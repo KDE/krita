@@ -6,10 +6,10 @@
 
 #include "KoSvgTextChunkShape.h"
 
+#include "KoPathShape.h"
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 #include <QSharedData>
-#include <QPainterPath>
 #include <QTextCharFormat>
 
 #include <KoShapeContainer_p.h>
@@ -28,8 +28,15 @@ public:
 
     QVector<KoSvgText::CharTransformation> localTransformations;
 
+    KoSvgText::TextOnPathInfo textPathInfo;
+    KoShape *textPath{nullptr};
+
     KoSvgText::AutoValue textLength;
     KoSvgText::LengthAdjust lengthAdjust = KoSvgText::LengthAdjustSpacing;
+
+    QMap<KoSvgText::TextDecoration, qreal> textDecorationOffsets;
+    QMap<KoSvgText::TextDecoration, qreal> textDecorationWidths;
+    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations;
 
     QString text;
 

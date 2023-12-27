@@ -1,4 +1,4 @@
-/* This file is part of the Calligra project
+/*
  * SPDX-FileCopyrightText: 2005 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  *
@@ -77,15 +77,17 @@ protected:
     /// Set the number of layers that will be created
     void setNumberOfLayers(int layers);
 
+    void showEvent(QShowEvent *) override;
+
     KisOpenPane *m_openPane;
 private:
-    
+
     double m_width, m_height;
     quint8 backgroundOpacity() const;
     void setBackgroundOpacity(quint8 value);
 
     void fillPredefined();
-    void showEvent(QShowEvent *) override;
+
     
     KoUnit m_widthUnit, m_heightUnit;
     QList<KisPropertiesConfigurationSP> m_predefined;

@@ -1,0 +1,45 @@
+From ad8c7acc1ab3cf784a19a808dc86627c2ef94cfc Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sat, 22 Apr 2023 22:47:03 -0300
+Subject: [PATCH] cdef: Disable MSVC optimizations for filter_block
+
+This brings build time to 1m44s in my Ryzen 7 2700x, from >15m per file.
+
+BUG: aomedia:3395
+Change-Id: Ie53dc51dfe1f8823fc36ee8656b2d6038c7c98ab
+(cherry picked from commit b07a503eeaac1b1567ba9509b0c15c84f1ee8463)
+---
+ av1/common/cdef_block_simd.h | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/av1/common/cdef_block_simd.h b/av1/common/cdef_block_simd.h
+index df6787177..c736c9009 100644
+--- a/av1/common/cdef_block_simd.h
++++ b/av1/common/cdef_block_simd.h
+@@ -270,6 +270,12 @@ SIMD_INLINE v256 get_max_secondary(const int is_lowbd, v256 *tap, v256 max,
+   return max;
+ }
+ 
++// MSVC takes far too much time optimizing these.
++// https://bugs.chromium.org/p/aomedia/issues/detail?id=3395
++#if defined(_MSC_VER) && !defined(__clang__)
++#pragma optimize("", off)
++#endif
++
+ CDEF_INLINE void filter_block_4x4(const int is_lowbd, void *dest, int dstride,
+                                   const uint16_t *in, int pri_strength,
+                                   int sec_strength, int dir, int pri_damping,
+@@ -617,6 +623,10 @@ CDEF_INLINE void filter_block_8x8(const int is_lowbd, void *dest, int dstride,
+   }
+ }
+ 
++#if defined(_MSC_VER) && !defined(__clang__)
++#pragma optimize("", on)
++#endif
++
+ SIMD_INLINE void copy_block_4xh(const int is_lowbd, void *dest, int dstride,
+                                 const uint16_t *in, int height) {
+   uint8_t *dst8 = (uint8_t *)dest;
+-- 
+2.40.1.windows.1
+

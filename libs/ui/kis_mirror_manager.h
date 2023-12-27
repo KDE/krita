@@ -40,6 +40,8 @@ private:
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas {nullptr};
     QAction *m_mirrorCanvasAroundCursor {nullptr};
+    QAction *m_mirrorCanvasAroundCanvas {nullptr};
+
     void setDecorationConfig();
     KisMirrorAxisSP decoration() const;
 };

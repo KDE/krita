@@ -326,7 +326,6 @@ QVariant LayerModel::data(const QModelIndex& index, int role) const
 {
     QVariant data;
     if (index.isValid()) {
-        index.internalPointer();
         KisNodeSP node = d->layers.at(index.row());
         if (node.isNull())
             return data;

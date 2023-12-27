@@ -74,6 +74,12 @@ private:
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawAnimatedDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
+    void drawSelectedButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index,
+                            QStyle *style) const;
+
+    // In here we handle the intricacies required to tie the state of selection and "current" index.
+    void changeSelectionAndCurrentIndex(const QModelIndex &index);
+
 public Q_SLOTS:
     void slotConfigChanged();
 private Q_SLOTS:

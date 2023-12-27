@@ -7,6 +7,7 @@
 #include <cmath>
 
 #include <kis_assert.h>
+#include <KisMpl.h>
 
 #include "KisSprayRandomDistributions.h"
 
@@ -152,8 +153,7 @@ public:
         // Find the first sample that has cdf greater than the passed value
         auto sampleIterator =
             std::upper_bound(samples.begin(), samples.end(), SampleInfo{0.0, randomValue, 0.0},
-                [](const SampleInfo &a, const SampleInfo &b) -> bool {  return a.cdfAtX < b.cdfAtX; }
-            );
+                             kismpl::mem_less(&SampleInfo::cdfAtX));
         const double t = (randomValue - (sampleIterator - 1)->cdfAtX) * sampleIterator->oneOverCdfDy;
         return (sampleIterator - 1)->x + t * (sampleIterator->x - (sampleIterator - 1)->x);
     }

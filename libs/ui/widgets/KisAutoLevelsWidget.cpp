@@ -8,12 +8,15 @@
 
 #include "KisAutoLevelsWidget.h"
 
+#include <KisSpinBoxI18nHelper.h>
+
 KisAutoLevelsWidget::KisAutoLevelsWidget(QWidget *parent)
     : QWidget(parent)
 {
     m_ui.setupUi(this);
 
-    m_ui.sliderShadowsClipping->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(m_ui.sliderShadowsClipping,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     m_ui.sliderShadowsClipping->setRange(0.0, 10.0, 2);
     m_ui.sliderShadowsClipping->setValue(0.1);
     m_ui.sliderShadowsClipping->setSingleStep(0.1);
@@ -45,7 +48,7 @@ KisAutoLevelsWidget::KisAutoLevelsWidget(QWidget *parent)
 KisAutoLevelsWidget::~KisAutoLevelsWidget()
 {}
 
-KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod KisAutoLevelsWidget::shadowsAndHighlightsAdjustementMethod() const
+KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod KisAutoLevelsWidget::shadowsAndHighlightsAdjustmentMethod() const
 {
     return static_cast<KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod>(m_ui.comboBoxShadowsAndLightsMethod->currentIndex());
 }
@@ -90,7 +93,7 @@ KoColor KisAutoLevelsWidget::outputMidtonesColor() const
     return m_ui.buttonMidtonesColor->color();
 }
 
-void KisAutoLevelsWidget::setShadowsAndHighlightsAdjustementMethod(KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod newMethod)
+void KisAutoLevelsWidget::setShadowsAndHighlightsAdjustmentMethod(KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod newMethod)
 {
     m_ui.comboBoxShadowsAndLightsMethod->setCurrentIndex(static_cast<int>(newMethod));
 }
@@ -135,12 +138,12 @@ void KisAutoLevelsWidget::setMidtonesColor(const KoColor &newMidtonesColor)
     m_ui.buttonMidtonesColor->setColor(newMidtonesColor);
 }
 
-void KisAutoLevelsWidget::lockShadowsAndHighlightsAdjustementMethod()
+void KisAutoLevelsWidget::lockShadowsAndHighlightsAdjustmentMethod()
 {
     m_ui.comboBoxShadowsAndLightsMethod->setEnabled(false);
 }
 
-void KisAutoLevelsWidget::unlockShadowsAndHighlightsAdjustementMethod()
+void KisAutoLevelsWidget::unlockShadowsAndHighlightsAdjustmentMethod()
 {
     m_ui.comboBoxShadowsAndLightsMethod->setEnabled(true);
 }

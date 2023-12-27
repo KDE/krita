@@ -191,51 +191,44 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
         return false;
     }
 
+    QDomElement root = doc.documentElement();
+
     if (d->version == "5.0" && resourceCount > 0) {
-        // Load the embedded resources
-        QDomNode n = doc.firstChild();
-        while (!n.isNull()) {
-            QDomElement e = n.toElement();
-            if (!e.isNull()) {
-                if (e.tagName() == "resources") {
-                    QDomNode n2 = n.firstChild();
-                    while (!n2.isNull()) {
-                        n2 = n2.nextSibling();
-                        QDomElement e2 = n2.toElement();
-                        QString resourceType = e2.attribute("type");
-                        QString md5sum = e2.attribute("md5sum");
-                        QString name = e2.attribute("name");
-                        QString filename = e2.attribute("filename");
+        // Load any embedded resources
+        QDomElement e = root.firstChildElement("resources");
+        for (e = e.firstChildElement("resource"); !e.isNull(); e = e.nextSiblingElement("resource")) {
+            QString name = e.attribute("name");
+            QString filename = e.attribute("filename");
+            QString resourceType = e.attribute("type");
+            QString md5sum = e.attribute("md5sum");
 
-                        KoResourceSP existingResource = resourcesInterface->source(resourceType).bestMatch(md5sum, filename, name);
+            KoResourceSP existingResource = resourcesInterface
+                ->source(resourceType)
+                .bestMatch(md5sum, filename, name);
 
-                        if (!existingResource) {
-                            QByteArray ba = QByteArray::fromBase64(e2.text().toLatin1());
-
-                            QBuffer buf(&ba);
-                            buf.open(QBuffer::ReadOnly);
-
-                            /// HACK ALERT: Calling importResource()
-                            /// here is technically undefined
-                            /// behavior, because this code is
-                            /// called from inside the storage's
-                            /// loadVersionedResource(). Basically
-                            /// we change underlying storage's
-                            /// storage while it is reading from
-                            /// it.
-
-                            KisResourceModel model(resourceType);
-                            model.importResource(filename, &buf, false, "memory");
-                        }
-                    }
-                    break;
-                }
+            if (existingResource) {
+                continue;
             }
-            n = n.nextSibling();
+
+            QByteArray ba = QByteArray::fromBase64(e.text().toLatin1());
+            QBuffer buf(&ba);
+            buf.open(QBuffer::ReadOnly);
+
+            /// HACK ALERT: Calling importResource()
+            /// here is technically undefined
+            /// behavior, because this code is
+            /// called from inside the storage's
+            /// loadVersionedResource(). Basically
+            /// we change underlying storage's
+            /// storage while it is reading from
+            /// it.
+
+            KisResourceModel model(resourceType);
+            model.importResource(filename, &buf, false, "memory");
         }
     }
 
-    fromXML(doc.documentElement(), resourcesInterface);
+    fromXML(root, resourcesInterface);
 
     if (!d->settings) {
         return false;
@@ -379,7 +372,7 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
      * updateLinkedResourcesMetaData(). The new version of the
      * preset format ("5.0") has all the linked resources embedded
      * outside KisPaintOpSettings, which are automatically
-     * loaded on the the resource activation. We we shouldn't
+     * loaded on the resource activation. We we shouldn't
      * add them into metaData()["dependent_resources_filenames"].
      */
     d->version = "5.0";

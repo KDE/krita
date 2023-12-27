@@ -322,7 +322,7 @@ void EXRConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
 
         /**
          * Division by a tiny alpha may result in an overflow of half
-         * value. That is why we use safe iterational approach.
+         * value. That is why we use safe iterative approach.
          */
         while (1) {
             dstPixel.setUnmultiplied(srcPixel.pixel, newAlpha);
@@ -428,8 +428,8 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     QVector<pixel_type> pixels(width * height);
 
-    Q_ASSERT(info.channelMap.contains("G"));
-    dbgFile << "G -> " << info.channelMap["G"];
+    Q_ASSERT(info.channelMap.contains("Y"));
+    dbgFile << "Gray -> " << info.channelMap["Y"];
 
     bool hasAlpha = info.channelMap.contains("A");
     dbgFile << "Has Alpha:" << hasAlpha;
@@ -437,10 +437,9 @@ void EXRConverter::Private::decodeData1(Imf::InputFile& file, ExrPaintLayerInfo&
 
     Imf::FrameBuffer frameBuffer;
     pixel_type* frameBufferData = (pixels.data()) - xstart - ystart * width;
-    frameBuffer.insert(info.channelMap["G"].toLatin1().constData(),
-            Imf::Slice(ptype, (char *) &frameBufferData->gray,
-                       sizeof(pixel_type) * 1,
-                       sizeof(pixel_type) * width));
+    frameBuffer.insert(
+        info.channelMap["Y"].toLatin1().constData(),
+        Imf::Slice(ptype, (char *)&frameBufferData->gray, sizeof(pixel_type) * 1, sizeof(pixel_type) * width));
 
     if (hasAlpha) {
         frameBuffer.insert(info.channelMap["A"].toLatin1().constData(),
@@ -535,7 +534,7 @@ bool EXRConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
     bool result = (extraInfoLayers == exrLayerNames);
 
     if (!result) {
-        dbgKrita << "WARINING: Krita EXR extra layers info is inconsistent!";
+        dbgKrita << "WARNING: Krita EXR extra layers info is inconsistent!";
         dbgKrita << ppVar(extraInfoLayers.size()) << ppVar(exrLayerNames.size());
 
         std::set<std::string>::const_iterator it1 = extraInfoLayers.begin();
@@ -599,11 +598,29 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
         bool topLevelRGBFound = false;
         info.name = HDR_LAYER;
 
-        QStringList topLevelChannelNames = QStringList() << "A" << "R" << "G" << "B"
-                                                         << ".A" << ".R" << ".G" << ".B"
-                                                         << "A." << "R." << "G." << "B."
-                                                         << "A." << "R." << "G." << "B."
-                                                         << ".alpha" << ".red" << ".green" << ".blue";
+        QStringList topLevelChannelNames = QStringList() << "A"
+                                                         << "R"
+                                                         << "G"
+                                                         << "B"
+                                                         << ".A"
+                                                         << ".R"
+                                                         << ".G"
+                                                         << ".B"
+                                                         << "A."
+                                                         << "R."
+                                                         << "G."
+                                                         << "B."
+                                                         << "A."
+                                                         << "R."
+                                                         << "G."
+                                                         << "B."
+                                                         << ".alpha"
+                                                         << ".red"
+                                                         << ".green"
+                                                         << ".blue"
+                                                         << "Y"
+                                                         << ".Y"
+                                                         << "Y.";
 
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
             const Imf::Channel &channel = i.channel();
@@ -687,11 +704,11 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
             if (info.channelMap.size() == 1) {
                 modelId = GrayAColorModelID.id();
                 QString key = info.channelMap.begin().key();
-                if (key != "G") {
-                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(key, "G"));
+                if (key != "Y") {
+                    info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(key, "Y"));
                     QString channel =  info.channelMap.begin().value();
                     info.channelMap.clear();
-                    info.channelMap["G"] = channel;
+                    info.channelMap["Y"] = channel;
                 }
             }
             else if (info.channelMap.size() == 2) {
@@ -703,19 +720,18 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                 QString failingChannelKey;
 
                 for (; it != end; ++it) {
-                    if (it.key() != "G" && it.key() != "A") {
+                    // BUG: 461975
+                    if (it.key() != "A") {
                         failingChannelKey = it.key();
                         break;
                     }
                 }
 
-                info.remappedChannels.push_back(
-                            ExrPaintLayerInfo::Remap(failingChannelKey, "G"));
+                info.remappedChannels.push_back(ExrPaintLayerInfo::Remap(failingChannelKey, "Y"));
 
                 QString failingChannelValue = info.channelMap[failingChannelKey];
                 info.channelMap.remove(failingChannelKey);
-                info.channelMap["G"] = failingChannelValue;
-
+                info.channelMap["Y"] = failingChannelValue;
             }
             else if (info.channelMap.size() == 3 || info.channelMap.size() == 4) {
 
@@ -1105,16 +1121,36 @@ KisImportExportErrorCode EXRConverter::buildFile(const QString &filename, KisPai
     else if (info.layerDevice->colorSpace()->colorDepthId() == Float32BitsColorDepthID) {
         pixelType = Imf::FLOAT;
     }
-    header.channels().insert("R", Imf::Channel(pixelType));
-    header.channels().insert("G", Imf::Channel(pixelType));
-    header.channels().insert("B", Imf::Channel(pixelType));
-    header.channels().insert("A", Imf::Channel(pixelType));
 
-    info.channels.push_back("R");
-    info.channels.push_back("G");
-    info.channels.push_back("B");
-    info.channels.push_back("A");
     info.pixelType = pixelType;
+
+    if (info.layerDevice->colorSpace()->colorModelId() == RGBAColorModelID) {
+        header.channels().insert("R", Imf::Channel(pixelType));
+        header.channels().insert("G", Imf::Channel(pixelType));
+        header.channels().insert("B", Imf::Channel(pixelType));
+        header.channels().insert("A", Imf::Channel(pixelType));
+
+        info.channels.push_back("R");
+        info.channels.push_back("G");
+        info.channels.push_back("B");
+        info.channels.push_back("A");
+    } else if (info.layerDevice->colorSpace()->colorModelId() == GrayAColorModelID) {
+        header.channels().insert("Y", Imf::Channel(pixelType));
+        header.channels().insert("A", Imf::Channel(pixelType));
+
+        info.channels.push_back("Y");
+        info.channels.push_back("A");
+    } else if (info.layerDevice->colorSpace()->colorModelId() == XYZAColorModelID) {
+        header.channels().insert("X", Imf::Channel(pixelType));
+        header.channels().insert("Y", Imf::Channel(pixelType));
+        header.channels().insert("Z", Imf::Channel(pixelType));
+        header.channels().insert("A", Imf::Channel(pixelType));
+
+        info.channels.push_back("X");
+        info.channels.push_back("Y");
+        info.channels.push_back("Z");
+        info.channels.push_back("A");
+    }
 
     // Open file for writing
     try {
@@ -1230,19 +1266,14 @@ void EXRConverter::Private::recBuildPaintLayerSaveInfo(QList<ExrPaintLayerSaveIn
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
                 else if (info.layerDevice->colorSpace()->colorModelId() == GrayAColorModelID) {
-                    info.channels.push_back(info.name + remap(current2original, "G"));
+                    info.channels.push_back(info.name + remap(current2original, "Y"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
-                }
-                else if (info.layerDevice->colorSpace()->colorModelId() == GrayColorModelID) {
-                    info.channels.push_back(info.name + remap(current2original, "G"));
-                }
-                else if (info.layerDevice->colorSpace()->colorModelId() == XYZAColorModelID) {
+                } else if (info.layerDevice->colorSpace()->colorModelId() == XYZAColorModelID) {
                     info.channels.push_back(info.name + remap(current2original, "X"));
                     info.channels.push_back(info.name + remap(current2original, "Y"));
                     info.channels.push_back(info.name + remap(current2original, "Z"));
                     info.channels.push_back(info.name + remap(current2original, "A"));
                 }
-
             }
 
             if (info.layerDevice->colorSpace()->colorDepthId() == Float16BitsColorDepthID) {

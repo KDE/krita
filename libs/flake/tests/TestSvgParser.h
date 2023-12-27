@@ -20,6 +20,7 @@ private Q_SLOTS:
     void testUnitIn();
     void testUnitPercentInitial();
     void testScalingViewport();
+    void testScalingViewportNoScale();
     void testScalingViewportKeepMeet1();
     void testScalingViewportKeepMeet2();
     void testScalingViewportKeepMeetAlign();
@@ -150,6 +151,7 @@ private Q_SLOTS:
     void testPolygonShape();
 
     void testPathShape();
+    void testPathData();
     void testPathShapeEllipticalArc();
 
     void testDefsHidden();
@@ -173,6 +175,8 @@ private Q_SLOTS:
     void testSodipodiChordShape();
 
     void testMarkersFillAsShape();
+
+    void testRenderPaintOrderProperty();
 private:
 
 };

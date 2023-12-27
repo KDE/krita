@@ -16,9 +16,10 @@
 #include "KoCanvasBase.h"
 #include "kis_global.h"
 
-KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &pos)
+KoPathPointMoveStrategy::KoPathPointMoveStrategy(KoPathTool *tool, const QPointF &mousePosition, const QPointF &pointPosition)
     : KoInteractionStrategy(*(new KoInteractionStrategyPrivate(tool))),
-    m_originalPosition(pos),
+    m_startMousePosition(mousePosition),
+    m_startPointPosition(pointPosition),
     m_tool(tool)
 {
 }
@@ -29,8 +30,9 @@ KoPathPointMoveStrategy::~KoPathPointMoveStrategy()
 
 void KoPathPointMoveStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
-    QPointF newPosition = m_tool->canvas()->snapGuide()->snap(mouseLocation, modifiers);
-    QPointF move = newPosition - m_originalPosition;
+    QPointF deltaMovement = mouseLocation - m_startMousePosition;
+    QPointF newPosition = m_tool->canvas()->snapGuide()->snap(m_startPointPosition + deltaMovement, modifiers);
+    QPointF move = newPosition - m_startPointPosition;
 
     if (modifiers & Qt::ShiftModifier) {
         // Limit change to one direction only

@@ -20,7 +20,7 @@ class KisHatchingPaintOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
     Q_OBJECT
 
 public:
-    KisHatchingPaintOpSettingsWidget(QWidget* parent = 0);
+    KisHatchingPaintOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     ~KisHatchingPaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;

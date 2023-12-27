@@ -22,6 +22,7 @@
 #include "KoToolSelection.h"
 #include "KoCanvasController.h"
 #include "KoToolProxy.h"
+#include <kis_icon_utils.h>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -29,6 +30,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QDomElement>
+#include <QApplication>
 
 KoToolBase::KoToolBase(KoCanvasBase *canvas)
     : d_ptr(new KoToolBasePrivate(this, canvas))
@@ -46,7 +48,6 @@ KoToolBase::KoToolBase(KoToolBasePrivate &dd)
 
 KoToolBase::~KoToolBase()
 {
-    qDeleteAll(d_ptr->optionWidgets);
     delete d_ptr;
 }
 
@@ -123,14 +124,16 @@ void KoToolBase::explicitUserStrokeEndRequest()
 {
 }
 
-QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &) const
+QVariant KoToolBase::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     Q_D(const KoToolBase);
     if (d->canvas->canvasWidget() == 0)
         return QVariant();
 
     switch (query) {
-    case Qt::ImMicroFocus:
+    case Qt::ImEnabled:
+        return isInTextMode();
+    case Qt::ImCursorRectangle:
         return QRect(d->canvas->canvasWidget()->width() / 2, 0, 1, d->canvas->canvasWidget()->height());
     case Qt::ImFont:
         return d->canvas->canvasWidget()->font();
@@ -146,6 +149,16 @@ void KoToolBase::inputMethodEvent(QInputMethodEvent * event)
         keyPressEvent(&ke);
     }
     event->accept();
+}
+
+void KoToolBase::focusInEvent(QFocusEvent *event)
+{
+    event->ignore();
+}
+
+void KoToolBase::focusOutEvent(QFocusEvent *event)
+{
+    event->ignore();
 }
 
 void KoToolBase::customPressEvent(KoPointerEvent * event)
@@ -255,11 +268,10 @@ int KoToolBase::handleRadius() const
 {
     Q_D(const KoToolBase);
     if (d->canvas
-            && d->canvas->shapeController()
-            && d->canvas->shapeController()->resourceManager()
+            && d->canvas->resourceManager()
        )
     {
-        return d->canvas->shapeController()->resourceManager()->handleRadius();
+        return d->canvas->resourceManager()->handleRadius();
     }
     else {
         return 3;
@@ -272,6 +284,20 @@ qreal KoToolBase::handleDocRadius() const
     const KoViewConverter * converter = d->canvas->viewConverter();
     const QPointF doc = converter->viewToDocument(QPointF(handleRadius(), handleRadius()));
     return qMax(doc.x(), doc.y());
+}
+
+int KoToolBase::decorationThickness() const
+{
+    Q_D(const KoToolBase);
+    if (d->canvas
+            && d->canvas->resourceManager()
+       )
+    {
+        return d->canvas->resourceManager()->decorationThickness();
+    }
+    else {
+        return 1;
+    }
 }
 
 int KoToolBase::grabSensitivity() const
@@ -308,12 +334,23 @@ QRectF KoToolBase::handlePaintRect(const QPointF &position) const
 void KoToolBase::setTextMode(bool value)
 {
     Q_D(KoToolBase);
-    d->isInTextMode=value;
+    d->isInTextMode = value;
+    qApp->inputMethod()->update(Qt::ImEnabled);
+    emit textModeChanged(d->isInTextMode);
 }
 
 bool KoToolBase::paste()
 {
     return false;
+}
+
+bool KoToolBase::selectAll()
+{
+    return false;
+}
+
+void KoToolBase::deselect()
+{
 }
 
 void KoToolBase::copy() const
@@ -403,4 +440,20 @@ void KoToolBase::setMaskSyntheticEvents(bool value)
 {
     Q_D(KoToolBase);
     d->maskSyntheticEvents = value;
+}
+
+void KoToolBase::updateOptionsWidgetIcons()
+{
+    Q_D(KoToolBase);
+    if (d->optionWidgetsCreated) {
+        QObjectList objects;
+        Q_FOREACH (QPointer<QWidget> widget, d->optionWidgets) {
+            objects.append(widget);
+        }
+        while (!objects.isEmpty()) {
+            QObject* object = objects.takeFirst();
+            objects.append(object->children());
+            KisIconUtils::updateIconCommon(object);
+        }
+    }
 }

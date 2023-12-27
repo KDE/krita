@@ -139,7 +139,15 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     }
 
     gc.save();
-    gc.setPen(QPen(QColor(0, 0, 0, 128), 1));
+
+    QPen pen1(QColor(0, 0, 0, 64), 2 * decorationThickness(), Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin);
+    pen1.setCosmetic(true);
+    QPen pen2 = pen1;
+    pen2.setColor(QColor(0, 0, 0, 128));
+    pen2.setStyle(Qt::SolidLine);
+    QPen pen3 = pen2;
+    pen3.setWidth(1 * decorationThickness());
+    gc.setPen(pen3);
     gc.setBrush(Qt::white);
     gc.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform);
 
@@ -172,7 +180,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
             QPointF horizontalHandleCenter = d->horizontalAxis.unitVector().pointAt(horizontalHandlePosition);
             d->horizontalHandle = QRectF(horizontalHandleCenter.x() - halfHandleSize, horizontalHandleCenter.y() - halfHandleSize, d->config.handleSize(), d->config.handleSize());
 
-            gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
+            gc.setPen(pen1);
             gc.drawLine(d->horizontalAxis);
 
             // gc.drawEllipse(horizontalIndicator);
@@ -180,7 +188,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
             // don't draw the handles if we are locking the axis for movement
             if (!d->config.lockHorizontal()) {
-                gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
+                gc.setPen(pen2);
                 gc.drawEllipse(d->horizontalHandle);
                 gc.drawPixmap(d->horizontalHandle.adjusted(5, 5, -5, -5).toRect(), d->horizontalIcon);
             }
@@ -193,7 +201,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
     if(d->config.mirrorVertical() && !d->config.hideVerticalDecoration()) {
         if (!d->verticalAxis.isNull()) {
 
-            gc.setPen(QPen(QColor(0, 0, 0, 64), 2, Qt::DashDotDotLine, Qt::RoundCap, Qt::RoundJoin));
+            gc.setPen(pen1);
             gc.drawLine(d->verticalAxis);
 
 
@@ -206,7 +214,7 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
             // don't draw the handles if we are locking the axis for movement
             if (!d->config.lockVertical()) {
-                gc.setPen(QPen(QColor(0, 0, 0, 128), 2));
+                gc.setPen(pen2);
                 gc.drawEllipse(d->verticalHandle);
                 gc.drawPixmap(d->verticalHandle.adjusted(5, 5, -5, -5).toRect(), d->verticalIcon);
             }
@@ -226,6 +234,33 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
 }
 
+static KoPointerEvent *getKoPointerEvent(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseMove:
+    case QEvent::MouseButtonRelease: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        return new KoPointerEvent(me, me->pos());
+    }
+    case QEvent::TabletPress:
+    case QEvent::TabletMove:
+    case QEvent::TabletRelease: {
+        QTabletEvent *te = static_cast<QTabletEvent *>(event);
+        return new KoPointerEvent(te, te->pos());
+    }
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    case QEvent::TouchCancel: {
+        QTouchEvent *te = static_cast<QTouchEvent *>(event);
+        return new KoPointerEvent(te, te->touchPoints().at(0).pos());
+    }
+    default:
+        return nullptr;
+    }
+}
+
 bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 {
     if (!visible()) return false;
@@ -235,10 +270,10 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
     if (!expectedCanvasWidget || target != expectedCanvasWidget) return false;
 
-    if(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress) {
-        QMouseEvent *me = dynamic_cast<QMouseEvent*>(event);
-        QTabletEvent *te = dynamic_cast<QTabletEvent*>(event);
-        QPoint pos = me ? me->pos() : (te ? te->pos() : QPoint(77,77));
+    if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress
+        || event->type() == QEvent::TouchBegin) {
+        const QScopedPointer<KoPointerEvent> pointerEvent(getKoPointerEvent(event));
+        const QPoint pos = !pointerEvent.isNull() ? pointerEvent->pos() : QPoint(77,77);
 
         if(d->config.mirrorHorizontal() && d->horizontalHandle.contains(pos) && !d->config.lockHorizontal() && !d->config.hideHorizontalDecoration() ) {
             d->xActive = true;
@@ -254,11 +289,10 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             return true;
         }
     }
-    if(event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-        QMouseEvent *me = dynamic_cast<QMouseEvent*>(event);
-        QTabletEvent *te = dynamic_cast<QTabletEvent*>(event);
-
-        QPoint pos = me ? me->pos() : (te ? te->pos() : QPoint(77,77));
+    if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove
+        || event->type() == QEvent::TouchUpdate) {
+        const QScopedPointer<KoPointerEvent> pointerEvent(getKoPointerEvent(event));
+        const QPoint pos = !pointerEvent.isNull() ? pointerEvent->pos() : QPoint(77,77);
 
         if(d->xActive) {
             float axisX = view()->viewConverter()->widgetToImage<QPoint>(pos).x();
@@ -316,7 +350,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             }
         }
     }
-    if(event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease) {
+    if (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease
+        || event->type() == QEvent::TouchEnd || event->type() == QEvent::TouchCancel) {
 
         if(d->xActive) {
             while (QApplication::overrideCursor()) {

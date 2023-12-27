@@ -87,7 +87,7 @@ void KisSelectionModifierMapper::Private::slotConfigChanged()
         replaceModifiers   = Qt::AltModifier;
         intersectModifiers = (Qt::KeyboardModifiers)(Qt::ControlModifier | Qt::ShiftModifier);
         subtractModifiers  = Qt::ControlModifier;
-        symmetricdifferenceModifiers = (Qt::KeyboardModifiers)(Qt::ShiftModifier | Qt::ControlModifier);
+        symmetricdifferenceModifiers = (Qt::KeyboardModifiers)(Qt::AltModifier | Qt::ControlModifier);
     }
 
     addModifiers = Qt::ShiftModifier;

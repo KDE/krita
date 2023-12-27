@@ -209,6 +209,7 @@ print("\nCreating base directories...")
 try:
     os.makedirs(f"{pkg_root}", exist_ok=True)
     os.makedirs(f"{pkg_root}\\bin", exist_ok=True)
+    os.makedirs(f"{pkg_root}\\etc", exist_ok=True)
     os.makedirs(f"{pkg_root}\\lib", exist_ok=True)
     os.makedirs(f"{pkg_root}\\share", exist_ok=True)
 except:
@@ -219,11 +220,13 @@ print("\nCopying files...")
 # krita.exe
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.exe", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.com", f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
+if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb"):
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
 # kritarunner.exe
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
-            f"{pkg_root}\\bin\\")
+if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb"):
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
+                f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner_com.com",
             f"{pkg_root}\\bin\\")
 
@@ -283,6 +286,16 @@ if os.path.isdir(f"{DEPS_INSTALL_DIR}\\lib\\site-packages"):
     subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\site-packages".format(
         DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\site-packages"], check=True)
 
+# MLT plugins and their data
+subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\lib\\mlt".format(
+    DEPS_INSTALL_DIR), f"{pkg_root}\\lib\\mlt"], check=True)
+subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\mlt".format(
+    DEPS_INSTALL_DIR), f"{pkg_root}\\share\\mlt"], check=True)
+
+# Fontconfig
+subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\etc\\fonts".format(
+    DEPS_INSTALL_DIR), f"{pkg_root}\\etc\\fonts"], check=True)
+
 # Share
 subprocess.run(["xcopy", "/S", "/Y", "/I", "{}\\share\\color".format(
     KRITA_INSTALL_DIR), f"{pkg_root}\\share\\color"], check=True)
@@ -321,11 +334,12 @@ if os.path.isdir(f"{KRITA_INSTALL_DIR}\\lib\\qml"):
 
 # windeployqt
 subprocess.run(["windeployqt.exe", *QMLDIR_ARGS, "--release", "-gui", "-core", "-concurrent", "-network", "-printsupport", "-svg",
-               "-xml", "-sql", "-multimedia", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
+               "-xml", "-sql", "-qml", "-quick", "-quickwidgets", f"{pkg_root}\\bin\\krita.exe", f"{pkg_root}\\bin\\krita.dll"], check=True)
 
 # ffmpeg
 if os.path.exists(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe"):
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg.exe", f"{pkg_root}\\bin")
+    shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffprobe.exe", f"{pkg_root}\\bin")
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_LICENSE.txt",
                 f"{pkg_root}\\bin")
     shutil.copy(f"{DEPS_INSTALL_DIR}\\bin\\ffmpeg_README.txt",
@@ -352,10 +366,14 @@ if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\pip*"):
         shutil.rmtree(f)
+    for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\ply*"):
+        shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\pyparsing*"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\PyQt_builder*"):
         shutil.rmtree(f)
+    for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\setuptools.pth"):
+        os.remove(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\setuptools*"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\sip*"):

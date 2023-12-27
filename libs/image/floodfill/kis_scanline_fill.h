@@ -25,19 +25,30 @@ public:
     /**
      * Fill the source device with \p fillColor
      */
-    void fillColor(const KoColor &fillColor);
+    void fill(const KoColor &fillColor);
+
+    /**
+     * Fill the source device with \p fillColor until \p boundaryColor is reached
+     */
+    void fillUntilColor(const KoColor &fillColor, const KoColor &boundaryColor);
 
     /**
      * Fill \p externalDevice with \p fillColor basing on the contents
      * of the source device.
      */
-    void fillColor(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
+    void fill(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
+
+    /**
+     * Fill \p externalDevice with \p fillColor basing on the contents
+     * of the source device. Fills until \p boundaryColor is reached
+     */
+    void fillUntilColor(const KoColor &fillColor, const KoColor &boundaryColor, KisPaintDeviceSP externalDevice);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area.
      * This method uses an existing selection as boundary for the flood fill.
      */
-    void fillSelectionWithBoundary(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP existingSelection);
+    void fillSelection(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP boundarySelection);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area
@@ -47,32 +58,32 @@ public:
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor.
+     * pixels of the source device is not similar to \p boundaryColor.
      * This method uses an existing selection as boundary for the flood fill.
      */
-    void fillSelectionUntilColorWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection);
+    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor, KisPaintDeviceSP boundarySelection);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor.
+     * pixels of the source device is not similar to \p boundaryColor.
      */
-    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor);
+    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor or transparent.
+     * pixels of the source device is not similar to \p boundaryColor or transparent.
      * This method uses an existing selection as boundary for the flood fill.
      */
-    void fillSelectionUntilColorOrTransparentWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection);
+    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor, KisPaintDeviceSP boundarySelection);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor or transparent.
+     * pixels of the source device is not similar to \p boundaryColor or transparent.
      */
-    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor);
+    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor);
 
     /**
      * Clear the contiguous non-zero area of the device
@@ -104,10 +115,10 @@ public:
      * seed point with the other pixels of the selected region being
      * semi-transparent (depending on how similar they are to the seed pixel)
      * up to the region boundary (given by the threshold value). 100 means that
-     * the fully opaque area will emcompass all the pixels of the selected
-     * region up to the contour. Any value inbetween will make the fully opaque
+     * the fully opaque area will encompass all the pixels of the selected
+     * region up to the contour. Any value in between will make the fully opaque
      * portion of the region vary in size, with semi-transparent pixels
-     * inbetween it and  the region boundary
+     * in between it and  the region boundary
      */
     void setOpacitySpread(int opacitySpread);
 
@@ -115,15 +126,29 @@ private:
     friend class KisScanlineFillTest;
     Q_DISABLE_COPY(KisScanlineFill)
 
-    template <class T>
-    void processLine(KisFillInterval interval, const int rowIncrement, T &pixelPolicy);
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void processLine(KisFillInterval interval, const int rowIncrement,
+                     DifferencePolicy &differencePolicy,
+                     SelectionPolicy &selectionPolicy,
+                     PixelAccessPolicy &pixelAccessPolicy);
 
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight,
+                      DifferencePolicy &differencePolicy,
+                      SelectionPolicy &selectionPolicy,
+                      PixelAccessPolicy &pixelAccessPolicy);
 
-    template <class T>
-        void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight, T &pixelPolicy);
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void runImpl(DifferencePolicy &differencePolicy,
+                 SelectionPolicy &selectionPolicy,
+                 PixelAccessPolicy &pixelAccessPolicy);
 
-    template <class T>
-    void runImpl(T &pixelPolicy);
+    template <template <typename SrcPixelType> typename OptimizedDifferencePolicy,
+              typename SlowDifferencePolicy,
+              typename SelectionPolicy, typename PixelAccessPolicy>
+    void selectDifferencePolicyAndRun(const KoColor &srcColor,
+                                      SelectionPolicy &selectionPolicy,
+                                      PixelAccessPolicy &pixelAccessPolicy);
 
 private:
     void testingProcessLine(const KisFillInterval &processInterval);

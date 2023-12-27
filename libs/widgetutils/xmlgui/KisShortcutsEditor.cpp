@@ -98,7 +98,7 @@ void KisShortcutsEditor::addCollection(KisKActionCollection *collection, const Q
 
 
     /**
-     * Forward this actioncollection to the delegate which will do conflict checking.
+     * Forward this action collection to the delegate which will do conflict checking.
      * This _replaces_ existing collections in the delegate.
      */
     d->actionCollections.append(collection);

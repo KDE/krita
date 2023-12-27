@@ -11,6 +11,8 @@
 #include <QList>
 #include <QString>
 #include <QMutex>
+#include <QSharedPointer>
+#include <kis_pointer_utils.h>
 #include "kritaplugin_export.h"
 
 class QPluginLoader;
@@ -28,6 +30,22 @@ public:
      * Returns the instance of this class.
      */
     static KoJsonTrader *instance();
+
+    struct KRITAPLUGIN_EXPORT Plugin {
+        Plugin() = default;
+        Plugin(QSharedPointer<QPluginLoader> loader, QMutex *mutex);
+        ~Plugin();
+
+        QObject *instance() const;
+
+        QJsonObject metaData() const;
+        QString fileName() const;
+        QString errorString() const;
+
+    private:
+        QSharedPointer<QPluginLoader> m_loader;
+        QMutex *m_mutex = 0;
+    };
 
     /**
      * The main function in the KoJsonTrader class. It tries to automatically
@@ -49,14 +67,22 @@ public:
      *
      * @return A list of QPluginLoader that satisfy the query
      */
-     QList<QPluginLoader *> query(const QString &servicetype, const QString &mimetype) const;
+     QList<Plugin> query(const QString &servicetype, const QString &mimetype);
 
      // Note: this should not be used
      KoJsonTrader();
+     ~KoJsonTrader();
+
+private:
+     void initializePluginLoaderCache();
 
 private:
      QString m_pluginPath;
      mutable QMutex m_mutex;
+
+     struct PluginCacheEntry;
+
+     QList<PluginCacheEntry> m_pluginLoaderCache;
 };
 
 #endif

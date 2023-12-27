@@ -19,6 +19,7 @@
 
 #include "kritaui_export.h"
 #include "kis_ui_types.h"
+#include "KisWraparoundAxis.h"
 
 class KisCanvas2;
 class KisCoordinatesConverter;
@@ -26,6 +27,7 @@ class KisDisplayColorConverter;
 class KisDisplayFilter;
 class QOpenGLShaderProgram;
 class QPainterPath;
+class KisOptimizedBrushOutline;
 
 #ifndef Q_MOC_RUN
 #ifndef Q_OS_MACOS
@@ -65,13 +67,16 @@ private:
     void renderCanvasGL(const QRect &updateRect);
 
 public:
-    void paintToolOutline(const QPainterPath &path);
+    void paintToolOutline(const KisOptimizedBrushOutline &path, const QRect &viewportUpdateRect, const int thickness = 1);
 
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
     void notifyImageColorSpaceChanged(const KoColorSpace *cs);
 
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
+
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value);
+    WrapAroundAxis wrapAroundViewingModeAxis() const;
 
     void channelSelectionChanged(const QBitArray &channelFlags);
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter);

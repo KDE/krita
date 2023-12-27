@@ -32,7 +32,7 @@ public:
     /**
      * @brief Get the method used to adjust the contrast
      */
-    KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod shadowsAndHighlightsAdjustementMethod() const;
+    KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod shadowsAndHighlightsAdjustmentMethod() const;
     /**
      * @brief Get the normalized percentage used to clip the shadows
      */
@@ -73,7 +73,7 @@ public Q_SLOTS:
     /**
      * @brief Set the method used to adjust the contrast
      */
-    void setShadowsAndHighlightsAdjustementMethod(KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod newMethod);
+    void setShadowsAndHighlightsAdjustmentMethod(KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod newMethod);
     /**
      * @brief Set the normalized percentage used to clip the shadows
      */
@@ -113,12 +113,12 @@ public Q_SLOTS:
      * @brief Disables the contrast method combo box. Use this when only one of
      * the methods makes sense
      */
-    void lockShadowsAndHighlightsAdjustementMethod();
+    void lockShadowsAndHighlightsAdjustmentMethod();
     /**
      * @brief Enables the contrast method combo box, allowing the user to choose
      * any of the methods
      */
-    void unlockShadowsAndHighlightsAdjustementMethod();
+    void unlockShadowsAndHighlightsAdjustmentMethod();
 
 Q_SIGNALS:
     void parametersChanged();

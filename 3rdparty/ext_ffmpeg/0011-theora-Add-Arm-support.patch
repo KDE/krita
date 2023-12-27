@@ -1,0 +1,214 @@
+From cc2af79c5c19555dadf337f309b1a400c5ba476e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 2 Dec 2022 15:59:17 +0000
+Subject: [PATCH 11/11] theora: Add Arm support
+
+---
+ lib/arm/arm2gnu-wrapper.py | 13 +++++++++
+ lib/meson.build            | 51 +++++++++++++++++++++++++++++---
+ meson.build                | 59 ++++++++++++++++++++++++++++++++++++++
+ meson_options.txt          |  1 +
+ 4 files changed, 120 insertions(+), 4 deletions(-)
+ create mode 100644 lib/arm/arm2gnu-wrapper.py
+
+diff --git a/lib/arm/arm2gnu-wrapper.py b/lib/arm/arm2gnu-wrapper.py
+new file mode 100644
+index 0000000..bb4ca25
+--- /dev/null
++++ b/lib/arm/arm2gnu-wrapper.py
+@@ -0,0 +1,13 @@
++#!/usr/bin/env python3
++
++from argparse import ArgumentParser
++from pathlib import Path
++from subprocess import run
++
++if __name__ == '__main__':
++    parser = ArgumentParser(description='Wraps around the Perl script to pipe input and output')
++    parser.add_argument('--program', help="Line to feed to subprocess.run as program")
++    parser.add_argument('infile', type=Path, help='Source file')
++    args = parser.parse_args()
++
++    run(args.program.split(), stdin=args.infile.open(), check=True)
+diff --git a/lib/meson.build b/lib/meson.build
+index 5f15375..da89dba 100644
+--- a/lib/meson.build
++++ b/lib/meson.build
+@@ -38,6 +38,8 @@ decoder_sources = files(
+   'state.c',
+ )
+ 
++common_arm_sources = files()
++
+ if asm
+   if conf.get('CPU_x86_64', false)
+     if cc.get_argument_syntax() != 'msvc'
+@@ -105,6 +107,47 @@ if asm
+         'x86_vc/x86state.c',
+       )
+     endif
++  elif cc.get_id() == 'gcc' and conf.get('CPU_arm', false)
++    # The Arm bits require the Arm -> GNU conversion script
++
++    arm2gnu_pl = find_program('arm/arm2gnu.pl', required: true)
++    arm2gnu_py = find_program('arm/arm2gnu-wrapper.py', required: true)
++
++    arm2gnu_gen = generator(
++      arm2gnu_py,
++      arguments: ['--program', arm2gnu_pl.full_path(), '@INPUT@'],
++      capture: true,
++      output: '@BASENAME@-gnu.S',
++    )
++
++    arm_opts_s = configure_file(
++      input: 'arm/armopts.s.in',
++      configuration: conf,
++      output: 'armopts.S',
++    )
++
++    common_arm_sources += arm2gnu_gen.process(
++      files('arm/armbits.s', 'arm/armfrag.s', 'arm/armidct.s', 'arm/armloop.s'),
++      arm_opts_s,
++    )
++
++    encoder_sources += arm2gnu_gen.process(
++      files(
++        'arm/armencfrag.s',
++        'arm/armenquant.s',
++      ),
++    )
++
++    encoder_sources += files(
++      'arm/armcpu.c',
++      'arm/armenc.c',
++      'arm/armstate.c',
++    )
++
++    decoder_sources += files(
++      'arm/armcpu.c',
++      'arm/armstate.c',
++    )
+   endif
+ endif
+ 
+@@ -177,7 +220,7 @@ endif
+ 
+ libtheoradec = library(
+   'theoradec',
+-  decoder_sources + decoder_res,
++  decoder_sources + common_arm_sources + decoder_res,
+   dependencies: [m_dep, libpng_dep, ogg_dep, cairo_dep, config_dep],
+   include_directories: incdir,
+   vs_module_defs: '../win32/xmingw32/libtheoradec-all.def',
+@@ -202,8 +245,8 @@ theoradec_dep = declare_dependency(
+ 
+ libtheoraenc = library(
+   'theoraenc',
+-  encoder_sources + encoder_res,
+-  dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
++  encoder_sources + common_arm_sources + encoder_res,
++  dependencies: [m_dep, ogg_dep, config_dep],
+   include_directories: incdir,
+   vs_module_defs: '../win32/xmingw32/libtheoraenc-all.def',
+   c_args: compile_args,
+@@ -232,7 +275,7 @@ theoraenc_dep = declare_dependency(
+ 
+ libtheora = library(
+   'theora',
+-  encoder_sources + decoder_sources,
++  encoder_sources + common_arm_sources + decoder_sources,
+   dependencies: [m_dep, libpng_dep, ogg_dep, config_dep],
+   include_directories: incdir,
+   c_args: compile_args,
+diff --git a/meson.build b/meson.build
+index e9152c3..d9e3414 100644
+--- a/meson.build
++++ b/meson.build
+@@ -118,6 +118,7 @@ if mem_constraint.enabled()
+ endif
+ 
+ asm = not get_option('asm').disabled()
++enable_asflag_probe = not get_option('asflag-probe').disabled()
+ if asm
+   if host_machine.cpu_family() == 'x86_64'
+     conf.set('CPU_x86_64', true)
+@@ -128,6 +129,64 @@ if asm
+   elif host_machine.cpu_family() == 'x86'
+     conf.set('CPU_x86_32', true)
+     conf.set('OC_X86_ASM', true)
++  elif host_machine.cpu_family() == 'arm' or host_machine.cpu_family() == 'aarch64'
++    conf.set('CPU_arm', true)
++    if cc.get_id() == 'gcc'
++      conf.set('OC_ARM_ASM', true)
++    endif
++  endif
++
++  if cc.get_id() == 'gcc' and conf.get('CPU_arm', false)
++    # The following checks were only designed for GNU AS.
++    # Perl is needed for the arm2gnu reformatter.
++    perl_exe = find_program('perl', required: false, disabler: true)
++
++    if not perl_exe.found()
++      warning('*** ARM assembly requires perl -- disabling optimizations')
++    endif
++
++    if enable_asflag_probe and perl_exe.found()
++      assembler_checks = [
++        [
++          ['HAVE_ARM_ASM_NEON', 'OC_ARM_ASM_NEON'],
++          '''.file "configure"
++              vorr d0,d0,d0
++          ''',
++          ['-mfpu=neon', '-march=armv7-a'],
++          'assembler supports NEON instructions on ARM'
++        ],
++        [
++          ['HAVE_ARM_ASM_MEDIA', 'OC_ARM_ASM_MEDIA'],
++          '''.file "configure"
++              shadd8 r3,r3,r3
++          ''',
++          ['-march=armv6j'],
++          'assembler supports ARMv6 media instructions on ARM'],
++        [
++          ['HAVE_ARM_ASM_EDSP', 'OC_ARM_ASM_EDSP'],
++          '''.file "configure"
++              qadd r3,r3,r3
++          ''',
++          ['-march=armv5e'],
++          'assembler supports EDSP instructions on ARM'
++        ]
++      ]
++
++      foreach check : assembler_checks
++        pass = cc.compiles(check[1],
++          args: ['-x', 'assembler'],
++          name: check[3]
++        ) or cc.compiles(check[1],
++            args: ['-x', 'assembler'] + check[2],
++            name: check[3]
++          )
++
++        foreach define : check[0]
++          conf.set(define, pass)
++          conf.set(define, pass)
++        endforeach
++      endforeach
++    endif
+   endif
+ endif
+ 
+diff --git a/meson_options.txt b/meson_options.txt
+index b791623..cf2f628 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -2,6 +2,7 @@ option('doc', type: 'feature', value: 'auto', description: 'Build API documentat
+ option('spec', type: 'feature', value: 'auto', description: 'Build the specification')
+ option('valgrind-testing', type: 'feature', value: 'disabled', description: 'Enable running of tests inside Valgrind')
+ option('asm', type: 'feature', value: 'enabled', description: 'Enable assembly optimizations')
++option('asflag-probe', type: 'feature', value: 'enabled', description: 'Enable instructions not supported by the default assembler flags (Arm only).')
+ option('telemetry', type: 'feature', value: 'disabled', description: 'Enable debugging output controls')
+ option('mem-constraint', type: 'feature', value: 'disabled', description: 'Abort if size exceeds 16384x16384 (for fuzzing only)')
+ option('examples', type: 'feature', value: 'disabled', description: 'Enable examples')
+-- 
+2.40.1.windows.1
+

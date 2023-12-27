@@ -93,7 +93,7 @@ class comic_page_delegate(QStyledItemDelegate):
         topSizeThumbnail = ((rect.height()-imageSize.height())/2)+rect.top()
         thumbImage = icon.pixmap(imageSizeHighDPI).toImage()
         thumbImage.setDevicePixelRatio(self.devicePixelRatioF)
-        painter.drawImage(QRect(leftSideThumbnail, topSizeThumbnail, imageSize.width(), imageSize.height()), thumbImage)
+        painter.drawImage(QRect(int(leftSideThumbnail), int(topSizeThumbnail), int(imageSize.width()), int(imageSize.height())), thumbImage)
         
         labelWidth = rect.width()-decoratonSize.width()-(margin*3)
         
@@ -136,8 +136,8 @@ class comic_page_delegate(QStyledItemDelegate):
             
             descRect = QRect(textRect.left(), textRect.bottom()+margin, labelWidth, (rect.bottom()-margin) - (textRect.bottom()+margin))
             if textRect.bottom()+metrics.height() < rect.bottom():
-                textRect.setBottom(textRect.bottom()+(margin/2))
-                textRect.setLeft(textRect.left()-(margin/2))
+                textRect.setBottom(int(textRect.bottom()+(margin/2)))
+                textRect.setLeft(int(textRect.left()-(margin/2)))
                 painter.setOpacity(0.4)
                 painter.drawLine(textRect.bottomLeft(), textRect.bottomRight())
                 painter.setOpacity(1.0)
@@ -196,6 +196,7 @@ class comics_project_manager_docker(DockWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle(self.stringName)
+        self.setProperty("ShowOnWelcomePage", True);
 
         # Setup layout:
         base = QHBoxLayout()

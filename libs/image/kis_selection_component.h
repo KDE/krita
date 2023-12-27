@@ -41,6 +41,8 @@ public:
     virtual void recalculateOutlineCache() = 0;
 
     virtual KUndo2Command* resetToEmpty() { return 0; }
+
+    virtual void setResolutionProxy(KisImageResolutionProxySP /* resolutionProxy */) { };
 };
 
 #endif

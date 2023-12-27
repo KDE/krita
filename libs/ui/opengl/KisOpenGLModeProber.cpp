@@ -144,11 +144,15 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
 {
     const QSurfaceFormat &format = rendererConfig.format;
 
+    dbgOpenGL << "Probing format" << rendererConfig.rendererId() << rendererConfig.angleRenderer
+              << rendererConfig.format;
+
     QScopedPointer<AppAttributeSetter> sharedContextSetter;
     QScopedPointer<AppAttributeSetter> glSetter;
     QScopedPointer<AppAttributeSetter> glesSetter;
     QScopedPointer<SurfaceFormatSetter> formatSetter;
     QScopedPointer<EnvironmentSetter> rendererSetter;
+    QScopedPointer<EnvironmentSetter> portalSetter;
     QScopedPointer<QGuiApplication> application;
 
     int argc = 1;
@@ -166,11 +170,14 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         }
 
         rendererSetter.reset(new EnvironmentSetter(QLatin1String("QT_ANGLE_PLATFORM"), angleRendererToString(rendererConfig.angleRenderer)));
+        portalSetter.reset(new EnvironmentSetter(QLatin1String("QT_NO_XDG_DESKTOP_PORTAL"), QLatin1String("1")));
         formatSetter.reset(new SurfaceFormatSetter(format));
 
-        QGuiApplication::setDesktopSettingsAware(false);
+        // Disable this workaround for plasma (BUG:408015), because it causes 
+        // a crash on Windows with Qt 5.15.7
+        //QGuiApplication::setDesktopSettingsAware(false);
         application.reset(new QGuiApplication(argc, &argv));
-        QGuiApplication::setDesktopSettingsAware(true);
+        //QGuiApplication::setDesktopSettingsAware(true);
     }
 
     QWindow surface;
@@ -201,7 +208,11 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     }
 #endif
 
-    return Result(context);
+    Result result(context);
+
+    dbgOpenGL << "Probe returned" << result.rendererString() << result.driverVersionString() << result.isOpenGLES();
+
+    return result;
 }
 
 bool KisOpenGLModeProber::fuzzyCompareColorSpaces(const KisSurfaceColorSpace &lhs, const KisSurfaceColorSpace &rhs)
@@ -332,4 +343,6 @@ KisOpenGLModeProber::Result::Result(QOpenGLContext &context) {
     m_supportsLod = context.format().majorVersion() >= 3 || (m_isOpenGLES && context.hasExtension("GL_EXT_shader_texture_lod"));
 
     m_extensions = context.extensions();
+    // Remove empty name extension that sometimes appears on NVIDIA output
+    m_extensions.remove("");
 }

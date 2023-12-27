@@ -65,7 +65,7 @@ KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter
     setAutoFillBackground(true);
     setAcceptDrops(true);
     setFocusPolicy(Qt::StrongFocus);
-    setAttribute(Qt::WA_InputMethodEnabled, false);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_OpaquePaintEvent);
 #ifdef Q_OS_MACOS
@@ -150,6 +150,28 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+void KisQPainterCanvas::focusInEvent(QFocusEvent *event)
+{
+    processFocusInEvent(event);
+}
+
+void KisQPainterCanvas::focusOutEvent(QFocusEvent *event)
+{
+    processFocusOutEvent(event);
+}
+
+void KisQPainterCanvas::hideEvent(QHideEvent *e)
+{
+    QWidget::hideEvent(e);
+    notifyDecorationsWindowMinimized(true);
+}
+
+void KisQPainterCanvas::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+    notifyDecorationsWindowMinimized(false);
+}
+
 void KisQPainterCanvas::channelSelectionChanged(const QBitArray &channelFlags)
 {
     Q_ASSERT(m_d->prescaledProjection);
@@ -190,6 +212,18 @@ void KisQPainterCanvas::setWrapAroundViewingMode(bool value)
 bool KisQPainterCanvas::wrapAroundViewingMode() const
 {
     return false;
+}
+
+void KisQPainterCanvas::setWrapAroundViewingModeAxis(WrapAroundAxis value)
+{
+    Q_UNUSED(value);
+    dbgKrita << "Wrap around viewing mode not implemented in QPainter Canvas.";
+    return;
+}
+
+WrapAroundAxis KisQPainterCanvas::wrapAroundViewingModeAxis() const
+{
+    return WRAPAROUND_BOTH;
 }
 
 void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)

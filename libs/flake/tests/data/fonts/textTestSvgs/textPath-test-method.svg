@@ -1,0 +1,34 @@
+<svg width="460px" height="270px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+    <defs>
+    <path id="figure-of-eight" d="M50 0C75 0 100 25 100 50C100 100 0 100 0 150C0 175 25 200 50 200C75 200 100 175 100 150C100 100 0 100 0 50C0 25 25 0 50 0Z" />
+</defs>
+<g id="testRect">
+    
+    <!-- Example of method="stretch", the red and blue texts should not fully overlap -->
+    <text id="spacing1" transform="translate(30,40)"
+          font-family="DejaVu Sans" fill="blue" font-size="30"><textPath href="#figure-of-eight">The quick brown fox jumps over the lazy dog.</textPath>
+    </text>
+    <text id="test1" transform="translate(30,40)"
+          font-family="DejaVu Sans" fill="red" font-size="30"><textPath method="stretch" href="#figure-of-eight">The quick brown fox jumps over the lazy dog.</textPath>
+    </text>
+    
+    <text id="spacing1rtl" transform="translate(180,40)"
+          font-family="DejaVu Sans" fill="blue" font-size="30" direction="rtl" text-anchor="end"><textPath href="#figure-of-eight">اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    <text id="test1rtl" transform="translate(180,40)"
+          font-family="DejaVu Sans" fill="red" font-size="30" direction="rtl" text-anchor="end"><textPath method="stretch" href="#figure-of-eight">اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    
+    <text id="test1ttb" transform="translate(330,40)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="30" 
+          writing-mode="vertical-rl"><textPath href="#figure-of-eight">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="spacing1ttb" transform="translate(330,40)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="red" font-size="30" 
+          writing-mode="vertical-rl"><textPath method="stretch" href="#figure-of-eight">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+
+</g>
+
+</svg>

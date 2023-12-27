@@ -52,4 +52,4 @@ void TestBaseColorSpaceRegistry::testProfileByUniqueId()
     QCOMPARE(*fetchedProfile, *profile);
 }
 
-QTEST_GUILESS_MAIN(TestBaseColorSpaceRegistry)
+SIMPLE_TEST_MAIN(TestBaseColorSpaceRegistry)

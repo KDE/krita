@@ -10,34 +10,31 @@
 #include "HeifExport.h"
 #include "HeifError.h"
 
-#include <QCheckBox>
-#include <QSlider>
 #include <QApplication>
-#include <QScopedPointer>
 #include <QBuffer>
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QScopedPointer>
+#include <QSlider>
 
 #include <algorithm>
 #include <kpluginfactory.h>
-#include <QFileInfo>
+#include <libheif/heif_cxx.h>
 
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceConstants.h>
+#include <KisDocument.h>
+#include <KisExportCheckRegistry.h>
+#include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
+#include <KoColorSpaceConstants.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorTransferFunctions.h>
-
-#include <KisImportExportManager.h>
-#include <KisExportCheckRegistry.h>
-
-#include <kis_properties_configuration.h>
+#include <kis_assert.h>
 #include <kis_config.h>
-#include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_group_layer.h>
-#include <kis_paint_device.h>
-#include <kis_paint_layer.h>
-
 #include <kis_exif_info_visitor.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
 #include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_filter_registry_model.h>
@@ -45,10 +42,9 @@
 #include <kis_meta_data_schema_registry.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_value.h>
-
-#include "kis_iterator_ng.h"
-
-#include "libheif/heif_cxx.h"
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_properties_configuration.h>
 
 using heif::Error;
 
@@ -94,8 +90,9 @@ public:
     }
 
     heif_error write(const void* data, size_t size) override {
-        qint64 n = m_io->write((const char*)data,size);
-        if (n != (qint64)size) {
+        qint64 n = m_io->write(static_cast<const char *>(data),
+                               static_cast<int>(size));
+        if (n != static_cast<qint64>(size)) {
             QString error = m_io->errorString();
 
             heif_error err = {
@@ -114,9 +111,32 @@ private:
     QIODevice* m_io;
 };
 
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+class Q_DECL_HIDDEN HeifLock
+{
+public:
+    HeifLock()
+        : p()
+    {
+        heif_init(&p);
+    }
+
+    ~HeifLock()
+    {
+        heif_deinit();
+    }
+
+private:
+    heif_init_params p;
+};
+#endif
 
 KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+    HeifLock lock;
+#endif
+
     KisImageSP image = document->savingImage();
     const KoColorSpace *cs = image->colorSpace();
 
@@ -141,23 +161,25 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                                       KoColorConversionTransformation::internalConversionFlags());
     }
 
-    ConversionPolicy conversionPolicy = KeepTheSame;
+    ConversionPolicy conversionPolicy = ConversionPolicy::KeepTheSame;
     bool convertToRec2020 = false;
     
     if (cs->hasHighDynamicRange() && cs->colorModelId() != GrayAColorModelID) {
-        QString conversionOption = (configuration->getString("floatingPointConversionOption", "Rec2100PQ"));
+        QString conversionOption =
+            (configuration->getString("floatingPointConversionOption",
+                                      "KeepSame"));
         if (conversionOption == "Rec2100PQ") {
             convertToRec2020 = true;
-            conversionPolicy = ApplyPQ;
+            conversionPolicy = ConversionPolicy::ApplyPQ;
         } else if (conversionOption == "Rec2100HLG") {
             convertToRec2020 = true;
-            conversionPolicy = ApplyHLG;
+            conversionPolicy = ConversionPolicy::ApplyHLG;
         } else if (conversionOption == "ApplyPQ") {
-            conversionPolicy = ApplyPQ;
+            conversionPolicy = ConversionPolicy::ApplyPQ;
         } else if (conversionOption == "ApplyHLG") {
-            conversionPolicy = ApplyHLG;
+            conversionPolicy = ConversionPolicy::ApplyHLG;
         }  else if (conversionOption == "ApplySMPTE428") {
-            conversionPolicy = ApplySMPTE428;
+            conversionPolicy = ConversionPolicy::ApplySMPTE428;
         }
     }
 
@@ -214,19 +236,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         heif::Context ctx;
 
         heif_chroma chroma = hasAlpha? heif_chroma_interleaved_RRGGBBAA_LE: heif_chroma_interleaved_RRGGBB_LE;
-        int endValue0 = 1;
-        int endValue1 = 0;
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-            endValue0 = 0;
-            endValue1 = 1;
             chroma = hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE;
         }
 
         heif::Image img;
-
-        const int max12bit = 4095;
-        const int max16bit = 65535;
-        const double multiplier16bit = (1.0/double(max16bit));
 
         if (cs->colorModelId() == RGBAColorModelID) {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
@@ -236,116 +250,79 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.add_plane(heif_channel_G, width,height, 8);
                 img.add_plane(heif_channel_B, width,height, 8);
 
-                uint8_t* ptrR {nullptr};
-                uint8_t *ptrG {nullptr};
-                uint8_t *ptrB {nullptr};
-                uint8_t *ptrA {nullptr};
-                int strideR, strideG, strideB, strideA;
+                int strideR = 0;
+                int strideG = 0;
+                int strideB = 0;
+                int strideA = 0;
 
-                ptrR = img.get_plane(heif_channel_R, &strideR);
-                ptrG = img.get_plane(heif_channel_G, &strideG);
-                ptrB = img.get_plane(heif_channel_B, &strideB);
+                uint8_t *ptrR = img.get_plane(heif_channel_R, &strideR);
+                uint8_t *ptrG = img.get_plane(heif_channel_G, &strideG);
+                uint8_t *ptrB = img.get_plane(heif_channel_B, &strideB);
 
-                if (hasAlpha) {
-                    img.add_plane(heif_channel_Alpha, width,height, 8);
-                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-                }
+                uint8_t *ptrA = [&]() -> uint8_t * {
+                    if (hasAlpha) {
+                        img.add_plane(heif_channel_Alpha, width, height, 8);
+                        return img.get_plane(heif_channel_Alpha, &strideA);
+                    } else {
+                        return nullptr;
+                    }
+                }();
 
                 KisPaintDeviceSP pd = image->projection();
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        ptrR[y*strideR+x] = KoBgrU8Traits::red(it->rawData());
-                        ptrG[y*strideG+x] = KoBgrU8Traits::green(it->rawData());
-                        ptrB[y*strideB+x] = KoBgrU8Traits::blue(it->rawData());
-
-                        if (hasAlpha) {
-                            ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
-            } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
-                dbgFile << "Saving as 12bit rgba";
-                img.create(width,height, heif_colorspace_RGB, chroma);
-                img.add_plane(heif_channel_interleaved, width, height, 12);
-
-                uint8_t *ptr {nullptr};
-                int stride;
-
-                ptr = img.get_plane(heif_channel_interleaved, &stride);
-
-                KisPaintDeviceSP pd = image->projection();
-                QVector<quint16> pixelValues(4);
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
-
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        pixelValues[0] = KoBgrU16Traits::red(it->rawData());
-                        pixelValues[1] = KoBgrU16Traits::green(it->rawData());
-                        pixelValues[2] = KoBgrU16Traits::blue(it->rawData());
-                        pixelValues[3] = quint16(KoBgrU16Traits::opacityF(it->rawData()) * max16bit);
-
-                        int channels = hasAlpha? 4: 3;
-                        for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound(0, int(float(pixelValues[ch]) * multiplier16bit * max12bit), max12bit);
-                            ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
-                            ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                Planar::writeLayer(hasAlpha,
+                                   width,
+                                   height,
+                                   ptrR,
+                                   strideR,
+                                   ptrG,
+                                   strideG,
+                                   ptrB,
+                                   strideB,
+                                   ptrA,
+                                   strideA,
+                                   it);
             } else {
-                dbgFile << "Saving floating point as 12bit rgba";
-                img.create(width,height, heif_colorspace_RGB, chroma);
+                dbgFile << "Saving as 12bit rgba";
+                img.create(width, height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
-                int stride;
+                int stride = 0;
 
                 uint8_t *ptr = img.get_plane(heif_channel_interleaved, &stride);
 
                 KisPaintDeviceSP pd = image->projection();
-                QVector<float> pixelValues(4);
-                QVector<qreal> pixelValuesLinear(4);
-                QVector<qreal> lCoef {cs->lumaCoefficients()};
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
-                const KoColorProfile *profile = cs->profile();
-                bool isLinear = profile->isLinear();
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        cs->normalisedChannelsValue(it->rawData(), pixelValues);
-                        if (!convertToRec2020 && !isLinear) {
-                            std::copy(pixelValues.begin(), pixelValues.end(), pixelValuesLinear.begin());
-                            profile->linearizeFloatValue(pixelValuesLinear);
-                            std::copy(pixelValuesLinear.begin(), pixelValuesLinear.end(), pixelValues.begin());
-                        }
-
-                        if (conversionPolicy == ApplyHLG && removeHGLOOTF) {
-                            removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
-                        }
-
-                        int channels = hasAlpha? 4: 3;
-                        for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * max12bit), max12bit);
-                            ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
-                            ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
+                if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+                    HDRInt::writeInterleavedLayer(QSysInfo::ByteOrder,
+                                                  hasAlpha,
+                                                  width,
+                                                  height,
+                                                  ptr,
+                                                  stride,
+                                                  it);
+                } else {
+                    HDRFloat::writeInterleavedLayer(cs->colorDepthId(),
+                                                    QSysInfo::ByteOrder,
+                                                    hasAlpha,
+                                                    convertToRec2020,
+                                                    cs->profile()->isLinear(),
+                                                    conversionPolicy,
+                                                    removeHGLOOTF,
+                                                    width,
+                                                    height,
+                                                    ptr,
+                                                    stride,
+                                                    it,
+                                                    hlgGamma,
+                                                    hlgNominalPeak,
+                                                    cs);
                 }
             }
-
         } else {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
                 dbgFile << "Saving as 8 bit monochrome.";
@@ -353,75 +330,71 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 img.add_plane(heif_channel_Y, width, height, 8);
 
-                uint8_t *ptrG {nullptr};
-                uint8_t *ptrA {nullptr};
-                int strideG, strideA;
+                int strideG = 0;
+                int strideA = 0;
 
-                ptrG = img.get_plane(heif_channel_Y, &strideG);
-
-                if (hasAlpha) {
-                    img.add_plane(heif_channel_Alpha, width, height, 8);
-                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-                }
+                uint8_t *ptrG = img.get_plane(heif_channel_Y, &strideG);
+                uint8_t *ptrA = [&]() -> uint8_t * {
+                    if (hasAlpha) {
+                        img.add_plane(heif_channel_Alpha, width, height, 8);
+                        return img.get_plane(heif_channel_Alpha, &strideA);
+                    } else {
+                        return nullptr;
+                    }
+                }();
 
                 KisPaintDeviceSP pd = image->projection();
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        ptrG[y * strideG + x] = KoGrayU8Traits::gray(it->rawData());
-
-                        if (hasAlpha) {
-                            ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                Gray::writePlanarLayer(QSysInfo::ByteOrder,
+                                       8,
+                                       hasAlpha,
+                                       width,
+                                       height,
+                                       ptrG,
+                                       strideG,
+                                       ptrA,
+                                       strideA,
+                                       it);
             } else {
                 dbgFile << "Saving as 12 bit monochrome";
                 img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
 
                 img.add_plane(heif_channel_Y, width, height, 12);
 
-                uint8_t *ptrG {nullptr};
-                uint8_t *ptrA {nullptr};
-                int strideG, strideA;
+                int strideG = 0;
+                int strideA = 0;
 
-                ptrG = img.get_plane(heif_channel_Y, &strideG);
-
-                if (hasAlpha) {
-                    img.add_plane(heif_channel_Alpha, width, height, 12);
-                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-                }
+                uint8_t *ptrG = img.get_plane(heif_channel_Y, &strideG);
+                uint8_t *ptrA = [&]() -> uint8_t * {
+                    if (hasAlpha) {
+                        img.add_plane(heif_channel_Alpha, width, height, 12);
+                        return img.get_plane(heif_channel_Alpha, &strideA);
+                    } else {
+                        return nullptr;
+                    }
+                }();
 
                 KisPaintDeviceSP pd = image->projection();
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) * multiplier16bit * max12bit), max12bit);
-                        ptrG[(x*2) + y * strideG + endValue0] = (uint8_t) (v >> 8);
-                        ptrG[(x*2) + y * strideG + endValue1] = (uint8_t) (v & 0xFF);
-
-                        if (hasAlpha) {
-                            uint16_t vA = qBound(0, int( cs->opacityF(it->rawData()) * max12bit), max12bit);
-                            ptrA[(x*2) + y * strideA + endValue0] = (uint8_t) (vA >> 8);
-                            ptrA[(x*2) + y * strideA + endValue1] = (uint8_t) (vA & 0xFF);
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                Gray::writePlanarLayer(QSysInfo::ByteOrder,
+                                       12,
+                                       hasAlpha,
+                                       width,
+                                       height,
+                                       ptrG,
+                                       strideG,
+                                       ptrA,
+                                       strideA,
+                                       it);
             }
         }
 
         // --- save the color profile.
-        if (conversionPolicy == KeepTheSame) {
+        if (conversionPolicy == ConversionPolicy::KeepTheSame) {
             QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
             std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
             img.set_raw_color_profile(heif_color_profile_type_prof, rawProfile);
@@ -430,20 +403,33 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
            nclxDescription.set_full_range_flag(true);
            nclxDescription.set_matrix_coefficients(heif_matrix_coefficients_RGB_GBR);
            if (convertToRec2020) {
+#if LIBHEIF_HAVE_VERSION(1, 14, 1)
+               nclxDescription.set_color_primaries(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
+#else
                nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
+#endif
            } else {
-               ColorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
-               if (primaries >= 256) {
-                   primaries = PRIMARIES_UNSPECIFIED;
-               }
-               nclxDescription.set_color_primaties(heif_color_primaries(primaries));
+                const ColorPrimaries primaries =
+                    image->colorSpace()->profile()->getColorPrimaries();
+                // PRIMARIES_ADOBE_RGB_1998 and higher are not valid for CICP.
+                // But this should have already been caught by the KeepTheSame
+                // clause...
+                KIS_SAFE_ASSERT_RECOVER(primaries <= PRIMARIES_EBU_Tech_3213_E) {
+                    errFile << "Attempt to export a file with unsupported primaries" << primaries;
+                    return ImportExportCodes::FormatColorSpaceUnsupported;
+                }
+#if LIBHEIF_HAVE_VERSION(1, 14, 1)
+                nclxDescription.set_color_primaries(heif_color_primaries(primaries));
+#else
+                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
+#endif
            }
 
-           if (conversionPolicy == ApplyPQ) {
+           if (conversionPolicy == ConversionPolicy::ApplyPQ) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_PQ);
-           } else if (conversionPolicy == ApplyHLG) {
+           } else if (conversionPolicy == ConversionPolicy::ApplyHLG) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_HLG);
-           } else if (conversionPolicy == ApplySMPTE428) {
+           } else if (conversionPolicy == ConversionPolicy::ApplySMPTE428) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_SMPTE_ST_428_1);
            }
 
@@ -457,7 +443,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         // iOS gets confused when a heif file contains an nclx.
         // but we absolutely need it for hdr.
-        if (conversionPolicy != KeepTheSame && cs->hasHighDynamicRange()) {
+        if (conversionPolicy != ConversionPolicy::KeepTheSame && cs->hasHighDynamicRange()) {
             options.macOS_compatibility_workaround_no_nclx_profile = false;
         }
 
@@ -530,19 +516,6 @@ void HeifExport::initializeCapabilities()
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
 
-float HeifExport::applyCurveAsNeeded(float value, HeifExport::ConversionPolicy policy)
-{
-    if ( policy == ApplyPQ) {
-        return applySmpte2048Curve(value);
-    } else if ( policy == ApplyHLG) {
-        return applyHLGCurve(value);
-    } else if ( policy == ApplySMPTE428) {
-        return applySMPTE_ST_428Curve(value);
-    }
-    return value;
-}
-
-
 void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     // the export manager should have prepared some info for us!
@@ -559,8 +532,9 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
     cmbChroma->setCurrentIndex(chromaOptions.indexOf(cfg->getString("chroma", "444")));
     m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
-    
-    int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, 2);
+
+    int cicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag,
+                                    static_cast<int>(PRIMARIES_UNSPECIFIED));
 
     // Rav1e doesn't support monochrome. To get around this, people may need to convert to sRGB first.
     chkMonochromesRGB->setVisible(cfg->getString(KisImportExportFilter::ColorModelIDTag) == "GRAYA");
@@ -575,7 +549,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
     
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
-        if (CicpPrimaries != PRIMARIES_UNSPECIFIED) {
+        if (cicpPrimaries != PRIMARIES_UNSPECIFIED) {
             conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode PQ");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
                                             " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
@@ -591,7 +565,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
                                             " Krita always opens images like these as linear floating point, this option is there to reverse that");
             conversionOptionName << "ApplySMPTE428";
         }
-        
+
         conversionOptionsList << i18nc("Color space option", "No changes, clip");
         toolTipList << i18nc("@tooltip", "The image will be converted plainly to 12bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
         conversionOptionName << "KeepSame";
@@ -601,8 +575,12 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
         cmbConversionPolicy->setItemData(i, toolTipList.at(i), Qt::ToolTipRole);
         cmbConversionPolicy->setItemData(i, conversionOptionName.at(i), Qt::UserRole+1);
     }
-    QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
-    cmbConversionPolicy->setCurrentIndex(conversionOptionName.indexOf(optionName));
+    QString optionName =
+        cfg->getString("floatingPointConversionOption", "KeepSame");
+    if (conversionOptionName.contains(optionName)) {
+        cmbConversionPolicy->setCurrentIndex(
+            conversionOptionName.indexOf(optionName));
+    }
     chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
     spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
     spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
@@ -618,7 +596,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     cfg->setProperty("monochromeToSRGB", chkMonochromesRGB->isChecked());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());
-    cfg->setProperty("removeHGLOOTF", chkLossless->isChecked());
+    cfg->setProperty("removeHGLOOTF", chkHLGOOTF->isChecked());
     cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }

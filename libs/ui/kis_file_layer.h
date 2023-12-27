@@ -32,18 +32,17 @@ public:
      * @param basePath the path to the image, if it has been saved before.
      * @param filename the path to the file, relative to the basePath
      * @param scalingMethod @see ScalingMethod
+     * @param scalingFilter the ID of the KisFilterStrategy to be used if scaling
      * @param name the name of the layer
      * @param opacity the opacity of the layer
      */
-    KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, const QString &name, quint8 opacity);
+    KisFileLayer(KisImageWSP image, const QString& basePath, const QString &filename, ScalingMethod scalingMethod, QString scalingFilter, const QString &name, quint8 opacity, const KoColorSpace *fallbackColorSpace = 0);
     ~KisFileLayer() override;
     KisFileLayer(const KisFileLayer& rhs);
 
     QIcon icon() const override;
 
     void resetCache() override;
-
-    const KoColorSpace *colorSpace() const override;
 
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;
@@ -62,6 +61,9 @@ public:
 
     ScalingMethod scalingMethod() const;
     void setScalingMethod(ScalingMethod method);
+
+    QString scalingFilter() const;
+    void setScalingFilter(QString method);
 
     KisNodeSP clone() const override;
     bool allowAsChild(KisNodeSP) const override;
@@ -96,6 +98,7 @@ private:
     QString m_basePath;
     QString m_filename;
     ScalingMethod m_scalingMethod {None};
+    QString m_scalingFilter;
 
     KisPaintDeviceSP m_paintDevice;
     KisSafeDocumentLoader m_loader;

@@ -22,7 +22,10 @@ public:
     void composite(const KisPaintDeviceSP sourceDevice, KisPaintDeviceSP targetDevice, const QRect &rect);
 
     QRect calculateFullExtent(const KisPaintDeviceSP device);
+    QRect calculateExtent(const KisPaintDeviceSP device, int time);
     QRect calculateExtent(const KisPaintDeviceSP device);
+
+    QRect updateExtentOnAddition(const KisPaintDeviceSP device, int addedTime);
 
     int configSeqNo() const;
 

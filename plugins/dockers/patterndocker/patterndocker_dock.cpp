@@ -31,8 +31,7 @@ PatternDockerDock::PatternDockerDock( )
 void PatternDockerDock::setViewManager(KisViewManager* kisview)
 {
     KisCanvasResourceProvider* resourceProvider = kisview->canvasResourceProvider();
-    connect(resourceProvider, SIGNAL(sigPatternChanged(KoPatternSP)),
-            this, SLOT(patternChanged(KoPatternSP)));
+    connect(resourceProvider, &KisCanvasResourceProvider::sigPatternChanged, this, &PatternDockerDock::patternChanged);
 
     connect(m_patternChooser, SIGNAL(resourceSelected(KoResourceSP )),
             resourceProvider, SLOT(slotPatternActivated(KoResourceSP )));

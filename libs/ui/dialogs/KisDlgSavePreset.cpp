@@ -207,7 +207,7 @@ void KisPresetSaveWidget::savePreset()
 
 
     //    // HACK ALERT! the server does not notify the observers
-    //    // automatically, so we need to call theupdate manually!
+    //    // automatically, so we need to call the update manually!
     //    rServer->tagCategoryMembersChanged();
     if (success) {
         m_favoriteResourceManager->updateFavoritePresets();

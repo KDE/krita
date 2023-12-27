@@ -18,7 +18,7 @@ class KoViewConverter;
 
 /**
  * @brief The KisHandlePainterHelper class is a special helper for
- *        painting handles around objects. It ensures the handlesare painted
+ *        painting handles around objects. It ensures the handles are painted
  *        with the same size and line width whatever transformation is setup
  *        in the painter. The handles will also be rotated/skewed if the object
  *        itself has these transformations.
@@ -39,14 +39,14 @@ public:
      * Creates the helper, initializes all the internal transformations and
      * *resets* the transformation of the painter.
      */
-    KisHandlePainterHelper(QPainter *_painter, qreal handleRadius = 0.0);
+    KisHandlePainterHelper(QPainter *_painter, qreal handleRadius = 0.0, int decorationThickness = 1);
 
     /**
      * Creates the helper, initializes all the internal transformations and
      * *resets* the transformation of the painter. This override also adjusts the
      * transformation of the painter into the coordinate system of the shape
      */
-    KisHandlePainterHelper(QPainter *_painter, const QTransform &originalPainterTransform, qreal handleRadius);
+    KisHandlePainterHelper(QPainter *_painter, const QTransform &originalPainterTransform, qreal handleRadius, int decorationThickness = 1);
 
     /**
      * Move c-tor. Used to create and return the helper from functions by-value.
@@ -94,6 +94,11 @@ public:
      * predefined size
      */
     void drawHandleSmallCircle(const QPointF &center);
+
+    /**
+     * Draws a line in the style of a handle with \p width indicating the thickness.
+     */
+    void drawHandleLine(const QLineF &line, qreal width = 1.0, QVector<qreal> dashPattern = {}, qreal dashOffset = 0.0);
 
     /**
      * Draw a rotated handle representing the gradient handle
@@ -155,7 +160,8 @@ private:
     QTransform m_originalPainterTransform;
     QTransform m_painterTransform;
     qreal m_handleRadius;
-    KisAlgebra2D::DecomposedMatix m_decomposedMatrix;
+    int m_decorationThickness;
+    KisAlgebra2D::DecomposedMatrix m_decomposedMatrix;
     QTransform m_handleTransform;
     QPolygonF m_handlePolygon;
     KisHandleStyle m_handleStyle;

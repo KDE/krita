@@ -259,4 +259,4 @@ private:
     QScopedPointer<KisSliderSpinBoxPrivate<KisDoubleSliderSpinBox, KisDoubleParseSpinBox>> d;
 };
 
-#endif //kISSLIDERSPINBOX_H
+#endif // KISSLIDERSPINBOX_H

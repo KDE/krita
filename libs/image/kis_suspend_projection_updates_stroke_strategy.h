@@ -10,10 +10,16 @@
 #include <KisRunnableBasedStrokeStrategy.h>
 
 #include <QScopedPointer>
+#include "kis_projection_updates_filter.h"
 
 class KisSuspendProjectionUpdatesStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
+    struct SuspendUpdatesFilterInterface : public KisProjectionUpdatesFilter
+    {
+        virtual void addExplicitUIUpdateRect(const QRect &rc) = 0;
+    };
+
     struct SharedData {
         KisProjectionUpdatesFilterCookie installedFilterCookie = {};
     };
@@ -44,9 +50,6 @@ private:
 
     void suspendStrokeCallback() override;
     void resumeStrokeCallback() override;
-
-
-    void resumeAndIssueUpdates(bool dropUpdates);
 
 private:
     struct Private;

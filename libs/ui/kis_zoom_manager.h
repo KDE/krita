@@ -78,6 +78,9 @@ public Q_SLOTS:
     void changeCanvasMappingMode(bool canvasMappingMode);
     void pageOffsetChanged();
     void zoomTo100();
+    void slotZoomToFit();
+    void slotZoomToFitWidth();
+    void slotZoomToFitHeight();
     void slotToggleZoomToFit();
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();

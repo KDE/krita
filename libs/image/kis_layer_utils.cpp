@@ -51,9 +51,15 @@
 #include "kis_transparency_mask.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_command_ids.h"
+#include "kis_image_config.h"
+#include "KisFutureUtils.h"
 
 
 namespace KisLayerUtils {
+
+namespace Private {
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea, const QRect &extraUpdateRect);
+}
 
     void fetchSelectionMasks(KisNodeList mergedNodes, QVector<KisSelectionMaskSP> &selectionMasks)
     {
@@ -136,9 +142,18 @@ namespace KisLayerUtils {
               prevLayer(_prevLayer),
               currLayer(_currLayer)
         {
-            frames =
-                fetchLayerFramesRecursive(prevLayer) |
+            frames = fetchLayerFramesRecursive(prevLayer) |
                 fetchLayerFramesRecursive(currLayer);
+
+            /**
+             * If source layer is not animated, then just merge that into the current frame
+             * only. See the other part of this feature in mergeDown() itself
+             *
+             * See https://bugs.kde.org/show_bug.cgi?id=475550
+             */
+            if (!frames.isEmpty() && !currLayer->isAnimated()) {
+                frames.insert(image->animationInterface()->currentTime());
+            }
 
             pinnedToTimeline = prevLayer->isPinnedToTimeline() || currLayer->isPinnedToTimeline();
 
@@ -471,26 +486,30 @@ namespace KisLayerUtils {
         bool m_skipIfDstIsGroup;
     };
 
-    struct RefreshHiddenAreas : public KUndo2Command {
+    struct RefreshHiddenAreas : public KisCommandUtils::AggregateCommand {
+        struct refresh_entire_image_t {};
+        static constexpr refresh_entire_image_t refresh_entire_image{};
+
         RefreshHiddenAreas(MergeDownInfoBaseSP info) : m_image(info->image), m_nodes(info->allSrcNodes()) {}
-        RefreshHiddenAreas(KisImageSP image, KisNodeList nodes) : m_image(image), m_nodes(nodes) {}
+        RefreshHiddenAreas(MergeDownInfoBaseSP info, refresh_entire_image_t) : m_image(info->image), m_nodes(info->allSrcNodes()), m_extraUpdateRect(info->image->bounds()) {}
         RefreshHiddenAreas(KisImageSP image, KisNodeSP node) : m_image(image), m_nodes() {
             m_nodes << node;
         }
 
-        void redo() override {
+        void populateChildCommands() override {
             KisImageAnimationInterface *interface = m_image->animationInterface();
             const QRect preparedRect = !interface->externalFrameActive() ?
                 m_image->bounds() : QRect();
 
             foreach (KisNodeSP node, m_nodes) {
-                refreshHiddenAreaAsync(m_image, node, preparedRect);
+                Private::refreshHiddenAreaAsync(m_image, node, preparedRect, m_extraUpdateRect);
             }
         }
 
     private:
         KisImageWSP m_image;
         KisNodeList m_nodes;
+        QRect m_extraUpdateRect;
     };
 
     struct RefreshDelayedUpdateLayers : public KUndo2Command {
@@ -598,7 +617,7 @@ namespace KisLayerUtils {
                 const QString mergedLayerSuffix = i18n("Merged");
                 mergedLayerName = m_info->mergedNodes.first()->name();
 
-                if (!mergedLayerName.endsWith(mergedLayerSuffix)) {
+                if (KisImageConfig(true).renameMergedLayers() && !mergedLayerName.endsWith(mergedLayerSuffix)) {
                     mergedLayerName = QString("%1 %2")
                         .arg(mergedLayerName).arg(mergedLayerSuffix);
                 }
@@ -666,15 +685,17 @@ namespace KisLayerUtils {
     };
 
     struct MergeLayers : public KisCommandUtils::AggregateCommand {
-        MergeLayers(MergeDownInfoSP info) : m_info(info) {}
+        MergeLayers(MergeDownInfoSP info, bool skipMergingSourceLayer)
+            : m_info(info), m_skipMergingSourceLayer(skipMergingSourceLayer) {}
 
         void populateChildCommands() override {
             // actual merging done by KisLayer::createMergedLayer (or specialized descendant)
-            m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer);
+            m_info->currLayer->fillMergedLayerTemplate(m_info->dstLayer(), m_info->prevLayer, m_skipMergingSourceLayer);
         }
 
     private:
         MergeDownInfoSP m_info;
+        bool m_skipMergingSourceLayer {false};
     };
 
     struct MergeLayersMultiple : public KisCommandUtils::AggregateCommand {
@@ -1248,7 +1269,7 @@ namespace KisLayerUtils {
         AddNewFrame(MergeDownInfoBaseSP info, int frame) : m_frame(frame), m_sampledNodes(info->allSrcNodes()), m_mergeInfo(info) {}
 
         void populateChildCommands() override {
-            KUndo2Command *cmd = new KisCommandUtils::SkipFirstRedoWrapper();
+            KUndo2Command *cmd = new KUndo2Command;
             KisNodeSP node = m_node ? m_node : m_mergeInfo->dstNode;
             KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
             channel->addKeyframe(m_frame, cmd);
@@ -1399,20 +1420,44 @@ namespace KisLayerUtils {
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (info->frames.size() > 0) {
+                /**
+                 * Save the original time before we start switching is with
+                 * asynchronous SwitchFrameCommand.
+                 */
+                const int currentTimeOnStart = info->image->animationInterface()->currentTime();
+
                 foreach (int frame, info->frames) {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
-                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    /**
+                     * When switching frames we need to update the entire image, not
+                     * only the **new** extent of the layer, hence we pass `refresh_entire_image`
+                     * to the command to make sure that the entire image bounds rect is added
+                     * to the update rect
+                     */
+                    applicator.applyCommand(new RefreshHiddenAreas(info, RefreshHiddenAreas::refresh_entire_image));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
-                    applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
+
+                    /**
+                     * If source layer is **not** animated, then just merge that into the
+                     * current frame to avoid unintentional destruction of the animation
+                     * on the layer below. To merge the source into all the frames, just
+                     * make the source animated.
+                     *
+                     * See https://bugs.kde.org/show_bug.cgi?id=475550
+                     */
+                    const bool skipMergingSourceLayer = !layer->isAnimated() &&
+                            frame != currentTimeOnStart;
+
+                    applicator.applyCommand(new MergeLayers(info, skipMergingSourceLayer), KisStrokeJobData::BARRIER);
 
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, true, info->storage), KisStrokeJobData::BARRIER);
                 }
             } else {
                 applicator.applyCommand(new RefreshHiddenAreas(info));
                 applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
-                applicator.applyCommand(new MergeLayers(info), KisStrokeJobData::BARRIER);
+                applicator.applyCommand(new MergeLayers(info, false), KisStrokeJobData::BARRIER);
             }
 
             applicator.applyCommand(new MergeMetaData(info, strategy), KisStrokeJobData::BARRIER);
@@ -1501,7 +1546,7 @@ namespace KisLayerUtils {
         return result;
     }
 
-    void filterMergableNodes(KisNodeList &nodes, bool allowMasks)
+    void filterMergeableNodes(KisNodeList &nodes, bool allowMasks)
     {
         KisNodeList::iterator it = nodes.begin();
 
@@ -1516,7 +1561,7 @@ namespace KisLayerUtils {
         }
     }
 
-    void sortMergableNodes(KisNodeSP root, KisNodeList &inputNodes, KisNodeList &outputNodes)
+    void sortMergeableNodes(KisNodeSP root, KisNodeList &inputNodes, KisNodeList &outputNodes)
     {
         KisNodeList::iterator it = std::find(inputNodes.begin(), inputNodes.end(), root);
 
@@ -1531,7 +1576,7 @@ namespace KisLayerUtils {
 
         KisNodeSP child = root->firstChild();
         while (child) {
-            sortMergableNodes(child, inputNodes, outputNodes);
+            sortMergeableNodes(child, inputNodes, outputNodes);
             child = child->nextSibling();
         }
 
@@ -1541,14 +1586,14 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
     }
 
-    KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes)
+    KisNodeList sortMergeableNodes(KisNodeSP root, KisNodeList nodes)
     {
         KisNodeList result;
-        sortMergableNodes(root, nodes, result);
+        sortMergeableNodes(root, nodes, result);
         return result;
     }
 
-    KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks)
+    KisNodeList sortAndFilterMergeableInternalNodes(KisNodeList nodes, bool allowMasks)
     {
         KIS_SAFE_ASSERT_RECOVER(!nodes.isEmpty()) { return nodes; }
 
@@ -1566,16 +1611,16 @@ namespace KisLayerUtils {
         }
 
         KisNodeList result;
-        sortMergableNodes(root, nodes, result);
-        filterMergableNodes(result, allowMasks);
+        sortMergeableNodes(root, nodes, result);
+        filterMergeableNodes(result, allowMasks);
         return result;
     }
 
-    KisNodeList sortAndFilterAnyMergableNodesSafe(const KisNodeList &nodes, KisImageSP image) {
+    KisNodeList sortAndFilterAnyMergeableNodesSafe(const KisNodeList &nodes, KisImageSP image) {
         KisNodeList filteredNodes = nodes;
         KisNodeList sortedNodes;
 
-        KisLayerUtils::filterMergableNodes(filteredNodes, true);
+        KisLayerUtils::filterMergeableNodes(filteredNodes, true);
 
         bool haveExternalNodes = false;
         Q_FOREACH (KisNodeSP node, nodes) {
@@ -1586,7 +1631,7 @@ namespace KisLayerUtils {
         }
 
         if (!haveExternalNodes) {
-            KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
+            KisLayerUtils::sortMergeableNodes(image->root(), filteredNodes, sortedNodes);
         } else {
             sortedNodes = filteredNodes;
         }
@@ -1710,11 +1755,11 @@ namespace KisLayerUtils {
             putAfter = mergedNodes.first();
         }
 
-        filterMergableNodes(mergedNodes);
+        filterMergeableNodes(mergedNodes);
         {
             KisNodeList tempNodes;
             std::swap(mergedNodes, tempNodes);
-            sortMergableNodes(image->root(), tempNodes, mergedNodes);
+            sortMergeableNodes(image->root(), tempNodes, mergedNodes);
         }
 
         if (mergedNodes.size() <= 1 &&
@@ -1741,7 +1786,7 @@ namespace KisLayerUtils {
         /**
          * We have reached the root of the layer hierarchy and didn't manage
          * to find a node that was editable enough for putting our merged
-         * result into it. That whouldn't happen in normal circumstances,
+         * result into it. That shouldn't happen in normal circumstances,
          * unless the user chose to make the root layer visible and lock
          * it manually.
          */
@@ -1798,7 +1843,13 @@ namespace KisLayerUtils {
                     applicator.applyCommand(new SwitchFrameCommand(info->image, frame, false, info->storage));
 
                     applicator.applyCommand(new AddNewFrame(info, frame));
-                    applicator.applyCommand(new RefreshHiddenAreas(info));
+                    /**
+                     * When switching frames we need to update the entire image, not
+                     * only the **new** extent of the layer, hence we pass `refresh_entire_image`
+                     * to the command to make sure that the entire image bounds rect is added
+                     * to the update rect
+                     */
+                    applicator.applyCommand(new RefreshHiddenAreas(info, RefreshHiddenAreas::refresh_entire_image));
                     applicator.applyCommand(new RefreshDelayedUpdateLayers(info), KisStrokeJobData::BARRIER);
                     applicator.applyCommand(new MergeLayersMultiple(info), KisStrokeJobData::BARRIER);
 
@@ -2081,7 +2132,7 @@ namespace KisLayerUtils {
             node = node->nextSibling();
         }
 
-        if (!rootNode->isFakeNode()) {
+        if (!rootNode->isFakeNode() && !rootNode->projectionLeaf()->isMask()) {
             // TODO: it would be better to count up changeRect inside
             // node's extent() method
             //
@@ -2096,8 +2147,9 @@ namespace KisLayerUtils {
     }
     }
 
-    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
-        QRect realNodeRect = Private::realNodeChangeRect(rootNode);
+namespace Private {
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea, const QRect &extraUpdateRect) {
+        QRect realNodeRect = Private::realNodeChangeRect(rootNode) | extraUpdateRect;
         if (!preparedArea.contains(realNodeRect)) {
 
             QRegion dirtyRegion = realNodeRect;
@@ -2109,6 +2161,11 @@ namespace KisLayerUtils {
                 rc++;
             }
         }
+    }
+} // namespace Private
+
+    void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea) {
+        Private::refreshHiddenAreaAsync(image, rootNode, preparedArea, QRect());
     }
 
     QRect recursiveTightNodeVisibleBounds(KisNodeSP rootNode)
@@ -2187,13 +2244,13 @@ namespace KisLayerUtils {
         applicator.end();
     }
 
-    void convertToPaintLayer(KisImageSP image, KisNodeSP src)
+    std::future<KisNodeSP> convertToPaintLayer(KisImageSP image, KisNodeSP src)
     {
         //Initialize all operation dependencies.
         ConvertToPaintLayerInfoSP info( new ConvertToPaintLayerInfo(image, src) );
 
         if (!info->hasTargetNode())
-            return;
+            return kismpl::make_ready_future(KisNodeSP());
 
         KisImageSignalVector emitSignals;
         KisProcessingApplicator applicator(image, 0, KisProcessingApplicator::NONE, emitSignals, kundo2_i18n("Convert to a Paint Layer"));
@@ -2214,6 +2271,11 @@ namespace KisLayerUtils {
         applicator.applyCommand(new SimpleRemoveLayers(info->toRemove(), info->image()));
 
         applicator.end();
+
+        return kismpl::then(applicator.successfullyCompletedFuture(),
+            [node = info->targetNode()] (std::future<bool> completed) {
+                return completed.get() ? node : KisNodeSP();
+            });
     }
 
     //===========================================================

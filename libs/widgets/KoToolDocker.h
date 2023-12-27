@@ -41,7 +41,7 @@ public Q_SLOTS:
     void slotScrollerStateChange(QScroller::State state);
 
     /**
-     * Returns whether the docker has an optionwidget attached
+     * Returns whether the docker has an option widget attached
      */
     bool hasOptionWidget();
 

@@ -43,6 +43,7 @@ void StoryboardTimelineSyncTest::initTestCase()
 
 void StoryboardTimelineSyncTest::cleanupTestCase()
 {
+    // Must give image time to finish before deallocating.
     m_image->waitForDone();
 
     delete m_storyboardModel;
@@ -51,8 +52,6 @@ void StoryboardTimelineSyncTest::cleanupTestCase()
 
 void StoryboardTimelineSyncTest::cleanup()
 {
-    //testStoryboardItemSortedUniquePositive();
-
     const int priorChannel1Count = m_channel1->keyframeCount();
     const int priorChannel2Count = m_channel2->keyframeCount();
 
@@ -61,6 +60,9 @@ void StoryboardTimelineSyncTest::cleanup()
     QCOMPARE(m_channel1->keyframeCount(), priorChannel1Count);
     QCOMPARE(m_channel2->keyframeCount(), priorChannel2Count);
     QCOMPARE(m_storyboardModel->rowCount(), 0);
+
+    // Must give image time to finish before continuing on to the next test.
+    m_image->waitForDone();
 }
 
 void StoryboardTimelineSyncTest::testAddKeyframeExtendsDuration()
@@ -139,7 +141,7 @@ void StoryboardTimelineSyncTest::testAddKeyframeExtendsDuration()
     QVERIFY(m_storyboardModel->rowCount() == 0);
 }
 
-void StoryboardTimelineSyncTest::testStoryboardTimelineTimeSyncronization()
+void StoryboardTimelineSyncTest::testStoryboardTimelineTimeSynchronization()
 {
     //             0  1  2  3  4  5  6  7  8  9
     //  channel1  [|  .  |] [| .] .  .  .  .  .
@@ -191,7 +193,6 @@ void StoryboardTimelineSyncTest::testStoryboardTimelineTimeSyncronization()
         QCOMPARE(m_channel2->keyframeCount(), 1);
     }
 }
-
 
 void StoryboardTimelineSyncTest::testDurationChange()
 {
@@ -288,7 +289,6 @@ void StoryboardTimelineSyncTest::testDurationChange()
         QCOMPARE(m_channel1->keyframeCount(), 1);
     }
 }
-
 
 void StoryboardTimelineSyncTest::testFpsChanged()
 {

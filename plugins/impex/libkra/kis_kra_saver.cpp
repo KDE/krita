@@ -142,13 +142,12 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveGrid(doc, imageElement);
     saveGuides(doc, imageElement);
     saveMirrorAxis(doc, imageElement);
-    saveAudio(doc, imageElement);
     saveResourcesToXML(doc, imageElement);
 
     // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
-    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->fullClipRange());
+    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->documentPlaybackRange());
     KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
     imageElement.appendChild(animationElement);
 
@@ -308,6 +307,42 @@ bool KisKraSaver::saveAnimationMetadata(KoStore *store, KisImageSP image, const 
     return true;
 }
 
+bool KisKraSaver::saveAudio(KoStore *store)
+{
+    if (m_d->doc->getAudioTracks().isEmpty())
+        return true;
+
+    if (!store->open(m_d->imageName + AUDIO_PATH + "index.xml")) {
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save audio meta data.");
+        return false;
+    }
+
+    QDomDocument audioDocument = m_d->doc->createDomDocument("audio-info", "1.1");
+    QDomElement root = audioDocument.documentElement();
+    saveAudioXML(audioDocument, root);
+
+    bool success = true;
+    QByteArray byteArray = audioDocument.toByteArray();
+    qint64 bytesWriteCount = 0;
+    if (!byteArray.isEmpty()) {
+        bytesWriteCount = store->write(byteArray);
+    } else {
+        qWarning() << "Could not save audio data to a byte array!";
+        success = false;
+    }
+
+    bool closeOK = store->close();
+
+    success = success && closeOK && (bytesWriteCount == byteArray.size());
+
+    if (!success) {
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save audio meta data.");
+        return false;
+    }
+
+    return true;
+}
+
 void KisKraSaver::saveResourcesToXML(QDomDocument &doc, QDomElement &element)
 {
     QDomElement ePalette = doc.createElement(PALETTES);
@@ -361,7 +396,7 @@ void KisKraSaver::saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
 void KisKraSaver::saveAnimationMetadataToXML(QDomDocument &doc, QDomElement &element, KisImageSP image)
 {
     KisDomUtils::saveValue(&element, "framerate", image->animationInterface()->framerate());
-    KisDomUtils::saveValue(&element, "range", image->animationInterface()->fullClipRange());
+    KisDomUtils::saveValue(&element, "range", image->animationInterface()->documentPlaybackRange());
     KisDomUtils::saveValue(&element, "currentTime", image->animationInterface()->currentUITime());
 
     {
@@ -707,7 +742,18 @@ bool KisKraSaver::saveAssistants(KoStore* store, QString uri, bool external)
 
 bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
 {
-    int count_ellipse = 0, count_twopoint = 0, count_perspective = 0, count_ruler = 0, count_vanishingpoint = 0,count_infiniteruler = 0, count_parallelruler = 0, count_concentricellipse = 0, count_fisheyepoint = 0, count_spline = 0, count_perspectiveellipse = 0;
+    int count_ellipse = 0,
+        count_twopoint = 0,
+        count_perspective = 0,
+        count_ruler = 0,
+        count_vanishingpoint = 0,
+        count_infiniteruler = 0,
+        count_parallelruler = 0,
+        count_concentricellipse = 0,
+        count_fisheyepoint = 0,
+        count_spline = 0,
+        count_perspectiveellipse = 0,
+        count_curvilinearperspective = 0;
     QList<KisPaintingAssistantSP> assistants =  m_d->doc->assistants();
     if (!assistants.isEmpty()) {
         QDomElement assistantsElement = doc.createElement("assistants");
@@ -756,6 +802,10 @@ bool KisKraSaver::saveAssistantsList(QDomDocument& doc, QDomElement& element)
                 assist->saveXmlList(doc, assistantsElement, count_perspectiveellipse);
                 count_perspectiveellipse++;
             }
+            else if (assist->id() == "curvilinear-perspective"){
+                assist->saveXmlList(doc, assistantsElement, count_curvilinearperspective);
+                count_curvilinearperspective++;
+            }
         }
         element.appendChild(assistantsElement);
     }
@@ -798,26 +848,21 @@ bool KisKraSaver::saveMirrorAxis(QDomDocument &doc, QDomElement &element)
     return true;
 }
 
-bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
+bool KisKraSaver::saveAudioXML(QDomDocument& doc, QDomElement& element)
 {
-    const KisImageAnimationInterface *interface = m_d->doc->image()->animationInterface();
-    QString fileName = interface->audioChannelFileName();
+    QVector<QFileInfo> clips = m_d->doc->getAudioTracks();
+    const qreal volume = m_d->doc->getAudioLevel();
 
-    if (fileName.isEmpty()) return true;
-
-    const QDir documentDir = QFileInfo(m_d->filename).absoluteDir();
-    KIS_ASSERT_RECOVER_RETURN_VALUE(documentDir.exists(), false);
-
-    fileName = documentDir.relativeFilePath(fileName);
-    fileName = QDir::fromNativeSeparators(fileName);
-
-    KIS_ASSERT_RECOVER_RETURN_VALUE(!fileName.isEmpty(), false);
-
-    QDomElement audioElement = doc.createElement("audio");
-    KisDomUtils::saveValue(&audioElement, "masterChannelPath", fileName);
-    KisDomUtils::saveValue(&audioElement, "audioMuted", interface->isAudioMuted());
-    KisDomUtils::saveValue(&audioElement, "audioVolume", interface->audioVolume());
-    element.appendChild(audioElement);
+    if (!clips.isEmpty()) {
+        QDomElement audioClips = doc.createElement("audioClips");
+        Q_FOREACH(const QFileInfo& file, clips) {
+            QDomElement clip = doc.createElement(QString("Clip"));
+            clip.setAttribute("filePath", file.absoluteFilePath());
+            clip.setAttribute("volume", volume);
+            audioClips.appendChild(clip);
+        }
+        element.appendChild(audioClips);
+    }
 
     return true;
 }

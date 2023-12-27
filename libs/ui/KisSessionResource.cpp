@@ -146,7 +146,7 @@ void KisSessionResource::saveXml(QDomDocument &doc, QDomElement &root) const
         QDomElement elem = doc.createElement("view");
 
         elem.setAttribute("window", view.windowId.toString());
-        // we convert to QUrl to maintain compatibilty with Krita 4.4
+        // we convert to QUrl to maintain compatibility with Krita 4.4
         elem.setAttribute("src", QUrl::fromLocalFile(view.file).toString());
         view.viewConfig.toXML(doc, elem);
 

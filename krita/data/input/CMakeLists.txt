@@ -1,4 +1,5 @@
 install(FILES
+    clipstudiopaintcompatible.profile
     kritadefault.profile
     painttoolsaicompatible.profile
     photoshopcompatible.profile

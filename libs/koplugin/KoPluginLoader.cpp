@@ -56,9 +56,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         query += QString::fromLatin1(" and (%1)").arg(versionString);
     }
 
-    QList<QPluginLoader *> offers = KoJsonTrader::instance()->query(serviceType, QString());
+    QList<KoJsonTrader::Plugin> offers = KoJsonTrader::instance()->query(serviceType, QString());
 
-    QList<QPluginLoader *> plugins;
+    QList<KoJsonTrader::Plugin> plugins;
 
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
@@ -74,14 +74,14 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         if (firstStart) {
             configChanged = true;
         }
-        Q_FOREACH (QPluginLoader *loader, offers) {
-            QJsonObject json = loader->metaData().value("MetaData").toObject();
+        Q_FOREACH (const KoJsonTrader::Plugin &loader, offers) {
+            QJsonObject json = loader.metaData().value("MetaData").toObject();
             if (json.contains("KPlugin")) {
                 json = json.value("KPlugin").toObject();
             }
             const QString pluginName = json.value("Id").toString();
             if (pluginName.isEmpty()) {
-                qWarning() << "Loading plugin" << loader->fileName() << "failed, has no X-KDE-PluginInfo-Name.";
+                qWarning() << "Loading plugin" << loader.fileName() << "failed, has no X-KDE-PluginInfo-Name.";
                 continue;
             }
 
@@ -100,44 +100,44 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         plugins = offers;
     }
 
-    QMap<QString, QPluginLoader *> serviceNames;
-    Q_FOREACH (QPluginLoader *loader, plugins) {
-        if (serviceNames.contains(loader->fileName())) { // duplicate
-            QJsonObject json2 = loader->metaData().value("MetaData").toObject();
+    QMap<QString, KoJsonTrader::Plugin> serviceNames;
+    Q_FOREACH (const KoJsonTrader::Plugin &loader, plugins) {
+        if (serviceNames.contains(loader.fileName())) { // duplicate
+            QJsonObject json2 = loader.metaData().value("MetaData").toObject();
             QVariant pluginVersion2 = json2.value("X-Flake-PluginVersion").toVariant();
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
-            QPluginLoader *currentLoader = serviceNames.value(loader->fileName());
-            QJsonObject json = currentLoader->metaData().value("MetaData").toObject();
+            KoJsonTrader::Plugin currentLoader = serviceNames.value(loader.fileName());
+            QJsonObject json = currentLoader.metaData().value("MetaData").toObject();
             QVariant pluginVersion = json.value("X-Flake-PluginVersion").toVariant();
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
                 continue; // replace the old one with this one, since its newer.
             }
         }
-        serviceNames.insert(loader->fileName(), loader);
+        serviceNames.insert(loader.fileName(), loader);
     }
 
     QList<QString> whiteList;
     Q_FOREACH (const QString &serviceName, serviceNames.keys()) {
         dbgPlugins << "loading" << serviceName;
-        QPluginLoader *loader = serviceNames[serviceName];
-        KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
+        KoJsonTrader::Plugin loader = serviceNames[serviceName];
+        KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader.instance());
         QObject *plugin = 0;
         if (factory) {
             plugin = factory->create<QObject>(owner ? owner : this, QVariantList());
         }
         if (plugin) {
-            QJsonObject json = loader->metaData().value("MetaData").toObject();
+            QJsonObject json = loader.metaData().value("MetaData").toObject();
             json = json.value("KPlugin").toObject();
             const QString pluginName = json.value("Id").toString();
             whiteList << pluginName;
-            dbgPlugins << "\tLoaded plugin" << loader->fileName() << owner;
+            dbgPlugins << "\tLoaded plugin" << loader.fileName() << owner;
             if (!owner) {
                 delete plugin;
             }
         } else {
-            qWarning() << "Loading plugin" << loader->fileName() << "failed, " << loader->errorString();
+            qWarning() << "Loading plugin" << loader.fileName() << "failed, " << loader.errorString();
         }
     }
 
@@ -146,6 +146,4 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
-
-    qDeleteAll(offers);
 }

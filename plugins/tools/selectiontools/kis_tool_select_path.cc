@@ -19,6 +19,8 @@
 #include <KisView.h>
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
+#include <KisOptimizedBrushOutline.h>
+#include <kis_default_bounds.h>
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,
@@ -42,6 +44,9 @@ void KisToolSelectPath::requestStrokeCancellation()
 bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!localTool()->pathStarted()) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -234,12 +239,16 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
 void __KisToolSelectPathLocalTool::beginShape()
 {
-    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->beginSelectInteraction();
+    KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
+    KIS_ASSERT(selectPathTool);
+    selectPathTool->beginSelectInteraction();
 }
 
 void __KisToolSelectPathLocalTool::endShape()
 {
-    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->endSelectInteraction();
+    KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
+    KIS_ASSERT(selectPathTool);
+    selectPathTool->endSelectInteraction();
 }
 
 void KisToolSelectPath::resetCursorStyle()

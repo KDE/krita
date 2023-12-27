@@ -49,7 +49,7 @@ public:
         Q_UNUSED(conversionFlags);
         Q_UNUSED(gamutWarning);
         Q_UNUSED(adaptationState);
-        qFatal("createColorProofinTransform undefined.");
+        qFatal("createColorProofingTransform undefined.");
         return 0;
     }
 };

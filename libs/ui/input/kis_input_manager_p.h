@@ -41,6 +41,7 @@ public:
     void setupActions();
     bool handleCompressedTabletEvent(QEvent *event);
     void fixShortcutMatcherModifiersState();
+    void fixShortcutMatcherModifiersState(QVector<Qt::Key> newKeys, Qt::KeyboardModifiers modifiers);
 
     KisInputManager *q;
 

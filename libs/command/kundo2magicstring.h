@@ -41,7 +41,7 @@ class KRITACOMMAND_EXPORT KUndo2MagicString : public boost::equality_comparable<
 public:
     /**
      * Construct an empty string. Note that you cannot create a
-     * non-empy string without special functions, all the calls to which
+     * non-empty string without special functions, all the calls to which
      * are processed by xgettext.
      */
     KUndo2MagicString();

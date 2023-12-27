@@ -2,15 +2,11 @@ project(kritafilters)
 
 add_subdirectory(libkra)
 
-if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-  add_definitions( -DCPU_32_BITS )
-endif()
-
 if(JPEG_FOUND AND HAVE_LCMS2)
 	add_subdirectory(jpeg)
 endif()
 
-if(TIFF_FOUND)
+if(TIFF_FOUND AND JPEG_FOUND)
 	add_subdirectory(tiff)
 endif()
 
@@ -31,7 +27,7 @@ if(OpenJPEG_FOUND AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
     add_subdirectory(jp2)
 endif()
 
-if(LIBRAW_FOUND)
+if(KF5KDcraw_FOUND)
     add_subdirectory(raw)
 endif()
 
@@ -64,3 +60,5 @@ endif()
 if (JPEGXL_FOUND)
     add_subdirectory(jxl)
 endif()
+
+add_subdirectory(rgbe)

@@ -151,7 +151,7 @@ void KisAlgebra2DTest::testMatrixDecomposition1()
         R * Sh *
         QTransform::fromTranslate(100, 200);
 
-    KisAlgebra2D::DecomposedMatix matrix(t0);
+    KisAlgebra2D::DecomposedMatrix matrix(t0);
 
     QCOMPARE(matrix.isValid(), true);
     QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
@@ -169,7 +169,7 @@ void KisAlgebra2DTest::testMatrixDecomposition2()
     bool valid = QTransform::squareToQuad(poly, t0);
     QVERIFY(valid);
 
-    KisAlgebra2D::DecomposedMatix matrix(t0);
+    KisAlgebra2D::DecomposedMatrix matrix(t0);
 
     QCOMPARE(matrix.isValid(), true);
     QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
@@ -180,7 +180,7 @@ void KisAlgebra2DTest::testMatrixDecomposition3()
     //QTransform t0 = QTransform(177.097, 28.4105, -0.344587, -231.26, -33.6893, -0.338797, 95.3185, -54.9594, 0.658308);
     QTransform t0 = QTransform(266.715, 65.9483, 0.153259, 331.445, 81.615, 0.922963, 500.68, 363.222, 1.53811);
     ENTER_FUNCTION() << ppVar(t0.m33()) << ppVar(t0.determinant());
-    KisAlgebra2D::DecomposedMatix matrix(t0);
+    KisAlgebra2D::DecomposedMatrix matrix(t0);
 
     QCOMPARE(matrix.isValid(), true);
     QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
@@ -325,7 +325,7 @@ void KisAlgebra2DTest::testNullRectProcessing()
 
     QCOMPARE(QRectF(20, 20, 40, 40) & lineRect, QRectF());
 
-    QEXPECT_FAIL("", "Qt's konjunstion operator doesn't work with line-rects", Continue);
+    QEXPECT_FAIL("", "Qt's rectangle intersection operator doesn't work with line-rects", Continue);
     QCOMPARE(QRectF(10, 10, 40, 40) & lineRect, QRectF(10, 10, 40, 0));
 
     /// QPolygon's bounding rect
@@ -1226,7 +1226,171 @@ void KisAlgebra2DTest::testMultiplyWrappedRect()
     QFETCH(QVector<QRect>, expected);
 
     QVector<QRect> result =
-        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect);
+        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect, WRAPAROUND_BOTH);
+
+#if 1
+    QCOMPARE(result, expected);
+#else
+    /// use this code to dump reference values
+    QString res;
+    Q_FOREACH (const QRect &rc, result) {
+        res += QString("QRect(%1, %2, %3, %4), ").arg(rc.x()).arg(rc.y()).arg(rc.width()).arg(rc.height());
+    }
+    qDebug() << res;
+#endif
+}
+
+void KisAlgebra2DTest::testMultiplyWrappedRectHorizontal_data()
+{
+    QTest::addColumn<QRect>("rc");
+    QTest::addColumn<QRect>("wrapRect");
+    QTest::addColumn<QRect>("limitRect");
+    QTest::addColumn<QVector<QRect>>("expected");
+
+    QTest::newRow("simple")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-90, 10, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(110, 10, 30, 30)});
+
+    QTest::newRow("non-full-rect")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-150, -150), QPoint(249, 249))
+        << QVector<QRect>(
+               {QRect(-90, 10, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(110, 10, 30, 30),
+                QRect(210, 10, 30, 30)});
+
+    QTest::newRow("minus-one")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-99, -99), QPoint(199, 199))
+        << QVector<QRect>(
+               {QRect(-90, 10, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(110, 10, 30, 30)});
+
+    QTest::newRow("simple-neg-rect")
+        << QRect(-10,-10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-10, -10, 10, 30),
+                QRect(90, -10, 10, 30),
+                QRect(190, -10, 10, 30),
+                QRect(-100, -10, 20, 30),
+                QRect(0, -10, 20, 30),
+                QRect(100, -10, 20, 30)});
+
+    QTest::newRow("simple-neg-long-rect")
+        << QRect(-10,-10,130,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-10, -10, 10, 30),
+                QRect(90, -10, 10, 30),
+                QRect(190, -10, 10, 30),
+                QRect(-100, -10, 90, 30),
+                QRect(0, -10, 90, 30),
+                QRect(100, -10, 90, 30)});
+}
+
+void KisAlgebra2DTest::testMultiplyWrappedRectHorizontal()
+{
+    QFETCH(QRect, rc);
+    QFETCH(QRect, wrapRect);
+    QFETCH(QRect, limitRect);
+    QFETCH(QVector<QRect>, expected);
+
+    QVector<QRect> result =
+        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect, WRAPAROUND_HORIZONTAL);
+
+#if 1
+    QCOMPARE(result, expected);
+#else
+    /// use this code to dump reference values
+    QString res;
+    Q_FOREACH (const QRect &rc, result) {
+        res += QString("QRect(%1, %2, %3, %4), ").arg(rc.x()).arg(rc.y()).arg(rc.width()).arg(rc.height());
+    }
+    qDebug() << res;
+#endif
+}
+
+void KisAlgebra2DTest::testMultiplyWrappedRectVertical_data()
+{
+    QTest::addColumn<QRect>("rc");
+    QTest::addColumn<QRect>("wrapRect");
+    QTest::addColumn<QRect>("limitRect");
+    QTest::addColumn<QVector<QRect>>("expected");
+
+    QTest::newRow("simple")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(10, -90, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(10, 110, 30, 30)});
+
+    QTest::newRow("non-full-rect")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-150, -150), QPoint(249, 249))
+        << QVector<QRect>(
+               {QRect(10, -90, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(10, 110, 30, 30),
+                QRect(10, 210, 30, 30)});
+
+    QTest::newRow("minus-one")
+        << QRect(10,10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-99, -99), QPoint(199, 199))
+        << QVector<QRect>(
+               {QRect(10, -90, 30, 30),
+                QRect(10, 10, 30, 30),
+                QRect(10, 110, 30, 30)});
+
+    QTest::newRow("simple-neg-rect")
+        << QRect(-10,-10,30,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-10, -10, 30, 10),
+                QRect(-10, 90, 30, 10),
+                QRect(-10, 190, 30, 10),
+                QRect(-10, -100, 30, 20),
+                QRect(-10, 0, 30, 20),
+                QRect(-10, 100, 30, 20)});
+
+    QTest::newRow("simple-neg-long-rect")
+        << QRect(-10,-10,130,30)
+        << QRect(0,0,100,100)
+        << QRect(QPoint(-100, -100), QPoint(199,199))
+        << QVector<QRect>(
+               {QRect(-10, -10, 130, 10),
+                QRect(-10, 90, 130, 10),
+                QRect(-10, 190, 130, 10),
+                QRect(-10, -100, 130, 20),
+                QRect(-10, 0, 130, 20),
+                QRect(-10, 100, 130, 20)});
+}
+
+void KisAlgebra2DTest::testMultiplyWrappedRectVertical()
+{
+    QFETCH(QRect, rc);
+    QFETCH(QRect, wrapRect);
+    QFETCH(QRect, limitRect);
+    QFETCH(QVector<QRect>, expected);
+
+    QVector<QRect> result =
+        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect, WRAPAROUND_VERTICAL);
 
 #if 1
     QCOMPARE(result, expected);

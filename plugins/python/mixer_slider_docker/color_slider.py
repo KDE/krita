@@ -85,10 +85,10 @@ class ColorSlider(QWidget):
 
         widget_painter.drawImage(0, 0, self.rendered_image)
         if self.value_x is not None:
-            start_x = self.value_x
-            start_y = self.height() / 2
-            delta_x = self.height() / 3
-            delta_y = self.height() / 3
+            start_x = int(self.value_x)
+            start_y = int(self.height() / 2)
+            delta_x = int(self.height() / 3)
+            delta_y = int(self.height() / 3)
             points = [QPoint(start_x, start_y),
                       QPoint(start_x - delta_x, start_y + delta_y),
                       QPoint(start_x + delta_x, start_y + delta_y)]

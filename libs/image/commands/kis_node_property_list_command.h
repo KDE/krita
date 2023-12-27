@@ -38,7 +38,7 @@ public:
 private:
     void doUpdate(const KisBaseNode::PropertyList &oldPropertyList,
                   const KisBaseNode::PropertyList &newPropertyList, const QRect &totalUpdateExtent);
-
+    static const QSet<QString>& propsWithNoUpdates();
 private:
     KisBaseNode::PropertyList m_newPropertyList;
     KisBaseNode::PropertyList m_oldPropertyList;

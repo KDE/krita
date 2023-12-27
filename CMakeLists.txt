@@ -1,12 +1,18 @@
-cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19.0 FATAL_ERROR)
 
-project(krita)
+set(SUPPORTED_LANGUAGES CXX C)
+
+if (APPLE)
+    list (APPEND SUPPORTED_LANGUAGES OBJC OBJCXX)
+endif()
+
+project(krita LANGUAGES ${SUPPORTED_LANGUAGES})
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 set(MIN_QT_VERSION 5.12.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
-set( CMAKE_CXX_STANDARD 14 )
+set( CMAKE_CXX_STANDARD 17 )
 set( CMAKE_CXX_STANDARD_REQUIRED ON )
 
 if (POLICY CMP0002)
@@ -57,9 +63,16 @@ if (POLICY CMP0071)
     cmake_policy(SET CMP0071 NEW)
 endif()
 
+if (POLICY CMP0135)
+    cmake_policy(SET CMP0135 NEW)
+endif()
+
 if (APPLE)
+    add_subdirectory(packaging/macos)
+    set(MACOSX_RPATH TRUE)
     set(APPLE_SUPPRESS_X11_WARNING TRUE)
     set(KDE_SKIP_RPATH_SETTINGS TRUE)
+    set(CMAKE_FIND_FRAMEWORK LAST)
     set(CMAKE_MACOSX_RPATH 1)
     set(BUILD_WITH_INSTALL_RPATH 1)
     set(MACOS_GUI_TEST "GUI")
@@ -91,11 +104,11 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.2.0-prealpha")
+set(KRITA_VERSION_STRING "5.3.0-prealpha")
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5)
 # Minor version: 0 for 4.0, 1 for 4.1, etc.
-set(KRITA_STABLE_VERSION_MINOR 2)
+set(KRITA_STABLE_VERSION_MINOR 3)
 # Bugfix release version, or 0 for before the first stable release
 set(KRITA_VERSION_RELEASE 0)
 # the 4th digit, really only used for the Windows installer:
@@ -154,6 +167,8 @@ endif()
 enable_testing()
 # collect list of broken tests, empty here to start fresh with each cmake run
 set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
+# Keep track of all test target (need special attention on macos)
+set(KRITA_TESTS_TARGET "" CACHE INTERNAL "KRITA_TESTS_TARGET")
 
  ############
 #############
@@ -173,14 +188,12 @@ add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
             set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
             set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
             set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
-            if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-                # Enable high-entropy ASLR for 64-bit
-                # The image base has to be >4GB for HEASLR to be enabled.
-                # The values used here are kind of arbitrary.
-                set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
-                set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
-                set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
-            endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+            # Enable high-entropy ASLR for 64-bit
+            # The image base has to be >4GB for HEASLR to be enabled.
+            # The values used here are kind of arbitrary.
+            set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
+            set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+            set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
         else (USE_MINGW_HARDENING_LINKER)
             message(WARNING "Linker Security Flags not enabled!")
         endif (USE_MINGW_HARDENING_LINKER)
@@ -239,8 +252,6 @@ option(LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode" ON)
 configure_file(config-limit-long-tests.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-limit-long-tests.h)
 add_feature_info("Limit long tests" LIMIT_LONG_TESTS "Run long running unittests in a limited quick mode")
 
-option(ENABLE_PYTHON_2 "Enables the compiler to look for Python 2.7 instead of Python 3. Some packaged scripts are not compatible with Python 2 and this should only be used if you really have to use 2.7." OFF)
-
 option(BUILD_KRITA_QT_DESIGNER_PLUGINS "Build Qt Designer plugins for Krita widgets" OFF)
 add_feature_info("Build Qt Designer plugins" BUILD_KRITA_QT_DESIGNER_PLUGINS "Builds Qt Designer plugins for Krita widgets (use -DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON to enable).")
 
@@ -248,8 +259,19 @@ option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
 configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
 add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
 
-option(KRITA_ENABLE_PCH "Enable precompiled headers support" ON)
+option(KRITA_ENABLE_PCH "Enable precompiled headers support" OFF)
 add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
+
+option(DISABLE_PO_INSTALLATION "Disable installation of po files" OFF)
+
+option(USE_EXTERNAL_RAQM "Fetch Raqm dependency online instead of the embedded one" OFF)
+
+set(ADDRESS_SANITIZER_ENABLED FALSE)
+if (ECM_ENABLE_SANITIZERS MATCHES address)
+    set(ADDRESS_SANITIZER_ENABLED TRUE)
+endif()
+
+add_feature_info("ASAN address sanitizer" ADDRESS_SANITIZER_ENABLED "crash Krita if it violates address access rules (-DECM_ENABLE_SANITIZERS=address)")
 
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
 if ("${BRANDING}" STREQUAL "")
@@ -283,24 +305,23 @@ function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
     endif (MINGW)
     unset(${OUTPUT_VARNAME} CACHE)
     CHECK_CXX_SOURCE_COMPILES("
+// https://bugs.python.org/issue22411
+#if defined(_MSC_VER)
+#  ifdef _DEBUG
+#    undef _DEBUG
+#  endif /* _DEBUG */
+#endif /* _MSC_VER */
 #include <Python.h>
 int main(int argc, char *argv[]) {
     Py_InitializeEx(0);
 }" ${OUTPUT_VARNAME})
 endfunction()
 
-if(MINGW)
-    if(ENABLE_PYTHON_2)
-        message(FATAL_ERROR "Python 2.7 is not supported on Windows at the moment.")
-    else(ENABLE_PYTHON_2)
-        find_package(Python 3.8 EXACT COMPONENTS Development Interpreter)
-    endif(ENABLE_PYTHON_2)
+if(WIN32)
+    set(Python_FIND_STRATEGY LOCATION)
+    find_package(Python 3.8 COMPONENTS Development Interpreter)
     if (Python_FOUND)
-        if(ENABLE_PYTHON_2)
-            find_package(PythonLibrary 2.7)
-        else(ENABLE_PYTHON_2)
-            find_package(PythonLibrary 3.8)
-        endif(ENABLE_PYTHON_2)
+        find_package(PythonLibrary 3.8)
         TestCompileLinkPythonLibs(CAN_USE_PYTHON_LIBS)
         if (NOT CAN_USE_PYTHON_LIBS)
             file(READ ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeError.log ERROR_LOG)
@@ -308,13 +329,9 @@ if(MINGW)
             message(FATAL_ERROR "Compiling with Python library failed, please check whether the architecture is correct!\nCMakeError.log:\n  ${ERROR_LOG}\n\n")
         endif (NOT CAN_USE_PYTHON_LIBS)
     endif (Python_FOUND)
-else(MINGW)
-    if(ENABLE_PYTHON_2)
-        find_package(PythonLibrary 2.7)
-    else(ENABLE_PYTHON_2)
-        find_package(PythonLibrary 3.0)
-    endif(ENABLE_PYTHON_2)
-endif(MINGW)
+else(WIN32)
+    find_package(PythonLibrary 3.8)
+endif(WIN32)
 
  ########################
 #########################
@@ -323,7 +340,7 @@ endif(MINGW)
 ########################
 
 find_package(ECM 5.22 REQUIRED NOMODULE)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${ECM_MODULE_PATH})
 include(ECMOptionalAddSubdirectory)
 include(ECMAddAppIcon)
 include(ECMSetupVersion)
@@ -345,6 +362,39 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
 endif()
 include(KDECMakeSettings)
 include(KDECompilerSettings)
+
+if (WIN32)
+# KDECompilerSettings sets Windows Vista as the default,
+# while MSVC's default is 0x0A00 (_WIN32_WINNT_WIN10, sdkddkver.h) and
+# MinGW's is 0x0601 (_WIN32_WINNT_WIN7, _mingw.h).
+# Both are enough to supply the APIs we need in main.cc, but since we
+# need the Windows 8 APIs anyway for the surface orientation and Store API,
+# we set the minimum here.
+remove_definitions(-D_WIN32_WINNT=0x0600 -DWINVER=0x0600 -D_WIN32_IE=0x0600)
+add_definitions(-D_WIN32_WINNT=0x0602 -DWINVER=0x0602  -D_WIN32_IE=0x0602)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC")
+    if (MSVC) # or CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC"
+        # KDE's CompilerSettings module sets -Wall -Wextra for Clang.
+        # However, -Wall on clang-cl maps to -Weverything, which turns on way too
+        # much, so we're using -W4 instead, which is mapped to clang's -Wall -Wextra.
+        # Source: https://hg.mozilla.org/mozilla-central/rev/ffb7bfbfc328
+        string(REPLACE "-Wall -Wextra" "-W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+        string(REPLACE "-Wall -Wextra" "-W4" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        # Allow KoColorSpaceMaths operators to build.
+        add_compile_options("/permissive")
+    endif()
+
+    # Remove these invalid flags.
+    string(REPLACE "-fno-common" "" CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    string(REPLACE "-fno-operator-names" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-fdiagnostics-color=always" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    string(REPLACE "-Wl,--no-undefined" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--no-undefined" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--fatal-warnings" "" CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS}")
+    string(REPLACE "-Wl,--fatal-warnings" "" CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS}")
+endif()
+endif()
 
 # do not reorder to be alphabetical: this is the order in which the frameworks
 # depend on each other.
@@ -402,9 +452,8 @@ QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI);
     configure_file(config_use_qt_tablet_windows.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_use_qt_tablet_windows.h)
 endif ()     
 
-
-set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
-set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES})
+set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
+set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
 CHECK_CXX_SOURCE_COMPILES("
 #include <QSurfaceFormat>
@@ -430,6 +479,17 @@ HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
 )
 configure_file(config-high-dpi-scale-factor-rounding-policy.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-high-dpi-scale-factor-rounding-policy.h)
 
+CHECK_CXX_SOURCE_COMPILES("
+#include <QMdiArea>
+int main(int argc, char *argv[]) {
+QMdiArea area;
+area.setOption(QMdiArea::AlwaysShowSubwindowNameInTitleBar);
+}
+"
+HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE
+)
+configure_file(config-qmdiarea-always-show-subwindow-title.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qmdiarea-always-show-subwindow-title.h)
+
 if (WIN32)
     CHECK_CXX_SOURCE_COMPILES("
 #include <QtPlatformHeaders/QWindowsWindowFunctions>
@@ -440,6 +500,7 @@ QWindowsWindowFunctions::setHasBorderInFullScreenDefault(true);
     HAVE_SET_HAS_BORDER_IN_FULL_SCREEN_DEFAULT
     )
     configure_file(config-set-has-border-in-full-screen-default.h.in ${CMAKE_CURRENT_BINARY_DIR}/config-set-has-border-in-full-screen-default.h)
+
 endif (WIN32)
 
 unset(CMAKE_REQUIRED_INCLUDES)
@@ -455,16 +516,6 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 
-find_package(Qt5Multimedia ${MIN_QT_VERSION})
-set_package_properties(Qt5Multimedia PROPERTIES
-        DESCRIPTION "Qt multimedia integration"
-        URL "https://www.qt.io/"
-        TYPE OPTIONAL
-        PURPOSE "Optionally used to provide sound support for animations")
-
-macro_bool_to_01(Qt5Multimedia_FOUND HAVE_QT_MULTIMEDIA)
-configure_file(config-qtmultimedia.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-qtmultimedia.h )
-
 if (NOT APPLE)
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
@@ -474,11 +525,6 @@ set_package_properties(Qt5Quick PROPERTIES
         PURPOSE "Optionally used for the touch gui for Krita")
 
 macro_bool_to_01(Qt5Quick_FOUND HAVE_QT_QUICK)
-if (Qt5Quick_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::Quick>)
-    list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::Qml>)
-endif()
-
 
 find_package(Qt5QuickWidgets ${MIN_QT_VERSION})
 set_package_properties(Qt5QuickWidgets PROPERTIES
@@ -487,10 +533,12 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
 endif()
-
 if (Qt5QuickWidgets_FOUND)
+    # This is needed because Qt dependencies aren't added by ECM but by androideployqt,
+    # so it doesn't benefit from our patch in ECM.
     list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::QuickWidgets>)
 endif()
+
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
 
@@ -524,13 +572,22 @@ endif()
 
 add_definitions(
   -DQT_USE_QSTRINGBUILDER
-  -DQT_STRICT_ITERATORS
   -DQT_NO_SIGNALS_SLOTS_KEYWORDS
   -DQT_NO_URL_CAST_FROM_STRING
   -DQT_USE_FAST_CONCATENATION 
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
+# MSVC is unable to disambiguate between definitions of QVector<QPointF> 
+# and QPolygonF. This is a known upstream bug e.g.:
+# - https://phabricator.kde.org/D21314
+# - https://codereview.qt-project.org/c/qt/qtbase/+/180229
+# Starting with Qt 5.13, it is impossible to use strict iterators
+# wholesale because of:
+# https://github.com/qt/qtbase/commit/972f8845a85d6a07140025e4257cb8a1a2699b5d
+if (NOT (MSVC OR CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC") OR ${Qt5_VERSION} VERSION_LESS "5.13.0")
+  add_definitions(-DQT_STRICT_ITERATORS)
+endif()
 
 #if (${Qt5_VERSION} VERSION_GREATER "5.14.0" )
 #    add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x50F00)
@@ -573,37 +630,42 @@ if(WIN32)
         # libs\ui\dialogs\kis_about_application.cpp : fatal error C1128: number of sections exceeded object file format limit: compile with /bigobj
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
 
-        # Force enable a good many optimizations
-
-        # Aggresive inlining (Release)
-        string(REPLACE "Ob2" "Ob3" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
-        # Aggresive inlining (RelWithDebInfo)
-        string(REPLACE "Ob1" "Ob3" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
         # Enable intrinsics
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Oi")
         # Favor fast code
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ot")
-        # -ffast-math (fused multiply-add if the arch allows)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /fp:fast")
-        # Whole program optimization
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
         # Function-level linking
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Gy")
-
-        # For all objects:
-        # - strip unused functions
-        # - fold identical functions
-        # - link-time code generation
-        string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
-        string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO}")
-        string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO}")
-        set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
-        set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
-        set(CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
 
         # Our code is UTF-8 encoded.
         add_compile_options(/utf-8)
     endif()
+endif()
+
+if (MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # Clang/CL is incompatible with this flag
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /RELEASE")
+    set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /RELEASE")
+    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /RELEASE")
+endif()
+
+# Force enable a good many optimizations
+if (MSVC AND NOT BUILD_TESTING)
+    # Aggresive inlining (Release)
+    string(REPLACE "Ob2" "Ob3" CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+    # Aggresive inlining (RelWithDebInfo)
+    string(REPLACE "Ob1" "Ob3" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    # Whole program optimization
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GL")
+    # For all objects:
+    # - strip unused functions
+    # - fold identical functions
+    # - link-time code generation
+    string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "INCREMENTAL" "INCREMENTAL:NO" CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO}")
+    set(CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
+    set(CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_SHARED_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
+    set(CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO "${CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO} /OPT:ICF,REF /LTCG")
 endif()
 
 # KDECompilerSettings adds the `--export-all-symbols` linker flag.
@@ -626,19 +688,11 @@ if(MINGW)
 endif(MINGW)
 
 # enable exceptions globally
+# WARNING: in MSVC this will NOT catch exceptions thrown through C code
+# see: 
+# - https://learn.microsoft.com/en-us/cpp/build/reference/eh-exception-handling-model?view=msvc-170#arguments
+# - https://invent.kde.org/frameworks/extra-cmake-modules/-/blob/v5.101.0/kde-modules/KDECompilerSettings.cmake#L502-526
 kde_enable_exceptions()
-
-set(KRITA_DEFAULT_TEST_DATA_DIR ${CMAKE_SOURCE_DIR}/sdk/tests/data/)
-macro(macro_add_unittest_definitions)
-  add_definitions(-DFILES_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/")
-  if(WIN32)
-    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-  else()
-    add_definitions(-DFILES_OUTPUT_DIR="${CMAKE_CURRENT_BINARY_DIR}")
-  endif()
-  add_definitions(-DFILES_DEFAULT_DATA_DIR="${KRITA_DEFAULT_TEST_DATA_DIR}")
-  add_definitions(-DSYSTEM_RESOURCES_DATA_DIR="${CMAKE_SOURCE_DIR}/krita/data/")
-endmacro()
 
 function(krita_select_pch_file targetname pch_file_name)
     #TODO: make kritaimage and kritaglobal targets to link to its own PCH
@@ -701,7 +755,6 @@ if(WIN32)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/winquirks)
     add_definitions(-D_USE_MATH_DEFINES)
     add_definitions(-DNOMINMAX)
-    set(WIN32_PLATFORM_NET_LIBS ws2_32.lib netapi32.lib)
 endif()
 
 # set custom krita plugin installdir
@@ -713,6 +766,12 @@ if (ANDROID)
     set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
     # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
+
+    # From ECM
+    # Because Qt changes library suffix (to include arch), this changes name of
+    # libraries that depend on Qt, but its Find file may not necessarily be
+    # adapted for this.
+    set(CMAKE_FIND_LIBRARY_SUFFIXES "_${CMAKE_ANDROID_ARCH_ABI}.so" ".so" ".a")
 else()
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR}/kritaplugins)
 endif()
@@ -726,7 +785,7 @@ endif()
 
 # FIXME: Still hardcoded
 if (ANDROID)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_71)
+    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_80)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
 
@@ -734,24 +793,42 @@ if (ANDROID)
 endif()
 
 find_package(PNG REQUIRED "1.2.6")
-list (APPEND ANDROID_EXTRA_LIBS ${PNG_LIBRARY})
 
 if (APPLE)
     # this is not added correctly on OSX -- see https://forum.kde.org/viewtopic.php?f=139&t=101867&p=221242#p221242
     include_directories(SYSTEM ${PNG_INCLUDE_DIR})
 endif()
 
-add_definitions(-DBOOST_ALL_NO_LIB)
-if (MSVC)
-    set(Boost_USE_STATIC_LIBS OFF)
-endif()
 if (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     string(REGEX REPLACE "([0-9])\\.([0-9])(\\.[0-9])?" "\\1"
         KRITA_boost_COMPILER_VERSION ${CMAKE_CXX_COMPILER_VERSION})
     set(Boost_COMPILER "mgw${KRITA_boost_COMPILER_VERSION}")
 endif()
-find_package(Boost 1.55 REQUIRED COMPONENTS system)
-include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+
+find_package(Boost 1.65 REQUIRED COMPONENTS system)
+set_package_properties(Boost PROPERTIES
+    DESCRIPTION "Boost provides free peer-reviewed portable C++ source libraries."
+    URL "https://www.boost.org"
+    TYPE REQUIRED)
+target_link_libraries(Boost::boost
+    INTERFACE
+        Boost::disable_autolinking
+)
+
+# Disallow usage of std::unary_function. 
+# See https://github.com/boostorg/container_hash/issues/22
+# and https://releases.llvm.org/15.0.0/projects/libcxx/docs/ReleaseNotes.html#deprecations-and-removals
+if(Boost_VERSION VERSION_LESS "1.81.0")
+target_compile_definitions(Boost::boost
+    INTERFACE
+        BOOST_NO_CXX98_FUNCTION_BASE
+)
+endif()
+
+find_package(Immer REQUIRED)
+find_package(Zug REQUIRED)
+find_package(Lager REQUIRED)
+
 ##
 ## Test for GNU Scientific Library
 ##
@@ -762,9 +839,6 @@ set_package_properties(GSL PROPERTIES
     PURPOSE "Required by Krita's Transform tool.")
 macro_bool_to_01(GSL_FOUND HAVE_GSL)
 configure_file(config-gsl.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gsl.h )
-if (GSL_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
-endif()
 
  ###########################
 ############################
@@ -773,7 +847,7 @@ endif()
 ###########################
 
 
-find_package(WebP 1.2.0)
+find_package(WebP 1.2.0 COMPONENTS demux mux)
 set_package_properties(WebP PROPERTIES
     URL "https://developers.google.com/speed/webp"
     TYPE OPTIONAL
@@ -791,11 +865,6 @@ set_package_properties(KSeExpr PROPERTIES
 )
 macro_bool_to_01(KSeExpr_FOUND HAVE_SEEXPR)
 configure_file(config-seexpr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-seexpr.h )
-if(KSeExpr_FOUND)
-    get_target_property(KSeExpr_LIBRARY KSeExpr::KSeExpr "LOCATION")
-    get_target_property(KSeExprUI_LIBRARY KSeExpr::KSeExprUI "LOCATION") 
-    list (APPEND ANDROID_EXTRA_LIBS ${KSeExpr_LIBRARY} ${KSeExprUI_LIBRARY})
-endif()
 
 find_package(ZLIB REQUIRED)
 set_package_properties(ZLIB PROPERTIES
@@ -808,15 +877,7 @@ macro_bool_to_01(ZLIB_FOUND HAVE_ZLIB)
 find_package(OpenEXR)
 macro_bool_to_01(OpenEXR_FOUND HAVE_OPENEXR)
 if(OpenEXR_FOUND)
-    if(TARGET OpenEXR::OpenEXR)
-        set(OPENEXR_LIBRARIES OpenEXR::OpenEXR)
-    else()
-        set(OPENEXR_LIBRARIES OpenEXR::IlmImf)
-    endif()
-    set(LINK_OPENEXR_LIB ${OPENEXR_LIBRARIES})
-    if(MSVC)
-        add_compile_definitions(OPENEXR_DLL) 
-    endif()
+    set(LINK_OPENEXR_LIB OpenEXR::IlmImf)
 endif()
 
 find_package(TIFF)
@@ -827,9 +888,6 @@ set_package_properties(TIFF PROPERTIES
     PURPOSE "Required by the Krita TIFF filter")
 include(CheckLibTIFFPSDSupport)
 configure_file(config-tiff.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-tiff.h)
-if (TIFF_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${TIFF_LIBRARY})
-endif()
 
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
@@ -838,8 +896,20 @@ set_package_properties(JPEG PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")
 if (JPEG_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${JPEG_LIBRARY})
     macro_bool_to_01(JPEG_FOUND HAVE_JPEG)
+endif()
+
+find_package(libjpeg-turbo 2.1.3 COMPONENTS turbojpeg)
+set_package_properties(libjpeg-turbo PROPERTIES
+    DESCRIPTION "libjpeg-turbo is a JPEG image codec that uses SIMD instructions (MMX, SSE2, AVX2, Neon, AltiVec) to accelerate baseline JPEG compression and decompression on x86, x86-64, Arm, and PowerPC systems, as well as progressive JPEG compression on x86 and x86-64 systems."
+    URL "https://www.libjpeg-turbo.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JPEG and TIFF filters")
+macro_bool_to_01(libjpeg-turbo_FOUND HAVE_JPEG_TURBO)
+configure_file(config-jpeg.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-jpeg.h )
+
+if(libjpeg-turbo_FOUND)
+    set(JPEG_TURBO_LIBRARIES libjpeg-turbo::turbojpeg)
 endif()
 
 find_package(GIF)
@@ -848,9 +918,6 @@ set_package_properties(GIF PROPERTIES
     URL "http://giflib.sourceforge.net/"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita GIF filter")
-if (GIF_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${GIF_LIBRARY})
-endif()
 
 find_package(HEIF "1.11.0")
 set_package_properties(HEIF PROPERTIES
@@ -866,29 +933,12 @@ set_package_properties(OpenJPEG PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JP2000 filter")
 
-set(LIBRAW_MIN_VERSION  "0.16")
-find_package(LibRaw ${LIBRAW_MIN_VERSION})
-set_package_properties(LibRaw PROPERTIES
-    DESCRIPTION "Library to decode RAW images"
-    URL "https://www.libraw.org/"
-    TYPE OPTIONAL
-    PURPOSE "Required to build the raw import plugin")
-
 find_package(JPEGXL 0.7.0)
 set_package_properties(JPEGXL PROPERTIES
     DESCRIPTION "JPEG XL is a royalty-free raster-graphics file format that supports both lossy and lossless compression and is experimentally supported by Chrome, Firefox, and Edge."
     URL "https://github.com/libjxl/libjxl"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG-XL filter")
-if (JPEGXL_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${JPEGXL_LIBRARIES})
-    # because libjxl depends on brotli and it is installed in the same folder
-    get_filename_component (_base_dir ${JPEGXL_LIBRARY} DIRECTORY)
-    list (APPEND ANDROID_EXTRA_LIBS 
-                    ${_base_dir}/libbrotlidec.so
-                    ${_base_dir}/libbrotlicommon.so
-                    ${_base_dir}/libbrotlienc.so)
-endif()
 
 find_package(FFTW3)
 set_package_properties(FFTW3 PROPERTIES
@@ -898,13 +948,8 @@ set_package_properties(FFTW3 PROPERTIES
     PURPOSE "Required by the Krita for fast convolution operators and some G'Mic features")
 macro_bool_to_01(FFTW3_FOUND HAVE_FFTW3)
 if (FFTW3_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${FFTW3_LIBRARY})
-
     # GMic uses the Threads library if available.
     find_library(FFTW3_THREADS_LIB fftw3_threads PATHS ${FFTW3_LIBRARY_DIRS})
-    if(FFTW3_THREADS_LIB)
-        list(APPEND ANDROID_EXTRA_LIBS ${FFTW3_THREADS_LIB})
-    endif()
 endif()
 
 find_package(OpenColorIO 1.1.1)
@@ -918,9 +963,6 @@ if (OPENCOLORIO_VERSION VERSION_GREATER_EQUAL "2.0.0")
     set(HAVE_OCIO_V2 TRUE)
 endif()
 configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h)
-if (OpenColorIO_FOUND)
-    list (APPEND ANDROID_EXTRA_LIBS ${OPENCOLORIO_LIBRARIES})
-endif()
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"
@@ -945,20 +987,32 @@ set_package_properties(PyQt5 PROPERTIES
     PURPOSE "Required by the Krita PyQt plugin")
 macro_bool_to_01(PYQT5_FOUND HAVE_PYQT5)
 
-find_package(LibMyPaint)
+find_package(Mlt7)
+set_package_properties(Mlt7 PROPERTIES DESCRIPTION "Media Lovin' Toolkit (Multimedia Framework)"
+                URL "https://mltframework.org/"
+                PURPOSE "Required to do audio/video syncrhonization and processing. No MLT = No Audio! ")
+if (Mlt7_FOUND)
+    find_package(SDL2 REQUIRED)
+    set_package_properties(SDL2 PROPERTIES DESCRIPTION "Simple DirectMedia Layer 2"
+                URL "https://www.libsdl.org/"
+                PURPOSE "Required for MLT to render audio buffers. Required **only** when MLT is found on the system." )
+
+  if (ANDROID)
+      # Get the first item in the CMAKE_FIND_ROOT_PATH, hopefully it will be where plugins are saved.
+      list(GET CMAKE_FIND_ROOT_PATH 0 FIRST_FIND_PATH)
+      # TODO(sh_zam): Hardcoded, apparently generators doesn't work for this purpose?
+      file(GLOB MLT_PLUGINS "${FIRST_FIND_PATH}/lib/mlt-7/*.so")
+      list(APPEND ANDROID_EXTRA_LIBS ${MLT_PLUGINS})
+  endif()
+endif()
+macro_bool_to_01(Mlt7_FOUND HAVE_MLT)
+configure_file(config-mlt.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mlt.h)
+
+find_package(LibMyPaint 1.4.0)
 set_package_properties(LibMyPaint PROPERTIES
     DESCRIPTION "MyPaint brush engine API for C/C++"
     TYPE OPTIONAL
-    PURPOSE "Required for the mypaint brush engine")
-if(LibMyPaint_FOUND)
-    if(LibMyPaint_VERSION VERSION_LESS "1.4.0")
-        message(WARNING "Please update libmypaint to version above 1.4.0 as lower versions are known to crash")
-    else()
-        list (APPEND ANDROID_EXTRA_LIBS ${libmypaint_LIBRARY_DIRS}/libmypaint.so
-            ${libmypaint_LIBRARY_DIRS}/libjson-c.so    # this is a direct dependency of libmypaint
-            )
-    endif()
-endif()
+    PURPOSE "Required for the MyPaint brush engine")
 macro_bool_to_01(LibMyPaint_FOUND HAVE_LIBMYPAINT)
 configure_file(config-mypaint.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mypaint.h )
 
@@ -975,7 +1029,7 @@ endif()
 ##
 ## Test for eigen3
 ##
-find_package(Eigen3 3.0 REQUIRED)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 set_package_properties(Eigen3 PROPERTIES
     DESCRIPTION "C++ template library for linear algebra"
     URL "http://eigen.tuxfamily.org"
@@ -985,12 +1039,6 @@ set_package_properties(Eigen3 PROPERTIES
 ## Test for exiv2
 ##
 find_package(LibExiv2 0.16 REQUIRED)
-if (ANDROID)
-    list (APPEND ANDROID_EXTRA_LIBS ${LibExiv2_LIBRARIES})
-    # because libexiv2 depends on libexpat and it is installed in the same folder
-    get_filename_component (_base_dir ${LibExiv2_LIBRARIES} DIRECTORY)
-    list (APPEND ANDROID_EXTRA_LIBS ${_base_dir}/libexpat.so)
-endif()
 
 ##
 ## Test for lcms
@@ -1018,12 +1066,16 @@ if(LCMS2_FOUND)
         set(HAVE_LCMS_FAST_FLOAT_PLUGIN 1)
     endif()
 endif()
-list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
 ##
 ## Test for xsimd
 ##
-find_package(xsimd 8.1.0)
+foreach(xsimd_version 8.1.0 9 10 11)
+    if(NOT xsimd_FOUND)
+        find_package(xsimd ${xsimd_version})
+    endif()
+endforeach()
+
 set_package_properties(xsimd PROPERTIES
     DESCRIPTION "C++ wrappers for SIMD intrinsics"
     URL "https://github.com/xtensor-stack/xsimd"
@@ -1069,7 +1121,6 @@ set_package_properties(Poppler PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required by the Krita PDF filter.")
 
-
 ##
 ## Test for quazip
 ##
@@ -1081,74 +1132,89 @@ set_package_properties(QUAZIP PROPERTIES
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
 
-# FIXME: better way to do this?
-list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
-                                ${EXPAT_LIBRARY}
-                                ${KF5_LIBRARIES}/libssl_1_1.so
-                                ${KF5_LIBRARIES}/libcrypto_1_1.so
-                                ${KF5_LIBRARIES}/libKF5Completion.so
-                                ${KF5_LIBRARIES}/libKF5WindowSystem.so
-                                ${KF5_LIBRARIES}/libKF5WidgetsAddons.so
-                                ${KF5_LIBRARIES}/libKF5ItemViews.so
-                                ${KF5_LIBRARIES}/libKF5ItemModels.so
-                                ${KF5_LIBRARIES}/libKF5GuiAddons.so
-                                ${KF5_LIBRARIES}/libKF5I18n.so
-                                ${KF5_LIBRARIES}/libKF5CoreAddons.so
-                                ${KF5_LIBRARIES}/libKF5ConfigGui.so
-                                ${KF5_LIBRARIES}/libKF5ConfigCore.so)
+##
+## Test for KDcraw
+##
+find_package(KF5KDcraw 5.0.0)
+set_package_properties(KF5KDcraw PROPERTIES
+    DESCRIPTION "A thread-safe wrapper around libraw"
+    URL "https://api.kde.org/libkdcraw/html/index.html"
+    TYPE OPTIONAL
+    PURPOSE "Needed for reading RAW files"
+)
 
+##
+## Check for freetype
+##
+find_package(Freetype 2.10.0 REQUIRED)
+set_package_properties(Freetype PROPERTIES
+    DESCRIPTION "A library for rendering glyphs"
+    URL "https://download.savannah.gnu.org/releases/freetype"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
 
-
-# Source translations
-option(FETCH_TRANSLATIONS "Retrieve translations before building Krita" OFF)
-add_feature_info("Retrieve translations before building" FETCH_TRANSLATIONS "Retrieve the translations from KDE before building Krita")
-
-if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
-    find_package(Python3 COMPONENTS Interpreter REQUIRED)
-    set_package_properties(Python3 PROPERTIES
-        DESCRIPTION "Python is an interpreted, high-level and general-purpose programming language."
-        URL "https://python.org/"
-        TYPE OPTIONAL
-        PURPOSE "Required to manually parse and fetch available translations.")
-    find_package(Subversion 1.4)
-    set_package_properties(Subversion PROPERTIES
-        DESCRIPTION "Subversion is an open source version control system"
-        URL "https://subversion.apache.org/"
-        TYPE OPTIONAL
-        PURPOSE "Required to access the KDE i18n repository.")
-
-    if (Subversion_FOUND AND Python3_FOUND) 
-       set(TRANSLATIONS ${CMAKE_CURRENT_BINARY_DIR}/po)
-
-        if (DEFINED KRITA_STABLE_BRANCH)
-            set(tr_EXTRA_FLAGS "")
-        else()
-            set(tr_EXTRA_FLAGS "--unstable")
-        endif()
-
-        get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
-        string(MD5 pathmd5 ${absolute_podir})
-
-        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED CMAKE_FIND_ROOT_PATH_BOTH)
-        if (NOT TARGET fetch-${pathmd5})
-            file(MAKE_DIRECTORY ${TRANSLATIONS})
-
-            add_custom_target(fetch-${pathmd5}
-                COMMENT "Retrieving translations..."
-                COMMAND ${Python3_EXECUTABLE} ${KRITA_PO_SCRIPT} ${tr_EXTRA_FLAGS}
-                BYPRODUCTS ${TRANSLATIONS}
-                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-            )
-        endif()
-    endif()
+##
+## Check for HarfBuzz
+##
+find_package(HarfBuzz 4.0.0 REQUIRED)
+set_package_properties(HarfBuzz PROPERTIES
+    DESCRIPTION "OpenType text shaping engine"
+    URL "https://harfbuzz.github.io"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+if (HarfBuzz_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${HarfBuzz_LIBRARIES})
 endif()
 
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po OR EXISTS ${CMAKE_CURRENT_BINARY_DIR}/po )
+# Note: We now build a patched raqm from source with Krita.
+
+##
+## Check for fontconfig
+##
+find_package(Fontconfig 2.13.1 REQUIRED)
+set_package_properties(Fontconfig PROPERTIES
+    TYPE REQUIRED
+    PURPOSE "Needed for getting font file information."
+)
+
+##
+## Check for libunibreak
+##
+find_package(libunibreak 5.0 REQUIRED)
+set_package_properties(libunibreak PROPERTIES
+    DESCRIPTION "Implementation of the line breaking and word breaking algorithms as described in Unicode Standard Annex 14 and Unicode Standard Annex 29"
+    URL "https://github.com/adah1972/libunibreak"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+
+##
+## Build vendored libraries
+##
+
+# Allow specification of a directory with pre-downloaded
+# requirements. This download directory is used for 3rdparty_vendor
+# download
+
+if(DEFINED ENV{EXTERNALS_DOWNLOAD_DIR})
+    set(EXTERNALS_DOWNLOAD_DIR $ENV{EXTERNALS_DOWNLOAD_DIR})
+endif()
+
+if(NOT IS_DIRECTORY ${EXTERNALS_DOWNLOAD_DIR})
+    message(WARNING "No externals download dir set, default location inside build tree is used. Use -DEXTERNALS_DOWNLOAD_DIR to override")
+else()
+    file(TO_CMAKE_PATH "${EXTERNALS_DOWNLOAD_DIR}" EXTERNALS_DOWNLOAD_DIR)
+endif()
+
+add_subdirectory(3rdparty_vendor)
+
+
+if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)
-    ki18n_install(po)
-    if (TRANSLATIONS)
-        add_dependencies(pofiles-${pathmd5} fetch-${pathmd5})
-        add_dependencies(tsfiles-${pathmd5} fetch-${pathmd5})
+    if (NOT DISABLE_PO_INSTALLATION)
+        ki18n_install(po)
     endif()
 endif()
 
@@ -1174,8 +1240,9 @@ include(MacroKritaAddBenchmark)
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_CURRENT_BINARY_DIR}
-                           ${CMAKE_SOURCE_DIR}/interfaces
 )
+
+add_subdirectory(sdk/tests)
 
 add_subdirectory(libs)
 add_subdirectory(plugins)
@@ -1185,6 +1252,7 @@ endif()
 add_subdirectory(krita)
 
 configure_file(KoConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoConfig.h )
+configure_file(KoTestConfig.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/KoTestConfig.h )
 configure_file(config_convolution.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config_convolution.h)
 
 check_function_exists(powf HAVE_POWF)
@@ -1200,18 +1268,27 @@ foreach(tst ${KRITA_BROKEN_TESTS})
     message("    * ${tst}")
 endforeach()
 
+if(APPLE)
+    # fix macos test rpath
+    macos_test_fixrpath(${KRITA_TESTS_TARGET})
+endif()
+
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
-  set (ANDROID_SDK_COMPILE_API "30")
-  if ((${NDK_VERSION} GREATER_EQUAL 20))
-    set (USE_LLVM ON)
-  endif()
+  set (ANDROID_SDK_COMPILE_API "33")
+
+  # To assist stdcpp-path in deployment.json file
+  set(ANDROID_SYSROOT_PREFIX "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr" CACHE STRING "" FORCE)
+
+  # otherwise ECM can't find the libs and throws a big error at us.
+  list (APPEND ECM_ADDITIONAL_FIND_ROOT_PATH ${KRITA_3rdparty_LIB_PREFIX})
+
+  # copied regex from ECM's toolchain
+  string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})
 
   if (NOT (CMAKE_CXX_STANDARD_LIBRARIES MATCHES "[^ ]*c\\+\\+[^ ]*\\.so"))
-    # copied regex from ECM's toolchain
-    string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})
 
     set (KRITA_ANDROID_STL_PATH "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr/lib/${ECM_ANDROID_STL_ARCH}/lib${ANDROID_STL}.so")
     if (NOT EXISTS ${KRITA_ANDROID_STL_PATH})

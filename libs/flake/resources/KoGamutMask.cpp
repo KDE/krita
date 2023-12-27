@@ -34,7 +34,6 @@
 
 KoGamutMaskShape::KoGamutMaskShape(KoShape* shape)
     : m_maskShape(shape)
-    , m_shapePaintingContext(KoShapePaintingContext())
 {
 }
 
@@ -63,7 +62,7 @@ void KoGamutMaskShape::paint(QPainter &painter)
 {
     painter.save();
     painter.setTransform(m_maskShape->absoluteTransformation(), true);
-    m_maskShape->paint(painter, m_shapePaintingContext);
+    m_maskShape->paint(painter);
     painter.restore();
 }
 
@@ -71,7 +70,7 @@ void KoGamutMaskShape::paintStroke(QPainter &painter)
 {
     painter.save();
     painter.setTransform(m_maskShape->absoluteTransformation(), true);
-    m_maskShape->paintStroke(painter, m_shapePaintingContext);
+    m_maskShape->paintStroke(painter);
     painter.restore();
 }
 

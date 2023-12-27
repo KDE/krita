@@ -10,9 +10,8 @@
 
 #include <QAbstractItemDelegate>
 
-#include "KoCheckerBoardPainter.h"
 #include "KisResourceThumbnailPainter.h"
-
+#include "KoCheckerBoardPainter.h"
 #include "kritaresourcewidgets_export.h"
 
 /// The resource item delegate for rendering the resource preview
@@ -24,12 +23,16 @@ public:
     ~KisResourceItemDelegate() override {}
 
     void paint( QPainter *, const QStyleOptionViewItem &, const QModelIndex & ) const override;
+    void setShowText(bool);
+    void setIsWidget(bool);
 
     QSize sizeHint ( const QStyleOptionViewItem &, const QModelIndex & ) const override;
 
 private:
     KoCheckerBoardPainter m_checkerPainter;
     KisResourceThumbnailPainter m_thumbnailPainter;
+    bool m_showText;
+    bool m_isWidget;
 };
 
 #endif

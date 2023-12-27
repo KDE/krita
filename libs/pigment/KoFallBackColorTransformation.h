@@ -26,7 +26,7 @@ public:
      * spaces. This constructor will initialize his own color conversion
      * objects.
      *
-     * The created object takes owner ship of the transormation and will
+     * The created object takes owner ship of the transformation and will
      * take charge of deleting it.
      *
      * @param cs color space of the source and destination pixels

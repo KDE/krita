@@ -81,13 +81,13 @@ public:
                     channels_type averageOpacity = scale<channels_type>(paramsWrapper.averageOpacity);
 
                     /**
-                     * Here we calculate fullFlowAlpha, which shuold strive either to
+                     * Here we calculate fullFlowAlpha, which should strive either to
                      * averageOpacity or opacity (whichever is the greater) or just keep old dstAlpha
                      * value, if both opacity values are not bit enough
                      */
                     if (averageOpacity > opacity) {
                         /**
-                         * This crypty code is basically an optimized version of the following:
+                         * This cryptic code is basically an optimized version of the following:
                          * fullFlowAlpha = averageOpacity *
                          *                     unionShapeOpacity(srcAlpha / averageOpacity,
                          *                                       dstAlpha / averageOpacity);

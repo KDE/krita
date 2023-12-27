@@ -333,9 +333,7 @@ QPointF KisColorSelector::mapHueToAngle(qreal hue) const
 qint8 KisColorSelector::getLightIndex(const QPointF& pt) const
 {
     if (m_lightStripArea.contains(pt.toPoint(), true)) {
-        qreal t = (pt.x() - m_lightStripArea.x()) / qreal(m_lightStripArea.width());
-        t = (pt.y() - m_lightStripArea.y()) / qreal(m_lightStripArea.height());
-
+        qreal t = (pt.y() - m_lightStripArea.y()) / qreal(m_lightStripArea.height());
         return qint8(t * getNumLightPieces());
     }
 

@@ -73,7 +73,7 @@ struct PsdResource {
 };
 
 /**
- * Color samplers, apparently distict from PSDColormode
+ * Color samplers, apparently distinct from PSDColormode
  */
 namespace psd_color_sampler
 {

@@ -23,7 +23,7 @@ struct KisDabRenderingExecutor::Private
 KisDabRenderingExecutor::KisDabRenderingExecutor(const KoColorSpace *cs,
                                                  KisDabCacheUtils::ResourcesFactory resourcesFactory,
                                                  KisRunnableStrokeJobsInterface *runnableJobsInterface,
-                                                 KisPressureMirrorOption *mirrorOption,
+                                                 KisMirrorOption *mirrorOption,
                                                  KisPrecisionOption *precisionOption)
     : m_d(new Private)
 {

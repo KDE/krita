@@ -11,14 +11,11 @@
 #include <QRect>
 #include <QVector>
 #include <QVector4D>
-#include <QVBoxLayout>
 #include <QList>
 #include <QtMath>
 
-#include <KSharedConfig>
-#include <KConfigGroup>
-
 #include "KoColorConversions.h"
+#include "KoColorSpace.h"
 #include "KoColorDisplayRendererInterface.h"
 #include "KoChannelInfo.h"
 #include <KoColorModelStandardIds.h>
@@ -30,7 +27,7 @@ struct KisVisualColorSelectorShape::Private
 {
     QImage gradient;
     QImage alphaMask;
-    QImage fullSelector;
+    QImage staticBackground;
     bool imagesNeedUpdate { true };
     bool alphaNeedsUpdate { true };
     bool acceptTabletEvents { false };
@@ -38,33 +35,32 @@ struct KisVisualColorSelectorShape::Private
     QPointF dragStart;
     QVector4D currentChannelValues;
     Dimensions dimension;
-    const KoColorSpace *colorSpace;
     int channel1;
     int channel2;
-    const KoColorDisplayRendererInterface *displayRenderer = 0;
+    quint32 channelMask;
 };
 
-KisVisualColorSelectorShape::KisVisualColorSelectorShape(QWidget *parent,
+KisVisualColorSelectorShape::KisVisualColorSelectorShape(KisVisualColorSelector *parent,
                                                          KisVisualColorSelectorShape::Dimensions dimension,
-                                                         const KoColorSpace *cs,
                                                          int channel1,
-                                                         int channel2,
-                                                         const KoColorDisplayRendererInterface *displayRenderer): QWidget(parent), m_d(new Private)
+                                                         int channel2): QWidget(parent), m_d(new Private)
 {
     m_d->dimension = dimension;
-    m_d->colorSpace = cs;
-    int maxchannel = m_d->colorSpace->colorChannelCount()-1;
+    int maxchannel = parent->selectorModel()->colorSpace()->colorChannelCount()-1;
     m_d->channel1 = qBound(0, channel1, maxchannel);
     m_d->channel2 = qBound(0, channel2, maxchannel);
+    m_d->channelMask = 1 << channel1;
+    if (dimension == Dimensions::twodimensional) {
+        m_d->channelMask |= 1 << channel2;
+    }
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    setDisplayRenderer(displayRenderer);
 }
 
 KisVisualColorSelectorShape::~KisVisualColorSelectorShape()
 {
 }
 
-QPointF KisVisualColorSelectorShape::getCursorPosition() {
+QPointF KisVisualColorSelectorShape::getCursorPosition() const {
     return m_d->currentCoordinates;
 }
 
@@ -86,10 +82,11 @@ void KisVisualColorSelectorShape::setCursorPosition(QPointF position, bool signa
     }
 }
 
-void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool setCursor)
+void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, quint32 channelFlags)
 {
     //qDebug() << this  << "setChannelValues";
     m_d->currentChannelValues = channelValues;
+    bool setCursor = channelFlags & m_d->channelMask;
     if (setCursor) {
         m_d->currentCoordinates = QPointF(qBound(0.f, channelValues[m_d->channel1], 1.f),
                                           qBound(0.f, channelValues[m_d->channel2], 1.f));
@@ -101,7 +98,7 @@ void KisVisualColorSelectorShape::setChannelValues(QVector4D channelValues, bool
             m_d->currentChannelValues[m_d->channel2] = m_d->currentCoordinates.y();
         }
     }
-    m_d->imagesNeedUpdate = true;
+    m_d->imagesNeedUpdate = m_d->imagesNeedUpdate || channelFlags & ~m_d->channelMask;
     update();
 }
 
@@ -110,13 +107,16 @@ void KisVisualColorSelectorShape::setAcceptTabletEvents(bool on)
     m_d->acceptTabletEvents = on;
 }
 
-void KisVisualColorSelectorShape::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
+bool KisVisualColorSelectorShape::isHueControl() const
 {
-    if (displayRenderer) {
-        m_d->displayRenderer = displayRenderer;
-    } else {
-        m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
-    }
+    return selectorModel()->isHSXModel()
+            && getDimensions() == KisVisualColorSelectorShape::onedimensional
+            && m_d->channel1 == 0;
+}
+
+bool KisVisualColorSelectorShape::supportsGamutMask() const
+{
+    return false;
 }
 
 void KisVisualColorSelectorShape::forceImageUpdate()
@@ -126,67 +126,54 @@ void KisVisualColorSelectorShape::forceImageUpdate()
     m_d->imagesNeedUpdate = true;
 }
 
-QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c){
-    QColor col;
-    KoColor color = c;
-    if (m_d->displayRenderer) {
-        color.convertTo(m_d->displayRenderer->getPaintingColorSpace());
-        col = m_d->displayRenderer->toQColor(c);
-    } else {
-        col = c.toQColor();
-    }
-    return col;
-}
-
-// currently unused?
-void KisVisualColorSelectorShape::slotSetActiveChannels(int channel1, int channel2)
+void KisVisualColorSelectorShape::updateGamutMask()
 {
-    //qDebug() << this  << "slotSetActiveChannels";
-    int maxchannel = m_d->colorSpace->colorChannelCount()-1;
-    m_d->channel1 = qBound(0, channel1, maxchannel);
-    m_d->channel2 = qBound(0, channel2, maxchannel);
-    m_d->imagesNeedUpdate = true;
-    update();
+    // Nothing to do if gamut masks not supported
 }
 
-bool KisVisualColorSelectorShape::imagesNeedUpdate() const {
-    return m_d->imagesNeedUpdate;
+QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c)
+{
+    const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
+    return renderer->toQColor(c, colorSelector()->proofColors());
 }
 
-QImage KisVisualColorSelectorShape::getImageMap()
+KisVisualColorSelector *KisVisualColorSelectorShape::colorSelector() const
+{
+    KisVisualColorSelector* selectorWidget = qobject_cast<KisVisualColorSelector*>(parent());
+    KIS_ASSERT(selectorWidget);
+    return selectorWidget;
+}
+
+KisVisualColorModel *KisVisualColorSelectorShape::selectorModel() const
+{
+    KisVisualColorSelector* selectorWidget = qobject_cast<KisVisualColorSelector*>(parent());
+    KIS_ASSERT(selectorWidget);
+    return selectorWidget->selectorModel().data();
+}
+
+const QImage& KisVisualColorSelectorShape::getImageMap()
 {
     //qDebug() << this  << ">>>>>>>>> getImageMap()" << m_d->imagesNeedUpdate;
 
     if (m_d->imagesNeedUpdate) {
-        // Fill a buffer with the right kocolors
-        m_d->gradient = renderBackground(m_d->currentChannelValues, m_d->colorSpace->pixelSize());
+        // NOTE: pure static backgrounds are currently somewhat implicitly handled,
+        // it would be nicer to avoid re-checking and overwriting m_d->gradient.
+        // But QImage's implicit data sharing allows all this mindless by-value stuff...
+        m_d->gradient = compositeBackground();
         m_d->imagesNeedUpdate = false;
     }
     return m_d->gradient;
 }
 
-const QImage KisVisualColorSelectorShape::getAlphaMask() const
-{
-    if (m_d->alphaNeedsUpdate) {
-        m_d->alphaMask = renderAlphaMask();
-        m_d->alphaNeedsUpdate = false;
-    }
-    return m_d->alphaMask;
-}
-
 QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const
 {
-    Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * m_d->colorSpace->pixelSize());
-    QImage image;
+    const KoColorSpace *colorSpace = selectorModel()->colorSpace();
+    Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * colorSpace->pixelSize());
+    const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
+
     // Convert the buffer to a qimage
-    if (m_d->displayRenderer) {
-        image = m_d->displayRenderer->convertToQImage(m_d->colorSpace, rawColor, imgSize.width(), imgSize.height());
-    }
-    else {
-        image = m_d->colorSpace->convertToQImage(rawColor, imgSize.width(), imgSize.height(), 0,
-                                                 KoColorConversionTransformation::internalRenderingIntent(),
-                                                 KoColorConversionTransformation::internalConversionFlags());
-    }
+    QImage image = renderer->toQImage(colorSpace, rawColor, imgSize, colorSelector()->proofColors());
+
     // safeguard:
     if (image.isNull())
     {
@@ -197,9 +184,9 @@ QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quin
     return image;
 }
 
-QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelValues, quint32 pixelSize) const
+QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelValues, const QImage &alpha) const
 {
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    const KisVisualColorModel *selector = selectorModel();
     Q_ASSERT(selector);
 
     // Hi-DPI aware rendering requires that we determine the device pixel dimension;
@@ -207,18 +194,18 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     const qreal deviceDivider = 1.0 / devicePixelRatioF();
     const int deviceWidth = qCeil(width() * devicePixelRatioF());
     const int deviceHeight = qCeil(height() * devicePixelRatioF());
-    quint32 imageSize = deviceWidth * deviceHeight * m_d->colorSpace->pixelSize();
+    quint32 imageSize = deviceWidth * deviceHeight * selector->colorSpace()->pixelSize();
     QScopedArrayPointer<quint8> raw(new quint8[imageSize] {});
     quint8 *dataPtr = raw.data();
     QVector4D coordinates = channelValues;
+    const qsizetype pixelSize = selector->colorSpace()->pixelSize();
 
-    QImage alpha = getAlphaMask();
     bool checkAlpha = !alpha.isNull() && alpha.valid(deviceWidth - 1, deviceHeight - 1);
     KIS_SAFE_ASSERT_RECOVER(!checkAlpha || alpha.format() == QImage::Format_Alpha8) {
         checkAlpha = false;
     }
 
-    KoColor filler(Qt::white, m_d->colorSpace);
+    KoColor filler(Qt::white, selector->colorSpace());
     for (int y = 0; y < deviceHeight; y++) {
         const uchar *alphaLine = checkAlpha ? alpha.scanLine(y) : 0;
         for (int x=0; x < deviceWidth; x++) {
@@ -228,7 +215,7 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
                 if (m_d->dimension == Dimensions::twodimensional) {
                     coordinates[m_d->channel2] = newcoordinate.y();
                 }
-                KoColor c = selector->convertShapeCoordsToKoColor(coordinates);
+                KoColor c = selector->convertChannelValuesToKoColor(coordinates);
                 memcpy(dataPtr, c.data(), pixelSize);
             }
             else {
@@ -252,7 +239,49 @@ QImage KisVisualColorSelectorShape::renderBackground(const QVector4D &channelVal
     return image;
 }
 
+QImage KisVisualColorSelectorShape::compositeBackground() const
+{
+    // Shapes are expect to return a valid alpha mask or a valid
+    // static alpha mask. If they provide both, the rendered backgrounds
+    // get composited.
+    if (m_d->alphaNeedsUpdate) {
+        QImage staticAlpha = renderStaticAlphaMask();
+        if (!staticAlpha.isNull()) {
+            QVector4D neutralValues(1, 1, 1, 1);
+            switch (selectorModel()->colorModel()) {
+            case KisVisualColorModel::HSL:
+            case KisVisualColorModel::HSI:
+            case KisVisualColorModel::HSY:
+                neutralValues.setZ(0.5f);
+            default:
+                break;
+            }
+
+            m_d->staticBackground = renderBackground(neutralValues, staticAlpha);
+        }
+        m_d->alphaMask = renderAlphaMask();
+        m_d->alphaNeedsUpdate = false;
+    }
+    if (m_d->alphaMask.isNull()) {
+        return m_d->staticBackground;
+    }
+
+    QImage bgImage = renderBackground(m_d->currentChannelValues, m_d->alphaMask);
+    if (!m_d->staticBackground.isNull()) {
+        QPainter painter(&bgImage);
+        // composite static and dynamic background parts
+        painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
+        painter.drawImage(0, 0, m_d->staticBackground);
+    }
+    return bgImage;
+}
+
 QImage KisVisualColorSelectorShape::renderAlphaMask() const
+{
+    return QImage();
+}
+
+QImage KisVisualColorSelectorShape::renderStaticAlphaMask() const
 {
     return QImage();
 }
@@ -267,6 +296,7 @@ void KisVisualColorSelectorShape::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_d->dragStart = e->localPos();
+        emit colorSelector()->sigInteraction(true);
         QPointF coordinates = mousePositionToShapeCoordinate(e->localPos(), m_d->dragStart);
         setCursorPosition(coordinates, true);
     }
@@ -287,7 +317,9 @@ void KisVisualColorSelectorShape::mouseMoveEvent(QMouseEvent *e)
 
 void KisVisualColorSelectorShape::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() != Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton) {
+        emit colorSelector()->sigInteraction(false);
+    } else {
         e->ignore();
     }
 }
@@ -332,14 +364,30 @@ void KisVisualColorSelectorShape::paintEvent(QPaintEvent*)
 {
     QPainter painter(this);
 
-    drawCursor();
-    painter.drawImage(0,0,m_d->fullSelector);
+    const QImage &fullSelector = getImageMap();
+    if (!fullSelector.isNull()) {
+        painter.drawImage(0, 0, fullSelector);
+    }
+
+    drawGamutMask(painter);
+
+    if (isEnabled()) {
+        painter.setRenderHint(QPainter::Antialiasing);
+        drawCursor(painter);
+    }
 }
 
 void KisVisualColorSelectorShape::resizeEvent(QResizeEvent *)
 {
     forceImageUpdate();
+    updateGamutMask();
     setMask(getMaskMap());
+}
+
+void KisVisualColorSelectorShape::drawGamutMask(QPainter &painter)
+{
+    // Nothing to do if gamut masks not supported
+    Q_UNUSED(painter);
 }
 
 KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensions() const
@@ -347,24 +395,28 @@ KisVisualColorSelectorShape::Dimensions KisVisualColorSelectorShape::getDimensio
     return m_d->dimension;
 }
 
-void KisVisualColorSelectorShape::setFullImage(QImage full)
-{
-    m_d->fullSelector = full;
-}
 KoColor KisVisualColorSelectorShape::getCurrentColor()
 {
-    const KisVisualColorSelector *selector = qobject_cast<KisVisualColorSelector*>(parent());
+    const KisVisualColorModel *selector = selectorModel();
     if (selector)
     {
-        return selector->convertShapeCoordsToKoColor(m_d->currentChannelValues);
+        return selector->convertChannelValuesToKoColor(m_d->currentChannelValues);
     }
-    return KoColor(m_d->colorSpace);
+    return KoColor();
 }
 
-QVector <int> KisVisualColorSelectorShape::getChannels() const
+int KisVisualColorSelectorShape::channel(int dimension) const
 {
-    QVector <int> channels(2);
-    channels[0] = m_d->channel1;
-    channels[1] = m_d->channel2;
-    return channels;
+    if (dimension == 0) {
+        return m_d->channel1;
+    }
+    if (dimension == 1 && getDimensions() == twodimensional) {
+        return m_d->channel2;
+    }
+    return -1;
+}
+
+quint32 KisVisualColorSelectorShape::channelMask() const
+{
+    return m_d->channelMask;
 }

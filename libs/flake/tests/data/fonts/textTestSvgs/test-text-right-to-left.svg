@@ -1,0 +1,45 @@
+<svg width="500px" height="600px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+<g id="test">
+
+    <rect id="boundingRect" x="5" y="5" width="490" height="590"
+        fill="none" stroke="red"/>
+
+    <text id="testRect" x="20" y="34" 
+        font-family="DejaVu Sans" font-size="15" fill="blue" text-anchor="end">
+
+        <tspan x="250" dy="0.0em" text-anchor="middle" direction="rtl">aa bb cc dd</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="rtl">حادثتا السفينتين «بسين Bassein» و«فايبر Viper»</tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+
+        <tspan x="150" dy="2.0em" text-anchor="start" direction="ltr">aa bb حادثتا السفينتين بسين cc dd </tspan>
+        <tspan x="350" dy="2.0em" text-anchor="start" direction="rtl">aa bb حادثتا السفينتين بسين cc dd </tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+
+        <tspan x="150" dy="2.0em" text-anchor="start" direction="ltr">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="ltr">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+        <tspan x="350" dy="2.0em" text-anchor="end" direction="ltr">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="ltr">الناطقون: 295 مليون - 422 مليون</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="ltr">Spoken: <tspan direction="rtl" unicode-bidi="embed">295 مليون - 422 مليون </tspan></tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="ltr">aa bb <tspan direction="rtl" unicode-bidi="bidi-override">c1 c2 c3 c4</tspan> dd ee</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="start" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="end" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+
+
+
+    </text>
+
+</g>
+
+</svg>

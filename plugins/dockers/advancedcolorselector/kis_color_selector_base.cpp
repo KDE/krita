@@ -209,7 +209,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
     event->accept();
 
     if(!m_isPopup && m_popupOnMouseClick &&
-       event->button() == Qt::MidButton) {
+       event->button() == Qt::MiddleButton) {
 
         lazyCreatePopup();
 
@@ -235,7 +235,7 @@ void KisColorSelectorBase::mousePressEvent(QMouseEvent* event)
         m_popup->setHidingTime(200);
         showPopup(DontMove);
 
-    } else if (m_isPopup && event->button() == Qt::MidButton) {
+    } else if (m_isPopup && event->button() == Qt::MiddleButton) {
         if (m_colorPreviewPopup) {
             m_colorPreviewPopup->hide();
         }
@@ -251,7 +251,7 @@ void KisColorSelectorBase::mouseReleaseEvent(QMouseEvent *e) {
 
    Q_UNUSED(e);
 
-    if (e->button() == Qt::MidButton) {
+    if (e->button() == Qt::MiddleButton) {
         e->accept();
     } else if (m_isPopup &&
                (m_hideOnMouseClick && !m_popupOnMouseOver) &&

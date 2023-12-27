@@ -54,7 +54,7 @@ void KisAnimationFrameCacheTest::testCache()
     glTex->testingForceInitialized();
 
     m_globalAnimationCache = cache.data();
-    connect(animation, SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameGerenationFinished(int)));
+    connect(animation, SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameGenerationFinished(int)));
 
     int t;
     animation->saveAndResetCurrentTime(11, &t);
@@ -93,7 +93,7 @@ void KisAnimationFrameCacheTest::testCache()
 
 }
 
-void KisAnimationFrameCacheTest::slotFrameGerenationFinished(int time)
+void KisAnimationFrameCacheTest::slotFrameGenerationFinished(int time)
 {
     KisImageSP image = m_globalAnimationCache->image();
     KisOpenGLUpdateInfoSP info = m_globalAnimationCache->fetchFrameData(time, image, KisRegion(image->bounds()));

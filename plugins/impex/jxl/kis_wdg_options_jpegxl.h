@@ -25,6 +25,12 @@ public:
     void setConfiguration(const KisPropertiesConfigurationSP cfg) override;
     KisPropertiesConfigurationSP configuration() const override;
 
+private Q_SLOTS:
+    // Disable all HLG options when the index is not for an HLG option.
+    void toggleExtraHDROptions(int index);
+    // Disable parameters unless its corresponding encoder is explicitly selected.
+    void toggleModularTabs(int index);
+
 private:
     KisMetaData::FilterRegistryModel m_filterRegistryModel;
 };

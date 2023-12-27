@@ -9,11 +9,12 @@
 #include <simpletest.h>
 
 #include <DebugPigment.h>
-#include <KoColorProfile.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorConversionSystem.h>
 #include <KoColorModelStandardIds.h>
-#include <sdk/tests/testpigment.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <testpigment.h>
+
 
 TestColorConversionSystem::TestColorConversionSystem()
 {

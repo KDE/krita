@@ -29,6 +29,7 @@
 #include "kis_keyframe_channel.h"
 #include "KisMainWindow.h"
 
+#include <KisLockFrameGenerationLock.h>
 #include "KisAsyncAnimationCacheRenderer.h"
 #include "dialogs/KisAsyncAnimationCacheRenderDialog.h"
 
@@ -49,17 +50,8 @@ struct KisAnimationCachePopulator::Private
     static const int IDLE_CHECK_INTERVAL = 500;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
 
-    int requestedFrame;
-    KisAnimationFrameCacheSP requestCache;
-    KisOpenGLUpdateInfoSP requestInfo;
-    KisSignalAutoConnectionsStore imageRequestConnections;
-
-    QFutureWatcher<void> infoConversionWatcher;
-
     KisAsyncAnimationCacheRenderer regenerator;
     bool calculateAnimationCacheInBackground = true;
-
-
 
     enum State {
         NotWaitingForAnything,
@@ -69,12 +61,17 @@ struct KisAnimationCachePopulator::Private
     };
     State state;
 
+    enum RegenerationRequestResult {
+        RequestSuccessful = 0,
+        RequestRejected,
+        RequestPostponed
+    };
+
     Private(KisAnimationCachePopulator *_q, KisPart *_part)
         : q(_q),
           part(_part),
           idleCounter(0),
           priorityFrames(),
-          requestedFrame(-1),
           state(WaitingForIdle)
     {
         timer.setSingleShot(true);
@@ -101,9 +98,14 @@ struct KisAnimationCachePopulator::Private
             idleCounter++;
 
             if (idleCounter >= IDLE_COUNT_THRESHOLD) {
-                if (!tryRequestGeneration()) {
+                RegenerationRequestResult result = tryRequestGeneration();
+
+                if (result == RequestPostponed) {
+                    enterState(WaitingForIdle);
+                } else if (result == RequestRejected) {
                     enterState(NotWaitingForAnything);
                 }
+
                 return;
             }
         } else {
@@ -114,7 +116,7 @@ struct KisAnimationCachePopulator::Private
     }
 
 
-    bool tryRequestGeneration()
+    RegenerationRequestResult tryRequestGeneration()
     {
         if (!priorityFrames.isEmpty()) {
             KisImageSP image = priorityFrames.top().first;
@@ -122,10 +124,11 @@ struct KisAnimationCachePopulator::Private
             priorityFrames.pop();
 
             KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, false);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, RequestRejected);
 
-            bool requested = tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);
-            if (requested) return true;
+            RegenerationRequestResult result =
+                tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);
+            if (result == RequestSuccessful) return result;
         }
 
         // Prioritize the active document
@@ -154,8 +157,9 @@ struct KisAnimationCachePopulator::Private
                     }
                 }
 
-                bool requested = tryRequestGeneration(activeDocumentCache, skipRange, -1);
-                if (requested) return true;
+                RegenerationRequestResult result =
+                    tryRequestGeneration(activeDocumentCache, skipRange, -1);
+                if (result == RequestSuccessful) return result;
             }
         }
 
@@ -167,20 +171,26 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
-            bool requested = tryRequestGeneration(cache, KisTimeSpan(), -1);
-            if (requested) return true;
+            RegenerationRequestResult result =
+                tryRequestGeneration(cache, KisTimeSpan(), -1);
+            if (result == RequestSuccessful) return result;
         }
 
-        return false;
+        return RequestRejected;
     }
 
-    bool tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeSpan skipRange, int priorityFrame)
+    RegenerationRequestResult tryRequestGeneration(KisAnimationFrameCacheSP cache, KisTimeSpan skipRange, int priorityFrame)
     {
         KisImageSP image = cache->image();
-        if (!image) return false;
+        if (!image) return RequestRejected;
 
         KisImageAnimationInterface *animation = image->animationInterface();
-        KisTimeSpan currentRange = animation->fullClipRange();
+
+        if (animation->backgroundFrameGenerationBlocked()) {
+            return RequestPostponed;
+        }
+
+        KisTimeSpan currentRange = animation->documentPlaybackRange();
 
         const int frame = priorityFrame >= 0 ? priorityFrame : KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 
@@ -188,14 +198,20 @@ struct KisAnimationCachePopulator::Private
             return regenerate(cache, frame);
         }
 
-        return false;
+        return RequestRejected;
     }
 
-    bool regenerate(KisAnimationFrameCacheSP cache, int frame)
+    RegenerationRequestResult regenerate(KisAnimationFrameCacheSP cache, int frame)
     {
         if (state == WaitingForFrame) {
             // Already busy, deny request
-            return false;
+            return RequestRejected;
+        }
+
+        KisLockFrameGenerationLock lock(cache->image()->animationInterface(), std::try_to_lock);
+
+        if (!lock.owns_lock()) {
+            return RequestPostponed;
         }
 
         /**
@@ -209,9 +225,9 @@ struct KisAnimationCachePopulator::Private
 
         // if we ever decide to add ROI to background cache
         // regeneration, it should be added here :)
-        regenerator.startFrameRegeneration(cache->image(), frame, KisAsyncAnimationRendererBase::Cancellable);
+        regenerator.startFrameRegeneration(cache->image(), frame, KisAsyncAnimationRendererBase::Cancellable, std::move(lock));
 
-        return true;
+        return RequestSuccessful;
     }
 
     QString debugStateToString(State newState) {

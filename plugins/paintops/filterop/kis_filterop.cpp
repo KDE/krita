@@ -28,18 +28,19 @@
 #include <kis_paint_device.h>
 #include <kis_properties_configuration.h>
 #include <kis_selection.h>
-#include <kis_pressure_size_option.h>
-#include <kis_filter_option.h>
 #include <kis_filterop_settings.h>
 #include <kis_iterator_ng.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_transaction.h>
 #include <kis_lod_transform.h>
 #include <kis_spacing_information.h>
+#include <KisFilterOptionData.h>
 
 
 KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
+    , m_sizeOption(settings.data())
+    , m_rotationOption(settings.data())
     , m_filterConfiguration(0)
 {
     Q_UNUSED(node);
@@ -48,13 +49,16 @@ KisFilterOp::KisFilterOp(const KisPaintOpSettingsSP settings, KisPainter *painte
     Q_ASSERT(painter);
 
     m_tmpDevice = source()->createCompositionSourceDevice();
-    m_sizeOption.readOptionSetting(settings);
-    m_rotationOption.readOptionSetting(settings);
-    m_sizeOption.resetAllSensors();
-    m_rotationOption.resetAllSensors();
-    m_filter = KisFilterRegistry::instance()->get(settings->getString(FILTER_ID));
-    m_filterConfiguration = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
-    m_smudgeMode = settings->getBool(FILTER_SMUDGE_MODE);
+
+    KisFilterOptionData data;
+    data.read(settings.data());
+
+    m_filter = KisFilterRegistry::instance()->get(data.filterId);
+    if (m_filter) {
+        m_filterConfiguration = m_filter->factoryConfiguration(settings->resourcesInterface());
+        m_filterConfiguration->fromXML(data.filterConfig);
+    }
+    m_smudgeMode = data.smudgeMode;
 
     m_rotationOption.applyFanCornersInfo(this);
 }
@@ -142,8 +146,15 @@ QList<KoResourceLoadResult> KisFilterOp::prepareLinkedResources(const KisPaintOp
 {
     QList<KoResourceLoadResult> resources = KisBrushBasedPaintOp::prepareLinkedResources(settings, resourcesInterface);
 
-    KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
-    resources << config->linkedResources(resourcesInterface);
+    KisFilterOptionData data;
+    data.read(settings.data());
+
+    KisFilterSP filter = KisFilterRegistry::instance()->get(data.filterId);
+    if (filter) {
+        KisFilterConfigurationSP config = filter->factoryConfiguration(settings->resourcesInterface());
+        config->fromXML(data.filterConfig);
+        resources << config->linkedResources(resourcesInterface);
+    }
 
     return resources;
 }
@@ -152,8 +163,15 @@ QList<KoResourceLoadResult> KisFilterOp::prepareEmbeddedResources(const KisPaint
 {
     QList<KoResourceLoadResult> resources = KisBrushBasedPaintOp::prepareEmbeddedResources(settings, resourcesInterface);
 
-    KisFilterConfigurationSP config = static_cast<const KisFilterOpSettings *>(settings.data())->filterConfig();
-    resources << config->embeddedResources(resourcesInterface);
+    KisFilterOptionData data;
+    data.read(settings.data());
+
+    KisFilterSP filter = KisFilterRegistry::instance()->get(data.filterId);
+    if (filter) {
+        KisFilterConfigurationSP config = filter->factoryConfiguration(settings->resourcesInterface());
+        config->fromXML(data.filterConfig);
+        resources << config->embeddedResources(resourcesInterface);
+    }
 
     return resources;
 }

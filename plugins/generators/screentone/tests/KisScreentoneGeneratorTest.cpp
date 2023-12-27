@@ -6,18 +6,19 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <generator/kis_generator_registry.h>
-#include <kis_filter_configuration.h>
-#include <kis_processing_information.h>
-#include <kis_selection.h>
+#include <KisGlobalResourcesInterface.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <KisGlobalResourcesInterface.h>
+#include <generator/kis_generator_registry.h>
+#include <kis_filter_configuration.h>
+#include <kis_processing_information.h>
+#include <kis_selection.h>
 #include <simpletest.h>
-#include <sdk/tests/testimage.h>
+#include <testimage.h>
 #include <testutil.h>
+
 
 #include "KisScreentoneGeneratorTest.h"
 

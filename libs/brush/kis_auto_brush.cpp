@@ -33,6 +33,7 @@
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include <kis_brush_mask_applicator_base.h>
 #include "kis_algebra_2d.h"
+#include <KisOptimizedBrushOutline.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
@@ -93,7 +94,7 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
         setHeight(qMax(1, height));
     }
 
-    // We don't initialize setBrushTipImage(), bacause
+    // We don't initialize setBrushTipImage(), because
     // auto brush doesn't use image pyramid. And generation
     // of a full-scaled QImage may cause a significant delay
     // in the beginning of the stroke
@@ -133,6 +134,18 @@ bool KisAutoBrush::isPiercedApprox() const
     }
 
     return result;
+}
+
+KisFixedPaintDeviceSP KisAutoBrush::outlineSourceImage() const
+{
+    KisFixedPaintDeviceSP dev;
+    KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    dev = new KisFixedPaintDevice(cs);
+    mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
+
+    return dev;
 }
 
 qreal KisAutoBrush::userEffectiveSize() const
@@ -180,6 +193,10 @@ qint32 KisAutoBrush::maskWidth(KisDabShape const& shape,
 QSizeF KisAutoBrush::characteristicSize(KisDabShape const& shape) const
 {
     return KisBrush::characteristicSize(lieAboutDabShape(shape, maskGenerator()->spikes()));
+}
+
+KisFixedPaintDeviceSP KisAutoBrush::paintDevice(const KoColorSpace *, const KisDabShape &, const KisPaintInformation &, double, double) const {
+    return 0; // The autobrush does NOT support images!
 }
 
 
@@ -288,7 +305,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
-        // new bounds. we don't care if there is some extra memory occcupied.
+        // new bounds. we don't care if there is some extra memory occupied.
         dst->setRect(QRect(0, 0, dstWidth, dstHeight));
         dst->lazyGrowBufferWithoutInitialization();
     }
@@ -410,7 +427,7 @@ qreal KisAutoBrush::randomness() const
     return d->randomness;
 }
 
-QPainterPath KisAutoBrush::outline(bool forcePreciseOutline) const
+KisOptimizedBrushOutline KisAutoBrush::outline(bool forcePreciseOutline) const
 {
     const bool requiresComplexOutline = d->shape->spikes() > 2;
     if (!requiresComplexOutline && !forcePreciseOutline) {

@@ -123,19 +123,19 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
     KoAbstractGradientSP gradient = filterConfig->gradient();
     const int colorMode = filterConfig->colorMode();
     const KoColorSpace *colorSpace = device->colorSpace();
-    const int cachedGradientSize = qMax(device->extent().width(), device->extent().height());
+    const int cachedGradientSize = device->extent().width() + device->extent().height();
 
     if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Blend) {
         KoCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         BlendColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    }
-    else if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Nearest) {
+
+    } else if (colorMode == KisGradientMapFilterConfiguration::ColorMode_Nearest) {
         KisGradientMapFilterNearestCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         NearestColorModePolicy colorModePolicy(&cachedGradient);
         processImpl(device, applyRect, config, progressUpdater, colorModePolicy);
-    }
-    else /* if colorMode == KisGradientMapFilterConfiguration::ColorMode_Dither */ {
+
+    } else /* if colorMode == KisGradientMapFilterConfiguration::ColorMode_Dither */ {
         KisDitherUtil ditherUtil;
         KisGradientMapFilterDitherCachedGradient cachedGradient(gradient, cachedGradientSize, colorSpace);
         ditherUtil.setConfiguration(*filterConfig, "dither/");
@@ -161,7 +161,7 @@ void KisGradientMapFilter::processImpl(KisPaintDeviceSP device,
     KisSequentialIteratorProgress it(device, applyRect, progressUpdater);
 
     while (it.nextPixel()) {
-        const qreal t = static_cast<qreal>(colorSpace->intensity8(it.oldRawData())) / 255;
+        const qreal t = colorSpace->intensityF(it.oldRawData());
         const qreal pixelOpacity = colorSpace->opacityF(it.oldRawData());
         const quint8 *color = colorModeStrategy.colorAt(t, it.x(), it.y());
         memcpy(it.rawData(), color, pixelSize);

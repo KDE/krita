@@ -1,0 +1,5 @@
+The fonts in this folder are all test fonts from https://github.com/simoncozens/test-fonts , which are licensed as:
+
+Copyright 2019 Simon Cozens. All rights reserved. Licensed under the Apache License, Version 2.0 (the “License”);
+
+They're all test fonts, with CBDT having only 'A' glyph, the rest of the color fonts both A & B, and the baseline test only having L and 道, and an ideographic and roman baseline.

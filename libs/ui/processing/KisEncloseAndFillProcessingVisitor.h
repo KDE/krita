@@ -34,11 +34,15 @@ public:
         int fillOpacitySpread,
         bool antiAlias,
         int expand,
+        bool stopGrowingAtDarkestPixel,
         int feather,
         bool useSelectionAsBoundary,
         bool usePattern,
         bool unmerged,
-        bool useBgColor
+        bool useBgColor,
+        bool useCustomBlendingOptions,
+        int customOpacity,
+        const QString &customCompositeOp
     );
 
 private:
@@ -63,10 +67,14 @@ private:
     bool m_useSelectionAsBoundary {true};
     bool m_antiAlias {false};
     int m_expand {0};
+    bool m_stopGrowingAtDarkestPixel {false};
     int m_feather {0};
     bool m_usePattern {false};
     bool m_unmerged {false};
     bool m_useBgColor {false};
+    bool m_useCustomBlendingOptions;
+    int m_customOpacity;
+    QString m_customCompositeOp;
 };
 
 #endif

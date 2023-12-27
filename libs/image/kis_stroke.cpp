@@ -89,10 +89,7 @@ void KisStroke::addMutatedJobs(const QVector<KisStrokeJobData *> list)
     // the stroke.
 
     auto it = std::find_if(m_jobsQueue.begin(), m_jobsQueue.end(),
-        [] (KisStrokeJob *job) {
-            return job->isOwnJob();
-        });
-
+                           std::mem_fn(&KisStrokeJob::isOwnJob));
 
     Q_FOREACH (KisStrokeJobData *data, list) {
         it = m_jobsQueue.insert(it, new KisStrokeJob(m_dabStrategy.data(), data, worksOnLevelOfDetail(), true));
@@ -183,6 +180,8 @@ void KisStroke::cancelStroke()
     else if(effectivelyInitialized &&
             (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
 
+        m_strokeStrategy->tryCancelCurrentStrokeJobAsync();
+
         clearQueueOnCancel();
         enqueue(m_cancelStrategy.data(),
                 m_strokeStrategy->createCancelData());
@@ -258,6 +257,16 @@ int KisStroke::worksOnLevelOfDetail() const
 bool KisStroke::canForgetAboutMe() const
 {
     return m_strokeStrategy->canForgetAboutMe();
+}
+
+bool KisStroke::isAsynchronouslyCancellable() const
+{
+    return m_strokeStrategy->isAsynchronouslyCancellable();
+}
+
+bool KisStroke::clearsRedoOnStart() const
+{
+    return m_strokeStrategy->clearsRedoOnStart();
 }
 
 qreal KisStroke::balancingRatioOverride() const

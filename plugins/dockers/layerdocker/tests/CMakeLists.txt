@@ -1,11 +1,7 @@
-include_directories(${CMAKE_SOURCE_DIR}/libs/image/metadata
-                    ${CMAKE_SOURCE_DIR}/sdk/tests )
-include(ECMAddTests)
+include(KritaAddBrokenUnitTest)
 
-macro_add_unittest_definitions()
-
-kis_add_test(
+kis_add_tests(
     TestNodeView.cpp
-    LINK_LIBRARIES kritaui Qt5::Test
-    NAME_PREFIX "plugins-dockers-layerdocker-")
-
+    LINK_LIBRARIES kritaui kritalayerdocker_static kritatestsdk
+    NAME_PREFIX "plugins-dockers-layerdocker-"
+    )

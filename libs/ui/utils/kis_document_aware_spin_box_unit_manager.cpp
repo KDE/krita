@@ -21,17 +21,17 @@ KisSpinBoxUnitManager* KisDocumentAwareSpinBoxUnitManagerBuilder::buildUnitManag
     return new KisDocumentAwareSpinBoxUnitManager(parent);
 }
 
-void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle)
+void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarenessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle)
 {
     KisDocumentAwareSpinBoxUnitManager* manager = new KisDocumentAwareSpinBoxUnitManager(spinBox);
     spinBox->setUnitManager(manager);
     spinBox->setUnitChangeFromOutsideBehavior(setUnitFromOutsideToggle);
 }
 
-KisDoubleParseUnitSpinBox* KisDocumentAwareSpinBoxUnitManager::createUnitSpinBoxWithDocumentAwarness(QWidget* parent)
+KisDoubleParseUnitSpinBox* KisDocumentAwareSpinBoxUnitManager::createUnitSpinBoxWithDocumentAwareness(QWidget* parent)
 {
     KisDoubleParseUnitSpinBox* spinBox = new KisDoubleParseUnitSpinBox(parent);
-    setDocumentAwarnessToExistingUnitSpinBox(spinBox);
+    setDocumentAwarenessToExistingUnitSpinBox(spinBox);
 
     return spinBox;
 }
@@ -135,7 +135,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionFactor(int dim, QString p
 
             factor = 1/fps;
         } else if (symbol == "%") {
-            const KisTimeSpan & time_range = img->animationInterface()->fullClipRange();
+            const KisTimeSpan & time_range = img->animationInterface()->documentPlaybackRange();
             qreal n_frame = time_range.end() - time_range.start();
 
             factor = 100/n_frame;
@@ -155,7 +155,7 @@ qreal KisDocumentAwareSpinBoxUnitManager::getConversionConstant(int dim, QString
 {
     if (dim == TIME && symbol == "%") {
         KisImage* img = KisPart::instance()->currentMainwindow()->activeView()->document()->image().data();
-        const KisTimeSpan & time_range = img->animationInterface()->fullClipRange();
+        const KisTimeSpan & time_range = img->animationInterface()->documentPlaybackRange();
         qreal n_frame = time_range.end() - time_range.start();
 
         return -time_range.start()*100.0/n_frame;

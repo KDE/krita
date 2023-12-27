@@ -11,6 +11,7 @@
 #include <QWheelEvent>
 #include <KoColorSpaceRegistry.h>
 #include "KisPaletteModel.h"
+#include <KisSpinBoxI18nHelper.h>
 
 #include "kis_config.h"
 #include <resources/KoColorSet.h>
@@ -21,7 +22,6 @@
 #include "kis_signals_blocker.h"
 #include "kis_signal_compressor.h"
 #include "kis_layer_properties_icons.h"
-
 
 struct KisToolLazyBrushOptionsWidget::Private
 {
@@ -89,7 +89,7 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->colorModel = new KisPaletteModel(this);
     m_d->ui->colorView->setPaletteModel(m_d->colorModel);
-    m_d->ui->colorView->setAllowModification(false); //people proly shouldn't be able to edit the colorentries themselves.
+    m_d->ui->colorView->setAllowModification(false); //people probably shouldn't be able to edit the colorentries themselves.
     m_d->ui->colorView->setCrossedKeyword("transparent");
 
     PaletteEventFilter *filter = new PaletteEventFilter(m_d->ui->colorView, this);
@@ -121,8 +121,8 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
               "if the gap is smaller than \"Gap close hint\" value"));
 
     m_d->ui->intCleanUp->setRange(0, 100);
-    m_d->ui->intCleanUp->setSuffix(i18n(" %"));
-    m_d->ui->intCleanUp->setPrefix(i18n("Clean up: "));
+    KisSpinBoxI18nHelper::setText(m_d->ui->intCleanUp,
+                                  i18nc("{n} is the number value, % is the percent sign", "Clean up: {n}%"));
     m_d->ui->intCleanUp->setToolTip(
         i18nc("@info:tooltip",
               "The mask will try to remove parts of the key strokes "
@@ -144,17 +144,19 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
     m_d->provider = provider;
 
-    m_d->colorModel->setPalette(m_d->colorSet);
+    m_d->colorModel->setColorSet(m_d->colorSet);
 
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::red, cs), "color1"));
-    m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::green, cs), "color2"));
-    m_d->colorModel->addEntry(KisSwatch(KoColor(Qt::blue, cs), "color3"));
+    m_d->colorModel->addSwatch(KisSwatch(KoColor(Qt::red, cs), "color1"));
+    m_d->colorModel->addSwatch(KisSwatch(KoColor(Qt::green, cs), "color2"));
+    m_d->colorModel->addSwatch(KisSwatch(KoColor(Qt::blue, cs), "color3"));
 }
 
 KisToolLazyBrushOptionsWidget::~KisToolLazyBrushOptionsWidget()
 {
+    delete m_d->ui;
+    m_d->ui = nullptr;
 }
 
 void KisToolLazyBrushOptionsWidget::showEvent(QShowEvent *event)
@@ -185,7 +187,7 @@ void KisToolLazyBrushOptionsWidget::entrySelected(QModelIndex index)
     if (!index.isValid()) return;
     if (!qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole))) return;
 
-    KisSwatch entry = m_d->colorModel->getEntry(index);
+    KisSwatch entry = m_d->colorModel->getSwatch(index);
     m_d->provider->setFGColor(entry.color());
 
     int idxInList = m_d->activeMask->keyStrokesColors().colors.indexOf(entry.color());
@@ -202,7 +204,7 @@ void KisToolLazyBrushOptionsWidget::slotCurrentFgColorChanged(const KoColor &col
     bool found = false;
 
     QModelIndex candidateIdx = m_d->colorModel->indexForClosest(color);
-    if (m_d->colorModel->getEntry(candidateIdx).color() == color) {
+    if (m_d->colorModel->getSwatch(candidateIdx).color() == color) {
         found = true;
     }
 
@@ -236,7 +238,7 @@ void KisToolLazyBrushOptionsWidget::slotColorLabelsChanged()
 
         for (int i = 0; i < colors.colors.size(); i++) {
             const QString name = i == m_d->transparentColorIndex ? "transparent" : "";
-            m_d->colorModel->addEntry(KisSwatch(colors.colors[i], name));
+            m_d->colorModel->addSwatch(KisSwatch(colors.colors[i], name));
         }
     }
 
@@ -314,12 +316,12 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool enableTransparency)
     KIS_ASSERT_RECOVER_RETURN(m_d->activeMask);
 
     QModelIndex index = m_d->ui->colorView->currentIndex();
-    KisSwatch activeSwatch = m_d->colorModel->getEntry(index);
+    KisSwatch activeSwatch = m_d->colorModel->getSwatch(index);
     if (!index.isValid()) return;
 
-    QVector<SwatchInfoType> infoList;
-    Q_FOREACH (const QString &groupName, m_d->colorSet->getGroupNames()) {
-        KisSwatchGroup *group = m_d->colorSet->getGroup(groupName);
+    QVector<KisSwatchGroup::SwatchInfo> infoList;
+    Q_FOREACH (const QString &groupName, m_d->colorSet->swatchGroupNames()) {
+        KisSwatchGroupSP group = m_d->colorSet->getGroup(groupName);
         Q_FOREACH (const KisSwatchGroup::SwatchInfo &info, group->infoList()) {
             infoList.append(info);
         }
@@ -329,7 +331,7 @@ void KisToolLazyBrushOptionsWidget::slotMakeTransparent(bool enableTransparency)
     std::sort(infoList.begin(), infoList.end(), sortSwatchInfo);
     KisColorizeMask::KeyStrokeColors colors;
     int i = 0;
-    for (const SwatchInfoType &info : infoList) {
+    for (const KisSwatchGroup::SwatchInfo &info : infoList) {
         if (activeSwatch == info.swatch && enableTransparency) {
             colors.transparentIndex = i;
         }
@@ -347,7 +349,7 @@ void KisToolLazyBrushOptionsWidget::slotRemove()
     QModelIndex index = m_d->ui->colorView->currentIndex();
     if (!index.isValid()) return;
 
-    const KoColor color = m_d->colorModel->getEntry(index).color();
+    const KoColor color = m_d->colorModel->getSwatch(index).color();
     m_d->activeMask->removeKeyStroke(color);
 }
 
@@ -406,7 +408,7 @@ void KisToolLazyBrushOptionsWidget::slotLimitToDeviceChanged(bool value)
     m_d->activeMask->setLimitToDeviceBounds(value);
 }
 
-bool KisToolLazyBrushOptionsWidget::sortSwatchInfo(const SwatchInfoType &first, const SwatchInfoType &second)
+bool KisToolLazyBrushOptionsWidget::sortSwatchInfo(const KisSwatchGroup::SwatchInfo &first, const KisSwatchGroup::SwatchInfo &second)
 {
     if (first.row < second.row) { return true; }
     if (first.row > second.row) { return false; }

@@ -18,6 +18,10 @@
 #define GL_BGRA 0x814F
 #endif
 
+#ifndef GL_RGBA16_EXT
+#define GL_RGBA16_EXT 0x805B
+#endif
+
 
 void KisTextureTile::setTextureParameters()
 {
@@ -30,11 +34,10 @@ void KisTextureTile::setTextureParameters()
     f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
 
     if ((m_texturesInfo->internalFormat == GL_RGBA8 && m_texturesInfo->format == GL_RGBA)
-#ifdef Q_OS_MACOS
+#ifndef QT_OPENGL_ES_2
         || (m_texturesInfo->internalFormat == GL_RGBA16 && m_texturesInfo->format == GL_RGBA)
-#elif defined(QT_OPENGL_ES_3)
-        || (m_texturesInfo->internalFormat == GL_RGBA16_EXT && m_texturesInfo->format == GL_RGBA)
 #endif
+        || (m_texturesInfo->internalFormat == GL_RGBA16_EXT && m_texturesInfo->format == GL_RGBA)
     ) {
         // If image format is RGBA8, swap the red and blue channels for the proper color
         // This is for OpenGL ES support and only used if lacking GL_EXT_texture_format_BGRA8888
@@ -43,6 +46,13 @@ void KisTextureTile::setTextureParameters()
     }
 
     f->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+}
+
+void KisTextureTile::restoreTextureParameters()
+{
+    // QPainter::drawText relies on this.
+    // Ref: https://bugreports.qt.io/browse/QTBUG-65496
+    f->glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 }
 
 inline QRectF relativeRect(const QRect &br /* baseRect */,
@@ -96,6 +106,8 @@ KisTextureTile::KisTextureTile(const QRect &imageRect, const KisGLTexturesInfo *
                  m_texturesInfo->height, 0,
                  m_texturesInfo->format,
                  m_texturesInfo->type, fd);
+
+    restoreTextureParameters();
 
     setNeedsMipmapRegeneration();
 }
@@ -326,6 +338,8 @@ void KisTextureTile::update(const KisTextureTileUpdateInfo &updateInfo, bool blo
     //     qDebug() << "    " << ppVar(m_preparedLodPlane);
     //     qDebug() << "    " << ppVar(patchLevelOfDetail);
     // }
+
+    restoreTextureParameters();
 
     if (!patchLevelOfDetail) {
         setNeedsMipmapRegeneration();

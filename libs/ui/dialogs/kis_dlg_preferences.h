@@ -29,6 +29,7 @@
 #include "ui_wdgfullscreensettings.h"
 #include "ui_WdgPopupPaletteSettings.h"
 #include "KisShortcutsDialog.h"
+#include "KisCumulativeUndoData.h"
 
 class KoID;
 class KisInputConfigurationPage;
@@ -81,7 +82,7 @@ public:
     bool trimFramesImport();
     bool useZip64();
     bool toolOptionsInDocker();
-    bool smoothZooming();
+    int zoomSteps();
     bool kineticScrollingEnabled();
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();
@@ -91,15 +92,21 @@ public:
     bool convertToImageColorspaceOnImport();
     bool autopinLayersToTimeline();
     bool adaptivePlaybackRange();
+    bool renameMergedLayers();
+    bool renamePastedLayers();
 
     int forcedFontDpi();
 
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
+    void checkResourcePath();
+    void enableSubWindowOptions(int);
+    void showAdvancedCumulativeUndoSettings();
 
 public:
     QButtonGroup m_pasteFormatGroup;
+    KisCumulativeUndoData m_cumulativeUndoData;
 };
 
 

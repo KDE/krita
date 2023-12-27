@@ -39,5 +39,12 @@ kis_add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 
 target_link_libraries(kritajpegexport kritaui kritaimpex ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 
+if (MSVC AND "${CMAKE_CXX_FLAGS}" MATCHES "-EHsc") 
+    message(WARNING "The JPEG error catcher requires crossing the C ABI on MSVC. Exceptions need to be patched in.")
+    # It needs to be done at the file level to override OpenEXR sneaking /EHsc.
+    # See https://github.com/AcademySoftwareFoundation/openexr/issues/1326
+    set_source_files_properties(kis_jpeg_converter.cc PROPERTIES COMPILE_OPTIONS "/EHsc-")
+endif()
+
 install(TARGETS kritajpegexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

@@ -45,7 +45,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return QString("XYZAF16");
+        return QStringLiteral("XYZAF16");
     }
 
     bool hasHighDynamicRange() const override

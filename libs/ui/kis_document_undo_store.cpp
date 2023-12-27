@@ -21,7 +21,7 @@ KisDocumentUndoStore::KisDocumentUndoStore(KisDocument *doc)
     /// avoid incorrect signal delivery
     KIS_SAFE_ASSERT_RECOVER_NOOP(doc->thread() == this->thread());
 
-    // Use direct connection to avoid queueing the singal forwarding (BUG:447985)
+    // Use direct connection to avoid queueing the signal forwarding (BUG:447985)
     connect(doc->undoStack(), SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()), Qt::DirectConnection);
 }
 
@@ -51,17 +51,17 @@ void KisDocumentUndoStore::undoLastCommand()
 void KisDocumentUndoStore::addCommand(KUndo2Command *command)
 {
     if(!command) return;
-    m_doc->addCommand(command);
+    m_doc->undoStack()->push(command);
 }
 
 void KisDocumentUndoStore::beginMacro(const KUndo2MagicString& macroName)
 {
-    m_doc->beginMacro(macroName);
+    m_doc->undoStack()->beginMacro(macroName);
 }
 
 void KisDocumentUndoStore::endMacro()
 {
-    m_doc->endMacro();
+    m_doc->undoStack()->endMacro();
 }
 
 void KisDocumentUndoStore::purgeRedoState()

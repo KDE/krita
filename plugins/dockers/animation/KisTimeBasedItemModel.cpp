@@ -10,7 +10,8 @@
 #include <kis_config.h>
 
 #include "kis_animation_frame_cache.h"
-#include "kis_animation_player.h"
+#include "KisCanvasAnimationState.h"
+#include "animation/KisFrameDisplayProxy.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
@@ -19,27 +20,31 @@
 #include "kis_keyframe_channel.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_processing_applicator.h"
-#include "KisImageBarrierLockerWithFeedback.h"
+#include "KisImageBarrierLock.h"
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_command_utils.h"
 #include "KisPart.h"
+#include "KisPlaybackEngine.h"
 #include "kis_animation_cache_populator.h"
 
 struct KisTimeBasedItemModel::Private
 {
     Private()
         : animationPlayer(0)
+        , document(nullptr)
         , numFramesOverride(0)
         , activeFrameIndex(0)
         , scrubInProgress(false)
         , scrubStartFrame(-1)
+        , shouldReturnToPlay(false)
         , scrubHeaderMin(0)
         , scrubHeaderMax(0)
     {}
 
     KisImageWSP image;
     KisAnimationFrameCacheWSP framesCache;
-    QPointer<KisAnimationPlayer> animationPlayer;
+    QPointer<KisCanvasAnimationState> animationPlayer;
+    KisDocument* document;
 
     QVector<bool> cachedFrames;
 
@@ -48,8 +53,8 @@ struct KisTimeBasedItemModel::Private
 
     bool scrubInProgress;
     int scrubStartFrame;
+    bool shouldReturnToPlay;
 
-    QScopedPointer<KisSignalCompressorWithParam<int>> scrubbingCompressor;
     QScopedPointer<KisSignalCompressorWithParam<int>> scrubHeaderUpdateCompressor;
     int scrubHeaderMin;
     int scrubHeaderMax;
@@ -80,7 +85,7 @@ struct KisTimeBasedItemModel::Private
             return true;
         }
 
-        KisTimeSpan clipRange = image->animationInterface()->fullClipRange();
+        KisTimeSpan clipRange = image->animationInterface()->documentPlaybackRange();
         return clipRange.contains(time);
     }
 };
@@ -92,14 +97,9 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
     KisConfig cfg(true);
 
     using namespace std::placeholders;
-    std::function<void (int)> scrubCompressCallback(
-        std::bind(&KisTimeBasedItemModel::slotInternalScrubPreviewRequested, this, _1));
 
     std::function<void (int)> scrubHorizHeaderUpdateCallback(
         std::bind(&KisTimeBasedItemModel::scrubHorizontalHeaderUpdate, this, _1));
-
-    m_d->scrubbingCompressor.reset(
-        new KisSignalCompressorWithParam<int>(cfg.scrubbingUpdatesDelay(), scrubCompressCallback, KisSignalCompressor::FIRST_ACTIVE));
 
     m_d->scrubHeaderUpdateCompressor.reset(
         new KisSignalCompressorWithParam<int>(100, scrubHorizHeaderUpdateCallback, KisSignalCompressor::FIRST_ACTIVE));
@@ -123,13 +123,14 @@ void KisTimeBasedItemModel::setImage(KisImageWSP p_image)
     }
 
     m_d->image = p_image;
+    m_d->numFramesOverride = m_d->effectiveNumFrames();
 
     if (m_d->image) {
         KisImageAnimationInterface *ai = m_d->image->animationInterface();
 
-        connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
-        connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
-        connect(ai, SIGNAL(sigFullClipRangeChanged()), SLOT(slotClipRangeChanged()));
+        connect(ai, SIGNAL(sigFramerateChanged()), this, SLOT(slotFramerateChanged()));
+        connect(ai, SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotCurrentTimeChanged(int)));
+        connect(ai, SIGNAL(sigPlaybackRangeChanged()), this, SLOT(slotPlaybackRangeChanged()));
     }
 
     endResetModel();
@@ -155,7 +156,7 @@ bool KisTimeBasedItemModel::isFrameCached(const int frame)
     return m_d->framesCache && m_d->framesCache->frameStatus(frame) == KisAnimationFrameCache::Cached;
 }
 
-void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
+void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
 {
     if (m_d->animationPlayer == player) return;
 
@@ -166,12 +167,27 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
     m_d->animationPlayer = player;
 
     if (m_d->animationPlayer) {
-        connect(m_d->animationPlayer, SIGNAL(sigPlaybackStopped()), SLOT(slotPlaybackStopped()));
+        connect(m_d->animationPlayer, SIGNAL(sigPlaybackStateChanged(PlaybackState)), SLOT(slotPlaybackStateChanged(PlaybackState)));
         connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
 
-        const int frame = player && player->isPlaying() ? player->visibleFrame() : m_d->image->animationInterface()->currentUITime();
+        const int frame = player ? player->displayProxy()->activeFrame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
+
+        // only prioritize the cache, no seek operation to prevent audio from playing
+        setHeaderData(frame, Qt::Horizontal, QVariant(int(SEEK_NONE)), ScrubToRole);
     }
+}
+
+void KisTimeBasedItemModel::setDocument(KisDocument *document)
+{
+    if (m_d->document == document) return;
+
+    m_d->document = document;
+}
+
+KisDocument* KisTimeBasedItemModel::document() const
+{
+    return m_d->document;
 }
 
 void KisTimeBasedItemModel::setLastVisibleFrame(int time)
@@ -197,7 +213,7 @@ void KisTimeBasedItemModel::setLastVisibleFrame(int time)
 int KisTimeBasedItemModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return m_d->effectiveNumFrames();
+    return m_d->numFramesOverride;
 }
 
 QVariant KisTimeBasedItemModel::data(const QModelIndex &index, int role) const
@@ -224,10 +240,12 @@ bool KisTimeBasedItemModel::setData(const QModelIndex &index, const QVariant &va
     if (!index.isValid()) return false;
 
     switch (role) {
-        case ActiveFrameRole: {
+        case ActiveFrameRole:
             setHeaderData(index.column(), Qt::Horizontal, value, role);
             break;
-        }
+        case ScrubToRole:
+            setHeaderData(index.column(), Qt::Horizontal, value, role);
+            break;
     }
 
     return false;
@@ -253,6 +271,15 @@ QVariant KisTimeBasedItemModel::headerData(int section, Qt::Orientation orientat
 
 bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
+    auto prioritizeCache = [this](int frame){
+        if (m_d->image) {
+            if(!isFrameCached(frame)) {
+                KisPart::instance()->prioritizeFrameForCache(m_d->image, frame);
+            }
+        }
+    };
+
+
     if (orientation == Qt::Horizontal) {
         switch (role) {
         case ActiveFrameRole:
@@ -261,17 +288,6 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
 
                 int prevFrame = m_d->activeFrameIndex;
                 m_d->activeFrameIndex = section;
-
-                // BUG:445265
-                // Edgecase occurs where if we move from a cached frame to a non-cached frame,
-                // we never technically "switch" to the cached one during scrubbing, which
-                // will prevent the uncached frame from ever determining it needs to be
-                // regenerated. We will force a frame switch when going from uncached to cached
-                // to work around this issue.
-                bool needsRegeneration = isFrameCached(m_d->activeFrameIndex) && !isFrameCached(prevFrame);
-
-                bool usePreview = m_d->scrubInProgress && !needsRegeneration;
-                scrubTo(m_d->activeFrameIndex, usePreview);
 
                 /**
                  * Optimization Hack Alert:
@@ -308,6 +324,14 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
                     emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
                 }
             }
+            break;
+        case ScrubToRole:
+            SeekOptionFlags seekFlags = SeekOptionFlags(value.toInt());
+            prioritizeCache(m_d->activeFrameIndex);
+            if (!m_d->image->hasUpdatesRunning()) {
+                KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags);
+            }
+            break;
         }
     }
 
@@ -326,7 +350,7 @@ bool KisTimeBasedItemModel::removeFrames(const QModelIndexList &indexes)
     KisAnimUtils::FrameItemList frameItems;
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         Q_FOREACH (const QModelIndex &index, indexes) {
             int time = index.column();
@@ -401,7 +425,7 @@ bool KisTimeBasedItemModel::removeFramesAndOffset(QModelIndexList indicesToRemov
     KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Remove frame and shift", "Remove %1 frames and shift", indicesToRemove.size()));
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         Q_FOREACH (const QModelIndex &index, indicesToRemove) {
             QModelIndexList indicesToOffset;
@@ -431,7 +455,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     QScopedPointer<KUndo2Command> parentCommand(new KUndo2Command(kundo2_i18n("Mirror Frames")));
 
     {
-        KisImageBarrierLockerWithFeedback locker(m_d->image);
+        KisImageBarrierLock locker(m_d->image);
 
         QMap<int, QModelIndexList> rowsList;
 
@@ -493,47 +517,37 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     }
 
     KisProcessingApplicator::runSingleCommandStroke(m_d->image,
-                                                    new KisCommandUtils::SkipFirstRedoWrapper(parentCommand.take()),
+                                                    parentCommand.take(),
                                                     KisStrokeJobData::BARRIER,
                                                     KisStrokeJobData::EXCLUSIVE);
     return true;
 }
 
-void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
+void KisTimeBasedItemModel::setScrubState(bool p_state)
 {
-    if (m_d->animationPlayer && !m_d->animationPlayer->isPlaying()) {
-        m_d->animationPlayer->displayFrame(time);
+    if (!m_d->animationPlayer) {
+        return;
     }
-}
 
-void KisTimeBasedItemModel::setScrubState(bool active)
-{
-    auto prioritizeCache = [this](){
-        if (m_d->image) {
-            const int currentFrame = m_d->image->animationInterface()->currentUITime();
-            if(!isFrameCached(currentFrame)) {
-                KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
+    if (m_d->scrubInProgress != p_state) {
+        m_d->scrubInProgress = p_state;
+
+        if (m_d->scrubInProgress == true) {
+            m_d->scrubStartFrame = m_d->activeFrameIndex;
+
+            if (m_d->animationPlayer->playbackState() == PLAYING) {
+                m_d->shouldReturnToPlay = true;
+                m_d->animationPlayer->setPlaybackState(PAUSED);
             }
+
+        } else {
+            if (m_d->shouldReturnToPlay) {
+                m_d->animationPlayer->setPlaybackState(PLAYING);
+            }
+
+            m_d->scrubStartFrame = -1;
+            m_d->shouldReturnToPlay = false;
         }
-    };
-
-    if (!m_d->scrubInProgress && active) {
-
-        prioritizeCache();
-        m_d->scrubStartFrame = m_d->activeFrameIndex;
-        m_d->scrubInProgress = true;
-    }
-
-    if (m_d->scrubInProgress && !active) {
-
-        m_d->scrubInProgress = false;
-        prioritizeCache();
-
-        if (m_d->image) {
-            scrubTo(m_d->activeFrameIndex, false);
-        }
-
-        m_d->scrubStartFrame = -1;
     }
 }
 
@@ -542,20 +556,6 @@ bool KisTimeBasedItemModel::isScrubbing()
     return m_d->scrubInProgress;
 }
 
-void KisTimeBasedItemModel::scrubTo(int time, bool preview)
-{
-    if (m_d->animationPlayer && m_d->animationPlayer->isPlaying()) return;
-
-    KIS_ASSERT_RECOVER_RETURN(m_d->image);
-
-    if (preview) {
-        if (m_d->animationPlayer) {
-            m_d->scrubbingCompressor->start(time);
-        }
-    } else {
-        m_d->image->animationInterface()->requestTimeSwitchWithUndo(time);
-    }
-}
 
 void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
 {
@@ -569,14 +569,14 @@ void KisTimeBasedItemModel::slotFramerateChanged()
     emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
 
-void KisTimeBasedItemModel::slotClipRangeChanged()
+void KisTimeBasedItemModel::slotPlaybackRangeChanged()
 {
     if (m_d->image && m_d->image->animationInterface() ) {
         const KisImageAnimationInterface* const interface = m_d->image->animationInterface();
-        const int lastFrame = interface->playbackRange().end();
+        const int lastFrame = interface->activePlaybackRange().end();
         if (lastFrame > m_d->numFramesOverride) {
-            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->playbackRange().end());
-            m_d->numFramesOverride = interface->playbackRange().end();
+            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->activePlaybackRange().end());
+            m_d->numFramesOverride = interface->activePlaybackRange().end();
             endInsertColumns();
         }
 
@@ -600,13 +600,15 @@ void KisTimeBasedItemModel::slotCacheChanged()
 
 void KisTimeBasedItemModel::slotPlaybackFrameChanged()
 {
-    if (!m_d->animationPlayer->isPlaying()) return;
-    setHeaderData(m_d->animationPlayer->visibleFrame(), Qt::Horizontal, true, ActiveFrameRole);
+    if (m_d->animationPlayer->playbackState() != PlaybackState::PLAYING) return;
+    setHeaderData(m_d->animationPlayer->displayProxy()->activeFrame(), Qt::Horizontal, true, ActiveFrameRole);
 }
 
-void KisTimeBasedItemModel::slotPlaybackStopped()
+void KisTimeBasedItemModel::slotPlaybackStateChanged(PlaybackState p_state)
 {
-    setHeaderData(m_d->image->animationInterface()->currentUITime(), Qt::Horizontal, true, ActiveFrameRole);
+    if (p_state == PlaybackState::STOPPED) {
+        setHeaderData(m_d->image->animationInterface()->currentUITime(), Qt::Horizontal, true, ActiveFrameRole);
+    }
 }
 
 void KisTimeBasedItemModel::setPlaybackRange(const KisTimeSpan &range)
@@ -614,22 +616,21 @@ void KisTimeBasedItemModel::setPlaybackRange(const KisTimeSpan &range)
     if (m_d->image.isNull()) return;
 
     KisImageAnimationInterface *i = m_d->image->animationInterface();
-    i->setPlaybackRange(range);
+    i->setActivePlaybackRange(range);
 }
 
 bool KisTimeBasedItemModel::isPlaybackActive() const
 {
-    return m_d->animationPlayer && m_d->animationPlayer->isPlaying();
+    return m_d->animationPlayer && m_d->animationPlayer->playbackState() == PlaybackState::PLAYING;
 }
 
 bool KisTimeBasedItemModel::isPlaybackPaused() const
 {
-    return m_d->animationPlayer && m_d->animationPlayer->isPaused();
+    return m_d->animationPlayer && m_d->animationPlayer->playbackState() == PlaybackState::PAUSED;
 }
 
 void KisTimeBasedItemModel::stopPlayback() const {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->animationPlayer);
-    m_d->animationPlayer->halt();
+    KisPart::instance()->playbackEngine()->stop();
 }
 
 int KisTimeBasedItemModel::currentTime() const

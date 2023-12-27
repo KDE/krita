@@ -1,8 +1,6 @@
-/*  This file is part of the Calligra project, made within the KDE community.
-
-    SPDX-FileCopyrightText: 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
-
-    SPDX-License-Identifier: LGPL-2.0-or-later
+/*
+ * SPDX-FileCopyrightText: 2012 Friedrich W. H. Kossebau <kossebau@kde.org>
+ * SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
 #ifndef KOICON_H

@@ -321,7 +321,7 @@ void KisForestTest::testCompositionIteration()
 
 }
 
-struct CompositonIteratorPairedValue
+struct CompositionIteratorPairedValue
 {
     using value_type = std::pair<int, KisForest<int>::composition_iterator::traversal_state>;
 
@@ -386,7 +386,7 @@ void KisForestTest::testCompositionIterationSubtree()
                   {5, traversal_direction::Leave}};
 
     QVERIFY(testForestIteration(compositionBegin(it5), compositionEnd(it5),
-                              references, CompositonIteratorPairedValue()));
+                              references, CompositionIteratorPairedValue()));
 
     references = {{3, traversal_direction::Enter},
                   {5, traversal_direction::Enter},
@@ -398,7 +398,7 @@ void KisForestTest::testCompositionIterationSubtree()
                   {3, traversal_direction::Leave}};
 
     QVERIFY(testForestIteration(compositionBegin(it3), compositionEnd(it3),
-                              references, CompositonIteratorPairedValue()));
+                              references, CompositionIteratorPairedValue()));
 
 }
 

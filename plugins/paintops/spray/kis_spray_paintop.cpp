@@ -17,14 +17,8 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_node.h>
 
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_brush_option.h>
-#include <kis_sprayop_option.h>
-#include <kis_spray_shape_option.h>
-#include <kis_color_option.h>
 #include <kis_lod_transform.h>
 #include <kis_paintop_plugin_utils.h>
 #include <KoResourceLoadResult.h>
@@ -32,36 +26,31 @@
 
 KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_sprayOpOption(settings.data())
     , m_isPresetValid(true)
+    , m_rotationOption(settings.data())
+    , m_sizeOption(settings.data())
+    , m_opacityOption(settings.data())
+    , m_rateOption(settings.data())
     , m_node(node)
+    
 {
     Q_ASSERT(settings);
     Q_ASSERT(painter);
     Q_UNUSED(image);
 
-    m_airbrushOption.readOptionSetting(settings);
-
-    m_rotationOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-
-    m_rotationOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
-    m_sizeOption.resetAllSensors();
-    m_rateOption.resetAllSensors();
+    m_airbrushData.read(settings.data());
 
     m_brushOption.readOptionSetting(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
 
-    m_colorProperties.fillProperties(settings);
-    m_properties.readOptionSetting(settings);
+    m_colorProperties.read(settings.data());
     // create the actual distribution objects
-    m_properties.updateDistributions();
+    m_sprayOpOption.updateDistributions();
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
-    m_shapeProperties.loadSettings(settings, m_properties.diameter() * m_properties.scale(), m_properties.diameter() * m_properties.aspect() * m_properties.scale());
+    m_shapeProperties.read(settings.data());
 
     // TODO: what to do with proportional sizes?
-    m_shapeDynamicsProperties.loadSettings(settings);
+    m_shapeDynamicsProperties.read(settings.data());
 
     if (!m_shapeProperties.enabled && !m_brushOption.brush()) {
         // in case the preset does not contain the definition for KisBrush
@@ -69,14 +58,14 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
         dbgKrita << "Preset is not valid. Painting is not possible. Use the preset editor to fix current brush engine preset.";
     }
 
-    m_sprayBrush.setProperties(&m_properties, &m_colorProperties,
+    m_sprayBrush.setProperties(&m_sprayOpOption.data, &m_colorProperties,
                                &m_shapeProperties, &m_shapeDynamicsProperties, m_brushOption.brush());
 
     m_sprayBrush.setFixedDab(cachedDab());
 
     // spacing
-    if ((m_properties.diameter() * 0.5) > 1) {
-        m_ySpacing = m_xSpacing = m_properties.diameter() * 0.5 * m_properties.spacing();
+    if ((m_sprayOpOption.data.diameter * 0.5) > 1) {
+        m_ySpacing = m_xSpacing = m_sprayOpOption.data.diameter * 0.5 * m_sprayOpOption.data.spacing;
     }
     else {
         m_ySpacing = m_xSpacing = 1.0;
@@ -138,7 +127,7 @@ KisSpacingInformation KisSprayPaintOp::updateSpacingImpl(const KisPaintInformati
 
 KisTimingInformation KisSprayPaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 
 KisSpacingInformation KisSprayPaintOp::computeSpacing(const KisPaintInformation &info,
@@ -146,5 +135,5 @@ KisSpacingInformation KisSprayPaintOp::computeSpacing(const KisPaintInformation 
 {
     return KisPaintOpPluginUtils::effectiveSpacing(1.0, 1.0, true, 0.0, false,
                                                    m_spacing * lodScale, false, 1.0, lodScale,
-                                                   &m_airbrushOption, nullptr, info);
+                                                   &m_airbrushData, nullptr, info);
 }

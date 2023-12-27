@@ -76,14 +76,19 @@ private Q_SLOTS:
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSetSP colorSet);
 
-    void saveToWorkspace(KisWorkspaceResourceSP workspace);
-    void loadFromWorkspace(KisWorkspaceResourceSP workspace);
-
     void slotFGColorResourceChanged(const KoColor& color);
 
     void slotStoragesChanged(const QString &location);
 
-    void slotUpdatePaletteName();
+    void slotUpdateLblPaletteName();
+
+    void slotLockPalette(bool locked);
+
+    void setUndoToolTip(const QString &text);
+    void setRedoToolTip(const QString &text);
+
+    void undo();
+    void redo();
 
 private:
     void setEntryByForeground(const QModelIndex &index);

@@ -5,13 +5,11 @@
  */
 
 #include "KisToolChangesTrackerData.h"
+#include <KisStaticInitializer.h>
 
-struct KisToolChangesTrackerDataSPRegistrar {
-    KisToolChangesTrackerDataSPRegistrar() {
-        qRegisterMetaType<KisToolChangesTrackerDataSP>("KisToolChangesTrackerDataSP");
-    }
-};
-static KisToolChangesTrackerDataSPRegistrar __registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisToolChangesTrackerDataSP>("KisToolChangesTrackerDataSP");
+}
 
 
 KisToolChangesTrackerData::~KisToolChangesTrackerData()

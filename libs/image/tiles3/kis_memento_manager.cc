@@ -123,8 +123,9 @@ void KisMementoManager::registerTileChange(KisTile *tile)
         mi->changeTile(tile);
         m_index.addTile(mi);
 
-        if(namedTransactionInProgress())
-            m_currentMemento->updateExtent(mi->col(), mi->row());
+        if(namedTransactionInProgress()) {
+            m_currentMemento->updateExtent(mi->col(), mi->row(), &m_currentMementoExtentLock);
+        }
     }
     else {
         mi->reset();
@@ -149,8 +150,9 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
         m_index.addTile(mi);
 
-        if(namedTransactionInProgress())
-            m_currentMemento->updateExtent(mi->col(), mi->row());
+        if(namedTransactionInProgress()) {
+            m_currentMemento->updateExtent(mi->col(), mi->row(), &m_currentMementoExtentLock);
+        }
     }
     else {
         mi->reset();
@@ -210,7 +212,7 @@ void KisMementoManager::commit()
     KisTileDataStore::instance()->kickPooler();
 }
 
-KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row, bool &existingTile)
+KisTileSP KisMementoManager::getCommittedTile(qint32 col, qint32 row, bool &existingTile)
 {
     /**
      * Our getOldTile mechanism is supposed to return current

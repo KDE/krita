@@ -22,7 +22,10 @@ public:
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    void setPaintOpAngle(qreal value) override;
+    qreal paintOpAngle() const override;
+
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     bool paintIncremental() override;
     bool isAirbrushing() const override;

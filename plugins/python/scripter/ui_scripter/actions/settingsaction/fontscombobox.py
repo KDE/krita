@@ -20,14 +20,10 @@ class FontsComboBox(QComboBox):
         self.addItems(_fontDataBase.families())
         self.setCurrentIndex(self.findText(self.editor.font))
 
-        com = QCompleter()
-        com.setCaseSensitivity(Qt.CaseInsensitive)
-        com.setCompletionMode(QCompleter.PopupCompletion)
-
         # Style sheet to set false on combobox-popup
-        self.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.setMaxVisibleItems(10)
-        self.setCompleter(com)
+        self.setEditable(True)
+        self.setInsertPolicy(QComboBox.NoInsert)
         self.currentIndexChanged.connect(self._currentIndexChanged)
 
     def _currentIndexChanged(self, index):

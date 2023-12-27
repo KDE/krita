@@ -14,18 +14,19 @@
 #include <QLineF>
 #include <QObject>
 
-class ConcentricEllipseAssistant : public KisPaintingAssistant
+#include "kritaassistanttool_export.h"
+
+class KRITAASSISTANTTOOL_EXPORT ConcentricEllipseAssistant
+    : public KisPaintingAssistant
 {
 public:
     ConcentricEllipseAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
-    void endStroke() override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
 
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 3; }
     bool isAssistantComplete() const override;
 
@@ -37,18 +38,14 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin) const;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement, qreal moveThresholdPt) const;
     mutable Ellipse m_ellipse;
     mutable Ellipse m_extraEllipse;
     explicit ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
-    // Needed to make sure that when we are in the middle of a brush stroke, the
-    // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
-    QPointF m_adjustedBrushPosition;
 };
 
-class ConcentricEllipseAssistantFactory : public KisPaintingAssistantFactory
+class KRITAASSISTANTTOOL_EXPORT ConcentricEllipseAssistantFactory
+    : public KisPaintingAssistantFactory
 {
 public:
     ConcentricEllipseAssistantFactory();

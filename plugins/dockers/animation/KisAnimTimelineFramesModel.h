@@ -10,6 +10,7 @@
 
 #include <QScopedPointer>
 #include <QIcon>
+#include <QFileInfo>
 
 #include "kritaanimationdocker_export.h"
 #include "kis_node_model.h"
@@ -19,7 +20,7 @@
 
 class KisNodeDummy;
 class KisDummiesFacadeBase;
-class KisAnimationPlayer;
+class KisCanvasAnimationState;
 class KisNodeDisplayModeAdapter;
 
 
@@ -68,7 +69,7 @@ public:
     bool insertOtherLayer(int index, int dstRow);
     int activeLayerRow() const;
 
-    bool createFrame(const QModelIndex &dstIndex);
+    bool createFrame(const QModelIndexList &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
     void makeClonesUnique(const QModelIndexList &indices);
 
@@ -76,7 +77,7 @@ public:
     bool insertHoldFrames(const QModelIndexList &selectedIndexes, int count);
 
     QString audioChannelFileName() const;
-    void setAudioChannelFileName(const QString &fileName);
+    void setAudioChannelFileName(const QFileInfo &fileName);
 
     bool isAudioMuted() const;
     void setAudioMuted(bool value);
@@ -84,8 +85,8 @@ public:
     qreal audioVolume() const;
     void setAudioVolume(qreal value);
 
-    void setFullClipRangeStart(int column);
-    void setFullClipRangeEnd(int column);
+    void setDocumentClipRangeStart(int column);
+    void setDocumentClipRangeEnd(int column);
 
     void clearEntireCache();
     void setActiveLayerSelectedTimes(const QSet<int>& times);
@@ -156,7 +157,6 @@ public Q_SLOTS:
 Q_SIGNALS:
     void requestCurrentNodeChanged(KisNodeSP node);
     void sigInfiniteTimelineUpdateNeeded();
-    void sigAudioChannelChanged();
     void sigEnsureRowVisible(int row);
     void requestTransferSelectionBetweenRows(int rowFrom, int rowTo);
     void sigFullClipRangeChanged();

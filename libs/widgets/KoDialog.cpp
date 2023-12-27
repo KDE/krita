@@ -10,6 +10,7 @@
 #include "KoDialog.h"
 #include "KoDialog_p.h"
 
+#include <QWindow>
 #include <QApplication>
 #include <QGuiApplication>
 #include <QDialogButtonBox>
@@ -22,6 +23,8 @@
 #include <QWhatsThis>
 #include <QDebug>
 #include <QPushButton>
+#include <QDesktopWidget>
+#include <QTimer>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -145,7 +148,7 @@ void KoDialogPrivate::appendButton(KoDialog::ButtonCode key, const KGuiItem &ite
 
     mButtonList.insert(key, button);
 
-    QObject::connect(button, &QPushButton::clicked, [=] { q->slotButtonClicked(key); });
+    QObject::connect(button, &QPushButton::clicked, q, [=] { q->slotButtonClicked(key); });
 
     if (key == mDefaultButton) {
         // Now that it exists, set it as default
@@ -171,14 +174,14 @@ void KoDialogPrivate::helpLinkClicked()
 }
 
 KoDialog::KoDialog(QWidget *parent, Qt::WindowFlags flags)
-    : QDialog(parent, flags)
+    : QDialog(parent ? parent : qApp->activeWindow(), flags)
     , d_ptr(new KoDialogPrivate)
 {
     d_ptr->init(this);
 }
 
 KoDialog::KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
-    : QDialog(parent, flags)
+    : QDialog(parent ? parent : qApp->activeWindow(), flags)
     , d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -432,6 +435,14 @@ void KoDialog::keyPressEvent(QKeyEvent *event)
     QDialog::keyPressEvent(event);
 }
 
+void KoDialog::showEvent(QShowEvent *e)
+{
+    QDialog::showEvent(e);
+    QTimer::singleShot(5, [&]() {
+        adjustPosition(parentWidget());
+    });
+}
+
 int KoDialog::marginHint()
 {
     return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
@@ -439,7 +450,7 @@ int KoDialog::marginHint()
 
 int KoDialog::spacingHint()
 {
-    return QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing);
+    return QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
 }
 
 int KoDialog::groupSpacingHint()
@@ -448,8 +459,8 @@ int KoDialog::groupSpacingHint()
 }
 
 QString KoDialog::makeStandardCaption(const QString &userCaption,
-                                     QWidget *window,
-                                     CaptionFlags flags)
+                                      QWidget *window,
+                                      CaptionFlags flags)
 {
     Q_UNUSED(window);
     QString caption = qApp->applicationDisplayName();
@@ -909,10 +920,6 @@ QString KoDialog::helpLinkText() const
 {
     Q_D(const KoDialog);
     return (d->mHelpLinkText.isEmpty() ? i18n("Get help...") : d->mHelpLinkText);
-}
-
-void KoDialog::updateGeometry()
-{
 }
 
 void KoDialog::hideEvent(QHideEvent *event)

@@ -62,13 +62,15 @@ protected:
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
 
-    QPainterPath getOutlinePath(const QPointF &documentPos,
-                                        const KoPointerEvent *event,
-                                        KisPaintOpSettings::OutlineMode outlineMode) override;
+    KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
+                                            const KoPointerEvent *event,
+                                            KisPaintOpSettings::OutlineMode outlineMode) override;
 
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;
     void resetHelper(KisToolFreehandHelper *helper);
+
+    bool supportsPaintingAssistants() const override;
 
 protected Q_SLOTS:
 
@@ -83,7 +85,7 @@ private:
     friend class KisToolFreehandPaintingInformationBuilder;
 
     /**
-     * Adjusts a coordinates according to a KisPaintingAssitant,
+     * Adjusts a coordinates according to a KisPaintingAssistant,
      * if available.
      */
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);

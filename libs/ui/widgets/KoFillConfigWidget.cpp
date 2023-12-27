@@ -184,7 +184,6 @@ public:
     KoCanvasBase *canvas {nullptr};
 
     KisSignalCompressorWithParam<std::pair<QColor, KoFlake::FillVariant>> colorChangedCompressor;
-    KisAcyclicSignalConnector shapeChangedAcyclicConnector;
     KisAcyclicSignalConnector resourceManagerAcyclicConnector;
     KoFillConfigWidget::StyleButton selectedFillIndex {KoFillConfigWidget::None};
 
@@ -212,17 +211,9 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->canvas = canvas;
 
     if (trackShapeSelection) {
-        d->shapeChangedAcyclicConnector.connectBackwardVoid(
-                    d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()),
-                     &d->shapeChangedCompressor, SLOT(start()));
-
-        d->shapeChangedAcyclicConnector.connectBackwardVoid(
-                    d->canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()),
-                    &d->shapeChangedCompressor, SLOT(start()));
-
-
+        connect(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), &d->shapeChangedCompressor,
+                SLOT(start()));
         connect(&d->shapeChangedCompressor, SIGNAL(timeout()), this, SLOT(shapeChanged()));
-
     }
 
     d->resourceManagerAcyclicConnector.connectBackwardResourcePair(
@@ -325,7 +316,6 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     connect(d->ui->cmbSmoothingType, SIGNAL(currentIndexChanged(int)), SLOT(slotMeshGradientShadingChanged(int)));
 
     // initialize deactivation locks
-    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 
 
@@ -356,7 +346,7 @@ void KoFillConfigWidget::activate()
         loadCurrentFillFromResourceServer();
     }
 
-    updateWidgetComponentVisbility();
+    updateWidgetComponentVisibility();
 }
 
 void KoFillConfigWidget::deactivate()
@@ -364,7 +354,6 @@ void KoFillConfigWidget::deactivate()
     emit sigInternalRecoverColorInResourceManager();
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(d->deactivationLocks.empty());
-    d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->shapeChangedAcyclicConnector));
     d->deactivationLocks.push_back(KisAcyclicSignalConnector::Blocker(d->resourceManagerAcyclicConnector));
 }
 
@@ -403,8 +392,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
 
         const int checkedId = d->group->checkedId();
 
-        if ((checkedId < 0 || checkedId == None || checkedId == Solid) &&
-            !(checkedId == Solid && d->colorAction->currentKoColor() == color)) {
+        if (checkedId < 0 || checkedId == None || checkedId == Solid) {
 
             d->group->button(Solid)->setChecked(true);
             d->selectedFillIndex = Solid;
@@ -413,8 +401,10 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
                                                ? KoFlake::Fill
                                                : KoFlake::StrokeFill;
 
-            d->colorAction->setCurrentColor(color);
-            d->colorChangedCompressor.start({color.toQColor(), colorSlot});
+            if (key == d->fillVariant) {
+                d->colorAction->setCurrentColor(color);
+            }
+            colorChanged({color.toQColor(), colorSlot});
         } else if (checkedId == Gradient && key == KoCanvasResource::ForegroundColor) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }
@@ -479,7 +469,7 @@ void KoFillConfigWidget::styleButtonPressed(int buttonId)
         updateUiFromFillType(firstShape);
     }
 
-    updateWidgetComponentVisbility();
+    updateWidgetComponentVisibility();
 }
 
 KoShapeStrokeSP KoFillConfigWidget::createShapeStroke()
@@ -510,8 +500,6 @@ KoShapeStrokeSP KoFillConfigWidget::createShapeStroke()
 
 void KoFillConfigWidget::noColorSelected()
 {
-    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
-
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
         emit sigFillChanged();
@@ -535,7 +523,6 @@ void KoFillConfigWidget::colorChanged(std::pair<QColor, KoFlake::FillVariant> re
     if (!color.isValid()) {
         return;
     }
-    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
 
     QList<KoShape*> selectedShapes = currentShapes();
     if (selectedShapes.isEmpty()) {
@@ -569,8 +556,6 @@ void KoFillConfigWidget::colorChanged(std::pair<QColor, KoFlake::FillVariant> re
          }
 
     }
-
-    d->colorAction->setCurrentColor(wrapper.color());
 
     emit sigFillChanged();
     emit sigInternalRequestColorToResourceManager();
@@ -749,8 +734,6 @@ void KoFillConfigWidget::setNewGradientBackgroundToShape()
         return;
     }
 
-    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
-
     KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
     QScopedPointer<QGradient> srcQGradient(d->activeGradient->toQGradient());
     KUndo2Command *command = wrapper.applyGradientStopsOnly(srcQGradient.data());
@@ -818,14 +801,25 @@ void KoFillConfigWidget::slotMeshGradientShadingChanged(int index)
 
 void KoFillConfigWidget::slotMeshHandleColorChanged(const KoColor &c)
 {
-    if (d->activeMeshGradient) {
-        if (d->meshposition.isValid()) {
-            d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
-            setNewMeshGradientBackgroundToShape();
-        }
-        return;
+    QList<KoShape*> selectedShapes = currentShapes();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!selectedShapes.isEmpty());
+
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    const SvgMeshGradient *gradient = wrapper.meshgradient();
+
+    // if we changed the handle, the gradient *has* to exist
+    KIS_SAFE_ASSERT_RECOVER_RETURN(gradient);
+
+    if (d->meshposition.isValid()) {
+        // We don't have any signals firing when we change the structure (i.e position of stops etc) of a
+        // meshgradient. So, activeMeshGradient isn't updated when this happens. Hence we update it here and
+        // then modify the color.
+        d->activeMeshGradient.reset(new SvgMeshGradient(*gradient));
+
+        d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
+        setNewMeshGradientBackgroundToShape();
     }
-    KIS_ASSERT(false);
+    return;
 }
 
 void KoFillConfigWidget::loadCurrentFillFromResourceServer()
@@ -903,8 +897,6 @@ void KoFillConfigWidget::createNewDefaultMeshGradientBackground()
 
 void KoFillConfigWidget::setNewMeshGradientBackgroundToShape()
 {
-    KisAcyclicSignalConnector::Blocker b(d->shapeChangedAcyclicConnector);
-
     QList<KoShape*> selectedShapes = currentShapes();
     // if called by "manager"
     if (selectedShapes.isEmpty()) {
@@ -956,6 +948,8 @@ void KoFillConfigWidget::shapeChanged()
 
     bool shouldUploadColorToResourceManager = false;
 
+    // Disable the buttons if there aren't any selected shapes or we have a several shapes with different
+    // gradient backgrounds.
     if (shapes.isEmpty() ||
         (shapes.size() > 1 && KoShapeFillWrapper(shapes, d->fillVariant).isMixedFill())) {
 
@@ -978,7 +972,7 @@ void KoFillConfigWidget::shapeChanged()
     // updates the UI
     d->group->button(d->selectedFillIndex)->setChecked(true);
 
-    updateWidgetComponentVisbility();
+    updateWidgetComponentVisibility();
     slotUpdateFillTitle();
 
     if (shouldUploadColorToResourceManager) {
@@ -1021,7 +1015,7 @@ void KoFillConfigWidget::updateUiFromFillType(KoShape *shape)
 }
 
 
-void KoFillConfigWidget::updateWidgetComponentVisbility()
+void KoFillConfigWidget::updateWidgetComponentVisibility()
 {
     // The UI is showing/hiding things like this because the 'stacked widget' isn't very flexible
     // and makes it difficult to put anything underneath it without a lot empty space

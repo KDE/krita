@@ -6,6 +6,10 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <KisViewManager.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
+
 #include "KisRectangleEnclosingProducer.h"
 
 KisRectangleEnclosingProducer::KisRectangleEnclosingProducer(KoCanvasBase * canvas)
@@ -14,10 +18,25 @@ KisRectangleEnclosingProducer::KisRectangleEnclosingProducer(KoCanvasBase * canv
     setObjectName("enclosing_tool_rectangle");
     setSupportOutline(true);
     setOutlineEnabled(false);
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisRectangleEnclosingProducer::~KisRectangleEnclosingProducer()
 {}
+
+void  KisRectangleEnclosingProducer::resetCursorStyle()
+{
+    if (isEraser()) {
+        useCursor(KisCursor::load("tool_rectangular_selection_enclose_eraser_cursor.png", 6, 6));
+    } else {
+        KisDynamicDelegateTool::resetCursorStyle();
+    }
+
+    overrideCursorIfNotEditable();
+}
 
 void KisRectangleEnclosingProducer::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
 {

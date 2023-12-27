@@ -72,9 +72,9 @@ private:
     int m_patchCount {0};
     int m_lineHeight {0};
     bool m_displayHelpText {false};
-    qreal m_mouseX {0.0};
+    int m_mouseX{0};
     QPoint m_ev;
-    qreal m_width {0.0};
+    int m_width{0};
     bool m_isDown {false};
 
     friend class KisShadeSelectorLineComboBox;

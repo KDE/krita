@@ -79,7 +79,7 @@ public:
      * If info.imageRect and info.viewportRect don't agree, the image
      * will be scaled
      * @p info.borderWidth has the same meaning as in getNearestPatch
-     * @p info.renderHints - hints, transmitted to QPainter during darwing
+     * @p info.renderHints - hints, transmitted to QPainter during drawing
      */
     virtual void drawFromOriginalImage(QPainter& gc,
                                        KisPPUpdateInfoSP info) = 0;

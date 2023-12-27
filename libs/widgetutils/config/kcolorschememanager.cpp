@@ -15,7 +15,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QPainter>
-#include <QStandardPaths>
+#include <KoResourcePaths.h>
 
 KColorSchemeManagerPrivate::KColorSchemeManagerPrivate()
     : model(new KColorSchemeModel())
@@ -63,9 +63,7 @@ void KColorSchemeModel::init()
     beginResetModel();
     m_data.clear();
 
-    const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::AppDataLocation,
-                             QStringLiteral("color-schemes"),
-                             QStandardPaths::LocateDirectory);
+    const QStringList dirs = KoResourcePaths::findDirs(QStringLiteral("color-schemes"));
     QStringList schemeFiles;
     Q_FOREACH (const QString &dir, dirs) {
         const QStringList fileNames = QDir(dir).entryList(QStringList() << QStringLiteral("*.colors"));

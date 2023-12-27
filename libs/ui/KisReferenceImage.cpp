@@ -205,7 +205,7 @@ KisReferenceImage::fromPaintDevice(KisPaintDeviceSP src, const KisCoordinatesCon
     return reference;
 }
 
-void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintcontext*/) const
+void KisReferenceImage::paint(QPainter &gc) const
 {
     if (!parent()) return;
 
@@ -283,7 +283,6 @@ QString KisReferenceImage::internalFile() const
 void KisReferenceImage::setFilename(const QString &filename)
 {
     d->externalFilename = filename;
-    d->embed = false;
 }
 
 QColor KisReferenceImage::getPixel(QPointF position)

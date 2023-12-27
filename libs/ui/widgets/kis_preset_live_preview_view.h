@@ -142,6 +142,7 @@ private:
      */
     void setupAndPaintStroke();
 
+    void changeEvent(QEvent*) override;
 };
 
 #endif

@@ -19,6 +19,7 @@
 
 #include <kis_fill_painter.h>
 #include <kis_paint_device.h>
+#include <kis_default_bounds.h>
 
 #include "KisResourceTypes.h"
 #include "kis_wdg_seexpr_presets_save.h"
@@ -124,6 +125,7 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
         KisDefaultBoundsBaseSP bounds(new KisWrapAroundBoundsWrapper(new KisDefaultBounds(), QRect(0, 0, 256, 256)));
         KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         src->setDefaultBounds(bounds);
+        src->setSupportsWraparoundMode(true);
         KisFillPainter fillPainter(src);
         fillPainter.fillRect(0, 0, 256, 256, m_currentConfiguration);
 

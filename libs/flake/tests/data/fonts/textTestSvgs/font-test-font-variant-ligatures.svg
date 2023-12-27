@@ -1,0 +1,177 @@
+<svg width="160px" height="200px"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+        <style>
+        .test {
+            font-size: 10pt;
+            font-family: FontWithFeaturesOTF;
+            fill: blue;
+        }
+        #test1 .high {
+            font-variant-ligatures: normal;
+        }
+        #test1 .low {
+            font-feature-settings: "liga" on, "clig" on, "calt" on, "hlig" off, "dlig" off;
+        }
+        
+        #test2 .high {
+            font-variant-ligatures: none;
+        }
+        #test2 .low {
+            font-feature-settings: "liga" off, "clig" off, "calt" off, "hlig" off, "dlig" off;
+        }
+        
+        #test3 .high {
+            font-variant-ligatures: common-ligatures;
+        }
+        #test3 .low {
+            font-feature-settings: "liga" on, "clig" on;
+        }
+        
+        #test4 .high {
+            font-variant-ligatures: no-common-ligatures;
+        }
+        #test4 .low {
+            font-feature-settings: "liga" off, "clig" off;
+        }
+        
+        #test5 .high {
+            font-variant-ligatures: discretionary-ligatures;
+        }
+        #test5 .low {
+            font-feature-settings: "dlig" on;
+        }
+        
+        #test6 .high {
+            font-variant-ligatures: no-discretionary-ligatures;
+        }
+        #test6 .low {
+            font-feature-settings: "dlig" off;
+        }
+        
+        #test7 .high {
+            font-variant-ligatures: historical-ligatures;
+        }
+        #test7 .low {
+            font-feature-settings: "hlig" on;
+        }
+        
+        #test8 .high {
+            font-variant-ligatures: no-historical-ligatures;
+        }
+        #test8 .low {
+            font-feature-settings: "hlig" off;
+        }
+        
+        #test9 .high {
+            font-variant-ligatures: contextual;
+        }
+        #test9 .low {
+            font-feature-settings: "calt" on;
+        }
+        
+        #test10 .high {
+            font-variant-ligatures: no-contextual;
+        }
+        #test10 .low {
+            font-feature-settings: "calt" off;
+        }
+        
+        #test11 {
+            font-family: DejaVu Sans;
+        }
+        #test11 .high {
+            font-variant-ligatures: none;
+        }
+        #test11 .low {
+            font-feature-settings: "rlig" off;
+        }
+        </style>
+    </defs>
+
+    <g id="testRect" class="test">
+        <!-- These tests are all adapted from the font-variant tests of the web-platform-tests: https://github.com/web-platform-tests/wpt/tree/master/css/css-fonts -->
+
+        <rect id="boundingRect" x="5" y="5" width="150" height="190"
+            fill="none" stroke="red"/>
+
+        
+        <!-- Adapted from font-variant-ligatures-01.html: Test passes if the three lines below are identical, with three check marks (✓) followed by two crosses (✗)-->
+        <text id="test1" x="7" y="27" >
+            <tspan class="high">CDGFE</tspan>
+            <tspan class="low"  x="7" dy="1em">CDGFE</tspan>
+            <tspan x="7" dy="1em">AAABB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-02.html: Test passes if the three lines below are identical, with five crosses (✗)-->
+        <text id="test2" x="87" y="27" >
+            <tspan class="high">CDGFE</tspan>
+            <tspan class="low"  x="87" dy="1em">CDGFE</tspan>
+            <tspan x="87" dy="1em">BBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-03.html: Test passes if the three lines below are identical, with two check marks (✓).-->
+        <text id="test3" x="7" y="77" >
+            <tspan class="high">CD</tspan>
+            <tspan class="low"  x="7" dy="1em">CD</tspan>
+            <tspan x="7" dy="1em">AA</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-04.html: Test passes if the three lines below are identical, with two crosses (✗).-->
+        <text id="test4" x="47" y="77" >
+            <tspan class="high">CD</tspan>
+            <tspan class="low"  x="47" dy="1em">CD</tspan>
+            <tspan x="47" dy="1em">BB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-05.html: Test passes if the three lines below are identical, with one check mark (✓).-->
+        <text id="test5" x="87" y="77" >
+            <tspan class="high">E</tspan>
+            <tspan class="low"  x="87" dy="1em">E</tspan>
+            <tspan x="87" dy="1em">A</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-06.html: Test passes if the three lines below are identical, with one cross (✗).-->
+        <text id="test6" x="127" y="77" >
+            <tspan class="high">E</tspan>
+            <tspan class="low"  x="127" dy="1em">E</tspan>
+            <tspan x="127" dy="1em">B</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-07.html: Test passes if the three lines below are identical, with one check mark (✓).-->
+        <text id="test7" x="7" y="127" >
+            <tspan class="high">F</tspan>
+            <tspan class="low"  x="7" dy="1em">F</tspan>
+            <tspan x="7" dy="1em">A</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-08.html: Test passes if the three lines below are identical, with one cross (✗).-->
+        <text id="test8" x="47" y="127" >
+            <tspan class="high">F</tspan>
+            <tspan class="low"  x="47" dy="1em">F</tspan>
+            <tspan x="47" dy="1em">B</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-09.html: Test passes if the three lines below are identical, with one check mark (✓).-->
+        <text id="test9" x="87" y="127" >
+            <tspan class="high">G</tspan>
+            <tspan class="low"  x="87" dy="1em">G</tspan>
+            <tspan x="87" dy="1em">A</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-10.html: Test passes if the three lines below are identical, with five crosses (✗)-->
+        <text id="test10" x="127" y="127" >
+            <tspan class="high">G</tspan>
+            <tspan class="low"  x="127" dy="1em">G</tspan>
+            <tspan x="127" dy="1em">B</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-ligatures-11.optional.html: Test passes if the first line shows a lam-alef ligature (لا) and the second shows an initial lam, final alef which is *normally incorrect*.-->
+        <text id="test11" x="70" y="177" >
+            <tspan class="high">لا</tspan> - 
+            <tspan class="low">لا</tspan>
+        </text>
+
+    </g>
+
+</svg>

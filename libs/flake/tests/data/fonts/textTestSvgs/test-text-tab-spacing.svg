@@ -1,0 +1,14 @@
+<svg width="400px" height="170px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+<g id="test">
+
+    <rect id="boundingRect" x="5" y="5" width="390" height="160"
+        fill="none" stroke="red"/>
+
+    <text id="testRect" x="5" y="24" 
+        font-family="DejaVu Sans" font-size="15" fill="blue" style="tab-size: 4;white-space:pre;" >
+<tspan x="10" dy="1.0em">  Lorem</tspan><tspan x="10" dy="2.0em">	ipsum</tspan><tspan x="10" dy="2.0em">dolor  sit	amet,</tspan><tspan x="10" dy="2.0em" style="tab-size: 8;">		consectetur	adipiscing elit.</tspan></text>
+
+</g>
+
+</svg>

@@ -40,6 +40,7 @@
 #include <kis_image_animation_interface.h>
 #include <kis_time_span.h>
 #include <kis_global.h>
+#include <KisCursorOverrideLock.h>
 
 #include "ui_wdgstoryboarddock.h"
 #include "ui_wdgcommentmenu.h"
@@ -188,7 +189,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_exportAsPdfAction = new KisAction(i18nc("Export storyboard as PDF", "Export as PDF"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsPdfAction);
 
-    m_exportAsSvgAction = new KisAction(i18nc("Export storyboard as SVG", "Export as SVG"));
+    m_exportAsSvgAction = new KisAction(i18nc("Export storyboard as SVG", "Export as SVG"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsSvgAction);
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));
@@ -298,6 +299,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         slotUpdateDocumentList();
         m_storyboardModel->resetData(StoryboardItemList());
         m_commentModel->resetData(QVector<StoryboardComment>());
+        m_storyboardModel->slotSetActiveNode(nullptr);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -384,7 +386,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
     if (dlg.exec() == QDialog::Accepted) {
         dlg.hide();
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
         ExportPage layoutPage;
         QPrinter printer(QPrinter::HighResolution);
@@ -424,7 +426,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
         if (!firstIndex.isValid() || !lastIndex.isValid()) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
-            QApplication::restoreOverrideCursor();
             return;
         }
 
@@ -434,7 +435,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         int numBoards = lastItemRow - firstItemRow + 1;
         if (numBoards <= 0) {
             QMessageBox::warning((QWidget*)(&dlg), i18nc("@title:window", "Krita"), i18n("Please enter correct range. There are no panels in the range of frames provided."));
-            QApplication::restoreOverrideCursor();
             return;
         }
 
@@ -644,8 +644,6 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
         }
         painter.end();
     }
-
-    QApplication::restoreOverrideCursor();
 }
 
 void StoryboardDockerDock::slotLockClicked(bool isLocked){

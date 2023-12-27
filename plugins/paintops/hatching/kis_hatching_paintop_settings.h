@@ -59,8 +59,6 @@ public:
     double thicknesssensorvalue {0.0};
 
     void initializeTwin(KisPaintOpSettingsSP convenienttwin) const;
-    using KisPropertiesConfiguration::fromXML;
-    void fromXML(const QDomElement&) override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 

@@ -133,8 +133,7 @@ public:
 
     KisColorLabelSelectorWidget* colorLabelSelector() const;
     
-    QSize sizeHint() const override;
-    void resizeEvent(QResizeEvent* e) override;
+    void showEvent(QShowEvent* e) override;
 
     int calculateMenuOffset() const;
 

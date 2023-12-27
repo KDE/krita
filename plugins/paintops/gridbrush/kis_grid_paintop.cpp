@@ -25,9 +25,7 @@
 #include <KoColorSpace.h>
 #include <KoMixColorsOp.h>
 
-#include <kis_gridop_option.h>
-#include <kis_grid_shape_option.h>
-#include <kis_color_option.h>
+#include <KisColorOptionData.h>
 #include <kis_lod_transform.h>
 
 
@@ -42,8 +40,9 @@ KisGridPaintOp::KisGridPaintOp(const KisPaintOpSettingsSP settings, KisPainter *
     , m_node(node)
 {
 
-    m_properties.readOptionSetting(settings);
-    m_colorProperties.fillProperties(settings);
+    m_properties.read(settings.data());
+    m_colorProperties.read(settings.data());
+    m_shapeProperties.read(settings.data());
 
     m_xSpacing = m_properties.grid_width * m_properties.grid_scale;
     m_ySpacing = m_properties.grid_height * m_properties.grid_scale;
@@ -189,7 +188,7 @@ KisSpacingInformation KisGridPaintOp::paintAt(const KisPaintInformation& info)
             }
 
             // paint some element
-            switch (m_properties.grid_shape) {
+            switch (m_shapeProperties.shape) {
             case 0: {
                 m_painter->paintEllipse(tile);
                 break;

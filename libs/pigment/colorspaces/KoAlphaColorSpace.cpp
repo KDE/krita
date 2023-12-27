@@ -74,37 +74,32 @@ template <class _CSTrait>
 KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
     : KoColorSpaceAbstract<_CSTrait>(alphaIdFromChannelType<channels_type>().id(),
                                      alphaIdFromChannelType<channels_type>().name())
+    , m_profile(new KoDummyColorProfile)
 {
     this->addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, channelInfoIdFromChannelType<channels_type>()));
 
-    m_compositeOps << new KoCompositeOpOver<_CSTrait>(this)
-                   << new KoCompositeOpErase<_CSTrait>(this)
-                   << new KoCompositeOpCopy2<_CSTrait>(this)
-                   << createAlphaDarkenCompositeOp<_CSTrait>(this)
-                   << new AlphaColorSpaceMultiplyOp<_CSTrait>(this);
-
-    Q_FOREACH (KoCompositeOp *op, m_compositeOps) {
-        this->addCompositeOp(op);
-    }
-    m_profile = new KoDummyColorProfile;
+    this->addCompositeOp(new KoCompositeOpOver<_CSTrait>(this));
+    this->addCompositeOp(new KoCompositeOpErase<_CSTrait>(this));
+    this->addCompositeOp(new KoCompositeOpCopy2<_CSTrait>(this));
+    this->addCompositeOp(createAlphaDarkenCompositeOp<_CSTrait>(this));
+    this->addCompositeOp(new AlphaColorSpaceMultiplyOp<_CSTrait>(this));
 }
 
 template <class _CSTrait>
 KoAlphaColorSpaceImpl<_CSTrait>::~KoAlphaColorSpaceImpl()
 {
-    qDeleteAll(m_compositeOps);
     delete m_profile;
     m_profile = 0;
 }
 
 template <class _CSTrait>
-void KoAlphaColorSpaceImpl<_CSTrait>::fromQColor(const QColor& c, quint8 *dst, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpaceImpl<_CSTrait>::fromQColor(const QColor& c, quint8 *dst) const
 {
     _CSTrait::nativeArray(dst)[0] = _MathsFromU8::scaleToA(c.alpha());
 }
 
 template <class _CSTrait>
-void KoAlphaColorSpaceImpl<_CSTrait>::toQColor(const quint8 * src, QColor *c, const KoColorProfile * /*profile*/) const
+void KoAlphaColorSpaceImpl<_CSTrait>::toQColor(const quint8 * src, QColor *c) const
 {
     c->setRgba(qRgba(255, 255, 255, _MathsToU8::scaleToA(_CSTrait::nativeArray(src)[0])));
 }

@@ -16,6 +16,7 @@ struct KisTransformStrategyBase::Private
 {
     QTransform thumbToImageTransform;
     QImage originalImage;
+    int decorationThickness = 1;
 };
 
 
@@ -39,6 +40,16 @@ void KisTransformStrategyBase::activatePrimaryAction()
 
 void KisTransformStrategyBase::deactivatePrimaryAction()
 {
+}
+
+void KisTransformStrategyBase::setDecorationThickness(int thickness)
+{
+    m_d->decorationThickness = qMax(1, thickness);
+}
+
+int KisTransformStrategyBase::decorationThickness() const
+{
+    return m_d->decorationThickness;
 }
 
 QImage KisTransformStrategyBase::originalImage() const

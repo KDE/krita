@@ -388,7 +388,7 @@ namespace KisLsUtils
         const QRect boundsRect = alignWithLayer ?
             env->layerBounds() : env->defaultBounds();
 
-        patternOffset += boundsRect.topLeft();
+        patternOffset -= boundsRect.topLeft();
 
         patternOffset.rx() %= psize.width();
         patternOffset.ry() %= psize.height();
@@ -416,6 +416,8 @@ namespace KisLsUtils
 
         } else if (config->fillType() == psd_fill_pattern) {
             KoPatternSP pattern = config->pattern(resourcesInterface);
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
 
             if (pattern->hasAlpha()) {
                 pattern = env->cachedFlattenedPattern(pattern);

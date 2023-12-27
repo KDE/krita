@@ -4,7 +4,7 @@
   <properties>
     <integer name="ImageWidth" />
     <integer name="ImageLength" />
-    <seq name="BitsPerSamble" type="integer" />
+    <seq name="BitsPerSample" type="integer" />
     <closedchoice name="Compression" >
       <integer name="uncompressed">1</integer>
       <integer name="JPEG">6</integer>

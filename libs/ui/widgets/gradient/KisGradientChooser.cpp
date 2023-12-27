@@ -167,7 +167,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     // Resource Item Chooser
     m_d->itemChooser = new KisResourceItemChooser(ResourceType::Gradients, false, this);
     m_d->itemChooser->showTaggingBar(true);
-    m_d->itemChooser->setViewModeButtonVisible(true);
+    m_d->itemChooser->showViewModeBtn(true);
 
     // View menu
     QActionGroup *actionGroupViewMode = new QActionGroup(this);

@@ -38,17 +38,17 @@ struct Q_DECL_HIDDEN KisBaseNode::Private
     bool pinnedToTimeline {false};
     KisImageWSP image;
 
-    Private(KisImageWSP image)
+    Private(KisImageWSP p_image)
         : id(QUuid::createUuid())
-        , opacityProperty(&properties, OPACITY_OPAQUE_U8)
-        , image(image)
+        , opacityProperty(new KisDefaultBounds(p_image), &properties, OPACITY_OPAQUE_U8)
+        , image(p_image)
     {
     }
 
     Private(const Private &rhs)
         : compositeOp(rhs.compositeOp),
           id(QUuid::createUuid()),
-          opacityProperty(&properties, OPACITY_OPAQUE_U8),
+          opacityProperty(new KisDefaultBounds(rhs.image), &properties, OPACITY_OPAQUE_U8),
           collapsed(rhs.collapsed),
           supportsLodMoves(rhs.supportsLodMoves),
           animated(rhs.animated),
@@ -92,7 +92,7 @@ KisBaseNode::KisBaseNode(const KisBaseNode & rhs)
     , m_d(new Private(*rhs.m_d))
 {
     if (rhs.m_d->opacityProperty.hasChannel()) {
-        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty, this);
+        m_d->opacityProperty.transferKeyframeData(rhs.m_d->opacityProperty);
         m_d->keyframeChannels.insert(m_d->opacityProperty.channel()->id(), m_d->opacityProperty.channel());
     }
 
@@ -117,6 +117,7 @@ quint8 KisBaseNode::opacity() const
 void KisBaseNode::setOpacity(quint8 val)
 {
     m_d->opacityProperty.set(val);
+    baseNodeChangedCallback();
 }
 
 quint8 KisBaseNode::percentOpacity() const
@@ -206,6 +207,11 @@ QImage KisBaseNode::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspe
         return QImage();
     }
 
+}
+
+int KisBaseNode::thumbnailSeqNo() const
+{
+    return -1;
 }
 
 QImage KisBaseNode::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)
@@ -361,6 +367,7 @@ bool KisBaseNode::supportsLodPainting() const
 void KisBaseNode::setImage(KisImageWSP image)
 {
     m_d->image = image;
+    m_d->opacityProperty.updateDefaultBounds(new KisDefaultBounds(image));
 }
 
 KisImageWSP KisBaseNode::image() const

@@ -201,30 +201,33 @@ void KoColorSpaceRegistry::init()
 
 KoColorSpaceRegistry::KoColorSpaceRegistry() : d(new Private(this))
 {
-    d->colorConversionSystem = 0;
-    d->colorConversionCache = 0;
+    d->colorConversionSystem = nullptr;
+    d->colorConversionCache = nullptr;
 }
 
 KoColorSpaceRegistry::~KoColorSpaceRegistry()
 {
-    // Just leak on exit... It's faster.
-//    delete d->colorConversionSystem;
-//    Q_FOREACH (KoColorProfile* profile, d->profileMap) {
-//        delete profile;
-//    }
-//    d->profileMap.clear();
+    delete d->colorConversionSystem;
+    d->colorConversionSystem = nullptr;
 
-//    Q_FOREACH (const KoColorSpace * cs, d->csMap) {
-//        cs->d->deletability = OwnedByRegistryRegistryDeletes;
-//    }
-//    d->csMap.clear();
+    Q_FOREACH (const KoColorSpace * cs, d->csMap) {
+        cs->d->deletability = OwnedByRegistryRegistryDeletes;
+        delete cs;
+    }
+    d->csMap.clear();
 
-//    // deleting colorspaces calls a function in the cache
-//    delete d->colorConversionCache;
-//    d->colorConversionCache = 0;
+    // deleting colorspaces calls a function in the cache
+    delete d->colorConversionCache;
+    d->colorConversionCache = nullptr;
 
-//    // Delete the colorspace factories
-//    qDeleteAll(d->localFactories);
+    // Delete the colorspace factories
+    Q_FOREACH(KoColorSpaceFactory *f, d->colorSpaceFactoryRegistry.values()) {
+        d->colorSpaceFactoryRegistry.remove(f->id());
+        delete f;
+    }
+    Q_FOREACH(KoColorSpaceFactory *f, d->colorSpaceFactoryRegistry.doubleEntries()) {
+        delete f;
+    }
 
     delete d;
 }
@@ -232,6 +235,14 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
 {
     QWriteLocker l(&d->registrylock);
+    if (d->colorSpaceFactoryRegistry.contains(item->id())) {
+        const KoColorSpaceFactory *original =
+            d->colorSpaceFactoryRegistry.get(item->id());
+        warnPigment << "Replacing color space factory"
+                    << original->id() << original->name()
+                    << "with"
+                    << item->id() << item->name();
+    }
     d->colorSpaceFactoryRegistry.add(item);
     d->colorConversionSystem->insertColorSpace(item);
 }
@@ -608,10 +619,10 @@ const KoColorSpace *KoColorSpaceRegistry::graya16(const QString &profile)
 const KoColorSpace *KoColorSpaceRegistry::graya16(const KoColorProfile *profile)
 {
     if (!profile) {
-        return graya8();
+        return graya16();
     }
     else {
-        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+        return KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
     }
 }
 
@@ -712,7 +723,7 @@ const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &co
     }
 
     QList<const KoColorProfile*> list = d->profileStorage.profilesFor(colorants, colorPrimaries, transferFunction);
-    if (list.size() > 0) {
+    if (!list.empty()) {
         return list.first();
     }
 
@@ -721,7 +732,7 @@ const KoColorProfile *KoColorSpaceRegistry::profileFor(const QVector<double> &co
         return engine->getProfile(colorants, colorPrimaries, transferFunction);
     }
 
-    return 0;
+    return nullptr;
 }
 
 QList<KoID> KoColorSpaceRegistry::colorModelsList(ColorSpaceListVisibility option) const
@@ -770,10 +781,9 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
 
 QString KoColorSpaceRegistry::Private::colorSpaceIdImpl(const QString & colorModelId, const QString & colorDepthId) const
 {
-    QList<KoColorSpaceFactory*> factories = colorSpaceFactoryRegistry.values();
-    Q_FOREACH (KoColorSpaceFactory* factory, factories) {
-        if (factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId) {
-            return factory->id();
+    for (auto it = colorSpaceFactoryRegistry.constBegin(); it != colorSpaceFactoryRegistry.constEnd(); ++it) {
+        if (it.value()->colorModelId().id() == colorModelId && it.value()->colorDepthId().id() == colorDepthId) {
+            return it.value()->id();
         }
     }
     return "";

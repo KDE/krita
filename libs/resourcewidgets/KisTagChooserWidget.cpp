@@ -23,13 +23,12 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
+#include <kis_assert.h>
 #include <KisSqueezedComboBox.h>
 
 #include <KoIcon.h>
 
-#include "KisResourceItemChooserContextMenu.h"
 #include "KisTagToolButton.h"
-#include "kis_debug.h"
 #include <KisTagResourceModel.h>
 
 class Q_DECL_HIDDEN KisTagChooserWidget::Private
@@ -40,6 +39,7 @@ public:
     KisTagModel *model;
     KisTagSP cachedTag;
     QString resourceType;
+    QScopedPointer<KisTagModel> allTagsModel;
 };
 
 KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceType, QWidget* parent)
@@ -49,14 +49,22 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
     d->resourceType = resourceType;
 
     d->comboBox = new QComboBox(this);
-
     d->comboBox->setToolTip(i18n("Tag"));
-    d->comboBox->setSizePolicy(QSizePolicy::MinimumExpanding , QSizePolicy::Fixed);
+    d->comboBox->setSizePolicy(QSizePolicy::Policy::Expanding , QSizePolicy::Policy::Fixed);
+
+    // Allow the combo box to not depend on content size.
+    // Removing below code will cause the QComboBox when inside a QSplitter to have a width
+    // equal to the longest QComboBox item regardless of size policy.
+    d->comboBox->setMinimumContentsLength(1);
+    d->comboBox->setSizeAdjustPolicy(QComboBox::SizeAdjustPolicy::AdjustToMinimumContentsLengthWithIcon);
+
     d->comboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
     model->sort(KisAllTagsModel::Name);
     d->comboBox->setModel(model);
 
     d->model = model;
+    d->allTagsModel.reset(new KisTagModel(resourceType));
+    d->allTagsModel->setTagFilter(KisTagModel::ShowAllTags);
 
     QGridLayout* comboLayout = new QGridLayout(this);
 
@@ -94,6 +102,8 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
     // Occurs when model changes under the user e.g. +/- a resource storage.
     connect(d->model, SIGNAL(modelAboutToBeReset()), this, SLOT(cacheSelectedTag()));
     connect(d->model, SIGNAL(modelReset()), this, SLOT(restoreTagFromCache()));
+    connect(d->allTagsModel.data(), SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
+            this, SLOT(slotTagModelDataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 
 }
 
@@ -108,7 +118,6 @@ void KisTagChooserWidget::tagToolDeleteCurrentTag()
     if (!currentTag.isNull() && currentTag->id() >= 0) {
         d->model->setTagInactive(currentTag);
         setCurrentIndex(0);
-        d->tagToolButton->setUndeletionCandidate(currentTag);
         d->model->sort(KisAllTagsModel::Name);
     }
 }
@@ -137,24 +146,32 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
         return;
     }
 
+    bool result = false;
+
     if (canRenameCurrentTag && !tagName.isEmpty()) {
-        tag->setName(tagName);
-        bool result = d->model->renameTag(tag, false);
+         result = d->model->renameTag(tag, tagName, false);
+
         if (!result) {
             KisTagSP tagToRemove = d->model->tagForUrl(tagName);
-            if (QMessageBox::question(this, i18nc("Dialog title", "Remove existing tag with that name?"),
+
+            if (tagToRemove &&
+                QMessageBox::question(this, i18nc("Dialog title", "Remove existing tag with that name?"),
                 i18nc("Dialog message (the arguments are both somewhat user readable nouns or adjectives (names of the tags), can be treated as nouns since they represent the tags)",
                 "A tag with this unique name already exists. In order to continue renaming, the existing tag needs to be removed. Do you want to continue?\n"
                 "Tag to be removed: %1\n"
                 "Tag's unique name: %2", tagToRemove->name(), tagToRemove->url()), QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel) {
-                result = d->model->renameTag(tag, true);
+                result = d->model->renameTag(tag, tagName, true);
                 KIS_SAFE_ASSERT_RECOVER_RETURN(result);
             }
         }
     }
-    // apparently after a name change it doesn't figure out that the model should be resorted even if we explicitely ask it to...
-    d->model->sort(KisAllTagsModel::Active);
-    d->model->sort(KisAllTagsModel::Name);
+
+    if (result) {
+        KisTagSP renamedTag = d->model->tagForUrl(tagName);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(renamedTag);
+        const QModelIndex idx = d->model->indexForTag(renamedTag);
+        setCurrentIndex(idx.row());
+    }
 }
 
 void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)
@@ -164,7 +181,6 @@ void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)
     bool success = d->model->setTagActive(tag);
     setCurrentIndex(previousIndex);
     if (success) {
-        d->tagToolButton->setUndeletionCandidate(KisTagSP());
         setCurrentItem(tag->name());
         d->model->sort(KisAllTagsModel::Name);
     }
@@ -181,6 +197,41 @@ void KisTagChooserWidget::restoreTagFromCache()
         QModelIndex cachedIndex = d->model->indexForTag(d->cachedTag);
         setCurrentIndex(cachedIndex.row());
         d->cachedTag = nullptr;
+    }
+}
+
+void KisTagChooserWidget::slotTagModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> roles)
+{
+    // we care only about the check status
+    if (!roles.isEmpty() && !roles.contains(Qt::CheckStateRole)) {
+        return;
+    }
+
+    const QModelIndex currIdx =
+            d->allTagsModel->indexForTag(d->tagToolButton->undeletionCandidate());
+
+    if (currIdx.isValid() &&
+        currIdx.row() >= topLeft.row() && currIdx.row() <= bottomRight.row() &&
+        currIdx.column() >= topLeft.column() && currIdx.column() <= bottomRight.column()) {
+
+        const bool isNowActive = d->allTagsModel->data(currIdx, Qt::CheckStateRole).toBool();
+
+        if (isNowActive) {
+            d->tagToolButton->setUndeletionCandidate(KisTagSP());
+        }
+    }
+
+    for (int row = topLeft.row(); row <= bottomRight.row(); row++) {
+        for (int column = topLeft.column(); column <= bottomRight.column(); column++) {
+            const QModelIndex idx = d->allTagsModel->index(row, column);
+
+            const bool isActive = d->allTagsModel->data(idx, Qt::CheckStateRole).toBool();
+
+            if (idx != currIdx && !isActive) {
+                d->tagToolButton->setUndeletionCandidate(d->allTagsModel->tagForIndex(idx));
+                break;
+            }
+        }
     }
 }
 

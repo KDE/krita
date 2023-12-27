@@ -159,6 +159,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
                         break;
                     } else {
                         reference->setFilename(url);
+                        reference->setEmbed(false);
                     }
                 }
             }
@@ -389,6 +390,10 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
 
             QString id = main.attribute("id", "not-valid");
 
+            // backward compatibility
+            if (id == "animatedtransformparams") {
+                id = "tooltransformparams";
+            }
             if (id == "not-valid") {
                 m_errorMessages << i18n("Could not load \"id\" of the transform mask");
                 return false;
@@ -411,7 +416,6 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
             mask->setTransformParams(params);
 
             loadNodeKeyframes(mask);
-            params->clearChangedFlag();
 
             return true;
         }
@@ -579,7 +583,7 @@ bool KisKraLoadVisitor::loadPaintDeviceFrame(KisPaintDeviceSP device, const QStr
 {
     {
         const int pixelSize = device->colorSpace()->pixelSize();
-        KoColor color(Qt::transparent, device->colorSpace());
+        KoColor color = KoColor::createTransparent(device->colorSpace());
 
         if (m_store->open(location + ".defaultpixel")) {
             if (m_store->size() == pixelSize) {
@@ -724,7 +728,7 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
     // by default the selection is expected to be fully transparent
     {
         KisPixelSelectionSP pixelSelection = dstSelection->pixelSelection();
-        KoColor transparent(Qt::transparent, pixelSelection->colorSpace());
+        KoColor transparent = KoColor::createTransparent(pixelSelection->colorSpace());
         pixelSelection->setDefaultPixel(transparent);
     }
 
@@ -738,9 +742,9 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, dstSelection);
         dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
-        result = shapeSelection->loadSelection(m_store);
+        result = shapeSelection->loadSelection(m_store, m_image->bounds());
 
         /**
          * We need to explicitly call updateProjection() here, because

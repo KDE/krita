@@ -1,9 +1,5 @@
 add_subdirectory( tests )
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 set(kritalibbrush_LIB_SRCS
     kis_predefined_brush_factory.cpp
     kis_auto_brush.cpp
@@ -26,18 +22,13 @@ set(kritalibbrush_LIB_SRCS
     KisAbrStorage.cpp
     KisColorfulBrush.cpp
     KisBrushTypeMetaDataFixup.cpp
+    KisBrushModel.cpp
 )
 
 kis_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS})
 generate_export_header(kritalibbrush BASE_NAME kritabrush EXPORT_MACRO_NAME BRUSH_EXPORT)
 
-if (WIN32)
-    target_link_libraries(kritalibbrush kritaimage Qt5::Svg ${WIN32_PLATFORM_NET_LIBS})
-else ()
-    target_link_libraries(kritalibbrush kritaimage Qt5::Svg)
-endif ()
-
-target_link_libraries(kritalibbrush kritamultiarch)
+target_link_libraries(kritalibbrush kritaimage Qt5::Svg kritamultiarch lager)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

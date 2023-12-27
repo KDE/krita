@@ -17,8 +17,8 @@
 #include "kis_update_selection_job.h"
 
 
-KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection)
-    : m_image(image)
+KisShapeSelectionModel::KisShapeSelectionModel(KisImageResolutionProxySP resolutionProxy, KisSelectionWSP selection, KisShapeSelection* shapeSelection)
+    : m_resolutionProxy(resolutionProxy)
     , m_parentSelection(selection)
     , m_shapeSelection(shapeSelection)
     , m_updatesEnabled(true)
@@ -27,7 +27,6 @@ KisShapeSelectionModel::KisShapeSelectionModel(KisImageWSP image, KisSelectionWS
 
 KisShapeSelectionModel::~KisShapeSelectionModel()
 {
-    m_image = 0;
     m_parentSelection = 0;
 }
 
@@ -38,6 +37,22 @@ void KisShapeSelectionModel::requestUpdate(const QRect &updateRect)
     if (m_updatesEnabled) {
         m_parentSelection->requestCompressedProjectionUpdate(updateRect);
     }
+}
+
+void KisShapeSelectionModel::setResolutionProxy(KisImageResolutionProxySP newResolutionProxy)
+{
+    const bool resolutionChanged = !m_resolutionProxy->compareResolution(*newResolutionProxy);
+
+    m_resolutionProxy = newResolutionProxy;
+
+    if (resolutionChanged) {
+        requestUpdate(QRect());
+    }
+}
+
+KisImageResolutionProxySP KisShapeSelectionModel::resolutionProxy() const
+{
+    return m_resolutionProxy;
 }
 
 void KisShapeSelectionModel::add(KoShape *child)
@@ -53,11 +68,9 @@ void KisShapeSelectionModel::add(KoShape *child)
     m_shapeSelection->shapeManager()->addShape(child);
 
     QRect updateRect = child->boundingRect().toAlignedRect();
-    if (m_image.isValid()) {
-        QTransform matrix;
-        matrix.scale(m_image->xRes(), m_image->yRes());
-        updateRect = matrix.mapRect(updateRect);
-    }
+    QTransform matrix;
+    matrix.scale(m_resolutionProxy->xRes(), m_resolutionProxy->yRes());
+    updateRect = matrix.mapRect(updateRect);
 
     if (m_shapeMap.count() == 1) {
         // The shape is the first one, so the shape selection just got created
@@ -79,13 +92,11 @@ void KisShapeSelectionModel::remove(KoShape *child)
     if (m_shapeSelection) {
         m_shapeSelection->shapeManager()->remove(child);
     }
-    if (m_image.isValid()) {
-        QTransform matrix;
-        matrix.scale(m_image->xRes(), m_image->yRes());
-        updateRect = matrix.mapRect(updateRect);
-        if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
-            requestUpdate(updateRect);
-        }
+    QTransform matrix;
+    matrix.scale(m_resolutionProxy->xRes(), m_resolutionProxy->yRes());
+    updateRect = matrix.mapRect(updateRect);
+    if (m_shapeSelection) { // No m_shapeSelection indicates the selection is being deleted
+        requestUpdate(updateRect);
     }
 }
 
@@ -147,11 +158,9 @@ void KisShapeSelectionModel::childChanged(KoShape * child, KoShape::ChangeType t
     changedRect = changedRect.united(child->boundingRect());
     m_shapeMap[child] = child->boundingRect();
 
-    if (m_image.isValid()) {
-        QTransform matrix;
-        matrix.scale(m_image->xRes(), m_image->yRes());
-        changedRect = matrix.mapRect(changedRect);
-    }
+    QTransform matrix;
+    matrix.scale(m_resolutionProxy->xRes(), m_resolutionProxy->yRes());
+    changedRect = matrix.mapRect(changedRect);
 
     requestUpdate(changedRect.toAlignedRect());
 }

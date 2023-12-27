@@ -54,6 +54,8 @@ private Q_SLOTS:
     void presetSelected(QListWidgetItem *item);
     void canvasResourceChanged(int key, const QVariant& v);
     void slotSortingModeChanged(QAction *action);
+    void slotPresetLimitChanged(int presetLimit);
+    void showPresetLimitDialog();
     void slotContextMenuRequest(const QPoint &pos);
     void updatePresets();
 private:
@@ -68,6 +70,7 @@ private:
     QAction *m_actionSortBubble;
     QActionGroup *m_sortingModes;
     DisplayOrder m_sorting {Static};
+    int m_presetLimit;
     KisResourceModel* m_resourceModel {0};
     bool m_block {false};
     bool m_initialized {false};

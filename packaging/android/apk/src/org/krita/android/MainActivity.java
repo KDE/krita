@@ -1,28 +1,35 @@
- /*
-  * This file is part of the KDE project
-  * SPDX-FileCopyrightText: 2019 Sharaf Zaman <sharafzaz121@gmail.com>
-  *
-  * SPDX-License-Identifier: GPL-2.0-or-later
-  */
+/*
+ * This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2019 Sharaf Zaman <sharafzaz121@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 
 package org.krita.android;
 
-import android.os.Build;
-import android.util.Log;
-import android.os.Bundle;
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.WindowManager;
+import android.view.ViewConfiguration;
+
+import androidx.annotation.RequiresApi;
 
 import org.qtproject.qt5.android.QtNative;
+import org.qtproject.qt5.android.QtInputEventDispatcher;
 import org.qtproject.qt5.android.bindings.QtActivity;
+
+import org.libsdl.app.SDLAudioManager;
 
 public class MainActivity extends QtActivity {
 
-    private boolean isStartup = true;
+    private boolean haveLibsLoaded = false;
+    private boolean serviceStarted = false;
     private final String TAG = "MainActivity";
 
     @Override
@@ -37,11 +44,32 @@ public class MainActivity extends QtActivity {
             i.putExtra("applicationArguments", uri);
         }
 
+        SDLAudioManager.initialize();
+        SDLAudioManager.setContext(this);
+        SDLAudioManager.nativeSetupJNI();
+
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "TouchSlop: " + ViewConfiguration.get(this).getScaledTouchSlop());
         Log.i(TAG, "LibsLoaded");
+        haveLibsLoaded = true;
         new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // unlike onCreate where we did this before, this method is called several times throughout the
+        // lifecycle of our app, but we intend to run this method only once (and in "Foreground").
+        if (!serviceStarted) {
+            // Keep the service started so in an unfortunate case where we're not allowed to start a
+            // foreground service, we can try to continue without it.
+            Intent docSaverServiceIntent = new Intent(this, DocumentSaverService.class);
+            startService(docSaverServiceIntent);
+            serviceStarted = true;
+        }
     }
 
     @Override
@@ -69,34 +97,45 @@ public class MainActivity extends QtActivity {
         super.onPause();
         // onPause() _is_ called when the app starts. If the native lib
         // isn't loaded, it crashes.
-        if (!isStartup) {
+        if (haveLibsLoaded) {
             synchronized(this) {
-                Intent intent = new Intent(this, DocumentSaverService.class);
-                intent.putExtra(DocumentSaverService.START_SAVING, true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
+                startServiceGeneric(DocumentSaverService.START_SAVING);
             }
         }
-        else {
-            isStartup = false;
+    }
+
+    void startServiceGeneric(final String action) {
+        Intent intent = new Intent(this, DocumentSaverService.class);
+        intent.putExtra(action, true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            startForegroundServiceS(intent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    void startForegroundServiceS(Intent intent) {
+        try {
+            startForegroundService(intent);
+        } catch (ForegroundServiceStartNotAllowedException e) {
+            Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + e);
+
+            // The service is already running, so maybe try saving without trying to put it in
+            // foreground. According to docs we should have a couple of minutes of runtime.
+            startService(intent);
         }
     }
 
     @Override
     public void onDestroy() {
-        Intent intent = new Intent(this, DocumentSaverService.class);
-        intent.putExtra(DocumentSaverService.KILL_PROCESS, true);
-
         // Docs say: this method will not be called if the activity's hosting process
         // is killed. This means, for us that the service has been stopped.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
+
+        Log.i(TAG, "[onDestroy]");
+        startServiceGeneric(DocumentSaverService.KILL_PROCESS);
 
         super.onDestroy();
     }
@@ -124,8 +163,11 @@ public class MainActivity extends QtActivity {
         // to the view which was just tapped. So, this view will never get to
         // QtSurface, because it doesn't claim focus.
         if (event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
-            return QtNative.sendGenericMotionEvent(event, event.getDeviceId());
+            return QtNative.getInputEventDispatcher().sendGenericMotionEvent(event, event.getDeviceId());
         }
         return super.onGenericMotionEvent(event);
     }
+
+    public void onUserInteraction() {
     }
+}

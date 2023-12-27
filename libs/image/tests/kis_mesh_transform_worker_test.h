@@ -33,6 +33,14 @@ private Q_SLOTS:
     void testIteratorConstness();
 
     void testLineCurveIntersections();
+
+    void testHitTestPatchInSourceSpace();
+
+    void testParamToSourceSpace();
+    void testApproximateSourceToParam();
+
+    void testChangeRect();
+    void testComplexChangeRect();
 };
 
 #endif /* __KIS_MESH_TRANSFORM_WORKER_TEST_H */

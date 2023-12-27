@@ -54,7 +54,7 @@ QString QtLocalPeer::appSessionId(const QString &appId)
 {
     QByteArray idc = appId.toUtf8();
     quint16 idNum = qChecksum(idc.constData(), idc.size());
-    //### could do: two 16bit checksums over separate halves of id, for a 32bit result - improved uniqeness probability. Every-other-char split would be best.
+    //### could do: two 16bit checksums over separate halves of id, for a 32bit result - improved uniqueness probability. Every-other-char split would be best.
 
     QString res = QLatin1String("qtsingleapplication-")
                  + QString::number(idNum, 16);

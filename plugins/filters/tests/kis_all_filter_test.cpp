@@ -5,18 +5,21 @@
  */
 
 #include "kis_all_filter_test.h"
-#include <simpletest.h>
+#include "KisImageResolutionProxy.h"
+#include "filter/kis_filter.h"
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
-#include "kis_selection.h"
-#include "kis_processing_information.h"
-#include "filter/kis_filter.h"
+#include "kis_default_bounds.h"
 #include "kis_pixel_selection.h"
+#include "kis_processing_information.h"
+#include "kis_selection.h"
 #include "kis_transaction.h"
-#include <KoColorSpaceRegistry.h>
-#include <sdk/tests/qimage_test_util.h>
-#include <sdk/tests/testing_timed_default_bounds.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KoColorSpaceRegistry.h>
+#include <qimage_test_util.h>
+#include <simpletest.h>
+#include <testing_timed_default_bounds.h>
+
 
 bool testFilterSrcNotIsDev(KisFilterSP f)
 {
@@ -160,7 +163,7 @@ bool testFilterWithSelections(KisFilterSP f)
     }
     dbgKrita << f->id();// << "\n"; << kfc->toXML() << "\n";
 
-    KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
+    KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev), KisImageResolutionProxy::identity());
     sel1->pixelSelection()->select(qimage.rect());
 
     kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
@@ -275,7 +278,5 @@ void KisAllFilterTest::testAllFiltersWithSelections()
     }
 }
 
-
-
-#include <sdk/tests/testimage.h>
+#include <testimage.h>
 KISTEST_MAIN(KisAllFilterTest)

@@ -554,14 +554,14 @@ void KisSketchView::geometryChanged(const QRectF& newGeometry, const QRectF& old
         // the canvas is rendered wrong, in what looks like an off-by-one ish kind of fashion.
         if (oldGeometry.height() == oldGeometry.width() && oldGeometry.height() == newGeometry.width()) {
             // in this case, we've just rotated the display... do something useful!
-            // Turns out we get /two/ resize events per rotation, one one per setting each height and width.
+            // Turns out we get /two/ resize events per rotation, one per setting each height and width.
             // So we can't just check it normally. Annoying, but there you go.
             QTimer::singleShot(100, this, SLOT(centerDoc()));
             QTimer::singleShot(150, this, SLOT(zoomOut()));
         }
         if (oldGeometry.height() == oldGeometry.width() && oldGeometry.width() == newGeometry.height()) {
             // in this case, we've just rotated the display... do something useful!
-            // Turns out we get /two/ resize events per rotation, one one per setting each height and width.
+            // Turns out we get /two/ resize events per rotation, one per setting each height and width.
             // So we can't just check it normally. Annoying, but there you go.
             QTimer::singleShot(100, this, SLOT(centerDoc()));
             QTimer::singleShot(150, this, SLOT(zoomOut()));

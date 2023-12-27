@@ -62,14 +62,12 @@ void saveStructure(Exiv2::XmpData &xmpData_,
 }
 }
 
-bool KisXMPIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
+bool KisXMPIO::saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
 {
     dbgMetaData << "Save XMP Data";
     Exiv2::XmpData xmpData_;
 
-    for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin(); it != store->end(); ++it) {
-        const KisMetaData::Entry &entry = *it;
-
+    for (const KisMetaData::Entry &entry : *store) {
         // Check whether the prefix and namespace are know to exiv2
         std::string prefix = exiv2Prefix(entry.schema());
         dbgMetaData << "Saving " << entry.name();
@@ -112,11 +110,11 @@ bool KisXMPIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType
                     // Cannot happen
                     ;
                 }
-                xmpData_.add(key, &tv); // set the arrya type
-                const KisMetaData::TypeInfo *stuctureTypeInfo = typeInfo->embeddedPropertyType();
+                xmpData_.add(key, &tv); // set the array type
+                const KisMetaData::TypeInfo *structureTypeInfo = typeInfo->embeddedPropertyType();
                 const KisMetaData::Schema *structureSchema = 0;
-                if (stuctureTypeInfo) {
-                    structureSchema = stuctureTypeInfo->structureSchema();
+                if (structureTypeInfo) {
+                    structureSchema = structureTypeInfo->structureSchema();
                 }
                 if (!structureSchema) {
                     dbgMetaData << "Unknown schema for " << entry.name();
@@ -225,7 +223,10 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
     dbgMetaData << xmpPacket_.length();
     //     dbgMetaData << xmpPacket_.c_str();
     Exiv2::XmpData xmpData_;
-    Exiv2::XmpParser::decode(xmpData_, xmpPacket_);
+    if (Exiv2::XmpParser::decode(xmpData_, xmpPacket_) != 0) {
+        warnMetaData << "Failed to decode as XMP";
+        return false;
+    }
     QMap<const KisMetaData::Schema *, QMap<QString, QMap<QString, KisMetaData::Value>>> structures;
     QMap<const KisMetaData::Schema *, QMap<QString, QVector<QMap<QString, KisMetaData::Value>>>> arraysOfStructures;
     for (Exiv2::XmpData::iterator it = xmpData_.begin(); it != xmpData_.end(); ++it) {
@@ -248,8 +249,11 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                     Q_ASSERT(schema);
                 }
             }
+#if EXIV2_TEST_VERSION(0,28,0)
+            const Exiv2::Value::UniquePtr value = it->getValue();
+#else
             const Exiv2::Value::AutoPtr value = it->getValue();
-
+#endif
             QString structName;
             int arrayIndex = -1;
             QString tagName;
@@ -278,7 +282,11 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                 const Exiv2::XmpArrayValue *xav = dynamic_cast<const Exiv2::XmpArrayValue *>(value.get());
                 Q_ASSERT(xav);
                 QList<KisMetaData::Value> array;
+#if EXIV2_TEST_VERSION(0,28,0)
+                for (size_t i = 0; i < xav->count(); ++i) {
+#else
                 for (int i = 0; i < xav->count(); ++i) {
+#endif
                     QString value = QString::fromStdString(xav->toString(i));
                     if (parser) {
                         array.push_back(parser->parse(value));
@@ -305,6 +313,8 @@ bool KisXMPIO::loadFrom(KisMetaData::Store *store, QIODevice *ioDevice) const
                 v = KisMetaData::Value(array, vt);
             } else if (value->typeId() == Exiv2::langAlt) {
                 const Exiv2::LangAltValue *xav = dynamic_cast<const Exiv2::LangAltValue *>(value.get());
+                KIS_ASSERT(xav);
+
                 QList<KisMetaData::Value> alt;
                 for (std::map<std::string, std::string>::const_iterator it = xav->value_.begin();
                      it != xav->value_.end();

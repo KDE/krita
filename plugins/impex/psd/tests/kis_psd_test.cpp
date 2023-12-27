@@ -10,7 +10,7 @@
 #include <simpletest.h>
 #include <QCoreApplication>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 #include "filestest.h"
 

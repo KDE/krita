@@ -14,7 +14,7 @@
  * A template base class that can be used for most composite modes/ops
  *
  * @param _compositeOp this template parameter is a class that must be
- *        derived fom KoCompositeOpBase and must define the static member function
+ *        derived from KoCompositeOpBase and must define the static member function
  *        template<bool alphaLocked, bool allChannelFlags>
  *        inline static channels_type composeColorChannels(
  *            const channels_type* src,

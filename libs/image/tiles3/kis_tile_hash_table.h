@@ -100,7 +100,7 @@ private:
     static inline quint32 calculateHash(qint32 col, qint32 row);
 
     inline qint32 debugChainLen(qint32 idx);
-    void debugListLengthDistibution();
+    void debugListLengthDistribution();
     void sanityChecksumCheck();
 private:
     template<class U, class LockerType> friend class KisTileHashTableIteratorTraits;

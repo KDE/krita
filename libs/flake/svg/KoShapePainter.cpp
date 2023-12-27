@@ -69,7 +69,12 @@ public:
         return 0;
     }
 
-    KoViewConverter *viewConverter() const override
+    const KoViewConverter *viewConverter() const override
+    {
+        return 0;
+    }
+
+    KoViewConverter *viewConverter() override
     {
         return 0;
     }
@@ -88,8 +93,6 @@ public:
     {
         return KoUnit(KoUnit::Point);
     }
-
-    void updateInputMethodInfo() override {}
 
     void setCursor(const QCursor &) override {}
 
@@ -131,7 +134,7 @@ void KoShapePainter::paint(QPainter &painter)
         shape->waitUntilReady(false);
     }
 
-    d->canvas->shapeManager()->paint(painter, true);
+    d->canvas->shapeManager()->paint(painter);
 }
 
 void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)

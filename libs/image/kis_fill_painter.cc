@@ -43,6 +43,12 @@
 #include <floodfill/kis_scanline_fill.h>
 #include "kis_selection_filters.h"
 #include <kis_perspectivetransform_worker.h>
+#include <kis_sequential_iterator.h>
+#include <KisColorSelectionPolicies.h>
+#include <krita_utils.h>
+#include <kis_default_bounds.h>
+#include <KisImageResolutionProxy.h>
+
 
 KisFillPainter::KisFillPainter()
         : KisPainter()
@@ -68,11 +74,13 @@ void KisFillPainter::initFillPainter()
     m_careForSelection = false;
     m_sizemod = 0;
     m_feather = 0;
-    m_useCompositioning = false;
+    m_useCompositing = false;
     m_threshold = 0;
     m_opacitySpread = 0;
     m_useSelectionAsBoundary = false;
     m_antiAlias = false;
+    m_regionFillingMode = RegionFillingMode_FloodFill;
+    m_stopGrowingAtDarkestPixel = false;
 }
 
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
@@ -142,7 +150,7 @@ void KisFillPainter::fillRectNoCompose(const QRect &rc, const KoPatternSP patter
 void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
 {
     /**
-     * Since this function doesn't do any kind of compostiting, so the pixel size
+     * Since this function doesn't do any kind of compositing, so the pixel size
      * of the source and destination devices must be exactly the same. The color
      * space should ideally be also the same.
      */
@@ -152,12 +160,16 @@ void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h,
     KisPaintDeviceSP wrapped = device;
     KisDefaultBoundsBaseSP oldBounds = wrapped->defaultBounds();
     wrapped->setDefaultBounds(new KisWrapAroundBoundsWrapper(oldBounds, deviceRect));
+    const bool oldSupportsWrapAroundMode = wrapped->supportsWraproundMode();
+    wrapped->setSupportsWraparoundMode(true);
+
 
     KisPerspectiveTransformWorker worker(this->device(), transform, false, this->progressUpdater());
     worker.runPartialDst(device, this->device(), QRect(x1, y1, w, h));
 
     addDirtyRect(QRect(x1, y1, w, h));
     wrapped->setDefaultBounds(oldBounds);
+    wrapped->setSupportsWraparoundMode(oldSupportsWrapAroundMode);
 }
 
 void KisFillPainter::fillRect(const QRect &rc, const KisPaintDeviceSP device, const QRect& deviceRect)
@@ -222,13 +234,13 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
 
 void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDevice)
 {
-    if (!m_useCompositioning) {
+    if (!m_useCompositing) {
         if (m_sizemod || m_feather ||
             compositeOpId() != COMPOSITE_OVER ||
             opacity() != MAX_SELECTED ||
             sourceDevice != device()) {
 
-            warnKrita << "WARNING: Fast Flood Fill (no compositioning mode)"
+            warnKrita << "WARNING: Fast Flood Fill (no compositing mode)"
                        << "does not support compositeOps, opacity, "
                        << "selection enhancements and separate source "
                        << "devices";
@@ -241,7 +253,11 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
 
         KisScanlineFill gc(device(), startPoint, fillBoundsRect);
         gc.setThreshold(m_threshold);
-        gc.fillColor(paintColor());
+        if (m_regionFillingMode == RegionFillingMode_FloodFill) {
+            gc.fill(paintColor());
+        } else {
+            gc.fillUntilColor(paintColor(), m_regionFillingBoundaryColor);
+        }
 
     } else {
         genericFillStart(startX, startY, sourceDevice);
@@ -280,7 +296,8 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP s
 
     KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice,
                                                               (selection().isNull() ? 0 : selection()->pixelSelection()));
-    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
+    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds(),
+                                                   selection() ? selection()->resolutionProxy() : KisImageResolutionProxy::identity());
     newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     m_fillSelection = newSelection;
 }
@@ -352,17 +369,30 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    gc.setOpacitySpread(m_useCompositioning ? m_opacitySpread : 100);
-    if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
-        gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
+    gc.setOpacitySpread(m_useCompositing ? m_opacitySpread : 100);
+    if (m_regionFillingMode == RegionFillingMode_FloodFill) {
+        if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
+            gc.fillSelection(pixelSelection, existingSelection);
+        } else {
+            gc.fillSelection(pixelSelection);
+        }
     } else {
-        gc.fillSelection(pixelSelection);
+        if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
+            gc.fillSelectionUntilColor(pixelSelection, m_regionFillingBoundaryColor, existingSelection);
+        } else {
+            gc.fillSelectionUntilColor(pixelSelection, m_regionFillingBoundaryColor);
+        }
     }
 
-    if (m_useCompositioning) {
+    if (m_useCompositing) {
         if (m_sizemod > 0) {
-            KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-            biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+            if (m_stopGrowingAtDarkestPixel) {
+                KisGrowUntilDarkestPixelSelectionFilter biggy(m_sizemod, sourceDevice);
+                biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+            } else {
+                KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+                biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+            }
         }
         else if (m_sizemod < 0) {
             KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
@@ -380,4 +410,251 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
     }
 
     return pixelSelection;
+}
+
+template <typename DifferencePolicy, typename SelectionPolicy>
+void createSimilarColorsSelectionImpl(KisPixelSelectionSP outSelection,
+                                      KisPaintDeviceSP referenceDevice,
+                                      const QRect &rect,
+                                      KisPixelSelectionSP mask,
+                                      DifferencePolicy differencePolicy,
+                                      SelectionPolicy selectionPolicy,
+                                      KoUpdater *updater = nullptr)
+{
+    KisSequentialConstIterator referenceDeviceIterator(referenceDevice, rect);
+    KisSequentialIterator outSelectionIterator(outSelection, rect);
+
+    const int totalNumberOfPixels = rect.width() * rect.height();
+    const int numberOfUpdates = 4;
+    const int numberOfPixelsPerUpdate = totalNumberOfPixels / numberOfUpdates;
+    const int progressIncrement = 100 / numberOfUpdates;
+    int numberOfPixelsProcessed = 0;
+
+    if (mask) {
+        KisSequentialConstIterator maskIterator(mask, rect);
+        while (referenceDeviceIterator.nextPixel() &&
+               outSelectionIterator.nextPixel() &&
+               maskIterator.nextPixel()) {
+            if (*maskIterator.rawDataConst() != MIN_SELECTED) {
+                *outSelectionIterator.rawData() =
+                    selectionPolicy.opacityFromDifference(
+                        differencePolicy.difference(referenceDeviceIterator.rawDataConst())
+                    );
+            }
+            if (updater) {
+                ++numberOfPixelsProcessed;
+                if (numberOfPixelsProcessed > numberOfPixelsPerUpdate) {
+                    numberOfPixelsProcessed = 0;
+                    updater->setProgress(updater->progress() + progressIncrement);
+                }
+            }
+        }
+    } else {
+        while (referenceDeviceIterator.nextPixel() &&
+               outSelectionIterator.nextPixel()) {
+            *outSelectionIterator.rawData() =
+                selectionPolicy.opacityFromDifference(
+                    differencePolicy.difference(referenceDeviceIterator.rawDataConst())
+                );
+            if (updater) {
+                ++numberOfPixelsProcessed;
+                if (numberOfPixelsProcessed > numberOfPixelsPerUpdate) {
+                    numberOfPixelsProcessed = 0;
+                    updater->setProgress(updater->progress() + progressIncrement);
+                }
+            }
+        }
+    }
+    if (updater) {
+        updater->setProgress(100);
+    }
+}
+
+void KisFillPainter::createSimilarColorsSelection(KisPixelSelectionSP outSelection,
+                                                  const KoColor &referenceColor,
+                                                  KisPaintDeviceSP referenceDevice,
+                                                  const QRect &rect,
+                                                  KisPixelSelectionSP mask)
+{
+    if (rect.isEmpty()) {
+        return;
+    }
+
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(referenceDevice->colorSpace());
+
+    const int pixelSize = referenceDevice->pixelSize();
+    const int softness = 100 - opacitySpread();
+
+    using namespace KisColorSelectionPolicies;
+
+    if (softness == 0) {
+        HardSelectionPolicy sp(fillThreshold());
+        if (pixelSize == 1) {
+            OptimizedDifferencePolicy<quint8> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else if (pixelSize == 2) {
+            OptimizedDifferencePolicy<quint16> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else if (pixelSize == 4) {
+            OptimizedDifferencePolicy<quint32> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else if (pixelSize == 8) {
+            OptimizedDifferencePolicy<quint64> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else {
+            SlowDifferencePolicy dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        }
+    } else {
+        SoftSelectionPolicy sp(fillThreshold(), softness);
+        if (pixelSize == 1) {
+            OptimizedDifferencePolicy<quint8> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else if (pixelSize == 2) {
+            OptimizedDifferencePolicy<quint16> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else if (pixelSize == 4) {
+            OptimizedDifferencePolicy<quint32> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else if (pixelSize == 8) {
+            OptimizedDifferencePolicy<quint64> dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        } else {
+            SlowDifferencePolicy dp(srcColor, fillThreshold());
+            createSimilarColorsSelectionImpl(outSelection, referenceDevice, rect, mask, dp, sp);
+        }
+    }
+}
+
+QVector<KisStrokeJobData*> KisFillPainter::createSimilarColorsSelectionJobs(
+    KisPixelSelectionSP outSelection,
+    const QSharedPointer<KoColor> referenceColor,
+    KisPaintDeviceSP referenceDevice,
+    const QRect &rect,
+    KisPixelSelectionSP mask,
+    QSharedPointer<KisProcessingVisitor::ProgressHelper> progressHelper
+)
+{
+    if (rect.isEmpty()) {
+        return {};
+    }
+
+    QVector<KisStrokeJobData*> jobsData;
+    QVector<QRect> fillPatches =
+        KritaUtils::splitRectIntoPatches(rect, KritaUtils::optimalPatchSize());
+    const int threshold = fillThreshold();
+    const int softness = 100 - opacitySpread();
+    const int sizemod = this->sizemod();
+    const bool stopGrowingAtDarkestPixel = this->stopGrowingAtDarkestPixel();
+    const int feather = this->feather();
+    const bool antiAlias = this->antiAlias();
+
+    KritaUtils::addJobBarrier(jobsData, nullptr);
+
+    for (const QRect &patch : fillPatches) {
+        KritaUtils::addJobConcurrent(
+            jobsData,
+            [referenceDevice, outSelection, mask, referenceColor,
+             threshold, softness, patch, progressHelper]() mutable
+            {
+                if (patch.isEmpty()) {
+                    return;
+                }
+
+                KoUpdater *updater = progressHelper ? progressHelper->updater() : nullptr;
+
+                using namespace KisColorSelectionPolicies;
+
+                const int pixelSize = referenceDevice->pixelSize();
+                KoColor srcColor(*referenceColor);
+                srcColor.convertTo(referenceDevice->colorSpace());
+
+                if (softness == 0) {
+                    HardSelectionPolicy sp(threshold);
+                    if (pixelSize == 1) {
+                        OptimizedDifferencePolicy<quint8> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else if (pixelSize == 2) {
+                        OptimizedDifferencePolicy<quint16> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else if (pixelSize == 4) {
+                        OptimizedDifferencePolicy<quint32> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else if (pixelSize == 8) {
+                        OptimizedDifferencePolicy<quint64> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else {
+                        SlowDifferencePolicy dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    }
+                } else {
+                    SoftSelectionPolicy sp(threshold, softness);
+                    if (pixelSize == 1) {
+                        OptimizedDifferencePolicy<quint8> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else if (pixelSize == 2) {
+                        OptimizedDifferencePolicy<quint16> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else if (pixelSize == 4) {
+                        OptimizedDifferencePolicy<quint32> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else if (pixelSize == 8) {
+                        OptimizedDifferencePolicy<quint64> dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    } else {
+                        SlowDifferencePolicy dp(srcColor, threshold);
+                        createSimilarColorsSelectionImpl(outSelection, referenceDevice, patch, mask, dp, sp, updater);
+                    }
+                }
+            }
+        );
+    }
+
+    KritaUtils::addJobSequential(
+        jobsData,
+        [outSelection, referenceDevice, mask,
+         sizemod, stopGrowingAtDarkestPixel, feather, antiAlias, progressHelper]() mutable
+        {
+            KoUpdater *updater = progressHelper ? progressHelper->updater() : nullptr;
+
+            if (sizemod > 0) {
+                if (stopGrowingAtDarkestPixel) {
+                    KisGrowUntilDarkestPixelSelectionFilter biggy(sizemod, referenceDevice);
+                    biggy.process(outSelection, outSelection->selectedRect().adjusted(-sizemod, -sizemod, sizemod, sizemod));
+                } else {
+                    KisGrowSelectionFilter biggy(sizemod, sizemod);
+                    biggy.process(outSelection, outSelection->selectedRect().adjusted(-sizemod, -sizemod, sizemod, sizemod));
+                }
+            } else if (sizemod < 0) {
+                KisShrinkSelectionFilter tiny(-sizemod, -sizemod, false);
+                tiny.process(outSelection, outSelection->selectedRect());
+            }
+            if (updater) {
+                updater->setProgress(33);
+            }
+
+            // Since the feathering already smooths the selection, the antiAlias
+            // is not applied if we must feather
+            if (feather > 0) {
+                KisFeatherSelectionFilter feathery(feather);
+                feathery.process(outSelection, outSelection->selectedRect().adjusted(-feather, -feather, feather, feather));
+            } else if (antiAlias) {
+                KisAntiAliasSelectionFilter antiAliasFilter;
+                antiAliasFilter.process(outSelection, outSelection->selectedRect());
+            }
+            if (updater) {
+                updater->setProgress(66);
+            }
+
+            if (mask) {
+                outSelection->applySelection(mask, SELECTION_INTERSECT);
+            }
+            if (updater) {
+                updater->setProgress(100);
+            }
+        }
+    );
+
+    return jobsData;
 }

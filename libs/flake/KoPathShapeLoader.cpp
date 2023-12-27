@@ -8,6 +8,7 @@
 #include "KoPathShape.h"
 #include <math.h>
 #include <FlakeDebug.h>
+#include <kis_algebra_2d.h>
 
 class KoPathShapeLoaderPrivate
 {
@@ -396,130 +397,137 @@ const char *KoPathShapeLoaderPrivate::getFlag(const char *ptr, bool &flag)
 
 // This works by converting the SVG arc to "simple" beziers.
 // For each bezier found a svgToCurve call is done.
-// Adapted from Niko's code in kdelibs/kdecore/svgicons.
-// Maybe this can serve in some shared lib? (Rob)
-void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal r1, qreal r2, bool largeArcFlag, bool sweepFlag)
+void KoPathShapeLoaderPrivate::calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal rx, qreal ry, bool largeArcFlag, bool sweepFlag)
 {
-    qreal sin_th, cos_th;
-    qreal a00, a01, a10, a11;
-    qreal x0, y0, x1, y1, xc, yc;
-    qreal d, sfactor, sfactor_sq;
-    qreal th0, th1, th_arc;
-    int i, n_segs;
+    // if radii are zero or the endpoints of ellipse are same as its start point, then use lineTo/don't do
+    // anything.
+    if (qFuzzyCompare(rx, 0.0) || qFuzzyCompare(ry, 0.0)
+        || (!relative && qFuzzyCompare(curx - x, 0) && qFuzzyCompare(cury - y, 0))
+        || (relative && qFuzzyCompare(x, 0) && qFuzzyCompare(y, 0))) {
+        qreal x2 = x;
+        qreal y2 = y;
 
-    sin_th = sin(angle * (M_PI / 180.0));
-    cos_th = cos(angle * (M_PI / 180.0));
-
-    qreal dx;
-
-    if (!relative)
-        dx = (curx - x) / 2.0;
-    else
-        dx = -x / 2.0;
-
-    qreal dy;
-
-    if (!relative)
-        dy = (cury - y) / 2.0;
-    else
-        dy = -y / 2.0;
-
-    qreal _x1 =  cos_th * dx + sin_th * dy;
-    qreal _y1 = -sin_th * dx + cos_th * dy;
-    qreal Pr1 = r1 * r1;
-    qreal Pr2 = r2 * r2;
-    qreal Px = _x1 * _x1;
-    qreal Py = _y1 * _y1;
-
-    // Spec : check if radii are large enough
-    qreal check = Px / Pr1 + Py / Pr2;
-    if (check > 1) {
-        r1 = r1 * sqrt(check);
-        r2 = r2 * sqrt(check);
+        if (relative) {
+            x2 += curx;
+            y2 += cury;
+        }
+        svgLineTo(x2, y2);
+        return;
     }
 
-    a00 = cos_th / r1;
-    a01 = sin_th / r1;
-    a10 = -sin_th / r2;
-    a11 = cos_th / r2;
+    const qreal angleRadians = angle * (M_PI / 180.0);
+    const qreal sin_th = sin(angleRadians);
+    const qreal cos_th = cos(angleRadians);
 
-    x0 = a00 * curx + a01 * cury;
-    y0 = a10 * curx + a11 * cury;
+    qreal dx;
+    qreal x2 = x;
+    if (!relative) {
+        dx = (curx - x) / 2.0;
+    } else {
+        dx = -(x / 2.0);
+        x2 = curx + x;
+    }
 
-    if (!relative)
-        x1 = a00 * x + a01 * y;
-    else
-        x1 = a00 * (curx + x) + a01 * (cury + y);
+    qreal dy;
+    qreal y2 = y;
+    if (!relative) {
+        dy = (cury - y) / 2.0;
+    } else {
+        dy = -(y / 2.0);
+        y2 = cury + y;
+    }
 
-    if (!relative)
-        y1 = a10 * x + a11 * y;
-    else
-        y1 = a10 * (curx + x) + a11 * (cury + y);
+    // From SVG spec
 
-    /* (x0, y0) is current point in transformed coordinate space.
-        (x1, y1) is new point in transformed coordinate space.
+    // Step 1: Compute (x1_prime, y1_prime)
+    const qreal x1Prime = cos_th * dx + sin_th * dy;
+    const qreal y1Prime = -sin_th * dx + cos_th * dy;
 
-        The arc fits a unit-radius circle in this space.
-    */
+    // eq. 5.1
+    const qreal x1PrimeSq = x1Prime * x1Prime;
+    const qreal y1PrimeSq = y1Prime * y1Prime;
 
-    d = (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
+    // Step 2: Compute (c_x_prime, c_y_prime)
+    qreal rxSq = rx * rx;
+    qreal rySq = ry * ry;
 
-    sfactor_sq = 1.0 / d - 0.25;
+    // Spec : check if radii are large enough
+    // eq. 6.2
+    const qreal check = x1PrimeSq / rxSq + y1PrimeSq / rySq;
+    if (check > 1) {
+        // eq. 6.3
+        rx = rx * sqrt(check);
+        ry = ry * sqrt(check);
 
-    if (sfactor_sq < 0)
-        sfactor_sq = 0;
+        rxSq = rx * rx;
+        rySq = ry * ry;
+    }
 
-    sfactor = sqrt(sfactor_sq);
+    // Step 2: Compute (c_x_prime, c_y_prime)
+    const qreal radiiSq = rxSq * rySq;
+    const qreal ellipseValue = rxSq * y1PrimeSq + rySq * x1PrimeSq;
 
-    if (sweepFlag == largeArcFlag)
-        sfactor = -sfactor;
+    qreal coef = sqrt(std::fabs((radiiSq - ellipseValue) / ellipseValue));
+    if (sweepFlag == largeArcFlag) {
+        coef = -coef;
+    }
+    // eq. 5.2
+    const qreal cxPrime = coef * (rx * y1Prime) / ry;
+    const qreal cyPrime = coef * -(ry * x1Prime) / rx;
 
-    xc = 0.5 * (x0 + x1) - sfactor * (y1 - y0);
-    yc = 0.5 * (y0 + y1) + sfactor * (x1 - x0);
+    // Step 3: Compute (c_x, c_y) from (c_x_prime, c_y_prime)
+    // eq. 5.3
+    const qreal cx = cos_th * cxPrime - sin_th * cyPrime + (curx + x2) * 0.5;
+    const qreal cy = sin_th * cxPrime + cos_th * cyPrime + (cury + y2) * 0.5;
 
-    /* (xc, yc) is center of the circle. */
-    th0 = atan2(y0 - yc, x0 - xc);
-    th1 = atan2(y1 - yc, x1 - xc);
+    // Step 4: Compute angle and delta
+    const QPointF v = {(x1Prime - cxPrime) / rx, (y1Prime - cyPrime) / ry};
+    // eq. 5.5
+    const qreal theta = KisAlgebra2D::angleBetweenVectors({1.0, 0.0}, v);
+    // eq. 5.6
+    qreal delta = std::fmod(
+        KisAlgebra2D::angleBetweenVectors(v, {(-x1Prime - cxPrime) / rx, (-y1Prime - cyPrime) / ry}),
+        M_PI * 2);
 
-    th_arc = th1 - th0;
-    if (th_arc < 0 && sweepFlag)
-        th_arc += 2 * M_PI;
-    else if (th_arc > 0 && !sweepFlag)
-        th_arc -= 2 * M_PI;
+    if (sweepFlag && delta < 0) {
+        delta += (M_PI * 2);
+    } else if (!sweepFlag && delta > 0) {
+        delta -= (M_PI * 2);
+    }
 
-    n_segs = (int)(int) ceil(fabs(th_arc / (M_PI * 0.5 + 0.001)));
+    int n_segs = (int)ceil(fabs(delta / (M_PI * 0.25)));
 
-    for (i = 0; i < n_segs; ++i) {
-        {
-            qreal sin_th, cos_th;
-            qreal a00, a01, a10, a11;
-            qreal x1, y1, x2, y2, x3, y3;
-            qreal t;
-            qreal th_half;
+    // From: http://www.spaceroots.org/documents/ellipse/elliptical-arc.pdf
+    for (int i = 0; i < n_segs; ++i) {
+        const qreal eta1 = theta + i * delta / n_segs;
+        const qreal eta2 = theta + (i + 1) * delta / n_segs;
 
-            qreal _th0 = th0 + i * th_arc / n_segs;
-            qreal _th1 = th0 + (i + 1) * th_arc / n_segs;
+        const qreal etaHalf = 0.5 * (eta2 - eta1);
 
-            sin_th = sin(angle * (M_PI / 180.0));
-            cos_th = cos(angle * (M_PI / 180.0));
+        const qreal cosAngle = cos(angleRadians);
+        const qreal sinAngle = sin(angleRadians);
 
-            /* inverse transform compared with rsvg_path_arc */
-            a00 = cos_th * r1;
-            a01 = -sin_th * r2;
-            a10 = sin_th * r1;
-            a11 = cos_th * r2;
+        auto ellipseArcToPoint = [sinAngle, cosAngle](qreal cx, qreal cy, qreal eta, qreal rx, qreal ry) {
+            qreal x = cx + (rx * cosAngle * cos(eta)) - (ry * sinAngle * sin(eta));
+            qreal y = cy + (rx * sinAngle * cos(eta)) + (ry * cosAngle * sin(eta));
+            return QPointF(x, y);
+        };
+        auto ellipseDerivativeArcToPoint = [sinAngle, cosAngle](qreal eta, qreal rx, qreal ry) {
+            qreal x = -(rx * cosAngle * sin(eta)) - (ry * sinAngle * cos(eta));
+            qreal y = -(rx * sinAngle * sin(eta)) + (ry * cosAngle * cos(eta));
+            return QPointF(x, y);
+        };
 
-            th_half = 0.5 * (_th1 - _th0);
-            t = (8.0 / 3.0) * sin(th_half * 0.5) * sin(th_half * 0.5) / sin(th_half);
-            x1 = xc + cos(_th0) - t * sin(_th0);
-            y1 = yc + sin(_th0) + t * cos(_th0);
-            x3 = xc + cos(_th1);
-            y3 = yc + sin(_th1);
-            x2 = x3 + t * sin(_th1);
-            y2 = y3 - t * cos(_th1);
+        // bezier control points
+        const QPointF p1 = ellipseArcToPoint(cx, cy, eta1, rx, ry);
+        const QPointF p2 = ellipseArcToPoint(cx, cy, eta2, rx, ry);
 
-            svgCurveToCubic(a00 * x1 + a01 * y1, a10 * x1 + a11 * y1, a00 * x2 + a01 * y2, a10 * x2 + a11 * y2, a00 * x3 + a01 * y3, a10 * x3 + a11 * y3);
-        }
+        const qreal alpha = sin(eta2 - eta1) * (sqrt(4 + 3 * tan(etaHalf) * tan(etaHalf)) - 1) / 3;
+
+        const QPointF q1 = p1 + alpha * ellipseDerivativeArcToPoint(eta1, rx, ry);
+        const QPointF q2 = p2 - alpha * ellipseDerivativeArcToPoint(eta2, rx, ry);
+
+        svgCurveToCubic(q1.x(), q1.y(), q2.x(), q2.y(), p2.x(), p2.y());
     }
 
     if (!relative)

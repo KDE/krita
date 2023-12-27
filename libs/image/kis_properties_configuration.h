@@ -143,7 +143,7 @@ public:
      */
     KoColor getColor(const QString& name, const KoColor& color = KoColor()) const;
 
-    QMap<QString, QVariant> getProperties() const;
+    virtual QMap<QString, QVariant> getProperties() const;
 
     /// Clear the map of properties
     void clearProperties();
@@ -170,7 +170,7 @@ public:
     void getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const;
 
     /**
-     * Takes all the properties from \p config, adds \p prefix to all their keys and puths them
+     * Takes all the properties from \p config, adds \p prefix to all their keys and puts them
      * into this properties object
      */
     void setPrefixedProperties(const QString &prefix, const KisPropertiesConfiguration *config);
@@ -179,6 +179,13 @@ public:
      * A convenience override
      */
     void setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config);
+
+    /**
+     * After calling `getPropertiesConfiguration()` the resulting properties
+     * will contain the prefix they were packed with. The prefix can be requested
+     * with the key returned by `extractedPrefixKey()` function.
+     */
+    static QString extractedPrefixKey();
 
     static QString escapeString(const QString &string);
     static QString unescapeString(const QString &string);
@@ -194,7 +201,7 @@ public:
 
 public:
 
-    void dump() const;
+    virtual void dump() const;
 
 private:
 

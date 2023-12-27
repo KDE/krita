@@ -1,17 +1,17 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.2.1'
     }
 }
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 apply plugin: 'com.android.application'
@@ -36,7 +36,7 @@ task configure() {
 
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
-            throw new GradleException('Krita libraries not found, please check if -p=krita-bin finished without errors')
+            throw new FileNotFoundException('Krita libraries not found, please check if -p=krita-bin finished without errors')
         }
     }
 }
@@ -59,6 +59,13 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
+task copyFonts(type: Copy) {
+    def etcDir = "../i/"
+    from "$etcDir/etc"
+    into 'assets/etc/'
+    include '**'
+}
+
 /*
  * androiddeployqt doesn't fully copy the directories. Hidden directories
  * to be specific. That's why we copy manually and then delete the partial
@@ -67,6 +74,21 @@ task copyLibs(type: Copy) {
 task copyAssets(type: Copy) {
     from "$installPrefix/share/"
     into 'assets/'
+    include '**'
+}
+
+task copyLocaleFiles(type: Copy) {
+    def libsDir = "../i/"
+    from "$libsDir/share/locale"
+    from "$libsDir/translations"
+    into 'assets/locale/'
+    include '**'
+}
+
+task copyExtraMltFiles(type: Copy) {
+    def libsDir = "../i/"
+    from "$libsDir/share/mlt-7"
+    into 'assets/mlt'
     include '**'
 }
 
@@ -86,6 +108,12 @@ android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
     ndkPath ndkpath
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 
     sourceSets {
         main {
@@ -144,22 +172,26 @@ android {
     def versionRelease  = 0
 
     defaultConfig {
-        targetSdkVersion 30
+        targetSdkVersion 33
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.1.0-prealpha"
-        archivesBaseName = "krita-$abi-$versionName"
+        versionName "5.2.0-prealpha"
+        archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName" : "krita-$abi-$versionName"
     }
 
     preBuild.dependsOn(configure)
     configure.onlyIf { isPackagingAPK() }
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
+    configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
+    configure.finalizedBy(copyLocaleFiles)
+    configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:3.0.3'
+    implementation 'com.android.billingclient:billing:5.0.0'
+    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation files('../i/jar/SDL2Android.jar')
 }
-

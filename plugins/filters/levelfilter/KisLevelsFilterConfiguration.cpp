@@ -6,9 +6,7 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QDomDocument>
-#include <QDomElement>
-#include <QDomText>
+#include <QRegularExpression>
 
 #include <kis_dom_utils.h>
 
@@ -16,9 +14,10 @@
 
 KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(int channelCount, qint32 version, KisResourcesInterfaceSP resourcesInterface)
     : KisColorTransformationConfiguration(defaultName(), version, resourcesInterface)
-    , m_channelCount(channelCount)
 {
+    setChannelCount(channelCount);
     setDefaults();
+
 }
 
 KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(int channelCount, KisResourcesInterfaceSP resourcesInterface)
@@ -27,13 +26,8 @@ KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(int channelCount, Kis
 
 KisLevelsFilterConfiguration::KisLevelsFilterConfiguration(const KisLevelsFilterConfiguration &rhs)
     : KisColorTransformationConfiguration(rhs)
-    , m_channelCount(rhs.m_channelCount)
-    , m_levelsCurves(rhs.m_levelsCurves)
-    , m_lightnessLevelsCurve(rhs.m_lightnessLevelsCurve)
     , m_transfers(rhs.m_transfers)
     , m_lightnessTransfer(rhs.m_lightnessTransfer)
-    , m_showLogarithmicHistogram(rhs.m_showLogarithmicHistogram)
-    , m_useLightnessMode(rhs.m_useLightnessMode)
 {}
 
 KisFilterConfigurationSP KisLevelsFilterConfiguration::clone() const
@@ -43,43 +37,53 @@ KisFilterConfigurationSP KisLevelsFilterConfiguration::clone() const
 
 bool KisLevelsFilterConfiguration::isCompatible(const KisPaintDeviceSP dev) const
 {
-    return m_useLightnessMode || (int)dev->compositionSourceColorSpace()->channelCount() == m_channelCount;
+    return useLightnessMode() || (int)dev->compositionSourceColorSpace()->channelCount() == channelCount();
 }
 
-const QVector<KisLevelsCurve>& KisLevelsFilterConfiguration::levelsCurves() const
+const QVector<KisLevelsCurve> KisLevelsFilterConfiguration::levelsCurves() const
 {
-    return m_levelsCurves;
+    QVector<KisLevelsCurve> levelsCurves_;
+    for (qint32 i = 0; i < channelCount(); ++i) {
+        const QString levelsCurveStr = getString(QString("channel_") + KisDomUtils::toString(i), "");
+        levelsCurves_.append(levelsCurveStr.isEmpty() ? KisLevelsCurve() : KisLevelsCurve(levelsCurveStr));
+    }
+    return levelsCurves_;
 }
 
-const KisLevelsCurve& KisLevelsFilterConfiguration::lightnessLevelsCurve() const
+const KisLevelsCurve KisLevelsFilterConfiguration::lightnessLevelsCurve() const
 {
-    return m_lightnessLevelsCurve;
+    const QString levelsCurveStr = getString("lightness", "");
+    return levelsCurveStr.isEmpty() ? KisLevelsCurve() : KisLevelsCurve(levelsCurveStr);
 }
 
 void KisLevelsFilterConfiguration::setLevelsCurves(const QVector<KisLevelsCurve> &newLevelsCurves)
 {
-    m_levelsCurves = newLevelsCurves;
-    m_channelCount = newLevelsCurves.size();
+    for (int i = 0; i < newLevelsCurves.size(); ++i) {
+        setProperty(QString("channel_") + KisDomUtils::toString(i), newLevelsCurves[i].toString());
+    }
+    setChannelCount(newLevelsCurves.size());
     updateTransfers();
 }
 
 void KisLevelsFilterConfiguration::setLightnessLevelsCurve(const KisLevelsCurve &newLightnessLevelsCurve)
 {
-    m_lightnessLevelsCurve = newLightnessLevelsCurve;
-    updateLightnessTransfer();
+    setProperty("lightness", newLightnessLevelsCurve.toString());
 }
 
 void KisLevelsFilterConfiguration::updateTransfers()
 {
-    m_transfers.resize(m_channelCount);
-    for (int i = 0; i < m_channelCount; i++) {
-        m_transfers[i] = m_levelsCurves[i].uint16Transfer();
+    const QVector<KisLevelsCurve> lc = levelsCurves();
+    m_transfers.resize(lc.size());
+    for (int i = 0; i < lc.size(); i++) {
+        m_transfers[i] = lc[i].uint16Transfer();
     }
 }
 
 void KisLevelsFilterConfiguration::updateLightnessTransfer()
 {
-    m_lightnessTransfer = m_lightnessLevelsCurve.uint16Transfer();
+    const KisLevelsCurve lightnessLevelsCurve_ = lightnessLevelsCurve();
+
+    m_lightnessTransfer = lightnessLevelsCurve_.uint16Transfer();
 }
 
 const QVector<QVector<quint16>>& KisLevelsFilterConfiguration::transfers() const
@@ -94,22 +98,111 @@ const QVector<quint16>& KisLevelsFilterConfiguration::lightnessTransfer() const
 
 bool KisLevelsFilterConfiguration::useLightnessMode() const
 {
-    return m_useLightnessMode;
+    const QString mode = getString("mode", "");
+    if (mode == "lightness") {
+        return true;
+    } else if (mode == "channels") {
+        return false;
+    }
+    return defaultUseLightnessMode();
 }
 
 bool KisLevelsFilterConfiguration::showLogarithmicHistogram() const
 {
-    return m_showLogarithmicHistogram;
+    const QString mode = getString("histogram_mode", "");
+    if (mode == "logarithmic") {
+        return true;
+    } else if (mode == "linear") {
+        return false;
+    }
+    return defaultShowLogarithmicHistogram();
 }
 
 void KisLevelsFilterConfiguration::setUseLightnessMode(bool newUseLightnessMode)
 {
-    m_useLightnessMode = newUseLightnessMode;
+    setProperty("mode", newUseLightnessMode ? "lightness" : "channels");
 }
 
 void KisLevelsFilterConfiguration::setShowLogarithmicHistogram(bool newShowLogarithmicHistogram)
 {
-    m_showLogarithmicHistogram = newShowLogarithmicHistogram;
+    setProperty("histogram_mode", newShowLogarithmicHistogram ? "logarithmic" : "linear");
+}
+
+/**
+ * The purpose of this function is to copy the values of the legacy
+ * options (levels filter version < 2), that correspond to the lightness
+ * levels adjustment, to the new and compact "lightness" option which
+ * is used now.
+ * Note that the "blackvalue", "whitevalue", "outblackvalue" and "outwhitevalue"
+ * legacy properties span the range [0, 255] while the values in the "lightness"
+ * property span the range [0, 1]
+ */
+void KisLevelsFilterConfiguration::setLightessLevelsCurveFromLegacyValues()
+{
+    const double inputBlackPoint = static_cast<double>(getInt("blackvalue", 0)) / 255.0;
+    const double inputWhitePoint = static_cast<double>(getInt("whitevalue", 255)) / 255.0;
+    const double inputGamma = getDouble("gammavalue", 1.0);
+    const double outputBlackPoint = static_cast<double>(getInt("outblackvalue", 0)) / 255.0;
+    const double outputWhitePoint = static_cast<double>(getInt("outwhitevalue", 255)) / 255.0;
+    KisColorTransformationConfiguration::setProperty(
+        "lightness",
+        KisLevelsCurve(inputBlackPoint, inputWhitePoint, inputGamma, outputBlackPoint, outputWhitePoint).toString()
+    );
+}
+
+/**
+ * The purpose of this function is to copy the values of the new and
+ * compact "lightness" option, that correspond to the lightness levels
+ * adjustment, to the legacy options that where used before version 2 of
+ * the filter. Storing the legacy options as well as the new ones
+ * improves backwards compatibility of documents.
+ * Note that the "blackvalue", "whitevalue", "outblackvalue" and "outwhitevalue"
+ * legacy properties span the range [0, 255] while the values in the "lightness"
+ * property span the range [0, 1]
+ */
+void KisLevelsFilterConfiguration::setLegacyValuesFromLightnessLevelsCurve()
+{
+    KisLevelsCurve lightnessLevelsCurve_ = lightnessLevelsCurve();
+    KisColorTransformationConfiguration::setProperty("blackvalue", static_cast<int>(qRound(lightnessLevelsCurve_.inputBlackPoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("whitevalue", static_cast<int>(qRound(lightnessLevelsCurve_.inputWhitePoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("gammavalue", lightnessLevelsCurve_.inputGamma());
+    KisColorTransformationConfiguration::setProperty("outblackvalue", static_cast<int>(qRound(lightnessLevelsCurve_.outputBlackPoint() * 255.0)));
+    KisColorTransformationConfiguration::setProperty("outwhitevalue", static_cast<int>(qRound(lightnessLevelsCurve_.outputWhitePoint() * 255.0)));
+}
+
+/**
+ * The options may be changed directly using the "setProperty" method of
+ * the "KisPropertiesConfiguration". In this case we must intercept the
+ * action to update the transfer function luts after setting the property.
+ * if some legacy property is set (lightness levels properties prior to
+ * version 2) then the legacy properties are copied to the new and
+ * compact "lightness" property. Conversely, if the "lightness" property
+ * is set, its values are copied to the legacy properties.
+ */
+void KisLevelsFilterConfiguration::setProperty(const QString &name, const QVariant &value)
+{
+    KisColorTransformationConfiguration::setProperty(name, value);
+
+    if (name == "lightness") {
+        setLegacyValuesFromLightnessLevelsCurve();
+        updateLightnessTransfer();
+    } else if (name == "blackvalue" || name == "whitevalue" || name == "gammavalue" ||
+               name == "outblackvalue" || name == "outwhitevalue") {
+        setLightessLevelsCurveFromLegacyValues();
+        updateLightnessTransfer();
+    } else if (QRegularExpression("channel_\\d+").match(name).hasMatch()) {
+        updateTransfers();
+    }
+}
+
+int KisLevelsFilterConfiguration::channelCount() const
+{
+    return getInt("number_of_channels", 0);
+}
+
+void KisLevelsFilterConfiguration::setChannelCount(int newChannelCount)
+{
+    setProperty("number_of_channels", newChannelCount);
 }
 
 void KisLevelsFilterConfiguration::fromLegacyXML(const QDomElement& root)
@@ -155,7 +248,7 @@ void KisLevelsFilterConfiguration::fromXML(const QDomElement& root)
         KisLevelsCurve levelsCurve;
 
         while (!e.isNull()) {
-            attributeName = KisDomUtils::unescapeText(e.attribute("name"));
+            attributeName = e.attribute("name");
             if (attributeName == "mode") {
                 lightnessMode = e.text() != "channels";
             } else if (attributeName == "histogram_mode") {
@@ -165,9 +258,10 @@ void KisLevelsFilterConfiguration::fromXML(const QDomElement& root)
             } else if (attributeName == "number_of_channels") {
                 numChannels = e.text().toInt();
             } else {
-                QRegExp rx("channel_(\\d+)");
-                if (rx.indexIn(attributeName, 0) != -1) {
-                    const int index = rx.cap(1).toInt();
+                const QRegularExpression rx("channel_(\\d+)");
+                const QRegularExpressionMatch match = rx.match(attributeName);
+                if (match.hasMatch()) {
+                    const int index = match.captured(1).toInt();
                     if (!e.text().isEmpty()) {
                         levelsCurve.fromString(e.text());
                         unsortedLevelsCurves[index] = levelsCurve;
@@ -199,7 +293,7 @@ void addParamNode(QDomDocument& doc,
                   const QString &value,
                   bool internal = false)
 {
-    QDomText text = doc.createTextNode(KisDomUtils::escapeText(value));
+    QDomText text = doc.createTextNode(value);
     QDomElement t = doc.createElement("param");
     t.setAttribute("name", name);
     if (internal) {
@@ -242,48 +336,37 @@ void KisLevelsFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) c
     QDomText text;
     QDomElement t;
 
-    addParamNode(doc, root, "mode", m_useLightnessMode ? "lightness" : "channels");
-    addParamNode(doc, root, "histogram_mode", m_showLogarithmicHistogram ? "logarithmic" : "linear");
-    addParamNode(doc, root, "lightness", m_lightnessLevelsCurve.toString());
-    addParamNode(doc, root, "number_of_channels", KisDomUtils::toString(m_channelCount));
+    addParamNode(doc, root, "mode", useLightnessMode() ? "lightness" : "channels");
+    addParamNode(doc, root, "histogram_mode", showLogarithmicHistogram() ? "logarithmic" : "linear");
+    addParamNode(doc, root, "lightness", lightnessLevelsCurve().toString());
+    addParamNode(doc, root, "number_of_channels", KisDomUtils::toString(channelCount()));
 
-    for (int i = 0; i < m_levelsCurves.size(); ++i) {
+    const QVector<KisLevelsCurve> levelsCurves_ = levelsCurves();
+    for (int i = 0; i < levelsCurves_.size(); ++i) {
         const QString name = QString("channel_") + KisDomUtils::toString(i);
-        const QString value = m_levelsCurves[i].toString();
+        const QString value = levelsCurves_[i].toString();
         addParamNode(doc, root, name, value);
     }
-
-    addParamNode(doc, root, "blackvalue", KisDomUtils::toString(static_cast<int>(qRound(m_lightnessLevelsCurve.inputBlackPoint() * 255.0))), true);
-    addParamNode(doc, root, "whitevalue", KisDomUtils::toString(static_cast<int>(qRound(m_lightnessLevelsCurve.inputWhitePoint() * 255.0))), true);
-    addParamNode(doc, root, "gammavalue", KisDomUtils::toString(m_lightnessLevelsCurve.inputGamma()), true);
-    addParamNode(doc, root, "outblackvalue", KisDomUtils::toString(static_cast<int>(qRound(m_lightnessLevelsCurve.outputBlackPoint() * 255.0))), true);
-    addParamNode(doc, root, "outwhitevalue", KisDomUtils::toString(static_cast<int>(qRound(m_lightnessLevelsCurve.outputWhitePoint() * 255.0))), true);
-}
-
-bool KisLevelsFilterConfiguration::compareTo(const KisPropertiesConfiguration *rhs) const
-{
-    const KisLevelsFilterConfiguration *otherConfig = dynamic_cast<const KisLevelsFilterConfiguration *>(rhs);
-
-    return
-        otherConfig
-        && KisFilterConfiguration::compareTo(rhs)
-        && m_channelCount == otherConfig->m_channelCount
-        && m_levelsCurves == otherConfig->m_levelsCurves
-        && m_lightnessLevelsCurve == otherConfig->m_lightnessLevelsCurve
-        && m_transfers == otherConfig->m_transfers
-        && m_lightnessTransfer == otherConfig->m_lightnessTransfer;
+    const KisLevelsCurve lightnessCurve_ = lightnessLevelsCurve();
+    addParamNode(doc, root, "blackvalue", KisDomUtils::toString(static_cast<int>(qRound(lightnessCurve_.inputBlackPoint() * 255.0))), true);
+    addParamNode(doc, root, "whitevalue", KisDomUtils::toString(static_cast<int>(qRound(lightnessCurve_.inputWhitePoint() * 255.0))), true);
+    addParamNode(doc, root, "gammavalue", KisDomUtils::toString(lightnessCurve_.inputGamma()), true);
+    addParamNode(doc, root, "outblackvalue", KisDomUtils::toString(static_cast<int>(qRound(lightnessCurve_.outputBlackPoint() * 255.0))), true);
+    addParamNode(doc, root, "outwhitevalue", KisDomUtils::toString(static_cast<int>(qRound(lightnessCurve_.outputWhitePoint() * 255.0))), true);
 }
 
 void KisLevelsFilterConfiguration::setDefaults()
 {
-    m_useLightnessMode = defaultUseLightnessMode();
-    m_showLogarithmicHistogram = defaultShowLogarithmicHistogram();
-    m_lightnessLevelsCurve = defaultLevelsCurve();
+    setUseLightnessMode(defaultUseLightnessMode());
+    setShowLogarithmicHistogram(defaultShowLogarithmicHistogram());
+    setLightnessLevelsCurve(defaultLevelsCurve());
 
-    m_levelsCurves.clear();
-    for (int i = 0; i < m_channelCount; ++i) {
-        m_levelsCurves.append(defaultLevelsCurve());
+    QVector<KisLevelsCurve> levelsCurves_;
+    for (int i = 0; i < channelCount(); ++i) {
+        levelsCurves_.append(defaultLevelsCurve());
     }
+    setLevelsCurves(levelsCurves_);
+
     updateTransfers();
     updateLightnessTransfer();
 }

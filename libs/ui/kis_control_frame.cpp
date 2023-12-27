@@ -139,6 +139,7 @@ void KisControlFrame::slotUpdateDisplayRenderer()
 
 void KisControlFrame::slotSetPattern(KoPatternSP pattern)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
     m_patternWidget->setThumbnail(pattern->image());
     m_patternChooser->setCurrentPattern(pattern);
 }
@@ -196,8 +197,10 @@ void KisControlFrame::createPatternsChooser(KisViewManager * view)
     connect(customPatterns, SIGNAL(patternAdded(KoResourceSP)), m_patternChooser, SLOT(setCurrentPattern(KoResourceSP)));
     connect(customPatterns, SIGNAL(patternUpdated(KoResourceSP)), m_patternChooser, SLOT(setCurrentPattern(KoResourceSP)));
 
-    connect(view->canvasResourceProvider(), SIGNAL(sigPatternChanged(KoPatternSP)),
-            this, SLOT(slotSetPattern(KoPatternSP)));
+    connect(view->canvasResourceProvider(),
+            &KisCanvasResourceProvider::sigPatternChanged,
+            this,
+            &KisControlFrame::slotSetPattern);
 
     m_patternChooser->setCurrentItem(0);
     if (m_patternChooser->currentResource() && view->canvasResourceProvider()) {

@@ -26,7 +26,7 @@ export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$LD_LIBRARY_PATH
 export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-# https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHOME
+# https://docs.python.org/3.10/using/cmdline.html#envvar-PYTHONHOME
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
@@ -56,7 +56,12 @@ fi
 cd $BUILD_PREFIX/krita-build/
 
 # Determine how many CPUs we have
-CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
+CPU_COUNT=`grep -c processor /proc/cpuinfo`
+
+if [ $CPU_COUNT -gt 2 ]; then
+    let "jobs = ${CPU_COUNT} - 2"
+    CPU_COUNT=$jobs
+fi
 
 # Configure Krita
 cmake $KRITA_SOURCES \
@@ -65,15 +70,14 @@ cmake $KRITA_SOURCES \
     -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
     -DFOUNDATION_BUILD=1 \
     -DHIDE_SAFE_ASSERTS=ON \
-    -DFETCH_TRANSLATIONS=ON \
     -DBUILD_TESTING=FALSE \
+    -DKRITA_ENABLE_PCH=off \
     -DPYQT_SIP_DIR_OVERRIDE=$DEPS_INSTALL_PREFIX/share/sip/ \
     -DHAVE_MEMORY_LEAK_TRACKER=FALSE \
     -DBRANDING="${KRITA_BRANDING}"
 
-
 # Build and Install Krita (ready for the next phase)
-make -j$CPU_COUNT install
+cmake --build . --target install --parallel $CPU_COUNT
 
 # We add Krita's AppImage location for plugins (GMic)
 export PLUGINS_INSTALL_PREFIX=$BUILD_PREFIX/krita.appdir/usr
@@ -96,9 +100,6 @@ fi
 # Switch to our build directory as we're basically ready to start building...
 cd $BUILD_PREFIX/plugins-build/
 
-# Determine how many CPUs we have
-CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
-
 # Configure the dependencies for building
 cmake $KRITA_SOURCES/3rdparty_plugins \
     -DCMAKE_INSTALL_PREFIX=$PLUGINS_INSTALL_PREFIX \
@@ -107,4 +108,4 @@ cmake $KRITA_SOURCES/3rdparty_plugins \
     -DSUBMAKE_JOBS=$CPU_COUNT
 
 # Now start building everything we need, in the appropriate order
-cmake --build . --target ext_gmic -- -j$CPU_COUNT
+cmake --build . --target ext_gmic --parallel $CPU_COUNT

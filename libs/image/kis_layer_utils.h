@@ -15,6 +15,7 @@
 #include "kis_command_utils.h"
 #include "kis_time_span.h"
 #include "kis_image.h"
+#include <future>
 
 class KoProperties;
 class KoColor;
@@ -27,10 +28,10 @@ namespace KisMetaData
 
 namespace KisLayerUtils
 {
-    KRITAIMAGE_EXPORT void sortMergableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
-    KRITAIMAGE_EXPORT KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes);
-    KRITAIMAGE_EXPORT void filterMergableNodes(KisNodeList &nodes, bool allowMasks = false);
-    KRITAIMAGE_EXPORT KisNodeList sortAndFilterAnyMergableNodesSafe(const KisNodeList &nodes, KisImageSP image);
+    KRITAIMAGE_EXPORT void sortMergeableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
+    KRITAIMAGE_EXPORT KisNodeList sortMergeableNodes(KisNodeSP root, KisNodeList nodes);
+    KRITAIMAGE_EXPORT void filterMergeableNodes(KisNodeList &nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT KisNodeList sortAndFilterAnyMergeableNodesSafe(const KisNodeList &nodes, KisImageSP image);
     KRITAIMAGE_EXPORT bool checkIsChildOf(KisNodeSP node, const KisNodeList &parents);
     KRITAIMAGE_EXPORT void filterUnlockedNodes(KisNodeList &nodes);
     KRITAIMAGE_EXPORT void refreshHiddenAreaAsync(KisImageSP image, KisNodeSP rootNode, const QRect &preparedArea);
@@ -49,7 +50,7 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void forceAllHiddenOriginalsUpdate(KisNodeSP root);
 
-    KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks = false);
+    KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergeableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
     KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
 
@@ -75,12 +76,16 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT void splitAlphaToMask(KisImageSP image, KisNodeSP node, const QString& maskName);
 
-    KRITAIMAGE_EXPORT void convertToPaintLayer(KisImageSP image, KisNodeSP src);
+    KRITAIMAGE_EXPORT std::future<KisNodeSP> convertToPaintLayer(KisImageSP image, KisNodeSP src);
 
     typedef QMap<int, QSet<KisNodeSP> > FrameJobs;
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);
 
+    /**
+     * @brief The SwitchFrameCommand struct
+     * Switches to frame with undo/redo support.
+     */
     struct KRITAIMAGE_EXPORT SwitchFrameCommand : public KisCommandUtils::FlipFlopCommand {
         struct KRITAIMAGE_EXPORT SharedStorage {
             /**
@@ -108,7 +113,7 @@ namespace KisLayerUtils
     };
 
     /**
-     * A command to keep correct set of selected/active nodes thoroughout
+     * A command to keep correct set of selected/active nodes throughout
      * the action.
      */
     class KRITAIMAGE_EXPORT KeepNodesSelectedCommand : public KisCommandUtils::FlipFlopCommand

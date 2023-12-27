@@ -52,7 +52,8 @@ public:
 
     KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
-    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas = 0);
+    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller);
+    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, std::function<KisShapeLayerCanvasBase*()> canvasFactory);
     /**
      * Merge constructor.
      *
@@ -63,11 +64,9 @@ public:
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     ~KisShapeLayer() override;
 protected:
-    KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, KisShapeLayerCanvasBase *canvas);
+    KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, std::function<KisShapeLayerCanvasBase *()> canvasFactory);
 private:
-    void initShapeLayerImpl(KoShapeControllerBase* controller, KisPaintDeviceSP newProjectionDevice, KisShapeLayerCanvasBase *overrideCanvas);
-    void initNewShapeLayer(KoShapeControllerBase* controller, const KoColorSpace *projectionColorSpace, KisDefaultBoundsBaseSP bounds, KisShapeLayerCanvasBase *overrideCanvas = 0);
-    void initClonedShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas = 0);
+    void initShapeLayerImpl(KoShapeControllerBase* controller, KisShapeLayerCanvasBase *overrideCanvas);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);
@@ -78,7 +77,7 @@ public:
     void setImage(KisImageWSP image) override;
 
     KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer) override;
 public:
 
     // KoShape overrides
@@ -116,7 +115,8 @@ public:
                                                 KoDocumentResourceManager *resourceManager,
                                                 bool loadingFromKra,
                                                 QSizeF *fragmentSize,
-                                                QStringList *warnings = 0);
+                                                QStringList *warnings = 0,
+                                                QStringList *errors = 0);
 
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store, QStringList *warnings = 0);
@@ -170,9 +170,10 @@ protected:
 
 
     friend class ShapeLayerContainerModel;
-    KoViewConverter* converter() const;
+    const KoViewConverter *converter() const;
 
     KoShapeControllerBase *shapeController() const;
+    KisShapeLayerCanvasBase *canvas() const;
 
     friend class TransformShapeLayerDeferred;
 
@@ -199,6 +200,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotMoveShapes(const QPointF &diff);
     void slotTransformShapes(const QTransform &transform);
+    void slotImageResolutionChanged();
 
 private:
     QList<KoShape*> shapesToBeTransformed();

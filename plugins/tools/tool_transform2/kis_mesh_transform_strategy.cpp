@@ -273,7 +273,7 @@ void KisMeshTransformStrategy::paint(QPainter &gc)
     gc.save();
     gc.setTransform(KisTransformUtils::imageToFlakeTransform(m_d->converter), true);
 
-    KisHandlePainterHelper handlePainter(&gc, 0.5 * KisTransformUtils::handleRadius);
+    KisHandlePainterHelper handlePainter(&gc, 0.5 * KisTransformUtils::handleRadius, decorationThickness());
 
     for (auto it = m_d->currentArgs.meshTransform()->beginSegments();
          it != m_d->currentArgs.meshTransform()->endSegments();
@@ -574,9 +574,9 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
     return retval;
 }
 
-void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive)
+void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActive, bool altModifierActive)
 {
-    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(shiftModifierActive);
     Q_UNUSED(altModifierActive);
 
     if (m_d->mode == Private::OVER_POINT ||

@@ -69,7 +69,7 @@ public:
 private:
 
     OCIO::ConstProcessorRcPtr m_processor;
-    OCIO::ConstProcessorRcPtr m_revereseApproximationProcessor;
+    OCIO::ConstProcessorRcPtr m_reverseApproximationProcessor;
     OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
 
     KisExposureGammaCorrectionInterface *m_interface {nullptr};

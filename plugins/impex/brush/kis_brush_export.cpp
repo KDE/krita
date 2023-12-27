@@ -222,6 +222,7 @@ void KisBrushExport::initializeCapabilities()
     addSupportedColorModels(supportedColorModels, "Gimp Brushes");
     if (mimeType() == "image/x-gimp-brush-animated") {
         addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
+        addCapability(KisExportCheckRegistry::instance()->get("LayerOpacityCheck")->create(KisExportCheckBase::SUPPORTED));
     }
 }
 

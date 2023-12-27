@@ -25,8 +25,9 @@
 
 #include "kis_layer_utils.h"
 
-#include <sdk/tests/testutil.h>
-#include <sdk/tests/testui.h>
+#include <testui.h>
+#include <testutil.h>
+
 
 void testMergeDownImpl(bool useImageTransformations)
 {

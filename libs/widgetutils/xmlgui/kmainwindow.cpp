@@ -468,6 +468,8 @@ void KisKMainWindow::savePropertiesInternal(KConfig *config, int number)
 
 void KisKMainWindow::saveMainWindowSettings(KConfigGroup &cg)
 {
+    if (!windowsLayoutSavingAllowed()) return;
+
     K_D(KisKMainWindow);
     //qDebug(200) << "KisKMainWindow::saveMainWindowSettings " << cg.name();
 
@@ -505,9 +507,8 @@ void KisKMainWindow::saveMainWindowSettings(KConfigGroup &cg)
         }
     }
 
-    if (!autoSaveSettings() || cg.name() == autoSaveGroup()) {
-        // TODO should be cg == d->autoSaveGroup, to compare both kconfig and group name
-        if (!cg.hasDefault("ToolBarsMovable") && !KisToolBar::toolBarsLocked()) {
+    {
+        if (!cg.hasDefault("ToolBarsMovable") && KisToolBar::toolBarsLocked()) {
             cg.revertToDefault("ToolBarsMovable");
         } else {
             cg.writeEntry("ToolBarsMovable", KisToolBar::toolBarsLocked() ? "Disabled" : "Enabled");
@@ -596,7 +597,7 @@ void KisKMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
         mb->setVisible( entry != QLatin1String("Disabled") );
     }
 
-    if (!autoSaveSettings() || cg.name() == autoSaveGroup()) {   // TODO should be cg == d->autoSaveGroup, to compare both kconfig and group name
+    {
         QString entry = cg.readEntry("ToolBarsMovable", "Disabled");
         KisToolBar::setToolBarsLocked(entry == QLatin1String("Disabled"));
     }
@@ -639,6 +640,11 @@ bool KisKMainWindow::settingsDirty() const
 {
     K_D(const KisKMainWindow);
     return d->settingsDirty;
+}
+
+bool KisKMainWindow::windowsLayoutSavingAllowed() const
+{
+    return true;
 }
 
 void KisKMainWindow::setAutoSaveSettings(const QString &groupName, bool saveWindowSize)

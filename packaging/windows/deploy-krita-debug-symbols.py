@@ -101,8 +101,8 @@ if not args.no_interactive:
 # Glob all PDBs for Krita binaries
 
 # try and figure out what configuration was used
-
-configurations = ["MinSizeRel", "RelWithDebInfo", "Release", "Debug"]
+# the latter covers the case where Ninja was used to build
+configurations = ["MinSizeRel", "RelWithDebInfo", "Release", "Debug", ""]
 
 configuration = None
 

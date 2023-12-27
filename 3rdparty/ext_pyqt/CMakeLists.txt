@@ -1,46 +1,22 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
 
-if (APPLE)
-    SET(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
-    if(NOT EXISTS "${Python_EXECUTABLE}")
-        message("WARNING: using system python3!")
-        SET(Python_EXECUTABLE python3)
-    endif()
-
-    list(APPEND _PYQT_conf
-        --confirm-license
-        --qmake ${PREFIX_ext_pyqt}/bin/qmake
-        --sip ${PREFIX_ext_pyqt}/bin/sip
-        --sip-incdir ${PREFIX_ext_pyqt}/include
-        --sipdir ${PREFIX_ext_pyqt}/share/sip
-    )
-    ExternalProject_Add( ext_pyqt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.13.1.tar.gz
-        URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
-
-        CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
-
-        # force single-threaded installation to avoid
-        # race conditions in post-install .py script
-        INSTALL_COMMAND make -j1 install
-
-        BUILD_IN_SOURCE 1
-
-        UPDATE_COMMAND ""
-    )
-
-elseif(UNIX)
-    SET(Python_EXECUTABLE ${PREFIX_ext_pyqt}/bin/python3)
-    if(NOT EXISTS ${Python_EXECUTABLE})
-      message("WARNING: using system python3!")
-      SET(Python_EXECUTABLE python3)
-    endif()
+if(UNIX)
+    if (QT_ENABLE_ASAN)
+       set(_extra_pyqt_config --qmake-setting QMAKE_LFLAGS+=-fsanitize=address --qmake-setting QMAKE_CFLAGS+=-fsanitize=address --qmake-setting QMAKE_CXXFLAGS+=-fsanitize=address)
+    elseif(APPLE)
+        if(MACOS_ARCHS GREATER 1)
+            set(_extra_pyqt_config --qmake-setting "QMAKE_APPLE_DEVICE_ARCHS=${CMAKE_OSX_ARCHITECTURES_STR}")
+        endif()
+    else ()
+       unset(_extra_pyqt_config)
+    endif ()
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
-        URL_HASH SHA256=86bd19fde83d92beaefacdeac1e26c6e1918c300ff78d7ec2a19973bf2cf21b5
+        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.13.0.tar.gz
+        URL_HASH SHA256=4877580c38ceb5320e129b381d083b0a8601c68166d8b99707f08fa0a1689eef
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-restrict-sip-version.patch
 
         CONFIGURE_COMMAND ""
 
@@ -59,12 +35,14 @@ elseif(UNIX)
 
     ExternalProject_Add( ext_pyqt5
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.4.tar.gz
-        URL_HASH SHA256=2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
+        URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.7.tar.gz
+        URL_HASH SHA256=755121a52b3a08cb07275c10ebb96576d36e320e572591db16cfdbc558101594
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Qt-composite-module-lacking-a-platform-tag-on-ma.patch
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
-            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS}
+            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS} ${_extra_pyqt_config}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
@@ -87,8 +65,8 @@ elseif(UNIX)
 
     ExternalProject_Add( ext_pyqt5_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.9.0.tar.gz
-        URL_HASH SHA256=d3e4489d7c2b0ece9d203ae66e573939f7f60d4d29e089c9f11daa17cfeaae32
+        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.11.0.tar.gz
+        URL_HASH SHA256=b4710fd85b57edef716cc55fae45bfd5bfac6fc7ba91036f1dcc3f331ca0eb39
 
         CONFIGURE_COMMAND ""
 
@@ -120,6 +98,12 @@ elseif(WIN32)
         set(_make_command jom)
     endif()
 
+    if (QT_ENABLE_ASAN)
+       set(_extra_pyqt_config --qmake-setting QMAKE_LFLAGS+=-fsanitize=address --qmake-setting QMAKE_CFLAGS+=-fsanitize=address --qmake-setting QMAKE_CXXFLAGS+=-fsanitize=address)
+    else ()
+       unset(_extra_pyqt_config)
+    endif ()
+
     krita_to_native_path("${PREFIX_ext_pyqt}" _pyqt_prefix)
     krita_to_native_path("${KRITA_PYTHONPATH}" _krita_pythonpath)
     string(TOLOWER ${_krita_pythonpath} _krita_pythonpath)
@@ -127,11 +111,11 @@ elseif(WIN32)
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
-        URL_HASH SHA256=86bd19fde83d92beaefacdeac1e26c6e1918c300ff78d7ec2a19973bf2cf21b5
+        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.13.0.tar.gz
+        URL_HASH SHA256=4877580c38ceb5320e129b381d083b0a8601c68166d8b99707f08fa0a1689eef
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-linking-to-Python3.8-on-Windows.patch
-            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-additional-flavor-of-MinGW.patch
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Support-MinGW-and-MSYS-Python-builds.patch
+              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-building-pyqt-on-Windows.patch
 
         CONFIGURE_COMMAND ""
 
@@ -155,12 +139,14 @@ elseif(WIN32)
 
     ExternalProject_Add( ext_pyqt5
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.4.tar.gz
-        URL_HASH SHA256=2a69597e0dd11caabe75fae133feca66387819fc9bc050f547e5551bce97e5be
+        URL https://pypi.python.org/packages/source/P/PyQt5/PyQt5-5.15.7.tar.gz
+        URL_HASH SHA256=755121a52b3a08cb07275c10ebb96576d36e320e572591db16cfdbc558101594
+
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Qt-composite-module-lacking-a-platform-tag-on-ma.patch
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
-            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\lib\\site-packages --jobs ${SUBMAKE_JOBS}
+            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\lib\\site-packages --jobs ${SUBMAKE_JOBS} ${_extra_pyqt_config}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
@@ -183,8 +169,8 @@ elseif(WIN32)
 
     ExternalProject_Add( ext_pyqt5_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.9.0.tar.gz
-        URL_HASH SHA256=d3e4489d7c2b0ece9d203ae66e573939f7f60d4d29e089c9f11daa17cfeaae32
+        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.11.0.tar.gz
+        URL_HASH SHA256=b4710fd85b57edef716cc55fae45bfd5bfac6fc7ba91036f1dcc3f331ca0eb39
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MinGW-Distutils-support-hack.patch
 

@@ -10,14 +10,11 @@
 #include "kis_keyframe_channel.h"
 #include "kis_node.h"
 #include "kis_layer_utils.h"
+#include <KisStaticInitializer.h>
 
-struct KisTimeSpanStaticRegistrar {
-    KisTimeSpanStaticRegistrar() {
-        qRegisterMetaType<KisTimeSpan>("KisTimeSpan");
-    }
-};
-
-static KisTimeSpanStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisTimeSpan>("KisTimeSpan");
+}
 
 QDebug operator<<(QDebug dbg, const KisTimeSpan &r)
 {

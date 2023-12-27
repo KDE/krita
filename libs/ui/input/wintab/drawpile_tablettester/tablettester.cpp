@@ -25,6 +25,8 @@ TabletTestDialog::TabletTestDialog(QWidget *parent)
                 "## Legend:\n"
                 "# X,Y - event coordinate\n"
                 "# B - buttons pressed\n"
+                "# P - pressure\n"
+                "# TX,TY - tilt\n"
                 "# S - speed\n"
                 "\n");
 }

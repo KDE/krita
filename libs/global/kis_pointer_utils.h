@@ -34,10 +34,10 @@ List<QSharedPointer<A>> listToQShared(const List<A*> list) {
  * Convert a list of strong pointers into a list of weak pointers
  */
 template <template <class> class Container, class T>
-Container<QWeakPointer<T>> listStrongToWeak(const Container<QSharedPointer<T>> &containter)
+Container<QWeakPointer<T>> listStrongToWeak(const Container<QSharedPointer<T>> &container)
 {
     Container<QWeakPointer<T> > result;
-    Q_FOREACH (QSharedPointer<T> v, containter) {
+    Q_FOREACH (QSharedPointer<T> v, container) {
         result << v;
     }
     return result;
@@ -52,11 +52,11 @@ Container<QWeakPointer<T>> listStrongToWeak(const Container<QSharedPointer<T>> &
  *          correctly.
  */
 template <template <class> class Container, class T>
-    Container<QSharedPointer<T> > listWeakToStrong(const Container<QWeakPointer<T>> &containter,
+    Container<QSharedPointer<T> > listWeakToStrong(const Container<QWeakPointer<T>> &container,
                                                    bool allOrNothing = true)
 {
     Container<QSharedPointer<T> > result;
-    Q_FOREACH (QWeakPointer<T> v, containter) {
+    Q_FOREACH (QWeakPointer<T> v, container) {
         QSharedPointer<T> strong(v);
         if (!strong && allOrNothing) {
             result.clear();

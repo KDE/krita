@@ -155,7 +155,7 @@ private:
     void updateScaledImage(KisPPUpdateInfoSP info);
 
     /**
-     * Atual drawing is done here
+     * Actual drawing is done here
      * @param info prepared information
      * @param gc The painter we draw on
      */

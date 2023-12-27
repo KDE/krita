@@ -19,18 +19,14 @@
 
 #include <kis_painting_tweaks.h>
 #include <kis_debug.h>
+#include <KisStaticInitializer.h>
 
 namespace
 {
 
-struct KisFileIconRegistrar {
-    KisFileIconRegistrar() {
-        KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
-    }
-};
-
-
-static KisFileIconRegistrar s_registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
+}
 
 
 QIcon createIcon(const QImage &source, const QSize &iconSize)
@@ -62,10 +58,11 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     // draw faint outline
     QPainter painter(&result);
     QColor textColor = qApp->palette().color(QPalette::Text);
-    QColor backgroundColor = qApp->palette().color(QPalette::Background);
+    QColor backgroundColor = qApp->palette().color(QPalette::Window);
     QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
     painter.setPen(blendedColor);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+    painter.end(); // Otherwise there will always be a copy
 
     return QIcon(QPixmap::fromImage(result));
 }
@@ -80,6 +77,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
     if (fi.exists()) {
         QString mimeType = KisMimeDatabase::mimeTypeForFile(path);
         if (mimeType == KisDocument::nativeFormatMimeType()
+               || mimeType == "application/x-krita-archive"
                || mimeType == "image/openraster") {
 
             QScopedPointer<KoStore> store(KoStore::createStore(path, KoStore::Read));

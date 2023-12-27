@@ -32,12 +32,8 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-private Q_SLOTS:
-    void configure();
 private:
     KisUndoView *m_undoView;
-    QToolButton *m_bnConfigure;
-    KoCanvasBase *m_historyCanvas;
 };
 
 

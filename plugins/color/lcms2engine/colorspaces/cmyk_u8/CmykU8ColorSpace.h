@@ -41,7 +41,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return "CMYK";
+        return QStringLiteral("CMYK");
     }
 
 };

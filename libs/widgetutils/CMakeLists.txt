@@ -30,12 +30,13 @@ set(kritawidgetutils_LIB_SRCS
     KisPopupButton.cpp
     kis_cursor.cc
     kis_cursor_cache.cpp
-    
+
     kis_double_parse_spin_box.cpp
     kis_double_parse_unit_spin_box.cpp
     kis_int_parse_spin_box.cpp
     kis_num_parser.cpp
     kis_slider_spin_box.cpp
+    kis_multipliers_double_slider_spinbox.cpp
     kis_spin_box_unit_manager.cpp
     kis_font_family_combo_box.cpp
     KisWrappableHBoxLayout.cpp
@@ -44,6 +45,9 @@ set(kritawidgetutils_LIB_SRCS
     KisOptionCollectionWidget.cpp
     KisOptionButtonStrip.cpp
     KisRepaintDebugger.cpp
+    KisMenuStyleDontCloseOnAlt.cpp
+    KisSpinBoxI18nHelper.cpp
+    KisScreenMigrationTracker.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp
@@ -79,6 +83,7 @@ set(kritawidgetutils_LIB_SRCS
     xmlgui/ktoggletoolbaraction.cpp
     xmlgui/ktoolbar.cpp
     xmlgui/ktoolbarhandler.cpp
+    xmlgui/KisToolBarStateModel.cpp
     xmlgui/kundoactions.cpp
     xmlgui/kxmlguibuilder.cpp
     xmlgui/kxmlguiclient.cpp
@@ -89,6 +94,8 @@ set(kritawidgetutils_LIB_SRCS
 
     katecommandbar.cpp
     commandmodel.cpp
+
+    KisClickableLabel.cpp
 )
 
 if (HAVE_DBUS)
@@ -110,6 +117,8 @@ target_include_directories(kritawidgetutils
     PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/config>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/xmlgui>
+    PRIVATE
+    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
 )
 
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)
@@ -121,6 +130,10 @@ endif ()
 if (APPLE)
     find_library(FOUNDATION_LIBRARY Foundation)
     set(KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} ${FOUNDATION_LIBRARY})
+    target_include_directories(kritawidgetutils PRIVATE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../macosutils>
+    )
+    target_link_libraries(kritawidgetutils PRIVATE kritamacosutils)
 endif ()
 
 target_link_libraries(kritawidgetutils

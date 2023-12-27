@@ -72,7 +72,7 @@ public:
      * Waits until all the running jobs are finished.
      *
      * If some other thread adds jobs in parallel, then you may
-     * wait forever. If you you don't want it, consider lock() instead.
+     * wait forever. If you don't want it, consider lock() instead.
      *
      * \see lock()
      */
@@ -83,7 +83,7 @@ public:
      * To unblock processing you should use unlock().
      *
      * If some other thread adds jobs in parallel, then you may
-     * wait forever. If you you don't want it, consider lock() instead.
+     * wait forever. If you don't want it, consider lock() instead.
      *
      * \see unlock(), lock()
      */
@@ -173,6 +173,23 @@ public:
      * of the *LOD0* strokes.
      */
     void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
+
+    /**
+     * Sets a callback that is called by the scheduler in the
+     * beginning of every stroke that declared the necessity
+     * of the redo state clearance.
+     */
+    void setPurgeRedoStateCallback(const std::function<void()> &callback);
+
+    /**
+     * Sets a callback that is called bu the scheduler when it
+     * thinks that Lod0 tiles **in the GUI** should be refetched
+     * by the GUI. Such situation happens in cases when a Lod0
+     * stroke has been cancelled, after its LodN buddy has managed
+     * to do some manipulations on the canvas. Without this call
+     * the GUI will still contain LodN tiles active.
+     */
+    void setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void()> &callback);
 
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 

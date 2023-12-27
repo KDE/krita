@@ -7,19 +7,22 @@
  */
 
 #include <KisGlobalResourcesInterface.h>
+#include <KisImageResolutionProxy.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
-#include <simpletest.h>
 #include <generator/kis_generator_registry.h>
+#include <kis_default_bounds.h>
 #include <kis_fill_painter.h>
 #include <kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_selection.h>
 #include <resources/KisSeExprScript.h>
-#include <sdk/tests/testimage.h>
+#include <simpletest.h>
+#include <testimage.h>
 #include <testutil.h>
+
 
 #include "kis_seexpr_generator_test.h"
 
@@ -55,6 +58,7 @@ void KisSeExprGeneratorTest::testGenerationFromScript()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
+    dev->setSupportsWraparoundMode(true);
 
     KisFillPainter fillPainter(dev);
     fillPainter.fillRect(point.x(), point.y(), 256, 256, config);
@@ -89,6 +93,7 @@ void KisSeExprGeneratorTest::testGenerationFromKoResource()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
+    dev->setSupportsWraparoundMode(true);
 
     KisFillPainter fillPainter(dev);
     fillPainter.fillRect(point.x(), point.y(), 256, 256, config);

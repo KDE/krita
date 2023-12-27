@@ -15,6 +15,7 @@
 #include <QDataStream>
 #include <QBuffer>
 
+#include <KoResourcePaths.h>
 #include <klocalizedstring.h>
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -45,6 +46,7 @@ struct Q_DECL_HIDDEN KisApplicationArguments::Private
     QString colorDepth {"U8"};
     int width {2000};
     int height {5000};
+
 };
 
 
@@ -94,6 +96,7 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-sequence"), i18n("Export animation to the given filename and exit")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("export-filename"), i18n("Filename for export"), QLatin1String("filename")));
     parser.addOption(QCommandLineOption(QStringList() << QLatin1String("file-layer"), i18n("File layer to be added to existing or new file"), QLatin1String("file-layer")));
+    parser.addOption(QCommandLineOption(QStringList() << QLatin1String("resource-location"), i18n("A location that overrides the configured location for Krita's resources"), QLatin1String("file-layer")));
     parser.addPositionalArgument(QLatin1String("[file(s)]"), i18n("File(s) or URL(s) to open"));
 
     QStringList filteredArgs;
@@ -183,6 +186,8 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
     d->noSplash = parser.isSet("nosplash");
     d->fullScreen = parser.isSet("fullscreen");
 
+    KoResourcePaths::s_overrideAppDataLocation = parser.value("resource-location");
+
     const QDir currentDir = QDir::current();
     Q_FOREACH (const QString &filename, parser.positionalArguments()) {
         d->filenames << currentDir.absoluteFilePath(filename);
@@ -204,6 +209,7 @@ KisApplicationArguments::KisApplicationArguments(const KisApplicationArguments &
     d->session = rhs.session();
     d->noSplash = rhs.noSplash();
     d->fullScreen = rhs.fullScreen();
+
 }
 
 void KisApplicationArguments::operator=(const KisApplicationArguments &rhs)

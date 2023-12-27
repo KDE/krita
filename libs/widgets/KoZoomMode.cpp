@@ -11,8 +11,8 @@
 const char* const KoZoomMode::modes[] =
 {
     I18N_NOOP("%1%"),
-    I18N_NOOP("Fit Page Width"),
-    I18N_NOOP("Fit Page"),
+    I18N_NOOP("Fit View"),
+    I18N_NOOP("Fit View Width"),
     0,
     I18N_NOOP("Actual Pixels"),
     0,
@@ -26,7 +26,7 @@ const char* const KoZoomMode::modes[] =
     0,
     0,
     0,
-    I18N_NOOP("Fit Page Height")
+    I18N_NOOP("Fit View Height")
 };
 
 qreal KoZoomMode::minimumZoomValue = 0.2;
@@ -39,11 +39,11 @@ QString KoZoomMode::toString(Mode mode)
 
 KoZoomMode::Mode KoZoomMode::toMode(const QString& mode)
 {
-    if (mode == i18n(modes[ZOOM_WIDTH]))
-        return ZOOM_WIDTH;
+    if (mode == i18n(modes[ZOOM_PAGE]))
+        return ZOOM_PAGE;
     else
-        if (mode == i18n(modes[ZOOM_PAGE]))
-            return ZOOM_PAGE;
+        if (mode == i18n(modes[ZOOM_WIDTH]))
+            return ZOOM_WIDTH;
         else
             if (mode == i18n(modes[ZOOM_PIXELS]))
                 return ZOOM_PIXELS;

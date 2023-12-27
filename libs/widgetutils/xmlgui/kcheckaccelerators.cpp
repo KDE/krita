@@ -127,7 +127,7 @@ bool KisKCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
         break;
     //case QEvent::MouseButtonDblClick:
     case QEvent::MouseButtonPress:
-        if (copyWidgetText && static_cast<QMouseEvent *>(e)->button() == Qt::MidButton) {
+        if (copyWidgetText && static_cast<QMouseEvent *>(e)->button() == Qt::MiddleButton) {
             //kWarning()<<"obj"<<obj;
             QWidget *w = static_cast<QWidget *>(obj)->childAt(static_cast<QMouseEvent *>(e)->pos());
             if (!w) {

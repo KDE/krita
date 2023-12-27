@@ -25,31 +25,24 @@
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paint_information.h>
 
-#include "kis_particleop_option.h"
+#include "KisParticleOpOptionData.h"
 
 #include "particle_brush.h"
 
 KisParticlePaintOp::KisParticlePaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_rateOption(settings.data())
+    , m_first(true)
 {
     Q_UNUSED(image);
     Q_UNUSED(node);
 
-    m_properties.particleCount = settings->getInt(PARTICLE_COUNT);
-    m_properties.iterations = settings->getInt(PARTICLE_ITERATIONS);
-    m_properties.gravity = settings->getDouble(PARTICLE_GRAVITY);
-    m_properties.weight = settings->getDouble(PARTICLE_WEIGHT);
-    m_properties.scale = QPointF(settings->getDouble(PARTICLE_SCALE_X), settings->getDouble(PARTICLE_SCALE_Y));
+    m_particleOpData.read(settings.data());
 
-    m_particleBrush.setProperties(&m_properties);
+    m_particleBrush.setProperties(&m_particleOpData);
     m_particleBrush.initParticles();
 
-    m_airbrushOption.readOptionSetting(settings);
-
-    m_rateOption.readOptionSetting(settings);
-    m_rateOption.resetAllSensors();
-
-    m_first = true;
+    m_airbrushData.read(settings.data());
 }
 
 KisParticlePaintOp::~KisParticlePaintOp()
@@ -66,12 +59,12 @@ KisSpacingInformation KisParticlePaintOp::updateSpacingImpl(const KisPaintInform
 {
     return KisPaintOpPluginUtils::effectiveSpacing(0.0, 0.0, true, 0.0, false, 0.0, false, 0.0,
                                                    KisLodTransform::lodToScale(painter()->device()),
-                                                   &m_airbrushOption, nullptr, info);
+                                                   &m_airbrushData, nullptr, info);
 }
 
 KisTimingInformation KisParticlePaintOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 
 void KisParticlePaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2,

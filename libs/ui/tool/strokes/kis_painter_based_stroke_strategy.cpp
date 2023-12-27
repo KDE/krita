@@ -14,21 +14,29 @@
 #include "kis_paint_layer.h"
 #include "kis_transaction.h"
 #include "kis_image.h"
+#include "kis_raster_keyframe_channel.h"
 #include <kis_distance_information.h>
 #include "kis_undo_stores.h"
 #include "KisFreehandStrokeInfo.h"
 #include "KisMaskedFreehandStrokePainter.h"
 #include "KisMaskingBrushRenderer.h"
 #include "KisRunnableStrokeJobData.h"
+#include "KisAnimAutoKey.h"
 
 #include "kis_paintop_registry.h"
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 
+#include <commands_new/kis_saved_commands.h>
+#include "kis_command_utils.h"
+
 #include "KisInterstrokeDataFactory.h"
 #include "KisInterstrokeDataTransactionWrapperFactory.h"
 #include "KisRunnableStrokeJobsInterface.h"
 #include "KisRunnableStrokeJobUtils.h"
+#include <KisStrokeCompatibilityInfo.h>
+#include "KisAnimAutoKey.h"
+
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
@@ -241,89 +249,142 @@ void KisPainterBasedStrokeStrategy::deletePainters()
 
 void KisPainterBasedStrokeStrategy::initStrokeCallback()
 {
-    KisNodeSP node = m_resources->currentNode();
-    KisPaintDeviceSP paintDevice = node->paintDevice();
-    KisPaintDeviceSP targetDevice = paintDevice;
-    bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
-    const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
+    QVector<KisRunnableStrokeJobData*> jobs;
 
-    KisSelectionSP selection =  m_resources->activeSelection();
+    KritaUtils::addJobSequential(jobs, [this] () {
+        KisNodeSP node = m_resources->currentNode();
 
-    if (hasIndirectPainting) {
-        KisIndirectPaintingSupport *indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
-
-        if (indirect) {
-            targetDevice = paintDevice->createCompositionSourceDevice();
-            targetDevice->setParentNode(node);
-            indirect->setCurrentColor(m_resources->currentFgColor());
-            indirect->setTemporaryTarget(targetDevice);
-
-            indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
-            indirect->setTemporaryOpacity(m_resources->opacity());
-            indirect->setTemporarySelection(selection);
-
-            QBitArray channelLockFlags = m_resources->channelLockFlags();
-            indirect->setTemporaryChannelFlags(channelLockFlags);
+        KUndo2Command *autoKeyframeCommand =
+            KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
+                                                     KisAutoKey::AllowBlankMode |
+                                                         KisAutoKey::SupportsLod);
+        if (autoKeyframeCommand) {
+            m_autokeyCommand.reset(autoKeyframeCommand);
         }
-        else {
-            hasIndirectPainting = false;
+    });
+
+    KritaUtils::addJobSequential(jobs, [this] () mutable {
+        KisNodeSP node = m_resources->currentNode();
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KisPaintDeviceSP targetDevice = paintDevice;
+        KisSelectionSP selection =  m_resources->activeSelection();
+        bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
+        const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
+
+        if (hasIndirectPainting) {
+            KisIndirectPaintingSupport *indirect =
+                dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+
+            if (indirect) {
+                targetDevice = paintDevice->createCompositionSourceDevice();
+                targetDevice->setParentNode(node);
+                indirect->setCurrentColor(m_resources->currentFgColor());
+                indirect->setTemporaryTarget(targetDevice);
+
+                indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
+                indirect->setTemporaryOpacity(m_resources->opacity());
+                indirect->setTemporarySelection(selection);
+
+                QBitArray channelLockFlags = m_resources->channelLockFlags();
+                indirect->setTemporaryChannelFlags(channelLockFlags);
+            }
+            else {
+                hasIndirectPainting = false;
+            }
         }
-    }
 
-    QScopedPointer<KisInterstrokeDataFactory> interstrokeDataFactory(
-        KisPaintOpRegistry::instance()->createInterstrokeDataFactory(m_resources->currentPaintOpPreset()));
+        QScopedPointer<KisInterstrokeDataFactory> interstrokeDataFactory(
+            KisPaintOpRegistry::instance()->createInterstrokeDataFactory(m_resources->currentPaintOpPreset()));
 
-    KIS_SAFE_ASSERT_RECOVER(!interstrokeDataFactory || !hasIndirectPainting) {
-        interstrokeDataFactory.reset();
-    }
+        KIS_SAFE_ASSERT_RECOVER(!interstrokeDataFactory || !hasIndirectPainting) {
+            interstrokeDataFactory.reset();
+        }
 
-    QScopedPointer<KisInterstrokeDataTransactionWrapperFactory> wrapper;
+        QScopedPointer<KisInterstrokeDataTransactionWrapperFactory> wrapper;
 
-    if (interstrokeDataFactory) {
-        wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
-                          interstrokeDataFactory.take(),
-                          supportsContinuedInterstrokeData()));
-    }
+        if (interstrokeDataFactory) {
+            wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
+                              interstrokeDataFactory.take(),
+                              supportsContinuedInterstrokeData()));
+        }
 
-    m_transaction.reset(new KisTransaction(name(), targetDevice, nullptr,
-                                           m_useMergeID ? timedID(this->id()) : -1,
-                                           wrapper.take()));
+        m_transaction.reset(new KisTransaction(KUndo2MagicString(), targetDevice, nullptr,
+                                               -1,
+                                               wrapper.take()));
 
-    // WARNING: masked brush cannot work without indirect painting mode!
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
-                                   m_resources->needsMaskingBrushRendering()) || hasIndirectPainting);
+        // WARNING: masked brush cannot work without indirect painting mode!
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
+                                       m_resources->needsMaskingBrushRendering()) || hasIndirectPainting);
 
-    if (hasIndirectPainting &&
-        supportsMaskingBrush() &&
-        m_resources->needsMaskingBrushRendering()) {
+        if (hasIndirectPainting &&
+            supportsMaskingBrush() &&
+            m_resources->needsMaskingBrushRendering()) {
 
-        const QString compositeOpId =
-            m_resources->currentPaintOpPreset()->settings()->maskingBrushCompositeOp();
+            const QString compositeOpId =
+                m_resources->currentPaintOpPreset()->settings()->maskingBrushCompositeOp();
 
-        m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice, compositeOpId));
+            m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice, compositeOpId));
 
-        initPainters(m_maskingBrushRenderer->strokeDevice(),
-                     m_maskingBrushRenderer->maskDevice(),
-                     selection,
-                     hasIndirectPainting,
-                     indirectCompositeOp);
+            initPainters(m_maskingBrushRenderer->strokeDevice(),
+                         m_maskingBrushRenderer->maskDevice(),
+                         selection,
+                         hasIndirectPainting,
+                         indirectCompositeOp);
 
-    } else {
-        initPainters(targetDevice, nullptr, selection, hasIndirectPainting, indirectCompositeOp);
-    }
+        } else {
+            initPainters(targetDevice, nullptr, selection, hasIndirectPainting, indirectCompositeOp);
+        }
 
-    m_targetDevice = targetDevice;
-    m_activeSelection = selection;
+        m_targetDevice = targetDevice;
+        m_activeSelection = selection;
 
-    // sanity check: selection should be applied only once
-    if (selection && !m_strokeInfos.isEmpty()) {
-        KisIndirectPaintingSupport *indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
-        KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_strokeInfos.first()->painter->selection());
-        KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_strokeInfos.first()->painter->selection());
-    }
+        // sanity check: selection should be applied only once
+        if (selection && !m_strokeInfos.isEmpty()) {
+            KisIndirectPaintingSupport *indirect =
+                dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+            KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_strokeInfos.first()->painter->selection());
+            // when hasIndirectPainting is true, indirect cannot be null
+            KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || indirect);
+            KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_strokeInfos.first()->painter->selection());
+        }
+    });
+
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
+
+namespace {
+
+struct MergeableStrokeUndoCommand : KUndo2Command
+{
+    MergeableStrokeUndoCommand(KisResourcesSnapshotSP resourcesSnapshot)
+        : m_compatibilityInfo(*resourcesSnapshot)
+    {
+    }
+
+    bool timedMergeWith(KUndo2Command *_other) override {
+        if(_other->timedId() == this->timedId() && _other->timedId() != -1 ) {
+            const bool isCompatible =
+                KisSavedCommand::unwrap(_other, [this] (KUndo2Command *cmd) {
+                    MergeableStrokeUndoCommand *other =
+                        dynamic_cast<MergeableStrokeUndoCommand*>(cmd);
+                    return other && m_compatibilityInfo == other->m_compatibilityInfo;
+                });
+
+            if (isCompatible) {
+                /// NOTE: we are merging the original (potentially) "saved"
+                ///       command, to the one we unwrapped above, because
+                ///       the unwrapped command is **owned** by the "saved"
+                ///       command
+                return KUndo2Command::timedMergeWith(_other);
+            }
+        }
+        return false;
+    }
+
+    KisStrokeCompatibilityInfo m_compatibilityInfo;
+};
+
+} // namespace
 
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
@@ -334,9 +395,28 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     KisPostExecutionUndoAdapter *undoAdapter =
         m_resources->postExecutionUndoAdapter();
 
+
     if (!undoAdapter) {
         m_fakeUndoData.reset(new FakeUndoData());
         undoAdapter = m_fakeUndoData->undoAdapter.data();
+    }
+
+    QSharedPointer<KUndo2Command> parentCommand;
+
+    if (!m_useMergeID) {
+        parentCommand.reset(new KUndo2Command());
+    } else {
+        parentCommand.reset(new MergeableStrokeUndoCommand(m_resources));
+        parentCommand->setTimedID(timedID(this->id()));
+    }
+
+    parentCommand->setText(name());
+    parentCommand->setTime(m_transaction->undoCommand()->time());
+    parentCommand->setEndTime(QTime::currentTime());
+
+    if (m_autokeyCommand) {
+        KisCommandUtils::CompositeCommand *wrapper = new KisCommandUtils::CompositeCommand(parentCommand.data());
+        wrapper->addCommand(m_autokeyCommand.take());
     }
 
     if (indirect && indirect->hasTemporaryTarget()) {
@@ -348,10 +428,19 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         QVector<KisRunnableStrokeJobData*> jobs;
 
         indirect->mergeToLayerThreaded(node,
-                               undoAdapter,
-                               transactionText,
-                               m_useMergeID ? timedID(this->id()) : -1,
+                               parentCommand.data(),
+                               KUndo2MagicString(),
+                               -1,
                                &jobs);
+
+        KritaUtils::addJobBarrier(jobs,
+            [parentCommand, undoAdapter] () {
+                parentCommand->redo();
+
+                if (undoAdapter) {
+                    undoAdapter->addCommand(parentCommand);
+                }
+            });
 
         /// When the transaction is reset to zero, cancel job does nothing.
         /// Therefore, we should ensure that the merging jobs are never
@@ -364,9 +453,17 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         runnableJobsInterface()->addRunnableJobs(jobs);
     }
     else {
-        m_transaction->commit(undoAdapter);
+        KisCommandUtils::CompositeCommand *wrapper = new KisCommandUtils::CompositeCommand(parentCommand.data());
+        wrapper->addCommand(m_transaction->endAndTake());
+
         m_transaction.reset();
         deletePainters();
+
+        if (undoAdapter) {
+            parentCommand->redo();
+            undoAdapter->addCommand(parentCommand);
+        }
+
     }
 
 }
@@ -374,6 +471,10 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
     if (!m_transaction) return;
+
+    if (m_autokeyCommand) {
+        m_autokeyCommand->undo();
+    }
 
     KisNodeSP node = m_resources->currentNode();
     KisIndirectPaintingSupport *indirect =

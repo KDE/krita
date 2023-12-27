@@ -2,10 +2,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/qtlockedfile
 )
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 if (ANDROID)
     # We explicitly set QT_OPENGL_ES_3 here because Qt for some reason does
     # not enable this for Android.
@@ -76,6 +72,10 @@ set(kritaui_LIB_SRCS
     dialogs/KisRecoverNamedAutosaveDialog.cpp
     dialogs/KisDlgSavePreset.cpp
     dialogs/kis_dlg_missing_color_profile.cpp
+    dialogs/kis_dlg_hlg_import.cpp
+    dialogs/KisDlgConfigureCumulativeUndo.cpp
+    dialogs/KisCumulativeUndoModel.cpp
+    dialogs/KisColorSpaceConversionDialog.cpp
 
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
@@ -101,6 +101,8 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_configurations_model.cc
     kis_bookmarked_filter_configurations_model.cc
     KisPaintopPropertiesBase.cpp
+    KisPlaybackEngine.cpp
+    KisPlaybackEngineQT.cpp
     KisPresetShadowUpdater.cpp
     kis_canvas_resource_provider.cpp
     kis_derived_resources.cpp
@@ -120,7 +122,6 @@ set(kritaui_LIB_SRCS
     kis_splash_screen.cpp
     kis_filter_manager.cc
     kis_filters_model.cc
-    KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
     kis_import_catcher.cc
@@ -138,6 +139,7 @@ set(kritaui_LIB_SRCS
     kis_model_index_converter_base.cpp
     kis_model_index_converter.cpp
     kis_model_index_converter_show_all.cpp
+    KisLayerThumbnailCache.cpp
     kis_painting_assistant.cc
     kis_painting_assistants_decoration.cpp
     KisDecorationsManager.cpp
@@ -165,6 +167,9 @@ set(kritaui_LIB_SRCS
     KisWelcomePageWidget.cpp
     KisChangeCloneLayersCommand.cpp
     KisUiFont.cpp
+    KisIdleTasksManager.cpp
+    KisIdleTaskStrokeStrategy.cpp
+    KisImageThumbnailStrokeStrategy.cpp
 
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp
@@ -197,7 +202,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_freehand_helper.cpp
     tool/kis_tool_multihand_helper.cpp
     tool/kis_figure_painting_tool_helper.cpp
-    tool/KisAsyncronousStrokeUpdateHelper.cpp
+    tool/KisAsynchronousStrokeUpdateHelper.cpp
     tool/kis_tool_paint.cc
     tool/kis_tool_shape.cc
     tool/kis_tool_ellipse_base.cpp
@@ -206,6 +211,7 @@ set(kritaui_LIB_SRCS
     tool/KisToolOutlineBase.cpp
     tool/kis_tool_utils.cpp
     tool/kis_resources_snapshot.cpp
+    tool/KisStrokeCompatibilityInfo.cpp
     tool/kis_smoothing_options.cpp
     tool/KisStabilizerDelayedPaintHelper.cpp
     tool/KisStrokeSpeedMonitor.cpp
@@ -222,6 +228,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisNodeSelectionRecipe.cpp
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
+    tool/KisAsyncColorSamplerHelper.cpp
 
     toolbox/KoToolBox.cpp
     toolbox/KoToolBoxButton.cpp
@@ -230,6 +237,7 @@ set(kritaui_LIB_SRCS
 
     widgets/kis_canvas_drop.cpp
     widgets/kis_cmb_composite.cc
+    widgets/KisCompositeOpListConnectionHelper.cpp
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
     widgets/kis_collapsible_button_group.cpp
@@ -242,9 +250,10 @@ set(kritaui_LIB_SRCS
     widgets/kis_transport_controls.cpp
     widgets/kis_utility_title_bar.cpp
     widgets/kis_curve_widget.cpp
+    widgets/KisCurveWidgetConnectionHelper.cpp
+    widgets/KisCurveWidgetControlsManager.cpp
     widgets/kis_custom_image_widget.cc
     widgets/kis_image_from_clipboard_widget.cpp
-    widgets/kis_double_widget.cc
     widgets/kis_filter_selector_widget.cc
     widgets/kis_iconwidget.cc
     widgets/kis_mask_widgets.cpp
@@ -252,7 +261,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_bool_filter_widget.cc
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
-    widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_editor.cpp
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp
@@ -264,7 +272,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_selection_options.cc
     widgets/kis_scratch_pad.cpp
     widgets/kis_scratch_pad_event_filter.cpp
-    widgets/kis_preset_selector_strip.cpp
     widgets/KisSelectionPropertySlider.cpp
     widgets/kis_size_group.cpp
     widgets/kis_size_group_p.cpp
@@ -275,6 +282,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_tool_button.cpp
     widgets/kis_floating_message.cpp
     widgets/kis_lod_availability_widget.cpp
+    widgets/KisLodAvailabilityData.cpp
+    widgets/KisLodAvailabilityModel.cpp
     widgets/kis_color_filter_combo.cpp
     widgets/kis_color_label_selector_widget.cpp
     widgets/kis_color_label_button.cpp
@@ -341,6 +350,7 @@ set(kritaui_LIB_SRCS
     input/kis_zoom_and_rotate_action.cpp
     input/KisCanvasOnlyAction.cpp
     input/KisTouchGestureAction.cpp
+    input/KisInputProfileMigrator.cpp
 
     operations/kis_operation.cpp
     operations/kis_operation_configuration.cpp
@@ -360,6 +370,7 @@ set(kritaui_LIB_SRCS
     animation/VideoHDRMetadataOptionsDialog.cpp
     animation/KisHDRMetadataOptions.cpp
     animation/KisDlgImportVideoAnimation.cpp
+    animation/KisFrameDisplayProxy.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp
     kis_gui_context_command.cpp
@@ -402,6 +413,7 @@ set(kritaui_LIB_SRCS
     KisImportExportFilter.cpp
     KisImportExportManager.cpp
     KisImportExportUtils.cpp
+    KisImportUserFeedbackInterface.cpp
     kis_async_action_feedback.cpp
     KisMainWindow.cpp
     KisOpenPane.cpp
@@ -455,11 +467,18 @@ set(kritaui_LIB_SRCS
     StoryboardItem.cpp
 
     KisNodeActivationActionCreatorVisitor.cpp
+    KisAndroidFileProxy.cpp
 )
 
 if (KSeExpr_FOUND)
     set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
         widgets/kis_seexpr_script_chooser.cpp
+    )
+endif()
+
+if (Mlt7_FOUND)
+    set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
+        KisPlaybackEngineMLT.cpp
     )
 endif()
 
@@ -498,9 +517,8 @@ endif()
         dialogs/KisAsyncAnimationRenderDialogBase.cpp
         dialogs/KisAsyncAnimationCacheRenderDialog.cpp
         dialogs/KisAsyncAnimationFramesSaveDialog.cpp
-        canvas/kis_animation_player.cpp
+        canvas/KisCanvasAnimationState.cpp	
         kis_animation_importer.cpp
-        KisSyncedAudioPlayback.cpp
         KisFrameDataSerializer.cpp
         KisFrameCacheStore.cpp
         KisFrameCacheSwapper.cpp
@@ -549,6 +567,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     widgets/KisDitherWidget.ui
     widgets/KisAutoLevelsWidget.ui
 
+    forms/wdgaboutapplication.ui
     forms/wdgdlgpngimport.ui
     forms/wdgfullscreensettings.ui
     forms/wdgsegmentgradienteditor.ui
@@ -600,10 +619,12 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/WdgPopupPaletteSettings.ui
     forms/wdgMissingColorProfile.ui
     forms/wdgPasteFormat.ui
+    forms/wdgconvertcolorspace.ui
 
 
     brushhud/kis_dlg_brush_hud_config.ui
     dialogs/kis_delayed_save_dialog.ui
+    dialogs/kis_dlg_hlg_import.ui
     dialogs/KisRecoverNamedAutosaveDialog.ui
     input/config/kis_input_configuration_page.ui
     input/config/kis_edit_profiles_dialog.ui
@@ -657,40 +678,66 @@ endif()
 kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS})
 generate_export_header(kritaui BASE_NAME kritaui)
 
-target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
-                      kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES}
+target_link_libraries(kritaui
+    PUBLIC
+        KF5::CoreAddons
+        KF5::Completion
+        KF5::I18n
+        KF5::ItemViews
+
+        Qt5::Network
+
+        Eigen3::Eigen
+        Boost::boost
+        ${PNG_LIBRARIES}
+
+        kritaversion
+        kritaimpex
+        kritacolor
+        kritaimage
+        kritalibbrush
+        kritawidgets
+        kritawidgetutils
+        kritaresources
 )
 
-if (ANDROID)
-    target_link_libraries(kritaui GLESv3)
-    target_link_libraries(kritaui Qt5::Gui)
-    target_link_libraries(kritaui Qt5::AndroidExtras)
+if (Mlt7_FOUND)
+    target_link_libraries(kritaui PRIVATE SDL2::SDL2 Mlt7::mlt Mlt7::mlt++)
 endif()
 
-if (HAVE_QT_MULTIMEDIA)
-    target_link_libraries(kritaui Qt5::Multimedia)
+if (ANDROID)
+    target_link_libraries(kritaui PRIVATE GLESv3)
+    target_link_libraries(kritaui PUBLIC Qt5::Gui)
+    target_link_libraries(kritaui PRIVATE Qt5::AndroidExtras)
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
-  target_link_libraries(kritaui ${X11_X11_LIB}
+  target_link_libraries(kritaui PRIVATE ${X11_X11_LIB}
                                 ${X11_Xinput_LIB})
 endif()
 
 if(APPLE)
-    target_link_libraries(kritaui ${FOUNDATION_LIBRARY})
-    target_link_libraries(kritaui ${APPKIT_LIBRARY})
+    target_link_libraries(kritaui
+        PUBLIC
+        kritamacosutils
+
+        PRIVATE
+        ${FOUNDATION_LIBRARY}
+        ${APPKIT_LIBRARY}
+    )
 endif ()
 
-
-target_link_libraries(kritaui ${OPENEXR_LIBRARIES})
+if(OpenEXR_FOUND)
+  target_link_libraries(kritaui PUBLIC ${LINK_OPENEXR_LIB})
+endif()
 
 # Add VSync disable workaround
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
-    target_link_libraries(kritaui ${CMAKE_DL_LIBS} Qt5::X11Extras)
+    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 
 if(X11_FOUND)
-    target_link_libraries(kritaui Qt5::X11Extras ${X11_LIBRARIES})
+    target_link_libraries(kritaui PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
 endif()
 
 target_include_directories(kritaui

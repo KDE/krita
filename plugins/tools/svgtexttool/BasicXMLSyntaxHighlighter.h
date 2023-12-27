@@ -17,7 +17,7 @@
  * * No specific handling for nested quotes within attributes
  * * No handling for multi-line comments
  *
- * @see https://github.com/d1vanov/basic-xml-syntax-highlighte
+ * @see https://github.com/d1vanov/basic-xml-syntax-highlighter
  *
  */
 class BasicXMLSyntaxHighlighter : public QSyntaxHighlighter

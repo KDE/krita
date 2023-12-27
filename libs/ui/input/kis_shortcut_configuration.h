@@ -85,6 +85,20 @@ public:
      */
     KisShortcutConfiguration(const KisShortcutConfiguration &other);
     /**
+     * Copy assignment.
+     */
+    KisShortcutConfiguration &operator=(const KisShortcutConfiguration &other);
+
+    /**
+     * Checks whether two configurations have the same _input_ config.
+     *
+     * \note This does not compare the action or the modes the Shortcut is mapped to. This is because those
+     * fields are what the input mapping  *should* do and not what an input mapping is. That is: this will
+     * return true even if two profiles have different actions.
+     */
+    bool operator==(const KisShortcutConfiguration &other) const;
+
+    /**
      * Destructor.
      */
     virtual ~KisShortcutConfiguration();
@@ -207,6 +221,18 @@ public:
      * \note Only applicable when type is GestureType.
      */
     void setGesture(GestureAction type);
+
+    /**
+     * \return True if shortcut is a no-op, that is it isn't bound to any input which can be performed by the
+     * user.
+     */
+    bool isNoOp() const;
+
+    /**
+     * \return an input string for the shortcut type.
+     */
+    QString getInputText() const;
+
     /**
      * Convert a set of mouse buttons into a user-readable
      * string.

@@ -192,7 +192,7 @@ void KisGuidesManager::Private::createUndoCommandIfNeeded()
     KisDocument *doc = view ? view->document() : 0;
     if (doc && needsUndoCommand()) {
         KUndo2Command *cmd = new KisChangeGuidesCommand(doc, oldGuidesConfig, guidesConfig);
-        doc->addCommand(cmd);
+        view->canvasBase()->addCommand(cmd);
     }
 }
 

@@ -14,6 +14,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoPathShape.h>
 
+#include "KisImageResolutionProxy.h"
+#include "kis_default_bounds.h"
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
 #include "flake/kis_shape_selection.h"
@@ -34,7 +36,10 @@ void KisShapeSelectionTest::testAddChild()
     doc->newImage("test", 300, 300, cs, bgColor, KisConfig::CANVAS_COLOR, 1, "test", 100);
     KisImageSP image = doc->image();
 
-    KisSelectionSP selection = new KisSelection();
+    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
+    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(image));
+
+    KisSelectionSP selection = new KisSelection(bounds, resolutionProxy);
     QVERIFY(!selection->hasNonEmptyPixelSelection());
     QVERIFY(!selection->hasNonEmptyShapeSelection());
 
@@ -57,7 +62,7 @@ void KisShapeSelectionTest::testAddChild()
     shape->lineTo(rect.bottomLeft());
     shape->close();
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection);
     shapeSelection->addShape(shape);
 
@@ -92,7 +97,10 @@ void KisShapeSelectionTest::testUndoFlattening()
 
     QCOMPARE(image->locked(), false);
 
-    KisSelectionSP selection = new KisSelection();
+    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
+    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(image));
+
+    KisSelectionSP selection = new KisSelection(bounds, resolutionProxy);
     QCOMPARE(selection->hasNonEmptyPixelSelection(), false);
     QCOMPARE(selection->hasNonEmptyShapeSelection(), false);
 
@@ -109,7 +117,7 @@ void KisShapeSelectionTest::testUndoFlattening()
     const QRectF srcRect1(50, 50, 100, 100);
     const QRectF rect1 = matrix.mapRect(srcRect1);
 
-    KisShapeSelection * shapeSelection1 = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection1 = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection1);
 
     KoPathShape *shape1 = createRectangularShape(rect1);
@@ -145,7 +153,7 @@ void KisShapeSelectionTest::testUndoFlattening()
     const QRectF rect2 = matrix.mapRect(srcRect2);
     KoPathShape *shape2 = createRectangularShape(rect2);
 
-    KisShapeSelection * shapeSelection2 = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection2 = new KisShapeSelection(doc->shapeController(), selection);
     KUndo2Command *cmd2 = selection->convertToVectorSelection(shapeSelection2);
     cmd2->redo(); // first redo
 
@@ -198,7 +206,10 @@ void KisShapeSelectionTest::testHistoryOnFlattening()
 
     QCOMPARE(image->locked(), false);
 
-    KisSelectionSP selection = new KisSelection();
+    KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
+    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(image));
+
+    KisSelectionSP selection = new KisSelection(bounds, resolutionProxy);
     QCOMPARE(selection->hasNonEmptyPixelSelection(), false);
     QCOMPARE(selection->hasNonEmptyShapeSelection(), false);
 
@@ -226,7 +237,7 @@ void KisShapeSelectionTest::testHistoryOnFlattening()
     const QRectF srcRect1(50, 50, 100, 100);
     const QRectF rect1 = matrix.mapRect(srcRect1);
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
 
     QScopedPointer<KUndo2Command> cmd2(selection->convertToVectorSelection(shapeSelection));
     cmd2->redo();

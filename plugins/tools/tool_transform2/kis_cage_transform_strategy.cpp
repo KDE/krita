@@ -56,6 +56,8 @@ void KisCageTransformStrategy::drawConnectionLines(QPainter &gc,
     QPen outlinePen;
 
     KisPaintingTweaks::initAntsPen(&antsPen, &outlinePen);
+    antsPen.setWidth(qMax(1, decorationThickness()));
+    outlinePen.setWidth(qMax(1, decorationThickness()));
 
     const int iterateLimit = isEditingPoints ? numPoints : numPoints + 1;
 

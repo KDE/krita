@@ -28,6 +28,7 @@
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 
+#include <kis_algebra_2d.h>
 #include <kis_icon.h>
 #include <KoShape.h>
 #include <KoCanvasResourceProvider.h>
@@ -59,17 +60,28 @@
 #include "kis_tool_utils.h"
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <brushengine/KisOptimizedBrushOutline.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include "strokes/kis_color_sampler_stroke_strategy.h"
 #include "kis_popup_palette.h"
+#include "kis_paintop_utils.h"
+
+
+struct KisToolPaint::Private
+{
+    // Keeps track of past cursor positions. This is used to determine the drawing angle when
+    // drawing the brush outline or starting a stroke.
+    KisPaintOpUtils::PositionHistory lastCursorPos;
+};
 
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
-      m_colorSamplerDelayTimer(),
       m_isOutlineEnabled(true),
-      m_isOutlineVisible(true)
+      m_isOutlineVisible(true),
+      m_colorSamplerHelper(dynamic_cast<KisCanvas2*>(canvas)),
+      m_d(new Private())
 {
 
     {
@@ -86,17 +98,12 @@ KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     }
 
     KisCanvas2 *kiscanvas = dynamic_cast<KisCanvas2*>(canvas);
-
+    KIS_ASSERT(kiscanvas);
     connect(this, SIGNAL(sigPaintingFinished()), kiscanvas->viewManager()->canvasResourceProvider(), SLOT(slotPainting()));
 
-    m_colorSamplerDelayTimer.setSingleShot(true);
-    connect(&m_colorSamplerDelayTimer, SIGNAL(timeout()), this, SLOT(activateSampleColorDelayed()));
-
-    using namespace std::placeholders; // For _1 placeholder
-    std::function<void(SamplingJob)> callback =
-        std::bind(&KisToolPaint::addSamplerJob, this, _1);
-    m_colorSamplingCompressor.reset(
-        new SamplingCompressor(100, callback, KisSignalCompressor::FIRST_ACTIVE));
+    connect(&m_colorSamplerHelper, SIGNAL(sigRequestCursor(QCursor)), this, SLOT(slotColorPickerRequestedCursor(QCursor)));
+    connect(&m_colorSamplerHelper, SIGNAL(sigRequestCursorReset()), this, SLOT(slotColorPickerRequestedCursorReset()));
+    connect(&m_colorSamplerHelper, SIGNAL(sigRequestUpdateOutline()), this, SLOT(slotColorPickerRequestedOutlineUpdate()));
 }
 
 
@@ -117,9 +124,19 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     case(KoCanvasResource::Opacity):
         setOpacity(v.toDouble());
         break;
-    case(KoCanvasResource::CurrentPaintOpPreset):
-        requestUpdateOutline(m_outlineDocPoint, 0);
+    case(KoCanvasResource::CurrentPaintOpPreset): {
+        if (isActive()) {
+            requestUpdateOutline(m_outlineDocPoint, 0);
+        }
         break;
+    }
+    case KoCanvasResource::CurrentPaintOpPresetName: {
+        if (isActive()) {
+            const QString formattedBrushName = v.toString().replace("_", " ");
+            emit statusTextChanged(formattedBrushName);
+        }
+        break;
+    }
     default: //nothing
         break;
     }
@@ -128,11 +145,48 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
 }
 
+void KisToolPaint::tryRestoreOpacitySnapshot()
+{
+    /**
+     * Here is a weird heuristics on when to restore
+     * brush opacity and when not. Basically, we should
+     * restore opacity to its saved if the brush preset
+     * hasn't changed too much, that is, its version is
+     * the same and it hasn't been reset into a clean
+     * state since then. The latter condition is checked
+     * in a fuzzy manner by just mangling the isDirty
+     * state before and after.
+     */
+
+    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
+
+    boost::optional<qreal> opacityToRestore;
+
+    KisPaintOpPresetSP newPreset = provider->currentPreset();
+
+    if (newPreset) {
+        if (newPreset == m_oldPreset && newPreset->version() == m_oldPresetVersion
+            && (newPreset->isDirty() || !m_oldPresetIsDirty)) {
+
+            opacityToRestore = m_oldOpacity;
+        }
+
+        m_oldPreset = newPreset;
+        m_oldPresetIsDirty = newPreset->isDirty();
+        m_oldPresetVersion = newPreset->version();
+        m_oldOpacity = provider->opacity();
+    }
+
+    if (opacityToRestore) {
+        provider->setOpacity(*opacityToRestore);
+    }
+}
+
 
 void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 {
     if (currentPaintOpPreset()) {
-        QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
+        const QString formattedBrushName = currentPaintOpPreset() ? currentPaintOpPreset()->name().replace("_", " ") : QString();
         emit statusTextChanged(formattedBrushName);
     }
 
@@ -145,11 +199,12 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 
     }
 
-    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
-    if ( provider->currentPreset() == m_localPreset ) {
-        m_oldOpacity = provider->opacity();
-        provider->setOpacity(m_localOpacity);
-    }
+    connect(action("rotate_brush_tip_clockwise"), SIGNAL(triggered()), SLOT(rotateBrushTipClockwise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_clockwise_precise"), SIGNAL(triggered()), SLOT(rotateBrushTipClockwisePrecise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_counter_clockwise"), SIGNAL(triggered()), SLOT(rotateBrushTipCounterClockwise()), Qt::UniqueConnection);
+    connect(action("rotate_brush_tip_counter_clockwise_precise"), SIGNAL(triggered()), SLOT(rotateBrushTipCounterClockwisePrecise()), Qt::UniqueConnection);
+
+    tryRestoreOpacitySnapshot();
 }
 
 void KisToolPaint::deactivate()
@@ -159,20 +214,37 @@ void KisToolPaint::deactivate()
         disconnect(action("decrease_brush_size"), 0, this, 0);
     }
 
-    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
-    m_localOpacity = provider->opacity();
-    m_localPreset = provider->currentPreset();
-    provider->setOpacity(m_oldOpacity);
+    disconnect(action("rotate_brush_tip_clockwise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_clockwise_precise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_counter_clockwise"), 0, this, 0);
+    disconnect(action("rotate_brush_tip_counter_clockwise_precise"), 0, this, 0);
+
+    tryRestoreOpacitySnapshot();
+    emit statusTextChanged(QString());
 
     KisTool::deactivate();
 }
 
-QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
+void KisToolPaint::slotColorPickerRequestedCursor(const QCursor &cursor)
+{
+    useCursor(cursor);
+}
+
+void KisToolPaint::slotColorPickerRequestedCursorReset()
+{
+    resetCursorStyle();
+}
+
+void KisToolPaint::slotColorPickerRequestedOutlineUpdate()
+{
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+KisOptimizedBrushOutline KisToolPaint::tryFixBrushOutline(const KisOptimizedBrushOutline &originalOutline)
 {
     KisConfig cfg(true);
 
-    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
     const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
     if (currentOutlineStyle == OUTLINE_NONE) return originalOutline;
@@ -188,7 +260,7 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
     QSize widgetSize = canvas()->canvasWidget()->size();
     const int maxThresholdSum = widgetSize.width() + widgetSize.height();
 
-    QPainterPath outline = originalOutline;
+    KisOptimizedBrushOutline outline = originalOutline;
     QRectF boundingRect = outline.boundingRect();
     const qreal sum = boundingRect.width() + boundingRect.height();
 
@@ -197,11 +269,16 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
     if (sum > maxThresholdSum) {
         const int hairOffset = 7;
 
-        outline.moveTo(center.x(), center.y() - hairOffset);
-        outline.lineTo(center.x(), center.y() + hairOffset);
+        QPainterPath crossIcon;
 
-        outline.moveTo(center.x() - hairOffset, center.y());
-        outline.lineTo(center.x() + hairOffset, center.y());
+        crossIcon.moveTo(center.x(), center.y() - hairOffset);
+        crossIcon.lineTo(center.x(), center.y() + hairOffset);
+
+        crossIcon.moveTo(center.x() - hairOffset, center.y());
+        crossIcon.lineTo(center.x() + hairOffset, center.y());
+
+        outline.addPath(crossIcon);
+
     } else if (sum < minThresholdSize && !outline.isEmpty()) {
         outline = QPainterPath();
         outline.addEllipse(center, 0.5 * minThresholdSize, 0.5 * minThresholdSize);
@@ -214,18 +291,10 @@ void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    QPainterPath path = tryFixBrushOutline(pixelToView(m_currentOutline));
+    KisOptimizedBrushOutline path = tryFixBrushOutline(pixelToView(m_currentOutline));
     paintToolOutline(&gc, path);
 
-    if (m_showColorPreview) {
-        const QRectF viewRect = converter.documentToView(m_oldColorPreviewRect);
-        gc.fillRect(viewRect, m_colorPreviewCurrentColor);
-
-        if (m_colorPreviewShowComparePlate) {
-            const QRectF baseColorRect = converter.documentToView(m_oldColorPreviewBaseColorRect);
-            gc.fillRect(baseColorRect, m_colorPreviewBaseColor);
-        }
-    }
+    m_colorSamplerHelper.paint(gc, converter);
 }
 
 void KisToolPaint::setMode(ToolMode mode)
@@ -240,90 +309,16 @@ void KisToolPaint::setMode(ToolMode mode)
     KisTool::setMode(mode);
 }
 
-void KisToolPaint::activateSampleColor(AlternateAction action)
-{
-    m_showColorPreview = true;
-
-    requestUpdateOutline(m_outlineDocPoint, 0);
-
-    int resource = colorPreviewResourceId(action);
-    KoColor color = canvas()->resourceManager()->koColorResource(resource);
-
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-
-    m_colorPreviewCurrentColor = kisCanvas->displayColorConverter()->toQColor(color);
-
-    if (!m_colorPreviewBaseColor.isValid()) {
-        m_colorPreviewBaseColor = m_colorPreviewCurrentColor;
-    }
-}
-
-void KisToolPaint::deactivateSampleColor(AlternateAction action)
-{
-    Q_UNUSED(action);
-
-    m_showColorPreview = false;
-    m_oldColorPreviewRect = QRect();
-    m_colorPreviewCurrentColor = QColor();
-}
-
-void KisToolPaint::sampleColorWasOverridden()
-{
-    m_colorPreviewShowComparePlate = false;
-    m_colorPreviewBaseColor = QColor();
-}
-
 void KisToolPaint::activateAlternateAction(AlternateAction action)
 {
-    switch (action) {
-    case SampleFgNode:
-        Q_FALLTHROUGH();
-    case SampleBgNode:
-        Q_FALLTHROUGH();
-    case SampleFgImage:
-        Q_FALLTHROUGH();
-    case SampleBgImage:
-        delayedAction = action;
-        m_colorSamplerDelayTimer.start(100);
-        Q_FALLTHROUGH();
-    default:
-        sampleColorWasOverridden();
+    if (!isSamplingAction(action)) {
         KisTool::activateAlternateAction(action);
-    };
-}
+        return;
+    }
 
-void KisToolPaint::activateSampleColorDelayed()
-{
-    switch (delayedAction) {
-        case SampleFgNode:
-        useCursor(KisCursor::samplerLayerForegroundCursor());
-        activateSampleColor(delayedAction);
-        break;
-    case SampleBgNode:
-        useCursor(KisCursor::samplerLayerBackgroundCursor());
-        activateSampleColor(delayedAction);
-        break;
-    case SampleFgImage:
-        useCursor(KisCursor::samplerImageForegroundCursor());
-        activateSampleColor(delayedAction);
-        break;
-    case SampleBgImage:
-        useCursor(KisCursor::samplerImageBackgroundCursor());
-        activateSampleColor(delayedAction);
-        break;
-    default:
-        break;
-    };
-
-    repaintDecorations();
-}
-
-bool KisToolPaint::isSamplingAction(AlternateAction action) {
-    return action == SampleFgNode ||
-        action == SampleBgNode ||
-        action == SampleFgImage ||
-        action == SampleBgImage;
+    const bool sampleCurrentLayer = action == SampleFgNode || action == SampleBgNode;
+    const bool sampleFgColor = action == SampleFgNode || action == SampleFgImage;
+    m_colorSamplerHelper.activate(sampleCurrentLayer, sampleFgColor);
 }
 
 void KisToolPaint::deactivateAlternateAction(AlternateAction action)
@@ -333,71 +328,25 @@ void KisToolPaint::deactivateAlternateAction(AlternateAction action)
         return;
     }
 
-    delayedAction = KisTool::NONE;
-    m_colorSamplerDelayTimer.stop();
-
-    resetCursorStyle();
-    deactivateSampleColor(action);
+    m_colorSamplerHelper.deactivate();
 }
 
-void KisToolPaint::addSamplerJob(const SamplingJob &samplingJob)
-{
-    /**
-     * The actual sampling is delayed by a compressor, so we can get this
-     * event when the stroke is already closed
-     */
-    if (!m_samplerStrokeId) return;
-
-    KIS_ASSERT_RECOVER_RETURN(isSamplingAction(samplingJob.action));
-
-    const QPoint imagePoint = image()->documentToImagePixelFloored(samplingJob.documentPixel);
-    const bool fromCurrentNode = samplingJob.action == SampleFgNode || samplingJob.action == SampleBgNode;
-    m_samplingResource = colorPreviewResourceId(samplingJob.action);
-
-    if (!fromCurrentNode) {
-        auto *kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-        KisSharedPtr<KisReferenceImagesLayer> referencesLayer = kisCanvas->imageView()->document()->referenceImagesLayer();
-        if (referencesLayer && kisCanvas->referenceImagesDecoration()->visible()) {
-            QColor color = referencesLayer->getPixel(imagePoint);
-            if (color.isValid() && color.alpha() != 0) {
-                slotColorSamplingFinished(KoColor(color, image()->colorSpace()));
-                return;
-            }
-        }
-    }
-
-    KisPaintDeviceSP device = fromCurrentNode ?
-        currentNode()->colorSampleSourceDevice() : image()->projection();
-
-    if (device) {
-        // Used for color sampler blending.
-        KoColor currentColor = canvas()->resourceManager()->foregroundColor();
-        if( samplingJob.action == SampleBgNode || samplingJob.action == SampleBgImage ){
-            currentColor = canvas()->resourceManager()->backgroundColor();
-        }
-
-        image()->addJob(m_samplerStrokeId,
-                        new KisColorSamplerStrokeStrategy::Data(device, imagePoint, currentColor));
-    } else {
-        KisCanvas2 *kiscanvas = static_cast<KisCanvas2 *>(canvas());
-        QString message = i18n("Color sampler does not work on this layer.");
-        kiscanvas->viewManager()->showFloatingMessage(message, koIcon("object-locked"));
-    }
+bool KisToolPaint::isSamplingAction(AlternateAction action) {
+    return action == SampleFgNode ||
+        action == SampleBgNode ||
+        action == SampleFgImage ||
+        action == SampleBgImage;
 }
 
 void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (isSamplingAction(action)) {
-        KIS_ASSERT_RECOVER_RETURN(!m_samplerStrokeId);
         setMode(SECONDARY_PAINT_MODE);
 
-        KisColorSamplerStrokeStrategy *strategy = new KisColorSamplerStrokeStrategy();
-        connect(strategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
-                this, &KisToolPaint::slotColorSamplingFinished);
+        KisToolUtils::ColorSamplerConfig config;
+        config.load();
 
-        m_samplerStrokeId = image()->startStroke(strategy);
-        m_colorSamplingCompressor->start(SamplingJob(event->point, action));
+        m_colorSamplerHelper.startAction(event->point, config.radius, config.blend);
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::beginAlternateAction(event, action);
@@ -407,8 +356,7 @@ void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction a
 void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (isSamplingAction(action)) {
-        KIS_ASSERT_RECOVER_RETURN(m_samplerStrokeId);
-        m_colorSamplingCompressor->start(SamplingJob(event->point, action));
+        m_colorSamplerHelper.continueAction(event->point);
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::continueAlternateAction(event, action);
@@ -418,40 +366,12 @@ void KisToolPaint::continueAlternateAction(KoPointerEvent *event, AlternateActio
 void KisToolPaint::endAlternateAction(KoPointerEvent *event, AlternateAction action)
 {
     if (isSamplingAction(action)) {
-        KIS_ASSERT_RECOVER_RETURN(m_samplerStrokeId);
-        image()->endStroke(m_samplerStrokeId);
-        m_samplerStrokeId.clear();
+        m_colorSamplerHelper.endAction();
         requestUpdateOutline(event->point, event);
         setMode(HOVER_MODE);
     } else {
         KisTool::endAlternateAction(event, action);
     }
-}
-
-int KisToolPaint::colorPreviewResourceId(AlternateAction action)
-{
-    bool toForegroundColor = action == SampleFgNode || action == SampleFgImage;
-    int resource = toForegroundColor ?
-        KoCanvasResource::ForegroundColor : KoCanvasResource::BackgroundColor;
-
-    return resource;
-}
-
-void KisToolPaint::slotColorSamplingFinished(KoColor color)
-{
-    color.setOpacity(OPACITY_OPAQUE_U8);
-    canvas()->resourceManager()->setResource(m_samplingResource, color);
-
-    if (!m_showColorPreview) return;
-
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-    QColor previewColor = kisCanvas->displayColorConverter()->toQColor(color);
-
-    m_colorPreviewShowComparePlate = true;
-    m_colorPreviewCurrentColor = previewColor;
-
-    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::mousePressEvent(KoPointerEvent *event)
@@ -601,7 +521,6 @@ void KisToolPaint::slotPopupQuickHelp()
 
 void KisToolPaint::activatePrimaryAction()
 {
-    sampleColorWasOverridden();
     setOutlineVisible(true);
     KisTool::activatePrimaryAction();
 }
@@ -656,7 +575,7 @@ void KisToolPaint::decreaseBrushSize()
     std::vector<int>::reverse_iterator result =
         std::upper_bound(m_standardBrushSizes.rbegin(),
                          m_standardBrushSizes.rend(),
-                         (int)paintopSize,
+                         qRound(paintopSize),
                          std::greater<int>());
 
     int newValue = result != m_standardBrushSizes.rend() ? *result : m_standardBrushSizes.front();
@@ -668,29 +587,37 @@ void KisToolPaint::decreaseBrushSize()
 void KisToolPaint::showBrushSize()
 {
      KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+     KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
      kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", currentPaintOpPreset()->settings()->paintOpSize())
                                                    , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
-std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)
+void KisToolPaint::rotateBrushTipClockwise()
 {
-    if (!m_showColorPreview) return std::make_pair(QRectF(), QRectF());
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle - 15);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
 
-    KisConfig cfg(true);
+void KisToolPaint::rotateBrushTipClockwisePrecise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle - 1);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
 
-    const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
+void KisToolPaint::rotateBrushTipCounterClockwise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle + 15);
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
 
-    const QRectF colorPreviewBaseColorViewRect =
-        m_colorPreviewShowComparePlate ?
-            colorPreviewViewRect.translated(colorPreviewViewRect.width(), 0) :
-            QRectF();
-
-    const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
-    const QRectF colorPreviewBaseColorDocumentRect =
-        canvas()->viewConverter()->viewToDocument(colorPreviewBaseColorViewRect);
-
-    return std::make_pair(colorPreviewDocumentRect.translated(outlineDocPoint),
-                          colorPreviewBaseColorDocumentRect.translated(outlineDocPoint));
+void KisToolPaint::rotateBrushTipCounterClockwisePrecise()
+{
+    const qreal angle = currentPaintOpPreset()->settings()->paintOpAngle();
+    currentPaintOpPreset()->settings()->setPaintOpAngle(angle + 1);
+    requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
 void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
@@ -698,16 +625,15 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     QRectF outlinePixelRect;
     QRectF outlineDocRect;
 
-    QRectF colorPreviewDocRect;
-    QRectF colorPreviewBaseColorDocRect;
     QRectF colorPreviewDocUpdateRect;
+
+    QPointF outlineMoveVector;
 
     if (m_supportOutline) {
         KisConfig cfg(true);
         KisPaintOpSettings::OutlineMode outlineMode;
 
-        bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-                canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+        bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
         const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
         const auto outlineStyleIsVisible = [&]() {
@@ -741,6 +667,8 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
         outlineMode.forceFullSize = !useSeparateEraserCursor ? cfg.forceAlwaysFullSizedOutline() : cfg.forceAlwaysFullSizedEraserOutline();
 
+        outlineMoveVector = outlineDocPoint - m_outlineDocPoint;
+
         m_outlineDocPoint = outlineDocPoint;
         m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);
 
@@ -760,10 +688,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
             outlineDocRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
         }
 
-        std::tie(colorPreviewDocRect, colorPreviewBaseColorDocRect) =
-                this->colorPreviewDocRect(m_outlineDocPoint);
-
-        colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
+        colorPreviewDocUpdateRect = m_colorSamplerHelper.colorPreviewDocRect(m_outlineDocPoint);
 
         if (!colorPreviewDocUpdateRect.isEmpty()) {
             colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
@@ -791,7 +716,43 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     }
 
     if (!outlineDocRect.isEmpty()) {
-        kiscanvas->updateCanvasToolOutlineDoc(outlineDocRect);
+        /**
+         * A simple "update-ahead" implementation that issues an update a little
+         * bigger to accomodata the possible following outline.
+         *
+         * The point is that canvas rendering comes through two stages of
+         * compression and the canvas may request outline update when the
+         * outline itself has already been changed. It causes visual tearing
+         * on the screen (see https://bugs.kde.org/show_bug.cgi?id=476300).
+         *
+         * We can solve that in  two ways:
+         *
+         * 1) Pass the actual outline with the update rect itself, which is
+         *    a bit complicated and may result in the outline being a bit
+         *    delayed visually. We don't implement this method (yet).
+         *
+         * 2) Just pass the update rect a bit bigger than the actual outline
+         *    to accomodate a possible change in the outline. We calculate
+         *    this bigger rect by offsetting the rect by the previous cursor
+         *    offset.
+         */
+
+        /// Don't try to update-ahead if the offset is bigger than 50%
+        /// of the brush outline
+        const qreal maxUpdateAheadOutlinePortion = 0.5;
+
+        /// 10% of extra move is added to offset
+        const qreal offsetFuzzyExtension = 0.1;
+
+        const qreal moveDistance = KisAlgebra2D::norm(outlineMoveVector);
+
+        QRectF offsetRect;
+
+        if (moveDistance < maxUpdateAheadOutlinePortion * KisAlgebra2D::maxDimension(outlineDocRect)) {
+            offsetRect = outlineDocRect.translated((1.0 + offsetFuzzyExtension) * outlineMoveVector);
+        }
+
+        kiscanvas->updateCanvasToolOutlineDoc(outlineDocRect | offsetRect);
     }
 
     if (!colorPreviewDocUpdateRect.isEmpty()) {
@@ -799,28 +760,41 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     }
 
     m_oldOutlineRect = outlineDocRect;
-    m_oldColorPreviewRect = colorPreviewDocRect;
-    m_oldColorPreviewBaseColorRect = colorPreviewBaseColorDocRect;
     m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
 }
 
-QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
-                                          const KoPointerEvent *event,
-                                          KisPaintOpSettings::OutlineMode outlineMode)
+bool KisToolPaint::isEraser() const {
+    return canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+}
+
+KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos,
+                                                      const KoPointerEvent *event,
+                                                      KisPaintOpSettings::OutlineMode outlineMode)
 {
     Q_UNUSED(event);
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_ASSERT(canvas2);
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
-    KisPaintInformation info(convertToPixelCoord(documentPos));
+    const QPointF pixelPos = convertToPixelCoord(documentPos);
+    KisPaintInformation info(pixelPos);
     info.setCanvasMirroredH(canvas2->coordinatesConverter()->xAxisMirrored());
     info.setCanvasMirroredV(canvas2->coordinatesConverter()->yAxisMirrored());
     info.setCanvasRotation(canvas2->coordinatesConverter()->rotationAngle());
     info.setRandomSource(new KisRandomSource());
     info.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
 
-    QPainterPath path = currentPaintOpPreset()->settings()->
+    const qreal currentZoom = canvas2->resourceManager() ? canvas2->resourceManager()->resource(KoCanvasResource::EffectiveZoom).toReal() : 1.0;
+
+    QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(pixelPos, currentZoom);
+    qreal startAngle = KisAlgebra2D::directionBetweenPoints(prevPoint, pixelPos, 0);
+    KisDistanceInformation distanceInfo(prevPoint, startAngle);
+
+    KisPaintInformation::DistanceInformationRegistrar registrar =
+        info.registerDistanceInformation(&distanceInfo);
+
+    KisOptimizedBrushOutline path = currentPaintOpPreset()->settings()->
         brushOutline(info,
                      outlineMode, converter->effectivePhysicalZoom());
 

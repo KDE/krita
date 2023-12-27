@@ -9,8 +9,9 @@
 #include <simpletest.h>
 #include <kis_filter_configuration.h>
 
-#include <sdk/tests/testutil.h>
-#include <sdk/tests/testui.h>
+#include <testui.h>
+#include <testutil.h>
+
 
 #include "ui_manager_test.h"
 

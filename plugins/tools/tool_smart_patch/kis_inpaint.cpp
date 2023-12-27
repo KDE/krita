@@ -308,13 +308,13 @@ public:
         ImageData newImage(newW, newH, cs->pixelSize());
         ImageData newMask(newW, newH, 1);
 
-        KoDummyUpdater updater;
+        KoDummyUpdaterHolder updaterHolder;
         KisTransformWorker worker(imageDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                  &updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+                                  updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bicubic"));
         worker.run();
 
         KisTransformWorker workerMask(maskDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                      &updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+                                      updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bicubic"));
         workerMask.run();
 
         imageDev->readBytes(newImage.data(), 0, 0, newW, newH);
@@ -491,7 +491,7 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
         dsq += v * v;
     }
 
-    // in HDR color spaces the value of the cnannel may become bigger than the unitValue
+    // in HDR color spaces the value of the channel may become bigger than the unitValue
     return qMin((float)(nchannels * MAX_DIST), dsq / (pow2((float)KoColorSpaceMathsTraits<T>::unitValue) / MAX_DIST ));
 }
 
@@ -687,7 +687,7 @@ public:
     {
         qint64 distance = 0;
         qint64 wsum = 0;
-        const qint64 ssdmax = nColors * 255 * 255;
+        const qint64 ssdmax = nColors * 255 * (qint64)255;
 
         //for each pixel in the source patch
         for (int dy = -patchSize; dy <= patchSize; dy++) {
@@ -737,6 +737,9 @@ public:
             }
         }
 
+        if (wsum == 0) {
+            return 0; // sanity check, to avoid undefined behaviour in code below
+        }
         return qFloor(MAX_DIST * (qreal(distance) / wsum));
     }
 

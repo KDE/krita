@@ -1,0 +1,20 @@
+<svg width="200px" height="70px"
+    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+    <defs>
+        <path id="split" stroke="cornflowerblue" fill="none" d="M0 0L120 0L0 60ZM130 0L 190 0L190 45L130 45Z" />
+    </defs>
+    <g id="testRect">
+
+        <g transform="translate(5, 5)">
+            <!-- 
+            This particular test is engineered so that the word 'dog' doesn't fit inside
+            the shape if the difference between the estimated and real height of a line
+            isn't corrected for.
+            -->
+            <use xlink:href="#split" />
+            <text id="test1" transform="translate(0,0)" style="shape-inside: url(#split);"
+                  font-family="DejaVu Sans" fill="blue" font-size="10">The quick brown fox <tspan font-size="14">jumps</tspan> over the lazy dog.
+            </text>
+        </g>
+    </g>
+</svg>

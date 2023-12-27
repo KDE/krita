@@ -62,6 +62,8 @@ public:
 
     static bool comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2);
 
+    virtual void notifyWindowMinimized(bool minimized);
+
 public Q_SLOTS:
     /**
      * Set if the decoration is visible or not.
@@ -84,6 +86,9 @@ protected:
      * the decoration is painted.
      */
     void setPriority(int value);
+
+    // returns the minimum decoration thickness, somewhat equivelant to the display scaling.
+    int decorationThickness() const;
 
 private:
     struct Private;

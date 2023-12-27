@@ -9,7 +9,10 @@
 
 #include "ui_wdgtextbrush.h"
 
-#include <kis_text_brush.h>
+#include <lager/cursor.hpp>
+#include <KisBrushModel.h>
+
+class KisTextBrushModel;
 
 class KisTextBrushChooser : public QWidget, public Ui::KisWdgTextBrush
 {
@@ -17,24 +20,17 @@ class KisTextBrushChooser : public QWidget, public Ui::KisWdgTextBrush
 
 public:
 
-    KisTextBrushChooser(QWidget *parent, const char* name, const QString& caption);
-
-    KisBrushSP brush() {
-        return m_textBrush;
-    }
-
-    void setBrush(KisBrushSP brush);
+    KisTextBrushChooser(KisTextBrushModel *model,
+                        QWidget *parent);
+    ~KisTextBrushChooser();
 
 private Q_SLOTS:
-    void rebuildTextBrush();
+    void updateBrushPreview();
     void getFont();
 
-Q_SIGNALS:
-    void sigBrushChanged();
-
 private:
-    KisBrushSP m_textBrush;
-    QFont m_font;
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

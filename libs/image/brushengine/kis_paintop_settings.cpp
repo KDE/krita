@@ -44,6 +44,7 @@
 #include <KoCanvasResourcesInterface.h>
 #include <KoResourceCacheInterface.h>
 #include <KoResourceCachePrefixedStorageWrapper.h>
+#include <brushengine/KisOptimizedBrushOutline.h>
 
 #define SANITY_CHECK_CACHE
 
@@ -561,9 +562,9 @@ bool KisPaintOpSettings::needsAsynchronousUpdates() const
     return false;
 }
 
-QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
     if (mode.isVisible) {
         path = ellipseOutline(10, 10, 1.0, 0);
 
@@ -577,7 +578,7 @@ QPainterPath KisPaintOpSettings::brushOutline(const KisPaintInformation &info, c
     return path;
 }
 
-QPainterPath KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation)
+KisOptimizedBrushOutline KisPaintOpSettings::ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation)
 {
     QPainterPath path;
     QRectF ellipse(0, 0, width * scale, height * scale);

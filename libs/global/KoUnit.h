@@ -11,13 +11,12 @@
 #ifndef KOUNIT_H
 #define KOUNIT_H
 
-// Calligra
 #include "kritaglobal_export.h"
-// Qt
+
 #include <QString>
 #include <QDebug>
 #include <QMetaType>
-// std
+
 #include <math.h> // for floor
 #include <boost/operators.hpp>
 
@@ -59,7 +58,7 @@ static const qreal CC_ROUNDING {100000.0}; // cicero
 
 
 /**
- * %Calligra stores everything in pt (using "qreal") internally.
+ * Krita stores everything in pt (using "qreal") internally.
  * When displaying a value to the user, the value is converted to the user's unit
  * of choice, and rounded to a reasonable precision to avoid 0.999999
  *
@@ -71,7 +70,7 @@ static const qreal CC_ROUNDING {100000.0}; // cicero
 class KRITAGLOBAL_EXPORT KoUnit : public boost::equality_comparable<KoUnit>
 {
 public:
-    /** Length units supported by Calligra. */
+    /** Length units supported by Krita. */
     enum Type {
         Millimeter = 0,
         Point,  ///< Postscript point, 1/72th of an Inco
@@ -181,7 +180,7 @@ public:
     /// if it is controlled with the given @p listOptions.
     int indexInListForUi(ListOptions listOptions = ListAll) const;
 
-    /// parse common %Calligra and Odf values, like "10cm", "5mm" to pt
+    /// parse common Krita and Odf values, like "10cm", "5mm" to pt
     static qreal parseValue(const QString &value, qreal defaultVal = 0.0);
 
     /// parse an angle to its value in degrees

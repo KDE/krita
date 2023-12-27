@@ -33,12 +33,13 @@
 #include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include "kis_resources_snapshot.h"
-#include "commands_new/KisMergeLabeledLayersCommand.h"
 #include <kis_color_filter_combo.h>
 #include <KisAngleSelector.h>
 #include <KoGroupButton.h>
 #include <kis_color_button.h>
 #include <kis_color_label_selector_widget.h>
+#include <kis_cmb_composite.h>
+#include <kis_image_animation_interface.h>
 
 #include <kis_processing_applicator.h>
 #include <kis_command_utils.h>
@@ -46,11 +47,13 @@
 #include <kis_group_layer.h>
 #include <kis_layer_utils.h>
 
+#include <KisSpinBoxI18nHelper.h>
 #include <KisPart.h>
 #include <KisDocument.h>
 #include <kis_dummies_facade.h>
 #include <KoShapeControllerBase.h>
 #include <kis_shape_controller.h>
+#include <kis_canvas_resource_provider.h>
 
 #include <KoCompositeOpRegistry.h>
 
@@ -81,7 +84,32 @@ void KisToolEncloseAndFill::resetCursorStyle()
 void KisToolEncloseAndFill::activate(const QSet<KoShape*> &shapes)
 {
     KisDynamicDelegatedTool::activate(shapes);
-    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
+    m_configGroup = KSharedConfig::openConfig()->group(toolId());
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisCanvasResourceProvider *resourceProvider = kisCanvas->viewManager()->canvasResourceProvider();
+    if (resourceProvider) {
+        connect(resourceProvider,
+                SIGNAL(sigNodeChanged(const KisNodeSP)),
+                this,
+                SLOT(slot_currentNodeChanged(const KisNodeSP)));
+        slot_currentNodeChanged(currentNode());
+    }
+}
+
+void KisToolEncloseAndFill::deactivate()
+{
+    m_referencePaintDevice = nullptr;
+    m_referenceNodeList = nullptr;
+    KisCanvas2 *kisCanvas = static_cast<KisCanvas2*>(canvas());
+    KisCanvasResourceProvider *resourceProvider = kisCanvas->viewManager()->canvasResourceProvider();
+    if (resourceProvider) {
+        disconnect(resourceProvider,
+                   SIGNAL(sigNodeChanged(const KisNodeSP)),
+                   this,
+                   SLOT(slot_currentNodeChanged(const KisNodeSP)));
+    }
+    slot_currentNodeChanged(nullptr);
+    KisDynamicDelegatedTool::deactivate();
 }
 
 void KisToolEncloseAndFill::setupEnclosingSubtool()
@@ -242,23 +270,42 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    KisPaintDeviceSP referenceDevice = nullptr;
-
     if (m_reference == CurrentLayer) {
-        referenceDevice = currentNode()->paintDevice();
+        m_referencePaintDevice = currentNode()->paintDevice();
     } else if (m_reference == AllLayers) {
-        referenceDevice = currentImage()->projection();
+        m_referencePaintDevice = currentImage()->projection();
     } else if (m_reference == ColorLabeledLayers) {
-        KisImageWSP currentImageWSP = currentImage();
-        KisNodeSP currentRoot = currentImageWSP->root();
-        KisImageSP referenceImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Enclose and Fill Tool Reference Image");
-        referenceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
-
-        applicator.applyCommand(new KisMergeLabeledLayersCommand(referenceImage, referenceDevice, currentRoot, m_selectedColorLabels),
-                                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        if (!m_referenceNodeList) {
+            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
+            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        }
+        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
+        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        const int currentTime = image()->animationInterface()->currentTime();
+        applicator.applyCommand(
+            new KisMergeLabeledLayersCommand(
+                image(),
+                m_referenceNodeList,
+                newReferenceNodeList,
+                m_referencePaintDevice,
+                newReferencePaintDevice,
+                m_selectedColorLabels,
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                m_previousTime != currentTime
+            ),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        );
+        m_referencePaintDevice = newReferencePaintDevice;
+        m_referenceNodeList = newReferenceNodeList;
+        m_previousTime = currentTime;
     }
 
-    KIS_ASSERT(referenceDevice);
+    if (m_reference != ColorLabeledLayers) {
+        // Reset this so that the device from color labeled layers gets
+        // regenerated when that mode is selected again
+        m_referenceNodeList.reset();
+    }
 
     QTransform transform;
     transform.rotate(m_patternRotation);
@@ -267,7 +314,7 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
     resources->setFillTransform(transform);
 
     KisProcessingVisitorSP visitor =
-        new KisEncloseAndFillProcessingVisitor(referenceDevice,
+        new KisEncloseAndFillProcessingVisitor(m_referencePaintDevice,
                                                enclosingMask,
                                                resources->activeSelection(),
                                                resources,
@@ -275,16 +322,20 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
                                                m_regionSelectionColor,
                                                m_regionSelectionInvert,
                                                m_regionSelectionIncludeContourRegions,
-                                               m_regionSelectionIncludeSurroundingRegions,
+                                               false,
                                                m_fillThreshold,
                                                m_fillOpacitySpread,
                                                m_antiAlias,
                                                m_expand,
+                                               m_stopGrowingAtDarkestPixel,
                                                m_feather,
                                                m_useSelectionAsBoundary,
                                                m_fillType == FillWithPattern,
                                                false,
-                                               m_fillType == FillWithBackgroundColor);
+                                               m_fillType == FillWithBackgroundColor,
+                                               m_useCustomBlendingOptions,
+                                               m_customOpacity * OPACITY_OPAQUE_U8 / 100,
+                                               m_customCompositeOp);
 
     applicator.applyVisitor(visitor,
                             KisStrokeJobData::SEQUENTIAL,
@@ -320,19 +371,53 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_buttonEnclosingMethodLasso->setChecked(true);
 
     m_comboBoxRegionSelectionMethod = new QComboBox;
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegions), static_cast<int>(RegionSelectionMethod::SelectAllRegions));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsFilledWithSpecificColor), static_cast<int>(RegionSelectionMethod::SelectRegionsFilledWithSpecificColor));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsFilledWithTransparent), static_cast<int>(RegionSelectionMethod::SelectRegionsFilledWithTransparent));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent), static_cast<int>(RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColor), static_cast<int>(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColor));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent), static_cast<int>(RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent), static_cast<int>(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor), static_cast<int>(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsSurroundedByTransparent), static_cast<int>(RegionSelectionMethod::SelectRegionsSurroundedByTransparent));
-    m_comboBoxRegionSelectionMethod->addItem(regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent), static_cast<int>(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent));
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegions),
+        static_cast<int>(RegionSelectionMethod::SelectAllRegions)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsFilledWithSpecificColor),
+        static_cast<int>(RegionSelectionMethod::SelectRegionsFilledWithSpecificColor)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsFilledWithTransparent),
+        static_cast<int>(RegionSelectionMethod::SelectRegionsFilledWithTransparent)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent),
+        static_cast<int>(RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColor),
+        static_cast<int>(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColor)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent),
+        static_cast<int>(RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(
+            RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent
+        ),
+        static_cast<int>(RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor),
+        static_cast<int>(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsSurroundedByTransparent),
+        static_cast<int>(RegionSelectionMethod::SelectRegionsSurroundedByTransparent)
+    );
+    m_comboBoxRegionSelectionMethod->addItem(
+        regionSelectionMethodToUserString(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent),
+        static_cast<int>(RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent)
+    );
     m_comboBoxRegionSelectionMethod->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
     m_comboBoxRegionSelectionMethod->setMinimumContentsLength(15);
-    m_comboBoxRegionSelectionMethod->view()->setMinimumWidth(m_comboBoxRegionSelectionMethod->view()->sizeHintForColumn(0));
+    m_comboBoxRegionSelectionMethod->view()->setMinimumWidth(
+        m_comboBoxRegionSelectionMethod->view()->sizeHintForColumn(0)
+    );
     m_buttonRegionSelectionColor = new KisColorButton;
     m_checkBoxRegionSelectionInvert =
         new QCheckBox(
@@ -345,12 +430,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
                   "Include contour regions")
         );
     m_checkBoxRegionSelectionIncludeContourRegions->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
-    m_checkBoxRegionSelectionIncludeSurroundingRegions =
-        new QCheckBox(
-            i18nc("The 'include surrounding regions' checkbox in enclose and fill tool",
-                  "Include surrounding regions")
-        );
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
     KisOptionButtonStrip *optionButtonStripFillWith = new KisOptionButtonStrip;
     m_buttonFillWithFG = optionButtonStripFillWith->addButton(
@@ -361,19 +440,30 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
         optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("pattern"));
     m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale = new KisDoubleSliderSpinBox;
-    m_sliderPatternScale->setRange(0, 500, 2);
-    m_sliderPatternScale->setPrefix(i18nc("The pattern 'scale' spinbox prefix in enclose and fill tool options", "Scale: "));
-    m_sliderPatternScale->setSuffix(i18n("%"));
+    m_sliderPatternScale->setRange(0, 10000, 2);
+    m_sliderPatternScale->setSoftMaximum(500);
+    KisSpinBoxI18nHelper::setText(m_sliderPatternScale,
+                                  i18nc("The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
+                                        "number value, % is the percent sign",
+                                        "Scale: {n}%"));
     m_angleSelectorPatternRotation = new KisAngleSelector;
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
+    m_checkBoxCustomBlendingOptions = new QCheckBox(i18n("Use custom blending options"));
+    m_sliderCustomOpacity = new KisSliderSpinBox;
+    m_sliderCustomOpacity->setRange(0, 100);
+    KisSpinBoxI18nHelper::setText(m_sliderCustomOpacity,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+    m_comboBoxCustomCompositeOp = new KisCompositeOpComboBox;
 
     m_sliderFillThreshold = new KisSliderSpinBox;
     m_sliderFillThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in enclose and fill tool options", "Threshold: "));
     m_sliderFillThreshold->setRange(1, 100);
     m_sliderFillOpacitySpread = new KisSliderSpinBox;
-    m_sliderFillOpacitySpread->setPrefix(i18nc("The 'spread' spinbox prefix in enclose and fill tool options", "Spread: "));
-    m_sliderFillOpacitySpread->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(
+        m_sliderFillOpacitySpread,
+        i18nc("The 'spread' spinbox in enclose and fill tool options; {n} is the number value, % is the percent sign",
+              "Spread: {n}%"));
     m_sliderFillOpacitySpread->setRange(0, 100);
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(
@@ -383,13 +473,22 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
     m_checkBoxAntiAlias = new QCheckBox(i18nc("The anti-alias checkbox in enclose and fill tool options", "Anti-aliasing"));
+    KisOptionCollectionWidget *containerGrow = new KisOptionCollectionWidget;
     m_sliderExpand = new KisSliderSpinBox;
     m_sliderExpand->setPrefix(i18nc("The 'grow/shrink' spinbox prefix in enclose and fill tool options", "Grow: "));
     m_sliderExpand->setRange(-40, 40);
     m_sliderExpand->setSuffix(i18n(" px"));
+    m_buttonStopGrowingAtDarkestPixel = new QToolButton;
+    m_buttonStopGrowingAtDarkestPixel->setAutoRaise(true);
+    m_buttonStopGrowingAtDarkestPixel->setCheckable(true);
+    m_buttonStopGrowingAtDarkestPixel->setIcon(KisIconUtils::loadIcon("stop-at-boundary"));
+    containerGrow->appendWidget("sliderExpand", m_sliderExpand);
+    containerGrow->appendWidget("buttonStopGrowingAtDarkestPixel", m_buttonStopGrowingAtDarkestPixel);
+    containerGrow->setOrientation(Qt::Horizontal);
     m_sliderFeather = new KisSliderSpinBox;
     m_sliderFeather->setPrefix(i18nc("The 'feather' spinbox prefix in enclose and fill tool options", "Feather: "));
-    m_sliderFeather->setRange(0, 40);
+    m_sliderFeather->setRange(0, 400);
+    m_sliderFeather->setSoftRange(0, 40);
     m_sliderFeather->setSuffix(i18n(" px"));
 
     KisOptionButtonStrip *optionButtonStripReference = new KisOptionButtonStrip;
@@ -415,28 +514,29 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_buttonEnclosingMethodLasso->setToolTip(i18n("Lasso"));
     m_buttonEnclosingMethodBrush->setToolTip(i18n("Brush"));
     m_comboBoxRegionSelectionMethod->setToolTip(regionSelectionMethodToUserString(m_regionSelectionMethod));
-    m_checkBoxRegionSelectionInvert->setToolTip(i18n("Check this option to fill all the regions except the selected ones"));
-    m_checkBoxRegionSelectionIncludeContourRegions->setToolTip(i18n("Check this option to also fill the shapes that touch the contour of the enclosing region"));
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setToolTip(i18n("Check this option to also fill the surrounding regions"));
+    m_checkBoxRegionSelectionInvert->setToolTip(i18n("Enable to fill opposite regions instead"));
+    m_checkBoxRegionSelectionIncludeContourRegions->setToolTip(i18n("Enable to also fill shapes that touch the contour of the enclosing region"));
     m_buttonFillWithFG->setToolTip(i18n("Foreground color"));
     m_buttonFillWithBG->setToolTip(i18n("Background color"));
     m_buttonFillWithPattern->setToolTip(i18n("Pattern"));
     m_sliderPatternScale->setToolTip(i18n("Set the scale of the pattern"));
     m_angleSelectorPatternRotation->setToolTip(i18n("Set the rotation of the pattern"));
+    m_checkBoxCustomBlendingOptions->setToolTip(i18n("Set custom blending options instead of using the brush ones"));
+    m_sliderCustomOpacity->setToolTip(i18n("Set a custom opacity for the fill"));
+    m_comboBoxCustomCompositeOp->setToolTip(i18n("Set a custom blend mode for the fill"));
 
-    m_sliderFillThreshold->setToolTip(i18n("Set how far the region should extend from the selected pixel in terms of color similarity"));
-    m_sliderFillOpacitySpread->setToolTip(i18n("Set how far the fully opaque portion of the region should extend."
-                                               "\n0% will make opaque only the pixels that are exactly equal to the selected pixel."
-                                               "\n100% will make opaque all the pixels in the region up to its boundary."));
-    m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the current selection should be treated as a boundary when obtaining the region"));
+    m_sliderFillThreshold->setToolTip(i18n("Set the color similarity tolerance of the fill. Increasing threshold increases the range of similar colors to be filled."));
+    m_sliderFillOpacitySpread->setToolTip(i18n("Set the extent of the opaque portion of the fill. Decreasing spread decreases opacity of fill areas depending on color similarity."));
+    m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the active selection should be treated as a boundary when filling the region"));
 
-    m_checkBoxAntiAlias->setToolTip(i18n("Smooth the jagged edges"));
-    m_sliderExpand->setToolTip(i18n("Grow (positive values) or shrink (negative values) the region by the set amount"));
-    m_sliderFeather->setToolTip(i18n("Blur the region by the set amount"));
+    m_checkBoxAntiAlias->setToolTip(i18n("Smooths the edges of the fill"));
+    m_sliderExpand->setToolTip(i18n("Grow or shrink the fill by the set amount"));
+    m_buttonStopGrowingAtDarkestPixel->setToolTip(i18n("Stop growing at the darkest and/or most opaque pixels"));
+    m_sliderFeather->setToolTip(i18n("Blur the fill by the set amount"));
 
-    m_buttonReferenceCurrent->setToolTip(i18n("Obtain the region using the active layer"));
-    m_buttonReferenceAll->setToolTip(i18n("Obtain the region using a merged copy of all layers"));
-    m_buttonReferenceLabeled->setToolTip(i18n("Obtain the region using a merged copy of the selected color-labeled layers"));
+    m_buttonReferenceCurrent->setToolTip(i18n("Fill regions found from the active layer"));
+    m_buttonReferenceAll->setToolTip(i18n("Fill regions found from the merging of all layers"));
+    m_buttonReferenceLabeled->setToolTip(i18n("Fill regions found from the merging of layers with specific color labels"));
 
     buttonReset->setToolTip(i18n("Reset the options to their default values"));
 
@@ -452,31 +552,43 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     sectionEnclosingMethod->setPrimaryWidget(optionButtonStripEnclosingMethod);
     m_optionWidget->appendWidget("sectionEnclosingMethod", sectionEnclosingMethod);
 
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'reference' section label in enclose and fill tool options", "Reference")
+        );
+    sectionReference->setPrimaryWidget(optionButtonStripReference);
+    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
+    sectionReference->setWidgetVisible("widgetLabels", false);
+    m_optionWidget->appendWidget("sectionReference", sectionReference);
+
+
     KisOptionCollectionWidgetWithHeader *sectionWhatToFill =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'what to fill' section label in enclose and fill tool options", "What to fill")
+            i18nc("The 'target regions' section label in enclose and fill tool options", "Target regions")
         );
     sectionWhatToFill->setPrimaryWidget(m_comboBoxRegionSelectionMethod);
     sectionWhatToFill->appendWidget("buttonRegionSelectionColor", m_buttonRegionSelectionColor);
     sectionWhatToFill->appendWidget("checkBoxRegionSelectionInvert", m_checkBoxRegionSelectionInvert);
     sectionWhatToFill->appendWidget("checkBoxRegionSelectionIncludeContourRegions", m_checkBoxRegionSelectionIncludeContourRegions);
-    sectionWhatToFill->appendWidget("checkBoxRegionSelectionIncludeSurroundingRegions", m_checkBoxRegionSelectionIncludeSurroundingRegions);
     m_optionWidget->appendWidget("sectionWhatToFill", sectionWhatToFill);
 
     KisOptionCollectionWidgetWithHeader *sectionFillWith =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'fill with' section label in enclose and fill tool options", "Fill with")
+            i18nc("The 'fill source' section label in enclose and fill tool options", "Fill source")
         );
     sectionFillWith->setPrimaryWidget(optionButtonStripFillWith);
     sectionFillWith->appendWidget("sliderPatternScale", m_sliderPatternScale);
     sectionFillWith->appendWidget("angleSelectorPatternRotation", m_angleSelectorPatternRotation);
+    sectionFillWith->appendWidget("checkBoxCustomBlendingOptions", m_checkBoxCustomBlendingOptions);
+    sectionFillWith->appendWidget("sliderCustomOpacity", m_sliderCustomOpacity);
+    sectionFillWith->appendWidget("comboBoxCustomCompositeOp", m_comboBoxCustomCompositeOp);
     sectionFillWith->setWidgetVisible("sliderPatternScale", false);
     sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", false);
     m_optionWidget->appendWidget("sectionFillWith", sectionFillWith);
 
     KisOptionCollectionWidgetWithHeader *sectionRegionExtent =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'region extent' section label in enclose and fill tool options", "Region extent")
+            i18nc("The 'fill extent' section label in enclose and fill tool options", "Fill extent")
         );
     sectionRegionExtent->appendWidget("sliderThreshold", m_sliderFillThreshold);
     sectionRegionExtent->appendWidget("sliderSpread", m_sliderFillOpacitySpread);
@@ -488,18 +600,9 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
             i18nc("The 'adjustments' section label in enclose and fill tool options", "Adjustments")
         );
     sectionAdjustments->appendWidget("checkBoxAntiAlias", m_checkBoxAntiAlias);
-    sectionAdjustments->appendWidget("sliderExpand", m_sliderExpand);
+    sectionAdjustments->appendWidget("containerGrow", containerGrow);
     sectionAdjustments->appendWidget("sliderFeather", m_sliderFeather);
     m_optionWidget->appendWidget("sectionAdjustments", sectionAdjustments);
-    
-    KisOptionCollectionWidgetWithHeader *sectionReference =
-        new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference' section label in enclose and fill tool options", "Reference")
-        );
-    sectionReference->setPrimaryWidget(optionButtonStripReference);
-    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
-    sectionReference->setWidgetVisible("widgetLabels", false);
-    m_optionWidget->appendWidget("sectionReference", sectionReference);
 
     m_optionWidget->appendWidget("buttonReset", buttonReset);
 
@@ -537,13 +640,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent
     );
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setChecked(m_regionSelectionIncludeSurroundingRegions);
-    sectionWhatToFill->setWidgetVisible(
-        "checkBoxRegionSelectionIncludeSurroundingRegions",
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedByTransparent ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent
-    );
     if (m_fillType == FillWithBackgroundColor) {
         m_buttonFillWithBG->setChecked(true);
     } else if (m_fillType == FillWithPattern) {
@@ -553,11 +649,22 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     }
     m_sliderPatternScale->setValue(m_patternScale);
     m_angleSelectorPatternRotation->setAngle(m_patternRotation);
+    m_checkBoxCustomBlendingOptions->setChecked(m_useCustomBlendingOptions);
+    m_sliderCustomOpacity->setValue(m_customOpacity);
+    slot_colorSpaceChanged(currentNode() && currentNode()->paintDevice()
+                           ? currentNode()->paintDevice()->colorSpace()
+                           : nullptr);
+    m_comboBoxCustomCompositeOp->selectCompositeOp(KoID(m_customCompositeOp));
+    if (!m_useCustomBlendingOptions) {
+        sectionFillWith->setWidgetVisible("sliderCustomOpacity", false);
+        sectionFillWith->setWidgetVisible("comboBoxCustomCompositeOp", false);
+    }
     m_sliderFillThreshold->setValue(m_fillThreshold);
     m_sliderFillOpacitySpread->setValue(m_fillOpacitySpread);
     m_checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
     m_checkBoxAntiAlias->setChecked(m_antiAlias);
     m_sliderExpand->setValue(m_expand);
+    m_buttonStopGrowingAtDarkestPixel->setChecked(m_stopGrowingAtDarkestPixel);
     m_sliderFeather->setValue(m_feather);
     if (m_reference == AllLayers) {
         m_buttonReferenceAll->setChecked(true);
@@ -573,29 +680,66 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
             SLOT(slot_optionButtonStripEnclosingMethod_buttonToggled(
                 KoGroupButton *,
                 bool)));
-    connect(m_comboBoxRegionSelectionMethod, SIGNAL(currentIndexChanged(int)), SLOT(slot_comboBoxRegionSelectionMethod_currentIndexChanged(int)));
-    connect(m_buttonRegionSelectionColor, SIGNAL(changed(const KoColor&)), SLOT(slot_buttonRegionSelectionColor_changed(const KoColor&)));
-    connect(m_checkBoxRegionSelectionInvert, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionInvert_toggled(bool)));
-    connect(m_checkBoxRegionSelectionIncludeContourRegions, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionIncludeContourRegions_toggled(bool)));
-    connect(m_checkBoxRegionSelectionIncludeSurroundingRegions, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool)));
+    connect(m_comboBoxRegionSelectionMethod,
+            SIGNAL(currentIndexChanged(int)),
+            SLOT(slot_comboBoxRegionSelectionMethod_currentIndexChanged(int)));
+    connect(m_buttonRegionSelectionColor,
+            SIGNAL(changed(const KoColor&)),
+            SLOT(slot_buttonRegionSelectionColor_changed(const KoColor&)));
+    connect(m_checkBoxRegionSelectionInvert,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxRegionSelectionInvert_toggled(bool)));
+    connect(m_checkBoxRegionSelectionIncludeContourRegions,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxRegionSelectionIncludeContourRegions_toggled(bool)));
     connect(optionButtonStripFillWith,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
-            SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *,
-                                                              bool)));
-    connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
-    connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
-    connect(m_sliderFillThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderFillThreshold_valueChanged(int)));
-    connect(m_sliderFillOpacitySpread, SIGNAL(valueChanged(int)), SLOT(slot_sliderFillOpacitySpread_valueChanged(int)));
-    connect(m_checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
-    connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
-    connect(m_sliderExpand, SIGNAL(valueChanged(int)), SLOT(slot_sliderExpand_valueChanged(int)));
-    connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
+            SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *, bool)));
+    connect(m_sliderPatternScale,
+            SIGNAL(valueChanged(double)),
+            SLOT(slot_sliderPatternScale_valueChanged(double)));
+    connect(m_angleSelectorPatternRotation,
+            SIGNAL(angleChanged(double)),
+            SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
+    connect(m_checkBoxCustomBlendingOptions,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxUseCustomBlendingOptions_toggled(bool)));
+    connect(m_sliderCustomOpacity,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderCustomOpacity_valueChanged(int)));
+    connect(m_comboBoxCustomCompositeOp,
+            SIGNAL(currentIndexChanged(int)),
+            SLOT(slot_comboBoxCustomCompositeOp_currentIndexChanged(int)));
+    connect(m_sliderFillThreshold,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderFillThreshold_valueChanged(int)));
+    connect(m_sliderFillOpacitySpread,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderFillOpacitySpread_valueChanged(int)));
+    connect(m_checkBoxSelectionAsBoundary,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
+    connect(m_checkBoxAntiAlias,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_checkBoxAntiAlias_toggled(bool)));
+    connect(m_sliderExpand,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderExpand_valueChanged(int)));
+    connect(m_buttonStopGrowingAtDarkestPixel,
+            SIGNAL(toggled(bool)),
+            SLOT(slot_buttonStopGrowingAtDarkestPixel_toggled(bool)));
+    connect(m_sliderFeather,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderFeather_valueChanged(int)));
     connect(optionButtonStripReference,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
-            SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton *,
-                                                               bool)));
-    connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
-    connect(buttonReset, SIGNAL(clicked()), SLOT(slot_buttonReset_clicked()));
+            SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton *, bool)));
+    connect(m_widgetLabels,
+            SIGNAL(selectionChanged()),
+            SLOT(slot_widgetLabels_selectionChanged()));
+    connect(buttonReset,
+            SIGNAL(clicked()),
+            SLOT(slot_buttonReset_clicked()));
     
     return m_optionWidget;
 }
@@ -607,7 +751,6 @@ void KisToolEncloseAndFill::loadConfiguration()
     m_regionSelectionColor = loadRegionSelectionColorFromConfig();
     m_regionSelectionInvert = m_configGroup.readEntry<bool>("regionSelectionInvert", false);
     m_regionSelectionIncludeContourRegions = m_configGroup.readEntry<bool>("regionSelectionIncludeContourRegions", false);
-    m_regionSelectionIncludeSurroundingRegions = m_configGroup.readEntry<bool>("regionSelectionIncludeSurroundingRegions", false);
     {
         const QString fillTypeStr = m_configGroup.readEntry<QString>("fillWith", "");
         if (fillTypeStr == "foregroundColor") {
@@ -626,11 +769,18 @@ void KisToolEncloseAndFill::loadConfiguration()
     }
     m_patternScale = m_configGroup.readEntry<qreal>("patternScale", 100.0);
     m_patternRotation = m_configGroup.readEntry<qreal>("patternRotate", 0.0);
+    m_useCustomBlendingOptions = m_configGroup.readEntry<bool>("useCustomBlendingOptions", false);
+    m_customOpacity = qBound(0, m_configGroup.readEntry<int>("customOpacity", 100), 100);
+    m_customCompositeOp = m_configGroup.readEntry<QString>("customCompositeOp", COMPOSITE_OVER);
+    if (KoCompositeOpRegistry::instance().getKoID(m_customCompositeOp).id().isNull()) {
+        m_customCompositeOp = COMPOSITE_OVER;
+    }
     m_fillThreshold = m_configGroup.readEntry<int>("fillThreshold", 8);
     m_fillOpacitySpread = m_configGroup.readEntry<int>("fillOpacitySpread", 100);
     m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
     m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", false);
     m_expand = m_configGroup.readEntry<int>("expand", 0);
+    m_stopGrowingAtDarkestPixel = m_configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
     m_feather = m_configGroup.readEntry<int>("feather", 0);
     {
         const QString sampleLayersModeStr = m_configGroup.readEntry<QString>("reference", "currentLayer");
@@ -643,7 +793,12 @@ void KisToolEncloseAndFill::loadConfiguration()
         }
     }
     {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        const QStringList colorLabelsStr = m_configGroup.readEntry<QString>("colorLabels", "").split(',', Qt::SkipEmptyParts);
+#else
         const QStringList colorLabelsStr = m_configGroup.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
+#endif
+
         m_selectedColorLabels.clear();
         for (const QString &colorLabelStr : colorLabelsStr) {
             bool ok;
@@ -696,34 +851,34 @@ QString KisToolEncloseAndFill::regionSelectionMethodToUserString(RegionSelection
 {
     if (regionSelectionMethod == RegionSelectionMethod::SelectAllRegions) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "All regions");
+                     "All");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithSpecificColor) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "Regions of a specific color");
+                     "Specific color");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithTransparent) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "Transparent regions");
+                     "Transparency");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "Regions of a specific color or transparent");
+                     "Specific color or transparency");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColor) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "All regions except those of a specific color");
+                     "All, excluding a specific color");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "All regions except the transparent ones");
+                     "All, excluding transparency");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "All regions except those of a specific color or transparent");
+                     "All, excluding a specific color or transparency");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "Regions surrounded by a specific color");
+                     "Any surrounded by a specific color");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedByTransparent) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "Regions surrounded by transparent");
+                     "Any surrounded by transparency");
     } else if (regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent) {
         return i18nc("Region selection method in enclose and fill tool",
-                     "Regions surrounded by a specific color or transparent");
+                     "Any surrounded by a specific color or transparency");
     }
     return QString();
 }
@@ -888,12 +1043,6 @@ void KisToolEncloseAndFill::slot_comboBoxRegionSelectionMethod_currentIndexChang
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent
     );
-    sectionWhatToFill->setWidgetVisible(
-        "checkBoxRegionSelectionIncludeSurroundingRegions",
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedByTransparent ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent
-    );
 
     m_comboBoxRegionSelectionMethod->setToolTip(m_comboBoxRegionSelectionMethod->currentText());
 
@@ -925,15 +1074,6 @@ void KisToolEncloseAndFill::slot_checkBoxRegionSelectionIncludeContourRegions_to
     }
     m_regionSelectionIncludeContourRegions = checked;
     m_configGroup.writeEntry("regionSelectionIncludeContourRegions", checked);
-}
-
-void KisToolEncloseAndFill::slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool checked)
-{
-    if (checked == m_regionSelectionIncludeSurroundingRegions) {
-        return;
-    }
-    m_regionSelectionIncludeSurroundingRegions = checked;
-    m_configGroup.writeEntry("regionSelectionIncludeSurroundingRegions", checked);
 }
 
 void KisToolEncloseAndFill::slot_optionButtonStripFillWith_buttonToggled(
@@ -974,6 +1114,36 @@ void KisToolEncloseAndFill::slot_angleSelectorPatternRotation_angleChanged(doubl
     }
     m_patternRotation = value;
     m_configGroup.writeEntry("patternRotate", value);
+}
+
+void KisToolEncloseAndFill::slot_checkBoxUseCustomBlendingOptions_toggled(bool checked)
+{
+    KisOptionCollectionWidgetWithHeader *sectionFillWith =
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionFillWith");
+    sectionFillWith->setWidgetVisible("sliderCustomOpacity", checked);
+    sectionFillWith->setWidgetVisible("comboBoxCustomCompositeOp", checked);
+    m_useCustomBlendingOptions = checked;
+    m_configGroup.writeEntry("useCustomBlendingOptions", checked);
+}
+
+void KisToolEncloseAndFill::slot_sliderCustomOpacity_valueChanged(int value)
+{
+    if (value == m_customOpacity) {
+        return;
+    }
+    m_customOpacity = value;
+    m_configGroup.writeEntry("customOpacity", value);
+}
+
+void KisToolEncloseAndFill::slot_comboBoxCustomCompositeOp_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+    const QString compositeOpId = m_comboBoxCustomCompositeOp->selectedCompositeOp().id();
+    if (compositeOpId == m_customCompositeOp) {
+        return;
+    }
+    m_customCompositeOp = compositeOpId;
+    m_configGroup.writeEntry("customCompositeOp", compositeOpId);
 }
 
 void KisToolEncloseAndFill::slot_sliderFillThreshold_valueChanged(int value)
@@ -1019,6 +1189,15 @@ void KisToolEncloseAndFill::slot_sliderExpand_valueChanged(int value)
     }
     m_expand = value;
     m_configGroup.writeEntry("expand", value);
+}
+
+void KisToolEncloseAndFill::slot_buttonStopGrowingAtDarkestPixel_toggled(bool enabled)
+{
+    if (enabled == m_stopGrowingAtDarkestPixel) {
+        return;
+    }
+    m_stopGrowingAtDarkestPixel = enabled;
+    m_configGroup.writeEntry("stopGrowingAtDarkestPixel", enabled);
 }
 
 void KisToolEncloseAndFill::slot_sliderFeather_valueChanged(int value)
@@ -1076,16 +1255,52 @@ void KisToolEncloseAndFill::slot_buttonReset_clicked()
     m_buttonRegionSelectionColor->setColor(KoColor());
     m_checkBoxRegionSelectionInvert->setChecked(false);
     m_checkBoxRegionSelectionIncludeContourRegions->setChecked(false);
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setChecked(false);
     m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale->setValue(100.0);
     m_angleSelectorPatternRotation->setAngle(0.0);
+    m_checkBoxCustomBlendingOptions->setChecked(false);
+    m_sliderCustomOpacity->setValue(100);
+    m_comboBoxCustomCompositeOp->selectCompositeOp(KoID(COMPOSITE_OVER));
     m_sliderFillThreshold->setValue(8);
     m_sliderFillOpacitySpread->setValue(100);
     m_checkBoxSelectionAsBoundary->setChecked(true);
     m_checkBoxAntiAlias->setChecked(false);
     m_sliderExpand->setValue(0);
+    m_buttonStopGrowingAtDarkestPixel->setChecked(false);
     m_sliderFeather->setValue(0);
     m_buttonReferenceCurrent->setChecked(true);
     m_widgetLabels->setSelection({});
+}
+
+void KisToolEncloseAndFill::slot_currentNodeChanged(const KisNodeSP node)
+{
+    if (m_previousNode && m_previousNode->paintDevice()) {
+        disconnect(m_previousNode->paintDevice().data(),
+                   SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                   this,
+                   SLOT(slot_colorSpaceChanged(const KoColorSpace*)));
+    }
+    if (node && node->paintDevice()) {
+        connect(node->paintDevice().data(),
+                SIGNAL(colorSpaceChanged(const KoColorSpace*)),
+                this,
+                SLOT(slot_colorSpaceChanged(const KoColorSpace*)));
+        slot_colorSpaceChanged(node->paintDevice()->colorSpace());
+    }
+    m_previousNode = node;
+}
+
+void KisToolEncloseAndFill::slot_colorSpaceChanged(const KoColorSpace *colorSpace)
+{
+    if (!m_comboBoxCustomCompositeOp) {
+        return;
+    }
+    const KoColorSpace *compositionSpace = colorSpace;
+    if (currentNode() && currentNode()->paintDevice()) {
+        // Currently, composition source is enough to determine the available blending mode,
+        // because either destination is the same (paint layers), or composition happens
+        // in source space (masks).
+        compositionSpace = currentNode()->paintDevice()->compositionSourceColorSpace();
+    }
+    m_comboBoxCustomCompositeOp->validate(compositionSpace);
 }

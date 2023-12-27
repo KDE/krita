@@ -79,8 +79,9 @@ void KisAssistantTool::activate(const QSet<KoShape*> &shapes)
         m_canvas->paintingAssistantsDecoration()->deselectAssistant();
         updateToolOptionsUI();
     }
-
+    
     m_canvas->updateCanvas();
+    
 }
 
 void KisAssistantTool::deactivate()
@@ -115,7 +116,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         return;
     }
     m_handleDrag = 0;
-    double minDist = 81.0;
+    double minDist = m_handleMaxDist;
 
 
     QPointF mousePos = m_canvas->viewConverter()->documentToView(canvasDecoration->snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
@@ -127,6 +128,10 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
 
 
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+
+        if (assistant->isLocked()) {
+            continue; // let's not modify an assistant that is locked
+        }
 
 
         // find out which handle on all assistants is closest to the mouse position
@@ -249,7 +254,8 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         else if (m_handleDrag && assistant->handles().size()>1 && (assistant->id() == "ruler" ||
                                                                    assistant->id() == "parallel ruler" ||
                                                                    assistant->id() == "infinite ruler" ||
-                                                                   assistant->id() == "spline")){
+                                                                   assistant->id() == "spline" ||
+                                                                   assistant->id() == "curvilinear-perspective")){
             if (m_handleDrag == assistant->handles()[0]) {
                 m_dragStart = *assistant->handles()[1];
             } else if (m_handleDrag == assistant->handles()[1]) {
@@ -330,58 +336,127 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
     }
 
     m_assistantDrag.clear();
-    Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
-
-        AssistantEditorData editorShared; // shared position data between assistant tool and decoration
+        Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+        AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+        
+        
         const KisCoordinatesConverter *converter = m_canvas->coordinatesConverter();
 
         // This code contains the click event behavior.
         QTransform initialTransform = converter->documentToWidgetTransform();
-        QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, editorShared.boundingSize));
+        QPointF actionsPosition = initialTransform.map(assistant->viewportConstrainedEditorPosition(converter, globalEditorWidgetData.boundingSize));
 
         // for UI editor widget controls with move, show, and delete -- disregard document transforms like rotating and mirroring.
         // otherwise the UI controls get awkward to use when they are at 45 degree angles or the order of controls gets flipped backwards
         QPointF uiMousePosition = initialTransform.map(canvasDecoration->snapToGuide(event, QPointF(), false));
+        
+        //loop through all activated buttons and see if any are being clicked
+        if(globalEditorWidgetData.moveButtonActivated) {
+            QPointF iconMovePosition(actionsPosition + globalEditorWidgetData.moveIconPosition);
+            QRectF moveRect(iconMovePosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
 
-        QPointF iconMovePosition(actionsPosition + editorShared.moveIconPosition);
-        QPointF iconSnapPosition(actionsPosition + editorShared.snapIconPosition);
-        QPointF iconDeletePosition(actionsPosition + editorShared.deleteIconPosition);
-
-        QRectF deleteRect(iconDeletePosition, QSizeF(editorShared.deleteIconSize, editorShared.deleteIconSize));
-        QRectF visibleRect(iconSnapPosition, QSizeF(editorShared.snapIconSize, editorShared.snapIconSize));
-        QRectF moveRect(iconMovePosition, QSizeF(editorShared.moveIconSize, editorShared.moveIconSize));
-
-        if (moveRect.contains(uiMousePosition)) {
-            m_assistantDrag = assistant;
-            m_cursorStart = event->point;
-            m_internalMode = MODE_EDITING;
-
-
-            assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
-
-            return;
-        }
-
-        if (deleteRect.contains(uiMousePosition)) {
-            removeAssistant(assistant);
-            if(m_canvas->paintingAssistantsDecoration()->assistants().isEmpty()) {
-                m_internalMode = MODE_CREATION;
-            }
-            else
+            if (moveRect.contains(uiMousePosition) && !assistant->isLocked()) {
+                m_assistantDrag = assistant;
+                m_cursorStart = event->point;
                 m_internalMode = MODE_EDITING;
-            m_canvas->updateCanvas();
-            return;
-        }
-        if (visibleRect.contains(uiMousePosition)) {
-            newAssistantAllowed = false;
-            assistant->setSnappingActive(!assistant->isSnappingActive()); // toggle
-            assistant->uncache();//this updates the cache of the assistant, very important.
 
-            assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+                assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+
+                return;
+            }
         }
+        if(globalEditorWidgetData.snapButtonActivated) {
+            QPointF iconSnapPosition(actionsPosition + globalEditorWidgetData.snapIconPosition);
+            QRectF visibleRect(iconSnapPosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
+            if (visibleRect.contains(uiMousePosition)) {
+                newAssistantAllowed = false;
+                assistant->setSnappingActive(!assistant->isSnappingActive()); // toggle
+                assistant->uncache();//this updates the cache of the assistant, very important.
+
+                assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+            }
+        }
+        if(globalEditorWidgetData.lockButtonActivated) {
+            QPointF iconLockPosition(actionsPosition + globalEditorWidgetData.lockedIconPosition);
+            QRectF lockRect(iconLockPosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
+            if (lockRect.contains(uiMousePosition)) {
+
+                assistant->setLocked(!assistant->isLocked());
+                assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+                m_internalMode = MODE_EDITING;
+
+                return;
+            }
+        }
+        if(globalEditorWidgetData.duplicateButtonActivated) {
+            QPointF iconDuplicatePosition(actionsPosition + globalEditorWidgetData.duplicateIconPosition);
+            QRectF duplicateRect(iconDuplicatePosition,QSizeF(globalEditorWidgetData.buttonSize,globalEditorWidgetData.buttonSize));
+            
+            if (duplicateRect.contains(uiMousePosition)) {
+                //create new assistant from old one
+                QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> handleMap;
+                m_newAssistant = assistant->clone(handleMap);
+                m_newAssistant->copySharedData(assistant);
+                m_newAssistant->setDuplicating(true);
+                //add assistant to global list and register UNDO/REDO object
+                m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
+                QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
+                KUndo2Command *addAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(assistants), EditAssistantsCommand::ADD, assistants.indexOf(m_newAssistant));
+                m_canvas->viewManager()->undoAdapter()->addCommand(addAssistantCmd);
+                m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
+                m_handles = m_canvas->paintingAssistantsDecoration()->handles();
+                m_canvas->paintingAssistantsDecoration()->setSelectedAssistant(m_newAssistant);
+                assistantDuplicatingFlag = true;
+                
+                // if assistant is locked simply move the editor widget, not the entire assistant
+                if(assistant->isLocked()) {
+                    newAssistantAllowed = false;
+                    m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
+                    m_dragStart = event->point;
+                    m_dragEnd = event->point;
+                    m_newAssistant.clear();
+                } else {
+                    m_assistantDrag = m_newAssistant;
+                    m_newAssistant.clear();
+                    m_cursorStart = event->point;
+                    m_internalMode = MODE_EDITING;
+                }
+                
+                updateToolOptionsUI(); 
+                m_canvas->updateCanvas();
+                return;
+            }
+
+        }
+        if(globalEditorWidgetData.deleteButtonActivated) {
+            QPointF iconDeletePosition(actionsPosition + globalEditorWidgetData.deleteIconPosition);
+            QRectF deleteRect(iconDeletePosition, QSizeF(globalEditorWidgetData.buttonSize, globalEditorWidgetData.buttonSize));
+            if (deleteRect.contains(uiMousePosition) && !assistant->isLocked()) {
+                removeAssistant(assistant);
+                if(m_canvas->paintingAssistantsDecoration()->assistants().isEmpty()) {
+                    m_internalMode = MODE_CREATION;
+                } else m_internalMode = MODE_EDITING;
+                m_canvas->updateCanvas();
+                return;
+            }
+
+        }
+        //if user clicking editor widget background.
+        if((QRectF(actionsPosition + QPointF(10, 10), globalEditorWidgetData.boundingSize).adjusted(-2, -2, 2, 2).contains(uiMousePosition))) {
+            newAssistantAllowed = false;
+            m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
+            assistantSelected(assistant);
+            m_dragStart = event->point;
+            m_dragEnd = event->point;
+            
+        } 
+        
     }
-    if (newAssistantAllowed==true){//don't make a new assistant when I'm just toggling visibility//
+
+    if (newAssistantAllowed==true) {//don't make a new assistant when I'm just toggling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+        cfg.writeEntry("AssistantType", key);
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         if (m_newAssistant->canBeLocal()) {
             m_newAssistant->setLocal(m_options.localAssistantCheckbox->isChecked());
@@ -437,7 +512,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
     } else if (m_assistantDrag) {
         QPointF newAdjustment = canvasDecoration->snapToGuide(event, QPointF(), false) - m_cursorStart;
         if (event->modifiers() & Qt::ShiftModifier ) {
-            newAdjustment = snapToClosestAxis(newAdjustment);
+            newAdjustment = snapToClosestNiceAngle(newAdjustment, QPointF(0, 0), M_PI / 4);
         }
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += (newAdjustment - m_currentAdjustment);
@@ -451,19 +526,26 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
         m_currentAdjustment = newAdjustment;
         m_canvas->updateCanvas();
 
+    } else if (m_internalMode == MODE_DRAGGING_EDITOR_WIDGET) {
+
+        KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+        QPointF currentOffset = selectedAssistant->editorWidgetOffset();
+        selectedAssistant->setEditorWidgetOffset(currentOffset + (event->point - m_dragEnd));
+        m_dragEnd = event->point;
+
     } else {
         event->ignore();
     }
 
-    bool wasHiglightedNode = m_higlightedNode != 0;
+    bool wasHighlightedNode = m_highlightedNode != 0;
     QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
     QList <KisPaintingAssistantSP> pAssistant= m_canvas->paintingAssistantsDecoration()->assistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, pAssistant) {
         if(assistant->id() == "perspective") {
-            if ((m_higlightedNode = assistant->closestCornerHandleFromPoint(mousep))) {
-                if (m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2) {
-                    m_higlightedNode = 0;
+            if ((m_highlightedNode = assistant->closestCornerHandleFromPoint(mousep))) {
+                if (m_highlightedNode == m_selectedNode1 || m_highlightedNode == m_selectedNode2) {
+                    m_highlightedNode = 0;
                 } else {
                     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                     break;
@@ -611,7 +693,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
             }
         }
     }
-    if (wasHiglightedNode && !m_higlightedNode) {
+    if (wasHighlightedNode && !m_highlightedNode) {
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     }
 }
@@ -619,6 +701,12 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
 void KisAssistantTool::endActionImpl(KoPointerEvent *event)
 {
     setMode(KisTool::HOVER_MODE);
+    //release duplication button flag
+    if(assistantDuplicatingFlag) {
+        KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+        selectedAssistant->setDuplicating(false);
+        assistantDuplicatingFlag = false;
+    }
 
     if (m_handleDrag || m_assistantDrag) {
         if (m_handleDrag) {
@@ -638,6 +726,10 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
     } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         addAssistant();
         m_internalMode = MODE_CREATION;
+    } else if (m_internalMode == MODE_DRAGGING_EDITOR_WIDGET) {
+        KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+        QPointF currentOffset = selectedAssistant->editorWidgetOffset();
+        selectedAssistant->setEditorWidgetOffset(currentOffset + (event->point - m_dragEnd));
     }
     else {
         event->ignore();
@@ -649,11 +741,6 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
 void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
-
-    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant.data());
-    if (grid) {
-        m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
-    }
 
     // generate the side handles for the Two Point assistant
     if (m_newAssistant->id() == "two point"){
@@ -713,14 +800,113 @@ void KisAssistantTool::addAssistant()
     m_newAssistant.clear();
 }
 
+void KisAssistantTool::updateEditorWidgetData()
+{
+
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    if( !globalEditorWidgetData.moveButtonActivated && !globalEditorWidgetData.snapButtonActivated && !globalEditorWidgetData.lockButtonActivated && 
+        !globalEditorWidgetData.duplicateButtonActivated && !globalEditorWidgetData.deleteButtonActivated) {
+        globalEditorWidgetData.widgetActivated = false;
+    } else globalEditorWidgetData.widgetActivated = true;
+
+    int horizontalButtonLimit = globalEditorWidgetData.horizontalButtonLimit;
+    int buttonCount = 0;
+    int horizontalButtonCount = 0;
+    int positionX = 15;
+    int positionY = 15;
+
+    //loop through all buttons and calculate positions
+    if(globalEditorWidgetData.moveButtonActivated) {
+        
+        buttonCount++;
+        horizontalButtonCount++;
+        if(horizontalButtonCount > horizontalButtonLimit)
+        {
+            horizontalButtonCount = 1;
+            positionX = 15;
+            positionY += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+        }
+        //the size icon is a little smaller than the others visually, so the icon is scaled
+        //and the positioin is adjusted by -5 to compinsate
+        globalEditorWidgetData.moveIconPosition.setX(positionX-5);
+        globalEditorWidgetData.moveIconPosition.setY(positionY-5);
+        positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+    }
+    if(globalEditorWidgetData.snapButtonActivated) {
+        buttonCount++;
+        horizontalButtonCount++;
+        if(horizontalButtonCount > horizontalButtonLimit)
+        {
+            horizontalButtonCount = 1;
+            positionX = 15;
+            positionY += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+        }
+        globalEditorWidgetData.snapIconPosition.setX(positionX);
+        globalEditorWidgetData.snapIconPosition.setY(positionY);
+        positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+    }
+    if(globalEditorWidgetData.lockButtonActivated) {
+        buttonCount++;
+        horizontalButtonCount++;
+        if(horizontalButtonCount > horizontalButtonLimit)
+        {
+            horizontalButtonCount = 1;
+            positionX = 15;
+            positionY += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+        }
+        globalEditorWidgetData.lockedIconPosition.setX(positionX);
+        globalEditorWidgetData.lockedIconPosition.setY(positionY);
+        positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+    }
+    if(globalEditorWidgetData.duplicateButtonActivated) {
+        buttonCount++;
+        horizontalButtonCount++;
+        if(horizontalButtonCount > horizontalButtonLimit)
+        {
+            horizontalButtonCount = 0;
+            positionX = 15;
+            positionY += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+        }
+        globalEditorWidgetData.duplicateIconPosition.setX(positionX);
+        globalEditorWidgetData.duplicateIconPosition.setY(positionY);
+        positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+    }
+    if(globalEditorWidgetData.deleteButtonActivated) {
+        buttonCount++;
+        horizontalButtonCount++;
+        if(horizontalButtonCount > horizontalButtonLimit)
+        {
+            horizontalButtonCount = 1;
+            positionX = 15;
+            positionY += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+        }
+        globalEditorWidgetData.deleteIconPosition.setX(positionX);
+        globalEditorWidgetData.deleteIconPosition.setY(positionY);
+        positionX += globalEditorWidgetData.buttonSize + globalEditorWidgetData.buttonPadding;
+    }
+    
+    int buttonSection = globalEditorWidgetData.buttonSize+globalEditorWidgetData.buttonPadding;
+    int boundingWidgetWidth = (buttonCount < horizontalButtonLimit) ? buttonCount*buttonSection:horizontalButtonLimit*buttonSection;
+    boundingWidgetWidth += 5;
+    globalEditorWidgetData.boundingSize.setWidth(boundingWidgetWidth+globalEditorWidgetData.dragDecorationWidth);
+
+    int buttonToWidthRatio = (buttonCount/horizontalButtonLimit);
+    if(buttonCount%horizontalButtonLimit != 0) {
+        buttonToWidthRatio++;
+    }
+
+    int boundingWidgetHeight = buttonToWidthRatio*buttonSection;
+    boundingWidgetHeight += 5;
+    globalEditorWidgetData.boundingSize.setHeight(boundingWidgetHeight);
+    
+    
+    m_canvas->updateCanvasDecorations();
+}
+
 void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
     QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
 
-    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-    if (grid) {
-        m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
-    }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
 
     KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
@@ -742,8 +928,25 @@ void KisAssistantTool::updateToolOptionsUI()
      KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
 
      bool hasActiveAssistant = m_selectedAssistant ? true : false;
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
 
-     if (m_selectedAssistant) {
+    if(globalEditorWidgetData.moveButtonActivated) {
+        m_options.showMove->setChecked(true);
+    }
+    if(globalEditorWidgetData.snapButtonActivated) {
+        m_options.showSnap->setChecked(true);
+    }
+    if(globalEditorWidgetData.lockButtonActivated) {
+        m_options.showLock->setChecked(true);
+    }
+    if(globalEditorWidgetData.duplicateButtonActivated) {
+        m_options.showDuplicate->setChecked(true);
+    }
+    if(globalEditorWidgetData.deleteButtonActivated) {
+        m_options.showDelete->setChecked(true);
+    }
+
+    if (m_selectedAssistant) {
          bool isVanishingPointAssistant = m_selectedAssistant->id() == "vanishing point";
          bool isTwoPointAssistant = m_selectedAssistant->id() == "two point";
          bool isRulerAssistant = m_selectedAssistant->id() == "ruler"
@@ -756,6 +959,14 @@ void KisAssistantTool::updateToolOptionsUI()
          m_options.subdivisionsSpinbox->setVisible(isRulerAssistant || isPerspectiveAssistant);
          m_options.minorSubdivisionsSpinbox->setVisible(isRulerAssistant);
          m_options.fixedLengthCheckbox->setVisible(isRulerAssistant);
+         //show checkboxes for controlling which editor widget buttons are visible
+         m_options.showMove->setVisible(true);
+         m_options.showSnap->setVisible(true);
+         m_options.showLock->setVisible(true);
+         m_options.showDuplicate->setVisible(true);
+         m_options.showDelete->setVisible(true);
+         
+         
 
          if (isVanishingPointAssistant) {
              QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
@@ -1052,6 +1263,7 @@ void KisAssistantTool::slotChangeFixedLengthUnit(int index) {
 
 void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    m_handleHover = 0;
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
 
         KisPaintingAssistantHandleSP new_handle = m_newAssistant->handles().back();
@@ -1065,6 +1277,27 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator = (QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
+    } else if (mode() == KisTool::HOVER_MODE) {
+
+        // find a handle underneath...
+        double minDist = m_handleMaxDist;
+
+        QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
+
+        Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+            QList<KisPaintingAssistantHandleSP> allAssistantHandles;
+            allAssistantHandles.append(assistant->handles());
+            allAssistantHandles.append(assistant->sideHandles());
+
+            Q_FOREACH (const KisPaintingAssistantHandleSP handle, allAssistantHandles) {
+
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+                if (dist < minDist) {
+                    minDist = dist;
+                    m_handleHover = handle;
+                }
+            }
+        }
     }
 
     m_canvas->updateCanvasDecorations();
@@ -1120,7 +1353,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
                            QSizeF(m_handleSize, m_handleSize));
 
             // render handles differently if it is the one being dragged.
-            if (handle == m_handleDrag || handle == m_handleCombine) {
+            if (handle == m_handleDrag || handle == m_handleCombine || (handle == m_handleHover && !handle->chiefAssistant()->isLocked())) {
                 QPen stroke(assistantColor, 4);
                 _gc.save();
                 _gc.setPen(stroke);
@@ -1137,7 +1370,6 @@ void KisAssistantTool::removeAllAssistants()
 {
     m_origAssistantList = m_canvas->paintingAssistantsDecoration()->assistants();
 
-    m_canvas->viewManager()->canvasResourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
 
     KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
@@ -1169,6 +1401,10 @@ void KisAssistantTool::loadAssistants()
     QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     KisPaintingAssistantSP assistant;
     bool errors = false;
+
+    m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
+
+
     while (!xml.atEnd()) {
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
@@ -1276,10 +1512,6 @@ void KisAssistantTool::loadAssistants()
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(140,0)), HandleType::SIDE);
                         }
                         m_canvas->paintingAssistantsDecoration()->addAssistant(assistant);
-                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-                        if (grid) {
-                            m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
-                        }
                     } else {
                         errors = true;
                     }
@@ -1303,9 +1535,12 @@ void KisAssistantTool::loadAssistants()
     if (errors) {
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Errors were encountered. Not all assistants were successfully loaded."));
     }
+
+    KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+    m_canvas->viewManager()->undoAdapter()->addCommand(command);
+
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
-
 }
 
 void KisAssistantTool::saveAssistants()
@@ -1403,6 +1638,8 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
 
+        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+
         // See https://bugs.kde.org/show_bug.cgi?id=316896
         QWidget *specialSpacer = new QWidget(m_optionsWidget);
         specialSpacer->setObjectName("SpecialSpacer");
@@ -1422,9 +1659,18 @@ QWidget *KisAssistantTool::createOptionWidget()
             assistants << KoID(key, name);
         }
         std::sort(assistants.begin(), assistants.end(), KoID::compareNames);
+
+        QString currentAssistantType = cfg.readEntry("AssistantType", "two point");
+        int i = 0;
+        int currentAssistantIndex = 0;
         Q_FOREACH(const KoID &id, assistants) {
             m_options.availableAssistantsComboBox->addItem(id.name(), id.id());
+            if (id.id() == currentAssistantType) {
+                currentAssistantIndex = i;
+            }
+            i++;
         }
+        m_options.availableAssistantsComboBox->setCurrentIndex(currentAssistantIndex);
 
         connect(m_options.availableAssistantsComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slotSelectedAssistantTypeChanged()));
 
@@ -1443,7 +1689,14 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.minorSubdivisionsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeMinorSubdivisions(int)));
         connect(m_options.fixedLengthCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotEnableFixedLength(int)));
         connect(m_options.fixedLengthSpinbox, SIGNAL(valueChangedPt(double)), this, SLOT(slotChangeFixedLength(double)));
-
+        
+        //update EditorWidgetData when checkbox clicked
+        connect(m_options.showMove, SIGNAL(stateChanged(int)), this, SLOT(slotToggleMoveButton(int)));
+        connect(m_options.showSnap, SIGNAL(stateChanged(int)), this, SLOT(slotToggleSnapButton(int)));
+        connect(m_options.showLock, SIGNAL(stateChanged(int)), this, SLOT(slotToggleLockButton(int)));
+        connect(m_options.showDuplicate, SIGNAL(stateChanged(int)), this, SLOT(slotToggleDuplicateButton(int)));
+        connect(m_options.showDelete, SIGNAL(stateChanged(int)), this, SLOT(slotToggleDeleteButton(int)));
+        
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
             const QColor color = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor();
@@ -1507,10 +1760,30 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.fixedLengthSpinbox->setVisible(false);
         m_options.fixedLengthUnit->setVisible(false);
         
-        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+
         m_options.localAssistantCheckbox->setChecked(cfg.readEntry("LimitAssistantToArea", false));
 
         connect(m_options.localAssistantCheckbox, SIGNAL(stateChanged(int)), SLOT(slotLocalAssistantCheckboxChanged()));
+
+        //set editor widget buttons on first startup.
+        AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+
+
+        if (globalEditorWidgetData.moveButtonActivated) {
+            m_options.showMove->setChecked(true);
+        }
+        if (globalEditorWidgetData.snapButtonActivated) {
+            m_options.showSnap->setChecked(true);
+        }
+        if (globalEditorWidgetData.lockButtonActivated) {
+        m_options.showLock->setChecked(true);
+        }
+        if (globalEditorWidgetData.duplicateButtonActivated) {
+            m_options.showDuplicate->setChecked(true);
+        }
+        if (globalEditorWidgetData.deleteButtonActivated) {
+            m_options.showDelete->setChecked(true);
+        }
     }
 
     updateToolOptionsUI();
@@ -1587,6 +1860,37 @@ void KisAssistantTool::slotLocalAssistantCheckboxChanged()
 void KisAssistantTool::slotSelectedAssistantTypeChanged()
 {
     updateToolOptionsUI();
+}
+
+void KisAssistantTool::slotToggleMoveButton(int index)
+{
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    globalEditorWidgetData.moveButtonActivated  = (index > 0) ? true:false;
+    updateEditorWidgetData();
+}
+void KisAssistantTool::slotToggleSnapButton(int index)
+{
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    globalEditorWidgetData.snapButtonActivated  = (index > 0) ? true:false;
+    updateEditorWidgetData();
+}
+void KisAssistantTool::slotToggleLockButton(int index)
+{
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    globalEditorWidgetData.lockButtonActivated  = (index > 0) ? true:false;
+    updateEditorWidgetData();
+}
+void KisAssistantTool::slotToggleDuplicateButton(int index)
+{
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    globalEditorWidgetData.duplicateButtonActivated  = (index > 0) ? true:false;
+    updateEditorWidgetData();
+}
+void KisAssistantTool::slotToggleDeleteButton(int index)
+{
+    AssistantEditorData &globalEditorWidgetData = m_canvas->paintingAssistantsDecoration()->globalEditorWidgetData;
+    globalEditorWidgetData.deleteButtonActivated  = (index > 0) ? true:false;
+    updateEditorWidgetData();
 }
 
 void KisAssistantTool::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
@@ -1725,8 +2029,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             dragRadius.setLength(m_radius.length());
             *m_handleDrag = dragRadius.p2();
         } else {
-            QPointF snap_point = snapToClosestAxis(event->point - m_dragStart);
-            *m_handleDrag = m_dragStart + snap_point;
+            QPointF snap_point = snapToClosestNiceAngle(event->point, m_dragStart);
+            *m_handleDrag = snap_point;
         }
     } else {
         if (m_newAssistant && m_internalMode == MODE_CREATION) {
@@ -1734,15 +2038,15 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             KisPaintingAssistantHandleSP handle_snap = handles.back();
             // for any assistant, snap 2nd handle to x or y axis relative to first handle
             if (handles.size() == 2) {
-                QPointF snap_point = snapToClosestAxis(event->point - *handles[0]);
-                *handle_snap =  *handles[0] + snap_point;
+                QPointF snap_point = snapToClosestNiceAngle(event->point, (QPointF)(*handles[0]));
+                *handle_snap =  snap_point;
             } else {
                 bool was_snapped = false;
                 if (m_newAssistant->id() == "spline") {
                     KisPaintingAssistantHandleSP start;
                     handles.size() == 3 ? start = handles[0] : start = handles[1];
-                    QPointF snap_point = snapToClosestAxis(event->point - *start);
-                    *handle_snap =  *start + snap_point;
+                    QPointF snap_point = snapToClosestNiceAngle(event->point, (QPointF)(*start));
+                    *handle_snap =  snap_point;
                     was_snapped = true;
                 }
 
@@ -1760,8 +2064,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                 if (m_newAssistant->id() == "perspective") {
                     KisPaintingAssistantHandleSP start;
                     handles.size() == 3 ? start = handles[1] : start = handles[2];
-                    QPointF snap_point = snapToClosestAxis(event->point - *start);
-                    *handle_snap =  *start + snap_point;
+                    QPointF snap_point = snapToClosestNiceAngle(event->point, (QPointF)(*start));
+                    *handle_snap = snap_point;
                     was_snapped = true;
                 }
                 return was_snapped;

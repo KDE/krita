@@ -36,13 +36,6 @@ public:
         SVGsource // 1
     };
 
-    // enum to store which tabs are visible in the configuration
-    enum EditorMode {
-        RichText,
-        SvgSource,
-        Both
-    };
-
     void setInitialShape(KoSvgTextShape *shape);
 
 private Q_SLOTS:
@@ -57,6 +50,7 @@ private Q_SLOTS:
      * in rich text, check the current format, and toggle the given buttons.
      */
     void checkFormat();
+    void checkDocumentFormat();
 
     void slotFixUpEmptyTextBlock();
 
@@ -111,6 +105,10 @@ private Q_SLOTS:
     void setBaseline(KoSvgText::BaselineShiftMode baseline);
     void setKerning(bool enable);
 
+    void setWrappingLegacy();
+    void setWrappingPre();
+    void setWrappingPreWrap();
+
     void setSettings();
     void slotToolbarToggled(bool);
 
@@ -126,6 +124,7 @@ Q_SIGNALS:
 
 protected:
     void wheelEvent(QWheelEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *event) override;
     /**
      * Selects all if there is no selection
      * @returns a copy of the previous cursor.
@@ -144,7 +143,6 @@ private:
     bool isSvgSourceEditorTabActive();
 
     Ui_WdgSvgTextEditor m_textEditorWidget;
-    EditorMode m_currentEditorMode {EditorMode::Both};
     QTextEdit *m_currentEditor {0};
     QWidget *m_page {0};
     QList<QAction*> m_richTextActions;

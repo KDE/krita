@@ -173,7 +173,7 @@ void KoInteractionTool::removeInteractionFactory(const QString &id)
     }
 }
 
-bool KoInteractionTool::hasInteractioFactory(const QString &id)
+bool KoInteractionTool::hasInteractionFactory(const QString &id)
 {
     Q_D(KoInteractionTool);
 

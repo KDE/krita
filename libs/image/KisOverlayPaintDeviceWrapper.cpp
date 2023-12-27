@@ -122,6 +122,7 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
         KisPaintDeviceSP overlay = new KisPaintDevice(overlayColorSpace);
         overlay->setDefaultPixel(source->defaultPixel().convertedTo(overlayColorSpace));
         overlay->setDefaultBounds(source->defaultBounds());
+        overlay->setSupportsWraparoundMode(source->supportsWraproundMode());
         overlay->moveTo(source->offset());
 
         m_d->overlays.append(overlay);
@@ -173,7 +174,7 @@ void KisOverlayPaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     Q_FOREACH (const QRect &rc, rects) {
         if (m_d->source->defaultBounds()->wrapAroundMode()) {
             const QRect wrapRect = m_d->source->defaultBounds()->imageBorderRect();
-            KisWrappedRect wrappedRect(rc, wrapRect);
+            KisWrappedRect wrappedRect(rc, wrapRect, m_d->source->defaultBounds()->wrapAroundModeAxis());
             Q_FOREACH (const QRect &wrc, wrappedRect) {
                 rectsToRead += m_d->grid.addRect(wrc);
             }
@@ -276,7 +277,7 @@ const KoColorSpace *KisOverlayPaintDeviceWrapper::overlayColorSpace() const
 KisPaintDeviceSP KisOverlayPaintDeviceWrapper::createPreciseCompositionSourceDevice()
 {
     /**
-     * TODO: this funciton has rather vague meaning when forcedOverlayColorSpace
+     * TODO: this function has rather vague meaning when forcedOverlayColorSpace
      *       feature is used
      */
 

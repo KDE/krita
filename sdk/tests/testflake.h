@@ -3,4 +3,4 @@
  */
 
 #define TESTFLAKE
-#include <sdk/tests/kistest.h>
+#include "kistest.h"

@@ -1,57 +1,32 @@
 /*
- * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
- * SPDX-FileCopyrightText: 2009 Sven Langkamp <sven.langkamp@gmail.com>
- * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
- * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Dmitry Kazakov <dimula73@gmail.com>
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KIS_MYPAINT_CURVE_OPTION_WIDGET_H
-#define KIS_MYPAINT_CURVE_OPTION_WIDGET_H
+#ifndef MYPAINTCURVEOPTIONWIDGET_H
+#define MYPAINTCURVEOPTIONWIDGET_H
 
-#include <QObject>
+#include <KisCurveOptionWidget.h>
+#include <MyPaintCurveOptionData.h>
 
-#include <MyPaintCurveOption.h>
-#include <MyPaintPaintOpOption.h>
-#include <kis_curve_option_widget.h>
-#include <kis_paintop_option.h>
-#include <kritapaintop_export.h>
-
-#include "ui_wdgcurveoption.h"
-#include "ui_wdgmypaintcurveoption.h"
-
-class Ui_WdgMyPaintCurveOption;
-class QComboBox;
-
-class KisMyPaintCurveOptionWidget : public KisCurveOptionWidget
+class MyPaintCurveOptionWidget : public KisCurveOptionWidget
 {
-    Q_OBJECT
 public:
-    KisMyPaintCurveOptionWidget(KisMyPaintCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider = false, KisMyPaintOpOption *option = nullptr);
-    ~KisMyPaintCurveOptionWidget() override;
+    using data_type = MyPaintCurveOptionData;
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
+public:
+    MyPaintCurveOptionWidget(lager::cursor<MyPaintCurveOptionData> optionData,
+                              qreal maxYRange, const QString &yValueSuffix);
+    ~MyPaintCurveOptionWidget();
 
-    KisDoubleSliderSpinBox* slider();
+    using KisCurveOptionWidget::strengthValueDenorm;
 
-protected Q_SLOTS:
+    OptionalLodLimitationsReader lodLimitationsReader() const override;
 
-    void slotUnCheckUseCurve();
-
-    void updateSensorCurveLabels(KisDynamicSensorSP sensor) const override;
-    void updateRangeSpinBoxes(KisDynamicSensorSP sensor) const;
-
-public Q_SLOTS:
-    void refresh();
-
-protected:
-
-    void checkRanges() const;
-    float getBaseValue(KisPropertiesConfigurationSP setting);
-    void setBaseValue(KisPropertiesConfigurationSP setting, float val) const;
-
+private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
-#endif // KIS_MYPAINT_CURVE_OPTION_WIDGET_H
+#endif // MYPAINTCURVEOPTIONWIDGET_H

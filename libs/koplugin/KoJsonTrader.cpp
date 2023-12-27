@@ -19,14 +19,22 @@
 #include <QGlobalStatic>
 #include <QMutexLocker>
 
+struct KoJsonTrader::PluginCacheEntry
+{
+    QString filePath;
+    QJsonArray serviceTypes;
+    QStringList mimeTypes;
+    QSharedPointer<QPluginLoader> loader;
+};
+
+
 KoJsonTrader::KoJsonTrader()
 {
     // Allow a command line variable KRITA_PLUGIN_PATH to override the automatic search
-    QString requestedPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
-    if (!requestedPath.isEmpty()) {
-        m_pluginPath = requestedPath;
-    }
-    else {
+    m_pluginPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
+
+    if (m_pluginPath.isEmpty() ||
+        !(QFileInfo(m_pluginPath).exists() && QFileInfo(m_pluginPath).isDir())) {
 
         QList<QDir> searchDirs;
 
@@ -43,10 +51,7 @@ KoJsonTrader::KoJsonTrader()
         appDir.cdUp();
 #endif
         searchDirs << appDir;
-        // help plugin trader find installed plugins when run from uninstalled tests
-#ifdef CMAKE_INSTALL_PREFIX
-        searchDirs << QDir(CMAKE_INSTALL_PREFIX);
-#endif
+
         Q_FOREACH (const QDir& dir, searchDirs) {
             const QStringList nameFilters = {
 #ifdef Q_OS_MACOS
@@ -109,7 +114,14 @@ KoJsonTrader::KoJsonTrader()
         }
         dbgPlugins << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
+
+    initializePluginLoaderCache();
 }
+
+KoJsonTrader::~KoJsonTrader()
+{
+}
+
 
 Q_GLOBAL_STATIC(KoJsonTrader, s_instance)
 
@@ -118,9 +130,11 @@ KoJsonTrader* KoJsonTrader::instance()
     return s_instance;
 }
 
-QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype) const
+void KoJsonTrader::initializePluginLoaderCache()
 {
     QMutexLocker l(&m_mutex);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_pluginLoaderCache.isEmpty());
 
     QList<QPluginLoader *>list;
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
@@ -134,40 +148,85 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #else
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
 #endif
+
             dbgPlugins << dirIter.fileName();
-            QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
+            QScopedPointer<QPluginLoader> loader(new QPluginLoader(dirIter.filePath()));
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
-            dbgPlugins << mimetype << json << json.value("X-KDE-ServiceTypes");
+            dbgPlugins << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
-                delete loader;
                 qWarning() << dirIter.filePath() << "has no json!";
-            }
-            else {
+                continue;
+            } else {
                 QJsonArray  serviceTypes = json.value("X-KDE-ServiceTypes").toArray();
                 if (serviceTypes.isEmpty()) {
                     qWarning() << dirIter.fileName() << "has no X-KDE-ServiceTypes";
-                }
-                if (!serviceTypes.contains(QJsonValue(servicetype))) {
-                    delete loader;
                     continue;
                 }
 
-                if (!mimetype.isEmpty()) {
-                    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-                    mimeTypes += json.value("MimeType").toString().split(';');
-                    mimeTypes += json.value("X-KDE-NativeMimeType").toString();
-                    if (! mimeTypes.contains(mimetype)) {
-                        qWarning() << dirIter.filePath() << "doesn't contain mimetype" << mimetype << "in" << mimeTypes;
-                        delete loader;
-                        continue;
-                    }
-                }
-                list.append(loader);
+                QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+                mimeTypes += json.value("MimeType").toString().split(';');
+                mimeTypes += json.value("X-KDE-NativeMimeType").toString();
+
+                PluginCacheEntry cacheEntry;
+                cacheEntry.filePath = dirIter.filePath();
+                cacheEntry.serviceTypes = serviceTypes;
+                cacheEntry.mimeTypes = mimeTypes;
+                cacheEntry.loader = toQShared(loader.take());
+                m_pluginLoaderCache << cacheEntry;
             }
         }
-
     }
+}
+
+QList<KoJsonTrader::Plugin> KoJsonTrader::query(const QString &servicetype, const QString &mimetype)
+{
+    QMutexLocker l(&m_mutex);
+
+    QList<Plugin> list;
+    Q_FOREACH(const PluginCacheEntry &plugin, m_pluginLoaderCache) {
+        if (!plugin.serviceTypes.contains(QJsonValue(servicetype))) {
+            continue;
+        }
+
+        if (!mimetype.isEmpty() && !plugin.mimeTypes.contains(mimetype)) {
+            continue;
+        }
+
+        list << Plugin(plugin.loader, &m_mutex);
+    }
+
     return list;
+}
+
+KoJsonTrader::Plugin::Plugin(QSharedPointer<QPluginLoader> loader, QMutex *mutex)
+    : m_loader(loader),
+      m_mutex(mutex)
+{
+}
+
+KoJsonTrader::Plugin::~Plugin()
+{
+}
+
+QObject *KoJsonTrader::Plugin::instance() const
+{
+    QMutexLocker l(m_mutex);
+    return m_loader->instance();
+}
+
+QJsonObject KoJsonTrader::Plugin::metaData() const
+{
+    return m_loader->metaData();
+}
+
+QString KoJsonTrader::Plugin::fileName() const
+{
+    return m_loader->fileName();
+}
+
+QString KoJsonTrader::Plugin::errorString() const
+{
+    return m_loader->errorString();
 }

@@ -8,7 +8,7 @@
 #include <MockShapes.h>
 #include "KoShapeBackgroundCommand.h"
 #include "KoColorBackground.h"
-#include "KoShapePaintingContext.h"
+
 
 #include <QPainterPath>
 #include <simpletest.h>
@@ -48,8 +48,8 @@ void TestShapeBackgroundCommand::refCounting()
     QPainter p;
     QPainterPath path;
     path.addRect( QRectF(0,0,100,100) );
-    KoShapePaintingContext context;
-    whiteFill->paint( p, context, path );
+
+    whiteFill->paint( p, path );
 
     delete cmd2;
     delete shape1;

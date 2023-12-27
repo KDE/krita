@@ -23,13 +23,17 @@ KoColorDisplayRendererInterface::~KoColorDisplayRendererInterface()
 {
 }
 
-QImage KoDumbColorDisplayRenderer::convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const
+QImage KoDumbColorDisplayRenderer::toQImage(const KoColorSpace *srcColorSpace, const quint8 *data, QSize size, bool proofPaintColors) const
 {
-    return srcColorSpace->convertToQImage(data, width, height, 0, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    Q_UNUSED(proofPaintColors); // dumb converter doesn't know a painting color space
+    return srcColorSpace->convertToQImage(data, size.width(), size.height(), 0,
+                                          KoColorConversionTransformation::internalRenderingIntent(),
+                                          KoColorConversionTransformation::internalConversionFlags());
 }
 
-QColor KoDumbColorDisplayRenderer::toQColor(const KoColor &c) const
+QColor KoDumbColorDisplayRenderer::toQColor(const KoColor &c, bool proofToPaintColors) const
 {
+    Q_UNUSED(proofToPaintColors);
     return c.toQColor();
 }
 

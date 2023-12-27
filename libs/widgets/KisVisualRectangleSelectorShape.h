@@ -13,16 +13,15 @@ class KisVisualRectangleSelectorShape : public KisVisualColorSelectorShape
     Q_OBJECT
 public:
     enum singelDTypes{vertical, horizontal, border, borderMirrored};
-    explicit KisVisualRectangleSelectorShape(QWidget *parent,
+    explicit KisVisualRectangleSelectorShape(KisVisualColorSelector *parent,
                                              Dimensions dimension,
-                                             const KoColorSpace *cs,
-                                             int channel1, int channel2,
-                                             const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance(), int width=20,
+                                             int channel1, int channel2, int width=20,
                                              KisVisualRectangleSelectorShape::singelDTypes d = KisVisualRectangleSelectorShape::vertical
             );
     ~KisVisualRectangleSelectorShape() override;
 
     void setBorderWidth(int width) override;
+    void setOneDimensionalType(singelDTypes type);
 
     /**
      * @brief getSpaceForSquare
@@ -33,6 +32,7 @@ public:
     QRect getSpaceForCircle(QRect geom) override;
     QRect getSpaceForTriangle(QRect geom) override;
 protected:
+    QRect getAvailableSpace(QRect geom, bool stretch);
     QImage renderAlphaMask() const override;
 
 private:
@@ -42,7 +42,7 @@ private:
     singelDTypes m_type;
     int m_barWidth;
     QRegion getMaskMap() override;
-    void drawCursor() override;
+    void drawCursor(QPainter &painter) override;
 };
 
 #endif 

@@ -20,8 +20,9 @@ public:
     typedef KisVLineIteratorSP IteratorTypeSP;
 
     WrappedVLineIteratorStrategy()
-        : m_iteratorColumnStart(KisWrappedRect::TOPLEFT),
-          m_lastColumnCoord(-1)
+        : m_splitRect(0)
+        , m_iteratorColumnStart(KisWrappedRect::TOPLEFT)
+        , m_lastColumnCoord(-1)
     {
     }
 

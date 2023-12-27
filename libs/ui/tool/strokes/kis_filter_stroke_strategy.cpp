@@ -19,26 +19,28 @@
 #include "kis_image_config.h"
 #include "kis_image_animation_interface.h"
 #include "kis_painter.h"
+#include "KisAnimAutoKey.h"
 #include <commands_new/KisDisableDirtyRequestsCommand.h>
 
 
 struct KisFilterStrokeStrategy::Private {
     Private()
-        : updatesFacade(0),
-          levelOfDetail(0)
+        : updatesFacade(0)
+        , levelOfDetail(0)
     {
     }
 
     Private(const Private &rhs)
-        : filter(rhs.filter),
-          filterConfig(rhs.filterConfig),
-          node(rhs.node),
-          targetDevice(rhs.targetDevice),
-          activeSelection(rhs.activeSelection),
-          image(rhs.image),
-          updatesFacade(rhs.updatesFacade),
-          levelOfDetail(0),
-          cancelledUpdates(rhs.cancelledUpdates)
+        : filter(rhs.filter)
+        , filterConfig(rhs.filterConfig)
+        , node(rhs.node)
+        , targetDevice(rhs.targetDevice)
+        , activeSelection(rhs.activeSelection)
+        , image(rhs.image)
+        , updatesFacade(rhs.updatesFacade)
+        , levelOfDetail(0)
+        , cancelledUpdates(rhs.cancelledUpdates)
+
     {
         KIS_ASSERT_RECOVER_RETURN(!rhs.levelOfDetail);
     }
@@ -55,7 +57,6 @@ struct KisFilterStrokeStrategy::Private {
     ExternalCancelUpdatesStorageSP cancelledUpdates;
     QRect nextExternalUpdateRect;
     bool hasBeenLodCloned = false;
-
 };
 
 struct SubTaskSharedData {
@@ -95,7 +96,9 @@ struct SubTaskSharedData {
 
     KisFilterConfigurationSP filterConfig() { return m_filterConfig; }
 
-    int frameTime() { return m_frameTime; }
+    int frameTime() {
+        return m_frameTime;
+    }
 
     bool shouldSwitchTime() { return m_shouldSwitchTime; }
 
@@ -124,6 +127,7 @@ private:
 
 };
 
+using namespace KritaUtils;
 
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter, KisFilterConfigurationSP filterConfig, KisResourcesSnapshotSP resources)
     : KisFilterStrokeStrategy(filter, filterConfig, resources, toQShared(new ExternalCancelUpdatesStorage()))
@@ -178,6 +182,13 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     qSwap(m_d->nextExternalUpdateRect, m_d->cancelledUpdates->updateRect);
     KisLodTransform t(m_d->levelOfDetail);
     m_d->nextExternalUpdateRect = t.map(m_d->nextExternalUpdateRect);
+
+    KUndo2Command *autoKeyframeCommand =
+        KisAutoKey::tryAutoCreateDuplicatedFrame(m_d->node->paintDevice(),
+                                                 KisAutoKey::SupportsLod);
+    if (autoKeyframeCommand) {
+        runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+    }
 }
 
 
@@ -186,9 +197,9 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     FilterJobData *filterFrameData = dynamic_cast<FilterJobData*>(data);
     KisRunnableStrokeJobData *jobData = dynamic_cast<KisRunnableStrokeJobData*>(data);
 
-    if (filterFrameData) { // Populate list of jobs for filter application...
+    // Populate list of jobs for filter application...
+    if (filterFrameData) {
 
-        using namespace KritaUtils;
         QVector<KisRunnableStrokeJobData*> jobs;
 
         QSharedPointer<SubTaskSharedData> shared( new SubTaskSharedData(m_d->image, m_d->node, m_d->levelOfDetail,
@@ -227,7 +238,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 }
             }
 
-            // Filter device needs a transaction to prevent grid-patch artifcacts from multithreaded read/write.
+            // Filter device needs a transaction to prevent grid-patch artifacts from multithreaded read/write.
             shared->filterDeviceTransaction.reset(new KisTransaction(shared->filterDevice));
 
 
@@ -275,7 +286,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
             // Make a transaction, change the target device, and "end" transaction.
             // Should be useful for undoing later.
-            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice(), AUTOKEY_DISABLED) );
+            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice()) );
             KisPainter::copyAreaOptimized(shared->processRect.topLeft(), shared->filterDevice, shared->targetDevice(), shared->processRect, shared->selection());
             runAndSaveCommand( toQShared(workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 

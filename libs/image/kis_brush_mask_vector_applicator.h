@@ -11,7 +11,7 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
-#if defined HAVE_XSIMD
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) && XSIMD_UNIVERSAL_BUILD_PASS
 
 #include "kis_brush_mask_scalar_applicator.h"
 

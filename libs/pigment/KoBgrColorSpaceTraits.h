@@ -29,18 +29,21 @@ struct KoBgrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
     };
 
     /// @return the red component
-    inline static channels_type red(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type red(const quint8 *data)
+    {
+        const channels_type *d = parent::nativeArray(data);
         return d[red_pos];
     }
     /// Set the red component
-    inline static void setRed(quint8* data, channels_type nv) {
+    inline static void setRed(quint8 *data, channels_type nv)
+    {
         channels_type* d = parent::nativeArray(data);
         d[red_pos] = nv;
     }
     /// @return the green component
-    inline static channels_type green(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type green(const quint8 *data)
+    {
+        const channels_type *d = parent::nativeArray(data);
         return d[green_pos];
     }
     /// Set the green component
@@ -49,8 +52,9 @@ struct KoBgrTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
         d[green_pos] = nv;
     }
     /// @return the blue component
-    inline static channels_type blue(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type blue(const quint8 *data)
+    {
+        const channels_type *d = parent::nativeArray(data);
         return d[blue_pos];
     }
     /// Set the blue component

@@ -11,7 +11,7 @@
 #include "kis_brush.h"
 #include <kis_fixed_paint_device.h>
 #include "kis_color_source.h"
-#include "kis_pressure_sharpness_option.h"
+#include "KisSharpnessOption.h"
 #include "kis_texture_option.h"
 
 #include <kundo2command.h>
@@ -30,8 +30,8 @@ struct KisDabCache::Private {
     KisBrushSP brush;
     KisPaintDeviceSP colorSourceDevice;
 
-    KisPressureSharpnessOption *sharpnessOption = 0;
-    KisTextureProperties *textureOption = 0;
+    KisSharpnessOption *sharpnessOption = 0;
+    KisTextureOption *textureOption = 0;
 };
 
 
@@ -46,12 +46,12 @@ KisDabCache::~KisDabCache()
     delete m_d;
 }
 
-void KisDabCache::setSharpnessPostprocessing(KisPressureSharpnessOption *option)
+void KisDabCache::setSharpnessPostprocessing(KisSharpnessOption *option)
 {
     m_d->sharpnessOption = option;
 }
 
-void KisDabCache::setTexturePostprocessing(KisTextureProperties *option)
+void KisDabCache::setTexturePostprocessing(KisTextureOption *option)
 {
     m_d->textureOption = option;
 }
@@ -136,7 +136,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchFromCache(KisDabCacheUtils::DabRendering
 
 /**
  * A special hack class that allows creation of temporary object with resources
- * without taking ownershop over the option classes
+ * without taking ownership over the option classes
  */
 struct TemporaryResourcesWithoutOwning : public KisDabCacheUtils::DabRenderingResources
 {

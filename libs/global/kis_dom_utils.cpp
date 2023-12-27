@@ -150,16 +150,16 @@ bool removeElements(QDomElement &parent, const QString &tag) {
 }
 
 namespace Private {
-bool checkType(const QDomElement &e, const QString &expectedType)
-{
-    QString type = e.attribute("type", "unknown-type");
-    if (type != expectedType) {
-        warnKrita << i18n("Error: incorrect type (%2) for value %1. Expected %3", e.tagName(), type, expectedType);
-        return false;
-    }
+    bool checkType(const QDomElement &e, const QString &expectedType)
+    {
+        QString type = e.attribute("type", "unknown-type");
+        if (type != expectedType) {
+            warnKrita << i18n("Error: incorrect type (%2) for value %1. Expected %3", e.tagName(), type, expectedType);
+            return false;
+        }
 
-    return true;
-}
+        return true;
+    }
 }
 
 bool loadValue(const QDomElement &e, float *v)
@@ -258,9 +258,9 @@ bool loadValue(const QDomElement &e, QTransform *t)
     qreal m33 = toDouble(e.attribute("m33", "1.0"));
 
     t->setMatrix(
-                m11, m12, m13,
-                m21, m22, m23,
-                m31, m32, m33);
+        m11, m12, m13,
+        m21, m22, m23,
+        m31, m32, m33);
 
     return true;
 }
@@ -279,72 +279,19 @@ bool loadValue(const QDomElement &e, QColor *value)
     return true;
 }
 
-QDomElement findElementByAttibute(QDomNode parent,
-                                  const QString &tag,
-                                  const QString &attribute,
-                                  const QString &key)
+QDomElement findElementByAttribute(QDomNode parent,
+                                   const QString &tag,
+                                   const QString &attribute,
+                                   const QString &value)
 {
-    QDomNode node = parent.firstChild();
-
-    while (!node.isNull()) {
-        QDomElement el = node.toElement();
-
-        if (!el.isNull() && el.tagName() == tag) {
-            QString value = el.attribute(attribute, "<undefined>");
-            if (value == key) return el;
+    QDomElement e;
+    for (e = parent.firstChildElement(tag); !e.isNull(); e = e.nextSiblingElement(tag)) {
+        if (value == e.attribute(attribute, "<undefined>")) {
+            return e;
         }
-
-        node = node.nextSibling();
     }
 
     return QDomElement();
-}
-
-QString escapeText(const QString &text)
-{
-    QString temp;
-
-    for (int index(0); index < text.size(); index++)
-    {
-        QChar character(text.at(index));
-
-        switch (character.unicode())
-        {
-        case '&':
-            temp += "&amp;"; break;
-
-        case '\'':
-            temp += "&apos;"; break;
-
-        case '"':
-            temp += "&quot;"; break;
-
-        case '<':
-            temp += "&lt;"; break;
-
-        case '>':
-            temp += "&gt;"; break;
-
-        default:
-            temp += character;
-            break;
-        }
-    }
-
-    return temp;
-}
-
-QString unescapeText(const QString &text)
-{
-    QString temp(text);
-
-    temp.replace("&amp;", "&");
-    temp.replace("&apos;", "'");
-    temp.replace("&quot;", "\"");
-    temp.replace("&lt;", "<");
-    temp.replace("&gt;", ">");
-
-    return temp;
 }
 
 

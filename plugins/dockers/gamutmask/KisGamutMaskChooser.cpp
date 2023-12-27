@@ -18,6 +18,7 @@
 #include <KisResourceItemChooser.h>
 #include <KisResourceItemListView.h>
 #include <KisResourceModel.h>
+#include <KisResourceThumbnailCache.h>
 #include <kis_icon_utils.h>
 #include <kis_config.h>
 #include "KisPopupButton.h"
@@ -66,7 +67,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     if (m_mode == KisGamutMaskChooser::ViewMode::THUMBNAIL) {
-        QImage previewHighDPI = preview.scaled(paintRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QImage previewHighDPI =
+            KisResourceThumbnailCache::instance()->getImage(index,
+                                                            paintRect.size() * devicePixelRatioF,
+                                                            Qt::IgnoreAspectRatio,
+                                                            Qt::SmoothTransformation);
         previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
         painter->drawImage(paintRect.x(), paintRect.y(), previewHighDPI);
 
@@ -83,7 +88,11 @@ void KisGamutMaskDelegate::paint(QPainter * painter, const QStyleOptionViewItem 
     } else {
         QSize previewSize(paintRect.height(), paintRect.height());
 
-        QImage previewHighDPI = preview.scaled(previewSize*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+        QImage previewHighDPI =
+            KisResourceThumbnailCache::instance()->getImage(index,
+                                                            previewSize * devicePixelRatioF,
+                                                            Qt::IgnoreAspectRatio,
+                                                            Qt::SmoothTransformation);
         previewHighDPI.setDevicePixelRatio(devicePixelRatioF);
 
         if (option.state & QStyle::State_Selected) {
@@ -148,7 +157,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
     m_itemChooser = new KisResourceItemChooser(ResourceType::GamutMasks, false, this);
     m_itemChooser->setItemDelegate(m_delegate);
     m_itemChooser->showTaggingBar(true);
-    m_itemChooser->showButtons(false);
+    m_itemChooser->showImportExportBtns(false);
     m_itemChooser->setSynced(true);
 
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -178,7 +187,7 @@ KisGamutMaskChooser::KisGamutMaskChooser(QWidget *parent) : QWidget(parent)
 
     // setting the view mode
     setViewMode(m_mode);
-    m_itemChooser->setViewModeButtonVisible(true);
+    m_itemChooser->showViewModeBtn(true);
     KisPopupButton* viewModeButton = m_itemChooser->viewModeButton();
     viewModeButton->setPopupWidget(menu);
 
@@ -215,16 +224,14 @@ void KisGamutMaskChooser::updateViewSettings()
     cfg.writeEntry("GamutMasks.viewMode", qint32(m_mode));
 
     if (m_mode == KisGamutMaskChooser::THUMBNAIL) {
-        m_itemChooser->setSynced(true);
-        m_itemChooser->itemView()->setViewMode(QListView::IconMode);
-        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
-        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing()*4);
+        m_itemChooser->setListViewMode(ListViewMode::IconGrid);
+        m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing() * 4);
+        m_itemChooser->setColumnWidth(this->fontMetrics().lineSpacing() * 4);
         m_delegate->setViewMode(m_mode);
-    } else if (m_mode == KisGamutMaskChooser::DETAIL) {
-        m_itemChooser->setSynced(false);
-        m_itemChooser->itemView()->setViewMode(QListView::ListMode);
+    }
+    else if (m_mode == KisGamutMaskChooser::DETAIL) {
+        m_itemChooser->setListViewMode(ListViewMode::Detail);
         m_itemChooser->setRowHeight(this->fontMetrics().lineSpacing()*4);
-        m_itemChooser->setColumnWidth(m_itemChooser->width());
         m_delegate->setViewMode(m_mode);
     }
 }

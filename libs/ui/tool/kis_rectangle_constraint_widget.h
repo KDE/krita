@@ -24,6 +24,9 @@ Q_SIGNALS:
 protected Q_SLOTS:
   void rectangleChanged(const QRectF &rect);
   void inputsChanged();
+  void inputWidthChanged();
+  void inputHeightChanged();
+  void inputRatioChanged();
 
   void slotRoundCornersChanged();
   void slotRoundCornersAspectLockChanged();

@@ -16,6 +16,7 @@ class KisDocument;
 class KoColorSpace;
 class KisPaintingAssistant;
 class StoryboardComment;
+class QVersionNumber;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
@@ -29,7 +30,7 @@ class KRITALIBKRA_EXPORT KisKraLoader
 
 public:
 
-    KisKraLoader(KisDocument * document, int syntaxVersion);
+    KisKraLoader(KisDocument * document, int syntaxVersion, const QVersionNumber &kritaVersion);
 
     ~KisKraLoader();
 
@@ -44,6 +45,8 @@ public:
     void loadResources(KoStore *store, KisDocument *doc);
     void loadStoryboards(KoStore *store, KisDocument *doc);
     void loadAnimationMetadata(KoStore *store, KisImageSP image);
+    void loadAudio(KoStore *store, KisDocument *kisDoc);
+    Q_DECL_DEPRECATED void backCompat_loadAudio(const QDomElement &elem, KisImageSP image, KisDocument *document);
 
     vKisNodeSP selectedNodes() const;
 
@@ -99,7 +102,7 @@ private:
 
     KisNodeSP loadColorizeMask(KisImageSP image, const QDomElement& elem, const KoColorSpace *colorSpace);
 
-    KisNodeSP loadFileLayer(const QDomElement& elem, KisImageSP image, const QString& name, quint32 opacity);
+    KisNodeSP loadFileLayer(const QDomElement& elem, KisImageSP image, const QString& name, quint32 opacity, const KoColorSpace *fallbackColorSpace);
 
     KisNodeSP loadReferenceImagesLayer(const QDomElement& elem, KisImageSP image);
 
@@ -111,9 +114,9 @@ private:
     void loadGrid(const QDomElement& elem);
     void loadGuides(const QDomElement& elem);
     void loadMirrorAxis(const QDomElement& elem);
-    void loadAudio(const QDomElement& elem, KisImageSP image);
     void loadStoryboardItemList(const QDomElement& elem);
     void loadStoryboardCommentList(const QDomElement& elem);
+    void loadAudioXML(QDomDocument& xmlDoc, QDomElement &xmlElement, KisDocument* kisDoc);
 private:
 
     struct Private;

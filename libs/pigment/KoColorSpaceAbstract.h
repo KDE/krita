@@ -140,10 +140,26 @@ public:
         m_alphaMaskApplicator->fillGrayBrushWithColor(dst, brush, brushColor, nPixels);
     }
 
+    /**
+     * By default this does the same as toQColor
+     */
+    void toQColor16(const quint8 *src, QColor *c) const override {
+        this->toQColor(src, c);
+    }
+
     quint8 intensity8(const quint8 * src) const override {
         QColor c;
         const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor(src, &c);
-        return static_cast<quint8>(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11);
+        // Integer version of:
+        //      static_cast<quint8>(qRound(c.red() * 0.30 + c.green() * 0.59 + c.blue() * 0.11))
+        // The "+ 50" is used for rounding
+        return static_cast<quint8>((c.red() * 30 + c.green() * 59 + c.blue() * 11 + 50) / 100);
+    }
+
+    qreal intensityF(const quint8 * src) const override {
+        QColor c;
+        const_cast<KoColorSpaceAbstract<_CSTrait> *>(this)->toQColor16(src, &c);
+        return c.redF() * 0.30 + c.greenF() * 0.59 + c.blueF() * 0.11;
     }
 
     KoColorTransformation* createInvertTransformation() const override {
@@ -154,64 +170,26 @@ public:
         return new KoFallBackColorTransformation(this, KoColorSpaceRegistry::instance()->lab16(""), new KoLabDarkenColorTransformation<quint16>(shade, compensate, compensation, KoColorSpaceRegistry::instance()->lab16("")));
     }
 
-    bool convertPixelsTo(const quint8 *src,
-                                 quint8 *dst, const KoColorSpace *dstColorSpace,
-                                 quint32 numPixels,
-                                 KoColorConversionTransformation::Intent renderingIntent,
-                                 KoColorConversionTransformation::ConversionFlags conversionFlags) const override
-    {
-
-        // check whether we have the same profile and color model, but only a different bit
-        // depth; in that case we don't convert as such, but scale
-        bool scaleOnly = false;
-
-        // Note: getting the id() is really, really expensive, so only do that if
-        // we are sure there is a difference between the colorspaces
-        if (!(*this == *dstColorSpace)) {
-            scaleOnly = dstColorSpace->colorModelId().id() == colorModelId().id() &&
-                         dstColorSpace->colorDepthId().id() != colorDepthId().id() &&
-                         dstColorSpace->profile()->name()   == profile()->name();
-        }
-
-        if (scaleOnly && dynamic_cast<const KoColorSpaceAbstract*>(dstColorSpace)) {
-            typedef typename _CSTrait::channels_type channels_type;
-
-            switch(dstColorSpace->channels()[0]->channelValueType())
-            {
-            case KoChannelInfo::UINT8:
-                scalePixels<_CSTrait::pixelSize, 1, channels_type, quint8>(src, dst, numPixels);
-                return true;
-//             case KoChannelInfo::INT8:
-//                 scalePixels<_CSTrait::pixelSize, 1, channels_type, qint8>(src, dst, numPixels);
-//                 return true;
-            case KoChannelInfo::UINT16:
-                scalePixels<_CSTrait::pixelSize, 2, channels_type, quint16>(src, dst, numPixels);
-                return true;
-            case KoChannelInfo::INT16:
-                scalePixels<_CSTrait::pixelSize, 2, channels_type, qint16>(src, dst, numPixels);
-                return true;
-            case KoChannelInfo::UINT32:
-                scalePixels<_CSTrait::pixelSize, 4, channels_type, quint32>(src, dst, numPixels);
-                return true;
-            default:
-                break;
-            }
-        }
-
-        return KoColorSpace::convertPixelsTo(src, dst, dstColorSpace, numPixels, renderingIntent, conversionFlags);
-    }
-
     void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const qint32 selectedChannelIndex) const override
     {
-        qint32 selectedChannelPos = this->channels()[selectedChannelIndex]->pos();
+        const int alphaPos = _CSTrait::alpha_pos;
+
         for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
-            for (uint channelIndex = 0; channelIndex < this->channelCount(); ++channelIndex) {
-                KoChannelInfo *channel = this->channels().at(channelIndex);
-                qint32 channelSize = channel->size();
-                if (channel->channelType() == KoChannelInfo::COLOR) {
-                    memcpy(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * _CSTrait::pixelSize) + selectedChannelPos, channelSize);
-                } else if (channel->channelType() == KoChannelInfo::ALPHA) {
-                    memcpy(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), channelSize);
+
+            const quint8 *srcPtr = src + pixelIndex * _CSTrait::pixelSize;
+            quint8 *dstPtr = dst + pixelIndex * _CSTrait::pixelSize;
+
+            const typename _CSTrait::channels_type *srcPixel = _CSTrait::nativeArray(srcPtr);
+            typename _CSTrait::channels_type *dstPixel = _CSTrait::nativeArray(dstPtr);
+
+            typename _CSTrait::channels_type commonChannel = srcPixel[selectedChannelIndex];
+
+            for (uint channelIndex = 0; channelIndex < _CSTrait::channels_nb; ++channelIndex) {
+
+                if (channelIndex != alphaPos) {
+                    dstPixel[channelIndex] = commonChannel;
+                } else {
+                    dstPixel[channelIndex] = srcPixel[channelIndex];
                 }
             }
         }
@@ -220,29 +198,19 @@ public:
     void convertChannelToVisualRepresentation(const quint8 *src, quint8 *dst, quint32 nPixels, const QBitArray selectedChannels) const override
     {
         for (uint pixelIndex = 0; pixelIndex < nPixels; ++pixelIndex) {
-            for (uint channelIndex = 0; channelIndex < this->channelCount(); ++channelIndex) {
-                KoChannelInfo *channel = this->channels().at(channelIndex);
-                qint32 channelSize = channel->size();
+            const quint8 *srcPtr = src + pixelIndex * _CSTrait::pixelSize;
+            quint8 *dstPtr = dst + pixelIndex * _CSTrait::pixelSize;
+
+            const typename _CSTrait::channels_type *srcPixel = _CSTrait::nativeArray(srcPtr);
+            typename _CSTrait::channels_type *dstPixel = _CSTrait::nativeArray(dstPtr);
+
+            for (uint channelIndex = 0; channelIndex < _CSTrait::channels_nb; ++channelIndex) {
                 if (selectedChannels.testBit(channelIndex)) {
-                    memcpy(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), src + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize), channelSize);
+                    dstPixel[channelIndex] = srcPixel[channelIndex];
                 } else {
-                    reinterpret_cast<typename _CSTrait::channels_type *>(dst + (pixelIndex * _CSTrait::pixelSize) + (channelIndex * channelSize))[0] = _CSTrait::math_trait::zeroValue;
+                    dstPixel[channelIndex] = _CSTrait::math_trait::zeroValue;
                 }
             }
-        }
-    }
-
-private:
-    template<int srcPixelSize, int dstChannelSize, class TSrcChannel, class TDstChannel>
-    void scalePixels(const quint8* src, quint8* dst, quint32 numPixels) const {
-        qint32 dstPixelSize = dstChannelSize * _CSTrait::channels_nb;
-
-        for(quint32 i=0; i<numPixels; ++i) {
-            const TSrcChannel* srcPixel = reinterpret_cast<const TSrcChannel*>(src + i * srcPixelSize);
-            TDstChannel*       dstPixel = reinterpret_cast<TDstChannel*>(dst + i * dstPixelSize);
-
-            for(quint32 c=0; c<_CSTrait::channels_nb; ++c)
-                dstPixel[c] = Arithmetic::scale<TDstChannel>(srcPixel[c]);
         }
     }
 

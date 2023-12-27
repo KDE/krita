@@ -18,9 +18,11 @@
 #include <kis_types.h>
 #include <brushengine/kis_paintop_factory.h>
 #include <brushengine/kis_paintop_settings.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
+#include <KisOpacityOption.h>
+#include <KisRotationOption.h>
+#include <KisSizeOptionWidget.h>
+#include <KisDuplicateOptionData.h>
+
 
 #include "kis_duplicateop_settings.h"
 
@@ -53,18 +55,15 @@ private:
     KisImageSP m_image;
     KisNodeSP m_node;
 
+    KisDuplicateOptionData m_duplicateOptionData;
     KisDuplicateOpSettingsSP m_settings;
     KisPaintDeviceSP m_srcdev;
     KisPaintDeviceSP m_target;
     QPointF m_duplicateStart {QPointF(0.0, 0.0)};
     bool m_duplicateStartIsSet {false};
-    KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
-    KisPressureRotationOption m_rotationOption;
-    bool m_healing {false};
-    bool m_perspectiveCorrection {false};
-    bool m_moveSourcePoint {false};
-    bool m_cloneFromProjection {false};
+    KisSizeOption m_sizeOption;
+    KisOpacityOption m_opacityOption;
+    KisRotationOption m_rotationOption;
 };
 
 #endif // KIS_DUPLICATEOP_H_

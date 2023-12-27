@@ -45,6 +45,7 @@ public:
     int rowHeight() const;
     int visibilityColumnWidth() const;
     int indentation() const;
+    int selectedButtonColumnWidth() const;
 
     QRect relVisibilityRect() const;
     QRect relThumbnailRect() const;

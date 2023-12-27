@@ -121,10 +121,10 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
 
     Q_FOREACH(const QString &path, paths) {
         if (path.endsWith("svg")) {
-            new KisImportCatcher(path, m_view, "KisShapeLayer");
+            rc += (new KisImportCatcher(path, m_view, "KisShapeLayer"))->numLayersImported();
         }
         else {
-            new KisImportCatcher(path, m_view, layerType);
+            rc += (new KisImportCatcher(path, m_view, layerType))->numLayersImported();
         }
     }
 

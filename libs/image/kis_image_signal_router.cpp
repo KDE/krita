@@ -7,6 +7,7 @@
 #include "kis_image_signal_router.h"
 
 #include <QThread>
+#include <KisStaticInitializer.h>
 
 #include "kis_image.h"
 
@@ -17,13 +18,9 @@
 #define CONNECT_TO_IMAGE_QUEUED(signal)                                 \
     connect(this, SIGNAL(signal), m_image, SIGNAL(signal), Qt::QueuedConnection)
 
-
-struct ImageSignalsStaticRegistrar {
-    ImageSignalsStaticRegistrar() {
-        qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
-    }
-};
-static ImageSignalsStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisImageSignalType>("KisImageSignalType");
+}
 
 
 KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
@@ -45,7 +42,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigLayersChangedAsync());
 
     /**
-     * Color space and profile conversion functions run without storkes,
+     * Color space and profile conversion functions run without strokes,
      * therefore they are executed in GUI hread under the global lock held.
      *
      * To ensure that the receiver of the signal will not deadlock by
@@ -80,7 +77,8 @@ void KisImageSignalRouter::emitNotification(KisImageSignalType type)
      * recipients in a non-reordered way
      */
 
-    if (type.id == LayersChangedSignal) {
+    if (type.id == LayersChangedSignal ||
+        type.id == NodeReselectionRequestSignal) {
         slotNotification(type);
     } else {
         emit sigNotification(type);

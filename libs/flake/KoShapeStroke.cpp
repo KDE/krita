@@ -40,6 +40,7 @@ public:
     KoShapeStroke *q;
 
     void paintBorder(const KoShape *shape, QPainter &painter, const QPen &pen) const;
+    void paintMarkers(const KoShape *shape, QPainter &painter, const QPen &pen) const;
     QColor color;
     QPen pen;
     QBrush brush;
@@ -82,6 +83,18 @@ void KoShapeStroke::Private::paintBorder(const KoShape *shape, QPainter &painter
             QPainterPath path = pathShape->pathStroke(pen);
 
             painter.fillPath(path, pen.brush());
+
+            return;
+        }
+
+        painter.strokePath(shape->outline(), pen);
+    }
+}
+void KoShapeStroke::Private::paintMarkers(const KoShape *shape, QPainter &painter, const QPen &pen) const
+{
+    if (!pen.isCosmetic() && pen.style() != Qt::NoPen) {
+        const KoPathShape *pathShape = dynamic_cast<const KoPathShape *>(shape);
+        if (pathShape) {
 
             if (!pathShape->hasMarkers()) return;
 
@@ -146,14 +159,9 @@ void KoShapeStroke::Private::paintBorder(const KoShape *shape, QPainter &painter
                     previousAngle = angle2;
                 }
             }
-
-            return;
         }
-
-        painter.strokePath(shape->outline(), pen);
     }
 }
-
 
 KoShapeStroke::KoShapeStroke()
         : d(new Private(this))
@@ -267,6 +275,13 @@ void KoShapeStroke::paint(const KoShape *shape, QPainter &painter) const
     KisQPainterStateSaver saver(&painter);
 
     d->paintBorder(shape, painter, resultLinePen());
+}
+
+void KoShapeStroke::paintMarkers(const KoShape *shape, QPainter &painter) const
+{
+    KisQPainterStateSaver saver(&painter);
+
+    d->paintMarkers(shape, painter, resultLinePen());
 }
 
 bool KoShapeStroke::compareFillTo(const KoShapeStrokeModel *other)

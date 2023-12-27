@@ -41,7 +41,6 @@
 #include <canvas/kis_canvas2.h>
 #include <KisViewManager.h>
 #include <widgets/kis_cmb_composite.h>
-#include <widgets/kis_double_widget.h>
 #include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include <kis_config.h>
@@ -64,6 +63,10 @@ KisToolGradient::KisToolGradient(KoCanvasBase * canvas)
     m_shape = KisGradientPainter::GradientShapeLinear;
     m_repeat = KisGradientPainter::GradientRepeatNone;
     m_antiAliasThreshold = 0.2;
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolGradient::~KisToolGradient()
@@ -72,7 +75,11 @@ KisToolGradient::~KisToolGradient()
 
 void KisToolGradient::resetCursorStyle()
 {
-    KisToolPaint::resetCursorStyle();
+    if (isEraser()) {
+        useCursor(KisCursor::load("tool_gradient_eraser_cursor.png", 6, 6));
+    } else {
+        KisToolPaint::resetCursorStyle();
+    }
 
     overrideCursorIfNotEditable();
 }
@@ -86,11 +93,9 @@ void KisToolGradient::activate(const QSet<KoShape*> &shapes)
 void KisToolGradient::paint(QPainter &painter, const KoViewConverter &converter)
 {
     if (mode() == KisTool::PAINT_MODE && m_startPos != m_endPos) {
-            qreal sx, sy;
-            converter.zoom(&sx, &sy);
-            painter.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-            paintLine(painter);
+        paintLine(painter);
     }
+    KisToolPaint::paint(painter, converter);
 }
 
 void KisToolGradient::beginPrimaryAction(KoPointerEvent *event)
@@ -111,15 +116,15 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
     /**
      * TODO: The gradient tool is still not in strokes, so the end of
      *       its action can call processEvent(), which would result in
-     *       nested event hadler calls. Please uncomment this line
+     *       nested event handler calls. Please uncomment this line
      *       when the tool is ported to strokes.
      */
     //CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
+    // First ensure the old guideline is deleted
+    updateGuideline();
 
-    QRectF bound(m_startPos, m_endPos);
-    canvas()->updateCanvas(convertToPt(bound.normalized()));
+    QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
 
     if (event->modifiers() == Qt::ShiftModifier) {
         m_endPos = straightLine(pos);
@@ -127,9 +132,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
         m_endPos = pos;
     }
 
-    bound.setTopLeft(m_startPos);
-    bound.setBottomRight(m_endPos);
-    canvas()->updateCanvas(convertToPt(bound.normalized()));
+    updateGuideline();
 }
 
 void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
@@ -193,7 +196,8 @@ void KisToolGradient::endPrimaryAction(KoPointerEvent *event)
                 }));
         applicator.end();
     }
-    canvas()->updateCanvas(convertToPt(currentImage()->bounds()));
+
+    updateGuideline();
 }
 
 QPointF KisToolGradient::straightLine(QPointF point)
@@ -214,13 +218,22 @@ QPointF KisToolGradient::straightLine(QPointF point)
 
 void KisToolGradient::paintLine(QPainter& gc)
 {
-    if (canvas()) {
-        QPen old = gc.pen();
-        QPen pen(Qt::SolidLine);
+    QPointF viewStartPos = pixelToView(m_startPos);
+    QPointF viewStartEnd = pixelToView(m_endPos);
 
-        gc.setPen(pen);
-        gc.drawLine(m_startPos, m_endPos);
-        gc.setPen(old);
+    if (canvas()) {
+        QPainterPath path;
+        path.moveTo(viewStartPos);
+        path.lineTo(viewStartEnd);
+        paintToolOutline(&gc, path);
+    }
+}
+
+void KisToolGradient::updateGuideline()
+{
+    if (canvas()) {
+        QRectF bound(m_startPos, m_endPos);
+        canvas()->updateCanvas(convertToPt(bound.normalized().adjusted(-3, -3, 3, 3)));
     }
 }
 

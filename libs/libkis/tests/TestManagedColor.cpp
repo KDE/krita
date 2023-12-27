@@ -14,7 +14,7 @@
 #include <KoColorProfile.h>
 #include <KoColor.h>
 
-#include <sdk/tests/testui.h>
+#include <testui.h>
 
 KISTEST_MAIN(TestManagedColor)
 

@@ -12,6 +12,8 @@
 
 #include <QScopedPointer>
 
+class KisUpdatesFacade;
+
 class KRITAIMAGE_EXPORT KisSyncLodCacheStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
 public:
@@ -20,7 +22,7 @@ public:
 
     static QList<KisStrokeJobData*> createJobsData(KisImageWSP image);
 
-    static void createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, int levelOfDetail, KisPaintDeviceList extraDevices = {});
+    static void createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, KisUpdatesFacade *updatesFacade, int levelOfDetail, KisPaintDeviceList extraDevices = {});
 
 private:
     void initStrokeCallback() override;

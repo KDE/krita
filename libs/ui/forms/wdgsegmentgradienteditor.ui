@@ -239,7 +239,7 @@
            <widget class="QToolButton" name="compactModeSelectNextHandleButton"/>
           </item>
           <item>
-           <widget class="QToolButton" name="compactModeMiscOptionsButton"/>
+           <widget class="KisPopupButton" name="compactModeMiscOptionsButton"/>
           </item>
          </layout>
         </item>
@@ -564,7 +564,7 @@
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QDoubleSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
@@ -572,6 +572,11 @@
    <class>KoAspectButton</class>
    <extends>QToolButton</extends>
    <header location="global">KoAspectButton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisPopupButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">KisPopupButton.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

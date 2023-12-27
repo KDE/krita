@@ -7,6 +7,14 @@ set(kritaresourcemanager_SOURCES
     wdgtagselection.cpp
     ResourceImporter.cpp
     DlgResourceTypeForFile.cpp
+    wdg_side.cpp
+    page_resource_chooser.cpp
+    page_tag_chooser.cpp
+    page_bundle_saver.cpp
+    page_metadata_info.cpp
+    wdg_resource_preview.cpp
+    KisResourceItemViewer.cpp
+    wdgtagpreview.cpp
 )
 
 ki18n_wrap_ui(kritaresourcemanager_SOURCES
@@ -14,6 +22,13 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
     wdgdlgbundlemanager.ui
     wdgdlgembedtags.ui
     WdgDlgResourceManager.ui
+    wdgside.ui
+    pageresourcechooser.ui
+    pagetagchooser.ui
+    pagebundlesaver.ui
+    pagemetadatainfo.ui
+    wdgresourcepreview.ui
+    wdgtagpreview.ui
 )
 
 kis_add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})

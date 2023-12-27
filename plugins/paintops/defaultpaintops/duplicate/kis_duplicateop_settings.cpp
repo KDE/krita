@@ -9,8 +9,8 @@
  */
 
 #include "kis_duplicateop_settings.h"
-#include "kis_duplicateop_option.h"
 #include "kis_duplicateop_settings_widget.h"
+#include <KisDuplicateOptionData.h>
 
 #include <QDomElement>
 #include <QDomDocument>
@@ -21,11 +21,8 @@
 #include <kis_image.h>
 #include <kis_brush_option_widget.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
 #include <kis_dom_utils.h>
+#include <KisOptimizedBrushOutline.h>
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisBrushBasedPaintOpSettings(resourcesInterface),
@@ -134,9 +131,9 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
 
     OutlineMode forcedMode = mode;
 
@@ -148,7 +145,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     // clone tool should always show an outline
     path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, alignForZoom, 1.0);
 
-    QPainterPath copy(path);
+    KisOptimizedBrushOutline copy(path);
     QRectF rect2 = copy.boundingRect();
     bool shouldStayInOrigin = m_isOffsetNotUptodate // the clone brush right now waits for first stroke with a new origin, so stays at origin point
             || !getBool(DUPLICATE_MOVE_SOURCE_POINT) // the brush always use the same source point, so stays at origin point
@@ -167,11 +164,15 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     qreal dy = rect2.height() / 4.0;
     rect2.adjust(dx, dy, -dx, -dy);
 
-    path.moveTo(rect2.topLeft());
-    path.lineTo(rect2.bottomRight());
+    QPainterPath crossIcon;
 
-    path.moveTo(rect2.topRight());
-    path.lineTo(rect2.bottomLeft());
+    crossIcon.moveTo(rect2.topLeft());
+    crossIcon.lineTo(rect2.bottomRight());
+
+    crossIcon.moveTo(rect2.topRight());
+    crossIcon.lineTo(rect2.bottomLeft());
+
+    path.addPath(crossIcon);
 
     return path;
 }
@@ -181,6 +182,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
 #include "kis_standard_uniform_properties_factory.h"
+#include <KisDuplicateOptionData.h>
 
 
 QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
@@ -195,17 +197,17 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
 
-                prop->setValue(option.duplicate_healing);
+                prop->setValue(optionData.healing);
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
-                option.duplicate_healing = prop->value().toBool();
-                option.writeOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
+                optionData.healing = prop->value().toBool();
+                optionData.write(prop->settings().data());
             });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -218,17 +220,17 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
 
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
 
-                prop->setValue(option.duplicate_move_source_point);
+                prop->setValue(optionData.moveSourcePoint);
             });
             prop->setWriteCallback(
                         [](KisUniformPaintOpProperty *prop) {
-                KisDuplicateOptionProperties option;
-                option.readOptionSetting(prop->settings().data());
-                option.duplicate_move_source_point = prop->value().toBool();
-                option.writeOptionSetting(prop->settings().data());
+                KisDuplicateOptionData optionData;
+                optionData.read(prop->settings().data());
+                optionData.moveSourcePoint = prop->value().toBool();
+                optionData.write(prop->settings().data());
             });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

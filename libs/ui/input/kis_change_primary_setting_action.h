@@ -37,7 +37,7 @@ public:
 
     bool supportsHiResInputEvents(int shortcut) const override;
 private:
-    KisTool::ToolAction decodeAction(int shorcut) const;
+    KisTool::ToolAction decodeAction(int shortcut) const;
     KisTool::ToolAction savedAction {KisTool::Alternate_NONE};
 };
 

@@ -63,6 +63,7 @@ class ComicsProjectSetupWizard():
         wizard = QWizard()
         wizard.setWindowTitle(i18n("Comic Project Setup"))
         wizard.setOption(QWizard.IndependentPages, True)
+        wizard.setWizardStyle(QWizard.ClassicStyle)
 
         # Set up the UI for the wizard
         basicsPage = QWizardPage()

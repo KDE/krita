@@ -1,0 +1,132 @@
+<svg width="355px" height="210px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+
+<g id="testRect" >
+    
+    <rect stroke="red" fill="none" x="255" y="5" width="95" height="200" />
+    <rect stroke="red" fill="none" x="5" y="5" width="250" height="200" />
+    <text id="test1" x="5" y="20"
+        font-family="DejaVu Sans" font-size="15"
+        fill="blue"
+        textLength="250">Lorem ipsum dolor sit amet</text>
+    
+    <text id="test2" x="5" y="40"
+        font-family="DejaVu Sans" font-size="15"
+        fill="cyan"
+        textLength="250">Lorem ipsum dolor sit amet<tspan x="5" y="55">Lorem ipsum dolor sit amet</tspan></text>
+
+    <text id="test3" x="155" y="40"
+        font-family="DejaVu Sans" font-size="15"
+        fill="green"
+        textLength="100">Lorem ipsum dolor sit amet</text>
+    <text id="test4" x="155" y="55"
+        font-family="DejaVu Sans" font-size="15"
+        fill="lightgreen"
+        textLength="100"
+        lengthAdjust="spacingAndGlyphs">Lorem ipsum dolor sit amet</text>
+    
+    <text id="test5" x="5" y="70"
+        font-family="DejaVu Sans" font-size="15"
+        fill="magenta"
+        textLength="250"
+        lengthAdjust="spacingAndGlyphs">Lorem ipsum dolor sit amet</text>
+    
+    <text id="test6" x="5" y="85"
+        font-family="DejaVu Sans" font-size="15"
+        fill="orange"
+        textLength="250">Lorem ipsum <tspan textLength="100">dolor</tspan> sit amet</text>
+    
+    <text id="test7" x="5" y="100"
+        font-family="DejaVu Sans" font-size="15"
+        fill="purple"
+        lengthAdjust="spacingAndGlyphs"
+        textLength="250">Lorem ipsum <tspan textLength="100" lengthAdjust="spacingAndGlyphs">dolor</tspan> sit amet</text>
+    
+    <text id="test1rtl" x="255" y="120"
+        font-family="DejaVu Sans" font-size="15"
+        fill="blue"
+        direction="rtl"
+        textLength="250">اللغة العربية المعيارية الحديثة</text>
+    <text id="test2rtl" x="255" y="140"
+        font-family="DejaVu Sans" font-size="15"
+        fill="cyan"
+        direction="rtl"
+        textLength="250">اللغة العربية المعيارية الحديثة<tspan x="255" y="155">اللغة العربية المعيارية الحديثة </tspan></text>
+    
+    <text id="test3rtl" x="105" y="140"
+        font-family="DejaVu Sans" font-size="15"
+        fill="green"
+        direction="rtl"
+        textLength="100">اللغة العربية المعيارية الحديثة</text>
+    <text id="test4rtl" x="105" y="155"
+        font-family="DejaVu Sans" font-size="15"
+        fill="lightgreen"
+        direction="rtl"
+        textLength="100"
+        lengthAdjust="spacingAndGlyphs">اللغة العربية المعيارية الحديثة</text>
+    <text id="test5rtl" x="255" y="170"
+        font-family="DejaVu Sans" font-size="15"
+        fill="magenta"
+        textLength="250"
+        direction="rtl"
+        lengthAdjust="spacingAndGlyphs">اللغة العربية المعيارية الحديثة</text>
+    <text id="test6rtl" x="255" y="185"
+        font-family="DejaVu Sans" font-size="15"
+        fill="orange"
+        direction="rtl"
+        textLength="250">اللغة <tspan textLength="100">العربية</tspan> المعيارية الحديثة</text>
+    <text id="test7rtl" x="255" y="200"
+        font-family="DejaVu Sans" font-size="15"
+        fill="purple"
+        direction="rtl"
+        lengthAdjust="spacingAndGlyphs"
+        textLength="250">اللغة <tspan textLength="100" lengthAdjust="spacingAndGlyphs">العربية</tspan> المعيارية الحديثة</text>
+    
+    <text id="test1ttb" x="265" y="5"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15" 
+        writing-mode="vertical-rl"
+        fill="blue"
+        textLength="200">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
+    
+    <text id="test2ttb" x="280" y="5"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15" 
+        writing-mode="vertical-rl"
+          fill="cyan"
+        textLength="180">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ<tspan x="295" y="5">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</tspan></text>
+    
+    <text id="test3ttb" x="280" y="110"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
+        fill="green"
+        writing-mode="vertical-rl"
+        textLength="95">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
+    <text id="test4ttb" x="295" y="110"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
+        fill="lightgreen"
+        writing-mode="vertical-rl"
+        textLength="95"
+        lengthAdjust="spacingAndGlyphs">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
+    
+    <text id="test5ttb" x="310" y="5"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
+        fill="magenta"
+        textLength="200"
+        writing-mode="vertical-rl"
+        lengthAdjust="spacingAndGlyphs">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
+    
+    <text id="test6ttb" x="325" y="5"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
+        fill="orange"
+        writing-mode="vertical-rl"
+        textLength="200">ああああ<tspan textLength="100">&#x82A6;&#x82A6;&#x82A6;</tspan>ああああ</text>
+    <text id="test7ttb" x="340" y="5"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
+        fill="purple"
+        lengthAdjust="spacingAndGlyphs"
+        writing-mode="vertical-rl"
+        textLength="200">ああああ<tspan textLength="100" lengthAdjust="spacingAndGlyphs">&#x82A6;&#x82A6;&#x82A6;</tspan>ああああ</text>
+    
+    
+
+</g>
+
+</svg>

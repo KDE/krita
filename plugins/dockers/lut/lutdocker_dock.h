@@ -63,20 +63,15 @@ public:
     bool canChangeExposureAndGamma() const override;
     qreal currentExposure() const override;
     void setCurrentExposure(qreal value) override;
-    qreal currentGamma() const override;
     void setCurrentGamma(qreal value) override;
+    qreal currentGamma() const override;
 
 private Q_SLOTS:
 
     void slotImageColorSpaceChanged();
 
     void exposureValueChanged(double exposure);
-    void exposureSliderPressed();
-    void exposureSliderReleased();
-
     void gammaValueChanged(double exposure);
-    void gammaSliderPressed();
-    void gammaSliderReleased();
 
     void updateDisplaySettings();
 
@@ -97,9 +92,6 @@ private:
     void enableControls();
     void refillControls();
 
-    void setCurrentExposureImpl(qreal value);
-    void setCurrentGammaImpl(qreal value);
-
 private:
 
     QWidget *m_page;
@@ -107,8 +99,6 @@ private:
     QPointer<KisCanvas2> m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
     QSharedPointer<KisDisplayFilter> m_displayFilter;
-
-    bool m_draggingSlider;
 
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_exposureCompressor;
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_gammaCompressor;

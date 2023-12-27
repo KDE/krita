@@ -117,6 +117,9 @@ Application.activeWindow().activeView().setForeGroundColor(color)
     qreal brushSize() const;
     void setBrushSize(qreal brushSize);
 
+    qreal brushRotation() const;
+    void setBrushRotation(qreal brushRotation);
+
     qreal paintingFlow() const;
     void setPaintingFlow(qreal flow);
 
@@ -149,21 +152,21 @@ print(selected_nodes)
 
     /**
      * @brief flakeToDocumentTransform
-     * The tranformation of the document relative to the view without rotation and mirroring
+     * The transformation of the document relative to the view without rotation and mirroring
      * @return QTransform
      */
     QTransform flakeToDocumentTransform() const;
 
     /**
      * @brief flakeToCanvasTransform
-     * The tranformation of the canvas relative to the view without rotation and mirroring
+     * The transformation of the canvas relative to the view without rotation and mirroring
      * @return QTransform
      */
     QTransform flakeToCanvasTransform() const;
 
     /**
      * @brief flakeToImageTransform
-     * The tranformation of the image relative to the view without rotation and mirroring
+     * The transformation of the image relative to the view without rotation and mirroring
      * @return QTransform
      */
     QTransform flakeToImageTransform() const;

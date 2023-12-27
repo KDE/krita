@@ -39,6 +39,7 @@
 #include <QMoveEvent>
 #include <QMdiSubWindow>
 #include <QFileInfo>
+#include <QScreen>
 
 #include <kis_image.h>
 #include <kis_node.h>
@@ -49,7 +50,6 @@
 #include <kis_selection.h>
 
 #include "KisDocument.h"
-#include "KisImageSignals.h"
 #include "KisImportExportManager.h"
 #include "KisMainWindow.h"
 #include "KisMimeDatabase.h"
@@ -58,7 +58,6 @@
 #include "KisRemoteFileFetcher.h"
 #include "KisSynchronizedConnection.h"
 #include "KisViewManager.h"
-#include "dialogs/kis_dlg_paste_format.h"
 #include "input/kis_input_manager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
@@ -71,23 +70,27 @@
 #include "kis_image_manager.h"
 #include "kis_import_catcher.h"
 #include "kis_mimedata.h"
-#include "kis_mirror_axis.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
 #include "kis_paint_layer.h"
 #include "kis_painting_assistants_decoration.h"
-#include "kis_processing_applicator.h"
-#include "kis_progress_widget.h"
 #include "kis_resources_snapshot.h"
 #include "kis_selection_manager.h"
 #include "kis_shape_controller.h"
 #include "kis_signal_compressor.h"
-#include "kis_statusbar.h"
-#include "kis_tool_freehand.h"
 #include "kis_zoom_manager.h"
 #include "krita_utils.h"
 #include "processing/fill_processing_visitor.h"
 #include "widgets/kis_canvas_drop.h"
+#include <commands_new/KisMergeLabeledLayersCommand.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <commands_new/kis_processing_command.h>
+#include <commands_new/kis_update_command.h>
+#include <kis_command_utils.h>
+#include <KisScreenMigrationTracker.h>
+#include "kis_memory_statistics_server.h"
+#include "kformat.h"
+
 
 //static
 QString KisView::newObjectName()
@@ -112,6 +115,7 @@ public:
         , zoomManager(_q, &this->viewConverter, &this->canvasController)
         , viewManager(viewManager)
         , floatingMessageCompressor(100, KisSignalCompressor::POSTPONE)
+        , screenMigrationTracker(_q)
     {
     }
 
@@ -140,6 +144,8 @@ public:
 
     KisSynchronizedConnection<KisNodeSP> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
+
+    KisScreenMigrationTracker screenMigrationTracker;
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
@@ -184,6 +190,7 @@ public:
                 m_connected = false;
             }
         }
+
     private:
         QWidget * m_widget = 0;
         int m_stretch;
@@ -200,7 +207,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     , d(new Private(this, document, viewManager))
 {
     Q_ASSERT(document);
-    connect(document, SIGNAL(titleModified(QString,bool)), this, SIGNAL(titleModified(QString,bool)));
     setObjectName(newObjectName());
 
     d->document = document;
@@ -231,7 +237,6 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    connect(d->document, SIGNAL(sigSavingFinished(QString)), this, SLOT(slotSavingFinished()));
 
     d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document, /* viewReady = */ false);
     d->canvas.addDecoration(d->referenceImagesDecoration);
@@ -242,7 +247,17 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     d->paintingAssistantsDecoration->setVisible(true);
 
     d->showFloatingMessage = cfg.showCanvasMessages();
-    d->zoomManager.updateScreenResolution(this);
+    slotScreenOrResolutionChanged();
+
+    connect(document, SIGNAL(sigReadWriteChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(sigRecoveredChanged(bool)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(sigPathChanged(QString)), this, SLOT(slotUpdateDocumentTitle()));
+    connect(KisMemoryStatisticsServer::instance(),
+            SIGNAL(sigUpdateMemoryStatistics()),
+            SLOT(slotUpdateDocumentTitle()));
+    connect(document, SIGNAL(modified(bool)), this, SLOT(setWindowModified(bool)));
+    slotUpdateDocumentTitle();
+    setWindowModified(document->isModified());
 }
 
 KisView::~KisView()
@@ -331,7 +346,8 @@ void KisView::setViewManager(KisViewManager *view)
 
     KoToolManager::instance()->addController(&d->canvasController);
     KoToolManager::instance()->registerToolActions(d->actionCollection, &d->canvasController);
-    dynamic_cast<KisShapeController*>(d->document->shapeController())->setInitialShapeForCanvas(&d->canvas);
+    KisShapeController* shapeController = dynamic_cast<KisShapeController*>(d->document->shapeController());
+    shapeController->setInitialShapeForCanvas(&d->canvas);
 
     if (resourceProvider()) {
         resourceProvider()->slotImageSizeChanged();
@@ -450,7 +466,7 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
           << "Has images: " << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node")
+            || event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")
             || event->mimeData()->hasFormat("krita/x-colorsetentry")
             || event->mimeData()->hasColor()) {
         event->accept();
@@ -469,15 +485,10 @@ void KisView::dropEvent(QDropEvent *event)
 
     QPoint imgCursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();
     QRect imageBounds = kisimage->bounds();
-    QPoint pasteCenter;
-    bool forceRecenter;
+    boost::optional<QPoint> forcedCenter;
 
     if (event->keyboardModifiers() & Qt::ShiftModifier && imageBounds.contains(imgCursorPos)) {
-        pasteCenter = imgCursorPos;
-        forceRecenter = true;
-    } else {
-        pasteCenter = imageBounds.center();
-        forceRecenter = false;
+        forcedCenter = imgCursorPos;
     }
 
     dbgUI << Q_FUNC_INFO;
@@ -485,14 +496,18 @@ void KisView::dropEvent(QDropEvent *event)
     dbgUI << "\t Urls: " << event->mimeData()->urls();
     dbgUI << "\t Has images: " << event->mimeData()->hasImage();
 
-    if (event->mimeData()->hasFormat("application/x-krita-node")) {
+    if (event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")) {
         KisShapeController *kritaShapeController =
                 dynamic_cast<KisShapeController*>(d->document->shapeController());
 
-        QList<KisNodeSP> nodes =
-                KisMimeData::loadNodes(event->mimeData(), imageBounds,
-                                       pasteCenter, forceRecenter,
-                                       kisimage, kritaShapeController);
+        bool copyNode = true;
+        QList<KisNodeSP> nodes;
+
+        if (forcedCenter) {
+            nodes = KisMimeData::loadNodesFastAndRecenter(*forcedCenter, event->mimeData(), kisimage, kritaShapeController, copyNode);
+        } else {
+            nodes = KisMimeData::loadNodesFast(event->mimeData(), kisimage, kritaShapeController, copyNode);
+        }
 
         Q_FOREACH (KisNodeSP node, nodes) {
             if (node) {
@@ -516,34 +531,122 @@ void KisView::dropEvent(QDropEvent *event)
         const KisCanvasDrop::Action action = dlgAction.dropAs(*data, callPos);
 
         if (action == KisCanvasDrop::INSERT_AS_NEW_LAYER) {
-            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
+            const QPair<bool, KisClipboard::PasteFormatBehaviour> source =
+                KisClipboard::instance()->askUserForSource(data);
+
+            if (!source.first) {
+                dbgUI << "Paste event cancelled";
+                return;
+            }
+
+            if (source.second != KisClipboard::PASTE_FORMAT_CLIP) {
+                const QList<QUrl> &urls = data->urls();
+                const auto url = std::find_if(
+                    urls.constBegin(),
+                    urls.constEnd(),
+                    [&](const QUrl &url) {
+                        if (source.second
+                            == KisClipboard::PASTE_FORMAT_DOWNLOAD) {
+                            return !url.isLocalFile();
+                        } else if (source.second
+                                   == KisClipboard::PASTE_FORMAT_LOCAL) {
+                            return url.isLocalFile();
+                        } else {
+                            return false;
+                        }
+                    });
+
+                if (url != urls.constEnd()) {
+                    QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
+                    tmp->setAutoRemove(true);
+
+                    const QUrl localUrl = [&]() -> QUrl {
+                        if (!url->isLocalFile()) {
+                            // download the file and substitute the url
+                            KisRemoteFileFetcher fetcher;
+                            tmp->setFileName(url->fileName());
+
+                            if (!fetcher.fetchFile(*url, tmp.data())) {
+                                warnUI << "Fetching" << *url << "failed";
+                                return {};
+                            }
+                            return QUrl::fromLocalFile(tmp->fileName());
+                        }
+                        return *url;
+                    }();
+
+                    if (localUrl.isLocalFile()) {
+                        this->mainWindow()
+                            ->viewManager()
+                            ->imageManager()
+                            ->importImage(localUrl);
+                        this->activateWindow();
+                        return;
+                    }
+                }
+            }
+
+            KisPaintDeviceSP clip =
+                KisClipboard::instance()->clipFromBoardContents(data,
+                                                                QRect(),
+                                                                true,
+                                                                -1,
+                                                                false,
+                                                                source);
             if (clip) {
-                const auto pos = this->viewConverter()->imageToDocument(imgCursorPos).toPoint();
+                const auto pos = this->viewConverter()
+                                     ->imageToDocument(imgCursorPos)
+                                     .toPoint();
 
                 clip->moveTo(pos.x(), pos.y());
 
-                KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
+                KisImportCatcher::adaptClipToImageColorSpace(clip,
+                                                             this->image());
 
-                KisPaintLayerSP layer = new KisPaintLayer(this->image(), "", OPACITY_OPAQUE_U8, clip);
-                KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
-                adapter.addNode(layer,
-                                this->mainWindow()->viewManager()->activeNode()->parent(),
-                                this->mainWindow()->viewManager()->activeNode());
+                KisPaintLayerSP layer = new KisPaintLayer(
+                    this->image(),
+                    this->image()->nextLayerName() + " " + i18n("(pasted)"),
+                    OPACITY_OPAQUE_U8,
+                    clip);
+                KisNodeCommandsAdapter adapter(
+                    this->mainWindow()->viewManager());
+                adapter.addNode(
+                    layer,
+                    this->mainWindow()->viewManager()->activeNode()->parent(),
+                    this->mainWindow()->viewManager()->activeNode());
                 this->activateWindow();
                 return;
             }
         } else if (action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGE) {
-            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
+            KisPaintDeviceSP clip =
+                KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
             if (clip) {
-                KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
+                KisImportCatcher::adaptClipToImageColorSpace(clip,
+                                                             this->image());
 
-                auto *reference = KisReferenceImage::fromPaintDevice(clip, *this->viewConverter(), this);
+                auto *reference =
+                    KisReferenceImage::fromPaintDevice(clip,
+                                                       *this->viewConverter(),
+                                                       this);
 
                 if (reference) {
-                    const auto pos = this->canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
-                    reference->setPosition((*this->viewConverter()).imageToDocument(pos));
-                    this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
-                    KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                    if (data->hasUrls()) {
+                        const auto &urls = data->urls();
+                        const auto url = std::find_if(urls.constBegin(), urls.constEnd(), std::mem_fn(&QUrl::isLocalFile));
+                        if (url != urls.constEnd()) {
+                            reference->setFilename((*url).toLocalFile());
+                        }
+                    }
+                    const auto pos = this->canvasBase()
+                                         ->coordinatesConverter()
+                                         ->widgetToImage(event->pos());
+                    reference->setPosition(
+                        (*this->viewConverter()).imageToDocument(pos));
+                    this->canvasBase()
+                        ->referenceImagesDecoration()
+                        ->addReferenceImage(reference);
+                    KoToolManager::instance()->switchToolRequested(
+                        "ToolReferenceImages");
                     return;
                 }
             }
@@ -568,51 +671,86 @@ void KisView::dropEvent(QDropEvent *event)
 
                 if (url.isLocalFile()) {
                     if (action == KisCanvasDrop::INSERT_MANY_LAYERS) {
-                        this->mainWindow()->viewManager()->imageManager()->importImage(url);
+                        this->mainWindow()
+                            ->viewManager()
+                            ->imageManager()
+                            ->importImage(url);
                         this->activateWindow();
                     } else if (action == KisCanvasDrop::INSERT_MANY_FILE_LAYERS
-                               || action == KisCanvasDrop::INSERT_AS_NEW_FILE_LAYER) {
-                        KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
+                               || action
+                                   == KisCanvasDrop::INSERT_AS_NEW_FILE_LAYER) {
+                        KisNodeCommandsAdapter adapter(
+                            this->mainWindow()->viewManager());
                         QFileInfo fileInfo(url.toLocalFile());
 
-                        QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
-                        QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
+                        QString type =
+                            KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                        QStringList mimes =
+                            KisImportExportManager::supportedMimeTypes(
+                                KisImportExportManager::Import);
 
                         if (!mimes.contains(type)) {
                             QString msg =
-                                KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
-                            QMessageBox::warning(this,
-                                                 i18nc("@title:window", "Krita"),
-                                                 i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
+                                KisImportExportErrorCode(
+                                    ImportExportCodes::FileFormatNotSupported)
+                                    .errorMessage();
+                            QMessageBox::warning(
+                                this,
+                                i18nc("@title:window", "Krita"),
+                                i18n("Could not open %2.\nReason: %1.",
+                                     msg,
+                                     url.toDisplayString()));
                             continue;
                         }
 
-                        KisFileLayer *fileLayer = new KisFileLayer(this->image(),
-                                                                   "",
-                                                                   url.toLocalFile(),
-                                                                   KisFileLayer::None,
-                                                                   fileInfo.fileName(),
-                                                                   OPACITY_OPAQUE_U8);
+                        KisFileLayer *fileLayer =
+                            new KisFileLayer(this->image(),
+                                             "",
+                                             url.toLocalFile(),
+                                             KisFileLayer::None,
+                                             "Bicubic",
+                                             fileInfo.fileName(),
+                                             OPACITY_OPAQUE_U8);
 
-                        KisLayerSP above = this->mainWindow()->viewManager()->activeLayer();
-                        KisNodeSP parent = above ? above->parent() : this->mainWindow()->viewManager()->image()->root();
+                        KisLayerSP above =
+                            this->mainWindow()->viewManager()->activeLayer();
+                        KisNodeSP parent = above ? above->parent()
+                                                 : this->mainWindow()
+                                                       ->viewManager()
+                                                       ->image()
+                                                       ->root();
 
                         adapter.addNode(fileLayer, parent, above);
                     } else if (action == KisCanvasDrop::OPEN_IN_NEW_DOCUMENT
-                               || action == KisCanvasDrop::OPEN_MANY_DOCUMENTS) {
+                               || action
+                                   == KisCanvasDrop::OPEN_MANY_DOCUMENTS) {
                         if (this->mainWindow()) {
-                            this->mainWindow()->openDocument(url.toLocalFile(), KisMainWindow::None);
+                            this->mainWindow()->openDocument(
+                                url.toLocalFile(),
+                                KisMainWindow::None);
                         }
-                    } else if (action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGES
-                               || action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGE) {
-                        auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), *this->viewConverter(), this);
+                    } else if (action
+                                   == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGES
+                               || action
+                                   == KisCanvasDrop::
+                                       INSERT_AS_REFERENCE_IMAGE) {
+                        auto *reference =
+                            KisReferenceImage::fromFile(url.toLocalFile(),
+                                                        *this->viewConverter(),
+                                                        this);
 
                         if (reference) {
-                            const auto pos = this->canvasBase()->coordinatesConverter()->widgetToImage(imgCursorPos);
-                            reference->setPosition((*this->viewConverter()).imageToDocument(pos));
-                            this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
+                            const auto pos = this->canvasBase()
+                                                 ->coordinatesConverter()
+                                                 ->widgetToImage(event->pos());
+                            reference->setPosition(
+                                (*this->viewConverter()).imageToDocument(pos));
+                            this->canvasBase()
+                                ->referenceImagesDecoration()
+                                ->addReferenceImage(reference);
 
-                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            KoToolManager::instance()->switchToolRequested(
+                                "ToolReferenceImages");
                         }
                     }
                 }
@@ -650,11 +788,14 @@ void KisView::dropEvent(QDropEvent *event)
         if (!image()->wrapAroundModePermitted() && !image()->bounds().contains(imgCursorPos)) {
             return;
         }
-
-        KisProcessingApplicator applicator(image(), d->viewManager->activeNode(),
-                                            KisProcessingApplicator::NONE,
-                                            KisImageSignalVector(),
-                                            kundo2_i18n("Flood Fill Layer"));
+            
+        KisStrokeStrategyUndoCommandBased *strategy =
+                new KisStrokeStrategyUndoCommandBased(
+                    kundo2_i18n("Flood Fill Layer"), false, image().data()
+                );
+        strategy->setSupportsWrapAroundMode(true);
+        KisStrokeId fillStrokeId = image()->startStroke(strategy);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(fillStrokeId);
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), d->viewManager->activeNode(), d->viewManager->canvasResourceProvider()->resourceManager());
@@ -669,64 +810,263 @@ void KisView::dropEvent(QDropEvent *event)
 
         // Use same options as the fill tool
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
-        const bool isAltPressed = event->keyboardModifiers() & Qt::AltModifier;
-        const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false) != isAltPressed;
-        const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
-        const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
-        const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
-        const bool antiAlias = configGroup.readEntry("antiAlias", true);
-        const int growSelection = configGroup.readEntry("growSelection", 0);
-        const int featherAmount = configGroup.readEntry("featherAmount", 0);
-        const QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
-        const QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
-        const QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
-        QString sampleLayersMode;
-        if (configGroup.hasKey("sampleLayersMode")) {
-            sampleLayersMode = configGroup.readEntry("sampleLayersMode", SAMPLE_LAYERS_MODE_CURRENT);
-        } else { // if neither option is present in the configuration, it will fall back to CURRENT
-            bool sampleMerged = configGroup.readEntry("sampleMerged", false);
-            sampleLayersMode = sampleMerged ? SAMPLE_LAYERS_MODE_ALL : SAMPLE_LAYERS_MODE_CURRENT;
+        QString fillMode = configGroup.readEntry<QString>("whatToFill", "");
+        if (fillMode.isEmpty()) {
+            if (configGroup.readEntry<bool>("fillSelection", false)) {
+                fillMode = "fillSelection";
+            } else {
+                fillMode = "fillContiguousRegion";
+            }
         }
-        const bool useFastMode = !resources->activeSelection() &&
-                                 opacitySpread == 100 &&
-                                 useSelectionAsBoundary == false &&
-                                 !antiAlias && growSelection == 0 && featherAmount == 0 &&
-                                 sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT;
-        // If the sample layer mode is other than SAMPLE_LAYERS_MODE_ALL just
-        // default to SAMPLE_LAYERS_MODE_CURRENT. This means that
-        // SAMPLE_LAYERS_MODE_COLOR_LABELED is not supported yet since the color
-        // labels are not stored in the config
-        // TODO: make this work with color labels or reference layers in the future
-        if (sampleLayersMode != SAMPLE_LAYERS_MODE_ALL) {
-            sampleLayersMode = SAMPLE_LAYERS_MODE_CURRENT;
+        const bool useCustomBlendingOptions = configGroup.readEntry<bool>("useCustomBlendingOptions", false);
+        const int customOpacity =
+            qBound(0, configGroup.readEntry<int>("customOpacity", 100), 100) * OPACITY_OPAQUE_U8 / 100;
+        QString customCompositeOp = configGroup.readEntry<QString>("customCompositeOp", COMPOSITE_OVER);
+        if (KoCompositeOpRegistry::instance().getKoID(customCompositeOp).id().isNull()) {
+            customCompositeOp = COMPOSITE_OVER;
+        }
+            
+        if (event->keyboardModifiers() == Qt::ShiftModifier) {
+            if (fillMode == "fillSimilarRegions") {
+                fillMode = "fillSelection";
+            } else {
+                fillMode = "fillSimilarRegions";
+            }
+        } else if (event->keyboardModifiers() == Qt::AltModifier) {
+            if (fillMode == "fillContiguousRegion") {
+                fillMode = "fillSelection";
+            } else {
+                fillMode = "fillContiguousRegion";
+            }
         }
 
-        KisPaintDeviceSP referencePaintDevice = nullptr;
-        if (sampleLayersMode == SAMPLE_LAYERS_MODE_ALL) {
-            referencePaintDevice = image()->projection();
-        } else if (sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT) {
-            referencePaintDevice = d->viewManager->activeNode()->paintDevice();
-        }
-        KIS_ASSERT(referencePaintDevice);
-        
-        FillProcessingVisitor *visitor = new FillProcessingVisitor(referencePaintDevice,
-                                                                   selection(),
-                                                                   resources);
-        visitor->setSeedPoint(imgCursorPos);
-        visitor->setUseFastMode(useFastMode);
-        visitor->setSelectionOnly(fillSelectionOnly);
-        visitor->setUseSelectionAsBoundary(useSelectionAsBoundary);
-        visitor->setFeather(featherAmount);
-        visitor->setSizeMod(growSelection);
-        visitor->setFillThreshold(thresholdAmount);
-        visitor->setOpacitySpread(opacitySpread);
-        visitor->setAntiAlias(antiAlias);
-        
-        applicator.applyVisitor(visitor,
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
+        if (fillMode == "fillSelection") {
+            FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr,
+                                                                        selection(),
+                                                                        resources);
+            visitor->setSeedPoint(imgCursorPos);
+            visitor->setSelectionOnly(true);
+            visitor->setUseCustomBlendingOptions(useCustomBlendingOptions);
+            if (useCustomBlendingOptions) {
+                visitor->setCustomOpacity(customOpacity);
+                visitor->setCustomCompositeOp(customCompositeOp);
+            }
+            image()->addJob(
+                fillStrokeId,
+                new KisStrokeStrategyUndoCommandBased::Data(
+                    KUndo2CommandSP(new KisProcessingCommand(visitor, d->viewManager->activeNode())),
+                    false,
+                    KisStrokeJobData::SEQUENTIAL,
+                    KisStrokeJobData::EXCLUSIVE
+                )
+            );
+        } else {
+            const int threshold = configGroup.readEntry("thresholdAmount", 8);
+            const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
+            const bool antiAlias = configGroup.readEntry("antiAlias", true);
+            const int grow = configGroup.readEntry("growSelection", 0);
+            const bool stopGrowingAtDarkestPixel = configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
+            const int feather = configGroup.readEntry("featherAmount", 0);
+            QString sampleLayersMode = configGroup.readEntry("sampleLayersMode", "");
+            if (sampleLayersMode.isEmpty()) {
+                if (configGroup.readEntry("sampleMerged", false)) {
+                    sampleLayersMode = "allLayers";
+                } else {
+                    sampleLayersMode = "currentLayer";
+                }
+            }
+            QList<int> colorLabels;
+            {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+                const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', Qt::SkipEmptyParts);
+#else
+                const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
+#endif
 
-        applicator.end();
+                for (const QString &colorLabelStr : colorLabelsStr) {
+                    bool ok;
+                    const int colorLabel = colorLabelStr.toInt(&ok);
+                    if (ok) {
+                        colorLabels << colorLabel;
+                    }
+                }
+            }
+            
+            KisPaintDeviceSP referencePaintDevice = nullptr;
+            if (sampleLayersMode == "allLayers") {
+                referencePaintDevice = image()->projection();
+            } else if (sampleLayersMode == "currentLayer") {
+                referencePaintDevice = d->viewManager->activeNode()->paintDevice();
+            } else if (sampleLayersMode == "colorLabeledLayers") {
+                referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+                image()->addJob(
+                    fillStrokeId,
+                    new KisStrokeStrategyUndoCommandBased::Data(
+                        KUndo2CommandSP(new KisMergeLabeledLayersCommand(image(),
+                                                                         referencePaintDevice,
+                                                                         colorLabels,
+                                                                         KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
+                        false,
+                        KisStrokeJobData::SEQUENTIAL,
+                        KisStrokeJobData::EXCLUSIVE
+                    )
+                );
+            }
+
+            QSharedPointer<KoColor> referenceColor(new KoColor);
+            if (sampleLayersMode == "colorLabeledLayers") {
+                // We need to obtain the reference color from the reference paint
+                // device, but it is produced in a stroke, so we must get the color
+                // after the device is ready. So we get it in the stroke
+                image()->addJob(
+                    fillStrokeId,
+                    new KisStrokeStrategyUndoCommandBased::Data(
+                        KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
+                            [referenceColor, referencePaintDevice, imgCursorPos]() -> KUndo2Command*
+                            {
+                                *referenceColor = referencePaintDevice->pixel(imgCursorPos);
+                                return 0;
+                            }
+                        )),
+                        false,
+                        KisStrokeJobData::SEQUENTIAL,
+                        KisStrokeJobData::EXCLUSIVE
+                    )
+                );
+            } else {
+                // Here the reference device is already ready, so we obtain the
+                // reference color directly
+                *referenceColor = referencePaintDevice->pixel(imgCursorPos);
+            }
+
+            if (fillMode == "fillContiguousRegion") {
+                const KisFillPainter::RegionFillingMode regionFillingMode =
+                    configGroup.readEntry("contiguousFillMode", "") == "boundaryFill"
+                    ? KisFillPainter::RegionFillingMode_BoundaryFill
+                    : KisFillPainter::RegionFillingMode_FloodFill;
+                KoColor regionFillingBoundaryColor;
+                if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+                    const QString xmlColor = configGroup.readEntry("contiguousFillBoundaryColor", QString());
+                    QDomDocument doc;
+                    if (doc.setContent(xmlColor)) {
+                        QDomElement e = doc.documentElement().firstChild().toElement();
+                        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
+                        bool ok;
+                        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
+                            regionFillingBoundaryColor = KoColor::fromXML(e, channelDepthID, &ok);
+                        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
+                            regionFillingBoundaryColor = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+                        }
+                    }
+                }
+                const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
+                const bool blendingOptionsAreNoOp = useCustomBlendingOptions
+                                                    ? (customOpacity == OPACITY_OPAQUE_U8 &&
+                                                       customCompositeOp == COMPOSITE_OVER)
+                                                    : (resources->opacity() == OPACITY_OPAQUE_U8 &&
+                                                       resources->compositeOpId() == COMPOSITE_OVER);
+                const bool useFastMode = !resources->activeSelection() &&
+                                         blendingOptionsAreNoOp &&
+                                         opacitySpread == 100 &&
+                                         useSelectionAsBoundary == false &&
+                                         !antiAlias && grow == 0 && feather == 0 &&
+                                         sampleLayersMode == "currentLayer";
+
+                FillProcessingVisitor *visitor = new FillProcessingVisitor(referencePaintDevice,
+                                                                           selection(),
+                                                                           resources);
+                visitor->setSeedPoint(imgCursorPos);
+                visitor->setUseFastMode(useFastMode);
+                visitor->setUseSelectionAsBoundary(useSelectionAsBoundary);
+                visitor->setFeather(feather);
+                visitor->setSizeMod(grow);
+                visitor->setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
+                visitor->setRegionFillingMode(regionFillingMode);
+                if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+                    visitor->setRegionFillingBoundaryColor(regionFillingBoundaryColor);
+                }
+                visitor->setFillThreshold(threshold);
+                visitor->setOpacitySpread(opacitySpread);
+                visitor->setAntiAlias(antiAlias);
+                visitor->setUseCustomBlendingOptions(useCustomBlendingOptions);
+                if (useCustomBlendingOptions) {
+                    visitor->setCustomOpacity(customOpacity);
+                    visitor->setCustomCompositeOp(customCompositeOp);
+                }
+                
+                image()->addJob(
+                    fillStrokeId,
+                    new KisStrokeStrategyUndoCommandBased::Data(
+                        KUndo2CommandSP(new KisProcessingCommand(visitor, d->viewManager->activeNode())),
+                        false,
+                        KisStrokeJobData::SEQUENTIAL,
+                        KisStrokeJobData::EXCLUSIVE
+                    )
+                );
+            } else {
+                KisSelectionSP fillMask = new KisSelection;
+                QSharedPointer<KisProcessingVisitor::ProgressHelper>
+                    progressHelper(new KisProcessingVisitor::ProgressHelper(currentNode()));
+
+                {
+                    KisSelectionSP selection = this->selection();
+                    KisFillPainter painter;
+                    QRect bounds = image()->bounds();
+                    if (selection) {
+                        bounds = bounds.intersected(selection->projection()->selectedRect());
+                    }
+
+                    painter.setFillThreshold(threshold);
+                    painter.setOpacitySpread(opacitySpread);
+                    painter.setAntiAlias(antiAlias);
+                    painter.setSizemod(grow);
+                    painter.setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
+                    painter.setFeather(feather);
+
+                    QVector<KisStrokeJobData*> jobs =
+                        painter.createSimilarColorsSelectionJobs(
+                            fillMask->pixelSelection(), referenceColor, referencePaintDevice,
+                            bounds, selection ? selection->projection() : nullptr, progressHelper
+                        );
+
+                    for (KisStrokeJobData *job : jobs) {
+                        image()->addJob(fillStrokeId, job);
+                    }
+                }
+
+                {
+                    FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr,
+                                                                                fillMask,
+                                                                                resources);
+
+                    visitor->setSeedPoint(imgCursorPos);
+                    visitor->setSelectionOnly(true);
+                    visitor->setProgressHelper(progressHelper);
+
+                    image()->addJob(
+                        fillStrokeId,
+                        new KisStrokeStrategyUndoCommandBased::Data(
+                            KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
+                            false,
+                            KisStrokeJobData::SEQUENTIAL,
+                            KisStrokeJobData::EXCLUSIVE
+                        )
+                    );
+                }
+            }
+        }
+
+        image()->addJob(
+            fillStrokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisUpdateCommand(d->viewManager->activeNode(), image()->bounds(), image().data())),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
+        );
+
+        image()->endStroke(fillStrokeId);
     }
 }
 
@@ -738,7 +1078,7 @@ void KisView::dragMoveEvent(QDragMoveEvent *event)
           << "Has images: " << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node")
+            || event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")
             || event->mimeData()->hasFormat("krita/x-colorsetentry")
             || event->mimeData()->hasColor()) {
         return event->accept();
@@ -809,9 +1149,9 @@ QList<QAction*> KisView::createChangeUnitActions(bool addPixelUnit)
 
 void KisView::closeEvent(QCloseEvent *event)
 {
-    // Check whether we're the last (user visible) view
+    // Check whether we're the last view
     int viewCount = KisPart::instance()->viewCount(document());
-    if (viewCount > 1 || !isVisible()) {
+    if (viewCount > 1) {
         // there are others still, so don't bother the user
         event->accept();
         return;
@@ -870,9 +1210,28 @@ bool KisView::queryClose()
 
 }
 
-void KisView::slotScreenChanged()
+void KisView::slotMigratedToScreen(QScreen *screen)
 {
+    d->canvas.slotScreenChanged(screen);
+}
+
+void KisView::slotScreenOrResolutionChanged()
+{
+    /**
+     * slotScreenOrResolutionChanged() is guaranteed to come after
+     * slotMigratedToScreen() when a migration happens
+     */
     d->zoomManager.updateScreenResolution(this);
+
+    if (d->canvas.resourceManager() && d->screenMigrationTracker.currentScreen()) {
+        int penWidth = qRound(d->screenMigrationTracker.currentScreen()->devicePixelRatio());
+        d->canvas.resourceManager()->setDecorationThickness(qMax(penWidth, 1));
+    }
+}
+
+QScreen* KisView::currentScreen() const
+{
+    return d->screenMigrationTracker.currentScreen();
 }
 
 void KisView::slotThemeChanged(QPalette pal)
@@ -890,6 +1249,30 @@ void KisView::slotThemeChanged(QPalette pal)
     if (canvasController()) {
         canvasController()->setPalette(pal);
     }
+}
+
+void KisView::slotUpdateDocumentTitle()
+{
+    QString title = d->document->caption();
+
+    if (!d->document->isReadWrite()) {
+        title += " " + i18n("Write Protected");
+    }
+
+    if (d->document->isRecovered()) {
+        title += " " + i18n("Recovered");
+    }
+
+    // show the file size for the document
+    KisMemoryStatisticsServer::Statistics fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->document->image());
+
+    if (fileSizeStats.imageSize) {
+        title += QString(" (").append( KFormat().formatByteSize(qreal(fileSizeStats.imageSize))).append( ") ");
+    }
+
+    title += "[*]";
+
+    this->setWindowTitle(title);
 }
 
 void KisView::resetImageSizeAndScroll(bool changeCentering,
@@ -1119,15 +1502,9 @@ void KisView::slotLoadingFinished()
     }
 
     setCurrentNode(activeNode);
-    connect(d->viewManager->mainWindow(), SIGNAL(screenChanged()), SLOT(slotScreenChanged()));
+    connect(&d->screenMigrationTracker, SIGNAL(sigScreenChanged(QScreen*)), this, SLOT(slotMigratedToScreen(QScreen*)));
+    connect(&d->screenMigrationTracker, SIGNAL(sigScreenOrResolutionChanged(QScreen*)), this, SLOT(slotScreenOrResolutionChanged()));
     zoomManager()->updateImageBoundsSnapping();
-}
-
-void KisView::slotSavingFinished()
-{
-    if (d->viewManager && d->viewManager->mainWindow()) {
-        d->viewManager->mainWindow()->updateCaption();
-    }
 }
 
 void KisView::slotImageResolutionChanged()

@@ -24,12 +24,10 @@ public:
     FisheyePointAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
-    void endStroke() override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
 
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 3; }
 
     bool isAssistantComplete() const override;
@@ -39,15 +37,10 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt);
     explicit FisheyePointAssistant(const FisheyePointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     mutable Ellipse e;
     mutable Ellipse extraE;
-    // Needed to make sure that when we are in the middle of a brush stroke, the
-    // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
-    QPointF m_adjustedBrushPosition;
 };
 
 class FisheyePointAssistantFactory : public KisPaintingAssistantFactory

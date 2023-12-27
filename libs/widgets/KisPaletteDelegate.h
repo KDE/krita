@@ -28,13 +28,8 @@ public:
     void paint(QPainter *, const QStyleOptionViewItem &, const QModelIndex &) const override;
     QSize sizeHint(const QStyleOptionViewItem & option, const QModelIndex &) const override;
 
-    void paintSwatch() const;
-    
 private:
     QString m_crossedKeyword;
-    void paintCrossedLine(const QStyleOptionViewItem &option, QPainter *painter) const;
-    void paintNonCrossed(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, const bool isSelected) const;
-    void paintGroupName(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index, const bool isSelected) const;
 };
 
 #endif /* __KIS_PALETTE_DELEGATE_H */

@@ -52,7 +52,7 @@ public:
     /**
      * @brief Get the current gradient
      * 
-     * Aclone is returned so that any changes in the returned gradient
+     * A clone is returned so that any changes in the returned gradient
      * won't change the editor gradient and viceversa
      * @return A clone of the current gradient
      * @see setGradient(KoAbstractGradientSP)

@@ -16,6 +16,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <KisMpl.h>
 
 class KisRecentFilesManager::Private
 {
@@ -54,9 +55,8 @@ bool KisRecentFilesManager::Private::containsUrl(const QUrl &url) const
 
 int KisRecentFilesManager::Private::indexOfUrl(const QUrl &url) const
 {
-    auto found = std::find_if(m_entries.constBegin(), m_entries.constEnd(), [url](const KisRecentFilesEntry &item) {
-        return item.m_url == url;
-    });
+    auto found = std::find_if(m_entries.constBegin(), m_entries.constEnd(),
+                              kismpl::mem_equal_to(&KisRecentFilesEntry::m_url, url));
     if (found == m_entries.constEnd()) {
         return -1;
     } else {

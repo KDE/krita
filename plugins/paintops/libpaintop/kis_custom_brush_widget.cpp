@@ -33,7 +33,7 @@
 #include <kis_selection.h>
 #include <KoProperties.h>
 #include "kis_iterator_ng.h"
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLock.h"
 #include <KisResourceUserOperations.h>
 
 #include <kstandardguiitem.h>
@@ -220,7 +220,7 @@ void KisCustomBrushWidget::createBrush()
         int w = m_image->width();
         int h = m_image->height();
 
-        KisImageBarrierLocker locker(m_image);
+        KisImageReadOnlyBarrierLock lock(m_image);
 
         // We only loop over the rootLayer. Since we actually should have a layer selection
         // list, no need to elaborate on that here and now

@@ -1,6 +1,6 @@
 /*
  * This file is part of the KDE project
- * SPDX-FileCopyrightText: 2020 Sharaf Zaman <sharafzaz121@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Sharaf Zaman <shzam@sdf.org>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,17 +10,23 @@ package org.krita.android;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingFlowParams.ProductDetailsParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsParams;
-import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryProductDetailsParams.Product;
+import com.android.billingclient.api.QueryPurchasesParams;
 
 import org.krita.R;
 import org.qtproject.qt5.android.QtNative;
@@ -28,12 +34,13 @@ import org.qtproject.qt5.android.QtNative;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DonationHelper implements PurchasesUpdatedListener, BillingClientStateListener, SkuDetailsResponseListener {
+@SuppressWarnings("unused")
+public class DonationHelper implements PurchasesUpdatedListener, BillingClientStateListener, ProductDetailsResponseListener {
 
     private final String LOG_TAG = "krita.DonationHelper";
 
-    private BillingClient mBillingClient;
-    private List<SkuDetails> mSkuDetails;
+    private final BillingClient mBillingClient;
+    private List<ProductDetails> mProductDetailsList;
 
     private static DonationHelper sInstance;
 
@@ -56,33 +63,28 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
     @Override
     public void onBillingSetupFinished(BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-            querySkuDetails();
+            queryProductDetails();
         }
     }
 
-    private void querySkuDetails() {
-        List<String> skus = new ArrayList<>();
-        skus.add("thankyoukiki");
+    private void queryProductDetails() {
+        List<QueryProductDetailsParams.Product> productList = new ArrayList<>();
+        productList.add(Product.newBuilder()
+                .setProductId("thankyoukiki")
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build());
 
-        SkuDetailsParams params = SkuDetailsParams.newBuilder()
-          .setType(BillingClient.SkuType.INAPP)
-          .setSkusList(skus)
-          .build();
+        QueryProductDetailsParams params = QueryProductDetailsParams.newBuilder()
+                .setProductList(productList)
+                .build();
 
-        mBillingClient.querySkuDetailsAsync(params, this);
+        mBillingClient.queryProductDetailsAsync(params, this);
     }
 
     @Override
-    public void onSkuDetailsResponse(BillingResult billingResult, List<SkuDetails> list) {
-        if (billingResult == null) {
-            Log.e(LOG_TAG, "null billingResult");
-            return;
-        }
-
+    public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-            if (list != null) {
-                mSkuDetails = list;
-            }
+            mProductDetailsList = list;
         }
     }
 
@@ -91,13 +93,8 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
 
     }
 
-
     @Override
-    public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
-        if (billingResult == null) {
-            Log.e(LOG_TAG, "null billingResult");
-            return;
-        }
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, List<Purchase> purchases) {
         switch (billingResult.getResponseCode()) {
             case BillingClient.BillingResponseCode.OK:
                 // only one item, for now
@@ -139,7 +136,7 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
                                                  .build();
         mBillingClient.acknowledgePurchase(params, new AcknowledgePurchaseResponseListener() {
             @Override
-            public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
                 Log.d(LOG_TAG, "BillingResult: " + billingResult.getResponseCode());
             }
         });
@@ -161,32 +158,44 @@ public class DonationHelper implements PurchasesUpdatedListener, BillingClientSt
             return;
         }
 
-        if (getInstance().mSkuDetails != null) {
-            // there's only one for now
-            for (SkuDetails detail: getInstance().mSkuDetails) {
-                BillingFlowParams flowParams = BillingFlowParams.newBuilder()
-                  .setSkuDetails(detail)
-                  .build();
+        if (getInstance().mProductDetailsList != null) {
+            List<ProductDetailsParams> productDetailsParamsList = new ArrayList<>();
 
-                getInstance().mBillingClient.launchBillingFlow(QtNative.activity(), flowParams);
+            // there's only one for now
+            for (ProductDetails details: getInstance().mProductDetailsList) {
+                productDetailsParamsList.add(ProductDetailsParams.newBuilder()
+                        .setProductDetails(details)
+                        .build());
             }
+            BillingFlowParams flowParams = BillingFlowParams.newBuilder()
+                    .setProductDetailsParamsList(productDetailsParamsList)
+                    .build();
+
+            getInstance().mBillingClient.launchBillingFlow(QtNative.activity(), flowParams);
         }
     }
 
     // This method will be called from C++ side, to see if the banner has been purchased.
     // We only have one item right now, so this will do.
-    public static boolean isBadgePurchased() {
-        Purchase.PurchasesResult purchasesResult =
-          getInstance().mBillingClient.queryPurchases(BillingClient.SkuType.INAPP);
-
-        if (purchasesResult.getPurchasesList() != null)
-            return !purchasesResult.getPurchasesList().isEmpty();
-        else
-            return false;
+    public static void checkBadgePurchased() {
+        getInstance().mBillingClient.queryPurchasesAsync(QueryPurchasesParams.newBuilder()
+                        .setProductType(BillingClient.ProductType.INAPP)
+                        .build(),
+                new PurchasesResponseListener() {
+                    @Override
+                    public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> list) {
+                        if (!list.isEmpty()) {
+                            // tell C++ that banner is purchased
+                            Log.d("DonationHelper", "Badge purchased");
+                            JNIWrappers.donationSuccessful();
+                        }
+                    }
+                });
     }
 
     public static void endConnection() {
         getInstance().mBillingClient.endConnection();
         sInstance = null;
     }
+
 }

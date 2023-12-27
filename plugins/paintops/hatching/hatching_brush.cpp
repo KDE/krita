@@ -40,14 +40,14 @@ void HatchingBrush::init()
 {
 }
 
-void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color, qreal additionalScale)
+void HatchingBrush::hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenAngle, const KoColor &color, qreal additionalScale)
 {
     m_painter.begin(dev);
     m_painter.setFillStyle(KisPainter::FillStyleForegroundColor);
     m_painter.setPaintColor(color);
     m_painter.setBackgroundColor(color);
 
-    angle = givenangle;
+    angle = givenAngle;
     double tempthickness = m_settings->thickness * m_settings->thicknesssensorvalue;
     thickness = qMax(1, qRound(additionalScale * tempthickness));
     separation = additionalScale *
@@ -127,28 +127,28 @@ void HatchingBrush::iterateLines(bool forward, int lineindex, bool oneline)
 
         if ((scanIntercept >= 0) && (scanIntercept <= height_)) {
             xdraw[append_index] = 0;
-            ydraw[append_index] = scanIntercept;       //interseccion at left
+            ydraw[append_index] = scanIntercept;       //intersection at left
             remaininginnerlines = true;
             append_index++;
         }
 
         if ((slope * width_ + scanIntercept <= height_) && (slope * width_ + scanIntercept >= 0)) {
             xdraw[append_index] = width_;
-            ydraw[append_index] = scanIntercept + slope * width_; //interseccion at right
+            ydraw[append_index] = scanIntercept + slope * width_; //intersection at right
             remaininginnerlines = true;
             append_index++;
         }
 
         if ((-scanIntercept / slope > 0) && (-scanIntercept / slope < width_)) {
             xdraw[append_index] = -scanIntercept / slope;
-            ydraw[append_index] = 0;       //interseccion at top
+            ydraw[append_index] = 0;       //intersection at top
             remaininginnerlines = true;
             append_index++;
         }
 
         if (((height_ - scanIntercept) / slope > 0) && ((height_ - scanIntercept) / slope < width_)) {
             xdraw[append_index] = (height_ - scanIntercept) / slope;
-            ydraw[append_index] = height_;       //interseccion at bottom
+            ydraw[append_index] = height_;       //intersection at bottom
             remaininginnerlines = true;
             append_index++;
         }

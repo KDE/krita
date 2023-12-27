@@ -64,9 +64,7 @@ void KisShadeSelectorLineComboBox::showPopup()
 
     const int widgetMargin = 20;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    QRect geom = this->geometry();
-    QPoint p(geom.width() / 2 + geom.left(), geom.height() / 2 + geom.top());
-    QScreen *screen = qApp->screenAt(p);
+    QScreen *screen = qApp->screenAt(QCursor::pos());
     QRect fitRect;
     if (screen) {
        fitRect = kisGrowRect(screen->availableGeometry(), -widgetMargin);

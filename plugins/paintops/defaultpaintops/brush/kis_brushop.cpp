@@ -47,7 +47,16 @@
 
 KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter, SupportsGradientMode | SupportsLightnessMode)
-    , m_opacityOption(node)
+    , m_sizeOption(settings.data())
+    , m_ratioOption(settings.data())
+    , m_rateOption(settings.data())
+    , m_softnessOption(settings.data())
+    , m_lightnessStrengthOption(settings.data())
+    , m_spacingOption(settings.data())
+    , m_scatterOption(settings.data())
+    , m_sharpnessOption(settings.data())
+    , m_rotationOption(settings.data())
+    , m_opacityOption(settings.data(), node)
     , m_avgSpacing(50)
     , m_avgNumDabs(50)
     , m_avgUpdateTimePerDab(50)
@@ -58,38 +67,13 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     Q_UNUSED(image);
     Q_ASSERT(settings);
 
-    m_airbrushOption.readOptionSetting(settings);
-
-    m_opacityOption.readOptionSetting(settings);
-    m_flowOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_ratioOption.readOptionSetting(settings);
-    m_spacingOption.readOptionSetting(settings);
-    m_rateOption.readOptionSetting(settings);
-    m_softnessOption.readOptionSetting(settings);
-    m_rotationOption.readOptionSetting(settings);
-    m_scatterOption.readOptionSetting(settings);
-    m_sharpnessOption.readOptionSetting(settings);
-    m_lightnessStrengthOption.readOptionSetting(settings);
-
-    m_opacityOption.resetAllSensors();
-    m_flowOption.resetAllSensors();
-    m_sizeOption.resetAllSensors();
-    m_ratioOption.resetAllSensors();
-    m_rateOption.resetAllSensors();
-    m_softnessOption.resetAllSensors();
-    m_sharpnessOption.resetAllSensors();
-    m_rotationOption.resetAllSensors();
-    m_scatterOption.resetAllSensors();
-    m_sharpnessOption.resetAllSensors();
-    m_lightnessStrengthOption.resetAllSensors();
-
+    m_airbrushData.read(settings.data());
     m_rotationOption.applyFanCornersInfo(this);
 
     m_precisionOption.setHasImprecisePositionOptions(
         m_precisionOption.hasImprecisePositionOptions()
         || m_scatterOption.isChecked() || m_rotationOption.isChecked()
-        || m_airbrushOption.enabled);
+        || m_airbrushData.isChecked);
 
     m_brush->notifyBrushIsGoingToBeClonedForStroke();
 
@@ -142,8 +126,6 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
                               brush->maskWidth(shape, 0, 0, info),
                               brush->maskHeight(shape, 0, 0, info));
 
-    m_opacityOption.setFlow(m_flowOption.apply(info));
-
     quint8 dabOpacity = OPACITY_OPAQUE_U8;
     quint8 dabFlow = OPACITY_OPAQUE_U8;
 
@@ -160,7 +142,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 
 
     KisSpacingInformation spacingInfo =
-        effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+        effectiveSpacing(scale, rotation, &m_airbrushData, &m_spacingOption, info);
 
     // gather statistics about dabs
     m_avgSpacing(spacingInfo.scalarApprox());
@@ -223,7 +205,7 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
     state->allDirtyRects.append(rects);
 }
 
-std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
+std::pair<int, bool> KisBrushOp::doAsynchronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 {
     bool someDabsAreStillInQueue = false;
     const bool hasPreparedDabsAtStart = m_dabExecutor->hasPreparedDabs();
@@ -275,19 +257,19 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              */
 
             const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
+            const WrapAroundAxis wrapAroundModeAxis = painter()->device()->defaultBounds()->wrapAroundModeAxis();
 
             QList<KisRenderedDab> wrappedDabs;
 
             Q_FOREACH (const KisRenderedDab &dab, state->dabsQueue) {
                 const QVector<QPoint> normalizationOrigins =
-                    KisWrappedRect::normalizationOriginsForRect(dab.realBounds(), wrapRect);
+                    KisWrappedRect::normalizationOriginsForRect(dab.realBounds(), wrapRect, wrapAroundModeAxis);
 
                 Q_FOREACH(const QPoint &pt, normalizationOrigins) {
                     KisRenderedDab newDab = dab;
 
                     newDab.offset = pt;
-
-                    rects.append(newDab.realBounds() & wrapRect);
+                    rects.append(KisWrappedRect::clipToWrapRect(newDab.realBounds(), wrapRect, wrapAroundModeAxis));
                     wrappedDabs.append(newDab);
                 }
             }
@@ -392,12 +374,12 @@ KisSpacingInformation KisBrushOp::updateSpacingImpl(const KisPaintInformation &i
 {
     const qreal scale = m_sizeOption.apply(info) * KisLodTransform::lodToScale(painter()->device());
     qreal rotation = m_rotationOption.apply(info);
-    return effectiveSpacing(scale, rotation, &m_airbrushOption, &m_spacingOption, info);
+    return effectiveSpacing(scale, rotation, &m_airbrushData, &m_spacingOption, info);
 }
 
 KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &info) const
 {
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushOption, &m_rateOption, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 
 void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)

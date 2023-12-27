@@ -1,4 +1,4 @@
-/* This file is part of the Calligra project
+/*
  * SPDX-FileCopyrightText: 2005 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -9,15 +9,16 @@
 #include "widgets/kis_image_from_clipboard_widget.h"
 #include "widgets/kis_custom_image_widget.h"
 
-#include <QMimeData>
-#include <QPushButton>
-#include <QSlider>
-#include <QComboBox>
-#include <QRect>
 #include <QApplication>
 #include <QClipboard>
+#include <QComboBox>
 #include <QDesktopWidget>
 #include <QFile>
+#include <QMimeData>
+#include <QPushButton>
+#include <QRect>
+#include <QSlider>
+#include <QTimer>
 
 #include <KisPart.h>
 #include <KoColor.h>
@@ -37,72 +38,115 @@
 #include <kis_paint_layer.h>
 #include <kis_painter.h>
 
+#include <KisCursorOverrideLock.h>
 #include "KisDocument.h"
 #include "kis_clipboard.h"
 #include "kis_import_catcher.h"
 #include "widgets/kis_cmb_idlist.h"
 
-KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisImageFromClipboardWidget::KisImageFromClipboardWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
 {
     setObjectName("KisImageFromClipboard");
 
-    // create clipboard preview and show it   
-    createClipboardPreview();
-
+    lblPreview->hide();
     grpClipboard->show();
-    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboard::clipboardDataChanged);
-    disconnect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), 0, 0); //disable normal signal
-    connect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
+
+    disconnect(newDialogConfirmationButtonBox, &QDialogButtonBox::accepted, nullptr,
+               nullptr); // disable normal signal
+    connect(newDialogConfirmationButtonBox, &QDialogButtonBox::accepted, this, &KisImageFromClipboardWidget::createImage);
 }
 
-KisImageFromClipboard::~KisImageFromClipboard()
+KisImageFromClipboardWidget::~KisImageFromClipboardWidget()
 {
 }
 
-void KisImageFromClipboard::createImage()
+void KisImageFromClipboardWidget::createImage()
 {
-    KisDocument *doc = createNewImage();
-    if (!doc) return; // createNewImage can return 0;
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-    KisImageSP image = doc->image();
-    if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = qobject_cast<KisLayer*>(image->root()->firstChild().data());
-
-        KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-
-        if (!clip) {
-            KisPart::instance()->removeDocument(doc);
-            return;
-        }
-
-        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-
-        QRect r = clip->exactBounds();
-        KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
-
-        layer->setDirty();
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
+    if (!clip) {
+        enableImageCreation(QImage());
+        return;
     }
-    doc->setModified(true);
-    emit m_openPane->documentSelected(doc);
-    m_openPane->accept();
+
+    KisDocument *doc = createNewImage();
+
+    if (doc) {
+        KisImageSP image = doc->image();
+        if (image && image->root() && image->root()->firstChild()) {
+            KisNodeSP node = image->root()->firstChild();
+            while (node && (!dynamic_cast<KisPaintLayer*>(node.data()) || node->userLocked())) {
+                node = node->nextSibling();
+            }
+
+            if (!node) {
+                KisPaintLayerSP newLayer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
+                image->addNode(newLayer);
+                node = newLayer;
+            }
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(node);
+
+            KisPaintLayer * layer = dynamic_cast<KisPaintLayer*>(node.data());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
+
+            layer->setOpacity(OPACITY_OPAQUE_U8);
+            const QRect r = clip->exactBounds();
+            KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+            KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
+            layer->setDirty();
+        }
+        doc->setModified(true);
+        emit m_openPane->documentSelected(doc);
+        m_openPane->accept();
+    }
+
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
-
-void KisImageFromClipboard::clipboardDataChanged()
+void KisImageFromClipboardWidget::clipboardDataChanged()
 {
     createClipboardPreview();
 }
 
-
-void KisImageFromClipboard::createClipboardPreview()
+void KisImageFromClipboardWidget::showEvent(QShowEvent *event)
 {
-    QImage qimage = KisClipboard::instance()->getPreview();
+    KisCustomImageWidget::showEvent(event);
 
-    if (!qimage.isNull()) {
+    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboardWidget::clipboardDataChanged, Qt::UniqueConnection);
+
+    createClipboardPreview();
+}
+
+
+void KisImageFromClipboardWidget::createClipboardPreview()
+{
+    if (!KisClipboard::instance()->hasClip()) {
+        enableImageCreation(QImage());
+    }
+
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
+
+    QImage qimage = QApplication::clipboard()->image();
+    enableImageCreation(qimage);
+}
+
+void KisImageFromClipboardWidget::enableImageCreation(const QImage &qimage)
+{
+    if (qimage.isNull()) {
+        doubleWidth->setValue(0);
+        doubleHeight->setValue(0);
+        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+        lblPreview->hide();
+        tabWidget->setEnabled(false);
+
+        lblDocumentInfo->setText(i18n("The clipboard is empty or does not have an image in it."));
+    } else {
         QSize previewSize = QSize(75, 75) * devicePixelRatioF();
         QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
         preview.setDevicePixelRatio(devicePixelRatioF());
@@ -112,11 +156,7 @@ void KisImageFromClipboard::createClipboardPreview()
 
         doubleWidth->setValue(qimage.width());
         doubleHeight->setValue(qimage.height());
-    } else {
-        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-        lblPreview->hide();
+
+        tabWidget->setEnabled(true);
     }
 }
-
-
-

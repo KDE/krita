@@ -40,7 +40,7 @@
 #include "kis_coordinates_converter.h"
 #include "kis_prescaled_projection.h"
 #include "kis_image.h"
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLock.h"
 #include "kis_undo_adapter.h"
 #include "flake/kis_shape_layer.h"
 #include "kis_canvas_resource_provider.h"
@@ -66,7 +66,7 @@
 #include "kis_grid_config.h"
 #include "KisMainWindow.h"
 
-#include "kis_animation_player.h"
+#include "KisCanvasAnimationState.h"
 #include "kis_animation_frame_cache.h"
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl.h"
@@ -165,7 +165,7 @@ public:
     KisDisplayColorConverter displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
-    KisAnimationPlayer *animationPlayer = 0;
+    QScopedPointer<KisCanvasAnimationState> animationPlayer;
     KisAnimationFrameCacheSP frameCache;
     bool lodPreferredInImage = false;
     bool bootstrapLodBlocked = false;
@@ -237,7 +237,6 @@ KisCanvas2::KisCanvas2(KisCoordinatesConverter *coordConverter, KoCanvasResource
      */
     m_d->bootstrapLodBlocked = true;
     connect(mainWindow, SIGNAL(guiLoadingFinished()), SLOT(bootstrapFinished()));
-    connect(mainWindow, SIGNAL(screenChanged()), SLOT(slotConfigChanged()));
 
     KisImageConfig config(false);
 
@@ -260,7 +259,7 @@ void KisCanvas2::setup()
     createCanvas(cfg.useOpenGL());
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
-    m_d->animationPlayer = new KisAnimationPlayer(this);
+    
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -299,6 +298,8 @@ void KisCanvas2::setup()
     connect(m_d->view->document(), SIGNAL(sigReferenceImagesChanged()), this, SLOT(slotReferenceImagesChanged()));
 
     initializeFpsDecoration();
+
+    m_d->animationPlayer.reset(new KisCanvasAnimationState(this));
 }
 
 void KisCanvas2::initializeFpsDecoration()
@@ -323,9 +324,6 @@ void KisCanvas2::initializeFpsDecoration()
 
 KisCanvas2::~KisCanvas2()
 {
-    if (m_d->animationPlayer->isPlaying()) {
-        m_d->animationPlayer->forcedStopOnExit();
-    }
     delete m_d;
 }
 
@@ -431,7 +429,7 @@ void KisCanvas2::channelSelectionChanged()
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
     // This method exists to support flake-related operations
-    m_d->view->document()->addCommand(command);
+    m_d->view->image()->undoAdapter()->addCommand(command);
 }
 
 void KisCanvas2::KisCanvas2Private::setActiveShapeManager(KoShapeManager *shapeManager)
@@ -476,17 +474,17 @@ KoShapeManager *KisCanvas2::localShapeManager() const
     return localShapeManager;
 }
 
-void KisCanvas2::updateInputMethodInfo()
-{
-    // TODO call (the protected) QWidget::updateMicroFocus() on the proper canvas widget...
-}
-
 const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
 {
     return m_d->coordinatesConverter;
 }
 
-KoViewConverter* KisCanvas2::viewConverter() const
+const KoViewConverter *KisCanvas2::viewConverter() const
+{
+    return m_d->coordinatesConverter;
+}
+
+KoViewConverter *KisCanvas2::viewConverter()
 {
     return m_d->coordinatesConverter;
 }
@@ -565,8 +563,15 @@ void KisCanvas2::createCanvas(bool useOpenGL)
     m_d->frameCache = 0;
 
     KisConfig cfg(true);
-    QDesktopWidget dw;
-    const KoColorProfile *profile = cfg.displayProfile(dw.screenNumber(imageView()));
+
+    int canvasScreenNumber = qApp->screens().indexOf(m_d->view->currentScreen());
+
+    if (canvasScreenNumber < 0) {
+        warnKrita << "Couldn't detect screen that Krita belongs to..." << ppVar(m_d->view->currentScreen());
+        canvasScreenNumber = 0;
+    }
+
+    const KoColorProfile *profile = cfg.displayProfile(canvasScreenNumber);
     m_d->displayColorConverter.notifyOpenGLCanvasIsActive(useOpenGL && KisOpenGL::hasOpenGL());
     m_d->displayColorConverter.setMonitorProfile(profile);
 
@@ -718,6 +723,7 @@ void KisCanvas2::slotImageColorSpaceChanged()
 
     m_d->displayColorConverter.setImageColorSpace(image->colorSpace());
     m_d->channelFlags = image->rootLayer()->channelFlags();
+    m_d->canvasWidget->channelSelectionChanged(m_d->channelFlags);
 
     // Not all color spaces are supported by soft-proofing, so update state
     if (imageView()->softProofing()) {
@@ -959,7 +965,7 @@ void KisCanvas2::slotDoCanvasUpdate()
             const QRect rc = m_d->coordinatesConverter->widgetToImage(m_d->savedCanvasProjectionUpdateRect).toAlignedRect();
 
             const QVector<QRect> updateRects =
-                KisWrappedRect::multiplyWrappedRect(rc, imageRect, widgetRectInImagePixels);
+                KisWrappedRect::multiplyWrappedRect(rc, imageRect, widgetRectInImagePixels, wrapAroundViewingModeAxis());
 
             Q_FOREACH(const QRect &rc, updateRects) {
                 const QRect widgetUpdateRect =
@@ -1220,25 +1226,39 @@ void KisCanvas2::slotConfigChanged()
 
     resetCanvas(cfg.useOpenGL());
 
-    // HACK: Sometimes screenNumber(this->canvasWidget()) is not able to get the
-    //       proper screenNumber when moving the window across screens. Using
-    //       the coordinates should be able to work around this.
-    // FIXME: We should change to associate the display profiles with the screen
-    //        model and serial number instead. See https://bugs.kde.org/show_bug.cgi?id=407498
-    int canvasScreenNumber = QApplication::desktop()->screenNumber(this->canvasWidget());
+    QWidget *mainWindow = m_d->view->mainWindow();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mainWindow);
+
+    QWidget *topLevelWidget = mainWindow->topLevelWidget();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(topLevelWidget);
+
+    slotScreenChanged(mainWindow->screen());
+
+    initializeFpsDecoration();
+}
+
+void KisCanvas2::slotScreenChanged(QScreen *screen)
+{
+    /**
+     * We cannot use QApplication::desktop()->screenNumber(mainWindow) here,
+     * because this data is not yet ready when screenChanged signal is delivered.
+     */
+
+    const int canvasScreenNumber = qApp->screens().indexOf(screen);
+
     if (canvasScreenNumber != -1) {
+        // If profile is the same, then setDisplayProfile does nothing
+        KisConfig cfg(true);
         setDisplayProfile(cfg.displayProfile(canvasScreenNumber));
     } else {
         warnUI << "Failed to get screenNumber for updating display profile.";
     }
-
-    initializeFpsDecoration();
 }
 
 void KisCanvas2::refetchDataFromImage()
 {
     KisImageSP image = this->image();
-    KisImageBarrierLocker l(image);
+    KisImageReadOnlyBarrierLock l(image);
     startUpdateInPatches(image->bounds());
 }
 
@@ -1250,7 +1270,7 @@ void KisCanvas2::setDisplayProfile(const KoColorProfile *monitorProfile)
 
     {
         KisImageSP image = this->image();
-        KisImageBarrierLocker l(image);
+        KisImageReadOnlyBarrierLock l(image);
         m_d->canvasWidget->setDisplayColorConverter(&m_d->displayColorConverter);
     }
 
@@ -1308,9 +1328,9 @@ KisAnimationFrameCacheSP KisCanvas2::frameCache() const
     return m_d->frameCache;
 }
 
-KisAnimationPlayer *KisCanvas2::animationPlayer() const
+KisCanvasAnimationState *KisCanvas2::animationState() const
 {
-    return m_d->animationPlayer;
+    return m_d->animationPlayer.data();
 }
 
 void KisCanvas2::slotSelectionChanged()
@@ -1342,12 +1362,26 @@ bool KisCanvas2::wrapAroundViewingMode() const
     return m_d->canvasWidget->wrapAroundViewingMode();
 }
 
+void KisCanvas2::setWrapAroundViewingModeAxis(WrapAroundAxis value)
+{
+    m_d->canvasWidget->setWrapAroundViewingModeAxis(value);
+    updateCanvas();
+}
+
+WrapAroundAxis KisCanvas2::wrapAroundViewingModeAxis() const
+{
+    return m_d->canvasWidget->wrapAroundViewingModeAxis();
+}
+
 void KisCanvas2::bootstrapFinished()
 {
     if (!m_d->bootstrapLodBlocked) return;
 
     m_d->bootstrapLodBlocked = false;
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
+
+    // Initialization of audio tracks is deferred until after canvas has been completely constructed.
+    m_d->animationPlayer->setupAudioTracks();
 }
 
 void KisCanvas2::setLodPreferredInCanvas(bool value)

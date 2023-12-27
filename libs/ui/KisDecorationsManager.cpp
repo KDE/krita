@@ -10,6 +10,7 @@
 #include "KisViewManager.h"
 #include "kis_action_manager.h"
 #include "kis_action.h"
+#include "kis_config_notifier.h"
 
 #include "kis_canvas2.h"
 #include <klocalizedstring.h>
@@ -75,6 +76,9 @@ void KisDecorationsManager::setView(QPointer<KisView> imageView)
                 assistantsDecoration(), &KisPaintingAssistantsDecoration::slotUpdateDecorationVisibility);
         connect(m_imageView->document(), &KisDocument::sigAssistantsChanged,
                 m_imageView->canvasBase(), QOverload<>::of(&KisCanvas2::updateCanvas));
+
+        connect(KisConfigNotifier::instance(), &KisConfigNotifier::configChanged,
+                assistantsDecoration(), &KisPaintingAssistantsDecoration::slotConfigChanged);
     }
 
     if (m_imageView && referenceImagesDecoration()) {

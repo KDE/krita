@@ -15,6 +15,7 @@
 class QColor;
 class QImage;
 class QInputMethodEvent;
+class QFocusEvent;
 class QVariant;
 
 class KisCoordinatesConverter;
@@ -45,8 +46,10 @@ public: // KisAbstractCanvasWidget
 
     void setDecorations(const QList<KisCanvasDecorationSP > &) override;
     QList<KisCanvasDecorationSP > decorations() const override;
+    void notifyDecorationsWindowMinimized(bool minimized);
 
     void setWrapAroundViewingMode(bool value) override;
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value) override;
 
     /**
      * Returns the color of the border, i.e. the part of the canvas
@@ -76,6 +79,8 @@ protected:
      */
     QVariant processInputMethodQuery(Qt::InputMethodQuery query) const;
     void processInputMethodEvent(QInputMethodEvent *event);
+    void processFocusInEvent(QFocusEvent *event);
+    void processFocusOutEvent(QFocusEvent *event);
     void notifyConfigChanged();
 
     /// To be implemented by the derived canvas

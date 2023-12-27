@@ -17,6 +17,7 @@
 #include <QList>
 #include <QCursor>
 #include <KoShapeFillResourceConnector.h>
+#include "KoPathPointTypeCommand.h"
 
 class QActionGroup;
 class QButtonGroup;
@@ -26,7 +27,6 @@ class KoPathToolHandle;
 class KoParameterShape;
 class KUndo2Command;
 
-class QAction;
 class QMenu;
 
 
@@ -57,13 +57,16 @@ public:
     void requestStrokeEnd() override;
     void explicitUserStrokeEndRequest() override;
 
+    bool selectAll() override;
+    void deselect() override;
+
     QMenu* popupActionsMenu() override;
 
     // for KoPathToolSelection
     void notifyPathPointsChanged(KoPathShape *shape);
 
 public Q_SLOTS:
-    void documentResourceChanged(int key, const QVariant & res) override;
+    void canvasResourceChanged(int key, const QVariant & res) override;
 
 Q_SIGNALS:
     void typeChanged(int types);
@@ -80,7 +83,10 @@ private:
     PathSegment* segmentAtPoint(const QPointF &point);
 
 private Q_SLOTS:
-    void pointTypeChanged(QAction *type);
+    void pointTypeChangedCorner();
+    void pointTypeChangedSmooth();
+    void pointTypeChangedSymmetric();
+    void pointTypeChanged(KoPathPointTypeCommand::PointType type);
     void insertPoints();
     void removePoints();
     void segmentToLine();
@@ -111,12 +117,11 @@ private:
     QPointF m_lastPoint; ///< needed for interaction strategy
     QScopedPointer<PathSegment> m_activeSegment;
 
-    // make a frind so that it can test private member/methods
+    // make a friend so that it can test private member/methods
     friend class TestPathTool;
 
     QScopedPointer<KoInteractionStrategy> m_currentStrategy; ///< the rubber selection strategy
 
-    QActionGroup *m_points;
     QAction *m_actionPathPointCorner;
     QAction *m_actionPathPointSmooth;
     QAction *m_actionPathPointSymmetric;

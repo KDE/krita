@@ -10,6 +10,7 @@
 #include <kundo2command.h>
 #include "kis_types.h"
 #include "kis_stroke_job_strategy.h"
+#include "KisCppQuirks.h"
 
 class KisStrokesFacade;
 
@@ -40,7 +41,7 @@ class KRITAIMAGE_EXPORT KisSavedCommand : public KisSavedCommandBase
 {
 public:
     KisSavedCommand(KUndo2CommandSP command, KisStrokesFacade *strokesFacade);
-    int timedId() override;
+    int timedId() const override;
     void setTimedID(int timedID) override;
 
     int id() const override;
@@ -48,12 +49,33 @@ public:
     bool canAnnihilateWith(const KUndo2Command *command) const override;
 
     bool timedMergeWith(KUndo2Command *other) override;
-    QVector<KUndo2Command*> mergeCommandsVector() override;
-    void setTime() override;
-    QTime time() override;
-    void setEndTime() override;
-    QTime endTime() override;
-    bool isMerged() override;
+    QVector<KUndo2Command*> mergeCommandsVector() const override;
+    void setTime(const QTime &time) override;
+    using KisSavedCommandBase::setTime;
+    QTime time() const override;
+    void setEndTime(const QTime &time) override;
+    using KisSavedCommandBase::setEndTime;
+    QTime endTime() const override;
+    bool isMerged() const override;
+
+    /**
+     * The function lazily unwraps a saved command `cmd` and passes the internal
+     * command to the the function `func`. If passed `cmd` command is not a saved
+     * command, then it is passed to the function directly.
+     */
+    template <typename Command, typename Func>
+    static auto unwrap(Command *cmd, Func &&func)
+        -> decltype(func(static_cast<Command*>(nullptr))) {
+
+        using SavedCommand = std::copy_const_t<Command, KisSavedCommand>;
+
+        SavedCommand *savedCommand =
+            dynamic_cast<SavedCommand*>(cmd);
+
+        return savedCommand ?
+            std::forward<Func>(func)(savedCommand->m_command.data()) :
+            std::forward<Func>(func)(cmd);
+    }
 
 protected:
     void addCommands(KisStrokeId id, bool undo) override;

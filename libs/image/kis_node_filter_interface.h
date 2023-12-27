@@ -34,7 +34,7 @@ public:
      * after you've set it. Don't try to access the configuration
      * after you've associated it with the node.
      *
-     * @param filterConfig the new configruation object
+     * @param filterConfig the new configuration object
      * @param checkCompareConfig if true, the update code will check whether the config is
      * the same as the old config, and if so, do nothing. If false, the filter node will be
      * updated always.

@@ -11,7 +11,7 @@
 #include <QTextStream>
 #include <QBuffer>
 #include <QByteArray>
-#include <kis_dom_utils.h>
+
 #include <kis_debug.h>
 
 #define TASKSET_VERSION 1
@@ -45,12 +45,12 @@ bool TasksetResource::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP res
         return false;
     }
     QDomElement element = doc.documentElement();
-    setName(KisDomUtils::unescapeText(element.attribute("name")));
+    setName(element.attribute("name"));
     QDomNode node = element.firstChild();
     while (!node.isNull()) {
         QDomElement child = node.toElement();
         if (!child.isNull() && child.tagName() == "action") {
-                m_actions.append(KisDomUtils::unescapeText(child.text()));
+                m_actions.append(child.text());
         }
         node = node.nextSibling();
     }
@@ -78,11 +78,11 @@ bool TasksetResource::saveToDevice(QIODevice *io) const
 
     QDomDocument doc;
     QDomElement root = doc.createElement("Taskset");
-    root.setAttribute("name", KisDomUtils::escapeText(name()));
+    root.setAttribute("name", name() );
     root.setAttribute("version", TASKSET_VERSION);
     Q_FOREACH (const QString& action, m_actions) {
         QDomElement element = doc.createElement("action");
-        element.appendChild(doc.createTextNode(KisDomUtils::escapeText(action)));
+        element.appendChild(doc.createTextNode(action));
         root.appendChild(element);
     }
     doc.appendChild(root);

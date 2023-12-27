@@ -57,18 +57,18 @@ void Palette::setComment(QString comment)
 QStringList Palette::groupNames() const
 {
     if (!d->palette) return QStringList();
-    return d->palette->getGroupNames();
+    return d->palette->swatchGroupNames();
 }
 
-bool Palette::addGroup(QString name)
+void Palette::addGroup(QString name)
 {
-    if (!d->palette) return false;
-    return d->palette->addGroup(name);
+    if (!d->palette) return;
+    d->palette->addGroup(name);
 }
 
-bool Palette::removeGroup(QString name, bool keepColors)
+void Palette::removeGroup(QString name, bool keepColors)
 {
-    if (!d->palette) return false;
+    if (!d->palette) return;
     return d->palette->removeGroup(name, keepColors);
 }
 
@@ -94,12 +94,12 @@ Swatch *Palette::colorSetEntryFromGroup(int index, const QString &groupName)
         return new Swatch();
     }
     int row = index % columnCount();
-    return new Swatch(d->palette->getColorGroup((index - row) / columnCount(), row, groupName));
+    return new Swatch(d->palette->getSwatchFromGroup((index - row) / columnCount(), row, groupName));
 }
 
 void Palette::addEntry(Swatch entry, QString groupName)
 {
-    d->palette->add(entry.kisSwatch(), groupName);
+    d->palette->addSwatch(entry.kisSwatch(), groupName);
 }
 
 void Palette::removeEntry(int index, const QString &/*groupName*/)
@@ -107,9 +107,9 @@ void Palette::removeEntry(int index, const QString &/*groupName*/)
     int col = index % columnCount();
     int tmp = index;
     int row = (index - col) / columnCount();
-    KisSwatchGroup *groupFoundIn = 0;
+    KisSwatchGroupSP groupFoundIn;
     Q_FOREACH(const QString &name, groupNames()) {
-        KisSwatchGroup *g = d->palette->getGroup(name);
+        KisSwatchGroupSP g = d->palette->getGroup(name);
         tmp -= g->rowCount() * columnCount();
         if (tmp < 0) {
             groupFoundIn = g;
@@ -119,15 +119,15 @@ void Palette::removeEntry(int index, const QString &/*groupName*/)
 
     }
     if (!groupFoundIn) { return; }
-    groupFoundIn->removeEntry(col, row);
+    d->palette->removeSwatch(col, row, groupFoundIn);
 }
 
-bool Palette::changeGroupName(QString oldGroupName, QString newGroupName)
+void Palette::changeGroupName(QString oldGroupName, QString newGroupName)
 {
-    return d->palette->changeGroupName(oldGroupName, newGroupName);
+    d->palette->changeGroupName(oldGroupName, newGroupName);
 }
 
-bool Palette::moveGroup(const QString &groupName, const QString &groupNameInsertBefore)
+void Palette::moveGroup(const QString &groupName, const QString &groupNameInsertBefore)
 {
     return d->palette->moveGroup(groupName, groupNameInsertBefore);
 }

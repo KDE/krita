@@ -1,0 +1,47 @@
+<svg width="420px" height="100px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+<g id="testRect">
+    
+    <!-- This tests hanging punctuation, which is part of css3-text, but currently has very few implementations, the force-end and allow-end options are particularly useful for East Asian text layout though.-->
+    
+    <!-- These lines define the position of the baseline for the horizontal text. -->
+    <line x1="5" x2="225" y1="35" y2="35" stroke="powderblue" />
+    
+    <!-- These lines define the inline-size boundaries for horizontal text -->
+    <line x1="10" x2="10" y1="5" y2="95" stroke="cornflowerblue" />
+    <line x1="110" x2="110" y1="5" y2="95" stroke="cornflowerblue" />
+    <line x1="120" x2="120" y1="5" y2="95" stroke="cornflowerblue" />
+    <line x1="220" x2="220" y1="5" y2="95" stroke="cornflowerblue" />
+    
+    
+    
+    <text id="test1" transform="translate(10,35)" hanging-punctuation="first last"
+          font-family="DejaVu Sans" fill="blue" text-anchor="start" font-size="10" inline-size="100">Lorem ipsum dolor <tspan font-size="15">sit</tspan> amet <tspan fill="red" style="word-break:break-all;"> This part tests word-break: break-all. </tspan>
+    </text>
+    
+    
+    <text id="testMixedBidi" transform="translate(220,35)" hanging-punctuation="first last"
+          font-family="DejaVu Sans" fill="blue" font-size="17" direction="rtl" text-anchor="start" inline-size="100">داستان SVG 1.1 SE<tspan fill="#808080" style="font-weight: 100;text-decoration: overline wavy;"> طولا ني</tspan> است.</text>
+    
+    <!-- These lines define the position of the baseline for the vertical text. Note that the default baseline for vertical is through the middle. -->
+    <line x1="300" x2="300" y1="15" y2="95" stroke="powderblue" />
+    <line x1="340" x2="340" y1="15" y2="95" stroke="powderblue" />
+    
+    <!-- These lines define the inline-size boundaries for vertical text -->
+    <line x1="230" x2="410" y1="15" y2="15" stroke="cornflowerblue" />
+    <line x1="230" x2="410" y1="75" y2="75" stroke="cornflowerblue" />
+    
+
+    <text id="emojiTest" transform="translate(300,15)"
+        font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="15" 
+          writing-mode="vertical-rl" text-anchor="start" inline-size="60">🃋あ😪&#x82A6;🐮あ&#x82A6;🁠あ😻
+    </text>
+
+    <text id="test-font-size-ttb" transform="translate(340,15)"
+        font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="15" 
+          writing-mode="vertical-lr" text-anchor="start" inline-size="60">ああ<tspan style="font-size:2em; fill: red;">&#x82A6;&#x82A6;</tspan>あ&#x82A6;あ&#x82A6;ああ
+    </text>
+
+</g>
+
+</svg>

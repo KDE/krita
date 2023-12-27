@@ -45,6 +45,9 @@ Imported Targets
 ``WebP::decoder``
   The WebP decoder library, if found.
 
+``WebP::sharpyuv``
+  The WebP Sharp RGB to YUV420 conversion library, if found.
+
 Result Variables
 ^^^^^^^^^^^^^^^^
 
@@ -66,7 +69,7 @@ This will define the following variables in your project:
 
 include(FindPackageHandleStandardArgs)
 
-set(PC_WEBP_CONFIG_DIR)
+set(PC_WEBP_CONFIG_DIR CACHE STRING "PkgConfig path for locating the package modules")
 foreach(_dir ${CMAKE_PREFIX_PATH})
     list(APPEND PC_WEBP_CONFIG_DIR ${_dir}/share/WebP/cmake)
 endforeach()
@@ -80,15 +83,59 @@ mark_as_advanced(WebP_DIR)
 # if we found the WebP CMake package then we are done, and
 # can print what we found and return.
 if(WebP_FOUND)
-    find_package_handle_standard_args(WebP HANDLE_COMPONENTS CONFIG_MODE)
-    message(STATUS "WebP found using CMake Config module.")
+    if (TARGET WebP::webp)
+        set(WebP_webp_FOUND ON)
+    else ()
+        set(WebP_webp_FOUND OFF)
+    endif ()
+
+    if (TARGET WebP::webpdemux)
+        set(WebP_demux_FOUND ON)
+    else ()
+        set(WebP_demux_FOUND OFF)
+    endif ()
+
+    if (TARGET WebP::libwebpmux)
+        set(WebP_mux_FOUND ON)
+    else ()
+        set(WebP_mux_FOUND OFF)
+    endif ()
+
+    if (TARGET WebP::decoder)
+        set(WebP_decoder_FOUND ON)
+    else ()
+        set(WebP_decoder_FOUND OFF)
+    endif ()
+
+    if (TARGET WebP::sharpyuv)
+        set(WebP_sharpyuv_FOUND ON)
+    else ()
+        set(WebP_sharpyuv_FOUND OFF)
+    endif ()
+
+    find_package_handle_standard_args(WebP 
+        FOUND_VAR WebP_FOUND
+        HANDLE_COMPONENTS
+        CONFIG_MODE
+    )
     return()
 endif()
 
 find_package(PkgConfig QUIET)
-pkg_check_modules(PC_WEBP QUIET libwebp)
-set(WebP_COMPILE_OPTIONS ${PC_WEBP_CFLAGS_OTHER})
-set(WebP_VERSION ${PC_WEBP_VERSION})
+
+if (PkgConfig_FOUND)
+    pkg_check_modules(PC_WEBP QUIET libwebp)
+    set(WebP_VERSION ${PC_WEBP_VERSION})
+    set(WebP_COMPILE_OPTIONS "${PC_WEBP_CFLAGS};${PC_WEBP_CFLAGS_OTHER}")
+
+    pkg_check_modules(PC_WEBP_DECODER QUIET libwebpdecoder)
+
+    pkg_check_modules(PC_WEBP_DEMUX QUIET libwebpdemux)
+
+    pkg_check_modules(PC_WEBP_DECODER QUIET libwebpmux)
+
+    pkg_check_modules(PC_WEBP_SHARPYUV QUIET libsharpyuv)
+endif ()
 
 find_path(WebP_INCLUDE_DIR
     NAMES webp/decode.h
@@ -96,7 +143,7 @@ find_path(WebP_INCLUDE_DIR
 )
 
 find_library(WebP_LIBRARY
-    NAMES ${WebP_NAMES} webp
+    NAMES ${WebP_NAMES} webp libwebp
     HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
 )
 
@@ -107,99 +154,72 @@ if (NOT WebP_VERSION)
     message(WARNING "Cannot determine WebP version without pkg-config")
 endif ()
 
-# Find components
 if (WebP_INCLUDE_DIR AND WebP_LIBRARY)
-    set(_WebP_REQUIRED_LIBS_FOUND ON)
-    set(WebP_LIBS_FOUND "WebP (required): ${WebP_LIBRARY}")
-else ()
-    set(_WebP_REQUIRED_LIBS_FOUND OFF)
-    set(WebP_LIBS_NOT_FOUND "WebP (required)")
-endif ()
+    set(WebP_webp_FOUND ON)
+else()
+    set(WebP_webp_FOUND OFF)
+endif()
 
+# Find components
 if ("demux" IN_LIST WebP_FIND_COMPONENTS)
     find_library(WebP_DEMUX_LIBRARY
-        NAMES ${WebP_DEMUX_NAMES} webpdemux
+        NAMES ${WebP_DEMUX_NAMES} webpdemux libwebpdemux
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 
     if (WebP_DEMUX_LIBRARY)
-        if (WebP_FIND_REQUIRED_demux)
-            list(APPEND WebP_LIBS_FOUND "demux (required): ${WebP_DEMUX_LIBRARY}")
-        else ()
-           list(APPEND WebP_LIBS_FOUND "demux (optional): ${WebP_DEMUX_LIBRARY}")
-        endif ()
+        set(WebP_demux_FOUND ON)
     else ()
-        if (WebP_FIND_REQUIRED_demux)
-           set(_WebP_REQUIRED_LIBS_FOUND OFF)
-           list(APPEND WebP_LIBS_NOT_FOUND "demux (required)")
-        else ()
-           list(APPEND WebP_LIBS_NOT_FOUND "demux (optional)")
-        endif ()
+        set(WebP_demux_FOUND OFF)
     endif ()
 endif ()
 
 if ("mux" IN_LIST WebP_FIND_COMPONENTS)
     find_library(WebP_MUX_LIBRARY
-        NAMES ${WebP_MUX_NAMES} webpmux
+        NAMES ${WebP_MUX_NAMES} webpmux libwebpmux
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 
     if (WebP_MUX_LIBRARY)
-        if (WebP_FIND_REQUIRED_mux)
-            list(APPEND WebP_LIBS_FOUND "mux (required): ${WebP_MUX_LIBRARY}")
-        else ()
-           list(APPEND WebP_LIBS_FOUND "mux (optional): ${WebP_MUX_LIBRARY}")
-        endif ()
+        set(WebP_mux_FOUND ON)
     else ()
-        if (WebP_FIND_REQUIRED_mux)
-           set(_WebP_REQUIRED_LIBS_FOUND OFF)
-           list(APPEND WebP_LIBS_NOT_FOUND "mux (required)")
-        else ()
-           list(APPEND WebP_LIBS_NOT_FOUND "mux (optional)")
-        endif ()
+        set(WebP_mux_FOUND OFF)
     endif ()
 endif ()
 
 if ("decoder" IN_LIST WebP_FIND_COMPONENTS)
     find_library(WebP_DECODER_LIBRARY
-        NAMES ${WebP_DECODER_NAMES} webpdecoder
+        NAMES ${WebP_DECODER_NAMES} webpdecoder libwebpdecoder
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 
     if (WebP_DECODER_LIBRARY)
-        if (WebP_FIND_REQUIRED_decoder)
-            list(APPEND WebP_LIBS_FOUND "decoder (required): ${WebP_DECODER_LIBRARY}")
-        else ()
-           list(APPEND WebP_LIBS_FOUND "decoder (optional): ${WebP_DECODER_LIBRARY}")
-        endif ()
+        set(WebP_decoder_FOUND ON)
     else ()
-        if (WebP_FIND_REQUIRED_decoder)
-           set(_WebP_REQUIRED_LIBS_FOUND OFF)
-           list(APPEND WebP_LIBS_NOT_FOUND "decoder (required)")
-        else ()
-           list(APPEND WebP_LIBS_NOT_FOUND "decoder (optional)")
-        endif ()
+        set(WebP_decoder_FOUND OFF)
     endif ()
 endif ()
 
-if (NOT WebP_FIND_QUIETLY)
-    if (WebP_LIBS_FOUND)
-        message(STATUS "Found the following WebP libraries:")
-        foreach (found ${WebP_LIBS_FOUND})
-            message(STATUS " ${found}")
-        endforeach ()
-    endif ()
-    if (WebP_LIBS_NOT_FOUND)
-        message(STATUS "The following WebP libraries were not found:")
-        foreach (found ${WebP_LIBS_NOT_FOUND})
-            message(STATUS " ${found}")
-        endforeach ()
+# SharpYUV is a dependency of WebP, should be looked up
+# if neither the CMake module nor pkgconf are available
+# (this could only happen, in theory, in Windows MSVC)
+if ("sharpyuv" IN_LIST WebP_FIND_COMPONENTS OR WebP_webp_FOUND)
+    find_library(WebP_SHARPYUV_LIBRARY
+        NAMES ${WebP_DECODER_NAMES} sharpyuv libsharpyuv
+        HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
+    )
+
+    if (WebP_SHARPYUV_LIBRARY)
+        set(WebP_sharpyuv_FOUND ON)
+    else ()
+        set(WebP_sharpyuv_FOUND OFF)
     endif ()
 endif ()
 
 find_package_handle_standard_args(WebP
     FOUND_VAR WebP_FOUND
-    REQUIRED_VARS WebP_INCLUDE_DIR WebP_LIBRARY _WebP_REQUIRED_LIBS_FOUND
+    REQUIRED_VARS WebP_INCLUDE_DIR WebP_LIBRARY
+    HANDLE_COMPONENTS
     VERSION_VAR WebP_VERSION
 )
 
@@ -208,8 +228,9 @@ if (WebP_LIBRARY AND NOT TARGET WebP::webp)
     add_library(WebP::webp UNKNOWN IMPORTED GLOBAL)
     set_target_properties(WebP::webp PROPERTIES
         IMPORTED_LOCATION "${WebP_LIBRARY}"
-        INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
-        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${PC_WEBP_CFLAGS};${PC_WEBP_CFLAGS_OTHER}"
+        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR};${PC_WEBP_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES "${PC_WEBP_LINK_LIBRARIES}"
     )
 endif ()
 
@@ -217,8 +238,9 @@ if (WebP_DEMUX_LIBRARY AND NOT TARGET WebP::webpdemux)
     add_library(WebP::webpdemux UNKNOWN IMPORTED GLOBAL)
     set_target_properties(WebP::webpdemux PROPERTIES
         IMPORTED_LOCATION "${WebP_DEMUX_LIBRARY}"
-        INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
-        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${PC_WEBP_DEMUX_CFLAGS};${PC_WEBP_DEMUX_CFLAGS_OTHER}"
+        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR};${PC_WEBP_DEMUX_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES "${PC_WEBP_DEMUX_LINK_LIBRARIES}"
     )
 endif ()
 
@@ -226,8 +248,9 @@ if (WebP_MUX_LIBRARY AND NOT TARGET WebP::libwebpmux)
     add_library(WebP::libwebpmux UNKNOWN IMPORTED GLOBAL)
     set_target_properties(WebP::libwebpmux PROPERTIES
         IMPORTED_LOCATION "${WebP_MUX_LIBRARY}"
-        INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
-        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${PC_WEBP_MUX_CFLAGS};${PC_WEBP_MUX_CFLAGS_OTHER}"
+        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR};${PC_WEBP_MUX_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES "${PC_WEBP_MUX_LINK_LIBRARIES}"
     )
 endif ()
 
@@ -235,8 +258,19 @@ if (WebP_DECODER_LIBRARY AND NOT TARGET WebP::webpdecoder)
     add_library(WebP::webpdecoder UNKNOWN IMPORTED GLOBAL)
     set_target_properties(WebP::webpdecoder PROPERTIES
         IMPORTED_LOCATION "${WebP_DECODER_LIBRARY}"
-        INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
-        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
+        INTERFACE_COMPILE_OPTIONS "${PC_WEBP_DECODER_CFLAGS};${PC_WEBP_DECODER_CFLAGS_OTHER}"
+        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR};${PC_WEBP_DECODER_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES "${PC_WEBP_DECODER_LINK_LIBRARIES}"
+    )
+endif ()
+
+if (WebP_SHARPYUV_LIBRARY AND NOT TARGET WebP::sharpyuv)
+    add_library(WebP::sharpyuv UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(WebP::sharpyuv PROPERTIES
+        IMPORTED_LOCATION "${WebP_SHARPYUV_LIBRARY}"
+        INTERFACE_COMPILE_OPTIONS "${PC_WEBP_SHARPYUV_CFLAGS};${PC_WEBP_SHARPYUV_CFLAGS_OTHER}"
+        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR};${PC_WEBP_SHARPYUV_INCLUDE_DIRS}"
+        INTERFACE_LINK_LIBRARIES "${PC_WEBP_SHARPYUV_LINK_LIBRARIES}"
     )
 endif ()
 
@@ -246,9 +280,10 @@ mark_as_advanced(
     WebP_DEMUX_LIBRARY
     WebP_MUX_LIBRARY
     WebP_DECODER_LIBRARY
+    WebP_SHARPYUV_LIBRARY
 )
 
-set(WebP_LIBRARIES ${WebP_LIBRARY} ${WebP_DEMUX_LIBRARY} ${WebP_MUX_LIBRARY} ${WebP_DECODER_LIBRARY})
+set(WebP_LIBRARIES ${WebP_LIBRARY} ${WebP_DEMUX_LIBRARY} ${WebP_MUX_LIBRARY} ${WebP_DECODER_LIBRARY} ${WebP_SHARPYUV_LIBRARY})
 set(WebP_INCLUDE_DIRS ${WebP_INCLUDE_DIR})
 
 endif()

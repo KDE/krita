@@ -11,8 +11,7 @@ EGL_DEVICE_EXT is passed as the queried attribute, the underlying
 D3D/DXGI device pointer is passed back to the caller via the value
 argument.
 
-The D3D device is needed for video support in QtMultimedia as well as
-the IDXGIDevice3::Trim() calls required by the Windows Store.
+The D3D device is needed for the IDXGIDevice3::Trim() calls required by the Windows Store.
 
 Change-Id: Ib3dfd3edc47dbcc02b07f71980ba785508f2ee57
 ---

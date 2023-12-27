@@ -14,6 +14,7 @@
 class KisRegion;
 
 class KisImageAnimationInterface;
+class KisLockFrameGenerationLock;
 
 
 class KisRegenerateFrameStrokeStrategy : public KisSimpleStrokeStrategy
@@ -31,8 +32,10 @@ public:
      * background without ending/cancelling any running actions
      */
     KisRegenerateFrameStrokeStrategy(int frameId,
-                                     const KisRegion &dirtyRegion, bool isCancellable,
-                                     KisImageAnimationInterface *interface);
+                                     const KisRegion &dirtyRegion,
+                                     bool isCancellable,
+                                     KisImageAnimationInterface *interface,
+                                     KisLockFrameGenerationLock &&frameGenerationLock);
 
     /**
      * Regenerates current frame without affecting the frames cache.

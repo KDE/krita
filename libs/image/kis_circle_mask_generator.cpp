@@ -63,7 +63,7 @@ bool KisCircleMaskGenerator::shouldVectorize() const
     return !shouldSupersample() && spikes() == 2;
 }
 
-KisBrushMaskApplicatorBase* KisCircleMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisCircleMaskGenerator::applicator() const
 {
     return d->applicator.data();
 }
@@ -100,7 +100,8 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
     d->transformedFadeY = d->yfadecoef * d->safeSoftnessCoeff;
 }
 
-void KisCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisCircleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator> >(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<MaskApplicatorFactory<KisCircleMaskGenerator>>(this));
 }

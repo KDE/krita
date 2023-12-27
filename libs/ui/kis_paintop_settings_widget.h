@@ -11,6 +11,7 @@
 
 #include <brushengine/kis_paintop_config_widget.h>
 
+#include <lager/reader.hpp>
 #include "kis_paintop_option.h"
 
 class KisPropertiesConfiguration;
@@ -29,7 +30,6 @@ class KRITAUI_EXPORT KisPaintOpSettingsWidget : public KisPaintOpConfigWidget
 public:
 
     KisPaintOpSettingsWidget(QWidget * parent = 0);
-
     ~KisPaintOpSettingsWidget() override;
 
     void addPaintOpOption(KisPaintOpOption *option);
@@ -42,6 +42,8 @@ public:
     void writeConfiguration(KisPropertiesConfigurationSP config) const override;
 
     KisPaintopLodLimitations lodLimitations() const override;
+    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
+    lager::reader<qreal> effectiveBrushSize() const override;
 
     ///Reimplemented, sets image on option widgets
     void setImage(KisImageWSP image) override;

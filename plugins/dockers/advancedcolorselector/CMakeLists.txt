@@ -24,6 +24,7 @@ set(KRITA_COLORSELECTORNG_SOURCES
     kis_color_selector_wheel.cpp
     kis_color_selector_combo_box.cpp
     kis_color_selector_base_proxy.cpp
+    KisColorPatchesTableView.cpp
 )
 
 ki18n_wrap_ui(KRITA_COLORSELECTORNG_SOURCES

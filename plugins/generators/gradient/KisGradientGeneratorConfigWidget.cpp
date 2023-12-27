@@ -113,6 +113,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
 {
     const KisGradientGeneratorConfiguration *generatorConfig =
         dynamic_cast<const KisGradientGeneratorConfiguration*>(config.data());
+    KIS_ASSERT(generatorConfig);
 
     {
         KisSignalsBlocker signalsBlocker(this);

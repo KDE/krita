@@ -197,7 +197,7 @@ private:
      * Shows whether the internal color management should be enabled or not.
      * Please note that if you disable color management, *but* your image color
      * space will not be supported (non-RGB), then it will be enabled anyway.
-     * And this valiable will hold the real state of affairs!
+     * And this variable will hold the real state of affairs!
      */
     bool m_internalColorManagementActive {true};
 

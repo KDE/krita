@@ -13,6 +13,8 @@ class KisTransformMaskTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
+
     void testSafeTransform();
     void testMaskOnPaintLayer();
     void testMaskOnCloneLayer();

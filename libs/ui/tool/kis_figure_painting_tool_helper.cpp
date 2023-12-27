@@ -13,7 +13,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include <strokes/KisFreehandStrokeInfo.h>
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 
 
 KisFigurePaintingToolHelper::KisFigurePaintingToolHelper(const KUndo2MagicString &name,
@@ -94,7 +94,7 @@ void KisFigurePaintingToolHelper::setupPaintStyles(KisResourcesSnapshotSP resour
 KisFigurePaintingToolHelper::~KisFigurePaintingToolHelper()
 {
     m_strokesFacade->addJob(m_strokeId,
-        new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+        new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
     m_strokesFacade->endStroke(m_strokeId);
 }
 

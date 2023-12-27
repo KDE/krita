@@ -24,6 +24,7 @@ class KisInputConfigurationPage : public QWidget
     Q_OBJECT
 public:
     KisInputConfigurationPage(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    ~KisInputConfigurationPage();
 
 public Q_SLOTS:
     void saveChanges();
@@ -31,14 +32,17 @@ public Q_SLOTS:
     void setDefaults();
     void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
 
+
 private Q_SLOTS:
     void editProfilesButtonClicked();
     void updateSelectedProfile();
     void changeCurrentProfile(const QString &newProfile);
+    void checkForConflicts();
 
 private:
     Ui::KisInputConfigurationPage *ui;
-
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif // KISINPUTCONFIGURATIONPAGE_H

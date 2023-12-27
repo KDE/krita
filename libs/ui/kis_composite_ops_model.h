@@ -49,7 +49,7 @@ private:
  * @brief The KisSortedCompositeOpListModel class provides a model for the composite op combobox.
  *
  * It intentionally does NOT use the shared instance of KisCompositeOpListModel because it is
- * perfect valid for two composite comboboboxes to show a different set of valid composite ops.
+ * perfect valid for two composite comboboxes to show a different set of valid composite ops.
  */
 class KRITAUI_EXPORT KisSortedCompositeOpListModel : public KisSortedCategorizedListModel<KisCompositeOpListModel>
 {

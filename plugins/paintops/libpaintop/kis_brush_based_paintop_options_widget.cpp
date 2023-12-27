@@ -9,10 +9,10 @@
 #include "kis_brush_option_widget.h"
 #include <klocalizedstring.h>
 
-KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(QWidget* parent)
+KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlags flags, QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    m_brushOption = new KisBrushOptionWidget();
+    m_brushOption = new KisBrushOptionWidget(flags);
     addPaintOpOption(m_brushOption);
 }
 
@@ -20,19 +20,14 @@ KisBrushBasedPaintopOptionWidget::~KisBrushBasedPaintopOptionWidget()
 {
 }
 
-void KisBrushBasedPaintopOptionWidget::setPrecisionEnabled(bool value)
-{
-    m_brushOption->setPrecisionEnabled(value);
-}
-
-void KisBrushBasedPaintopOptionWidget::setHSLBrushTipEnabled(bool value)
-{
-    m_brushOption->setHSLBrushTipEnabled(value);
-}
-
 KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
 {
     return m_brushOption->brush();
+}
+
+lager::reader<qreal> KisBrushBasedPaintopOptionWidget::effectiveBrushSize() const
+{
+    return m_brushOption->effectiveBrushSize();
 }
 
 KisBrushOptionWidget *KisBrushBasedPaintopOptionWidget::brushOptionWidget() const

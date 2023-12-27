@@ -13,7 +13,8 @@
 #include "kritapaintop_export.h"
 #include "ui_wdgpredefinedbrushchooser.h"
 
-
+#include <lager/cursor.hpp>
+#include <KisBrushModel.h>
 
 
 class KisDoubleSliderSpinBox;
@@ -26,6 +27,7 @@ class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisResourceItemChooser;
 class KoResource;
+class KisPredefinedBrushModel;
 
 
 class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgPredefinedBrushChooser
@@ -34,53 +36,37 @@ class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgP
     Q_OBJECT
 
 public:
-    KisPredefinedBrushChooser(int maxBrushSize, QWidget *parent = 0, const char *name = 0);
+    KisPredefinedBrushChooser(int maxBrushSize,
+                              KisPredefinedBrushModel *model,
+                              QWidget *parent = 0, const char *name = 0);
     ~KisPredefinedBrushChooser() override;
 
-    KisBrushSP brush() {
-        return m_brush;
-    };
-
     void setBrush(KisBrushSP brush);
-    void setBrushSize(qreal xPixels, qreal yPixels);
     void setImage(KisImageWSP image);
 
-    void setHSLBrushTipEnabled(bool value);
-    bool hslBrushTipEnabled() const;
+    lager::reader<bool> lightnessModeEnabled() const;
 
 private Q_SLOTS:
 
     void slotResetBrush();
     void slotResetAdjustments();
-    void slotSetItemSize(qreal);
-    void slotSetItemRotation(qreal);
-    void slotSpacingChanged();
     void slotOpenStampBrush();
     void slotOpenClipboardBrush();
     void slotImportNewBrushResource();
     void slotDeleteBrushResource();
     void slotNewPredefinedBrush(KoResourceSP);
-    void updateBrushTip(KoResourceSP, bool isChangingBrushPresets = false);
-    void slotUpdateBrushModeButtonsState();
-    void slotUpdateResetBrushAdjustmentsButtonState();
-    void slotUpdateBrushAdjustmentsState();
-
-    void slotWriteBrushMode();
-    void slotWriteBrushAdjustments();
-
-Q_SIGNALS:
-
-    void sigBrushChanged();
+    void slotBrushSelected(KoResourceSP resource);
+    void slotBrushPropertyChanged(KoResourceSignature signature);
 
 private:
+    struct Private;
+    const QScopedPointer<Private> m_d;
+
     KisBrushSP m_brush;
     KisResourceItemChooser* m_itemChooser;
     KisImageWSP m_image;
     KisCustomBrushWidget* m_stampBrushWidget;
     KisClipboardBrushWidget* m_clipboardBrushWidget;
-
-    bool m_hslBrushTipEnabled = false;
-    bool m_autoMidpointAdjustmentIsDefault = true;
 };
 
 #endif // KIS_PREDEFINED_BRUSH_CHOOSER_H_

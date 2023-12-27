@@ -1,0 +1,32 @@
+<svg width="120px" height="220px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+<g id="testRect">
+    
+    <!-- This tests overflow-wrap, that is, what behaviourr to choose when a word is so long it would otherwise overflow. Behaviours are 'do nothing', 'break anywhere' and 'try to break at softwraps first or break anywhere'.-->
+    
+    <!-- These lines define the position of the baseline for the horizontal text. -->
+    <line x1="5" x2="115" y1="25" y2="25" stroke="powderblue" />
+    <line x1="5" x2="115" y1="85" y2="85" stroke="powderblue" />
+    <line x1="5" x2="115" y1="145" y2="145" stroke="powderblue" />
+    
+    <!-- These lines define the inline-size boundaries for horizontal text -->
+    <line x1="10" x2="10" y1="5" y2="215" stroke="cornflowerblue" />
+    <line x1="110" x2="110" y1="5" y2="215" stroke="cornflowerblue" />
+    
+    
+    
+    <text id="test1" transform="translate(10,25)" line-height="1.0"
+          font-family="DejaVu Sans" fill="blue" font-size="10" inline-size="100">This+text+continues+endlessly+and+diligently Without Breaks+Despite+Wrapping At+100+points.
+    </text>
+    
+    <text id="test2" transform="translate(10,85)" line-height="1.0"
+          font-family="DejaVu Sans" fill="blue" style="overflow-wrap:anywhere;" font-size="10" inline-size="100">This+text+wraps+endlessly+and+diligently At Any Break+Points At+100+points.
+    </text>
+    
+    <text id="test3" transform="translate(10,145)" line-height="1.0"
+          font-family="DejaVu Sans" fill="blue" style="overflow-wrap:break-word;" font-size="10" inline-size="100">This+text+wraps+endlessly+and+diligently At Soft+Word Breaks+first At+100+points.
+    </text>
+
+</g>
+
+</svg>

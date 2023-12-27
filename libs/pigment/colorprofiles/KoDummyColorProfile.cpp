@@ -106,6 +106,11 @@ QVector <double> KoDummyColorProfile::getEstimatedTRC() const
     return Dummy;
 }
 
+bool KoDummyColorProfile::compareTRC(TransferCharacteristics, float) const
+{
+    return false;
+}
+
 void KoDummyColorProfile::linearizeFloatValue(QVector <double> & ) const
 {
 }

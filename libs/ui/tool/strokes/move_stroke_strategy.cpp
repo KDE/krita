@@ -19,6 +19,9 @@
 #include "KisRunnableStrokeJobsInterface.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_image.h"
+#include "kis_image_animation_interface.h"
+#include "kis_raster_keyframe_channel.h"
+#include "KisAnimAutoKey.h"
 
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_params_interface.h"
@@ -26,11 +29,191 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_image_animation_interface.h"
 #include "commands_new/KisSimpleModifyTransformMaskCommand.h"
+#include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
+
+/* MoveNodeStrategyBase and descendants
+ *
+ * A set of strategies that define how to actually move
+ * nodes of different types. Some nodes should be moved
+ * with KisNodeMoveCommand2, others with KisTransaction,
+ * transform masks with their own command.
+ */
+
+struct MoveNodeStrategyBase
+{
+    MoveNodeStrategyBase(KisNodeSP node)
+        : m_node(node),
+          m_initialOffset(node->x(), node->y())
+    {
+    }
+
+    virtual ~MoveNodeStrategyBase() {}
+
+    virtual QRect moveNode(const QPoint &offset) = 0;
+    virtual void finishMove(KUndo2Command *parentCommand) = 0;
+    virtual QRect cancelMove() = 0;
+
+protected:
+    QRect moveNodeCommon(const QPoint &offset) {
+        const QPoint newOffset = m_initialOffset + offset;
+
+        QRect dirtyRect = m_node->projectionPlane()->tightUserVisibleBounds();
+
+        /**
+         * Some layers, e.g. clones need an update to change extent(), so
+         * calculate the dirty rect manually
+         */
+        QPoint currentOffset(m_node->x(), m_node->y());
+        dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
+
+        m_node->setX(newOffset.x());
+        m_node->setY(newOffset.y());
+
+        KisNodeMoveCommand2::tryNotifySelection(m_node);
+        return dirtyRect;
+    }
+
+protected:
+    KisNodeSP m_node;
+    QPoint m_initialOffset;
+};
+
+struct MoveNormalNodeStrategy : public MoveNodeStrategyBase
+{
+    MoveNormalNodeStrategy(KisNodeSP node)
+        : MoveNodeStrategyBase(node)
+    {
+    }
+
+    QRect moveNode(const QPoint &offset) override {
+        return moveNodeCommon(offset);
+    }
+
+    void finishMove(KUndo2Command *parentCommand) override {
+        const QPoint nodeOffset(m_node->x(), m_node->y());
+        new KisNodeMoveCommand2(m_node, m_initialOffset, nodeOffset, parentCommand);
+    }
+
+    QRect cancelMove() override {
+        return moveNode(QPoint());
+    }
+
+};
+
+struct MoveTransformMaskStrategy : public MoveNodeStrategyBase
+{
+    MoveTransformMaskStrategy(KisNodeSP node)
+        : MoveNodeStrategyBase(node)
+    {
+    }
+
+    QRect moveNode(const QPoint &offset) override {
+        QScopedPointer<KUndo2Command> cmd;
+        QRect dirtyRect = m_node->projectionPlane()->tightUserVisibleBounds();
+
+        KisTransformMask *mask = dynamic_cast<KisTransformMask*>(m_node.data());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(mask, QRect());
+
+        KisTransformMaskParamsInterfaceSP oldParams = mask->transformParams();
+        KisTransformMaskParamsInterfaceSP params = oldParams->clone();
+        params->translateDstSpace(offset - m_currentOffset);
+
+        cmd.reset(new KisSimpleModifyTransformMaskCommand(mask, params));
+        cmd->redo();
+
+        if (m_undoCommand) {
+            const bool mergeResult = m_undoCommand->mergeWith(cmd.get());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(mergeResult);
+            cmd.reset();
+        } else {
+            m_undoCommand.swap(cmd);
+        }
+
+        m_currentOffset = offset;
+
+        dirtyRect |= m_node->projectionPlane()->tightUserVisibleBounds();
+
+        return dirtyRect;
+    }
+
+    void finishMove(KUndo2Command *parentCommand) override {
+        KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand(parentCommand);
+        cmd->addCommand(m_undoCommand.take());
+    }
+
+    QRect cancelMove() override {
+        return moveNode(QPoint());
+    }
+
+private:
+    QPoint m_currentOffset;
+    QScopedPointer<KUndo2Command> m_undoCommand;
+};
+
+struct MovePaintableNodeStrategy : public MoveNodeStrategyBase
+{
+    MovePaintableNodeStrategy(KisNodeSP node)
+        : MoveNodeStrategyBase(node),
+          m_transaction(node->paintDevice(), 0, -1, 0, KisTransaction::SuppressUpdates)
+    {
+        // TODO: disable updates in the transaction
+    }
+
+    QRect moveNode(const QPoint &offset) override {
+        return moveNodeCommon(offset);
+    }
+
+    void finishMove(KUndo2Command *parentCommand) override {
+        KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand(parentCommand);
+
+        KUndo2Command *transactionCommand = m_transaction.endAndTake();
+        transactionCommand->redo();
+        cmd->addCommand(transactionCommand);
+    }
+
+    QRect cancelMove() override {
+        QRect dirtyRect = m_node->projectionPlane()->tightUserVisibleBounds();
+
+        m_transaction.revert();
+
+        dirtyRect |= m_node->projectionPlane()->tightUserVisibleBounds();
+
+        return dirtyRect;
+    }
+
+private:
+    KisTransaction m_transaction;
+};
+
+/*******************************************************/
+/*    MoveStrokeStrategy::Private                      */
+/*******************************************************/
+
+struct MoveStrokeStrategy::Private {
+    std::unordered_map<KisNodeSP, std::unique_ptr<MoveNodeStrategyBase>> strategy;
+};
+
+template <typename Functor>
+void MoveStrokeStrategy::recursiveApplyNodes(KisNodeList nodes, Functor &&func) {
+    Q_FOREACH(KisNodeSP subtree, nodes) {
+        KisLayerUtils::recursiveApplyNodes(subtree,
+            [&] (KisNodeSP node) {
+                if (!m_blacklistedNodes.contains(node)) {
+                    func(node);
+                }
+            });
+    }
+}
+
+/*******************************************************/
+/*    MoveStrokeStrategy                               */
+/*******************************************************/
 
 MoveStrokeStrategy::MoveStrokeStrategy(KisNodeSelectionRecipe nodeSelection,
                                        KisUpdatesFacade *updatesFacade,
                                        KisStrokeUndoFacade *undoFacade)
     : KisStrokeStrategyUndoCommandBased(kundo2_i18n("Move"), false, undoFacade),
+      m_d(new Private()),
       m_requestedNodeSelection(nodeSelection),
       m_updatesFacade(updatesFacade),
       m_updatesEnabled(true)
@@ -45,38 +228,29 @@ MoveStrokeStrategy::MoveStrokeStrategy(KisNodeList nodes, KisUpdatesFacade *upda
 {
 }
 
+MoveStrokeStrategy::~MoveStrokeStrategy()
+{
+}
+
 MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, int lod)
     : QObject(),
       KisStrokeStrategyUndoCommandBased(rhs),
+      m_d(new Private()),
       m_requestedNodeSelection(rhs.m_requestedNodeSelection, lod),
       m_nodes(rhs.m_nodes),
       m_blacklistedNodes(rhs.m_blacklistedNodes),
       m_updatesFacade(rhs.m_updatesFacade),
       m_finalOffset(rhs.m_finalOffset),
-      m_dirtyRect(rhs.m_dirtyRect),
       m_dirtyRects(rhs.m_dirtyRects),
-      m_updatesEnabled(rhs.m_updatesEnabled),
-      m_transformMaskData()
+      m_updatesEnabled(rhs.m_updatesEnabled)
 {
-    KIS_SAFE_ASSERT_RECOVER_NOOP(rhs.m_transformMaskData.empty());
-}
-void MoveStrokeStrategy::saveInitialNodeOffsets(KisNodeSP node)
-{
-    if (!m_blacklistedNodes.contains(node)) {
-        m_initialNodeOffsets.insert(node, QPoint(node->x(), node->y()));
-    }
-
-    KisNodeSP child = node->firstChild();
-    while(child) {
-        saveInitialNodeOffsets(child);
-        child = child->nextSibling();
-    }
+    KIS_SAFE_ASSERT_RECOVER_NOOP(rhs.m_d->strategy.empty());
 }
 
 void MoveStrokeStrategy::initStrokeCallback()
 {
     /**
-     * Our LodN moght have already prepared the list of nodes for us,
+     * Our LodN might have already prepared the list of nodes for us,
      * so we should reuse it to avoid different nodes to be moved in
      * LodN and Lod0 modes.
      */
@@ -84,7 +258,7 @@ void MoveStrokeStrategy::initStrokeCallback()
         m_nodes = m_requestedNodeSelection.selectNodesToProcess();
 
         if (!m_nodes.isEmpty()) {
-            m_nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(m_nodes, true);
+            m_nodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(m_nodes, true);
         }
 
         KritaUtils::filterContainer<KisNodeList>(m_nodes,
@@ -99,7 +273,9 @@ void MoveStrokeStrategy::initStrokeCallback()
                         subtree,
                         [this](KisNodeSP node) {
                 if (KisLayerUtils::checkIsCloneOf(node, m_nodes) ||
-                        !node->isEditable(false)) {
+                        !node->isEditable(false) ||
+                        (dynamic_cast<KisTransformMask*>(node.data()) &&
+                         KisLayerUtils::checkIsChildOf(node, m_nodes))) {
 
                     m_blacklistedNodes.insert(node);
                 }
@@ -107,11 +283,11 @@ void MoveStrokeStrategy::initStrokeCallback()
         }
 
         if (m_sharedNodes) {
-            *m_sharedNodes = m_nodes;
+            *m_sharedNodes = std::make_pair(m_nodes, m_blacklistedNodes);
         }
     } else {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_sharedNodes);
-        m_nodes = *m_sharedNodes;
+        std::tie(m_nodes, m_blacklistedNodes) = *m_sharedNodes;
     }
 
     if (m_nodes.isEmpty()) {
@@ -136,12 +312,46 @@ void MoveStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobBarrier(jobs, [this]() {
         QRect handlesRect;
 
-        Q_FOREACH(KisNodeSP node, m_nodes) {
-            saveInitialNodeOffsets(node);
-            handlesRect |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
-        }
+        /**
+         * Collect handles rect
+         */
+        recursiveApplyNodes(m_nodes,
+            [&handlesRect] (KisNodeSP node) {
+                handlesRect |= node->projectionPlane()->tightUserVisibleBounds();
+            });
 
         KisStrokeStrategyUndoCommandBased::initStrokeCallback();
+
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            if (node->hasEditablePaintDevice()) {
+                KUndo2Command *autoKeyframeCommand =
+                        KisAutoKey::tryAutoCreateDuplicatedFrame(node->paintDevice(),
+                                                                 KisAutoKey::SupportsLod);
+                if (autoKeyframeCommand) {
+                    runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
+            } else if (KisTransformMask *mask = dynamic_cast<KisTransformMask*>(node.data())) {
+                const bool maskAnimated = KisLazyCreateTransformMaskKeyframesCommand::maskHasAnimation(mask);
+
+                if (maskAnimated) {
+                    runAndSaveCommand(toQShared(new KisLazyCreateTransformMaskKeyframesCommand(mask)), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
+            }
+        }
+
+        /**
+         * Create strategies and start the transactions when necessary
+         */
+        recursiveApplyNodes(m_nodes,
+            [this] (KisNodeSP node) {
+                if (dynamic_cast<KisTransformMask*>(node.data())) {
+                    m_d->strategy.emplace(node, new MoveTransformMaskStrategy(node));
+                } else if (node->paintDevice()) {
+                    m_d->strategy.emplace(node, new MovePaintableNodeStrategy(node));
+                } else {
+                    m_d->strategy.emplace(node, new MoveNormalNodeStrategy(node));
+                }
+            });
 
         if (m_updatesEnabled) {
             KisLodTransform t(m_nodes.first()->image()->currentLevelOfDetail());
@@ -162,7 +372,13 @@ void MoveStrokeStrategy::finishStrokeCallback()
         KUndo2Command *updateCommand =
             new KisUpdateCommand(node, m_dirtyRects[node], m_updatesFacade, true);
 
-        addMoveCommands(node, updateCommand);
+        recursiveApplyNodes({node}, [this, updateCommand](KisNodeSP node) {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->strategy.find(node) != m_d->strategy.end());
+
+            MoveNodeStrategyBase *strategy = m_d->strategy[node].get();
+
+            strategy->finishMove(updateCommand);
+        });
 
         notifyCommandDone(KUndo2CommandSP(updateCommand),
                           KisStrokeJobData::SEQUENTIAL,
@@ -183,7 +399,32 @@ void MoveStrokeStrategy::cancelStrokeCallback()
     if (!m_nodes.isEmpty()) {
         m_finalOffset = QPoint();
         m_hasPostponedJob = true;
-        tryPostUpdateJob(true);
+
+        QVector<KisRunnableStrokeJobData*> jobs;
+
+        KritaUtils::addJobBarrierExclusive(jobs, [this]() {
+            Q_FOREACH (KisNodeSP node, m_nodes) {
+                QRect dirtyRect;
+
+                recursiveApplyNodes({node},
+                    [this, &dirtyRect] (KisNodeSP node) {
+                        MoveNodeStrategyBase *strategy =
+                            m_d->strategy[node].get();
+                        KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+                        dirtyRect |= strategy->cancelMove();
+                    });
+
+                m_dirtyRects[node] |= dirtyRect;
+
+                /// emit updates not looking onto the
+                /// updatesEnabled switch, since that is
+                /// the end of the stroke
+                m_updatesFacade->refreshGraphAsync(node, dirtyRect);
+            }
+        });
+
+        runnableJobsInterface()->addRunnableJobs(jobs);
     }
 
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallback();
@@ -226,8 +467,8 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         doCanvasUpdate(barrierData->forceUpdate);
 
-    } else if (KisAsyncronousStrokeUpdateHelper::UpdateData *updateData =
-               dynamic_cast<KisAsyncronousStrokeUpdateHelper::UpdateData*>(data)) {
+    } else if (KisAsynchronousStrokeUpdateHelper::UpdateData *updateData =
+               dynamic_cast<KisAsynchronousStrokeUpdateHelper::UpdateData*>(data)) {
 
         tryPostUpdateJob(updateData->forceUpdate);
 
@@ -251,112 +492,26 @@ void MoveStrokeStrategy::doCanvasUpdate(bool forceUpdate)
     if (!m_hasPostponedJob) return;
 
     Q_FOREACH (KisNodeSP node, m_nodes) {
-        QRect dirtyRect = moveNode(node, m_finalOffset);
+        QRect dirtyRect;
+
+        recursiveApplyNodes({node},
+            [this, &dirtyRect] (KisNodeSP node) {
+                MoveNodeStrategyBase *strategy =
+                    m_d->strategy[node].get();
+                KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+
+                dirtyRect |= strategy->moveNode(m_finalOffset);
+            });
+
         m_dirtyRects[node] |= dirtyRect;
 
         if (m_updatesEnabled) {
             m_updatesFacade->refreshGraphAsync(node, dirtyRect);
         }
-
-        if (KisSelectionMask *mask = dynamic_cast<KisSelectionMask*>(node.data())) {
-            Q_UNUSED(mask);
-            //mask->selection()->notifySelectionChanged();
-        }
     }
 
     m_hasPostponedJob = false;
     m_updateTimer.restart();
-}
-
-
-QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
-{
-    QRect dirtyRect;
-
-    if (!m_blacklistedNodes.contains(node)) {
-        dirtyRect = node->projectionPlane()->tightUserVisibleBounds();
-
-        KisTransformMask *mask = dynamic_cast<KisTransformMask*>(node.data());
-        if (mask && !KisLayerUtils::checkIsChildOf(node, m_nodes)) {
-
-            TransformMaskData &data = m_transformMaskData[node];
-
-            std::unique_ptr<KUndo2Command> cmd;
-
-            KisTransformMaskParamsInterfaceSP oldParams = mask->transformParams();
-            KisTransformMaskParamsInterfaceSP params = oldParams->clone();
-            params->translateDstSpace(offset - data.currentOffset);
-
-            if (mask->isAnimated()) {
-                KUndo2Command* parent = new KUndo2Command();
-                KisAnimatedTransformParamsInterface* animInterface = dynamic_cast<KisAnimatedTransformParamsInterface*>(mask->transformParams().data());
-                KIS_ASSERT(animInterface);
-                animInterface->initializeKeyframes(mask, params, parent);
-                cmd.reset(parent);
-            } else {
-                mask->setTransformParams(params);
-                cmd.reset(new KisSimpleModifyTransformMaskCommand(mask, oldParams, params));
-            }
-
-            KIS_ASSERT(cmd);
-
-            if (data.undoCommand) {
-                const bool mergeResult = data.undoCommand->mergeWith(cmd.get());
-
-                KIS_SAFE_ASSERT_RECOVER_NOOP(mergeResult);
-
-                cmd.reset();
-            } else {
-                std::swap(data.undoCommand, cmd);
-            }
-
-            data.currentOffset = offset;
-
-            dirtyRect |= node->projectionPlane()->tightUserVisibleBounds();
-
-        } else {
-            QPoint newOffset = m_initialNodeOffsets[node] + offset;
-
-            /**
-             * Some layers, e.g. clones need an update to change extent(), so
-             * calculate the dirty rect manually
-             */
-            QPoint currentOffset(node->x(), node->y());
-            dirtyRect |= dirtyRect.translated(newOffset - currentOffset);
-
-
-            node->setX(newOffset.x());
-            node->setY(newOffset.y());
-        }
-        KisNodeMoveCommand2::tryNotifySelection(node);
-    }
-
-    KisNodeSP child = node->firstChild();
-    while(child) {
-        dirtyRect |= moveNode(child, offset);
-        child = child->nextSibling();
-    }
-
-    return dirtyRect;
-}
-
-void MoveStrokeStrategy::addMoveCommands(KisNodeSP node, KUndo2Command *parent)
-{
-    if (!m_blacklistedNodes.contains(node)) {
-        if (m_transformMaskData.find(node) == m_transformMaskData.end()) {
-            QPoint nodeOffset(node->x(), node->y());
-            new KisNodeMoveCommand2(node, nodeOffset - m_finalOffset, nodeOffset, parent);
-        } else {
-            KisCommandUtils::CompositeCommand *cmd = new KisCommandUtils::CompositeCommand(parent);
-            cmd->addCommand(m_transformMaskData[node].undoCommand.release());
-        }
-    }
-
-    KisNodeSP child = node->firstChild();
-    while(child) {
-        addMoveCommands(child, parent);
-        child = child->nextSibling();
-    }
 }
 
 void MoveStrokeStrategy::setUpdatesEnabled(bool value)
@@ -399,7 +554,7 @@ KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
     connect(clone, SIGNAL(sigStrokeStartedEmpty()), this, SIGNAL(sigStrokeStartedEmpty()));
     connect(clone, SIGNAL(sigLayersPicked(const KisNodeList&)), this, SIGNAL(sigLayersPicked(const KisNodeList&)));
     this->setUpdatesEnabled(false);
-    m_sharedNodes.reset(new KisNodeList());
+    m_sharedNodes.reset(new std::pair<KisNodeList, QSet<KisNodeSP>>());
     clone->m_sharedNodes = m_sharedNodes;
     return clone;
 }
@@ -440,7 +595,7 @@ MoveStrokeStrategy::PickLayerData::PickLayerData(const MoveStrokeStrategy::PickL
 }
 
 MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(bool _forceUpdate)
-    : KisAsyncronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
+    : KisAsynchronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
 {}
 
 KisStrokeJobData *MoveStrokeStrategy::BarrierUpdateData::createLodClone(int levelOfDetail) {
@@ -448,6 +603,6 @@ KisStrokeJobData *MoveStrokeStrategy::BarrierUpdateData::createLodClone(int leve
 }
 
 MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const MoveStrokeStrategy::BarrierUpdateData &rhs, int levelOfDetail)
-    : KisAsyncronousStrokeUpdateHelper::UpdateData(rhs, levelOfDetail)
+    : KisAsynchronousStrokeUpdateHelper::UpdateData(rhs, levelOfDetail)
 {
 }

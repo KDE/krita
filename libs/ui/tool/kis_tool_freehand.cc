@@ -34,6 +34,7 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_selection.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <brushengine/KisOptimizedBrushOutline.h>
 
 
 // Krita/ui
@@ -69,8 +70,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas)->viewManager()->canvasResourceProvider();
 
-    connect(provider, SIGNAL(sigEraserModeToggled(bool)), SLOT(explicitUpdateOutline()));
-    connect(provider, SIGNAL(sigEraserModeToggled(bool)), SLOT(resetCursorStyle()));
+    connect(provider, SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(explicitUpdateOutline()));
+    connect(provider, SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
     connect(provider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(explicitUpdateOutline()));
     connect(provider, SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(resetCursorStyle()));
 }
@@ -96,8 +97,7 @@ void KisToolFreehand::resetCursorStyle()
 {
     KisConfig cfg(true);
 
-    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
-            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() && isEraser();
 
     switch (useSeparateEraserCursor ? cfg.eraserCursorStyle() : cfg.newCursorStyle()) {
     case CURSOR_STYLE_NO_CURSOR:
@@ -143,6 +143,11 @@ void KisToolFreehand::resetHelper(KisToolFreehandHelper *helper)
 {
     delete m_helper;
     m_helper = helper;
+}
+
+bool KisToolFreehand::supportsPaintingAssistants() const
+{
+    return true;
 }
 
 int KisToolFreehand::flags() const
@@ -268,13 +273,7 @@ bool KisToolFreehand::trySampleByPaintOp(KoPointerEvent *event, AlternateAction 
      * for a paintop level. This method is used in DuplicateOp only!
      */
     QPointF pos = adjustPosition(event->point, event->point);
-    qreal perspective = 1.0;
-    Q_FOREACH (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider()->perspectiveGrids()) {
-        if (grid && grid->contains(pos)) {
-            perspective = grid->distance(pos);
-            break;
-        }
-    }
+    qreal perspective = calculatePerspective(pos);
     if (!currentPaintOpPreset()) {
         return false;
     }
@@ -352,6 +351,7 @@ void KisToolFreehand::continueAlternateAction(KoPointerEvent *event, AlternateAc
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas2);
     QRect screenRect = QGuiApplication::primaryScreen()->availableVirtualGeometry();
 
     qreal scaleX = 0;
@@ -452,8 +452,9 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
 qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
 {
     qreal perspective = 1.0;
-    Q_FOREACH (const QPointer<KisAbstractPerspectiveGrid> grid, static_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider()->perspectiveGrids()) {
-        if (grid && grid->contains(documentPoint)) {
+    Q_FOREACH (const KisPaintingAssistantSP assistant, static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->assistants()) {
+        QPointer<KisAbstractPerspectiveGrid> grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
+        if (grid && grid->isActive() && grid->contains(documentPoint)) {
             perspective = grid->distance(documentPoint);
             break;
         }
@@ -466,7 +467,7 @@ void KisToolFreehand::explicitUpdateOutline()
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
-QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
+KisOptimizedBrushOutline KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
@@ -476,7 +477,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                         currentPaintOpPreset()->settings(),
                                         outlineMode);
     else
-        return QPainterPath();
+        return KisOptimizedBrushOutline();
 }
 
 

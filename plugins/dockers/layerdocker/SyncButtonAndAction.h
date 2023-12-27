@@ -11,7 +11,9 @@
 #include <QAbstractButton>
 #include "kis_action.h"
 
-class SyncButtonAndAction : public QObject
+#include "kritalayerdocker_export.h"
+
+class KRITALAYERDOCKER_EXPORT SyncButtonAndAction : public QObject
 {
     Q_OBJECT
 public:

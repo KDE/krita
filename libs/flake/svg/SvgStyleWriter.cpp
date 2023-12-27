@@ -71,6 +71,21 @@ void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context
     } else if (shape->transparency() > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
     }
+    if (shape->paintOrder().at(0) != KoShape::Fill
+        && shape->paintOrder().at(1) != KoShape::Stroke
+        && !shape->inheritPaintOrder()) {
+        QStringList order;
+        Q_FOREACH(const KoShape::PaintOrder p, shape->paintOrder()) {
+            if (p == KoShape::Fill) {
+                order.append("fill");
+            } else if (p == KoShape::Stroke) {
+                order.append("stroke");
+            } else if (p == KoShape::Markers) {
+                order.append("markers");
+            }
+        }
+        context.shapeWriter().addAttribute("paint-order", order.join(" "));
+    }
 }
 
 void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
@@ -202,6 +217,19 @@ void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
     outWriter.addCompleteElement(&buffer);
 }
 
+QString SvgStyleWriter::embedShape(const KoShape *shape, SvgSavingContext &context)
+{
+    QList<KoShape *> shapes;
+    KoShape* clonedShape = shape->cloneShape();
+    if (!clonedShape) {
+        return QString();
+    }
+    const QString uid = context.createUID("path");
+    clonedShape->setName(uid);
+    shapes.append(clonedShape);
+    embedShapes(shapes, context.styleWriter());
+    return uid;
+}
 
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {
@@ -267,7 +295,7 @@ void writeMarkerStyle(KoXmlWriter &styleWriter, const KoMarker *marker, const QS
     styleWriter.addAttribute("markerHeight", refSize.height());
 
 
-    if (marker->hasAutoOtientation()) {
+    if (marker->hasAutoOrientation()) {
         styleWriter.addAttribute("orient", "auto");
     } else {
         // no suffix means 'degrees'

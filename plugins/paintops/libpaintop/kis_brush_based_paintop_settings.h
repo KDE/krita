@@ -25,14 +25,11 @@ public:
     bool paintIncremental() override;
 
     using KisPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     KisBrushSP brush() const;
 
     KisPaintOpSettingsSP clone() const override;
-
-    void setAngle(qreal value);
-    qreal angle();
 
     void setSpacing(qreal spacing);
     qreal spacing();
@@ -44,6 +41,9 @@ public:
 
     void setPaintOpSize(qreal value) override;
     qreal paintOpSize() const override;
+
+    void setPaintOpAngle(qreal value) override;
+    qreal paintOpAngle() const override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 
@@ -57,7 +57,7 @@ public:
 protected:
 
     void onPropertyChanged() override;
-    QPainterPath brushOutlineImpl(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom, qreal additionalScale);
+    KisOptimizedBrushOutline brushOutlineImpl(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom, qreal additionalScale);
     mutable KisBrushSP m_savedBrush;
     QList<KisUniformPaintOpPropertyWSP> m_uniformProperties;
 

@@ -9,6 +9,7 @@
 #include <QStandardPaths>
 #include <QPluginLoader>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QMessageBox>
 #include <QStringList>
 #include <QProcess>
@@ -28,6 +29,7 @@
 #include <kis_time_span.h>
 #include <KisImportExportManager.h>
 #include <kis_config_widget.h>
+#include <kis_signals_blocker.h>
 #include <KisDocument.h>
 #include <QHBoxLayout>
 #include <kis_config.h>
@@ -59,8 +61,8 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
 
     m_page->intStart->setMinimum(0);
-    m_page->intStart->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
-    m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
+    m_page->intStart->setMaximum(doc->image()->animationInterface()->documentPlaybackRange().end());
+    m_page->intEnd->setMinimum(doc->image()->animationInterface()->documentPlaybackRange().start());
 
     m_page->intHeight->setMinimum(1);
     m_page->intHeight->setMaximum(100000);
@@ -68,10 +70,12 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     m_page->intWidth->setMinimum(1);
     m_page->intWidth->setMaximum(100000);
 
-    QFileInfo audioFileInfo(doc->image()->animationInterface()->audioChannelFileName());
-    const bool hasAudio = audioFileInfo.exists();
+    // Setup audio...
+    QVector<QFileInfo> audioFiles = doc->getAudioTracks();
+    const bool hasAudio = audioFiles.count() > 0;
     m_page->chkIncludeAudio->setEnabled(hasAudio);
 
+    // Setup image mimeTypes...
     QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     mimes.sort();
     filterSequenceMimeTypes(mimes);
@@ -87,16 +91,6 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
             m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->count() - 1);
         }
     }
-
-    QStringList supportedMimeType = makeVideoMimeTypesList();
-    Q_FOREACH (const QString &mime, supportedMimeType) {
-        QString description = KisMimeDatabase::descriptionForMimeType(mime);
-        if (description.isEmpty()) {
-            description = mime;
-        }
-        m_page->cmbRenderType->addItem(description, mime);
-    }
-    
     
     m_page->cmbScaleFilter->addItem(i18nc("bicubic filtering", "bicubic"), "bicubic");
     m_page->cmbScaleFilter->addItem(i18nc("bilinear filtering", "bilinear"), "bilinear");
@@ -108,37 +102,39 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
 
     m_page->ffmpegLocation->setMode(KoFileDialog::OpenFile);
 
-    m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/render_type", 0));
-    m_page->cmbRenderType->setCurrentIndex(cfg.readEntry<int>("AnimationRenderer/scale_mode", 0));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 15, 0)
+    m_page->cmbRenderType->setPlaceholderText(i18nc("Not applicable. No render types without valid ffmpeg path.", "N/A"));
+#endif
 
-    connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeOptionsClicked()));
-    connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
+    {   // Establish connections...
+        connect(m_page->bnExportOptions, SIGNAL(clicked()), this, SLOT(sequenceMimeTypeOptionsClicked()));
+        connect(m_page->bnRenderOptions, SIGNAL(clicked()), this, SLOT(selectRenderOptions()));
 
-    connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
-    connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
-    connect(m_page->shouldExportAll, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
+        connect(m_page->shouldExportOnlyImageSequence, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
+        connect(m_page->shouldExportOnlyVideo, SIGNAL(toggled(bool)), this, SLOT(slotExportTypeChanged()));
 
-    connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(frameRateChanged(int)));
+        connect(m_page->intFramesPerSecond, SIGNAL(valueChanged(int)), SLOT(frameRateChanged(int)));
 
-    // connect and cold init
-    connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
-    selectRenderType(m_page->cmbRenderType->currentIndex());
+        connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(setFFmpegPath(QString)));
+
+        connect(this, SIGNAL(accepted()), SLOT(slotDialogAccepted()));
+    }
+
 
     // try to lock the width and height being updated
     KisAcyclicSignalConnector *constrainsConnector = new KisAcyclicSignalConnector(this);
     constrainsConnector->createCoordinatedConnector()->connectBackwardInt(m_page->intWidth, SIGNAL(valueChanged(int)), this, SLOT(slotLockAspectRatioDimensionsWidth(int)));
     constrainsConnector->createCoordinatedConnector()->connectForwardInt(m_page->intHeight, SIGNAL(valueChanged(int)), this, SLOT(slotLockAspectRatioDimensionsHeight(int)));
 
-    {
-        KisPropertiesConfigurationSP settings = loadLastConfiguration("ANIMATION_EXPORT");
+    {   // Initialize settings from last configuration...
+        KisPropertiesConfigurationSP animProperties = loadLastConfiguration("ANIMATION_EXPORT");
         KisAnimationRenderingOptions options;
-        options.fromProperties(settings);
+        options.fromProperties(animProperties);
+
         initializeRenderSettings(*doc, options);
     }
 
-    resize(m_page->sizeHint());
     setMainWidget(m_page);
-    connect(this, SIGNAL(accepted()), SLOT(slotDialogAccepted()));
 }
 
 KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
@@ -146,16 +142,144 @@ KisDlgAnimationRenderer::~KisDlgAnimationRenderer()
     delete m_page;
 }
 
+void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions)
+{
+    const QString documentPath = m_doc->localFilePath();
+
+    // Initialize these settings based on last used configuration when possible..
+    if (!lastUsedOptions.lastDocumentPath.isEmpty() &&
+        lastUsedOptions.lastDocumentPath == documentPath) {
+
+        // If the file is the same as last time, we use the last used basename.
+        m_page->txtBasename->setText(lastUsedOptions.basename);
+
+        m_page->sequenceStart->setValue(lastUsedOptions.sequenceStart);
+        m_page->intWidth->setValue(lastUsedOptions.width);
+        m_page->intHeight->setValue(lastUsedOptions.height);
+
+        m_page->videoFilename->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->videoFilename->setFileName(lastUsedOptions.videoFileName);
+
+        m_page->dirRequester->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->dirRequester->setFileName(lastUsedOptions.directory);
+    } else {
+        m_page->sequenceStart->setValue(m_image->animationInterface()->activePlaybackRange().start());
+        m_page->intWidth->setValue(m_image->width());
+        m_page->intHeight->setValue(m_image->height());
+
+        m_page->videoFilename->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->videoFilename->setFileName(defaultVideoFileName(m_doc, lastUsedOptions.videoMimeType));
+
+        m_page->dirRequester->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
+        m_page->dirRequester->setFileName(lastUsedOptions.directory);
+    }
+
+    for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
+        if (m_page->cmbMimetype->itemData(i).toString() == lastUsedOptions.frameMimeType) {
+            m_page->cmbMimetype->setCurrentIndex(i);
+            break;
+        }
+    }
+
+    // Skipping m_page->cmbRenderType for now, as it depends on the ffmpeg provided.
+
+    for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
+        if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
+            m_page->cmbScaleFilter->setCurrentIndex(i);
+            break;
+        }
+    }
+
+    m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
+
+    m_page->shouldExportOnlyVideo->setChecked(lastUsedOptions.shouldEncodeVideo);
+    m_page->shouldExportOnlyImageSequence->setChecked(!lastUsedOptions.shouldDeleteSequence);
+    slotExportTypeChanged();
+
+    {
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
+
+        QStringList encodersPresent;
+        Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+            encodersPresent << ffmpegEncoderTypes[key];
+        }
+
+        getDefaultVideoEncoderOptions(lastUsedOptions.videoMimeType, settings,
+                                      encodersPresent,
+                                      &m_customFFMpegOptionsString,
+                                      &m_wantsRenderWithHDR);
+    }
+
+    {
+        KisPropertiesConfigurationSP settings = loadLastConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
+        m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
+    }
+
+    // Initialize FFmpeg location... (!)
+    KisConfig cfg(false);
+    QString cfgFFmpegPath = cfg.ffmpegLocation();
+#ifdef Q_OS_MACOS
+    if (cfgFFmpegPath.isEmpty()) {
+        QJsonObject ffmpegInfo =  KisFFMpegWrapper::findFFMpeg(cfgFFmpegPath);
+        cfgFFmpegPath = (ffmpegInfo["enabled"].toBool()) ? ffmpegInfo["path"].toString() : "";
+    }
+#endif
+    QString likelyFFmpegPath = [&]() {
+        if (!cfgFFmpegPath.isEmpty()) {
+            return cfgFFmpegPath;
+        }
+
+        if (!lastUsedOptions.ffmpegPath.isEmpty()) {
+            return lastUsedOptions.ffmpegPath;
+        }
+
+        return QStandardPaths::findExecutable("ffmpeg");
+    }();
+
+    if (likelyFFmpegPath.isEmpty() || !QFileInfo(likelyFFmpegPath).isExecutable()) {
+        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg("");
+
+        likelyFFmpegPath = (ffmpegJsonObj["enabled"].toBool()) ? ffmpegJsonObj["path"].toString() : "";
+    }
+
+    m_page->ffmpegLocation->setFileName(likelyFFmpegPath);
+    m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
+    m_page->ffmpegLocation->setReadOnlyText(true);
+
+    // Initialize these settings based on the current document context..
+    m_page->intStart->setValue(doc.image()->animationInterface()->activePlaybackRange().start());
+    m_page->intEnd->setValue(doc.image()->animationInterface()->activePlaybackRange().end());
+    m_page->intFramesPerSecond->setValue(doc.image()->animationInterface()->framerate());
+
+    if (!doc.image()->animationInterface()->exportSequenceFilePath().isEmpty()
+        && QDir(doc.image()->animationInterface()->exportSequenceFilePath()).exists() ) {
+        m_page->dirRequester->setStartDir(doc.image()->animationInterface()->exportSequenceFilePath());
+        m_page->dirRequester->setFileName(doc.image()->animationInterface()->exportSequenceFilePath());
+    }
+
+    if (!doc.image()->animationInterface()->exportSequenceBaseName().isEmpty()) {
+        m_page->txtBasename->setText(doc.image()->animationInterface()->exportSequenceBaseName());
+    }
+
+    if (doc.image()->animationInterface()->exportInitialFrameNumber() != -1) {
+        m_page->sequenceStart->setValue(doc.image()->animationInterface()->exportInitialFrameNumber());
+    }
+
+    bool hasAudioLoaded = doc.getAudioTracks().count() > 0;
+    m_page->chkIncludeAudio->setChecked(hasAudioLoaded);
+}
+
 void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,
-                                                         KisPropertiesConfigurationSP cfg,
-                                                         QString *customFFMpegOptionsString,
-                                                         bool *renderHDR)
+                                                            KisPropertiesConfigurationSP cfg,
+                                                            const QStringList &availableEncoders,
+                                                            QString *customFFMpegOptionsString,
+                                                            bool *renderHDR)
 {
     const KisVideoExportOptionsDialog::ContainerType containerType =
             KisVideoExportOptionsDialog::mimeToContainer(mimeType);
 
     QScopedPointer<KisVideoExportOptionsDialog> encoderConfigWidget(
-        new KisVideoExportOptionsDialog(containerType, 0));
+        new KisVideoExportOptionsDialog(containerType, availableEncoders,   0));
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -177,14 +301,74 @@ QStringList KisDlgAnimationRenderer::makeVideoMimeTypesList()
 {
     QStringList supportedMimeTypes = QStringList();
     supportedMimeTypes << "video/x-matroska";
+    supportedMimeTypes << "video/mp4";
+    supportedMimeTypes << "video/webm";
     supportedMimeTypes << "image/gif";
     supportedMimeTypes << "image/apng";    
     supportedMimeTypes << "image/webp";       
     supportedMimeTypes << "video/ogg";
-    supportedMimeTypes << "video/mp4";
-    supportedMimeTypes << "video/webm";
 
     return supportedMimeTypes;
+}
+
+bool meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::ContainerType encoderType, const QStringList& encodersPresent) {
+    QVector<KoID> encodersExpected = KisVideoExportOptionsDialog::encoderIdentifiers(encoderType);
+    Q_FOREACH(const KoID &encoder, encodersExpected ) {
+        if (encodersPresent.contains(encoder.id())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// For dependencies, see here:
+// https://en.wikipedia.org/wiki/Comparison_of_video_container_formats
+QStringList KisDlgAnimationRenderer::filterMimeTypeListByAvailableEncoders(const QStringList& input) 
+{
+    QStringList retValue;
+
+    Q_FOREACH(const QString& mime, input) {
+        if ( mime == "video/x-matroska" ) {
+            if ( ffmpegCodecs.contains("h264") || ffmpegCodecs.contains("vp9") ) {
+                QList<QString> encodersPresent;
+                encodersPresent << ffmpegEncoderTypes["h264"] << ffmpegEncoderTypes["vp9"];
+                if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::MKV, encodersPresent))
+                    retValue << mime;
+            }
+        } else if (mime == "video/mp4") {
+            if ( ffmpegCodecs.contains("h264") || ffmpegCodecs.contains("vp9") ) {
+                QList<QString> encodersPresent;
+                encodersPresent << ffmpegEncoderTypes["h264"] << ffmpegEncoderTypes["vp9"];
+                if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::MP4, encodersPresent))
+                    retValue << mime;
+            }
+        } else if (mime == "video/webm") {
+            if ( ffmpegCodecs.contains("vp9") ) {
+                QList<QString> encodersPresent;
+                encodersPresent << ffmpegEncoderTypes["vp9"];
+                if (meetsEncoderRequirementsForContainer(KisVideoExportOptionsDialog::WEBM, encodersPresent))
+                    retValue << mime;
+            }
+        } else if (mime == "image/gif") {
+            if ( ffmpegCodecs.contains("gif") ) {
+                retValue << mime;
+            }
+        } else if (mime == "image/apng") {
+            if ( ffmpegCodecs.contains("apng") ) {
+                retValue << mime;
+            }
+        } else if (mime == "image/webp") {
+            if ( ffmpegCodecs.contains("webp") ) {
+                retValue << mime;
+            }
+        } else if (mime == "video/ogg") {
+            if ( ffmpegCodecs.contains("dirac") ) {
+                retValue << mime;
+            }
+        }
+    }
+
+    return retValue;
 }
 
 bool KisDlgAnimationRenderer::imageMimeSupportsHDR(QString &mime)
@@ -203,162 +387,142 @@ void KisDlgAnimationRenderer::saveLastUsedConfiguration(QString configurationID,
     globalConfig.setExportConfiguration(configurationID, config);
 }
 
-void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions)
-{
-    const QString documentPath = m_doc->localFilePath();
+void KisDlgAnimationRenderer::setFFmpegPath(const QString& path) {
+    // Let's START with the assumption that user-specified ffmpeg path is invalid
+    // and clear out all of the ffmpeg-specific fields to fill post-validation...
+    m_page->cmbRenderType->setDisabled(true);
+    m_page->bnRenderOptions->setDisabled(true);
+    m_page->cmbRenderType->clear();
+    ffmpegEncoderTypes.clear();
 
-    // Initialize these settings based on last used configuration when possible..
-    if (!lastUsedOptions.lastDocuemntPath.isEmpty() &&
-            lastUsedOptions.lastDocuemntPath == documentPath) {
+    // Validate FFmpeg binary and setup FFMpeg...
+    if (validateFFmpeg()) {
+        QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(path);
+        ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString() : i18n("No valid FFmpeg binary supplied...");
+        ffmpegCodecs = KisFFMpegWrapper::getSupportedCodecs(ffmpegJsonObj);
 
-        // If the file is the same as last time, we use the last used basename.
-        m_page->txtBasename->setText(lastUsedOptions.basename);
+        // Build map of encoding types to their specific encoder support (e.g. h264 => libopenh264, h264, h264_vaapi or whatever)
+        Q_FOREACH(const QString& codec, ffmpegCodecs) {
+            QJsonObject codecjson = ffmpegJsonObj["codecs"].toObject()[codec].toObject();
+            if ( codecjson["encoding"].toBool() ) {
+                QJsonArray codecEncoders = codecjson["encoders"].toArray();
 
-        m_page->sequenceStart->setValue(lastUsedOptions.sequenceStart);
-        m_page->intWidth->setValue(lastUsedOptions.width);
-        m_page->intHeight->setValue(lastUsedOptions.height);
+                // In the case where no specific codec "library" is specified but we do support
+                // encoding, we simply push the type onto the list regardless. This basically
+                // means that there's no "specific" requirements that we need to meet and
+                // encoding should be possible.
+                if (codecEncoders.size() == 0) {
+                    codecEncoders.push_back(QJsonValue(codec));
+                }
 
-        m_page->videoFilename->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
-        m_page->videoFilename->setFileName(lastUsedOptions.videoFileName);
-
-        m_page->dirRequester->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
-        m_page->dirRequester->setFileName(lastUsedOptions.directory);
-    } else {
-        m_page->sequenceStart->setValue(m_image->animationInterface()->playbackRange().start());
-        m_page->intWidth->setValue(m_image->width());
-        m_page->intHeight->setValue(m_image->height());
-
-        m_page->videoFilename->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
-        m_page->videoFilename->setFileName(defaultVideoFileName(m_doc, lastUsedOptions.videoMimeType));
-
-        m_page->dirRequester->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
-        m_page->dirRequester->setFileName(lastUsedOptions.directory);
-    }
-
-    for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
-        if (m_page->cmbMimetype->itemData(i).toString() == lastUsedOptions.frameMimeType) {
-            m_page->cmbMimetype->setCurrentIndex(i);
-            break;
+                Q_FOREACH(const QJsonValue& value, codecEncoders) {
+                    if (ffmpegEncoderTypes.contains(codec)) {
+                        ffmpegEncoderTypes[codec].push_back(value.toString());
+                    } else {
+                        ffmpegEncoderTypes.insert(codec, {value.toString()} );
+                    }
+                }
+            }
         }
-    }
 
-    for (int i = 0; i < m_page->cmbRenderType->count(); ++i) {
-        if (m_page->cmbRenderType->itemData(i).toString() == lastUsedOptions.videoMimeType) {
-            m_page->cmbRenderType->setCurrentIndex(i);
-            break;
+        KisConfig cfg(false);
+
+        {   // Build list of supported container types and repopulate cmbRenderType.
+            KisSignalsBlocker(m_page->cmbRenderType);
+
+            QStringList supportedMimeTypes = makeVideoMimeTypesList();
+            supportedMimeTypes = filterMimeTypeListByAvailableEncoders(supportedMimeTypes);
+
+            Q_FOREACH (const QString &mime, supportedMimeTypes) {
+                QString description = KisMimeDatabase::descriptionForMimeType(mime);
+                if (description.isEmpty()) {
+                    description = mime;
+                }
+
+                m_page->cmbRenderType->addItem(description, mime);
+            }
+
+            const int indexCount = m_page->cmbRenderType->count();
+            if (indexCount > 0) {
+                const int desiredIndex = cfg.readEntry<int>("AnimationRenderer/render_type", 0);
+                m_page->cmbRenderType->setCurrentIndex(desiredIndex % indexCount); // ;P
+                selectRenderType(m_page->cmbRenderType->currentIndex());
+                m_page->cmbRenderType->setDisabled(false);
+                m_page->bnRenderOptions->setDisabled(false);
+                connect(m_page->cmbRenderType, SIGNAL(currentIndexChanged(int)), this, SLOT(selectRenderType(int)));
+            }
         }
+
+        m_page->lblFFMpegVersion->setText(ffmpegVersion);
+
+        // Store configuration..
+        cfg.setFFMpegLocation(ffmpegJsonObj["path"].toString());
+
+        ffmpegWarningCheck();
     }
-
-    for (int i = 0; i < m_page->cmbScaleFilter->count(); ++i) {
-        if (m_page->cmbScaleFilter->itemData(i).toString() == lastUsedOptions.scaleFilter) {
-            m_page->cmbScaleFilter->setCurrentIndex(i);
-            break;
-        }
-    }    
-    
-    m_page->chkOnlyUniqueFrames->setChecked(lastUsedOptions.wantsOnlyUniqueFrameSequence);
-
-    if (lastUsedOptions.shouldDeleteSequence) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(lastUsedOptions.shouldEncodeVideo);
-        m_page->shouldExportOnlyVideo->setChecked(true);
-    } else if (!lastUsedOptions.shouldEncodeVideo) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!lastUsedOptions.shouldDeleteSequence);
-        m_page->shouldExportOnlyImageSequence->setChecked(true);
-    } else {
-        m_page->shouldExportAll->setChecked(true); // export to both
-    }
-
-
-    {
-        KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
-
-        getDefaultVideoEncoderOptions(lastUsedOptions.videoMimeType, settings,
-                                      &m_customFFMpegOptionsString,
-                                      &m_wantsRenderWithHDR);
-    }
-
-    {
-        KisPropertiesConfigurationSP settings = loadLastConfiguration("img_sequence/" + lastUsedOptions.frameMimeType);
-        m_wantsRenderWithHDR = settings->getPropertyLazy("saveAsHDR", m_wantsRenderWithHDR);
-    }
-
-    m_page->ffmpegLocation->setStartDir(QFileInfo(m_doc->localFilePath()).path());
-    KisConfig cfg(false);
-    QString ffmpegPath = cfg.ffmpegLocation();
-    QJsonObject ffmpegJsonObj = KisFFMpegWrapper::findFFMpeg(ffmpegPath.isEmpty() ? lastUsedOptions.ffmpegPath:ffmpegPath);
-
-    ffmpegPath = ffmpegJsonObj["path"].toString();
-    ffmpegVersion = ffmpegJsonObj["enabled"].toBool() ? ffmpegJsonObj["version"].toString():"None";
-
-    m_page->ffmpegLocation->setFileName(ffmpegPath);
-    m_page->ffmpegLocation->setReadOnlyText(true);
-    cfg.setFFMpegLocation(ffmpegPath);
-    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion + (!ffmpegJsonObj["enabled"].toBool() || ffmpegJsonObj["encoder"].toObject()["h264"].toBool() ? "":" (MP4/MKV UNSUPPORTED)"));
-    
-    ffmpegWarningCheck();
-
-    connect(m_page->ffmpegLocation, SIGNAL(fileSelected(QString)), SLOT(slotFFMpegChanged(QString)));
-
-    // Initialize these settings based on the current document context..
-    m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
-    m_page->intEnd->setValue(doc.image()->animationInterface()->playbackRange().end());
-    m_page->intFramesPerSecond->setValue(doc.image()->animationInterface()->framerate());
-
-    if (!doc.image()->animationInterface()->exportSequenceFilePath().isEmpty()
-        && QDir(doc.image()->animationInterface()->exportSequenceFilePath()).exists() ) {
-        m_page->dirRequester->setStartDir(doc.image()->animationInterface()->exportSequenceFilePath());
-        m_page->dirRequester->setFileName(doc.image()->animationInterface()->exportSequenceFilePath());
-    }
-
-    if (!doc.image()->animationInterface()->exportSequenceBaseName().isEmpty()) {
-        m_page->txtBasename->setText(doc.image()->animationInterface()->exportSequenceBaseName());
-    }
-
-    if (doc.image()->animationInterface()->exportInitialFrameNumber() != -1) {
-        m_page->sequenceStart->setValue(doc.image()->animationInterface()->exportInitialFrameNumber());
-    }
-
-    m_page->chkIncludeAudio->setChecked(!doc.image()->animationInterface()->isAudioMuted());
-}
-
-void KisDlgAnimationRenderer::slotFFMpegChanged(const QString& path) {
-    KisConfig cfg(false);
-    QJsonObject ffmpegChangeJsonObj = KisFFMpegWrapper::findFFMpeg(path);
-    ffmpegVersion = ffmpegChangeJsonObj["enabled"].toBool() ? ffmpegChangeJsonObj["version"].toString():"None";
-
-    cfg.setFFMpegLocation(ffmpegChangeJsonObj["path"].toString());
-    m_page->lblFFMpegVersion->setText("FFMpeg Version: " + ffmpegVersion + (!ffmpegChangeJsonObj["enabled"].toBool() || ffmpegChangeJsonObj["encoder"].toObject()["h264"].toBool() ? "":" (MP4/MKV UNSUPPORTED)"));
-
-    ffmpegWarningCheck();
-    ffmpegValidate();
 }
 
 void KisDlgAnimationRenderer::ffmpegWarningCheck() {
     const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
 
-    QRegularExpression minVerFFMpegRX("^n{0,1}(?:[0-3]|4\\.[01])[\\.\\-]");
-    QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
+    const QRegularExpression minVerFFMpegRX(R"(^n{0,1}(?:[0-3]|4\.[01])[\.\-])");
+    const QRegularExpressionMatch minVerFFMpegMatch = minVerFFMpegRX.match(ffmpegVersion);
 
-    m_page->lblGifWarningFFMpeg->setVisible((mimeType == "image/gif" && minVerFFMpegMatch.hasMatch() ));
+    QStringList warnings;
+
+    if (mimeType == "image/gif" && minVerFFMpegMatch.hasMatch()) {
+        warnings << i18nc("ffmpeg warning checks", "FFmpeg must be at least version 4.2+ for GIF transparency to work");
+    }
+
+    // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType !=
+    // "image/png" );
+    if (mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50) {
+        warnings << i18nc("ffmpeg warning checks",
+                          "Animated GIF images cannot have a framerate higher than 50. The framerate will be reduced "
+                          "to 50 frames per second");
+    }
+
+    m_page->lblWarnings->setVisible(!warnings.isEmpty());
+
+    if (!warnings.isEmpty()) {
+        QString text = QString("<p><b>%1</b>").arg(i18n("Warning(s):"));
+        text.append("<ul>");
+        Q_FOREACH (const QString &warning, warnings) {
+            text.append("<li>");
+            text.append(warning.toHtmlEscaped());
+            text.append("</li>");
+        }
+        text.append("</ul></p>");
+        m_page->lblWarnings->setText(text);
+
+        m_page->lblWarnings->setPixmap(
+            m_page->lblWarnings->style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(QSize(32, 32)));
+    }
+
+    m_page->adjustSize();
 }
 
 QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QString &mimeType)
 {
-    const QString docFileName = !doc->localFilePath().isEmpty() ?
-        doc->localFilePath() : i18n("Untitled");
+    const QString docFileName = !doc->localFilePath().isEmpty() ? doc->localFilePath() : i18n("Untitled");
 
-    return
-        QString("%1.%2")
-            .arg(QFileInfo(docFileName).completeBaseName())
-            .arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
+    if (!mimeType.isEmpty()) {
+        return QString("%1.%2").arg(QFileInfo(docFileName).completeBaseName(),
+                                    KisMimeDatabase::suffixesForMimeType(mimeType).first());
+    } else {
+        return docFileName;
+    }
 }
 
 void KisDlgAnimationRenderer::selectRenderType(int index)
 {
+    if (m_page->cmbRenderType->count() == 0) return;
+
     const QString mimeType = m_page->cmbRenderType->itemData(index).toString();
 
-    // m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png" );
-    m_page->lblGifWarningFPS->setVisible((mimeType == "image/gif" && m_page->intFramesPerSecond->value() > 50));
+    /*
+    m_page->bnRenderOptions->setEnabled(mimeType != "image/gif" && mimeType != "image/webp" && mimeType != "image/png");
+    */
 
     ffmpegWarningCheck();
 
@@ -369,9 +533,8 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         const QString baseName = info.completeBaseName();
         const QString path = info.path();
 
-        videoFileName =
-            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
-
+        videoFileName = QString("%1%2%3.%4")
+                            .arg(path, "/", baseName, KisMimeDatabase::suffixesForMimeType(mimeType).first());
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
     m_page->videoFilename->setFileName(videoFileName);
@@ -382,8 +545,14 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         // If this is removed from the configuration, ogg vorbis can fail to render on first attempt. BUG:421658
         // This should be revisited at some point, too much configuration juggling in this class makes it error-prone...
 
+        QStringList encodersPresent;
+        Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+            encodersPresent << ffmpegEncoderTypes[key];
+        }
+
         KisPropertiesConfigurationSP settings = loadLastConfiguration("VIDEO_ENCODER");
         getDefaultVideoEncoderOptions(mimeType, settings,
+                                      encodersPresent,
                                       &m_customFFMpegOptionsString,
                                       &m_wantsRenderWithHDR);
     }
@@ -397,8 +566,13 @@ void KisDlgAnimationRenderer::selectRenderOptions()
     const KisVideoExportOptionsDialog::ContainerType containerType =
         KisVideoExportOptionsDialog::mimeToContainer(mimetype);
 
+    QStringList encodersPresent;
+    Q_FOREACH(const QString& key, ffmpegEncoderTypes.keys()) {
+        encodersPresent << ffmpegEncoderTypes[key];
+    }
+
     KisVideoExportOptionsDialog *encoderConfigWidget =
-        new KisVideoExportOptionsDialog(containerType, this);
+        new KisVideoExportOptionsDialog(containerType, encodersPresent, this);
 
     // we always enable HDR, letting the user to force it
     encoderConfigWidget->setSupportsHDR(true);
@@ -471,7 +645,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 {
     KisAnimationRenderingOptions options;
 
-    options.lastDocuemntPath = m_doc->localFilePath();
+    options.lastDocumentPath = m_doc->localFilePath();
     options.videoMimeType = m_page->cmbRenderType->currentData().toString();
     options.frameMimeType = m_page->cmbMimetype->currentData().toString();
     options.scaleFilter = m_page->cmbScaleFilter->currentData().toString();
@@ -482,8 +656,8 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     options.lastFrame = m_page->intEnd->value();
     options.sequenceStart = m_page->sequenceStart->value();
 
-    options.shouldEncodeVideo = !m_page->shouldExportOnlyImageSequence->isChecked();
-    options.shouldDeleteSequence = m_page->shouldExportOnlyVideo->isChecked();
+    options.shouldEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
+    options.shouldDeleteSequence = !m_page->shouldExportOnlyImageSequence->isChecked();
     options.includeAudio = m_page->chkIncludeAudio->isChecked();
     options.wantsOnlyUniqueFrameSequence = m_page->chkOnlyUniqueFrames->isChecked();
 
@@ -519,45 +693,35 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
     return options;
 }
 
-bool KisDlgAnimationRenderer::ffmpegValidate()
+bool KisDlgAnimationRenderer::validateFFmpeg(bool warn)
 {
     QString ffmpeg = m_page->ffmpegLocation->fileName();
 
-    if (ffmpeg.isEmpty()) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("<b>Krita can't find FFmpeg!</b><br> \
-            <i>Krita depends on another free program called FFmpeg to turn frame-by-frame animations into video files. (<a href=\"https://www.ffmpeg.org\">www.ffmpeg.org</a>)</i><br><br>\
-            To learn more about setting up Krita for rendering animations, <a href=\"https://docs.krita.org/en/reference_manual/render_animation.html#setting-up-krita-for-exporting-animations\">please visit this section of our User Manual.</a>"));
-        return false;
-    }
-    else {
-        QFileInfo fi(ffmpeg);
-        if (!fi.exists()) {
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is invalid. Please select the correct location of the FFmpeg executable on your system."));
-            return false;
-        }
-        if (fi.fileName().endsWith("zip") || fi.fileName().endsWith("7z")) {
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Please extract ffmpeg from the archive first."));
-            return false;
-        }
+    if (!ffmpeg.isEmpty()) {
+        QFileInfo file(ffmpeg);
+        if (file.exists()) {
+            QStringList commpressedFormats{"zip", "7z", "tar.bz2"};
+            Q_FOREACH(const QString& compressedFormat, commpressedFormats) {
+                if (file.fileName().endsWith(compressedFormat)) {
+                    if (warn) {
+                        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be compressed. Please try to extract FFmpeg from the archive first."));
+                    }
 
-        if (fi.fileName().endsWith("tar.bz2")) {
-#ifdef Q_OS_WIN
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"),
-                                    i18n("This is a source code archive. Please download the application archive ('Windows Builds'), unpack it and then provide the path to the extracted ffmpeg file."));
-#else
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"),
-                                    i18n("This is a source code archive. Please install ffmpeg instead."));
-#endif
-            return false;
-        }
+                    return false;
+                }
+            }
 
-        if (!fi.isExecutable()) {
-            QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The location of FFmpeg is invalid. Please select the correct location of the FFmpeg executable on your system."));
-            return false;
+            if (file.isExecutable()) {
+                return true;
+            }
         }
     }
 
-    return true;
+    if (warn) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("The FFmpeg that you've given us appears to be invalid. Please select the correct location of an FFmpeg executable on your system."));
+    }
+
+    return false;
 }
 
 void KisDlgAnimationRenderer::slotButtonClicked(int button)
@@ -570,7 +734,7 @@ void KisDlgAnimationRenderer::slotButtonClicked(int button)
             return;
         }
         else {
-            if (!ffmpegValidate()) return;
+            if (!validateFFmpeg(true)) return;
         }
     }
     KoDialog::slotButtonClicked(button);
@@ -591,63 +755,30 @@ void KisDlgAnimationRenderer::slotExportTypeChanged()
 {
     KisConfig cfg(false);
 
-    bool willEncodeVideo =
-        m_page->shouldExportAll->isChecked() || m_page->shouldExportOnlyVideo->isChecked();
+    const bool willEncodeVideo = m_page->shouldExportOnlyVideo->isChecked();
 
     // if a video format needs to be outputted
     if (willEncodeVideo) {
          // videos always uses PNG for creating video, so disable the ability to change the format
          m_page->cmbMimetype->setEnabled(false);
-         for (int i = 0; i < m_page->cmbMimetype->count(); ++i) {
-             if (m_page->cmbMimetype->itemData(i).toString() == "image/png") {
-                 m_page->cmbMimetype->setCurrentIndex(i);
-                 break;
-             }
-         }
+         m_page->cmbMimetype->setCurrentIndex(m_page->cmbMimetype->findData("image/png"));
     }
 
-    m_page->intWidth->setVisible(willEncodeVideo);
-    m_page->intHeight->setVisible(willEncodeVideo);
-    m_page->intFramesPerSecond->setVisible(willEncodeVideo);
-    m_page->fpsLabel->setVisible(willEncodeVideo);
-    m_page->cmbScaleFilter->setVisible(willEncodeVideo);
-    m_page->scaleFilterLabel->setVisible(willEncodeVideo);
-    m_page->lblWidth->setVisible(willEncodeVideo);
-    m_page->lblHeight->setVisible(willEncodeVideo);
+    /**
+     * A fallback fix for a case when both checkboxes are unchecked
+     */
+    if (!m_page->shouldExportOnlyVideo->isChecked() &&
+        !m_page->shouldExportOnlyImageSequence->isChecked()) {
 
-    // if only exporting video
-    if (m_page->shouldExportOnlyVideo->isChecked()) {
-        m_page->cmbMimetype->setEnabled(false); // allow to change image format
-        m_page->imageSequenceOptionsGroup->setVisible(false);
-        m_page->videoOptionsGroup->setVisible(false); //shrinks the horizontal space temporarily to help resize() work
-        m_page->videoOptionsGroup->setVisible(true);
+         KisSignalsBlocker b(m_page->shouldExportOnlyImageSequence);
+         m_page->shouldExportOnlyImageSequence->setChecked(true);
     }
-
-
-    // if only an image sequence needs to be output
-    if (m_page->shouldExportOnlyImageSequence->isChecked()) {
-        m_page->cmbMimetype->setEnabled(true); // allow to change image format
-        m_page->videoOptionsGroup->setVisible(false);
-        m_page->imageSequenceOptionsGroup->setVisible(false);
-        m_page->imageSequenceOptionsGroup->setVisible(true);
-    }
-
-    // show all options
-     if (m_page->shouldExportAll->isChecked() ) {
-         m_page->imageSequenceOptionsGroup->setVisible(true);
-         m_page->videoOptionsGroup->setVisible(true);
-     }
-
-
-     // for the resize to work as expected, try to hide elements first before displaying other ones.
-     // if the widget gets bigger at any point, the resize will use that, even if elements are hidden later to make it smaller
-     resize(m_page->sizeHint());
 }
 
 void KisDlgAnimationRenderer::frameRateChanged(int framerate)
 {
-    const QString mimeType = m_page->cmbRenderType->itemData(m_page->cmbRenderType->currentIndex()).toString();
-    m_page->lblGifWarningFPS->setVisible((mimeType == "image/gif" && framerate > 50));
+    Q_UNUSED(framerate);
+    ffmpegWarningCheck();
 }
 
 void KisDlgAnimationRenderer::slotLockAspectRatioDimensionsWidth(int width)

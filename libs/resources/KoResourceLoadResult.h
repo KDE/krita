@@ -44,7 +44,7 @@ public:
      * Returns non-null pointer only when `type()` is equal to
      * `ExistingResource`
      */
-    KoResourceSP resource() const;
+    KoResourceSP resource() const noexcept;
 
     /**
      * Same as resource(), but returns a resource that is dynamically
@@ -63,7 +63,7 @@ public:
      * Returns a valid object only when `type()` is equal to
      * `EmbeddedResource`
      */
-    KoEmbeddedResource embeddedResource() const;
+    KoEmbeddedResource embeddedResource() const noexcept;
 
     /**
      * Return a signature for the embedded/linked resource. This is

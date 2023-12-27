@@ -23,7 +23,12 @@ class KisRemoteFileFetcher : public QObject
 public:
     explicit KisRemoteFileFetcher(QObject *parent = 0);
     ~KisRemoteFileFetcher() override;
+
+    /// fetch the image. Shows a progress dialog
     bool fetchFile(const QUrl &remote, QIODevice *io);
+
+    static QByteArray fetchFile(const QUrl &remote);
+
 
 private Q_SLOTS:
     void error(QNetworkReply::NetworkError error);

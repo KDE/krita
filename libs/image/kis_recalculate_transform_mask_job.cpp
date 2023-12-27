@@ -38,7 +38,7 @@ void KisRecalculateTransformMaskJob::run()
     if (!m_mask->visible()) return;
 
     const QRect oldMaskExtent = m_mask->extent();
-    m_mask->recaclulateStaticImage();
+    m_mask->recalculateStaticImage();
 
     KisLayerSP layer = qobject_cast<KisLayer*>(m_mask->parent().data());
 
@@ -79,9 +79,7 @@ void KisRecalculateTransformMaskJob::run()
         QRect updateRect = oldMaskExtent |
             layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
 
-        if (!m_mask->isAnimated()) {
-            image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
-        }
+        image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
     }
 }
 

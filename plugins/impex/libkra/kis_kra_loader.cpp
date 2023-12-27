@@ -13,6 +13,7 @@
 
 #include <QUrl>
 #include <QBuffer>
+#include <QVersionNumber>
 
 #include <KoStore.h>
 #include <KoColorSpaceRegistry.h>
@@ -77,6 +78,7 @@
 #include "kis_layer_properties_icons.h"
 #include "kis_node_view_color_scheme.h"
 #include "KisMirrorAxisConfig.h"
+#include <kis_cursor_override_hijacker.h>
 
 /*
   Color model id comparison through the ages:
@@ -122,6 +124,7 @@ public:
     QString imageComment; // used to be stored in the image, is now in the documentInfo block
     QMap<KisNode*, QString> layerFilenames; // temp storage during loading
     int syntaxVersion; // version of the fileformat we are loading
+    QVersionNumber kritaVersion;
     vKisNodeSP selectedNodes; // the nodes that were active when saving the document.
     QMap<QString, QString> assistantsFilenames;
     StoryboardItemList storyboardItemList;
@@ -174,11 +177,12 @@ void convertColorSpaceNames(QString &colorspacename, QString &profileProductName
     }
 }
 
-KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion)
+KisKraLoader::KisKraLoader(KisDocument * document, int syntaxVersion, const QVersionNumber &kritaVersion)
     : m_d(new Private())
 {
     m_d->document = document;
     m_d->syntaxVersion = syntaxVersion;
+    m_d->kritaVersion = kritaVersion;
 }
 
 
@@ -226,7 +230,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
         if (!(attr = imageElement.attribute(X_RESOLUTION)).isNull()) {
             qreal value = KisDomUtils::toDouble(attr);
 
-            if (value > 1.0) {
+            if (value > 0) {
                 xres = value / 72.0;
             }
         }
@@ -234,7 +238,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
         yres = 100.0 / 72.0;
         if (!(attr = imageElement.attribute(Y_RESOLUTION)).isNull()) {
             qreal value = KisDomUtils::toDouble(attr);
-            if (value > 1.0) {
+            if (value > 0) {
                 yres = value / 72.0;
             }
         }
@@ -354,7 +358,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
         } else if (e.tagName() == "audio") {
-            loadAudio(e, image);
+            backCompat_loadAudio(e, image, m_d->document);
         }
     }
 
@@ -577,11 +581,10 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
 
             /// don't try to load the resource if its file is empty
             /// (which is a sign of a failed save operation)
-            if (!store->device()->atEnd()) {
+            if (!store->device()->atEnd() && !doc->linkedResourcesStorageId().isEmpty()) {
                 bool result = model.importResource(resourceItem.filename, store->device(), false, doc->linkedResourcesStorageId());
                 if (!result) {
                     m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be imported. The filename of the resource: %1", resourceItem.filename));
-                    continue;
                 }
             }
 
@@ -627,6 +630,70 @@ void KisKraLoader::loadAnimationMetadata(KoStore *store, KisImageSP image)
 
         QDomElement root = document.documentElement();
         loadAnimationMetadataFromXML(root, image);
+    }
+}
+
+void KisKraLoader::loadAudio(KoStore *store, KisDocument *kisDoc)
+{
+    if (!store->hasFile(m_d->imageName + AUDIO_PATH + "index.xml")) return;
+
+    if (store->open(m_d->imageName + AUDIO_PATH + "index.xml")) {
+        QByteArray byteData = store->read(store->size());
+        QDomDocument xmlDocument;
+        xmlDocument.setContent(byteData);
+        store->close();
+
+        QDomElement root = xmlDocument.documentElement();
+        loadAudioXML(xmlDocument, root, kisDoc);
+    }
+}
+
+void KisKraLoader::backCompat_loadAudio(const QDomElement& elem, KisImageSP image, KisDocument *document)
+{
+    QDomDocument dom;
+    dom.appendChild(dom.importNode(elem, true));
+    QDomElement qElement = dom.firstChildElement();
+
+    QString fileName;
+    if (KisDomUtils::loadValue(qElement, "masterChannelPath", &fileName)) {
+        fileName = QDir::toNativeSeparators(fileName);
+
+        QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
+        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
+
+        QFileInfo info(fileName);
+
+        if (!info.exists()) {
+            KisCursorOverrideHijacker cursorHijacker;
+
+            QString msg = i18nc(
+                        "@info",
+                        "Audio channel file \"%1\" doesn't exist!\n\n"
+                        "Expected path:\n"
+                        "%2\n\n"
+                        "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
+
+            int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+            if (result == QMessageBox::Yes) {
+                info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
+            }
+        }
+
+        if (info.exists()) {
+            QVector<QFileInfo> clipFiles;
+
+            clipFiles << info;
+
+            document->setAudioTracks(clipFiles);
+        }
+    }
+
+    // Note: Muting has been removed from backCompat due to it no longer being document-specific.
+
+    qreal audioVolume = 1.0;
+    if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
+        document->setAudioVolume(audioVolume);
     }
 }
 
@@ -712,7 +779,7 @@ void KisKraLoader::loadAnimationMetadataFromXML(const QDomElement &element, KisI
     }
 
     if (KisDomUtils::loadValue(rootElement, "range", &range)) {
-        animation->setFullClipRange(range);
+        animation->setDocumentRange(range);
     }
 
     if (KisDomUtils::loadValue(rootElement, "currentTime", &currentTime)) {
@@ -722,16 +789,18 @@ void KisKraLoader::loadAnimationMetadataFromXML(const QDomElement &element, KisI
     {
         int initialFrameNumber = -1;
         QDomElement exportElement = rootElement.firstChildElement("export-settings");
-        if (KisDomUtils::loadValue(exportElement, "sequenceFilePath", &string)) {
-            animation->setExportSequenceFilePath(string);
-        }
+        if (!exportElement.isNull()) {
+            if (KisDomUtils::loadValue(exportElement, "sequenceFilePath", &string)) {
+                animation->setExportSequenceFilePath(string);
+            }
 
-        if (KisDomUtils::loadValue(exportElement, "sequenceBaseName", &string)) {
-            animation->setExportSequenceBaseName(string);
-        }
+            if (KisDomUtils::loadValue(exportElement, "sequenceBaseName", &string)) {
+                animation->setExportSequenceBaseName(string);
+            }
 
-        if (KisDomUtils::loadValue(exportElement, "sequenceInitialFrameNumber", &initialFrameNumber)) {
-            animation->setExportInitialFrameNumber(initialFrameNumber);
+            if (KisDomUtils::loadValue(exportElement, "sequenceInitialFrameNumber", &initialFrameNumber)) {
+                animation->setExportInitialFrameNumber(initialFrameNumber);
+            }
         }
     }
 
@@ -767,8 +836,21 @@ KisNodeSP KisKraLoader::loadNodes(const QDomElement& element, KisImageSP image, 
                         }
                     }
                 }
-                if (!topLevelSelectionMasks.isEmpty()) {
-                    image->addNode(topLevelSelectionMasks.first(), parent);
+
+                KisSelectionMaskSP activeSelectionMask;
+                Q_FOREACH (KisNodeSP node, topLevelSelectionMasks) {
+                    KisSelectionMask *mask = qobject_cast<KisSelectionMask*>(node.data());
+                    if (mask->active()) {
+                        if (activeSelectionMask) {
+                            m_d->warningMessages << i18n("Two global selection masks in active state found. \"%1\" is kept active, \"%2\" is deactivated", activeSelectionMask->name(), mask->name());
+                            mask->setActive(false);
+                            KIS_ASSERT(!mask->active());
+                        } else {
+                            activeSelectionMask = mask;
+                        }
+                    }
+
+                    image->addNode(mask, parent);
                 }
             }
         }
@@ -776,6 +858,8 @@ KisNodeSP KisKraLoader::loadNodes(const QDomElement& element, KisImageSP image, 
 
     return parent;
 }
+
+#include <KoColorSpaceBlendingPolicy.h>
 
 KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
 {
@@ -846,6 +930,7 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     }
 
 
+
     KisNodeSP node = 0;
 
     if (nodeType == PAINT_LAYER)
@@ -871,7 +956,7 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     else if (nodeType == COLORIZE_MASK)
         node = loadColorizeMask(image, element, colorSpace);
     else if (nodeType == FILE_LAYER)
-        node = loadFileLayer(element, image, name, opacity);
+        node = loadFileLayer(element, image, name, opacity, colorSpace);
     else if (nodeType == REFERENCE_IMAGES_LAYER)
         node = loadReferenceImagesLayer(element, image);
     else {
@@ -900,6 +985,18 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     if (node->inherits("KisLayer") || node->inherits("KisColorizeMask")) {
         QString compositeOpName = element.attribute(COMPOSITE_OP, "normal");
         node->setCompositeOpId(compositeOpName);
+
+        if (m_d->kritaVersion < QVersionNumber(5, 2) &&
+            colorSpace->colorModelId() == CMYKAColorModelID &&
+            subtractiveBlendingModesInCmyk().contains(compositeOpName)) {
+
+            m_d->warningMessages <<
+                i18n("Layer \"%1\" has blending mode \"%2\" that has changed its "
+                    "behavior for CMYK color in Krita 5.2. Please check the "
+                    "result and consider enabling legacy \"Additive\" algorithm in "
+                    "Settings->Configure Krita->General->Tools->CMYK blending mode",
+                    name, KoCompositeOpRegistry::instance().getKoID(compositeOpName).name());
+        }
     }
 
     if (node->inherits("KisLayer")) {
@@ -972,7 +1069,7 @@ KisNodeSP KisKraLoader::loadPaintLayer(const QDomElement& element, KisImageSP im
 
 }
 
-KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP image, const QString& name, quint32 opacity)
+KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP image, const QString& name, quint32 opacity, const KoColorSpace *fallbackColorSpace)
 {
     QString filename = element.attribute("source", QString());
     if (filename.isNull()) return 0;
@@ -986,6 +1083,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
             scalingMethod = KisFileLayer::None;
         }
     }
+    QString scalingFilter = element.attribute("scalingfilter", "Bicubic");
 
     QString documentPath;
     if (m_d->document) {
@@ -1000,8 +1098,8 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
     QString fullPath = filename;
 #endif
     if (!QFileInfo(fullPath).exists()) {
+        KisCursorOverrideHijacker cursorHijacker;
 
-        qApp->setOverrideCursor(Qt::ArrowCursor);
         QString msg = i18nc(
                     "@info",
                     "The file associated to a file layer with the name \"%1\" is not found.\n\n"
@@ -1025,11 +1123,9 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
                 filename = d.relativeFilePath(url);
             }
         }
-
-        qApp->restoreOverrideCursor();
     }
 
-    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);
+    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, scalingFilter, name, opacity, fallbackColorSpace);
     Q_CHECK_PTR(layer);
 
     return layer;
@@ -1061,7 +1157,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const QDomElement& element, KisImage
     QString legacy = filtername;
 
     if ((filtername = element.attribute(FILTER_NAME)).isNull()) {
-        // XXX: Invalid adjustmentlayer! We should warn about it!
+        // XXX: Invalid adjustment layer! We should warn about it!
         warnFile << "No filter in adjustment layer";
         return 0;
     }
@@ -1327,8 +1423,8 @@ void KisKraLoader::loadGrid(const QDomElement& elem)
     QDomElement domElement = dom.firstChildElement();
 
     KisGridConfig config;
-    config.loadDynamicDataFromXml(domElement);
     config.loadStaticData();
+    config.loadDynamicDataFromXml(domElement);
     m_d->document->setGridConfig(config);
 }
 
@@ -1352,55 +1448,6 @@ void KisKraLoader::loadMirrorAxis(const QDomElement &elem)
     KisMirrorAxisConfig mirrorAxis;
     mirrorAxis.loadFromXml(domElement);
     m_d->document->setMirrorAxisConfig(mirrorAxis);
-}
-
-void KisKraLoader::loadAudio(const QDomElement& elem, KisImageSP image)
-{
-    QDomDocument dom;
-    dom.appendChild(dom.importNode(elem, true));
-    QDomElement qElement = dom.firstChildElement();
-
-    QString fileName;
-    if (KisDomUtils::loadValue(qElement, "masterChannelPath", &fileName)) {
-        fileName = QDir::toNativeSeparators(fileName);
-
-        QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
-        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
-
-        QFileInfo info(fileName);
-
-        if (!info.exists()) {
-            qApp->setOverrideCursor(Qt::ArrowCursor);
-            QString msg = i18nc(
-                        "@info",
-                        "Audio channel file \"%1\" doesn't exist!\n\n"
-                        "Expected path:\n"
-                        "%2\n\n"
-                        "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
-
-            int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-            if (result == QMessageBox::Yes) {
-                info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
-            }
-
-            qApp->restoreOverrideCursor();
-        }
-
-        if (info.exists()) {
-            image->animationInterface()->setAudioChannelFileName(info.absoluteFilePath());
-        }
-    }
-
-    bool audioMuted = false;
-    if (KisDomUtils::loadValue(qElement, "audioMuted", &audioMuted)) {
-        image->animationInterface()->setAudioMuted(audioMuted);
-    }
-
-    qreal audioVolume = 0.5;
-    if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
-        image->animationInterface()->setAudioVolume(audioVolume);
-    }
 }
 
 void KisKraLoader::loadStoryboardItemList(const QDomElement& elem)
@@ -1435,6 +1482,35 @@ void KisKraLoader::loadStoryboardCommentList(const QDomElement& elem)
             count++;
             m_d->storyboardCommentList.append(comment);
         }
+    }
+}
+
+void KisKraLoader::loadAudioXML(QDomDocument &xmlDoc, QDomElement &xmlElement, KisDocument *kisDoc)
+{
+    Q_UNUSED(xmlDoc);
+    QDomNode audioClip = xmlElement.firstChild();
+    if (audioClip.nodeName() == "audioClips") {
+        QDomElement audioClipElement = audioClip.toElement();
+        QVector<QFileInfo> clipFiles;
+        qreal volume = 1.0;
+        QDomNode clip;
+        for (clip = audioClipElement.firstChild(); !clip.isNull(); clip = clip.nextSibling()) {
+            QDomElement clipElem = clip.toElement();
+
+            if (clipElem.hasAttribute("filePath")) {
+                QFileInfo f(clipElem.attribute("filePath"));
+                if (f.exists()) {
+                    clipFiles << f;
+                }
+            }
+
+            if (clipElem.hasAttribute("volume")) {
+                volume = clipElem.attribute("volume").toDouble();
+            }
+        }
+
+        kisDoc->setAudioTracks(clipFiles);
+        kisDoc->setAudioVolume(volume);
     }
 }
 

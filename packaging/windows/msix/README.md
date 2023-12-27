@@ -86,7 +86,7 @@ to copy the files required for the shell extension.
 Self-signing the package for testing purposes
 ---------------------------------------------
 
-1. Make a backup of the built pacakge if needed. You will **not** be able to remove the signature after it has been added.
+1. Make a backup of the built package if needed. You will **not** be able to remove the signature after it has been added.
 2. Generate a fake certificate for signing by running this command in PowerShell:
    ```
    New-SelfSignedCertificate -Type Custom -Subject "CN=03E730BB-6849-4762-9BDB-10CD7FFDB2C1" -KeyUsage DigitalSignature -FriendlyName "Fake Krita Foundation certificate for debugging only" -CertStoreLocation "Cert:\CurrentUser\My" -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")

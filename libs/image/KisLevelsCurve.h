@@ -45,6 +45,11 @@ public:
     KisLevelsCurve();
     KisLevelsCurve(qreal inputBlackPoint, qreal inputWhitePoint, qreal inputGamma,
                    qreal outputBlackPoint, qreal outputWhitePoint);
+    /**
+     * @see toString()
+     * @see fromString() 
+     */
+    KisLevelsCurve(const QString &text);
     KisLevelsCurve(const KisLevelsCurve &rhs) = default;
     KisLevelsCurve& operator=(const KisLevelsCurve &rhs) = default;
     bool operator==(const KisLevelsCurve& rhs) const;

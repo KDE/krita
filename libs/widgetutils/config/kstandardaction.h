@@ -302,7 +302,7 @@ KRITAWIDGETUTILS_EXPORT QAction *paste(QObject *parent);
  * Clear selected area.  Calls clear() on the widget with the current focus.
  * Note that for some widgets, this may not provide the intended behavior.  For
  * example if you make use of the code above and a K3ListView has the focus, clear()
- * will clear all of the items in the list.  If this is not the intened behavior
+ * will clear all of the items in the list.  If this is not the intended behavior
  * and you want to make use of this slot, you can subclass K3ListView and reimplement
  * this slot.  For example the following code would implement a K3ListView without this
  * behavior:
@@ -582,4 +582,4 @@ KRITAWIDGETUTILS_EXPORT QAction *aboutApp(const QObject *recvr, const char *slot
 KRITAWIDGETUTILS_EXPORT QAction *aboutKDE(const QObject *recvr, const char *slot, QObject *parent);
 }
 
-#endif // KSTDACTION_H
+#endif // KSTANDARDACTION_H

@@ -10,7 +10,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoChannelInfo.h>
 
-#include "sdk/tests/testpigment.h"
+#include <testpigment.h>
 
 void TestKoColorSpaceSanity::testChannelsInfo()
 {

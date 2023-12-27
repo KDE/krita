@@ -3,9 +3,13 @@ set(kritadeformpaintop_SOURCES
     deform_paintop_plugin.cpp
     kis_deform_paintop.cpp
     kis_deform_paintop_settings.cpp
-    kis_deform_option.cpp
     kis_deform_paintop_settings_widget.cpp
-    kis_brush_size_option.cpp
+    KisBrushSizeOptionData.cpp
+    KisBrushSizeOptionModel.cpp
+    KisBrushSizeOptionWidget.cpp
+    KisDeformOptionData.cpp
+    KisDeformOptionModel.cpp
+    KisDeformOptionWidget.cpp
     )
 
 ki18n_wrap_ui(kritadeformpaintop_SOURCES wdgdeformoptions.ui )

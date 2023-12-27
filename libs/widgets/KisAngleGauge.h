@@ -61,8 +61,8 @@ public:
     /**
      * @brief Gets the direction in which the angle increases
      * @return The direction in which the angle increases
-     * @see IcreasingDirection
-     * @see setIncreasingDirection(IcreasingDirection)
+     * @see IncreasingDirection
+     * @see setIncreasingDirection(IncreasingDirection)
      */
     IncreasingDirection increasingDirection() const;
     
@@ -81,7 +81,7 @@ public:
     /**
      * @brief Sets the increasing direction
      * @param newIncreasingDirection The new increasing direction
-     * @see IcreasingDirection
+     * @see IncreasingDirection
      * @see increasingDirection() const
      */
     void setIncreasingDirection(IncreasingDirection newIncreasingDirection);

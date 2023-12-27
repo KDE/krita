@@ -45,7 +45,7 @@ protected:
 
 private:
     static constexpr int showControlsTimerDuration {500};
-    // Hou much the cursor has to move to prevent the showing animation
+    // How much the cursor has to move to prevent the showing animation
     static constexpr double showControlsAreaRadius {4.0};
     static constexpr double showControlsAnimationDuration {150.0};
     static constexpr double touchDragDistance {8.0};

@@ -101,7 +101,7 @@ void KisDlgPaletteEditor::setPaletteModel(KisPaletteModel *model)
 
     m_ui->storageLocation->setCurrentIndex(m_ui->storageLocation->findData(m_colorSet->storageLocation(), Qt::UserRole + KisStorageModel::Location));
 
-    Q_FOREACH (const QString & groupName, m_colorSet->getGroupNames()) {
+    Q_FOREACH (const QString & groupName, m_colorSet->swatchGroupNames()) {
         m_ui->cbxGroup->addItem(groupName);
     }
 
@@ -182,7 +182,7 @@ void KisDlgPaletteEditor::slotNameChanged()
 
 void KisDlgPaletteEditor::slotColCountChanged(int newCount)
 {
-    m_paletteEditor->changeColCount(newCount);
+    m_paletteEditor->changeColumnCount(newCount);
 }
 
 void KisDlgPaletteEditor::slotAccepted()

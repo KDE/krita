@@ -13,6 +13,7 @@
 #include <brushengine/kis_paintop_lod_limitations.h>
 
 class KoCanvasResourceProvider;
+#include <KisLodAvailabilityModel.h>
 
 
 class KisLodAvailabilityWidget : public QWidget
@@ -23,14 +24,10 @@ public:
     KisLodAvailabilityWidget(QWidget *parent);
     ~KisLodAvailabilityWidget() override;
 
-    void setCanvasResourceManager(KoCanvasResourceProvider *resourceManager);
-
-    void setLimitations(const KisPaintopLodLimitations &l);
+    void setLodAvailabilityModel(KisLodAvailabilityModel *model);
 
 public Q_SLOTS:
-    void slotUserChangedLodAvailability(bool value);
-    void slotUserChangedLodThreshold(qreal value);
-    void slotUserChangedSize(qreal value);
+    void slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state, const KisPaintopLodLimitations &l, bool isLodUserAllowed);
 
 Q_SIGNALS:
     void sigUserChangedLodAvailability(bool value);

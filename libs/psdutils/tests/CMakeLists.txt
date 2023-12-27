@@ -1,15 +1,6 @@
-include_directories(
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-    ${CMAKE_SOURCE_DIR}/libs/psdutils
-)
+include(KritaAddBrokenUnitTest)
 
-macro_add_unittest_definitions()
-
-if (WIN32)
-    set(PSD_TEST_LIBS kritapsdutils Qt5::Test ${WIN32_PLATFORM_NET_LIBS})
-else (WIN32)
-    set(PSD_TEST_LIBS kritapsdutils Qt5::Test)
-endif (WIN32)
+set(PSD_TEST_LIBS kritapsdutils kritatestsdk)
 
 kis_add_tests(
     psd_utils_test.cpp

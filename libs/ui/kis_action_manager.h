@@ -32,7 +32,7 @@ class KisOperation;
  * to the state of the application.
  *
  * Some of the primitive actions (load/save and so on) are not defined as
- * KisActions, but instead KActions, automacially registered through KisKXMLGUI.
+ * KisActions, but instead KActions, automatically registered through KisKXMLGUI.
  * It tracks these actions through the KisKActionCollection owned by the window.
  * Ultimately it would be nice to unify these things more fully.
  *

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2007, 2009-2010 Thomas Zander <zander@kde.org>
- * SPDX-FileCopyrightText: 2010 Ko Gmbh <cbo@kogmbh.com>
+ * SPDX-FileCopyrightText: 2010 KO GmbH <cbo@kogmbh.com>
  * SPDX-FileCopyrightText: 2011 Matus Hanzes <matus.hanzes@ixonos.com>
  * SPDX-FileCopyrightText: 2013 C. Boemann <cbo@boemann.dk>
  *

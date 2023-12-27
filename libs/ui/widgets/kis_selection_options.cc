@@ -7,6 +7,7 @@
 #include "kis_selection_options.h"
 
 #include <QCheckBox>
+#include <QToolButton>
 
 #include <kis_icon.h>
 #include "kis_types.h"
@@ -33,6 +34,7 @@ public:
     KisOptionButtonStrip *optionButtonStripAction{nullptr};
     QCheckBox *checkBoxAntiAliasSelection{nullptr};
     KisSliderSpinBox *sliderGrowSelection{nullptr};
+    QToolButton *buttonStopGrowingAtDarkestPixel {nullptr};
     KisSliderSpinBox *sliderFeatherSelection{nullptr};
     KisOptionButtonStrip *optionButtonStripReference{nullptr};
     KisColorLabelSelectorWidget *widgetLabels{nullptr};
@@ -175,17 +177,27 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
 
     m_d->checkBoxAntiAliasSelection = new QCheckBox(
         i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
+    KisOptionCollectionWidget *containerGrowSelection = new KisOptionCollectionWidget;
     m_d->sliderGrowSelection = new KisSliderSpinBox;
     m_d->sliderGrowSelection->setPrefix(
         i18nc("The 'grow/shrink' spinbox prefix in selection tools options",
               "Grow: "));
     m_d->sliderGrowSelection->setRange(-40, 40);
     m_d->sliderGrowSelection->setSuffix(i18n(" px"));
+    m_d->buttonStopGrowingAtDarkestPixel = new QToolButton;
+    m_d->buttonStopGrowingAtDarkestPixel->setAutoRaise(true);
+    m_d->buttonStopGrowingAtDarkestPixel->setCheckable(true);
+    m_d->buttonStopGrowingAtDarkestPixel->setIcon(KisIconUtils::loadIcon("stop-at-boundary"));
+    containerGrowSelection->appendWidget("sliderGrowSelection", m_d->sliderGrowSelection);
+    containerGrowSelection->appendWidget("buttonStopGrowingAtDarkestPixel", m_d->buttonStopGrowingAtDarkestPixel);
+    containerGrowSelection->setOrientation(Qt::Horizontal);
+    containerGrowSelection->setWidgetVisible("buttonStopGrowingAtDarkestPixel", false);
     m_d->sliderFeatherSelection = new KisSliderSpinBox;
     m_d->sliderFeatherSelection->setPrefix(
         i18nc("The 'feather' spinbox prefix in selection tools options",
               "Feather: "));
-    m_d->sliderFeatherSelection->setRange(0, 40);
+    m_d->sliderFeatherSelection->setRange(0, 400);
+    m_d->sliderFeatherSelection->setSoftRange(0, 40);
     m_d->sliderFeatherSelection->setSuffix(i18n(" px"));
 
     m_d->optionButtonStripReference = new KisOptionButtonStrip;
@@ -219,20 +231,20 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
         i18nc("@info:tooltip", "Symmetric Difference"));
 
     m_d->checkBoxAntiAliasSelection->setToolTip(
-        i18n("Smooth the jagged edges"));
+        i18n("Smooths the edges of the selection"));
     m_d->sliderGrowSelection->setToolTip(
-        i18n("Grow (positive values) or shrink (negative values) the selection "
-             "by the set amount"));
+        i18n("Grow or shrink the selection by the set amount"));
+    m_d->buttonStopGrowingAtDarkestPixel->setToolTip(
+        i18n("Stop growing at the darkest and/or most opaque pixels"));
     m_d->sliderFeatherSelection->setToolTip(
         i18n("Blur the selection by the set amount"));
 
     m_d->optionButtonStripReference->button(0)->setToolTip(
-        i18n("Make the selection using the active layer"));
+        i18n("Select regions found from the active layer"));
     m_d->optionButtonStripReference->button(1)->setToolTip(
-        i18n("Make the selection using a merged copy of all layers"));
+        i18n("Select regions found from the merging of all layers"));
     m_d->optionButtonStripReference->button(2)->setToolTip(
-        i18n("Make the selection using a merged copy of the selected "
-             "color-labeled layers"));
+        i18n("Select regions found from the merging of layers with specific color labels"));
 
     // Construct the option widget
     setSeparatorsVisible(true);
@@ -251,17 +263,6 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     sectionAction->setPrimaryWidget(m_d->optionButtonStripAction);
     appendWidget("sectionAction", sectionAction);
 
-    KisOptionCollectionWidgetWithHeader *sectionAdjustments =
-        new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'adjustments' section label in selection tools options",
-                  "Adjustments"));
-    sectionAdjustments->appendWidget("checkBoxAntiAliasSelection",
-                                     m_d->checkBoxAntiAliasSelection);
-    sectionAdjustments->appendWidget("sliderGrow", m_d->sliderGrowSelection);
-    sectionAdjustments->appendWidget("sliderFeather",
-                                     m_d->sliderFeatherSelection);
-    appendWidget("sectionAdjustments", sectionAdjustments);
-
     KisOptionCollectionWidgetWithHeader *sectionReference =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'reference' section label in selection tools options",
@@ -270,6 +271,17 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     sectionReference->appendWidget("widgetLabels", m_d->widgetLabels);
     sectionReference->setWidgetVisible("widgetLabels", false);
     appendWidget("sectionReference", sectionReference);
+
+    KisOptionCollectionWidgetWithHeader *sectionAdjustments =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'adjustments' section label in selection tools options",
+                  "Adjustments"));
+    sectionAdjustments->appendWidget("checkBoxAntiAliasSelection",
+                                     m_d->checkBoxAntiAliasSelection);
+    sectionAdjustments->appendWidget("containerGrowSelection", containerGrowSelection);
+    sectionAdjustments->appendWidget("sliderFeather",
+                                     m_d->sliderFeatherSelection);
+    appendWidget("sectionAdjustments", sectionAdjustments);
 
     // Make connections
     connect(m_d->optionButtonStripMode,
@@ -288,6 +300,9 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     connect(m_d->sliderGrowSelection,
             SIGNAL(valueChanged(int)),
             SIGNAL(growSelectionChanged(int)));
+    connect(m_d->buttonStopGrowingAtDarkestPixel,
+            SIGNAL(toggled(bool)),
+            SIGNAL(stopGrowingAtDarkestPixelChanged(bool)));
     connect(m_d->sliderFeatherSelection,
             SIGNAL(valueChanged(int)),
             SIGNAL(featherSelectionChanged(int)));
@@ -325,6 +340,11 @@ bool KisSelectionOptions::antiAliasSelection() const
 int KisSelectionOptions::growSelection() const
 {
     return m_d->sliderGrowSelection->value();
+}
+
+bool KisSelectionOptions::stopGrowingAtDarkestPixel() const
+{
+    return m_d->buttonStopGrowingAtDarkestPixel->isChecked();
 }
 
 int KisSelectionOptions::featherSelection() const
@@ -372,6 +392,11 @@ void KisSelectionOptions::setGrowSelection(int newGrowSelection)
     m_d->sliderGrowSelection->setValue(newGrowSelection);
 }
 
+void KisSelectionOptions::setStopGrowingAtDarkestPixel(bool newStopGrowingAtDarkestPixel)
+{
+    m_d->buttonStopGrowingAtDarkestPixel->setChecked(newStopGrowingAtDarkestPixel);
+}
+
 void KisSelectionOptions::setFeatherSelection(int newFeatherSelection)
 {
     m_d->sliderFeatherSelection->setValue(newFeatherSelection);
@@ -400,6 +425,13 @@ void KisSelectionOptions::setModeSectionVisible(bool visible)
 void KisSelectionOptions::setActionSectionVisible(bool visible)
 {
     setWidgetVisible("sectionAction", visible);
+}
+
+void KisSelectionOptions::setStopGrowingAtDarkestPixelButtonVisible(bool visible)
+{
+    widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionAdjustments")
+        ->widgetAs<KisOptionCollectionWidget*>("containerGrowSelection")
+            ->setWidgetVisible("buttonStopGrowingAtDarkestPixel", visible);
 }
 
 void KisSelectionOptions::setAdjustmentsSectionVisible(bool visible)

@@ -1,0 +1,19 @@
+<svg width="150px" height="135px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+<g id="test">
+
+    <rect id="boundingRect" x="5" y="5" width="140" height="125"
+        fill="none" stroke="red"/>
+
+    <text id="testRect" x="4" y="24" 
+        font-family="DejaVu Sans" font-size="15" fill="blue">
+
+        <tspan x="20" dy="0.0em" text-decoration="underline">Lorem </tspan><tspan style="text-decoration:underline wavy red;">ipsum</tspan>
+        <tspan x="20" dy="2.5em" text-decoration="overline">Lorem </tspan><tspan style="text-decoration:overline dashed;">ipsum</tspan>
+        <tspan x="20" dy="2.0em" text-decoration="line-through">Lorem </tspan><tspan style="text-decoration:line-through dotted;">ipsum</tspan>
+        <tspan x="20" dy="2.0em" text-decoration="underline double">Lorem <tspan fill="red">ipsum</tspan></tspan>
+
+    </text>
+
+</g>
+</svg>

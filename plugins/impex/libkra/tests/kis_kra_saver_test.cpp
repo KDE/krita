@@ -19,6 +19,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
 #include "kis_image.h"
+#include <KisImageResolutionProxy.h>
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
@@ -38,23 +39,28 @@
 #include "kis_layer_properties_icons.h"
 #include <KisGlobalResourcesInterface.h>
 
-#include "kis_transform_mask_params_interface.h"
+#include "KritaTransformMaskStubs.h"
+#include "KisDumbTransformMaskParams.h"
+
 #include "StoryboardItem.h"
 
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
-#include  <sdk/tests/testui.h>
 #include <filestest.h>
+#include <testui.h>
+
 
 const QString KraMimetype = "application/x-krita";
 
 void KisKraSaverTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+    KoResourcePaths::addAssetDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
+
+    TestUtil::registerTransformMaskStubs();
 }
 
 void KisKraSaverTest::testCrashyShapeLayer()
@@ -483,9 +489,9 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     p.layer->paintDevice()->setDefaultPixel(KoColor(Qt::green, p.layer->colorSpace()));
 
-    KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
-
-    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
+    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(p.image));
+    KisSelectionSP selection = new KisSelection(p.layer->paintDevice() ->defaultBounds(), resolutionProxy);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();

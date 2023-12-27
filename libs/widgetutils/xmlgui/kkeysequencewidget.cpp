@@ -25,6 +25,9 @@
 
 #include <kis_icon_utils.h>
 
+#include <QtGui/private/qkeymapper_p.h>
+
+
 uint qHash(const QKeySequence &seq)
 {
     return qHash(seq.toString());
@@ -82,7 +85,7 @@ public:
         return checkAgainstShortcutTypes & KisKKeySequenceWidget::LocalShortcuts;
     }
 
-    void controlModifierlessTimout()
+    void controlModifierlessTimeout()
     {
         if (nKey != 0 && !modifierKeys) {
             // No modifier key pressed currently. Start the timeout
@@ -351,7 +354,7 @@ void KisKKeySequenceWidget::applyStealShortcut()
         stealAction->setShortcuts(QList<QKeySequence>());
 
         // The following code will find the action we are about to
-        // steal from and save it's actioncollection.
+        // steal from and save its action collection.
         KisKActionCollection *parentCollection = 0;
         foreach (KisKActionCollection *collection, d->checkActionCollections) {
             if (collection->actions().contains(stealAction)) {
@@ -669,7 +672,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Meta:
     case Qt::Key_Super_L:
     case Qt::Key_Super_R:
-        d->controlModifierlessTimout();
+        d->controlModifierlessTimeout();
         d->updateShortcutDisplay();
         break;
     default:
@@ -686,7 +689,27 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
 
         // We now have a valid key press.
         if (keyQt) {
-            if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
+            /**
+             * Here is the trap, which is different on every OS. On Widnows Qt
+             * has incomprehensible rules on translating AltGr-related key
+             * sequences into shortcuts. On macOS symbols may confuse Qt when
+             * using Cmd+Shift-based shortcuts. * So we should just ask Qt
+             * itself what it expects to receive as a shortcut :)
+             *
+             * That is exactly what Qt's QKeySequenceEdit does internally.
+             *
+             * TODO: in the future replace the whole widget with QKeySequenceEdit,
+             *       it uses QKeyMapper directly.
+             */
+            const QList<int> vec = QKeyMapper::possibleKeys(e);
+
+            if (!vec.isEmpty() && e->modifiers() != Qt::NoModifier) {
+                /**
+                 * Take the first element, which is usually the shortcut form the latin
+                 * layout of the keyboard
+                 */
+                keyQt = vec.first();
+            } else if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 keyQt = Qt::Key_Tab | d->modifierKeys;
             } else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {
                 keyQt |= d->modifierKeys;
@@ -706,7 +729,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
                 d->doneRecording();
                 return;
             }
-            d->controlModifierlessTimout();
+            d->controlModifierlessTimeout();
             d->updateShortcutDisplay();
         }
     }
@@ -730,7 +753,7 @@ void KKeySequenceButton::keyReleaseEvent(QKeyEvent *e)
     //if a modifier that belongs to the shortcut was released...
     if ((newModifiers & d->modifierKeys) < d->modifierKeys) {
         d->modifierKeys = newModifiers;
-        d->controlModifierlessTimout();
+        d->controlModifierlessTimeout();
         d->updateShortcutDisplay();
     }
 }

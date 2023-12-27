@@ -29,6 +29,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QFocusEvent;
 class QPainter;
 class QPointF;
 class QMenu;
@@ -91,10 +92,16 @@ public:
     void explicitUserStrokeEndRequest();
 
     /// Forwarded to the current KoToolBase
-    QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /// Forwarded to the current KoToolBase
     void inputMethodEvent(QInputMethodEvent *event);
+
+    /// Forwarded to the current KoToolBase
+    void focusInEvent(QFocusEvent *event);
+
+    /// Forwarded to the current KoToolBase
+    void focusOutEvent(QFocusEvent *event);
 
     /// Forwarded to the current KoToolBase
     QMenu* popupActionsMenu();
@@ -122,6 +129,12 @@ public:
     bool paste();
 
     /// Forwarded to the current KoToolBase
+    bool selectAll();
+
+    /// Forwarded to the current KoToolBase
+    void deselect();
+
+    /// Forwarded to the current KoToolBase
     void dragMoveEvent(QDragMoveEvent *event, const QPointF &point);
 
     /// Forwarded to the current KoToolBase
@@ -136,6 +149,8 @@ public:
     void touchEvent(QTouchEvent* event, const QPointF& point);
 
     KoPointerEvent* lastDeliveredPointerEvent() const;
+
+    QVector<QKeySequence> toolPriorityShortcuts() const;
 
     /// \internal
     KoToolProxyPrivate *priv();
@@ -171,9 +186,12 @@ protected:
     virtual QPointF widgetToDocument(const QPointF &widgetPoint) const;
     KoCanvasBase* canvas() const;
 
+
 private:
     Q_PRIVATE_SLOT(d, void timeout())
     Q_PRIVATE_SLOT(d, void selectionChanged(bool))
+
+    void countMultiClick(KoPointerEvent *ev, int eventType);
 
     friend class KoToolProxyPrivate;
     KoToolProxyPrivate * const d;

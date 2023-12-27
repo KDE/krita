@@ -1,0 +1,119 @@
+<svg width="100px" height="370px"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+        <style>
+        .test {
+            font-size: 10pt;
+            font-family: FontWithFeaturesOTF;
+            fill: blue;
+        }
+        #test1 .high {
+            font-variant-caps: normal;
+        }
+        #test1 .low {
+            font-feature-settings: "smcp" off, "c2sc" off, "pcap" off, "c2pc" off, "unic" off, "titl" off;
+        }
+        
+        #test2 .high {
+            font-variant-caps: small-caps;
+        }
+        #test2 .low {
+            font-feature-settings: "smcp" on, "c2sc" off, "pcap" off, "c2pc" off, "unic" off, "titl" off;
+        }
+        
+        #test3 .high {
+            font-variant-caps: all-small-caps;
+        }
+        #test3 .low {
+            font-feature-settings: "smcp" on, "c2sc" on, "pcap" off, "c2pc" off, "unic" off, "titl" off;
+        }
+        
+        #test4 .high {
+            font-variant-caps: petite-caps;
+        }
+        #test4 .low {
+            font-feature-settings: "smcp" off, "c2sc" off, "pcap" on, "c2pc" off, "unic" off, "titl" off;
+        }
+        
+        #test5 .high {
+            font-variant-caps: all-petite-caps;
+        }
+        #test5 .low {
+            font-feature-settings: "smcp" off, "c2sc" off, "pcap" on, "c2pc" on, "unic" off, "titl" off;
+        }
+        
+        #test6 .high {
+            font-variant-caps: unicase;
+        }
+        #test6 .low {
+            font-feature-settings: "smcp" off, "c2sc" off, "pcap" off, "c2pc" off, "unic" on, "titl" off;
+        }
+        
+        #test7 .high {
+            font-variant-caps: titling-caps;
+        }
+        #test7 .low {
+            font-feature-settings: "smcp" off, "c2sc" off, "pcap" off, "c2pc" off, "unic" off, "titl" on;
+        }
+        </style>
+    </defs>
+
+    <g id="testRect" class="test">
+        <!-- These tests are all adapted from the font-variant tests of the web-platform-tests: https://github.com/web-platform-tests/wpt/tree/master/css/css-fonts -->
+
+        <rect id="boundingRect" x="5" y="5" width="90" height="360"
+            fill="none" stroke="red"/>
+
+        
+        <!-- Adapted from font-variant-caps-01.html: Test passes if the three lines below are identical, with six crosses (✗). -->
+        <text id="test1" x="7" y="27" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">BBBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-caps-02.html: Test passes if the three lines below are identical, with one check mark (✓) followed by five crosses (✗). . -->
+        <text id="test2" x="7" y="77" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">ABBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-caps-03.html:Test passes if the three lines below are identical, with two check marks (✓) followed by four crosses (✗). -->
+        <text id="test3" x="7" y="127" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">AABBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-caps-04.html: Test passes if the three lines below are identical, with two crosses (✗), one check mark (✓) and three more crosses (✗).  -->
+        <text id="test4" x="7" y="177" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">BBABBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-caps-05.html: Test passes if the three lines below are identical, with two crosses (✗), two check marks (✓) and two more crosses (✗).  -->
+        <text id="test5" x="7" y="227" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">BBAABB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-caps-06.html: Test passes if the three lines below are identical, with four crosses (✗), one check mark (✓) and one more cross (✗).  -->
+        <text id="test6" x="7" y="277" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">BBBBAB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-caps-07.html: Test passes if the three lines below are identical, with five crosses (✗), followed by one check mark (✓).   -->
+        <text id="test7" x="7" y="327" >
+            <tspan class="high">JKLMNO</tspan>
+            <tspan class="low"  x="7" dy="1em">JKLMNO</tspan>
+            <tspan x="7" dy="1em">BBBBBA</tspan>
+        </text>
+
+    </g>
+
+</svg>

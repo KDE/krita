@@ -18,6 +18,9 @@ ki18n_wrap_ui(kritabuginfo_SOURCES wdg_buginfo.ui )
 kis_add_library(kritabuginfo MODULE ${kritabuginfo_SOURCES})
 
 target_link_libraries(kritabuginfo kritaui)
+if (ANDROID)
+    target_link_libraries(kritabuginfo Qt5::AndroidExtras)
+endif()
 
 install(TARGETS kritabuginfo  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

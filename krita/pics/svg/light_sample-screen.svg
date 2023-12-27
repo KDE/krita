@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g opacity=".5" stroke-width="2">
+  <rect x="7" y="13" width="2" height="2" fill="#d2d2d2" opacity="1"/>
+  <rect x="4" y="15" width="8" height="1" fill="#d2d2d2" opacity="1"/>
+  <rect x="2" y="1094.5" width="28" height="17" display="none" fill="#373737" fill-opacity=".25098" opacity="1"/>
+  <rect x=".5" y="4.5" width="15" height="8" fill="none" stroke="#d2d2d2" stroke-linecap="square" stroke-width="1"/>
+ </g>
+ <g transform="matrix(.71376 0 0 .71376 4.6423 -.062454)" fill="#d2d2d2" stroke-width="1.401">
+  <path d="m8.338 4.35a0.5 0.5 0 0 0-0.342 0.146l-7 7a0.5 0.5 0 0 0-0.142 0.299l-0.35 3.15a0.5 0.5 0 0 0 0.55 0.551l3.2-0.35a0.5 0.5 0 0 0 0.299-0.142l7-7a0.5 0.5 0 0 0-2e-3 -0.711l-2.851-2.799a0.5 0.5 0 0 0-0.363-0.144zm0.016 1.205 2.136 2.097-6.52 6.52-2.406 0.264 0.264-2.356z" color="#000000" color-rendering="auto" dominant-baseline="auto" image-rendering="auto" shape-rendering="auto" solid-color="#000000" style="font-feature-settings:normal;font-variant-alternates:normal;font-variant-caps:normal;font-variant-ligatures:normal;font-variant-numeric:normal;font-variant-position:normal;isolation:auto;mix-blend-mode:normal;shape-padding:0;text-decoration-color:#000000;text-decoration-line:none;text-decoration-style:solid;text-indent:0;text-orientation:mixed;text-transform:none;white-space:normal"/>
+  <rect class="st1" transform="rotate(-45)" x="1.9802" y="6.8361" width="2" height="8.9998" stroke-width=".7005"/>
+  <path class="st1" d="m12.6 7.65-4.25-4.25 2.45-2.45c1.15-1.15 3.05-1.15 4.25 0 1.15 1.15 1.15 3.05 0 4.25z" stroke-width=".70051"/>
+ </g>
+</svg>

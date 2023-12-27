@@ -90,7 +90,7 @@ struct CellOp
     inline void nextLine() {
         std::swap(prevLinePoints, currLinePoints);
 
-        // we are erasing elements for not free'ing the occupied
+        // we are erasing elements for not freeing the occupied
         // memory, which is more efficient since we are going to fill
         // the vector again
         currLinePoints.erase(currLinePoints.begin(), currLinePoints.end());

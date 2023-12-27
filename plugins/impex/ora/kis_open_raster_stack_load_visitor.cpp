@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2006-2007, 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2023 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -21,10 +22,10 @@
 #include <kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
 
-#include <kis_paint_layer.h>
-#include <kis_png_converter.h>
-#include <kis_selection.h>
 #include <kis_dom_utils.h>
+#include <kis_paint_layer.h>
+#include <kis_selection.h>
+
 
 #include "KisDocument.h"
 
@@ -167,6 +168,9 @@ void KisOpenRasterStackLoadVisitor::loadLayerInfo(const QDomElement& elem, KisLa
         if (compop == "svg:add") layer->setCompositeOpId(COMPOSITE_ADD);
     }
 
+    if (elem.hasAttribute("alpha-preserve") && elem.attribute("alpha-preserve") == "true") {
+        layer->disableAlphaChannel(true);
+    }
 }
 
 void KisOpenRasterStackLoadVisitor::loadAdjustmentLayer(const QDomElement& elem, KisAdjustmentLayerSP aL)
@@ -210,7 +214,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                         // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml
                         d->image->setResolution(d->xRes, d->yRes);
                         // now get the device
-                        KisPaintDeviceSP device = pngImage->projection();
+                        KisPaintDeviceSP device = new KisPaintDevice(*pngImage->projection());
 
                         KisPaintLayerSP layer = new KisPaintLayer(groupLayer->image() , "", opacity * 255, device);
                         d->image->addNode(layer, groupLayer, 0);

@@ -1,8 +1,5 @@
 /*
- *  This file is part of Calligra tests
- *
  *  SPDX-FileCopyrightText: 2011 Hanna Skott <hannaetscott@gmail.com>
- *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 

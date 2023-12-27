@@ -18,11 +18,22 @@ const QString STARTING_SIZE = "KisPrecisionOption/SizeToStartFrom";
 const QString DELTA_VALUE = "KisPrecisionOption/DeltaValue";
 
 
+namespace KisBrushModel {
+struct PrecisionData :  public boost::equality_comparable<PrecisionData>
+{
+    int precisionLevel = 5;
+    bool useAutoPrecision = false;
+
+    friend bool operator==(const PrecisionData &lhs, const PrecisionData &rhs);
+    static PrecisionData read(const KisPropertiesConfiguration *config);
+    void write(KisPropertiesConfiguration *config) const;
+};
+}
+
 class PAINTOP_EXPORT KisPrecisionOption
 {
 public:
-    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP settings);
+    KisPrecisionOption(const KisPropertiesConfiguration *setting);
 
     int effectivePrecisionLevel(qreal effectiveDabSize) const;
     void setHasImprecisePositionOptions(bool value);
@@ -34,9 +45,8 @@ public:
     bool autoPrecisionEnabled();
 
 private:
-    int m_precisionLevel {0};
-    bool m_autoPrecisionEnabled {false};
     bool m_hasImprecisePositionOptions {false};
+    KisBrushModel::PrecisionData m_precisionData;
 };
 
 #endif /* __KIS_PRECISION_OPTION_H */

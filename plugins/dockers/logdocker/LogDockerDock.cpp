@@ -36,6 +36,8 @@ QTextCharFormat LogDockerDock::s_warning;
 QTextCharFormat LogDockerDock::s_critical;
 QTextCharFormat LogDockerDock::s_fatal;
 
+static QtMessageHandler s_originalMessageHandler{nullptr};
+
 LogDockerDock::LogDockerDock( )
     : QDockWidget(i18n("Log Viewer"))
 {
@@ -60,7 +62,6 @@ LogDockerDock::LogDockerDock( )
     qRegisterMetaType<QtMsgType>("QtMsgType");
     connect(s_messageSender, SIGNAL(emitMessage(QtMsgType,QString)), this, SLOT(insertMessage(QtMsgType,QString)), Qt::AutoConnection);
 
-    applyCategories();
     changeTheme();
 }
 
@@ -78,11 +79,15 @@ void LogDockerDock::toggleLogging(bool toggle)
 {
     KisConfig(false).writeEntry<bool>("logviewer_enabled", toggle);
     if (toggle) {
-        qInstallMessageHandler(messageHandler);
+        const QtMessageHandler oldHandler = qInstallMessageHandler(messageHandler);
+        if (!s_originalMessageHandler) {
+            s_originalMessageHandler = oldHandler;
+        }
         applyCategories();
     }
     else {
-        qInstallMessageHandler(0);
+        qInstallMessageHandler(nullptr);
+        QLoggingCategory::setFilterRules(QString());
     }
 
 }
@@ -215,14 +220,19 @@ void LogDockerDock::settings()
         cfg.writeEntry("metadata_41016", chkMetaData->isChecked());
         cfg.writeEntry("pigment", chkPigment->isChecked());
 
-        applyCategories();
+        if (bnToggle->isChecked()) {
+            applyCategories();
+        }
     }
 
 }
 
-QString cfgToString(QString tpl, bool cfg)
+QString cfgToString(const char *category, bool cfg)
 {
-    return tpl.arg(cfg ? "true" : "false");
+    if (cfg) {
+        return QStringLiteral("%0=true").arg(QLatin1String(category));
+    }
+    return QStringLiteral("%0.debug=false").arg(QLatin1String(category));
 }
 
 void LogDockerDock::applyCategories()
@@ -230,45 +240,48 @@ void LogDockerDock::applyCategories()
     QStringList filters;
     KConfigGroup cfg( KSharedConfig::openConfig(), "LogDocker");
 
-    filters << cfgToString("krita.general=%1", cfg.readEntry("krita_41000", false));
-    filters << cfgToString("krita.lib.resources=%1", cfg.readEntry("resources_30009", false));
-    filters << cfgToString("krita.core=%1", cfg.readEntry("image_41001", false));
-    filters << cfgToString("krita.registry=%1", cfg.readEntry("registry_41002", false));
+    filters << cfgToString("krita.general", cfg.readEntry("krita_41000", false));
+    filters << cfgToString("krita.lib.resources", cfg.readEntry("resources_30009", false));
+    filters << cfgToString("krita.core", cfg.readEntry("image_41001", false));
+    filters << cfgToString("krita.registry", cfg.readEntry("registry_41002", false));
 
-    filters << cfgToString("krita.tools=%1", cfg.readEntry("tools_41003", false));
-    filters << cfgToString("krita.lib.flake=%1", cfg.readEntry("tools_41003", false));
+    filters << cfgToString("krita.tools", cfg.readEntry("tools_41003", false));
+    filters << cfgToString("krita.lib.flake", cfg.readEntry("tools_41003", false));
 
-    filters << cfgToString("krita.tiles=%1", cfg.readEntry("tiles_41004", false));
-    filters << cfgToString("krita.filters=%1", cfg.readEntry("filters_41005", false));
+    filters << cfgToString("krita.tiles", cfg.readEntry("tiles_41004", false));
+    filters << cfgToString("krita.filters", cfg.readEntry("filters_41005", false));
 
-    filters << cfgToString("krita.plugins=%1", cfg.readEntry("plugins_41006", false));
-    filters << cfgToString("krita.lib.plugin=%1", cfg.readEntry("plugins_41006", false));
+    filters << cfgToString("krita.plugins", cfg.readEntry("plugins_41006", false));
+    filters << cfgToString("krita.lib.plugin", cfg.readEntry("plugins_41006", false));
 
-    filters << cfgToString("krita.ui=%1", cfg.readEntry("ui_41007", false));
-    filters << cfgToString("krita.widgets=%1", cfg.readEntry("ui_41007", false));
-    filters << cfgToString("krita.widgetutils=%1", cfg.readEntry("ui_41007", false));
+    filters << cfgToString("krita.ui", cfg.readEntry("ui_41007", false));
+    filters << cfgToString("krita.widgets", cfg.readEntry("ui_41007", false));
+    filters << cfgToString("krita.widgetutils", cfg.readEntry("ui_41007", false));
 
-    filters << cfgToString("krita.file=%1", cfg.readEntry("file_41008", false));
-    filters << cfgToString("krita.lib.store=%1", cfg.readEntry("file_41008", false));
-    filters << cfgToString("krita.lib.odf=%1", cfg.readEntry("file_41008", false));
+    filters << cfgToString("krita.file", cfg.readEntry("file_41008", false));
+    filters << cfgToString("krita.lib.store", cfg.readEntry("file_41008", false));
+    filters << cfgToString("krita.lib.odf", cfg.readEntry("file_41008", false));
 
-    filters << cfgToString("krita.math=%1", cfg.readEntry("math_41009", false));
-    filters << cfgToString("krita.grender=%1", cfg.readEntry("render_41010", false));
-    filters << cfgToString("krita.scripting=%1", cfg.readEntry("script_41011", false));
-    filters << cfgToString("krita.input=%1", cfg.readEntry("input_41012", false));
-    filters << cfgToString("krita.action=%1", cfg.readEntry("action_41013", false));
-    filters << cfgToString("krita.tablet=%1", cfg.readEntry("tablet_41014", false));
-    filters << cfgToString("krita.opengl=%1", cfg.readEntry("opengl_41015", false));
-    filters << cfgToString("krita.metadata=%1", cfg.readEntry("metadata_41016", false));
+    filters << cfgToString("krita.math", cfg.readEntry("math_41009", false));
+    filters << cfgToString("krita.grender", cfg.readEntry("render_41010", false));
+    filters << cfgToString("krita.scripting", cfg.readEntry("script_41011", false));
+    filters << cfgToString("krita.input", cfg.readEntry("input_41012", false));
+    filters << cfgToString("krita.action", cfg.readEntry("action_41013", false));
+    filters << cfgToString("krita.tablet", cfg.readEntry("tablet_41014", false));
+    filters << cfgToString("krita.opengl", cfg.readEntry("opengl_41015", false));
+    filters << cfgToString("krita.metadata", cfg.readEntry("metadata_41016", false));
 
-    filters << cfgToString("krita.lib.pigment=%1", cfg.readEntry("pigment", false));
+    filters << cfgToString("krita.lib.pigment", cfg.readEntry("pigment", false));
 
     QLoggingCategory::setFilterRules(filters.join("\n"));
 }
 
-void LogDockerDock::messageHandler(QtMsgType type, const QMessageLogContext &/*context*/, const QString &msg)
+void LogDockerDock::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     s_messageSender->sendMessage(type, msg);
+    if (s_originalMessageHandler) {
+        s_originalMessageHandler(type, context, msg);
+    }
 }
 
 void LogDockerDock::insertMessage(QtMsgType type, const QString &msg)

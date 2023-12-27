@@ -12,9 +12,11 @@
 #include <kis_processing_visitor.h>
 #include <kis_shape_layer_canvas.h>
 
+#include "kis_default_bounds.h"
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
 #include "KisDocument.h"
+#include <KoViewConverter.h>
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -84,9 +86,16 @@ private:
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
 {
 public:
-    ReferenceImagesCanvas(KisReferenceImagesLayer *parent, KisImageWSP image)
-        : KisShapeLayerCanvasBase(parent, image)
+    ReferenceImagesCanvas(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds, KisReferenceImagesLayer *parent)
+        : KisShapeLayerCanvasBase(parent)
         , m_layer(parent)
+        , m_fallbackProjection(new KisPaintDevice(parent, cs, defaultBounds))
+    {}
+
+    ReferenceImagesCanvas(const ReferenceImagesCanvas &rhs, KisReferenceImagesLayer *parent)
+        : KisShapeLayerCanvasBase(rhs, parent)
+        , m_layer(parent)
+        , m_fallbackProjection(new KisPaintDevice(*rhs.m_fallbackProjection))
     {}
 
     void updateCanvas(const QRectF &rect) override
@@ -95,7 +104,7 @@ public:
             return;
         }
 
-        QRectF r = m_viewConverter->documentToView(rect);
+        QRectF r = viewConverter()->documentToView(rect);
         m_layer->signalUpdate(r);
     }
 
@@ -111,21 +120,27 @@ public:
 
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP image) override
-    {
-        m_viewConverter->setImage(image);
+
+    KisPaintDeviceSP projection() const override {
+        return m_fallbackProjection;
     }
 
 private:
     KisReferenceImagesLayer *m_layer;
+    KisPaintDeviceSP m_fallbackProjection;
 };
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
-    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
+    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8,
+                    [&] () { return new ReferenceImagesCanvas(image->colorSpace(), new KisDefaultBounds(image), this); })
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
-    : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
+    : KisShapeLayer(rhs, rhs.shapeController(),
+                    [&] () {
+                            const ReferenceImagesCanvas* referenceImagesCanvas = dynamic_cast<const ReferenceImagesCanvas*>(rhs.canvas());
+                            KIS_ASSERT(referenceImagesCanvas);
+                            return new ReferenceImagesCanvas(*referenceImagesCanvas, this); })
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
@@ -165,7 +180,7 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
     painter.setTransform(converter()->documentToView(), true);
-    shapeManager()->paint(painter, false);
+    shapeManager()->paint(painter);
 }
 
 bool KisReferenceImagesLayer::allowAsChild(KisNodeSP) const

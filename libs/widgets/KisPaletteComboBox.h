@@ -17,6 +17,7 @@
 #include <QHash>
 #include <KisSqueezedComboBox.h>
 #include <KisPaletteModel.h>
+#include <KisSwatchGroup.h>
 
 class KisPaletteView;
 
@@ -28,8 +29,8 @@ class KisPaletteView;
 class KRITAWIDGETS_EXPORT KisPaletteComboBox : public KisSqueezedComboBox
 {
     Q_OBJECT
-private /* typedef */:
-    typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
+private:
+
     typedef QPair<int, int> SwatchPosType; // first is column #, second is row #
     typedef QHash<SwatchPosType, int> PosIdxMapType;
 
@@ -40,20 +41,22 @@ public:
 Q_SIGNALS:
     void sigColorSelected(const KoColor &);
 
-public /* methods */:
+public:
     void setCompanionView(KisPaletteView *);
 
 private Q_SLOTS:
+
     void setPaletteModel(const KisPaletteModel *);
     void slotPaletteChanged();
     void slotSwatchSelected(const QModelIndex &index);
     void slotIndexUpdated(int);
 
-private /* methods */:
-    QPixmap createColorSquare(const KisSwatch &swatch) const;
-    static bool swatchInfoLess(const SwatchInfoType &, const SwatchInfoType &);
+private:
 
-private /* member variables */:
+    QPixmap createColorSquare(const KisSwatch &swatch) const;
+    static bool swatchInfoLess(const KisSwatchGroup::SwatchInfo &, const KisSwatchGroup::SwatchInfo &);
+
+private:
     QPointer<const KisPaletteModel> m_model;
     QPointer<KisPaletteView> m_view;
     QHash<QString, PosIdxMapType> m_groupMapMap;

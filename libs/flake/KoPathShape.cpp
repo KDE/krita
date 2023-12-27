@@ -104,15 +104,16 @@ void KoPathShape::clear()
     notifyPointsChanged();
 }
 
-void KoPathShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
+void KoPathShape::paint(QPainter &painter) const
 {
     KisQPainterStateSaver saver(&painter);
+    Q_UNUSED(saver);
 
     QPainterPath path(outline());
     path.setFillRule(d->fillRule);
 
     if (background()) {
-        background()->paint(painter, paintContext, path);
+        background()->paint(painter, path);
     }
     //d->paintDebug(painter);
 }

@@ -16,6 +16,7 @@
 
 #include "kis_brush.h"
 #include "kis_brush_factory.h"
+#include "KisBrushModel.h"
 
 class QDomElement;
 
@@ -31,6 +32,9 @@ public:
     static KisBrushRegistry* instance();
 
     KoResourceLoadResult createBrush(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
+    KoResourceLoadResult createBrush(const KisBrushModel::BrushData &data, KisResourcesInterfaceSP resourcesInterface);
+    std::optional<KisBrushModel::BrushData> createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
+    void toXML(QDomDocument &doc, QDomElement& element, const KisBrushModel::BrushData &model);
 
 private:
     KisBrushRegistry(const KisBrushRegistry&);

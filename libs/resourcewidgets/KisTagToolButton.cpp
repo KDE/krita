@@ -24,7 +24,7 @@
 #include <KisTagModel.h>
 
 #include "KisResourceItemChooserContextMenu.h"
-
+#include "KisMenuStyleDontCloseOnAlt.h"
 
 class KisTagToolButton::Private
 {
@@ -58,6 +58,10 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     d->tagToolButton->setEnabled(true);
 
     QMenu* popup = new QMenu(this);
+
+    KisMenuStyleDontCloseOnAlt *menuStyle = new KisMenuStyleDontCloseOnAlt(popup->style());
+    menuStyle->setParent(popup);
+    popup->setStyle(menuStyle);
 
     d->addTagAction = new UserInputTagAction(popup);
     d->addTagAction->setPlaceholderText(i18n("New tag"));
@@ -115,12 +119,17 @@ void KisTagToolButton::setUndeletionCandidate(const KisTagSP deletedTag)
 {
     if (deletedTag.isNull() || deletedTag->name().isEmpty()) {
         d->undeleteTagAction->setVisible(false);
-        return;
+        d->undeleteCandidate.clear();
     } else {
         d->undeleteCandidate = deletedTag;
         d->undeleteTagAction->setText(i18n("Undelete") +" "+ deletedTag->name());
         d->undeleteTagAction->setVisible(true);
     }
+}
+
+KisTagSP KisTagToolButton::undeletionCandidate() const
+{
+    return d->undeleteCandidate;
 }
 
 void KisTagToolButton::setCurrentTag(const KisTagSP tag)

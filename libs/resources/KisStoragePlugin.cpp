@@ -37,7 +37,12 @@ KoResourceSP KisStoragePlugin::resource(const QString &url)
 {
     if (!url.contains('/')) return nullptr;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList parts = url.split('/', Qt::SkipEmptyParts);
+#else
     QStringList parts = url.split('/', QString::SkipEmptyParts);
+#endif
+
     if (parts.isEmpty()) return nullptr;
 
     const QString resourceType = parts[0];
@@ -70,6 +75,7 @@ QString KisStoragePlugin::resourceMd5(const QString &url)
 
 QString KisStoragePlugin::resourceFilePath(const QString &url)
 {
+    Q_UNUSED(url);
     return QString();
 }
 

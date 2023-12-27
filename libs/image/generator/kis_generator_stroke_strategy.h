@@ -6,6 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <boost/none.hpp>
 #include <QObject>
 #include <QSharedPointer>
 #include <kis_generator.h>
@@ -19,5 +20,5 @@ public:
     KisGeneratorStrokeStrategy();
     ~KisGeneratorStrokeStrategy() override;
 
-    static QVector<KisStrokeJobData *> createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &rc, const KisFilterConfigurationSP filterConfig);
+    static QVector<KisStrokeJobData *> createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<boost::none_t> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &rc, const KisFilterConfigurationSP filterConfig);
 };

@@ -139,6 +139,11 @@ int KisNodeViewColorScheme::indentation() const
     return qMax(8, percentage*absoluteMax/100);
 }
 
+int KisNodeViewColorScheme::selectedButtonColumnWidth() const
+{
+    return visibilityColumnWidth();
+}
+
 QRect KisNodeViewColorScheme::relVisibilityRect() const
 {
     return QRect(0, 0,

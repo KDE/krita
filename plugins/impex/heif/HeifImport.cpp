@@ -10,37 +10,34 @@
 #include "HeifImport.h"
 #include "HeifError.h"
 
-#include <kpluginfactory.h>
-#include <QFileInfo>
 #include <QBuffer>
+#include <QFileInfo>
 
-#include <KisImportExportManager.h>
+#include <kpluginfactory.h>
+#include <libheif/heif.h>
+#include <libheif/heif_cxx.h>
 
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceEngine.h>
-#include <KoColorProfile.h>
-#include <KoColorTransferFunctions.h>
-
-#include <kis_transaction.h>
-#include <kis_paint_device.h>
 #include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_node.h>
+#include <KisImportExportManager.h>
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceEngine.h>
+#include <KoColorSpaceRegistry.h>
+#include <dialogs/kis_dlg_hlg_import.h>
 #include <kis_group_layer.h>
-
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
 #include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_value.h>
+#include <kis_node.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_transaction.h>
+#include <qmutex.h>
 
-#include "kis_iterator_ng.h"
-
-
-#include "libheif/heif_cxx.h"
-
-#include "DlgHeifImport.h"
+#include "kis_heif_import_tools.h"
 
 using heif::Error;
 
@@ -57,7 +54,11 @@ HeifImport::~HeifImport()
 
 class Reader_QIODevice : public heif::Context::Reader {
 public:
-  Reader_QIODevice(QIODevice* device) : m_device(device) { m_total_length=m_device->bytesAvailable(); }
+    Reader_QIODevice(QIODevice *device)
+        : m_device(device)
+        , m_total_length(m_device->bytesAvailable())
+    {
+    }
 
   int64_t get_position() const override
   {
@@ -65,8 +66,9 @@ public:
   }
   int read(void *data, size_t size) override
   {
-      qint64 readSize = m_device->read((char*)data, (qint64)size);
-      return (readSize > 0 && (quint64)readSize != size);
+      qint64 readSize =
+          m_device->read(static_cast<char *>(data), static_cast<qint64>(size));
+      return (readSize > 0 && readSize != static_cast<qint64>(size));
   }
   int seek(int64_t position) override
   {
@@ -84,17 +86,140 @@ private:
   int64_t m_total_length;
 };
 
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+class Q_DECL_HIDDEN HeifLock
+{
+public:
+    HeifLock()
+        : p()
+    {
+        heif_init(&p);
+    }
 
+    ~HeifLock()
+    {
+        heif_deinit();
+    }
+
+private:
+    heif_init_params p;
+};
+#endif
+
+namespace Planar
+{
+inline auto readPlanarLayer(const int luma,
+                            LinearizePolicy policy,
+                            bool applyOOTF,
+                            bool hasAlpha,
+                            const int width,
+                            const int height,
+                            const uint8_t *imgR,
+                            const int strideR,
+                            const uint8_t *imgG,
+                            const int strideG,
+                            const uint8_t *imgB,
+                            const int strideB,
+                            const uint8_t *imgA,
+                            const int strideA,
+                            KisHLineIteratorSP it,
+                            float displayGamma,
+                            float displayNits,
+                            const KoColorSpace *colorSpace)
+{
+    return createOptimizedClass<readLayerImpl>(luma,
+                                               policy,
+                                               applyOOTF,
+                                               hasAlpha,
+                                               width,
+                                               height,
+                                               imgR,
+                                               strideR,
+                                               imgG,
+                                               strideG,
+                                               imgB,
+                                               strideB,
+                                               imgA,
+                                               strideA,
+                                               it,
+                                               displayGamma,
+                                               displayNits,
+                                               colorSpace);
+}
+} // namespace Planar
+
+namespace HDR
+{
+template<typename... Args>
+inline auto readInterleavedLayer(const int luma,
+                                 LinearizePolicy linearizePolicy,
+                                 bool applyOOTF,
+                                 const int channels,
+                                 const int width,
+                                 const int height,
+                                 const uint8_t *img,
+                                 const int stride,
+                                 KisHLineIteratorSP it,
+                                 float displayGamma,
+                                 float displayNits,
+                                 const KoColorSpace *colorSpace)
+{
+    return createOptimizedClass<HDR::readLayerImpl>(luma,
+                                                    linearizePolicy,
+                                                    applyOOTF,
+                                                    channels,
+                                                    width,
+                                                    height,
+                                                    img,
+                                                    stride,
+                                                    it,
+                                                    displayGamma,
+                                                    displayNits,
+                                                    colorSpace);
+}
+} // namespace HDR
+
+namespace SDR
+{
+template<typename... Args>
+inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
+                                 bool applyOOTF,
+                                 const int channels,
+                                 const int width,
+                                 const int height,
+                                 const uint8_t *img,
+                                 const int stride,
+                                 KisHLineIteratorSP it,
+                                 float displayGamma,
+                                 float displayNits,
+                                 const KoColorSpace *colorSpace)
+{
+    return createOptimizedClass<SDR::readLayerImpl>(linearizePolicy,
+                                                    applyOOTF,
+                                                    channels,
+                                                    width,
+                                                    height,
+                                                    img,
+                                                    stride,
+                                                    it,
+                                                    displayGamma,
+                                                    displayNits,
+                                                    colorSpace);
+}
+} // namespace SDR
 
 KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+    HeifLock lock;
+#endif
+
     // Wrap input stream into heif Reader object
     Reader_QIODevice reader(io);
 
     try {
         heif::Context ctx;
         ctx.read_from_reader(reader);
-
 
         // decode primary image
 
@@ -111,13 +236,14 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         dbgFile << "loading heif" << heifModel << heifChroma << luma;
 
-        LinearizePolicy linearizePolicy = KeepTheSame;
+        LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
         bool applyOOTF = true;
-        float displayGamma = 1.2;
+        float displayGamma = 1.2f;
         float displayNits = 1000.0;
 
-        struct heif_error err;
-        const KoColorProfile *profile = 0;
+        struct heif_error err {
+        };
+        const KoColorProfile *profile = nullptr;
         KoID colorDepth = Integer8BitsColorDepthID;
         QString colorModel = RGBAColorModelID.id();
 
@@ -161,24 +287,24 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 ColorPrimaries primaries = ColorPrimaries(nclx->color_primaries);
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
                     dbgFile << "linearizing from PQ";
-                    linearizePolicy = LinearFromPQ;
+                    linearizePolicy = LinearizePolicy::LinearFromPQ;
                     transferCharacteristic = TRC_LINEAR;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     dbgFile << "linearizing from HLG";
                     if (!document->fileBatchMode()) {
-                        DlgHeifImport dlg(applyOOTF, displayGamma, displayNits);
+                        KisDlgHLGImport dlg(applyOOTF, displayGamma, displayNits);
                         dlg.exec();
                         applyOOTF = dlg.applyOOTF();
                         displayGamma = dlg.gamma();
                         displayNits = dlg.nominalPeakBrightness();
                     }
-                    linearizePolicy = LinearFromHLG;
+                    linearizePolicy = LinearizePolicy::LinearFromHLG;
                     transferCharacteristic = TRC_LINEAR;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_SMPTE_ST_428_1) {
                     dbgFile << "linearizing from SMPTE 428";
-                    linearizePolicy = LinearFromSMPTE428;
+                    linearizePolicy = LinearizePolicy::LinearFromSMPTE428;
                     transferCharacteristic = TRC_LINEAR;
                 }
 
@@ -187,27 +313,29 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     transferCharacteristic = TRC_ITU_R_BT_709_5;
                 }
 
-
-
-
-                QVector<double>colorants = {nclx->color_primary_white_x, nclx->color_primary_white_y,
-                                            nclx->color_primary_red_x, nclx->color_primary_red_y,
-                                            nclx->color_primary_green_x, nclx->color_primary_green_y,
-                                            nclx->color_primary_blue_x, nclx->color_primary_blue_y};
-
-                if (primaries == PRIMARIES_UNSPECIFIED) {
-                    colorants.clear();
-                }
+                const QVector<double> colorants = [&]() -> QVector<double> {
+                    if (primaries == PRIMARIES_UNSPECIFIED) {
+                        return {};
+                    } else {
+                        return {
+                            static_cast<double>(nclx->color_primary_white_x),
+                            static_cast<double>(nclx->color_primary_white_y),
+                            static_cast<double>(nclx->color_primary_red_x),
+                            static_cast<double>(nclx->color_primary_red_y),
+                            static_cast<double>(nclx->color_primary_green_x),
+                            static_cast<double>(nclx->color_primary_green_y),
+                            static_cast<double>(nclx->color_primary_blue_x),
+                            static_cast<double>(nclx->color_primary_blue_y)};
+                    }
+                }();
 
                 profile = KoColorSpaceRegistry::instance()->profileFor(colorants,
                                                                        primaries,
                                                                        transferCharacteristic);
 
-                if (linearizePolicy != KeepTheSame) {
+                if (linearizePolicy != LinearizePolicy::KeepTheSame) {
                     colorDepth = Float32BitsColorDepthID;
                 }
-
-
 
                 heif_nclx_color_profile_free(nclx);
                 dbgFile << "nclx profile found" << profile->name();
@@ -253,200 +381,106 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
 
-        const double max16bit = 65535.0;
-        const double multiplier10bit = double(1.0 / 1023.0);
-        const double multiplier12bit = double(1.0 / 4095.0);
-        const double multiplier16bit = double(1.0 / max16bit);
-
         if (luma != 8 && luma != 10 && luma != 12) {
             dbgFile << "unknown bitdepth" << luma;
         }
 
         if (heifChroma == heif_chroma_monochrome) {
             dbgFile << "monochrome heif file, bits:" << luma;
-            int strideG, strideA;
-            const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
-            const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
-            width = heifimage.get_width(heif_channel_Y);
-            height = heifimage.get_height(heif_channel_Y);
-            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
+            int strideG = 0;
+            int strideA = 0;
+            const uint8_t *imgG = heifimage.get_plane(heif_channel_Y, &strideG);
+            const uint8_t *imgA =
+                heifimage.get_plane(heif_channel_Alpha, &strideA);
+            const int width = heifimage.get_width(heif_channel_Y);
+            const int height = heifimage.get_height(heif_channel_Y);
+            KisHLineIteratorSP it =
+                layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    if (luma == 8) {
-                        KoGrayU8Traits::setGray(it->rawData(), imgG[y * strideG + x]);
-
-                        if (hasAlpha) {
-                            KoGrayU8Traits::setOpacity(it->rawData(), quint8(imgA[y * strideA + x]), 1);
-                        } else {
-                            KoGrayU8Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-                        }
-                    } else {
-                        uint16_t source = KoGrayU16Traits::nativeArray(imgG)[y * (strideG / 2) + (x)];
-
-                        if (luma == 10) {
-                            KoGrayU16Traits::setGray(it->rawData(), float(0x03ff & (source)) * multiplier10bit * max16bit);
-                        } else if (luma == 12) {
-                            KoGrayU16Traits::setGray(it->rawData(), float(0x0fff & (source)) * multiplier12bit * max16bit);
-                        } else {
-                            KoGrayU16Traits::setGray(it->rawData(), float(source) * multiplier16bit);
-                        }
-
-                        if (hasAlpha) {
-                            source = KoGrayU16Traits::nativeArray(imgA)[y * (strideA / 2) + x];
-                            if (luma == 10) {
-                                KoGrayU16Traits::setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier10bit, 1);
-                            } else if (luma == 12) {
-                                KoGrayU16Traits::setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier12bit, 1);
-                            } else {
-                                KoGrayU16Traits::setOpacity(it->rawData(), float(source) * multiplier16bit, 1);
-                            }
-                        } else {
-                            KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-                        }
-                    }
-
-                    it->nextPixel();
-                }
-
-                it->nextRow();
-            }
-
+            Gray::readPlanarLayer(luma,
+                                  hasAlpha,
+                                  width,
+                                  height,
+                                  it,
+                                  imgG,
+                                  imgA,
+                                  strideG,
+                                  strideA);
         } else if (heifChroma == heif_chroma_444) {
             dbgFile << "planar heif file, bits:" << luma;
 
-            int strideR, strideG, strideB, strideA;
+            int strideR = 0;
+            int strideG = 0;
+            int strideB = 0;
+            int strideA = 0;
             const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
             const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
             const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
-            const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
-            width = heifimage.get_width(heif_channel_R);
-            height = heifimage.get_height(heif_channel_R);
-            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
-            QVector<float> pixelValues(4);
+            const uint8_t *imgA =
+                heifimage.get_plane(heif_channel_Alpha, &strideA);
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            auto value =
-                [&](const uint8_t *img, int stride, int x, int y) {
-                    if (luma == 8) {
-                        return linearizeValueAsNeeded(float(img[y * (stride) + x]) / 255.0f, linearizePolicy);
-                    } else {
-                        uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + x];
-                        if (luma == 10) {
-                            return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
-                        } else if (luma == 12) {
-                            return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
-                        } else {
-                            return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
-                        }
-                    }
-                };
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
-
-                    pixelValues[0] = value(imgR, strideR, x, y);
-                    pixelValues[1] = value(imgG, strideG, x, y);
-                    pixelValues[2] = value(imgB, strideB, x, y);
-
-                    if (hasAlpha) {
-                        pixelValues[3] = value(imgA, strideA, x, y);
-                    }
-
-                    if (linearizePolicy == KeepTheSame) {
-                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
-                    }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
-                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
-                    }
-                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
-
-                    it->nextPixel();
-                }
-
-                it->nextRow();
-            }
+            Planar::readPlanarLayer(luma,
+                                    linearizePolicy,
+                                    applyOOTF,
+                                    hasAlpha,
+                                    width,
+                                    height,
+                                    imgR,
+                                    strideR,
+                                    imgG,
+                                    strideG,
+                                    imgB,
+                                    strideB,
+                                    imgA,
+                                    strideA,
+                                    it,
+                                    displayGamma,
+                                    displayNits,
+                                    colorSpace);
         } else if (heifChroma == heif_chroma_interleaved_RGB || heifChroma == heif_chroma_interleaved_RGBA) {
-            int stride;
+            int stride = 0;
             dbgFile << "interleaved SDR heif file, bits:" << luma;
 
             const uint8_t *img = heifimage.get_plane(heif_channel_interleaved, &stride);
             width = heifimage.get_width(heif_channel_interleaved);
             height = heifimage.get_height(heif_channel_interleaved);
-            QVector<float> pixelValues(4);
-            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
-            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
-            int channels = hasAlpha ? 4 : 3;
+            KisHLineIteratorSP it =
+                layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
-                uint8_t source = img[(y * stride) + (x * channels) + ch];
-                return linearizeValueAsNeeded(float(source) / 255.0f, linearizePolicy);
-            };
+            SDR::readInterleavedLayer(linearizePolicy,
+                                      applyOOTF,
+                                      hasAlpha,
+                                      width,
+                                      height,
+                                      img,
+                                      stride,
+                                      it,
+                                      displayGamma,
+                                      displayNits,
+                                      colorSpace);
 
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
-
-                    for (int ch = 0; ch < channels; ch++) {
-                        pixelValues[ch] = value(img, stride, x, y, ch);
-                    }
-
-                    if (linearizePolicy == KeepTheSame) {
-                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
-                    }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
-                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
-                    }
-                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
-
-                    it->nextPixel();
-                }
-
-                it->nextRow();
-            }
         } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE || heifChroma == heif_chroma_interleaved_RRGGBB_BE || heifChroma == heif_chroma_interleaved_RRGGBB_BE) {
-            int stride;
+            int stride = 0;
             dbgFile << "interleaved HDR heif file, bits:" << luma;
 
-            const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
-            QVector<float> pixelValues(4);
-            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
-            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
-            int channels = hasAlpha ? 4 : 3;
+            const uint8_t *img =
+                heifimage.get_plane(heif_channel_interleaved, &stride);
+            KisHLineIteratorSP it =
+                layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
-                uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + (x * channels) + ch];
-                if (luma == 10) {
-                    return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
-                } else if (luma == 12) {
-                    return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
-                } else {
-                    return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
-                }
-            };
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
-
-                    for (int ch = 0; ch < channels; ch++) {
-                        pixelValues[ch] = value(img, stride, x, y, ch);
-                    }
-
-                    if (linearizePolicy == KeepTheSame) {
-                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
-                    }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
-                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
-                    }
-                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
-
-                    it->nextPixel();
-                }
-
-                it->nextRow();
-            }
+            HDR::readInterleavedLayer(luma,
+                                      linearizePolicy,
+                                      applyOOTF,
+                                      hasAlpha,
+                                      width,
+                                      height,
+                                      img,
+                                      stride,
+                                      it,
+                                      displayGamma,
+                                      displayNits,
+                                      colorSpace);
         }
 
         image->addNode(layer.data(), image->rootLayer().data());
@@ -464,17 +498,22 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             std::vector<uint8_t> exif_data = handle.get_metadata(id);
 
             if (exif_data.size()>4) {
-              size_t skip = ((exif_data[0]<<24) | (exif_data[1]<<16) | (exif_data[2]<<8) | exif_data[3]) + 4;
+                size_t skip = ((quint32(exif_data[0]) << 24U)
+                               | (quint32(exif_data[1])) << 16U
+                               | (quint32(exif_data[2]) << 8U) | exif_data[3])
+                    + 4u;
 
-              if (exif_data.size()>skip) {
-                  KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
+                if (exif_data.size() > skip) {
+                    KisMetaData::IOBackend *exifIO =
+                        KisMetadataBackendRegistry::instance()->value("exif");
 
-                  // Copy the exif data into the byte array
-                  QByteArray ba(reinterpret_cast<char *>(exif_data.data() + skip),
-                                static_cast<int>(exif_data.size() - skip));
-                  QBuffer buf(&ba);
-                  exifIO->loadFrom(layer->metaData(), &buf);
-              }
+                    // Copy the exif data into the byte array
+                    QByteArray ba(
+                        reinterpret_cast<char *>(exif_data.data() + skip),
+                        static_cast<int>(exif_data.size() - skip));
+                    QBuffer buf(&ba);
+                    exifIO->loadFrom(layer->metaData(), &buf);
+                }
             }
           }
 
@@ -483,7 +522,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             // Read XMP information
 
             std::vector<uint8_t> xmp_data = handle.get_metadata(id);
-
             KisMetaData::IOBackend *xmpIO = KisMetadataBackendRegistry::instance()->value("xmp");
 
             // Copy the xmp data into the byte array
@@ -498,18 +536,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
     } catch (Error &err) {
         return setHeifError(document, err);
     }
-}
-
-float HeifImport::linearizeValueAsNeeded(float value, HeifImport::LinearizePolicy policy)
-{
-    if ( policy == LinearFromPQ) {
-        return removeSmpte2048Curve(value);
-    } else if ( policy == LinearFromHLG) {
-        return removeHLGCurve(value);
-    } else if ( policy == LinearFromSMPTE428) {
-        return removeSMPTE_ST_428Curve(value);
-    }
-    return value;
 }
 
 #include <HeifImport.moc>

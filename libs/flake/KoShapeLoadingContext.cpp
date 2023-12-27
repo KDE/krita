@@ -22,7 +22,7 @@ uint qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData)
     return qHash(attributeData.name);
 }
 
-static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
+static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionalAttributes;
 
 class Q_DECL_HIDDEN KoShapeLoadingContext::Private
 {
@@ -167,12 +167,12 @@ KoSharedLoadingData * KoShapeLoadingContext::sharedData(const QString & id) cons
 
 void KoShapeLoadingContext::addAdditionalAttributeData(const AdditionalAttributeData & attributeData)
 {
-    s_additionlAttributes.insert(attributeData);
+    s_additionalAttributes.insert(attributeData);
 }
 
 QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::additionalAttributeData()
 {
-    return s_additionlAttributes;
+    return s_additionalAttributes;
 }
 
 KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() const

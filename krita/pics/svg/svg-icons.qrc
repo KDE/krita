@@ -105,6 +105,7 @@
         <file>dark_selection-mode_mask.svg</file>
         <file>dark_select-all.svg</file>
         <file>dark_select-clear.svg</file>
+        <file>dark_sample-screen.svg</file>
         <file>dark_select-pixel.svg</file>
         <file>dark_select-shape.svg</file>
         <file>dark_selection_add.svg</file>
@@ -225,6 +226,7 @@
         <file>light_selection-mode_invisible.svg</file>
         <file>light_selection-mode_mask.svg</file>
         <file>light_select-all.svg</file>
+        <file>light_sample-screen.svg</file>
         <file>light_select-clear.svg</file>
         <file>light_select-pixel.svg</file>
         <file>light_select-shape.svg</file>
@@ -385,10 +387,10 @@
         <file>light_sort-by-hue.svg</file>
         <file>dark_cut-item.svg</file>
         <file>light_cut-item.svg</file>
-        <file>dark_color-adjustement-mode-lightness.svg</file>
-        <file>light_color-adjustement-mode-lightness.svg</file>
-        <file>dark_color-adjustement-mode-channels.svg</file>
-        <file>light_color-adjustement-mode-channels.svg</file>
+        <file>dark_color-adjustment-mode-lightness.svg</file>
+        <file>light_color-adjustment-mode-lightness.svg</file>
+        <file>dark_color-adjustment-mode-channels.svg</file>
+        <file>light_color-adjustment-mode-channels.svg</file>
         <file>dark_autolevels.svg</file>
         <file>light_autolevels.svg</file>
         <file>dark_histogram-linear.svg</file>
@@ -405,9 +407,29 @@
         <file>light_all-layers.svg</file>
         <file>dark_contiguous-selection.svg</file>
         <file>light_contiguous-selection.svg</file>
+        <file>dark_similar-selection.svg</file>
+        <file>light_similar-selection.svg</file>
         <file>dark_different-regions.svg</file>
         <file>light_different-regions.svg</file>
         <file>dark_similar-regions.svg</file>
         <file>light_similar-regions.svg</file>
+        <file>dark_region-filling-flood-fill.svg</file>
+        <file>light_region-filling-flood-fill.svg</file>
+        <file>dark_region-filling-boundary-fill.svg</file>
+        <file>light_region-filling-boundary-fill.svg</file>
+        <file>dark_stop-at-boundary.svg</file>
+        <file>light_stop-at-boundary.svg</file>
+        <file>dark_paint-order-fill-stroke-marker.svg</file>
+        <file>light_paint-order-fill-stroke-marker.svg</file>
+        <file>dark_paint-order-fill-marker-stroke.svg</file>
+        <file>light_paint-order-fill-marker-stroke.svg</file>
+        <file>dark_paint-order-stroke-fill-marker.svg</file>
+        <file>light_paint-order-stroke-fill-marker.svg</file>
+        <file>dark_paint-order-stroke-marker-fill.svg</file>
+        <file>light_paint-order-stroke-marker-fill.svg</file>
+        <file>dark_paint-order-marker-fill-stroke.svg</file>
+        <file>light_paint-order-marker-fill-stroke.svg</file>
+        <file>dark_paint-order-marker-stroke-fill.svg</file>
+        <file>light_paint-order-marker-stroke-fill.svg</file>
     </qresource>
 </RCC>

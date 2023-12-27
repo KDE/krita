@@ -45,6 +45,8 @@ public:
     void activateToolAction(KisTool::ToolAction action);
     void deactivateToolAction(KisTool::ToolAction action);
 
+    bool supportsPaintingAssistants() const;
+
 private:
     KoPointerEvent convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result);
     QPointF tabletToDocument(const QPointF &globalPos);

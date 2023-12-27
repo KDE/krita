@@ -1,0 +1,27 @@
+From 5d4d0937bc75646237952447fdb4cfdb2e8a5137 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Wed, 7 Sep 2022 19:00:22 +0800
+Subject: [PATCH] win: Fix missing declarations from wchar.h
+
+---
+ gettext-runtime/intl/gettextP.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/gettext-runtime/intl/gettextP.h b/gettext-runtime/intl/gettextP.h
+index 1efeb192c..b05c20bf3 100644
+--- a/gettext-runtime/intl/gettextP.h
++++ b/gettext-runtime/intl/gettextP.h
+@@ -36,6 +36,10 @@
+ # include "lock.h"
+ #endif
+ 
++#if defined _WIN32 && !defined __CYGWIN__
++# include <wchar.h>
++#endif
++
+ #ifdef _LIBC
+ struct loaded_domain;
+ extern char *__gettext (const char *__msgid);
+-- 
+2.37.1
+

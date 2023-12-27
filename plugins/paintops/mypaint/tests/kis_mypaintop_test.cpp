@@ -16,6 +16,7 @@
 #include <stroke_testing_utils.h>
 #include <kis_paint_information.h>
 #include <kis_random_accessor_ng.h>
+#include <KisGlobalResourcesInterface.h>
 
 #include "kis_mypaintop_test.h"
 #include "MyPaintPaintOp.h"
@@ -81,7 +82,7 @@ void KisMyPaintOpTest::testGetColor() {
 void KisMyPaintOpTest::testLoading() {
 
     QScopedPointer<KisMyPaintPaintOpPreset> brush (new KisMyPaintPaintOpPreset(QString(FILES_DATA_DIR) + QDir::separator() + "basic.myb"));
-    brush->load(0);
+    brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(brush->valid());
 }
 

@@ -90,7 +90,7 @@ void KisNodeShape::editabilityChanged()
     }
 
     /**
-     * Editability of a child depends on the editablity
+     * Editability of a child depends on the editability
      * of its parent. So when we change one's editability,
      * we need to search for active children and reactivate them
      */
@@ -125,7 +125,7 @@ void KisNodeShape::setPosition(const QPointF &)
 {
 }
 
-void KisNodeShape::paint(QPainter &, KoShapePaintingContext &) const
+void KisNodeShape::paint(QPainter &) const
 {
 }
 

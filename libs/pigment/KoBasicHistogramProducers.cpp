@@ -359,7 +359,7 @@ void KoBasicF16HalfHistogramProducer::addRegionToBin(const quint8 * pixels, cons
 KoGenericRGBHistogramProducer::KoGenericRGBHistogramProducer()
     : KoBasicHistogramProducer(KoID("GENRGBHISTO", i18n("Generic RGB Histogram")), 3, 256)
 {
-    /* we set 0 as colorspece, because we are not based on a specific colorspace. This
+    /* we set 0 as colorspace, because we are not based on a specific colorspace. This
        is no problem for the superclass since we override channels() */
     m_channelsList.append(new KoChannelInfo(i18n("R"), 0, 0, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(255, 0, 0)));
     m_channelsList.append(new KoChannelInfo(i18n("G"), 1, 1, KoChannelInfo::COLOR, KoChannelInfo::UINT8, 1, QColor(0, 255, 0)));

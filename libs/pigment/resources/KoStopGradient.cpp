@@ -123,6 +123,13 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
 {
     if (!m_stops.count())
         return false;
+
+    KIS_SAFE_ASSERT_RECOVER(!qIsNaN(t)) { // if it's nan, it would crash in the last 'else'
+        leftStop = m_stops.first();
+        rightStop = KoGradientStop(-std::numeric_limits<double>::infinity(), leftStop.color, leftStop.type);
+        return true;
+    }
+
     if (t <= m_stops.first().position || m_stops.count() == 1) {
         // we have only one stop or t is before the first stop
         leftStop = m_stops.first();
@@ -136,9 +143,8 @@ bool KoStopGradient::stopsAt(KoGradientStop& leftStop, KoGradientStop& rightStop
     } else {
         // we have at least two color stops
         // -> find the two stops which frame our t
-        auto it = std::lower_bound(m_stops.begin(), m_stops.end(), KoGradientStop(t, KoColor(), COLORSTOP), [](const KoGradientStop& a, const KoGradientStop& b) {
-            return a.position < b.position;
-            });
+        auto it = std::lower_bound(m_stops.begin(), m_stops.end(), KoGradientStop(t, KoColor(), COLORSTOP),
+                                   kismpl::mem_less(&KoGradientStop::position));
         leftStop = *(it - 1);
         rightStop = *(it);
         return true;
@@ -250,10 +256,9 @@ QList<int> KoStopGradient::requiredCanvasResources() const
 {
     QList<int> result;
 
-    if (std::find_if(m_stops.begin(), m_stops.end(),
-                     [] (const KoGradientStop &stop) {
-                         return stop.type != COLORSTOP;
-                     }) != m_stops.end()) {
+    if (std::find_if_not(m_stops.begin(), m_stops.end(),
+                         kismpl::mem_equal_to(&KoGradientStop::type, COLORSTOP))
+        != m_stops.end()) {
 
         result << KoCanvasResource::ForegroundColor << KoCanvasResource::BackgroundColor;
     }
@@ -503,7 +508,11 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element, QHash<QString,
             else {
                 // try style attr
                 QString style = colorstop.attribute("style").simplified();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+                QStringList substyles = style.split(';', Qt::SkipEmptyParts);
+#else
                 QStringList substyles = style.split(';', QString::SkipEmptyParts);
+#endif
                 Q_FOREACH(const QString & s, substyles) {
                     QStringList substyle = s.split(':');
                     QString command = substyle[0].trimmed();

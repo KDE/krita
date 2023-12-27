@@ -29,7 +29,7 @@ enum Identifier {
     IdentifierLogheight  ///< The height of the svg:viewBox in 1/100th mm is used.
 };
 
-/// The bstract parameter class
+/// The abstract parameter class
 class EnhancedPathParameter
 {
 public:

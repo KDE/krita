@@ -7,7 +7,7 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
-#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) && XSIMD_UNIVERSAL_BUILD_PASS
 
 #include "kis_circle_mask_generator.h"
 #include "kis_circle_mask_generator_p.h"

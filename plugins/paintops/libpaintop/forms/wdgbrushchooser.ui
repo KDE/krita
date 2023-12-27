@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -30,31 +30,11 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QFrame" name="frame">
-       <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
+      <layout class="QHBoxLayout" name="brushChooserButtonLayout">
+       <property name="spacing">
+        <number>0</number>
        </property>
-       <property name="frameShadow">
-        <enum>QFrame::Plain</enum>
-       </property>
-       <layout class="QHBoxLayout" name="brushChooserButtonLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
-       </layout>
-      </widget>
+      </layout>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -110,7 +90,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisSliderSpinBox" name="sliderPrecision" native="true">
+      <widget class="KisSliderSpinBox" name="sliderPrecision">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -126,7 +106,7 @@
  <customwidgets>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

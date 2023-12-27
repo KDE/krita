@@ -112,7 +112,7 @@ void KisNormalizeTransformation::transform(const quint8* src, quint8* dst, qint3
 
         m_colorSpace->fromNormalisedChannelsValue(dst, channelValues);
         dst[3]=src[3];
-        //hack to trunucate values.
+        //hack to truncate values.
         m_colorSpace->toRgbA16(dst, reinterpret_cast<quint8 *>(m_rgba), 1);
         m_colorSpace->fromRgbA16(reinterpret_cast<quint8 *>(m_rgba), dst, 1);
 

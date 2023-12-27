@@ -85,7 +85,7 @@ private:
 
     /**
      * Searches for the last pyramid plane that can cover
-     * canvans on current zoom level
+     * canvas on current zoom level
      */
 
     int findFirstGoodPlaneIndex(qreal scale, QSize originalSize);

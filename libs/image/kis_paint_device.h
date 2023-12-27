@@ -201,7 +201,7 @@ public:
      * uses caching, so calling to this function without changing
      * the device is quite cheap.
      *
-     * Exactbounds follows these rules:
+     * exactBounds follows these rules:
      *
      * <ul>
      * <li>if default pixel is transparent, then exact bounds
@@ -739,10 +739,10 @@ public:
     quint32 channelCount() const;
 
     /**
-     * @return interstroke data that is atteched to the paint device.
+     * @return interstroke data that is attached to the paint device.
      *
      * This data is managed by KisTransaction and can be used by brushes
-     * to store some data that can be shared betweet the strokes. For
+     * to store some data that can be shared between the strokes. For
      * example, information about drying of the pigment.
      *
      * The interstroke data is stored in a per-frame manner, that is,
@@ -773,6 +773,24 @@ public:
      * An interface to modify/load/save frames stored inside this device
      */
     KisPaintDeviceFramesInterface* framesInterface();
+
+    /**
+     * @brief burnKeyframe
+     *
+     * Take a frame from the keyframe channel,
+     * Copy the contents onto the "base" frame,
+     * and completely remove the keyframe channel.
+     *
+     * Should be useful for copy+paste operations where
+     * we shouldn't expect keyframe data to persist.
+     *
+     * Parameterless version simply gets the current frameID.
+     *
+     * @param frameID -- frameID (from the framesInterface, **not the time**) to burn to device.
+     * @return success
+     */
+    bool burnKeyframe(int frameID);
+    bool burnKeyframe();
 
 public:
 
@@ -878,7 +896,7 @@ public:
     friend class PaintDeviceCache;
 
     /**
-     * Caclculates exact bounds of the device. Used internally
+     * Calculates exact bounds of the device. Used internally
      * by a transparent caching system. The solution is very slow
      * because it does a linear scanline search. So the complexity
      * is n*n at worst.
@@ -906,8 +924,11 @@ public:
 
     void generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod);
 
+    void setSupportsWraparoundMode(bool value);
+    bool supportsWraproundMode() const;
+
     void setProjectionDevice(bool value);
-    void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
+    void testingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);

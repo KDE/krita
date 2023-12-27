@@ -24,7 +24,7 @@ public:
     KoMeshPatchesRenderer()
     {}
 
-    void configure(QRectF gradientgRect, const QTransform& painterTransform) {
+    void configure(QRectF gradientRect, const QTransform& painterTransform) {
 
         // NOTE: This is a necessary step to prevent loss of quality, because painterTransform is scaled.
 
@@ -34,11 +34,11 @@ public:
             QTransform::fromTranslate(painterTransform.dx(), painterTransform.dy()).inverted();
 
         // we are applying transformation on a Unit rect, so we can extract scaling info only
-        QRectF unitRectScaled = painterTransformShifted.mapRect(QRectF(gradientgRect.topLeft(), QSize(1, 1)));
+        QRectF unitRectScaled = painterTransformShifted.mapRect(QRectF(gradientRect.topLeft(), QSize(1, 1)));
         QTransform scaledTransform = QTransform::fromScale(unitRectScaled.width(), unitRectScaled.height());
 
         // boundingRect of the scaled version
-        QRectF scaledGradientRect = scaledTransform.mapRect(gradientgRect);
+        QRectF scaledGradientRect = scaledTransform.mapRect(gradientRect);
 
         m_patch = QImage(scaledGradientRect.size().toSize(), QImage::Format_ARGB32);
         m_patch.fill(Qt::transparent);
@@ -72,7 +72,7 @@ public:
         cs->fromQColor(color2, c[2]);
         cs->fromQColor(color3, c[3]);
 
-        bool verticalDiv = patch->isDivisbleVertically();
+        bool verticalDiv = patch->isDivisibleVertically();
         bool horizontalDiv = patch->isDivisibleHorizontally();
         bool colorVariationExists = checkColorVariance(c);
 

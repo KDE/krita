@@ -267,7 +267,7 @@ void KisInputManager::Private::CanvasSwitcher::addCanvas(KisCanvas2 *canvas)
     if (!canvasResolver.contains(canvasWidget)) {
         canvasResolver.insert(canvasWidget, canvas);
     } else {
-        // just a sanity cheeck to find out if we are
+        // just a sanity cheek to find out if we are
         // trying to add two canvases concurrently.
         KIS_SAFE_ASSERT_RECOVER_NOOP(d->canvas == canvas);
     }
@@ -486,8 +486,8 @@ void KisInputManager::Private::addStrokeShortcut(KisAbstractInputAction* action,
     if(buttons & Qt::RightButton) {
         buttonSet << Qt::RightButton;
     }
-    if(buttons & Qt::MidButton) {
-        buttonSet << Qt::MidButton;
+    if(buttons & Qt::MiddleButton) {
+        buttonSet << Qt::MiddleButton;
     }
 
 BOOST_PP_REPEAT_FROM_TO(1, 25, EXTRA_BUTTON, _)
@@ -729,20 +729,6 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 {
     bool retval = false;
 
-    /**
-     * When Krita (as an application) has no input focus, we cannot
-     * handle key events. But at the same time, when the user hovers
-     * Krita canvas, we should still show him the correct cursor.
-     *
-     * So here we just add a simple workaround to resync shortcut
-     * matcher's state at least against the basic modifiers, like
-     * Shift, Control and Alt.
-     */
-    QWidget *recievingWidget = dynamic_cast<QWidget*>(eventsReceiver);
-    if (recievingWidget && !recievingWidget->hasFocus()) {
-        fixShortcutMatcherModifiersState();
-    }
-
     if (event->type() == QTouchEvent::TouchUpdate && touchHasBlockedPressEvents) {
         matcher.touchUpdateEvent((QTouchEvent *)event);
     } else if (!matcher.pointerMoved(event) && toolProxy && event->type() != QTouchEvent::TouchUpdate) {
@@ -756,15 +742,49 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 
 void KisInputManager::Private::fixShortcutMatcherModifiersState()
 {
-    QVector<Qt::Key> guessedKeys;
     KisExtendedModifiersMapper mapper;
+
+    QVector<Qt::Key> newKeys;
     Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
     Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
         QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
-        guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
+        newKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
     }
 
-    matcher.recoveryModifiersWithoutFocus(guessedKeys);
+    fixShortcutMatcherModifiersState(newKeys, modifiers);
+}
+
+void KisInputManager::Private::fixShortcutMatcherModifiersState(QVector<Qt::Key> newKeys, Qt::KeyboardModifiers modifiers)
+{
+    QVector<Qt::Key> danglingKeys = matcher.debugPressedKeys();
+
+    matcher.handlePolledKeys(newKeys);
+
+    for (auto it = danglingKeys.begin(); it != danglingKeys.end();) {
+        if (newKeys.contains(*it)) {
+            newKeys.removeOne(*it);
+            it = danglingKeys.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    Q_FOREACH (Qt::Key key, danglingKeys) {
+        QKeyEvent kevent(QEvent::KeyRelease, key, modifiers);
+        processUnhandledEvent(&kevent);
+    }
+
+    Q_FOREACH (Qt::Key key, newKeys) {
+        // just replay the whole sequence
+        {
+            QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+            processUnhandledEvent(&kevent);
+        }
+        {
+            QKeyEvent kevent(QEvent::KeyPress, key, modifiers);
+            processUnhandledEvent(&kevent);
+        }
+    }
 }
 
 qint64 KisInputManager::Private::TabletLatencyTracker::currentTimestamp() const

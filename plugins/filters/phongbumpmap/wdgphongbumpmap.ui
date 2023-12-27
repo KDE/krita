@@ -143,7 +143,7 @@
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="KisSliderSpinBox" name="shinynessExponentKisSliderSpinBox" native="true">
+              <widget class="KisSliderSpinBox" name="shininessExponentKisSliderSpinBox" native="true">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                  <horstretch>1</horstretch>
@@ -832,13 +832,13 @@
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QDoubleSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

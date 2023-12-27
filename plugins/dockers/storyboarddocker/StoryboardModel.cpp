@@ -23,7 +23,6 @@
 #include "kis_raster_keyframe_channel.h"
 #include "KisStoryboardThumbnailRenderScheduler.h"
 #include "KisAddRemoveStoryboardCommand.h"
-#include "KisImageBarrierLockerWithFeedback.h"
 #include "kis_processing_applicator.h"
 
 #include "kis_config.h"
@@ -56,22 +55,19 @@ QModelIndex StoryboardModel::index(int row, int column, const QModelIndex &paren
     if (row < 0 || row >= rowCount(parent)) {
         return QModelIndex();
     }
-    if (column !=0) {
+    if (column != 0) {
         return QModelIndex();
     }
     
-    //1st level node has invalid parent
-    if (!parent.isValid()) {
-        return createIndex(row, column, m_items.at(row).data());
-    }
-    else if (!parent.parent().isValid()) {
+    if (isValidBoard(parent)) {
         StoryboardItemSP parentItem = m_items.at(parent.row());
         QSharedPointer<StoryboardChild> childItem = parentItem->child(row);
-        if (childItem) {
-            return createIndex(row, column, childItem.data());
-        }
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(childItem, QModelIndex());
+        return createIndex(row, column, childItem.data());
+    } else {
+        return createIndex(row, column, m_items.at(row).data());
     }
-    return QModelIndex();
 }
 
 QModelIndex StoryboardModel::parent(const QModelIndex &index) const
@@ -123,16 +119,15 @@ int StoryboardModel::columnCount(const QModelIndex &parent) const
 
 QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 {
-
     if (!index.isValid()) {
         return QVariant();
     }
+
     //return data only for the storyboardChild i.e. 2nd level nodes
-    if (!index.parent().isValid()) {
+    if (isValidBoard(index)) {
         if (role == TotalSceneDurationInFrames) {
             int duration = this->index(StoryboardItem::DurationFrame, 0, index).data().toInt()
-                + this->index(StoryboardItem::DurationSecond, 0, index).data().toInt()
-                * getFramesPerSecond();
+                + this->index(StoryboardItem::DurationSecond, 0, index).data().toInt() * getFramesPerSecond();
             return duration;
         }
         else if (role == TotalSceneDurationInSeconds) {
@@ -172,7 +167,7 @@ QVariant StoryboardModel::data(const QModelIndex &index, int role) const
 bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value, int role)
 {
     if (index.isValid() && !isLocked() && (role == Qt::EditRole || role == Qt::DisplayRole)) {
-        if (!index.parent().isValid()) {
+        if (isValidBoard(index)) {
             return false;
         }
 
@@ -237,9 +232,9 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                     if (cfg.adaptivePlaybackRange()) {
                         int frameNum = this->index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
                         int totalDuration = data(lastScene, TotalSceneDurationInFrames).toInt();
-                        KisTimeSpan playbackRange = m_image->animationInterface()->fullClipRange();
+                        KisTimeSpan playbackRange = m_image->animationInterface()->documentPlaybackRange();
                         playbackRange.include(frameNum+totalDuration);
-                        m_image->animationInterface()->setFullClipRange(playbackRange);
+                        m_image->animationInterface()->setDocumentRange(playbackRange);
                     }
                 }
 
@@ -283,7 +278,7 @@ bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, co
     QPixmap pxmap = QPixmap::fromImage(image);
     pxmap = pxmap.scaled((1.5)*scale*m_image->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    if (!index.parent().isValid())
+    if (isValidBoard(index))
         return false;
 
     QSharedPointer<StoryboardChild> child = m_items.at(index.parent().row())->child(index.row());
@@ -329,7 +324,7 @@ Qt::ItemFlags StoryboardModel::flags(const QModelIndex & index) const
     }
 
     //1st level nodes
-    if (!index.parent().isValid()) {
+    if (isValidBoard(index)) {
         return Qt::ItemIsDragEnabled | Qt::ItemIsSelectable | Qt::ItemIsEnabled;
     }
 
@@ -615,7 +610,7 @@ void StoryboardModel::setImage(KisImageWSP image)
     }
     m_lastScene = m_items.size();
 
-    m_imageIdleWatcher.startCountdown();
+    m_imageIdleWatcher.forceImageModified();
 
     connect(m_image, SIGNAL(sigImageUpdated(const QRect &)), &m_renderSchedulingCompressor, SLOT(start()));
 
@@ -800,7 +795,7 @@ void StoryboardModel::reorderKeyframes()
         return;
     }
 
-    //We want to temporarily lock respondance to keyframe removal / addition.
+    //We want to temporarily lock responding to keyframe removal / addition.
     //Will unlock when scope exits.
     QScopedPointer<KeyframeReorderLock> lock(new KeyframeReorderLock(this));
 
@@ -1303,7 +1298,7 @@ void StoryboardModel::visualizeScene(const QModelIndex &scene, bool useUndo)
     int frameTime = index(StoryboardItem::FrameNumber, 0, scene).data().toInt();
 
     if (frameTime != m_image->animationInterface()->currentTime()) {
-        m_image->animationInterface()->switchCurrentTimeAsync(frameTime, useUndo);
+        m_image->animationInterface()->switchCurrentTimeAsync(frameTime, useUndo ? KisImageAnimationInterface::STAO_USE_UNDO : KisImageAnimationInterface::STAO_NONE);
     }
 }
 

@@ -14,9 +14,12 @@
 #include <QTime>
 #include <QList>
 #include <QtMath>
+#include <kis_async_action_feedback.h>
 
 #include <klocalizedstring.h>
 
+#include <KisLockFrameGenerationLock.h>
+#include <KisBlockBackgroundFrameGenerationLock.h>
 #include "KisViewManager.h"
 #include "KisAsyncAnimationRendererBase.h"
 #include "kis_time_span.h"
@@ -120,6 +123,8 @@ KisAsyncAnimationRenderDialogBase::~KisAsyncAnimationRenderDialogBase()
 KisAsyncAnimationRenderDialogBase::Result
 KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 {
+    KisBlockBackgroundFrameGenerationLock populatorBlock(m_d->image->animationInterface());
+
     {
         /**
          * Since this method can be called from the places where no
@@ -142,6 +147,14 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
         if (!imageIsIdle) {
             return RenderCancelled;
         }
+    }
+
+
+    if (!m_d->isBatchMode) {
+        QWidget *parentWidget = viewManager ? viewManager->mainWindowAsQWidget() : 0;
+        KisLockFrameGenerationLockAdapter adapter(m_d->image->animationInterface());
+        KisAsyncActionFeedback feedback(i18n("Wait for existing frame generation process to complete..."), parentWidget);
+        feedback.waitForMutex(adapter);
     }
 
     m_d->stillDirtyFrames = calcDirtyFrames();
@@ -177,7 +190,23 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     for (int i = 0; i < numWorkers; i++) {
         // reuse the image for one of the workers
-        KisImageSP image = i == numWorkers - 1 ? m_d->image : m_d->image->clone(true);
+        const bool lastWorker = (i == numWorkers - 1);
+        KisImageSP image = m_d->image;
+
+        if (!lastWorker) {
+            //Only the last-most worker should try to use the source image pointer. Others need a copy.
+
+            if (m_d->asyncRenderers.size() == 0) {
+                // Copy source image when no renderers (aka no copies) exist, requires lock as image memory can be actively modified.
+                m_d->image->barrierLock(true);
+                image = m_d->image->clone(true);
+                m_d->image->unlock();
+            } else {
+                // Copy a previous copy, shouldn't require lock since image is "fresh" and untouchable by other krita systems.
+                image = m_d->asyncRenderers[m_d->asyncRenderers.size() - 1].image->clone(true);
+            }
+        }
+
 
         image->setWorkingThreadsLimit(numThreadsPerWorker);
         KisAsyncAnimationRendererBase *renderer = createRenderer(image);
@@ -187,6 +216,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
         m_d->asyncRenderers.push_back(RendererPair(renderer, image));
     }
+
 
     tryInitiateFrameRegeneration();
     updateProgressLabel();
@@ -281,8 +311,11 @@ void KisAsyncAnimationRenderDialogBase::tryInitiateFrameRegeneration()
             if (!pair.renderer->isActive()) {
                 const int currentDirtyFrame = m_d->stillDirtyFrames.takeFirst();
 
+                KisLockFrameGenerationLock lock(pair.image->animationInterface());
+
                 initializeRendererForFrame(pair.renderer.get(), pair.image, currentDirtyFrame);
-                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame, m_d->regionOfInterest);
+                pair.renderer->startFrameRegeneration(pair.image, currentDirtyFrame, m_d->regionOfInterest,
+                                                      KisAsyncAnimationRendererBase::None, std::move(lock));
                 hadWorkOnPreviousCycle = true;
                 m_d->framesInProgress.append(currentDirtyFrame);
                 break;
@@ -343,7 +376,7 @@ void KisAsyncAnimationRenderDialogBase::slotUpdateCompressedProgressData()
      * QApplication::processEvents() from inside setValue(), which means
      * that our update method may reenter multiple times.
      *
-     * This code avoids reentering by using a compresson and an explicit
+     * This code avoids reentering by using a compressor and an explicit
      * entrance counter.
      */
 

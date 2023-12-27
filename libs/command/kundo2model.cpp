@@ -51,7 +51,7 @@ KUndo2Model::KUndo2Model(QObject *parent)
     m_stack = 0;
     m_sel_model = new QItemSelectionModel(this, this);
     connect(m_sel_model, SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(setStackCurrentIndex(QModelIndex)));
-    m_emty_label = i18n("<empty>");
+    m_empty_label = i18n("<empty>");
 }
 
 QItemSelectionModel *KUndo2Model::selectionModel() const
@@ -172,7 +172,7 @@ QVariant KUndo2Model::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole) {
         if (index.row() == 0)
-            return m_emty_label;
+            return m_empty_label;
         return m_stack->text(index.row() - 1);
     } else if (role == Qt::DecorationRole) {
         if (index.row() == m_stack->cleanIndex() && !m_clean_icon.isNull())
@@ -184,12 +184,12 @@ QVariant KUndo2Model::data(const QModelIndex &index, int role) const
 
 QString KUndo2Model::emptyLabel() const
 {
-    return m_emty_label;
+    return m_empty_label;
 }
 
 void KUndo2Model::setEmptyLabel(const QString &label)
 {
-    m_emty_label = label;
+    m_empty_label = label;
     stackChanged();
 }
 

@@ -253,3 +253,9 @@ void KisToolProxy::deactivateToolAction(KisTool::ToolAction action)
     m_isActionActivated = false;
     m_lastAction = action;
 }
+
+bool KisToolProxy::supportsPaintingAssistants() const
+{
+    KisTool *activeTool = dynamic_cast<KisTool*>(const_cast<KisToolProxy*>(this)->priv()->activeTool);
+    return activeTool && activeTool->supportsPaintingAssistants();
+}

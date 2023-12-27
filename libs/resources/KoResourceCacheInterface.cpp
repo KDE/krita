@@ -5,15 +5,12 @@
  */
 
 #include "KoResourceCacheInterface.h"
+#include <KisStaticInitializer.h>
 
-
-struct KoResourceCacheInterfaceSPStaticRegistrar {
-    KoResourceCacheInterfaceSPStaticRegistrar() {
-        qRegisterMetaType<KoResourceCacheInterfaceSP>("KoResourceCacheInterfaceSP");
-        QMetaType::registerEqualsComparator<KoResourceCacheInterfaceSP>();
-    }
-};
-static KoResourceCacheInterfaceSPStaticRegistrar __registrar1;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KoResourceCacheInterfaceSP>("KoResourceCacheInterfaceSP");
+    QMetaType::registerEqualsComparator<KoResourceCacheInterfaceSP>();
+}
 
 KoResourceCacheInterface::~KoResourceCacheInterface()
 {

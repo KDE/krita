@@ -17,6 +17,7 @@
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
+#include <kis_image.h>
 
 #include "kis_qmic_plugin_interface.h"
 
@@ -45,30 +46,29 @@ void QMic::slotQMic(bool again)
     m_qmicAction->setEnabled(false);
     m_againAction->setEnabled(false);
 
-    KisQmicPluginInterface *plugin = nullptr;
+    std::unique_ptr<KisQmicPluginInterface> plugin;
 
     // find the krita-gmic-qt plugin
-    const auto offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
+    const QList<KoJsonTrader::Plugin> offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
     if (offers.isEmpty()) {
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The GMic plugin is not installed or could not be loaded."));
         return;
     }
 
     for (const auto &loader : offers) {
-        auto *factory = qobject_cast<KPluginFactory *>(loader->instance());
+        auto *factory = qobject_cast<KPluginFactory *>(loader.instance());
         if (!factory) {
-            warnPlugins << "(GMic) This is not a Krita plugin: " << loader->fileName() << loader->errorString();
+            warnPlugins << "(GMic) This is not a Krita plugin: " << loader.fileName() << loader.errorString();
 
             continue;
         }
 
         auto *pluginBase = factory->create<QObject>();
 
-        plugin = qobject_cast<KisQmicPluginInterface *>(pluginBase);
+        plugin.reset(qobject_cast<KisQmicPluginInterface *>(pluginBase));
 
         if (!plugin) {
-            warnPlugins << "(GMic) This is not a valid GMic-Qt plugin: " << loader->fileName();
-
+            warnPlugins << "(GMic) This is not a valid GMic-Qt plugin: " << loader.fileName();
             continue;
         }
 
@@ -80,14 +80,14 @@ void QMic::slotQMic(bool again)
         return;
     }
 
-    qDeleteAll(offers);
+    if (this->viewManager()->blockUntilOperationsFinished(this->viewManager()->image())) {
+        auto image = std::make_shared<KisImageInterface>(this->viewManager().data());
+        int status = plugin->launch(image, again);
 
-    auto image = std::make_shared<KisImageInterface>(this->viewManager().data());
-    int status = plugin->launch(image, again);
+        dbgPlugins << "pluginFinished" << status;
+    }
 
-    dbgPlugins << "pluginFinished" << status;
-    delete plugin;
-    plugin = nullptr;
+    plugin.reset();
 
     m_qmicAction->setEnabled(true);
     m_againAction->setEnabled(true);

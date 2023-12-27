@@ -49,7 +49,7 @@ Q_SIGNALS:
      * until the **all** the data is loaded. Otherwise the user will see weird flickering
      * because of partially loaded lod0 tiles.
      *
-     * NOTE: while the sync is blockes, the canvas is considered to use LodN planes
+     * NOTE: while the sync is blocked, the canvas is considered to use LodN planes
      *       that are expected to contain valid data.
      */
     void sigRequestLodPlanesSyncBlocked(bool value);

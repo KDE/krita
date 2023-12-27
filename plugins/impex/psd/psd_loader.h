@@ -15,6 +15,7 @@
 #include "kis_types.h"
 #include <KisImportExportErrorCode.h>
 class KisDocument;
+class KisImportUserFeedbackInterface;
 
 class PSDLoader : public QObject {
 
@@ -22,7 +23,7 @@ class PSDLoader : public QObject {
 
 public:
 
-    PSDLoader(KisDocument *doc);
+    PSDLoader(KisDocument *doc, KisImportUserFeedbackInterface *feedbackInterface);
     ~PSDLoader() override;
 
     KisImportExportErrorCode buildImage(QIODevice &io);
@@ -41,6 +42,7 @@ private:
     KisImageSP m_image;
     KisDocument *m_doc;
     bool m_stop;
+    KisImportUserFeedbackInterface *m_feedbackInterface {nullptr};
 };
 
 #endif

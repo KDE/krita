@@ -32,7 +32,7 @@
 
 void KisPaintingAssistantsDecorationTest::initTestCase()
 {
-    /* A bit of a heavy handed way to force the plugings to be loaded and get
+    /* A bit of a heavy handed way to force the plugins to be loaded and get
      * access to the paintingAssistantsDecoration but can't find another way
      * at the moment
      */
@@ -92,8 +92,8 @@ void KisPaintingAssistantsDecorationTest::testPerspectiveAssistant()
     QPointF p2(14.0, 90.0);
     QPointF adjustedPosition;
     // Compute twice to make sure state variables get taken into account
-    adjustedPosition = assistant->adjustPosition(p2, startPosition, true);
-    adjustedPosition = assistant->adjustPosition(p2, startPosition, true);
+    adjustedPosition = assistant->adjustPosition(p2, startPosition, true, 4.0);
+    adjustedPosition = assistant->adjustPosition(p2, startPosition, true, 4.0);
     // Should lead to a adjustment
     QVERIFY(adjustedPosition != p2);
 }
@@ -149,8 +149,8 @@ void KisPaintingAssistantsDecorationTest::testParallelRulerAdjustPosition()
     // Add an assistant
     paintingAssistantsDecoration->addAssistant(assistant);
 
-    // First compute directly via the assisant
-    adjustedPosition = assistant->adjustPosition(p2, startPosition, true);
+    // First compute directly via the assistant
+    adjustedPosition = assistant->adjustPosition(p2, startPosition, true, 4.0);
     // The position should be adjusted to the horizontal direction
     QVERIFY(adjustedPosition.x() == 90.0);
     QVERIFY(adjustedPosition.y() == 50.0);

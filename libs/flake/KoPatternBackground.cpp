@@ -214,7 +214,7 @@ QSizeF KoPatternBackground::patternOriginalSize() const
     return d->pattern.size();
 }
 
-void KoPatternBackground::paint(QPainter &painter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
+void KoPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
 {
     if (d->pattern.isNull()) {
         return;

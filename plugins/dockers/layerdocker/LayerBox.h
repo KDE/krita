@@ -31,6 +31,12 @@
 #include "kis_layer_filter_widget.h"
 #include "kis_signal_auto_connection.h"
 #include <QSlider>
+#include <QCheckBox>
+#include <kis_slider_spin_box.h>
+#include <QComboBox>
+#include <kis_idle_watcher.h>
+
+#include "kritalayerdocker_export.h"
 
 class QModelIndex;
 
@@ -56,7 +62,7 @@ class KisSelectionActionsAdapter;
  * This widget adds docking functionality and command buttons.
  *
  */
-class LayerBox : public QDockWidget, public KisMainwindowObserver
+class KRITALAYERDOCKER_EXPORT LayerBox : public QDockWidget, public KisMainwindowObserver
 {
 
     Q_OBJECT
@@ -70,15 +76,16 @@ public:
     void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
+
+protected:
+    void showEvent(QShowEvent *event) override;
+    void hideEvent(QHideEvent *event) override;
+
 private Q_SLOTS:
 
     void notifyImageDeleted();
 
     void slotContextMenuRequested(const QPoint &pos, const QModelIndex &index);
-
-    void slotMinimalView();
-    void slotDetailedView();
-    void slotThumbnailView();
 
     // From the node manager to the layerbox
     void slotSetCompositeOp(const KoCompositeOp* compositeOp);
@@ -120,12 +127,15 @@ private Q_SLOTS:
     void slotLayerOpMenuOpened();
     void slotLayerOpMenuClosed();
 
-    void updateThumbnail();
     void updateAvailableLabels();
     void updateLayerFiltering();
 
     void slotUpdateThumbnailIconSize();
     void slotUpdateTreeIndentation();
+    void slotUpdateLayerInfoTextStyle();
+    void slotUpdateLayerInfoTextOpacity();
+    void slotUpdateUseInlineLayerInfoText();
+    void slotUpdateUseLayerSelectionCheckbox();
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
@@ -162,14 +172,18 @@ private:
     KisAction *m_changeCloneSourceAction;
     KisAction *m_layerToggleSolo;
     KisAction *m_showGlobalSelectionMask;
-    KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
     KisSignalCompressor m_treeIndentationCompressor;
+    KisSignalCompressor m_infoTextOpacityCompressor;
 
     KisLayerFilterWidget* layerFilterWidget;
     QSlider *thumbnailSizeSlider;
     QSlider *indentationSlider;
+    QComboBox *infoTextCombobox;
+    KisSliderSpinBox *infoTextOpacitySlider;
+    QCheckBox *infoTextInlineChkbox;
+    QCheckBox *layerSelectionCheckBox {nullptr};
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
@@ -177,7 +191,7 @@ private:
     KisSignalAutoConnectionsStore m_activeNodeConnections;
 };
 
-class LayerBoxFactory : public KoDockFactoryBase
+class KRITALAYERDOCKER_EXPORT LayerBoxFactory : public KoDockFactoryBase
 {
 
 public:

@@ -70,6 +70,7 @@ public:
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual QString category() const = 0;
+    virtual bool lodSizeThresholdSupported() const = 0;
 
     /**
      * @return all the resources linked to \p settings.
@@ -103,7 +104,7 @@ public:
     /**
      * create a widget that can display paintop settings
      */
-    virtual KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) = 0;
+    virtual KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) = 0;
 
     /**
      * Set the priority of this paintop, as it is shown in the UI; lower number means

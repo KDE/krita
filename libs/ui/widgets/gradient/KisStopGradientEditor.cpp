@@ -18,6 +18,7 @@
 #include <resources/KoStopGradient.h>
 
 #include "kis_debug.h"
+#include <kis_signals_blocker.h>
 
 #include <kis_icon_utils.h>
 
@@ -92,18 +93,20 @@ KisStopGradientEditor::KisStopGradientEditor(QWidget *parent)
     compactModeSelectNextStopButton->setDefaultAction(selectNextStopAction);
     
     compactModeMiscOptionsButton->setPopupMode(QToolButton::InstantPopup);
+    compactModeMiscOptionsButton->setArrowVisible(false);
     compactModeMiscOptionsButton->setAutoRaise(true);
     compactModeMiscOptionsButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    compactModeMiscOptionsButton->setStyleSheet("QToolButton::menu-indicator { image: none; }");
-    QAction *separator = new QAction;
+    QMenu *compactModeMiscOptionsButtonMenu = new QMenu(this);
+    QAction *separator = new QAction(this);
     separator->setSeparator(true);
-    compactModeMiscOptionsButton->addAction(m_editStopAction);
-    compactModeMiscOptionsButton->addAction(m_deleteStopAction);
-    compactModeMiscOptionsButton->addAction(separator);
-    compactModeMiscOptionsButton->addAction(flipStopsAction);
-    compactModeMiscOptionsButton->addAction(sortByValueAction);
-    compactModeMiscOptionsButton->addAction(sortByHueAction);
-    compactModeMiscOptionsButton->addAction(distributeEvenlyAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_editStopAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_deleteStopAction);
+    compactModeMiscOptionsButtonMenu->addAction(separator);
+    compactModeMiscOptionsButtonMenu->addAction(flipStopsAction);
+    compactModeMiscOptionsButtonMenu->addAction(sortByValueAction);
+    compactModeMiscOptionsButtonMenu->addAction(sortByHueAction);
+    compactModeMiscOptionsButtonMenu->addAction(distributeEvenlyAction);
+    compactModeMiscOptionsButton->setPopupWidget(compactModeMiscOptionsButtonMenu);
 
     stopEditor->setUseTransParentCheckBox(false);
 
@@ -191,6 +194,7 @@ void KisStopGradientEditor::stopChanged(int stop)
         selectedStopLabel->setText(i18nc("Text that indicates the selected stop in the stop gradient editor", "Stop #%1", stop + 1));
 
         KoGradientStop gradientStop = m_gradient->stops()[stop];
+        KisSignalsBlocker blocker(stopEditor);
         stopEditor->setPosition(gradientStop.position * 100.0);
 
         KoColor color;

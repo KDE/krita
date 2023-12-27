@@ -18,6 +18,7 @@
 
 #include <KoColorSpace.h>
 
+#include <KisSpinBoxI18nHelper.h>
 #include "KisViewManager.h"
 #include <kis_debug.h>
 #include <kis_global.h>
@@ -71,7 +72,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     : KoDialog(parent)
     , d(new Private())
 {
-    nodes = KisLayerUtils::sortMergableNodes(view->image()->root(), nodes);
+    nodes = KisLayerUtils::sortMergeableNodes(view->image()->root(), nodes);
     d->nodes = nodes;
 
     Q_UNUSED(f);
@@ -94,7 +95,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     connect(d->page->editName, SIGNAL(textChanged(QString)), SLOT(slotNameValueChangedExternally()));
 
     d->page->intOpacity->setRange(0, 100);
-    d->page->intOpacity->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(d->page->intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     d->opacityProperty.reset(new KisMultinodeOpacityProperty(nodes));
     d->opacityProperty->connectIgnoreCheckBox(d->page->chkOpacity);
     d->opacityProperty->connectAutoEnableWidget(d->page->intOpacity);

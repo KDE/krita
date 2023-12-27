@@ -22,7 +22,7 @@ class KoColorSpace;
 /**
  * @brief A class that can render different KisHistograms. It renders a
  * somewhat smooth shape (with different colors for rgb, cmyk and xyz channels).
- * It can also render the different channels of a colorspace overlaped.
+ * It can also render the different channels of a colorspace overlapped.
  */
 class KRITAUI_EXPORT KisHistogramPainter
 {

@@ -9,18 +9,16 @@
 #include <QTimer>
 #include <QThread>
 
+#include "KisMpl.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_image_config.h"
+#include <KisStaticInitializer.h>
 
-struct KisCancelReasonStaticRegistrar {
-    KisCancelReasonStaticRegistrar() {
-        qRegisterMetaType<KisAsyncAnimationRendererBase::CancelReason>("KisAsyncAnimationRendererBase::CancelReason");
-    }
-};
-
-static KisCancelReasonStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisAsyncAnimationRendererBase::CancelReason>("KisAsyncAnimationRendererBase::CancelReason");
+}
 
 struct KRITAUI_NO_EXPORT KisAsyncAnimationRendererBase::Private
 {
@@ -51,7 +49,7 @@ KisAsyncAnimationRendererBase::~KisAsyncAnimationRendererBase()
 
 }
 
-void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags)
+void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags, KisLockFrameGenerationLock &&frameGenerationLock)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() == this->thread());
 
@@ -74,12 +72,12 @@ void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int
                 Qt::AutoConnection);
 
     m_d->regenerationTimeout.start();
-    animation->requestFrameRegeneration(m_d->requestedFrame, m_d->requestedRegion, flags & Cancellable);
+    animation->requestFrameRegeneration(m_d->requestedFrame, m_d->requestedRegion, flags & Cancellable, std::move(frameGenerationLock));
 }
 
-void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, Flags flags)
+void KisAsyncAnimationRendererBase::startFrameRegeneration(KisImageSP image, int frame, Flags flags, KisLockFrameGenerationLock &&frameGenerationLock)
 {
-    startFrameRegeneration(image, frame, KisRegion(), flags);
+    startFrameRegeneration(image, frame, KisRegion(), flags, std::move(frameGenerationLock));
 }
 
 bool KisAsyncAnimationRendererBase::isActive() const
@@ -129,10 +127,17 @@ void KisAsyncAnimationRendererBase::notifyFrameCompleted(int frame)
     // the processing was cancelled
     if (m_d->isCancelled) return;
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    {
+        // clean state right after the assert checks
+        auto cleanup = kismpl::finally([&] () {
+            clearFrameRegenerationState(false);
+        });
 
-    clearFrameRegenerationState(false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    }
+
+
     emit sigFrameCompleted(frame);
 }
 
@@ -144,10 +149,16 @@ void KisAsyncAnimationRendererBase::notifyFrameCancelled(int frame, CancelReason
     // the processing was cancelled
     if (m_d->isCancelled) return;
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    {
+        // clean state right after the assert checks
+        auto cleanup = kismpl::finally([&] () {
+            clearFrameRegenerationState(true);
+        });
 
-    clearFrameRegenerationState(true);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedImage);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
+    }
+
     emit sigFrameCancelled(frame, cancelReason);
 }
 

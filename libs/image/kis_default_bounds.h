@@ -29,6 +29,7 @@ public:
 
     QRect bounds() const override;
     bool wrapAroundMode() const override;
+    WrapAroundAxis wrapAroundModeAxis() const override;
     int currentLevelOfDetail() const override;
     int currentTime() const override;
     bool externalFrameActive() const override;
@@ -54,6 +55,7 @@ public:
     QRect bounds() const override;
     QRect imageBorderRect() const override;
     bool wrapAroundMode() const override;
+    WrapAroundAxis wrapAroundModeAxis() const override;
     int currentLevelOfDetail() const override;
     int currentTime() const override;
     bool externalFrameActive() const override;
@@ -69,6 +71,7 @@ private:
 class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds
 {
 public:
+    KisSelectionEmptyBounds();
     KisSelectionEmptyBounds(KisImageWSP image);
     ~KisSelectionEmptyBounds() override;
     QRect bounds() const override;
@@ -87,6 +90,7 @@ public:
 
     QRect bounds() const override;
     bool wrapAroundMode() const override;
+    WrapAroundAxis wrapAroundModeAxis() const override;
     int currentLevelOfDetail() const override;
     int currentTime() const override;
     bool externalFrameActive() const override;

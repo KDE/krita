@@ -30,7 +30,7 @@
  are just paint devices, too.
 
  Masks should show up in the layerbox as sub-layers for the layer they
- are associated with and be ccp'able and draggable to other layers.
+ are associated with and be cut/copy-able and draggable to other layers.
 
  Examples of masks are:
 
@@ -176,6 +176,7 @@ public:
     QRect needRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const override;
     QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
+    int thumbnailSeqNo() const override;
 
     void testingInitSelection(const QRect &rect, KisLayerSP parentLayer);
 

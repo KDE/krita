@@ -9,6 +9,8 @@
 
 #include "kis_hsv_adjustment_filter.h"
 
+#include <klocalizedstring.h>
+
 #include <filter/kis_filter_category_ids.h>
 #include <filter/kis_color_transformation_configuration.h>
 #include <kis_selection.h>
@@ -45,7 +47,7 @@ enum class SLIDER_SET {
 };
 
 struct SliderSettings {
-    SliderSettings(SLIDER_TYPE type, KisHsvColorSlider::MIX_MODE mixMode, const char *title, int min, int max, int minRelative, int maxRelative, int resetValue)
+    SliderSettings(SLIDER_TYPE type, KisHsvColorSlider::MIX_MODE mixMode, const KLocalizedString &title, int min, int max, int minRelative, int maxRelative, int resetValue)
         : m_type(type)
         , m_mixMode(mixMode)
         , m_title(title)
@@ -63,7 +65,7 @@ struct SliderSettings {
         const int min = colorize ? m_min : m_minRelative;
         const int max = colorize ? m_max : m_maxRelative;
 
-        label->setText(i18n(m_title));
+        label->setText(m_title.toString());
         slider->setMinimum(min);
         slider->setMaximum(max);
         spinBox->setMinimum(min);
@@ -213,7 +215,7 @@ struct SliderSettings {
 
     SLIDER_TYPE m_type;
     KisHsvColorSlider::MIX_MODE m_mixMode;
-    const char *m_title;
+    KLocalizedString m_title;
     int m_min, m_max;
     int m_minRelative, m_maxRelative;
     int m_resetValue;
@@ -221,15 +223,15 @@ struct SliderSettings {
 
 // Slider configuration based on their SLIDER_TYPE
 const SliderSettings SLIDER_TABLE[9] = {
-    SliderSettings(SLIDER_TYPE::HUE,        KisHsvColorSlider::MIX_MODE::HSV,         "Hue",         0,    360, -180, 180, 0),
-    SliderSettings(SLIDER_TYPE::SATURATION, KisHsvColorSlider::MIX_MODE::HSV,         "Saturation",  0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::VALUE,      KisHsvColorSlider::MIX_MODE::HSV,         "Value",       -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::LIGHTNESS,  KisHsvColorSlider::MIX_MODE::HSL,         "Lightness",   -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::LUMA,       KisHsvColorSlider::MIX_MODE::HSY,         "Luma",        -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::INTENSITY,  KisHsvColorSlider::MIX_MODE::HSI,         "Intensity",   -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::YELLOW_BLUE,KisHsvColorSlider::MIX_MODE::COLOR_SPACE, "Yellow-Blue", 0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::GREEN_RED,  KisHsvColorSlider::MIX_MODE::COLOR_SPACE, "Green-Red",   0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::LUMA_YUV,   KisHsvColorSlider::MIX_MODE::COLOR_SPACE, "Luma",        -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::HUE,        KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Hue"),         0,    360, -180, 180, 0),
+    SliderSettings(SLIDER_TYPE::SATURATION, KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Saturation"),  0,    100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::VALUE,      KisHsvColorSlider::MIX_MODE::HSV,         ki18nc("Brightness level of HSV model", "Value"),       -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::LIGHTNESS,  KisHsvColorSlider::MIX_MODE::HSL,         ki18n("Lightness"),   -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::LUMA,       KisHsvColorSlider::MIX_MODE::HSY,         ki18n("Luma"),        -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::INTENSITY,  KisHsvColorSlider::MIX_MODE::HSI,         ki18nc("Brightness in HSI color model", "Intensity"),   -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::YELLOW_BLUE,KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Yellow-Blue"), 0,    100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::GREEN_RED,  KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Green-Red"),   0,    100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::LUMA_YUV,   KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Luma"),        -100, 100, -100, 100, 0),
 };
 
 // Defines which sliders to display in each set.
@@ -359,6 +361,8 @@ void KisHSVConfigWidget::setConfiguration(const KisPropertiesConfigurationSP con
 
 void KisHSVConfigWidget::configureSliderLimitsAndLabels()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_page->cmbType->currentIndex() >= 0);
+
     const std::array<SLIDER_TYPE, 3> sliderSet = SLIDER_SETS[m_page->cmbType->currentIndex()];
     const bool colorize = m_page->chkColorize->isChecked();
 
@@ -372,8 +376,7 @@ void KisHSVConfigWidget::configureSliderLimitsAndLabels()
 
     recolorSliders();
 
-    const bool compat = !m_page->chkColorize->isChecked() &&
-            m_page->cmbType->currentIndex() >= 0 && m_page->cmbType->currentIndex() <= 3;
+    const bool compat = !m_page->chkColorize->isChecked() && m_page->cmbType->currentIndex() <= 3;
 
     m_page->chkCompatibilityMode->setEnabled(compat);
     m_prevColorize = colorize;

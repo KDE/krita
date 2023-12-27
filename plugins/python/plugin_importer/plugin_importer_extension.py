@@ -87,8 +87,7 @@ class PluginImporterExtension(krita.Extension):
                 'true')
 
     def get_resources_dir(self):
-        return QStandardPaths.writableLocation(
-            QStandardPaths.AppDataLocation)
+        return Krita.instance().getAppDataLocation()
 
     def import_plugin_from_web(self):
         infotext = i18n(

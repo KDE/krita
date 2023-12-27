@@ -1,0 +1,69 @@
+<svg width="400px" height="320px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+<g id="testRect">
+    <!-- This test CSS Text white-space and xml:space. Because SVG 2 relies on the model in CSS-Text-4, where white space is split into three sub-properties. Break-spaces is still missing in CSS-Text-4 and is thus not tested. At the same time, CSS-Txt-4 is still fluctuating at time of writing, so we only test CSS-Text-3 white-space values andd not the longhands-->
+    
+    <text id="test-ws-normal" transform="translate(5,15)"
+          style="white-space:normal; tab-size:4; inline-size:100"
+          font-family="DejaVu Sans" fill="red"
+          font-size="10">This tests "white-space:normal",
+		which  collapses  spaces and wraps text.   
+		<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    <text id="test-ws-pre" transform="translate(115,15)"
+          style="white-space:pre; tab-size:4; inline-size:100"
+          font-family="DejaVu Sans" fill="blue"
+          font-size="10">This tests "white-space:pre",
+		which  preserves  spaces and does not wrap text.   
+    	<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    <text id="test-ws-nowrap" transform="translate(105,115)"
+          style="white-space:nowrap; tab-size:4; inline-size:100"
+          font-family="DejaVu Sans" fill="blue"
+          font-size="10">This tests "white-space:nowrap",
+		which  collapses  spaces and does not wrap text.   
+		<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <!-- This is a pretty important test: positioning should only be applied after white-space collapse has been handled. -->
+    <text style="white-space:normal;" transform="translate(120,180)" font-family="DejaVu Sans" fill="green"
+          font-size="10" dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0">Test    text   with      white-space.</text>
+    
+    <text style="white-space:pre;" transform="translate(280,170)" font-family="DejaVu Sans" fill="green"
+          font-size="10" dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 -3 3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0">Test hard breaks for
+svg 1.1 style text.</text>
+
+    <text id="test-ws-pre-wrap" transform="translate(5,115)"
+          style="white-space:pre-wrap; tab-size:4; inline-size:100"
+          font-family="DejaVu Sans" fill="red"
+          font-size="10">This tests "white-space:pre-wrap",
+		which  preserves  spaces and wraps text.   
+		<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <text id="test-ws-pre-line" transform="translate(5,215)"
+          style="white-space:pre-line; tab-size:4; inline-size:100"
+          font-family="DejaVu Sans" fill="red"
+          font-size="10">This tests "white-space:pre-line",
+		which  preserves  breaks and wraps text.   
+		<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <text id="test-xmlspace-default" transform="translate(105,215)"
+          style="inline-size:100; tab-size:4;" xml:space="default"
+          font-family="DejaVu Sans" fill="blue"
+          font-size="10">This tests xml:space="default",
+		which  removes  spaces and may wrap text.   
+		<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <text id="test-xmlspace-preserve" transform="translate(215,215)"
+          style="inline-size:100; tab-size:4;" xml:space="preserve"
+          font-family="DejaVu Sans" fill="green"
+          font-size="10">This tests xml:space="preserve",
+		which  preserves  spaces and may wrap text.   
+		<tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+</g>
+
+</svg>

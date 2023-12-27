@@ -181,7 +181,7 @@
       </widget>
      </item>
      <item>
-      <widget class="KisFileNameRequester" name="imageUrl">
+      <widget class="KisFileNameRequester" name="imageUrlRequester">
        <property name="sizePolicy">
         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -216,7 +216,7 @@
   </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QDoubleSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

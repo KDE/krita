@@ -1,8 +1,5 @@
 /*
- *  This file is part of Calligra tests
- *
  *  SPDX-FileCopyrightText: 2006-2010 Thomas Zander <zander@kde.org>
- *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #ifndef MOCKSHAPES_H
@@ -27,7 +24,7 @@ class KRITAFLAKE_EXPORT MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, KoShapePaintingContext &) const override {
+    void paint(QPainter &painter) const override {
         Q_UNUSED(painter);
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
@@ -41,7 +38,7 @@ class KRITAFLAKE_EXPORT MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = new SimpleShapeContainerModel()) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
+    void paintComponent(QPainter &painter) const override {
         Q_UNUSED(painter);
         //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
@@ -71,7 +68,7 @@ public:
 
 class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
+    void paintComponent(QPainter &painter) const override {
         Q_UNUSED(painter);
         paintedCount++;
     }
@@ -135,7 +132,10 @@ public:
     KoToolProxy * toolProxy() const override {
         return 0;
     }
-    KoViewConverter *viewConverter() const override {
+    const KoViewConverter *viewConverter() const override {
+        return 0;
+    }
+    KoViewConverter *viewConverter() override {
         return 0;
     }
     QWidget* canvasWidget() override {
@@ -147,7 +147,6 @@ public:
     KoUnit unit() const override {
         return KoUnit(KoUnit::Millimeter);
     }
-    void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
     private:
         QScopedPointer<KoShapeManager> m_shapeManager;

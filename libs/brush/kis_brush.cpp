@@ -41,14 +41,14 @@
 #include <KoResource.h>
 #include <KoResourceServerProvider.h>
 #include <KisLazySharedCacheStorage.h>
+#include <KisOptimizedBrushOutline.h>
+#include <KisStaticInitializer.h>
 
-struct KisBrushSPStaticRegistrar {
-    KisBrushSPStaticRegistrar() {
-        qRegisterMetaType<KisBrushSP>("KisBrushSP");
-        QMetaType::registerEqualsComparator<KisBrushSP>();
-    }
-};
-static KisBrushSPStaticRegistrar __registrar1;
+
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisBrushSP>("KisBrushSP");
+    QMetaType::registerEqualsComparator<KisBrushSP>();
+}
 
 const QString KisBrush::brushTypeMetaDataKey = "image-based-brush";
 
@@ -101,25 +101,13 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
     m_iterator->nextRow();
 }
 
-
-namespace {
-QPainterPath* outlineFactory(const KisBrush *brush) {
-    KisFixedPaintDeviceSP dev;
-    KisDabShape inverseTransform(1.0 / brush->scale(), 1.0, -brush->angle());
-
-    if (brush->brushApplication() == IMAGESTAMP) {
-        dev = brush->paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
-                          inverseTransform, KisPaintInformation());
-    }
-    else {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-        dev = new KisFixedPaintDevice(cs);
-        brush->mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
-    }
+namespace detail {
+KisOptimizedBrushOutline* outlineFactory(const KisBrush *brush) {
+    KisFixedPaintDeviceSP dev = brush->outlineSourceImage();
 
     KisBoundary boundary(dev);
     boundary.generateBoundary();
-    return new QPainterPath(boundary.path());
+    return new KisOptimizedBrushOutline(boundary.path());
 }
 }
 
@@ -141,7 +129,8 @@ struct KisBrush::Private {
                        {
                            return new KisQImagePyramid(brush->brushTipImage());
                        })
-        , brushOutline(outlineFactory)
+        , brushOutline(&detail::outlineFactory)
+
     {
     }
 
@@ -163,6 +152,12 @@ struct KisBrush::Private {
            * Be careful! The pyramid is shared between two brush objects,
            * therefore you cannot change it, only recreate! That is the
            * reason why it is defined as const!
+           *
+           * Take it also into account that the object is defined as
+           * KisLazySharedCacheStorage**Linked**, that is, when a cloned
+           * object updates the cache, the cache of the source object is
+           * also updated. The two caches are detached only when any of
+           * the objects calls cache.reset().
            */
           brushPyramid(rhs.brushPyramid),
           brushOutline(rhs.brushOutline)
@@ -195,8 +190,8 @@ struct KisBrush::Private {
     bool threadingAllowed;
 
     QImage brushTipImage;
-    mutable KisLazySharedCacheStorage<KisQImagePyramid, const KisBrush*> brushPyramid;
-    mutable KisLazySharedCacheStorage<QPainterPath, const KisBrush*> brushOutline;
+    mutable KisLazySharedCacheStorageLinked<KisQImagePyramid, const KisBrush*> brushPyramid;
+    mutable KisLazySharedCacheStorageLinked<KisOptimizedBrushOutline, const KisBrush*> brushOutline;
 };
 
 KisBrush::KisBrush()
@@ -293,8 +288,10 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
 
 void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
-    d->brushApplication = brushApplication;
-    clearBrushPyramid();
+    if (d->brushApplication != brushApplication) {
+        d->brushApplication = brushApplication;
+        clearBrushPyramid();
+    }
 }
 
 enumBrushApplication KisBrush::brushApplication() const
@@ -358,6 +355,45 @@ bool KisBrush::isPiercedApprox() const
     return failedPixels > failedPixelsThreshold;
 }
 
+namespace {
+void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
+{
+    for (int x = 0; x < maskWidth; x++) {
+        *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*src));
+        src++;
+        dst++;
+    }
+}
+}
+
+KisFixedPaintDeviceSP KisBrush::outlineSourceImage() const
+{
+    /**
+     * We need to generate the mask manually, skipping the
+     * construction of the image pyramid
+     */
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->alpha8();
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+    const QImage image = brushTipImage().convertToFormat(QImage::Format_ARGB32);
+
+    dev->setRect(image.rect());
+    dev->lazyGrowBufferWithoutInitialization();
+
+    const int maskWidth = image.width();
+    const int maskHeight = image.height();
+
+    quint8 *dstPtr = dev->data();
+
+    for (int y = 0; y < maskHeight; y++) {
+        const QRgb* maskPointer = reinterpret_cast<const QRgb*>(image.constScanLine(y));
+        fetchPremultipliedRed(maskPointer, dstPtr, maskWidth);
+        dstPtr += maskWidth;
+    }
+
+    return dev;
+}
+
 bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)
 {
     return true;
@@ -378,7 +414,7 @@ void KisBrush::setBrushTipImage(const QImage& image)
         setHeight(image.height());
     }
     clearBrushPyramid();
-
+    resetOutlineCache();
 }
 
 void KisBrush::setBrushType(enumBrushType type)
@@ -538,17 +574,6 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDa
 {
     PaintDeviceColoringInformation pdci(src, maskWidth(shape, subPixelX, subPixelY, info));
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
-}
-
-namespace {
-void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
-{
-    for (int x = 0; x < maskWidth; x++) {
-        *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*src));
-        src++;
-        dst++;
-    }
-}
 }
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
@@ -717,7 +742,7 @@ qreal KisBrush::angle() const
     return d->angle;
 }
 
-QPainterPath KisBrush::outline(bool forcePreciseOutline) const
+KisOptimizedBrushOutline KisBrush::outline(bool forcePreciseOutline) const
 {
     Q_UNUSED(forcePreciseOutline);
 

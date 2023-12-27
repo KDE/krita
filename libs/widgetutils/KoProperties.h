@@ -154,7 +154,7 @@ public:
     bool contains(const QString &key) const;
 
     /**
-     * Returns the value assocatied with the specified key if this
+     * Returns the value associated with the specified key if this
      * properties object contains the specified key; otherwise return
      * an empty QVariant.
      */

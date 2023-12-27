@@ -29,14 +29,12 @@ public:
 
 
     TwoPointAssistant();
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
+    void endStroke() override;
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
-    void endStroke() override;
-
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 5 : 3; }
 
     void saveCustomXml(QXmlStreamWriter* xml) override;
@@ -82,13 +80,7 @@ private:
     double m_gridDensity {1.0};
     bool m_useVertical {true};
 
-    // Needed to make sure that when we are in the middle of a brush stroke, the
-    // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition {false};
-    bool m_adjustedPositionValid {false};
-    QPointF m_adjustedBrushPosition;
-    int m_lastUsedPoint {-1};
-    bool m_hasBeenInsideLocal {false};
+    int m_lastUsedPoint {-1}; // last used vanishing point
 
 };
 

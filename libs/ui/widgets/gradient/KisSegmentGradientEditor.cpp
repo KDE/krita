@@ -11,6 +11,7 @@
 #include <QDoubleSpinBox>
 #include <QAction>
 #include <QDialog>
+#include <QMenu>
 
 #include <KoColorSpace.h>
 #include <resources/KoSegmentGradient.h>
@@ -24,6 +25,7 @@
 
 #include <kis_icon_utils.h>
 #include <kis_signals_blocker.h>
+#include <KisSpinBoxI18nHelper.h>
 
 #include "KisSegmentGradientEditor.h"
 
@@ -133,33 +135,35 @@ KisSegmentGradientEditor::KisSegmentGradientEditor(QWidget *parent)
     compactModeSelectNextHandleButton->setDefaultAction(selectNextHandleAction);
 
     compactModeMiscOptionsButton->setPopupMode(QToolButton::InstantPopup);
+    compactModeMiscOptionsButton->setArrowVisible(false);
     compactModeMiscOptionsButton->setAutoRaise(true);
     compactModeMiscOptionsButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    compactModeMiscOptionsButton->setStyleSheet("QToolButton::menu-indicator { image: none; }");
+    QMenu *compactModeMiscOptionsButtonMenu = new QMenu;
     QAction *separator = new QAction;
     separator->setSeparator(true);
-    compactModeMiscOptionsButton->addAction(m_editHandleAction);
-    compactModeMiscOptionsButton->addAction(m_deleteSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_flipSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_splitSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_duplicateSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_deleteStopAction);
-    compactModeMiscOptionsButton->addAction(m_centerStopAction);
-    compactModeMiscOptionsButton->addAction(m_centerMidPointAction);
-    compactModeMiscOptionsButton->addAction(separator);
-    compactModeMiscOptionsButton->addAction(flipGradientAction);
-    compactModeMiscOptionsButton->addAction(distributeSegmentsEvenlyAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_editHandleAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_deleteSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_flipSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_splitSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_duplicateSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_deleteStopAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_centerStopAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_centerMidPointAction);
+    compactModeMiscOptionsButtonMenu->addAction(separator);
+    compactModeMiscOptionsButtonMenu->addAction(flipGradientAction);
+    compactModeMiscOptionsButtonMenu->addAction(distributeSegmentsEvenlyAction);
+    compactModeMiscOptionsButton->setPopupWidget(compactModeMiscOptionsButtonMenu);
 
     stopLeftEditor->setUsePositionSlider(false);
     stopRightEditor->setUsePositionSlider(false);
     constrainStopButton->setKeepAspectRatio(false);
     constrainStopButton->setToolTip(i18nc("Button to link both end colors of a stop handle in the segment gradient editor", "Link colors"));
     stopPositionSlider->setRange(0, 100, 2);
-    stopPositionSlider->setPrefix(i18n("Position: "));
-    stopPositionSlider->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(stopPositionSlider,
+                                  i18nc("{n} is the number value, % is the percent sign", "Position: {n}%"));
     midPointPositionSlider->setRange(0, 100, 2);
-    midPointPositionSlider->setPrefix(i18n("Position: "));
-    midPointPositionSlider->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(midPointPositionSlider,
+                                  i18nc("{n} is the number value, % is the percent sign", "Position: {n}%"));
 
     setCompactMode(false);
     setGradient(0);
@@ -775,7 +779,6 @@ void KisSegmentGradientEditor::on_midPointPositionSlider_valueChanged(double pos
 
 void KisSegmentGradientEditor::on_nameedit_editingFinished()
 {
-    qDebug() << "on_nameedit_editingfinished" << m_gradient->name() << nameedit->text();
     m_gradient->setName(nameedit->text());
     m_gradient->setFilename(nameedit->text() + m_gradient->defaultFileExtension());
     emit sigGradientChanged();

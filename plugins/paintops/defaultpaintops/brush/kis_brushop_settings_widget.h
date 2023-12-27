@@ -12,7 +12,6 @@
 #define KIS_BRUSHOP_SETTINGS_WIDGET_H_
 
 #include <kis_brush_based_paintop_options_widget.h>
-#include <kis_curve_option_widget.h>
 
 
 class KisBrushOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
@@ -22,19 +21,13 @@ class KisBrushOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
 
-    KisBrushOpSettingsWidget(QWidget* parent = 0);
+    KisBrushOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     ~KisBrushOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
 
-protected:
-    void notifyPageChanged() override;
-
-private:
-    KisCurveOptionWidget* m_lightnessStrengthOptionWidget;
 };
-
 
 
 #endif // KIS_BRUSHOP_SETTINGS_WIDGET_H_

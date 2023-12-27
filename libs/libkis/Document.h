@@ -592,9 +592,11 @@ print(root.childNodes())
      * @param fileName the absolute filename of the file referenced. Symlinks will be resolved.
      * @param scalingMethod how the dimensions of the file are interpreted
      *        can be either "None", "ImageToSize" or "ImageToPPI"
+     * @param scalingFilter filter used to scale the file
+     *        can be "Bicubic", "Hermite", "NearestNeighbor", "Bilinear", "Bell", "BSpline", "Lanczos3", "Mitchell"
      * @return a FileLayer
      */
-    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod);
+    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod, const QString scalingFilter = "Bicubic");
 
     /**
      * @brief createFilterLayer creates a filter layer, which is a layer that represents a filter
@@ -742,7 +744,7 @@ print(root.childNodes())
 
     /**
      * Wait for all the internal image jobs to complete and return without locking
-     * the image. This function is handly for tests or other synchronous actions,
+     * the image. This function is handy for tests or other synchronous actions,
      * when one needs to wait for the result of his actions.
      */
     void waitForDone();
@@ -795,6 +797,12 @@ print(root.childNodes())
      * @brief modified returns true if the document has unsaved modifications.
      */
     bool modified() const;
+
+    /**
+     * @brief setModified sets the modified status of the document
+     * @param modified if true, the document is considered modified and closing it will ask for saving.
+     */
+    void setModified(bool modified);
 
     /**
      * @brief bounds return the bounds of the image

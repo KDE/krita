@@ -265,7 +265,7 @@ QMap<QString, Resource*> Krita::resources(QString &type) const
     QMap<QString, Resource*> resources;
     KisResourceModel *resourceModel = 0;
     if (type == "pattern") {
-        resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
+        resourceModel = KoResourceServerProvider::instance()->patternServer()->resourceModel();
         type = ResourceType::Patterns;
     }
     else if (type == "gradient") {
@@ -336,7 +336,6 @@ Document* Krita::createDocument(int width, int height, const QString &name, cons
     Q_ASSERT(cs);
 
     QColor qc(Qt::white);
-    qc.setAlpha(0);
     KoColor bgColor(qc, cs);
 
     if (!document->newImage(name, width, height, cs, bgColor, KisConfig::RASTER_LAYER, 1, "", double(resolution / 72) )) {
@@ -441,6 +440,11 @@ QString Krita::krita_i18n(const QString &text)
 QString Krita::krita_i18nc(const QString &context, const QString &text)
 {
     return i18nc(context.toUtf8().constData(), text.toUtf8().constData());
+}
+
+QString Krita::getAppDataLocation()
+{
+    return KoResourcePaths::getAppDataLocation();
 }
 
 void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)

@@ -14,14 +14,12 @@
 
 #include "kis_debug.h"
 
-KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(QWidget *parent,
+KisVisualRectangleSelectorShape::KisVisualRectangleSelectorShape(KisVisualColorSelector *parent,
                                                                  Dimensions dimension,
-                                                                 const KoColorSpace *cs,
                                                                  int channel1, int channel2,
-                                                                 const KoColorDisplayRendererInterface *displayRenderer,
                                                                  int width,
                                                                  singelDTypes d)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, channel1, channel2)
 {
     //qDebug()  << "creating KisVisualRectangleSelectorShape" << this;
     m_type = d;
@@ -38,30 +36,23 @@ void KisVisualRectangleSelectorShape::setBorderWidth(int width)
     m_barWidth = width;
 }
 
+void KisVisualRectangleSelectorShape::setOneDimensionalType(KisVisualRectangleSelectorShape::singelDTypes type)
+{
+    if (type != m_type) {
+        m_type = type;
+        forceImageUpdate();
+        update();
+    }
+}
+
 QRect KisVisualRectangleSelectorShape::getSpaceForSquare(QRect geom)
 {
-    QPointF tl;
-    QPointF br;
-
-    if (m_type==KisVisualRectangleSelectorShape::vertical) {
-        br = geom.bottomRight();
-        tl = QPoint(geom.topLeft().x()+m_barWidth, geom.topLeft().y());
-    } else if (m_type==KisVisualRectangleSelectorShape::horizontal) {
-        br = geom.bottomRight();
-        tl = QPoint(geom.topLeft().x(), geom.topLeft().y()+m_barWidth);
-    } else {
-        tl = QPointF (geom.topLeft().x()+m_barWidth, geom.topLeft().y()+m_barWidth);
-        br = QPointF (geom.bottomRight().x()-m_barWidth, geom.bottomRight().y()-m_barWidth);
-
-    }
-    QRect a(tl.toPoint(), br.toPoint());
-    QRect r(a.left(), a.top(), qMin(a.height(), a.width()), qMin(a.height(), a.width()));
-    return r;
+    return getAvailableSpace(geom, true);
 }
 
 QRect KisVisualRectangleSelectorShape::getSpaceForCircle(QRect geom)
 {
-    return getSpaceForSquare(geom);
+    return getAvailableSpace(geom, false);
 }
 
 QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
@@ -69,11 +60,40 @@ QRect KisVisualRectangleSelectorShape::getSpaceForTriangle(QRect geom)
     return getSpaceForSquare(geom);
 }
 
+QRect KisVisualRectangleSelectorShape::getAvailableSpace(QRect geom, bool stretch)
+{
+    QPoint tl;
+    QPoint br;
+
+    if (m_type == KisVisualRectangleSelectorShape::vertical) {
+        br = geom.bottomRight();
+        tl = QPoint(geom.topLeft().x() + m_barWidth, geom.topLeft().y());
+    } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+        br = geom.bottomRight();
+        tl = QPoint(geom.topLeft().x(), geom.topLeft().y() + m_barWidth);
+    } else {
+        tl = QPoint(geom.topLeft().x() + m_barWidth, geom.topLeft().y() + m_barWidth);
+        br = QPoint(geom.bottomRight().x() - m_barWidth, geom.bottomRight().y() - m_barWidth);
+    }
+    QRect available(tl, br);
+    if (!stretch) {
+        int size = qMin(available.height(), available.width());
+        if (m_type == KisVisualRectangleSelectorShape::vertical) {
+            available.moveTop(available.y() + (available.height() - size)/2);
+        } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+            available.moveLeft(available.x() + (available.width() - size)/2);
+        }
+        available.setSize(QSize(size, size));
+    }
+
+    return available;
+}
+
 QPointF KisVisualRectangleSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
 {
     // Reminder: in Qt widget space, origin is top-left, but we want zero y to be at the bottom
-    qreal x = 0.5 * m_barWidth;
-    qreal y = 0.5 * m_barWidth;
+    qreal x = 0.5 * width();
+    qreal y = 0.5 * height();
     qreal offset = 5.0;
     KisVisualColorSelectorShape::Dimensions dimension = getDimensions();
     if (dimension == KisVisualColorSelectorShape::onedimensional) {
@@ -275,55 +295,54 @@ QImage KisVisualRectangleSelectorShape::renderAlphaMask() const
     painter.setBrush(Qt::white);
     painter.setPen(Qt::NoPen);
 
-    painter.drawRect(3, 3, width() - 6, height() - 6);
-    if (m_type == border || m_type == borderMirrored) {
-        painter.setBrush(Qt::black);
-        painter.drawRect(m_barWidth, m_barWidth, width() - 2 * m_barWidth, height() - 2 * m_barWidth);
+    if (getDimensions() == onedimensional) {
+        if (m_type == KisVisualRectangleSelectorShape::vertical) {
+            painter.drawRect(2, 3, width() - 4, height() - 6);
+        } else if (m_type == KisVisualRectangleSelectorShape::horizontal) {
+            painter.drawRect(3, 2, width() - 6, height() - 4);
+        } else /*if (m_type == border || m_type == borderMirrored)*/ {
+            painter.drawRect(2, 2, width() - 4, height() - 4);
+            painter.setBrush(Qt::black);
+            painter.drawRect(m_barWidth, m_barWidth, width() - 2 * m_barWidth, height() - 2 * m_barWidth);
+        }
+    } else {
+        painter.drawRect(3, 3, width() - 6, height() - 6);
     }
 
     return alphaMask;
 }
 
-void KisVisualRectangleSelectorShape::drawCursor()
+void KisVisualRectangleSelectorShape::drawCursor(QPainter &painter)
 {
     //qDebug() << this << "KisVisualRectangleSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
-    QPainter painter;
-    painter.begin(&fullSelector);
-    painter.setRenderHint(QPainter::Antialiasing);
-    //QPainterPath path;
-    QBrush fill;
-    fill.setStyle(Qt::SolidPattern);
+    QBrush fill(Qt::SolidPattern);
 
     int cursorwidth = 5;
-    QRect rect(cursorPoint.toPoint().x()-cursorwidth,cursorPoint.toPoint().y()-cursorwidth,
-               cursorwidth*2,cursorwidth*2);
-    if (m_type==KisVisualRectangleSelectorShape::vertical){
-        int x = ( cursorPoint.x()-(width()/2)+1 );
-        int y = ( cursorPoint.y()-cursorwidth );
-        rect.setCoords(x, y, x+width()-2, y+(cursorwidth*2));
-    } else {
-        int x = cursorPoint.x()-cursorwidth;
-        int y = cursorPoint.y()-(height()/2)+1;
-        rect.setCoords(x, y, x+(cursorwidth*2), y+cursorwidth-2);
-    }
-    QRectF innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
-    if (getDimensions() == KisVisualColorSelectorShape::onedimensional && m_type!=KisVisualRectangleSelectorShape::border && m_type!=KisVisualRectangleSelectorShape::borderMirrored) {
+
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional
+            && m_type != KisVisualRectangleSelectorShape::border
+            && m_type != KisVisualRectangleSelectorShape::borderMirrored) {
+        QRectF rect;
+        if (m_type==KisVisualRectangleSelectorShape::vertical) {
+            qreal y = qRound(cursorPoint.y());
+            rect.setCoords(1.5, y - cursorwidth + 0.5, width() - 1.5, y + cursorwidth - 0.5);
+        } else {
+            qreal x = qRound(cursorPoint.x());
+            rect.setCoords(x - cursorwidth  + 0.5, 1.5, x + cursorwidth - 0.5, height() - 1.5);
+        }
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);
         painter.drawRect(rect);
-        //set filter conversion!
         fill.setColor(col);
         painter.setPen(Qt::black);
         painter.setBrush(fill);
-        rect.setCoords(rect.topLeft().x()+1, rect.topLeft().y()+1,
-                       rect.topLeft().x()+rect.width()-2, rect.topLeft().y()+rect.height()-2);
-        painter.drawRect(rect);
+        painter.drawRect(rect.adjusted(1, 1, -1, -1));
 
     }else if(m_type==KisVisualRectangleSelectorShape::borderMirrored){
+        QRectF innerRect(m_barWidth, m_barWidth, width()-(m_barWidth*2), height()-(m_barWidth*2));
         painter.setPen(Qt::white);
         fill.setColor(Qt::white);
         painter.setBrush(fill);
@@ -346,6 +365,4 @@ void KisVisualRectangleSelectorShape::drawCursor()
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
     }
-    painter.end();
-    setFullImage(fullSelector);
 }

@@ -78,7 +78,7 @@ private:
     void addBristleInk(Bristle *bristle,const QPointF &pos, const KoColor &color);
     /// composite single pixel to dab
     void plotPixel(int wx, int wy, const KoColor &color);
-    /// check the opacity of dab pixel and if the opacity is less then color, it will copy color to dab
+    /// check the opacity of dab pixel and if the opacity is less than color, it will copy color to dab
     void darkenPixel(int wx, int wy, const KoColor &color);
     /// paint wu particle by copying the color and setup just the opacity, weight is complementary to opacity of the color
     void paintParticle(QPointF pos, const KoColor& color, qreal weight);
@@ -92,9 +92,9 @@ private:
     double computeMousePressure(double distance);
 
     /// simulate running out of saturation
-    void saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
+    void saturationDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDepletion);
     /// simulate running out of ink through opacity decreasing
-    void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDeplation);
+    void opacityDepletion(Bristle * bristle, KoColor &bristleColor, qreal pressure, qreal inkDepletion);
     /// fetch actual ink status according depletion curve
     qreal fetchInkDepletion(Bristle * bristle, int inkDepletionSize);
 

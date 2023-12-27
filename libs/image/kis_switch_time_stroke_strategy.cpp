@@ -70,7 +70,7 @@ KisStrokeStrategy* KisSwitchTimeStrokeStrategy::createLodClone(int levelOfDetail
 
     // This stroke is explicitly made LEGACY, so that it could create a barrier for
     // time switch. Theoretically, we can have separate time ids for Lod0 and LodN,
-    // but currently this idea doesn't wotk for some reason. The consequences of
+    // but currently this idea doesn't work for some reason. The consequences of
     // making this stroke a barrier:
     //
     // * LodSync stroke is started after every time switch (not slow, but still...)

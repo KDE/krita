@@ -27,8 +27,10 @@ KisCloneDocumentStroke::KisCloneDocumentStroke(KisDocument *document)
 {
     setClearsRedoOnStart(false);
     setRequestsOtherStrokesToEnd(false);
+    setNeedsExplicitCancel(true);
     enableJob(JOB_INIT, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
     enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
+    enableJob(JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL);
 }
 
 KisCloneDocumentStroke::~KisCloneDocumentStroke()
@@ -45,4 +47,9 @@ void KisCloneDocumentStroke::finishStrokeCallback()
     KisDocument *doc = m_d->document->clone();
     doc->moveToThread(qApp->thread());
     emit sigDocumentCloned(doc);
+}
+
+void KisCloneDocumentStroke::cancelStrokeCallback()
+{
+    emit sigCloningCancelled();
 }

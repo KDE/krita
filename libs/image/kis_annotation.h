@@ -67,7 +67,7 @@ public:
     /**
      * gets a non-localized string identifying the type of the
      * annotation.
-     * @return a non-localized string identifiying the type of the
+     * @return a non-localized string identifying the type of the
      * annotation
      */
     const QString & type() const {

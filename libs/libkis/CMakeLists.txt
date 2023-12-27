@@ -37,6 +37,11 @@ set(kritalibkis_LIB_SRCS
     GroupShape.cpp
 
     LibKisUtils.cpp
+
+    AngleSelector.cpp
+    IntParseSpinBox.cpp
+    DoubleParseSpinBox.cpp
+    SliderSpinBox.cpp
 )
 
 kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})

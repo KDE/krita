@@ -55,7 +55,7 @@ public:
     QRectF outlineRect() const override;
     QPainterPath outline() const override;
 
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const override;
+    void paintComponent(QPainter &painter) const override;
 
     bool saveHtml(HtmlSavingContext &context);
     /**
@@ -69,17 +69,6 @@ public:
     bool saveSvg(SvgSavingContext &context) override;
     bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
-
-    /**
-     * Normalize the SVG character transformations
-     *
-     * In SVG x,y,dx,dy,rotate attributes are inherited from the parent shapes
-     * in a curious ways. We do not want to unwind the links on the fly, so we
-     * just parse and adjust them right when the loading completed. After
-     * normalizeCharTransformations() is finished, all the child shapes will
-     * have local transformations set according to the parent's lists.
-     */
-    void normalizeCharTransformations();
 
     /**
      * Compress the inheritance of 'fill' and 'stroke'.
@@ -131,18 +120,49 @@ public:
     KoSvgTextChunkShapeLayoutInterface* layoutInterface() const;
 
     /**
-     * WARNING: this propperty is available only if isRootTextNode() is true
+     * WARNING: this property is available only if isRootTextNode() is true
      *
      * @return true if the shape should be edited in a rich-text editor
      */
     bool isRichTextPreferred() const;
 
     /**
-     * WARNING: this propperty is available only if isRootTextNode() is true
+     * WARNING: this property is available only if isRootTextNode() is true
      *
      * Sets whether the shape should be edited in rich-text editor
      */
     void setRichTextPreferred(bool value);
+
+    /**
+     * @brief setTextPath
+     * Set the path for textOnPath;
+     * @param shape
+     */
+    void setTextPath(KoShape *path);
+
+    /**
+     * @brief textPath
+     * @return the path used for text on path, if null, this chunk is not a
+     * textPath.
+     */
+    const KoShape *textPath();
+
+    virtual QString textRenderingString() const
+    {
+        return QString();
+    }
+
+    /**
+     * @brief chunkSpecificStyles
+     * Some properties are only applied to the rootshape,
+     * this includes inline-size, text-align, shape-inside, and so forth.
+     * @return list of styls for only this text.
+     */
+    virtual QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const
+    {
+        Q_UNUSED(context);
+        return QMap<QString, QString>();
+    }
 
 protected:
     /**
@@ -151,13 +171,10 @@ protected:
      */
     virtual bool isRootTextNode() const;
 
-protected:
     KoSvgTextChunkShape(KoSvgTextChunkShapePrivate *dd);
 
 private:
     KoSvgText::KoSvgCharChunkFormat fetchCharFormat() const;
-
-    void applyParentCharTransformations(const QVector<KoSvgText::CharTransformation> transformations);
 
 private:
     class Private;

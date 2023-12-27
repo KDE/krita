@@ -64,11 +64,12 @@ configure_ext() {
         -DCMAKE_INSTALL_PREFIX=$THIRDPARTY_INSTALL                                      \
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
-        -DANDROID_STL=c++_shared                                                           \
+        -DANDROID_STL=c++_shared                                                        \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
-        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"                              \
-        -DLOCALE_INSTALL_DIR="$INSTALL_PREFIX/share/locale/"
+        -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/i"                                          \
+        -DANDROID_SDK_COMPILE_API="android-33"                                          \
+        -G Ninja
     cd $BUILD_ROOT
 }
 
@@ -80,17 +81,22 @@ configure_plugins() {
         -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                          \
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
-        -DANDROID_STL=c++_shared                                                           \
+        -DANDROID_STL=c++_shared                                                        \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
-        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i;$INSTALL_PREFIX"
+        -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/i;$INSTALL_PREFIX"
     cd $BUILD_ROOT
 }
 
 PROC_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
+if [ $PROC_COUNT -gt "2" ]; then
+    let "jobs = ${PROC_COUNT} - 2"
+    PROC_COUNT=$jobs
+fi
+
 build_qt() {
-    if [[ ! -z $QT_ANDROID && -e $QT_ANDROID/lib/libQt5AndroidExtras.so ]]; then
+    if [[ ! -z $QT_ANDROID && -e $QT_ANDROID/lib/libQt5AndroidExtras_*.so ]]; then
         echo "Qt path provided; Skipping Qt build"
         return 0
     fi
@@ -106,6 +112,8 @@ build_ext() {
         echo "Please run -p=qt prior to this"
         exit
     fi
+
+    export PKG_CONFIG_LIBDIR="$BUILD_ROOT/i/lib/pkgconfig"
 
     configure_ext
     cd $DEPS_BUILD
@@ -129,7 +137,13 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_xsimd -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_jpegxl -- -j$PROC_COUNT
     # cmake --build . --config $BUILD_TYPE --target ext_ocio -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_freetype -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_fribidi -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_unibreak -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_fontconfig -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_lager -- -j$PROC_COUNT
 
+    cmake --build . --config $BUILD_TYPE --target ext_mlt -- -j$PROC_COUNT
     cd $BUILD_ROOT
 }
 
@@ -182,8 +196,17 @@ build_kf5() {
 
 build_krita() {
     cd $BUILD_ROOT
+    if [[ $NIGHTLY_BUILD == 1 ]]; then
+        # to copy files, --aux-mode doesn't seem to work
+        EXTRA_ARGS="--no-gdbserver"
+    elif [[ $BUILD_TYPE == "Release" ]]; then
+        EXTRA_ARGS="--release"
+    else
+        EXTRA_ARGS="--no-gdbserver"
+    fi
     # Configure files using cmake
     cmake $KRITA_ROOT -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                \
+         -DKRITA_ENABLE_PCH=off                                                             \
          -DDEFINE_NO_DEPRECATED=1                                                           \
          -DCMAKE_BUILD_TYPE=$BUILD_TYPE                                                     \
          -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake      \
@@ -191,34 +214,29 @@ build_krita() {
          -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF                                         \
          -DBoost_NO_BOOST_CMAKE=TRUE                                                        \
          -DBoost_NO_SYSTEM_PATHS=TRUE                                                       \
-         -DTIFF_HAS_PSD_TAGS=TRUE \
-         -DTIFF_CAN_WRITE_PSD_TAGS=TRUE \
+         -DTIFF_HAS_PSD_TAGS=TRUE                                                           \
+         -DTIFF_CAN_WRITE_PSD_TAGS=TRUE                                                     \
          -DQTANDROID_EXPORTED_TARGET=krita                                                  \
          -DANDROID_APK_DIR=$KRITA_ROOT/packaging/android/apk                                \
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
-         -DNDK_VERSION=21                                                                   \
-         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i" $EXTRA_ARGS
+         -DKRITA_3rdparty_LIB_PREFIX="$BUILD_ROOT/i/lib"                                    \
+         -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/i" \
+         -DANDROIDDEPLOYQT_EXTRA_ARGS="$EXTRA_ARGS"
 
-    make -j$PROC_COUNT install
+    cmake --build . --target install --parallel $PROC_COUNT
 }
 
 build_apk() {
     cd $BUILD_ROOT
 
+    cmake --build . --target create-apk
     if [[ $NIGHTLY_BUILD == 1 ]]; then
-        # to copy files, --aux-mode doesn't seem to work
-        make create-apk ARGS="--no-gdbserver"
-
         cd $BUILD_ROOT/krita_build_apk
         ./gradlew clean  # so binary factory doesn't use the debug files
         ./gradlew assembleNightly
 
         cd $BUILD_ROOT
-    elif [[ $BUILD_TYPE == "Release" ]]; then
-        make create-apk ARGS="--release"
-    else
-        make create-apk ARGS="--no-gdbserver"
     fi
 }
 
@@ -295,12 +313,6 @@ if [[ -z $BUILD_ROOT ]]; then
     print_usage
 elif [[ ! -d $BUILD_ROOT ]]; then
     mkdir $BUILD_ROOT -p
-fi
-
-if [[ $NIGHTLY_BUILD == 1 ]]; then
-    EXTRA_ARGS="-DFETCH_TRANSLATIONS=ON"
-else
-    EXTRA_ARGS="-DFETCH_TRANSLATIONS=OFF"
 fi
 
 check_exists CMAKE_ANDROID_NDK

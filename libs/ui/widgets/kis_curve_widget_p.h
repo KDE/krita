@@ -9,7 +9,6 @@
 #include <kis_cubic_curve.h>
 #include <QApplication>
 #include <QPalette>
-#include <KisSpinBoxSplineUnitConverter.h>
 
 enum enumState {
     ST_NORMAL,
@@ -23,8 +22,6 @@ class Q_DECL_HIDDEN KisCurveWidget::Private
 {
 
     KisCurveWidget *m_curveWidget {nullptr};
-    KisSpinBoxSplineUnitConverter unitConverter;
-
 
 public:
     Private(KisCurveWidget *parent);
@@ -39,28 +36,14 @@ public:
     int m_draggedAwayPointIndex {0};
 
     bool m_readOnlyMode {false};
-    bool m_guideVisible {false};
-    QColor m_colorGuide;
-
 
     /* The curve itself */
     bool    m_splineDirty {false};
     KisCubicCurve m_curve;
 
     QPixmap m_pix;
-    QPixmap m_pixmapBase;
     bool m_pixmapDirty {true};
     QPixmap *m_pixmapCache {nullptr};
-
-    /* In/Out controls */
-    QSpinBox *m_intIn {nullptr};
-    QSpinBox *m_intOut {nullptr};
-
-    /* Working range of them */
-    int m_inMin {0};
-    int m_inMax {0};
-    int m_outMin {0};
-    int m_outMax {0};
 
     /* view-logic variables */
     int m_handleSize {12}; // size of the control points (diameter, in logical pixels) - both for painting and for detecting clicks
@@ -85,18 +68,9 @@ public:
     /**
      * Common update routines
      */
-    void setCurveModified(bool rewriteSpinBoxesValues);
+    void setCurveModified(bool rewriteSpinBoxesValues = true);
     void setCurveRepaint();
 
-
-    /**
-     * Convert working range of
-     * In/Out controls to normalized
-     * range of spline (and reverse)
-     * See notes on KisSpinBoxSplineUnitConverter
-     */
-    double io2sp(int x, int min, int max);
-    int sp2io(double x, int min, int max);
 
 
     /**
@@ -135,17 +109,6 @@ KisCurveWidget::Private::Private(KisCurveWidget *parent)
 {
     m_curveWidget = parent;
 }
-
-double KisCurveWidget::Private::io2sp(int x, int min, int max)
-{
-    return unitConverter.io2sp(x, min, max);
-}
-
-int KisCurveWidget::Private::sp2io(double x, int min, int max)
-{
-    return unitConverter.sp2io(x, min, max);
-}
-
 
 bool KisCurveWidget::Private::jumpOverExistingPoints(QPointF &pt, int skipIndex)
 {
@@ -235,36 +198,17 @@ void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
 
 void KisCurveWidget::Private::syncIOControls()
 {
-    if (!m_intIn || !m_intOut)
-        return;
-
-    bool somethingSelected = (m_grab_point_index >= 0);
-
-    m_intIn->setEnabled(somethingSelected);
-    m_intOut->setEnabled(somethingSelected);
-
-    if (m_grab_point_index >= 0) {
-        m_intIn->blockSignals(true);
-        m_intOut->blockSignals(true);
-
-        m_intIn->setValue(sp2io(m_curve.points()[m_grab_point_index].x(), m_inMin, m_inMax));
-        m_intOut->setValue(sp2io(m_curve.points()[m_grab_point_index].y(), m_outMin, m_outMax));
-
-        m_intIn->blockSignals(false);
-        m_intOut->blockSignals(false);
-    } else {
-        /*FIXME: Ideally, these controls should hide away now */
-    }
+    emit m_curveWidget->shouldSyncIOControls();
 }
 
-void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues = true)
+void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues)
 {
     if (rewriteSpinBoxesValues) {
         syncIOControls();
     }
     m_splineDirty = true;
     m_curveWidget->update();
-    m_curveWidget->emit compressorShouldEmitModified();
+    emit m_curveWidget->compressorShouldEmitModified();
 }
 
 void KisCurveWidget::Private::setCurveRepaint()

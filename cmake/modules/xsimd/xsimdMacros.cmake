@@ -11,7 +11,9 @@
 # SPDX-License-Identifier: BSD-3-Clause
 #=============================================================================
 
-cmake_minimum_required(VERSION 3.12.0)
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
+   message(FATAL_ERROR "CMake 3.12.0 is required by xsimdMacros.cmake")
+endif()
 
 include ("${CMAKE_CURRENT_LIST_DIR}/xsimdAddCompilerFlag.cmake")
 
@@ -58,17 +60,25 @@ macro(xsimd_determine_compiler)
 endmacro()
 
 macro(xsimd_check_assembler)
-   exec_program(${CMAKE_CXX_COMPILER} ARGS -print-prog-name=as OUTPUT_VARIABLE _as)
+   execute_process(COMMAND ${CMAKE_CXX_COMPILER} -print-prog-name=as OUTPUT_VARIABLE _as RESULT_VARIABLE _as_result)
    mark_as_advanced(_as)
-   if(NOT _as)
+   mark_as_advanced(_as_result)
+   if(_as_result) # error code is 0 == OK
       message(WARNING "Could not find 'as', the assembler used by GCC. Hoping everything will work out...")
    else()
-      exec_program(${_as} ARGS --version OUTPUT_VARIABLE _as_version)
-      string(REGEX REPLACE "\\([^\\)]*\\)" "" _as_version "${_as_version}")
-      string(REGEX MATCH "[1-9]\\.[0-9]+(\\.[0-9]+)?" _as_version "${_as_version}")
-      if(_as_version VERSION_LESS "2.21.0")
-         message(WARNING "Your binutils is too old (${_as_version}) for reliably compiling xsimd.")
-         set(xsimd_IS_CONFIGURATION_VALID FALSE)
+      string(STRIP "${_as}" _as)
+      if (WIN32 AND NOT "${_as}" MATCHES "\.exe$")
+         set(_as "${_as}.exe")
+      endif()
+      execute_process(COMMAND ${_as} ARGS --version OUTPUT_VARIABLE _as_version RESULT_VARIABLE _as_result)
+      if (_as_result)
+         message(WARNING "'as' returned an error. Unable to detect version.")
+      else()
+         string(REGEX MATCH "[1-9]\\.[0-9]+(\\.[0-9]+)?" _as_version "${_as_version}")
+         if(_as_version VERSION_LESS "2.21.0")
+            message(WARNING "Your binutils is too old (${_as_version}) for reliably compiling xsimd.")
+            set(xsimd_IS_CONFIGURATION_VALID FALSE)
+         endif()
       endif()
    endif()
 endmacro()
@@ -129,7 +139,7 @@ endmacro()
 macro(xsimd_set_preferred_compiler_flags)
    xsimd_determine_compiler()
 
-   if (NOT xsimd_COMPILER_IS_MSVC)
+   if (NOT xsimd_COMPILER_IS_MSVC AND NOT MSVC_VERSION)
       xsimd_check_assembler()
    endif()
 
@@ -195,7 +205,7 @@ macro(_xsimd_compile_one_implementation _srcs _impl)
          endif()
       endforeach()
 
-      if(MSVC)
+      if(MSVC AND NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
          # MSVC for 64bit does not recognize /arch:SSE2 anymore. Therefore we set override _ok if _impl
          # says SSE
          if("${_impl}" MATCHES "SSE")
@@ -216,6 +226,7 @@ macro(_xsimd_compile_one_implementation _srcs _impl)
          set_source_files_properties( "${_out}" PROPERTIES
             COMPILE_FLAGS "${_flags} ${_extra_flags}"
             COMPILE_DEFINITIONS "XSIMD_IMPL=${_impl}"
+            SKIP_PRECOMPILE_HEADERS TRUE
          )
          list(APPEND ${_srcs} "${_out}")
       endif()

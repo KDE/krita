@@ -34,6 +34,7 @@ public:
 
 private:
     boost::optional<quint8> m_oldOpacity;
+    QScopedPointer<KUndo2Command> m_autokey;
     quint8 m_newOpacity;
 };
 

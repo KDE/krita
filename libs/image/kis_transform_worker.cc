@@ -144,6 +144,16 @@ QRect KisTransformWorker::rotate180(KisPaintDeviceSP dev,
     return QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
 }
 
+bool KisTransformWorker::forceSubPixelTranslation() const
+{
+    return m_forceSubPixelTranslation;
+}
+
+void KisTransformWorker::setForceSubPixelTranslation(bool value)
+{
+    m_forceSubPixelTranslation = value;
+}
+
 template <class iter> void calcDimensions(QRect rc, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines);
 
 template <> void calcDimensions <KisHLineIteratorSP>
@@ -297,7 +307,7 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
      * We don't check for xtranslate and ytranslate to be integers here, because
      * people expect the translation to be lossless, that is, not doing any resampling.
      *
-     * Theoretically, we could implement a seperate option to allow translations with
+     * Theoretically, we could implement a separate option to allow translations with
      * resampling in the transform tool, but I don't know how useful it would be.
      * People who wo pixel art can set scale to something like 99.99% and it should
      * do the trick.
@@ -305,6 +315,7 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
      * See: https://bugs.kde.org/show_bug.cgi?id=445714
      */
     const bool simpleTranslation =
+        !m_forceSubPixelTranslation &&
         qFuzzyCompare(rotation, 0.0) &&
         qFuzzyCompare(xscale, 1.0) &&
         qFuzzyCompare(yscale, 1.0);

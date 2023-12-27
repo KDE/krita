@@ -505,7 +505,7 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
         if(args.m_mode == CAGE){
             // Pixel precision is a parameter introduced in Krita 4.2, so we should
             // expect it not being present in older files. In case it is not found,
-            // just use the defalt value initialized by c-tor (that is, do nothing).
+            // just use the default value initialized by c-tor (that is, do nothing).
 
             (void) KisDomUtils::loadValue(warpEl, "pixelPrecision", &args.m_pixelPrecision);
             (void) KisDomUtils::loadValue(warpEl, "previewPixelPrecision", &args.m_previewPixelPrecision);

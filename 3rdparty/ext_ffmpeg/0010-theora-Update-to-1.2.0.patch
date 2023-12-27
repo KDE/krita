@@ -1,0 +1,145 @@
+From 6e49ef502d2eeb7793f35dc336d3a86e1a3525eb Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Fri, 2 Dec 2022 15:59:05 +0000
+Subject: [PATCH 10/11] theora: Update to 1.2.0
+
+---
+ examples/meson.build | 17 +++++++++++++++++
+ lib/meson.build      | 13 +++++++++++++
+ meson.build          | 18 +++++++++++++-----
+ 3 files changed, 43 insertions(+), 5 deletions(-)
+
+diff --git a/examples/meson.build b/examples/meson.build
+index fc78b86..0c8c982 100644
+--- a/examples/meson.build
++++ b/examples/meson.build
+@@ -48,6 +48,14 @@ dump_psnr = executable(
+   dependencies: [m_dep, getopt_dep] + theoradec_libs,
+ )
+ 
++libtheora_info_sources = files('libtheora_info.c')
++
++libtheora_info = executable(
++  'libtheora_info',
++  libtheora_info_sources,
++  dependencies: [config_dep] + theoraenc_libs,
++)
++
+ player_example_sources = files('player_example.c')
+ 
+ player_example = executable(
+@@ -78,3 +86,12 @@ png2theora = executable(
+   dependencies: [ogg_dep, libpng_dep, unistd_dep, m_dep, getopt_dep, config_dep] +
+   theoraenc_libs,
+ )
++
++tiff2theora_sources = files('tiff2theora.c')
++
++tiff2theora = executable(
++  'tiff2theora',
++  tiff2theora_sources,
++  dependencies: [ogg_dep, tiff_dep, unistd_dep, m_dep, getopt_dep, config_dep] +
++  theoraenc_libs,
++)
+diff --git a/lib/meson.build b/lib/meson.build
+index e5cfca7..5f15375 100644
+--- a/lib/meson.build
++++ b/lib/meson.build
+@@ -47,14 +47,20 @@ if asm
+         'x86/mmxfrag.c',
+         'x86/mmxidct.c',
+         'x86/mmxstate.c',
++        'x86/sse2encfrag.c',
+         'x86/sse2fdct.c',
++        'x86/sse2idct.c',
++        'x86/x86cpu.c',
+         'x86/x86enc.c',
++        'x86/x86enquant.c',
+         'x86/x86state.c',
+       )
+       decoder_sources += files(
+         'x86/mmxfrag.c',
+         'x86/mmxidct.c',
+         'x86/mmxstate.c',
++        'x86/sse2idct.c',
++        'x86/x86cpu.c',
+         'x86/x86state.c',
+       )
+     endif
+@@ -72,8 +78,13 @@ if asm
+         'x86/mmxfrag.c',
+         'x86/mmxidct.c',
+         'x86/mmxstate.c',
++        'x86/sse2encfrag.c',
++        'x86/sse2idct.c',
++        'x86/x86cpu.c',
+         'x86/x86enc.c',
++        'x86/x86enquant.c',
+         'x86/x86state.c',
++
+       )
+     else
+       encoder_sources += files(
+@@ -82,6 +93,7 @@ if asm
+         'x86_vc/mmxfrag.c',
+         'x86_vc/mmxidct.c',
+         'x86_vc/mmxstate.c',
++        'x86_vc/x86cpu.c',
+         'x86_vc/x86enc.c',
+         'x86_vc/x86state.c',
+       )
+@@ -89,6 +101,7 @@ if asm
+         'x86_vc/mmxfrag.c',
+         'x86_vc/mmxidct.c',
+         'x86_vc/mmxstate.c',
++        'x86_vc/x86cpu.c',
+         'x86_vc/x86state.c',
+       )
+     endif
+diff --git a/meson.build b/meson.build
+index e317a92..e9152c3 100644
+--- a/meson.build
++++ b/meson.build
+@@ -2,7 +2,7 @@ project(
+   'theora',
+   'c',
+   'cpp',
+-  version: '1.1.1',
++  version: '1.2.0',
+   meson_version: '>= 0.49.0',
+   license: 'BSD-3-Clause',
+   default_options: ['c_std=c11'],
+@@ -95,7 +95,18 @@ else
+   unistd_dep = disabler()
+ endif
+ 
++tiff_dep = dependency('tiff', required: false, disabler: true)
++
++if tiff_dep.found() and not cc.has_header_symbol(
++    'tiffio.h',
++    'TIFFReadRGBAImage',
++    dependencies: tiff_dep
++  )
++  tiff_dep = disabler()
++endif
++
+ cairo_dep = dependency('cairo', required: get_option('telemetry'))
++
+ if cairo_dep.found()
+   conf.set('HAVE_CAIRO', true)
+ endif
+@@ -216,10 +227,7 @@ if spec.auto() or spec.enabled()
+     tex_pkg_ok = false
+   endif
+ 
+-  if tex_pkg_ok and meson.project_version() > '1.2.0alpha1'
+-    # libtheora <= 1.2.0alpha1 has a tex file which is incompatible
+-    # with TeX distributions < 2015 at the least.
+-    # See commit fbb275803696085225c310773474ef4dcf8a4528.
++  if tex_pkg_ok
+     subdir('doc/spec')
+   else
+     message('*** Format Specification will not be built.')
+-- 
+2.40.1.windows.1
+

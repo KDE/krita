@@ -69,7 +69,7 @@ void KisSegmentGradientSlider::paintEvent(QPaintEvent*)
     if (m_gradient) {
         // Gradient
         KisGradientWidgetsUtils::paintGradientBox(painter, m_gradient, previewRect);
-        // Haldles
+        // Handles
         QList<KoGradientSegment*> segments = m_gradient->segments();
         painter.setRenderHint(QPainter::Antialiasing, true);
         const QRect handlesRect = this->handlesStripeRect();
@@ -148,7 +148,7 @@ void KisSegmentGradientSlider::paintEvent(QPaintEvent*)
                 KoGradientSegment* currentSegment = segments[i];
                 KoGradientSegment* nextSegment = segments[i + 1];
                 // If the end point of the current segment and the start point
-                // of the next segmenthave the same offset, that means the
+                // of the next segment have the same offset, that means the
                 // segments touch each other, are connected (normal behavior),
                 // so we paint a single special handle.
                 // If the end points have different offsets then krita stills

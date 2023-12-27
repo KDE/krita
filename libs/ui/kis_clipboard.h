@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QSize>
 
-#include <KoColorProfile.h>
 #include <kis_types.h>
 
 #include <kritaui_export.h>
@@ -21,6 +20,7 @@
 class QRect;
 class QMimeData;
 class KisTimeSpan;
+class KoColorSpace;
 
 class KisClipboardPrivate;
 
@@ -65,6 +65,17 @@ public:
                           KisTimeSpan *clipRange = nullptr) const;
 
     /**
+     * Given the mimedata for a paste event, ask user which source
+     * they'll want to use for the image.
+     *
+     * @return A pair of bool and PasteFormatBehaviour:
+     *   The boolean indicates acceptance of the paste event.
+     *   If set, the PasteFormatBehaviour member indicates the chosen source.
+     */
+    QPair<bool, PasteFormatBehaviour> askUserForSource(const QMimeData *data,
+                                                       bool useClipboardFallback = false) const;
+
+    /**
      * Get the contents of the specified mimedata buffer in the form of a paint device.
      */
     KisPaintDeviceSP clipFromMimeData(const QMimeData *data,
@@ -73,6 +84,18 @@ public:
                                       int overridePasteBehaviour = -1,
                                       KisTimeSpan *clipRange = nullptr,
                                       bool useClipboardFallback = false) const;
+
+    KisPaintDeviceSP clipFromKritaLayers(const QRect &imageBounds,
+                                         const KoColorSpace *cs) const;
+
+    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
+                          const QRect &imageBounds,
+                          bool showPopup,
+                          int overridePasteBehaviour = -1,
+                          bool useClipboardFallback = false,
+                          QPair<bool, PasteFormatBehaviour> source = {
+                              false,
+                              PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
 
     bool hasClip() const;
 
@@ -84,12 +107,9 @@ public:
 
     const QMimeData* layersMimeData() const;
 
-    QImage getPreview() const;
-
     bool hasUrls() const;
 
 Q_SIGNALS:
-    void clipCreated();
     void clipChanged();
 
 private Q_SLOTS:
@@ -100,12 +120,6 @@ private:
 
     KisPaintDeviceSP
     clipFromKritaSelection(const QMimeData *data, const QRect &imageBounds, KisTimeSpan *clipRange) const;
-
-    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
-                                           const QRect &imageBounds,
-                                           bool showPopup,
-                                           int overridePasteBehaviour = -1,
-                                           bool useClipboardFallback = false) const;
 
     KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
 

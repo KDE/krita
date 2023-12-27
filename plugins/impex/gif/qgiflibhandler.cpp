@@ -259,7 +259,7 @@ bool QGIFLibHandler::write ( const QImage & image )
     GifFileType *gif = EGifOpen(device(), doOutput, &err);
 
     /// @todo how to specify which version, or decide based on features in use
-    // Because of this call, libgif is not re-entrant
+    // Because of this call, libgif is not reentrant
     EGifSetGifVersion(gif, true);
 
     /// @todo how to specify background

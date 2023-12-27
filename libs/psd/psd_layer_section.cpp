@@ -93,7 +93,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
 
         if (layerInfoSectionSize > 0) {
             if (!psdread<byteOrder>(io, nLayers) || nLayers == 0) {
-                error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
+                error = QString("Could not read number of layers or no layers in image. %1").arg(nLayers);
                 return false;
             }
 
@@ -155,7 +155,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                 // read the rle row lengths;
                 if (channelInfo->compressionType == psd_compression_type::RLE) {
                     for (qint64 row = 0; row < channelRect.height(); ++row) {
-                        // dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io.pos();
+                        // dbgFile << "Reading the RLE byte count position of row" << row << "at pos" << io.pos();
 
                         quint32 byteCount;
                         if (m_header.version == 1) {
@@ -203,28 +203,36 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
 {
     dbgFile << "(PSD) reading layer section. Pos:" << io.pos() << "bytes left:" << io.bytesAvailable();
 
-    layerMaskBlockSize = 0;
+    // https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_21849
+    boost::optional<quint64> layerMaskBlockSize = 0;
+
     if (m_header.version == 1) {
         quint32 _layerMaskBlockSize = 0;
-        if (!psdread(io, _layerMaskBlockSize) || _layerMaskBlockSize > (quint64)io.bytesAvailable()) {
-            error = QString("Could not read layer block size. Got %1. Bytes left %2").arg(_layerMaskBlockSize).arg(io.bytesAvailable());
-            return false;
-        }
+        SAFE_READ_EX(psd_byte_order::psdBigEndian, io, _layerMaskBlockSize);
         layerMaskBlockSize = _layerMaskBlockSize;
     } else if (m_header.version == 2) {
-        if (!psdread(io, layerMaskBlockSize) || layerMaskBlockSize > (quint64)io.bytesAvailable()) {
-            error = QString("Could not read layer block size. Got %1. Bytes left %2").arg(layerMaskBlockSize).arg(io.bytesAvailable());
-            return false;
-        }
+        SAFE_READ_EX(psd_byte_order::psdBigEndian, io, *layerMaskBlockSize);
     }
 
     qint64 start = io.pos();
 
-    dbgFile << "layer block size" << layerMaskBlockSize;
+    dbgFile << "layer block size" << *layerMaskBlockSize;
 
-    if (layerMaskBlockSize == 0) {
+    if (*layerMaskBlockSize == 0) {
         dbgFile << "No layer info, so no PSD layers available";
-        return false;
+        return true;
+    }
+
+    /**
+     * PSD files created in some weird web applications may
+     * have invalid layer-mask-block-size set. Just do a simple
+     * sanity check to catch this case
+     */
+    if (static_cast<qint64>(*layerMaskBlockSize) > io.bytesAvailable()) {
+        warnKrita << "WARNING: invalid layer block size. Got" << *layerMaskBlockSize << "Bytes left" << io.bytesAvailable() << "Triggering a workaround...";
+
+        // just don't use this value for offset recovery at the end
+        layerMaskBlockSize = boost::none;
     }
 
     if (!readLayerInfoImpl(io)) {
@@ -249,7 +257,7 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
 
         for (int i = 0; i < 4; ++i) {
             if (!psdread(io, globalLayerMaskInfo.colorComponents[i])) {
-                error = QString("Could not read mask info visualizaion color component %1").arg(i);
+                error = QString("Could not read mask info visualization color component %1").arg(i);
                 return false;
             }
         }
@@ -290,8 +298,10 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
 
     globalInfoSection.read(io);
 
-    /* put us after this section so reading the next section will work even if we mess up */
-    io.seek(start + static_cast<qint64>(layerMaskBlockSize));
+    if (layerMaskBlockSize) {
+        /* put us after this section so reading the next section will work even if we mess up */
+        io.seek(start + static_cast<qint64>(*layerMaskBlockSize));
+    }
 
     return true;
 }
@@ -315,7 +325,7 @@ bool PSDLayerMaskSection::readGlobalMask(QIODevice &io)
 
         for (int i = 0; i < 4; ++i) {
             if (!psdread<byteOrder>(io, globalLayerMaskInfo.colorComponents[i])) {
-                error = QString("Could not read mask info visualizaion color component %1").arg(i);
+                error = QString("Could not read mask info visualization color component %1").arg(i);
                 return false;
             }
         }
@@ -477,7 +487,7 @@ QDomDocument fetchLayerStyleXmlData(KisNodeSP node)
 
 inline QDomNode findNodeByKey(const QString &key, QDomNode parent)
 {
-    return KisDomUtils::findElementByAttibute(parent, "node", "key", key);
+    return KisDomUtils::findElementByAttribute(parent, "node", "key", key);
 }
 
 void mergePatternsXMLSection(const QDomDocument &src, QDomDocument &dst)
@@ -532,7 +542,7 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer, psd_compress
 
 void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
-    dbgFile << "Writing layer layer section";
+    dbgFile << "Writing layer section";
 
     // Build the whole layer structure
     QList<FlattenedNode> nodes;
@@ -640,14 +650,19 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 if (item.type == FlattenedNode::RASTER_LAYER) {
                     nodeIrrelevant = false;
                     nodeName = node->name();
-                    bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
-                    bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
-                    if (fillLayer && (transparency || semiOpacity)) {
-                        layerContentDevice = node->original();
-                        onlyTransparencyMask = node;
-                        maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
-                    } else {
-                        layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+                    layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+
+                    /**
+                     * For fill layers we save their internal selection as a separate transparency mask
+                     */
+                    if (fillLayer) {
+                        bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
+                        bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
+                        if (transparency || semiOpacity) {
+                            layerContentDevice = node->original();
+                            onlyTransparencyMask = node;
+                            maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
+                        }
                     }
                     sectionType = psd_other;
                 } else {

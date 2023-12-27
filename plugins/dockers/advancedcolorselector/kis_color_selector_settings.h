@@ -44,9 +44,6 @@ Q_SIGNALS:
     void settingsChanged() const;
     void hsxchanged(int);
 
-protected:
-    //void changeEvent(QEvent *e);
-
 private:
     Ui::KisColorSelectorSettings *ui;
 };

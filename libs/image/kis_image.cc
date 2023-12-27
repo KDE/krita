@@ -52,8 +52,6 @@
 #include "kis_keyframe_channel.h"
 #include "kis_stroke_strategy.h"
 #include "kis_simple_stroke_strategy.h"
-#include "kis_image_barrier_locker.h"
-
 
 #include "kis_undo_stores.h"
 #include "kis_legacy_undo_adapter.h"
@@ -100,6 +98,7 @@
 #include "KisRunnableStrokeJobsInterface.h"
 
 #include "KisBusyWaitBroker.h"
+#include <KisStaticInitializer.h>
 
 
 // #define SANITY_CHECKS
@@ -113,13 +112,9 @@
 #define SANITY_CHECK_LOCKED(name)
 #endif
 
-
-struct KisImageSPStaticRegistrar {
-    KisImageSPStaticRegistrar() {
-        qRegisterMetaType<KisImageSP>("KisImageSP");
-    }
-};
-static KisImageSPStaticRegistrar __registrar1;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisImageSP>("KisImageSP");
+}
 
 class KisImage::KisImagePrivate
 {
@@ -168,6 +163,35 @@ public:
 
                     return std::make_pair(suspend, resume);
                 });
+
+            scheduler.setPurgeRedoStateCallback(
+                        [this] () {
+                undoStore->purgeRedoState();
+            });
+
+            scheduler.setPostSyncLod0GUIPlaneRequestForResumeCallback(
+                        [this] () {
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(q->currentLevelOfDetail() == 0);
+
+                bool addedUIUpdateRequestSuccessfully = false;
+
+                for (auto it = std::make_reverse_iterator(projectionUpdatesFilters.end());
+                     it != std::make_reverse_iterator(projectionUpdatesFilters.begin());
+                     ++it) {
+
+                    KisSuspendProjectionUpdatesStrokeStrategy::SuspendUpdatesFilterInterface *iface =
+                        dynamic_cast<KisSuspendProjectionUpdatesStrokeStrategy::SuspendUpdatesFilterInterface*>(it->data());
+
+                    if (iface) {
+                        iface->addExplicitUIUpdateRect(q->bounds());
+                        addedUIUpdateRequestSuccessfully = true;
+                        break;
+                    }
+                }
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(addedUIUpdateRequestSuccessfully);
+            });
         }
 
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
@@ -187,7 +211,7 @@ public:
          * Firstly we need to disconnect the nodes from the image,
          * because some of the nodes (e.g. KisGroupLayer) may
          * request the image back via defaultBouds() and/or
-         * animationInyterface()
+         * animationInterface()
          */
         if (rootLayer->image() == q) {
             rootLayer->setImage(0);
@@ -230,6 +254,7 @@ public:
     bool isolateGroup;
 
     bool wrapAroundModePermitted = false;
+    WrapAroundAxis wrapAroundModeAxis = WRAPAROUND_BOTH;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -375,7 +400,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     KIS_ASSERT_RECOVER_RETURN(bool(policy & REPLACE) != bool(policy & CONSTRUCT));
 
     /**
-     * We should replace the root before amitting any signals, because some of the layers
+     * We should replace the root before emitting any signals, because some of the layers
      * may be subscribed to sigSizeChanged() signal (e.g. KisSelectionBasedLayer). So the
      * old layers should be fully detached before we actually emit this signal.
      *
@@ -570,7 +595,6 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
 void KisImage::nodeChanged(KisNode* node)
 {
     KisNodeGraphListener::nodeChanged(node);
-    requestStrokeEnd();
     m_d->signalRouter.emitNodeChanged(node);
 }
 
@@ -608,7 +632,8 @@ void KisImage::setOverlaySelectionMask(KisSelectionMaskSP mask)
             }
 
             if (oldMask) {
-                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMask->extent());
+                const QRect oldMaskRect = oldMask->graphListener() ? oldMask->extent() : m_image->bounds();
+                m_image->m_d->rootLayer->setDirtyDontResetAnimationCache(oldMaskRect);
             }
 
             if (newMask) {
@@ -717,7 +742,7 @@ QString KisImage::nextLayerName(const QString &_baseName) const
 
     // special case if there is only root node
     if (numLayers == 1) {
-        return i18n("Background");
+        return i18nc("Name for the bottom-most layer in the layerstack", "Background");
     }
 
     if (baseName.isEmpty()) {
@@ -1002,7 +1027,11 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
 
 void KisImage::scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection)
 {
-    KUndo2MagicString actionName(kundo2_i18n("Scale Layer"));
+    scaleNodes(KisNodeList{node}, center, scaleX, scaleY, filterStrategy, selection);
+}
+void KisImage::scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection)
+{
+    KUndo2MagicString actionName(kundo2_i18np("Scale Layer", "Scale %1 Layers", nodes.size()));
     KisImageSignalVector emitSignals;
 
     QPointF offset;
@@ -1017,7 +1046,7 @@ void KisImage::scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qr
         offset = center - transform.map(center);
     }
 
-    KisProcessingApplicator applicator(this, node,
+    KisProcessingApplicator applicator(this, nodes,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
@@ -1046,16 +1075,32 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
                           bool resizeImage,
                           KisSelectionSP selection)
 {
+    rotateImpl(actionName, KisNodeList{rootNode}, radians, resizeImage, selection);
+}
+void KisImage::rotateImpl(const KUndo2MagicString &actionName,
+                          KisNodeList nodes,
+                          double radians,
+                          bool resizeImage,
+                          KisSelectionSP selection)
+{
     // we can either transform (and resize) the whole image or
     // transform a selection, we cannot do both at the same time
     KIS_SAFE_ASSERT_RECOVER(!(bool(selection) && resizeImage)) {
         selection = 0;
     }
 
-    const QRect baseBounds =
-        resizeImage ? bounds() :
-        selection ? selection->selectedExactRect() :
-        rootNode->exactBounds();
+    QRect baseBounds;
+    if (resizeImage) {
+        baseBounds = bounds();
+    }
+    else if (selection) {
+        baseBounds = selection->selectedExactRect();
+    }
+    else {
+        Q_FOREACH(KisNodeSP node, nodes) {
+            baseBounds = baseBounds.united(node->exactBounds());
+        }
+    }
 
     QPointF offset;
     QSize newSize;
@@ -1096,7 +1141,7 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
         KisProcessingApplicator::NONE;
 
 
-    KisProcessingApplicator applicator(this, rootNode,
+    KisProcessingApplicator applicator(this, nodes,
                                        KisProcessingApplicator::RECURSIVE | signalFlags,
                                        emitSignals, actionName);
 
@@ -1132,10 +1177,15 @@ void KisImage::rotateImage(double radians)
 
 void KisImage::rotateNode(KisNodeSP node, double radians, KisSelectionSP selection)
 {
-    if (node->inherits("KisMask")) {
-        rotateImpl(kundo2_i18n("Rotate Mask"), node, radians, false, selection);
-    } else {
-        rotateImpl(kundo2_i18n("Rotate Layer"), node, radians, false, selection);
+    rotateNodes(KisNodeList{node}, radians, selection);
+}
+void KisImage::rotateNodes(KisNodeList nodes, double radians, KisSelectionSP selection)
+{
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        rotateImpl(kundo2_i18n("Rotate Mask"), nodes, radians, false, selection);
+    }
+    else {
+        rotateImpl(kundo2_i18np("Rotate Layer", "Rotate %1 Layers", nodes.size()), nodes, radians, false, selection);
     }
 }
 
@@ -1145,11 +1195,26 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
                          double angleX, double angleY,
                          KisSelectionSP selection)
 {
-    const QRect baseBounds =
-        resizeImage ? bounds() :
-        selection ? selection->selectedExactRect() :
-        rootNode->exactBounds();
-
+    shearImpl(actionName, KisNodeList{rootNode}, resizeImage, angleX, angleY, selection);
+}
+void KisImage::shearImpl(const KUndo2MagicString &actionName,
+                         KisNodeList nodes,
+                         bool resizeImage,
+                         double angleX, double angleY,
+                         KisSelectionSP selection)
+{
+    QRect baseBounds;
+    if (resizeImage) {
+        baseBounds = bounds();
+    }
+    else if (selection) {
+        baseBounds = selection->selectedExactRect();
+    }
+    else {
+        Q_FOREACH(KisNodeSP node, nodes) {
+            baseBounds = baseBounds.united(node->exactBounds());
+        }
+    }
     const QPointF origin = QRectF(baseBounds).center();
 
     //angleX, angleY are in degrees
@@ -1183,7 +1248,7 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
         KisProcessingApplicator::RECURSIVE;
     if (resizeImage) signalFlags |= KisProcessingApplicator::NO_UI_UPDATES;
 
-    KisProcessingApplicator applicator(this, rootNode,
+    KisProcessingApplicator applicator(this, nodes,
                                        signalFlags,
                                        emitSignals, actionName);
 
@@ -1215,11 +1280,16 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
 
 void KisImage::shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection)
 {
-    if (node->inherits("KisMask")) {
-        shearImpl(kundo2_i18n("Shear Mask"), node, false,
+    shearNodes(KisNodeList{node}, angleX, angleY, selection);
+}
+void KisImage::shearNodes(KisNodeList nodes, double angleX, double angleY, KisSelectionSP selection)
+{
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        shearImpl(kundo2_i18n("Shear Mask"), nodes, false,
                   angleX, angleY, selection);
-    } else {
-        shearImpl(kundo2_i18n("Shear Layer"), node, false,
+    }
+    else {
+        shearImpl(kundo2_i18np("Shear Layer", "Shear %1 Layers", nodes.size()), nodes, false,
                   angleX, angleY, selection);
     }
 }
@@ -1547,12 +1617,12 @@ qint32 KisImage::nHiddenLayers() const
 
 qint32 KisImage::nChildLayers() const
 {
-    QStringList list;
-    list << "KisLayer";
+    const QStringList list = {"KisLayer"};
 
     KoProperties koProperties;
     KisCountVisitor visitor(list, koProperties);
-    for (auto childNode : m_d->rootLayer->childNodes(list, koProperties)) {
+    const QList<KisNodeSP> childNodes = m_d->rootLayer->childNodes(list, koProperties);
+    for (KisNodeSP childNode: childNodes) {
         childNode->accept(visitor);
     }
     return visitor.count();
@@ -1636,12 +1706,11 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
         return convertToQImage(size(), profile).scaled(scaledImageSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
-    QPointer<KoUpdater> updater = new KoDummyUpdater();
+    KoDummyUpdaterHolder updaterHolder;
+    QPointer<KoUpdater> updater = updaterHolder.updater();
 
     KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
     worker.run();
-
-    delete updater;
 
     return dev->convertToQImage(profile);
 }
@@ -1712,7 +1781,7 @@ void KisImage::setDefaultProjectionColor(const KoColor &color)
 KoColor KisImage::defaultProjectionColor() const
 {
     KIS_ASSERT_RECOVER(m_d->rootLayer) {
-        return KoColor(Qt::transparent, m_d->colorSpace);
+        return KoColor::createTransparent(m_d->colorSpace);
     }
 
     return m_d->rootLayer->defaultProjectionColor();
@@ -1722,7 +1791,7 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
     emit sigInternalStopIsolatedModeRequested();
 
-    KoColor defaultProjectionColor(Qt::transparent, m_d->colorSpace);
+    KoColor defaultProjectionColor = KoColor::createTransparent(m_d->colorSpace);
 
     if (m_d->rootLayer) {
         m_d->rootLayer->setGraphListener(0);
@@ -1749,7 +1818,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
     while (it != m_d->annotations.end()) {
         if ((*it)->type() == annotation->type()) {
             *it = annotation;
-            emit sigImageModified();
+            setModifiedWithoutUndo();
             return;
         }
         ++it;
@@ -1827,16 +1896,6 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
         requestStrokeEnd();
     }
 
-    /**
-     * Some of the strokes can cancel their work with undoing all the
-     * changes they did to the paint devices. The problem is that undo
-     * stack will know nothing about it. Therefore, just notify it
-     * explicitly
-     */
-    if (strokeStrategy->clearsRedoOnStart()) {
-        m_d->undoStore->purgeRedoState();
-    }
-
     return m_d->scheduler.startStroke(strokeStrategy);
 }
 
@@ -1863,7 +1922,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
     if ((isolateLayer || isolateGroup) == false) return false;
 
     /**
-     * Isolation of trnsform masks is not possible, so we should
+     * Isolation of transform masks is not possible, so we should
      * not allow that
      */
     if (!node->projection()) return false;
@@ -2352,7 +2411,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
 
         const QRect boundRect = effectiveLodBounds();
         Q_FOREACH (const QRect &rc, rects) {
-            KisWrappedRect splitRect(rc, boundRect);
+            KisWrappedRect splitRect(rc, boundRect, m_d->wrapAroundModeAxis);
             allSplitRects.append(splitRect);
         }
 
@@ -2383,8 +2442,9 @@ KisNode *KisImage::graphOverlayNode() const
 void KisImage::keyframeChannelHasBeenAdded(KisNode *node, KisKeyframeChannel *channel)
 {
     Q_UNUSED(node);
+
     channel->connect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
-    channel->connect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
+    channel->connect(channel, SIGNAL(sigKeyframeHasBeenRemoved(const KisKeyframeChannel*,int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)), Qt::UniqueConnection);
 }
 
 void KisImage::keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel *channel)
@@ -2392,7 +2452,7 @@ void KisImage::keyframeChannelAboutToBeRemoved(KisNode *node, KisKeyframeChannel
     Q_UNUSED(node);
 
     channel->disconnect(channel, SIGNAL(sigAddedKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeAdded(const KisKeyframeChannel*, int)));
-    channel->disconnect(channel, SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
+    channel->disconnect(channel, SIGNAL(sigKeyframeHasBeenRemoved(const KisKeyframeChannel*, int)), m_d->animationInterface, SIGNAL(sigKeyframeRemoved(const KisKeyframeChannel*, int)));
 }
 
 QList<KisLayerCompositionSP> KisImage::compositions()
@@ -2474,6 +2534,17 @@ void KisImage::setWrapAroundModePermitted(bool value)
         applicator.end();
     }
 }
+
+void KisImage::setWrapAroundModeAxis(WrapAroundAxis value)
+{
+    m_d->wrapAroundModeAxis = value;
+}
+
+WrapAroundAxis KisImage::wrapAroundModeAxis() const
+{
+    return m_d->wrapAroundModeAxis;
+}
+
 
 bool KisImage::wrapAroundModePermitted() const
 {

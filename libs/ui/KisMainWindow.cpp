@@ -69,17 +69,16 @@
 #include <kxmlguiclient.h>
 #include <kguiitem.h>
 #include <kwindowconfig.h>
-#include <kformat.h>
 #include <kacceleratormanager.h>
 
 #include <KoResourcePaths.h>
 #include <KoToolFactoryBase.h>
 #include <KoToolRegistry.h>
-#include "KoDockFactoryBase.h"
-#include "KoDockWidgetTitleBar.h"
-#include "KoDocumentInfoDlg.h"
-#include "KoDocumentInfo.h"
-#include "KoFileDialog.h"
+#include <KoDockFactoryBase.h>
+#include <KoDockWidgetTitleBar.h>
+#include <KoDocumentInfoDlg.h>
+#include <KoDocumentInfo.h>
+#include <KoFileDialog.h>
 #include <kis_icon.h>
 #include <KoToolManager.h>
 #include <KoZoomController.h>
@@ -96,6 +95,7 @@
 #include <KisResourceCacheDb.h>
 #include <KisStorageModel.h>
 #include <KisStorageFilterProxyModel.h>
+#include <KisPlaybackEngine.h>
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -125,7 +125,6 @@
 #include <KisImportExportFilter.h>
 #include "KisImportExportManager.h"
 #include "kis_mainwindow_observer.h"
-#include "kis_memory_statistics_server.h"
 #include "kis_node.h"
 #include "KisOpenPane.h"
 #include "kis_paintop_box.h"
@@ -152,7 +151,9 @@
 #include "KisUiFont.h"
 #include <KisResourceUserOperations.h>
 #include "KisRecentFilesManager.h"
-
+#include "KisWidgetConnectionUtils.h"
+#include "KisToolBarStateModel.h"
+#include <config-qmdiarea-always-show-subwindow-title.h>
 
 #include <mutex>
 
@@ -206,6 +207,9 @@ public:
         mdiArea->setActivationOrder(QMdiArea::ActivationHistoryOrder);
         mdiArea->setDocumentMode(true);
         mdiArea->setOption(QMdiArea::DontMaximizeSubWindowOnActivation);
+#ifdef HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE
+        mdiArea->setOption(QMdiArea::AlwaysShowSubwindowNameInTitleBar);
+#endif /* HAVE_QMDIAREA_ALWAYS_SHOW_SUBWINDOW_TITLE */
 
         commandBar = new KateCommandBar(parent);
     }
@@ -220,6 +224,7 @@ public:
     KisViewManager *viewManager {nullptr};
 
     QPointer<KisView> activeView;
+    KisSignalAutoConnectionsStore activeViewConnections;
 
     QList<QAction *> toolbarList;
 
@@ -239,7 +244,6 @@ public:
     KisAction *exportFileAdvance {nullptr};
     KisAction *undo {nullptr};
     KisAction *redo {nullptr};
-    KisAction *newWindow {nullptr};
     KisAction *close {nullptr};
     KisAction *mdiCascade {nullptr};
     KisAction *mdiTile {nullptr};
@@ -248,7 +252,10 @@ public:
     KisAction *toggleDockers {nullptr};
     KisAction *resetConfigurations {nullptr};
     KisAction *toggleDockerTitleBars {nullptr};
+#ifndef Q_OS_ANDROID
     KisAction *toggleDetachCanvas {nullptr};
+    KisAction *newWindow {nullptr};
+#endif
     KisAction *fullScreenMode {nullptr};
     KisAction *showSessionManager {nullptr};
     KisAction *commandBarAction {nullptr};
@@ -299,7 +306,6 @@ public:
     KConfigGroup windowStateConfig;
 
     QUuid workspaceBorrowedBy;
-    KisSignalAutoConnectionsStore screenConnectionsStore;
 
     KateCommandBar *commandBar {nullptr};
 
@@ -364,6 +370,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
+    connect(this, SIGNAL(themeChanged()), KoToolManager::instance(), SLOT(themeChanged()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
@@ -381,16 +388,22 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-        d->toolOptionsDocker->toggleViewAction()->setEnabled(true);
+        if (d->toolOptionsDocker) {
+            d->toolOptionsDocker->toggleViewAction()->setEnabled(true);
+        }
     }
 
     QMap<QString, QAction*> dockwidgetActions;
 
-    dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
+    if (toolbox) {
+        dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
+    }
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         QDockWidget *dw = createDockWidget(factory);
-        dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
+        if (dw) {
+            dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
+        }
     }
 
     if (d->toolOptionsDocker) {
@@ -406,7 +419,21 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // Style menu actions
     d->styleActions = new QActionGroup(this);
     QAction * action;
+
+    QStringList allowableStyles = QStringList() << "macintosh" << "breeze" << "fusion";
+
     Q_FOREACH (QString styleName, QStyleFactory::keys()) {
+#ifdef Q_OS_ANDROID
+        // disable the style for android platform
+        if (styleName.toLower().contains("android")) {
+            continue;
+        }
+#endif
+        if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
+            if (!allowableStyles.contains(styleName.toLower())) {
+                continue;
+            }
+        }
         action = new QAction(styleName, d->styleActions);
         action->setCheckable(true);
         d->actionMap.insert(styleName, action);
@@ -453,6 +480,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
+    d->mdiArea->setAcceptDrops(true);
 
     themeChanged(); // updates icon styles
 
@@ -473,7 +501,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->recentFiles->setRecentFilesModel(&KisRecentDocumentsModelWrapper::instance()->model());
 
-    setAutoSaveSettings(d->windowStateConfig, false);
+    applyMainWindowSettings(d->windowStateConfig);
 
     subWindowActivated();
     updateWindowMenu();
@@ -555,8 +583,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
         KisToolBar * toolBar = ::qobject_cast<KisToolBar *>(it);
         if (toolBar) {
-            toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
-
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
             actionCollection()->addAction(toolBar->objectName().toUtf8(), act);
             act->setCheckedState(KGuiItem(i18n("Hide %1 Toolbar", toolBar->windowTitle())));
@@ -600,8 +626,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     }
 
     this->winId(); // Ensures the native window has been created.
-    QWindow *window = this->windowHandle();
-    connect(window, SIGNAL(screenChanged(QScreen *)), this, SLOT(windowScreenChanged(QScreen *)));
 
 #ifdef Q_OS_ANDROID
     // HACK: This prevents the mainWindow from going beyond the screen with no
@@ -614,17 +638,23 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     connect(s, SIGNAL(orientationChanged(Qt::ScreenOrientation)), this, SLOT(orientationChanged()));
 
     // When Krita starts, Java side sends an event to set applicationState() to active. But, before
-    // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFomat.
+    // the event could reach KisApplication's platform integration, it is cleared by KisOpenGLModeProber::probeFormat.
     // So, we send it manually when MainWindow shows up.
     QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
 #endif
 
+    setAcceptDrops(true);
     QTabBar *tabBar = d->findTabBarHACK();
     if (tabBar) {
         tabBar->setElideMode(Qt::ElideRight);
         // load customized tab style
         customizeTabBar();
+        tabBar->setExpanding(true);
+        tabBar->setAcceptDrops(true);
+        tabBar->setChangeCurrentOnDrag(true);
     }
+
+
 }
 
 KisMainWindow::~KisMainWindow()
@@ -678,13 +708,14 @@ void KisMainWindow::addView(KisView *view, QMdiSubWindow *subWindow)
     viewManager()->inputManager()->addTrackedCanvas(view->canvasBase());
 
     showView(view, subWindow);
-    updateCaption();
     emit restoringDone();
 
-    if (d->activeView) {
-        connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
-        connect(d->viewManager->statusBar(), SIGNAL(memoryStatusUpdated()), this, SLOT(updateCaption()));
-    }
+//    QTabBar *tabBar = d->findTabBarHACK();
+//    Q_FOREACH(QObject *c, tabBar->children()) {
+//        if (QWidget *w = qobject_cast<QWidget*>(c)) {
+//            w->setAcceptDrops(true);
+//        }
+//    }
 }
 
 void KisMainWindow::notifyChildViewDestroyed(KisView *view)
@@ -771,7 +802,8 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         setActiveView(imageView);
 
         updateWindowMenu();
-        updateCaption();
+    } else {
+        unsetActiveView();
     }
 }
 
@@ -794,7 +826,9 @@ void KisMainWindow::slotPreferences()
                 // because nodes are not QObjects (because only one base class
                 // can be a QObject).
                 KisNode* node = dynamic_cast<KisNode*>(view->image()->rootLayer().data());
-                node->updateSettings();
+                if (node) {
+                    node->updateSettings();
+                }
             }
 
         }
@@ -804,15 +838,8 @@ void KisMainWindow::slotPreferences()
     }
 }
 
-void KisMainWindow::slotThemeChanged()
+void KisMainWindow::updateTheme()
 {
-    KConfigGroup group(KSharedConfig::openConfig(), "theme");
-
-    if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
-
-    // save theme changes instantly
-    group.writeEntry("Theme", d->themeManager->currentThemeName());
-
     // reload action icons!
     Q_FOREACH (QAction *action, actionCollection()->actions()) {
         KisIconUtils::updateIcon(action);
@@ -832,6 +859,60 @@ void KisMainWindow::slotThemeChanged()
     }
 
     customizeTabBar();
+
+    // Update toolbars
+    {
+        Q_FOREACH (KisToolBar* aToolBar, toolBars()) {
+            QObjectList objects;
+            objects.append(aToolBar);
+            while (!objects.isEmpty()) {
+                QWidget* widget = qobject_cast<QWidget*>(objects.takeFirst());
+                if (widget) {
+                    objects.append(widget->children());
+                    widget->setPalette(qApp->palette());
+                }
+            }
+        }
+    }
+}
+
+void KisMainWindow::slotThemeChanged()
+{
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+
+    if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
+
+    // save theme changes instantly
+    group.writeEntry("Theme", d->themeManager->currentThemeName());
+
+    updateTheme();
+
+    // Make the other top level windows update as well
+    Q_FOREACH (QWidget* topLevelWidget, qApp->topLevelWidgets()) {
+        if (topLevelWidget == this) {
+            // Skip if the current top level widget is this window
+            continue;
+        }
+        if (topLevelWidget->isHidden()) {
+            // Skip unwanted top level widgets like menus, dropdowns, tooltips, etc.
+            continue;
+        }
+        KisMainWindow *topLevelMainWindow = qobject_cast<KisMainWindow*>(topLevelWidget);
+        if (topLevelMainWindow) {
+            topLevelMainWindow->updateTheme();
+            emit topLevelMainWindow->themeChanged();
+        } else {
+            QObjectList objects;
+            objects.append(topLevelWidget);
+            while (!objects.isEmpty()) {
+                QWidget* widget = qobject_cast<QWidget*>(objects.takeFirst());
+                if (widget) {
+                    objects.append(widget->children());
+                    KisIconUtils::updateIconCommon(widget);
+                }
+            }
+        }
+    }
 
     emit themeChanged();
 }
@@ -884,6 +965,12 @@ bool KisMainWindow::canvasDetached() const
 
 void KisMainWindow::setCanvasDetached(bool detach)
 {
+#ifdef Q_OS_ANDROID
+    if (detach) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"),
+                             "Detach Canvas is unsupported on Android");
+    }
+#else
     if (detach == canvasDetached()) return;
 
     QWidget *outgoingWidget = centralWidget() ? takeCentralWidget() : nullptr;
@@ -899,6 +986,7 @@ void KisMainWindow::setCanvasDetached(bool detach)
         d->canvasWindow->hide();
     }
     d->toggleDetachCanvas->setChecked(detach);
+#endif
 }
 
 QWidget * KisMainWindow::canvasWindow() const
@@ -910,7 +998,6 @@ void KisMainWindow::setReadWrite(bool readwrite)
 {
     d->saveAction->setEnabled(readwrite);
     d->importFile->setEnabled(readwrite);
-    updateCaption();
 }
 
 void KisMainWindow::clearRecentFiles()
@@ -918,62 +1005,22 @@ void KisMainWindow::clearRecentFiles()
     KisRecentFilesManager::instance()->clear();
 }
 
-void KisMainWindow::updateCaption()
+void KisMainWindow::removeRecentFile(QString url)
 {
-    if (!d->mdiArea->activeSubWindow()) {
-        setWindowTitle("");
-   }
-    else if (d->activeView && d->activeView->document() && d->activeView->image()){
-        KisDocument *doc = d->activeView->document();
-
-        QString caption = doc->caption();
-
-        if (d->mdiArea->activeSubWindow() && d->mdiArea->activeSubWindow()->isMaximized() && d->mdiArea->viewMode() == QMdiArea::SubWindowView) {
-            caption = "";
-        }
-        if (!doc->isReadWrite()) {
-            caption += " " + i18n("Write Protected") + " ";
-        }
-
-        if (doc->isRecovered()) {
-            caption += " " + i18n("Recovered") + " ";
-        }
-
-        // show the file size for the document
-        KisMemoryStatisticsServer::Statistics m_fileSizeStats = KisMemoryStatisticsServer::instance()->fetchMemoryStatistics(d->activeView ? d->activeView->image() : 0);
-
-        if (m_fileSizeStats.imageSize) {
-            caption += QString(" (").append( KFormat().formatByteSize(m_fileSizeStats.imageSize)).append( ") ");
-        }
-
-        if (doc->isModified()) {
-            caption += " *";
-        }
-
-#ifdef Q_OS_ANDROID
-        // there's no way to view mainwindow title on Android, so we need to do with mdiArea title.
-        d->mdiArea->activeSubWindow()->setWindowTitle(caption);
-#else
-        if (doc->isModified()) {
-            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption() + " *");
-        }
-        else {
-            d->mdiArea->activeSubWindow()->setWindowTitle(doc->caption());
-        }
-#endif
-
-
-        setWindowTitle(caption);
-
-        if (!QFileInfo(doc->path()).fileName().isEmpty()) {
-            d->saveAction->setToolTip(i18n("Save as %1", QFileInfo(doc->path()).fileName()));
-        }
-        else {
-            d->saveAction->setToolTip(i18n("Save"));
-        }
-    }
+    KisRecentFilesManager::instance()->remove(QUrl::fromLocalFile(url));
 }
 
+void KisMainWindow::slotUpdateSaveActionTitle(const QString &documentPath)
+{
+    const QString fileName = QFileInfo(documentPath).fileName();
+
+    if (!fileName.isEmpty()) {
+        d->saveAction->setToolTip(i18n("Save as %1", fileName));
+    }
+    else {
+        d->saveAction->setToolTip(i18n("Save"));
+    }
+}
 
 KisView *KisMainWindow::activeView() const
 {
@@ -1140,15 +1187,14 @@ void KisMainWindow::slotSaveCompleted()
 
 bool KisMainWindow::hackIsSaving() const
 {
-    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
-    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    std::unique_lock<QMutex> l(d->savingEntryMutex, std::try_to_lock);
     return !l.owns_lock();
 }
 
 bool KisMainWindow::installBundle(const QString &fileName) const
 {
     QFileInfo from(fileName);
-    QFileInfo to(QStringLiteral("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), from.fileName()));
+    QFileInfo to(QStringLiteral("%1/%2").arg(KoResourcePaths::getAppDataLocation(), from.fileName()));
     if (to.exists()) {
         QFile::remove(to.canonicalFilePath());
     }
@@ -1202,8 +1248,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
      * double-entry is quite possible to achieve. Here we try to lock
      * the mutex, and if it is failed, just cancel saving.
      */
-    StdLockableWrapper<QMutex> wrapper(&d->savingEntryMutex);
-    std::unique_lock<StdLockableWrapper<QMutex>> l(wrapper, std::try_to_lock);
+    std::unique_lock<QMutex> l(d->savingEntryMutex, std::try_to_lock);
     if (!l.owns_lock()) return false;
 
     // no busy wait for saving because it is dangerous!
@@ -1309,7 +1354,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             // If exporting, default to all supported file types if user is exporting
             QByteArray default_mime_type = "";
             if (!isExporting) {
-                // otherwise use the document's mimetype, or if that is empty, kra, which is the savest.
+                // otherwise use the document's mimetype, or if that is empty, kra, which is the safest.
                 default_mime_type = document->mimeType().isEmpty() ? nativeFormat : document->mimeType();
             }
             dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));
@@ -1395,8 +1440,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
         }
     }
 
-    updateCaption();
-
     return ret;
 }
 
@@ -1443,8 +1486,9 @@ void KisMainWindow::closeEvent(QCloseEvent *e)
     QList<QMdiSubWindow*> childrenList = d->mdiArea->subWindowList();
 
     if (childrenList.isEmpty()) {
+        // TODO: that assignment looks really suspicious, because `e`
+        // is destroyed right after the exit of this function
         d->deferredClosingEvent = e;
-        saveWindowState(true);
         d->canvasWindow->close();
     } else {
         e->setAccepted(false);
@@ -1497,10 +1541,92 @@ void KisMainWindow::resizeEvent(QResizeEvent * e)
     KXmlGuiWindow::resizeEvent(e);
 }
 
+
+void KisMainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    dragMove(event);
+    event->accept();
+}
+
+void KisMainWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    dragLeave();
+    event->accept();
+}
+
+bool KisMainWindow::windowsLayoutSavingAllowed() const
+{
+    QAction *action= d->viewManager->actionCollection()->action("view_show_canvas_only");
+    return !action || !action->isChecked();
+}
+
+void KisMainWindow::showEvent(QShowEvent *event)
+{
+    // we're here because, we need to make sure everything (dockers, toolbars etc) is loaded and ready before
+    // we can hide it.
+    if (!event->spontaneous()) {
+        setMainWindowLayoutForCurrentMainWidget(d->widgetStack->currentIndex(), false);
+    }
+    return KXmlGuiWindow::showEvent(event);
+}
+
+void KisMainWindow::setMainWindowLayoutForCurrentMainWidget(int widgetIndex, bool widgetIndexChanged)
+{
+
+    if (widgetIndex == 0) {
+        if (widgetIndexChanged) {
+            /// save the state of the window which existed up-to now (this is before we stop auto-saving).
+            ///
+            /// saving should happen if the call s has come from a real state change, but not from
+            /// on-startup initialization
+
+            if (d->mdiArea->subWindowList().isEmpty()) {
+                /**
+                 * When closing the latest subwindow we should restore the
+                 * canvas-only mode to save stuff properly
+                 */
+                saveWindowState(true);
+            } else {
+                saveMainWindowSettings(d->windowStateConfig);
+            }
+        }
+        adjustLayoutForWelcomePage();
+    }
+    else {
+        setAutoSaveSettings(d->windowStateConfig, false);
+        statusBar()->setVisible(KisConfig(true).showStatusBar());
+    }
+
+    QList<QAction *> actions = d->dockWidgetMenu->menu()->actions();
+    actions.append(toolBarMenuAction()->menu()->actions());
+    for (QAction *action : actions) {
+        if (action) {
+            action->setEnabled(widgetIndex);
+        }
+    }
+}
+
+void KisMainWindow::adjustLayoutForWelcomePage()
+{
+    // This makes sure we don't save window state when we're in welcome page mode, because all the dockers
+    // etc are hidden while the user is here.
+    resetAutoSaveSettings();
+
+    toggleDockersVisibility(false, true);
+    if (statusBar()) {
+        statusBar()->hide();
+    }
+    QList<QToolBar *> toolbars = findChildren<QToolBar *>();
+    for (QToolBar *toolbar : toolbars) {
+        if (toolbar->objectName() == "BrushesAndStuff" || toolbar->objectName() == "editToolBar") {
+            toolbar->hide();
+        }
+    }
+}
+
 void KisMainWindow::setActiveView(KisView* view)
 {
     d->activeView = view;
-    updateCaption();
 
     if (d->undoActionsUpdateManager) {
         d->undoActionsUpdateManager->setCurrentDocument(view ? view->document() : 0);
@@ -1508,9 +1634,21 @@ void KisMainWindow::setActiveView(KisView* view)
 
     d->viewManager->setCurrentView(view);
 
+    d->activeViewConnections.clear();
+    d->activeViewConnections.addConnection(view->document(),
+                                           SIGNAL(sigPathChanged(QString)),
+                                           this, SLOT(slotUpdateSaveActionTitle(QString)));
+    slotUpdateSaveActionTitle(view->document()->path());
+
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
     emit activeViewChanged();
+}
+
+void KisMainWindow::unsetActiveView()
+{
+    d->activeViewConnections.clear();
+    slotUpdateSaveActionTitle(QString());
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -1553,7 +1691,20 @@ void KisMainWindow::switchTab(int index)
 
 void KisMainWindow::showWelcomeScreen(bool show)
 {
-    d->widgetStack->setCurrentIndex(!show);
+    const int currentIndex = show ? 0 : 1;
+    if (d->widgetStack->currentIndex() != currentIndex) {
+        setUpdatesEnabled(false);
+        // These have to be done in different sequence to avoid graphical
+        // layout glitch during the switch.
+        if (show) {
+            setMainWindowLayoutForCurrentMainWidget(currentIndex, true);
+            d->widgetStack->setCurrentIndex(currentIndex);
+        } else {
+            d->widgetStack->setCurrentIndex(currentIndex);
+            setMainWindowLayoutForCurrentMainWidget(currentIndex, true);
+        }
+        setUpdatesEnabled(true);
+    }
 }
 
 void KisMainWindow::slotFileNew()
@@ -1589,15 +1740,9 @@ void KisMainWindow::slotFileNew()
     item.title = i18n("Custom Document");
     startupWidget->addCustomDocumentWidget(item.widget, item.title, "Custom Document", item.icon);
 
-    QSize sz = KisClipboard::instance()->clipSize();
-    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-        w = sz.width();
-        h = sz.height();
-    }
-
-    item.widget = new KisImageFromClipboard(startupWidget,
-                                            w,
-                                            h,
+    item.widget = new KisImageFromClipboardWidget(startupWidget,
+                                            0,
+                                            0,
                                             resolution,
                                             colorModel,
                                             colorDepth,
@@ -1695,6 +1840,12 @@ const KConfigGroup &KisMainWindow::windowStateConfig() const
 
 void KisMainWindow::saveWindowState(bool restoreNormalState)
 {
+    // We don't need to save welcome page's layout
+    if (d->widgetStack->currentIndex() == 0) {
+        // TODO(sh_zam): We should still save position/geometry, right?
+        return;
+    }
+
     if (restoreNormalState) {
         QAction *showCanvasOnly = d->viewManager->actionCollection()->action("view_show_canvas_only");
 
@@ -1705,7 +1856,8 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
         d->windowStateConfig.writeEntry("ko_geometry", saveGeometry().toBase64());
         d->windowStateConfig.writeEntry("State", saveState().toBase64());
 
-        if (!d->dockerStateBeforeHiding.isEmpty()) {
+        // if the dockers are hidden at this time, save their state.
+        if (!d->toggleDockers->isChecked()) {
             restoreState(d->dockerStateBeforeHiding);
         }
 
@@ -1727,11 +1879,13 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        dock->setProperty("Locked", false); // Unlock invisible dockers
-        dock->toggleViewAction()->setEnabled(true);
-        dock->hide();
-        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
-            dock->titleBarWidget()->setVisible(showTitlebars);
+        if (dock) {
+            dock->setProperty("Locked", false); // Unlock invisible dockers
+            dock->toggleViewAction()->setEnabled(true);
+            dock->hide();
+            if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+                dock->titleBarWidget()->setVisible(showTitlebars);
+            }
         }
     }
 
@@ -1842,6 +1996,8 @@ bool KisMainWindow::restoreWorkspace(KoResourceSP res)
         activeKisView()->resourceProvider()->notifyLoadingWorkspace(workspace);
     }
 
+    d->viewManager->notifyWorkspaceLoaded();
+
     return success;
 }
 
@@ -1903,7 +2059,6 @@ void KisMainWindow::slotDocumentInfo()
         } else {
             d->activeView->document()->setModified(true);
         }
-        d->activeView->document()->setTitleModified();
     }
 
     delete dlg;
@@ -1918,7 +2073,6 @@ bool KisMainWindow::slotFileCloseAll()
         }
     }
 
-    updateCaption();
     return true;
 }
 
@@ -1993,8 +2147,8 @@ void KisMainWindow::importVideoAnimation()
 
             dbgFile << "Current frames:" << document->image()->animationInterface()->totalLength() << "total frames:" << totalFrames;
             if ( document->image()->animationInterface()->totalLength() < totalFrames ) {
-                document->image()->animationInterface()->setFullClipRangeStartTime(0);
-                document->image()->animationInterface()->setFullClipRangeEndTime(totalFrames);
+                document->image()->animationInterface()->setDocumentRangeStartFrame(0);
+                document->image()->animationInterface()->setDocumentRangeEndFrame(totalFrames);
             }
 
         } else {
@@ -2025,8 +2179,8 @@ void KisMainWindow::importVideoAnimation()
             }
 
             document->image()->animationInterface()->setFramerate(fps);
-            document->image()->animationInterface()->setFullClipRangeStartTime(0);
-            document->image()->animationInterface()->setFullClipRangeEndTime(totalFrames);
+            document->image()->animationInterface()->setDocumentRangeStartFrame(0);
+            document->image()->animationInterface()->setDocumentRangeEndFrame(totalFrames);
 
 
             this->showDocument(document);
@@ -2155,7 +2309,7 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;
-    bool lockAllDockers = KisConfig(true).readEntry<bool>("LockAllDockerPanels", false);
+    const bool showTitlebars = KisConfig(false).showDockerTitleBars();
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
@@ -2185,7 +2339,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
         dockWidget->setObjectName(factory->id());
         dockWidget->setParent(this);
-        if (lockAllDockers) {
+        if (!showTitlebars) {
             if (dockWidget->titleBarWidget() && !dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar")) {
                 dockWidget->titleBarWidget()->setVisible(false);
             }
@@ -2283,6 +2437,8 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 
+    observers.append(static_cast<KoCanvasObserverBase*>(KisPart::instance()->playbackEngine()));
+
     Q_FOREACH (QDockWidget *docker, dockWidgets()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
@@ -2292,11 +2448,12 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
             warnKrita << docker << "is not a canvas observer";
         }
     }
+
     return observers;
 }
 
 
-void KisMainWindow::toggleDockersVisibility(bool visible)
+void KisMainWindow::toggleDockersVisibility(bool visible, bool onWelcomePage)
 {
     if (!visible) {
         d->dockerStateBeforeHiding = saveState();
@@ -2304,7 +2461,7 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
         Q_FOREACH (QObject* widget, children()) {
             if (widget->inherits("QDockWidget")) {
                 QDockWidget* dw = static_cast<QDockWidget*>(widget);
-                if (dw->isVisible()) {
+                if (dw->isVisible() && !(onWelcomePage && dw->property("ShowOnWelcomePage").toBool())) {
                     dw->hide();
                 }
             }
@@ -2314,12 +2471,6 @@ void KisMainWindow::toggleDockersVisibility(bool visible)
         restoreState(d->dockerStateBeforeHiding);
     }
 }
-
-void KisMainWindow::slotDocumentTitleModified()
-{
-    updateCaption();
-}
-
 
 void KisMainWindow::subWindowActivated()
 {
@@ -2355,7 +2506,6 @@ void KisMainWindow::subWindowActivated()
         }
     }
 
-    updateCaption();
     d->actionManager()->updateGUI();
 }
 
@@ -2396,7 +2546,9 @@ void KisMainWindow::updateWindowMenu()
     QMenu *menu = d->windowMenu->menu();
     menu->clear();
 
+#ifndef Q_OS_ANDROID
     menu->addAction(d->newWindow);
+#endif
     menu->addAction(d->documentMenu);
 
     QMenu *docMenu = d->documentMenu->menu();
@@ -2477,7 +2629,7 @@ void KisMainWindow::updateWindowMenu()
         d->viewManager->canvasResourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);
 
-        workspace->setFilename(name + workspace->defaultFileExtension());
+        workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
         workspace->setName(name);
 
         KisResourceUserOperations::addResourceWithUserInput(this, workspace);
@@ -2504,12 +2656,11 @@ void KisMainWindow::updateWindowMenu()
         QPointer<KisView>child = qobject_cast<KisView*>(windows.at(i)->widget());
         if (child && child->document()) {
             QString text;
-            const QString elidedPath = fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth);
             if (i < 9) {
-                text = i18nc("@item:inmenu opened document, %1=index %2=document path", "&%1 %2", i + 1, elidedPath);
+                text = i18n("&%1 %2", i + 1, fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth));
             }
             else {
-                text = i18nc("@item:inmenu opened document, %1=index %2=document path", "%1 %2", i + 1, elidedPath);
+                text = i18n("%1 %2", i + 1, fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth));
             }
 
             QAction *action  = menu->addAction(text);
@@ -2536,8 +2687,6 @@ void KisMainWindow::updateWindowMenu()
             }
         }
     }
-
-    updateCaption();
 }
 
 void KisMainWindow::updateSubwindowFlags()
@@ -2558,7 +2707,10 @@ void KisMainWindow::updateSubwindowFlags()
 
 void KisMainWindow::setActiveSubWindow(QWidget *window)
 {
-    if (!window) return;
+    if (!window) {
+        unsetActiveView();
+        return;
+    }
     QMdiSubWindow *subwin = qobject_cast<QMdiSubWindow *>(window);
     //dbgKrita << "setActiveSubWindow();" << subwin << d->activeSubWindow;
 
@@ -2566,7 +2718,6 @@ void KisMainWindow::setActiveSubWindow(QWidget *window)
         KisView *view = qobject_cast<KisView *>(subwin->widget());
         //dbgKrita << "\t" << view << activeView();
         if (view && view != activeView()) {
-            d->mdiArea->setActiveSubWindow(subwin);
             setActiveView(view);
         }
         d->activeSubWindow = subwin;
@@ -2650,6 +2801,14 @@ KisView* KisMainWindow::newView(QObject *document, QMdiSubWindow *subWindow)
 
 void KisMainWindow::newWindow()
 {
+#ifdef Q_OS_ANDROID
+    // Check if current mainwindow exists, just to be sure.
+    if (KisPart::instance()->currentMainwindow()) {
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"),
+                             "Creating a New Main Window is unsupported on Android");
+        return;
+    }
+#endif
     KisMainWindow *mainWindow = KisPart::instance()->createMainWindow();
     mainWindow->initializeGeometry();
     mainWindow->show();
@@ -2796,7 +2955,7 @@ void KisMainWindow::createActions()
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::QueuedConnection);
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
+    connect(this, SIGNAL(themeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
     d->toggleDockers = actionManager->createAction("view_toggledockers");
 
 
@@ -2807,9 +2966,11 @@ void KisMainWindow::createActions()
     d->resetConfigurations  = actionManager->createAction("reset_configurations");
     connect(d->resetConfigurations, SIGNAL(triggered()), this, SLOT(slotResetConfigurations()));
 
+#ifndef Q_OS_ANDROID
     d->toggleDetachCanvas = actionManager->createAction("view_detached_canvas");
     d->toggleDetachCanvas->setChecked(false);
     connect(d->toggleDetachCanvas, SIGNAL(toggled(bool)), SLOT(setCanvasDetached(bool)));
+#endif
     setCanvasDetached(false);
 
     d->toggleDockerTitleBars = actionManager->createAction("view_toggledockertitlebars");
@@ -2833,8 +2994,10 @@ void KisMainWindow::createActions()
     d->mdiPreviousWindow = actionManager->createAction("windows_previous");
     connect(d->mdiPreviousWindow, SIGNAL(triggered()), d->mdiArea, SLOT(activatePreviousSubWindow()));
 
+#ifndef Q_OS_ANDROID
     d->newWindow = actionManager->createAction("view_newwindow");
     connect(d->newWindow, SIGNAL(triggered(bool)), this, SLOT(newWindow()));
+#endif
 
     d->close = actionManager->createStandardAction(KStandardAction::Close, this, SLOT(closeCurrentWindow()));
 
@@ -2852,12 +3015,17 @@ void KisMainWindow::createActions()
         d->expandingSpacers[i]->defaultWidget()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         actionManager->addAction(QString("expanding_spacer_%1").arg(i), d->expandingSpacers[i]);
     }
+
+    {
+        using namespace KisWidgetConnectionUtils;
+
+        QAction *action = actionManager->createAction("lock_toolbars");
+        connectControl(action, KisToolBar::toolBarStateModel(), "toolBarsLocked");
+    }
 }
 
 void KisMainWindow::applyToolBarLayout()
 {
-    KisToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
-
     Q_FOREACH (KisToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
         toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like
@@ -2913,14 +3081,6 @@ void KisMainWindow::initializeGeometry()
 void KisMainWindow::showManual()
 {
     QDesktopServices::openUrl(QUrl("https://docs.krita.org"));
-}
-
-void KisMainWindow::windowScreenChanged(QScreen *screen)
-{
-    emit screenChanged();
-    d->screenConnectionsStore.clear();
-    d->screenConnectionsStore.addConnection(screen, SIGNAL(physicalDotsPerInchChanged(qreal)),
-                                            this, SIGNAL(screenChanged()));
 }
 
 void KisMainWindow::showDockerTitleBars(bool show)

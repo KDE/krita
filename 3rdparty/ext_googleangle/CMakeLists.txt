@@ -63,6 +63,8 @@ ExternalProject_Add(
     URL_HASH SHA256=9d3ff60560b953dae7d7613b69dda643aef62390574114fdb1c9d4eada672049
 
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo Patching ANGLE
+    # backported fixes from upstream
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-D3D-Initialize-storage-after-generating-mipmap-image.patch
     # Patches from Qt 5.12.12:
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-patches_qt5.12.12/0001-ANGLE-Use-pixel-sizes-in-the-XAML-swap-chain.patch
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-patches_qt5.12.12/0002-ANGLE-Add-support-for-querying-platform-device.patch
@@ -85,6 +87,7 @@ ExternalProject_Add(
     # Miscellaneous fixes:
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-patches_krita/0016-Reduce-flickering-when-resizing-window.patch
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-patches_krita/0017-Replace-extern-thread_local-to-avoid-GCC-mingw-w64-b.patch
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/02-patches_krita/0019-Add-resource-files-for-DLL-identification.patch
     # Copy headers:
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/angle_commit.h ./
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/angle_commit.h ./src/common/
@@ -98,6 +101,7 @@ ExternalProject_Add(
     SOURCE_DIR src
     BINARY_DIR build
     STAMP_DIR stamps
+    DEPENDS ext_patch
 )
 
 # ANGLE requires `third_party/zlib` to be pulled separately. The git commit
@@ -132,6 +136,6 @@ ExternalProject_Add_StepDependencies(ext_googleangle patch ext_googleangle_zlib-
 
 # Generate `angle_commit.h`
 string(SUBSTRING "${GOOGLE_ANGLE_BASE_COMMIT}" 0 12 ANGLE_COMMIT_HASH)
-set(ANGLE_COMMIT_HASH "${ANGLE_COMMIT_HASH}+krita_qt5.12.12")
+set(ANGLE_COMMIT_HASH "${ANGLE_COMMIT_HASH}+krita_qt5")
 string(LENGTH "${ANGLE_COMMIT_HASH}" ANGLE_COMMIT_HASH_SIZE)
 configure_file(angle_commit.h.in ${CMAKE_CURRENT_BINARY_DIR}/angle_commit.h)

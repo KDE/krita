@@ -157,19 +157,7 @@ QString channelIdToChannelType(int channelId, psd_color_mode colormode)
 }
 
 PSDLayerRecord::PSDLayerRecord(const PSDHeader &header)
-    : top(0)
-    , left(0)
-    , bottom(0)
-    , right(0)
-    , nChannels(0)
-    , opacity(0)
-    , clipping(0)
-    , transparencyProtected(false)
-    , visible(true)
-    , irrelevant(false)
-    , layerName("UNINITIALIZED")
-    , infoBlocks(header)
-    , m_transparencyMaskSizeOffset(0)
+    : infoBlocks(header)
     , m_header(header)
 {
 }
@@ -311,46 +299,138 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
 
         // See https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_22582
         quint32 layerMaskLength = 1; // invalid...
-        if (!psdread<byteOrder>(io, layerMaskLength) || io.bytesAvailable() < layerMaskLength
-            || !(layerMaskLength == 0 || layerMaskLength == 20 || layerMaskLength == 36)) {
+        if (!psdread<byteOrder>(io, layerMaskLength) || io.bytesAvailable() < layerMaskLength) {
             error = QString("Could not read layer mask length: %1").arg(layerMaskLength);
             return false;
         }
 
         layerMask = {};
 
-        if (layerMaskLength == 20 || layerMaskLength == 36) {
-            if (!psdread<byteOrder>(io, layerMask.top) || !psdread<byteOrder>(io, layerMask.left) || !psdread<byteOrder>(io, layerMask.bottom)
-                || !psdread<byteOrder>(io, layerMask.right) || !psdread<byteOrder>(io, layerMask.defaultColor) || !psdread<byteOrder>(io, flags)) {
-                error = "could not read mask record";
+        if (layerMaskLength == 0) {
+            dbgFile << "\tNo layer mask/adjustment layer data. pos" << io.pos();
+        } else {
+            dbgFile << "\tReading layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos"
+                    << io.pos();
+
+            if (!psdread<byteOrder>(io, layerMask.top) || !psdread<byteOrder>(io, layerMask.left)
+                || !psdread<byteOrder>(io, layerMask.bottom) || !psdread<byteOrder>(io, layerMask.right)
+                || !psdread<byteOrder>(io, layerMask.defaultColor) || !psdread<byteOrder>(io, flags)) {
+                error = "could not read common records of layer mask";
                 return false;
             }
-        }
-        if (layerMaskLength == 20) {
-            quint16 padding;
-            if (!psdread<byteOrder>(io, padding)) {
-                error = "Could not read layer mask padding";
-                return false;
+
+            layerMask.positionedRelativeToLayer = (flags & 1) != 0;
+            layerMask.disabled = (flags & 2) != 0;
+            layerMask.invertLayerMaskWhenBlending = (flags & 4) != 0;
+            const bool hasMaskParameters = (flags & 8) != 0;
+
+            dbgFile << "\tLayer mask info (original): position relative" << layerMask.positionedRelativeToLayer
+                    << ", disabled" << layerMask.disabled << ", invert" << layerMask.invertLayerMaskWhenBlending
+                    << ", needs to read mask parameters" << hasMaskParameters;
+
+            if (layerMaskLength == 20) {
+                quint16 padding = 0;
+                if (!psdread<byteOrder>(io, padding)) {
+                    error = "Could not read layer mask padding";
+                    return false;
+                }
+            } else {
+                quint32 remainingBlockLength = layerMaskLength - 18;
+
+                dbgFile << "\tReading selective records from layer mask info. Remaining block length"
+                        << remainingBlockLength;
+
+                if (hasMaskParameters) {
+                    if (!psdread<byteOrder>(io, flags)) {
+                        error = "could not read mask parameters";
+                        return false;
+                    }
+
+                    remainingBlockLength -= 1;
+
+                    dbgFile << "\t\tMask parameters" << QString::number(flags, 2) << ". Remaining block length"
+                            << remainingBlockLength;
+
+                    if (flags & 1) {
+                        quint8 dummy = 0;
+                        if (!psdread<byteOrder>(io, dummy)) {
+                            error = "could not read user mask density";
+                            return false;
+                        }
+                        remainingBlockLength -= sizeof(dummy);
+                    }
+
+                    if (flags & 2) {
+                        double dummy = 0;
+                        if (!psdread<byteOrder>(io, dummy)) {
+                            error = "could not read user mask feather";
+                            return false;
+                        }
+                        remainingBlockLength -= sizeof(dummy);
+                    }
+
+                    if (flags & 4) {
+                        quint8 dummy = 0;
+                        if (!psdread<byteOrder>(io, dummy)) {
+                            error = "could not read vector mask density";
+                            return false;
+                        }
+                        remainingBlockLength -= sizeof(dummy);
+                    }
+
+                    if (flags & 8) {
+                        double dummy = 0;
+                        if (!psdread<byteOrder>(io, dummy)) {
+                            error = "could not read vector mask feather";
+                            return false;
+                        }
+                        remainingBlockLength -= sizeof(dummy);
+                    }
+                }
+
+                if (remainingBlockLength >= 1) {
+                    if (!psdread<byteOrder>(io, flags)) {
+                        error = "could not read 'real' mask record";
+                        return false;
+                    }
+
+                    layerMask.positionedRelativeToLayer = (flags & 1) != 0;
+                    layerMask.disabled = (flags & 2) != 0;
+                    layerMask.invertLayerMaskWhenBlending = (flags & 4) != 0;
+                    const bool hasMaskParameters = (flags & 8) != 0;
+
+                    dbgFile << "\t\tLayer mask info (real): position relative" << layerMask.positionedRelativeToLayer
+                            << ", disabled" << layerMask.disabled << ", invert" << layerMask.invertLayerMaskWhenBlending
+                            << ", needs to read mask parameters" << hasMaskParameters;
+
+                    remainingBlockLength -= 1;
+
+                    dbgFile << "\t\tRemaining block length" << remainingBlockLength;
+                }
+
+                if (remainingBlockLength >= 1) {
+                    if (!psdread<byteOrder>(io, layerMask.defaultColor)) {
+                        error = "could not read 'real' default color";
+                        return false;
+                    }
+                    remainingBlockLength -= 1;
+                    dbgFile << "\t\tRead 'real' default color. Remaining block length" << remainingBlockLength;
+                }
+
+                if (remainingBlockLength >= 16) {
+                    if (!psdread<byteOrder>(io, layerMask.top) || !psdread<byteOrder>(io, layerMask.left)
+                        || !psdread<byteOrder>(io, layerMask.bottom) || !psdread<byteOrder>(io, layerMask.right)) {
+                        error = "could not read 'real' mask rectangle";
+                        return false;
+                    }
+                    remainingBlockLength -= 16;
+                    dbgFile << "\t\tRead 'real' mask rectangle. Remaining block length" << remainingBlockLength;
+                }
             }
         }
-
-        // If it's 36, that is, bit four of the flags is set, we also need to read the 'real' flags, background and rectangle
-        if (layerMaskLength == 36) {
-            if (!psdread<byteOrder>(io, flags) || !psdread<byteOrder>(io, layerMask.defaultColor) || !psdread<byteOrder>(io, layerMask.top)
-                || !psdread<byteOrder>(io, layerMask.left) || !psdread<byteOrder>(io, layerMask.bottom) || !psdread<byteOrder>(io, layerMask.right)) {
-                error = "could not read 'real' mask record";
-                return false;
-            }
-        }
-
-        layerMask.positionedRelativeToLayer = flags & 1 ? true : false;
-        layerMask.disabled = flags & 2 ? true : false;
-        layerMask.invertLayerMaskWhenBlending = flags & 4 ? true : false;
-
-        dbgFile << "\tRead layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos" << io.pos();
 
         // layer blending thingies
-        quint32 blendingDataLength;
+        quint32 blendingDataLength = 0;
         if (!psdread<byteOrder>(io, blendingDataLength) || io.bytesAvailable() < blendingDataLength) {
             error = "Could not read extra blending data.";
             return false;
@@ -360,26 +440,36 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
 
         dbgFile << "\tNumber of blending channels:" << blendingNchannels;
 
-        if (blendingNchannels > 0) {
-            if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[1])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[1])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[1])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[1])) {
-                error = "Could not read blending black/white values";
-                return false;
+        if (blendingDataLength > 0) {
+            if (blendingDataLength > 0) {
+                if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[1])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[1])) {
+                    error = "Could not read blending black/white values";
+                    return false;
+                }
             }
+            blendingDataLength -= 4;
+
+            if (blendingDataLength > 0) {
+                if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[1])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[1])) {
+                    error = "Could not read blending black/white values";
+                    return false;
+                }
+            }
+            blendingDataLength -= 4;
 
             dbgFile << "\tBlending ranges:";
             dbgFile << "\t\tcomposite gray (source) :" << blendingRanges.compositeGrayRange.first;
             dbgFile << "\t\tcomposite gray (dest):" << blendingRanges.compositeGrayRange.second;
 
             for (quint32 i = 0; i < blendingNchannels; ++i) {
-                LayerBlendingRanges::LayerBlendingRange src;
-                LayerBlendingRanges::LayerBlendingRange dst;
+                LayerBlendingRanges::LayerBlendingRange src{};
+                LayerBlendingRanges::LayerBlendingRange dst{};
                 if (!psdread<byteOrder>(io, src.blackValues[0]) || !psdread<byteOrder>(io, src.blackValues[1]) || !psdread<byteOrder>(io, src.whiteValues[0])
                     || !psdread<byteOrder>(io, src.whiteValues[1]) || !psdread<byteOrder>(io, dst.blackValues[0]) || !psdread<byteOrder>(io, dst.blackValues[1])
                     || !psdread<byteOrder>(io, dst.whiteValues[0]) || !psdread<byteOrder>(io, dst.whiteValues[1])) {

@@ -254,10 +254,12 @@ void TestTagModel::testRenameTag()
     QCOMPARE(tag->url(), m_tag->url());
     QCOMPARE(tag->name(), m_tag->name());
 
-    tag->setName("Another name altogether");
-    QVERIFY(tagModel.renameTag(tag, true));
+    QVERIFY(tagModel.renameTag(tag, "Another name altogether", true));
 
-    tag = tagModel.tagForIndex(tagModel.index(2,0));
+    /// We are renaming "* Favorites" into "Another...", which
+    /// changed position of the item due to sorting order
+
+    tag = tagModel.tagForIndex(tagModel.index(3,0));
 
     QCOMPARE(tag->url(), "Another name altogether");
     QCOMPARE(tag->name(), "Another name altogether");

@@ -39,8 +39,7 @@ void KisToolBasicBrushBase::updateSettings()
 {
     KisConfig cfg(true);
     // Pressure curve
-    KisCubicCurve curve;
-    curve.fromString(cfg.pressureTabletCurve());
+    KisCubicCurve curve(cfg.pressureTabletCurve());
     m_pressureSamples = curve.floatTransfer(levelOfPressureResolution + 1);
     // Outline options
     m_outlineStyle = cfg.newOutlineStyle();
@@ -172,6 +171,7 @@ void KisToolBasicBrushBase::continueAlternateAction(KoPointerEvent *event, Alter
     QPointF offset = actualWidgetPosition - lastWidgetPosition;
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_ASSERT(canvas2);
     QRect screenRect = QGuiApplication::primaryScreen()->availableVirtualGeometry();
 
     qreal scaleX = 0;
@@ -251,15 +251,15 @@ void KisToolBasicBrushBase::update(const QRectF &strokeSegmentRect)
     }
 }
 
-QPainterPath KisToolBasicBrushBase::getOutlinePath(const QPointF &documentPos,
-                                                   const KoPointerEvent *event,
-                                                   KisPaintOpSettings::OutlineMode outlineMode)
+KisOptimizedBrushOutline KisToolBasicBrushBase::getOutlinePath(const QPointF &documentPos,
+                                                               const KoPointerEvent *event,
+                                                               KisPaintOpSettings::OutlineMode outlineMode)
 {
     Q_UNUSED(documentPos);
     Q_UNUSED(event);
 
     if (!outlineMode.isVisible) {
-        return QPainterPath();
+        return {};
     }
     const qreal radius =
         mode() != KisTool::PAINT_MODE || outlineMode.forceFullSize

@@ -155,7 +155,7 @@ public:
     void loadActionFiles();
     void loadCustomShortcuts(QString filename = QStringLiteral("kritashortcutsrc"));
 
-    // XXX: this adds a default item for the given name to the list of actioninfo objects!
+    // XXX: this adds a default item for the given name to the list of actionInfo objects!
     ActionInfoItem &actionInfo(const QString &name) {
         if (!actionInfoList.contains(name)) {
             dbgAction << "Tried to look up info for unknown action" << name;
@@ -328,7 +328,7 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         QString icon      = getChildContent(actionXml, "icon");
         QString text      = getChildContent_i18n("text");
         QString whatsthis = getChildContent_i18n("whatsThis");
-        // tooltip is set in updateShortcut() because shortcit gets appended to the tooltip
+        // tooltip is set in updateShortcut() because shortcut gets appended to the tooltip
         //QString toolTip   = getChildContent_i18n("toolTip");
         QString statusTip = getChildContent_i18n("statusTip");
         QString iconText  = getChildContent_i18n("iconText");
@@ -343,7 +343,6 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         a->setObjectName(name);
         a->setWhatsThis(whatsthis);
 
-        //a->setToolTip(toolTip);
         a->setStatusTip(statusTip);
         a->setIconText(iconText);
         a->setCheckable(isCheckable);
@@ -372,7 +371,7 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
-        KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+        KoResourcePaths::findAllAssets("kis_actions", "*.action", KoResourcePaths::Recursive);
     dbgAction << "Action Definitions" << actionDefinitions;
 
     // Extract actions all XML .action files.
@@ -403,7 +402,7 @@ void KisActionRegistry::Private::loadActionFiles()
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
 
             if (actionXml.isNull()) {
-                qWarning() << actionDefinition << "does not contain any valid actios! (Or the text element was left empty...)";
+                qWarning() << actionDefinition << "does not contain any valid actions! (Or the text element was left empty...)";
             }
 
             // Loop over individual actions

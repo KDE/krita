@@ -7,15 +7,23 @@
 #include "KisResourceItemListView.h"
 
 #include <QEvent>
-#include <QHeaderView>
 #include <QScroller>
+#include <QScrollBar>
 #include <QHelpEvent>
-#include <QDebug>
+
+#include "KisIconToolTip.h"
+
 
 struct  Q_DECL_HIDDEN KisResourceItemListView::Private
 {
+    ListViewMode viewMode = ListViewMode::IconGrid;
     bool strictSelectionMode {false};
     KisIconToolTip tip;
+
+    QScroller* scroller {0};
+    QString prev_scrollbar_style;
+
+    QSize requestedItemSize = QSize(56, 56);
 };
 
 KisResourceItemListView::KisResourceItemListView(QWidget *parent)
@@ -23,29 +31,98 @@ KisResourceItemListView::KisResourceItemListView(QWidget *parent)
     , m_d(new Private)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
-    setContextMenuPolicy(Qt::DefaultContextMenu);
-    setViewMode(QListView::IconMode);
-    setGridSize(QSize(64, 64));
-    setIconSize(QSize(64, 64));
+    setContextMenuPolicy(Qt::DefaultContextMenu);   
     setResizeMode(QListView::Adjust);
     setUniformItemSizes(true);
 
-    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
-    if (scroller) {
-        connect(scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
+    // Default configuration
+    setViewMode(QListView::IconMode);
+    setGridSize(QSize(56, 56));
+    setIconSize(QSize(56, 56));
+    setResizeMode(QListView::Adjust);
+    setUniformItemSizes(true);
+
+    m_d->scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (m_d->scroller) {
+        connect(m_d->scroller, SIGNAL(stateChanged(QScroller::State)), this, SLOT(slotScrollerStateChange(QScroller::State)));
     }
 
     connect(this, SIGNAL(clicked(QModelIndex)), SIGNAL(currentResourceClicked(const QModelIndex &)));
+
+    m_d->prev_scrollbar_style = horizontalScrollBar()->styleSheet();
 }
 
 KisResourceItemListView::~KisResourceItemListView()
 {
 }
 
+void KisResourceItemListView::setListViewMode(ListViewMode viewMode)
+{
+    m_d->viewMode = viewMode;
+
+    auto restoreScrollbar = [&, this] () {
+        horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
+        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+    };
+
+    switch (viewMode) {
+    case ListViewMode::IconGrid: {
+        setViewMode(ViewMode::IconMode);
+        setFlow(Flow::LeftToRight);
+        setWrapping(true);
+        restoreScrollbar();
+
+        setItemSize(m_d->requestedItemSize);
+        break;
+    }
+    case ListViewMode::IconStripHorizontal: {
+        setViewMode(ViewMode::IconMode);
+        setFlow(Flow::LeftToRight);
+        setWrapping(false);
+
+        // this is the only way to hide it and not have it ocupy space
+        horizontalScrollBar()->setStyleSheet("QScrollBar::horizontal {height: 0px;}");
+        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
+
+        setItemSize(m_d->requestedItemSize);
+        break;
+    }
+    case ListViewMode::Detail: {
+        setViewMode(ViewMode::ListMode);
+        setFlow(Flow::TopToBottom);
+        setWrapping(false);
+        restoreScrollbar();
+        setItemSize(m_d->requestedItemSize);
+        // horizontalScrollBar()->setStyleSheet(m_d->prev_scrollbar_style);
+        setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
+        break;
+    }
+    }
+}
+
 void KisResourceItemListView::setItemSize(QSize size)
 {
-    setGridSize(size);
-    setIconSize(size);
+    m_d->requestedItemSize = size;
+
+    switch (m_d->viewMode) {
+    case ListViewMode::IconGrid: {
+        setGridSize(size);
+        setIconSize(size);
+        break;
+    }
+    case ListViewMode::IconStripHorizontal: {
+        // you can not set the item size in strip mode
+        // it is configured automatically based on size
+        break;
+    }
+    case ListViewMode::Detail: {
+        const int w = width() - horizontalScrollBar()->width();
+        setGridSize(QSize(w, size.height()));
+        setIconSize(QSize(size));
+        break;
+    }
+    }
 }
 
 void KisResourceItemListView::setStrictSelectionMode(bool enable)
@@ -125,7 +202,26 @@ bool KisResourceItemListView::viewportEvent(QEvent *event)
             m_d->tip.showTip(this, he->pos(), option, index);
             return true;
         }
+        m_d->tip.hide();
     }
 
     return QListView::viewportEvent(event);
+}
+
+void KisResourceItemListView::resizeEvent(QResizeEvent *event)
+{
+    QListView::resizeEvent(event);
+
+    switch (m_d->viewMode) {
+    case ListViewMode::IconStripHorizontal: {
+        const int height = event->size().height();
+        setGridSize(QSize(height, height));
+        setIconSize(QSize(height, height));
+        break;
+    }
+    case ListViewMode::Detail: {
+        setItemSize(m_d->requestedItemSize);
+    }
+    }
+    scrollTo(currentIndex(), QAbstractItemView::PositionAtCenter);
 }

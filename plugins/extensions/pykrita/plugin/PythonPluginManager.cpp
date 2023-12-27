@@ -19,6 +19,8 @@
 #include <KConfigCore/KSharedConfig>
 #include <KConfigCore/KConfigGroup>
 
+#include <KisUsageLogger.h>
+
 #include "config.h"
 #include "version_checker.h"
 
@@ -109,7 +111,7 @@ bool PythonPluginManager::verifyModuleExists(PythonPlugin &plugin)
     rel_path = rel_path + "/" + "__init__.py";
     dbgScript << "Finding Python module with rel_path:" << rel_path;
 
-    QString module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
+    QString module_path = KoResourcePaths::findAsset("pythonscripts", rel_path);
 
     dbgScript << "module_path:" << module_path;
 
@@ -117,7 +119,7 @@ bool PythonPluginManager::verifyModuleExists(PythonPlugin &plugin)
         // 1) Nothing found, then try file based plugin
         rel_path = plugin.moduleFilePathPart() + ".py";
         dbgScript << "Finding Python module with rel_path:" << rel_path;
-        module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
+        module_path = KoResourcePaths::findAsset("pythonscripts", rel_path);
         dbgScript << "module_path:" << module_path;
     }
 
@@ -267,7 +269,7 @@ void PythonPluginManager::scanPlugins()
 
     KConfigGroup pluginSettings(KSharedConfig::openConfig(), "python");
 
-    QStringList desktopFiles = KoResourcePaths::findAllResources("data", "pykrita/*desktop");
+    QStringList desktopFiles = KoResourcePaths::findAllAssets("data", "pykrita/*desktop");
 
     Q_FOREACH(const QString &desktopFile, desktopFiles) {
 
@@ -314,6 +316,7 @@ void PythonPluginManager::scanPlugins()
 
 void PythonPluginManager::tryLoadEnabledPlugins()
 {
+    KisUsageLogger::writeSysInfo("Loaded Python Plugins");
     for (PythonPlugin &plugin : m_plugins) {
         dbgScript << "Trying to load plugin" << plugin.moduleName()
                   << ". Enabled:" << plugin.isEnabled()
@@ -323,6 +326,7 @@ void PythonPluginManager::tryLoadEnabledPlugins()
             loadModule(plugin);
         }
     }
+    KisUsageLogger::writeSysInfo("\n");
 }
 
 void PythonPluginManager::loadModule(PythonPlugin &plugin)
@@ -330,6 +334,7 @@ void PythonPluginManager::loadModule(PythonPlugin &plugin)
     KIS_SAFE_ASSERT_RECOVER_RETURN(plugin.isEnabled() && !plugin.isBroken());
 
     QString module_name = plugin.moduleName();
+    KisUsageLogger::writeSysInfo("\t" + module_name);
     dbgScript << "Loading module: " << module_name;
 
     PyKrita::Python py = PyKrita::Python();

@@ -21,10 +21,10 @@ QList<QAction *> KisSelectionToolFactoryBase::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("selection_tool_mode_add");
-    actions << actionRegistry->makeQAction("selection_tool_mode_replace");
-    actions << actionRegistry->makeQAction("selection_tool_mode_subtract");
-    actions << actionRegistry->makeQAction("selection_tool_mode_intersect");
+    actions << actionRegistry->makeQAction("selection_tool_mode_add", this);
+    actions << actionRegistry->makeQAction("selection_tool_mode_replace", this);
+    actions << actionRegistry->makeQAction("selection_tool_mode_subtract", this);
+    actions << actionRegistry->makeQAction("selection_tool_mode_intersect", this);
 
     return actions;
 }
@@ -44,8 +44,8 @@ QList<QAction *> KisToolPolyLineFactoryBase::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("undo_polygon_selection");
-    actions << actionRegistry->makeQAction("selection_tool_mode_add");
+    actions << actionRegistry->makeQAction("undo_polygon_selection", this);
+    actions << actionRegistry->makeQAction("selection_tool_mode_add", this);
 
     return actions;
 }

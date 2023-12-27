@@ -17,7 +17,7 @@ public:
     KisAsyncAnimationFramesSaveDialog(KisImageSP image,
                                       const KisTimeSpan &range,
                                       const QString &baseFilename,
-                                      int sequenceNumberingOffset,
+                                      int startNumberingAt,
                                       bool onlyNeedsUniqueFrames,
                                       KisPropertiesConfigurationSP exportConfiguration);
 
@@ -27,6 +27,8 @@ public:
 
     QString savedFilesMask() const;
     QString savedFilesMaskWildcard() const;
+    QStringList savedFiles() const;
+    QStringList savedUniqueFiles() const;
 
     QList<int> getUniqueFrames() const;
 

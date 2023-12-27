@@ -62,7 +62,7 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     connect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
     connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
-    setDecimals(d->unitManager->getApparentUnitRecommandedDecimals());
+    setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
 
 }
 
@@ -132,7 +132,7 @@ connect_signals:
     KisDoubleParseSpinBox::setValue(newVal);
 
     if (d->allowResetDecimals) { //if the user has not fixed the number of decimals.
-        setDecimals(d->unitManager->getApparentUnitRecommandedDecimals());
+        setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
     }
 }
 
@@ -216,7 +216,7 @@ void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
     KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( d->previousValueInPoint ) );
 
     if (d->allowResetDecimals) {
-        setDecimals(d->unitManager->getApparentUnitRecommandedDecimals());
+        setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
     }
 
     d->unitHasBeenChangedFromOutSideOnce = true;

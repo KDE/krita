@@ -52,7 +52,7 @@ public:
     float lastDistance {0.0};
 
     qreal startZoom {1.0};
-    qreal lastDescreteZoomDistance {0.0};
+    qreal lastDiscreteZoomDistance {0.0};
 
     void zoomTo(bool zoomIn, const QPoint &pos);
 };
@@ -88,6 +88,7 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, const QPoint &point)
         KoCanvasControllerWidget *controller =
             dynamic_cast<KoCanvasControllerWidget*>(
                 q->inputManager()->canvas()->canvasController());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
 
         controller->zoomRelativeToPoint(point, newZoom / oldZoom);
     } else {
@@ -113,10 +114,10 @@ KisZoomAction::KisZoomAction()
     shortcuts.insert(i18n("Relative Discrete Zoom Mode"), RelativeDiscreteZoomModeShortcut);
     shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
     shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
-    shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
-    shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
-    shortcuts.insert(i18n("Fit to Width"), ZoomToWidthShortcut);
-    shortcuts.insert(i18n("Fit to Height"), ZoomToHeightShortcut);
+    shortcuts.insert(i18n("Zoom to 100%"), Zoom100PctShortcut);
+    shortcuts.insert(i18n("Fit to View"), FitToViewShortcut);
+    shortcuts.insert(i18n("Fit to View Width"), FitToWidthShortcut);
+    shortcuts.insert(i18n("Fit to View Height"), FitToHeightShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -163,7 +164,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case DiscreteZoomModeShortcut:
         case RelativeDiscreteZoomModeShortcut:
             d->startZoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
-            d->lastDescreteZoomDistance = 0;
+            d->lastDiscreteZoomDistance = 0;
             d->mode = (Shortcuts)shortcut;
             break;
         case ZoomInShortcut:
@@ -172,16 +173,16 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case ZoomOutShortcut:
             d->zoomTo(false, pointFromEvent(event));
             break;
-        case ZoomResetShortcut:
+        case Zoom100PctShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;
-        case ZoomToPageShortcut:
+        case FitToViewShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             break;
-        case ZoomToWidthShortcut:
+        case FitToWidthShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
             break;
-        case ZoomToHeightShortcut:
+        case FitToHeightShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
             break;
     }
@@ -315,6 +316,7 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
             KoCanvasControllerWidget *controller =
                 dynamic_cast<KoCanvasControllerWidget*>(
                     inputManager()->canvas()->canvasController());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
 
             controller->zoomRelativeToPoint(startPos.toPoint(), coeff);
         }
@@ -325,13 +327,13 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
         QPoint stillPoint = d->mode == RelativeDiscreteZoomModeShortcut ?
             startPos.toPoint() : QPoint();
 
-        qreal currentDiff = qreal(diff.y()) / stepDisc - d->lastDescreteZoomDistance;
+        qreal currentDiff = qreal(diff.y()) / stepDisc - d->lastDiscreteZoomDistance;
 
         bool zoomIn = currentDiff > 0;
         while (qAbs(currentDiff) > 1.0) {
             d->zoomTo(zoomIn, stillPoint);
-            d->lastDescreteZoomDistance += zoomIn ? 1.0 : -1.0;
-            currentDiff = qreal(diff.y()) / stepDisc - d->lastDescreteZoomDistance;
+            d->lastDiscreteZoomDistance += zoomIn ? 1.0 : -1.0;
+            currentDiff = qreal(diff.y()) / stepDisc - d->lastDiscreteZoomDistance;
         }
     }
 }

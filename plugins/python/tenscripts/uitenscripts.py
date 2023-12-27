@@ -52,14 +52,16 @@ class UITenScripts(object):
         self.mainDialog.activateWindow()
         self.mainDialog.exec_()
 
-    def addNewRow(self, key):
+    def addNewRow(self, index):
         rowPosition = self.scriptsLayout.rowCount()
         label = QLabel()
         directoryTextField = QLineEdit()
         directoryDialogButton = QPushButton(i18n("..."))
 
+        action = Application.action(self.tenscripts.indexToAction[index])
+
         directoryTextField.setReadOnly(True)
-        label.setText(self.tenscripts.actions[key].shortcut().toString(QKeySequence.NativeText))
+        label.setText(action.shortcut().toString(QKeySequence.NativeText))
         directoryTextField.setToolTip(i18n("Selected path"))
         directoryDialogButton.setToolTip(i18n("Select the script"))
         directoryDialogButton.clicked.connect(self._selectScript)
@@ -77,8 +79,7 @@ class UITenScripts(object):
 
         for row in range(self.scriptsLayout.rowCount()-1):
             textField = self.scriptsLayout.itemAt(index + 1).widget()
-            if textField.text():
-                _saved_scripts.append(textField.text())
+            _saved_scripts.append(textField.text())
             index += 3
 
         return _saved_scripts
@@ -95,8 +96,8 @@ class UITenScripts(object):
             textField.setText(selectedFile)
 
     def _loadGridLayout(self):
-        for item in range(0, 10):
-            self.addNewRow(item)
+        for index in range(0, 10):
+            self.addNewRow(index)
 
     def _fillScripts(self):
         scripts = self.tenscripts.scripts

@@ -393,7 +393,12 @@ void readCommon(KisPaintDeviceSP dev,
                 pixelFunc(channelSize, channelBytes, col, it->rawData());
                 it->nextPixel();
             }
-            it->nextRow();
+
+            /// don't write-access the row right after the
+            /// the end of the read area
+            if (i < layerRect.height() - 1) {
+                it->nextRow();
+            }
         }
     }
 }
@@ -627,7 +632,7 @@ void writePixelDataCommonImpl(QIODevice &io,
 
         quint8 *alphaPlanePtr = 0;
 
-        QList<KoChannelInfo *> origChannels = colorSpace->channels();
+        const QList<KoChannelInfo *> origChannels = colorSpace->channels();
         Q_FOREACH (KoChannelInfo *ch, KoChannelInfo::displayOrderSorted(origChannels)) {
             int channelIndex = KoChannelInfo::displayPositionToChannelIndex(ch->displayPosition(), origChannels);
 

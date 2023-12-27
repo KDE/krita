@@ -71,7 +71,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     m_iconLabel->setAttribute(Qt::WA_TranslucentBackground);
     {
         int h, s, v;
-        palette().color( QPalette::Normal, QPalette::Foreground ).getHsv( &h, &s, &v );
+        palette().color( QPalette::Normal, QPalette::WindowText ).getHsv( &h, &s, &v );
         const QColor shadowColor = v > 128 ? Qt::black : Qt::white;
         addDropShadow(m_messageLabel, shadowColor);
         addDropShadow(m_iconLabel, shadowColor);

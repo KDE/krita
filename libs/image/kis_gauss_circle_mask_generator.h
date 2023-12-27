@@ -33,9 +33,9 @@ public:
     void setScale(qreal scaleX, qreal scaleY) override;
 
     bool shouldVectorize() const override;
-    KisBrushMaskApplicatorBase* applicator() override;
+    KisBrushMaskApplicatorBase *applicator() const override;
 
-    void resetMaskApplicator(bool forceScalar);
+    void setMaskScalarApplicator();
 
 private:
 

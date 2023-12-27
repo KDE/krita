@@ -13,10 +13,9 @@
 #include <KoColorBackground.h>
 #include <KoColorProfile.h>
 
-
 #include "SvgParserTestingUtils.h"
-#include <sdk/tests/testflake.h>
-#include "../../sdk/tests/qimage_test_util.h"
+#include <qimage_test_util.h>
+#include <testflake.h>
 
 #ifdef USE_ROUND_TRIP
 #include "SvgWriter.h"
@@ -175,6 +174,35 @@ void TestSvgParser::testScalingViewport()
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomLeft), QPointF(2,18));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(8,18));
+}
+
+void TestSvgParser::testScalingViewportNoScale()
+{
+    const QString data =
+            "<svg width=\"10.1px\" height=\"20.2px\" viewBox=\"60 70 10.1 20.2\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"64\" y=\"74\" width=\"12\" height=\"32\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4));
+    // Verify that the scale factors are exactly 1.0
+    QVERIFY(shape->absoluteTransformation().m11() == 1.0);
+    QVERIFY(shape->absoluteTransformation().m22() == 1.0);
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(4,4));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(16,4));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomLeft), QPointF(4,36));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(16,36));
 }
 
 void TestSvgParser::testScalingViewportKeepMeet1()
@@ -1108,10 +1136,18 @@ void TestSvgParser::testRenderStrokeWithInlineStyle()
 
 void TestSvgParser::testIccColor()
 {
+#ifdef Q_OS_WIN
+    // HACK: For reasons yet unknown, the profile unique id is different on Windows.
+    // See https://invent.kde.org/graphics/krita/-/commit/1191295a4618a93893987497e3c54e6f0c2fd025#note_634123
+#define PROFILE_UNIQUE_ID_HEX "84f64878faf21217362594685be031d5"
+#else
+#define PROFILE_UNIQUE_ID_HEX "133a66607cffeebdd64dd433ada9bf4e"
+#endif
     struct ScopedProfileRemover
     {
         ScopedProfileRemover()
-            : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(QByteArray::fromHex("133a66607cffeebdd64dd433ada9bf4e")))
+            : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(
+                QByteArray::fromHex(PROFILE_UNIQUE_ID_HEX)))
         {
             if (m_profile) {
                 qWarning() << "Profile already loaded, removing profile before test";
@@ -1134,21 +1170,21 @@ void TestSvgParser::testIccColor()
     // This test works because the icc-color won't be loaded unless there's a profile for it,
     // and the fill will be red if the icc-color is not loaded (it should be cyan).
     const QString data =
-            "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+        "<svg width=\"30px\" height=\"30px\""
+        "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g xml:base=\"icc\">"
-            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"default-profile\"/>"
+        "<g xml:base=\"icc\">"
+        "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+        "        local=\"" PROFILE_UNIQUE_ID_HEX "\" name=\"default-profile\"/>"
 
-            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"some-other-name\"/>"
+        "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+        "        local=\"" PROFILE_UNIQUE_ID_HEX "\" name=\"some-other-name\"/>"
 
-            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
-            "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
-            "</g>"
+        "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+        "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
+        "</g>"
 
-            "</svg>";
+        "</svg>";
 
     SvgRenderTester t (data);
 
@@ -1175,6 +1211,7 @@ void TestSvgParser::testIccColor()
         QVERIFY2(bg->color() == QColor("#00FFFF"), "icc-color is not being loaded during parsing");
     }
     QCOMPARE(numFetches, 1);
+#undef PROFILE_UNIQUE_ID_HEX
 }
 
 void TestSvgParser::testRenderFillLinearGradientRelativePercent()
@@ -3505,6 +3542,19 @@ void TestSvgParser::testPathShape()
     t.test_standard_30px_72ppi("polygon", false);
 }
 
+void TestSvgParser::testPathData()
+{
+    const QString fileName = TestUtil::fetchDataFileLazy("paths-data-03-f.svg");
+    QVERIFY(!fileName.isEmpty());
+
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray pathData = file.readAll();
+
+    SvgRenderTester t(pathData);
+    t.test_standard("paths_data", {480, 360}, 72);
+}
+
 void TestSvgParser::testPathShapeEllipticalArc()
 {
     const QString data =
@@ -3516,7 +3566,8 @@ void TestSvgParser::testPathShapeEllipticalArc()
         "        a 1.8474812,2.9054325 0 013.3048758,-2.598695 l 3.3048637,-2.598687"
         "        a 5.4242101,1.9738467 73.492263 0,1,3.304876,-2.598694 l 3.304865,-2.598696"
         "        A 8.0718175,1.9886167 71.359615,0119.9573,14.244222 l 3.304873,-2.598695"
-        "        a 10.73523,1.9933048 70.675722   0  1 3.304865,-2.5986956 l 3.304876,-2.598694\""
+        "        a 10.73523,1.9933048 70.675722   0  1 3.304865,-2.5986956 l 3.304876,-2.598694"
+        "        a 0,0,0 00, 0.12808856,29.836374 a 10.73523,1.9933048,0 00, 0,0\""
         "     fill=\"none\" stroke=\"#ff0000\" stroke-width=\"0.414447\""
         "     transform=\"scale(3, 3)\""
         "     id=\"testRect\" />"
@@ -3826,6 +3877,54 @@ void TestSvgParser::testMarkersFillAsShape()
     SvgRenderTester t (data);
 
     t.test_standard_30px_72ppi("markers_scaled_fill_as_shape", false);
+}
+
+void TestSvgParser::testRenderPaintOrderProperty()
+{
+    QMap<QString, QString> tests;
+
+    const QString dataBefore = "<svg width=\"30px\" height=\"30px\""
+                               "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+                               "<marker id=\"SimpleRectMarker\""
+                               "    orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+                               "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+                               "        fill=\"red\" stroke=\"none\"/>"
+                               "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+                               "        fill=\"yellow\" stroke=\"none\"/>"
+                               "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+                               "        fill=\"white\" stroke=\"none\"/>"
+                               "</marker>"
+
+                               "<path id=\"testRect\"";
+    const QString dataAfter = "    style=\"fill:#ffffff;stroke:#000000;stroke-width:2px;marker-start:url(#SimpleRectMarker);marker-end:url(#SimpleRectMarker);marker-mid:url(#SimpleRectMarker)\""
+                              "    d=\"M5,15 C5,5 25,5 25,15 L15,25\"/>"
+
+                              "</svg>";
+
+    QString data = dataBefore + dataAfter;
+    tests.insert("fill-stroke-markers", data);
+
+    data = dataBefore + " paint-order=\"stroke\"" + dataAfter;
+    tests.insert("stroke-fill-markers", data);
+
+    data = dataBefore + " paint-order=\"stroke markers\"" + dataAfter;
+    tests.insert("stroke-markers-fill", data);
+
+    data = dataBefore + " paint-order=\"fill markers\"" + dataAfter;
+    tests.insert("fill-markers-stroke", data);
+
+    data = dataBefore + " paint-order=\"markers\"" + dataAfter;
+    tests.insert("markers-fill-stroke", data);
+
+    data = dataBefore + " paint-order=\"markers stroke\"" + dataAfter;
+    tests.insert("markers-stroke-fill", data);
+
+    Q_FOREACH(const QString key, tests.keys()) {
+        SvgRenderTester t (tests.value(key));
+        t.test_standard_30px_72ppi(key, false);
+    }
 }
 
 void TestSvgParser::testMarkersOnClosedPath()

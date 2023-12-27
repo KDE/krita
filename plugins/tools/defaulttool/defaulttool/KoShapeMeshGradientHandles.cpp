@@ -52,7 +52,7 @@ QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::handles(
 
     // we get pointer events in points (pts, not logical), so we transform these now
     // and then invert them while drawing handles (see SelectionDecorator).
-    QTransform t = abosoluteTransformation(g->gradientUnits());
+    QTransform t = absoluteTransformation(g->gradientUnits());
     for (auto &handle: result) {
         handle.pos = t.map(handle.pos);
     }
@@ -67,7 +67,7 @@ KoShapeMeshGradientHandles::Handle KoShapeMeshGradientHandles::getHandle(SvgMesh
 
     Handle handle = getHandles(g->getMeshArray().data(), position.segmentType, position.row, position.col)[0];
 
-    QTransform t = abosoluteTransformation(g->gradientUnits());
+    QTransform t = absoluteTransformation(g->gradientUnits());
     handle.pos = t.map(handle.pos);
 
     return handle;
@@ -82,7 +82,7 @@ KUndo2Command* KoShapeMeshGradientHandles::moveGradientHandle(const Handle &hand
     SvgMeshPatch *patch = newGradient->getMeshArray()->getPatch(handle.row, handle.col);
     std::array<QPointF, 4> path = patch->getSegment(handle.segmentType);
 
-    QTransform t = abosoluteTransformation(newGradient->gradientUnits()).inverted();
+    QTransform t = absoluteTransformation(newGradient->gradientUnits()).inverted();
 
     if (handle.type == Handle::BezierHandle) {
         path[handle.index] = t.map(newPos);
@@ -202,7 +202,7 @@ QVector<KoShapeMeshGradientHandles::Handle> KoShapeMeshGradientHandles::getBezie
     return buffer;
 }
 
-QTransform KoShapeMeshGradientHandles::abosoluteTransformation(KoFlake::CoordinateSystem system) const
+QTransform KoShapeMeshGradientHandles::absoluteTransformation(KoFlake::CoordinateSystem system) const
 {
     QTransform t;
     if (system == KoFlake::UserSpaceOnUse) {

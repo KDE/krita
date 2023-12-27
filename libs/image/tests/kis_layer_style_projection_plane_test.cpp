@@ -553,7 +553,6 @@ void KisLayerStyleProjectionPlaneTest::testBlending()
     KisPaintDeviceSP result = new KisPaintDevice(cs);
 
     const int width = 20;
-    KoColor color(Qt::transparent, cs);
 
     QVector<QColor> layerColors;
     QVector<QColor> overlayColors;

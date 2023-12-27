@@ -49,13 +49,13 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     KisLodTransformScalar t(device);
 
     QVariant value;
-    float horizontalRadius = 1.0;
+    double horizontalRadius = 1.0;
     if (configuration->getProperty("horizRadius", value)) {
-        horizontalRadius = t.scale(value.toFloat());
+        horizontalRadius = t.scale(value.toDouble());
     }
-    float verticalRadius = 1.0;
+    double verticalRadius = 1.0;
     if (configuration->getProperty("vertRadius", value)) {
-        verticalRadius = t.scale(value.toFloat());
+        verticalRadius = t.scale(value.toDouble());
     }
 
     QBitArray channelFlags;
@@ -66,7 +66,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
 
     if (configuration->getString("type") == "prewitt") {
-        type = KisEdgeDetectionKernel::Prewit;
+        type = KisEdgeDetectionKernel::Prewitt;
     } else if (configuration->getString("type") == "simple") {
         type = KisEdgeDetectionKernel::Simple;
     }
@@ -86,7 +86,9 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlip[0] = false;
     }
 
-    int displayPosition = device->colorSpace()->channels().at(0)->displayPosition();
+    const QList<KoChannelInfo*> channels = device->colorSpace()->channels();
+
+    int displayPosition = channels.at(0)->displayPosition();
     channelOrder[displayPosition] = qMax(i/2,0);
 
     i = config->getInt("greenSwizzle", 2);
@@ -97,7 +99,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlip[1] = false;
     }
 
-    displayPosition = device->colorSpace()->channels().at(1)->displayPosition();
+    displayPosition = channels.at(1)->displayPosition();
     channelOrder[displayPosition] = qMax(i/2,0);
 
     i = config->getInt("blueSwizzle", 4);
@@ -108,7 +110,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
         channelFlip[2] = false;
     }
 
-    displayPosition = device->colorSpace()->channels().at(2)->displayPosition();
+    displayPosition = channels.at(2)->displayPosition();
     channelOrder[displayPosition] = qMax(i / 2, 0);
 
     KisEdgeDetectionKernel::convertToNormalMap(device,

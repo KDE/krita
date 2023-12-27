@@ -31,6 +31,7 @@ public:
     SelectionAction selectionAction() const;
     bool antiAliasSelection() const;
     int growSelection() const;
+    bool stopGrowingAtDarkestPixel() const;
     int featherSelection() const;
     KisSelectionOptions::ReferenceLayers referenceLayers() const;
     QList<int> selectedColorLabels() const;
@@ -49,6 +50,7 @@ public Q_SLOTS:
     void slotWidgetActionChanged(SelectionAction action);
     void slotWidgetAntiAliasChanged(bool value);
     void slotWidgetGrowChanged(int value);
+    void slotWidgetStopGrowingAtDarkestPixelChanged(bool value);
     void slotWidgetFeatherChanged(int value);
     void slotReferenceLayersChanged(
         KisSelectionOptions::ReferenceLayers referenceLayers);

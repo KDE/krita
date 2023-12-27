@@ -84,7 +84,6 @@
 #include "kis_filter_manager.h"
 #include "kis_group_layer.h"
 #include <kis_image.h>
-#include <kis_image_barrier_locker.h>
 #include "kis_image_manager.h"
 #include <kis_layer.h>
 #include "kis_mainwindow_observer.h"
@@ -100,7 +99,6 @@
 #include <brushengine/kis_paintop_preset.h>
 #include "KisPart.h"
 #include <KoUpdater.h>
-#include "KisResourceServerProvider.h"
 #include "kis_selection.h"
 #include "kis_selection_mask.h"
 #include "kis_selection_manager.h"
@@ -122,6 +120,9 @@
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
 #include "imagesize/imagesize.h"
+#include <KoToolDocker.h>
+#include <KisIdleTasksManager.h>
+#include <KisImageBarrierLock.h>
 
 #include "kis_filter_configuration.h"
 
@@ -182,13 +183,22 @@ public:
     KisAction *rotateCanvasLeft {nullptr};
     KisAction *resetCanvasRotation {nullptr};
     KisAction *wrapAroundAction {nullptr};
+    KisAction *wrapAroundHVAxisAction {nullptr};
+    KisAction *wrapAroundHAxisAction {nullptr};
+    KisAction *wrapAroundVAxisAction {nullptr};
+    QActionGroup *wrapAroundAxisActions {nullptr};
     KisAction *levelOfDetailAction {nullptr};
     KisAction *showRulersAction {nullptr};
     KisAction *rulersTrackMouseAction {nullptr};
     KisAction *zoomTo100pct {nullptr};
     KisAction *zoomIn {nullptr};
     KisAction *zoomOut {nullptr};
+    KisAction *zoomToFit {nullptr};
+    KisAction *zoomToFitWidth {nullptr};
+    KisAction *zoomToFitHeight {nullptr};
     KisAction *toggleZoomToFit {nullptr};
+    KisAction *resetDisplay {nullptr};
+    KisAction *viewPrintSize {nullptr};
     KisAction *softProof {nullptr};
     KisAction *gamutCheck {nullptr};
     KisAction *toggleFgBg {nullptr};
@@ -221,15 +231,41 @@ public:
     KisKActionCollection *actionCollection {nullptr};
     KisMirrorManager mirrorManager;
     KisInputManager inputManager;
+    KisIdleTasksManager idleTasksManager;
 
     KisSignalAutoConnectionsStore viewConnections;
     KSelectAction *actionAuthor {nullptr}; // Select action for author profile.
     KisAction *showPixelGrid {nullptr};
 
-    QByteArray canvasState;
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-    QFlags<Qt::WindowState> windowFlags;
-#endif
+    QByteArray canvasStateInNormalMode;
+    QByteArray canvasStateInCanvasOnlyMode;
+
+    struct CanvasOnlyOptions : boost::equality_comparable<CanvasOnlyOptions>
+    {
+        CanvasOnlyOptions(const KisConfig &cfg)
+            : hideStatusbarFullscreen(cfg.hideStatusbarFullscreen())
+            , hideDockersFullscreen(cfg.hideDockersFullscreen())
+            , hideTitlebarFullscreen(cfg.hideTitlebarFullscreen())
+            , hideMenuFullscreen(cfg.hideMenuFullscreen())
+            , hideToolbarFullscreen(cfg.hideToolbarFullscreen())
+        {
+        }
+
+        bool hideStatusbarFullscreen = false;
+        bool hideDockersFullscreen = false;
+        bool hideTitlebarFullscreen = false;
+        bool hideMenuFullscreen = false;
+        bool hideToolbarFullscreen = false;
+
+        bool operator==(const CanvasOnlyOptions &rhs) {
+            return hideStatusbarFullscreen == rhs.hideStatusbarFullscreen &&
+                hideDockersFullscreen == rhs.hideDockersFullscreen &&
+                hideTitlebarFullscreen == rhs.hideTitlebarFullscreen &&
+                hideMenuFullscreen == rhs.hideMenuFullscreen &&
+                hideToolbarFullscreen == rhs.hideToolbarFullscreen;
+        }
+    };
+    std::optional<CanvasOnlyOptions> canvasOnlyOptions;
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
@@ -278,8 +314,6 @@ KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCol
     QScopedPointer<KoDummyCanvasController> dummy(new KoDummyCanvasController(actionCollection()));
     KoToolManager::instance()->registerToolActions(actionCollection(), dummy.data());
 
-    QTimer::singleShot(0, this, SLOT(initializeStatusBarVisibility()));
-
     connect(KoToolManager::instance(), SIGNAL(inputDeviceChanged(KoInputDevice)),
             d->controlFrame.paintopBox(), SLOT(slotInputDeviceChanged(KoInputDevice)));
 
@@ -291,6 +325,8 @@ KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCol
 
     connect(KisPart::instance(), SIGNAL(sigViewAdded(KisView*)), SLOT(slotViewAdded(KisView*)));
     connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)), SLOT(slotViewRemoved(KisView*)));
+    connect(KisPart::instance(), SIGNAL(sigViewRemoved(KisView*)),
+            d->controlFrame.paintopBox(), SLOT(updatePresetConfig()));
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotUpdateAuthorProfileActions()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotUpdatePixelGridAction()));
@@ -319,7 +355,7 @@ KisViewManager::~KisViewManager()
     }
 
     cfg.writeEntry("baseLength", KisResourceItemChooserSync::instance()->baseLength());
-    cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
+    cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CanvasOnlyMode
     delete d;
 }
 
@@ -334,11 +370,13 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisFadeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisScatterResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisBrushRotationResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdSupportedResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisBrushNameResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
 
     resourceManager->addActiveCanvasResourceDependency(
@@ -355,6 +393,11 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
         toQShared(new KoActiveCanvasResourceDependencyKoResource<KoAbstractGradient>(
                       KoCanvasResource::CurrentGradient,
                       KoCanvasResource::BackgroundColor)));
+
+    KSharedConfigPtr config =  KSharedConfig::openConfig();
+    KConfigGroup miscGroup = config->group("Misc");
+    const uint handleRadius = miscGroup.readEntry("HandleRadius", 5);
+    resourceManager->setHandleRadius(handleRadius);
 }
 
 KisKActionCollection *KisViewManager::actionCollection() const
@@ -380,21 +423,14 @@ void KisViewManager::slotViewRemoved(KisView *view)
     if (view->viewManager() == this && viewCount() == 0) {
         d->statusBar.hideAllStatusBarItems();
     }
-
-    KisConfig cfg(false);
-    if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
-        cfg.writeEntry("LastPreset", canvasResourceProvider()->currentPreset()->name());
-    }
 }
 
 void KisViewManager::setCurrentView(KisView *view)
 {
-    bool first = true;
     if (d->currentImageView) {
         d->currentImageView->notifyCurrentStateChanged(false);
 
         d->currentImageView->canvasBase()->setCursor(QCursor(Qt::ArrowCursor));
-        first = false;
         KisDocument* doc = d->currentImageView->document();
         if (doc) {
             doc->image()->compositeProgressProxy()->removeProxy(d->persistentImageProgressUpdater);
@@ -402,6 +438,7 @@ void KisViewManager::setCurrentView(KisView *view)
         }
         d->currentImageView->canvasController()->proxyObject->disconnect(&d->statusBar);
         d->viewConnections.clear();
+        d->idleTasksManager.setImage(0);
     }
 
 
@@ -409,6 +446,10 @@ void KisViewManager::setCurrentView(KisView *view)
     d->currentImageView = imageView;
 
     if (imageView) {
+        /// idle tasks managed should be reconnected to the new image the first,
+        /// because other dockers may request it to recalcualte stuff
+        d->idleTasksManager.setImage(d->currentImageView->image());
+
         d->softProof->setChecked(imageView->softProofing());
         d->gamutCheck->setChecked(imageView->gamutCheck());
 
@@ -422,43 +463,8 @@ void KisViewManager::setCurrentView(KisView *view)
                     SLOT(documentMousePositionChanged(QPointF)));
         }
 
-        // Restore the last used brush preset, color and background color.
-        if (first) {
-            KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-            const QString defaultPresetName = "b) Basic-5 Size Opacity";
-
-            KisConfig cfg(true);
-            QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);
-
-            KisPaintOpPresetSP preset = rserver->resource("", "", lastPreset);
-            if (!preset) {
-                preset = rserver->resource("", "", defaultPresetName);
-            }
-
-            if (!preset && rserver->resourceCount() > 0) {
-                KisResourceModel *resourceModel = rserver->resourceModel();
-                for (int i = 0; i < resourceModel->rowCount(); i++) {
-
-                    QModelIndex idx = resourceModel->index(i, 0);
-
-                    QString resourceName = idx.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
-                    QString fileName = idx.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString();
-
-                    if (resourceName.toLower().contains("default") || fileName.toLower().contains("default")) {
-                        preset = resourceModel->resourceForIndex(idx).dynamicCast<KisPaintOpPreset>();
-                        break;
-                    }
-                }
-            }
-
-            if (preset) {
-
-                paintOpBox()->restoreResource(preset);
-                canvasResourceProvider()->setCurrentCompositeOp(preset->settings()->paintOpCompositeOp());
-            }
-        }
-
         KisCanvasController *canvasController = dynamic_cast<KisCanvasController*>(d->currentImageView->canvasController());
+        KIS_ASSERT(canvasController);
 
         d->viewConnections.addUniqueConnection(&d->nodeManager, SIGNAL(sigNodeActivated(KisNodeSP)), doc->image(), SLOT(requestStrokeEndActiveNode()));
         d->viewConnections.addUniqueConnection(d->rotateCanvasRight, SIGNAL(triggered()), canvasController, SLOT(rotateCanvasRight15()));
@@ -467,6 +473,12 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
         d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
+        d->viewConnections.addUniqueConnection(d->wrapAroundHVAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisHV()));
+        d->wrapAroundHVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == WRAPAROUND_BOTH);
+        d->viewConnections.addUniqueConnection(d->wrapAroundHAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisH()));
+        d->wrapAroundHAxisAction->setChecked(canvasController->wrapAroundModeAxis() == WRAPAROUND_HORIZONTAL);
+        d->viewConnections.addUniqueConnection(d->wrapAroundVAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisV()));
+        d->wrapAroundVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == WRAPAROUND_VERTICAL);
 
         d->viewConnections.addUniqueConnection(d->levelOfDetailAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleLevelOfDetailMode(bool)));
         d->levelOfDetailAction->setChecked(canvasController->levelOfDetailMode());
@@ -477,12 +489,20 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+        d->viewConnections.addUniqueConnection(d->zoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFit()));
+        d->viewConnections.addUniqueConnection(d->zoomToFitWidth, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFitWidth()));
+        d->viewConnections.addUniqueConnection(d->zoomToFitHeight, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFitHeight()));
         d->viewConnections.addUniqueConnection(d->toggleZoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotToggleZoomToFit()));
+
+        d->viewConnections.addUniqueConnection(d->resetDisplay, SIGNAL(triggered()), imageView->viewManager(), SLOT(slotResetDisplay()));
+
+        d->viewConnections.addUniqueConnection(d->viewPrintSize, SIGNAL(toggled(bool)), imageView->zoomManager(), SLOT(changeCanvasMappingMode(bool)));
+        d->viewConnections.addUniqueConnection(d->viewPrintSize, SIGNAL(toggled(bool)), imageView->zoomController()->zoomAction(), SLOT(setCanvasMappingMode(bool)));
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
 
-        // set up progrress reporting
+        // set up progress reporting
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
 
@@ -528,7 +548,6 @@ void KisViewManager::setCurrentView(KisView *view)
                     d->currentImageView->zoomManager()->zoomController(),
                     SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
                     canvasResourceProvider(), SLOT(slotOnScreenResolutionChanged()));
-
     }
 
     d->actionManager.updateGUI();
@@ -640,6 +659,11 @@ KisInputManager* KisViewManager::inputManager() const
     return &d->inputManager;
 }
 
+KisIdleTasksManager *KisViewManager::idleTasksManager()
+{
+    return &d->idleTasksManager;
+}
+
 KisSelectionSP KisViewManager::selection()
 {
     if (d->currentImageView) {
@@ -703,6 +727,13 @@ void KisViewManager::createActions()
     d->rotateCanvasLeft    = actionManager()->createAction("rotate_canvas_left");
     d->resetCanvasRotation = actionManager()->createAction("reset_canvas_rotation");
     d->wrapAroundAction    = actionManager()->createAction("wrap_around_mode");
+    d->wrapAroundHVAxisAction = actionManager()->createAction("wrap_around_hv_axis");
+    d->wrapAroundHAxisAction  = actionManager()->createAction("wrap_around_h_axis");
+    d->wrapAroundVAxisAction  = actionManager()->createAction("wrap_around_v_axis");
+    d->wrapAroundAxisActions = new QActionGroup(this);
+    d->wrapAroundAxisActions->addAction(d->wrapAroundHVAxisAction);
+    d->wrapAroundAxisActions->addAction(d->wrapAroundHAxisAction);
+    d->wrapAroundAxisActions->addAction(d->wrapAroundVAxisAction);
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
     d->softProof           = actionManager()->createAction("softProof");
     d->gamutCheck          = actionManager()->createAction("gamutCheck");
@@ -735,7 +766,14 @@ void KisViewManager::createActions()
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
+    d->zoomToFit = actionManager()->createAction("zoom_to_fit");
+    d->zoomToFitWidth = actionManager()->createAction("zoom_to_fit_width");
+    d->zoomToFitHeight = actionManager()->createAction("zoom_to_fit_height");
     d->toggleZoomToFit = actionManager()->createAction("toggle_zoom_to_fit");
+
+    d->resetDisplay = actionManager()->createAction("reset_display");
+
+    d->viewPrintSize = actionManager()->createAction("view_print_size");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
@@ -759,7 +797,7 @@ void KisViewManager::createActions()
 void KisViewManager::setupManagers()
 {
     // Create the managers for filters, selections, layers etc.
-    // XXX: When the currentlayer changes, call updateGUI on all
+    // XXX: When the current layer changes, call updateGUI on all
     // managers
 
     d->filterManager.setup(actionCollection(), actionManager());
@@ -858,7 +896,7 @@ void KisViewManager::slotCreateCopy()
 
     KisDocument *doc = 0;
     {
-        KisImageBarrierLocker l(srcDoc->image());
+        KisImageReadOnlyBarrierLock l(srcDoc->image());
         doc = srcDoc->clone(true);
     }
     KIS_SAFE_ASSERT_RECOVER_RETURN(doc);
@@ -869,6 +907,7 @@ void KisViewManager::slotCreateCopy()
     }
     name = i18n("%1 (Copy)", name);
     doc->documentInfo()->setAboutInfo("title", name);
+    doc->resetPath();
 
     KisPart::instance()->addDocument(doc);
     KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);
@@ -1018,11 +1057,6 @@ void KisViewManager::slotSaveIncremental()
     document()->setFileBatchMode(false);
     KisPart::instance()->queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl::fromLocalFile(newFilePath),
                                                                       QUrl::fromLocalFile(document()->path()));
-
-    if (mainWindow()) {
-        mainWindow()->updateCaption();
-    }
-
 }
 
 void KisViewManager::slotSaveIncrementalBackup()
@@ -1095,8 +1129,6 @@ void KisViewManager::slotSaveIncrementalBackup()
         }
         QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
         document()->saveAs(path + '/' + fileName, document()->mimeType(), true);
-
-        if (mainWindow()) mainWindow()->updateCaption();
     }
     else { // if NOT working on a backup...
         // Navigate directory searching for latest backup version, ignore letters
@@ -1134,8 +1166,6 @@ void KisViewManager::slotSaveIncrementalBackup()
         QFile::copy(path + '/' + fileName, path + '/' + backupFileName);
         document()->saveAs(path + '/' + fileName, document()->mimeType(), true);
         document()->setFileBatchMode(false);
-
-        if (mainWindow()) mainWindow()->updateCaption();
     }
 }
 
@@ -1169,6 +1199,13 @@ void KisViewManager::showStatusBar(bool toggled)
     }
 }
 
+void KisViewManager::notifyWorkspaceLoaded()
+{
+    d->canvasStateInNormalMode.clear();
+    d->canvasStateInCanvasOnlyMode.clear();
+    d->canvasOnlyOptions = std::nullopt;
+}
+
 void KisViewManager::switchCanvasOnly(bool toggled)
 {
     KisConfig cfg(false);
@@ -1181,14 +1218,16 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     cfg.writeEntry("CanvasOnlyActive", toggled);
 
+    KisViewManagerPrivate::CanvasOnlyOptions options(cfg);
+
     if (toggled) {
-        d->canvasState = qtMainWindow()->saveState();
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-        d->windowFlags = main->windowState();
-#endif
+        d->canvasStateInNormalMode = qtMainWindow()->saveState();
+    } else {
+        d->canvasStateInCanvasOnlyMode = qtMainWindow()->saveState();
+        d->canvasOnlyOptions = options;
     }
 
-    if (cfg.hideStatusbarFullscreen()) {
+    if (options.hideStatusbarFullscreen) {
         if (main->statusBar()) {
             if (!toggled) {
                 if (main->statusBar()->dynamicPropertyNames().contains("wasvisible")) {
@@ -1204,7 +1243,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
-    if (cfg.hideDockersFullscreen()) {
+    if (options.hideDockersFullscreen) {
         KisAction* action = qobject_cast<KisAction*>(main->actionCollection()->action("view_toggledockers"));
         if (action) {
             action->setCheckable(true);
@@ -1223,21 +1262,15 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     // QT in windows does not return to maximized upon 4th tab in a row
     // https://bugreports.qt.io/browse/QTBUG-57882, https://bugreports.qt.io/browse/QTBUG-52555, https://codereview.qt-project.org/#/c/185016/
-    if (cfg.hideTitlebarFullscreen() && !cfg.fullscreenMode()) {
+    if (options.hideTitlebarFullscreen && !cfg.fullscreenMode()) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {
             main->setWindowState( main->windowState() & ~Qt::WindowFullScreen);
-#if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)
-            // If window was maximized prior to fullscreen, restore that
-            if (d->windowFlags & Qt::WindowMaximized) {
-                main->setWindowState( main->windowState() | Qt::WindowMaximized);
-            }
-#endif
         }
     }
 
-    if (cfg.hideMenuFullscreen()) {
+    if (options.hideMenuFullscreen) {
         if (!toggled) {
             if (main->menuBar()->dynamicPropertyNames().contains("wasvisible")) {
                 if (main->menuBar()->property("wasvisible").toBool()) {
@@ -1251,7 +1284,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
-    if (cfg.hideToolbarFullscreen()) {
+    if (options.hideToolbarFullscreen) {
         QList<QToolBar*> toolBars = main->findChildren<QToolBar*>();
         Q_FOREACH (QToolBar* toolbar, toolBars) {
             if (!toggled) {
@@ -1271,13 +1304,34 @@ void KisViewManager::switchCanvasOnly(bool toggled)
     showHideScrollbars();
 
     if (toggled) {
-        // show a fading heads-up display about the shortcut to go back
+        if (!d->canvasStateInCanvasOnlyMode.isEmpty() &&
+            d->canvasOnlyOptions &&
+            *d->canvasOnlyOptions == options) {
 
+            /**
+             * Restore state uses the current layout state of the window,
+             * but removal of the menu will be backed into this state after
+             * receiving of some events in the event queue. Hence we cannot
+             * apply the application of the saved state directly. We need to
+             * postpone that via the events queue.
+             *
+             * See https://bugs.kde.org/show_bug.cgi?id=475973
+             */
+            QTimer::singleShot(0, this, [this] () {
+                this->mainWindow()->restoreState(d->canvasStateInCanvasOnlyMode);
+            });
+        }
+
+               // show a fading heads-up display about the shortcut to go back
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon());
+                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon(),
+                            2000,
+                            KisFloatingMessage::Low);
     }
     else {
-        main->restoreState(d->canvasState);
+        if (!d->canvasStateInNormalMode.isEmpty()) {
+            main->restoreState(d->canvasStateInNormalMode);
+        }
     }
 
 }
@@ -1291,60 +1345,61 @@ void KisViewManager::openResourcesDirectory()
 {
     QString resourcePath = KisResourceLocator::instance()->resourceLocationBase();
 #ifdef Q_OS_WIN
-    if (KisWindowsPackageUtils::isRunningInPackage()) {
-        const QDir resourceDir(resourcePath);
-        const QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-        // FIXME: Actually check if the resource dir is inside roaming appdata?
-        if (resourceDir.absolutePath().compare(appData, Qt::CaseInsensitive) == 0) {
-            const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
-            if (!privateAppData.isEmpty()) {
-                // FIXME: Actually build the path based on the configured path relative to user RoamingAppData?
-                const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
-                if (privateResourceDir.exists()) {
-                    const auto pathToDisplay = [](const QString &path) {
-                        // Due to how Unicode word wrapping works, the string does not
-                        // wrap after backslashes in Qt 5.12. We don't want the path to
-                        // become too long, so we add a U+200B ZERO WIDTH SPACE to allow
-                        // wrapping. The downside is that we cannot let the user select
-                        // and copy the path because it now contains invisible unicode
-                        // code points.
-                        // See: https://bugreports.qt.io/browse/QTBUG-80892
-                        return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
-                    };
-                    QMessageBox mbox(mainWindowAsQWidget());
-                    mbox.setIcon(QMessageBox::Information);
-                    mbox.setWindowTitle(i18nc("@title:window resource folder", "Open Resource Folder"));
-                    // Similar text is also used in kis_dlg_preferences.cc
-                    mbox.setText(i18nc("@info resource folder",
-                        "<p>You are using the Microsoft Store package version of Krita. "
-                        "Even though Krita can be configured to place resources under the "
-                        "user AppData location, Windows may actually store the files "
-                        "inside a private app location.</p>\n"
-                        "<p>You should check both locations to determine where "
-                        "the files are located.</p>\n"
-                        "<p><b>User AppData</b>:<br/>\n"
-                        "%1</p>\n"
-                        "<p><b>Private app location</b>:<br/>\n"
-                        "%2</p>",
-                        pathToDisplay(resourceDir.absolutePath()),
-                        pathToDisplay(privateResourceDir.absolutePath())
-                    ));
-                    mbox.setTextInteractionFlags(Qt::NoTextInteraction);
-                    const auto *btnOpenUserAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &user AppData"), QMessageBox::AcceptRole);
-                    const auto *btnOpenPrivateAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &private app location"), QMessageBox::AcceptRole);
-                    mbox.addButton(QMessageBox::Close);
-                    mbox.setDefaultButton(QMessageBox::Close);
-                    mbox.exec();
-                    if (mbox.clickedButton() == btnOpenPrivateAppData) {
-                        resourcePath = privateResourceDir.absolutePath();
-                    } else if (mbox.clickedButton() == btnOpenUserAppData) {
-                        // no-op: resourcePath = resourceDir.absolutePath();
-                    } else {
-                        return;
-                    }
-                }
-            }
+
+    QString folderInStandardAppData;
+    QString folderInPrivateAppData;
+    KoResourcePaths::getAllUserResourceFoldersLocationsForWindowsStore(folderInStandardAppData, folderInPrivateAppData);
+
+    if (!folderInPrivateAppData.isEmpty()) {
+
+        const auto pathToDisplay = [](const QString &path) {
+            // Due to how Unicode word wrapping works, the string does not
+            // wrap after backslashes in Qt 5.12. We don't want the path to
+            // become too long, so we add a U+200B ZERO WIDTH SPACE to allow
+            // wrapping. The downside is that we cannot let the user select
+            // and copy the path because it now contains invisible unicode
+            // code points.
+            // See: https://bugreports.qt.io/browse/QTBUG-80892
+            return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
+        };
+
+        QMessageBox mbox(qApp->activeWindow());
+        mbox.setIcon(QMessageBox::Information);
+        mbox.setWindowTitle(i18nc("@title:window resource folder", "Open Resource Folder"));
+        // Similar text is also used in kis_dlg_preferences.cc
+
+        mbox.setText(i18nc("@info resource folder",
+            "<p>You are using the Microsoft Store package version of Krita. "
+            "Even though Krita can be configured to place resources under the "
+            "user AppData location, Windows may actually store the files "
+            "inside a private app location.</p>\n"
+            "<p>You should check both locations to determine where "
+            "the files are located.</p>\n"
+            "<p><b>User AppData</b>:<br/>\n"
+            "%1</p>\n"
+            "<p><b>Private app location</b>:<br/>\n"
+            "%2</p>",
+            pathToDisplay(folderInStandardAppData),
+            pathToDisplay(folderInPrivateAppData)
+        ));
+        mbox.setTextInteractionFlags(Qt::NoTextInteraction);
+
+        const auto *btnOpenUserAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &user AppData"), QMessageBox::AcceptRole);
+        const auto *btnOpenPrivateAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &private app location"), QMessageBox::AcceptRole);
+
+        mbox.addButton(QMessageBox::Close);
+        mbox.setDefaultButton(QMessageBox::Close);
+        mbox.exec();
+
+        if (mbox.clickedButton() == btnOpenPrivateAppData) {
+            resourcePath = folderInPrivateAppData;
+        } else if (mbox.clickedButton() == btnOpenUserAppData) {
+            // no-op: resourcePath = resourceDir.absolutePath();
+        } else {
+            return;
         }
+
+
     }
 #endif
     QDesktopServices::openUrl(QUrl::fromLocalFile(resourcePath));
@@ -1359,6 +1414,10 @@ void KisViewManager::updateIcons()
             if (titlebar) {
                 titlebar->updateIcons();
             }
+            if (qobject_cast<KoToolDocker*>(dock)) {
+                // Tool options widgets icons are updated by KoToolManager
+                continue;
+            }
             QObjectList objects;
             objects.append(dock);
             while (!objects.isEmpty()) {
@@ -1368,11 +1427,6 @@ void KisViewManager::updateIcons()
             }
         }
     }
-}
-void KisViewManager::initializeStatusBarVisibility()
-{
-    KisConfig cfg(true);
-    d->mainWindow->statusBar()->setVisible(cfg.showStatusBar());
 }
 
 void KisViewManager::guiUpdateTimeout()
@@ -1466,7 +1520,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
 
     KConfigGroup authorGroup(KSharedConfig::openConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QString authorInfo = KoResourcePaths::getAppDataLocation() + "/authorinfo/";
     QStringList filters = QStringList() << "*.authorinfo";
     QDir dir(authorInfo);
     Q_FOREACH(QString entry, dir.entryList(filters)) {
@@ -1498,6 +1552,11 @@ void KisViewManager::slotUpdatePixelGridAction()
 
     KisConfig cfg(true);
     d->showPixelGrid->setChecked(cfg.pixelGridEnabled() && cfg.useOpenGL());
+}
+
+void KisViewManager::updatePrintSizeAction(bool canvasMappingMode)
+{
+    d->viewPrintSize->setChecked(canvasMappingMode);
 }
 
 void KisViewManager::slotActivateTransformTool()
@@ -1560,6 +1619,14 @@ void KisViewManager::slotResetRotation()
 {
     KisCanvasController *canvasController = d->currentImageView->canvasController();
     canvasController->resetCanvasRotation();
+}
+
+void KisViewManager::slotResetDisplay()
+{
+    KisCanvasController *canvasController = d->currentImageView->canvasController();
+    canvasController->resetCanvasRotation();
+    canvasController->mirrorCanvas(false);
+    zoomManager()->slotZoomToFit();
 }
 
 void KisViewManager::slotToggleFullscreen()

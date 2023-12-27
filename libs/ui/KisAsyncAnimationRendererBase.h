@@ -13,6 +13,7 @@
 #include "kritaui_export.h"
 
 class KisRegion;
+class KisLockFrameGenerationLock;
 
 /**
  * KisAsyncAnimationRendererBase is a special class representing a
@@ -52,12 +53,12 @@ public:
      * Only \p regionOfInterest is regenerated. If \p regionOfInterest is
      * empty, then entire bounds of the image is regenerated.
      */
-    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags = None);
+    void startFrameRegeneration(KisImageSP image, int frame, const KisRegion &regionOfInterest, Flags flags, KisLockFrameGenerationLock &&frameGenerationLock);
 
     /**
      * Convenience overload that regenerates the full image
      */
-    void startFrameRegeneration(KisImageSP image, int frame, Flags flags = None);
+    void startFrameRegeneration(KisImageSP image, int frame, Flags flags, KisLockFrameGenerationLock &&frameGenerationLock);
 
     /**
      * @return true if the regeneration process is in progress

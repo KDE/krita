@@ -49,6 +49,68 @@ inline void cfColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& d
 }
 
 template<class HSXType, class TReal>
+inline void cfLambertLighting(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
+{
+	TReal tr = sr * dr * (1.0 / 0.215686);
+	TReal tg = sg * dg * (1.0 / 0.215686);
+	TReal tb = sb * db * (1.0 / 0.215686);
+
+	if (tr > 1.0) {
+		dr = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.01925;
+	}
+	else {
+		dr = tr;
+	}
+
+	if (tg > 1.0) {
+		dg = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.01925;
+	}
+	else {
+		dg = tg;
+	}
+
+	if (tb > 1.0) {
+		db = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.01925;
+	}
+	else {
+		db = tb;
+	}
+
+
+	ToneMapping<HSXType, TReal>(dr, dg, db);
+}
+
+template<class HSXType, class TReal>
+inline void cfLambertLightingGamma2_2(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+	TReal tr = sr * dr * 2.0;
+	TReal tg = sg * dg * 2.0;
+	TReal tb = sb * db * 2.0;
+
+	if (tr > 1.0) {
+		dr = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.4;
+	}
+	else {
+		dr = tr;
+	}
+
+	if (tg > 1.0) {
+		dg = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.4;
+	}
+	else {
+		dg = tg;
+	}
+
+	if (tb > 1.0) {
+		db = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.4;
+	}
+	else {
+		db = tb;
+	}
+
+	ToneMapping<HSXType, TReal>(dr, dg, db);
+}
+
+template<class HSXType, class TReal>
 inline void cfLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     setLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb));
 }
@@ -187,12 +249,12 @@ inline T colorDodgeHelper(T src, T dst) {
     using namespace Arithmetic;
     // Handle the case where the denominator is 0.
     // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
-    // dividing by 0 we treat the denominator as an infinitelly small number,
+    // dividing by 0 we treat the denominator as an infinitely small number,
     // so the result of the formula would approach infinity. As in the generic
     // case, that result is clamped to the maximum value (which for integer
     // types is the same as the unit value).
     // Another special case is when both numerator and denominator are 0. In
-    // this case we also treat the denominator as an infinitelly small number,
+    // this case we also treat the denominator as an infinitely small number,
     // and the numerator can remain as 0, so dividing 0 over a number (no matter
     // how small it is) gives 0.
     if (src == unitValue<T>()) {

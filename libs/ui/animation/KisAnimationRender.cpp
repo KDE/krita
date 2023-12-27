@@ -41,7 +41,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
     if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
         if (hasEvenDimensions(scaledSize.width(), scaledSize.height()) != true) {
-            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Mastroska (.mkv) ";
+            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Matroska (.mkv) ";
             qWarning() << type <<"requires width and height to be even, resize and try again!";
             doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));
@@ -105,23 +105,22 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
         if (encoderOptions.shouldDeleteSequence) {
 
-            QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
-            Q_FOREACH(const QString &f, sequenceFiles) {
-                d.remove(f);
+            QStringList savedFiles = exporter.savedFiles();
+            Q_FOREACH(const QString &f, savedFiles) {
+                if (d.exists(f)) {
+                    d.remove(f);
+                }
             }
+
         } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
 
-            const QList<int> uniques = exporter.getUniqueFrames();
-            QStringList uniqueFrameNames = getNamesForFrames(encoderOptions.basename, extension, encoderOptions.sequenceStart, uniques);
-            QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
+            const QStringList fileNames = exporter.savedFiles();
+            const QStringList uniqueFrameNames = exporter.savedUniqueFiles();
 
-            //Filter out unique files.
-            KritaUtils::filterContainer(sequenceFiles, [uniqueFrameNames](QString &framename){
-                return !uniqueFrameNames.contains(framename);
-            });
-
-            Q_FOREACH(const QString &f, sequenceFiles) {
-                d.remove(f);
+            Q_FOREACH(const QString &f, fileNames) {
+                if (!uniqueFrameNames.contains(f)) {
+                    d.remove(f);
+                }
             }
 
         }
@@ -137,21 +136,6 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
     } else if (result == KisAsyncAnimationFramesSaveDialog::RenderFailed) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Rendering error"), i18n("Failed to render animation frames! Output files are incomplete."));
     }
-}
-
-QString KisAnimationRender::getNameForFrame(const QString &basename, const QString &extension, int sequenceStart, int frame)
-{
-    QString frameNumberText = QString("%1").arg(frame + sequenceStart, 4, 10, QChar('0'));
-    return basename + frameNumberText + "." + extension;
-}
-
-QStringList KisAnimationRender::getNamesForFrames(const QString &basename, const QString &extension, int sequenceStart, const QList<int> &frames)
-{
-    QStringList list;
-    Q_FOREACH(const int &i, frames) {
-        list.append(getNameForFrame(basename, extension, sequenceStart, i));
-    }
-    return list;
 }
 
 bool KisAnimationRender::mustHaveEvenDimensions(const QString &mimeType, KisAnimationRenderingOptions::RenderMode renderMode)

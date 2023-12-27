@@ -17,6 +17,9 @@
 #include "kis_types.h"
 #include "kis_selection.h"
 
+#include <KisRunnableStrokeJobUtils.h>
+#include <kis_processing_visitor.h>
+
 #include <kritaimage_export.h>
 
 
@@ -31,6 +34,11 @@ class KRITAIMAGE_EXPORT KisFillPainter : public KisPainter
 {
 
 public:
+    enum RegionFillingMode
+    {
+        RegionFillingMode_FloodFill,
+        RegionFillingMode_BoundaryFill
+    };
 
     /**
      * Construct an empty painter. Use the begin(KisPaintDeviceSP) method to attach
@@ -222,6 +230,45 @@ public:
                                              KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
 
     /**
+     * Fills all the pixels of the @ref outSelection device inside @ref rect
+     * if the corresponding pixels on @ref referenceDevice are similar
+     * to @ref referenceColor
+     *
+     * @param outSelection the selection where the values are written to
+     * @param referenceColor the color that we have to compare pixels to
+     * @param referenceDevice the device that we have to use to compare colors
+     * @param rect the rectangle that defines the area to be processed
+     * @param mask a selection to mask the results. Set to nullptr if not needed
+     */
+    void createSimilarColorsSelection(KisPixelSelectionSP outSelection,
+                                      const KoColor &referenceColor,
+                                      KisPaintDeviceSP referenceDevice,
+                                      const QRect &rect,
+                                      KisPixelSelectionSP mask);
+
+    /**
+     * Create a list of jobs that will fill synchronously all the pixels of the
+     * @ref outSelection device inside @ref rect if the corresponding pixels
+     * on @ref referenceDevice are similar to @ref referenceColor. @ref rect
+     * is splitted into smaller rects if needed, and the painting of each one
+     * is distributed on several jobs
+     *
+     * @param outSelection the selection where the values are written to
+     * @param referenceColor the color that we have to compare pixels to
+     * @param referenceDevice the device that we have to use to compare colors
+     * @param rect the rectangle that defines the area to be processed
+     * @param mask a selection to mask the results. Set to nullptr if not needed
+     */
+    QVector<KisStrokeJobData*> createSimilarColorsSelectionJobs(
+        KisPixelSelectionSP outSelection,
+        const QSharedPointer<KoColor> referenceColor,
+        KisPaintDeviceSP referenceDevice,
+        const QRect &rect,
+        KisPixelSelectionSP mask,
+        QSharedPointer<KisProcessingVisitor::ProgressHelper> progressHelper = nullptr
+    );
+
+    /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
      * fill parts that are the exact same color, 255 means anything will be filled
      */
@@ -242,9 +289,9 @@ public:
      * semi-transparent (depending on how similar they are to the seed pixel)
      * up to the region boundary (given by the threshold value). 100 means that
      * the fully opaque area will encompass all the pixels of the selected
-     * region up to the contour. Any value inbetween will make the fully opaque
+     * region up to the contour. Any value in between will make the fully opaque
      * portion of the region vary in size, with semi-transparent pixels
-     * inbetween it and  the region boundary
+     * in between it and  the region boundary
      */
     void setOpacitySpread(int opacitySpread)
     {
@@ -256,12 +303,12 @@ public:
         return m_opacitySpread;
     }
 
-    bool useCompositioning() const {
-        return m_useCompositioning;
+    bool useCompositing() const {
+        return m_useCompositing;
     }
 
-    void setUseCompositioning(bool useCompositioning) {
-        m_useCompositioning = useCompositioning;
+    void setUseCompositing(bool useCompositing) {
+        m_useCompositing = useCompositing;
     }
 
     /** Sets the width of the paint device */
@@ -326,6 +373,46 @@ public:
         return m_useSelectionAsBoundary;
     }
 
+    /** Sets the region filling mode */
+    void setRegionFillingMode(RegionFillingMode regionFillingMode) {
+        m_regionFillingMode = regionFillingMode;
+    }
+
+    /** Gets the region filling mode */
+    RegionFillingMode regionFillingMode() const {
+        return m_regionFillingMode;
+    }
+
+    /** Sets the color of the boundary used when the region filling mode is
+     *  RegionFillingMode_BoundaryFill
+     */
+    void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor) {
+        m_regionFillingBoundaryColor = regionFillingBoundaryColor;
+    }
+
+    /** Gets the color of the boundary used when the region filling mode is
+     *  RegionFillingMode_BoundaryFill
+     */
+    KoColor regionFillingBoundaryColor() const {
+        return m_regionFillingBoundaryColor;
+    }
+
+    /**
+     *  Sets if the selection should stop growing at the darkest and/or more
+     *  opaque pixel when using a positive grow value (sizemod)
+     */
+    void setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel) {
+        m_stopGrowingAtDarkestPixel = stopGrowingAtDarkestPixel;
+    }
+    
+    /**
+     *  Gets if the selection should stop growing at the darkest and/or more
+     *  opaque pixel when using a positive grow value (sizemod)
+     */
+    bool stopGrowingAtDarkestPixel() const {
+        return m_stopGrowingAtDarkestPixel;
+    }
+
 protected:
     void setCurrentFillSelection(KisSelectionSP fillSelection)
     {
@@ -352,8 +439,11 @@ private:
     int m_width, m_height;
     QRect m_rect;
     bool m_careForSelection;
-    bool m_useCompositioning;
+    bool m_useCompositing;
     bool m_useSelectionAsBoundary;
+    RegionFillingMode m_regionFillingMode;
+    KoColor m_regionFillingBoundaryColor;
+    bool m_stopGrowingAtDarkestPixel;
 };
 
 #endif //KIS_FILL_PAINTER_H_

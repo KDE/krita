@@ -27,6 +27,8 @@ public:
     {
         m_widget->setParent(this);
 
+        setSizePolicy(widget->sizePolicy());
+
         QBoxLayout *layoutWidget = new QBoxLayout(QBoxLayout::TopToBottom);
         layoutWidget->setContentsMargins(m_margin, 0, m_margin, 0);
         layoutWidget->setSpacing(0);
@@ -56,6 +58,8 @@ public:
     void setSeparatorVisible(bool visible)
     {
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
+        KIS_ASSERT(layoutMain);
+
         const bool isVisible = layoutMain->count() > 1;
         if (isVisible == visible) {
             return;
@@ -72,7 +76,10 @@ public:
     void setOrientation(Qt::Orientation orientation)
     {
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
+        KIS_ASSERT(layoutMain);
         QBoxLayout *layoutWidget = dynamic_cast<QBoxLayout*>(layoutMain->itemAt(0)->layout());
+        KIS_ASSERT(layoutWidget);
+
         if (orientation == Qt::Vertical) {
             if (layoutMain->direction() == QBoxLayout::TopToBottom) {
                 return;
@@ -101,6 +108,7 @@ public:
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
         if (layoutMain->direction() == QBoxLayout::TopToBottom) {
             QBoxLayout *layoutWidget = dynamic_cast<QBoxLayout*>(layoutMain->itemAt(0)->layout());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(layoutWidget);
             layoutWidget->setContentsMargins(margin, 0, margin, 0);
         }
     }
@@ -163,6 +171,7 @@ struct KisOptionCollectionWidgetWithHeader::Private
     void adjustWidgetCollection()
     {
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(q->layout());
+        KIS_ASSERT(layoutMain);
         if (layoutMain->indexOf(layoutWidgets) == -1) {
             if (widgetCollection->numberOfVisibleWidgets() == 0) {
                 return;
@@ -201,6 +210,8 @@ struct KisOptionCollectionWidget::Private
         widgetWrappers.insert(index, widgetWrapper);
 
         QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(q->layout());
+        KIS_ASSERT(layoutMain);
+
         int indexLayout;
         for (indexLayout = 0; indexLayout < layoutMain->count(); ++indexLayout) {
             const QWidget *prevWidget = layoutMain->itemAt(indexLayout)->widget();
@@ -369,6 +380,7 @@ void KisOptionCollectionWidget::setWidgetVisible(int index, bool visible)
     KisOptionCollectionWidgetWrapper *widgetWrapper = m_d->widgetWrappers[index];
 
     QBoxLayout *layoutMain = dynamic_cast<QBoxLayout*>(layout());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layoutMain);
 
     if (visible) {
         if (layoutMain->indexOf(widgetWrapper) != -1) {
@@ -512,10 +524,12 @@ QSize KisOptionCollectionWidgetWithHeader::minimumSizeHint() const
             ),
             width() < minimumHeaderWidth
             ? m_d->label->minimumSizeHint().height() +
-              (m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().height() + m_d->layoutHeader->spacing() : 0)
+              (m_d->primaryWidget && m_d->primaryWidget->isVisible()
+                ? m_d->layoutPrimaryWidget->minimumSize().height() + m_d->layoutHeader->spacing() : 0)
             : qMax(
                 m_d->label->minimumSizeHint().height(),
-                m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().height() : 0
+                m_d->primaryWidget && m_d->primaryWidget->isVisible()
+                    ? m_d->layoutPrimaryWidget->minimumSize().height() : 0
               )
         );
 
@@ -583,17 +597,19 @@ void KisOptionCollectionWidgetWithHeader::setPrimaryWidgetVisible(bool visible)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->primaryWidget);
 
-    if (visible == m_d->primaryWidget->isVisible()) {
-        return;
-    }
-
-    if (m_d->primaryWidget->isVisible()) {
-        m_d->layoutHeader->takeAt(1);
-        m_d->primaryWidget->setVisible(false);
-    } else {
+    if (visible) {
+        if (m_d->layoutHeader->count() == 2) {
+            return;
+        }
         m_d->layoutHeader->insertLayout(1, m_d->layoutPrimaryWidget, 1);
         m_d->primaryWidget->setVisible(true);
         m_d->adjustPrimaryWidget();
+    } else {
+        if (m_d->layoutHeader->count() == 1) {
+            return;
+        }
+        m_d->layoutHeader->takeAt(1);
+        m_d->primaryWidget->setVisible(false);
     }
 }
 

@@ -22,6 +22,7 @@
 #include "kis_processing_visitor.h"
 #include "kis_node_progress_proxy.h"
 #include "kis_busy_progress_indicator.h"
+#include "KisFrameChangeUpdateRecipe.h"
 
 #include "kis_clone_layer.h"
 
@@ -37,25 +38,17 @@ typedef KisSafeReadList<KisNodeSP> KisSafeReadNodeList;
 #include "kis_image.h"
 #include "kis_layer_utils.h"
 #include "KisRegion.h"
+#include <KisStaticInitializer.h>
 
 /**
- *The link between KisProjection and KisImageUpdater
- *uses queued signals with an argument of KisNodeSP type,
- *so we should register it beforehand
+ * The link between KisProjection and KisImageUpdater
+ * uses queued signals with an argument of KisNodeSP type,
+ * so we should register it beforehand
  */
-struct KisNodeSPStaticRegistrar {
-    KisNodeSPStaticRegistrar() {
-        qRegisterMetaType<KisNodeSP>("KisNodeSP");
-    }
-};
-static KisNodeSPStaticRegistrar __registrar1;
-
-struct KisNodeListStaticRegistrar {
-    KisNodeListStaticRegistrar() {
-        qRegisterMetaType<KisNodeList>("KisNodeList");
-    }
-};
-static KisNodeListStaticRegistrar __registrar2;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisNodeSP>("KisNodeSP");
+    qRegisterMetaType<KisNodeList>("KisNodeList");
+}
 
 
 /**
@@ -104,6 +97,9 @@ public:
     void processDuplicatedClones(const KisNode *srcDuplicationRoot,
                                  const KisNode *dstDuplicationRoot,
                                  KisNode *node);
+
+    std::optional<KisFrameChangeUpdateRecipe> frameRemovalUpdateRecipe;
+    KisFrameChangeUpdateRecipe handleKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time);
 };
 
 /**
@@ -479,7 +475,7 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 
     int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 
-    // threoretical race condition may happen here ('idx' may become
+    // theoretical race condition may happen here ('idx' may become
     // deprecated until the write lock will be held). But we ignore
     // it, because it is not supported to add/remove nodes from two
     // concurrent threads simultaneously
@@ -623,17 +619,51 @@ void KisNode::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
     }
 }
 
-void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect)
+KisFrameChangeUpdateRecipe
+KisNode::Private::handleKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
 {
-    invalidateFrames(range, rect);
+    KisFrameChangeUpdateRecipe recipe;
 
-    if (image()) {
-        KisDefaultBoundsSP bounds(new KisDefaultBounds(image()));
+    recipe.affectedRange = channel->affectedFrames(time);
+    recipe.affectedRect = channel->affectedRect(time);
 
-        if (range.contains(bounds->currentTime())) {
-            setDirty(rect);
+    if (parent->image()) {
+        KisDefaultBoundsSP bounds(new KisDefaultBounds(parent->image()));
+
+        if (recipe.affectedRange.contains(bounds->currentTime())) {
+            recipe.totalDirtyRect = recipe.affectedRect;
         }
     }
+
+    return recipe;
+}
+
+void KisNode::handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time)
+{
+    m_d->handleKeyframeChannelUpdateImpl(channel, time).notify(this);
+}
+
+void KisNode::handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time)
+{
+    m_d->handleKeyframeChannelUpdateImpl(channel, time).notify(this);
+}
+
+KisFrameChangeUpdateRecipe KisNode::handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time)
+{
+    return m_d->handleKeyframeChannelUpdateImpl(channel, time);
+}
+
+void KisNode::handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time)
+{
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->frameRemovalUpdateRecipe);
+    m_d->frameRemovalUpdateRecipe = handleKeyframeChannelFrameAboutToBeRemovedImpl(channel, time);
+}
+
+void KisNode::handleKeyframeChannelFrameHasBeenRemoved(const KisKeyframeChannel *channel, int time)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->frameRemovalUpdateRecipe);
+    m_d->frameRemovalUpdateRecipe->notify(this);
+    m_d->frameRemovalUpdateRecipe = std::nullopt;
 }
 
 void KisNode::requestTimeSwitch(int time)

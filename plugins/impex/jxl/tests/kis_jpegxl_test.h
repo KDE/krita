@@ -15,8 +15,13 @@ class KisJPEGXLTest : public QObject
 
 private Q_SLOTS:
     void testAnimation();
+    void testAnimationWithTail();
     void testFiles();
     void testHDR();
+    void testCmykWithLayers();
+    void testSaveRgbaColorSpace();
+    void testSaveGreyAColorSpace();
+    void testSaveCmykAColorSpace();
     void testImportIncorrectFormat();
 
 #ifndef Q_OS_WIN

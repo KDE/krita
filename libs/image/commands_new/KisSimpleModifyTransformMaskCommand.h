@@ -9,6 +9,7 @@
 
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include <boost/none.hpp>
 
 #include <kundo2command.h>
 
@@ -17,8 +18,9 @@ class KRITAIMAGE_EXPORT KisSimpleModifyTransformMaskCommand : public KUndo2Comma
 {
 public:
     KisSimpleModifyTransformMaskCommand(KisTransformMaskSP mask,
-                                        KisTransformMaskParamsInterfaceSP oldParams,
-                                        KisTransformMaskParamsInterfaceSP newParams);
+                                        KisTransformMaskParamsInterfaceSP newParams,
+                                        QWeakPointer<boost::none_t> updatesBlockerCookie = QWeakPointer<boost::none_t>(),
+                                        KUndo2Command *parent = nullptr);
 
     int id() const override;
 
@@ -29,9 +31,15 @@ public:
     void redo() override;
 
 private:
+    bool m_isInitialized {false};
+
     KisTransformMaskSP m_mask;
     KisTransformMaskParamsInterfaceSP m_oldParams;
     KisTransformMaskParamsInterfaceSP m_newParams;
+
+    QWeakPointer<boost::none_t> m_updatesBlockerCookie;
+
+    std::vector<std::unique_ptr<KUndo2Command>> m_undoCommands;
 };
 
 #endif // KISSIMPLEMODIFYTRANSFORMMASKCOMMAND_H

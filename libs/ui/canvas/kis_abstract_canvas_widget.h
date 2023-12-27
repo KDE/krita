@@ -23,6 +23,7 @@ class KoColorSpace;
 
 #include "kis_types.h"
 #include "kis_ui_types.h"
+#include "KisWraparoundAxis.h"
 
 class KisAbstractCanvasWidget
 {
@@ -57,6 +58,9 @@ public:
 
     virtual void setWrapAroundViewingMode(bool value) = 0;
     virtual bool wrapAroundViewingMode() const = 0;
+
+    virtual void setWrapAroundViewingModeAxis(WrapAroundAxis value) = 0;
+    virtual WrapAroundAxis wrapAroundViewingModeAxis() const = 0;
 
     // Called from KisCanvas2::channelSelectionChanged
     virtual void channelSelectionChanged(const QBitArray &channelFlags) = 0;

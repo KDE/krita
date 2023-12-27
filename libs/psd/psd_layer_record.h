@@ -94,25 +94,25 @@ public:
 
     QString error;
 
-    qint32 top;
-    qint32 left;
-    qint32 bottom;
-    qint32 right;
+    qint32 top {0};
+    qint32 left {0};
+    qint32 bottom {0};
+    qint32 right {0};
 
-    quint16 nChannels;
+    quint16 nChannels {0};
 
     QVector<ChannelInfo *> channelInfoRecords;
 
     QString blendModeKey;
-    bool isPassThrough;
+    bool isPassThrough {false};
 
-    quint8 opacity;
-    quint8 clipping;
-    bool transparencyProtected;
-    bool visible;
-    bool irrelevant;
+    quint8 opacity {0};
+    quint8 clipping {0};
+    bool transparencyProtected {false};
+    bool visible {true};
+    bool irrelevant {false};
 
-    int labelColor;
+    int labelColor {0};
 
     psd_fill_type fillType {psd_fill_solid_color};
     QDomDocument fillConfig;
@@ -148,7 +148,7 @@ public:
 
     LayerBlendingRanges blendingRanges;
 
-    QString layerName; // pascal, not unicode!
+    QString layerName {"UNINITIALIZED"}; // pascal, not unicode!
 
     PsdAdditionalLayerInfoBlock infoBlocks;
 
@@ -180,7 +180,7 @@ private:
     KisPaintDeviceSP m_layerContentDevice;
     KisNodeSP m_onlyTransparencyMask;
     QRect m_onlyTransparencyMaskRect;
-    qint64 m_transparencyMaskSizeOffset;
+    qint64 m_transparencyMaskSizeOffset {0};
 
     const PSDHeader m_header;
 };

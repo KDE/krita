@@ -99,6 +99,11 @@ KisLocalStrokeResources::KisLocalStrokeResources(const QList<KoResourceSP> &loca
 void KisLocalStrokeResources::addResource(KoResourceSP resource)
 {
     Q_D(KisLocalStrokeResources);
+    KIS_SAFE_ASSERT_RECOVER(resource)
+    {
+        warnKrita << "Attempted to insert a null resource into the local style resource server";
+        return;
+    }
     d->localResources.append(resource);
 }
 
@@ -106,6 +111,12 @@ void KisLocalStrokeResources::removeResource(KoResourceSP resource)
 {
     Q_D(KisLocalStrokeResources);
     d->localResources.removeAll(resource);
+}
+
+KisLocalStrokeResources *KisLocalStrokeResources::clone() const
+{
+    Q_D(const KisLocalStrokeResources);
+    return new KisLocalStrokeResources(d->localResources);
 }
 
 KisResourcesInterface::ResourceSourceAdapter *KisLocalStrokeResources::createSourceImpl(const QString &type) const

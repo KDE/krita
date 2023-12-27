@@ -1,7 +1,8 @@
 /*
  *  Copyright (c) 2020 Agata Cacko cacko.azh@gmail.com
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
- * SPDX-License-Identifier: LGPL-2.0-or-later
+ *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #ifndef WDG_TAG_SELECTION_H
 #define WDG_TAG_SELECTION_H
@@ -60,9 +61,13 @@ public:
 
     void updateView();
     void setResourceType(const QString& resourceType);
+    void addTag(KoID tag);
 
+Q_SIGNALS:
+    void tagAdded(KoID tag);
+    void tagRemoved(KoID tag);
 
-private Q_SLOTS:
+public Q_SLOTS:
     void slotRemoveTag(KoID tag);
     void slotAddTag(KoID tag);
 

@@ -27,6 +27,7 @@ GroupLayer::~GroupLayer()
 void GroupLayer::setPassThroughMode(bool passthrough)
 {
     KisGroupLayer *group = dynamic_cast<KisGroupLayer*>(this->node().data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(group);
     group->setPassThroughMode(passthrough);
 }
 

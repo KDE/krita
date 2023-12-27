@@ -7,7 +7,8 @@ ExternalProject_Add( ext_patch
 	CONFIGURE_COMMAND ""
 	BUILD_COMMAND ${CMAKE_COMMAND} -E echo deploying patch.exe binary
 	INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${PREFIX_ext_patch}/bin
-		COMMAND ${CMAKE_COMMAND} -E copy bin/patch.exe ${PREFIX_ext_patch}/bin/myptch.exe
+		COMMAND ${CMAKE_COMMAND} -E copy bin/patch.exe ${PREFIX_ext_patch}/bin/patch.exe
+		COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/patch.exe.manifest ${PREFIX_ext_patch}/bin/patch.exe.manifest
 	UPDATE_COMMAND ""
 	BUILD_IN_SOURCE 1
 )

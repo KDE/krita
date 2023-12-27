@@ -102,11 +102,11 @@ public:
         CS2_PRINT_INFO = 1071, /* 0x042F - (Photoshop CS2) Print info */
         LAYER_GROUP_ENABLED_ID = 1072, /* 0x0430 - (Photoshop CS2) Layer Group(s) Enabled ID. 1 byte for each layer in the document, repeated by length of the
                                           resource. NOTE: Layer groups have start and end markers */
-        COLOR_SAMPLERS = 1073, /* 0x0431 - (Photoshop CS3) Color samplers resource. Also see ID 1038 for old format. See See Color samplers resource format. */
+        COLOR_SAMPLERS = 1073, /* 0x0431 - (Photoshop CS3) Color samplers resource. Also see ID 1038 for old format. See Color samplers resource format. */
         MEASUREMENT_SCALE = 1074, /* 0x0432 - (Photoshop CS3) Measurement Scale. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
         TIMELINE_INFO = 1075, /* 0x0433 - (Photoshop CS3) Timeline Information. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
         SHEET_DISCLOSURE = 1076, /* 0x0434 - (Photoshop CS3) Sheet Disclosure. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
-        CS3_DISPLAY_INFO = 1077, /* 0x0435 - (Photoshop CS3) DisplayInfo structure to support floating point clors. Also see ID 1007. See Appendix A in
+        CS3_DISPLAY_INFO = 1077, /* 0x0435 - (Photoshop CS3) DisplayInfo structure to support floating point colors. Also see ID 1007. See Appendix A in
                                     Photoshop API Guide.pdf . */
         ONION_SKINS = 1078, /* 0x0436 - (Photoshop CS3) Onion Skins. 4 bytes (descriptor version = 16), Descriptor (see See Descriptor structure) */
 

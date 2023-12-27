@@ -143,6 +143,26 @@ T inwardUnitNormal(const T &a, int polygonDirection)
 }
 
 /**
+ * Helper function to convert a qreal to int lazily. If the
+ * passed type is an integer, then the value is rounded.
+ * Otherwise it is just passed forward.
+ */
+template<typename R>
+R lazyRound(qreal value);
+
+template<>
+inline int lazyRound<int>(qreal value)
+{
+    return qRound(value);
+}
+
+template<>
+inline qreal lazyRound<qreal>(qreal value)
+{
+    return value;
+}
+
+/**
  * \return 1 if the polygon is counterclockwise
  *        -1 if the polygon is clockwise
  *
@@ -210,20 +230,40 @@ inline void accumulateBounds(const Point &pt, Rect *bounds)
         Private::resetEmptyRectangle(pt, bounds);
     }
 
-    if (pt.x() > bounds->right()) {
+    /**
+     * `Rect::left()` is cheaper than `Rect::right()`,
+     * so check it first
+     */
+    if (pt.x() < bounds->left()) {
+        bounds->setLeft(pt.x());
+    } else if (pt.x() > bounds->right()) {
         bounds->setRight(pt.x());
     }
 
+    /**
+     * `Rect::top()` is cheaper than `Rect::bottom()`,
+     * so check it first
+     */
+    if (pt.y() < bounds->top()) {
+        bounds->setTop(pt.y());
+    } else if (pt.y() > bounds->bottom()) {
+        bounds->setBottom(pt.y());
+    }
+}
+
+template <class Point, class Rect>
+inline void accumulateBoundsNonEmpty(const Point &pt, Rect *bounds)
+{
     if (pt.x() < bounds->left()) {
         bounds->setLeft(pt.x());
-    }
-
-    if (pt.y() > bounds->bottom()) {
-        bounds->setBottom(pt.y());
+    } else if (pt.x() > bounds->right()) {
+        bounds->setRight(pt.x());
     }
 
     if (pt.y() < bounds->top()) {
         bounds->setTop(pt.y());
+    } else if (pt.y() > bounds->bottom()) {
+        bounds->setBottom(pt.y());
     }
 }
 
@@ -539,7 +579,7 @@ QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p);
  *
  * \p x1, \p x2 --- the found solution. The variables are filled with
  *                  data iff the corresponding solution is found. That
- *                  is: 0 solutions --- variabled are not touched, 1
+ *                  is: 0 solutions --- variables are not touched, 1
  *                  solution --- x1 is filled with the result, 2
  *                  solutions --- x1 and x2 are filled.
  */
@@ -664,10 +704,10 @@ bool fuzzyCompareRects(const Rect &r1, const Rect &r2, Difference tolerance) {
     return maxError < tolerance;
 }
 
-struct KRITAGLOBAL_EXPORT DecomposedMatix {
-    DecomposedMatix();
+struct KRITAGLOBAL_EXPORT DecomposedMatrix {
+    DecomposedMatrix();
 
-    DecomposedMatix(const QTransform &t0);
+    DecomposedMatrix(const QTransform &t0);
 
     inline QTransform scaleTransform() const
     {
@@ -781,7 +821,7 @@ boost::optional<QPointF> KRITAGLOBAL_EXPORT findTrianglePointNearest(const QPoin
  * @param pt point in question, tied to points \p base, \p wingA and \p wingB
  *           using springs
  * @param base initial position of the dragged point
- * @param newBase final position of tht dragged point
+ * @param newBase final position of the dragged point
  * @param wingA first anchor point
  * @param wingB second anchor point
  * @return the new position of \p pt
@@ -839,6 +879,18 @@ public:
         return qreal(m_n) / m_d;
     }
 
+    void step() {
+        generationStep();
+    }
+
+    int currentValue(int maxRange) const {
+        return (m_n * maxRange + m_d / 2) / m_d;
+    }
+
+    qreal currentValue() const{
+        return qreal(m_n) / m_d;
+    }
+
 private:
     inline void generationStep() {
         int x = m_d - m_n;
@@ -873,6 +925,8 @@ qreal findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB
 // Golden Section is supposed to be usually faster than Ternary Section
 // NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
 qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
+
+qreal KRITAGLOBAL_EXPORT pointToLineDistSquared(const QPointF& pt, const QLineF& line);
 
 
 }

@@ -12,7 +12,7 @@
 
 /**
  * A simple storage class that owns a fixed amount of
- * QOpenGLBuffer objects and returnes them sequentially.
+ * QOpenGLBuffer objects and returns them sequentially.
  * Using multiple distinct buffers lets us avoid blocks
  */
 class KisOpenGLBufferCircularStorage
@@ -33,16 +33,24 @@ public:
          */
         BufferBinder(KisOpenGLBufferCircularStorage *bufferStorage, const void **dataPtr, int dataSize);
         ~BufferBinder();
-        BufferBinder(const BufferBinder &rhs) = delete;
+
+        BufferBinder(const BufferBinder &) = delete;
+        BufferBinder &operator=(const BufferBinder &) = delete;
+        BufferBinder(BufferBinder &&) = delete;
+        BufferBinder &operator=(BufferBinder &&) = delete;
 
     private:
-        QOpenGLBuffer *m_buffer = 0;
+        QOpenGLBuffer *m_buffer = nullptr;
     };
 
-public:
     KisOpenGLBufferCircularStorage();
     KisOpenGLBufferCircularStorage(QOpenGLBuffer::Type type);
     ~KisOpenGLBufferCircularStorage();
+
+    KisOpenGLBufferCircularStorage(const KisOpenGLBufferCircularStorage &) = delete;
+    KisOpenGLBufferCircularStorage &operator=(const KisOpenGLBufferCircularStorage &) = delete;
+    KisOpenGLBufferCircularStorage(KisOpenGLBufferCircularStorage &&) = delete;
+    KisOpenGLBufferCircularStorage &operator=(KisOpenGLBufferCircularStorage &&) = delete;
 
     void allocate(int numBuffers, int bufferSize);
     QOpenGLBuffer* getNextBuffer();
@@ -51,12 +59,11 @@ public:
 
     void reset();
 
-    void allocateMoreBuffers(uint numBuffers);
+    void allocateMoreBuffers();
 
 private:
-    void addBuffersImpl(int buffersToAdd, int bufferSize);
+    void addBuffersImpl(size_t buffersToAdd, int bufferSize);
 
-private:
     struct Private;
     const QScopedPointer<Private> m_d;
 };

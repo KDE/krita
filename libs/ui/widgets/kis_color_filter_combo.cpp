@@ -156,7 +156,7 @@ public:
 
     int styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override
     {
-        // This flag makes ComboBox popup float ontop of its parent ComboBox, like in Fusion style.
+        // This flag makes ComboBox popup float on top of its parent ComboBox, like in Fusion style.
         // Only when this hint is set will Qt respect combobox popup size hints, otherwise the popup
         // can never exceed the width of its parent ComboBox, like in Breeze style.
         if (hint == QStyle::SH_ComboBox_Popup) {
@@ -215,7 +215,7 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent, bool filterMode, bool 
     QStandardItem* item = new QStandardItem(i18nc("combo box: show all layers", "All"));
     item->setCheckable(true);
     item->setCheckState(Qt::Unchecked);
-    item->setData(QColor(Qt::transparent), Qt::BackgroundColorRole);
+    item->setData(QColor(Qt::transparent), Qt::BackgroundRole);
     item->setData(int(-1), OriginalLabelIndex);
     item->setData(QSize(30, scm.rowHeight()), Qt::SizeHintRole);
     newModel->appendRow(item);
@@ -227,7 +227,7 @@ KisColorFilterCombo::KisColorFilterCombo(QWidget *parent, bool filterMode, bool 
         QStandardItem* item = new QStandardItem(title);
         item->setCheckable(true);
         item->setCheckState(Qt::Unchecked);
-        item->setData(color, Qt::BackgroundColorRole);
+        item->setData(color, Qt::BackgroundRole);
         item->setData(labelIndex, OriginalLabelIndex);
         item->setData(QSize(30, scm.rowHeight()), Qt::SizeHintRole);
         newModel->appendRow(item);

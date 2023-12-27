@@ -19,13 +19,13 @@ if not callable(cygwinccompiler.get_msvcr):
  raise RuntimeError(
  "distutils.cygwinccompiler.get_msvcr is not a function, which is unexpected")
 
-print("[*] Krita is patching cygwinccompiler.get_msvcr... ({})".format(cygwinccompiler.__file__))
+# print("[*] Krita is patching cygwinccompiler.get_msvcr... ({})".format(cygwinccompiler.__file__))
 
 # HACK: Replace the function to apply our hack...
 cygwinccompiler.get_msvcr = _get_msvcr_replacement
 
-print("[*] Check: {} {}".format(cygwinccompiler.get_msvcr,
-      cygwinccompiler.get_msvcr()))
+# print("[*] Check: {} {}".format(cygwinccompiler.get_msvcr,
+#       cygwinccompiler.get_msvcr()))
 
 
 # distutils's cygwinccompiler module contains some very old version checking
@@ -45,12 +45,12 @@ def _get_versions_replacement():
     return gcc_ver, ld_ver, dllwrap_ver
 
 if callable(cygwinccompiler.get_versions):
-    print("[*] Krita is patching cygwinccompiler.get_versions... ({})".format(cygwinccompiler.__file__))
+    # print("[*] Krita is patching cygwinccompiler.get_versions... ({})".format(cygwinccompiler.__file__))
     cygwinccompiler.get_versions = _get_versions_replacement
 
 
 # HACK: Override distutils.cygwinccompiler lookup
 # https://github.com/pypa/setuptools/blob/298f5a6368397977ee09cb0b39d5f76aa544b048/setuptools/_distutils/ccompiler.py#L1024
-print("[*] Freezing distutils.cygwinccompiler module")
+# print("[*] Freezing distutils.cygwinccompiler module")
 
 sys.modules["distutils.cygwinccompiler"] = cygwinccompiler

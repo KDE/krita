@@ -15,9 +15,11 @@
 
 #include "hairy_brush.h"
 
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_opacity_option.h>
+#include <KisStandardOptions.h>
+#include <KisRotationOption.h>
+#include <KisOpacityOption.h>
+#include "KisHairyBristleOptionData.h"
+#include "KisHairyInkOptionData.h"
 
 class KisPainter;
 class KisBrushBasedPaintOpSettings;
@@ -39,15 +41,17 @@ protected:
 
 private:
     KisHairyProperties m_properties;
+    KisHairyBristleOptionData m_hairyBristleOption;
+    KisHairyInkOptionData m_hairyInkOption;
 
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
     HairyBrush m_brush;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureOpacityOption m_opacityOption;
+    KisOpacityOption m_opacityOption;
+    KisSizeOption m_sizeOption;
+    KisRotationOption m_rotationOption;
 
-    void loadSettings(const KisBrushBasedPaintOpSettings* settings);
+    void loadSettings();
 };
 
 #endif // KIS_HAIRYPAINTOP_H_

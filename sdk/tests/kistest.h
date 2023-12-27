@@ -7,7 +7,7 @@
 #ifndef KISTEST
 #define KISTEST
 
-#include <KoConfig.h>
+#include <KoTestConfig.h>
 #include <QApplication>
 #include <simpletest.h>
 #include <QStandardPaths>
@@ -114,22 +114,22 @@ void addResourceTypes()
 {
 #if defined(TESTRESOURCES) || defined(TESTPIGMENT) || defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
     // All Krita's resource types
-    KoResourcePaths::addResourceType("markers", "data", "/styles/");
-    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
-    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("kis_defaultpresets", "data", "/defaultpresets/");
-    KoResourcePaths::addResourceType("psd_layer_style_collections", "data", "/asl");
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType("tags", "data", "/tags/");
-    KoResourcePaths::addResourceType("templates", "data", "/templates");
-    KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
-    KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
+    KoResourcePaths::addAssetType("markers", "data", "/styles/");
+    KoResourcePaths::addAssetType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addAssetType("kis_images", "data", "/images/");
+    KoResourcePaths::addAssetType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addAssetType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addAssetType("kis_defaultpresets", "data", "/defaultpresets/");
+    KoResourcePaths::addAssetType("psd_layer_style_collections", "data", "/asl");
+    KoResourcePaths::addAssetType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/actions");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/pykrita");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addAssetType("tags", "data", "/tags/");
+    KoResourcePaths::addAssetType("templates", "data", "/templates");
+    KoResourcePaths::addAssetType("pythonscripts", "data", "/pykrita");
+    KoResourcePaths::addAssetType("preset_icons", "data", "/preset_icons");
 
     // Make directories for all resources we can save, and tags
     QDir d;
@@ -169,6 +169,12 @@ void registerResources()
 {
 
 #if defined(TESTRESOURCES) || defined(TESTPIGMENT) || defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
+
+    QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    if (dir.exists("resourcecache.sqlite")) {
+        bool result = dir.removeRecursively();
+        qDebug() << "result" << (result);
+    }
 
     addResourceTypes();
 
@@ -248,7 +254,8 @@ int main(int argc, char *argv[]) \
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     qputenv("QT_LOGGING_RULES", ""); \
     QStandardPaths::setTestModeEnabled(true); \
-    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
+    qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     QTEST_DISABLE_KEYPAD_NAVIGATION \
@@ -266,7 +273,8 @@ int main(int argc, char *argv[]) \
     qputenv("LANGUAGE", "en"); \
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     qputenv("QT_LOGGING_RULES", ""); \
-    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
+    qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
     QStandardPaths::setTestModeEnabled(true); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \

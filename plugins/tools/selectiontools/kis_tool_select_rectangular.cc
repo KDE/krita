@@ -19,6 +19,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_shape_tool_helper.h"
+#include <kis_default_bounds.h>
 
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"

@@ -28,6 +28,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_figure_painting_tool_helper.h>
 #include <kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 #include <KisViewManager.h>
 #include <kis_action_registry.h>
 #include <kis_painting_information_builder.h>
@@ -38,6 +39,7 @@
 const KisCoordinatesConverter* getCoordinatesConverter(KoCanvasBase * canvas)
 {
     KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+    KIS_ASSERT(kritaCanvas);
     return kritaCanvas->coordinatesConverter();
 }
 
@@ -59,6 +61,10 @@ KisToolLine::KisToolLine(KoCanvasBase * canvas)
 
     connect(&m_strokeUpdateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
     connect(&m_longStrokeUpdateCompressor, SIGNAL(timeout()), SLOT(updateStroke()));
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisToolLine::~KisToolLine()
@@ -67,7 +73,11 @@ KisToolLine::~KisToolLine()
 
 void KisToolLine::resetCursorStyle()
 {
-    KisToolPaint::resetCursorStyle();
+    if (isEraser() && (nodePaintAbility() == PAINT)) {
+        useCursor(KisCursor::load("tool_line_eraser_cursor.png", 6, 6));
+    } else {
+        KisToolPaint::resetCursorStyle();
+    }
 
     overrideCursorIfNotEditable();
 }
@@ -97,16 +107,31 @@ QWidget* KisToolLine::createOptionWidget()
     m_chkShowGuideline = new QCheckBox(i18n("Show Guideline"));
     addOptionWidgetOption(m_chkShowGuideline);
 
+    m_chkSnapToAssistants = new QCheckBox(i18n("Snap to Assistants"));
+    addOptionWidgetOption(m_chkSnapToAssistants);
+
+    m_chkSnapEraser = new QCheckBox(i18n("Snap Eraser"));
+    addOptionWidgetOption(m_chkSnapEraser);
+
+
+
+
     // hook up connections for value changing
     connect(m_chkUseSensors, SIGNAL(clicked(bool)), this, SLOT(setUseSensors(bool)) );
     connect(m_chkShowPreview, SIGNAL(clicked(bool)), this, SLOT(setShowPreview(bool)) );
     connect(m_chkShowGuideline, SIGNAL(clicked(bool)), this, SLOT(setShowGuideline(bool)) );
+    connect(m_chkSnapToAssistants, SIGNAL(clicked(bool)), this, SLOT(setSnapToAssistants(bool)) );
 
 
     // read values in from configuration
     m_chkUseSensors->setChecked(configGroup.readEntry("useSensors", true));
     m_chkShowPreview->setChecked(configGroup.readEntry("showPreview", true));
     m_chkShowGuideline->setChecked(configGroup.readEntry("showGuideline", true));
+    m_chkSnapToAssistants->setChecked(configGroup.readEntry("snapToAssistants", false));
+    m_chkSnapEraser->setChecked(configGroup.readEntry("snapEraser", false));
+    if (!m_chkSnapToAssistants->isChecked()) {
+        m_chkSnapEraser->setEnabled(false);
+    }
 
     return widget;
 }
@@ -125,6 +150,17 @@ void KisToolLine::setShowGuideline(bool value)
 void KisToolLine::setShowPreview(bool value)
 {
     configGroup.writeEntry("showPreview", value);
+}
+
+void KisToolLine::setSnapToAssistants(bool value)
+{
+    configGroup.writeEntry("snapToAssistants", value);
+    m_chkSnapEraser->setEnabled(value);
+}
+
+void KisToolLine::setSnapEraser(bool value)
+{
+    configGroup.writeEntry("snapEraser", value);
 }
 
 void KisToolLine::requestStrokeCancellation()
@@ -193,6 +229,7 @@ void KisToolLine::beginPrimaryAction(KoPointerEvent *event)
     m_startPoint = convertToPixelCoordAndSnap(event);
     m_endPoint = m_startPoint;
     m_lastUpdatedPoint = m_startPoint;
+    m_originalStartPoint = m_startPoint;
 
     m_strokeIsRunning = true;
 
@@ -223,11 +260,14 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
         m_helper->translatePoints(trans);
         m_startPoint += trans;
         m_endPoint += trans;
+        m_originalStartPoint += trans; // original start point is only original in terms of snapping to assistants
     } else if (event->modifiers() == Qt::ShiftModifier) {
         pos = straightLine(pos);
         m_helper->addPoint(event, pos);
     } else {
+        pos = snapToAssistants(pos);
         m_helper->addPoint(event, pos);
+        m_helper->movePointsTo(m_startPoint, pos);
     }
     m_endPoint = pos;
 
@@ -249,6 +289,7 @@ void KisToolLine::continuePrimaryAction(KoPointerEvent *event)
 
     if(event->modifiers() == Qt::AltModifier) {
         KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+        KIS_ASSERT(kisCanvas);
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px", QString::number(m_startPoint.x(), 'f',1)
                                                            , QString::number(m_startPoint.y(), 'f',1))
                                                            , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
@@ -269,6 +310,10 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
 
     updateGuideline();
     endStroke();
+
+    if (static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
+        static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->endStroke();
+    }
 }
 
 bool KisToolLine::primaryActionSupportsHiResEvents() const
@@ -328,7 +373,6 @@ void KisToolLine::cancelStroke()
         m_helper->cancel();
     }
 
-
     m_strokeIsRunning = false;
     m_endPoint = m_startPoint;
 }
@@ -356,6 +400,31 @@ QPointF KisToolLine::straightLine(QPointF point)
     return result;
 }
 
+QPointF KisToolLine::snapToAssistants(QPointF point)
+{
+    if (m_chkSnapToAssistants->isChecked() && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
+        KisCanvas2* c = static_cast<KisCanvas2*>(canvas());
+        c->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(true);
+        c->paintingAssistantsDecoration()->setEraserSnap(m_chkSnapEraser->isChecked());
+        QPointF startPoint = m_originalStartPoint;
+
+        // startPoint etc. are in image coordinates system (pixels)
+        // but assistants work in document coordinates system ("points")
+        QPointF startPointInDoc = getCoordinatesConverter(canvas())->imageToDocument(startPoint);
+        QPointF pointInDoc = getCoordinatesConverter(canvas())->imageToDocument(point);
+
+        c->paintingAssistantsDecoration()->adjustLine(pointInDoc, startPointInDoc);
+        c->paintingAssistantsDecoration()->setAdjustedBrushPosition(pointInDoc);
+
+        startPoint = getCoordinatesConverter(canvas())->documentToImage(startPointInDoc);
+        point = getCoordinatesConverter(canvas())->documentToImage(pointInDoc);
+
+        m_startPoint = startPoint;
+        return point;
+    }
+    return point;
+}
+
 
 void KisToolLine::updateGuideline()
 {
@@ -369,6 +438,7 @@ void KisToolLine::updateGuideline()
 void KisToolLine::showSize()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT(kisCanvas);
     kisCanvas->viewManager()->showFloatingMessage(i18n("Length: %1 px", QString::number(QLineF(m_startPoint,m_endPoint).length(), 'f',1))
                                                         , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
@@ -388,4 +458,9 @@ void KisToolLine::paintLine(QPainter& gc, const QRect&)
 QString KisToolLine::quickHelp() const
 {
     return i18n("Alt+Drag will move the origin of the currently displayed line around, Shift+Drag will force you to draw straight lines");
+}
+
+bool KisToolLine::supportsPaintingAssistants() const
+{
+    return true;
 }

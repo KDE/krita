@@ -41,6 +41,7 @@
 #include <kis_exif_info_visitor.h>
 #include <generator/kis_generator_layer.h>
 #include <KisExportCheckRegistry.h>
+#include <KisSpinBoxI18nHelper.h>
 #include "kis_jpeg_converter.h"
 
 class KisExternalLayer;
@@ -214,9 +215,9 @@ KisWdgOptionsJPEG::KisWdgOptionsJPEG(QWidget *parent)
 
     metaDataFilters->setModel(&m_filterRegistryModel);
     qualityLevel->setRange(0, 100, 0);
-    qualityLevel->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(qualityLevel, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     smoothLevel->setRange(0, 100, 0);
-    smoothLevel->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(smoothLevel, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 }
 
 

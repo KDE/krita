@@ -101,7 +101,7 @@ void KisOilPaintFilter::OilPaint(const KisPaintDeviceSP src, KisPaintDeviceSP ds
  * Intensity        => Intensity to calculate
  *
  * Theory           => This function creates a matrix with the analyzed pixel in
- *                     the center of this matrix and find the most frequenty color
+ *                     the center of this matrix and find the most frequent color
  */
 
 void KisOilPaintFilter::MostFrequentColor(KisPaintDeviceSP src, quint8* dst, const QRect& /*bounds*/, int X, int Y, int Radius, int Intensity) const

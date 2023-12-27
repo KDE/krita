@@ -16,6 +16,7 @@
 #include "kis_full_refresh_walker.h"
 #include "kis_async_merger.h"
 #include "kis_projection_updates_filter.h"
+#include <KisLockFrameGenerationLock.h>
 
 
 struct KisRegenerateFrameStrokeStrategy::Private
@@ -26,6 +27,7 @@ struct KisRegenerateFrameStrokeStrategy::Private
     KisRegion dirtyRegion;
     KisImageAnimationInterface *interface;
     QStack<KisProjectionUpdatesFilterSP> prevUpdatesFilters;
+    std::optional<KisLockFrameGenerationLock> frameGenerationLock;
 
     class Data : public KisStrokeJobData {
     public:
@@ -70,7 +72,8 @@ struct KisRegenerateFrameStrokeStrategy::Private
 KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
                                                                    const KisRegion &dirtyRegion,
                                                                    bool isCancellable,
-                                                                   KisImageAnimationInterface *interface)
+                                                                   KisImageAnimationInterface *interface,
+                                                                   KisLockFrameGenerationLock &&frameGenerationLock)
     : KisSimpleStrokeStrategy(QLatin1String("regenerate_external_frame_stroke")),
       m_d(new Private)
 {
@@ -79,6 +82,7 @@ KisRegenerateFrameStrokeStrategy::KisRegenerateFrameStrokeStrategy(int frameId,
     m_d->frameId = frameId;
     m_d->dirtyRegion = dirtyRegion;
     m_d->interface = interface;
+    m_d->frameGenerationLock = std::move(frameGenerationLock);
 
     enableJob(JOB_INIT);
     enableJob(JOB_FINISH, true, KisStrokeJobData::BARRIER);
@@ -159,12 +163,15 @@ void KisRegenerateFrameStrokeStrategy::finishStrokeCallback()
     if (!image) {
         return;
     }
+
+
     if (m_d->type == EXTERNAL_FRAME) {
         m_d->interface->notifyFrameReady();
         m_d->interface->restoreCurrentTime(&m_d->previousFrameId);
         image->enableUIUpdates();
         m_d->restoreUpdatesFilter();
     } else if (m_d->type == CURRENT_FRAME) {
+        m_d->interface->notifyFrameRegenerated();
         m_d->interface->blockFrameInvalidation(false);
     }
 }

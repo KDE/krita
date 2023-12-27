@@ -8,9 +8,13 @@
 
 #include <kis_node.h>
 #include <kis_image.h>
-#include <kis_fill_painter.h>
 #include <kis_wrapped_rect.h>
 #include "lazybrush/kis_colorize_mask.h"
+#include <kis_assert.h>
+#include <KisImageResolutionProxy.h>
+#include <KoCompositeOpRegistry.h>
+#include "KisAnimAutoKey.h"
+#include "kis_undo_adapter.h"
 
 
 FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
@@ -26,12 +30,19 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_antiAlias(false)
     , m_feather(0)
     , m_sizemod(0)
+    , m_stopGrowingAtDarkestPixel(false)
     , m_fillThreshold(8)
     , m_opacitySpread(0)
+    , m_regionFillingMode(KisFillPainter::RegionFillingMode_FloodFill)
     , m_continuousFillMode(ContinuousFillMode_DoNotUse)
     , m_continuousFillMask(nullptr)
+    , m_continuousFillReferenceColor(nullptr)
     , m_unmerged(false)
     , m_useBgColor(false)
+    , m_useCustomBlendingOptions(false)
+    , m_customOpacity(OPACITY_OPAQUE_U8)
+    , m_customCompositeOp(COMPOSITE_OVER)
+    , m_progressHelper(nullptr)
 {}
 
 void FillProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
@@ -43,26 +54,43 @@ void FillProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoA
 void FillProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)
 {
     KisPaintDeviceSP device = node->paintDevice();
-    Q_ASSERT(device);
-    ProgressHelper helper(node);
-    fillPaintDevice(device, undoAdapter, helper);
+    KIS_ASSERT(device);
+    if (!m_progressHelper) {
+        m_progressHelper.reset(new ProgressHelper(node));
+    }
+    fillPaintDevice(device, undoAdapter);
 }
 
-void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper)
+void FillProcessingVisitor::visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
 {
-    Q_ASSERT(!m_seedPoints.isEmpty());
+    // we fill only the coloring project so the user can work
+    // with the mask like with a usual paint layer
+    if (!m_progressHelper) {
+        m_progressHelper.reset(new ProgressHelper(mask));
+    }
+    fillPaintDevice(mask->coloringProjection(), undoAdapter);
+}
+
+void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter)
+{
+    KIS_ASSERT(!m_seedPoints.isEmpty());
 
     QRect fillRect = m_resources->image()->bounds();
+
+    KUndo2Command *autoKeyframeCommand = KisAutoKey::tryAutoCreateDuplicatedFrame(device);
+    if (autoKeyframeCommand) {
+        undoAdapter->addCommand(autoKeyframeCommand);
+    }
 
     if (m_selectionOnly) {
         if (device->defaultBounds()->wrapAroundMode()) {
             // Always fill if wrap around mode is on
-            selectionFill(device, fillRect, undoAdapter, helper);
+            selectionFill(device, fillRect, undoAdapter);
         } else {
             // Otherwise fill only if any of the points is inside the rect
             for (const QPoint &seedPoint : m_seedPoints) {
                 if (fillRect.contains(seedPoint)) {
-                    selectionFill(device, fillRect, undoAdapter, helper);
+                    selectionFill(device, fillRect, undoAdapter);
                     break;
                 }
             }
@@ -70,32 +98,23 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
     } else {
         for (QPoint seedPoint : m_seedPoints) {
             if (device->defaultBounds()->wrapAroundMode()) {
-                seedPoint = KisWrappedRect::ptToWrappedPt(seedPoint, device->defaultBounds()->imageBorderRect());
+                seedPoint = KisWrappedRect::ptToWrappedPt(seedPoint, device->defaultBounds()->imageBorderRect(), device->defaultBounds()->wrapAroundModeAxis());
             }
 
             if (m_continuousFillMode == ContinuousFillMode_DoNotUse) {
-                normalFill(device, fillRect, seedPoint, undoAdapter, helper);
+                normalFill(device, fillRect, seedPoint, undoAdapter);
             } else {
-                continuousFill(device, fillRect, seedPoint, undoAdapter, helper);
+                continuousFill(device, fillRect, seedPoint, undoAdapter);
             }
         }
     }
 }
 
-void FillProcessingVisitor::visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)
-{
-    // we fill only the coloring project so the user can work
-    // with the mask like with a usual paint layer
-    ProgressHelper helper(mask);
-    fillPaintDevice(mask->coloringProjection(), undoAdapter, helper);
-}
-
-
-void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter, ProgressHelper &helper)
+void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter)
 {
     KisPaintDeviceSP filledDevice = device->createCompositionSourceDevice();
     KisFillPainter fillPainter(filledDevice);
-    fillPainter.setProgress(helper.updater());
+    fillPainter.setProgress(m_progressHelper->updater());
 
     if (m_usePattern) {
         fillPainter.fillRectNoCompose(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
@@ -116,6 +135,11 @@ void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &
 
     m_resources->setupPainter(&painter);
 
+    if (m_useCustomBlendingOptions) {
+        painter.setOpacity(m_customOpacity);
+        painter.setCompositeOpId(m_customCompositeOp);
+    }
+
     Q_FOREACH (const QRect &rc, dirtyRect) {
         painter.bitBlt(rc.topLeft(), filledDevice, rc);
     }
@@ -123,7 +147,7 @@ void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &
     painter.endTransaction(undoAdapter);
 }
 
-void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper)
+void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter)
 {
     KisFillPainter fillPainter(device, m_selection);
     fillPainter.beginTransaction();
@@ -133,17 +157,26 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     if (m_useBgColor) {
         fillPainter.setPaintColor(fillPainter.backgroundColor());
     }
-    fillPainter.setProgress(helper.updater());
+    fillPainter.setProgress(m_progressHelper->updater());
     fillPainter.setAntiAlias(m_antiAlias);
     fillPainter.setSizemod(m_sizemod);
+    fillPainter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     fillPainter.setFeather(m_feather);
     fillPainter.setFillThreshold(m_fillThreshold);
     fillPainter.setOpacitySpread(m_opacitySpread);
+    fillPainter.setRegionFillingMode(m_regionFillingMode);
+    if (m_regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+        fillPainter.setRegionFillingBoundaryColor(m_regionFillingBoundaryColor);
+    }
     fillPainter.setCareForSelection(true);
     fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     fillPainter.setWidth(fillRect.width());
     fillPainter.setHeight(fillRect.height());
-    fillPainter.setUseCompositioning(!m_useFastMode);
+    fillPainter.setUseCompositing(!m_useFastMode);
+    if (m_useCustomBlendingOptions) {
+        fillPainter.setOpacity(m_customOpacity);
+        fillPainter.setCompositeOpId(m_customCompositeOp);
+    }
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_refPaintDevice;
 
@@ -156,14 +189,15 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.endTransaction(undoAdapter);
 }
 
-void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper)
+void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter)
 {
     // In continuous filling we use a selection mask that represents the
     // cumulated regions already filled. Being able to discard filling
     // operations based on if they were already filled the area under
     // the cursor speeds up greatly the continuous fill operation
 
-    Q_ASSERT(m_continuousFillMask);
+    KIS_ASSERT(m_continuousFillMask);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(m_continuousFillReferenceColor);
 
     // The following checks are useful in the continuous fill.
     if (m_useSelectionAsBoundary && m_selection) {
@@ -194,7 +228,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
     if (m_continuousFillMode == ContinuousFillMode_FillSimilarRegions) {
         // If the color in the reference device under the start point
         // differs from the reference color we return early and don't fill
-        const KoColor referenceColor = m_continuousFillReferenceColor.convertedTo(m_refPaintDevice->colorSpace());
+        const KoColor referenceColor = m_continuousFillReferenceColor->convertedTo(m_refPaintDevice->colorSpace());
         const KoColor referenceDeviceColor = m_refPaintDevice->pixel(seedPoint);
         if (referenceColor != referenceDeviceColor) {
             return;
@@ -207,24 +241,30 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
     {
         KisFillPainter painter;
 
-        painter.setProgress(helper.updater());
+        painter.setProgress(m_progressHelper->updater());
         painter.setSizemod(m_sizemod);
+        painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
         painter.setAntiAlias(m_antiAlias);
         painter.setFeather(m_feather);
         painter.setFillThreshold(m_fillThreshold);
         painter.setOpacitySpread(m_opacitySpread);
+        painter.setRegionFillingMode(m_regionFillingMode);
+        if (m_regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+            painter.setRegionFillingBoundaryColor(m_regionFillingBoundaryColor);
+        }
         painter.setCareForSelection(true);
         painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         painter.setWidth(fillRect.width());
         painter.setHeight(fillRect.height());
-        painter.setUseCompositioning(!m_useFastMode);
+        painter.setUseCompositing(!m_useFastMode);
 
         KisPixelSelectionSP pixelSelection = painter.createFloodSelection(seedPoint.x(),
                                                                           seedPoint.y(),
                                                                           sourceDevice,
                                                                           m_selection.isNull() ? 0 : m_selection->pixelSelection());
 
-        newFillSelection = new KisSelection(pixelSelection->defaultBounds());
+        newFillSelection = new KisSelection(pixelSelection->defaultBounds(),
+                                            m_selection ? m_selection->resolutionProxy() : KisImageResolutionProxy::identity());
         newFillSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     }
     // Now we actually fill the destination device
@@ -236,7 +276,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
     {
         KisSelectionSP trimmedFillSelection;
         if (m_selection) {
-            trimmedFillSelection = new KisSelection(newFillSelection->pixelSelection()->defaultBounds());
+            trimmedFillSelection = new KisSelection(newFillSelection->pixelSelection()->defaultBounds(), newFillSelection->resolutionProxy());
             trimmedFillSelection->pixelSelection()->applySelection(newFillSelection->pixelSelection(), SELECTION_REPLACE);
             trimmedFillSelection->pixelSelection()->applySelection(m_selection->projection(), SELECTION_INTERSECT);
         } else {
@@ -244,7 +284,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
         }
         KisSelectionSP tmpSelection = m_selection;
         m_selection = trimmedFillSelection;
-        selectionFill(device, fillRect, undoAdapter, helper);
+        selectionFill(device, fillRect, undoAdapter);
         m_selection = tmpSelection;
     }
     // Now we update the continuous fill mask with the new mask
@@ -299,6 +339,11 @@ void FillProcessingVisitor::setSizeMod(int sizemod)
     m_sizemod = sizemod;
 }
 
+void FillProcessingVisitor::setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel)
+{
+    m_stopGrowingAtDarkestPixel = stopGrowingAtDarkestPixel;
+}
+
 void FillProcessingVisitor::setFillThreshold(int fillThreshold)
 {
     m_fillThreshold = fillThreshold;
@@ -307,6 +352,16 @@ void FillProcessingVisitor::setFillThreshold(int fillThreshold)
 void FillProcessingVisitor::setOpacitySpread(int opacitySpread)
 {
     m_opacitySpread = opacitySpread;
+}
+
+void FillProcessingVisitor::setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode)
+{
+    m_regionFillingMode = regionFillingMode;
+}
+
+void FillProcessingVisitor::setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor)
+{
+    m_regionFillingBoundaryColor = regionFillingBoundaryColor;
 }
 
 void FillProcessingVisitor::setContinuousFillMode(ContinuousFillMode continuousFillMode)
@@ -319,7 +374,7 @@ void FillProcessingVisitor::setContinuousFillMask(KisSelectionSP continuousFillM
     m_continuousFillMask = continuousFillMask;
 }
 
-void FillProcessingVisitor::setContinuousFillReferenceColor(const KoColor &continuousFillReferenceColor)
+void FillProcessingVisitor::setContinuousFillReferenceColor(const QSharedPointer<KoColor> continuousFillReferenceColor)
 {
     m_continuousFillReferenceColor = continuousFillReferenceColor;
 }
@@ -332,4 +387,24 @@ void FillProcessingVisitor::setUnmerged(bool unmerged)
 void FillProcessingVisitor::setUseBgColor(bool useBgColor)
 {
     m_useBgColor = useBgColor;
+}
+
+void FillProcessingVisitor::setUseCustomBlendingOptions(bool useCustomBlendingOptions)
+{
+    m_useCustomBlendingOptions = useCustomBlendingOptions;
+}
+
+void FillProcessingVisitor::setCustomOpacity(int customOpacity)
+{
+    m_customOpacity = customOpacity;
+}
+
+void FillProcessingVisitor::setCustomCompositeOp(const QString &customCompositeOp)
+{
+    m_customCompositeOp = customCompositeOp;
+}
+
+void FillProcessingVisitor::setProgressHelper(QSharedPointer<ProgressHelper> progressHelper)
+{
+    m_progressHelper = progressHelper;
 }

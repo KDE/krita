@@ -27,7 +27,7 @@ public Q_SLOTS:
     void setCurrentBrushPreset(Resource *resource);
 
     Resource *currentPattern() const /Factory/;
-    void setCurrentPattern(Resource *resournce);
+    void setCurrentPattern(Resource *resource);
 
     Resource *currentGradient() const /Factory/;
     void setCurrentGradient(Resource *resource);
@@ -46,6 +46,9 @@ public Q_SLOTS:
 
     qreal brushSize() const;
     void setBrushSize(qreal brushSize);
+
+    qreal brushRotation() const;
+    void setBrushRotation(qreal brushRotation);
 
     qreal paintingFlow() const;
     void setPaintingFlow(qreal flow);

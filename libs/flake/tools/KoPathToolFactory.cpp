@@ -35,19 +35,19 @@ QList<QAction *> KoPathToolFactory::createActionsImpl()
 {
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions;
-    actions << actionRegistry->makeQAction("pathpoint-corner");
-    actions << actionRegistry->makeQAction("pathpoint-smooth");
-    actions << actionRegistry->makeQAction("pathpoint-symmetric");
-    actions << actionRegistry->makeQAction("pathpoint-curve");
-    actions << actionRegistry->makeQAction("pathpoint-line");
-    actions << actionRegistry->makeQAction("pathsegment-line");
-    actions << actionRegistry->makeQAction("pathsegment-curve");
-    actions << actionRegistry->makeQAction("pathpoint-insert");
-    actions << actionRegistry->makeQAction("pathpoint-remove");
-    actions << actionRegistry->makeQAction("path-break-point");
-    actions << actionRegistry->makeQAction("path-break-segment");
-    actions << actionRegistry->makeQAction("pathpoint-join");
-    actions << actionRegistry->makeQAction("pathpoint-merge");
-    actions << actionRegistry->makeQAction("convert-to-path");
+    actions << actionRegistry->makeQAction("pathpoint-corner", this);
+    actions << actionRegistry->makeQAction("pathpoint-smooth", this);
+    actions << actionRegistry->makeQAction("pathpoint-symmetric", this);
+    actions << actionRegistry->makeQAction("pathpoint-curve", this);
+    actions << actionRegistry->makeQAction("pathpoint-line", this);
+    actions << actionRegistry->makeQAction("pathsegment-line", this);
+    actions << actionRegistry->makeQAction("pathsegment-curve", this);
+    actions << actionRegistry->makeQAction("pathpoint-insert", this);
+    actions << actionRegistry->makeQAction("pathpoint-remove", this);
+    actions << actionRegistry->makeQAction("path-break-point", this);
+    actions << actionRegistry->makeQAction("path-break-segment", this);
+    actions << actionRegistry->makeQAction("pathpoint-join", this);
+    actions << actionRegistry->makeQAction("pathpoint-merge", this);
+    actions << actionRegistry->makeQAction("convert-to-path", this);
     return actions;
 }

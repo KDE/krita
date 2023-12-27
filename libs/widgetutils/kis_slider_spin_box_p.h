@@ -265,16 +265,16 @@ public:
     }
 
     template <typename U = SpinBoxTypeTP, typename = typename std::enable_if<std::is_same<ValueType, double>::value, U>::type>
-    void setRange(double newMinimum, double newMaximum, int newNumberOfecimals, bool computeNewFastSliderStep)
+    void setRange(double newMinimum, double newMaximum, int newNumberOfDecimals, bool computeNewFastSliderStep)
     {
-        m_q->setDecimals(newNumberOfecimals);
+        m_q->setDecimals(newNumberOfDecimals);
         m_q->BaseSpinBoxType::setRange(newMinimum, newMaximum);
         if (computeNewFastSliderStep) {
-            // Behavior takem from the old slider. Kind of arbitrary
+            // Behavior taken from the old slider. Kind of arbitrary
             const double rangeSize = m_q->maximum() - m_q->minimum();
-            if (rangeSize >= 2.0 || newNumberOfecimals <= 0) {
+            if (rangeSize >= 2.0 || newNumberOfDecimals <= 0) {
                 m_fastSliderStep = 1.0;
-            } else if (newNumberOfecimals == 1) {
+            } else if (newNumberOfDecimals == 1) {
                 m_fastSliderStep = rangeSize / 10.0;
             } else {
                 m_fastSliderStep = rangeSize / 20.0;
@@ -291,7 +291,7 @@ public:
         m_blockUpdateSignalOnDrag = newBlockUpdateSignalOnDrag;
     }
 
-    void setFastSliderStep(int newFastSliderStep)
+    void setFastSliderStep(ValueType newFastSliderStep)
     {
         m_fastSliderStep = newFastSliderStep;
     }
@@ -731,8 +731,7 @@ public:
                 m_lastMousePressPosition = e->pos();
                 const QPoint currentValuePosition = pointForValue(m_q->value());
                 m_relativeDraggingOffset = currentValuePosition.x() - e->x();
-                m_useRelativeDragging = (e->modifiers() & Qt::ShiftModifier)
-                                        || qAbs(m_relativeDraggingOffset) <= relativeDraggingMargin;
+                m_useRelativeDragging = (e->modifiers() & Qt::ShiftModifier);
                 m_timerStartEditing.start(qApp->styleHints()->mousePressAndHoldInterval());
             }
             return true;
@@ -844,7 +843,7 @@ public:
         return true;
     }
 
-    bool widgetRangeToggletMouseReleaseEvent(QMouseEvent *e)
+    bool widgetRangeToggleMouseReleaseEvent(QMouseEvent *e)
     {
         if (!m_q->isEnabled()) {
             return false;
@@ -911,7 +910,7 @@ public:
         } else if (o == m_widgetRangeToggle) {
             switch (e->type()) {
                 case QEvent::Paint : return widgetRangeTogglePaintEvent(static_cast<QPaintEvent*>(e));
-                case QEvent::MouseButtonRelease: return widgetRangeToggletMouseReleaseEvent(static_cast<QMouseEvent*>(e));
+                case QEvent::MouseButtonRelease: return widgetRangeToggleMouseReleaseEvent(static_cast<QMouseEvent*>(e));
                 case QEvent::Enter: return widgetRangeToggleEnterEvent(e);
                 case QEvent::Leave: return widgetRangeToggleLeaveEvent(e);
                 default: break;
@@ -927,9 +926,6 @@ private:
     // Margin around the spinbox for which the dragging gives same results,
     // regardless of the vertical distance
     static constexpr double constantDraggingMargin{32.0};
-    // Margin around the current value that marks if the dragging should be
-    // relative to the current value (inside the margin) or absolute (outside)
-    static constexpr int relativeDraggingMargin{15};
     // Height of the collapsed slider bar
     static constexpr double heightOfCollapsedSlider{3.0};
     // Height of the space between the soft and hard range sliders

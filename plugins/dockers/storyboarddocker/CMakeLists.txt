@@ -1,11 +1,8 @@
-if(NOT MSVC AND NOT APPLE)
 add_subdirectory(tests)
-endif()
 
 set(KRITA_STORYBOARDDOCKER_SOURCES
     CommentModel.cpp
     StoryboardUtils.cpp
-    StoryboardDocker.cpp
     StoryboardDockerDock.cpp
     CommentDelegate.cpp
     StoryboardModel.cpp
@@ -17,30 +14,19 @@ set(KRITA_STORYBOARDDOCKER_SOURCES
     KisAddRemoveStoryboardCommand.cpp
     )
 
-set(KRITA_STORYBOARDDOCKER_PART_HEADERS
-    CommentModel.h
-    StoryboardUtils.h
-    StoryboardDocker.h
-    StoryboardDockerDock.h
-    CommentDelegate.h
-    StoryboardModel.h
-    StoryboardDelegate.h
-    StoryboardView.h
-    KisAsyncStoryboardThumbnailRenderer.h
-    KisStoryboardThumbnailRenderScheduler.h
-    DlgExportStoryboard.h
-    KisAddRemoveStoryboardCommand.h
-)
-
 ki18n_wrap_ui(KRITA_STORYBOARDDOCKER_SOURCES
     wdgstoryboarddock.ui wdgarrangemenu.ui wdgcommentmenu.ui wdgexportstoryboard.ui
 )
 
-kis_add_library(kritastoryboarddocker MODULE ${KRITA_STORYBOARDDOCKER_SOURCES}
-                                         ${KRITA_STORYBOARDDOCKER_PART_HEADERS}
+kis_add_library(kritastoryboarddocker_static STATIC ${KRITA_STORYBOARDDOCKER_SOURCES}
 )
 
-generate_export_header(kritastoryboarddocker BASE_NAME kritastoryboarddocker)
+generate_export_header(kritastoryboarddocker_static BASE_NAME kritastoryboarddocker)
 
-target_link_libraries(kritastoryboarddocker kritaui)
+target_link_libraries(kritastoryboarddocker_static kritaui)
+
+kis_add_library(kritastoryboarddocker MODULE StoryboardDocker.cpp)
+
+target_link_libraries(kritastoryboarddocker kritastoryboarddocker_static)
+
 install(TARGETS kritastoryboarddocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

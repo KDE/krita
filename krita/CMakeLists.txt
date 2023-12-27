@@ -1,8 +1,3 @@
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-    ${Vc_INCLUDE_DIR}
-)
-
 add_subdirectory( dtd )
 add_subdirectory( data )
 add_subdirectory( integration )
@@ -88,6 +83,7 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/plugins/paintops/defaultpresets/defaultpresets.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/branding/${BRANDING}/branding.qrc
     ${CMAKE_SOURCE_DIR}/krita/data/splash/splash.qrc
+    ${CMAKE_SOURCE_DIR}/krita/banner/banner.qrc
     CACHE INTERNAL "krita_QRCS"
 )
 
@@ -144,6 +140,11 @@ if (NOT ANDROID)
 
 
   install(TARGETS krita_version ${INSTALL_TARGETS_DEFAULT_ARGS})
+
+  if(APPLE)
+      set_target_properties(krita_version PROPERTIES INSTALL_RPATH "@loader_path/../Frameworks;@executable_path/../lib;@executable_path/../Frameworks")
+      set_property(TARGET krita_version PROPERTY MACOSX_BUNDLE OFF)
+  endif ()
 endif()
 
 
@@ -157,14 +158,19 @@ install(DIRECTORY DESTINATION ${DATA_INSTALL_DIR}/krita/shortcuts)
 if (WIN32)
     configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
     configure_file(krita.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest)
-    # CMake does not know how to embed manifest on mingw, so we create our own RC file to be included
-    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc "1 24 \"krita.exe.manifest\"\n")
-
+    if (MINGW)
+        # CMake does not know how to embed manifest on mingw, so we create our own RC file to be included
+        file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc "1 24 \"krita.exe.manifest\"\n")
+        set(KRITA_MANIFEST_SRC ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc)
+    else()
+        set(KRITA_MANIFEST_SRC
+            ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest)
+    endif()
     add_executable(krita_windows_stub_exe
         windows_stub_main.cpp
         ${krita_windows_stub_ICONS_SRCS}
         ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
-        ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc
+        ${KRITA_MANIFEST_SRC}
     )
     target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt5::WinMain)
     set_target_properties(krita_windows_stub_exe
@@ -179,7 +185,7 @@ if (WIN32)
     add_executable(krita_windows_stub_com
         windows_stub_main.cpp
         ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
-        ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc
+        ${KRITA_MANIFEST_SRC}
     )
     target_link_libraries(krita_windows_stub_com PRIVATE krita)
     set_target_properties(krita_windows_stub_com
@@ -190,6 +196,9 @@ if (WIN32)
     )
     if (MSVC)
         target_link_options(krita_windows_stub_com PRIVATE "/DEBUG:NONE")
+        # If MSVC uses incremental linking, it will race the database
+        # for krita.exe with the one for krita.com.
+        add_dependencies(krita_windows_stub_com krita_windows_stub_exe)
     endif()
     install(TARGETS krita_windows_stub_com ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif (WIN32)

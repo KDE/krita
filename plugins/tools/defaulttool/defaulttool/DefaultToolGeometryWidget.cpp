@@ -22,6 +22,7 @@
 #include <commands/KoShapeTransformCommand.h>
 #include <commands/KoShapeKeepAspectRatioCommand.h>
 #include <commands/KoShapeTransparencyCommand.h>
+#include <commands/KoShapePaintOrderCommand.h>
 #include "SelectionDecorator.h"
 #include <KoShapeGroup.h>
 
@@ -42,6 +43,7 @@
 #include "kis_acyclic_signal_connector.h"
 #include "kis_signal_compressor.h"
 #include "kis_signals_blocker.h"
+#include "kis_icon.h"
 
 
 DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QWidget *parent)
@@ -52,7 +54,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 {
     setupUi(this);
 
-    setUnit(m_tool->canvas()->unit());
+    setUnit(KoUnit(KoUnit::Point));
 
     // Connect and initialize automated aspect locker
     m_sizeAspectLocker->connectSpinBoxes(widthSpinBox, heightSpinBox, aspectButton);
@@ -77,7 +79,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 
 
     /**
-     * A huge block of self-blocking acycled connections
+     * A huge block of self-blocking acyclic connections
      */
     KisAcyclicSignalConnector *acyclicConnector = new KisAcyclicSignalConnector(this);
     acyclicConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(aspectButtonChanged()), this, SLOT(slotAspectButtonToggled()));
@@ -103,11 +105,21 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
     // Connect anchor point selector
     connect(positionSelector, SIGNAL(valueChanged(KoFlake::AnchorPosition)), SLOT(slotAnchorPointChanged()));
 
+    cmbPaintOrder->setIconSize(QSize(22, 22));
+    cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-fill-stroke-marker"), i18n("Fill, Stroke, Markers"));
+    cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-fill-marker-stroke"), i18n("Fill, Markers, Stroke"));
+    cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-stroke-fill-marker"), i18n("Stroke, Fill, Markers"));
+    cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-stroke-marker-fill"), i18n("Stroke, Markers, Fill"));
+    cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-marker-fill-stroke"), i18n("Markers, Fill, Stroke"));
+    cmbPaintOrder->addItem(KisIconUtils::loadIcon("paint-order-marker-stroke-fill"), i18n("Markers, Stroke, Fill"));
+    connect(cmbPaintOrder, SIGNAL(currentIndexChanged(int)), SLOT(slotPaintOrderChanged()));
+
 
     dblOpacity->setRange(0.0, 1.0, 2);
     dblOpacity->setSingleStep(0.01);
     dblOpacity->setFastSliderStep(0.1);
-    dblOpacity->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
+    dblOpacity->setTextTemplates(i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}"),
+                                 i18nc("{n} is the number value, % is the percent sign", "Opacity [*varies*]: {n}"));
 
     dblOpacity->setValueGetter(
         [](KoShape *s) { return 1.0 - s->transparency(); }
@@ -160,7 +172,7 @@ QRectF calculateSelectionBounds(KoSelection *selection,
          * fetch their scale using the transform.
          */
 
-        KisAlgebra2D::DecomposedMatix matrix(shape->transformation());
+        KisAlgebra2D::DecomposedMatrix matrix(shape->transformation());
         resultRect = matrix.scaleTransform().mapRect(resultRect);
     }
 
@@ -294,6 +306,68 @@ void DefaultToolGeometryWidget::slotUpdateOpacitySlider()
     dblOpacity->setSelection(shapes);
 }
 
+void DefaultToolGeometryWidget::slotPaintOrderChanged()
+{
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+    if (shapes.isEmpty()) return;
+
+    KoShape::PaintOrder first = KoShape::Fill;
+    KoShape::PaintOrder second = KoShape::Stroke;
+
+    switch(cmbPaintOrder->currentIndex()) {
+    case 1:
+        first = KoShape::Fill;
+        second = KoShape::Markers;
+        break;
+    case 2:
+        first = KoShape::Stroke;
+        second = KoShape::Fill;
+        break;
+    case 3:
+        first = KoShape::Stroke;
+        second = KoShape::Markers;
+        break;
+    case 4:
+        first = KoShape::Markers;
+        second = KoShape::Fill;
+        break;
+    case 5:
+        first = KoShape::Markers;
+        second = KoShape::Stroke;
+        break;
+    default:
+        first = KoShape::Fill;
+        second = KoShape::Stroke;
+    }
+
+    KUndo2Command *cmd =
+        new KoShapePaintOrderCommand(shapes, first, second);
+
+    m_tool->canvas()->addCommand(cmd);
+}
+
+void DefaultToolGeometryWidget::slotUpdatePaintOrder() {
+    if (!isVisible()) return;
+
+    KoSelection *selection = m_tool->canvas()->selectedShapesProxy()->selection();
+    QList<KoShape*> shapes = selection->selectedEditableShapes();
+
+    if (!shapes.isEmpty()) {
+        KoShape *shape = shapes.first();
+        QVector<KoShape::PaintOrder> paintOrder = shape->paintOrder();
+        int index = 0;
+        if (paintOrder.first() == KoShape::Fill) {
+            index = paintOrder.at(1) == KoShape::Stroke? 0: 1;
+        } else if (paintOrder.first() == KoShape::Stroke) {
+            index = paintOrder.at(1) == KoShape::Fill? 2: 3;
+        } else {
+            index = paintOrder.at(1) == KoShape::Fill? 4: 5;
+        }
+        cmbPaintOrder->setCurrentIndex(index);
+    }
+}
+
 void DefaultToolGeometryWidget::slotUpdateSizeBoxes(bool updateAspect)
 {
     if (!isVisible()) return;
@@ -422,6 +496,11 @@ void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
     widthSpinBox->setUnit(unit);
     heightSpinBox->setUnit(unit);
 
+    positionXSpinBox->setDecimals(2);
+    positionYSpinBox->setDecimals(2);
+    widthSpinBox->setDecimals(2);
+    heightSpinBox->setDecimals(2);
+
     positionXSpinBox->setLineStep(1.0);
     positionYSpinBox->setLineStep(1.0);
     widthSpinBox->setLineStep(1.0);
@@ -446,6 +525,7 @@ void DefaultToolGeometryWidget::showEvent(QShowEvent *event)
     slotUpdateAspectButton();
     slotUpdateCheckboxes();
     slotAnchorPointChanged();
+    slotUpdatePaintOrder();
 }
 
 void DefaultToolGeometryWidget::resourceChanged(int key, const QVariant &res)

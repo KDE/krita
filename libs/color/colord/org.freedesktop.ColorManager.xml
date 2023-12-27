@@ -486,10 +486,10 @@
             <doc:para>
               This optional value allows the profile to be created with
               the latency of one bus round-trip, rather than doing
-              a few <doc:tt>SetProperty</doc:tt> methods indervidually.
+              a few <doc:tt>SetProperty</doc:tt> methods individually.
             </doc:para>
             <doc:para>
-              Any properties not interstood by colord will be added as
+              Any properties not understood by colord will be added as
               dictionary values to the <doc:tt>Metadata</doc:tt>
               property.
             </doc:para>
@@ -629,10 +629,10 @@
             <doc:para>
               This optional value allows the device to be created with
               the latency of one bus round-trip, rather than doing
-              a few <doc:tt>SetProperty</doc:tt> methods indervidually.
+              a few <doc:tt>SetProperty</doc:tt> methods individually.
             </doc:para>
             <doc:para>
-              Any properties not interstood by colord will be added as
+              Any properties not understood by colord will be added as
               dictionary values to the <doc:tt>Metadata</doc:tt>
               property.
             </doc:para>

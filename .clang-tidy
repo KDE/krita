@@ -1,0 +1,82 @@
+# SPDX-FileCopyrightText: 2020-2022 Rachel Mant <git@dragonmux.network>
+# SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
+# SPDX-License-Ref: BSD-3-Clause
+
+---
+Checks:              '
+    bugprone-*
+    ,cert-*
+    ,cppcoreguidelines-*
+    ,modernize-*
+    ,performance-*
+    ,readability-*
+    ,portability-*
+    ,clang-analyzer-unix
+    ,clang-analyzer-security
+    ,clang-analyzer-deadcode
+    ,clang-analyzer-core
+    ,clang-analyzer-cplusplus
+    ,clang-analyzer-optin
+    ,llvm-namespace-comment
+    ,readability-static-accessed-through-instance
+    ,misc-const-correctness
+    ,-modernize-use-trailing-return-type
+    ,-cppcoreguidelines-avoid-magic-numbers
+    ,-readability-redundant-member-init
+    ,-readability-else-after-return
+    ,-readability-implicit-bool-conversion
+    ,-cppcoreguidelines-owning-memory
+    ,-cppcoreguidelines-pro-bounds-pointer-arithmetic
+    ,-cppcoreguidelines-pro-type-vararg
+    ,-readability-named-parameter
+    ,-readability-magic-numbers
+    ,-readability-uppercase-literal-suffix
+    ,-bugprone-easily-swappable-parameters
+'
+WarningsAsErrors: ''
+FormatStyle: 'file'
+AnalyzeTemporaryDtors: false
+CheckOptions:
+  - key:             cert-dcl16-c.NewSuffixes
+    value:           'L;LL;LU;LLU'
+  - key:             cert-oop54-cpp.WarnOnlyIfThisHasSuspiciousField
+    value:           '0'
+  - key:             cppcoreguidelines-explicit-virtual-functions.IgnoreDestructors
+    value:           '0'
+  - key:             cppcoreguidelines-special-member-functions.AllowMissingMoveFunctionsWhenCopyIsDeleted
+    value:           true
+  - key:             cppcoreguidelines-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value:           '1'
+  - key:             modernize-loop-convert.MaxCopySize
+    value:           '16'
+  - key:             modernize-loop-convert.MinConfidence
+    value:           reasonable
+  - key:             modernize-loop-convert.NamingStyle
+    value:           camelBack
+  - key:             modernize-pass-by-value.IncludeStyle
+    value:           llvm
+  - key:             modernize-replace-auto-ptr.IncludeStyle
+    value:           llvm
+  - key:             modernize-use-nullptr.NullMacros
+    value:           'NULL'
+  - key:             readability-braces-around-statements.ShortStatementLines
+    value:           '4'
+  - key:             cppcoreguidelines-owning-memory.LegacyResourceConsumers
+    value:           '::free;::realloc;::freopen;::fclose;::toQShared;::QSharedPointer::QSharedPointer;::QSharedPointer::reset;::QScopedPointer::QScopedPointer;::QScopedPointer::reset'
+  - key:             performance-unnecessary-value-param.AllowedTypes
+    value:           '.+SP;QWeakPointer;QSharedPointer'
+  - key:             modernize-use-auto.MinTypeNameLength
+    value:           10
+  - key:             readability-identifier-length.IgnoredVariableNames
+    value:           '^(gc|rc|p[0-9]|i[dot]|ok|[abcdijknopt]|c[rs]|fp|tf)$'
+  - key:             readability-identifier-length.IgnoredParameterNames
+    value:           '^(c[rs]|i[dot]|v)$'
+  - key:             readability-identifier-length.IgnoredLoopCounterNames
+    value:           '^[cijktuvxyz_]$'
+  - key:             modernize-use-transparent-functors.SafeMode
+    value:           true
+  - key:             misc-const-correctness.WarnPointersAsValues
+    value:           true
+  - key:             misc-const-correctness.TransformPointersAsValues
+    value:           true
+...

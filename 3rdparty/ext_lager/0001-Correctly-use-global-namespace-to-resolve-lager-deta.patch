@@ -1,0 +1,26 @@
+From eb883332d8e3f6d7f42a0c68e81047d4fa84d8dd Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 23 Apr 2023 21:41:01 -0300
+Subject: [PATCH 1/2] Correctly use global namespace to resolve
+ lager::detail::make_getset_t
+
+---
+ lager/lenses.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lager/lenses.hpp b/lager/lenses.hpp
+index 7100103..f19a9b8 100644
+--- a/lager/lenses.hpp
++++ b/lager/lenses.hpp
+@@ -249,7 +249,7 @@ template <typename Getter, typename Setter>
+ auto getset(const Getter& getter, const Setter& setter)
+ {
+     return zug::comp([=](auto&& f) {
+-        return detail::make_getset_t(LAGER_FWD(f), getter, setter);
++        return ::lager::detail::make_getset_t(LAGER_FWD(f), getter, setter);
+     });
+ }
+ 
+-- 
+2.37.1.windows.1
+

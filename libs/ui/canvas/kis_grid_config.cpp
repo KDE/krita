@@ -11,14 +11,11 @@
 #include "kis_config.h"
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
+#include <KisStaticInitializer.h>
 
-
-struct KisGridConfigStaticRegistrar {
-    KisGridConfigStaticRegistrar() {
-        qRegisterMetaType<KisGridConfig>("KisGridConfig");
-    }
-};
-static KisGridConfigStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisGridConfig>("KisGridConfig");
+}
 
 Q_GLOBAL_STATIC(KisGridConfig, staticDefaultObject)
 
@@ -32,9 +29,7 @@ void KisGridConfig::transform(const QTransform &transform)
 {
     if (transform.type() >= QTransform::TxShear) return;
 
-    KisAlgebra2D::DecomposedMatix m(transform);
-
-
+    KisAlgebra2D::DecomposedMatrix m(transform);
 
     if (m_gridType == GRID_RECTANGULAR) {
         QTransform t = m.scaleTransform();
@@ -64,6 +59,8 @@ void KisGridConfig::loadStaticData()
 
     m_colorMain = cfg.getGridMainColor();
     m_colorSubdivision = cfg.getGridSubdivisionColor();
+
+    m_spacing = cfg.getDefaultGridSpacing();
 }
 
 void KisGridConfig::saveStaticData() const

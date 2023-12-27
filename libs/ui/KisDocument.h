@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QTransform>
 #include <QList>
+#include <QFileInfo>
 
 #include <klocalizedstring.h>
 
@@ -57,11 +58,8 @@ class KisReferenceImagesLayer;
 #define KIS_MIME_TYPE "application/x-krita"
 
 /**
- *  The %Calligra document class
- *
- *  This class provides some functionality each %Calligra document should have.
- *
- *  @short The %Calligra document class
+ *  KisDocument contains the image and keeps track of loading,
+ *  modification, undo stack and saving.
  */
 class KRITAUI_EXPORT KisDocument : public QObject
 {
@@ -117,7 +115,7 @@ public:
      * @brief creates a clone of the document and returns it. Please make sure that you
      * hold all the necessary locks on the image before asking for a clone!
      */
-    KisDocument* clone(bool addStorage = false);
+    KisDocument *clone(bool addStorage = false);
 
     /**
      * @brief openPath Open a Path
@@ -237,13 +235,6 @@ public:
     QPixmap generatePreview(const QSize& size);
 
     /**
-     *  Tells the document that its title has been modified, either because
-     *  the modified status changes (this is done by setModified() ) or
-     *  because the Path or the document-info's title changed.
-     */
-    void setTitleModified();
-
-    /**
      *  @brief Sets the document to empty.
      *
      *  Used after loading a template
@@ -262,7 +253,7 @@ public:
     QDomDocument createDomDocument(const QString& tagName, const QString& version) const;
 
     /**
-     *  Return a correctly created QDomDocument for an old (1.3-style) %Calligra document,
+     *  Return a correctly created QDomDocument for an old (1.3-style) Krita document,
      *  including processing instruction, complete DOCTYPE tag (with systemId and publicId), and root element.
      *  This static method can be used e.g. by filters.
      *  @param appName the app's instance name, e.g. words, kspread, kpresenter etc.
@@ -323,7 +314,6 @@ public:
 
     /**
      * Sets the document Path to empty Path
-     * KParts doesn't allow this, but %Calligra apps have e.g. templates
      * After using loadNativeFormat on a template, one wants
      * to set the path to QString()
      */
@@ -376,8 +366,8 @@ public:
 
     /**
      * @brief setPaletteList replaces the palettes in the document's local resource storage with the list
-     * of palettes passed to this function. It will then emitsigPaletteListChanged with both the old and
-     * the new list, if emitsignal is true.
+     * of palettes passed to this function. It will then emit sigPaletteListChanged with both the old and
+     * the new list, if emitSignal is true.
      */
     void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
@@ -400,6 +390,12 @@ public:
      * @brief sets the  list of comments for the storyboard docker in the document, emits empty signal if emitSignal is true.
      */
     void setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal = false);
+
+    QVector<QFileInfo> getAudioTracks() const;
+    void setAudioTracks(QVector<QFileInfo> f);
+
+    void setAudioVolume(qreal level);
+    qreal getAudioLevel();
 
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
@@ -430,7 +426,7 @@ public:
     KisImportExportManager *importExportManager() const;
 
     /**
-     * @brief serializeToNativeByteArray daves the document into a .kra file wtitten
+     * @brief serializeToNativeByteArray daves the document into a .kra file written
      * to a memory-based byte-array
      * @return a byte array containing the .kra file
      */
@@ -442,25 +438,6 @@ public:
      * @return true if there is some saving in action
      */
     bool isInSaving() const;
-
-public Q_SLOTS:
-
-    /**
-     * Adds a command to the undo stack and executes it by calling the redo() function.
-     * @param command command to add to the undo stack
-     */
-    void addCommand(KUndo2Command *command);
-
-    /**
-     * Begins recording of a macro command. At the end endMacro needs to be called.
-     * @param text command description
-     */
-    void beginMacro(const KUndo2MagicString &text);
-
-    /**
-     * Ends the recording of a macro command.
-     */
-    void endMacro();
 
 Q_SIGNALS:
 
@@ -488,7 +465,9 @@ Q_SIGNALS:
     */
     void modified(bool);
 
-    void titleModified(const QString &caption, bool isModified);
+    void sigReadWriteChanged(bool value);
+    void sigRecoveredChanged(bool value);
+    void sigPathChanged(const QString &path);
 
     void sigLoadingFinished();
 
@@ -520,6 +499,10 @@ Q_SIGNALS:
 
     void sigStoryboardCommentListChanged();
 
+    void sigAudioTracksChanged();
+
+    void sigAudioLevelChanged(qreal level);
+
 private Q_SLOTS:
     void finishExportInBackground();
     void slotChildCompletedSavingInBackground(KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
@@ -528,6 +511,7 @@ private Q_SLOTS:
     void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
+    void slotDocumentCloningCancelled();
 
     void slotPerformIdleRoutines();
 
@@ -596,7 +580,7 @@ public:
 
     bool closePath(bool promptToSave = true);
 
-    bool saveAs(const QString &path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
+    bool saveAs(const QString &path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     /**
      * Create a new image that has this document as a parent and
@@ -642,9 +626,9 @@ public:
      * The shape controller matches internal krita image layers with
      * the flake shape hierarchy.
      */
-    KoShapeControllerBase * shapeController() const;
+    KoShapeControllerBase *shapeController() const;
 
-    KoShapeLayer* shapeForNode(KisNodeSP layer) const;
+    KoShapeLayer *shapeForNode(KisNodeSP layer) const;
 
     /**
      * Set the list of nodes that was marked as currently active. Used *only*

@@ -7,8 +7,11 @@
 #include "KisRemoteFileFetcher.h"
 
 #include <QApplication>
+#include <QDebug>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QProgressDialog>
 
 #include <klocalizedstring.h>
@@ -30,12 +33,15 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
 {
     Q_ASSERT(!remote.isLocalFile());
 
-    {
+    if (remote.scheme() != "data") {
         QMessageBox msgBox;
         msgBox.setWindowTitle(i18nc("@title:window", "Krita"));
         msgBox.setIcon(QMessageBox::Question);
-        msgBox.setText(
-            i18nc("Fetching remote image", "Do you want to download the image at %1?").arg(remote.toDisplayString()));
+        msgBox.setText(i18nc("Fetching remote image",
+                             "Do you want to download the image from %1?\nClick \"Show Details\" to view the full link "
+                             "to the image.")
+                           .arg(remote.host()));
+        msgBox.setDetailedText(remote.toDisplayString());
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         msgBox.setDefaultButton(QMessageBox::No);
         const int res = msgBox.exec();
@@ -99,6 +105,31 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     io->close();
 
     return true;
+}
+
+QByteArray KisRemoteFileFetcher::fetchFile(const QUrl &remote)
+{
+    QByteArray ba;
+    QEventLoop loop;
+
+    QNetworkAccessManager manager(nullptr);
+    connect(&manager, &QNetworkAccessManager::finished, &loop, &QEventLoop::quit);
+
+    QNetworkRequest *request = new QNetworkRequest(remote);
+    request->setRawHeader("User-Agent", QString("Krita-%1").arg(qApp->applicationVersion()).toUtf8());
+
+    QNetworkReply *reply = manager.get(*request);
+
+    loop.exec();
+
+    if (reply->error() != QNetworkReply::NoError) {
+        ba = reply->readAll();
+    }
+
+    reply->setParent(nullptr);
+
+    return ba;
+
 }
 
 void KisRemoteFileFetcher::error(QNetworkReply::NetworkError error)

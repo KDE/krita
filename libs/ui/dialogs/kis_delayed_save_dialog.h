@@ -7,15 +7,14 @@
 #ifndef KIS_DELAYED_SAVE_DIALOG_H
 #define KIS_DELAYED_SAVE_DIALOG_H
 
-#include <QDialog>
 #include <QScopedPointer>
-#include "kis_types.h"
 
-namespace Ui {
-class KisDelayedSaveDialog;
-}
+#include <KoDialog.h>
+#include <kis_types.h>
 
-class KisDelayedSaveDialog : public QDialog
+class WdgDelayedSaveDialog;
+
+class KisDelayedSaveDialog : public KoDialog
 {
     Q_OBJECT
 
@@ -33,7 +32,7 @@ public:
     };
 
 public:
-    explicit KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent = 0);
+    explicit KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent = nullptr);
     ~KisDelayedSaveDialog() override;
 
     void blockIfImageIsBusy();
@@ -44,9 +43,7 @@ private Q_SLOTS:
     void slotIgnoreRequested();
 
 private:
-    Ui::KisDelayedSaveDialog *ui;
-
-private:
+    WdgDelayedSaveDialog *ui;
     struct Private;
     const QScopedPointer<Private> m_d;
 };

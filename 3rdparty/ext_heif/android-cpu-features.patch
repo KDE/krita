@@ -1,0 +1,10 @@
+--- a/CMakeLists.txt	2023-05-26 23:00:57.037430105 +1000
++++ b/CMakeLists.txt	2023-05-31 01:43:29.529977035 +1000
+@@ -212,6 +212,7 @@
+ 
+ if(CONFIG_RUNTIME_CPU_DETECT AND ANDROID_NDK)
+   include_directories(${ANDROID_NDK}/sources/android/cpufeatures)
++  list(APPEND AOM_SOURCES ${ANDROID_NDK}/sources/android/cpufeatures/cpu-features.c)
+ endif()
+ 
+ # Targets

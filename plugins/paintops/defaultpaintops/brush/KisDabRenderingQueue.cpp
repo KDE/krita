@@ -140,27 +140,17 @@ KisDabRenderingJobSP KisDabRenderingQueue::addDab(const KisDabCacheUtils::DabReq
 
     const int lastDabJobIndex = m_d->lastDabJobInQueue;
 
-    KisDabRenderingJobSP job(new KisDabRenderingJob());
+    KisDabRenderingJobSP job(new KisDabRenderingJob(seqNo, KisDabRenderingJob::Dab, opacity, flow));
 
     bool shouldUseCache = false;
-    m_d->cacheInterface->getDabType(lastDabJobIndex >= 0,
-                                    resources,
-                                    request,
-                                    &job->generationInfo,
-                                    &shouldUseCache);
+    m_d->cacheInterface->getDabType(lastDabJobIndex >= 0, resources, request, &job->generationInfo, &shouldUseCache);
 
     m_d->putResourcesToCache(resources);
-    resources = 0;
+    resources = nullptr;
 
-    // TODO: initialize via c-tor
-    job->seqNo = seqNo;
-    job->type =
-        !shouldUseCache ? KisDabRenderingJob::Dab :
-        job->generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess :
-        KisDabRenderingJob::Copy;
-    job->opacity = opacity;
-    job->flow = flow;
-
+    job->type = !shouldUseCache                   ? KisDabRenderingJob::Dab
+        : job->generationInfo.needsPostprocessing ? KisDabRenderingJob::Postprocess
+                                                  : KisDabRenderingJob::Copy;
 
     if (job->type == KisDabRenderingJob::Dab) {
         job->status = KisDabRenderingJob::Running;
@@ -212,9 +202,7 @@ QList<KisDabRenderingJobSP> KisDabRenderingQueue::notifyJobFinished(int seqNo, i
      */
     auto finishedJobIt =
         std::lower_bound(m_d->jobs.begin(), m_d->jobs.end(), seqNo,
-                         [] (KisDabRenderingJobSP job, int seqNo) {
-                             return job->seqNo < seqNo;
-                         });
+                         kismpl::mem_less(&KisDabRenderingJob::seqNo));
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(finishedJobIt != m_d->jobs.end(), dependentJobs);
     KisDabRenderingJobSP finishedJob = *finishedJobIt;
@@ -376,7 +364,7 @@ void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterfac
     m_d->cacheInterface.reset(interface);
 }
 
-KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
+KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevice()
 {
     /**
      * We create a special type of a fixed paint device that

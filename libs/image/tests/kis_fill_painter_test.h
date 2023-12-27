@@ -14,14 +14,14 @@ class KisFillPainterTest : public QObject
     Q_OBJECT
 
 private:
-    void benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning);
+    void benchmarkFillPainter(const QPoint &startPoint, bool useCompositing);
 
 private Q_SLOTS:
 
     void testCreation();
     void benchmarkFillPainter();
     void benchmarkFillPainterOffset();
-    void benchmarkFillPainterOffsetCompositioning();
+    void benchmarkFillPainterOffsetCompositing();
     void benchmarkFillingScanlineColor();
     void benchmarkFillingScanlineSelection();
 

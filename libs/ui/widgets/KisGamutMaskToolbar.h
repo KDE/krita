@@ -39,6 +39,8 @@ private Q_SLOTS:
     void slotGamutMaskRotate(qreal angle);
 
 private:
+    void updateMaskState(bool maskEnabled, bool internalChange);
+
     QScopedPointer<Ui_wdgGamutMaskToolbar> m_ui;
     KoGamutMaskSP m_selectedMask;
 

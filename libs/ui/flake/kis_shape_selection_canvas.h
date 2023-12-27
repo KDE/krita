@@ -38,11 +38,11 @@ public:
     KoSelectedShapesProxy *selectedShapesProxy() const override;
     void updateCanvas(const QRectF& rc) override;
     KoToolProxy * toolProxy() const override;
-    KoViewConverter *viewConverter() const override;
+    const KoViewConverter *viewConverter() const override;
+    KoViewConverter *viewConverter() override;
     QWidget* canvasWidget() override;
     const QWidget* canvasWidget() const override;
     KoUnit unit() const override;
-    void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 private:
     QScopedPointer<KoShapeManager> m_shapeManager;

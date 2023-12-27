@@ -58,6 +58,13 @@ public:
 
     virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
 
+    /**
+     * @brief tryCancelCurrentStrokeJobAsync is called by the strokes queue
+     * when the stroke is being cancelled. The stroke strategy may or may not
+     * handle this request and cancel the currently running long action.
+     */
+    virtual void tryCancelCurrentStrokeJobAsync();
+
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
 
@@ -89,6 +96,19 @@ public:
      * Default is 'false'.
      */
     bool canForgetAboutMe() const;
+
+    /**
+     * Returns true if the stroke can be cancelled by the
+     * engine, e.g. when the user presses Esc key or
+     * Ctrl+Z shortcut. Default value is true. The only
+     * exception right now are the strokes that perform
+     * undo/redo operations.
+     *
+     * The owner of the stroke can still cancel the stroke
+     * via the strokeId handle (though it is not used for
+     * undo/redo strokes).
+     */
+    bool isAsynchronouslyCancellable() const;
 
     bool needsExplicitCancel() const;
 
@@ -127,7 +147,7 @@ protected:
      *   * the added job is guaranteed to be executed in some time after
      *     the currently executed job, *before* the next SEQUENTIAL or
      *     BARRIER job
-     *   * if the currently executed job is CUNCURRENTthe mutated job *may*
+     *   * if the currently executed job is CONCURRENT, the mutated job *may*
      *     start execution right after adding to the queue without waiting for
      *     its parent to complete. Though this behavior is *not* guaranteed,
      *     because addMutatedJob does not initiate processQueues(), because
@@ -149,6 +169,7 @@ protected:
     void setClearsRedoOnStart(bool value);
     void setRequestsOtherStrokesToEnd(bool value);
     void setCanForgetAboutMe(bool value);
+    void setAsynchronouslyCancellable(bool value);
     void setNeedsExplicitCancel(bool value);
 
     /**
@@ -178,6 +199,7 @@ private:
     bool m_clearsRedoOnStart;
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
+    bool m_asynchronouslyCancellable;
     bool m_needsExplicitCancel;
     bool m_forceLodModeIfPossible;
     qreal m_balancingRatioOverride;

@@ -7,15 +7,14 @@
 #ifndef KISRESOURCEITEMLISTVIEW_H
 #define KISRESOURCEITEMLISTVIEW_H
 
-#include <QWidget>
 #include <QListView>
 #include <QScopedPointer>
 
 #include <KisKineticScroller.h>
 
-#include "KisIconToolTip.h"
-
 #include "kritaresourcewidgets_export.h"
+#include "ResourceListViewModes.h"
+
 
 class KRITARESOURCEWIDGETS_EXPORT KisResourceItemListView : public QListView
 {
@@ -25,6 +24,8 @@ public:
     KisResourceItemListView(QWidget *parent = nullptr);
     ~KisResourceItemListView() override;
 
+    void setListViewMode(ListViewMode layout);
+
     /**
      * @brief setItemSize
      * convenience function which sets both the icon and the grid size
@@ -32,11 +33,12 @@ public:
      * @param size - the size you wish either to be.
      */
     void setItemSize(QSize size);
+
     /**
      * @brief setStrictSelectionMode sets additional restrictions on the selection.
      *
      * When in QAbstractItemView::SingleSelection mode, this ensures that the
-     * selection never gets transfered to another item. Instead, the selection
+     * selection never gets transferred to another item. Instead, the selection
      * is cleared if the current item gets removed (filtered) from the model.
      * Furthermore, it prevents users from deselecting the current item with Ctrl+click.
      * This behavior is important for resource selectors.
@@ -68,6 +70,9 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 
     bool viewportEvent(QEvent *event) override;
+
+private:
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     struct Private;

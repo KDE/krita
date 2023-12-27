@@ -35,6 +35,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
+#include <kis_cursor_override_hijacker.h>
 
 // plugins's headers
 #include "kis_pdf_import_widget.h"
@@ -81,11 +82,15 @@ KisImportExportErrorCode KisPDFImport::convert(KisDocument *document, QIODevice 
 
     KisPDFImportWidget* wdg = new KisPDFImportWidget(pdoc, kdb);
     kdb->setMainWidget(wdg);
-    QApplication::restoreOverrideCursor();
-    if (kdb->exec() == QDialog::Rejected) {
-        delete pdoc;
-        delete kdb;
-        return ImportExportCodes::Cancelled;
+
+    {
+        KisCursorOverrideHijacker cursorHijacker;
+
+        if (kdb->exec() == QDialog::Rejected) {
+            delete pdoc;
+            delete kdb;
+            return ImportExportCodes::Cancelled;
+        }
     }
 
     // Create the krita image

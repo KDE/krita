@@ -86,15 +86,14 @@ void KisIptcIO::initMappingsTable() const
     }
 }
 
-bool KisIptcIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
+bool KisIptcIO::saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType) const
 {
     QStringList blockedEntries = QStringList() << "photoshop:DateCreated";
 
     initMappingsTable();
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::IptcData iptcData;
-    for (QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin(); it != store->end(); ++it) {
-        const KisMetaData::Entry &entry = *it;
+    for (const KisMetaData::Entry &entry : *store) {
         if (d->kmdToIPTC.contains(entry.qualifiedName())) {
             if (blockedEntries.contains(entry.qualifiedName())) {
                 warnKrita << "skipping" << entry.qualifiedName() << entry.value();
@@ -110,7 +109,11 @@ bool KisIptcIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderTyp
                 if (v && v->typeId() != Exiv2::invalidTypeId) {
                     iptcData.add(iptcKey, v);
                 }
+#if EXIV2_TEST_VERSION(0,28,0)
+            } catch (Exiv2::Error &e) {
+#else
             } catch (Exiv2::AnyError &e) {
+#endif
                 dbgMetaData << "exiv error " << e.what();
             }
         }
@@ -128,7 +131,11 @@ bool KisIptcIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderTyp
         header.append(photoshopBimId_);
         header.append(photoshopIptc_);
         header.append(QByteArray(2, 0));
+#if EXIV2_TEST_VERSION(0, 28, 0)
+        qint32 size = rawData.size();
+#else
         qint32 size = rawData.size_;
+#endif
         QByteArray sizeArray(4, 0);
         sizeArray[0] = (char)((size & 0xff000000) >> 24);
         sizeArray[1] = (char)((size & 0x00ff0000) >> 16);
@@ -138,7 +145,11 @@ bool KisIptcIO::saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderTyp
         ioDevice->write(header);
     }
 
+#if EXIV2_TEST_VERSION(0, 28, 0)
+    ioDevice->write((const char *)rawData.data(), rawData.size());
+#else
     ioDevice->write((const char *)rawData.pData_, rawData.size_);
+#endif
     ioDevice->close();
     return true;
 }

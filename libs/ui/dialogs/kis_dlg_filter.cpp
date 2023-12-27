@@ -251,21 +251,3 @@ void KisDlgFilter::filterSelectionChanged()
     d->uiFilterDialog.pushButtonCreateMaskEffect->setEnabled(filter.isNull() ? false : (filter->supportsAdjustmentLayers() && !multiframeEnabled));
     d->updateCompressor.start();
 }
-
-
-void KisDlgFilter::resizeEvent(QResizeEvent* event)
-{
-    QDialog::resizeEvent(event);
-
-//    // Workaround, after the initialisation don't center the dialog anymore
-//    if(d->resizeCount < 2) {
-//        QWidget* canvas = d->view->canvas();
-//        QRect rect(canvas->mapToGlobal(canvas->geometry().topLeft()), size());
-//        int deltaX = (canvas->geometry().width() - geometry().width())/2;
-//        int deltaY = (canvas->geometry().height() - geometry().height())/2;
-//        rect.translate(deltaX, deltaY);
-//        setGeometry(rect);
-
-//        d->resizeCount++;
-//    }
-}

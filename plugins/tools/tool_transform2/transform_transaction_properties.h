@@ -24,11 +24,11 @@ public:
 
 TransformTransactionProperties(const QRectF &originalRect,
                                ToolTransformArgs *currentConfig,
-                               KisNodeSP rootNode,
+                               KisNodeList rootNodes,
                                const QList<KisNodeSP> &transformedNodes)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
-          m_rootNode(rootNode),
+          m_rootNodes(rootNodes),
           m_transformedNodes(transformedNodes),
           m_shouldAvoidPerspectiveTransform(false)
     {
@@ -105,8 +105,8 @@ TransformTransactionProperties(const QRectF &originalRect,
         return m_currentConfig;
     }
 
-    KisNodeSP rootNode() const {
-        return m_rootNode;
+    KisNodeList rootNodes() const {
+        return m_rootNodes;
     }
 
     KisNodeList transformedNodes() const {
@@ -114,7 +114,8 @@ TransformTransactionProperties(const QRectF &originalRect,
     }
 
     qreal basePreviewOpacity() const {
-        return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
+        // Todo: this doesn't work for multiple layers
+        return 0.9 * qreal(m_rootNodes[0]->opacity()) / 255.0;
     }
 
     bool shouldAvoidPerspectiveTransform() const {
@@ -136,7 +137,7 @@ private:
      */
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig {0};
-    KisNodeSP m_rootNode;
+    KisNodeList m_rootNodes;
     KisNodeList m_transformedNodes;
     bool m_shouldAvoidPerspectiveTransform {false};
     bool m_hasInvisibleNodes {false};

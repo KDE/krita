@@ -97,14 +97,12 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
         QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
         img.setDevicePixelRatio(devicePixelRatioF());
         img.fill(m_d->backgroundColor);
-        if (m_d->thumbnail.width() < iconWidth*devicePixelRatioF() || m_d->thumbnail.height() < iconHeight*devicePixelRatioF()) {
-            QImage thumb = m_d->thumbnail.scaled(m_d->thumbnail.size()*devicePixelRatioF()); // first scale up to the high DPI so the pattern is visible
-            thumb.setDevicePixelRatio(devicePixelRatioF());
+        if (m_d->thumbnail.width() < iconWidth || m_d->thumbnail.height() < iconHeight) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x = 0; x < iconWidth; x += thumb.width()/devicePixelRatioF()) {
-                for (int y = 0; y < iconHeight; y+= thumb.height()/devicePixelRatioF()) {
-                    paint2.drawImage(x, y, thumb);
+            for (int x = 0; x < iconWidth; x += m_d->thumbnail.width()) {
+                for (int y = 0; y < iconHeight; y+= m_d->thumbnail.height()) {
+                    paint2.drawImage(x, y, m_d->thumbnail);
                 }
             }
         } else {
@@ -115,18 +113,18 @@ void KisIconWidget::paintEvent(QPaintEvent *event)
 
     auto paintResourceIcon = [&](QPainter &p) {
         QImage img = QImage(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), QImage::Format_ARGB32);
+        img.setDevicePixelRatio(devicePixelRatioF());
         img.fill(m_d->backgroundColor);
-        if (m_d->resource->image().width() < iconWidth*devicePixelRatioF() || m_d->resource->image().height() < iconHeight*devicePixelRatioF()) {
+        if (m_d->resource->image().width() < iconWidth || m_d->resource->image().height() < iconHeight) {
             QPainter paint2;
             paint2.begin(&img);
-            for (int x = 0; x < iconWidth; x += m_d->resource->image().width()/devicePixelRatioF()) {
-                for (int y = 0; y < iconHeight; y += m_d->resource->image().height()/devicePixelRatioF()) {
+            for (int x = 0; x < iconWidth; x += m_d->resource->image().width()) {
+                for (int y = 0; y < iconHeight; y += m_d->resource->image().height()) {
                     paint2.drawImage(x, y, m_d->resource->image());
                 }
             }
         } else {
             img = m_d->resource->image().scaled(iconWidth*devicePixelRatioF(), iconHeight*devicePixelRatioF(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            img.setDevicePixelRatio(devicePixelRatioF());
         }
         p.drawImage(QRect(0, 0, iconWidth, iconHeight), img);
     };

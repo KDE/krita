@@ -33,7 +33,7 @@ public:
     {
         return true;
     }
-    bool saveTo(KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType = NoHeader) const override;
+    bool saveTo(const KisMetaData::Store *store, QIODevice *ioDevice, HeaderType headerType = NoHeader) const override;
     bool canSaveAllEntries(KisMetaData::Store *) const override
     {
         return true;

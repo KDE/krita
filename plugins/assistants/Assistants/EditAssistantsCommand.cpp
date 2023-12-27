@@ -49,22 +49,7 @@ void EditAssistantsCommand::replaceWith(AssistantSPList newAssistants, Type type
         KIS_ASSERT_RECOVER_RETURN(newAssistants.size() < oldAssistants.size());
     }
 
-    Q_FOREACH (KisPaintingAssistantSP assistant, oldAssistants) {
-        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-        if (grid) {
-            m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
-        }
-    }
-
     m_canvas->paintingAssistantsDecoration()->setAssistants(newAssistants);
-
-    Q_FOREACH (KisPaintingAssistantSP assistant, newAssistants) {
-        assistant->uncache();
-        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-        if (grid) {
-            m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
-        }
-    }
 
     m_canvas->updateCanvas();
 }

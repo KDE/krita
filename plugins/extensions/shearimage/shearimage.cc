@@ -61,6 +61,10 @@ void ShearImage::slotShearImage()
 
 void ShearImage::shearLayerImpl(KisNodeSP rootNode)
 {
+    shearLayersImpl(KisNodeList{rootNode});
+}
+void ShearImage::shearLayersImpl(KisNodeList nodes)
+{
     KisImageWSP image = viewManager()->image();
     if (!image) return;
 
@@ -69,13 +73,13 @@ void ShearImage::shearLayerImpl(KisNodeSP rootNode)
     DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindowAsQWidget(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
-    dlgShearImage->setCaption(i18n("Shear Layer"));
+    dlgShearImage->setCaption(i18np("Shear Layer", "Shear %1 Layers", nodes.size()));
 
     if (dlgShearImage->exec() == QDialog::Accepted) {
         qint32 angleX = dlgShearImage->angleX();
         qint32 angleY = dlgShearImage->angleY();
 
-        image->shearNode(rootNode,
+        image->shearNodes(nodes,
                          angleX, angleY,
                          viewManager()->selection());
     }
@@ -84,7 +88,7 @@ void ShearImage::shearLayerImpl(KisNodeSP rootNode)
 
 void ShearImage::slotShearLayer()
 {
-    shearLayerImpl(viewManager()->activeNode());
+    shearLayersImpl(viewManager()->nodeManager()->selectedNodes());
 }
 
 void ShearImage::slotShearAllLayers()

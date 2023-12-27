@@ -7,7 +7,7 @@ This is a simple Blender OpenColorIO configuration and LUT / matrix set that is 
 Traditionally, Blender assumes sRGB primaries for input and output. However, some areas remain without color management that form critical pinch points where the primaries or transfer curve cannot be correctly displayed. This configuration shifts simply rotates the sRGB primaries to make it extremely clear where color management is not working.
 
 ## Usage
-Within your Blender build or install, move the ```<BLENDER_HOME>/bin/<VERSION.NUMBER>/datafiles/colormanagement``` directory to an alternate name to preserve it. Symbollically link this repository in its place.
+Within your Blender build or install, move the ```<BLENDER_HOME>/bin/<VERSION.NUMBER>/datafiles/colormanagement``` directory to an alternate name to preserve it. Symbolically link this repository in its place.
 
 ## Testing
 The repository includes a marcie-whacked.exr image that has data values with strongly shifted primaries. There is a default transform that corrects this for pure D65 sRGB output.

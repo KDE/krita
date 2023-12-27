@@ -129,6 +129,7 @@ Node *Document::activeNode() const
 
 void Document::setActiveNode(Node* value)
 {
+    if (!value) return;
     if (!value->node()) return;
     KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
     if (!mainWin) return;
@@ -155,7 +156,9 @@ Node *Document::nodeByName(const QString &name) const
 {
     if (!d->document) return 0;
     KisNodeSP node = KisLayerUtils::findNodeByName(d->document->image()->rootLayer(),name);
+
     if (node.isNull()) return 0;
+
     return Node::createNode(d->document->image(), node);
 }
 
@@ -544,7 +547,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    image->scaleImage(rc.size(), xres/72, yres/72, actualStrategy);
+    image->scaleImage(rc.size(), xres / 72.0, yres / 72.0, actualStrategy);
     image->waitForDone();
 }
 
@@ -581,6 +584,7 @@ bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
 
+    setFileName(filename);
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
     QString oldPath = d->document->path();
@@ -649,13 +653,13 @@ GroupLayer *Document::createGroupLayer(const QString &name)
     return new GroupLayer(image, name);
 }
 
-FileLayer *Document::createFileLayer(const QString &name, const QString fileName, const QString scalingMethod)
+FileLayer *Document::createFileLayer(const QString &name, const QString fileName, const QString scalingMethod, const QString scalingFilter)
 {
     if (!d->document) return 0;
     if (!d->document->image()) return 0;
     KisImageSP image = d->document->image();
 
-    return new FileLayer(image, name, this->fileName(), fileName, scalingMethod);
+    return new FileLayer(image, name, this->fileName(), fileName, scalingMethod, scalingFilter);
 }
 
 FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)
@@ -865,8 +869,11 @@ Document *Document::clone() const
 {
     if (!d->document) return 0;
     QPointer<KisDocument> clone = d->document->clone();
-    Document * newDocument = new Document(clone, d->ownsDocument);
-    clone->setParent(newDocument); // It's owned by the document, not KisPart
+
+    /// We set ownsDocument to true, it will be reset
+    /// automatically as soon as we create the first
+    /// view for the document
+    Document * newDocument = new Document(clone, true);
     return newDocument;
 }
 
@@ -924,6 +931,12 @@ bool Document::modified() const
     return d->document->isModified();
 }
 
+void Document::setModified(bool modified)
+{
+    if (!d->document) return;
+    d->document->setModified(modified);
+}
+
 QRect Document::bounds() const
 {
     if (!d->document) return QRect();
@@ -978,7 +991,7 @@ void Document::setFullClipRangeStartTime(int startTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setFullClipRangeStartTime(startTime);
+    d->document->image()->animationInterface()->setDocumentRangeStartFrame(startTime);
 }
 
 
@@ -987,7 +1000,7 @@ int Document::fullClipRangeStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->fullClipRange().start();
+    return d->document->image()->animationInterface()->documentPlaybackRange().start();
 }
 
 
@@ -996,7 +1009,7 @@ void Document::setFullClipRangeEndTime(int endTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setFullClipRangeEndTime(endTime);
+    d->document->image()->animationInterface()->setDocumentRangeEndFrame(endTime);
 }
 
 
@@ -1005,7 +1018,7 @@ int Document::fullClipRangeEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->fullClipRange().end();
+    return d->document->image()->animationInterface()->documentPlaybackRange().end();
 }
 
 int Document::animationLength()
@@ -1022,7 +1035,7 @@ void Document::setPlayBackRange(int start, int stop)
     if (!d->document->image()) return;
 
     const KisTimeSpan newTimeRange = KisTimeSpan::fromTimeWithDuration(start, (stop-start));
-    d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
+    d->document->image()->animationInterface()->setActivePlaybackRange(newTimeRange);
 }
 
 int Document::playBackStartTime()
@@ -1030,7 +1043,7 @@ int Document::playBackStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->playbackRange().start();
+    return d->document->image()->animationInterface()->activePlaybackRange().start();
 }
 
 int Document::playBackEndTime()
@@ -1038,7 +1051,7 @@ int Document::playBackEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->playbackRange().end();
+    return d->document->image()->animationInterface()->activePlaybackRange().end();
 }
 
 int Document::currentTime()

@@ -95,7 +95,7 @@ public:
      * T  - transpose (@p xtranslate, @p ytranslate)
      *
      * WARNING: due to some rounding problems in the worker
-     * the work it does does not correspond to the matrix exactly!
+     * the work it does not correspond to the matrix exactly!
      * The result always differs 1-3 pixel. So be careful with it
      * (or fix it)
      */
@@ -105,6 +105,9 @@ public:
      * Transforms the outline of the pixel selection (if it is valid)
      */
     void transformPixelSelectionOutline(KisPixelSelectionSP pixelSelection) const;
+
+    bool forceSubPixelTranslation() const;
+    void setForceSubPixelTranslation(bool value);
 
 private:
     // XXX (BSAR): Why didn't we use the shared-pointer versions of the paint device classes?
@@ -143,6 +146,7 @@ private:
     KoUpdaterPtr m_progressUpdater;
     KisFilterStrategy *m_filter;
     QRect m_boundRect;
+    bool m_forceSubPixelTranslation {false};
 };
 
 #endif // KIS_TRANSFORM_VISITOR_H_

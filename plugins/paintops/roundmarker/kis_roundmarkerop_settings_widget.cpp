@@ -9,29 +9,26 @@
 
 #include <kis_properties_configuration.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_pressure_size_option.h>
-#include <kis_curve_option_widget.h>
-#include <kis_compositeop_option.h>
-#include <kis_pressure_spacing_option_widget.h>
-//#include "kis_texture_option.h"
-//#include "kis_pressure_texture_strength_option.h"
 #include "kis_roundmarkerop_settings.h"
-#include "kis_roundmarker_option.h"
+#include <KisRoundMarkerOpOptionWidget.h>
+#include <KisPaintOpOptionWidgetUtils.h>
+#include <KisCompositeOpOptionWidget.h>
+#include "KisSizeOptionWidget.h"
+#include "KisSpacingOptionWidget.h"
 
 
 KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
+
     setObjectName("roundmarker option widget");
     //setPrecisionEnabled(true);
 
-    addPaintOpOption(new KisRoundMarkerOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
-
-    //addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
-    //addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+    addPaintOpOption(kpowu::createOptionWidget<KisRoundMarkerOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisSpacingOptionWidget>());
 }
 
 KisRoundMarkerOpSettingsWidget::~KisRoundMarkerOpSettingsWidget() { }

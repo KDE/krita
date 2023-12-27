@@ -168,15 +168,6 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KoID &id, KisDefaultBou
     : KisKeyframeChannel(id, bounds)
     , m_d(new Private)
 {
-    // When keyframe is changed (value, tangents, etc), we should notify that the channel has been updated.
-    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, this, [](const KisKeyframeChannel *channel, int time) {
-        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(chan);
-        chan->sigChannelUpdated(
-                    chan->affectedFrames(time),
-                    chan->affectedRect(time)
-                    );
-    });
 }
 
 KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChannel &rhs)
@@ -187,15 +178,6 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChanne
     Q_FOREACH (int time, rhs.constKeys().keys()) {
         KisKeyframeChannel::copyKeyframe(&rhs, time, this, time);
     }
-
-    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, this, [](const KisKeyframeChannel *channel, int time) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN(channel);
-        const KisScalarKeyframeChannel* scalarChan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(scalarChan);
-        scalarChan->sigChannelUpdated(
-                    scalarChan->affectedFrames(time),
-                    scalarChan->affectedRect(time) );
-    });
 }
 
 KisScalarKeyframeChannel::~KisScalarKeyframeChannel()
@@ -327,28 +309,28 @@ QPointF KisScalarKeyframeChannel::interpolate(QPointF point1, QPointF rightTange
 
 void KisScalarKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd)
 {
-    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
-
     KisScalarKeyframeSP scalarKeyframe = keyframe.dynamicCast<KisScalarKeyframe>();
     if (scalarKeyframe) {
         scalarKeyframe->valueChangedChannelConnection =
-                QObject::connect(scalarKeyframe.data(),
-                                 &KisScalarKeyframe::sigChanged,
-                                 [this, time](const KisScalarKeyframe* key){
-                                     Q_UNUSED(key);
-                                     emit sigKeyframeChanged(this, time);
-                                 });
+            QObject::connect(scalarKeyframe.data(),
+                             &KisScalarKeyframe::sigChanged,
+                             [this, time](const KisScalarKeyframe* key){
+                                 Q_UNUSED(key);
+                                 emit sigKeyframeChanged(this, time);
+                             });
     }
+
+    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
 }
 
 void KisScalarKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
-    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
-
     KisScalarKeyframeSP keyframe = keyframeAt<KisScalarKeyframe>(time);
     if (keyframe) {
         disconnect(keyframe->valueChangedChannelConnection);
     }
+
+    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
 }
 
 KisTimeSpan KisScalarKeyframeChannel::affectedFrames(int time) const

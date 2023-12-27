@@ -26,6 +26,7 @@
 #include <kis_selection_options.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
+#include <kis_default_bounds.h>
 
 #include "canvas/kis_canvas2.h"
 #include "kis_painter.h"
@@ -34,6 +35,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_algebra_2d.h"
 
@@ -69,7 +71,7 @@ void KisToolSelectOutline::finishOutline(const QVector<QPointF>& points)
         return;
     }
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
     const SelectionMode mode =
         helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
@@ -155,7 +157,6 @@ void KisToolSelectOutline::finishOutline(const QVector<QPointF>& points)
 
         helper.addSelectionShape(path, selectionAction());
     }
-    QApplication::restoreOverrideCursor();
 }
 
 void KisToolSelectOutline::beginShape()

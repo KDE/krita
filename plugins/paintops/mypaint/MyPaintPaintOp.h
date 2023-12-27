@@ -11,7 +11,7 @@
 #include <brushengine/kis_paintop.h>
 
 #include <libmypaint/mypaint-brush.h>
-#include <kis_airbrush_option_widget.h>
+#include <KisAirbrushOptionData.h>
 
 #include "MyPaintPaintOpPreset.h"
 #include "MyPaintSurface.h"
@@ -42,7 +42,7 @@ private:
     QScopedPointer<KisMyPaintPaintOpPreset> m_brush;
     QScopedPointer<KisMyPaintSurface> m_surface;
     KisPaintOpSettingsSP m_settings;
-    KisAirbrushOptionProperties m_airBrushOption;
+    KisAirbrushOptionData m_airBrushData;
     KisImageWSP m_image;
     double m_dtime, m_radius, m_previousTime = 0;
     bool m_isStrokeStarted;

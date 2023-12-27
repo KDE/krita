@@ -15,12 +15,12 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 
-#include <KoColorSpace.h>
+#include <KisImportExportFilter.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
-
-#include <kis_properties_configuration.h>
+#include <KoColorSpace.h>
 #include <kis_config.h>
+#include <kis_properties_configuration.h>
 
 #include <config-tiff.h>
 
@@ -31,8 +31,36 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
     activated(0);
     connect(kComboBoxCompressionType, SIGNAL(activated(int)), this, SLOT(activated(int)));
     connect(flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
-    QApplication::restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+
+    // See KisTIFFOptions::fromProperties
+    kComboBoxCompressionType->addItem(i18nc("TIFF options", "None"), 0);
+    kComboBoxCompressionType->addItem(
+        i18nc("TIFF options", "JPEG DCT compression"),
+        1);
+    kComboBoxCompressionType->addItem(i18nc("TIFF options", "Deflate (ZIP)"),
+                                      2);
+    kComboBoxCompressionType->addItem(
+        i18nc("TIFF options", "Lempel-Ziv & Welch"),
+        3);
+    kComboBoxCompressionType->addItem(i18nc("TIFF options", "Pixar Log"), 4);
+
+    connect(kComboBoxCompressionType,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [&](int index) {
+                const int deflate = kComboBoxCompressionType->findData(2);
+                const int lzw = kComboBoxCompressionType->findData(3);
+                kComboBoxPredictor->setEnabled(index == deflate
+                                               || index == lzw);
+            });
+
+    kComboBoxPredictor->addItem(i18nc("TIFF options", "None"), 0);
+    kComboBoxPredictor->addItem(
+        i18nc("TIFF options", "Horizontal Differencing"),
+        1);
+    kComboBoxPredictor->addItem(
+        i18nc("TIFF options", "Floating Point Horizontal Differencing"),
+        2);
 }
 
 void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -56,25 +84,41 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     compressionLevelPixarLog->setValue(cfg->getInt("pixarlog", 6));
     chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
 
-    if (cfg->getInt("type", -1) == KoChannelInfo::FLOAT16 || cfg->getInt("type", -1) == KoChannelInfo::FLOAT32) {
-        kComboBoxPredictor->removeItem(1);
-    } else {
-        kComboBoxPredictor->removeItem(2);
+    {
+        const QString colorDepthId =
+            cfg->getString(KisImportExportFilter::ColorDepthIDTag);
+
+        if (colorDepthId == Float16BitsColorDepthID.id()
+            || colorDepthId == Float32BitsColorDepthID.id()
+            || colorDepthId == Float64BitsColorDepthID.id()) {
+            kComboBoxPredictor->removeItem(1);
+        } else {
+            kComboBoxPredictor->removeItem(2);
+        }
+
+        if (colorDepthId != Integer8BitsColorDepthID.id()) {
+            kComboBoxCompressionType->removeItem(
+                kComboBoxCompressionType->findData(1));
+        }
     }
 
-    if (cfg->getBool("isCMYK")) {
-        alpha->setChecked(false);
-        alpha->setEnabled(false);
+    {
+        const QString colorModelId =
+            cfg->getString(KisImportExportFilter::ColorModelIDTag);
+
+        if (colorModelId == YCbCrAColorModelID.id()) {
+            alpha->setChecked(false);
+            alpha->setEnabled(false);
+        }
     }
-
-
 }
 
 KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
 {
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    cfg->setProperty("compressiontype", kComboBoxCompressionType->currentIndex());
-    cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
+    cfg->setProperty("compressiontype",
+                     kComboBoxCompressionType->currentData());
+    cfg->setProperty("predictor", kComboBoxPredictor->currentData());
     cfg->setProperty("alpha", alpha->isChecked());
     cfg->setProperty("saveAsPhotoshop", chkPhotoshop->isChecked());
     cfg->setProperty("psdCompressionType", kComboBoxPSDCompressionType->currentIndex());
@@ -89,14 +133,15 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
 
 void KisTIFFOptionsWidget::activated(int index)
 {
-    switch (index) {
-    case 1:
+    const int data = kComboBoxCompressionType->itemData(index).value<int>();
+    switch (data) {
+    case 1: // JPEG
         codecsOptionsStack->setCurrentIndex(1);
         break;
-    case 2:
+    case 2: // Deflate
         codecsOptionsStack->setCurrentIndex(2);
         break;
-    case 4:
+    case 4: // Pixar Log
         codecsOptionsStack->setCurrentIndex(3);
         break;
     default:
@@ -110,9 +155,11 @@ void KisTIFFOptionsWidget::flattenToggled(bool t)
     if (!t) {
         alpha->setChecked(true);
     }
+#ifdef TIFF_CAN_WRITE_PSD_TAGS
     chkPhotoshop->setEnabled(!t);
     if (t) {
         chkPhotoshop->setChecked(false);
     }
+#endif
 }
 

@@ -24,37 +24,22 @@ class KisTransactionWrapperFactory;
 class KisTransaction
 {
 public:
+    enum Flag {
+        None = 0x0,
+        SuppressUpdates = 0x1
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
 
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0) {
-        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, interstrokeDataFactory, parent);
+public:
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0, Flags flags = None) {
+        m_transactionData = new KisTransactionData(name, device, true, interstrokeDataFactory, parent, flags & SuppressUpdates);
         m_transactionData->setTimedID(timedID);
     }
 
-    KisTransaction(KisPaintDeviceSP device, AutoKeyMode autoKeyMode, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0)
-        : KisTransaction(KUndo2MagicString(), device, autoKeyMode, parent, timedID, interstrokeDataFactory){
+    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0, Flags flags = None)
+        : KisTransaction(KUndo2MagicString(), device, parent, timedID, interstrokeDataFactory, flags)
+    {
     }
-
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0) {
-
-        KisImageConfig cfg(true);
-        AutoKeyMode autoKeyMode = AUTOKEY_DISABLED;
-
-        if (cfg.autoKeyEnabled()) {
-            if (cfg.autoKeyModeDuplicate()) {
-                autoKeyMode = AUTOKEY_DUPLICATE;
-            } else {
-                autoKeyMode = AUTOKEY_BLANK;
-            }
-        }
-
-        m_transactionData = new KisTransactionData(name, device, true, autoKeyMode, interstrokeDataFactory, parent);
-        m_transactionData->setTimedID(timedID);
-    }
-
-    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1)
-        : KisTransaction(KUndo2MagicString(), device, parent, timedID){
-    }
-
 
     virtual ~KisTransaction() {
         delete m_transactionData;
@@ -65,8 +50,9 @@ public:
     }
 
     void commit(KisUndoAdapter* undoAdapter) {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
-                   "the transaction has been tried to be committed twice");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::commit()",
+                     "the transaction has been tried to be committed twice");
 
         m_transactionData->endTransaction();
         undoAdapter->addCommand(m_transactionData);
@@ -74,8 +60,9 @@ public:
     }
 
     void commit(KisPostExecutionUndoAdapter* undoAdapter) {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
-                   "the transaction has been tried to be committed twice");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::commit()",
+                     "the transaction has been tried to be committed twice");
 
         m_transactionData->endTransaction();
         m_transactionData->redo();
@@ -84,19 +71,19 @@ public:
     }
 
     KUndo2Command* endAndTake() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
-                   "the transaction has been tried to be committed twice");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::endAndTake()",
+                     "the transaction has been tried to be committed twice");
 
+        m_transactionData->endTransaction();
         KisTransactionData *transactionData = m_transactionData;
         m_transactionData = 0;
 
-        transactionData->endTransaction();
         return transactionData;
     }
 
     void end() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::end()",
-                   "nothing to end!");
+        KIS_ASSERT_X(m_transactionData, "KisTransaction::end()", "nothing to end!");
         /**
          * We will not call endTransaction for m_transactionData,
          * we'll just kill it, and it'll report about it's death to
@@ -107,9 +94,10 @@ public:
     }
 
     void revert() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::reverted()",
-                   "the transaction is tried to be reverted()"
-                   "after it has already been added to undo adapter");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::reverted()",
+                     "the transaction is tried to be reverted()"
+                     "after it has already been added to undo adapter");
 
         m_transactionData->endTransaction();
         /**
@@ -121,28 +109,33 @@ public:
     }
 
     KUndo2MagicString text() const {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::text()",
-                   "the name has been requested after the transaction"
-                   "has already been ended");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::text()",
+                     "the name has been requested after the transaction"
+                     "has already been ended");
         return m_transactionData->text();
     }
 
 protected:
+    Q_DISABLE_COPY(KisTransaction);
+
     KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisTransaction::Flags)
 
 class KisSelectionTransaction : public KisTransaction
 {
 public:
     KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, AUTOKEY_DISABLED, 0, parent);
+        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, 0, parent, false);
     }
 
     KisSelectionTransaction(const KUndo2MagicString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(name, pixelSelection, false, AUTOKEY_DISABLED, 0, parent);
+        m_transactionData = new KisTransactionData(name, pixelSelection, false, 0, parent, false);
     }
 };
 

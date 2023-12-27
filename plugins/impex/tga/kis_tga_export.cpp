@@ -43,6 +43,9 @@ KisImportExportErrorCode KisTGAExport::convert(KisDocument *document, QIODevice 
 
     const QImage& img = image;
     const bool hasAlpha = (img.format() == QImage::Format_ARGB32);
+    static constexpr quint8 originTopLeft = TGA_ORIGIN_UPPER + TGA_ORIGIN_LEFT; // 0x20
+    static constexpr quint8 alphaChannel8Bits = 0x08;
+
     for (int i = 0; i < 12; i++)
         s << targaMagic[i];
 
@@ -50,7 +53,7 @@ KisImportExportErrorCode KisTGAExport::convert(KisDocument *document, QIODevice 
     s << quint16(img.width());   // width
     s << quint16(img.height());   // height
     s << quint8(hasAlpha ? 32 : 24);   // depth (24 bit RGB + 8 bit alpha)
-    s << quint8(hasAlpha ? 0x24 : 0x20);   // top left image (0x20) + 8 bit alpha (0x4)
+    s << quint8(hasAlpha ? originTopLeft + alphaChannel8Bits : originTopLeft);   // top left image (0x20) + 8 bit alpha (0x8)
 
     for (int y = 0; y < img.height(); y++) {
         for (int x = 0; x < img.width(); x++) {

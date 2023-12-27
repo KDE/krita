@@ -81,7 +81,7 @@ public:
     /// Adds a new input at the end of the input list
     void addInput(const QString &input);
 
-    /// Inserts an input at the giben position in the input list
+    /// Inserts an input at the given position in the input list
     void insertInput(int index, const QString &input);
 
     /// Sets an existing input to a new value

@@ -95,10 +95,11 @@ struct KoLabTraits : public KoColorSpaceTrait<_channels_type_, 4, 3> {
             return QString("Error");
         }
     }
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels)
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &v)
     {
-        Q_ASSERT((int)channels.count() >= (int)parent::channels_nb);
+        Q_ASSERT((int)v.count() >= (int)parent::channels_nb);
         channels_type c;
+        float *channels = v.data();
         for (uint i = 0; i < parent::channels_nb; i++) {
             c = parent::nativeArray(pixel)[i];
             switch (i) {

@@ -6,13 +6,14 @@
 #include <QStandardPaths>
 #include <QLocale>
 // #include <KLocalizedString>
-#include <KoConfig.h>
+#include <KoTestConfig.h>
 
 #define SIMPLE_MAIN_IMPL(TestObject) \
     qputenv("LANGUAGE", "en"); \
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     QStandardPaths::setTestModeEnabled(true); \
-    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
+    qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     /*QLocale en_US(QLocale::English, QLocale::UnitedStates); \

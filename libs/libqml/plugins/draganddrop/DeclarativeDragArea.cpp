@@ -245,7 +245,7 @@ void DeclarativeDragArea::mouseMoveEvent(QMouseEvent *event)
             } else if (mimeData()->hasImage()) {
 //                 qDebug() << "++++++hasImage";
                 QImage im = qvariant_cast<QImage>(mimeData()->imageData());
-                drag->setPixmap(QPixmap::fromImage(im));
+                drag->setPixmap(QPixmap::fromImage(std::move(im)));
             } else if (mimeData()->hasColor()) {
 //                 qDebug() << "++++++color";
                 QPixmap px(_s);

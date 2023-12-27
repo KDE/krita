@@ -32,13 +32,14 @@ enum CanvasResourceId {
     CurrentKritaNode,
     CurrentPaintOpPreset,
     CurrentPaintOpPresetCache, ///< the cache associated with the currently active preset (this cache may be different per canvas if the preset depends on the canvas resources)
+    CurrentPaintOpPresetName,
     CurrentGeneratorConfiguration,
     CurrentCompositeOp,
     CurrentEffectiveCompositeOp,
     LodAvailability, ///<-user choice
     LodSizeThreshold, ///<-user choice
     LodSizeThresholdSupported, ///<-paintop property
-    EffectiveLodAvailablility, ///<- a superposition of user choice, threshold and paintop traits
+    EffectiveLodAvailability, ///<- a superposition of user choice, threshold and paintop traits
     EraserMode,
     MirrorHorizontal,
     MirrorVertical,
@@ -57,7 +58,10 @@ enum CanvasResourceId {
     DisablePressure,
     PreviousPaintOpPreset,
     EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
-    EffectivePhysicalZoom ///<-Used by tool for displaying purposes
+    EffectivePhysicalZoom, ///<-Used by tool for displaying purposes
+    BrushRotation,
+    HandleRadius,           ///< The handle radius used for drawing handles of any kind
+    DecorationThickness, ///< Integer, the thickness of single px decorations, will be adjusted by HiDPI settings. Because most of our decorations are drawn without anti-aliasing, this is an integer, so that line thickness won't vary as the painter tries round the floating point.
 };
 
 }

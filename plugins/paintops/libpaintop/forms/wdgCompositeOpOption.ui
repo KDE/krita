@@ -43,7 +43,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="lbChoosenMode">
+      <widget class="QLabel" name="lbChosenMode">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>1</horstretch>

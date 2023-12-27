@@ -31,7 +31,8 @@ ExperimentPaintOpPlugin::ExperimentPaintOpPlugin(QObject *parent, const QVariant
                                                i18n("Shape"),
                                                KisPaintOpFactory::categoryStable(),
                                                "krita-experiment.png",
-                                               QString(), QStringList(), 5));
+                                               QString(), QStringList(), 5,
+                                               false));
 }
 
 ExperimentPaintOpPlugin::~ExperimentPaintOpPlugin()

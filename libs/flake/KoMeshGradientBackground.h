@@ -19,7 +19,7 @@ public:
     KoMeshGradientBackground(const KoMeshGradientBackground &);
     KoMeshGradientBackground& operator=(const KoMeshGradientBackground &);
 
-    void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, const QPainterPath &fillPath) const override;
 
     bool compareTo(const KoShapeBackground *other) const override;
 

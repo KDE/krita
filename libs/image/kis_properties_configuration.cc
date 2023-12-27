@@ -12,7 +12,6 @@
 #include <QDomDocument>
 #include <QString>
 
-#include "kis_dom_utils.h"
 #include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
@@ -26,7 +25,7 @@
 
 struct Q_DECL_HIDDEN KisPropertiesConfiguration::Private {
     QMap<QString, QVariant> properties;
-    QStringList notSavedProperties;
+    QSet<QString> notSavedProperties;
 };
 
 KisPropertiesConfiguration::KisPropertiesConfiguration() : d(new Private)
@@ -68,38 +67,23 @@ bool KisPropertiesConfiguration::fromXML(const QString & xml, bool clear)
     return retval;
 }
 
-void KisPropertiesConfiguration::fromXML(const QDomElement& e)
+void KisPropertiesConfiguration::fromXML(const QDomElement &root)
 {
-    QDomNode n = e.firstChild();
+    QDomElement e;
+    for (e = root.firstChildElement("param"); !e.isNull(); e = e.nextSiblingElement("param")) {
+        QString name = e.attribute("name");
+        QString value = e.text();
 
-    while (!n.isNull()) {
-        // We don't nest elements in filter configuration. For now...
-        QDomElement e = n.toElement();
-        if (!e.isNull()) {
-            if (e.tagName() == "param") {
-                // If the file contains the new type parameter introduced in Krita act on it
-                // Else invoke old behaviour
-                if(e.attributes().contains("type"))
-                {
-                    QString type = e.attribute("type");
-                    QString name = e.attribute("name");
-                    QString value = e.text();
-
-                    if (type == "bytearray") {
-                        d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
-                    }
-                    else {
-                        d->properties[name] = KisDomUtils::unescapeText(value);
-                    }
-                }
-                else {
-                    d->properties[e.attribute("name")] = QVariant(KisDomUtils::unescapeText(e.text()));
-                }
-            }
+        // Older versions didn't have a "type" parameter,
+        // so fall back to the old behavior if it's missing.
+        if (!e.hasAttribute("type")) {
+            d->properties[name] = QVariant(value);
+        } else if (e.attribute("type") == "bytearray") {
+            d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
+        } else {
+            d->properties[name] = value;
         }
-        n = n.nextSibling();
     }
-    //dump();
 }
 
 void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -117,25 +101,21 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         QDomText text;
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
-        }
-        else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+        } else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
             QDomDocument cdataDoc = QDomDocument("color");
             QDomElement cdataRoot = cdataDoc.createElement("color");
             cdataDoc.appendChild(cdataRoot);
             v.value<KoColor>().toXML(cdataDoc, cdataRoot);
             text = cdataDoc.createCDATASection(cdataDoc.toString());
             type = "color";
-        }
-        else if(v.type() == QVariant::String) {
-            text = doc.createCDATASection(KisDomUtils::escapeText(v.toString()));  // XXX: Unittest this!
+        } else if(v.type() == QVariant::String ) {
+            text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
             type = "string";
-        }
-        else if(v.type() == QVariant::ByteArray ) {
+        } else if(v.type() == QVariant::ByteArray ) {
             text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitrary Data
             type = "bytearray";
-        }
-        else {
-            text = doc.createTextNode(KisDomUtils::escapeText(v.toString()));
+        } else {
+            text = doc.createTextNode(v.toString());
             type = "internal";
         }
         e.setAttribute("type", type);
@@ -238,9 +218,7 @@ KisCubicCurve KisPropertiesConfiguration::getCubicCurve(const QString & name, co
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             return v.value<KisCubicCurve>();
         } else {
-            KisCubicCurve c;
-            c.fromString(v.toString());
-            return c;
+            return KisCubicCurve(v.toString());
         }
     } else
         return curve;
@@ -327,7 +305,7 @@ void KisPropertiesConfiguration::clearProperties()
 
 void KisPropertiesConfiguration::setPropertyNotSaved(const QString& name)
 {
-    d->notSavedProperties.append(name);
+    d->notSavedProperties.insert(name);
 }
 
 QMap<QString, QVariant> KisPropertiesConfiguration::getProperties() const
@@ -355,6 +333,17 @@ void KisPropertiesConfiguration::getPrefixedProperties(const QString &prefix, Ki
             config->setProperty(key.mid(prefixSize), getProperty(key));
         }
     }
+
+    QString fullPrefix;
+    const QString parentPrefix = getString(extractedPrefixKey());
+    if (!parentPrefix.isEmpty()) {
+        fullPrefix = parentPrefix + "/" + prefix;
+    } else {
+        fullPrefix = prefix;
+    }
+
+    config->setProperty(extractedPrefixKey(), fullPrefix);
+    config->setPropertyNotSaved(extractedPrefixKey());
 }
 
 void KisPropertiesConfiguration::getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const
@@ -373,6 +362,12 @@ void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, co
 void KisPropertiesConfiguration::setPrefixedProperties(const QString &prefix, const KisPropertiesConfigurationSP config)
 {
     setPrefixedProperties(prefix, config.data());
+}
+
+QString KisPropertiesConfiguration::extractedPrefixKey()
+{
+    static const QString key = "__extractedFromPrefix";
+    return key;
 }
 
 QString KisPropertiesConfiguration::escapeString(const QString &string)

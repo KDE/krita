@@ -37,6 +37,8 @@ public:
 
     bool saveAnimationMetadata(KoStore *store, KisImageSP image, const QString &uri);
 
+    bool saveAudio(KoStore *store);
+
     /// @return a list with everything that went wrong while saving
     QStringList errorMessages() const;
 
@@ -53,7 +55,7 @@ private:
     bool saveGrid(QDomDocument& doc, QDomElement& element);
     bool saveGuides(QDomDocument& doc, QDomElement& element);
     bool saveMirrorAxis(QDomDocument& doc, QDomElement& element);
-    bool saveAudio(QDomDocument& doc, QDomElement& element);
+    bool saveAudioXML(QDomDocument& doc, QDomElement& element);
     bool saveNodeKeyframes(KoStore *store, QString location, const KisNode *node);
     void saveResourcesToXML(QDomDocument& doc, QDomElement &element);
     void saveStoryboardToXML(QDomDocument& doc, QDomElement &element);

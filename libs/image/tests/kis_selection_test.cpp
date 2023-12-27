@@ -18,6 +18,8 @@
 #include "kis_datamanager.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 #include "kis_fill_painter.h"
 #include "kis_mask.h"
 #include "kis_image.h"
@@ -157,7 +159,7 @@ void KisSelectionTest::testInvertSelection()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 1024, 1024, cs, "stest");
 
-    KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
+    KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
     pixelSelection->select(QRect(20, 20, 20, 20));
 
@@ -192,7 +194,7 @@ void KisSelectionTest::testInvertSelectionSemi()
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisImageSP image = new KisImage(0, 1024, 1024, cs, "stest");
 
-    KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
+    KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
     KisPixelSelectionSP pixelSelection = selection->pixelSelection();
     quint8 selectedness = 42;
     pixelSelection->select(QRect(20, 20, 20, 20), selectedness);
@@ -255,7 +257,7 @@ void KisSelectionTest::testSelectionExactBounds()
 
     QCOMPARE(device->exactBounds(), referenceDeviceRect);
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(device), toQShared(new KisImageResolutionProxy(image)));
 
     quint8 defaultPixel = MAX_SELECTED;
     selection->pixelSelection()->setDefaultPixel(KoColor(&defaultPixel, selection->pixelSelection()->colorSpace()));

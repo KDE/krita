@@ -54,7 +54,7 @@ public Q_SLOTS:
 
     void slotSetStartTimeToCurrentPosition();
     void slotSetEndTimeToCurrentPosition();
-    void slotUpdatePlackbackRange();
+    void slotUpdatePlaybackRange();
     void slotUpdateInfiniteFramesCount();
 
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
@@ -119,7 +119,6 @@ public Q_SLOTS:
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);
     void slotAudioChannelRemove();
-    void slotUpdateAudioActions();
     void slotAudioVolumeChanged(int value);
 
     // Zoom & Scroll

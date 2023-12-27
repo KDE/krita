@@ -33,6 +33,8 @@ private Q_SLOTS:
     void slotUpdateWindowLayoutSaveButton();
     void windowLayoutSelected( KoResourceSP resource );
 
+    void showEvent(QShowEvent*) override;
+
 private:
     struct ChooserWidgets
     {

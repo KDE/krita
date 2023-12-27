@@ -59,7 +59,6 @@ KisSelectionMask::KisSelectionMask(KisImageWSP image, const QString &name)
             new KisThreadSafeSignalCompressor(50, KisSignalCompressor::FIRST_ACTIVE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->moveToThread(image->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     m_d->slotConfigChangedImpl(false);
@@ -73,7 +72,6 @@ KisSelectionMask::KisSelectionMask(const KisSelectionMask& rhs)
             new KisThreadSafeSignalCompressor(300, KisSignalCompressor::POSTPONE);
 
     connect(m_d->updatesCompressor, SIGNAL(timeout()), SLOT(slotSelectionChangedCompressed()));
-    this->moveToThread(rhs.image()->thread());
 
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     m_d->slotConfigChangedImpl(false);

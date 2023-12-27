@@ -421,9 +421,9 @@ static qreal controlrectLen(const SvgMeshPath &path) {
         QLineF(path[2], path[3]).length();
 }
 
-bool SvgMeshPatch::isDivisbleVertically() const
+bool SvgMeshPatch::isDivisibleVertically() const
 {
-    // I arrived at this number by the virute called trial 'n error
+    // I arrived at this number by the virtue called trial 'n error
     const qreal minlength = 1.7;
     const qreal line1 = QLineF(controlPoints[Top][0], controlPoints[Top][3]).length();
     const qreal control1 = controlrectLen(getSegment(Top));
@@ -444,7 +444,7 @@ bool SvgMeshPatch::isDivisbleVertically() const
 
 bool SvgMeshPatch::isDivisibleHorizontally() const
 {
-    // I arrived at this number by the virute called trial 'n error
+    // I arrived at this number by the virtue called trial 'n error
     const qreal minlength = 1.7;
 
     // a decent average, thanks to Khronos's forums

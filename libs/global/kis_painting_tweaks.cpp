@@ -133,4 +133,59 @@ void dragColor(QColor *color, const QColor &baseColor, qreal threshold)
     }
 }
 
+// This does a simplified linearization and calculates the luma.
+// Krita has the ability to precisely calculate this value,
+// but that seems overkill when all we want to know is whether
+// it passes a certain gray threshold.
+static QMap<qreal, qreal> sRgbTRCToLinear {
+    {0.0, 0.0},
+    {0.1, 0.01002},
+    {0.2, 0.0331},
+    {0.3, 0.07324},
+    {0.4, 0.13287},
+    {0.5, 0.21404},
+    {0.6, 0.31855},
+    {0.7, 0.44799},
+    {0.8, 0.60383},
+    {0.9, 0.78741},
+    {1.0, 1.0}
+};
+
+static QMap<qreal, qreal> linearToSRGBTRC {
+    {0.0, 0.0},
+    {0.01002, 0.1},
+    {0.0331, 0.2},
+    {0.07324, 0.3},
+    {0.13287, 0.4},
+    {0.21404, 0.5},
+    {0.31855, 0.6},
+    {0.44799, 0.7},
+    {0.60383, 0.8},
+    {0.78741, 0.9},
+    {1.0, 1.0}
+};
+
+qreal luminosityCoarse(const QColor &c, bool sRGBtrc)
+{
+    qreal r = c.redF();
+    qreal g = c.greenF();
+    qreal b = c.blueF();
+    if (sRGBtrc) {
+        if (r < 1.0) {
+            r = sRgbTRCToLinear.upperBound(r).value();
+        }
+        if (g < 1.0) {
+            g = sRgbTRCToLinear.upperBound(g).value();
+        }
+        if (b < 1.0) {
+            b = sRgbTRCToLinear.upperBound(b).value();
+        }
+    }
+    qreal lumi = (r * .2126) + (g * .7152) + (b * .0722);
+    if (sRGBtrc && lumi < 1.0) {
+        lumi = linearToSRGBTRC.lowerBound(lumi).value();
+    }
+    return lumi;
+}
+
 }

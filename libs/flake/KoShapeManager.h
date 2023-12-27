@@ -25,7 +25,6 @@ class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
 class KoPointerEvent;
-class KoShapePaintingContext;
 
 class QPainter;
 class QPointF;
@@ -148,7 +147,7 @@ public:
 
     /**
      * Prepare a shallow copy of all the shapes and the jobs to be rendered
-     * asynchronoursly later. The copies are stored in jobs, so that the user
+     * asynchronously later. The copies are stored in jobs, so that the user
      * could later pass these jobs into paintJob() in a separate thread.
      *
      * @param jobs a list of rects that are going to be updated. docUpdateRect
@@ -172,7 +171,7 @@ public:
      *
      * \see preparePaintJobs
      */
-    void paintJob(QPainter &painter, const KoShapeManager::PaintJob &job, bool forPrint);
+    void paintJob(QPainter &painter, const KoShapeManager::PaintJob &job);
 
     /**
      * Paint all shapes and their selection handles etc.
@@ -180,7 +179,7 @@ public:
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      * @param converter to convert between document and view coordinates.
      */
-    void paint(QPainter &painter, bool forPrint);
+    void paint(QPainter &painter);
 
     /**
      * Returns the shape located at a specific point in the document.
@@ -228,7 +227,7 @@ public:
     /**
      * Update the tree for finding the shapes.
      * This will remove the shape from the tree and will reinsert it again.
-     * The update to the tree will be posponed until it is needed so that successive calls
+     * The update to the tree will be postponed until it is needed so that successive calls
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
      */
@@ -238,7 +237,7 @@ public:
      * @brief renderSingleShape renders a shape on \p painter. This method includes all the
      * needed steps for painting a single shape: setting transformations, clipping and masking.
      */
-    static void renderSingleShape(KoShape *shape, QPainter &painter, KoShapePaintingContext &paintContext);
+    static void renderSingleShape(KoShape *shape, QPainter &painter);
 
     /**
      * A special interface for KoShape to use during shape destruction. Don't use this
@@ -275,7 +274,7 @@ private:
     class Private;
     Private * const d;
     Q_PRIVATE_SLOT(d, void updateTree())
-    Q_PRIVATE_SLOT(d, void forwardCompressedUdpate())
+    Q_PRIVATE_SLOT(d, void forwardCompressedUpdate())
 };
 
 #endif

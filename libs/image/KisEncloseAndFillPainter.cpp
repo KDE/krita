@@ -11,6 +11,8 @@
 #include <kis_selection_filters.h>
 #include <kis_iterator_ng.h>
 #include <KoUpdater.h>
+#include <kis_default_bounds.h>
+#include <KisImageResolutionProxy.h>
 
 #include "KisEncloseAndFillPainter.h"
 
@@ -130,6 +132,7 @@ public:
     bool regionSelectionInvert {false};
     bool regionSelectionIncludeContourRegions {true};
     bool regionSelectionIncludeSurroundingRegions {true};
+    QRect imageRect;
 
     Private(KisEncloseAndFillPainter *q) : q(q) {}
     
@@ -218,7 +221,8 @@ public:
     QVector<QPoint> getEnclosingContourPoints(KisPixelSelectionSP enclosingMask,
                                               const QRect &enclosingMaskRect) const;
 
-    void applyPostProcessing(KisPixelSelectionSP mask) const;
+    void applyPostProcessing(KisPixelSelectionSP mask,
+                             KisPaintDeviceSP referenceDevice) const;
 
     void invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask) const;
 
@@ -281,19 +285,31 @@ public:
                                    const QRect &rect) const;
 };
 
-KisEncloseAndFillPainter::KisEncloseAndFillPainter()
+KisEncloseAndFillPainter::KisEncloseAndFillPainter(const QSize &imageSize)
     : m_d(new Private(this))
-{}
+{
+    setWidth(imageSize.width());
+    setHeight(imageSize.height());
+    m_d->imageRect = QRect(QPoint(0, 0), imageSize);
+}
 
-KisEncloseAndFillPainter::KisEncloseAndFillPainter(KisPaintDeviceSP device)
+KisEncloseAndFillPainter::KisEncloseAndFillPainter(KisPaintDeviceSP device, const QSize &imageSize)
     : KisFillPainter(device)
     , m_d(new Private(this))
-{}
+{
+    setWidth(imageSize.width());
+    setHeight(imageSize.height());
+    m_d->imageRect = QRect(QPoint(0, 0), imageSize);
+}
 
-KisEncloseAndFillPainter::KisEncloseAndFillPainter(KisPaintDeviceSP device, KisSelectionSP selection)
+KisEncloseAndFillPainter::KisEncloseAndFillPainter(KisPaintDeviceSP device, KisSelectionSP selection, const QSize &imageSize)
     : KisFillPainter(device, selection)
     , m_d(new Private(this))
-{}
+{
+    setWidth(imageSize.width());
+    setHeight(imageSize.height());
+    m_d->imageRect = QRect(QPoint(0, 0), imageSize);
+}
 
 KisEncloseAndFillPainter::~KisEncloseAndFillPainter()
 {}
@@ -335,7 +351,7 @@ void KisEncloseAndFillPainter::genericEncloseAndFillStart(KisPixelSelectionSP en
     // Create a selection from the closed regions
     KisPixelSelectionSP pixelSelection = createEncloseAndFillSelection(enclosingMask, referenceDevice,
                                                                        (selection().isNull() ? 0 : selection()->pixelSelection()));
-    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
+    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds(), KisImageResolutionProxy::identity());
     newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     setCurrentFillSelection(newSelection);
 }
@@ -379,7 +395,7 @@ KisPixelSelectionSP KisEncloseAndFillPainter::createEncloseAndFillSelection(KisP
         newSelection->applySelection(existingSelection, SELECTION_INTERSECT);
     }
     // Post-process
-    m_d->applyPostProcessing(newSelection);
+    m_d->applyPostProcessing(newSelection, referenceDevice);
 
     return newSelection;
 }
@@ -482,9 +498,10 @@ void KisEncloseAndFillPainter::Private::selectAllRegions(KisPixelSelectionSP res
                                                          const QRect &enclosingMaskRect,
                                                          KisPaintDeviceSP referenceDevice) const
 {
-    // For performance reasons, this function outputs an inverted version of the enclosed regions
-    // Here we just fill all the connected regions from the border towards inside
-    selectRegionsFromContour(resultMask, enclosingMask, enclosingMaskRect, referenceDevice);
+    resultMask->applySelection(enclosingMask, SELECTION_REPLACE);
+    KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
+    selectRegionsFromContour(mask, enclosingMask, enclosingMaskRect, referenceDevice);
+    resultMask->applySelection(mask, SELECTION_SUBTRACT);
     if (resultMaskRect) {
         *resultMaskRect = resultMask->selectedExactRect();
     }
@@ -605,10 +622,10 @@ void KisEncloseAndFillPainter::Private::selectAllRegionsExceptFilledWithTranspar
     using namespace KisEncloseAndFillPainterDetail;
     const int softness = 100 - q->opacitySpread();
     if (softness == 0) {
-        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold());
+        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold());
         selectAllRegionsExceptFilledWithSpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     } else {
-        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold(), softness);
+        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold(), softness);
         selectAllRegionsExceptFilledWithSpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     }
 }
@@ -685,10 +702,10 @@ void KisEncloseAndFillPainter::Private::selectRegionsSurroundedByTransparent(Kis
     using namespace KisEncloseAndFillPainterDetail;
     const int softness = 100 - q->opacitySpread();
     if (softness == 0) {
-        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold());
+        HardSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold());
         selectRegionsSurroundedBySpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     } else {
-        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor(QColor(Qt::transparent), referenceDevice->colorSpace()), q->fillThreshold(), softness);
+        SoftSelectionPolicy<TransparentDifferencePolicy> policy(referenceDevice->colorSpace(), KoColor::createTransparent(referenceDevice->colorSpace()), q->fillThreshold(), softness);
         selectRegionsSurroundedBySpecificColorGeneric(resultMask, resultMaskRect, enclosingMask, enclosingMaskRect, referenceDevice, policy);
     }
 }
@@ -726,26 +743,33 @@ void KisEncloseAndFillPainter::Private::selectRegionsSurroundedBySpecificColorGe
     if (enclosingPoints.isEmpty()) {
         return;
     }
-    // Here we just fill all the areas from the border towards inside until the specific color
+    // Here we just fill all the areas from the border towards inside until the
+    // specific color. This selects any region that touches the enclosing area
+    // contour and that is not equal to the surrounding color
     if (colorOrTransparent) {
         selectRegionsFromContourUntilColorOrTransparent(resultMask, enclosingMask, enclosingPoints, enclosingMaskRect, referenceDevice, selectionPolicy.color);
     } else {
         selectRegionsFromContourUntilColor(resultMask, enclosingMask, enclosingPoints, enclosingMaskRect, referenceDevice, selectionPolicy.color);
     }
-    // Invert the mask since it contains the regions surrounding the regions we want
+    // Invert the mask since it contains the regions surrounding the regions we
+    // want, that is, the regions that touch the enclosing area contour and that
+    // are not equal to the surrounding color. We want the opposite
     resultMask->invert();
     // Since, after inverting, the mask includes the region outside the enclosing
     // mask, we must intersect the current mask with the enclosing mask. The result
     // is a mask that includes all the closed regions inside the enclosing mask
     resultMask->applySelection(enclosingMask, SELECTION_INTERSECT);
-    // Remove the surrounding regions, if needed
-    if (!regionSelectionIncludeSurroundingRegions) {
+    
+    if (regionSelectionIncludeSurroundingRegions) {
+        // Remove the regions that touch the enclosing area
+        removeContourRegions(resultMask, enclosingPoints, enclosingMaskRect);
+    } else {
+        // Remove the surrounding regions. Also there shouldn't be any regions
+        // that touch the enclosing area contour after this step
         KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
         selectSimilarRegions(mask, enclosingMask, enclosingMaskRect, referenceDevice, selectionPolicy);
         resultMask->applySelection(mask, SELECTION_SUBTRACT);
     }
-    // Remove the regions that touch the enclosing area
-    removeContourRegions(resultMask, enclosingPoints, enclosingMaskRect);
     if (resultMaskRect) {
         *resultMaskRect = resultMask->selectedExactRect();
     }
@@ -830,11 +854,27 @@ QVector<QPoint> KisEncloseAndFillPainter::Private::getEnclosingContourPoints(Kis
     return enclosingPoints;
 }
 
-void KisEncloseAndFillPainter::Private::applyPostProcessing(KisPixelSelectionSP mask) const
+void KisEncloseAndFillPainter::Private::applyPostProcessing(KisPixelSelectionSP mask,
+                                                            KisPaintDeviceSP referenceDevice) const
 {
     if (q->sizemod() > 0) {
-        KisGrowSelectionFilter biggy(q->sizemod(), q->sizemod());
-        biggy.process(mask, mask->selectedRect().adjusted(-q->sizemod(), -q->sizemod(), q->sizemod(), q->sizemod()));
+        if (q->stopGrowingAtDarkestPixel()) {
+            KisGrowUntilDarkestPixelSelectionFilter biggy(q->sizemod(), referenceDevice);
+            biggy.process(
+                mask, 
+                mask->selectedRect().adjusted(
+                    -q->sizemod(), -q->sizemod(), q->sizemod(), q->sizemod()
+                )
+            );
+        } else {
+            KisGrowSelectionFilter biggy(q->sizemod(), q->sizemod());
+            biggy.process(
+                mask,
+                mask->selectedRect().adjusted(
+                    -q->sizemod(), -q->sizemod(), q->sizemod(), q->sizemod()
+                )
+            );
+        }
     } else if (q->sizemod() < 0) {
         KisShrinkSelectionFilter tiny(-q->sizemod(), -q->sizemod(), false);
         tiny.process(mask, mask->selectedRect());
@@ -852,12 +892,7 @@ void KisEncloseAndFillPainter::Private::applyPostProcessing(KisPixelSelectionSP 
 
 void KisEncloseAndFillPainter::Private::invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask) const
 {
-    if (regionSelectionMethod == SelectAllRegions) {
-        // Return if the mask should be inverted since here it is already inverted
-        if (regionSelectionInvert) {
-            return;
-        }
-    } else if (!regionSelectionInvert) {
+    if (!regionSelectionInvert) {
         return;
     }
     resultMask->invert();
@@ -935,19 +970,25 @@ void KisEncloseAndFillPainter::Private::selectRegionsFromContour(KisPixelSelecti
     if (enclosingPoints.isEmpty()) {
         return;
     }
+    const QRect inclusionRect = q->device()->defaultBounds()->wrapAroundMode()
+                                ? enclosingMaskRect
+                                : imageRect;
     // Here we just fill all the areas from the border towards inside
     for (const QPoint &point : enclosingPoints) {
+        if (!inclusionRect.contains(point)) {
+            continue;
+        }
         // Continue if the region under the point was already filled
         if (*(resultMask->pixel(point).data()) == MAX_SELECTED) {
             continue;
         }
         KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(resultMask));
-        KisScanlineFill gc(referenceDevice, point, enclosingMaskRect);
+        KisScanlineFill gc(referenceDevice, point, inclusionRect);
         gc.setThreshold(q->fillThreshold());
         gc.setOpacitySpread(q->opacitySpread());
         // Use the enclosing mask as boundary so that we don't fill
         // potentially large regions on the outside
-        gc.fillSelectionWithBoundary(mask, enclosingMask);
+        gc.fillSelection(mask, enclosingMask);
         resultMask->applySelection(mask, SELECTION_ADD);
     }
 }
@@ -972,19 +1013,25 @@ void KisEncloseAndFillPainter::Private::selectRegionsFromContourUntilColor(KisPi
     if (enclosingPoints.isEmpty()) {
         return;
     }
+    const QRect inclusionRect = q->device()->defaultBounds()->wrapAroundMode()
+                                ? enclosingMaskRect
+                                : imageRect;
     // Here we just fill all the areas from the border towards inside until the specific color
     for (const QPoint &point : enclosingPoints) {
+        if (!inclusionRect.contains(point)) {
+            continue;
+        }
         // Continue if the region under the point was already filled
         if (*(resultMask->pixel(point).data()) == MAX_SELECTED) {
             continue;
         }
         KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(resultMask));
-        KisScanlineFill gc(referenceDevice, point, enclosingMaskRect);
+        KisScanlineFill gc(referenceDevice, point, inclusionRect);
         gc.setThreshold(q->fillThreshold());
         gc.setOpacitySpread(q->opacitySpread());
         // Use the enclosing mask as boundary so that we don't fill
         // potentially large regions in the outside
-        gc.fillSelectionUntilColorWithBoundary(mask, color, enclosingMask);
+        gc.fillSelectionUntilColor(mask, color, enclosingMask);
         resultMask->applySelection(mask, SELECTION_ADD);
     }
 }
@@ -1009,19 +1056,25 @@ void KisEncloseAndFillPainter::Private::selectRegionsFromContourUntilColorOrTran
     if (enclosingPoints.isEmpty()) {
         return;
     }
+    const QRect inclusionRect = q->device()->defaultBounds()->wrapAroundMode()
+                                ? enclosingMaskRect
+                                : imageRect;
     // Here we just fill all the areas from the border towards inside until the specific color
     for (const QPoint &point : enclosingPoints) {
+        if (!inclusionRect.contains(point)) {
+            continue;
+        }
         // Continue if the region under the point was already filled
         if (*(resultMask->pixel(point).data()) == MAX_SELECTED) {
             continue;
         }
         KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(resultMask));
-        KisScanlineFill gc(referenceDevice, point, enclosingMaskRect);
+        KisScanlineFill gc(referenceDevice, point, inclusionRect);
         gc.setThreshold(q->fillThreshold());
         gc.setOpacitySpread(q->opacitySpread());
         // Use the enclosing mask as boundary so that we don't fill
         // potentially large regions in the outside
-        gc.fillSelectionUntilColorOrTransparentWithBoundary(mask, color, enclosingMask);
+        gc.fillSelectionUntilColorOrTransparent(mask, color, enclosingMask);
         resultMask->applySelection(mask, SELECTION_ADD);
     }
 }
@@ -1041,13 +1094,19 @@ void KisEncloseAndFillPainter::Private::removeContourRegions(KisPixelSelectionSP
     if (enclosingPoints.isEmpty()) {
         return;
     }
+    const QRect inclusionRect = q->device()->defaultBounds()->wrapAroundMode()
+                                ? enclosingMaskRect
+                                : imageRect;
     // Here we just fill all the non-zero areas from the border towards inside
     for (const QPoint &point : enclosingPoints) {
+        if (!inclusionRect.contains(point)) {
+            continue;
+        }
         // Continue if the region under the point was already filled
         if (*(resultMask->pixel(point).data()) == MIN_SELECTED) {
             continue;
         }
-        KisScanlineFill gc(resultMask, point, enclosingMaskRect);
+        KisScanlineFill gc(resultMask, point, inclusionRect);
         gc.clearNonZeroComponent();
     }
 }

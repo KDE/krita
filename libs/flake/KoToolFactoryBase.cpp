@@ -50,7 +50,7 @@ QList<QAction *> KoToolFactoryBase::createActions(KisKActionCollection *actionCo
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction*> actions = createActionsImpl();
-    QAction *action = actionRegistry->makeQAction(id());
+    QAction *action = actionRegistry->makeQAction(id(), this);
     actionCollection->addAction(id(), action);
     connect(action, SIGNAL(triggered()), SLOT(activateTool()));
     //qDebug() << action << action->shortcut();

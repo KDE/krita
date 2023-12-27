@@ -61,17 +61,33 @@ void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
 {
     // processes that data _in_ place
     if (m_processor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
-        m_processor->getDefaultCPUProcessor()->apply(img);
+        if (numPixels > 16) {
+            // creation of PackedImageDesc is really slow on Windows due to malloc/free
+            OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
+            m_processorCPU->apply(img);
+        } else {
+            for (quint32 i = 0; i < numPixels; i++) {
+                m_processorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
+                pixels+=4;
+            }
+        }
     }
 }
 
 void OcioDisplayFilter::approximateInverseTransformation(quint8 *pixels, quint32 numPixels)
 {
     // processes that data _in_ place
-    if (m_revereseApproximationProcessor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
-        m_revereseApproximationProcessor->getDefaultCPUProcessor()->apply(img);
+    if (m_reverseApproximationProcessor) {
+        if (numPixels > 16) {
+            // creation of PackedImageDesc is really slow on Windows due to malloc/free
+            OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
+            m_reverseApproximationProcessorCPU->apply(img);
+        } else {
+            for (quint32 i = 0; i < numPixels; i++) {
+                m_reverseApproximationProcessorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
+                pixels+=4;
+            }
+        }
     }
 }
 
@@ -79,8 +95,16 @@ void OcioDisplayFilter::approximateForwardTransformation(quint8 *pixels, quint32
 {
     // processes that data _in_ place
     if (m_forwardApproximationProcessor) {
-        OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
-        m_forwardApproximationProcessor->getDefaultCPUProcessor()->apply(img);
+        if (numPixels > 16) {
+            // creation of PackedImageDesc is really slow on Windows due to malloc/free
+            OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
+            m_forwardApproximationProcessorCPU->apply(img);
+        } else {
+            for (quint32 i = 0; i < numPixels; i++) {
+                m_forwardApproximationProcessorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
+                pixels+=4;
+            }
+        }
     }
 }
 
@@ -255,6 +279,7 @@ void OcioDisplayFilter::updateProcessor()
     try {
         AutoSetAndRestoreThreadLocale l;
         m_processor = vpt->getProcessor(config, config->getCurrentContext());
+        m_processorCPU = m_processor->getDefaultCPUProcessor();
     } catch (OCIO::Exception &e) {
         // XXX: How to not break the OCIO shader now?
         errKrita << "OCIO exception while parsing the current context:" << e.what();
@@ -263,12 +288,14 @@ void OcioDisplayFilter::updateProcessor()
     }
 
     m_forwardApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_FORWARD);
+    m_forwardApproximationProcessorCPU = m_forwardApproximationProcessor->getDefaultCPUProcessor();
 
     try {
-        m_revereseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
+        m_reverseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
+        m_reverseApproximationProcessorCPU = m_reverseApproximationProcessor->getDefaultCPUProcessor();
     } catch (...) {
         warnKrita << "OCIO inverted matrix does not exist!";
-        // m_revereseApproximationProcessor;
+        // m_reverseApproximationProcessor;
     }
 
     m_shaderDirty = true;
@@ -480,7 +507,13 @@ bool OcioDisplayFilter::updateShaderImpl(F *f)
         unsigned height = 0;
         OCIO::GpuShaderDesc::TextureType channel = OCIO::GpuShaderDesc::TEXTURE_RGB_CHANNEL;
         OCIO::Interpolation interpolation = OCIO::INTERP_LINEAR;
+
+#if OCIO_VERSION_HEX >= 0x2030000
+        OCIO::GpuShaderCreator::TextureDimensions dimensions;
+        shaderDesc->getTexture(idx, textureName, samplerName, width, height, channel, dimensions, interpolation);
+#else
         shaderDesc->getTexture(idx, textureName, samplerName, width, height, channel, interpolation);
+#endif
 
         if (!textureName || !*textureName || !samplerName || !*samplerName || width == 0) {
             errOpenGL << "The texture data is corrupted";

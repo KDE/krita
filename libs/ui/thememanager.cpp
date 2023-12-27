@@ -31,7 +31,6 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QDebug>
-#include <QStandardPaths>
 #include <QAction>
 #include <QMessageBox>
 
@@ -135,6 +134,11 @@ void ThemeManager::slotChangePalette()
 {
     //qDebug() << "slotChangePalette" << sender();
 
+    // We must clear the icon cache before the palette is changed. That way
+    // The widgets can change the icons properly when they receive the
+    // PaletteChange event if needed.
+    KisIconUtils::clearIconCache();
+
     QString theme(currentThemeName());
     QString filename        = d->themeMap.value(theme);
     KSharedConfigPtr config = KSharedConfig::openConfig(filename);
@@ -173,7 +177,7 @@ void ThemeManager::slotChangePalette()
         palette.setBrush(state, QPalette::Link,            schemeView.foreground(KColorScheme::LinkText));
         palette.setBrush(state, QPalette::LinkVisited,     schemeView.foreground(KColorScheme::VisitedText));
     }
-
+    
     //qDebug() << ">>>>>>>>>>>>>>>>>> going to set palette on app" << theme;
     // hint for the style to synchronize the color scheme with the window manager/compositor
     qApp->setProperty("KDE_COLOR_SCHEME_PATH", filename);
@@ -189,7 +193,6 @@ void ThemeManager::slotChangePalette()
     }
 #endif
 
-    KisIconUtils::clearIconCache();
     emit signalThemeChanged();
 }
 
@@ -217,8 +220,8 @@ void ThemeManager::populateThemeMenu()
             this, SLOT(slotChangePalette()));
 
     QAction * action;
-    QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
-    schemeFiles += KoResourcePaths::findAllResources("genericdata", "color-schemes/*.colors");
+    QStringList schemeFiles = KoResourcePaths::findAllAssets("data", "color-schemes/*.colors");
+    schemeFiles += KoResourcePaths::findAllAssets("genericdata", "color-schemes/*.colors");
 
     QMap<QString, QAction*> actionMap;
     for (int i = 0; i < schemeFiles.size(); ++i) {
@@ -288,8 +291,8 @@ QPixmap ThemeManager::createSchemePreviewIcon(const KSharedConfigPtr& config)
 
 void ThemeManager::populateThemeMap()
 {
-    QStringList schemeFiles = KoResourcePaths::findAllResources("data", "color-schemes/*.colors");
-    schemeFiles += KoResourcePaths::findAllResources("genericdata", "color-schemes/*.colors");
+    QStringList schemeFiles = KoResourcePaths::findAllAssets("data", "color-schemes/*.colors");
+    schemeFiles += KoResourcePaths::findAllAssets("genericdata", "color-schemes/*.colors");
     
     for (int i = 0; i < schemeFiles.size(); ++i) {
         const QString filename  = schemeFiles.at(i);

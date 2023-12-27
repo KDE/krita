@@ -1,0 +1,29 @@
+From 3908e72cc6b7600f9645e71c795cdff0024ebd88 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 24 Nov 2022 01:20:53 +0000
+Subject: [PATCH 2/3] lame: Install pkg-config file
+
+---
+ meson.build | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index c29d68e..798048f 100644
+--- a/meson.build
++++ b/meson.build
+@@ -246,3 +246,12 @@ subdir('libmp3lame')
+ if curses_dep.found()
+   subdir('frontend')
+ endif
++
++pkg = import('pkgconfig')
++
++pkg.generate(
++  lamelib,
++  name: meson.project_name(),
++  description: 'LAME is a high quality MPEG Audio Layer III (MP3) encoder',
++  url: 'http://lame.sourceforge.net/'
++)
+-- 
+2.37.1.windows.1
+

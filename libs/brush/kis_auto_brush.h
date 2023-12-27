@@ -52,9 +52,7 @@ public:
     KisFixedPaintDeviceSP paintDevice(const KoColorSpace*,
             KisDabShape const&,
             const KisPaintInformation&,
-            double = 0, double = 0) const override {
-        return 0; // The autobrush does NOT support images!
-    }
+            double = 0, double = 0) const override;
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
         KisBrush::ColoringInformation* src,
@@ -64,11 +62,12 @@ public:
         qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR,
         qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
-    QPainterPath outline(bool forcePreciseOutline = false) const override;
+    KisOptimizedBrushOutline outline(bool forcePreciseOutline = false) const override;
 
     void notifyBrushIsGoingToBeClonedForStroke() override;
 
     void coldInitBrush() override;
+    KisFixedPaintDeviceSP outlineSourceImage() const override;
 
 public:
 

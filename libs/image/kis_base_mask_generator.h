@@ -68,9 +68,11 @@ public:
 
     virtual bool shouldSupersample() const;
 
+    virtual bool shouldSupersample6x6() const;
+
     virtual bool shouldVectorize() const;
 
-    virtual KisBrushMaskApplicatorBase* applicator();
+    virtual KisBrushMaskApplicatorBase *applicator() const = 0;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 

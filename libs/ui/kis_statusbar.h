@@ -95,10 +95,6 @@ private Q_SLOTS:
 Q_SIGNALS:
     void sigCancellationRequested();
 
-    /// tell the listener that the memory usage has changed
-    /// and it needs to update its stats
-    void memoryStatusUpdated();
-
 private:
 
     void removeStatusBarItem(QWidget *widget);

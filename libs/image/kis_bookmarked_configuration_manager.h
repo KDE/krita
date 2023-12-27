@@ -57,7 +57,7 @@ public:
      * @param base the base of the new name, including a "%1" for incrementing
      *      the number, for instance : "New Configuration %1", then this function
      *      will return the string where %1 will be replaced by the lowest number
-     *      and be inexistant in the lists of configuration
+     *      and be nonexistent in the lists of configuration
      */
     QString uniqueName(const KLocalizedString & base);
 

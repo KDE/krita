@@ -32,12 +32,17 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_layer_properties_icons.h"
 
+#include "KisFrameChangeUpdateRecipe.h"
 #include "kis_onion_skin_cache.h"
+#include "kis_time_span.h"
+
 
 struct Q_DECL_HIDDEN KisPaintLayer::Private
 {
 public:
-    Private() : contentChannel(0) {}
+    Private(KisPaintLayer *_q) : q(_q), contentChannel(0) {}
+
+    KisPaintLayer *q;
 
     KisPaintDeviceSP paintDevice;
     QBitArray        paintChannelFlags;
@@ -49,50 +54,62 @@ public:
     KisOnionSkinCache onionSkinCache;
 
     bool onionSkinVisibleOverride = true;
+
+    [[nodiscard]]
+    KisFrameChangeUpdateRecipe
+    handleRasterKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time);
 };
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, KisPaintDeviceSP dev)
     : KisLayer(image, name, opacity)
-    , m_d(new Private())
+    , m_d(new Private(this))
 {
     Q_ASSERT(dev);
 
-    init(dev);
+    m_d->paintDevice = dev;
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->paintDevice->setSupportsWraparoundMode(true);
+    m_d->paintDevice->setParentNode(this);
 }
 
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity)
     : KisLayer(image, name, opacity)
-    , m_d(new Private())
+    , m_d(new Private(this))
 {
     Q_ASSERT(image);
 
-    init(new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image)));
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    m_d->paintDevice->setSupportsWraparoundMode(true);
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
     : KisLayer(image, name, opacity)
-    , m_d(new Private())
+    , m_d(new Private(this))
 {
     if (!colorSpace) {
         Q_ASSERT(image);
         colorSpace = image->colorSpace();
     }
     Q_ASSERT(colorSpace);
-    init(new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image)));
+    m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
+    m_d->paintDevice->setSupportsWraparoundMode(true);
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     : KisLayer(rhs)
     , KisIndirectPaintingSupport()
-    , m_d(new Private)
+    , m_d(new Private(this))
 {
     const bool copyFrames = (rhs.m_d->contentChannel != 0);
     if (!copyFrames) {
-        init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
+        m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopySnapshot, this);
+        m_d->paintDevice->setSupportsWraparoundMode(true);
+        m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
     } else {
-        init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames), rhs.m_d->paintChannelFlags);
+        m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames, this);
+        m_d->paintDevice->setSupportsWraparoundMode(true);
+        m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
 
         m_d->contentChannel = m_d->paintDevice->keyframeChannel();
         addKeyframeChannel(m_d->contentChannel);
@@ -101,14 +118,6 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
 
         KisLayer::enableAnimation();
     }
-}
-
-void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags)
-{
-    m_d->paintDevice = paintDevice;
-    m_d->paintDevice->setParentNode(this);
-
-    m_d->paintChannelFlags = paintChannelFlags;
 }
 
 KisPaintLayer::~KisPaintLayer()
@@ -206,11 +215,6 @@ void KisPaintLayer::setSectionModelProperties(const KisBaseNode::PropertyList &p
     }
 
     KisLayer::setSectionModelProperties(properties);
-}
-
-const KoColorSpace * KisPaintLayer::colorSpace() const
-{
-    return m_d->paintDevice->colorSpace();
 }
 
 bool KisPaintLayer::accept(KisNodeVisitor &v)
@@ -321,11 +325,61 @@ KisKeyframeChannel *KisPaintLayer::requestKeyframeChannel(const QString &id)
     if (id == KisKeyframeChannel::Raster.id()) {
         m_d->contentChannel = m_d->paintDevice->createKeyframeChannel(KisKeyframeChannel::Raster);
         m_d->contentChannel->setOnionSkinsEnabled(onionSkinEnabled());
+
         enableAnimation();
         return m_d->contentChannel;
     }
 
     return KisLayer::requestKeyframeChannel(id);
+}
+
+KisFrameChangeUpdateRecipe KisPaintLayer::Private::handleRasterKeyframeChannelUpdateImpl(const KisKeyframeChannel *channel, int time)
+{
+    KisFrameChangeUpdateRecipe recipe;
+
+    recipe.affectedRange = channel->affectedFrames(time);
+    recipe.affectedRect = channel->affectedRect(time);
+
+    KisImageWSP image = q->image();
+    if (image) {
+        KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
+        if (recipe.affectedRange.contains(bounds->currentTime())) {
+            recipe.totalDirtyRect = recipe.affectedRect;
+        }
+    }
+
+    if (contentChannel->onionSkinsEnabled()) {
+        recipe.totalDirtyRect |= KisOnionSkinCompositor::instance()->updateExtentOnAddition(paintDevice, time);
+    }
+
+    return recipe;
+}
+
+void KisPaintLayer::handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time)
+{
+    if (channel->id() == KisKeyframeChannel::Raster.id()) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "raster channel is not supposed to emit sigKeyframeChanged");
+    } else {
+        KisLayer::handleKeyframeChannelFrameChange(channel, time);
+    }
+}
+
+void KisPaintLayer::handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time)
+{
+    if (channel->id() == KisKeyframeChannel::Raster.id()) {
+        m_d->handleRasterKeyframeChannelUpdateImpl(channel, time).notify(this);
+    } else {
+        KisLayer::handleKeyframeChannelFrameAdded(channel, time);
+    }
+}
+
+KisFrameChangeUpdateRecipe KisPaintLayer::handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time)
+{
+    if (channel->id() == KisKeyframeChannel::Raster.id()) {
+        return m_d->handleRasterKeyframeChannelUpdateImpl(channel, time);
+    } else {
+        return KisLayer::handleKeyframeChannelFrameAboutToBeRemovedImpl(channel, time);
+    }
 }
 
 bool KisPaintLayer::supportsKeyframeChannel(const QString &id)

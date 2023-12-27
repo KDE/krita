@@ -55,6 +55,7 @@ private:
     /// \param deletedTag tag that can be undeleted (activated again)
     ///
     void setUndeletionCandidate(const KisTagSP deletedTag);
+    KisTagSP undeletionCandidate() const;
 
     void setCurrentTag(const KisTagSP tag);
 
@@ -115,4 +116,4 @@ private:
     friend class KisTagChooserWidget;
 };
 
-#endif // KOTAGTOOLBUTTON_H
+#endif // KISTAGTOOLBUTTON_H

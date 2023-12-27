@@ -16,6 +16,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
@@ -81,8 +82,9 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 
 void KisSelectionBasedLayer::initSelection()
 {
-    m_d->selection = KisSelectionSP(new KisSelection(KisDefaultBoundsSP(new KisDefaultBounds(image()))));
+    m_d->selection = new KisSelection(new KisDefaultBounds(image()), toQShared(new KisImageResolutionProxy(image())));
     m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
+    m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
@@ -103,7 +105,8 @@ void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
     m_d->imageConnections.clear();
     m_d->paintDevice->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
-    m_d->selection->pixelSelection()->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
+    m_d->selection->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
+    m_d->selection->setResolutionProxy(m_d->selection->resolutionProxy()->createOrCloneDetached(image));
     KisLayer::setImage(image);
 
     if (image) {
@@ -226,6 +229,8 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->setParentNode(this);
         m_d->selection->setDefaultBounds(new KisDefaultBounds(image()));
+        m_d->selection->setResolutionProxy(toQShared(new KisImageResolutionProxy(image())));
+        m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
         m_d->selection->updateProjection();
 
         KisPixelSelectionSP pixelSelection = m_d->selection->pixelSelection();
@@ -235,13 +240,16 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         }
 
         KisImageSP imageSP = image().toStrongRef();
-        KIS_SAFE_ASSERT_RECOVER_RETURN(imageSP);
-
-        if (m_d->selection->pixelSelection()->defaultBounds()->bounds() != imageSP->bounds()) {
-            qWarning() << "WARNING: KisSelectionBasedLayer::setInternalSelection"
-                       << "New selection has suspicious default bounds";
-            qWarning() << "WARNING:" << ppVar(m_d->selection->pixelSelection()->defaultBounds()->bounds());
-            qWarning() << "WARNING:" << ppVar(imageSP->bounds());
+        if (imageSP) {
+            /**
+             * Sanity check for the case when the image is present
+             */
+            if (m_d->selection->pixelSelection()->defaultBounds()->bounds() != imageSP->bounds()) {
+                qWarning() << "WARNING: KisSelectionBasedLayer::setInternalSelection"
+                           << "New selection has suspicious default bounds";
+                qWarning() << "WARNING:" << ppVar(m_d->selection->pixelSelection()->defaultBounds()->bounds());
+                qWarning() << "WARNING:" << ppVar(imageSP->bounds());
+            }
         }
 
     } else {
@@ -364,5 +372,13 @@ QImage KisSelectionBasedLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRat
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) :
            QImage();
+}
+
+int KisSelectionBasedLayer::thumbnailSeqNo() const
+{
+    KisSelectionSP originalSelection = internalSelection();
+    KisPaintDeviceSP originalDevice = original();
+
+    return originalDevice && originalSelection ? originalDevice->sequenceNumber() : -1;
 }
 

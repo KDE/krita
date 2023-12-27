@@ -12,6 +12,7 @@
 #include "KoShapeContainerModel.h"
 #include "kis_types.h"
 #include "kis_signal_compressor.h"
+#include "KisImageResolutionProxy.h"
 
 class KisShapeSelection;
 
@@ -22,7 +23,7 @@ class KisShapeSelectionModel: public QObject, public KoShapeContainerModel
 {
     Q_OBJECT
 public:
-    KisShapeSelectionModel(KisImageWSP image, KisSelectionWSP selection, KisShapeSelection* shapeSelection);
+    KisShapeSelectionModel(KisImageResolutionProxySP resolutionProxy, KisSelectionWSP selection, KisShapeSelection* shapeSelection);
     ~KisShapeSelectionModel() override;
 
     void add(KoShape *child) override;
@@ -43,12 +44,15 @@ public:
     void childChanged(KoShape * child, KoShape::ChangeType type) override;
     void setShapeSelection(KisShapeSelection* selection);
 
+    void setResolutionProxy(KisImageResolutionProxySP newResolutionProxy);
+    KisImageResolutionProxySP resolutionProxy() const;
+
 private Q_SLOTS:
     void requestUpdate(const QRect &updateRect);
 
 private:
     QMap<KoShape*, QRectF> m_shapeMap;
-    KisImageWSP m_image;
+    KisImageResolutionProxySP m_resolutionProxy;
     KisSelectionWSP m_parentSelection;
     KisShapeSelection* m_shapeSelection;
 

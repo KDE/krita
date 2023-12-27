@@ -93,8 +93,8 @@ QScroller* KisKineticScroller::createPreconfiguredScroller(QAbstractScrollArea *
 
         // DragStartDistance seems to be based on meter per second; though it's
         // not explicitly documented, other QScroller values are in that metric.
-        // To start kinetic scrolling, with minimal sensitity, we expect a drag
-        // of 10 mm, with minimum sensitity any > 0 mm.
+        // To start kinetic scrolling, with minimal sensitivity, we expect a drag
+        // of 10 mm, with minimum sensitivity any > 0 mm.
         const float mm = 0.001f;
         const float resistance = 1.0f - (sensitivity / 100.0f);
         const float mousePressEventDelay = config.readEntry("KineticScrollingMousePressDelay", 1.0f - 0.75f * resistance);

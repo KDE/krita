@@ -31,6 +31,8 @@ private Q_SLOTS:
     void testTextTabSpacing();
     void testTextDecorations();
     void testRightToLeft();
+    void testRightToLeftAnchoring();
+    void testVerticalText();
 
     void testQtBidi();
     void testQtDxDy();
@@ -45,16 +47,53 @@ private Q_SLOTS:
 
     void testEmptyTextChunk();
     void testTrailingWhitespace();
+    void testWhiteSpaceRules();
 
     void testConvertHtmlToSvg();
     void testTextWithMultipleRelativeOffsets();
     void testTextWithMultipleAbsoluteOffsetsArabic();
     void testTextWithMultipleRelativeOffsetsArabic();
+    void testTextWithMultipleRelativeOffsetsVertical();
+    void testTextWithMultipleRotations();
 
     void testTextOutline();
 
     void testTextFontSize();
 
+    void testAddingTestFont();
+
+    void testUnicodeGraphemeClusters();
+
+    void testFontSelectionForText();
+    void testFontStyleSelection();
+    void testFontSizeConfiguration();
+
+    void testFontSizeRender();
+    void testFontOpenTypeVariationsConfiguration();
+    void testFontColorRender();
+
+    void testCssFontVariants();
+
+    void testTextLength();
+    void testTextPathBasic();
+    void testTextPathComplex();
+
+    void testCssTextTransform();
+
+    void testTextInlineSize();
+
+    void testTextWrap();
+
+    void testTextBaselineAlignment();
+
+    void testCssShapeParsing();
+    void testShapeInsideRender();
+
+    void testTextInsertion();
+
+    void testTextDeletion_data();
+    void testTextDeletion();
+    void testNavigation();
 };
 
 #endif // TESTSVGTEXT_H

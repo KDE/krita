@@ -16,6 +16,7 @@
 #include "lazybrush/kis_colorize_mask.h"
 
 #include "kis_filter_mask.h"
+#include "kis_generator_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
@@ -45,6 +46,14 @@ void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer 
     KoUpdater *updater = helper.updater();
     undoAdapter->addCommand(layer->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
     updater->setProgress(100);
+}
+
+void KisConvertColorSpaceProcessingVisitor::visit(KisGeneratorLayer *layer, KisUndoAdapter *undoAdapter)
+{
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisGeneratorLayer*>(layer, false));
+    KisSimpleProcessingVisitor::visit(layer, undoAdapter);
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisGeneratorLayer*>(layer, true));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
@@ -93,7 +102,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
         layer->original()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
-    if (layer->paintDevice()) {
+    if (layer->paintDevice() && layer->paintDevice()->colorSpace()->colorModelId() != AlphaColorModelID) {
         layer->paintDevice()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
@@ -101,7 +110,7 @@ void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *no
         layer->projection()->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags, parentConversionCommand, helper.updater());
     }
 
-    if (layer && alphaDisabled) {
+    if (alphaDisabled) {
         new KisChangeChannelFlagsCommand(m_dstColorSpace->channelFlags(true, false),
                                          layer, parentConversionCommand);
     }

@@ -41,11 +41,7 @@ public:
     struct Config
     {
         Config() :
-#ifdef Q_OS_ANDROID
-            modal(false),
-#else
             modal(true),
-#endif
             visualColorSelector(true),
             paletteBox(true),
             screenColorSampler(true),

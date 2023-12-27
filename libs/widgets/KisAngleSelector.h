@@ -167,18 +167,17 @@ public:
      */
     FlipOptionsMode flipOptionsMode() const;
     /**
-     * @brief Gets the size of the gauge widget
-     * 
-     * By default the size of the gauge is set to the height of the spin box
-     * @return The size of the gauge widget
-     * @see setGaugeSize(int)
+     * @brief Gets the common height of the widgets inside this angle selector
+     * @return The height of the internal widgets (angle gauge, spin box, etc.).
+     *         Returns 0 if each widget has its default height.
+     * @see setWidgetsHeight(int)
      */
-    int gaugeSize() const;
+    int widgetsHeight() const;
     /**
      * @brief Gets the direction in which the angle increases in the angle gauge
      * @return The direction in which the angle increases
-     * @see KisAngleGauge::IcreasingDirection
-     * @see setIncreasingDirection(KisAngleGauge::IcreasingDirection)
+     * @see KisAngleGauge::IncreasingDirection
+     * @see setIncreasingDirection(KisAngleGauge::IncreasingDirection)
      */
     KisAngleGauge::IncreasingDirection increasingDirection() const;
     /**
@@ -251,15 +250,16 @@ public:
      */
     void setFlipOptionsMode(FlipOptionsMode newMode);
     /**
-     * @brief Sets the size of the gauge widget
-     * @param newGaugeSize the new size of the gauge widget
-     * @see gaugeSize() const
+     * @brief Sets the common height of the widgets inside this angle selector.
+     *        Use 0 to reset widgets to default height.
+     * @param newHeight the new height of the internal widgets (angle gauge, spin box, etc.)
+     * @see widgetsHeight() const
      */
-    void setGaugeSize(int newGaugeSize);
+    void setWidgetsHeight(int newHeight);
     /**
      * @brief Sets the increasing direction in the angle gauge
      * @param newIncreasingDirection The new increasing direction
-     * @see IcreasingDirection
+     * @see IncreasingDirection
      * @see increasingDirection() const
      */
     void setIncreasingDirection(KisAngleGauge::IncreasingDirection newIncreasingDirection);

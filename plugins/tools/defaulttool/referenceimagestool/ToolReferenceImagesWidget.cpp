@@ -16,6 +16,7 @@
 #include <kis_signals_blocker.h>
 #include <kis_signal_compressor.h>
 #include <KisReferenceImage.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <kis_clipboard.h>
 
 #include <QApplication>
@@ -41,15 +42,17 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->setupUi(this);
 
     d->ui->opacitySlider->setRange(0, 100);
-    d->ui->opacitySlider->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
-    d->ui->opacitySlider->setSuffix(i18n(" %"));
+    d->ui->opacitySlider->setTextTemplates(
+        i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"),
+        i18nc("{n} is the number value, % is the percent sign", "Opacity [*varies*]: {n}%"));
     d->ui->opacitySlider->setValueGetter(
         [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
     );
 
     d->ui->saturationSlider->setRange(0, 100);
-    d->ui->saturationSlider->setPrefixes(i18n("Saturation: "), i18n("Saturation [*varies*]: "));
-    d->ui->saturationSlider->setSuffix(i18n(" %"));
+    d->ui->saturationSlider->setTextTemplates(
+        i18nc("{n} is the number value, % is the percent sign", "Saturation: {n}%"),
+        i18nc("{n} is the number value, % is the percent sign", "Saturation [*varies*]: {n}%"));
     d->ui->saturationSlider->setValueGetter(
         [](KoShape *s){
             auto *r = dynamic_cast<KisReferenceImage*>(s);
@@ -108,6 +111,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
 {
+    delete d->ui;
+    d->ui = nullptr;
 }
 
 void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)

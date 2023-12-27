@@ -1,0 +1,93 @@
+<svg width="550px" height="700px"
+    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+<defs>
+    <path id="bubble" stroke="cornflowerblue" fill="none" d="M60 0C90 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 30 0 60 0Z" />
+</defs>
+<g id="testRect">
+    
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(5,5)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(5,145)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(5,285)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(5,425)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(5,565)" />
+    <text id="test1" transform="translate(5,5)" style="shape-inside: url(#bubble); text-align: start;"
+          font-family="DejaVu Sans" fill="blue" font-size="12">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    <text id="test2" transform="translate(5,145)" style="shape-inside: url(#bubble); text-align: center"
+          font-family="DejaVu Sans" fill="blue" font-size="12">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    <text id="test3" transform="translate(5,285)" style="shape-inside: url(#bubble); text-align: end"
+          font-family="DejaVu Sans" fill="blue" font-size="12">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    <text id="test4" transform="translate(5,425)" style="shape-inside: url(#bubble); text-align:left"
+          font-family="DejaVu Sans" fill="blue" font-size="12">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    <text id="test5" transform="translate(5,565)" style="shape-inside: url(#bubble); text-align:right"
+          font-family="DejaVu Sans" fill="blue" font-size="12">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(145,5)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(145,145)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(145,285)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(145,425)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(145,565)" />
+    <text id="test1" transform="translate(145,5)" style="shape-inside: url(#bubble); direction: rtl; text-align:start"
+          font-family="DejaVu Sans" fill="blue" font-size="12">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc
+    </text>
+    <text id="test2rtl" transform="translate(145,145)" style="shape-inside: url(#bubble); direction: rtl; text-align: center"
+          font-family="DejaVu Sans" fill="blue" font-size="12">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc
+    </text>
+    <text id="test3rtl" transform="translate(145,285)" style="shape-inside: url(#bubble); direction: rtl;text-align: end"
+          font-family="DejaVu Sans" fill="blue" font-size="12">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc
+    </text>
+    <text id="test4rtl" transform="translate(145,425)" style="shape-inside: url(#bubble); direction: rtl;text-align:left"
+          font-family="DejaVu Sans" fill="blue" font-size="12">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc
+    </text>
+    <text id="test5rtl" transform="translate(145,565)" style="shape-inside: url(#bubble); direction: rtl;text-align:right"
+          font-family="DejaVu Sans" fill="blue" font-size="12">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc
+    </text>
+    
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(285,5)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(285,145)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(285,285)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(285,425)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(285,565)" />
+    <text id="test1ttb" transform="translate(285,5)" style="shape-inside: url(#bubble); writing-mode: vertical-rl; text-align: start"
+          font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test2ttb" transform="translate(285,145)" style="shape-inside: url(#bubble); writing-mode: vertical-rl; text-align: center"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test3ttb" transform="translate(285,285)" style="shape-inside: url(#bubble); writing-mode: vertical-rl; text-align: end"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test4ttb" transform="translate(285,425)" style="shape-inside: url(#bubble); writing-mode: vertical-rl; text-align:left"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test5ttb" transform="translate(285,565)" style="shape-inside: url(#bubble); writing-mode: vertical-rl; text-align:right"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(425,5)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(425,145)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(425,285)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(425,425)" />
+    <use xlink:href="#bubble" fill="none" stroke="cornflowerblue" transform="translate(425,565)" />
+    <text id="test1ttblr" transform="translate(425,5)" style="shape-inside: url(#bubble); writing-mode: vertical-lr; text-align:start"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test2ttblr" transform="translate(425,145)" style="shape-inside: url(#bubble); writing-mode: vertical-lr; text-align:center"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test3ttblr" transform="translate(425,285)" style="shape-inside: url(#bubble); writing-mode: vertical-lr; text-align:end"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test4ttblr" transform="translate(425,425)" style="shape-inside: url(#bubble); writing-mode: vertical-lr; text-align:left"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+    <text id="test4ttblr" transform="translate(425,565)" style="shape-inside: url(#bubble); writing-mode: vertical-lr; text-align:right"
+          font-family="Krita_Test_Unicode_Variation_A,DejaVu Sans" fill="blue" font-size="16">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;あ
+    </text>
+</g>
+
+</svg>

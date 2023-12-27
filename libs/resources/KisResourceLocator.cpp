@@ -28,6 +28,7 @@
 #include <KisMimeDatabase.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
+#include <KisUsageLogger.h>
 
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
@@ -39,6 +40,7 @@
 #include <KisStorageModel.h>
 #include <KoMD5Generator.h>
 #include <KoResourceLoadResult.h>
+#include <KisResourceThumbnailCache.h>
 
 #include "ResourceDebug.h"
 
@@ -49,7 +51,6 @@ public:
     QString resourceLocation;
     QMap<QString, KisResourceStorageSP> storages;
     QHash<QPair<QString, QString>, KoResourceSP> resourceCache;
-    QMap<QPair<QString, QString>, QImage> thumbnailCache;
     QMap<QPair<QString, QString>, KisTagSP> tagCache;
     QStringList errorMessages;
 };
@@ -79,7 +80,9 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
 {
     InitializationStatus initializationStatus = InitializationStatus::Unknown;
 
-    d->resourceLocation = resourceLocationBaseFromConfig();
+    d->resourceLocation = KoResourcePaths::getAppDataLocation();
+
+    if (!d->resourceLocation.endsWith('/')) d->resourceLocation += '/';
 
     QFileInfo fi(d->resourceLocation);
 
@@ -148,24 +151,6 @@ bool KisResourceLocator::resourceCached(QString storageLocation, const QString &
     return d->resourceCache.contains(key);
 }
 
-void KisResourceLocator::cacheThumbnail(QString storageLocation, const QString &resourceType, const QString &filename,
-                                        const QImage &img) {
-    storageLocation = makeStorageLocationAbsolute(storageLocation);
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
-
-    d->thumbnailCache[key] = img;
-}
-
-QImage KisResourceLocator::thumbnailCached(QString storageLocation, const QString &resourceType, const QString &filename)
-{
-    storageLocation = makeStorageLocationAbsolute(storageLocation);
-    QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + filename);
-    if (d->thumbnailCache.contains(key)) {
-        return d->thumbnailCache[key];
-    }
-    return QImage();
-}
-
 void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 {
     QList<KoResourceLoadResult> requiredResources = resource->requiredResources(KisGlobalResourcesInterface::instance());
@@ -177,12 +162,6 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
             KIS_SAFE_ASSERT_RECOVER_NOOP(res.resource()->resourceId() >= 0);
             break;
         case KoResourceLoadResult::EmbeddedResource: {
-            if (!res.embeddedResource().sanityCheckMd5()) {
-                qWarning() << "WARNING: KisResourceLocator::loadRequiredResources failed to sanity check the embedded resource:";
-                qWarning() << "         parent resource:" << resource->signature();
-                qWarning() << "         embedded resource:" << res.signature();
-            }
-
             KoResourceSignature sig = res.embeddedResource().signature();
             QByteArray data = res.embeddedResource().data();
             QBuffer buffer(&data);
@@ -428,8 +407,8 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
     QPair<QString, QString> key = QPair<QString, QString> (rs.storageLocation, rs.resourceType + "/" + rs.resourceFileName);
 
     d->resourceCache.remove(key);
-    if (!active && d->thumbnailCache.contains(key)) {
-        d->thumbnailCache.remove(key);
+    if (!active) {
+        KisResourceThumbnailCache::instance()->remove(key);
     }
 
     bool result = KisResourceCacheDb::setResourceActive(resourceId, active);
@@ -595,7 +574,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         const QPair<QString, QString> key = {absoluteStorageLocation, resourceType + "/" + resource->filename()};
         // Add to the cache
         d->resourceCache[key] = resource;
-        d->thumbnailCache[key] = resource->thumbnail();
+        KisResourceThumbnailCache::instance()->insert(key, resource->thumbnail());
 
         return resource;
     }
@@ -679,7 +658,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     if (!storage->supportsVersioning()) return false;
 
     // remove older version
-    d->thumbnailCache.remove(QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename()));
+    KisResourceThumbnailCache::instance()->remove(storageLocation, resourceType, resource->filename());
 
     resource->updateThumbnail();
     resource->setVersion(resource->version() + 1);
@@ -708,7 +687,7 @@ bool KisResourceLocator::updateResource(const QString &resourceType, const KoRes
     // Update the resource in the cache
     QPair<QString, QString> key = QPair<QString, QString> (storageLocation, resourceType + "/" + resource->filename());
     d->resourceCache[key] = resource;
-    d->thumbnailCache[key] = resource->thumbnail();
+    KisResourceThumbnailCache::instance()->insert(key, resource->thumbnail());
 
     return true;
 }
@@ -781,8 +760,8 @@ void KisResourceLocator::purge(const QString &storageLocation)
 {
     Q_FOREACH(const auto key, d->resourceCache.keys()) {
         if (key.first == storageLocation) {
-            d->resourceCache.take(key);
-            d->thumbnailCache.take(key);
+            d->resourceCache.remove(key);
+            KisResourceThumbnailCache::instance()->remove(key);
         }
     }
 }
@@ -899,12 +878,19 @@ void KisResourceLocator::saveTags()
         return;
     }
 
-    QString resourceLocation = resourceLocationBaseFromConfig();
+    // this needs to use ResourcePaths because it is sometimes called during initialization
+    // (when the database versions don't match up and tags need to be saved)
+    QString resourceLocation = KoResourcePaths::getAppDataLocation() + "/";
 
     while (query.next()) {
         // Save tag...
         KisTagSP tag = tagForUrlNoCache(query.value("tags.url").toString(),
                                  query.value("resource_types.name").toString());
+
+        if (!tag || !tag->valid()) {
+            continue;
+        }
+
 
         QString filename = tag->filename();
         if (filename.isEmpty() || QFileInfo(filename).suffix().isEmpty()) {
@@ -924,7 +910,7 @@ void KisResourceLocator::saveTags()
         QFile f(resourceLocation + "/" + tag->resourceType() + '/' + filename);
 
         if (!f.open(QFile::WriteOnly)) {
-            qWarning () << "Couild not open tag file for writing" << f.fileName();
+            qWarning () << "Could not open tag file for writing" << f.fileName();
             continue;
         }
 
@@ -1222,15 +1208,4 @@ QString KisResourceLocator::makeStorageLocationRelative(QString location) const
 {
 //    debugResource << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
     return location.remove(resourceLocationBase());
-}
-
-QString KisResourceLocator::resourceLocationBaseFromConfig()
-{
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString resourceLocation = cfg.readEntry(resourceLocationKey, "");
-    if (resourceLocation.isEmpty()) {
-        resourceLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
-    if (!resourceLocation.endsWith('/')) resourceLocation += '/';
-    return resourceLocation;
 }

@@ -17,6 +17,9 @@
 #include <testutil.h>
 #include <testui.h>
 
+#include "KritaTransformMaskStubs.h"
+#include "KisDumbTransformMaskParams.h"
+
 #include "config-limit-long-tests.h"
 
 void waitForMaskUpdates(KisNodeSP root) {
@@ -29,6 +32,11 @@ void waitForMaskUpdates(KisNodeSP root) {
 #endif /* LIMIT_LONG_TESTS */
 }
 
+void KisFileLayerTest::initTestCase()
+{
+    TestUtil::registerTransformMaskStubs();
+}
+
 void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
 {
     TestUtil::ReferenceImageChecker chk("flayer_tmask_offimage", "file_layer");
@@ -37,7 +45,7 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskOffImage()
     TestUtil::MaskParent p(refRect);
 
     QString refName(TestUtil::fetchDataFileLazy("hakonepa.png"));
-    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "flayer", OPACITY_OPAQUE_U8);
+    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "Bicubic", "flayer", OPACITY_OPAQUE_U8);
 
     p.image->addNode(flayer, p.image->root(), KisNodeSP());
 
@@ -99,7 +107,7 @@ void KisFileLayerTest::testFileLayerPlusTransformMaskSmallFileBigOffset()
     TestUtil::MaskParent p(refRect);
 
     QString refName(TestUtil::fetchDataFileLazy("file_layer_source.png"));
-    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "flayer", OPACITY_OPAQUE_U8);
+    KisLayerSP flayer = new KisFileLayer(p.image, "", refName, KisFileLayer::None, "Bicubic", "flayer", OPACITY_OPAQUE_U8);
 
     p.image->addNode(flayer, p.image->root(), KisNodeSP());
 

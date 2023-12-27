@@ -13,6 +13,7 @@
 #include <QPointer>
 
 #include <KoColorSpaceConstants.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <klocalizedstring.h>
 
@@ -44,6 +45,7 @@
 #include "kis_config_notifier.h"
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"
+#include "KisLayerThumbnailCache.h"
 
 
 struct KisNodeModel::Private
@@ -75,6 +77,8 @@ struct KisNodeModel::Private
     QPointer<KisNodeDummy> parentOfRemovedNode = 0;
 
     QSet<quintptr> dropEnabled;
+
+    KisLayerThumbnailCache thumbnalCache;
 };
 
 KisNodeModel::KisNodeModel(QObject * parent, int clonedColumns)
@@ -83,6 +87,7 @@ KisNodeModel::KisNodeModel(QObject * parent, int clonedColumns)
 {
     m_d->dummyColumns = qMax(0, clonedColumns);
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SLOT(processUpdateQueue()));
+    connect(&m_d->thumbnalCache, SIGNAL(sigLayerThumbnailUpdated(KisNodeSP)), SLOT(slotLayerThumbnailUpdated(KisNodeSP)));
 }
 
 KisNodeModel::~KisNodeModel()
@@ -178,6 +183,11 @@ bool KisNodeModel::showGlobalSelection() const
         false;
 }
 
+void KisNodeModel::setPreferredThumnalSize(int preferredSize) const
+{
+    m_d->thumbnalCache.setMaxSize(preferredSize);
+}
+
 void KisNodeModel::setShowGlobalSelection(bool value)
 {
     if (m_d->nodeDisplayModeAdapter) {
@@ -210,6 +220,14 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
 
         emit dataChanged(index, index);
     }
+}
+
+void KisNodeModel::slotLayerThumbnailUpdated(KisNodeSP node)
+{
+    QModelIndex index = indexFromNode(node);
+    if (!index.isValid()) return;
+
+    emit dataChanged(index, index);
 }
 
 KisModelIndexConverterBase * KisNodeModel::indexConverter() const
@@ -287,6 +305,7 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     m_d->image = image;
     m_d->dummiesFacade = dummiesFacade;
     m_d->parentOfRemovedNode = 0;
+    m_d->thumbnalCache.setImage(image);
     resetIndexConverter();
 
     if (m_d->dummiesFacade) {
@@ -318,6 +337,11 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     }
 }
 
+void KisNodeModel::setIdleTaskManager(KisIdleTasksManager *idleTasksManager)
+{
+    m_d->thumbnalCache.setIdleTaskManager(idleTasksManager);
+}
+
 void KisNodeModel::slotBeginInsertDummy(KisNodeDummy *parent, int index, const QString &metaObjectType)
 {
     int row = 0;
@@ -341,6 +365,8 @@ void KisNodeModel::slotEndInsertDummy(KisNodeDummy *dummy)
         endInsertRows();
         m_d->needFinishInsertRows = false;
     }
+
+    m_d->thumbnalCache.notifyNodeAdded(dummy->node());
 }
 
 void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
@@ -366,6 +392,8 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
+
+    m_d->thumbnalCache.notifyNodeRemoved(dummy->node());
 }
 
 void KisNodeModel::slotEndRemoveDummy()
@@ -488,7 +516,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole: return node->icon();
     case Qt::EditRole: return node->name();
     case Qt::SizeHintRole: return m_d->image->size(); // FIXME
-    case Qt::TextColorRole:
+    case Qt::ForegroundRole:
         return belongsToIsolatedGroup(node) &&
             !node->projectionLeaf()->isDroppedNode() ? QVariant() : QVariant(QColor(Qt::gray));
     case Qt::FontRole: {
@@ -531,6 +559,46 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case KisNodeModel::IsAnimatedRole: {
         return node->isAnimated();
     }
+    case KisNodeModel::InfoTextRole: {
+        // These layer types' opacity and blending modes cannot be changed,
+        // so there's little point in showing them
+        if (node->inherits("KisFilterMask") ||
+            node->inherits("KisTransparencyMask") ||
+            node->inherits("KisTransformMask") ||
+            node->inherits("KisSelectionMask")) {
+            return "";
+        }
+        const KisConfig::LayerInfoTextStyle infoTextStyle = KisConfig(true).layerInfoTextStyle();
+        const int opacity = round(node->opacity() * 100.0 / 255);
+        const QString opacityString = QString::number(opacity);
+        const QString compositeOpId = node->compositeOpId();
+        QString compositeOpDesc = "null";
+        // make sure the compositeOp exists to avoid crashing on specific layer undo
+        if (node->compositeOp()) {
+            compositeOpDesc = node->compositeOp()->description();
+        }
+        QString defaultOpId = COMPOSITE_OVER;   // "normal";
+        if (node->inherits("KisAdjustmentLayer")) {
+            defaultOpId = COMPOSITE_COPY;
+        }
+        else if (node->inherits("KisColorizeMask")) {
+            defaultOpId = COMPOSITE_BEHIND;
+        }
+        QString infoText = "";
+        if (infoTextStyle == KisConfig::LayerInfoTextStyle::INFOTEXT_DETAILED ||
+                !(opacity == 100 && compositeOpId == defaultOpId)) {
+            if (infoTextStyle == KisConfig::LayerInfoTextStyle::INFOTEXT_SIMPLE) {
+                if (opacity == 100) {
+                    return QString(compositeOpDesc);
+                }
+                if (compositeOpId == defaultOpId) {
+                    return i18nc("%1 is the percent value, % is the percent sign", "%1%", opacityString);
+                }
+            }
+            infoText = i18nc("%1 is the percent value, % is the percent sign", "%1% %2", opacityString, compositeOpDesc);
+        }
+        return infoText;
+    }
     default:
 
         /**
@@ -544,11 +612,16 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
             /**
              * WARNING: there is still a possible theoretical race condition if the node is
-             * removed from the image right here. We consider that as "improbaple" atm.
+             * removed from the image right here. We consider that as "improbable" atm.
              */
 
             const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);
-            return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
+
+            if (maxSize == m_d->thumbnalCache.maxSize()) {
+                return m_d->thumbnalCache.thumbnail(node);
+            } else {
+                return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);
+            }
         } else {
             return QVariant();
         }
@@ -687,7 +760,7 @@ bool KisNodeModel::hasDummiesFacade()
 QStringList KisNodeModel::mimeTypes() const
 {
     QStringList types;
-    types << QLatin1String("application/x-krita-node");
+    types << QLatin1String("application/x-krita-node-internal-pointer");
     types << QLatin1String("application/x-qt-image");
     types << QLatin1String("application/x-color");
     types << QLatin1String("krita/x-colorsetentry");

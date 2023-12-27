@@ -85,16 +85,27 @@ public:
 private:
     friend class KisMementoManager;
 
-    inline void updateExtent(qint32 col, qint32 row) {
+    inline void updateExtent(qint32 col, qint32 row, QMutex *currentMementoExtentLock) {
         const qint32 tileMinX = col * KisTileData::WIDTH;
         const qint32 tileMinY = row * KisTileData::HEIGHT;
         const qint32 tileMaxX = tileMinX + KisTileData::WIDTH - 1;
         const qint32 tileMaxY = tileMinY + KisTileData::HEIGHT - 1;
 
-        m_extentMinX = qMin(m_extentMinX, tileMinX);
-        m_extentMaxX = qMax(m_extentMaxX, tileMaxX);
-        m_extentMinY = qMin(m_extentMinY, tileMinY);
-        m_extentMaxY = qMax(m_extentMaxY, tileMaxY);
+        {
+            /**
+             * HACK ALERT: the lock is stored in the memento
+             * manager to avoid too many locks to be created.
+             * Anyway, a memento manager can have only one
+             * "current memento". And it would not be nice to
+             * do KisTileData::WIDTH/HEIGHT multiplication
+             * under the lock held.
+             */
+            QMutexLocker l(currentMementoExtentLock);
+            m_extentMinX = qMin(m_extentMinX, tileMinX);
+            m_extentMaxX = qMax(m_extentMaxX, tileMaxX);
+            m_extentMinY = qMin(m_extentMinY, tileMinY);
+            m_extentMaxY = qMax(m_extentMaxY, tileMaxY);
+        }
     }
 
 private:

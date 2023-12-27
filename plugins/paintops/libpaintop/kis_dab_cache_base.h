@@ -13,9 +13,9 @@
 #include "KisDabCacheUtils.h"
 
 class KisColorSource;
-class KisPressureSharpnessOption;
-class KisTextureProperties;
-class KisPressureMirrorOption;
+class KisSharpnessOption;
+class KisTextureOption;
+class KisMirrorOption;
 class KisPrecisionOption;
 struct MirrorProperties;
 
@@ -45,7 +45,7 @@ public:
     KisDabCacheBase();
     ~KisDabCacheBase();
 
-    void setMirrorPostprocessing(KisPressureMirrorOption *option);
+    void setMirrorPostprocessing(KisMirrorOption *option);
     void setPrecisionOption(KisPrecisionOption *option);
 
     /**
@@ -60,8 +60,8 @@ public:
      * Return true if the dab needs postprocessing by special options
      * like 'texture' or 'sharpness'
      */
-    bool needSeparateOriginal(KisTextureProperties *textureOption,
-                              KisPressureSharpnessOption *sharpnessOption) const;
+    bool needSeparateOriginal(KisTextureOption *textureOption,
+                              KisSharpnessOption *sharpnessOption) const;
 
 protected:
     /**
@@ -102,7 +102,7 @@ private:
     calculateDabRect(KisBrushSP brush, const QPointF &cursorPoint,
                      KisDabShape,
                      const KisPaintInformation& info,
-                     const MirrorProperties &mirrorProperties, KisPressureSharpnessOption *sharpnessOption);
+                     const MirrorProperties &mirrorProperties, KisSharpnessOption *sharpnessOption);
 
 private:
     struct Private;

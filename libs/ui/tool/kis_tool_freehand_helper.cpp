@@ -33,8 +33,9 @@
 
 #include "strokes/freehand_stroke.h"
 #include "strokes/KisFreehandStrokeInfo.h"
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include "kis_canvas_resource_provider.h"
+#include <KisOptimizedBrushOutline.h>
 
 #include <math.h>
 
@@ -58,7 +59,7 @@ struct KisToolFreehandHelper::Private
     KoCanvasResourceProvider *resourceManager;
     KisPaintingInformationBuilder *infoBuilder;
     KisStrokesFacade *strokesFacade;
-    KisAsyncronousStrokeUpdateHelper asyncUpdateHelper;
+    KisAsynchronousStrokeUpdateHelper asyncUpdateHelper;
 
     KUndo2MagicString transactionText;
 
@@ -152,10 +153,10 @@ KisSmoothingOptionsSP KisToolFreehandHelper::smoothingOptions() const
     return m_d->smoothingOptions;
 }
 
-QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
-                                                   const KoPointerEvent *event,
-                                                   const KisPaintOpSettingsSP globalSettings,
-                                                   KisPaintOpSettings::OutlineMode mode) const
+KisOptimizedBrushOutline KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
+                                                               const KoPointerEvent *event,
+                                                               const KisPaintOpSettingsSP globalSettings,
+                                                               KisPaintOpSettings::OutlineMode mode) const
 {
     KisPaintOpSettingsSP settings = globalSettings;
     QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos, currentZoom());
@@ -208,7 +209,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     info.setRandomSource(m_d->fakeDabRandomSource);
     info.setPerStrokeRandomSource(m_d->fakeStrokeRandomSource);
 
-    QPainterPath outline = settings->brushOutline(info, mode, currentPhysicalZoom());
+    KisOptimizedBrushOutline outline = settings->brushOutline(info, mode, currentPhysicalZoom());
 
     if (m_d->resources &&
         m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER &&
@@ -465,7 +466,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      * 3) 'Tail Aggressiveness' is used for controlling the end of the
      *    stroke
      *
-     * 4) The formila is a little bit different: 'Distance' parameter
+     * 4) The formula is a little bit different: 'Distance' parameter
      *    stands for $3 \Sigma$
      */
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
@@ -513,10 +514,10 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
                 if (i < m_d->history.size() - 1) {
                     pressureGrad = nextInfo.pressure() - m_d->history.at(i + 1).pressure();
 
-                    const qreal tailAgressiveness = 40.0 * m_d->smoothingOptions->tailAggressiveness();
+                    const qreal tailAggressiveness = 40.0 * m_d->smoothingOptions->tailAggressiveness();
 
                     if (pressureGrad > 0.0 ) {
-                        pressureGrad *= tailAgressiveness * (1.0 - nextInfo.pressure());
+                        pressureGrad *= tailAggressiveness * (1.0 - nextInfo.pressure());
                         distance += pressureGrad * 3.0 * sigma; // (3 * sigma) --- holds > 90% of the region
                     }
                 }
@@ -638,6 +639,10 @@ void KisToolFreehandHelper::endPaint()
      * is needed
      */
     m_d->strokeInfos.clear();
+
+    // last update to complete rendering if there is still something pending
+    m_d->strokesFacade->addJob(m_d->strokeId,
+       new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
 
     m_d->strokesFacade->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
@@ -887,6 +892,9 @@ void KisToolFreehandHelper::doAirbrushing()
                                       prevPaint.perspective(),
                                       elapsedStrokeTime(),
                                       0.0);
+        nextPaint.setCanvasRotation(prevPaint.canvasRotation());
+        nextPaint.setCanvasMirroredH(prevPaint.canvasMirroredH());
+        nextPaint.setCanvasMirroredV(prevPaint.canvasMirroredV());
         paint(nextPaint);
     }
 }

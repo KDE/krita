@@ -55,7 +55,7 @@ public:
     /**
      * Overwrite this method to set the application unit type and update all unit-widgets
      * in this panel.
-     * Called by the tool that created the shape using KoCavasBase::unit()
+     * Called by the tool that created the shape using KoCanvasBase::unit()
      * @param unit the new unit to show data in.
      */
     virtual void setUnit(const KoUnit &unit);

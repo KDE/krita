@@ -1,68 +1,69 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KisVisualColorSelector.h"
 
-#include <QRect>
-#include <QVector>
-#include <QVector3D>
 #include <QVector4D>
-#include <QVBoxLayout>
 #include <QList>
-#include <QtMath>
+#include <QPointer>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
 
-#include "KoColorConversions.h"
 #include "KoColorDisplayRendererInterface.h"
-#include "KoColorProfile.h"
-#include "KoChannelInfo.h"
 #include <KoColorModelStandardIds.h>
-#include <QPointer>
+//#include <QPointer>
 #include "kis_signal_compressor.h"
 #include "kis_debug.h"
 
 #include "KisVisualColorSelectorShape.h"
+#include "KisVisualDiamondSelectorShape.h"
 #include "KisVisualRectangleSelectorShape.h"
 #include "KisVisualTriangleSelectorShape.h"
 #include "KisVisualEllipticalSelectorShape.h"
 
 struct KisVisualColorSelector::Private
 {
-    KoColor currentcolor;
-    const KoColorSpace *currentCS {0};
     QList<KisVisualColorSelectorShape*> widgetlist;
     bool acceptTabletEvents {false};
     bool circular {false};
-    bool exposureSupported {false};
-    bool isRGBA {false};
-    bool isLinear {false};
-    bool applyGamma {false};
-    int displayPosition[4]; // map channel index to storage index for display
+    bool proofColors {false};
+    bool initialized {false};
+    bool useACSConfig {true};
+    bool autoAdjustExposure {true};
     int colorChannelCount {0};
-    qreal gamma {2.2};
-    qreal lumaRGB[3] {0.2126, 0.7152, 0.0722};
+    int minimumSliderWidth {16};
+    Qt::Edge sliderPosition {Qt::LeftEdge};
+    qreal stretchLimit {1.5};
     QVector4D channelValues;
-    QVector4D channelMaxValues;
-    ColorModel model {ColorModel::None};
-    const KoColorDisplayRendererInterface *displayRenderer {0};
+    KisVisualColorSelector::RenderMode renderMode {RenderMode::DynamicBackground};
     KisColorSelectorConfiguration acs_config;
     KisSignalCompressor *updateTimer {0};
+    KisVisualColorModelSP selectorModel;
+    QPointer<const KoColorDisplayRendererInterface> displayRenderer;
+    KoGamutMaskSP gamutMask;
 };
 
-KisVisualColorSelector::KisVisualColorSelector(QWidget *parent)
+KisVisualColorSelector::KisVisualColorSelector(QWidget *parent, KisVisualColorModelSP model)
     : KisColorSelectorInterface(parent)
     , m_d(new Private)
 {
-    this->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_d->acs_config = validatedConfiguration(KisColorSelectorConfiguration());
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-    m_d->acs_config = KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
+    loadACSConfig();
+    if (model) {
+        setSelectorModel(model);
+    } else {
+        setSelectorModel(KisVisualColorModelSP(new KisVisualColorModel));
+        m_d->selectorModel->slotLoadACSConfig();
+    }
+
     m_d->updateTimer = new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE);
-    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotRebuildSelectors()), Qt::UniqueConnection);
+    connect(m_d->updateTimer, SIGNAL(timeout()), SLOT(slotReloadConfiguration()), Qt::UniqueConnection);
 }
 
 KisVisualColorSelector::~KisVisualColorSelector()
@@ -70,319 +71,322 @@ KisVisualColorSelector::~KisVisualColorSelector()
     delete m_d->updateTimer;
 }
 
-void KisVisualColorSelector::slotSetColor(const KoColor &c)
+QSize KisVisualColorSelector::minimumSizeHint() const
 {
-    if (!m_d->currentCS) {
-        m_d->currentcolor = c;
-        slotSetColorSpace(c.colorSpace());
-    }
-    else {
-        m_d->currentcolor = c.convertedTo(m_d->currentCS);
-        m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
-        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-            shape->setChannelValues(m_d->channelValues, true);
-        }
-    }
-    if (isHSXModel()) {
-        emit sigHSXChanged(QVector3D(m_d->channelValues));
-    }
+    return QSize(75, 75);
 }
 
-void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
+void KisVisualColorSelector::setSelectorModel(KisVisualColorModelSP model)
 {
-    if (!m_d->currentCS || *m_d->currentCS != *cs) {
-        const KoColorSpace *csNew = cs;
-
-        // PQ color space is not very suitable for selecting colors, substitute with linear one
-        if (cs && cs->profile()
-               && cs->colorModelId() == RGBAColorModelID
-               && KoColorSpaceRegistry::instance()->p2020PQProfile()
-               && cs->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p2020PQProfile()->uniqueId())
-        {
-            csNew = KoColorSpaceRegistry::instance()->
-                    colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(),
-                               KoColorSpaceRegistry::instance()->p2020G10Profile());
-        }
-        m_d->currentCS = csNew;
-        m_d->currentcolor = KoColor(csNew);
-        slotRebuildSelectors();
+    if (model == m_d->selectorModel) {
+        return;
     }
+    if (m_d->selectorModel) {
+        m_d->selectorModel->disconnect(this);
+    }
+    connect(model.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)),
+                          SLOT(slotChannelValuesChanged(QVector4D,quint32)));
+    connect(model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotColorModelChanged()));
+    connect(model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotColorSpaceChanged()));
+    // to keep the KisColorSelectorInterface API functional:
+    connect(model.data(), SIGNAL(sigNewColor(KoColor)), this, SIGNAL(sigNewColor(KoColor)));
+    m_d->selectorModel = model;
+    m_d->initialized = false;
+    rebuildSelector();
 }
 
-void KisVisualColorSelector::slotSetHSX(const QVector3D &hsx)
+KisVisualColorModelSP KisVisualColorSelector::selectorModel() const
 {
-    if (isHSXModel()) {
-        m_d->channelValues = QVector4D(hsx, 0.f);
-        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-            shape->setChannelValues(m_d->channelValues, true);
-        }
-        KoColor newColor = convertShapeCoordsToKoColor(QVector4D(hsx));
-        if (newColor != m_d->currentcolor) {
-            m_d->currentcolor = newColor;
-            emit sigNewColor(m_d->currentcolor);
-        }
-    }
+    return m_d->selectorModel;
 }
 
 void KisVisualColorSelector::setConfig(bool forceCircular, bool forceSelfUpdate)
 {
     Q_UNUSED(forceSelfUpdate);
-    m_d->circular = forceCircular;
+    if (forceCircular != m_d->circular) {
+        m_d->circular = forceCircular;
+        m_d->initialized = false;
+        rebuildSelector();
+    }
+}
+
+const KisColorSelectorConfiguration &KisVisualColorSelector::configuration() const
+{
+    return m_d->acs_config;
+}
+
+void KisVisualColorSelector::setConfiguration(const KisColorSelectorConfiguration *config)
+{
+    m_d->useACSConfig = !config;
+    if (config) {
+        // applies immediately, while signalled rebuilds from krita configuration changes
+        // are queued, so make sure we cancel queued updates
+        m_d->updateTimer->stop();
+        KisColorSelectorConfiguration configNew = validatedConfiguration(*config);
+        if (configNew != m_d->acs_config) {
+            m_d->acs_config = configNew;
+            m_d->initialized = false;
+            rebuildSelector();
+        }
+    } else {
+        m_d->initialized = false;
+        m_d->updateTimer->start();
+    }
 }
 
 void KisVisualColorSelector::setAcceptTabletEvents(bool on)
 {
     m_d->acceptTabletEvents = on;
-    Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->setAcceptTabletEvents(on);
     }
 }
 
 KoColor KisVisualColorSelector::getCurrentColor() const
 {
-    return m_d->currentcolor;
+    if (m_d->selectorModel) {
+        return m_d->selectorModel->currentColor();
+    }
+    return KoColor();
 }
 
-QVector4D KisVisualColorSelector::getChannelValues() const
+void KisVisualColorSelector::setMinimumSliderWidth(int width)
 {
-    return m_d->channelValues;
+    int newWidth = qMax(5, width);
+    if (newWidth != m_d->minimumSliderWidth) {
+        m_d->minimumSliderWidth = width;
+        KisVisualColorSelector::resizeEvent(0);
+    }
 }
 
-KisVisualColorSelector::ColorModel KisVisualColorSelector::getColorModel() const
+const KoColorDisplayRendererInterface *KisVisualColorSelector::displayRenderer() const
 {
-    return m_d->model;
+    return m_d->displayRenderer ? m_d->displayRenderer : KoDumbColorDisplayRenderer::instance();
 }
 
-bool KisVisualColorSelector::isHSXModel() const
+KisVisualColorSelector::RenderMode KisVisualColorSelector::renderMode() const
 {
-    return (m_d->model >= ColorModel::HSV && m_d->model <= ColorModel::HSY);
+    return m_d->renderMode;
 }
 
-KoColor KisVisualColorSelector::convertShapeCoordsToKoColor(const QVector4D &coordinates) const
+void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mode)
 {
-    KoColor c(m_d->currentCS);
-    QVector4D baseValues(coordinates);
-    QVector <float> channelValues(c.colorSpace()->channelCount());
-    channelValues.fill(1.0);
-
-    if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
-
-        if (m_d->model == ColorModel::HSV) {
-            HSVToRGB(coordinates.x()*360, coordinates.y(), coordinates.z(), &baseValues[0], &baseValues[1], &baseValues[2]);
-        }
-        else if (m_d->model == ColorModel::HSL) {
-            HSLToRGB(coordinates.x()*360, coordinates.y(), coordinates.z(), &baseValues[0], &baseValues[1], &baseValues[2]);
-        }
-        else if (m_d->model == ColorModel::HSI) {
-            // why suddenly qreal?
-            qreal temp[3];
-            HSIToRGB(coordinates.x(), coordinates.y(), coordinates.z(), &temp[0], &temp[1], &temp[2]);
-            baseValues.setX(temp[0]);
-            baseValues.setY(temp[1]);
-            baseValues.setZ(temp[2]);
-        }
-        else /*if (m_d->model == ColorModel::HSY)*/ {
-            qreal temp[3];
-            qreal Y = pow(coordinates.z(), m_d->gamma);
-            HSYToRGB(coordinates.x(), coordinates.y(), Y, &temp[0], &temp[1], &temp[2],
-                    m_d->lumaRGB[0], m_d->lumaRGB[1], m_d->lumaRGB[2]);
-            baseValues.setX(temp[0]);
-            baseValues.setY(temp[1]);
-            baseValues.setZ(temp[2]);
-            if (!m_d->isLinear) {
-                // Note: not all profiles define a TRC necessary for (de-)linearization,
-                // substituting with a linear profiles would be better
-                QVector<qreal> temp({baseValues[0], baseValues[1], baseValues[2]});
-                if (m_d->exposureSupported) {
-                    m_d->currentCS->profile()->delinearizeFloatValue(temp);
-                }
-                else {
-                    m_d->currentCS->profile()->delinearizeFloatValueFast(temp);
-                }
-                baseValues = QVector4D(temp[0], temp[1], temp[2], 0);
-            }
-        }
-        if (m_d->applyGamma) {
-            for (int i=0; i<3; i++) {
-                baseValues[i] = pow(baseValues[i], 2.2);
-            }
+    if (mode != m_d->renderMode) {
+        m_d->renderMode = mode;
+        for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+            shape->forceImageUpdate();
+            shape->update();
         }
     }
-
-    if (m_d->exposureSupported) {
-        baseValues *= m_d->channelMaxValues;
-    }
-
-    for (int i=0; i<m_d->colorChannelCount; i++) {
-        channelValues[m_d->displayPosition[i]] = baseValues[i];
-    }
-
-    c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
-
-    return c;
-
 }
 
-QVector4D KisVisualColorSelector::convertKoColorToShapeCoordinates(KoColor c) const
+bool KisVisualColorSelector::autoAdjustExposure() const
 {
-    if (c.colorSpace() != m_d->currentCS) {
-        c.convertTo(m_d->currentCS);
-    }
-    QVector <float> channelValues (c.colorSpace()->channelCount());
-    channelValues.fill(1.0);
-    m_d->currentCS->normalisedChannelsValue(c.data(), channelValues);
-    QVector4D channelValuesDisplay(0, 0, 0, 0), coordinates(0, 0, 0, 0);
-
-    for (int i =0; i<m_d->colorChannelCount; i++) {
-        channelValuesDisplay[i] = channelValues[m_d->displayPosition[i]];
-    }
-
-    if (m_d->exposureSupported) {
-        channelValuesDisplay /= m_d->channelMaxValues;
-    }
-    if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
-        if (m_d->isRGBA == true) {
-            if (m_d->applyGamma) {
-                for (int i=0; i<3; i++) {
-                    channelValuesDisplay[i] = pow(channelValuesDisplay[i], 1/2.2);
-                }
-            }
-            if (m_d->model == ColorModel::HSV) {
-                QVector3D hsv;
-                RGBToHSV(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsv[0], &hsv[1], &hsv[2]);
-                hsv[0] /= 360;
-                coordinates = QVector4D(hsv, 0.f);
-            } else if (m_d->model == ColorModel::HSL) {
-                QVector3D hsl;
-                RGBToHSL(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsl[0], &hsl[1], &hsl[2]);
-                hsl[0] /= 360;
-                coordinates = QVector4D(hsl, 0.f);
-            } else if (m_d->model == ColorModel::HSI) {
-                qreal hsi[3];
-                RGBToHSI(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsi[0], &hsi[1], &hsi[2]);
-                coordinates = QVector4D(hsi[0], hsi[1], hsi[2], 0.f);
-            } else if (m_d->model == ColorModel::HSY) {
-                if (!m_d->isLinear) {
-                    // Note: not all profiles define a TRC necessary for (de-)linearization,
-                    // substituting with a linear profiles would be better
-                    QVector<qreal> temp({channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2]});
-                    m_d->currentCS->profile()->linearizeFloatValue(temp);
-                    channelValuesDisplay = QVector4D(temp[0], temp[1], temp[2], 0);
-                }
-                qreal hsy[3];
-                RGBToHSY(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsy[0], &hsy[1], &hsy[2],
-                         m_d->lumaRGB[0], m_d->lumaRGB[1], m_d->lumaRGB[2]);
-                hsy[2] = pow(hsy[2], 1/m_d->gamma);
-                coordinates = QVector4D(hsy[0], hsy[1], hsy[2], 0.f);
-            }
-            // if we couldn't determine a hue, keep last value
-            if (coordinates[0] < 0) {
-                coordinates[0] = m_d->channelValues[0];
-            }
-            for (int i=0; i<3; i++) {
-                coordinates[i] = qBound(0.f, coordinates[i], 1.f);
-            }
-        }
-    } else {
-        for (int i=0; i<4; i++) {
-            coordinates[i] = qBound(0.f, channelValuesDisplay[i], 1.f);
-        }
-    }
-    return coordinates;
+    return m_d->autoAdjustExposure;
 }
 
-void KisVisualColorSelector::configurationChanged()
+void KisVisualColorSelector::setAutoAdjustExposure(bool enabled)
 {
-    if (m_d->updateTimer) {
+    m_d->autoAdjustExposure = enabled;
+}
+
+bool KisVisualColorSelector::proofColors() const
+{
+    return m_d->proofColors;
+}
+
+void KisVisualColorSelector::setProofColors(bool enabled)
+{
+    if (enabled != m_d->proofColors) {
+        m_d->proofColors = enabled;
+        for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+            shape->forceImageUpdate();
+            shape->update();
+        }
+    }
+}
+
+void KisVisualColorSelector::setSliderPosition(Qt::Edge edge)
+{
+    if (edge != Qt::TopEdge && edge != Qt::LeftEdge) {
+        return;
+    }
+
+    if (edge != m_d->sliderPosition) {
+        m_d->sliderPosition = edge;
+        rebuildSelector();
+    }
+}
+
+KoGamutMask *KisVisualColorSelector::activeGamutMask() const
+{
+    return m_d->gamutMask.data();
+}
+
+void KisVisualColorSelector::slotSetColor(const KoColor &c)
+{
+    if (m_d->selectorModel) {
+        m_d->selectorModel->slotSetColor(c);
+    }
+}
+
+void KisVisualColorSelector::slotSetColorSpace(const KoColorSpace *cs)
+{
+    if (m_d->selectorModel) {
+        m_d->selectorModel->slotSetColorSpace(cs);
+    }
+}
+
+void KisVisualColorSelector::slotConfigurationChanged()
+{
+    if (m_d->updateTimer && m_d->useACSConfig) {
+        // NOTE: this timer is because notifyConfigChanged() is only called
+        // via KisConfig::setCustomColorSelectorColorSpace(), but at this point
+        // Advanced Color Selector has not written the relevant config values yet.
+        m_d->initialized = false;
         m_d->updateTimer->start();
     }
 }
 
+void KisVisualColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    switchDisplayRenderer(displayRenderer);
+
+    if (m_d->selectorModel) {
+        slotDisplayConfigurationChanged();
+    }
+}
+
+void KisVisualColorSelector::slotGamutMaskChanged(KoGamutMaskSP mask)
+{
+    // Note: KisCanvasResourceProvider currently does not distinguish
+    // between activating, switching and property changes of a gamut mask
+    m_d->gamutMask = mask;
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        shape->updateGamutMask();
+    }
+}
+
+void KisVisualColorSelector::slotGamutMaskUnset()
+{
+    m_d->gamutMask.clear();
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        shape->updateGamutMask();
+    }
+}
+
+void KisVisualColorSelector::slotGamutMaskPreviewUpdate()
+{
+    // Shapes currently always requests preview shapes if available, so more of the same...
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        shape->updateGamutMask();
+    }
+}
+
+void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values, quint32 channelFlags)
+{
+    // about to (re-)build selector, values will be fetched when done
+    if (!m_d->initialized) {
+        return;
+    }
+    m_d->channelValues = values;
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        shape->setChannelValues(m_d->channelValues, channelFlags);
+    }
+}
+
+void KisVisualColorSelector::slotColorModelChanged()
+{
+    // TODO: triangle <=> diamond switch only happens on HSV <=> non-HSV, but
+    // the previous color model is not accessible right now
+    if (!m_d->initialized || m_d->selectorModel->colorChannelCount() != m_d->colorChannelCount
+            || m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
+        m_d->initialized = false;
+        rebuildSelector();
+    } else {
+        slotDisplayConfigurationChanged();
+    }
+}
+
+void KisVisualColorSelector::slotColorSpaceChanged()
+{
+    if (m_d->autoAdjustExposure && m_d->selectorModel && m_d->selectorModel->supportsExposure()) {
+        m_d->selectorModel->setMaxChannelValues(calculateMaxChannelValues());
+    }
+}
+
+void KisVisualColorSelector::slotCursorMoved(QPointF pos)
+{
+    const KisVisualColorSelectorShape *shape = qobject_cast<KisVisualColorSelectorShape *>(sender());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+
+    m_d->channelValues[shape->channel(0)] = pos.x();
+    if (shape->getDimensions() == KisVisualColorSelectorShape::twodimensional) {
+        m_d->channelValues[shape->channel(1)] = pos.y();
+    }
+
+    for (KisVisualColorSelectorShape *widget : qAsConst(m_d->widgetlist)) {
+        if (widget != shape){
+            widget->setChannelValues(m_d->channelValues, shape->channelMask());
+        }
+    }
+    m_d->selectorModel->slotSetChannelValues(m_d->channelValues);
+}
+
 void KisVisualColorSelector::slotDisplayConfigurationChanged()
 {
-    Q_ASSERT(m_d->displayRenderer);
+    if (m_d->autoAdjustExposure && m_d->selectorModel && m_d->selectorModel->supportsExposure()) {
+        m_d->selectorModel->setMaxChannelValues(calculateMaxChannelValues());
+    }
+    // TODO: can we be smarter about forced updates?
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+        shape->forceImageUpdate();
+        shape->update();
+    }
+}
 
-    if (m_d->currentCS)
-    {
-        m_d->channelMaxValues = QVector4D(1, 1, 1, 1);
-        QList<KoChannelInfo *> channels = m_d->currentCS->channels();
-        for (int i=0; i<m_d->colorChannelCount; ++i)
-        {
-            m_d->channelMaxValues[i] = m_d->displayRenderer->maxVisibleFloatValue(channels[m_d->displayPosition[i]]);
-        }
-        // need to re-scale our normalized channel values on exposure changes:
-        m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
-        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-            shape->setChannelValues(m_d->channelValues, true);
-        }
-        if (isHSXModel()) {
-            emit sigHSXChanged(QVector3D(m_d->channelValues));
+void KisVisualColorSelector::slotReloadConfiguration()
+{
+    if (m_d->useACSConfig) {
+        loadACSConfig();
+        // this may trigger slotColorModelChanged() so check afterwards if we already rebuild
+        m_d->selectorModel->slotLoadACSConfig();
+        if (!m_d->initialized) {
+            rebuildSelector();
         }
     }
 }
 
-void KisVisualColorSelector::slotRebuildSelectors()
+void KisVisualColorSelector::rebuildSelector()
 {
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
-    m_d->acs_config = KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
-
-    ColorModel oldModel = m_d->model;
-    QList<KoChannelInfo *> channelList = m_d->currentCS->channels();
-    int cCount = 0;
-    Q_FOREACH(const KoChannelInfo *channel, channelList)
-    {
-        if (channel->channelType() != KoChannelInfo::ALPHA)
-        {
-            m_d->displayPosition[cCount] = channel->displayPosition();
-            ++cCount;
-        }
-    }
-    Q_ASSERT_X(cCount < 5, "", "unsupported channel count!");
-    m_d->colorChannelCount = cCount;
-
-    // TODO: The following is done because the IDs are actually strings. Ideally, in the future, we
-    // refactor everything so that the IDs are actually proper enums or something faster.
-    if (m_d->displayRenderer
-            && (m_d->currentCS->colorDepthId() == Float16BitsColorDepthID
-                || m_d->currentCS->colorDepthId() == Float32BitsColorDepthID
-                || m_d->currentCS->colorDepthId() == Float64BitsColorDepthID)
-            && m_d->currentCS->colorModelId() != LABAColorModelID
-            && m_d->currentCS->colorModelId() != CMYKAColorModelID) {
-        m_d->exposureSupported = true;
-    } else {
-        m_d->exposureSupported = false;
-    }
-    m_d->isRGBA = (m_d->currentCS->colorModelId() == RGBAColorModelID);
-    const KoColorProfile *profile = m_d->currentCS->profile();
-    m_d->isLinear = (profile && profile->isLinear());
-
-    qDeleteAll(children());
+    qDeleteAll(m_d->widgetlist);
     m_d->widgetlist.clear();
-    // TODO: Layout only used for monochrome selector currently, but always present
-    QLayout *layout = new QHBoxLayout(this);
-    //recreate all the widgets.
-    m_d->model = KisVisualColorSelector::Channel;
 
-    if (m_d->currentCS->colorChannelCount() == 1) {
+    if (!m_d->selectorModel || m_d->selectorModel->colorModel() == KisVisualColorModel::None) {
+        return;
+    }
+
+    m_d->colorChannelCount = m_d->selectorModel->colorChannelCount();
+
+    //recreate all the widgets.
+
+    if (m_d->colorChannelCount == 1) {
 
         KisVisualColorSelectorShape *bar;
 
-        if (m_d->circular==false) {
-            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0,m_d->displayRenderer, 20);
-            bar->setMaximumWidth(width()*0.1);
-            bar->setMaximumHeight(height());
+        if (m_d->circular) {
+            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional,
+                                                       0, 0, 20, KisVisualEllipticalSelectorShape::borderMirrored);
         }
         else {
-            bar = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::onedimensional, m_d->currentCS, 0, 0,m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
-            layout->setMargin(0);
+            bar = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::onedimensional,
+                                                      0, 0, 20);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
-        layout->addWidget(bar);
         m_d->widgetlist.append(bar);
     }
-    else if (m_d->currentCS->colorChannelCount() == 3) {
-        KisVisualColorSelector::ColorModel modelS = KisVisualColorSelector::HSV;
+    else if (m_d->colorChannelCount == 3) {
         int channel1 = 0;
         int channel2 = 1;
         int channel3 = 2;
@@ -393,16 +397,10 @@ void KisVisualColorSelector::slotRebuildSelectors()
         case KisColorSelectorConfiguration::Hluma:
             channel1 = 0;
             break;
-        case KisColorSelectorConfiguration::hsyS:
-        case KisColorSelectorConfiguration::hsiS:
-        case KisColorSelectorConfiguration::hslS:
         case KisColorSelectorConfiguration::hsvS:
             channel1 = 1;
             break;
         case KisColorSelectorConfiguration::V:
-        case KisColorSelectorConfiguration::L:
-        case KisColorSelectorConfiguration::I:
-        case KisColorSelectorConfiguration::Y:
             channel1 = 2;
             break;
         default:
@@ -411,104 +409,42 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
         switch(m_d->acs_config.mainTypeParameter)
         {
-        case KisColorSelectorConfiguration::hsySH:
-            modelS = KisVisualColorSelector::HSY;
-            channel2 = 0;
-            channel3 = 1;
-            break;
-        case KisColorSelectorConfiguration::hsiSH:
-            modelS = KisVisualColorSelector::HSI;
-            channel2 = 0;
-            channel3 = 1;
-            break;
-        case KisColorSelectorConfiguration::hslSH:
-            modelS = KisVisualColorSelector::HSL;
-            channel2 = 0;
-            channel3 = 1;
-            break;
         case KisColorSelectorConfiguration::hsvSH:
-            modelS = KisVisualColorSelector::HSV;
             channel2 = 0;
             channel3 = 1;
-            break;
-        case KisColorSelectorConfiguration::YH:
-            modelS = KisVisualColorSelector::HSY;
-            channel2 = 0;
-            channel3 = 2;
-            break;
-        case KisColorSelectorConfiguration::LH:
-            modelS = KisVisualColorSelector::HSL;
-            channel2 = 0;
-            channel3 = 2;
-            break;
-        case KisColorSelectorConfiguration::IH:
-            modelS = KisVisualColorSelector::HSI;
-            channel2 = 0;
-            channel3 = 2;
             break;
         case KisColorSelectorConfiguration::VH:
-            modelS = KisVisualColorSelector::HSV;
             channel2 = 0;
-            channel3 = 2;
-            break;
-        case KisColorSelectorConfiguration::SY:
-            modelS = KisVisualColorSelector::HSY;
-            channel2 = 1;
-            channel3 = 2;
-            break;
-        case KisColorSelectorConfiguration::SI:
-            modelS = KisVisualColorSelector::HSI;
-            channel2 = 1;
-            channel3 = 2;
-            break;
-        case KisColorSelectorConfiguration::SL:
-            modelS = KisVisualColorSelector::HSL;
-            channel2 = 1;
             channel3 = 2;
             break;
         case KisColorSelectorConfiguration::SV:
-        case KisColorSelectorConfiguration::SV2:
-            modelS = KisVisualColorSelector::HSV;
             channel2 = 1;
             channel3 = 2;
             break;
         default:
             Q_ASSERT_X(false, "", "Invalid acs_config.mainTypeParameter");
         }
-        if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
-            modelS = KisVisualColorSelector::HSV;
-            //Triangle only really works in HSV mode.
-        }
-
-        // L*a*b* mimics the HSX selector types, but model is still Channel (until someone implements LCH)
-        if (m_d->isRGBA) {
-            m_d->model = modelS;
-            m_d->gamma = cfg.readEntry("gamma", 2.2);
-            m_d->applyGamma = (m_d->isLinear && modelS != ColorModel::HSY);
-            // Note: only profiles that define colorants will give precise luma coefficients.
-            // Maybe using the explicitly set values of the Advanced Color Selector is better?
-            QVector <qreal> luma = m_d->currentCS->lumaCoefficients();
-            memcpy(m_d->lumaRGB, luma.constData(), 3*sizeof(qreal));
-        }
 
         KisVisualColorSelectorShape *bar;
         if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
-                                                       m_d->currentCS, channel1, channel1,
-                                                       m_d->displayRenderer, 20,KisVisualEllipticalSelectorShape::border);
+                                                       channel1, channel1, 20,
+                                                       KisVisualEllipticalSelectorShape::border);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == false) {
+            KisVisualRectangleSelectorShape::singelDTypes orientation = useHorizontalSlider() ?
+                        KisVisualRectangleSelectorShape::horizontal : KisVisualRectangleSelectorShape::vertical;
+
             bar = new KisVisualRectangleSelectorShape(this,
                                                       KisVisualColorSelectorShape::onedimensional,
-                                                      m_d->currentCS, channel1, channel1,
-                                                      m_d->displayRenderer, 20);
+                                                      channel1, channel1, 20, orientation);
         }
         else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular == true) {
             bar = new KisVisualEllipticalSelectorShape(this,
                                                        KisVisualColorSelectorShape::onedimensional,
-                                                       m_d->currentCS, channel1, channel1,
-                                                       m_d->displayRenderer, 20, KisVisualEllipticalSelectorShape::borderMirrored);
+                                                       channel1, channel1,
+                                                       20, KisVisualEllipticalSelectorShape::borderMirrored);
         } else {
             // Accessing bar below would crash since it's not initialized.
             // Hopefully this can never happen.
@@ -521,115 +457,120 @@ void KisVisualColorSelector::slotRebuildSelectors()
 
         KisVisualColorSelectorShape *block;
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
-            block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                       m_d->currentCS, channel2, channel3,
-                                                       m_d->displayRenderer);
+            if (m_d->selectorModel->colorModel() == KisVisualColorModel::HSV) {
+                block = new KisVisualTriangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                           channel2, channel3);
+            } else {
+                block = new KisVisualDiamondSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
+                                                           channel2, channel3);
+            }
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             block = new KisVisualRectangleSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                        m_d->currentCS, channel2, channel3,
-                                                        m_d->displayRenderer);
+                                                        channel2, channel3);
         }
         else {
             block = new KisVisualEllipticalSelectorShape(this, KisVisualColorSelectorShape::twodimensional,
-                                                         m_d->currentCS, channel2, channel3,
-                                                         m_d->displayRenderer);
+                                                         channel2, channel3);
         }
 
         connect(bar, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         connect(block, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         m_d->widgetlist.append(block);
     }
-    else if (m_d->currentCS->colorChannelCount() == 4) {
-        KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, m_d->currentCS, 0, 1);
-        KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, m_d->currentCS, 2, 3);
+    else if (m_d->colorChannelCount == 4) {
+        KisVisualRectangleSelectorShape *block =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, 0, 1);
+        KisVisualRectangleSelectorShape *block2 =  new KisVisualRectangleSelectorShape(this, KisVisualRectangleSelectorShape::twodimensional, 2, 3);
         connect(block, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         connect(block2, SIGNAL(sigCursorMoved(QPointF)), SLOT(slotCursorMoved(QPointF)));
         m_d->widgetlist.append(block);
         m_d->widgetlist.append(block2);
     }
 
+    m_d->initialized = true;
     // make sure we call "our" resize function
     KisVisualColorSelector::resizeEvent(0);
 
-    // finally recalculate channel values and update widgets
-    if (m_d->displayRenderer) {
-        slotDisplayConfigurationChanged();
-    }
-    m_d->channelValues = convertKoColorToShapeCoordinates(m_d->currentcolor);
-    Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-        shape->setChannelValues(m_d->channelValues, true);
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->setAcceptTabletEvents(m_d->acceptTabletEvents);
         // if this widget is currently visible, new children are hidden by default
         shape->show();
     }
-    if (m_d->model != oldModel) {
-        emit sigColorModelChanged();
-    }
+
+    // finally update widgets with new channel values
+    slotChannelValuesChanged(m_d->selectorModel->channelValues(), (1u << m_d->colorChannelCount) - 1);
 }
 
-void KisVisualColorSelector::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
+void KisVisualColorSelector::resizeEvent(QResizeEvent *)
 {
-    if (m_d->displayRenderer) {
-        m_d->displayRenderer->disconnect(this);
+    if (!m_d->selectorModel || !m_d->initialized) {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->widgetlist.isEmpty() || !m_d->initialized);
+        return;
     }
-    m_d->displayRenderer = displayRenderer;
-    if (m_d->widgetlist.size()>0) {
-        Q_FOREACH (KisVisualColorSelectorShape *shape, m_d->widgetlist) {
-            shape->setDisplayRenderer(displayRenderer);
-        }
-    }
-    connect(m_d->displayRenderer, SIGNAL(displayConfigurationChanged()),
-            SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
-    slotDisplayConfigurationChanged();
-}
-
-void KisVisualColorSelector::slotCursorMoved(QPointF pos)
-{
-    const KisVisualColorSelectorShape *shape = qobject_cast<KisVisualColorSelectorShape *>(sender());
-    Q_ASSERT(shape);
-    QVector<int> channels = shape->getChannels();
-    m_d->channelValues[channels.at(0)] = pos.x();
-    if (shape->getDimensions() == KisVisualColorSelectorShape::twodimensional) {
-        m_d->channelValues[channels.at(1)] = pos.y();
-    }
-    KoColor newColor = convertShapeCoordsToKoColor(m_d->channelValues);
-    if (newColor != m_d->currentcolor) {
-        m_d->currentcolor = newColor;
-        emit sigNewColor(m_d->currentcolor);
-    }
-    if (isHSXModel()) {
-        emit sigHSXChanged(QVector3D(m_d->channelValues));
-    }
-    Q_FOREACH (KisVisualColorSelectorShape *widget, m_d->widgetlist) {
-        if (widget != shape){
-            widget->setChannelValues(m_d->channelValues, false);
-        }
-    }
-}
-
-void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
     int sizeValue = qMin(width(), height());
-    int borderWidth = qMax(sizeValue*0.1, 20.0);
+    // due to masking/antialiasing, the visible width is ~4 pixels less, so add them here
+    const int margin = 4;
+    const qreal sliderRatio = 0.09;
+    int borderWidth = qMax(int(sizeValue * sliderRatio), m_d->minimumSliderWidth) + margin;
     QRect newrect(0,0, this->geometry().width(), this->geometry().height());
-    if (!m_d->currentCS) {
-        slotSetColorSpace(m_d->currentcolor.colorSpace());
+
+    if (m_d->colorChannelCount == 1) {
+        if (m_d->circular) {
+            m_d->widgetlist.at(0)->resize(sizeValue, sizeValue);
+        }
+        else {
+            KisVisualRectangleSelectorShape *slider = qobject_cast<KisVisualRectangleSelectorShape *>(m_d->widgetlist.at(0));
+            KIS_SAFE_ASSERT_RECOVER_RETURN(slider);
+            if (useHorizontalSlider()) {
+                int sliderWidth = qMax(width()/10, m_d->minimumSliderWidth);
+                sliderWidth = qMin(sliderWidth, height());
+                int y = (height() - sliderWidth)/2;
+                slider->setOneDimensionalType(KisVisualRectangleSelectorShape::horizontal);
+                slider->setGeometry(0, y, width(), sliderWidth);
+            }
+            else {
+                // vertical slider
+                int sliderWidth = qMax(height()/10, m_d->minimumSliderWidth);
+                sliderWidth = qMin(sliderWidth, width());
+                int x = (width() - sliderWidth)/2;
+                slider->setOneDimensionalType(KisVisualRectangleSelectorShape::vertical);
+                slider->setGeometry(x, 0, sliderWidth, height());
+            }
+        }
     }
-    if (m_d->currentCS->colorChannelCount()==3) {
-        // set border width first, else the resized painting may have happened already, and we'd have to re-render
+    else if (m_d->colorChannelCount == 3) {
         m_d->widgetlist.at(0)->setBorderWidth(borderWidth);
-        if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring) {
-            m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
+        // Ring
+        if (m_d->acs_config.subType == KisColorSelectorConfiguration::Ring ||
+            (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular)) {
+
+            m_d->widgetlist.at(0)->setGeometry((width() - sizeValue)/2, (height() - sizeValue)/2,
+                                               sizeValue, sizeValue);
         }
-        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==false) {
-            m_d->widgetlist.at(0)->resize(borderWidth, sizeValue);
-        }
-        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider && m_d->circular==true) {
-            m_d->widgetlist.at(0)->resize(sizeValue,sizeValue);
+        // Slider Bar
+        else if (m_d->acs_config.subType == KisColorSelectorConfiguration::Slider) {
+            // limit stretch; only vertical slider currently
+            if (useHorizontalSlider()) {
+                newrect.setWidth(qMin(newrect.width(), qRound((newrect.height() - borderWidth) * m_d->stretchLimit)));
+                newrect.setHeight(qMin(newrect.height(), qRound(sizeValue * m_d->stretchLimit + borderWidth)));
+
+                m_d->widgetlist.at(0)->setGeometry(0, 0, newrect.width(), borderWidth);
+            }
+            else {
+                newrect.setWidth(qMin(newrect.width(), qRound(sizeValue * m_d->stretchLimit + borderWidth)));
+                newrect.setHeight(qMin(newrect.height(), qRound((newrect.width() - borderWidth) * m_d->stretchLimit)));
+
+                m_d->widgetlist.at(0)->setGeometry(0, 0, borderWidth, newrect.height());
+            }
+
         }
 
         if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Triangle) {
-            m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForTriangle(newrect));
+            if (m_d->selectorModel->colorModel() == KisVisualColorModel::HSV) {
+                m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForTriangle(newrect));
+            } else {
+                m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForCircle(newrect));
+            }
         }
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Square) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForSquare(newrect));
@@ -637,10 +578,146 @@ void KisVisualColorSelector::resizeEvent(QResizeEvent *) {
         else if (m_d->acs_config.mainType == KisColorSelectorConfiguration::Wheel) {
             m_d->widgetlist.at(1)->setGeometry(m_d->widgetlist.at(0)->getSpaceForCircle(newrect));
         }
+        // center horizontally
+        QRect boundRect(m_d->widgetlist.at(0)->geometry() | m_d->widgetlist.at(1)->geometry());
+        int offset = (width() - boundRect.width()) / 2 - boundRect.left();
+        m_d->widgetlist.at(0)->move(m_d->widgetlist.at(0)->pos() + QPoint(offset, 0));
+        m_d->widgetlist.at(1)->move(m_d->widgetlist.at(1)->pos() + QPoint(offset, 0));
     }
-    else if (m_d->currentCS->colorChannelCount() == 4) {
+    else if (m_d->colorChannelCount == 4) {
         int sizeBlock = qMin(width()/2 - 8, height());
         m_d->widgetlist.at(0)->setGeometry(0, 0, sizeBlock, sizeBlock);
         m_d->widgetlist.at(1)->setGeometry(sizeBlock + 8, 0, sizeBlock, sizeBlock);
     }
+}
+
+bool KisVisualColorSelector::useHorizontalSlider()
+{
+    if (m_d->colorChannelCount == 1) {
+        return width() > height();
+    }
+    else {
+        return m_d->sliderPosition == Qt::TopEdge;
+    }
+}
+
+void KisVisualColorSelector::switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer != m_d->displayRenderer) {
+        if (m_d->displayRenderer) {
+            m_d->displayRenderer->disconnect(this);
+        }
+        if (displayRenderer) {
+            connect(displayRenderer, SIGNAL(displayConfigurationChanged()),
+                    SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
+        }
+        m_d->displayRenderer = displayRenderer;
+    }
+}
+
+QVector4D KisVisualColorSelector::calculateMaxChannelValues()
+{
+    // Note: This calculation only makes sense for HDR color spaces
+    QVector4D maxChannelValues = QVector4D(1, 1, 1, 1);
+    const QList<KoChannelInfo *> channels = m_d->selectorModel->colorSpace()->channels();
+
+    for (int i = 0; i < channels.size(); i++) {
+        const KoChannelInfo *channel = channels.at(i);
+        if (channel->channelType() != KoChannelInfo::ALPHA) {
+            quint32 logical = channel->displayPosition();
+            if (logical > m_d->selectorModel->colorSpace()->alphaPos()) {
+                --logical;
+            }
+            maxChannelValues[logical] = displayRenderer()->maxVisibleFloatValue(channel);
+        }
+    }
+
+    return maxChannelValues;
+}
+
+void KisVisualColorSelector::loadACSConfig()
+{
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    KisColorSelectorConfiguration raw_config = KisColorSelectorConfiguration::fromString(
+                cfg.readEntry("colorSelectorConfiguration", KisColorSelectorConfiguration().toString()));
+    m_d->acs_config = validatedConfiguration(raw_config);
+}
+
+KisColorSelectorConfiguration KisVisualColorSelector::validatedConfiguration(const KisColorSelectorConfiguration &cfg)
+{
+    KisColorSelectorConfiguration validated(cfg);
+    bool ok = true;
+
+    switch (validated.mainType) {
+    case KisColorSelectorConfiguration::Triangle:
+    case KisColorSelectorConfiguration::Square:
+    case KisColorSelectorConfiguration::Wheel:
+        break;
+    default:
+        ok = false;
+    }
+
+    switch (validated.subType) {
+    case KisColorSelectorConfiguration::Ring:
+    case KisColorSelectorConfiguration::Slider:
+        break;
+    default:
+        ok = false;
+    }
+
+    switch(validated.subTypeParameter)
+    {
+    case KisColorSelectorConfiguration::H:
+    case KisColorSelectorConfiguration::hsvS:
+    case KisColorSelectorConfiguration::V:
+        break;
+    // translate to HSV
+    case KisColorSelectorConfiguration::hsyS:
+    case KisColorSelectorConfiguration::hsiS:
+    case KisColorSelectorConfiguration::hslS:
+        validated.subTypeParameter = KisColorSelectorConfiguration::hsvS;
+        break;
+    case KisColorSelectorConfiguration::L:
+    case KisColorSelectorConfiguration::I:
+    case KisColorSelectorConfiguration::Y:
+        validated.subTypeParameter = KisColorSelectorConfiguration::V;
+        break;
+    default:
+        ok = false;
+    }
+
+    switch(validated.mainTypeParameter)
+    {
+    case KisColorSelectorConfiguration::SV:
+    case KisColorSelectorConfiguration::hsvSH:
+    case KisColorSelectorConfiguration::VH:
+        break;
+    // translate to HSV
+    case KisColorSelectorConfiguration::SL:
+    case KisColorSelectorConfiguration::SV2:
+    case KisColorSelectorConfiguration::SI:
+    case KisColorSelectorConfiguration::SY:
+        validated.mainTypeParameter = KisColorSelectorConfiguration::SV;
+        break;
+    case KisColorSelectorConfiguration::hslSH:
+    case KisColorSelectorConfiguration::hsiSH:
+    case KisColorSelectorConfiguration::hsySH:
+        validated.mainTypeParameter = KisColorSelectorConfiguration::hsvSH;
+        break;
+    case KisColorSelectorConfiguration::LH:
+    case KisColorSelectorConfiguration::IH:
+    case KisColorSelectorConfiguration::YH:
+        validated.mainTypeParameter = KisColorSelectorConfiguration::VH;
+        break;
+    default:
+        ok = false;
+    }
+
+    if (ok) {
+        return validated;
+    }
+    return KisColorSelectorConfiguration(KisColorSelectorConfiguration::Triangle,
+                                         KisColorSelectorConfiguration::Ring,
+                                         KisColorSelectorConfiguration::SV,
+                                         KisColorSelectorConfiguration::H);
 }

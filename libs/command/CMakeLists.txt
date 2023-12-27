@@ -1,3 +1,5 @@
+add_subdirectory( tests )
+
 set(kritacommand_LIB_SRCS
 	kundo2stack.cpp
 	kundo2group.cpp
@@ -8,6 +10,7 @@ set(kritacommand_LIB_SRCS
         kis_undo_store.cpp
         kis_undo_stores.cpp
         kis_command_utils.cpp
+        KisCumulativeUndoData.cpp
 )
 
 kis_add_library(kritacommand SHARED ${kritacommand_LIB_SRCS})
@@ -20,6 +23,7 @@ target_link_libraries(kritacommand
         KF5::ConfigGui
         Qt5::Core 
         Qt5::Widgets
+        Boost::boost
 )
 
 set_target_properties(kritacommand PROPERTIES

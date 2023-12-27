@@ -124,6 +124,11 @@ public:
 
     void closeView();
 
+    /**
+     * Returns the current screen that the view belongs to
+     */
+    QScreen *currentScreen() const;
+
 public:
 
     /**
@@ -224,9 +229,12 @@ public Q_SLOTS:
 
     bool queryClose();
 
-    void slotScreenChanged();
+    void slotMigratedToScreen(QScreen *screen);
+    void slotScreenOrResolutionChanged();
 
     void slotThemeChanged(QPalette pal);
+
+    void slotUpdateDocumentTitle();
 
 private Q_SLOTS:
     void slotContinueAddNode(KisNodeSP newActiveNode);
@@ -239,7 +247,6 @@ Q_SIGNALS:
     void sigSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
     void sigProfileChanged(const KoColorProfile *  profile);
     void sigColorSpaceChanged(const KoColorSpace*  cs);
-    void titleModified(QString,bool);
 
 protected:
 
@@ -256,7 +263,6 @@ protected:
 
 public Q_SLOTS:
     void slotLoadingFinished();
-    void slotSavingFinished();
     void slotImageResolutionChanged();
     void slotImageSizeChanged(const QPointF &oldStillPoint, const QPointF &newStillPoint);
 

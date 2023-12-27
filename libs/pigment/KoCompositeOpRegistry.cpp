@@ -91,7 +91,7 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[3], KoID(COMPOSITE_FOG_LIGHTEN_IFS_ILLUSIONS,  i18nc("Blending mode - Fog Lighten (IFS Illusions)", "Fog Lighten (IFS Illusions)")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_EASY_DODGE       ,  i18nc("Blending mode - Easy Dodge", "Easy Dodge")));
     m_map.insert(m_categories[3], KoID(COMPOSITE_LUMINOSITY_SAI       ,  i18nc("Blending mode - Luminosity/Shine (SAI)", "Luminosity/Shine (SAI)")));
-    
+
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD              ,  i18nc("Blending mode - Modulo", "Modulo")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_MOD_CON          ,  i18nc("Blending mode - Modulo - Continuous", "Modulo - Continuous")));
     m_map.insert(m_categories[4], KoID(COMPOSITE_DIVISIVE_MOD     ,  i18nc("Blending mode - Divisive Modulo", "Divisive Modulo")));
@@ -110,6 +110,8 @@ KoCompositeOpRegistry::KoCompositeOpRegistry()
     m_map.insert(m_categories[6], KoID(COMPOSITE_BEHIND          ,  i18nc("Blending mode - Behind", "Behind")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_GREATER         ,  i18nc("Blending mode - Greater", "Greater")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_OVERLAY         ,  i18nc("Blending mode - Overlay", "Overlay")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_LAMBERT_LIGHTING, i18nc("Blending mode - Lambert Lighting (Linear)", "Lambert Lighting (Linear)")));
+    m_map.insert(m_categories[6], KoID(COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, i18nc("Blending mode - Lambert Lighting (Gamma 2.2)", "Lambert Lighting (Gamma 2.2)")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_ERASE           ,  i18nc("Blending mode - Erase", "Erase")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_ALPHA_DARKEN    ,  i18nc("Blending mode - Alpha Darken", "Alpha Darken")));
     m_map.insert(m_categories[6], KoID(COMPOSITE_HARD_MIX        ,  i18nc("Blending mode - Hard Mix", "Hard Mix")));

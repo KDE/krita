@@ -37,7 +37,7 @@ struct Q_DECL_HIDDEN KisNodeQueryPath::Private {
         for (; i < elements.count() && elements[i].type == PathElement::Parent; ++i) {
             newelements.push_back(PathElement::Parent);
         }
-        // Loop ofver the element of the list
+        // Loop over the element of the list
         for (; i < elements.count(); ++i) {
             PathElement pe = elements[i];
             // If it's the last element, or the next element isn't a parent

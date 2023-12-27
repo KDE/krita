@@ -76,7 +76,7 @@
           <number>5</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="labeShape">
+          <widget class="QLabel" name="labelShape">
            <property name="text">
             <string>Shape:</string>
            </property>
@@ -557,7 +557,7 @@
  <customwidgets>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QDoubleSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

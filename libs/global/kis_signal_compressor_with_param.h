@@ -80,7 +80,7 @@ Q_SIGNALS:
 
 
 /**
- * A special class for deferring and comressing events with one
+ * A special class for deferring and compressing events with one
  * parameter of type T. This works like KisSignalCompressor but can
  * handle events with one parameter. Due to limitation of the Qt this
  * doesn't allow signal/slots, so it uses std::function instead.

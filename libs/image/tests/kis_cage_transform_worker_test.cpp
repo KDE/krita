@@ -123,12 +123,12 @@ void KisCageTransformWorkerTest::testCageClockwisePrepareOnly()
     testCage(true, false, true);
 }
 
-void KisCageTransformWorkerTest::testCageClockwisePixePrecision4()
+void KisCageTransformWorkerTest::testCageClockwisePixelPrecision4()
 {
     testCage(true, false, false, 4);
 }
 
-void KisCageTransformWorkerTest::testCageClockwisePixePrecision8QImage()
+void KisCageTransformWorkerTest::testCageClockwisePixelPrecision8QImage()
 {
     testCage(true, false, false, 8, true);
 }

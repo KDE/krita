@@ -9,8 +9,8 @@
 
 #include "kritapaintop_export.h"
 #include <kis_types.h>
-#include <kis_brush.h>
-#include <boost/optional.hpp>
+#include <KisBrushModel.h>
+#include <KoCompositeOpRegistry.h>
 
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
@@ -18,22 +18,22 @@ using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 class KoCanvasResourcesInterface;
 using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
-
-class PAINTOP_EXPORT KisMaskingBrushOptionProperties
+namespace KisBrushModel {
+struct PAINTOP_EXPORT MaskingBrushData :  public boost::equality_comparable<MaskingBrushData>
 {
-public:
-    KisMaskingBrushOptionProperties();
-
     bool isEnabled = false;
-    KisBrushSP brush;
-    QString compositeOpId;
+    BrushData brush;
+    QString compositeOpId = COMPOSITE_MULT;
     bool useMasterSize = true;
+    qreal masterSizeCoeff = 1.0;
 
-    boost::optional<qreal> theoreticalMaskingBrushSize;
-
-    void write(KisPropertiesConfiguration *setting, qreal masterBrushSize) const;
-    void read(const KisPropertiesConfiguration *setting, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
-    QList<KoResourceLoadResult> prepareLinkedResources(const KisPropertiesConfigurationSP settings, KisResourcesInterfaceSP resourcesInterface);
+    friend bool operator==(const MaskingBrushData &lhs, const MaskingBrushData &rhs);
+    static MaskingBrushData read(const KisPropertiesConfiguration *config, qreal masterBrushSize, KisResourcesInterfaceSP resourcesInterface);
+    void write(KisPropertiesConfiguration *config) const;
 };
+
+bool operator==(const MaskingBrushData &lhs, const MaskingBrushData &rhs);
+
+}
 
 #endif // KISMASKINGBRUSHOPTIONPROPERTIES_H

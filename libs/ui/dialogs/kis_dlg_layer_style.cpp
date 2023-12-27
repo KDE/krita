@@ -35,6 +35,7 @@
 #include "kis_psd_layer_style.h"
 #include <KisAslStorage.h>
 #include <KisResourceLocator.h>
+#include <KisSpinBoxI18nHelper.h>
 #include <KisStorageModel.h>
 #include <KisResourceUserOperations.h>
 
@@ -83,6 +84,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
 
     m_blendingOptions = new BlendingOptions(this);
     wdgLayerStyles.stylesStack->addWidget(m_blendingOptions);
+    // currently unimplemented, hide for now
+    wdgLayerStyles.lstStyleSelector->item(1)->setHidden(true);
 
     m_dropShadow = new DropShadow(DropShadow::DropShadowMode, this);
     wdgLayerStyles.stylesStack->addWidget(m_dropShadow);
@@ -135,8 +138,8 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     connect(m_stroke, SIGNAL(configChanged()), SLOT(notifyGuiConfigChanged()));
 
     KisConfig cfg(true);
-    wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 1));
-    wdgLayerStyles.lstStyleSelector->setCurrentRow(cfg.readEntry("KisDlgLayerStyle::current", 1));
+    wdgLayerStyles.stylesStack->setCurrentIndex(cfg.readEntry("KisDlgLayerStyle::current", 0));
+    wdgLayerStyles.lstStyleSelector->setCurrentRow(cfg.readEntry("KisDlgLayerStyle::current", 0));
 
     connect(wdgLayerStyles.lstStyleSelector,
             SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)),
@@ -145,7 +148,7 @@ KisDlgLayerStyle::KisDlgLayerStyle(KisPSDLayerStyleSP layerStyle, KisCanvasResou
     // improve the checkbox visibility by altering the style sheet list a bit
     // the dark themes make them hard to see
     QPalette newPalette = palette();
-    newPalette.setColor(QPalette::Active, QPalette::Background, palette().text().color() );
+    newPalette.setColor(QPalette::Active, QPalette::Window, palette().text().color() );
     wdgLayerStyles.lstStyleSelector->setPalette(newPalette);
 
 
@@ -287,9 +290,7 @@ void KisDlgLayerStyle::slotNewStyle()
     clone->setValid(true);
 
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
-    KisConfig cfg(true);
-    QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString resourceDir = KoResourcePaths::getAppDataLocation();
     QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
     bool resourceAdded = false;
@@ -358,9 +359,7 @@ void KisDlgLayerStyle::slotLoadStyle()
         }
 
         // 1. Copy the layer style to the resource folder
-        KisConfig cfg(true);
-        const QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                                QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+        const QString newDir = KoResourcePaths::getAppDataLocation();
         const QString newName = oldFileInfo.fileName();
         const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
 
@@ -747,7 +746,7 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Structure
     ui.intDepth->setRange(0, 100);
-    ui.intDepth->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intDepth, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
@@ -765,10 +764,10 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Shading
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intOpacity2->setRange(0, 100);
-    ui.intOpacity2->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity2, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.angleSelector->enableGlobalLight(true);
     connect(ui.angleSelector, SIGNAL(globalAngleChanged(int)), SIGNAL(globalAngleChanged(int)));
@@ -786,7 +785,8 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Contour
     m_contour->ui.intRange->setRange(1, 100);
-    m_contour->ui.intRange->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(m_contour->ui.intRange,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(m_contour->ui.cmbContour, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(m_contour->ui.chkAntiAliased, SIGNAL(toggled(bool)), SIGNAL(configChanged()));
@@ -794,10 +794,12 @@ BevelAndEmboss::BevelAndEmboss(Contour *contour, Texture *texture, QWidget *pare
 
     // Texture
     m_texture->ui.intScale->setRange(0, 100);
-    m_texture->ui.intScale->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(m_texture->ui.intScale,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     m_texture->ui.intDepth->setRange(-1000, 1000);
-    m_texture->ui.intDepth->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(m_texture->ui.intDepth,
+                                  i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(m_texture->ui.patternChooser, SIGNAL(resourceSelected(KoResourceSP )), SIGNAL(configChanged()));
     connect(m_texture->ui.intScale, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -921,7 +923,7 @@ ColorOverlay::ColorOverlay(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -954,21 +956,21 @@ DropShadow::DropShadow(Mode mode, QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intDistance->setRange(0, 500);
     ui.intDistance->setSuffix(i18n(" px"));
     ui.intDistance->setExponentRatio(3.0);
 
     ui.intSpread->setRange(0, 100);
-    ui.intSpread->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intSpread, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
     ui.intSize->setExponentRatio(2.0);
 
     ui.intNoise->setRange(0, 100);
-    ui.intNoise->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intNoise, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.angleSelector->enableGlobalLight(true);
     connect(ui.angleSelector, SIGNAL(globalAngleChanged(int)), SIGNAL(globalAngleChanged(int)));
@@ -1097,17 +1099,16 @@ GradientOverlay::GradientOverlay(KisCanvasResourceProvider *resourceProvider, QW
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale->setRange(0, 100);
-    ui.intScale->setSuffix(i18n(" %"));
-    
+    KisSpinBoxI18nHelper::setText(ui.intScale, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+
     ui.angleSelector->angleSelector()->setResetAngle(90.0);
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
     connect(ui.angleSelector, SIGNAL(configChanged()), SIGNAL(configChanged()));
-
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
     connect(ui.cmbGradient, SIGNAL(gradientChanged(KoAbstractGradientSP)), SIGNAL(configChanged()));
@@ -1131,7 +1132,8 @@ void GradientOverlay::setGradientOverlay(const psd_layer_effects_gradient_overla
 
     ui.chkReverse->setChecked(config->reverse());
     ui.cmbStyle->setCurrentIndex((int)config->style());
-    ui.chkAlignWithLayer->setCheckable(config->alignWithLayer());
+    ui.chkAlignWithLayer->setChecked(config->alignWithLayer());
+    ui.chkAlignWithLayer->setCheckable(true);
     ui.angleSelector->setValue(config->angle());
     ui.intScale->setValue(config->scale());
     ui.chkDither->setChecked(config->dither());
@@ -1155,7 +1157,7 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
 
 
 /********************************************************************/
-/***** Innner Glow      *********************************************/
+/***** Inner Glow      **********************************************/
 /********************************************************************/
 
 InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWidget *parent)
@@ -1165,24 +1167,28 @@ InnerGlow::InnerGlow(Mode mode, KisCanvasResourceProvider *resourceProvider, QWi
 {
     ui.setupUi(this);
 
+    if (mode == OuterGlowMode) {
+        ui.groupBox->setTitle(i18n("Outer Glow"));
+    }
+
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intNoise->setRange(0, 100);
-    ui.intNoise->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intNoise, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intChoke->setRange(0, 100);
-    ui.intChoke->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intChoke, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intSize->setRange(0, 250);
     ui.intSize->setSuffix(i18n(" px"));
     ui.intSize->setExponentRatio(2.0);
 
     ui.intRange->setRange(1, 100);
-    ui.intRange->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intRange, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intJitter->setRange(0, 100);
-    ui.intJitter->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intJitter, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
@@ -1299,10 +1305,10 @@ PatternOverlay::PatternOverlay(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale->setRange(0, 100);
-    ui.intScale->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intScale, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(ui.cmbCompositeOp, SIGNAL(currentIndexChanged(int)), SIGNAL(configChanged()));
     connect(ui.intOpacity, SIGNAL(valueChanged(int)), SIGNAL(configChanged()));
@@ -1341,7 +1347,7 @@ Satin::Satin(QWidget *parent)
     ui.setupUi(this);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intDistance->setRange(0, 250);
     ui.intDistance->setSuffix(i18n(" px"));
@@ -1415,13 +1421,13 @@ Stroke::Stroke(KisCanvasResourceProvider *resourceProvider, QWidget *parent)
     ui.intSize->setExponentRatio(2.0);
 
     ui.intOpacity->setRange(0, 100);
-    ui.intOpacity->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale->setRange(0, 100);
-    ui.intScale->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intScale, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.intScale_2->setRange(0, 100);
-    ui.intScale_2->setSuffix(i18n(" %"));
+    KisSpinBoxI18nHelper::setText(ui.intScale_2, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     ui.cmbGradient->setCanvasResourcesInterface(resourceProvider->resourceManager()->canvasResourcesInterface());
 
@@ -1470,7 +1476,8 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
 
     ui.chkReverse->setChecked(stroke->antiAliased());
     ui.cmbStyle->setCurrentIndex((int)stroke->style());
-    ui.chkAlignWithLayer->setCheckable(stroke->alignWithLayer());
+    ui.chkAlignWithLayer->setChecked(stroke->alignWithLayer());
+    ui.chkAlignWithLayer->setCheckable(true);
     ui.angleSelector->setValue(stroke->angle());
     ui.intScale->setValue(stroke->scale());
 
@@ -1486,7 +1493,8 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
     stroke->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     stroke->setOpacity(ui.intOpacity->value());
 
-    stroke->setFillType((psd_fill_type)ui.cmbFillType->currentIndex());
+    psd_fill_type fillType = (psd_fill_type)ui.cmbFillType->currentIndex();
+    stroke->setFillType(fillType);
 
     stroke->setColor(ui.bnColor->color());
 
@@ -1497,11 +1505,17 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setReverse(ui.chkReverse->isChecked());
     stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
-    stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    if (fillType == psd_fill_gradient) {
+        // there is only one boolean value, and it's shared with pattern's "link with layer"
+        stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());
+    }
     stroke->setAngle(ui.angleSelector->value());
     stroke->setScale(ui.intScale->value());
 
     stroke->setPattern(ui.patternChooser->currentResource(true).staticCast<KoPattern>());
-    stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
+    if (fillType == psd_fill_pattern) {
+        // there is only one boolean value, and it's shared with gradient's "align with layer"
+        stroke->setAlignWithLayer(ui.chkLinkWithLayer->isChecked());
+    }
     stroke->setScale(ui.intScale->value());
 }

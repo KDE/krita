@@ -12,8 +12,11 @@
 
 #include "kritaui_export.h"
 
+#define PROFILE_VERSION 6
+
 class KisAbstractInputAction;
 class KisInputProfile;
+class KisShortcutConfiguration;
 
 /**
  * \brief A class to manage a list of profiles and actions.
@@ -105,6 +108,16 @@ public:
      * Save all profiles to configuration on disk.
      */
     void saveProfiles();
+
+    /**
+     * Save \c profile to \c storagePath
+     */
+    void saveProfile(KisInputProfile *profile, QString storagePath);
+
+    /**
+     * Return the configurations that have conflicts.
+     */
+    QList<KisShortcutConfiguration *> getConflictingShortcuts(KisInputProfile *profile);
 
     /**
      * Reset all profiles to the default state.

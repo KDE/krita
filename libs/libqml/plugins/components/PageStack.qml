@@ -186,7 +186,7 @@ Item {
         // The number of ongoing transitions.
         property int ongoingTransitionCount: 0
 
-        //FIXME: there should be a way to access to theh without storing it in an ugly way
+        //FIXME: there should be a way to access to them without storing it in an ugly way
         property bool completed: false
 
         // Sets the page status.

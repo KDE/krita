@@ -14,7 +14,6 @@
 #include <QFileInfo>
 #include <QTextDecoder>
 #include <kis_assert.h>
-#include <KisFileUtils.h>
 
 #include "KisSeExprScript.h"
 
@@ -42,11 +41,11 @@ KisSeExprScript::KisSeExprScript(const QImage &image, const QString &script, con
     setImage(image);
     setName(name);
 
-    QFileInfo fileInfo(folderName + QDir::separator() + KisFileUtils::sanitizeFileName(name) + defaultFileExtension());
+    QFileInfo fileInfo(folderName + QDir::separator() + name + defaultFileExtension());
 
     int i = 1;
     while (fileInfo.exists()) {
-        fileInfo.setFile(folderName + QDir::separator() + KisFileUtils::sanitizeFileName(name) + QString::number(i) + defaultFileExtension());
+        fileInfo.setFile(folderName + QDir::separator() + name + QString::number(i) + defaultFileExtension());
         i++;
     }
 

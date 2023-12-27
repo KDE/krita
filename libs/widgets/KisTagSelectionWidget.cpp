@@ -40,7 +40,7 @@
 
 WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected, QWidget *parent)
     : QWidget(parent)
-    , m_editble(editable)
+    , m_editable(editable)
     , m_semiSelected(semiSelected)
     , m_tag(tag)
 {
@@ -53,16 +53,16 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
     m_textLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addWidget(m_textLabel);
     layout->insertStretch(2, 1);
-    if (m_editble) {
+    if (m_editable) {
         m_closeIconLabel = new QPushButton(parent);
         m_closeIconLabel->setFlat(true);
         m_closeIconLabel->setIcon(KisIconUtils::loadIcon("docker_close"));
         m_closeIconLabel->setToolTip(i18n("Remove from tag"));
         m_closeIconLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        m_closeIconLabel->setEnabled(m_editble);
+        m_closeIconLabel->setEnabled(m_editable);
         m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
 
-        connect(m_closeIconLabel, &QAbstractButton::clicked, [&]() {
+        connect(m_closeIconLabel, &QAbstractButton::clicked, this, [&]() {
             emit sigRemoveTagFromSelection(m_tag);
         });
         layout->addWidget(m_closeIconLabel);
@@ -113,8 +113,9 @@ void WdgCloseableLabel::paintEvent(QPaintEvent *event)
 
 }
 
-WdgAddTagButton::WdgAddTagButton(QWidget *parent)
-    : QToolButton(parent)
+WdgAddTagButton::WdgAddTagButton(QWidget *parent, bool createNew)
+    : QToolButton(parent),
+    m_createNew(createNew)
 {
     setPopupMode(QToolButton::InstantPopup);
     setIcon(KisIconUtils::loadIcon("list-add"));
@@ -126,11 +127,18 @@ WdgAddTagButton::WdgAddTagButton(QWidget *parent)
 
     connect(this, SIGNAL(triggered(QAction*)), SLOT(slotAddNewTag(QAction*)));
 
-    UserInputTagAction *newTag = new UserInputTagAction(this);
-    newTag->setCloseParentOnTrigger(false);
+    if (m_createNew) {
+        UserInputTagAction *newTag = new UserInputTagAction(this);
+        newTag->setCloseParentOnTrigger(false);
 
-    connect(newTag, SIGNAL(triggered(QString)), this, SLOT(slotCreateNewTag(QString)), Qt::UniqueConnection);
-    m_createNewTagAction = newTag;
+        connect(newTag, SIGNAL(triggered(QString)), this, SLOT(slotCreateNewTag(QString)), Qt::UniqueConnection);
+        m_createNewTagAction = newTag;
+    } else {
+        m_noTags = new QAction("No tags present");
+        QFont font = m_noTags->font();
+        font.setItalic(true);
+        m_noTags->setFont(font);
+    }
 
 }
 
@@ -151,13 +159,19 @@ void WdgAddTagButton::setAvailableTagsList(QList<KoID> &notSelected)
         action->setData(QVariant::fromValue<KoID>(tag));
         addAction(action);
     }
-
+    
     QAction *separator = new QAction(this);
     separator->setSeparator(true);
     addAction(separator);
 
-    addAction(m_createNewTagAction);
-    setDefaultAction(0);
+    if (m_createNew) {
+        addAction(m_createNewTagAction);
+        setDefaultAction(0);
+    } else {
+        if (notSelected.count() == 0) {
+            addAction(m_noTags);
+        }
+    }
 }
 
 void WdgAddTagButton::slotFinishLastAction()
@@ -226,11 +240,12 @@ void WdgAddTagButton::paintEvent(QPaintEvent *event)
     painter.setOpacity(1.0);
 }
 
-KisTagSelectionWidget::KisTagSelectionWidget(QWidget *parent)
-    : QWidget(parent)
+KisTagSelectionWidget::KisTagSelectionWidget(QWidget *parent, bool createNew)
+    : QWidget(parent),
+    m_createNew(createNew)
 {
     m_layout = new KisWrappableHBoxLayout(this);
-    m_addTagButton = new WdgAddTagButton(this);
+    m_addTagButton = new WdgAddTagButton(this, m_createNew);
 
     m_layout->addWidget(m_addTagButton);
     connect(m_addTagButton, SIGNAL(sigCreateNewTag(QString)), this, SIGNAL(sigCreateNewTag(QString)), Qt::UniqueConnection);
@@ -269,6 +284,7 @@ void KisTagSelectionWidget::setTagList(bool editable, QList<KoID> &selected, QLi
 
 
     WdgAddTagButton* addTagButton = dynamic_cast<WdgAddTagButton*>(m_addTagButton);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(addTagButton);
     addTagButton->setAvailableTagsList(notSelected);
 
     Q_FOREACH(KoID tag, selected) {

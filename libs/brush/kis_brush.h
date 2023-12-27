@@ -24,6 +24,7 @@ class KoColorSpace;
 class KisPaintInformation;
 class KisPaintopLodLimitations;
 class KoAbstractGradient;
+class KisOptimizedBrushOutline;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
 enum enumBrushType {
@@ -127,6 +128,15 @@ public:
      * @return a valid QImage.
      */
     virtual QImage brushTipImage() const;
+
+    /**
+     * Is a paint device of the brush that should be used for generation
+     * of the brush outline. Usually, it is the same device returned
+     * by brushTipImage(), but might be different in some types
+     * of brushes, like in KisAutoBrush.
+     */
+    virtual KisFixedPaintDeviceSP outlineSourceImage() const;
+
 
     /**
      * Change the spacing of the brush.
@@ -315,7 +325,7 @@ public:
 
     static KoResourceLoadResult fromXMLLoadResult(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
-    virtual QPainterPath outline(bool forcePreciseOutline = false) const;
+    virtual KisOptimizedBrushOutline outline(bool forcePreciseOutline = false) const;
 
     virtual void setScale(qreal _scale);
     qreal scale() const;

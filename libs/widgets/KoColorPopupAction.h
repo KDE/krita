@@ -15,7 +15,7 @@
 class KoColor;
 
 /**
- * KoColorPopupAction makes use of KoColorSetWidget to show a widget for for choosing a color (colormanaged via pigment).
+ * KoColorPopupAction makes use of KoColorSetWidget to show a widget for choosing a color (colormanaged via pigment).
  * @see KoColorPopupAction
  */
 

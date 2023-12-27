@@ -11,19 +11,55 @@
 
 #include "LcmsColorProfileContainer.h"
 
+#include <QGenericMatrix>
+#include <QTransform>
+#include <array>
 #include <cfloat>
 #include <cmath>
-#include <QTransform>
-#include <QGenericMatrix>
 
 #include <QDebug>
 
 #include "kis_debug.h"
 
+#include <KisLazyStorage.h>
+#include <KisLazyValueWrapper.h>
+
+namespace {
+struct ReverseCurveWrapper
+{
+    ReverseCurveWrapper() : reverseCurve(0) {}
+
+    explicit ReverseCurveWrapper(cmsToneCurve *curve) {
+        reverseCurve = cmsReverseToneCurve(curve);
+    }
+
+    ~ReverseCurveWrapper() {
+        if (reverseCurve) {
+            cmsFreeToneCurve(reverseCurve);
+        }
+    }
+
+    operator cmsToneCurve*() const {
+        return reverseCurve;
+    }
+
+    operator cmsToneCurve*() {
+        return reverseCurve;
+    }
+
+    ReverseCurveWrapper(const ReverseCurveWrapper&rhs) = delete;
+    ReverseCurveWrapper& operator=(const ReverseCurveWrapper&rhs) = delete;
+
+    ReverseCurveWrapper(ReverseCurveWrapper&&rhs) = default;
+    ReverseCurveWrapper& operator=(ReverseCurveWrapper&&rhs) = default;
+
+    cmsToneCurve *reverseCurve {0};
+};
+} // namespace
+
 class LcmsColorProfileContainer::Private
 {
 public:
-
     cmsHPROFILE profile;
     cmsColorSpaceSignature colorSpaceSignature;
     cmsProfileClassSignature deviceClass;
@@ -36,8 +72,12 @@ public:
     bool valid {false};
     bool suitableForOutput {false};
     bool hasColorants;
-    bool hasTRC;
-    bool isLinear {false};
+
+    using LazyBool = KisLazyStorage<KisLazyValueWrapper<bool>, std::function<bool()>>;
+
+    LazyBool hasTRC = LazyBool(LazyBool::init_value_tag{}, {});
+    LazyBool isLinear = LazyBool(LazyBool::init_value_tag{}, {});
+
     bool adaptedFromD50;
     cmsCIEXYZ mediaWhitePoint;
     cmsCIExyY whitePoint;
@@ -46,10 +86,13 @@ public:
     cmsToneCurve *greenTRC {0};
     cmsToneCurve *blueTRC {0};
     cmsToneCurve *grayTRC {0};
-    cmsToneCurve *redTRCReverse {0};
-    cmsToneCurve *greenTRCReverse {0};
-    cmsToneCurve *blueTRCReverse {0};
-    cmsToneCurve *grayTRCReverse {0};
+
+    using LazyReverseCurve = KisLazyStorage<ReverseCurveWrapper, cmsToneCurve*>;
+
+    LazyReverseCurve redTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
+    LazyReverseCurve greenTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
+    LazyReverseCurve blueTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
+    LazyReverseCurve grayTRCReverse = LazyReverseCurve(LazyReverseCurve::init_value_tag{}, {});
 
     cmsUInt32Number defaultIntent;
     bool isPerceptualCLUT;
@@ -147,6 +190,8 @@ bool LcmsColorProfileContainer::init()
         //present. This is necessary for profiles following the v4 spec.
         cmsCIEXYZ baseMediaWhitePoint;//dummy to hold copy of mediawhitepoint if this is modified by chromatic adaption.
         cmsCIEXYZ *mediaWhitePointPtr;
+        bool whiteComp[3];
+        bool whiteIsD50;
         // Possible bug in profiles: there are in fact some that says they contain that tag
         //    but in fact the pointer is null.
         //    Let's not crash on it anyway, and assume there is no white point instead.
@@ -156,10 +201,17 @@ bool LcmsColorProfileContainer::init()
 
             d->mediaWhitePoint = *(mediaWhitePointPtr);
             baseMediaWhitePoint = d->mediaWhitePoint;
+
+            whiteComp[0] = std::fabs(baseMediaWhitePoint.X - cmsD50_XYZ()->X) < 0.00001;
+            whiteComp[1] = std::fabs(baseMediaWhitePoint.Y - cmsD50_XYZ()->Y) < 0.00001;
+            whiteComp[2] = std::fabs(baseMediaWhitePoint.Z - cmsD50_XYZ()->Z) < 0.00001;
+            whiteIsD50 = std::all_of(std::begin(whiteComp), std::end(whiteComp), [](bool b) {return b;});
+
             cmsXYZ2xyY(&d->whitePoint, &d->mediaWhitePoint);
             cmsCIEXYZ *CAM1;
             if (cmsIsTag(d->profile, cmsSigChromaticAdaptationTag)
-                    && (CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag))) {
+                    && (CAM1 = (cmsCIEXYZ *)cmsReadTag(d->profile, cmsSigChromaticAdaptationTag))
+                    && whiteIsD50) {
                 //the chromatic adaption tag represent a matrix from the actual white point of the profile to D50.
 
                 //We first put all our data into structures we can manipulate.
@@ -167,7 +219,7 @@ bool LcmsColorProfileContainer::init()
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
                 //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
-                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
+                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeable
                 //effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();
                 //we then put the QTransform into a generic 3x3 matrix.
@@ -199,9 +251,9 @@ bool LcmsColorProfileContainer::init()
             tempColorants.Green = *tempColorantsGreen;
             tempColorants.Blue = *tempColorantsBlue;
             //convert to d65, this is useless.
-            cmsAdaptToIlluminant(&d->colorants.Red, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Red);
-            cmsAdaptToIlluminant(&d->colorants.Green, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Green);
-            cmsAdaptToIlluminant(&d->colorants.Blue, &baseMediaWhitePoint, &d->mediaWhitePoint, &tempColorants.Blue);
+            cmsAdaptToIlluminant(&d->colorants.Red, cmsD50_XYZ(), &d->mediaWhitePoint, &tempColorants.Red);
+            cmsAdaptToIlluminant(&d->colorants.Green, cmsD50_XYZ(), &d->mediaWhitePoint, &tempColorants.Green);
+            cmsAdaptToIlluminant(&d->colorants.Blue, cmsD50_XYZ(), &d->mediaWhitePoint, &tempColorants.Blue);
             //d->colorants = tempColorants;
             d->hasColorants = true;
         } else {
@@ -214,27 +266,40 @@ bool LcmsColorProfileContainer::init()
             d->redTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigRedTRCTag));
             d->greenTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGreenTRCTag));
             d->blueTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigBlueTRCTag));
-            if (d->redTRC) d->redTRCReverse = cmsReverseToneCurve(d->redTRC);
-            if (d->greenTRC) d->greenTRCReverse = cmsReverseToneCurve(d->greenTRC);
-            if (d->blueTRC) d->blueTRCReverse = cmsReverseToneCurve(d->blueTRC);
-            d->hasTRC = (d->redTRC && d->greenTRC && d->blueTRC && d->redTRCReverse && d->greenTRCReverse && d->blueTRCReverse);
-            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->redTRC)
-                                      && cmsIsToneCurveLinear(d->greenTRC)
-                                      && cmsIsToneCurveLinear(d->blueTRC);
+            if (d->redTRC) d->redTRCReverse = Private::LazyReverseCurve(d->redTRC);
+            if (d->greenTRC) d->greenTRCReverse = Private::LazyReverseCurve(d->greenTRC);
+            if (d->blueTRC) d->blueTRCReverse = Private::LazyReverseCurve(d->blueTRC);
+
+            d->hasTRC = Private::LazyBool([d = d] () {
+                return d->redTRC && d->greenTRC && d->blueTRC && *d->redTRCReverse && *d->greenTRCReverse && *d->blueTRCReverse;
+            });
+
+            d->isLinear = Private::LazyBool([d = d] () {
+                return *d->hasTRC
+                    && cmsIsToneCurveLinear(d->redTRC)
+                    && cmsIsToneCurveLinear(d->greenTRC)
+                    && cmsIsToneCurveLinear(d->blueTRC);
+            });
 
         } else if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
             d->grayTRC = ((cmsToneCurve *)cmsReadTag (d->profile, cmsSigGrayTRCTag));
-            if (d->grayTRC) d->grayTRCReverse = cmsReverseToneCurve(d->grayTRC);
-            d->hasTRC = (d->grayTRC && d->grayTRCReverse);
-            if (d->hasTRC) d->isLinear = cmsIsToneCurveLinear(d->grayTRC);
+            if (d->grayTRC) d->grayTRCReverse = Private::LazyReverseCurve(d->grayTRC);
+
+            d->hasTRC = Private::LazyBool([d = d] () {
+                return d->grayTRC && *d->grayTRCReverse;
+            });
+
+            d->isLinear = Private::LazyBool([d = d] () {
+                return *d->hasTRC && cmsIsToneCurveLinear(d->grayTRC);
+            });
         } else {
-            d->hasTRC = false;
+            d->hasTRC = Private::LazyBool(Private::LazyBool::init_value_tag{}, {});
         }
 
         // Check if the profile can convert (something->this)
-        d->suitableForOutput = cmsIsMatrixShaper(d->profile)
-                               || (cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
-                                   cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT));
+        d->suitableForOutput = cmsIsIntentSupported(d->profile,
+                                                    INTENT_PERCEPTUAL,
+                                                    LCMS_USED_AS_OUTPUT);
 
         d->version = cmsGetProfileVersion(d->profile);
         d->defaultIntent = cmsGetHeaderRenderingIntent(d->profile);
@@ -325,11 +390,11 @@ bool LcmsColorProfileContainer::hasColorants() const
 }
 bool LcmsColorProfileContainer::hasTRC() const
 {
-    return d->hasTRC;
+    return *d->hasTRC;
 }
 bool LcmsColorProfileContainer::isLinear() const
 {
-    return d->isLinear;
+    return *d->isLinear;
 }
 QVector <double> LcmsColorProfileContainer::getColorantsXYZ() const
 {
@@ -457,18 +522,18 @@ void LcmsColorProfileContainer::DelinearizeFloatValue(QVector <double> & Value) 
 {
     if (d->hasColorants) {
         if (!cmsIsToneCurveLinear(d->redTRC)) {
-            Value[0] = cmsEvalToneCurveFloat(d->redTRCReverse, Value[0]);
+            Value[0] = cmsEvalToneCurveFloat(*d->redTRCReverse, Value[0]);
         }
         if (!cmsIsToneCurveLinear(d->greenTRC)) {
-            Value[1] = cmsEvalToneCurveFloat(d->greenTRCReverse, Value[1]);
+            Value[1] = cmsEvalToneCurveFloat(*d->greenTRCReverse, Value[1]);
         }
         if (!cmsIsToneCurveLinear(d->blueTRC)) {
-            Value[2] = cmsEvalToneCurveFloat(d->blueTRCReverse, Value[2]);
+            Value[2] = cmsEvalToneCurveFloat(*d->blueTRCReverse, Value[2]);
         }
 
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag)) {
-            Value[0] = cmsEvalToneCurveFloat(d->grayTRCReverse, Value[0]);
+            Value[0] = cmsEvalToneCurveFloat(*d->grayTRCReverse, Value[0]);
         }
     }
 }
@@ -509,20 +574,20 @@ void LcmsColorProfileContainer::DelinearizeFloatValueFast(QVector <double> & Val
         //we can only reliably delinearise in the 0-1.0 range, outside of that leave the value alone.
 
         if (!cmsIsToneCurveLinear(d->redTRC) && Value[0]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->redTRCReverse, Value[0] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->redTRCReverse, Value[0] * scale);
             Value[0] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->greenTRC) && Value[1]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->greenTRCReverse, Value[1] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->greenTRCReverse, Value[1] * scale);
             Value[1] = newValue * invScale;
         }
         if (!cmsIsToneCurveLinear(d->blueTRC) && Value[2]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->blueTRCReverse, Value[2] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->blueTRCReverse, Value[2] * scale);
             Value[2] = newValue * invScale;
         }
     } else {
         if (cmsIsTag(d->profile, cmsSigGrayTRCTag) && Value[0]<1.0) {
-            quint16 newValue = cmsEvalToneCurve16(d->grayTRCReverse, Value[0] * scale);
+            quint16 newValue = cmsEvalToneCurve16(*d->grayTRCReverse, Value[0] * scale);
             Value[0] = newValue * invScale;
         }
     }
@@ -562,11 +627,41 @@ QByteArray LcmsColorProfileContainer::getProfileUniqueId() const
     return d->uniqueId;
 }
 
+bool LcmsColorProfileContainer::compareTRC(TransferCharacteristics characteristics, float error) const
+{
+    if (!*d->hasTRC) {
+        return false;
+    }
+
+    std::array<cmsFloat32Number, 2> calcValues{};
+
+    cmsToneCurve *mainCurve = [&]() {
+        if (d->hasColorants) {
+            return d->redTRC;
+        }
+        return d->grayTRC;
+    }();
+
+    cmsToneCurve *compareCurve = transferFunction(characteristics);
+
+    // Number of sweep samples across the curve
+    for (uint32_t i = 0; i < 32; i++) {
+        const float step = float(i) / 31.0f;
+        calcValues[0] = cmsEvalToneCurveFloat(mainCurve, step);
+        calcValues[1] = cmsEvalToneCurveFloat(compareCurve, step);
+        if (std::fabs(calcValues[0] - calcValues[1]) >= error) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristics transferFunction)
 {
     cmsToneCurve *mainCurve;
 
-    // Values courtesey of Elle Stone
+    // Values courtesy of Elle Stone
     cmsFloat64Number srgb_parameters[5] =
     { 2.4, 1.0 / 1.055,  0.055 / 1.055, 1.0 / 12.92, 0.04045 };
     cmsFloat64Number rec709_parameters[5] =
@@ -584,6 +679,8 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
 
     cmsFloat64Number log_100[5] = {1.0, 10, 2.0, -2.0, 0.0};
     cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
+
+    cmsFloat64Number labl_parameters[5] = {3.0, 0.862076, 0.137924, 0.110703, 0.080002};
 
     switch (transferFunction) {
     case TRC_IEC_61966_2_4:
@@ -619,8 +716,8 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
         mainCurve = cmsBuildParametricToneCurve(NULL, 8, log_100_sqrt);
         break;
     case TRC_A98:
-        //gamma 256/563
-        mainCurve = cmsBuildGamma(NULL, 256.0/563);
+        // gamma 563/256
+        mainCurve = cmsBuildGamma(NULL, 563.0 / 256.0);
         break;
     case TRC_PROPHOTO:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, prophoto_parameters);
@@ -630,6 +727,9 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
         break;
     case TRC_GAMMA_2_4:
         mainCurve = cmsBuildGamma(NULL, 2.4);
+        break;
+    case TRC_LAB_L:
+        mainCurve = cmsBuildParametricToneCurve(NULL, 4, labl_parameters);
         break;
     case TRC_SMPTE_ST_428_1:
         // Requires an a*X^y construction, not possible.

@@ -46,8 +46,8 @@ struct ConversionOptions {
 
     bool m_needsConversion {false};
     const KoColorSpace *m_destinationColorSpace {0};
-    KoColorConversionTransformation::Intent m_renderingIntent;
-    KoColorConversionTransformation::ConversionFlags m_conversionFlags;
+    KoColorConversionTransformation::Intent m_renderingIntent {KoColorConversionTransformation::IntentPerceptual};
+    KoColorConversionTransformation::ConversionFlags m_conversionFlags {KoColorConversionTransformation::Empty};
 };
 
 class KisOpenGLUpdateInfo;

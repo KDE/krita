@@ -32,7 +32,7 @@ public:
 
     /**
      * All the methods of this class are split into two groups:
-     * treadsafe and non-threadsafe. The methods from the first group
+     * threadsafe and non-threadsafe. The methods from the first group
      * can be called concurrently with each other. The ones form
      * the other group can't be called concurrently (even with the
      * friends from the first group) and must have an exclusive

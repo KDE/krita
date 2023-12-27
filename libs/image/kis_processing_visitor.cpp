@@ -11,9 +11,11 @@
 #include "kis_node_progress_proxy.h"
 #include "kis_node.h"
 #include <KLocalizedString>
+#include <QTimer>
 
 KisProcessingVisitor::ProgressHelper::ProgressHelper(const KisNode *node)
 {
+    KIS_ASSERT(node);
     KisNodeProgressProxy *progressProxy = node->nodeProgressProxy();
 
     if(progressProxy) {
@@ -39,6 +41,12 @@ KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
     return m_progressUpdater ? m_progressUpdater->startSubtask() : 0;
 }
 
+void KisProcessingVisitor::ProgressHelper::cancel()
+{
+    if (m_progressUpdater) {
+        QTimer::singleShot(0, m_progressUpdater, &KoProgressUpdater::cancel);
+    }
+}
 
 KisProcessingVisitor::~KisProcessingVisitor()
 {

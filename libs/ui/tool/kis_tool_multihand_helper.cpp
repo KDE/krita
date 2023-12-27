@@ -53,7 +53,7 @@ void KisToolMultihandHelper::createPainters(QVector<KisFreehandStrokeInfo*> &str
 
 void adjustPointInformationRotation(KisPaintInformation &pi, const QTransform &t)
 {
-    KisAlgebra2D::DecomposedMatix d(t);
+    KisAlgebra2D::DecomposedMatrix d(t);
 
     qreal rotation = d.angle;
     const bool mirrorX = KisAlgebra2D::signPZ(d.scaleX) < 0;

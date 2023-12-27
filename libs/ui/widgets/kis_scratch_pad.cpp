@@ -161,7 +161,7 @@ KisScratchPad::Mode KisScratchPad::modeFromButton(Qt::MouseButton button) const
 {
     return
         button == Qt::NoButton ? HOVERING :
-        button == Qt::MidButton ? PANNING :
+        button == Qt::MiddleButton ? PANNING :
         button == Qt::RightButton ? SAMPLING :
         PAINTING;
 }
@@ -176,7 +176,7 @@ void KisScratchPad::pointerPress(KoPointerEvent *event)
 
     // see if we are pressing down with a button
     if (event->button() == Qt::LeftButton ||
-        event->button() == Qt::MidButton ||
+        event->button() == Qt::MiddleButton ||
         event->button() == Qt::RightButton) {
         isMouseDown = true;
     } else {
@@ -241,8 +241,9 @@ void KisScratchPad::pointerRelease(KoPointerEvent *event)
 void KisScratchPad::pointerMove(KoPointerEvent *event)
 {
     if(!isEnabled()) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(event);
 
-    if(event && event->point.isNull() == false) {
+    if(event->point.isNull() == false) {
         m_helper->cursorMoved(documentToWidget().map(event->point));
     }
 
@@ -438,7 +439,7 @@ void KisScratchPad::setupScratchPad(KisCanvasResourceProvider* resourceProvider,
 {
     m_resourceProvider = resourceProvider;
     KisConfig cfg(true);
-    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(this)));
+    setDisplayProfile(cfg.displayProfile(QApplication::desktop()->screenNumber(QApplication::activeWindow())));
     connect(m_resourceProvider, SIGNAL(sigDisplayProfileChanged(const KoColorProfile*)),
             SLOT(setDisplayProfile(const KoColorProfile*)));
 
@@ -487,7 +488,7 @@ void KisScratchPad::setModeType(QString mode)
     }
 }
 
-void KisScratchPad::linkCanvavsToZoomLevel(bool value)
+void KisScratchPad::linkCanvasToZoomLevel(bool value)
 {
     linkCanvasZoomLevel = value;
 }

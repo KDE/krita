@@ -7,6 +7,7 @@
 #include "kis_experiment_paintop_settings.h"
 #include "kis_current_outline_fetcher.h"
 #include "kis_algebra_2d.h"
+#include <KisOptimizedBrushOutline.h>
 
 struct KisExperimentPaintOpSettings::Private
 {
@@ -23,11 +24,6 @@ KisExperimentPaintOpSettings::~KisExperimentPaintOpSettings()
 {
 }
 
-bool KisExperimentPaintOpSettings::lodSizeThresholdSupported() const
-{
-    return false;
-}
-
 bool KisExperimentPaintOpSettings::paintIncremental()
 {
     /**
@@ -37,7 +33,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
     return false;
 }
 
-QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -61,8 +57,10 @@ QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformatio
 #include <brushengine/kis_slider_based_paintop_property.h>
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
-#include "kis_experimentop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
+#include <KisOptimizedBrushOutline.h>
+#include "KisExperimentOpOptionData.h"
+
 
 
 QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
@@ -81,22 +79,22 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
 
                     prop->setValue(int(option.speed));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     option.speed = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
             prop->setIsVisibleCallback(
                 [](const KisUniformPaintOpProperty *prop) -> bool {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     return option.isSpeedEnabled;
                 });
 
@@ -114,22 +112,22 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
 
                     prop->setValue(int(option.smoothing));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     option.smoothing = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
             prop->setIsVisibleCallback(
                 [](const KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     return option.isSmoothingEnabled;
                 });
 
@@ -150,22 +148,22 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
 
                     prop->setValue(int(option.displacement));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     option.displacement = prop->value().toInt();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
             prop->setIsVisibleCallback(
                 [](const KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     return option.isDisplacementEnabled;
                 });
 
@@ -180,17 +178,17 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
 
                     prop->setValue(option.windingFill);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     option.windingFill = prop->value().toBool();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -204,17 +202,17 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
 
                     prop->setValue(option.hardEdge);
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
-                    ExperimentOption option;
-                    option.readOptionSetting(prop->settings().data());
+                    KisExperimentOpOptionData option;
+                    option.read(prop->settings().data());
                     option.hardEdge = prop->value().toBool();
-                    option.writeOptionSetting(prop->settings().data());
+                    option.write(prop->settings().data());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

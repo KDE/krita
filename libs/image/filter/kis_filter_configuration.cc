@@ -73,32 +73,20 @@ KisFilterConfiguration::~KisFilterConfiguration()
     delete d;
 }
 
-void KisFilterConfiguration::fromLegacyXML(const QDomElement& e)
+void KisFilterConfiguration::fromLegacyXML(const QDomElement& root)
 {
     clearProperties();
-    d->name = e.attribute("name");
-    d->version = e.attribute("version").toInt();
+    d->name = root.attribute("name");
+    d->version = root.attribute("version").toInt();
 
-    QDomNode n = e.firstChild();
+    QDomElement e;
+    for (e = root.firstChildElement("property"); !e.isNull(); e = e.nextSiblingElement()) {
+        QString name = e.attribute("name");
+        QString type = e.attribute("type");
+        QString value = e.text();
 
-
-    while (!n.isNull()) {
-        // We don't nest elements in filter configuration. For now...
-        QDomElement e = n.toElement();
-        QString name;
-        QString type;
-        QString value;
-
-        if (!e.isNull()) {
-            if (e.tagName() == "property") {
-                name = e.attribute("name");
-                type = e.attribute("type");
-                value = e.text();
-                // XXX Convert the variant pro-actively to the right type?
-                setProperty(name, QVariant(value));
-            }
-        }
-        n = n.nextSibling();
+        // XXX: Convert the variant pro-actively to the right type?
+        setProperty(name, QVariant(value));
     }
 }
 

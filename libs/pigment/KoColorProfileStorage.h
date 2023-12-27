@@ -46,7 +46,6 @@ public:
      * @param profile the new profile to be registered
      */
     void addProfile(KoColorProfile* profile);
-    void addProfile(const KoColorProfile* profile); // TODO
 
     /**
      * Removes the profile from the storage.

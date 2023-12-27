@@ -607,7 +607,7 @@ void KisStrokeBenchmark::benchmarkRand()
     Q_UNUSED(j);
 }
 
-void KisStrokeBenchmark::becnhmarkPresetCloning()
+void KisStrokeBenchmark::benchmarkPresetCloning()
 {
     QString presetFileName = "spray_21_textures1.kpp";
     KisPaintOpPresetSP preset(new KisPaintOpPreset(m_dataPath + presetFileName));

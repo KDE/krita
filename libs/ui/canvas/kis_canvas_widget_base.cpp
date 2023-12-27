@@ -18,7 +18,7 @@
 #include <KoCanvasController.h>
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <KoShapePaintingContext.h>
+
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
@@ -88,7 +88,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
 
     // This option does not do anything anymore with Qt4.6, so don't re-enable it since it seems to break display
     // https://lists.qt-project.org/pipermail/qt-interest-old/2009-December/017078.html
-    // gc.setRenderHint(QPainter::HighQualityAntialiasing);
+    // gc.setRenderHint(QPainter::Antialiasing);
 
     gc.setRenderHint(QPainter::SmoothPixmapTransform);
 
@@ -97,7 +97,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
 
         // Paint the shapes (other than the layers)
-        m_d->canvas->globalShapeManager()->paint(gc, false);
+        m_d->canvas->globalShapeManager()->paint(gc);
 
     }
 
@@ -156,8 +156,18 @@ QList<KisCanvasDecorationSP > KisCanvasWidgetBase::decorations() const
 {
     return m_d->decorations;
 }
-
+void KisCanvasWidgetBase::notifyDecorationsWindowMinimized(bool minimized)
+{
+    Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
+        deco->notifyWindowMinimized(minimized);
+    }
+}
 void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
+{
+    Q_UNUSED(value);
+}
+
+void KisCanvasWidgetBase::setWrapAroundViewingModeAxis(WrapAroundAxis value)
 {
     Q_UNUSED(value);
 }
@@ -221,14 +231,20 @@ KoToolProxy *KisCanvasWidgetBase::toolProxy() const
 
 QVariant KisCanvasWidgetBase::processInputMethodQuery(Qt::InputMethodQuery query) const
 {
-    if (query == Qt::ImMicroFocus) {
-        QRectF rect = m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter).toRectF();
-        return m_d->coordinatesConverter->flakeToWidget(rect);
-    }
-    return m_d->toolProxy->inputMethodQuery(query, *m_d->viewConverter);
+    return m_d->toolProxy->inputMethodQuery(query);
 }
 
 void KisCanvasWidgetBase::processInputMethodEvent(QInputMethodEvent *event)
 {
     m_d->toolProxy->inputMethodEvent(event);
+}
+
+void KisCanvasWidgetBase::processFocusInEvent(QFocusEvent *event)
+{
+    m_d->toolProxy->focusInEvent(event);
+}
+
+void KisCanvasWidgetBase::processFocusOutEvent(QFocusEvent *event)
+{
+    m_d->toolProxy->focusOutEvent(event);
 }

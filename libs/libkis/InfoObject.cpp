@@ -57,10 +57,10 @@ QMap<QString, QVariant> InfoObject::properties() const
     return map;
 }
 
-void InfoObject::setProperties(QMap<QString, QVariant> proprertyMap)
+void InfoObject::setProperties(QMap<QString, QVariant> propertyMap)
 {
-    Q_FOREACH(const QString & key, proprertyMap.keys()) {
-        d->properties->setProperty(key, proprertyMap[key]);
+    Q_FOREACH(const QString & key, propertyMap.keys()) {
+        d->properties->setProperty(key, propertyMap[key]);
     }
 }
 

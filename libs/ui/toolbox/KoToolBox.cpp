@@ -62,6 +62,7 @@ public:
     void addSection(Section *section, const QString &name);
 
     QList<QToolButton*> buttons;
+    KoToolBoxButton *selectedButton {nullptr};
     QHash<QString, KoToolBoxButton*> buttonsByToolId;
     QMap<QString, Section*> sections;
     KoToolBoxLayout *layout {0};
@@ -92,7 +93,7 @@ KoToolBox::KoToolBox()
     d->buttonGroup = new QButtonGroup(this);
 
     // Get screen the widget exists in, but fall back to primary screen if invalid.
-    const int widgetsScreen = qApp->desktop()->screenNumber(this);
+    const int widgetsScreen = QApplication::desktop()->screenNumber(QApplication::activeWindow());
     const int primaryScreen = 0; //In QT, primary screen should always be the first index of QGuiApplication::screens()
     const int screen = (widgetsScreen >= 0 && widgetsScreen < QGuiApplication::screens().size()) ? widgetsScreen : primaryScreen;
     const int toolbuttonSize = buttonSize(screen);
@@ -190,6 +191,10 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas)
     if (button) {
         button->setChecked(true);
         button->setHighlightColor();
+        if (d->selectedButton) {
+            d->selectedButton->setHighlightColor();
+        }
+        d->selectedButton = button;
     }
     else {
         warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";
@@ -276,6 +281,19 @@ void KoToolBox::paintEvent(QPaintEvent *)
     painter.end();
 }
 
+void KoToolBox::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::PaletteChange) {
+        Q_FOREACH (QToolButton *button, d->buttons) {
+            KoToolBoxButton* toolBoxButton = qobject_cast<KoToolBoxButton*>(button);
+            if (toolBoxButton) {
+                toolBoxButton->setHighlightColor();
+            }
+        }
+    }
+}
+
 void KoToolBox::setOrientation(Qt::Orientation orientation)
 {
     d->orientation = orientation;
@@ -305,7 +323,7 @@ void KoToolBox::slotContextIconSize()
     if (action) {
         int iconSize = -1;
         if (action == d->defaultIconSizeAction) {
-            iconSize = buttonSize(qApp->desktop()->screenNumber(this));
+            iconSize = buttonSize(QApplication::desktop()->screenNumber(QApplication::activeWindow()));
             QAction *action = d->contextIconSizes.key(iconSize);
             if (action) {
                 action->setChecked(true);

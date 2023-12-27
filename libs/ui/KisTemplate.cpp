@@ -64,7 +64,7 @@ const QPixmap &KisTemplate::loadPicture()
 
 
         QString filenameBuilder = themePrefix.append(m_picture).append(".png");
-        QString filename = KoResourcePaths::findResource("kis_pics", filenameBuilder);
+        QString filename = KoResourcePaths::findAsset("kis_pics", filenameBuilder);
 
         if (filename.isEmpty()) {
 

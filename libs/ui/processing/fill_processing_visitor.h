@@ -13,6 +13,7 @@
 #include <kis_selection.h>
 #include <kis_resources_snapshot.h>
 #include <kritaui_export.h>
+#include <kis_fill_painter.h>
 
 class KRITAUI_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
 {
@@ -37,24 +38,31 @@ public:
     void setAntiAlias(bool antiAlias);
     void setFeather(int feather);
     void setSizeMod(int sizemod);
+    void setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel);
     void setFillThreshold(int fillThreshold);
     void setOpacitySpread(int opacitySpread);
+    void setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode);
+    void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor);
     void setContinuousFillMode(ContinuousFillMode continuousFillMode);
     void setContinuousFillMask(KisSelectionSP continuousFillMask);
-    void setContinuousFillReferenceColor(const KoColor &continuousFillReferenceColor);
+    void setContinuousFillReferenceColor(const QSharedPointer<KoColor> continuousFillReferenceColor);
     void setUnmerged(bool unmerged);
     void setUseBgColor(bool useBgColor);
+    void setUseCustomBlendingOptions(bool useCustomBlendingOptions);
+    void setCustomOpacity(int customOpacity);
+    void setCustomCompositeOp(const QString &customCompositeOp);
+    void setProgressHelper(QSharedPointer<ProgressHelper> progressHelper);
 
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) override;
     void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) override;
 
-    void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
+    void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);
 
-    void selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
-    void normalFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
-    void continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
+    void selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter);
+    void normalFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter);
+    void continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter);
 
 private:
     KisPaintDeviceSP m_refPaintDevice;
@@ -69,15 +77,24 @@ private:
     bool m_antiAlias;
     int m_feather;
     int m_sizemod;
+    bool m_stopGrowingAtDarkestPixel;
     int m_fillThreshold;
     int m_opacitySpread;
+    KisFillPainter::RegionFillingMode m_regionFillingMode;
+    KoColor m_regionFillingBoundaryColor;
 
     ContinuousFillMode m_continuousFillMode;
     KisSelectionSP m_continuousFillMask;
-    KoColor m_continuousFillReferenceColor;
+    QSharedPointer<KoColor> m_continuousFillReferenceColor {nullptr};
 
     bool m_unmerged;
     bool m_useBgColor;
+
+    bool m_useCustomBlendingOptions;
+    int m_customOpacity;
+    QString m_customCompositeOp;
+
+    QSharedPointer<ProgressHelper> m_progressHelper {nullptr};
 };
 
 #endif /* __FILL_PROCESSING_VISITOR_H */

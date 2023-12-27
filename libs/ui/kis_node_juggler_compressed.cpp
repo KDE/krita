@@ -106,7 +106,7 @@ typedef QHash<KisNodeSP, MoveNodeStructSP> MovedNodesHash;
 
 
 /**
- * All the commands executed bythe stroke system are running in the
+ * All the commands executed by the stroke system are running in the
  * background asynchronously. But, at the same time, they emit updates
  * in parallel to the ones emitted by the juggler. Therefore, the
  * juggler and all its commands should share some data: which updates
@@ -130,7 +130,7 @@ public:
 
 private:
 
-    struct NewParentCollistionPolicy {
+    struct NewParentCollisionPolicy {
         static void setSuppressRefresh(MoveNodeStructSP update, bool value) {
             update->suppressNewParentRefresh = value;
         }
@@ -139,7 +139,7 @@ private:
         }
     };
 
-    struct OldParentCollistionPolicy {
+    struct OldParentCollisionPolicy {
         static void setSuppressRefresh(MoveNodeStructSP update, bool value) {
             update->suppressOldParentRefresh = value;
         }
@@ -169,8 +169,8 @@ private:
     }
 
     static void resolveParentCollisions(MovedNodesHash *hash) {
-        resolveParentCollisionsImpl<NewParentCollistionPolicy>(hash);
-        resolveParentCollisionsImpl<OldParentCollistionPolicy>(hash);
+        resolveParentCollisionsImpl<NewParentCollisionPolicy>(hash);
+        resolveParentCollisionsImpl<OldParentCollisionPolicy>(hash);
     }
 
     static void addToHashLazy(MovedNodesHash *hash, MoveNodeStructSP moveStruct) {
@@ -256,7 +256,7 @@ public:
             /**
              * When doing the first redo() some of the updates might
              * have already been executed by the juggler itself, so we
-             * should process'unhandled' updates only
+             * should process 'unhandled' updates only
              */
             m_updateData->processUnhandledUpdates();
         } else {
@@ -368,7 +368,7 @@ struct LowerRaiseLayer : public KisCommandUtils::AggregateCommand {
     }
 
     void populateChildCommands() override {
-        KisNodeList sortedNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
+        KisNodeList sortedNodes = KisLayerUtils::sortAndFilterAnyMergeableNodesSafe(m_nodes, m_image);
         KisNodeSP headNode = m_lower ? sortedNodes.first() : sortedNodes.last();
         const NodesType nodesType = getNodesType(sortedNodes);
 
@@ -487,7 +487,7 @@ struct DuplicateLayers : public KisCommandUtils::AggregateCommand {
           m_mode(mode) {}
 
     void populateChildCommands() override {
-        KisNodeList filteredNodes = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(m_nodes, m_image);
+        KisNodeList filteredNodes = KisLayerUtils::sortAndFilterAnyMergeableNodesSafe(m_nodes, m_image);
 
         if (filteredNodes.isEmpty()) return;
 
@@ -644,7 +644,7 @@ struct RemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommand
 
     void populateChildCommands() override {
         KisNodeList filteredNodes = m_nodes;
-        KisLayerUtils::filterMergableNodes(filteredNodes, true);
+        KisLayerUtils::filterMergeableNodes(filteredNodes, true);
         KisLayerUtils::filterUnlockedNodes(filteredNodes);
 
         if (filteredNodes.isEmpty()) return;

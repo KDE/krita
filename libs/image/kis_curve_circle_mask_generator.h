@@ -45,9 +45,9 @@ public:
     void setSoftness(qreal softness) override;
 
     bool shouldVectorize() const override;
-    KisBrushMaskApplicatorBase* applicator() override;
+    KisBrushMaskApplicatorBase *applicator() const override;
 
-    void resetMaskApplicator(bool forceScalar);
+    void setMaskScalarApplicator();
 
     static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
 

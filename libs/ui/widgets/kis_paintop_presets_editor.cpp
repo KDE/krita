@@ -20,6 +20,7 @@
 #include <QFontDatabase>
 #include <QWidgetAction>
 #include <QDesktopWidget>
+#include <QSplitter>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -31,16 +32,16 @@
 #include <brushengine/kis_paintop_config_widget.h>
 #include <kis_canvas_resource_provider.h>
 #include <widgets/kis_preset_chooser.h>
-#include <widgets/kis_preset_selector_strip.h>
 #include <KisResourceUserOperations.h>
+#include <KisResourceItemChooser.h>
 
 #include <ui_wdgpaintopsettings.h>
 #include <kis_node.h>
 #include "kis_config.h"
-#include "KisUiFont.h"
 
 #include "KisResourceServerProvider.h"
 #include "kis_lod_availability_widget.h"
+#include "KisLodAvailabilityModel.h"
 
 #include "kis_signal_auto_connection.h"
 #include <kis_paintop_settings.h>
@@ -50,23 +51,30 @@
 #include <brushengine/kis_paintop_factory.h>
 #include <kis_preset_live_preview_view.h>
 
+#include <lager/state.hpp>
+
 struct KisPaintOpPresetsEditor::Private
 {
-
-public:
-
     Ui_WdgPaintOpSettings uiWdgPaintOpPresetSettings;
-    QGridLayout *layout;
-    KisPaintOpConfigWidget *settingsWidget;
+    QGridLayout *layout {0};
+
+    QSplitter* horzSplitter {0};
+    QList<int> defaultSplitterSizes;
+    int presetPanelWidth {0};
+    int scratchPanelWidth {0};
+
+    KisPaintOpConfigWidget *settingsWidget {0};
     QFont smallFont;
-    KisCanvasResourceProvider *resourceProvider;
-    KisFavoriteResourceManager *favoriteResManager;
+    KisCanvasResourceProvider *resourceProvider {0};
+    KisFavoriteResourceManager *favoriteResManager {0};
 
     bool ignoreHideEvents;
     bool isCreatingBrushFromScratch = false;
     QSize minimumSettingsWidgetSize;
 
     KisSignalAutoConnectionsStore widgetConnections;
+
+    lager::state<KisLodAvailabilityData, lager::automatic_tag> lodAvailabilityData;
 };
 
 KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * resourceProvider,
@@ -88,7 +96,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.setupUi(this);
 
     m_d->layout = new QGridLayout(m_d->uiWdgPaintOpPresetSettings.frmOptionWidgetContainer);
-    m_d->layout->setSizeConstraint(QLayout::SetFixedSize);
 
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setupScratchPad(resourceProvider, Qt::white);
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setCutoutOverlayRect(QRect(25, 25, 200, 200));
@@ -117,69 +124,87 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     // the area on the brush editor for renaming the brush. make sure edit fields are hidden by default
     toggleBrushRenameUIActive(false);
 
+    // Brush Preset Left Panel
+    {
+        // Container
+        QVBoxLayout* containerLayout = dynamic_cast<QVBoxLayout*>(m_d->uiWdgPaintOpPresetSettings.presetsContainer->layout());
+        containerLayout->setAlignment(Qt::AlignmentFlag::AlignTop);  // spacers are not required
 
-    // DETAIL and THUMBNAIL view changer
-    QMenu* menu = new QMenu(this);
+        // Show Panel Button
+        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
+        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(cfg.presetStripVisible());
 
-    menu->setStyleSheet("margin: 6px");
-    menu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
+        connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
 
-    QActionGroup *actionGroup = new QActionGroup(this);
+        // Brush Engine Filter
+        connect(m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(slotUpdatePaintOpFilter()));
 
-    KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)cfg.presetChooserViewMode();
+        // Brush Presets
+        KisPresetChooser* presetChooser = m_d->uiWdgPaintOpPresetSettings.presetWidget;
+        presetChooser->showTaggingBar(true);
 
-    QAction* action = menu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotThumbnailMode()));
-    action->setCheckable(true);
-    action->setChecked(mode == KisPresetChooser::THUMBNAIL);
-    action->setActionGroup(actionGroup);
+        // Brush Presets ViewMode Menu
+        QMenu* viewModeMenu = new QMenu(this);
+        {
+            viewModeMenu->setStyleSheet("margin: 6px");
 
-    action = menu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"), m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotDetailMode()));
-    action->setCheckable(true);
-    action->setChecked(mode == KisPresetChooser::DETAIL);
-    action->setActionGroup(actionGroup);
+            // View Modes Btns
+            viewModeMenu->addSection(i18nc("@title Which elements to display (e.g., thumbnails or details)", "Display"));
+            KisPresetChooser::ViewMode mode = (KisPresetChooser::ViewMode)cfg.presetChooserViewMode();
+            QActionGroup *actionGroup = new QActionGroup(this);
 
+            QAction* action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-preview"), i18n("Thumbnails"));
+            action->setCheckable(true);
+            action->setChecked(mode == KisPresetChooser::THUMBNAIL);
+            action->setActionGroup(actionGroup);
 
-    // add horizontal slider for the icon size
-    QSlider* iconSizeSlider = new QSlider(this);
-    iconSizeSlider->setOrientation(Qt::Horizontal);
-    iconSizeSlider->setRange(30, 80);
-    iconSizeSlider->setValue(m_d->uiWdgPaintOpPresetSettings.presetWidget->iconSize());
-    iconSizeSlider->setMinimumHeight(20);
-    iconSizeSlider->setMinimumWidth(40);
-    iconSizeSlider->setTickInterval(10);
+            connect(action, &QAction::triggered,
+                m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToThumbnail);
 
+            action = viewModeMenu->addAction(KisIconUtils::loadIcon("view-list-details"), i18n("Details"));
+            action->setCheckable(true);
+            action->setChecked(mode == KisPresetChooser::DETAIL);
+            action->setActionGroup(actionGroup);
 
-    QWidgetAction *sliderAction= new QWidgetAction(this);
-    sliderAction->setDefaultWidget(iconSizeSlider);
+            connect(action, &QAction::triggered,
+                m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setViewModeToDetail);
 
-    menu->addSection(i18n("Icon Size"));
-    menu->addAction(sliderAction);
+            // Icon Size Slider
+            viewModeMenu->addSection(i18n("Icon Size"));
 
+            QSlider* iconSizeSlider = new QSlider(this);
+            iconSizeSlider->setOrientation(Qt::Horizontal);
+            iconSizeSlider->setRange(30, 80);
+            iconSizeSlider->setValue(m_d->uiWdgPaintOpPresetSettings.presetWidget->iconSize());
+            iconSizeSlider->setMinimumHeight(20);
+            iconSizeSlider->setMinimumWidth(40);
+            iconSizeSlider->setTickInterval(10);
 
-    // configure the button and assign menu
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setMenu(menu);
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setPopupMode(QToolButton::InstantPopup);
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setAutoRaise(true);
+            connect(iconSizeSlider, &QSlider::valueChanged,
+                    m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::setIconSize);
 
+            connect(iconSizeSlider, &QSlider::sliderReleased,
+                m_d->uiWdgPaintOpPresetSettings.presetWidget, &KisPresetChooser::saveIconSize);
 
-    // loading preset from scratch option
-    m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setPopupMode(QToolButton::InstantPopup);
+            QWidgetAction *sliderAction= new QWidgetAction(this);
+            sliderAction->setDefaultWidget(iconSizeSlider);
 
+            viewModeMenu->addAction(sliderAction);
+        }
 
-    // show/hide buttons
+        KisResourceItemChooser* resourceChooser = presetChooser->itemChooser();
+        resourceChooser->viewModeButton()->setPopupWidget(viewModeMenu);
 
-    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
-    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
-
-    if (cfg.scratchpadVisible()) {
-        slotSwitchScratchpad(true); // show scratchpad
-    } else {
-        slotSwitchScratchpad(false);
+        // Bottom Bar Buttons
+        m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setPopupMode(QToolButton::InstantPopup);  // loading preset from scratch option
+        connect(m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset,SIGNAL(clicked()),
+            this, SLOT(slotBlackListCurrentPreset()));  // TODO: add confirm dialog
     }
 
-    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setCheckable(true);
-    m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setChecked(false);
-    slotSwitchShowPresets(false); // hide presets by default
+    // show/hide buttons
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setCheckable(true);
+    m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setChecked(cfg.scratchpadVisible());
 
     QMenu *viewOptionsMenu = new QMenu(this);
     QAction *detachBrushEditorAction = viewOptionsMenu->addAction(i18n("Detach Brush Editor"));
@@ -205,18 +230,8 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     connect(m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField, SIGNAL(returnPressed()),
             SLOT(slotSaveRenameCurrentBrush()));
 
-    connect(iconSizeSlider, SIGNAL(sliderMoved(int)),
-            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSetIconSize(int)));
-
-    connect(iconSizeSlider, SIGNAL(sliderReleased()),
-            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(slotSaveIconSize()));
-
-
     connect(m_d->uiWdgPaintOpPresetSettings.showScratchpadButton, SIGNAL(clicked(bool)),
             this, SLOT(slotSwitchScratchpad(bool)));
-
-
-    connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
 
     connect(detachBrushEditorAction, SIGNAL(toggled(bool)),
             this, SLOT(slotToggleDetach(bool)));
@@ -235,7 +250,6 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
 
     m_d->settingsWidget = 0;
-    setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
 
     connect(m_d->uiWdgPaintOpPresetSettings.saveBrushPresetButton, SIGNAL(clicked()),
             this, SLOT(slotSaveBrushPreset()));
@@ -257,13 +271,11 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
 
 
     // preset widget connections
-    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SIGNAL(resourceSelected(KoResourceSP )),
+    connect(m_d->uiWdgPaintOpPresetSettings.presetWidget, SIGNAL(resourceSelected(KoResourceSP )),
             this, SIGNAL(signalResourceSelected(KoResourceSP )));
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()),
-            m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser, SLOT(updateViewSettings()));
-
-
+            m_d->uiWdgPaintOpPresetSettings.presetWidget, SLOT(updateViewSettings()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.reloadPresetButton, SIGNAL(clicked()), SLOT(slotUpdatePresetSettings()));
 
@@ -274,31 +286,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
 
-    m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setCanvasResourceManager(resourceProvider->resourceManager());
-
-    connect(resourceProvider->resourceManager(),
-            SIGNAL(canvasResourceChanged(int,QVariant)),
-            SLOT(slotResourceChanged(int,QVariant)));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
-            SIGNAL(sigUserChangedLodAvailability(bool)),
-            SLOT(slotLodAvailabilityChanged(bool)));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability,
-            SIGNAL(sigUserChangedLodThreshold(qreal)),
-            SLOT(slotLodThresholdChanged(qreal)));
-
-    slotResourceChanged(KoCanvasResource::LodAvailability,
-                        resourceProvider->resourceManager()->
-                        resource(KoCanvasResource::LodAvailability));
-
-    slotResourceChanged(KoCanvasResource::LodSizeThreshold,
-                        resourceProvider->resourceManager()->
-                        resource(KoCanvasResource::LodSizeThreshold));
-
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
-
-
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
     connect(m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset, SIGNAL(clicked()), this, SLOT(slotBlackListCurrentPreset()));
 
     updateThemedIcons();
@@ -306,6 +294,28 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     // setup things like the scene construct images, layers, etc that is a one-time thing
     m_d->uiWdgPaintOpPresetSettings.liveBrushPreviewView->setup(resourceProvider->resourceManager());
 
+    // Responsive Layout
+    m_d->horzSplitter = new QSplitter(this);  // you can't add QSplitter to a UI file
+    m_d->horzSplitter->setChildrenCollapsible(false);
+
+    m_d->horzSplitter->addWidget(m_d->uiWdgPaintOpPresetSettings.presetsContainer);
+    m_d->horzSplitter->setStretchFactor(0, 0);
+    m_d->horzSplitter->addWidget(m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls);
+    m_d->horzSplitter->setStretchFactor(1, 2);
+    m_d->horzSplitter->addWidget(m_d->uiWdgPaintOpPresetSettings.scratchpadControls);
+    m_d->horzSplitter->setStretchFactor(2, 0);
+
+    m_d->uiWdgPaintOpPresetSettings.gridLayout->addWidget(m_d->horzSplitter, 3, 0, 1, 3);
+
+    // The side panels' sizeHints must be retrieved while they are visible.
+    // The center widget's sizeHint must be retrieved later.
+    m_d->defaultSplitterSizes << m_d->horzSplitter->widget(0)->sizeHint().width()
+                              << m_d->horzSplitter->widget(1)->sizeHint().width()
+                              << m_d->horzSplitter->widget(2)->sizeHint().width();
+
+    // Default Configuration
+    slotSwitchShowPresets(cfg.presetStripVisible());
+    slotSwitchScratchpad(cfg.scratchpadVisible());
 }
 
 void KisPaintOpPresetsEditor::slotBlackListCurrentPreset()
@@ -399,27 +409,6 @@ void KisPaintOpPresetsEditor::slotSaveRenameCurrentBrush()
     slotUpdatePresetSettings(); // update visibility of dirty preset and icon
 }
 
-void KisPaintOpPresetsEditor::slotResourceChanged(int key, const QVariant &value)
-{
-    if (key == KoCanvasResource::LodAvailability) {
-        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodAvailability(value.toBool());
-    } else if (key == KoCanvasResource::LodSizeThreshold) {
-        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedLodThreshold(value.toDouble());
-    } else if (key == KoCanvasResource::Size) {
-        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->slotUserChangedSize(value.toDouble());
-    }
-}
-
-void KisPaintOpPresetsEditor::slotLodAvailabilityChanged(bool value)
-{
-    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodAvailability, QVariant(value));
-}
-
-void KisPaintOpPresetsEditor::slotLodThresholdChanged(qreal value)
-{
-    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::LodSizeThreshold, QVariant(value));
-}
-
 KisPaintOpPresetsEditor::~KisPaintOpPresetsEditor()
 {
     if (m_d->settingsWidget) {
@@ -456,8 +445,13 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
             slotSwitchScratchpad(false);
         }
 
-        m_d->widgetConnections.addConnection(m_d->settingsWidget, SIGNAL(sigConfigurationItemChanged()),
-                                             this, SLOT(slotUpdateLodAvailability()));
+        slotSwitchShowPresets(cfg.presetStripVisible());
+
+        KisLodAvailabilityModel *model =
+            new KisLodAvailabilityModel(m_d->lodAvailabilityData,
+                                        m_d->settingsWidget->effectiveBrushSize(),
+                                        m_d->settingsWidget->lodLimitationsReader());
+        m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLodAvailabilityModel(model);
 
         widget->setFont(m_d->smallFont);
 
@@ -475,19 +469,17 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
                                                  this, SLOT(slotUpdatePresetSettings()));
         }
 
+        m_d->widgetConnections.addConnection(model, SIGNAL(effectiveLodAvailableChanged(bool)),
+                                             this, SLOT(slotUpdateEffectiveLodAvailable(bool)));
+        slotUpdateEffectiveLodAvailable(model->effectiveLodAvailable());
+
+        m_d->widgetConnections.addConnection(model, SIGNAL(sigConfigurationItemChanged()),
+                                             widget, SIGNAL(sigConfigurationItemChanged()));
+
         m_d->layout->update();
         widget->show();
 
     }
-    slotUpdateLodAvailability();
-}
-
-void KisPaintOpPresetsEditor::slotUpdateLodAvailability()
-{
-    if (!m_d->settingsWidget) return;
-
-    KisPaintopLodLimitations l = m_d->settingsWidget->lodLimitations();
-    m_d->uiWdgPaintOpPresetSettings.wdgLodAvailability->setLimitations(l);
 }
 
 QImage KisPaintOpPresetsEditor::cutOutOverlay()
@@ -505,13 +497,31 @@ void KisPaintOpPresetsEditor::setCreatingBrushFromScratch(bool enabled)
     m_d->isCreatingBrushFromScratch = enabled;
 }
 
+void KisPaintOpPresetsEditor::readOptionSetting(const KisPropertiesConfigurationSP setting)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
+    m_d->settingsWidget->setConfigurationSafe(setting);
+
+    KisLodAvailabilityData data = m_d->lodAvailabilityData.get();
+    data.read(setting.data());
+    m_d->lodAvailabilityData.set(data);
+}
+
+void KisPaintOpPresetsEditor::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->settingsWidget);
+
+    m_d->settingsWidget->writeConfigurationSafe(setting);
+    m_d->lodAvailabilityData->write(setting.data());
+}
+
 void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
 {
     // this gets called every time the brush editor window is opened
     // TODO: this gets called multiple times whenever the preset is changed in the presets area
     // the connections probably need to be thought about with this a bit more to keep things in sync
 
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(resource);
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setCurrentResource(resource);
 
     // find the display name of the brush engine and append it to the selected preset display
     QString currentBrushEngineName;
@@ -537,7 +547,14 @@ void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
-    QPixmap thumbnail = QPixmap::fromImage(resource->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QImage thumbImage = resource->image();
+    QPixmap thumbnail;
+    if (!thumbImage.isNull()) {
+        thumbnail = QPixmap::fromImage(thumbImage.scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    } else {
+        thumbnail = QPixmap();
+    }
+
     thumbnail.setDevicePixelRatio(devicePixelRatioF());
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(thumbnail);
 
@@ -552,7 +569,7 @@ bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
 
 void KisPaintOpPresetsEditor::setPaintOpList(const QList< KisPaintOpFactory* >& list)
 {
-    m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
+    m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->clear(); // reset combobox list just in case
 
 
     // create a new list so we can sort it and populate the brush engine combo box
@@ -591,7 +608,7 @@ void KisPaintOpPresetsEditor::setPaintOpList(const QList< KisPaintOpFactory* >& 
     // fill the list into the brush combo box
     sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), QIcon(emptyPixmap), 0 ));
     for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
-        m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
+        m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
     }
 }
 
@@ -617,11 +634,58 @@ void KisPaintOpPresetsEditor::hideEvent(QHideEvent *event)
     if (m_d->ignoreHideEvents) {
         return;
     }
+
+    KisConfig cfg(false);
+
+    QList<int> splitterSizes = m_d->horzSplitter->sizes();
+    if (!cfg.presetStripVisible()) {
+        splitterSizes[0] = m_d->presetPanelWidth;
+    }
+
+    if (!cfg.scratchpadVisible()) {
+        splitterSizes[2] = m_d->scratchPanelWidth;
+    }
+
+    cfg.writeList<int>("brushEditorSplitterSizes", splitterSizes);
+
+    QWidget *frame = this->parentWidget();
+    cfg.writeEntry("brushEditorWindowGeometry", frame->saveGeometry());
+
     QWidget::hideEvent(event);
 }
 
 void KisPaintOpPresetsEditor::showEvent(QShowEvent *)
 {
+    KisConfig cfg(false);
+
+    // The center widget's size will be cut off if not re-retrieved.
+    m_d->defaultSplitterSizes[1] = m_d->horzSplitter->widget(1)->sizeHint().width();
+    QList<int> splitterSizes = cfg.readList<int>("brushEditorSplitterSizes", m_d->defaultSplitterSizes);
+
+    m_d->presetPanelWidth = splitterSizes[0];
+    m_d->scratchPanelWidth = splitterSizes[2];
+
+    if (!cfg.presetStripVisible()) {
+        splitterSizes[0] = 0;
+    }
+    if (!cfg.scratchpadVisible()) {
+        splitterSizes[2] = 0;
+    }
+
+    QWidget *frame = this->parentWidget();
+    QByteArray frameGeometry = cfg.readEntry("brushEditorWindowGeometry", QByteArray());
+    if (!frameGeometry.isEmpty()) {
+        frame->restoreGeometry(frameGeometry);
+    }
+    else {
+        int presetPanelWidth = splitterSizes[0] != 0 ? splitterSizes[0] : m_d->uiWdgPaintOpPresetSettings.showPresetsButton->width();
+        int scratchPanelWidth = splitterSizes[2] != 0 ? splitterSizes[2] : m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->width();
+        int width = presetPanelWidth + splitterSizes[1] + scratchPanelWidth + m_d->layout->margin() * 4;
+        QRect defaultGeometry = QRect(frame->geometry().x(), frame->geometry().y(), width, frame->geometry().height());
+        frame->setGeometry(defaultGeometry);
+    }
+    m_d->horzSplitter->setSizes(splitterSizes);
+
     emit brushEditorShown();
 }
 
@@ -638,6 +702,8 @@ void KisPaintOpPresetsEditor::resizeEvent(QResizeEvent* event)
 
 void KisPaintOpPresetsEditor::slotSwitchScratchpad(bool visible)
 {
+    bool sameVisibility = m_d->uiWdgPaintOpPresetSettings.scratchPad->isVisible() == visible;
+
     // hide all the internal controls except the toggle button
     m_d->uiWdgPaintOpPresetSettings.scratchPad->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.paintPresetIcon->setVisible(visible);
@@ -647,10 +713,44 @@ void KisPaintOpPresetsEditor::slotSwitchScratchpad(bool visible)
     m_d->uiWdgPaintOpPresetSettings.eraseScratchPad->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.scratchpadSidebarLabel->setVisible(visible);
 
+    if (sameVisibility) {
+        return;
+    }
+
+    QPushButton* showBtn = m_d->uiWdgPaintOpPresetSettings.showScratchpadButton;
+    QGroupBox* container = m_d->uiWdgPaintOpPresetSettings.scratchpadControls;
+
+    int emptyContainerWidth = showBtn->width() + m_d->layout->margin() * 2;
+
     if (visible) {
-        m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
+        showBtn->setIcon(KisIconUtils::loadIcon("arrow-left"));
+
+        container->setMinimumWidth(scratchPadPanelMinWidth);
+        container->setMaximumWidth(0xFF'FFFF);
+
+        QList<int> splitterSizes = m_d->horzSplitter->sizes();
+        splitterSizes[2] = m_d->scratchPanelWidth > 0 ? m_d->scratchPanelWidth : scratchPadPanelInitWidth;
+        QWidget *frame = this->parentWidget();
+        QRect currentGeometry = frame->geometry();
+        currentGeometry.setRight(currentGeometry.right() + (splitterSizes[2] - emptyContainerWidth));
+        frame->setGeometry(currentGeometry);
+        m_d->horzSplitter->setSizes(splitterSizes);
     } else {
-        m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
+        showBtn->setIcon(KisIconUtils::loadIcon("arrow-right"));
+
+        container->setMinimumWidth(emptyContainerWidth);
+        container->setMaximumWidth(emptyContainerWidth);
+
+        QList<int> splitterSizes = m_d->horzSplitter->sizes();
+        m_d->scratchPanelWidth = m_d->scratchPanelWidth > 0 ? splitterSizes[2] : scratchPadPanelInitWidth;
+        QWidget *frame = this->parentWidget();
+        QRect currentGeometry = frame->geometry();
+        currentGeometry.setRight(currentGeometry.right() - (m_d->scratchPanelWidth - emptyContainerWidth));
+        frame->setGeometry(currentGeometry);
+
+        splitterSizes[1] = 0xFF'FFFF;
+        splitterSizes[2] = emptyContainerWidth;
+        m_d->horzSplitter->setSizes(splitterSizes);
     }
 
     KisConfig cfg(false);
@@ -661,30 +761,63 @@ void KisPaintOpPresetsEditor::slotSwitchShowEditor(bool visible) {
     m_d->uiWdgPaintOpPresetSettings.brushEditorSettingsControls->setVisible(visible);
 }
 
-void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible) {
+void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible)
+{
+    bool sameVisibility = m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->isVisible() == visible;
 
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(visible);
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setVisible(visible);
-    m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setVisible(visible);
-    m_d->uiWdgPaintOpPresetSettings.engineFilterLabel->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.engineFilterLabel->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setVisible(visible);
 
-    // we only want a spacer to work when the toggle icon is present. Otherwise the list of presets will shrink
-    // which is something we don't want
-    if (visible) {
-        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::Ignored,QSizePolicy::Ignored);
-        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
-    } else {
-        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
-        m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
+    if (sameVisibility) {
+        return;
     }
 
+    QPushButton* showBtn = m_d->uiWdgPaintOpPresetSettings.showPresetsButton;
+    QGroupBox* container = m_d->uiWdgPaintOpPresetSettings.presetsContainer;
+
+    int emptyContainerWidth = showBtn->width() + m_d->layout->margin() * 2;
+
+    if (visible) {
+        showBtn->setIcon(KisIconUtils::loadIcon("arrow-right"));
+
+        container->setMinimumWidth(brushPresetsPanelMinWidth);
+        container->setMaximumWidth(0xFF'FFFF);
+
+        QList<int> splitterSizes = m_d->horzSplitter->sizes();
+        splitterSizes[0] = m_d->presetPanelWidth;
+        QWidget *frame = this->parentWidget();
+        QRect currentGeometry = frame->geometry();
+        currentGeometry.setLeft(currentGeometry.left() - (splitterSizes[0] - emptyContainerWidth));
+        frame->setGeometry(currentGeometry);
+        m_d->horzSplitter->setSizes(splitterSizes);
+    } else {
+        showBtn->setIcon(KisIconUtils::loadIcon("arrow-left"));
+
+        container->setMinimumWidth(emptyContainerWidth);
+        container->setMaximumWidth(emptyContainerWidth);
+
+        QList<int> splitterSizes = m_d->horzSplitter->sizes();
+        m_d->presetPanelWidth = m_d->presetPanelWidth > 0 ? splitterSizes[0] : brushPresetsPanelInitWidth;
+        QWidget *frame = this->parentWidget();
+        QRect currentGeometry = frame->geometry();
+        currentGeometry.setLeft(currentGeometry.left() + (m_d->presetPanelWidth - emptyContainerWidth));
+        frame->setGeometry(currentGeometry);
+
+        splitterSizes[0] = emptyContainerWidth;
+        splitterSizes[1] = 0xFF'FFFF;
+        m_d->horzSplitter->setSizes(splitterSizes);
+    }
+
+    KisConfig cfg(false);
+    cfg.setPresetStripVisible(visible);
 }
 
 void KisPaintOpPresetsEditor::slotUpdatePaintOpFilter() {
-    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
+    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->currentData(); // grab paintOpID from data
     QString filterPaintOpId = userData.toString();
 
     if (filterPaintOpId == "all_options") {
@@ -721,6 +854,12 @@ void KisPaintOpPresetsEditor::slotToggleDetach(bool detach)
     cfg.setPaintopPopupDetached(detach);
 }
 
+void KisPaintOpPresetsEditor::slotUpdateEffectiveLodAvailable(bool value)
+{
+    if (!m_d->resourceProvider) return;
+    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::EffectiveLodAvailability, value);
+}
+
 void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()
 {
     emit createPresetFromScratch(sender()->objectName());
@@ -728,13 +867,13 @@ void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()
 
 void KisPaintOpPresetsEditor::updateViewSettings()
 {
-    m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->updateViewSettings();
+    m_d->uiWdgPaintOpPresetSettings.presetWidget->updateViewSettings();
 }
 
 void KisPaintOpPresetsEditor::currentPresetChanged(KisPaintOpPresetSP preset)
 {
     if (preset) {
-        m_d->uiWdgPaintOpPresetSettings.presetWidget->smallPresetChooser->setCurrentResource(preset);
+        m_d->uiWdgPaintOpPresetSettings.presetWidget->setCurrentResource(preset);
         setCurrentPaintOpId(preset->paintOp().id());
     }
 }
@@ -758,20 +897,18 @@ void KisPaintOpPresetsEditor::updateThemedIcons()
 
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setIcon(KisIconUtils::loadIcon("list-add"));
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setIcon(KisIconUtils::loadIcon("deletelayer"));
-    m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
+    //m_d->uiWdgPaintOpPresetSettings.presetChangeViewToolButton->setIcon(KisIconUtils::loadIcon("view-choose"));
 
-    // if we cannot see the "Preset label", we know it is not visible
-    // maybe this can also be stored in the config like the scratchpad?
-    if (m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->isVisible()) {
-        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::Ignored,QSizePolicy::Ignored);
+    // store if the scratchpad or brush presets are visible in the config
+    KisConfig cfg(true);
+    if (cfg.presetStripVisible()) {
+        //m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::Ignored,QSizePolicy::Ignored);
         m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-right"));
     } else {
-        m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+        //m_d->uiWdgPaintOpPresetSettings.presetsSpacer->changeSize(0,0, QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
         m_d->uiWdgPaintOpPresetSettings.showPresetsButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     }
 
-    // we store whether the scratchpad if visible in the config.
-    KisConfig cfg(true);
     if (cfg.scratchpadVisible()) {
         m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->setIcon(KisIconUtils::loadIcon("arrow-left"));
     } else {

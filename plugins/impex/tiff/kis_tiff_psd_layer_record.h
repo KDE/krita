@@ -14,7 +14,9 @@
 #include <psd.h>
 #include <psd_layer_section.h>
 
-class KisTiffPsdLayerRecord
+#include "kritatiffpsd_export.h"
+
+class KRITATIFFPSD_EXPORT KisTiffPsdLayerRecord
 {
 public:
     KisTiffPsdLayerRecord(bool isBigEndian,

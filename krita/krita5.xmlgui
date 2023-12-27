@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="502"
+version="540"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -74,6 +74,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="stroke_selection"/>
       <Action name="delete"/>
       <Separator/>
+      <Action name="sample_screen_color"/>
+      <Action name="sample_screen_color_real_canvas"/>
+      <Separator/>
       <Action name="revert"/>
     </Menu>
     <Menu name="view">
@@ -82,31 +85,36 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="fullscreen"/>
       <Action name="view_detached_canvas"/>
       <Action name="wrap_around_mode"/>
+      <Menu name="wrap_around_mode_direction">
+        <text>Wrap Around Mode Direction</text>
+        <Action name="wrap_around_hv_axis"/>
+        <Action name="wrap_around_h_axis"/>
+        <Action name="wrap_around_v_axis"/>
+      </Menu>
       <Action name="level_of_detail_mode"/>
       <Action name="softProof"/>
       <Action name="gamutCheck"/>
       <Separator/>
-      <Menu name="Canvas">
-          <text>&amp;Canvas</text>
-          <Action name="mirror_canvas"/>
-          <Action name="mirror_canvas_around_cursor"/>
-          <Separator/>
-          <Action name="zoom_to_100pct" />
-          <Action name="rotate_canvas_right" />
-          <Action name="rotate_canvas_left" />
-          <Action name="reset_canvas_rotation" />
-          <!-- TODO: Something is not right with the way zoom actions are hooked up. These are in the KoZoomController.
-               It seems they are not being properly placed in the view manager since the MDI changes were implemented
-          -->
+      <Menu name="ZoomRotateMirror">
+          <text>&amp;Zoom, Rotate, and Mirror</text>
           <Action name="view_zoom_in"/>
           <Action name="view_zoom_out"/>
+          <Action name="zoom_to_100pct"/>
+          <Action name="zoom_to_fit"/>
+          <Action name="zoom_to_fit_width"/>
+          <Action name="zoom_to_fit_height"/>
+          <Separator/>
+          <Action name="rotate_canvas_right"/>
+          <Action name="rotate_canvas_left"/>
+          <Action name="reset_canvas_rotation"/>
+          <Separator/>
+          <Action name="mirror_canvas"/>
+          <Action name="mirror_canvas_around_cursor"/>
+          <Action name="mirror_canvas_around_canvas"/>
+          <Separator/>
+          <Action name="reset_display"/>
       </Menu>
-      <!-- TODO: None of these actions are showing. There names must have been changed to something with the MDI changes?...
-      <Action name="actual_pixels"/>
-      <Action name="actual_size"/>
-      <Action name="fit_to_canvas"/>
-      -->
-
+      <Action name="view_print_size"/>
       <Separator/>
       <Action name="view_ruler"/>
       <Action name="rulers_track_mouse"/>
@@ -188,7 +196,19 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Menu name="LayerNew">
         <text context="New layer">&amp;New</text>
         <Action name="add_new_paint_layer"/>
+        <Action name="add_new_group_layer"/>
         <Action name="add_new_clone_layer"/>
+        <Action name="add_new_shape_layer"/>
+        <Action name="add_new_adjustment_layer"/>
+        <Action name="add_new_fill_layer"/>
+        <Action name="add_new_file_layer"/>
+        <Separator/>
+        <Action name="add_new_transparency_mask"/>
+        <Action name="add_new_filter_mask"/>
+        <Action name="add_new_colorize_mask"/>
+        <Action name="add_new_transform_mask"/>
+        <Action name="add_new_selection_mask"/>
+        <Separator/>
         <Action name="new_from_visible"/>
         <Action name="duplicatelayer"/>
         <Separator/>
@@ -362,6 +382,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Separator/>
       <Action name="options_configure_toolbars"/>
       <Merge name="StandardToolBarMenuHandler" />
+      <Action name="lock_toolbars"/>
       <Separator/>
       <Action name="view_toggledockers"/>
       <Action name="settings_dockers_menu"/>
@@ -403,7 +424,9 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
     <Action name="file_new"/>
     <Action name="file_open"/>
     <Action name="file_save"/>
-    <Separator/>
+  </ToolBar>
+  <ToolBar name="editToolBar" fullWidth="false" noMerge="1">
+    <Text>Edit</Text>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
   </ToolBar>

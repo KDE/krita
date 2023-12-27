@@ -35,6 +35,7 @@
 #include "kis_node_commands_adapter.h"
 #include "kis_undo_adapter.h"
 
+#include <KisCursorOverrideLock.h>
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
 
@@ -59,7 +60,7 @@ void WaveletDecompose::slotWaveletDecompose()
         
     if (dlg.exec() == QDialog::Accepted) {
 
-        QApplication::setOverrideCursor(Qt::WaitCursor);
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
         QPointer<KoUpdater> updater = viewManager()->createUnthreadedUpdater(i18n("Wavelet Decompose"));
 
@@ -137,8 +138,6 @@ void WaveletDecompose::slotWaveletDecompose()
         updater->setProgress(100);
         image->unlock();
     }
-        
-    QApplication::restoreOverrideCursor();
 }
 
 #include "waveletdecompose.moc"

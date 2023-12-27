@@ -19,7 +19,7 @@ class KoColor;
 /**
  * @brief The ManagedColor class is a class to handle colors that are color managed.
  * A managed color is a color of which we know the model(RGB, LAB, CMYK, etc), the bitdepth and
- * the specific properties of its colorspace, such as the whitepoint, chromacities, trc, etc, as represented
+ * the specific properties of its colorspace, such as the whitepoint, chromaticities, trc, etc, as represented
  * by the color profile.
  *
  * Krita has two color management systems. LCMS and OCIO.

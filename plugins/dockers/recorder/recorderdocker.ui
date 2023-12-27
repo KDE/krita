@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>277</width>
+    <width>324</width>
     <height>369</height>
    </rect>
   </property>
@@ -49,7 +49,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>277</width>
+        <width>324</width>
         <height>369</height>
        </rect>
       </property>
@@ -150,17 +150,17 @@
           <item>
            <layout class="QFormLayout" name="formLayout">
             <item row="1" column="0">
-             <widget class="QLabel" name="labelCaptureRate">
+             <widget class="QLabel" name="labelRate">
               <property name="text">
-               <string>Capture interval:</string>
+               <string extracomment="This value changes for RealtTimeCapture mode switched to on. It can alter the column width of the labels, if this value is the longest of all labels. Please ensure, that at least one other label has more characters than this one (by stuffing space characters after the colon of one label).">Capture interval:</string>
               </property>
               <property name="buddy">
-               <cstring>spinCaptureInterval</cstring>
+               <cstring>spinRate</cstring>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinCaptureInterval">
+             <widget class="QDoubleSpinBox" name="spinRate">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -173,17 +173,23 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="correctionMode">
+               <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+              </property>
               <property name="keyboardTracking">
                <bool>false</bool>
               </property>
               <property name="suffix">
                <string comment="Contraction of &quot;second&quot; for interval"> sec.</string>
               </property>
-              <property name="minimum">
+              <property name="decimals">
                <number>1</number>
               </property>
+              <property name="minimum">
+               <double>0.100000000000000</double>
+              </property>
               <property name="value">
-               <number>1</number>
+               <double>1.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -216,7 +222,7 @@
             <item row="4" column="0">
              <widget class="QLabel" name="labelResolution">
               <property name="text">
-               <string comment="Resolution for recorded frames">Resolution:</string>
+               <string comment="Resolution for recorded frames" extracomment="Please do not remove the spaces after the label text. It ensures to fix the column width if the label text of `labelRate` is set to an other value for RealTimeCaptureMode switched on.">Resolution:         </string>
               </property>
               <property name="buddy">
                <cstring>comboResolution</cstring>
@@ -290,7 +296,58 @@
               </item>
              </widget>
             </item>
+            <item row="5" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayoutThreads">
+              <item>
+               <widget class="QSlider" name="sliderThreads">
+                <property name="toolTip">
+                 <string>Number of threads, which should be used for recording</string>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="pageStep">
+                 <number>1</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="spinThreads">
+                <property name="minimumSize">
+                 <size>
+                  <width>40</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="toolTip">
+                 <string>Number of threads, which should be used for recording</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="5" column="0">
+             <widget class="QLabel" name="labelThreads">
+              <property name="text">
+               <string>Threads:</string>
+              </property>
+             </widget>
+            </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBoxRealTimeCaptureMode">
+            <property name="toolTip">
+             <string extracomment="Tooltip for check box">Calculate the Capture Interval from the Video FPS export settings.
+Please handle with care, may cause performance issues.</string>
+            </property>
+            <property name="text">
+             <string>Real Time Capture mode</string>
+            </property>
+           </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="checkBoxRecordIsolateMode">
@@ -358,17 +415,6 @@ Depending on timelapse speed, this may cause flickering in the resulting video.<
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="labelUnsupportedColorSpace">
-         <property name="text">
-          <string>⚠ Unsupported color space.
-Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -390,10 +436,60 @@ Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
  <customwidgets>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QSpinBox</extends>
    <header location="global">kis_slider_spin_box.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>buttonManageRecordings</tabstop>
+  <tabstop>editDirectory</tabstop>
+  <tabstop>buttonBrowse</tabstop>
+  <tabstop>spinRate</tabstop>
+  <tabstop>comboFormat</tabstop>
+  <tabstop>spinQuality</tabstop>
+  <tabstop>comboResolution</tabstop>
+  <tabstop>sliderThreads</tabstop>
+  <tabstop>spinThreads</tabstop>
+  <tabstop>checkBoxRealTimeCaptureMode</tabstop>
+  <tabstop>checkBoxRecordIsolateMode</tabstop>
+  <tabstop>checkBoxAutoRecord</tabstop>
+  <tabstop>buttonRecordToggle</tabstop>
+  <tabstop>buttonExport</tabstop>
+ </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>sliderThreads</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>spinThreads</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>219</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinThreads</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>sliderThreads</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>319</x>
+     <y>219</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>252</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

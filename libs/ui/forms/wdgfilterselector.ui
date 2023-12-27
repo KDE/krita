@@ -125,7 +125,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButtonEditPressets">
+        <widget class="QPushButton" name="pushButtonEditPresets">
          <property name="text">
           <string>Edit Presets</string>
          </property>

@@ -1,5 +1,4 @@
 # The MSIX packaging is only designed for x64
-if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
 
 if(DEFINED KRITA_STABLE)
     set(MSIX_DISPLAY_NAME_SUFFIX "")
@@ -31,5 +30,3 @@ install(
     DESTINATION
         ${CMAKE_INSTALL_PREFIX}/krita-msix
 )
-
-endif()

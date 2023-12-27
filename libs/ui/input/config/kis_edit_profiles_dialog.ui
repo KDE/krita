@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -15,43 +15,43 @@
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item colspan="4" column="0" row="2">
+   <item row="2" column="0" colspan="4">
     <widget class="QListView" name="profileList"/>
    </item>
-   <item column="0" row="1">
+   <item row="1" column="0">
     <widget class="QPushButton" name="duplicateButton">
      <property name="text">
       <string>Duplicate</string>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item column="3" row="1">
+   <item row="1" column="3">
     <widget class="QPushButton" name="resetButton">
      <property name="text">
       <string>Reset All</string>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>
-   <item column="1" row="1">
+   <item row="1" column="1">
     <widget class="QPushButton" name="removeButton">
      <property name="text">
       <string>Remove</string>
      </property>
     </widget>
    </item>
-   <item column="2" row="1">
+   <item row="1" column="2">
     <widget class="QPushButton" name="renameButton">
      <property name="text">
       <string>Rename</string>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
      </property>
     </widget>
    </item>

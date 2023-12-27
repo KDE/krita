@@ -115,8 +115,11 @@ struct CopyCompositor128 {
                     dst_c2 /= newAlpha;
                     dst_c3 /= newAlpha;
 
-                    const float_v unitValue(KoColorSpaceMathsTraits<channels_type>::unitValue);
 
+                    const float_v unitValue(KoColorSpaceMathsTraits<channels_type>::unitValue);
+                    dst_c1 = xsimd::select(xsimd::isnan(dst_c1), unitValue, dst_c1);
+                    dst_c2 = xsimd::select(xsimd::isnan(dst_c2), unitValue, dst_c2);
+                    dst_c3 = xsimd::select(xsimd::isnan(dst_c3), unitValue, dst_c3);
                     dst_c1 = xsimd::min(dst_c1, unitValue);
                     dst_c2 = xsimd::min(dst_c2, unitValue);
                     dst_c3 = xsimd::min(dst_c3, unitValue);
@@ -234,6 +237,10 @@ struct CopyCompositor128 {
                     dst_c3 /= newAlpha;
 
                     const float unitValue = KoColorSpaceMathsTraits<channels_type>::unitValue;
+
+                    dst_c1 = std::isnan(dst_c1) ? unitValue : dst_c1;
+                    dst_c2 = std::isnan(dst_c2) ? unitValue : dst_c2;
+                    dst_c3 = std::isnan(dst_c3) ? unitValue : dst_c3;
 
                     dst_c1 = std::min(dst_c1, unitValue);
                     dst_c2 = std::min(dst_c2, unitValue);

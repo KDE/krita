@@ -26,10 +26,9 @@
 #include <kis_paint_layer.h>
 #include <KisPart.h>
 
-#include <sdk/tests/testui.h>
-#include <kis_undo_stores.h>
 #include <kis_transform_mask_params_factory_registry.h>
-
+#include <kis_undo_stores.h>
+#include <testui.h>
 
 void TestDocument::testSetColorSpace()
 {
@@ -276,6 +275,7 @@ void TestDocument::testCreateColorizeMask()
     node->addChildNode(mask,0);
 
     qApp->processEvents();
+    d.waitForDone();
 
     ManagedColor col1("RGBA","U8","");
     ManagedColor col2("RGBA","U8","");
@@ -334,6 +334,8 @@ void TestDocument::testCreateColorizeMask()
 
     mask->removeKeyStroke(&col2);
     qApp->processEvents();
+    d.waitForDone();
+
     checkColors = mask->keyStrokesColors();
 
     QVERIFY(checkColors.size() == 1);

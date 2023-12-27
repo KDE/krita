@@ -39,6 +39,7 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QTouchEvent;
+class QFocusEvent;
 class QMenu;
 
 /**
@@ -175,7 +176,7 @@ public:
      * @param query specifies which property is queried.
      * @param converter the view converter for the current canvas.
      */
-    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const;
+    virtual QVariant inputMethodQuery(Qt::InputMethodQuery query) const;
 
     /**
      * Text entry of complex text, like CJK, can be made more interactive if a tool
@@ -185,6 +186,18 @@ public:
      * @param event the input method event.
      */
     virtual void inputMethodEvent(QInputMethodEvent *event);
+
+    /**
+     * This passes on the focusInEven from the canvas widget, which can be used to activate
+     * animating decorations (like a cursor blink effect in the text tool).
+     */
+    virtual void focusInEvent(QFocusEvent *event);
+
+    /**
+     * This passes on the focusInEven from the canvas widget, which can be used to deactivate
+     * animating decorations (like a cursor blink effect in the text tool).
+     */
+    virtual void focusOutEvent(QFocusEvent *event);
 
     /**
      * Called when (one of) a custom device buttons is pressed.
@@ -270,6 +283,19 @@ public:
     virtual bool paste();
 
     /**
+     * @brief selectAll
+     * select all data the tool can select.
+     * @return true if something happened, false if nothing happened.
+     */
+    virtual bool selectAll();
+
+    /**
+     * @brief deselect
+     * the tool should clear the selection if it has one.
+     */
+    virtual void deselect();
+
+    /**
      * Handle the dragMoveEvent
      * A tool typically has one or more shapes selected and dropping into should do
      * something meaningful for this specific shape and tool combination. For example
@@ -280,7 +306,7 @@ public:
 
     /**
      * Handle the dragLeaveEvent
-     * Basically just a noticification that the drag is no long relevant
+     * Basically just a notification that the drag is no long relevant
      * The tool should Accept the event if it is meaningful; Default implementation does not.
      */
     virtual void dragLeaveEvent(QDragLeaveEvent *event);
@@ -315,6 +341,15 @@ public:
       *   any kind of textual input and all single key shortcuts should be eaten.
       */
     bool isInTextMode() const;
+
+    /**
+     * @brief decorationThickness
+     * The minimum thickness for tool decoration lines,
+     * this is derived from the screen magnification, thus the HiDPI settings.
+     * Note: to use this effectively, also set the pen to isCosmetic(true);
+     * @return the minimum thickness for decoration lines in pixels.
+     */
+    int decorationThickness() const;
 
 public Q_SLOTS:
 
@@ -398,6 +433,11 @@ public Q_SLOTS:
      */
     virtual void repaintDecorations();
 
+    /**
+     * force the update of the icons on the cached options widget
+     */
+    void updateOptionsWidgetIcons();
+
 Q_SIGNALS:
 
     /**
@@ -426,6 +466,12 @@ Q_SIGNALS:
      */
     void statusTextChanged(const QString &statusText);
 
+    /**
+     * Emitted when the tool's text mode has changed.
+     * @param inTextMode whether it is now in text mode.
+     */
+    void textModeChanged(bool inTextMode);
+
 protected:
     /**
      * Classes inheriting from this one can call this method to signify which cursor
@@ -449,7 +495,8 @@ protected:
     /// coordinates (points)
     qreal handleDocRadius() const;
 
-    /// Convencience function to get the current grab sensitivity
+
+    /// Convenience function to get the current grab sensitivity
     int grabSensitivity() const;
 
     /**
@@ -519,4 +566,4 @@ private:
     Q_DECLARE_PRIVATE(KoToolBase)
 };
 
-#endif /* KOTOOL_H */
+#endif /* KOTOOLBASE_H */

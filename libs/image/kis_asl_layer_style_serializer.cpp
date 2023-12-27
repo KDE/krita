@@ -12,7 +12,7 @@
 #include <QMultiHash>
 
 #include <KisResourceModel.h>
-#include <KisGlobalResourcesInterface.h>
+#include <KisEmbeddedResourceStorageProxy.h>
 
 #include <KoResourceServerProvider.h>
 #include <resources/KoAbstractGradient.h>
@@ -280,6 +280,12 @@ QVector<KoPatternSP> KisAslLayerStyleSerializer::fetchAllPatterns(const KisPSDLa
         allPatterns << style->bevelAndEmboss()->texturePattern(style->resourcesInterface());
     }
 
+    KIS_SAFE_ASSERT_RECOVER(!allPatterns.contains(KoPatternSP()))
+    {
+        warnKrita << "WARNING: one or more patterns from the style is null";
+        allPatterns.removeAll(KoPatternSP());
+    }
+
     return allPatterns;
 }
 
@@ -410,9 +416,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(outerGlow->gradient(style->resourcesInterface()).data());
 
                 if (segmentGradient && segmentGradient->valid()) {
-                    w.writeSegmentGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", *segmentGradient);
                 } else if (stopGradient  && stopGradient->valid()) {
-                    w.writeStopGradient("Grad", stopGradient);
+                    w.writeStopGradient("Grad", *stopGradient);
                 } else {
                     warnKrita << "WARNING: OG: Unknown gradient type!";
                     w.writeColor("Clr ", outerGlow->color());
@@ -457,9 +463,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(innerGlow->gradient(style->resourcesInterface()).data());
 
                 if (segmentGradient  && innerGlow->gradient(style->resourcesInterface())->valid()) {
-                    w.writeSegmentGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", *segmentGradient);
                 } else if (stopGradient  && innerGlow->gradient(style->resourcesInterface())->valid()) {
-                    w.writeStopGradient("Grad", stopGradient);
+                    w.writeStopGradient("Grad", *stopGradient);
                 } else {
                     warnKrita << "WARNING: IG: Unknown gradient type!";
                     w.writeColor("Clr ", innerGlow->color());
@@ -606,9 +612,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
             w.writeUnitFloat("Opct", "#Prc", gradientOverlay->opacity());
 
             if (segmentGradient && segmentGradient->valid()) {
-                w.writeSegmentGradient("Grad", segmentGradient);
+                w.writeSegmentGradient("Grad", *segmentGradient);
             } else if (stopGradient && stopGradient->valid()) {
-                w.writeStopGradient("Grad", stopGradient);
+                w.writeStopGradient("Grad", *stopGradient);
             }
 
             w.writeUnitFloat("Angl", "#Ang", gradientOverlay->angle());
@@ -667,9 +673,9 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
                 KoStopGradient *stopGradient = dynamic_cast<KoStopGradient*>(stroke->gradient(style->resourcesInterface()).data());
 
                 if (segmentGradient && segmentGradient->valid()) {
-                    w.writeSegmentGradient("Grad", segmentGradient);
+                    w.writeSegmentGradient("Grad", *segmentGradient);
                 } else if (stopGradient && stopGradient->valid()) {
-                    w.writeStopGradient("Grad", stopGradient);
+                    w.writeStopGradient("Grad", *stopGradient);
                 } else {
                     warnKrita << "WARNING: Stroke: Unknown gradient type!";
                     w.writeColor("Clr ", stroke->color());
@@ -705,7 +711,7 @@ QDomDocument KisAslLayerStyleSerializer::formXmlDocument() const
 }
 
 inline QDomNode findNodeByClassId(const QString &classId, QDomNode parent) {
-    return KisDomUtils::findElementByAttibute(parent, "node", "classId", classId);
+    return KisDomUtils::findElementByAttribute(parent, "node", "classId", classId);
 }
 
 void replaceAllChildren(QDomNode src, QDomNode dst)
@@ -763,6 +769,11 @@ QVector<KoResourceSP> KisAslLayerStyleSerializer::fetchEmbeddedResources(const K
     if (style->stroke()->effectEnabled() && style->stroke()->fillType() == psd_fill_gradient) {
         embeddedResources << style->stroke()->gradient(style->resourcesInterface());
         KIS_ASSERT(embeddedResources.last().data());
+    }
+
+    KIS_SAFE_ASSERT_RECOVER(!embeddedResources.contains(KoResourceSP()))
+    {
+        embeddedResources.removeAll(KoResourceSP());
     }
 
     return embeddedResources;
@@ -932,9 +943,9 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
 {
     Q_UNUSED(patternName);
 
-    KoPatternSP pattern = m_patternsStore[patternUuid];
+    KoPatternSP pattern;
 
-    if (!pattern) {
+    if (!m_patternsStore.contains(patternUuid)) {
         warnKrita << "WARNING: ASL style contains non-existent pattern reference! Searching for uuid: "
                   << patternUuid << " (name: " << patternName << ")";
 
@@ -943,9 +954,8 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
         KoPatternSP dumbPattern(new KoPattern(dumbImage, "invalid", ""));
         registerPatternObject(dumbPattern, patternUuid + QString("_invalid"));
         pattern = dumbPattern;
-        m_isValid = false;
-
-        m_patternsStore.remove(patternUuid);
+    } else {
+        pattern = m_patternsStore[patternUuid];
     }
 
     setPattern(pattern);
@@ -1229,7 +1239,7 @@ void KisAslLayerStyleSerializer::connectCatcherToStyle(KisPSDLayerStyle *style, 
     CONN_BOOL("/ebbl/InvT", setTextureInvert, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_BOOL("/ebbl/Algn", setTextureAlignWithLayer, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_UNITF("/ebbl/Scl ", "#Prc", setTextureScale, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
-    CONN_UNITF("/ebbl/textureDepth", "#Prc", setTextureDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
+    CONN_UNITF("/ebbl/textureDepth ", "#Prc", setTextureDepth, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_PATTERN("/ebbl/Ptrn", setTexturePattern, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
     CONN_POINT("/ebbl/phase", setTexturePhase, bevelAndEmboss, psd_layer_effects_bevel_emboss, prefix);
 }
@@ -1287,23 +1297,25 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 {
     QVector<KisPSDLayerStyleSP> styles;
 
-    KisResourceModel stylesModel(ResourceType::LayerStyles);
-    KisResourceModel patternsModel(ResourceType::Patterns);
-    KisResourceModel gradientsModel(ResourceType::Gradients);
+    KisEmbeddedResourceStorageProxy resourcesProxy(storageLocation);
 
-    Q_FOREACH(KoPatternSP pattern, patterns().values()) {
-        patternsModel.addResource(pattern, storageLocation);
-    }
-
-    Q_FOREACH(KoAbstractGradientSP gradient, gradients()) {
-        gradientsModel.addResource(gradient, storageLocation);
+    if (!storageLocation.isEmpty()) {
+        Q_FOREACH(KoPatternSP pattern, patterns().values()) {
+            resourcesProxy.addResource(pattern);
+        }
+        Q_FOREACH(KoAbstractGradientSP gradient, gradients()) {
+            resourcesProxy.addResource(gradient);
+        }
     }
 
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         KisPSDLayerStyleSP newStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
-        newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+        newStyle->setResourcesInterface(resourcesProxy.detachedResourcesInterface());
         newStyle->setValid(true);
-        stylesModel.addResource(newStyle, storageLocation);
+
+        if (!storageLocation.isEmpty()) {
+            resourcesProxy.addResource(newStyle);
+        }
 
         styles << newStyle;
     }
@@ -1318,7 +1330,7 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 
             Q_FOREACH (KisPSDLayerStyleSP style, styles) {
                 if (style->uuid() == uuid) {
-                    layer->setLayerStyle(style->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(), 0));
+                    layer->setLayerStyle(style->cloneWithResourcesSnapshot(style->resourcesInterface(), 0));
                     found = true;
                     break;
                 }

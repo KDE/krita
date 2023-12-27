@@ -74,8 +74,8 @@ install(FILES
 09_04_knife-rake.png
 09_05_paint-roller.png
 10_01_color-effect.png
-10_02_adjustement-contrast.png
-10_03_adjustement-dark.png
+10_02_adjustment-contrast.png
+10_03_adjustment-dark.png
 10_04_filter.png
 10_05_deform.png
 10_06_clone.png

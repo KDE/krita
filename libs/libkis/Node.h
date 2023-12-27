@@ -81,7 +81,7 @@ public Q_SLOTS:
      * @brief findChildNodes
      * @param name name of the child node to search for. Leaving this blank will return all nodes.
      * @param recursive whether or not to search recursively. Defaults to false.
-     * @param partialMatch return if the name partially contains the string (case insensative). Defaults to false.
+     * @param partialMatch return if the name partially contains the string (case insensitive). Defaults to false.
      * @param type filter returned nodes based on type
      * @param colorLabelIndex filter returned nodes based on color label index
      * @return returns a list of child nodes and grand child nodes of the current node that match the search criteria.
@@ -546,7 +546,7 @@ public Q_SLOTS:
     QImage thumbnail(int w, int h);
 
     /**
-     * @brief layerStyleToAsl retreive the current layer's style in ASL format.
+     * @brief layerStyleToAsl retrieve the current layer's style in ASL format.
      * @return a QString in ASL format representing the layer style.
      */
     QString layerStyleToAsl();

@@ -3,6 +3,8 @@
  */
 
 #include "PerspectiveEllipseAssistant.h"
+#include "PerspectiveBasedAssistantHelper.h"
+
 
 #include <klocalizedstring.h>
 #include "kis_debug.h"
@@ -319,79 +321,32 @@ public:
 
     bool cacheValid { false };
 
+    PerspectiveBasedAssistantHelper::CacheData cache;
+
     QVector<QPointF> cachedPoints; // points on the polygon
+
 };
 
-
-
-PerspectiveEllipseAssistant::PerspectiveEllipseAssistant()
-    : KisPaintingAssistant("perspective ellipse", i18n("Perspective Ellipse assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
+PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(QObject *parent)
+    : KisAbstractPerspectiveGrid(parent)
+    , KisPaintingAssistant("perspective ellipse", i18n("Perspective Ellipse assistant"))
     , d(new Private())
 {
 
 }
 
+PerspectiveEllipseAssistant::~PerspectiveEllipseAssistant() {}
+
 PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(const PerspectiveEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-    : KisPaintingAssistant(rhs, handleMap)
-    , m_cachedTransform(rhs.m_cachedTransform)
-    , m_cachedPolygon(rhs.m_cachedPolygon)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
+    : KisAbstractPerspectiveGrid(rhs.parent())
+    , KisPaintingAssistant(rhs, handleMap)
     , d(new Private())
 {
-    for (int i = 0; i < 4; ++i) {
-        m_cachedPoints[i] = rhs.m_cachedPoints[i];
-    }
-
-    // need to provide proper copying
-    d->ellipseInPolygon.updateToPolygon(m_cachedPolygon);
 }
 
 KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new PerspectiveEllipseAssistant(*this, handleMap));
-}
-
-void PerspectiveEllipseAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void PerspectiveEllipseAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
-}
-
-inline qreal distsqr(const QPointF& pt, const QLineF& line)
-{
-    // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
-
-    // magnitude of (p2 - p1) x (p1 - pt)
-    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
-
-    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
-}
-
-template <typename T> int sign(T a)
-{
-    return (a > 0) - (a < 0);
-}
-// perpendicular dot product
-inline qreal pdot(const QPointF& a, const QPointF& b)
-{
-    return a.x() * b.y() - a.y() * b.x();
-}
-// draw a vanishing point marker
-inline QPainterPath drawX(const QPointF& pt)
-{
-    QPainterPath path;
-    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
-    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
-    return path;
 }
 
 QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -404,16 +359,15 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
     return d->simpleEllipse.project(pt);
 }
 
-QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt, strokeBegin);
 }
 
-void PerspectiveEllipseAssistant::endStroke()
+void PerspectiveEllipseAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
+    point = QPointF();
+    strokeBegin = QPointF();
 }
 
 void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
@@ -435,16 +389,11 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
     if (isEllipseValid() && assistantVisible==true) {
         // draw vanishing points
-        QPointF intersection(0, 0);
-        if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0 || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
-            if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                drawPath(gc, drawX(initialTransform.map(intersection)));
-            }
+        if (d->cache.vanishingPoint1) {
+            drawX(gc, initialTransform.map(d->cache.vanishingPoint1.get()));
         }
-        if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0 || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
-            if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                drawPath(gc, drawX(initialTransform.map(intersection)));
-            }
+        if (d->cache.vanishingPoint2) {
+            drawX(gc, initialTransform.map(d->cache.vanishingPoint2.get()));
         }
     }
 
@@ -464,15 +413,18 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     }
 
     // draw ellipse and axes
-    if (isAssistantComplete() && isEllipseValid()) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
+    if (isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
          gc.setTransform(initialTransform);
          gc.setTransform(d->simpleEllipse.getTransform().inverted(), true);
 
          QPainterPath path;
-
          path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
-         drawPath(gc, path, isSnappingActive());
 
+         if (assistantVisible || isEditing) {
+             drawPath(gc, path, isSnappingActive());
+         } else if (previewVisible && isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos.toPoint()), false)) {
+             drawPreview(gc, path);
+         }
 
          if (isEditing) {
              QPainterPath axes;
@@ -517,26 +469,24 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
          touchingLine.moveTo(pt2);
          touchingLine.lineTo(pt4);
 
-         drawPath(gc, touchingLine, isSnappingActive());
+         if (assistantVisible) {
+             drawPath(gc, touchingLine, isSnappingActive());
+         }
     }
 
 
     gc.setTransform(converter->documentToWidgetTransform());
 
-    if (assistantVisible) {
+    if (assistantVisible || isEditing) {
         if (!isEllipseValid()) {
             // color red for an invalid transform, but not for an incomplete one
             if(isAssistantComplete()) {
-                QPen pen_a(QColor(255, 0, 0, 125), 5);
-                pen_a.setCosmetic(true);
-                gc.setPen(pen_a);
-
                 QPainterPath path;
                 QPolygonF polyAllConnected;
                 // that will create a triangle with a point inside connected to all vertices of the triangle
                 polyAllConnected << *handles()[0] << *handles()[1] << *handles()[2] << *handles()[3] << *handles()[0] << *handles()[2] << *handles()[1] << *handles()[3];
                 path.addPolygon(polyAllConnected);
-                gc.drawPath(path);
+                drawError(gc, path);
             } else {
                 QPainterPath path;
                 path.addPolygon(poly);
@@ -591,7 +541,7 @@ QRect PerspectiveEllipseAssistant::boundingRect() const
     }
 }
 
-QPointF PerspectiveEllipseAssistant::getEditorPosition() const
+QPointF PerspectiveEllipseAssistant::getDefaultEditorPosition() const
 {
     QPointF centroid(0, 0);
     for (int i = 0; i < 4; ++i) {
@@ -599,58 +549,6 @@ QPointF PerspectiveEllipseAssistant::getEditorPosition() const
     }
 
     return centroid * 0.25;
-}
-
-bool PerspectiveEllipseAssistant::quad(QPolygonF& poly) const
-{
-    poly.clear();
-    for (int i = 0; i < handles().size(); ++i) {
-        poly.push_back(*handles()[i]);
-    }
-
-    if (!isAssistantComplete()) {
-        return false;
-    }
-
-    int sum = 0;
-    int signs[4];
-
-    for (int i = 0; i < 4; ++i) {
-        int j = (i == 3) ? 0 : (i + 1);
-        int k = (j == 3) ? 0 : (j + 1);
-        signs[i] = sign(pdot(poly[j] - poly[i], poly[k] - poly[j]));
-        sum += signs[i];
-    }
-
-    if (sum == 0) {
-        // complex (crossed)
-        for (int i = 0; i < 4; ++i) {
-            int j = (i == 3) ? 0 : (i + 1);
-            if (signs[i] * signs[j] == -1) {
-                // opposite signs: uncross
-                std::swap(poly[i], poly[j]);
-                return true;
-            }
-        }
-        // okay, maybe it's just a line
-        return false;
-    } else if (sum != 4 && sum != -4) {
-        // concave, or a triangle
-        if (sum == 2 || sum == -2) {
-            // concave, let's return a triangle instead
-            for (int i = 0; i < 4; ++i) {
-                int j = (i == 3) ? 0 : (i + 1);
-                if (signs[i] != sign(sum)) {
-                    // wrong sign: drop the inside node
-                    poly.remove(j);
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-    // convex
-    return true;
 }
 
 bool PerspectiveEllipseAssistant::isEllipseValid()
@@ -682,7 +580,7 @@ void PerspectiveEllipseAssistant::updateCache()
 
     QPolygonF poly = QPolygonF(d->cachedPoints);
 
-    if (!quad(poly)) { // this function changes poly to some "standarized" version, or a triangle when it cannot be achieved
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) { // this function changes poly to some "standardized" version, or a triangle when it cannot be achieved
 
         poly = QPolygonF(d->cachedPoints);
         poly << d->cachedPoints[0];
@@ -695,6 +593,8 @@ void PerspectiveEllipseAssistant::updateCache()
     if (d->ellipseInPolygon.isValid()) {
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
     }
+
+    PerspectiveBasedAssistantHelper::updateCacheData(d->cache, poly);
     d->cacheValid = true;
 
 }
@@ -702,6 +602,24 @@ void PerspectiveEllipseAssistant::updateCache()
 bool PerspectiveEllipseAssistant::isAssistantComplete() const
 {   
     return handles().size() >= 4;
+}
+
+bool PerspectiveEllipseAssistant::contains(const QPointF &point) const
+{
+
+    QPolygonF poly;
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) return false;
+    return poly.containsPoint(point, Qt::OddEvenFill);
+}
+
+qreal PerspectiveEllipseAssistant::distance(const QPointF &point) const
+{
+    return PerspectiveBasedAssistantHelper::distanceInGrid(d->cache, point);
+}
+
+bool PerspectiveEllipseAssistant::isActive() const
+{
+    return isSnappingActive();
 }
 
 PerspectiveEllipseAssistantFactory::PerspectiveEllipseAssistantFactory()

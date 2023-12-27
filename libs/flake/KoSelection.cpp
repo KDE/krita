@@ -13,7 +13,6 @@
 #include "KoShapeContainer.h"
 #include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
-#include "KoShapePaintingContext.h"
 #include "kis_algebra_2d.h"
 #include "krita_container_utils.h"
 
@@ -25,7 +24,7 @@ KoSelection::KoSelection(QObject *parent)
     , KoShape()
     , d(new Private)
 {
-    connect(&d->selectionChangedCompressor, SIGNAL(timeout()), SIGNAL(selectionChanged()));
+    connect(d->selectionChangedCompressor, SIGNAL(timeout()), SIGNAL(selectionChanged()));
 }
 
 KoSelection::KoSelection(const KoSelection &rhs)
@@ -39,10 +38,9 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint(QPainter &painter, KoShapePaintingContext &paintcontext) const
+void KoSelection::paint(QPainter &painter) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(paintcontext);
 }
 
 void KoSelection::setSize(const QSizeF &size)
@@ -106,7 +104,7 @@ void KoSelection::select(KoShape *shape)
         setTransformation(QTransform());
     }
 
-    d->selectionChangedCompressor.start();
+    d->selectionChangedCompressor->start();
 }
 
 void KoSelection::deselect(KoShape *shape)
@@ -121,7 +119,7 @@ void KoSelection::deselect(KoShape *shape)
         setTransformation(d->selectedShapes.first()->absoluteTransformation());
     }
 
-    d->selectionChangedCompressor.start();
+    d->selectionChangedCompressor->start();
 }
 
 void KoSelection::deselectAll()
@@ -138,7 +136,7 @@ void KoSelection::deselectAll()
     setTransformation(QTransform());
 
     d->selectedShapes.clear();
-    d->selectionChangedCompressor.start();
+    d->selectionChangedCompressor->start();
 }
 
 int KoSelection::count() const

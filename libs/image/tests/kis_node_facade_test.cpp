@@ -286,7 +286,7 @@ void KisNodeFacadeTest::testOrdering()
     QVERIFY(node2->nextSibling() == node1);
     QVERIFY(node2->prevSibling() == 0);
 
-    // Try lowering bottomnode to bottomg
+    // Try lowering bottom node to bottom
     QVERIFY(facade.lowerNode(node2) == true);
     QVERIFY(node2->nextSibling() == node1);
     QVERIFY(node2->prevSibling() == 0);

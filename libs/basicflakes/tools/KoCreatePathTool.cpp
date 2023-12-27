@@ -14,7 +14,6 @@
 #include "KoPathShape.h"
 #include "KoSelection.h"
 #include "KoDocumentResourceManager.h"
-#include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
 #include "KoCanvasBase.h"
 #include "kis_int_parse_spin_box.h"
@@ -87,7 +86,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
 
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius, d->decorationThickness);
 
         const bool firstPointActive = d->firstPoint == d->activePoint;
 
@@ -112,7 +111,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 
     if (d->hoveredPoint) {
-        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius, d->decorationThickness);
         helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
         d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
@@ -131,8 +130,7 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
                          painter.transform());
     painter.save();
 
-    KoShapePaintingContext paintContext; //FIXME
-    pathShape.paint(painter, paintContext);
+    pathShape.paint(painter);
     painter.restore();
 
     if (pathShape.stroke()) {
@@ -386,6 +384,9 @@ void KoCreatePathTool::endPath()
 {
     Q_D(KoCreatePathTool);
 
+    if (!d->shape) {
+        return;
+    }
     d->addPathShape();
     repaintDecorations();
     endShape();
@@ -395,12 +396,13 @@ void KoCreatePathTool::endPathWithoutLastPoint()
 {
     Q_D(KoCreatePathTool);
 
-    if (d->shape) {
-        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-        d->addPathShape();
-
-        repaintDecorations();
+    if (!d->shape) {
+        return;
     }
+    delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
+    d->addPathShape();
+
+    repaintDecorations();
     endShape();
 }
 
@@ -408,10 +410,11 @@ void KoCreatePathTool::cancelPath()
 {
     Q_D(KoCreatePathTool);
 
-    if (d->shape) {
-        d->firstPoint = 0;
-        d->activePoint = 0;
+    if (!d->shape) {
+        return;
     }
+    d->firstPoint = 0;
+    d->activePoint = 0;
     d->cleanUp();
     repaintDecorations();
     endShape();
@@ -444,6 +447,7 @@ void KoCreatePathTool::activate(const QSet<KoShape*> &shapes)
 
     // retrieve the actual global handle radius
     d->handleRadius = handleRadius();
+    d->decorationThickness = decorationThickness();
     d->loadAutoSmoothValueFromConfig();
 
     // reset snap guide
@@ -457,13 +461,17 @@ void KoCreatePathTool::deactivate()
     KoToolBase::deactivate();
 }
 
-void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
+void KoCreatePathTool::canvasResourceChanged(int key, const QVariant & res)
 {
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoDocumentResourceManager::HandleRadius: {
+    case KoCanvasResource::HandleRadius: {
         d->handleRadius = res.toUInt();
+    }
+    break;
+    case KoCanvasResource::DecorationThickness: {
+        d->decorationThickness = res.toUInt();
     }
     break;
     default:

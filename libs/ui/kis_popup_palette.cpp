@@ -192,6 +192,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     zoomToOneHundredPercentButton->setToolTip(i18n("Zoom to 100%"));
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
 
+    fitToViewButton = new QPushButton(this);
+    fitToViewButton->setFixedHeight(35);
+
+    fitToViewButton->setToolTip(i18n("Fit Canvas to View"));
+    connect(fitToViewButton, SIGNAL(clicked(bool)), this, SLOT(slotFitToViewClicked()));
+
     zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
     zoomSliderMinValue = 10; // set in %
     zoomSliderMaxValue = 200; // set in %
@@ -215,11 +221,13 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomCanvasSlider);
     hLayout->addWidget(zoomToOneHundredPercentButton);
+    hLayout->addWidget(fitToViewButton);
     
     setVisible(false);
     reconfigure();
 
     opacityChange = new QGraphicsOpacityEffect(this);
+    opacityChange->setOpacity(1);
     setGraphicsEffect(opacityChange);
 
     /**
@@ -273,7 +281,7 @@ void KisPopupPalette::reconfigure()
         m_presetSlotCount = m_maxPresetSlotCount;
     }
     m_popupPaletteSize = config.readEntry("popuppalette/size", 385);
-    qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2;
+    qreal selectorRadius = config.readEntry("popuppalette/selectorSize", 140) / 2.0;
     
     m_showColorHistory = config.readEntry("popuppalette/showColorHistory", true);
     m_showRotationTrack = config.readEntry("popuppalette/showRotationTrack", true);
@@ -302,11 +310,15 @@ void KisPopupPalette::reconfigure()
         if (useVisualSelector) {
             KisVisualColorSelector *selector = new KisVisualColorSelector(this);
             selector->setAcceptTabletEvents(true);
+            connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                    selector, SLOT(slotConfigurationChanged()));
             m_colorSelector = selector;
         }
         else {
             m_colorSelector  = new PopupColorTriangle(m_displayRenderer, this);
             connect(m_colorSelector, SIGNAL(requestCloseContainer()), this, SIGNAL(finished()));
+            connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                    m_colorSelector, SLOT(configurationChanged()));
         }
         m_colorSelector->setDisplayRenderer(m_displayRenderer);
         m_colorSelector->setConfig(true,false);
@@ -314,8 +326,7 @@ void KisPopupPalette::reconfigure()
         slotDisplayConfigurationChanged();
         connect(m_colorSelector, SIGNAL(sigNewColor(KoColor)),
                 m_colorChangeCompressor.data(), SLOT(start()));
-        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
-                m_colorSelector, SLOT(configurationChanged()));
+
     }
 
 
@@ -340,8 +351,8 @@ void KisPopupPalette::reconfigure()
     // the margin in degrees between buttons
     qreal margin = 10.0; 
     // visual center
-    qreal center = m_popupPaletteSize/2 - auxButtonSize/2;
-    qreal length = m_popupPaletteSize/2 + auxButtonSize/2 + 5;
+    qreal center = m_popupPaletteSize/2 - auxButtonSize/2.0;
+    qreal length = m_popupPaletteSize/2 + auxButtonSize/2.0 + 5;
     {
         int buttonCount = 2;
         int arcLength = 90;
@@ -481,6 +492,7 @@ void KisPopupPalette::slotUpdateIcons()
         }
     }
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
+    fitToViewButton->setIcon(m_actionCollection->action("zoom_to_fit")->icon());
     m_brushHud->updateIcons();
     m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_clearColorHistoryButton->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
@@ -560,12 +572,12 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
     // draws the circle halfway into the border so that the border never goes past the bounds of the popup
     QRectF circleRect(BORDER_WIDTH/2, BORDER_WIDTH/2, m_popupPaletteSize - BORDER_WIDTH, m_popupPaletteSize - BORDER_WIDTH);
     backgroundContainer.addEllipse(circleRect);
-    painter.fillPath(backgroundContainer, palette().brush(QPalette::Background));
+    painter.fillPath(backgroundContainer, palette().brush(QPalette::Window));
     painter.drawPath(backgroundContainer);
 
     if (m_showRotationTrack) {
         painter.save();
-        QPen pen(palette().color(QPalette::Background).lighter(150), 2);
+        QPen pen(palette().color(QPalette::Window).lighter(150), 2);
         painter.setPen(pen);
 
         // draw rotation snap lines
@@ -590,7 +602,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             ? palette().color(QPalette::Highlight)
             : palette().color(QPalette::Text));
         // cover the first snap line
-        painter.setBrush(palette().brush(QPalette::Background));
+        painter.setBrush(palette().brush(QPalette::Window));
         painter.setPen(pen);
         painter.drawEllipse(resetRotationIndicator);
 
@@ -606,6 +618,9 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             ? palette().brush(QPalette::Highlight)
             : palette().brush(QPalette::Text));
         
+        // gotta update the rect, see bug 459801
+        // (note: it can't just update when it shows up because then rotating when popup palette is on the screen wouldn't make an effect)
+        m_canvasRotationIndicatorRect = rotationIndicatorRect(m_coordinatesConverter->rotationAngle());
         painter.drawEllipse(m_canvasRotationIndicatorRect);
 
         painter.restore();
@@ -641,7 +656,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
         painter.restore();
         // if the slot is empty, stroke it slightly darker
         QColor color = isTagEmpty || pos >= presetCount
-            ? palette().color(QPalette::Background).lighter(150)
+            ? palette().color(QPalette::Window).lighter(150)
             : palette().color(QPalette::Text);
         painter.setPen(QPen(color, 1));
         painter.drawPath(presetPath);
@@ -662,7 +677,7 @@ void KisPopupPalette::paintEvent(QPaintEvent* e)
             painter.setBrush(Qt::transparent);
 
             QPainterPath emptyRecentColorsPath(drawDonutPathFull(0, 0, m_colorHistoryInnerRadius, m_colorHistoryOuterRadius));
-            painter.setPen(QPen(palette().color(QPalette::Background).lighter(150), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
+            painter.setPen(QPen(palette().color(QPalette::Window).lighter(150), 2, Qt::SolidLine, Qt::FlatCap, Qt::MiterJoin));
             painter.drawPath(emptyRecentColorsPath);
         } else {
 
@@ -836,6 +851,7 @@ void KisPopupPalette::mouseMoveEvent(QMouseEvent *event)
 
             KisCanvasController *canvasController =
                 dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+            KIS_ASSERT_RECOVER_RETURN(canvasController);
             canvasController->rotateCanvas(angleDifference);
             m_canvasRotationIndicatorRect = rotationIndicatorRect(finalAngle);
 
@@ -921,6 +937,7 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
                 qreal angleDifference = -m_coordinatesConverter->rotationAngle(); // the rotation function accepts diffs
                 KisCanvasController *canvasController =
                         dynamic_cast<KisCanvasController*>(m_viewManager->canvasBase()->canvasController());
+                KIS_ASSERT_RECOVER_RETURN(canvasController);
                 canvasController->rotateCanvas(angleDifference);
                 m_canvasRotationIndicatorRect = rotationIndicatorRect(0);
 
@@ -1007,6 +1024,17 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
 
     // also move the zoom slider to 100% position so they are in sync
     zoomCanvasSlider->setValue(100);
+}
+
+void KisPopupPalette::slotFitToViewClicked() {
+    QAction *action = m_actionCollection->action("zoom_to_fit");
+
+    if (action) {
+        action->trigger();
+    }
+
+    // sync zoom slider
+    zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent());
 }
 
 void KisPopupPalette::slotSetMirrorPos() {
@@ -1236,7 +1264,7 @@ void KisPopupPalette::calculatePresetLayout()
     qreal threeRowInnerCount = ceil(qMax(m_presetSlotCount, 2) / 3.0);
     qreal threeRowAngleSlice = 360.0 / threeRowInnerCount;
 
-    // then we decrease the radius until no row is overlapping eachother or itself
+    // then we decrease the radius until no row is overlapping each other or itself
     while (tempRadius >= 0) {
         QPointF r1p1(drawPointOnAngle(threeRowAngleSlice / 2, innerRadius + tempRadius));
         QPointF r1p2(drawPointOnAngle(threeRowAngleSlice / 2 * 3, innerRadius + tempRadius));
@@ -1341,7 +1369,7 @@ void KisPopupPalette::calculatePresetLayout()
                     firstRowRadius = tempFirstRowRadius;
                     row1to2Distance = tempRow1to2Distance;
                     r1p1 = tempR1p1;
-                    // these are unused after so it's not neccesary to update them
+                    // these are unused after so it's not necessary to update them
                     // row1to3Distance = tempRow1to3Distance;
                     // row1SiblingDistance = tempRow1SiblingDistance;
                     // r1p2 = tempR1p2;
@@ -1384,7 +1412,7 @@ void KisPopupPalette::calculatePresetLayout()
                 ) {
                     secondRowRadius = tempRadius;
                     secondRowPos = tempSecondRowPos;
-                    // these are unused after so it's not neccesary to update them
+                    // these are unused after so it's not necessary to update them
                     // r2p1 = tempR2p1;
                     // row1to2Distance = tempRow1to2Distance;
                     // row2to3Distance = tempRow2to3Distance;
@@ -1491,9 +1519,9 @@ void KisPopupPalette::calculateRotationSnapAreas() {
 
 int KisPopupPalette::findPresetSlot(QPointF position) const
 {
-    QPointF adujustedPoint = position - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
+    QPointF adjustedPoint = position - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
     for (int i = 0; i < m_presetSlotCount; i++) {
-        if (createPathFromPresetIndex(i).contains(adujustedPoint)) {
+        if (createPathFromPresetIndex(i).contains(adjustedPoint)) {
             return i;
         }
     }

@@ -510,8 +510,7 @@ void TestTagResourceModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-#include <sdk/tests/kistest.h>
-
+#include <kistest.h>
 
 // ***** MODEL SIGNAL CHECKER Function definitions *****
 

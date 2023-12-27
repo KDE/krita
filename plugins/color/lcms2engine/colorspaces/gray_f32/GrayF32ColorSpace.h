@@ -49,7 +49,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return "GRAYAF32";
+        return QStringLiteral("GRAYAF32");
     }
 
     bool hasHighDynamicRange() const override

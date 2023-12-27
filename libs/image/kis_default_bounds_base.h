@@ -11,6 +11,7 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 #include "kritaimage_export.h"
+#include "KisWraparoundAxis.h"
 class KisDefaultBoundsBase;
 
 typedef KisSharedPtr<KisDefaultBoundsBase> KisDefaultBoundsBaseSP;
@@ -44,12 +45,13 @@ public:
      * used for wrapping the device in wrap-around mode and in some
      * specific operations.
      *
-     * NOTE: don't use it uless you know what you are doing,
+     * NOTE: don't use it unless you know what you are doing,
      *       most probably you want to use `bounds()` instead!
      */
     virtual QRect imageBorderRect() const;
 
     virtual bool wrapAroundMode() const = 0;
+    virtual WrapAroundAxis wrapAroundModeAxis() const = 0;
     virtual int currentLevelOfDetail() const = 0;
     virtual int currentTime() const = 0;
     virtual bool externalFrameActive() const = 0;

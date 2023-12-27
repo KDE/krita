@@ -73,6 +73,11 @@ void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList, QSt
     m_mime_default_filter = defaultFilter;
 }
 
+void KisFileNameRequester::setValidator(QValidator *validator)
+{
+    m_ui->txtFileName->setValidator(validator);
+}
+
 void KisFileNameRequester::slotSelectFile()
 {
     KoFileDialog dialog(this, m_mode, m_name);
@@ -86,11 +91,11 @@ void KisFileNameRequester::slotSelectFile()
     }
 
     const QString basePath =
-        KisFileUtils::resolveAbsoluteFilePath(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+        KritaUtils::resolveAbsoluteFilePath(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
                                             m_basePath);
 
     const QString filePath =
-        KisFileUtils::resolveAbsoluteFilePath(basePath, m_ui->txtFileName->text());
+        KritaUtils::resolveAbsoluteFilePath(basePath, m_ui->txtFileName->text());
 
     dialog.setDefaultDir(filePath, true);
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);

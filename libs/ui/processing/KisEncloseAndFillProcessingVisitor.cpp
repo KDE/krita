@@ -10,6 +10,7 @@
 #include <kis_image.h>
 #include <kis_wrapped_rect.h>
 #include <lazybrush/kis_colorize_mask.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "KisEncloseAndFillProcessingVisitor.h"
 
@@ -27,11 +28,15 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         int fillOpacitySpread,
         bool antiAlias,
         int expand,
+        bool stopGrowingAtDarkestPixel,
         int feather,
         bool useSelectionAsBoundary,
         bool usePattern,
         bool unmerged,
-        bool useBgColor
+        bool useBgColor,
+        bool useCustomBlendingOptions,
+        int customOpacity,
+        const QString &customCompositeOp
 )
     : m_referencePaintDevice(referencePaintDevice)
     , m_enclosingMask(enclosingMask)
@@ -47,10 +52,14 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
     , m_useSelectionAsBoundary(useSelectionAsBoundary)
     , m_antiAlias(antiAlias)
     , m_expand(expand)
+    , m_stopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel)
     , m_feather(feather)
     , m_usePattern(usePattern)
     , m_unmerged(unmerged)
     , m_useBgColor(useBgColor)
+    , m_useCustomBlendingOptions(useCustomBlendingOptions)
+    , m_customOpacity(customOpacity)
+    , m_customCompositeOp(customCompositeOp)
 {}
 
 void KisEncloseAndFillProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
@@ -73,7 +82,7 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
 
     const QRect fillRect = m_resources->image()->bounds();
 
-    KisEncloseAndFillPainter painter(device, m_selection);
+    KisEncloseAndFillPainter painter(device, m_selection, fillRect.size());
     painter.beginTransaction();
 
     m_resources->setupPainter(&painter);
@@ -93,9 +102,12 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     painter.setAntiAlias(m_antiAlias);
     painter.setSizemod(m_expand);
+    painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     painter.setFeather(m_feather);
-    painter.setWidth(fillRect.width());
-    painter.setHeight(fillRect.height());
+    if (m_useCustomBlendingOptions) {
+        painter.setOpacity(m_customOpacity);
+        painter.setCompositeOpId(m_customCompositeOp);
+    }
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_referencePaintDevice;
 

@@ -188,10 +188,10 @@ void TestKoUnit::testToUserValue()
 
     KoUnit unit = KoUnit(type);
 
-    qreal exphere = unit.toUserValue(value, false);
+    qreal expHere = unit.toUserValue(value, false);
     qreal expRound = unit.toUserValue(value, true);
 
-    QCOMPARE(exphere, expected);
+    QCOMPARE(expHere, expected);
     QCOMPARE(expRound, expectedRounded);
 
 }

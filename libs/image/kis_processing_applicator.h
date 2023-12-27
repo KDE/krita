@@ -7,14 +7,16 @@
 #ifndef __KIS_PROCESSING_APPLICATOR_H
 #define __KIS_PROCESSING_APPLICATOR_H
 
-#include "kritaimage_export.h"
+#include <future>
+
+#include <kundo2commandextradata.h>
+#include <kundo2magicstring.h>
+
+#include "KisImageSignals.h"
+#include "kis_stroke_job_strategy.h"
 #include "kis_types.h"
 
-#include "kis_stroke_job_strategy.h"
-#include "KisImageSignals.h"
-#include "kundo2magicstring.h"
-#include "kundo2commandextradata.h"
-
+#include "kritaimage_export.h"
 
 class KRITAIMAGE_EXPORT KisProcessingApplicator
 {
@@ -32,6 +34,13 @@ public:
 public:
     KisProcessingApplicator(KisImageWSP image,
                             KisNodeSP node,
+                            ProcessingFlags flags = NONE,
+                            KisImageSignalVector emitSignals = KisImageSignalVector(),
+                            const KUndo2MagicString &name = KUndo2MagicString(),
+                            KUndo2CommandExtraData *extraData = 0,
+                            int macroId = -1);
+    KisProcessingApplicator(KisImageWSP image,
+                            KisNodeList nodes = KisNodeList(),
                             ProcessingFlags flags = NONE,
                             KisImageSignalVector emitSignals = KisImageSignalVector(),
                             const KUndo2MagicString &name = KUndo2MagicString(),
@@ -74,6 +83,13 @@ public:
     const KisStrokeId getStroke() const;
 
     /**
+     * A future that notifies the caller when the whole processing
+     * stroke has been completed. The returned value shows if the
+     * stroke has been completed (true) or cancelled (false).
+     */
+    std::future<bool> &&successfullyCompletedFuture();
+
+    /**
      * @brief runSingleCommandStroke creates a stroke and runs \p cmd in it.
      *        The text() field fo \p cmd is used as a title of the stroke.
      * @param image the image to run the stroke on
@@ -94,12 +110,13 @@ private:
 
 private:
     KisImageWSP m_image;
-    KisNodeSP m_node;
+    KisNodeList m_nodes;
     ProcessingFlags m_flags;
     KisImageSignalVector m_emitSignals;
     KisStrokeId m_strokeId;
     bool m_finalSignalsEmitted;
     QSharedPointer<bool> m_sharedAllFramesToken;
+    std::future<bool> m_successfullyCompletedFuture;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KisProcessingApplicator::ProcessingFlags)

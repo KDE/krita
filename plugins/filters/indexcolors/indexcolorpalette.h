@@ -39,7 +39,7 @@ struct IndexColorPalette
     void insertColor(KoColor clr);
     void insertColor(LabColor clr);
     
-    void mergeMostReduantColors();
+    void mergeMostRedundantColors();
     
     LabColor getNearestIndex(LabColor clr) const;
     int numColors() const;

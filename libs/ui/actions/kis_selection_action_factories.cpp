@@ -31,7 +31,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLock.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
 #include "kis_iterator_ng.h"
@@ -69,7 +69,8 @@ namespace ActionHelper {
                         bool makeSharpClip = false,
                         const KisTimeSpan &range = KisTimeSpan())
     {
-        Q_UNUSED(range)
+        Q_UNUSED(range); // TODO: Allow multiple frame operation across a timespan.
+
         KisImageWSP image = view->image();
         if (!image) return;
 
@@ -82,7 +83,7 @@ namespace ActionHelper {
         // We need to allow for trimming from non-transparent defaultPixel layers.
         // Default color should be phased out of use when the area in question is not aligned with image bounds.
         // Otherwise, we can maintain default pixel.
-        const bool hasNonTransparentDefaultPixel = device->defaultPixel() != KoColor(Qt::transparent, device->colorSpace());
+        const bool hasNonTransparentDefaultPixel = device->defaultPixel() != KoColor::createTransparent(device->colorSpace());
         const bool needsTransparentPixel = selection && rc != image->bounds() && hasNonTransparentDefaultPixel;
 
         if (selection) {
@@ -113,8 +114,10 @@ namespace ActionHelper {
             }
         }
 
+
+
         if ( needsTransparentPixel ) {
-            device->setDefaultPixel(KoColor(Qt::transparent, device->colorSpace()));
+            device->setDefaultPixel(KoColor::createTransparent(device->colorSpace()));
             device->purgeDefaultPixels();
         }
 
@@ -126,6 +129,7 @@ namespace ActionHelper {
         KisImageWSP image = view->image();
 
         KisImageSP clipImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
+        clipImage->setResolution(image->xRes(), image->yRes());
         Q_FOREACH (KisNodeSP node, nodes) {
             clipImage->addNode(node, clipImage->root());
         }
@@ -141,6 +145,10 @@ void KisSelectAllActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
+
+    if (view->canvasBase()->toolProxy()->selectAll()) {
+        return;
+    }
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
@@ -175,6 +183,15 @@ void KisDeselectActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
+
+    if (view->canvasBase()->toolProxy()->hasSelection()) {
+        // see KisCutCopyActionFactory::run
+        KisImageBarrierLock lock(image, std::try_to_lock);
+        if (!lock.owns_lock()) return;
+
+        view->canvasBase()->toolProxy()->deselect();
+        return;
+    }
 
     KUndo2Command *cmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
 
@@ -267,22 +284,29 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisImageSP image = view->image();
     if (!image) return;
 
+    if (!view->blockUntilOperationsFinished(image)) return;
+
     // Reference layers is a fake node, so it isn't added to the layer stack, this results in KisSelectedShapesProxy not
     // being aware of the active shapeManager and its selected shapes.
-    const auto hasReferenceImageSelected = [&]() {
-        KisReferenceImagesLayerSP refLayer = view->document()->referenceImagesLayer();
-        return refLayer && refLayer->shapeManager()->selection()->count();
-    };
+    const auto currentToolHasSelection =
+        view->canvasBase()->toolProxy()->hasSelection();
 
-    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected() || hasReferenceImageSelected();
+    const bool haveShapesSelected =
+        view->selectionManager()->haveShapesSelected();
 
     KisNodeSP node = view->activeNode();
     KisSelectionSP selection = view->selection();
 
-    if (!makeSharpClip && haveShapesSelected) {
-        // XXX: "Add saving of XML data for Cut/Copy of shapes"
+    if (!makeSharpClip && (haveShapesSelected || currentToolHasSelection)) {
+        /**
+         * Make sure that we use tryBarrierLock() here becasue it does **not**
+         * cause requestStrokeEnd() to be called in the tools, hence does not
+         * prevent disruptions in the text tool.
+         */
+        KisImageBarrierLock lock(image, std::try_to_lock);
+        if (!lock.owns_lock()) return;
 
-        KisImageBarrierLocker locker(image);
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
         if (willCut) {
             view->canvasBase()->toolProxy()->cut();
         } else {
@@ -298,7 +322,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             }
         }
 
-        selectedNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(selectedNodes);
+        selectedNodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(selectedNodes);
 
         KisNodeList nodes;
         Q_FOREACH (KisNodeSP node, selectedNodes) {
@@ -313,64 +337,29 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             nodes.append(dupNode);
         }
 
-        {
-            //KisImageBarrierLocker locker(image);  not needed as these nodes do not belong to 'image'
-            Q_FOREACH (KisNodeSP node, nodes) {
-                KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
-                    KisPaintDeviceSP dev = node->paintDevice();
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
+                if (node && node->paintDevice()) {
+                    node->paintDevice()->burnKeyframe();
+                }
 
-                    KisTimeSpan range;
+                KisTimeSpan range;
 
-                    KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-                    if (channel) {
-                        const int currentTime = image->animationInterface()->currentTime();
-                        range = channel->affectedFrames(currentTime);
-                    }
+                KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+                if (channel) {
+                    const int currentTime = image->animationInterface()->currentTime();
+                    range = channel->affectedFrames(currentTime);
+                }
 
-                    if (dev && !node->inherits("KisMask")) {
-                        ActionHelper::trimDevice(view, dev, makeSharpClip, range);
-                    }
-                });
-            }
+                if (node && node->paintDevice() && !node->inherits("KisMask")) {
+                    ActionHelper::trimDevice(view, node->paintDevice(), makeSharpClip, range);
+                }
+            });
         }
+
         KisImageSP tempImage = ActionHelper::makeImage(view, nodes);
         KisClipboard::instance()->setLayers(nodes, tempImage);
 
-/*        {
-            KisImageBarrierLocker locker(image);
-            KisPaintDeviceSP dev = node->paintDevice();
-            if (!dev) {
-                dev = node->projection();
-            }
-
-            if (!dev) {
-                view->showFloatingMessage(
-                    i18nc("floating message when cannot copy from a node",
-                          "Cannot copy pixels from this type of layer "),
-                    QIcon(), 3000, KisFloatingMessage::Medium);
-
-                return;
-            }
-
-            if (dev->exactBounds().isEmpty()) {
-                view->showFloatingMessage(
-                    i18nc("floating message when copying empty selection",
-                          "Selection is empty: no pixels were copied "),
-                    QIcon(), 3000, KisFloatingMessage::Medium);
-
-                return;
-            }
-
-            KisTimeSpan range;
-
-            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-            if (channel) {
-                const int currentTime = image->animationInterface()->currentTime();
-                range = channel->affectedFrames(currentTime);
-            }
-
-            ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
-        }*/
 
         KUndo2MagicString actionName = willCut ?
                     kundo2_i18n("Cut") :

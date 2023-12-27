@@ -43,6 +43,7 @@ class KoProgressUpdater;
 class KisMainWindow;
 class KoZoomController;
 class KoCanvasResourceProvider;
+class KisIdleTasksManager;
 
 /**
  * KisViewManager manages the collection of views shown in a single mainwindow.
@@ -79,7 +80,7 @@ public:  // Krita specific interfaces
     /// current color, current paint op etc.
     KisCanvasResourceProvider *canvasResourceProvider();
 
-    /// Return the canvasbase class
+    /// Return the canvas base class
     KisCanvas2 *canvasBase() const;
 
     /// Return the actual widget that is displaying the current image
@@ -125,6 +126,8 @@ public:  // Krita specific interfaces
     /// Filters events and sends them to canvas actions
     KisInputManager *inputManager() const;
 
+    KisIdleTasksManager *idleTasksManager();
+
     /// Convenience method to get at the active selection (the
     /// selection of the current layer, or, if that does not exist,
     /// the global selection.
@@ -157,6 +160,8 @@ public:  // Krita specific interfaces
      * @param image the image which we should wait for
      */
     void blockUntilOperationsFinishedForced(KisImageSP image);
+
+    void notifyWorkspaceLoaded();
 
 public:
 
@@ -221,6 +226,8 @@ public Q_SLOTS:
 
     // Enable the last set brush outline, or disable it if already enabled
     void slotToggleBrushOutline();
+
+    void updatePrintSizeAction(bool canvasMappingMode);
     
 Q_SIGNALS:
 
@@ -243,12 +250,12 @@ private Q_SLOTS:
     void showStatusBar(bool toggled);
     void toggleTabletLogger();
     void openResourcesDirectory();
-    void initializeStatusBarVisibility();
     void guiUpdateTimeout();
     void slotUpdatePixelGridAction();
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
     void slotResetRotation();
+    void slotResetDisplay();
     void slotToggleFullscreen();
 private:
     void createActions();

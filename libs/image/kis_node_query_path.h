@@ -11,7 +11,7 @@
 #include <kritaimage_export.h>
 
 /**
- * This class represent a path to access a node starting from an other node.
+ * This class represent a path to access a node starting from another node.
  */
 class KRITAIMAGE_EXPORT KisNodeQueryPath
 {

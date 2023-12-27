@@ -15,17 +15,19 @@
 
 #include <AnimationCheck.h>
 #include <ColorModelCheck.h>
+#include <ColorModelHomogenousCheck.h>
 #include <ColorModelPerLayerCheck.h>
 #include <CompositionsCheck.h>
 #include <ExifCheck.h>
+#include <FillLayerTypeCheck.h>
+#include <ImageSizeCheck.h>
+#include <IntegralFrameDuration.h>
+#include <LayerOpacityCheck.h>
 #include <MultiLayerCheck.h>
 #include <MultiTransparencyMaskCheck.h>
+#include <NodeTypeCheck.h>
 #include <PSDLayerStylesCheck.h>
 #include <sRGBProfileCheck.h>
-#include <NodeTypeCheck.h>
-#include <ImageSizeCheck.h>
-#include <ColorModelHomogenousCheck.h>
-#include <FillLayerTypeCheck.h>
 
 #include <QGlobalStatic>
 
@@ -76,6 +78,12 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
 
     // Do all layer have the image colorspace
     chkFactory = new ColorModelHomogenousCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    chkFactory = new IntegralFrameDurationCheckFactory();
+    add(chkFactory->id(), chkFactory);
+
+    chkFactory = new LayerOpacityCheckFactory();
     add(chkFactory->id(), chkFactory);
 
     QList<KoID> allColorModels = KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::AllColorSpaces);

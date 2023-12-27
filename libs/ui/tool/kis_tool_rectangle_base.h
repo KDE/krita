@@ -21,6 +21,10 @@ Q_SIGNALS:
 public Q_SLOTS:
     void constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height);
     void roundCornersChanged(int rx, int ry);
+
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
+
 public:
     enum ToolType {
         PAINT,
@@ -74,6 +78,9 @@ protected:
     virtual void paintRectangle(QPainter &gc, const QRectF &imageRect);
     virtual QRectF createRect(const QPointF &start, const QPointF &end);
     virtual bool showRoundCornersGUI() const;
+
+    void endStroke();
+    void cancelStroke();
 };
 
 #endif // KIS_TOOL_RECTANGLE_BASE_H

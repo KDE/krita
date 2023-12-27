@@ -95,7 +95,7 @@ const QGradient * KoGradientBackground::gradient() const
     return d->gradient;
 }
 
-void KoGradientBackground::paint(QPainter &painter, KoShapePaintingContext &/*context*/, const QPainterPath &fillPath) const
+void KoGradientBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
 {
     if (!d->gradient) return;
 
@@ -108,7 +108,7 @@ void KoGradientBackground::paint(QPainter &painter, KoShapePaintingContext &/*co
          * to what SVG defines. SVG defines gradientToUser matrix to be postmultiplied
          * by QBrush::transform(), but Qt does exactly reverse!
          *
-         * That most probably has beed caused by the fact that Qt uses transposed
+         * That most probably has been caused by the fact that Qt uses transposed
          * matrices and someone just mistyped the stuff long ago :(
          *
          * So here we basically emulate this feature by converting the gradient into

@@ -19,9 +19,13 @@
 #include "ksharedconfig.h"
 #include "kconfiggroup.h"
 #include "KisResourceLocator.h"
+#include "KisWindowsPackageUtils.h"
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
+QString KoResourcePaths::s_overrideAppDataLocation;
+
+namespace {
 
 static QString cleanup(const QString &path)
 {
@@ -32,23 +36,44 @@ static QString cleanup(const QString &path)
 static QStringList cleanup(const QStringList &pathList)
 {
     QStringList cleanedPathList;
-    Q_FOREACH(const QString &path, pathList) {
-        cleanedPathList << cleanup(path);
+
+    bool getRidOfAppDataLocation = KoResourcePaths::getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString writableLocation = []() {
+        QString location = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        // we have to ensure that the location has a trailing separator, because otherwise when we'll do startsWith
+        // check it will skip paths that start have the same path but different directory name. E.g:
+        // ~/.local/share/krita -> AppDataLocation
+        // ~/.local/share/krita3 -> custom location, but this will be skipped in getRidOfAppDataLocation.
+        if (location.back() == '/') {
+            return location;
+        } else {
+            return QString(location + "/");
+        }
+    }();
+
+     Q_FOREACH(const QString &path, pathList) {
+        QString cleanPath = cleanup(path);
+        if (getRidOfAppDataLocation && cleanPath.startsWith(writableLocation)) {
+            continue;
+        }
+        cleanedPathList << cleanPath;
     }
     return cleanedPathList;
-}
-
-
-static QString cleanupDirs(const QString &path)
-{
-    return QDir::cleanPath(path) + '/';
 }
 
 static QStringList cleanupDirs(const QStringList &pathList)
 {
     QStringList cleanedPathList;
+
+    bool getRidOfAppDataLocation = KoResourcePaths::getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString writableLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
     Q_FOREACH(const QString &path, pathList) {
-        cleanedPathList << cleanupDirs(path);
+        QString cleanPath = QDir::cleanPath(path) + '/';
+        if (getRidOfAppDataLocation && cleanPath.startsWith(writableLocation)) {
+            continue;
+        }
+        cleanedPathList << cleanPath;
     }
     return cleanedPathList;
 }
@@ -97,17 +122,33 @@ QString getInstallationPrefix() {
         bundlePath = appPath + "/../../";
     }
     else {
-        qFatal("Cannot calculate the bundle path from the app path");
+        // This is needed as tests will not run outside of the
+        // install directory without this
+        // This needs krita to be installed.
+        QString envInstallPath = qgetenv("KIS_TEST_PREFIX_PATH");
+        if (!envInstallPath.isEmpty() && (
+                    QDir(envInstallPath + "/share/kritaplugins").exists()
+                    || QDir(envInstallPath + "/Resources/kritaplugins").exists() ))
+        {
+            bundlePath = envInstallPath;
+        }
+        else {
+            qFatal("Cannot calculate the bundle path from the app path");
+            qInfo() << "If running tests set KIS_TEST_PREFIX_PATH to krita install prefix";
+        }
     }
 
     return bundlePath;
 #elif defined(Q_OS_ANDROID)
     // qApp->applicationDirPath() isn't writable and android system won't allow
     // any files other than libraries
-    return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
+    // NOTE the subscript [1]. It points to the internal location.
+    return QStandardPaths::standardLocations(QStandardPaths::AppDataLocation)[1] + "/";
 #else
     return qApp->applicationDirPath() + "/../";
 #endif
+}
+
 }
 
 class Q_DECL_HIDDEN KoResourcePaths::Private {
@@ -138,10 +179,7 @@ public:
 
     QStandardPaths::StandardLocation mapTypeToQStandardPaths(const QString &type)
     {
-        if (type == "tmp") {
-            return QStandardPaths::TempLocation;
-        }
-        else if (type == "appdata") {
+        if (type == "appdata") {
             return QStandardPaths::AppDataLocation;
         }
         else if (type == "data") {
@@ -176,18 +214,97 @@ QString KoResourcePaths::getApplicationRoot()
     return getInstallationPrefix();
 }
 
-void KoResourcePaths::addResourceType(const QString &type, const char *basetype,
+QString KoResourcePaths::getAppDataLocation()
+{
+    if (!s_overrideAppDataLocation.isEmpty()) {
+        return s_overrideAppDataLocation;
+    }
+
+    QString path;
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    path = cfg.readEntry(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+
+    QFileInfo fi(path);
+
+    // Check whether an existing location is writable
+    if (fi.exists() && !fi.isWritable()) {
+        path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
+    else if (!fi.exists()) {
+        // Check whether a non-existing location can be created
+        if (!QDir().mkpath(path)) {
+            path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        }
+        QDir().rmpath(path);
+    }
+    return path;
+
+
+}
+
+void KoResourcePaths::getAllUserResourceFoldersLocationsForWindowsStore(QString &standardLocation, QString &privateLocation)
+{
+    standardLocation = "";
+    privateLocation = "";
+    QString resourcePath = QDir(KisResourceLocator::instance()->resourceLocationBase()).absolutePath();
+#ifndef Q_OS_WIN
+    // not Windows, no problem
+    standardLocation = resourcePath;
+    return;
+#else
+    if (!KisWindowsPackageUtils::isRunningInPackage()) {
+        standardLocation = resourcePath; // Windows, but not Windows Store, so no problem
+        return;
+    }
+
+    // running inside Windows Store
+    const QDir resourceDir(resourcePath);
+    QDir appDataGeneralDir = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    appDataGeneralDir.cdUp();
+    const QString appDataGeneralDirPath = appDataGeneralDir.path();
+    if (resourceDir.absolutePath().contains(appDataGeneralDirPath, Qt::CaseInsensitive)) {
+        // resource folder location is inside appdata, so it can cause issues
+        // from inside of Krita, we can't determine whether it uses genuine %AppData% or the private Windows Store one
+        // so, half of the time, a custom folder inside %AppData% wouldn't work
+        // we can't fix that, we can only inform users about it or prevent them from choosing such folder
+        // in any case, here we need to return both folders: inside normal appdata and the private one
+        // (note that this case also handles the default resource folder called "krita" inside the appdata)
+
+
+        const QString folderName = QFileInfo(resourcePath).fileName();
+
+        const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
+        const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + folderName);
+
+        standardLocation = resourcePath;
+
+        if (privateResourceDir.exists()) {
+            privateLocation = privateResourceDir.absolutePath();
+        }
+
+        return;
+
+    } else {
+        standardLocation = resourcePath; // custom folder not inside AppData, so no problem (hopefully)
+        return;
+    }
+
+#endif
+}
+
+void KoResourcePaths::addAssetType(const QString &type, const char *basetype,
                                       const QString &relativeName, bool priority)
 {
     s_instance->addResourceTypeInternal(type, QString::fromLatin1(basetype), relativeName, priority);
 }
 
-void KoResourcePaths::addResourceDir(const QString &type, const QString &dir, bool priority)
+void KoResourcePaths::addAssetDir(const QString &type, const QString &dir, bool priority)
 {
     s_instance->addResourceDirInternal(type, dir, priority);
 }
 
-QString KoResourcePaths::findResource(const QString &type, const QString &fileName)
+QString KoResourcePaths::findAsset(const QString &type, const QString &fileName)
 {
     return cleanup(s_instance->findResourceInternal(type, fileName));
 }
@@ -197,21 +314,21 @@ QStringList KoResourcePaths::findDirs(const QString &type)
     return cleanupDirs(s_instance->findDirsInternal(type));
 }
 
-QStringList KoResourcePaths::findAllResources(const QString &type,
+QStringList KoResourcePaths::findAllAssets(const QString &type,
                                               const QString &filter,
                                               SearchOptions options)
 {
     return cleanup(s_instance->findAllResourcesInternal(type, filter, options));
 }
 
-QStringList KoResourcePaths::resourceDirs(const QString &type)
+QStringList KoResourcePaths::assetDirs(const QString &type)
 {
     return cleanupDirs(s_instance->resourceDirsInternal(type));
 }
 
 QString KoResourcePaths::saveLocation(const QString &type, const QString &suffix, bool create)
 {
-    return cleanupDirs(s_instance->saveLocationInternal(type, suffix, create));
+    return QDir::cleanPath(s_instance->saveLocationInternal(type, suffix, create)) + '/';
 }
 
 QString KoResourcePaths::locate(const QString &type, const QString &filename)
@@ -312,15 +429,10 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
     }
 
     if (resource.isEmpty() || !QFile::exists(resource)) {
-        QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
-        KConfigGroup cfg(KSharedConfig::openConfig(), "");
-        QString customPath = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
-        if (!customPath.isEmpty()) {
-            extraResourceDirs = extraResourceDirs + ":" + customPath;
-        }
+        QStringList extraResourceDirs = findExtraResourceDirs();
 
         if (!extraResourceDirs.isEmpty()) {
-            Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
+            Q_FOREACH(const QString &extraResourceDir, extraResourceDirs) {
                 if (aliases.isEmpty()) {
                     resource = extraResourceDir + '/' + fileName;
                     dbgResources<< "\t4" << resource;
@@ -381,6 +493,7 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
     QStringList dirs;
     QStringList standardDirs =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), "", QStandardPaths::LocateDirectory);
+
     appendResources(&dirs, standardDirs, true);
 
     Q_FOREACH (const QString &alias, aliases) {
@@ -404,6 +517,11 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
         appendResources(&dirs, fallbackPaths, true);
 
     }
+
+    QStringList saveLocationList;
+    saveLocationList << saveLocation(type, QString(), true);
+    appendResources(&dirs, saveLocationList, true);
+
     dbgResources << "findDirs: type" << type << "resource" << dirs;
     return dirs;
 }
@@ -440,17 +558,10 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         dbgResources << "1" << resources;
     }
 
+    QStringList extraResourceDirs = findExtraResourceDirs();
 
-    QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString customPath = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
-    if (!customPath.isEmpty()) {
-        extraResourceDirs = extraResourceDirs + ":" + customPath;
-    }
-
-    dbgResources << "extraResourceDirs" << extraResourceDirs;
     if (!extraResourceDirs.isEmpty()) {
-        Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
+        Q_FOREACH(const QString &extraResourceDir, extraResourceDirs) {
             if (aliases.isEmpty()) {
                 appendResources(&resources, filesInDir(extraResourceDir + '/' + type, filter, recursive), true);
             }
@@ -596,4 +707,30 @@ QString KoResourcePaths::locateLocalInternal(const QString &type, const QString 
     QString path = saveLocationInternal(type, "", createDir);
     dbgResources << "locateLocal: type" << type << "filename" << filename << "CreateDir" << createDir << "path" << path;
     return path + '/' + filename;
+}
+
+QStringList KoResourcePaths::findExtraResourceDirs() const
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList extraResourceDirs =
+        QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS"))
+            .split(';', Qt::SkipEmptyParts);
+#else
+    QStringList extraResourceDirs =
+        QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS"))
+            .split(';', QString::SkipEmptyParts);
+#endif
+
+    const KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    const QString customPath =
+        cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
+    if (!customPath.isEmpty()) {
+        extraResourceDirs << customPath;
+    }
+
+    if (getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)) {
+        extraResourceDirs << getAppDataLocation();
+    }
+
+    return extraResourceDirs;
 }

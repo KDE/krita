@@ -603,8 +603,8 @@ void KisSelectionManager::paintSelectedShapes()
 
     Q_FOREACH (KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation() * QTransform::fromScale(image->xRes(), image->yRes());
-        QPainterPath mapedOutline = matrix.map(shape->outline());
-        helper.paintPainterPath(mapedOutline);
+        QPainterPath mappedOutline = matrix.map(shape->outline());
+        helper.paintPainterPath(mappedOutline);
     }
     m_adapter->endMacro();
 }
@@ -660,7 +660,7 @@ void KisSelectionManager::slotStrokeSelection()
 
 }
 
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLock.h"
 #include "kis_selection_tool_helper.h"
 
 void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction action)
@@ -677,7 +677,7 @@ void KisSelectionManager::selectOpaqueOnNode(KisNodeSP node, SelectionAction act
 
 
     {
-        KisImageBarrierLocker locker(image);
+        KisImageBarrierLock lock(image);
 
         KisPaintDeviceSP device = node->projection();
         if (!device) device = node->paintDevice();

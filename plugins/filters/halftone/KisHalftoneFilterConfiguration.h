@@ -103,6 +103,8 @@ public:
     void setBackgroundColor(const QString &prefix, const KoColor &newBackgroundColor);
     void setBackgroundOpacity(const QString &prefix, int newBackgroundOpacity);
 
+    void setProperty(const QString &name, const QVariant &value) override;
+
 private:
     mutable QHash<QString, KisFilterConfigurationSP> m_generatorConfigurationsCache;
 };

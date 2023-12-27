@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2010 Adam Celarek <kdedev at xibo dot at>
+ *  SPDX-FileCopyrightText: 2023 Sharaf Zaman <shzam@sdf.org>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -7,6 +8,7 @@
 #include "kis_color_patches.h"
 
 #include <QApplication>
+#include <QLayout>
 #include <QPainter>
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -19,225 +21,80 @@
 
 #include "kis_canvas2.h"
 #include "KoCanvasResourceProvider.h"
+#include "KisColorPatchesTableView.h"
 #include "kis_display_color_converter.h"
 
-
-KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent) :
-    KisColorSelectorBase(parent), m_allowColorListChangeGuard(true), m_scrollValue(0), m_configPrefix(configPrefix)
+KisColorPatches::KisColorPatches(QString configPrefix, QWidget *parent)
+    : KisColorSelectorBase(parent)
+    , m_configPrefix(configPrefix)
+    , m_colorPatchesView(new KisColorPatchesTableView(configPrefix, parent))
 {
-    resize(1, 1);
     updateSettings();
-}
-
-void KisColorPatches::setColors(QList<KoColor>colors)
-{
-    if (m_allowColorListChangeGuard) {
-        m_colors = colors;
-
-        m_allowColorListChangeGuard=false;
-
-        KisColorPatches* parent = dynamic_cast<KisColorPatches*>(m_parent);
-        if (parent) parent->setColors(colors);
-
-        KisColorPatches* popup = dynamic_cast<KisColorPatches*>(m_popup);
-        if (popup) popup->setColors(colors);
-
-        m_allowColorListChangeGuard=true;
-
-        update();
-    }
-}
-
-void KisColorPatches::paintEvent(QPaintEvent* e)
-{
-    QPainter painter(this);
-    if(m_allowScrolling) {
-        if(m_direction == Vertical)
-            painter.translate(0, m_scrollValue);
-        else
-            painter.translate(m_scrollValue, 0);
-    }
-
-
-    int widgetWidth = width();
-    int numPatchesInARow = qMax(widgetWidth/m_patchWidth, 1);
-
-    int widgetHeight = height();
-    int numPatchesInACol = qMax(widgetHeight/m_patchHeight, 1);
-
-    for(int i = m_buttonList.size(); i < qMin(fieldCount(), m_colors.size() + m_buttonList.size()); i++) {
-        int row;
-        int col;
-        if(m_direction == Vertical) {
-            row =  i /numPatchesInARow;
-            col = i % numPatchesInARow;
-        }
-        else {
-            row= i % numPatchesInACol;
-            col = i / numPatchesInACol;
-        }
-
-        QColor qcolor = converter()->toQColor(m_colors.at(i - m_buttonList.size()));
-
-        painter.fillRect(col*m_patchWidth,
-                         row*m_patchHeight,
-                         m_patchWidth,
-                         m_patchHeight,
-                         qcolor);
-    }
-
-    QWidget::paintEvent(e);
-
-}
-
-void KisColorPatches::wheelEvent(QWheelEvent* event)
-{
-    m_scrollValue+=event->delta()/2;
-    if(m_direction == Vertical) {
-        if(m_scrollValue < -1*(heightOfAllPatches()-height()))
-            m_scrollValue = -1*(heightOfAllPatches()-height());
-    }
-    else {
-        if(m_scrollValue < -1*(widthOfAllPatches()-width()))
-            m_scrollValue = -1*(widthOfAllPatches()-width());
-    }
-    if(m_scrollValue>0) m_scrollValue=0;
-
-
-    update();
-}
-
-void KisColorPatches::resizeEvent(QResizeEvent* event)
-{
-    if(size()==QSize(1, 1))
-        return;
-
-    QWheelEvent dummyWheelEvent(QPoint(), 0, Qt::NoButton, Qt::NoModifier);
-    wheelEvent(&dummyWheelEvent);
-
-    if(parentWidget()==0) {
-        // this instance is a popup
-        setMinimumWidth(m_patchWidth*(m_patchCount/4));
-        setMaximumWidth(minimumWidth());
-    }
-
-
-    if (m_allowScrolling == false && event->oldSize() != event->size()) {
-        if(m_direction == Horizontal) {
-            setMaximumHeight(heightForWidth(width()));
-            setMinimumHeight(heightForWidth(width()));
-        }
-        else {
-            setMaximumWidth(widthForHeight(height()));
-            setMinimumWidth(widthForHeight(height()));
-        }
-    }
 }
 
 void KisColorPatches::mouseReleaseEvent(QMouseEvent* event)
 {
-    KisColorSelectorBase::mouseReleaseEvent(event);
-    event->setAccepted(false);
+    event->ignore();
     KisColorSelectorBase::mouseReleaseEvent(event);
     if (event->isAccepted() || !rect().contains(event->pos()))
         return;
 
     if (!m_canvas) return;
 
-    KoColor color;
-    if(colorAt(event->pos(), &color)) {
-        if (event->button()==Qt::LeftButton)
-            m_canvas->resourceManager()->setForegroundColor(color);
-        else if (event->button()==Qt::RightButton)
-            m_canvas->resourceManager()->setBackgroundColor(color);
+    boost::optional<KoColor> isColor = m_colorPatchesView->colorPatchAt(event->globalPos());
+    if (!isColor) {
+        return;
     }
-}
 
+    KoColor color = *isColor;
+    if (event->button() == Qt::LeftButton) {
+        m_canvas->resourceManager()->setForegroundColor(color);
+    } else if (event->button() == Qt::RightButton) {
+        m_canvas->resourceManager()->setBackgroundColor(color);
+    }
+    event->accept();
+}
 
 void KisColorPatches::mousePressEvent(QMouseEvent *event)
 {
-    KoColor koColor;
-    if(!colorAt(event->pos(), &koColor))
+    boost::optional<KoColor> isColor = m_colorPatchesView->colorPatchAt(event->globalPos());
+    if (!isColor) {
         return;
+    }
+
+    KoColor color = *isColor;
 
     KisColorSelectorBase::mousePressEvent(event);
-    if(event->isAccepted())
+    if (event->isAccepted())
         return;
 
-    updateColorPreview(koColor);
-
-    if (event->button() == Qt::LeftButton)
-        m_dragStartPos = event->pos();
-}
-
-void KisColorPatches::mouseMoveEvent(QMouseEvent *event)
-{
-    event->ignore();
-    KisColorSelectorBase::mouseMoveEvent(event);
-    if(event->isAccepted())
-        return;
-
-    if (!(event->buttons() & Qt::LeftButton))
-        return;
-    if ((event->pos() - m_dragStartPos).manhattanLength()
-         < QApplication::startDragDistance())
-        return;
-
-    KoColor koColor;
-    if(!colorAt(m_dragStartPos, &koColor))
-        return;
-
-    QDrag *drag = new QDrag(this);
-    QMimeData *mimeData = new QMimeData;
-
-    QColor color = converter()->toQColor(koColor);
-    mimeData->setColorData(color);
-    mimeData->setText(color.name());
-    drag->setMimeData(mimeData);
-
-    drag->exec(Qt::CopyAction);
-
+    updateColorPreview(color);
     event->accept();
 }
 
 int KisColorPatches::patchCount() const
 {
-    return m_patchCount;
+    return m_colorPatchesView->patchCount();
 }
 
-bool KisColorPatches::colorAt(const QPoint &pos, KoColor *result) const
+void KisColorPatches::setCanvas(KisCanvas2 *canvas)
 {
-    if(!rect().contains(pos))
-        return false;
+    KisColorSelectorBase::setCanvas(canvas);
+}
 
-    int scrollX = m_direction==Horizontal?m_scrollValue:0;
-    int scrollY = m_direction==Vertical?m_scrollValue:0;
-    int column = (pos.x()-scrollX)/m_patchWidth;
-    int row = (pos.y()-scrollY)/m_patchHeight;
+void KisColorPatches::unsetCanvas()
+{
+    KisColorSelectorBase::unsetCanvas();
+}
 
-    int patchNr;
-    if(m_direction == Vertical) {
-        int patchesInARow = width()/m_patchWidth;
-        patchNr=row*patchesInARow+column;
-    }
-    else {
-        // Vertical
-        int patchesInAColumn = height()/m_patchHeight;
-        patchNr=column*patchesInAColumn+row;
-    }
-
-    patchNr-=m_buttonList.size();
-
-    if(patchNr>=0 && patchNr<m_colors.size()) {
-        (*result)=m_colors.at(patchNr);
-        return true;
-    }
-    else return false;
+void KisColorPatches::addColorPatch(const KoColor &color)
+{
+    m_colorPatchesView->addColorPatch(color);
 }
 
 void KisColorPatches::setAdditionalButtons(QList<QWidget*> buttonList)
 {
-    for(int i=0; i<buttonList.size(); i++) {
+    for (int i = 0; i < buttonList.size(); i++) {
         buttonList.at(i)->setParent(this);
     }
     m_buttonList = buttonList;
@@ -248,94 +105,53 @@ void KisColorPatches::updateSettings()
     KisColorSelectorBase::updateSettings();
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
+    m_colorPatchesView->reloadWidgetConfig();
 
-    if(cfg.readEntry(m_configPrefix+"Alignment", false))
-        m_direction=Vertical;
-    else
-        m_direction=Horizontal;
-    m_allowScrolling=cfg.readEntry(m_configPrefix+"Scrolling", true);
-    m_numCols=cfg.readEntry(m_configPrefix+"NumCols", 1);
-    m_numRows=cfg.readEntry(m_configPrefix+"NumRows", 1);
-    m_patchCount=cfg.readEntry(m_configPrefix+"Count", 15);
-    m_patchWidth=cfg.readEntry(m_configPrefix+"Width", 20);
-    m_patchHeight=cfg.readEntry(m_configPrefix+"Height", 20);
-    if(m_patchHeight == 0) {
-        m_patchHeight = 1;
-    }
-
-    if(parentWidget()==0) {
-        // this instance is a popup
-        m_allowScrolling = false;
+    QBoxLayout::Direction layoutDirection;
+    if (cfg.readEntry(m_configPrefix + "Alignment", false)) {
+        m_direction = Vertical;
+        layoutDirection = QBoxLayout::TopToBottom;
+    } else {
         m_direction = Horizontal;
-        m_patchWidth*=2;
-        m_patchHeight*=2;
+        layoutDirection = QBoxLayout::LeftToRight;
     }
 
-    for(int i=0; i<m_buttonList.size(); i++) {
-        m_buttonList.at(i)->setGeometry(0, i*m_patchHeight, m_patchWidth, m_patchHeight);
-    }
-
-    setMaximumWidth(QWIDGETSIZE_MAX);
-    setMinimumWidth(1);
-    setMaximumHeight(QWIDGETSIZE_MAX);
-    setMinimumHeight(1);
-
-    if(m_allowScrolling && m_direction == Horizontal) {
-        setMaximumHeight(m_numRows*m_patchHeight);
-        setMinimumHeight(m_numRows*m_patchHeight);
-    }
-
-    if(m_allowScrolling && m_direction == Vertical) {
-        setMaximumWidth(m_numCols*m_patchWidth);
-        setMinimumWidth(m_numCols*m_patchWidth);
-    }
-
-    if(m_allowScrolling == false) {
-        m_scrollValue = 0;
+    QBoxLayout *boxLayout = dynamic_cast<QBoxLayout*>(layout());
+    if (!boxLayout) {
+        boxLayout = new QBoxLayout(layoutDirection, this);
+        boxLayout->setContentsMargins(0, 0, 0, 0);
+        setLayout(boxLayout);
+        layout()->addWidget(m_colorPatchesView);
+    } else if (boxLayout->direction() != layoutDirection) {
+        boxLayout->setDirection(layoutDirection);
     }
 
 
-    QResizeEvent dummy(size(), QSize(-1,-1));
-    resizeEvent(&dummy);
+    if (isPopup()) {
+        if (m_direction == Vertical) {
+            setMinimumWidth(m_colorPatchesView->width());
+            setMaximumWidth(m_colorPatchesView->width());
+        } else {
+            setMinimumHeight(m_colorPatchesView->height());
+            setMaximumHeight(m_colorPatchesView->height());
+        }
+    }
+
+    for (int i = 0; i < m_buttonList.size(); i++) {
+        m_buttonList.at(i)->setGeometry(QRect(QPoint(0, 0), m_colorPatchesView->cellSize()));
+    }
 
     setPopupBehaviour(false, false);
     update();
 }
 
-int KisColorPatches::widthOfAllPatches()
+
+void KisColorPatches::setColors(const QList<KoColor> &colors)
 {
-    return (fieldCount()/m_numRows)*m_patchWidth;
+    m_colorPatchesView->setColors(colors);
 }
 
-int KisColorPatches::heightOfAllPatches()
+QList<KoColor> KisColorPatches::colors() const
 {
-    return (fieldCount()/m_numCols)*m_patchHeight;
-}
-
-int KisColorPatches::heightForWidth(int width) const
-{
-    int numPatchesInARow = width / m_patchWidth;
-    int numRows = qMax((fieldCount() - 1), 1) / qMax(numPatchesInARow + 1, 1);
-    return qMax(numRows * m_patchHeight, m_patchHeight);
-}
-
-int KisColorPatches::widthForHeight(int height) const
-{
-    if (height == 0) {
-        return 0;
-    }
-
-    if (m_patchHeight == 0) {
-        return 0;
-    }
-    int numPatchesInACol = height / m_patchHeight;
-
-    int numCols = (fieldCount() - 1) / (numPatchesInACol + 1);
-
-    return qMax(numCols*m_patchWidth, m_patchWidth);
-}
-
-int KisColorPatches::fieldCount() const
-{
-    return m_patchCount+m_buttonList.size();
+    return m_colorPatchesView->colors();
 }

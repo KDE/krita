@@ -48,13 +48,15 @@ SprayBrush::~SprayBrush()
     delete m_transfo;
 }
 
-void SprayBrush::setProperties(KisSprayOptionProperties * properties,
-                               KisColorProperties * colorProperties,
-                               KisShapeProperties * shapeProperties,
-                               KisShapeDynamicsProperties * shapeDynamicsProperties,
+void SprayBrush::setProperties(KisSprayOpOptionData * properties,
+                               KisColorOptionData * colorProperties,
+                               KisSprayShapeOptionData * shapeProperties,
+                               KisSprayShapeDynamicsOptionData * shapeDynamicsProperties,
                                KisBrushSP brush)
 {
-    m_properties = properties;
+    m_sprayOpOptionData = properties;
+    m_sprayOpOption = new KisSprayOpOption(*properties);
+    m_sprayOpOption->updateDistributions();
     m_colorProperties = colorProperties;
     m_shapeProperties = shapeProperties;
     m_shapeDynamicsProperties = shapeDynamicsProperties;
@@ -76,11 +78,7 @@ qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
 
         qreal randomValue = 0.0;
 
-        // if (m_properties->gaussian) {
-        //     randomValue = qBound<qreal>(0.0, randomSource->generateGaussian(0.0, 0.5), 1.0);
-        // } else {
         randomValue = randomSource->generateNormalized();
-        // }
 
         rotation =
             linearInterpolation(rotation ,
@@ -97,10 +95,10 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                        qreal additionalScale,
                        const KoColor &color, const KoColor &bgColor)
 {
-    if (m_properties->angularDistributionType() == KisSprayOptionProperties::ParticleDistribution_Uniform) {
-        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor, m_properties->uniformDistribution());
+    if (m_sprayOpOption->data.angularDistributionType == KisSprayOpOptionData::ParticleDistribution_Uniform) {
+        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor, m_sprayOpOption->m_uniformDistribution);
     } else {
-        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor, m_properties->angularCurveBasedDistribution());
+        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor, m_sprayOpOption->m_angularCurveBasedDistribution);
     }
 }
 
@@ -113,28 +111,28 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                            const KoColor &bgColor,
                            const AngularDistribution &angularDistribution)
 {
-    if (m_properties->radialDistributionType() == KisSprayOptionProperties::ParticleDistribution_Uniform) {
-        if (m_properties->radialDistributionCenterBiased()) {
+    if (m_sprayOpOption->data.radialDistributionType == KisSprayOpOptionData::ParticleDistribution_Uniform) {
+        if (m_sprayOpOption->data.radialDistributionCenterBiased) {
             paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
-                      angularDistribution, m_properties->uniformDistribution());
+                      angularDistribution, m_sprayOpOption->m_uniformDistribution);
         } else {
             paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
-                      angularDistribution, m_properties->uniformDistributionPolarDistance());
+                      angularDistribution, m_sprayOpOption->m_uniformDistributionPolarDistance);
         }
-    } else if (m_properties->radialDistributionType() == KisSprayOptionProperties::ParticleDistribution_Gaussian) {
-        if (m_properties->radialDistributionCenterBiased()) {
+    } else if (m_sprayOpOption->data.radialDistributionType == KisSprayOpOptionData::ParticleDistribution_Gaussian) {
+        if (m_sprayOpOption->data.radialDistributionCenterBiased) {
             paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
-                      angularDistribution, m_properties->normalDistribution());
+                      angularDistribution, m_sprayOpOption->m_normalDistribution);
         } else {
             paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
-                      angularDistribution, m_properties->normalDistributionPolarDistance());
+                      angularDistribution, m_sprayOpOption->m_normalDistributionPolarDistance);
         }
-    } else if (m_properties->radialDistributionType() == KisSprayOptionProperties::ParticleDistribution_ClusterBased) {
+    } else if (m_sprayOpOption->data.radialDistributionType == KisSprayOpOptionData::ParticleDistribution_ClusterBased) {
         paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
-                  angularDistribution, m_properties->clusterBasedDistributionPolarDistance());
+                  angularDistribution, m_sprayOpOption->m_clusterBasedDistributionPolarDistance);
     } else {
         paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
-                  angularDistribution, m_properties->radialCurveBasedDistributionPolarDistance());
+                  angularDistribution, m_sprayOpOption->m_radialCurveBasedDistributionPolarDistance);
     }
 }
 
@@ -154,11 +152,13 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     KisRandomSourceSP randomSource = info.randomSource();
 
+    const QSize effectiveSize = m_shapeProperties->effectiveSize(m_sprayOpOptionData->diameter, m_sprayOpOptionData->scale);
+
     // initializing painter
     if (!m_painter) {
         m_painter = new KisPainter(dab);
         m_painter->setFillStyle(KisPainter::FillStyleForegroundColor);
-        m_painter->setMaskImageSize(m_shapeProperties->width, m_shapeProperties->height);
+        m_painter->setMaskImageSize(effectiveSize.width(), effectiveSize.height());
         m_dabPixelSize = dab->colorSpace()->pixelSize();
         if (m_colorProperties->useRandomHSV) {
             m_transfo = dab->colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
@@ -166,7 +166,7 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
         m_brushQImage = m_shapeProperties->image;
         if (!m_brushQImage.isNull()) {
-            m_brushQImage = m_brushQImage.scaled(m_shapeProperties->width, m_shapeProperties->height);
+            m_brushQImage = m_brushQImage.scaled(effectiveSize);
         }
         m_imageDevice = new KisPaintDevice(dab->colorSpace());
     }
@@ -181,22 +181,22 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     KisCrossDeviceColorSampler colorSampler(source, m_inkColor);
 
     // apply size sensor
-    m_radius = m_properties->radius() * scale * additionalScale;
+    m_radius = m_sprayOpOption->data.diameter/2 * scale * additionalScale;
 
     // jitter movement
-    if (m_properties->jitterMovement()) {
-        x = x + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->jitterAmount();
-        y = y + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->jitterAmount();
+    if (m_sprayOpOption->data.jitterMovement) {
+        x = x + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_sprayOpOption->data.jitterAmount;
+        y = y + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_sprayOpOption->data.jitterAmount;
     }
 
     // this is wrong for every shape except pixel and anti-aliased pixel
 
 
-    if (m_properties->useDensity()) {
-        m_particlesCount = (m_properties->coverage() * (M_PI * pow2(m_radius)) / pow2(additionalScale));
+    if (m_sprayOpOption->data.useDensity) {
+        m_particlesCount = (m_sprayOpOption->data.coverage * (M_PI * pow2(m_radius)) / pow2(additionalScale));
     }
     else {
-        m_particlesCount = m_properties->particleCount();
+        m_particlesCount = m_sprayOpOption->data.particleCount;
     }
 
     QHash<QString, QVariant> params;
@@ -216,8 +216,8 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     QTransform m;
     m.reset();
-    m.rotateRadians(-rotation + deg2rad(m_properties->brushRotation()));
-    m.scale(m_properties->scale(), m_properties->scale());
+    m.rotateRadians(-rotation + deg2rad(m_sprayOpOption->data.brushRotation));
+    m.scale(m_sprayOpOption->data.scale, m_sprayOpOption->data.scale);
 
     for (quint32 i = 0; i < m_particlesCount; i++) {
         // generate random angle
@@ -231,7 +231,7 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
             if (m_shapeDynamicsProperties->followCursor) {
 
-                rotationZ = linearInterpolation(rotationZ, angle, m_shapeDynamicsProperties->followCursorWeigth);
+                rotationZ = linearInterpolation(rotationZ, angle, m_shapeDynamicsProperties->followCursorWeight);
             }
 
 
@@ -250,7 +250,7 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         ny = (m_radius * sin(angle)  * length);
 
         // compute the height of the ellipse
-        ny *= m_properties->aspect();
+        ny *= m_sprayOpOption->data.aspect;
 
         // transform
         m.map(nx, ny, &nx, &ny);
@@ -302,15 +302,15 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
             m_painter->setPaintColor(m_inkColor);
         }
 
-        qreal jitteredWidth = qMax(1.0 * additionalScale, m_shapeProperties->width * particleScale * additionalScale);
-        qreal jitteredHeight = qMax(1.0 * additionalScale, m_shapeProperties->height * particleScale * additionalScale);
+        qreal jitteredWidth = qMax(1.0 * additionalScale, effectiveSize.width() * particleScale * additionalScale);
+        qreal jitteredHeight = qMax(1.0 * additionalScale, effectiveSize.height() * particleScale * additionalScale);
 
         if (m_shapeProperties->enabled){
         switch (m_shapeProperties->shape){
             // ellipse
             case 0:
             {
-                if (m_shapeProperties->width == m_shapeProperties->height){
+                if (effectiveSize.width() == effectiveSize.height()){
                     paintCircle(m_painter, nx + x, ny + y, jitteredWidth * 0.5);
                 }
                 else {

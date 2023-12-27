@@ -1,0 +1,9 @@
+{
+    "Id": "Sample Screen Color Plugin",
+    "Type": "Service",
+    "X-KDE-Library": "kritasamplescreencolor",
+    "X-KDE-ServiceTypes": [
+        "Krita/ViewPlugin"
+    ],
+    "X-Krita-Version": "28"
+}

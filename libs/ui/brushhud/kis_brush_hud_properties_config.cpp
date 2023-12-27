@@ -109,9 +109,7 @@ void KisBrushHudPropertiesConfig::filterProperties(
     Q_FOREACH (const QString &id, selectedIds) {
         auto it = std::find_if(skippedProperties->begin(),
                                skippedProperties->end(),
-                               [id] (KisUniformPaintOpPropertySP prop) {
-                                   return prop->id() == id;
-                               });
+                               kismpl::mem_equal_to(&KisUniformPaintOpProperty::id, id));
 
         if (it != skippedProperties->end()) {
             *chosenProperties << *it;

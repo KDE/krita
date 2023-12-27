@@ -747,7 +747,7 @@ void ConicalGradientPaintPolicy::setup(const QPointF& gradientVectorStart,
 
 const quint8 *ConicalGradientPaintPolicy::colorAt(qreal x, qreal y) const
 {
-    // Compute the distance from the center of the gradient to thecurrent pixel
+    // Compute the distance from the center of the gradient to the current pixel
     qreal dx = x - m_gradientVectorStart.x();
     qreal dy = y - m_gradientVectorStart.y();
     qreal distanceInPixels = sqrt(dx * dx + dy * dy);
@@ -1117,7 +1117,7 @@ bool KisGradientPainter::paintGradient(const QPointF& gradientVectorStart,
     // The following combinations of options have aliasing artifacts
     // where the first color meets the last color of the gradient.
     // so antialias threshold is used to compute if the pixel is in
-    // the smothing area. Then linear interpolation is used to blend
+    // the smoothing area. Then linear interpolation is used to blend
     // between the first and last colors
     if (antiAliasThreshold > DBL_EPSILON) {
         if ((m_d->shape == GradientShapeLinear || m_d->shape == GradientShapeBiLinear ||

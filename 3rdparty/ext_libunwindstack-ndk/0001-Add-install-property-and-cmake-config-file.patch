@@ -1,4 +1,4 @@
-From 4496990716b87137f1ef874a6d38cbd1c391ca31 Mon Sep 17 00:00:00 2001
+From ef114659f068dba2e6d966c48c2c3adf865d0d03 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 13 Jan 2022 13:59:01 +0000
 Subject: [PATCH] Add install property and cmake config file
@@ -10,7 +10,7 @@ Subject: [PATCH] Add install property and cmake config file
  create mode 100644 cmake/unwindstack-config.cmake.in
 
 diff --git a/cmake/CMakeLists.txt b/cmake/CMakeLists.txt
-index 5e104f3..a764b6a 100644
+index 68fd086..02ddb56 100644
 --- a/cmake/CMakeLists.txt
 +++ b/cmake/CMakeLists.txt
 @@ -1,6 +1,8 @@
@@ -22,7 +22,7 @@ index 5e104f3..a764b6a 100644
  set(UNWINDSTACK_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/../)
  
  include_directories(${UNWINDSTACK_ROOT} ${UNWINDSTACK_ROOT}/include)
-@@ -99,6 +101,28 @@ add_library(unwindstack STATIC
+@@ -98,6 +100,28 @@ add_library(unwindstack STATIC
  target_link_libraries(unwindstack log)
  set_property(TARGET unwindstack PROPERTY CXX_STANDARD 17)
  
@@ -47,7 +47,7 @@ index 5e104f3..a764b6a 100644
 +    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
 +    )
 +
-+install(DIRECTORY ${UNWINDSTACK_ROOT}/include/unwindstack DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
++install(DIRECTORY ${UNWINDSTACK_ROOT}/include/ ${UNWINDSTACK_ROOT}/include/unwindstack DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 +install(FILES
 +    "${CMAKE_CURRENT_BINARY_DIR}/unwindstack-config.cmake"
 +    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
@@ -68,5 +68,5 @@ index 0000000..39032c1
 +
 +set(unwindstack_FOUND TRUE)
 -- 
-2.34.1
+2.37.1
 

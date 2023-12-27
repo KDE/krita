@@ -36,7 +36,7 @@ public:
     KisGridConfig()
         : m_showGrid(false),
           m_snapToGrid(false),
-          m_spacing(20,20),
+          m_spacing(16,16),
           m_offsetAspectLocked(true),
           m_spacingAspectLocked(true),
           m_angleLeft(45),

@@ -248,7 +248,7 @@ void KisColorSelectorWheel::paint(QPainter* painter)
 
 KoColor KisColorSelectorWheel::colorAt(float x, float y, bool forceValid)
 {
-    KoColor color(Qt::transparent, m_parent->colorSpace());
+    KoColor color = KoColor::createTransparent(m_parent->colorSpace());
 
     Q_ASSERT(x>=0 && x<=width());
     Q_ASSERT(y>=0 && y<=height());

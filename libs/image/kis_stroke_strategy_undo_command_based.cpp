@@ -54,6 +54,7 @@ KisStrokeStrategyUndoCommandBased(const KisStrokeStrategyUndoCommandBased &rhs)
 void KisStrokeStrategyUndoCommandBased::setUsedWhileUndoRedo(bool value)
 {
     setClearsRedoOnStart(!value);
+    setAsynchronouslyCancellable(!value);
 }
 
 void KisStrokeStrategyUndoCommandBased::executeCommand(KUndo2CommandSP command, bool undo)

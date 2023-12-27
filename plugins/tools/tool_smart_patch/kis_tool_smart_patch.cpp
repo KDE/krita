@@ -26,6 +26,7 @@
 #include "kis_datamanager.h"
 
 #include "KoColorSpaceRegistry.h"
+#include <KisCursorOverrideLock.h>
 
 #include "kis_tool_smart_patch_options_widget.h"
 #include "libs/image/kis_paint_device_debug_utils.h"
@@ -155,7 +156,7 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     KisToolPaint::endPrimaryAction(event);
     setMode(KisTool::HOVER_MODE);
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
     int accuracy = 50; //default accuracy - middle value
     int patchRadius = 4; //default radius, which works well for most cases tested
@@ -181,7 +182,6 @@ void KisToolSmartPatch::endPrimaryAction(KoPointerEvent *event)
     applicator.end();
     image()->waitForDone();
 
-    QApplication::restoreOverrideCursor();
     m_d->maskDev->clear();
 }
 
@@ -202,6 +202,7 @@ QPainterPath KisToolSmartPatch::getBrushOutlinePath(const QPointF &documentPos,
     QPainterPath path = brushOutline();
 
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(canvas2, QPainterPath());
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
     return path.translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectivePhysicalZoom()));
@@ -264,6 +265,7 @@ void KisToolSmartPatch::paint(QPainter &painter, const KoViewConverter &converte
 QWidget * KisToolSmartPatch::createOptionWidget()
 {
     KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT(kiscanvas);
 
     m_d->optionsWidget = new KisToolSmartPatchOptionsWidget(kiscanvas->viewManager()->canvasResourceProvider(), 0);
     m_d->optionsWidget->setObjectName(toolId() + "option widget");

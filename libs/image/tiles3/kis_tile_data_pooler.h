@@ -61,13 +61,13 @@ protected:
     qint32 tryGetMemory(QList<KisTileData*> &donors, qint32 memoryMetric);
 
     template<class Iter>
-        void getLists(Iter *iter, QList<KisTileData*> &beggers,
+        void getLists(Iter *iter, QList<KisTileData*> &beggars,
                       QList<KisTileData*> &donors,
                       qint32 &memoryOccupied,
                       qint32 &statRealMemory,
                       qint32 &statHistoricalMemory);
 
-    bool processLists(QList<KisTileData*> &beggers,
+    bool processLists(QList<KisTileData*> &beggars,
                       QList<KisTileData*> &donors,
                       qint32 &memoryOccupied);
 

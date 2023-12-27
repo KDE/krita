@@ -7,6 +7,7 @@
 #include "kis_canvas_decoration.h"
 #include "kis_canvas2.h"
 #include "kis_debug.h"
+#include "kis_canvas_resource_provider.h"
 
 struct KisCanvasDecoration::Private {
     bool visible;
@@ -81,11 +82,22 @@ void KisCanvasDecoration::setPriority(int value)
     d->priority = value;
 }
 
+int KisCanvasDecoration::decorationThickness() const
+{
+    if (d->view && d->view->canvasBase() && d->view->canvasBase()->resourceManager()) {
+        return d->view->canvasBase()->resourceManager()->decorationThickness();
+    }
+    return 1;
+}
+
 bool KisCanvasDecoration::comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2)
 {
     return decoration1->priority() < decoration2->priority();
 }
+void KisCanvasDecoration::notifyWindowMinimized(bool)
+{
 
+}
 QPointer<KisView>KisCanvasDecoration::view() const
 {
     return d->view;

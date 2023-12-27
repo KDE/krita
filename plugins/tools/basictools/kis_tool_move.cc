@@ -33,8 +33,10 @@
 #include "kis_node_manager.h"
 #include "kis_selection_manager.h"
 #include "kis_signals_blocker.h"
+#include "KisAnimAutoKey.h"
 #include <boost/operators.hpp>
 #include "KisMoveBoundsCalculationJob.h"
+#include <KisOptimizedBrushOutline.h>
 
 
 struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<KisToolMoveState>
@@ -80,6 +82,7 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
 KisToolMove::~KisToolMove()
 {
     endStroke();
+    delete m_optionsWidget;
 }
 
 void KisToolMove::resetCursorStyle()
@@ -116,7 +119,9 @@ void KisToolMove::resetCursorStyle()
                 !selection->selectedRect().isEmpty() &&
                 !selection->selectedExactRect().isEmpty();
 
-        if (!canUseSelectionMode) {
+        if (canUseSelectionMode) {
+            canMove = (m_currentMode == MoveSelectedLayer ? paintLayer->isEditable() : true);
+        } else {
             KisNodeSelectionRecipe nodeSelection =
                     KisNodeSelectionRecipe(
                         this->selectedNodes(),
@@ -148,6 +153,8 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     KisPaintLayerSP paintLayer =
         dynamic_cast<KisPaintLayer*>(this->currentNode().data());
 
+
+
     const bool canUseSelectionMode =
             paintLayer && selection &&
             !selection->selectedRect().isEmpty() &&
@@ -174,6 +181,13 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
     }
 
     if (m_strokeId) return true;
+
+
+    if (canUseSelectionMode && !nodeEditable()) {
+        // if there is a selection, it would only use the current layer anyway
+        // if the current layer is not editable, don't continue
+        return false;
+    }
 
     KisNodeList nodes;
 
@@ -245,7 +259,7 @@ bool KisToolMove::startStrokeImpl(MoveToolMode mode, const QPoint *pos)
         m_asyncUpdateHelper.startUpdateStream(image.data(), m_strokeId);
     }
 
-    KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty(true)) {
+    KIS_SAFE_ASSERT_RECOVER(m_changesTracker.isEmpty()) {
         m_changesTracker.reset();
     }
     commitChanges();
@@ -454,7 +468,7 @@ void KisToolMove::requestUndoDuringStroke()
 {
     if (!m_strokeId) return;
 
-    if (m_changesTracker.isEmpty(true)) {
+    if (!m_changesTracker.canUndo()) {
         cancelStroke();
     } else {
         m_changesTracker.requestUndo();
@@ -465,7 +479,9 @@ void KisToolMove::requestRedoDuringStroke()
 {
     if (!m_strokeId) return;
 
-    m_changesTracker.requestRedo();
+    if (m_changesTracker.canRedo()) {
+        m_changesTracker.requestRedo();
+    }
 }
 
 void KisToolMove::beginPrimaryAction(KoPointerEvent *event)
@@ -779,7 +795,7 @@ void KisToolMove::requestHandlesRectUpdate()
     KisMoveBoundsCalculationJob *job = new KisMoveBoundsCalculationJob(this->selectedNodes(),
                                                                        selection, this);
     connect(job,
-            SIGNAL(sigCalcualtionFinished(const QRect&)),
+            SIGNAL(sigCalculationFinished(const QRect&)),
             SLOT(slotHandlesRectCalculated(const QRect &)));
 
     KisImageSP image = this->image();
@@ -807,15 +823,15 @@ QList<QAction *> KisToolMoveFactory::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("movetool-move-up");
-    actions << actionRegistry->makeQAction("movetool-move-down");
-    actions << actionRegistry->makeQAction("movetool-move-left");
-    actions << actionRegistry->makeQAction("movetool-move-right");
-    actions << actionRegistry->makeQAction("movetool-move-up-more");
-    actions << actionRegistry->makeQAction("movetool-move-down-more");
-    actions << actionRegistry->makeQAction("movetool-move-left-more");
-    actions << actionRegistry->makeQAction("movetool-move-right-more");
-    actions << actionRegistry->makeQAction("movetool-show-coordinates");
+    actions << actionRegistry->makeQAction("movetool-move-up", this);
+    actions << actionRegistry->makeQAction("movetool-move-down", this);
+    actions << actionRegistry->makeQAction("movetool-move-left", this);
+    actions << actionRegistry->makeQAction("movetool-move-right", this);
+    actions << actionRegistry->makeQAction("movetool-move-up-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-down-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-left-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-right-more", this);
+    actions << actionRegistry->makeQAction("movetool-show-coordinates", this);
 
     return actions;
 

@@ -71,7 +71,7 @@ public:
     QString filename() const;
     QString internalFile() const;
 
-    void paint(QPainter &gc, KoShapePaintingContext &paintcontext) const override;
+    void paint(QPainter &gc) const override;
 
     QColor getPixel(QPointF position);
 

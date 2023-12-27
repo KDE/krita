@@ -38,6 +38,8 @@ public:
 
     QList<QString> getPropertiesKeys() const override;
 
+    void dump() const override;
+
 private:
     Q_DISABLE_COPY(KisLockedPropertiesProxy)
     mutable KisLockedPropertiesSP m_lockedProperties;

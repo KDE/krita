@@ -7,7 +7,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoMultiArchBuildSupport.h>
+#include <KoMultiArchBuildSupport.h>
 
 #include "kis_brush_mask_applicator_factories.h"
 #include "kis_mask_generator.h"
@@ -77,7 +77,6 @@ struct KisMaskGenerator::Private {
     QString curveString;
     qreal scaleX;
     qreal scaleY;
-    QScopedPointer<KisBrushMaskApplicatorBase> defaultMaskProcessor;
 };
 
 
@@ -117,7 +116,12 @@ void KisMaskGenerator::init()
 
 bool KisMaskGenerator::shouldSupersample() const
 {
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
+    return antialiasEdges() && (effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10);
+}
+
+bool KisMaskGenerator::shouldSupersample6x6() const
+{
+    return effectiveSrcWidth() < 1 || effectiveSrcHeight() < 1;
 }
 
 bool KisMaskGenerator::shouldVectorize() const
@@ -129,16 +133,6 @@ bool KisMaskGenerator::shouldVectorize() const
 bool KisMaskGenerator::isEmpty() const
 {
     return d->empty;
-}
-
-KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
-{
-    if (!d->defaultMaskProcessor) {
-        d->defaultMaskProcessor.reset(
-            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator>>(this));
-    }
-
-    return d->defaultMaskProcessor.data();
 }
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const
@@ -183,8 +177,7 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     }
 
     if (id == SoftId.id()) {
-        KisCubicCurve curve;
-        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
+        const KisCubicCurve curve(elt.attribute("softness_curve","0,0;1,1"));
 
         if (typeShape == "circle") {
             return new KisCurveCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve, antialiasEdges);

@@ -363,8 +363,10 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     QPainterPath mappedHandles = m_d->handlesTransform.map(handles);
 
     QPen pen[2];
-    pen[0].setWidth(1);
-    pen[1].setWidth(2);
+    pen[0].setWidth(decorationThickness());
+    pen[0].setCosmetic(true);
+    pen[1].setWidth(decorationThickness() * 2);
+    pen[1].setCosmetic(true);
     pen[1].setColor(Qt::lightGray);
 
     for (int i = 1; i >= 0; --i) {

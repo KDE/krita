@@ -32,6 +32,11 @@ public:
 
     void setAction(KisAbstractInputAction *action);
 
+    void setWarningEnabled(bool enabled, QString additionalToolTipText = QString());
+
+Q_SIGNALS:
+    void inputConfigurationChanged();
+
 public Q_SLOTS:
     void setExpanded(bool expand);
 
@@ -42,6 +47,8 @@ private:
     Ui::KisInputConfigurationPageItem *ui {nullptr};
     KisAbstractInputAction *m_action {nullptr};
     KisActionShortcutsModel *m_shortcutsModel {nullptr};
+
+    const QString m_defaultToolTipText;
 };
 
 #endif // KISINPUTCONFIGURATIONPAGEITEM_H

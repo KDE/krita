@@ -16,6 +16,7 @@
 #include "kis_node.h"
 #include "kis_image.h"
 
+#include "KisImageResolutionProxy.h"
 #include "kis_default_bounds.h"
 #include "kis_iterator_ng.h"
 #include "KisLazyStorage.h"
@@ -38,16 +39,17 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     {
     }
 
-    static void safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection);
+    template <typename T>
+    static void safeDeleteShapeSelection(T *object, KisSelection *selection);
 
     // used for forwarding setDirty signals only
     KisNodeWSP parentNode;
 
     bool isVisible; //false is the selection decoration should not be displayed
-    KisDefaultBoundsBaseSP defaultBounds;
+    KisImageResolutionProxySP resolutionProxy;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent *shapeSelection;
-    KisLazyStorage<KisSelectionUpdateCompressor> updateCompressor;
+    KisLazyStorage<KisSelectionUpdateCompressor, KisSelection*> updateCompressor;
 
     /**
      * This lock makes sure that the shape selection is not reincarnated,
@@ -56,12 +58,13 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     QReadWriteLock shapeSelectionPointerLock;
 };
 
-void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection)
+template <typename T>
+void KisSelection::Private::safeDeleteShapeSelection(T *object, KisSelection *selection)
 {
     struct ShapeSelectionReleaseStroke : public KisSimpleStrokeStrategy {
-        ShapeSelectionReleaseStroke(KisSelectionComponent *shapeSelection)
+        ShapeSelectionReleaseStroke(T *object)
             : KisSimpleStrokeStrategy(QLatin1String("ShapeSelectionReleaseStroke")),
-              m_shapeSelection(shapeSelection)
+              m_objectWrapper(makeKisDeleteLaterWrapper(object))
         {
             setRequestsOtherStrokesToEnd(false);
             setClearsRedoOnStart(false);
@@ -71,9 +74,17 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
             this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
         }
 
+        ~ShapeSelectionReleaseStroke()
+        {
+            /// it looks like the strategy has not been executed,
+            /// the object will leak...
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_objectWrapper);
+        }
+
         void finishStrokeCallback() override
         {
-            makeKisDeleteLaterWrapper(m_shapeSelection)->deleteLater();
+            m_objectWrapper->deleteLater();
+            m_objectWrapper = 0;
         }
 
         void cancelStrokeCallback() override
@@ -82,7 +93,7 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
         }
 
     private:
-        KisSelectionComponent *m_shapeSelection = 0;
+        KisDeleteLaterWrapper<T*> *m_objectWrapper = 0;
     };
 
     /**
@@ -114,8 +125,8 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
      */
     struct GuiStrokeWrapper
     {
-        GuiStrokeWrapper(KisImageSP image, KisSelectionComponent *shapeSelection)
-            : m_image(image), m_shapeSelection(shapeSelection)
+        GuiStrokeWrapper(KisImageSP image, T *object)
+            : m_image(image), m_object(object)
         {
         }
 
@@ -124,15 +135,15 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
             KisImageSP image = m_image;
 
             if (image) {
-                KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(m_shapeSelection));
+                KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(m_object));
                 image->endStroke(strokeId);
             } else {
-                delete m_shapeSelection;
+                delete m_object;
             }
         }
 
         KisImageWSP m_image;
-        KisSelectionComponent *m_shapeSelection;
+        T *m_object;
     };
 
     if (selection) {
@@ -144,14 +155,14 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
         }
 
         if (image) {
-            makeKisDeleteLaterWrapper(new GuiStrokeWrapper(image, shapeSelection))->deleteLater();
-            shapeSelection = 0;
+            makeKisDeleteLaterWrapper(new GuiStrokeWrapper(image, object))->deleteLater();
+            object = 0;
         }
     }
 
-    if (shapeSelection) {
-        makeKisDeleteLaterWrapper(shapeSelection)->deleteLater();
-        shapeSelection = 0;
+    if (object) {
+        makeKisDeleteLaterWrapper(object)->deleteLater();
+        object = 0;
     }
 }
 
@@ -168,6 +179,10 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
     {
         if (m_shapeSelection) {
             Private::safeDeleteShapeSelection(m_shapeSelection, m_selection ? m_selection.data() : 0);
+        }
+
+        if (m_reincarnationCommand) {
+            Private::safeDeleteShapeSelection(m_reincarnationCommand.take(), m_selection ? m_selection.data() : 0);
         }
     }
 
@@ -226,15 +241,25 @@ private:
     bool m_isFlatten = false;
 };
 
-KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
+KisSelection::KisSelection()
+    : KisSelection(nullptr, nullptr)
+{
+}
+
+KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds, KisImageResolutionProxySP resolutionProxy)
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionEmptyBounds(0);
+        defaultBounds = new KisSelectionEmptyBounds(nullptr);
     }
-    m_d->defaultBounds = defaultBounds;
 
-    m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds, this);
+    if (!resolutionProxy) {
+        resolutionProxy.reset(new KisImageResolutionProxy(nullptr));
+    }
+
+    m_d->resolutionProxy = resolutionProxy;
+
+    m_d->pixelSelection = new KisPixelSelection(defaultBounds, this);
     m_d->pixelSelection->setParentNode(m_d->parentNode);
 }
 
@@ -245,18 +270,19 @@ KisSelection::KisSelection(const KisSelection& rhs)
     copyFrom(rhs);
 }
 
-KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds)
+KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode,
+                           KisDefaultBoundsBaseSP defaultBounds, KisImageResolutionProxySP resolutionProxy)
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
         defaultBounds = new KisSelectionEmptyBounds(0);
     }
 
-    m_d->defaultBounds = defaultBounds;
+    m_d->resolutionProxy = resolutionProxy;
     m_d->pixelSelection = new KisPixelSelection(source, copyMode);
     m_d->pixelSelection->setParentSelection(this);
     m_d->pixelSelection->setParentNode(m_d->parentNode);
-    m_d->pixelSelection->setDefaultBounds(m_d->defaultBounds);
+    m_d->pixelSelection->setDefaultBounds(defaultBounds);
 }
 
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
@@ -270,7 +296,7 @@ KisSelection &KisSelection::operator=(const KisSelection &rhs)
 void KisSelection::copyFrom(const KisSelection &rhs)
 {
     m_d->isVisible = rhs.m_d->isVisible;
-    m_d->defaultBounds = rhs.m_d->defaultBounds;
+    m_d->resolutionProxy = rhs.m_d->resolutionProxy;
     m_d->parentNode = 0; // not supposed to be shared
 
     Q_ASSERT(rhs.m_d->pixelSelection);
@@ -404,6 +430,9 @@ KisSelectionComponent* KisSelection::shapeSelection() const
 
 void KisSelection::convertToVectorSelectionNoUndo(KisSelectionComponent* shapeSelection)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shapeSelection);
+
+    shapeSelection->setResolutionProxy(m_d->resolutionProxy);
     QScopedPointer<KUndo2Command> cmd(new ChangeShapeSelectionCommand(this, shapeSelection));
     cmd->redo();
 }
@@ -411,6 +440,8 @@ void KisSelection::convertToVectorSelectionNoUndo(KisSelectionComponent* shapeSe
 KUndo2Command *KisSelection::convertToVectorSelection(KisSelectionComponent *shapeSelection)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->shapeSelection, nullptr);
+
+    shapeSelection->setResolutionProxy(m_d->resolutionProxy);
     return new ChangeShapeSelectionCommand(this, shapeSelection);
 }
 
@@ -509,8 +540,20 @@ void KisSelection::setY(qint32 y)
 
 void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
-    m_d->defaultBounds = bounds;
     m_d->pixelSelection->setDefaultBounds(bounds);
+}
+
+void KisSelection::setResolutionProxy(KisImageResolutionProxySP proxy)
+{
+    m_d->resolutionProxy = proxy;
+    if (m_d->shapeSelection) {
+        m_d->shapeSelection->setResolutionProxy(proxy);
+    }
+}
+
+KisImageResolutionProxySP KisSelection::resolutionProxy() const
+{
+    return m_d->resolutionProxy;
 }
 
 void KisSelection::clear()

@@ -66,13 +66,13 @@ void KisFilter::process(const KisPaintDeviceSP src,
     }
 
     try {
-        QScopedPointer<KoUpdater> fakeUpdater;
+        QScopedPointer<KoDummyUpdaterHolder> updaterHolder;
 
         if (!progressUpdater) {
             // TODO: remove dependency on KoUpdater, depend on KoProgressProxy,
             //       it is more lightweight
-            fakeUpdater.reset(new KoDummyUpdater());
-            progressUpdater = fakeUpdater.data();
+            updaterHolder.reset(new KoDummyUpdaterHolder());
+            progressUpdater = updaterHolder->updater();
         }
 
         processImpl(temporary, applyRect, config, progressUpdater);

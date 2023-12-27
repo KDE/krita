@@ -35,8 +35,6 @@ public:
         KConfigGroup miscGroup = config->group("Misc");
         const uint grabSensitivity = miscGroup.readEntry("GrabSensitivity", 10);
         resourceManager->setGrabSensitivity(grabSensitivity);
-        const uint handleRadius = miscGroup.readEntry("HandleRadius", 5);
-        resourceManager->setHandleRadius(handleRadius);
     }
 
     ~KoshapeControllerBasePrivate()

@@ -8,12 +8,30 @@
 
 #include "kis_transform_mask.h"
 #include <testutil.h>
+#include "kistest.h"
 #include "tool_transform_args.h"
-#include "kis_modify_transform_mask_command.h"
+#include "commands_new/KisSimpleModifyTransformMaskCommand.h"
+#include "commands_new/KisLazyCreateTransformMaskKeyframesCommand.h"
 #include "kis_image_animation_interface.h"
 #include "kis_transform_mask_params_interface.h"
-#include "kis_animated_transform_parameters.h"
+#include "KisAnimatedTransformMaskParamsHolder.h"
 #include "kis_keyframe_channel.h"
+
+#include <KoToolRegistry.h>
+
+void KisAnimatedTransformParametersTest::initTestCase()
+{
+    KoToolRegistry::instance();
+}
+
+QSharedPointer<KisTransformMaskAdapter> adapterFromParams(KisTransformMaskParamsInterfaceSP params)
+{
+    return params.dynamicCast<KisTransformMaskAdapter>();
+}
+
+ToolTransformArgs argsFromParams(KisTransformMaskParamsInterfaceSP params) {
+    return *adapterFromParams(params)->transformArgs();
+}
 
 void KisAnimatedTransformParametersTest::testTransformKeyframing()
 {
@@ -21,13 +39,30 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
     KisTransformMaskSP mask = new KisTransformMask(p.image, "mask");
     p.image->addNode(mask, p.layer);
 
+    // Make mask animated
+    QList<KoID> ids = {
+        KisKeyframeChannel::PositionX,
+        KisKeyframeChannel::PositionY,
+        KisKeyframeChannel::ScaleX,
+        KisKeyframeChannel::ScaleY,
+        KisKeyframeChannel::ShearX,
+        KisKeyframeChannel::ShearY,
+        KisKeyframeChannel::RotationX,
+        KisKeyframeChannel::RotationY,
+        KisKeyframeChannel::RotationZ
+    };
+
+    Q_FOREACH( const KoID& koid, ids ) {
+        mask->getKeyframeChannel(koid.id(), true);
+        QVERIFY(mask->getKeyframeChannel(koid.id(), false));
+    }
+
+    QVERIFY(!adapterFromParams(mask->transformParams())->isInitialized());
 
     ToolTransformArgs args;
-    mask->setTransformParams(toQShared(new KisTransformMaskAdapter(args)));
 
-    // Make mask animated
-    mask->getKeyframeChannel(KisKeyframeChannel::ScaleX.id(), true);
-    QVERIFY(mask->getKeyframeChannel(KisKeyframeChannel::ScaleX.id(), false));
+    KUndo2Command firstFrameCommand;
+    KUndo2Command secondFrameCommand;
 
     {
         p.image->animationInterface()->switchCurrentTimeAsync(0);
@@ -36,15 +71,12 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
         args.setMode(ToolTransformArgs::FREE_TRANSFORM);
         args.setScaleX(0.75);
 
-        QScopedPointer<KisInitializeTransformMaskKeyframesCommand> command0(
-                    new KisInitializeTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisSetTransformMaskKeyframesCommand> command1(
-                    new KisSetTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisModifyTransformMaskCommand> command2(
-                    new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        command0->redo();
-        command1->redo();
-        command2->redo();
+        new KisLazyCreateTransformMaskKeyframesCommand(mask, &firstFrameCommand);
+        new KisSimpleModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args)), {}, &firstFrameCommand);
+        firstFrameCommand.redo();
+
+        QVERIFY(adapterFromParams(mask->transformParams())->isInitialized());
+        QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 0.75);
     }
 
     {
@@ -53,32 +85,35 @@ void KisAnimatedTransformParametersTest::testTransformKeyframing()
 
         args.setScaleX(0.5);
 
-        QScopedPointer<KisInitializeTransformMaskKeyframesCommand> command0(
-                    new KisInitializeTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisSetTransformMaskKeyframesCommand> command1(
-                    new KisSetTransformMaskKeyframesCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        QScopedPointer<KisModifyTransformMaskCommand> command2(
-                    new KisModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args))));
-        command0->redo();
-        command1->redo();
-        command2->redo();
+        new KisLazyCreateTransformMaskKeyframesCommand(mask, &secondFrameCommand);
+        new KisSimpleModifyTransformMaskCommand(mask, toQShared(new KisTransformMaskAdapter(args)), {}, &secondFrameCommand);
+        secondFrameCommand.redo();
+
+        QVERIFY(adapterFromParams(mask->transformParams())->isInitialized());
+        QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 0.5);
     }
-
-    KisAnimatedTransformMaskParameters *params_out = 0;
-
-    params_out = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
-    QVERIFY(params_out != 0);
-    QCOMPARE(params_out->transformArgs()->scaleX(), 0.5);
 
     p.image->animationInterface()->switchCurrentTimeAsync(0);
     p.image->waitForDone();
-
     QVERIFY(p.image->animationInterface()->currentTime() == 0);
+    QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 0.75);
 
-    params_out = dynamic_cast<KisAnimatedTransformMaskParameters*>(mask->transformParams().data());
-    QVERIFY(params_out != 0);
-    QCOMPARE(params_out->transformArgs()->scaleX(), 0.75);
+    p.image->animationInterface()->switchCurrentTimeAsync(10);
+    p.image->waitForDone();
+    QVERIFY(p.image->animationInterface()->currentTime() == 10);
+    QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 0.5);
+
+    secondFrameCommand.undo();
+    QVERIFY(p.image->animationInterface()->currentTime() == 10);
+    QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 0.75);
+
+    firstFrameCommand.undo();
+    QVERIFY(p.image->animationInterface()->currentTime() == 10);
+    QCOMPARE(argsFromParams(mask->transformParams()).scaleX(), 1.0);
+
+    mask->forceUpdateTimedNode();
+    p.image->waitForDone();
 }
 
 
-SIMPLE_TEST_MAIN(KisAnimatedTransformParametersTest)
+KISTEST_MAIN(KisAnimatedTransformParametersTest)

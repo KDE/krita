@@ -132,28 +132,47 @@ public:
      */
     virtual KisTimeSpan identicalFrames(int time) const;
 
+    /**
+     * The rect that is affected by a frame at the given time
+     */
+    virtual QRect affectedRect(int time) const = 0;
+
     virtual QDomElement toXML(QDomDocument doc, const QString &layerFilename);
     virtual void loadXML(const QDomElement &channelNode);
 
-Q_SIGNALS:
-    /** @brief This signal is emitted whenever the relevant internal state
-     * of the channel is changed.
-     * @param  affectedTimeSpan  The span of times that were affected by the change.
-     * @param  affectedArea  The area of the paint device that were affected by the change.
-     */
-    void sigChannelUpdated(const KisTimeSpan &affectedTimeSpan, const QRect &affectedArea) const;
+    static KoID channelIdToKoId(const QString &id);
 
+Q_SIGNALS:
     /** @brief This signal is emitted just AFTER a keyframe was added to the channel. */
     void sigAddedKeyframe(const KisKeyframeChannel *channel, int time);
 
     /** @brief This signal is emitted just BEFORE a keyframe is removed from the channel. */
-    void sigRemovingKeyframe(const KisKeyframeChannel *channel, int time);
+    void sigKeyframeAboutToBeRemoved(const KisKeyframeChannel *channel, int time);
+
+    /** @brief This signal is emitted just AFTER a keyframe is removed from the channel. */
+    void sigKeyframeHasBeenRemoved(const KisKeyframeChannel *channel, int time);
+
+    /** @brief This signal is emitted just AFTER a non-raster keyframe was changed its value */
+    void sigKeyframeChanged(const KisKeyframeChannel *channel, int time);
+
+    /** This signal is an aggregate of the following signals:
+     *      - sigAddedKeyframe
+     *      - sigKeyframeHasBeenRemoved
+     *      - sigKeyframeChanged
+     */
+    void sigAnyKeyframeChange();
 
 protected:
     typedef QMap<int, KisKeyframeSP> TimeKeyframeMap;
     TimeKeyframeMap &keys();
     const TimeKeyframeMap &constKeys() const;
     int currentTime() const;
+
+    /**
+     * Actual implementation of the frame removal that does everything except of
+     * the signal emission (that should be emitted **before** the removal)
+     */
+    virtual void removeKeyframeImpl(int time, KUndo2Command *parentUndoCmd);
 
     /**
      * @brief Between Krita 4.1 and 4.4 Krita had a bug which resulted in creating frames
@@ -173,7 +192,6 @@ private:
      * of their specific KisKeyframe subclasses.
      */
     virtual KisKeyframeSP createKeyframe() = 0;
-    virtual QRect affectedRect(int time) const = 0;
     virtual QPair<int, KisKeyframeSP> loadKeyframe(const QDomElement &keyframeNode) = 0;
     virtual void saveKeyframe(KisKeyframeSP keyframe, QDomElement keyframeElement, const QString &layerFilename) = 0;
 };

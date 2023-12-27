@@ -163,7 +163,7 @@ public:
      * @brief Returns the index of the item corresponding the frame,
      * if there is an item with that frame
      * @param frame The frame whose index is needed.
-     * @param framePefect Whether query will return a valid scene
+     * @param framePerfect Whether query will return a valid scene
      * even when a scene contains the frame, not just if it starts
      * on said frame. Default == true
      * @return The index corresponding to frame, if exists.
@@ -270,6 +270,10 @@ public:
     void createBlankKeyframes(const QModelIndex& index, KUndo2Command* cmd = nullptr);
 
 private:
+    // For now, board is structured as a tree, with each board element being the top level
+    // and storyboard components (numbers, comments, etc.) being children/leaves.
+    inline bool isValidBoard(const QModelIndex &index) const {return index.isValid() && !index.parent().isValid();}
+
     bool moveRowsImpl(const QModelIndex &sourceParent, int sourceRow, int count,
                     const QModelIndex &destinationParent, int destinationChild, KUndo2Command *parentCMD = nullptr);
 
@@ -340,7 +344,7 @@ private:
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;
     StoryboardView *m_view {0};
-    KisNodeSP m_activeNode;
+    KisNodeWSP m_activeNode;
     KisStoryboardThumbnailRenderScheduler *m_renderScheduler {0};
     KisSignalCompressor m_renderSchedulingCompressor;
 };

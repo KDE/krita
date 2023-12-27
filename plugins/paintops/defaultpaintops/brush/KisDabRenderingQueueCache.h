@@ -12,10 +12,6 @@
 
 #include "kritadefaultpaintops_export.h"
 
-class KisPressureMirrorOption;
-class KisPrecisionOption;
-class KisPressureSharpnessOption;
-
 class KRITADEFAULTPAINTOPS_EXPORT KisDabRenderingQueueCache : public KisDabRenderingQueue::CacheInterface, public KisDabCacheBase
 {
 public:

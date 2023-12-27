@@ -10,7 +10,7 @@
 #include "kis_runnable_with_debug_name.h"
 #include "kis_stroke_job_strategy.h"
 
-class KisStrokeJob : public KisRunnableWithDebugName
+class KRITAIMAGE_EXPORT KisStrokeJob : public KisRunnableWithDebugName
 {
 public:
     KisStrokeJob(KisStrokeJobStrategy *strategy,

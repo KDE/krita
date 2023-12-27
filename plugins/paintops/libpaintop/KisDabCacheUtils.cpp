@@ -11,7 +11,7 @@
 #include "kis_fixed_paint_device.h"
 #include "kis_color_source.h"
 
-#include <kis_pressure_sharpness_option.h>
+#include <KisSharpnessOption.h>
 #include <kis_texture_option.h>
 
 #include <kundo2command.h>

@@ -1,0 +1,17 @@
+<svg width="300px" height="100px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+    <g id="test">
+
+        <rect id="boundingRect" x="5" y="5" width="89" height="19"
+            fill="none" stroke="red"/>
+
+        <text id="testRect" x="7" y="27" dx="0,1,2,3,4,5,6,7,8"
+            font-family="DejaVu Sans" font-size="15" fill="blue" >
+            Hello, <tspan fill="red" x="20" y="46" text-anchor="start">ou
+t</tspan> there <![CDATA[cool cdata --> nice work]]>
+        </text>
+
+    </g>
+
+</svg>

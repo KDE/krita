@@ -11,6 +11,8 @@
 
 #include "KisPart.h"
 
+#include <config-mlt.h>
+
 #include "KoProgressProxy.h"
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
@@ -27,12 +29,14 @@
 #include "KisView.h"
 #include "KisViewManager.h"
 #include "KisImportExportManager.h"
+#include "KoDocumentInfo.h"
 
 #include <kis_debug.h>
 #include <KoResourcePaths.h>
 #include <KoDialog.h>
 #include <QMessageBox>
 #include <QMenu>
+#include <QScopedPointer>
 #include <QMap>
 
 #include <QMenuBar>
@@ -62,6 +66,7 @@
 #include "KisTranslateLayerNamesVisitor.h"
 #include "kis_color_manager.h"
 
+#include <KisCursorOverrideLock.h>
 #include "kis_action.h"
 #include "kis_action_registry.h"
 #include "KisSessionResource.h"
@@ -70,6 +75,12 @@
 #include "kis_memory_statistics_server.h"
 #include "KisRecentFilesManager.h"
 #include "KisRecentFileIconCache.h"
+#include "KisPlaybackEngine.h"
+#include "KisPlaybackEngineQT.h"
+
+#ifdef HAVE_MLT
+#include "KisPlaybackEngineMLT.h"
+#endif
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -81,6 +92,7 @@ public:
         : part(_part)
         , idleWatcher(2500)
         , animationCachePopulator(_part)
+        , playbackEngine(nullptr)
     {
     }
 
@@ -95,6 +107,7 @@ public:
     QList<QPointer<KisDocument> > documents;
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
+    QScopedPointer<KisPlaybackEngine> playbackEngine;
 
     KisSessionResourceSP currentSession;
     bool closingSession{false};
@@ -151,6 +164,9 @@ KisPart::KisPart()
     connect(&d->idleWatcher, SIGNAL(startedIdleMode()),
             KisMemoryStatisticsServer::instance(), SLOT(tryForceUpdateMemoryStatisticsWhileIdle()));
 
+    // We start by loading the simple QTimer-based anim playback engine first.
+    // To save RAM, the MLT-based engine will be loaded later, once the KisImage in question becomes animated.
+    setPlaybackEngine(new KisPlaybackEngineQT(this));
 
     d->animationCachePopulator.slotRequestRegeneration();
     KisBusyWaitBroker::instance()->setFeedbackCallback(&busyWaitWithFeedback);
@@ -188,7 +204,7 @@ void KisPart::updateIdleWatcherConnections()
     /**
      * Update memory stats on changing the amount of images open in Krita
      */
-    d->idleWatcher.startCountdown();
+    d->idleWatcher.forceImageModified();
 }
 
 void KisPart::addDocument(KisDocument *document, bool notify)
@@ -297,9 +313,11 @@ KisView *KisPart::createView(KisDocument *document,
     grp.writeEntry("CreatingCanvas", true);
     grp.sync();
 
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    KisView *view = new KisView(document,  viewManager, parent);
-    QApplication::restoreOverrideCursor();
+    KisView *view = nullptr;
+    {
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
+        view = new KisView(document,  viewManager, parent);
+    }
 
     // Record successful canvas creation
     grp.writeEntry("CreatingCanvas", false);
@@ -503,9 +521,14 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
     return &d->animationCachePopulator;
 }
 
+KisPlaybackEngine *KisPart::playbackEngine() const
+{
+    return d->playbackEngine.data();
+}
+
 void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
     KisImageAnimationInterface* animInterface = image->animationInterface();
-    if ( animInterface && animInterface->fullClipRange().contains(frame)) {
+    if ( animInterface && animInterface->documentPlaybackRange().contains(frame)) {
         d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
     }
 }
@@ -533,12 +556,14 @@ void KisPart::updateShortcuts()
 
 void KisPart::openTemplate(const QUrl &url)
 {
-    qApp->setOverrideCursor(Qt::BusyCursor);
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
+
     KisDocument *document = createDocument();
 
     bool ok = document->loadNativeFormat(url.toLocalFile());
     document->setModified(false);
     document->undoStack()->clear();
+    document->documentInfo()->resetMetaData();
 
     if (ok) {
         QString mimeType = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
@@ -567,8 +592,6 @@ void KisPart::openTemplate(const QUrl &url)
 
     KisMainWindow *mw = currentMainwindow();
     mw->addViewAndNotifyLoadingCompleted(document);
-
-    qApp->restoreOverrideCursor();
 }
 
 void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
@@ -579,7 +602,7 @@ void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
         bool ok = true;
         if (url.isLocalFile()) {
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
+            const QStringList tmpDirs = QStandardPaths::locateAll(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
                 if (path.contains(*it)) {
                     ok = false; // it's in the tmp resource
@@ -662,6 +685,35 @@ bool KisPart::restoreSession(KisSessionResourceSP session)
 void KisPart::setCurrentSession(KisSessionResourceSP session)
 {
     d->currentSession = session;
+}
+
+void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
+{
+#ifdef HAVE_MLT
+
+    // TODO: This is a slightly hacky workaround to loading the MLT engine over itself,
+    // as the QT-based engine no longer supports audio. Is there a better way?
+    if (d->playbackEngine->supportsAudio()) {
+        return;
+    }
+
+    setPlaybackEngine(new KisPlaybackEngineMLT(this));
+
+    if (canvas) {
+        d->playbackEngine->setObservedCanvas(canvas);
+    }
+
+#endif //HAVE_MLT
+}
+
+void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
+{
+    // make sure that the old engine is still alive until the end
+    // of the emitted signal
+    QScopedPointer backup(p_playbackEngine);
+    d->playbackEngine.swap(backup);
+
+    emit playbackEngineChanged(p_playbackEngine);
 }
 
 #include "moc_KisPart.cpp"

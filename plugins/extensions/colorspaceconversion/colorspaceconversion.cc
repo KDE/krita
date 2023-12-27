@@ -9,7 +9,6 @@
 #include "colorspaceconversion.h"
 
 #include <QApplication>
-#include <QCursor>
 
 #include <klocalizedstring.h>
 #include <kis_debug.h>
@@ -21,7 +20,6 @@
 #include <kis_transaction.h>
 #include <kis_annotation.h>
 #include <kis_config.h>
-#include <kis_cursor.h>
 #include <kis_global.h>
 #include <kis_image.h>
 #include <kis_node_manager.h>
@@ -33,7 +31,7 @@
 #include <kis_action.h>
 #include <kis_group_layer.h>
 
-#include "dlg_colorspaceconversion.h"
+#include <dialogs/KisColorSpaceConversionDialog.h>
 #include "kis_action_manager.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ColorSpaceConversionFactory, "kritacolorspaceconversion.json", registerPlugin<ColorSpaceConversion>();)
@@ -58,7 +56,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     KisImageSP image = viewManager()->image().toStrongRef();
     if (!image) return;
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindowAsQWidget(), "ColorSpaceConversion");
+    KisColorSpaceConversionDialog * dlgColorSpaceConversion = new KisColorSpaceConversionDialog(viewManager()->mainWindowAsQWidget(), "ColorSpaceConversion");
     bool allowLCMSOptimization = KisConfig(true).allowLCMSOptimization();
     dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->setChecked(allowLCMSOptimization);
     Q_CHECK_PTR(dlgColorSpaceConversion);
@@ -68,14 +66,11 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
 
     if (dlgColorSpaceConversion->exec() == QDialog::Accepted) {
 
-        const KoColorSpace * cs = dlgColorSpaceConversion->m_page->colorSpaceSelector->currentColorSpace();
+        const KoColorSpace * cs = dlgColorSpaceConversion->colorSpace();
         if (cs) {
-            QApplication::setOverrideCursor(KisCursor::waitCursor());
-            KoColorConversionTransformation::ConversionFlags conversionFlags = KoColorConversionTransformation::HighQuality;
-            if (dlgColorSpaceConversion->m_page->chkBlackpointCompensation->isChecked()) conversionFlags |= KoColorConversionTransformation::BlackpointCompensation;
-            if (!dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->isChecked()) conversionFlags |= KoColorConversionTransformation::NoOptimization;
-            image->convertImageColorSpace(cs, (KoColorConversionTransformation::Intent)dlgColorSpaceConversion->m_intentButtonGroup.checkedId(), conversionFlags);
-            QApplication::restoreOverrideCursor();
+            image->convertImageColorSpace(cs,
+                                          dlgColorSpaceConversion->conversionIntent(),
+                                          dlgColorSpaceConversion->conversionFlags());
         }
     }
     delete dlgColorSpaceConversion;
@@ -89,7 +84,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisLayerSP layer = viewManager()->activeLayer();
     if (!layer) return;
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindowAsQWidget(), "ColorSpaceConversion");
+    KisColorSpaceConversionDialog * dlgColorSpaceConversion = new KisColorSpaceConversionDialog(viewManager()->mainWindowAsQWidget(), "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From %1", layer->colorSpace()->name()));

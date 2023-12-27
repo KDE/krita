@@ -17,18 +17,20 @@
 
 #include <math.h>
 
+constexpr qreal DISCRETE_ANGLE_STEP = 15.0;  // discrete rotation snapping angle
+
 class KisRotateCanvasAction::Private
 {
 public:
-    Private() : previousAngle(0) {}
+    Private() {}
 
     // Coverity requires sane defaults for all variables (CID 36429)
     Shortcut mode {RotateModeShortcut};
 
     qreal previousAngle {0.0};
-    qreal startRotation {0.0};
-    qreal previousRotation {0.0};
-    bool updatedRotation {false};
+    qreal snapRotation {0.0};
+    qreal touchRotation {0.0};
+    bool allowRotation {false};
 };
 
 
@@ -76,19 +78,28 @@ void KisRotateCanvasAction::deactivate(int shortcut)
 void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
 {
     KisAbstractInputAction::begin(shortcut, event);
+    d->allowRotation = false;
     d->previousAngle = 0;
+    d->snapRotation = 0;
+    d->touchRotation = 0;
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
+
+    d->mode = (Shortcut)shortcut;
 
     switch(shortcut) {
         case RotateModeShortcut:
-        case DiscreteRotateModeShortcut:
-            d->mode = (Shortcut)shortcut;
-            d->startRotation = inputManager()->canvas()->rotationAngle();
-            d->previousRotation = 0;
-            d->updatedRotation = false;
+        case DiscreteRotateModeShortcut: {
+            // If the canvas has been rotated to an angle that is not an exact multiple of DISCRETE_ANGLE_STEP,
+            // we need to adjust the final discrete rotation by that angle difference.
+            // trunc() is used to round the negative numbers towards zero.
+            const qreal startRotation = inputManager()->canvas()->rotationAngle();
+            d->snapRotation = startRotation - std::trunc(startRotation / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP;
+            canvasController->beginCanvasRotation();
             break;
+        }
         case RotateLeftShortcut:
             canvasController->rotateCanvasLeft15();
             break;
@@ -101,8 +112,30 @@ void KisRotateCanvasAction::begin(int shortcut, QEvent *event)
     }
 }
 
+void KisRotateCanvasAction::end(QEvent *event)
+{
+    Q_UNUSED(event);
+
+    KisCanvasController *canvasController =
+        dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
+
+    switch(d->mode) {
+    case RotateModeShortcut:
+    case DiscreteRotateModeShortcut:
+        canvasController->endCanvasRotation();
+        break;
+    default:
+        break;
+    }
+}
+
 void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos)
 {
+    if (d->mode == RotateResetShortcut) {
+        return;
+    }
+
     const KisCoordinatesConverter *converter = inputManager()->canvas()->coordinatesConverter();
     const QPointF centerPoint = converter->flakeToWidget(converter->flakeCenterPoint());
     const QPointF startPoint = startPos - centerPoint;
@@ -114,23 +147,19 @@ void KisRotateCanvasAction::cursorMovedAbsolute(const QPointF &startPos, const Q
     qreal newRotation = (180 / M_PI) * (newAngle - oldAngle);
 
     if (d->mode == DiscreteRotateModeShortcut) {
-        const qreal angleStep = 15;
-
-        // avoid jumps at the beginning of the rotation action
-        if (qAbs(newRotation) > 0.5 * angleStep || d->updatedRotation) {
-            d->updatedRotation = true;
-            const qreal currentCanvasRotation = converter->rotationAngle();
-            const qreal desiredOffset = newRotation - d->previousRotation;
-            newRotation = qRound((currentCanvasRotation + desiredOffset) / angleStep) * angleStep - currentCanvasRotation + d->previousRotation;
+        // Do not snap unless the user rotated half-way in the desired direction.
+        if (qAbs(newRotation) > 0.5 * DISCRETE_ANGLE_STEP || d->allowRotation) {
+            d->allowRotation = true;
+            newRotation = qRound((newRotation + d->snapRotation) / DISCRETE_ANGLE_STEP) * DISCRETE_ANGLE_STEP - d->snapRotation;
         } else {
-            newRotation = d->previousRotation;
+            newRotation = 0.0;
         }
     }
 
     KisCanvasController *canvasController =
         dynamic_cast<KisCanvasController*>(inputManager()->canvas()->canvasController());
-    canvasController->rotateCanvas(newRotation - d->previousRotation);
-    d->previousRotation = newRotation;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvasController);
+    canvasController->rotateCanvas(newRotation);
 }
 
 void KisRotateCanvasAction::inputEvent(QEvent* event)
@@ -143,7 +172,7 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
 
             const float angle = gevent->value();
             QPoint widgetPos = canvas->canvasWidget()->mapFromGlobal(gevent->globalPos());
-            controller->rotateCanvas(angle, widgetPos);
+            controller->rotateCanvas(angle, widgetPos, true);
             return;
         }
         case QEvent::TouchUpdate: {
@@ -181,24 +210,23 @@ void KisRotateCanvasAction::inputEvent(QEvent* event)
             // high school (y2 - y1) / (x2 - x1)
             QPointF slope = p1 - p0;
             qreal newAngle = atan2(slope.y(), slope.x());
-            qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
 
-            // Workaround: So, TouchPoint coordinates are not 100% reliable.
-            // Freshly pressed TouchPoints are sometimes not accurate for
-            // multiple events. So if the computed rotation angle is out of
-            // whack, we just ignore it: it probably means the previous
-            // position was off.
-            if (qAbs(delta) > 15) {
-                // TouchPoint coordinates tend to converge toward correct
-                // values, so assume the previous angle was off but this one is
-                // better and should be the new basis for the next event.
-                d->previousAngle = newAngle;
-                break;
+            // We must have the previous angle measurement to calculate the delta.
+            if (d->allowRotation)
+            {
+                qreal delta = (180 / M_PI) * (newAngle - d->previousAngle);
+
+                // Rotate by the effective angle from the beginning of the action.
+                d->touchRotation += delta;
+
+                KisCanvas2 *canvas = inputManager()->canvas();
+                KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
+                controller->rotateCanvas(d->touchRotation);
             }
-
-            KisCanvas2 *canvas = inputManager()->canvas();
-            KisCanvasController *controller = static_cast<KisCanvasController*>(canvas->canvasController());
-            controller->rotateCanvas(delta);
+            else
+            {
+                d->allowRotation = true;
+            }
 
             d->previousAngle = newAngle;
             return;

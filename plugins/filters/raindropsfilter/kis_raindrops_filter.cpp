@@ -111,7 +111,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
     double    r, a;                             // polar coordinates
     double    OldRadius;                        // Radius before processing
-    double    NewfishEyes = (double)fishEyes * 0.01;  // FishEye fishEyesicients
+    double    NewfishEyes = (double)fishEyes * 0.01;  // FishEye Coefficients
     double    s;
     double    R, G, B;
 
@@ -316,7 +316,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 /* Function to free a dynamic boolean array
  *
  * lpbArray          => Dynamic boolean array
- * Columns           => The array bidimension value
+ * Columns           => The number of array columns
  *
  * Theory            => An easy to understand 'for' statement
  */
@@ -328,7 +328,7 @@ void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
     free(lpbArray);
 }
 
-/* Function to create a bidimentional dynamic boolean array
+/* Function to create a bidimensional dynamic boolean array
  *
  * Columns           => Number of columns
  * Rows              => Number of rows

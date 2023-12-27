@@ -5,14 +5,15 @@
  */
 
 #include "TestPointMergeCommand.h"
-#include "KoPathPointMergeCommand.h"
-#include "KoPathShape.h"
 #include "KoPathPoint.h"
 #include "KoPathPointData.h"
-#include <sdk/tests/testflake.h>
+#include "KoPathPointMergeCommand.h"
+#include "KoPathShape.h"
+#include <FlakeDebug.h>
 #include <QPainterPath>
 #include <simpletest.h>
-#include <FlakeDebug.h>
+#include <testflake.h>
+
 
 void TestPointMergeCommand::closeSingleLinePath()
 {

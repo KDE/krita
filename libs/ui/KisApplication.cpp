@@ -11,10 +11,12 @@
 #ifdef Q_OS_WIN
 #include <windows.h>
 #include <tchar.h>
+#include "KisWindowsPackageUtils.h"
 #endif
 
 #ifdef Q_OS_MACOS
 #include "osx.h"
+#include "KisMacosEntitlements.h"
 #endif
 
 #include <QStandardPaths>
@@ -70,7 +72,6 @@
 #include <KoResourceServer.h>
 #include <KisResourceServerProvider.h>
 #include <KoResourceServerProvider.h>
-#include "kis_image_barrier_locker.h"
 #include "opengl/kis_opengl.h"
 #include "kis_spin_box_unit_manager.h"
 #include "kis_document_aware_spin_box_unit_manager.h"
@@ -108,10 +109,12 @@
 #include "kis_node_commands_adapter.h"
 #include "KisSynchronizedConnection.h"
 #include <QThreadStorage>
+#include <KisWindowsPackageUtils.h>
 
 #include <kis_psd_layer_style.h>
 
 #include <config-seexpr.h>
+#include <config-safe-asserts.h>
 
 namespace {
 const QTime appStartTime(QTime::currentTime());
@@ -274,23 +277,23 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 void KisApplication::addResourceTypes()
 {
     // All Krita's resource types
-    KoResourcePaths::addResourceType("markers", "data", "/styles/");
-    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
-    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");
-    KoResourcePaths::addResourceType("tags", "data", "/tags/");
-    KoResourcePaths::addResourceType("templates", "data", "/templates");
-    KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
-    KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
+    KoResourcePaths::addAssetType("markers", "data", "/styles/");
+    KoResourcePaths::addAssetType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addAssetType("kis_images", "data", "/images/");
+    KoResourcePaths::addAssetType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addAssetType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addAssetType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/actions");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/pykrita");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addAssetType(ResourceType::FilterEffects, "data", "/effects/");
+    KoResourcePaths::addAssetType("tags", "data", "/tags/");
+    KoResourcePaths::addAssetType("templates", "data", "/templates");
+    KoResourcePaths::addAssetType("pythonscripts", "data", "/pykrita");
+    KoResourcePaths::addAssetType("preset_icons", "data", "/preset_icons");
 #if defined HAVE_SEEXPR
-    KoResourcePaths::addResourceType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
+    KoResourcePaths::addAssetType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
 #endif
 
     // Make directories for all resources we can save, and tags
@@ -362,11 +365,12 @@ bool KisApplication::registerResources()
 
     reg->registerFixup(10, new KisBrushTypeMetaDataFixup());
 
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString databaseLocation = cfg.readEntry(KisResourceCacheDb::dbLocationKey, "");
-    if (databaseLocation.isEmpty()) {
-        databaseLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
+#ifndef Q_OS_ANDROID
+    QString databaseLocation = KoResourcePaths::getAppDataLocation();
+#else
+    // Sqlite doesn't support content URIs (obviously). So, we make database location unconfigurable on android.
+    QString databaseLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+#endif
 
     if (!KisResourceCacheDb::initialize(databaseLocation)) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));
@@ -459,10 +463,14 @@ bool KisApplication::start(const KisApplicationArguments &args)
     processEvents();
     addResourceTypes();
 
+    setSplashScreenLoadingText(i18n("Loading plugins..."));
+    processEvents();
     // Load the plugins
     loadPlugins();
 
     // Load all resources
+    setSplashScreenLoadingText(i18n("Loading resources..."));
+    processEvents();
     if (!registerResources()) {
         return false;
     }
@@ -502,6 +510,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
             }
         }
 
+        setSplashScreenLoadingText(i18n("Launching..."));
+
         if (showmainWindow) {
             d->mainWindow = kisPart->currentMainwindow();
 
@@ -526,7 +536,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
-    // Check for autosave files that can be restored, if we're not running a batchrun (test)
+    // Check for autosave files that can be restored, if we're not running a batch run (test)
     if (!d->batchRun) {
         checkAutosaveFiles();
     }
@@ -616,7 +626,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     int sequenceStart = 0;
 
                     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                               doc->image()->animationInterface()->fullClipRange(),
+                                               doc->image()->animationInterface()->documentPlaybackRange(),
                                                exportFileName,
                                                sequenceStart,
                                                false,
@@ -651,7 +661,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     if (!args.fileLayer().isEmpty()){
         if (d->mainWindow->viewManager()->image()){
             KisFileLayer *fileLayer = new KisFileLayer(d->mainWindow->viewManager()->image(), "",
-                                                    args.fileLayer(), KisFileLayer::None,
+                                                    args.fileLayer(), KisFileLayer::None, "Bicubic",
                                                     d->mainWindow->viewManager()->image()->nextLayerName(i18n("File layer")), OPACITY_OPAQUE_U8);
             QFileInfo fi(fileLayer->path());
             if (fi.exists()){
@@ -697,6 +707,8 @@ bool KisApplication::start(const KisApplicationArguments &args)
             d->mainWindow->openDocument(fileName, QFlags<KisMainWindow::OpenFlag>());
         }
     }
+
+    verifyMetatypeRegistration();
 
     // not calling this before since the program will quit there.
     return true;
@@ -801,6 +813,87 @@ void KisApplication::processPostponedSynchronizationEvents()
     }
 }
 
+bool KisApplication::isStoreApplication()
+{
+    if (qEnvironmentVariableIsSet("STEAMAPPID") || qEnvironmentVariableIsSet("SteamAppId")) {
+        return true;
+    }
+
+    if (applicationDirPath().toLower().contains("steam")) {
+        return true;
+    }
+
+#ifdef Q_OS_WIN
+    // This is also true for user-installed MSIX, but that's
+    // likely only true in institutional situations, where
+    // we don't want to show the beggin banner either.
+    if (KisWindowsPackageUtils::isRunningInPackage()) {
+        return true;
+    }
+#endif
+
+#ifdef Q_OS_MACOS
+    KisMacosEntitlements entitlements;
+    if (entitlements.sandbox()) {
+       return true;
+    }
+#endif
+
+    return false;
+}
+
+void KisApplication::verifyMetatypeRegistration()
+{
+    /**
+     * Veryfy that all our statically registered types are actually registered.
+     * This check is skipped in release builds, when HIDE_SAFE_ASSERTS is defined
+     */
+#if !defined(HIDE_SAFE_ASSERTS) || defined(CRASH_ON_SAFE_ASSERTS)
+
+    auto verifyTypeRegistered = [] (const char *type) {
+        const int typeId = QMetaType::type(type);
+
+        if (typeId <= 0) {
+            qFatal("ERROR: type-id for metatype %s is not found", type);
+        }
+
+        if (!QMetaType::isRegistered(typeId)) {
+            qFatal("ERROR: metatype %s is not registered", type);
+        }
+    };
+
+    verifyTypeRegistered("KisBrushSP");
+    verifyTypeRegistered("KoSvgText::AutoValue");
+    verifyTypeRegistered("KoSvgText::BackgroundProperty");
+    verifyTypeRegistered("KoSvgText::StrokeProperty");
+    verifyTypeRegistered("KoSvgText::TextTransformInfo");
+    verifyTypeRegistered("KoSvgText::TextIndentInfo");
+    verifyTypeRegistered("KoSvgText::TabSizeInfo");
+    verifyTypeRegistered("KoSvgText::LineHeightInfo");
+    verifyTypeRegistered("KoSvgText::AssociatedShapeWrapper");
+    verifyTypeRegistered("KisPaintopLodLimitations");
+    verifyTypeRegistered("KisImageSP");
+    verifyTypeRegistered("KisImageSignalType");
+    verifyTypeRegistered("KisNodeSP");
+    verifyTypeRegistered("KisNodeList");
+    verifyTypeRegistered("KisPaintDeviceSP");
+    verifyTypeRegistered("KisTimeSpan");
+    verifyTypeRegistered("KoColor");
+    verifyTypeRegistered("KoResourceSP");
+    verifyTypeRegistered("KoResourceCacheInterfaceSP");
+    verifyTypeRegistered("KisAsyncAnimationRendererBase::CancelReason");
+    verifyTypeRegistered("KisGridConfig");
+    verifyTypeRegistered("KisGuidesConfig");
+    verifyTypeRegistered("KisUpdateInfoSP");
+    verifyTypeRegistered("KisToolChangesTrackerDataSP");
+    verifyTypeRegistered("QVector<QImage>");
+    verifyTypeRegistered("SnapshotDirInfoList");
+    verifyTypeRegistered("TransformTransactionProperties");
+    verifyTypeRegistered("ToolTransformArgs");
+    verifyTypeRegistered("QPainterPath");
+#endif
+}
+
 void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow)
 {
     KisApplicationArguments args = KisApplicationArguments::deserialize(message);
@@ -841,7 +934,7 @@ void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *m
         }
         else if (mainWindow->viewManager()->image()){
             KisFileLayer *fileLayer = new KisFileLayer(mainWindow->viewManager()->image(), "",
-                                                    args.fileLayer(), KisFileLayer::None,
+                                                    args.fileLayer(), KisFileLayer::None, "Bicubic",
                                                     mainWindow->viewManager()->image()->nextLayerName(i18n("File layer")), OPACITY_OPAQUE_U8);
             QFileInfo fi(fileLayer->path());
             if (fi.exists()){
@@ -964,9 +1057,9 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QString desktopName(fileName);
         const QString templatesResourcePath =  QStringLiteral("templates/");
 
-        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
+        QStringList paths = KoResourcePaths::findAllAssets("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {
-            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
+            paths = KoResourcePaths::findAllAssets("data", templatesResourcePath + desktopName);
         }
 
         if (paths.isEmpty()) {

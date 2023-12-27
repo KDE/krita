@@ -15,8 +15,8 @@ class KisCageTransformWorkerTest : public QObject
 private Q_SLOTS:
     void testCageClockwise();
     void testCageClockwisePrepareOnly();
-    void testCageClockwisePixePrecision4();
-    void testCageClockwisePixePrecision8QImage();
+    void testCageClockwisePixelPrecision4();
+    void testCageClockwisePixelPrecision8QImage();
     void testCageCounterclockwise();
     void testCageClockwiseUnity();
     void testCageCounterclockwiseUnity();

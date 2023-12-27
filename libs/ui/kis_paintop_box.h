@@ -27,7 +27,7 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"
 
-
+class QMenu;
 class QToolButton;
 class QString;
 class QHBoxLayout;
@@ -52,7 +52,7 @@ class KisAcyclicSignalConnector;
 
 /**
  * This widget presents all paintops that a user can paint with.
- * Paintops represent real-world tools or the well-known Shoup
+ * Paintops represent real-world tools or the well-known Shop
  * computer equivalents that do nothing but change color.
  *
  * To incorporate the dirty preset functionality and locked settings
@@ -109,6 +109,9 @@ public Q_SLOTS:
 
     void slotColorSpaceChanged(const KoColorSpace* colorSpace);
     void slotInputDeviceChanged(const KoInputDevice & inputDevice);
+    void slotToggleEraserPreset(bool usingEraser);
+    void slotSelectEraserPreset();
+    void slotSelectBrushPreset();
     void slotCanvasResourceChangeAttempted(int key, const QVariant &value);
     void slotCanvasResourceChanged(int key, const QVariant& v);
     void resourceSelected(KoResourceSP resource);
@@ -129,6 +132,7 @@ private:
     void setWidgetState(int flags);
     void setSliderValue(const QString& sliderID, qreal value);
     void setMultiplierSliderValue(const QString& sliderID, qreal value);
+    void setAngleSliderValue(const QString& sliderID, qreal value);
     void sliderChanged(int n);
     void findDefaultPresets();
 
@@ -145,6 +149,7 @@ private Q_SLOTS:
     void slotSlider2Changed();
     void slotSlider3Changed();
     void slotSlider4Changed();
+    void slotSlider5Changed();
     void slotToolChanged(KoCanvasController* canvas);
     void slotPreviousFavoritePreset();
     void slotNextFavoritePreset();
@@ -172,6 +177,7 @@ private Q_SLOTS:
     void slotUpdateOptionsWidgetPopup();
 
     void togglePresetEditor();
+    void updatePresetConfig();
 
 private:
     KisCanvasResourceProvider*          m_resourceProvider {0};
@@ -194,16 +200,22 @@ private:
     KisPaintOpPresetsChooserPopup*      m_presetsChooserPopup {0};
     KisViewManager*                     m_viewManager {0};
     KisPopupButton*                     m_workspaceWidget {0};
-    KisWidgetChooser*                   m_sliderChooser[4];
+    KisWidgetChooser*                   m_sliderChooser[5];
     QMap<KoID, KisPaintOpConfigWidget*> m_paintopOptionWidgets;
     KisFavoriteResourceManager*         m_favoriteResourceManager {0};
     QToolButton*                        m_reloadButton {0};
     KisAction*                          m_eraseAction {0};
+    KisAction*                          m_eraserTogglePresetAction {0};
+    KisAction*                          m_eraserSelectPresetAction {0};
+    KisAction*                          m_brushSelectPresetAction {0};
     KisAction*                          m_reloadAction {0};
     KisAction*                          m_disablePressureAction {0};
 
     QString    m_currCompositeOpID;
     KisNodeWSP m_currentNode;
+
+    QMenu*     toolbarMenuXMirror{nullptr};
+    QMenu*     toolbarMenuYMirror{nullptr};
 
     KisAction* m_hMirrorAction {0};
     KisAction* m_vMirrorAction {0};

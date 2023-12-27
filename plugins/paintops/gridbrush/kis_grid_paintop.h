@@ -12,8 +12,9 @@
 #include <klocalizedstring.h>
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
-#include <kis_color_option.h>
-#include <kis_gridop_option.h>
+#include <KisColorOptionData.h>
+#include <KisGridOpOptionData.h>
+#include <KisGridShapeOptionData.h>
 
 #include "kis_grid_paintop_settings.h"
 
@@ -43,8 +44,9 @@ private:
     qreal              m_xSpacing;
     qreal              m_ySpacing;
     qreal              m_spacing;
-    KisGridOpProperties   m_properties;
-    KisColorProperties  m_colorProperties;
+    KisGridOpOptionData   m_properties;
+    KisColorOptionData  m_colorProperties;
+    KisGridShapeOptionData m_shapeProperties;
     KisNodeSP m_node;
 
 

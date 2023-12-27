@@ -94,13 +94,13 @@ bool KoShapeContainer::inheritsTransform(const KoShape *shape) const
     return d->model->inheritsTransform(shape);
 }
 
-void KoShapeContainer::paint(QPainter &painter, KoShapePaintingContext &paintcontext) const
+void KoShapeContainer::paint(QPainter &painter) const
 {
     // Shape container paints only its internal component part. All the children are rendered
     // by the shape manager itself
 
     painter.save();
-    paintComponent(painter, paintcontext);
+    paintComponent(painter);
     painter.restore();
 }
 
@@ -127,9 +127,11 @@ bool KoShapeContainer::isClipped(const KoShape *child) const
 void KoShapeContainer::update() const
 {
     KoShape::update();
-    if (d->model)
-        Q_FOREACH (KoShape *shape, d->model->shapes())
+    if (d->model) {
+        Q_FOREACH (KoShape *shape, d->model->shapes()) {
             shape->update();
+        }
+    }
 }
 
 QList<KoShape*> KoShapeContainer::shapes() const

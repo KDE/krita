@@ -19,7 +19,6 @@ public:
     KisParticlePaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisParticlePaintOpSettings() override;
 
-    bool lodSizeThresholdSupported() const override;
     bool paintIncremental() override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;

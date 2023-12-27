@@ -92,4 +92,4 @@ public:
     bool displayBlip() const {return m_blipDisplay;}
 };
 
-#endif // KIS_COLSELNG_COLOR_SELECTOR_H
+#endif // KIS_COLOR_SELECTOR_H

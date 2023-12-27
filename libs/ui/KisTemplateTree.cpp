@@ -137,6 +137,7 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 
 void KisTemplateTree::readGroups()
 {
+
     QStringList dirs = KoResourcePaths::findDirs("templates");
 
     Q_FOREACH (const QString & dirName, dirs) {
@@ -146,6 +147,8 @@ void KisTemplateTree::readGroups()
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+
         Q_FOREACH (const QString & templateDirName, templateDirs) {
             QDir templateDir(dirName + "/" + templateDirName);
             QString name = templateDirName;
@@ -270,7 +273,7 @@ void KisTemplateTree::writeTemplate(KisTemplate *t, KisTemplateGroup *group,
             return;
         }
     }
-    // be sure that the template's file name is unique so we don't overwrite an other
+    // be sure that the template's file name is unique so we don't overwrite another
     QString const path = localDir + group->name() + '/';
     QString const name = KisTemplates::trimmed(t->name());
     fileName = path + name + ".desktop";

@@ -55,8 +55,10 @@ set(kritawidgets_LIB_SRCS
     # classes used by internal color selector
     kis_spinbox_color_selector.cpp
     KisSpinboxHSXSelector.cpp
+    KisVisualColorModel.cpp
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
+    KisVisualDiamondSelectorShape.cpp
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
@@ -70,11 +72,16 @@ set(kritawidgets_LIB_SRCS
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp
-    
+
     KisAngleGauge.cpp
     KisAngleSelector.cpp
 
     KisTagSelectionWidget.cpp
+
+    kis_warning_block.cpp
+    KisWidgetConnectionUtils.cpp
+    kis_spacing_selection_widget.cpp
+    kis_stacked_widget.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

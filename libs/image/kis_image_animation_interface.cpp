@@ -17,6 +17,7 @@
 #include "kis_raster_keyframe_channel.h"
 #include "kis_time_span.h"
 
+#include <KisLockFrameGenerationLock.h>
 #include "kis_post_execution_undo_adapter.h"
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_layer_utils.h"
@@ -25,16 +26,13 @@
 struct KisImageAnimationInterface::Private
 {
     Private()
-        : image(0)
-        , externalFrameActive(false)
-        , frameInvalidationBlocked(false)
-        , framerate(24)
-        , cachedLastFrameValue(-1)
-        , audioChannelMuted(false)
-        , audioChannelVolume(0.5)
-        , exportInitialFrameNumber(-1)
-        , m_currentTime(0)
-        , m_currentUITime(0)
+        : image(0),
+          externalFrameActive(false),
+          frameInvalidationBlocked(false),
+          cachedLastFrameValue(-1),
+          exportInitialFrameNumber(-1),
+          m_currentTime(0),
+          m_currentUITime(0)
     {
     }
 
@@ -42,13 +40,10 @@ struct KisImageAnimationInterface::Private
         : image(newImage),
           externalFrameActive(false),
           frameInvalidationBlocked(false),
-          fullClipRange(rhs.fullClipRange),
-          playbackRange(rhs.playbackRange),
+          documentRange(rhs.documentRange),
+          activePlaybackRange(rhs.activePlaybackRange),
           framerate(rhs.framerate),
           cachedLastFrameValue(-1),
-          audioChannelFileName(rhs.audioChannelFileName),
-          audioChannelMuted(rhs.audioChannelMuted),
-          audioChannelVolume(rhs.audioChannelVolume),
           exportSequenceFilePath(rhs.exportSequenceFilePath),
           exportSequenceBaseName(rhs.exportSequenceBaseName),
           exportInitialFrameNumber(rhs.exportInitialFrameNumber),
@@ -61,13 +56,10 @@ struct KisImageAnimationInterface::Private
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
-    KisTimeSpan fullClipRange;
-    KisTimeSpan playbackRange;
+    KisTimeSpan documentRange;
+    KisTimeSpan activePlaybackRange;
     int framerate;
     int cachedLastFrameValue;
-    QString audioChannelFileName;
-    bool audioChannelMuted;
-    qreal audioChannelVolume;
 
     QSet<int> activeLayerSelectedTimes;
 
@@ -76,6 +68,9 @@ struct KisImageAnimationInterface::Private
     int exportInitialFrameNumber;
 
     KisSwitchTimeStrokeStrategy::SharedTokenWSP switchToken;
+
+    QAtomicInt backgroundFrameGenerationBlocked;
+    QMutex frameGenerationLock;
 
     inline int currentTime() const {
         return m_currentTime;
@@ -105,15 +100,19 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->fullClipRange = KisTimeSpan::fromTimeToTime(0, 100);
+    m_d->documentRange = KisTimeSpan::fromTimeToTime(0, 100);
 
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
+    connect(this, &KisImageAnimationInterface::sigInternalRequestTimeSwitch, this, [this](int frame, bool useUndo) {
+        this->switchCurrentTimeAsync(frame, useUndo ? STAO_USE_UNDO : STAO_NONE);
+    });
 }
 
 KisImageAnimationInterface::KisImageAnimationInterface(const KisImageAnimationInterface &rhs, KisImage *newImage)
     : m_d(new Private(*rhs.m_d, newImage))
 {
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
+    connect(this, &KisImageAnimationInterface::sigInternalRequestTimeSwitch, this, [this](int frame, bool useUndo) {
+        this->switchCurrentTimeAsync(frame, useUndo ? STAO_USE_UNDO : STAO_NONE);
+    });
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -143,60 +142,45 @@ int KisImageAnimationInterface::currentUITime() const
     return m_d->currentUITime();
 }
 
-const KisTimeSpan& KisImageAnimationInterface::fullClipRange() const
+const KisTimeSpan& KisImageAnimationInterface::documentPlaybackRange() const
 {
-    return m_d->fullClipRange;
+    return m_d->documentRange;
 }
 
-void KisImageAnimationInterface::setFullClipRange(const KisTimeSpan range)
+void KisImageAnimationInterface::setDocumentRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
-    m_d->fullClipRange = range;
-    emit sigFullClipRangeChanged();
+    m_d->documentRange = range;
+    emit sigPlaybackRangeChanged();
 }
 
-void KisImageAnimationInterface::setFullClipRangeStartTime(int column)
+void KisImageAnimationInterface::setDocumentRangeStartFrame(int column)
 {
-    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(column,  m_d->fullClipRange.end());
-    setFullClipRange(newRange);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(column,  m_d->documentRange.end());
+    setDocumentRange(newRange);
 }
 
-void KisImageAnimationInterface::setFullClipRangeEndTime(int column)
+void KisImageAnimationInterface::setDocumentRangeEndFrame(int column)
 {
-    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(m_d->fullClipRange.start(), column);
-    setFullClipRange(newRange);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(m_d->documentRange.start(), column);
+    setDocumentRange(newRange);
 }
 
-const KisTimeSpan& KisImageAnimationInterface::playbackRange() const
+const KisTimeSpan& KisImageAnimationInterface::activePlaybackRange() const
 {
-    return m_d->playbackRange.isValid() ? m_d->playbackRange : m_d->fullClipRange;
+    return m_d->activePlaybackRange.isValid() ? m_d->activePlaybackRange : m_d->documentRange;
 }
 
-void KisImageAnimationInterface::setPlaybackRange(const KisTimeSpan range)
+void KisImageAnimationInterface::setActivePlaybackRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
-    m_d->playbackRange = range;
+    m_d->activePlaybackRange = range;
     emit sigPlaybackRangeChanged();
 }
 
 int KisImageAnimationInterface::framerate() const
 {
     return m_d->framerate;
-}
-
-QString KisImageAnimationInterface::audioChannelFileName() const
-{
-    return m_d->audioChannelFileName;
-}
-
-void KisImageAnimationInterface::setAudioChannelFileName(const QString &fileName)
-{
-    QFileInfo info(fileName);
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(fileName.isEmpty() || info.isAbsolute());
-    m_d->audioChannelFileName = fileName.isEmpty() ? fileName : info.absoluteFilePath();
-
-    emit sigAudioChannelChanged();
 }
 
 QString KisImageAnimationInterface::exportSequenceFilePath()
@@ -227,28 +211,6 @@ int KisImageAnimationInterface::exportInitialFrameNumber()
 void KisImageAnimationInterface::setExportInitialFrameNumber(const int frameNum)
 {
     m_d->exportInitialFrameNumber = frameNum;
-}
-
-bool KisImageAnimationInterface::isAudioMuted() const
-{
-    return m_d->audioChannelMuted;
-}
-
-void KisImageAnimationInterface::setAudioMuted(bool value)
-{
-    m_d->audioChannelMuted = value;
-    emit sigAudioChannelChanged();
-}
-
-qreal KisImageAnimationInterface::audioVolume() const
-{
-    return m_d->audioChannelVolume;
-}
-
-void KisImageAnimationInterface::setAudioVolume(qreal value)
-{
-    m_d->audioChannelVolume = value;
-    emit sigAudioVolumeChanged();
 }
 
 QSet<int> KisImageAnimationInterface::activeLayerSelectedTimes()
@@ -304,17 +266,17 @@ void KisImageAnimationInterface::explicitlySetCurrentTime(int frameId)
     m_d->setCurrentTime(frameId);
 }
 
-void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUndo)
+void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, SwitchTimeAsyncFlags options)
 {
+    const bool useUndo = options & STAO_USE_UNDO;
     const bool sameFrame = currentUITime() == frameId;
     const bool needsCompositingUpdate = requiresOnionSkinRendering();
     const KisTimeSpan range = KisTimeSpan::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
-    
-    const bool needsRegeneration = !range.contains(frameId) || needsCompositingUpdate;
+    const bool needsRegeneration = !range.contains(frameId) || needsCompositingUpdate || (options & STAO_FORCE_REGENERATION);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token = m_d->switchToken.toStrongRef();
 
-    // Handle switching frame to new time..    
+    // Handle switching frame to new time..
     if (!token || !token->tryResetDestinationTime(frameId, needsRegeneration)) {
 
         if (!sameFrame) {
@@ -330,7 +292,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId stroke = m_d->image->startStroke(strategy);
             m_d->image->endStroke(stroke);
         }
-        
+
         if (needsRegeneration) {
             KisStrokeStrategy *strategy =
                 new KisRegenerateFrameStrokeStrategy(this);
@@ -339,20 +301,25 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             m_d->image->endStroke(strokeId);
         }
     }
-    
-    
+
+    if (!needsRegeneration) {
+        sigFrameRegenerationSkipped(frameId);
+    }
+
+
 
     m_d->setCurrentUITime(frameId);
     emit sigUiTimeChanged(frameId);
 }
 
-void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable)
+void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable, KisLockFrameGenerationLock &&lock)
 {
     KisStrokeStrategy *strategy =
         new KisRegenerateFrameStrokeStrategy(frameId,
                                              dirtyRegion,
                                              isCancellable,
-                                             this);
+                                             this,
+                                             std::move(lock));
 
     QList<KisStrokeJobData*> jobs = KisRegenerateFrameStrokeStrategy::createJobsData(m_d->image);
 
@@ -384,6 +351,11 @@ void KisImageAnimationInterface::notifyFrameReady()
 void KisImageAnimationInterface::notifyFrameCancelled()
 {
     emit sigFrameCancelled();
+}
+
+void KisImageAnimationInterface::notifyFrameRegenerated()
+{
+    emit sigFrameRegenerated(m_d->currentTime());
 }
 
 bool KisImageAnimationInterface::requiresOnionSkinRendering() {
@@ -501,8 +473,38 @@ int KisImageAnimationInterface::totalLength()
 
     int lastKey = m_d->cachedLastFrameValue;
 
-    lastKey  = std::max(lastKey, m_d->fullClipRange.end());
+    lastKey  = std::max(lastKey, m_d->documentRange.end());
     lastKey  = std::max(lastKey, m_d->currentUITime());
 
     return lastKey + 1;
+}
+
+void KisImageAnimationInterface::blockBackgroundFrameGeneration()
+{
+    m_d->backgroundFrameGenerationBlocked.ref();
+}
+
+void KisImageAnimationInterface::unblockBackgroundFrameGeneration()
+{
+    m_d->backgroundFrameGenerationBlocked.deref();
+}
+
+bool KisImageAnimationInterface::backgroundFrameGenerationBlocked() const
+{
+    return m_d->backgroundFrameGenerationBlocked.loadAcquire();
+}
+
+bool KisImageAnimationInterface::tryLockFrameGeneration()
+{
+    return m_d->frameGenerationLock.tryLock();
+}
+
+void KisImageAnimationInterface::lockFrameGeneration()
+{
+    m_d->frameGenerationLock.lock();
+}
+
+void KisImageAnimationInterface::unlockFrameGeneration()
+{
+    m_d->frameGenerationLock.unlock();
 }

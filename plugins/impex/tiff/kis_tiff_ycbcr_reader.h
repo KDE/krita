@@ -12,6 +12,8 @@
 #include <cstdint>
 #include <memory>
 
+#include <QSharedPointer>
+
 #include <kis_buffer_stream.h>
 #include <kis_global.h>
 #include <kis_iterator_ng.h>
@@ -36,7 +38,7 @@ public:
     KisTIFFYCbCrReader(KisPaintDeviceSP device,
                        quint32 width,
                        quint32 height,
-                       quint8 *poses,
+                       const std::array<quint8, 5> &poses,
                        int32_t alphapos,
                        uint16_t sourceDepth,
                        uint16_t sampleformat,
@@ -44,15 +46,24 @@ public:
                        uint16_t extrasamplescount,
                        bool premultipliedAlpha,
                        KoColorTransformation *transformProfile,
-                       KisTIFFPostProcessor *postprocessor,
+                       QSharedPointer<KisTIFFPostProcessor> postprocessor,
                        uint16_t hsub,
                        uint16_t vsub)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sampleformat, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device,
+                            poses,
+                            alphapos,
+                            sourceDepth,
+                            sampleformat,
+                            nbcolorssamples,
+                            extrasamplescount,
+                            premultipliedAlpha,
+                            transformProfile,
+                            postprocessor)
         , m_hsub(hsub)
         , m_vsub(vsub)
+        , m_imageWidth(width)
     {
         // Initialize the buffer
-        m_imageWidth = width;
         if (2 * (m_imageWidth / 2) != m_imageWidth)
             m_imageWidth++;
         m_bufferWidth = m_imageWidth / m_hsub;
@@ -66,7 +77,11 @@ public:
 
     ~KisTIFFYCbCrReader() override = default;
 
-    uint32_t copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream) override
+    uint32_t
+    copyDataToChannels(quint32 x,
+                       quint32 y,
+                       quint32 dataWidth,
+                       QSharedPointer<KisBufferStreamBase> tiffstream) override
     {
         return copyDataToChannelsImpl(x, y, dataWidth, tiffstream);
     }
@@ -77,7 +92,14 @@ public:
     }
 
 private:
-    template<typename U = T, typename std::enable_if<!std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t copyDataToChannelsImpl(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
+    template<typename U = T,
+             typename std::enable_if<!std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    uint32_t
+    copyDataToChannelsImpl(quint32 x,
+                           quint32 y,
+                           quint32 dataWidth,
+                           QSharedPointer<KisBufferStreamBase> tiffstream)
     {
         quint32 numcols = dataWidth / m_hsub;
         quint32 buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
@@ -104,11 +126,18 @@ private:
         return m_vsub;
     }
 
-    template<typename U = T, typename std::enable_if<std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t copyDataToChannelsImpl(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
+    template<typename U = T,
+             typename std::enable_if<std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    uint32_t
+    copyDataToChannelsImpl(quint32 x,
+                           quint32 y,
+                           quint32 dataWidth,
+                           QSharedPointer<KisBufferStreamBase> tiffstream)
     {
         quint32 numcols = dataWidth / m_hsub;
         double coeff = std::numeric_limits<T>::max() / (double)(std::pow(2.0, this->sourceDepth()) - 1);
-        //     dbgFile <<" depth expension coefficient :" << coeff;
+        //     dbgFile <<" depth expansion coefficient :" << coeff;
         //     dbgFile <<" y =" << y;
         size_t buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
         for (quint32 index = 0; index < numcols; index++) {

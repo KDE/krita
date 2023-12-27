@@ -44,10 +44,24 @@ QPointF EllipseAssistant::project(const QPointF& pt) const
     return e.project(pt);
 }
 
-QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/, const bool /*snapToAny*/)
+QPointF EllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt);
 
+}
+
+void EllipseAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    const QPointF p1 = point;
+    const QPointF p2 = strokeBegin;
+
+    Q_ASSERT(isAssistantComplete());
+    e.set(*handles()[0], *handles()[1], *handles()[2]);
+
+    QPointF p3 = e.project(p1);
+    QPointF p4 = e.project(p2);
+    point = p3;
+    strokeBegin = p4;
 }
 
 void EllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
@@ -135,7 +149,7 @@ QRect EllipseAssistant::boundingRect() const
     }
 }
 
-QPointF EllipseAssistant::getEditorPosition() const
+QPointF EllipseAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

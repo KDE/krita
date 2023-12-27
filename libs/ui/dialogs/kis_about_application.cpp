@@ -1,49 +1,45 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+
 #include "kis_about_application.h"
+
+#include <KAboutData>
+#include <KLocalizedString>
+#include <QFile>
+#include <QStandardPaths>
 
 #include <kis_debug.h>
 
-#include <QStandardPaths>
-#include <QTabWidget>
-#include <QLabel>
-#include <QTextEdit>
-#include <QTextBrowser>
-#include <QString>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QDate>
-#include <QApplication>
-#include <QFile>
-#include <QDesktopServices>
-#include <kaboutdata.h>
-
-#include <klocalizedstring.h>
 #include "kis_splash_screen.h"
+#include "ui_wdgaboutapplication.h"
+
+class Q_DECL_HIDDEN WdgAboutApplication : public QWidget, public Ui::WdgAboutApplication
+{
+public:
+    WdgAboutApplication(QWidget *parent = nullptr)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
 
 KisAboutApplication::KisAboutApplication(QWidget *parent)
-    : QDialog(parent)
+    : KoDialog(parent)
 {
     setWindowTitle(i18n("About Krita"));
+    setButtons(KoDialog::Close);
 
-    QVBoxLayout *vlayout = new QVBoxLayout(this);
-    vlayout->setMargin(0);
-    vlayout->setSizeConstraint(QLayout::SetFixedSize);
-    QTabWidget *wdgTab = new QTabWidget;
-    vlayout->addWidget(wdgTab);
+    WdgAboutApplication *wdgTab = new WdgAboutApplication(this);
+
     KisSplashScreen *splash = new KisSplashScreen(true);
-
     splash->setWindowFlags(Qt::Widget);
     splash->displayLinks(true);
 
-    wdgTab->addTab(splash, i18n("About"));
-
-    QTextEdit *lblAuthors = new QTextEdit();
-    lblAuthors->setReadOnly(true);
+    wdgTab->aboutTab->layout()->addWidget(splash);
 
     QString authors = i18n("<html>"
                           "<head/>"
@@ -53,17 +49,17 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileDevelopers(":/developers.txt");
     Q_ASSERT(fileDevelopers.exists());
-    fileDevelopers.open(QIODevice::ReadOnly);
-
-    Q_FOREACH (const QByteArray &author, fileDevelopers.readAll().split('\n')) {
-        authors.append(QString::fromUtf8(author));
-        authors.append(", ");
+    if (fileDevelopers.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream developersText(&fileDevelopers);
+        developersText.setCodec("UTF-8");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        authors.append(developersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
+#else
+        authors.append(developersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+#endif
     }
-    authors.chop(2);
     authors.append(".</p></body></html>");
-    lblAuthors->setText(authors);
-    wdgTab->addTab(lblAuthors, i18nc("Heading for the list of Krita authors/developers", "Authors"));
-
+    wdgTab->lblAuthors->setText(authors);
 
     // Translators
     KAboutData aboutData(KAboutData::applicationData());
@@ -73,14 +69,32 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     }
 
-    if (!aboutData.translators().isEmpty()) {
-        wdgTab->addTab(createTranslatorsWidget(aboutData.translators(), aboutData.ocsProviderUrl()),
-                       i18nc("@title:tab", "Translators"));
+    {
+        const QString aboutTranslationTeam = KAboutData::aboutTranslationTeam();
+
+        qDebug() << aboutTranslationTeam << aboutData.ocsProviderUrl();
     }
 
+    QString translatorHtml = i18n(
+        "<html>"
+        "<head/>"
+        "<body>"
+        "<h1 align=\"center\"><b>Translators</b></h1>"
+        "<p><ul>");
 
-    QTextEdit *lblKickstarter = new QTextEdit();
-    lblKickstarter->setReadOnly(true);
+    Q_FOREACH (const KAboutPerson &person, aboutData.translators()) {
+        translatorHtml.append(QString("<li>%1</li>").arg(person.name()));
+    }
+
+    translatorHtml.append("<ul></p>");
+    translatorHtml.append(
+        i18n("<p>KDE is translated into many languages thanks to the work of the "
+             "translation teams all over the world.</p><p>For more information on KDE "
+             "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n."
+             "kde.org</a></p>"));
+    translatorHtml.append("</body></html>");
+
+    wdgTab->lblTranslators->setText(translatorHtml);
 
     QString backers = i18n("<html>"
                           "<head/>"
@@ -90,19 +104,18 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileBackers(":/backers.txt");
     Q_ASSERT(fileBackers.exists());
-    fileBackers.open(QIODevice::ReadOnly | QIODevice::Text);
-    QTextStream backersText(&fileBackers);
-    backersText.setCodec("UTF-8");
-    backers.append(backersText.readAll().replace("\n", ", "));
-    backers.chop(2);
+    if (fileBackers.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream backersText(&fileBackers);
+        backersText.setCodec("UTF-8");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        backers.append(backersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
+#else
+        backers.append(backersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
+#endif
+    }
     backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
-    lblKickstarter->setText(backers);
-    wdgTab->addTab(lblKickstarter, i18n("Backers"));
+    wdgTab->lblKickstarter->setText(backers);
 
-
-
-    QTextEdit *lblCredits = new QTextEdit();
-    lblCredits->setReadOnly(true);
     QString credits = i18n("<html>"
                           "<head/>"
                           "<body>"
@@ -111,24 +124,29 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile fileCredits(":/credits.txt");
     Q_ASSERT(fileCredits.exists());
-    fileCredits.open(QIODevice::ReadOnly);
+    if (fileCredits.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream creditsText(&fileCredits);
+        creditsText.setCodec("UTF-8");
 
-    Q_FOREACH (const QString &credit, QString::fromUtf8(fileCredits.readAll()).split('\n', QString::SkipEmptyParts)) {
-        if (credit.contains(":")) {
-            QList<QString> creditSplit = credit.split(':');
-            credits.append(creditSplit.at(0));
-            credits.append(" (<i>" + creditSplit.at(1) + "</i>)");
-            credits.append(", ");
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', Qt::SkipEmptyParts)) {
+#else
+        Q_FOREACH (const QString &credit, creditsText.readAll().split('\n', QString::SkipEmptyParts)) {
+#endif
+
+            if (credit.contains(":")) {
+                QList<QString> creditSplit = credit.split(':');
+                credits.append(creditSplit.at(0));
+                credits.append(" (<i>" + creditSplit.at(1) + "</i>)");
+                credits.append(", ");
+            }
         }
+        credits.chop(2);
     }
-    credits.chop(2);
     credits.append(i18n(".</p><p><i>For supporting Krita development with advice, icons, brush sets and more.</i></p></body></html>"));
 
-    lblCredits->setText(credits);
-    wdgTab->addTab(lblCredits, i18n("Also Thanks To"));
+    wdgTab->lblCredits->setText(credits);
 
-    QTextEdit *lblLicense = new QTextEdit();
-    lblLicense->setReadOnly(true);
     QString license = i18n("<html>"
                            "<head/>"
                            "<body>"
@@ -151,19 +169,18 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QFile licenseFile(":/LICENSE");
     Q_ASSERT(licenseFile.exists());
-    licenseFile.open(QIODevice::ReadOnly);
-    QByteArray ba = licenseFile.readAll();
-    license.append(QString::fromUtf8(ba));
+    if (licenseFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream licenseText(&licenseFile);
+        licenseText.setCodec("UTF-8");
+        license.append(licenseText.readAll());
+    }
     license.append("</pre></body></html>");
-    lblLicense->setText(license);
+    wdgTab->lblLicense->setText(license);
 
-    wdgTab->addTab(lblLicense, i18n("License"));
-
-    QTextBrowser *lblThirdParty = new QTextBrowser();
-    lblThirdParty->setOpenExternalLinks(true);
     QFile thirdPartyFile(":/libraries.txt");
-    if (thirdPartyFile.open(QIODevice::ReadOnly)) {
-        ba = thirdPartyFile.readAll();
+    if (thirdPartyFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream thirdPartyText(&thirdPartyFile);
+        thirdPartyText.setCodec("UTF-8");
 
         QString thirdPartyHtml = i18n("<html>"
                                       "<head/>"
@@ -171,8 +188,12 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
                                       "<h1 align=\"center\"><b>Third-party Libraries used by Krita</b></h1>"
                                       "<p>Krita is built on the following free software libraries:</p><p><ul>");
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', Qt::SkipEmptyParts)) {
+#else
+        Q_FOREACH (const QString &lib, thirdPartyText.readAll().split('\n', QString::SkipEmptyParts)) {
+#endif
 
-        Q_FOREACH(const QString &lib, QString::fromUtf8(ba).split('\n')) {
             if (!lib.startsWith("#")) {
                 QStringList parts = lib.split(',');
                 if (parts.size() >= 3) {
@@ -181,55 +202,11 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
             }
         }
         thirdPartyHtml.append("<ul></p></body></html>");
-        lblThirdParty->setText(thirdPartyHtml);
-    }
-    wdgTab->addTab(lblThirdParty, i18n("Third-party libraries"));
-
-
-    QPushButton *bnClose = new QPushButton(i18n("Close"));
-    bnClose->setIcon(QIcon::fromTheme(QStringLiteral("dialog-close")));
-    connect(bnClose, SIGNAL(clicked()), SLOT(close()));
-
-    QHBoxLayout *hlayout = new QHBoxLayout;
-    hlayout->setMargin(10);
-    hlayout->addStretch(10);
-    hlayout->addWidget(bnClose);
-
-    vlayout->addLayout(hlayout);
-
-    setMinimumSize(vlayout->sizeHint());
-}
-
-QWidget *KisAboutApplication::createTranslatorsWidget(const QList<KAboutPerson> &translators, const QString &ocsProviderUrl)
-{
-    QString aboutTranslationTeam = KAboutData::aboutTranslationTeam();
-
-    qDebug() << aboutTranslationTeam << ocsProviderUrl;
-
-    QTextBrowser *lblTranslators = new QTextBrowser();
-
-    lblTranslators->setOpenExternalLinks(true);
-
-    QString translatorHtml = i18n("<html>"
-                                  "<head/>"
-                                  "<body>"
-                                  "<h1 align=\"center\"><b>Translators</b></h1>"
-                                  "<p><ul>");
-
-
-    Q_FOREACH(const KAboutPerson &person, translators) {
-        translatorHtml.append(QString("<li>%1</li>").arg(person.name()));
+        wdgTab->lblThirdParty->setText(thirdPartyHtml);
     }
 
-    translatorHtml.append("<ul></p>");
-    translatorHtml.append(i18n("<p>KDE is translated into many languages thanks to the work of the "
-                          "translation teams all over the world.</p><p>For more information on KDE "
-                          "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n."
-                          "kde.org</a></p>"));
-    translatorHtml.append("</body></html>");
-
-    lblTranslators->setText(translatorHtml);
-
-    return lblTranslators;
+    setMainWidget(wdgTab);
+    setMinimumSize(sizeHint());
+    Q_ASSERT(layout());
+    layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
-

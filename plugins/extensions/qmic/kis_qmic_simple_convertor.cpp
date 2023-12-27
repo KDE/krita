@@ -395,21 +395,21 @@ void KisQmicSimpleConvertor::convertFromGmicFast(const KisQMicImage &gmicImage,
             Float32BitsColorDepthID.id(),
             KoColorSpaceRegistry::instance()->rgb8()->profile());
     // this function always convert to rgba or rgb with various color depth
-    const auto dstNumChannels = rgbaFloat32bitcolorSpace->channelCount();
+    const quint32 dstNumChannels = rgbaFloat32bitcolorSpace->channelCount();
 
     // number of channels that we will copy
-    const auto numChannels = gmicImage.m_spectrum;
+    const int numChannels = gmicImage.m_spectrum;
 
     // gmic image has 4, 3, 2, 1 channel
     std::vector<float *> planes(dstNumChannels);
     const size_t channelOffset = width * height;
-    for (unsigned int channelIndex = 0; channelIndex < gmicImage.m_spectrum;
+    for (int channelIndex = 0; channelIndex < gmicImage.m_spectrum;
          channelIndex++) {
         planes[channelIndex] = gmicImage.m_data + channelOffset * channelIndex;
     }
 
-    for (auto channelIndex = gmicImage.m_spectrum;
-         channelIndex < dstNumChannels;
+    for (int channelIndex = gmicImage.m_spectrum;
+         channelIndex < (int)dstNumChannels;
          channelIndex++) {
         planes[channelIndex] = 0; // turn off
     }
@@ -465,7 +465,7 @@ void KisQmicSimpleConvertor::convertFromGmicFast(const KisQMicImage &gmicImage,
             auto *tileItStart = convertedTile.data();
             // copy gmic channels to float tile
             const auto channelSize = sizeof(float);
-            for (quint32 i = 0; i < numChannels; i++) {
+            for (int i = 0; i < numChannels; i++) {
                 float *planeIt = planes[i] + dataIdx;
                 const auto dataStride = width - columnsToWork;
                 quint8 *tileIt = tileItStart;
@@ -971,10 +971,10 @@ QImage KisQmicSimpleConvertor::convertToQImage(const KisQMicImage &gmicImage,
     // always put 255 to qimage
     const float multiplied = 255.0f / gmicActualMaxChannelValue;
 
-    for (size_t y = 0; y < gmicImage.m_height; y++) {
+    for (int y = 0; y < gmicImage.m_height; y++) {
         QRgb *pixel =
             reinterpret_cast<QRgb *>(image.scanLine(static_cast<int>(y)));
-        for (size_t x = 0; x < gmicImage.m_width; x++) {
+        for (int x = 0; x < gmicImage.m_width; x++) {
             const auto pos = y * gmicImage.m_width + x;
             const float r = gmicImage.m_data[pos] * multiplied;
             const float g = gmicImage.m_data[pos + greenOffset] * multiplied;

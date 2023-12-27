@@ -205,6 +205,9 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TongueWidget->setRGBData(whitepoint, colorants);
         }
         d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        TransferCharacteristics detCharacteristics = currentColorSpace()->profile()->getTransferCharacteristics();
+        QString detCharacteristicsStr =
+            currentColorSpace()->profile()->getTransferCharacteristicName(detCharacteristics);
         estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
         QString estimatedCurve = " Estimated curve: ";
         QPolygonF redcurve;
@@ -235,16 +238,23 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setRGBCurve(redcurve, greencurve, bluecurve);
         }
 
-        if (estimatedTRC[0] == -1) {
-            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+whatissRGB+"<br />"+estimatedCurve+"</body></html>");
+        if (estimatedTRC[0] != -1 && currentColorSpace()->profile()->hasTRC()) {
+            d->colorSpaceSelector->TRCwidget->setToolTip(
+                "<html><head/><body>" + estimatedGamma + detCharacteristicsStr + "<br/>"
+                + QString::number(estimatedTRC[0]) + "," + QString::number(estimatedTRC[1]) + ","
+                + QString::number(estimatedTRC[2]) + "<br/>" + estimatedCurve + "</body></html>");
         } else {
-            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+estimatedGamma + QString::number(estimatedTRC[0]) + "," + QString::number(estimatedTRC[1]) + "," + QString::number(estimatedTRC[2])+"<br />"+estimatedCurve+"</body></html>");
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>" + estimatedGamma + detCharacteristicsStr
+                                                         + "<br/>" + estimatedCurve + "</body></html>");
         }
     }
     else if (currentModelStr == "GRAYA") {
         QVector <qreal> whitepoint = currentColorSpace()->profile()->getWhitePointxyY();
         d->colorSpaceSelector->TongueWidget->setGrayData(whitepoint);
         d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
+        TransferCharacteristics detCharacteristics = currentColorSpace()->profile()->getTransferCharacteristics();
+        QString detCharacteristicsStr =
+            currentColorSpace()->profile()->getTransferCharacteristicName(detCharacteristics);
         estimatedTRC = currentColorSpace()->profile()->getEstimatedTRC();
         QString estimatedCurve = " Estimated curve: ";
         QPolygonF tonecurve;
@@ -261,10 +271,13 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
         }
         d->colorSpaceSelector->TRCwidget->setGreyscaleCurve(tonecurve);
-        if (estimatedTRC[0] == -1) {
-            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+whatissRGB+"<br />"+estimatedCurve+"</body></html>");
+        if (estimatedTRC[0] != -1 && currentColorSpace()->profile()->hasTRC()) {
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>" + estimatedGamma + detCharacteristicsStr
+                                                         + "<br/>" + QString::number(estimatedTRC[0]) + "<br/>"
+                                                         + estimatedCurve + "</body></html>");
         } else {
-            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>"+estimatedGamma + QString::number(estimatedTRC[0])+"<br />"+estimatedCurve+"</body></html>");
+            d->colorSpaceSelector->TRCwidget->setToolTip("<html><head/><body>" + estimatedGamma + detCharacteristicsStr
+                                                         + "<br/>" + estimatedCurve + "</body></html>");
         }
     }
     else if (currentModelStr == "CMYKA") {

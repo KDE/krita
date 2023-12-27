@@ -10,7 +10,7 @@
 #include <Window.h>
 #include <Document.h>
 
-#include <sdk/tests/testui.h>
+#include <testui.h>
 
 void TestKrita::initTestCase()
 {

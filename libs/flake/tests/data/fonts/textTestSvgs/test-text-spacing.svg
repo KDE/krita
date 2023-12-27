@@ -1,0 +1,29 @@
+<svg width="340px" height="250px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+<g id="test">
+    <rect id="boundingRect" x="5" y="5" width="330" height="240"
+        fill="none" stroke="red"/>
+
+    <text id="testRect" x="5" y="24" 
+        font-family="DejaVu Sans" font-size="15" fill="blue" >
+
+        <tspan x="5" dy="0.0em">Lorem ipsum</tspan>
+        <tspan x="5" dy="1.5em" letter-spacing="4.0">Lorem ipsum (ls=4)</tspan>
+        <tspan x="5" dy="1.5em" letter-spacing="-2.0">Lorem ipsum (ls=-2)</tspan>
+
+        <tspan x="5" dy="2.0em">Lorem ipsum</tspan>
+        <tspan x="5" dy="1.5em" word-spacing="4.0">Lorem ipsum (ws=4)</tspan>
+        <tspan x="5" dy="1.5em" word-spacing="-2.0">Lorem ipsum (ws=-2)</tspan>
+
+        <!-- (in SVG 2 Kerning only controls font-kerning property) -->
+        <tspan x="5" dy="2.0em">Lorem ipsum</tspan>
+        <tspan x="5" dy="1.5em" kerning="0.0">Lorem ipsum (k=0)</tspan>
+        <tspan x="5" dy="1.5em" kerning="2.0">Lorem ipsum (k=2)</tspan>
+        <tspan x="5" dy="1.5em" kerning="2.0" letter-spacing="2.0">Lorem ipsum (k=2,ls=2)</tspan>
+
+    </text>
+
+</g>
+
+</svg>

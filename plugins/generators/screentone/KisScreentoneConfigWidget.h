@@ -46,9 +46,6 @@ private:
     int shapeToComboIndex(int pattern, int shape) const;
     int comboIndexToShape(int patterIndex, int shapeIndex) const;
 
-    void setSliderAlignToPixelGridXText();
-    void setSliderAlignToPixelGridYText();
-
 private Q_SLOTS:
     void slot_comboBoxPattern_currentIndexChanged(int);
     void slot_comboBoxShape_currentIndexChanged(int);

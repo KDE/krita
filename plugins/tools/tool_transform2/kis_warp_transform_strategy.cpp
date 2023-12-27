@@ -68,7 +68,7 @@ struct KisWarpTransformStrategy::Private
         SCALE_MODE,
         NOTHING
     };
-    Mode mode;
+    Mode mode {NOTHING};
 
     QVector<int> pointsInAction;
     int lastNumPoints {0};
@@ -210,6 +210,8 @@ void KisWarpTransformStrategy::drawConnectionLines(QPainter &gc,
     QPen outlinePen;
 
     KisPaintingTweaks::initAntsPen(&antsPen, &outlinePen);
+    antsPen.setWidth(decorationThickness());
+    outlinePen.setWidth(decorationThickness());
 
     const int numPoints = origPoints.size();
 
@@ -248,7 +250,11 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
 
 
     QPen mainPen(Qt::black);
+    mainPen.setCosmetic(true);
+    mainPen.setWidth(decorationThickness());
     QPen outlinePen(Qt::white);
+    outlinePen.setCosmetic(true);
+    outlinePen.setWidth(decorationThickness());
 
     // draw handles
     {
@@ -328,7 +334,7 @@ void KisWarpTransformStrategy::paint(QPainter &gc)
     int rowsInWarp = sqrt(m_d->currentArgs.origPoints().size());
 
 
-        KisHandlePainterHelper handlePainter(&gc);
+        KisHandlePainterHelper handlePainter(&gc, 0.0, decorationThickness());
         handlePainter.setHandleStyle(KisHandleStyle::primarySelection());
 
         // draw horizontal lines
@@ -444,9 +450,9 @@ QVector<QPointF*> KisWarpTransformStrategy::Private::getSelectedPoints(QPointF *
     return selectedPoints;
 }
 
-void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive)
+void KisWarpTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActive, bool altModifierActive)
 {
-    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(shiftModifierActive);
     Q_UNUSED(altModifierActive);
 
     // toplevel code switches to HOVER mode if nothing is selected

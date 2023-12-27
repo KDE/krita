@@ -31,6 +31,9 @@ KoClipMaskPainter::KoClipMaskPainter(QPainter *painter, const QRectF &globalClip
     m_d->globalPainter = painter;
     m_d->alignedGlobalClipRect = globalClipRect.toAlignedRect();
 
+    if (!m_d->alignedGlobalClipRect.isValid()) {
+        m_d->alignedGlobalClipRect = QRect();
+    }
     m_d->shapeImage = QImage(m_d->alignedGlobalClipRect.size(), QImage::Format_ARGB32);
     m_d->maskImage = QImage(m_d->alignedGlobalClipRect.size(), QImage::Format_ARGB32);
 
@@ -79,23 +82,24 @@ QPainter *KoClipMaskPainter::maskPainter()
 void KoClipMaskPainter::renderOnGlobalPainter()
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->maskImage.size() == m_d->shapeImage.size());
+    const float normCoeff = 1.0f / 255.0f;
 
-    for (int y = 0; y < m_d->maskImage.height(); y++) {
-        QRgb *shapeData = reinterpret_cast<QRgb*>(m_d->shapeImage.scanLine(y));
-        QRgb *maskData = reinterpret_cast<QRgb*>(m_d->maskImage.scanLine(y));
+    const int height = m_d->maskImage.height();
+    const int width = m_d->maskImage.width();
 
-        for (int x = 0; x < m_d->maskImage.width(); x++) {
+    for (int y = 0; y < height; y++) {
+        QRgb *shapeData = reinterpret_cast<QRgb *>(m_d->shapeImage.scanLine(y));
+        const QRgb *maskData = reinterpret_cast<const QRgb *>(m_d->maskImage.scanLine(y));
 
-            const qreal normCoeff = 1.0 / 255.0 * 255.0;
+        for (int x = 0; x < width; x++) {
+            const QRgb mask = *maskData;
+            const QRgb shape = *shapeData;
 
-            qreal maskValue = qreal(qAlpha(*maskData)) *
-                (0.2125 * qRed(*maskData) +
-                 0.7154 * qGreen(*maskData) +
-                 0.0721 * qBlue(*maskData));
+            const float maskValue = qAlpha(mask) * (0.2125f * qRed(mask) + 0.7154f * qGreen(mask) + 0.0721f * qBlue(mask)) * normCoeff;
 
-            int alpha = qRound(maskValue * qAlpha(*shapeData) * normCoeff);
+            const QRgb alpha = static_cast<QRgb>(qRound(maskValue * (qAlpha(shape) * normCoeff)));
 
-            *shapeData = (alpha << 24) | (*shapeData & 0x00ffffff);
+            *shapeData = (alpha << 24) | (shape & 0x00ffffff);
 
             shapeData++;
             maskData++;

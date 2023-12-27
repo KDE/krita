@@ -77,13 +77,13 @@ void OffsetImage::slotOffsetLayer()
         DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindowAsQWidget(), "OffsetLayer", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
-        KUndo2MagicString actionName = kundo2_i18n("Offset Layer");
-        dlgOffsetImage->setCaption(i18nc("@title:window", "Offset Layer"));
+        KisNodeList nodes = viewManager()->nodeManager()->selectedNodes();
+        dlgOffsetImage->setCaption(i18ncp("@title:window", "Offset Layer", "Offset %1 Layers", nodes.size()));
 
         if (dlgOffsetImage->exec() == QDialog::Accepted) {
             QPoint offsetPoint = QPoint(dlgOffsetImage->offsetX(), dlgOffsetImage->offsetY());
-            KisNodeSP activeNode = viewManager()->activeNode();
-            offsetImpl(actionName, activeNode, offsetPoint);
+            KUndo2MagicString actionName = kundo2_i18np("Offset Layer", "Offset %1 Layers", nodes.size());
+            offsetImpl(actionName, nodes, offsetPoint);
         }
         delete dlgOffsetImage;
     }
@@ -95,9 +95,13 @@ void OffsetImage::slotOffsetLayer()
 
 void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node, const QPoint& offsetPoint)
 {
+    offsetImpl(actionName, KisNodeList{node}, offsetPoint);
+}
+void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeList nodes, const QPoint& offsetPoint)
+{
     KisImageSignalVector emitSignals;
 
-    KisProcessingApplicator applicator(viewManager()->image(), node,
+    KisProcessingApplicator applicator(viewManager()->image(), nodes,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
@@ -106,6 +110,7 @@ void OffsetImage::offsetImpl(const KUndo2MagicString& actionName, KisNodeSP node
     applicator.applyVisitor(visitor, KisStrokeJobData::CONCURRENT);
     applicator.end();
 }
+
 
 
 QRect OffsetImage::offsetWrapRect()

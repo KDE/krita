@@ -662,7 +662,7 @@ void KisZoomAndPanTest::testRotation(qreal vastScrolling, qreal zoom)
          * vastScrolling value is 0.2. The problem is that the centering
          * correction applied  to the offset in
          * KisCanvasController::rotateCanvas pollutes the preferredCenter
-         * value, because KoCnvasControllerWidget has no access to this
+         * value, because KoCanvasControllerWidget has no access to this
          * correction and cannot calculate the real value of the center of
          * the image. To fix this bug the calculation of correction
          * (aka "origin") should be moved to the KoCanvasControllerWidget

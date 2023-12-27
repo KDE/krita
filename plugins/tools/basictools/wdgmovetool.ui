@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>245</width>
+    <width>253</width>
     <height>517</height>
    </rect>
   </property>
@@ -27,7 +27,7 @@
       <string>Selection Mode</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QRadioButton" name="radioSelectedLayer">
         <property name="toolTip">
          <string>Move the layer that you have currently selected in the layerbox with its masks. Shortcut: ctrl-click.</string>
@@ -40,10 +40,10 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QRadioButton" name="radioFirstLayer">
         <property name="toolTip">
-         <string>Move the first layer with visible content at the place where you click. This will also select that layer in the layerbox.</string>
+         <string>Move the first layer with visible content at the place where you click.</string>
         </property>
         <property name="text">
          <string>Mo&amp;ve layer with content</string>
@@ -53,7 +53,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="2">
+      <item row="2" column="0">
        <widget class="QRadioButton" name="radioGroup">
         <property name="toolTip">
          <string>Move the group containing the first layer that contains visible content. Shortcut: ctrl-shift-click.</string>
@@ -78,7 +78,7 @@
       <string>Move Shortcut</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item column="1" row="2">
+      <item row="2" column="1">
        <widget class="KisDoubleParseSpinBox" name="spinMoveScale">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -100,7 +100,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="2">
+      <item row="2" column="0">
        <widget class="QLabel" name="scaleLabel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -113,10 +113,10 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="1">
+      <item row="1" column="1">
        <widget class="QComboBox" name="cmbUnit"/>
       </item>
-      <item column="1" row="0">
+      <item row="0" column="1">
        <widget class="KisDoubleParseSpinBox" name="spinMoveStep">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -138,7 +138,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -151,7 +151,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
@@ -223,7 +223,7 @@
         <property name="bottomMargin">
          <number>5</number>
         </property>
-        <item column="0" row="0">
+        <item row="0" column="0">
          <widget class="QLabel" name="label_offsetX">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
@@ -245,7 +245,7 @@
           </property>
          </widget>
         </item>
-        <item column="1" row="0">
+        <item row="0" column="1">
          <widget class="KisIntParseSpinBox" name="translateXBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -261,7 +261,7 @@
           </property>
          </widget>
         </item>
-        <item column="1" row="2">
+        <item row="2" column="1">
          <widget class="KisIntParseSpinBox" name="translateYBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -274,7 +274,7 @@
           </property>
          </widget>
         </item>
-        <item column="0" row="2">
+        <item row="2" column="0">
          <widget class="QLabel" name="label_offsetY">
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">

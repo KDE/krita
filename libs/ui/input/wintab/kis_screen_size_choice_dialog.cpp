@@ -42,7 +42,7 @@ KisScreenSizeChoiceDialog::KisScreenSizeChoiceDialog(QWidget *parent,
     connect(ui->radioManual, SIGNAL(toggled(bool)), ui->intWidth, SLOT(setEnabled(bool)));
     connect(ui->radioManual, SIGNAL(toggled(bool)), ui->intHeight, SLOT(setEnabled(bool)));
 
-    // cold-init the state of the manua controls
+    // cold-init the state of the manual controls
     ui->radioManual->setChecked(true);
 
     ui->radioWintab->setText(i18nc("@option:radio", "%1 (Wintab)", rectToString(wintabRect)));

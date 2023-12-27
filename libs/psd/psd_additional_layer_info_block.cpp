@@ -112,7 +112,7 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         dbgFile << "info block size" << blockSize << "(" << io.pos() << ")";
 
         if (blockSize == 0)
-            return;
+            continue;
 
         // offset verifier will correct the position on the exit from
         // current namespace, including 'continue', 'return' and

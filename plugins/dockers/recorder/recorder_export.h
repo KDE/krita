@@ -11,22 +11,17 @@
 
 #include <QDialog>
 
-struct RecorderExportSettings
-{
-    QString name;
-    QString inputDirectory;
-    RecorderFormat format;
-};
+struct RecorderExportSettings;
 
 class RecorderExport : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit RecorderExport(QWidget *parent = nullptr);
+    explicit RecorderExport(RecorderExportSettings *s, QWidget *parent = nullptr);
     ~RecorderExport();
 
-    void setup(const RecorderExportSettings &settings);
+    void setup();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
@@ -46,6 +41,7 @@ private Q_SLOTS:
     void onSpinScaleWidthValueChanged(int value);
     void onSpinScaleHeightValueChanged(int value);
     void onButtonLockRatioToggled(bool checked);
+    void onButtonLockFpsToggled(bool checked);
     void onButtonBrowseFfmpegClicked();
     void onComboProfileIndexChanged(int index);
     void onButtonEditProfileClicked();
@@ -72,6 +68,7 @@ private:
 private:
     Q_DISABLE_COPY(RecorderExport)
     class Private;
+    RecorderExportSettings *settings;
     QScopedPointer<Private> d;
 };
 

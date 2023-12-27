@@ -599,22 +599,10 @@ boost::optional<qreal> KisDistanceInformation::lockedDrawingAngleOptional() cons
 
 void KisDistanceInformation::lockCurrentDrawingAngle(const KisPaintInformation &info) const
 {
-    const qreal angle = info.drawingAngle(false);
-
-    qreal newAngle = angle;
+    qreal newAngle = info.drawingAngle(false);
 
     if (m_d->lockedDrawingAngleOptional) {
-        const qreal stabilizingCoeff = 20.0;
-        const qreal dist = stabilizingCoeff * m_d->spacing.scalarApprox();
-        const qreal alpha = qMax(0.0, dist - scalarDistanceApprox()) / dist;
-
-        const qreal oldAngle = *m_d->lockedDrawingAngleOptional;
-
-        if (shortestAngularDistance(oldAngle, newAngle) < M_PI / 6) {
-            newAngle = (1.0 - alpha) * oldAngle + alpha * newAngle;
-        } else {
-            newAngle = oldAngle;
-        }
+        newAngle = *m_d->lockedDrawingAngleOptional;
     }
 
     m_d->lockedDrawingAngleOptional = newAngle;

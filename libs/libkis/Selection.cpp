@@ -12,6 +12,7 @@
 #include <kis_paint_device.h>
 #include <kis_selection_filters.h>
 #include <kis_painter.h>
+#include <kis_node.h>
 #include <kis_clipboard.h>
 #include <QByteArray>
 

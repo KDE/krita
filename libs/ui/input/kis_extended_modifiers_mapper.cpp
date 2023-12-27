@@ -67,6 +67,8 @@ QVector<Qt::Key> queryPressedKeysWin()
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
+#include <krita_container_utils.h>
+#include <X11/XKBlib.h>
 
 struct KeyMapping {
     KeyMapping() {}
@@ -85,6 +87,8 @@ struct KisExtendedModifiersMapper::Private
 
     QVector<KeyMapping> mapping;
     char keysState[32];
+    int minKeyCode = 0;
+    int maxKeyCode = 0;
 
     bool checkKeyCodePressedX11(KeyCode key);
     bool checkKeySymPressedX11(KeySym sym);
@@ -95,6 +99,7 @@ struct KisExtendedModifiersMapper::Private
 
 KisExtendedModifiersMapper::Private::Private()
 {
+    XDisplayKeycodes(QX11Info::display(), &minKeyCode, &maxKeyCode);
     XQueryKeymap(QX11Info::display(), keysState);
 
     mapping.append(KeyMapping(XK_Shift_L, Qt::Key_Shift));
@@ -103,11 +108,16 @@ KisExtendedModifiersMapper::Private::Private()
     mapping.append(KeyMapping(XK_Control_L, Qt::Key_Control));
     mapping.append(KeyMapping(XK_Control_R, Qt::Key_Control));
 
-    mapping.append(KeyMapping(XK_Meta_L, Qt::Key_Meta));
-    mapping.append(KeyMapping(XK_Meta_R, Qt::Key_Meta));
+    mapping.append(KeyMapping(XK_Meta_L, Qt::Key_Alt));
+    mapping.append(KeyMapping(XK_Meta_R, Qt::Key_Alt));
+    mapping.append(KeyMapping(XK_Mode_switch, Qt::Key_AltGr));
+    mapping.append(KeyMapping(XK_ISO_Level3_Shift, Qt::Key_AltGr));
 
-    mapping.append(KeyMapping(XK_Super_L, Qt::Key_Super_L));
-    mapping.append(KeyMapping(XK_Super_R, Qt::Key_Super_R));
+    mapping.append(KeyMapping(XK_Alt_L, Qt::Key_Alt));
+    mapping.append(KeyMapping(XK_Alt_R, Qt::Key_Alt));
+
+    mapping.append(KeyMapping(XK_Super_L, Qt::Key_Meta));
+    mapping.append(KeyMapping(XK_Super_R, Qt::Key_Meta));
 
     mapping.append(KeyMapping(XK_Hyper_L, Qt::Key_Hyper_L));
     mapping.append(KeyMapping(XK_Hyper_R, Qt::Key_Hyper_R));
@@ -177,11 +187,25 @@ KisExtendedModifiersMapper::queryExtendedModifiers()
 
 #ifdef HAVE_X11
 
-    Q_FOREACH (const KeyMapping &map, m_d->mapping) {
-        if (m_d->checkKeySymPressedX11(map.x11KeySym)) {
-            modifiers << map.qtKey;
+    {
+        for (int keyCode = m_d->minKeyCode; keyCode <= m_d->maxKeyCode; keyCode++) {
+            if (m_d->checkKeyCodePressedX11(keyCode)) {
+
+                KeySym sym = XkbKeycodeToKeysym(QX11Info::display(), keyCode,
+                                                0, 0);
+                Q_FOREACH (const KeyMapping &map, m_d->mapping) {
+                    if (map.x11KeySym == sym) {
+                        modifiers << map.qtKey;
+                        break;
+                    }
+                }
+            }
         }
     }
+
+    // in X11 some keys may have multiple keysyms,
+    // (Alt Key == XK_Meta_{L,R}, XK_Meta_{L,R})
+    KritaUtils::makeContainerUnique(modifiers);
 
 #elif defined Q_OS_WIN
 

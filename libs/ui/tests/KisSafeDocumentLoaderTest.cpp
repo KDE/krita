@@ -7,7 +7,7 @@
 #include "kis_debug.h"
 
 namespace {
-void writeToFile(QFile &file, QColor color)
+void writeToFile(QFile &file, QColor /*color*/)
 {
     file.reset();
     file.resize(0);

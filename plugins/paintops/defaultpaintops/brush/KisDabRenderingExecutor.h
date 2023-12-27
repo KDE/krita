@@ -16,7 +16,7 @@ struct KisRenderedDab;
 
 #include "KisDabCacheUtils.h"
 
-class KisPressureMirrorOption;
+class KisMirrorOption;
 class KisPrecisionOption;
 class KisRunnableStrokeJobsInterface;
 
@@ -27,7 +27,7 @@ public:
     KisDabRenderingExecutor(const KoColorSpace *cs,
                             KisDabCacheUtils::ResourcesFactory resourcesFactory,
                             KisRunnableStrokeJobsInterface *runnableJobsInterface,
-                            KisPressureMirrorOption *mirrorOption = 0,
+                            KisMirrorOption *mirrorOption = 0,
                             KisPrecisionOption *precisionOption = 0);
     ~KisDabRenderingExecutor();
 

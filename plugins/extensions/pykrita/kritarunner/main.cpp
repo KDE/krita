@@ -4,7 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <random>
 
 #include <QString>
 #include <QCommandLineParser>
@@ -17,7 +18,10 @@
 extern "C" int main(int argc, char **argv)
 {
     // The global initialization of the random generator
-    qsrand(time(0));
+    {
+        std::random_device urandom;
+        qsrand(urandom());
+    }
     KLocalizedString::setApplicationDomain("kritarunner");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     KisOpenGL::testingInitializeDefaultSurfaceFormat();

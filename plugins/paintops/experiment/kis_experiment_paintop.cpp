@@ -31,7 +31,7 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisPaintOpSettingsSP settings, 
 
     m_firstRun = true;
 
-    m_experimentOption.readOptionSetting(settings);
+    m_experimentOption.read(settings.data());
 
     m_displaceEnabled = m_experimentOption.isDisplacementEnabled;
     m_displaceCoeff = (m_experimentOption.displacement * 0.01 * 14) + 1; // 1..15 [7 default according alchemy]

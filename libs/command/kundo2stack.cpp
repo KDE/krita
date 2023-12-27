@@ -53,7 +53,8 @@
 #include "kundo2stack_p.h"
 #include "kundo2group.h"
 #include <KoIcon.h>
-#include<QtGlobal>
+#include <QtGlobal>
+#include "kis_assert.h"
 
 
 #ifndef QT_NO_UNDOCOMMAND
@@ -318,11 +319,12 @@ const KUndo2Command *KUndo2Command::child(int index) const
     return d->child_list.at(index);
 }
 
-bool KUndo2Command::hasParent()
+bool KUndo2Command::hasParent() const
 {
     return m_hasParent;
 }
-int KUndo2Command::timedId()
+
+int KUndo2Command::timedId() const
 {
     return m_timedID;
 }
@@ -333,10 +335,12 @@ void KUndo2Command::setTimedID(int value)
 
 bool KUndo2Command::timedMergeWith(KUndo2Command *other)
 {
-    if(other->timedId() == this->timedId() && other->timedId()!=-1 )
+    if(other->timedId() == this->timedId() && other->timedId() != -1 ) {
         m_mergeCommandsVector.append(other);
-    else
+        m_timeOfCreation = other->time();
+    } else {
         return false;
+    }
     return true;
 }
 /*!
@@ -362,19 +366,31 @@ bool KUndo2Command::canAnnihilateWith(const KUndo2Command *other) const
     Q_UNUSED(other)
     return false;
 }
+
 void KUndo2Command::setTime()
 {
-    m_timeOfCreation = QTime::currentTime();
+    setTime(QTime::currentTime());
 }
-QTime KUndo2Command::time()
+
+void KUndo2Command::setTime(const QTime &time)
+{
+    m_timeOfCreation = time;
+}
+
+QTime KUndo2Command::time() const
 {
     return m_timeOfCreation;
 }
+
 void KUndo2Command::setEndTime()
 {
-    m_endOfCommand  = QTime::currentTime();
+    setEndTime(QTime::currentTime());
 }
-QTime KUndo2Command::endTime()
+void KUndo2Command::setEndTime(const QTime &time)
+{
+    m_endOfCommand  = time;
+}
+QTime KUndo2Command::endTime() const
 {
     return m_endOfCommand;
 }
@@ -406,11 +422,11 @@ void KUndo2Command::redoMergedCommands()
     }
     redo();
 }
-QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector()
+QVector<KUndo2Command*> KUndo2Command::mergeCommandsVector() const
 {
     return m_mergeCommandsVector;
 }
-bool KUndo2Command::isMerged()
+bool KUndo2Command::isMerged() const
 {
     return !m_mergeCommandsVector.isEmpty();
 }
@@ -534,17 +550,7 @@ void KUndo2Action::setPrefixedText(const QString &text)
 void KUndo2QStack::setIndex(int idx, bool clean)
 {
     bool was_clean = m_index == m_clean_index;
-    if (m_lastMergedIndex <= idx) {
-        m_lastMergedSetCount = idx - m_lastMergedIndex;
 
-    } else {
-        m_lastMergedSetCount = 1;
-        m_lastMergedIndex = idx-1;
-    }
-    if(idx == 0){
-        m_lastMergedSetCount = 0;
-        m_lastMergedIndex = 0;
-    }
     if (idx != m_index) {
         m_index = idx;
         emit indexChanged(m_index);
@@ -626,11 +632,9 @@ bool KUndo2QStack::checkUndoLimit()
 */
 
 KUndo2QStack::KUndo2QStack(QObject *parent)
-    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0), m_useCumulativeUndoRedo(false), m_lastMergedSetCount(0), m_lastMergedIndex(0)
+    : QObject(parent), m_index(0), m_clean_index(0), m_group(0), m_undo_limit(0)
+    , m_useCumulativeUndoRedo(false)
 {
-    setTimeT1(5);
-    setTimeT2(1);
-    setStrokesN(2);
 #ifndef QT_NO_UNDOGROUP
     if (KUndo2Group *group = qobject_cast<KUndo2Group*>(parent))
         group->addStack(this);
@@ -718,7 +722,10 @@ void KUndo2QStack::clear()
 void KUndo2QStack::push(KUndo2Command *cmd)
 {
     cmd->redoMergedCommands();
-    cmd->setEndTime();
+
+    if (cmd->endTime().isNull()) {
+        cmd->setEndTime();
+    }
 
     bool macro = !m_macro_stack.isEmpty();
 
@@ -748,102 +755,100 @@ void KUndo2QStack::push(KUndo2Command *cmd)
      * N : Number of commands that should remain individual at the top of the
      *     stack.
      *
-     * T1 : Time lapsed between current command and previously merged command
-     *      -- signal to merge throughout the stack.
+     * T1 : Timeout for the commands to be outdated and merged
      *
-     * T2 : Time elapsed between two commands (unmerged) signaling both commands
-     *      belong to the same set
+     * T2 : Time separation between two commands to be considered as belonging
+     *      to the same group
      *
-     * Whenever a KUndo2Command is initialized -- it consists of a start-time
-     * and when it is pushed -- an end time. Every time a command is pushed --
-     * it checks whether the command pushed was pushed after T1 seconds of the
-     * last merged command. Then the merging begins with each group depending on
-     * the time in between each command (T2).
-     *
-     * @TODO : Currently it is not able to merge two merged commands together.
      */
 
     if (!macro && m_command_list.size() > 1 && cmd->timedId() != -1 && m_useCumulativeUndoRedo) {
         KUndo2Command* lastcmd = m_command_list.last();
-        if (qAbs(cmd->time().msecsTo(lastcmd->endTime())) < m_timeT2 * 1000) {
-            m_lastMergedSetCount++;
-        } else {
-            m_lastMergedSetCount = 0;
-            m_lastMergedIndex = m_index-1;
-        }
-        if (lastcmd->timedId() == -1){
-            m_lastMergedSetCount = 0;
-            m_lastMergedIndex = m_index;
-        }
 
-        {
-            /**
-             * Implement N rule: not more than N strokes with the same timedId
-             * should stay separate in the Undo History
-             */
+        auto tryMergeBack =
+            [this] (auto revIt, bool *isMerged) {
+                /// we have a guarantee that std::next(revIt) exists,
+                /// so we can safely iterate back in the forward order
+                auto dst = std::prev(revIt.base());
+                auto src = std::prev(dst);
 
-            const int mergeSourceIndex = m_lastMergedIndex;
-            const int mergeDestinationIndex = m_lastMergedIndex + 1;
+                if ((*dst)->timedId() != -1 &&
+                    (*dst)->timedId() == (*src)->timedId() &&
+                    (*src)->time().msecsTo((*dst)->endTime()) <= m_cumulativeUndoData.maxGroupDuration &&
+                    (*src)->endTime().msecsTo((*dst)->time()) <= m_cumulativeUndoData.maxGroupSeparation &&
+                    (*dst)->timedMergeWith(*src)) {
 
-            if (m_lastMergedSetCount > m_strokesN && mergeSourceIndex >= 0
-                && mergeDestinationIndex < m_command_list.size()) {
+                    const int removedIndex = std::distance(m_command_list.begin(), src);
 
-                KUndo2Command *mergeDestination = m_command_list.at(mergeDestinationIndex);
-                KUndo2Command *mergeSource = m_command_list.at(mergeSourceIndex);
-
-                if (mergeDestination && mergeSource) {
-
-                    if (mergeDestination->timedMergeWith(mergeSource)) {
-                        m_command_list.removeAt(mergeSourceIndex);
+                    /// index and clean_index are one off the real index in the
+                    /// commands list
+                    if (m_clean_index - 1 == removedIndex) {
+                        m_clean_index = -1;
+                    } else if (m_clean_index - 1 > removedIndex) {
+                        m_clean_index--;
                     }
+                    m_index--;
 
-                    m_lastMergedSetCount--;
-                    m_lastMergedIndex = m_command_list.indexOf(mergeDestination);
+                    dst = m_command_list.erase(src);
+                    *isMerged = true;
+                } else {
+                    *isMerged = false;
                 }
+
+                return std::make_reverse_iterator(std::next(dst));
+        };
+
+        int extraCheckDepth = 0;
+        int newDepth = 1; // `cmd` will be added soon and will increase the total depth!
+        QTime oldTimeBase = lastcmd->time(); // needed to calculate already processed items
+        QTime newTimeBase = cmd->time();
+
+        auto it = std::make_reverse_iterator(m_command_list.end());
+        auto next = std::next(it);
+
+        while (next != std::make_reverse_iterator(m_command_list.begin())) {
+
+            if (newDepth < m_cumulativeUndoData.excludeFromMerge) {
+                ++it;
+                ++newDepth;
+                next = std::next(it);
+                continue;
             }
-        }
 
-        m_index = m_command_list.size();
+            int oldTime = (*it)->endTime().msecsTo(oldTimeBase);
+            int newTime = (*it)->endTime().msecsTo(newTimeBase);
 
-        if (m_lastMergedIndex < m_index) {
-            KUndo2Command* mergeDestination = m_command_list.at(m_lastMergedIndex);
+            /// we have reached the element processed when
+            /// the previous command was added, now we need to
+            /// count m_strokesN to make sure that "pinned" jobs
+            /// are also process
+            if (oldTime > m_cumulativeUndoData.mergeTimeout &&
+                extraCheckDepth++ >= m_cumulativeUndoData.excludeFromMerge) break;
 
-            if (qAbs(cmd->time().msecsTo(mergeDestination->endTime())) > m_timeT1 * 1000) { //T1 time elapsed
-                QListIterator<KUndo2Command*> it(m_command_list);
+            if (newTime >= m_cumulativeUndoData.mergeTimeout) {
+                bool merged = true;
 
-                it.toBack();
-                m_lastMergedSetCount = 1;
+                KUndo2Command *debugOldCmd = *it;
 
-                while (it.hasPrevious()) {
-                    KUndo2Command* curr = it.previous();
-                    KUndo2Command* lastCmdInCurrent = curr;
+                it = tryMergeBack(it, &merged);
 
-                    if (!lastcmd->mergeCommandsVector().isEmpty()) {
-                        if (qAbs(lastcmd->mergeCommandsVector().last()->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent && lastcmd != curr) {
-                            if(lastcmd->timedMergeWith(curr)){
-                                if (m_command_list.contains(curr)) {
-                                    m_command_list.removeOne(curr);
-                                }
-                             }
-                        } else {
-                            lastcmd = curr; //end of a merge set
-                        }
-                    } else {
-                        if (qAbs(lastcmd->time().msecsTo(lastCmdInCurrent->endTime())) < int(m_timeT2 * 1000) && lastcmd != lastCmdInCurrent &&lastcmd!=curr) {
-                            if(lastcmd->timedMergeWith(curr)){
-                                if (m_command_list.contains(curr)){
-                                    m_command_list.removeOne(curr);
-                                }
-                            }
-                        } else {
-                            lastcmd = curr; //end of a merge set
-                        }
-                    }
+                KUndo2Command *debugNewCmd = *it;
+
+                KIS_SAFE_ASSERT_RECOVER_BREAK(it != std::make_reverse_iterator(m_command_list.begin()));
+                KIS_SAFE_ASSERT_RECOVER_BREAK(debugOldCmd == debugNewCmd);
+
+                if (!merged) {
+                    ++it;
+                    ++newDepth;
                 }
-                m_lastMergedIndex = m_command_list.size()-1;
+
+            } else {
+                ++it;
+                ++newDepth;
             }
+
+            next = std::next(it);
         }
-        m_index = m_command_list.size();
     }
 
     if (try_merge && !macro && cur->canAnnihilateWith(cmd)) {
@@ -879,10 +884,8 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             m_macro_stack.last()->d->child_list.append(cmd);
         } else {
             m_command_list.append(cmd);
-            if(checkUndoLimit())
-            {
-                m_lastMergedIndex = m_index - m_strokesN;
-            }
+
+            checkUndoLimit();
             setIndex(m_index + 1, false);
         }
     }
@@ -1293,7 +1296,7 @@ QString KUndo2QStack::text(int idx) const
     \brief the maximum number of commands on this stack.
     \since 4.3
 
-    When the number of commands on a stack exceedes the stack's undoLimit, commands are
+    When the number of commands on a stack exceeds the stack's undoLimit, commands are
     deleted from the bottom of the stack. Macro commands (commands with child commands)
     are treated as one command. The default value is 0, which means that there is no
     limit.
@@ -1365,39 +1368,20 @@ void KUndo2QStack::setUseCumulativeUndoRedo(bool value)
     m_useCumulativeUndoRedo = value;
 }
 
-bool KUndo2QStack::useCumulativeUndoRedo()
+bool KUndo2QStack::useCumulativeUndoRedo() const
 {
     return m_useCumulativeUndoRedo;
 }
-void KUndo2QStack::setTimeT1(double value)
+
+void KUndo2QStack::setCumulativeUndoData(const KisCumulativeUndoData &data)
 {
-    m_timeT1 = value;
+    m_cumulativeUndoData = data;
 }
 
-double KUndo2QStack::timeT1()
+KisCumulativeUndoData KUndo2QStack::cumulativeUndoData()
 {
-    return m_timeT1;
+    return m_cumulativeUndoData;
 }
-
-void KUndo2QStack::setTimeT2(double value)
-{
-    m_timeT2 = value;
-}
-
-double KUndo2QStack::timeT2()
-{
-    return m_timeT2;
-}
-int KUndo2QStack::strokesN()
-{
-    return m_strokesN;
-}
-void KUndo2QStack::setStrokesN(int value)
-{
-    m_strokesN  = value;
-}
-
-
 
 QAction* KUndo2Stack::createRedoAction(KisKActionCollection* actionCollection, const QString& actionName)
 {

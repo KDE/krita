@@ -14,7 +14,7 @@
 //#define COMPRESSOR_VERSION 2
 
 KisSwappedDataStore::KisSwappedDataStore()
-    : m_memoryMetric(0)
+    : m_totalSwapMemoryUsed(0)
 {
     KisImageConfig config(true);
     const quint64 maxSwapSize = config.maxSwapSize() * MiB;
@@ -72,7 +72,7 @@ bool KisSwappedDataStore::trySwapOutTileData(KisTileData *td)
     td->releaseMemory();
     td->setSwapChunk(chunk);
 
-    m_memoryMetric += td->pixelSize();
+    m_totalSwapMemoryUsed += chunk.size();
 
     return true;
 }
@@ -85,6 +85,7 @@ void KisSwappedDataStore::swapInTileData(KisTileData *td)
     // see comment in swapOutTileData()
 
     KisChunk chunk = td->swapChunk();
+    m_totalSwapMemoryUsed -= chunk.size();
 
     td->allocateMemory();
     td->setSwapChunk(KisChunk());
@@ -93,23 +94,21 @@ void KisSwappedDataStore::swapInTileData(KisTileData *td)
     Q_ASSERT(ptr);
     m_compressor->decompressTileData(ptr, chunk.size(), td);
     m_allocator->freeChunk(chunk);
-
-    m_memoryMetric -= td->pixelSize();
 }
 
 void KisSwappedDataStore::forgetTileData(KisTileData *td)
 {
     QMutexLocker locker(&m_lock);
 
+    m_totalSwapMemoryUsed -= td->swapChunk().size();
+
     m_allocator->freeChunk(td->swapChunk());
     td->setSwapChunk(KisChunk());
-
-    m_memoryMetric -= td->pixelSize();
 }
 
-qint64 KisSwappedDataStore::totalMemoryMetric() const
+qint64 KisSwappedDataStore::totalSwapMemoryUsed() const
 {
-    return m_memoryMetric;
+    return m_totalSwapMemoryUsed;
 }
 
 void KisSwappedDataStore::debugStatistics()

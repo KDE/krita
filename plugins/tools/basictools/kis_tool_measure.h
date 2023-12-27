@@ -19,8 +19,11 @@
 #include "flake/kis_node_shape.h"
 #include <kis_icon.h>
 
+#include <QVector2D>
+
 class QPointF;
 class QWidget;
+class QVector2D;
 
 class KoCanvasBase;
 
@@ -30,21 +33,22 @@ class KisToolMeasureOptionsWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisToolMeasureOptionsWidget(QWidget* parent, double resolution);
+    KisToolMeasureOptionsWidget(QWidget* parent, KisImageWSP image);
 
 public Q_SLOTS:
     void slotSetDistance(double distance);
     void slotSetAngle(double angle);
     void slotUnitChanged(int index);
+    void slotResolutionChanged(double xRes, double yRes);
 
 private:
     void updateDistance();
 
-    double m_resolution {0.0};
     QLabel* m_angleLabel {nullptr};
     double m_distance {0.0};
 public:
     QLabel* m_distanceLabel {nullptr};
+    double m_resolution;
     KoUnit m_unit;
 };
 
@@ -62,6 +66,8 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void showDistanceAngleOnCanvas();
 
+    QPointF lockedAngle(QPointF pos);
+
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 
     QWidget * createOptionWidget() override;
@@ -75,18 +81,13 @@ private:
     double angle();
     double distance();
 
-    double deltaX() {
-        return m_endPos.x() - m_startPos.x();
-    }
-    double deltaY() {
-        return m_startPos.y() - m_endPos.y();
-    }
-
 private:
     KisToolMeasureOptionsWidget *m_optionsWidget {nullptr};
 
     QPointF m_startPos {QPointF(0, 0)};
-    QPointF m_endPos {QPointF(0, 0)};
+    QPointF m_endPos {QPointF(0, 0)}; 
+    QVector2D m_baseLineVec {QPointF(1, 0)};
+    bool m_chooseBaseLineVec {false};
 };
 
 
@@ -116,4 +117,3 @@ public:
 
 
 #endif //KIS_TOOL_MEASURE_H_
-

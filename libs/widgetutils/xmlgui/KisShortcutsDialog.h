@@ -98,7 +98,7 @@ public:
      *
      * @param parent the parent widget to attach to
      *
-     * There is some legacy support for global (i.e. desktop-wide) shortucts
+     * There is some legacy support for global (i.e. desktop-wide) shortcuts
      * that should probably be removed.
      */
     explicit KisShortcutsDialog(KisShortcutsEditor::ActionTypes types = defaultActionTypes,

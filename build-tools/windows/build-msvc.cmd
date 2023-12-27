@@ -361,6 +361,7 @@ if "%CMAKE_EXE%" == "" (
             echo ERROR: CMake not found! 1>&2
             exit /b 102
         )
+        call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
     ) else (
         echo Found CMake on PATH: !CMAKE_EXE!
         if not "%ARG_NO_INTERACTIVE%" == "1" (
@@ -372,11 +373,13 @@ if "%CMAKE_EXE%" == "" (
                     echo ERROR: CMake not found! 1>&2
                     exit /b 102
                 )
+                call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
             )
         )
+        call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
     )
 )
-echo CMake: %CMAKE_EXE%
+echo CMake: %CMAKE_BIN_DIR%
 
 if "%SEVENZIP_EXE%" == "" (
     call :find_on_path SEVENZIP_EXE 7z.exe
@@ -723,6 +726,9 @@ if NOT "%KRITA_NINJA_DIR%" == "" (
 if NOT "%SVN_DIR%" == "" (
     set PATH=%PATH%;%SVN_DIR%
 )
+if NOT "%CMAKE_BIN_DIR%" == "" (
+    set PATH=%PATH%;%CMAKE_BIN_DIR%
+)
 
 echo Creating dirs...
 if NOT "%ARG_SKIP_DEPS%" == "1" (
@@ -818,9 +824,20 @@ set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
 if not "%PERL_DIR%" == "" (
-    set "PERL_EXECUTABLE=%PERL_DIR%\perl.exe"
-    set "PERL_EXECUTABLE=%PERL_EXECUTABLE:\=/%"
-    set "PERL_EXECUTABLE=%PERL_EXECUTABLE: =\ %"
+    :: Safety measure for Strawberry Perl injecting pkg-config in the PATH
+    call :find_on_path STRAWBERRY_PERL_PKG_CONFIG_EXE_DIR pkg-config.bat
+    if exist "%PERL_DIR%\pkg-config.bat" (
+        echo Found unpatched Strawberry Perl, ignoring due to its pkg-config introducing external binaries.
+        set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
+    ) else (
+        echo Found patched Strawberry Perl, it is safe to use.
+        set "PERL_EXECUTABLE=%PERL_DIR%\perl.exe"
+        set "PERL_EXECUTABLE=!PERL_EXECUTABLE:\=/!"
+        set "PERL_EXECUTABLE=!PERL_EXECUTABLE: =\ !"
+        set "PATH=%PATH%;%PERL_DIR%"
+    )
+) else (
+    set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
 )
 
 set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
@@ -855,7 +872,6 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DFOUNDATION_BUILD=ON ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHIDE_SAFE_ASSERTS=ON ^
-    -DFETCH_TRANSLATIONS=ON ^
     -DBRANDING=%KRITA_BRANDING% ^
     -Wno-dev ^
     -G "%KRITA_GENERATOR%" ^
@@ -924,11 +940,13 @@ echo Running CMake for deps...
 echo.
 
 set EXT_TARGETS=patch zlib gettext openssl boost exiv2 fftw3 eigen3 jpeg lcms2
-set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw freetype poppler 
+set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl
+set EXT_TARGETS=%EXT_TARGETS% giflib qt libraw kwindowsystem drmingw
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
+set EXT_TARGETS=%EXT_TARGETS% freetype fontconfig poppler fribidi unibreak
+set EXT_TARGETS=%EXT_TARGETS% ffmpeg lager
 
 for %%a in (%EXT_TARGETS%) do (
     set TEST_HAS_TARGET=
@@ -941,7 +959,7 @@ for %%a in (%EXT_TARGETS%) do (
 
     if defined TEST_HAS_TARGET (
         echo Building ext_%%a...
-        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a --parallel %PARALLEL_JOBS%
+        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a --parallel %PARALLEL_JOBS% -- /p:CL_MPCount=2
         if errorlevel 1 (
             echo ERROR: Building of ext_%%a failed! 1>&2
             exit /b 105

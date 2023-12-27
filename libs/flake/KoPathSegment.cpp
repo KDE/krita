@@ -47,7 +47,7 @@ public:
      * @param p2 the first control point at t
      * @param p3 the new point at t
      * @param p4 the second control point at t
-     * @param p3 the new control point of the segment end (for cubic curbes only)
+     * @param p3 the new control point of the segment end (for cubic curves only)
      */
     void deCasteljau(qreal t, QPointF *p1, QPointF *p2, QPointF *p3, QPointF *p4, QPointF *p5) const;
 
@@ -147,7 +147,7 @@ QList<qreal> KoPathSegment::Private::extrema() const
     QList<qreal> params;
 
     /*
-     * The basic idea for calculating the extrama for bezier segments
+     * The basic idea for calculating the extrema for bezier segments
      * was found in comp.graphics.algorithms:
      *
      * Both the x coordinate and the y coordinate are polynomial. Newton told

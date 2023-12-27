@@ -9,11 +9,9 @@
 
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
-#include "kis_curve_line_option.h"
-#include "kis_curve_paintop_settings.h"
-#include <kis_pressure_opacity_option.h>
-#include "kis_linewidth_option.h"
-#include "kis_curves_opacity_option.h"
+#include <KisCurveStandardOptions.h>
+#include <KisCurveOpOptionData.h>
+#include <KisOpacityOption.h>
 
 class KisPainter;
 
@@ -38,8 +36,8 @@ private:
     KisPaintDeviceSP m_dab;
     KisPaintDeviceSP m_dev;
 
-    KisCurveOptionProperties m_curveProperties;
-    KisPressureOpacityOption m_opacityOption;
+    KisCurveOpOptionData m_curveOpOption;
+    KisOpacityOption m_opacityOption;
     KisLineWidthOption m_lineWidthOption;
     KisCurvesOpacityOption m_curvesOpacityOption;
 

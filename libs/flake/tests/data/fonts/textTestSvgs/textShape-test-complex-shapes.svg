@@ -1,0 +1,72 @@
+<svg width="380px" height="380px"
+    xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+  <defs>
+      <rect id="rotatedRect" transform="rotate(45)" x="0" y="0" width="84" height="84" />
+      <rect id="tinyRect" x="60" y="60" width="5" height="5" />
+      <polygon id="hourglass" points="0 0, 120 0, 0 120, 120 120" />
+      
+      <polygon id="overlapNonZero" fill-rule="nonzero" points="0 0, 20 0, 70 70, 50 70, 50 0, 120 0, 120 120, 0 120" />
+      <polygon id="overlapEvenOdd" fill-rule="evenodd" points="0 0, 20 0, 70 70, 50 70, 50 0, 120 0, 120 120, 0 120" />
+      <path id="ring" fill-rule="nonzero" d="M0 0L120 0L120 120L0 120ZM50 70L70 70L70 50L50 50Z" />
+      
+      <polygon id="pronged" fill-rule="evenodd" points="0 0, 50 0, 50 70, 70 70, 70 0, 120 0, 120 120, 0 120" />
+      
+      <path id="notclosed" d="M50 50L50 70L120 70L120 120L0 120L0 0L120 0L120 50" />
+      
+      <path id="split" d="M0 0L50 0L50 120L0 120Z M70 0L120 0L120 120L70 120Z"/>
+      
+      <path id="left" d="M0 0L50 0L50 120L0 120Z"/>
+      <path id="right" d="M70 0L120 0L120 120L70 120Z"/>
+  </defs>
+<g id="testRect">
+    <!-- This tests complex shapes, amongst which transformed, self-overlapping, split shapes and and fill-rules.-->
+    
+    <use id="ref-rotatedRect" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#rotatedRect" stroke="cornflowerblue" transform="translate(65,5)" />
+    <text id="test-rotatedRect" transform="translate(65,5)" style="shape-inside: url(#rotatedRect);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a rotated rect. The quick brown fox jumps over the lazy dog.
+    </text>
+    
+    <use id="ref-tinyRect" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#tinyRect" stroke="cornflowerblue" transform="translate(130,5)" />
+    <text id="test-tinyRect" transform="translate(130,5)" style="shape-inside: url(#tinyRect);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Too tiny!
+    </text>
+    
+    <use id="ref-hourglass" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#hourglass" stroke="cornflowerblue" transform="translate(255,5)" />
+    <text id="test-hourglass" transform="translate(255,5)" style="shape-inside: url(#hourglass);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a polygon with crossing edges. The quick brown fox jumps over the lazy dog.
+    </text>
+    
+    <use id="ref-overlapNonZero" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#overlapNonZero" stroke="cornflowerblue" transform="translate(5,130)" />
+    <text id="test-overlapNonZero" transform="translate(5,130)" style="shape-inside: url(#overlapNonZero);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a self-overlapping polygon with fill-rule: nonzero. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <use id="ref-overlapEvenOdd" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#ring" stroke="cornflowerblue" transform="translate(130,130)" />
+    <text id="test-overlapEvenOdd" transform="translate(130,130)" style="shape-inside: url(#ring);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a self-overlapping polygon with fill-rule: evenodd. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <use id="ref-pronged" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#pronged" stroke="cornflowerblue" transform="translate(255,130)" />
+    <text id="test-pronged" transform="translate(255,130)" style="shape-inside: url(#pronged);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a pronged polygon. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <use id="ref-notclosed" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#notclosed" stroke="cornflowerblue" transform="translate(5,255)" />
+    <text id="test-notclosed" transform="translate(5,255)" style="shape-inside: url(#notclosed);"
+          font-family="Krita_Test_Unicode_Variation_A"
+        writing-mode="vertical-rl" fill="blue" font-size="10">あああああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああああああ
+    </text>
+    
+    <use id="ref-split" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#split" stroke="cornflowerblue" transform="translate(130,255)" />
+    <text id="test-split" transform="translate(130,255)" style="shape-inside: url(#split);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a totally split rect. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+    
+    <use id="ref-left" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#left" stroke="cornflowerblue" transform="translate(255,255)" />
+    <use id="ref-right" fill="cornflowerblue" fill-opacity="0.2" xlink:href="#right" stroke="cornflowerblue" transform="translate(255,255)" />
+    <text id="test-double" transform="translate(255,255)" style="shape-inside: url(#left) url(#right);"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside two separate rects. The quick brown fox jumps over the lazy dog. <tspan direction="rtl" unicode-bidi="embed">داستان SVG 2.0 SE طولا ني است.</tspan>
+    </text>
+</g>
+
+</svg>

@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>647</width>
+    <width>340</width>
     <height>422</height>
    </rect>
   </property>
@@ -54,14 +54,21 @@
     </widget>
    </item>
    <item>
+    <widget class="KSqueezedTextLabel" name="lblPaletteName">
+     <property name="text">
+      <string notr="true">KSqueezedTextLabel</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QGridLayout" name="gridLayout">
-     <item row="2" column="5">
-      <widget class="QToolButton" name="bnRename">
+     <item row="2" column="7">
+      <widget class="QToolButton" name="bnSavePalette">
        <property name="text">
-        <string/>
+        <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="edit-rename">
+        <iconset theme="document-save">
          <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="autoRaise">
@@ -69,7 +76,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
+     <item row="2" column="5">
       <widget class="QToolButton" name="bnAdd">
        <property name="toolTip">
         <string>Add foreground color</string>
@@ -92,30 +99,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="KisPopupButton" name="bnColorSets">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="autoRaise">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <spacer name="hBottomSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="2" column="8">
+     <item row="2" column="9">
       <widget class="QToolButton" name="bnRemove">
        <property name="toolTip">
         <string>Remove swatch or group</string>
@@ -138,13 +122,61 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="7">
-      <widget class="QToolButton" name="bnEditPalette">
+     <item row="2" column="4">
+      <widget class="QToolButton" name="bnRedo">
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="document-layer">
+        <iconset theme="edit-redo">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="10">
+      <widget class="QToolButton" name="bnLock">
+       <property name="toolTip">
+        <string>Lock the current palette.</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="object-unlocked"/>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="KisPopupButton" name="bnColorSets">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="autoRaise">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QToolButton" name="bnUndo">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-undo">
+         <normaloff>.</normaloff>.</iconset>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="6">
+      <widget class="QToolButton" name="bnRename">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="edit-rename">
          <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="autoRaise">
@@ -152,20 +184,27 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="KSqueezedTextLabel" name="lblPaletteName">
-       <property name="text">
-        <string notr="true">KSqueezedTextLabel</string>
+     <item row="2" column="2">
+      <spacer name="hBottomSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
-     <item row="2" column="6">
-      <widget class="QToolButton" name="bnSavePalette">
+     <item row="2" column="8">
+      <widget class="QToolButton" name="bnEditPalette">
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset theme="document-save"/>
+        <iconset theme="document-layer">
+         <normaloff>.</normaloff>.</iconset>
        </property>
        <property name="autoRaise">
         <bool>true</bool>

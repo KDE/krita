@@ -27,15 +27,21 @@
 #include <brushengine/kis_locked_properties.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 
+#include <lager/constant.hpp>
+#include <KisLager.h>
 
 
 struct KisPaintOpSettingsWidget::Private
 {
+    Private()
+    {
+    }
+
     QList<KisPaintOpOption*>    paintOpOptions;
     KisCategorizedListView*     optionsList;
     KisPaintOpOptionListModel*  model;
     QStackedWidget*             optionsStack;
-
+    std::optional<lager::reader<KisPaintopLodLimitations>> lodLimitations;
 };
 
 KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
@@ -94,11 +100,7 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option)
 
 void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, KisPaintOpOption::PaintopCategory category)
 {
-    if (!option->configurationPage()) return;
-    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), option->label(), category);
-    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
-    m_d->optionsStack->addWidget(option->configurationPage());
-    m_d->paintOpOptions << option;
+    addPaintOpOption(option, m_d->model->categoryName(category));
 }
 
 void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QString category)
@@ -108,6 +110,10 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QStrin
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
+
+    m_d->lodLimitations =
+        kislager::fold_optional_cursors(std::bit_or{}, m_d->lodLimitations,
+                                      option->effectiveLodLimitations());
 }
 
 void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
@@ -118,17 +124,11 @@ void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfiguration
     Q_FOREACH (KisPaintOpOption* option, m_d->paintOpOptions) {
         option->startReadOptionSetting(propertiesProxy);
 
-        if (KisLockedPropertiesServer::instance()->propertiesFromLocked()) {
-            option->setLocked(true);
-        }
-        else {
-            option->setLocked(false);
-        }
-
         KisLockedPropertiesServer::instance()->setPropertiesFromLocked(false);
         KisOptionInfo info;
         info.option = option;
         info.index = indexcount;
+
         m_d->model->categoriesMapper()->itemFromRow(m_d->model->indexOf(info).row())->setLocked(option->isLocked());
         m_d->model->categoriesMapper()->itemFromRow(m_d->model->indexOf(info).row())->setLockable(true);
         m_d->model->signalDataChanged(m_d->model->indexOf(info));
@@ -154,6 +154,16 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
     }
 
     return l;
+}
+
+lager::reader<KisPaintopLodLimitations> KisPaintOpSettingsWidget::lodLimitationsReader() const
+{
+    return m_d->lodLimitations.value_or(lager::make_constant(KisPaintopLodLimitations()));
+}
+
+lager::reader<qreal> KisPaintOpSettingsWidget::effectiveBrushSize() const
+{
+    return lager::make_constant(1.0);
 }
 
 void KisPaintOpSettingsWidget::setImage(KisImageWSP image)
@@ -201,15 +211,6 @@ void KisPaintOpSettingsWidget::changePage(const QModelIndex& index)
 
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
-
-        // disable the widget if a setting area is not active and not being used
-       if (info.option->isCheckable() ) {
-            m_d->optionsStack->setEnabled(info.option->isChecked());
-       } else {
-           m_d->optionsStack->setEnabled(true); // option is not checkable, so always enable
-       }
-
-
     }
 
     notifyPageChanged();
@@ -231,12 +232,14 @@ void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
             KisLockedPropertiesServer::instance()->addToLockedProperties(p);
             info.option->setLocked(true);
             m_d->model->categoriesMapper()->itemFromRow(index.row())->setLocked(true);
+            m_d->model->signalDataChanged(index);
 
         }
         else {
             KisLockedPropertiesServer::instance()->removeFromLockedProperties(p);
             info.option->setLocked(false);
             m_d->model->categoriesMapper()->itemFromRow(index.row())->setLocked(false);
+            m_d->model->signalDataChanged(index);
 
             if (m_saveLockedOption){
                 emit sigSaveLockedConfig(p);
@@ -246,9 +249,7 @@ void KisPaintOpSettingsWidget::lockProperties(const QModelIndex& index)
             }
             m_saveLockedOption = false;
         }
-        m_d->model->signalDataChanged(index);
     }
-
 }
 void KisPaintOpSettingsWidget::slotLockPropertiesDrop()
 {

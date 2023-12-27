@@ -22,7 +22,7 @@ public:
 
     KisToolBasicBrushBase(KoCanvasBase *canvas,
                           ToolType type,
-                          const QCursor & cursor=KisCursor::load("tool_outline_selection_cursor.png", 6, 6));
+                          const QCursor & cursor=KisCursor::load("tool_outline_selection_cursor.png", 5, 5));
     ~KisToolBasicBrushBase() override;
 
     void mouseMoveEvent(KoPointerEvent *event) override;
@@ -45,7 +45,7 @@ public Q_SLOTS:
 
 protected:
     virtual void finishStroke(const QPainterPath& stroke) = 0;
-    QPainterPath getOutlinePath(const QPointF &documentPos,
+    KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
                                 const KoPointerEvent *event,
                                 KisPaintOpSettings::OutlineMode outlineMode) override;
 

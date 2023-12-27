@@ -17,7 +17,7 @@
 #include "KisAnimUtils.h"
 #include "kis_processing_applicator.h"
 #include "kis_command_utils.h"
-#include "KisImageBarrierLockerWithFeedback.h"
+#include "KisImageBarrierLock.h"
 
 struct KisAnimationCurve::Private
 {
@@ -317,7 +317,7 @@ bool KisAnimCurvesModel::adjustKeyframes(const QModelIndexList &indexes, int tim
                          indexes.size())));
 
     {
-        KisImageBarrierLockerWithFeedback locker(image());
+        KisImageBarrierLock lock(image());
 
         if (timeOffset != 0) {
             bool ok = createOffsetFramesCommand(indexes, QPoint(timeOffset, 0), false, false, command.data());
@@ -389,7 +389,7 @@ KisAnimationCurve *KisAnimCurvesModel::addCurve(KisScalarKeyframeChannel *channe
     connect(channel, &KisScalarKeyframeChannel::sigAddedKeyframe,
             this, &KisAnimCurvesModel::slotKeyframeAdded);
 
-    connect(channel, &KisScalarKeyframeChannel::sigRemovingKeyframe,
+    connect(channel, &KisScalarKeyframeChannel::sigKeyframeHasBeenRemoved,
             this, [this](const KisKeyframeChannel* channel, int time) {
         this->slotKeyframeChanged(channel, time);
     });

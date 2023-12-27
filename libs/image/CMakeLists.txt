@@ -13,12 +13,6 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/generator
     ${CMAKE_CURRENT_SOURCE_DIR}/layerstyles
     ${CMAKE_CURRENT_SOURCE_DIR}/processing
-
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-)
-
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
 )
 
 if(FFTW3_FOUND)
@@ -36,25 +30,25 @@ if(HAVE_XSIMD)
 endif()
 
 set(kritaimage_LIB_SRCS
-    tiles3/kis_tile.cc
-    tiles3/kis_tile_data.cc
-    tiles3/kis_tile_data_store.cc
-    tiles3/kis_tile_data_pooler.cc
-    tiles3/kis_tiled_data_manager.cc
-    tiles3/KisTiledExtentManager.cpp
-    tiles3/kis_memento_manager.cc
-    tiles3/kis_hline_iterator.cpp
-    tiles3/kis_vline_iterator.cpp
-    tiles3/kis_random_accessor.cc
-    tiles3/swap/kis_abstract_compression.cpp
-    tiles3/swap/kis_lzf_compression.cpp
-    tiles3/swap/kis_abstract_tile_compressor.cpp
-    tiles3/swap/kis_legacy_tile_compressor.cpp
-    tiles3/swap/kis_tile_compressor_2.cpp
-    tiles3/swap/kis_chunk_allocator.cpp
-    tiles3/swap/kis_memory_window.cpp
-    tiles3/swap/kis_swapped_data_store.cpp
-    tiles3/swap/kis_tile_data_swapper.cpp
+   tiles3/kis_tile.cc
+   tiles3/kis_tile_data.cc
+   tiles3/kis_tile_data_store.cc
+   tiles3/kis_tile_data_pooler.cc
+   tiles3/kis_tiled_data_manager.cc
+   tiles3/KisTiledExtentManager.cpp
+   tiles3/kis_memento_manager.cc
+   tiles3/kis_hline_iterator.cpp
+   tiles3/kis_vline_iterator.cpp
+   tiles3/kis_random_accessor.cc
+   tiles3/swap/kis_abstract_compression.cpp
+   tiles3/swap/kis_lzf_compression.cpp
+   tiles3/swap/kis_abstract_tile_compressor.cpp
+   tiles3/swap/kis_legacy_tile_compressor.cpp
+   tiles3/swap/kis_tile_compressor_2.cpp
+   tiles3/swap/kis_chunk_allocator.cpp
+   tiles3/swap/kis_memory_window.cpp
+   tiles3/swap/kis_swapped_data_store.cpp
+   tiles3/swap/kis_tile_data_swapper.cpp
    kis_distance_information.cpp
    kis_painter.cc
    kis_painter_blt_multi_fixed.cpp
@@ -84,6 +78,8 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_standard_uniform_properties_factory.cpp
    brushengine/KisStrokeSpeedMeasurer.cpp
    brushengine/KisPaintopSettingsIds.cpp
+   brushengine/KisOptimizedBrushOutline.cpp
+   brushengine/kis_paintop_lod_limitations.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/KisDeselectActiveSelectionCommand.cpp
    commands/kis_image_change_layers_command.cpp
@@ -122,6 +118,7 @@ set(kritaimage_LIB_SRCS
    commands_new/KisUpdateCommandEx.cpp
    commands_new/KisDisableDirtyRequestsCommand.cpp
    commands_new/KisResetGroupLayerCacheCommand.cpp
+   commands_new/KisLazyCreateTransformMaskKeyframesCommand.cpp
    processing/kis_do_nothing_processing_visitor.cpp
    processing/kis_simple_processing_visitor.cpp
    processing/kis_convert_color_space_processing_visitor.cpp
@@ -149,6 +146,8 @@ set(kritaimage_LIB_SRCS
    lazybrush/KisWatershedWorker.cpp
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
+   KisFrameChangeUpdateRecipe.cpp
+   KisAnimAutoKey.cpp
    KisDelayedUpdateNodeInterface.cpp
    KisCroppedOriginalLayerInterface.cpp
    KisDecoratedNodeInterface.cpp
@@ -183,7 +182,6 @@ set(kritaimage_LIB_SRCS
    kis_transform_mask.cpp
    kis_transform_mask_params_interface.cpp
    kis_recalculate_transform_mask_job.cpp
-   kis_recalculate_generator_layer_job.cpp
    kis_transform_mask_params_factory_registry.cpp
    kis_safe_transform.cpp
    kis_gradient_painter.cc
@@ -227,6 +225,7 @@ set(kritaimage_LIB_SRCS
    kis_image_signal_router.cpp
    KisImageSignals.cpp
    kis_image_config.cpp
+   KisImageResolutionProxy.cpp
    kis_projection_updates_filter.cpp
    kis_suspend_projection_updates_stroke_strategy.cpp
    kis_regenerate_frame_stroke_strategy.cpp
@@ -348,6 +347,8 @@ set(kritaimage_LIB_SRCS
    KisBezierTransformMesh.cpp
 
    KisEncloseAndFillPainter.cpp
+   KisBlockBackgroundFrameGenerationLock.cpp
+   KisLockFrameGenerationLock.cpp
 )
 
 set(einspline_SRCS
@@ -360,12 +361,6 @@ set(einspline_SRCS
 )
 
 kis_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
-
-set_source_files_properties(
-    ${__per_arch_circle_mask_generator_objs}
-    ${_per_arch_processor_objs}
-    PROPERTIES SKIP_PRECOMPILE_HEADERS TRUE)
-
 
 generate_export_header(kritaimage BASE_NAME kritaimage)
 
@@ -381,21 +376,25 @@ target_link_libraries(kritaimage
         kritawidgetutils 
         kritametadata
         kritaresources
-        Qt5::Concurrent
-)
 
-target_link_libraries(kritaimage PUBLIC ${Boost_SYSTEM_LIBRARY})
+        Qt5::Concurrent
+
+        Eigen3::Eigen
+        Boost::boost
+)
 
 if(HAVE_CXX_ATOMICS_WITH_LIB OR HAVE_CXX_ATOMICS64_WITH_LIB)
    target_link_libraries(kritaimage PUBLIC atomic)
 endif()
 
 if(OpenEXR_FOUND)
-  target_link_libraries(kritaimage PUBLIC ${OPENEXR_LIBRARIES})
+  target_link_libraries(kritaimage PUBLIC ${LINK_OPENEXR_LIB})
 endif()
 
-if(FFTW3_FOUND)
-  target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
+target_link_libraries(kritaimage PRIVATE ${FFTW3_LIBRARIES})
+
+if(APPLE)
+    target_link_libraries(kritaimage PRIVATE kritamacosutils)
 endif()
 
 target_link_libraries(kritaimage PUBLIC kritamultiarch)
@@ -403,7 +402,7 @@ target_link_libraries(kritaimage PUBLIC kritamultiarch)
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Shaped Gradients might be non-normalized! Please install GSL library.")
 else ()
-  target_link_libraries(kritaimage PRIVATE ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+  target_link_libraries(kritaimage PRIVATE GSL::gsl)
 endif ()
 
 target_include_directories(kritaimage

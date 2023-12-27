@@ -172,6 +172,18 @@ int KisUndoModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
+namespace {
+
+int calcNumMergedCommands(KUndo2Command *cmd) {
+    int numCommands = 1;
+    Q_FOREACH (KUndo2Command *child, cmd->mergeCommandsVector()) {
+        numCommands += calcNumMergedCommands(child);
+    }
+    return numCommands;
+};
+
+} // namespace
+
 QVariant KisUndoModel::data(const QModelIndex &index, int role) const
 {
     if (m_stack == 0){
@@ -191,7 +203,10 @@ QVariant KisUndoModel::data(const QModelIndex &index, int role) const
             return m_empty_label;
         }
         KUndo2Command* currentCommand = const_cast<KUndo2Command*>(m_stack->command(index.row() - 1));
-        return currentCommand->isMerged()?m_stack->text(index.row() - 1)+"(Merged)":m_stack->text(index.row() - 1);
+
+        return currentCommand->isMerged() ?
+            QString("%1 (Merged %2)").arg(currentCommand->text().toString()).arg(calcNumMergedCommands(currentCommand)) :
+            currentCommand->text().toString();
     }
     else if (role == Qt::DecorationRole) {
         if (index.row() > 0) {

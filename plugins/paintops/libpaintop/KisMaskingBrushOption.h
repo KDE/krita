@@ -12,17 +12,13 @@
 
 #include <kis_types.h>
 #include "kis_paintop_option.h"
-
-class KisMaskingBrushOptionProperties;
+#include <lager/reader.hpp>
 
 class PAINTOP_EXPORT KisMaskingBrushOption : public KisPaintOpOption
 {
     Q_OBJECT
 public:
-    typedef std::function<qreal()> MasterBrushSizeAdapter;
-
-public:
-    KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushSizeAdapter);
+    KisMaskingBrushOption(lager::reader<qreal> effectiveBrushSize);
     ~KisMaskingBrushOption() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
@@ -32,11 +28,11 @@ public:
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
-private Q_SLOTS:
-    void slotMaskingBrushChanged();
+    lager::reader<bool> maskingBrushEnabledReader() const;
 
-private:
-    void updateWarningLabelStatus();
+private Q_SLOTS:
+    void slotCompositeModeWidgetChanged(int index);
+    void slotCompositeModePropertyChanged(const QString &value);
 
 private:
     struct Private;

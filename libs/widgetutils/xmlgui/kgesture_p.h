@@ -36,7 +36,7 @@ public:
      * @p shape must be a "reasonable" polygon. It must contain at least two points
      * and it should contain at most 50 for performance reasons. No two consecutive points
      * are allowed to be at the same position.
-     * @param shape shape to draw to trigger this gesture
+     * @param shape to draw to trigger this gesture
      */
     KisKShapeGesture(const QPolygon &shape);
 

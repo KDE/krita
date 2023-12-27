@@ -26,7 +26,7 @@ typedef QSharedPointer<KisTag> KisTagSP;
  * are important:
  *
  * name: the name of the tag, which can be translated
- * comment: a tooltip for the tag, which can be translagted
+ * comment: a tooltip for the tag, which can be translated
  * url: the untranslated name of the tag
  *
  */

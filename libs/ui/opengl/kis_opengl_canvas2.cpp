@@ -95,7 +95,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
 #else
     setAttribute(Qt::WA_AcceptTouchEvents, true);
 #endif
-    setAttribute(Qt::WA_InputMethodEnabled, false);
+    setAttribute(Qt::WA_InputMethodEnabled, true);
     setAttribute(Qt::WA_DontCreateNativeAncestors, true);
     setUpdateBehavior(PartialUpdate);
 
@@ -123,7 +123,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisConfigNotifier::instance(), SIGNAL(pixelGridModeChanged()), SLOT(slotPixelGridModeChanged()));
 
-    connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEraserModeToggled(bool)), SLOT(slotUpdateCursorColor()));
+    connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(slotUpdateCursorColor()));
     connect(canvas->viewManager()->canvasResourceProvider(), SIGNAL(sigPaintOpPresetChanged(KisPaintOpPresetSP)), SLOT(slotUpdateCursorColor()));
 
     slotConfigChanged();
@@ -172,6 +172,17 @@ bool KisOpenGLCanvas2::wrapAroundViewingMode() const
     return d->renderer->wrapAroundViewingMode();
 }
 
+void KisOpenGLCanvas2::setWrapAroundViewingModeAxis(WrapAroundAxis value)
+{
+    d->renderer->setWrapAroundViewingModeAxis(value);
+    update();
+}
+
+WrapAroundAxis KisOpenGLCanvas2::wrapAroundViewingModeAxis() const
+{
+    return d->renderer->wrapAroundViewingModeAxis();
+}
+
 void KisOpenGLCanvas2::initializeGL()
 {
     d->renderer->initializeGL();
@@ -193,7 +204,7 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
-    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
+    KisOpenglCanvasDebugger::instance()->notifyPaintRequested();
     QRect canvasImageDirtyRect = d->canvasImageDirtyRect & rect();
     d->canvasImageDirtyRect = QRect();
     d->renderer->paintCanvasOnly(canvasImageDirtyRect, updateRect);
@@ -232,20 +243,42 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->updateRect);
 
-    d->updateRect = e->rect();
+    if (qFuzzyCompare(devicePixelRatioF(), qRound(devicePixelRatioF()))) {
+        /**
+         * Enable partial updates **only** for the case when we have
+         * integer scaling. There is a bug in Qt that causes artifacts
+         * otherwise:
+         *
+         * See https://bugs.kde.org/show_bug.cgi?id=441216
+         */
+        d->updateRect = e->rect();
+    } else {
+        d->updateRect = this->rect();
+    }
+
     QOpenGLWidget::paintEvent(e);
     d->updateRect = boost::none;
 }
 
-void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
+void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path, int thickness)
 {
-    d->renderer->paintToolOutline(path);
+    /**
+     * paintToolOutline() is called from drawDecorations(), which has clipping
+     * set only for QPainter-based painting; here we paint in native mode, so we
+     * should care about clipping manually
+     *
+     * `d->updateRect` might be empty in case the fractional DPI workaround
+     * is active.
+     */
+    const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
+
+    d->renderer->paintToolOutline(path, updateRect, thickness);
 }
 
 bool KisOpenGLCanvas2::isBusy() const
 {
     const bool isBusyStatus = d->glSyncObject && !d->glSyncObject->isSignaled();
-    KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
+    KisOpenglCanvasDebugger::instance()->notifySyncStatus(isBusyStatus);
     return isBusyStatus;
 }
 
@@ -286,6 +319,28 @@ QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
 void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
+}
+
+void KisOpenGLCanvas2::focusInEvent(QFocusEvent *event)
+{
+    processFocusInEvent(event);
+}
+
+void KisOpenGLCanvas2::focusOutEvent(QFocusEvent *event)
+{
+    processFocusOutEvent(event);
+}
+
+void KisOpenGLCanvas2::hideEvent(QHideEvent *e)
+{
+    QOpenGLWidget::hideEvent(e);
+    notifyDecorationsWindowMinimized(true);
+}
+
+void KisOpenGLCanvas2::showEvent(QShowEvent *e)
+{
+    QOpenGLWidget::showEvent(e);
+    notifyDecorationsWindowMinimized(false);
 }
 
 void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
@@ -354,7 +409,6 @@ void KisOpenGLCanvas2::updateCanvasDecorations(const QRect &decoUpdateRect)
 {
     update(decoUpdateRect);
 }
-
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);

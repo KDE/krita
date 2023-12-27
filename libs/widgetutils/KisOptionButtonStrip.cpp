@@ -9,6 +9,7 @@
 
 #include <KoGroupButton.h>
 
+#include <kis_assert.h>
 #include "KisOptionButtonStrip.h"
 
 class KisOptionButtonStrip::Private
@@ -67,6 +68,7 @@ KoGroupButton *KisOptionButtonStrip::addButton(const QIcon &icon,
     m_d->buttonGroup->addButton(newButton, m_d->numberOfButtons);
 
     QHBoxLayout *mainLayout = dynamic_cast<QHBoxLayout *>(layout());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(mainLayout, newButton);
     mainLayout->insertWidget(m_d->numberOfButtons, newButton);
 
     ++m_d->numberOfButtons;

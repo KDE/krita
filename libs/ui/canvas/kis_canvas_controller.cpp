@@ -178,6 +178,8 @@ void KisCanvasController::mirrorCanvas(bool enable)
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
     m_d->showMirrorStateOnCanvas();
+
+    emit canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
@@ -198,6 +200,29 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
         setScrollBarValue(newOffset);
         m_d->showMirrorStateOnCanvas();
     }
+
+    emit canvasMirrorModeChanged(enable);
+}
+
+void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
+{
+    int docWidth = KoCanvasControllerWidget::documentSize().width();
+    int docOffsetX = KoCanvasControllerWidget::canvasOffsetX();
+        
+    QPoint center = QPoint(docOffsetX + (docWidth / 2), 0);
+    QPoint newOffset = m_d->coordinatesConverter->mirror(center, enable, false);
+    
+    setScrollBarValue(newOffset);
+    
+    // When the width is odd one side will be 1 pixel bigger, mirroring will 
+    // make the canvas move left by 1 pixel hence we pan it back to place.
+    if (docWidth % 2 == 1) 
+        KoCanvasControllerWidget::pan(QPoint(-1, 0));
+    
+    m_d->updateDocumentSizeAfterTransform();
+    m_d->showMirrorStateOnCanvas();
+
+    emit canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::Private::showRotationValueOnCanvas()
@@ -210,8 +235,21 @@ void KisCanvasController::Private::showRotationValueOnCanvas()
             QIcon(), 500, KisFloatingMessage::Low, Qt::AlignCenter);
 }
 
-void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center)
+void KisCanvasController::beginCanvasRotation()
 {
+    m_d->coordinatesConverter->beginRotation();
+}
+
+void KisCanvasController::endCanvasRotation()
+{
+    m_d->coordinatesConverter->endRotation();
+}
+
+void KisCanvasController::rotateCanvas(qreal angle, const QPointF &center, bool isNativeGesture)
+{
+    if(isNativeGesture) {
+        m_d->coordinatesConverter->enableNatureGestureFlag();
+    }
     QPoint newOffset = m_d->coordinatesConverter->rotate(center, angle);
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
@@ -265,6 +303,38 @@ bool KisCanvasController::wrapAroundMode() const
     Q_ASSERT(kritaCanvas);
 
     return kritaCanvas->wrapAroundViewingMode();
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxis(WrapAroundAxis value)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    kritaCanvas->setWrapAroundViewingModeAxis(value);
+    kritaCanvas->image()->setWrapAroundModeAxis(value);
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxisHV()
+{
+    slotSetWrapAroundModeAxis(WRAPAROUND_BOTH);
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxisH()
+{
+    slotSetWrapAroundModeAxis(WRAPAROUND_HORIZONTAL);
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxisV()
+{
+    slotSetWrapAroundModeAxis(WRAPAROUND_VERTICAL);
+}
+
+WrapAroundAxis KisCanvasController::wrapAroundModeAxis() const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->wrapAroundViewingModeAxis();
 }
 
 void KisCanvasController::slotTogglePixelGrid(bool value)
@@ -328,6 +398,7 @@ void KisCanvasController::saveCanvasState(KisPropertiesConfiguration &config) co
     config.setProperty("rotation", rotation());
     config.setProperty("mirror", m_d->coordinatesConverter->xAxisMirrored());
     config.setProperty("wrapAround", wrapAroundMode());
+    config.setProperty("wrapAroundAxis", wrapAroundModeAxis());
     config.setProperty("enableInstantPreview", levelOfDetailMode());
 }
 
@@ -345,6 +416,7 @@ void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &c
     setPreferredCenter(QPointF(panX, panY));
 
     slotToggleWrapAroundMode(config.getBool("wrapAround", false));
+    slotSetWrapAroundModeAxis((WrapAroundAxis)config.getInt("wrapAroundAxis", 0));
     kritaCanvas->setLodPreferredInCanvas(config.getBool("enableInstantPreview", false));
 }
 

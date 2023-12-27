@@ -5,25 +5,28 @@
  */
 #include "kis_grid_paintop_settings_widget.h"
 
-#include "kis_gridop_option.h"
 #include "kis_grid_paintop_settings.h"
-#include "kis_grid_shape_option.h"
+#include "KisGridShapeOptionWidget.h"
+#include "KisGridOpOptionWidget.h"
 
-#include <kis_color_option.h>
+
+#include <KisColorOptionWidget.h>
 
 #include <kis_paintop_settings_widget.h>
-#include <kis_paint_action_type_option.h>
-#include <kis_compositeop_option.h>
+#include <KisPaintingModeOptionWidget.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <klocalizedstring.h>
+#include <KisCompositeOpOptionWidget.h>
 
 KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    addPaintOpOption(new KisGridOpOption());
-    addPaintOpOption(new KisGridShapeOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisColorOption());
-    addPaintOpOption(new KisPaintActionTypeOption());
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
+    addPaintOpOption(kpowu::createOptionWidget<KisGridOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisGridShapeOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisColorOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>());
 }
 
 KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()

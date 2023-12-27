@@ -15,8 +15,8 @@ class KisPainter;
 
 
 /**
- * An interface of the node to the compositioning
- * system. Compositioning system KisAsyncMerger knows nothing about
+ * An interface of the node to the compositing
+ * system. Compositing system KisAsyncMerger knows nothing about
  * the internals of the layer, it just knows that the layer can:
  *
  * 1) recalculate() its internal representation if it is filthy

@@ -28,6 +28,7 @@
 #include <kis_raster_keyframe_channel.h>
 #include <kis_time_span.h>
 #include <kis_image_config.h>
+#include <KisAnimAutoKey.h>
 
 // krita/ui
 #include "KisViewManager.h"
@@ -328,11 +329,11 @@ void KisFilterManager::finish()
 
     if (d->filterAllSelectedFrames) {   // Apply filter to the other selected frames...
         KisImageSP image = d->view->image();
-        QSet<int> selectedTimes = image->animationInterface()->activeLayerSelectedTimes();
         KisPaintDeviceSP paintDevice = d->view->activeNode()->paintDevice();
         KisNodeSP node = d->view->activeNode();
 
         // Filter selected times to only those with keyframes...
+        QSet<int> selectedTimes = image->animationInterface()->activeLayerSelectedTimes();
         selectedTimes = KisLayerUtils::filterTimesForOnlyRasterKeyedTimes(node, selectedTimes);
         QSet<int> uniqueFrames = KisLayerUtils::fetchUniqueFrameTimes(node, selectedTimes, true);
 

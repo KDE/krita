@@ -33,11 +33,13 @@
 #include "kis_node_manager.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_undo_adapter.h"
-#include <kis_image_barrier_locker.h>
+#include <KisImageBarrierLock.h>
 #include "kis_selection_mask.h"
+#include "kis_layer_utils.h"
 
 #include <KoUpdater.h>
 #include <KoProgressUpdater.h>
+#include <KisCursorOverrideLock.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(LayerSplitFactory, "kritalayersplit.json", registerPlugin<LayerSplit>();)
 
@@ -73,28 +75,22 @@ void LayerSplit::slotLayerSplit()
 
         bool modeToLayer = !dlg.m_modeToMask;
         dlg.hide();
-        
-        // Convert to paint layer prior to splitting if current node is a colorize mask
-        if(viewManager()->activeNode()->inherits("KisColorizeMask")) {
-            viewManager()->nodeManager()->convertNode("KisPaintLayer");
-        }
 
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-
-        QPointer<KoUpdater> updater;
-        if( modeToLayer){
-            updater = viewManager()->createUnthreadedUpdater(i18n("Split into Layers"));
-        }
-        else {
-            updater = viewManager()->createUnthreadedUpdater(i18n("Split into Masks"));
-        }
         KisImageSP image = viewManager()->image();
         if (!image) return;
 
-        KisImageBarrierLocker locker(image);
-
         KisNodeSP node = viewManager()->activeNode();
         if (!node) return;
+
+        // Convert to paint layer prior to splitting if current node is a colorize mask
+        if (node->inherits("KisColorizeMask")) {
+            std::future<KisNodeSP> convertedNode = KisLayerUtils::convertToPaintLayer(image, node);
+            node = convertedNode.get();
+        }
+
+        if (!node) return;
+
+        KisImageBarrierLock lock(image);
 
         KisPaintDeviceSP projection = node->projection();
         if (!projection) return;
@@ -105,6 +101,16 @@ void LayerSplit::slotLayerSplit()
         QRect rc = image->bounds();
 
         int fuzziness = dlg.fuzziness();
+
+        KisCursorOverrideLock cursorLock(Qt::WaitCursor);
+
+        QPointer<KoUpdater> updater;
+        if( modeToLayer){
+            updater = viewManager()->createUnthreadedUpdater(i18n("Split into Layers"));
+        }
+        else {
+            updater = viewManager()->createUnthreadedUpdater(i18n("Split into Masks"));
+        }
 
         updater->setProgress(0);
 
@@ -149,7 +155,7 @@ void LayerSplit::slotLayerSplit()
                 if (!found) {
                     QString name = "";
                     if (dlg.palette()) {
-                       name = dlg.palette()->getClosestColorInfo(c).swatch.name();
+                       name = dlg.palette()->getClosestSwatchInfo(c).swatch.name();
                     }
 
                     if (name.toLower() == "untitled" || name.toLower() == "none" || name.toLower() == "") {
@@ -231,8 +237,6 @@ void LayerSplit::slotLayerSplit()
 
         undo->endMacro();
    }
-
-    QApplication::restoreOverrideCursor();
 }
 
 #include "layersplit.moc"

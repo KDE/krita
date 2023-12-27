@@ -69,6 +69,9 @@ public:
     qreal textRunAroundDistanceBottom;
     qreal textRunAroundThreshold;
     KoShape::TextRunAroundContour textRunAroundContour;
+
+    QVector<PaintOrder> paintOrder {Fill, Stroke, Markers};
+    bool inheritPaintOrder = true;
 };
 
 class KoShape::Private

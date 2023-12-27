@@ -71,7 +71,6 @@ void KisToolLineHelper::repaintLine(KisImageWSP image, KisNodeSP node,
                                                           0.0);
     }
 
-
     KisPaintOpPresetSP preset = resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset)
             .value<KisPaintOpPresetSP>();
 
@@ -121,6 +120,12 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
     KisPaintInformation pi =
             m_d->infoBuilder->continueStroke(event, 0);
 
+    addPoint(pi, overridePos);
+}
+
+void KisToolLineHelper::addPoint(KisPaintInformation pi, const QPointF &overridePos)
+{
+    if (!m_d->enabled) return;
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());
     }
@@ -132,24 +137,30 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
     if (m_d->linePoints.size() > 1) {
         const QPointF startPos = m_d->linePoints.first().pos();
         const QPointF endPos = pi.pos();
-        const qreal maxDistance = kisDistance(startPos, endPos);
-        const QPointF unit = (endPos - startPos) / maxDistance;
 
-        QVector<KisPaintInformation>::iterator it = m_d->linePoints.begin();
-        ++it;
-        while (it != m_d->linePoints.end()) {
-            qreal dist = kisDistance(startPos, it->pos());
-            if (dist < maxDistance) {
-                QPointF pos = startPos + unit * dist;
-                it->setPos(pos);
-                ++it;
-            } else {
-                it = m_d->linePoints.erase(it);
+        if (!KisAlgebra2D::fuzzyPointCompare(startPos, endPos)) {
+            const qreal maxDistance = kisDistance(startPos, endPos);
+            const QPointF unit = (endPos - startPos) / maxDistance;
+
+            QVector<KisPaintInformation>::iterator it = m_d->linePoints.begin();
+            ++it;
+            while (it != m_d->linePoints.end()) {
+                qreal dist = kisDistance(startPos, it->pos());
+                if (dist < maxDistance) {
+                    QPointF pos = startPos + unit * dist;
+                    it->setPos(pos);
+                    ++it;
+                } else {
+                    it = m_d->linePoints.erase(it);
+                }
             }
+        } else {
+            m_d->linePoints.clear();
         }
     }
 
     m_d->linePoints.append(pi);
+
 }
 
 void KisToolLineHelper::translatePoints(const QPointF &offset)
@@ -160,6 +171,31 @@ void KisToolLineHelper::translatePoints(const QPointF &offset)
     while (it != m_d->linePoints.end()) {
         it->setPos(it->pos() + offset);
         ++it;
+    }
+}
+
+void KisToolLineHelper::movePointsTo(const QPointF &startPoint, const QPointF &endPoint)
+{
+    if (m_d->linePoints.size() <= 1 ) {
+        return;
+    }
+
+    if (KisAlgebra2D::fuzzyPointCompare(startPoint, endPoint)) {
+        return;
+    }
+
+    if (m_d->linePoints.size() > 1) {
+        const qreal maxDistance = kisDistance(startPoint, endPoint);
+        const QPointF unit = (endPoint - startPoint) / maxDistance;
+
+        QVector<KisPaintInformation>::iterator it = m_d->linePoints.begin();
+        ++it;
+        while (it != m_d->linePoints.end()) {
+            qreal dist = kisDistance(startPoint, it->pos());
+            QPointF pos = startPoint + unit * dist;
+            it->setPos(pos);
+            ++it;
+        }
     }
 }
 

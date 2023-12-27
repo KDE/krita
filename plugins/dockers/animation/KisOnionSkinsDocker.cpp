@@ -22,6 +22,7 @@
 #include "kis_action.h"
 #include <KoColorSpaceRegistry.h>
 #include "KisMainWindow.h"
+#include <KisSpinBoxI18nHelper.h>
 
 #include "kis_equalizer_widget.h"
 #include "kis_color_label_button.h"
@@ -43,8 +44,8 @@ KisOnionSkinsDocker::KisOnionSkinsDocker(QWidget *parent) :
 
     ui->doubleTintFactor->setMinimum(0);
     ui->doubleTintFactor->setMaximum(100);
-    ui->doubleTintFactor->setPrefix(i18n("Tint: "));
-    ui->doubleTintFactor->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(ui->doubleTintFactor,
+                                  i18nc("{n} is the number value, % is the percent sign", "Tint: {n}%"));
 
     ui->btnBackwardColor->setToolTip(i18n("Tint color for past frames"));
     ui->btnForwardColor->setToolTip(i18n("Tint color for future frames"));
@@ -70,6 +71,8 @@ KisOnionSkinsDocker::KisOnionSkinsDocker(QWidget *parent) :
         connect(ui->btnShowHide, SIGNAL(toggled(bool)), SLOT(slotShowAdditionalSettings(bool)));
         slotShowAdditionalSettings(isShown);
     }
+
+    setEnabled(false);
 
     {
         KisNodeViewColorScheme scm;
@@ -114,11 +117,12 @@ KisOnionSkinsDocker::~KisOnionSkinsDocker()
 
 void KisOnionSkinsDocker::setCanvas(KoCanvasBase *canvas)
 {
-    Q_UNUSED(canvas);
+    setEnabled(canvas != 0);
 }
 
 void KisOnionSkinsDocker::unsetCanvas()
 {
+    setCanvas(0);
 }
 
 void KisOnionSkinsDocker::setViewManager(KisViewManager *view)

@@ -18,6 +18,7 @@
 #include <QEvent>
 #include <QPaintEvent>
 #include <QList>
+#include <optional>
 
 #include <kritaui_export.h>
 
@@ -57,14 +58,6 @@ public:
     void reset(void);
 
     /**
-     * Enable the guide and set the guide color to the specified color.
-     *
-     * XXX: it seems that the guide feature isn't actually implemented yet?
-     */
-    void setCurveGuide(const QColor & color);
-
-
-    /**
      * Set a background pixmap. The background pixmap will be drawn under
      * the grid and the curve.
      *
@@ -74,14 +67,14 @@ public:
     void setPixmap(const QPixmap & pix);
     QPixmap getPixmap();
     
-    void setBasePixmap(const QPixmap & pix);
-    QPixmap getBasePixmap();
-
     /**
      * Whether or not there is a point selected
      * This does NOT include the first and last points
      */
     bool pointSelected() const;
+
+    bool setCurrentPoint(QPointF pt);
+    std::optional<QPointF> currentPoint() const;
 
 Q_SIGNALS:
 
@@ -89,6 +82,7 @@ Q_SIGNALS:
      * Emitted whenever a control point has changed position.
      */
     void modified(void);
+    void curveChanged(const KisCubicCurve &);
     /**
      * Emitted whenever the status of whether a control point is selected or not changes
      */
@@ -102,9 +96,11 @@ Q_SIGNALS:
      */
     void compressorShouldEmitModified();
 
+    void shouldSyncIOControls();
+    void shouldFocusIOControls();
+
 
 protected Q_SLOTS:
-    void inOutChanged(int);
     void notifyModified();
 
     /**
@@ -135,12 +131,6 @@ public:
     KisCubicCurve curve();
 
     /**
-     * Replace the current curve with a curve specified by the curve defined by the control
-     * points in @p inlist.
-     */
-    void setCurve(KisCubicCurve inlist);
-
-    /**
      * Connect/disconnect external spinboxes to the curve
      * @p inMin / @p inMax - is the range for input values
      * @p outMin / @p outMax - is the range for output values
@@ -155,11 +145,17 @@ public:
      */
     void addPointInTheMiddle();
 
+public Q_SLOTS:
+    /**
+     * Replace the current curve with a curve specified by the curve defined by the control
+     * points in @p inlist.
+     */
+    void setCurve(KisCubicCurve inlist);
+
 private:
 
     class Private;
     Private * const d {nullptr};
-
 };
 
 

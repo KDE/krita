@@ -255,7 +255,7 @@ struct ChannelFlagAdapter : public BaseAdapter {
         }
 
 
-        QList<KoChannelInfo*> channels = nodes.first()->colorSpace()->channels();
+        const QList<KoChannelInfo*> channels = nodes.first()->colorSpace()->channels();
 
         int index = 0;
         Q_FOREACH (KoChannelInfo *info, channels) {
@@ -524,7 +524,7 @@ public:
             ValueType value = m_propAdapter.propForNode(node);
 
             if (value != lastValue) {
-                qWarning() << "WARNING: mutiprops: values differ after reread!";
+                qWarning() << "WARNING: multiprops: values differ after reread!";
             }
 
             lastValue = value;

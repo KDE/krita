@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>233</width>
+    <width>244</width>
     <height>116</height>
    </rect>
   </property>
@@ -80,7 +80,7 @@
          <item>
           <widget class="QPushButton" name="editProfilesButton">
            <property name="toolTip">
-            <string>Duplicate current profile</string>
+            <string>Manage canvas input profiles</string>
            </property>
            <property name="text">
             <string>Edit Profiles</string>
@@ -109,7 +109,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>233</width>
+        <width>244</width>
         <height>87</height>
        </rect>
       </property>

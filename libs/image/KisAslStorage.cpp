@@ -9,13 +9,11 @@
 #include <kis_psd_layer_style.h>
 
 #include <QFileInfo>
+#include <KisStaticInitializer.h>
 
-struct KisAslStorageStaticRegistrar {
-    KisAslStorageStaticRegistrar() {
-        KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeStyleLibrary, new KisStoragePluginFactory<KisAslStorage>());
-    }
-};
-static KisAslStorageStaticRegistrar s_registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    KisStoragePluginRegistry::instance()->addStoragePluginFactory(KisResourceStorage::StorageType::AdobeStyleLibrary, new KisStoragePluginFactory<KisAslStorage>());
+}
 
 
 class AslTagIterator : public KisResourceStorage::TagIterator

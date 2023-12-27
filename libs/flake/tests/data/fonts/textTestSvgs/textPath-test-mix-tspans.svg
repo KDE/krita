@@ -1,0 +1,27 @@
+<svg width="230px" height="170px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+    <defs>
+    <path id="path-horizontal" transform="translate(50, 0)" d="M0 0C10 20 50 20 60 0" />
+    <path id="path-horizontal2" transform="translate(-20, 20)" d="M0 0C10 20 50 20 60 0" />
+    <path id="path-vertical" transform="translate(0, 50)" d="M0 0C20 10 20 50 0 60" />
+</defs>
+<g id="testRect">
+    
+    <!-- Example of mix of tspans and a textpath in the middle. This is an edge case, but we should proly test it.-->
+
+    <text id="test1" transform="translate(20,50)"
+          font-family="DejaVu Sans" fill="blue" font-size="15">Lorem <textPath href="#path-horizontal">ipsum dolor sit </textPath>amet</text>
+    
+    <!-- This really doesn't work for RTL text, and I am not sure how we would go about fixing it as the spec says the glyphs need to be aligned to the end of the path, not at all taking into account RTL needing to have it at the beginning... -->
+    <text id="test1rtl" transform="translate(90,100)"
+          font-family="DejaVu Sans" fill="blue" font-size="15" direction="rtl">اللغة العربية<textPath href="#path-horizontal2" startOffset="100%"> المعيارية </textPath>الحديثة
+    </text>
+    
+    <text id="test1ttb" transform="translate(200,10)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl">ああ&#x82A6;<textPath href="#path-vertical">&#x82A6;&#x82A6;&#x82A6;あ</textPath>ああ&#x82A6;
+    </text>
+
+</g>
+
+</svg>

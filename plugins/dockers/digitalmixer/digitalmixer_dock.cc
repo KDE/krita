@@ -138,7 +138,7 @@ DigitalMixerDock::DigitalMixerDock( )
     connect(m_gradientMixer.targetColor, SIGNAL(triggered(KoColorPatch*)), signalMapperGradientTargetColor, SLOT(map()));
     signalMapperGradientTargetColor->setMapping(m_gradientMixer.targetColor, 6);
 
-    m_reset_button = new QPushButton(KisIconUtils::loadIcon("select-clear"),i18n("Reset"));
+    m_reset_button = new QPushButton(KisIconUtils::loadIcon("reload-preset-16"),i18n("Reset"));
     m_reset_button->setToolTip(i18n("Return to default settings"));
     layout->addWidget(m_reset_button, 0, 0, Qt::AlignLeft);
     connect(m_reset_button, SIGNAL(clicked()), SLOT(resetMixer()));

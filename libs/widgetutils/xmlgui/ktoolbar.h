@@ -23,6 +23,7 @@ class KConfigGroup;
 class KConfig;
 class KisKMainWindow;
 class KisKXMLGUIClient;
+class KisToolBarStateModel;
 
 /**
  * @short Floatable toolbar with auto resize.
@@ -137,12 +138,12 @@ public:
     static void setToolBarsEditable(bool editable);
 
     /**
-     * Returns whether the toolbars are locked (i.e., moving of the toobars disallowed).
+     * Returns whether the toolbars are locked (i.e., moving of the toolbars disallowed).
      */
     static bool toolBarsLocked();
 
     /**
-     * Allows you to lock and unlock all toolbars (i.e., disallow/allow moving of the toobars).
+     * Allows you to lock and unlock all toolbars (i.e., disallow/allow moving of the toolbars).
      */
     static void setToolBarsLocked(bool locked);
 
@@ -152,6 +153,8 @@ public:
      * @since 5.0
      */
     static void emitToolbarStyleChanged();
+
+    static KisToolBarStateModel* toolBarStateModel();
 
 protected Q_SLOTS:
     virtual void slotMovableChanged(bool movable);

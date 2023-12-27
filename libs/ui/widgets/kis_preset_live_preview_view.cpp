@@ -5,13 +5,15 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QEvent>
+
 #include <kis_preset_live_preview_view.h>
 #include <QDebug>
 #include <QGraphicsPixmapItem>
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
 #include <KisGlobalResourcesInterface.h>
 #include "kis_transaction.h"
@@ -161,7 +163,7 @@ void KisPresetLivePreviewView::paintBackground()
 
         // fill with gray first to clear out what existed from previous preview        
         KisTransaction t(m_layer->paintDevice());
-        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
         t.end();
 
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
@@ -180,7 +182,7 @@ void KisPresetLivePreviewView::paintBackground()
 
         // fill with gray first to clear out what existed from previous preview
         KisTransaction t(m_layer->paintDevice());
-        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Background) , m_colorSpace));
+        m_layer->paintDevice()->fill(m_image->bounds(), KoColor(palette().color(QPalette::Window) , m_colorSpace));
         t.end();
 
         m_paintColor = KoColor(palette().color(QPalette::Text), m_colorSpace);
@@ -218,7 +220,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
-    //Except for the sketchbrush where it determine sthe history.
+    //Except for the sketchbrush where it determines the history.
     if (m_currentPreset->paintOp().id() == "sketchbrush" ||
             m_currentPreset->paintOp().id() == "spraybrush") {
         previewSize = qMax(3.0, m_currentPreset->settings()->paintOpSize());
@@ -261,6 +263,11 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                 if (width * scale > 25.0) {
                     diameterToBrushRatio = diameter / (width * scale);
                     scale = 25.0 / width;
+
+                    if (!settings->getBool("SprayShape/proportional")) {
+                        settings->setProperty("SprayShape/width", qRound(scale * settings->getInt("SprayShape/width")));
+                        settings->setProperty("SprayShape/height", qRound(scale * settings->getInt("SprayShape/height")));
+                    }
                 }
             }
             settings->setProperty("Spray/diameter", int(25.0 * diameterToBrushRatio));
@@ -334,7 +341,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                              QPointF(pointTwo.pos().x(),
                                                                      handleY),
                                                              pointTwo));
-            m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+            m_image->addJob(strokeId, new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
         }
 
     } else {
@@ -358,7 +365,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                          QPointF(m_canvasCenterPoint.x(),
                                                                  m_canvasCenterPoint.y()+this->height()),
                                                          m_curvePointPI2));
-        m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+        m_image->addJob(strokeId, new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
     }
     m_image->endStroke(strokeId);
 
@@ -376,6 +383,16 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // we need to return brush size to normal.The normal brush sends out a lot of extra signals, so keeping the proxy for now
     //proxy_preset->settings()->setPaintOpSize(originalPresetSize);
 
+}
+
+void KisPresetLivePreviewView::changeEvent(QEvent *event)
+{
+    QWidget::changeEvent(event);
+    if (event->type() == QEvent::PaletteChange) {
+        if (m_currentPreset) {
+            requestUpdateStroke();
+        }
+    }
 }
 
 #include "kis_preset_live_preview_view.moc"

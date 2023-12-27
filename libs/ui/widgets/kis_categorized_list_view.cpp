@@ -24,7 +24,7 @@ KisCategorizedListView::KisCategorizedListView(QWidget* parent):
     // Because this widget has a darker background, the checkbox borders get hidden with default palette
     // This palette update makes the checkboxes easier to see by starting with the text color
     QPalette newPall = palette();
-    newPall.setColor(QPalette::Active, QPalette::Background, palette().text().color() );
+    newPall.setColor(QPalette::Active, QPalette::Window, palette().text().color() );
     setPalette(newPall);
 
     {
@@ -84,7 +84,7 @@ void KisCategorizedListView::dataChanged(const QModelIndex& topLeft, const QMode
     updateRows(topLeft.row(), bottomRight.row()+1);
 
     // check to see if the data changed was a check box
-    // if it is a checkbox tell the brush edtor that the preset is now "dirty"
+    // if it is a checkbox tell the brush editor that the preset is now "dirty"
     int i = 0;
     for (QVector<int>::const_iterator iterator = roles.begin(); iterator != roles.end(); ++iterator) {
 

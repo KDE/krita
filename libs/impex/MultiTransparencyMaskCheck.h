@@ -74,4 +74,4 @@ public:
     }
 };
 
-#endif // MultiTransparencyMaskrCheck_H
+#endif // MultiTransparencyMaskCheck_H

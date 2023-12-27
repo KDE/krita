@@ -37,6 +37,7 @@ public:
     void activate(int shortcut) override;
     void deactivate(int shortcut) override;
     void begin(int shortcut, QEvent *event) override;
+    void end(QEvent *event) override;
     void cursorMovedAbsolute(const QPointF &startPos, const QPointF &pos) override;
     void inputEvent(QEvent* event) override;
 

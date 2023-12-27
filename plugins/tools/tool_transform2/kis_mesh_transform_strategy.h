@@ -40,7 +40,7 @@ public:
     void externalConfigChanged() override;
 
     bool beginPrimaryAction(const QPointF &pt) override;
-    void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive) override;
+    void continuePrimaryAction(const QPointF &pt, bool shiftModifierActive, bool altModifierActive) override;
     bool endPrimaryAction() override;
 
     using KisSimplifiedActionPolicyStrategy::beginPrimaryAction;

@@ -59,9 +59,8 @@ KoShape *ImageShape::cloneShape() const
     return new ImageShape(*this);
 }
 
-void ImageShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
+void ImageShape::paint(QPainter &painter) const
 {
-    Q_UNUSED(paintContext);
     KisQPainterStateSaver saver(&painter);
 
     const QRectF myrect(QPointF(), size());

@@ -38,7 +38,8 @@ class KisAssistantTool : public KisTool
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
         MODE_DRAGGING_NODE, // In this mode one node is translated
-        MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
+        MODE_DRAGGING_TRANSLATING_TWONODES, // This mode is used when creating a new sub perspective grid
+        MODE_DRAGGING_EDITOR_WIDGET // This mode is used when dragging/moving the little editor widget
     };
 public:
     KisAssistantTool(KoCanvasBase * canvas);
@@ -87,7 +88,8 @@ private:
     void beginActionImpl(KoPointerEvent *event);
     void continueActionImpl(KoPointerEvent *event);
     void endActionImpl(KoPointerEvent *event);
-
+    //function to calculate new button positions for editor widget
+    void updateEditorWidgetData();
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
@@ -119,6 +121,14 @@ private Q_SLOTS:
     void slotSelectedAssistantTypeChanged();
     void slotChangeFixedLengthUnit(int index);
 
+    //When the user checks an editor widget button checkbox, update the AssistantEditorData
+    //struct within the current document's KisPaintingAssistantsDecoration instance
+    void slotToggleMoveButton(int index);
+    void slotToggleSnapButton(int index);
+    void slotToggleLockButton(int index);
+    void slotToggleDuplicateButton(int index);
+    void slotToggleDeleteButton(int index);
+    
 protected:
     /// Draws the editor widget controls with move, activate, and delete
     /// This also creates a lot of assistant specific stuff for vanishing points and perspective grids
@@ -137,6 +147,7 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
+    KisPaintingAssistantHandleSP m_handleHover;
     KisPaintingAssistantSP m_assistantDrag;
 
     /// Used while a new assistant is being created. Most assistants need multiple points to exist
@@ -153,13 +164,14 @@ protected:
     bool m_snapIsRadial {false};
     QPointF m_dragEnd;
     int m_handleSize {17}; // how large the editor handles will appear
-
+    int m_handleMaxDist {81}; // how far away the user can click and still select a handle
+    bool assistantDuplicatingFlag {false}; // this flag is set during an assistant duplication
 
 private:
     void drawEditorWidget(KisPaintingAssistantSP assistant, QPainter& _gc);
 
     PerspectiveAssistantEditionMode m_internalMode { MODE_CREATION };
-    KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
+    KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_highlightedNode;
     int m_assistantHelperYOffset {10}; // used by the assistant editor icons for placement on the canvas.
     QList<KisPaintingAssistantSP> m_origAssistantList;
     KisSpinBoxUnitManager* m_unitManager {0};

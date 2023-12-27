@@ -25,8 +25,6 @@
 
 TwoPointAssistant::TwoPointAssistant()
     : KisPaintingAssistant("two point", i18n("Two point assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
 {
 }
 
@@ -36,9 +34,6 @@ TwoPointAssistant::TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaint
     , m_snapLine(rhs.m_snapLine)
     , m_gridDensity(rhs.m_gridDensity)
     , m_useVertical(rhs.m_useVertical)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
     , m_lastUsedPoint(rhs.m_lastUsedPoint)
 {
 }
@@ -72,10 +67,10 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
 
         QRectF rect = getLocalRect();
         bool insideLocalRect = rect.contains(point);
-        if (!insideLocalRect && (!isLastUsedPointCorrectNow || !m_hasBeenInsideLocal)) {
+        if (!insideLocalRect && (!isLastUsedPointCorrectNow || !m_hasBeenInsideLocalRect)) {
             return QPointF(qQNaN(), qQNaN());
         } else if (insideLocalRect) {
-            m_hasBeenInsideLocal = true;
+            m_hasBeenInsideLocalRect = true;
         }
     }
 
@@ -143,30 +138,22 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
     return useBeginInstead ? strokeBegin : best_pt;
 }
 
-void TwoPointAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void TwoPointAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
-}
-
 void TwoPointAssistant::endStroke()
 {
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
     m_snapLine = QLineF();
-    m_hasBeenInsideLocal = false;
     m_lastUsedPoint = -1;
+    KisPaintingAssistant::endStroke();
 }
 
-QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny)
+QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny, qreal /*moveThresholdPt*/)
 {
     return project(pt, strokeBegin, snapToAny);
+}
+
+void TwoPointAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    QPointF p = project(point, strokeBegin, true);
+    point = p;
 }
 
 void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
@@ -377,7 +364,8 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             fade.setColorAt(0.6, effectiveAssistantColor());
             const QPen pen = gc.pen();
             const QBrush new_brush = QBrush(fade);
-            const QPen new_pen = QPen(new_brush, pen.width(), pen.style());
+            int width = 1;
+            const QPen new_pen = QPen(new_brush, width, pen.style());
             gc.setPen(new_pen);
 
             const QList<QPointF> station_points = {upper, lower};
@@ -458,7 +446,7 @@ KisPaintingAssistantHandleSP TwoPointAssistant::secondLocalHandle() const
     }
 }
 
-QPointF TwoPointAssistant::getEditorPosition() const
+QPointF TwoPointAssistant::getDefaultEditorPosition() const
 {
     int centerOfVisionHandle = 2;
     if (handles().size() > centerOfVisionHandle) {

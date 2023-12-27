@@ -37,4 +37,4 @@ private:
     Private* const d;
 };
 
-#endif // KOTAGFILTERWIDGET_H
+#endif // KISTAGFILTERWIDGET_H

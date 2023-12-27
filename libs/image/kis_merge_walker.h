@@ -57,7 +57,7 @@ private:
 
 private:
     /**
-     * Visits a node @leaf and goes on crowling
+     * Visits a node @leaf and goes on crawling
      * towards the top of the graph, calling visitHigherNode() or
      * startTrip() one more time. After the top is reached
      * returns back to the @leaf.
@@ -65,7 +65,7 @@ private:
     void visitHigherNode(KisProjectionLeafSP leaf, NodePosition positionToFilthy);
 
     /**
-     * Visits a node @leaf and goes on crowling
+     * Visits a node @leaf and goes on crawling
      * towards the bottom of the graph, calling visitLowerNode() or
      * startTrip() one more time.
      */

@@ -25,7 +25,7 @@ public:
         ambientReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setRange(0, 1, 2);
         specularReflectivityKisDoubleSliderSpinBox -> setRange(0, 1, 2);
-        shinynessExponentKisSliderSpinBox          -> setRange(1, 200);
+        shininessExponentKisSliderSpinBox          -> setRange(1, 200);
 
         ambientReflectivityKisDoubleSliderSpinBox  -> setSingleStep(0.01);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setSingleStep(0.01);
@@ -34,7 +34,7 @@ public:
         ambientReflectivityKisDoubleSliderSpinBox  -> setValue(0.1);
         diffuseReflectivityKisDoubleSliderSpinBox  -> setValue(0.5);
         specularReflectivityKisDoubleSliderSpinBox -> setValue(0.5);
-        shinynessExponentKisSliderSpinBox          -> setValue(40);
+        shininessExponentKisSliderSpinBox          -> setValue(40);
 
         azimuthAngleSelector1->setDecimals(0);
         azimuthAngleSelector1->setRange(0, 359);

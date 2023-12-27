@@ -106,7 +106,7 @@ public:
     void save(KoXmlWriter &writer, const QString &filterId);
 
     /// Returns list of required standard inputs
-    QSet<QString> requiredStandarsInputs() const;
+    QSet<QString> requiredStandardsInputs() const;
 private:
     class Private;
     Private * const d;

@@ -40,7 +40,6 @@ class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
 class KoClipMask;
-class KoShapePaintingContext;
 class KoShapeAnchor;
 struct KoInsets;
 class KoShapeBackground;
@@ -143,6 +142,12 @@ public:
         Foreground
     };
 
+    enum PaintOrder {
+        Fill,
+        Stroke,
+        Markers
+    };
+
     /**
      * @brief Constructor
      */
@@ -165,17 +170,22 @@ public:
      * to be preconfigured to work in "document" pixels.
      *
      * @param painter used for painting the shape
-     * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const = 0;
+    virtual void paint(QPainter &painter) const = 0;
 
     /**
      * @brief paintStroke paints the shape's stroked outline
      * @param painter used for painting the shape
      * @see applyConversion()
-     * @param paintcontext the painting context.
      */
-    virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const;
+    virtual void paintStroke(QPainter &painter) const;
+
+    /**
+     * @brief paintStroke paints the shape's markers
+     * @param painter used for painting the shape
+     * @see applyConversion()
+     */
+    virtual void paintMarkers(QPainter &painter) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.
@@ -418,7 +428,7 @@ public:
     QSharedPointer<KoShapeBackground> background() const;
 
     /**
-     * @brief setInheritBackground marks a shape as inhiriting the background
+     * @brief setInheritBackground marks a shape as inheriting the background
      * from the parent shape. NOTE: The currently selected background is destroyed.
      * @param value true if the shape should inherit the filling background
      */
@@ -638,7 +648,7 @@ public:
    /**
     * Returns if during compareShapeZIndex() how this shape portrays the values
     * of its children. The default behaviour is to let this shape's z values take
-    * the place of its childrens values, so you get a parent/child relationship.
+    * the place of its children's values, so you get a parent/child relationship.
     * The children are naturally still ordered relatively to their z values
     *
     * But for special cases (like Calligra's TextShape) it can be overloaded to return
@@ -697,7 +707,7 @@ public:
     void setStroke(KoShapeStrokeModelSP stroke);
 
     /**
-     * @brief setInheritStroke marks a shape as inhiriting the stroke
+     * @brief setInheritStroke marks a shape as inheriting the stroke
      * from the parent shape. NOTE: The currently selected stroke is destroyed.
      * @param value true if the shape should inherit the stroke style
      */
@@ -714,6 +724,35 @@ public:
      * Convenience method for KoShapeStrokeModel::strokeInsets()
      */
     KoInsets strokeInsets() const;
+
+    /**
+     * @brief setPaintOrder
+     * set the paint order. As there's only three entries in any given paintorder,
+     * you only need to have the first
+     * and second entry to set it.
+     * @param first first thing to paint
+     * @param second second thing to paint.
+     */
+    void setPaintOrder(PaintOrder first, PaintOrder second);
+
+    /**
+     * @brief paintOrder
+     * @return vector of paint orders, will always be 3 big and contain a fill, stroke and marker entry.
+     */
+    QVector<PaintOrder> paintOrder() const;
+
+    /**
+     * @brief setInheritPaintOrder
+     * set inherit paint order.
+     * @param value
+     */
+    void setInheritPaintOrder(bool value);
+
+    /**
+     * @brief inheritPaintOrder
+     * @return whether the paint order is inherited. By default it is.
+     */
+    bool inheritPaintOrder() const;
 
     /// Sets the new shadow, removing the old one
     void setShadow(KoShapeShadow *shadow);
@@ -850,8 +889,8 @@ public:
      * the same time. Please note that you shouldn't save/restore additionally. All the work
      * on restoring original painter's transformations is done by the helper.
      */
-    static KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0);
-    static KisHandlePainterHelper createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius);
+    static KisHandlePainterHelper createHandlePainterHelperView(QPainter *painter, KoShape *shape, const KoViewConverter &converter, qreal handleRadius = 0.0, int decorationThickness = 1);
+    static KisHandlePainterHelper createHandlePainterHelperDocument(QPainter *painter, KoShape *shape, qreal handleRadius, int decorationThickness);
 
     /**
      * @brief Transforms point from shape coordinates to document coordinates
@@ -1022,6 +1061,15 @@ public:
      * @param hyperLink name.
      */
     void setHyperLink(const QString &hyperLink);
+
+    /**
+     * Update the image resolution in pixels per inch. Shapes should override
+     * this if they need to know the image resolution.
+     *
+     * @param xRes
+     * @param yRes
+     */
+    virtual void setResolution(qreal xRes, qreal yRes);
 
 public:
 

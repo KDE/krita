@@ -98,7 +98,7 @@ public:
     QSizeF patternOriginalSize() const;
 
     /// reimplemented from KoShapeBackground
-    void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, const QPainterPath &fillPath) const override;
 
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);

@@ -7,13 +7,9 @@
 #ifndef _KIS_WEBP_IMPORT_H_
 #define _KIS_WEBP_IMPORT_H_
 
-#include <QScopedPointer>
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
-#include <KoDialog.h>
-
-#include "dlg_webp_import.h"
 
 class KisWebPImport : public KisImportExportFilter
 {
@@ -22,11 +18,11 @@ public:
     KisWebPImport(QObject *parent, const QVariantList &);
     ~KisWebPImport() override;
 
-    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP configuration = 0) override;
-    KisPropertiesConfigurationSP defaultConfiguration(const QByteArray &from, const QByteArray &to) const override;
-
-private:
-    QScopedPointer<KisDlgWebPImport> m_dialog {nullptr};
+    KisImportExportErrorCode
+    convert(KisDocument *document,
+            QIODevice *io,
+            KisPropertiesConfigurationSP configuration = 0) override;
+    ;
 };
 
 #endif // _KIS_WEBP_IMPORT_H_

@@ -35,6 +35,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
         if (f.fileName().endsWith(".kra", Qt::CaseInsensitive)) {
             // try to use any embedded thumbnail
             KoStore *store = KoStore::createStore(id, KoStore::Read);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(store, QImage());
 
             QString thumbnailPath = QLatin1String("Thumbnails/thumbnail.png");
             QString previewPath = QLatin1String("preview.png");
@@ -42,7 +43,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
             bool previewExists = store->hasFile(previewPath);
             QString pathToUse = thumbnailExists ? thumbnailPath : (previewExists ? previewPath : "");
 
-            if (store && !pathToUse.isEmpty() && store->open(pathToUse)) {
+            if (!pathToUse.isEmpty() && store->open(pathToUse)) {
                 // Hooray! No long delay for the user...
                 const QByteArray thumbnailData = store->read(store->size());
 

@@ -131,6 +131,12 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
 
 KisToolCrop::~KisToolCrop()
 {
+    delete applyCrop;
+    delete centerToggleOption;
+    delete growToggleOption;
+    delete lockWidthToggleOption;
+    delete lockHeightToggleOption;
+    delete lockRatioToggleOption;
 }
 
 void KisToolCrop::activate(const QSet<KoShape*> &shapes)
@@ -434,8 +440,9 @@ void KisToolCrop::paintOutlineWithHandles(QPainter& gc)
 
         // Handles
         QPen pen(Qt::SolidLine);
-        pen.setWidth(HANDLE_BORDER_LINE_WIDTH);
+        pen.setWidth(HANDLE_BORDER_LINE_WIDTH * decorationThickness());
         pen.setColor(Qt::black);
+        pen.setCosmetic(true);
         gc.setPen(pen);
         gc.setBrush(QColor(200, 200, 200, OUTSIDE_CROP_ALPHA));
         gc.drawPath(handlesPath());
@@ -712,6 +719,7 @@ bool KisToolCrop::lockRatio() const
 void KisToolCrop::showSizeOnCanvas()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kisCanvas);
     if(m_mouseOnHandleType == 9) {
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1\nY: %2"
                                                        , optionsWidget->intX->text(), optionsWidget->intY->text())

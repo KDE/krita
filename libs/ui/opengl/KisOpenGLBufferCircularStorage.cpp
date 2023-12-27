@@ -6,16 +6,17 @@
 
 #include "KisOpenGLBufferCircularStorage.h"
 
+#include <QtMath>
+
 #include "kis_assert.h"
 #include "kis_opengl.h"
-
 
 KisOpenGLBufferCircularStorage::BufferBinder::BufferBinder(KisOpenGLBufferCircularStorage *bufferStorage, const void **dataPtr, int dataSize) {
     if (bufferStorage) {
         m_buffer = bufferStorage->getNextBuffer();
         m_buffer->bind();
         m_buffer->write(0, *dataPtr, dataSize);
-        *dataPtr = 0;
+        *dataPtr = nullptr;
     }
 
 }
@@ -30,13 +31,12 @@ KisOpenGLBufferCircularStorage::BufferBinder::~BufferBinder() {
     }
 }
 
-
-struct KisOpenGLBufferCircularStorage::Private
+struct Q_DECL_HIDDEN KisOpenGLBufferCircularStorage::Private
 {
-    int nextBuffer = 0;
+    std::vector<QOpenGLBuffer> buffers;
+    decltype(buffers)::size_type nextBuffer = 0;
     int bufferSize = 0;
     QOpenGLBuffer::Type type = QOpenGLBuffer::QOpenGLBuffer::VertexBuffer;
-    std::vector<QOpenGLBuffer> buffers;
 };
 
 
@@ -51,14 +51,14 @@ KisOpenGLBufferCircularStorage::KisOpenGLBufferCircularStorage(QOpenGLBuffer::Ty
     m_d->type = type;
 }
 
-KisOpenGLBufferCircularStorage::~KisOpenGLBufferCircularStorage()
-{
-}
+KisOpenGLBufferCircularStorage::~KisOpenGLBufferCircularStorage() = default;
 
 void KisOpenGLBufferCircularStorage::allocate(int numBuffers, int bufferSize)
 {
     reset();
-    addBuffersImpl(numBuffers, bufferSize);
+    KIS_ASSERT(numBuffers > 0);
+    KIS_ASSERT(bufferSize > 0);
+    addBuffersImpl(static_cast<size_t>(numBuffers), bufferSize);
 }
 
 QOpenGLBuffer *KisOpenGLBufferCircularStorage::getNextBuffer()
@@ -77,7 +77,7 @@ bool KisOpenGLBufferCircularStorage::isValid() const
 
 int KisOpenGLBufferCircularStorage::size() const
 {
-    return m_d->buffers.size();
+    return static_cast<int>(m_d->buffers.size());
 }
 
 void KisOpenGLBufferCircularStorage::reset()
@@ -87,24 +87,48 @@ void KisOpenGLBufferCircularStorage::reset()
     m_d->bufferSize = 0;
 }
 
-void KisOpenGLBufferCircularStorage::allocateMoreBuffers(uint numBuffers)
+void KisOpenGLBufferCircularStorage::allocateMoreBuffers()
 {
-    if (numBuffers <= m_d->buffers.size())
-        return;
+    const size_t numBuffers = nextPowerOfTwo(m_d->buffers.size());
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->buffers.empty());
 
-    std::rotate(m_d->buffers.begin(), m_d->buffers.begin() + m_d->nextBuffer, m_d->buffers.end());
+    auto begin = m_d->buffers.begin();
+    auto middle = [&]() {
+        using value_type = typename decltype(m_d->buffers)::difference_type;
+        const value_type maxIndex = std::numeric_limits<value_type>::max();
+
+        if (m_d->nextBuffer <= std::numeric_limits<value_type>::max()) {
+            return std::next(begin, value_type(m_d->nextBuffer));
+        } else {
+            auto midpoint = std::next(begin, std::numeric_limits<value_type>::max());
+            return std::next(midpoint, value_type(m_d->nextBuffer - maxIndex));
+        }
+    }();
+    auto end = m_d->buffers.end();
+
+    std::rotate(begin, middle, end);
 
     m_d->nextBuffer = m_d->buffers.size();
-    addBuffersImpl(numBuffers - m_d->buffers.size(), m_d->bufferSize);
+
+    const size_t buffersToAdd = numBuffers - m_d->buffers.size();
+
+    addBuffersImpl(buffersToAdd, m_d->bufferSize);
 }
 
-void KisOpenGLBufferCircularStorage::addBuffersImpl(int buffersToAdd, int bufferSize)
+void KisOpenGLBufferCircularStorage::addBuffersImpl(size_t buffersToAdd, int bufferSize)
 {
     m_d->bufferSize = bufferSize;
-    m_d->buffers.reserve(m_d->buffers.size() + buffersToAdd);
 
-    for (int i = 0; i < buffersToAdd; i++) {
+    const size_t newSize = qMax(m_d->buffers.size() + buffersToAdd, nextPowerOfTwo(m_d->buffers.size()));
+
+    if (m_d->buffers.capacity() < newSize)
+        m_d->buffers.reserve(newSize);
+
+    // overflow check for size()
+    KIS_ASSERT(m_d->buffers.size() <= std::numeric_limits<int>::max());
+
+    for (size_t i = 0; i < buffersToAdd; i++) {
         m_d->buffers.emplace_back(m_d->type);
 
         QOpenGLBuffer &buf = m_d->buffers.back();
@@ -112,7 +136,7 @@ void KisOpenGLBufferCircularStorage::addBuffersImpl(int buffersToAdd, int buffer
         buf.create();
         buf.setUsagePattern(QOpenGLBuffer::DynamicDraw);
         buf.bind();
-        buf.allocate(bufferSize);
+        buf.allocate(m_d->bufferSize);
         buf.release();
     }
 }

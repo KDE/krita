@@ -89,7 +89,7 @@ Q_SIGNALS:
     void sigChanged(const KisScalarKeyframe* scalarKey);
 
 private:
-    qreal m_value; /**< Scalar value of this keyframe. Optionally clamped to m_channelLimtis. */
+    qreal m_value; /**< Scalar value of this keyframe. Optionally clamped to m_channelLimits. */
     InterpolationMode m_interpolationMode;
     TangentsMode m_tangentsMode;
     QPointF m_leftTangent; /**< Controls part of between this and PREVIOUS keyframe. */
@@ -148,9 +148,6 @@ public:
     virtual void removeKeyframe(int time, KUndo2Command *parentUndoCmd = nullptr) override;
     virtual KisTimeSpan affectedFrames(int time) const override;
     virtual KisTimeSpan identicalFrames(int time) const override;
-
-Q_SIGNALS:
-    void sigKeyframeChanged(const KisKeyframeChannel *channel, int time);
 
 private:
     static qreal findCubicCurveParameter(int time0, qreal delta0, qreal delta1, int time1, int time);

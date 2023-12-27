@@ -20,6 +20,7 @@
 #include "kis_image_signal_router.h"
 #include "KisAsynchronouslyMergeableCommandInterface.h"
 #include "kis_command_ids.h"
+#include <KisRunnableStrokeJobUtils.h>
 
 class DisableUIUpdatesCommand : public KisCommandUtils::FlipFlopCommand, public KisAsynchronouslyMergeableCommandInterface
 {
@@ -62,12 +63,12 @@ private:
 class UpdateCommand : public KisCommandUtils::FlipFlopCommand, public KisAsynchronouslyMergeableCommandInterface
 {
 public:
-    UpdateCommand(KisImageWSP image, KisNodeSP node,
+    UpdateCommand(KisImageWSP image, KisNodeList nodes,
                   KisProcessingApplicator::ProcessingFlags flags,
                   State initialState, QSharedPointer<bool> sharedAllFramesToken)
         : FlipFlopCommand(initialState),
           m_image(image),
-          m_node(node),
+          m_nodes(nodes),
           m_flags(flags),
           m_sharedAllFramesToken(sharedAllFramesToken)
     {
@@ -97,16 +98,18 @@ private:
             });
         }
 
-        m_image->root()->graphListener()->invalidateFrames(KisTimeSpan::infinite(0), m_node->exactBounds());
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            m_image->root()->graphListener()->invalidateFrames(KisTimeSpan::infinite(0), node->exactBounds());
 
-        if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
-            if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
-                m_image->refreshGraphAsync(m_node);
+            if (!m_flags.testFlag(KisProcessingApplicator::NO_IMAGE_UPDATES)) {
+                if(m_flags.testFlag(KisProcessingApplicator::RECURSIVE)) {
+                    m_image->refreshGraphAsync(node);
+                }
+
+                node->setDirty(m_image->bounds());
+
+                updateClones(node);
             }
-
-            m_node->setDirty(m_image->bounds());
-
-            updateClones(m_node);
         }
     }
 
@@ -119,16 +122,18 @@ private:
             prevNode = prevNode->prevSibling();
         }
 
-        KisLayer *layer = qobject_cast<KisLayer*>(m_node.data());
-        if(layer && layer->hasClones()) {
-            Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
-                if(!clone) continue;
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KisLayer *layer = qobject_cast<KisLayer*>(node.data());
+            if(layer && layer->hasClones()) {
+                Q_FOREACH (KisCloneLayerSP clone, layer->registeredClones()) {
+                    if(!clone) continue;
 
-                QPoint offset(clone->x(), clone->y());
-                QRegion dirtyRegion(m_image->bounds());
-                dirtyRegion -= m_image->bounds().translated(offset);
+                    QPoint offset(clone->x(), clone->y());
+                    QRegion dirtyRegion(m_image->bounds());
+                    dirtyRegion -= m_image->bounds().translated(offset);
 
-                clone->setDirty(KisRegion::fromQRegion(dirtyRegion));
+                    clone->setDirty(KisRegion::fromQRegion(dirtyRegion));
+                }
             }
         }
     }
@@ -147,7 +152,7 @@ private:
 
         return other &&
             other->m_image == m_image &&
-            other->m_node == m_node &&
+            other->m_nodes == m_nodes &&
             other->m_flags == m_flags &&
             bool(other->m_sharedAllFramesToken) == bool(m_sharedAllFramesToken) &&
             (!m_sharedAllFramesToken || *m_sharedAllFramesToken == *other->m_sharedAllFramesToken);
@@ -155,7 +160,7 @@ private:
 
 private:
     KisImageWSP m_image;
-    KisNodeSP m_node;
+    KisNodeList m_nodes;
     KisProcessingApplicator::ProcessingFlags m_flags;
     QSharedPointer<bool> m_sharedAllFramesToken;
 };
@@ -219,6 +224,28 @@ private:
     KisImageSignalVector m_emitSignals;
 };
 
+struct StrategyWithStatusPromise : KisStrokeStrategyUndoCommandBased
+{
+    StrategyWithStatusPromise(const KUndo2MagicString &name,
+                          KisStrokeUndoFacade *facade)
+        : KisStrokeStrategyUndoCommandBased(name, false, facade)
+    {
+    }
+
+    void finishStrokeCallback() override {
+        KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
+        m_successfullyCompleted.set_value(true);
+    }
+
+    void cancelStrokeCallback() override {
+        QVector<KisStrokeJobData *> jobs;
+        cancelStrokeCallbackImpl(jobs);
+        KritaUtils::addJobBarrier(jobs, [this] () { m_successfullyCompleted.set_value(false);});
+        addMutatedJobs(jobs);
+    }
+
+    std::promise<bool> m_successfullyCompleted;
+};
 
 KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  KisNodeSP node,
@@ -227,15 +254,28 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
                                                  const KUndo2MagicString &name,
                                                  KUndo2CommandExtraData *extraData,
                                                  int macroId)
+    : KisProcessingApplicator(image, node ? KisNodeList { node } : KisNodeList(), flags, emitSignals, name, extraData, macroId )
+{
+
+}
+KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
+                                                 KisNodeList nodes,
+                                                 ProcessingFlags flags,
+                                                 KisImageSignalVector emitSignals,
+                                                 const KUndo2MagicString &name,
+                                                 KUndo2CommandExtraData *extraData,
+                                                 int macroId)
     : m_image(image),
-      m_node(node),
+      m_nodes(nodes),
       m_flags(flags),
       m_emitSignals(emitSignals),
       m_finalSignalsEmitted(false),
       m_sharedAllFramesToken(new bool(false))
 {
-    KisStrokeStrategyUndoCommandBased *strategy =
-            new KisStrokeStrategyUndoCommandBased(name, false, m_image.data());
+    StrategyWithStatusPromise *strategy =
+            new StrategyWithStatusPromise(name, m_image.data());
+
+    m_successfullyCompletedFuture = strategy->m_successfullyCompleted.get_future();
 
     if (m_flags.testFlag(SUPPORTS_WRAPAROUND_MODE)) {
         strategy->setSupportsWrapAroundMode(true);
@@ -256,8 +296,8 @@ KisProcessingApplicator::KisProcessingApplicator(KisImageWSP image,
         applyCommand(new DisableUIUpdatesCommand(m_image, false), KisStrokeJobData::BARRIER);
     }
 
-    if (m_node) {
-        applyCommand(new UpdateCommand(m_image, m_node, m_flags,
+    if (!m_nodes.isEmpty()) {
+        applyCommand(new UpdateCommand(m_image, m_nodes, m_flags,
                                        UpdateCommand::INITIALIZING,
                                        m_sharedAllFramesToken));
     }
@@ -272,6 +312,12 @@ const KisStrokeId KisProcessingApplicator::getStroke() const
     return m_strokeId;
 }
 
+std::future<bool>&& KisProcessingApplicator::successfullyCompletedFuture()
+{
+    KIS_ASSERT(m_successfullyCompletedFuture.valid());
+    return std::move(m_successfullyCompletedFuture);
+}
+
 void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                                            KisStrokeJobData::Sequentiality sequentiality,
                                            KisStrokeJobData::Exclusivity exclusivity)
@@ -282,12 +328,16 @@ void KisProcessingApplicator::applyVisitor(KisProcessingVisitorSP visitor,
                      KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::NORMAL);
     }
 
-    if(!m_flags.testFlag(RECURSIVE)) {
-        applyCommand(new KisProcessingCommand(visitor, m_node),
-                     sequentiality, exclusivity);
-    }
-    else {
-        visitRecursively(m_node, visitor, sequentiality, exclusivity);
+    if (!m_nodes.isEmpty()) {
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            if(!m_flags.testFlag(RECURSIVE)) {
+                applyCommand(new KisProcessingCommand(visitor, node),
+                             sequentiality, exclusivity);
+            }
+            else {
+                visitRecursively(node, visitor, sequentiality, exclusivity);
+            }
+        }
     }
 }
 
@@ -309,7 +359,11 @@ void KisProcessingApplicator::applyVisitorAllFrames(KisProcessingVisitorSP visit
     //       (such case is not yet used anywhere)
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_flags.testFlag(RECURSIVE));
 
-    KisLayerUtils::updateFrameJobsRecursive(&jobs, m_node);
+    if (!m_nodes.isEmpty()) {
+        Q_FOREACH(KisNodeSP node, m_nodes) {
+            KisLayerUtils::updateFrameJobsRecursive(&jobs, node);
+        }
+    }
 
     if (jobs.isEmpty()) {
         applyVisitor(visitor, sequentiality, exclusivity);
@@ -375,8 +429,8 @@ void KisProcessingApplicator::explicitlyEmitFinalSignals()
 {
     KIS_ASSERT_RECOVER_RETURN(!m_finalSignalsEmitted);
 
-    if (m_node) {
-        applyCommand(new UpdateCommand(m_image, m_node, m_flags,
+    if (!m_nodes.isEmpty()) {
+        applyCommand(new UpdateCommand(m_image, m_nodes, m_flags,
                                        UpdateCommand::FINALIZING,
                                        m_sharedAllFramesToken));
     }

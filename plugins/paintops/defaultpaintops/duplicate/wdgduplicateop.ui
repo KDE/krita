@@ -31,6 +31,9 @@
          <property name="toolTip">
           <string>To correct perspective, first create a perspective grid.</string>
          </property>
+         <property name="visible">
+           <bool>false</bool>
+         </property>
          <property name="text">
           <string>Correct the perspective</string>
          </property>

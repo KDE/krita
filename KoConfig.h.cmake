@@ -8,7 +8,7 @@
 #endif
 
 // Check GCC
-#if __GNUC__
+#ifdef __GNUC__
   #if defined (__x86_64__) || defined (__ppc64__)
     #define ENV64BIT
   #else
@@ -60,9 +60,3 @@
 
 /* This variable contains the path to the root of the build directory */
 #define KRITA_BUILD_DIR "${CMAKE_BINARY_DIR}"
-
-/* This variable contains the path to the root of the source directory */
-#define KRITA_SOURCE_DIR "${CMAKE_SOURCE_DIR}"
-
-/* This variable contains the path to the data install dir */
-#define KRITA_EXTRA_RESOURCE_DIRS "${CMAKE_INSTALL_PREFIX}/${DATA_INSTALL_DIR}:${CMAKE_SOURCE_DIR}/krita/data"

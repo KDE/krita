@@ -1,0 +1,86 @@
+<svg width="160px" height="70px"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+        <style>
+        .test {
+            font-size: 10pt;
+            font-family: FontWithFeaturesOTF;
+            fill: blue;
+        }
+        #test1 .high {
+            font-variant-position: normal;
+        }
+        #test1 .low {
+            font-feature-settings: "subs" off, "sups" off;
+        }
+        
+        #test2 .high {
+            font-variant-position: sub;
+        }
+        #test2 .low {
+            font-feature-settings: "subs" on, "sups" off;
+        }
+        
+        #test3 .high {
+            font-variant-position: super;
+        }
+        #test3 .low {
+            font-feature-settings: "subs" off, "sups" on;
+        }
+        </style>
+    </defs>
+
+    <g id="testRect" class="test">
+
+        <rect id="boundingRect" x="5" y="5" width="150" height="60"
+            fill="none" stroke="red"/>
+
+        
+        <!-- Adapted from font-variant-position-01.html: Test passes if the three lines below are identical, with two crosses (✗)-->
+        <g id="test1" transform="translate(7,27)" >
+            <text x="0">
+                <tspan class="high">H</tspan>
+                <tspan class="low"  x="0" dy="1em">H</tspan>
+                <tspan x="0" dy="1em">B</tspan>
+            </text>
+            <text x="15">
+                <tspan class="high">I</tspan>
+                <tspan class="low"  x="15" dy="1em">I</tspan>
+                <tspan x="15" dy="1em">B</tspan>
+            </text>
+        </g>
+        
+        <!-- Adapted from font-variant-position-02.html: Test passes if the second and third lines below are identical, with two checkmarks (✓) followed by one cross (✗); and
+  also, if the first line is <em>either</em> identical to the other two, <em>or</em> has one checkmark followed by two <b>subscript</b> crosses.
+  If the first line has a checkmark followed by two normally sized crosses, the test fails. -->
+        <g id="test2" transform="translate(47,27)" >
+            <text x="0">
+                <tspan >A</tspan>
+                <tspan  x="0" dy="1em">A</tspan>
+                <tspan x="0" dy="1em">A</tspan>
+            </text>
+            <text x="15">
+                <tspan class="high">HI</tspan>
+                <tspan class="low"  x="15" dy="1em">HI</tspan>
+                <tspan x="15" dy="1em">AB</tspan>
+            </text>
+        </g>
+        
+        <!-- Adapted from font-variant-position-03.html: Test passes if the second and third lines below are identical, with two crosses (✗) followed by one checkmark (✓); and
+  also, if the first line is <em>either</em> identical to the other two, <em>or</em> has one  cross followed by two <b>superscript</b> crosses.
+  If the first line has three normally sized crosses, the test fails. -->
+        <g id="test3" transform="translate(107,27)" >
+            <text x="0">
+                <tspan >B</tspan>
+                <tspan x="0" dy="1em">B</tspan>
+                <tspan x="0" dy="1em">B</tspan>
+            </text>
+            <text x="15">
+                <tspan class="high">HI</tspan>
+                <tspan class="low"  x="15" dy="1em">HI</tspan>
+                <tspan x="15" dy="1em">BA</tspan>
+            </text>
+        </g>
+    </g>
+
+</svg>

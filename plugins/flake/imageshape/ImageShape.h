@@ -23,7 +23,7 @@ public:
 
     KoShape *cloneShape() const override;
 
-    void paint(QPainter &painter, KoShapePaintingContext &paintContext) const override;
+    void paint(QPainter &painter) const override;
 
     void setSize(const QSizeF &size) override;
 

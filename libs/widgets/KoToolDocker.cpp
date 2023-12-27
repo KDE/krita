@@ -39,7 +39,7 @@ public:
     QGridLayout *housekeeperLayout {nullptr};
     QBoxLayout *housekeeperMainLayout{nullptr};
     KoToolDocker *q {nullptr};
-    Qt::DockWidgetArea dockingArea;
+    Qt::DockWidgetArea dockingArea {Qt::NoDockWidgetArea};
 
     void resetWidgets()
     {

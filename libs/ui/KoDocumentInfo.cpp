@@ -8,12 +8,13 @@
 #include "KoDocumentInfo.h"
 
 #include "KisDocument.h"
+#include "KoXmlNS.h"
+#include <KoResourcePaths.h>
 #include <QDateTime>
 #include <KoStoreDevice.h>
 #include <QDomDocument>
 #include <QDir>
 
-#include <kis_dom_utils.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <klocalizedstring.h>
@@ -77,9 +78,9 @@ QDomDocument KoDocumentInfo::save(QDomDocument &doc)
         doc.documentElement().appendChild(s);
 
     s = saveAuthorInfo(doc);
-    if (!s.isNull()) {
+    if (!s.isNull())
         doc.documentElement().appendChild(s);
-    }
+
 
     if (doc.documentElement().isNull())
         return QDomDocument();
@@ -141,21 +142,25 @@ QString KoDocumentInfo::aboutInfo(const QString &info) const
 }
 
 
-bool KoDocumentInfo::loadAuthorInfo(const QDomElement &e)
+bool KoDocumentInfo::loadAuthorInfo(const QDomElement &root)
 {
     m_contact.clear();
-    QDomNode n = e.namedItem("author").firstChild();
-    for (; !n.isNull(); n = n.nextSibling()) {
-        QDomElement e = n.toElement();
-        if (e.isNull())
-            continue;
 
-        if (e.tagName() == "full-name") {
-            setActiveAuthorInfo("creator", KisDomUtils::unescapeText(e.text().trimmed()));
-        } else if (e.tagName() == "contact") {
-            m_contact.insert(KisDomUtils::unescapeText(e.text()), e.attribute("type"));
+    QDomElement e = root.firstChildElement("author");
+    if(e.isNull()) {
+        return false;
+    }
+
+    for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        QString field = e.tagName();
+        QString value = e.text();
+
+        if (field == "full-name") {
+            setActiveAuthorInfo("creator", value.trimmed());
+        } else if (field == "contact") {
+            m_contact.insert(value, e.attribute("type"));
         } else {
-            setActiveAuthorInfo(e.tagName(), KisDomUtils::unescapeText(e.text().trimmed()));
+            setActiveAuthorInfo(field, value.trimmed());
         }
     }
 
@@ -174,34 +179,29 @@ QDomElement KoDocumentInfo::saveAuthorInfo(QDomDocument &doc)
             t = doc.createElement(tag);
 
         e.appendChild(t);
-        t.appendChild(doc.createTextNode(KisDomUtils::escapeText(authorInfo(tag))));
+        t.appendChild(doc.createTextNode(authorInfo(tag)));
     }
     for (int i=0; i<m_contact.keys().size(); i++) {
         t = doc.createElement("contact");
         e.appendChild(t);
         QString key = m_contact.keys().at(i);
         t.setAttribute("type", m_contact[key]);
-        t.appendChild(doc.createTextNode(KisDomUtils::escapeText(key)));
+        t.appendChild(doc.createTextNode(key));
     }
 
     return e;
 }
 
 
-bool KoDocumentInfo::loadAboutInfo(const QDomElement &e)
+bool KoDocumentInfo::loadAboutInfo(const QDomElement &root)
 {
-    QDomNode n = e.namedItem("about").firstChild();
-    QDomElement tmp;
-    for (; !n.isNull(); n = n.nextSibling()) {
-        tmp = n.toElement();
-        if (tmp.isNull())
-            continue;
+    QDomElement e = root.firstChildElement("about");
+    if(e.isNull()) {
+        return false;
+    }
 
-        if (tmp.tagName() == "abstract") {
-            setAboutInfo("abstract", KisDomUtils::unescapeText(tmp.text()));
-        }
-
-        setAboutInfo(tmp.tagName(), KisDomUtils::unescapeText(tmp.text()));
+    for (e = e.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
+        setAboutInfo(e.tagName(), e.text());
     }
 
     return true;
@@ -216,11 +216,11 @@ QDomElement KoDocumentInfo::saveAboutInfo(QDomDocument &doc)
         if (tag == "abstract") {
             t = doc.createElement("abstract");
             e.appendChild(t);
-            t.appendChild(doc.createCDATASection(KisDomUtils::escapeText(aboutInfo(tag))));
+            t.appendChild(doc.createCDATASection(aboutInfo(tag)));
         } else {
             t = doc.createElement(tag);
             e.appendChild(t);
-            t.appendChild(doc.createTextNode(KisDomUtils::escapeText(aboutInfo(tag))));
+            t.appendChild(doc.createTextNode(aboutInfo(tag)));
         }
     }
 
@@ -252,7 +252,7 @@ void KoDocumentInfo::updateParameters()
     KConfigGroup appAuthorGroup(&config, "Author");
     QString profile = appAuthorGroup.readEntry("active-profile", "");
 
-    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QString authorInfo = KoResourcePaths::getAppDataLocation() + "/authorinfo/";
     QDir dir(authorInfo);
     QStringList filters = QStringList() << "*.authorinfo";
 
@@ -274,37 +274,37 @@ void KoDocumentInfo::updateParameters()
 
             QDomElement el = root.firstChildElement("nickname");
             if (!el.isNull()) {
-                setActiveAuthorInfo("creator", KisDomUtils::unescapeText(el.text()));
+                setActiveAuthorInfo("creator", el.text());
             }
             el = root.firstChildElement("givenname");
             if (!el.isNull()) {
-                setActiveAuthorInfo("creator-first-name", KisDomUtils::unescapeText(el.text()));
+                setActiveAuthorInfo("creator-first-name", el.text());
             }
             el = root.firstChildElement("middlename");
             if (!el.isNull()) {
-                setActiveAuthorInfo("initial", KisDomUtils::unescapeText(el.text()));
+                setActiveAuthorInfo("initial", el.text());
             }
             el = root.firstChildElement("familyname");
             if (!el.isNull()) {
-               setActiveAuthorInfo("creator-last-name", KisDomUtils::unescapeText(el.text()));
+               setActiveAuthorInfo("creator-last-name", el.text());
             }
             el = root.firstChildElement("title");
             if (!el.isNull()) {
-                setActiveAuthorInfo("author-title", KisDomUtils::unescapeText(el.text()));
+                setActiveAuthorInfo("author-title", el.text());
             }
             el = root.firstChildElement("position");
             if (!el.isNull()) {
-                setActiveAuthorInfo("position", KisDomUtils::unescapeText(el.text()));
+                setActiveAuthorInfo("position", el.text());
             }
             el = root.firstChildElement("company");
             if (!el.isNull()) {
-                setActiveAuthorInfo("company", KisDomUtils::unescapeText(el.text()));
+                setActiveAuthorInfo("company", el.text());
             }
 
             m_contact.clear();
             el = root.firstChildElement("contact");
             while (!el.isNull()) {
-                m_contact.insert(KisDomUtils::unescapeText(el.text()), el.attribute("type"));
+                m_contact.insert(el.text(), el.attribute("type"));
                 el = el.nextSiblingElement("contact");
             }
         }

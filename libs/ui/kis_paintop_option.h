@@ -13,6 +13,9 @@
 #include <brushengine/kis_locked_properties_proxy.h>
 #include <KisPaintopPropertiesBase.h>
 
+#include <lager/reader.hpp>
+#include <lager/cursor.hpp>
+
 class QWidget;
 class QString;
 class KisPaintopLodLimitations;
@@ -36,6 +39,8 @@ class KRITAUI_EXPORT KisPaintOpOption : public QObject
     Q_OBJECT
 public:
 
+    using OptionalLodLimitationsReader = std::optional<lager::reader<KisPaintopLodLimitations>>;
+
     enum PaintopCategory {
         GENERAL,
         COLOR,
@@ -44,7 +49,12 @@ public:
         MASKING_BRUSH
     };
 
-    KisPaintOpOption(QString label, KisPaintOpOption::PaintopCategory category, bool checked);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, bool checked);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category,
+                     lager::cursor<bool> checkedCursor);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category,
+                     lager::cursor<bool> checkedCursor,
+                     lager::reader<bool> externallyEnabledLink);
     ~KisPaintOpOption() override;
 
     KisPaintOpOption::PaintopCategory category() const;
@@ -52,6 +62,8 @@ public:
 
     virtual bool isChecked() const;
     virtual void setChecked(bool checked);
+
+    bool isEnabled() const;
 
     void setLocked(bool value);
     bool isLocked() const;
@@ -72,9 +84,10 @@ public:
     QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+    OptionalLodLimitationsReader effectiveLodLimitations() const;
 
 protected:
-
+    virtual OptionalLodLimitationsReader lodLimitationsReader() const;
     void setConfigurationPage(QWidget *page);
 
     KisResourcesInterfaceSP resourcesInterface() const;
@@ -97,7 +110,8 @@ protected:
 
 protected Q_SLOTS:
     void emitSettingChanged();
-    void emitCheckedChanged();
+    void emitCheckedChanged(bool checked);
+    void emitEnabledChanged(bool enabled);
 
 Q_SIGNALS:
 
@@ -111,6 +125,10 @@ Q_SIGNALS:
      * emitted *before* sigSettingChanged()
      */
     void sigCheckedChanged(bool value);
+    void sigEnabledChanged(bool value);
+
+private:
+    void slotEnablePageWidget(bool value);
 
 protected:
 

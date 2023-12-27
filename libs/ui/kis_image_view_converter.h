@@ -9,12 +9,9 @@
 
 #include <kritaui_export.h>
 
-#include "kis_image.h"
 #include "kis_types.h"
-#include <KoViewConverter.h>
-
-class QTransform;
-
+#include "KisClonableViewConverter.h"
+#include "KisImageResolutionProxy.h"
 
 /**
  * ViewConverter to convert from flake-internal points to
@@ -24,22 +21,22 @@ class QTransform;
  * For usage remember that the document here is the flake-points. And
  * the view is the krita-pixels.
  */
-class KRITAUI_EXPORT KisImageViewConverter : public KoViewConverter
+class KRITAUI_EXPORT KisImageViewConverter : public KisClonableViewConverter
 {
 public:
     /**
      * constructor
      * @param image the image this viewConverter works for.
      */
+    KisImageViewConverter();
     KisImageViewConverter(const KisImageWSP image);
+    KisImageViewConverter(KisImageResolutionProxySP proxy);
+    KisImageViewConverter(const KisImageViewConverter &rhs);
+    ~KisImageViewConverter();
+
+    KisClonableViewConverter* clone() const override;
 
     void setImage(KisImageWSP image);
-
-    QTransform documentToView() const;
-    QTransform viewToDocument() const;
-
-    using KoViewConverter::documentToView;
-    using KoViewConverter::viewToDocument;
 
     /// reimplemented from superclass
     void zoom(qreal *zoomX, qreal *zoomY) const override;
@@ -53,7 +50,13 @@ public:
     qreal zoom() const;
 
 private:
-    KisImageWSP m_image;
+    qreal effectiveXRes() const;
+    qreal effectiveYRes() const;
+
+private:
+    KisImageResolutionProxySP m_proxy;
 };
+
+using KisImageViewConverterSP = QSharedPointer<KisImageViewConverter>;
 
 #endif

@@ -509,9 +509,10 @@ qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
 
     QVector<QRgb> palette;
 
-    palette.resize(256);
-
     if (mode == Indexed) {
+
+        palette.resize(256);
+
         for(auto i = 0; i < 256; i++) {
             quint8 r = 0;
             quint8 g = 0;

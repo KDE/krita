@@ -197,7 +197,9 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
     int first = 1 ;
     for( i=0; i<spec->numLayers; i++ )
       if( spec->layers[i].isVisible ) {
-        computeDimensions(&spec->layers[i].dim) ;
+        if (computeDimensions(&spec->layers[i].dim) != XCF_OK) {
+          return XCF_ERROR;
+        }
         if( first ) {
           spec->dim = spec->layers[i].dim ;
           first = 0 ;
@@ -227,8 +229,10 @@ complete_flatspec(struct FlattenSpec *spec, guesser guess_callback)
       spec->dim.width = XCF.width ;
     }
   }
-  computeDimensions(&spec->dim);
-  
+  if (computeDimensions(&spec->dim) != XCF_OK) {
+    return XCF_ERROR;
+  }
+
   /* Turn off layers that we don't hit at all */
   for( i=0; i<spec->numLayers; i++ )
     if( spec->layers[i].isVisible &&

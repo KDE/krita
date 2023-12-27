@@ -12,16 +12,15 @@
 #include <kstandardguiitem.h>
 
 VideoHDRMetadataOptionsDialog::VideoHDRMetadataOptionsDialog(QWidget *parent)
-    : QDialog(parent),
+    : KoDialog(parent),
     ui(new Ui::VideoHDRMetadataOptionsDialog)
 {
-    ui->setupUi(this);
+    setButtons(Ok | Cancel);
+    setDefaultButton(Ok);
 
-    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Ok), KStandardGuiItem::ok());
-    KGuiItem::assign(ui->btnBox->button(QDialogButtonBox::Cancel), KStandardGuiItem::cancel());
-
-    connect(ui->btnBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(ui->btnBox, SIGNAL(rejected()), this, SLOT(reject()));
+    QWidget *page = new QWidget(this);
+    ui->setupUi(page);
+    setMainWidget(page);
 
     ui->cmbMasterDisplay->addItem(i18n("Rec. 2100 PQ"), "p2100-pq");
     ui->cmbMasterDisplay->addItem(i18n("DCI-P3 D65"), "dci-p3-d65");

@@ -10,6 +10,7 @@
 #include "KoCanvasBase.h"
 #include "KoShapeController.h"
 #include "KoDocumentResourceManager.h"
+#include "KoCanvasResourceProvider.h"
 
 #include <kundo2command.h>
 
@@ -50,7 +51,12 @@ KoToolBase *KoInteractionStrategy::tool() const
 
 uint KoInteractionStrategy::handleRadius() const
 {
-    return tool()->canvas()->shapeController()->resourceManager()->handleRadius();
+    return tool()->canvas()->resourceManager()->handleRadius();
+}
+
+uint KoInteractionStrategy::decorationThickness() const
+{
+    return tool()->canvas()->resourceManager()->decorationThickness();
 }
 
 uint KoInteractionStrategy::grabSensitivity() const

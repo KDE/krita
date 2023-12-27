@@ -43,7 +43,7 @@ public:
     
     static QString colorSpaceId()
     {
-        return "CMYKAU16";
+        return QStringLiteral("CMYKAU16");
     }
 
 };

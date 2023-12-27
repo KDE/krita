@@ -1,0 +1,35 @@
+<svg width="380px" height="255px"
+    xmlns="http://www.w3.org/2000/svg"  xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+<defs>
+    <path id="bubble" d="M60 0C90 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 30 0 60 0Z" />
+    
+</defs>
+<g id="testRect">
+    <!-- the svg text 2 spect says that ellipse, circle and polygon are valid, inset invalid, uri valid... This tests path as well because it is a no-brainer, but xywh and rect are tricky with their 'auto' value-->
+    
+    <circle id="ref-circle" fill="none" stroke="cornflowerblue" transform="translate(5,5)" r="60" cx="60" cy="60" />
+    <text id="test-circle" transform="translate(5,5)" style="shape-inside: circle(60px at 60px 60px); text-align: center;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a circle. The quick brown fox jumps over the lazy dog.
+    </text>
+    
+    <ellipse id="ref-ellipse" fill="none" stroke="cornflowerblue" transform="translate(130,5)" rx="60" ry="50" cx="60" cy="60" />
+    <text id="test-ellipse" transform="translate(130,5)" style="shape-inside: ellipse(60 50 at 60 60); text-align: center;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside an ellipse. The quick brown fox jumps over the lazy dog.
+    </text>
+    <polygon id="ref-polygon"  fill="none" transform="translate(255,5)" stroke="cornflowerblue" points="0 0, 120 0, 100 60, 120 120, 0 120"/>
+    <text id="test-polygon" transform="translate(255,5)" style="shape-inside: polygon(0 0px, 120px 0, 100px 60, 120px 120, 0 120px); text-align: center;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a polygon. The quick brown fox jumps over the lazy dog.
+    </text>
+    
+    <path id="ref-path" fill="none" transform="translate(5,130)" stroke="cornflowerblue" d="M60 0C90 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 30 0 60 0Z" />
+    <text id="test-path" transform="translate(5,130)" style="shape-inside: path('M60 0C90 0 120 30 120 60C120 90 90 120 60 120C30 120 0 90 0 60C0 30 30 0 60 0Z'); text-align: center;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside an SVG path. The quick brown fox jumps over the lazy dog.
+    </text>
+    
+    <use id="ref-uri" fill="none" xlink:href="#bubble" stroke="cornflowerblue" transform="translate(130,130)" />
+    <text id="test-uri" transform="translate(130,130)" style="shape-inside: url(#bubble); text-align: center;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Text inside a referenced path. The quick brown fox jumps over the lazy dog.
+    </text>
+</g>
+
+</svg>

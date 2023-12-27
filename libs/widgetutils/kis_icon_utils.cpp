@@ -10,6 +10,8 @@
 #include <QAction>
 #include <QAbstractButton>
 #include <QComboBox>
+#include <QTabBar>
+#include <QTabWidget>
 #include <QIcon>
 #include <QFile>
 #include <QPair>
@@ -30,9 +32,8 @@ QIcon loadIcon(const QString &name)
     if (cached != s_cache.constEnd()) {
         return cached.value();
     }
+
     // try load themed icon
-
-
     const char * const prefix = useDarkIcons() ? "dark_" : "light_";
 
     QString  realName = QLatin1String(prefix) + name;
@@ -121,7 +122,9 @@ bool adjustIcon(QIcon *icon)
     QString iconName = icon->name();
     if (iconName.isNull()) {
         if (s_icons.contains(icon->cacheKey())) {
-            iconName = s_icons.take(icon->cacheKey());
+            iconName = s_icons[icon->cacheKey()];
+        } else {
+            return false;
         }
     }
 
@@ -149,21 +152,30 @@ void updateIconCommon(QObject *object)
     QAbstractButton* button = qobject_cast<QAbstractButton*>(object);
     if (button) {
         updateIcon(button);
+        return;
     }
 
     QComboBox* comboBox = qobject_cast<QComboBox*>(object);
     if (comboBox) {
         updateIcon(comboBox);
+        return;
     }
 
     QAction* action = qobject_cast<QAction*>(object);
     if (action) {
         updateIcon(action);
+        return;
+    }
+
+    QTabBar* tabBar = qobject_cast<QTabBar*>(object);
+    if (tabBar) {
+        updateIcon(tabBar);
+        return;
     }
 }
 
 void clearIconCache() {
-        s_cache.clear();
+    s_cache.clear();
 }
 
 void updateIcon(QAbstractButton *button)
@@ -195,4 +207,15 @@ void updateIcon(QAction *action)
         action->setIcon(icon);
     }
 }
+
+void updateIcon(QTabBar *tabBar)
+{
+    for (int i = 0; i < tabBar->count(); i++) {
+        QIcon icon = tabBar->tabIcon(i);
+        if (adjustIcon(&icon)) {
+            tabBar->setTabIcon(i, icon);
+        }
+    }
+}
+
 }

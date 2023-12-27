@@ -18,6 +18,7 @@
 #include "kis_scalar_keyframe_channel.h"
 #include "kis_mask.h"
 #include "kis_image.h"
+#include "kis_command_utils.h"
 
 #include <QMap>
 
@@ -33,6 +34,40 @@ const KoID KisKeyframeChannel::ShearY = KoID("transform_shear_y", ki18n("Shear (
 const KoID KisKeyframeChannel::RotationX = KoID("transform_rotation_x", ki18n("Rotation (X)"));
 const KoID KisKeyframeChannel::RotationY = KoID("transform_rotation_y", ki18n("Rotation (Y)"));
 const KoID KisKeyframeChannel::RotationZ = KoID("transform_rotation_z", ki18n("Rotation (Z)"));
+
+KoID KisKeyframeChannel::channelIdToKoId(const QString &id)
+{
+    KoID channelId;
+
+    if (id == KisKeyframeChannel::Raster.id()) {
+        channelId = KisKeyframeChannel::Raster;
+    } else if (id == KisKeyframeChannel::Opacity.id()) {
+        channelId = KisKeyframeChannel::Opacity;
+    } else if (id == KisKeyframeChannel::PositionX.id()) {
+        channelId = KisKeyframeChannel::PositionX;
+    } else if (id == KisKeyframeChannel::PositionY.id()) {
+        channelId = KisKeyframeChannel::PositionY;
+    } else if (id == KisKeyframeChannel::ScaleX.id()) {
+        channelId = KisKeyframeChannel::ScaleX;
+    } else if (id == KisKeyframeChannel::ScaleY.id()) {
+        channelId = KisKeyframeChannel::ScaleY;
+    } else if (id == KisKeyframeChannel::ShearX.id()) {
+        channelId = KisKeyframeChannel::ShearX;
+    } else if (id == KisKeyframeChannel::ShearY.id()) {
+        channelId = KisKeyframeChannel::ShearY;
+    } else if (id == KisKeyframeChannel::RotationX.id()) {
+        channelId = KisKeyframeChannel::RotationX;
+    } else if (id == KisKeyframeChannel::RotationY.id()) {
+        channelId = KisKeyframeChannel::RotationY;
+    } else if (id == KisKeyframeChannel::RotationZ.id()) {
+        channelId = KisKeyframeChannel::RotationZ;
+
+    } else {
+        channelId = KoID();
+    }
+
+    return channelId;
+}
 
 
 struct KisKeyframeChannel::Private
@@ -60,19 +95,16 @@ KisKeyframeChannel::KisKeyframeChannel(const KoID &id, KisDefaultBoundsBaseSP bo
     : m_d(new Private(id, bounds))
 {
     // Added keyframes should fire channel updated signal..
-    connect(this, &KisKeyframeChannel::sigAddedKeyframe, [](const KisKeyframeChannel *channel, int time) {
-        channel->sigChannelUpdated(
-                    channel->affectedFrames(time),
-                    channel->affectedRect(time)
-                    );
+    connect(this, &KisKeyframeChannel::sigAddedKeyframe, [this](const KisKeyframeChannel *, int) {
+        Q_EMIT sigAnyKeyframeChange();
     });
 
-    // Removing keyframes should fire channel updated signal..
-    connect(this, &KisKeyframeChannel::sigRemovingKeyframe, [](const KisKeyframeChannel *channel, int time) {
-        channel->sigChannelUpdated(
-                   channel->affectedFrames(time),
-                   channel->affectedRect(time)
-                   );
+    connect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, [this](const KisKeyframeChannel *, int) {
+        Q_EMIT sigAnyKeyframeChange();
+    });
+
+    connect(this, &KisKeyframeChannel::sigKeyframeChanged, [this](const KisKeyframeChannel *, int) {
+        Q_EMIT sigAnyKeyframeChange();
     });
 }
 
@@ -103,7 +135,9 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
     }
 
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisInsertKeyframeCommand(this, time, keyframe, parentUndoCmd);
+        KUndo2Command* cmd =
+            new KisCommandUtils::SkipFirstRedoWrapper(
+                new KisInsertKeyframeCommand(this, time, keyframe), parentUndoCmd);
         Q_UNUSED(cmd);
     }
 
@@ -111,15 +145,23 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
     emit sigAddedKeyframe(this, time);
 }
 
-void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
+void KisKeyframeChannel::removeKeyframeImpl(int time, KUndo2Command *parentUndoCmd)
 {
     if (parentUndoCmd) {
-        KUndo2Command* cmd = new KisRemoveKeyframeCommand(this, time, parentUndoCmd);
+        KUndo2Command* cmd =
+            new KisCommandUtils::SkipFirstRedoWrapper(
+                new KisRemoveKeyframeCommand(this, time), parentUndoCmd);
         Q_UNUSED(cmd);
     }
 
-    emit sigRemovingKeyframe(this, time);
     m_d->keys.remove(time);
+    emit sigKeyframeHasBeenRemoved(this, time);
+}
+
+void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
+{
+    emit sigKeyframeAboutToBeRemoved(this, time);
+    removeKeyframeImpl(time, parentUndoCmd);
 }
 
 void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sourceTime, KisKeyframeChannel *targetChannel, int targetTime, KUndo2Command *parentUndoCmd)
@@ -127,12 +169,15 @@ void KisKeyframeChannel::moveKeyframe(KisKeyframeChannel *sourceChannel, int sou
     KIS_ASSERT(sourceChannel && targetChannel);
 
     KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
+    if (!sourceKeyframe) return;
+
     sourceChannel->removeKeyframe(sourceTime, parentUndoCmd);
 
     KisKeyframeSP targetKeyframe = sourceKeyframe;
     if (sourceChannel != targetChannel) {
         // When "moving" Keyframes between channels, a new copy is made for that channel.
         targetKeyframe = sourceKeyframe->duplicate(targetChannel);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(targetKeyframe);
     }
 
     targetChannel->insertKeyframe(targetTime, targetKeyframe, parentUndoCmd);
@@ -143,7 +188,10 @@ void KisKeyframeChannel::copyKeyframe(const KisKeyframeChannel *sourceChannel, i
     KIS_ASSERT(sourceChannel && targetChannel);
 
     KisKeyframeSP sourceKeyframe = sourceChannel->keyframeAt(sourceTime);
+    if (!sourceKeyframe) return;
+
     KisKeyframeSP copiedKeyframe = sourceKeyframe->duplicate(targetChannel);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(copiedKeyframe);
 
     targetChannel->insertKeyframe(targetTime, copiedKeyframe, parentUndoCmd);
 }
@@ -154,6 +202,7 @@ void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, 
 
     // Store B.
     KisKeyframeSP keyframeB = channelB->keyframeAt(timeB);
+    if (!keyframeB) return;
 
     // Move A -> B
     moveKeyframe(channelA, timeA, channelB, timeB, parentUndoCmd);
@@ -161,6 +210,7 @@ void KisKeyframeChannel::swapKeyframes(KisKeyframeChannel *channelA, int timeA, 
     // Insert B -> A
     if (channelA != channelB) {
         keyframeB = keyframeB->duplicate(channelA);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframeB);
     }
     channelA->insertKeyframe(timeA, keyframeB, parentUndoCmd);
 }
@@ -271,14 +321,20 @@ QString KisKeyframeChannel::name() const
 void KisKeyframeChannel::setNode(KisNodeWSP node)
 {
     if (m_d->parentNode.isValid()) { // Disconnect old..
-        disconnect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);
+        disconnect(this, &KisKeyframeChannel::sigAddedKeyframe, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAdded);
+        disconnect(this, &KisKeyframeChannel::sigKeyframeAboutToBeRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAboutToBeRemoved);
+        disconnect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameHasBeenRemoved);
+        disconnect(this, &KisKeyframeChannel::sigKeyframeChanged, m_d->parentNode, &KisNode::handleKeyframeChannelFrameChange);
     }
 
     m_d->parentNode = node;
     m_d->bounds = KisDefaultBoundsNodeWrapperSP( new KisDefaultBoundsNodeWrapper( node ));
 
     if (m_d->parentNode) { // Connect new..
-        connect(this, &KisKeyframeChannel::sigChannelUpdated, m_d->parentNode, &KisNode::handleKeyframeChannelUpdate);
+        connect(this, &KisKeyframeChannel::sigAddedKeyframe, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAdded, Qt::DirectConnection);
+        connect(this, &KisKeyframeChannel::sigKeyframeAboutToBeRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameAboutToBeRemoved, Qt::DirectConnection);
+        connect(this, &KisKeyframeChannel::sigKeyframeHasBeenRemoved, m_d->parentNode, &KisNode::handleKeyframeChannelFrameHasBeenRemoved, Qt::DirectConnection);
+        connect(this, &KisKeyframeChannel::sigKeyframeChanged, m_d->parentNode, &KisNode::handleKeyframeChannelFrameChange, Qt::DirectConnection);
     }
 }
 

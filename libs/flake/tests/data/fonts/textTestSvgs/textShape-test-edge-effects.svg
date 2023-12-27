@@ -1,0 +1,95 @@
+<svg width="450px" height="450px"
+    xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="2.0">
+<defs>
+    <rect id="simple" stroke="cornflowerblue" fill="none" x="0" y="0" width="100" height="100" />
+</defs>
+<g id="testRect">
+    
+    <g transform="translate(10, 10)">
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,0)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
+    <text id="test1" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first last;text-align:justify-all"
+          font-family="DejaVu Sans" fill="blue" font-size="10">(Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque finibus mattis lacus.)
+    </text>
+    
+    <text id="test2" transform="translate(0,110)" style="shape-inside: url(#simple);text-indent:2em;white-space:pre-wrap;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    <text id="test3" transform="translate(0,220)" style="shape-inside: url(#simple);text-indent:2em each-line;white-space:pre-wrap;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+    <text id="test4" transform="translate(0,330)" style="shape-inside: url(#simple);text-indent:2em hanging;white-space:pre-wrap;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">Lorem ipsum dolor sit amet, consectetur
+adipiscing elit. Quisque finibus mattis lacus.
+    </text>
+</g>
+    
+<g transform="translate(120, 10)">
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,0)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
+    <text id="test1ttb" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first allow-end last; writing-mode: vertical-rl;text-align:justify-all"
+          font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">&quot;ああああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;.
+&#x82A6;&#x82A6;&#x82A6;ああああああああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ&quot;</text>
+    
+    <text id="test2ttb" transform="translate(0,110)" style="shape-inside: url(#simple);font-family:Krita_Test_Unicode_Variation_A, DejaVu Sans;text-indent:2em;white-space:pre-wrap; writing-mode: vertical-rl;" fill="blue"
+          font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああああ
+あああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ</text>
+    <text id="test3ttb" transform="translate(0,220)" style="shape-inside: url(#simple);font-family:Krita_Test_Unicode_Variation_A, DejaVu Sans;text-indent:2em each-line;white-space:pre-wrap;writing-mode: vertical-rl;" fill="blue"
+          font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああああ
+あああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ</text>
+    <text id="test4ttb" transform="translate(0,330)"
+          style="shape-inside: url(#simple);font-family:Krita_Test_Unicode_Variation_A, DejaVu Sans;text-indent:2em hanging;white-space:pre-wrap;writing-mode: vertical-rl;" fill="blue"
+          font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああああ
+あああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ</text>
+</g>
+
+<g transform="translate(230, 10)">
+    
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,0)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
+    <text id="test1rtl" transform="translate(0,0)" style="shape-inside: url(#simple); direction:rtl;hanging-punctuation:first last;text-align:justify-all"
+          font-family="DejaVu Sans" fill="blue" font-size="10">(داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة اللغة العربية المعيارية الحديثة abc)
+    </text>
+    
+    <text id="test2rtl" transform="translate(0,110)" style="shape-inside: url(#simple); direction:rtl;text-indent:2em;white-space:pre-wrap;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة 
+اللغة العربية المعيارية الحديثة abc
+    </text>
+    <text id="test3rtl" transform="translate(0,220)" style="shape-inside: url(#simple); direction:rtl;text-indent:2em each-line;white-space:pre-wrap;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة 
+اللغة العربية المعيارية الحديثة abc
+    </text>
+    <text id="test4rtl" transform="translate(0,330)" style="shape-inside: url(#simple); direction:rtl;text-indent:2em hanging;white-space:pre-wrap;"
+          font-family="DejaVu Sans" fill="blue" font-size="10">داستان SVG 1.1 SE طولا ني است. اللغة العربية المعيارية الحديثة 
+اللغة العربية المعيارية الحديثة abc
+    </text>
+</g>
+    <g transform="translate(340, 10)">
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,0)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,110)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,220)" />
+    <use xlink:href="#simple" fill="none" stroke="cornflowerblue" transform="translate(0,330)" />
+    <text id="test1ttb-lr" transform="translate(0,0)" style="shape-inside: url(#simple);hanging-punctuation:first force-end;last;writing-mode: vertical-lr;text-align:justify-all"
+          font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">&quot;ああああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;.
+&#x82A6;&#x82A6;&#x82A6;ああああああああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ&quot;</text>
+    
+    <text id="test2ttb-lr" transform="translate(0,110)" style="shape-inside: url(#simple);text-indent:2em;white-space:pre-wrap;writing-mode: vertical-lr;"
+          font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああああ
+あああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ</text>
+    <text id="test3ttb-lr" transform="translate(0,220)" style="shape-inside: url(#simple);text-indent:2em each-line;white-space:pre-wrap;writing-mode: vertical-lr;"
+          font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああああ
+あああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ</text>
+    <text id="test4ttb-lr" transform="translate(0,330)" style="shape-inside: url(#simple);text-indent:2em hanging;white-space:pre-wrap;writing-mode: vertical-lr;"
+          font-family="Krita_Test_Unicode_Variation_A, DejaVu Sans" fill="blue" font-size="10">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああああ
+あああ&#x82A6;ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああ</text>
+</g>
+    </g>
+    </svg>

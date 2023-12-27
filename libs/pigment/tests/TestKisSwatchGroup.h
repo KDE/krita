@@ -20,7 +20,16 @@ private Q_SLOTS:
     void testRemoveEntries();
     void testChangeColumnNumber();
     void testAddEntry();
+
+    void testName();
+    void testColorCount();
+    void testInfoList();
+
 private:
+
+    KoColor blue();
+    KoColor red();
+
     KisSwatchGroup g;
     QHash<QPair<int, int>, KisSwatch> testSwatches;
 };

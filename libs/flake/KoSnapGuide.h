@@ -36,7 +36,7 @@ class QRectF;
  *
  * The snap guide is part of the KoCanvasBase class and thus can be accessed by any tool
  * or application via the canvas pointer.
- * For letting the user manage which snap stratgies to enable, there is a snap guide config
+ * For letting the user manage which snap strategies to enable, there is a snap guide config
  * widget in guiutils.
  *
  */

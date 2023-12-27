@@ -41,13 +41,14 @@ KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
 
     /* color docker selector drop down */
     ui->dockerColorSettingsComboBox->addItem(i18n("Advanced Color Selector"));
-    //ui->dockerColorSettingsComboBox->addItem(i18n("Color Sliders"));
     ui->dockerColorSettingsComboBox->addItem(i18n("Color Hotkeys"));
-    ui->dockerColorSettingsComboBox->setCurrentIndex(0); // start off seeing advanced color selector properties
 
-    connect( ui->dockerColorSettingsComboBox, SIGNAL(currentIndexChanged(int)),this, SLOT(changedColorDocker(int)));
-    changedColorDocker(0);
-
+    connect(ui->dockerColorSettingsComboBox,
+            qOverload<int>(&QComboBox::currentIndexChanged),
+            this,
+            &KisColorSelectorSettings::changedColorDocker);
+    // start off seeing advanced color selector properties
+    ui->dockerColorSettingsComboBox->setCurrentIndex(0);
 
     /* advanced color docker options */
     ui->dockerResizeOptionsComboBox->addItem(i18n("Change to a Horizontal Layout"));
@@ -232,6 +233,8 @@ void KisColorSelectorSettings::savePreferences() const
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
+    KIS_ASSERT(cstw);
+
     cfg.writeEntry("colorSelectorConfiguration", cstw->configuration().toString());
 
     cfg.writeEntry("hsxSettingType", ui->colorSelectorTypeComboBox->currentIndex());
@@ -241,20 +244,6 @@ void KisColorSelectorSettings::savePreferences() const
     cfg.writeEntry("lumaG", ui->l_lumaG->value());
     cfg.writeEntry("lumaB", ui->l_lumaB->value());
     cfg.writeEntry("gamma", ui->SP_Gamma->value());
-
-    //slider//
-    hsxcfg.writeEntry("hsvH", ui->csl_hsvH->isChecked());
-    hsxcfg.writeEntry("hsvS", ui->csl_hsvS->isChecked());
-    hsxcfg.writeEntry("hsvV", ui->csl_hsvV->isChecked());
-    hsxcfg.writeEntry("hslH", ui->csl_hslH->isChecked());
-    hsxcfg.writeEntry("hslS", ui->csl_hslS->isChecked());
-    hsxcfg.writeEntry("hslL", ui->csl_hslL->isChecked());
-    hsxcfg.writeEntry("hsiH", ui->csl_hsiH->isChecked());
-    hsxcfg.writeEntry("hsiS", ui->csl_hsiS->isChecked());
-    hsxcfg.writeEntry("hsiI", ui->csl_hsiI->isChecked());
-    hsxcfg.writeEntry("hsyH", ui->csl_hsyH->isChecked());
-    hsxcfg.writeEntry("hsyS", ui->csl_hsyS->isChecked());
-    hsxcfg.writeEntry("hsyY", ui->csl_hsyY->isChecked());
 
     //hotkeys//
     hotkeycfg.writeEntry("steps_lightness", ui->sb_lightness->value());
@@ -266,41 +255,9 @@ void KisColorSelectorSettings::savePreferences() const
     emit settingsChanged();
 }
 
-//void KisColorSelectorSettings::changeEvent(QEvent *e)
-//{
-//    QDialog::changeEvent(e);
-//    switch (e->type()) {
-//    case QEvent::LanguageChange:
-//        ui->retranslateUi(this);
-//        break;
-//    default:
-//        break;
-//    }
-//}
-
-
 void KisColorSelectorSettings::changedColorDocker(int index)
 {
-    // having a situation where too many sections are visible makes the window too large. turn all off before turning more on
-    ui->colorSliderOptions->hide();
-    ui->advancedColorSelectorOptions->hide();
-    ui->hotKeyOptions->hide();
-
-    if (index == 0)     { // advanced color selector options selected
-        ui->advancedColorSelectorOptions->show();
-        ui->colorSliderOptions->hide();
-        ui->hotKeyOptions->hide();
-    }
-//    else if (index == 1) {  // color slider options selected
-//        ui->advancedColorSelectorOptions->hide();
-//        ui->hotKeyOptions->hide();
-//        ui->colorSliderOptions->show();
-//    }
-    else {
-       ui->colorSliderOptions->hide();
-       ui->advancedColorSelectorOptions->hide();
-       ui->hotKeyOptions->show();
-    }
+    ui->dockerOptionsPanel->setCurrentIndex(index);
 }
 
 void KisColorSelectorSettings::changedACSColorSelectorType(int index)
@@ -490,6 +447,7 @@ void KisColorSelectorSettings::loadPreferences()
 
     //color selector
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
+    KIS_ASSERT(cstw);
     cstw->setConfiguration(KisColorSelectorConfiguration::fromString(cfg.readEntry("colorSelectorConfiguration", "3|0|5|0"))); // triangle selector
 
     //luma values//
@@ -497,20 +455,6 @@ void KisColorSelectorSettings::loadPreferences()
     ui->l_lumaG->setValue(cfg.readEntry("lumaG", 0.7152));
     ui->l_lumaB->setValue(cfg.readEntry("lumaB", 0.0722));
     ui->SP_Gamma->setValue(cfg.readEntry("gamma", 2.2));
-
-    //color sliders//
-    ui->csl_hsvH->setChecked(hsxcfg.readEntry("hsvH", false));
-    ui->csl_hsvS->setChecked(hsxcfg.readEntry("hsvS", false));
-    ui->csl_hsvV->setChecked(hsxcfg.readEntry("hsvV", false));
-    ui->csl_hslH->setChecked(hsxcfg.readEntry("hslH", true));
-    ui->csl_hslS->setChecked(hsxcfg.readEntry("hslS", true));
-    ui->csl_hslL->setChecked(hsxcfg.readEntry("hslL", true));
-    ui->csl_hsiH->setChecked(hsxcfg.readEntry("hsiH", false));
-    ui->csl_hsiS->setChecked(hsxcfg.readEntry("hsiS", false));
-    ui->csl_hsiI->setChecked(hsxcfg.readEntry("hsiI", false));
-    ui->csl_hsyH->setChecked(hsxcfg.readEntry("hsyH", false));
-    ui->csl_hsyS->setChecked(hsxcfg.readEntry("hsyS", false));
-    ui->csl_hsyY->setChecked(hsxcfg.readEntry("hsyY", false));
 
     //hotkeys//
     ui->sb_lightness->setValue(hotkeycfg.readEntry("steps_lightness", 10));
@@ -571,9 +515,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->shadeSelectorUpdateOnForeground->setChecked(true);
     ui->shadeSelectorUpdateOnBackground->setChecked(true);
 
-    bool asGradient = true;
-    if(asGradient) ui->minimalShadeSelectorAsGradient->setChecked(true);
-    else ui->minimalShadeSelectorAsColorPatches->setChecked(true);
+    ui->minimalShadeSelectorAsGradient->setChecked(true);
+    ui->minimalShadeSelectorAsColorPatches->setChecked(false);
 
     ui->minimalShadeSelectorPatchesPerLine->setValue(10);
     ui->minimalShadeSelectorLineSettings->fromString("0|0.2|0|0|0|0|0;1|0|1|1|0|0|0;2|0|-1|1|0|0|0;");
@@ -583,6 +526,8 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->colorSelectorTypeComboBox->setCurrentIndex(0);
 
     KisColorSelectorComboBox* cstw = dynamic_cast<KisColorSelectorComboBox*>(ui->colorSelectorConfiguration);
+    KIS_ASSERT(cstw);
+
     cstw->setConfiguration(KisColorSelectorConfiguration("3|0|5|0")); // triangle selector
 
     //luma//
@@ -590,20 +535,6 @@ void KisColorSelectorSettings::loadDefaultPreferences()
     ui->l_lumaG->setValue(0.7152);
     ui->l_lumaB->setValue(0.0722);
     ui->SP_Gamma->setValue(2.2);
-
-    //color sliders//
-    ui->csl_hsvH->setChecked(false);
-    ui->csl_hsvS->setChecked(false);
-    ui->csl_hsvV->setChecked(false);
-    ui->csl_hslH->setChecked(true);
-    ui->csl_hslS->setChecked(true);
-    ui->csl_hslL->setChecked(true);
-    ui->csl_hsiH->setChecked(false);
-    ui->csl_hsiS->setChecked(false);
-    ui->csl_hsiI->setChecked(false);
-    ui->csl_hsyH->setChecked(false);
-    ui->csl_hsyS->setChecked(false);
-    ui->csl_hsyY->setChecked(false);
 
     //hotkeys//
     ui->sb_lightness->setValue(10);

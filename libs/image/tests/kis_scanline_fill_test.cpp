@@ -269,7 +269,7 @@ void KisScanlineFillTest::testExternalFill()
     QCOMPARE(dev->exactBounds(), rc1 | rc2);
 
     KisScanlineFill fill(dev, QPoint(10,10), boundingRect);
-    fill.fillColor(KoColor(Qt::blue, dev->colorSpace()), other);
+    fill.fill(KoColor(Qt::blue, dev->colorSpace()), other);
 
     QCOMPARE(dev->exactBounds(), rc1 | rc2);
     QCOMPARE(other->exactBounds(), rc1);

@@ -213,7 +213,7 @@ void KisAsyncMerger::startMerge(KisBaseRectsWalker &walker, bool notifyClones) {
         KisProjectionLeafSP currentLeaf = item.m_leaf;
 
         /**
-         * In some unidentified cases teh nodes might be removed
+         * In some unidentified cases the nodes might be removed
          * while the updates are still running. We have no proof
          * of it yet, so just add a safety assert here.
          */
@@ -311,9 +311,9 @@ void KisAsyncMerger::resetProjection() {
 }
 
 void KisAsyncMerger::setupProjection(KisProjectionLeafSP currentLeaf, const QRect& rect, bool useTempProjection) {
-    KisPaintDeviceSP parentOriginal = currentLeaf->parent()->original();
+    KisPaintDeviceSP parentOriginal = currentLeaf->parent()->lazyDestinationForSubtreeComposition();
 
-    if (parentOriginal != currentLeaf->projection()) {
+    if (parentOriginal) {
         if (useTempProjection) {
             if(!m_cachedPaintDevice)
                 m_cachedPaintDevice = new KisPaintDevice(parentOriginal->colorSpace());

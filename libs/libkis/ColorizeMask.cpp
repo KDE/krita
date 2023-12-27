@@ -14,7 +14,7 @@
 #include <kis_transaction.h>
 #include <kis_update_scheduler.h>
 #include <kis_undo_stores.h>
-
+#include <kis_default_bounds.h>
 
 
 
@@ -59,7 +59,7 @@ void ColorizeMask::initializeKeyStrokeColors(QList<ManagedColor*> colors, int tr
      *  It is necessary because the function also changes the color
      *  space and blending mode of the mask
      *
-     *  TODO: inplement a proper API that modifies key strokes
+     *  TODO: implement a proper API that modifies key strokes
      *  of a colorize mask without breaking undo history
      */
     KIS_SAFE_ASSERT_RECOVER_RETURN(mask->keyStrokesColors().colors.size() == 0);
@@ -73,9 +73,10 @@ void ColorizeMask::initializeKeyStrokeColors(QList<ManagedColor*> colors, int tr
         KisLazyFillTools::KeyStroke keyStroke;
         keyStroke.color = colors[i]->color();
         keyStroke.dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-        keyStroke.dev->setParentNode(this->node());
         keyStroke.dev->setDefaultBounds(new KisDefaultBounds(this->node()->image()));
         keyStroke.isTransparent = transparentIndex == i;
+        // NOTE: the parent node link is initialized in
+        //       setKeyStrokesDirect
 
         keyStrokes.append(keyStroke);
     }

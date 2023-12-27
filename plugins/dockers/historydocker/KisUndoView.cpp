@@ -86,17 +86,13 @@
 class KisUndoViewPrivate
 {
 public:
-    KisUndoViewPrivate() :
-#ifndef QT_NO_UNDOGROUP
-        group(0),
-#endif
-        model(0) {}
+    KisUndoViewPrivate() {}
 
 #ifndef QT_NO_UNDOGROUP
-    QPointer<KUndo2Group> group;
+    QPointer<KUndo2Group> group {0};
 #endif
-    KisUndoModel *model;
-    KisUndoView* q;
+    KisUndoModel *model {0};
+    KisUndoView *q {0};
 
     void init(KisUndoView* view);
 };
@@ -120,6 +116,11 @@ KisUndoView::KisUndoView(QWidget *parent)
 {
     d->init(this);
 
+    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
+    if (scroller) {
+        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
+                this, SLOT(slotScrollerStateChanged(QScroller::State)));
+    }
 }
 
 /*!
@@ -127,10 +128,8 @@ KisUndoView::KisUndoView(QWidget *parent)
 */
 
 KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent)
-    : QListView(parent)
-    , d(new KisUndoViewPrivate)
+    : KisUndoView(parent)
 {
-    d->init(this);
     setStack(stack);
 }
 
@@ -143,17 +142,9 @@ KisUndoView::KisUndoView(KUndo2QStack *stack, QWidget *parent)
 */
 
 KisUndoView::KisUndoView(KUndo2Group *group, QWidget *parent)
-    : QListView(parent)
-    , d(new KisUndoViewPrivate)
+    : KisUndoView(parent)
 {
-    d->init(this);
     setGroup(group);
-
-    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
-    if (scroller) {
-        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
-                this, SLOT(slotScrollerStateChanged(QScroller::State)));
-    }
 }
 
 #endif // QT_NO_UNDOGROUP
@@ -205,7 +196,7 @@ void KisUndoView::setStack(KUndo2QStack *stack)
     Sets the group displayed by this view to \a group. If \a group is 0, the view will
     be empty.
 
-    The view will update itself autmiatically whenever the active stack of the group changes.
+    The view will update itself automatically whenever the active stack of the group changes.
 
     \sa group() setStack()
 */
@@ -296,35 +287,5 @@ QIcon KisUndoView::cleanIcon() const
 void KisUndoView::setCanvas(KisCanvas2 *canvas) {
     d->model->setCanvas(canvas);
 }
-
-
-void KisUndoView::toggleCumulativeUndoRedo()
-{
-    stack()->setUseCumulativeUndoRedo(!stack()->useCumulativeUndoRedo() );
-    KisConfig cfg(false);
-    cfg.setCumulativeUndoRedo(stack()->useCumulativeUndoRedo());
-}
-
-void KisUndoView::setStackT1(double value)
-{
-    stack()->setTimeT1(value);
-    KisConfig cfg(false);
-    cfg.setStackT1(value);
-}
-
-void KisUndoView::setStackT2(double value)
-{
-    stack()->setTimeT2(value);
-    KisConfig cfg(false);
-    cfg.setStackT2(value);
-}
-
-void KisUndoView::setStackN(int value)
-{
-    stack()->setStrokesN(value);
-    KisConfig cfg(false);
-    cfg.setStackN(value);
-}
-
 
 #endif // QT_NO_UNDOVIEW

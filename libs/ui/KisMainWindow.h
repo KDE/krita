@@ -59,9 +59,7 @@ public:
 public:
 
     /**
-     *  Constructor.
-     *
-     *  Initializes a Calligra main window (with its basic GUI etc.).
+     *  Initializes a Krita main window (with its basic GUI etc.).
      */
     explicit KisMainWindow(QUuid id = QUuid());
 
@@ -166,7 +164,7 @@ public:
      * Shows if the main window is saving anything right now. If the
      * user presses Ctrl+W too fast, then the document can be close
      * before the saving is completed. I'm not sure if it is fixable
-     * in any way without avoiding using porcessEvents()
+     * in any way without avoiding using processEvents()
      * everywhere (DK)
      *
      * Don't use it unless you have no option.
@@ -195,7 +193,7 @@ Q_SIGNALS:
     /// and the document anymore.
     void loadCompleted();
 
-    /// This signal is emitted right after the docker states have been succefully restored from config
+    /// This signal is emitted right after the docker states have been successfully restored from config
     void restoringDone();
 
     /// This signal is emitted when the color theme changes
@@ -205,9 +203,6 @@ Q_SIGNALS:
     void keyBindingsChanged();
 
     void guiLoadingFinished();
-
-    /// emitted when the window is migrated among different screens
-    void screenChanged();
 
     /// emitted when the current view has changed
     void activeViewChanged();
@@ -220,6 +215,11 @@ public Q_SLOTS:
      * clears the list of the recent files
      */
     void clearRecentFiles();
+
+    /**
+     * remove one file from the list of the recent files
+     */
+    void removeRecentFile(QString url);
 
 
     /**
@@ -252,12 +252,6 @@ public Q_SLOTS:
     void slotPreferences();
 
     /**
-     * Update caption from document info - call when document info
-     * (title in the about page) changes.
-     */
-    void updateCaption();
-
-    /**
      *  Saves the current document with the current name.
      */
     void slotFileSave();
@@ -276,6 +270,7 @@ public Q_SLOTS:
 
     /// Set the active view, this will update the undo/redo actions
     void setActiveView(KisView *view);
+    void unsetActiveView();
 
     void subWindowActivated();
 
@@ -308,10 +303,7 @@ private Q_SLOTS:
 
     void slotUpdateWidgetStyle();
 
-    /**
-     * @internal
-     */
-    void slotDocumentTitleModified();
+    void slotUpdateSaveActionTitle(const QString &documentPath);
 
     /**
      *  Saves the current document with a new name.
@@ -391,11 +383,12 @@ private Q_SLOTS:
     /**
      * Hide the dockers
      */
-    void toggleDockersVisibility(bool visible);
+    void toggleDockersVisibility(bool visible, bool onWelcomePage = false);
 
     /**
      * Handle theme changes from theme manager
      */
+    void updateTheme();
     void slotThemeChanged();
 
     void undo();
@@ -416,8 +409,6 @@ private Q_SLOTS:
     void showManual();
     void switchTab(int index);
 
-    void windowScreenChanged(QScreen *screen);
-
     void slotXmlGuiMakingChanges(bool finished);
 
     void orientationChanged();
@@ -432,8 +423,13 @@ protected:
 
     void closeEvent(QCloseEvent * e) override;
     void resizeEvent(QResizeEvent * e) override;
+    void showEvent(QShowEvent *event) override;
 
     // QWidget overrides
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+
+    bool windowsLayoutSavingAllowed() const override;
 
 private:
 
@@ -475,6 +471,8 @@ private:
 
     void customizeTabBar();
 
+    void setMainWindowLayoutForCurrentMainWidget(int widgetIndex, bool widgetIndexChanged);
+    void adjustLayoutForWelcomePage();
 
 private:
 

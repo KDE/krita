@@ -109,7 +109,7 @@ KisOpenGLUpdateInfoSP KisOpenGLUpdateInfoBuilder::buildUpdateInfo(const QRect &r
     QBitArray channelFlags; // empty by default
 
     if (!m_d->channelFlags.isEmpty() &&
-        m_d->channelFlags.size() == projection->colorSpace()->channels().size()) {
+        m_d->channelFlags.size() == projection->colorSpace()->channelCount()) {
 
         channelFlags = m_d->channelFlags;
     }

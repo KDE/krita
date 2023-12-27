@@ -34,6 +34,7 @@ public:
                         const QString baseName=QString(),
                         const QString fileName=QString(),
                         const QString scalingMethod=QString(),
+                        const QString scalingFilter=QString(),
                         QObject *parent = 0);
     explicit FileLayer(KisFileLayerSP layer, QObject *parent = 0);
     ~FileLayer() override;
@@ -53,8 +54,10 @@ public Q_SLOTS:
      * @param fileName - A String containing the absolute file name.
      * @param scalingMethod - a string with the scaling method, defaults to "None",
      *  other options are "ToImageSize" and "ToImagePPI"
+     * @param scalingFilter - a string with the scaling filter, defaults to "Bicubic",
+     *  other options are "Hermite", "NearestNeighbor", "Bilinear", "Bell", "BSpline", "Lanczos3", "Mitchell"
      */
-    void setProperties(QString fileName, QString scalingMethod = QString("None"));
+    void setProperties(QString fileName, QString scalingMethod = QString("None"), QString scalingFilter = QString("Bicubic"));
 
     /**
      * @brief makes the file layer to reload the connected image from disk
@@ -78,6 +81,12 @@ public Q_SLOTS:
      * </ul>
      */
     QString scalingMethod() const;
+
+    /**
+     * @brief scalingFilter
+     * returns the filter with which the file referenced is scaled.
+     */
+    QString scalingFilter() const;
 
 private:
     /**

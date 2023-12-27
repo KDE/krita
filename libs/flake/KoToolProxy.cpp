@@ -34,6 +34,8 @@
 #include "KoShapeController.h"
 #include "KoViewConverter.h"
 #include "KoShapeFactoryBase.h"
+#include "kis_assert.h"
+#include "kactioncollection.h"
 
 
 KoToolProxyPrivate::KoToolProxyPrivate(KoToolProxy *p)
@@ -144,6 +146,52 @@ KoCanvasBase* KoToolProxy::canvas() const
     return d->controller->canvas();
 }
 
+void KoToolProxy::countMultiClick(KoPointerEvent *ev, int eventType)
+{
+    QPointF globalPoint = ev->globalPos();
+
+    if (d->multiClickSource != eventType) {
+        d->multiClickCount = 0;
+    }
+
+    if (d->multiClickGlobalPoint != globalPoint) {
+        if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
+                qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
+            d->multiClickCount = 0;
+        }
+        d->multiClickGlobalPoint = globalPoint;
+    }
+
+    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
+        // One more multiclick;
+        d->multiClickCount++;
+    } else {
+        d->multiClickTimeStamp.start();
+        d->multiClickCount = 1;
+        d->multiClickSource = QEvent::Type(eventType);
+    }
+
+    if (d->activeTool) {
+        switch (d->multiClickCount) {
+        case 0:
+        case 1:
+            d->activeTool->mousePressEvent(ev);
+            break;
+        case 2:
+            d->activeTool->mouseDoubleClickEvent(ev);
+            break;
+        case 3:
+        default:
+            d->activeTool->mouseTripleClickEvent(ev);
+            break;
+        }
+    } else {
+        d->multiClickCount = 0;
+        ev->ignore();
+    }
+
+}
+
 void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
 {
     // We get these events exclusively from KisToolProxy - accept them
@@ -153,10 +201,10 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
     KoPointerEvent ev(event, point);
+
     switch (event->type()) {
     case QEvent::TabletPress:
-        if (d->activeTool)
-            d->activeTool->mousePressEvent(&ev);
+        countMultiClick(&ev, event->type());
         break;
     case QEvent::TabletRelease:
         d->scrollTimer.stop();
@@ -198,41 +246,7 @@ void KoToolProxy::mousePressEvent(KoPointerEvent *ev)
         return;
     }
 
-    QPointF globalPoint = ev->globalPos();
-    if (d->multiClickGlobalPoint != globalPoint) {
-        if (qAbs(globalPoint.x() - d->multiClickGlobalPoint.x()) > 5||
-                qAbs(globalPoint.y() - d->multiClickGlobalPoint.y()) > 5) {
-            d->multiClickCount = 0;
-        }
-        d->multiClickGlobalPoint = globalPoint;
-    }
-
-    if (d->multiClickCount && d->multiClickTimeStamp.elapsed() < QApplication::doubleClickInterval()) {
-        // One more multiclick;
-        d->multiClickCount++;
-    } else {
-        d->multiClickTimeStamp.start();
-        d->multiClickCount = 1;
-    }
-
-    if (d->activeTool) {
-        switch (d->multiClickCount) {
-        case 0:
-        case 1:
-            d->activeTool->mousePressEvent(ev);
-            break;
-        case 2:
-            d->activeTool->mouseDoubleClickEvent(ev);
-            break;
-        case 3:
-        default:
-            d->activeTool->mouseTripleClickEvent(ev);
-            break;
-        }
-    } else {
-        d->multiClickCount = 0;
-        ev->ignore();
-    }
+    countMultiClick(ev, QEvent::MouseButtonPress);
 
     d->isToolPressed = true;
 }
@@ -330,16 +344,26 @@ void KoToolProxy::explicitUserStrokeEndRequest()
     }
 }
 
-QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query, const KoViewConverter &converter) const
+QVariant KoToolProxy::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     if (d->activeTool)
-        return d->activeTool->inputMethodQuery(query, converter);
+        return d->activeTool->inputMethodQuery(query);
     return QVariant();
 }
 
 void KoToolProxy::inputMethodEvent(QInputMethodEvent *event)
 {
     if (d->activeTool) d->activeTool->inputMethodEvent(event);
+}
+
+void KoToolProxy::focusInEvent(QFocusEvent *event)
+{
+    if (d->activeTool) d->activeTool->focusInEvent(event);
+}
+
+void KoToolProxy::focusOutEvent(QFocusEvent *event)
+{
+    if (d->activeTool) d->activeTool->focusOutEvent(event);
 }
 
 QMenu *KoToolProxy::popupActionsMenu()
@@ -354,10 +378,33 @@ KisPopupWidgetInterface* KoToolProxy::popupWidget()
 
 void KoToolProxy::setActiveTool(KoToolBase *tool)
 {
-    if (d->activeTool)
+    if (d->activeTool) {
         disconnect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
+        d->toolPriorityShortcuts.clear();
+    }
+
     d->activeTool = tool;
+
     if (tool) {
+        KisKActionCollection *collection = d->controller->actionCollection();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(collection);
+        if (collection) {
+            Q_FOREACH(QAction *action, collection->actions()) {
+
+                const QVariant prop = action->property("tool_action");
+
+                if (prop.isValid()) {
+                    const QStringList tools = prop.toStringList();
+
+                    if (tools.contains(d->activeTool->toolId())) {
+                        const QList<QKeySequence> shortcuts = action->shortcuts();
+                        std::copy(shortcuts.begin(), shortcuts.end(),
+                                  std::back_inserter(d->toolPriorityShortcuts));
+                    }
+                }
+            }
+        }
+
         connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
         d->selectionChanged(hasSelection());
         emit toolChanged(tool->toolId());
@@ -394,6 +441,11 @@ KoPointerEvent *KoToolProxy::lastDeliveredPointerEvent() const
     return d->lastPointerEvent ? &(d->lastPointerEvent->event) : 0;
 }
 
+QVector<QKeySequence> KoToolProxy::toolPriorityShortcuts() const
+{
+    return d->toolPriorityShortcuts;
+}
+
 void KoToolProxyPrivate::setCanvasController(KoCanvasController *c)
 {
     controller = c;
@@ -427,6 +479,23 @@ bool KoToolProxy::paste()
     return success;
 }
 
+bool KoToolProxy::selectAll()
+{
+    bool success = false;
+
+    if (d->activeTool && d->isActiveLayerEditable()) {
+        success = d->activeTool->selectAll();
+    }
+
+    return success;
+}
+
+void KoToolProxy::deselect()
+{
+    if (d->activeTool)
+        d->activeTool->deselect();
+}
+
 void KoToolProxy::dragMoveEvent(QDragMoveEvent *event, const QPointF &point)
 {
     if (d->activeTool)
@@ -457,7 +526,13 @@ void KoToolProxy::processEvent(QEvent *e) const
             && d->activeTool
             && d->activeTool->isInTextMode()
             && (static_cast<QKeyEvent*>(e)->modifiers()==Qt::NoModifier ||
-                static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier)) {
+                static_cast<QKeyEvent*>(e)->modifiers()==Qt::ShiftModifier
+#ifdef Q_OS_WIN
+            // we should disallow AltGr shortcuts if a text box is in focus
+            || (static_cast<QKeyEvent*>(e)->modifiers()==(Qt::AltModifier | Qt::ControlModifier) &&
+                static_cast<QKeyEvent*>(e)->key() < Qt::Key_Escape)
+#endif
+            )) {
         e->accept();
     }
 }

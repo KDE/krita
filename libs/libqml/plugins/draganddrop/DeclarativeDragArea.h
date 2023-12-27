@@ -55,7 +55,7 @@ class DeclarativeDragArea : public QQuickItem
     Q_PROPERTY(Qt::DropActions supportedActions READ supportedActions WRITE setSupportedActions NOTIFY supportedActionsChanged)
 
     /**
-     * The default action will be performed during a drag when no modificators are pressed.
+     * The default action will be performed during a drag when no modifiers are pressed.
      */
     Q_PROPERTY(Qt::DropAction defaultAction READ defaultAction WRITE setDefaultAction NOTIFY defaultActionChanged)
 

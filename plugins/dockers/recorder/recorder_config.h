@@ -22,8 +22,8 @@ public:
     QString snapshotDirectory() const;
     void setSnapshotDirectory(const QString &value);
 
-    int captureInterval() const;
-    void setCaptureInterval(int value);
+    double captureInterval() const;
+    void setCaptureInterval(double value);
 
     RecorderFormat format() const;
     void setFormat(RecorderFormat value);
@@ -38,6 +38,12 @@ public:
 
     int resolution() const;
     void setResolution(int value);
+
+    int threads() const;
+    void setThreads(int value);
+
+    bool realTimeCaptureMode() const;
+    void setRealTimeCaptureMode(bool value);
 
     bool recordIsolateLayerMode() const;
     void setRecordIsolateLayerMode(bool value);

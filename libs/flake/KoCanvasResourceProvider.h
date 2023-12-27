@@ -179,6 +179,28 @@ public:
     KoUnit unitResource(int key) const;
 
     /**
+     * Tools that provide a handle for controlling the content that the tool can edit can
+     * use this property to alter the radius that a circular handle should have on screen.
+     * @param handleSize the radius in pixels.
+     */
+    void setHandleRadius(int handleSize);
+    /// Returns the actual handle radius
+    int handleRadius() const;
+
+    /**
+     * @brief setDecorationThickness
+     * Set the minimum decoration thickness.
+     * @param decorationThickness the minimum decoration thickness in pixels.
+     */
+    void setDecorationThickness(int decorationThickness);
+
+    /**
+     * @brief decorationThickness
+     * @return the minimum decoration thickness in pixels.
+     */
+    int decorationThickness() const;
+
+    /**
      * Returns true if there is a resource set with the requested key.
      * @param key the identifying key for the resource
      * @see KoCanvasResource::CanvasResourceId
@@ -258,7 +280,7 @@ Q_SIGNALS:
      * This signal is emitted every time a resource is attempted to be
      * changed. The this signal is emitted even when the new value of
      * the resource is the same as the current value. This method is called
-     * **before** the actual change has happended at the resource manager.
+     * **before** the actual change has happened at the resource manager.
      * @param key the identifying key for the resource
      * @param value the variants new value.
      * @see KoCanvasResource::CanvasResourceId

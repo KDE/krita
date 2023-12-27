@@ -132,6 +132,9 @@ public:
     qreal animationCacheRegionOfInterestMargin(bool defaultValue = false) const;
     void setAnimationCacheRegionOfInterestMargin(qreal value);
 
+    qreal selectionOutlineOpacity(bool defaultValue = false) const;
+    void setSelectionOutlineOpacity(qreal value);
+
     QColor selectionOverlayMaskColor(bool defaultValue = false) const;
     void setSelectionOverlayMaskColor(const QColor &color);
 
@@ -139,6 +142,9 @@ public:
     void setMaxBrushSize(int value);
 
     int maxMaskingBrushSize() const;
+
+    bool renameMergedLayers(bool defaultValue = false) const;
+    void setRenameMergedLayers(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {
@@ -182,4 +188,3 @@ private:
 
 
 #endif /* KIS_IMAGE_CONFIG_H_ */
-

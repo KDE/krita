@@ -14,6 +14,7 @@
 #include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
+#include <KisPlaybackEngine.h>
 
 #include <klocalizedstring.h>
 
@@ -477,10 +478,11 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
         if (e->button() == Qt::RightButton) {
             if (numSelectedColumns <= 1) {
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+                model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);
             }
 
             /* Fix for safe-assert involving kis_animation_curve_docker.
-             * There should probably be a more elagant way for dealing
+             * There should probably be a more elegant way for dealing
              * with reused timeline_ruler_header instances in other
              * timeline views instead of simply animation_frame_view.
              *
@@ -552,7 +554,12 @@ void KisAnimTimelineTimeHeader::mouseMoveEvent(QMouseEvent *e)
         if (e->buttons() & Qt::LeftButton) {
 
             m_d->model->setScrubState(true);
-            model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+            QVariant activeValue = model()->headerData(logical, orientation(), KisTimeBasedItemModel::ActiveFrameRole);
+            KIS_ASSERT(activeValue.type() == QVariant::Bool);
+            if (activeValue.toBool() != true) {
+                model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+                model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);
+            }
 
             if (m_d->lastPressSectionIndex >= 0 &&
                 logical != m_d->lastPressSectionIndex &&
@@ -592,6 +599,11 @@ void KisAnimTimelineTimeHeader::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     if (e->button() == Qt::LeftButton) {
+        int timeUnderMouse = qMax(logicalIndexAt(e->pos()), 0);
+        model()->setHeaderData(timeUnderMouse, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+        if (timeUnderMouse != m_d->model->currentTime()) {
+            model()->setHeaderData(timeUnderMouse, orientation(), QVariant(int(SEEK_PUSH_AUDIO | SEEK_FINALIZE)), KisTimeBasedItemModel::ScrubToRole);
+        }
         m_d->model->setScrubState(false);
     }
 

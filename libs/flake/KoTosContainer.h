@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2010 Thomas Zander <zander@kde.org>
- * SPDX-FileCopyrightText: 2010 KO GmbH <boud@kogbmh.com>
+ * SPDX-FileCopyrightText: 2010 KO GmbH <boud@kogmbh.com>
  * SPDX-FileCopyrightText: 2010 Thorsten Zachmann <zachmann@kde.org>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -28,10 +28,10 @@ public:
     ~KoTosContainer() override;
 
     // reimplemented
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
+    void paintComponent(QPainter &painter) const override;
 
     // reimplemented
-    virtual bool loadText(const QDomElement &element, KoShapeLoadingContext &context);
+    virtual bool loadText(const QDomElement &element);
 
 
     /// different kinds of resizing behavior to determine how to treat text overflow

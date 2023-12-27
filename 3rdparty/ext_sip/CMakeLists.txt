@@ -1,45 +1,10 @@
 SET(PREFIX_ext_sip "${EXTPREFIX}" )
 
-if(APPLE)
-    if(NOT Python_FOUND)
-        SET(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
-        if(NOT EXISTS "${Python_EXECUTABLE}")
-            message("WARNING: using system python3!")
-            SET(Python_EXECUTABLE python3)
-        endif()
-    endif()
-
+if(UNIX)
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/sip-4.19.19.tar.gz
-        URL_MD5 98111479309dc472410f26080d6d4a88
-
-        CMAKE_ARGS -DPYTHON_INCLUDE_DIR=${PREFIX_ext_sip}/lib/Python.framework/Headers
-        CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11
-            -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/ 
-            -e ${PREFIX_ext_sip}/include --sipdir ${PREFIX_ext_sip}/share/sip --target-py-version 3.8 --sip-module PyQt5.sip
-
-        # force single-threaded installation to avoid
-        # race conditions in post-install .py script
-        INSTALL_COMMAND make -j1 install
-            # COMMAND ${CMAKE_COMMAND} -E create_symlink ./PyQt5/sip.so ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/sip.so
-            # COMMAND ${CMAKE_COMMAND} -E create_symlink ./PyQt5/sip.pyi ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/sip.pyi
-
-        BUILD_IN_SOURCE 1
-
-        UPDATE_COMMAND ""
-    )
-elseif(UNIX)
-    set(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
-    if(NOT EXISTS ${Python_EXECUTABLE})
-      message("WARNING: using system python3!")
-      set(Python_EXECUTABLE python3)
-    endif()
-
-    ExternalProject_Add( ext_sip
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/s/sip/sip-6.1.1.tar.gz
-        URL_HASH SHA256=52d25af2fcd764c4e15cc9cd1350bdb0e63f52dfa2aa3c5e7679af7fde9f7e20
+        URL https://pypi.python.org/packages/source/s/sip/sip-6.6.2.tar.gz
+        URL_HASH SHA256=0e3efac1c5dfd8e525ae57140927df26993e13f58b89d1577c314f4105bfd90d
 
         CONFIGURE_COMMAND ""
 
@@ -69,8 +34,8 @@ elseif (WIN32)
 
     ExternalProject_Add( ext_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
-        URL_HASH SHA256=f069d550dd819609e019e5dc58fc5193e081c7f3fb4f7dc8f9be734e34d4e56e
+        URL https://pypi.python.org/packages/source/s/sip/sip-6.6.2.tar.gz
+        URL_HASH SHA256=0e3efac1c5dfd8e525ae57140927df26993e13f58b89d1577c314f4105bfd90d
 
         CONFIGURE_COMMAND ""
 
@@ -97,15 +62,16 @@ elseif (WIN32)
             wheel_update_setuptools
             COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
-            ${Python_EXECUTABLE} -m pip install -U pip setuptools===59.8.0
-                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/sitecustomize.py ${KRITA_PYTHONPATH}
+            PYTHONUSERBASE=${_sip_prefix}
+            ${Python_EXECUTABLE} -m pip install -U pip setuptools>==59.8.0
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/sitecustomize.py ${_sip_prefix}\\lib\\site-packages
 
             DEPENDERS build
         )
         message(STATUS "Using mingw, Will deploy workaround for setuptools.")
         ExternalProject_Add_Step(ext_sip
             distutils_system_mod
-            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/_distutils_system_mod.py ${KRITA_PYTHONPATH}
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/_distutils_system_mod.py ${_sip_prefix}\\lib\\site-packages
 
             DEPENDERS build
         )

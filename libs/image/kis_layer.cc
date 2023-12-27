@@ -225,11 +225,9 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    KisImageSP image = this->image();
-    if (!image) {
-        return nullptr;
-    }
-    return image->colorSpace();
+    KisPaintDeviceSP dev = original();
+    KIS_ASSERT_RECOVER_RETURN_VALUE(dev, KoColorSpaceRegistry::instance()->rgb8());
+    return dev->colorSpace();
 }
 
 const KoCompositeOp * KisLayer::compositeOp() const
@@ -411,7 +409,7 @@ KisLayerSP KisLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
     return newLayer;
 }
 
-void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)
 {
     const bool keepBlendingOptions = canMergeAndKeepBlendOptions(prevLayer);
 
@@ -438,24 +436,28 @@ void KisLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer
         //Restore the previous prevLayer disableAlpha status for correct undo/redo
         prevLayer->disableAlphaChannel(prevAlphaDisabled);
 
-        //Paint the pixels of the current layer, using their actual alpha value
-        if (alphaDisabled == prevAlphaDisabled) {
-            this->disableAlphaChannel(false);
+        if (!skipPaintingThisLayer) {
+            //Paint the pixels of the current layer, using their actual alpha value
+            if (alphaDisabled == prevAlphaDisabled) {
+                this->disableAlphaChannel(false);
+            }
+
+            this->projectionPlane()->apply(&gc, layerProjectionExtent | imageSP->bounds());
+
+            //Restore the layer disableAlpha status for correct undo/redo
+            this->disableAlphaChannel(alphaDisabled);
         }
-
-        this->projectionPlane()->apply(&gc, layerProjectionExtent | imageSP->bounds());
-
-        //Restore the layer disableAlpha status for correct undo/redo
-        this->disableAlphaChannel(alphaDisabled);
     }
     else {
         //Copy prevLayer
         KisPaintDeviceSP srcDev = prevLayer->projection();
         mergedDevice->makeCloneFrom(srcDev, srcDev->extent());
 
-        //Paint layer on the copy
-        KisPainter gc(mergedDevice);
-        gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+        if (!skipPaintingThisLayer) {
+            //Paint layer on the copy
+            KisPainter gc(mergedDevice);
+            gc.bitBlt(layerProjectionExtent.topLeft(), this->projection(), layerProjectionExtent);
+        }
     }
 }
 
@@ -836,8 +838,8 @@ QRect KisLayer::changeRect(const QRect &rect, PositionToFilthy pos) const
         /**
          * If the projection contains some dirty areas we should also
          * add them to the change rect, because they might have
-         * changed. E.g. when a visibility of the mask has chnaged
-         * while the parent layer was invinisble.
+         * changed. E.g. when a visibility of the mask has changed
+         * while the parent layer was invincible.
          */
 
         if (!projectionToBeUpdated.isEmpty() &&
@@ -904,6 +906,12 @@ QImage KisLayer::createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectR
            originalDevice->createThumbnail(w, h, aspectRatioMode, 1,
                                            KoColorConversionTransformation::internalRenderingIntent(),
                                            KoColorConversionTransformation::internalConversionFlags()) : QImage();
+}
+
+int KisLayer::thumbnailSeqNo() const
+{
+    KisPaintDeviceSP originalDevice = original();
+    return originalDevice ? originalDevice->sequenceNumber() : -1;
 }
 
 QImage KisLayer::createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode)

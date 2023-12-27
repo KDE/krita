@@ -24,7 +24,6 @@ class KRITARESOURCES_EXPORT KisResourceCacheDb
 {
 public:
 
-    static const QString dbLocationKey; ///< configuration key for the location of the database
     static const QString resourceCacheDbFilename; ///< filename of the database
     static const QString databaseVersion; ///< current schema version
     static QStringList storageTypes; ///< kinds of places where resources can be stored

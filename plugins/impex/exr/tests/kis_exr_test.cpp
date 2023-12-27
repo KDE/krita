@@ -9,7 +9,7 @@
 #include <simpletest.h>
 #include <QCoreApplication>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 #include <half.h>
 #include <KisMimeDatabase.h>

@@ -9,6 +9,8 @@
 #include <klocalizedstring.h>
 
 #include "kis_image.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 #include "kis_selection.h"
 #include "kis_undo_adapter.h"
 #include "kis_selection_mask.h"
@@ -44,6 +46,8 @@ void KisSetGlobalSelectionCommand::undo()
 }
 
 KisSetEmptyGlobalSelectionCommand::KisSetEmptyGlobalSelectionCommand(KisImageWSP image)
-    : KisSetGlobalSelectionCommand(image, KisSelectionSP(new KisSelection(KisSelectionEmptyBoundsSP(new KisSelectionEmptyBounds(image)))))
+    : KisSetGlobalSelectionCommand(image,
+                                   new KisSelection(new KisSelectionEmptyBounds(image),
+                                                    toQShared(new KisImageResolutionProxy(image))))
 {
 }

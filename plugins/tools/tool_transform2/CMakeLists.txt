@@ -1,12 +1,9 @@
-if (NOT WIN32 AND NOT APPLE)
-    add_subdirectory(tests)
-endif()
+add_subdirectory(tests)
 
-set(kritatooltransform_SOURCES
-    tool_transform.cc
+set(kritatooltransform_static_SRCS
     tool_transform_args.cc
     kis_transform_mask_adapter.cpp
-    kis_animated_transform_parameters.cpp
+    KisAnimatedTransformMaskParamsHolder.cpp
     kis_tool_transform.cc
     kis_tool_transform_config_widget.cpp
     kis_transform_strategy_base.cpp
@@ -22,24 +19,37 @@ set(kritatooltransform_SOURCES
     kis_free_transform_strategy_gsl_helpers.cpp
     kis_perspective_transform_strategy.cpp
     kis_transform_utils.cpp
-    kis_modify_transform_mask_command.cpp
     strokes/transform_stroke_strategy.cpp
     strokes/inplace_transform_stroke_strategy.cpp
     )
 
-qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
-ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
+ki18n_wrap_ui(kritatooltransform_static_SRCS wdg_tool_transform.ui)
 
+kis_add_library(kritatooltransform_static STATIC ${kritatooltransform_static_SRCS})
+generate_export_header(kritatooltransform_static BASE_NAME kritatooltransform)
+
+set(kritatooltransform_SOURCES
+  tool_transform.cc
+)
+
+qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
 kis_add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 
-generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
+target_link_libraries(kritatooltransform_static
+  PUBLIC
+    kritaui
+)
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")
-  target_link_libraries(kritatooltransform kritaui)
 else ()
-  target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+  target_link_libraries(kritatooltransform_static
+    PUBLIC
+      GSL::gsl
+  )
 endif ()
+
+target_link_libraries(kritatooltransform PRIVATE kritatooltransform_static)
 
 install(TARGETS kritatooltransform  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

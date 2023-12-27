@@ -24,6 +24,14 @@ KisConfigWidget * KisFilterDodgeBurn::createConfigurationWidget(QWidget* parent,
     return new KisDodgeBurnConfigWidget(parent, id());
 }
 
+KisFilterConfigurationSP KisFilterDodgeBurn::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
+{
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    config->setProperty("exposure", 0.5);
+    config->setProperty("type", KisFilterDodgeBurn::MIDTONES);
+    return config;
+}
+
 KoColorTransformation* KisFilterDodgeBurn::createTransformation(const KoColorSpace* cs, const KisFilterConfigurationSP config) const
 {
     QHash<QString, QVariant> params;

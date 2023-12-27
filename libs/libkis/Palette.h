@@ -85,14 +85,14 @@ public:
      * @param name of the new group
      * @return whether adding the group was successful.
      */
-    bool addGroup(QString name);
+    void addGroup(QString name);
     /**
      * @brief removeGroup
      * @param name the name of the group to remove.
      * @param keepColors whether or not to delete all the colors inside, or to move them to the default group.
      * @return
      */
-    bool removeGroup(QString name, bool keepColors = true);
+    void removeGroup(QString name, bool keepColors = true);
 
     /**
      * @brief colorsCountTotal
@@ -135,7 +135,7 @@ public:
      * @param newGroupName the new name to change it into.
      * @return whether successful. Reasons for failure include not knowing have oldGroupName
      */
-    bool changeGroupName(QString oldGroupName, QString newGroupName);
+    void changeGroupName(QString oldGroupName, QString newGroupName);
     /**
      * @brief moveGroup
      * move the group to before groupNameInsertBefore.
@@ -143,7 +143,7 @@ public:
      * @param groupNameInsertBefore group to inset before.
      * @return whether successful. Reasons for failure include either group not existing.
      */
-    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
+    void moveGroup(const QString &groupName, const QString &groupNameInsertBefore = QString());
 
     /**
      * @brief save

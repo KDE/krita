@@ -44,7 +44,7 @@ class KisViewManager;
  * Krita.  It manages lists of Actions and shortcuts as well.
  *
  * The terminology comes from KParts, which is a system allowing one KDE app
- * to be run from inside another, like pressing F4 inside dophin to run konsole.
+ * to be run from inside another, like pressing F4 inside dolphin to run konsole.
  *
  * Needless to say, KisPart hasn't got much to do with KParts anymore.
  */
@@ -166,6 +166,8 @@ public:
      */
     KisAnimationCachePopulator *cachePopulator() const;
 
+    class KisPlaybackEngine* playbackEngine() const;
+
     /**
      * Adds a frame time index to a priority stack, which should be
      * cached immediately and irregardless of whether it is the
@@ -211,6 +213,13 @@ Q_SIGNALS:
      * emitted when an old document is closed. (for the idle watcher)
      */
     void documentClosed(const QString &ref);
+
+    /**
+     * Emitted when the animation PlaybackEngine is changed.
+     * GUI objects that want to control playback should watch this signal 
+     * and connect to the new playbackEgine as needed.
+    */
+   void playbackEngineChanged(KisPlaybackEngine *newPlaybackEngine);
 
     // These signals are for libkis or sketch
     void sigViewAdded(KisView *view);
@@ -292,6 +301,14 @@ public:
      * @see QGlobalStatic::exists()
      */
     static bool exists();
+
+    //------------------ Animation PlaybackEngine management ------------------
+public:
+    void upgradeToPlaybackEngineMLT(class KoCanvasBase *canvas);
+
+private:
+
+    void setPlaybackEngine(KisPlaybackEngine *p_playbackEngine);
 
 private Q_SLOTS:
 

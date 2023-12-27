@@ -12,12 +12,32 @@
 #include "ui_wdgrawimport.h"
 
 class KoDialog;
-class WdgRawImport;
+
+class Q_DECL_HIDDEN WdgRawImport : public QWidget, public Ui::WdgRawImport
+{
+    Q_OBJECT
+
+public:
+    WdgRawImport(QWidget *parent = nullptr)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+
+    void showEvent(QShowEvent *event) override
+    {
+        Q_EMIT paint();
+        QWidget::showEvent(event);
+    }
+
+Q_SIGNALS:
+    void paint();
+};
 
 namespace KDcrawIface
 {
 class RawDecodingSettings;
-}
+} // namespace KDcrawIface
 
 class KisRawImport : public KisImportExportFilter
 {
@@ -27,18 +47,16 @@ public:
     KisRawImport(QObject *parent, const QVariantList &);
     ~KisRawImport() override;
 
-public:
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 
-
 private Q_SLOTS:
-
     void slotUpdatePreview();
+
 private:
     KDcrawIface::RawDecodingSettings rawDecodingSettings();
-private:
-    Ui::WdgRawImport m_rawWidget;
-    KoDialog* m_dialog;
+
+    KoDialog *m_dialog;
+    WdgRawImport *m_rawWidget;
 };
 
 #endif // KIS_RAW_IMPORT_H_

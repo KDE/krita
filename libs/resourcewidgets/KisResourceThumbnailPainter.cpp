@@ -11,6 +11,8 @@
 #include <QPainter>
 #include <QDebug>
 
+#include <KisResourceThumbnailCache.h>
+
 KisResourceThumbnailPainter::KisResourceThumbnailPainter(QObject *parent)
     : QObject(parent)
     , m_checkerPainter(4)
@@ -28,32 +30,26 @@ QImage KisResourceThumbnailPainter::getReadyThumbnail(const QModelIndex &index, 
 
 void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& index, QRect rect, const QPalette& palette, bool selected, bool addMargin) const
 {
-    QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
-    QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
-    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    const qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
-    paint(painter, thumbnail, resourceType, name, rect, palette, selected, addMargin);
-}
+    QImage thumbnail = KisResourceThumbnailCache::instance()->getImage(index);
+    thumbnail.setDevicePixelRatio(devicePixelRatioF);
 
-void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QString resourceType, QString name, QRect rect, const QPalette& palette, bool selected, bool addMargin) const
-{
+    const QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
+    const QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString();
+
     painter->save();
 
     if(addMargin) {
-        // margin has empty space...which we want to be the color palette backround
+        // margin has empty space...which we want to be the color palette background
         painter->fillRect(rect, palette.background());
     }
-
-    qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
     if (selected) {
         painter->fillRect(rect, palette.highlight());
     }
 
     QRect innerRect = addMargin ? rect.adjusted(2, 2, -2, -2) : rect;
-
-    thumbnail.setDevicePixelRatio(devicePixelRatioF);
-
     QSize imageSize = thumbnail.size();
 
     painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
@@ -61,34 +57,50 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
     if (resourceType == ResourceType::Gradients) {
         m_checkerPainter.paint(*painter, innerRect, innerRect.topLeft());
         if (!thumbnail.isNull()) {
-            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                         innerRect.size() * devicePixelRatioF,
+                                                                         Qt::IgnoreAspectRatio,
+                                                                         Qt::SmoothTransformation);
+            thumbnail.setDevicePixelRatio(devicePixelRatioF);
             painter->drawImage(innerRect.topLeft(), thumbnail);
         }
-    }
-    else if (resourceType == ResourceType::Patterns) {
+    } else if (resourceType == ResourceType::Patterns) {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
         if (!thumbnail.isNull() && (imageSize.height() > innerRect.height() || imageSize.width() > innerRect.width())) {
-            thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            thumbnail = KisResourceThumbnailCache::instance()->getImage(index,
+                                                                         innerRect.size() * devicePixelRatioF,
+                                                                         Qt::KeepAspectRatio,
+                                                                         Qt::SmoothTransformation);
+            thumbnail.setDevicePixelRatio(devicePixelRatioF);
         }
         QBrush patternBrush(thumbnail);
         patternBrush.setTransform(QTransform::fromTranslate(innerRect.x(), innerRect.y()));
         painter->fillRect(innerRect, patternBrush);
-    }
-    else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
+    } else if (resourceType == ResourceType::Workspaces || resourceType == ResourceType::WindowLayouts) {
         // TODO: thumbnails for workspaces and window layouts?
         painter->fillRect(innerRect, Qt::white);
         QPen before = painter->pen();
         painter->setPen(Qt::black);
         painter->drawText(innerRect, Qt::TextWordWrap, name.split("_").join(" "));
         painter->setPen(before);
-    }
-    else {
+    } else {
         painter->fillRect(innerRect, Qt::white); // no checkers, they are confusing with patterns.
         if (!thumbnail.isNull()) {
             if (imageSize.height() > innerRect.height()*devicePixelRatioF || imageSize.width() > innerRect.width()*devicePixelRatioF) {
-                thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-            } else if(imageSize.height() < innerRect.height()*devicePixelRatioF || imageSize.width() < innerRect.width()*devicePixelRatioF) {
-                thumbnail = thumbnail.scaled(innerRect.size()*devicePixelRatioF, Qt::KeepAspectRatio, Qt::FastTransformation);
+                thumbnail =
+                    KisResourceThumbnailCache::instance()->getImage(index,
+                                                                     innerRect.size() * devicePixelRatioF,
+                                                                     Qt::KeepAspectRatio,
+                                                                     Qt::SmoothTransformation);
+                thumbnail.setDevicePixelRatio(devicePixelRatioF);
+            } else if (imageSize.height() < innerRect.height() * devicePixelRatioF
+                       || imageSize.width() < innerRect.width() * devicePixelRatioF) {
+                thumbnail =
+                    KisResourceThumbnailCache::instance()->getImage(index,
+                                                                     innerRect.size() * devicePixelRatioF,
+                                                                     Qt::KeepAspectRatio,
+                                                                     Qt::FastTransformation);
+                thumbnail.setDevicePixelRatio(devicePixelRatioF);
             }
         }
         QPoint topleft(innerRect.topLeft());
@@ -101,7 +113,6 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QSt
         }
         painter->drawImage(topleft, thumbnail);
     }
-
 
     painter->restore();
 }

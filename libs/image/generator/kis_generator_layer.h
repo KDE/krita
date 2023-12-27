@@ -6,6 +6,8 @@
 #ifndef KIS_GENERATOR_LAYER_H_
 #define KIS_GENERATOR_LAYER_H_
 
+#include <boost/none.hpp>
+
 #include "kis_selection_based_layer.h"
 #include <kritaimage_export.h>
 #include <KisDelayedUpdateNodeInterface.h>
@@ -65,7 +67,7 @@ public:
      * re-runs the generator with the specified configuration.
      * Used for previewing the layer inside the stroke.
      */
-    QWeakPointer<bool> previewWithStroke(const KisStrokeId stroke);
+    QWeakPointer<boost::none_t> previewWithStroke(const KisStrokeId stroke);
 
     using KisSelectionBasedLayer::setDirty;
     void setDirty(const QVector<QRect> &rects) override;

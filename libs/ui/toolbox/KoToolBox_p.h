@@ -92,6 +92,7 @@ private Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void changeEvent(QEvent *event) override;
 
 private:
     void setupIconSizeMenu(QMenu *menu);

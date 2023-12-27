@@ -85,7 +85,7 @@ private:
 
 /**
  * A KisPaintingAssistant is an object that assist the drawing on the canvas.
- * With this class you can implement virtual equivalent to ruler or compas.
+ * With this class you can implement virtual equivalent to ruler or compass.
  */
 class KRITAUI_EXPORT KisPaintingAssistant
 {
@@ -97,6 +97,8 @@ public:
     const QString& name() const;
     bool isSnappingActive() const;
     void setSnappingActive(bool set);
+    //copy SharedData from an assistant to this
+    void copySharedData(KisPaintingAssistantSP assistant);
 
 
     /**
@@ -107,12 +109,16 @@ public:
      *         snapToAny true means that you can use any of the inside assistant, while it being false
      *         means you should use the last used one. The logic determining when it happens (first stroke etc.)
      *         is in the decoration, so those two options are enough.
+     * @param moveThresholdPt the threshold for the "move" of the cursor measured in pt
+     *                        (usually equals to 2px in screen coordinates converted to pt)
      */
-    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) = 0;
-    virtual void endStroke() {}
-    virtual void setAdjustedBrushPosition(const QPointF position) { Q_UNUSED(position) }
-    virtual void setFollowBrushPosition(bool follow) { Q_UNUSED(follow) }
-    virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
+    virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny, qreal moveThresholdPt) = 0;
+    virtual void adjustLine(QPointF& point, QPointF& strokeBegin) = 0;
+    virtual void endStroke();
+    virtual void setAdjustedBrushPosition(const QPointF position);
+    virtual void setFollowBrushPosition(bool follow);
+    virtual QPointF getDefaultEditorPosition() const = 0; // Returns standard editor widget position for this assistant
+    virtual QPointF getEditorPosition() const; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
     /**
@@ -131,6 +137,32 @@ public:
      */
     void setLocal(bool value);
 
+    /**
+     * @brief isLocked
+     * @return if the assistant is locked (= cannot be moved, or edited in any way), or not
+     */
+    bool isLocked();
+    /**
+     * @brief setLocked
+     * @param value set the indication if the assistant is locked (= cannot be moved, or edited in any way) or not
+     */
+    void setLocked(bool value);
+    /**
+     * @brief isDuplicating
+     * @return If the duplication button is pressed
+     */
+    /*The duplication button must be depressed when the user clicks it. This getter function indicates to the 
+    render function when the button is clicked*/
+    bool isDuplicating();
+    /**
+     * @brief setDuplicating
+     * @param value setter function sets the indication that the duplication button is pressed
+     */
+    void setDuplicating(bool value);
+
+    QPointF editorWidgetOffset();
+    void setEditorWidgetOffset(QPointF offset);
+
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);
 
@@ -143,7 +175,7 @@ public:
     QColor assistantCustomColor();
     void setAssistantGlobalColorCache(const QColor &color);
 
-    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached = true,KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
+    virtual void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter, bool cached, KisCanvas2 *canvas=0, bool assistantVisible=true, bool previewVisible=true);
     void uncache();
     const QList<KisPaintingAssistantHandleSP>& handles() const;
     QList<KisPaintingAssistantHandleSP> handles();
@@ -156,7 +188,7 @@ public:
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
     virtual bool loadCustomXml(QXmlStreamReader* xml);
 
-    void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
+    void saveXmlList(QDomDocument& doc, QDomElement& assistantsElement, int count);
     void findPerspectiveAssistantHandleLocation();
     KisPaintingAssistantHandleSP oppHandleOne();
 
@@ -207,7 +239,13 @@ public:
      */
     void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
     void drawPreview(QPainter& painter, const QPainterPath& path);
+    // draw a path in a red color, signalizing incorrect state
+    void drawError(QPainter& painter, const QPainterPath& path);
+    // draw a vanishing point marker
+    void drawX(QPainter& painter, const QPointF& pt);
     static double norm2(const QPointF& p);
+
+    void setDecorationThickness(int thickness);
 
 protected:
     explicit KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
@@ -257,6 +295,14 @@ public:
     /// the originally shared handles will still be shared
     /// the cloned assistants do not share any handle with the original assistants
     static QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list);
+
+protected:
+
+    bool m_followBrushPosition {false};
+    bool m_adjustedPositionValid {false};
+    QPointF m_adjustedBrushPosition;
+
+    bool m_hasBeenInsideLocalRect {false};
 
 private:
     struct Private;

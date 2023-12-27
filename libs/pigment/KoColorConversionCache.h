@@ -61,16 +61,14 @@ class KoCachedColorConversionTransformation
 {
     friend class KoColorConversionCache;
 private:
-    KoCachedColorConversionTransformation(KoColorConversionCache* cache,
-                                          KoColorConversionCache::CachedTransformation* transfo);
+    KoCachedColorConversionTransformation(KoColorConversionCache::CachedTransformation* transfo);
 public:
     KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation&);
     ~KoCachedColorConversionTransformation();
 public:
     const KoColorConversionTransformation* transformation() const;
 private:
-    struct Private;
-    Private* const d;
+    KoColorConversionCache::CachedTransformation* m_transfo;
 };
 
 

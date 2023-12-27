@@ -28,7 +28,7 @@ struct KisAnimTimelineLayersHeader::Private
 
     int numIcons(int logicalIndex) const;
     int iconSectionWidth(int layerIndex) const;
-    QPoint getSectionLocalPostion(int layerIndex, QPoint widgetPosition) const;
+    QPoint getSectionLocalPosition(int layerIndex, QPoint widgetPosition) const;
     QRect getSectionRect(int layerIndex) const;
     QRect propertyIconRect(int logicalIndex, int iconIndex) const;
     int propertyIconAt(int logicalIndex, const QPoint &pt);
@@ -174,7 +174,7 @@ int KisAnimTimelineLayersHeader::Private::iconSectionWidth(int layerIndex) const
     return (iconSize + iconPadding) * numIcons(layerIndex);
 }
 
-QPoint KisAnimTimelineLayersHeader::Private::getSectionLocalPostion(int layerIndex, QPoint widgetPosition) const
+QPoint KisAnimTimelineLayersHeader::Private::getSectionLocalPosition(int layerIndex, QPoint widgetPosition) const
 {
     QPoint sectionTopLeft(0, q->sectionViewportPosition(layerIndex));
     return widgetPosition - sectionTopLeft;
@@ -214,7 +214,7 @@ QRect KisAnimTimelineLayersHeader::Private::propertyIconRect(int logicalIndex, i
 
 int KisAnimTimelineLayersHeader::Private::propertyIconAt(int logicalIndex, const QPoint &pt)
 {
-    QPoint localPos = getSectionLocalPostion(logicalIndex, pt);
+    QPoint localPos = getSectionLocalPosition(logicalIndex, pt);
 
     for (int i = 0; i < numIcons(logicalIndex); i++) {
         QRect rc = propertyIconRect(logicalIndex, i);

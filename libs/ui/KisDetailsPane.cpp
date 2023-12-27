@@ -83,7 +83,7 @@ void KisDetailsPane::changePalette()
 {
     QPalette p = palette();
     p.setBrush(QPalette::Base, QColor(Qt::transparent));
-    p.setColor(QPalette::Text, p.color(QPalette::Normal, QPalette::Foreground));
+    p.setColor(QPalette::Text, p.color(QPalette::Normal, QPalette::WindowText));
     m_detailsLabel->setPalette(p);
 }
 

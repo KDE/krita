@@ -114,20 +114,15 @@ void View::activateResource(Resource *resource)
     KoResourceSP r = resource->resource();
     if (!r) return;
 
-    if (r.dynamicCast<KoPattern>()) {
-        QVariant v;
-        v.setValue<KoResourceSP>(r);
-        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentPattern, v);
+    if (KoPatternSP pattern = r.dynamicCast<KoPattern>()) {
+        QVariant value = QVariant::fromValue(pattern);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentPattern, value);
+    } else if (KoAbstractGradientSP gradient = r.dynamicCast<KoAbstractGradient>()) {
+        QVariant value = QVariant::fromValue(gradient);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentGradient, value);
+    } else if (KoResourceSP preset = r.dynamicCast<KisPaintOpPreset>()) {
+        d->view->viewManager()->paintOpBox()->resourceSelected(preset);
     }
-    else if (r.dynamicCast<KoAbstractGradient>()) {
-        QVariant v;
-        v.setValue<KoResourceSP>(r);
-        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentGradient, v);
-    }
-    else if (r.dynamicCast<KisPaintOpPreset>()) {
-        d->view->viewManager()->paintOpBox()->resourceSelected(r);
-    }
-
 }
 
 
@@ -250,6 +245,18 @@ void View::setBrushSize(qreal brushSize)
 {
     if (!d->view) return;
     d->view->resourceProvider()->setSize(brushSize);
+}
+
+qreal View::brushRotation() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->brushRotation();
+}
+
+void View::setBrushRotation(qreal brushRotation)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setBrushRotation(brushRotation);
 }
 
 qreal View::paintingFlow() const

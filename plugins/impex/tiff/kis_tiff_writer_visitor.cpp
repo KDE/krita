@@ -1,19 +1,22 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_tiff_writer_visitor.h"
-
 #include <QBuffer>
+
+#include <memory>
 
 #include <tiff.h>
 
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoID.h>
+#include <kis_assert.h>
 #include <kis_meta_data_backend_registry.h>
 
 #include <KoConfig.h>
@@ -21,67 +24,87 @@
 #include <half.h>
 #endif
 
+#include "kis_tiff_converter.h"
+#include "kis_tiff_writer_visitor.h"
+
 namespace
 {
-    bool isBitDepthFloat(QString depth) {
-        return depth.contains("F");
-    }
+bool isBitDepthFloat(const KoID depth)
+{
+    return depth == Float16BitsColorDepthID || depth == Float32BitsColorDepthID
+        || depth == Float64BitsColorDepthID;
+}
 
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16_t& color_type, uint16_t& sample_format, const KoColorSpace* &destColorSpace)
-    {
-        dbgKrita << cs->id();
-        QString id = cs->id();
-        QString depth = cs->colorDepthId().id();
-        // destColorSpace should be reassigned to a proper color space to convert to
-        // if the return value of this function is false
-        destColorSpace = 0;
+bool writeColorSpaceInformation(TIFF *image,
+                                const KoColorSpace *cs,
+                                uint16_t &color_type,
+                                uint16_t &sample_format,
+                                const KoColorSpace *&destColorSpace)
+{
+    const KoID id = cs->colorModelId();
+    const KoID depth = cs->colorDepthId();
+    // destColorSpace should be reassigned to a proper color space to convert to
+    // if the return value of this function is false
+    destColorSpace = nullptr;
 
-        // sample_format and color_type should be assigned to the destination color space,
-        // not /always/ the one we get here
+    // sample_format and color_type should be assigned to the destination color
+    // space, not /always/ the one we get here
 
-        if (id.contains("RGBA")) {
-            color_type = PHOTOMETRIC_RGB;
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else if (id.contains("CMYK")) {
-            color_type = PHOTOMETRIC_SEPARATED;
-            TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
-
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else if (id.contains("LABA")) {
-            color_type = PHOTOMETRIC_ICCLAB;
-
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else if (id.contains("GRAYA")) {
-            color_type = PHOTOMETRIC_MINISBLACK;
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else {
-            color_type = PHOTOMETRIC_RGB;
-            const QString profile = "sRGB-elle-V2-srgbtrc";
-            destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depth, profile);
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return false;
+    if (id == RGBAColorModelID) {
+        color_type = PHOTOMETRIC_RGB;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
         }
+        return true;
 
+    } else if (id == CMYKAColorModelID) {
+        color_type = PHOTOMETRIC_SEPARATED;
+        TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
+
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+
+    } else if (id == LABAColorModelID) {
+        color_type = PHOTOMETRIC_ICCLAB;
+
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+
+    } else if (id == GrayAColorModelID) {
+        color_type = PHOTOMETRIC_MINISBLACK;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+    } else if (id == LABAColorModelID) {
+        color_type = PHOTOMETRIC_CIELAB;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+    } else if (id == YCbCrAColorModelID) {
+        color_type = PHOTOMETRIC_YCBCR;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+    } else {
+        color_type = PHOTOMETRIC_RGB;
+        destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
+            RGBAColorModelID.id(),
+            depth.id(),
+            KoColorSpaceRegistry::instance()->p709SRGBProfile());
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return false;
     }
 }
+} // namespace
 
 KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
     : m_image(image)
@@ -89,22 +112,25 @@ KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
 {
 }
 
-KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
-{
-}
+KisTIFFWriterVisitor::~KisTIFFWriterVisitor() = default;
 
-bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8_t depth, uint16_t sample_format, uint8_t nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it,
+                                            tdata_t buff,
+                                            uint32_t depth,
+                                            uint16_t sample_format,
+                                            uint8_t nbcolorssamples,
+                                            const std::array<quint8, 5> &poses)
 {
     if (depth == 32) {
         Q_ASSERT(sample_format == SAMPLEFORMAT_IEEEFP);
         float *dst = reinterpret_cast<float *>(buff);
         do {
             const float *d = reinterpret_cast<const float *>(it->oldRawData());
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
+            for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                *(dst++) = d[poses.at(i)];
             }
-            if (m_options->alpha) *(dst++) = d[poses[i]];
+            if (m_options->alpha)
+                *(dst++) = d[poses.at(nbcolorssamples)];
         } while (it->nextPixel());
         return true;
     }
@@ -114,12 +140,11 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             half *dst = reinterpret_cast<half *>(buff);
             do {
                 const half *d = reinterpret_cast<const half *>(it->oldRawData());
-                int i;
-                for (i = 0; i < nbcolorssamples; i++) {
-                    *(dst++) = d[poses[i]];
+                for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses.at(i)];
                 }
-                if (m_options->alpha) *(dst++) = d[poses[i]];
-
+                if (m_options->alpha)
+                    *(dst++) = d[poses.at(nbcolorssamples)];
             } while (it->nextPixel());
             return true;
 #endif
@@ -127,12 +152,13 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
         else {
             quint16 *dst = reinterpret_cast<quint16 *>(buff);
             do {
-                const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                int i;
-                for (i = 0; i < nbcolorssamples; i++) {
-                    *(dst++) = d[poses[i]];
+                const quint16 *d =
+                    reinterpret_cast<const quint16 *>(it->oldRawData());
+                for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses.at(i)];
                 }
-                if (m_options->alpha) *(dst++) = d[poses[i]];
+                if (m_options->alpha)
+                    *(dst++) = d[poses.at(nbcolorssamples)];
 
             } while (it->nextPixel());
             return true;
@@ -142,11 +168,11 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
         quint8 *dst = reinterpret_cast<quint8 *>(buff);
         do {
             const quint8 *d = it->oldRawData();
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
+            for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                *(dst++) = d[poses.at(i)];
             }
-            if (m_options->alpha) *(dst++) = d[poses[i]];
+            if (m_options->alpha)
+                *(dst++) = d[poses.at(nbcolorssamples)];
 
         } while (it->nextPixel());
         return true;
@@ -159,9 +185,9 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     dbgFile << "visiting on layer" << layer->name() << "";
     KisPaintDeviceSP pd = layer->projection();
 
-    uint16_t color_type;
+    uint16_t color_type = 0;
     uint16_t sample_format = SAMPLEFORMAT_UINT;
-    const KoColorSpace* destColorSpace;
+    const KoColorSpace *destColorSpace = nullptr;
     // Check colorspace
     if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format, destColorSpace)) { // unsupported colorspace
         if (!destColorSpace) {
@@ -171,14 +197,38 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         pd->convertTo(destColorSpace);
     }
 
+    {
+        // WORKAROUND: block any attempts to use YCbCr with alpha channels.
+        // This should not happen because alpha is disabled by default
+        // and the checkbox is blocked for YCbCr and CMYK.
+        KIS_SAFE_ASSERT_RECOVER(color_type != PHOTOMETRIC_YCBCR
+                                || !m_options->alpha)
+        {
+            warnFile << "TIFF does not support exporting alpha channels with "
+                        "YCbCr. Skipping...";
+            m_options->alpha = false;
+        }
+    }
+
     // Save depth
-    int depth = 8 * pd->pixelSize() / pd->channelCount();
+    uint32_t depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
+
+    {
+        // WORKAROUND: block any attempts to use JPEG with >= 8 bits
+
+        if (m_options->compressionType == COMPRESSION_JPEG && depth != 8) {
+            warnFile << "Attempt to export JPEG with multi-byte depth, "
+                        "disabling compression";
+            m_options->compressionType = COMPRESSION_NONE;
+        }
+    }
+
     // Save number of samples
     if (m_options->alpha) {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());
-        uint16_t sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
-        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
+        const std::array<uint16_t, 1> sampleinfo = {EXTRASAMPLE_UNASSALPHA};
+        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo.data());
     } else {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount() - 1);
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 0);
@@ -192,17 +242,35 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 
     // Set the compression options
     TIFFSetField(image(), TIFFTAG_COMPRESSION, m_options->compressionType);
-    TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
-    TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
-    TIFFSetField(image(), TIFFTAG_PIXARLOGQUALITY, m_options->pixarLogCompress);
+    if (m_options->compressionType == COMPRESSION_JPEG) {
+        TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
+    } else if (m_options->compressionType == COMPRESSION_DEFLATE) {
+        TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
+    } else if (m_options->compressionType == COMPRESSION_PIXARLOG) {
+        TIFFSetField(image(),
+                     TIFFTAG_PIXARLOGQUALITY,
+                     m_options->pixarLogCompress);
+    }
 
     // Set the predictor
-    TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
+    if (m_options->compressionType == COMPRESSION_LZW
+        || m_options->compressionType == COMPRESSION_ADOBE_DEFLATE
+        || m_options->compressionType == COMPRESSION_DEFLATE)
+        TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
 
     // Use contiguous configuration
     TIFFSetField(image(), TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    // Use 8 rows per strip
-    TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
+
+    // Do not set the rowsperstrip, as it's incompatible with JPEG
+
+    // But do set YCbCr 4:4:4 if applicable
+    if (color_type == PHOTOMETRIC_YCBCR) {
+        TIFFSetField(image(), TIFFTAG_YCBCRSUBSAMPLING, 1, 1);
+        TIFFSetField(image(), TIFFTAG_YCBCRPOSITIONING, YCBCRPOSITION_CENTERED);
+        if (m_options->compressionType == COMPRESSION_JPEG) {
+            TIFFSetField(image(), TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RAW);
+        }
+    }
 
     // Save profile
     if (m_options->saveProfile) {
@@ -212,8 +280,46 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
             TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.constData());
         }
     }
+
+    {
+        // IPTC
+        KisMetaData::IOBackend *io =
+            KisMetadataBackendRegistry::instance()->value("iptc");
+        QBuffer buf;
+        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
+
+        if (buf.size()
+            && !TIFFSetField(image(),
+                             TIFFTAG_RICHTIFFIPTC,
+                             static_cast<uint32_t>(buf.size()),
+                             buf.data().data())) {
+            dbgFile << "Failed to write the IPTC metadata to the TIFF field";
+        }
+    }
+
+    {
+        // XMP
+        KisMetaData::IOBackend *io =
+            KisMetadataBackendRegistry::instance()->value("xmp");
+        QBuffer buf;
+        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
+
+        if (buf.size()
+            && !TIFFSetField(image(),
+                             TIFFTAG_XMLPACKET,
+                             static_cast<uint32_t>(buf.size()),
+                             buf.data().data())) {
+            dbgFile << "Failed to write the XMP metadata to the TIFF field";
+        }
+    }
+
     tsize_t stripsize = TIFFStripSize(image());
-    tdata_t buff = _TIFFmalloc(stripsize);
+    std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buff(
+        _TIFFmalloc(stripsize),
+        &_TIFFfree);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(
+        buff && "Unable to allocate buffer for TIFF!",
+        false);
     qint32 height = layer->image()->height();
     qint32 width = layer->image()->width();
     bool r = true;
@@ -221,58 +327,59 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         KisHLineConstIteratorSP it = pd->createHLineConstIteratorNG(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
-                quint8 poses[] = { 0, 1 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
+            const std::array<quint8, 5> poses = {0, 1};
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 1,
+                                 poses);
             }
             break;
         case PHOTOMETRIC_RGB: {
-                quint8 poses[4];
+            const auto poses = [&]() -> std::array<quint8, 5> {
                 if (sample_format == SAMPLEFORMAT_IEEEFP) {
-                    poses[2] = 2; poses[1] = 1; poses[0] = 0; poses[3] = 3;
+                    return {0, 1, 2, 3};
                 } else {
-                    poses[0] = 2; poses[1] = 1; poses[2] = 0; poses[3] = 3;
+                    return {2, 1, 0, 3};
                 }
-                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+            }();
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 3,
+                                 poses);
             }
             break;
         case PHOTOMETRIC_SEPARATED: {
-                quint8 poses[] = { 0, 1, 2, 3, 4 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
+            const std::array<quint8, 5> poses = {0, 1, 2, 3, 4};
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 4,
+                                 poses);
             }
             break;
-        case PHOTOMETRIC_ICCLAB: {
-                quint8 poses[] = { 0, 1, 2, 3 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
-            }
-            break;
-            return false;
+            case PHOTOMETRIC_ICCLAB:
+            case PHOTOMETRIC_YCBCR: {
+                const std::array<quint8, 5> poses = {0, 1, 2, 3};
+                r = copyDataToStrips(it,
+                                     buff.get(),
+                                     depth,
+                                     sample_format,
+                                     3,
+                                     poses);
+            } break;
         }
         if (!r) return false;
-        TIFFWriteScanline(image(), buff, y, (tsample_t) - 1);
+        TIFFWriteScanline(image(),
+                          buff.get(),
+                          static_cast<uint32_t>(y),
+                          (tsample_t)-1);
     }
-    _TIFFfree(buff);
+    buff.reset();
 
-    {
-        // IPTC
-        KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("iptc");
-        QBuffer buf;
-        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
-
-        if (!TIFFSetField(image(), TIFFTAG_RICHTIFFIPTC, static_cast<uint32_t>(buf.size()), buf.data().data())) {
-            dbgFile << "Failed to write the IPTC metadata to the TIFF field";
-        }
-    }
-
-    {
-        // XMP
-        KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("xmp");
-        QBuffer buf;
-        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
-
-        if (!TIFFSetField(image(), TIFFTAG_XMLPACKET, static_cast<uint32_t>(buf.size()), buf.data().data())) {
-            dbgFile << "Failed to write the XMP metadata to the TIFF field";
-        }
-    }
-    TIFFWriteDirectory(image());
-    return true;
+    return TIFFWriteDirectory(image());
 }

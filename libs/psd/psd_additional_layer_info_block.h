@@ -51,7 +51,7 @@ struct KRITAPSD_EXPORT psd_layer_levels {
     // At the end of the Version 2 file is the following information:
     quint16 extra_level_count {0}; // Count of total level record structures. Subtract the legacy number of level record structures, 29, to determine how many are
                                // remaining in the file for reading.
-    psd_layer_level_record *extra_record {nullptr}; // Additianol level records according to count
+    psd_layer_level_record *extra_record {nullptr}; // Additional level records according to count
     quint8 lookup_table[3][256];
 };
 
@@ -153,6 +153,7 @@ struct KRITAPSD_EXPORT psd_layer_photo_filter {
 };
 
 #include <kis_psd_layer_style.h>
+#include <KoColorProfile.h>
 
 struct KRITAPSD_EXPORT psd_layer_solid_color {
     KoColor fill_color;
@@ -163,6 +164,16 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
         fill_color = color;
         if (fill_color.colorSpace()->colorModelId() == cs->colorModelId()) {
             fill_color.setProfile(cs->profile());
+        }
+
+        /**
+         * PSD files may be saved with a stripped profile that is not suitable for
+         * displaying, so we should convert such colors into some "universal" color
+         * space, so that we could actually manage it
+         */
+        if (fill_color.profile() && !fill_color.profile()->isSuitableForOutput()) {
+            fill_color.convertTo(KoColorSpaceRegistry::instance()->
+                                 colorSpace(LABAColorModelID.id(), Float32BitsColorDepthID.id(), 0));
         }
     }
     QDomDocument getFillLayerConfig() {
@@ -362,7 +373,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             angle = cfg->getDouble("end_position_angle", 0.0);
             scale = cfg->getDouble("end_position_distance", 100.0);
         } else {
-            // assume carthesian
+            // assume cartesian
             QPointF end(cfg->getDouble("end_position_x", 1.0), cfg->getDouble("end_position_y", 1.0));
             // calculate angle and scale.
             double width  = start.x() - end.x();
@@ -430,13 +441,13 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             if (!gradientElement.isNull()) {
                 const QString gradientType = gradientElement.attribute("type");
                 if (gradientType == "stop") {
-                    const KoStopGradient *grad = new KoStopGradient(KoStopGradient::fromXML(gradientElement));
-                    if (grad && grad->valid()) {
+                    const KoStopGradient grad = KoStopGradient::fromXML(gradientElement);
+                    if (grad.valid()) {
                         w.writeStopGradient("Grad", grad);
                     }
                 } else if (gradientType == "segment") {
-                    const KoSegmentGradient *grad = new KoSegmentGradient(KoSegmentGradient::fromXML(gradientElement));
-                    if (grad && grad->valid()) {
+                    const KoSegmentGradient grad = KoSegmentGradient::fromXML(gradientElement);
+                    if (grad.valid()) {
                         w.writeSegmentGradient("Grad", grad);
                     }
                 }

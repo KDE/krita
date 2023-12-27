@@ -11,7 +11,7 @@
 
 struct KisAsyncAnimationCacheRenderer::Private
 {
-    KisAnimationFrameCacheSP requestedCache;
+    KisAnimationFrameCacheWSP requestedCache;
     KisOpenGLUpdateInfoSP requestInfo;
 };
 
@@ -50,7 +50,13 @@ void KisAsyncAnimationCacheRenderer::slotCompleteRegenerationInternal(int frame)
         return;
     }
 
-    m_d->requestedCache->addConvertedFrameData(m_d->requestInfo, frame);
+    KisAnimationFrameCacheSP cache = m_d->requestedCache;
+    if (!cache) {
+        frameCancelledCallback(frame, UserCancelled);
+        return;
+    }
+
+    cache->addConvertedFrameData(m_d->requestInfo, frame);
     notifyFrameCompleted(frame);
 }
 
@@ -63,7 +69,7 @@ void KisAsyncAnimationCacheRenderer::frameCancelledCallback(int frame, CancelRea
 void KisAsyncAnimationCacheRenderer::clearFrameRegenerationState(bool isCancelled)
 {
     m_d->requestInfo.clear();
-    m_d->requestedCache.clear();
+    m_d->requestedCache = nullptr; // TODO: implement clear() for weak pointers
 
     KisAsyncAnimationRendererBase::clearFrameRegenerationState(isCancelled);
 }

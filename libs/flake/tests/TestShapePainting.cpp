@@ -1,8 +1,5 @@
 /*
- *  This file is part of Calligra tests
- *
  *  SPDX-FileCopyrightText: 2006-2010 Thomas Zander <zander@kde.org>
- *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -11,9 +8,10 @@
 #include <QtGui>
 #include "KoShapeContainer.h"
 #include "KoShapeManager.h"
-#include "KoShapePaintingContext.h"
-#include <sdk/tests/testflake.h>
+
 #include <MockShapes.h>
+#include <testflake.h>
+
 
 #include <simpletest.h>
 
@@ -39,7 +37,7 @@ void TestShapePainting::testPaintShape()
 
     QImage image(100, 100,  QImage::Format_Mono);
     QPainter painter(&image);
-    manager.paint(painter, false);
+    manager.paint(painter);
 
     // with the shape not being clipped, the shapeManager will paint it for us.
     QCOMPARE(shape1->paintedCount, 1);
@@ -50,8 +48,8 @@ void TestShapePainting::testPaintShape()
     shape1->paintedCount = 0;
     shape2->paintedCount = 0;
     container->paintedCount = 0;
-    KoShapePaintingContext paintContext;
-    container->paint(painter, paintContext);
+
+    container->paint(painter);
     QCOMPARE(shape1->paintedCount, 0);
     QCOMPARE(shape2->paintedCount, 0);
     QCOMPARE(container->paintedCount, 1);
@@ -65,7 +63,7 @@ void TestShapePainting::testPaintShape()
     shape1->paintedCount = 0;
     shape2->paintedCount = 0;
     container->paintedCount = 0;
-    manager.paint(painter, false);
+    manager.paint(painter);
 
 
     // with this shape not being clipped, the shapeManager will paint the container and this shape
@@ -81,13 +79,13 @@ void TestShapePainting::testPaintHiddenShape()
 
     MockShape *shape = new MockShape();
     MockContainer *fourth = new MockContainer();
-    MockContainer *thirth = new MockContainer();
+    MockContainer *third = new MockContainer();
     MockContainer *second = new MockContainer();
 
 
     top->addShape(second);
-    second->addShape(thirth);
-    thirth->addShape(fourth);
+    second->addShape(third);
+    third->addShape(fourth);
     fourth->addShape(shape);
 
     second->setVisible(false);
@@ -99,11 +97,11 @@ void TestShapePainting::testPaintHiddenShape()
 
     QImage image(100, 100,  QImage::Format_Mono);
     QPainter painter(&image);
-    manager.paint(painter, false);
+    manager.paint(painter);
 
     QCOMPARE(top->paintedCount, 1);
     QCOMPARE(second->paintedCount, 0);
-    QCOMPARE(thirth->paintedCount, 0);
+    QCOMPARE(third->paintedCount, 0);
     QCOMPARE(fourth->paintedCount, 0);
     QCOMPARE(shape->paintedCount, 0);
 }
@@ -121,9 +119,9 @@ void TestShapePainting::testPaintOrder()
     class OrderedMockShape : public MockShape {
     public:
         OrderedMockShape(QList<const MockShape*> *list) : order(list) {}
-        void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override {
+        void paint(QPainter &painter) const override {
             order->append(this);
-            MockShape::paint(painter, paintcontext);
+            MockShape::paint(painter);
         }
         mutable QList<const MockShape*> *order;
     };
@@ -157,7 +155,7 @@ void TestShapePainting::testPaintOrder()
 
         QImage image(100, 100,  QImage::Format_Mono);
         QPainter painter(&image);
-        manager.paint(painter, false);
+        manager.paint(painter);
         QCOMPARE(top->paintedCount, 1);
         QCOMPARE(bottom->paintedCount, 1);
         QCOMPARE(shape1->paintedCount, 1);
@@ -174,7 +172,7 @@ void TestShapePainting::testPaintOrder()
         // again, with clipping.
         order.clear();
         painter.setClipRect(0, 0, 100, 100);
-        manager.paint(painter, false);
+        manager.paint(painter);
         QCOMPARE(top->paintedCount, 2);
         QCOMPARE(bottom->paintedCount, 2);
         QCOMPARE(shape1->paintedCount, 2);
@@ -275,7 +273,7 @@ void TestShapePainting::testGroupUngroup()
 
             groupingCommand.redo();
 
-            manager->paint(painter, false);
+            manager->paint(painter);
 
             QCOMPARE(shape1->paintedCount, 2 * i + 1);
             QCOMPARE(shape2->paintedCount, 2 * i + 1);
@@ -291,7 +289,7 @@ void TestShapePainting::testGroupUngroup()
 
             ungroupingCommand.redo();
 
-            manager->paint(painter, false);
+            manager->paint(painter);
 
             QCOMPARE(shape1->paintedCount, 2 * i + 2);
             QCOMPARE(shape2->paintedCount, 2 * i + 2);

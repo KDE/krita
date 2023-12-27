@@ -36,7 +36,6 @@
 
 
 class QNetworkReply;
-class QNetworkAccessManager;
 class KisNetworkAccessManager;
 
 class KRITAUI_EXPORT MultiFeedRssModel : public QAbstractListModel
@@ -77,7 +76,7 @@ private Q_SLOTS:
 private:
     QStringList m_sites;
     RssItemList m_aggregatedFeed;
-    QNetworkAccessManager *m_networkAccessManager;
+    KisNetworkAccessManager *m_networkAccessManager;
     int m_articleCount;
 
     void sortAggregatedFeed();

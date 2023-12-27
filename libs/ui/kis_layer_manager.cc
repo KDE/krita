@@ -301,14 +301,17 @@ void KisLayerManager::layerProperties()
         QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString fileNameOld = fileLayer->fileName();
         KisFileLayer::ScalingMethod scalingMethodOld = fileLayer->scalingMethod();
+        QString scalingFilterOld = fileLayer->scalingFilter();
         KisDlgFileLayer dlg(basePath, fileLayer->name(), m_view->mainWindow());
         dlg.setCaption(i18n("File Layer Properties"));
         dlg.setFileName(fileNameOld);
         dlg.setScalingMethod(scalingMethodOld);
+        dlg.setScalingFilter(scalingFilterOld);
 
         if (dlg.exec() == QDialog::Accepted) {
             const QString fileNameNew = dlg.fileName();
             KisFileLayer::ScalingMethod scalingMethodNew = dlg.scaleToImageResolution();
+            QString scalingFilterNew = dlg.scalingFilter();
 
             if(fileNameNew.isEmpty()){
                 QMessageBox::critical(m_view->mainWindow(), i18nc("@title:window", "Krita"), i18n("No file name specified"));
@@ -316,15 +319,17 @@ void KisLayerManager::layerProperties()
             }
             fileLayer->setName(dlg.layerName());
 
-            if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew) {
+            if (fileNameOld!= fileNameNew || scalingMethodOld != scalingMethodNew || scalingFilterOld != scalingFilterNew) {
                 KisChangeFileLayerCmd *cmd
                         = new KisChangeFileLayerCmd(fileLayer,
                                                     basePath,
                                                     fileNameOld,
                                                     scalingMethodOld,
+                                                    scalingFilterOld,
                                                     basePath,
                                                     fileNameNew,
-                                                    scalingMethodNew);
+                                                    scalingMethodNew,
+                                                    scalingFilterNew);
                 m_view->undoAdapter()->addCommand(cmd);
             }
         }
@@ -453,7 +458,7 @@ void KisLayerManager::convertNodeToPaintLayer(KisNodeSP source)
         return;
     }
 
-    KisLayerUtils::convertToPaintLayer(image, source);
+    (void) KisLayerUtils::convertToPaintLayer(image, source);
 }
 
 void KisLayerManager::convertGroupToAnimated()
@@ -557,7 +562,7 @@ void KisLayerManager::convertLayerToFileLayer(KisNodeSP source)
     } else {
         QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString relativePath = QDir(basePath).relativeFilePath(path);
-        KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, source->name(), OPACITY_OPAQUE_U8);
+        KisFileLayer *fileLayer = new KisFileLayer(image, basePath, relativePath, KisFileLayer::None, "Bicubic", source->name(), OPACITY_OPAQUE_U8);
         fileLayer->setX(bounds.x());
         fileLayer->setY(bounds.y());
         KisNodeSP dstParent = source->parent();
@@ -637,7 +642,7 @@ KisNodeSP KisLayerManager::addCloneLayer(KisNodeList nodes)
 {
     KisImageWSP image = m_view->image();
 
-    KisNodeList filteredNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(nodes, false);
+    KisNodeList filteredNodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(nodes, false);
     if (filteredNodes.isEmpty()) return KisNodeSP();
 
     KisNodeSP newAbove = filteredNodes.last();
@@ -852,19 +857,30 @@ void KisLayerManager::mergeLayer()
         if (!layer->prevSibling()) return;
         KisLayer *prevLayer = qobject_cast<KisLayer*>(layer->prevSibling().data());
         if (!prevLayer) return;
+
         if (prevLayer->userLocked()) {
             m_view->showFloatingMessage(
                         i18nc("floating message in layer manager when previous layer is locked",
                               "Layer is locked"),
                         QIcon(), 2000, KisFloatingMessage::Low);
-        }
+        } else {
+            const KisMetaData::MergeStrategy* strategy = nullptr;
 
-        else if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
-            image->mergeDown(layer, KisMetaData::MergeStrategyRegistry::instance()->get("Drop"));
-        }
-        else {
-            const KisMetaData::MergeStrategy* strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
+            if (layer->metaData()->isEmpty() && prevLayer->metaData()->isEmpty()) {
+                strategy = KisMetaData::MergeStrategyRegistry::instance()->get("Drop");
+            }
+            else {
+                strategy = KisMetaDataMergeStrategyChooserWidget::showDialog(m_view->mainWindow());
+            }
+
             if (!strategy) return;
+
+            if (!layer->isAnimated() && prevLayer->isAnimated()) {
+                m_view->showFloatingMessage(
+                            i18nc("floating message in layer manager when trying to merge a non-animated layer into an animated one",
+                                  "Non-animated layer is merged into the current frame. To merge it into the whole clip, create at least one frame"),
+                            QIcon(), 5000, KisFloatingMessage::Medium);
+            }
             image->mergeDown(layer, strategy);
         }
     }
@@ -966,19 +982,20 @@ KisNodeSP KisLayerManager::addFileLayer(KisNodeSP activeNode)
         }
 
         KisFileLayer::ScalingMethod scalingMethod = dlg.scaleToImageResolution();
-        KisNodeSP node = new KisFileLayer(image, basePath, fileName, scalingMethod, name, OPACITY_OPAQUE_U8);
+        QString scalingFilter = dlg.scalingFilter();
+        KisNodeSP node = new KisFileLayer(image, basePath, fileName, scalingMethod, scalingFilter, name, OPACITY_OPAQUE_U8);
         addLayerCommon(activeNode, node, true, 0);
         return node;
     }
     return 0;
 }
 
-void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg, KoCanvasResourcesInterfaceSP canvasResroucesInterface)
+void updateLayerStyles(KisLayerSP layer, KisDlgLayerStyle *dlg, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     KisSetLayerStyleCommand::updateLayerStyle(layer,
                                               dlg->style()->cloneWithResourcesSnapshot(
                                                   KisGlobalResourcesInterface::instance(),
-                                                  canvasResroucesInterface));
+                                                  canvasResourcesInterface));
 }
 
 void KisLayerManager::layerStyle()
@@ -992,7 +1009,7 @@ void KisLayerManager::layerStyle()
     if (!m_view->blockUntilOperationsFinished(image)) return;
     if (!m_view->nodeManager()->canModifyLayer(layer)) return;
 
-    KoCanvasResourcesInterfaceSP canvasResroucesInterface = m_view->canvasBase()->resourceManager()->canvasResourcesInterface();
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface = m_view->canvasBase()->resourceManager()->canvasResourcesInterface();
 
     KisPSDLayerStyleSP oldStyle;
     if (layer->layerStyle()) {
@@ -1001,22 +1018,24 @@ void KisLayerManager::layerStyle()
     } else {
         oldStyle = toQShared(new KisPSDLayerStyle("", KisGlobalResourcesInterface::instance()))
                 ->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(),
-                                             canvasResroucesInterface);
+                                             canvasResourcesInterface);
     }
 
     KisPSDLayerStyleSP newStyle = oldStyle->clone().dynamicCast<KisPSDLayerStyle>();
+    // We want to also change the UUID, else it might be considered the same style after save and won't load correctly
+    newStyle->setUuid(QUuid::createUuid());
     newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
 
     KisDlgLayerStyle dlg(newStyle, m_view->canvasResourceProvider());
 
-    std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg, canvasResroucesInterface));
+    std::function<void ()> updateCall(std::bind(updateLayerStyles, layer, &dlg, canvasResourcesInterface));
     SignalToFunctionProxy proxy(updateCall);
     connect(&dlg, SIGNAL(configChanged()), &proxy, SLOT(start()));
 
     if (dlg.exec() == QDialog::Accepted) {
         KisPSDLayerStyleSP newStyle =
             dlg.style()->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(),
-                                                    canvasResroucesInterface);
+                                                    canvasResourcesInterface);
 
         KUndo2CommandSP command = toQShared(
                     new KisSetLayerStyleCommand(layer, oldStyle, newStyle));

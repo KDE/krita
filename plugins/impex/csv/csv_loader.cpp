@@ -22,6 +22,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include <KisCursorOverrideLock.h>
 
 #include <kis_debug.h>
 #include <kis_image.h>
@@ -67,7 +68,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
 
     QVector<CSVLayerRecord*> layers;
 
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    KisCursorOverrideLock cursorLock(Qt::WaitCursor);
 
     idx = filename.lastIndexOf(QRegExp("[\\/]"));
     QString base = (idx == -1) ? QString() : filename.left(idx + 1); //include separator
@@ -286,7 +287,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
             if (frame > frameCount)
                 frameCount = frame;
 
-            animation->setFullClipRange(KisTimeSpan::fromTimeToTime(0,frameCount - 1));
+            animation->setDocumentRange(KisTimeSpan::fromTimeToTime(0,frameCount - 1));
             animation->setFramerate((int)framerate);
         }
 
@@ -330,7 +331,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
             emit m_doc->clearStatusBarMessage();
         }
     }
-    QApplication::restoreOverrideCursor();
+
     return retval;
 }
 

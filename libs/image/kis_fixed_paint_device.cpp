@@ -156,7 +156,7 @@ void KisFixedPaintDevice::convertFromQImage(const QImage& _image, const QString 
     QImage image = _image;
 
     if (image.format() != QImage::Format_ARGB32) {
-        image = image.convertToFormat(QImage::Format_ARGB32);
+        image.convertTo(QImage::Format_ARGB32);
     }
     setRect(image.rect());
     lazyGrowBufferWithoutInitialization();

@@ -77,7 +77,7 @@ void KisDialogStateSaver::saveState(QWidget *parent, const QString &dialogName)
             }
         }
         else {
-            qWarning() << "Dialog" << dialogName << "has a widget without an objectname:" << widget;
+            qWarning() << "Dialog" << dialogName << "has a widget without an objectName:" << widget;
         }
 
     }

@@ -159,7 +159,6 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
 
     float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
     float minValue = KoColorSpaceMathsTraits<channelType>::min;
-    float maxValue = KoColorSpaceMathsTraits<channelType>::max;
     bool eraser = painter()->compositeOpId() == COMPOSITE_ERASE;
 
 
@@ -259,10 +258,10 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
         if (unitValue == 1.0f) {
             swap(b, r);
         }
-        nativeArray[0] = qBound(minValue, b * unitValue, maxValue);
-        nativeArray[1] = qBound(minValue, g * unitValue, maxValue);
-        nativeArray[2] = qBound(minValue, r * unitValue, maxValue);
-        nativeArray[3] = qBound(minValue, a * unitValue, maxValue);
+        nativeArray[0] = KoColorSpaceMaths<float, channelType>::scaleToA(b);
+        nativeArray[1] = KoColorSpaceMaths<float, channelType>::scaleToA(g);
+        nativeArray[2] = KoColorSpaceMaths<float, channelType>::scaleToA(r);
+        nativeArray[3] = KoColorSpaceMaths<float, channelType>::scaleToA(a);
 
         maskPointer++;
     }
@@ -347,7 +346,7 @@ void KisMyPaintSurface::getColorImpl(MyPaintSurface *self, float x, float y, flo
         num_colors += 1;
     }
 
-    KoColor color(Qt::transparent, activeDev->colorSpace());
+    KoColor color = KoColor::createTransparent(activeDev->colorSpace());
     activeDev->colorSpace()->mixColorsOp()->mixColors(m_blendDevice->data(), weights, size, color.data(), sum_weight);
 
     if (sum_weight > 0.0f) {
@@ -494,7 +493,7 @@ inline float KisMyPaintSurface::calculate_rr_antialiased (int  xp, int  yp, floa
         /* XXX: precision of "nearest" values could be improved
          * by intersecting the line that goes from nearest_x/Y to 0
          * with the pixel's borders here, however the improvements
-         * would probably not justify the perdormance cost.
+         * would probably not justify the performance cost.
          */
         r_near = calculate_r_sample( nearest_x, nearest_y, aspect_ratio, sn, cs );
         rr_near = r_near * one_over_radius2;

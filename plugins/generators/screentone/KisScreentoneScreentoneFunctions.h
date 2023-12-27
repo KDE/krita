@@ -43,7 +43,7 @@ namespace KisScreentoneScreentoneFunctions {
 //        functions and pass them through a precomputed cumulative function
 //        that equalizes them. Some of these cumulative functions were derived
 //        analytically, but others, due to the complexity of the original
-//        function, had to be empirically aproximated as piecewise functions
+//        function, had to be empirically approximate as piecewise functions
 //        using cubic functions for each piece.
 //     2. The second method is derived from traditional halftone screen
 //        construction using a template. The template is filled with increasing

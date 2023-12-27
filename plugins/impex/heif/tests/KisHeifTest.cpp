@@ -63,12 +63,12 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
 
         KisImportExportManager manager(doc_png.data());
 
-        KisImportExportErrorCode loadingStatus =
-            manager.importDocument(file+"png", QString());
-
+        KisImportExportErrorCode loadingStatus = manager.importDocument(file + "png", QString());
         QVERIFY(loadingStatus.isOk());
-        KisImportExportManager (doc_heif.data()).importDocument(file+"heif", QString());
-        KisImportExportManager (doc_avif.data()).importDocument(file+"avif", QString());
+        loadingStatus = KisImportExportManager(doc_heif.data()).importDocument(file + "heif", QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus = KisImportExportManager(doc_avif.data()).importDocument(file + "avif", QString());
+        QVERIFY(loadingStatus.isOk());
 
         KisImageSP png_image = doc_png->image().toStrongRef();
         KisImageSP heif_image = doc_heif->image().toStrongRef();
@@ -121,12 +121,12 @@ void KisHeifTest::testLoadRGB(int bitDepth)
 
         KisImportExportManager manager(doc_png.data());
 
-        KisImportExportErrorCode loadingStatus =
-            manager.importDocument(file+"png", QString());
-
+        KisImportExportErrorCode loadingStatus = manager.importDocument(file + "png", QString());
         QVERIFY(loadingStatus.isOk());
-        KisImportExportManager (doc_heif.data()).importDocument(file+"heif", QString());
-        KisImportExportManager (doc_avif.data()).importDocument(file+"avif", QString());
+        loadingStatus = KisImportExportManager(doc_heif.data()).importDocument(file + "heif", QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus = KisImportExportManager(doc_avif.data()).importDocument(file + "avif", QString());
+        QVERIFY(loadingStatus.isOk());
 
         KisImageSP png_image = doc_png->image().toStrongRef();
         KisImageSP heif_image = doc_heif->image().toStrongRef();
@@ -232,7 +232,7 @@ void KisHeifTest::testSaveHDR()
         pngExportConfiguration->setProperty("saveAsHDR", true);
         pngExportConfiguration->setProperty("saveSRGBProfile", true);
         pngExportConfiguration->setProperty("forceSRGB", false);
-        doc->exportDocumentSync(QString("test_rgba_hdr.png"), "image/png", pngExportConfiguration);
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr.png"), "image/png", pngExportConfiguration));
 
         qDebug() << "Saving HDR heif and avif for PQ";
         KisPropertiesConfigurationSP heifExportConfiguration = new KisPropertiesConfiguration();
@@ -240,21 +240,21 @@ void KisHeifTest::testSaveHDR()
         heifExportConfiguration->setProperty("lossless", true);
         heifExportConfiguration->setProperty("chroma", "444");
         heifExportConfiguration->setProperty("floatingPointConversionOption", "Rec2100PQ");
-        doc->exportDocumentSync(QString("test_rgba_hdr_pq.heif"), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QString("test_rgba_hdr_pq.avif"), "image/avif", heifExportConfiguration);
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr_pq.heif"), "image/heic", heifExportConfiguration));
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr_pq.avif"), "image/avif", heifExportConfiguration));
 
         qDebug() << "Saving HDR heif and avif for HLG";
         heifExportConfiguration->setProperty("HLGnominalPeak", 1000.0);
         heifExportConfiguration->setProperty("HLGgamma", 1.2);
         heifExportConfiguration->setProperty("removeHGLOOTF", true);
         heifExportConfiguration->setProperty("floatingPointConversionOption", "Rec2100HLG");
-        doc->exportDocumentSync(QString("test_rgba_hdr_hlg.heif"), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QString("test_rgba_hdr_hlg.avif"), "image/avif", heifExportConfiguration);
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr_hlg.heif"), "image/heic", heifExportConfiguration));
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr_hlg.avif"), "image/avif", heifExportConfiguration));
 
         qDebug() << "Saving HDR heif and avif for SMPTE 428";
         heifExportConfiguration->setProperty("floatingPointConversionOption", "ApplySMPTE428");
-        doc->exportDocumentSync(QString("test_rgba_hdr_smpte428.heif"), "image/heic", heifExportConfiguration);
-        doc->exportDocumentSync(QString("test_rgba_hdr_smpte428.avif"), "image/avif", heifExportConfiguration);
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr_smpte428.heif"), "image/heic", heifExportConfiguration));
+        QVERIFY(doc->exportDocumentSync(QString("test_rgba_hdr_smpte428.avif"), "image/avif", heifExportConfiguration));
     }
 }
 
@@ -278,23 +278,41 @@ void KisHeifTest::testLoadHDR()
         QScopedPointer<KisDocument> doc_heif_smpte428(KisPart::instance()->createDocument());
         doc_heif_smpte428->setFileBatchMode(true);
 
-        KisImportExportManager manager(doc_png.data());
-
         KisImportExportErrorCode loadingStatus =
-            manager.importDocument(QString("test_rgba_hdr.png"), QString());
-
+            KisImportExportManager(doc_png.data()).importDocument(QString("test_rgba_hdr.png"), QString());
         QVERIFY(loadingStatus.isOk());
+
         qDebug() << "Loading test for PQ files";
-        KisImportExportManager (doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
-        KisImportExportManager (doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
+        loadingStatus =
+            KisImportExportManager(doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus =
+            KisImportExportManager(doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
+        QVERIFY(loadingStatus.isOk());
 
         qDebug() << "Loading test for HLG files";
-        KisImportExportManager (doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
-        KisImportExportManager (doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
+        loadingStatus =
+            KisImportExportManager(doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus =
+            KisImportExportManager(doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
+        QVERIFY(loadingStatus.isOk());
 
         qDebug() << "Loading test for smpte428 files";
-        KisImportExportManager (doc_avif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.avif"), QString());
-        KisImportExportManager (doc_heif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.heif"), QString());
+        loadingStatus = KisImportExportManager(doc_avif_smpte428.data())
+                            .importDocument(QString("test_rgba_hdr_smpte428.avif"), QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus = KisImportExportManager(doc_heif_smpte428.data())
+                            .importDocument(QString("test_rgba_hdr_smpte428.heif"), QString());
+        QVERIFY(loadingStatus.isOk());
+
+        QVERIFY(doc_png->image());
+        QVERIFY(doc_heif_pq->image());
+        QVERIFY(doc_avif_pq->image());
+        QVERIFY(doc_avif_smpte428->image());
+        QVERIFY(doc_heif_smpte428->image());
+        QVERIFY(doc_avif_hlg->image());
+        QVERIFY(doc_heif_hlg->image());
 
         KisImageSP png_image = doc_png->image().toStrongRef();
         KisImageSP heif_image_pq = doc_heif_pq->image().toStrongRef();
@@ -332,11 +350,18 @@ void KisHeifTest::testLoadHDR()
                 heif_image_pq->projection()->pixel(x, y, &heifColor);
                 avif_image_pq->projection()->pixel(x, y, &avifColor);
 
-                QVERIFY2(cs->difference(pngColor.data(), avifColor.data()) <1, QString("Avif PQ color doesn't match PNG color, (%1, %2) %3 %4")
+                // PNG file experiences alpha sampling to 16i-bits, so use differenceA for comparison
+                QVERIFY2(cs->differenceA(pngColor.data(), avifColor.data()) <1, QString("Avif PQ color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(avifColor.toXML()).toLatin1());
 
-                QVERIFY2(cs->difference(pngColor.data(), heifColor.data()) <1, QString("Heif PQ color doesn't match PNG color, (%1, %2) %3 %4")
+                // PNG file experiences alpha sampling to 16i-bits, so use differenceA for comparison
+                QVERIFY2(cs->differenceA(pngColor.data(), heifColor.data()) <1, QString("Heif PQ color doesn't match PNG color, (%1, %2) %3 %4")
                          .arg(x).arg(y).arg(pngColor.toXML()).arg(heifColor.toXML()).toLatin1());
+
+                // compare HEIF and AVIF strictly
+                QVERIFY2(cs->difference(heifColor.data(), avifColor.data()) <1, QString("Heif PQ color doesn't match AVIF color, (%1, %2) %3 %4")
+                         .arg(x).arg(y).arg(heifColor.toXML()).arg(avifColor.toXML()).toLatin1());
+
 
                 heif_image_hlg->projection()->pixel(x, y, &heifColor);
                 avif_image_hlg->projection()->pixel(x, y, &avifColor);

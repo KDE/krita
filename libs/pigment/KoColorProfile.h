@@ -174,6 +174,12 @@ public:
     virtual void linearizeFloatValueFast(QVector <qreal> & Value) const = 0;
     virtual void delinearizeFloatValueFast(QVector <qreal> & Value) const = 0;
 
+    /**
+     * Comparing profile's TRC against the other with defined error threshold,
+     * returns true if profile TRC is matched.
+     */
+    virtual bool compareTRC(TransferCharacteristics characteristics, float error) const = 0;
+
     virtual QByteArray uniqueId() const = 0;
     
     virtual bool operator==(const KoColorProfile&) const = 0;

@@ -20,13 +20,13 @@
 #include "kis_paint_device.h"
 #include <kis_repeat_iterators_pixel.h>
 
-#include "sdk/tests/testimage.h"
+#include <testimage.h>
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
-    QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
+    QList<const KoColorSpace*> colorspaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 
-    Q_FOREACH (const KoColorSpace* cs, colorsapces) {
+    Q_FOREACH (const KoColorSpace* cs, colorspaces) {
 
         dbgKrita << "Testing with" << cs->id();
 

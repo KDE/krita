@@ -95,7 +95,7 @@ end tell
 print_help() {
     printf \
 "dmgstyle.sh is a minitool to aid in the creation of the DMG look for krita
-out is designed to be copy pasted into osxdeploy.sh in the osasrcipt section
+out is designed to be copy pasted into osxdeploy.sh in the osascript section
 
 - Run once with set to set new background
 - Edit by moving elements or <Cmd> + J to set net icon size

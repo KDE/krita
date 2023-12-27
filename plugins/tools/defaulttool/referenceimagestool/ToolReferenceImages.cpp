@@ -31,6 +31,7 @@
 #include <kis_image.h>
 #include "QClipboard"
 #include "kis_action.h"
+#include <KisCursorOverrideLock.h>
 
 #include "ToolReferenceImagesWidget.h"
 #include "KisReferenceImageCollection.h"
@@ -50,6 +51,7 @@ void ToolReferenceImages::activate(const QSet<KoShape*> &shapes)
     DefaultTool::activate(shapes);
 
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT(kisCanvas);
     connect(kisCanvas->image(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
     connect(kisCanvas->imageView()->document(), &KisDocument::sigReferenceImagesLayerChanged, this, &ToolReferenceImages::slotNodeAdded);
 
@@ -81,6 +83,12 @@ void ToolReferenceImages::setReferenceImageLayer(KisSharedPtr<KisReferenceImages
     connect(layer->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
 }
 
+bool ToolReferenceImages::hasSelection()
+{
+    const KoShapeManager *manager = shapeManager();
+    return manager && manager->selection()->count() != 0;
+}
+
 void ToolReferenceImages::addReferenceImage()
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -103,8 +111,7 @@ void ToolReferenceImages::addReferenceImage()
         if (document()->referenceImagesLayer()) {
             reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
         }
-        KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+        canvas()->addCommand(KisReferenceImagesLayer::addReferenceImages(document(), {reference}));
     }
 }
 
@@ -118,8 +125,7 @@ void ToolReferenceImages::pasteReferenceImage()
         if (document()->referenceImagesLayer()) {
             reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
         }
-        KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+        canvas()->addCommand(KisReferenceImagesLayer::addReferenceImages(document(), {reference}));
     } else {
         if (canvas()->canvasWidget()) {
             QMessageBox::critical(canvas()->canvasWidget(), i18nc("@title:window", "Krita"), i18n("Could not load reference image from clipboard"));
@@ -176,8 +182,7 @@ void ToolReferenceImages::loadReferenceImages()
             currentZIndex += 1;
         }
 
-        KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, shapes));
+        canvas()->addCommand(KisReferenceImagesLayer::addReferenceImages(document(), shapes));
     } else {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
     }
@@ -186,6 +191,8 @@ void ToolReferenceImages::loadReferenceImages()
 
 void ToolReferenceImages::saveReferenceImages()
 {
+    KisCursorOverrideLock cursorLock(Qt::BusyCursor);
+
     auto layer = m_layer.toStrongRef();
     if (!layer || layer->shapeCount() == 0) return;
 
@@ -338,6 +345,7 @@ void ToolReferenceImages::copy() const
     if (!shapes.isEmpty()) {
         KoShape* shape = shapes.at(0);
         KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(reference);
         QClipboard *cb = QApplication::clipboard();
         cb->setImage(reference->getImage());
     }
@@ -348,9 +356,28 @@ bool ToolReferenceImages::paste()
     pasteReferenceImage();
     return true;
 }
+
+bool ToolReferenceImages::selectAll()
+{
+    Q_FOREACH(KoShape *shape, shapeManager()->shapes()) {
+        if (!shape->isSelectable()) continue;
+        koSelection()->select(shape);
+    }
+    repaintDecorations();
+
+    return true;
+}
+
+void ToolReferenceImages::deselect()
+{
+    koSelection()->deselectAll();
+    repaintDecorations();
+}
+
 KisDocument *ToolReferenceImages::document() const
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT(kisCanvas);
     return kisCanvas->imageView()->document();
 }
 
@@ -374,6 +401,8 @@ QList<QAction *> ToolReferenceImagesFactory::createActionsImpl()
     Q_FOREACH(QAction *action, defaultActions) {
         if (actionNames.contains(action->objectName())) {
             actions << action;
+        } else {
+            delete action;
         }
     }
     return actions;

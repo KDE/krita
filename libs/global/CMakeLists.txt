@@ -8,10 +8,6 @@ option(HAVE_MEMORY_LEAK_TRACKER "Enable memory leak tracker (always disabled in 
 option(HAVE_BACKTRACE_SUPPORT "Enable recording of backtrace in memory leak tracker" OFF)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-memory-leak-tracker.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-memory-leak-tracker.h) ### WRONG PLACE???
 
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
 set(kritaglobal_LIB_SRCS
     kis_assert.cpp
     kis_debug.cpp
@@ -28,21 +24,25 @@ set(kritaglobal_LIB_SRCS
     kis_acyclic_signal_connector.cpp
     kis_latency_tracker.cpp
     KisQPainterStateSaver.cpp
-    KisSharedThreadPoolAdapter.cpp
-    KisSharedRunnable.cpp
     KisRollingMeanAccumulatorWrapper.cpp
+    KisRollingSumAccumulatorWrapper.cpp
     kis_config_notifier.cpp
     KisDeleteLaterWrapper.cpp
     KisUsageLogger.cpp
     KisFileUtils.cpp
     KisSignalMapper.cpp
     KisRegion.cpp
+    KoID.cpp
     KoUnit.cpp
     KisBezierUtils.cpp
     KisBezierPatch.cpp
     KisBezierMesh.cpp
     KisRectsGrid.cpp
     KisSynchronizedConnection.cpp
+    KisFilteredRollingMean.cpp
+    KisBackup.cpp
+    KisSampleRectIterator.cpp
+    KisCursorOverrideLock.cpp
 )
 
 if(WIN32)
@@ -71,12 +71,26 @@ target_link_libraries(kritaglobal
         Qt5::Widgets 
         Qt5::Xml 
         KF5::I18n
-        ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
+        Boost::boost
+        zug
+        lager
+    PRIVATE
+        Eigen3::Eigen
 )
+
+if (GSL_FOUND)
+  target_link_libraries(kritaglobal PRIVATE GSL::gsl)
+endif ()
 
 if (ANDROID)
     target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
 endif()
+
+if(APPLE)
+    target_link_libraries(kritaglobal PRIVATE
+        kritamacosutils
+    )
+endif ()
 
 set_target_properties(kritaglobal PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

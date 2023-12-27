@@ -25,12 +25,12 @@ public:
         DiscreteZoomModeShortcut, ///< Toggle discrete zoom mode
         ZoomInShortcut, ///< Zoom in by a fixed amount.
         ZoomOutShortcut, ///< Zoom out by a fixed amount.
-        ZoomResetShortcut, ///< Reset zoom to 100%.
-        ZoomToPageShortcut, ///< Zoom fit to page.
-        ZoomToWidthShortcut, ///< Zoom fit to width.
+        Zoom100PctShortcut, ///< Reset zoom to 100%.
+        FitToViewShortcut, ///< Zoom fit to page.
+        FitToWidthShortcut, ///< Zoom fit to width.
         RelativeZoomModeShortcut, ///< Toggle zoom mode relative to cursor
         RelativeDiscreteZoomModeShortcut, ///< Toggle discrete zoom mode relative to cursor
-        ZoomToHeightShortcut ///< Zoom fit to height.
+        FitToHeightShortcut ///< Zoom fit to height.
     };
     explicit KisZoomAction();
     ~KisZoomAction() override;

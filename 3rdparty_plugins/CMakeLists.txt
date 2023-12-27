@@ -64,19 +64,17 @@ if (MINGW)
         set(SECURITY_EXE_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
         set(SECURITY_SHARED_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
         set(SECURITY_MODULE_LINKER_FLAGS "-Wl,--dynamicbase -Wl,--nxcompat -Wl,--disable-auto-image-base")
-        if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-            # Enable high-entropy ASLR for 64-bit
-            # The image base has to be >4GB for HEASLR to be enabled.
-            # The values used here are kind of arbitrary.
-            set(SECURITY_EXE_LINKER_FLAGS "${SECURITY_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
-            set(SECURITY_SHARED_LINKER_FLAGS "${SECURITY_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
-            set(SECURITY_MODULE_LINKER_FLAGS "${SECURITY_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
-            set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
-                -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
-                -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
-                -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
-            )
-        endif ()
+        # Enable high-entropy ASLR for 64-bit
+        # The image base has to be >4GB for HEASLR to be enabled.
+        # The values used here are kind of arbitrary.
+        set(SECURITY_EXE_LINKER_FLAGS "${SECURITY_EXE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x140000000")
+        set(SECURITY_SHARED_LINKER_FLAGS "${SECURITY_SHARED_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+        set(SECURITY_MODULE_LINKER_FLAGS "${SECURITY_MODULE_LINKER_FLAGS} -Wl,--high-entropy-va -Wl,--image-base,0x180000000")
+        set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+            -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
+            -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
+            -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
+        )
     else ()
         message(WARNING "Linker Security Flags not enabled!")
     endif ()
@@ -105,16 +103,20 @@ elseif (MSVC)
 endif ()
 
 if (WIN32)
-   set(PATCH_COMMAND myptch)
+   set(PATCH_COMMAND patch)
 endif()
 
 if (APPLE)
+    string(REPLACE ";" "$<SEMICOLON>" CMAKE_OSX_ARCHITECTURES_ESCAPED "${CMAKE_OSX_ARCHITECTURES}")
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
                         -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
                         -DCMAKE_MACOSX_RPATH=ON
                         -DKDE_SKIP_RPATH_SETTINGS=ON
                         -DBUILD_WITH_INSTALL_RPATH=ON
-                        -DAPPLE_SUPPRESS_X11_WARNING=ON)
+                        -DAPPLE_SUPPRESS_X11_WARNING=ON
+                        -DCMAKE_FIND_FRAMEWORK=LAST
+                        -DCMAKE_OSX_ARCHITECTURES:STRING=${CMAKE_OSX_ARCHITECTURES_ESCAPED}
+                        )
     set(PATCH_COMMAND patch)
 endif ()
 
@@ -124,7 +126,7 @@ if (ANDROID)
   set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
   set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
 
-  string(REPLACE ";" "|" _escape_find_root_path "${CMAKE_FIND_ROOT_PATH}")
+  string(REPLACE ";" "$<SEMICOLON>" _escape_find_root_path "${CMAKE_FIND_ROOT_PATH}")
   set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}
@@ -134,9 +136,6 @@ if (ANDROID)
                      -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
                      -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS}
                      )
-
-  # see: https://github.com/android/ndk/issues/929
-  unset (CMAKE_SYSROOT)
 endif()
 
 if (UNIX AND NOT APPLE)

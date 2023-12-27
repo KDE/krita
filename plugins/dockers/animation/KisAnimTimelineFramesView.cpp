@@ -11,6 +11,7 @@
 #include "KisAnimTimelineLayersHeader.h"
 #include "timeline_insert_keyframe_dialog.h"
 #include "KisAnimTimelineFrameDelegate.h"
+#include "KisPlaybackEngine.h"
 
 #include <QPainter>
 #include <QApplication>
@@ -25,7 +26,6 @@
 #include <QMimeData>
 #include <QLayout>
 #include <QScreen>
-#include "config-qtmultimedia.h"
 
 #include "KSharedConfig"
 #include "KisKineticScroller.h"
@@ -33,6 +33,8 @@
 #include "kis_zoom_button.h"
 #include "kis_icon_utils.h"
 #include "KisAnimUtils.h"
+#include "KisCanvasAnimationState.h"
+#include "kis_canvas2.h"
 #include "kis_custom_modifiers_catcher.h"
 #include "kis_action.h"
 #include "kis_signal_compressor.h"
@@ -63,19 +65,15 @@ struct KisAnimTimelineFramesView::Private
         , layersHeader(nullptr)
         , addLayersButton(nullptr)
         , pinLayerToTimelineAction(nullptr)
-        , audioOptionsButton(nullptr)
         , colorSelector(nullptr)
         , colorSelectorAction(nullptr)
         , multiframeColorSelector(nullptr)
         , multiframeColorSelectorAction(nullptr)
-        , audioOptionsMenu(nullptr)
-        , openAudioAction(nullptr)
-        , audioMuteAction(nullptr)
-        , volumeSlider(nullptr)
         , layerEditingMenu(nullptr)
         , existingLayersMenu(nullptr)
         , insertKeyframeDialog(nullptr)
         , zoomDragButton(nullptr)
+        , canvas(nullptr)
         , fps(1)
         , dragInProgress(false)
         , dragWasSuccessful(false)
@@ -95,22 +93,17 @@ struct KisAnimTimelineFramesView::Private
     QToolButton* addLayersButton;
     KisAction* pinLayerToTimelineAction;
 
-    QToolButton* audioOptionsButton;
-
     KisColorLabelSelectorWidgetMenuWrapper* colorSelector;
     QWidgetAction* colorSelectorAction;
     KisColorLabelSelectorWidgetMenuWrapper* multiframeColorSelector;
     QWidgetAction* multiframeColorSelectorAction;
 
-    QMenu* audioOptionsMenu;
-    QAction* openAudioAction;
-    QAction* audioMuteAction;
-    KisSliderSpinBox* volumeSlider;
-
     QMenu* layerEditingMenu;
     QMenu* existingLayersMenu;
     TimelineInsertKeyframeDialog* insertKeyframeDialog;
     KisZoomButton* zoomDragButton;
+
+    KoCanvasBase* canvas;
 
     int fps;
     QPoint initialDragPanValue;
@@ -212,51 +205,6 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
-    /********** Audio Channel Menu *******************************************************/
-
-    m_d->audioOptionsButton = new QToolButton(this);
-    m_d->audioOptionsButton->setAutoRaise(true);
-    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
-    m_d->audioOptionsButton->setIconSize(QSize(22, 22));
-    m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
-
-    m_d->audioOptionsMenu = new QMenu(this);
-    m_d->audioOptionsMenu->addSection(i18n("Edit Audio:"));
-    m_d->audioOptionsMenu->addSeparator();
-
-#ifndef HAVE_QT_MULTIMEDIA
-    m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
-#endif
-
-    m_d->openAudioAction = new QAction("XXX", this);
-    connect(m_d->openAudioAction, SIGNAL(triggered()), this, SLOT(slotSelectAudioChannelFile()));
-    m_d->audioOptionsMenu->addAction(m_d->openAudioAction);
-
-    m_d->audioMuteAction = new QAction(i18nc("@item:inmenu", "Mute"), this);
-    m_d->audioMuteAction->setCheckable(true);
-    connect(m_d->audioMuteAction, SIGNAL(triggered(bool)), SLOT(slotAudioChannelMute(bool)));
-
-    m_d->audioOptionsMenu->addAction(m_d->audioMuteAction);
-    m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio"), this, SLOT(slotAudioChannelRemove()));
-
-    m_d->audioOptionsMenu->addSeparator();
-
-    m_d->volumeSlider = new KisSliderSpinBox(this);
-    m_d->volumeSlider->setRange(0, 100);
-    m_d->volumeSlider->setSuffix(i18n("%"));
-    m_d->volumeSlider->setPrefix(i18nc("@item:inmenu, slider", "Volume:"));
-    m_d->volumeSlider->setSingleStep(1);
-    m_d->volumeSlider->setPageStep(10);
-    m_d->volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
-
-    connect(m_d->volumeSlider, SIGNAL(valueChanged(int)), SLOT(slotAudioVolumeChanged(int)));
-
-    QWidgetAction *volumeAction = new QWidgetAction(m_d->audioOptionsMenu);
-    volumeAction->setDefaultWidget(m_d->volumeSlider);
-    m_d->audioOptionsMenu->addAction(volumeAction);
-
-    m_d->audioOptionsButton->setMenu(m_d->audioOptionsMenu);
-
     /********** Frame Editing Context Menu ***********************************************/
 
     m_d->colorSelector = new KisColorLabelSelectorWidgetMenuWrapper(this);
@@ -356,9 +304,6 @@ void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
             this, SLOT(slotUpdateInfiniteFramesCount()));
-
-    connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
-            this, SLOT(slotUpdateAudioActions()));
     
     connect(m_d->model, SIGNAL(requestTransferSelectionBetweenRows(int,int)),
             this, SLOT(slotTryTransferSelectionBetweenRows(int,int)));
@@ -367,7 +312,6 @@ void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
-    slotUpdateAudioActions();
 }
 
 void KisAnimTimelineFramesView::setActionManager(KisActionManager *actionManager)
@@ -436,7 +380,7 @@ void KisAnimTimelineFramesView::setActionManager(KisActionManager *actionManager
         connect(action, SIGNAL(triggered()), SLOT(slotSetEndTimeToCurrentPosition()));
 
         action = m_d->actionMan->createAction("update_playback_range");
-        connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlackbackRange()));
+        connect(action, SIGNAL(triggered()), SLOT(slotUpdatePlaybackRange()));
 
         action = m_d->actionMan->actionByName("pin_to_timeline");
         m_d->pinLayerToTimelineAction = action;
@@ -453,13 +397,11 @@ void KisAnimTimelineFramesView::updateGeometries()
     const int minimalSize = availableHeight - 2 * margin;
 
     resizeToMinimalSize(m_d->addLayersButton, minimalSize);
-    resizeToMinimalSize(m_d->audioOptionsButton, minimalSize);
     resizeToMinimalSize(m_d->zoomDragButton, minimalSize);
 
     int x = 2 * margin;
     int y = (availableHeight - minimalSize) / 2;
     m_d->addLayersButton->move(x, 2 * y);
-    m_d->audioOptionsButton->move(x + minimalSize + 2 * margin, 2 * y);
 
     const int availableWidth = m_d->layersHeader->width();
 
@@ -469,13 +411,22 @@ void KisAnimTimelineFramesView::updateGeometries()
 
 void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 {
-    horizontalScrollBar()->setEnabled(canvas != nullptr);
+    if (m_d->canvas) {
+        KisCanvas2* canvas2 = dynamic_cast<KisCanvas2*>(m_d->canvas);
+        if (canvas2) {
+            KisCanvasAnimationState* state = canvas2->animationState();
+            state->disconnect(this);
+        }
+    }
+
+    m_d->canvas = canvas;
+
+    horizontalScrollBar()->setEnabled(m_d->canvas != nullptr);
 }
 
 void KisAnimTimelineFramesView::slotUpdateIcons()
 {
     m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add-22"));
-    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
 }
 
@@ -562,10 +513,6 @@ void KisAnimTimelineFramesView::slotSelectionChanged()
         range = KisTimeSpan::fromTimeWithDuration(minColumn, maxColumn - minColumn + 1);
     }
 
-    if (m_d->model->isPlaybackPaused()) {
-        m_d->model->stopPlayback();
-    }
-
     m_d->model->setPlaybackRange(range);
 }
 
@@ -591,15 +538,15 @@ void KisAnimTimelineFramesView::slotTryTransferSelectionBetweenRows(int fromRow,
 
 void KisAnimTimelineFramesView::slotSetStartTimeToCurrentPosition()
 {
-     m_d->model->setFullClipRangeStart(this->currentIndex().column());
+     m_d->model->setDocumentClipRangeStart(this->currentIndex().column());
 }
 
 void KisAnimTimelineFramesView::slotSetEndTimeToCurrentPosition()
 {
-    m_d->model->setFullClipRangeEnd(this->currentIndex().column());
+    m_d->model->setDocumentClipRangeEnd(this->currentIndex().column());
 }
 
-void KisAnimTimelineFramesView::slotUpdatePlackbackRange()
+void KisAnimTimelineFramesView::slotUpdatePlaybackRange()
 {
     QSet<int> rows;
     int minColumn = 0;
@@ -607,8 +554,8 @@ void KisAnimTimelineFramesView::slotUpdatePlackbackRange()
 
     calculateSelectionMetrics(minColumn, maxColumn, rows);
 
-    m_d->model->setFullClipRangeStart(minColumn);
-    m_d->model->setFullClipRangeEnd(maxColumn);
+    m_d->model->setDocumentClipRangeStart(minColumn);
+    m_d->model->setDocumentClipRangeEnd(maxColumn);
 }
 
 void KisAnimTimelineFramesView::slotUpdateInfiniteFramesCount()
@@ -646,8 +593,9 @@ void KisAnimTimelineFramesView::slotDataChanged(const QModelIndex &topLeft, cons
         selectedColumn = index.column();
     }
 
-    if (selectedColumn != index.column() && !m_d->dragInProgress) {
-        int row= index.isValid() ? index.row() : 0;
+    if (selectedColumn != index.column() && !m_d->dragInProgress && !m_d->model->isScrubbing()) {
+        int row = index.isValid() ? index.row() : 0;
+        // Todo: This is causing double audio pushes. We should fix this eventually.
         selectionModel()->setCurrentIndex(m_d->model->index(row, selectedColumn), QItemSelectionModel::ClearAndSelect);
     }
 }
@@ -709,14 +657,15 @@ void KisAnimTimelineFramesView::slotLayerContextMenuRequested(const QPoint &glob
 
 void KisAnimTimelineFramesView::slotAddBlankFrame()
 {
-    QModelIndex index = currentIndex();
-    if (!index.isValid() ||
-        !m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) {
-
-        return;
+    QModelIndexList selectedIndices = calculateSelectionSpan(false);
+    Q_FOREACH(const QModelIndex &index, selectedIndices) {
+        if (!index.isValid() ||
+            !m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) {
+            selectedIndices.removeOne(index);
+        }
     }
 
-    m_d->model->createFrame(index);
+    m_d->model->createFrame(selectedIndices);
 }
 
 void KisAnimTimelineFramesView::slotAddDuplicateFrame()
@@ -802,7 +751,7 @@ void KisAnimTimelineFramesView::slotSelectAudioChannelFile()
     const QFileInfo info(result);
 
     if (info.exists()) {
-        m_d->model->setAudioChannelFileName(info.absoluteFilePath());
+        m_d->model->setAudioChannelFileName(info);
     }
 }
 
@@ -818,41 +767,7 @@ void KisAnimTimelineFramesView::slotAudioChannelMute(bool value)
 void KisAnimTimelineFramesView::slotAudioChannelRemove()
 {
     if (!m_d->model) return;
-    m_d->model->setAudioChannelFileName(QString());
-}
-
-void KisAnimTimelineFramesView::slotUpdateAudioActions()
-{
-    if (!m_d->model) return;
-
-    const QString currentFile = m_d->model->audioChannelFileName();
-
-    if (currentFile.isEmpty()) {
-        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Open audio..."));
-    } else {
-        QFileInfo info(currentFile);
-        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Change audio (%1)...", info.fileName()));
-    }
-
-    m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
-
-    QIcon audioIcon;
-    if (currentFile.isEmpty()) {
-        audioIcon = KisIconUtils::loadIcon("audio-none");
-    } else {
-        if (m_d->model->isAudioMuted()) {
-            audioIcon = KisIconUtils::loadIcon("audio-volume-mute");
-        } else {
-            audioIcon = KisIconUtils::loadIcon("audio-volume-high");
-        }
-    }
-
-    m_d->audioOptionsButton->setIcon(audioIcon);
-
-    m_d->volumeSlider->setEnabled(!m_d->model->isAudioMuted());
-
-    KisSignalsBlocker b(m_d->volumeSlider);
-    m_d->volumeSlider->setValue(qRound(m_d->model->audioVolume() * 100.0));
+    m_d->model->setAudioChannelFileName(QFileInfo());
 }
 
 void KisAnimTimelineFramesView::slotAudioVolumeChanged(int value)
@@ -942,6 +857,11 @@ void KisAnimTimelineFramesView::calculateActiveLayerSelectedTimes(const QModelIn
 
 bool KisAnimTimelineFramesView::viewportEvent(QEvent *event)
 {
+    // Seems to have been copied over from KisResourceItemListView.
+    // These tooltips currently give bogus info (empty thumbnail and resource location), so removed for now.
+    // TODO: Implement meaningful tooltips if there's demand, probably including frame thumbnails.
+
+    /*
     if (event->type() == QEvent::ToolTip && model()) {
         QHelpEvent *he = static_cast<QHelpEvent *>(event);
         QModelIndex index = model()->buddy(indexAt(he->pos()));
@@ -953,6 +873,7 @@ bool KisAnimTimelineFramesView::viewportEvent(QEvent *event)
             return true;
         }
     }
+    */
 
     return QTableView::viewportEvent(event);
 }
@@ -986,6 +907,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 
             model()->setData(index, true, KisAnimTimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, KisAnimTimelineFramesModel::ActiveFrameRole);
+            model()->setData(index, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
             setCurrentIndex(index);
 
             if (model()->data(index, KisAnimTimelineFramesModel::FrameExistsRole).toBool() ||
@@ -1062,7 +984,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
             menu.exec(event->globalPos());
         }
         
-    } else if (event->button() == Qt::MidButton) {
+    } else if (event->button() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(event->pos()));
         if (index.isValid()) {
             QStyleOptionViewItem option = viewOptions();
@@ -1137,7 +1059,7 @@ void KisAnimTimelineFramesView::mouseMoveEvent(QMouseEvent *e)
             verticalScrollBar()->setValue(offset.y() / height);
         }
         e->accept();
-    } else if (e->buttons() == Qt::MidButton) {
+    } else if (e->buttons() == Qt::MiddleButton) {
         QModelIndex index = model()->buddy(indexAt(e->pos()));
         if (index.isValid()) {
             QStyleOptionViewItem option = viewOptions();
@@ -1390,6 +1312,9 @@ void KisAnimTimelineFramesView::currentChanged(const QModelIndex &current, const
     if (previous.column() != current.column()) {
         m_d->model->setData(previous, false, KisAnimTimelineFramesModel::ActiveFrameRole);
         m_d->model->setData(current, true, KisAnimTimelineFramesModel::ActiveFrameRole);
+        if ( current.column() != m_d->model->currentTime() ) {
+            m_d->model->setData(current, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
+        }
     }
 }
 
@@ -1535,6 +1460,7 @@ void KisAnimTimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireC
 {
     QModelIndexList indexes;
 
+    // Populate indices..
     if (!entireColumn) {
         Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
             if (m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) {
@@ -1552,28 +1478,7 @@ void KisAnimTimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireC
         }
     }
     
-    
     if (!indexes.isEmpty()) {
-        // add extra columns to the end of the timeline if we are adding hold frames
-        // they will be truncated if we don't do this
-        if (count > 0) {
-            // Scan all the layers and find out what layer has the most keyframes
-            // only keep a reference of layer that has the most keyframes
-            int keyframesInLayerNode = 0;
-            Q_FOREACH (const QModelIndex &index, indexes) {
-                KisNodeSP layerNode = m_d->model->nodeAt(index);
-
-                KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-                if (!channel) continue;
-
-                if (keyframesInLayerNode < channel->allKeyframeTimes().count()) {
-                   keyframesInLayerNode = channel->allKeyframeTimes().count();
-                }
-            }
-            m_d->model->setLastVisibleFrame(m_d->model->columnCount() + count*keyframesInLayerNode);
-        }
-
-
         m_d->model->insertHoldFrames(indexes, count);
 
         // Fan selection based on insertion or deletion.

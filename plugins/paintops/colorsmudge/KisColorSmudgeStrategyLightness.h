@@ -9,7 +9,7 @@
 
 #include "KisColorSmudgeStrategyBase.h"
 #include "kis_painter.h"
-#include "kis_pressure_paint_thickness_option.h"
+#include "KisPaintThicknessOptionData.h"
 
 class KisColorSmudgeStrategyLightness : public KisColorSmudgeStrategyBase
 {
@@ -18,7 +18,7 @@ public:
     KisColorSmudgeStrategyLightness(KisPainter *painter,
                                     bool smearAlpha,
                                     bool useDullingMode, 
-                                    KisPressurePaintThicknessOption::ThicknessMode thicknessMode);
+                                    KisPaintThicknessOptionData::ThicknessMode thicknessMode);
 
     void initializePainting() override;
 
@@ -47,7 +47,7 @@ private:
     DabColoringStrategyMask m_coloringStrategy;
     bool m_smearAlpha {true};
     KisPainter *m_initializationPainter {nullptr};
-    KisPressurePaintThicknessOption::ThicknessMode m_thicknessMode;
+    KisPaintThicknessOptionData::ThicknessMode m_thicknessMode;
 };
 
 

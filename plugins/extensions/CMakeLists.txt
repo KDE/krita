@@ -15,6 +15,8 @@ add_subdirectory( waveletdecompose )
 add_subdirectory( pykrita )
 add_subdirectory( qmic )
 add_subdirectory( buginfo )
+add_subdirectory( samplescreencolor )
+add_subdirectory( dbexplorer )
 
 if (ANDROID)
     add_subdirectory( spensettings )

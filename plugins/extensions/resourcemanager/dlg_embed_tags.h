@@ -39,4 +39,4 @@ private:
     QList<int> m_selectedTagIds;
 };
 
-#endif // KOBUNDLECREATIONWIDGET_H
+#endif // DLG_EMBED_TAGS_H

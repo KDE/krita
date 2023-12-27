@@ -29,6 +29,7 @@ struct KisAllResourcesModel::Private {
     QString resourceType;
     int columnCount {StorageActive};
     int cachedRowCount {-1};
+    int externalResourcesRemovedCount {0};
 };
 
 KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject *parent)
@@ -56,7 +57,6 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        ",      resources.name\n"
                                        ",      resources.filename\n"
                                        ",      resources.tooltip\n"
-                                       ",      resources.thumbnail\n"
                                        ",      resources.status\n"
                                        ",      resources.md5sum\n"
                                        ",      storages.location\n"
@@ -70,8 +70,8 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        "AND    resources.storage_id = storages.id\n"
                                        "AND    resource_types.name = :resource_type\n"
                                        "GROUP BY resources.name\n"
-                                       ", resources.filename\n"
-                                       ", resources.md5sum\n"
+                                       ",        resources.filename\n"
+                                       ",        resources.md5sum\n"
                                        "ORDER BY resources.id");
     if (!r) {
         qWarning() << "Could not prepare KisAllResourcesModel query" << d->resourcesQuery.lastError();
@@ -115,12 +115,11 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
 
 QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    QVariant v = QVariant();
     if (role != Qt::DisplayRole) {
-        return v;
+        return {};
     }
     if (orientation == Qt::Horizontal) {
-        switch(section) {
+        switch (section) {
         case Id:
             return i18n("Id");
         case StorageId:
@@ -145,11 +144,19 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
             return i18n("Storage Active");
         case MD5:
             return i18n("md5sum");
+        case Tags:
+            return i18n("Tags");
+        case LargeThumbnail:
+            return i18n("Large Thumbnail");
+        case Dirty:
+            return i18n("Dirty");
+        case MetaData:
+            return i18n("Metadata");
         default:
             return QString::number(section);
         }
     }
-    return v;
+    return {};
 }
 
 bool KisAllResourcesModel::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -487,7 +494,7 @@ bool KisAllResourcesModel::updateResource(KoResourceSP resource)
     }
     bool r = resetQuery();
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index, {Qt::EditRole});
+    emit dataChanged(index, index);
     return r;
 }
 
@@ -502,10 +509,15 @@ bool KisAllResourcesModel::reloadResource(KoResourceSP resource)
         qWarning() << "Failed to reload resource" << resource;
         return false;
     }
-    bool r = resetQuery();
+
+    /**
+     * We don't have to call reset query here, because reloading a resource
+     * doesn't change any database content.
+     */
+
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index, {Qt::EditRole});
-    return r;
+    emit dataChanged(index, index);
+    return true;
 }
 
 bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &name)
@@ -521,7 +533,7 @@ bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &
     }
     bool r = resetQuery();
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index, {Qt::EditRole});
+    emit dataChanged(index, index);
     return r;
 }
 
@@ -572,7 +584,9 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
     QVector<KisTagSP> tags;
     while (q.next()) {
         KisTagSP tag = KisResourceLocator::instance()->tagForUrl(q.value(0).toString(), d->resourceType);
-        tags << tag;
+        if (tag && tag->valid()) {
+            tags << tag;
+        }
     }
     return tags;
 }
@@ -593,13 +607,21 @@ int KisAllResourcesModel::rowCount(const QModelIndex &parent) const
          */
 
         QSqlQuery q;
-        q.prepare("SELECT COUNT(DISTINCT resources.name || resources.filename || resources.md5sum)\n"
+        bool r = q.prepare("SELECT COUNT(DISTINCT resources.name || resources.filename || resources.md5sum)\n"
                   "FROM   resources\n"
                   ",      resource_types\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n");
+        if (!r) {
+            qWarning() << "Could not prepare all resources rowcount query" << q.lastError();
+            return 0;
+        }
         q.bindValue(":resource_type", d->resourceType);
-        q.exec();
+        r = q.exec();
+        if (!r) {
+            qWarning() << "Could not execute all resources rowcount query" << q.lastError() << q.boundValues();
+            return 0;
+        }
         q.first();
 
         const_cast<KisAllResourcesModel*>(this)->d->cachedRowCount = q.value(0).toInt();
@@ -645,7 +667,14 @@ void KisAllResourcesModel::beginExternalResourceRemove(const QString &resourceTy
 
     Q_FOREACH (int resourceId, resourceIds) {
         const QModelIndex index = indexForResourceId(resourceId);
-        beginRemoveRows(QModelIndex(), index.row(), index.row());
+        if (index.isValid()) {
+            beginRemoveRows(QModelIndex(), index.row(), index.row());
+            d->externalResourcesRemovedCount++;
+        } else {
+            // it's fine if the index is invalid; it probably means it's one of the duplicates (another resource with the same type and content was already in the database)
+            dbgResources << "KisAllResourcesModel::beginExternalResourceRemove got invalid index" << index << "for resourceId" << resourceId
+                         << "of type" << resourceType << "(possibly the resource was deduplicated via sql query and that's why it doesn't appear in the model)";
+        }
     }
 }
 
@@ -653,8 +682,14 @@ void KisAllResourcesModel::endExternalResourceRemove(const QString &resourceType
 {
     if (resourceType != d->resourceType) return;
 
-    resetQuery();
-    endRemoveRows();
+    if (d->externalResourcesRemovedCount > 0) {
+        resetQuery();
+    }
+    for (int i = 0; i < d->externalResourcesRemovedCount; i++) {
+        endRemoveRows();
+    }
+
+    d->externalResourcesRemovedCount = 0;
 }
 
 void KisAllResourcesModel::slotResourceActiveStateChanged(const QString &resourceType, int resourceId)

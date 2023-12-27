@@ -25,8 +25,7 @@
 const char *progname = "$0" ;
 int verboseFlag = 0 ;
 
-
-void
+static void
 vFatalGeneric(int status,const char *format, va_list args)
 {
   (void) status; /* mark as unused */
@@ -172,7 +171,3 @@ closeout(FILE *f,const char *name)
   FatalUnexpected(_("!Error writing file %s"),name);
   return XCF_ERROR;
 }
-
-        
-      
-    

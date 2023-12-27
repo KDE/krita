@@ -19,7 +19,7 @@ class QIODevice;
 
 /**
  * KisDataManager defines the interface that modules responsible for
- * storing and retrieving data must inmplement. Data modules, like
+ * storing and retrieving data must implement. Data modules, like
  * the tile manager, are responsible for:
  *
  * * Storing undo/redo data
@@ -36,7 +36,7 @@ class KisDataManager : public ACTUAL_DATAMGR
 public:
 
     /**
-     * Create a new datamanger where every pixel will take pixelSize bytes and will be initialized
+     * Create a new datamanager where every pixel will take pixelSize bytes and will be initialized
      * by default with defPixel. The value of defPixel is copied, the caller still owns the pointer.
      *
      * Note that if pixelSize > size of the defPixel array, we will happily read beyond the
@@ -65,9 +65,9 @@ public:
     }
 
     /**
-     * Reguests a memento from the data manager. There is only one memento active
+     * Requests a memento from the data manager. There is only one memento active
      * at any given moment for a given paint device and all and any
-     * write actions on the datamanger builds undo data into this memento
+     * write actions on the datamanager builds undo data into this memento
      * necessary to rollback the transaction.
      */
     inline KisMementoSP getMemento() {

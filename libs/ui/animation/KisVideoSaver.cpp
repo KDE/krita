@@ -57,9 +57,9 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
 
     KisImageAnimationInterface *animation = m_image->animationInterface();
 
-    const int sequenceNumberingOffset = options.sequenceStart;
-    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(sequenceNumberingOffset + options.firstFrame,
-                                                        sequenceNumberingOffset + options.lastFrame);
+    const int sequenceStart = options.sequenceStart;
+    const KisTimeSpan clipRange = KisTimeSpan::fromTimeToTime(options.firstFrame,
+                                                              options.lastFrame);
 
      // export dimensions could be off a little bit, so the last force option tweaks the pixels for the export to work
     const QString exportDimensions =
@@ -77,7 +77,12 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
 
     const QString suffix = resultFileInfo.suffix().toLower();
     const QString palettePath = videoDir.filePath("KritaTempPalettegen_\%06d.png");
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', Qt::SkipEmptyParts);
+#else
     QStringList additionalOptionsList = options.customFFMpegOptions.split(' ', QString::SkipEmptyParts);
+#endif
 
     QScopedPointer<KisFFMpegWrapper> ffmpegWrapper(new KisFFMpegWrapper(this));
     
@@ -88,9 +93,10 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         QStringList complexFilterArgs;
         QStringList args;
         
-        args << "-r" << QString::number(options.frameRate)
-             << "-start_number" << QString::number(clipRange.start())
-             << "-i" << savedFilesMask;        
+        args << "-y" // Auto Confirm...
+             << "-r" << QString::number(options.frameRate) // Frame rate for video...
+             << "-start_number" << QString::number(sequenceStart) << "-start_number_range" << "1"
+             << "-i" << savedFilesMask; // Input frame(s) file mask..
 
         const int lavfiOptionsIndex = additionalOptionsList.indexOf("-lavfi");
 
@@ -102,30 +108,28 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
       
         if ( suffix == "gif" ) {
             paletteArgs << "-r" << QString::number(options.frameRate)
-                        << "-start_number" << QString::number(clipRange.start())
+                        << "-start_number" << QString::number(sequenceStart) << "-start_number_range" << "1"
                         << "-i" << savedFilesMask;
             
             const int paletteOptionsIndex = additionalOptionsList.indexOf("-palettegen");
-            QString pallettegenString = "palettegen";
+            QString palettegenString = "palettegen";
             
             if ( paletteOptionsIndex != -1 ) {
-                pallettegenString = additionalOptionsList.takeAt(paletteOptionsIndex + 1);
+                palettegenString = additionalOptionsList.takeAt(paletteOptionsIndex + 1);
 
                 additionalOptionsList.removeAt( paletteOptionsIndex );
             }
                         
             if (m_image->width() != options.width || m_image->height() != options.height) {
-                paletteArgs << "-vf" << (exportDimensions + "," + pallettegenString );
+                paletteArgs << "-vf" << (exportDimensions + "," + palettegenString );
             } else {
-                paletteArgs << "-vf" << pallettegenString;
+                paletteArgs << "-vf" << palettegenString;
             }
                  
             paletteArgs << "-y" << palettePath;
 
-
             QStringList ffmpegArgs;
             ffmpegArgs << "-v" << "debug"
-                         << "-nostdin"
                          << paletteArgs;
 
             KisFFMpegWrapperSettings ffmpegSettings;
@@ -153,10 +157,12 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             ffmpegWrapper->reset();
         }
         
-        QFileInfo audioFileInfo = animation->audioChannelFileName();
-        if (options.includeAudio && audioFileInfo.exists()) {
-            const int msecStart = clipRange.start() * 1000 / animation->framerate();
-            const int msecDuration = clipRange.duration() * 1000 / animation->framerate();
+        QVector<QFileInfo> audioFiles = m_doc->getAudioTracks();
+        if (options.includeAudio && audioFiles.count() > 0 && audioFiles.first().exists()) {
+            QFileInfo audioFileInfo = audioFiles.first();
+            const int msecPerFrame = (1000 / animation->framerate());
+            const int msecStart = msecPerFrame * clipRange.start();
+            const int msecDuration = msecPerFrame * clipRange.duration();
 
             const QTime startTime = QTime::fromMSecsSinceStartOfDay(msecStart);
             const QTime durationTime = QTime::fromMSecsSinceStartOfDay(msecDuration);
@@ -181,7 +187,8 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         
         args << additionalOptionsList;
 
-        dbgFile << "savedFilesMask" << savedFilesMask 
+        dbgFile << "savedFilesMask" << savedFilesMask
+                << "save files offset" << sequenceStart
                 << "start" << QString::number(clipRange.start()) 
                 << "duration" << clipRange.duration();
 

@@ -56,7 +56,7 @@ public:
     const QGradient *gradient() const;
 
     /// reimplemented from KoShapeBackground
-    void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, const QPainterPath &fillPath) const override;
 private:
     class Private;
     QSharedDataPointer<Private> d;

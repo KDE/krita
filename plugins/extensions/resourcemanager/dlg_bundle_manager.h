@@ -1,5 +1,6 @@
 ﻿/*
  *  SPDX-FileCopyrightText: 2014 Victor Lafon metabolic.ewilan @hotmail.fr
+ *  SPDX-FileCopyrightText: 2023 Srirupa Datta <srirupa.sps@gmail.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -57,9 +58,13 @@ private Q_SLOTS:
     void addBundle();
     void createBundle();
     void toggleBundle();
+    void editBundle();
 
     void slotModelAboutToBeReset();
     void slotModelReset();
+    void slotRowsRemoved(const QModelIndex &parent, int first, int last);
+    void slotRowsInserted(const QModelIndex &parent, int first, int last);
+
     void currentCellSelectedChanged(QModelIndex current, QModelIndex previous);
 
 private:

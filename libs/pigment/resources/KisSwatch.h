@@ -35,7 +35,6 @@ public:
 
     bool isValid() const { return m_valid; }
 
-
     void writeToStream(QDataStream& stream, const QString& groupName, int originalRow , int originalColumn);
     static KisSwatch fromByteArray(QByteArray& data, QString &groupName, int &originalRow, int &originalColumn);
     static KisSwatch fromByteArray(QByteArray &data);

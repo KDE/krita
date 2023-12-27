@@ -17,7 +17,7 @@
 #include "kis_action_registry.h"
 #include <KSharedConfig>
 #include <KConfigGroup>
-
+#include <KisCursorOverrideLock.h>
 
 
 QKeySequence primarySequence(const QList<QKeySequence> &sequences)
@@ -48,7 +48,7 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
         m_shortcutsEditor->undo();
     }
 
-    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+    KisCursorOverrideLock cursorLock(Qt::WaitCursor);
     m_shortcutsEditor->clearCollections();
 
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
@@ -64,8 +64,6 @@ void KisShortcutsDialog::KisShortcutsDialogPrivate::changeShortcutScheme(const Q
         m_shortcutsEditor->addCollection(it.value(), it.key());
         it++;
     }
-
-    QApplication::restoreOverrideCursor();
 }
 
 void KisShortcutsDialog::KisShortcutsDialogPrivate::undo()

@@ -417,7 +417,7 @@ void KisTiledDataManagerTest::testPurgeHistory()
     dm.purgeHistory(memento1);
 
     /**
-     * Nothing nas changed in the visible state of the data manager
+     * Nothing has changed in the visible state of the data manager
      */
 
     tile00 = dm.getTile(0, 0, false);
@@ -983,7 +983,7 @@ void KisTiledDataManagerTest::stressTestExtentsColumn()
     QVERIFY(column.max() < column.min()); // really empty :)
 }
 
-void KisTiledDataManagerTest::benchmaskQRegion()
+void KisTiledDataManagerTest::benchmarkQRegion()
 {
     QVector<QRect> rects;
 
@@ -1013,7 +1013,7 @@ void KisTiledDataManagerTest::benchmaskQRegion()
 }
 
 #include "KisRegion.h"
-void KisTiledDataManagerTest::benchmaskKisRegion()
+void KisTiledDataManagerTest::benchmarkKisRegion()
 {
     QVector<QRect> rects;
 
@@ -1048,7 +1048,7 @@ inline bool findPoint (const QPoint &pt, const QVector<QRect> &rects)
     return false;
 }
 
-void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
+void KisTiledDataManagerTest::benchmarkOverlappedKisRegion()
 {
     QVector<QRect> rects;
 
@@ -1081,7 +1081,7 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
     KisRegion::approximateOverlappingRects(rects, 64);
 
     qDebug() << "deoverlapped rects:" << ppVar(originalSize) << "-->" << ppVar(rects.size());
-    qDebug() << "deoverlaping time:" << timer.restart() << "ms";
+    qDebug() << "deoverlapping time:" << timer.restart() << "ms";
 
     KisRegion region(rects);
 
@@ -1099,7 +1099,7 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
     /// very slow sanity check for invariant: "all source rects are
     /// represented in the deoverlapped set of rects"
 
-    QVector<QRect> comressedRects = region.rects();
+    QVector<QRect> compressedRects = region.rects();
     int i = 0;
     Q_FOREACH(const QRect &rc, originalRects) {
         if (i % 1000 == 0) {
@@ -1108,7 +1108,7 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
 
         for (int y = rc.y(); y <= rc.bottom(); ++y) {
             for (int x = rc.x(); x <= rc.right(); ++x) {
-                QVERIFY(findPoint(QPoint(x, y), comressedRects));
+                QVERIFY(findPoint(QPoint(x, y), compressedRects));
             }
         }
         i++;

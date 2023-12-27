@@ -16,7 +16,7 @@ class KRITAFLAKE_EXPORT KoShapeConnectionChangeCommand : public KUndo2Command
 {
 public:
     /**
-     * Creates command to connect aconnection shape to a shape
+     * Creates command to connect a connection shape to a shape
      * @param connection the connection shape to connect to the shape
      * @param connectionHandle the handle of the connection to connect to
      * @param oldConnectedShape the old shape we were connected to

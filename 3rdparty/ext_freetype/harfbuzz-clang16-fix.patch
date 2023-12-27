@@ -1,0 +1,122 @@
+From d88269c827895b38f99f7cf741fa60210d4d5169 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Storsj=C3=B6?= <martin@martin.st>
+Date: Fri, 28 Oct 2022 22:17:15 +0300
+Subject: [PATCH] freetype: Fix function signatures to match without casts
+
+Clang 16 has got a new stricter warning for casts of function types
+(see https://github.com/llvm/llvm-project/commit/1aad641c793090b4d036c03e737df2ebe2c32c57).
+
+This new warning gets included as part of the existing error
+diagnostic setting of -Wcast-function-type.
+
+This fixes errors like these:
+
+../src/hb-ft.cc:1011:34: error: cast from 'void (*)(FT_Face)' (aka 'void (*)(FT_FaceRec_ *)') to 'FT_Generic_Finalizer' (aka 'void (*)(void *)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+    ft_face->generic.finalizer = (FT_Generic_Finalizer) hb_ft_face_finalize;
+                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+---
+ src/hb-ft.cc | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/src/hb-ft.cc b/src/hb-ft.cc
+index bcc1dd080f5..1626b9a1500 100644
+--- a/src/hb-ft.cc
++++ b/src/hb-ft.cc
+@@ -732,16 +732,18 @@ hb_ft_get_font_h_extents (hb_font_t *font HB_UNUSED,
+ 
+ static int
+ _hb_ft_move_to (const FT_Vector *to,
+-		hb_draw_session_t *drawing)
++		void *arg)
+ {
++  hb_draw_session_t *drawing = (hb_draw_session_t *) arg;
+   drawing->move_to (to->x, to->y);
+   return FT_Err_Ok;
+ }
+ 
+ static int
+ _hb_ft_line_to (const FT_Vector *to,
+-		hb_draw_session_t *drawing)
++		void *arg)
+ {
++  hb_draw_session_t *drawing = (hb_draw_session_t *) arg;
+   drawing->line_to (to->x, to->y);
+   return FT_Err_Ok;
+ }
+@@ -749,8 +751,9 @@ _hb_ft_line_to (const FT_Vector *to,
+ static int
+ _hb_ft_conic_to (const FT_Vector *control,
+ 		 const FT_Vector *to,
+-		 hb_draw_session_t *drawing)
++		 void *arg)
+ {
++  hb_draw_session_t *drawing = (hb_draw_session_t *) arg;
+   drawing->quadratic_to (control->x, control->y,
+ 			 to->x, to->y);
+   return FT_Err_Ok;
+@@ -760,8 +763,9 @@ static int
+ _hb_ft_cubic_to (const FT_Vector *control1,
+ 		 const FT_Vector *control2,
+ 		 const FT_Vector *to,
+-		 hb_draw_session_t *drawing)
++		 void *arg)
+ {
++  hb_draw_session_t *drawing = (hb_draw_session_t *) arg;
+   drawing->cubic_to (control1->x, control1->y,
+ 		     control2->x, control2->y,
+ 		     to->x, to->y);
+@@ -787,10 +791,10 @@ hb_ft_get_glyph_shape (hb_font_t *font HB_UNUSED,
+     return;
+ 
+   const FT_Outline_Funcs outline_funcs = {
+-    (FT_Outline_MoveToFunc) _hb_ft_move_to,
+-    (FT_Outline_LineToFunc) _hb_ft_line_to,
+-    (FT_Outline_ConicToFunc) _hb_ft_conic_to,
+-    (FT_Outline_CubicToFunc) _hb_ft_cubic_to,
++    _hb_ft_move_to,
++    _hb_ft_line_to,
++    _hb_ft_conic_to,
++    _hb_ft_cubic_to,
+     0, /* shift */
+     0, /* delta */
+   };
+@@ -975,8 +979,9 @@ hb_ft_face_create_referenced (FT_Face ft_face)
+ }
+ 
+ static void
+-hb_ft_face_finalize (FT_Face ft_face)
++hb_ft_face_finalize (void *arg)
+ {
++  FT_Face ft_face = (FT_Face) arg;
+   hb_face_destroy ((hb_face_t *) ft_face->generic.data);
+ }
+ 
+@@ -1008,7 +1013,7 @@ hb_ft_face_create_cached (FT_Face ft_face)
+       ft_face->generic.finalizer (ft_face);
+ 
+     ft_face->generic.data = hb_ft_face_create (ft_face, nullptr);
+-    ft_face->generic.finalizer = (FT_Generic_Finalizer) hb_ft_face_finalize;
++    ft_face->generic.finalizer = hb_ft_face_finalize;
+   }
+ 
+   return hb_face_reference ((hb_face_t *) ft_face->generic.data);
+@@ -1217,8 +1222,9 @@ get_ft_library ()
+ }
+ 
+ static void
+-_release_blob (FT_Face ft_face)
++_release_blob (void *arg)
+ {
++  FT_Face ft_face = (FT_Face) arg;
+   hb_blob_destroy ((hb_blob_t *) ft_face->generic.data);
+ }
+ 
+@@ -1271,7 +1277,7 @@ hb_ft_font_set_funcs (hb_font_t *font)
+ 
+ 
+   ft_face->generic.data = blob;
+-  ft_face->generic.finalizer = (FT_Generic_Finalizer) _release_blob;
++  ft_face->generic.finalizer = _release_blob;
+ 
+   _hb_ft_font_set_funcs (font, ft_face, true);
+   hb_ft_font_set_load_flags (font, FT_LOAD_DEFAULT | FT_LOAD_NO_HINTING);

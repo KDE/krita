@@ -654,7 +654,16 @@ KisFilterConfigurationSP KisHalftoneFilter::defaultConfiguration(KisResourcesInt
     filterConfig->setBackgroundOpacity("intensity_", KisHalftoneFilterConfiguration::defaultBackgroundOpacity());
     
     // Alpha
-    filterConfig->setGeneratorId("alpha_", "");
+    filterConfig->setGeneratorId("alpha_", defaultGeneratorId);
+    if (defaultGenerator) {
+        KisFilterConfigurationSP defaultGeneratorConfiguration =
+            defaultGenerator->defaultConfiguration(resourcesInterface);
+        if (defaultGeneratorId == "screentone") {
+            defaultGeneratorConfiguration->setProperty("rotation", 45.0);
+            defaultGeneratorConfiguration->setProperty("contrast", 50.0);
+        }
+        filterConfig->setGeneratorConfiguration("alpha_", defaultGeneratorConfiguration);
+    }
     filterConfig->setHardness("alpha_", KisHalftoneFilterConfiguration::defaultHardness());
     filterConfig->setInvert("alpha_", KisHalftoneFilterConfiguration::defaultInvert());
 

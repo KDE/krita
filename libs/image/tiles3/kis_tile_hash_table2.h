@@ -329,7 +329,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
         /// when invalid tile index is requested, just return a
         /// detached tile with the default data
 
-        /// we pretent as if this tile has already existed, it will
+        /// we pretend as if this tile has already existed, it will
         /// allow the calling code to avoid modifying the extent
         /// manager
         newTile = false;
@@ -408,7 +408,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
         /// when invalid tile index is requested, just return a
         /// detached tile with the default data
 
-        /// we pretent as if this tile hasn't existed, it will
+        /// we pretend as if this tile hasn't existed, it will
         /// allow the calling code to avoid modifying the extent
         /// manager (note, that is opposite to what happens in
         /// getTileLazy())

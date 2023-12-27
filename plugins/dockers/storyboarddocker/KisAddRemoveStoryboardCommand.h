@@ -13,7 +13,7 @@
 
 class StoryboardModel;
 
-//For addition of Storyboardds.
+//For addition of Storyboards.
 class KisAddStoryboardCommand : public KUndo2Command
 {
 public:
@@ -31,7 +31,7 @@ private:
     StoryboardModel *m_model;
 };
 
-//For removal of Storyboardds.
+//For removal of Storyboards.
 class KisRemoveStoryboardCommand : public KUndo2Command
 {
 public:
@@ -63,7 +63,7 @@ private:
     QScopedPointer<KUndo2Command> m_keyframeCommands;
 };
 
-//For moving of Storyboardds.
+//For moving of Storyboards.
 class KisMoveStoryboardCommand : public KUndo2Command
 {
 public:

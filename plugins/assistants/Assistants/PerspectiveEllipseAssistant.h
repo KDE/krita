@@ -10,20 +10,26 @@
 #include "Ellipse.h"
 #include <QObject>
 
-class PerspectiveEllipseAssistant : public KisPaintingAssistant
+class PerspectiveEllipseAssistant : public KisAbstractPerspectiveGrid, public KisPaintingAssistant
 {
+    Q_OBJECT
 public:
-    PerspectiveEllipseAssistant();
+    PerspectiveEllipseAssistant(QObject * parent = 0);
+    ~PerspectiveEllipseAssistant();
+
+
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
-    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 4; }
     bool isAssistantComplete() const override;
-    
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
-    void endStroke() override;
+
+    // implements KisAbstractPerspectiveGrid
+    bool contains(const QPointF& point) const override;
+    qreal distance(const QPointF& point) const override;
+    bool isActive() const  override;
     
 protected:
     QRect boundingRect() const override;
@@ -31,8 +37,6 @@ protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
-    // creates the convex hull, returns false if it's not a quadrilateral
-    bool quad(QPolygonF& out) const;
 
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut);
@@ -45,18 +49,6 @@ private:
      
     explicit PerspectiveEllipseAssistant(const PerspectiveEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
-
-    mutable QTransform m_cachedTransform;
-    mutable QPolygonF m_cachedPolygon;
-    mutable QPointF m_cachedPoints[4];
-
-
-    QVector<QPointF> pointsToDraw;
-    
-    
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
-    QPointF m_adjustedBrushPosition;
 
     class Private;
     QScopedPointer<Private> d;

@@ -4,16 +4,6 @@
  * SPDX-License-Identifier: BSD-2-Clause
  */
 
-// Get Windows 8 API prototypes and types
-#ifdef WINVER
-#  undef WINVER
-#endif
-#ifdef _WIN32_WINNT
-#  undef _WIN32_WINNT
-#endif
-#define WINVER 0x0602
-#define _WIN32_WINNT 0x0602
-
 #include "kis_tablet_support_win8.h"
 
 #include <QApplication>
@@ -280,7 +270,7 @@ struct PenPointerItem
     HANDLE deviceHandle;
     QPointer<QWidget> activeWidget; // Current widget receiving events
     qreal oneOverDpr; // 1 / devicePixelRatio of activeWidget
-    bool widgetIsCaptured; // Current widget is capturing a pen cown event
+    bool widgetIsCaptured; // Current widget is capturing a pen down event
     bool widgetIsIgnored; // Pen events should be ignored until pen up
     bool widgetAcceptsPenEvent; // Whether the widget accepts pen events
 

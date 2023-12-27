@@ -133,7 +133,7 @@ ContainerNode *ContainerNode::findContainer(const QString &_name, bool tag)
 
 /*
  * Finds a child container node (not recursively) with the given name and tagname. Explicitly
- * leaves out container widgets specified in the exludeList . Also ensures that the containers
+ * leaves out container widgets specified in the excludeList . Also ensures that the containers
  * belongs to currClient.
  */
 ContainerNode *ContainerNode::findContainer(const QString &name, const QString &tagName,
@@ -452,7 +452,7 @@ void ContainerNode::unplugClient(ContainerClient *client)
                                + client->customElements.count()),
                          mergingIt);
 
-    // unplug all actionslists
+    // unplug all actionlists
 
     ActionListMap::ConstIterator alIt = client->actionLists.constBegin();
     ActionListMap::ConstIterator alEnd = client->actionLists.constEnd();

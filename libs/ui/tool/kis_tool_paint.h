@@ -22,9 +22,10 @@
 
 #include <kis_types.h>
 #include <kis_image.h>
-#include "kis_signal_compressor_with_param.h"
 #include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
+#include <KisOptimizedBrushOutline.h>
+#include "KisAsyncColorSamplerHelper.h"
 
 class QGridLayout;
 class KoCompositeOp;
@@ -73,9 +74,9 @@ protected:
         m_supportOutline = supportOutline;
     }
 
-    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
-                                        const KoPointerEvent *event,
-                                        KisPaintOpSettings::OutlineMode outlineMode);
+    virtual KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
+                                                    const KoPointerEvent *event,
+                                                    KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
     bool isOutlineEnabled() const;
@@ -83,7 +84,7 @@ protected:
     bool isOutlineVisible() const;
     void setOutlineVisible(bool visible);
 
-    bool sampleColor(const QPointF &documentPixel, AlternateAction action);
+    bool isEraser() const;
 
     /// Add the tool-specific layout to the default option widget layout.
     void addOptionWidgetLayout(QLayout *layout);
@@ -109,56 +110,33 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
+    void slotColorPickerRequestedCursor(const QCursor &cursor);
+    void slotColorPickerRequestedCursorReset();
+    void slotColorPickerRequestedOutlineUpdate();
+
     void slotPopupQuickHelp();
 
     void increaseBrushSize();
     void decreaseBrushSize();
     void showBrushSize();
 
-    void activateSampleColorDelayed();
-
-    void slotColorSamplingFinished(KoColor color);
+    void rotateBrushTipClockwise();
+    void rotateBrushTipClockwisePrecise();
+    void rotateBrushTipCounterClockwise();
+    void rotateBrushTipCounterClockwisePrecise();
 
 protected:
     quint8 m_opacity {OPACITY_OPAQUE_U8};
     bool m_paintOutline {false};
     QPointF m_outlineDocPoint;
-    QPainterPath m_currentOutline;
+    KisOptimizedBrushOutline m_currentOutline;
     QRectF m_oldOutlineRect;
-
-    bool m_showColorPreview {false};
-    QRectF m_oldColorPreviewRect;
     QRectF m_oldColorPreviewUpdateRect;
-    QColor m_colorPreviewCurrentColor;
-    bool m_colorPreviewShowComparePlate {false};
-    QRectF m_oldColorPreviewBaseColorRect;
-    QColor m_colorPreviewBaseColor;
 
 private:
-    QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
+    KisOptimizedBrushOutline tryFixBrushOutline(const KisOptimizedBrushOutline &originalOutline);
     void setOpacity(qreal opacity);
-
-    void activateSampleColor(AlternateAction action);
-    void deactivateSampleColor(AlternateAction action);
-    void sampleColorWasOverridden();
-
-    int colorPreviewResourceId(AlternateAction action);
-    std::pair<QRectF, QRectF> colorPreviewDocRect(const QPointF &outlineDocPoint);
-
     bool isSamplingAction(AlternateAction action);
-
-    struct SamplingJob {
-        SamplingJob() {}
-        SamplingJob(QPointF _documentPixel,
-                   AlternateAction _action)
-            : documentPixel(_documentPixel),
-              action(_action) {}
-
-        QPointF documentPixel;
-        AlternateAction action;
-    };
-    void addSamplerJob(const SamplingJob &samplingJob);
-
 private:
 
     bool m_specialHoverModifier {false};
@@ -170,22 +148,20 @@ private:
      * Used as a switch for sampleColor
      */
 
-    // used to skip some of the tablet events and don't update the color that often
-    QTimer m_colorSamplerDelayTimer;
-    AlternateAction delayedAction {AlternateAction::NONE};
-
     bool m_isOutlineEnabled;
     bool m_isOutlineVisible;
     std::vector<int> m_standardBrushSizes;
 
-    KisStrokeId m_samplerStrokeId;
-    int m_samplingResource {0};
-    typedef KisSignalCompressorWithParam<SamplingJob> SamplingCompressor;
-    QScopedPointer<SamplingCompressor> m_colorSamplingCompressor;
-
-    qreal m_localOpacity {1.0};
-    KisPaintOpPresetSP m_localPreset;
+    KisPaintOpPresetSP m_oldPreset;
     qreal m_oldOpacity {1.0};
+    bool m_oldPresetIsDirty {false};
+    int m_oldPresetVersion {-1};
+    KisAsyncColorSamplerHelper m_colorSamplerHelper;
+
+    void tryRestoreOpacitySnapshot();
+
+    struct Private;
+    QScopedPointer<Private> m_d;
 
 Q_SIGNALS:
     void sigPaintingFinished();

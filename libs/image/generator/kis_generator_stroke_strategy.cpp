@@ -26,7 +26,7 @@ KisGeneratorStrokeStrategy::KisGeneratorStrokeStrategy()
     setCanForgetAboutMe(false);
 }
 
-QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<bool> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &region, const KisFilterConfigurationSP filterConfig)
+QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisGeneratorLayerSP layer, QSharedPointer<boost::none_t> cookie, const KisGeneratorSP f, const KisPaintDeviceSP dev, const QRegion &region, const KisFilterConfigurationSP filterConfig)
 {
     using namespace KritaUtils;
 
@@ -49,7 +49,7 @@ QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisG
                     // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
                     const_cast<KisGeneratorLayerSP &>(layer)->setDirtyWithoutUpdate({tile});
 
-                    const_cast<QSharedPointer<bool> &>(cookie).clear();
+                    const_cast<QSharedPointer<boost::none_t> &>(cookie).clear();
                 });
             }
         } else {
@@ -62,7 +62,7 @@ QVector<KisStrokeJobData *>KisGeneratorStrokeStrategy::createJobsData(const KisG
                 // this avoids cyclic loop with KisRecalculateGeneratorLayerJob::run()
                 const_cast<KisGeneratorLayerSP &>(layer)->setDirtyWithoutUpdate({rc});
 
-                const_cast<QSharedPointer<bool>&>(cookie).clear();
+                const_cast<QSharedPointer<boost::none_t>&>(cookie).clear();
             });
         }
     }

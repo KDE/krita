@@ -44,6 +44,7 @@ struct KisPNGOptions {
         , storeAuthor(false)
         , saveAsHDR(false)
         , transparencyFillColor(Qt::white)
+        , downsample(false)
     {}
 
     int compression;
@@ -60,7 +61,7 @@ struct KisPNGOptions {
     bool saveAsHDR;
     QList<const KisMetaData::Filter*> filters;
     QColor transparencyFillColor;
-
+    bool downsample; // Converts to 8 bit on export
 };
 
 /**

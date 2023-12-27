@@ -116,6 +116,7 @@
               <uap:FileType>.heif</uap:FileType>
               <uap:FileType>.jpeg</uap:FileType>
               <uap:FileType>.jpg</uap:FileType>
+              <uap:FileType>.jxl</uap:FileType>
               <uap:FileType>.png</uap:FileType>
               <uap:FileType>.psd</uap:FileType>
               <uap:FileType>.tif</uap:FileType>

@@ -25,7 +25,7 @@ public:
     QString debugName() const override;
 
 Q_SIGNALS:
-    void sigCalcualtionFinished(const QRect &bounds);
+    void sigCalculationFinished(const QRect &bounds);
 
 private:
     KisNodeList m_nodes;

@@ -51,4 +51,4 @@ private :
     Private* const d {nullptr};
 };
 
-#endif /* KISTONECURVEWIDGET_H */
+#endif /* KIS_TONECURVEWIDGET_H */

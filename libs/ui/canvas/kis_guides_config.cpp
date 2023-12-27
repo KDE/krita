@@ -16,15 +16,11 @@
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
 #include "kis_global.h"
+#include <KisStaticInitializer.h>
 
-
-struct KisGuidesConfigStaticRegistrar {
-    KisGuidesConfigStaticRegistrar() {
-        qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
-    }
-};
-static KisGuidesConfigStaticRegistrar __registrar;
-
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
+}
 
 class Q_DECL_HIDDEN KisGuidesConfig::Private
 {
@@ -285,7 +281,7 @@ void KisGuidesConfig::transform(const QTransform &transform)
 {
     if (transform.type() >= QTransform::TxShear) return;
 
-    KisAlgebra2D::DecomposedMatix m(transform);
+    KisAlgebra2D::DecomposedMatrix m(transform);
 
     QTransform t = m.scaleTransform();
 

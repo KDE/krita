@@ -10,13 +10,13 @@
 #if XSIMD_UNIVERSAL_BUILD_PASS
 #include "KoOptimizedPixelDataScalerU8ToU16.h"
 
-template<typename _impl>
-KoOptimizedPixelDataScalerU8ToU16Base *KoOptimizedPixelDataScalerU8ToU16FactoryImpl::create(int channelsPerPixel)
+template<>
+KoOptimizedPixelDataScalerU8ToU16Base *
+KoOptimizedPixelDataScalerU8ToU16FactoryImpl::create<xsimd::current_arch>(
+    int channelsPerPixel)
 {
-    return new KoOptimizedPixelDataScalerU8ToU16<_impl>(channelsPerPixel);
+    return new KoOptimizedPixelDataScalerU8ToU16<xsimd::current_arch>(
+        channelsPerPixel);
 }
-
-template KoOptimizedPixelDataScalerU8ToU16Base *
-KoOptimizedPixelDataScalerU8ToU16FactoryImpl::create<xsimd::current_arch>(int);
 
 #endif // XSIMD_UNIVERSAL_BUILD_PASS

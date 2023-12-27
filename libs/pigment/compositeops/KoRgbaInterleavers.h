@@ -9,13 +9,19 @@
 
 #include <xsimd_extensions/xsimd.hpp>
 
+#if XSIMD_VERSION_MAJOR >= 10
+#error "The interleavers use per-lane zipping semantics, which are not compatible with xsimd 10"
+#endif
+
 using namespace xsimd;
 
 template<typename T, size_t S>
-using enable_sized_t = kernel::detail::enable_sized_t<T, S>;
+using enable_sized_t = typename std::enable_if<sizeof(T) == S, int>::type;
 
 template<typename T, size_t S>
-using enable_sized_integral_t = kernel::detail::enable_sized_integral_t<T, S>;
+using enable_sized_integral_t =
+    typename std::enable_if<std::is_integral<T>::value && sizeof(T) == S,
+                            int>::type;
 
 template<typename T, typename A, size_t S>
 using enable_sized_vector_t = typename std::enable_if<batch<T, A>::size == S, int>::type;
@@ -152,7 +158,8 @@ struct KoRgbaInterleavers<16> {
         const auto t2 = duplicate_high_halves(src1, src2, A{});
         b = exchange_mid_halves(t2, A{});
     }
-#elif XSIMD_WITH_AVX
+#endif
+#if XSIMD_WITH_AVX
     template<bool aligned, typename T, typename A, enable_sized_t<T, 4> = 0>
     static inline void deinterleave(const void *src, batch<T, A> &a, batch<T, A> &b, kernel::requires_arch<avx>)
     {

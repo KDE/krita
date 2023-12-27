@@ -36,8 +36,8 @@ public:
     void setSoftness(qreal softness) override;
 
     bool shouldVectorize() const override;
-    KisBrushMaskApplicatorBase* applicator() override;
-    void resetMaskApplicator(bool forceScalar);
+    KisBrushMaskApplicatorBase *applicator() const override;
+    void setMaskScalarApplicator();
 
 private:
     struct Private;

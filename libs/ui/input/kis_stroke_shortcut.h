@@ -38,7 +38,7 @@ public:
     /**
      * Sets the configuration for this shortcut
      *
-     * \param modifiers keyboard keys that should be holded
+     * \param modifiers keyboard keys that should be held
      *                  for the shortcut to trigger
      * \param buttons mouse buttons that should be pressed (simultaneously)
      *                for the shortcut to trigger

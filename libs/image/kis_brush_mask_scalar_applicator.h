@@ -13,9 +13,6 @@
 #include "kis_global.h"
 #include "kis_random_source.h"
 
-// 3x3 supersampling
-#define SUPERSAMPLING 3
-
 template<class MaskGenerator, typename impl>
 struct KisBrushMaskScalarApplicator : public KisBrushMaskApplicatorBase {
     KisBrushMaskScalarApplicator(MaskGenerator *maskGenerator)
@@ -39,7 +36,11 @@ protected:
         quint8 alphaValue = OPACITY_TRANSPARENT_U8;
         // this offset is needed when brush size is smaller then fixed device size
         int offset = (m_d->device->bounds().width() - rect.width()) * m_d->pixelSize;
-        int supersample = (m_maskGenerator->shouldSupersample() ? SUPERSAMPLING : 1);
+        int supersample = 1;
+        if (m_maskGenerator->shouldSupersample()) {
+            // strengthen supersampling from 3x3 for very small dabs, to smooth out dashed strokes
+            supersample = (m_maskGenerator->shouldSupersample6x6() ? 6 : 3);
+        }
         double invss = 1.0 / supersample;
         int samplearea = pow2(supersample);
         for (int y = rect.y(); y < rect.y() + rect.height(); y++) {

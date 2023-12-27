@@ -63,7 +63,7 @@ private:
     friend class Node;
     /**
      * @brief configuration gives access to the internal configuration object. Must
-     * be used used internally in libkis
+     * be used internally in libkis
      * @return the internal configuration object.
      */
     KisPropertiesConfigurationSP configuration() const;

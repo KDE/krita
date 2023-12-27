@@ -68,8 +68,6 @@ public:
 
     bool allowAsChild(KisNodeSP) const override;
 
-    const KoColorSpace * colorSpace() const override;
-
     bool needProjection() const override;
 
     QIcon icon() const override;
@@ -145,6 +143,9 @@ public:
     void setDecorationsVisible(bool value, bool update) override;
     using KisDecoratedNodeInterface::setDecorationsVisible;
 
+    void handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time) override;
+    void handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time) override;
+
 public Q_SLOTS:
     void slotExternalUpdateOnionSkins();
 
@@ -164,10 +165,9 @@ protected:
 
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
     bool supportsKeyframeChannel(const QString &id) override;
+    KisFrameChangeUpdateRecipe handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time) override;
 
 private:
-    void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());
-
     struct Private;
     Private * const m_d;
 };

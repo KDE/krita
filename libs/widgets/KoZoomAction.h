@@ -161,7 +161,7 @@ public:
      */
     qreal maximumZoom();
     /**
-     * Clamp the zoom value so that mimimumZoom <= zoom <= maximumZoom.
+     * Clamp the zoom value so that minimumZoom <= zoom <= maximumZoom.
      *
      * \param zoom The value to clamp.
      *
@@ -188,6 +188,16 @@ public:
      * \param zoom The maximum zoom to use.
      */
     void setMaximumZoom(qreal zoom);
+    /**
+     * Set the minimum and maximum zoom levels for documents.
+     *
+     * Note that after calling this, any existing KoZoomAction instances
+     * should be recreated.
+     *
+     * \param min The minimum zoom to use.
+     * \param max The maximum zoom to use.
+     */
+    void setMinMaxZoom(qreal min, qreal max);
 
 protected:
     /// Regenerates the action's items

@@ -41,7 +41,6 @@ set(kritaflake_SRCS
     KoShapeContainerModel.cpp
     KoShapeGroup.cpp
     KoShapeManager.cpp
-    KoShapePaintingContext.cpp
     KoMarker.cpp
     KoMarkerCollection.cpp
     KoToolBase.cpp
@@ -59,7 +58,6 @@ set(kritaflake_SRCS
     KoShapeController.cpp
     KoToolSelection.cpp
     KoShapeLayer.cpp
-    KoPostscriptPaintDevice.cpp
     KoInputDevice.cpp
     KoToolManager_p.cpp
     KoToolManager.cpp
@@ -151,6 +149,7 @@ set(kritaflake_SRCS
     commands/KoKeepShapesSelectedCommand.cpp
     commands/KoPathMergeUtils.cpp
     commands/KoAddRemoveShapeCommands.cpp
+    commands/KoShapePaintOrderCommand.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
@@ -193,11 +192,20 @@ set(kritaflake_SRCS
     svg/SvgMeshPatch.cpp
     svg/SvgMeshArray.cpp
 
+    text/KisTofuGlyph.cpp
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
     text/KoSvgTextChunkShape.cpp
     text/KoSvgTextShape.cpp
+    text/KoSvgTextShape_p_glyphs.cpp
+    text/KoSvgTextShape_p_layout.cpp
+    text/KoSvgTextShape_p_output.cpp
+    text/KoSvgTextShapeLayoutFunc_inShape.cpp
+    text/KoSvgTextShapeLayoutFunc_lines.cpp
     text/KoSvgTextShapeMarkupConverter.cpp
+    text/KoFontRegistry.cpp
+    text/KoCssTextUtils.cpp
+    text/KoPolygonUtils.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp
@@ -228,7 +236,26 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritacommand KF5::WidgetsAddons Qt5::Svg KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaflake
+    PUBLIC
+        kritapigment
+        kritawidgetutils
+        kritacommand
+        KF5::WidgetsAddons
+        Qt5::Svg
+        KF5::CoreAddons
+        KF5::ConfigCore
+        KF5::I18n
+        Qt5::Gui
+        Qt5::Xml
+        Boost::boost
+        Freetype::Freetype
+        HarfBuzz::HarfBuzz
+    PRIVATE
+        Raqm::Raqm
+        Fontconfig::Fontconfig
+        libunibreak::libunibreak
+)
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

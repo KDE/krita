@@ -1,6 +1,6 @@
 Since 1999, people have been hacking on Krita. Everyone brought their
 own coding style, their own code conventions, their own likes and
-dislikes. Me, (Boudewijn that is), I like indents of four spaces, and
+dislikes. Me, (Halla that is), I like indents of four spaces, and
 no scope prefixes for variables. However, in the interests of
 consistency, these are the rules new code should adhere to:
 
@@ -51,8 +51,6 @@ C++11 and C++14
 
     * Before using other new features, discuss on #krita so we can expand this list.
 
-    * Our minimum gcc version is 5.5.0, shipped with Ubuntu 16.04
-
 
 Indentation
 
@@ -78,7 +76,7 @@ Initializers
     Note the location of the colon and comma.
 
     It is also preferred to use {}-initialization for class members and
-    glabal namespace scope variables, e.g.
+    global namespace scope variables, e.g.
 
     class Foo
     {
@@ -90,7 +88,7 @@ Initializers
         int SomeGlobalValue {0};
     };
 
-    Since Krita has a long history of usage =-initizalization everywhere, it is **not**
+    Since Krita has a long history of usage =-initialization everywhere, it is **not**
     recommended to use {}-initialization in function bodies, especially, when it results
     in a mix of styles in the same file. You can still use that as an exception to solve
     some specific problems like the most vexing parse.
@@ -135,6 +133,9 @@ Variable/Parameter names
     Variable/parameter names start with a lower case letter. A name composed of different
     words is done in camelBackedStyle.
 
+    Try to avoid abbreviations except for the most common cases, like cs for KoColorSpace. 
+    It's okay for variable names to be long and explicit and derived from the type name.
+
 Designer
 
     Krita has started to use designer. All dialogs and all widgets that have a layout
@@ -171,6 +172,38 @@ Boolean operators
     Use the standard !, !=, ==, && etc style, not the "not", "and" etc. style. Keep krita code
     using one, easily recognizable, C++ style.
 
+Static initializers
+
+    Sometimes we need to declare a static object that performs some actions on Krita
+    loading, e.g. to register Qt's metatype for a Krita type. We have a special macro
+    for that:
+
+    KIS_DECLARE_STATIC_INITIALIZER {
+        qRegisterMetaType<KoResourceSP>("KoResourceSP");
+    }
+
+    What the macro does is basically defining a static variable that is initialized
+    on loading of the library:
+
+    struct KoResourceSPStaticInitializer {
+        KoResourceSPStaticInitializer() {
+            qRegisterMetaType<KoResourceSP>("KoResourceSP");
+        }
+    };
+    static KoResourceSPStaticInitializer __initializer1;
+
+    This macro is usually added to the same .cpp file as the class itself.
+
+    WARNING: do not use this pattern in **plugins**. All Krita's plugins are
+    actually static libraries that are pulled into dynamic .so libraries at the
+    linking stage. It means that all "unused" objects will never be pulled
+    into the final plugin. Instead, do all the initialization in the "plugin"
+    class (the one that is passed to registerPlugin<>() in
+    K_PLUGIN_FACTORY_WITH_JSON).
+
+    The problem can be worked around with `$<LINK_LIBRARY:WHOLE_ARCHIVE,...>`
+    CMake feature, but it is available only since CMake 3.24, so for now
+    just avoid using initializers in plugins.
 
 With Krita now supporting Python scripting, we need guidelines for these as well.
 These guidelines are preliminary and may be further refined in the future.

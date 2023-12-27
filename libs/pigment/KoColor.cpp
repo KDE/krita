@@ -351,77 +351,84 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId)
     return fromXML(elt, channelDepthId, &ok);
 }
 
-KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, bool* ok)
+KoColor KoColor::fromXML(const QDomElement &elt, const QString &channelDepthId, bool *ok)
 {
     *ok = true;
+
     QString modelId;
-    if (elt.tagName() == "CMYK") {
+    QString modelName = elt.tagName();
+    if (modelName == "CMYK") {
         modelId = CMYKAColorModelID.id();
-    } else if (elt.tagName() == "RGB") {
+    } else if (modelName == "RGB") {
         modelId = RGBAColorModelID.id();
-    } else if (elt.tagName() == "sRGB") {
+    } else if (modelName == "sRGB") {
         modelId = RGBAColorModelID.id();
-    } else if (elt.tagName() == "Lab") {
+    } else if (modelName == "Lab") {
         modelId = LABAColorModelID.id();
-    } else if (elt.tagName() == "XYZ") {
+    } else if (modelName == "XYZ") {
         modelId = XYZAColorModelID.id();
-    } else if (elt.tagName() == "Gray") {
+    } else if (modelName == "Gray") {
         modelId = GrayAColorModelID.id();
-    } else if (elt.tagName() == "YCbCr") {
+    } else if (modelName == "YCbCr") {
         modelId = YCbCrAColorModelID.id();
     }
+
+    KoColorSpaceRegistry *colorSpaceRegistry = KoColorSpaceRegistry::instance();
+
     QString profileName;
-    if (elt.tagName() != "sRGB") {
-        profileName = elt.attribute("space", "");
-        if (!KoColorSpaceRegistry::instance()->profileByName(profileName)) {
-            profileName.clear();
-        }
-    } else {
-        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+    if (modelName == "sRGB") {
+        const KoColorProfile *profile = colorSpaceRegistry->p709SRGBProfile();
         if (profile) {
             profileName = profile->name();
         }
-    }
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, channelDepthId, profileName);
-    if (cs == 0) {
-        QList<KoID> list =  KoColorSpaceRegistry::instance()->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
-        if (!list.empty()) {
-            cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, list[0].id(), profileName);
-        }
-    }
-    if (cs) {
-        KoColor c(cs);
-        // TODO: Provide a way for colorFromXML() to notify the caller if parsing failed. Currently it returns default values on failure.
-        cs->colorFromXML(c.data(), elt);
-
-        QDomElement e = elt;
-        while (!e.nextSiblingElement("metadata").isNull()) {
-            e = e.nextSiblingElement("metadata");
-
-            const QString name = e.attribute("name");
-            const QString type = e.attribute("type");
-            const QString value = e.text();
-            QVariant v;
-            if (type == "string") {
-                v = KisDomUtils::toString(e.attribute("value"));
-                c.addMetadata(name , v);
-            } else if (type == "int") {
-                v = KisDomUtils::toInt(e.attribute("value"));
-                c.addMetadata(name , v);
-            } else if (type == "double") {
-                v = KisDomUtils::toDouble(e.attribute("value"));
-                c.addMetadata(name , v);
-            }  else if (type == "bool") {
-                v = KisDomUtils::toInt(e.attribute("value"));
-                c.addMetadata(name , v);
-            }
-
-        }
-        return c;
     } else {
+        profileName = elt.attribute("space", "");
+        if (!colorSpaceRegistry->profileByName(profileName)) {
+            profileName.clear();
+        }
+    }
+
+    const KoColorSpace* cs = colorSpaceRegistry->colorSpace(modelId, channelDepthId, profileName);
+    if (!cs) {
+        QList<KoID> list = colorSpaceRegistry->colorDepthList(modelId, KoColorSpaceRegistry::AllColorSpaces);
+        if (!list.empty()) {
+            cs = colorSpaceRegistry->colorSpace(modelId, list[0].id(), profileName);
+        }
+    }
+
+    if (!cs) {
         *ok = false;
         return KoColor();
     }
+
+    KoColor c(cs);
+    // TODO: Provide a way for colorFromXML() to notify the caller if parsing failed.
+    //       Currently it returns default values on failure.
+    cs->colorFromXML(c.data(), elt);
+
+    QDomElement e = elt.nextSiblingElement("metadata");
+    for (; !e.isNull(); e = e.nextSiblingElement("metadata")) {
+        const QString name = e.attribute("name");
+        const QString type = e.attribute("type");
+        const QString value = e.attribute("value");
+
+        QVariant v;
+        if (type == "string") {
+            v = KisDomUtils::toString(value);
+        } else if (type == "int") {
+            v = KisDomUtils::toInt(value);
+        } else if (type == "double") {
+            v = KisDomUtils::toDouble(value);
+        }  else if (type == "bool") {
+            v = KisDomUtils::toInt(value);
+        } else {
+            continue;
+        }
+
+        c.addMetadata(name , v);
+    }
+
+    return c;
 }
 
 QString KoColor::toXML() const
@@ -438,18 +445,23 @@ KoColor KoColor::fromXML(const QString &xml)
 {
     KoColor c;
     QDomDocument doc;
-    if (doc.setContent(xml)) {
-        QDomElement e = doc.documentElement().firstChild().toElement();
-        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
-        bool ok;
-        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
-            c = KoColor::fromXML(e, channelDepthID, &ok);
-        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
-            c = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
-        } else {
-            qWarning() << "Cannot parse color from xml" << xml;
-        }
+    if (!doc.setContent(xml)) {
+        return c;
     }
+
+    QDomElement root = doc.documentElement();
+    QDomElement child = root.firstChildElement();
+    QString channelDepthID = root.attribute("channeldepth", Integer16BitsColorDepthID.id());
+
+    bool ok;
+    if (child.hasAttribute("space") || child.tagName().toLower() == "srgb") {
+        c = KoColor::fromXML(child, channelDepthID, &ok);
+    } else if (root.hasAttribute("space") || root.tagName().toLower() == "srgb"){
+        c = KoColor::fromXML(root, channelDepthID, &ok);
+    } else {
+        qWarning() << "Cannot parse color from xml" << xml;
+    }
+
     return c;
 }
 
@@ -660,11 +672,22 @@ void KoColor::clearMetadata()
     m_metadata.clear();
 }
 
+KoColor KoColor::createTransparent(const KoColorSpace *cs)
+{
+    KoColor result;
+
+    result.m_colorSpace = KoColorSpaceRegistry::instance()->permanentColorspace(cs);
+    result.m_size = cs->pixelSize();
+    cs->transparentColor(result.m_data, 1);
+
+    return result;
+}
+
 QDebug operator<<(QDebug dbg, const KoColor &color)
 {
     dbg.nospace() << "KoColor (" << color.colorSpace()->id();
 
-    QList<KoChannelInfo*> channels = color.colorSpace()->channels();
+    const QList<KoChannelInfo*> channels = color.colorSpace()->channels();
     for (auto it = channels.constBegin(); it != channels.constEnd(); ++it) {
 
         KoChannelInfo *ch = (*it);

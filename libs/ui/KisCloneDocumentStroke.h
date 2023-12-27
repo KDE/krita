@@ -21,9 +21,11 @@ public:
 
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
+    void cancelStrokeCallback() override;
 
 Q_SIGNALS:
     void sigDocumentCloned(KisDocument *image);
+    void sigCloningCancelled();
 
 private:
     struct Private;

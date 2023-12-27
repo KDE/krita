@@ -87,7 +87,7 @@ RIntNumInput::RIntNumInput(QWidget* const parent)
     hlay->addWidget(d->resetButton);
     hlay->setContentsMargins(QMargins());
     hlay->setStretchFactor(d->input, 10);
-    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
     // -------------------------------------------------------------
 
@@ -186,7 +186,7 @@ RDoubleNumInput::RDoubleNumInput(QWidget* const parent)
     hlay->addWidget(d->resetButton);
     hlay->setContentsMargins(QMargins());
     hlay->setStretchFactor(d->input, 10);
-    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
     // -------------------------------------------------------------
 

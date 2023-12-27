@@ -31,7 +31,7 @@
 #     This uses oTool iterative to find all unique libraries, then it searches each
 #     library fond in <kritadmg> folder, and if not found attempts to copy contents
 #     to the appropriate folder, either Frameworks (if frameworks is in namefile, or
-#         library has plugin isnot in path), or plugin if otherwise.
+#         library has plugin is not in path), or plugin if otherwise.
 
 # - Builds DMG
 #     Building DMG creates a new dmg with the contents of <kritadmg>
@@ -56,7 +56,7 @@ BUILDROOT="${BUILDROOT%/}"
 # print status messages
 print_msg() {
     printf "\e[32m${1}\e[0m\n" "${@:2}"
-    # printf "%s\n" "${1}" >> ${OUPUT_LOG}
+    # printf "%s\n" "${1}" >> ${OUTPUT_LOG}
 }
 
 # print error
@@ -89,9 +89,13 @@ SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
-KIS_SRC_DIR=${BUILDROOT}/krita
+if [[ -z "${KIS_SRC_DIR}" ]]; then
+    KIS_SRC_DIR=${BUILDROOT}/krita
+fi
+if [[ -z "${KIS_BUILD_DIR}" ]]; then
+    KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+fi
 KIS_INSTALL_DIR=${BUILDROOT}/i
-KIS_BUILD_DIR=${BUILDROOT}/kisbuild # only used for getting git sha number
 KRITA_DMG=${BUILDROOT}/kritadmg
 KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
 
@@ -101,6 +105,8 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 # We only support from 10.13 up
 export MACOSX_DEPLOYMENT_TARGET=10.13
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
+
+KRITA_VERSION="$(${KIS_INSTALL_DIR}/bin/krita_version -v)"
 
 
 print_usage () {
@@ -131,7 +137,7 @@ print_usage () {
 "
 }
 
-# Attempt to detach previous mouted DMG
+# Attempt to detach previous mounted DMG
 if [[ -d "/Volumes/${DMG_title}" ]]; then
     echo "WARNING: Another Krita DMG is mounted!"
     echo "Attempting eject…"
@@ -248,7 +254,7 @@ else
 
             if [[ ${?} -ne 0 ]]; then
                 NOTARIZE="false"
-                echo "No password given for notarization or AC_PASSWORD missig in keychain"
+                echo "No password given for notarization or AC_PASSWORD missing in keychain"
             fi
         else
             NOTARYTOOL="long"
@@ -322,15 +328,23 @@ find_needed_libs () {
             continue
         fi
 
-        oToolResult=$(otool -L ${libFile} | awk '{print $1}')
-        resultArray=(${oToolResult}) # convert to array
+        resultArray=($(otool -L ${libFile} | awk '{print $1","substr($2,2)}'))
 
-        for lib in ${resultArray[@]:1}; do
+        printf "Fixing %s\n" "${libFile#${KRITA_DMG}/}" >&2
+        for entry in ${resultArray[@]:1}; do
+            # skip fat-bin file markers
+            if [[ "${entry##*,}" = "architecture" ]]; then
+                continue
+            fi
+
+            lib="${entry%%,*}"
+
             if [[ "${lib:0:1}" = "@" ]]; then
                 local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
             fi
+
             if [[ "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}" ]]; then
-                printf "Fixing %s: %s\n" "${libFile#${KRITA_DMG}/}" "${lib##*/}" >&2
+                printf "\t%s\n" "${lib}" >&2
                 if [[ "${lib##*/}" = "${libFile##*/}" ]]; then
                     install_name_tool -id ${lib##*/} "${libFile}"
                 else
@@ -412,18 +426,18 @@ strip_python_dmginstall() {
     rm -rf Python.app
 }
 
-# Remove any missing rpath poiting to BUILDROOT
+# Remove any missing rpath pointing to BUILDROOT
 libs_clean_rpath () {
     for libFile in ${@}; do
-        rpath=$(otool -l "${libFile}" | grep "path ${BUILDROOT}" | awk '{$1=$1;print $2}')
-        if [[ -n "${rpath}" ]]; then
-            echo "removed rpath _${rpath}_ from ${libFile}"
-            install_name_tool -delete_rpath "${rpath}" "${libFile}"
-        fi
+        rpath=($(otool -l "${libFile}" | grep "path ${BUILDROOT}" | awk '{$1=$1;print $2}'))
+        for lpath in "${rpath[@]}"; do
+            echo "removed rpath _${lpath}_ from ${libFile}"
+            install_name_tool -delete_rpath "${lpath}" "${libFile}" 2> /dev/null
+        done
     done
 }
 
-# Multhread version
+# Multithreaded version
 # of libs_clean_rpath, but makes assumptions
 delete_install_rpath() {
     xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
@@ -457,7 +471,7 @@ fix_python_framework() {
 
 # Checks for macdeployqt
 # If not present attempts to install
-# If it fails shows an informatve message
+# If it fails shows an informative message
 # (For now, macdeployqt is fundamental to deploy)
 macdeployqt_exists() {
     printf "Checking for macdeployqt...  "
@@ -511,6 +525,8 @@ krita_deploy () {
     mkdir "${KRITA_DMG}"
 
     rsync -prul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
+    cp ${KIS_INSTALL_DIR}/bin/kritarunner ${KRITA_DMG}/krita.app/Contents/MacOS
+    cp ${KIS_INSTALL_DIR}/bin/krita_version ${KRITA_DMG}/krita.app/Contents/MacOS
 
     mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
@@ -538,6 +554,16 @@ krita_deploy () {
             --exclude qml \
             ${KRITA_DMG}/krita.app/Contents/Resources
 
+
+    # support localized system menu entries from MacOS, bug #432685.
+    echo "Creating locale lproj directories for localization"
+    LOCALE_FILES=$(find "${KRITA_DMG}/krita.app/Contents/Resources/locale" -type d -depth 1)
+    cd "${KRITA_DMG}/krita.app/Contents/Resources/"
+    for LOCALE in ${LOCALE_FILES} ; do
+        BASE=$(basename ${LOCALE})
+        mkdir "$BASE.lproj"
+    done
+
     cd ${BUILDROOT}
 
     echo "Copying translations..."
@@ -550,7 +576,7 @@ krita_deploy () {
     echo "Copying Spotlight plugin..."
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaspotlight.mdimporter ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
+    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
     # echo "Copying QuickLook Thumbnailing extension..."
     # rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
 
@@ -561,15 +587,27 @@ krita_deploy () {
     rsync -prul ${KIS_INSTALL_DIR}/qml Resources/qml
 
     echo "Copying plugins..."
+    local KRITA_DMG_PLUGIN_DIR="${KRITA_DMG}/krita.app/Contents/PlugIns"
     # exclude kritaquicklook.qlgenerator/
     cd ${KIS_INSTALL_DIR}/plugins/
     rsync -prul --delete --delete-excluded ./ \
         --exclude kritaquicklook.qlgenerator \
         --exclude kritaspotlight.mdimporter \
-        ${KRITA_DMG}/krita.app/Contents/PlugIns
+        ${KRITA_DMG_PLUGIN_DIR}
 
     cd ${BUILDROOT}
-    rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/ ${KRITA_DMG}/krita.app/Contents/PlugIns
+    rsync -prul ${KIS_INSTALL_DIR}/lib/kritaplugins/* ${KRITA_DMG_PLUGIN_DIR}
+
+    rsync -prul ${KIS_INSTALL_DIR}/lib/mlt ${KRITA_DMG_PLUGIN_DIR}
+    
+    echo "Adding ffmpeg to bundle"
+    cd ${KRITA_DMG}/krita.app/Contents/MacOS
+    cp ${KIS_INSTALL_DIR}/bin/ffmpeg .
+    cp ${KIS_INSTALL_DIR}/bin/ffprobe .
+    for bin in ffmpeg ffprobe; do
+        cp ${KIS_INSTALL_DIR}/bin/${bin}
+        install_name_tool -add_rpath @executable_path/../Frameworks/ ${bin}
+    done
 
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
@@ -586,6 +624,7 @@ krita_deploy () {
         -executable=${KRITA_DMG}/krita.app/Contents/MacOS/krita \
         -libpath=${KIS_INSTALL_DIR}/lib \
         -qmldir=${KIS_INSTALL_DIR}/qml \
+        -appstore-compliant
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/kritaplugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/plugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/plugins
@@ -611,6 +650,9 @@ krita_deploy () {
     cd ${KRITA_DMG}/krita.app
     ${KIS_INSTALL_DIR}/bin/python -m compileall . &> /dev/null
 
+    # remove unnecessary rpaths
+    install_name_tool -delete_rpath @executable_path/../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita_version
+    install_name_tool -delete_rpath @executable_path/../lib ${KRITA_DMG}/krita.app/Contents/MacOS/kritarunner
     install_name_tool -delete_rpath @loader_path/../../../../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
@@ -623,7 +665,7 @@ krita_deploy () {
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
 
     # Fix rpath for plugins
-    # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
+    # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
     # printf "Repairing rpath for Finder plugins\n"
     # find "${KRITA_DMG}/krita.app/Contents/Library" -type f -path "*/Contents/MacOS/*" -perm 755 | xargs -I FILE install_name_tool -add_rpath @loader_path/../../../../../Frameworks FILE
 
@@ -635,13 +677,16 @@ krita_deploy () {
 #    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
     echo "Done!"
-
 }
 
 
 # helper to define function only once
 batch_codesign() {
-    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${KIS_SRC_DIR}/packaging/macos/entitlements.plist" FILE
+    local entitlements="${1}"
+    if [[ -z "${1}" ]]; then
+        entitlements="${KIS_SRC_DIR}/packaging/macos/entitlements.plist"
+    fi
+    xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${entitlements}" FILE
 }
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
@@ -675,6 +720,12 @@ signBundle() {
     cd ${KRITA_DMG}/krita.app/Contents/Resources
     find . -perm +111 -type f | batch_codesign
 
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/ffmpeg" | batch_codesign
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/ffprobe" | batch_codesign
+    
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/kritarunner" | batch_codesign
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita_version" | batch_codesign
+
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign
     printf "${KRITA_DMG}/krita.app" | batch_codesign
@@ -702,6 +753,8 @@ sign_hasError() {
 notarize_build() {
     local NOT_SRC_DIR=${1}
     local NOT_SRC_FILE=${2}
+
+    local notarization_complete="true"
 
     if [[ ${NOTARIZE} = "true" ]]; then
         printf "performing notarization of %s\n" "${2}"
@@ -739,18 +792,22 @@ notarize_build() {
                 notarize_status=`echo "${fullstatus}" | grep 'Status\:' | awk '{ print $2 }'`
                 echo "${fullstatus}"
                 if [[ "${notarize_status}" = "success" ]]; then
-                    xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
-                    xcrun stapler validate -v "${NOT_SRC_FILE}"
                     print_msg "Notarization success!"
                     break
                 elif [[ "${notarize_status}" = "in" ]]; then
                     waiting_fixed "Notarization still in progress, wait before checking again" 60
                 else
+                    notarization_complete="false"
                     echo "Notarization failed! full status below"
                     echo "${fullstatus}"
                     exit 1
                 fi
             done
+        fi
+
+        if [[ "${notarization_complete}" = "true" ]]; then
+            xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
+            xcrun stapler validate -v "${NOT_SRC_FILE}"
         fi
     fi
 }
@@ -762,8 +819,7 @@ createDMG () {
 
     if [[ -z "${DMG_NAME}" ]]; then
         # Add git version number
-        GIT_SHA=$(grep "#define KRITA_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kritagitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
-        DMG_NAME="krita-nightly_${GIT_SHA}.dmg"
+        DMG_NAME="krita-${KRITA_VERSION// /_}.dmg"
     else
         DMG_NAME="${DMG_NAME}.dmg"
     fi

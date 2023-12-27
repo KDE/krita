@@ -131,6 +131,35 @@ KoUnit KoCanvasResourceProvider::unitResource(int key) const
     return resource(key).value<KoUnit>();
 }
 
+void KoCanvasResourceProvider::setHandleRadius(int handleSize)
+{
+    // do not allow arbitrary small handles
+    if (handleSize < 5)
+        handleSize = 5;
+    setResource(KoCanvasResource::HandleRadius, QVariant(handleSize));
+}
+
+int KoCanvasResourceProvider::handleRadius() const
+{
+    if (hasResource(KoCanvasResource::HandleRadius))
+        return intResource(KoCanvasResource::HandleRadius);
+    return 5; // default value (and is used just about everywhere)
+}
+
+void KoCanvasResourceProvider::setDecorationThickness(int decorationThickness)
+{
+    if (decorationThickness < 1)
+        decorationThickness = 1;
+    setResource(KoCanvasResource::DecorationThickness, QVariant(decorationThickness));
+}
+
+int KoCanvasResourceProvider::decorationThickness() const
+{
+    if (hasResource(KoCanvasResource::DecorationThickness))
+        return intResource(KoCanvasResource::DecorationThickness);
+    return 1;
+}
+
 bool KoCanvasResourceProvider::boolResource(int key) const
 {
     return d->manager.boolResource(key);

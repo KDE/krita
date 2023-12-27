@@ -17,10 +17,17 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 
 #include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
 #include "WidgetUtilsDebug.h"
+
+#include <kis_assert.h>
+
+#ifdef Q_OS_MACOS
+#include "KisMacosSecurityBookmarkManager.h"
+#endif
 
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
@@ -126,6 +133,13 @@ void KoFileDialog::createFileDialog()
     }
     connect(d->fileDialog.get(), SIGNAL(filterSelected(const QString&)), this, SLOT(onFilterSelected(const QString&)));
 
+#ifdef Q_OS_MACOS
+    KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+    if(bookmarkmngr->isSandboxed()) {
+        connect(d->fileDialog.get(), SIGNAL(urlSelected  (const QUrl&)), bookmarkmngr, SLOT(addBookmarkAndCheckParentDir(const QUrl&)));
+    }
+#endif
+
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;
@@ -217,6 +231,12 @@ void KoFileDialog::createFileDialog()
 // MacOS do not declare native file dialog as modal BUG:413241.
 #ifdef Q_OS_MACOS
         allowModal = optionDontUseNative;
+//        if ( d->proposedFileName.isEmpty() ) {
+//            d->fileDialog->selectFile("untitled.kra");
+//        } else {
+//            d->fileDialog->selectFile(d->proposedFileName);
+//        }
+//        qDebug() << d->proposedFileName.isEmpty() << d->proposedFileName << d->defaultDirectory;
 #endif
         if (allowModal) {
             d->fileDialog->setWindowModality(Qt::WindowModal);
@@ -239,6 +259,8 @@ QString KoFileDialog::filename()
         QInputDialog mimeSelector;
         mimeSelector.setLabelText(i18n("Save As:"));
         mimeSelector.setComboBoxItems(d->filterList);
+        mimeSelector.setOkButtonText(KStandardGuiItem::ok().text());
+        mimeSelector.setCancelButtonText(KStandardGuiItem::cancel().text());
         // combobox as they stand, are very hard to scroll on a touch device
         mimeSelector.setOption(QInputDialog::UseListViewForComboBoxItems);
 
@@ -248,13 +270,15 @@ QString KoFileDialog::filename()
             int end = selectedFilter.indexOf(" ", start);
             int n = end - start;
             extension = selectedFilter.mid(start, n);
-            if (!extension.contains(".")) {
+            if (!extension.startsWith(".")) {
                 extension = "." + extension;
             }
             d->fileDialog->selectNameFilter(selectedFilter);
 
+            const QString proposedFileBaseName = QFileInfo(d->proposedFileName).baseName();
             // HACK: discovered by looking into the code
-            d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled" + extension : d->proposedFileName);
+            d->fileDialog->setWindowTitle(proposedFileBaseName.isEmpty() ? QString("Untitled" + extension)
+                                                                         : proposedFileBaseName + extension);
         } else {
             return url;
         }
@@ -319,6 +343,11 @@ QString KoFileDialog::filename()
                 i18n("The selected file name does not have a file extension that Krita understands.\n"
                      "Make sure the file name ends in '.%1' for example.", extension));
             retryNeeded = true;
+
+// We can only write to the Uri that was returned, we don't have permission to change the Uri.
+#if !(defined(Q_OS_MACOS) || defined(Q_OS_ANDROID))
+            url = url + extension;
+#endif
         }
 #endif
     } while (retryNeeded);
@@ -355,7 +384,12 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
         description = nameFilter.left(nameFilter.indexOf("(") -1).trimmed();
     }
 
-    QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ",QString::SkipEmptyParts );
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ", Qt::SkipEmptyParts);
+#else
+    QStringList entries = nameFilter.mid(nameFilter.indexOf("(") + 1).split(" ", QString::SkipEmptyParts);
+#endif
+
     entries.sort();
     Q_FOREACH (QString entry, entries) {
 
@@ -397,12 +431,21 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
     FilterData ora {};
     // remaining
     QVector<FilterData> otherFileTypes;
+    // All files
+    bool hasAllFilesFilter = false;
 
     QStringList mimeList = mimeTypeList;
     mimeList.sort();
 
     Q_FOREACH(const QString &mimeType, mimeList) {
         if (!mimeSeen.contains(mimeType)) {
+            if (mimeType == QLatin1String("application/octet-stream")) {
+                // QFileDialog uses application/octet-stream for the
+                // "All files (*)" filter. We can do the same here.
+                hasAllFilesFilter = true;
+                mimeSeen << mimeType;
+                continue;
+            }
             QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
             if (description.isEmpty() && !mimeType.isEmpty()) {
                 description = mimeType.split("/")[1];
@@ -414,6 +457,10 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
 
             QString oneFilter;
             const QStringList suffixes = KisMimeDatabase::suffixesForMimeType(mimeType);
+            KIS_SAFE_ASSERT_RECOVER(!suffixes.isEmpty()) {
+                warnWidgetUtils << "KoFileDialog: Found no suffixes for mime type" << mimeType;
+                continue;
+            }
 
             Q_FOREACH(const QString &suffix, suffixes) {
                 const QString glob = QStringLiteral("*.") + suffix;
@@ -499,6 +546,11 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
     });
     Q_FOREACH(const FilterData &filterData, otherFileTypes) {
         addFilterItem(filterData);
+    }
+
+    if (hasAllFilesFilter) {
+        // Reusing Qt's existing "All files" translation
+        retFilterList.append(QFileDialog::tr("All files (*)"));
     }
 
     d->filterList = retFilterList;

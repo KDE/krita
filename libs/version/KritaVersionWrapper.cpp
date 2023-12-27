@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include <KritaVersionWrapper.h>
+#include "KritaVersionWrapper.h"
 
 #include <kritaversion.h>
 #include <kritagitversion.h>

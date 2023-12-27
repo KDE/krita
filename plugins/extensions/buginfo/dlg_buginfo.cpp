@@ -28,9 +28,9 @@
 #include <QtAndroid>
 #endif
 
-
 DlgBugInfo::DlgBugInfo(QWidget *parent, KoDialog::ButtonCodes customButtons)
     : KoDialog(parent)
+    , m_page(new WdgBugInfo(this))
 {
     setCaption(i18n("Please paste this information in your bug report"));
 
@@ -39,7 +39,6 @@ DlgBugInfo::DlgBugInfo(QWidget *parent, KoDialog::ButtonCodes customButtons)
     setButtonText(User2, i18n("Save to file"));
     setDefaultButton(Ok);
 
-    m_page = new WdgBugInfo(this);
     Q_CHECK_PTR(m_page);
 
     setMainWidget(m_page);
@@ -66,17 +65,7 @@ void DlgBugInfo::initializeText()
 
     QString info = infoText(kritarc);
 
-    // calculate a default height for the widget
-    int wheight = m_page->sizeHint().height();
     m_page->txtBugInfo->setText(info);
-
-    QFontMetrics fm = m_page->txtBugInfo->fontMetrics();
-    int target_height = fm.height() * info.split('\n').size() + wheight;
-
-    QRect screen_rect = QGuiApplication::primaryScreen()->availableGeometry();
-    int frame_height = parentWidget()->frameGeometry().height() - parentWidget()->size().height();
-
-    resize(m_page->size().width(), target_height > screen_rect.height() ? screen_rect.height() - frame_height : target_height);
 }
 
 void DlgBugInfo::saveToFile()

@@ -32,17 +32,60 @@ public:
         : context(loadingContext)
     {
         textAttributes << KoSvgTextProperties::supportedXmlAttributes();
+        textAttributes.removeAll("xml:space");
 
         // the order of the font attributes is important, don't change without reason !!!
-        fontAttributes << "font-family" << "font-size" << "font-weight" << "font-style"
-                       << "font-variant" << "font-stretch" << "font-size-adjust" << "font"
-                       << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
+        fontAttributes << "font-family"
+                       << "font-size"
+                       << "font-weight"
+                       << "font-style"
+                       << "font-variant-caps"
+                       << "font-variant-alternates"
+                       << "font-variant-ligatures"
+                       << "font-variant-numeric"
+                       << "font-variant-east-asian"
+                       << "font-variant-position"
+                       << "font-variant"
+                       << "font-feature-settings"
+                       << "font-stretch"
+                       << "font-size-adjust"
+                       << "font" // why are we doing this after the rest?
+                       << "font-optical-sizing"
+                       << "font-variation-settings"
+                       << "text-decoration"
+                       << "text-decoration-line"
+                       << "text-decoration-style"
+                       << "text-decoration-color"
+                       << "text-decoration-position"
+                       << "letter-spacing"
+                       << "word-spacing"
+                       << "baseline-shift"
+                       << "vertical-align"
+                       << "line-height"
+                       << "xml:space"
+                       << "white-space"
+                       << "text-transform"
+                       << "text-indent"
+                       << "word-break"
+                       << "line-break"
+                       << "hanging-punctuation"
+                       << "text-align"
+                       << "text-align-all"
+                       << "text-align-last"
+                       << "inline-size"
+                       << "overflow"
+                       << "text-overflow"
+                       << "tab-size"
+                       << "overflow-wrap"
+                       << "word-wrap"
+                       << "text-orientation";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
         styleAttributes << "stroke" << "stroke-width" << "stroke-linejoin" << "stroke-linecap";
         styleAttributes << "stroke-dasharray" << "stroke-dashoffset" << "stroke-opacity" << "stroke-miterlimit";
-        styleAttributes << "opacity" << "filter" << "clip-path" << "clip-rule" << "mask";
+        styleAttributes << "opacity" << "paint-order" << "filter" << "clip-path" << "clip-rule" << "mask";
+        styleAttributes << "shape-inside" << "shape-subtract" << "shape-padding" << "shape-margin";
         styleAttributes << "marker" << "marker-start" << "marker-mid" << "marker-end" << "krita:marker-fill-method";
     }
 
@@ -190,6 +233,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         fillcolor.setAlphaF(opacity);
     } else if (command == "opacity") {
         gc->opacity = SvgUtil::fromPercentage(params);
+    } else if (command == "paint-order") {
+        gc->paintOrder = params;
     } else if (command == "font-family") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size") {
@@ -197,25 +242,27 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "font-style") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
-    } else if (command == "font-variant") {
+    } else if (command == "font-variant" || command == "font-variant-caps" || command == "font-variant-alternates" || command == "font-variant-ligatures"
+               || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
+    } else if (command == "font-feature-settings") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-stretch") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
-
     } else if (command == "font-weight") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
+    } else if (command == "font-variation-settings") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+    } else if (command == "font-optical-sizing") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size-adjust") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
     } else if (command == "font") {
-        warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
-    } else if (command == "text-decoration") {
+        qWarning() << "Krita does not support the 'font' shorthand";
+    } else if (command == "text-decoration" || command == "text-decoration-line" || command == "text-decoration-style" || command == "text-decoration-color"
+               || command == "text-decoration-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
-
 
     } else if (command == "color") {
         QColor color;
@@ -239,6 +286,10 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             unsigned int end = params.indexOf(')', start);
             gc->clipPathId = params.mid(start, end - start);
         }
+    } else if (command == "shape-inside") {
+        gc->shapeInsideValue = params;
+    } else if (command == "shape-subtract") {
+        gc->shapeSubtractValue = params;
     } else if (command == "clip-rule") {
         if (params == "nonzero")
             gc->clipRule = Qt::WindingFill;
@@ -251,11 +302,11 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->clipMaskId = params.mid(start, end - start);
         }
     } else if (command == "marker-start") {
-           if (params != "none" && params.startsWith("url(")) {
-               unsigned int start = params.indexOf('#') + 1;
-               unsigned int end = params.indexOf(')', start);
-               gc->markerStartId = params.mid(start, end - start);
-           }
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->markerStartId = params.mid(start, end - start);
+        }
     } else if (command == "marker-end") {
         if (params != "none" && params.startsWith("url(")) {
             unsigned int start = params.indexOf('#') + 1;
@@ -276,6 +327,12 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->markerMidId = gc->markerStartId;
             gc->markerEndId = gc->markerStartId;
         }
+    } else if (command == "line-height" || command == "white-space" || command == "xml:space" || command == "text-transform" || command == "text-indent"
+               || command == "word-break" || command == "line-break" || command == "hanging-punctuation" || command == "text-align"
+               || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
+               || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align"
+               || command ==  "shape-padding" || command ==   "shape-margin" || command ==   "text-orientation") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";
     } else if (d->textAttributes.contains(command)) {
@@ -380,7 +437,11 @@ SvgStyles SvgStyleParser::parseOneCssStyle(const QString &style, const QStringLi
     SvgStyles parsedStyles;
     if (style.isEmpty()) return parsedStyles;
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    QStringList substyles = style.simplified().split(';', Qt::SkipEmptyParts);
+#else
     QStringList substyles = style.simplified().split(';', QString::SkipEmptyParts);
+#endif
     if (!substyles.count()) return parsedStyles;
 
     for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {
@@ -426,7 +487,11 @@ SvgStyles SvgStyleParser::collectStyles(const QDomElement &e)
 
     // collect all css style attributes
     Q_FOREACH (const QString &style, cssStyles) {
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        QStringList substyles = style.split(';', Qt::SkipEmptyParts);
+#else
         QStringList substyles = style.split(';', QString::SkipEmptyParts);
+#endif
         if (!substyles.count())
             continue;
         for (QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it) {

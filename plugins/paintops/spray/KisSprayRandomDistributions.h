@@ -63,7 +63,7 @@ public:
     double max() const;
 
     /**
-     * @brief Return if this object is correctly initialiced and can be used to
+     * @brief Return if this object is correctly initialized and can be used to
      *        generate values
      */
     bool isValid() const;
@@ -107,7 +107,7 @@ public:
     double max() const { return 1.0; }
 
     /**
-     * @brief Return if this object is correctly initialiced and can be used to
+     * @brief Return if this object is correctly initialized and can be used to
      *        generate values
      */
     bool isValid() const { return true; }

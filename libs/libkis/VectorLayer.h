@@ -81,7 +81,7 @@ public Q_SLOTS:
      * get all non-group shapes that the shape's boundingBox() intersects or is contained within a given rectangle on the current layer.
      * @param rect a QRectF
      * @param omitHiddenShapes true if non-visible() shapes should be omitted, false if they should be included. \p omitHiddenShapes defaults to true.
-     * @param containedMode false if only shapes that are within or interesect with the outline should be included, true if only shapes that are fully contained within the outline should be included. \p containedMode defaults to false
+     * @param containedMode false if only shapes that are within or intersect with the outline should be included, true if only shapes that are fully contained within the outline should be included. \p containedMode defaults to false
      * @return returns a list of shapes.
      */
     QList<Shape *> shapesInRect(const QRectF &rect, bool omitHiddenShapes = true, bool containedMode = false) const;

@@ -3,7 +3,9 @@ set(kritaroundmarkerpaintop_SOURCES
     kis_roundmarkerop.cpp
     kis_roundmarkerop_settings.cpp
     kis_roundmarkerop_settings_widget.cpp
-    kis_roundmarker_option.cpp
+    KisRoundMarkerOpOptionData.cpp
+    KisRoundMarkerOpOptionModel.cpp
+    KisRoundMarkerOpOptionWidget.cpp
 )
 
 ki18n_wrap_ui(kritaroundmarkerpaintop_SOURCES kis_roundmarker_option.ui )

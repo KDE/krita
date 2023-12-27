@@ -78,6 +78,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         saveLayer(layerElement, FILE_LAYER, layer);
 
         KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer);
+        KIS_ASSERT(fileLayer);
 
         QString path = fileLayer->path();
 
@@ -97,6 +98,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         }
         layerElement.setAttribute("scalingmethod", (int)fileLayer->scalingMethod());
         layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
+        layerElement.setAttribute("scalingfilter", fileLayer->scalingFilter());
 
         m_elem.appendChild(layerElement);
         m_count++;

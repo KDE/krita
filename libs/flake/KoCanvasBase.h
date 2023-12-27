@@ -110,7 +110,7 @@ public:
     /**
      * @brief selectedShapesProxy() is a special interface for keeping a persistent connections
      * to selectionChanged() and selectionContentChanged() signals. While shapeManager() can change
-     * throughout the life time of the cavas, selectedShapesProxy() is guaranteed to stay the same.
+     * throughout the life time of the canvas, selectedShapesProxy() is guaranteed to stay the same.
      * @return persistent KoSelectedShapesProxy object
      */
     virtual KoSelectedShapesProxy *selectedShapesProxy() const = 0;
@@ -132,7 +132,8 @@ public:
      * Return the viewConverter for this view.
      * @return the viewConverter for this view.
      */
-    virtual KoViewConverter *viewConverter() const = 0;
+    virtual const KoViewConverter *viewConverter() const = 0;
+    virtual KoViewConverter *viewConverter() = 0;
 
     /**
      * Convert a coordinate in pixels to pt.
@@ -176,11 +177,6 @@ public:
     virtual QPoint documentOrigin() const {
         return QPoint(0, 0);
     }
-
-    /**
-     * This method should somehow call QWidget::updateMicroFocus() on the canvas widget.
-     */
-    virtual void updateInputMethodInfo() = 0;
 
     /**
      * disconnect the given QObject completely and utterly from any and all

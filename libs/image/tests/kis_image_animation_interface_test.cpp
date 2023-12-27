@@ -14,11 +14,13 @@
 #include "kundo2command.h"
 
 #include "kis_debug.h"
+#include "kis_paint_device_debug_utils.h"
 
 #include "kis_image_animation_interface.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_time_span.h"
+#include "KisLockFrameGenerationLock.h"
 
 
 void checkFrame(KisImageAnimationInterface *i, KisImageSP image, int frameId, bool externalFrameActive, const QRect &rc)
@@ -89,9 +91,10 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
 
     // check external frame (frame 0)
     {
+        KisLockFrameGenerationLock lock(p.image->animationInterface());
         SignalToFunctionProxy proxy1(std::bind(checkFrame, i, p.image, 0, true, rc1 | rc2));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy1, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(0, KisRegion(refRect), false);
+        i->requestFrameRegeneration(0, KisRegion(refRect), false, std::move(lock));
         QTest::qWait(200);
     }
 
@@ -112,9 +115,10 @@ void KisImageAnimationInterfaceTest::testFrameRegeneration()
 
     // check external frame (frame 10)
     {
+        KisLockFrameGenerationLock lock(p.image->animationInterface());
         SignalToFunctionProxy proxy2(std::bind(checkFrame, i, p.image, 10, true, rc3 | rc4));
         connect(i, SIGNAL(sigFrameReady(int)), &proxy2, SLOT(start()), Qt::DirectConnection);
-        i->requestFrameRegeneration(10, KisRegion(refRect), false);
+        i->requestFrameRegeneration(10, KisRegion(refRect), false, std::move(lock));
         QTest::qWait(200);
     }
 
@@ -200,7 +204,12 @@ void KisImageAnimationInterfaceTest::testAnimationCompositionBug()
 
     m_image = p.image;
     connect(p.image->animationInterface(), SIGNAL(sigFrameReady(int)), this, SLOT(slotFrameDone()), Qt::DirectConnection);
-    p.image->animationInterface()->requestFrameRegeneration(5, rect, false);
+
+    {
+        KisLockFrameGenerationLock lock(p.image->animationInterface());
+        p.image->animationInterface()->requestFrameRegeneration(5, rect, false, std::move(lock));
+    }
+
     QTest::qWait(200);
 
     KisPaintDeviceSP tmpDevice = new KisPaintDevice(p.image->colorSpace());
@@ -290,8 +299,122 @@ void KisImageAnimationInterfaceTest::testSwitchFrameHangup()
     QTest::qWait(100);
     p.image->waitForDone();
     QCOMPARE(i->currentTime(), 16);
-
-
 }
+
+namespace {
+
+inline QRect rectForTime(int time) {
+    return QRect(time * 64 + 1, 65, 62, 62);
+}
+
+} // namespace
+
+void KisImageAnimationInterfaceTest::testAutoKeyframeWithOnionSkins()
+{
+    KisSurrogateUndoStore *undoStore = new KisSurrogateUndoStore();
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisImageSP image = new KisImage(undoStore, 512, 512, cs, "");
+    KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
+    image->addNode(layer);
+
+    KisPaintDeviceSP dev = layer->paintDevice();
+
+    layer->enableAnimation();
+    layer->setOnionSkinEnabled(true);
+
+    KisKeyframeChannel *contentChannel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
+    QVERIFY(contentChannel);
+
+    for (int time = 1; time < 6; ++time) {
+        qInfo() << "Switch to time" << time;
+        image->animationInterface()->requestTimeSwitchWithUndo(time);
+        QTest::qWait(200);
+        image->waitForDone();
+
+        QVERIFY(layer->needProjection());
+        QVERIFY(layer->projection() != layer->paintDevice());
+        QCOMPARE(image->animationInterface()->currentTime(), time);
+        QCOMPARE(image->animationInterface()->currentUITime(), time);
+
+        qInfo() << "Create frame at position" << time;
+        KUndo2Command *parentCommand = new KUndo2Command;
+        contentChannel->addKeyframe(time, parentCommand);
+        image->undoAdapter()->addCommand(parentCommand);
+        QCOMPARE(contentChannel->keyframeCount(), 1 + time);
+
+        image->waitForDone();
+
+        const QRect fillRect = rectForTime(time);
+
+        dev->fill(fillRect, KoColor(Qt::black, cs));
+
+        layer->setDirty(fillRect);
+        image->waitForDone();
+
+//        KIS_DUMP_DEVICE_2(dev, QRect(0,0,1000,200), "pd", "dd");
+//        KIS_DUMP_DEVICE_2(layer->projection(), QRect(0,0,1000,200), "proj", "dd");
+
+        const QRect farthestOnionSkin(rectForTime(qMax(1, time - 2)));
+
+        QCOMPARE(layer->paintDevice()->exactBounds(), fillRect);
+        QCOMPARE(layer->projection()->exactBounds(), fillRect | farthestOnionSkin);
+    }
+
+    QCOMPARE(image->animationInterface()->currentTime(), 5);
+    QCOMPARE(image->animationInterface()->currentUITime(), 5);
+    QCOMPARE(layer->paintDevice()->exactBounds(), rectForTime(5));
+    QCOMPARE(layer->projection()->exactBounds(), rectForTime(3) | rectForTime(5));
+
+    {
+        qInfo() << "Remove frame at position" << 5;
+        KUndo2Command *parentCommand = new KUndo2Command;
+        contentChannel->removeKeyframe(5, parentCommand);
+        image->undoAdapter()->addCommand(parentCommand);
+        image->waitForDone();
+    }
+
+//    KIS_DUMP_DEVICE_2(dev, QRect(0,0,1000,200), "pd", "dd_xx");
+//    KIS_DUMP_DEVICE_2(layer->projection(), QRect(0,0,1000,200), "proj", "dd_xx");
+
+    // verify that the outline of onion skins has changed
+    QCOMPARE(image->animationInterface()->currentTime(), 5);
+    QCOMPARE(image->animationInterface()->currentUITime(), 5);
+    QCOMPARE(layer->paintDevice()->exactBounds(), rectForTime(4));
+    QCOMPARE(layer->projection()->exactBounds(), rectForTime(2) | rectForTime(4));
+
+    qInfo() << "Undo the removal of the frame at position" << 5;
+    // undo the removal, not the state should be the same as before
+    undoStore->undo();
+    QTest::qWait(200);
+    image->waitForDone();
+
+    QCOMPARE(image->animationInterface()->currentTime(), 5);
+    QCOMPARE(image->animationInterface()->currentUITime(), 5);
+    QCOMPARE(layer->paintDevice()->exactBounds(), rectForTime(5));
+    QCOMPARE(layer->projection()->exactBounds(), rectForTime(3) | rectForTime(5));
+
+    for (int time = 5; time >= 2; time--) {
+        qInfo() << "Cycle: undo adding new frame at position" << time;
+        undoStore->undo();
+        QTest::qWait(200);
+        image->waitForDone();
+
+        QCOMPARE(image->animationInterface()->currentTime(), time);
+        QCOMPARE(image->animationInterface()->currentUITime(), time);
+        QCOMPARE(layer->paintDevice()->exactBounds(), rectForTime(time - 1));
+        QCOMPARE(layer->projection()->exactBounds(), rectForTime(qMax(1, time - 3)) | rectForTime(time - 1));
+
+        qInfo() << "Cycle: undo switching to time" << time;
+        undoStore->undo();
+        QTest::qWait(200);
+        image->waitForDone();
+
+        QCOMPARE(image->animationInterface()->currentTime(), time - 1);
+        QCOMPARE(image->animationInterface()->currentUITime(), time - 1);
+        QCOMPARE(layer->paintDevice()->exactBounds(), rectForTime(time - 1));
+        QCOMPARE(layer->projection()->exactBounds(), rectForTime(qMax(1, time - 3)) | rectForTime(time - 1));
+    }
+}
+
 
 SIMPLE_TEST_MAIN(KisImageAnimationInterfaceTest)

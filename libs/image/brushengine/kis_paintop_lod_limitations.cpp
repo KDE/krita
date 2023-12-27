@@ -5,10 +5,8 @@
  */
 
 #include "kis_paintop_lod_limitations.h"
+#include "KisStaticInitializer.h"
 
-struct KisPaintopLodLimitationsStaticRegistrar {
-    KisPaintopLodLimitationsStaticRegistrar() {
-        qRegisterMetaType<KisPaintopLodLimitations>("KisPaintopLodLimitations");
-    }
-};
-static KisPaintopLodLimitationsStaticRegistrar __registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisPaintopLodLimitations>("KisPaintopLodLimitations");
+}

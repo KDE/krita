@@ -18,15 +18,11 @@
 #include "kis_assert.h"
 
 #include "KoResourceLoadResult.h"
+#include <KisStaticInitializer.h>
 
-
-struct KoResourceSPStaticRegistrar {
-    KoResourceSPStaticRegistrar() {
-        qRegisterMetaType<KoResourceSP>("KoResourceSP");
-    }
-};
-static KoResourceSPStaticRegistrar __registrar1;
-
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KoResourceSP>("KoResourceSP");
+}
 
 struct Q_DECL_HIDDEN KoResource::Private {
     int version {-1};
@@ -34,7 +30,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     bool valid {false};
     bool active {true};
     bool permanent {false};
-    bool dirty {false};
+    bool modified {false};
     QString name;
     QString filename;
     QString storageLocation;
@@ -183,7 +179,7 @@ QString KoResource::filename() const
 
 void KoResource::setFilename(const QString& filename)
 {
-    d->filename = filename;
+    d->filename = QFileInfo(filename).fileName();
 }
 
 QString KoResource::name() const
@@ -269,12 +265,12 @@ QString KoResource::storageLocation() const
 
 void KoResource::setDirty(bool value)
 {
-    d->dirty = value;
+    d->modified = value;
 }
 
 bool KoResource::isDirty() const
 {
-    return d->dirty;
+    return d->modified;
 }
 
 void KoResource::addMetaData(QString key, QVariant value)

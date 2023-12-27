@@ -14,6 +14,7 @@
 
 #include <brushengine/kis_paintop_registry.h>
 
+#include "kis_curve_paintop_settings.h"
 #include "kis_curve_paintop.h"
 #include "kis_curve_paintop_settings_widget.h"
 #include "kis_simple_paintop_factory.h"

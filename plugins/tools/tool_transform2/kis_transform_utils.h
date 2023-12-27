@@ -98,7 +98,8 @@ public:
     static void transformDeviceWithCroppedDst(const ToolTransformArgs &config,
                                               KisPaintDeviceSP srcDevice,
                                               KisPaintDeviceSP dstDevice,
-                                              KisProcessingVisitor::ProgressHelper *helper);
+                                              KisProcessingVisitor::ProgressHelper *helper,
+                                              bool forceSubPixelTranslation);
 
     static QRect needRect(const ToolTransformArgs &config,
                           const QRect &rc,
@@ -176,20 +177,21 @@ public:
 
     static void postProcessToplevelCommand(KUndo2Command *command,
                                            const ToolTransformArgs &args,
-                                           KisNodeSP rootNode,
-                                           KisNodeList processedNodes,
+                                           KisNodeList rootNodes,
+                                           KisNodeList processedNodes, int currentTime,
                                            const KisSavedMacroCommand *overriddenCommand);
 
     static bool fetchArgsFromCommand(const KUndo2Command *command,
                                      ToolTransformArgs *args,
-                                     KisNodeSP *rootNode,
-                                     KisNodeList *transformedNodes);
+                                     KisNodeList *rootNodes,
+                                     KisNodeList *transformedNodes, int *oldTime);
 
     static KisNodeSP tryOverrideRootToTransformMask(KisNodeSP root);
 
-    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent);
-    static bool tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args);
-    static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs, ToolTransformArgs::TransformMode mode, KisNodeSP currentNode, KisNodeList selectedNodes, KisStrokeUndoFacade *undoFacade, QVector<KisStrokeJobData *> *undoJobs, const KisSavedMacroCommand **overriddenCommand);
+    static int fetchCurrentImageTime(KisNodeList rootNodes);
+    static QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeList rootNodes, bool isExternalSourcePresent, KisSelectionSP selection);
+    static bool tryInitArgsFromNode(KisNodeList rootNodes, ToolTransformArgs *args);
+    static bool tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs, ToolTransformArgs::TransformMode mode, KisNodeList currentNodes, KisNodeList selectedNodes, KisStrokeUndoFacade *undoFacade, int currentTime, QVector<KisStrokeJobData *> *undoJobs, const KisSavedMacroCommand **overriddenCommand);
 
 };
 

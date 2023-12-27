@@ -31,6 +31,7 @@ const QString LAYER_PATH = "/layers/";
 const QString PALETTE_PATH = "/palettes/";
 const QString RESOURCE_PATH = "resources/"; // Note: intentionally not slash in front.
 const QString STORYBOARD_PATH = "/storyboard/";
+const QString AUDIO_PATH = "/audio/";
 const QString ANIMATION_METADATA_PATH = "/animation/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";
@@ -58,7 +59,7 @@ const QString DOT_METADATA = ".metadata";
 const QString FILE_NAME = "filename";
 const QString FILTER_MASK = "filtermask";
 const QString FILTER_NAME = "filtername";
-const QString FILTER_STATEGY = "filter_strategy";
+const QString FILTER_STRATEGY = "filter_strategy";
 const QString FILTER_VERSION = "filterversion";
 const QString GENERATOR_LAYER = "generatorlayer";
 const QString GENERATOR_NAME = "generatorname";

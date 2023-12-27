@@ -1,0 +1,147 @@
+<svg width="370px" height="160px"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+        <style>
+        .test {
+            font-size: 10pt;
+            font-family: FontWithFeaturesOTF;
+            fill: blue;
+        }
+        #test1 .high {
+            font-variant-numeric: normal;
+        }
+        #test1 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" off, "tnum" off, "frac" off, "afrc" off, "ordn" off, "zero" off;
+        }
+        
+        #test2 .high {
+            font-variant-numeric: lining-nums;
+        }
+        #test2 .low {
+            font-feature-settings: "lnum" on, "onum" off, "pnum" off, "tnum" off, "frac" off, "afrc" off, "ordn" off, "zero" off;
+        }
+        
+        #test3 .high {
+            font-variant-numeric: oldstyle-nums;
+        }
+        #test3 .low {
+            font-feature-settings: "lnum" off, "onum" on, "pnum" off, "tnum" off, "frac" off, "afrc" off, "ordn" off, "zero" off;
+        }
+        
+        #test4 .high {
+            font-variant-numeric: proportional-nums;
+        }
+        #test4 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" on, "tnum" off, "frac" off, "afrc" off, "ordn" off, "zero" off;
+        }
+        
+        #test5 .high {
+            font-variant-numeric: tabular-nums;
+        }
+        #test5 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" off, "tnum" on, "frac" off, "afrc" off, "ordn" off, "zero" off;
+        }
+        
+        #test6 .high {
+            font-variant-numeric: diagonal-fractions;
+        }
+        #test6 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" off, "tnum" off, "frac" on, "afrc" off, "ordn" off, "zero" off;
+        }
+        
+        #test7 .high {
+            font-variant-numeric: stacked-fractions;
+        }
+        #test7 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" off, "tnum" off, "frac" off, "afrc" on, "ordn" off, "zero" off;
+        }
+        
+        #test8 .high {
+            font-variant-numeric: ordinal;
+        }
+        #test8 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" off, "tnum" off, "frac" off, "afrc" off, "ordn" on, "zero" off;
+        }
+        
+        #test9 .high {
+            font-variant-numeric: slashed-zero;
+        }
+        #test9 .low {
+            font-feature-settings: "lnum" off, "onum" off, "pnum" off, "tnum" off, "frac" off, "afrc" off, "ordn" off, "zero" on;
+        }
+        </style>
+    </defs>
+
+    <g id="testRect" class="test">
+        <!-- These tests are all adapted from the font-variant tests of the web-platform-tests: https://github.com/web-platform-tests/wpt/tree/master/css/css-fonts -->
+
+        <rect id="boundingRect" x="5" y="5" width="360" height="150"
+            fill="none" stroke="red"/>
+
+        
+        <!-- Adapted from font-variant-numeric-01.html: Test passes if the three lines below are identical, with eight crosses (✗)-->
+        <text id="test1" x="7" y="27" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="7" dy="1em">PQRSTUVW</tspan>
+            <tspan x="7" dy="1em">BBBBBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-02.html: Test passes if the three lines below are identical, with one check mark (✓) followed by seven crosses (✗).-->
+        <text id="test2" x="127" y="27" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="127" dy="1em">PQRSTUVW</tspan>
+            <tspan x="127" dy="1em">ABBBBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-03.html: Test passes if the three lines below are identical, with one cross (✗), then one check mark (✓) followed by six crosses (✗).-->
+        <text id="test3" x="247" y="27" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="247" dy="1em">PQRSTUVW</tspan>
+            <tspan x="247" dy="1em">BABBBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-04.html: Test passes if the three lines below are identical, with two crosses (✗), then one check mark (✓) followed by five crosses (✗).-->
+        <text id="test4" x="7" y="77" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="7" dy="1em">PQRSTUVW</tspan>
+            <tspan x="7" dy="1em">BBABBBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-05.html: Test passes if the three lines below are identical, with three crosses (✗), then one check mark (✓) followed by four crosses (✗).-->
+        <text id="test5" x="127" y="77" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="127" dy="1em">PQRSTUVW</tspan>
+            <tspan x="127" dy="1em">BBBABBBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-06.html: Test passes if the three lines below are identical, with four crosses (✗), then one check mark (✓) followed by three crosses (✗).-->
+        <text id="test6" x="247" y="77" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="247" dy="1em">PQRSTUVW</tspan>
+            <tspan x="247" dy="1em">BBBBABBB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-07.html: Test passes if the three lines below are identical, with five crosses (✗), then one check mark (✓) followed by two crosses (✗). -->
+        <text id="test7" x="7" y="127" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="7" dy="1em">PQRSTUVW</tspan>
+            <tspan x="7" dy="1em">BBBBBABB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-08.html: Test passes if the three lines below are identical, with six crosses (✗), then one check mark (✓) followed by one cross (✗). -->
+        <text id="test8" x="127" y="127" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="127" dy="1em">PQRSTUVW</tspan>
+            <tspan x="127" dy="1em">BBBBBBAB</tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-numeric-09.html: Test passes if the three lines below are identical, with seven crosses (✗), then one check mark (✓).-->
+        <text id="test9" x="247" y="127" >
+            <tspan class="high">PQRSTUVW</tspan>
+            <tspan class="low"  x="247" dy="1em">PQRSTUVW</tspan>
+            <tspan x="247" dy="1em">BBBBBBBA</tspan>
+        </text>
+
+    </g>
+
+</svg>

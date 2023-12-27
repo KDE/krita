@@ -57,16 +57,11 @@
 #include "kis_transform_worker.h"
 #include "kis_filter_strategy.h"
 #include "krita_utils.h"
+#include <KisStaticInitializer.h>
 
-
-struct KisPaintDeviceSPStaticRegistrar {
-    KisPaintDeviceSPStaticRegistrar() {
-        qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
-    }
-};
-static KisPaintDeviceSPStaticRegistrar __registrar;
-
-
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
+}
 
 struct KisPaintDevice::Private
 {
@@ -97,6 +92,7 @@ public:
 
     QScopedPointer<KisPaintDeviceFramesInterface> framesInterface;
     bool isProjectionDevice;
+    bool supportsWrapAroundMode;
 
     KisPaintDeviceStrategy* currentStrategy();
 
@@ -374,6 +370,7 @@ public:
         DataSP data = m_frames[frameId];
         data->setX(offset.x());
         data->setY(offset.y());
+        data->cache()->invalidate();
     }
 
     const QList<int> frameIds() const
@@ -402,6 +399,7 @@ public:
         KoColor color(defPixel);
         color.convertTo(data->colorSpace());
         data->dataManager()->setDefaultPixel(color.data());
+        data->cache()->invalidate();
     }
 
     KoColor frameDefaultPixel(int frameId) const
@@ -428,7 +426,7 @@ public:
 
     void generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod);
 
-    void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
+    void testingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 
 private:
@@ -544,13 +542,14 @@ private:
          * currentData() to start cloning.
          */
         q->setDefaultBounds(src->defaultBounds());
+        q->setSupportsWraparoundMode(src->supportsWraproundMode());
 
         currentData()->prepareClone(srcData);
 
 
         /**
          * Default pixel must be updated **after** the color space
-         * of the device has been adjusted in prpareClone(). Otherwise,
+         * of the device has been adjusted in prepareClone(). Otherwise,
          * colorSpace() of the resulting KoColor object will be
          * incorrect.
          */
@@ -609,6 +608,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
       isProjectionDevice(false),
+      supportsWrapAroundMode(false),
       m_data(new Data(paintDevice)),
       m_nextFreeFrameId(0)
 {
@@ -622,7 +622,7 @@ KisPaintDevice::Private::~Private()
 
 KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::currentStrategy()
 {
-    if (!defaultBounds->wrapAroundMode()) {
+    if (!supportsWrapAroundMode || !defaultBounds->wrapAroundMode()) {
         return basicStrategy.data();
     }
 
@@ -755,19 +755,6 @@ void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManage
     const int srcStepStride = srcStepSize * pixelSize;
     const int srcColumnStride = (srcStepSize - 1) * srcStepStride;
 
-    QScopedArrayPointer<qint16> weights(new qint16[srcCellSize]);
-
-    {
-        const qint16 averageWeight = qCeil(255.0 / srcCellSize);
-        const qint16 extraWeight = averageWeight * srcCellSize - 255;
-        KIS_ASSERT_RECOVER_NOOP(extraWeight == 1);
-
-        for (int i = 0; i < srcCellSize - 1; i++) {
-            weights[i] = averageWeight;
-        }
-        weights[srcCellSize - 1] = averageWeight - extraWeight;
-    }
-
     InternalSequentialConstIterator srcIntIt(StrategyPolicy(currentStrategy(), srcDataManager, srcOffset.x(), srcOffset.y()), srcRect);
     InternalSequentialIterator dstIntIt(StrategyPolicy(currentStrategy(), dstDataManager, dstOffset.x(), dstOffset.y()), dstRect);
 
@@ -798,7 +785,7 @@ void KisPaintDevice::Private::updateLodDataManager(KisDataManager *srcDataManage
 
             int colsRemaining = dstRect.width();
             while (colsRemaining > 0 && dstIntIt.nextPixel()) {
-                mixOp->mixColors(blendDataPtr, weights.data(), srcCellSize, dstIntIt.rawData());
+                mixOp->mixColors(blendDataPtr, srcCellSize, dstIntIt.rawData());
                 blendDataPtr += srcCellStride;
 
                 colsRemaining--;
@@ -930,7 +917,7 @@ void KisPaintDevice::Private::uploadFrameData(DataSP srcData, DataSP dstData)
     dstData->setY(srcData->y());
 }
 
-void KisPaintDevice::Private::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)
+void KisPaintDevice::Private::testingFetchLodDevice(KisPaintDeviceSP targetDevice)
 {
     Data *data = m_lodData.data();
     Q_ASSERT(data);
@@ -1082,9 +1069,8 @@ void KisPaintDevice::init(const KoColorSpace *colorSpace,
         defaultBounds = m_d->transitionalDefaultBounds;
     }
 
-    QScopedArrayPointer<quint8> defaultPixel(new quint8[colorSpace->pixelSize()]);
-    colorSpace->fromQColor(Qt::transparent, defaultPixel.data());
-    m_d->init(colorSpace, defaultPixel.data());
+    KoColor color = KoColor::createTransparent(colorSpace);
+    m_d->init(colorSpace, color.data());
 
     Q_ASSERT(m_d->colorSpace());
 
@@ -1117,6 +1103,7 @@ void KisPaintDevice::makeFullCopyFrom(const KisPaintDevice &rhs, KritaUtils::Dev
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), this));
     }
 
+    m_d->supportsWrapAroundMode = rhs.m_d->supportsWrapAroundMode;
     setDefaultBounds(rhs.m_d->defaultBounds);
     setParentNode(newParentNode);
 }
@@ -1205,6 +1192,7 @@ void KisPaintDevice::estimateMemoryStats(qint64 &imageData, qint64 &temporaryDat
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->parent || !parent);
     m_d->parent = parent;
 }
 
@@ -1609,7 +1597,7 @@ void KisPaintDevice::convertFromQImage(const QImage& _image, const KoColorProfil
     QImage image = _image;
 
     if (image.format() != QImage::Format_ARGB32) {
-        image = image.convertToFormat(QImage::Format_ARGB32);
+        image.convertTo(QImage::Format_ARGB32);
     }
     // Don't convert if not no profile is given and both paint dev and qimage are rgba.
     if (!profile && colorSpace()->id() == "RGBA") {
@@ -1799,9 +1787,9 @@ KisPaintDeviceSP KisPaintDevice::createThumbnailDeviceOversampled(qint32 w, qint
                                  thumbnailOversampledSize.width(), thumbnailOversampledSize.height(), outputRect);
 
     if (oversample != 1. && oversampleAdjusted != 1.) {
-        KoDummyUpdater updater;
+        KoDummyUpdaterHolder updaterHolder;
         KisTransformWorker worker(thumbnail, 1 / oversampleAdjusted, 1 / oversampleAdjusted, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                                  &updater, KisFilterStrategyRegistry::instance()->value("Bilinear"));
+                                  updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bilinear"));
         worker.run();
     }
     return thumbnail;
@@ -1828,7 +1816,7 @@ QImage KisPaintDevice::createThumbnail(qint32 maxw, qint32 maxh,
                                        qreal oversample, KoColorConversionTransformation::Intent renderingIntent,
                                        KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    const QRect deviceExtent = extent();
+    const QRect deviceExtent = exactBounds();
     const QSize thumbnailSize = deviceExtent.size().scaled(maxw, maxh, aspectRatioMode);
     return createThumbnail(thumbnailSize.width(), thumbnailSize.height(),
                            oversample, renderingIntent, conversionFlags);
@@ -2093,6 +2081,7 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
 {
     KisPaintDeviceSP device = new KisPaintDevice(compositionSourceColorSpace());
     device->setDefaultBounds(defaultBounds());
+    device->setSupportsWraparoundMode(supportsWraproundMode());
     return device;
 }
 
@@ -2100,6 +2089,7 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP 
 {
     KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
     clone->setDefaultBounds(defaultBounds());
+    clone->setSupportsWraparoundMode(supportsWraproundMode());
     clone->convertTo(compositionSourceColorSpace(),
                      KoColorConversionTransformation::internalRenderingIntent(),
                      KoColorConversionTransformation::internalConversionFlags());
@@ -2110,6 +2100,7 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP 
 {
     KisPaintDeviceSP clone = new KisPaintDevice(colorSpace());
     clone->setDefaultBounds(defaultBounds());
+    clone->setSupportsWraparoundMode(supportsWraproundMode());
     clone->makeCloneFromRough(cloneSource, roughRect);
     clone->convertTo(compositionSourceColorSpace(),
                      KoColorConversionTransformation::internalRenderingIntent(),
@@ -2178,10 +2169,48 @@ void KisPaintDevice::generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &o
     m_d->generateLodCloneDevice(dst, originalRect, lod);
 }
 
+void KisPaintDevice::setSupportsWraparoundMode(bool value)
+{
+    m_d->supportsWrapAroundMode = value;
+}
+
+bool KisPaintDevice::supportsWraproundMode() const
+{
+    return m_d->supportsWrapAroundMode;
+}
 
 KisPaintDeviceFramesInterface* KisPaintDevice::framesInterface()
 {
     return m_d->framesInterface.data();
+}
+
+bool KisPaintDevice::burnKeyframe(int frameID)
+{
+    KIS_ASSERT_RECOVER_RETURN_VALUE(m_d->framesInterface.data()->frames().contains(frameID), false);
+
+    // Preserve keyframe data from frameID...
+    KisPaintDeviceSP holder = new KisPaintDevice(m_d->colorSpace());
+    m_d->framesInterface->writeFrameToDevice(frameID, holder);
+
+    // Remove all keyframes..
+    QSet<int> times = m_d->contentChannel->allKeyframeTimes();
+    Q_FOREACH( const int& time, times ) {
+        m_d->contentChannel->removeKeyframe(time);
+    }
+
+    // TODO: Eventually rewrite this to completely remove contentChannel.
+    //          For now, importing it as frame 0 will be close enough.
+    m_d->contentChannel->importFrame(0, holder, nullptr);
+
+    return true;
+}
+
+bool KisPaintDevice::burnKeyframe()
+{
+    if (m_d->framesInterface) {
+        return burnKeyframe(m_d->framesInterface->currentFrameId());
+    }
+    return true;
 }
 
 /******************************************************************/
@@ -2317,7 +2346,7 @@ QList<KisPaintDeviceData*> KisPaintDeviceFramesInterface::testingGetDataObjectsL
     return q->m_d->allDataObjects();
 }
 
-void KisPaintDevice::tesingFetchLodDevice(KisPaintDeviceSP targetDevice)
+void KisPaintDevice::testingFetchLodDevice(KisPaintDeviceSP targetDevice)
 {
-    m_d->tesingFetchLodDevice(targetDevice);
+    m_d->testingFetchLodDevice(targetDevice);
 }

@@ -24,7 +24,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return QString("LABA");
+        return QStringLiteral("LABA");
     }
 
     KoID colorModelId() const override

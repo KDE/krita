@@ -23,7 +23,7 @@
 #include <KisDocument.h>
 #include <KisPart.h>
 
-#include <sdk/tests/testui.h>
+#include <testui.h>
 
 void TestNode::testSetColorSpace()
 {

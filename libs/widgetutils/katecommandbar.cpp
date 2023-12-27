@@ -181,7 +181,7 @@ public:
             // collect rects for each word
             QVector<QPair<QRect, QString>> btns;
             const auto list = [&shortcutString] {
-#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 14, 0)
                 auto list = shortcutString.split(QLatin1Char('+'), QString::SkipEmptyParts);
 #else
                 auto list = shortcutString.split(QLatin1Char('+'), Qt::SkipEmptyParts);

@@ -7,6 +7,9 @@
 
 #include "kis_painter.h"
 #include "KoCompositeOpRegistry.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
+
 
 KisLayerStyleKnockoutBlower::KisLayerStyleKnockoutBlower()
 {
@@ -31,7 +34,8 @@ KisSelectionSP KisLayerStyleKnockoutBlower::knockoutSelectionLazy()
         if (m_knockoutSelection) {
             return m_knockoutSelection;
         } else {
-            m_knockoutSelection = new KisSelection(new KisSelectionEmptyBounds(0));
+            m_knockoutSelection = new KisSelection(new KisSelectionEmptyBounds(),
+                                                   KisImageResolutionProxy::identity());
             return m_knockoutSelection;
         }
     }

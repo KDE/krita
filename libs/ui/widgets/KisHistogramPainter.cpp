@@ -56,7 +56,7 @@ public:
     static qreal bestCutOffHeight(QPolygonF polygon);
     static void smoothHistogramShape(QPolygonF &polygon);
     static void simplifyHistogramShape(QPolygonF &polygon);
-    static QPair<QColor, QPainter::CompositionMode> computeChannelPaintigInfo(const KoColorSpace *colorSpace,
+    static QPair<QColor, QPainter::CompositionMode> computeChannelPaintingInfo(const KoColorSpace *colorSpace,
                                                                               int channel);
     static void paintHistogramShape(QImage &image,
                                     const QPolygonF &polygon,
@@ -168,7 +168,7 @@ void KisHistogramPainter::Private::simplifyHistogramShape(QPolygonF &polygon)
 }
 
 QPair<QColor, QPainter::CompositionMode>
-KisHistogramPainter::Private::computeChannelPaintigInfo(const KoColorSpace *colorSpace,
+KisHistogramPainter::Private::computeChannelPaintingInfo(const KoColorSpace *colorSpace,
                                                         int channel)
 {
     Q_ASSERT(colorSpace);
@@ -326,7 +326,7 @@ void KisHistogramPainter::setup(KisHistogram *histogram, const KoColorSpace *col
         const quint32 highest = histogram->calculations().getHighest();
         QPair<QPolygonF, QPolygonF> shapes = Private::computeHistogramShape(histogram, channel, highest);
         const QPair<QColor, QPainter::CompositionMode> channelPaintingInfo =
-            Private::computeChannelPaintigInfo(colorSpace, channel);
+            Private::computeChannelPaintingInfo(colorSpace, channel);
         const qreal linearBestCutOffHeight = Private::bestCutOffHeight(shapes.first);
         const qreal logarithmicBestCutOffHeight = Private::bestCutOffHeight(shapes.second);
 

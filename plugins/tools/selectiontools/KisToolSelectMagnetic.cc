@@ -26,6 +26,7 @@
 #include <kis_selection_options.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
+#include <kis_default_bounds.h>
 
 #include "canvas/kis_canvas2.h"
 #include "kis_painter.h"
@@ -34,11 +35,12 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_algebra_2d.h"
 
 #include "KisHandlePainterHelper.h"
-
+#include <KisOptimizedBrushOutline.h>
 #include <kis_slider_spin_box.h>
 
 #define FEEDBACK_LINE_WIDTH 2
@@ -488,7 +490,7 @@ void KisToolSelectMagnetic::finishSelectionAction()
     if (m_points.count() > 2 &&
         !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction()))
     {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
         const SelectionMode mode =
             helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
@@ -574,7 +576,6 @@ void KisToolSelectMagnetic::finishSelectionAction()
             path->normalize();
             helper.addSelectionShape(path, selectionAction());
         }
-        QApplication::restoreOverrideCursor();
     }
 
     resetVariables();
@@ -630,7 +631,7 @@ void KisToolSelectMagnetic::drawAnchors(QPainter &gc)
 {
     int sides = updateInitialAnchorBounds(m_anchorPoints.first());
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
-        KisHandlePainterHelper helper(&gc, handleRadius());
+        KisHandlePainterHelper helper(&gc, handleRadius(), decorationThickness());
         QRect r(QPoint(0, 0), QSize(sides, sides));
         r.moveCenter(pt);
         if (r.contains(m_lastCursorPos.toPoint())) {

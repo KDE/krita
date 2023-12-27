@@ -1,5 +1,3 @@
-add_subdirectory(dbexplorer)
-
 set(kritaresourcewidgets_LIB_SRCS
     KisIconToolTip.cpp
     KisResourceItemChooserContextMenu.cpp
@@ -7,9 +5,11 @@ set(kritaresourcewidgets_LIB_SRCS
     KisResourceItemChooserSync.cpp
     KisResourceItemDelegate.cpp
     KisResourceItemListView.cpp
+    KisResourceItemListWidget.cpp
     KisResourceItemView.cpp
     KisResourceThumbnailPainter.cpp
     KisTagChooserWidget.cpp
+    KisTagLabel.cpp
     KisTagFilterWidget.cpp
     KisTagToolButton.cpp
     KisResourceTaggingManager.cpp

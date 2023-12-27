@@ -1,9 +1,12 @@
 set(kritaexperimentpaintop_SOURCES
     experiment_paintop_plugin.cpp
     kis_experiment_paintop.cpp
-    kis_experimentop_option.cpp
     kis_experiment_paintop_settings.cpp
     kis_experiment_paintop_settings_widget.cpp
+    KisExperimentOpOptionData.cpp
+    KisExperimentOpOptionModel.cpp
+    KisExperimentOpOptionWidget.cpp
+    
     )
 
 ki18n_wrap_ui(kritaexperimentpaintop_SOURCES wdgexperimentoptions.ui )

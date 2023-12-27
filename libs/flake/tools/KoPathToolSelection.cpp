@@ -30,10 +30,11 @@ KoPathToolSelection::~KoPathToolSelection()
 
 void KoPathToolSelection::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
 {
+    int decorationThickness = m_tool? m_tool->decorationThickness(): 1;
     PathShapePointMap::iterator it(m_shapePointMap.begin());
     for (; it != m_shapePointMap.end(); ++it) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, it.key(), converter, handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, it.key(), converter, handleRadius, decorationThickness);
         helper.setHandleStyle(KisHandleStyle::selectedPrimaryHandles());
 
         Q_FOREACH (KoPathPoint *p, it.value()) {
@@ -47,18 +48,18 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
     if(! point)
         return;
 
-    bool allreadyIn = false;
+    bool alreadyIn = false;
     if (clear) {
         if (size() == 1 && m_selectedPoints.contains(point)) {
-            allreadyIn = true;
+            alreadyIn = true;
         } else {
             this->clear();
         }
     } else {
-        allreadyIn = m_selectedPoints.contains(point);
+        alreadyIn = m_selectedPoints.contains(point);
     }
 
-    if (!allreadyIn) {
+    if (!alreadyIn) {
         m_selectedPoints.insert(point);
         KoPathShape * pathShape = point->parent();
         PathShapePointMap::iterator it(m_shapePointMap.find(pathShape));
@@ -101,6 +102,20 @@ void KoPathToolSelection::selectPoints(const QRectF &rect, bool clearSelection)
         if (parameterShape && parameterShape->isParametricShape())
             continue;
         Q_FOREACH (KoPathPoint* point, shape->pointsAt(shape->documentToShape(rect)))
+            add(point, false);
+    }
+    blockSignals(false);
+    emit selectionChanged();
+}
+
+void KoPathToolSelection::selectAll()
+{
+    blockSignals(true);
+    Q_FOREACH (KoPathShape* shape, m_selectedShapes) {
+        KoParameterShape *parameterShape = dynamic_cast<KoParameterShape*>(shape);
+        if (parameterShape && parameterShape->isParametricShape())
+            continue;
+        Q_FOREACH (KoPathPoint* point, shape->pointsAt(shape->outlineRect().adjusted(-2, -2, 2, 2)))
             add(point, false);
     }
     blockSignals(false);

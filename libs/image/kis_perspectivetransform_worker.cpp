@@ -208,7 +208,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
     QRectF srcClipRect = srcDev->exactBounds() | srcDev->defaultBounds()->imageBorderRect();
     if (srcClipRect.isEmpty()) return;
 
-    if (m_isIdentity || m_isTranslating) {
+    if (m_isIdentity || (m_isTranslating && !m_forceSubPixelTranslation)) {
         KisPainter gc(dstDev);
         gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(dstRect.topLeft(), srcDev, m_backwardTransform.mapRect(dstRect));
@@ -243,4 +243,14 @@ QTransform KisPerspectiveTransformWorker::forwardTransform() const
 QTransform KisPerspectiveTransformWorker::backwardTransform() const
 {
     return m_backwardTransform;
+}
+
+bool KisPerspectiveTransformWorker::forceSubPixelTranslation() const
+{
+    return m_forceSubPixelTranslation;
+}
+
+void KisPerspectiveTransformWorker::setForceSubPixelTranslation(bool value)
+{
+    m_forceSubPixelTranslation = value;
 }

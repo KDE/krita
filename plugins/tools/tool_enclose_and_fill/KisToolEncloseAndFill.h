@@ -19,6 +19,8 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KisEncloseAndFillPainter.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "subtools/KisDynamicDelegatedTool.h"
 
@@ -31,7 +33,9 @@ class KisSliderSpinBox;
 class QCheckBox;
 class KisColorLabelSelectorWidget;
 class QPushButton;
+class QToolButton;
 class QComboBox;
+class KisCompositeOpComboBox;
 
 class KisToolEncloseAndFill : public KisDynamicDelegatedTool<KisToolShape>
 {
@@ -79,6 +83,7 @@ public:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private:
     EnclosingMethod m_enclosingMethod {Lasso};
@@ -87,11 +92,13 @@ private:
     KoColor m_regionSelectionColor;
     bool m_regionSelectionInvert {false};
     bool m_regionSelectionIncludeContourRegions {false};
-    bool m_regionSelectionIncludeSurroundingRegions {false};
 
     FillType m_fillType {FillWithForegroundColor};
     qreal m_patternScale {100.0};
     qreal m_patternRotation {0.0};
+    bool m_useCustomBlendingOptions {false};
+    int m_customOpacity {100};
+    QString m_customCompositeOp {COMPOSITE_OVER};
 
     int m_fillThreshold {8};
     int m_fillOpacitySpread {100};
@@ -99,10 +106,16 @@ private:
 
     bool m_antiAlias {false};
     int m_expand {0};
+    int m_stopGrowingAtDarkestPixel {false};
     int m_feather {0};
 
     Reference m_reference {CurrentLayer};
     QList<int> m_selectedColorLabels;
+
+    KisPaintDeviceSP m_referencePaintDevice {nullptr};
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList {nullptr};
+    int m_previousTime {0};
+    KisNodeSP m_previousNode {nullptr};
 
     KisOptionCollectionWidget *m_optionWidget {nullptr};
 
@@ -116,13 +129,15 @@ private:
     KisColorButton *m_buttonRegionSelectionColor {nullptr};
     QCheckBox *m_checkBoxRegionSelectionInvert {nullptr};
     QCheckBox *m_checkBoxRegionSelectionIncludeContourRegions {nullptr};
-    QCheckBox *m_checkBoxRegionSelectionIncludeSurroundingRegions {nullptr};
 
     KoGroupButton *m_buttonFillWithFG{nullptr};
     KoGroupButton *m_buttonFillWithBG{nullptr};
     KoGroupButton *m_buttonFillWithPattern{nullptr};
     KisDoubleSliderSpinBox *m_sliderPatternScale {nullptr};
     KisAngleSelector *m_angleSelectorPatternRotation {nullptr};
+    QCheckBox *m_checkBoxCustomBlendingOptions {nullptr};
+    KisSliderSpinBox *m_sliderCustomOpacity {nullptr};
+    KisCompositeOpComboBox *m_comboBoxCustomCompositeOp {nullptr};
 
     KisSliderSpinBox *m_sliderFillThreshold {nullptr};
     KisSliderSpinBox *m_sliderFillOpacitySpread {nullptr};
@@ -130,6 +145,7 @@ private:
 
     QCheckBox *m_checkBoxAntiAlias {nullptr};
     KisSliderSpinBox *m_sliderExpand {nullptr};
+    QToolButton *m_buttonStopGrowingAtDarkestPixel {nullptr};
     KisSliderSpinBox *m_sliderFeather {nullptr};
 
     KoGroupButton *m_buttonReferenceCurrent{nullptr};
@@ -178,21 +194,27 @@ private Q_SLOTS:
     void slot_buttonRegionSelectionColor_changed(const KoColor &color);
     void slot_checkBoxRegionSelectionInvert_toggled(bool checked);
     void slot_checkBoxRegionSelectionIncludeContourRegions_toggled(bool checked);
-    void slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool checked);
     void slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *button,
                                                       bool checked);
     void slot_sliderPatternScale_valueChanged(double value);
     void slot_angleSelectorPatternRotation_angleChanged(double value);
+    void slot_checkBoxUseCustomBlendingOptions_toggled(bool checked);
+    void slot_sliderCustomOpacity_valueChanged(int value);
+    void slot_comboBoxCustomCompositeOp_currentIndexChanged(int index);
     void slot_sliderFillThreshold_valueChanged(int value);
     void slot_sliderFillOpacitySpread_valueChanged(int value);
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderExpand_valueChanged(int value);
+    void slot_buttonStopGrowingAtDarkestPixel_toggled(bool enabled);
     void slot_sliderFeather_valueChanged(int value);
     void slot_optionButtonStripReference_buttonToggled(KoGroupButton *button,
                                                        bool checked);
     void slot_widgetLabels_selectionChanged();
     void slot_buttonReset_clicked();
+
+    void slot_currentNodeChanged(const KisNodeSP node);
+    void slot_colorSpaceChanged(const KoColorSpace *colorSpace);
 
     void slot_delegateTool_enclosingMaskProduced(KisPixelSelectionSP enclosingMask);
 

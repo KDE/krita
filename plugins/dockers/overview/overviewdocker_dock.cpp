@@ -57,8 +57,6 @@ OverviewDockerDock::OverviewDockerDock()
     m_controlsLayout->setSpacing(2);
     m_controlsContainer->setLayout(m_controlsLayout);
 
-    m_controlsSecondRowLayout = new QHBoxLayout();
-
     setWidget(m_page);
 
     m_showControlsTimer.setSingleShot(true);
@@ -116,15 +114,17 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     // Delete the stretch
-    while (m_controlsSecondRowLayout->count() && m_controlsSecondRowLayout->itemAt(0)->spacerItem()) {
+    while (m_controlsSecondRowLayout && m_controlsSecondRowLayout->count() && m_controlsSecondRowLayout->itemAt(0)->spacerItem()) {
         delete m_controlsSecondRowLayout->takeAt(0);
     }
 
     m_controlsLayout->removeItem(m_controlsSecondRowLayout);
 
+    delete m_controlsSecondRowLayout;
+
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    m_overviewWidget->setCanvas(canvas);
+    m_overviewWidget->setCanvas(m_canvas);
     if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->zoomController() && m_canvas->viewManager()->zoomController()->zoomAction()) {
         m_zoomSlider = m_canvas->viewManager()->zoomController()->zoomAction()->createWidget(m_canvas->imageView()->KisView::statusBar());
         static_cast<KoZoomWidget*>(m_zoomSlider)->setZoomInputFlat(false);
@@ -159,6 +159,8 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_pinControlsButton->setAutoRaise(true);
         connect(m_pinControlsButton, SIGNAL(toggled(bool)), SLOT(setPinControls(bool)));
 
+        m_controlsSecondRowLayout = new QHBoxLayout();
+
         m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);
         m_controlsSecondRowLayout->addStretch();
         m_controlsSecondRowLayout->addWidget(m_mirrorCanvas);
@@ -186,7 +188,7 @@ void OverviewDockerDock::unsetCanvas()
 {
     setEnabled(false);
     m_canvas = nullptr;
-    m_overviewWidget->unsetCanvas();
+    m_overviewWidget->setCanvas(0);
 }
 
 void OverviewDockerDock::mirrorUpdateIcon()
@@ -242,11 +244,7 @@ void OverviewDockerDock::enterEvent(QEvent*)
 
 bool OverviewDockerDock::event(QEvent *e)
 {
-    if (e->type() == QEvent::PaletteChange) {
-        if (m_pinControlsButton) {
-            KisIconUtils::updateIcon(m_pinControlsButton);
-        }
-    } else if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange) {
+    if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange) {
         resizeEvent(nullptr);
     }
     return QDockWidget::event(e);
@@ -299,7 +297,7 @@ bool OverviewDockerDock::eventFilter(QObject *o, QEvent *e)
                 m_touchPointId = te->touchPoints().first().id();
                 m_lastTouchPos = te->touchPoints().first().pos();
             }
-            // Accept the event so that other touch events keep comming
+            // Accept the event so that other touch events keep coming
             e->accept();
             return true;
 

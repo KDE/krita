@@ -64,7 +64,7 @@ private Q_SLOTS:
     void testProcessLine_NearestNeighbourFilter_0098x_horizontal();
     void testProcessLine_NearestNeighbourFilter_0098x_vertical();
 
-    void benchmarkProcesssLine();
+    void benchmarkProcessesLine();
 
     void testProcessSolidLine();
 };

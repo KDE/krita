@@ -35,6 +35,7 @@ public:
 
     KisPaintDeviceSP original();
     KisPaintDeviceSP projection();
+    KisPaintDeviceSP lazyDestinationForSubtreeComposition();
 
     bool isRoot() const;
     bool isLayer() const;

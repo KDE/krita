@@ -57,7 +57,7 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
             QIcon floatIcon = kisIcon("docker_float");
             QPushButton *button = new QPushButton(floatIcon, "", this);
             button->setFlat(true);
-            connect(button, &QPushButton::clicked, [dockWidget](){
+            connect(button, &QPushButton::clicked, dockWidget, [dockWidget](){
                 dockWidget->setFloating(!dockWidget->isFloating());
             } );
             sublayout->addWidget(button);

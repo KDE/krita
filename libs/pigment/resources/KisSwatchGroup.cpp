@@ -1,5 +1,5 @@
 /*  This file is part of the KDE project
-    SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
+    SPDX-FileCopyrightText: 2005..2022 Halla Rempt <halla@valdyas.org>
     SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
     SPDX-FileCopyrightText: 2018 Michael Zhou <simerixh@gmail.com>
 
@@ -9,11 +9,11 @@
 
 #include "KisSwatchGroup.h"
 
+int KisSwatchGroup::DEFAULT_COLUMN_COUNT = 16;
+int KisSwatchGroup::DEFAULT_ROW_COUNT = 20;
+
 struct KisSwatchGroup::Private {
     typedef QMap<int, KisSwatch> Column;
-
-    static int DEFAULT_COLUMN_COUNT;
-    static int DEFAULT_ROW_COUNT;
 
     QString name {QString()};
     QVector<Column> colorMatrix {DEFAULT_COLUMN_COUNT};
@@ -21,14 +21,13 @@ struct KisSwatchGroup::Private {
     int rowCount {DEFAULT_ROW_COUNT};
 };
 
-int KisSwatchGroup::Private::DEFAULT_COLUMN_COUNT = 16;
-int KisSwatchGroup::Private::DEFAULT_ROW_COUNT = 20;
 
 KisSwatchGroup::KisSwatchGroup()
     : d(new Private)
 { }
 
-KisSwatchGroup::~KisSwatchGroup() = default;
+KisSwatchGroup::~KisSwatchGroup()
+{ }
 
 KisSwatchGroup::KisSwatchGroup(const KisSwatchGroup &rhs)
     : d(new Private(*rhs.d))
@@ -39,23 +38,24 @@ KisSwatchGroup &KisSwatchGroup::operator =(const KisSwatchGroup &rhs)
     if (&rhs == this) {
         return *this;
     }
-    d.reset(new Private(*rhs.d));
+    *d = *rhs.d;
     return *this;
 }
 
-void KisSwatchGroup::setEntry(const KisSwatch &e, int column, int row)
+void KisSwatchGroup::setSwatch(const KisSwatch &e, int column, int row)
 {
     Q_ASSERT(column < d->colorMatrix.size() && column >= 0 && row >= 0);
-    if (row >= d->rowCount) {
+
+    if (row + 1 >= d->rowCount) {
         setRowCount(row + 1);
     }
-    if (!checkEntry(column, row)) {
+    if (!checkSwatchExists(column, row)) {
         d->colorCount++;
     }
     d->colorMatrix[column][row] = e;
 }
 
-bool KisSwatchGroup::checkEntry(int column, int row) const
+bool KisSwatchGroup::checkSwatchExists(int column, int row) const
 {
     if (row >= d->rowCount) {
         return false;
@@ -80,7 +80,7 @@ bool KisSwatchGroup::checkEntry(int column, int row) const
     return true;
 }
 
-bool KisSwatchGroup::removeEntry(int column, int row)
+bool KisSwatchGroup::removeSwatch(int column, int row)
 {
     if (d->colorCount == 0) {
         return false;
@@ -101,7 +101,7 @@ bool KisSwatchGroup::removeEntry(int column, int row)
 
 void KisSwatchGroup::setColumnCount(int columnCount)
 {
-    Q_ASSERT(columnCount >= 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(columnCount >= 1);
 
 
     // Move 'removed' swatches into new row
@@ -110,8 +110,8 @@ void KisSwatchGroup::setColumnCount(int columnCount)
     for (int r = 0; r < rowCount(); r++ ) {
         for (int c = 0; c < d->colorMatrix.size(); c++ ) {
 
-            if (c >= columnCount && checkEntry(c, r)) {
-                movedSwatches.push_back(getEntry(c, r));
+            if (c >= columnCount && checkSwatchExists(c, r)) {
+                movedSwatches.push_back(getSwatch(c, r));
             }
         }
     }
@@ -141,23 +141,27 @@ int KisSwatchGroup::columnCount() const {
     return d->colorMatrix.size();
 }
 
-KisSwatch KisSwatchGroup::getEntry(int column, int row) const
+KisSwatch KisSwatchGroup::getSwatch(int column, int row) const
 {
+    // This is perfectly normal when Krita gets initialized, so it needs an if, not an assert.
+    // Getting -1, -1 is not a coding error.
+    if (row < 0 || column < 0) return KisSwatch();
+
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(column >= 0 && column < d->colorMatrix.size(), KisSwatch());
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(row >= 0 && row < d->rowCount, KisSwatch());
 
     return d->colorMatrix[column][row];
 }
 
-void KisSwatchGroup::addEntry(const KisSwatch &e)
+QPair<int, int> KisSwatchGroup::addSwatch(const KisSwatch &swatch)
 {
     if (columnCount() == 0) {
-        setColumnCount(Private::DEFAULT_COLUMN_COUNT);
+        setColumnCount(DEFAULT_COLUMN_COUNT);
     }
 
     int y = 0;
     int x = 0;
-    while(checkEntry(x, y))
+    while (checkSwatchExists(x, y))
     {
         if(++x == d->colorMatrix.size())
         {
@@ -166,9 +170,11 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
         }
     }
     // clear color metadata for now.
-    e.color().clearMetadata();
+    swatch.color().clearMetadata();
 
-    setEntry(e, x, y);
+    setSwatch(swatch, x, y);
+
+    return QPair<int, int> (x, y);
 }
 
 void KisSwatchGroup::clear()

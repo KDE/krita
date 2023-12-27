@@ -38,8 +38,6 @@ protected Q_SLOTS:
 
     void filterSelectionChanged();
 
-    void resizeEvent(QResizeEvent* ) override;
-
 public Q_SLOTS:
     void adjustSize();
 

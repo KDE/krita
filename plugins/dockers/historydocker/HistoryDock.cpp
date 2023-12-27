@@ -15,26 +15,11 @@
 #include <QVBoxLayout>
 #include <QSpacerItem>
 
-#include <DlgConfigureHistoryDock.h>
-
 HistoryDock::HistoryDock()
     : QDockWidget()
-    , m_historyCanvas(0)
+    , m_undoView(new KisUndoView(this))
 {
-    QWidget *page = new QWidget(this);
-    QVBoxLayout *vl = new QVBoxLayout(page);
-    m_undoView = new KisUndoView(this);
-    vl->addWidget(m_undoView);
-    QHBoxLayout *hl = new QHBoxLayout();
-    hl->addSpacerItem(new QSpacerItem(10, 1,  QSizePolicy::Expanding, QSizePolicy::Fixed));
-    m_bnConfigure = new QToolButton(page);
-    m_bnConfigure->setIcon(KisIconUtils::loadIcon("configure-thicker"));
-    m_bnConfigure->setAutoRaise(true);
-    connect(m_bnConfigure, SIGNAL(clicked(bool)), SLOT(configure()));
-    hl->addWidget(m_bnConfigure);
-    vl->addLayout(hl);
-
-    setWidget(page);
+    setWidget(m_undoView);
     setWindowTitle(i18n("Undo History"));
 }
 
@@ -49,24 +34,13 @@ void HistoryDock::setCanvas(KoCanvasBase *canvas)
         KUndo2Stack* undoStack = myCanvas->shapeController()->resourceManager()->undoStack();
 
         m_undoView->setStack(undoStack);
-        KisConfig cfg(true);
-        m_undoView->stack()->setUseCumulativeUndoRedo(cfg.useCumulativeUndoRedo());
-        m_undoView->stack()->setTimeT1(cfg.stackT1());
-        m_undoView->stack()->setTimeT2(cfg.stackT2());
-        m_undoView->stack()->setStrokesN(cfg.stackN());
     }
     m_undoView->setCanvas( myCanvas );
 
 }
-void HistoryDock::configure()
-{
-    DlgConfigureHistoryDock dlg(m_undoView, m_undoView->stack(), this);
-    dlg.exec();
-}
 
 void HistoryDock::unsetCanvas()
 {
-    m_historyCanvas = 0;
     setEnabled(false);
     m_undoView->setStack(0);
 }

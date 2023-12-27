@@ -1,5 +1,6 @@
 /*
- * SPDX-FileCopyrightText: 2019 boud <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2019 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2023 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -12,6 +13,8 @@
 
 #include "KisResourceStorage.h"
 #include "kritaresources_export.h"
+
+class QSqlQuery;
 
 /**
  * KisStorageModel provides a model of all registered storages, like
@@ -59,7 +62,6 @@ public:
 
     bool importStorage(QString filename, StorageImportOption importOption) const;
 
-
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
 Q_SIGNALS:
@@ -80,10 +82,10 @@ private:
     KisStorageModel(const KisStorageModel&);
     KisStorageModel operator=(const KisStorageModel&);
 
+    static QImage getThumbnailFromQuery(const QSqlQuery &query);
+
     struct Private;
     QScopedPointer<Private> d;
-
-
 };
 
 #endif // KISSTORAGEMODEL_H

@@ -35,7 +35,7 @@ public:
      * Set a callback that is called before image goes into sleep. This callback
      * may show the user some feedback window with a progress bar.
      *
-     * This callback is expected to be initialized dorung the construction
+     * This callback is expected to be initialized during the construction
      * of KisPart.
      */
     void setFeedbackCallback(std::function<void(KisImageSP)> callback);

@@ -24,7 +24,7 @@ ImageShapeFactory::ImageShapeFactory()
     : KoShapeFactoryBase(ImageShapeId, i18n("Image shape"))
 {
     setToolTip(i18n("A shape that shows an image (PNG/JPG/TIFF)"));
-    setIconName(koIconNameCStrNeededWithSubs("a generic image image icon", "x-shape-vectorimage", "application-x-wmf"));
+    setIconName(koIconNameCStrNeededWithSubs("a generic image icon", "x-shape-vectorimage", "application-x-wmf"));
 
     QList<QPair<QString, QStringList> > elementNamesList;
     elementNamesList.append(qMakePair(QString(KoXmlNS::draw), QStringList("image")));

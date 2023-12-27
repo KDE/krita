@@ -261,7 +261,7 @@ void KisColorizeMask::setProfile(const KoColorProfile *profile, KUndo2Command *p
     m_d->fakePaintDevice->setProfile(profile, parentCommand);
     m_d->coloringProjection->setProfile(profile, parentCommand);
 
-    for (auto stroke : m_d->keyStrokes) {
+    for (auto & stroke : m_d->keyStrokes) {
         stroke.color.setProfile(profile);
     }
 }
@@ -360,7 +360,7 @@ void KisColorizeMask::slotUpdateRegenerateFilling(bool prefilterOnly)
             const KoColor color =
                 !stroke.isTransparent ?
                 stroke.color :
-                KoColor(Qt::transparent, stroke.color.colorSpace());
+                KoColor::createTransparent(stroke.color.colorSpace());
 
             strategy->addKeyStroke(stroke.dev, color);
         }
@@ -425,6 +425,7 @@ void KisColorizeMask::slotRegenerationFinished(bool prefilterOnly)
 void KisColorizeMask::slotRegenerationCancelled()
 {
     slotRegenerationFinished(true);
+    m_d->setNeedsUpdateImpl(true, false);
 }
 
 KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const
@@ -683,9 +684,7 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     QList<KeyStroke>::const_iterator it =
         std::find_if(m_d->keyStrokes.constBegin(),
                      m_d->keyStrokes.constEnd(),
-                     [color] (const KeyStroke &s) {
-                         return s.color == color;
-                     });
+                     kismpl::mem_equal_to(&KeyStroke::color, color));
 
     KisPaintDeviceSP activeDevice;
     bool newKeyStroke = false;
@@ -707,8 +706,8 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
 
 
 struct KeyStrokeAddRemoveCommand : public KisCommandUtils::FlipFlopCommand {
-    KeyStrokeAddRemoveCommand(bool add, int index, KeyStroke stroke, QList<KeyStroke> *list, KisColorizeMaskSP node)
-        : FlipFlopCommand(!add),
+    KeyStrokeAddRemoveCommand(bool add, int index, KeyStroke stroke, QList<KeyStroke> *list, KisColorizeMaskSP node, KUndo2Command *parentCommand = nullptr)
+        : FlipFlopCommand(!add, parentCommand),
           m_index(index), m_stroke(stroke),
           m_list(list), m_node(node) {}
 
@@ -732,20 +731,25 @@ private:
     KisColorizeMaskSP m_node;
 };
 
-void KisColorizeMask::mergeToLayerThreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID, QVector<KisRunnableStrokeJobData*> *jobs)
+void KisColorizeMask::mergeToLayerThreaded(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText,int timedID, QVector<KisRunnableStrokeJobData*> *jobs)
 {
     // Just fake threaded merging. It is not supported for the colorize mask.
 
     KritaUtils::addJobSequential(*jobs,
         [=] () {
-            this->mergeToLayerUnthreaded(layer, undoAdapter, transactionText, timedID);
+            this->mergeToLayerUnthreaded(layer, parentCommand, transactionText, timedID);
         }
     );
 }
 
-void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID)
+void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID)
 {
     Q_UNUSED(layer);
+
+    auto executeAndAdd = [parentCommand] (KUndo2Command *cmd) {
+        cmd->redo();
+        new KisCommandUtils::SkipFirstRedoWrapper(cmd, parentCommand);
+    };
 
     WriteLockerSP sharedWriteLock(new WriteLocker(this));
 
@@ -753,21 +757,13 @@ void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KisPostExecutionUn
     const bool isTemporaryTargetErasing = temporaryCompositeOp() == COMPOSITE_ERASE;
     const QRect temporaryExtent = temporaryTarget ? temporaryTarget->extent() : QRect();
 
-    KisSavedMacroCommand *macro = undoAdapter->createMacro(transactionText);
-    KisMacroBasedUndoStore store(macro);
-    KisPostExecutionUndoAdapter fakeUndoAdapter(&store, undoAdapter->strokesFacade());
-
     /**
      * Add a new key stroke plane
      */
     if (m_d->needAddCurrentKeyStroke && !isTemporaryTargetErasing) {
         KeyStroke key(m_d->currentKeyStrokeDevice, m_d->currentColor);
-
-        KUndo2Command *cmd =
-            new KeyStrokeAddRemoveCommand(
-                true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, KisColorizeMaskSP(this));
-        cmd->redo();
-        fakeUndoAdapter.addCommand(toQShared(cmd));
+        executeAndAdd(new KeyStrokeAddRemoveCommand(
+            true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, KisColorizeMaskSP(this), nullptr));
     }
 
     QVector<KisRunnableStrokeJobData*> jobs;
@@ -777,21 +773,21 @@ void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KisPostExecutionUn
      * the current one.
      */
     if (!isTemporaryTargetErasing) {
-        mergeToLayerImpl(m_d->currentKeyStrokeDevice, &fakeUndoAdapter, transactionText, timedID, false, sharedWriteLock, &jobs);
+        mergeToLayerImpl(m_d->currentKeyStrokeDevice, parentCommand, transactionText, timedID, false, sharedWriteLock, &jobs);
     } else {
         Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
             if (temporaryExtent.intersects(stroke.dev->extent())) {
-                mergeToLayerImpl(stroke.dev, &fakeUndoAdapter, transactionText, timedID, false, sharedWriteLock, &jobs);
+                mergeToLayerImpl(stroke.dev, parentCommand, transactionText, timedID, false, sharedWriteLock, &jobs);
             }
         }
     }
 
-    mergeToLayerImpl(m_d->fakePaintDevice, &fakeUndoAdapter, transactionText, timedID, false, sharedWriteLock, &jobs);
+    mergeToLayerImpl(m_d->fakePaintDevice, parentCommand, transactionText, timedID, false, sharedWriteLock, &jobs);
 
     /**
      * When merging, we use barrier jobs only for ensuring that the merge jobs
      * are not split by the update jobs. Merge jobs hold the shared lock, so
-     * forcinf them out of CPU will basically cause a deadlock. When running in
+     * forcing them out of CPU will basically cause a deadlock. When running in
      * the fake executor, the jobs cannot be split anyway, so there is no danger
      * in that.
      */
@@ -810,20 +806,13 @@ void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KisPostExecutionUn
             const KeyStroke &stroke = m_d->keyStrokes[index];
 
             if (stroke.dev->exactBounds().isEmpty()) {
-                KUndo2Command *cmd =
-                    new KeyStrokeAddRemoveCommand(
-                        false, index, stroke, &m_d->keyStrokes, KisColorizeMaskSP(this));
-
-                cmd->redo();
-                fakeUndoAdapter.addCommand(toQShared(cmd));
-
+                executeAndAdd(new KeyStrokeAddRemoveCommand(
+                    false, index, stroke, &m_d->keyStrokes, KisColorizeMaskSP(this), nullptr));
             } else {
                 index++;
             }
         }
     }
-
-    undoAdapter->addMacro(macro);
 }
 
 
@@ -967,9 +956,7 @@ void KisColorizeMask::removeKeyStroke(const KoColor &_color)
     QList<KeyStroke>::iterator it =
         std::find_if(m_d->keyStrokes.begin(),
                      m_d->keyStrokes.end(),
-                     [color] (const KeyStroke &s) {
-                         return s.color == color;
-                     });
+                     kismpl::mem_equal_to(&KeyStroke::color, color));
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(it != m_d->keyStrokes.end());
 
@@ -1116,7 +1103,8 @@ void KisColorizeMask::setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStrok
         it->dev->setParentNode(this);
     }
 
-    KIS_SAFE_ASSERT_RECOVER(image());
+    KIS_SAFE_ASSERT_RECOVER(image())
+    {};
 }
 
 qint32 KisColorizeMask::x() const

@@ -79,7 +79,8 @@ QWidget * KisToolShape::createOptionWidget()
     m_shapeOptionsWidget->angleSelectorRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
     m_shapeOptionsWidget->sldScale->setSuffix("%");
-    m_shapeOptionsWidget->sldScale->setRange(0.0, 500.0, 2);
+    m_shapeOptionsWidget->sldScale->setRange(0.0, 10000.0, 2);
+    m_shapeOptionsWidget->sldScale->setSoftMaximum(500);
     m_shapeOptionsWidget->sldScale->setSingleStep(1.0);
 
     //connect two combo box event. Inherited classes can call the slots to make appropriate changes
@@ -253,7 +254,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
-    QPainterPath mapedOutline = matrix.map(pathShape->outline());
+    QPainterPath mappedOutline = matrix.map(pathShape->outline());
 
     if (node->hasEditablePaintDevice()) {
         KisFigurePaintingToolHelper helper(name,
@@ -263,7 +264,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
                                            strokeStyle(),
                                            fillStyle(),
                                            fillTransform());
-        helper.paintPainterPath(mapedOutline);
+        helper.paintPainterPath(mappedOutline);
     } else if (node->inherits("KisShapeLayer")) {
         pathShape->normalize();
         addShape(pathShape);

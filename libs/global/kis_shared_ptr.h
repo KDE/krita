@@ -27,7 +27,7 @@ class KisWeakSharedPtr;
  * to 0 the contained pointer is deleted. You can use the shared
  * pointer just as you would use a real pointer.
  *
- * See also also item 28 and 29 of More Effective C++ and
+ * See also item 28 and 29 of More Effective C++ and
  * https://bugs.kde.org/show_bug.cgi?id=52261 as well as
  * https://www.boost.org/libs/smart_ptr/shared_ptr.htm.
  *
@@ -57,6 +57,9 @@ class KisSharedPtr
 {
     friend class KisWeakSharedPtr<T>;
 public:
+    using element_type = T;
+    using weak_type = KisWeakSharedPtr<T>;
+
     /**
      * Creates a null pointer.
      */
@@ -235,6 +238,8 @@ class KisWeakSharedPtr
 {
     friend class KisSharedPtr<T>;
 public:
+    using element_type = T;
+
     /**
      * Creates a null pointer.
      */

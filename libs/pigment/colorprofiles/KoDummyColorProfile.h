@@ -32,6 +32,7 @@ public:
     QVector <double> getWhitePointXYZ() const override;
     QVector <double> getWhitePointxyY() const override;
     QVector <double> getEstimatedTRC() const override;
+    bool compareTRC(TransferCharacteristics characteristics, float error) const override;
     void linearizeFloatValue(QVector <double> & Value) const override;
     void delinearizeFloatValue(QVector <double> & Value) const override;
     void linearizeFloatValueFast(QVector <double> & Value) const override;

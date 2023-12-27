@@ -23,6 +23,9 @@ public:
     qreal paintOpSize() const override;
     void setPaintOpSize(qreal value) override;
 
+    void setPaintOpAngle(qreal value) override;
+    qreal paintOpAngle() const override;
+
     bool isAirbrushing() const override
     {
         return false;
@@ -33,7 +36,7 @@ public:
         return 1000.0;
     }
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     QList<KisUniformPaintOpPropertySP> uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy) override;
 

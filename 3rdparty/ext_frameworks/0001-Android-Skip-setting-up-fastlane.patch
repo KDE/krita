@@ -1,0 +1,23 @@
+From 922c22474a4d918b311407b4e0d221c973bc784e Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Mon, 5 Dec 2022 11:16:30 +0000
+Subject: [PATCH 1/2] Android: Skip setting up fastlane
+
+---
+ toolchain/ECMAndroidDeployQt.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/toolchain/ECMAndroidDeployQt.cmake b/toolchain/ECMAndroidDeployQt.cmake
+index 6986f12d..1ddb8b47 100644
+--- a/toolchain/ECMAndroidDeployQt.cmake
++++ b/toolchain/ECMAndroidDeployQt.cmake
+@@ -125,5 +125,5 @@ function(ecm_androiddeployqt QTANDROID_EXPORTED_TARGET ECM_ADDITIONAL_FIND_ROOT_
+         COMMAND adb install -r "${ANDROID_APK_OUTPUT_DIR}/${QTANDROID_EXPORTED_TARGET}-${CMAKE_ANDROID_ARCH_ABI}.apk"
+     )
+     add_dependencies(create-apk ${CREATEAPK_TARGET_NAME})
+-    add_dependencies(${CREATEAPK_TARGET_NAME} create-fastlane)
++    # add_dependencies(${CREATEAPK_TARGET_NAME} create-fastlane)
+ endfunction()
+-- 
+2.37.1.windows.1
+

@@ -12,7 +12,7 @@
 
 #include "filestest.h"
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -112,7 +112,9 @@ void roudTripHdrImage(const KoColorSpace *savingColorSpace)
 void KisPngTest::testSaveHDR()
 {
     QVector<KoID> colorDepthIds;
+#ifdef HAVE_OPENEXR
     colorDepthIds << Float16BitsColorDepthID;
+#endif
     colorDepthIds << Float32BitsColorDepthID;
 
     QVector<const KoColorProfile*> profiles;

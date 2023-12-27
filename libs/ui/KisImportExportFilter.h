@@ -26,6 +26,7 @@
 class KoUpdater;
 class KisDocument;
 class KisConfigWidget;
+class KisImportUserFeedbackInterface;
 
 #include "kritaui_export.h"
 #include "KisImportExportErrorCode.h"
@@ -66,6 +67,7 @@ public:
     ~KisImportExportFilter() override;
 
     void setBatchMode(bool batchmode);
+    void setImportUserFeedBackInterface(KisImportUserFeedbackInterface *interface);
     void setFilename(const QString &filename);
     void setRealFilename(const QString &filename);
     void setMimeType(const QString &mime);
@@ -130,6 +132,7 @@ protected:
     QString filename() const;
     QString realFilename() const;
     bool batchMode() const;
+    KisImportUserFeedbackInterface* importUserFeedBackInterface() const;
     QByteArray mimeType() const;
 
     void setProgress(int value);

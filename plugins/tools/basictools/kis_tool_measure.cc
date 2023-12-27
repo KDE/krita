@@ -13,11 +13,13 @@
 #include <QLayout>
 #include <QWidget>
 #include <QLabel>
+#include <QPainterPath>
 #include <kcombobox.h>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
+#include "kis_algebra_2d.h"
 #include "kis_image.h"
 #include "kis_cursor.h"
 #include "KoPointerEvent.h"
@@ -27,11 +29,13 @@
 #include "kis_floating_message.h"
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
+#include <KisOptimizedBrushOutline.h>
+
 #define INNER_RADIUS 50
 
-KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double resolution)
+KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, KisImageWSP image)
         : QWidget(parent),
-        m_resolution(resolution),
+        m_resolution(image->xRes()),
         m_unit(KoUnit::Pixel)
 {
     m_distance = 0.0;
@@ -58,11 +62,13 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double
 
     optionLayout->addWidget(unitBox, 0, 2);
     optionLayout->addItem(new QSpacerItem(1, 1, QSizePolicy::Fixed, QSizePolicy::Expanding), 2, 0, 1, 2);
+
+    connect(image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotResolutionChanged(double, double)));
 }
 
 void KisToolMeasureOptionsWidget::slotSetDistance(double distance)
 {
-    m_distance = distance / m_resolution;
+    m_distance = distance;
     updateDistance();
 }
 
@@ -77,9 +83,16 @@ void KisToolMeasureOptionsWidget::slotUnitChanged(int index)
     updateDistance();
 }
 
+void KisToolMeasureOptionsWidget::slotResolutionChanged(double xRes, double /*yRes*/)
+{
+    m_resolution = xRes;
+    updateDistance();
+}
+
 void KisToolMeasureOptionsWidget::updateDistance()
 {
-    m_distanceLabel->setText(KritaUtils::prettyFormatReal(m_unit.toUserValue(m_distance)));
+    double distance = m_distance / m_resolution;
+    m_distanceLabel->setText(KritaUtils::prettyFormatReal(m_unit.toUserValue(distance)));
 }
 
 
@@ -91,36 +104,70 @@ KisToolMeasure::KisToolMeasure(KoCanvasBase * canvas)
 KisToolMeasure::~KisToolMeasure()
 {
 }
+QPointF KisToolMeasure::lockedAngle(QPointF pos)
+{
+    const QPointF lineVector = pos - m_startPos;
+    qreal lineAngle = normalizeAngle(std::atan2(lineVector.y(), lineVector.x()));
+
+    const qreal ANGLE_BETWEEN_CONSTRAINED_LINES = (2 * M_PI) / 24;
+
+    const quint32 constrainedLineIndex = static_cast<quint32>((lineAngle / ANGLE_BETWEEN_CONSTRAINED_LINES) + 0.5);
+    const qreal constrainedLineAngle = constrainedLineIndex * ANGLE_BETWEEN_CONSTRAINED_LINES;
+
+    const qreal lineLength = KisAlgebra2D::norm(lineVector);
+
+    const QPointF constrainedLineVector(lineLength * std::cos(constrainedLineAngle), lineLength * std::sin(constrainedLineAngle));
+
+    const QPointF result = m_startPos + constrainedLineVector;
+
+    return result;
+}
 
 void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-
     QPen old = gc.pen();
     QPen pen(Qt::SolidLine);
     gc.setPen(pen);
 
-    gc.drawLine(m_startPos, m_endPos);
+    QPainterPath elbowPath;
+    elbowPath.moveTo(m_endPos);
+    elbowPath.lineTo(m_startPos);
 
-    if (deltaX() >= 0)
-        gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() + INNER_RADIUS, m_startPos.y()));
-    else
-        gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() - INNER_RADIUS, m_startPos.y()));
+    QPointF offset = (m_baseLineVec * INNER_RADIUS).toPoint();
+    QPointF diff = m_endPos-m_startPos;
+
+    bool switch_elbow = QPointF::dotProduct(diff, offset) > 0.0;
+    if(switch_elbow) {
+        elbowPath.lineTo(m_startPos + offset);
+    } else {
+        elbowPath.lineTo(m_startPos - offset);
+    }
 
     if (distance() >= INNER_RADIUS) {
         QRectF rectangle(m_startPos.x() - INNER_RADIUS, m_startPos.y() - INNER_RADIUS, 2*INNER_RADIUS, 2*INNER_RADIUS);
-        int startAngle = (deltaX() >= 0) ? 0 : 180 * 16;
+        
+        double det = diff.x() * m_baseLineVec.y() - diff.y() * m_baseLineVec.x();
+        int startAngle = -atan2(m_baseLineVec.y(), m_baseLineVec.x()) / (2*M_PI) * 360;
+        int spanAngle = switch_elbow ? -angle() : angle();
 
-        int spanAngle;
-        if ((deltaY() >= 0 && deltaX() >= 0) || (deltaY() < 0 && deltaX() < 0))
-            spanAngle = static_cast<int>(angle() * 16);
-        else
-            spanAngle = static_cast<int>(-angle() * 16);
-        gc.drawArc(rectangle, startAngle, spanAngle);
+        if(!switch_elbow) {
+            startAngle+=180;
+            startAngle%=360;
+        }
+
+        if(det > 0) {
+            spanAngle = -spanAngle;
+        }
+
+        elbowPath.arcTo(rectangle, startAngle, spanAngle);
     }
+
+    // The opengl renderer doesn't take the QPainter's transform, so the path is scaled here
+    qreal sx, sy;
+    converter.zoom(&sx, &sy);
+    QTransform transf;
+    transf.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
+    paintToolOutline(&gc, transf.map(elbowPath));
 
     gc.setPen(old);
 }
@@ -142,6 +189,7 @@ void KisToolMeasure::beginPrimaryAction(KoPointerEvent *event)
 
     m_startPos = convertToPixelCoord(event);
     m_endPos = m_startPos;
+    m_baseLineVec = QVector2D(1.0f, 0.0f);
 
     emit sigDistanceChanged(0.0);
     emit sigAngleChanged(0.0);
@@ -156,12 +204,21 @@ void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
 
     QPointF pos = convertToPixelCoord(event);
 
-    if (event->modifiers() == Qt::AltModifier) {
+    if (event->modifiers() & Qt::AltModifier) {
         QPointF trans = pos - m_endPos;
         m_startPos += trans;
         m_endPos += trans;
+    } else if(event->modifiers() & Qt::ShiftModifier){
+        m_endPos = lockedAngle(pos);
     } else {
         m_endPos = pos;
+    }
+
+    if(!(event->modifiers() & Qt::ControlModifier)) {
+        m_chooseBaseLineVec = false;
+    } else if(!m_chooseBaseLineVec) {
+        m_chooseBaseLineVec = true;
+        m_baseLineVec = QVector2D(m_endPos-m_startPos).normalized();
     }
 
     canvas()->updateCanvas(convertToPt(boundingRect()));
@@ -182,7 +239,7 @@ QWidget* KisToolMeasure::createOptionWidget()
 {
     if (!currentImage())
         return nullptr;
-    m_optionsWidget = new KisToolMeasureOptionsWidget(nullptr, currentImage()->xRes());
+    m_optionsWidget = new KisToolMeasureOptionsWidget(nullptr, currentImage());
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
@@ -199,12 +256,13 @@ QWidget* KisToolMeasure::createOptionWidget()
 
 double KisToolMeasure::angle()
 {
-    return atan(qAbs(deltaY()) / qAbs(deltaX())) / (2*M_PI)*360;
+    double dot = QVector2D::dotProduct(QVector2D(m_endPos-m_startPos).normalized(), m_baseLineVec);
+    return acos(qAbs(dot)) / (2*M_PI)*360;
 }
 
 double KisToolMeasure::distance()
 {
-    return sqrt(deltaX()*deltaX() + deltaY()*deltaY());
+    return QVector2D(m_endPos - m_startPos).length();
 }
 
 QRectF KisToolMeasure::boundingRect()
@@ -215,4 +273,3 @@ QRectF KisToolMeasure::boundingRect()
     bound = bound.united(QRectF(m_startPos.x() - INNER_RADIUS, m_startPos.y() - INNER_RADIUS, 2 * INNER_RADIUS, 2 * INNER_RADIUS));
     return bound.normalized();
 }
-

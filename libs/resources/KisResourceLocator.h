@@ -159,15 +159,10 @@ private:
     friend class KisResourceQueryMapper;
     friend class KisResourceUserOperations;
     friend class KisBrushTypeMetaDataFixup;
+    friend class KisResourceThumbnailCache;
 
     /// @return true if the resource is present in the cache, false if it hasn't been loaded
     bool resourceCached(QString storageLocation, const QString &resourceType, const QString &filename) const;
-
-    /// add the thumbnail associated with resouceId to cache
-    void cacheThumbnail(QString storageLocation, const QString &resourceType, const QString &filename, const QImage &img);
-
-    /// @return a valid image if the thumbnail is present in the cache, an invalid image otherwise
-    QImage thumbnailCached(QString storageLocation, const QString &resourceType, const QString &filename);
 
     /**
      * @brief resource finds a physical resource in one of the storages
@@ -238,7 +233,7 @@ private:
      * @brief addResource adds the given resource to the database and potentially a storage
      * @param resourceType the type of the resource
      * @param resource the actual resource object
-     * @param storageLocation the storage where the resource will be saved. By default this is the the default folder storage.
+     * @param storageLocation the storage where the resource will be saved. By default this is the default folder storage.
      * @return true if successful
      */
     bool addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation = QString());
@@ -350,12 +345,6 @@ private:
     ResourceStorage getResourceStorage(int resourceId) const;
     QString makeStorageLocationAbsolute(QString storageLocation) const;
     QString makeStorageLocationRelative(QString location) const;
-
-    /**
-     * @brief resourceLocationBaseFromConfig - the same as resourceLocationBase but straight from config, not cached in a variable
-     * @return resource location base (ex. /home/user/.local/share/krita/ default on Ubuntu-based systems)
-     */
-    static QString resourceLocationBaseFromConfig();
 
     class Private;
     QScopedPointer<Private> d;

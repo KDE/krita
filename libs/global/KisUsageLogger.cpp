@@ -34,6 +34,10 @@
 #include <QtAndroidExtras/QtAndroid>
 #endif
 
+#ifdef Q_OS_MACOS
+#include "KisMacosEntitlements.h"
+#endif
+
 #include <clocale>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
@@ -109,6 +113,10 @@ QString KisUsageLogger::basicSystemInfo()
     }
 #endif
     systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
+#ifdef Q_OS_MACOS
+    KisMacosEntitlements entitlements;
+    systemInfo.append("\n Sandbox: ").append((entitlements.sandbox()) ? "true" : "false");
+#endif
     systemInfo.append("\n\n");
 
     systemInfo.append("Qt\n");
@@ -136,6 +144,8 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n  Product Model: ").append(manufacturer + " " + model);
 #elif defined(Q_OS_LINUX)
     systemInfo.append("\n  Desktop: ").append(qgetenv("XDG_CURRENT_DESKTOP"));
+
+    systemInfo.append("\n  Appimage build: ").append(qEnvironmentVariableIsSet("APPIMAGE") ? "Yes" : "No");
 #endif
     systemInfo.append("\n\n");
 
@@ -270,6 +280,11 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tName: ").append(screen->name());
         info.append("\n\t\tDepth: ").append(QString::number(screen->depth()));
         info.append("\n\t\tScale: ").append(QString::number(screen->devicePixelRatio()));
+        info.append("\n\t\tPhysical DPI").append(QString::number(screen->physicalDotsPerInch()));
+        info.append("\n\t\tLogical DPI").append(QString::number(screen->logicalDotsPerInch()));
+        info.append("\n\t\tPhysical Size: ").append(QString::number(screen->physicalSize().width()))
+                .append(", ")
+                .append(QString::number(screen->physicalSize().height()));
         info.append("\n\t\tPosition: ").append(QString::number(screen->geometry().x()))
                 .append(", ")
                 .append(QString::number(screen->geometry().y()));
@@ -279,6 +294,8 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tManufacturer: ").append(screen->manufacturer());
         info.append("\n\t\tModel: ").append(screen->model());
         info.append("\n\t\tRefresh Rate: ").append(QString::number(screen->refreshRate()));
+        info.append("\n\t\tSerial Number: ").append(screen->serialNumber());
+
     }
     info.append("\n");
     return info;
@@ -287,7 +304,6 @@ QString KisUsageLogger::screenInformation()
 void KisUsageLogger::rotateLog()
 {
     if (d->logFile.exists()) {
-
         {
             // Check for CLOSING SESSION
             d->logFile.open(QFile::ReadOnly);

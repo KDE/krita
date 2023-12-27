@@ -8,42 +8,44 @@
  */
 
 #include "KoPathTool.h"
-#include "KoToolBase_p.h"
-#include "KoPathShape_p.h"
-#include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
-#include "KoShapeManager.h"
-#include "KoSelectedShapesProxy.h"
 #include "KoDocumentResourceManager.h"
-#include "KoViewConverter.h"
-#include "KoSelection.h"
-#include "KoPointerEvent.h"
-#include "commands/KoPathPointTypeCommand.h"
-#include "commands/KoPathPointInsertCommand.h"
-#include "commands/KoPathPointRemoveCommand.h"
-#include "commands/KoPathSegmentTypeCommand.h"
-#include "commands/KoPathBreakAtPointCommand.h"
-#include "commands/KoPathSegmentBreakCommand.h"
-#include "commands/KoParameterToPathCommand.h"
-#include "commands/KoSubpathJoinCommand.h"
-#include <commands/KoMultiPathPointMergeCommand.h>
-#include <commands/KoMultiPathPointJoinCommand.h>
-#include <commands/KoKeepShapesSelectedCommand.h>
+#include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
-#include <text/KoSvgTextShape.h>
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
-#include "KoParameterChangeStrategy.h"
-#include "PathToolOptionWidget.h"
-#include "KoSnapGuide.h"
+#include "KoPathShape_p.h"
+#include "KoPathToolHandle.h"
+#include "KoPointerEvent.h"
+#include "KoSelectedShapesProxy.h"
+#include "KoSelection.h"
 #include "KoShapeController.h"
+#include "KoShapeGroup.h"
+#include "KoShapeManager.h"
+#include "KoSnapGuide.h"
+#include "KoToolBase_p.h"
+#include "KoToolManager.h"
+#include "KoViewConverter.h"
+#include "PathToolOptionWidget.h"
+#include "commands/KoParameterToPathCommand.h"
+#include "commands/KoPathBreakAtPointCommand.h"
+#include "commands/KoPathPointInsertCommand.h"
+#include "commands/KoPathPointRemoveCommand.h"
+#include "commands/KoPathPointTypeCommand.h"
+#include "commands/KoPathSegmentBreakCommand.h"
+#include "commands/KoPathSegmentTypeCommand.h"
+#include "commands/KoSubpathJoinCommand.h"
 #include "kis_action_registry.h"
-#include <KisHandlePainterHelper.h>
-#include <KoShapeStrokeModel.h>
 #include "kis_command_utils.h"
 #include "kis_pointer_utils.h"
-#include "KoToolManager.h"
+#include <KisHandlePainterHelper.h>
+#include <KoShapeStrokeModel.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
+#include <commands/KoMultiPathPointJoinCommand.h>
+#include <commands/KoMultiPathPointMergeCommand.h>
+#include <commands/KoShapeGroupCommand.h>
+#include <text/KoSvgTextShape.h>
 
 #include <KoIcon.h>
 
@@ -57,50 +59,6 @@
 #include <QTabWidget>
 
 #include <math.h>
-
-static const char *const needle_xpm[] = {
-    "16 16 2 1",
-    "  c None",
-    "# c #000000",
-    "                ",
-    "    #           ",
-    "     #          ",
-    "     ##         ",
-    "      ##        ",
-    "      ###       ",
-    "       ###      ",
-    "       ####     ",
-    "        ####    ",
-    "        #####   ",
-    "         #####  ",
-    "         ###### ",
-    "          ##### ",
-    "          ###   ",
-    "           ##   ",
-    "                "
-};
-
-static const char *const needle_move_xpm[] = {
-    "16 16 2 1",
-    "  c None",
-    "# c #000000",
-    "                ",
-    "    #           ",
-    "     #          ",
-    "     ##         ",
-    "      ##        ",
-    "      ###       ",
-    "       ###      ",
-    "       ####     ",
-    "    #   ####    ",
-    "   ###  #####   ",
-    "  # # #  #####  ",
-    " ####### ###### ",
-    "  # # #   ##### ",
-    "   ###    ###   ",
-    "    #      ##   ",
-    "                "
-};
 
 // helper function to calculate the squared distance between two points
 qreal squaredDistance(const QPointF& p1, const QPointF &p2)
@@ -129,26 +87,9 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
     , m_pointSelection(this)
 {
-    m_points = new QActionGroup(this);
-    // m_pointTypeGroup->setExclusive(true);
-
     m_actionPathPointCorner = action("pathpoint-corner");
-    if (m_actionPathPointCorner) {
-        m_actionPathPointCorner->setData(KoPathPointTypeCommand::Corner);
-        m_points->addAction(m_actionPathPointCorner);
-    }
     m_actionPathPointSmooth = action("pathpoint-smooth");
-    if (m_actionPathPointSmooth) {
-        m_actionPathPointSmooth->setData(KoPathPointTypeCommand::Smooth);
-        m_points->addAction(m_actionPathPointSmooth);
-    }
-
     m_actionPathPointSymmetric = action("pathpoint-symmetric");
-    if (m_actionPathPointSymmetric) {
-        m_actionPathPointSymmetric->setData(KoPathPointTypeCommand::Symmetric);
-        m_points->addAction(m_actionPathPointSymmetric);
-    }
-
     m_actionCurvePoint = action("pathpoint-curve");
     m_actionLinePoint = action("pathpoint-line");
     m_actionLineSegment = action("pathsegment-line");
@@ -163,8 +104,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
     m_contextMenu.reset(new QMenu());
 
-    m_selectCursor = QCursor(QPixmap(needle_xpm), 2, 0);
-    m_moveCursor = QCursor(QPixmap(needle_move_xpm), 2, 0);
+    m_selectCursor = QCursor(QIcon(":/cursor-needle.svg").pixmap(32), 0, 0);
+    m_moveCursor = QCursor(QIcon(":/cursor-needle-move.svg").pixmap(32), 0, 0);
 
     connect(&m_pointSelection, SIGNAL(selectionChanged()), SLOT(repaintDecorations()));
 }
@@ -188,7 +129,17 @@ QList<QPointer<QWidget> >  KoPathTool::createOptionWidgets()
     return list;
 }
 
-void KoPathTool::pointTypeChanged(QAction *type)
+void KoPathTool::pointTypeChangedCorner() {
+    pointTypeChanged(KoPathPointTypeCommand::Corner);
+}
+void KoPathTool::pointTypeChangedSmooth() {
+    pointTypeChanged(KoPathPointTypeCommand::Smooth);
+}
+void KoPathTool::pointTypeChangedSymmetric() {
+    pointTypeChanged(KoPathPointTypeCommand::Symmetric);
+}
+
+void KoPathTool::pointTypeChanged(KoPathPointTypeCommand::PointType type)
 {
     Q_D(KoToolBase);
     if (m_pointSelection.hasSelection()) {
@@ -203,8 +154,7 @@ void KoPathTool::pointTypeChanged(QAction *type)
         }
 
         KUndo2Command *command =
-                new KoPathPointTypeCommand(selectedPoints,
-                                           static_cast<KoPathPointTypeCommand::PointType>(type->data().toInt()));
+                new KoPathPointTypeCommand(selectedPoints, type);
 
         if (initialConversionCommand) {
             using namespace KisCommandUtils;
@@ -339,9 +289,9 @@ void KoPathTool::convertToPath()
     QList<KoParameterShape*> parameterShapes;
 
     Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
-        KoParameterShape * parameteric = dynamic_cast<KoParameterShape*>(shape);
-        if (parameteric && parameteric->isParametricShape()) {
-            parameterShapes.append(parameteric);
+        KoParameterShape * parametric = dynamic_cast<KoParameterShape*>(shape);
+        if (parametric && parametric->isParametricShape()) {
+            parameterShapes.append(parametric);
         }
     }
 
@@ -366,20 +316,17 @@ void KoPathTool::convertToPath()
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
-            const QPainterPath path = shape->textOutline();
-            if (path.isEmpty()) continue;
+            KoShapeGroup *groupShape = new KoShapeGroup();
+            KoShapeGroupCommand groupCmd(groupShape, shape->textOutline(), false);
+            groupCmd.redo();
 
-            KoPathShape *pathShape = KoPathShape::createShapeFromPainterPath(path);
-
-            pathShape->setBackground(shape->background());
-            pathShape->setStroke(shape->stroke());
-            pathShape->setZIndex(shape->zIndex());
-            pathShape->setTransformation(shape->absoluteTransformation());
+            groupShape->setZIndex(shape->zIndex());
+            groupShape->setTransformation(shape->absoluteTransformation());
 
             KoShapeContainer *parent = shape->parent();
-            canvas()->shapeController()->addShapeDirect(pathShape, parent, cmd);
+            canvas()->shapeController()->addShapeDirect(groupShape, parent, cmd);
 
-            newSelectedShapes << pathShape;
+            newSelectedShapes << groupShape;
         }
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);
@@ -483,7 +430,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     Q_FOREACH (KoPathShape *shape, m_pointSelection.selectedShapes()) {
         KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelperView(&painter, shape, converter, handleRadius());
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, handleRadius(), decorationThickness());
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         KoParameterShape * parameterShape = dynamic_cast<KoParameterShape*>(shape);
@@ -509,7 +456,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (m_activeHandle) {
         if (m_activeHandle->check(m_pointSelection.selectedShapes())) {
-            m_activeHandle->paint(painter, converter, handleRadius());
+            m_activeHandle->paint(painter, converter, handleRadius(), decorationThickness());
         } else {
             m_activeHandle.reset();
         }
@@ -525,7 +472,7 @@ void KoPathTool::paint(QPainter &painter, const KoViewConverter &converter)
             KIS_SAFE_ASSERT_RECOVER_RETURN(segment.isValid());
 
             KisHandlePainterHelper helper =
-                    KoShape::createHandlePainterHelperView(&painter, shape, converter, handleRadius());
+                    KoShape::createHandlePainterHelperView(&painter, shape, converter, handleRadius(), decorationThickness());
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
             QPainterPath path;
@@ -941,7 +888,9 @@ void KoPathTool::activate(const QSet<KoShape*> &shapes)
     connect(m_actionJoinSegment, SIGNAL(triggered()), this, SLOT(joinPoints()), Qt::UniqueConnection);
     connect(m_actionMergePoints, SIGNAL(triggered()), this, SLOT(mergePoints()), Qt::UniqueConnection);
     connect(m_actionConvertToPath, SIGNAL(triggered()), this, SLOT(convertToPath()), Qt::UniqueConnection);
-    connect(m_points, SIGNAL(triggered(QAction*)), this, SLOT(pointTypeChanged(QAction*)), Qt::UniqueConnection);
+    connect(m_actionPathPointCorner, SIGNAL(triggered()), this, SLOT(pointTypeChangedCorner()), Qt::UniqueConnection);
+    connect(m_actionPathPointSmooth, SIGNAL(triggered()), this, SLOT(pointTypeChangedSmooth()), Qt::UniqueConnection);
+    connect(m_actionPathPointSymmetric, SIGNAL(triggered()), this, SLOT(pointTypeChangedSymmetric()), Qt::UniqueConnection);
     connect(&m_pointSelection, SIGNAL(selectionChanged()), this, SLOT(pointSelectionChanged()), Qt::UniqueConnection);
 
 }
@@ -1135,15 +1084,17 @@ void KoPathTool::deactivate()
     disconnect(m_actionJoinSegment, 0, this, 0);
     disconnect(m_actionMergePoints, 0, this, 0);
     disconnect(m_actionConvertToPath, 0, this, 0);
-    disconnect(m_points, 0, this, 0);
+    disconnect(m_actionPathPointCorner, 0, this, 0);
+    disconnect(m_actionPathPointSmooth, 0, this, 0);
+    disconnect(m_actionPathPointSymmetric, 0, this, 0);
     disconnect(&m_pointSelection, 0, this, 0);
 
     KoToolBase::deactivate();
 }
 
-void KoPathTool::documentResourceChanged(int key, const QVariant & /*res*/)
+void KoPathTool::canvasResourceChanged(int key, const QVariant & /*res*/)
 {
-    if (key == KoDocumentResourceManager::HandleRadius) {
+    if (key == KoCanvasResource::HandleRadius || key == KoCanvasResource::DecorationThickness) {
         repaintDecorations();
     }
 }
@@ -1259,4 +1210,17 @@ void KoPathTool::requestStrokeEnd()
 void KoPathTool::explicitUserStrokeEndRequest()
 {
     KoToolManager::instance()->switchToolRequested("InteractionTool");
+}
+
+bool KoPathTool::selectAll()
+{
+    m_pointSelection.selectAll();
+    repaintDecorations();
+    return true;
+}
+
+void KoPathTool::deselect()
+{
+    clearActivePointSelectionReferences();
+    repaintDecorations();
 }

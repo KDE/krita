@@ -6,5 +6,6 @@
 <RCC version="1.0">
     <qresource>
         <file>tool_polyline_cursor.png</file>
+        <file>tool_polyline_eraser_cursor.png</file>
     </qresource>
 </RCC>

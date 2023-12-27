@@ -33,8 +33,19 @@ public:
         QPoint pt;
         KoColor currentColor; // Used for color sampler blending.
     };
+
+    class FinalizeData : public KisStrokeJobData {
+    public:
+        FinalizeData()
+        {}
+
+        KisStrokeJobData* createLodClone(int levelOfDetail) override {
+            Q_UNUSED(levelOfDetail);
+            return new FinalizeData();
+        }
+    };
 public:
-    KisColorSamplerStrokeStrategy(int lod = 0);
+    KisColorSamplerStrokeStrategy(int radius, int blend, int lod = 0);
     ~KisColorSamplerStrokeStrategy() override;
 
     void doStrokeCallback(KisStrokeJobData *data) override;
@@ -42,6 +53,7 @@ public:
 
 Q_SIGNALS:
     void sigColorUpdated(const KoColor &color);
+    void sigFinalColorSelected(const KoColor &color);
 
 private:
     struct Private;

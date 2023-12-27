@@ -35,7 +35,7 @@ public:
     static KisHandleStyle& primarySelection();
 
     /**
-     * Secondary style. Used for highlighting objects inside a mupltiple
+     * Secondary style. Used for highlighting objects inside a multiple
      * selection.
      */
     static KisHandleStyle& secondarySelection();

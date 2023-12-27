@@ -70,7 +70,7 @@ public:
      * @brief should the scratchpad zoom level stay in sync with canvas
      * @param should we link zoom level
      */
-    void linkCanvavsToZoomLevel(bool value);
+    void linkCanvasToZoomLevel(bool value);
 
 
     /// return the contents of the area under the cutoutOverlay rect

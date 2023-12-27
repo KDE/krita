@@ -40,6 +40,7 @@ public:
     QString filename;
     QString realFilename;
     bool batchmode;
+    KisImportUserFeedbackInterface *importUserFeedBackInterface {nullptr};
 
     QMap<QString, KisExportCheckBase*> capabilities;
 
@@ -85,10 +86,19 @@ bool KisImportExportFilter::batchMode() const
     return d->batchmode;
 }
 
+KisImportUserFeedbackInterface *KisImportExportFilter::importUserFeedBackInterface() const
+{
+    return d->importUserFeedBackInterface;
+}
 
 void KisImportExportFilter::setBatchMode(bool batchmode)
 {
     d->batchmode = batchmode;
+}
+
+void KisImportExportFilter::setImportUserFeedBackInterface(KisImportUserFeedbackInterface *interface)
+{
+    d->importUserFeedBackInterface = interface;
 }
 
 void KisImportExportFilter::setFilename(const QString &filename)

@@ -200,6 +200,11 @@ public:
         return m_widgetHelper.growSelection();
     }
 
+    bool stopGrowingAtDarkestPixel() const
+    {
+        return m_widgetHelper.stopGrowingAtDarkestPixel();
+    }
+
     int featherSelection() const
     {
         return m_widgetHelper.featherSelection();
@@ -238,7 +243,6 @@ public:
     virtual void setAlternateSelectionAction(SelectionAction action)
     {
         m_selectionActionAlternate = action;
-        dbgKrita << "Changing to selection action" << m_selectionActionAlternate;
     }
 
     void activateAlternateAction(KisTool::AlternateAction action) override
@@ -303,18 +307,21 @@ public:
 
     void keyPressEvent(QKeyEvent *event) override
     {
-        m_currentModifiers = event->modifiers();
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
-
-        if (key == Qt::Key_Control) {
-            m_currentModifiers |= Qt::ControlModifier;
-        } else if (key == Qt::Key_Shift) {
-            m_currentModifiers |= Qt::ShiftModifier;
-        } else if (key == Qt::Key_Alt) {
-            m_currentModifiers |= Qt::AltModifier;
+        // Assume all the modifiers were unpressed...
+        m_currentModifiers = Qt::NoModifier;
+        // ...and add those which are right now
+        if (key == Qt::Key_Control || event->modifiers().testFlag(Qt::ControlModifier)) {
+            m_currentModifiers.setFlag(Qt::ControlModifier);
+        }
+        if (key == Qt::Key_Shift || event->modifiers().testFlag(Qt::ShiftModifier)) {
+            m_currentModifiers.setFlag(Qt::ShiftModifier);
+        }
+        if (key == Qt::Key_Alt || event->modifiers().testFlag(Qt::AltModifier)) {
+            m_currentModifiers.setFlag(Qt::AltModifier);
         }
         
-        // Avoid changing the selection mode and cursor if the user is interactiong
+        // Avoid changing the selection mode and cursor if the user is interacting
         if (isSelecting()) {
             BaseClass::keyPressEvent(event);
             return;
@@ -329,15 +336,18 @@ public:
 
     void keyReleaseEvent(QKeyEvent *event) override
     {
-        m_currentModifiers = event->modifiers();
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
-
-        if (key == Qt::Key_Control) {
-            m_currentModifiers &= ~Qt::ControlModifier;
-        } else if (key == Qt::Key_Shift) {
-            m_currentModifiers &= ~Qt::ShiftModifier;
-        } else if (key == Qt::Key_Alt) {
-            m_currentModifiers &= ~Qt::AltModifier;
+        // Assume all the modifiers were pressed...
+        m_currentModifiers = Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier;
+        // ...and remove those which aren't right now
+        if (key == Qt::Key_Control || !event->modifiers().testFlag(Qt::ControlModifier)) {
+            m_currentModifiers.setFlag(Qt::ControlModifier, false);
+        }
+        if (key == Qt::Key_Shift || !event->modifiers().testFlag(Qt::ShiftModifier)) {
+            m_currentModifiers.setFlag(Qt::ShiftModifier, false);
+        }
+        if (key == Qt::Key_Alt || !event->modifiers().testFlag(Qt::AltModifier)) {
+            m_currentModifiers.setFlag(Qt::AltModifier, false);
         }
 
         // Avoid changing the selection mode and cursor if the user is interacting
@@ -444,10 +454,22 @@ public:
 
     QMenu *popupActionsMenu() override
     {
+        if (isSelecting()) {
+            return BaseClass::popupActionsMenu();
+        }
+
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
 
         return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    }
+
+    KisPopupWidgetInterface* popupWidget() override
+    {
+        if (isSelecting()) {
+            return BaseClass::popupWidget();
+        }
+        return nullptr;
     }
 
     bool beginMoveSelectionInteraction() {
@@ -495,6 +517,7 @@ public:
     void updateCursorDelayed() {
         setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
         QTimer::singleShot(100,
+            this,
             [this]()
             {
                 KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);

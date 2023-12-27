@@ -99,7 +99,7 @@ QSize KoSliderCombo::minimumSizeHint() const
 void KoSliderCombo::KoSliderComboPrivate::showPopup()
 {
     if(firstShowOfSlider) {
-        container->show(); //show container a bit early so the slider can be layout'ed
+        container->show(); //show container a bit early so the slider can be laid out
         firstShowOfSlider = false;
     }
 

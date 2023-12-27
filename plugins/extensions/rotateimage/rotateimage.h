@@ -23,7 +23,9 @@ public:
 
 private:
     void rotateLayerCustomImpl(KisNodeSP rootNode);
+    void rotateLayersCustomImpl(KisNodeList nodes);
     void rotateLayerImpl(KisNodeSP rootNode, qreal radians);
+    void rotateLayersImpl(KisNodeList nodes, qreal radians);
 
 private Q_SLOTS:
 

@@ -75,16 +75,21 @@ int KisAllTagsModel::rowCount(const QModelIndex &parent) const
 
     if (d->cachedRowCount < 0) {
         QSqlQuery q;
-        q.prepare("SELECT count(*)\n"
+        const bool r = q.prepare("SELECT count(*)\n"
                   "FROM   tags\n"
                   ",      resource_types\n"
                   "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                   "WHERE  tags.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n");
+        if (!r) {
+            qWarning() << "Could not execute tags rowcount query" << q.lastError();
+            return 0;
+        }
         q.bindValue(":resource_type", d->resourceType);
         q.bindValue(":language", KisTag::currentLocale());
         if (!q.exec()) {
             qWarning() << "Could not execute tags rowcount query" << q.lastError();
+            return 0;
         }
         q.first();
 
@@ -217,7 +222,9 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
 {
     int id = data(index, Qt::UserRole + Id).toInt();
 
-    if (index.isValid() && role == Qt::CheckStateRole) {
+    if (index.isValid() &&
+        (role == Qt::UserRole + Active)) {
+
         QSqlQuery q;
         if (!q.prepare("UPDATE tags\n"
                        "SET    active = :active\n"
@@ -232,6 +239,7 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
             qWarning() << "Could not execute make existing tag active query" << q.boundValues(), q.lastError();
             return false;
         }
+        KisResourceLocator::instance()->purgeTag(data(index, Qt::UserRole + Url).toString(), d->resourceType);
     }
     resetQuery();
     emit dataChanged(index, index, {role});
@@ -338,7 +346,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, const bool allowOverwri
 }
 
 
-bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
+bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -357,7 +365,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     }
     else if (allowOverwrite) {
         KisTagSP trueTag = tagForUrl(tag->url());
-        r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::CheckStateRole);
+        r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::UserRole + KisAllTagsModel::Active);
         untagAllResources(trueTag);
         tag->setComment(trueTag->comment()); // id will be set later, comment and filename are the only thing left
         tag->setFilename(trueTag->filename());
@@ -370,9 +378,9 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     tag->setValid(true);
     tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
-    if (!taggedResouces.isEmpty()) {
+    if (!taggedResources.isEmpty()) {
         QVector<int> resourceIds;
-        Q_FOREACH(const KoResourceSP resource, taggedResouces) {
+        Q_FOREACH(const KoResourceSP resource, taggedResources) {
 
             if (!resource) continue;
             if (!resource->valid()) continue;
@@ -393,7 +401,7 @@ bool KisAllTagsModel::setTagActive(const KisTagSP tag)
 
     tag->setActive(true);
 
-    return setData(indexForTag(tag), QVariant::fromValue(true), Qt::CheckStateRole);
+    return setData(indexForTag(tag), QVariant::fromValue(true), Qt::UserRole + KisAllTagsModel::Active);
 
 }
 
@@ -404,96 +412,47 @@ bool KisAllTagsModel::setTagInactive(const KisTagSP tag)
 
     tag->setActive(false);
 
-    return setData(indexForTag(tag), QVariant::fromValue(false), Qt::CheckStateRole);
+    return setData(indexForTag(tag), QVariant::fromValue(false), Qt::UserRole + KisAllTagsModel::Active);
 }
 
-bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
+bool KisAllTagsModel::renameTag(const KisTagSP tag, const QString &newName, const bool allowOverwrite)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
-
-    QString name = tag->name();
-    QString url = tag->name(); // let's set the url to be the same as the name
-    int id = tag->id();
-
     if (tag->id() < 0) return false;
 
-    if (name.isEmpty()) return false;
+    if (newName.isEmpty()) return false;
 
-    KisTagSP tagWithTheSameUrl = tagForUrl(url);
+    KisTagSP dstTag = tagForUrl(newName);
 
-    if (!tagWithTheSameUrl.isNull()) {
-        if (!allowOverwrite) {
-            // there is already a tag with this url
-            return false;
-        } else { // allowOverwrite = true
-            // untag everything and remove the tag from the database
-            this->untagAllResources(tagWithTheSameUrl);
+    if (dstTag && dstTag->active() && !allowOverwrite) {
+        return false;
+    }
 
-            QModelIndex idxRemove = indexForTag(tagWithTheSameUrl);
-            beginRemoveRows(QModelIndex(), idxRemove.row(), idxRemove.row());
-
-            QSqlQuery qRemove;
-            if (!qRemove.prepare("DELETE FROM tags\n"
-                                 "WHERE  id = :id\n"
-                                 "AND    url = :url\n"
-                                 "AND    resource_type_id = (SELECT id\n"
-                                 "                           FROM   resource_types\n"
-                                 "                           WHERE  name = :resource_type\n)")) {
-                qWarning() << "Couild not prepare make query to remove a different tag with the same url" << tag << qRemove.lastError();
-                endRemoveRows();
-                return false;
-            }
-
-            qRemove.bindValue(":id", tagWithTheSameUrl->id());
-            qRemove.bindValue(":url", tagWithTheSameUrl->url());
-            qRemove.bindValue(":resource_type", d->resourceType);
-
-            if (!qRemove.exec()) {
-                qWarning() << "Couild not execute query to remove a different tag with the same url" << qRemove.boundValues(), qRemove.lastError();
-                endRemoveRows();
-                return false;
-            }
-
-            KisResourceLocator::instance()->purgeTag(tagWithTheSameUrl->url(), d->resourceType);
-
-            resetQuery();
-            endRemoveRows();
-
+    if (!dstTag) {
+        dstTag = addTag(newName, false, {});
+    } else {
+        if (!dstTag->active()) {
+            setTagActive(dstTag);
         }
+        untagAllResources(dstTag);
     }
 
-    QSqlQuery q;
-    if (!q.prepare("UPDATE tags\n"
-                   "SET    name = :name\n"
-                   ",      url = :url\n"
-                   "WHERE  id = :id\n"
-                   "AND    resource_type_id = (SELECT id\n"
-                   "                           FROM   resource_types\n"
-                   "                           WHERE  name = :resource_type\n)")) {
-        qWarning() << "Couild not prepare make existing tag active query" << tag << q.lastError();
-        return false;
+    QVector<int> resourceIds;
+
+    KisTagResourceModel model(d->resourceType);
+    model.setTagsFilter(QVector<int>() << tag->id());
+
+    for (int i = 0; i < model.rowCount(); i++) {
+        QModelIndex idx = model.index(i, 0);
+        resourceIds.append(model.data(idx, Qt::UserRole + KisTagResourceModel::Id).toInt());
     }
 
-    q.bindValue(":name", name);
-    q.bindValue(":url", url);
-    q.bindValue(":id", id);
-    q.bindValue(":resource_type", d->resourceType);
+    model.tagResources(dstTag, resourceIds);
+    model.untagResources(tag, resourceIds);
+    setTagInactive(tag);
 
-    if (!q.exec()) {
-        qWarning() << "Couild not execute make existing tag active query" << q.boundValues(), q.lastError();
-        return false;
-    }
-
-    bool r = resetQuery();
-    QModelIndex idx = indexForTag(tag);
-    emit dataChanged(idx, idx, {Qt::EditRole});
-
-    // set the url of the provided tag to the new one
-    tag->setUrl(name);
-
-    return r;
-
+    return true;
 }
 
 bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
@@ -503,7 +462,7 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
 
     QModelIndex idx = indexForTag(tag);
     tag->setActive(active);
-    return setData(idx, QVariant::fromValue(active), Qt::CheckStateRole);
+    return setData(idx, QVariant::fromValue(active), Qt::UserRole + KisAllTagsModel::Active);
 
 }
 
@@ -646,11 +605,11 @@ KisTagSP KisTagModel::tagForUrl(const QString& url) const
 }
 
 
-bool KisTagModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
+bool KisTagModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addTag(tag, allowOverwrite, taggedResouces) ;
+        return source->addTag(tag, allowOverwrite, taggedResources) ;
     }
     return false;
 }
@@ -674,11 +633,11 @@ bool KisTagModel::setTagActive(const KisTagSP tag)
 
 }
 
-bool KisTagModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
+bool KisTagModel::renameTag(const KisTagSP tag, const QString &newName, const bool allowOverwrite)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->renameTag(tag, allowOverwrite);
+        return source->renameTag(tag, newName, allowOverwrite);
     }
     return false;
 }
@@ -720,17 +679,22 @@ bool KisTagModel::filterAcceptsRow(int source_row, const QModelIndex &source_par
     {
         if (tagId > 0) {
             QSqlQuery q;
-            q.prepare("SELECT count(*)\n"
+            const bool r = q.prepare("SELECT count(*)\n"
                       "FROM   tags_storages\n"
                       ",      storages\n"
                       "WHERE  tags_storages.tag_id = :tag_id\n"
                       "AND    tags_storages.storage_id = storages.id\n"
                       "AND    storages.active = 1\n");
+            if (!r) {
+                qWarning() << "Could not execute tags in storages query" << q.lastError();
+                return true;
+            }
 
             q.bindValue(":tag_id", tagId);
 
             if (!q.exec()) {
                 qWarning() << "Could not execute tags in storages query" << q.lastError() << q.boundValues();
+                return true;
             }
             else {
                 q.first();

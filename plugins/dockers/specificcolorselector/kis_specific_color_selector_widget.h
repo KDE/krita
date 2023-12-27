@@ -10,6 +10,7 @@
 #include <QWidget>
 
 #include <KoColor.h>
+#include <QtWidgets/QComboBox>
 #include "kis_signal_auto_connection.h"
 
 #include "ui_wdgSpecificColorSelectorWidget.h"
@@ -53,6 +54,7 @@ private Q_SLOTS:
     void rereadCurrentColorSpace(bool force = false);
     void onChkUsePercentageChanged(bool);
     void hsvSelectorClicked(QAbstractButton *);
+    void changeHsxMode(int index);
 
 Q_SIGNALS:
     void colorChanged(const KoColor&);
@@ -65,7 +67,8 @@ private:
     KisHexColorInput *m_hexInput;
     KisHsvColorInput *m_hsvSlider;
     QRadioButton *m_rgbButton;
-    QRadioButton *m_hsvButton;
+    QRadioButton *m_hsxButton;
+
     QButtonGroup *m_hsvSelector;
     const KoColorSpace* m_colorSpace;
     KoColor m_color;
@@ -77,6 +80,8 @@ private:
 
     KisDisplayColorConverter *m_displayConverter;
     KisSignalAutoConnectionsStore m_converterConnection;
+
+    QComboBox* m_hsxModeComboBox;
 };
 
 #endif

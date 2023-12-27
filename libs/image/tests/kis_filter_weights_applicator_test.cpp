@@ -733,7 +733,7 @@ void KisFilterWeightsApplicatorTest::testProcessLine_NearestNeighbourFilter_0098
 }
 
 
-void KisFilterWeightsApplicatorTest::benchmarkProcesssLine()
+void KisFilterWeightsApplicatorTest::benchmarkProcessesLine()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);

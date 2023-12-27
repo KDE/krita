@@ -18,7 +18,7 @@ class KisAnimationFrameCacheTest : public QObject
 private Q_SLOTS:
     void testCache();
 
-    void slotFrameGerenationFinished(int time);
+    void slotFrameGenerationFinished(int time);
 
 private:
     KisAnimationFrameCache *m_globalAnimationCache = 0;

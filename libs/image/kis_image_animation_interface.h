@@ -18,6 +18,7 @@ class KisTimeSpan;
 class KisKeyframeChannel;
 class KoColor;
 class KisRegion;
+class KisLockFrameGenerationLock;
 
 namespace KisLayerUtils {
     struct SwitchFrameCommand;
@@ -79,8 +80,11 @@ public:
      *    with Qt::DirectConnection and fetch the result from
      *    frameProjection().  After the signal handler is exited, the
      *    data will no longer be available.
+     *
+     * 3) The passed lock will be released when the stroke is finished
+     *    execution (and the strategy is destroyed)
      */
-    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable);
+    void requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable, KisLockFrameGenerationLock &&lock);
 
     void notifyNodeChanged(const KisNode *node, const QRect &rect, bool recursive);
     void notifyNodeChanged(const KisNode *node, const QVector<QRect> &rects, bool recursive);
@@ -95,27 +99,23 @@ public:
     void setDefaultProjectionColor(const KoColor &color);
 
     /**
-     * The current time range selected by user.
-     * @return current time range
+     * @brief documentPlaybackRange
+     * @return A KisTimeSpan reflecting actual document time range. This is
+     * the actual play back range associated with a krita document.
      */
-    const KisTimeSpan& fullClipRange() const;
-    void setFullClipRange(const KisTimeSpan range);
+    const KisTimeSpan& documentPlaybackRange() const;
+    void setDocumentRange(const KisTimeSpan range);
 
+    /**
+     * @brief activePlaybackRange
+     * @return Returns the current clip range that the user wishes play through.
+     * Takes into account selection range when available as a custom loop override.
+     * Should be used in the PlaybackEngine to determine proper loop points.
+     */
+    const KisTimeSpan &activePlaybackRange() const;
+    void setActivePlaybackRange(const KisTimeSpan range);
 
-    const KisTimeSpan &playbackRange() const;
-    void setPlaybackRange(const KisTimeSpan range);
     int framerate() const;
-
-    /**
-     * @return **absolute** file name of the audio channel file
-     */
-    QString audioChannelFileName() const;
-
-    /**
-     * Sets **absolute** file name of the audio channel file. Don't try to pass
-     * a relative path, it'll assert!
-     */
-    void setAudioChannelFileName(const QString &fileName);
 
     QString exportSequenceFilePath();
     void setExportSequenceFilePath(const QString &filePath);
@@ -126,26 +126,6 @@ public:
     int exportInitialFrameNumber();
     void setExportInitialFrameNumber(const int frameNum);
 
-    /**
-     * @return is the audio channel is currently muted
-     */
-    bool isAudioMuted() const;
-
-    /**
-     * Mutes the audio channel
-     */
-    void setAudioMuted(bool value);
-
-    /**
-     * Returns the preferred audio value in rangle [0, 1]
-     */
-    qreal audioVolume() const;
-
-    /**
-     * Set the preferred volume for the audio channel in range [0, 1]
-     */
-    void setAudioVolume(qreal value);
-
     QSet<int> activeLayerSelectedTimes();
     void setActiveLayerSelectedTimes(const QSet<int> &times);
 
@@ -153,20 +133,117 @@ public:
 
     int totalLength();
 
+    /**
+     * Blocks background processes like frame cache populator from starting the
+     * generation process, hence giving priority to the interactive frame
+     * generation methods.
+     *
+     * This method is **not** blocking, it just forbids further
+     * actions. If there is any backround action is running, it
+     * continues to run. Use lockFrameGeneration() to wait
+     * for completion of such actions.
+     *
+     * \see KisBlockBackgroundFrameGenerationLock for RAII wrapper
+     */
+    void blockBackgroundFrameGeneration();
+
+    /**
+     * Unblocks background generation process.
+     *
+     * \see blockBackgroundFrameGeneration()
+     */
+    void unblockBackgroundFrameGeneration();
+
+    /**
+     * Reports if background generation process is blocked
+     *
+     * \see blockBackgroundFrameGeneration()
+     */
+    bool backgroundFrameGenerationBlocked() const;
+
+    /**
+     * Acquire an exclusive lock for the frame generation process
+     * initiated by requestFrameRegeneration().
+     *
+     * It is impossible to execute multiple background frame
+     * generation processes on a single image, because the
+     * image returns the result using global signals. Hence
+     * the initiator of the generation should acquire the lock
+     * first and pass it to requestFrameRegeneration(). The lock
+     * will be automatically released when the frame generation
+     * process is ended and all the signals are emitted.
+     *
+     * Calling to lockFrameGeneration() may block until the
+     * currently executing frame generation process is running.
+     *
+     * \see KisLockFrameGenerationLock for RAII wrapper
+     */
+    void lockFrameGeneration();
+
+    /**
+     * Release frame generation lock
+     *
+     * \see lockFrameGeneration()
+     */
+    void unlockFrameGeneration();
+
+    /**
+     * Try to acquire frame generation lock
+     *
+     * \see lockFrameGeneration()
+     */
+    bool tryLockFrameGeneration();
+
+    enum SwitchTimeAsyncOption {
+        STAO_NONE = 0,
+        STAO_USE_UNDO = 1 << 1,
+        STAO_FORCE_REGENERATION = 1 << 2
+    };
+    Q_DECLARE_FLAGS(SwitchTimeAsyncFlags, SwitchTimeAsyncOption);
+
 public Q_SLOTS:
+
     /**
      * Switches current frame (synchronously) and starts an
      * asynchronous regeneration of the entire image.
      */
-    void switchCurrentTimeAsync(int frameId, bool useUndo = false);
+    void switchCurrentTimeAsync(int frameId, SwitchTimeAsyncFlags options = STAO_NONE);
 
-    void setFullClipRangeStartTime(int column);
-    void setFullClipRangeEndTime(int column);
+    void setDocumentRangeStartFrame(int column);
+    void setDocumentRangeEndFrame(int column);
 
     void setFramerate(int fps);
 
 Q_SIGNALS:
+    /**
+     * @brief sigFrameReady notifies when an External frame has been regenerated and is available.
+     * @param time -- frame index
+     *
+     * Used for background processing of frames where we want to ensure that an external frame has
+     * been fully processed before updating.
+     *
+     */
     void sigFrameReady(int time);
+
+    /**
+     * @brief sigFrameRegenerated notifies when internal frame has been fully regenerated.
+     * @param time
+     *
+     * Used to notify switchCurrentTimeAsync clients that the frame is visible to the user.
+     * Only notifies when internal frame regeneration occurs, not external.
+     * Currently used in AnimationPlayer to update what it considers to be the "visible" frame
+     */
+    void sigFrameRegenerated(int time);
+
+    /**
+     * @brief sigFrameRegenerationSkipped notified when async frame changes are skipped.
+     * @param time
+     *
+     * Skipping frame regeneration occurs when the contents of the frame are deemed unimportant
+     * and not work updating the canvas for (generally for image-wide hold frames, for example.)
+     */
+    void sigFrameRegenerationSkipped(int time);
+
     void sigFrameCancelled();
     void sigUiTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeSpan &range, const QRect &rect);
@@ -174,19 +251,7 @@ Q_SIGNALS:
     void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 
     void sigFramerateChanged();
-    void sigFullClipRangeChanged();
     void sigPlaybackRangeChanged();
-
-    /**
-     * Emitted when the audio channel of the document is changed
-     */
-    void sigAudioChannelChanged();
-
-    /**
-     * Emitted when audion volume changes. Please note that it doesn't change
-     * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
-     */
-    void sigAudioVolumeChanged();
 
     void sigKeyframeAdded(const KisKeyframeChannel* channel, int time);
     void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);
@@ -202,6 +267,7 @@ private:
     void restoreCurrentTime(int *savedValue);
     void notifyFrameReady();
     void notifyFrameCancelled();
+    void notifyFrameRegenerated();
     bool requiresOnionSkinRendering();
 
     KisUpdatesFacade* updatesFacade() const;

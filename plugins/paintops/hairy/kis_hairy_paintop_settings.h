@@ -22,7 +22,7 @@ public:
 
     KisHairyPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     using KisBrushBasedPaintOpSettings::brushOutline;
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
     bool hasPatternSettings() const override;
 
 };

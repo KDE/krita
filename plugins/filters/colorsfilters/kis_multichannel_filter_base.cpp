@@ -109,6 +109,12 @@ void KisMultiChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
     updateTransfers();
 }
 
+void KisMultiChannelFilterConfiguration::updateTransfer(int index)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(index >= 0 && index < m_curves.size());
+    m_transfers[index] = m_curves[index].uint16Transfer();
+}
+
 void KisMultiChannelFilterConfiguration::updateTransfers()
 {
     m_transfers.resize(m_channelCount);
@@ -157,7 +163,7 @@ void KisMultiChannelFilterConfiguration::fromXML(const QDomElement& root)
                 index = qMin(index, quint16(curves.count()));
 
                 if (!e.text().isEmpty()) {
-                    curve.fromString(e.text());
+                    curve = KisCubicCurve(e.text());
                 }
                 curves.insert(index, curve);
             }
@@ -249,6 +255,96 @@ bool KisMultiChannelFilterConfiguration::compareTo(const KisPropertiesConfigurat
         && m_transfers == otherConfig->m_transfers;
 }
 
+bool KisMultiChannelFilterConfiguration::hasProperty(const QString& name) const
+{
+    if (KisColorTransformationConfiguration::hasProperty(name)) {
+        return true;
+    }
+    if (name == "nTransfers") {
+        return true;
+    }
+    int curveIndex;
+    if (!curveIndexFromCurvePropertyName(name, curveIndex)) {
+        return false;
+    }
+    return curveIndex >= 0 && curveIndex < m_channelCount;
+}
+
+void KisMultiChannelFilterConfiguration::setProperty(const QString& name, const QVariant& value)
+{
+    if (name == "nTransfers") {
+        // No Op
+        return;
+    }
+    int curveIndex;
+    if (!curveIndexFromCurvePropertyName(name, curveIndex) ||
+        curveIndex < 0 || curveIndex >= m_channelCount) {
+        KisColorTransformationConfiguration::setProperty(name, value);
+        return;
+    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.canConvert<QString>());
+    m_curves[curveIndex] = KisCubicCurve(value.toString());
+    updateTransfer(curveIndex);
+    invalidateColorTransformationCache();
+}
+
+bool KisMultiChannelFilterConfiguration::getProperty(const QString& name, QVariant& value) const
+{
+    if (KisColorTransformationConfiguration::hasProperty(name)) {
+        return KisColorTransformationConfiguration::getProperty(name, value);
+    }
+    if (name == "nTransfers") {
+        value = m_curves.size();
+        return true;
+    }
+    int curveIndex;
+    if (!curveIndexFromCurvePropertyName(name, curveIndex) ||
+        curveIndex < 0 || curveIndex >= m_channelCount) {
+        return false;
+    }
+    value = m_curves[curveIndex].toString();
+    return true;
+}
+
+QVariant KisMultiChannelFilterConfiguration::getProperty(const QString& name) const
+{
+    if (KisColorTransformationConfiguration::hasProperty(name)) {
+        return KisColorTransformationConfiguration::getProperty(name);
+    }
+    if (name == "nTransfers") {
+        return m_curves.size();
+    }
+    int curveIndex;
+    if (!curveIndexFromCurvePropertyName(name, curveIndex) ||
+        curveIndex < 0 || curveIndex >= m_channelCount) {
+        return false;
+    }
+    return m_curves[curveIndex].toString();
+}
+
+QMap<QString, QVariant> KisMultiChannelFilterConfiguration::getProperties() const
+{
+    QMap<QString, QVariant> propertyMap = KisColorTransformationConfiguration::getProperties();
+    propertyMap.insert("nTransfers", m_curves.size());
+    for (int i = 0; i < m_curves.size(); ++i) {
+        const QString name = QLatin1String("curve") + QString::number(i);
+        const QString value = m_curves[i].toString();
+        propertyMap.insert(name, value);
+    }
+    return propertyMap;
+}
+
+bool KisMultiChannelFilterConfiguration::curveIndexFromCurvePropertyName(const QString& name, int& curveIndex) const
+{
+    QRegExp rx("curve(\\d+)");
+    if (rx.indexIn(name, 0) == -1) {
+        return false;
+    }
+
+    curveIndex = rx.cap(1).toUShort();
+    return true;
+}
+
 KisMultiChannelConfigWidget::KisMultiChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)
         : KisConfigWidget(parent, f)
         , m_dev(dev)
@@ -308,7 +404,7 @@ void KisMultiChannelConfigWidget::init() {
 
 KisMultiChannelConfigWidget::~KisMultiChannelConfigWidget()
 {
-    KIS_ASSERT_RECOVER_RETURN(m_histogram);
+    KIS_ASSERT(m_histogram);
     delete m_histogram;
 }
 

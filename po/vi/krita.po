@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-27 00:40+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -12890,7 +12890,7 @@ msgstr "&Gắn vào"
 msgid "&Image"
 msgstr "&Ảnh "
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
@@ -12909,25 +12909,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "&Cách xem mới"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, fuzzy, kde-format
 msgid "&Import/Export"
 msgstr "Nhập ảnh"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "Nhập ảnh"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Convert"
 msgstr "&Chuyển đổi"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12936,78 +12936,78 @@ msgstr "&Chuyển đổi"
 msgid "&Select"
 msgstr "&Chọn"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "Nhóm:"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, fuzzy, kde-format
 msgid "&Transform"
 msgstr "Phương thức"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, fuzzy, kde-format
 msgid "Transform &All Layers"
 msgstr "Công cụ &xoá"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, fuzzy, kde-format
 msgid "S&plit"
 msgstr "Từ màu sang độ trong suốt"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Từ màu sang độ trong suốt"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, fuzzy, kde-format
 msgid "Select &Opaque"
 msgstr "Không chọn"
 
 # Sử dụng cụm từ "Bộ lọc" sẽ chính xác hơn là "Lọc" vì "Lọc" dễ gây nhầm lẫn và khiến người đọc cảm thấy khó hiểu
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, kde-format
 msgid "Filte&r"
 msgstr "&Bộ lọc"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "&Công cụ"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, fuzzy, kde-format
 msgid "Scripts"
 msgstr "Công cụ &bút vẽ"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, fuzzy, kde-format
 msgid "Setti&ngs"
 msgstr "Thiết lập"
 
-#: krita/krita5.xmlgui:393 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:405 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, fuzzy, kde-format
 msgid "&Help"
 msgstr "Ẩ&n"
 
-#: krita/krita5.xmlgui:411 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, fuzzy, kde-format
 msgid "File"
 msgstr "&Bộ lọc"
 
-#: krita/krita5.xmlgui:417
+#: krita/krita5.xmlgui:429
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Sửa"
 
-#: krita/krita5.xmlgui:422
+#: krita/krita5.xmlgui:434
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Định sẵn:"

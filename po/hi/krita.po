@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-27 00:40+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -12875,7 +12875,7 @@ msgstr "स्नेप करें (&S)"
 msgid "&Image"
 msgstr "चित्र (&I)"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
@@ -12894,25 +12894,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "नई परत (&N)"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, kde-format
 msgid "&Import/Export"
 msgstr "आयात/निर्यात (&I)"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "आयात करें"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Convert"
 msgstr "परिवर्तित करें (&C)"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12921,78 +12921,78 @@ msgstr "परिवर्तित करें (&C)"
 msgid "&Select"
 msgstr "चुनें (&S)"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "समूह (&G)"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, kde-format
 msgid "&Transform"
 msgstr "रूपांतरण (&T)"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "सभी परतें रूपांतित करें (&A)"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, kde-format
 msgid "S&plit"
 msgstr "विभाजन (&p)"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "अल्फ़ा विभाजन (&p)"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, kde-format
 msgid "Select &Opaque"
 msgstr "पारदर्शिता से चयन (&O)"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, kde-format
 msgid "Filte&r"
 msgstr "फ़िल्टर (&r)"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "साधन (&T)"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, kde-format
 msgid "Scripts"
 msgstr "स्क्रिप्टें"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
 msgstr "सेटिंग्स (&n)"
 
-#: krita/krita5.xmlgui:393 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:405 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "मदत (&H)"
 
-#: krita/krita5.xmlgui:411 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "फाइल"
 
-#: krita/krita5.xmlgui:417
+#: krita/krita5.xmlgui:429
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Edit"
 msgid "Edit"
 msgstr "संपादन"
 
-#: krita/krita5.xmlgui:422
+#: krita/krita5.xmlgui:434
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "ब्रश व अन्य चिजें"

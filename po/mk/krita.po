@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-27 00:40+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2000-10-02 22:00+0100\n"
 "Last-Translator: Damjan Janevski <miopa@usa.net>\n"
 "Language-Team: Macedonian <mkde-l10n@lists.sourceforge.net>\n"
@@ -12923,7 +12923,7 @@ msgstr "Насловна линија:"
 msgid "&Image"
 msgstr "Преглед на страна"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, fuzzy, kde-format
@@ -12943,25 +12943,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "&Не"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, fuzzy, kde-format
 msgid "&Import/Export"
 msgstr "&Отвори документ"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "Отстрани приказ"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "Создади шаблон"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12970,77 +12970,77 @@ msgstr "Создади шаблон"
 msgid "&Select"
 msgstr "Одбери..."
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "Група:"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, fuzzy, kde-format
 msgid "&Transform"
 msgstr "Колони:"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, fuzzy, kde-format
 msgid "Transform &All Layers"
 msgstr "Колони:"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, fuzzy, kde-format
 msgid "S&plit"
 msgstr "Фирма :"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Фирма :"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, fuzzy, kde-format
 msgid "Select &Opaque"
 msgstr "Одбери слика"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, fuzzy, kde-format
 msgid "Filte&r"
 msgstr "Избери"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, fuzzy, kde-format
 msgid "&Tools"
 msgstr "Одбери..."
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, fuzzy, kde-format
 msgid "Scripts"
 msgstr "Скрипта за извршување."
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, fuzzy, kde-format
 msgid "Setti&ngs"
 msgstr "inch"
 
-#: krita/krita5.xmlgui:393 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:405 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr ""
 
-#: krita/krita5.xmlgui:411 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, fuzzy, kde-format
 msgid "File"
 msgstr "Полно име :"
 
-#: krita/krita5.xmlgui:417
+#: krita/krita5.xmlgui:429
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "&Додади група..."
 
-#: krita/krita5.xmlgui:422
+#: krita/krita5.xmlgui:434
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Вертикално"

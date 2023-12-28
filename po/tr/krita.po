@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 02:27+0000\n"
-"PO-Revision-Date: 2023-12-25 13:11+0300\n"
+"POT-Creation-Date: 2023-12-28 02:30+0000\n"
+"PO-Revision-Date: 2023-12-27 13:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12759,7 +12759,7 @@ msgstr "&Tutturma Ölçütü"
 msgid "&Image"
 msgstr "Gö&rsel"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
@@ -12778,25 +12778,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "&Yeni"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, kde-format
 msgid "&Import/Export"
 msgstr "&İçe/Dışa Aktar"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "İçe Aktar"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Convert"
 msgstr "&Dönüştür"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12805,76 +12805,76 @@ msgstr "&Dönüştür"
 msgid "&Select"
 msgstr "&Seçim"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "&Grupla"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, kde-format
 msgid "&Transform"
 msgstr "&Dönüştür"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "Tüm Katmanları &Dönüştür"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, kde-format
 msgid "S&plit"
 msgstr "&Böl"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Alfayı &Böl"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, kde-format
 msgid "Select &Opaque"
 msgstr "&Matlığı Seç"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, kde-format
 msgid "Filte&r"
 msgstr "S&üzgeç"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "&Araçlar"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, kde-format
 msgid "Scripts"
 msgstr "Betikler"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, kde-format
 msgid "Setti&ngs"
 msgstr "Ayar&lar"
 
-#: krita/krita5.xmlgui:392 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&Yardım"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:422 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
 msgid "File"
 msgstr "Dosya"
 
-#: krita/krita5.xmlgui:416
+#: krita/krita5.xmlgui:428
 #, kde-format
 msgid "Edit"
 msgstr "Düzen"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:433
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Fırçalar ve Doldurma"
@@ -25326,7 +25326,7 @@ msgstr "Sert (Krita 4.1 ve önceki sürümler)"
 #: libs/ui/forms/wdggeneralsettings.ui:703
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Kontrol/Seçenek Seçim Düzenleyicilerini Değiştir"
+msgstr "Kontrol/Seçenek Seçim Niteleyicilerini Değiştir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
 #: libs/ui/forms/wdggeneralsettings.ui:710
@@ -28102,7 +28102,7 @@ msgstr "Düğmeler"
 #: libs/ui/input/config/kis_wheel_input_editor.ui:79
 #, kde-format
 msgid "Modifiers"
-msgstr "Değiştirici Düğmeler"
+msgstr "Niteleyiciler"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_mouse_input_editor.ui:79

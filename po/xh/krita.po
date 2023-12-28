@@ -55,7 +55,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 02:27+0000\n"
+"POT-Creation-Date: 2023-12-28 02:30+0000\n"
 "PO-Revision-Date: 2002-11-08 16:00+0200\n"
 "Last-Translator: Thelma Lungcuzo <thelma@translate.org.za>\n"
 "Language-Team: Xhosa <xhosa@translate.org.za>\n"
@@ -12797,7 +12797,7 @@ msgstr "Yongeza Ulwaleko..."
 msgid "&Image"
 msgstr "Umfanekiso"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, fuzzy, kde-format
@@ -12816,25 +12816,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "Entsha"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, fuzzy, kde-format
 msgid "&Import/Export"
 msgstr "Rhweba Umfanekiso..."
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "Rhweba Umfanekiso..."
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "Yitshintshele kwisiGrike"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12843,78 +12843,78 @@ msgstr "Yitshintshele kwisiGrike"
 msgid "&Select"
 msgstr "Ukhetho"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "Iqela:"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, fuzzy, kde-format
 msgid "&Transform"
 msgstr "&Isixhobo Somcimi"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, fuzzy, kde-format
 msgid "Transform &All Layers"
 msgstr "&Isixhobo Somcimi"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, fuzzy, kde-format
 msgid "S&plit"
 msgstr "&Umkhethi Wombala"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "&Umkhethi Wombala"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, fuzzy, kde-format
 msgid "Select &Opaque"
 msgstr "Sukukhetha nanye"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, fuzzy, kde-format
 msgid "Filte&r"
 msgstr "&Mhlophe"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, fuzzy, kde-format
 msgid "&Tools"
 msgstr "&Isixhobo Sosiba"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "Scripts"
 msgstr "Okushicilelweyo okusezantsi"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, fuzzy, kde-format
 msgid "Setti&ngs"
 msgstr "Izicwangciso"
 
-#: krita/krita5.xmlgui:392 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, fuzzy, kde-format
 msgid "&Help"
 msgstr "&Fihla/Bonisa Ulwaleko"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:422 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, fuzzy, kde-format
 msgid "File"
 msgstr "&Mhlophe"
 
-#: krita/krita5.xmlgui:416
+#: krita/krita5.xmlgui:428
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "Yongeza Isigqumathelo"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:433
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "Izinto zobumnini Zolwaleko..."

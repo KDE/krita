@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 02:27+0000\n"
+"POT-Creation-Date: 2023-12-28 02:30+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -13132,7 +13132,7 @@ msgstr "Macro"
 msgid "&Image"
 msgstr "سۈرەت(&I)"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
@@ -13152,26 +13152,26 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "يېڭى كۆرۈنۈش(&N)"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, fuzzy, kde-format
 msgid "&Import/Export"
 msgstr "نۇر ئۆتۈش"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, fuzzy, kde-format
 msgid "Import"
 msgstr "نۇر ئۆتۈش"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, fuzzy, kde-format
 #| msgid "Convert"
 msgid "&Convert"
 msgstr "CONVERT"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -13180,79 +13180,79 @@ msgstr "CONVERT"
 msgid "&Select"
 msgstr "تاللا(&S)"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "گۇرۇپپا:"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, fuzzy, kde-format
 msgid "&Transform"
 msgstr "سۈزۈك"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, fuzzy, kde-format
 msgid "Transform &All Layers"
 msgstr "سۈزۈك"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, fuzzy, kde-format
 #| msgid "Bilinear"
 msgid "S&plit"
 msgstr "قوش سىزىقلىق"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "رەڭ ئاتى:"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, fuzzy, kde-format
 msgid "Select &Opaque"
 msgstr "مۇندەرىجە تاللاش"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, fuzzy, kde-format
 msgid "Filte&r"
 msgstr "سۈزگۈچ"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "قوراللار(&T)"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, fuzzy, kde-format
 #| msgid "Subscript"
 msgid "Scripts"
 msgstr "تۆۋەنكى ئىندېكس"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, fuzzy, kde-format
 msgid "Setti&ngs"
 msgstr "تەڭشەكلەر"
 
-#: krita/krita5.xmlgui:392 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "ياردەم(&H)"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:422 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
 msgid "File"
 msgstr "ھۆججەت"
 
-#: krita/krita5.xmlgui:416
+#: krita/krita5.xmlgui:428
 #, fuzzy, kde-format
 msgid "Edit"
 msgstr "تەھرىر(&E)"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:433
 #, fuzzy, kde-format
 msgid "Brushes and Stuff"
 msgstr "رادىئۇس:"

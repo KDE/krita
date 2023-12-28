@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 02:27+0000\n"
+"POT-Creation-Date: 2023-12-28 02:30+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -12743,7 +12743,7 @@ msgstr "吸附(&S)"
 msgid "&Image"
 msgstr "影像(&I)"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
@@ -12762,25 +12762,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "建立(&N)"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, kde-format
 msgid "&Import/Export"
 msgstr "匯入/匯出(&I)"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "匯入"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
 #, kde-format
 msgid "&Convert"
 msgstr "轉換(&C)"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1216
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12789,76 +12789,76 @@ msgstr "轉換(&C)"
 msgid "&Select"
 msgstr "選取(&S)"
 
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "群組(&G)"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, kde-format
 msgid "&Transform"
 msgstr "變形(&T)"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "變形全部圖層(&A)"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, kde-format
 msgid "S&plit"
 msgstr "分割(&P)"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "分割 Alpha (透明度) (&P)"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, kde-format
 msgid "Select &Opaque"
 msgstr "選取不透明區域(&O)"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, kde-format
 msgid "Filte&r"
 msgstr "濾鏡(&R)"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "工具(&T)"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, kde-format
 msgid "Scripts"
 msgstr "指令稿"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:64
 #, kde-format
 msgid "Setti&ngs"
 msgstr "設定(&N)"
 
-#: krita/krita5.xmlgui:392 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:404 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "說明(&H)"
 
-#: krita/krita5.xmlgui:410 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:422 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:71
 #, kde-format
 msgid "File"
 msgstr "檔案"
 
-#: krita/krita5.xmlgui:416
+#: krita/krita5.xmlgui:428
 #, kde-format
 msgid "Edit"
 msgstr "編輯"
 
-#: krita/krita5.xmlgui:421
+#: krita/krita5.xmlgui:433
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "筆刷及其他工具"

@@ -27,12 +27,15 @@
 #include "KisMemoryStorage.h"
 
 
+const QString KisResourceStorage::s_xmlns_meta("urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+const QString KisResourceStorage::s_xmlns_dc("http://purl.org/dc/elements/1.1");
+
 const QString KisResourceStorage::s_meta_generator("meta:generator");
 const QString KisResourceStorage::s_meta_author("dc:author");
 const QString KisResourceStorage::s_meta_title("dc:title");
 const QString KisResourceStorage::s_meta_description("dc:description");
 const QString KisResourceStorage::s_meta_initial_creator("meta:initial-creator");
-const QString KisResourceStorage::s_meta_creator("cd:creator");
+const QString KisResourceStorage::s_meta_creator("dc:creator");
 const QString KisResourceStorage::s_meta_creation_date("meta:creation-date");
 const QString KisResourceStorage::s_meta_dc_date("meta:dc-date");
 const QString KisResourceStorage::s_meta_user_defined("meta:meta-userdefined");

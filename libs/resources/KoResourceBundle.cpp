@@ -372,6 +372,9 @@ bool KoResourceBundle::readMetaData(KoStore *resourceStore)
 
             m_metadata.insert(name, value);
             name = "meta:" + name;
+        } else if (name == "cd:creator") {
+            // Bundles from some versions have prefix 'cd' instead of 'dc'.
+            name = "dc:creator";
         }
 
         if (!m_metadata.contains(name)) {
@@ -393,6 +396,8 @@ void KoResourceBundle::saveMetadata(QScopedPointer<KoStore> &store)
     KoXmlWriter metaWriter(&buf);
     metaWriter.startDocument("office:document-meta");
     metaWriter.startElement("meta:meta");
+    metaWriter.addAttribute("xmlns:meta", KisResourceStorage::s_xmlns_meta);
+    metaWriter.addAttribute("xmlns:dc",   KisResourceStorage::s_xmlns_dc);
 
     writeMeta(KisResourceStorage::s_meta_generator, &metaWriter);
 

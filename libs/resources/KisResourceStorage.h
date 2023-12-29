@@ -239,6 +239,9 @@ public:
     /// Reloads the given resource from the persistent storage
     bool loadVersionedResource(KoResourceSP resource);
 
+    static const QString s_xmlns_meta;
+    static const QString s_xmlns_dc;
+
     static const QString s_meta_generator;
     static const QString s_meta_author;
     static const QString s_meta_title;

@@ -48,7 +48,7 @@
 # edito <prod@d-booker.net>, 2018.
 # Patricia Moncorgé <patricia.moncorge@d-booker.fr>, 2018, 2021, 2023.
 # Simon Depiets <sdepiets@gmail.com>, 2018, 2019, 2020.
-# Xavier BESNARD <xavier.besnard@kde.org>, 2022, 2023.
+# Xavier Besnard <xavier.besnard@kde.org>, 2022, 2023.
 #
 # -- kritalibs
 # translation of kplatomodels.po to français

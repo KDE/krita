@@ -42,7 +42,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
-# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
+# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2023 Stefan Asserhäll <stefan.asserhall@bredband.net>
 # Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Arve Eriksson <031299870@telia.com>, 2011.
 # Arve Eriksson <031299870@telia.com>, 2010.
@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-11-06 21:12+0100\n"
+"PO-Revision-Date: 2023-12-29 21:54+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.3\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -12004,12 +12004,10 @@ msgstr "Konvertera lager till animeringsbildrutor"
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Konvertera till ett arkivlager"
+msgstr "Konvertera till &arkivlager..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -15846,12 +15844,10 @@ msgstr "Skjutreglage för penselalternativ 4"
 #. i18n: context: iconText @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush option slider 1"
+#, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
-msgstr "Skjutreglage för penselalternativ 1"
+msgstr "Skjutreglage för penselalternativ 5"
 
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -16247,12 +16243,9 @@ msgid "Move shapes"
 msgstr "Flytta former"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Ange punkttyp"
+msgstr "Ange målarordning"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -16396,12 +16389,10 @@ msgstr ""
 "är kompatibelt med Krita 4.x."
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
-#, fuzzy, kde-format
-#| msgctxt "Default text for the text shape"
-#| msgid "<text>Placeholder Text</text>"
+#, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
-msgstr "<text>Platsmarkeringstext</text>"
+msgstr "Platsmarkeringstext"
 
 #: libs/flake/text/KoSvgTextShape.cpp:1053
 #, kde-format
@@ -24684,11 +24675,9 @@ msgstr "Skalningsmetod:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Assistant:"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Guide:"
+msgstr "Guideläge:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24699,26 +24688,28 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Kan användas för att felsöka prestanda- eller "
+"förvrängningsproblem med teckningsguider.\n"
+"              </p><p>Ändring av punktavbildningscachen kräver omstart.</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Direkt (rekommenderat)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Animeringscache"
+msgstr "Punktavbildningscache"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Använd stor punktavbildningscache"
+msgstr "Stor punktavbildningscache"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -40127,11 +40118,10 @@ msgstr "Kvalitet:"
 #. i18n: Please do not remove the spaces after the label text. It ensures to fix the column width if the label text of `labelRate` is set to an other value for RealTimeCaptureMode switched on.
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:225
-#, fuzzy, kde-format
-#| msgid "Resolution:"
+#, kde-format
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:         "
-msgstr "Upplösning:"
+msgstr "Upplösning:         "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:248
@@ -40162,18 +40152,15 @@ msgstr "Format:"
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:304
 #: plugins/dockers/recorder/recorderdocker.ui:326
-#, fuzzy, kde-format
-#| msgid ""
-#| "Please choose the language which should be used for this application:"
+#, kde-format
 msgid "Number of threads, which should be used for recording"
-msgstr "Välj språk som ska användas för det här programmet:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgid "Threads:"
-msgstr "Spridning:"
+msgstr ""
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -40276,15 +40263,13 @@ msgstr ""
 "Värden ovanför 3 rekommenderas inte på grund av stor prestandaförsämring."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:184
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Videons bilder/s:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:193
-#, fuzzy, kde-format
-#| msgid "Capture interval:"
+#, kde-format
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Tagningsintervall:"
@@ -40359,10 +40344,9 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:353
-#, fuzzy, kde-format
-#| msgid "Set the angle of the light source"
+#, kde-format
 msgid "Set the number of threads to be used for recording."
-msgstr "Ställ in ljuskällans vinkel"
+msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:361
 #, kde-format
@@ -40403,32 +40387,22 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:714
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time during Real Time Capture mode.\n"
 "Try to reduce the frame rate for the ffmpeg export or reduce the scaling "
 "filtering in the canvas acceleration settings."
 msgstr ""
-"Varning för dålig prestanda. Inspelningen kan inte skriva alla bildrutor i "
-"tid. Försök att öka tagningsintervallet."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:716
-#, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
+#, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time.\n"
 "Try to increase the capture interval or reduce the scaling filtering in the "
 "canvas acceleration settings."
 msgstr ""
-"Varning för dålig prestanda. Inspelningen kan inte skriva alla bildrutor i "
-"tid. Försök att öka tagningsintervallet."
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -57115,14 +57089,12 @@ msgid "Flood Fill"
 msgstr "Fyll ut"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:542
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Skala: "
+msgstr "Skala: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
@@ -57137,14 +57109,12 @@ msgid "Threshold: "
 msgstr "Tröskel: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:568
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Spridning: "
+msgstr "Spridning: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #, kde-format
@@ -58036,19 +58006,16 @@ msgid "Markers, Stroke, Fill"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
-#| msgctxt "{n} is the number value, % is the percent sign"
-#| msgid "Opacity: {n}%"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "Ogenomskinlighet: {n} %"
+msgstr "Ogenomskinlighet: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "Ogenomskinlighet [*varierar*]:"
+msgstr "Ogenomskinlighet [*varierar*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58191,11 +58158,10 @@ msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "Ogenomskinlighet [*varierar*]:"
+msgstr "Ogenomskinlighet [*varierar*]: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
 #, kde-format
@@ -58204,11 +58170,10 @@ msgid "Saturation: {n}%"
 msgstr "Färgmättnad: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Saturation [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "Färgmättnad [*varierar*]: "
+msgstr "Färgmättnad [*varierar*]: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -58465,14 +58430,12 @@ msgid "Threshold: "
 msgstr "Tröskel: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Spridning: "
+msgstr "Spridning: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
 #, kde-format
@@ -58627,14 +58590,12 @@ msgid "Threshold: "
 msgstr "Tröskel: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Spridning: "
+msgstr "Spridning: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
@@ -59517,19 +59478,15 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Escape in right direction"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "Fri riktning åt höger"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Change text direction"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "Ändra textriktning"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
@@ -59838,14 +59795,12 @@ msgid "Include contour regions"
 msgstr "Inkludera konturområden"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Skala: "
+msgstr "Skala: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
@@ -59854,14 +59809,12 @@ msgid "Threshold: "
 msgstr "Tröskel: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Spridning: "
+msgstr "Spridning: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
 #, kde-format

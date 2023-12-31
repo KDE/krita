@@ -61756,14 +61756,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgctxt "action"
-#~ msgid "to &File Layer..."
-#~ msgstr "ファイル参照レイヤーへ(&F)..."
-
-#~ msgctxt "Resolution for recorded frames"
-#~ msgid "Resolution:"
-#~ msgstr "解像度:"
-
-#~ msgid "Recorder is active"
-#~ msgstr "レコーダー録画中"

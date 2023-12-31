@@ -13397,7 +13397,7 @@ msgstr "Re&talla"
 #, kde-format
 msgctxt "action"
 msgid "Cut selection to clipboard"
-msgstr "Retalla la selecció al porta-retalls"
+msgstr "Retalla la selecció a dins del porta-retalls"
 
 #. i18n: context: iconText @ Action (edit_cut), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:292
@@ -13418,7 +13418,7 @@ msgstr "&Copia"
 #, kde-format
 msgctxt "action"
 msgid "Copy selection to clipboard"
-msgstr "Copia la selecció al porta-retalls"
+msgstr "Copia la selecció a dins del porta-retalls"
 
 #. i18n: context: iconText @ Action (edit_copy), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:304
@@ -35767,7 +35767,7 @@ msgstr "Re&talla"
 #: libs/widgetutils/config/kstandardaction_p.h:43
 #, kde-format
 msgid "Cut selection to clipboard"
-msgstr "Retalla la selecció al porta-retalls"
+msgstr "Retalla la selecció a dins del porta-retalls"
 
 #: libs/widgetutils/config/kstandardaction_p.h:44
 #, kde-format
@@ -35777,7 +35777,7 @@ msgstr "&Copia"
 #: libs/widgetutils/config/kstandardaction_p.h:44
 #, kde-format
 msgid "Copy selection to clipboard"
-msgstr "Copia la selecció al porta-retalls"
+msgstr "Copia la selecció a dins del porta-retalls"
 
 #: libs/widgetutils/config/kstandardaction_p.h:45
 #: libs/widgetutils/config/kstandardaction_p.h:46

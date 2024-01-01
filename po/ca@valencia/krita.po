@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-12-20 11:38+0100\n"
+"PO-Revision-Date: 2023-12-31 08:35+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -11064,7 +11064,7 @@ msgstr "Copia els fotogrames clau"
 #, kde-format
 msgctxt "action"
 msgid "Copy frames to clipboard"
-msgstr "Copia els fotogrames al porta-retalls"
+msgstr "Copia els fotogrames a dins del porta-retalls"
 
 #. i18n: context: text @ Action (copy_frames_as_clones), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2375
@@ -11078,7 +11078,7 @@ msgstr "Clona fotogrames clau"
 #, kde-format
 msgctxt "action"
 msgid "Clone frames to clipboard"
-msgstr "Clona els fotogrames al porta-retalls"
+msgstr "Clona els fotogrames a dins del porta-retalls"
 
 #. i18n: context: text @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2387
@@ -11106,7 +11106,7 @@ msgstr "Retalla fotogrames clau"
 #, kde-format
 msgctxt "action"
 msgid "Cut frames to clipboard"
-msgstr "Retalla els fotogrames al porta-retalls"
+msgstr "Retalla els fotogrames a dins del porta-retalls"
 
 #. i18n: context: text @ Action (paste_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2411
@@ -11134,7 +11134,7 @@ msgstr "Copia columnes"
 #, kde-format
 msgctxt "action"
 msgid "Copy columns to clipboard"
-msgstr "Copia les columnes al porta-retalls"
+msgstr "Copia les columnes a dins del porta-retalls"
 
 #. i18n: context: text @ Action (cut_columns_to_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2435
@@ -11148,7 +11148,7 @@ msgstr "Retalla columnes"
 #, kde-format
 msgctxt "action"
 msgid "Cut columns to clipboard"
-msgstr "Retalla les columnes al porta-retalls"
+msgstr "Retalla les columnes a dins del porta-retalls"
 
 #. i18n: context: text @ Action (paste_columns_from_clipboard), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2447
@@ -11724,7 +11724,7 @@ msgstr "Copia una capa"
 #, kde-format
 msgctxt "action"
 msgid "Copy layer to clipboard"
-msgstr "Copia la capa al porta-retalls"
+msgstr "Copia la capa a dins del porta-retalls"
 
 #. i18n: context: text @ Action (cut_layer_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2846
@@ -11741,7 +11741,7 @@ msgstr "Retalla la capa"
 #, kde-format
 msgctxt "action"
 msgid "Cut layer to clipboard"
-msgstr "Retalla la capa al porta-retalls"
+msgstr "Retalla la capa a dins del porta-retalls"
 
 #. i18n: context: text @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2858
@@ -41637,7 +41637,7 @@ msgstr "Verds"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
 #, kde-format
 msgid "Cyans"
-msgstr "Cels"
+msgstr "Cians"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:47
@@ -53040,7 +53040,7 @@ msgid ""
 " to Clipboard"
 msgstr ""
 "No s'ha copiat res\n"
-" al porta-retalls"
+" a dins del porta-retalls"
 
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:226
 #, kde-format
@@ -55734,8 +55734,8 @@ msgid ""
 "Copies the path of the project to the clipboard. Useful for quickly copying "
 "to a file manager or the like."
 msgstr ""
-"Copia el camí del projecte al porta-retalls. És útil per a copiar ràpidament "
-"a un gestor de fitxers o similar."
+"Copia el camí del projecte a dins del porta-retalls. És útil per a copiar "
+"ràpidament a un gestor de fitxers o similar."
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:342
 msgid "Please select the JSON comic config file."

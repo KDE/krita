@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-12-20 11:38+0100\n"
+"PO-Revision-Date: 2023-12-31 08:35+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -41636,7 +41636,7 @@ msgstr "Verds"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
 #, kde-format
 msgid "Cyans"
-msgstr "Cels"
+msgstr "Cians"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:47

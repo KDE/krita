@@ -1,7 +1,7 @@
 # Copyright (C) licensed under the GNU Free Documentation License 1.3+ unless stated otherwise
 # This file is distributed under the same license as the Krita package.
 #
-# SPDX-FileCopyrightText: 2022, 2023 Emir SARI <emir_sari@icloud.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Emir SARI <emir_sari@icloud.com>
 # Görkem Çetin <gorkem@kde.org>, 2002-2003.
 # Serdar Cevher <scevher@gsl.gsu.edu.tr>, 2001-2002.
 # obsoleteman <tulliana@gmail.com>, 2008-2012.
@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-12-27 13:23+0300\n"
+"PO-Revision-Date: 2024-01-01 14:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.01.85\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -18972,7 +18972,7 @@ msgstr "Eşitlik"
 #, kde-format
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
-msgstr "Eklemeli Çıkarma"
+msgstr "Toplamalı Çıkar"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:105
 #, kde-format
@@ -18990,7 +18990,7 @@ msgstr "Ark Tanjant"
 #, kde-format
 msgctxt "Blending mode - Negation"
 msgid "Negation"
-msgstr "Negatif"
+msgstr "Negatiflik"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:110
 #, kde-format
@@ -29680,7 +29680,7 @@ msgstr "Süzgeç"
 #, kde-format
 msgctxt "option category"
 msgid "Masked Brush"
-msgstr "Maskelenmiş Fırça"
+msgstr "Maskeli Fırça"
 
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
@@ -53172,7 +53172,7 @@ msgstr "Dikey"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Only wash mode is possible when using a masked brush."
-msgstr "Maskeli fırça kullanırken yalnızca Yıkama kipi olanaklıdır."
+msgstr "Maskeli fırça kullanılırken yalnızca yıkama kipi kullanılabilir."
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:26
 #, kde-format

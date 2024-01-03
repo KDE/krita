@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-13 00:40+0000\n"
+"POT-Creation-Date: 2023-12-28 00:40+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -11995,8 +11995,8 @@ msgstr "Gjer lag om til animasjonsbilete"
 #: krita/krita.action:3026
 #, kde-format
 msgctxt "action"
-msgid "to &File Layer..."
-msgstr "Til &fil-lag …"
+msgid "Convert to &File Layer..."
+msgstr ""
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028
@@ -12839,7 +12839,7 @@ msgstr "&Lås til"
 msgid "&Image"
 msgstr "&Bilete"
 
-#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:253 krita/krita5.xmlgui:269
+#: krita/krita5.xmlgui:169 krita/krita5.xmlgui:265 krita/krita5.xmlgui:281
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:5
 #: plugins/extensions/rotateimage/rotateimage.xmlgui:18
 #, kde-format
@@ -12858,25 +12858,25 @@ msgctxt "New layer"
 msgid "&New"
 msgstr "&Nytt"
 
-#: krita/krita5.xmlgui:207
+#: krita/krita5.xmlgui:219
 #, kde-format
 msgid "&Import/Export"
 msgstr "&Importer/eksporter"
 
 #. i18n: ectx: property (text), widget (QPushButton, addPresetButton)
-#: krita/krita5.xmlgui:214
+#: krita/krita5.xmlgui:226
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:68
 #, kde-format
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:222 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
 #, kde-format
 msgid "&Convert"
 msgstr "&Konverter"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
-#: krita/krita5.xmlgui:233 krita/krita5.xmlgui:304
+#: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
 #: plugins/dockers/layerdocker/LayerBox.cpp:1220
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
@@ -12886,76 +12886,76 @@ msgid "&Select"
 msgstr "&Merk"
 
 # Inneheld kommandoar for gruppering, så det er best med imperativ her (til trass for den offisielle konteksten).
-#: krita/krita5.xmlgui:241 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
 msgstr "&Grupper"
 
-#: krita/krita5.xmlgui:247
+#: krita/krita5.xmlgui:259
 #, kde-format
 msgid "&Transform"
 msgstr "&Transformer"
 
-#: krita/krita5.xmlgui:264
+#: krita/krita5.xmlgui:276
 #, kde-format
 msgid "Transform &All Layers"
 msgstr "Transformer &alle laga"
 
-#: krita/krita5.xmlgui:279
+#: krita/krita5.xmlgui:291
 #, kde-format
 msgid "S&plit"
 msgstr "&Del opp"
 
-#: krita/krita5.xmlgui:281 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Del opp &alfa"
 
-#: krita/krita5.xmlgui:326
+#: krita/krita5.xmlgui:338
 #, kde-format
 msgid "Select &Opaque"
 msgstr "Merk alt ugje&nnomsiktige"
 
-#: krita/krita5.xmlgui:341
+#: krita/krita5.xmlgui:353
 #, kde-format
 msgid "Filte&r"
 msgstr "Fil&ter"
 
-#: krita/krita5.xmlgui:362 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
+#: krita/krita5.xmlgui:374 libs/widgetutils/xmlgui/ui_standards.xmlgui:144
 #, kde-format
 msgid "&Tools"
 msgstr "V&erktøy"
 
-#: krita/krita5.xmlgui:363
+#: krita/krita5.xmlgui:375
 #, kde-format
 msgid "Scripts"
 msgstr "Skript"
 
-#: krita/krita5.xmlgui:366 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
+#: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
 msgstr "&Innstillingar"
 
-#: krita/krita5.xmlgui:393 libs/widgetutils/xmlgui/khelpmenu.cpp:132
+#: krita/krita5.xmlgui:405 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
 #, kde-format
 msgid "&Help"
 msgstr "&Hjelp"
 
-#: krita/krita5.xmlgui:411 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:128
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
 msgid "File"
 msgstr "Fil"
 
-#: krita/krita5.xmlgui:417
+#: krita/krita5.xmlgui:429
 #, kde-format
 msgid "Edit"
 msgstr ""
 
-#: krita/krita5.xmlgui:422
+#: krita/krita5.xmlgui:434
 #, kde-format
 msgid "Brushes and Stuff"
 msgstr "Penslar og anna"
@@ -15944,17 +15944,17 @@ msgstr ""
 "Klarte ikkje lasta WinTab-drivaren. Viss du har ei teikneplate, sjå til at "
 "drivaren til teikneplata er rett installert."
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:547
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:552
 #, kde-format
 msgid "Path options"
 msgstr "Bane-val"
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:549
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format
 msgid "Autosmooth curve"
 msgstr "Automatisk glatting"
 
-#: libs/basicflakes/tools/KoCreatePathTool.cpp:553
+#: libs/basicflakes/tools/KoCreatePathTool.cpp:558
 #, kde-format
 msgid "Activate angle snap"
 msgstr "Bruk vinkelsteg"
@@ -16214,7 +16214,7 @@ msgstr "Fordel figurar"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1252
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Grupper figurar"
@@ -16308,7 +16308,7 @@ msgid "Unclip Shapes"
 msgstr "Fjern figurklipping"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1280
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Løys opp figurgruppe"
@@ -19495,7 +19495,7 @@ msgstr "Ut"
 #: libs/pigment/resources/KoColorSet.cpp:1472
 #: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1179
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1181
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19565,8 +19565,8 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
-#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
+#: libs/ui/KisView.cpp:1184 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -20414,7 +20414,7 @@ msgid "Select All"
 msgstr "Merk alt"
 
 #: libs/ui/actions/kis_selection_action_factories.cpp:238
-#: libs/ui/KisView.cpp:792
+#: libs/ui/KisView.cpp:794
 msgctxt "(qtundo-format)"
 msgid "Flood Fill Layer"
 msgstr "Fargefyll-lag"
@@ -20476,7 +20476,7 @@ msgid "Paste shapes"
 msgstr "Lim inn figurar"
 
 #: libs/ui/actions/KisPasteActionFactories.cpp:272
-#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:606
+#: libs/ui/actions/KisPasteActionFactories.cpp:366 libs/ui/KisView.cpp:608
 #, kde-format
 msgid "(pasted)"
 msgstr "(limt inn)"
@@ -22210,13 +22210,13 @@ msgid "Edit Guides"
 msgstr "Rediger hjelpelinjer"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:543
-#: libs/ui/canvas/kis_mirror_axis.cpp:318
+#: libs/ui/canvas/kis_mirror_axis.cpp:326
 #, kde-format
 msgid "Y: %1 px"
 msgstr "Y: %1 pikslar"
 
 #: libs/ui/canvas/kis_guides_manager.cpp:548
-#: libs/ui/canvas/kis_mirror_axis.cpp:302
+#: libs/ui/canvas/kis_mirror_axis.cpp:310
 #, kde-format
 msgid "X: %1 px"
 msgstr "X: %1 pikslar"
@@ -29084,7 +29084,7 @@ msgctxt "(qtundo-format)"
 msgid "Change File Layer"
 msgstr "Endra fil-lag"
 
-#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:698
+#: libs/ui/kis_clipboard.cc:721 libs/ui/KisView.cpp:700
 #, kde-format
 msgid ""
 "Could not open %2.\n"
@@ -31373,107 +31373,107 @@ msgstr "Ingen bilete er tilgjengelege."
 msgid "Use This Template"
 msgstr "Bruk denne malen"
 
-#: libs/ui/KisView.cpp:767
+#: libs/ui/KisView.cpp:769
 #, kde-format
 msgid "You cannot drag and drop colors on the selected layer type."
 msgstr "Du kan ikkje dra og sleppa fargar på den valde lagtypen."
 
-#: libs/ui/KisView.cpp:775 libs/ui/tool/kis_tool.cc:678
+#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:681
 #, kde-format
 msgid "Layer is locked and invisible."
 msgstr "Laget er låst og usynleg."
 
-#: libs/ui/KisView.cpp:777 libs/ui/tool/kis_tool.cc:680
+#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:683
 #, kde-format
 msgid "Layer is locked."
 msgstr "Laget er låst."
 
-#: libs/ui/KisView.cpp:779 libs/ui/tool/kis_tool.cc:682
+#: libs/ui/KisView.cpp:781 libs/ui/tool/kis_tool.cc:685
 #, kde-format
 msgid "Layer is invisible."
 msgstr "Laget er usynleg."
 
-#: libs/ui/KisView.cpp:1183
+#: libs/ui/KisView.cpp:1185
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>Dokumentet <b>«%1»</b> er endra.</p><p>Vil du lagra det?</p>"
 
-#: libs/ui/KisView.cpp:1252
+#: libs/ui/KisView.cpp:1259
 #, kde-format
 msgid "Write Protected"
 msgstr "Skriveverna"
 
-#: libs/ui/KisView.cpp:1256
+#: libs/ui/KisView.cpp:1263
 #, kde-format
 msgid "Recovered"
 msgstr "Gjenoppretta"
 
-#: libs/ui/KisView.cpp:1410
+#: libs/ui/KisView.cpp:1417
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Utskriftssimulering verkar ikkje i flyttalsmodus."
 
-#: libs/ui/KisView.cpp:1415
+#: libs/ui/KisView.cpp:1422
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Utskriftssimulering slått på."
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1424
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Utskriftssimulering slått av."
 
-#: libs/ui/KisView.cpp:1429
+#: libs/ui/KisView.cpp:1436
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Fargeområde-åtvaringar verkar ikkje i flyttalsmodus."
 
-#: libs/ui/KisView.cpp:1435
+#: libs/ui/KisView.cpp:1442
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "Fargeområde-åtvaringar er slått på."
 
-#: libs/ui/KisView.cpp:1437
+#: libs/ui/KisView.cpp:1444
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Men utskriftssimulering er framleis av."
 
-#: libs/ui/KisView.cpp:1440
+#: libs/ui/KisView.cpp:1447
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "Fargeområde-åtvaringar er slått av."
 
-#: libs/ui/KisViewManager.cpp:773
+#: libs/ui/KisViewManager.cpp:778
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Gjeldande forfattarprofil"
 
-#: libs/ui/KisViewManager.cpp:903
+#: libs/ui/KisViewManager.cpp:908
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopi)"
 
-#: libs/ui/KisViewManager.cpp:1046 libs/ui/KisViewManager.cpp:1122
+#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Slapp opp for alternative filnamn. Prøv å lagra manuelt, med eit høgare tal."
 
-#: libs/ui/KisViewManager.cpp:1046
+#: libs/ui/KisViewManager.cpp:1051
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Klarte ikkje lagra inkrementell versjon"
 
-#: libs/ui/KisViewManager.cpp:1122
+#: libs/ui/KisViewManager.cpp:1127
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Klarte ikkje lagra inkrementell reservekopi"
 
-#: libs/ui/KisViewManager.cpp:1321
+#: libs/ui/KisViewManager.cpp:1326
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31482,13 +31482,13 @@ msgstr ""
 "Går over til «berre lerretet»-modus.\n"
 "Trykk «%1» for å gå tilbake."
 
-#: libs/ui/KisViewManager.cpp:1363
+#: libs/ui/KisViewManager.cpp:1368
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Opna ressursmappe"
 
-#: libs/ui/KisViewManager.cpp:1367
+#: libs/ui/KisViewManager.cpp:1372
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31511,19 +31511,19 @@ msgstr ""
 "<p><b>Privat appmappe</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1382
+#: libs/ui/KisViewManager.cpp:1387
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Opna i AppData-mappa for &brukaren"
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1388
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Opna i &privat appmappe"
 
-#: libs/ui/KisViewManager.cpp:1496 libs/ui/KisViewManager.cpp:1514
+#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32627,7 +32627,7 @@ msgstr "Utvalshandlingar"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1848
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
 #, kde-format
 msgid "Transform"
@@ -32638,17 +32638,17 @@ msgstr "Transformer"
 msgid "No options"
 msgstr "Ingen val"
 
-#: libs/ui/tool/kis_tool.cc:684
+#: libs/ui/tool/kis_tool.cc:687
 #, kde-format
 msgid "Layer can be painted in Wash Mode only."
 msgstr "Laget kan berre teiknast på i lasurmodus."
 
-#: libs/ui/tool/kis_tool.cc:686
+#: libs/ui/tool/kis_tool.cc:689
 #, kde-format
 msgid "Group not editable."
 msgstr "Gruppa er ikkje redigerbar."
 
-#: libs/ui/tool/kis_tool.cc:701
+#: libs/ui/tool/kis_tool.cc:704
 #, kde-format
 msgid "Local selection is locked."
 msgstr "Lokalt utval er låst."
@@ -57936,69 +57936,69 @@ msgstr ""
 "Trykk og dra for å endra storleik på utvalet. Midtklikk for å velja merkt "
 "posisjon."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:861
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Dette verktøyet kan berre brukast på vektorlag. Du er truleg på jakt etter "
 "objektflyttingsverktøyet."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1314
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Drei objektet 90° til høgre"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1318
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Drei objektet 90° til venstre"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1322
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Drei objektet 180°"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1326
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Spegla objektet vassrett"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1330
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Spegla objektet loddrett"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1334
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Nullstill transformasjonar av objektet"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1408
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Union av figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1422
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Snitt av figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1432
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Trekk frå figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1477
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Del opp figurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1845
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Handlingar for vektorfigurar"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1864
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logiske operasjonar"
@@ -58353,7 +58353,7 @@ msgctxt "invalid profile name"
 msgid "Invalid name."
 msgstr "Ugyldig namn."
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:228
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:227
 #, kde-format
 msgid ""
 "A profile with that name already exists.\n"
@@ -58362,13 +58362,13 @@ msgstr ""
 "Det finst alt ein profil med dette namnet.\n"
 "Vil du skriva over han?"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:363
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:388
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:362
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:387
 #, kde-format
 msgid "Mouse"
 msgstr "Mus"
 
-#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:376
+#: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:375
 #, kde-format
 msgid "Graphics Pen"
 msgstr "Teiknepenn"
@@ -59397,7 +59397,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:286
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -59616,7 +59616,7 @@ msgstr "Lås breidd/høgd-forhold"
 msgid "Crop Tool Actions"
 msgstr "Avskjeringshandlingar"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:723
+#: plugins/tools/tool_crop/kis_tool_crop.cc:724
 #, kde-format
 msgid ""
 "X: %1\n"
@@ -59625,7 +59625,7 @@ msgstr ""
 "X: %1\n"
 "Y: %2"
 
-#: plugins/tools/tool_crop/kis_tool_crop.cc:728
+#: plugins/tools/tool_crop/kis_tool_crop.cc:729
 #, kde-format
 msgid ""
 "Width: %1\n"
@@ -60258,18 +60258,18 @@ msgstr "Drei 90° til venstre"
 msgid "Apply"
 msgstr "Bruk"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:377
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:378
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Transformeringshandlingar"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:864
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Lagtypen kan ikkje bruka transformeringsverktøyet"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60277,7 +60277,7 @@ msgstr ""
 "Lagtypen kan ikkje bruka transformerings­verktøyet. Bruk heller ei "
 "transformerings­maske."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:891
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60287,20 +60287,20 @@ msgstr ""
 "Laget har barnelag med transformerings­masker. Slå av maskene før du gjer "
 "transformeringa."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Utval vert ikkje brukte ved redigering av transformeringsmasker "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan ikkje transformera tomt lag "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""

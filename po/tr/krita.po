@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2024-01-01 14:21+0300\n"
+"PO-Revision-Date: 2024-01-03 14:21+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -11161,7 +11161,7 @@ msgstr "Bitiş Zamanını Ayarla"
 #, kde-format
 msgctxt "action"
 msgid "Update Playback Range"
-msgstr "Oynatma Aralığını Güncelle"
+msgstr "Oynatma Erimini Güncelle"
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2495
@@ -14145,7 +14145,7 @@ msgstr "Tuval Döndürmesini Sıfırla"
 #, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Ekranı Sıfırla"
+msgstr "Görüntüyü Sıfırla"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
@@ -15007,7 +15007,7 @@ msgstr "Ölçekle"
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
-msgstr "Renk A&ralığından Seç..."
+msgstr "Renk Eriminden &Seç..."
 
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
@@ -15017,7 +15017,7 @@ msgstr "Renk A&ralığından Seç..."
 #, kde-format
 msgctxt "action"
 msgid "Select from Color Range"
-msgstr "Renk Aralığından Seç"
+msgstr "Renk Eriminden Seç"
 
 #. i18n: context: text @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1501
@@ -19995,7 +19995,7 @@ msgstr "özkaynak klasörü"
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:127
 #, kde-format
 msgid "Display settings"
-msgstr "Ekran ayarları"
+msgstr "Görüntü ayarları"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, kde-format
@@ -21504,7 +21504,7 @@ msgstr "İletişim Kutusu"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:30
 #, kde-format
 msgid "Master Display:"
-msgstr "Ana ekran:"
+msgstr "Ana görüntü:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpCustomDisplay)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
@@ -21517,7 +21517,7 @@ msgstr "Ana ekran:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
 msgid "Display"
-msgstr "Ekran"
+msgstr "Görüntü"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, labelX)
@@ -21564,7 +21564,7 @@ msgstr "Beyaz nokta:"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:250
 #, kde-format
 msgid "Min Luminance:"
-msgstr "En az renk parlaklığı:"
+msgstr "En düşük renk parlaklığı:"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMinLuminance)
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, dblMaxLuminance)
@@ -21585,7 +21585,7 @@ msgstr " cd/m²"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:270
 #, kde-format
 msgid "Max Luminance:"
-msgstr "En çok renk parlaklığı:"
+msgstr "En yüksek renk parlaklığı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:293
@@ -22396,9 +22396,9 @@ msgid ""
 msgstr ""
 "<p>Süzme kipini seç:\n"
 "<ul><li>Piksel sanatı için <b>en yakın komşu</b>. Yeni renk üretmez.</"
-"li><li>Kalıtımları engellemek üzere tek renkli alanlar için <b>iki çizgili</"
+"li><li>Kalıntıları engellemek üzere tek renkli alanlar için <b>iki çizgili</"
 "b>.</li><li>Daha pürüzsüz sonuçlar için <b>iki küplü</b>.</li><li>Keskin "
-"sonuçlar için <b>Lanczos3</b>. Antenler üretebilir.</li></ul></p>"
+"sonuçlar için <b>Lanczos3</b>. Hava görüntüleri üretebilir.</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -23009,12 +23009,12 @@ msgstr "Görüntü adı: %1 %2"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1793
 #, kde-format
 msgid "Min Luminance: %1"
-msgstr "En az renk parlaklığı: %1"
+msgstr "En düşük renk parlaklığı: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1794
 #, kde-format
 msgid "Max Luminance: %1"
-msgstr "En çok renk parlaklığı: %1"
+msgstr "En yüksek renk parlaklığı: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1795
 #, kde-format
@@ -24641,7 +24641,7 @@ msgstr "Yüksek Kaliteli Süzme"
 #: libs/ui/forms/wdgdisplaysettings.ui:139
 #, kde-format
 msgid "Scaling Mode:"
-msgstr "Ölçekleme Kipi:"
+msgstr "Ölçekleme kipi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
@@ -24803,7 +24803,7 @@ msgstr "Renk:"
 #: libs/ui/forms/wdgdisplaysettings.ui:427
 #, kde-format
 msgid "Start showing at:"
-msgstr "Gösterimi şuradan başlat:"
+msgstr "Şuradan göstermeye başla:"
 
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intChoke)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, intRange)
@@ -24909,7 +24909,7 @@ msgstr "Kıvrım yumuşatmayı etkinleştir"
 #: libs/ui/forms/wdgdisplaysettings.ui:549
 #, kde-format
 msgid "Hide layer thumbnail popup"
-msgstr "Katman küçük görsel açılır penceresini gizle"
+msgstr "Katman küçük görseli açılır penceresini gizle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkChannelsAsColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:556
@@ -28352,37 +28352,37 @@ msgstr "Pozlamayı ve Gamayı Sıfırla"
 #: libs/ui/input/kis_pan_action.cpp:40
 #, kde-format
 msgid "Pan Canvas"
-msgstr "Tuvali Gezdir"
+msgstr "Tuvali Kaydır"
 
 #: libs/ui/input/kis_pan_action.cpp:41
 #, kde-format
 msgid "The <i>Pan Canvas</i> action pans the canvas."
-msgstr "<i>Tuvali Gezdir</i> eylemi, tuvali gezdirir."
+msgstr "<i>Tuvali Kaydır</i> eylemi, tuvali gezdirir."
 
 #: libs/ui/input/kis_pan_action.cpp:44
 #, kde-format
 msgid "Pan Mode"
-msgstr "Gezdirme Kipi"
+msgstr "Kaydırma Kipi"
 
 #: libs/ui/input/kis_pan_action.cpp:45
 #, kde-format
 msgid "Pan Left"
-msgstr "Sola Gezdir"
+msgstr "Sola Kaydır"
 
 #: libs/ui/input/kis_pan_action.cpp:46
 #, kde-format
 msgid "Pan Right"
-msgstr "Sağa Gezdir"
+msgstr "Sağa Kaydır"
 
 #: libs/ui/input/kis_pan_action.cpp:47
 #, kde-format
 msgid "Pan Up"
-msgstr "Yukarı Gezdir"
+msgstr "Yukarı Kaydır"
 
 #: libs/ui/input/kis_pan_action.cpp:48
 #, kde-format
 msgid "Pan Down"
-msgstr "Aşağı Gezdir"
+msgstr "Aşağı Kaydır"
 
 #: libs/ui/input/kis_rotate_canvas_action.cpp:41
 #, kde-format
@@ -28590,7 +28590,7 @@ msgstr "Fare Tekerleği Sağa"
 #: libs/ui/input/kis_shortcut_configuration.cpp:425
 #, kde-format
 msgid "Trackpad Pan"
-msgstr "İzsürücü Çevir"
+msgstr "Dokunmatik Yüzey Kaydırması"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:429
 #, kde-format
@@ -28618,7 +28618,7 @@ msgstr "Kıstırma Hareketi"
 #: libs/ui/input/kis_shortcut_configuration.cpp:473
 #, kde-format
 msgid "Pan Gesture"
-msgstr "Gezdirme Hareketi"
+msgstr "Kaydırma Hareketi"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:475
 #, kde-format
@@ -28884,7 +28884,7 @@ msgstr "Silgiyi Aç/Kapat"
 #: libs/ui/input/KisTouchGestureAction.cpp:25
 #, kde-format
 msgid "Reset Display"
-msgstr "Ekranı Sıfırla"
+msgstr "Görüntüyü Sıfırla"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
 #, kde-format
@@ -30238,7 +30238,7 @@ msgstr "Krita'yı tam ekran kipinde başlat"
 #: libs/ui/KisApplicationArguments.cpp:91
 #, kde-format
 msgid "Override display DPI"
-msgstr "Ekran DPI değerini geçersiz kıl"
+msgstr "Görüntü DPI değerini geçersiz kıl"
 
 #: libs/ui/KisApplicationArguments.cpp:95
 #, kde-format
@@ -32069,7 +32069,7 @@ msgstr "Konturu yumuşat"
 #: libs/ui/layerstyles/wdgContour.ui:57 libs/ui/layerstyles/wdgInnerGlow.ui:306
 #, kde-format
 msgid "&Range:"
-msgstr "&Aralık:"
+msgstr "&Erim:"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intRange)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, intNoise)
@@ -34134,7 +34134,7 @@ msgstr "Orta gri düzeyi:"
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
 msgid "Display"
-msgstr "Ekran"
+msgstr "Görüntü"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:157
@@ -35981,9 +35981,9 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
-"Tam aralık ve alt aralık arasında geçiş yap.\n"
-"Tam aralık: [%1, %2]\n"
-"Alt aralık: [%3, %4]"
+"Tam erim ve alt erim arasında geçiş yapın.\n"
+"Tam erim: [%1, %2]\n"
+"Alt erim: [%3, %4]"
 
 #: libs/widgetutils/kis_slider_spin_box_p.h:545
 #, kde-format
@@ -38104,7 +38104,7 @@ msgstr "Pürüzsüz aradeğerleme tanjantları."
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
 #, kde-format
 msgid "Zoom view to fit channel range."
-msgstr "Görünümü kanal aralığına sığacak biçimde yakınlaştır."
+msgstr "Görünümü kanal erimine sığacak biçimde yakınlaştırın."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:531
 #, kde-format
@@ -40205,7 +40205,7 @@ msgid ""
 msgstr ""
 "Daha yüksek bir değer daha büyük ve daha kaliteli bir dosya üretir. CPU "
 "tüketimini etkilemez.\n"
-"Yüksek kalıtım izi nedeniyle 50'den küçük değerler önerilmez."
+"Yüksek kalıntı izi nedeniyle 50'den küçük değerler önerilmez."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:155
 #, kde-format
@@ -41070,7 +41070,7 @@ msgstr "Otomatik Güncelle"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
 #, kde-format
 msgid "Range:"
-msgstr "Aralık:"
+msgstr "Erimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -41088,7 +41088,7 @@ msgstr "Ofset:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:157
 #, kde-format
 msgid "Display:"
-msgstr "Ekran:"
+msgstr "Görüntü:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbSlider)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
@@ -41429,7 +41429,7 @@ msgstr "Seç"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:18
 #, kde-format
 msgid "Color Range"
-msgstr "Renk Aralığı"
+msgstr "Renk Erimi"
 
 #: plugins/extensions/colorrange/dlg_colorrange.cc:247
 msgctxt "(qtundo-format)"
@@ -41590,7 +41590,7 @@ msgstr "Açıklama"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #, kde-format
 msgid "Display Name"
-msgstr "Ekran Adı"
+msgstr "Görüntü Adı"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
 #, kde-format
@@ -42145,7 +42145,7 @@ msgstr "Diğer"
 #, kde-format
 msgctxt "EXIF: autofocus"
 msgid "D&istance range:"
-msgstr "Uza&klık aralığı:"
+msgstr "Uza&klık erimi:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:390
@@ -47609,7 +47609,7 @@ msgstr "Temel"
 #, kde-format
 msgctxt "A progressive jpeg file can be displayed while loading."
 msgid "Progressive"
-msgstr "İlerlemeci"
+msgstr "Aşamalı"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkForceSRGB)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:38
@@ -48031,7 +48031,7 @@ msgstr "Ort1"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
-msgstr "ort2"
+msgstr "Ort2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, kde-format
@@ -48043,7 +48043,7 @@ msgstr "Ort3"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
-msgstr "En yüksek öngörülebilir averaj"
+msgstr "En yüksek öngörülebilir ortalama"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
 #, kde-format
@@ -48401,7 +48401,7 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
-"İlerlemeci kodlama için kod akışında hangi 256 × 256 bölgenin kaydedileceği "
+"Aşamalı kodlama için kod akışında hangi 256 × 256 bölgenin kaydedileceği "
 "sırayı belirler."
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
@@ -48465,8 +48465,8 @@ msgstr "Düşük çözünürlük DC"
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
-"İlerlemeci kipi, VarDCT için düşük çözünürlüklü DC görselleri kullanarak "
-"ayarla."
+"Aşamalı kipi, VarDCT için düşük çözünürlüklü DC görselleri kullanarak "
+"ayarlayın."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:604
@@ -48478,20 +48478,19 @@ msgstr "Modüler parametreler"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:610
 #, kde-format
 msgid "Progressive encoding"
-msgstr "Gelişimsel kodlama"
+msgstr "Aşamalı kodlama"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:617
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
-"Modüler kip için ilerlemeci kipi etkinleştirir veya devre dışı bırakır."
+msgstr "Modüler kip için aşamalı kipi etkinleştirir veya devre dışı bırakır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:624
 #, kde-format
 msgid "Global channel palette range"
-msgstr "Global kanal palet aralığı"
+msgstr "Global kanal palet erimi"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
@@ -48502,9 +48501,8 @@ msgid ""
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
-"Renk miktarı aralığın bu yüzdesinden küçükse Global kanal paletini "
-"kullanın.\n"
-"Belirgin bir yüzde ayarlamak için 0-100, kodlayıcı varsayılanını kullanmak "
+"Renk miktarı erimin bu yüzdesinden küçükse Global kanal paletini kullanın.\n"
+"Belirgin bir yüzde ayarlamak için 0-100, kodlayıcı öntanımlısını kullanmak "
 "için -1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
@@ -48512,7 +48510,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
 #, kde-format
 msgid "Local channel palette range"
-msgstr "Yerel kanal palet aralığı"
+msgstr "Yerel kanal palet erimi"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -48523,9 +48521,9 @@ msgid ""
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
-"Renk miktarı bu aralık yüzdesinden küçükse Yerel (grup başına) kanal "
-"paletini kullanın.\n"
-"Belirgin bir yüzde ayarlamak için 0-100, kodlayıcı varsayılanını kullanmak "
+"Renk miktarı bu erim yüzdesinden küçükse Yerel (grup başına) kanal paletini "
+"kullanın.\n"
+"Belirgin bir yüzde ayarlamak için 0-100, kodlayıcı öntanımlısını kullanmak "
 "için -1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
@@ -49442,10 +49440,10 @@ msgid ""
 "artifacts get introduced. <br/>Note: A quality of 100 switches to lossless "
 "compression similar to (but often more efficient than) PNG.</p>"
 msgstr ""
-"<p>Görsel kalitesini ayarla. Kalite düştükçe, daha fazla sıkıştırma "
-"bozulması ortaya çıkar. <br/> Not: Kalite değerinin 100'e ayarlanması PNG'ye "
-"benzer (ancak genellikle daha verimli) kayıpsız bir sıkıştırmayı ortaya "
-"koyar.</p>"
+"<p>Görsel kalitesini ayarlayın. Kalite düştükçe, daha fazla sıkıştırma "
+"kalıntıları ortaya çıkar. <br/> Not: Kalite değerinin 100'e ayarlanması "
+"PNG'ye benzer (ancak genellikle daha verimli) kayıpsız bir sıkıştırmayı "
+"ortaya koyar.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
 #, kde-format
@@ -49636,7 +49634,7 @@ msgid ""
 "if RAW decoder have been built without extension packs.</p>"
 msgstr ""
 "<title>Kalite (aradeğerleme)</title><p>Burada, RAW görsellerin kodunu "
-"çözerken kullanılacak demosaicing yöntemini seçin. Bir demosaicing "
+"çözerken kullanılacak mozaik kaldırma yöntemini seçin. Bir mozaik kaldırma "
 "algoritması, renkli süzülmüş görsel algılayıcısından alınan kısmi ham "
 "verilerden, birçok sayısal kameraya dahili olarak, renkli piksel matrisi "
 "biçiminde komple bir görselin aradeğerlenmesi için kullanılan sayısal bir "
@@ -50064,7 +50062,7 @@ msgstr "CFA Satır Gürültüsünü Kaldır"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
-msgstr "Nabız Gürültüsünü Kaldır"
+msgstr "Darbe Gürültüsünü Kaldır"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
@@ -50083,14 +50081,14 @@ msgid ""
 msgstr ""
 "<title>Gürültü Azaltma</title><p>RAW çözme sırasında uygulanacak gürültü "
 "azaltma yöntemini buradan seçin.</p><p><ul><li><emphasis strong='true'>Yok</"
-"emphasis>: hiç gürültü azaltma yok.</li><li><emphasis "
+"emphasis>: Hiç gürültü azaltma yok.</li><li><emphasis "
 "strong='true'>Dalgacıklar</emphasis>: Gerçek ayrıntılar korunurken "
 "gürültünün silinmesi için dalgacık düzeltme. Aradeğerlemeden sonra uygulanır."
 "</li><li><emphasis strong='true'>FBDD</emphasis>: FBDD gürültü azaltma. "
 "Aradeğerlemeden önce uygulanır.</li><li><emphasis strong='true'>CFA Satır "
 "Gürültü Kaldırma</emphasis>: Bant gürültü engelleme. Aradeğerlemeden sonra "
-"uygulanır.</li><li><emphasis strong='true'>Nabız Gürültüsünü Kaldır</"
-"emphasis>: Nabız gürültüsünü engelleme. Aradeğerlemeden sonra uygulanır.</"
+"uygulanır.</li><li><emphasis strong='true'>Darbe Gürültüsünü Kaldır</"
+"emphasis>: Darbe gürültüsünü engelleme. Aradeğerlemeden sonra uygulanır.</"
 "li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
@@ -50335,7 +50333,7 @@ msgctxt "@info:whatsthis"
 msgid ""
 "<title>Luminance</title><p>Amount of Luminance impulse noise reduction.</p>"
 msgstr ""
-"<title>Parlaklık</title><p>Parlaklık impuls gürültü azaltma miktarı.</p>"
+"<title>Parlaklık</title><p>Parlaklık darbe gürültüsünü azaltma miktarı.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
@@ -50350,7 +50348,7 @@ msgid ""
 "<title>Chrominance</title><p>Amount of Chrominance impulse noise reduction.</"
 "p>"
 msgstr ""
-"<title>Renklilik</title><p>Renklilik dürtüsü gürültü azaltma miktarı.</p>"
+"<title>Renklilik</title><p>Renklilik darbe gürültüsünü azaltma miktarı.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rcombobox.cpp:74
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rnuminput.cpp:84
@@ -50751,7 +50749,7 @@ msgid ""
 "precedence over Target Size."
 msgstr ""
 "Sıfır değilse elde edilmeye çalışılacak minimum bozulmayı belirtir. Hedef "
-"Boyuttan önceliklidir."
+"Boyutundan önceliklidir."
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:234
@@ -50953,8 +50951,8 @@ msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
 "progressive decoding."
 msgstr ""
-"log2(jeton bölüntülerin sayısı) 0 ile 3 arası. Daha kolay ilerlemeci kod "
-"çözümü için öntanımlı değer 0'dır."
+"log2(jeton bölüntülerin sayısı) 0 ile 3 arası. Daha kolay aşamalı kod çözümü "
+"için öntanımlı değer 0'dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:547
@@ -52361,7 +52359,7 @@ msgstr "Kalem Ayarlarını Etkinleştir"
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:469
 #, kde-format
 msgid "Y Range:"
-msgstr "Y aralığı:"
+msgstr "Y erimi:"
 
 #. i18n: ectx: property (text), widget (QLabel, toLabel2)
 #. i18n: ectx: property (text), widget (QLabel, toLabel1)
@@ -52903,8 +52901,8 @@ msgid ""
 "When pattern texture values are outside the range specified by the slider, "
 "the cut-off policy will be applied."
 msgstr ""
-"Desen doku değerleri kaydırıcıda tanımlı aralığın dışındaysa kesme "
-"politikası uygulanacaktır."
+"Desen doku değerleri kaydırıcıda tanımlı erimin dışındaysa kesme politikası "
+"uygulanacaktır."
 
 #: plugins/paintops/libpaintop/KisAirbrushOptionWidget.cpp:56
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:189
@@ -57182,7 +57180,7 @@ msgid ""
 "increases the range of similar colors to be filled."
 msgstr ""
 "Dolgunun renk benzerliği toleransını ayarlayın. Eşiği artırmak, doldurulacak "
-"benzer renklerin aralığını da artırır."
+"benzer renklerin erimini de artırır."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
@@ -57455,7 +57453,7 @@ msgstr "Çoklu fırça Aracı"
 #: plugins/tools/basictools/kis_tool_pan.cpp:79
 #, kde-format
 msgid "Pan Tool"
-msgstr "Çevir Aracı"
+msgstr "Kaydırma Aracı"
 
 #: plugins/tools/basictools/kis_tool_path.cc:142
 msgctxt "(qtundo-format)"
@@ -58436,8 +58434,8 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
-"Seçimin renk benzerlik toleransını ayarla. Eşiği artırmak, benzer renklerin "
-"seçim aralığını artırır."
+"Seçimin renk benzerlik toleransını ayarlayın. Eşiği artırmak, benzer "
+"renklerin seçim erimini artırır."
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
@@ -59730,7 +59728,7 @@ msgstr "Başlangıç genişliği:"
 #: plugins/tools/tool_dyna/kis_tool_dyna.cpp:319
 #, kde-format
 msgid "Width range:"
-msgstr "Genişlik aralığı:"
+msgstr "Genişlik erimi:"
 
 #: plugins/tools/tool_dyna/kis_tool_dyna.h:139
 #, kde-format
@@ -60839,7 +60837,7 @@ msgstr "Akıllı Yama Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Pan Tool"
-msgstr "Çevir Aracı"
+msgstr "Kaydırma Aracı"
 
 #. i18n: context: text @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (InteractionTool), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -61019,42 +61017,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgctxt "action"
-#~ msgid "to &File Layer..."
-#~ msgstr "&Dosya Katmana..."
-
-#~ msgctxt "Resolution for recorded frames"
-#~ msgid "Resolution:"
-#~ msgstr "Çözünürlük:"
-
-#~ msgid "Recorder is active"
-#~ msgstr "Kayıt aygıtı etkin"
-
-#~ msgid "Vertical Text Layout"
-#~ msgstr "Dikey Metin Düzeni"
-
-#~ msgid ""
-#~ "<html><head/><body><p>This should be enabled if you see any artifacts "
-#~ "while using assistants.</p></body></html>"
-#~ msgstr ""
-#~ "<html><head/><body><p>Yardımcıları kullanırken kalıtımlar görüyorsanız bu "
-#~ "etkinleştirilmelidir.</p></body></html>"
-
-#~ msgctxt "The 'spread' spinbox prefix in contiguous selection tool options"
-#~ msgid "Spread: "
-#~ msgstr "Yay: "
-
-#~ msgctxt ""
-#~ "The 'spread' spinbox prefix in similar color selection tool options"
-#~ msgid "Spread: "
-#~ msgstr "Yay: "
-
-#~ msgctxt ""
-#~ "The pattern 'scale' spinbox prefix in enclose and fill tool options"
-#~ msgid "Scale: "
-#~ msgstr "Ölçek:"
-
-#~ msgctxt "The 'spread' spinbox prefix in enclose and fill tool options"
-#~ msgid "Spread: "
-#~ msgstr "Yay: "

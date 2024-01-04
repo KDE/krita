@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2023-12-21 20:56+0100\n"
+"PO-Revision-Date: 2024-01-03 15:00+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1805,7 +1805,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_linear.kpp"
 msgid "Airbrush linear"
-msgstr "Aerografo lineara"
+msgstr "Aerpeniko lineara"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1813,7 +1813,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_linear_noisy.kpp"
 msgid "Airbrush linear noisy"
-msgstr "Aerografo lineara brua"
+msgstr "Aerpeniko lineara brua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8014,7 +8014,7 @@ msgstr "Glata punkto"
 #, kde-format
 msgctxt "action"
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Ĝenerala"
 
 #. i18n: context: text @ Action (open_resources_directory), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (open_resources_directory), Actions (General), ActionCollection (Krita)
@@ -25479,7 +25479,7 @@ msgstr "Aŭtomatkonserva Intervalo:"
 #, kde-format
 msgctxt "Suffix: “Every x min”"
 msgid " min"
-msgstr "min"
+msgstr " min"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
 #: libs/ui/forms/wdggeneralsettings.ui:880
@@ -29670,7 +29670,7 @@ msgstr ""
 #, kde-format
 msgctxt "option category"
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Ĝenerala"
 
 #: libs/ui/kis_paintop_options_model.cpp:28
 #, kde-format
@@ -54223,7 +54223,7 @@ msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
 msgid "Count"
-msgstr "grafo"
+msgstr "Nombro"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213

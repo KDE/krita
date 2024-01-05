@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2024-01-03 15:00+0100\n"
+"PO-Revision-Date: 2024-01-04 21:03+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -20617,7 +20617,7 @@ msgstr "FPS"
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
-msgstr "s"
+msgstr " s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
 #, kde-format
@@ -26835,7 +26835,7 @@ msgstr "Memorlimo:"
 #: libs/ui/forms/wdgperformancesettings.ui:172
 #, kde-format
 msgid " MiB"
-msgstr "MiB"
+msgstr " MiB"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgperformancesettings.ui:119
@@ -27640,7 +27640,7 @@ msgstr "Linio:"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Foreground color"
-msgstr "Malantaŭa koloro"
+msgstr "Malfona koloro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -32958,7 +32958,7 @@ msgstr "nenomita"
 #, kde-format
 msgctxt "Button to change the gradient stop type to foreground"
 msgid "Foreground color"
-msgstr "Malantaŭa koloro"
+msgstr "Malfona koloro"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:55
 #, kde-format
@@ -35466,7 +35466,7 @@ msgstr "Neniuj Eniroj"
 #: libs/widgetutils/config/krecentfilesaction.cpp:96
 #, kde-format
 msgid "Clear List"
-msgstr "Klara Listo"
+msgstr "Viŝi Liston"
 
 #: libs/widgetutils/config/kstandardaction.cpp:78
 #, kde-format

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 00:40+0000\n"
-"PO-Revision-Date: 2024-01-03 14:21+0300\n"
+"PO-Revision-Date: 2024-01-04 16:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 24.01.85\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2657,7 +2657,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Special_dyna_dots.kpp"
 msgid "Special dyna dots"
-msgstr "Özel dyna noktaları"
+msgstr "Özel devingen noktalar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -57034,7 +57034,7 @@ msgstr "%1 palet dosyasına yazılamıyor. Saltokunur olabilir."
 #: plugins/tools/basictools/kis_tool_colorsampler.h:122
 #, kde-format
 msgid "Color Sampler Tool"
-msgstr "Renk Örnekleme Aracı"
+msgstr "Renk Örnekleyicisi Aracı"
 
 #: plugins/tools/basictools/kis_tool_ellipse.cc:63
 msgctxt "(qtundo-format)"
@@ -57442,13 +57442,13 @@ msgstr "Aralıklarla Noktalara Çokla"
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
-"Çoklu Fırça Aracı, %1 fırçadan fazlasını desteklemiyor; daha geniş bir "
-"aralık kullanın."
+"Çoklu Fırça Aracı, %1 fırçadan fazlasını desteklemez; daha geniş bir aralık "
+"kullanın."
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
 msgid "Multibrush Tool"
-msgstr "Çoklu fırça Aracı"
+msgstr "Çoklu Fırça Aracı"
 
 #: plugins/tools/basictools/kis_tool_pan.cpp:79
 #, kde-format
@@ -57631,8 +57631,8 @@ msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>Renk seçicisi örnekleyicisinin ön planı güncellenip</nobr> "
-"güncellemeyeceğini denetler."
+"<nobr>Renk örnekleyicisinin ön planı güncellenip</nobr> güncellemeyeceğini "
+"denetler."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:238
@@ -58212,12 +58212,12 @@ msgstr "Güzel Yazı Şekli"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:59
 #, kde-format
 msgid "Save profile as..."
-msgstr "Profili farklı kaydet..."
+msgstr "Profili Farklı Kaydet..."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
 #, kde-format
 msgid "Remove profile"
-msgstr "Profili sil"
+msgstr "Profili Kaldır"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:74
 #, kde-format
@@ -58322,7 +58322,7 @@ msgstr "Grafik Kalemi"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: increase width"
-msgstr "Güzel yazı: Genişliği Artır"
+msgstr "Güzel Yazı: Genişliği Artır"
 
 #. i18n: context: text @ Action (calligraphy_increase_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_increase_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58336,7 +58336,7 @@ msgstr "Güzel yazı: Genişliği Artır"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: increase angle"
-msgstr "Güzel yazı: Açıyı Artır"
+msgstr "Güzel Yazı: Açıyı Artır"
 
 #. i18n: context: text @ Action (calligraphy_decrease_width), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_width), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58350,7 +58350,7 @@ msgstr "Güzel yazı: Açıyı Artır"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease width"
-msgstr "Güzel yazı: Genişliği Azalt"
+msgstr "Güzel Yazı: Genişliği Azalt"
 
 #. i18n: context: text @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -58364,7 +58364,7 @@ msgstr "Güzel yazı: Genişliği Azalt"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease angle"
-msgstr "Güzel yazı: Açıyı Azalt"
+msgstr "Güzel Yazı: Açıyı Azalt"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
 #, kde-format
@@ -58471,7 +58471,7 @@ msgstr "Komşu Seçim Aracı"
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:37
 #, kde-format
 msgid "Elliptical Selection"
-msgstr "Elips Seçim"
+msgstr "Eliptik Seçim"
 
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:48
 #: plugins/tools/selectiontools/kis_tool_select_elliptical.cc:64

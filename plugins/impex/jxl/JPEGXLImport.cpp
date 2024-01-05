@@ -511,7 +511,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             JxlColorEncoding colorEncoding{};
             if (JXL_DEC_SUCCESS
                 == JxlDecoderGetColorAsEncodedProfile(dec.get(),
+#if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0, 9, 0)
                                                       nullptr,
+#endif
                                                       JXL_COLOR_PROFILE_TARGET_DATA,
                                                       &colorEncoding)) {
                 const TransferCharacteristics transferFunction = [&]() {
@@ -635,7 +637,12 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 size_t iccSize = 0;
                 QByteArray iccProfile;
                 if (JXL_DEC_SUCCESS
-                    != JxlDecoderGetICCProfileSize(dec.get(), nullptr, JXL_COLOR_PROFILE_TARGET_DATA, &iccSize)) {
+                    != JxlDecoderGetICCProfileSize(dec.get(),
+#if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0,9,0)
+                                                   nullptr,
+#endif
+                                                   JXL_COLOR_PROFILE_TARGET_DATA,
+                                                   &iccSize)) {
                     errFile << "ICC profile size retrieval failed";
                     document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
                     return ImportExportCodes::ErrorWhileReading;
@@ -643,7 +650,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 iccProfile.resize(static_cast<int>(iccSize));
                 if (JXL_DEC_SUCCESS
                     != JxlDecoderGetColorAsICCProfile(dec.get(),
+#if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0,9,0)
                                                       nullptr,
+#endif
                                                       JXL_COLOR_PROFILE_TARGET_DATA,
                                                       reinterpret_cast<uint8_t *>(iccProfile.data()),
                                                       static_cast<size_t>(iccProfile.size()))) {
@@ -657,7 +666,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 if (!d.m_info.uses_original_profile) {
                     if (JXL_DEC_SUCCESS
                         != JxlDecoderGetICCProfileSize(dec.get(),
+#if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0,9,0)
                                                        nullptr,
+#endif
                                                        JXL_COLOR_PROFILE_TARGET_ORIGINAL,
                                                        &iccTargetSize)) {
                         errFile << "ICC profile size retrieval failed";
@@ -667,7 +678,9 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     iccTargetProfile.resize(static_cast<int>(iccTargetSize));
                     if (JXL_DEC_SUCCESS
                         != JxlDecoderGetColorAsICCProfile(dec.get(),
+#if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0,9,0)
                                                           nullptr,
+#endif
                                                           JXL_COLOR_PROFILE_TARGET_ORIGINAL,
                                                           reinterpret_cast<uint8_t *>(iccTargetProfile.data()),
                                                           static_cast<size_t>(iccTargetProfile.size()))) {

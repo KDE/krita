@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
+"POT-Creation-Date: 2024-01-06 00:39+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -51270,10 +51270,10 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:640
-#: plugins/impex/jxl/JPEGXLImport.cpp:650
-#: plugins/impex/jxl/JPEGXLImport.cpp:664
-#: plugins/impex/jxl/JPEGXLImport.cpp:674
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:659
+#: plugins/impex/jxl/JPEGXLImport.cpp:675
+#: plugins/impex/jxl/JPEGXLImport.cpp:687
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -51284,7 +51284,7 @@ msgstr ""
 "%1\n"
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:816
+#: plugins/impex/jxl/JPEGXLImport.cpp:829
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -51292,13 +51292,13 @@ msgid ""
 "flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:833
+#: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:892
+#: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
+"POT-Creation-Date: 2024-01-06 00:39+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -48439,16 +48439,16 @@ msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:640
-#: plugins/impex/jxl/JPEGXLImport.cpp:650
-#: plugins/impex/jxl/JPEGXLImport.cpp:664
-#: plugins/impex/jxl/JPEGXLImport.cpp:674
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:659
+#: plugins/impex/jxl/JPEGXLImport.cpp:675
+#: plugins/impex/jxl/JPEGXLImport.cpp:687
 #, fuzzy, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:816
+#: plugins/impex/jxl/JPEGXLImport.cpp:829
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -48456,13 +48456,13 @@ msgid ""
 "flattened image."
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:833
+#: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr ""
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:892
+#: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

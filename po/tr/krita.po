@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
+"POT-Creation-Date: 2024-01-06 00:39+0000\n"
 "PO-Revision-Date: 2024-01-04 16:59+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -47779,16 +47779,16 @@ msgstr ""
 "Spot renk kanallı JPEG-XL görseli algılandı, düzleştirilmiş görsel içe "
 "aktarılıyor."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:640
-#: plugins/impex/jxl/JPEGXLImport.cpp:650
-#: plugins/impex/jxl/JPEGXLImport.cpp:664
-#: plugins/impex/jxl/JPEGXLImport.cpp:674
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:659
+#: plugins/impex/jxl/JPEGXLImport.cpp:675
+#: plugins/impex/jxl/JPEGXLImport.cpp:687
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Görsel profili okunamadı."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:816
+#: plugins/impex/jxl/JPEGXLImport.cpp:829
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47798,13 +47798,13 @@ msgstr ""
 "Desteklenmeyen harmanlama kipli, çok kanallı JPEG-XL görseli algılandı; "
 "düzleştirilmiş görsel içe aktarılıyor."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:833
+#: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Geçersiz JPEG-XL katmanı adı uzunluğu"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:892
+#: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

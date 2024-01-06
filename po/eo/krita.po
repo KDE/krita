@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
+"POT-Creation-Date: 2024-01-06 00:39+0000\n"
 "PO-Revision-Date: 2024-01-04 21:03+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -47796,16 +47796,16 @@ msgstr ""
 "Detektis JPEG-XL-bildon kun makulkoloraj kanaloj, importante platigitan "
 "bildon."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:640
-#: plugins/impex/jxl/JPEGXLImport.cpp:650
-#: plugins/impex/jxl/JPEGXLImport.cpp:664
-#: plugins/impex/jxl/JPEGXLImport.cpp:674
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:659
+#: plugins/impex/jxl/JPEGXLImport.cpp:675
+#: plugins/impex/jxl/JPEGXLImport.cpp:687
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Ne eblas legi la bildan profilon."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:816
+#: plugins/impex/jxl/JPEGXLImport.cpp:829
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47815,13 +47815,13 @@ msgstr ""
 "Detektis plurtavolan JPEG-XL-bildon kun nesubtenata miksreĝimo, importante "
 "platigitan bildon."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:833
+#: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Nevalida JPEG-XL-tavola nomlongeco"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:892
+#: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

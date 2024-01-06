@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 00:40+0000\n"
+"POT-Creation-Date: 2024-01-06 00:39+0000\n"
 "PO-Revision-Date: 2023-12-21 08:55+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -48257,16 +48257,16 @@ msgstr ""
 "Image « JPEG-XL » détectée avec des canaux de tâches de couleurs. "
 "Importation d'une image à plat."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:640
-#: plugins/impex/jxl/JPEGXLImport.cpp:650
-#: plugins/impex/jxl/JPEGXLImport.cpp:664
-#: plugins/impex/jxl/JPEGXLImport.cpp:674
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:659
+#: plugins/impex/jxl/JPEGXLImport.cpp:675
+#: plugins/impex/jxl/JPEGXLImport.cpp:687
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Impossible de lire le profil de l'image."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:816
+#: plugins/impex/jxl/JPEGXLImport.cpp:829
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -48276,13 +48276,13 @@ msgstr ""
 "Image « JPEG-XL » multi-couches détectée avec un mode de fusion non pris en "
 "charge. Importation d'une image à plat."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:833
+#: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Longueur non valable pour le nom de calque « JPEG-XL »"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:892
+#: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

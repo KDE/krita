@@ -1,22 +1,22 @@
 # Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the krita package.
 # Linerly <linerly@protonmail.com>, 2022.
-# SPDX-FileCopyrightText: 2022, 2023 Wantoyèk <wantoyek@gmail.com>
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Wantoyèk <wantoyek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 02:30+0000\n"
-"PO-Revision-Date: 2023-12-29 20:14+0700\n"
+"PO-Revision-Date: 2024-01-05 18:35+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
-"Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
+"Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -2482,7 +2482,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Shape_smooth.kpp"
 msgid "Shape smooth"
-msgstr ""
+msgstr "Bentuk halus"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -6631,7 +6631,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/default.gpl"
 msgid "Default"
-msgstr ""
+msgstr "Bawaan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/gradient.gpl:2
@@ -7107,7 +7107,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/palettes/animation-color-set.gpl"
 msgid "Animation Color Set"
-msgstr ""
+msgstr "Perlengkapan Warna Animasi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/concept-cookie.gpl:2
@@ -7121,7 +7121,7 @@ msgstr ""
 #, kde-format
 msgctxt "./krita/data/palettes/default.gpl"
 msgid "Default"
-msgstr ""
+msgstr "Bawaan"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/palettes/gradient.gpl:2
@@ -7637,7 +7637,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Subtract"
-msgstr "Kurangi"
+msgstr "Subtract"
 
 #. i18n: context: toolTip @ Action (object_subtract), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:282
@@ -8887,7 +8887,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Hide Brushes and Stuff Toolbar"
-msgstr ""
+msgstr "Sembunyikan Bilah-Alat Kuas dan Hal-hal"
 
 #. i18n: context: text @ Action (reset_fg_bg), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (reset_fg_bg), Actions (Painting), ActionCollection (Krita)
@@ -8964,7 +8964,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Selection Mode: Subtract"
-msgstr "Mode Pemilihan: Kurangi"
+msgstr "Mode Pemilihan: Subtract"
 
 #. i18n: context: text @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_intersect), Actions (Painting), ActionCollection (Krita)
@@ -8976,7 +8976,7 @@ msgstr "Mode Pemilihan: Kurangi"
 #, kde-format
 msgctxt "action"
 msgid "Selection Mode: Intersect"
-msgstr ""
+msgstr "Mode Pemilihan: Intersect"
 
 #. i18n: context: text @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_replace), Actions (Painting), ActionCollection (Krita)
@@ -9000,7 +9000,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Weighted"
-msgstr ""
+msgstr "Kehalusan Kuas: Berbobot"
 
 #. i18n: context: text @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_no_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9012,7 +9012,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Disabled"
-msgstr ""
+msgstr "Kehalusan Kuas: Dinonfungsikan"
 
 #. i18n: context: text @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (set_stabilizer_brush_smoothing), Actions (Painting), ActionCollection (Krita)
@@ -9024,7 +9024,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Stabilizer"
-msgstr ""
+msgstr "Kehalusan Kuas: Stabil"
 
 #. i18n: context: text @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (decrease_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9048,7 +9048,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Brush Smoothing: Basic"
-msgstr ""
+msgstr "Kehalusan Kuas: Dasar"
 
 #. i18n: context: text @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (increase_brush_size), Actions (Painting), ActionCollection (Krita)
@@ -9381,7 +9381,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "B&urn"
-msgstr ""
+msgstr "Ba&ra"
 
 #. i18n: context: toolTip @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_burn), Actions (Filters), ActionCollection (Krita)
@@ -9391,7 +9391,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Burn"
-msgstr "Bakar"
+msgstr "Bara"
 
 #. i18n: context: text @ Action (krita_filter_mean removal), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1060
@@ -9949,7 +9949,7 @@ msgstr "Emboss Horizontal & Vertikal"
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
-msgstr ""
+msgstr "&Comot Acak..."
 
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
@@ -9959,7 +9959,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Random Pick"
-msgstr ""
+msgstr "Comot Acak"
 
 #. i18n: context: text @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1456
@@ -10497,6 +10497,7 @@ msgstr ""
 msgctxt "action"
 msgid "Change time to previous keyframe that has visible onion skin"
 msgstr ""
+"Ubah waktu ke keyframe sebelumnya yang memiliki onion skin yang terlihat"
 
 #. i18n: context: text @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (next_unfiltered_keyframe), Actions (Animation), ActionCollection (Krita)
@@ -10514,6 +10515,7 @@ msgstr ""
 msgctxt "action"
 msgid "Change time to next keyframe that has visible onion skin"
 msgstr ""
+"Ubah waktu ke keyframe selanjutnya yang memiliki onion skin yang terlihat"
 
 #. i18n: context: text @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_playback), Actions (Animation), ActionCollection (Krita)
@@ -10554,7 +10556,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add blank frame"
-msgstr ""
+msgstr "Tambahkan frame kosong"
 
 #. i18n: context: text @ Action (add_duplicate_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1974
@@ -10571,7 +10573,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add duplicate frame"
-msgstr ""
+msgstr "Tambahkan frame duplikat"
 
 #. i18n: context: text @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (toggle_onion_skin), Actions (Animation), ActionCollection (Krita)
@@ -10583,7 +10585,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle onion skin"
-msgstr ""
+msgstr "Jungkit onion skin"
 
 #. i18n: context: text @ Action (first_frame), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1998
@@ -10625,7 +10627,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Pin to Timeline"
-msgstr ""
+msgstr "Sematkan ke Linimasa"
 
 #. i18n: context: toolTip @ Action (pin_to_timeline), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2044
@@ -10694,21 +10696,21 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes moving the tail of animation to the left"
-msgstr ""
+msgstr "Hapus keyframe memindah ekor animasi ke kiri"
 
 #. i18n: context: text @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2101
 #, kde-format
 msgctxt "action"
 msgid "Remove Keyframe"
-msgstr ""
+msgstr "Hapus Keyframe"
 
 #. i18n: context: toolTip @ Action (remove_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2103
 #, kde-format
 msgctxt "action"
 msgid "Remove keyframes without moving anything around"
-msgstr ""
+msgstr "Hapus keyframe tanpa memindah apa pun yang di sekitar"
 
 #. i18n: context: text @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2113
@@ -10775,7 +10777,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove Column"
-msgstr ""
+msgstr "Hapus Kolom"
 
 #. i18n: context: toolTip @ Action (remove_columns), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2163
@@ -10908,7 +10910,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Adds keyframe to control scalar property"
-msgstr ""
+msgstr "Menambahkan keyframe untuk mengendalikan properti skalar"
 
 #. i18n: context: text @ Action (remove_scalar_keyframe), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2281
@@ -10922,7 +10924,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Removes the selected scalar keyframe"
-msgstr ""
+msgstr "Menghapus keyframe skalar yang dipilih"
 
 #. i18n: context: text @ Action (mirror_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2293
@@ -11181,7 +11183,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Group Layer"
-msgstr ""
+msgstr "Tambahkan Lapisan Kelompok"
 
 #. i18n: context: toolTip @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2526
@@ -11223,7 +11225,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Vector Layer"
-msgstr ""
+msgstr "Tambahkan Lapisan Vektor"
 
 #. i18n: context: toolTip @ Action (add_new_shape_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2550
@@ -11244,7 +11246,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr ""
+msgstr "Tambahkan Lapisan &Filter..."
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2562
@@ -11265,7 +11267,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr ""
+msgstr "Tambahkan Lapisan &Isi..."
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2574
@@ -11286,7 +11288,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr ""
+msgstr "Tambahkan Lapisan &File..."
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2586
@@ -11307,7 +11309,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Transparency Mask"
-msgstr ""
+msgstr "Tambahkan Mask &Transparansi"
 
 #. i18n: context: toolTip @ Action (add_new_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2598
@@ -11328,7 +11330,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
-msgstr ""
+msgstr "Tambahkan Mask &Filter..."
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2610
@@ -11370,7 +11372,7 @@ msgstr "Mask Pewarnaan"
 #, kde-format
 msgctxt "action"
 msgid "Add &Transform Mask"
-msgstr ""
+msgstr "Tambahkan Mask Transformasi"
 
 #. i18n: context: toolTip @ Action (add_new_transform_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2634
@@ -11391,7 +11393,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Add &Local Selection"
-msgstr ""
+msgstr "Tambahkan Pemilihan &Lokal"
 
 #. i18n: context: toolTip @ Action (add_new_selection_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2646
@@ -11412,7 +11414,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Layer"
-msgstr ""
+msgstr "&Isolasikan Lapisan Aktif"
 
 #. i18n: context: toolTip @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_layer), Actions (Layers), ActionCollection (Krita)
@@ -11422,14 +11424,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Layer"
-msgstr ""
+msgstr "Isolasikan Lapisan Aktif"
 
 #. i18n: context: text @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2668
 #, kde-format
 msgctxt "action"
 msgid "&Isolate Active Group"
-msgstr ""
+msgstr "&Isolasikan Kelompok Aktif"
 
 #. i18n: context: toolTip @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (isolate_active_group), Actions (Layers), ActionCollection (Krita)
@@ -11439,14 +11441,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Isolate Active Group"
-msgstr ""
+msgstr "Isolasikan Kelompok Aktif"
 
 #. i18n: context: text @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2680
 #, kde-format
 msgctxt "action"
 msgid "&Toggle layer lock"
-msgstr ""
+msgstr "&Jungkit gembok lapisan"
 
 #. i18n: context: toolTip @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_lock), Actions (Layers), ActionCollection (Krita)
@@ -11456,14 +11458,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer lock"
-msgstr ""
+msgstr "Jungkit gembok lapisan"
 
 #. i18n: context: text @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2692
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &visibility"
-msgstr ""
+msgstr "Jungkit ke&terlihatan lapisan"
 
 #. i18n: context: toolTip @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_visibility), Actions (Layers), ActionCollection (Krita)
@@ -11473,7 +11475,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer visibility"
-msgstr ""
+msgstr "Jungkit keterlihatan lapisan"
 
 #. i18n: context: text @ Action (toggle_layer_soloing), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2704
@@ -11503,7 +11505,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer &alpha"
-msgstr ""
+msgstr "Jungkit &alfa lapisan"
 
 #. i18n: context: toolTip @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_alpha_lock), Actions (Layers), ActionCollection (Krita)
@@ -11513,14 +11515,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha"
-msgstr ""
+msgstr "Jungkit alfa lapisan"
 
 #. i18n: context: text @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2728
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha &inheritance"
-msgstr ""
+msgstr "Jungkit &inherit alfa lapisan"
 
 #. i18n: context: toolTip @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_layer_inherit_alpha), Actions (Layers), ActionCollection (Krita)
@@ -11530,7 +11532,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Toggle layer alpha inheritance"
-msgstr ""
+msgstr "Jungkit inherit alfa lapisan"
 
 #. i18n: context: text @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2740
@@ -11544,14 +11546,14 @@ msgstr "Tambahkan Lapisan &Lukis"
 #, kde-format
 msgctxt "action"
 msgid "Add a new Paint Layer"
-msgstr ""
+msgstr "Tambahkan sebuah Lapisan Lukis"
 
 #. i18n: context: iconText @ Action (add_new_paint_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2743
 #, kde-format
 msgctxt "action"
 msgid "Paint Layer"
-msgstr ""
+msgstr "Lapisan Lukis"
 
 #. i18n: context: text @ Action (new_from_visible), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2752
@@ -11660,7 +11662,7 @@ msgstr "Potong lapisan ke papan klip"
 #, kde-format
 msgctxt "action"
 msgid "Paste Layer"
-msgstr ""
+msgstr "Tempel Lapisan"
 
 #. i18n: context: toolTip @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (paste_layer_from_clipboard), Actions (Layers), ActionCollection (Krita)
@@ -11670,7 +11672,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Paste layer from clipboard"
-msgstr ""
+msgstr "Tempel lapisan dari papan klip"
 
 #. i18n: context: text @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_quick_group), Actions (Layers), ActionCollection (Krita)
@@ -12014,7 +12016,7 @@ msgstr "Konversikan ke Lapisan &Lukis"
 #, kde-format
 msgctxt "action"
 msgid "to Paint Layer"
-msgstr ""
+msgstr "ke Lapisan Lukis"
 
 #. i18n: context: text @ Action (convert_to_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3076
@@ -12618,7 +12620,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Remove Layer"
-msgstr ""
+msgstr "&Hapus Lapisan"
 
 #. i18n: context: toolTip @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (remove_layer), Actions (Layers), ActionCollection (Krita)
@@ -12628,7 +12630,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove Layer"
-msgstr ""
+msgstr "Hapus Lapisan"
 
 #. i18n: context: text @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_up), Actions (Layers), ActionCollection (Krita)
@@ -12638,7 +12640,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Up"
-msgstr ""
+msgstr "Pindahkan Naik Lapisan atau Mask"
 
 #. i18n: context: text @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (move_layer_down), Actions (Layers), ActionCollection (Krita)
@@ -12648,14 +12650,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Move Layer or Mask Down"
-msgstr ""
+msgstr "Pindahkan Turun Lapisan atau Mask"
 
 #. i18n: context: text @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3540
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
-msgstr ""
+msgstr "&Properti..."
 
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
@@ -12665,7 +12667,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
-msgstr ""
+msgstr "Properti"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3552
@@ -12814,7 +12816,7 @@ msgstr "B&elah Alfa"
 #: krita/krita5.xmlgui:338
 #, kde-format
 msgid "Select &Opaque"
-msgstr "Pilih &Buram"
+msgstr "Pilih &Kekusaman"
 
 #: krita/krita5.xmlgui:353
 #, kde-format
@@ -12857,7 +12859,7 @@ msgstr ""
 #: krita/krita5.xmlgui:433
 #, kde-format
 msgid "Brushes and Stuff"
-msgstr ""
+msgstr "Kuas dan Hal-hal"
 
 #. i18n: context: text @ Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:4
@@ -13556,7 +13558,7 @@ msgstr "Isi dengan Warna Latar Depan"
 #, kde-format
 msgctxt "action"
 msgid "Fill &with Background Color"
-msgstr "Isi &dengan Warna Latar belakang"
+msgstr "Isi &dengan Warna Latar Belakang"
 
 #. i18n: context: toolTip @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (fill_selection_background_color), Actions (Edit), ActionCollection (Menu)
@@ -13566,7 +13568,7 @@ msgstr "Isi &dengan Warna Latar belakang"
 #, kde-format
 msgctxt "action"
 msgid "Fill with Background Color"
-msgstr "Isi dengan Warna Latar belakang"
+msgstr "Isi dengan Warna Latar Belakang"
 
 #. i18n: context: text @ Action (fill_selection_pattern), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:484
@@ -14949,7 +14951,7 @@ msgstr "Pilih dari Rentang Warna"
 #, kde-format
 msgctxt "action"
 msgid "Select &Opaque (Replace)"
-msgstr "Pilih &Buram (Ganti)"
+msgstr "Pilih &Kekusaman (Ganti)"
 
 #. i18n: context: toolTip @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque), Actions (Select), ActionCollection (Menu)
@@ -14959,14 +14961,14 @@ msgstr "Pilih &Buram (Ganti)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque"
-msgstr "Pilih Buram"
+msgstr "Pilih Kekusaman"
 
 #. i18n: context: text @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1513
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Add)"
-msgstr "Pilih Buram (&Tambahi)"
+msgstr "Pilih Kekusaman (&Add)"
 
 #. i18n: context: toolTip @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_add), Actions (Select), ActionCollection (Menu)
@@ -14976,14 +14978,14 @@ msgstr "Pilih Buram (&Tambahi)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Add)"
-msgstr "Pilih Buram (Tambahi)"
+msgstr "Pilih Kekusaman (Add)"
 
 #. i18n: context: text @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1525
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Subtract)"
-msgstr "Pilih Buram (&Kurangi)"
+msgstr "Pilih Kekusaman (&Subtract)"
 
 #. i18n: context: toolTip @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_subtract), Actions (Select), ActionCollection (Menu)
@@ -14993,14 +14995,14 @@ msgstr "Pilih Buram (&Kurangi)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Subtract)"
-msgstr "Pilih Buram (Kurangi)"
+msgstr "Pilih Kekusaman (Subtract)"
 
 #. i18n: context: text @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1537
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (&Intersect)"
-msgstr "Pilih Buram (&Memotong)"
+msgstr "Pilih Kekusaman (&Intersect)"
 
 #. i18n: context: toolTip @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectopaque_intersect), Actions (Select), ActionCollection (Menu)
@@ -15010,7 +15012,7 @@ msgstr "Pilih Buram (&Memotong)"
 #, kde-format
 msgctxt "action"
 msgid "Select Opaque (Intersect)"
-msgstr "Pilih Buram (Memotong)"
+msgstr "Pilih Kekusaman (Intersect)"
 
 #. i18n: context: text @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #: krita/kritamenu.action:1549
@@ -15581,7 +15583,7 @@ msgstr "Tentang KDE"
 #, kde-format
 msgctxt "action"
 msgid "Brushes and Stuff"
-msgstr ""
+msgstr "Kuas dan Hal-hal"
 
 #. i18n: context: text @ Action (gradients), Actions (BrushesAndStuff), ActionCollection (Menu)
 #: krita/kritamenu.action:1941
@@ -15811,12 +15813,12 @@ msgstr ""
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:547
 #, kde-format
 msgid "Path options"
-msgstr ""
+msgstr "Opsi alur"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:549
 #, kde-format
 msgid "Autosmooth curve"
-msgstr ""
+msgstr "Kurva halus otomatis"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:553
 #, kde-format
@@ -15834,7 +15836,7 @@ msgstr "Presisi:"
 #, kde-format
 msgctxt "The raw line data"
 msgid "Raw"
-msgstr "Raw"
+msgstr "Mentah"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:300
 #: plugins/flake/pathshapes/spiral/SpiralShapeConfigWidget.cpp:16
@@ -16728,7 +16730,7 @@ msgstr "Sudutpandang"
 #: plugins/paintops/spray/kis_spray_paintop_settings.cpp:104
 #, kde-format
 msgid "Spacing"
-msgstr "&Peruangan:"
+msgstr "Penspasian"
 
 #: libs/image/commands/kis_change_filter_command.h:30
 msgctxt "(qtundo-format)"
@@ -16751,13 +16753,13 @@ msgstr ""
 #: libs/image/commands/kis_image_layer_move_command.cpp:38
 msgctxt "(qtundo-format)"
 msgid "Move Layer"
-msgstr ""
+msgstr "Pindahkan Lapisan"
 
 #: libs/image/commands/kis_image_layer_remove_command.cpp:18
 #: libs/image/commands/kis_image_layer_remove_command_impl.cpp:35
 msgctxt "(qtundo-format)"
 msgid "Remove Layer"
-msgstr ""
+msgstr "Hapus Lapisan"
 
 #: libs/image/commands/kis_node_compositeop_command.cpp:15
 msgctxt "(qtundo-format)"
@@ -17016,7 +17018,7 @@ msgstr "Latar belakang"
 #: libs/image/kis_image.cc:752 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
-msgstr ""
+msgstr "Lapisan Lukis"
 
 #: libs/image/kis_image.cc:851
 msgctxt "(qtundo-format)"
@@ -17192,20 +17194,20 @@ msgstr ""
 #: libs/image/kis_layer_properties_icons.cpp:23
 #, kde-format
 msgid "Inherit Alpha"
-msgstr ""
+msgstr "Alfa Inherit"
 
 #: libs/image/kis_layer_properties_icons.cpp:24
 #: libs/image/kis_paint_layer.cc:209
 #, kde-format
 msgid "Alpha Locked"
-msgstr ""
+msgstr "Alfa Digembok"
 
 #: libs/image/kis_layer_properties_icons.cpp:25
 #: libs/image/kis_paint_layer.cc:212
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:30
 #, kde-format
 msgid "Onion Skins"
-msgstr ""
+msgstr "Onion Skin"
 
 #: libs/image/kis_layer_properties_icons.cpp:27
 #: libs/resources/KisResourceModel.cpp:142
@@ -17306,7 +17308,7 @@ msgstr "Belah Alfa ke dalam sebuah Mask"
 #: libs/image/kis_layer_utils.cpp:2256
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
-msgstr ""
+msgstr "Konversikan ke Lapisan Lukis"
 
 #: libs/image/kis_processing_visitor.cpp:24
 #, kde-format
@@ -17319,7 +17321,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
-msgstr "Tidak dinamai"
+msgstr "Tak bernama"
 
 #: libs/image/kis_regenerate_frame_stroke_strategy.cpp:102
 msgctxt "(qtundo-format)"
@@ -17427,7 +17429,7 @@ msgstr "Lapisan"
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:44
 #, kde-format
 msgid "layer"
-msgstr ""
+msgstr "lapisan"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:56
 #, kde-format
@@ -17457,7 +17459,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Lines"
-msgstr ""
+msgstr "Garis"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:61
 #, kde-format
@@ -17487,7 +17489,7 @@ msgstr "Filter"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Mask"
-msgstr ""
+msgstr "Mask"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:66
 #, kde-format
@@ -17571,7 +17573,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Layout"
-msgstr ""
+msgstr "Tata letak"
 
 #: libs/image/krita_utils.cpp:351
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
@@ -18484,7 +18486,7 @@ msgstr "Penambahan"
 #, kde-format
 msgctxt "Blending mode - Subtract"
 msgid "Subtract"
-msgstr "Kurangi"
+msgstr "Subtract"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
@@ -18568,7 +18570,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Burn"
 msgid "Burn"
-msgstr "Bakar"
+msgstr "Bara"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:63
 #, kde-format
@@ -18799,7 +18801,9 @@ msgid "Equivalence"
 msgstr "Ekuivalen"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:104
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Additive Subtractive"
+#| msgid "Additive Subtractive"
 msgctxt "Blending mode - Additive Subtractive"
 msgid "Additive Subtractive"
 msgstr "Aditif Subtraktif"
@@ -19021,7 +19025,9 @@ msgid "Color"
 msgstr "Warna"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:145
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hue HSY"
+#| msgid "Hue"
 msgctxt "Blending mode - Hue HSY"
 msgid "Hue"
 msgstr "Rona"
@@ -19069,7 +19075,9 @@ msgid "Color HSI"
 msgstr "Warna HSI"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:154
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hue HSI"
+#| msgid "Hue HSI"
 msgctxt "Blending mode - Hue HSI"
 msgid "Hue HSI"
 msgstr "Rona HSI"
@@ -19117,7 +19125,9 @@ msgid "Color HSL"
 msgstr "Warna HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:163
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hue HSL"
+#| msgid "Hue HSL"
 msgctxt "Blending mode - Hue HSL"
 msgid "Hue HSL"
 msgstr "Rona HSL"
@@ -19165,7 +19175,9 @@ msgid "Color HSV"
 msgstr "Warna HSV"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:172
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "Blending mode - Hue HSV"
+#| msgid "Hue HSV"
 msgctxt "Blending mode - Hue HSV"
 msgid "Hue HSV"
 msgstr "Rona HSV"
@@ -19295,7 +19307,7 @@ msgstr "Latar belakang"
 #: libs/psd/psd_layer_section.cpp:725 libs/psd/psd_layer_section.cpp:873
 #, kde-format
 msgid "Unnamed Layer"
-msgstr ""
+msgstr "Lapisan Tak Bernama"
 
 #: libs/psd/psd_resource_block.h:110
 #, kde-format
@@ -19305,7 +19317,7 @@ msgstr ""
 #: libs/resources/KisFolderStorage.cpp:278
 #, kde-format
 msgid "Local Resources"
-msgstr ""
+msgstr "Sumber Daya Lokal"
 
 #: libs/resources/KisResourceCacheDb.cpp:255
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:167
@@ -19468,7 +19480,7 @@ msgstr "Id"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
-msgstr ""
+msgstr "ID Tempat Penyimpanan"
 
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisStorageModel.cpp:488
@@ -19535,7 +19547,7 @@ msgstr ""
 #: libs/resources/KisTagResourceModel.cpp:676
 #, kde-format
 msgid "Storage Active"
-msgstr ""
+msgstr "Tempat Penyimpanan Aktif"
 
 #: libs/resources/KisResourceModel.cpp:146
 #: libs/resources/KisTagResourceModel.cpp:648
@@ -19622,7 +19634,7 @@ msgstr "Memori"
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:51
 #, kde-format
 msgid "Invalid"
-msgstr ""
+msgstr "Tidak valid"
 
 #: libs/resources/KisResourceTypes.cpp:43
 #, kde-format
@@ -19738,7 +19750,7 @@ msgstr ""
 #: plugins/python/filtermanager/components/filtermanagertreemodel.py:18
 #, kde-format
 msgid "Thumbnail"
-msgstr ""
+msgstr "Thumbnail"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
@@ -19759,7 +19771,7 @@ msgstr "Semua"
 #: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, kde-format
 msgid "All Untagged"
-msgstr ""
+msgstr "Semua Tak Ter-tag"
 
 #: libs/resources/KisTagModel.cpp:305
 #, kde-format
@@ -19769,7 +19781,7 @@ msgstr ""
 #: libs/resources/KisTagModel.cpp:315
 #, kde-format
 msgid "All Untagged Resources"
-msgstr ""
+msgstr "Semua Sumber Daya yang Tak Ter-tag"
 
 #: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
@@ -19821,24 +19833,24 @@ msgstr ""
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:127
 #, kde-format
 msgid "Display settings"
-msgstr "Pengaturan Tampilan"
+msgstr "Pengaturan Display"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, kde-format
 msgid "Storage Resources"
-msgstr ""
+msgstr "Tempat Penyimpanan Sumber Daya"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:195
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Import resource"
-msgstr "Impor sumberdaya"
+msgstr "Impor sumber daya"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:200
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Delete resource"
-msgstr "Hapus sumberdaya"
+msgstr "Hapus sumber daya"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
 #: libs/ui/KisMainWindow.cpp:2604
@@ -20130,7 +20142,7 @@ msgctxt ""
 "It appears in the checkbox next to the filter box in resources dockers; must "
 "be short."
 msgid "Filter in Tag"
-msgstr ""
+msgstr "Filter dalam Tag"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:56
 #, kde-format
@@ -20464,7 +20476,7 @@ msgstr ""
 #, kde-format
 msgctxt "video importer: video file statistics"
 msgid "Height: %1 px"
-msgstr ""
+msgstr "Tinggi: %1 px"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:379
 #, kde-format
@@ -21004,7 +21016,7 @@ msgstr ""
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "none"
-msgstr ""
+msgstr "tidak ada"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:76
 #, kde-format
@@ -21017,7 +21029,7 @@ msgstr ""
 #, kde-format
 msgctxt "apng prediction option name"
 msgid "none"
-msgstr ""
+msgstr "tidak ada"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:79
 #, kde-format
@@ -21059,7 +21071,7 @@ msgstr ""
 #, kde-format
 msgctxt "webp preset option name"
 msgid "none"
-msgstr ""
+msgstr "tidak ada"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:87
 #, kde-format
@@ -21113,7 +21125,7 @@ msgstr ""
 #, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr ""
+msgstr "tidak ada"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
 #, kde-format
@@ -21149,7 +21161,7 @@ msgstr ""
 #, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr ""
+msgstr "tidak ada"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
 #, kde-format
@@ -21768,7 +21780,7 @@ msgstr ""
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:441
 #, kde-format
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: libs/ui/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -21898,7 +21910,7 @@ msgstr "Tambahkan Panduan"
 #: libs/ui/canvas/kis_change_guides_command.cpp:49
 msgctxt "(qtundo-format)"
 msgid "Remove Guide"
-msgstr "Singkirkan Panduan"
+msgstr "Hapus Panduan"
 
 #: libs/ui/canvas/kis_change_guides_command.cpp:52
 #: libs/ui/canvas/kis_change_guides_command.cpp:104
@@ -21997,13 +22009,13 @@ msgstr ""
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr ""
+msgstr "Wantoyèk"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
+msgstr "wantoyek@gmail.com"
 
 #: libs/ui/dialogs/kis_about_application.cpp:79
 #, kde-format
@@ -22026,7 +22038,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_about_application.cpp:99
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr ""
+msgstr "<html><head/><body><h1 align=\"center\">Didukung Oleh</h1><p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:116
 #, kde-format
@@ -22036,7 +22048,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_about_application.cpp:119
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
-msgstr ""
+msgstr "<html><head/><body><h1 align=\"center\">Terimakasih Kepada</h1><p>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:146
 #, kde-format
@@ -22071,6 +22083,9 @@ msgid ""
 "Krita</b></h1><p>Krita is built on the following free software libraries:</"
 "p><p><ul>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\"><b>Pustaka Pihak Ketiga digunakan "
+"oleh Krita</b></h1><p>Krita adalah dibangun pada pustaka perangkat lunak "
+"bebas berikut:</p><p><ul>"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:57
 #, kde-format
@@ -22618,7 +22633,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:470
 #, kde-format
 msgid "Internal Storage"
-msgstr ""
+msgstr "Tempat Penyimpanan Internal"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:472
 #, kde-format
@@ -22771,12 +22786,12 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1790
 #, kde-format
 msgid "Display Id: %1"
-msgstr ""
+msgstr "Id display: %1"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1791
 #, kde-format
 msgid "Display Name: %1 %2"
-msgstr ""
+msgstr "Nama Display: %1 %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1792
 #, kde-format
@@ -22911,7 +22926,7 @@ msgstr "Kembalikan Default"
 #, kde-format
 msgctxt "@title:window"
 msgid "Stroke Selection Properties"
-msgstr ""
+msgstr "Properti Goresan Pemilihan"
 
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
 #, kde-format
@@ -23719,7 +23734,7 @@ msgstr "Tentang"
 #, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
-msgstr ""
+msgstr "Para Penulis"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
@@ -23731,13 +23746,13 @@ msgstr "Penerjemah"
 #: libs/ui/forms/wdgaboutapplication.ui:66
 #, kde-format
 msgid "Backers"
-msgstr ""
+msgstr "Para Pendukung"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:80
 #, kde-format
 msgid "Also Thanks To"
-msgstr ""
+msgstr "Terimakasih Juga Kepada"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
 #: libs/ui/forms/wdgaboutapplication.ui:94
@@ -23749,7 +23764,7 @@ msgstr "Lisensi"
 #: libs/ui/forms/wdgaboutapplication.ui:108
 #, kde-format
 msgid "Third-party libraries"
-msgstr ""
+msgstr "Pustaka pihak ketiga"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox1)
 #: libs/ui/forms/wdgapplyprofile.ui:27
@@ -24102,7 +24117,7 @@ msgstr ""
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:51
 #, kde-format
 msgid "Profile Picker"
-msgstr ""
+msgstr "Pencomot Profil"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:59
@@ -24346,7 +24361,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:184
 #, kde-format
 msgid "Pixmap Cache"
-msgstr ""
+msgstr "Cache Pixmap"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
@@ -24382,7 +24397,7 @@ msgstr ""
 #: libs/ui/forms/wdgdisplaysettings.ui:263
 #, kde-format
 msgid "Display Format:"
-msgstr ""
+msgstr "Format Display:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:270
@@ -24622,7 +24637,7 @@ msgstr ""
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:53
 #, kde-format
 msgid "Storage location:"
-msgstr ""
+msgstr "Lokasi tempat penyimpanan:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
 #: libs/ui/forms/WdgDlgPaletteEditor.ui:98
@@ -24728,7 +24743,7 @@ msgstr ""
 #: libs/ui/forms/wdgfullscreensettings.ui:56
 #, kde-format
 msgid "Scrollbars"
-msgstr ""
+msgstr "Bilah Gulir"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTitlebar)
 #: libs/ui/forms/wdgfullscreensettings.ui:63
@@ -24740,7 +24755,7 @@ msgstr ""
 #: libs/ui/forms/wdgfullscreensettings.ui:70
 #, kde-format
 msgid "Statusbar"
-msgstr ""
+msgstr "Bilah Status"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnToggleMask)
 #: libs/ui/forms/wdgGamutMaskToolbar.ui:51
@@ -24902,7 +24917,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:490
 #, kde-format
 msgid "Window Background:"
-msgstr "Latar Belakang Jendela"
+msgstr "Latar Belakang Jendela:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkRubberBand)
 #: libs/ui/forms/wdggeneralsettings.ui:516
@@ -25021,7 +25036,7 @@ msgstr ""
 #: libs/ui/forms/wdggeneralsettings.ui:756
 #, kde-format
 msgid "Sensitivity:"
-msgstr ""
+msgstr "Sensitivitas:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkKineticScrollingHideScrollbars)
 #: libs/ui/forms/wdggeneralsettings.ui:781
@@ -25077,7 +25092,7 @@ msgstr " mnt"
 #, kde-format
 msgctxt "Prefix: “Every x min”"
 msgid "Every "
-msgstr ""
+msgstr "Setiap "
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHideAutosaveFiles)
 #: libs/ui/forms/wdggeneralsettings.ui:899
@@ -25409,7 +25424,7 @@ msgstr "Tingkat lanjut..."
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:37
 #, kde-format
 msgid "Resources"
-msgstr ""
+msgstr "Sumber Daya"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: libs/ui/forms/wdggeneralsettings.ui:1531
@@ -25421,7 +25436,7 @@ msgstr ""
 #: libs/ui/forms/wdggeometryoptions.ui:18
 #, kde-format
 msgid "Geometry Options"
-msgstr ""
+msgstr "Opsi Geometri"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, textLabelFill)
@@ -25435,7 +25450,7 @@ msgstr "Isi:"
 #: libs/ui/forms/wdggeometryoptions.ui:59
 #, kde-format
 msgid "Not Filled"
-msgstr ""
+msgstr "Tidak Diisi"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #. i18n: ectx: property (text), widget (QRadioButton, solidColorButton)
@@ -25443,7 +25458,7 @@ msgstr ""
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:156
 #, kde-format
 msgid "Foreground Color"
-msgstr ""
+msgstr "Warna Latar Depan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
@@ -25481,7 +25496,7 @@ msgstr "Kerangka:"
 #, kde-format
 msgctxt "Label of the option to not draw outline in Geometry Options"
 msgid "No Outline"
-msgstr ""
+msgstr "Tanpa Kerangka"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
@@ -25495,13 +25510,13 @@ msgstr "Kuas"
 #: libs/ui/forms/wdggeometryoptions.ui:106
 #, kde-format
 msgid "Brush (Background Color)"
-msgstr ""
+msgstr "Kuas (Warna Latar Belakang)"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbPatternTransform)
 #: libs/ui/forms/wdggeometryoptions.ui:114
 #, kde-format
 msgid "Pattern Transform"
-msgstr ""
+msgstr "Transformasi Pola"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdggeometryoptions.ui:120
@@ -25640,7 +25655,7 @@ msgstr ""
 #: libs/ui/forms/wdgimportimagesequence.ui:37
 #, kde-format
 msgid "Add images..."
-msgstr ""
+msgstr "Tambahkan Gambar..."
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
@@ -25651,7 +25666,7 @@ msgstr ""
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:159
 #, kde-format
 msgid "Remove"
-msgstr ""
+msgstr "Hapus"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -25729,7 +25744,7 @@ msgstr ""
 #: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
 #, kde-format
 msgid "&Name:"
-msgstr ""
+msgstr "&Nama:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -25768,7 +25783,7 @@ msgstr "Profil:"
 #: libs/ui/forms/wdglayerproperties.ui:167
 #, kde-format
 msgid "Color label:"
-msgstr ""
+msgstr "Label warna:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDimensionsTitle)
 #: libs/ui/forms/wdglayerproperties.ui:196
@@ -25781,7 +25796,7 @@ msgstr "Dimensi:"
 #: libs/ui/forms/wdglayerproperties.ui:244
 #, kde-format
 msgid "Properties"
-msgstr ""
+msgstr "Properti"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, grpActiveChannels)
 #: libs/ui/forms/wdglayerproperties.ui:258
@@ -25801,7 +25816,7 @@ msgstr ""
 #: libs/ui/forms/wdglayerproperties.ui:264
 #, kde-format
 msgid "&Active Channels"
-msgstr ""
+msgstr "&Kanal-kanal Aktif"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSelectionSource)
 #: libs/ui/forms/wdgmaskfromselection.ui:21
@@ -25849,7 +25864,7 @@ msgstr ""
 #: libs/ui/forms/wdgmasksource.ui:27
 #, kde-format
 msgid "&None"
-msgstr "&Nihil"
+msgstr "&Tidak ada"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioMask)
 #: libs/ui/forms/wdgmasksource.ui:34
@@ -26044,7 +26059,7 @@ msgstr "Warna Latar Bela&kang:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:719
 #, kde-format
 msgid "Background:"
-msgstr "Latar belakang:"
+msgstr "Latar Belakang:"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioBackgroundAsRaster)
 #: libs/ui/forms/wdgnewimage.ui:551
@@ -26171,7 +26186,7 @@ msgstr "Simpan"
 #: libs/ui/forms/wdgpaintopsettings.ui:230
 #, kde-format
 msgid "Current Brush Engine"
-msgstr ""
+msgstr "Mesin Kuas Saat Ini"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveNewBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:340
@@ -26549,7 +26564,7 @@ msgstr ""
 #: libs/ui/forms/wdgperformancesettings.ui:427
 #, kde-format
 msgid "Animation Cache"
-msgstr ""
+msgstr "Cache Animasi"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgperformancesettings.ui:433
@@ -26865,7 +26880,7 @@ msgstr "Tinggi"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:665
 #, kde-format
 msgid "Height: "
-msgstr ""
+msgstr "Tinggi: "
 
 #. i18n: ectx: property (toolTip), widget (KisDoubleParseSpinBox, doubleRatio)
 #: libs/ui/forms/wdgrectangleconstraints.ui:134
@@ -26890,7 +26905,7 @@ msgstr ""
 #: libs/ui/forms/wdgrectangleconstraints.ui:181
 #, kde-format
 msgid "Round X: "
-msgstr ""
+msgstr "Bundar X: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intRoundCornersY)
 #: libs/ui/forms/wdgrectangleconstraints.ui:197
@@ -26902,7 +26917,7 @@ msgstr ""
 #: libs/ui/forms/wdgrectangleconstraints.ui:203
 #, kde-format
 msgid "Round Y: "
-msgstr ""
+msgstr "Bundar Y: "
 
 #. i18n: ectx: property (text), widget (QLabel, newBrushNameLabel)
 #: libs/ui/forms/wdgsavebrushpreset.ui:35
@@ -27075,25 +27090,25 @@ msgstr "Hapus..."
 #, kde-format
 msgctxt "Draws a line around an area"
 msgid "Stroke"
-msgstr "Gores"
+msgstr "Goresan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, typeBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:63
 #, kde-format
 msgid "Current Brush"
-msgstr ""
+msgstr "Kuas Saat Ini"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, typeBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:68
 #, kde-format
 msgid "Solid line"
-msgstr ""
+msgstr "Garis padat"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:76
 #, kde-format
 msgid "Line:"
-msgstr ""
+msgstr "Garis:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -27103,7 +27118,7 @@ msgstr ""
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgid "Foreground color"
-msgstr "Warna latardepan"
+msgstr "Warna latar depan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -27121,7 +27136,7 @@ msgstr "Warna latar belakang"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:219
 #, kde-format
 msgid "Custom color"
-msgstr ""
+msgstr "Warna kustom"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFillType)
@@ -27153,7 +27168,7 @@ msgstr ""
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:209
 #, kde-format
 msgid "Line color"
-msgstr ""
+msgstr "Warna garis"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgtabletsettings.ui:28
@@ -27385,7 +27400,7 @@ msgstr "Y:"
 #: libs/ui/imagesize/wdg_canvassize.ui:540
 #, kde-format
 msgid "Anchor:"
-msgstr ""
+msgstr "Jangkar:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupImageSize)
 #: libs/ui/imagesize/wdg_imagesize.ui:24
@@ -27410,7 +27425,7 @@ msgstr ""
 #: libs/ui/imagesize/wdg_imagesize.ui:167
 #, kde-format
 msgid "Hei&ght:"
-msgstr ""
+msgstr "Tin&ggi:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPrintWidth)
 #: libs/ui/imagesize/wdg_imagesize.ui:202
@@ -27534,7 +27549,7 @@ msgstr ""
 #, kde-format
 msgctxt "No input for this button"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: libs/ui/input/config/kis_input_button.cpp:128
 #: libs/ui/input/config/kis_input_button.cpp:190
@@ -27960,7 +27975,7 @@ msgstr ""
 #, kde-format
 msgctxt "Mouse Forward Button"
 msgid "Forward"
-msgstr ""
+msgstr "Maju"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:339
 #, kde-format
@@ -27978,7 +27993,7 @@ msgstr ""
 #, kde-format
 msgctxt "No mouse buttons for shortcut"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:358
 #, kde-format
@@ -28024,7 +28039,7 @@ msgstr "Shift"
 #, kde-format
 msgctxt "No keys for shortcut"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:409
 #, kde-format
@@ -28055,7 +28070,7 @@ msgstr ""
 #, kde-format
 msgctxt "No mouse wheel buttons for shortcut"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: libs/ui/input/kis_shortcut_configuration.cpp:441
 #, kde-format
@@ -28701,12 +28716,12 @@ msgstr "Pemilihan"
 #: libs/ui/kis_mask_manager.cc:210
 msgctxt "(qtundo-format)"
 msgid "Add Transparency Mask"
-msgstr ""
+msgstr "Tambahkan Mask Transparansi"
 
 #: libs/ui/kis_mask_manager.cc:223
 msgctxt "(qtundo-format)"
 msgid "Add Filter Mask"
-msgstr ""
+msgstr "Tambahkan Mask Filter"
 
 #: libs/ui/kis_mask_manager.cc:238
 #, kde-format
@@ -28721,7 +28736,7 @@ msgstr "Tambahan Mask Pewarnaan"
 #: libs/ui/kis_mask_manager.cc:286
 msgctxt "(qtundo-format)"
 msgid "Add Transform Mask"
-msgstr ""
+msgstr "Tambahkan Mask Transformasi"
 
 #: libs/ui/kis_mask_manager.cc:309
 #, kde-format
@@ -28776,7 +28791,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:941
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
-msgstr ""
+msgstr "Onion skin memerlukan lapisan dengan latar belakang transparan."
 
 #: libs/ui/kis_node_manager.cpp:968
 msgctxt "(qtundo-format)"
@@ -29094,27 +29109,27 @@ msgstr ""
 #: libs/ui/kis_selection_manager.cc:710
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
-msgstr "Pilih Buram (Tambah)"
+msgstr "Pilih Kekusaman (Add)"
 
 #: libs/ui/kis_selection_manager.cc:713
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
-msgstr "Pilih Buram (Kurangi)"
+msgstr "Pilih Kekusaman (Subtract)"
 
 #: libs/ui/kis_selection_manager.cc:716
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
-msgstr "Pilih Buram (Memotong)"
+msgstr "Pilih Kekusaman (Intersect)"
 
 #: libs/ui/kis_selection_manager.cc:719
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
-msgstr "Pilih Buram (Perbedaan Simetris)"
+msgstr "Pilih Kekusaman (Perbedaan Simetris)"
 
 #: libs/ui/kis_selection_manager.cc:722
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
-msgstr "Pilih Buram"
+msgstr "Pilih Kekusaman"
 
 #: libs/ui/kis_splash_screen.cpp:151
 #, kde-format
@@ -29222,7 +29237,7 @@ msgstr ""
 #: libs/ui/kis_statusbar.cc:386
 #, kde-format
 msgid "No Selection"
-msgstr ""
+msgstr "Tidak Ada Pemilihan"
 
 #: libs/ui/kis_statusbar.cc:404
 #, kde-format
@@ -29568,6 +29583,9 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
+"Jika Anda memilih Batal, semua file yang dapat dipulihkan akan disimpan.\n"
+"Jika Anda tekan Oke, file yang dipilih akan dipulihkan, file yang tidak "
+"dipilih dibuang."
 
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
@@ -30163,7 +30181,7 @@ msgstr "Buat dari Papan Klip"
 #: libs/ui/KisMainWindow.cpp:1937
 #, kde-format
 msgid "Layers/Masks"
-msgstr ""
+msgstr "Lapisan/Mask"
 
 #: libs/ui/KisMainWindow.cpp:1963
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
@@ -30290,7 +30308,7 @@ msgstr ""
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
 msgid "Save Palette in the Current Document"
-msgstr ""
+msgstr "Simpan palet di dalam Dokumen Saat Ini"
 
 #: libs/ui/KisPaletteEditor.cpp:140
 #, kde-format
@@ -30330,7 +30348,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:dialog"
 msgid "Add a new Color Swatch"
-msgstr ""
+msgstr "Tambahkan sebuah Contoh Warna baru"
 
 #: libs/ui/KisPaletteEditor.cpp:376 libs/ui/KisPaletteEditor.cpp:426
 #: libs/widgets/kis_palette_view.cpp:113
@@ -30455,7 +30473,7 @@ msgstr "&Tambahkan Kelompok.."
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
 msgid "&Remove"
-msgstr ""
+msgstr "&Hapus"
 
 #: libs/ui/KisTemplateCreateDia.cpp:129
 #, kde-format
@@ -30491,7 +30509,7 @@ msgstr ""
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Apakah kamu sungguh ingin menimpa templat '%1' yang ada?"
+msgstr "Apakah Anda sungguh ingin menimpa templat '%1' yang ada?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
@@ -30519,7 +30537,7 @@ msgstr ""
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "Do you really want to remove that group?"
-msgstr "Apakah kamu sungguh ingin menghapus kelompok itu?"
+msgstr "Apakah Anda sungguh ingin menghapus kelompok itu?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:435
 #, kde-format
@@ -30530,7 +30548,7 @@ msgstr "Hapus Kelompok"
 #: libs/ui/KisTemplateCreateDia.cpp:437
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr "Apakah kamu sungguh ingin menghapus templat itu?"
+msgstr "Apakah Anda sungguh ingin menghapus templat itu?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
 #, kde-format
@@ -30579,7 +30597,7 @@ msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
-"<p>Dokumen <b>'%1'</b> telah dimodifikasi.</p><p>Apakah kamu ingin "
+"<p>Dokumen <b>'%1'</b> telah dimodifikasi.</p><p>Apakah Anda ingin "
 "menyimpannya?</p>"
 
 #: libs/ui/KisView.cpp:1252
@@ -31125,7 +31143,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Knockout option"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbKnockout)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:225
@@ -31581,7 +31599,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer Style - Stroke"
 msgid "Stroke"
-msgstr "Gores"
+msgstr "Goresan"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnNewStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:156
@@ -31685,7 +31703,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:group In Layer Style"
 msgid "Fill"
-msgstr ""
+msgstr "Isi"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLinkWithLayer)
 #: libs/ui/layerstyles/WdgStroke.ui:389
@@ -32089,7 +32107,7 @@ msgstr ""
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:238
 #, kde-format
 msgid "Add..."
-msgstr ""
+msgstr "Tambah..."
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:243
 #, kde-format
@@ -32110,13 +32128,13 @@ msgstr ""
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
 #, kde-format
 msgid "unnamed"
-msgstr "tak_bernama"
+msgstr "tak bernama"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:39
 #, kde-format
 msgctxt "Button to change the gradient stop type to foreground"
 msgid "Foreground color"
-msgstr "Warna latardepan"
+msgstr "Warna latar depan"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:54
 #, kde-format
@@ -32128,7 +32146,7 @@ msgstr "Warna latar belakang"
 #, kde-format
 msgctxt "Button to change the gradient stop type to custom color"
 msgid "Custom color"
-msgstr ""
+msgstr "Warna kustom"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:82
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:20
@@ -32353,7 +32371,7 @@ msgctxt ""
 "This is appended to the color profile which is the default for the given "
 "colorspace and bit-depth"
 msgid "(Default)"
-msgstr ""
+msgstr "(Bawaan)"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:155
 #, kde-format
@@ -33068,7 +33086,8 @@ msgstr ""
 #: libs/widgets/KisSpinboxHSXSelector.cpp:34
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:84
 #: plugins/paintops/libpaintop/forms/wdgcoloroptions.ui:42
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hue:"
 msgid "Hue:"
 msgstr "Rona:"
 
@@ -33093,7 +33112,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title Which elements to display (e.g., thumbnails or details)"
 msgid "Display"
-msgstr ""
+msgstr "Display"
 
 #: libs/ui/widgets/kis_paintop_presets_chooser_popup.cpp:50
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:169
@@ -33203,14 +33222,14 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add"
-msgstr ""
+msgstr "Tambah"
 
 #: libs/ui/widgets/kis_selection_options.cc:228
 #: libs/ui/widgets/kis_selection_options.cc:468
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
-msgstr "Kurangi"
+msgstr "Subtract"
 
 #: libs/ui/widgets/kis_selection_options.cc:230
 #: libs/ui/widgets/kis_selection_options.cc:478
@@ -33293,13 +33312,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Add (%1)"
-msgstr ""
+msgstr "Tambahkan (%1)"
 
 #: libs/ui/widgets/kis_selection_options.cc:469
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract (%1)"
-msgstr "Kurangi (%1)"
+msgstr "Subtract (%1)"
 
 #: libs/ui/widgets/kis_selection_options.cc:474
 #, kde-format
@@ -33321,18 +33340,18 @@ msgstr ""
 #: libs/ui/widgets/kis_transport_controls.cpp:27
 #, kde-format
 msgid "Skip Back"
-msgstr ""
+msgstr "Lewati Mundur"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:36
 #, kde-format
 msgid "Back"
-msgstr ""
+msgstr "Mundur"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:45
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stopaction.py:21
 #, kde-format
 msgid "Stop"
-msgstr ""
+msgstr "Hentikan"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:54
 #, kde-format
@@ -33342,7 +33361,7 @@ msgstr "Putar/Jeda"
 #: libs/ui/widgets/kis_transport_controls.cpp:63
 #, kde-format
 msgid "Forward"
-msgstr ""
+msgstr "Maju"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:72
 #, kde-format
@@ -33367,7 +33386,7 @@ msgstr "Tidak ada opsi konfigurasi."
 #: libs/ui/widgets/kis_workspace_chooser.cpp:132
 #, kde-format
 msgid "Insert name"
-msgstr ""
+msgstr "Sisipkan nama"
 
 #: libs/ui/widgets/kis_workspace_chooser.cpp:204
 #, kde-format
@@ -33510,7 +33529,7 @@ msgstr ""
 #, kde-format
 msgctxt "Output color used for the midtones in auto levels"
 msgid "Color:"
-msgstr ""
+msgstr "Warna:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:202
@@ -33891,7 +33910,7 @@ msgstr ""
 #, kde-format
 msgctxt "Name for default swatch group"
 msgid "Default"
-msgstr ""
+msgstr "Bawaan"
 
 #: libs/widgets/kis_palette_view.cpp:120
 #, kde-format
@@ -33947,25 +33966,25 @@ msgstr ""
 #, kde-format
 msgctxt "Flips the angle horizontally, around the vertical axis"
 msgid "Flip the angle horizontally"
-msgstr ""
+msgstr "Jungkir sudut-pandang secara horizontal"
 
 #: libs/widgets/KisAngleSelector.cpp:229
 #, kde-format
 msgctxt "Flips the angle vertically, around the horizontal axis"
 msgid "Flip the angle vertically"
-msgstr ""
+msgstr "Jungkir sudut-pandang secara vertikal"
 
 #: libs/widgets/KisAngleSelector.cpp:236
 #, kde-format
 msgctxt "Flips the angle horizontally and vertically"
 msgid "Flip the angle horizontally and vertically"
-msgstr ""
+msgstr "Jungkir sudut-pandang secara horizontal dan vertikal"
 
 #: libs/widgets/KisAngleSelector.cpp:245
 #, kde-format
 msgctxt "Reset the angle to a predefined value"
 msgid "Reset angle"
-msgstr ""
+msgstr "Atur ulang sudut-pandang"
 
 #: libs/widgets/KisDlgInternalColorSelector.cpp:146
 #, kde-format
@@ -34026,7 +34045,7 @@ msgstr ""
 #: libs/widgets/KisPaletteChooser.cpp:34
 #, kde-format
 msgid "Add a new palette"
-msgstr ""
+msgstr "Tambahkan sebuah palet baru"
 
 #: libs/widgets/KisPaletteChooser.cpp:36
 #, kde-format
@@ -34180,7 +34199,7 @@ msgstr ""
 #: libs/widgets/KoConfigAuthorPage.ui:127
 #, kde-format
 msgid "Co&mpany:"
-msgstr ""
+msgstr "Per&usahaan:"
 
 #. i18n: ectx: property (text), widget (QLabel, LabelFamily)
 #: libs/widgets/KoConfigAuthorPage.ui:140
@@ -34406,7 +34425,7 @@ msgstr "&Kembali"
 #, kde-format
 msgctxt "go forward"
 msgid "&Forward"
-msgstr ""
+msgstr "&Maju"
 
 #: libs/widgetutils/config/kstandardaction.cpp:92
 #, kde-format
@@ -34695,7 +34714,7 @@ msgstr "Pilih level zoom"
 #: libs/widgetutils/config/kstandardaction_p.h:62
 #, kde-format
 msgid "&Redisplay"
-msgstr ""
+msgstr "&Display ulang"
 
 #: libs/widgetutils/config/kstandardaction_p.h:62
 #, kde-format
@@ -34780,7 +34799,7 @@ msgstr "Menuju mundur di dokumen"
 #: libs/widgetutils/config/kstandardaction_p.h:77
 #, kde-format
 msgid "&Forward"
-msgstr ""
+msgstr "&Maju"
 
 #: libs/widgetutils/config/kstandardaction_p.h:77
 #, kde-format
@@ -34790,7 +34809,7 @@ msgstr "Menuju maju di dokumen"
 #: libs/widgetutils/config/kstandardaction_p.h:79
 #, kde-format
 msgid "&Add Bookmark"
-msgstr "Tambah &Markah"
+msgstr "Tambahkan &Markah"
 
 #: libs/widgetutils/config/kstandardaction_p.h:80
 #, kde-format
@@ -35389,7 +35408,7 @@ msgstr ""
 #, kde-format
 msgctxt "No shortcut defined"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #. i18n: ectx: property (whatsThis), widget (KTreeWidgetSearchLineWidget, searchFilter)
 #: libs/widgetutils/xmlgui/KisShortcutsDialog.ui:21
@@ -35499,11 +35518,11 @@ msgid_plural ""
 "%3"
 msgstr[0] ""
 "Pintasan \"%2\" ambigu dengan pintasan berikut.\n"
-"Apakah kamu ingin menugaskan sebuah pintasan kosong untuk aksi ini?\n"
+"Apakah Anda ingin menugaskan sebuah pintasan kosong untuk aksi ini?\n"
 "%3"
 msgstr[1] ""
 "Pintasan \"%2\" ambigu dengan pintasan berikut.\n"
-"Apakah kamu ingin menugaskan sebuah pintasan kosong untuk aksi tersebut?\n"
+"Apakah Anda ingin menugaskan sebuah pintasan kosong untuk aksi tersebut?\n"
 "%3"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:189
@@ -35866,7 +35885,7 @@ msgstr ""
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:32
 #, kde-format
 msgid "Add:"
-msgstr ""
+msgstr "Tambah:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, localAssistantCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:44
@@ -35913,7 +35932,7 @@ msgstr ""
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:209
 #, kde-format
 msgid "Custom Color"
-msgstr ""
+msgstr "Warna kustom"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, loadAssistantButton)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:274
@@ -36535,7 +36554,7 @@ msgstr ""
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:145
 #, kde-format
 msgid "Green':"
-msgstr ""
+msgstr "Hijau':"
 
 #. i18n: ectx: property (text), widget (QLabel, bluelabel)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:162
@@ -36683,7 +36702,7 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:556
 #, kde-format
 msgid "Patches Per Line: "
-msgstr ""
+msgstr "Alur Tiap Garis:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, historyGroupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_ColorHistory)
@@ -36842,26 +36861,26 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
 #, kde-format
 msgid "Animation Curves"
-msgstr ""
+msgstr "Kurva Animasi"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:70
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:71
 #, kde-format
 msgid "Frame register"
-msgstr ""
+msgstr "Register frame"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:88
 #, kde-format
 msgctxt "preview playback speed percentage prefix"
 msgid "Speed: "
-msgstr ""
+msgstr "Kecepatan: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:88
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:90
 #, kde-format
 msgid "Preview playback speed"
-msgstr ""
+msgstr "Kecepatan pemutaran pratinjau"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:131
 #, kde-format
@@ -36873,36 +36892,36 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:130
 #, kde-format
 msgid "Onion skins menu"
-msgstr ""
+msgstr "Menu onion skin"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:176
 #, kde-format
 msgid "Audio menu"
-msgstr ""
+msgstr "Menu audio"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:182
 #, kde-format
 msgid "Animation settings menu"
-msgstr ""
+msgstr "Menu pengaturan animasi"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:194
 #, kde-format
 msgid "Clip Start: "
-msgstr ""
+msgstr "Awal Klip: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:198
 #, kde-format
 msgid "Clip End: "
-msgstr ""
+msgstr "Akhir Klip: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:203
 #, kde-format
 msgid "Frame Rate: "
-msgstr ""
+msgstr "Laju Frame: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
 #, kde-format
@@ -36927,12 +36946,12 @@ msgstr "Atur Ulang Semua Kanal"
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
 #, kde-format
 msgid "Hold constant value. No interpolation."
-msgstr ""
+msgstr "Tahan nilai konstan. Tanpa interpolasi."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
 #, kde-format
 msgid "Linear interpolation."
-msgstr ""
+msgstr "Interpolasi linier."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
 #, kde-format
@@ -36942,22 +36961,22 @@ msgstr "Interpolasi kurva bezier."
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
 #, kde-format
 msgid "Sharp interpolation tangents."
-msgstr ""
+msgstr "Garis singgung interpolasi tajam."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:517
 #, kde-format
 msgid "Smooth interpolation tangents."
-msgstr ""
+msgstr "Garis singgung interpolasi halus."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
 #, kde-format
 msgid "Zoom view to fit channel range."
-msgstr ""
+msgstr "Zum tampilan untuk mengepaskan rentang kanal."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:531
 #, kde-format
 msgid "Zoom view to fit curve."
-msgstr ""
+msgstr "Zum tampilan untuk mengepaskan kurva."
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -36998,7 +37017,7 @@ msgstr[1] ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:296
 #, kde-format
 msgid "Animation Timeline"
-msgstr ""
+msgstr "Linimasa Animasi"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
 #, kde-format
@@ -37027,7 +37046,7 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
 #, kde-format
 msgid "Animation audio menu"
-msgstr ""
+msgstr "Menu audio animasi"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
@@ -37069,8 +37088,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Add blank frame"
 msgid_plural "Add %1 blank frames"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tambahkan frame kosong"
+msgstr[1] "Tambahkan %1 frame kosong"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:922
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:970
@@ -37161,12 +37180,12 @@ msgstr ""
 #: plugins/dockers/animation/KisAnimUtils.cpp:31
 #, kde-format
 msgid "Remove Layer"
-msgstr ""
+msgstr "Hapus Lapisan"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:33
 #, kde-format
 msgid "Add transform keyframe"
-msgstr ""
+msgstr "Tambahkan keyframe transformasi"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:34
 #, kde-format
@@ -37187,8 +37206,8 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hapus Keyframe"
+msgstr[1] "Hapus Keyframe"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:304
 #, kde-format
@@ -37227,24 +37246,24 @@ msgstr ""
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
 #, kde-format
 msgid "Tint color for past frames"
-msgstr ""
+msgstr "Warna tint untuk frame-frame lampau"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:50
 #, kde-format
 msgid "Tint color for future frames"
-msgstr ""
+msgstr "Warna tint untuk frame-frame nanti"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, OnionSkinsDocker)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:23
 #, kde-format
 msgid "Onion skin options"
-msgstr ""
+msgstr "Opsi onion skin"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorFilterGroupbox)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:54
 #, kde-format
 msgid "Filter Onion Skins by Frame Color"
-msgstr ""
+msgstr "Filter Onion Skin berdasarkan Warna Frame"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnShowHide)
 #. i18n: ectx: property (text), widget (QToolButton, btnAddField)
@@ -37259,13 +37278,13 @@ msgstr ""
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:169
 #, kde-format
 msgid "Previous frames"
-msgstr ""
+msgstr "Frame sebelumnya"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNextColor)
 #: plugins/dockers/animation/KisOnionSkinsDocker.ui:189
 #, kde-format
 msgid "Next frames"
-msgstr ""
+msgstr "Frame selanjutnya"
 
 #: plugins/dockers/animation/KisTimeBasedItemModel.cpp:425
 #, kde-format
@@ -37507,7 +37526,7 @@ msgstr ""
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:105
 #, kde-format
 msgid "Insert Name"
-msgstr ""
+msgstr "Sisipkan Nama"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
@@ -37695,13 +37714,13 @@ msgstr ""
 #: plugins/dockers/griddocker/grid_config_widget.ui:191
 #, kde-format
 msgid "X spacing:"
-msgstr ""
+msgstr "Penspasian X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:223
 #, kde-format
 msgid "Y spacing:"
-msgstr ""
+msgstr "Penspasian Y:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
 #: plugins/dockers/griddocker/grid_config_widget.ui:246
@@ -37724,7 +37743,7 @@ msgstr ""
 #, kde-format
 msgctxt "Grid line style - Solid Lines"
 msgid "Lines"
-msgstr ""
+msgstr "Garis"
 
 #. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
@@ -37857,7 +37876,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:379
 #, kde-format
@@ -37922,13 +37941,13 @@ msgstr ""
 #: plugins/dockers/layerdocker/LayerBox.cpp:1226
 #, kde-format
 msgid "&Toggle Locks && Visibility"
-msgstr ""
+msgstr "Jungkitan Gembok && Keterlihatan"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:1233
 #: plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Add"
-msgstr ""
+msgstr "&Tambah"
 
 #: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
 #, kde-format
@@ -37967,25 +37986,25 @@ msgstr "Duplikatkan Lapisan atau Mask"
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:238
 #, kde-format
 msgid "Move layer or mask down"
-msgstr ""
+msgstr "Pindahkan turun lapisan atau mask"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRaise)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:263
 #, kde-format
 msgid "Move layer or mask up"
-msgstr ""
+msgstr "Pindahkan naik lapisan atau mask"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnProperties)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:288
 #, kde-format
 msgid "View or change the layer properties"
-msgstr ""
+msgstr "Tampilan atau ubah properti lapisan"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnDelete)
 #: plugins/dockers/layerdocker/WdgLayerBox.ui:329
 #, kde-format
 msgid "Delete the layer or mask"
-msgstr ""
+msgstr "Hapus lapisan atau mask"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:42
 #, kde-format
@@ -38170,7 +38189,7 @@ msgstr ""
 #, kde-format
 msgctxt "Item to indicate no look transform being selected"
 msgid "None"
-msgstr "Nihil"
+msgstr "Tidak ada"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_chkUseOcio)
 #: plugins/dockers/lut/wdglut.ui:36
@@ -38182,7 +38201,7 @@ msgstr ""
 #: plugins/dockers/lut/wdglut.ui:93
 #, kde-format
 msgid "Display Device:"
-msgstr ""
+msgstr "Peranti Display:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/lut/wdglut.ui:106
@@ -38280,24 +38299,24 @@ msgstr ""
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:68
 #, kde-format
 msgid "Add a new color swatch"
-msgstr ""
+msgstr "Tambahkan sebuah contoh warna baru"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRemove)
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:69
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:105
 #, kde-format
 msgid "Remove swatch or group"
-msgstr ""
+msgstr "Hapus contoh atau kelompok"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:70
 #, kde-format
 msgid "Edit swatch or group"
-msgstr ""
+msgstr "Edit contoh atau kelompok"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:71
 #, kde-format
 msgid "Edit current palette"
-msgstr ""
+msgstr "Edit palet saat ini"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:72
 #, kde-format
@@ -38307,7 +38326,7 @@ msgstr ""
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:125
 #, kde-format
 msgid "Load a palette"
-msgstr ""
+msgstr "Muat sebuah palet"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:226
 #, kde-format
@@ -38326,6 +38345,8 @@ msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
+"Simpan palet secara gamblang, juga akan terjadi secara otomatis saat Krita "
+"keluar."
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
@@ -38798,7 +38819,7 @@ msgstr "Pilih Semua"
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
 #, kde-format
 msgid "Select None"
-msgstr "Pilih Nihil"
+msgstr "Pilih Tidak ada"
 
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:249
 #, kde-format
@@ -38995,13 +39016,13 @@ msgctxt ""
 "Use the resolution four times smaller than the original resolution for the "
 "frames when recording the canvas"
 msgid "Quarter"
-msgstr ""
+msgstr "Seperempat"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:179
 #, kde-format
 msgctxt "Stop recording the canvas"
 msgid "Stop"
-msgstr ""
+msgstr "Hentikan"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:180
 #, kde-format
@@ -39098,7 +39119,7 @@ msgstr "HSY"
 #: plugins/dockers/specificcolorselector/specificcolorselector_dock.cc:22
 #, kde-format
 msgid "Specific Color Selector"
-msgstr ""
+msgstr "Pemilih Warna Spesifik"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, colorspacePopupButton)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:44
@@ -40184,7 +40205,7 @@ msgstr "&Tambahkan ke pemilihan saat ini"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:108
 #, kde-format
 msgid "Subtract fro&m current selection"
-msgstr "Kurangi da&ri pemilihan saat ini"
+msgstr "Subtract da&ri pemilihan saat ini"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeselect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:141
@@ -40249,7 +40270,7 @@ msgstr "Komentar"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:112
 #, kde-format
 msgid "Display Name"
-msgstr ""
+msgstr "Nama Display"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
 #, kde-format
@@ -40270,7 +40291,7 @@ msgstr ""
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
 #, kde-format
 msgid "Storages"
-msgstr ""
+msgstr "Tempat Penyimpanan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:119
@@ -40955,7 +40976,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:551
@@ -42038,7 +42059,7 @@ msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
 "location, when no resource is shown so there is no specific filename"
 msgid "(None selected)"
-msgstr ""
+msgstr "Tidak ada yang dipilih"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:381
 #, kde-format
@@ -42050,7 +42071,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:319
 #, kde-format
 msgid "Delete Resources"
-msgstr ""
+msgstr "Hapus Sumber Daya"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:401
 #, kde-format
@@ -42171,7 +42192,7 @@ msgstr ""
 #: plugins/extensions/resourcemanager/wdgdlgcreatebundle.ui:190
 #, kde-format
 msgid "Author:"
-msgstr ""
+msgstr "Penulis:"
 
 #. i18n: ectx: property (text), widget (QLabel, license)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -43001,7 +43022,8 @@ msgstr "Desaturasi"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:226
 #: plugins/filters/colorsfilters/virtual_channel_info.cpp:29
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:85
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Hue"
 msgid "Hue"
 msgstr "Rona"
 
@@ -43396,7 +43418,7 @@ msgstr ""
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
 #, kde-format
 msgid "Burn..."
-msgstr ""
+msgstr "Bara..."
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.cpp:39
 #, kde-format
@@ -43575,7 +43597,7 @@ msgstr ""
 #, kde-format
 msgctxt "Default gradient name for the gradient generator"
 msgid "Unnamed"
-msgstr ""
+msgstr "Tak bernama"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabGradientColors)
 #: plugins/filters/gradientmap/KisGradientMapFilterConfigWidget.ui:36
@@ -43661,7 +43683,7 @@ msgstr "Kebalikan:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:685
 #, kde-format
 msgid "Foreground:"
-msgstr "LatarDepan:"
+msgstr "Latar Depan:"
 
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
@@ -44071,7 +44093,7 @@ msgstr ""
 #: plugins/filters/palettize/palettize.ui:181
 #, kde-format
 msgid "Clip"
-msgstr "Clip"
+msgstr "Klip"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, alphaModeComboBox)
 #: plugins/filters/palettize/palettize.ui:186
@@ -44293,12 +44315,12 @@ msgstr ""
 #: plugins/filters/randompickfilter/randompickfilter.cpp:54
 #, kde-format
 msgid "&Random Pick..."
-msgstr ""
+msgstr "Comot &Acak..."
 
 #: plugins/filters/randompickfilter/randompickfilter.h:37
 #, kde-format
 msgid "Random Pick"
-msgstr ""
+msgstr "Comot Acak"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2)
 #: plugins/filters/randompickfilter/wdgrandompickoptions.ui:44
@@ -44793,7 +44815,7 @@ msgstr ""
 #, kde-format
 msgctxt "The gradient will not repeat"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_gradient.cc:268
@@ -44934,7 +44956,7 @@ msgstr ""
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:53
 #, kde-format
 msgid "No Connectors"
-msgstr "Tidak Ada Penghubung"
+msgstr "Tidak ada Penghubung"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:54
 #, kde-format
@@ -44982,7 +45004,7 @@ msgstr ""
 #, kde-format
 msgctxt "Lines in Multigridpattern"
 msgid "Lines"
-msgstr ""
+msgstr "Garis"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:60
@@ -45011,14 +45033,14 @@ msgstr "Warna"
 #, kde-format
 msgctxt "Line color"
 msgid "Lines: "
-msgstr ""
+msgstr "Garis: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:119
 #, kde-format
 msgctxt "Connector line color"
 msgid "Connector:"
-msgstr ""
+msgstr "Penghubung:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbColors)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:146
@@ -45123,13 +45145,13 @@ msgstr ""
 #, kde-format
 msgctxt "Screentone generator line units - lines/inch"
 msgid " lines/inch"
-msgstr ""
+msgstr "garis/inci"
 
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:451
 #, kde-format
 msgctxt "Screentone generator line units - lines/cm"
 msgid " lines/cm"
-msgstr ""
+msgstr "garis/cm"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreentoneType)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:49
@@ -45154,7 +45176,7 @@ msgstr ""
 #, kde-format
 msgctxt "Screentone equalization mode"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonEqualizationFunctionBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:157
@@ -45269,13 +45291,13 @@ msgstr ""
 #, kde-format
 msgctxt "Screentone Pattern Type - Lines"
 msgid "Lines"
-msgstr ""
+msgstr "Garis"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:29
 #, kde-format
 msgctxt "Screentone Pattern - Round Dots"
 msgid "Round"
-msgstr ""
+msgstr "Bundar"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:30
 #, kde-format
@@ -45384,7 +45406,7 @@ msgstr ""
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Image height"
-msgstr ""
+msgstr "Tinggi gambar"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:359
 #, kde-format
@@ -45546,7 +45568,7 @@ msgstr "Peringkat"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1966
 #, kde-format
 msgid "Spacing:"
-msgstr ""
+msgstr "Penspasian:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsmask)
 #. i18n: ectx: property (text), widget (QCheckBox, colorAsMask)
@@ -46940,7 +46962,7 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
-msgstr ""
+msgstr "Palet delta"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:771
@@ -48254,7 +48276,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
 #, kde-format
@@ -48371,7 +48393,7 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
@@ -48551,7 +48573,7 @@ msgstr ""
 #, kde-format
 msgctxt "TIFF options"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:39
 #, kde-format
@@ -48803,7 +48825,7 @@ msgstr "Kuat"
 #, kde-format
 msgctxt "WebP alpha plane compression"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:44
 #, kde-format
@@ -48815,7 +48837,7 @@ msgstr ""
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "None"
-msgstr ""
+msgstr "Tidak ada"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:49
 #, kde-format
@@ -49723,7 +49745,7 @@ msgstr ""
 #: plugins/paintops/deform/wdgdeformoptions.ui:170
 #, kde-format
 msgid "Bilinear interpolation"
-msgstr ""
+msgstr "Interpolasi bilinier."
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCounter)
 #: plugins/paintops/deform/wdgdeformoptions.ui:180
@@ -49750,7 +49772,7 @@ msgstr "Bentuk"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:84
 #, kde-format
 msgid "Speed"
-msgstr ""
+msgstr "Kecepatan"
 
 #. i18n: ectx: property (text), widget (QCheckBox, displaceCHBox)
 #: plugins/paintops/experiment/kis_experiment_paintop_settings.cpp:141
@@ -50526,7 +50548,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:554
 #, kde-format
 msgid "addition"
-msgstr ""
+msgstr "penambahan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, curveMode)
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:554
@@ -50757,7 +50779,7 @@ msgstr "Ofset Vertikal:"
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
 #, kde-format
 msgid "Auto Spacing"
-msgstr ""
+msgstr "Penspasian Otomatis"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
@@ -51107,7 +51129,7 @@ msgstr "Goresan Kurang Tepat"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Speed"
-msgstr ""
+msgstr "Kecepatan"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:14
 #, kde-format
@@ -51547,7 +51569,7 @@ msgstr "Warna"
 #, kde-format
 msgctxt "Option Category"
 msgid "Speed"
-msgstr ""
+msgstr "Kecepatan"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:198
 #, kde-format
@@ -51577,7 +51599,7 @@ msgstr ""
 #, kde-format
 msgctxt "Option Category"
 msgid "Stroke"
-msgstr "Gores"
+msgstr "Goresan"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:213
 #, kde-format
@@ -51599,7 +51621,7 @@ msgstr ""
 #, kde-format
 msgctxt "The duration of a brush stroke"
 msgid "Stroke"
-msgstr "Gores"
+msgstr "Goresan"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionDirection)
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:22
@@ -52189,7 +52211,7 @@ msgstr "Skala:"
 #, kde-format
 msgctxt "Label for the spacing of the spray area in the spray engine"
 msgid "Spacing:"
-msgstr ""
+msgstr "Penspasian:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
@@ -52221,7 +52243,7 @@ msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
 msgid "Count"
-msgstr ""
+msgstr "Jumlah"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
@@ -52810,7 +52832,7 @@ msgstr "Nama Keluarga"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:322
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:357
 msgid "Add Author"
-msgstr ""
+msgstr "Tambahkan Penulis"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:325
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:359
@@ -53272,7 +53294,7 @@ msgstr "Peran"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:366
 msgid "Authors"
-msgstr ""
+msgstr "Para Penulis"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:373
 msgid ""
@@ -54796,7 +54818,7 @@ msgstr "Goresan Kuas Tak Beraturan"
 #: plugins/tools/basictools/kis_tool_brush.cc:177
 #, kde-format
 msgid "Sample count:"
-msgstr ""
+msgstr "Jumlah sampel:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:188
 #, kde-format
@@ -54809,7 +54831,7 @@ msgstr "Jarak:"
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "None"
-msgstr "Nihil"
+msgstr "Tidak ada"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:346
 #, kde-format
@@ -54821,23 +54843,23 @@ msgstr "Dasar"
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Weighted"
-msgstr ""
+msgstr "Berbobot"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:348
 #, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Stabilizer"
-msgstr "Penstabil"
+msgstr "Stabil"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:350
 #, kde-format
 msgid "Brush Smoothing:"
-msgstr ""
+msgstr "Kehalusan Kuas:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:376
 #, kde-format
 msgid "Delay:"
-msgstr ""
+msgstr "Tunda:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:381
 #, kde-format
@@ -54852,22 +54874,22 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_brush.cc:392
 #, kde-format
 msgid "Finish line:"
-msgstr ""
+msgstr "Garis finis:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:405
 #, kde-format
 msgid "Stabilize Sensors:"
-msgstr ""
+msgstr "Sensor Stabilisator:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:414
 #, kde-format
 msgid "Stroke Ending:"
-msgstr ""
+msgstr "Ujung Goresan:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:421
 #, kde-format
 msgid "Smooth Pressure"
-msgstr ""
+msgstr "Haluskan Tekanan"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:428
 #, kde-format
@@ -54880,7 +54902,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_brush.cc:433
 #, kde-format
 msgid "Scalable Distance"
-msgstr ""
+msgstr "Jaraknya Dapat Diskalakan"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:449
 #: plugins/tools/basictools/kis_tool_line.cc:110
@@ -55225,7 +55247,7 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_line.cc:101
 #, kde-format
 msgid "Use sensors"
-msgstr ""
+msgstr "Gunakan Sensor"
 
 #: plugins/tools/basictools/kis_tool_line.cc:104
 #, kde-format
@@ -55235,7 +55257,7 @@ msgstr "Tampilkan Pratinjau"
 #: plugins/tools/basictools/kis_tool_line.cc:107
 #, kde-format
 msgid "Show Guideline"
-msgstr ""
+msgstr "Tampilkan Garis Panduan"
 
 #: plugins/tools/basictools/kis_tool_line.cc:442
 #, kde-format
@@ -55540,7 +55562,7 @@ msgstr ""
 #: plugins/tools/basictools/wdgmovetool.ui:49
 #, kde-format
 msgid "Mo&ve layer with content"
-msgstr ""
+msgstr "&Pindahkan lapisan serta kontennya"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:59
@@ -55685,13 +55707,13 @@ msgstr "Asal:"
 #: plugins/tools/basictools/wdgmultihandtool.ui:228
 #, kde-format
 msgid "Add"
-msgstr ""
+msgstr "Tambah"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeSubbrushButton)
 #: plugins/tools/basictools/wdgmultihandtool.ui:241
 #, kde-format
 msgid "Remove All"
-msgstr ""
+msgstr "Hapus Semua"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:744
 #, kde-format
@@ -55774,7 +55796,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1410
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
-msgstr "Kurangi Bentuk"
+msgstr "Bentuk Subtract"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1455
 msgctxt "(qtundo-format)"
@@ -55806,7 +55828,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
 #, kde-format
 msgid "Anchor Lock"
-msgstr ""
+msgstr "Gembok Jangkar"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
@@ -55823,7 +55845,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205
 #, kde-format
 msgid "Scale Styles"
-msgstr ""
+msgstr "Gaya Skala"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:218
@@ -55841,7 +55863,7 @@ msgstr ""
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
 #, kde-format
 msgid "Global Coordinates"
-msgstr ""
+msgstr "Koordinat Global"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:25
 #, kde-format
@@ -55851,7 +55873,7 @@ msgstr "Geometri"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolTabbedWidget.cpp:41
 #, kde-format
 msgid "Fill"
-msgstr ""
+msgstr "Isi"
 
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
@@ -56026,7 +56048,7 @@ msgstr "Perenggangan:"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
 msgid "Use tablet &angle"
-msgstr "Gunakan &sudutpandang tablet"
+msgstr "Gunakan &sudut-pandang tablet"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:111
 #, kde-format
@@ -56067,13 +56089,13 @@ msgstr "Nama profil"
 #, kde-format
 msgid "Please insert the name by which you want to save this profile:"
 msgstr ""
-"Silakan sisipkan nama menurut apa yang kamu inginkan untuk menyimpan profil "
+"Silakan sisipkan nama menurut apa yang Anda inginkan untuk menyimpan profil "
 "ini:"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:219
 #, kde-format
 msgid "Sorry, the name you entered is invalid."
-msgstr "Maaf, nama yang kamu masukkan tidak absah."
+msgstr "Maaf, nama yang Anda masukkan tidak absah."
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:220
 #, kde-format
@@ -56088,7 +56110,7 @@ msgid ""
 "Do you want to overwrite it?"
 msgstr ""
 "Sebuah profil dengan nama tersebut sudah ada.\n"
-"Apakah kamu ingin menimpanya?"
+"Apakah Anda ingin menimpanya?"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:363
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:388
@@ -56449,7 +56471,7 @@ msgstr ""
 #, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
-msgstr ""
+msgstr "Gap Jangkar: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
 #, kde-format
@@ -56499,13 +56521,13 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard Selection"
-msgstr ""
+msgstr "Buang Pemilihan"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
 #, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr ""
+msgstr "Opsi alur"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
@@ -56658,7 +56680,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:212
 #, kde-format
 msgid "Letter Spacing"
-msgstr ""
+msgstr "Penyepasian Huruf"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -57046,7 +57068,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:141
 #, kde-format
 msgid "Create new texts with..."
-msgstr ""
+msgstr "Buat teks baru dengan..."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:178
 #, kde-format
@@ -57066,13 +57088,13 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:226
 #, kde-format
 msgid "Edit Text"
-msgstr ""
+msgstr "Edit Teks"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:262
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
-msgstr ""
+msgstr "Krita - Edit Teks"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:33
 #, kde-format
@@ -57369,7 +57391,7 @@ msgstr "Diterapkan ke:"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:446
 #, kde-format
 msgid "Thirds"
-msgstr ""
+msgstr "Para pihak ketiga"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:451
@@ -57562,7 +57584,7 @@ msgstr "Semua"
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
-msgstr ""
+msgstr "Warna spesifik"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:854
 #, kde-format
@@ -57740,7 +57762,7 @@ msgstr "Alat Poligon. Shift-klik-mouse mengakhiri poligon."
 #: plugins/tools/tool_polyline/kis_tool_polyline.h:42
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
-msgstr "Alat Garis Poli: Shift-klik-mouse mengakhiri garis poli."
+msgstr "Alat Polyline: Shift-klik-mouse mengakhiri polyline."
 
 #. i18n: context: text @ Action (KisToolPolyline), Actions (tool-shortcuts), ActionCollection (Tools)
 #: plugins/tools/tool_polyline/KisToolPolyline.action:7
@@ -57758,7 +57780,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Polyline Tool. Shift-mouseclick ends the polyline."
-msgstr "Alat Garis Poli. Shift-klik-mouse mengakhiri garis poli."
+msgstr "Alat Polyline. Shift-klik-mouse mengakhiri polyline."
 
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch.cpp:134
 #, kde-format

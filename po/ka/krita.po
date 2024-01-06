@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 02:30+0000\n"
-"PO-Revision-Date: 2023-11-05 00:53+0100\n"
+"PO-Revision-Date: 2024-01-05 05:29+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -15464,7 +15464,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reset All Settings to Default"
-msgstr ""
+msgstr "ყველა პარამეტრის დაბრუნება ნაგულისხმევ მნიშვნელობაზე"
 
 #. i18n: context: iconText @ Action (reset_configurations), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1864
@@ -24298,10 +24298,9 @@ msgstr "არჩევის რეჟიმი:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Save Assistant"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "დამხმარის შენახვა"
+msgstr "დამხმარის რეჟიმი:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24321,10 +24320,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "ანიმაციის კეში"
+msgstr "პიქსელების რუკის ქეში"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189

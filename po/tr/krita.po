@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-12-28 02:30+0000\n"
-"PO-Revision-Date: 2024-01-04 16:59+0300\n"
+"PO-Revision-Date: 2024-01-06 23:19+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -29681,7 +29681,7 @@ msgstr "Tam Ekran Aç/Kapat"
 #, kde-format
 msgctxt "@info:status width x height (file size)"
 msgid "%1 &x %2 (%3)"
-msgstr "%1 &× %2 (%3)"
+msgstr "%1 × %2 &(%3)"
 
 #: libs/ui/kis_statusbar.cc:277
 #, kde-format

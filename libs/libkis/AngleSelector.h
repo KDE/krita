@@ -11,7 +11,13 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
-
+/**
+ * @brief A wrapper around KisAngleSelector, a widget with several options to
+ * select an angle. The widget itself is accessed with the widget() function.
+ * 
+ * This widget is a combination of a @ref KisAngleGauge and a spin box,
+ * along with some flipping options
+ */
 class KRITALIBKIS_EXPORT AngleSelector : public QObject
 {
     Q_OBJECT
@@ -23,6 +29,12 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * @brief Get the internal KisAngleSelector as a QWidget, so it may be
+     * added to a UI
+     * 
+     * @return the internal KisAngleSelector as a QWidget
+     */
     QWidget* widget() const;
 
     /**

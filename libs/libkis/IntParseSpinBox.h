@@ -13,9 +13,12 @@
 #include "libkis.h"
 
 /**
- * @brief The IntParseSpinBox class is a cleverer SpinBox, able to parse arithmetic expressions.
+ * @brief A wrapper around KisIntParseSpinBox, which is a cleverer SpinBox,
+ * able to parse arithmetic expressions. The widget itself is accessed with
+ * the widget() function.
  *
- * Use this spinbox instead of the basic one from Qt if you want it to be able to parse arithmetic expressions.
+ * Use this spinbox instead of the basic one from Qt if you want it to be able
+ * to parse arithmetic expressions.
  */
 class KRITALIBKIS_EXPORT IntParseSpinBox : public QObject
 {
@@ -28,6 +31,12 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * @brief Get the internal KisIntParseSpinBox as a QWidget, so it may be
+     * added to a UI
+     * 
+     * @return the internal KisIntParseSpinBox as a QWidget
+     */
     QSpinBox* widget() const;
 
     /**

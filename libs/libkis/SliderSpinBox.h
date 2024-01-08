@@ -19,8 +19,9 @@ template <typename SpinBoxTypeTP, typename BaseSpinBoxTypeTP>
 class KisSliderSpinBoxPrivate;
 
 /**
- * @brief This class is a spinbox in which you can click and drag to set
- * the value. A slider like bar is displayed inside.
+ * @brief This class is a wrapper around KisSliderSpinBox, a spinbox in which 
+ * you can click and drag to set the value, with a slider like bar displayed
+ * inside. The widget itself is accessed with the widget() function.
  * 
  * The value can be set by click and dragging with the mouse or pen or by
  * typing in with the keyboard. To enter the edit mode, in which the keyboard
@@ -58,6 +59,12 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * @brief Get the internal KisSliderSpinBox as a QWidget, so it may be
+     * added to a UI
+     * 
+     * @return the internal KisSliderSpinBox as a QWidget
+     */
     QWidget* widget() const;
 
     /**
@@ -198,10 +205,11 @@ private:
 };
 
 /**
- * @brief This class is a spinbox in which you can click and drag to set
- * the value. A slider like bar is displayed inside.
+ * @brief This class is a wrapper around KisDoubleSliderSpinBox, a spinbox in
+ * which you can click and drag to set the value, with a slider like bar
+ * displayed inside. The widget itself is accessed with the widget() function.
  * 
- * @see KisSliderSpinBox
+ * @see SliderSpinBox
  */
 class KRITALIBKIS_EXPORT DoubleSliderSpinBox : public DoubleParseSpinBox
 {
@@ -214,6 +222,12 @@ public:
 
 public Q_SLOTS:
 
+    /**
+     * @brief Get the internal KisDoubleSliderSpinBox as a QWidget, so it may be
+     * added to a UI
+     * 
+     * @return the internal KisDoubleSliderSpinBox as a QWidget
+     */
     QWidget* widget() const;
 
     qreal fastSliderStep() const;

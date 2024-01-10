@@ -1,0 +1,10 @@
+<RCC>
+    <qresource>
+        <file>asifa.png</file>
+        <file>broken_rules.png</file>
+        <file>epic.png</file>
+        <file>fosshub.png</file>
+        <file>gamechuck.png</file>
+        <file>intel.png</file>
+    </qresource>
+</RCC>

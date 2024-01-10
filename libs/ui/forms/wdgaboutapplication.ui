@@ -63,12 +63,15 @@
      </widget>
      <widget class="QWidget" name="kickstarterTab">
       <attribute name="title">
-       <string>Backers</string>
+       <string>Sponsors</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
-        <widget class="QTextEdit" name="lblKickstarter">
+        <widget class="QTextBrowser" name="lblKickstarter">
          <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="openExternalLinks">
           <bool>true</bool>
          </property>
         </widget>

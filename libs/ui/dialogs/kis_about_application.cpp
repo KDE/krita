@@ -69,12 +69,6 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     }
 
-    {
-        const QString aboutTranslationTeam = KAboutData::aboutTranslationTeam();
-
-        qDebug() << aboutTranslationTeam << aboutData.ocsProviderUrl();
-    }
-
     QString translatorHtml = i18n(
         "<html>"
         "<head/>"
@@ -96,25 +90,18 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     wdgTab->lblTranslators->setText(translatorHtml);
 
-    QString backers = i18n("<html>"
-                          "<head/>"
-                          "<body>"
-                          "<h1 align=\"center\">Backed By</h1>"
-                          "<p>");
-
-    QFile fileBackers(":/backers.txt");
-    Q_ASSERT(fileBackers.exists());
-    if (fileBackers.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QTextStream backersText(&fileBackers);
-        backersText.setCodec("UTF-8");
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-        backers.append(backersText.readAll().split("\n", Qt::SkipEmptyParts).join(", "));
-#else
-        backers.append(backersText.readAll().split("\n", QString::SkipEmptyParts).join(", "));
-#endif
-    }
-    backers.append(i18n(".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"));
-    wdgTab->lblKickstarter->setText(backers);
+    QString sponsors = i18n(
+        "<html><head/><body>"
+        "<h1 align=\"center\">Development Fund</h1>"
+        "<p align=\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> "
+        "<h2 align=\"center\">One Time Sponsors</h2>"
+        "<p align=\"center\"> <a href=\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> "
+        "<p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png\"></a> "
+        "<p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src=\":/gamechuck.png\"></a> "
+        "<p align=\"center\"> <a href=\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> "
+        "<p align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> "
+        "</body></html>");
+    wdgTab->lblKickstarter->setText(sponsors);
 
     QString credits = i18n("<html>"
                           "<head/>"

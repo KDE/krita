@@ -301,8 +301,6 @@ void KisAnimatedTransformMaskParamsHolder::setParamsAtCurrentPosition(const KisT
     makeChangeValueCommand<&Private::isHidden>(m_d.data(), adapter->isHidden(), parentCommand);
     makeChangeValueCommand<&Private::isInitialized>(m_d.data(), adapter->isInitialized(), parentCommand);
 
-    ToolTransformArgs args = *adapter->transformArgs();
-
     setNewTransformArgs(*adapter->transformArgs(), parentCommand);
 }
 
@@ -321,11 +319,35 @@ void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransfo
         }
     };
 
+    const QPointF layerCenterOffset = args.originalCenter() - m_d->baseArgs->originalCenter();
+
     new ChangeParamsCommand(m_d.data(), std::make_pair(m_d->defaultBounds->currentLevelOfDetail(), args), parentCommand);
 
     if (m_d->transformChannels.isEmpty()) return;
     if (m_d->defaultBounds->currentLevelOfDetail() > 0) return;
     if (args.mode() != ToolTransformArgs::FREE_TRANSFORM) return;
+
+    if (!layerCenterOffset.isNull()) {
+        /**
+         * Sometimes the originalCenter() position can change on a layer change or
+         * a transformation tool run. In this case we should adjust all the frames,
+         * because their relative translation offsets should not change
+         */
+        auto translateChannel = [this] (const KoID &channelId, qreal offset, KUndo2Command *parentCommand)
+        {
+            KisScalarKeyframeChannel *channel = m_d->transformChannels.value(channelId.id()).data();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(channel);
+
+            Q_FOREACH(int time, channel->allKeyframeTimes()) {
+                KisScalarKeyframeSP keyframe = channel->keyframeAt(time).dynamicCast<KisScalarKeyframe>();
+                KIS_SAFE_ASSERT_RECOVER(keyframe) { break; }
+                keyframe->setValue(keyframe->value() + offset, parentCommand);
+            }
+        };
+
+        translateChannel(KisKeyframeChannel::PositionX, layerCenterOffset.x(), parentCommand);
+        translateChannel(KisKeyframeChannel::PositionY, layerCenterOffset.y(), parentCommand);
+    }
 
     const int currentTime = m_d->defaultBounds->currentTime();
 

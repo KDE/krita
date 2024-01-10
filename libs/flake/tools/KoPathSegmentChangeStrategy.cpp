@@ -16,6 +16,7 @@
 #include <limits>
 #include <math.h>
 #include <KisBezierUtils.h>
+#include <kis_command_utils.h>
 
 KoPathSegmentChangeStrategy::KoPathSegmentChangeStrategy(KoPathTool *tool, const QPointF &pos, const KoPathPointData &segment, qreal segmentParam)
 : KoInteractionStrategy(tool)
@@ -107,21 +108,18 @@ KUndo2Command* KoPathSegmentChangeStrategy::createCommand()
 
     KUndo2Command * cmd = new KUndo2Command(kundo2_i18n("Change Segment"));
     if (m_originalSegmentDegree == 1) {
-        m_segment.first()->removeControlPoint2();
-        m_segment.second()->removeControlPoint1();
         new KoPathSegmentTypeCommand(m_pointData1, KoPathSegmentTypeCommand::Curve, cmd);
     }
 
     if (hasControlPoint2) {
-        QPointF oldCtrlPointPos = m_segment.first()->controlPoint2()-m_ctrlPoint2Move;
-        m_segment.first()->setControlPoint2(oldCtrlPointPos);
         new KoPathControlPointMoveCommand(m_pointData1, m_ctrlPoint2Move, KoPathPoint::ControlPoint2, cmd);
     }
     if (hasControlPoint1) {
-        QPointF oldCtrlPointPos = m_segment.second()->controlPoint1()-m_ctrlPoint1Move;
-        m_segment.second()->setControlPoint1(oldCtrlPointPos);
         new KoPathControlPointMoveCommand(m_pointData2, m_ctrlPoint1Move, KoPathPoint::ControlPoint1, cmd);
     }
 
-    return cmd;
+    if (cmd) {
+        return new KisCommandUtils::SkipFirstRedoWrapper(cmd);
+    }
+    return nullptr;
 }

@@ -39,6 +39,7 @@ private:
     KoPathPointData m_pointData;
     KoPathShape *m_path;
     KoPathPoint::PointType m_pointType;
+    QScopedPointer<KUndo2Command> m_intermediateCommand;
 };
 
 #endif /* KOPATHCONTROLPOINTMOVESTRATEGY_H */

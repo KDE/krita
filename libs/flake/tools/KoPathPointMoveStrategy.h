@@ -9,6 +9,7 @@
 #define KOPATHPOINTMOVESTRATEGY_H
 
 #include <QPointF>
+#include <QScopedPointer>
 #include "KoInteractionStrategy.h"
 
 
@@ -33,6 +34,7 @@ private:
     QPointF m_move;
     /// pointer to the path tool
     KoPathTool *m_tool;
+    QScopedPointer<KUndo2Command> m_intermediateCommand;
 };
 
 #endif /* KOPATHPOINTMOVESTRATEGY_H */

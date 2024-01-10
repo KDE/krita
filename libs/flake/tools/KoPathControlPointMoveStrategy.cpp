@@ -11,6 +11,7 @@
 
 #include "KoPathTool.h"
 #include "commands/KoPathControlPointMoveCommand.h"
+#include "kis_command_utils.h"
 
 KoPathControlPointMoveStrategy::KoPathControlPointMoveStrategy(KoPathTool *tool, const KoPathPointData &pointData, KoPathPoint::PointType type, const QPointF &pos)
         : KoInteractionStrategy(tool)
@@ -39,7 +40,13 @@ void KoPathControlPointMoveStrategy::handleMouseMove(const QPointF &mouseLocatio
     m_move += move;
 
     KoPathControlPointMoveCommand *cmd = new KoPathControlPointMoveCommand(m_pointData, move, m_pointType);
-    tool()->canvas()->addCommand(cmd);
+
+    cmd->redo();
+    if (m_intermediateCommand) {
+        m_intermediateCommand->mergeWith(cmd);
+    } else {
+        m_intermediateCommand.reset(cmd);
+    }
 }
 
 void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
@@ -49,5 +56,8 @@ void KoPathControlPointMoveStrategy::finishInteraction(Qt::KeyboardModifiers mod
 
 KUndo2Command* KoPathControlPointMoveStrategy::createCommand()
 {
+    if (m_intermediateCommand) {
+        return new KisCommandUtils::SkipFirstRedoWrapper(m_intermediateCommand.take());
+    }
     return nullptr;
 }

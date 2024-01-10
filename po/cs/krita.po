@@ -11980,12 +11980,10 @@ msgstr ""
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3026
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to Shape"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Převést na tvar"
+msgstr ""
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3028

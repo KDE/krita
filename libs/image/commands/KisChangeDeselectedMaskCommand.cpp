@@ -13,7 +13,7 @@ KisChangeDeselectedMaskCommand::KisChangeDeselectedMaskCommand(KisImageWSP image
     : m_image(image)
 {}
 
-inline KisChangeDeselectedMaskCommand::KisChangeDeselectedMaskCommand(KisImageWSP image, KisSelectionMaskSP newDeselectedMask)
+KisChangeDeselectedMaskCommand::KisChangeDeselectedMaskCommand(KisImageWSP image, KisSelectionMaskSP newDeselectedMask)
     : m_image(image)
     , m_newDeselectedMask(newDeselectedMask)
 {}

@@ -12,8 +12,9 @@
 #include <kundo2command.h>
 
 
-struct KRITAIMAGE_EXPORT KisChangeDeselectedMaskCommand : KUndo2Command
+class KRITAIMAGE_EXPORT KisChangeDeselectedMaskCommand : public KUndo2Command
 {
+public:
     KisChangeDeselectedMaskCommand(KisImageWSP image);
 
     KisChangeDeselectedMaskCommand(KisImageWSP image,

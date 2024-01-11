@@ -7,7 +7,7 @@
 #define KIS_RESELECT_GLOBAL_SELECTION_COMMAND_H
 
 #include <kritaimage_export.h>
-#include <kis_command_utils.h>>
+#include <kis_command_utils.h>
 #include "kis_types.h"
 
 /// The command for deselection the global selection of KisImage

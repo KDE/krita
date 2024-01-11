@@ -58,11 +58,11 @@ class LastDocumentsListModel(QAbstractListModel):
                 if thumbnail.isNull():
                     continue
 
-                thumbSize = QSize(200*self.devicePixelRatioF, 150*self.devicePixelRatioF)
+                thumbSize = QSize(int(200*self.devicePixelRatioF), int(150*self.devicePixelRatioF))
                 if thumbnail.width() <= thumbSize.width() or thumbnail.height() <= thumbSize.height():
-                	thumbnail = thumbnail.scaled(thumbSize, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    thumbnail = thumbnail.scaled(thumbSize, Qt.KeepAspectRatio, Qt.FastTransformation)
                 else:
-                	thumbnail = thumbnail.scaled(thumbSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+                    thumbnail = thumbnail.scaled(thumbSize, Qt.KeepAspectRatio, Qt.SmoothTransformation)
                 thumbnail.setDevicePixelRatio(self.devicePixelRatioF)
                 self.recentDocuments.append(thumbnail)
         self.modelReset.emit()

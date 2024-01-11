@@ -1069,7 +1069,12 @@ endif()
 ##
 ## Test for xsimd
 ##
-foreach(xsimd_version 8.1.0 9 10 11)
+## xsimd has `SameMajorVersion` compatibility option set
+## in `write_basic_package_version_file`, so we cannot just
+## write a version range in the find_package call. Instead we
+## should try all the supported versions manually
+##
+foreach(xsimd_version 8.1.0 9 10 11 12)
     if(NOT xsimd_FOUND)
         find_package(xsimd ${xsimd_version})
     endif()

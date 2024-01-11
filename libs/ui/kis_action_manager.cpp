@@ -256,6 +256,10 @@ void KisActionManager::updateGUI()
 
         if (selectionManager) {
 
+            if (selectionManager->canReselectDeactivatedSelection()) {
+                flags |= KisAction::IMAGE_CAN_RESELECT;
+            }
+
             if (selectionManager->havePixelsSelected()) {
                 flags |= KisAction::PIXELS_SELECTED;
             }

@@ -30,6 +30,9 @@
 #include "KisProofingConfiguration.h"
 #include <KisGlobalResourcesInterface.h>
 #include "KisImageResolutionProxy.h"
+#include <commands/kis_deselect_global_selection_command.h>
+#include <commands/kis_reselect_global_selection_command.h>
+#include <commands/kis_set_global_selection_command.h>
 
 #include "kis_undo_stores.h"
 
@@ -265,36 +268,37 @@ void KisImageTest::testGlobalSelection()
 
     KisSelectionSP selection1 = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
     KisSelectionSP selection2 = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
+    KisSelectionSP selection3 = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
 
-    image->setGlobalSelection(selection1);
+    image->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(image, selection1));
     QCOMPARE(image->globalSelection(), selection1);
     QCOMPARE(image->canReselectGlobalSelection(), false);
     QCOMPARE(image->root()->childCount(), 1U);
 
-    image->setGlobalSelection(selection2);
+    image->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(image, selection2));
     QCOMPARE(image->globalSelection(), selection2);
     QCOMPARE(image->canReselectGlobalSelection(), false);
     QCOMPARE(image->root()->childCount(), 1U);
 
-    image->deselectGlobalSelection();
+    image->undoAdapter()->addCommand(new KisDeselectGlobalSelectionCommand(image));
     QCOMPARE(image->globalSelection(), KisSelectionSP(0));
     QCOMPARE(image->canReselectGlobalSelection(), true);
     QCOMPARE(image->root()->childCount(), 0U);
 
-    image->reselectGlobalSelection();
+    image->undoAdapter()->addCommand(new KisReselectGlobalSelectionCommand(image));
     QCOMPARE(image->globalSelection(), selection2);
     QCOMPARE(image->canReselectGlobalSelection(), false);
     QCOMPARE(image->root()->childCount(), 1U);
 
     // mixed deselecting/setting/reselecting
 
-    image->deselectGlobalSelection();
+    image->undoAdapter()->addCommand(new KisDeselectGlobalSelectionCommand(image));
     QCOMPARE(image->globalSelection(), KisSelectionSP(0));
     QCOMPARE(image->canReselectGlobalSelection(), true);
     QCOMPARE(image->root()->childCount(), 0U);
 
-    image->setGlobalSelection(selection1);
-    QCOMPARE(image->globalSelection(), selection1);
+    image->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(image, selection3));
+    QCOMPARE(image->globalSelection(), selection3);
     QCOMPARE(image->canReselectGlobalSelection(), false);
     QCOMPARE(image->root()->childCount(), 1U);
 }

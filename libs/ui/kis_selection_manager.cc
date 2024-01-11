@@ -22,6 +22,7 @@
 #include <kstandardaction.h>
 #include <kactioncollection.h>
 
+#include <KoProperties.h>
 #include "KoCanvasController.h"
 #include "KoChannelInfo.h"
 #include "KoIntegerMaths.h"
@@ -281,6 +282,33 @@ bool KisSelectionManager::haveRasterSelectionWithPixels()
     return selection && selection->hasNonEmptyPixelSelection() && !selection->hasNonEmptyShapeSelection();
 }
 
+bool KisSelectionManager::canReselectDeactivatedSelection()
+{
+    if (!m_view) return false;
+
+    KisLayerSP layer = m_view->activeLayer();
+
+    if (layer) {
+        /**
+         * If we have an active selection mask, then
+         * no reselection is possible
+         */
+        if (layer->selectionMask()) return false;
+
+        KoProperties properties;
+        properties.setProperty("active", false);
+        properties.setProperty("visible", true);
+        QList<KisNodeSP> masks = layer->childNodes(QStringList("KisSelectionMask"), properties);
+
+        if (!masks.isEmpty()) {
+            return true;
+        }
+    }
+
+    KisImageSP image = m_view->image();
+    return image && image->canReselectGlobalSelection();
+}
+
 void KisSelectionManager::updateGUI()
 {
     Q_ASSERT(m_view);
@@ -292,19 +320,12 @@ void KisSelectionManager::updateGUI()
 
     KisLayerSP activeLayer = m_view->activeLayer();
     KisImageWSP image = activeLayer ? activeLayer->image() : 0;
-    bool canReselect = image && image->canReselectGlobalSelection();
-    bool canDeselect =  image && image->globalSelection();
 
     // FIXME: how about pasting shapes?
+    // TODO: check if these manual update actually work and not
+    //       overridden by KisActionManager
     m_pasteNew->setEnabled(havePixelsInClipboard);
     m_pasteAsReference->setEnabled(haveDevice);
-
-    m_selectAll->setEnabled(true);
-    m_deselect->setEnabled(canDeselect);
-    m_reselect->setEnabled(canReselect);
-
-//    m_load->setEnabled(true);
-//    m_save->setEnabled(havePixelsSelected);
 
     updateStatusBar();
     emit signalUpdateGUI();

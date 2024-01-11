@@ -42,6 +42,7 @@ class KisImageAnimationInterface;
 class KUndo2MagicString;
 class KisProofingConfiguration;
 class KisPaintDevice;
+class KisImageGlobalSelectionManagementInterface;
 
 namespace KisMetaData
 {
@@ -1240,6 +1241,11 @@ public Q_SLOTS:
      */
     void requestStrokeEndActiveNode();
 
+    /**
+     * A special interface that commands use to modify image's global selection
+     */
+    KisImageGlobalSelectionManagementInterface* globalSelectionManagementInterface() const;
+
 private:
 
     KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy);
@@ -1270,32 +1276,7 @@ private:
 
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
 
-
-    friend class KisDeselectGlobalSelectionCommand;
-    friend class KisReselectGlobalSelectionCommand;
-    friend class KisSetGlobalSelectionCommand;
-    friend class KisImageTest;
-    friend class Document; // For libkis
-
-    /**
-     * Replaces the current global selection with globalSelection. If
-     * \p globalSelection is empty, removes the selection object, so that
-     * \ref globalSelection() will return 0 after that.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection);
-
-    /**
-     * Deselects current global selection.
-     * \ref globalSelection() will return 0 after that.
-     */
-    void deselectGlobalSelection();
-
-    /**
-     * Reselects current deselected selection
-     *
-     * \see deselectGlobalSelection()
-     */
-    void reselectGlobalSelection();
+    friend class KisImageGlobalSelectionManagementInterface;
 
 private:
     class KisImagePrivate;

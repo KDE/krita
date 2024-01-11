@@ -99,6 +99,7 @@
 
 #include "KisBusyWaitBroker.h"
 #include <KisStaticInitializer.h>
+#include "KisImageGlobalSelectionManagementInterface.h"
 
 
 // #define SANITY_CHECKS
@@ -128,6 +129,7 @@ public:
         , width(w)
         , height(h)
         , colorSpace(c ? c : KoColorSpaceRegistry::instance()->rgb8())
+        , globalSelectionInterface(_q)
         , isolateLayer(false)
         , isolateGroup(false)
         , undoStore(undo ? undo : new KisDumbUndoStore())
@@ -243,7 +245,8 @@ public:
     const KoColorSpace * colorSpace;
     KisProofingConfigurationSP proofingConfig;
 
-    KisSelectionSP deselectedGlobalSelection;
+    KisImageGlobalSelectionManagementInterface globalSelectionInterface;
+    KisSelectionMaskSP deselectedGlobalSelectionMask;
     KisGroupLayerSP rootLayer; // The layers are contained in here
     KisSelectionMaskSP targetOverlaySelectionMask; // the overlay switching stroke will try to switch into this mask
     KisSelectionMaskSP overlaySelectionMask;
@@ -289,6 +292,21 @@ public:
 
     struct SetImageProjectionColorSpace;
 };
+
+KisImageGlobalSelectionManagementInterface::KisImageGlobalSelectionManagementInterface(KisImage *_q)
+    : q(_q)
+{
+}
+
+KisSelectionMaskSP KisImageGlobalSelectionManagementInterface::deselectedGlobalSelection() const
+{
+    return q->m_d->deselectedGlobalSelectionMask;
+}
+
+void KisImageGlobalSelectionManagementInterface::setDeselectedGlobalSelection(KisSelectionMaskSP selectionMask)
+{
+    q->m_d->deselectedGlobalSelectionMask = selectionMask;
+}
 
 KisImage::KisImage(KisUndoStore *undoStore, qint32 width, qint32 height, const KoColorSpace *colorSpace, const QString& name)
         : QObject(0)
@@ -671,54 +689,14 @@ KisSelectionSP KisImage::globalSelection() const
     }
 }
 
-void KisImage::setGlobalSelection(KisSelectionSP globalSelection)
-{
-    KisSelectionMaskSP selectionMask = m_d->rootLayer->selectionMask();
-
-    if (!globalSelection) {
-        if (selectionMask) {
-            removeNode(selectionMask);
-        }
-    }
-    else {
-        if (!selectionMask) {
-            selectionMask = new KisSelectionMask(this, i18n("Selection Mask"));
-            selectionMask->initSelection(m_d->rootLayer);
-            addNode(selectionMask);
-            // If we do not set the selection now, the setActive call coming next
-            // can be very, very expensive, depending on the size of the image.
-            selectionMask->setSelection(globalSelection);
-            selectionMask->setActive(true);
-        }
-        else {
-            selectionMask->setSelection(globalSelection);
-        }
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->rootLayer->childCount() > 0);
-        KIS_SAFE_ASSERT_RECOVER_NOOP(m_d->rootLayer->selectionMask());
-    }
-
-    m_d->deselectedGlobalSelection = 0;
-    m_d->legacyUndoAdapter.emitSelectionChanged();
-}
-
-void KisImage::deselectGlobalSelection()
-{
-    KisSelectionSP savedSelection = globalSelection();
-    setGlobalSelection(0);
-    m_d->deselectedGlobalSelection = savedSelection;
-}
-
 bool KisImage::canReselectGlobalSelection()
 {
-    return m_d->deselectedGlobalSelection;
+    return m_d->deselectedGlobalSelectionMask;
 }
 
-void KisImage::reselectGlobalSelection()
+KisImageGlobalSelectionManagementInterface* KisImage::globalSelectionManagementInterface() const
 {
-    if(m_d->deselectedGlobalSelection) {
-        setGlobalSelection(m_d->deselectedGlobalSelection);
-    }
+    return &m_d->globalSelectionInterface;
 }
 
 QString KisImage::nextLayerName(const QString &_baseName) const

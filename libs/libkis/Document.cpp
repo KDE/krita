@@ -64,6 +64,8 @@
 
 #include <kis_image_animation_interface.h>
 #include <kis_layer_utils.h>
+#include <kis_undo_adapter.h>
+#include <commands/kis_set_global_selection_command.h>
 
 struct Document::Private {
     Private() {}
@@ -349,10 +351,10 @@ void Document::setSelection(Selection* value)
     if (!d->document) return;
     if (!d->document->image()) return;
     if (value) {
-        d->document->image()->setGlobalSelection(value->selection());
+        d->document->image()->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(d->document->image(), value->selection()));
     }
     else {
-        d->document->image()->setGlobalSelection(0);
+        d->document->image()->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(d->document->image(), nullptr));
     }
 }
 

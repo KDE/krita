@@ -15,6 +15,17 @@
 #include "kis_undo_adapter.h"
 #include "kis_selection_mask.h"
 #include "kis_pixel_selection.h"
+#include "KisImageGlobalSelectionManagementInterface.h"
+#include "kis_group_layer.h"
+
+#include "kis_image_layer_remove_command.h"
+#include "kis_image_layer_add_command.h"
+#include "kis_selection_mask.h"
+#include "kis_activate_selection_mask_command.h"
+#include "KisChangeValueCommand.h"
+#include "KisChangeDeselectedMaskCommand.h"
+#include "KisNotifySelectionChangedCommand.h"
+
 
 KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, KisSelectionSP selection)
     : m_image(image)
@@ -27,22 +38,36 @@ KisSetGlobalSelectionCommand::KisSetGlobalSelectionCommand(KisImageWSP image, Ki
     m_newSelection = selection;
 }
 
-void KisSetGlobalSelectionCommand::redo()
+void KisSetGlobalSelectionCommand::populateChildCommands()
 {
     KisImageSP image = m_image.toStrongRef();
-    if (!image) {
-        return;
-    }
-    image->setGlobalSelection(m_newSelection);
-}
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
 
-void KisSetGlobalSelectionCommand::undo()
-{
-    KisImageSP image = m_image.toStrongRef();
-    if (!image) {
-        return;
+    addCommand(new KisNotifySelectionChangedCommand(image, KisNotifySelectionChangedCommand::INITIALIZING));
+
+    KisSelectionMaskSP selectionMask = image->rootLayer()->selectionMask();
+    if (selectionMask) {
+        addCommand(new KisImageLayerRemoveCommand(image, selectionMask, false, false));
     }
-    image->setGlobalSelection(m_oldSelection);
+
+    if (m_newSelection) {
+        selectionMask = new KisSelectionMask(image, i18n("Selection Mask"));
+        selectionMask->initSelection(image->rootLayer());
+
+        // If we do not set the selection now, the setActive call coming next
+        // can be very, very expensive, depending on the size of the image.
+        selectionMask->setSelection(m_newSelection);
+
+        addCommand(new KisImageLayerAddCommand(image, selectionMask,
+                                               image->root(), image->root()->lastChild(),
+                                               false, false));
+        addCommand(new KisActivateSelectionMaskCommand(selectionMask, true));
+
+    }
+
+
+    addCommand(new KisChangeDeselectedMaskCommand(image));
+    addCommand(new KisNotifySelectionChangedCommand(image, KisNotifySelectionChangedCommand::FINALIZING));
 }
 
 KisSetEmptyGlobalSelectionCommand::KisSetEmptyGlobalSelectionCommand(KisImageWSP image)

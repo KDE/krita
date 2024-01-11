@@ -1394,7 +1394,7 @@
       <whatsThis></whatsThis>
       <toolTip>Reselect</toolTip>
       <iconText>Reselect</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1000000000000000000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+Shift+D</shortcut>
       <isCheckable>false</isCheckable>

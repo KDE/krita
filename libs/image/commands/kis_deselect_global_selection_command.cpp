@@ -4,19 +4,22 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_selection_commands.h"
+#include "kis_deselect_global_selection_command.h"
 
 #include <klocalizedstring.h>
 
 #include "kis_image.h"
-#include "kis_selection.h"
-#include "kis_undo_adapter.h"
+#include "kis_group_layer.h"
 #include "kis_selection_mask.h"
-#include "kis_pixel_selection.h"
+#include "KisImageGlobalSelectionManagementInterface.h"
+#include "KisChangeDeselectedMaskCommand.h"
+#include "kis_image_layer_remove_command.h"
+#include "KisNotifySelectionChangedCommand.h"
 
-KisDeselectGlobalSelectionCommand::KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent) :
-    KUndo2Command(kundo2_i18n("Deselect"), parent)
-  , m_image(image)
+
+KisDeselectGlobalSelectionCommand::KisDeselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent)
+    : KisCommandUtils::AggregateCommand(kundo2_i18n("Deselect"), parent)
+    , m_image(image)
 {
 }
 
@@ -24,19 +27,16 @@ KisDeselectGlobalSelectionCommand::~KisDeselectGlobalSelectionCommand()
 {
 }
 
-void KisDeselectGlobalSelectionCommand::redo()
+void KisDeselectGlobalSelectionCommand::populateChildCommands()
 {
     KisImageSP image = m_image.toStrongRef();
-    if (image) {
-        m_oldSelection = image->globalSelection();
-        image->deselectGlobalSelection();
-    }
-}
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
 
-void KisDeselectGlobalSelectionCommand::undo()
-{
-    KisImageSP image = m_image.toStrongRef();
-    if (image) {
-        image->setGlobalSelection(m_oldSelection);
+    KisSelectionMaskSP selectionMask = image->rootLayer()->selectionMask();
+    if (selectionMask) {
+        addCommand(new KisNotifySelectionChangedCommand(image, KisNotifySelectionChangedCommand::INITIALIZING));
+        addCommand(new KisChangeDeselectedMaskCommand(image, selectionMask));
+        addCommand(new KisImageLayerRemoveCommand(image, selectionMask, false, false));
+        addCommand(new KisNotifySelectionChangedCommand(image, KisNotifySelectionChangedCommand::FINALIZING));
     }
 }

@@ -48,6 +48,7 @@ WGColorSelectorSettings::WGColorSelectorSettings(QWidget *parent)
     connect(m_ui->cmbSelectionColorSpace, SIGNAL(currentIndexChanged(int)), SLOT(slotColorSpaceSourceChanged(int)));
 
     m_shadeLineGroup->setExclusive(false);
+    slotSetShadeLineCount(m_ui->sbShadeLineCount->value());
 #if QT_VERSION >= QT_VERSION_CHECK(5,15,0)
     connect(m_shadeLineGroup, SIGNAL(idClicked(int)), SLOT(slotShowLineEditor(int)));
 #else
@@ -184,6 +185,10 @@ void WGColorSelectorSettings::loadPreferencesImpl(bool defaults)
     m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnInteractionEnd, defaults));
     m_ui->chkShadeSelUpdateOnRightClick->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnRightClick, defaults));
     m_shadeLineConfig = cfg.shadeSelectorLines(defaults);
+    // update shade lines we will re-use, the rest is handled by slotSetShadeLineCount()
+    for (int i = 0, end = qMin(m_shadeLineButtons.size(), m_shadeLineConfig.size()); i < end; i++) {
+        m_shadeLineButtons.at(i)->setIcon(m_shadeLineEditor->generateIcon(m_shadeLineConfig.at(i)));
+    }
     m_ui->sbShadeLineCount->setValue(m_shadeLineConfig.size());
     m_ui->sbShadeLineHeight->setValue(cfg.get(WGConfig::shadeSelectorLineHeight, defaults));
     // Color History

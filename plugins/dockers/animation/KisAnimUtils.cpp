@@ -85,10 +85,25 @@ namespace KisAnimUtils {
                             success = true;
                         }
                     } else { // Make a regular new blank keyframe...
-                        KisKeyframeSP previousKey = channel->activeKeyframeAt(time);
+                        KisKeyframeSP referenceKey = channel->activeKeyframeAt(time);
 
                         bool isScalar = (channelId != KisKeyframeChannel::Raster.id());
-                        if (isScalar && previousKey) {
+
+                        if (isScalar && !referenceKey) {
+                            /**
+                             * Scalar keyframes return the **next** value for positions
+                             * **before** the first keyframe. That is a bit counterintuitive,
+                             * but that is what we have.
+                             */
+                            const QSet<int> allTimes = channel->allKeyframeTimes();
+
+                            auto it = std::min_element(allTimes.begin(), allTimes.end());
+                            if (it != allTimes.end()) {
+                                referenceKey = channel->keyframeAt(*it);
+                            }
+                        }
+
+                        if (isScalar && referenceKey) {
                             KisScalarKeyframeChannel* scalarChannel = static_cast<KisScalarKeyframeChannel*>(channel);
                             const qreal value = scalarChannel->valueAt(time); //Get interpolated value.
                             scalarChannel->addScalarKeyframe(time, value, cmd.data());
@@ -97,8 +112,8 @@ namespace KisAnimUtils {
                         }
 
                         // Use color label of previous key, if exists...
-                        if (previousKey && channel->keyframeAt(time)) {
-                            channel->keyframeAt(time)->setColorLabel(previousKey->colorLabel());
+                        if (referenceKey && channel->keyframeAt(time)) {
+                            channel->keyframeAt(time)->setColorLabel(referenceKey->colorLabel());
                         }
 
                         success = true;

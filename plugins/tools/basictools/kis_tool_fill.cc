@@ -578,7 +578,8 @@ QWidget* KisToolFill::createOptionWidget()
     KisOptionCollectionWidget *containerGrow = new KisOptionCollectionWidget;
     m_sliderGrow = new KisSliderSpinBox;
     m_sliderGrow->setPrefix(i18nc("The 'grow/shrink' spinbox prefix in fill tool options", "Grow: "));
-    m_sliderGrow->setRange(-40, 40);
+    m_sliderGrow->setRange(-400, 400);
+    m_sliderGrow->setSoftRange(-40, 40);
     m_sliderGrow->setSuffix(i18n(" px"));
     m_buttonStopGrowingAtDarkestPixel = new QToolButton;
     m_buttonStopGrowingAtDarkestPixel->setAutoRaise(true);

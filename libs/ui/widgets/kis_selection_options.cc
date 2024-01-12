@@ -182,7 +182,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->sliderGrowSelection->setPrefix(
         i18nc("The 'grow/shrink' spinbox prefix in selection tools options",
               "Grow: "));
-    m_d->sliderGrowSelection->setRange(-40, 40);
+    m_d->sliderGrowSelection->setRange(-400, 400);
+    m_d->sliderGrowSelection->setSoftRange(-40, 40);
     m_d->sliderGrowSelection->setSuffix(i18n(" px"));
     m_d->buttonStopGrowingAtDarkestPixel = new QToolButton;
     m_d->buttonStopGrowingAtDarkestPixel->setAutoRaise(true);

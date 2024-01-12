@@ -323,6 +323,11 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
     setShapes(shapes);
 
+    /**
+     * Shape manager uses uses queued signals, therefore it should belong
+     * to the GUI thread.
+     */
+    this->moveToThread(qApp->thread());
     connect(this, SIGNAL(forwardUpdate()), this, SLOT(forwardCompressedUpdate()));
 }
 
@@ -332,6 +337,8 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
     Q_ASSERT(d->canvas); // not optional.
     connect(d->selection, SIGNAL(selectionChanged()), this, SIGNAL(selectionChanged()));
 
+    // see a comment in another constructor
+    this->moveToThread(qApp->thread());
     connect(this, SIGNAL(forwardUpdate()), this, SLOT(forwardCompressedUpdate()));
 }
 

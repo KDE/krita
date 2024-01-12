@@ -14,6 +14,7 @@
 #include <QSpinBox>
 #include "kis_slider_spin_box.h"
 #include "kis_int_parse_spin_box.h"
+#include "KoAspectButton.h"
 
 #include <vector>
 
@@ -39,13 +40,14 @@ private:
 
 struct KRITAUI_EXPORT KisIntegerWidgetParam {
 
-    KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString& label, const QString& nname);
+    KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString& label, const QString& nname, const QString& lockerName = QString());
 
     qint32 min;
     qint32 max;
     qint32 initvalue;
     QString label;
     QString name;
+    QString lockerName;
 };
 
 typedef std::vector<KisIntegerWidgetParam> vKisIntegerWidgetParam;
@@ -66,6 +68,7 @@ private:
     qint32 valueAt(qint32 i);
 
     QVector<KisDelayedActionIntegerInput*> m_integerWidgets;
+    QVector<KoAspectButton*> m_aspectButtons;
     QString m_filterid;
     KisPropertiesConfigurationSP m_config;
 };

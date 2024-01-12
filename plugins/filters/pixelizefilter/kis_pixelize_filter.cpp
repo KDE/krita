@@ -136,8 +136,8 @@ QRect KisPixelizeFilter::changedRect(const QRect &rect, const KisFilterConfigura
 KisConfigWidget * KisPixelizeFilter::createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP, bool) const
 {
     vKisIntegerWidgetParam param;
-    param.push_back(KisIntegerWidgetParam(2, 512, 10, i18n("Pixel width"), "pixelWidth"));
-    param.push_back(KisIntegerWidgetParam(2, 512, 10, i18n("Pixel height"), "pixelHeight"));
+    param.push_back(KisIntegerWidgetParam(2, 512, 10, i18n("Pixel width"), "pixelWidth" /*"keepAspect"*/));
+    param.push_back(KisIntegerWidgetParam(2, 512, 10, i18n("Pixel height"), "pixelHeight", "keepAspect"));
     return new KisMultiIntegerFilterWidget(id().id(),  parent,  id().id(),  param);
 }
 
@@ -146,6 +146,7 @@ KisFilterConfigurationSP KisPixelizeFilter::defaultConfiguration(KisResourcesInt
     KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
     config->setProperty("pixelWidth", 10);
     config->setProperty("pixelHeight", 10);
+    config->setProperty("keepAspect", true);
     return config;
 }
 

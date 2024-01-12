@@ -36,6 +36,8 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
     qreal scale = scaled.width()/(qreal)(source.width());
 
+
+
     if (scale >= 2) {
         // it can be treated like pixel art
         // first scale with NN
@@ -59,9 +61,20 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     QPainter painter(&result);
     QColor textColor = qApp->palette().color(QPalette::Text);
     QColor backgroundColor = qApp->palette().color(QPalette::Window);
-    QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
+    QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.1);
     painter.setPen(blendedColor);
+    painter.setBrush(QBrush(blendedColor));
+
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+
+    QColor blendedColorBrighter = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
+    painter.setPen(blendedColorBrighter);
+    painter.setBrush(QBrush());
+
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+
     painter.end(); // Otherwise there will always be a copy
 
     return QIcon(QPixmap::fromImage(result));

@@ -109,7 +109,7 @@
       <item>
        <widget class="QWidget" name="widgetCenter" native="true">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -244,6 +244,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
            <item>
             <widget class="QToolButton" name="newFileLink">
              <property name="sizePolicy">
@@ -268,15 +271,15 @@
              </property>
              <property name="iconSize">
               <size>
-               <width>32</width>
-               <height>32</height>
+               <width>64</width>
+               <height>64</height>
               </size>
              </property>
              <property name="checkable">
               <bool>false</bool>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonTextBesideIcon</enum>
              </property>
              <property name="autoRaise">
               <bool>true</bool>
@@ -335,15 +338,15 @@
              </property>
              <property name="iconSize">
               <size>
-               <width>32</width>
-               <height>32</height>
+               <width>64</width>
+               <height>64</height>
               </size>
              </property>
              <property name="checkable">
               <bool>false</bool>
              </property>
              <property name="toolButtonStyle">
-              <enum>Qt::ToolButtonTextUnderIcon</enum>
+              <enum>Qt::ToolButtonTextBesideIcon</enum>
              </property>
              <property name="autoRaise">
               <bool>true</bool>

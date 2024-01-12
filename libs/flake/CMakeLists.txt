@@ -107,7 +107,6 @@ set(kritaflake_SRCS
     KoTosContainer.cpp
     KoTosContainerModel.cpp
     KoClipMaskApplicatorBase.cpp
-    xsimd/KoClipMaskApplicator.cpp
     ${__per_arch_alpha_applicator_factory_objs}
     KoClipMaskPainter.cpp
     KoClipPath.cpp

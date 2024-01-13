@@ -29,6 +29,7 @@ private Q_SLOTS:
 
     void slotWidthChanged(double w);
     void slotHeightChanged(double h);
+    void slotScaleAspectRatioChanged(bool checked);
 private:
     Ui_WdgPatternOptions* m_widget;
 };

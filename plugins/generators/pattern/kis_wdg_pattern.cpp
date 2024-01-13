@@ -19,6 +19,7 @@
 
 #include <filter/kis_filter_configuration.h>
 #include <kis_pattern_chooser.h>
+#include <kis_signals_blocker.h>
 #include "ui_wdgpatternoptions.h"
 
 KisWdgPattern::KisWdgPattern(QWidget* parent)
@@ -28,23 +29,34 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     m_widget->setupUi(this);
     m_widget->lblPattern->setVisible(false);
 
-    m_widget->sldShearX->setSuffix(QChar(Qt::Key_Percent));
-    m_widget->sldShearY->setSuffix(QChar(Qt::Key_Percent));
     m_widget->sldShearX->setRange(-500, 500, 2);
-    m_widget->sldShearY->setRange(-500, 500, 2);
+    m_widget->sldShearX->setSoftRange(-100, 100);
     m_widget->sldShearX->setSingleStep(1);
-    m_widget->sldShearY->setSingleStep(1);
     m_widget->sldShearX->setValue(0.0);
+    m_widget->sldShearY->setRange(-500, 500, 2);
+    m_widget->sldShearY->setSoftRange(-100, 100);
+    m_widget->sldShearY->setSingleStep(1);
     m_widget->sldShearY->setValue(0.0);
 
-    m_widget->spbOffsetX->setSuffix(i18n(" px"));
-    m_widget->spbOffsetY->setSuffix(i18n(" px"));
     m_widget->spbOffsetX->setRange(-10000, 10000);
+    m_widget->spbOffsetX->setSoftRange(-500, 500);
+    m_widget->spbOffsetX->setValue(0);
     m_widget->spbOffsetY->setRange(-10000, 10000);
+    m_widget->spbOffsetY->setSoftRange(-500, 500);
+    m_widget->spbOffsetY->setValue(0);
 
+    m_widget->spbScaleWidth->setRange(0, 10000, 2);
+    m_widget->spbScaleWidth->setSoftRange(0, 500);
+    m_widget->spbScaleWidth->setValue(100.0);
+    m_widget->spbScaleHeight->setRange(0, 10000, 2);
+    m_widget->spbScaleHeight->setSoftRange(0, 500);
+    m_widget->spbScaleHeight->setValue(100.0);
+
+    m_widget->angleSelectorRotationX->setPrefix(i18n("X: "));
+    m_widget->angleSelectorRotationY->setPrefix(i18n("Y: "));
     m_widget->angleSelectorRotationZ->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
-    m_widget->gb3dRotation->setVisible(false);
+    m_widget->container3DRotation->setVisible(false);
 
     connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResourceSP)), this, SIGNAL(sigConfigurationUpdated()));
 
@@ -56,6 +68,7 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
 
     connect(m_widget->spbScaleWidth, SIGNAL(valueChanged(double)), this, SLOT(slotWidthChanged(double)));
     connect(m_widget->spbScaleHeight, SIGNAL(valueChanged(double)), this, SLOT(slotHeightChanged(double)));
+    connect(m_widget->btnLockAspectRatio, SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(slotScaleAspectRatioChanged(bool)));
 
     connect(m_widget->angleSelectorRotationX, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->angleSelectorRotationY, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
@@ -125,9 +138,8 @@ KisPropertiesConfigurationSP KisWdgPattern::configuration() const
 void KisWdgPattern::slotWidthChanged(double w)
 {
     if (m_widget->btnLockAspectRatio->keepAspectRatio()) {
-        m_widget->spbScaleHeight->blockSignals(true);
+        KisSignalsBlocker blocker(m_widget->spbScaleHeight);
         m_widget->spbScaleHeight->setValue(w);
-        m_widget->spbScaleHeight->blockSignals(false);
     }
     emit sigConfigurationItemChanged();
 }
@@ -135,10 +147,18 @@ void KisWdgPattern::slotWidthChanged(double w)
 void KisWdgPattern::slotHeightChanged(double h)
 {
     if (m_widget->btnLockAspectRatio->keepAspectRatio()) {
-        m_widget->spbScaleWidth->blockSignals(true);
+        KisSignalsBlocker blocker(m_widget->spbScaleWidth);
         m_widget->spbScaleWidth->setValue(h);
-        m_widget->spbScaleWidth->blockSignals(false);
     }
     emit sigConfigurationItemChanged();
+}
+
+void KisWdgPattern::slotScaleAspectRatioChanged(bool checked)
+{
+    if (checked && m_widget->spbScaleHeight->value() != m_widget->spbScaleWidth->value()) {
+        KisSignalsBlocker blocker(m_widget->spbScaleHeight);
+        m_widget->spbScaleHeight->setValue(m_widget->spbScaleWidth->value());
+        emit sigConfigurationItemChanged();
+    }
 }
 

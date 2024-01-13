@@ -50,300 +50,239 @@
       <attribute name="title">
        <string>Transform</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1">
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0">
-          <widget class="QGroupBox" name="gbScale">
-           <property name="title">
-            <string>Scale:</string>
+        <layout class="QFormLayout" name="formLayout">
+         <property name="horizontalSpacing">
+          <number>10</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>10</number>
+         </property>
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item row="0" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,0,1">
+           <property name="spacing">
+            <number>5</number>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
-             <spacer name="horizontalSpacer_5">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QFormLayout" name="formLayout_5">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label">
-                <property name="text">
-                 <string>Width:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="KisDoubleParseSpinBox" name="spbScaleWidth">
-                <property name="suffix">
-                 <string>%</string>
-                </property>
-                <property name="decimals">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <double>500.000000000000000</double>
-                </property>
-                <property name="value">
-                 <double>100.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>Height:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="KisDoubleParseSpinBox" name="spbScaleHeight">
-                <property name="suffix">
-                 <string>%</string>
-                </property>
-                <property name="decimals">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <double>500.000000000000000</double>
-                </property>
-                <property name="value">
-                 <double>100.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="KoAspectButton" name="btnLockAspectRatio" native="true"/>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_6">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
+           <item>
+            <widget class="KisDoubleSliderSpinBox" name="spbScaleWidth">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="prefix">
+              <string>X: </string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="value">
+              <double>99.989999999999995</double>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KoAspectButton" name="btnLockAspectRatio" native="true"/>
+           </item>
+           <item>
+            <widget class="KisDoubleSliderSpinBox" name="spbScaleHeight">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="prefix">
+              <string>Y: </string>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="value">
+              <double>99.989999999999995</double>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item row="1" column="1">
-          <widget class="QGroupBox" name="gbOffset">
-           <property name="title">
-            <string>Offset:</string>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <property name="spacing">
+            <number>5</number>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QFormLayout" name="formLayout_2">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>X:</string>
+           <item>
+            <widget class="KisSliderSpinBox" name="spbOffsetX">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string> px</string>
+             </property>
+             <property name="prefix">
+              <string>X: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KisSliderSpinBox" name="spbOffsetY">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="suffix">
+              <string> px</string>
+             </property>
+             <property name="prefix">
+              <string>Y: </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="2" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="KisDoubleSliderSpinBox" name="sldShearX">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="prefix">
+              <string>X: </string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="KisDoubleSliderSpinBox" name="sldShearY">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="prefix">
+              <string>Y: </string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="3" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="KisAngleSelector" name="angleSelectorRotationZ" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>30</width>
+                 <height>30</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="container3DRotation" native="true">
+               <layout class="QVBoxLayout" name="verticalLayout_4">
+                <property name="spacing">
+                 <number>10</number>
                 </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="KisIntParseSpinBox" name="spbOffsetX"/>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>Y:</string>
+                <property name="leftMargin">
+                 <number>0</number>
                 </property>
-               </widget>
-              </item>
-              <item row="1" column="1">
-               <widget class="KisIntParseSpinBox" name="spbOffsetY"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="KisAngleSelector" name="angleSelectorRotationX" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="KisAngleSelector" name="angleSelectorRotationY" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>30</height>
+                   </size>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Size:</string>
+           </property>
           </widget>
          </item>
-         <item row="0" column="0" colspan="2">
-          <widget class="QGroupBox" name="gbRotation">
-           <property name="title">
-            <string>Rotation:</string>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Position:</string>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="KisAngleSelector" name="angleSelectorRotationZ" native="true"/>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
           </widget>
          </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QGroupBox" name="gbShear">
-           <property name="title">
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
             <string>Shear:</string>
            </property>
-           <layout class="QFormLayout" name="formLayout_4">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>X:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_8">
-              <property name="text">
-               <string>Y:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="sldShearX" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="KisDoubleSliderSpinBox" name="sldShearY" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-             </widget>
-            </item>
-           </layout>
           </widget>
          </item>
-         <item row="3" column="0" colspan="2">
-          <widget class="QGroupBox" name="gb3dRotation">
-           <property name="title">
-            <string>3d Rotation:</string>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Rotation</string>
            </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <spacer name="horizontalSpacer_7">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <layout class="QFormLayout" name="formLayout_3">
-              <item row="0" column="0">
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>X-Rotation:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>Y-Rotation:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="KisAngleSelector" name="angleSelectorRotationX" native="true"/>
-              </item>
-              <item row="1" column="1">
-               <widget class="KisAngleSelector" name="angleSelectorRotationY" native="true"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_8">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
           </widget>
          </item>
         </layout>
@@ -381,26 +320,21 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleParseSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_double_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QDoubleSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisAngleSelector</class>
    <extends>QWidget</extends>
    <header location="global">KisAngleSelector.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_slider_spin_box.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

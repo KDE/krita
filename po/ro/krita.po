@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-06 00:39+0000\n"
+"POT-Creation-Date: 2024-01-13 01:45+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -16585,7 +16585,7 @@ msgstr ""
 msgid "Unknown error writing SVG text element"
 msgstr ""
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Schimbă segmentul"
@@ -17036,7 +17036,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Filter"
 msgstr "&Alb"
 
-#: libs/image/commands/kis_deselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_deselect_global_selection_command.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Deselect"
@@ -17082,10 +17082,17 @@ msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "Proprietăți plan..."
 
-#: libs/image/commands/kis_reselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_reselect_global_selection_command.cpp:21
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Reselect"
+msgstr "Selecția"
+
+#: libs/image/commands/kis_set_global_selection_command.cpp:54
+#: libs/image/kis_layer_utils.cpp:1921
+#: libs/impex/KisExportCheckRegistry.cpp:128
+#, fuzzy, kde-format
+msgid "Selection Mask"
 msgstr "Selecția"
 
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
@@ -17095,7 +17102,7 @@ msgid "Node Rename"
 msgstr "Denumire:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:849
+#: libs/image/kis_image.cc:827
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
@@ -17314,60 +17321,54 @@ msgstr ""
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:379
+#: libs/image/kis_image.cc:397
 #, fuzzy, kde-format
 msgid "Imported Image"
 msgstr "Importă imagine"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
-#: libs/impex/KisExportCheckRegistry.cpp:128
-#, fuzzy, kde-format
-msgid "Selection Mask"
-msgstr "Selecția"
-
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fundal"
 
-#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "Plan"
 
-#: libs/image/kis_image.cc:848
+#: libs/image/kis_image.cc:826
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Salvează planul ca imagine..."
 
-#: libs/image/kis_image.cc:944
+#: libs/image/kis_image.cc:922
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:945
+#: libs/image/kis_image.cc:923
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Alfa"
 
-#: libs/image/kis_image.cc:982
+#: libs/image/kis_image.cc:960
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Imagine nouă"
 
-#: libs/image/kis_image.cc:983
+#: libs/image/kis_image.cc:961
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Rezoluția imaginii"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1012
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17376,19 +17377,19 @@ msgstr[0] "&Adaugă plan..."
 msgstr[1] "&Adaugă plan..."
 msgstr[2] "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1175
+#: libs/image/kis_image.cc:1153
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotește imaginea"
 
-#: libs/image/kis_image.cc:1185
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Modele"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1166
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17397,7 +17398,7 @@ msgstr[0] "Șterge plan"
 msgstr[1] "Șterge plan"
 msgstr[2] "Șterge plan"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1266
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -17405,7 +17406,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Taie forme"
 
-#: libs/image/kis_image.cc:1292
+#: libs/image/kis_image.cc:1270
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17414,45 +17415,45 @@ msgstr[0] "&Adaugă plan..."
 msgstr[1] "&Adaugă plan..."
 msgstr[2] "&Adaugă plan..."
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1277
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Imagine nouă"
 
-#: libs/image/kis_image.cc:1317
+#: libs/image/kis_image.cc:1295
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1368
+#: libs/image/kis_image.cc:1346
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1369
+#: libs/image/kis_image.cc:1347
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "I&nserează imagine ca plan..."
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1405
 #, fuzzy
 #| msgid "Profile:"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1446
 #, fuzzy
 #| msgid "Profile:"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil:"
 
-#: libs/image/kis_image.cc:2528
+#: libs/image/kis_image.cc:2506
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -18424,7 +18425,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Șterge imaginea"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2108
 #: libs/ui/KisMainWindow.cpp:2191
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -22564,12 +22565,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "sergiu@ase.md"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22578,29 +22579,34 @@ msgid ""
 "org</a></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-msgstr ""
-
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22619,7 +22625,7 @@ msgid ""
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -23796,7 +23802,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Șterge imaginea"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:134
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
 #, fuzzy, kde-format
 msgid "Reference images"
 msgstr "Șterge imaginea"
@@ -24247,23 +24253,24 @@ msgstr "Dreptunghiular"
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
 #, fuzzy, kde-format
-msgid "Backers"
-msgstr "Stânci"
+#| msgid "Sensor:"
+msgid "Sponsors"
+msgstr "Senzor:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, fuzzy, kde-format
 msgid "License"
 msgstr "Unelte de desenare"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr ""
@@ -27378,7 +27385,7 @@ msgstr "Selecția"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, fuzzy, kde-format
 msgid "Wide Gamut Selector"
 msgstr "Selecția"
@@ -29849,42 +29856,42 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:611
 #, fuzzy, kde-format
 msgid "Stroked Shapes"
 msgstr "Selecția"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:613
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Selecția"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:731
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Deselectează"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:734
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Deselectează"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:737
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Deselectează"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:740
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Deselectează"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:743
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
@@ -38141,7 +38148,7 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Plan"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
@@ -38150,7 +38157,7 @@ msgstr[0] "Plan"
 msgstr[1] "Plan"
 msgstr[2] "Plan"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -38159,7 +38166,7 @@ msgstr[0] "Plan"
 msgstr[1] "Plan"
 msgstr[2] "Plan"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -38168,7 +38175,7 @@ msgstr[0] "Plan"
 msgstr[1] "Plan"
 msgstr[2] "Plan"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -38177,7 +38184,7 @@ msgstr[0] "Plan"
 msgstr[1] "Plan"
 msgstr[2] "Plan"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
@@ -41087,7 +41094,7 @@ msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Culoare"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, fuzzy, kde-format
 msgid "Wide Gamut Color Selector Settings"
 msgstr "Selecția"
@@ -60798,6 +60805,10 @@ msgstr "Unealtă de măr&ire"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Șterge imaginea"
+
+#, fuzzy
+#~ msgid "Backers"
+#~ msgstr "Stânci"
 
 #, fuzzy
 #~ msgctxt "action"

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-06 00:39+0000\n"
+"POT-Creation-Date: 2024-01-13 01:45+0000\n"
 "PO-Revision-Date: 2022-08-28 09:26+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -17229,7 +17229,7 @@ msgstr ""
 msgid "Unknown error writing SVG text element"
 msgstr "Unbekannter Fehler beim Schreiben des SVG-Textelements"
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Segment ändern"
@@ -17677,7 +17677,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Filter"
 msgstr "Filter ändern"
 
-#: libs/image/commands/kis_deselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_deselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Deselect"
 msgstr "Auswahl aufheben"
@@ -17718,10 +17718,17 @@ msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "Eigenschaftenänderungen"
 
-#: libs/image/commands/kis_reselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_reselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Reselect"
 msgstr "Erneut auswählen"
+
+#: libs/image/commands/kis_set_global_selection_command.cpp:54
+#: libs/image/kis_layer_utils.cpp:1921
+#: libs/impex/KisExportCheckRegistry.cpp:128
+#, kde-format
+msgid "Selection Mask"
+msgstr "Auswahlmaske"
 
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 #, fuzzy
@@ -17731,7 +17738,7 @@ msgid "Node Rename"
 msgstr "Neuer Name:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:849
+#: libs/image/kis_image.cc:827
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Bildgröße ändern"
@@ -17955,18 +17962,12 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:379
+#: libs/image/kis_image.cc:397
 #, kde-format
 msgid "Imported Image"
 msgstr "Importiertes Bild"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
-#: libs/impex/KisExportCheckRegistry.cpp:128
-#, kde-format
-msgid "Selection Mask"
-msgstr "Auswahlmaske"
-
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17974,37 +17975,37 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Hintergrund"
 
-#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Malebene"
 
-#: libs/image/kis_image.cc:848
+#: libs/image/kis_image.cc:826
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Bild zuschneiden"
 
-#: libs/image/kis_image.cc:944
+#: libs/image/kis_image.cc:922
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Ebene zuschneiden"
 
-#: libs/image/kis_image.cc:945
+#: libs/image/kis_image.cc:923
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Maske zuschneiden"
 
-#: libs/image/kis_image.cc:982
+#: libs/image/kis_image.cc:960
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Bild skalieren"
 
-#: libs/image/kis_image.cc:983
+#: libs/image/kis_image.cc:961
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Bildauflösung ändern"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1012
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -18014,17 +18015,17 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Ebene skalieren"
 msgstr[1] "Ebene skalieren"
 
-#: libs/image/kis_image.cc:1175
+#: libs/image/kis_image.cc:1153
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Bild drehen"
 
-#: libs/image/kis_image.cc:1185
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Maske drehen"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1166
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -18034,12 +18035,12 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Ebene drehen"
 msgstr[1] "Ebene drehen"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1266
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Maske neigen"
 
-#: libs/image/kis_image.cc:1292
+#: libs/image/kis_image.cc:1270
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -18049,39 +18050,39 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Ebene neigen"
 msgstr[1] "Ebene neigen"
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Bild neigen"
 
-#: libs/image/kis_image.cc:1317
+#: libs/image/kis_image.cc:1295
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Ebenenfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1368
+#: libs/image/kis_image.cc:1346
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Bildfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1369
+#: libs/image/kis_image.cc:1347
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Projektionsfarbraum konvertieren"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1405
 #, fuzzy
 #| msgid "Assign Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Profil zuordnen"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1446
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profil zuordnen"
 
-#: libs/image/kis_image.cc:2528
+#: libs/image/kis_image.cc:2506
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Auswahl zuschneiden"
@@ -19056,7 +19057,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Grafik ersetzen"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2108
 #: libs/ui/KisMainWindow.cpp:2191
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -23248,12 +23249,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "opensource@kuhr.org,gotwig@ubuntu.com"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Übersetzer</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -23266,29 +23267,34 @@ msgstr ""
 "Internationalisierung besuchen Sie<a href=\"http://l10n.kde.org\">http://"
 "l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><p align=\"center\"><b>Unterstützt durch</b></p>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Dank an</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -23307,7 +23313,7 @@ msgid ""
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -24503,7 +24509,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Referenzbild hinzufügen"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:134
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
 #, kde-format
 msgid "Reference images"
 msgstr "Referenzbilder"
@@ -24949,24 +24955,25 @@ msgstr "Übersetzer"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "Unterstützer"
+#, fuzzy, kde-format
+#| msgid "Sensor:"
+msgid "Sponsors"
+msgstr "Sensor:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "Weiteren Dank an"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Lizenz"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr ""
@@ -28259,7 +28266,7 @@ msgstr "Dreieckiger Farbwähler"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, fuzzy, kde-format
 #| msgid "Hide Shade Selector"
 msgid "Wide Gamut Selector"
@@ -30801,37 +30808,37 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:611
 #, kde-format
 msgid "Stroked Shapes"
 msgstr "Strich-Objekte"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:613
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Strich-Objekte"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:731
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Deckende Bereiche auswählen (Hinzufügen)"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:734
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Deckende Bereiche auswählen (Abziehen)"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:737
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Deckende Bereiche auswählen (Überschneidung)"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:740
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Deckende Bereiche auswählen (Symmetrische Differenz)"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:743
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Undurchlässigkeit auswählen"
@@ -39362,14 +39369,14 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Keyframe hinzufügen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "Keyframe entfernen"
 msgstr[1] "Keyframes entfernen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -39377,7 +39384,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Keyframe verschieben"
 msgstr[1] "%1 Keyframes verschieben"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Copy Keyframe"
@@ -39388,7 +39395,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Keyframe kopieren"
 msgstr[1] "%1 Keyframes kopieren"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Move Keyframe"
@@ -39399,7 +39406,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Keyframe verschieben"
 msgstr[1] "%1 Keyframes verschieben"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Make line point"
@@ -42487,7 +42494,7 @@ msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Einrichten ..."
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
 msgid "Wide Gamut Color Selector Settings"
@@ -62603,6 +62610,12 @@ msgstr "Zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referenzbilder"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><p align=\"center\"><b>Unterstützt durch</b></p>"
+
+#~ msgid "Backers"
+#~ msgstr "Unterstützer"
 
 #~ msgctxt "action"
 #~ msgid "to &File Layer..."

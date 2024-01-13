@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-06 00:39+0000\n"
+"POT-Creation-Date: 2024-01-13 01:45+0000\n"
 "PO-Revision-Date: 2023-10-12 18:19+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17481,7 +17481,7 @@ msgstr "”text”-solmua ei löytynyt!"
 msgid "Unknown error writing SVG text element"
 msgstr "Tuntematon virhe kirjoitettaessa SVG:n tekstialkiota"
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Muuta lohkoa"
@@ -17932,7 +17932,7 @@ msgstr ""
 "Vaihda suodinta\n"
 "suotimen vaihto"
 
-#: libs/image/commands/kis_deselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_deselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Deselect"
 msgstr ""
@@ -17984,12 +17984,21 @@ msgstr ""
 "Ominaisuuden muutokset\n"
 "ominaisuuden muutokset"
 
-#: libs/image/commands/kis_reselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_reselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Reselect"
 msgstr ""
 "Valitse uudestaan\n"
 "uudestaan valitseminen"
+
+#: libs/image/commands/kis_set_global_selection_command.cpp:54
+#: libs/image/kis_layer_utils.cpp:1921
+#: libs/impex/KisExportCheckRegistry.cpp:128
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "as Selection Mask"
+msgid "Selection Mask"
+msgstr "valintamaskina"
 
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 #, fuzzy
@@ -18000,7 +18009,7 @@ msgid "Node Rename"
 msgstr "Uusi nimi"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:849
+#: libs/image/kis_image.cc:827
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr ""
@@ -18240,21 +18249,13 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Läpivienti"
 
-#: libs/image/kis_image.cc:379
+#: libs/image/kis_image.cc:397
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "Tuo kuva"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
-#: libs/impex/KisExportCheckRegistry.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "as Selection Mask"
-msgid "Selection Mask"
-msgstr "valintamaskina"
-
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -18262,47 +18263,47 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Tausta"
 
-#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Maalitaso"
 
-#: libs/image/kis_image.cc:848
+#: libs/image/kis_image.cc:826
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr ""
 "Rajaa kuva\n"
 "kuvan rajaus"
 
-#: libs/image/kis_image.cc:944
+#: libs/image/kis_image.cc:922
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr ""
 "Rajaa taso\n"
 "tason rajaus"
 
-#: libs/image/kis_image.cc:945
+#: libs/image/kis_image.cc:923
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr ""
 "Rajaa maski\n"
 "maskin rajaus"
 
-#: libs/image/kis_image.cc:982
+#: libs/image/kis_image.cc:960
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr ""
 "Skaalaa kuva\n"
 "kuvan skaalaus"
 
-#: libs/image/kis_image.cc:983
+#: libs/image/kis_image.cc:961
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr ""
 "Muuta kuvan tarkkuutta\n"
 "kuvan tarkkuuden muuttaminen"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1012
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -18316,21 +18317,21 @@ msgstr[1] ""
 "Skaalaa taso\n"
 "tason skaalaus"
 
-#: libs/image/kis_image.cc:1175
+#: libs/image/kis_image.cc:1153
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr ""
 "Kierrä kuvaa\n"
 "kuvan kierto"
 
-#: libs/image/kis_image.cc:1185
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Tuo maski eteen"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1166
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -18344,7 +18345,7 @@ msgstr[1] ""
 "Kierrä tasoa\n"
 "tason kierto"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1266
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -18352,7 +18353,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Katkaise muotoja"
 
-#: libs/image/kis_image.cc:1292
+#: libs/image/kis_image.cc:1270
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -18362,44 +18363,44 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Viistoa taso"
 msgstr[1] "Viistoa taso"
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr ""
 "Viistoa kuva\n"
 "kuvan viistoaminen"
 
-#: libs/image/kis_image.cc:1317
+#: libs/image/kis_image.cc:1295
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Muunna tason väriavaruus"
 
-#: libs/image/kis_image.cc:1368
+#: libs/image/kis_image.cc:1346
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Muunna kuvan väriavaruutta"
 
-#: libs/image/kis_image.cc:1369
+#: libs/image/kis_image.cc:1347
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Muuta kuvan tyyppiä"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1405
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Käytä profiilia"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1446
 #, fuzzy
 #| msgid "Apply Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Käytä profiilia"
 
-#: libs/image/kis_image.cc:2528
+#: libs/image/kis_image.cc:2506
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Rajaa valinnat"
@@ -19444,7 +19445,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Korvaa kuva"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2108
 #: libs/ui/KisMainWindow.cpp:2191
 #, kde-format
 msgid "Import frames"
@@ -23753,13 +23754,13 @@ msgstr ""
 "com, translator@legisign.org, mikko.piippo@helsinki.fi, teemu.rytilahti@d5k."
 "net"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, fuzzy, kde-format
 #| msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\">Kiitokset</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -23772,30 +23773,34 @@ msgstr ""
 "community.kde.org/KDE_Localization/fi\">community.kde.org/KDE_Localization/"
 "fi</a>.</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><h1 align=\"center\">Kritaa ovat tukeneet</h1><p>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
-".</p><p><i>Kiitos! Olitte kaikki <b>mahtavia</b>!</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Kiitokset</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -23814,7 +23819,7 @@ msgid ""
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -25046,7 +25051,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Mallikuva:"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:134
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgid "Reference images"
@@ -25503,24 +25508,25 @@ msgstr "Kääntäjät"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "Tukijat"
+#, fuzzy, kde-format
+#| msgid "Sponsor"
+msgid "Sponsors"
+msgstr "Sponsori"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "Lisäkiitokset"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Lisenssi"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr "Kolmannen osapuolen kirjastot"
@@ -28860,7 +28866,7 @@ msgstr "Sävyvalitsin"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, fuzzy, kde-format
 #| msgid "Hide Shade Selector"
 msgid "Wide Gamut Selector"
@@ -31448,18 +31454,18 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:611
 #, fuzzy, kde-format
 msgid "Stroked Shapes"
 msgstr "Dynaaminen sivellin"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:613
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Dynaaminen sivellin"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:731
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -31467,7 +31473,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Valitse läpinäkymätön"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:734
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -31475,7 +31481,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Valitse läpinäkymätön"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:737
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -31483,7 +31489,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Valitse läpinäkymätön"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:740
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -31491,7 +31497,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Valitse läpinäkymätön"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:743
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Valitse läpinäkymätön"
@@ -40286,14 +40292,14 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Lisää avainkuva"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "Poista avainkuva"
 msgstr[1] "Poista avainkuvat"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -40301,7 +40307,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Seuraava avainkuva"
 msgstr[1] "Seuraava avainkuva"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Add Keyframe"
@@ -40311,7 +40317,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Lisää avainkuva"
 msgstr[1] "Lisää avainkuva"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -40319,7 +40325,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Seuraava avainkuva"
 msgstr[1] "Seuraava avainkuva"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Make line point"
@@ -43371,7 +43377,7 @@ msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Asetukset…"
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
 msgid "Wide Gamut Color Selector Settings"
@@ -63319,6 +63325,18 @@ msgstr "Lähennystyökalu"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Viitekuvatyökalu"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr ""
+#~ "<html><head/><body><h1 align=\"center\">Kritaa ovat tukeneet</h1><p>"
+
+#~ msgid ""
+#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+#~ msgstr ""
+#~ ".</p><p><i>Kiitos! Olitte kaikki <b>mahtavia</b>!</i></p></body></html>"
+
+#~ msgid "Backers"
+#~ msgstr "Tukijat"
 
 #, fuzzy
 #~| msgctxt "action"

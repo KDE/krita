@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-06 00:39+0000\n"
+"POT-Creation-Date: 2024-01-13 01:45+0000\n"
 "PO-Revision-Date: 2023-12-22 10:20+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -16409,7 +16409,7 @@ msgstr "Nobenega »besedilnega« vozlišča ni mogoče najti!"
 msgid "Unknown error writing SVG text element"
 msgstr "Neznana napaka pri pisanju besedilnega elementa SVG"
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Spremeni segment"
@@ -16855,7 +16855,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Filter"
 msgstr "Spremeni filter"
 
-#: libs/image/commands/kis_deselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_deselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Deselect"
 msgstr "Odstrani izbiro"
@@ -16894,10 +16894,17 @@ msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "Spremembe lastnosti"
 
-#: libs/image/commands/kis_reselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_reselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Reselect"
 msgstr "Ponovno izberi"
+
+#: libs/image/commands/kis_set_global_selection_command.cpp:54
+#: libs/image/kis_layer_utils.cpp:1921
+#: libs/impex/KisExportCheckRegistry.cpp:128
+#, kde-format
+msgid "Selection Mask"
+msgstr "Maska izbora"
 
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 msgctxt "(qtundo-format)"
@@ -16905,7 +16912,7 @@ msgid "Node Rename"
 msgstr "Preimenuj vozlišče"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:849
+#: libs/image/kis_image.cc:827
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Spremeni velikost slike"
@@ -17124,55 +17131,49 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr "Prepusti skozi"
 
-#: libs/image/kis_image.cc:379
+#: libs/image/kis_image.cc:397
 #, kde-format
 msgid "Imported Image"
 msgstr "Uvožena slika"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
-#: libs/impex/KisExportCheckRegistry.cpp:128
-#, kde-format
-msgid "Selection Mask"
-msgstr "Maska izbora"
-
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Ozadje"
 
-#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
 #, kde-format
 msgid "Paint Layer"
 msgstr "Plast slikanja"
 
-#: libs/image/kis_image.cc:848
+#: libs/image/kis_image.cc:826
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Obreži sliko"
 
-#: libs/image/kis_image.cc:944
+#: libs/image/kis_image.cc:922
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Obreži plast"
 
-#: libs/image/kis_image.cc:945
+#: libs/image/kis_image.cc:923
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Obreži masko"
 
-#: libs/image/kis_image.cc:982
+#: libs/image/kis_image.cc:960
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Spremeni merilo slike"
 
-#: libs/image/kis_image.cc:983
+#: libs/image/kis_image.cc:961
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Spremeni ločljivost slike"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1012
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
@@ -17182,17 +17183,17 @@ msgstr[1] "Spremeni merilo %1 plasti"
 msgstr[2] "Spremeni merilo %1 plasti"
 msgstr[3] "Spremeni merilo %1 plasti"
 
-#: libs/image/kis_image.cc:1175
+#: libs/image/kis_image.cc:1153
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Zavrti sliko"
 
-#: libs/image/kis_image.cc:1185
+#: libs/image/kis_image.cc:1163
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Zavrti masko"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1166
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
@@ -17202,12 +17203,12 @@ msgstr[1] "Zavrti %1 plast"
 msgstr[2] "Zavrti %1 plasti"
 msgstr[3] "Zavrti %1 plasti"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1266
 msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Ostriži masko"
 
-#: libs/image/kis_image.cc:1292
+#: libs/image/kis_image.cc:1270
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
@@ -17217,37 +17218,37 @@ msgstr[1] "Ostriži %1 plast"
 msgstr[2] "Ostriži %1 plasti"
 msgstr[3] "Ostriži %1 plasti"
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Ostriži sliko"
 
-#: libs/image/kis_image.cc:1317
+#: libs/image/kis_image.cc:1295
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "Pretvori barvni prostor plasti"
 
-#: libs/image/kis_image.cc:1368
+#: libs/image/kis_image.cc:1346
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Pretvori barvni prostor slike"
 
-#: libs/image/kis_image.cc:1369
+#: libs/image/kis_image.cc:1347
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Pretvori barvni prostor projekcije"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1405
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Dodeli profil plasti"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1446
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Dodeli profil"
 
-#: libs/image/kis_image.cc:2528
+#: libs/image/kis_image.cc:2506
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Obreži izbore"
@@ -18205,7 +18206,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Slika RGBE Radiance"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2108
 #: libs/ui/KisMainWindow.cpp:2191
 #, kde-format
 msgid "Import frames"
@@ -22266,12 +22267,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "miles@filmsi.net,gregor.rakar@kiss.si,andrej.vernekar@moj.net"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Prevajalci</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22283,22 +22284,27 @@ msgstr ""
 "skupin po vsem svetu.</p><p>Za več informacij o internacionalizaciji KDE "
 "obiščite <a href=\"http://l10n.kde.org\">http://l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><h1 align=\"center\">Podporniki</h1><p>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
+msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-msgstr ".</p><p><i>Hvala! <b>Enkratni</b> ste!</i></p></body></html>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Zahvale</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22307,7 +22313,7 @@ msgstr ""
 ".</p><p><i>Za podporo razvoju Krite z nasveti, ikonami, nabori čopičev in "
 "mnogo čem drugim.</i></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22341,7 +22347,7 @@ msgstr ""
 "komercialne programske opreme, ki bodo prepovedale vaše delo v komercialnih "
 "okoliščinah.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -23569,7 +23575,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Dodaj referenčno sliko"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:134
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
 #, kde-format
 msgid "Reference images"
 msgstr "Referenčne slike"
@@ -23998,24 +24004,25 @@ msgstr "Prevajalci"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "Podporniki"
+#, fuzzy, kde-format
+#| msgid "Sponsor"
+msgid "Sponsors"
+msgstr "Sponzor"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "Zahvale"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Dovoljenje"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr "Zunanje knjižnice"
@@ -27296,7 +27303,7 @@ msgstr "Trikotni izbirnik sRGB"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, kde-format
 msgid "Wide Gamut Selector"
 msgstr "Široki izbirnik gamuta"
@@ -29749,37 +29756,37 @@ msgstr ""
 "V tem pojavnem oknu ni za prikaz na voljo nobenih oznak. Če želite dodati "
 "prednastavitve, jih morate označiti in nato tukaj izbrati oznako."
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:611
 #, kde-format
 msgid "Stroked Shapes"
 msgstr "Liki s potezami"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:613
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Vleci poteze po izbranih likih"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:731
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Izberi prekrivno (dodaj)"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:734
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Izberi prekrivno (odštej)"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:737
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Izberi prekrivno (presekaj)"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:740
 msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Izberi prekrivno (simetrična razlika)"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:743
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Izberi prekrivno"
@@ -38398,7 +38405,7 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Dodaj ključno sličico"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
@@ -38407,7 +38414,7 @@ msgstr[1] "Odstrani %1 ključno sličico"
 msgstr[2] "Odstrani %1 ključni sličici"
 msgstr[3] "Odstrani %1 ključne sličice"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -38417,7 +38424,7 @@ msgstr[1] "Premakni %1 ključno sličico"
 msgstr[2] "Premakni %1 ključni sličici"
 msgstr[3] "Premakni %1 ključne sličice"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -38427,7 +38434,7 @@ msgstr[1] "Kopiraj %1 ključno sličico"
 msgstr[2] "Kopiraj %1 ključni sličici"
 msgstr[3] "Kopiraj %1 ključne sličice"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -38437,7 +38444,7 @@ msgstr[1] "Kloniraj %1 ključno sličico"
 msgstr[2] "Kloniraj %1 ključni sličici"
 msgstr[3] "Kloniraj %1 ključne sličice"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
 msgstr "Naredi klone enkratne"
@@ -41349,7 +41356,7 @@ msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Prilagodi ..."
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, kde-format
 msgid "Wide Gamut Color Selector Settings"
 msgstr "Nastavitve izbirnika barv širokega gamuta"
@@ -61099,3 +61106,13 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><h1 align=\"center\">Podporniki</h1><p>"
+
+#~ msgid ""
+#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+#~ msgstr ".</p><p><i>Hvala! <b>Enkratni</b> ste!</i></p></body></html>"
+
+#~ msgid "Backers"
+#~ msgstr "Podporniki"

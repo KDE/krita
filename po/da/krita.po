@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-06 00:39+0000\n"
+"POT-Creation-Date: 2024-01-13 01:45+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -16977,7 +16977,7 @@ msgstr ""
 msgid "Unknown error writing SVG text element"
 msgstr ""
 
-#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:108
+#: libs/flake/tools/KoPathSegmentChangeStrategy.cpp:109
 msgctxt "(qtundo-format)"
 msgid "Change Segment"
 msgstr "Ændr segment"
@@ -17426,7 +17426,7 @@ msgctxt "(qtundo-format)"
 msgid "Change Filter"
 msgstr "Ændr filter"
 
-#: libs/image/commands/kis_deselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_deselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Deselect"
 msgstr "Fravælg"
@@ -17465,10 +17465,17 @@ msgctxt "(qtundo-format)"
 msgid "Property Changes"
 msgstr "Ændringer af egenskaber"
 
-#: libs/image/commands/kis_reselect_global_selection_command.cpp:18
+#: libs/image/commands/kis_reselect_global_selection_command.cpp:21
 msgctxt "(qtundo-format)"
 msgid "Reselect"
 msgstr "Vælg igen"
+
+#: libs/image/commands/kis_set_global_selection_command.cpp:54
+#: libs/image/kis_layer_utils.cpp:1921
+#: libs/impex/KisExportCheckRegistry.cpp:128
+#, fuzzy, kde-format
+msgid "Selection Mask"
+msgstr "Markeringsmaske:"
 
 #: libs/image/commands/KisNodeRenameCommand.cpp:15
 #, fuzzy
@@ -17478,7 +17485,7 @@ msgid "Node Rename"
 msgstr "Nyt navn:"
 
 #: libs/image/commands_new/kis_image_resize_command.cpp:16
-#: libs/image/kis_image.cc:849
+#: libs/image/kis_image.cc:827
 msgctxt "(qtundo-format)"
 msgid "Resize Image"
 msgstr "Justér billedstørrelse"
@@ -17707,19 +17714,13 @@ msgstr "Mitchell"
 msgid "Pass Through"
 msgstr ""
 
-#: libs/image/kis_image.cc:379
+#: libs/image/kis_image.cc:397
 #, fuzzy, kde-format
 #| msgid "Import Image"
 msgid "Imported Image"
 msgstr "Importér billede"
 
-#: libs/image/kis_image.cc:685 libs/image/kis_layer_utils.cpp:1921
-#: libs/impex/KisExportCheckRegistry.cpp:128
-#, fuzzy, kde-format
-msgid "Selection Mask"
-msgstr "Markeringsmaske:"
-
-#: libs/image/kis_image.cc:745 libs/ui/KisDocument.cpp:2591
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -17727,37 +17728,37 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Baggrund"
 
-#: libs/image/kis_image.cc:749 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Mal lag"
 
-#: libs/image/kis_image.cc:848
+#: libs/image/kis_image.cc:826
 msgctxt "(qtundo-format)"
 msgid "Crop Image"
 msgstr "Beskær billede"
 
-#: libs/image/kis_image.cc:944
+#: libs/image/kis_image.cc:922
 msgctxt "(qtundo-format)"
 msgid "Crop Layer"
 msgstr "Beskær lag"
 
-#: libs/image/kis_image.cc:945
+#: libs/image/kis_image.cc:923
 msgctxt "(qtundo-format)"
 msgid "Crop Mask"
 msgstr "Beskær maske"
 
-#: libs/image/kis_image.cc:982
+#: libs/image/kis_image.cc:960
 msgctxt "(qtundo-format)"
 msgid "Scale Image"
 msgstr "Skalér billede"
 
-#: libs/image/kis_image.cc:983
+#: libs/image/kis_image.cc:961
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
 msgstr "Skift billedopløsning"
 
-#: libs/image/kis_image.cc:1034
+#: libs/image/kis_image.cc:1012
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Scale Layer"
@@ -17767,19 +17768,19 @@ msgid_plural "Scale %1 Layers"
 msgstr[0] "Skalér lag"
 msgstr[1] "Skalér lag"
 
-#: libs/image/kis_image.cc:1175
+#: libs/image/kis_image.cc:1153
 msgctxt "(qtundo-format)"
 msgid "Rotate Image"
 msgstr "Rotér billede"
 
-#: libs/image/kis_image.cc:1185
+#: libs/image/kis_image.cc:1163
 #, fuzzy
 #| msgid "Raise Mask"
 msgctxt "(qtundo-format)"
 msgid "Rotate Mask"
 msgstr "Hæv maske"
 
-#: libs/image/kis_image.cc:1188
+#: libs/image/kis_image.cc:1166
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Rotate Layer"
@@ -17789,7 +17790,7 @@ msgid_plural "Rotate %1 Layers"
 msgstr[0] "Rotér lag"
 msgstr[1] "Rotér lag"
 
-#: libs/image/kis_image.cc:1288
+#: libs/image/kis_image.cc:1266
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear shapes"
@@ -17797,7 +17798,7 @@ msgctxt "(qtundo-format)"
 msgid "Shear Mask"
 msgstr "Forskyd former"
 
-#: libs/image/kis_image.cc:1292
+#: libs/image/kis_image.cc:1270
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Shear Layer"
@@ -17807,40 +17808,40 @@ msgid_plural "Shear %1 Layers"
 msgstr[0] "Vrid lag"
 msgstr[1] "Vrid lag"
 
-#: libs/image/kis_image.cc:1299
+#: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
 msgid "Shear Image"
 msgstr "Vrid billede"
 
-#: libs/image/kis_image.cc:1317
+#: libs/image/kis_image.cc:1295
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert Layer Color Space"
 msgstr "&Konvertér lagets farverum..."
 
-#: libs/image/kis_image.cc:1368
+#: libs/image/kis_image.cc:1346
 msgctxt "(qtundo-format)"
 msgid "Convert Image Color Space"
 msgstr "Konvertér billedets farverum"
 
-#: libs/image/kis_image.cc:1369
+#: libs/image/kis_image.cc:1347
 msgctxt "(qtundo-format)"
 msgid "Convert Projection Color Space"
 msgstr "Konvertér projektionens farverum"
 
-#: libs/image/kis_image.cc:1427
+#: libs/image/kis_image.cc:1405
 #, fuzzy
 #| msgid "Assign Profile"
 msgctxt "(qtundo-format)"
 msgid "Assign Profile to Layer"
 msgstr "Tildel profil"
 
-#: libs/image/kis_image.cc:1468
+#: libs/image/kis_image.cc:1446
 msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Tildel profil"
 
-#: libs/image/kis_image.cc:2528
+#: libs/image/kis_image.cc:2506
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Beskær markeringer"
@@ -18850,7 +18851,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Separér billede"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2108
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2108
 #: libs/ui/KisMainWindow.cpp:2191
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -23078,12 +23079,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "erik@binghamton.edu,mschlander@opensuse.org"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, fuzzy, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<p><b>Tak til:</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -23092,29 +23093,34 @@ msgid ""
 "org</a></p>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
-#, fuzzy, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><p align=\"center\"><b>Nylige filer</b></p>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:116
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, fuzzy, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<p><b>Tak til:</b></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -23133,7 +23139,7 @@ msgid ""
 "that will forbid your work in commercial situations.</p><br/><hr/><pre>"
 msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -24339,7 +24345,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Referencebillede:"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:134
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgid "Reference images"
@@ -24795,23 +24801,24 @@ msgstr "Oversætter"
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
 #, fuzzy, kde-format
-msgid "Backers"
-msgstr "Tilbage"
+#| msgid "Sensor:"
+msgid "Sponsors"
+msgstr "Sensor:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Licens"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr ""
@@ -28087,7 +28094,7 @@ msgstr "Trekantbaseret farvevælger"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorType)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:95
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:69
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:70
 #, fuzzy, kde-format
 msgid "Wide Gamut Selector"
 msgstr "Skyggevælger"
@@ -30623,17 +30630,17 @@ msgid ""
 "to tag them and then select the tag here."
 msgstr ""
 
-#: libs/ui/kis_selection_manager.cc:590
+#: libs/ui/kis_selection_manager.cc:611
 #, kde-format
 msgid "Stroked Shapes"
 msgstr "Strøgne former"
 
-#: libs/ui/kis_selection_manager.cc:592
+#: libs/ui/kis_selection_manager.cc:613
 msgctxt "(qtundo-format)"
 msgid "Stroke Shapes"
 msgstr "Stryg former"
 
-#: libs/ui/kis_selection_manager.cc:710
+#: libs/ui/kis_selection_manager.cc:731
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -30641,7 +30648,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Add)"
 msgstr "Vælg ugennemsigtigt"
 
-#: libs/ui/kis_selection_manager.cc:713
+#: libs/ui/kis_selection_manager.cc:734
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -30649,7 +30656,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Subtract)"
 msgstr "Vælg ugennemsigtigt"
 
-#: libs/ui/kis_selection_manager.cc:716
+#: libs/ui/kis_selection_manager.cc:737
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -30657,7 +30664,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Intersect)"
 msgstr "Vælg ugennemsigtigt"
 
-#: libs/ui/kis_selection_manager.cc:719
+#: libs/ui/kis_selection_manager.cc:740
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Select Opaque"
@@ -30665,7 +30672,7 @@ msgctxt "(qtundo-format)"
 msgid "Select Opaque (Symmetric Difference)"
 msgstr "Vælg ugennemsigtigt"
 
-#: libs/ui/kis_selection_manager.cc:722
+#: libs/ui/kis_selection_manager.cc:743
 msgctxt "(qtundo-format)"
 msgid "Select Opaque"
 msgstr "Vælg ugennemsigtigt"
@@ -39165,7 +39172,7 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Tilføj keyframe"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
@@ -39173,7 +39180,7 @@ msgid_plural "Remove Keyframes"
 msgstr[0] "Fjern keyframe"
 msgstr[1] "Indsæt navn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -39181,7 +39188,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Indsæt navn"
 msgstr[1] "Indsæt navn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -39189,7 +39196,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Indsæt navn"
 msgstr[1] "Indsæt navn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -39197,7 +39204,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Indsæt navn"
 msgstr[1] "Indsæt navn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
@@ -42240,7 +42247,7 @@ msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
 msgstr "Konfiguration..."
 
-#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
+#: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, fuzzy, kde-format
 #| msgid "Color Selector Settings"
 msgid "Wide Gamut Color Selector Settings"
@@ -62757,6 +62764,14 @@ msgstr "&Zoomværktøj"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referencebilleder"
+
+#, fuzzy
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><p align=\"center\"><b>Nylige filer</b></p>"
+
+#, fuzzy
+#~ msgid "Backers"
+#~ msgstr "Tilbage"
 
 #, fuzzy
 #~ msgctxt "action"

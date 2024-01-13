@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 02:30+0000\n"
+"POT-Creation-Date: 2024-01-13 03:27+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -22264,12 +22264,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "raviratlami@aol.in,"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>अनुवादक</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22281,22 +22281,27 @@ msgstr ""
 "हार्दिक धन्यवाद।</p><p>केडीई के अंतर्राष्ट्रीयकरण के बारे में और अधिक जानकारी के लिए यहाँ "
 "जाएँ - <a href=\"http://l10n.kde.org\">http://l10n.kde.org</a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><h1 align=\"center\">मददगार</h1><p>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
+msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-msgstr "।</p><p><i>धन्यवाद! आप सभी <b>कमाल</b> के थे!</i></p></body></html>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">इन्हें धन्यवाद</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22305,7 +22310,7 @@ msgstr ""
 ".</p><p><i>सलाह, आइकन, ब्रश सेट और अन्य विषयों में क्रिता के विकास का समर्थन करने के "
 "लिए।</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22339,7 +22344,7 @@ msgstr ""
 "शैक्षिक संस्करण, जो वाणिज्यिक स्थितियों में आपके काम के लिए इनका उपयोग करने से आपको वर्जित "
 "करते हैं ।</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -24035,24 +24040,25 @@ msgstr "अनुवादक"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "समर्थक"
+#, fuzzy, kde-format
+#| msgid "Sponsor"
+msgid "Sponsors"
+msgstr "प्रायोजक"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "इन्हें धन्यवाद"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "अनुज्ञा पत्र"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr "तृतीय-पक्ष संग्रह"
@@ -60042,6 +60048,16 @@ msgstr "ज़ूम औज़ार"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><h1 align=\"center\">मददगार</h1><p>"
+
+#~ msgid ""
+#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+#~ msgstr "।</p><p><i>धन्यवाद! आप सभी <b>कमाल</b> के थे!</i></p></body></html>"
+
+#~ msgid "Backers"
+#~ msgstr "समर्थक"
 
 #, fuzzy
 #~| msgid "Toolbars"

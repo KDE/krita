@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 02:30+0000\n"
+"POT-Creation-Date: 2024-01-13 03:27+0000\n"
 "PO-Revision-Date: 2023-11-18 22:09+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -22210,12 +22210,12 @@ msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
 msgstr "newzella@linux.nu,stefan.asserhall@bredband.net"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Översättare</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22227,22 +22227,27 @@ msgstr ""
 "världen över.</p><p>Besök <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a> för mer information om internationalisering av KDE.</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><h1 align=\"center\">Sponsrat av</h1><p>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
+msgstr ""
 
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-msgstr ".</p><p><i>Tack! Ni är alla <b>underbara</b>!</i></p></body></html>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Tack till</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22251,7 +22256,7 @@ msgstr ""
 ".</p><p><i>För stöd av Kritas utveckling med råd, ikoner, "
 "penseluppsättningar med mera.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22285,7 +22290,7 @@ msgstr ""
 "utbildningsversioner av kommersiell programvara som förbjuder dig att arbeta "
 "i kommersiellt syfte.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -24024,24 +24029,25 @@ msgstr "Översättare"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "Sponsorer"
+#, fuzzy, kde-format
+#| msgid "Sponsor"
+msgid "Sponsors"
+msgstr "Sponsor"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "Också tack till"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Licens"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr "Tredjepartsbibliotek"
@@ -60467,6 +60473,16 @@ msgstr "Zoomverktyg"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Referensbildverktyg"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><h1 align=\"center\">Sponsrat av</h1><p>"
+
+#~ msgid ""
+#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+#~ msgstr ".</p><p><i>Tack! Ni är alla <b>underbara</b>!</i></p></body></html>"
+
+#~ msgid "Backers"
+#~ msgstr "Sponsorer"
 
 #~ msgid ""
 #~ "<html><head/><body><p>This should be enabled if you see any artifacts "

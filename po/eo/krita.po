@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 02:30+0000\n"
-"PO-Revision-Date: 2023-12-12 23:48+0100\n"
+"POT-Creation-Date: 2024-01-13 03:27+0000\n"
+"PO-Revision-Date: 2024-01-04 21:03+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -1805,7 +1805,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_linear.kpp"
 msgid "Airbrush linear"
-msgstr "Aerografo lineara"
+msgstr "Aerpeniko lineara"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -1813,7 +1813,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
 "Airbrush_linear_noisy.kpp"
 msgid "Airbrush linear noisy"
-msgstr "Aerografo lineara brua"
+msgstr "Aerpeniko lineara brua"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8014,7 +8014,7 @@ msgstr "Glata punkto"
 #, kde-format
 msgctxt "action"
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Ĝenerala"
 
 #. i18n: context: text @ Action (open_resources_directory), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (open_resources_directory), Actions (General), ActionCollection (Krita)
@@ -20534,7 +20534,7 @@ msgstr "FPS"
 #, kde-format
 msgctxt "Second as a unit following a value, like 60 s"
 msgid " s"
-msgstr "s"
+msgstr " s"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:100
 #, kde-format
@@ -21562,7 +21562,7 @@ msgstr "Video Animacia Importo"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:263
 #, kde-format
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Ĝenerala"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
@@ -22202,12 +22202,12 @@ msgid "Your emails"
 msgstr ""
 "wolfram@steloj.de,axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Tradukistoj</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22220,23 +22220,27 @@ msgstr ""
 "internaciigo vizitu <a href=\"http://l10n.kde. org\">http://l10n.kde.org</"
 "a></p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><h1 align=\"center\">Apogita De</h1><p>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
-".</p><p><i>Dankon! Vi ĉiuj estis <b>mirindaj</b>!</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Dankon Al</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22245,7 +22249,7 @@ msgstr ""
 ".</p><p><i>Por subteni la disvolviĝon de Krita per konsiloj, piktogramoj, "
 "penikoroj kaj pli.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22278,7 +22282,7 @@ msgstr ""
 "al provaj aŭ edukaj versioj de komerca programaro, kiuj malpermesos vian "
 "laboron en komercaj situacioj.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -24016,24 +24020,25 @@ msgstr "Tradukistoj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "Subtenantoj"
+#, fuzzy, kde-format
+#| msgid "Sponsor"
+msgid "Sponsors"
+msgstr "Sponsoro"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "Ankaŭ Dankon Al"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Permesilo"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr "Triaj bibliotekoj"
@@ -25423,7 +25428,7 @@ msgstr "Aŭtomatkonserva Intervalo:"
 #, kde-format
 msgctxt "Suffix: “Every x min”"
 msgid " min"
-msgstr "min"
+msgstr " min"
 
 #. i18n: ectx: property (prefix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
 #: libs/ui/forms/wdggeneralsettings.ui:880
@@ -26780,7 +26785,7 @@ msgstr "Memorlimo:"
 #: libs/ui/forms/wdgperformancesettings.ui:172
 #, kde-format
 msgid " MiB"
-msgstr "MiB"
+msgstr " MiB"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: libs/ui/forms/wdgperformancesettings.ui:119
@@ -27577,7 +27582,7 @@ msgstr "Linio:"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgid "Foreground color"
-msgstr "Malantaŭa koloro"
+msgstr "Malfona koloro"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, lineColorBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -29519,7 +29524,7 @@ msgstr ""
 #, kde-format
 msgctxt "option category"
 msgid "General"
-msgstr "Ĝeneralo"
+msgstr "Ĝenerala"
 
 #: libs/ui/kis_paintop_options_model.cpp:28
 #, kde-format
@@ -32805,7 +32810,7 @@ msgstr "nenomita"
 #, kde-format
 msgctxt "Button to change the gradient stop type to foreground"
 msgid "Foreground color"
-msgstr "Malantaŭa koloro"
+msgstr "Malfona koloro"
 
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:54
 #, kde-format
@@ -35326,7 +35331,7 @@ msgstr "Neniuj Eniroj"
 #: libs/widgetutils/config/krecentfilesaction.cpp:96
 #, kde-format
 msgid "Clear List"
-msgstr "Klara Listo"
+msgstr "Viŝi Liston"
 
 #: libs/widgetutils/config/kstandardaction.cpp:78
 #, kde-format
@@ -53809,7 +53814,7 @@ msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
 msgid "Count"
-msgstr "grafo"
+msgstr "Nombro"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
@@ -60427,3 +60432,14 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><h1 align=\"center\">Apogita De</h1><p>"
+
+#~ msgid ""
+#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+#~ msgstr ""
+#~ ".</p><p><i>Dankon! Vi ĉiuj estis <b>mirindaj</b>!</i></p></body></html>"
+
+#~ msgid "Backers"
+#~ msgstr "Subtenantoj"

@@ -50,7 +50,7 @@
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Sander Koning <sanderkoning@kde.nl>, 2006.
 # Natalie Koning <nat@switch.demon.nl>, 2006.
-# SPDX-FileCopyrightText: 2008, 2009, 2023 Freek de Kruijf <freekdekruijf@kde.nl>
+# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024 Freek de Kruijf <freekdekruijf@kde.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2010, 2011, 2012.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2015, 2016.
@@ -61,8 +61,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-12-28 02:30+0000\n"
-"PO-Revision-Date: 2023-12-20 14:00+0100\n"
+"POT-Creation-Date: 2024-01-13 03:27+0000\n"
+"PO-Revision-Date: 2024-01-12 11:51+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -22253,12 +22253,12 @@ msgstr ""
 "rinsedevries@kde.nl,bramschoenmakers@kde.nl,,sanderkoning@kde.nl,"
 "freekdekruijf@kde.nl"
 
-#: libs/ui/dialogs/kis_about_application.cpp:79
+#: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\"><b>Translators</b></h1><p><ul>"
 msgstr "<html><head/><body><h1 align=\"center\"><b>Vertalers</b></h1><p><ul>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:91
+#: libs/ui/dialogs/kis_about_application.cpp:85
 #, kde-format
 msgid ""
 "<p>KDE is translated into many languages thanks to the work of the "
@@ -22272,24 +22272,27 @@ msgstr ""
 "vertaling van KDE is te vinden op http://l10n.kde.org/.</p> <p> Komt u een "
 "foutje tegen in een vertaling? Meld dit op http://www.kde.nl/bugs</p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:99
+#: libs/ui/dialogs/kis_about_application.cpp:94
 #, kde-format
-msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-msgstr "<html><head/><body><p align=\"center\"><b>Ondersteund door</b></p>"
-
-#: libs/ui/dialogs/kis_about_application.cpp:116
-#, kde-format
-msgid ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+msgid ""
+"<html><head/><body><h1 align=\"center\">Development Fund</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">One Time Sponsors</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 msgstr ""
-".</p><p><i>Bedankt! Jullie waren allemaal <b>geweldig</b>!</i></p></body></"
-"html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:119
+#: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
 msgid "<html><head/><body><h1 align=\"center\">Thanks To</h1><p>"
 msgstr "<html><head/><body><h1 align=\"center\">Met dank aan</h1><p>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:146
+#: libs/ui/dialogs/kis_about_application.cpp:133
 #, kde-format
 msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
@@ -22298,7 +22301,7 @@ msgstr ""
 ".</p><p><i>Voor het ondersteunen van de ontwikkeling van Krita met advies, "
 "pictogrammen, sets penselen en meer.</i></p></body></html>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:150
+#: libs/ui/dialogs/kis_about_application.cpp:137
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Your Rights</b></h1><p>Krita is "
@@ -22332,7 +22335,7 @@ msgstr ""
 "probeer- of educatieve versies van commerciële software die u zullen "
 "verbieden uw werk in commerciële situaties te gebruiken.</p><br/><hr/><pre>"
 
-#: libs/ui/dialogs/kis_about_application.cpp:185
+#: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
 msgid ""
 "<html><head/><body><h1 align=\"center\"><b>Third-party Libraries used by "
@@ -24075,24 +24078,25 @@ msgstr "Vertalers"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, kde-format
-msgid "Backers"
-msgstr "Ondersteuners"
+#, fuzzy, kde-format
+#| msgid "Sponsor"
+msgid "Sponsors"
+msgstr "Sponsor"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
-#: libs/ui/forms/wdgaboutapplication.ui:80
+#: libs/ui/forms/wdgaboutapplication.ui:83
 #, kde-format
 msgid "Also Thanks To"
 msgstr "Ook dank aan"
 
 #. i18n: ectx: attribute (title), widget (QWidget, licenseTab)
-#: libs/ui/forms/wdgaboutapplication.ui:94
+#: libs/ui/forms/wdgaboutapplication.ui:97
 #, kde-format
 msgid "License"
 msgstr "Licentie"
 
 #. i18n: ectx: attribute (title), widget (QWidget, thirdPartyLibrariesTab)
-#: libs/ui/forms/wdgaboutapplication.ui:108
+#: libs/ui/forms/wdgaboutapplication.ui:111
 #, kde-format
 msgid "Third-party libraries"
 msgstr "Bibliotheken van derden"
@@ -35557,7 +35561,7 @@ msgstr "Open een bestaand document"
 #: libs/widgetutils/config/kstandardaction_p.h:31
 #, kde-format
 msgid "Open &Recent"
-msgstr "&Recent geopend"
+msgstr "&Recent openen"
 
 #: libs/widgetutils/config/kstandardaction_p.h:31
 #, kde-format
@@ -44854,7 +44858,7 @@ msgstr "Naamloos"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:504
 #, kde-format
 msgid "Gradient Colors"
-msgstr "Kleuren van de kleurverloop"
+msgstr "Kleuren van het kleurverloop"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorMode)
 #. i18n: ectx: property (text), widget (QLabel, colorModeLabel)
@@ -60720,6 +60724,18 @@ msgstr "Zoomgereedschap"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Hulpmiddel voor referentie-afbeeldingen"
+
+#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
+#~ msgstr "<html><head/><body><p align=\"center\"><b>Ondersteund door</b></p>"
+
+#~ msgid ""
+#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
+#~ msgstr ""
+#~ ".</p><p><i>Bedankt! Jullie waren allemaal <b>geweldig</b>!</i></p></"
+#~ "body></html>"
+
+#~ msgid "Backers"
+#~ msgstr "Ondersteuners"
 
 #~ msgid ""
 #~ "<html><head/><body><p>This should be enabled if you see any artifacts "

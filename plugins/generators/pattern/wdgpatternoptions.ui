@@ -14,7 +14,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabPatterns">
       <attribute name="title">
@@ -57,9 +57,6 @@
           <number>10</number>
          </property>
          <property name="verticalSpacing">
-          <number>10</number>
-         </property>
-         <property name="bottomMargin">
           <number>10</number>
          </property>
          <item row="0" column="1">
@@ -111,18 +108,12 @@
           </layout>
          </item>
          <item row="1" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="1,1">
            <property name="spacing">
             <number>5</number>
            </property>
            <item>
             <widget class="KisSliderSpinBox" name="spbOffsetX">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="suffix">
               <string> px</string>
              </property>
@@ -133,12 +124,6 @@
            </item>
            <item>
             <widget class="KisSliderSpinBox" name="spbOffsetY">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
              <property name="suffix">
               <string> px</string>
              </property>
@@ -150,7 +135,7 @@
           </layout>
          </item>
          <item row="2" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,1">
            <item>
             <widget class="KisDoubleSliderSpinBox" name="sldShearX">
              <property name="sizePolicy">
@@ -285,6 +270,36 @@
            </property>
           </widget>
          </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Align to Pixel Grid:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1">
+           <property name="spacing">
+            <number>5</number>
+           </property>
+           <item>
+            <widget class="QCheckBox" name="checkBoxAlignToPixelGrid"/>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_3">
+             <property name="spacing">
+              <number>5</number>
+             </property>
+             <item>
+              <widget class="KisSliderSpinBox" name="sliderAlignToPixelGridX"/>
+             </item>
+             <item>
+              <widget class="KisSliderSpinBox" name="sliderAlignToPixelGridY"/>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
         </layout>
        </item>
        <item>
@@ -308,9 +323,15 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KisPatternChooser</class>
-   <extends>QWidget</extends>
-   <header location="global">kis_pattern_chooser.h</header>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -320,21 +341,16 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>KisAngleSelector</class>
    <extends>QWidget</extends>
    <header location="global">KisAngleSelector.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KisSliderSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_slider_spin_box.h</header>
+   <class>KisPatternChooser</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_pattern_chooser.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -20,6 +20,8 @@
 #include <filter/kis_filter_configuration.h>
 #include <kis_pattern_chooser.h>
 #include <kis_signals_blocker.h>
+#include <KisSpinBoxI18nHelper.h>
+
 #include "ui_wdgpatternoptions.h"
 
 KisWdgPattern::KisWdgPattern(QWidget* parent)
@@ -58,6 +60,21 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
 
     m_widget->container3DRotation->setVisible(false);
 
+    m_widget->sliderAlignToPixelGridX->setRange(1, 20);
+    m_widget->sliderAlignToPixelGridY->setRange(1, 20);
+    KisSpinBoxI18nHelper::install(m_widget->sliderAlignToPixelGridX, [](int value) {
+        // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+        //       and it will be substituted by the number. The text before will be
+        //       used as the prefix and the text after as the suffix
+        return i18ncp("Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern generator", "Every {n} repetition horizontally", "Every {n} repetitions horizontally", value);
+    });
+    KisSpinBoxI18nHelper::install(m_widget->sliderAlignToPixelGridY, [](int value) {
+        // i18n: This is meant to be used in a spinbox so keep the {n} in the text
+        //       and it will be substituted by the number. The text before will be
+        //       used as the prefix and the text after as the suffix
+        return i18ncp("Vertical pixel grid alignment prefix/suffix for spinboxes in pattern generator", "Every {n} repetition vertically", "Every {n} repetitions vertically", value);
+    });
+
     connect(m_widget->patternChooser, SIGNAL(resourceSelected(KoResourceSP)), this, SIGNAL(sigConfigurationUpdated()));
 
     connect(m_widget->sldShearX, SIGNAL(valueChanged(double)), this, SIGNAL(sigConfigurationUpdated()));
@@ -73,6 +90,10 @@ KisWdgPattern::KisWdgPattern(QWidget* parent)
     connect(m_widget->angleSelectorRotationX, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->angleSelectorRotationY, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
     connect(m_widget->angleSelectorRotationZ, SIGNAL(angleChanged(qreal)), this, SIGNAL(sigConfigurationUpdated()));
+
+    connect(m_widget->checkBoxAlignToPixelGrid, SIGNAL(toggled(bool)), this, SIGNAL(sigConfigurationUpdated()));
+    connect(m_widget->sliderAlignToPixelGridX, SIGNAL(valueChanged(int)), this, SLOT(slot_sliderAlignToPixelGridX_valueChanged(int)));
+    connect(m_widget->sliderAlignToPixelGridY, SIGNAL(valueChanged(int)), this, SLOT(slot_sliderAlignToPixelGridY_valueChanged(int)));
 }
 
 KisWdgPattern::~KisWdgPattern()
@@ -85,23 +106,37 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     auto source = KisGlobalResourcesInterface::instance()->source<KoPattern>(ResourceType::Patterns);
 
-    QString md5sum = config->getString("md5sum");
-    QString patternName = config->getString("pattern", "Grid01.pat");
-    KoPatternSP pattern = source.bestMatch(md5sum, "", patternName);
-    widget()->patternChooser->setCurrentPattern(pattern ? pattern : source.fallbackResource());
-    m_widget->spbOffsetX->setValue(config->getInt("transform_offset_x", 0));
-    m_widget->spbOffsetY->setValue(config->getInt("transform_offset_y", 0));
+    {
+        KisSignalsBlocker blocker1(m_widget->patternChooser, m_widget->spbOffsetX, m_widget->spbOffsetY,
+                                   m_widget->spbScaleWidth, m_widget->spbScaleHeight, m_widget->btnLockAspectRatio);
+        KisSignalsBlocker blocker2(m_widget->sldShearX, m_widget->sldShearY, m_widget->angleSelectorRotationX,
+                                   m_widget->angleSelectorRotationY, m_widget->angleSelectorRotationZ);
+        KisSignalsBlocker blocker3(m_widget->checkBoxAlignToPixelGrid, m_widget->sliderAlignToPixelGridX,
+                                   m_widget->sliderAlignToPixelGridY);
 
-    m_widget->spbScaleWidth->setValue(config->getDouble("transform_scale_x", 1.0) * 100);
-    m_widget->spbScaleHeight->setValue(config->getDouble("transform_scale_y", 1.0) * 100);
-    m_widget->btnLockAspectRatio->setKeepAspectRatio(config->getBool("transform_keep_scale_aspect", true));
+        QString md5sum = config->getString("md5sum");
+        QString patternName = config->getString("pattern", "Grid01.pat");
+        KoPatternSP pattern = source.bestMatch(md5sum, "", patternName);
+        widget()->patternChooser->setCurrentPattern(pattern ? pattern : source.fallbackResource());
+        m_widget->spbOffsetX->setValue(config->getInt("transform_offset_x", 0));
+        m_widget->spbOffsetY->setValue(config->getInt("transform_offset_y", 0));
 
-    m_widget->sldShearX->setValue(config->getDouble("transform_shear_x", 0.0) * 100);
-    m_widget->sldShearY->setValue(config->getDouble("transform_shear_y", 0.0) * 100);
+        m_widget->spbScaleWidth->setValue(config->getDouble("transform_scale_x", 1.0) * 100);
+        m_widget->spbScaleHeight->setValue(config->getDouble("transform_scale_y", 1.0) * 100);
+        m_widget->btnLockAspectRatio->setKeepAspectRatio(config->getBool("transform_keep_scale_aspect", true));
 
-    widget()->angleSelectorRotationX->setAngle(config->getDouble("transform_rotation_x", 0.0));
-    widget()->angleSelectorRotationY->setAngle(config->getDouble("transform_rotation_y", 0.0));
-    widget()->angleSelectorRotationZ->setAngle(config->getDouble("transform_rotation_z", 0.0));
+        m_widget->sldShearX->setValue(config->getDouble("transform_shear_x", 0.0) * 100);
+        m_widget->sldShearY->setValue(config->getDouble("transform_shear_y", 0.0) * 100);
+
+        widget()->angleSelectorRotationX->setAngle(config->getDouble("transform_rotation_x", 0.0));
+        widget()->angleSelectorRotationY->setAngle(config->getDouble("transform_rotation_y", 0.0));
+        widget()->angleSelectorRotationZ->setAngle(config->getDouble("transform_rotation_z", 0.0));
+
+        m_widget->checkBoxAlignToPixelGrid->setChecked(config->getBool("transform_align_to_pixel_grid", false));
+        m_widget->sliderAlignToPixelGridX->setValue(config->getInt("transform_align_to_pixel_grid_x", 1));
+        m_widget->sliderAlignToPixelGridY->setValue(config->getInt("transform_align_to_pixel_grid_y", 1));
+    }
+    emit sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
@@ -132,6 +167,10 @@ KisPropertiesConfigurationSP KisWdgPattern::configuration() const
     config->setProperty("transform_rotation_y", widget()->angleSelectorRotationY->angle());
     config->setProperty("transform_rotation_z", widget()->angleSelectorRotationZ->angle());
 
+    config->setProperty("transform_align_to_pixel_grid", m_widget->checkBoxAlignToPixelGrid->isChecked());
+    config->setProperty("transform_align_to_pixel_grid_x", m_widget->sliderAlignToPixelGridX->value());
+    config->setProperty("transform_align_to_pixel_grid_y", m_widget->sliderAlignToPixelGridY->value());
+
     return config;
 }
 
@@ -158,6 +197,22 @@ void KisWdgPattern::slotScaleAspectRatioChanged(bool checked)
     if (checked && m_widget->spbScaleHeight->value() != m_widget->spbScaleWidth->value()) {
         KisSignalsBlocker blocker(m_widget->spbScaleHeight);
         m_widget->spbScaleHeight->setValue(m_widget->spbScaleWidth->value());
+        emit sigConfigurationItemChanged();
+    }
+}
+
+void KisWdgPattern::slot_sliderAlignToPixelGridX_valueChanged(int value)
+{
+    Q_UNUSED(value);
+    if (m_widget->checkBoxAlignToPixelGrid->isChecked()) {
+        emit sigConfigurationItemChanged();
+    }
+}
+
+void KisWdgPattern::slot_sliderAlignToPixelGridY_valueChanged(int value)
+{
+    Q_UNUSED(value);
+    if (m_widget->checkBoxAlignToPixelGrid->isChecked()) {
         emit sigConfigurationItemChanged();
     }
 }

@@ -60906,15 +60906,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><p align=\"center\"><b>後援</b></p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ""
-#~ "</p><p><i>ありがとうございます! あなたは<b>最高</b>です!</i></p></body></"
-#~ "html>"
-
-#~ msgid "Backers"
-#~ msgstr "後援"

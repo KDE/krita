@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-14 01:58+0000\n"
-"PO-Revision-Date: 2023-12-22 10:20+0100\n"
+"PO-Revision-Date: 2024-01-14 08:11+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -22298,6 +22298,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Razvojni sklad</h1><p align=\"center"
+"\"><a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 align="
+"\"center\">Enkratni sponzorji</h2><p align=\"center\"><a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"><a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"><a href=\"https://game-chuck.com/\"><img src=\":/"
+"gamechuck.png\"></a> <p align=\"center\"><a href=\"https://www.fosshub.com/"
+"Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"><a href="
+"\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </body></"
+"html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -24004,10 +24014,9 @@ msgstr "Prevajalci"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
-msgstr "Sponzor"
+msgstr "Sponzorji"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83
@@ -61106,13 +61115,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><h1 align=\"center\">Podporniki</h1><p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ".</p><p><i>Hvala! <b>Enkratni</b> ste!</i></p></body></html>"
-
-#~ msgid "Backers"
-#~ msgstr "Podporniki"

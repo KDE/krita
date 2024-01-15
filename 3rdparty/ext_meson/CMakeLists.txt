@@ -31,6 +31,8 @@ elseif(NOT CMAKE_CROSSCOMPILING)
         URL https://github.com/mesonbuild/meson/releases/download/1.1.0/meson-1.1.0.tar.gz
         URL_HASH SHA256=d9616c44cd6c53689ff8f05fc6958a693f2e17c3472a8daf83cee55dabff829f
 
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-fix-linker-detection-on-Xcode-15.patch
+        
         CONFIGURE_COMMAND chmod u+x <SOURCE_DIR>/setup.py
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 

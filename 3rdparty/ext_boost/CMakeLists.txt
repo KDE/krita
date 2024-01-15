@@ -111,7 +111,7 @@ elseif(ANDROID)
    )
 else()
   if(APPLE)
-      set(MACOS_BOOST_ARGS architecture=arm+x86 cxxflags="${MACOS_ARCH_FLAGS}")
+      set(MACOS_BOOST_ARGS architecture=arm+x86 cxxflags=${MACOS_ARCH_FLAGS})
   endif()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

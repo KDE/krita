@@ -329,7 +329,6 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
         order = invertByteOrder(order);
         columns = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
         rows = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
-        Q_ASSERT((columns * rows + 4) == dvalue->count());
     }
     QVariant qcolumns, qrows;
     qcolumns.setValue(columns);

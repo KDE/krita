@@ -170,6 +170,8 @@ ExternalProject_Add(
     URL https://download.kde.org/stable/frameworks/5.101/kimageformats-5.101.0.tar.xz
     URL_HASH SHA256=ae19b07141fdf977035e6decc50fa45855c0e635f57333a2443d3c24464c625f
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-comment-out-jxl-0.9.0-API-change.patch
+
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_frameworks} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_TESTING=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""

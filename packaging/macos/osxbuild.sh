@@ -108,10 +108,9 @@ export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export PKG_CONFIG_PATH=${KIS_INSTALL_DIR}/share/pkgconfig:${KIS_INSTALL_DIR}/lib/pkgconfig
 export CMAKE_PREFIX_PATH=${KIS_INSTALL_DIR}
-export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
-export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
+export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib
 
-export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib
+export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
 export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include
 export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include
 
@@ -340,12 +339,12 @@ build_3rdparty () {
     # build 3rdparty tools
     # The order must be changed with caution
     cmake_3rdparty \
-        ext_zlib \
-        ext_iconv \
         ext_pkgconfig \
-        ext_gettext \
         ext_openssl \
         ext_python \
+        ext_zlib \
+        ext_gettext \
+        ext_iconv \
         ext_qt \
         ext_boost \
         ext_eigen3 \

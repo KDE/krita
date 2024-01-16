@@ -340,6 +340,7 @@ namespace Private {
             }
         }
 
+        QScopedPointer<KisSurrogateUndoStore> ephemeralCommandsStore;
         KisNodeList mergedNodes;
         bool nodesCompositingVaries = false;
 
@@ -1722,6 +1723,54 @@ namespace Private {
         applicator.end();
     }
 
+    struct EphemeralCommandsWrapper : KisCommandUtils::AggregateCommand
+    {
+        EphemeralCommandsWrapper(MergeMultipleInfoSP info, QVector<KUndo2Command*> commands, bool cleanupNodes)
+            : m_info(info)
+            , m_commands(commands)
+            , m_cleanupNodes(cleanupNodes)
+        {
+        }
+
+        void populateChildCommands() {
+            if (!m_cleanupNodes && !m_info->ephemeralCommandsStore) {
+                m_info->ephemeralCommandsStore.reset(new KisSurrogateUndoStore());
+            }
+
+            Q_FOREACH (KUndo2Command *cmd, m_commands) {
+                if (m_cleanupNodes) {
+                    addCommand(cmd);
+                } else {
+                    m_info->ephemeralCommandsStore->addCommand(cmd);
+                }
+            }
+            m_commands.clear();
+            m_info.reset();
+        }
+
+    private:
+        MergeMultipleInfoSP m_info;
+        QVector<KUndo2Command*> m_commands;
+        bool m_cleanupNodes {true};
+    };
+
+    struct UndoEphemeralCommands : KisCommandUtils::AggregateCommand
+    {
+        UndoEphemeralCommands(MergeMultipleInfoSP info)
+            : m_info(info)
+        {
+        }
+
+        void populateChildCommands() {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_info->ephemeralCommandsStore);
+            m_info->ephemeralCommandsStore->undoAll();
+
+        }
+
+    private:
+        MergeMultipleInfoSP m_info;
+    };
+
     /**
      * There might be two approaches for merging multiple layers:
      *
@@ -1827,15 +1876,24 @@ namespace Private {
 
             // disable key strokes on all colorize masks, all onion skins on
             // paint layers and wait until update is finished with a barrier
-            applicator.applyCommand(new DisableColorizeKeyStrokes(info));
-            applicator.applyCommand(new DisableOnionSkins(info));
-            applicator.applyCommand(new DisablePassThroughForHeadsOnly(info));
+            //
+            // when doing "new layer from visible" we should undo these changes
+            // before the action stops, because the source layers are **not**
+            // removed as a result of this action
+            applicator.applyCommand(
+                new EphemeralCommandsWrapper(info,
+                                             {
+                                              new DisableColorizeKeyStrokes(info),
+                                              new DisableOnionSkins(info),
+                                              new DisablePassThroughForHeadsOnly(info)
+                                             },
+                                             cleanupNodes));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             applicator.applyCommand(new KeepMergedNodesSelected(info, putAfter, false));
             applicator.applyCommand(new FillSelectionMasks(info));
             applicator.applyCommand(new CreateMergedLayerMultiple(info, layerName), KisStrokeJobData::BARRIER);
-            applicator.applyCommand(new DisableExtraCompositing(info));
+            applicator.applyCommand(new EphemeralCommandsWrapper(info, { new DisableExtraCompositing(info) } , cleanupNodes));
             applicator.applyCommand(new KUndo2Command(), KisStrokeJobData::BARRIER);
 
             if (!info->frames.isEmpty()) {
@@ -1867,6 +1925,7 @@ namespace Private {
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);
             } else {
+                applicator.applyCommand(new UndoEphemeralCommands(info));
                 applicator.applyCommand(new InsertNode(info, putAfter),
                                             KisStrokeJobData::SEQUENTIAL,
                                         KisStrokeJobData::EXCLUSIVE);

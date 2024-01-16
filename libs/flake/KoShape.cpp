@@ -205,6 +205,22 @@ KoShape *KoShape::cloneShape() const
     return 0;
 }
 
+KoShape *KoShape::cloneShapeAndBakeAbsoluteTransform() const
+{
+    KoShape *clonedShape = this->cloneShape();
+
+    /**
+     * The shape is cloned without its parent's transformation, so we should
+     * adjust it manually.
+     */
+    KoShape *oldParentShape = this->parent();
+    if (oldParentShape && !oldParentShape->absoluteTransformation().isIdentity()) {
+        clonedShape->applyAbsoluteTransformation(oldParentShape->absoluteTransformation());
+    }
+
+    return clonedShape;
+}
+
 void KoShape::paintStroke(QPainter &painter) const
 {
     if (stroke()) {

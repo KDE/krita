@@ -546,18 +546,7 @@ void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
             continue;
         }
 
-        KoShape *clonedShape = shape->cloneShape();
-
-        /**
-         * The shape is cloned without its parent's transformation, so we should
-         * adjust it manually.
-         */
-        KoShape *oldParentShape = shape->parent();
-        if (oldParentShape && !oldParentShape->absoluteTransformation().isIdentity()) {
-            clonedShape->applyAbsoluteTransformation(oldParentShape->absoluteTransformation());
-        }
-
-        clonedShapes << clonedShape;
+        clonedShapes << shape->cloneShapeAndBakeAbsoluteTransform();
     }
 
     if (clonedShapes.isEmpty()) {

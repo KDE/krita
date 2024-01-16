@@ -165,6 +165,20 @@ public:
     virtual KoShape* cloneShape() const;
 
     /**
+     * @brief creates a deep copy of the shape/shapes tree and bakes
+     * the absolute transform of `this` into the resulting shape.
+     *
+     * After cloning clonedShape->transformation() is equal to
+     * this->absoluteTransformation(), even though the new shape
+     * has no parents.
+     *
+     * This is just a convenience wrapper for cloneShape()
+     *
+     * @return cloned shape
+     */
+    KoShape* cloneShapeAndBakeAbsoluteTransform() const;
+
+    /**
      * @brief Paint the shape fill
      * The class extending this one is responsible for painting itself. \p painter is expected
      * to be preconfigured to work in "document" pixels.

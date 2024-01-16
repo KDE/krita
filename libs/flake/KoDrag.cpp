@@ -53,17 +53,7 @@ bool KoDrag::setSvg(const QList<KoShape *> originalShapes)
     Q_FOREACH (KoShape *shape, originalShapes) {
         boundingRect |= shape->boundingRect();
 
-        KoShape *clonedShape = shape->cloneShape();
-
-        /**
-         * The shape is cloned without its parent's transformation, so we should
-         * adjust it manually.
-         */
-        KoShape *oldParentShape = shape->parent();
-        if (oldParentShape) {
-            clonedShape->applyAbsoluteTransformation(oldParentShape->absoluteTransformation());
-        }
-
+        KoShape *clonedShape = shape->cloneShapeAndBakeAbsoluteTransform();
         shapes.append(clonedShape);
     }
 

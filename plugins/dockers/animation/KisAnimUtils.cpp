@@ -67,7 +67,7 @@ namespace KisAnimUtils {
                     }
                 } else {
                     bool clearExistingFrame = channel->keyframeAt(time) && !channelCreated;
-                    if (clearExistingFrame) { // Overwrite existing keyframe with a new blank one...
+                    if (clearExistingFrame && channelId == KisKeyframeChannel::Raster.id()) { // Overwrite existing keyframe with a new blank one...
                         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image->animationInterface()->currentTime() == time, nullptr);
                         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(channelId == KisKeyframeChannel::Raster.id(), nullptr);
 

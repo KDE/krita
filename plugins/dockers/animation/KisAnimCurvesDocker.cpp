@@ -568,7 +568,7 @@ void KisAnimCurvesDocker::addKeyframeCommandToParent(const QString &channelIdent
     if (!node) return;
 
     const int time = m_d->canvas->image()->animationInterface()->currentTime();
-    KisAnimUtils::createKeyframeCommand(m_d->canvas->image(), node, channelIdentity, time, true, parentCMD);
+    KisAnimUtils::createKeyframeCommand(m_d->canvas->image(), node, channelIdentity, time, false, parentCMD);
 }
 
 void KisAnimCurvesDocker::addKeyframeQuick(const QString &channelIdentity)

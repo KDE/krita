@@ -170,6 +170,7 @@ void TimelineNodeListKeeper::Private::disconnectDummy(KisNodeDummy *dummy)
     }
 
     Q_FOREACH(KisKeyframeChannel *channel, channels) {
+        dummiesUpdateMapper.removeMappings(channel);
         channel->disconnect(&dummiesUpdateMapper);
     }
 

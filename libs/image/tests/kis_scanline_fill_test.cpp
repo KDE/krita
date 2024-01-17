@@ -18,7 +18,8 @@
 #include <KoColorSpaceRegistry.h>
 #include "kis_types.h"
 #include "kis_paint_device.h"
-
+#include "kis_default_bounds.h"
+#include "kis_pixel_selection.h"
 
 void KisScanlineFillTest::testFillGeneral(const QVector<KisFillInterval> &initialBackwardIntervals,
                                           const QVector<QColor> &expectedResult,
@@ -281,6 +282,78 @@ void KisScanlineFillTest::testExternalFill()
 
     other->pixel(10, 10, &c);
     QCOMPARE(c, QColor(Qt::blue));
+}
+
+void KisScanlineFillTest::testGapClosingFillGeneral(QPoint seed, int gapSize)
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisPaintDeviceSP dev = new KisPaintDevice(cs);
+
+    QImage srcImage(TestUtil::fetchDataFileLazy("close_gap_low.png"));
+    QVERIFY(!srcImage.isNull());
+
+    QRect imageRect = srcImage.rect();
+
+    dev->convertFromQImage(srcImage, 0, 0, 0);
+
+    KisPixelSelectionSP pixelSelection = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
+
+    KisScanlineFill gc(dev, seed, imageRect);
+    gc.setThreshold(1);
+    gc.setOpacitySpread(100);
+    gc.setCloseGap(gapSize);
+
+    gc.fillSelection(pixelSelection);
+
+    QImage resultImage =
+        pixelSelection->convertToQImage(0,
+                                        imageRect.x(), imageRect.y(),
+                                        imageRect.width(), imageRect.height());
+
+    QString referenceSuffix =
+        QString("low_%1_%2_%3").arg(gapSize).arg(seed.x()).arg(seed.y());
+
+    QVERIFY(TestUtil::checkQImage(resultImage,
+                                  "fill_painter",
+                                  "close_gap_",
+                                  referenceSuffix));
+}
+
+void KisScanlineFillTest::testGapClosingFill()
+{
+    // The most basic case.
+    testGapClosingFillGeneral(QPoint(52, 84), 1);
+
+    // Progressively better closing.
+    testGapClosingFillGeneral(QPoint(103, 94), 1);
+    testGapClosingFillGeneral(QPoint(103, 94), 2);
+    testGapClosingFillGeneral(QPoint(103, 94), 3);
+
+    // Curved lines, filling into gaps.
+    testGapClosingFillGeneral(QPoint(43, 30), 3);
+
+    // No spilling at an extreme gap size.
+    testGapClosingFillGeneral(QPoint(32, 28), 32);
+
+    // Getting into a problematic territory (missed pixels).
+    // NOTE: The algorithm WILL miss some currently.
+    testGapClosingFillGeneral(QPoint(103, 94), 8);
+    testGapClosingFillGeneral(QPoint(93, 79), 18);
+
+    // Fill lines instead of transparent areas.
+    testGapClosingFillGeneral(QPoint(146, 96), 1);
+
+    // Expansion cases (filling away from a corner/gap).
+    testGapClosingFillGeneral(QPoint(50, 57), 5);
+    testGapClosingFillGeneral(QPoint(63, 53), 5);
+    testGapClosingFillGeneral(QPoint(63, 53), 19);
+
+    // A problematic expansion case (will not fully expand).
+    // The test will help notice if it got better or worse.
+    testGapClosingFillGeneral(QPoint(39, 56), 4);
+
+    // Fill up to the image edges. Ensure no out of bounds access.
+    testGapClosingFillGeneral(QPoint(147, 97), 32);
 }
 
 SIMPLE_TEST_MAIN(KisScanlineFillTest)

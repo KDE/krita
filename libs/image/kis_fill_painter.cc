@@ -77,6 +77,7 @@ void KisFillPainter::initFillPainter()
     m_useCompositing = false;
     m_threshold = 0;
     m_opacitySpread = 0;
+    m_closeGap = 0;
     m_useSelectionAsBoundary = false;
     m_antiAlias = false;
     m_regionFillingMode = RegionFillingMode_FloodFill;
@@ -370,6 +371,8 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
     gc.setOpacitySpread(m_useCompositing ? m_opacitySpread : 100);
+    gc.setCloseGap(m_closeGap);
+
     if (m_regionFillingMode == RegionFillingMode_FloodFill) {
         if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
             gc.fillSelection(pixelSelection, existingSelection);

@@ -159,6 +159,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KoColor contiguousSelectionBoundaryColor = m_contiguousSelectionBoundaryColor;
     int threshold = m_threshold;
     int opacitySpread = m_opacitySpread;
+    int closeGap = m_closeGap;
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
     bool antiAlias = antiAliasSelection();
     int grow = growSelection();
@@ -186,6 +187,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                  contiguousSelectionBoundaryColor,
                  threshold,
                  opacitySpread,
+                 closeGap,
                  antiAlias,
                  feather,
                  grow,
@@ -210,6 +212,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setOpacitySpread(opacitySpread);
                     fillpainter.setAntiAlias(antiAlias);
                     fillpainter.setFeather(feather);
+                    fillpainter.setCloseGap(closeGap);
                     fillpainter.setSizemod(grow);
                     fillpainter.setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
                     fillpainter.setUseCompositing(true);
@@ -289,6 +292,12 @@ void KisToolSelectContiguous::slotSetOpacitySpread(int opacitySpread)
 {
     m_opacitySpread = opacitySpread;
     m_configGroup.writeEntry("opacitySpread", opacitySpread);
+}
+
+void KisToolSelectContiguous::slotSetCloseGap(int closeGap)
+{
+    m_closeGap = closeGap;
+    m_configGroup.writeEntry("closeGapAmount", closeGap);
 }
 
 void KisToolSelectContiguous::slotSetUseSelectionAsBoundary(bool useSelectionAsBoundary)
@@ -399,6 +408,12 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         i18n("Set if the contour of the active selection should be treated as "
              "a boundary when making a new selection"));
 
+
+    KisSliderSpinBox *sliderCloseGap = new KisSliderSpinBox;
+    sliderCloseGap->setPrefix(i18nc("The 'close gap' spinbox prefix in contiguous selection tool options", "Close Gap: "));
+    sliderCloseGap->setRange(0, 32);
+    sliderCloseGap->setSuffix(i18n(" px"));
+
     // Construct the option widget
     KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =
         new KisOptionCollectionWidgetWithHeader(
@@ -418,8 +433,10 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     );
     sectionSelectionExtent->appendWidget("sliderThreshold", sliderThreshold);
     sectionSelectionExtent->appendWidget("sliderSpread", sliderSpread);
+    sectionSelectionExtent->appendWidget("sliderCloseGap", sliderCloseGap);
     sectionSelectionExtent->appendWidget("checkBoxSelectionAsBoundary",
                                          checkBoxSelectionAsBoundary);
+
     selectionWidget->insertWidget(3,
                                   "sectionSelectionExtent",
                                   sectionSelectionExtent);
@@ -439,6 +456,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         m_threshold = m_configGroup.readEntry("fuzziness", 8);
     }
     m_opacitySpread = m_configGroup.readEntry("opacitySpread", 100);
+    m_closeGap = m_configGroup.readEntry("closeGapAmount", 0);
     m_useSelectionAsBoundary =
         m_configGroup.readEntry("useSelectionAsBoundary", false);
 
@@ -454,6 +472,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     );
     sliderThreshold->setValue(m_threshold);
     sliderSpread->setValue(m_opacitySpread);
+    sliderCloseGap->setValue(m_closeGap);
     checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
 
     // Make connections
@@ -472,6 +491,10 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
             SIGNAL(valueChanged(int)),
             this,
             SLOT(slotSetOpacitySpread(int)));
+    connect(sliderCloseGap,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetCloseGap(int)));
     connect(checkBoxSelectionAsBoundary,
             SIGNAL(toggled(bool)),
             this,

@@ -62,6 +62,7 @@ public Q_SLOTS:
     void slotSetContiguousSelectionBoundaryColor(const KoColor&);
     void slotSetThreshold(int);
     void slotSetOpacitySpread(int);
+    void slotSetCloseGap(int);
     void slotSetUseSelectionAsBoundary(bool);
 
 protected:
@@ -72,6 +73,7 @@ private:
     KoColor m_contiguousSelectionBoundaryColor;
     int m_threshold{8};
     int  m_opacitySpread {100};
+    int m_closeGap {0};
     bool m_useSelectionAsBoundary {false};
     KConfigGroup m_configGroup;
     KisPaintDeviceSP m_referencePaintDevice;

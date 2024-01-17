@@ -303,6 +303,19 @@ public:
         return m_opacitySpread;
     }
 
+    /** Sets the gap radius for a gap closing fill. */
+    void setCloseGap(int gap) {
+        m_closeGap = gap;
+    }
+
+    /**
+     * Defines the gap closing radius for the contiguous selection and fill operations.
+     * Does not affect the fill similar regions operation.
+     */
+    uint closeGap() const {
+        return m_closeGap;
+    }
+
     bool useCompositing() const {
         return m_useCompositing;
     }
@@ -436,6 +449,7 @@ private:
     bool m_antiAlias;
     int m_threshold;
     int m_opacitySpread;
+    int m_closeGap;
     int m_width, m_height;
     QRect m_rect;
     bool m_careForSelection;

@@ -122,6 +122,16 @@ public:
      */
     void setOpacitySpread(int opacitySpread);
 
+    /**
+     * Set the close gap size in pixels for the flood fill.
+     * The value 0 behaves like a regular fill. Values 1 and larger will cause
+     * a gap map to be computed for the area and then used for the fill.
+     * The gaps are small areas of non-opaque pixels that are roughly not
+     * larger than the selected gap size. If such a gap is detected, the fill
+     * will stop spreading beyond that area.
+     */
+    void setCloseGap(int closeGap);
+
 private:
     friend class KisScanlineFillTest;
     Q_DISABLE_COPY(KisScanlineFill)
@@ -149,6 +159,20 @@ private:
     void selectDifferencePolicyAndRun(const KoColor &srcColor,
                                       SelectionPolicy &selectionPolicy,
                                       PixelAccessPolicy &pixelAccessPolicy);
+
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    KisFillInterval closeGapPass(DifferencePolicy &differencePolicy,
+                                 SelectionPolicy &selectionPolicy,
+                                 PixelAccessPolicy &pixelAccessPolicy);
+
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void fillOpacity(DifferencePolicy &differencePolicy,
+                     SelectionPolicy &selectionPolicy,
+                     PixelAccessPolicy &pixelAccessPolicy,
+                     quint8* const opacityData,
+                     const QRect& rect) const;
+
+    inline bool tryPushingCloseGapSeed(int x, int y, bool allowExpand);
 
 private:
     void testingProcessLine(const KisFillInterval &processInterval);

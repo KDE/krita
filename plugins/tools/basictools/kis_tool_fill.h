@@ -116,6 +116,7 @@ private:
     KoColor m_contiguousFillBoundaryColor;
     int m_threshold {8};
     int m_opacitySpread {100};
+    int m_closeGap {0};
     bool m_useSelectionAsBoundary {true};
 
     bool m_antiAlias {true};
@@ -167,6 +168,7 @@ private:
     KisColorButton *m_buttonContiguousFillBoundaryColor {nullptr};
     KisSliderSpinBox *m_sliderThreshold {nullptr};
     KisSliderSpinBox *m_sliderSpread {nullptr};
+    KisSliderSpinBox *m_sliderCloseGap {nullptr};
     QCheckBox *m_checkBoxSelectionAsBoundary {nullptr};
 
     QCheckBox *m_checkBoxAntiAlias {nullptr};
@@ -206,6 +208,7 @@ private Q_SLOTS:
     void slot_buttonContiguousFillBoundaryColor_changed(const KoColor &color);
     void slot_sliderThreshold_valueChanged(int value);
     void slot_sliderSpread_valueChanged(int value);
+    void slot_sliderCloseGap_valueChanged(int value);
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderGrow_valueChanged(int value);

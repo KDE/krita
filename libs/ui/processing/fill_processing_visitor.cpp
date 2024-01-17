@@ -33,6 +33,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_stopGrowingAtDarkestPixel(false)
     , m_fillThreshold(8)
     , m_opacitySpread(0)
+    , m_closeGap(0)
     , m_regionFillingMode(KisFillPainter::RegionFillingMode_FloodFill)
     , m_continuousFillMode(ContinuousFillMode_DoNotUse)
     , m_continuousFillMask(nullptr)
@@ -164,6 +165,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setFeather(m_feather);
     fillPainter.setFillThreshold(m_fillThreshold);
     fillPainter.setOpacitySpread(m_opacitySpread);
+    fillPainter.setCloseGap(m_closeGap);
     fillPainter.setRegionFillingMode(m_regionFillingMode);
     if (m_regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
         fillPainter.setRegionFillingBoundaryColor(m_regionFillingBoundaryColor);
@@ -248,6 +250,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
         painter.setFeather(m_feather);
         painter.setFillThreshold(m_fillThreshold);
         painter.setOpacitySpread(m_opacitySpread);
+        painter.setCloseGap(m_closeGap);
         painter.setRegionFillingMode(m_regionFillingMode);
         if (m_regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
             painter.setRegionFillingBoundaryColor(m_regionFillingBoundaryColor);
@@ -352,6 +355,11 @@ void FillProcessingVisitor::setFillThreshold(int fillThreshold)
 void FillProcessingVisitor::setOpacitySpread(int opacitySpread)
 {
     m_opacitySpread = opacitySpread;
+}
+
+void FillProcessingVisitor::setCloseGap(int gap)
+{
+    m_closeGap = gap;
 }
 
 void FillProcessingVisitor::setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode)

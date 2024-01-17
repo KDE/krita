@@ -386,6 +386,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
         }
         visitor->setFillThreshold(m_threshold);
         visitor->setOpacitySpread(m_opacitySpread);
+        visitor->setCloseGap(m_closeGap);
         visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
         visitor->setAntiAlias(m_antiAlias);
         visitor->setSizeMod(m_sizemod);
@@ -425,6 +426,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
 
             painter.setFillThreshold(m_threshold);
             painter.setOpacitySpread(m_opacitySpread);
+            painter.setCloseGap(m_closeGap);
             painter.setAntiAlias(m_antiAlias);
             painter.setSizemod(m_sizemod);
             painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
@@ -566,6 +568,12 @@ QWidget* KisToolFill::createOptionWidget()
         m_sliderSpread,
         i18nc("The 'spread' spinbox in fill tool options; {n} is the number value, % is the percent sign",
               "Spread: {n}%"));
+
+    m_sliderCloseGap = new KisSliderSpinBox;
+    m_sliderCloseGap->setPrefix(i18nc("The 'close gap' spinbox prefix in fill tool options", "Close Gap: "));
+    m_sliderCloseGap->setRange(0, 32);
+    m_sliderCloseGap->setSuffix(i18n(" px"));
+
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(
             i18nc("The 'use selection as boundary' checkbox in fill tool to use selection borders as boundary when filling",
@@ -637,6 +645,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_buttonContiguousFillBoundaryColor->setToolTip(i18n("Boundary color"));
     m_sliderThreshold->setToolTip(i18n("Set the color similarity tolerance of the fill. Increasing threshold increases the range of similar colors to be filled."));
     m_sliderSpread->setToolTip(i18n("Set the extent of the opaque portion of the fill. Decreasing spread decreases opacity of fill areas depending on color similarity."));
+    m_sliderCloseGap->setToolTip(i18n("Close gaps in lines up to the set amount"));
     m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the active selection should be treated as a boundary when filling the region"));
 
     m_checkBoxAntiAlias->setToolTip(i18n("Smooths the edges of the fill"));
@@ -697,6 +706,7 @@ QWidget* KisToolFill::createOptionWidget()
     sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor", false);
     sectionRegionExtent->appendWidget("sliderThreshold", m_sliderThreshold);
     sectionRegionExtent->appendWidget("sliderSpread", m_sliderSpread);
+    sectionRegionExtent->appendWidget("sliderCloseGap", m_sliderCloseGap);
     sectionRegionExtent->appendWidget("checkBoxSelectionAsBoundary", m_checkBoxSelectionAsBoundary);
     m_optionWidget->appendWidget("sectionRegionExtent", sectionRegionExtent);
 
@@ -729,6 +739,7 @@ QWidget* KisToolFill::createOptionWidget()
         m_buttonWhatToFillSimilar->setChecked(true);
         m_optionWidget->setWidgetVisible("sectionDragFill", false);
         sectionRegionExtent->setWidgetVisible("checkBoxSelectionAsBoundary", false);
+        sectionRegionExtent->setWidgetVisible("sliderCloseGap", false);
     }
     sectionRegionExtent->setPrimaryWidgetVisible(m_fillMode == FillMode_FillContiguousRegion);
     if (m_fillType == FillType_FillWithBackgroundColor) {
@@ -758,6 +769,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_buttonContiguousFillBoundaryColor->setColor(m_contiguousFillBoundaryColor);
     m_sliderThreshold->setValue(m_threshold);
     m_sliderSpread->setValue(m_opacitySpread);
+    m_sliderCloseGap->setValue(m_closeGap);
     m_checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
     m_checkBoxAntiAlias->setChecked(m_antiAlias);
     m_sliderGrow->setValue(m_sizemod);
@@ -804,6 +816,7 @@ QWidget* KisToolFill::createOptionWidget()
             SLOT(slot_buttonContiguousFillBoundaryColor_changed(const KoColor&)));
     connect(m_sliderThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderThreshold_valueChanged(int)));
     connect(m_sliderSpread, SIGNAL(valueChanged(int)), SLOT(slot_sliderSpread_valueChanged(int)));
+    connect(m_sliderCloseGap, SIGNAL(valueChanged(int)), SLOT(slot_sliderCloseGap_valueChanged(int)));
     connect(m_checkBoxSelectionAsBoundary,
             SIGNAL(toggled(bool)),
             SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
@@ -877,6 +890,7 @@ void KisToolFill::loadConfiguration()
     m_contiguousFillBoundaryColor = loadContiguousFillBoundaryColorFromConfig();
     m_threshold = m_configGroup.readEntry<int>("thresholdAmount", 8);
     m_opacitySpread = m_configGroup.readEntry<int>("opacitySpread", 100);
+    m_closeGap = m_configGroup.readEntry<int>("closeGapAmount", 0);
     m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
     m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", false);
     m_sizemod = m_configGroup.readEntry<int>("growSelection", 0);
@@ -965,6 +979,8 @@ void KisToolFill::slot_optionButtonStripWhatToFill_buttonToggled(
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
             ->setWidgetVisible("buttonContiguousFillBoundaryColor", m_contiguousFillMode == ContiguousFillMode_BoundaryFill);
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setWidgetVisible("sliderCloseGap", true);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
             ->setWidgetVisible("checkBoxSelectionAsBoundary", true);
         m_fillMode = FillMode_FillContiguousRegion;
         m_configGroup.writeEntry("whatToFill", "fillContiguousRegion");
@@ -977,6 +993,8 @@ void KisToolFill::slot_optionButtonStripWhatToFill_buttonToggled(
             ->setPrimaryWidgetVisible(false);
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
             ->setWidgetVisible("buttonContiguousFillBoundaryColor", false);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setWidgetVisible("sliderCloseGap", false);
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
             ->setWidgetVisible("checkBoxSelectionAsBoundary", false);
         m_fillMode = FillMode_FillSimilarRegions;
@@ -1110,6 +1128,15 @@ void KisToolFill::slot_sliderSpread_valueChanged(int value)
     m_configGroup.writeEntry("opacitySpread", value);
 }
 
+void KisToolFill::slot_sliderCloseGap_valueChanged(int value)
+{
+    if (value == m_closeGap) {
+        return;
+    }
+    m_closeGap = value;
+    m_configGroup.writeEntry("closeGapAmount", value);
+}
+
 void KisToolFill::slot_checkBoxSelectionAsBoundary_toggled(bool checked)
 {
     if (checked == m_useSelectionAsBoundary) {
@@ -1223,6 +1250,7 @@ void KisToolFill::slot_buttonReset_clicked()
     m_comboBoxCustomCompositeOp->selectCompositeOp(KoID(COMPOSITE_OVER));
     m_sliderThreshold->setValue(8);
     m_sliderSpread->setValue(100);
+    m_sliderCloseGap->setValue(0);
     m_checkBoxSelectionAsBoundary->setChecked(true);
     m_checkBoxAntiAlias->setChecked(false);
     m_sliderGrow->setValue(0);

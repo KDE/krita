@@ -27,11 +27,15 @@ private Q_SLOTS:
     void testClearNonZeroComponent();
     void testExternalFill();
 
+    void testGapClosingFill();
+
 private:
     void testFillGeneral(const QVector<KisFillInterval> &initialBackwardIntervals,
                          const QVector<QColor> &expectedResult,
                          const QVector<KisFillInterval> &expectedForwardIntervals,
                          const QVector<KisFillInterval> &expectedBackwardIntervals);
+
+    void testGapClosingFillGeneral(QPoint seed, int gapSize);
 };
 
 #endif /* __KIS_SCANLINE_FILL_TEST_H */

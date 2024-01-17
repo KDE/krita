@@ -41,6 +41,7 @@ public:
     void setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel);
     void setFillThreshold(int fillThreshold);
     void setOpacitySpread(int opacitySpread);
+    void setCloseGap(int gap);
     void setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode);
     void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor);
     void setContinuousFillMode(ContinuousFillMode continuousFillMode);
@@ -80,6 +81,7 @@ private:
     bool m_stopGrowingAtDarkestPixel;
     int m_fillThreshold;
     int m_opacitySpread;
+    int m_closeGap;
     KisFillPainter::RegionFillingMode m_regionFillingMode;
     KoColor m_regionFillingBoundaryColor;
 

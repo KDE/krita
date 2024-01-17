@@ -1038,13 +1038,10 @@ void KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
 #endif
     const int pixelSize = m_d->device->pixelSize();
 
-    int numPixelsLeft;
-    quint8* dataPtr;
-    quint8* outPtr;
-
     for (int y = rect.top(); y <= rect.bottom(); ++y) {
-        numPixelsLeft = 0;
-        outPtr = opacityData + rect.left() + y * m_d->boundingRect.width();
+        int numPixelsLeft = 0;
+        quint8* outPtr = opacityData + rect.left() + y * m_d->boundingRect.width();
+        quint8* dataPtr;
 
         for (int x = rect.left(); x <= rect.right(); ++x) {
             if (numPixelsLeft <= 0) {

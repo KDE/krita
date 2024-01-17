@@ -64,7 +64,7 @@ private:
         std::vector<quint8> data;
         bool available;
 
-        Buffer(std::size_t size) : data(size), available(false) {}
+        explicit Buffer(std::size_t size) : data(size), available(false) {}
     };
 
     using BufferSP = std::shared_ptr<Buffer>;
@@ -85,13 +85,18 @@ void* BufferCache::acquire(std::size_t size)
     const QMutexLocker lock(&m_mutex);
 
     // Try to fetch an existing buffer.
-    for (auto& buffer : m_buffers) {
-        if (buffer->available) {
-            buffer->available = false;
-            buffer->data.resize(size);
+    auto availableBufferIter = std::find_if(
+        m_buffers.begin(),
+        m_buffers.end(),
+        [](auto& bufferSP){ return bufferSP->available; }
+    );
 
-            return buffer->data.data();
-        }
+    if (availableBufferIter != m_buffers.end()) {
+        auto& buffer = **availableBufferIter;
+        buffer.available = false;
+        buffer.data.resize(size);
+
+        return buffer.data.data();
     }
 
     // We need to create a new buffer.
@@ -133,10 +138,10 @@ void BufferCache::release(void* dataPtr)
     // Return to the pool.
     if (releasedBuffer) {
         releasedBuffer->available = true;
-    } else {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(false &&
-                                     "FATAL: KisGapMap cache released pointer invalid");
     }
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(releasedBuffer &&
+                                 "FATAL: KisGapMap cache released pointer invalid");
 }
 
 

@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-14 01:58+0000\n"
+"POT-Creation-Date: 2024-01-17 01:37+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -20980,21 +20980,21 @@ msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:554
+#: libs/ui/actions/kis_selection_action_factories.cpp:555
 #, fuzzy, kde-format
 #| msgid "Transform a layer or a selection"
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "En Laag oder Köör ümwanneln"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:560
+#: libs/ui/actions/kis_selection_action_factories.cpp:561
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Vektorköör"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:613
-#: libs/ui/actions/kis_selection_action_factories.cpp:672
+#: libs/ui/actions/kis_selection_action_factories.cpp:614
+#: libs/ui/actions/kis_selection_action_factories.cpp:673
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 #, fuzzy
 msgctxt "(qtundo-format)"

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-14 01:58+0000\n"
+"POT-Creation-Date: 2024-01-17 01:37+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -20849,20 +20849,20 @@ msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:554
+#: libs/ui/actions/kis_selection_action_factories.cpp:555
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr ""
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:560
+#: libs/ui/actions/kis_selection_action_factories.cpp:561
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Gan Roghnúchán"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:613
-#: libs/ui/actions/kis_selection_action_factories.cpp:672
+#: libs/ui/actions/kis_selection_action_factories.cpp:614
+#: libs/ui/actions/kis_selection_action_factories.cpp:673
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 #, fuzzy
 msgctxt "(qtundo-format)"

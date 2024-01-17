@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-14 01:58+0000\n"
+"POT-Creation-Date: 2024-01-17 01:37+0000\n"
 "PO-Revision-Date: 2023-12-21 08:55+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -20541,19 +20541,19 @@ msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "La sélection est déjà dans un format matriciel."
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:554
+#: libs/ui/actions/kis_selection_action_factories.cpp:555
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "La forme appartient déjà à la sélection."
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:560
+#: libs/ui/actions/kis_selection_action_factories.cpp:561
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Convertir les tracés en sélection vectorielle"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:613
-#: libs/ui/actions/kis_selection_action_factories.cpp:672
+#: libs/ui/actions/kis_selection_action_factories.cpp:614
+#: libs/ui/actions/kis_selection_action_factories.cpp:673
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"

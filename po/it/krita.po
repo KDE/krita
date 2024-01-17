@@ -20,7 +20,7 @@
 # Simone Solinas <ksolsim@gmail.com>, 2008, 2009, 2010, 2011.
 # Vincenzo Reale <smart2128vr@gmail.com>, 2011, 2012, 2013, 2014, 2015, 2022, 2023.
 # Luigi Toscano <luigi.toscano@tiscali.it>, 2015.
-# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Valter Mura <valtermura@gmail.com>
+# SPDX-FileCopyrightText: 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Valter Mura <valtermura@gmail.com>
 #
 # Per i motivi/sfumature, vedere il seguente collegamento:
 # http://craik.shef.ac.uk/cpt-city/ggr/
@@ -32,8 +32,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-14 01:58+0000\n"
-"PO-Revision-Date: 2023-12-20 21:55+0100\n"
+"POT-Creation-Date: 2024-01-17 01:37+0000\n"
+"PO-Revision-Date: 2024-01-15 19:26+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -20461,19 +20461,19 @@ msgctxt "floating message"
 msgid "Selection is already in a raster format "
 msgstr "La selezione è già in formato raster"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:554
+#: libs/ui/actions/kis_selection_action_factories.cpp:555
 #, kde-format
 msgctxt "floating message"
 msgid "The shape already belongs to a selection"
 msgstr "La forma appartiene già a una selezione"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:560
+#: libs/ui/actions/kis_selection_action_factories.cpp:561
 msgctxt "(qtundo-format)"
 msgid "Convert shapes to vector selection"
 msgstr "Converti forme a selezione vettoriale"
 
-#: libs/ui/actions/kis_selection_action_factories.cpp:613
-#: libs/ui/actions/kis_selection_action_factories.cpp:672
+#: libs/ui/actions/kis_selection_action_factories.cpp:614
+#: libs/ui/actions/kis_selection_action_factories.cpp:673
 #: plugins/tools/tool_polyline/kis_tool_polyline.cc:54
 msgctxt "(qtundo-format)"
 msgid "Draw Polyline"
@@ -22359,6 +22359,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Fondo per lo sviluppo</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">Sponsor una tantum</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -24072,8 +24082,7 @@ msgstr "Traduttori"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
 msgstr "Sponsor"
 

@@ -408,7 +408,7 @@ class comicsExporter():
     """
 
     def getPanelsAndTextVector(self, group, list, textOnly=False):
-        for shape in group.shapes():
+        for shape in group.children():
             if (shape.type() == "groupshape"):
                 self.getPanelsAndTextVector(shape, list, textOnly)
             else:

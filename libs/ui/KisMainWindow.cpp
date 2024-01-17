@@ -1133,7 +1133,10 @@ QStringList KisMainWindow::showOpenFileDialog(bool isImporting)
     dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
     dialog.setCaption(isImporting ? i18n("Import Images") : i18n("Open Images"));
 
-    return dialog.filenames();
+    QStringList filenames = dialog.filenames();
+    filenames.sort();
+
+    return filenames;
 }
 
 // Separate from openDocument to handle async loading (remote URLs)

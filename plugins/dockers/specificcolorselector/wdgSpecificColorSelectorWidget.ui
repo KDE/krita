@@ -52,6 +52,16 @@
       </widget>
      </item>
      <item>
+     <widget class="QToolButton" name="useSameColorSpace">
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="toolTip">
+        <string>Lock to current layer colorspace</string>
+       </property>
+     </widget>
+     </item>
+     <item>
       <widget class="QToolButton" name="chkUsePercentage">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">

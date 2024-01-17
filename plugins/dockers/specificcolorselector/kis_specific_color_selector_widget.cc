@@ -44,10 +44,10 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     , m_hsvSelector(nullptr)
     , m_colorSpace(nullptr)
     , m_color()
+    , m_FGColor()
     , m_updateAllowed(true)
     , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
     , m_colorspaceSelector(nullptr)
-    , m_customColorSpaceSelected(false)
     , m_ui(nullptr)
     , m_displayConverter(nullptr)
     , m_converterConnection()
@@ -101,6 +101,10 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 
     m_ui->colorspacePopupButton->setPopupWidget(m_colorspaceSelector);
 
+    m_ui->useSameColorSpace->setChecked(true);
+    setUseSameColorSpace(m_ui->useSameColorSpace->isChecked(), false);
+    connect(m_ui->useSameColorSpace, SIGNAL(toggled(bool)), this, SLOT(setUseSameColorSpace(bool)));
+
     connect(m_ui->chkUsePercentage, SIGNAL(toggled(bool)), this, SLOT(onChkUsePercentageChanged(bool)));
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
@@ -123,9 +127,12 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
     cfg.writeEntry("SpecificColorSelector/UseHsx", m_hsxButton->isChecked());
 }
 
-bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
+void KisSpecificColorSelectorWidget::setUseSameColorSpace(bool locked, bool reloadColorSpace)
 {
-    return m_customColorSpaceSelected;
+    m_ui->useSameColorSpace->setIcon(locked ? KisIconUtils::loadIcon("chain-icon") : KisIconUtils::loadIcon("chain-broken-icon"));
+    if (locked && reloadColorSpace) {
+        rereadCurrentColorSpace();
+    }
 }
 
 void KisSpecificColorSelectorWidget::resizeEvent(QResizeEvent *event)
@@ -157,11 +164,12 @@ void KisSpecificColorSelectorWidget::setDisplayConverter(KisDisplayColorConverte
 
 void KisSpecificColorSelectorWidget::rereadCurrentColorSpace(bool force)
 {
-    if (m_displayConverter && !m_customColorSpaceSelected) {
-        m_colorSpace = m_displayConverter->paintingColorSpace();
+    if (m_displayConverter && m_ui->useSameColorSpace->isChecked()) {
+        setColorSpace(m_displayConverter->paintingColorSpace(), force);
+    } else {
+        setColorSpace(m_colorSpace, force);
     }
 
-    setColorSpace(m_colorSpace, force);
     setColor(m_color);
 }
 
@@ -170,7 +178,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
     Q_ASSERT(cs);
     dbgPlugins << cs->id() << " " << cs->profile()->name();
 
-    if (*m_colorSpace == *cs && !force) {
+    if (m_colorSpace && *m_colorSpace == *cs && !force) {
         Q_FOREACH (KisColorInput* input, m_inputs) {
             input->update();
         }
@@ -194,7 +202,7 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
                 );
     m_ui->colorspacePopupButton->setText(elidedColorspaceName);
 
-    m_color = KoColor(m_color, m_colorSpace);
+    m_color = KoColor(m_FGColor, m_colorSpace);
     Q_FOREACH (KisColorInput* input, m_inputs) {
         delete input;
     }
@@ -293,6 +301,12 @@ void KisSpecificColorSelectorWidget::setColor(const KoColor& c)
     m_updateAllowed = true;
 }
 
+void KisSpecificColorSelectorWidget::setFGColor(const KoColor& c)
+{
+    m_FGColor = c;
+}
+
+
 void KisSpecificColorSelectorWidget::updateTimeout()
 {
     emit(colorChanged(m_color));
@@ -300,7 +314,7 @@ void KisSpecificColorSelectorWidget::updateTimeout()
 
 void KisSpecificColorSelectorWidget::setCustomColorSpace(const KoColorSpace *colorSpace)
 {
-    m_customColorSpaceSelected = true;
+    m_ui->useSameColorSpace->setChecked(false);
     setColorSpace(colorSpace);
     setColor(m_color);
 }
@@ -324,29 +338,11 @@ void KisSpecificColorSelectorWidget::changeHsxMode(int index) {
 
 void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
 {
-    if (isRgbColorSpace) {
-        m_rgbButton->setVisible(true);
-        m_hsxButton->setVisible(true);
-        m_hsxModeComboBox->setVisible(true);
+    m_rgbButton->setVisible(isRgbColorSpace);
+    m_hsxButton->setVisible(isRgbColorSpace);
+    m_hsxModeComboBox->setVisible(isRgbColorSpace);
 
-		//m_hsxModeComboBox->addItem(i18n("HSV"));
-		//m_hsxModeComboBox->addItem(i18n("HSL"));
-		//m_hsxModeComboBox->addItem(i18n("HSI"));
-		//m_hsxModeComboBox->addItem(i18n("HSY'"));
-
-		switch (m_hsxModeComboBox->currentIndex())
-		{
-		case 0:
-
-		default:
-			break;
-		}
-
-    } else {
-        m_rgbButton->setVisible(false);
-		m_hsxButton->setVisible(false);
-		m_hsxModeComboBox->setVisible(false);
-
+    if (!isRgbColorSpace) {
         // Force to be RGB only
         m_hsvSlider->setVisible(false);
         Q_FOREACH (KisColorInput* input, m_inputs) {
@@ -357,19 +353,11 @@ void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
         return;
     }
 
-    QAbstractButton *checked = m_hsvSelector->checkedButton();
-    if (checked == m_rgbButton) {
-        m_hsvSlider->setVisible(false);
-        Q_FOREACH (KisColorInput* input, m_inputs) {
-            input->setVisible(true);
-        }
-        m_ui->chkUsePercentage->setEnabled(true);
-    } else if (checked == m_hsxButton) {
-        Q_FOREACH (KisColorInput* input, m_inputs) {
-            input->setVisible(false);
-        }
-        m_hsvSlider->setVisible(true);
-        m_ui->chkUsePercentage->setEnabled(false);
+    Q_FOREACH (KisColorInput* input, m_inputs) {
+        input->setVisible(m_rgbButton->isChecked());
     }
+    m_ui->chkUsePercentage->setEnabled(m_rgbButton->isChecked());
+
+    m_hsvSlider->setVisible(m_hsxButton->isChecked());
 }
 

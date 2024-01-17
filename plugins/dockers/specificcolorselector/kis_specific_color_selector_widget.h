@@ -36,7 +36,6 @@ class KisSpecificColorSelectorWidget : public QWidget
 public:
     KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget() override;
-    bool customColorSpaceUsed();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -46,11 +45,13 @@ public Q_SLOTS:
 
     void setColorSpace(const KoColorSpace *cs, bool force = false);
     void setColor(const KoColor&);
+    void setFGColor(const KoColor& c);
 
 private Q_SLOTS:
     void update();
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
+    void setUseSameColorSpace(bool locked, bool reloadColorSpace = true);
     void rereadCurrentColorSpace(bool force = false);
     void onChkUsePercentageChanged(bool);
     void hsvSelectorClicked(QAbstractButton *);
@@ -72,10 +73,10 @@ private:
     QButtonGroup *m_hsvSelector;
     const KoColorSpace* m_colorSpace;
     KoColor m_color;
+    KoColor m_FGColor;
     bool m_updateAllowed;
     KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
-    bool m_customColorSpaceSelected;
     QScopedPointer<Ui_wdgSpecificColorSelectorWidget> m_ui;
 
     KisDisplayColorConverter *m_displayConverter;

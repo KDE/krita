@@ -88,7 +88,7 @@ void* BufferCache::acquire(std::size_t size)
     auto availableBufferIter = std::find_if(
         m_buffers.begin(),
         m_buffers.end(),
-        [](auto& bufferSP){ return bufferSP->available; }
+        [](const auto& bufferSP){ return bufferSP->available; }
     );
 
     if (availableBufferIter != m_buffers.end()) {
@@ -140,8 +140,11 @@ void BufferCache::release(void* dataPtr)
         releasedBuffer->available = true;
     }
 
+#if 0
+    // Very unlikely to happen, can be enabled during development.
     KIS_SAFE_ASSERT_RECOVER_NOOP(releasedBuffer &&
                                  "FATAL: KisGapMap cache released pointer invalid");
+#endif
 }
 
 
@@ -208,7 +211,7 @@ KisGapMap::KisGapMap(int gapSize,
     m_distancePtr(nullptr),
     m_opacityPtr(nullptr)
 {
-    /** Ensure the scanline fill uses the same coordinates. */
+    // Ensure the scanline fill uses the same coordinates.
     KIS_ASSERT((mapBounds.x() == 0) && (mapBounds.y() == 0) &&
                "Gap closing fill assumes x and y start at coordinate (0, 0)");
 

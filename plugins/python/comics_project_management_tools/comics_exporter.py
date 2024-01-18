@@ -418,6 +418,9 @@ class comicsExporter():
     """
 
     def handleShapeDescription(self, shape, list, textOnly=False):
+        return
+        # Turn off shape retrieval for now until the new text tool is finished.
+        """
         if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
             return
         shapeDesc = {}
@@ -587,6 +590,7 @@ class comicsExporter():
         if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
             shapeDesc["text"] = shape.toSvg()
         list.append(shapeDesc)
+        """
 
     """
     Function to remove layers when they have the given labels.

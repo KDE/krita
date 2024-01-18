@@ -35,14 +35,12 @@ ExternalProject_Add( ext_brotli
 
 ExternalProject_Add( ext_jpegxl
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/libjxl/libjxl/archive/refs/tags/v0.9.0.tar.gz
-    URL_HASH SHA256=d83bbe188d8fa9725bb75109c922c37fcff8c3b802808f3a6c2c14aaf8337d9f
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-PATCH-fix-cmyk-encoding.patch
+    URL https://github.com/libjxl/libjxl/archive/refs/tags/v0.9.1.tar.gz
+    URL_HASH SHA256=a0e72e9ece26878147069ad4888ac3382021d4bbee71c2e1b687d5bde7fd7e01
 
     INSTALL_DIR ${PREFIX_ext_jpegxl}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpegxl} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
-        -DJPEGXL_VERSION=0.9.0
+        -DJPEGXL_VERSION=0.9.1
         -DJPEGXL_ENABLE_BENCHMARK=OFF
         -DJPEGXL_ENABLE_COVERAGE=OFF
         -DJPEGXL_ENABLE_EXAMPLES=OFF

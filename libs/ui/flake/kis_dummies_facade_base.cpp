@@ -56,21 +56,19 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->image->disconnect(&m_d->nodeChangedConnection);
         m_d->image->disconnect(&m_d->activateNodeConnection);
 
-        if (rootDummy()) {
-            KisNodeList nodesToRemove;
+        KisNodeList nodesToRemove;
 
-            {
-                QMutexLocker l(&m_d->pendingNodeSetLock);
-                std::swap(nodesToRemove, m_d->pendingNodeSet);
-                m_d->pendingNodeSet.clear();
-            }
+        {
+            QMutexLocker l(&m_d->pendingNodeSetLock);
+            std::swap(nodesToRemove, m_d->pendingNodeSet);
+            m_d->pendingNodeSet.clear();
+        }
 
-            for (auto it = std::make_reverse_iterator(nodesToRemove.end());
-                 it != std::make_reverse_iterator(nodesToRemove.begin());
-                 ++it) {
+        for (auto it = std::make_reverse_iterator(nodesToRemove.end());
+             it != std::make_reverse_iterator(nodesToRemove.begin());
+             ++it) {
 
-                m_d->removeNodeConnection.start(*it);
-            }
+            m_d->removeNodeConnection.start(*it);
         }
     }
 

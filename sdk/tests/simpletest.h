@@ -7,11 +7,13 @@
 #include <QLocale>
 // #include <KLocalizedString>
 #include <KoTestConfig.h>
+#include <KisSynchronizedConnection.h>
 
 #define SIMPLE_MAIN_IMPL(TestObject) \
     qputenv("LANGUAGE", "en"); \
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     QStandardPaths::setTestModeEnabled(true); \
+    KisSynchronizedConnectionBase::setAutoModeForUnittestsEnabled(true); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
     qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
     QApplication app(argc, argv); \

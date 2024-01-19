@@ -3,7 +3,7 @@ include(KritaAddBrokenUnitTest)
 kis_add_test(
     ../KoLZF.cpp TestKoLZF.cpp
     TEST_NAME TestKoLZF
-    LINK_LIBRARIES kritastore kritatestsdk
+    LINK_LIBRARIES kritastore kritatestsdk kritaglobal
     NAME_PREFIX "libs-odf"
     )
 

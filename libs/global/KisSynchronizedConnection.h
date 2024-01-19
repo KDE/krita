@@ -51,6 +51,17 @@ public:
     static int eventType();
     static void registerSynchronizedEventBarrier(std::function<void()> callback);
 
+    /**
+     * In unittests the connection should work in 'Auto' mode, because most of the
+     * actions are executed in the GUI thread, and (usually) don't have an event
+     * loop at all
+     *
+     * Defautl value: false
+     */
+    static void setAutoModeForUnittestsEnabled(bool value);
+    static bool isAutoModeForUnittestsEnabled();
+
+
 protected:
     bool event(QEvent *event) override;
 

@@ -15,6 +15,7 @@
 #include <QtTest/qtestsystem.h>
 #include <set>
 #include <QLocale>
+#include <KisSynchronizedConnection.h>
 
 /**
  * There is a hierarchy of libraries built on the kritaresources library
@@ -275,6 +276,7 @@ int main(int argc, char *argv[]) \
     qputenv("QT_LOGGING_RULES", ""); \
     qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
     qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
+    KisSynchronizedConnectionBase::setAutoModeForUnittestsEnabled(true); \
     QStandardPaths::setTestModeEnabled(true); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \

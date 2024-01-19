@@ -49,7 +49,7 @@ private Q_SLOTS:
     void slotBeginRemoveDummy(KisNodeDummy *dummy);
     void slotDummyChanged(KisNodeDummy *dummy);
 
-    void slotUpdateDummyContent(QObject *dummy);
+    void slotUpdateDummyContent(QPointer<KisNodeDummy> dummy);
 
     void slotDisplayModeChanged();
 

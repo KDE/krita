@@ -61,10 +61,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-13 03:27+0000\n"
-"PO-Revision-Date: 2024-01-13 13:04+0100\n"
+"POT-Creation-Date: 2024-01-19 03:10+0000\n"
+"PO-Revision-Date: 2024-01-18 09:56+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
-"Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
+"Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18994,7 +18994,7 @@ msgstr "Groter"
 #, kde-format
 msgctxt "Blending mode - Overlay"
 msgid "Overlay"
-msgstr "Over elkaar"
+msgstr "Overlay"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:113
 #, kde-format
@@ -54875,7 +54875,7 @@ msgstr "Exporteren voor {key}"
 msgid "Export not happening because there are no pages."
 msgstr "Exporteren gebeurt niet omdat er geen pagina's zijn."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:627
+#: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -54883,7 +54883,7 @@ msgstr ""
 "Vanuit Comicbook opslaan\n"
 "informatiemetagegevensbestand"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:637
+#: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
 msgstr "CBZ in pakketvorm brengen"
 

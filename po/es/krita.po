@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-13 03:27+0000\n"
+"POT-Creation-Date: 2024-01-19 03:10+0000\n"
 "PO-Revision-Date: 2024-01-15 20:41+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -54930,7 +54930,7 @@ msgstr "Exportando para {key}"
 msgid "Export not happening because there are no pages."
 msgstr "No se ha realizado la exportación porque no hay páginas."
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:627
+#: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -54938,7 +54938,7 @@ msgstr ""
 "Guardando archivo de metadatos\n"
 "de información de Comicbook"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:637
+#: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
 msgstr "Empaquetando CBZ"
 

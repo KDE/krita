@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-13 03:27+0000\n"
+"POT-Creation-Date: 2024-01-19 03:10+0000\n"
 "PO-Revision-Date: 2024-01-13 06:05\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -53960,7 +53960,7 @@ msgstr "为 {key} 导出"
 msgid "Export not happening because there are no pages."
 msgstr "导出未被执行，因为没有页面。"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:627
+#: plugins/python/comics_project_management_tools/comics_exporter.py:631
 msgid ""
 "Saving out Comicbook\n"
 "info metadata file"
@@ -53968,7 +53968,7 @@ msgstr ""
 "正在保存到 Comicbook\n"
 "信息元文件"
 
-#: plugins/python/comics_project_management_tools/comics_exporter.py:637
+#: plugins/python/comics_project_management_tools/comics_exporter.py:641
 msgid "Packaging CBZ"
 msgstr "正在打包 CBZ"
 

@@ -218,10 +218,10 @@ KisGapMap::KisGapMap(int gapSize,
     // Request cached memory. Use distancePtr as the owning "handle".
     const quint32 numPixels = m_size.width() * m_size.height();
     const auto distanceMemSize = sizeof(quint16) * numPixels;
-    const auto opaciteMemSize = sizeof(quint8) * numPixels;
+    const auto opacityMemSize = sizeof(quint8) * numPixels;
 
     // We are placing the distance map first, as it should have at least a quint16 alignment.
-    m_distancePtr = static_cast<quint16*>(BufferCache::instance()->acquire(distanceMemSize + opaciteMemSize));
+    m_distancePtr = static_cast<quint16*>(BufferCache::instance()->acquire(distanceMemSize + opacityMemSize));
     m_opacityPtr = reinterpret_cast<quint8*>(m_distancePtr + numPixels);
 
     // Tile loading is deferred. All set to false = not loaded.

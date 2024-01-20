@@ -47,6 +47,9 @@ void CurvilinearPerspectiveAssistant::adjustLine(QPointF &point, QPointF &stroke
 
 void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
+    Q_UNUSED(cached);
+    Q_UNUSED(updateRect);
+
     gc.save();
     gc.resetTransform();
 
@@ -61,8 +64,8 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         mousePos = QCursor::pos();//this'll give an offset//
         dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
     }
-
-    if (isAssistantComplete() && assistantVisible) {
+    
+    if (isSnappingActive()) {
 
         QTransform initialTransform = converter->documentToWidgetTransform();
         QPainterPath baseGuidePath;
@@ -98,6 +101,24 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         double deltaX = p2.x() - p1.x();
         double deltaY = p2.y() - p1.y();
 
+        // Copied from Two-Point Perspective's fading effect for approaching vanishing points.
+        // Set up the fading effect for the grid lines
+        // Needed so the grid density doesn't look distracting
+        QColor color = effectiveAssistantColor();
+        QGradient fade = QLinearGradient(
+            QPointF(p1.x() - deltaY, p1.y() + deltaX), 
+            QPointF(p1.x() + deltaY, p1.y() - deltaX));
+        
+        color.setAlphaF(0.0);
+        fade.setColorAt(0.42, effectiveAssistantColor());
+        fade.setColorAt(0.5, color);
+        fade.setColorAt(0.58, effectiveAssistantColor());
+        const QPen pen = gc.pen();
+        const QBrush new_brush = QBrush(fade);
+        int width = 0;
+        const QPen new_pen = QPen(new_brush, width, pen.style());
+        gc.setPen(new_pen);
+
         double handleDistance = KisAlgebra2D::norm(QPointF(deltaX, deltaY));
         double halfHandleDist = handleDistance / 2.0;
 
@@ -109,32 +130,35 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         double dirX = -deltaY / handleDistance;
         double dirY = deltaX / handleDistance;
 
-        int resolution = 5;
+        int resolution = halfHandleDist / 3;
 
-        for(int i = -resolution; i < resolution; i++) {
-            // If i = 0, the circle would be infinitely far away with an infinite radius (aka a line)
-            if(i == 0) {
-                baseGuidePath.moveTo(QPointF(p1.x() - deltaX*2, p1.y() - deltaY*2));
-                baseGuidePath.lineTo(QPointF(p2.x() + deltaX*2, p2.y() + deltaY*2));
-                continue;
+        if(assistantVisible) {
+            
+            for(int i = -resolution; i < resolution; i++) {
+                // If i = 0, the circle would be infinitely far away with an infinite radius (aka a line)
+                if(i == 0) {
+                    baseGuidePath.moveTo(QPointF(p1.x() - deltaX*2, p1.y() - deltaY*2));
+                    baseGuidePath.lineTo(QPointF(p2.x() + deltaX*2, p2.y() + deltaY*2));
+                    continue;
+                }
+                // Map loop iterator to multiplier. This line gives the depth-like effect.
+                double mult = 1.0 / i;
+                // Use formula to calculate CenterDist
+                double centerDist = halfHandleDist * (1 - pow2(mult)) / (2*mult);
+
+                // Use the distance to the center (from the average point) to calculate the center location.
+                double circleCenterX = centerDist * dirX + avgX;
+                double circleCenterY = centerDist * dirY + avgY;
+                // Use formula to calculate Radius
+                double radius = halfHandleDist * (1 + pow2(mult)) / (2*mult);
+
+                baseGuidePath.addEllipse(QPointF(circleCenterX, circleCenterY), radius, radius);
+
             }
-            // Map loop iterator to multiplier
-            double mult = ((double) i) / resolution;
-            // Use formula to calculate CenterDist
-            double centerDist = halfHandleDist * (1 - pow2(mult)) / (2*mult);
-
-            // Use the distance to the center (from the average point) to calculate the center location.
-            double circleCenterX = centerDist * dirX + avgX;
-            double circleCenterY = centerDist * dirY + avgY;
-            // Use formula to calculate Radius
-            double radius = halfHandleDist * (1 + pow2(mult)) / (2*mult);
-
-            baseGuidePath.addEllipse(QPointF(circleCenterX, circleCenterY), radius, radius);
-
+            gc.drawPath(baseGuidePath);//drawPath(gc, baseGuidePath);
         }
-        drawPreview(gc, baseGuidePath);
         
-        if(isSnappingActive() && previewVisible) {
+        if(previewVisible) {
             // Draw guideline for the mouse, based on mouse position.
             // Get location on the screen of handles.
             QPointF screenP1 = initialTransform.map(*handles()[0]);
@@ -150,13 +174,13 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
                 mouseGuidePath.addEllipse(circle.p1(), radius, radius);
             }
 
-            drawPreview(gc, mouseGuidePath);
+            gc.drawPath(mouseGuidePath);//drawPath(gc, mouseGuidePath);
         }
 
     }
     gc.restore();
 
-    KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
+    //KisPaintingAssistant::drawAssistant(gc, updateRect, converter, cached, canvas, assistantVisible, previewVisible);
 
 }
 

@@ -17,7 +17,7 @@ KisPropertiesConfigurationSP KisTIFFOptions::toProperties() const
     QHash<int, int> compToIndex;
     compToIndex[COMPRESSION_NONE] = 0;
     compToIndex[COMPRESSION_JPEG] = 1;
-    compToIndex[COMPRESSION_DEFLATE] = 2;
+    compToIndex[COMPRESSION_ADOBE_DEFLATE] = 2;
     compToIndex[COMPRESSION_LZW] = 3;
     compToIndex[COMPRESSION_PIXARLOG] = 8;
 
@@ -48,7 +48,7 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
     QHash<int, int> indexToComp;
     indexToComp[0] = COMPRESSION_NONE;
     indexToComp[1] = COMPRESSION_JPEG;
-    indexToComp[2] = COMPRESSION_DEFLATE;
+    indexToComp[2] = COMPRESSION_ADOBE_DEFLATE;
     indexToComp[3] = COMPRESSION_LZW;
     indexToComp[4] = COMPRESSION_PIXARLOG;
 

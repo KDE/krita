@@ -261,7 +261,7 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
     TIFFSetField(image(), TIFFTAG_COMPRESSION, m_options->compressionType);
     if (m_options->compressionType == COMPRESSION_JPEG) {
         TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
-    } else if (m_options->compressionType == COMPRESSION_DEFLATE) {
+    } else if (m_options->compressionType == COMPRESSION_ADOBE_DEFLATE) {
         TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
     } else if (m_options->compressionType == COMPRESSION_PIXARLOG) {
         TIFFSetField(image(),
@@ -272,7 +272,7 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
     // Set the predictor
     if (m_options->compressionType == COMPRESSION_LZW
         || m_options->compressionType == COMPRESSION_ADOBE_DEFLATE
-        || m_options->compressionType == COMPRESSION_DEFLATE)
+        || m_options->compressionType == COMPRESSION_ADOBE_DEFLATE)
         TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
 
     // Use contiguous configuration

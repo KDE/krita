@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-20 01:35+0000\n"
-"PO-Revision-Date: 2024-01-13 06:02\n"
+"PO-Revision-Date: 2024-01-21 14:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -22199,6 +22199,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Krita 发展基金赞助商</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">单次赞助商</h2><p align=\"center\"> <a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src="
+"\":/gamechuck.png\"></a> <p align=\"center\"> <a href=\"https://www.fosshub."
+"com/Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"> <a "
+"href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
+"body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -22235,14 +22245,14 @@ msgstr ""
 "<html><head/><body><h1 align=\"center\"><b>用户的权利</b></h1><p>Krita 是在 "
 "GNU 通用公共许可证 (第 3 版或者其后续版本) 下发布的。</p><p>此许可证赋予人们"
 "以下自由的权利：</p><ul><li>任何人都可以为了任何目的自由地使用 Krita</li><li>"
-"任何人都可以自由地分发 Krita</li><li>任何人都可以自由地研究 Krita 的工作原理"
-"并对其进行修改</li><li>任何人都可以自由地分发修改过的 Krita 版本</li></"
-"ul><p>Krita 基金会和它在 krita.org 运营的其他项目将尽一切努力确保 Krita 始终"
-"是一款自由软件。</p><h1 align=\"center\">用户作品的权利</h1><p>用户使用 "
-"Krita 创作的作品是该用户独占的个人财产，该用户享有自由支配这些作品的权利。</"
-"p><p>Krita 对软件的使用场景不做任何限制。用户可以在包括商业用途在内的任意场景"
-"自由地使用 Krita。</p><p>Krita 通过 GPL 许可证赋予用户上述自由，任何人无权剥"
-"夺。</p><br/><hr/><pre>"
+"任何人都可以自由地分发 Krita</li><li>任何人都可以自由地研究、修改 Krita</"
+"li><li>任何人都可以自由地分发修改后的 Krita 版本</li></ul><p>Krita 基金会和它"
+"在 krita.org 运营的其他项目将尽一切努力确保 Krita 始终是一款自由软件。</"
+"p><h1 align=\"center\">用户作品的权利</h1><p>用户使用 Krita 创作的作品是该用"
+"户独占的个人财产，该用户享有自由支配这些作品的权利。</p><p>Krita 对软件的使用"
+"场景不做任何限制。用户可以在包括商业用途在内的任意场景自由地使用 Krita。</"
+"p><p>Krita 通过 GPL 许可证赋予用户上述自由，任何人无权剥夺。</p><br/><hr/"
+"><pre>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:172
 #, kde-format
@@ -23878,8 +23888,7 @@ msgstr "翻译人员"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
 msgstr "赞助商"
 
@@ -60267,15 +60276,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><h1 align=\"center\">赞助人员名单</h1><p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ""
-#~ "</p><p>我们衷心感谢上述各位赞助者对 Krita 项目的资金支持！</p></body></"
-#~ "html>"
-
-#~ msgid "Backers"
-#~ msgstr "赞助人员"

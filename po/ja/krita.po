@@ -5347,7 +5347,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/"
 "Rough_Wall_With_Impasto.png"
 msgid "Rough Wall With Impasto"
-msgstr ""
+msgstr "インパスト付きの粗い壁"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5524,7 +5524,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "David_Revoy's_Electric_Arcs.kse"
 msgid "David Revoy's Electric Arcs"
-msgstr ""
+msgstr "David Revoyの電気アーク"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5676,7 +5676,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Malachite.kse"
 msgid "Wolthera's Malachite"
-msgstr ""
+msgstr "Wolthera のマラカイト"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5684,7 +5684,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Maze_Truchet.kse"
 msgid "Wolthera's Maze Truchet"
-msgstr ""
+msgstr "Wolthera の迷路トルーチェ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5692,16 +5692,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Mercurial.kse"
 msgid "Wolthera's Mercurial"
-msgstr ""
+msgstr "Wolthera の水銀"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "&Moiré pattern"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Moiré_Pattern.kse"
 msgid "Wolthera's Moiré Pattern"
-msgstr "モアレパターン(&M)"
+msgstr "Wolthera のモアレパターン"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5709,7 +5708,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Perlin_Noise_1983.kse"
 msgid "Wolthera's Perlin Noise 1983"
-msgstr ""
+msgstr "Wolthera のパーリンノイズ 1983"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5717,7 +5716,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Petri_Dish.kse"
 msgid "Wolthera's Petri Dish"
-msgstr ""
+msgstr "Wolthera のペトリ皿"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5725,7 +5724,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Radial_Lines.kse"
 msgid "Wolthera's Radial Lines"
-msgstr ""
+msgstr "Wolthera の放射状線"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5733,16 +5732,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Random_Rotated_Hatches.kse"
 msgid "Wolthera's Random Rotated Hatches"
-msgstr ""
+msgstr "Wolthera のランダムな回転したハッチ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Screen"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Screentones.kse"
 msgid "Wolthera's Screentones"
-msgstr "スクリーン"
+msgstr "Wolthera のスクリーントーン"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5750,7 +5748,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Tiled_Dots.kse"
 msgid "Wolthera's Tiled Dots"
-msgstr ""
+msgstr "Wolthera のタイル状の点々"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5758,7 +5756,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Tiled_Squares.kse"
 msgid "Wolthera's Tiled Squares"
-msgstr ""
+msgstr "Wolthera のタイル状の正方形"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5766,7 +5764,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Turbulence.kse"
 msgid "Wolthera's Turbulence"
-msgstr ""
+msgstr "Wolthera のタービュランス"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5774,7 +5772,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Voronoi_cells.kse"
 msgid "Wolthera's Voronoi cells"
-msgstr ""
+msgstr "Wolthera のボロノイセル"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5782,7 +5780,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Weird_Rectangle_Pattern.kse"
 msgid "Wolthera's Weird Rectangle Pattern"
-msgstr ""
+msgstr "Wolthera の奇妙な長方形のパターン"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5790,50 +5788,48 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_fractional_Brownian_Motion.kse"
 msgid "Wolthera's fractional Brownian Motion"
-msgstr ""
+msgstr "Wolthera のフラクショナルなブラウン運動"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt "./krita/data/bundles/RGBA_brushes.bundle:brushes/Craig_02.png"
 msgid "Craig 02"
-msgstr ""
+msgstr "クレイグ 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small.png"
 msgid "DA RGBA bluegreen small"
-msgstr ""
+msgstr "DA RGBA 青緑 小"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_RGBA bluegreen_small1.png"
 msgid "DA RGBA bluegreen small1"
-msgstr ""
+msgstr "DA RGBA 青緑 小1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Triangle Righthanded"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/DA_Triangle grain.png"
 msgid "DA Triangle grain"
-msgstr "三角形 (右利き用)"
+msgstr "DA 三角形 緑"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "MyPaint"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:brushes/Mountain_Brush_01.png"
 msgid "Mountain Brush 01"
-msgstr "MyPaint"
+msgstr "山 ブラシ 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: file: ./krita/data/bundles/RGBA_brushes.bundle:brushes/RGBA anim 01.gih:1
 #, kde-format
 msgctxt "./krita/data/bundles/RGBA_brushes.bundle:brushes/RGBA anim 01.gih"
 msgid "RGBA anim 01"
-msgstr ""
+msgstr "RGBA アニメ 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5842,7 +5838,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_01_Thick-dry."
 "kpp"
 msgid "m) RGBA 01 Thick-dry"
-msgstr ""
+msgstr "m) RGBA 01 厚塗り-乾燥"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5851,7 +5847,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/"
 "m)_RGBA_02_Thickpaint.kpp"
 msgid "m) RGBA 02 Thickpaint"
-msgstr ""
+msgstr "m) RGBA 02 厚塗り"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5859,7 +5855,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_03_Rake.kpp"
 msgid "m) RGBA 03 Rake"
-msgstr ""
+msgstr "m) RGBA 03 レーキ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5868,7 +5864,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_04_Impasto."
 "kpp"
 msgid "m) RGBA 04 Impasto"
-msgstr ""
+msgstr "m) RGBA 04 インパスト"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5877,7 +5873,7 @@ msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_05_Impasto-"
 "details.kpp"
 msgid "m) RGBA 05 Impasto-details"
-msgstr ""
+msgstr "m) RGBA 05 インパスト-ディティール"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -5885,21 +5881,19 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/RGBA_brushes.bundle:paintoppresets/m)_RGBA_06_Rock.kpp"
 msgid "m) RGBA 06 Rock"
-msgstr ""
+msgstr "m) RGBA 06 岩"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Foreground to Background"
+#, kde-format
 msgctxt "memory/gradients/Foreground to Background.svg"
 msgid "0. Foreground to Background"
-msgstr "描画色を背景色に変換"
+msgstr "0. 描画色から背景色"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
-#, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#, kde-format
 msgctxt "memory/gradients/Foreground to Transparent.svg"
 msgid "1. Foreground to Transparent"
-msgstr "描画色を透明値に変換"
+msgstr "1. 描画色から透明"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/3_eroded.gih:1
@@ -34077,10 +34071,9 @@ msgid "No configuration options"
 msgstr "設定オプションはありません。"
 
 #: libs/ui/widgets/kis_image_from_clipboard_widget.cpp:148
-#, fuzzy, kde-format
-#| msgid "The file does not contain an image."
+#, kde-format
 msgid "The clipboard is empty or does not have an image in it."
-msgstr "このファイルは画像を含んでいません"
+msgstr "クリップボードは空か、画像を含んでいません。"
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format

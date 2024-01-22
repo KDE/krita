@@ -651,6 +651,13 @@ public:
         erase(childBegin(), childEnd());
     }
 
+    Forest(Forest<T> &rhs) {
+        for (auto it = rhs.childBegin(); it != rhs.childEnd(); ++it) {
+            auto cloneIt = this->insert(this->childEnd(), *it);
+            cloneChildren(it, cloneIt);
+        }
+    }
+
     using child_iterator = ChildIterator<T>;
     using composition_iterator = CompositionIterator<T>;
     using hierarchy_iterator = HierarchyIterator<T>;
@@ -820,6 +827,17 @@ private:
 
         if (parentNode->lastChild == node) {
             parentNode->lastChild = node->prevSibling;
+        }
+    }
+
+    void cloneChildren(child_iterator oldParent, child_iterator parent) {
+        // At compile time childBegin(child_iterator) isn't recognized because there's also Forest::childBegin()
+        // so we duplicate childBegin(child_iterator) and childEnd(child_iterator) here.
+        auto it = child_iterator(oldParent.node() ? oldParent.node()->firstChild : nullptr, oldParent.node());
+        auto end = child_iterator(nullptr, oldParent.node());
+        for (;it != end; ++it) {
+            auto itClone = this->insert(child_iterator(nullptr, parent.node()), *it);
+            cloneChildren(it, itClone);
         }
     }
 private:

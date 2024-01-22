@@ -912,10 +912,7 @@ void KisForestTest::testCopyForest()
                                 end(forest),
                                 {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
 
-
-    // TODO: copy forests here
-
-    KisForest<int> clonedForest;
+    KisForest<int> clonedForest = forest;
 
     QVERIFY(testForestIteration(begin(clonedForest),
                                 end(clonedForest),

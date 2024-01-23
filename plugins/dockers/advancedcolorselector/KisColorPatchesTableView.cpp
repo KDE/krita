@@ -294,7 +294,7 @@ boost::optional<KoColor> KisColorPatchesTableView::colorPatchAt(const QPoint &po
     // since (0, 0) index has the additional button.
     linearIndex -= 1;
 
-    if (linearIndex >= m_d->colorPatches.size()) {
+    if (linearIndex < 0 || linearIndex >= m_d->colorPatches.size()) {
         return boost::none;
     }
     return m_d->colorPatches[linearIndex];

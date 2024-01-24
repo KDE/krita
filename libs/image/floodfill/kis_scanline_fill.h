@@ -166,7 +166,7 @@ private:
                                  PixelAccessPolicy &pixelAccessPolicy);
 
     template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
-    void fillOpacity(DifferencePolicy &differencePolicy,
+    bool fillOpacity(DifferencePolicy &differencePolicy,
                      SelectionPolicy &selectionPolicy,
                      PixelAccessPolicy &pixelAccessPolicy,
                      quint8* const opacityData,

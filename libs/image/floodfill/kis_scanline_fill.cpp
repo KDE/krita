@@ -624,7 +624,7 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
         // We need to reuse the complex policies used by this class and only provide the final
         // "projection" of opacity for the distance map calculation.
         auto opacityFunc = [&](quint8* outOpacityPtr, const QRect& rect) {
-            fillOpacity(differencePolicy, selectionPolicy, pixelAccessPolicy, outOpacityPtr, rect);
+            return fillOpacity(differencePolicy, selectionPolicy, pixelAccessPolicy, outOpacityPtr, rect);
         };
 
         // Prime the resources. The computations are made lazily, when distance at a pixel is requested.
@@ -1023,7 +1023,7 @@ void KisScanlineFill::fillContiguousGroup(KisPaintDeviceSP groupMapDevice, qint3
  * during an ongoing runImpl() loop.
  */
 template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
-void KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
+bool KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
                                   SelectionPolicy &selectionPolicy,
                                   PixelAccessPolicy &pixelAccessPolicy,
                                   quint8* const opacityData,
@@ -1037,6 +1037,7 @@ void KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
                "FATAL: The rect is not fully inside the fill bounds");
 #endif
     const int pixelSize = m_d->device->pixelSize();
+    bool hasOpaquePixels = false;
 
     for (int y = rect.top(); y <= rect.bottom(); ++y) {
         int numPixelsLeft = 0;
@@ -1054,11 +1055,18 @@ void KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
             }
 
             const quint8 difference = differencePolicy.difference(dataPtr);
-            *outPtr = selectionPolicy.opacityFromDifference(difference, x, y);
+            const quint8 opacity = selectionPolicy.opacityFromDifference(difference, x, y);
 
+            if (opacity == 0) {
+                hasOpaquePixels = true;
+            }
+
+            *outPtr = opacity;
             ++outPtr;
         }
     }
+
+    return hasOpaquePixels;
 }
 
 void KisScanlineFill::testingProcessLine(const KisFillInterval &processInterval)

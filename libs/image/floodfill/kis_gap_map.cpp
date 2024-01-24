@@ -177,7 +177,8 @@ template<bool BoundsCheck>
 bool KisGapMap::isOpaque(int x, int y) const
 {
 #if DEBUG_LOGGING_AND_ASSERTS
-    KIS_SAFE_ASSERT_RECOVER((m_opacityTiles[(x / TileSize) + (y / TileSize) * m_numTiles.width()] == false)) {
+    const TileFlags flags = *tileFlagsPtr(x / TileSize, y / TileSize);
+    KIS_SAFE_ASSERT_RECOVER((flags & TILE_OPACITY_LOADED) != 0) {
         qDebug() << "ERROR: opacity at (" << x << "," << y << ") not loaded";
         return false;
     }
@@ -217,16 +218,20 @@ KisGapMap::KisGapMap(int gapSize,
 
     // Request cached memory. Use distancePtr as the owning "handle".
     const quint32 numPixels = m_size.width() * m_size.height();
-    const auto distanceMemSize = sizeof(quint16) * numPixels;
-    const auto opacityMemSize = sizeof(quint8) * numPixels;
+    const quint32 numTiles = m_numTiles.width() * m_numTiles.height();
+    const std::size_t distanceMemSize = sizeof(quint16) * numPixels;
+    const std::size_t opacityMemSize = sizeof(quint8) * numPixels;
+    const std::size_t tileFlagsMemSize = sizeof(TileFlags) * numTiles;
 
     // We are placing the distance map first, as it should have at least a quint16 alignment.
-    m_distancePtr = static_cast<quint16*>(BufferCache::instance()->acquire(distanceMemSize + opacityMemSize));
+    m_distancePtr = static_cast<quint16*>(BufferCache::instance()->acquire(distanceMemSize +
+                                                                           opacityMemSize +
+                                                                           tileFlagsMemSize));
     m_opacityPtr = reinterpret_cast<quint8*>(m_distancePtr + numPixels);
+    m_tileFlags  = m_opacityPtr + numPixels;
 
-    // Tile loading is deferred. All set to false = not loaded.
-    m_opacityTiles.resize(m_numTiles.width() * m_numTiles.height(), false);
-    m_distanceTiles.resize(m_numTiles.width() * m_numTiles.height(), false);
+    // Tile loading is deferred. All flags are cleared in the initial state.
+    memset(m_tileFlags, 0, tileFlagsMemSize);
 }
 
 KisGapMap::~KisGapMap()
@@ -243,8 +248,8 @@ void KisGapMap::loadOpacityTiles(const QRect& tileRect)
 
     for (int ty = tileRect.top(); ty <= tileRect.bottom(); ++ty) {
         for (int tx = tileRect.left(); tx <= tileRect.right(); ++tx) {
-            auto bitRef = m_opacityTiles[tx + ty * m_numTiles.width()];
-            if (!bitRef) {
+            TileFlags* const pFlags = tileFlagsPtr(tx, ty);
+            if ((*pFlags & TILE_OPACITY_LOADED) == 0) {
                 // Resize and clamp to image bounds.
                 QRect rect(tx * TileSize, ty * TileSize, TileSize, TileSize);
                 rect.setRight(qMin(rect.right(), m_size.width() - 1));
@@ -253,10 +258,10 @@ void KisGapMap::loadOpacityTiles(const QRect& tileRect)
 #if DEBUG_LOGGING_AND_ASSERTS
                 qDebug() << "loadOpacityTiles()" << rect;
 #endif
-                m_fillOpacityFunc(m_opacityPtr, rect);
+                const bool hasOpaquePixels = m_fillOpacityFunc(m_opacityPtr, rect);
 
                 // This tile is now loaded.
-                bitRef.flip();
+                *pFlags |= TILE_OPACITY_LOADED | (hasOpaquePixels ? TILE_HAS_OPAQUE_PIXELS : 0);
             }
         }
     }
@@ -264,6 +269,30 @@ void KisGapMap::loadOpacityTiles(const QRect& tileRect)
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
     m_opacityElapsedNanos += timer.nsecsElapsed();
 #endif
+}
+
+/** This is a part of loadDistanceTile() implementation. */
+void KisGapMap::distanceSearchRowInnerLoop(bool boundsCheck, int y, int x1, int x2)
+{
+    if (boundsCheck) {
+        for (int x = x1; x <= x2; ++x) {
+            if (isOpaque<true>(x, y)) {
+                gapDistanceSearch<true>(x, y, TransformNone);
+                gapDistanceSearch<true>(x, y, TransformRotateClockwiseMirrorHorizontally);
+                gapDistanceSearch<true>(x, y, TransformRotateClockwise);
+                gapDistanceSearch<true>(x, y, TransformMirrorHorizontally);
+            }
+        }
+    } else {
+        for (int x = x1; x <= x2; ++x) {
+            if (isOpaque<false>(x, y)) {
+                gapDistanceSearch<false>(x, y, TransformNone);
+                gapDistanceSearch<false>(x, y, TransformRotateClockwiseMirrorHorizontally);
+                gapDistanceSearch<false>(x, y, TransformRotateClockwise);
+                gapDistanceSearch<false>(x, y, TransformMirrorHorizontally);
+            }
+        }
+    }
 }
 
 /** Calculate the gap distance data in the specified rect.
@@ -276,12 +305,17 @@ void KisGapMap::loadOpacityTiles(const QRect& tileRect)
  *  and must be at least equal to the gap size. We need to do calculations in
  *  a larger region in order to compute correct distances within the requested rect.
  */
-void KisGapMap::loadDistanceRect(const QRect& rect, int guardBand)
+void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRect, int guardBand)
 {
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
     QElapsedTimer timer;
     timer.start();
 #endif
+
+    // The area of the image covered only by this tile.
+    QRect rect(tile.x() * TileSize, tile.y() * TileSize, TileSize, TileSize);
+    rect.setRight(qMin(rect.right(), m_size.width() - 1));
+    rect.setBottom(qMin(rect.bottom(), m_size.height() - 1));
 
     // We only care about the distance data inside the rect, so we can leave the
     // distance pixels in the guard band uninitialized. They will be overwritten anyway
@@ -297,44 +331,62 @@ void KisGapMap::loadDistanceRect(const QRect& rect, int guardBand)
         }
     }
 
-    // Compromise: At tile size 64 and gap size 32, the guard band must be 31 at most,
-    // because opacity is sampled in gap size + 1 radius, which could be two tiles
+    TileFlags* const pFlags = tileFlagsPtr(tile.x(), tile.y());
+
+    // This tile is now considered loaded.
+    *pFlags |= TILE_DISTANCE_LOADED;
+
+    // Optimization: If a tile is completely transparent (TILE_HAS_OPAQUE_PIXELS == 0), then
+    // we can skip the distance calculation for it. Unfortunately, with the guard bands we need
+    // to check the flags of the neighboring tiles as well.
+
+    const bool tileOpaque           = (*pFlags & TILE_HAS_OPAQUE_PIXELS) != 0;
+    const bool tileOpaqueLeft       = (nearbyTilesRect.left()   == tile.x()) ?                                           false : (*tileFlagsPtr(tile.x() - 1, tile.y())     & TILE_HAS_OPAQUE_PIXELS) != 0;
+    const bool tileOpaqueTopLeft    = (nearbyTilesRect.left()   == tile.x()) || (nearbyTilesRect.top()    == tile.y()) ? false : (*tileFlagsPtr(tile.x() - 1, tile.y() - 1) & TILE_HAS_OPAQUE_PIXELS) != 0;
+    const bool tileOpaqueBottomLeft = (nearbyTilesRect.left()   == tile.x()) || (nearbyTilesRect.bottom() == tile.y()) ? false : (*tileFlagsPtr(tile.x() - 1, tile.y() + 1) & TILE_HAS_OPAQUE_PIXELS) != 0;
+    const bool tileOpaqueTop        = (nearbyTilesRect.top()    == tile.y()) ?                                           false : (*tileFlagsPtr(tile.x(),     tile.y() - 1) & TILE_HAS_OPAQUE_PIXELS) != 0;
+    const bool tileOpaqueBottom     = (nearbyTilesRect.bottom() == tile.y()) ?                                           false : (*tileFlagsPtr(tile.x(),     tile.y() + 1) & TILE_HAS_OPAQUE_PIXELS) != 0;
+
+    if (! (tileOpaqueTopLeft || tileOpaqueTop || tileOpaqueLeft || tileOpaque || tileOpaqueBottomLeft || tileOpaqueBottom)) {
+#if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
+        m_distanceElapsedNanos += timer.nsecsElapsed();
+#endif
+        // This tile as well as its surroundings are transparent, we can finally exit.
+        return;
+    }
+
+    // Compromise: At the tile size 64 px and the gap size 32 px, the guard band must be
+    // 31 px at most, because opacity is sampled in gap size + 1 radius, which could be two tiles
     // away and that tile might not have been loaded yet. To avoid loading one row of that tile,
-    // we can clamp the guard band to 31. It should not introduce an error in majority of cases.
+    // we can clamp the guard band to 31. The error intruduced by it should not be noticeable.
 
     const int guardBandVertical = qMin(guardBand, 31);
-    const int y1 = qMax(0, rect.top() - guardBandVertical);
-    const int y2 = qMin(rect.bottom() + guardBandVertical, m_size.height() - 1);
-    const int x1 = qMax(0, rect.left() - guardBand);
-    const int x2 = rect.right();
+    const int y1       = tileOpaqueTopLeft    || tileOpaqueTop    ? qMax(0, rect.top() - guardBandVertical) : rect.top();
+    const int y2       = tileOpaqueBottomLeft || tileOpaqueBottom ? qMin(rect.bottom() + guardBandVertical, m_size.height() - 1) : rect.bottom();
+    const int x1Top    = tileOpaqueTopLeft                        ? qMax(0, rect.left() - guardBand) : rect.left();
+    const int x1Middle = tileOpaqueLeft                           ? qMax(0, rect.left() - guardBand) : rect.left();
+    const int x1Bottom = tileOpaqueBottomLeft                     ? qMax(0, rect.left() - guardBand) : rect.left();
+    const int x2Top    = tileOpaqueTop                            ? rect.right() : rect.left() - 1;
+    const int x2Middle = tileOpaque                               ? rect.right() : rect.left() - 1;
+    const int x2Bottom = tileOpaqueBottom                         ? rect.right() : rect.left() - 1;
 
     // Apply conservative bounds checking. +1 for opacity.
     const bool boundsCheck =
-        (x2 + (m_gapSize + 1) >= m_size.width()) ||  // no risk of accessing x<0
+        (rect.right() + (m_gapSize + 1) >= m_size.width()) ||  // no risk of accessing x<0
         (y1 - (m_gapSize + 1) < 0) || (y2 + (m_gapSize + 1) >= m_size.height());
 
-    for (int y = y1; y <= y2; ++y) {
-        for (int x = x1; x <= x2; ++x) {
-            // Compute pixels in the right half-circle. Each call covers an octant of the half-circle.
-            // We only need to update the pixels inside the rect (even though we process a larger area
-            // due to the guard band).
-
-            if (boundsCheck) {
-                if (isOpaque<true>(x, y)) {
-                    gapDistanceSearch<true>(x, y, TransformNone);                                // 0 to 45
-                    gapDistanceSearch<true>(x, y, TransformRotateClockwiseMirrorHorizontally);   // 45 to 90
-                    gapDistanceSearch<true>(x, y, TransformRotateClockwise);                     // 90 to 135
-                    gapDistanceSearch<true>(x, y, TransformMirrorHorizontally);                  // 135 to 180
-                }
-            } else {
-                if (isOpaque<false>(x, y)) {
-                    gapDistanceSearch<false>(x, y, TransformNone);
-                    gapDistanceSearch<false>(x, y, TransformRotateClockwiseMirrorHorizontally);
-                    gapDistanceSearch<false>(x, y, TransformRotateClockwise);
-                    gapDistanceSearch<false>(x, y, TransformMirrorHorizontally);
-                }
-            }
-        }
+    // Process the tile and its neighborhood in three passes:
+    // Top (the top guard bands)
+    for (int y = y1; y <= rect.top() - 1; ++y) {
+        distanceSearchRowInnerLoop(boundsCheck, y, x1Top, x2Top);
+    }
+    // Middle (the left guard band and the tile)
+    for (int y = rect.top(); y <= rect.bottom(); ++y) {
+        distanceSearchRowInnerLoop(boundsCheck, y, x1Middle, x2Middle);
+    }
+    // Bottom (the bottom guard bands)
+    for (int y = rect.bottom() + 1; y <= y2; ++y) {
+        distanceSearchRowInnerLoop(boundsCheck, y, x1Bottom, x2Bottom);
     }
 
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
@@ -365,7 +417,8 @@ void KisGapMap::loadDistanceRect(const QRect& rect, int guardBand)
 template<bool BoundsCheck>
 void KisGapMap::gapDistanceSearch(int x, int y, CoordinateTransform op)
 {
-    if (isOpaque<BoundsCheck>(op(x, y, 0, -1)) || isOpaque<BoundsCheck>(op(x, y, 1, -1))) {
+    if (isOpaque<BoundsCheck>(op(x, y, 0, -1)) ||
+        isOpaque<BoundsCheck>(op(x, y, 1, -1))) {
         return;
     }
 
@@ -424,26 +477,18 @@ quint16 KisGapMap::lazyDistance(int x, int y)
     const int tx = x / TileSize;
     const int ty = y / TileSize;
 
-    // For opacity data, we always load all the adjacent tiles (up to 9 tiles in total).
-    {
-        const QPoint topLeft(qMax(0, tx - 1),
-                             qMax(0, ty - 1));
-        const QPoint bottomRight(qMin(tx + 1, m_numTiles.width() - 1),
-                                 qMin(ty + 1, m_numTiles.height() - 1));
+    // Clamped tile neighborhood.
+    const QPoint topLeft(qMax(0, tx - 1),
+                         qMax(0, ty - 1));
+    const QPoint bottomRight(qMin(tx + 1, m_numTiles.width() - 1),
+                             qMin(ty + 1, m_numTiles.height() - 1));
+    const QRect nearbyTiles = QRect(topLeft, bottomRight);
 
-        loadOpacityTiles(QRect(topLeft, bottomRight));
-    }
+    // For opacity data, we always load all the adjacent tiles (up to 9 tiles in total).
+    loadOpacityTiles(nearbyTiles);
 
     // For distance data, we always load a single tile.
-    {
-        QRect rect(tx * TileSize, ty * TileSize, TileSize, TileSize);
-        rect.setRight(qMin(rect.right(), m_size.width() - 1));
-        rect.setBottom(qMin(rect.bottom(), m_size.height() - 1));
-
-        // Mark as available and load.
-        m_distanceTiles[tx + ty * m_numTiles.width()] = true;
-        loadDistanceRect(rect, m_gapSize);
-    }
+    loadDistanceTile(QPoint(tx, ty), nearbyTiles, m_gapSize);
 
     // The data is now ready to be returned.
     return *distancePtr(x, y);

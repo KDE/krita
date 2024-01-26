@@ -4,7 +4,7 @@
 # traduction de krita.po en Français
 # Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
 # This file is distributed under the same license as the PACKAGE package.
-# SPDX-FileCopyrightText: 2012, 2023 Xavier Besnard <xavier.besnard@kde.org>
+# SPDX-FileCopyrightText: 2012, 2023, 2024 Xavier Besnard <xavier.besnard@kde.org>
 # Robert Jacolin <rjacolin@ifrance.com>, 2003.
 # Delafond <gerard@delafond.org>, 2003, 2004, 2005.
 # Yann Verley <yann.verley@free.fr>, 2004, 2005.
@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-19 03:10+0000\n"
-"PO-Revision-Date: 2023-12-20 09:32+0100\n"
+"PO-Revision-Date: 2024-01-22 22:02+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -22361,6 +22361,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Budget de développement</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">Mécènes non récurrents</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -24173,10 +24183,9 @@ msgstr "Équipe de traduction"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
-msgstr "Mécène"
+msgstr "Mécènes"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83

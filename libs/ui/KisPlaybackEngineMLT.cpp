@@ -286,6 +286,21 @@ public:
 
             m_d->frameStats.reset();
 
+            {
+                /**
+                 * Make sure that **all** producer properties are initialized **before**
+                 * the consumers start pulling stuff from the producer. Otherwise we
+                 * can get a race condition with the consumer's read-ahead thread.
+                 */
+
+                KisImageAnimationInterface* animInterface = m_d->activeCanvas()->image()->animationInterface();
+                m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
+                m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
+                m_d->activeProducer()->set("speed", m_d->playbackSpeed);
+                const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
+                m_d->activeProducer()->set("limit_enabled", shouldLimit);
+            }
+
             if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
                 m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : animationState->currentVolume());
                 m_d->pushConsumer->start();
@@ -294,15 +309,6 @@ public:
                 m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : animationState->currentVolume());
                 m_d->pullConsumer->set("real_time", m_d->dropFrames() ? 1 : 0);
                 m_d->pullConsumer->start();
-            }
-
-            {
-                KisImageAnimationInterface* animInterface = m_d->activeCanvas()->image()->animationInterface();
-                m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
-                m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
-                m_d->activeProducer()->set("speed", m_d->playbackSpeed);
-                const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
-                m_d->activeProducer()->set("limit_enabled", shouldLimit);
             }
         }
     }
@@ -381,6 +387,7 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
     producer->set("start_frame", animInterface->documentPlaybackRange().start());
     producer->set("end_frame", animInterface->documentPlaybackRange().end());
     producer->set("limit_enabled", false);
+    producer->set("speed", m_d->playbackSpeed);
 }
 
 void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)

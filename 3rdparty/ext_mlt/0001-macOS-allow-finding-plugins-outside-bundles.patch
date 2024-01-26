@@ -1,7 +1,7 @@
-From 929d2bef24bab8a83b28bd0eff5039b42a76919a Mon Sep 17 00:00:00 2001
+From 38ef302db9ae8b41c5158f4b44fbbe1ef8636b60 Mon Sep 17 00:00:00 2001
 From: Ivan Yossi <ghevan@gmail.com>
-Date: Fri, 26 May 2023 22:44:18 -0600
-Subject: [PATCH] macOS allow finding plugins outside bundles
+Date: Fri, 26 Jan 2024 19:57:17 +0100
+Subject: [PATCH 1/2] [macOS] allow finding plugins outside bundles
 
 This allows to load mlt plugins from install directory when the
 .app is missing Plugins and Resources locations.
@@ -19,19 +19,19 @@ i/bin/krita.app/Contents/Resources/mlt -> i/share/mlt
  1 file changed, 25 insertions(+)
 
 diff --git a/src/framework/mlt_factory.c b/src/framework/mlt_factory.c
-index bc890320..57ae3191 100644
+index 16469aa1..bee8eb9f 100644
 --- a/src/framework/mlt_factory.c
 +++ b/src/framework/mlt_factory.c
 @@ -52,6 +52,7 @@
- #  endif
- #  ifdef __APPLE__
- #    include <mach-o/dyld.h>
-+#	 include <dirent.h>
-      /** the default subdirectory of the libdir for holding modules (plugins) */
- #    define PREFIX_LIB "/PlugIns/mlt"
-      /** the default subdirectory of the install prefix for holding module (plugin) data */
+ #endif
+ #ifdef __APPLE__
+ #include <mach-o/dyld.h>
++#include <dirent.h>
+ /** the default subdirectory of the libdir for holding modules (plugins) */
+ #define PREFIX_LIB "/PlugIns/mlt"
+ /** the default subdirectory of the install prefix for holding module (plugin) data */
 @@ -64,6 +65,24 @@
- #  endif
+ #endif
  #endif
  
 +#ifdef __APPLE__
@@ -55,25 +55,25 @@ index bc890320..57ae3191 100644
  /** holds the full path to the modules directory - initialized and retained for the entire session */
  static char *mlt_directory = NULL;
  /** a global properties list for holding environment config data and things needing session-oriented cleanup */
-@@ -172,12 +191,18 @@ mlt_repository mlt_factory_init( const char *directory )
- 				mlt_directory = calloc( 1, size + strlen( PREFIX_DATA ) + 1 );
- 				strcpy( mlt_directory, exedir );
- 				strcat( mlt_directory, PREFIX_DATA );
-+#  ifdef __APPLE__
-+				mlt_apple_relocate_mltdirectory(&mlt_directory, exedir, "/share/mlt");
-+#  endif
- 				mlt_properties_set( global_properties, "MLT_DATA", mlt_directory );
- 				free( mlt_directory );
- 			}
- 			mlt_directory = calloc( 1, size + strlen( PREFIX_LIB ) + 1 );
- 			strcpy( mlt_directory, exedir );
- 			strcat( mlt_directory, PREFIX_LIB );
-+#  ifdef __APPLE__
-+			mlt_apple_relocate_mltdirectory(&mlt_directory, exedir, "/lib/mlt");
-+#  endif
- 		}
+@@ -182,12 +201,18 @@ mlt_repository mlt_factory_init(const char *directory)
+                 mlt_directory = calloc(1, size + strlen(PREFIX_DATA) + 1);
+                 strcpy(mlt_directory, exedir);
+                 strcat(mlt_directory, PREFIX_DATA);
++#ifdef __APPLE__
++                mlt_apple_relocate_mltdirectory(&mlt_directory, exedir, "/share/mlt");
++#endif 
+                 mlt_properties_set(global_properties, "MLT_DATA", mlt_directory);
+                 free(mlt_directory);
+             }
+             mlt_directory = calloc(1, size + strlen(PREFIX_LIB) + 1);
+             strcpy(mlt_directory, exedir);
+             strcat(mlt_directory, PREFIX_LIB);
++#ifdef __APPLE__
++            mlt_apple_relocate_mltdirectory(&mlt_directory, exedir, "/lib/mlt");
++#endif
+         }
  #endif
- 		
+ 
 -- 
-2.37.1 (Apple Git-137.1)
+2.23.0.windows.1
 

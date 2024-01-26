@@ -1,0 +1,49 @@
+From 4a6944fd0e7164d77eddca22f9d703ce2533611e Mon Sep 17 00:00:00 2001
+From: Halla Rempt <halla@valdyas.org>
+Date: Fri, 26 Jan 2024 20:03:28 +0100
+Subject: [PATCH 2/2] MLT: check pointers before dereferencing
+
+In other places, checks for "self" occur as well, so it probably
+should be checked everywhere.
+
+This prevents MLT from crashing if it cannot find plugins on creating
+an image in Krita. It's still not good that MLT cannot find plugins
+in a reliable way, though...
+---
+ src/framework/mlt_consumer.c | 2 ++
+ src/framework/mlt_service.c  | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/framework/mlt_consumer.c b/src/framework/mlt_consumer.c
+index a65d7c81..00c125a9 100644
+--- a/src/framework/mlt_consumer.c
++++ b/src/framework/mlt_consumer.c
+@@ -578,6 +578,8 @@ int mlt_consumer_put_frame(mlt_consumer self, mlt_frame frame)
+ {
+     int error = 1;
+ 
++    if (!self) return error;
++
+     // Get the service associated to the consumer
+     mlt_service service = MLT_CONSUMER_SERVICE(self);
+ 
+diff --git a/src/framework/mlt_service.c b/src/framework/mlt_service.c
+index 4ee83fa5..f2e42331 100644
+--- a/src/framework/mlt_service.c
++++ b/src/framework/mlt_service.c
+@@ -319,9 +319,11 @@ int mlt_service_insert_producer(mlt_service self, mlt_service producer, int inde
+ 
+ int mlt_service_disconnect_producer(mlt_service self, int index)
+ {
++    if (!self) return -1;
++
+     mlt_service_base *base = self->local;
+ 
+-    if (base->in && index >= 0 && index < base->count) {
++    if (base && base->in && index >= 0 && index < base->count) {
+         mlt_service current = base->in[index];
+ 
+         if (current) {
+-- 
+2.23.0.windows.1
+

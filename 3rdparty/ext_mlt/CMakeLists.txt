@@ -31,11 +31,14 @@ endif()
 kis_ExternalProject_Add_with_separate_builds_apple(
   ext_mlt
   DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-  GIT_REPOSITORY https://github.com/emmetoneillpdx/mlt.git
-  GIT_TAG origin/master
+  URL https://github.com/mltframework/mlt/releases/download/v7.22.0/mlt-7.22.0.tar.gz
+  URL_HASH MD5=9f747ae1b7388937be6328b4c234431b
+  #GIT_REPOSITORY https://github.com/emmetoneillpdx/mlt.git
+  #GIT_TAG origin/master
   # GIT_TAG 1924f3712e3dc0f7a1e5a1aa658dbbbf0e863754 # fixed tip of 'origin/mlt-krita-plugins'
 
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-macOS-allow-finding-plugins-outside-bundles.patch
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-compilation-on-Windows-with-Clang-15-965.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-macOS-allow-finding-plugins-outside-bundles.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-MLT-check-pointers-before-dereferencing.patch
 
   CMAKE_ARGS ${GLOBAL_PROFILE} -DMOD_OPENCV=OFF ${WIN32_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_mlt} ${BUILD_EXTRA_OPTS}

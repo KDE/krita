@@ -121,6 +121,40 @@ static int producer_get_frame(mlt_producer producer, mlt_frame_ptr frame, int in
     return retval;
 }
 
+static void updateInternalProducesEofStatus(mlt_producer producer_internal, int effectiveLimitEnabled)
+{
+    const char *effectiveEofMode = effectiveLimitEnabled ? "continue" : "pause";
+
+    mlt_properties internalProducerProps = MLT_PRODUCER_PROPERTIES(producer_internal);
+
+    const char *currentEofMode = mlt_properties_get(internalProducerProps, "eof");
+
+    if (!currentEofMode || strcmp(currentEofMode, effectiveEofMode) != 0) {
+        mlt_properties_set_string(internalProducerProps, "eof", effectiveEofMode);
+    }
+}
+
+static void producer_property_changed( mlt_service owner, mlt_producer self, mlt_event_data event_data)
+{
+    const char *name = mlt_event_data_to_string(event_data);
+    if (!name) return;
+
+    if (strcmp(name, "start_frame") == 0 ||
+        strcmp(name, "end_frame" ) == 0 ||
+        strcmp(name, "limit_enabled") == 0) {
+
+        mlt_properties props = MLT_PRODUCER_PROPERTIES(self);
+
+        const int effectiveLimitEnabled =
+            is_valid_range(mlt_properties_get_int(props, "start_frame"),
+                           mlt_properties_get_int(props, "end_frame")) &&
+            mlt_properties_get_int(props, "limit_enabled");
+
+        private_data* pdata = (private_data*)self->child;
+        updateInternalProducesEofStatus(pdata->producer_internal, effectiveLimitEnabled);
+    }
+}
+
 static int producer_seek(mlt_producer producer, mlt_position position)
 {
     private_data *pdata = (private_data *) producer->child;
@@ -174,6 +208,9 @@ extern "C" void* producer_krita_init(mlt_profile profile,
         if (pdata->producer_internal) {
             mlt_producer_set_speed(pdata->producer_internal, 1.0);
         }
+
+        mlt_events_listen( producer_properties, producer, "property-changed", ( mlt_listener )producer_property_changed );
+        updateInternalProducesEofStatus(pdata->producer_internal, 0);
     }
 
     const bool INVALID_CONTEXT = !producer || !pdata || !pdata->producer_internal;

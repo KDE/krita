@@ -6177,7 +6177,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured1."
 "gih"
 msgid "Flat_textured1"
-msgstr ""
+msgstr "平_テクスチャ1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured2.gih:1
@@ -6186,7 +6186,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Flat_textured2."
 "gih"
 msgid "Flat_textured2"
-msgstr ""
+msgstr "平_テクスチャ2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/G_Sparks.gih:1
@@ -6325,7 +6325,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured1."
 "gih"
 msgid "Rect_textured1"
-msgstr ""
+msgstr "長方形 テクスチャ1"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured2.gih:1
@@ -6334,7 +6334,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured2."
 "gih"
 msgid "Rect_textured2"
-msgstr ""
+msgstr "長方形 テクスチャ2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured3.gih:1
@@ -6343,7 +6343,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/Rect_textured3."
 "gih"
 msgid "Rect_textured3"
-msgstr ""
+msgstr "長方形 テクスチャ3"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/S_splats_02.gih:1
@@ -6466,7 +6466,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/"
 "z_study_pencil_2Hb.gih"
 msgid "2B pencil Grain 2 b"
-msgstr ""
+msgstr "2B 鉛筆 粒子 2B"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:brushes/z_study_pencil_H.gih:1
@@ -6743,13 +6743,11 @@ msgstr "見本"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/web.gpl:2
-#, fuzzy, kde-format
-#| msgctxt "./krita/data/palettes/web.gpl"
-#| msgid "Web"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/web.gpl"
 msgid "Web"
-msgstr "ウェブ"
+msgstr "Webセーフカラー"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bamboo_leaves_random.gih:1
@@ -6758,17 +6756,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bamboo_leaves_random.gih"
 msgid "bamboo_leaves_random"
-msgstr ""
+msgstr "竹 葉 ランダム"
 
-# tip は筆記具の先端 (Krita では描線のセグメントとなる画像データ) を指します
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/brick.gih:1
-#, fuzzy, kde-format
-#| msgid "Brush Tip"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/brick.gih"
 msgid "GIMP Brush Pipe"
-msgstr "ブラシ形状"
+msgstr "GIMP ブラシ パイプ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/bristles_circle_random.gih:1
@@ -6777,7 +6773,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "bristles_circle_random.gih"
 msgid "bristles_circle_random"
-msgstr ""
+msgstr "筆 丸 ランダム"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel.gih:1
@@ -6786,17 +6782,16 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel."
 "gih"
 msgid "Chalk Chisel"
-msgstr ""
+msgstr "チョーク 平"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel_random.gih:1
-#, fuzzy, kde-format
-#| msgid "Chisel Hard"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chalk_chisel_random.gih"
 msgid "Chalk Chisel Random"
-msgstr "強く彫る"
+msgstr "チョーク 平 ランダム"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk_chisel_random_small.gih:1
@@ -6805,7 +6800,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chalk_chisel_random_small.gih"
 msgid "3_eroded"
-msgstr ""
+msgstr "3 虫食い"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chisel_bent_rough.gih:1
@@ -6814,27 +6809,24 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "chisel_bent_rough.gih"
 msgid "Chisel Bent Rough"
-msgstr ""
+msgstr "チゼル 湾曲 粗"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/circle_hard_eroded.gih:1
-#, fuzzy, kde-format
-#| msgid "Circular Arrow"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "circle_hard_eroded.gih"
 msgid "Circle Hard Eroded"
-msgstr "Uターン矢印"
+msgstr "丸 硬 虫食い"
 
-# tip は筆記具の先端 (Krita では描線のセグメントとなる画像データ) を指します
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/fairy-dust.gih:1
-#, fuzzy, kde-format
-#| msgid "Brush Tip"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/fairy-dust.gih"
 msgid "GIMP Brush Pipe"
-msgstr "ブラシ形状"
+msgstr "GIMP ブラシ パイプ"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/floor.gih:1
@@ -6842,17 +6834,16 @@ msgstr "ブラシ形状"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/floor.gih"
 msgid "A-4 Forest"
-msgstr ""
+msgstr "A-4 森"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain.gih:1
-#, fuzzy, kde-format
-#| msgid "Graphics Pen"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/graphite_grain."
 "gih"
 msgid "Graphite Grain"
-msgstr "グラフィックペン"
+msgstr "炭 粒子"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass.gih:1
@@ -6860,17 +6851,15 @@ msgstr "グラフィックペン"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass.gih"
 msgid "Grass"
-msgstr ""
+msgstr "草むら"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass_patch.gih:1
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Smart Patch"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/grass_patch.gih"
 msgid "Grass Patch"
-msgstr "画像補完"
+msgstr "草むら まだら"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hearts.gih:1
@@ -6878,7 +6867,7 @@ msgstr "画像補完"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hearts.gih"
 msgid "Hearts"
-msgstr ""
+msgstr "ハート"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/impressionism_brush.gih:1
@@ -6887,18 +6876,17 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "impressionism_brush.gih"
 msgid "random-stroke"
-msgstr ""
+msgstr "ランダムなストローク"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/mountains_distant.gih:1
-#, fuzzy, kde-format
-#| msgid "Spline assistant"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "mountains_distant.gih"
 msgid "Mountains Distant"
-msgstr "スプライン補助線"
+msgstr "山々 遠景"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/noise.gih:1
@@ -6906,17 +6894,16 @@ msgstr "スプライン補助線"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/noise.gih"
 msgid "P_Graphite Black Grass"
-msgstr ""
+msgstr "P 黒鉛 黒 草"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/paint_splats.gih:1
-#, fuzzy, kde-format
-#| msgid "Gradient Steps"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/paint_splats."
 "gih"
 msgid "Paint Splats"
-msgstr "階調数"
+msgstr "ペイント 飛沫"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-vegetal.gih:1
@@ -6925,25 +6912,23 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/random-vegetal."
 "gih"
 msgid "A-4 random vegetal2"
-msgstr ""
+msgstr "A-4 ランダム 植物2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_light.gih:1
-#, fuzzy, kde-format
-#| msgid "Lock the height"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_light.gih"
 msgid "Rock Light"
-msgstr "高さをロック"
+msgstr "岩 反射"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_pitted.gih:1
-#, fuzzy, kde-format
-#| msgid "Lock Points"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_pitted.gih"
 msgid "Rock Pitted"
-msgstr "ポイントをロック"
+msgstr "岩 穴あき"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_scraped.gih:1
@@ -6952,7 +6937,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock_scraped."
 "gih"
 msgid "rock_scraped"
-msgstr ""
+msgstr "岩 削り取り"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/scratches_rough.gih:1
@@ -6961,7 +6946,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "scratches_rough.gih"
 msgid "scratches_rough"
-msgstr ""
+msgstr "ひっかき傷 粗"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/shapes_mech_random.gih:1
@@ -6970,7 +6955,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "shapes_mech_random.gih"
 msgid "shapes_mech_random"
-msgstr ""
+msgstr "形 機械 ランダム"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/shapes_round_random.gih:1
@@ -6979,7 +6964,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "shapes_round_random.gih"
 msgid "shapes_round_random"
-msgstr ""
+msgstr "形 丸 ランダム"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/shapes_spiked_random.gih:1
@@ -6988,16 +6973,15 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "shapes_spiked_random.gih"
 msgid "shapes_spiked_random"
-msgstr ""
+msgstr "形 とげ ランダム"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/snow.gih:1
-#, fuzzy, kde-format
-#| msgid "Snowflake"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/snow.gih"
 msgid "Snow"
-msgstr "反転多重対称"
+msgstr "雪"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large.gih:1
@@ -7006,7 +6990,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/splats_large."
 "gih"
 msgid "S_Splats 2"
-msgstr ""
+msgstr "S 飛沫 2"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/vegetal_stylised.gih:1
@@ -7015,25 +6999,23 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/"
 "vegetal_stylised.gih"
 msgid "deevad_vegetal-stylised_colormask_01"
-msgstr ""
+msgstr "Deevad 植物 スタイル化 色マスク 01"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/water_still.gih:1
-#, fuzzy, kde-format
-#| msgid "Layer Style"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/water_still.gih"
 msgid "Water Still"
-msgstr "レイヤースタイル"
+msgstr "水 静止"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/watercolor.gih:1
-#, fuzzy, kde-format
-#| msgid "Update color"
+#, kde-format
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/watercolor.gih"
 msgid "Watercolor"
-msgstr "色を更新"
+msgstr "水彩"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/BG-Krita2.ggr:2
@@ -8128,11 +8110,10 @@ msgstr "ツールバー左側 (ファイル系) 表示"
 #. i18n: context: toolTip @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "ツールバー"
+msgstr "ツールバーをロックする"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -8436,12 +8417,10 @@ msgstr "スクリーンの色を抽出(&S)"
 #. i18n: context: toolTip @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
 #: krita/krita.action:303 plugins/tools/svgtexttool/SvgTextTool.action:248
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Pick a color from the screen"
+#, kde-format
 msgctxt "action"
 msgid "Sample a color from the screen"
-msgstr "スクリーンから色を選択"
+msgstr "スクリーンから色を抽出"
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:304
@@ -8465,13 +8444,15 @@ msgid ""
 "Sample a color from the screen while sampling a real color from the canvas "
 "if the cursor is over it"
 msgstr ""
+"スクリーンから色を抽出するとき、カーソルがキャンバス上にある場合は、キャンバ"
+"スの実際の色を抽出します"
 
 #. i18n: context: iconText @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:314
 #, kde-format
 msgctxt "action"
 msgid "Sample Screen Color (Sample Real Canvas)"
-msgstr ""
+msgstr "スクリーンの色を抽出(キャンバスの実際の色を抽出)"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:321
@@ -8639,122 +8620,102 @@ msgstr "ブラシの不透明度を下げる "
 #. i18n: context: text @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:452 krita/krita.action:455
-#, fuzzy, kde-format
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "action"
 msgid "Increase Flow"
-msgstr "明度を上げる"
+msgstr "流量を上げる"
 
 #. i18n: context: toolTip @ Action (increase_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:454
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Flow"
-msgstr "ブラシのサイズを大きくする"
+msgstr "ブラシの流量を上げる"
 
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:464 krita/krita.action:467
-#, fuzzy, kde-format
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Flow"
-msgstr "明度を下げる"
+msgstr "流量を下げる"
 
 #. i18n: context: toolTip @ Action (decrease_flow), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:466
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Flow"
-msgstr "ブラシのサイズを小さくする"
+msgstr "ブラシの流量を下げる"
 
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:476 krita/krita.action:479
-#, fuzzy, kde-format
-#| msgid "Increase Value"
+#, kde-format
 msgctxt "action"
 msgid "Increase Fade"
-msgstr "明度を上げる"
+msgstr "フェードを上げる"
 
 #. i18n: context: toolTip @ Action (increase_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:478
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Fade"
-msgstr "ブラシのサイズを大きくする"
+msgstr "ブラシのフェードを上げる"
 
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:488 krita/krita.action:491
-#, fuzzy, kde-format
-#| msgid "Decrease Value"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Fade"
-msgstr "明度を下げる"
+msgstr "フェードを下げる"
 
 #. i18n: context: toolTip @ Action (decrease_fade), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:490
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Fade"
-msgstr "ブラシのサイズを小さくする"
+msgstr "ブラシのフェードを下げる"
 
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:500 krita/krita.action:503
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase Scatter"
-msgstr "彩度を上げる"
+msgstr "散らばりを増やす"
 
 #. i18n: context: toolTip @ Action (increase_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:502
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Increase Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Increase brush Scatter strength"
-msgstr "ブラシのサイズを大きくする"
+msgstr "ブラシの散らばりの強さを上げる"
 
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:512 krita/krita.action:515
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease Scatter"
-msgstr "彩度を下げる"
+msgstr "散らばりを少なくする"
 
 #. i18n: context: toolTip @ Action (decrease_scatter), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:514
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Decrease Brush Size"
+#, kde-format
 msgctxt "action"
 msgid "Decrease brush Scatter strength"
-msgstr "ブラシのサイズを小さくする"
+msgstr "ブラシの散らばりの強さを下げる"
 
 #. i18n: context: text @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (erase_action), Actions (Painting), ActionCollection (Krita)
@@ -8775,47 +8736,44 @@ msgstr "消しゴムモードに設定"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:536 krita/krita.action:538 krita/krita.action:539
-#, fuzzy, kde-format
-#| msgid "Toggle Eraser"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "消しゴムの切り替え"
+msgstr "消しゴムプリセットに切り替える"
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:548 krita/krita.action:551
-#, fuzzy, kde-format
-#| msgid "Toggle Eraser"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "消しゴムの切り替え"
+msgstr "消しゴムプリセットを選択する"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:550
 #, kde-format
 msgctxt "action"
 msgid "Select eraser preset, along with the freehand brush tool"
-msgstr ""
+msgstr "フリーハンドブラシツールと一緒に消しゴムプリセットを選択する"
 
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:560 krita/krita.action:563
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "現在のブラシプリセット"
+msgstr "ブラシプリセットを選択する"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:562
 #, kde-format
 msgctxt "action"
 msgid "Select brush preset, along with the freehand brush tool"
-msgstr ""
+msgstr "フリーハンドブラシツールと一緒にブラシプリセットを選択する"
 
 #. i18n: context: text @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (reload_preset_action), Actions (Painting), ActionCollection (Krita)
@@ -9066,6 +9024,8 @@ msgid ""
 "Disable the brush outline, or enable the previously used brush outline shape "
 "if already disabled"
 msgstr ""
+"ブラシの輪郭を無効にするか、既に無効になっている場合は以前に使用されていたブ"
+"ラシの輪郭形状を有効にします"
 
 #. i18n: context: text @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (selection_tool_mode_add), Actions (Painting), ActionCollection (Krita)
@@ -9194,12 +9154,10 @@ msgstr "ブラシのサイズを大きくする"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:879 krita/krita.action:881 krita/krita.action:882
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "オブジェクトを時計回りに90°回転"
+msgstr "ブラシ形状を時計回りに回転"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9208,11 +9166,10 @@ msgstr "オブジェクトを時計回りに90°回転"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "選択範囲を90°時計回りに回転させます。"
+msgstr "ブラシ形状を時計回りに回転 (精密)"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
@@ -9221,12 +9178,10 @@ msgstr "選択範囲を90°時計回りに回転させます。"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:903 krita/krita.action:905 krita/krita.action:906
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "オブジェクトを反時計回りに90°回転"
+msgstr "ブラシ形状を反時計回りに回転"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9235,11 +9190,10 @@ msgstr "オブジェクトを反時計回りに90°回転"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "選択範囲を90°反時計回りに回転させます。"
+msgstr "ブラシ形状を反時計回りに回転 (精密)"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)

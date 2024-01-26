@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "kis_assert.h"
+
 #include <framework/mlt_factory.h>
 #include <framework/mlt_frame.h>
 #include <framework/mlt_producer.h>

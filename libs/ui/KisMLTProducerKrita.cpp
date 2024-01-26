@@ -79,7 +79,11 @@ static int producer_get_audio(mlt_frame frame,
     mlt_properties props = MLT_PRODUCER_PROPERTIES(producer);
 
     // Scale the frequency to account for the dynamic speed (normalized).
-    const double SPEED = mlt_properties_get_double(props, "speed");
+    double SPEED = mlt_properties_get_double(props, "speed");
+
+    KIS_SAFE_ASSERT_RECOVER(!qFuzzyIsNull(SPEED)) {
+        SPEED = 1.0;
+    }
 
     audio.frequency = (double) audio.frequency * fabs(SPEED);
     if (SPEED < 0.0) {

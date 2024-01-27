@@ -174,6 +174,40 @@ public:
      * @return a list of booleans for whether the current codePoint represents a justificaton opportunity.
      */
     static QVector<QPair<bool, bool>> justificationOpportunities(QString text, QString langCode);
+
+    /**
+     * @brief getBidiOpening
+     * Get the bidi opening string associated with the given Css unicode-bidi value and direction
+     * https://www.w3.org/TR/css-writing-modes-3/#unicode-bidi
+     * @param ltr -- whether the direction is left-to-right
+     * @param bidi -- the unicodee-bidi value.
+     * @return string with bidi opening marks.
+     */
+    static QString getBidiOpening(bool ltr, KoSvgText::UnicodeBidi bidi);
+
+    /**
+     * @brief getBidiClosing
+     * Returns the bidi closing string associated with the given Css unicode-bidi value.
+     * @param bidi -- the unicode-bidi value
+     * @return string with bidi closing marks.
+     */
+    static QString getBidiClosing(KoSvgText::UnicodeBidi bidi);
+
+    /**
+     * @brief removeText
+     * Special removal of text that takes a text, start and length and will modify these values
+     * so that...
+     * - Whole code points are deleted at any time, avoiding
+     *   no dangling surrogates.
+     * - Graphemes don't end with Zero-width-joiners, as that can lead
+     *   to the grapheme merging with the next.
+     * - Variation selectors are deleted along their base.
+     * - regional sequences are deleted in pairs.
+     * @param text text to remove text from.
+     * @param start the start index, will be modified.
+     * @param length the length.
+     */
+    static void removeText(QString &text, int &start, int length);
 };
 
 #endif // KOCSSTEXTUTILS_H

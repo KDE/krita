@@ -339,6 +339,8 @@ public:
     /// Notify that the cursor position has changed.
     void notifyCursorPosChanged(int pos, int anchor);
 
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

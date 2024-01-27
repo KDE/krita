@@ -863,6 +863,43 @@ void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
         }
     }
 }
+#include <QDomElement>
+bool loadSvgChildNodes(const QDomElement &element, SvgLoadingContext &context, KisForest<KoSvgTextContentElement> &textData, KisForest<KoSvgTextContentElement>::child_iterator parent)
+{
+    KoSvgTextContentElement textNode;
+    textNode.loadSvg(element, context);
+    auto currentIt = textData.insert(parent, textNode);
+    for (int j = 0; j < element.childNodes().size() ; ++j) {
+        QDomNode child = element.childNodes().at(j);
+        if (child.isText()) {
+            if (element.childNodes().size() == 1) {
+                currentIt.node()->value.loadSvgTextNode(child.toText(), context);
+            } else {
+                KoSvgTextContentElement childNode = textNode;
+                childNode.loadSvgTextNode(child.toText(), context);
+                textData.insert(currentIt, childNode);
+            }
+        } else if (child.isElement()) {
+            loadSvgChildNodes(child.toElement(), context, textData, currentIt);
+        }
+    }
+    return true;
+}
+
+bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
+{
+    KoSvgTextChunkShape::loadSvg(element, context);
+    d->textData = KisForest<KoSvgTextContentElement>();
+
+    loadSvgChildNodes(element, context, d->textData, d->textData.childBegin());
+
+    qDebug() << "testing parsing";
+    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+        qDebug() << it.node()->value.text;
+    }
+
+    return true;
+}
 
 void KoSvgTextShape::paintComponent(QPainter &painter) const
 {

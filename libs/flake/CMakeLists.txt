@@ -213,6 +213,7 @@ set(kritaflake_SRCS
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
     text/KoSvgTextChunkShape.cpp
+    text/KoSvgTextContentElement.cpp
     text/KoSvgTextShape.cpp
     text/KoSvgTextShape_p_glyphs.cpp
     text/KoSvgTextShape_p_layout.cpp

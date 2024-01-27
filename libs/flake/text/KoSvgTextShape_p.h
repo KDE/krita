@@ -11,8 +11,10 @@
 #include "KoSvgTextShape.h"
 
 #include "KoSvgText.h"
+#include "KoSvgTextContentElement.h"
 
 #include <kis_assert.h>
+#include <KisForest.h>
 
 #include <QFont>
 #include <QImage>
@@ -297,6 +299,7 @@ public:
         xRes = rhs.xRes;
         result = rhs.result;
         lineBoxes = rhs.lineBoxes;
+        textData = rhs.textData;
     };
 
     TextRendering textRendering = Auto;
@@ -304,6 +307,8 @@ public:
     int yRes = 72;
     QList<KoShape*> shapesInside;
     QList<KoShape*> shapesSubtract;
+
+    KisForest<KoSvgTextContentElement> textData;
 
     QVector<CharacterResult> result;
     QVector<LineBox> lineBoxes;

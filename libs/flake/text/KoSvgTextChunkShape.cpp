@@ -945,6 +945,7 @@ void KoSvgTextChunkShape::resetTextShape()
     }
 }
 
+
 bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &context)
 {
     SvgGraphicsContext *gc = context.currentGC();

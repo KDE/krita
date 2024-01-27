@@ -406,3 +406,156 @@ QVector<QPair<bool, bool> > KoCssTextUtils::justificationOpportunities(QString t
     }
     return opportunities;
 }
+
+const QString BIDI_CONTROL_LRE = "\u202a";
+const QString BIDI_CONTROL_RLE = "\u202b";
+const QString BIDI_CONTROL_PDF = "\u202c";
+const QString BIDI_CONTROL_LRO = "\u202d";
+const QString BIDI_CONTROL_RLO = "\u202e";
+const QString BIDI_CONTROL_LRI = "\u2066";
+const QString BIDI_CONTROL_RLI = "\u2067";
+const QString BIDI_CONTROL_FSI = "\u2068";
+const QString BIDI_CONTROL_PDI = "\u2069";
+const QString UNICODE_BIDI_ISOLATE_OVERRIDE_LR_START = "\u2068\u202d";
+const QString UNICODE_BIDI_ISOLATE_OVERRIDE_RL_START = "\u2068\u202e";
+const QString UNICODE_BIDI_ISOLATE_OVERRIDE_END = "\u202c\u2069";
+const QChar ZERO_WIDTH_JOINER = 0x200d;
+
+QString KoCssTextUtils::getBidiOpening(bool ltr, KoSvgText::UnicodeBidi bidi)
+{
+    using namespace KoSvgText;
+
+    QString result;
+
+    if (ltr) {
+        if (bidi == BidiEmbed) {
+            result = BIDI_CONTROL_LRE;
+        } else if (bidi == BidiOverride) {
+            result = BIDI_CONTROL_LRI;
+        } else if (bidi == BidiIsolate) {
+            result = BIDI_CONTROL_LRO;
+        } else if (bidi == BidiIsolateOverride) {
+            result = UNICODE_BIDI_ISOLATE_OVERRIDE_LR_START;
+        } else if (bidi == BidiPlainText) {
+            result = BIDI_CONTROL_FSI;
+        }
+    } else {
+        if (bidi == BidiEmbed) {
+            result = BIDI_CONTROL_RLE;
+        } else if (bidi == BidiOverride) {
+            result = BIDI_CONTROL_RLI;
+        } else if (bidi == BidiIsolate) {
+            result = BIDI_CONTROL_RLO;
+        } else if (bidi == BidiIsolateOverride) {
+            result = UNICODE_BIDI_ISOLATE_OVERRIDE_RL_START;
+        } else if (bidi == BidiPlainText) {
+            result = BIDI_CONTROL_FSI;
+        }
+    }
+
+    return result;
+}
+
+QString KoCssTextUtils::getBidiClosing(KoSvgText::UnicodeBidi bidi)
+{
+    using namespace KoSvgText;
+
+    QString result;
+
+    if (bidi == BidiEmbed || bidi == BidiOverride) {
+        result = BIDI_CONTROL_PDF;
+    } else if (bidi == BidiIsolate || bidi == BidiPlainText) {
+        result = BIDI_CONTROL_PDI;
+    } else if (bidi == BidiIsolateOverride) {
+        result = UNICODE_BIDI_ISOLATE_OVERRIDE_END;
+    }
+
+    return result;
+}
+
+bool isVariationSelector(uint val) {
+    // Original set of VS
+    if (val == 0xfe00 || (val > 0xfe00 && val <= 0xfe0f)) {
+        return true;
+    }
+    // Extended set VS
+    if (val == 0xe0100 || (val > 0xe0100 && val <= 0xe01ef)) {
+        return true;
+    }
+    // Mongolian VS
+    if (val == 0x180b || (val > 0x180b && val <= 0x180f)) {
+        return true;
+    }
+    // Emoji skin tones
+    if (val == 0x1f3fb || (val > 0x1f3fb && val <= 0x1f3ff)) {
+        return true;
+    }
+    return false;
+}
+
+bool regionalIndicator(uint val) {
+    if (val == 0x1f1e6 || (val > 0x1f1e6 && val <= 0x1f1ff)) {
+        return true;
+    }
+    return false;
+}
+
+void KoCssTextUtils::removeText(QString &text, int &start, int length)
+{
+    int end = start+length;
+    int j = 0;
+    int v = 0;
+    int lastCharZWJ = 0;
+    int lastVS = 0;
+    int vsClusterStart = 0;
+    int regionalIndicatorCount = 0;
+    bool startFound = false;
+    bool addToEnd = true;
+    Q_FOREACH(const uint i, text.toUcs4()) {
+        v = QChar::requiresSurrogates(i)? 2: 1;
+        int index = (j+v) -1;
+        bool ZWJ = text.at(index) == ZERO_WIDTH_JOINER;
+        if (isVariationSelector(i)) {
+            lastVS += v;
+        } else {
+            lastVS = 0;
+            vsClusterStart = j;
+        }
+        if (index >= start && !startFound) {
+            startFound = true;
+            if (v > 1) {
+                start = j;
+            }
+            if (regionalIndicatorCount > 0 && regionalIndicator(i)) {
+                start -= regionalIndicatorCount;
+                regionalIndicatorCount = 0;
+            }
+            // Always delete any zero-width-joiners as well.
+            if (ZWJ && index > start) {
+                start = -1;
+            }
+            if (lastCharZWJ > 0) {
+                start -= lastCharZWJ;
+                lastCharZWJ = 0;
+            }
+            // remove any clusters too.
+            if (lastVS > 0) {
+                start = vsClusterStart;
+            }
+        }
+
+
+        if (j >= end && addToEnd) {
+            end = j;
+            addToEnd =  ZWJ || isVariationSelector(i)
+                    || (regionalIndicatorCount < 3 && regionalIndicator(i));
+            if (addToEnd) {
+                end += v;
+            }
+        }
+        j += v;
+        lastCharZWJ = ZWJ? lastCharZWJ + v: 0;
+        regionalIndicatorCount = regionalIndicator(i)? regionalIndicatorCount + v: 0;
+    }
+    text.remove(start, end-start);
+}

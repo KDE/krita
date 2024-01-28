@@ -863,42 +863,94 @@ void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
         }
     }
 }
-#include <QDomElement>
-bool loadSvgChildNodes(const QDomElement &element, SvgLoadingContext &context, KisForest<KoSvgTextContentElement> &textData, KisForest<KoSvgTextContentElement>::child_iterator parent)
+
+bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
 {
+
     KoSvgTextContentElement textNode;
     textNode.loadSvg(element, context);
-    auto currentIt = textData.insert(parent, textNode);
-    for (int j = 0; j < element.childNodes().size() ; ++j) {
-        QDomNode child = element.childNodes().at(j);
-        if (child.isText()) {
-            if (element.childNodes().size() == 1) {
-                currentIt.node()->value.loadSvgTextNode(child.toText(), context);
-            } else {
-                KoSvgTextContentElement childNode = textNode;
-                childNode.loadSvgTextNode(child.toText(), context);
-                textData.insert(currentIt, childNode);
-            }
-        } else if (child.isElement()) {
-            loadSvgChildNodes(child.toElement(), context, textData, currentIt);
-        }
+    qDebug() << Q_FUNC_INFO;
+    if (KisForestDetail::size(d->textData) == 0) {
+        KoSvgTextChunkShape::loadSvg(element, context);
+        d->currentNode = d->textData.insert(d->textData.childEnd(), textNode);
+    } else {
+        d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
+    }
+
+    return true;
+}
+
+bool KoSvgTextShape::loadSvgText(const QDomText &text, SvgLoadingContext &context)
+{
+    if (d->currentNode.node()) {
+        qDebug() << "loading text";
+        d->currentNode.node()->value.loadSvgTextNode(text, context);
+    } else {
+        qDebug() << "new text";
+        KoSvgTextContentElement textNode;
+        textNode.loadSvgTextNode(text, context);
+        d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
     }
     return true;
 }
 
-bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
+void KoSvgTextShape::setStyleInfo(KoShape *s)
 {
-    KoSvgTextChunkShape::loadSvg(element, context);
-    d->textData = KisForest<KoSvgTextContentElement>();
-
-    loadSvgChildNodes(element, context, d->textData, d->textData.childBegin());
-
-    qDebug() << "testing parsing";
-    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
-        qDebug() << it.node()->value.text;
+    if (d->currentNode.node()) {
+        if (!s->inheritBackground()) {
+            d->currentNode.node()->value.properties.setProperty(KoSvgTextProperties::FillId,
+                                                                QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
+        }
+        if (!s->inheritStroke()) {
+            d->currentNode.node()->value.properties.setProperty(KoSvgTextProperties::StrokeId,
+                                                                QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
+        }
     }
+}
 
-    return true;
+void KoSvgTextShape::enterNodeSubtree()
+{
+    qDebug() << Q_FUNC_INFO;
+    if (!d->currentNode.node()) {
+        d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), KoSvgTextContentElement());
+        qDebug() << KisForestDetail::depth(d->textData);
+    }
+    d->currentNode = childEnd(d->currentNode);
+}
+
+void KoSvgTextShape::leaveNodeSubtree()
+{
+    d->currentNode = KisForestDetail::parent(d->currentNode);
+}
+
+void KoSvgTextShape::resetParsing()
+{
+    qDebug() << Q_FUNC_INFO;
+    d->textData = KisForest<KoSvgTextContentElement>();
+    d->currentNode = d->textData.childEnd();
+}
+
+void KoSvgTextShape::debugParsing()
+{
+    qDebug() << "testing parsing" << KisForestDetail::size(d->textData);
+    QString spaces;
+    QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
+    for (auto it = compositionBegin(d->textData); it != compositionEnd(d->textData); it++) {
+        if (it.state() == KisForestDetail::Enter) {
+
+            qDebug() << QString(spaces + "+") << it.node()->value.text;
+            qDebug() << QString(spaces + "|") << it.node()->value.properties.ownProperties(parentProps.last()).convertToSvgTextAttributes();
+            qDebug() << QString(spaces + "| Fill set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::FillId);
+            qDebug() << QString(spaces + "| Stroke set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::StrokeId);
+            spaces.append(" ");
+            parentProps.append(it.node()->value.properties);
+        }
+
+        if (it.state() == KisForestDetail::Leave) {
+            spaces.chop(1);
+            parentProps.pop_back();
+        }
+    }
 }
 
 void KoSvgTextShape::paintComponent(QPainter &painter) const

@@ -1770,6 +1770,34 @@ QDomText getTheOnlyTextChild(const QDomElement &e)
                 firstChild.toText() : QDomText();
 }
 
+void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextShape *rootTextShape) {
+    QDomText t = getTheOnlyTextChild(e);
+    if (!t.isNull()) {
+        rootTextShape->loadSvgText(t, m_context);
+    } else {
+        rootTextShape->enterNodeSubtree();
+        for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
+            QDomElement b = n.toElement();
+            if (b.isNull()) {
+                rootTextShape->loadSvg(e, m_context);
+                rootTextShape->loadSvgText(n.toText(), m_context);
+            } else {
+                m_context.pushGraphicsContext(b);
+                uploadStyleToContext(b);
+                rootTextShape->loadSvg(b, m_context);
+                if (b.hasChildNodes()) {
+                    parseTextChildren(b, rootTextShape);
+                }
+                m_context.popGraphicsContext();
+            }
+        }
+        rootTextShape->leaveNodeSubtree();
+    }
+    KoShape *styleDummy = new KoPathShape();
+    applyCurrentBasicStyle(styleDummy);
+    rootTextShape->setStyleInfo(styleDummy);
+}
+
 KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *mergeIntoShape)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || e.tagName() == "tspan" || e.tagName() == "textPath", 0);
@@ -1786,6 +1814,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
             rootTextShape = new KoSvgTextShape();
             const QString useRichText = e.attribute("krita:useRichText", "false");
             rootTextShape->setRichTextPreferred(useRichText != "false");
+            rootTextShape->resetParsing();
         }
     }
 
@@ -1862,6 +1891,10 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     } else {
         QList<KoShape*> childShapes = parseContainer(e, true);
         addToGroup(childShapes, textChunk);
+
+        if (rootTextShape) {
+            parseTextChildren(e, rootTextShape);
+        }
     }
 
     m_context.popGraphicsContext();
@@ -1897,6 +1930,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
         m_isInsideTextSubtree = false;
         rootTextShape->relayout();
+        rootTextShape->debugParsing();
     }
 
     return textChunk;

@@ -300,6 +300,7 @@ public:
         result = rhs.result;
         lineBoxes = rhs.lineBoxes;
         textData = rhs.textData;
+        currentNode = rhs.currentNode;
     };
 
     TextRendering textRendering = Auto;
@@ -309,6 +310,8 @@ public:
     QList<KoShape*> shapesSubtract;
 
     KisForest<KoSvgTextContentElement> textData;
+    KisForest<KoSvgTextContentElement>::child_iterator currentNode = textData.childBegin(); ///< Current Node in parsing SVG.
+
 
     QVector<CharacterResult> result;
     QVector<LineBox> lineBoxes;

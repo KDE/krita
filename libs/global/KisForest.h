@@ -831,12 +831,10 @@ private:
     }
 
     void cloneChildren(child_iterator oldParent, child_iterator parent) {
-        // At compile time childBegin(child_iterator) isn't recognized because there's also Forest::childBegin()
-        // so we duplicate childBegin(child_iterator) and childEnd(child_iterator) here.
-        auto it = child_iterator(oldParent.node() ? oldParent.node()->firstChild : nullptr, oldParent.node());
-        auto end = child_iterator(nullptr, oldParent.node());
+        auto it = KisForestDetail::childBegin(oldParent);
+        auto end = KisForestDetail::childEnd(oldParent);
         for (;it != end; ++it) {
-            auto itClone = this->insert(child_iterator(nullptr, parent.node()), *it);
+            auto itClone = this->insert(KisForestDetail::childEnd(parent), *it);
             cloneChildren(it, itClone);
         }
     }

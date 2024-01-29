@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-20 01:35+0000\n"
+"POT-Creation-Date: 2024-01-29 01:34+0000\n"
 "PO-Revision-Date: 2023-07-13 00:28+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -17092,6 +17092,8 @@ msgstr "Tamanho"
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, commonColorsHeight)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinScaleWidth)
 #. i18n: ectx: property (suffix), widget (QSpinBox, spinScaleHeight)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, spbOffsetX)
+#. i18n: ectx: property (suffix), widget (KisSliderSpinBox, spbOffsetY)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:40
 #: libs/ui/animation/wdg_animationrenderer.ui:150
 #: libs/ui/animation/wdg_animationrenderer.ui:164
@@ -17129,8 +17131,8 @@ msgstr "Tamanho"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:36
 #: plugins/filters/blur/kis_wdg_gaussian_blur.cpp:44
-#: plugins/generators/pattern/kis_wdg_pattern.cpp:40
-#: plugins/generators/pattern/kis_wdg_pattern.cpp:41
+#: plugins/generators/pattern/wdgpatternoptions.ui:118
+#: plugins/generators/pattern/wdgpatternoptions.ui:128
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:64
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:69
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:74
@@ -17833,8 +17835,8 @@ msgid "Processing"
 msgstr "A processar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1365
-#: libs/ui/KisMainWindow.cpp:1737 libs/ui/KisMainWindow.cpp:1750
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1368
+#: libs/ui/KisMainWindow.cpp:1740 libs/ui/KisMainWindow.cpp:1753
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18585,8 +18587,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr ""
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2108
-#: libs/ui/KisMainWindow.cpp:2191
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2111
+#: libs/ui/KisMainWindow.cpp:2194
 #, kde-format
 msgid "Import frames"
 msgstr "Importar as imagens"
@@ -19898,11 +19900,11 @@ msgstr "Recursos Locais"
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
 #: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
-#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1166
-#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1968
-#: libs/ui/KisMainWindow.cpp:1977 libs/ui/KisMainWindow.cpp:2116
-#: libs/ui/KisMainWindow.cpp:2177 libs/ui/KisMainWindow.cpp:2198
-#: libs/ui/KisMainWindow.cpp:2807 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1169
+#: libs/ui/KisMainWindow.cpp:1266 libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1980 libs/ui/KisMainWindow.cpp:2119
+#: libs/ui/KisMainWindow.cpp:2180 libs/ui/KisMainWindow.cpp:2201
+#: libs/ui/KisMainWindow.cpp:2810 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20408,7 +20410,7 @@ msgid "Delete resource"
 msgstr "Apagar o recurso"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2606
+#: libs/ui/KisMainWindow.cpp:2609
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20868,7 +20870,7 @@ msgstr ""
 "estão incompletos."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2218
+#: libs/ui/KisMainWindow.cpp:2221
 #, kde-format
 msgid "Render Animation"
 msgstr "Desenhar a Animação"
@@ -22179,7 +22181,6 @@ msgstr "Documento"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:867
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:89
-#: plugins/generators/pattern/wdgpatternoptions.ui:80
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:165
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:167
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:98
@@ -22207,7 +22208,6 @@ msgstr "Largura:"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
-#. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/animation/VideoImportDialog.ui:537
 #: libs/ui/animation/VideoImportDialog.ui:572
 #: libs/ui/animation/wdg_animationrenderer.ui:157
@@ -22221,7 +22221,6 @@ msgstr "Largura:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:887
-#: plugins/generators/pattern/wdgpatternoptions.ui:106
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:112
 #: plugins/impex/pdf/pdfimportwidgetbase.ui:199
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:133
@@ -23025,7 +23024,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Indique o nome do novo estilo"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2617
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25163,8 +25162,10 @@ msgstr "Cor 2:"
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
 #. i18n: ectx: property (text), widget (QLabel, lblSize)
 #. i18n: ectx: property (text), widget (QLabel, labelSize)
+#. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:361 libs/ui/kis_paintop_box.cc:269
 #: libs/ui/kis_paintop_box.cc:276
+#: plugins/generators/pattern/wdgpatternoptions.ui:248
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:414
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:185
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2007
@@ -25227,14 +25228,14 @@ msgstr "Iniciar a apresentação em:"
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGlobalPercent)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #. i18n: ectx: property (suffix), widget (KisSliderSpinBox, modularMATreeLearningPercent)
-#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
-#. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleWidth)
+#. i18n: ectx: property (suffix), widget (KisDoubleSliderSpinBox, spbScaleHeight)
 #: libs/ui/forms/wdgdisplaysettings.ui:434
 #: libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
-#: plugins/generators/pattern/wdgpatternoptions.ui:90
-#: plugins/generators/pattern/wdgpatternoptions.ui:116
+#: plugins/generators/pattern/wdgpatternoptions.ui:79
+#: plugins/generators/pattern/wdgpatternoptions.ui:101
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:638
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:690
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:837
@@ -26353,9 +26354,7 @@ msgstr "Rodar:"
 #. i18n: ectx: property (text), widget (QLabel, lblDiameter)
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#. i18n: ectx: property (title), widget (QGroupBox, gbScale)
 #: libs/ui/forms/wdggeometryoptions.ui:127
-#: plugins/generators/pattern/wdgpatternoptions.ui:59
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
@@ -28317,13 +28316,10 @@ msgstr "Posição"
 #. i18n: ectx: property (text), widget (QLabel, xLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/imagesize/wdg_canvassize.ui:196
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
-#: plugins/generators/pattern/wdgpatternoptions.ui:174
-#: plugins/generators/pattern/wdgpatternoptions.ui:256
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:129
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:35
 #, kde-format
@@ -28335,13 +28331,10 @@ msgstr "X:"
 #. i18n: ectx: property (text), widget (QLabel, yLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/imagesize/wdg_canvassize.ui:530
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
-#: plugins/generators/pattern/wdgpatternoptions.ui:184
-#: plugins/generators/pattern/wdgpatternoptions.ui:263
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:149
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:99
 #, kde-format
@@ -30067,10 +30060,8 @@ msgstr "Fluxo: %1%"
 #. i18n: ectx: property (text), widget (QLabel, axisRotationLabel)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, labelRotationSimple)
-#. i18n: ectx: property (title), widget (QGroupBox, gbRotation)
 #: libs/ui/kis_paintop_box.cc:270 libs/ui/kis_paintop_box.cc:277
 #: plugins/filters/blur/wdg_lens_blur.ui:84
-#: plugins/generators/pattern/wdgpatternoptions.ui:212
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:529
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:178
 #: plugins/tools/basictools/wdgmultihandtool.ui:129
@@ -31385,7 +31376,7 @@ msgstr "O ficheiro %1 não existe."
 msgid "Open Images"
 msgstr "Abrir as Imagens"
 
-#: libs/ui/KisMainWindow.cpp:1264
+#: libs/ui/KisMainWindow.cpp:1267
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31399,45 +31390,45 @@ msgstr ""
 "Por favor, seleccione um local onde o ficheiro original não possa ser "
 "sobreposto!"
 
-#: libs/ui/KisMainWindow.cpp:1320
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Exporting"
 msgstr "A exportar"
 
-#: libs/ui/KisMainWindow.cpp:1320
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Saving As"
 msgstr "A Gravar Como"
 
-#: libs/ui/KisMainWindow.cpp:1716
+#: libs/ui/KisMainWindow.cpp:1719
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Criar um novo documento"
 
-#: libs/ui/KisMainWindow.cpp:1740
+#: libs/ui/KisMainWindow.cpp:1743
 #, kde-format
 msgid "Custom Document"
 msgstr "Documento Personalizado"
 
-#: libs/ui/KisMainWindow.cpp:1752
+#: libs/ui/KisMainWindow.cpp:1755
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Criar a partir da área de transferência"
 
-#: libs/ui/KisMainWindow.cpp:1937
+#: libs/ui/KisMainWindow.cpp:1940
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Camadas/Máscaras"
 
-#: libs/ui/KisMainWindow.cpp:1963
+#: libs/ui/KisMainWindow.cpp:1966
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Não tem nenhuns grupos de recursos activos."
 
-#: libs/ui/KisMainWindow.cpp:1967
+#: libs/ui/KisMainWindow.cpp:1970
 #, kde-format
 msgid ""
 "\n"
@@ -31448,7 +31439,7 @@ msgstr ""
 "Não estão disponíveis predefinições de pincéis. Por favor active um grupo "
 "que forneça predefinições de pincéis antes de continuar.\n"
 
-#: libs/ui/KisMainWindow.cpp:1977
+#: libs/ui/KisMainWindow.cpp:1980
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -31459,7 +31450,7 @@ msgstr ""
 "\n"
 "Só estão disponíveis os seus recursos locais."
 
-#: libs/ui/KisMainWindow.cpp:2116 libs/ui/KisMainWindow.cpp:2198
+#: libs/ui/KisMainWindow.cpp:2119 libs/ui/KisMainWindow.cpp:2201
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31468,42 +31459,42 @@ msgstr ""
 "Não foi possível terminar a importação da animação:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2177
+#: libs/ui/KisMainWindow.cpp:2180
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Não foi possível criar um novo documento. A importação da animação foi "
 "interrompida."
 
-#: libs/ui/KisMainWindow.cpp:2597
+#: libs/ui/KisMainWindow.cpp:2600
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importar um Espaço de Trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2612
+#: libs/ui/KisMainWindow.cpp:2615
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Novo Espaço de Trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2616
+#: libs/ui/KisMainWindow.cpp:2619
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Novo Espaço de Trabalho..."
 
-#: libs/ui/KisMainWindow.cpp:2660
+#: libs/ui/KisMainWindow.cpp:2663
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/KisMainWindow.cpp:2666
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2830
+#: libs/ui/KisMainWindow.cpp:2833
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31512,19 +31503,19 @@ msgstr ""
 "O 'plugin' de gestão de cores LittleCMS para o Krita não está instalado. O "
 "Krita irá sair agora."
 
-#: libs/ui/KisMainWindow.cpp:2846
+#: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Erro de instalação"
 
-#: libs/ui/KisMainWindow.cpp:2955
+#: libs/ui/KisMainWindow.cpp:2958
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Temas"
 
-#: libs/ui/KisMainWindow.cpp:3013
+#: libs/ui/KisMainWindow.cpp:3016
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Espaço Expandido"
@@ -37631,7 +37622,7 @@ msgstr "Elipse Concêntrica"
 msgid "Curvilinear Perspective assistant"
 msgstr "Assistente de perspectivas"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
 #, fuzzy, kde-format
 #| msgid "2 Point Perspective"
 msgid "Curvilinear Perspective"
@@ -41015,8 +41006,15 @@ msgstr "Selector de Cores Específicas"
 msgid "Set color space"
 msgstr "Definir o espaço de cores"
 
+#. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
+#: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
+#, fuzzy, kde-format
+#| msgid "Lock the current palette."
+msgid "Lock to current layer colorspace"
+msgstr "Bloqueia a paleta actual."
+
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
-#: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:69
+#: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
 #, kde-format
 msgid "Use percentage"
 msgstr "Usar uma percentagem"
@@ -41657,11 +41655,9 @@ msgstr "Intervalo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
-#. i18n: ectx: property (title), widget (QGroupBox, gbOffset)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:146
 #: plugins/filters/asccdl/wdg_asccdl.ui:35
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:42
-#: plugins/generators/pattern/wdgpatternoptions.ui:153
 #: plugins/python/documenttools/tools/canvassizetool/canvassizetool.py:36
 #, kde-format
 msgid "Offset:"
@@ -47138,7 +47134,73 @@ msgstr "Ligação:"
 msgid "Color Factors"
 msgstr "Factores de Cores"
 
-#: plugins/generators/pattern/patterngenerator.cpp:113
+#. i18n: ectx: property (prefix), widget (KisDoubleSliderSpinBox, spbScaleWidth)
+#. i18n: ectx: property (prefix), widget (KisSliderSpinBox, spbOffsetX)
+#. i18n: ectx: property (prefix), widget (KisDoubleSliderSpinBox, sldShearX)
+#: plugins/generators/pattern/kis_wdg_pattern.cpp:57
+#: plugins/generators/pattern/wdgpatternoptions.ui:76
+#: plugins/generators/pattern/wdgpatternoptions.ui:121
+#: plugins/generators/pattern/wdgpatternoptions.ui:148
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
+#, kde-format
+msgid "X: "
+msgstr "X: "
+
+#. i18n: ectx: property (prefix), widget (KisDoubleSliderSpinBox, spbScaleHeight)
+#. i18n: ectx: property (prefix), widget (KisSliderSpinBox, spbOffsetY)
+#. i18n: ectx: property (prefix), widget (KisDoubleSliderSpinBox, sldShearY)
+#: plugins/generators/pattern/kis_wdg_pattern.cpp:58
+#: plugins/generators/pattern/wdgpatternoptions.ui:98
+#: plugins/generators/pattern/wdgpatternoptions.ui:131
+#: plugins/generators/pattern/wdgpatternoptions.ui:161
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
+#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
+#, kde-format
+msgid "Y: "
+msgstr "Y: "
+
+#. i18n: This is meant to be used in a spinbox so keep the {n} in the text
+#. and it will be substituted by the number. The text before will be
+#. used as the prefix and the text after as the suffix
+#: plugins/generators/pattern/kis_wdg_pattern.cpp:69
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
+#| "generator"
+#| msgid "Every {n} cell horizontally"
+#| msgid_plural "Every {n} cells horizontally"
+msgctxt ""
+"Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
+"generator"
+msgid "Every {n} repetition horizontally"
+msgid_plural "Every {n} repetitions horizontally"
+msgstr[0] "A cada {n} célula na horizontal"
+msgstr[1] "A cada {n} células na horizontal"
+
+#. i18n: This is meant to be used in a spinbox so keep the {n} in the text
+#. and it will be substituted by the number. The text before will be
+#. used as the prefix and the text after as the suffix
+#: plugins/generators/pattern/kis_wdg_pattern.cpp:75
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
+#| "generator"
+#| msgid "Every {n} cell vertically"
+#| msgid_plural "Every {n} cells vertically"
+msgctxt ""
+"Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
+"generator"
+msgid "Every {n} repetition vertically"
+msgid_plural "Every {n} repetitions vertically"
+msgstr[0] "A cada {n} célula na vertical"
+msgstr[1] "A cada {n} células na vertical"
+
+#: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
 msgid "&Pattern..."
 msgstr "&Padrão..."
@@ -47150,48 +47212,39 @@ msgid "&Pattern:"
 msgstr "&Padrão:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/generators/pattern/wdgpatternoptions.ui:255
+#, fuzzy, kde-format
+#| msgctxt "Job Position"
+#| msgid "Position:"
+msgid "Position:"
+msgstr "Posição:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelShear)
-#. i18n: ectx: property (title), widget (QGroupBox, gbShear)
-#: plugins/generators/pattern/wdgpatternoptions.ui:250
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: plugins/generators/pattern/wdgpatternoptions.ui:262
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:475
 #: plugins/paintops/hairy/wdgbristleoptions.ui:118
 #, kde-format
 msgid "Shear:"
 msgstr "Inclinar:"
 
-#. i18n: ectx: property (title), widget (QGroupBox, gb3dRotation)
-#: plugins/generators/pattern/wdgpatternoptions.ui:293
+#. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
+#. i18n: ectx: property (text), widget (QLabel, label_4)
+#: plugins/generators/pattern/wdgpatternoptions.ui:269
+#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
+#: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
 #, kde-format
-msgid "3d Rotation:"
-msgstr "Rotação 3D:"
+msgid "Rotation"
+msgstr "Rotação"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/generators/pattern/wdgpatternoptions.ui:314
+#: plugins/generators/pattern/wdgpatternoptions.ui:276
+#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
 #, kde-format
-msgid "X-Rotation:"
-msgstr "Rotação em X:"
-
-#. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/generators/pattern/wdgpatternoptions.ui:321
-#, kde-format
-msgid "Y-Rotation:"
-msgstr "Rotação em Y:"
-
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:55
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:63
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:73
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:85
-#, kde-format
-msgid "X: "
-msgstr "X: "
-
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:57
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:68
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:79
-#: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:89
-#, kde-format
-msgid "Y: "
-msgstr "Y: "
+msgid "Align to Pixel Grid:"
+msgstr "Alinhar à Grelha de Pixels:"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
@@ -47332,12 +47385,6 @@ msgstr "Obter da Imagem"
 #, kde-format
 msgid "Frequency:"
 msgstr "Frequência:"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/generators/screentone/KisScreentoneConfigWidget.ui:563
-#, kde-format
-msgid "Align to Pixel Grid:"
-msgstr "Alinhar à Grelha de Pixels:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPosition)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:586
@@ -54074,13 +54121,6 @@ msgstr "Taxa"
 #, kde-format
 msgid "Softness"
 msgstr "Suavidade"
-
-#. i18n: ectx: property (title), widget (QGroupBox, rotationGroup)
-#: plugins/paintops/libpaintop/KisStandardOptionData.h:60
-#: plugins/tools/tool_transform2/wdg_tool_transform.ui:739
-#, kde-format
-msgid "Rotation"
-msgstr "Rotação"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:69
 #, kde-format
@@ -61759,6 +61799,15 @@ msgstr "Ferramenta de Ampliação"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de Imagens de Referência"
+
+#~ msgid "3d Rotation:"
+#~ msgstr "Rotação 3D:"
+
+#~ msgid "X-Rotation:"
+#~ msgstr "Rotação em X:"
+
+#~ msgid "Y-Rotation:"
+#~ msgstr "Rotação em Y:"
 
 #~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 #~ msgstr "<html><head/><body><h1 align=\"center\">Salvaguardado Por</h1><p>"

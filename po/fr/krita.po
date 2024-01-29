@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-19 03:10+0000\n"
+"POT-Creation-Date: 2024-01-29 03:11+0000\n"
 "PO-Revision-Date: 2024-01-22 22:02+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
@@ -17490,8 +17490,8 @@ msgid "Processing"
 msgstr "Traitement"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1365
-#: libs/ui/KisMainWindow.cpp:1737 libs/ui/KisMainWindow.cpp:1750
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1368
+#: libs/ui/KisMainWindow.cpp:1740 libs/ui/KisMainWindow.cpp:1753
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18236,8 +18236,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "Document au format « csv »"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2106
-#: libs/ui/KisMainWindow.cpp:2189
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2109
+#: libs/ui/KisMainWindow.cpp:2192
 #, kde-format
 msgid "Import frames"
 msgstr "Importer des images"
@@ -19553,11 +19553,11 @@ msgstr "Ressources locales"
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
 #: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
-#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1166
-#: libs/ui/KisMainWindow.cpp:1263 libs/ui/KisMainWindow.cpp:1968
-#: libs/ui/KisMainWindow.cpp:1977 libs/ui/KisMainWindow.cpp:2114
-#: libs/ui/KisMainWindow.cpp:2175 libs/ui/KisMainWindow.cpp:2196
-#: libs/ui/KisMainWindow.cpp:2805 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1169
+#: libs/ui/KisMainWindow.cpp:1266 libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1980 libs/ui/KisMainWindow.cpp:2117
+#: libs/ui/KisMainWindow.cpp:2178 libs/ui/KisMainWindow.cpp:2199
+#: libs/ui/KisMainWindow.cpp:2808 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20064,7 +20064,7 @@ msgid "Delete resource"
 msgstr "Supprimer la ressource"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2604
+#: libs/ui/KisMainWindow.cpp:2607
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20531,7 +20531,7 @@ msgstr ""
 "de sortie sont incomplets."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2216
+#: libs/ui/KisMainWindow.cpp:2219
 #, kde-format
 msgid "Render Animation"
 msgstr "Rendu de l'animation"
@@ -22753,7 +22753,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Saisissez un nouveau nom de style"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2615
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2618
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -31020,7 +31020,7 @@ msgstr "Le fichier %1 n'existe pas."
 msgid "Open Images"
 msgstr "Ouvrir des images"
 
-#: libs/ui/KisMainWindow.cpp:1264
+#: libs/ui/KisMainWindow.cpp:1267
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31033,45 +31033,45 @@ msgstr ""
 "Veuillez sélectionner un emplacement où le fichier original ne sera pas "
 "écrasé !"
 
-#: libs/ui/KisMainWindow.cpp:1320
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Exporting"
 msgstr "Exportation"
 
-#: libs/ui/KisMainWindow.cpp:1320
+#: libs/ui/KisMainWindow.cpp:1323
 #, kde-format
 msgid "Saving As"
 msgstr "Enregistrer sous"
 
-#: libs/ui/KisMainWindow.cpp:1716
+#: libs/ui/KisMainWindow.cpp:1719
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Créer un nouveau document"
 
-#: libs/ui/KisMainWindow.cpp:1740
+#: libs/ui/KisMainWindow.cpp:1743
 #, kde-format
 msgid "Custom Document"
 msgstr "Document personnalisé"
 
-#: libs/ui/KisMainWindow.cpp:1752
+#: libs/ui/KisMainWindow.cpp:1755
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Créer à partir du presse-papier"
 
-#: libs/ui/KisMainWindow.cpp:1937
+#: libs/ui/KisMainWindow.cpp:1940
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Calques / Masques"
 
-#: libs/ui/KisMainWindow.cpp:1963
+#: libs/ui/KisMainWindow.cpp:1966
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Vous n'avez aucun lot de ressources activé."
 
-#: libs/ui/KisMainWindow.cpp:1967
+#: libs/ui/KisMainWindow.cpp:1970
 #, kde-format
 msgid ""
 "\n"
@@ -31082,7 +31082,7 @@ msgstr ""
 "Il n'y a aucun préréglage de brosse disponible. Veuillez activer un lot "
 "possédant des préréglages de brosse, avant de continuer.\n"
 
-#: libs/ui/KisMainWindow.cpp:1977
+#: libs/ui/KisMainWindow.cpp:1980
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -31093,7 +31093,7 @@ msgstr ""
 "\n"
 "Seules vos ressources locales sont disponibles."
 
-#: libs/ui/KisMainWindow.cpp:2114 libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2117 libs/ui/KisMainWindow.cpp:2199
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31102,42 +31102,42 @@ msgstr ""
 "Impossible de terminer l'importation de l'animation :\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2175
+#: libs/ui/KisMainWindow.cpp:2178
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 "Impossible de créer un nouveau document. Annulation de l'importation pour "
 "l'animation."
 
-#: libs/ui/KisMainWindow.cpp:2595
+#: libs/ui/KisMainWindow.cpp:2598
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importer des espaces de travail..."
 
-#: libs/ui/KisMainWindow.cpp:2610
+#: libs/ui/KisMainWindow.cpp:2613
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Nouvel espace de travail..."
 
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2617
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Nouvel espace de travail"
 
-#: libs/ui/KisMainWindow.cpp:2658
+#: libs/ui/KisMainWindow.cpp:2661
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2661
+#: libs/ui/KisMainWindow.cpp:2664
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2828
+#: libs/ui/KisMainWindow.cpp:2831
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31146,19 +31146,19 @@ msgstr ""
 "Le module externe « Gestionnaire de couleur Little-CMS de Calligra » n'est "
 "pas installé. Krita va s'arrêter maintenant."
 
-#: libs/ui/KisMainWindow.cpp:2844
+#: libs/ui/KisMainWindow.cpp:2847
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Erreur à l'installation"
 
-#: libs/ui/KisMainWindow.cpp:2953
+#: libs/ui/KisMainWindow.cpp:2956
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Thèmes"
 
-#: libs/ui/KisMainWindow.cpp:3011
+#: libs/ui/KisMainWindow.cpp:3014
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expansion de l'espaceur"
@@ -47847,16 +47847,16 @@ msgstr ""
 "Image « JPEG-XL » détectée avec des canaux de tâches de couleurs. "
 "Importation d'une image à plat."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:640
-#: plugins/impex/jxl/JPEGXLImport.cpp:650
-#: plugins/impex/jxl/JPEGXLImport.cpp:664
-#: plugins/impex/jxl/JPEGXLImport.cpp:674
+#: plugins/impex/jxl/JPEGXLImport.cpp:647
+#: plugins/impex/jxl/JPEGXLImport.cpp:659
+#: plugins/impex/jxl/JPEGXLImport.cpp:675
+#: plugins/impex/jxl/JPEGXLImport.cpp:687
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "Unable to read the image profile."
 msgstr "Impossible de lire le profil de l'image."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:816
+#: plugins/impex/jxl/JPEGXLImport.cpp:829
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid ""
@@ -47866,13 +47866,13 @@ msgstr ""
 "Image « JPEG-XL » multi-couches détectée avec un mode de fusion non pris en "
 "charge. Importation d'une image à plat."
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:833
+#: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
 msgstr "Longueur non valable pour le nom de calque « JPEG-XL »"
 
-#: plugins/impex/jxl/JPEGXLImport.cpp:892
+#: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."

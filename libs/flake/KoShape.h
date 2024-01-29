@@ -1146,5 +1146,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(KoShape*)
+Q_DECLARE_METATYPE(QVector<KoShape::PaintOrder>)
 
 #endif

@@ -90,6 +90,9 @@ public:
         TextDecorationPositionVerticalId, ///< KoSvgText::TextDecorationUnderlinePosition
         FillId, ///< KoSvgText::BackgroundProperty
         StrokeId, ///< KoSvgText::StrokeProperty
+        Opacity, ///< Double, SVG shape opacity.
+        PaintOrder, ///< QVector<KoShape::PaintOrder>
+        Visiblity, ///< Bool, CSS visibility
 
         TextLanguage, ///< a language string.
 

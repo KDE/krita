@@ -905,6 +905,23 @@ void KoSvgTextShape::setStyleInfo(KoShape *s)
             d->currentNode.node()->value.properties.setProperty(KoSvgTextProperties::StrokeId,
                                                                 QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
         }
+        d->currentNode.node()->value.properties.setProperty(KoSvgTextProperties::Opacity,
+                                                            s->transparency());
+        if (!s->isVisible()) {
+            d->currentNode.node()->value.properties.setProperty(KoSvgTextProperties::Visiblity,
+                                                                false);
+        }
+        if (!s->inheritPaintOrder()) {
+            d->currentNode.node()->value.properties.setProperty(KoSvgTextProperties::PaintOrder,
+                                                                QVariant::fromValue(s->paintOrder()));
+        }
+    }
+}
+
+void KoSvgTextShape::setTextPathOnCurrentNode(KoShape *s)
+{
+    if (d->currentNode.node()) {
+        d->currentNode.node()->value.textPath.reset(s);
     }
 }
 
@@ -942,6 +959,11 @@ void KoSvgTextShape::debugParsing()
             qDebug() << QString(spaces + "|") << it.node()->value.properties.ownProperties(parentProps.last()).convertToSvgTextAttributes();
             qDebug() << QString(spaces + "| Fill set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::FillId);
             qDebug() << QString(spaces + "| Stroke set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::StrokeId);
+            qDebug() << QString(spaces + "| Opacity: ") << it.node()->value.properties.property(KoSvgTextProperties::Opacity);
+            qDebug() << QString(spaces + "| PaintOrder: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::PaintOrder);
+            qDebug() << QString(spaces + "| Visibility set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::Visiblity);
+            qDebug() << QString(spaces + "| TextPath set: ") << (it.node()->value.textPath);
+            qDebug() << QString(spaces + "| Transforms set: ") << it.node()->value.localTransformations;
             spaces.append(" ");
             parentProps.append(it.node()->value.properties);
         }

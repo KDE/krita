@@ -85,6 +85,8 @@ protected:
     // XXX
     KoShape* parseTextNode(const QDomText &e);
 
+    KoShape* getTextPath(const QDomElement &e);
+
     void parseTextChildren(const QDomElement &e, KoSvgTextShape *rootTextShape);
     
     /// Parses a container element, returning a list of child shapes

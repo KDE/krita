@@ -1770,6 +1770,32 @@ QDomText getTheOnlyTextChild(const QDomElement &e)
                 firstChild.toText() : QDomText();
 }
 
+KoShape* SvgParser::getTextPath(const QDomElement &e) {
+    if (e.hasAttribute("path")) {
+        QDomElement p = e.ownerDocument().createElement("path");
+        p.setAttribute("d", e.attribute("path"));
+        KoShape *s = createPath(p);
+        return s;
+    } else {
+        QString pathId;
+        if (e.hasAttribute("href")) {
+            pathId = e.attribute("href").remove(0, 1);
+        } else if (e.hasAttribute("xlink:href")) {
+            pathId = e.attribute("xlink:href").remove(0, 1);
+        }
+        if (!pathId.isNull()) {
+            KoShape *s = m_context.shapeById(pathId);
+            if (s) {
+                const QTransform absTf = s->absoluteTransformation();
+                KoShape *cloned = s->cloneShape();
+                cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+                return cloned;
+            }
+        }
+    }
+    return nullptr;
+}
+
 void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextShape *rootTextShape) {
     QDomText t = getTheOnlyTextChild(e);
     if (!t.isNull()) {
@@ -1781,6 +1807,9 @@ void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextShape *rootText
             if (b.isNull()) {
                 rootTextShape->loadSvg(e, m_context);
                 rootTextShape->loadSvgText(n.toText(), m_context);
+                KoShape *styleDummy = new KoPathShape();
+                applyCurrentBasicStyle(styleDummy);
+                rootTextShape->setStyleInfo(styleDummy);
             } else {
                 m_context.pushGraphicsContext(b);
                 uploadStyleToContext(b);
@@ -1788,6 +1817,7 @@ void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextShape *rootText
                 if (b.hasChildNodes()) {
                     parseTextChildren(b, rootTextShape);
                 }
+                rootTextShape->setTextPathOnCurrentNode(getTextPath(b));
                 m_context.popGraphicsContext();
             }
         }
@@ -1899,28 +1929,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     m_context.popGraphicsContext();
 
-    if (e.hasAttribute("path")) {
-        QDomElement p = e.ownerDocument().createElement("path");
-        p.setAttribute("d", e.attribute("path"));
-        KoShape *s = createPath(p);
-        textChunk->setTextPath(s);
-    } else {
-        QString pathId;
-        if (e.hasAttribute("href")) {
-            pathId = e.attribute("href").remove(0, 1);
-        } else if (e.hasAttribute("xlink:href")) {
-            pathId = e.attribute("xlink:href").remove(0, 1);
-        }
-        if (!pathId.isNull()) {
-            KoShape *s = m_context.shapeById(pathId);
-            if (s) {
-                const QTransform absTf = s->absoluteTransformation();
-                KoShape *cloned = s->cloneShape();
-                cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
-                textChunk->setTextPath(cloned);
-            }
-        }
-    }
+    textChunk->setTextPath(getTextPath(e));
 
     if (rootTextShape) {
         textChunk->simplifyFillStrokeInheritance();

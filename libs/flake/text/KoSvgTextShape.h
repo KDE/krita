@@ -342,6 +342,7 @@ public:
     bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
     bool loadSvgText(const QDomText &text, SvgLoadingContext &context);
     void setStyleInfo(KoShape* s);
+    void setTextPathOnCurrentNode(KoShape *s);
 
     void enterNodeSubtree();
     void leaveNodeSubtree();

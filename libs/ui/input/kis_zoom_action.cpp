@@ -297,10 +297,11 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
     if (d->mode == ZoomModeShortcut ||
         d->mode == RelativeZoomModeShortcut) {
 
-        const qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
-        const qreal logDistance = std::pow(2.0, qreal(diff.y()) / qreal(stepCont));
-
         KisConfig cfg(true);
+
+        const qreal zoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
+        const qreal logDistance = std::pow(2.0, qreal(cfg.zoomHorizontal() ? -diff.x() : diff.y()) / qreal(stepCont));
+
         qreal newZoom = zoom;
         if (cfg.readEntry<bool>("InvertMiddleClickZoom", false)) {
             newZoom = d->startZoom / logDistance;

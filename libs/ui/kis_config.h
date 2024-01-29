@@ -646,6 +646,9 @@ public:
     bool activateTransformToolAfterPaste(bool defaultValue = false) const;
     void setActivateTransformToolAfterPaste(bool value);
     
+    bool zoomHorizontal(bool defaultValue = false) const;
+    void setZoomHorizontal(bool value);
+    
     enum RootSurfaceFormat {
         BT709_G22 = 0,
         BT709_G10,

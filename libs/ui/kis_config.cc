@@ -2398,6 +2398,16 @@ void KisConfig::setActivateTransformToolAfterPaste(bool value)
     m_cfg.writeEntry("activateTransformToolAfterPaste", value);
 }
 
+bool KisConfig::zoomHorizontal(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("zoomHorizontal", false);
+}
+
+void KisConfig::setZoomHorizontal(bool value)
+{
+    m_cfg.writeEntry("zoomHorizontal", value);
+}
+
 KisConfig::RootSurfaceFormat KisConfig::rootSurfaceFormat(bool defaultValue) const
 {
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

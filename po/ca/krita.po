@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-29 01:34+0000\n"
-"PO-Revision-Date: 2024-01-13 07:30+0100\n"
+"PO-Revision-Date: 2024-01-29 19:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -3073,7 +3073,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr "22 textura-reptil"
+msgstr "22 textura-rèptil"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5084,7 +5084,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:patterns/22_texture-"
 "reptile.png"
 msgid "22 texture-reptile"
-msgstr "22 textura-reptil"
+msgstr "22 textura-rèptil"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -14232,8 +14232,8 @@ msgid ""
 "canvas. <p>Uncheck this to hide the rulers.</p>"
 msgstr ""
 "Els regles mostren les posicions horitzontals i verticals del ratolí sobre "
-"la imatge i es poden utilitzar per posicionar el ratolí al lloc correcte del "
-"llenç. <p>Desmarqueu això per ocultar els regles.</p>"
+"la imatge i es poden utilitzar per a posicionar el ratolí al lloc correcte "
+"del llenç. <p>Desmarqueu això per a ocultar els regles.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -17545,7 +17545,7 @@ msgstr "Selecció de l'antialiàsing"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr "Fes créixer la selecció fins el píxel més fosc"
+msgstr "Fes créixer la selecció fins al píxel més fosc"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -22368,7 +22368,7 @@ msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
-".</p><p><i>Per ajudar al desenvolupament del Krita amb consells, icones, "
+".</p><p><i>Per a ajudar al desenvolupament del Krita amb consells, icones, "
 "conjunts de pinzells i més.</i></p></body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:137
@@ -22928,10 +22928,10 @@ msgid ""
 "%2</p>"
 msgstr ""
 "<p>Esteu usant la versió del paquet de la Microsoft Store del Krita. Encara "
-"que el Krita es pot configurar per situar els recursos dins la ubicació "
+"que el Krita es pot configurar per a situar els recursos dins la ubicació "
 "AppData de l'usuari, el Windows pot emmagatzemar realment els fitxers dins "
 "una ubicació privada d'aplicació.</p>\n"
-"<p>Cal que comproveu ambdues ubicacions per determinar a on s'ubiquen els "
+"<p>Cal que comproveu ambdues ubicacions per a determinar a on s'ubiquen els "
 "fitxers.</p>\n"
 "<p><b>AppData de l'usuari</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
 "%1</p>\n"
@@ -24732,8 +24732,8 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Es pot utilitzar per resoldre problemes de rendiment o "
-"de defectes gràfics amb els assistents de dibuix.\n"
+"<html><head/><body><p>Es pot utilitzar per a resoldre problemes de rendiment "
+"o de defectes gràfics amb els assistents de dibuix.\n"
 "              </p><p>Canviar la mida de la memòria cau dels mapes de píxels "
 "requereix reiniciar.</p></body></html>"
 
@@ -25339,7 +25339,8 @@ msgstr "Mida del marge del zoom:"
 #: libs/ui/forms/wdggeneralsettings.ui:380
 #, kde-format
 msgid "Spacing between the image and the page when zoomed to fit, in pixels"
-msgstr "Espaiat entre la imatge i la pàgina en fer zoom per ajustar, en píxels"
+msgstr ""
+"Espaiat entre la imatge i la pàgina en fer zoom per a ajustar, en píxels"
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
@@ -31575,10 +31576,10 @@ msgid ""
 "%2</p>"
 msgstr ""
 "<p>Esteu usant la versió del paquet de la Microsoft Store del Krita. Encara "
-"que el Krita es pot configurar per situar els recursos dins la ubicació "
+"que el Krita es pot configurar per a situar els recursos dins la ubicació "
 "AppData de l'usuari, el Windows pot emmagatzemar realment els fitxers dins "
 "una ubicació privada d'aplicació.</p>\n"
-"<p>Cal que comproveu ambdues ubicacions per determinar a on s'ubiquen els "
+"<p>Cal que comproveu ambdues ubicacions per a determinar a on s'ubiquen els "
 "fitxers.</p>\n"
 "<p><b>AppData de l'usuari</b>:<br/>\n"
 "%1</p>\n"
@@ -33827,7 +33828,7 @@ msgstr ""
 "recomano els perfils Rec. 2020 o ACEScg del ProPhotoRGB. Però si teniu un "
 "flux de treball ja ben establert utilitzant el ProPhotoRGB, potser trobareu "
 "una mica estrany el canvi a un altre espai de treball RGB, almenys al "
-"començament, i per tant, haureu de ponderar els avantatges i els contres del "
+"començament i, per tant, haureu de ponderar els avantatges i els contres del "
 "canvi en el vostre flux de treball.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:604
@@ -39831,7 +39832,7 @@ msgstr "fotograma/es"
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
-msgstr "No hi ha cap fotograma per explorar."
+msgstr "No hi ha cap fotograma per a explorar."
 
 #: plugins/dockers/recorder/recorder_export.cpp:543
 #, kde-format
@@ -40612,10 +40613,9 @@ msgstr "Estableix l'espai de color"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Lock the current palette."
+#, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "Bloqueja la paleta actual."
+msgstr "Bloqueja a l'espai de color de la capa actual"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
@@ -45132,7 +45132,7 @@ msgid ""
 "different values in the kernel, and thus give subtly different results."
 msgstr ""
 "La fórmula decideix com es crea el nucli, de manera que fórmules diferents "
-"trien valors diferents en el nucli, i per tant, donen resultats lleugerament "
+"trien valors diferents en el nucli i, per tant, donen resultats lleugerament "
 "diferents."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransparent)
@@ -46750,37 +46750,27 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "Cada {n} cel·la horitzontalment"
-msgstr[1] "Cada {n} cel·les horitzontalment"
+msgstr[0] "Cada {n} repetició horitzontalment"
+msgstr[1] "Cada {n} repeticions horitzontalment"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "Cada {n} cel·la verticalment"
-msgstr[1] "Cada {n} cel·les verticalment"
+msgstr[0] "Cada {n} repetició verticalment"
+msgstr[1] "Cada {n} repeticions verticalment"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -46795,9 +46785,7 @@ msgstr "&Patró:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position:"
 msgstr "Posició:"
 
@@ -48628,7 +48616,7 @@ msgid ""
 "chooses), 0 to 3 to set a strength."
 msgstr ""
 "Nivell del filtre de manteniment de les vores, de -1 a 3. Utilitzeu -1 de "
-"manera predeterminada (el codificador tria), 0 a 3 per establir una "
+"manera predeterminada (el codificador tria), 0 a 3 per a establir una "
 "intensitat."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
@@ -48772,8 +48760,8 @@ msgid ""
 msgstr ""
 "Utilitzeu la paleta de canals globals si la quantitat de colors és menor que "
 "aquest percentatge d'interval.\n"
-"Utilitzeu 0-100 per establir un percentatge explícit, -1 per utilitzar el "
-"valor predeterminat del codificador.\n"
+"Utilitzeu 0-100 per a establir un percentatge explícit, -1 per a utilitzar "
+"el valor predeterminat del codificador.\n"
 "S'utilitza per a la codificació modular."
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
@@ -48793,8 +48781,8 @@ msgid ""
 msgstr ""
 "Utilitzeu la paleta de canals locals (per grup) si la quantitat de colors és "
 "menor que aquest percentatge d'interval.\n"
-"Utilitzeu 0-100 per establir un percentatge explícit, -1 per utilitzar el "
-"valor predeterminat del codificador.\n"
+"Utilitzeu 0-100 per a establir un percentatge explícit, -1 per a utilitzar "
+"el valor predeterminat del codificador.\n"
 "S'utilitza per a la codificació modular."
 
 # skip-rule: t-sp_pu
@@ -48813,7 +48801,7 @@ msgid ""
 "Used for modular encoding."
 msgstr ""
 "Utilitzeu la paleta de colors si la quantitat de colors és menor o igual que "
-"aquesta quantitat, o -1 per utilitzar el valor predeterminat del "
+"aquesta quantitat, o -1 per a utilitzar el valor predeterminat del "
 "codificador.\n"
 "S'utilitza per a la codificació modular."
 
@@ -48870,7 +48858,7 @@ msgid ""
 "-1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all.\n"
 "Higher values use more encoder memory."
 msgstr ""
-"Fracció dels píxels utilitzats per aprendre arbres MA com a percentatge.\n"
+"Fracció dels píxels utilitzats per a aprendre arbres MA com a percentatge.\n"
 "-1 = predeterminat, 0 = sense MA i descodificació ràpida, 50 = valor "
 "predeterminat, 100 = tot.\n"
 "Els valors més alts utilitzen més memòria del codificador."
@@ -51281,7 +51269,7 @@ msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
 "coding (0 = no degradation, 100 = maximum possible degradation)."
 msgstr ""
-"Degradació permesa de la qualitat per a ajustar-se al límit de 512KB en la "
+"Degradació permesa de la qualitat per a ajustar-se al límit de 512 kB en la "
 "predicció dels modes de codificació (0 = sense degradació, 100 = màxima "
 "degradació possible)."
 
@@ -55530,7 +55518,7 @@ msgid ""
 "in your own. Separate genres with commas. Try to limit the amount to about "
 "two or three."
 msgstr ""
-"El gènere del treball. Els valor preomplerts són de l'ACBF, però també els "
+"El gènere del treball. Els valors preomplerts són de l'ACBF, però també els "
 "podeu omplir. Separeu els gèneres per comes. Intenteu limitar la quantitat a "
 "dos o tres."
 
@@ -55979,7 +55967,7 @@ msgstr "Configuració bàsica de projecte de còmic"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:76
 msgid "A Project name. This can be different from the eventual title"
-msgstr "Un nom de projecte. Pot ser diferents del títol definitiu"
+msgstr "Un nom de projecte. Pot ser diferent del títol definitiu"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:78
 msgid "Generate"
@@ -57591,7 +57579,7 @@ msgid ""
 "(useful for filling line-art)"
 msgstr ""
 "En arrossegar només s'emplenaran les regions similars en color a la regió "
-"inicial (útil per emplenar la línia artística)"
+"inicial (útil per a emplenar la línia artística)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542

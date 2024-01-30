@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-29 01:34+0000\n"
-"PO-Revision-Date: 2024-01-13 09:08+0200\n"
+"PO-Revision-Date: 2024-01-29 15:38+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -41125,10 +41125,9 @@ msgstr "Встановити простір кольорів"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Lock the current palette."
+#, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "Зафіксувати поточну палітру."
+msgstr "Зафіксувати за простором кольорів поточного шару"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
@@ -47302,41 +47301,31 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "Кожну {n} комірку горизонтально"
-msgstr[1] "Кожні {n} комірки горизонтально"
-msgstr[2] "Кожні {n} комірок горизонтально"
-msgstr[3] "Кожну {n} комірку горизонтально"
+msgstr[0] "Кожне {n} повторення горизонтально"
+msgstr[1] "Кожні {n} повторення горизонтально"
+msgstr[2] "Кожні {n} повторень горизонтально"
+msgstr[3] "Кожне {n} повторення горизонтально"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "Кожну {n} комірку вертикально"
-msgstr[1] "Кожні {n} комірки вертикально"
-msgstr[2] "Кожні {n} комірок вертикально"
-msgstr[3] "Кожну {n} комірку вертикально"
+msgstr[0] "Кожне {n} повторення вертикально"
+msgstr[1] "Кожні {n} повторення вертикально"
+msgstr[2] "Кожні {n} повторень вертикально"
+msgstr[3] "Кожне {n} повторення вертикально"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -47351,11 +47340,9 @@ msgstr "&Візерунок:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position:"
-msgstr "Посада:"
+msgstr "Розташування:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelShear)

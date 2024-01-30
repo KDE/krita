@@ -96,7 +96,7 @@ static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> &c
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 {
-    clearAssociatedOutlines(q);
+    clearAssociatedOutlines();
     this->initialTextPosition = QPointF();
     this->result.clear();
     this->cursorPos.clear();
@@ -840,9 +840,8 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     debugFlake << "9. return result.";
     globalIndex = 0;
     QVector<CursorPos> cursorPos;
-    Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
-        KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
-        const int j = chunk.text.size();
+    for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
+        const int j = it->text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
             if (result.at(i).addressable && !result.at(i).middle) {
 
@@ -886,7 +885,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
                 if (!result.at(i).hidden) {
                     const QTransform tf = result.at(i).finalTransform();
-                    wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
+                    it->associatedOutline.addRect(tf.mapRect(result.at(i).boundingBox));
                 }
             }
         }
@@ -915,16 +914,10 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     this->logicalToVisualCursorPos = logicalToVisualCursorPositions(cursorPos, result, this->lineBoxes, direction == KoSvgText::DirectionLeftToRight);
 }
 
-void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
+void KoSvgTextShape::Private::clearAssociatedOutlines()
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
-
-    chunkShape->layoutInterface()->clearAssociatedOutline();
-    chunkShape->layoutInterface()->clearTextDecorations();
-
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        clearAssociatedOutlines(child);
+    for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
+        it->associatedOutline = QPainterPath();
     }
 }
 

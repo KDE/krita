@@ -32,6 +32,7 @@
 #include <KoProperties.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
+#include <KoInsets.h>
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -1032,6 +1033,40 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 {
     Q_UNUSED(painter);
     // do nothing! everything is painted in paintComponent()
+}
+
+QPainterPath KoSvgTextShape::outline() const {
+    QPainterPath result;
+    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+        result.addPath(it->associatedOutline);
+        for (int i = 0; i < it->textDecorations.values().size(); ++i) {
+            result.addPath(it->textDecorations.values().at(i));
+        }
+
+    }
+    return result;
+}
+QRectF KoSvgTextShape::outlineRect() const
+{
+    return outline().boundingRect();
+}
+
+QRectF KoSvgTextShape::boundingRect() const
+{
+    QRectF result;
+    KoShapeStrokeModelSP stroke = nullptr;
+    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+        if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
+        }
+        if (stroke) {
+            QRectF bb = outlineRect();
+            KoInsets insets;
+            stroke->strokeInsets(this, insets);
+            result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+        }
+    }
+    return this->absoluteTransformation().mapRect(result);
 }
 
 void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements) const

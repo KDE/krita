@@ -42,6 +42,10 @@ public:
     void paintComponent(QPainter &painter) const override;
     void paintStroke(QPainter &painter) const override;
 
+    QPainterPath outline() const override;
+    QRectF outlineRect() const override;
+    QRectF boundingRect() const override;
+
     enum class DebugElement {
         CharBbox = 1 << 0,
         LineBox = 1 << 1,

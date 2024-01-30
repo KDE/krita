@@ -281,7 +281,8 @@ public:
 
     Private() = default;
 
-    Private(const Private &rhs) {
+    Private(const Private &rhs)
+        : textData(const_cast<Private&>(rhs).textData) {
         Q_FOREACH (KoShape *shape, rhs.shapesInside) {
             KoShape *clonedShape = shape->cloneShape();
             KIS_ASSERT_RECOVER(clonedShape) { continue; }
@@ -299,7 +300,6 @@ public:
         xRes = rhs.xRes;
         result = rhs.result;
         lineBoxes = rhs.lineBoxes;
-        textData = rhs.textData;
         currentNode = rhs.currentNode;
     };
 
@@ -340,7 +340,7 @@ public:
                                                raqm_glyph_t &currentGlyph,
                                                CharacterResult &charResult) const;
 
-    void clearAssociatedOutlines(const KoShape *rootShape);
+    void clearAssociatedOutlines();
     void resolveTransforms(const KoShape *rootShape, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);
 
     void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
@@ -404,6 +404,9 @@ public:
                     const QVector<CharacterResult> &result,
                     QPainterPath &chunk,
                     int &currentIndex);
+    int childCount(KisForest<KoSvgTextContentElement>::child_iterator it) {
+        return std::distance(KisForestDetail::childBegin(it), KisForestDetail::childEnd(it));
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

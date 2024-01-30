@@ -80,12 +80,6 @@ bool writeColorSpaceInformation(TIFF *image,
             sample_format = SAMPLEFORMAT_IEEEFP;
         }
         return true;
-    } else if (id == LABAColorModelID) {
-        color_type = PHOTOMETRIC_CIELAB;
-        if (isBitDepthFloat(depth)) {
-            sample_format = SAMPLEFORMAT_IEEEFP;
-        }
-        return true;
     } else if (id == YCbCrAColorModelID) {
         color_type = PHOTOMETRIC_YCBCR;
         if (isBitDepthFloat(depth)) {

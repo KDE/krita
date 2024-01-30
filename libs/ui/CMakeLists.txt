@@ -243,6 +243,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_tone_curve_widget.cpp
     widgets/kis_transport_controls.cpp
     widgets/kis_utility_title_bar.cpp
+    widgets/kis_utility_title_bar_p.h
     widgets/kis_curve_widget.cpp
     widgets/KisCurveWidgetConnectionHelper.cpp
     widgets/KisCurveWidgetControlsManager.cpp

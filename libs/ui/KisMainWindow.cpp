@@ -76,6 +76,7 @@
 #include <KoToolRegistry.h>
 #include <KoDockFactoryBase.h>
 #include <KoDockWidgetTitleBar.h>
+#include <kis_utility_title_bar.h>
 #include <KoDocumentInfoDlg.h>
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
@@ -2384,6 +2385,10 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
         bool locked = group.readEntry("Locked", false);
         if (titleBar && locked) {
             titleBar->setLocked(true);
+        }
+        else if ( dockWidget->titleBarWidget()->inherits("KisUtilityTitleBar") && locked){
+            KisUtilityTitleBar *utilityTitleBar = dynamic_cast<KisUtilityTitleBar*>(dockWidget->titleBarWidget());
+            utilityTitleBar->setLocked(true);
         }
 
         d->dockWidgetsMap.insert(factory->id(), dockWidget);

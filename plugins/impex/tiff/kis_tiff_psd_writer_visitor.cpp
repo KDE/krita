@@ -271,7 +271,6 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
 
     // Set the predictor
     if (m_options->compressionType == COMPRESSION_LZW
-        || m_options->compressionType == COMPRESSION_ADOBE_DEFLATE
         || m_options->compressionType == COMPRESSION_ADOBE_DEFLATE)
         TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
 

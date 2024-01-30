@@ -1918,6 +1918,10 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     QDomText onlyTextChild = getTheOnlyTextChild(e);
     if (!onlyTextChild.isNull()) {
         textChunk->loadSvgTextNode(onlyTextChild, m_context);
+
+        if (rootTextShape) {
+            rootTextShape->loadSvgText(onlyTextChild, m_context);
+        }
     } else {
         QList<KoShape*> childShapes = parseContainer(e, true);
         addToGroup(childShapes, textChunk);

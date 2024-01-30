@@ -1064,6 +1064,8 @@ QRectF KoSvgTextShape::boundingRect() const
             KoInsets insets;
             stroke->strokeInsets(this, insets);
             result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
+        } else {
+            result |= outlineRect();
         }
     }
     return this->absoluteTransformation().mapRect(result);

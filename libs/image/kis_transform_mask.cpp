@@ -143,9 +143,11 @@ void KisTransformMask::setTransformParamsWithUndo(KisTransformMaskParamsInterfac
 
     m_d->paramsHolder->setParamsAtCurrentPosition(params.data(), parentCommand);
 
-    m_d->staticCacheValid = false;
-    m_d->paramsForStaticImage.clear();
-    m_d->updateSignalCompressor.start();
+    if (!m_d->staticCacheIsOverridden) {
+        m_d->staticCacheValid = false;
+        m_d->paramsForStaticImage.clear();
+        m_d->updateSignalCompressor.start();
+    }
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)

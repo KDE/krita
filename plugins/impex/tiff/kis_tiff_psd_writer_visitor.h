@@ -15,9 +15,11 @@
 #include <KisImportExportErrorCode.h>
 #include <kis_types.h>
 
+#include "kis_tiff_base_writer.h"
+
 struct KisTIFFOptions;
 
-class KisTiffPsdWriter : public QObject
+class KisTiffPsdWriter : public QObject, protected KisTIFFBaseWriter
 {
     Q_OBJECT
 public:
@@ -25,23 +27,6 @@ public:
     ~KisTiffPsdWriter() override;
 
     KisImportExportErrorCode writeImage(KisGroupLayerSP rootLayer);
-
-private:
-    inline TIFF *image()
-    {
-        return m_image;
-    }
-
-    bool copyDataToStrips(KisHLineConstIteratorSP it,
-                          tdata_t buff,
-                          uint32_t depth,
-                          uint16_t sample_format,
-                          uint8_t nbcolorssamples,
-                          const std::array<quint8, 5> &poses);
-    bool saveLayerProjection(KisLayer *);
-
-    TIFF *m_image;
-    KisTIFFOptions *m_options;
 };
 
 #endif // _KIS_TIFF_PSD_WRITER_VISITOR_H

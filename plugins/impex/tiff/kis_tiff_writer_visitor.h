@@ -26,12 +26,14 @@
 #include <kis_shape_layer.h>
 #include <kis_types.h>
 
+#include "kis_tiff_base_writer.h"
+
 struct KisTIFFOptions;
 
 /**
    @author Cyrille Berger <cberger@cberger.net>
 */
-class KisTIFFWriterVisitor : public KisNodeVisitor
+class KisTIFFWriterVisitor : public KisNodeVisitor, protected KisTIFFBaseWriter
 {
 public:
 
@@ -93,19 +95,7 @@ public:
 
 
 private:
-    inline TIFF* image() {
-        return m_image;
-    }
-    bool copyDataToStrips(KisHLineConstIteratorSP it,
-                          tdata_t buff,
-                          uint32_t depth,
-                          uint16_t sample_format,
-                          uint8_t nbcolorssamples,
-                          const std::array<quint8, 5> &poses);
     bool saveLayerProjection(KisLayer *);
-private:
-    TIFF* m_image;
-    KisTIFFOptions* m_options;
 };
 
 #endif

@@ -41,6 +41,7 @@ target_link_libraries(kritatiffimport
 install(TARGETS kritatiffimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 set(kritatiffexport_SOURCES
+    kis_tiff_base_writer.cpp
     kis_tiff_converter.cc
     kis_tiff_writer_visitor.cpp
     kis_tiff_export.cc

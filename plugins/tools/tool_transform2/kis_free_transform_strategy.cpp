@@ -23,6 +23,7 @@
 #include "kis_algebra_2d.h"
 
 
+namespace {
 enum StrokeFunction {
     ROTATE = 0,
     MOVE,
@@ -41,6 +42,7 @@ enum StrokeFunction {
     MOVECENTER,
     PERSPECTIVE
 };
+}
 
 struct KisFreeTransformStrategy::Private
 {

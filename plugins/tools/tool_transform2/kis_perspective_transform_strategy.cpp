@@ -23,7 +23,7 @@
 #include "kis_transform_utils.h"
 #include "kis_free_transform_strategy_gsl_helpers.h"
 
-
+namespace {
 enum StrokeFunction {
     DRAG_HANDLE = 0,
     DRAG_X_VANISHING_POINT,
@@ -43,6 +43,7 @@ enum HandleIndexes {
     HANDLE_MIDDLE_RIGHT,
     HANDLE_COUNT,
 };
+}
 
 struct KisPerspectiveTransformStrategy::Private
 {

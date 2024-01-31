@@ -366,7 +366,7 @@ public:
                             QVector<CharacterResult> &result, QVector<LineBox> lineBoxes,
                             int &currentIndex,
                             bool isHorizontal);
-    void computeTextDecorations(const KoShape *rootShape,
+    void computeTextDecorations(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                 const QVector<CharacterResult>& result,
                                 const QMap<int, int>& logicalToVisual,
                                 qreal minimumDecorationThickness,
@@ -377,7 +377,7 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping);
-    QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(const KoSvgTextChunkShape *chunkShape,
+    QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                                                           const int &start, const int &end,
                                                                           const QVector<CharacterResult> &result,
                                                                           QPainterPathStroker &stroker,

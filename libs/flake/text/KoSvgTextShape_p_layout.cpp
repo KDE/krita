@@ -804,7 +804,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         // positioning.
         debugFlake << "Now Computing text-decorations";
         globalIndex = 0;
-        this->computeTextDecorations(q,
+        this->computeTextDecorations(textData.childBegin(),
                                   result,
                                   logicalToVisual,
                                   minimumDecorationThickness,
@@ -823,7 +823,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     } else {
         globalIndex = 0;
         debugFlake << "Computing text-decorationsfor inline-size";
-        this->computeTextDecorations(q,
+        this->computeTextDecorations(textData.childBegin(),
                                   result,
                                   logicalToVisual,
                                   minimumDecorationThickness,
@@ -918,6 +918,7 @@ void KoSvgTextShape::Private::clearAssociatedOutlines()
 {
     for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
         it->associatedOutline = QPainterPath();
+        it->textDecorations.clear();
     }
 }
 
@@ -1440,8 +1441,8 @@ void KoSvgTextShape::Private::handleLineBoxAlignment(KisForest<KoSvgTextContentE
  * bends them to the textPath, strokes them, and then adds them to the node in
  * question.
  */
-void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-function-cognitive-complexity)
-    const KoShape *rootShape,
+void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-function-cognitive-complexity)
+    KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
     const QVector<CharacterResult> &result,
     const QMap<int, int> &logicalToVisual,
     qreal minimumDecorationThickness,
@@ -1453,31 +1454,29 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
     bool ltr,
     bool wrapping)
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     const int i = currentIndex;
-    const int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+    const int j = qMin(i + numChars(currentTextElement, true), result.size());
     using namespace KoSvgText;
 
     KoPathShape *currentTextPath = nullptr;
     qreal currentTextPathOffset = textPathoffset;
     bool textPathSide = side;
     if (!wrapping) {
-        currentTextPath = textPath ? textPath : dynamic_cast<KoPathShape *>(chunkShape->layoutInterface()->textPath());
+        currentTextPath = textPath ? textPath : dynamic_cast<KoPathShape *>(currentTextElement->textPath.data());
 
-        if (chunkShape->layoutInterface()->textPath()) {
-            textPathSide = chunkShape->layoutInterface()->textOnPathInfo().side == TextPathSideRight;
-            if (chunkShape->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
+        if (currentTextElement->textPath) {
+            textPathSide = currentTextElement->textPathInfo.side == TextPathSideRight;
+            if (currentTextElement->textPathInfo.startOffsetIsPercentage) {
                 KIS_ASSERT(currentTextPath);
-                currentTextPathOffset = currentTextPath->outline().length() * (0.01 * chunkShape->layoutInterface()->textOnPathInfo().startOffset);
+                currentTextPathOffset = currentTextPath->outline().length() * (0.01 * currentTextElement->textPathInfo.startOffset);
             } else {
-                currentTextPathOffset = chunkShape->layoutInterface()->textOnPathInfo().startOffset;
+                currentTextPathOffset = currentTextElement->textPathInfo.startOffset;
             }
         }
     }
 
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+    for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
         computeTextDecorations(child,
                                result,
                                logicalToVisual,
@@ -1491,19 +1490,19 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
                                wrapping);
     }
 
-    TextDecorations decor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<TextDecorations>();
-    if (decor != DecorationNone && chunkShape->textProperties().hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
-        KoSvgTextProperties properties = chunkShape->textProperties();
+    TextDecorations decor = currentTextElement->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<TextDecorations>();
+    if (decor != DecorationNone && currentTextElement->properties.hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
+        KoSvgTextProperties properties =currentTextElement->properties;
         TextDecorationStyle style = TextDecorationStyle(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationStyleId).toInt());
         TextDecorationUnderlinePosition underlinePosH =
-            TextDecorationUnderlinePosition(chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
+            TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
         TextDecorationUnderlinePosition underlinePosV =
-            TextDecorationUnderlinePosition(chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
+            TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
 
         QPainterPathStroker stroker;
 
         QMap<TextDecoration, QPainterPath> decorationPaths =
-                generateDecorationPaths(chunkShape, i, j,
+                generateDecorationPaths(currentTextElement, i, j,
                                         result, stroker, isHorizontal, decor,
                                         minimumDecorationThickness, style, false, currentTextPath,
                                         currentTextPathOffset, textPathSide, underlinePosH, underlinePosV
@@ -1514,9 +1513,9 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
         Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
             QPainterPath decorationPath = decorationPaths.value(type);
             if (!decorationPath.isEmpty()) {
-                stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(type)));
+                stroker.setWidth(qMax(minimumDecorationThickness, currentTextElement->textDecorationWidths.value(type)));
                 decorationPath = stroker.createStroke(decorationPath).simplified();
-                chunkShape->layoutInterface()->addTextDecoration(type, decorationPath.simplified());
+                currentTextElement->textDecorations.insert(type, decorationPath.simplified());
             }
         }
     }
@@ -1524,7 +1523,7 @@ void KoSvgTextShape::Private::computeTextDecorations( // NOLINT(readability-func
 }
 
 QMap<KoSvgText::TextDecoration, QPainterPath>
-KoSvgTextShape::Private::generateDecorationPaths(const KoSvgTextChunkShape *chunkShape,
+KoSvgTextShape::Private::generateDecorationPaths(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                                  const int &start, const int &end,
                                                  const QVector<CharacterResult> &result,
                                                  QPainterPathStroker &stroker,
@@ -1549,11 +1548,11 @@ KoSvgTextShape::Private::generateDecorationPaths(const KoSvgTextChunkShape *chun
     decorationPaths.insert(DecorationLineThrough, QPainterPath());
 
     Q_FOREACH (TextDecoration type, decorationPaths.keys()) {
-        qreal offset = chunkShape->layoutInterface()->getTextDecorationOffset(type);
+        qreal offset = currentTextElement->textDecorationOffsets.value(type);
         decorationOffsets.insert(type, isHorizontal ? QPointF(0, offset) : QPointF(offset, 0));
     }
 
-    stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(DecorationUnderline)));
+    stroker.setWidth(qMax(minimumDecorationThickness, currentTextElement->textDecorationWidths.value(DecorationUnderline)));
     stroker.setCapStyle(Qt::FlatCap);
     if (style == Dotted) {
         QPen pen;

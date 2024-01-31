@@ -352,7 +352,7 @@ public:
                                            bool isHorizontal,
                                            qreal offset,
                                            bool isClosed);
-    static void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos);
+    static void applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator parent, QVector<CharacterResult> &result, bool isHorizontal, QPointF &startPos);
     void computeFontMetrics(KisForest<KoSvgTextContentElement>::child_iterator parent,
                             const QMap<int, int> &parentBaselineTable,
                             qreal parentFontSize,
@@ -404,14 +404,14 @@ public:
                     const QVector<CharacterResult> &result,
                     QPainterPath &chunk,
                     int &currentIndex);
-    int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls) {
+    static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls) {
         int count = parent->numChars(withControls);
         for (auto it = KisForestDetail::childBegin(parent); it != KisForestDetail::childEnd(parent); it++) {
             count += numChars(it, withControls);
         }
         return count;
     }
-    int childCount(KisForest<KoSvgTextContentElement>::child_iterator it) {
+    static int childCount(KisForest<KoSvgTextContentElement>::child_iterator it) {
         return std::distance(KisForestDetail::childBegin(it), KisForestDetail::childEnd(it));
     }
 };

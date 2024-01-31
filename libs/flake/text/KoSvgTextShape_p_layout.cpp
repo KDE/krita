@@ -819,7 +819,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         // 8. Position on path
 
         debugFlake << "8. Position on path";
-        this->applyTextPath(q, result, isHorizontal, startPos);
+        this->applyTextPath(textData.childBegin(), result, isHorizontal, startPos);
     } else {
         globalIndex = 0;
         debugFlake << "Computing text-decorationsfor inline-size";
@@ -1865,7 +1865,7 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(const QPainterPath &gly
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
+void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::child_iterator root,
                                             QVector<CharacterResult> &result,
                                             bool isHorizontal,
                                             QPointF &startPos)
@@ -1873,36 +1873,32 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
     // Unlike all the other applying functions, this one only iterrates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
     // https://github.com/w3c/svgwg/issues/580
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
     bool inPath = false;
     bool afterPath = false;
     int currentIndex = 0;
     QPointF pathEnd;
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape *>(child);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(textPathChunk);
-        int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars(true);
+    for (auto textShapeElement = KisForestDetail::childBegin(root); textShapeElement != KisForestDetail::childEnd(root); textShapeElement++) {
+        int endIndex = currentIndex + numChars(textShapeElement, true);
 
-        KoPathShape *shape = dynamic_cast<KoPathShape *>(textPathChunk->layoutInterface()->textPath());
+        KoPathShape *shape = dynamic_cast<KoPathShape *>(textShapeElement->textPath.data());
         if (shape) {
             QPainterPath path = shape->outline();
             path = shape->transformation().map(path);
             inPath = true;
-            if (textPathChunk->layoutInterface()->textOnPathInfo().side == KoSvgText::TextPathSideRight) {
+            if (textShapeElement->textPathInfo.side == KoSvgText::TextPathSideRight) {
                 path = path.toReversed();
             }
             qreal length = path.length();
             qreal offset = 0.0;
             bool isClosed = (shape->isClosedSubpath(0) && shape->subpathCount() == 1);
-            if (textPathChunk->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
-                offset = length * (0.01 * textPathChunk->layoutInterface()->textOnPathInfo().startOffset);
+            if (textShapeElement->textPathInfo.startOffsetIsPercentage) {
+                offset = length * (0.01 * textShapeElement->textPathInfo.startOffset);
             } else {
-                offset = textPathChunk->layoutInterface()->textOnPathInfo().startOffset;
+                offset = textShapeElement->textPathInfo.startOffset;
             }
-            bool stretch = textPathChunk->layoutInterface()->textOnPathInfo().method == KoSvgText::TextPathStretch;
+            bool stretch = textShapeElement->textPathInfo.method == KoSvgText::TextPathStretch;
 
-            if (child == chunkShape->shapes().first()) {
+            if (textShapeElement == KisForestDetail::childBegin(root)) {
                 const qreal percent = path.percentAtLength(offset);
                 startPos = path.pointAtPercent(percent);
             }

@@ -270,6 +270,25 @@ struct LineBox {
         if (chunks.isEmpty()) return true;
         return chunks.at(currentChunk).chunkIndices.isEmpty();
     }
+
+};
+
+/**
+ * A representation of a single leaf of the KisForest<KoTextContentElement>
+ **/
+struct SubChunk {
+
+    SubChunk(KisForest<KoSvgTextContentElement>::child_iterator leaf):
+        associatedLeaf(leaf){
+
+    }
+
+    QString text;
+    QString originalText;
+    KisForest<KoSvgTextContentElement>::child_iterator associatedLeaf;
+    QVector<QPair<int, int>> newToOldPositions; ///< For transformed strings, we need to know which
+    bool textInPath = false;
+    bool firstTextInPath = false; ///< We need to mark the first text in path as an anchored chunk.                         ///< original index matches which new index;
 };
 
 class KoSvgTextShape::Private
@@ -414,6 +433,10 @@ public:
     static int childCount(KisForest<KoSvgTextContentElement>::child_iterator it) {
         return std::distance(KisForestDetail::childBegin(it), KisForestDetail::childEnd(it));
     }
+    /**
+     * Return a linearized representation of a subtree of text "subchunks".
+     */
+    QVector<SubChunk> collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath);
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

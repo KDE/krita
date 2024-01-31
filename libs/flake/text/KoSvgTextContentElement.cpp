@@ -227,6 +227,15 @@ void KoSvgTextContentElement::insertText(int start, QString insertText)
     }
 }
 
+
+QString KoSvgTextContentElement::getTransformedString(QVector<QPair<int, int> > positions) const
+{
+    KoSvgText::TextTransformInfo textTransformInfo =
+        properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
+    QString lang = properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+    return transformText(text, textTransformInfo, lang, positions);
+}
+
 void KoSvgTextContentElement::removeText(int &start, int length)
 {
     KoCssTextUtils::removeText(text, start, length);

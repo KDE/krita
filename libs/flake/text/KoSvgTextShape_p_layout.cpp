@@ -162,12 +162,12 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // First, get text. We use the subChunks because that handles bidi-insertion for us.
 
     bool _ignore = false;
-    const QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks =
-        q->layoutInterface()->collectSubChunks(false, _ignore);
+    const QVector<SubChunk> textChunks =
+        collectSubChunks(textData.childBegin(),false, _ignore);
     QString text;
     QVector<QPair<int, int>> clusterToOriginalString;
     QString plainText;
-    Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
+    Q_FOREACH (const SubChunk &chunk, textChunks) {
         for (int i = 0; i < chunk.newToOldPositions.size(); i++) {
             QPair pos = chunk.newToOldPositions.at(i);
             int a = pos.second < 0? -1: text.size()+pos.second;
@@ -265,9 +265,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         }
 
         int start = 0;
-        Q_FOREACH (const KoSvgTextChunkShapeLayoutInterface::SubChunk &chunk, textChunks) {
+        Q_FOREACH (const SubChunk &chunk, textChunks) {
             int length = chunk.text.size();
-            KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
+            KoSvgTextProperties properties = chunk.associatedLeaf->properties;
 
             // In this section we retrieve the resolved transforms and
             // direction/anchoring that we can get from the subchunks.
@@ -282,7 +282,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             KoSvgText::LineHeightInfo lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
 
-            KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunk.format.associatedShapeWrapper().shape()->background().data());
+            KoColorBackground *b = dynamic_cast<KoColorBackground *>(properties.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property.data());
             QColor fillColor;
             if (b)
             {
@@ -903,7 +903,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
             pos.synthetic = true;
             cursorPos.append(pos);
             if (!textChunks.isEmpty()) {
-                textChunks.last().format.associatedShapeWrapper().addCharacterRect(result.at(dummyIndex).finalTransform().mapRect(result[dummyIndex].boundingBox));
+                textChunks.last().associatedLeaf->associatedOutline.addRect(result.at(dummyIndex).finalTransform().mapRect(result[dummyIndex].boundingBox));
             }
         }
     }
@@ -1961,4 +1961,54 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
         }
         currentIndex = endIndex;
     }
+}
+QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath)
+{
+    QVector<SubChunk> result;
+    if (it->textPath) {
+        textInPath = true;
+        firstTextInPath = true;
+    }
+
+    if (childCount(it)) {
+        for (auto child = KisForestDetail::childBegin(it); child != KisForestDetail::childEnd(it); child++) {
+         result += collectSubChunks(child, textInPath, firstTextInPath);
+        }
+    } else {
+        SubChunk chunk(it);
+
+        KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(it->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
+        KoSvgText::Direction direction = KoSvgText::Direction(it->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+        const QString bidiOpening = KoCssTextUtils::getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi);
+        const QString bidiClosing = KoCssTextUtils::getBidiClosing(bidi);
+
+
+        if (!bidiOpening.isEmpty()) {
+            chunk.text = bidiOpening;
+            chunk.originalText = QString();
+            chunk.newToOldPositions.clear();
+            result.append(chunk);
+            firstTextInPath = false;
+        }
+
+        chunk.originalText = it->text;
+        chunk.text = it->getTransformedString(chunk.newToOldPositions);
+        result.append(chunk);
+
+        if (!bidiClosing.isEmpty()) {
+            chunk.text = bidiClosing;
+            chunk.originalText = QString();
+            chunk.newToOldPositions.clear();
+            result.append(chunk);
+        }
+
+        firstTextInPath = false;
+    }
+
+    if (it->textPath) {
+        textInPath = false;
+        firstTextInPath = false;
+    }
+
+    return result;
 }

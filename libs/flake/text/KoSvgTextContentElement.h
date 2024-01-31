@@ -66,12 +66,16 @@ public:
 
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 
+
     /**
      * The number of characters contained in the currentChunk.
      * @param withControls this will enable the bidi controls to be
      * counted as well.
      */
     int numChars(bool withControls) const;
+
+    QString getTransformedString(QVector<QPair<int, int>> positions) const;
+
     void insertText(int start, QString insertText);
     void removeText(int &start, int length);
 };

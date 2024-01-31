@@ -768,7 +768,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         debugFlake << "5. Apply ‘textLength’ attribute";
         globalIndex = 0;
         int resolved = 0;
-        this->applyTextLength(q, result, globalIndex, resolved, isHorizontal);
+        this->applyTextLength(textData.childBegin(), result, globalIndex, resolved, isHorizontal);
 
         // 6. Adjust positions: x, y
         debugFlake << "6. Adjust positions: x, y";
@@ -1003,27 +1003,25 @@ void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, QStrin
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
+void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                               QVector<CharacterResult> &result,
                                               int &currentIndex,
                                               int &resolvedDescendentNodes,
                                               bool isHorizontal)
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
-    int j = i + chunkShape->layoutInterface()->numChars(true);
+    int j = i + numChars(currentTextElement, true);
     int resolvedChildren = 0;
 
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+    for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
         applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal);
     }
     // Raqm handles bidi reordering for us, but this algorithm does not
     // anticipate that, so we need to keep track of which typographic item
     // belongs where.
     QMap<int, int> visualToLogical;
-    if (!chunkShape->layoutInterface()->textLength().isAuto) {
+    if (!currentTextElement->textLength.isAuto) {
         qreal a = 0.0;
         qreal b = 0.0;
         int n = 0;
@@ -1053,11 +1051,11 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             }
         }
         n += resolvedChildren;
-        bool spacingAndGlyphs = (chunkShape->layoutInterface()->lengthAdjust() == KoSvgText::LengthAdjustSpacingAndGlyphs);
+        bool spacingAndGlyphs = (currentTextElement->lengthAdjust == KoSvgText::LengthAdjustSpacingAndGlyphs);
         if (!spacingAndGlyphs) {
             n -= 1;
         }
-        const qreal delta = chunkShape->layoutInterface()->textLength().customValue - (b - a);
+        const qreal delta = currentTextElement->textLength.customValue - (b - a);
 
         const QPointF d = isHorizontal ? QPointF(delta / n, 0) : QPointF(0, delta / n);
 

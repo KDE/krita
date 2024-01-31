@@ -343,7 +343,7 @@ public:
     void clearAssociatedOutlines();
     void resolveTransforms(const KoShape *rootShape, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars);
 
-    void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
+    void applyTextLength(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
     static void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     static qreal
     characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);

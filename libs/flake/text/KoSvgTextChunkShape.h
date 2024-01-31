@@ -98,7 +98,7 @@ public:
      * SVG properties of the text chunk
      * @return the properties object with fill and stroke included as a property
      */
-    KoSvgTextProperties textProperties() const;
+    virtual KoSvgTextProperties textProperties() const;
 
     /**
      * Return the type of the chunk.

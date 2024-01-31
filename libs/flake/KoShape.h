@@ -430,7 +430,7 @@ public:
      *
      * @param background the new shape background.
      */
-    void setBackground(QSharedPointer<KoShapeBackground> background);
+    virtual void setBackground(QSharedPointer<KoShapeBackground> background);
 
     /**
      * return the brush used to paint te background of this shape with.
@@ -439,7 +439,7 @@ public:
      * will be able to tell if its transparent or not.
      * @return the background-brush
      */
-    QSharedPointer<KoShapeBackground> background() const;
+    virtual QSharedPointer<KoShapeBackground> background() const;
 
     /**
      * @brief setInheritBackground marks a shape as inheriting the background
@@ -712,13 +712,13 @@ public:
      * Returns the currently set stroke, or 0 if there is no stroke.
      * @return the currently set stroke, or 0 if there is no stroke.
      */
-    KoShapeStrokeModelSP stroke() const;
+    virtual KoShapeStrokeModelSP stroke() const;
 
     /**
      * Set a new stroke, removing the old one. The stroke inheritance becomes disabled.
      * @param stroke the new stroke, or 0 if there should be no stroke.
      */
-    void setStroke(KoShapeStrokeModelSP stroke);
+    virtual void setStroke(KoShapeStrokeModelSP stroke);
 
     /**
      * @brief setInheritStroke marks a shape as inheriting the stroke
@@ -747,13 +747,13 @@ public:
      * @param first first thing to paint
      * @param second second thing to paint.
      */
-    void setPaintOrder(PaintOrder first, PaintOrder second);
+    virtual void setPaintOrder(PaintOrder first, PaintOrder second);
 
     /**
      * @brief paintOrder
      * @return vector of paint orders, will always be 3 big and contain a fill, stroke and marker entry.
      */
-    QVector<PaintOrder> paintOrder() const;
+    virtual QVector<PaintOrder> paintOrder() const;
 
     /**
      * @brief setInheritPaintOrder

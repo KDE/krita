@@ -158,8 +158,6 @@ bool KoSvgTextContentElement::loadSvgTextNode(const QDomText &text, SvgLoadingCo
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
-    properties = gc->textProperties;
-
     // In theory, the XML spec requires XML parsers to normalize line endings to
     // LF. However, QXmlInputSource + QXmlSimpleReader do not do this, so we can
     // end up with CR in the text. The SVG spec explicitly calls out that all
@@ -228,7 +226,7 @@ void KoSvgTextContentElement::insertText(int start, QString insertText)
 }
 
 
-QString KoSvgTextContentElement::getTransformedString(QVector<QPair<int, int> > positions) const
+QString KoSvgTextContentElement::getTransformedString(QVector<QPair<int, int> > &positions) const
 {
     KoSvgText::TextTransformInfo textTransformInfo =
         properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();

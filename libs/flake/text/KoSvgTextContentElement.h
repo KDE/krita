@@ -74,7 +74,7 @@ public:
      */
     int numChars(bool withControls) const;
 
-    QString getTransformedString(QVector<QPair<int, int>> positions) const;
+    QString getTransformedString(QVector<QPair<int, int>> &positions) const;
 
     void insertText(int start, QString insertText);
     void removeText(int &start, int length);

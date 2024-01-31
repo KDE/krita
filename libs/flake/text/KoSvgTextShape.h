@@ -320,6 +320,14 @@ public:
     KoSvgTextProperties propertiesForPos(int pos);
     void setPropertiesAtPos(int pos, KoSvgTextProperties properties);
 
+    KoSvgTextProperties textProperties() const override;
+    QSharedPointer<KoShapeBackground> background() const override;
+    void setBackground(QSharedPointer<KoShapeBackground> background) override;
+    KoShapeStrokeModelSP stroke() const override;
+    void setStroke(KoShapeStrokeModelSP stroke) override;
+    QVector<PaintOrder> paintOrder() const override;
+    void setPaintOrder(PaintOrder first, PaintOrder second) override;
+
     /**
      * @brief plainText
      * plain text of all text inside this text shape,

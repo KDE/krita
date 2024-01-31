@@ -94,7 +94,7 @@ static QMap<int, int> logicalToVisualCursorPositions(const QVector<CursorPos> &c
 
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
-void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
+void KoSvgTextShape::Private::relayout()
 {
     clearAssociatedOutlines();
     this->initialTextPosition = QPointF();
@@ -102,8 +102,11 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     this->cursorPos.clear();
     this->logicalToVisualCursorPos.clear();
 
+    if (KisForestDetail::size(textData) == 0) {
+        return;
+    }
     // The following is based on the text-layout algorithm in SVG 2.
-    KoSvgTextProperties rootProperties = textData.childBegin().node()? textData.childBegin()->properties: KoSvgTextProperties::defaultProperties();
+    KoSvgTextProperties rootProperties = textData.childBegin()->properties;
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(rootProperties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     KoSvgText::Direction direction = KoSvgText::Direction(rootProperties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     KoSvgText::AutoValue inlineSize = rootProperties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();

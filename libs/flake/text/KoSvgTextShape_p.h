@@ -342,7 +342,7 @@ public:
     bool isBidi = false;
     QPointF initialTextPosition = QPointF();
 
-    void relayout(const KoSvgTextShape *q);
+    void relayout();
 
     bool loadGlyph(const QTransform &ftTF,
                    const QMap<int, KoSvgText::TabSizeInfo> &tabSizeInfo,

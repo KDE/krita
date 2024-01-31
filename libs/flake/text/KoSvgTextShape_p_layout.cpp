@@ -248,7 +248,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
         resolvedTransforms[0].xPos = 0;
         resolvedTransforms[0].yPos = 0;
     }
-    this->resolveTransforms(q, text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars);
+    this->resolveTransforms(textData.childBegin(), text, result, globalIndex, isHorizontal, wrapped, false, resolvedTransforms, collapseChars);
 
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
@@ -926,18 +926,16 @@ void KoSvgTextShape::Private::clearAssociatedOutlines()
  * @brief KoSvgTextShape::Private::resolveTransforms
  * This resolves transforms and applies whitespace collapse.
  */
-void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars) {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement, QString text, QVector<CharacterResult> &result, int &currentIndex, bool isHorizontal, bool wrapped, bool textInPath, QVector<KoSvgText::CharTransformation> &resolved, QVector<bool> collapsedChars) {
 
-    QVector<KoSvgText::CharTransformation> local = chunkShape->layoutInterface()->localCharTransformations();
+    QVector<KoSvgText::CharTransformation> local = currentTextElement->localTransformations;
 
     int i = 0;
 
     int index = currentIndex;
-    int j = index + chunkShape->layoutInterface()->numChars(true);
+    int j = index + numChars(currentTextElement, true);
 
-    if (chunkShape->layoutInterface()->textPath()) {
+    if (currentTextElement->textPath) {
         textInPath = true;
     } else {
         for (int k = index; k < j; k++ ) {
@@ -965,12 +963,12 @@ void KoSvgTextShape::Private::resolveTransforms(const KoShape *rootShape, QStrin
         }
     }
 
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+    for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
         resolveTransforms(child, text, result, currentIndex, isHorizontal, false, textInPath, resolved, collapsedChars);
 
     }
 
-    if (chunkShape->layoutInterface()->textPath()) {
+    if (currentTextElement->textPath) {
         bool first = true;
         for (int k = index; k < j; k++ ) {
 

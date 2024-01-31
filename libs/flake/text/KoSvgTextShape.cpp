@@ -881,6 +881,15 @@ bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &cont
     return true;
 }
 
+bool KoSvgTextShape::loadSvgTextIntoNewLeaf(const QDomElement &parent, const QDomText &text, SvgLoadingContext &context) {
+    KoSvgTextContentElement textNode;
+    textNode.loadSvg(parent, context);
+    textNode.localTransformations.clear();
+    textNode.textLength = KoSvgText::AutoValue();
+    d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
+    return loadSvgText(text, context);
+}
+
 bool KoSvgTextShape::loadSvgText(const QDomText &text, SvgLoadingContext &context)
 {
     if (d->currentNode.node()) {

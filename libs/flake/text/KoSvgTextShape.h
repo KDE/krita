@@ -344,6 +344,7 @@ public:
     void notifyCursorPosChanged(int pos, int anchor);
 
     bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
+    bool loadSvgTextIntoNewLeaf(const QDomElement &parent, const QDomText &text, SvgLoadingContext &context);
     bool loadSvgText(const QDomText &text, SvgLoadingContext &context);
     void setStyleInfo(KoShape* s);
     void setTextPathOnCurrentNode(KoShape *s);

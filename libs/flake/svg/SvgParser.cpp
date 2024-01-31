@@ -1805,8 +1805,7 @@ void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextShape *rootText
         for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
             QDomElement b = n.toElement();
             if (b.isNull()) {
-                rootTextShape->loadSvg(e, m_context);
-                rootTextShape->loadSvgText(n.toText(), m_context);
+                rootTextShape->loadSvgTextIntoNewLeaf(e, n.toText(), m_context);
                 KoShape *styleDummy = new KoPathShape();
                 applyCurrentBasicStyle(styleDummy);
                 rootTextShape->setStyleInfo(styleDummy);

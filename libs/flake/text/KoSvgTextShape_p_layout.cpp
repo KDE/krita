@@ -715,7 +715,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(q, QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
+    this->computeFontMetrics(textData.childBegin(), QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
@@ -728,7 +728,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
     // Handle baseline alignment.
     globalIndex = 0;
-    this->handleLineBoxAlignment(q, result, this->lineBoxes, globalIndex, isHorizontal);
+    this->handleLineBoxAlignment(textData.childBegin(), result, this->lineBoxes, globalIndex, isHorizontal);
 
     if (inlineSize.isAuto && this->shapesInside.isEmpty()) {
         debugFlake << "Starting with SVG 1.1 specific portion";
@@ -1122,7 +1122,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
  */
 
 void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function-cognitive-complexity)
-    const KoShape *rootShape,
+    KisForest<KoSvgTextContentElement>::child_iterator parent,
     const QMap<int, int> &parentBaselineTable,
     qreal parentFontSize,
     QPointF superScript,
@@ -1132,14 +1132,12 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     qreal res,
     bool isHorizontal)
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     QMap<int, int> baselineTable;
     const int i = currentIndex;
-    const int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+    const int j = qMin(i + numChars(parent, true), result.size());
 
-    KoSvgTextProperties properties = chunkShape->textProperties();
+    KoSvgTextProperties properties = parent->properties;
 
     const qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
     const qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
@@ -1277,15 +1275,18 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         offset *= -freetypePixelsToPt;
         width *= freetypePixelsToPt;
 
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
+        parent->textDecorationWidths.insert(KoSvgText::DecorationUnderline, width);
+        parent->textDecorationOffsets.insert(KoSvgText::DecorationUnderline, offset);
+        parent->textDecorationWidths.insert(KoSvgText::DecorationOverline, width);
 
         hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = baseline;
         hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
         width *= freetypePixelsToPt;
         offset *= -freetypePixelsToPt;
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
+
+        parent->textDecorationWidths.insert(KoSvgText::DecorationLineThrough, width);
+        parent->textDecorationOffsets.insert(KoSvgText::DecorationLineThrough, offset);
     } else {
         baseline = 0;
         hb_position_t baseline2 = 0;
@@ -1319,8 +1320,9 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         offset *= -freetypePixelsToPt;
         width *= freetypePixelsToPt;
 
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
+        parent->textDecorationWidths.insert(KoSvgText::DecorationUnderline, width);
+        parent->textDecorationOffsets.insert(KoSvgText::DecorationUnderline, offset);
+        parent->textDecorationWidths.insert(KoSvgText::DecorationOverline, width);
 
         hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = qMax<double>(baseline, fallbackThickness);
@@ -1331,10 +1333,11 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         width *= freetypePixelsToPt;
         offset *= -freetypePixelsToPt;
 
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
+        parent->textDecorationWidths.insert(KoSvgText::DecorationLineThrough, width);
+        parent->textDecorationOffsets.insert(KoSvgText::DecorationLineThrough, offset);
     }
 
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+    for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
         computeFontMetrics(child, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal);
     }
 
@@ -1377,22 +1380,20 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     currentIndex = j;
 }
 
-void KoSvgTextShape::Private::handleLineBoxAlignment(const KoShape *rootShape,
+void KoSvgTextShape::Private::handleLineBoxAlignment(KisForest<KoSvgTextContentElement>::child_iterator parent,
                                                      QVector<CharacterResult> &result,
                                                      QVector<LineBox> lineBoxes,
                                                      int &currentIndex,
                                                      bool isHorizontal)
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     const int i = currentIndex;
-    const int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+    const int j = qMin(i + numChars(parent, true), result.size());
 
-    KoSvgTextProperties properties = chunkShape->textProperties();
+    KoSvgTextProperties properties = parent->properties;
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
 
-    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+    for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
         handleLineBoxAlignment(child, result, lineBoxes, currentIndex, isHorizontal);
     }
     LineBox relevantLine;

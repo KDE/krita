@@ -103,10 +103,11 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     this->logicalToVisualCursorPos.clear();
 
     // The following is based on the text-layout algorithm in SVG 2.
-    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(q->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
-    KoSvgText::Direction direction = KoSvgText::Direction(q->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
-    KoSvgText::AutoValue inlineSize = q->textProperties().propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
-    QString lang = q->textProperties().property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+    KoSvgTextProperties rootProperties = textData.childBegin().node()? textData.childBegin()->properties: KoSvgTextProperties::defaultProperties();
+    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(rootProperties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(rootProperties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    KoSvgText::AutoValue inlineSize = rootProperties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    QString lang = rootProperties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
 
     const bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
@@ -184,9 +185,9 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
 
     // KoSvgText::TextSpaceTrims trims =
     // q->textProperties().propertyOrDefault(KoSvgTextProperties::TextTrimId).value<KoSvgText::TextSpaceTrims>();
-    KoSvgText::TextWrap wrap = KoSvgText::TextWrap(q->textProperties().propertyOrDefault(KoSvgTextProperties::TextWrapId).toInt());
-    KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(q->textProperties().propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
-    KoSvgText::LineBreak linebreakStrictness = KoSvgText::LineBreak(q->textProperties().property(KoSvgTextProperties::LineBreakId).toInt());
+    KoSvgText::TextWrap wrap = KoSvgText::TextWrap(rootProperties.propertyOrDefault(KoSvgTextProperties::TextWrapId).toInt());
+    KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(rootProperties.propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
+    KoSvgText::LineBreak linebreakStrictness = KoSvgText::LineBreak(rootProperties.property(KoSvgTextProperties::LineBreakId).toInt());
     QVector<bool> collapseChars = KoCssTextUtils::collapseSpaces(&text, collapse);
     if (!lang.isEmpty()) {
         // Libunibreak currently only has support for strict, and even then only
@@ -243,7 +244,7 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // to consider it anything but required to have both shaping and bidi-reorder break.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
     globalIndex = 0;
-    bool wrapped = !(inlineSize.isAuto && q->shapesInside().isEmpty());
+    bool wrapped = !(inlineSize.isAuto && this->shapesInside.isEmpty());
     if (!resolvedTransforms.isEmpty()) {
         resolvedTransforms[0].xPos = 0;
         resolvedTransforms[0].yPos = 0;
@@ -720,10 +721,10 @@ void KoSvgTextShape::Private::relayout(const KoSvgTextShape *q)
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
     if (!this->shapesInside.isEmpty()) {
-        QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, q->textProperties());
-        this->lineBoxes = flowTextInShapes(q->textProperties(), logicalToVisual, result, shapes, startPos);
+        QList<QPainterPath> shapes = getShapes(this->shapesInside, this->shapesSubtract, rootProperties);
+        this->lineBoxes = flowTextInShapes(rootProperties, logicalToVisual, result, shapes, startPos);
     } else {
-        this->lineBoxes = breakLines(q->textProperties(), logicalToVisual, result, startPos);
+        this->lineBoxes = breakLines(rootProperties, logicalToVisual, result, startPos);
     }
 
     // Handle baseline alignment.

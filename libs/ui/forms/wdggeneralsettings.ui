@@ -738,7 +738,7 @@
        <item row="7" column="1">
         <widget class="QCheckBox" name="chkZoomHorizontally">
          <property name="text">
-          <string>Use horizontal axis for Relative Zoom Mode</string>
+          <string>Use horizontal axis for Canvas Zoom Action</string>
          </property>
         </widget>
        </item>

@@ -325,16 +325,19 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
     } else if (d->mode == DiscreteZoomModeShortcut ||
                d->mode == RelativeDiscreteZoomModeShortcut) {
 
+        KisConfig cfg(true);
+
         QPoint stillPoint = d->mode == RelativeDiscreteZoomModeShortcut ?
             startPos.toPoint() : QPoint();
 
-        qreal currentDiff = qreal(diff.y()) / stepDisc - d->lastDiscreteZoomDistance;
+        qreal axisDiff = qreal(cfg.zoomHorizontal() ? -diff.x() : diff.y());
+        qreal currentDiff = axisDiff / stepDisc - d->lastDiscreteZoomDistance;
 
         bool zoomIn = currentDiff > 0;
         while (qAbs(currentDiff) > 1.0) {
             d->zoomTo(zoomIn, stillPoint);
             d->lastDiscreteZoomDistance += zoomIn ? 1.0 : -1.0;
-            currentDiff = qreal(diff.y()) / stepDisc - d->lastDiscreteZoomDistance;
+            currentDiff = axisDiff / stepDisc - d->lastDiscreteZoomDistance;
         }
     }
 }

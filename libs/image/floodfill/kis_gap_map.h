@@ -11,6 +11,8 @@
 #include <KoAlwaysInline.h>
 #include <kis_shared.h>
 #include <QRect>
+#include <kis_paint_device.h>
+#include <kis_random_accessor_ng.h>
 
 #define KIS_GAP_MAP_MEASURE_ELAPSED_TIME 0
 
@@ -28,13 +30,12 @@ public:
     /** A callback to request opacity data for pixels in the image.
      *  It can be called at any time distance() function is invoked.
      *
-     *  @param outOpacityPtr the memory location where opacity data should be written back;
-     *         It points to fill region's (0, 0) coordinate and one row is equal to
-     *         fill region's width.
+     *  @param devicePtr our underlying paint device, it contains opacity among other data.
+     *         For each pixel, the offset of opacity quint8 data is 2 bytes.
      *  @param rect the bounds within the fill region (image) that are requested.
      *  @return true, if at least one pixel within the tile is opaque
      */
-    typedef std::function<bool(quint8* outOpacityPtr, const QRect& rect)> FillOpacityFunc;
+    typedef std::function<bool(KisPaintDevice* devicePtr, const QRect& rect)> FillOpacityFunc;
 
     /** Create a new gap distance map object and prepare it for lazy initialization.
      *  Some memory allocation will happen upfront, but most of the calculations
@@ -48,10 +49,6 @@ public:
               const QRect& mapBounds,
               const FillOpacityFunc& fillOpacityFunc);
 
-    /** May free some resources allocated by the constructor.
-     *  Some data is cached for reuse. */
-    ~KisGapMap();
-
     /** Query the gap distance at a pixel.
      *  (x, y) are the filled region's coordinates, always starting at (0, 0).
      *
@@ -60,7 +57,7 @@ public:
     ALWAYS_INLINE quint16 distance(int x, int y)
     {
         if (isDistanceAvailable(x, y)) {
-            return *distancePtr(x, y);
+            return dataPtr(x, y)->distance;
         } else {
             return lazyDistance(x, y);
         }
@@ -99,6 +96,14 @@ private:
         TILE_HAS_OPAQUE_PIXELS   = 0x4,      ///< Some pixels of the loaded tile are opaque
     };
 
+    struct Data
+    {
+        quint16     distance;
+        quint8      opacity;
+        TileFlags   flags;
+    };
+    static_assert(sizeof(Data) == sizeof(quint32));
+
     void loadOpacityTiles(const QRect& tileRect);
     void loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRect, int guardBand);
     void distanceSearchRowInnerLoop(bool boundsCheck, int y, int x1, int x2);
@@ -108,23 +113,26 @@ private:
     // (i.e., the if conditions can be removed at compilation time).
 
     template<bool BoundsCheck> void gapDistanceSearch(int x, int y, CoordinateTransform op);
-    template<bool BoundsCheck> void updateDistance(const QPoint& p, quint16 newDistance);
-    template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(int x, int y) const;
-    template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(const QPoint& p) const;
+    template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(int x, int y);
+    template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(const QPoint& p);
+    void updateDistance(const QPoint& globalPosition, quint16 newDistance);
+    void copyFromScratchTile(const QRect& rect);
 
-    ALWAYS_INLINE bool isDistanceAvailable(int x, int y) const
+    ALWAYS_INLINE bool isDistanceAvailable(int x, int y)
     {
         return (*tileFlagsPtr(x / TileSize, y / TileSize) & TILE_DISTANCE_LOADED) != 0;
     }
 
-    ALWAYS_INLINE quint16* distancePtr(int x, int y) const
+    ALWAYS_INLINE Data* dataPtr(int x, int y)
     {
-        return m_distancePtr + x + y * m_size.width();
+        m_accessorSp->moveTo(x, y);
+        return reinterpret_cast<Data*>(m_accessorSp->rawData());
     }
 
-    ALWAYS_INLINE TileFlags* tileFlagsPtr(int tileX, int tileY) const
+    ALWAYS_INLINE TileFlags* tileFlagsPtr(int tileX, int tileY)
     {
-        return m_tileFlags + tileX + tileY * m_numTiles.width();
+        m_accessorSp->moveTo(TileSize * tileX, TileSize * tileY);
+        return reinterpret_cast<TileFlags*>(m_accessorSp->rawData() + offsetof(Data, flags));
     }
 
     const int m_gapSize;                      ///< Gap size in pixels for this map
@@ -132,9 +140,11 @@ private:
     const QSize m_numTiles;                   ///< Map size in tiles
     const FillOpacityFunc m_fillOpacityFunc;  ///< A callback to get the opacity data from the fill class
 
-    quint16* m_distancePtr;                   ///< The buffer containing the distance data
-    quint8* m_opacityPtr;                     ///< The buffer containing the opacity data
-    TileFlags* m_tileFlags;                   ///< The buffer containing the tile metadata
+    QPoint m_scratchTilePosition;             ///< The position of the scratch tile compared to the whole region
+    std::vector<quint16> m_scratchTile;       ///< Scratch memory to perform computations
+
+    KisPaintDeviceSP m_deviceSp;              ///< A 32-bit per pixel paint device that holds the distance and other data
+    KisRandomAccessorSP m_accessorSp;         ///< An accessor for the paint device
 };
 
 #endif /* __KIS_GAP_MAP_H */

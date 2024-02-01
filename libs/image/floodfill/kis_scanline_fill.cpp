@@ -623,8 +623,8 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
     if (m_d->closeGap > 0) {
         // We need to reuse the complex policies used by this class and only provide the final
         // "projection" of opacity for the distance map calculation.
-        auto opacityFunc = [&](quint8* outOpacityPtr, const QRect& rect) {
-            return fillOpacity(differencePolicy, selectionPolicy, pixelAccessPolicy, outOpacityPtr, rect);
+        auto opacityFunc = [&](KisPaintDevice* devicePtr, const QRect& rect) {
+            return fillOpacity(differencePolicy, selectionPolicy, pixelAccessPolicy, devicePtr, rect);
         };
 
         // Prime the resources. The computations are made lazily, when distance at a pixel is requested.
@@ -1026,7 +1026,7 @@ template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAcc
 bool KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
                                   SelectionPolicy &selectionPolicy,
                                   PixelAccessPolicy &pixelAccessPolicy,
-                                  quint8* const opacityData,
+                                  KisPaintDevice* const devicePtr,
                                   const QRect& rect) const
 {
 #if 0
@@ -1036,12 +1036,16 @@ bool KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->boundingRect.contains(rect) &&
                "FATAL: The rect is not fully inside the fill bounds");
 #endif
+    KisRandomAccessorSP accessor = devicePtr->createRandomAccessorNG();
+
     const int pixelSize = m_d->device->pixelSize();
     bool hasOpaquePixels = false;
 
+    // We are relying on the knowledge of KisGapMap's paint device data organization.
+    constexpr int OpacityOffset = 2;
+
     for (int y = rect.top(); y <= rect.bottom(); ++y) {
         int numPixelsLeft = 0;
-        quint8* outPtr = opacityData + rect.left() + y * m_d->boundingRect.width();
         quint8* dataPtr;
 
         for (int x = rect.left(); x <= rect.right(); ++x) {
@@ -1057,12 +1061,14 @@ bool KisScanlineFill::fillOpacity(DifferencePolicy &differencePolicy,
             const quint8 difference = differencePolicy.difference(dataPtr);
             const quint8 opacity = selectionPolicy.opacityFromDifference(difference, x, y);
 
-            if (opacity == 0) {
+            if (opacity == MIN_SELECTED) {
                 hasOpaquePixels = true;
-            }
 
-            *outPtr = opacity;
-            ++outPtr;
+                accessor->moveTo(x, y);
+                quint8* outPtr = accessor->rawData() + OpacityOffset;
+
+                *outPtr = opacity;
+            }
         }
     }
 

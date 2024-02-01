@@ -24,7 +24,8 @@
 #include <QtMath>
 #include <QMutex>
 #include <QMutexLocker>
-#include <vector>
+#include <KoColor.h>
+#include <KoColorSpaceRegistry.h>
 
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
 #include <QElapsedTimer>
@@ -35,118 +36,6 @@
 
 namespace
 {
-
- /** A persistent, global cache of "memory blocks" that gap filling can reuse.
-  *  It will try to use the same block (resized, if needed), unless multiple
-  *  allocations are needed at the same time, which should only happen if
-  *  Krita has more than one document opened and filled at the same time.
-  *
-  *  TODO: Is there a similar existing cache that could be used for this?
-  */
-class BufferCache
-{
-public:
-    static BufferCache* instance();
-
-    /** Get a block of memory from the cache.
-     *  Will allocate, if no suitable block is available.
-     */
-    void* acquire(std::size_t size);
-
-    /** Return the block to the cache.
-     *  blockPtr MUST be a pointer previously returned by acquire(), or a nullptr.
-     */
-    void release(void* dataPtr);
-
-private:
-    struct Buffer
-    {
-        std::vector<quint8> data;
-        bool available;
-
-        explicit Buffer(std::size_t size) : data(size), available(false) {}
-    };
-
-    using BufferSP = std::shared_ptr<Buffer>;
-
-    std::vector<BufferSP> m_buffers;
-    QMutex m_mutex;
-};
-
-Q_GLOBAL_STATIC(BufferCache, s_bufferCache);
-
-BufferCache* BufferCache::instance()
-{
-    return s_bufferCache;
-}
-
-void* BufferCache::acquire(std::size_t size)
-{
-    const QMutexLocker lock(&m_mutex);
-
-    // Try to fetch an existing buffer.
-    auto availableBufferIter = std::find_if(
-        m_buffers.begin(),
-        m_buffers.end(),
-        [](const auto& bufferSP){ return bufferSP->available; }
-    );
-
-    if (availableBufferIter != m_buffers.end()) {
-        auto& buffer = **availableBufferIter;
-        buffer.available = false;
-        buffer.data.resize(size);
-
-        return buffer.data.data();
-    }
-
-    // We need to create a new buffer.
-    m_buffers.emplace_back(
-        std::make_shared<Buffer>(size));
-
-    return m_buffers.back()->data.data();
-}
-
-void BufferCache::release(void* dataPtr)
-{
-    if (dataPtr == nullptr) {
-        return;
-    }
-
-    const QMutexLocker lock(&m_mutex);
-
-    // Only keep one buffer in the cache.
-    // It's very rare that there are two or more fill operations
-    // executed at the same time.
-
-    BufferSP releasedBuffer;
-    auto it = m_buffers.begin();
-
-    while (it != m_buffers.end()) {
-        if ((*it)->available) {
-            // Unused, free it.
-            it = m_buffers.erase(it);
-        } else if ((*it)->data.data() == dataPtr) {
-            // Finish iterating first to not delete it right away.
-            releasedBuffer = *it;
-            ++it;
-        } else {
-            // Still in use.
-            ++it;
-        }
-    }
-
-    // Return to the pool.
-    if (releasedBuffer) {
-        releasedBuffer->available = true;
-    }
-
-#if 0
-    // Very unlikely to happen, can be enabled during development.
-    KIS_SAFE_ASSERT_RECOVER_NOOP(releasedBuffer &&
-                                 "FATAL: KisGapMap cache released pointer invalid");
-#endif
-}
-
 
 // The following four transformation functions are used to parametrize the distance search algorithm.
 // All used together help cover the four octants (a 1/8th circular sector) of a half-circle covering a part of the map.
@@ -174,7 +63,7 @@ ALWAYS_INLINE QPoint TransformMirrorHorizontally(int x, int y, int xOffset, int 
 } // anonymous namespace
 
 template<bool BoundsCheck>
-bool KisGapMap::isOpaque(int x, int y) const
+bool KisGapMap::isOpaque(int x, int y)
 {
 #if DEBUG_LOGGING_AND_ASSERTS
     const TileFlags flags = *tileFlagsPtr(x / TileSize, y / TileSize);
@@ -185,17 +74,17 @@ bool KisGapMap::isOpaque(int x, int y) const
 #endif
     if (BoundsCheck) {
         if ((x >= 0) && (x < m_size.width()) && (y >= 0) && (y < m_size.height())) {
-            return *(m_opacityPtr + y * m_size.width() + x) == 0;
+            return dataPtr(x, y)->opacity == MIN_SELECTED;
         } else {
             return false;
         }
     } else {
-        return *(m_opacityPtr + y * m_size.width() + x) == 0;
+        return dataPtr(x, y)->opacity == MIN_SELECTED;
     }
 }
 
 template<bool BoundsCheck>
-bool KisGapMap::isOpaque(const QPoint& p) const
+bool KisGapMap::isOpaque(const QPoint& p)
 {
     return isOpaque<BoundsCheck>(p.x(), p.y());
 }
@@ -209,34 +98,22 @@ KisGapMap::KisGapMap(int gapSize,
     m_numTiles(qCeil(static_cast<float>(m_size.width()) / TileSize),
                qCeil(static_cast<float>(m_size.height()) / TileSize)),
     m_fillOpacityFunc(fillOpacityFunc),
-    m_distancePtr(nullptr),
-    m_opacityPtr(nullptr)
+    m_deviceSp(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
+    m_accessorSp(m_deviceSp->createRandomAccessorNG())
 {
     // Ensure the scanline fill uses the same coordinates.
     KIS_ASSERT((mapBounds.x() == 0) && (mapBounds.y() == 0) &&
                "Gap closing fill assumes x and y start at coordinate (0, 0)");
 
-    // Request cached memory. Use distancePtr as the owning "handle".
-    const quint32 numPixels = m_size.width() * m_size.height();
-    const quint32 numTiles = m_numTiles.width() * m_numTiles.height();
-    const std::size_t distanceMemSize = sizeof(quint16) * numPixels;
-    const std::size_t opacityMemSize = sizeof(quint8) * numPixels;
-    const std::size_t tileFlagsMemSize = sizeof(TileFlags) * numTiles;
+    Data defaultPixel {};
+    defaultPixel.distance = DISTANCE_INFINITE;
+    defaultPixel.opacity = MAX_SELECTED;    // here: max = transparent
 
-    // We are placing the distance map first, as it should have at least a quint16 alignment.
-    m_distancePtr = static_cast<quint16*>(BufferCache::instance()->acquire(distanceMemSize +
-                                                                           opacityMemSize +
-                                                                           tileFlagsMemSize));
-    m_opacityPtr = reinterpret_cast<quint8*>(m_distancePtr + numPixels);
-    m_tileFlags  = m_opacityPtr + numPixels;
+    KoColor color(reinterpret_cast<quint8*>(&defaultPixel), KoColorSpaceRegistry::instance()->rgb8());
+    m_deviceSp->setDefaultPixel(color);
+    m_deviceSp->fill(mapBounds, color);
 
-    // Tile loading is deferred. All flags are cleared in the initial state.
-    memset(m_tileFlags, 0, tileFlagsMemSize);
-}
-
-KisGapMap::~KisGapMap()
-{
-    BufferCache::instance()->release(m_distancePtr);
+    m_scratchTile.resize(TileSize * TileSize);
 }
 
 void KisGapMap::loadOpacityTiles(const QRect& tileRect)
@@ -258,7 +135,8 @@ void KisGapMap::loadOpacityTiles(const QRect& tileRect)
 #if DEBUG_LOGGING_AND_ASSERTS
                 qDebug() << "loadOpacityTiles()" << rect;
 #endif
-                const bool hasOpaquePixels = m_fillOpacityFunc(m_opacityPtr, rect);
+                // It's not too elegant to pass the device, but this performs the best for now.
+                const bool hasOpaquePixels = m_fillOpacityFunc(m_deviceSp.data(), rect);
 
                 // This tile is now loaded.
                 *pFlags |= TILE_OPACITY_LOADED | (hasOpaquePixels ? TILE_HAS_OPAQUE_PIXELS : 0);
@@ -312,25 +190,6 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
     timer.start();
 #endif
 
-    // The area of the image covered only by this tile.
-    QRect rect(tile.x() * TileSize, tile.y() * TileSize, TileSize, TileSize);
-    rect.setRight(qMin(rect.right(), m_size.width() - 1));
-    rect.setBottom(qMin(rect.bottom(), m_size.height() - 1));
-
-    // We only care about the distance data inside the rect, so we can leave the
-    // distance pixels in the guard band uninitialized. They will be overwritten anyway
-    // when their respective tile(s) are loaded.
-
-    if (rect.width() == m_size.width()) {
-        std::fill_n(m_distancePtr + rect.top() * m_size.width(), m_size.width() * rect.height(), DISTANCE_INFINITE);
-    } else {
-        quint16* pData = m_distancePtr + rect.left() + rect.top() * m_size.width();
-        for (int y = rect.top(); y <= rect.bottom(); ++y) {
-            std::fill_n(pData, rect.width(), DISTANCE_INFINITE);
-            pData += m_size.width();
-        }
-    }
-
     TileFlags* const pFlags = tileFlagsPtr(tile.x(), tile.y());
 
     // This tile is now considered loaded.
@@ -348,12 +207,19 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
     const bool tileOpaqueBottom     = (nearbyTilesRect.bottom() == tile.y()) ?                                           false : (*tileFlagsPtr(tile.x(),     tile.y() + 1) & TILE_HAS_OPAQUE_PIXELS) != 0;
 
     if (! (tileOpaqueTopLeft || tileOpaqueTop || tileOpaqueLeft || tileOpaque || tileOpaqueBottomLeft || tileOpaqueBottom)) {
+        // This tile as well as its surroundings are transparent.
+        // We can simply exit without explicitly initializing the tile. The paint device's default pixel is DISTANCE_INFINITE.
+
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
         m_distanceElapsedNanos += timer.nsecsElapsed();
 #endif
-        // This tile as well as its surroundings are transparent, we can finally exit.
         return;
     }
+
+    // The area of the image covered only by this tile.
+    QRect rect(tile.x() * TileSize, tile.y() * TileSize, TileSize, TileSize);
+    rect.setRight(qMin(rect.right(), m_size.width() - 1));
+    rect.setBottom(qMin(rect.bottom(), m_size.height() - 1));
 
     // Compromise: At the tile size 64 px and the gap size 32 px, the guard band must be
     // 31 px at most, because opacity is sampled in gap size + 1 radius, which could be two tiles
@@ -375,6 +241,9 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
         (rect.right() + (m_gapSize + 1) >= m_size.width()) ||  // no risk of accessing x<0
         (y1 - (m_gapSize + 1) < 0) || (y2 + (m_gapSize + 1) >= m_size.height());
 
+    m_scratchTilePosition = rect.topLeft();
+    std::fill(m_scratchTile.begin(), m_scratchTile.end(), DISTANCE_INFINITE);
+
     // Process the tile and its neighborhood in three passes:
     // Top (the top guard bands)
     for (int y = y1; y <= rect.top() - 1; ++y) {
@@ -389,9 +258,33 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
         distanceSearchRowInnerLoop(boundsCheck, y, x1Bottom, x2Bottom);
     }
 
+    copyFromScratchTile(rect);
+
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
     m_distanceElapsedNanos += timer.nsecsElapsed();
 #endif
+}
+
+/** Copy the distance values from the scratch tile to the paint device. */
+void KisGapMap::copyFromScratchTile(const QRect& rect)
+{
+    for (int iy = 0, y = rect.top(); y <= rect.bottom(); ++iy, ++y) {
+        int numPixelsLeft = 0;
+        Data* dataPtr;
+
+        for (int ix = 0, x = rect.left(); x <= rect.right(); ++ix, ++x) {
+            if (numPixelsLeft <= 0) {
+                m_accessorSp->moveTo(x, y);
+                numPixelsLeft = m_accessorSp->numContiguousColumns(x) - 1;
+                dataPtr = reinterpret_cast<Data*>(m_accessorSp->rawData());
+            } else {
+                numPixelsLeft--;
+                dataPtr++;
+            }
+
+            dataPtr->distance = m_scratchTile[ix + iy * TileSize];
+        }
+    }
 }
 
 /**
@@ -438,32 +331,32 @@ void KisGapMap::gapDistanceSearch(int x, int y, CoordinateTransform op)
                 int cx = 0;
 
                 for (int cy = 1; cy < yoffs; ++cy) {
-                    updateDistance<BoundsCheck>(op(x, y, cx, -cy), offsetDistance);
+                    updateDistance(op(x, y, cx, -cy), offsetDistance);
 
                     tx += dx;
                     if (static_cast<int>(tx) > cx) {
                         cx++;
-                        updateDistance<BoundsCheck>(op(x, y, cx, -cy), offsetDistance);
+                        updateDistance(op(x, y, cx, -cy), offsetDistance);
                     }
 
-                    updateDistance<BoundsCheck>(op(x, y, cx + 1, -cy), offsetDistance);
+                    updateDistance(op(x, y, cx + 1, -cy), offsetDistance);
                 }
             }
         }
     }
 }
 
-template<bool BoundsCheck>
-void KisGapMap::updateDistance(const QPoint& p, quint16 newDistance)
+void KisGapMap::updateDistance(const QPoint& globalPosition, quint16 newDistance)
 {
-    if (BoundsCheck) {
-        if ((p.x() < 0) || (p.x() >= m_size.width()) || (p.y() < 0) || (p.y() >= m_size.height())) {
-            return;
-        }
+    const QPoint p = globalPosition - m_scratchTilePosition;
+
+    if ((p.x() < 0) || (p.x() >= TileSize) || (p.y() < 0) || (p.y() >= TileSize)) {
+        return;
     }
-    quint16* const dataPtr = distancePtr(p.x(), p.y());
-    if (*dataPtr > newDistance) {
-        *dataPtr = newDistance;
+
+    quint16* ptr = &m_scratchTile[p.x() + p.y() * TileSize];
+    if (*ptr > newDistance) {
+        *ptr = newDistance;
     }
 }
 
@@ -491,5 +384,5 @@ quint16 KisGapMap::lazyDistance(int x, int y)
     loadDistanceTile(QPoint(tx, ty), nearbyTiles, m_gapSize);
 
     // The data is now ready to be returned.
-    return *distancePtr(x, y);
+    return dataPtr(x, y)->distance;
 }

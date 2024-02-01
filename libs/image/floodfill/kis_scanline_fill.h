@@ -169,7 +169,7 @@ private:
     bool fillOpacity(DifferencePolicy &differencePolicy,
                      SelectionPolicy &selectionPolicy,
                      PixelAccessPolicy &pixelAccessPolicy,
-                     quint8* const opacityData,
+                     KisPaintDevice* const devicePtr,
                      const QRect& rect) const;
 
     inline bool tryPushingCloseGapSeed(int x, int y, bool allowExpand);

@@ -285,7 +285,7 @@ void KoSvgTextShape::Private::relayout()
             KoSvgText::LineHeightInfo lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
 
-            KoColorBackground *b = dynamic_cast<KoColorBackground *>(properties.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property.data());
+            KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunk.bg.data());
             QColor fillColor;
             if (b)
             {
@@ -1977,6 +1977,12 @@ QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextC
         }
     } else {
         SubChunk chunk(it);
+        for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it)); parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
+            if (parentIt->properties.hasProperty(KoSvgTextProperties::FillId)) {
+                chunk.bg = parentIt->properties.background();
+                break;
+            }
+        }
 
         KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(it->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
         KoSvgText::Direction direction = KoSvgText::Direction(it->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());

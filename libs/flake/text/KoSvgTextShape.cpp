@@ -982,18 +982,30 @@ bool KoSvgTextShape::loadSvgText(const QDomText &text, SvgLoadingContext &contex
 void KoSvgTextShape::setStyleInfo(KoShape *s)
 {
     if (d->currentNode.node()) {
-        KoSvgTextProperties parent = KisForestDetail::parent(d->currentNode).node()? KisForestDetail::parent(d->currentNode)->properties
-                                                                                   : KoSvgTextProperties();
-        QSharedPointer<KoShapeBackground> parentBg = parent.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;
+        // find closest parent stroke and fill so we can check for inheritance.
+        QSharedPointer<KoShapeBackground> parentBg;
+        KoShapeStrokeModelSP parentStroke;
+        for (auto it = KisForestDetail::hierarchyBegin(d->currentNode); it != KisForestDetail::hierarchyEnd(d->currentNode); it++) {
+            if (it->properties.hasProperty(KoSvgTextProperties::FillId)) {
+                parentBg = it->properties.background();
+                break;
+            }
+        }
+        for (auto it = KisForestDetail::hierarchyBegin(d->currentNode); it != KisForestDetail::hierarchyEnd(d->currentNode); it++) {
+            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                parentStroke = it->properties.stroke();
+                break;
+            }
+        }
+
         if ((parentBg && !parentBg->compareTo(s->background().data()))
                 || (!parentBg && s->background())) {
             d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
                                                    QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
         }
-
-        KoShapeStrokeModelSP parentStroke = parent.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
         if ((parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data()))
                 || (!parentStroke && s->stroke())) {
+            qDebug() << "setting stroke";
             d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
                                                    QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
         }
@@ -1013,6 +1025,67 @@ void KoSvgTextShape::setTextPathOnCurrentNode(KoShape *s)
     if (d->currentNode.node()) {
         d->currentNode.node()->value.textPath.reset(s);
     }
+}
+
+#include "KoXmlWriter.h"
+bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
+{
+    bool success = false;
+    QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
+    for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
+        if (it.state() == KisForestDetail::Enter) {
+            bool isTextPath = false;
+            QMap<QString, QString> shapeSpecificStyles;
+            if (it->textPath) {
+                isTextPath = true;
+            }
+            if (it == d->textData.compositionBegin()) {
+                context.shapeWriter().startElement("text", false);
+
+                if (!context.strippedTextMode()) {
+                    context.shapeWriter().addAttribute("id", context.getID(this));
+
+                    context.shapeWriter().addAttribute("text-rendering", textRenderingString());
+
+                    // save the version to distinguish from the buggy Krita version
+                    // 2: Wrong font-size.
+                    // 3: Wrong font-size-adjust.
+                    context.shapeWriter().addAttribute("krita:textVersion", 3);
+
+                    SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
+                    SvgStyleWriter::saveSvgStyle(this, context);
+                } else {
+                    context.shapeWriter().addAttribute("text-rendering", textRenderingString());
+                    SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
+                    SvgStyleWriter::saveSvgStroke(this->stroke(), context);
+                }
+                shapeSpecificStyles = this->shapeTypeSpecificStyles(context);
+            } else {
+                if (isTextPath) {
+                    context.shapeWriter().startElement("textPath", false);
+                } else {
+                    context.shapeWriter().startElement("tspan", false);
+                }
+                if (!context.strippedTextMode()) {
+                    SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity).toBool(),
+                                                      it->properties.property(KoSvgTextProperties::Opacity).toReal(),
+                                                      it->properties.property(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>(),
+                                                      it->properties.hasProperty(KoSvgTextProperties::PaintOrder), context);
+                }
+            }
+
+            success = it->saveSvg(context,
+                                  parentProps.last(),
+                                  it == d->textData.compositionBegin(),
+                                  d->childCount(siblingCurrent(it)) == 0,
+                                  shapeSpecificStyles);
+            parentProps.append(it.node()->value.properties);
+        } else {
+            parentProps.pop_back();
+            context.shapeWriter().endElement();
+        }
+    }
+    return success;
 }
 
 void KoSvgTextShape::enterNodeSubtree()
@@ -1045,15 +1118,15 @@ void KoSvgTextShape::debugParsing()
     for (auto it = compositionBegin(d->textData); it != compositionEnd(d->textData); it++) {
         if (it.state() == KisForestDetail::Enter) {
 
-            qDebug() << QString(spaces + "+") << it.node()->value.text;
-            qDebug() << QString(spaces + "|") << it.node()->value.properties.ownProperties(parentProps.last()).convertToSvgTextAttributes();
-            qDebug() << QString(spaces + "| Fill set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::FillId);
-            qDebug() << QString(spaces + "| Stroke set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::StrokeId);
-            qDebug() << QString(spaces + "| Opacity: ") << it.node()->value.properties.property(KoSvgTextProperties::Opacity);
-            qDebug() << QString(spaces + "| PaintOrder: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::PaintOrder);
-            qDebug() << QString(spaces + "| Visibility set: ") << it.node()->value.properties.hasProperty(KoSvgTextProperties::Visiblity);
-            qDebug() << QString(spaces + "| TextPath set: ") << (it.node()->value.textPath);
-            qDebug() << QString(spaces + "| Transforms set: ") << it.node()->value.localTransformations;
+            qDebug() << QString(spaces + "+") << it->text;
+            qDebug() << QString(spaces + "|") << it->properties.ownProperties(parentProps.last()).convertToSvgTextAttributes();
+            qDebug() << QString(spaces + "| Fill set: ") << it->properties.hasProperty(KoSvgTextProperties::FillId);
+            qDebug() << QString(spaces + "| Stroke set: ") << it->properties.hasProperty(KoSvgTextProperties::StrokeId);
+            qDebug() << QString(spaces + "| Opacity: ") << it->properties.property(KoSvgTextProperties::Opacity);
+            qDebug() << QString(spaces + "| PaintOrder: ") << it->properties.hasProperty(KoSvgTextProperties::PaintOrder);
+            qDebug() << QString(spaces + "| Visibility set: ") << it->properties.hasProperty(KoSvgTextProperties::Visiblity);
+            qDebug() << QString(spaces + "| TextPath set: ") << (it->textPath);
+            qDebug() << QString(spaces + "| Transforms set: ") << it->localTransformations;
             spaces.append(" ");
             parentProps.append(it.node()->value.properties);
         }

@@ -1033,6 +1033,16 @@ QMap<QString, qreal> KoSvgTextProperties::fontAxisSettings() const
     return settings;
 }
 
+QSharedPointer<KoShapeBackground> KoSvgTextProperties::background() const
+{
+    return property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;
+}
+
+KoShapeStrokeModelSP KoSvgTextProperties::stroke() const
+{
+    return property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
+}
+
 QStringList KoSvgTextProperties::supportedXmlAttributes()
 {
     QStringList attributes;

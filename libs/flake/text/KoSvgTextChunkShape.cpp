@@ -789,8 +789,8 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             SvgStyleWriter::saveSvgStyle(this, context);
         } else {
             context.shapeWriter().addAttribute("text-rendering", textRenderingString());
-            SvgStyleWriter::saveSvgFill(this, context);
-            SvgStyleWriter::saveSvgStroke(this, context);
+            SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
+            SvgStyleWriter::saveSvgStroke(this->stroke(), context);
         }
     } else {
         if (isTextPath) {
@@ -799,7 +799,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             context.shapeWriter().startElement("tspan", false);
         }
         if (!context.strippedTextMode()) {
-            SvgStyleWriter::saveSvgBasicStyle(this, context);
+            SvgStyleWriter::saveSvgBasicStyle(this->isVisible(false), this->transparency(false), this->paintOrder(), this->inheritPaintOrder(), context);
         }
     }
 
@@ -871,11 +871,11 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     // we write down stroke/fill iff they are different from the parent's value
     if (!isRootTextNode()) {
         if (ownProperties.hasProperty(KoSvgTextProperties::FillId)) {
-            SvgStyleWriter::saveSvgFill(this, context);
+            SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
         }
 
         if (ownProperties.hasProperty(KoSvgTextProperties::StrokeId)) {
-            SvgStyleWriter::saveSvgStroke(this, context);
+            SvgStyleWriter::saveSvgStroke(this->stroke(), context);
         }
     }
 

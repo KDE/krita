@@ -9,6 +9,9 @@
 #include "KoCssTextUtils.h"
 #include <kis_dom_utils.h>
 #include "SvgUtil.h"
+#include "KoXmlWriter.h"
+#include "SvgStyleWriter.h"
+#include <kis_global.h>
 
 #include "SvgGraphicContext.h"
 
@@ -44,6 +47,8 @@ void fillTransforms(QVector<qreal> *xPos, QVector<qreal> *yPos, QVector<qreal> *
         appendLazy(rotate, t.rotate, i);
     }
 }
+
+
 
 QVector<qreal> parseListAttributeX(const QString &value, SvgLoadingContext &context)
 {
@@ -90,6 +95,66 @@ QString convertListAttribute(const QVector<qreal> &values) {
 
     return stringValues.join(',');
 }
+
+void writeTextListAttribute(const QString &attribute, const QVector<qreal> &values, KoXmlWriter &writer)
+{
+    const QString value = convertListAttribute(values);
+    if (!value.isEmpty()) {
+        writer.addAttribute(attribute.toLatin1().data(), value);
+    }
+}
+}
+
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+
+/**
+ * HACK ALERT: this is a function from a private Qt's header qfont_p.h,
+ * we don't include the whole header, because it is painful in the
+ * environments we don't fully control, e.g. in distribution packages.
+ */
+Q_GUI_EXPORT int qt_defaultDpi();
+
+namespace {
+int forcedDpiForQtFontBugWorkaround() {
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    int value = cfg.readEntry("forcedDpiForQtFontBugWorkaround", qt_defaultDpi());
+
+    if (value < 0) {
+        value = qt_defaultDpi();
+    }
+
+    return value;
+}
+
+
+KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextProperties &properties)
+{
+    if (!properties.hasProperty(KoSvgTextProperties::FontSizeId) || !properties.hasProperty(KoSvgTextProperties::FontSizeAdjustId))
+        return properties;
+
+    KoSvgTextProperties result = properties;
+
+    const int forcedFontDPI = forcedDpiForQtFontBugWorkaround();
+
+    if (result.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
+        result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2 &&
+        forcedFontDPI > 0) {
+
+        qreal fontSize = result.property(KoSvgTextProperties::FontSizeId).toReal();
+        fontSize *= qreal(forcedFontDPI) / 72.0;
+        result.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
+    }
+    if (result.hasProperty(KoSvgTextProperties::KraTextVersionId) && result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3
+        && result.hasProperty(KoSvgTextProperties::FontSizeAdjustId)) {
+        result.setProperty(KoSvgTextProperties::FontSizeAdjustId, KoSvgText::fromAutoValue(KoSvgText::AutoValue()));
+    }
+
+    result.setProperty(KoSvgTextProperties::KraTextVersionId, 3);
+
+    return result;
+}
+
 }
 
 bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context)
@@ -169,6 +234,113 @@ bool KoSvgTextContentElement::loadSvgTextNode(const QDomText &text, SvgLoadingCo
 
     this->text = std::move(content);
 
+    return true;
+}
+
+bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
+                                      KoSvgTextProperties parentProperties,
+                                      bool rootText,
+                                      bool saveText,
+                                      QMap<QString, QString> shapeSpecificAttributes)
+{
+    if (textPath) {
+        if (textPath) {
+            // we'll always save as an embedded shape as "path" is an svg 2.0
+            // feature.
+            QString id = SvgStyleWriter::embedShape(textPath.data(), context);
+            // inkscape can only read 'xlink:href'
+            if (!id.isEmpty()) {
+                context.shapeWriter().addAttribute("xlink:href", "#" + id);
+            }
+        }
+        if (textPathInfo.startOffset != 0) {
+            QString offset = KisDomUtils::toString(textPathInfo.startOffset);
+            if (textPathInfo.startOffsetIsPercentage) {
+                offset += "%";
+            }
+            context.shapeWriter().addAttribute("startOffset", offset);
+        }
+        if (textPathInfo.method != KoSvgText::TextPathAlign) {
+            context.shapeWriter().addAttribute("method", KoSvgText::writeTextPathMethod(textPathInfo.method));
+        }
+        if (textPathInfo.side != KoSvgText::TextPathSideLeft) {
+            context.shapeWriter().addAttribute("side", KoSvgText::writeTextPathSide(textPathInfo.side));
+        }
+        if (textPathInfo.spacing != KoSvgText::TextPathAuto) {
+            context.shapeWriter().addAttribute("spacing", KoSvgText::writeTextPathSpacing(textPathInfo.spacing));
+        }
+    }
+
+    if (!localTransformations.isEmpty()) {
+
+        QVector<qreal> xPos;
+        QVector<qreal> yPos;
+        QVector<qreal> dxPos;
+        QVector<qreal> dyPos;
+        QVector<qreal> rotate;
+
+        fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, localTransformations);
+
+        for (int i = 0; i < rotate.size(); i++) {
+            rotate[i] = kisRadiansToDegrees(rotate[i]);
+        }
+
+        writeTextListAttribute("x", xPos, context.shapeWriter());
+        writeTextListAttribute("y", yPos, context.shapeWriter());
+        writeTextListAttribute("dx", dxPos, context.shapeWriter());
+        writeTextListAttribute("dy", dyPos, context.shapeWriter());
+        writeTextListAttribute("rotate", rotate, context.shapeWriter());
+    }
+
+    if (!textLength.isAuto) {
+        context.shapeWriter().addAttribute("textLength", KisDomUtils::toString(textLength.customValue));
+
+        if (lengthAdjust == KoSvgText::LengthAdjustSpacingAndGlyphs) {
+            context.shapeWriter().addAttribute("lengthAdjust", "spacingAndGlyphs");
+        }
+    }
+
+    KoSvgTextProperties ownProperties = properties.ownProperties(parentProperties, rootText);
+
+    ownProperties = adjustPropertiesForFontSizeWorkaround(ownProperties);
+
+    // we write down stroke/fill if they are different from the parent's value
+    if (!rootText) {
+        if (ownProperties.hasProperty(KoSvgTextProperties::FillId)) {
+            SvgStyleWriter::saveSvgFill(properties.background(),
+                                        false,
+                                        this->associatedOutline.boundingRect(),
+                                        associatedOutline.boundingRect().size(),
+                                        QTransform(),
+                                        context);
+        }
+
+        if (ownProperties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            SvgStyleWriter::saveSvgStroke(properties.stroke(), context);
+        }
+    }
+
+    QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+    QStringList allowedAttributes = properties.supportedXmlAttributes();
+    QString styleString;
+
+    for (auto it = shapeSpecificAttributes.constBegin(); it != shapeSpecificAttributes.constEnd(); ++it) {
+        styleString.append(it.key().toLatin1().data()).append(": ").append(it.value()).append(";");
+    }
+    for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
+        if (allowedAttributes.contains(it.key())) {
+            context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
+        } else {
+            styleString.append(it.key().toLatin1().data()).append(": ").append(it.value()).append(";");
+        }
+    }
+    if (!styleString.isEmpty()) {
+        context.shapeWriter().addAttribute("style", styleString);
+    }
+
+    if (saveText) {
+        context.shapeWriter().addTextNode(text);
+    }
     return true;
 }
 

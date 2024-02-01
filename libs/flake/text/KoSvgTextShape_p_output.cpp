@@ -20,6 +20,30 @@
 
 #include <variant>
 
+void inheritPaintProperties(KisForest<KoSvgTextContentElement>::composition_iterator it,
+                       KoShapeStrokeModelSP &stroke,
+                       QSharedPointer<KoShapeBackground> &background,
+                       QVector<KoShape::PaintOrder> &paintOrder) {
+    for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it)); parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
+        if (parentIt->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            stroke = parentIt->properties.stroke();
+            break;
+        }
+    }
+    for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it)); parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
+        if (parentIt->properties.hasProperty(KoSvgTextProperties::FillId)) {
+            background = parentIt->properties.background();
+            break;
+        }
+    }
+    for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it)); parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
+        if (parentIt->properties.hasProperty(KoSvgTextProperties::PaintOrder)) {
+            paintOrder = parentIt->properties.propertyOrDefault(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>();
+            break;
+        }
+    }
+}
+
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::paintPaths(QPainter &painter,
@@ -35,15 +59,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     QVector<PaintOrder> paintOrder = rootShape->paintOrder();
 
     for (auto it = compositionBegin(textData); it != compositionEnd(textData); it++) {
-        if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-            stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
-        }
-        if (it->properties.hasProperty(KoSvgTextProperties::FillId)) {
-            background = it->properties.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;
-        }
-        if (it->properties.hasProperty(KoSvgTextProperties::PaintOrder)) {
-            paintOrder = it->properties.propertyOrDefault(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>();
-        }
+        inheritPaintProperties(it, stroke, background, paintOrder);
 
         if (it.state() == KisForestDetail::Enter) {
             QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = it->textDecorations;
@@ -218,6 +234,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         }
 
         if (it.state() == KisForestDetail::Leave) {
+            inheritPaintProperties(it, stroke, background, paintOrder);
             QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = it->textDecorations;
             QColor textDecorationColor = it->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
             if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
@@ -251,17 +268,8 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
     QVector<PaintOrder> paintOrder = rootShape->paintOrder();
 
     for (auto it = compositionBegin(textData); it != compositionEnd(textData); it++) {
-        bool hasPaintOrder = false;
-        if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-            stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
-        }
-        if (it->properties.hasProperty(KoSvgTextProperties::FillId)) {
-            background = it->properties.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;
-        }
-        if (it->properties.hasProperty(KoSvgTextProperties::PaintOrder)) {
-            paintOrder = it->properties.propertyOrDefault(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>();
-            hasPaintOrder = true;
-        }
+        bool hasPaintOrder = it->properties.hasProperty(KoSvgTextProperties::PaintOrder);
+        inheritPaintProperties(it, stroke, background, paintOrder);
         QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = it->textDecorations;
         QColor textDecorationColor = it->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
         QSharedPointer<KoShapeBackground> decorationColor = background;
@@ -339,6 +347,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<Characte
             }
         }
         if (it.state() ==KisForestDetail::Leave) {
+            inheritPaintProperties(it, stroke, background, paintOrder);
             if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
                 KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough));
                 shape->setBackground(decorationColor);

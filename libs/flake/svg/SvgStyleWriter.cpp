@@ -53,10 +53,12 @@
 
 void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
 {
-    saveSvgBasicStyle(shape, context);
+    saveSvgBasicStyle(shape->isVisible(false), shape->transparency(false), shape->paintOrder(), shape->inheritPaintOrder(), context);
 
-    saveSvgFill(shape, context);
-    saveSvgStroke(shape, context);
+    KoPathShape *pathShape = dynamic_cast<KoPathShape*>(shape);
+    bool fillRule = pathShape && pathShape->background() && pathShape->fillRule() == Qt::OddEvenFill? true: false;
+    saveSvgFill(shape->background(), fillRule, shape->outlineRect(), shape->size(), shape->absoluteTransformation(), context);
+    saveSvgStroke(shape->stroke(), context);
 
     saveSvgEffects(shape, context);
     saveSvgClipping(shape, context);
@@ -64,18 +66,18 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgMarkers(shape, context);
 }
 
-void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context)
+void SvgStyleWriter::saveSvgBasicStyle(const bool isVisible, const qreal transparency, const QVector<KoShape::PaintOrder> paintOrder, bool inheritPaintorder, SvgSavingContext &context)
 {
-    if (!shape->isVisible(false)) {
+    if (!isVisible) {
         context.shapeWriter().addAttribute("display", "none");
-    } else if (shape->transparency() > 0.0) {
-        context.shapeWriter().addAttribute("opacity", 1.0 - shape->transparency());
+    } else if (transparency > 0.0) {
+        context.shapeWriter().addAttribute("opacity", 1.0 - transparency);
     }
-    if (shape->paintOrder().at(0) != KoShape::Fill
-        && shape->paintOrder().at(1) != KoShape::Stroke
-        && !shape->inheritPaintOrder()) {
+    if (paintOrder.at(0) != KoShape::Fill
+        && paintOrder.at(1) != KoShape::Stroke
+        && !inheritPaintorder) {
         QStringList order;
-        Q_FOREACH(const KoShape::PaintOrder p, shape->paintOrder()) {
+        Q_FOREACH(const KoShape::PaintOrder p, paintOrder) {
             if (p == KoShape::Fill) {
                 order.append("fill");
             } else if (p == KoShape::Stroke) {
@@ -88,51 +90,48 @@ void SvgStyleWriter::saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context
     }
 }
 
-void SvgStyleWriter::saveSvgFill(KoShape *shape, SvgSavingContext &context)
+void SvgStyleWriter::saveSvgFill(QSharedPointer<KoShapeBackground> background, const bool fillRuleEvenOdd, const QRectF outlineRect, const QSizeF size, const QTransform absoluteTransform, SvgSavingContext &context)
 {
-    if (! shape->background()) {
+    if (! background) {
         context.shapeWriter().addAttribute("fill", "none");
     }
 
     QBrush fill(Qt::NoBrush);
-    QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
+    QSharedPointer<KoColorBackground>  cbg = qSharedPointerDynamicCast<KoColorBackground>(background);
     if (cbg) {
         context.shapeWriter().addAttribute("fill", cbg->color().name());
         if (cbg->color().alphaF() < 1.0)
             context.shapeWriter().addAttribute("fill-opacity", cbg->color().alphaF());
     }
-    QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(shape->background());
+    QSharedPointer<KoGradientBackground>  gbg = qSharedPointerDynamicCast<KoGradientBackground>(background);
     if (gbg) {
         QString gradientId = saveSvgGradient(gbg->gradient(), gbg->transform(), context);
         context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
-    QSharedPointer<KoMeshGradientBackground> mgbg = qSharedPointerDynamicCast<KoMeshGradientBackground>(shape->background());
+    QSharedPointer<KoMeshGradientBackground> mgbg = qSharedPointerDynamicCast<KoMeshGradientBackground>(background);
     if (mgbg) {
         QString gradientId = saveSvgMeshGradient(mgbg->gradient(), mgbg->transform(), context);
         context.shapeWriter().addAttribute("fill", "url(#" + gradientId + ")");
     }
-    QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(shape->background());
+    QSharedPointer<KoPatternBackground>  pbg = qSharedPointerDynamicCast<KoPatternBackground>(background);
     if (pbg) {
-        const QString patternId = saveSvgPattern(pbg, shape, context);
+        const QString patternId = saveSvgPattern(pbg, size, absoluteTransform, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
-    QSharedPointer<KoVectorPatternBackground>  vpbg = qSharedPointerDynamicCast<KoVectorPatternBackground>(shape->background());
+    QSharedPointer<KoVectorPatternBackground>  vpbg = qSharedPointerDynamicCast<KoVectorPatternBackground>(background);
     if (vpbg) {
-        const QString patternId = saveSvgVectorPattern(vpbg, shape, context);
+        const QString patternId = saveSvgVectorPattern(vpbg, outlineRect, context);
         context.shapeWriter().addAttribute("fill", "url(#" + patternId + ")");
     }
 
-    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
-    if (path && shape->background()) {
-        // non-zero is default, so only write fillrule if evenodd is set
-        if (path->fillRule() == Qt::OddEvenFill)
-            context.shapeWriter().addAttribute("fill-rule", "evenodd");
-    }
+    // non-zero is default, so only write fillrule if evenodd is set
+    if (fillRuleEvenOdd)
+        context.shapeWriter().addAttribute("fill-rule", "evenodd");
 }
 
-void SvgStyleWriter::saveSvgStroke(KoShape *shape, SvgSavingContext &context)
+void SvgStyleWriter::saveSvgStroke(KoShapeStrokeModelSP stroke, SvgSavingContext &context)
 {
-    const QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(shape->stroke());
+    const QSharedPointer<KoShapeStroke> lineBorder = qSharedPointerDynamicCast<KoShapeStroke>(stroke);
 
     if (! lineBorder)
         return;
@@ -523,11 +522,10 @@ QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
     return uid;
 }
 
-QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context)
+QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, const QSizeF shapeSize, const QTransform absoluteTransform, SvgSavingContext &context)
 {
     const QString uid = context.createUID("pattern");
 
-    const QSizeF shapeSize = shape->size();
     const QSizeF patternSize = pattern->patternDisplaySize();
     const QSize imageSize = pattern->pattern().size();
 
@@ -566,7 +564,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
         break;
     }
 
-    offset = shape->absoluteTransformation().map(offset);
+    offset = absoluteTransform.map(offset);
 
     context.styleWriter().startElement("pattern");
     context.styleWriter().addAttribute("id", uid);
@@ -605,7 +603,7 @@ QString SvgStyleWriter::saveSvgPattern(QSharedPointer<KoPatternBackground> patte
     return uid;
 }
 
-QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *parentShape, SvgSavingContext &context)
+QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, const QRectF outlineRect, SvgSavingContext &context)
 {
     const QString uid = context.createUID("pattern");
 
@@ -630,8 +628,7 @@ QString SvgStyleWriter::saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackg
         QList<KoShape*> shapes = pattern->shapes();
         QList<KoShape*> clonedShapes;
 
-        const QRectF dstShapeBoundingRect = parentShape->outlineRect();
-        const QTransform relativeToShape = KisAlgebra2D::mapToRect(dstShapeBoundingRect);
+        const QTransform relativeToShape = KisAlgebra2D::mapToRect(outlineRect);
         const QTransform shapeToRelative = relativeToShape.inverted();
 
         Q_FOREACH (KoShape *shape, shapes) {

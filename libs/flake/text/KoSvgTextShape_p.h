@@ -288,7 +288,9 @@ struct SubChunk {
     KisForest<KoSvgTextContentElement>::child_iterator associatedLeaf;
     QVector<QPair<int, int>> newToOldPositions; ///< For transformed strings, we need to know which
     bool textInPath = false;
-    bool firstTextInPath = false; ///< We need to mark the first text in path as an anchored chunk.                         ///< original index matches which new index;
+    bool firstTextInPath = false; ///< We need to mark the first text in path as an anchored chunk.
+                                  ///< original index matches which new index;
+    QSharedPointer<KoShapeBackground> bg;
 };
 
 class KoSvgTextShape::Private

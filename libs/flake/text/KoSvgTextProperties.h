@@ -8,14 +8,14 @@
 #define KOSVGTEXTPROPERTIES_H
 
 #include "kritaflake_export.h"
+#include "KoFlakeTypes.h"
 
 #include <QScopedPointer>
 #include <QVariant>
 #include <QList>
 
 class SvgLoadingContext;
-
-
+class KoShapeBackground;
 
 /**
  * KoSvgTextProperties represents the text attributes defined in SVG DOM tree
@@ -239,6 +239,9 @@ public:
      * @return a map of axis-tags and their values.
      */
     QMap<QString, qreal> fontAxisSettings() const;
+
+    QSharedPointer<KoShapeBackground> background() const;
+    KoShapeStrokeModelSP stroke() const;
 
     /**
      * Return a list of supported XML attribute names (defined in SVG)

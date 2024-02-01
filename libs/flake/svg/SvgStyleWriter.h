@@ -17,13 +17,16 @@
 #define SVGSTYLEWRITER_H
 
 #include "kritaflake_export.h"
+#include "KoFlakeTypes.h"
 #include <QGradientStops>
 #include <QSharedPointer>
+#include <KoShape.h>
 
 class SvgSavingContext;
 class KoShape;
 class KoPatternBackground;
 class KoVectorPatternBackground;
+class KoShapeBackground;
 class QTransform;
 class QGradient;
 class SvgMeshGradient;
@@ -36,12 +39,12 @@ public:
     static void saveSvgStyle(KoShape *shape, SvgSavingContext &context);
 
     /// Saves only stroke, fill and transparency of the shape
-    static void saveSvgBasicStyle(KoShape *shape, SvgSavingContext &context);
+    static void saveSvgBasicStyle(const bool isVisible, const qreal transparency, const QVector<KoShape::PaintOrder> paintOrder, bool inheritPaintorder, SvgSavingContext &context);
 
     /// Saves fill style of specified shape
-    static void saveSvgFill(KoShape *shape, SvgSavingContext &context);
+    static void saveSvgFill(QSharedPointer<KoShapeBackground> background, const bool fillRuleEvenOdd, const QRectF outlineRect, const QSizeF size, const QTransform absoluteTransform, SvgSavingContext &context);
     /// Saves stroke style of specified shape
-    static void saveSvgStroke(KoShape *shape, SvgSavingContext &context);
+    static void saveSvgStroke(KoShapeStrokeModelSP, SvgSavingContext &context);
 
     // embed the given shape, returns an id to refer to.
     static QString embedShape(const KoShape *shape, SvgSavingContext &context);
@@ -61,8 +64,8 @@ protected:
     static QString saveSvgGradient(const QGradient *gradient, const QTransform &gradientTransform, SvgSavingContext &context);
     static QString saveSvgMeshGradient(SvgMeshGradient* gradient, const QTransform &transform, SvgSavingContext &context);
     /// Saves pattern
-    static QString saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
-    static QString saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, KoShape *shape, SvgSavingContext &context);
+    static QString saveSvgPattern(QSharedPointer<KoPatternBackground> pattern, const QSizeF shapeSize, const QTransform absoluteTransform, SvgSavingContext &context);
+    static QString saveSvgVectorPattern(QSharedPointer<KoVectorPatternBackground> pattern, const QRectF outlineRect, SvgSavingContext &context);
 };
 
 #endif // SVGSTYLEWRITER_H

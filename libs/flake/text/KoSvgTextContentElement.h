@@ -10,6 +10,7 @@
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 #include "SvgLoadingContext.h"
+#include "SvgSavingContext.h"
 
 #include <QScopedPointer>
 
@@ -65,6 +66,8 @@ public:
     bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
 
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
+
+    bool saveSvg(SvgSavingContext &context, KoSvgTextProperties parentProperties, bool rootText, bool saveText, QMap<QString, QString> shapeSpecificAttributes);
 
 
     /**

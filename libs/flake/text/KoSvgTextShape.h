@@ -357,6 +357,8 @@ public:
     void setStyleInfo(KoShape* s);
     void setTextPathOnCurrentNode(KoShape *s);
 
+    bool saveSvg(SvgSavingContext &context) override;
+
     void enterNodeSubtree();
     void leaveNodeSubtree();
     void resetParsing();

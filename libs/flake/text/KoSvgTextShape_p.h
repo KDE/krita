@@ -418,10 +418,7 @@ public:
                     int &currentIndex);
     QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
     void paintDebug(QPainter &painter,
-                    const QPainterPath &outlineRect,
-                    const KoShape *rootShape,
                     const QVector<CharacterResult> &result,
-                    QPainterPath &chunk,
                     int &currentIndex);
     static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls) {
         int count = parent->numChars(withControls);

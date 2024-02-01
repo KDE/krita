@@ -8,7 +8,6 @@
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShape_p.h"
 
-#include "KoSvgTextChunkShapeLayoutInterface.h"
 #include "KoSvgTextProperties.h"
 
 #include <KoClipMaskPainter.h>
@@ -245,119 +244,132 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 QList<KoShape *>
 KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
 
     QList<KoShape *> shapes;
+    KoShapeStrokeModelSP stroke = rootShape->stroke();
+    QSharedPointer<KoShapeBackground> background = rootShape->background();
+    QVector<PaintOrder> paintOrder = rootShape->paintOrder();
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, shapes);
+    for (auto it = compositionBegin(textData); it != compositionEnd(textData); it++) {
+        bool hasPaintOrder = false;
+        if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
+        }
+        if (it->properties.hasProperty(KoSvgTextProperties::FillId)) {
+            background = it->properties.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;
+        }
+        if (it->properties.hasProperty(KoSvgTextProperties::PaintOrder)) {
+            paintOrder = it->properties.propertyOrDefault(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>();
+            hasPaintOrder = true;
+        }
+        QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = it->textDecorations;
+        QColor textDecorationColor = it->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
+        QSharedPointer<KoShapeBackground> decorationColor = background;
+        if (textDecorationColor.isValid()) {
+            decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
+        }
 
-    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = chunkShape->layoutInterface()->textDecorations();
-    QColor textDecorationColor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
-    QSharedPointer<KoShapeBackground> decorationColor = chunkShape->background();
-    if (textDecorationColor.isValid()) {
-        decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
-    }
+        PaintOrder first = paintOrder.at(0);
+        PaintOrder second = paintOrder.at(1);
 
-    PaintOrder first = chunkShape->paintOrder().at(0);
-    PaintOrder second = chunkShape->paintOrder().at(1);
+        if (it.state() == KisForestDetail::Enter) {
 
-    if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
-        shape->setBackground(decorationColor);
-        shape->setStroke(chunkShape->stroke());
-        shape->setZIndex(chunkShape->zIndex());
-        shape->setFillRule(Qt::WindingFill);
-        shape->setPaintOrder(first, second);
-        shapes.append(shape);
-    }
-    if (textDecorations.contains(KoSvgText::DecorationOverline)) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline));
-        shape->setBackground(decorationColor);
-        shape->setStroke(chunkShape->stroke());
-        shape->setZIndex(chunkShape->zIndex());
-        shape->setFillRule(Qt::WindingFill);
-        shape->setPaintOrder(first, second);
-        shapes.append(shape);
-    }
 
-    if (chunkShape->isTextNode()) {
-        QPainterPath chunk;
+            if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
+                KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
+                shape->setBackground(decorationColor);
+                shape->setStroke(stroke);
+                shape->setZIndex(shapes.size());
+                shape->setFillRule(Qt::WindingFill);
+                if (hasPaintOrder)
+                    shape->setPaintOrder(first, second);
+                shapes.append(shape);
+            }
+            if (textDecorations.contains(KoSvgText::DecorationOverline)) {
+                KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline));
+                shape->setBackground(decorationColor);
+                shape->setStroke(stroke);
+                shape->setZIndex(shapes.size());
+                shape->setFillRule(Qt::WindingFill);
+                if (hasPaintOrder)
+                    shape->setPaintOrder(first, second);
+                shapes.append(shape);
+            }
 
-        const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
-        for (int i = currentIndex; i < j; i++) {
-            if (result.at(i).addressable && !result.at(i).hidden) {
-                const QTransform tf = result.at(i).finalTransform();
-                if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&result.at(i).glyph)) {
-                    for (int c = 0; c < colorGlyph->paths.size(); c++) {
-                        QBrush color = colorGlyph->colors.at(c);
-                        bool replace = colorGlyph->replaceWithForeGroundColor.at(c);
-                        // In theory we can use the pattern or gradient as well
-                        // for ColorV0 fonts, but ColorV1 fonts can have
-                        // gradients, so I am hesitant.
-                        KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunkShape->background().data());
-                        if (b && replace) {
-                            color = b->brush();
+            if (childCount(siblingCurrent(it)) == 0) {
+                QPainterPath chunk;
+
+                const int j = currentIndex + it->numChars(true);
+                for (int i = currentIndex; i < j; i++) {
+                    if (result.at(i).addressable && !result.at(i).hidden) {
+                        const QTransform tf = result.at(i).finalTransform();
+                        if (const auto *colorGlyph = std::get_if<Glyph::ColorLayers>(&result.at(i).glyph)) {
+                            for (int c = 0; c < colorGlyph->paths.size(); c++) {
+                                QBrush color = colorGlyph->colors.at(c);
+                                bool replace = colorGlyph->replaceWithForeGroundColor.at(c);
+                                // In theory we can use the pattern or gradient as well
+                                // for ColorV0 fonts, but ColorV1 fonts can have
+                                // gradients, so I am hesitant.
+                                KoColorBackground *b = dynamic_cast<KoColorBackground *>(background.data());
+                                if (b && replace) {
+                                    color = b->brush();
+                                }
+                                KoPathShape *shape = KoPathShape::createShapeFromPainterPath(tf.map(colorGlyph->paths.at(c)));
+                                shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color.color())));
+                                shape->setZIndex(shapes.size());
+                                shape->setFillRule(Qt::WindingFill);
+                                shape->setPaintOrder(first, second);
+                                shapes.append(shape);
+                            }
+                        } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
+                            chunk.addPath(tf.map(outlineGlyph->path));
                         }
-                        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(tf.map(colorGlyph->paths.at(c)));
-                        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color.color())));
-                        shape->setZIndex(chunkShape->zIndex());
-                        shape->setFillRule(Qt::WindingFill);
-                        shape->setPaintOrder(first, second);
-                        shapes.append(shape);
                     }
-                } else if (const auto *outlineGlyph = std::get_if<Glyph::Outline>(&result.at(i).glyph)) {
-                    chunk.addPath(tf.map(outlineGlyph->path));
                 }
+                KoPathShape *shape = KoPathShape::createShapeFromPainterPath(chunk);
+                shape->setBackground(background);
+                shape->setStroke(stroke);
+                shape->setZIndex(shapes.size());
+                shape->setFillRule(Qt::WindingFill);
+                if (hasPaintOrder)
+                    shape->setPaintOrder(first, second);
+                shapes.append(shape);
+                currentIndex = j;
+
             }
         }
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(chunk);
-        shape->setBackground(chunkShape->background());
-        shape->setStroke(chunkShape->stroke());
-        shape->setZIndex(chunkShape->zIndex());
-        shape->setFillRule(Qt::WindingFill);
-        shape->setPaintOrder(first, second);
-        shapes.append(shape);
-        currentIndex = j;
-
-    } else {
-        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            shapes.append(collectPaths(child, result, currentIndex));
+        if (it.state() ==KisForestDetail::Leave) {
+            if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
+                KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough));
+                shape->setBackground(decorationColor);
+                shape->setStroke(stroke);
+                shape->setZIndex(shapes.size());
+                shape->setFillRule(Qt::WindingFill);
+                shape->setPaintOrder(first, second);
+                shapes.append(shape);
+            }
         }
-    }
-    if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough));
-        shape->setBackground(decorationColor);
-        shape->setStroke(chunkShape->stroke());
-        shape->setZIndex(chunkShape->zIndex());
-        shape->setFillRule(Qt::WindingFill);
-        shape->setPaintOrder(first, second);
-        shapes.append(shape);
     }
     return shapes;
 }
 
 // NOLINTNEXTLINE(readability-function-cognitive-complexity)
 void KoSvgTextShape::Private::paintDebug(QPainter &painter,
-                                         const QPainterPath &rootOutline,
-                                         const KoShape *rootShape,
                                          const QVector<CharacterResult> &result,
-                                         QPainterPath &chunk,
                                          int &currentIndex)
 {
-    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
-    if (chunkShape->isTextNode()) {
-        const int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
+    for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
+        const int j = currentIndex + it->numChars(true);
 
-        const QRect shapeGlobalClipRect = painter.transform().mapRect(chunkShape->outlineRect()).toAlignedRect();
+        const QRect shapeGlobalClipRect = painter.transform().mapRect(it->associatedOutline.boundingRect()).toAlignedRect();
 
         painter.save();
 
         QFont font(QFont(), painter.device());
         font.setPointSizeF(16.0);
 
-        if (shapeGlobalClipRect.isValid()) {
+        if (shapeGlobalClipRect.isValid() && childCount(siblingCurrent(it)) == 0) {
             for (int i = currentIndex; i < j; i++) {
                 if (result.at(i).addressable && !result.at(i).hidden) {
                     const QTransform tf = result.at(i).finalTransform();
@@ -453,15 +465,6 @@ void KoSvgTextShape::Private::paintDebug(QPainter &painter,
             }
         }
         painter.restore();
-        chunk = QPainterPath();
         currentIndex = j;
-    } else {
-        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            /**
-             * We pass the root outline to make sure that all gradient and
-             * object-size-related decorations are rendered correctly.
-             */
-            paintDebug(painter, rootOutline, child, result, chunk, currentIndex);
-        }
     }
 }

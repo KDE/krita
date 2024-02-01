@@ -985,13 +985,15 @@ void KoSvgTextShape::setStyleInfo(KoShape *s)
         KoSvgTextProperties parent = KisForestDetail::parent(d->currentNode).node()? KisForestDetail::parent(d->currentNode)->properties
                                                                                    : KoSvgTextProperties();
         QSharedPointer<KoShapeBackground> parentBg = parent.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;
-        if (parentBg && !parentBg->compareTo(s->background().data())) {
+        if ((parentBg && !parentBg->compareTo(s->background().data()))
+                || (!parentBg && s->background())) {
             d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
                                                    QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
         }
 
         KoShapeStrokeModelSP parentStroke = parent.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
-        if (parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data())) {
+        if ((parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data()))
+                || (!parentStroke && s->stroke())) {
             d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
                                                    QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
         }
@@ -1161,12 +1163,11 @@ QRectF KoSvgTextShape::boundingRect() const
 void KoSvgTextShape::paintDebug(QPainter &painter, const DebugElements elements) const
 {
     if (elements & DebugElement::CharBbox) {
-        QPainterPath chunk;
         int currentIndex = 0;
         if (!d->result.isEmpty()) {
             QPainterPath rootBounds;
             rootBounds.addRect(this->outline().boundingRect());
-            d->paintDebug(painter, rootBounds, this, d->result, chunk, currentIndex);
+            d->paintDebug(painter, d->result, currentIndex);
         }
     }
 

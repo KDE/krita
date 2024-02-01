@@ -12,7 +12,6 @@
 #include "KoCssTextUtils.h"
 #include "KoFontLibraryResourceUtils.h"
 #include "KoFontRegistry.h"
-#include "KoSvgTextChunkShapeLayoutInterface.h"
 #include "KoSvgTextProperties.h"
 #include "KoColorBackground.h"
 

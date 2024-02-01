@@ -918,6 +918,7 @@ void KoSvgTextShape::setPaintOrder(KoShape::PaintOrder first, KoShape::PaintOrde
     }
     d->textData.childBegin()->properties.setProperty(KoSvgTextProperties::PaintOrder,
                                                     QVariant::fromValue(order));
+    setInheritPaintOrder(false);
 }
 
 QString KoSvgTextShape::plainText()
@@ -1070,7 +1071,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                     SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity).toBool(),
                                                       it->properties.property(KoSvgTextProperties::Opacity).toReal(),
                                                       it->properties.property(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>(),
-                                                      it->properties.hasProperty(KoSvgTextProperties::PaintOrder), context);
+                                                      !it->properties.hasProperty(KoSvgTextProperties::PaintOrder), context);
                 }
             }
 
@@ -1106,7 +1107,7 @@ void KoSvgTextShape::leaveNodeSubtree()
 void KoSvgTextShape::resetParsing()
 {
     qDebug() << Q_FUNC_INFO;
-    d->textData = KisForest<KoSvgTextContentElement>();
+    d->textData.erase(d->textData.childBegin(), d->textData.childEnd());
     d->currentNode = d->textData.childEnd();
 }
 

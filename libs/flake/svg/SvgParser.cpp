@@ -1835,17 +1835,17 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     KoSvgTextShape *rootTextShape  = 0;
 
-    if (e.tagName() == "text") {
-        // XXX: Shapes need to be created by their factories
-        if (mergeIntoShape) {
-            rootTextShape = mergeIntoShape;
-        } else {
-            rootTextShape = new KoSvgTextShape();
-            const QString useRichText = e.attribute("krita:useRichText", "false");
-            rootTextShape->setRichTextPreferred(useRichText != "false");
-            rootTextShape->resetParsing();
-        }
+    // XXX: Shapes need to be created by their factories
+    if (mergeIntoShape) {
+        rootTextShape = mergeIntoShape;
+    } else {
+        rootTextShape = new KoSvgTextShape();
+        const QString useRichText = e.attribute("krita:useRichText", "false");
+        rootTextShape->setRichTextPreferred(useRichText != "false");
     }
+    QVector<KoShape::PaintOrder> paintOrder = rootTextShape->paintOrder();
+    rootTextShape->resetParsing();
+
 
     if (rootTextShape) {
         m_isInsideTextSubtree = true;
@@ -1874,10 +1874,8 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
-
     if (!mergeIntoShape) {
-        textChunk->setZIndex(m_context.nextZIndex());
+        rootTextShape->setZIndex(m_context.nextZIndex());
     }
 
 
@@ -1897,55 +1895,48 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    textChunk->loadSvg(e, m_context);
+    rootTextShape->loadSvg(e, m_context);
 
     // 1) apply transformation only in case we are not overriding the shape!
     // 2) the transformation should be applied *before* the shape is added to the group!
     if (!mergeIntoShape) {
         // groups should also have their own coordinate system!
-        textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-        const QPointF extraOffset = extraShapeOffset(textChunk, m_context.currentGC()->matrix);
+        rootTextShape->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        const QPointF extraOffset = extraShapeOffset(rootTextShape, m_context.currentGC()->matrix);
 
         // handle id
-        applyId(e.attribute("id"), textChunk);
-        applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
+        applyId(e.attribute("id"), rootTextShape);
+        applyCurrentStyle(rootTextShape, extraOffset); // apply style to this group after size is set
     } else {
         m_context.currentGC()->matrix = mergeIntoShape->absoluteTransformation();
-        applyCurrentBasicStyle(textChunk);
+        applyCurrentBasicStyle(rootTextShape);
     }
 
     QDomText onlyTextChild = getTheOnlyTextChild(e);
     if (!onlyTextChild.isNull()) {
-        textChunk->loadSvgTextNode(onlyTextChild, m_context);
+        rootTextShape->loadSvgText(onlyTextChild, m_context);
 
-        if (rootTextShape) {
-            rootTextShape->loadSvgText(onlyTextChild, m_context);
-        }
     } else {
-        QList<KoShape*> childShapes = parseContainer(e, true);
-        addToGroup(childShapes, textChunk);
+        parseTextChildren(e, rootTextShape);
 
-        if (rootTextShape) {
-            parseTextChildren(e, rootTextShape);
-        }
+    }
+    if (mergeIntoShape) {
+        rootTextShape->setPaintOrder(paintOrder.at(0), paintOrder.at(1));
     }
 
     m_context.popGraphicsContext();
 
-    textChunk->setTextPath(getTextPath(e));
-
-    if (rootTextShape) {
-        textChunk->simplifyFillStrokeInheritance();
-        if (e.hasAttribute("text-rendering")) {
-            rootTextShape->setTextRenderingFromString(e.attribute("text-rendering"));
-        }
-
-        m_isInsideTextSubtree = false;
-        rootTextShape->relayout();
-        rootTextShape->debugParsing();
+    if (e.hasAttribute("text-rendering")) {
+        rootTextShape->setTextRenderingFromString(e.attribute("text-rendering"));
     }
 
-    return textChunk;
+    m_isInsideTextSubtree = false;
+
+    rootTextShape->debugParsing();
+    rootTextShape->relayout();
+
+
+    return rootTextShape;
 }
 
 QList<KoShape*> SvgParser::parseContainer(const QDomElement &e, bool parseTextNodes)

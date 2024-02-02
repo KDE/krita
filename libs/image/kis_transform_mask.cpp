@@ -37,9 +37,116 @@
 #include "kis_image_config.h"
 #include "kis_lod_capable_layer_offset.h"
 
+#include <QReadWriteLock>
+#include "KisTransformMaskTestingInterface.h"
+
 //#include "kis_paint_device_debug_utils.h"
 //#define DEBUG_RENDERING
 //#define DUMP_RECT QRect(0,0,512,512)
+
+namespace {
+
+class StaticCacheStorage
+{
+public:
+    bool isCacheValid(KisTransformMaskParamsInterfaceSP currentParams) const {
+        QReadLocker l(&m_lock);
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!staticCacheValid ||
+                                     paramsForStaticImage ||
+                                     staticCacheIsOverridden);
+
+        return staticCacheValid &&
+            (!paramsForStaticImage ||
+             paramsForStaticImage->compareTransform(currentParams));
+    }
+
+    bool isCacheOverridden() const {
+        QReadLocker l(&m_lock);
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!staticCacheIsOverridden || staticCacheValid);
+
+        return staticCacheIsOverridden;
+    }
+
+    void lazyAllocateStaticCache(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds) {
+        QWriteLocker l(&m_lock);
+
+        if (!staticCacheDevice ||
+            *staticCacheDevice->colorSpace() != *cs) {
+
+            staticCacheDevice = new KisPaintDevice(cs);
+            staticCacheDevice->setDefaultBounds(defaultBounds);
+        }
+    }
+
+    KisPaintDeviceSP device() {
+        return staticCacheDevice;
+    }
+
+    void setDeviceCacheValid(KisTransformMaskParamsInterfaceSP currentParams) {
+        QWriteLocker l(&m_lock);
+
+        paramsForStaticImage = currentParams;
+        staticCacheValid = true;
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!staticCacheIsOverridden);
+    }
+
+    void overrideStaticCacheDevice(KisPaintDeviceSP device)
+    {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(staticCacheDevice);
+
+        staticCacheDevice->clear();
+
+        if (device) {
+            const QRect rc = device->extent();
+            KisPainter::copyAreaOptimized(rc.topLeft(), device, staticCacheDevice, rc);
+        }
+
+        {
+            QWriteLocker l(&m_lock);
+            paramsForStaticImage.clear();
+            staticCacheValid = bool(device);
+            staticCacheIsOverridden = bool(device);
+        }
+    }
+
+    void invalidateDeviceCache() {
+        staticCacheValid = false;
+        paramsForStaticImage.clear();
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!staticCacheIsOverridden);
+    }
+
+private:
+    mutable QReadWriteLock m_lock;
+    bool staticCacheIsOverridden {false};
+    bool staticCacheValid = {false};
+    KisPaintDeviceSP staticCacheDevice;
+    KisTransformMaskParamsInterfaceSP paramsForStaticImage;
+};
+
+struct AccumulatedRectStorage
+{
+    void addRect(const QRect &rc) {
+        QMutexLocker l(&m_mutex);
+        m_rect |= rc;
+    }
+
+    QRect takeRect() {
+        QMutexLocker l(&m_mutex);
+
+        const QRect rect = m_rect;
+        m_rect = QRect();
+
+        return rect;
+    }
+
+private:
+    QMutex m_mutex;
+    QRect m_rect;
+};
+
+}
 
 #define UPDATE_DELAY 3000 /*ms */
 
@@ -48,7 +155,6 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     Private(KisImageSP image)
         : worker(0, QTransform(), true, 0),
           paramsHolder(KisTransformMaskParamsFactoryRegistry::instance()->createAnimatedParamsHolder(new KisDefaultBounds(image))),
-          staticCacheValid(false),
           recalculatingStaticImage(false),
           offset(new KisDefaultBounds(image)),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
@@ -59,9 +165,7 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     Private(const Private &rhs)
         : worker(rhs.worker),
           paramsHolder(rhs.paramsHolder->clone()),
-          staticCacheValid(rhs.staticCacheValid),
           recalculatingStaticImage(rhs.recalculatingStaticImage),
-          staticCacheDevice(nullptr),
           offset(rhs.offset),
           updateSignalCompressor(UPDATE_DELAY, KisSignalCompressor::POSTPONE),
           offBoundsReadArea(rhs.offBoundsReadArea)
@@ -71,16 +175,17 @@ struct Q_DECL_HIDDEN KisTransformMask::Private
     KisPerspectiveTransformWorker worker;
     KisAnimatedTransformParamsHolderInterfaceSP paramsHolder;
 
-    bool staticCacheValid;
+    StaticCacheStorage staticCache;
     bool recalculatingStaticImage;
-    KisPaintDeviceSP staticCacheDevice;
-    bool staticCacheIsOverridden = false;
-    KisTransformMaskParamsInterfaceSP paramsForStaticImage;
+
+    AccumulatedRectStorage forcedStaticUpdateExtraUpdateRect;
 
     KisLodCapableLayerOffset offset;
 
     KisThreadSafeSignalCompressor updateSignalCompressor;
     qreal offBoundsReadArea;
+
+    QScopedPointer<KisTransformMaskTestingInterface> testingInterface;
 };
 
 
@@ -142,12 +247,6 @@ void KisTransformMask::setTransformParamsWithUndo(KisTransformMaskParamsInterfac
     KIS_SAFE_ASSERT_RECOVER_RETURN(params);
 
     m_d->paramsHolder->setParamsAtCurrentPosition(params.data(), parentCommand);
-
-    if (!m_d->staticCacheIsOverridden) {
-        m_d->staticCacheValid = false;
-        m_d->paramsForStaticImage.clear();
-        m_d->updateSignalCompressor.start();
-    }
 }
 
 void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP params)
@@ -155,6 +254,9 @@ void KisTransformMask::setTransformParams(KisTransformMaskParamsInterfaceSP para
     KUndo2Command todo_REMOVE;
     setTransformParamsWithUndo(params, &todo_REMOVE);
     todo_REMOVE.redo();
+
+    m_d->staticCache.invalidateDeviceCache();
+    m_d->updateSignalCompressor.start();
 }
 
 KisTransformMaskParamsInterfaceSP KisTransformMask::transformParams() const
@@ -163,6 +265,22 @@ KisTransformMaskParamsInterfaceSP KisTransformMask::transformParams() const
 }
 
 void KisTransformMask::slotDelayedStaticUpdate()
+{
+    if (m_d->testingInterface) {
+        m_d->testingInterface->notifySlotDelayedStaticUpdate();
+    }
+
+    startAsyncRegenerationJob();
+}
+
+void KisTransformMask::forceStartAsyncRegenerationJob()
+{
+    m_d->staticCache.invalidateDeviceCache();
+    m_d->updateSignalCompressor.stop();
+    startAsyncRegenerationJob();
+}
+
+void KisTransformMask::startAsyncRegenerationJob()
 {
     /**
      * The mask might have been deleted from the layers stack in the
@@ -188,7 +306,9 @@ void KisTransformMask::slotDelayedStaticUpdate()
         return;
     }
 
-    image->addSpontaneousJob(new KisRecalculateTransformMaskJob(this));
+
+    const QRect extraUpdateRect = m_d->forcedStaticUpdateExtraUpdateRect.takeRect();
+    image->addSpontaneousJob(new KisRecalculateTransformMaskJob(this, extraUpdateRect));
 }
 
 KisPaintDeviceSP KisTransformMask::buildPreviewDevice()
@@ -244,19 +364,21 @@ KisPaintDeviceSP KisTransformMask::buildSourcePreviewDevice()
 
 void KisTransformMask::overrideStaticCacheDevice(KisPaintDeviceSP device)
 {
-    m_d->staticCacheDevice->clear();
+    // TODO: make sure the device is allocated
+    m_d->staticCache.overrideStaticCacheDevice(device);
+}
 
-    if (device) {
-        const QRect rc = device->extent();
-        KisPainter::copyAreaOptimized(rc.topLeft(), device, m_d->staticCacheDevice, rc);
-    }
-
-    m_d->staticCacheValid = bool(device);
-    m_d->staticCacheIsOverridden = bool(device);
+bool KisTransformMask::staticImageCacheIsValid() const
+{
+    return m_d->staticCache.isCacheValid(m_d->paramsHolder->bakeIntoParams());
 }
 
 void KisTransformMask::recalculateStaticImage()
 {
+    if (m_d->testingInterface) {
+        m_d->testingInterface->notifyRecalculateStaticImage();
+    }
+
     /**
      * Note: this function must be called from within the scheduler's
      * context. We are accessing parent's updateProjection(), which
@@ -271,13 +393,8 @@ void KisTransformMask::recalculateStaticImage()
     // situation, hence assert.
     KIS_SAFE_ASSERT_RECOVER_RETURN(parentLayer->projection() != parentLayer->paintDevice());
 
-    if (!m_d->staticCacheDevice ||
-        *m_d->staticCacheDevice->colorSpace() != *parentLayer->original()->colorSpace()) {
-
-        m_d->staticCacheDevice =
-            new KisPaintDevice(parentLayer->original()->colorSpace());
-        m_d->staticCacheDevice->setDefaultBounds(parentLayer->original()->defaultBounds());
-    }
+    m_d->staticCache.lazyAllocateStaticCache(parentLayer->original()->colorSpace(),
+                                             parentLayer->original()->defaultBounds());
 
     m_d->recalculatingStaticImage = true;
     /**
@@ -319,8 +436,6 @@ void KisTransformMask::recalculateStaticImage()
      */
     parentLayer->updateProjection(requestedRect, this);
     m_d->recalculatingStaticImage = false;
-
-    m_d->staticCacheValid = true;
 }
 
 QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
@@ -363,31 +478,31 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         return rc;
     }
 
-    /**
-     * Hold the shared pointer in case some other thread will also try to release it
-     */
-    KisTransformMaskParamsInterfaceSP localParamsForStaticImage = m_d->paramsForStaticImage;
-
-    if (!m_d->staticCacheIsOverridden &&
+    if (!m_d->staticCache.isCacheOverridden() &&
         !m_d->recalculatingStaticImage &&
-        ((maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY) ||
-         (localParamsForStaticImage &&
-          !localParamsForStaticImage->compareTransform(params)))) {
+        (maskPos == N_FILTHY || maskPos == N_ABOVE_FILTHY ||
+         !m_d->staticCache.isCacheValid(params))) {
 
-        m_d->staticCacheValid = false;
-        m_d->paramsForStaticImage.clear();
+        if (m_d->testingInterface) {
+            m_d->testingInterface->notifyDecorateRectTriggeredStaticImageUpdate();
+        }
+
+        m_d->staticCache.invalidateDeviceCache();
         m_d->updateSignalCompressor.start();
     }
 
     if (m_d->recalculatingStaticImage) {
-        m_d->staticCacheDevice->clear();
-        params->transformDevice(const_cast<KisTransformMask*>(this), src,
-                                m_d->staticCacheDevice, m_d->paramsHolder->isAnimated());
-        QRect updatedRect = m_d->staticCacheDevice->extent();
-        KisPainter::copyAreaOptimized(updatedRect.topLeft(), m_d->staticCacheDevice, dst, updatedRect);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->staticCache.isCacheValid(params));
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->paramsForStaticImage);
-        m_d->paramsForStaticImage = params;
+        KisPaintDeviceSP staticCacheDevice = m_d->staticCache.device();
+
+        staticCacheDevice->clear();
+        params->transformDevice(const_cast<KisTransformMask*>(this), src,
+                                staticCacheDevice, m_d->paramsHolder->isAnimated());
+        QRect updatedRect = staticCacheDevice->extent();
+        KisPainter::copyAreaOptimized(updatedRect.topLeft(), staticCacheDevice, dst, updatedRect);
+
+        m_d->staticCache.setDeviceCacheValid(params);
 
 #ifdef DEBUG_RENDERING
         qDebug() << "Recalculate" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
@@ -395,7 +510,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "recalc_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else if (!m_d->staticCacheValid && !m_d->staticCacheIsOverridden && params->isAffine()) {
+    // Note: overridden cache is **always** valid
+    } else if (params->isAffine() && !m_d->staticCache.isCacheValid(params)) {
         m_d->worker.setForceSubPixelTranslation(m_d->paramsHolder->isAnimated());
         m_d->worker.setForwardTransform(params->finalAffineTransform());
         m_d->worker.runPartialDst(src, dst, rc);
@@ -406,8 +522,8 @@ QRect KisTransformMask::decorateRect(KisPaintDeviceSP &src,
         KIS_DUMP_DEVICE_2(dst, DUMP_RECT, "partial_dst", "dd");
 #endif /* DEBUG_RENDERING */
 
-    } else if ((m_d->staticCacheValid || m_d->staticCacheIsOverridden) && m_d->staticCacheDevice) {
-        KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCacheDevice, dst, rc);
+    } else if (m_d->staticCache.isCacheValid(params)) {
+        KisPainter::copyAreaOptimized(rc.topLeft(), m_d->staticCache.device(), dst, rc);
 
 #ifdef DEBUG_RENDERING
         qDebug() << "Fetch" << name() << ppVar(src->exactBounds()) << ppVar(dst->exactBounds()) << ppVar(rc);
@@ -619,21 +735,18 @@ void KisTransformMask::setY(qint32 y)
 
 void KisTransformMask::forceUpdateTimedNode()
 {
-    KisTransformMaskParamsInterfaceSP localParamsForStaticImage = m_d->paramsForStaticImage;
+    if (m_d->testingInterface) {
+        m_d->testingInterface->notifyForceUpdateTimedNode();
+    }
 
     /**
      * When flattening the layer with animated transform mask we should
      * actually rerender the static image
      */
     if (hasPendingTimedUpdates() ||
-        !m_d->staticCacheValid ||
-        !localParamsForStaticImage ||
-        !localParamsForStaticImage->compareTransform(m_d->paramsHolder->bakeIntoParams())) {
+        !m_d->staticCache.isCacheValid(m_d->paramsHolder->bakeIntoParams())) {
 
-        m_d->staticCacheValid = false;
-        m_d->paramsForStaticImage.clear();
-        m_d->updateSignalCompressor.stop();
-        slotDelayedStaticUpdate();
+        forceStartAsyncRegenerationJob();
     }
 }
 
@@ -644,7 +757,23 @@ bool KisTransformMask::hasPendingTimedUpdates() const
 
 void KisTransformMask::threadSafeForceStaticImageUpdate()
 {
+    threadSafeForceStaticImageUpdate(QRect());
+}
+
+void KisTransformMask::threadSafeForceStaticImageUpdate(const QRect &extraUpdateRect)
+{
+    if (m_d->testingInterface) {
+        m_d->testingInterface->notifyThreadSafeForceStaticImageUpdate();
+    }
+    if (!extraUpdateRect.isEmpty()) {
+        m_d->forcedStaticUpdateExtraUpdateRect.addRect(extraUpdateRect);
+    }
     emit sigInternalForceStaticImageUpdate();
+}
+
+void KisTransformMask::slotInternalForceStaticImageUpdate()
+{
+    forceStartAsyncRegenerationJob();
 }
 
 void KisTransformMask::syncLodCache()
@@ -658,16 +787,20 @@ KisPaintDeviceList KisTransformMask::getLodCapableDevices() const
 {
     KisPaintDeviceList devices;
     devices += KisEffectMask::getLodCapableDevices();
-    if (m_d->staticCacheDevice) {
-        devices << m_d->staticCacheDevice;
+    if (m_d->staticCache.device()) {
+        devices << m_d->staticCache.device();
     }
     return devices;
 }
 
-void KisTransformMask::slotInternalForceStaticImageUpdate()
+void KisTransformMask::setTestingInterface(KisTransformMaskTestingInterface *interface)
 {
-    m_d->updateSignalCompressor.stop();
-    slotDelayedStaticUpdate();
+    m_d->testingInterface.reset(interface);
+}
+
+KisTransformMaskTestingInterface* KisTransformMask::testingInterface() const
+{
+    return m_d->testingInterface.data();
 }
 
 KisKeyframeChannel *KisTransformMask::requestKeyframeChannel(const QString &id)

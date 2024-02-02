@@ -900,7 +900,8 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
             if (transformMask &&
                     ((levelOfDetail <= 0 && !transformMask->transformParams()->isAffine()) ||
                      (levelOfDetail <= 0 && m_d->previewLevelOfDetail > 0))) {
-                transformMask->threadSafeForceStaticImageUpdate();
+
+                transformMask->threadSafeForceStaticImageUpdate(it->second);
             } else {
                 m_d->updatesFacade->refreshGraphAsync(it->first, it->second);
             }
@@ -1021,6 +1022,13 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
     const bool isChangingTransformMask = !m_d->transformMaskCacheHash.isEmpty();
 
     if (m_d->initialTransformArgs.isIdentity()) {
+        KritaUtils::addJobSequential(mutatedJobs, [this]() {
+            Q_FOREACH (KisTransformMask *mask, m_d->transformMaskCacheHash.keys()) {
+                mask->overrideStaticCacheDevice(0);
+            }
+        });
+
+
         KritaUtils::addJobBarrier(mutatedJobs, [this]() {
             m_d->commandUpdatesBlockerCookie.reset();
             undoTransformCommands(0);
@@ -1030,7 +1038,6 @@ void InplaceTransformStrokeStrategy::cancelAction(QVector<KisStrokeJobData *> &m
 
         KritaUtils::addJobSequential(mutatedJobs, [this]() {
             Q_FOREACH (KisTransformMask *mask, m_d->transformMaskCacheHash.keys()) {
-                mask->overrideStaticCacheDevice(0);
                 mask->threadSafeForceStaticImageUpdate();
             }
         });

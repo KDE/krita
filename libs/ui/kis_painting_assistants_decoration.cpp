@@ -7,13 +7,14 @@
 
 #include "kis_painting_assistants_decoration.h"
 
-#include <cfloat>
+#include <limits>
 
 #include <QList>
 #include <QPointF>
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
 #include <ktoggleaction.h>
+#include <kis_algebra_2d.h>
 #include "kis_debug.h"
 #include "KisDocument.h"
 #include "kis_canvas2.h"
@@ -35,7 +36,6 @@ struct KisPaintingAssistantsDecoration::Private {
         , snapEraser(false)
         , useCache(false)
         , firstAssistant(0)
-        , aFirstStroke(false)
         , m_handleSize(14)
     {}
 
@@ -46,7 +46,6 @@ struct KisPaintingAssistantsDecoration::Private {
     bool useCache;
     KisPaintingAssistantSP firstAssistant;
     KisPaintingAssistantSP selectedAssistant;
-    bool aFirstStroke;
     bool m_isEditingAssistants = false;
     int m_handleSize; // size of editor handles on assistants
 
@@ -166,103 +165,63 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image, point);
 
     const KisCoordinatesConverter *converter = d->m_canvas->coordinatesConverter();
-    const qreal moveThresholdPt = 2.0 * converter->effectiveZoom() / qMax(image->xRes(), image->yRes());
-
-
-    // There is at least 1 assistant
-    if (assistants().count() == 1) {
-        // Things are easy when there is only one assistant
-        if(assistants().first()->isSnappingActive() == true){
-            bool snapSingle = d->snapOnlyOneAssistant && d->aFirstStroke;
-            QPointF newpoint = assistants().first()->adjustPosition(point, strokeBegin, !snapSingle, moveThresholdPt);
-            // check for NaN
-            if (newpoint.x() != newpoint.x()) return point;
-            // Tell the assistant that its guidelines should
-            // follow the adjusted bush position.
-            assistants().first()->setFollowBrushPosition(true);
-
-            // we need setting d->aFirstStroke even for one assistant, because now
-            // single assistants can be made out of several inner ones (vide TwoPointPerspective).
-            //this is here to be compatible with the movement in the perspective tool.
-            qreal dx = point.x() - strokeBegin.x();
-            qreal dy = point.y() - strokeBegin.y();
-            if (dx * dx + dy * dy >= 4.0) {
-                // allow some movement before snapping
-                d->aFirstStroke=true;
-            }
-            return newpoint;
-        } else {
-            // One assistant, but it is not active, so no adjustment
-            return point;
-        }
-    }
-
-    // There is more than one assistant.
-    // We have to chose one of these.
-    // This is done by checking which assistant gives the an adjusted position
-    // that is closest to the current position.
+    const qreal moveThresholdPt = 4.0 / (converter->effectiveZoom() * qMax(image->xRes(), image->yRes()));
 
     QPointF best = point;
-    double distance = DBL_MAX;
-    if (!d->snapOnlyOneAssistant) {
-        // In this mode the best assistant is constantly computed anew.
+    qreal minSquareDistance = std::numeric_limits<qreal>::max();
+    qreal secondSquareDistance = std::numeric_limits<qreal>::max();
+
+    if (!d->snapOnlyOneAssistant || !d->firstAssistant) {
+        // In these cases the best assistant meeds to be determined.
+        int numSuitableAssistants = 0;
+        KisPaintingAssistantSP bestAssistant;
+
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-            if (assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
-                QPointF pt = assistant->adjustPosition(point, strokeBegin, true, moveThresholdPt);
-                // check for NaN
-                if (pt.x() != pt.x()) continue;
-                double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
-                if (dist < distance) {
-                    best = pt;
-                    distance = dist;
+            if (assistant->isSnappingActive() == true){ // the toggle button with eye icon to disable assistants
+                QPointF newpoint = assistant->adjustPosition(point, strokeBegin, true, moveThresholdPt);
+                // Assistants that can't or don't want to snap return NaN values (aside from possible numeric issues)
+                // NOTE: It would be safer to also reject points too far outside canvas (or widget?) area,
+                // because for example squashed concentric ellipses can currently shoot points far off.
+                if (qIsNaN(newpoint.x()) ||  qIsNaN(newpoint.y())) {
+                    continue;
+                }
+                ++numSuitableAssistants;
+                qreal dist = kisSquareDistance(newpoint, point);
+                if (dist < minSquareDistance) {
+                    best = newpoint;
+                    secondSquareDistance = minSquareDistance;
+                    minSquareDistance = dist;
+                    bestAssistant = assistant;
+                } else if (dist < secondSquareDistance) {
+                    secondSquareDistance = dist;
                 }
                 assistant->setFollowBrushPosition(true);
             }
         }
-    } else if (d->aFirstStroke==false) {
-        // In this mode we compute the best assistant during the initial
-        // movement and then keep using that assistant. (Called the first
-        // assistant).
-        bool foundAGoodAssistant = false;
-        Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
-            if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
-                QPointF pt = assistant->adjustPosition(point, strokeBegin, true, moveThresholdPt);
-                if (pt.x() != pt.x()) continue;
-                double dist = qAbs(pt.x() - point.x()) + qAbs(pt.y() - point.y());
-                if (dist < distance) {
-                    best = pt;
-                    distance = dist;
-                    d->firstAssistant = assistant;
-                    foundAGoodAssistant = true;
-                }
-                assistant->setFollowBrushPosition(true);
-            }
+
+        // When there are multiple choices within moveThresholdPt, delay the decision until movement leaves
+        // threshold to determine which curve follows cursor movement the closest. Assistants with multiple
+        // snapping curves also need this movement to decide the best choice.
+        // NOTE: It is currently not possible to tell painting tools that a decision is pending, or that
+        // the active snapping curve changed, so certain artifact lines from snapping changes are unavoidable.
+
+        if (numSuitableAssistants > 1 && KisAlgebra2D::norm(point - strokeBegin) <= moveThresholdPt
+                && (sqrt(secondSquareDistance) < moveThresholdPt)) {
+            return strokeBegin;
+        } else if (numSuitableAssistants > 0 && d->snapOnlyOneAssistant) {
+            // if only snapping to one assistant, register it
+            d->firstAssistant = bestAssistant;
         }
-        if (!foundAGoodAssistant) {
-            // reset the first assistant if none of them are available
-            // that helps in case all of the assistants are disabled
-            // BUG:448187
-            d->firstAssistant = 0;
-        }
-    } else if (d->firstAssistant) {
-        //make sure there's a first assistant to begin with.//
+    } else {
+        // Make sure BUG:448187 doesn't crop up again
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->firstAssistant->isSnappingActive(), point);
+        // there already is an assistant locked in, check if it can be used
         QPointF newpoint = d->firstAssistant->adjustPosition(point, strokeBegin, false, moveThresholdPt);
         // BUGFIX: 402535
         // assistants might return (NaN,NaN), must always check for that
-        if (newpoint.x() == newpoint.x()) {
-            // not a NaN
+        if (!(qIsNaN(newpoint.x()) || qIsNaN(newpoint.y()))) {
             best = newpoint;
         }
-    } else {
-        d->aFirstStroke=false;
-    }
-
-    //this is here to be compatible with the movement in the perspective tool.
-    qreal dx = point.x() - strokeBegin.x();
-    qreal dy = point.y() - strokeBegin.y();
-    if (dx * dx + dy * dy >= 4.0) {
-        // allow some movement before snapping
-        d->aFirstStroke=true;
     }
 
     return best;
@@ -320,7 +279,7 @@ void KisPaintingAssistantsDecoration::adjustLine(QPointF &point, QPointF &stroke
 
 void KisPaintingAssistantsDecoration::endStroke()
 {
-    d->aFirstStroke = false;
+    d->firstAssistant.clear();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
         assistant->endStroke();

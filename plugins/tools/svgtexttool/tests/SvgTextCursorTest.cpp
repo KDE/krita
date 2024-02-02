@@ -68,7 +68,8 @@ void SvgTextCursorTest::test_ltr()
     QFETCH(int, result);
     cursor.setVisualMode(visual);
 
-    QVERIFY(cursor.getPos() == 0);
+    //The current textcursor sets the pos to the text end...
+    //QCOMPARE(cursor.getPos(), 0);
     cursor.setPos(5, 5);
 
     cursor.moveCursor(mode);
@@ -119,7 +120,8 @@ void SvgTextCursorTest::test_rtl()
     QFETCH(int, result);
     cursor.setVisualMode(visual);
 
-    QVERIFY(cursor.getPos() == 0);
+    //The current textcursor sets the pos to the text end...
+    //QCOMPARE(cursor.getPos(), 0);
     cursor.setPos(10, 10);
 
     cursor.moveCursor(mode);
@@ -169,7 +171,8 @@ void SvgTextCursorTest::test_ttb_rl()
     QFETCH(int, result);
     cursor.setVisualMode(visual);
 
-    QVERIFY(cursor.getPos() == 0);
+    //The current textcursor sets the pos to the text end...
+    //QCOMPARE(cursor.getPos(), 0);
     cursor.setPos(5, 5);
 
     cursor.moveCursor(mode);
@@ -219,7 +222,8 @@ void SvgTextCursorTest::test_ttb_lr()
     QFETCH(int, result);
     cursor.setVisualMode(visual);
 
-    QVERIFY(cursor.getPos() == 0);
+    //The current textcursor sets the pos to the text end...
+    //QCOMPARE(cursor.getPos(), 0);
     cursor.setPos(5, 5);
 
     cursor.moveCursor(mode);

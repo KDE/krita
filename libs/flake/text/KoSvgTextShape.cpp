@@ -51,6 +51,7 @@ KoSvgTextShape::KoSvgTextShape()
     , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
+    d->textData.insert(d->textData.childBegin(), KoSvgTextContentElement());
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
@@ -757,7 +758,6 @@ bool KoSvgTextShape::insertText(int pos, QString text)
     auto it = findTextChunkForIndex(d->textData, currentIndex, index);
     if (it.node()) {
         int offset = oldIndex - currentIndex;
-        qDebug() << "found node" << currentIndex << oldIndex << offset;
         it->insertText(offset, text);
         notifyChanged();
         shapeChangedPriv(ContentChanged);

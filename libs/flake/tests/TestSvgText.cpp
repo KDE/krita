@@ -358,8 +358,8 @@ void TestSvgText::testParseTextStyles()
 }
 
 #include <text/KoSvgTextShape.h>
-#include <text/KoSvgTextChunkShape.h>
-#include <text/KoSvgTextChunkShapeLayoutInterface.h>
+#include <text/KoSvgTextShape_p.h>
+#include <text/KoSvgTextContentElement.h>
 
 void TestSvgText::testSimpleText()
 {
@@ -375,21 +375,20 @@ void TestSvgText::testSimpleText()
     t.test_standard("text_simple", QSize(140, 40), 72.0);
 
     KoShape *shape = t.findShape("testRect");
-    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
+    KoSvgTextShape *chunkShape = dynamic_cast<KoSvgTextShape*>(shape);
     QVERIFY(chunkShape);
 
     // root shape is not just a chunk!
     QVERIFY(dynamic_cast<KoSvgTextShape*>(shape));
 
-    QCOMPARE(chunkShape->shapeCount(), 0);
-    QCOMPARE(chunkShape->layoutInterface()->isTextNode(), true);
+    QCOMPARE(KoSvgTextShape::Private::childCount(chunkShape->d->textData.childBegin()), 0);
 
-    QString text = chunkShape->layoutInterface()->nodeText();
+    QString text = chunkShape->d->textData.childBegin()->text;
     QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, KoSvgText::Collapse);
     QCOMPARE(collapse.count(false), 17);
     QCOMPARE(text, QString("         Hello, out there!         "));
 
-    QVector<KoSvgText::CharTransformation> transform = chunkShape->layoutInterface()->localCharTransformations();
+    QVector<KoSvgText::CharTransformation> transform = chunkShape->d->textData.childBegin()->localTransformations;
     QCOMPARE(transform.size(), 1);
     QVERIFY(bool(transform[0].xPos));
     QVERIFY(bool(transform[0].yPos));
@@ -401,7 +400,7 @@ void TestSvgText::testSimpleText()
     QCOMPARE(*transform[0].yPos, 27.0);
 
     bool dummy = false;
-    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunkShape->layoutInterface()->collectSubChunks(false, dummy);
+    QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(chunkShape->d->textData.childBegin(), false, dummy);
 
     QCOMPARE(subChunks.size(), 1);
     QCOMPARE(subChunks[0].text.size(), 35);
@@ -409,12 +408,6 @@ void TestSvgText::testSimpleText()
     //qDebug() << ppVar(subChunks[0].transformation);
     //qDebug() << ppVar(subChunks[0].format);
 
-}
-
-inline KoSvgTextChunkShape* toChunkShape(KoShape *shape) {
-    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-    KIS_ASSERT(chunkShape);
-    return chunkShape;
 }
 
 void TestSvgText::testComplexText()
@@ -430,17 +423,14 @@ void TestSvgText::testComplexText()
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_complex", QSize(370, 56), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
+    KisForest<KoSvgTextContentElement>::child_iterator root = baseShape->d->textData.childBegin();
 
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
+    QCOMPARE(KoSvgTextShape::Private::childCount(root), 5);
+    QCOMPARE(KoSvgTextShape::Private::numChars(root, false), 64);
 
-    QCOMPARE(baseShape->shapeCount(), 4);
-    QCOMPARE(baseShape->layoutInterface()->isTextNode(), false);
-    QCOMPARE(baseShape->layoutInterface()->numChars(), 55);
-
-    QVector<KoSvgText::CharTransformation> baseTransform = baseShape->layoutInterface()->localCharTransformations();
+    QVector<KoSvgText::CharTransformation> baseTransform = root->localTransformations;
     QCOMPARE(baseTransform.size(), 9);
     QVERIFY(bool(baseTransform[0].xPos));
     QVERIFY(!bool(baseTransform[1].xPos));
@@ -455,81 +445,78 @@ void TestSvgText::testComplexText()
         }
     }
 
+    KisForest<KoSvgTextContentElement>::child_iterator child = KisForestDetail::childBegin(root);
     {   // chunk 0: "Hello, "
-        KoSvgTextChunkShape *chunk = toChunkShape(baseShape->shapes()[0]);
+        QCOMPARE(KoSvgTextShape::Private::childCount(child), 0);
 
-        QCOMPARE(chunk->shapeCount(), 0);
-        QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
-
-        QString text = chunk->layoutInterface()->nodeText();
+        QString text = child->text;
         QVector<bool> collapse = KoCssTextUtils::collapseSpaces(&text, KoSvgText::Collapse);
 
         QCOMPARE(collapse.count(false), 6);
         QCOMPARE(text, QString("             Hello, "));
 
-        QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
+        QVector<KoSvgText::CharTransformation> transform = child->localTransformations;
         QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
-        QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunk->layoutInterface()->collectSubChunks(false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
 
         QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggresive subchunking.
         QCOMPARE(subChunks[0].text.size(), 20);
     }
+    child ++;
 
     {   // chunk 1: "out"
-        KoSvgTextChunkShape *chunk = toChunkShape(baseShape->shapes()[1]);
 
-        QCOMPARE(chunk->shapeCount(), 0);
-        QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
+        QCOMPARE(KoSvgTextShape::Private::childCount(child), 0);
 
-        QCOMPARE(chunk->layoutInterface()->numChars(), 4);
-        QCOMPARE(chunk->layoutInterface()->nodeText(), QString("ou\nt"));
+        QCOMPARE(KoSvgTextShape::Private::numChars(child), 4);
+        QCOMPARE(child->text, QString("ou\nt"));
 
-        QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
+        QVector<KoSvgText::CharTransformation> transform = child->localTransformations;
         QCOMPARE(transform.size(), 1);
         QVERIFY(bool(transform[0].xPos));
 
         bool dummy = false;
-        QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunk->layoutInterface()->collectSubChunks(false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 4);
     }
 
+    child++;
+
     {   // chunk 2: " there "
-        KoSvgTextChunkShape *chunk = toChunkShape(baseShape->shapes()[2]);
 
-        QCOMPARE(chunk->shapeCount(), 0);
-        QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
+        QCOMPARE(KoSvgTextShape::Private::childCount(child), 0);
 
-        QCOMPARE(chunk->layoutInterface()->numChars(), 7);
-        QCOMPARE(chunk->layoutInterface()->nodeText(), QString(" there "));
+        QCOMPARE(child->numChars(), 7);
+        QCOMPARE(child->text, QString(" there "));
 
-        QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
+        QVector<KoSvgText::CharTransformation> transform = child->localTransformations;
         QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
-        QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunk->layoutInterface()->collectSubChunks(false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 7);
     }
 
+    child++;
+
     {   // chunk 3: "cool cdata --> nice work"
-        KoSvgTextChunkShape *chunk = toChunkShape(baseShape->shapes()[3]);
 
-        QCOMPARE(chunk->shapeCount(), 0);
-        QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
+        QCOMPARE(KoSvgTextShape::Private::childCount(child), 0);
 
-        QCOMPARE(chunk->layoutInterface()->numChars(), 24);
-        QCOMPARE(chunk->layoutInterface()->nodeText(), QString("cool cdata --> nice work"));
+        QCOMPARE(child->numChars(), 24);
+        QCOMPARE(child->text, QString("cool cdata --> nice work"));
 
-        QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
+        QVector<KoSvgText::CharTransformation> transform = child->localTransformations;
         QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
-        QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks = chunk->layoutInterface()->collectSubChunks(false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 24);
@@ -580,11 +567,8 @@ void TestSvgText::testTextBaselineShift()
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_baseline_shift", QSize(180, 40), 72);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
-
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 
 }
 /**
@@ -611,11 +595,8 @@ void TestSvgText::testTextSpacing()
 
     t.test_standard("text_letter_word_spacing", QSize(340, 250), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    KoSvgTextShape *baseShape =  dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
-
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 
 }
 /**
@@ -637,11 +618,8 @@ void TestSvgText::testTextTabSpacing()
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_tab_spacing", QSize(400, 170), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
-
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 }
 
 /**
@@ -663,11 +641,8 @@ void TestSvgText::testTextDecorations()
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_decorations", QSize(290, 135), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
-
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 
 }
 
@@ -684,11 +659,8 @@ void TestSvgText::testRightToLeft()
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_right_to_left", QSize(500, 600), 72.0);
 
-    KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
+    KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
     QVERIFY(baseShape);
-
-    // root shape is not just a chunk!
-    QVERIFY(dynamic_cast<KoSvgTextShape *>(baseShape));
 }
 
 /**
@@ -1289,8 +1261,6 @@ void TestSvgText::testTextOutline()
     t.test_standard("text_outline", renderRect.size(), 72.0);
 
     KoShape *shape = t.findShape("testRect");
-    KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-    QVERIFY(chunkShape);
 
     KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);
 
@@ -2445,7 +2415,8 @@ void TestSvgText::testTextDeletion()
     QCOMPARE(start2, start);
     QCOMPARE(length2, length);
     QVERIFY2(finalText == textShape->plainText(),
-             QString("Mismatch between textShape plain text and reference for text-removal.").toLatin1());
+             QString("Mismatch between textShape plain text and reference for text-removal. \n Res: %1 \n Exp: %2")
+             .arg(textShape->plainText()).arg(finalText).toLatin1());
 }
 /**
  * Test the cursor navigation. In particular we're
@@ -2463,18 +2434,18 @@ void TestSvgText::testNavigation()
     for (int i=0; i<4; i++) {
         cursorPos = textShape->posRight(cursorPos);
     }
-    QVERIFY(cursorPos == 4);
+    QCOMPARE(cursorPos, 4);
     for (int i=0; i<5; i++) {
         cursorPos = textShape->posLeft(cursorPos);
     }
-    QVERIFY(cursorPos == 0);
+    QCOMPARE(cursorPos, 0);
     for (int i=0; i<8; i++) {
         cursorPos = textShape->posRight(cursorPos);
     }
     cursorPos = textShape->posDown(cursorPos);
-    QVERIFY(cursorPos == 19);
-    QVERIFY(textShape->lineStart(cursorPos) == 10);
-    QVERIFY(textShape->lineEnd(cursorPos) == 19);
+    QCOMPARE(cursorPos, 19);
+    QCOMPARE(textShape->lineStart(cursorPos), 11);
+    QCOMPARE(textShape->lineEnd(cursorPos), 21);
 
     // Test right-to-left horizontal.
     QString rtlRef ("<text style=\"inline-size:50.0; font-size:10.0; direction:rtl; font-family:Deja Vu Sans\">داستان SVG 1.1 SE طولا ني است.</text>");
@@ -2484,22 +2455,22 @@ void TestSvgText::testNavigation()
     for (int i=0; i<10; i++) {
         cursorPos = textShape->posLeft(cursorPos, false);
     }
-    QVERIFY(cursorPos == 10);
+    QCOMPARE(cursorPos,  10);
     for (int i=0; i<11; i++) {
         cursorPos = textShape->posRight(cursorPos, false);
     }
-    QVERIFY(cursorPos == 0);
+    QCOMPARE(cursorPos, 0);
 
 
     // Test right-to-left bidi with visual.
     for (int i=0; i<10; i++) {
         cursorPos = textShape->posLeft(cursorPos, true);
     }
-    QVERIFY(cursorPos == 11);
+    QCOMPARE(cursorPos, 14);
     for (int i=0; i<10; i++) {
         cursorPos = textShape->posLeft(cursorPos, true);
     }
-    QVERIFY(cursorPos == 20);
+    QCOMPARE(cursorPos, 20);
 
     // Test top-to-bottom.
     QString ttbRef ("<text style=\"inline-size:50.0; font-size:10.0; writing-mode:vertical-rl; font-family:Deja Vu Sans\">A B C D E F G H I J K L M N O P</text>");
@@ -2508,22 +2479,22 @@ void TestSvgText::testNavigation()
     for (int i=0; i<5; i++) {
         cursorPos = textShape->posDown(cursorPos);
     }
-    QVERIFY(cursorPos == 5);
+    QCOMPARE(cursorPos, 5);
     for (int i=0; i<10; i++) {
         cursorPos = textShape->posUp(cursorPos);
     }
-    QVERIFY(cursorPos == 0);
+    QCOMPARE(cursorPos, 0);
     for (int i=0; i<5; i++) {
         cursorPos = textShape->posDown(cursorPos);
     }
     cursorPos = textShape->posLeft(cursorPos);
-    QVERIFY(cursorPos == 11);
-    QVERIFY(textShape->lineStart(cursorPos) == 6);
-    QVERIFY(textShape->lineEnd(cursorPos) == 11);
+    QCOMPARE(cursorPos, 12);
+    QCOMPARE(textShape->lineStart(cursorPos), 7);
+    QCOMPARE(textShape->lineEnd(cursorPos), 13);
 
     cursorPos = textShape->posRight(cursorPos);
     cursorPos = textShape->posRight(cursorPos);
-    QVERIFY(cursorPos == 0);
+    QCOMPARE(cursorPos, 0);
 
     // Test vertical left-to-right.
     QString ttbRef2 ("<text style=\"inline-size:50.0; font-size:10.0; writing-mode:vertical-lr; font-family:Deja Vu Sans\">A B C D E F G H I J K L M N O P</text>");
@@ -2532,22 +2503,22 @@ void TestSvgText::testNavigation()
     for (int i=0; i<5; i++) {
         cursorPos = textShape->posDown(cursorPos);
     }
-    QVERIFY(cursorPos == 5);
+    QCOMPARE(cursorPos, 5);
     for (int i=0; i<10; i++) {
         cursorPos = textShape->posUp(cursorPos);
     }
-    QVERIFY(cursorPos == 0);
+    QCOMPARE(cursorPos, 0);
     for (int i=0; i<5; i++) {
         cursorPos = textShape->posDown(cursorPos);
     }
     cursorPos = textShape->posRight(cursorPos);
-    QVERIFY(cursorPos == 11);
-    QVERIFY(textShape->lineStart(cursorPos) == 6);
-    QVERIFY(textShape->lineEnd(cursorPos) == 11);
+    QCOMPARE(cursorPos, 12);
+    QCOMPARE(textShape->lineStart(cursorPos), 7);
+    QCOMPARE(textShape->lineEnd(cursorPos), 13);
 
     cursorPos = textShape->posLeft(cursorPos);
     cursorPos = textShape->posLeft(cursorPos);
-    QVERIFY(cursorPos == 0);
+    QCOMPARE(cursorPos, 0);
 }
 
 #include "kistest.h"

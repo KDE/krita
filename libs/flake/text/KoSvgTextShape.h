@@ -374,6 +374,7 @@ protected:
     void shapeChanged(ChangeType type, KoShape *shape) override;
 
 private:
+    friend class TestSvgText;
     /**
      * @brief nextPos
      * get the next position.

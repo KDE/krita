@@ -422,7 +422,7 @@ public:
     void paintDebug(QPainter &painter,
                     const QVector<CharacterResult> &result,
                     int &currentIndex);
-    static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls) {
+    static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls = false) {
         int count = parent->numChars(withControls);
         for (auto it = KisForestDetail::childBegin(parent); it != KisForestDetail::childEnd(parent); it++) {
             count += numChars(it, withControls);
@@ -435,7 +435,7 @@ public:
     /**
      * Return a linearized representation of a subtree of text "subchunks".
      */
-    QVector<SubChunk> collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath);
+    static QVector<SubChunk> collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath);
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

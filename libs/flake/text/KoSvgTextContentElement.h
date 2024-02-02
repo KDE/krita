@@ -12,6 +12,7 @@
 #include "SvgLoadingContext.h"
 #include "SvgSavingContext.h"
 
+#include <kritaflake_export.h>
 #include <QScopedPointer>
 
 /**
@@ -23,7 +24,7 @@
  * of KoSvgTextShape.
  */
 
-struct KoSvgTextContentElement
+struct KRITAFLAKE_EXPORT KoSvgTextContentElement
 {
 public:
     KoSvgTextContentElement();
@@ -75,7 +76,7 @@ public:
      * @param withControls this will enable the bidi controls to be
      * counted as well.
      */
-    int numChars(bool withControls) const;
+    int numChars(bool withControls = false) const;
 
     QString getTransformedString(QVector<QPair<int, int>> &positions) const;
 

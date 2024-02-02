@@ -48,7 +48,7 @@ public:
 protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool alwaysStartAnew, qreal moveThresholdPt);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAnyDirection, qreal moveThresholdPt);
     // creates the convex hull, returns false if it's not a quadrilateral
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;

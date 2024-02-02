@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-29 01:34+0000\n"
-"PO-Revision-Date: 2024-01-22 22:02+0100\n"
+"PO-Revision-Date: 2024-01-31 21:18+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -40871,10 +40871,9 @@ msgstr "Définir l'espace colorimétrique"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Limit to current layer"
+#, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "Limiter au calque actuel"
+msgstr "Se verrouiller sur l'espace colorimétrique du calque courant"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
@@ -47021,37 +47020,27 @@ msgstr "Y :"
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "Chaque {n} cellule horizontalement"
-msgstr[1] "Chaque {n} cellule horizontalement"
+msgstr[0] "Chaque {n} répétition horizontalement"
+msgstr[1] "Chaque {n} répétition horizontalement"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "Chaque {n} cellule verticalement"
-msgstr[1] "Chaque {n} cellule verticalement"
+msgstr[0] "Chaque {n} répétition verticalement"
+msgstr[1] "Chaque {n} répétition verticalement"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format

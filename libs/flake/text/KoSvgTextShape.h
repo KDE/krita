@@ -10,8 +10,10 @@
 #include "kritaflake_export.h"
 
 #include <KoShapeFactoryBase.h>
-#include <KoSvgTextChunkShape.h>
 #include <SvgShape.h>
+#include <KoShape.h>
+#include <KoSvgText.h>
+#include "html/HtmlSavingContext.h"
 
 #include <QFlags>
 
@@ -21,7 +23,7 @@ class KoSvgTextProperties;
 /**
  * KoSvgTextShape is a root chunk of the \<text\> element subtree.
  */
-class KRITAFLAKE_EXPORT KoSvgTextShape : public KoSvgTextChunkShape
+class KRITAFLAKE_EXPORT KoSvgTextShape : public KoShape, public SvgShape
 {
 public:
     KoSvgTextShape();
@@ -39,7 +41,7 @@ public:
 
     KoShape* cloneShape() const override;
 
-    void paintComponent(QPainter &painter) const override;
+    void paint(QPainter &painter) const override;
     void paintStroke(QPainter &painter) const override;
 
     QPainterPath outline() const override;
@@ -52,14 +54,6 @@ public:
     };
     Q_DECLARE_FLAGS(DebugElements, DebugElement);
     void paintDebug(QPainter &painter, DebugElements elements) const;
-
-    /**
-     * Reset the text shape into initial shape, removing all the child shapes
-     * and precalculated layouts. This method is used by text-updating code to
-     * upload the updated text into shape. The upload code first calls
-     * resetTextShape() and then adds new children.
-     */
-    void resetTextShape() override;
 
     /**
      * Create a new text layout for the current content of the text shape
@@ -91,7 +85,7 @@ public:
      * @return the Text Rendering type as a string.
      */
 
-    QString textRenderingString() const override;
+    QString textRenderingString() const;
 
     /**
      * @brief setShapesInside
@@ -117,7 +111,7 @@ public:
      */
     QList<KoShape*> shapesSubtract() const;
 
-    QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const override;
+    QMap<QString, QString> shapeTypeSpecificStyles(SvgSavingContext &context) const;
 
     void setResolution(qreal xRes, qreal yRes) override;
 
@@ -320,7 +314,7 @@ public:
     KoSvgTextProperties propertiesForPos(int pos);
     void setPropertiesAtPos(int pos, KoSvgTextProperties properties);
 
-    KoSvgTextProperties textProperties() const override;
+    KoSvgTextProperties textProperties() const;
     QSharedPointer<KoShapeBackground> background() const override;
     void setBackground(QSharedPointer<KoShapeBackground> background) override;
     KoShapeStrokeModelSP stroke() const override;
@@ -374,17 +368,18 @@ public:
     void enterNodeSubtree();
     /// Set the current node to its parent, leaving the subtree.
     void leaveNodeSubtree();
-    /// Completely empties the current textData. NOTE: This makes the textShape invalid because the tree is empty.
+    /**
+     * Completely empties the current textData.
+     * Resets the text shape into initial shape, removing all the child shapes
+     * and precalculated layouts. This method is used by text-parsing code to
+     * upload the updated text into shape.
+     * NOTE: This makes the textShape invalid because the tree is empty.
+     */
     void resetParsing();
     /// Outputs debug with the current textData tree.
     void debugParsing();
 
 protected:
-    /**
-     * Show if the shape is a root of the text hierarchy. Always true for
-     * KoSvgTextShape and always false for KoSvgTextChunkShape
-     */
-    bool isRootTextNode() const override;
 
     void shapeChanged(ChangeType type, KoShape *shape) override;
 

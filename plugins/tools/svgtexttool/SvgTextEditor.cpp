@@ -379,7 +379,9 @@ void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
 
-            if (shape->isRichTextPreferred() &&
+            /// Todo: remove this bool when removing rich text editor.
+            bool richtextPreferred = false;
+            if (richtextPreferred &&
                 converter.convertSvgToDocument(svg, doc)) {
 
                 m_textEditorWidget.richTextEdit->setDocument(doc);
@@ -428,9 +430,9 @@ void SvgTextEditor::save()
                     qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
-            emit textUpdated(m_shape, svg, styles, true);
+            emit textUpdated(m_shape, svg, styles);
         } else if (isSvgSourceEditorTabActive()) {
-            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(), false);
+            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }

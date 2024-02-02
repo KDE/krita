@@ -82,11 +82,10 @@ protected:
     /// Parses a group-like element element, saving all its topmost properties
     KoShape* parseGroup(const QDomElement &e, const QDomElement &overrideChildrenFrom = QDomElement(), bool createContext = true);
 
-    // XXX
-    KoShape* parseTextNode(const QDomText &e);
-
+    /// Get the path for the gives textPath element.
     KoShape* getTextPath(const QDomElement &e);
 
+    /// parse children of a <text /> element into the root shape.
     void parseTextChildren(const QDomElement &e, KoSvgTextShape *rootTextShape);
     
     /// Parses a container element, returning a list of child shapes

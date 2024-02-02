@@ -288,7 +288,7 @@ void SvgTextTool::showEditor()
         m_editor->setWindowModality(Qt::ApplicationModal);
         m_editor->setAttribute( Qt::WA_QuitOnClose, false );
 
-        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString,bool)), SLOT(textUpdated(KoSvgTextShape*,QString,QString,bool)));
+        connect(m_editor, SIGNAL(textUpdated(KoSvgTextShape*,QString,QString)), SLOT(textUpdated(KoSvgTextShape*,QString,QString)));
         connect(m_editor, SIGNAL(textEditorClosed()), SLOT(slotTextEditorClosed()));
 
         m_editor->activateWindow(); // raise on creation only
@@ -310,13 +310,12 @@ void SvgTextTool::showEditorSvgSource()
     if (!shape) {
         return;
     }
-    shape->setRichTextPreferred(false);
     showEditor();
 }
 
-void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextUpdated)
+void SvgTextTool::textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs)
 {
-    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs, richTextUpdated);
+    SvgTextChangeCommand *cmd = new SvgTextChangeCommand(shape, svg, defs);
     canvas()->addCommand(cmd);
 }
 

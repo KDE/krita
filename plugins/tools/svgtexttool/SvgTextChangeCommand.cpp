@@ -15,17 +15,14 @@
 SvgTextChangeCommand::SvgTextChangeCommand(KoSvgTextShape *shape,
                                            const QString &svg,
                                            const QString &defs,
-                                           bool richTextPreferred,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_svg(svg)
     , m_defs(defs)
-    , m_richTextPreferred(richTextPreferred)
 {
     Q_ASSERT(shape);
     setText(kundo2_i18n("Change SvgTextTool"));
-    m_oldRichTextPreferred = m_shape->isRichTextPreferred();
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
 }
@@ -40,7 +37,6 @@ void SvgTextChangeCommand::redo()
     KoSvgTextShapeMarkupConverter converter(m_shape);
     // Hardcoded resolution?
     converter.convertFromSvg(m_svg, m_defs, m_shape->boundingRect(), 72.0);
-    m_shape->setRichTextPreferred(m_richTextPreferred);
     m_shape->update();
 }
 
@@ -50,6 +46,5 @@ void SvgTextChangeCommand::undo()
     KoSvgTextShapeMarkupConverter converter(m_shape);
     // Hardcoded resolution?
     converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
-    m_shape->setRichTextPreferred(m_oldRichTextPreferred);
     m_shape->update();
 }

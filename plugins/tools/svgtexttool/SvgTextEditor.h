@@ -119,7 +119,7 @@ private Q_SLOTS:
     void dialogButtonClicked(QAbstractButton *button);
 
 Q_SIGNALS:
-    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs, bool richTextPreferred);
+    void textUpdated(KoSvgTextShape *shape, const QString &svg, const QString &defs);
     void textEditorClosed();
 
 protected:

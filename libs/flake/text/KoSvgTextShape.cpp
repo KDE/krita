@@ -13,13 +13,11 @@
 #include <klocalizedstring.h>
 
 #include "KoSvgTextProperties.h"
-#include "KoSvgTextChunkShapeLayoutInterface.h"
 #include <KoDocumentResourceManager.h>
 #include <KoShapeContainer_p.h>
 #include <KoShapeController.h>
 #include <text/KoCssTextUtils.h>
 #include <text/KoFontRegistry.h>
-#include <text/KoSvgTextChunkShape_p.h>
 #include <text/KoSvgTextShapeMarkupConverter.h>
 #include <text/KoPolygonUtils.h>
 
@@ -47,7 +45,7 @@
 
 
 KoSvgTextShape::KoSvgTextShape()
-    : KoSvgTextChunkShape()
+    : KoShape()
     , d(new Private)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
@@ -55,7 +53,7 @@ KoSvgTextShape::KoSvgTextShape()
 }
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
-    : KoSvgTextChunkShape(rhs)
+    : KoShape(rhs)
     , d(new Private(*rhs.d))
 {
     setShapeId(KoSvgTextShape_SHAPEID);
@@ -78,7 +76,7 @@ KoShape *KoSvgTextShape::cloneShape() const
 
 void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
-    KoSvgTextChunkShape::shapeChanged(type, shape);
+    KoShape::shapeChanged(type, shape);
 
     if (type == StrokeChanged || type == BackgroundChanged || type == ContentChanged) {
         relayout();
@@ -537,7 +535,7 @@ QPainterPath KoSvgTextShape::underlines(int pos, int anchor, KoSvgText::TextDeco
     }
 
     QPainterPathStroker stroker;
-    qreal width = qMax(minimum, this->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationUnderline));
+    qreal width = qMax(minimum, d->textData.childBegin()->textDecorationWidths.value(KoSvgText::DecorationUnderline));
     if (thick) {
         width *= 2;
     }
@@ -946,7 +944,6 @@ bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &cont
     KoSvgTextContentElement textNode;
     textNode.loadSvg(element, context);
     if (KisForestDetail::size(d->textData) == 0) {
-        KoSvgTextChunkShape::loadSvg(element, context);
         d->currentNode = d->textData.insert(d->textData.childEnd(), textNode);
     } else {
         d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
@@ -1083,7 +1080,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
     }
     return success;
 }
-#include "html/HtmlSavingContext.h"
+
 bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
 {
     bool success = true;
@@ -1097,7 +1094,8 @@ bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
             } else {
                 context.shapeWriter().startElement("span", false);
             }
-            KoSvgTextProperties ownProperties = it->properties.ownProperties(parentProps.last(), isRootTextNode());
+            KoSvgTextProperties ownProperties = it->properties.ownProperties(parentProps.last(),
+                                                                             it == d->textData.compositionBegin());
             parentProps.append(ownProperties);
             QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
             if (attributes.size() > 0) {
@@ -1167,6 +1165,7 @@ void KoSvgTextShape::resetParsing()
 {
     d->textData.erase(d->textData.childBegin(), d->textData.childEnd());
     d->currentNode = d->textData.childEnd();
+    d->relayout();
 }
 
 void KoSvgTextShape::debugParsing()
@@ -1197,7 +1196,7 @@ void KoSvgTextShape::debugParsing()
     }
 }
 
-void KoSvgTextShape::paintComponent(QPainter &painter) const
+void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
     if (d->textRendering == OptimizeSpeed) {
@@ -1253,7 +1252,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
 void KoSvgTextShape::paintStroke(QPainter &painter) const
 {
     Q_UNUSED(painter);
-    // do nothing! everything is painted in paintComponent()
+    // do nothing! everything is painted in paint()
 }
 
 QPainterPath KoSvgTextShape::outline() const {
@@ -1401,20 +1400,9 @@ QMap<QString, QString> KoSvgTextShape::shapeTypeSpecificStyles(SvgSavingContext 
     return map;
 }
 
-void KoSvgTextShape::resetTextShape()
-{
-    KoSvgTextChunkShape::resetTextShape();
-    relayout();
-}
-
 void KoSvgTextShape::relayout() const
 {
     d->relayout();
-}
-
-bool KoSvgTextShape::isRootTextNode() const
-{
-    return true;
 }
 
 KoSvgTextShapeFactory::KoSvgTextShapeFactory()

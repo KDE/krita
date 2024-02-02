@@ -924,7 +924,7 @@ void TestSvgText::testConvertToStrippedSvg()
         QCOMPARE(fontSize, 19.0);
     }
 
-    QCOMPARE(baseShape->shapeCount(), 3);
+    QCOMPARE(KoSvgTextShape::Private::childCount(baseShape->d->textData.childBegin()), 3);
 }
 
 void TestSvgText::testConvertToStrippedSvgNullOrigin()

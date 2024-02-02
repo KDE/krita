@@ -58,7 +58,6 @@
 #include <KoMarker.h>
 
 #include <text/KoSvgTextShape.h>
-#include <text/KoSvgTextChunkShape.h>
 
 #include "kis_dom_utils.h"
 
@@ -1748,21 +1747,6 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
     return group;
 }
 
-KoShape* SvgParser::parseTextNode(const QDomText &e)
-{
-    QScopedPointer<KoSvgTextChunkShape> textChunk(new KoSvgTextChunkShape());
-    textChunk->setZIndex(m_context.nextZIndex());
-
-    if (!textChunk->loadSvgTextNode(e, m_context)) {
-        return 0;
-    }
-
-    textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-    applyCurrentBasicStyle(textChunk.data()); // apply style to this group after size is set
-
-    return textChunk.take();
-}
-
 QDomText getTheOnlyTextChild(const QDomElement &e)
 {
     QDomNode firstChild = e.firstChild();
@@ -1840,8 +1824,6 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         rootTextShape = mergeIntoShape;
     } else {
         rootTextShape = new KoSvgTextShape();
-        const QString useRichText = e.attribute("krita:useRichText", "false");
-        rootTextShape->setRichTextPreferred(useRichText != "false");
     }
     QVector<KoShape::PaintOrder> paintOrder = rootTextShape->paintOrder();
     rootTextShape->resetParsing();
@@ -1932,7 +1914,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     m_isInsideTextSubtree = false;
 
-    rootTextShape->debugParsing();
+    //rootTextShape->debugParsing();
     rootTextShape->relayout();
 
 
@@ -1951,14 +1933,6 @@ QList<KoShape*> SvgParser::parseContainer(const QDomElement &e, bool parseTextNo
     for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement b = n.toElement();
         if (b.isNull()) {
-            if (parseTextNodes && n.isText()) {
-                KoShape *shape = parseTextNode(n.toText());
-
-                if (shape) {
-                    shapes += shape;
-                }
-            }
-
             continue;
         }
 

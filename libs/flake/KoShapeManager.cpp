@@ -30,7 +30,6 @@
 #include "KoClipMaskPainter.h"
 #include "KoViewConverter.h"
 #include "KisQPainterStateSaver.h"
-#include "KoSvgTextChunkShape.h"
 #include "KoSvgTextShape.h"
 #include <QApplication>
 
@@ -57,8 +56,7 @@ inline bool shapeUsedInRenderingTree(KoShape *shape)
     // FIXME: make more general!
 
     return !dynamic_cast<KoShapeGroup*>(shape) &&
-            !dynamic_cast<KoShapeLayer*>(shape) &&
-            !(dynamic_cast<KoSvgTextChunkShape*>(shape) && !dynamic_cast<KoSvgTextShape*>(shape));
+            !dynamic_cast<KoShapeLayer*>(shape);
 }
 
 /**

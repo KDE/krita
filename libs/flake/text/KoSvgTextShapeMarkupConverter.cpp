@@ -121,8 +121,6 @@ bool KoSvgTextShapeMarkupConverter::convertFromSvg(const QString &svgText, const
         return false;
     }
 
-    d->shape->resetTextShape();
-
     KoDocumentResourceManager resourceManager;
     SvgParser parser(&resourceManager);
     parser.setResolution(boundsInPixels, pixelsPerInch);

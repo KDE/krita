@@ -212,7 +212,6 @@ set(kritaflake_SRCS
     text/KisTofuGlyph.cpp
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
-    text/KoSvgTextChunkShape.cpp
     text/KoSvgTextContentElement.cpp
     text/KoSvgTextShape.cpp
     text/KoSvgTextShape_p_glyphs.cpp

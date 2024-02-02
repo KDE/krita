@@ -19,8 +19,6 @@
 #include <SvgLoadingContext.h>
 #include <SvgUtil.h>
 
-#include <KoSvgTextChunkShape.h>
-#include <KoSvgTextChunkShapeLayoutInterface.h>
 #include <KisStaticInitializer.h>
 
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -51,8 +49,6 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
     QMetaType::registerEqualsComparator<KoSvgText::LineHeightInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::LineHeightInfo>();
-
-    qRegisterMetaType<KoSvgText::AssociatedShapeWrapper>("KoSvgText::AssociatedShapeWrapper");
 }
 
 namespace KoSvgText {
@@ -421,60 +417,6 @@ QDebug operator<<(QDebug dbg, const StrokeProperty &prop)
 
     dbg.nospace() << ")";
     return dbg.space();
-}
-
-AssociatedShapeWrapper::AssociatedShapeWrapper()
-{
-}
-
-AssociatedShapeWrapper::AssociatedShapeWrapper(KoSvgTextChunkShape *shape)
-    : m_shape(shape)
-{
-    if (m_shape) {
-        m_shape->addShapeChangeListener(this);
-    }
-}
-
-AssociatedShapeWrapper::AssociatedShapeWrapper(const AssociatedShapeWrapper &rhs)
-    : AssociatedShapeWrapper(rhs.m_shape)
-{
-}
-
-AssociatedShapeWrapper &AssociatedShapeWrapper::operator=(const AssociatedShapeWrapper &rhs)
-{
-    if (m_shape) {
-        m_shape->removeShapeChangeListener(this);
-        m_shape = 0;
-    }
-
-    m_shape = rhs.m_shape;
-
-    if (m_shape) {
-        m_shape->addShapeChangeListener(this);
-    }
-
-    return *this;
-}
-
-bool AssociatedShapeWrapper::isValid() const
-{
-    return m_shape;
-}
-
-void AssociatedShapeWrapper::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
-{
-    KIS_SAFE_ASSERT_RECOVER_RETURN(shape == m_shape);
-
-    if (type == KoShape::Deleted) {
-        m_shape = 0;
-    }
-}
-
-void AssociatedShapeWrapper::addCharacterRect(const QRectF &rect)
-{
-    if (m_shape) {
-        m_shape->layoutInterface()->addAssociatedOutline(rect);
-    }
 }
 
 TextPathMethod parseTextPathMethod(const QString &value)

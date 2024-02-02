@@ -613,29 +613,6 @@ private:
     KoSvgTextChunkShape *m_shape = nullptr;
 };
 
-struct KoSvgCharChunkFormat : public QTextCharFormat
-{
-    enum SvgCharProperty {
-        TextAnchor = UserProperty + 1,
-        AssociatedShape
-    };
-
-    inline void setTextAnchor(KoSvgText::TextAnchor value) {
-        setProperty(TextAnchor, int(value));
-    }
-    inline KoSvgText::TextAnchor textAnchor() const {
-        return KoSvgText::TextAnchor(intProperty(TextAnchor));
-    }
-
-    inline void setAssociatedShape(KoSvgTextChunkShape *shape) {
-        setProperty(AssociatedShape, QVariant::fromValue(AssociatedShapeWrapper(shape)));
-    }
-
-    inline AssociatedShapeWrapper associatedShapeWrapper() const {
-        return property(AssociatedShape).value<AssociatedShapeWrapper>();
-    }
-};
-
 /**
  * @brief BackgroundProperty is a special wrapper around KoShapeBackground for managing it in KoSvgTextProperties
  */

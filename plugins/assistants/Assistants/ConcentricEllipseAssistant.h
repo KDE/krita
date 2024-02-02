@@ -38,7 +38,7 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement, qreal moveThresholdPt) const;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin) const;
     mutable Ellipse m_ellipse;
     mutable Ellipse m_extraEllipse;
     explicit ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);

@@ -39,17 +39,9 @@ ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs
 {
 }
 
-QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt)
+QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal /*moveThresholdPt*/)
 {
     Q_ASSERT(isAssistantComplete());
-
-    //code nicked from the perspective ruler.
-    qreal dx = pt.x() - strokeBegin.x();
-    qreal dy = pt.y() - strokeBegin.y();
-
-    if (KisAlgebra2D::norm(QPointF(dx, dy)) < moveThresholdPt) {
-        return strokeBegin; // allow some movement before snapping
-    }
 
     if (isLocal() && isAssistantComplete()) {
         if (getLocalRect().contains(pt)) {
@@ -64,8 +56,8 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     QPointF translation = (*handles()[0]-strokeBegin)*-1.0;
     snapLine = snapLine.translated(translation);
 
-    dx = snapLine.dx();
-    dy = snapLine.dy();
+    qreal dx = snapLine.dx();
+    qreal dy = snapLine.dy();
 
     const qreal
             dx2 = dx * dx,
@@ -75,7 +67,6 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
               dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
     r *= invsqrlen;
     return r;
-    //return pt;
 }
 
 QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)

@@ -37,16 +37,11 @@ ConcentricEllipseAssistant::ConcentricEllipseAssistant(const ConcentricEllipseAs
 {
 }
 
-QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement, qreal moveThresholdPt) const
+QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const
 {
     Q_ASSERT(isAssistantComplete());
     m_ellipse.set(*handles()[0], *handles()[1], *handles()[2]);
 
-    if (checkForInitialMovement && KisAlgebra2D::norm(pt - strokeBegin) < moveThresholdPt) {
-        // allow some movement before snapping
-        return strokeBegin;
-    }
-    //
     //calculate ratio
     QPointF initial = m_ellipse.project(strokeBegin);
     QPointF center = m_ellipse.boundingRect().center();
@@ -68,12 +63,12 @@ QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& st
 
 QPointF ConcentricEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin, true, moveThresholdPt);
+    return project(pt, strokeBegin);
 }
 
 void ConcentricEllipseAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
-    point = project(point, strokeBegin, false, 0.0);
+    point = project(point, strokeBegin);
 }
 
 void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)

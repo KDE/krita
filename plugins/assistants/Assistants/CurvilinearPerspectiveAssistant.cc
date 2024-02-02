@@ -234,17 +234,8 @@ QLineF CurvilinearPerspectiveAssistant::identifyCircle(const QPointF thirdPoint)
     return QLineF(QPointF(circleCenterX, circleCenterY), thirdPoint);
 }
 
-QPointF CurvilinearPerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
+QPointF CurvilinearPerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
-
-    qreal dx = pt.x() - strokeBegin.x();
-    qreal dy = pt.y() - strokeBegin.y();
-
-    if (KisAlgebra2D::norm(QPointF(dx, dy)) < moveThresholdPt) {
-        // allow some movement before snapping
-        return strokeBegin;
-    }
-
     // Get the center and radius for the given point
     QLineF initialCircle = identifyCircle(strokeBegin);
 

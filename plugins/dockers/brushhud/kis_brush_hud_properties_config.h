@@ -17,7 +17,7 @@ class QStringList;
 class QString;
 
 
-class KRITAUI_EXPORT KisBrushHudPropertiesConfig
+class KisBrushHudPropertiesConfig
 {
 public:
     KisBrushHudPropertiesConfig();

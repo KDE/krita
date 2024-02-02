@@ -72,7 +72,7 @@ protected:
 
 
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny, qreal moveThreshold);
     explicit TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
     KisCanvas2 *m_canvas {nullptr};
 

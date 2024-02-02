@@ -29,7 +29,7 @@ ToolTransformArgs syncLodNValue<ToolTransformArgs>(const ToolTransformArgs &valu
 }
 } // namespace KisLodSwitchingWrapperDetail
 
-using KisLogCapableTransformArgs = KisLodSwitchingWrapper<ToolTransformArgs>;
+using KisLodCapableTransformArgs = KisLodSwitchingWrapper<ToolTransformArgs>;
 
 struct KisAnimatedTransformMaskParamsHolder::Private
 {
@@ -56,7 +56,7 @@ struct KisAnimatedTransformMaskParamsHolder::Private
     }
 
     TransformChannels transformChannels;
-    KisLogCapableTransformArgs baseArgs;
+    KisLodCapableTransformArgs baseArgs;
     KisDefaultBoundsBaseSP defaultBounds;
     bool isHidden {false};
     bool isInitialized {false};
@@ -308,10 +308,10 @@ void KisAnimatedTransformMaskParamsHolder::setNewTransformArgs(const ToolTransfo
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->transformChannels.isEmpty() || m_d->transformChannels.size() == 9);
 
-    struct ChangeParamsCommand : KisChangeValueCommand<&Private::baseArgs, KisLogCapableTransformArgs::LodState>
+    struct ChangeParamsCommand : KisChangeValueCommand<&Private::baseArgs, KisLodCapableTransformArgs::LodState>
     {
         ChangeParamsCommand(Private *base,
-                            const KisLogCapableTransformArgs::LodState &newValue,
+                            const KisLodCapableTransformArgs::LodState &newValue,
                             KUndo2Command *parent = nullptr)
             : KisChangeValueCommand(base, newValue, parent)
         {

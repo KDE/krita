@@ -45,6 +45,7 @@ struct KisAnimatedTransformMaskParamsHolder::Private
         : baseArgs(rhs.baseArgs)
         , defaultBounds(rhs.defaultBounds)
         , isHidden(rhs.isHidden)
+        , isInitialized(rhs.isInitialized)
     {
 
         Q_FOREACH(QString otherKey, rhs.transformChannels.keys()) {

@@ -47,21 +47,34 @@ public:
 
     ~KoSvgTextContentElement() = default;
 
+    /// The textProperties. This includes
     KoSvgTextProperties properties;
+
+    /// Local SVG char transforms.
     QVector<KoSvgText::CharTransformation> localTransformations;
 
+    /// Text path info for the text-on-path algorithm
     KoSvgText::TextOnPathInfo textPathInfo;
+
+    /// The textpath, if any. Defaults to null.
     QScopedPointer<KoShape> textPath{nullptr};
 
+    /// the value 'textLength' attribute of the associated dom element
     KoSvgText::AutoValue textLength;
+    /// the value 'lengthAdjust' attribute of the associated dom element
     KoSvgText::LengthAdjust lengthAdjust = KoSvgText::LengthAdjustSpacing;
 
+    /// Offset metrics for the current dom element.
     QMap<KoSvgText::TextDecoration, qreal> textDecorationOffsets;
+    /// Underline width metrics for the current dom element.
     QMap<KoSvgText::TextDecoration, qreal> textDecorationWidths;
+    /// Cached text decorations to be used by the painting function.
     QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations;
 
+    /// Plain text of the current node. Use insertText and removeText to manipulate it.
     QString text;
 
+    /// The associated outline. Currently only a bounding box.
     QPainterPath associatedOutline;
 
     bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
@@ -70,7 +83,6 @@ public:
 
     bool saveSvg(SvgSavingContext &context, KoSvgTextProperties parentProperties, bool rootText, bool saveText, QMap<QString, QString> shapeSpecificAttributes);
 
-
     /**
      * The number of characters contained in the currentChunk.
      * @param withControls this will enable the bidi controls to be
@@ -78,9 +90,24 @@ public:
      */
     int numChars(bool withControls = false) const;
 
+    /**
+     * Get the text with transformations applied.
+     * @param positions the text positions which may have changed due the uppercase transform.
+     */
     QString getTransformedString(QVector<QPair<int, int>> &positions) const;
 
+    /**
+     * @brief insertText
+     * @param start -- start index.
+     * @param insertText -- text to insert.
+     */
     void insertText(int start, QString insertText);
+    /**
+     * @brief removeText
+     * removes text, @see KoSvgTextShape::removeText and CssUtils::removeText
+     * @param start -- start index, may be modified.
+     * @param length -- length of text to remove.
+     */
     void removeText(int &start, int length);
 };
 

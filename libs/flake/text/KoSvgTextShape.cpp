@@ -856,7 +856,6 @@ QSharedPointer<KoShapeBackground> KoSvgTextShape::background() const
 
 void KoSvgTextShape::setBackground(QSharedPointer<KoShapeBackground> background)
 {
-    qDebug() << Q_FUNC_INFO;
     if (KisForestDetail::size(d->textData) == 0) {
         d->textData.insert(d->textData.childBegin(), KoSvgTextContentElement());
     }
@@ -946,7 +945,6 @@ bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &cont
 
     KoSvgTextContentElement textNode;
     textNode.loadSvg(element, context);
-    qDebug() << Q_FUNC_INFO;
     if (KisForestDetail::size(d->textData) == 0) {
         KoSvgTextChunkShape::loadSvg(element, context);
         d->currentNode = d->textData.insert(d->textData.childEnd(), textNode);
@@ -969,10 +967,8 @@ bool KoSvgTextShape::loadSvgTextIntoNewLeaf(const QDomElement &parent, const QDo
 bool KoSvgTextShape::loadSvgText(const QDomText &text, SvgLoadingContext &context)
 {
     if (d->currentNode.node()) {
-        qDebug() << "loading text";
         d->currentNode.node()->value.loadSvgTextNode(text, context);
     } else {
-        qDebug() << "new text";
         KoSvgTextContentElement textNode;
         textNode.loadSvgTextNode(text, context);
         d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
@@ -1006,7 +1002,6 @@ void KoSvgTextShape::setStyleInfo(KoShape *s)
         }
         if ((parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data()))
                 || (!parentStroke && s->stroke())) {
-            qDebug() << "setting stroke";
             d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
                                                    QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
         }
@@ -1088,13 +1083,77 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
     }
     return success;
 }
+#include "html/HtmlSavingContext.h"
+bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
+{
+    bool success = true;
+    QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
+    for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
+        if (it.state() == KisForestDetail::Enter) {
+            QMap<QString, QString> shapeSpecificStyles;
+
+            if (it == d->textData.compositionBegin()) {
+                context.shapeWriter().startElement("p", false);
+            } else {
+                context.shapeWriter().startElement("span", false);
+            }
+            KoSvgTextProperties ownProperties = it->properties.ownProperties(parentProps.last(), isRootTextNode());
+            parentProps.append(ownProperties);
+            QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+            if (attributes.size() > 0) {
+                QString styleString;
+                for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
+                    if (QString(it.key().toLatin1().data()).contains("text-anchor")) {
+                        QString val = it.value();
+                        if (it.value()=="middle") {
+                            val = "center";
+                        } else if (it.value()=="end") {
+                            val = "right";
+                        } else {
+                            val = "left";
+                        }
+                        styleString.append("text-align")
+                                .append(": ")
+                                .append(val)
+                                .append(";" );
+                    } else if (QString(it.key().toLatin1().data()).contains("fill")){
+                        styleString.append("color")
+                                .append(": ")
+                                .append(it.value())
+                                .append(";" );
+                    } else if (QString(it.key().toLatin1().data()).contains("font-size")){
+                        QString val = it.value();
+                        styleString.append(it.key().toLatin1().data())
+                                .append(": ")
+                                .append(val)
+                                .append(";" );
+                    } else {
+                        styleString.append(it.key().toLatin1().data())
+                                .append(": ")
+                                .append(it.value())
+                                .append(";" );
+                    }
+                }
+                context.shapeWriter().addAttribute("style", styleString);
+
+                if (d->childCount(siblingCurrent(it)) == 0) {
+                    debugFlake << "saveHTML" << this << it->text;
+                    // After adding all the styling to the <p> element, add the text
+                    context.shapeWriter().addTextNode(it->text);
+                }
+            }
+        } else {
+            parentProps.pop_back();
+            context.shapeWriter().endElement();
+        }
+    }
+    return success;
+}
 
 void KoSvgTextShape::enterNodeSubtree()
 {
-    qDebug() << Q_FUNC_INFO;
     if (!d->currentNode.node()) {
         d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), KoSvgTextContentElement());
-        qDebug() << KisForestDetail::depth(d->textData);
     }
     d->currentNode = childEnd(d->currentNode);
 }
@@ -1106,14 +1165,13 @@ void KoSvgTextShape::leaveNodeSubtree()
 
 void KoSvgTextShape::resetParsing()
 {
-    qDebug() << Q_FUNC_INFO;
     d->textData.erase(d->textData.childBegin(), d->textData.childEnd());
     d->currentNode = d->textData.childEnd();
 }
 
 void KoSvgTextShape::debugParsing()
 {
-    qDebug() << "testing parsing" << KisForestDetail::size(d->textData);
+    qDebug() << "Tree size:" << KisForestDetail::size(d->textData);
     QString spaces;
     QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
     for (auto it = compositionBegin(d->textData); it != compositionEnd(d->textData); it++) {

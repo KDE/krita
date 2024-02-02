@@ -422,6 +422,8 @@ public:
     void paintDebug(QPainter &painter,
                     const QVector<CharacterResult> &result,
                     int &currentIndex);
+
+    /// Get the number of characters for the whole subtree of this node.
     static int numChars(KisForest<KoSvgTextContentElement>::child_iterator parent, bool withControls = false) {
         int count = parent->numChars(withControls);
         for (auto it = KisForestDetail::childBegin(parent); it != KisForestDetail::childEnd(parent); it++) {
@@ -429,6 +431,8 @@ public:
         }
         return count;
     }
+
+    /// Get the child count of the current node. A node without children is a text node.
     static int childCount(KisForest<KoSvgTextContentElement>::child_iterator it) {
         return std::distance(KisForestDetail::childBegin(it), KisForestDetail::childEnd(it));
     }

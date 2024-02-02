@@ -10,6 +10,8 @@
 
 #include <QPushButton>
 #include <QSlider>
+#include <QComboBox>
+#include <QLabel>
 #include <QGraphicsOpacityEffect>
 #include "KisViewManager.h"
 #include "kactioncollection.h"
@@ -23,7 +25,6 @@ class QWidget;
 class KoColor;
 class KoTriangleColorSelector;
 class KisSignalCompressor;
-class KisBrushHud;
 class KisRoundHudButton;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
@@ -53,7 +54,7 @@ class KisPopupPalette : public QWidget, public KisPopupWidgetInterface
 
 public:
     KisPopupPalette(KisViewManager*, KisCoordinatesConverter* ,KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
-                    KisCanvasResourceProvider *provider, QWidget *parent = 0);
+                    QWidget *parent = 0);
     ~KisPopupPalette() override;
     QSize sizeHint() const override;
 
@@ -145,7 +146,14 @@ private:
     KisKActionCollection *m_actionCollection;
 
     QSpacerItem *m_mainArea {0};
-    KisBrushHud *m_brushHud {0};
+    QWidget *m_dockerHud {0};
+    QComboBox *m_dockerComboBox;
+    QVBoxLayout *m_dockerLayout;
+    QDockWidget* m_oldDockerParent {};
+    bool m_oldDockerVis {false};
+    bool m_isBorrowing {false};
+    QLabel* m_dockerIOULabel {};
+    QToolButton* m_dockerMenu {};
     QWidget* m_bottomBarWidget {0};
     qreal m_popupPaletteSize {385.0};
     qreal m_colorHistoryInnerRadius {72.0};
@@ -158,7 +166,7 @@ private:
     KisRoundHudButton *m_clearColorHistoryButton {0};
     KisRoundHudButton *m_tagsButton {0};
     KisRoundHudButton *m_bottomBarButton {0};
-    KisRoundHudButton *m_brushHudButton {0};
+    KisRoundHudButton *m_dockerHudButton {0};
     QRectF m_canvasRotationIndicatorRect;
     QRectF m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
@@ -203,6 +211,12 @@ private Q_SLOTS:
     void slotUpdate();
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
+    void borrowOrReturnDocker();
+    void showDockerConfig();
+    void writeDockerList(QList<QVariant>);
+    void readDockerList();
+    void writeCurrentDocker();
+    QString readCurrentDocker();
     void showBottomBarWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();
     void slotFitToViewClicked();

@@ -153,7 +153,7 @@
   <customwidget>
    <class>KisBrushHudPropertiesList</class>
    <extends>QListView</extends>
-   <header>brushhud/kis_brush_hud_properties_list.h</header>
+   <header>kis_brush_hud_properties_list.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

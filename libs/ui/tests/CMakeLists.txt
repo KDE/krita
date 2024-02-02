@@ -6,7 +6,6 @@ kis_add_tests(
     kis_coordinates_converter_test.cpp
     kis_grid_config_test.cpp
     kis_stabilized_events_sampler_test.cpp
-    kis_brush_hud_properties_config_test.cpp
     kis_shape_commands_test.cpp
     kis_stop_gradient_editor_test.cpp
     kis_multinode_property_test.cpp

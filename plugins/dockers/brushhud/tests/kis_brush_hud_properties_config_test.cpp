@@ -7,7 +7,7 @@
 #include "kis_brush_hud_properties_config_test.h"
 
 #include <simpletest.h>
-#include "brushhud/kis_brush_hud_properties_config.h"
+#include "kis_brush_hud_properties_config.h"
 #include <QDomDocument>
 
 #include "kis_debug.h"

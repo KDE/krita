@@ -89,12 +89,6 @@ set(kritaui_LIB_SRCS
     flake/kis_shape_selection_canvas.cpp
     flake/kis_shape_selection_model.cpp
     flake/kis_take_all_shapes_command.cpp
-    brushhud/kis_uniform_paintop_property_widget.cpp
-    brushhud/kis_brush_hud.cpp
-    brushhud/kis_round_hud_button.cpp
-    brushhud/kis_dlg_brush_hud_config.cpp
-    brushhud/kis_brush_hud_properties_list.cpp
-    brushhud/kis_brush_hud_properties_config.cpp
 
     kis_aspect_ratio_locker.cpp
     kis_bookmarked_configurations_editor.cc
@@ -302,6 +296,8 @@ set(kritaui_LIB_SRCS
     widgets/KisHistogramPainter.cpp
     widgets/KisHistogramView.cpp
     widgets/kis_zoom_scrollbar.cpp
+    widgets/KisDlgListPicker.cpp
+    widgets/kis_round_hud_button.cpp
 
     # Gradient related widgets
     widgets/gradient/KisStopGradientEditor.cpp
@@ -623,7 +619,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgconvertcolorspace.ui
 
 
-    brushhud/kis_dlg_brush_hud_config.ui
+    widgets/KisDlgListPicker.ui
     dialogs/kis_delayed_save_dialog.ui
     dialogs/kis_dlg_hlg_import.ui
     dialogs/KisRecoverNamedAutosaveDialog.ui

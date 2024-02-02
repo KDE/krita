@@ -43,16 +43,13 @@ KisPaintingAssistantSP TwoPointAssistant::clone(QMap<KisPaintingAssistantHandleS
     return KisPaintingAssistantSP(new TwoPointAssistant(*this, handleMap));
 }
 
-QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny)
+QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny, qreal moveThreshold)
 {
     Q_ASSERT(isAssistantComplete());
 
     QPointF best_pt = point;
     double best_dist = DBL_MAX;
     QList<int> possibleHandles;
-
-    bool overrideLastUsedPoint = false;
-    bool useBeginInstead = false;
 
     // must be above or equal to 0;
     // if useVertical, then last used point must be below 3, because 2 means vertical
@@ -74,6 +71,9 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         }
     }
 
+    if (!isLastUsedPointCorrectNow && KisAlgebra2D::norm(point - strokeBegin) < moveThreshold) {
+        return strokeBegin;
+    }
 
     if (!snapToAny && isLastUsedPointCorrectNow) {
         possibleHandles = QList<int>({m_lastUsedPoint});
@@ -83,7 +83,6 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         } else {
             possibleHandles = QList<int>({0, 1});
         }
-        overrideLastUsedPoint = true;
     }
 
     Q_FOREACH (int vpIndex, possibleHandles) {
@@ -98,11 +97,6 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         // extension the perspective assistant...
         qreal dx = point.x() - strokeBegin.x();
         qreal dy = point.y() - strokeBegin.y();
-
-        if (dx * dx + dy * dy < 4.0) {
-            // we cannot return here because m_lastUsedPoint needs to be set properly
-            useBeginInstead = true;
-        }
 
         if (vp != *handles()[2]) {
             snapLine = QLineF(vp, strokeBegin);
@@ -129,13 +123,11 @@ QPointF TwoPointAssistant::project(const QPointF& point, const QPointF& strokeBe
         if (dist < best_dist) {
             best_pt = pt;
             best_dist = dist;
-            if (overrideLastUsedPoint) {
-                m_lastUsedPoint = vpIndex;
-            }
+            m_lastUsedPoint = vpIndex;
         }
     }
 
-    return useBeginInstead ? strokeBegin : best_pt;
+    return best_pt;
 }
 
 void TwoPointAssistant::endStroke()
@@ -145,14 +137,14 @@ void TwoPointAssistant::endStroke()
     KisPaintingAssistant::endStroke();
 }
 
-QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny, qreal /*moveThresholdPt*/)
+QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin, snapToAny);
+    return project(pt, strokeBegin, snapToAny, moveThresholdPt);
 }
 
 void TwoPointAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
-    QPointF p = project(point, strokeBegin, true);
+    QPointF p = project(point, strokeBegin, true, 0.0);
     point = p;
 }
 

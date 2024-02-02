@@ -7,6 +7,8 @@
 #ifndef __KIS_RECALCULATE_TRANSFORM_MASK_JOB_H
 #define __KIS_RECALCULATE_TRANSFORM_MASK_JOB_H
 
+#include <QRect>
+
 #include "kis_types.h"
 #include "kis_spontaneous_job.h"
 

@@ -40,17 +40,9 @@ KisPaintingAssistantSP VanishingPointAssistant::clone(QMap<KisPaintingAssistantH
     return KisPaintingAssistantSP(new VanishingPointAssistant(*this, handleMap));
 }
 
-QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal moveThresholdPt)
+QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal /*moveThresholdPt*/)
 {
     //Q_ASSERT(handles().size() == 1 || handles().size() == 5);
-    //code nicked from the perspective ruler.
-    qreal dx = pt.x() - strokeBegin.x();
-    qreal dy = pt.y() - strokeBegin.y();
-
-    if (KisAlgebra2D::norm(QPointF(dx, dy)) < moveThresholdPt) {
-        // allow some movement before snapping
-        return strokeBegin;
-    }
 
     if (isLocal() && isAssistantComplete()) {
         if (getLocalRect().contains(pt)) {
@@ -64,8 +56,8 @@ QPointF VanishingPointAssistant::project(const QPointF& pt, const QPointF& strok
     QLineF snapLine = QLineF(*handles()[0], strokeBegin);
 
 
-    dx = snapLine.dx();
-    dy = snapLine.dy();
+    qreal dx = snapLine.dx();
+    qreal dy = snapLine.dy();
 
     const qreal dx2 = dx * dx;
     const qreal dy2 = dy * dy;

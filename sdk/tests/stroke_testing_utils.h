@@ -32,12 +32,14 @@ namespace utils {
         virtual ~StrokeTester();
 
         void testSimpleStroke();
+        void testSimpleStrokeCancelled();
         void test();
         void benchmark();
         void testSimpleStrokeNoVerification();
 
         void setNumIterations(int value);
         void setBaseFuzziness(int value);
+        void setCancelOnIteration(int value);
 
         int lastStrokeTime() const;
 
@@ -58,6 +60,7 @@ namespace utils {
         // overload
         virtual void initImage(KisImageWSP image, KisNodeSP activeNode);
         virtual void beforeCheckingResult(KisImageWSP image, KisNodeSP activeNode);
+        virtual void iterationEndedCallback(KisImageWSP image, KisNodeSP activeNode, int iteration);
 
         virtual KisStrokeStrategy* createStroke(KisResourcesSnapshotSP resources,
                                                 KisImageWSP image) = 0;
@@ -92,6 +95,7 @@ namespace utils {
         int m_numIterations;
         int m_baseFuzziness;
         int m_strokeTime = 0;
+        int m_cancelOnIteration = 0;
     };
 }
 

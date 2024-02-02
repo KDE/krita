@@ -14,11 +14,13 @@
 #include "kis_abstract_projection_plane.h"
 #include "kis_transform_mask_params_interface.h"
 
-KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskSP mask)
+KisRecalculateTransformMaskJob::KisRecalculateTransformMaskJob(KisTransformMaskSP mask, const QRect &extraUpdateRect)
     : m_mask(mask)
+    , m_extraUpdateRect(extraUpdateRect)
 {
     setExclusive(true);
 }
+
 
 bool KisRecalculateTransformMaskJob::overrides(const KisSpontaneousJob *_otherJob)
 {
@@ -36,6 +38,7 @@ void KisRecalculateTransformMaskJob::run()
      */
     if (!m_mask->parent()) return;
     if (!m_mask->visible()) return;
+    if (m_mask->staticImageCacheIsValid()) return;
 
     const QRect oldMaskExtent = m_mask->extent();
     m_mask->recalculateStaticImage();
@@ -60,6 +63,8 @@ void KisRecalculateTransformMaskJob::run()
     if (m_mask->transformParams()->isHidden()) {
         QRect updateRect = m_mask->extent() | oldMaskExtent;
 
+        updateRect |= m_extraUpdateRect;
+
         if (layer->original()) {
             updateRect |= layer->original()->defaultBounds()->bounds();
         }
@@ -78,6 +83,8 @@ void KisRecalculateTransformMaskJob::run()
          */
         QRect updateRect = oldMaskExtent |
             layer->projectionPlane()->changeRect(layer->extent(), KisLayer::N_FILTHY);
+
+        updateRect |= m_extraUpdateRect;
 
         image->requestProjectionUpdateNoFilthy(layer, updateRect, image->bounds(), false); // Should there be a case where this is flushed?
     }

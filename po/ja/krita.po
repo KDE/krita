@@ -10651,19 +10651,14 @@ msgstr "自動フレームモード"
 
 #. i18n: context: text @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2031
-#, fuzzy, kde-format
-#| msgid "Drop Frames"
+#, kde-format
 msgctxt "action"
 msgid "Drop Frames"
 msgstr "フレーム落ちを有効"
 
 #. i18n: context: toolTip @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2033
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid ""
-#| "Drop Frames\n"
-#| "Enable to preserve playback timing."
+#, kde-format
 msgctxt "action"
 msgid "Drop Frames, enable to preserve playback timing."
 msgstr ""
@@ -11053,14 +11048,14 @@ msgstr "複製したフレームをクリップボードにコピー"
 #, kde-format
 msgctxt "action"
 msgid "Make Unique"
-msgstr ""
+msgstr "ユニークなフレームを作成する"
 
 #. i18n: context: toolTip @ Action (make_clones_unique), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2355
 #, kde-format
 msgctxt "action"
 msgid "Convert clones to unique keyframe instances."
-msgstr ""
+msgstr "クローンをユニークなキーフレームインスタンスに変換する"
 
 #. i18n: context: text @ Action (cut_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2365
@@ -11246,12 +11241,10 @@ msgstr "新しいグループレイヤーを追加"
 
 #. i18n: context: iconText @ Action (add_new_group_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2527
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Layer"
+#, kde-format
 msgctxt "action"
 msgid "Group Layer"
-msgstr "レイヤーを切り取り"
+msgstr "グループレイヤー"
 
 #. i18n: context: text @ Action (add_new_clone_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2536
@@ -12910,9 +12903,7 @@ msgid "File"
 msgstr "ファイル"
 
 #: krita/krita5.xmlgui:428
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
 msgstr "編集"
 
@@ -14034,11 +14025,10 @@ msgstr "ビューに合わせる"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "キャンバスの大きさ"
+msgstr "ビューの大きさに合わせる"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
@@ -14082,11 +14072,10 @@ msgstr "キャンバスをビューの高さに合わせる"
 #. i18n: context: iconText @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:828 krita/kritamenu.action:830
 #: krita/kritamenu.action:831
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "ページに合わせる"
+msgstr "ビューに合わせる/解除する"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -14220,6 +14209,8 @@ msgid ""
 "The rulers will track current mouse position and show it on screen. It can "
 "cause subtle performance slowdown"
 msgstr ""
+"現在のマウスの位置が捕捉され、スクリーンに表示されます。これはパフォーマンス"
+"のちょっとした低下を引き起こす可能性があります"
 
 #. i18n: context: text @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_show_guides), Actions (View), ActionCollection (Menu)
@@ -16956,12 +16947,9 @@ msgid "Generator"
 msgstr "生成"
 
 #: libs/image/generator/kis_generator_stroke_strategy.cpp:19
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Fill Layer"
 msgctxt "(qtundo-format)"
 msgid "Fill Layer Render"
-msgstr "塗りつぶしレイヤー"
+msgstr "塗りつぶしレイヤーのレンダリング"
 
 #: libs/image/kis_adjustment_layer.cc:124
 #, kde-format
@@ -17140,9 +17128,6 @@ msgid "Change Image Resolution"
 msgstr "画像の解像度を変更"
 
 #: libs/image/kis_image.cc:1033
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "レイヤーをスケール"
@@ -17158,9 +17143,6 @@ msgid "Rotate Mask"
 msgstr "マスクを回転"
 
 #: libs/image/kis_image.cc:1166
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "レイヤーを回転"
@@ -17171,9 +17153,6 @@ msgid "Shear Mask"
 msgstr "マスクを剪断変形"
 
 #: libs/image/kis_image.cc:1250
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "レイヤーを剪断変形"
@@ -17472,12 +17451,9 @@ msgid "Invert Selection"
 msgstr "選択反転"
 
 #: libs/image/kis_selection_filters.cpp:930
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Dilate Selection"
 msgctxt "(qtundo-format)"
 msgid "Anti-Alias Selection"
-msgstr "選択範囲を拡張"
+msgstr "選択範囲をアンチエイリアス化"
 
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
@@ -17605,12 +17581,10 @@ msgid "Layer"
 msgstr "レイヤー"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert Column Right"
+#, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Indirect light"
-msgstr "右にカラムを挿入"
+msgstr "間接光"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:68
 #, kde-format
@@ -17816,18 +17790,14 @@ msgstr ""
 "最初のレイヤー</b>のメタデータのみ保存されます。"
 
 #: libs/impex/FillLayerTypeCheck.h:92
-#, fuzzy, kde-format
-#| msgctxt "Loading a .kra file"
-#| msgid ""
-#| "The file contains a clone layer that has an incorrect source node id. "
-#| "This layer will be converted into a paint layer."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "The image contains a Fill Layer of type <b>%1</b>, which is not supported, "
 "the layer will be converted to a paintlayer"
 msgstr ""
-"このファイルには不適切なソースノード ID を持つクローンレイヤーが含まれていま"
-"す。このレイヤーはペイントレイヤーに変換されます。"
+"この画像にはサポートされていない<b>%1</b>タイプの塗りつぶしレイヤーが含まれて"
+"おり、レイヤーはペイントレイヤーに変換されます。"
 
 #: libs/impex/IntegralFrameDuration.h:32
 #, kde-format
@@ -17898,18 +17868,14 @@ msgid "Transparency Mask"
 msgstr "透過マスク"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "image conversion warning"
-#| msgid ""
-#| "Your image contains layers with a color model that is different from the "
-#| "image. The layers will be converted."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"この画像には画像の色モデルとは異なる色モデルのレイヤーが含まれています。その"
-"レイヤーは変換されます。"
+"この画像には不透明度のあるレイヤーが含まれています。レイヤーは不透明度を無視"
+"して出力されます。"
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -18173,11 +18139,10 @@ msgid "JPEG-XL Image"
 msgstr "JPEG-XL 画像"
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "ドキュメント"
+msgstr "CSV ドキュメント"
 
 #: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2109
 #: libs/ui/KisMainWindow.cpp:2192
@@ -18982,11 +18947,10 @@ msgid "Behind"
 msgstr "裏透かし"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:111
-#, fuzzy, kde-format
-#| msgid "Greater"
+#, kde-format
 msgctxt "Blending mode - Greater"
 msgid "Greater"
-msgstr "増アルファ"
+msgstr "比較 (明)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:112
 #, kde-format
@@ -40110,6 +40074,9 @@ msgid ""
 "affect CPU consumption.\n"
 "Values lower than 50 are not recommended due to high artifacts."
 msgstr ""
+"大きな値にするほど、ファイルサイズは大きくなり、品質は向上します。CPU 負荷に"
+"は影響しません。\n"
+"50 より小さい値は、アーティファクトが多くなるため、推奨されません。"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:118
 #, kde-format
@@ -40126,6 +40093,10 @@ msgid ""
 "Compression set to 0 is not recommended due to high disk space consumption.\n"
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
+"大きな値にするほど、ファイルサイズは小さくなりますが、CPU 負荷は大きくなりま"
+"す。品質には影響しません。\n"
+"圧縮を 0 にすることは、ディスク容量の消費が大きくなるため、推奨されません。\n"
+"3 より大きい値は、パフォーマンスに影響が発生するため、推奨されません。"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:152
 #, kde-format
@@ -40339,11 +40310,9 @@ msgid "Move Storyboard Scene"
 msgstr "ストーリーボードのシーンを移動"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:155
-#, fuzzy
-#| msgid "Export directory"
 msgctxt "(qtundo-format)"
 msgid "Edit Storyboard Child"
-msgstr "ディレクトリをエクスポート"
+msgstr "ストーリーボードの子を編集"
 
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:137
 #: plugins/dockers/storyboarddocker/StoryboardDelegate.cpp:312
@@ -40664,27 +40633,24 @@ msgstr "タッチドッキングパネル"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "色モード"
+msgstr "カラーモデル"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
-#, fuzzy, kde-format
-#| msgid "Selector Appearance"
+#, kde-format
 msgid "Hue Ring Appearance:"
-msgstr "ツール外観"
+msgstr "色相環の見た目:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:50
-#, fuzzy, kde-format
-#| msgid "Status"
+#, kde-format
 msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
 msgid "Static"
-msgstr "ステータス"
+msgstr "静的"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
@@ -40693,79 +40659,69 @@ msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr ""
+msgstr "動的"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
 #, kde-format
 msgid "Dynamic + Static Edge"
-msgstr ""
+msgstr "動的 + 静的な円環"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpQuickSettingsMenu)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:109
-#, fuzzy, kde-format
-#| msgid "Quick Settings Docker"
+#, kde-format
 msgid "Show &Quick Settings Menu"
-msgstr "クイック設定ドッキングパネル"
+msgstr "クイック設定メニューを表示(&Q)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select layout"
+#, kde-format
 msgid "Favorite Selector Layouts:"
-msgstr "レイアウトを選択"
+msgstr "お気に入りのレイアウトセレクタ:"
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "選択(&S)..."
+msgstr "選択..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
-#, fuzzy, kde-format
-#| msgid "Select a Color Space"
+#, kde-format
 msgid "Selection Color Space:"
-msgstr "色空間を選択"
+msgstr "選択されている色空間:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectionColorSpace)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:151
-#, fuzzy, kde-format
-#| msgid "Layers/Masks"
+#, kde-format
 msgid "Layer/Mask"
 msgstr "レイヤー/マスク"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkProofColors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:184
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Convert Projection Color Space"
+#, kde-format
 msgid "Proof Colors to Painting Color Space"
-msgstr "投影色空間を変換"
+msgstr "色を描画時の色空間に色校正する"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabPopups)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:194
 #, kde-format
 msgid "Pop-ups"
-msgstr ""
+msgstr "ポップアップ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:202
-#, fuzzy, kde-format
-#| msgid "Drop size"
+#, kde-format
 msgid "Pop-up size:"
-msgstr "雨滴のサイズ"
+msgstr "ポップアップのサイズ:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, tabColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:221
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:539
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Patches"
-msgstr "段階表示(&R)"
+msgstr "カラーパッチ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -40783,8 +40739,7 @@ msgstr "向き:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:260
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:582
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:789
-#, fuzzy, kde-format
-#| msgid "Hori&zontal"
+#, kde-format
 msgid "hori&zontal"
 msgstr "水平(&Z)"
 
@@ -40794,8 +40749,7 @@ msgstr "水平(&Z)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:270
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:592
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:799
-#, fuzzy, kde-format
-#| msgid "&Vertical"
+#, kde-format
 msgid "&vertical"
 msgstr "垂直(&V)"
 
@@ -40805,10 +40759,9 @@ msgstr "垂直(&V)"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:289
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:628
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:835
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Along Orientation"
-msgstr "方向"
+msgstr "カラーパッチの向きに合わせる"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
@@ -40816,10 +40769,9 @@ msgstr "方向"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:294
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:633
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:840
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Laterally"
-msgstr "垂直方向"
+msgstr "カラーパッチの向きと垂直に"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #. i18n: ectx: property (text), widget (QLabel, label_12)
@@ -40827,10 +40779,9 @@ msgstr "垂直方向"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:302
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:641
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:848
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgid "Scrolling:"
-msgstr "描点間隔:"
+msgstr "スクロール:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
@@ -40838,12 +40789,9 @@ msgstr "描点間隔:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:palettes/swatche.gpl"
-#| msgid "Swatches"
+#, kde-format
 msgid "Patches"
-msgstr "見本"
+msgstr "パッチ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40857,31 +40805,27 @@ msgstr "最大表示色数:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:414
-#, fuzzy, kde-format
-#| msgid "Update Selector When:"
+#, kde-format
 msgid "Update Base Color When:"
-msgstr "選択の表示の更新を行うタイミング:"
+msgstr "基本色を更新するタイミング:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateExternal)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:421
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgid "Color changes externally"
-msgstr "色チャンネル"
+msgstr "外部から色が変更された時"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateOnRightClick)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:428
-#, fuzzy, kde-format
-#| msgid "Right clicking on shade selector"
+#, kde-format
 msgid "Right-clicking on shade selector"
-msgstr "色合い選択を右クリックした時"
+msgstr "シェードセレクタ上で右クリックした時"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShadeSelUpdateInteraction)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:435
-#, fuzzy, kde-format
-#| msgid "Iterations"
+#, kde-format
 msgid "Interaction ends"
-msgstr "繰り返し処理数"
+msgstr "操作が終了した時"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:448
@@ -40891,39 +40835,33 @@ msgstr "列の数:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:465
-#, fuzzy, kde-format
-#| msgid "Line Height: "
+#, kde-format
 msgid "Line Height:"
 msgstr "列の縦幅: "
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckHistoryClearButton)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:726
-#, fuzzy, kde-format
-#| msgctxt "left mouse button"
-#| msgid "left button"
+#, kde-format
 msgid "Clear Button"
-msgstr "マウス左ボタン"
+msgstr "履歴消去ボタンを表示"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsGroupBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:752
-#, fuzzy, kde-format
-#| msgid "Colors from Image"
+#, kde-format
 msgid "Colors fro&m Image"
-msgstr "現在編集中の画像の色一覧"
+msgstr "画像内の色(&M)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
 msgstr "自動更新"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "&Range:"
+#, kde-format
 msgid "Range:"
-msgstr "範囲(&R):"
+msgstr "範囲:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40947,47 +40885,40 @@ msgstr "表示:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr ""
+msgstr "スライダー(&L)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
-#, fuzzy, kde-format
-#| msgid "Colo&r Patches"
+#, kde-format
 msgid "Color Pa&tches"
-msgstr "段階表示(&R)"
+msgstr "カラーパッチ(&T)"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "プレビュー"
+msgstr "プレビュー:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgctxt "action"
 msgid "WG Color Selector Actions"
-msgstr "色選択の設定"
+msgstr "広色選択アクション"
 
 #. i18n: context: text @ Action (show_wg_color_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:7
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut color selector"
-msgstr "色選択を表示"
+msgstr "広色選択を表示"
 
 #. i18n: context: text @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:17
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show wide-gamut shade selector"
-msgstr "MyPaint 色合い選択"
+msgstr "広影選択を表示"
 
 #. i18n: context: toolTip @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
@@ -40995,12 +40926,10 @@ msgstr "MyPaint 色合い選択"
 #. i18n: context: iconText @ Action (show_wg_shade_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:19
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:20
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show shade selector"
-msgstr "MyPaint 色合い選択"
+msgstr "影選択を表示"
 
 #. i18n: context: toolTip @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
@@ -41008,12 +40937,10 @@ msgstr "MyPaint 色合い選択"
 #. i18n: context: iconText @ Action (show_wg_mypaint_selector), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:29
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:30
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show MyPaint shade selector"
+#, kde-format
 msgctxt "action"
 msgid "Show MyPaint selector"
-msgstr "MyPaint 色合い選択"
+msgstr "MyPaint 選択を表示"
 
 #. i18n: context: text @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
@@ -41021,12 +40948,10 @@ msgstr "MyPaint 色合い選択"
 #. i18n: context: iconText @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:47
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:50
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color lighter"
+#, kde-format
 msgctxt "action"
 msgid "Make color lighter"
-msgstr "ブラシの明度を上げる"
+msgstr "色を明るくする"
 
 #. i18n: context: toolTip @ Action (wgcs_lighten_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:49
@@ -41036,6 +40961,7 @@ msgid ""
 "Increase value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"選択した色モデルによって、選択した色の明度、輝度、強度、または輝度を上げます"
 
 #. i18n: context: text @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
@@ -41043,12 +40969,10 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:57
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Make brush color darker"
+#, kde-format
 msgctxt "action"
 msgid "Make color darker"
-msgstr "ブラシの明度を下げる"
+msgstr "色を暗くする"
 
 #. i18n: context: toolTip @ Action (wgcs_darken_color), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:59
@@ -41058,6 +40982,7 @@ msgid ""
 "Decreases value, lightness, intensity or luma of the selected color, "
 "depending on selected color model"
 msgstr ""
+"選択した色モデルによって、選択した色の明度、輝度、強度、または輝度を下げます"
 
 #. i18n: context: text @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
@@ -41065,19 +40990,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:67
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:70
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Increase Saturation HSY"
-#| msgid "Increase Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Increase color saturation"
-msgstr "彩度を上げる"
+msgstr "色の彩度を上げる"
 
 #. i18n: context: toolTip @ Action (wgcs_increase_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:69
 #, kde-format
 msgctxt "action"
 msgid "Increase saturation of the selected color"
-msgstr ""
+msgstr "選択した色の彩度を上げます"
 
 #. i18n: context: text @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
@@ -41085,19 +41008,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:77
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:80
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Decrease Saturation HSY"
-#| msgid "Decrease Saturation"
+#, kde-format
 msgctxt "action"
 msgid "Decrease color saturation"
-msgstr "彩度を下げる"
+msgstr "色の彩度を下げる"
 
 #. i18n: context: toolTip @ Action (wgcs_decrease_saturation), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:79
 #, kde-format
 msgctxt "action"
 msgid "Decrease saturation of the selected color"
-msgstr ""
+msgstr "選択した色の彩度を下げます"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
@@ -41105,21 +41026,17 @@ msgstr ""
 #. i18n: context: iconText @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:87
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:90
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue clockwise"
-msgstr "ブラシの色の色相を時計回りにシフト"
+msgstr "色相を時計回りにシフト"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_clockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color clockwise"
-msgstr "ブラシの色の色相を時計回りにシフト"
+msgstr "選択した色の色相を時計回りにシフトします"
 
 #. i18n: context: text @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
@@ -41127,40 +41044,33 @@ msgstr "ブラシの色の色相を時計回りにシフト"
 #. i18n: context: iconText @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:97
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:100
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue counter-clockwise"
-msgstr "ブラシの色の色相を反時計回りにシフト"
+msgstr "色相を反時計回りにシフト"
 
 #. i18n: context: toolTip @ Action (wgcs_shift_hue_counterclockwise), Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:99
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shift brush color hue counter-clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Shift hue of the selected color counter-clockwise"
-msgstr "ブラシの色の色相を反時計回りにシフト"
+msgstr "選択した色の色相を反時計回りにシフトします"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:48
-#, fuzzy, kde-format
-#| msgid "Wide Gamut Selector"
+#, kde-format
 msgid "Wide Gamut Color Selector"
 msgstr "広色域セレクター"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
-#| msgid "&Configure %1..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "%1を設定(&C)..."
+msgstr "設定..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:74
-#, fuzzy, kde-format
-#| msgid "Color Selector Settings"
+#, kde-format
 msgid "Wide Gamut Color Selector Settings"
-msgstr "色選択の設定"
+msgstr "広色域選択の設定"
 
 #: plugins/extensions/buginfo/dlg_buginfo.cpp:35
 #, kde-format
@@ -41449,8 +41359,7 @@ msgid "Resources Cache Database Explorer"
 msgstr "リソースキャッシュデータベースエクスプローラ"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
 msgstr "バージョン"
 
@@ -41473,22 +41382,19 @@ msgid "Display Name"
 msgstr "表示名"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:148
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version"
-msgstr "データベースバージョン"
+msgstr "データベースのバージョン"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:149
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version"
-msgstr "Krita バージョン"
+msgstr "Krita のバージョン"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:150
-#, fuzzy, kde-format
-#| msgid "Update"
+#, kde-format
 msgid "Upgrade date"
-msgstr "更新"
+msgstr "更新日"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabStorages)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:23
@@ -41510,13 +41416,9 @@ msgstr "概要情報"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:166
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "animation"
+#, kde-format
 msgid "Initialization"
-msgstr "animation"
+msgstr "初期化"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172

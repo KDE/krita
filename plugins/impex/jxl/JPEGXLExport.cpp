@@ -10,6 +10,7 @@
 
 #include <KisGlobalResourcesInterface.h>
 
+#include <jxl/version.h>
 #include <jxl/color_encoding.h>
 #include <jxl/encode_cxx.h>
 #include <jxl/resizable_parallel_runner_cxx.h>

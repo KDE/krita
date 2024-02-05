@@ -2521,6 +2521,35 @@ void TestSvgText::testNavigation()
     QCOMPARE(cursorPos, 0);
 }
 
+void TestSvgText::testTextRichCopy()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"inline-size:50.0; font-size:10.0;font-family:Deja Vu Sans\">The quick <tspan fill=\"brown\">brown</tspan> fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    KoSvgTextShape *copy = textShape->copyRange(10, 10);
+    QCOMPARE(copy->plainText(), "brown fox ");
+    QCOMPARE(size(copy->d->textData), 3);
+}
+
+void TestSvgText::testTextRichInsert()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"inline-size:50.0; font-size:10.0;font-family:Deja Vu Sans\">Sphinx of black quartz, judge my vow!</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    KoSvgTextShape *insert = new KoSvgTextShape();
+    QString ref2 ("<text style=\"inline-size:50.0; font-size:10.0;font-family:Deja Vu Sans\">The quick <tspan fill=\"brown\">brown</tspan> fox</text>");
+    KoSvgTextShapeMarkupConverter converter2(insert);
+    converter2.convertFromSvg(ref2, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    textShape->insertRichText(10, insert);
+    QCOMPARE(textShape->plainText(), "Sphinx ofThe quick brown fox black quartz, judge my vow!");
+    QCOMPARE(size(textShape->d->textData), 7);
+}
+
 #include "kistest.h"
 
 

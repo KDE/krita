@@ -438,6 +438,128 @@ public:
      * Return a linearized representation of a subtree of text "subchunks".
      */
     static QVector<SubChunk> collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath);
+
+    /**
+     * @brief findTextContentElementForIndex
+     * Finds the given leaf of the current tree-wide string index.
+     * @param tree -- tree to search in.
+     * @param currentIndex -- currentIndex, will always be set to the start index of the found element.
+     * @param sought -- index sought.
+     * @param skipZeroWidth -- whether to explicitely skip zero-width chunks. Remove text may set this to true, while inserting text into empty chunks requires this to be false.
+     * @return iterator -- found iterator. Will default to tree end if nothing is found.
+     */
+    static KisForest<KoSvgTextContentElement>::depth_first_tail_iterator findTextContentElementForIndex(KisForest<KoSvgTextContentElement> &tree,
+                                                                                                        int &currentIndex,
+                                                                                                        int sought,
+                                                                                                        bool skipZeroWidth = false)
+    {
+        auto it = tree.depthFirstTailBegin();
+        for (; it != tree.depthFirstTailEnd(); it++) {
+            if (childCount(siblingCurrent(it)) > 0) {
+                continue;
+            }
+            int length = it->numChars(false);
+            if (length == 0 && skipZeroWidth) {
+                continue;
+            }
+
+            if (sought == currentIndex || (sought > currentIndex && sought < currentIndex + length)) {
+                break;
+            } else {
+                currentIndex += length;
+            }
+        }
+        return it;
+    }
+    /**
+     * @brief splitContentElement
+     * split the contentElement in tree at index into two nodes.
+     * @param tree -- tree to work on.
+     * @param index -- index
+     * @return whether it was successful.
+     */
+    static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index) {
+        int currentIndex = 0;
+        auto contentElement = findTextContentElementForIndex(tree, currentIndex, index, true);
+        if (contentElement.node()) {
+            KoSvgTextContentElement duplicate = KoSvgTextContentElement();
+            duplicate.text = contentElement->text;
+            int start = index - currentIndex;
+            int length = contentElement->numChars(false) - start;
+            int zero = 0;
+            duplicate.removeText(start, length);
+            // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
+
+            if (siblingCurrent(contentElement) != tree.childBegin()
+                    && !contentElement->textPath
+                    && contentElement->textLength.isAuto
+                    && contentElement->localTransformations.isEmpty()) {
+                contentElement->removeText(zero, start);
+                duplicate.properties = contentElement->properties;
+                tree.insert(siblingCurrent(contentElement), duplicate);
+            } else {
+                KoSvgTextContentElement duplicate2 = KoSvgTextContentElement();
+                duplicate2.text = contentElement->text;
+                duplicate2.removeText(zero, start);
+                contentElement->text.clear();
+                duplicate.properties.inheritFrom(contentElement->properties);
+                duplicate2.properties.inheritFrom(contentElement->properties);
+                tree.insert(childBegin(contentElement), duplicate);
+                tree.insert(childEnd(contentElement), duplicate2);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @brief cleanUp
+     * This cleans up the tree by...
+     * - Removing empty text elements that are not the root or text paths.
+     * - Merging sibling elements with similar properties.
+     * - Merging single children with parent if possible.
+     * @param tree -- tree to clean up
+     */
+    static void cleanUp(KisForest<KoSvgTextContentElement> &tree) {
+        for (auto it = tree.depthFirstTailBegin(); it != tree.depthFirstTailEnd(); it++) {
+            const int children = childCount(siblingCurrent(it));
+            if (children == 0) {
+
+                // Remove empty leafs that are not the root or text paths.
+                const int length = it->numChars(false);
+                if (length == 0 && siblingCurrent(it) != tree.childBegin() && !it->textPath) {
+                    tree.erase(siblingCurrent(it));
+                } else {
+                    // check if siblings are similar.
+                    auto siblingPrev = siblingCurrent(it);
+                    siblingPrev--;
+                    if (siblingPrev.node()
+                            && siblingPrev != siblingCurrent(it)
+                            && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
+                            && (!siblingPrev->textPath && !it->textPath)
+                            && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
+                            && (siblingPrev->properties == it->properties)) {
+                        qDebug() << "merge siblings" << siblingPrev->text << it->text;
+                        // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
+                        siblingPrev->text += it->text;
+                        tree.erase(siblingCurrent(it));
+                    }
+                }
+            } else if (children == 1) {
+                // merge single children into parents if possible.
+                auto child = childBegin(siblingCurrent(it));
+                if ((child->localTransformations.isEmpty() && it->localTransformations.isEmpty())
+                        && (!child->textPath && !it->textPath)
+                        && (child->textLength.isAuto && it->textLength.isAuto)
+                        && (child->properties == it->properties)) {
+                    qDebug() << "child to parent" << child->text;
+                    // TODO: handle merging of text properties, this is now too strict. Also mind uninheritable properties
+                    tree.move(child, siblingCurrent(it));
+                    tree.erase(siblingCurrent(it));
+                }
+            }
+        }
+    }
 };
 
 #endif // KO_SVG_TEXT_SHAPE_P_H

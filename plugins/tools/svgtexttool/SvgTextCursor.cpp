@@ -7,8 +7,11 @@
 #include "KoCanvasBase.h"
 #include "KoSvgTextProperties.h"
 #include "SvgTextInsertCommand.h"
+#include "SvgTextInsertRichCommand.h"
 #include "SvgTextRemoveCommand.h"
 #include "SvgTextShapeManagerBlocker.h"
+#include "KoSvgTextShapeMarkupConverter.h"
+#include "KoSvgPaste.h"
 
 #include "KoViewConverter.h"
 #include "kis_coordinates_converter.h"
@@ -26,6 +29,7 @@
 #include <QAction>
 #include <kis_assert.h>
 #include <QInputMethodEvent>
+#include <QBuffer>
 
 struct IMEDecorationInfo {
     int start = -1; ///< The startPos from the attribute.
@@ -115,6 +119,7 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     int anchorIndex = 0;
 
     bool visualNavigation = true;
+    bool pasteRichText = true;
 
     SvgTextInsertCommand *preEditCommand {nullptr}; ///< PreEdit string as an command provided by the input method.
     int preEditStart = -1; ///< Start of the preEdit string as a cursor pos.
@@ -316,8 +321,26 @@ void SvgTextCursor::copy() const
         int start = d->shape->indexForPos(qMin(d->anchor, d->pos));
         int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - start;
         QString copied = d->shape->plainText().mid(start, length);
+        KoSvgTextShape *copy = d->shape->copyRange(start, length);
         QClipboard *cb = QApplication::clipboard();
-        cb->setText(copied);
+
+        if (copy) {
+            KoSvgTextShapeMarkupConverter converter(copy);
+            QString svg;
+            QString styles;
+            QString html;
+            QMimeData *svgData = new QMimeData();
+            if (converter.convertToSvg(&svg, &styles)) {
+                QString svgDoc = QString("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"2.0\">%1\n%2</svg>").arg(styles).arg(svg);
+                svgData->setData(QLatin1String("image/svg+xml"), svgDoc.toUtf8());
+            }
+            svgData->setText(copied);
+            if (converter.convertToHtml(&html))
+                svgData->setHtml(html);
+            cb->setMimeData(svgData);
+        } else {
+            cb->setText(copied);
+        }
 
     }
 }
@@ -328,7 +351,37 @@ bool SvgTextCursor::paste()
     if (d->shape) {
         QClipboard *cb = QApplication::clipboard();
         const QMimeData *mimeData = cb->mimeData();
-        if (mimeData->hasText()) {
+        KoSvgPaste shapePaste;
+        if (d->pasteRichText && shapePaste.hasShapes()) {
+            QList<KoShape*> shapes = shapePaste.fetchShapes(d->shape->boundingRect(), 72.0);
+            while (shapes.size() > 0) {
+                KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shapes.takeFirst());
+                if (textShape) {
+                    KUndo2Command *cmd = new SvgTextInsertRichCommand(d->shape, textShape, d->pos, d->anchor);
+                    if (cmd) {
+                        addCommandToUndoAdapter(cmd);
+                        success = true;
+                    }
+                }
+            }
+        } else if (d->pasteRichText && mimeData->hasHtml()) {
+            QString html = mimeData->html();
+            KoSvgTextShape *insert = new KoSvgTextShape();
+            KoSvgTextShapeMarkupConverter converter(insert);
+            QString svg;
+            QString styles;
+            if (converter.convertFromHtml(html, &svg, &styles)
+                    && converter.convertFromSvg(svg, styles, d->shape->boundingRect(), 72.0) ) {
+                KUndo2Command *cmd = new SvgTextInsertRichCommand(d->shape, insert, d->pos, d->anchor);
+                if (cmd) {
+                    addCommandToUndoAdapter(cmd);
+                    success = true;
+                }
+                success = true;
+            }
+        }
+
+        if (mimeData->hasText() && !success) {
             insertText(mimeData->text());
             success = true;
         }

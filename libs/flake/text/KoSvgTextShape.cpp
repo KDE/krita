@@ -719,27 +719,6 @@ QPointF KoSvgTextShape::initialTextPosition() const
     return d->initialTextPosition;
 }
 
-KisForest<KoSvgTextContentElement>::depth_first_tail_iterator findTextChunkForIndex(KisForest<KoSvgTextContentElement> &tree, int &currentIndex, int sought, bool skipZeroWidth = false)
-{
-    auto it = tree.depthFirstTailBegin();
-    for (; it != tree.depthFirstTailEnd(); it++) {
-        if (std::distance(KisForestDetail::childBegin(it), KisForestDetail::childEnd(it)) > 0) {
-            continue;
-        }
-        int length = it->numChars(false);
-        if (length == 0 && skipZeroWidth) {
-            continue;
-        }
-
-        if (sought == currentIndex || (sought > currentIndex && sought < currentIndex + length)) {
-            break;
-        } else {
-            currentIndex += length;
-        }
-    }
-    return it;
-}
-
 bool KoSvgTextShape::insertText(int pos, QString text)
 {
     bool succes = false;
@@ -753,7 +732,7 @@ bool KoSvgTextShape::insertText(int pos, QString text)
         oldIndex = cursorPos.index;
         index = qMin(index, d->result.size()-1);
     }
-    auto it = findTextChunkForIndex(d->textData, currentIndex, index);
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
     if (!isEnd(siblingCurrent(it))) {
         int offset = oldIndex - currentIndex;
         it->insertText(offset, text);
@@ -767,14 +746,15 @@ bool KoSvgTextShape::insertText(int pos, QString text)
 bool KoSvgTextShape::removeText(int &index, int &length)
 {
     bool succes = false;
-    if (index < -1 || d->cursorPos.isEmpty()) {
+    if (index < -1) {
         return succes;
     }
     int currentLength = length;
     int endLength = 0;
     while (currentLength > 0) {
         int currentIndex = 0;
-        auto it = findTextChunkForIndex(d->textData, currentIndex, index, true);
+
+        auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index, true);
         if (!isEnd(siblingCurrent(it))) {
             int offset = index > currentIndex? index - currentIndex: 0;
             int size = it->numChars(false);
@@ -808,7 +788,7 @@ KoSvgTextProperties KoSvgTextShape::propertiesForPos(int pos)
     CursorPos cursorPos = d->cursorPos.at(pos);
     CharacterResult res = d->result.at(cursorPos.cluster);
     int currentIndex = 0;
-    auto it = findTextChunkForIndex(d->textData, currentIndex, res.plaintTextIndex);
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, res.plaintTextIndex);
     if (!isEnd(siblingCurrent(it))) {
         props = it->properties;
     }
@@ -829,12 +809,54 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
     CursorPos cursorPos = d->cursorPos.at(pos);
     CharacterResult res = d->result.at(cursorPos.cluster);
     int currentIndex = 0;
-    auto it = findTextChunkForIndex(d->textData, currentIndex, res.plaintTextIndex);
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, res.plaintTextIndex);
     if (!isEnd(siblingCurrent(it))) {
         it->properties = properties;
         notifyChanged();
         shapeChangedPriv(ContentChanged);
     }
+}
+
+KoSvgTextShape *KoSvgTextShape::copyRange(int index, int length) const
+{
+    KoSvgTextShape *clone = new KoSvgTextShape(*this);
+    int zero = 0;
+    int endRange = index + length;
+    int size = KoSvgTextShape::Private::numChars(clone->d->textData.childBegin(), false) - endRange;
+    clone->debugParsing();
+    clone->removeText(endRange, size);
+    clone->removeText(zero, index);
+    KoSvgTextShape::Private::cleanUp(clone->d->textData);
+    clone->debugParsing();
+    return clone;
+}
+
+bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
+{
+    bool succes = false;
+    int currentIndex = 0;
+    int index = 0;
+    int oldIndex = 0;
+
+    if (pos > -1 && !d->cursorPos.isEmpty()) {
+        CursorPos cursorPos = d->cursorPos.at(pos);
+        CharacterResult res = d->result.at(cursorPos.cluster);
+        index = res.plaintTextIndex;
+        oldIndex = cursorPos.index;
+        index = qMin(index, d->result.size()-1);
+    }
+
+    KoSvgTextShape::Private::splitContentElement(this->d->textData, index);
+
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
+    if (it.node() && richText->d->textData.childBegin().node()) {
+        d->textData.move(richText->d->textData.childBegin(), siblingCurrent(it));
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+        succes = true;
+    }
+
+    return succes;
 }
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const
@@ -1017,6 +1039,9 @@ bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
                                                                              it == d->textData.compositionBegin());
             parentProps.append(ownProperties);
             QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+            if (it == d->textData.compositionBegin())
+                attributes.insert(ownProperties.convertParagraphProperties());
+            bool addedFill = false;
             if (attributes.size() > 0) {
                 QString styleString;
                 for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
@@ -1033,12 +1058,13 @@ bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
                                 .append(": ")
                                 .append(val)
                                 .append(";" );
-                    } else if (QString(it.key().toLatin1().data()).contains("fill")){
+                    } else if (QString(it.key().toLatin1().data()).contains("fill")) {
                         styleString.append("color")
                                 .append(": ")
                                 .append(it.value())
                                 .append(";" );
-                    } else if (QString(it.key().toLatin1().data()).contains("font-size")){
+                        addedFill = true;
+                    } else if (QString(it.key().toLatin1().data()).contains("font-size")) {
                         QString val = it.value();
                         styleString.append(it.key().toLatin1().data())
                                 .append(": ")
@@ -1048,6 +1074,15 @@ bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
                         styleString.append(it.key().toLatin1().data())
                                 .append(": ")
                                 .append(it.value())
+                                .append(";" );
+                    }
+                }
+                if (ownProperties.hasProperty(KoSvgTextProperties::FillId) && !addedFill) {
+                    KoColorBackground *b = dynamic_cast<KoColorBackground *>(it->properties.background().data());
+                    if (b) {
+                        styleString.append("color")
+                                .append(": ")
+                                .append(b->color().name())
                                 .append(";" );
                     }
                 }

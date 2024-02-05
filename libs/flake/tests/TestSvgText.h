@@ -94,6 +94,9 @@ private Q_SLOTS:
     void testTextDeletion_data();
     void testTextDeletion();
     void testNavigation();
+
+    void testTextRichCopy();
+    void testTextRichInsert();
 };
 
 #endif // TESTSVGTEXT_H

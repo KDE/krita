@@ -285,6 +285,7 @@ public:
      */
     QPointF initialTextPosition() const;
 
+    /*--------------- Edit text ---------------*/
     /**
      * @brief insertText
      * Insert a text somewhere in the KoTextShape.
@@ -313,6 +314,26 @@ public:
 
     KoSvgTextProperties propertiesForPos(int pos);
     void setPropertiesAtPos(int pos, KoSvgTextProperties properties);
+
+    /**
+     * @brief copyRange
+     * Copy the rich text for the given range.
+     * @param index -- start string index of the range.
+     * @param length -- length of the range.
+     * @return a KoSvgTextShape with only the content elements inside the range.
+     */
+    KoSvgTextShape *copyRange(int index, int length) const;
+
+    /**
+     * @brief insertRichText
+     * Insert rich text at the given cursor pos. This will first split contents at the given pos before inserting the new rich text.
+     * @param pos -- cursor pos to insert at.
+     * @param richText -- KoSvgTextShape with rich text data. TODO: make this const once KisForest constness issues have been fixed.
+     * @return whether insertion happened succesfully.
+     */
+    bool insertRichText(int pos, const KoSvgTextShape *richText);
+
+    /*--------------- Properties ---------------*/
 
     KoSvgTextProperties textProperties() const;
     QSharedPointer<KoShapeBackground> background() const override;

@@ -197,7 +197,7 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     QXmlStreamReader htmlReader(htmlText);
     QXmlStreamWriter svgWriter(&svgBuffer);
 
-    svgWriter.setAutoFormatting(true);
+    svgWriter.setAutoFormatting(false);
 
     QStringRef elementName;
 
@@ -209,9 +209,11 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
     //previous style string is for keeping formatting proper on linebreaks and appendstyle is for specific tags
     QString previousStyleString;
     QString appendStyle;
+    bool firstElement = true;
 
     while (!htmlReader.atEnd()) {
         QXmlStreamReader::TokenType token = htmlReader.readNext();
+        QLatin1String elName = firstElement? QLatin1String("text"): QLatin1String("tspan");
         switch (token) {
         case QXmlStreamReader::StartElement:
         {
@@ -230,13 +232,15 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
 
             if (elementName == "body") {
                 debugFlake << "\tstart Element" << elementName;
-                svgWriter.writeStartElement("text");
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
                 appendStyle = QString();
             }
             else if (elementName == "p") {
                 // new line
                 debugFlake << "\t\tstart Element" << elementName;
-                svgWriter.writeStartElement("tspan");
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
                 newLine = true;
                 if (em.isEmpty()) {
                     em = bodyEm;
@@ -246,22 +250,26 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
             }
             else if (elementName == "span") {
                 debugFlake << "\tstart Element" << elementName;
-                svgWriter.writeStartElement("tspan");
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
                 appendStyle = QString();
             }
             else if (elementName == "b" || elementName == "strong") {
                 debugFlake << "\tstart Element" << elementName;
-                svgWriter.writeStartElement("tspan");
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
                 appendStyle = "font-weight:700;";
             }
             else if (elementName == "i" || elementName == "em") {
                 debugFlake << "\tstart Element" << elementName;
-                svgWriter.writeStartElement("tspan");
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
                 appendStyle = "font-style:italic;";
             }
             else if (elementName == "u") {
                 debugFlake << "\tstart Element" << elementName;
-                svgWriter.writeStartElement("tspan");
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
                 appendStyle = "text-decoration:underline";
             }
 

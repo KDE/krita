@@ -49,6 +49,10 @@ KoSvgTextProperties &KoSvgTextProperties::operator=(const KoSvgTextProperties &r
     return *this;
 }
 
+bool KoSvgTextProperties::operator==(const KoSvgTextProperties &rhs) {
+    return m_d->properties == rhs.m_d->properties;
+}
+
 void KoSvgTextProperties::setProperty(KoSvgTextProperties::PropertyId id, const QVariant &value)
 {
     m_d->properties.insert(id, value);

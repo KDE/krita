@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-29 01:34+0000\n"
-"PO-Revision-Date: 2024-02-03 20:30+0100\n"
+"PO-Revision-Date: 2024-02-04 17:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -14202,7 +14202,7 @@ msgstr "Vidi Presan Grandecon"
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
-"Mapu la kanvasan ekranon por presi grandecon, surbaze de la bilda rezolucio."
+"Mapu la kanvasan ekranon por presi grandecon, surbaze de la bilda distingivo."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -16938,7 +16938,7 @@ msgstr "Regrandigi Bildon"
 #: libs/image/commands_new/kis_image_set_resolution_command.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Set Image Resolution"
-msgstr "Meti Bildrezolucion"
+msgstr "Meti Bilddistingivon"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
 #: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
@@ -17189,7 +17189,7 @@ msgstr "Skali Bildon"
 #: libs/image/kis_image.cc:961
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
-msgstr "Ŝanĝi Bildrezolucion"
+msgstr "Ŝanĝi Bilddistingivon"
 
 #: libs/image/kis_image.cc:1012
 #, kde-format
@@ -23990,13 +23990,13 @@ msgstr "Bild-distingivo"
 #: libs/ui/forms/wdg_resolution.ui:52
 #, kde-format
 msgid "X resolution:"
-msgstr "X-rezolucio:"
+msgstr "X-distingivo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution)
 #: libs/ui/forms/wdg_resolution.ui:81
 #, kde-format
 msgid "Y resolution:"
-msgstr "Y rezolucio:"
+msgstr "Y-distingivo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResolution)
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution_3)
@@ -24007,7 +24007,7 @@ msgstr "Y rezolucio:"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:42
 #, kde-format
 msgid "Resolution:"
-msgstr "Rezolucio:"
+msgstr "Distingivo:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, aboutTab)
 #: libs/ui/forms/wdgaboutapplication.ui:29
@@ -25027,7 +25027,7 @@ msgstr "Skali al Bilda Grandeco"
 #: libs/ui/forms/wdgdlgfilelayer.ui:135
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
-msgstr "Adaptiĝi al Bilda Rezolucio (ppi)"
+msgstr "Adaptiĝi al Bilda Distingivo (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
@@ -28979,7 +28979,7 @@ msgstr "%1 (Qt)"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:18
 #, kde-format
 msgid "Choose screen resolution"
-msgstr "Elekti ekranan rezolucion"
+msgstr "Elekti ekranan distingivon"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleMessage)
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:24
@@ -46743,13 +46743,13 @@ msgstr "Grandeca Reĝimo:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:257
 #, kde-format
 msgid "Resolution based"
-msgstr "Rezolucio bazita"
+msgstr "Distingiv-bazita"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModePixelBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:273
 #, kde-format
 msgid "Pixel based"
-msgstr "Bazita en rastrumeroj"
+msgstr "Surbaze de rastrumeroj"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
@@ -47238,7 +47238,7 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved in both dimensions."
 msgstr ""
-"La brileco de la bildo estos je plena rezolucio, dum la bunteco estos "
+"La brileco de la bildo estos je plena distingivo, dum la bunteco estos "
 "duonigita en ambaŭ dimensioj."
 
 #: plugins/impex/heif/HeifExport.cpp:529
@@ -47248,7 +47248,7 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved horizontally."
 msgstr ""
-"La brileco de la bildo estos je plena rezolucio, dum la bunteco estos "
+"La brileco de la bildo estos je plena distingivo, dum la bunteco estos "
 "duonigita horizontale."
 
 #: plugins/impex/heif/HeifExport.cpp:530
@@ -47256,7 +47256,7 @@ msgstr ""
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr "Ambaŭ brileco kaj bunteco de la bildo estos je plena rezolucio."
+msgstr "Ambaŭ brileco kaj bunteco de la bildo estos je plena distingivo."
 
 #: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
@@ -47661,7 +47661,7 @@ msgstr ""
 #: plugins/impex/jp2/kis_wdg_options_jp2.ui:78
 #, kde-format
 msgid "Number of resolutions:"
-msgstr "Nombro da rezolucioj:"
+msgstr "Nombro da distingivoj:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:25
@@ -47995,13 +47995,13 @@ msgstr "Centro-unua ordo"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "64x64 pli malalta rezolucio-paso"
+msgstr "64x64 pli malalta distingivo-paso"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr "512x512 + 64x64 pli malalta rezolucio pasas"
+msgstr "512x512 + 64x64 pli malalta distingivo pasas"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
 #, kde-format
@@ -48522,15 +48522,15 @@ msgstr "Kvantigo"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
 #, kde-format
 msgid "Low resolution DC"
-msgstr "Malalta rezolucio DC"
+msgstr "Malalt-distingiva DC"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
-"Agordu la progreseman reĝimon uzante pli malaltajn rezoluciajn DC-bildojn "
-"por VarDCT."
+"Agordu la progreseman reĝimon uzante pli malalt-distingivajn DC-bildojn por "
+"VarDCT."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:604
@@ -49222,7 +49222,7 @@ msgstr "dpi"
 #, kde-format
 msgctxt "horizontal resolution"
 msgid "Resolution:"
-msgstr "Rezolucio:"
+msgstr "Distingivo:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
 #: plugins/impex/png/kis_wdg_options_png.ui:18
@@ -50440,7 +50440,7 @@ msgstr "Importi SVG"
 #: plugins/impex/svg/kis_svg_import.cc:49
 #, kde-format
 msgid "Enter preferred resolution (PPI) for \"%1\""
-msgstr "Enigu preferatan rezolucion (PPI) por \"%1\""
+msgstr "Enigu preferatan distingivon (PPI) por \"%1\""
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57

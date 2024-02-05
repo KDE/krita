@@ -377,7 +377,6 @@ bool SvgTextCursor::paste()
                     addCommandToUndoAdapter(cmd);
                     success = true;
                 }
-                success = true;
             }
         }
 

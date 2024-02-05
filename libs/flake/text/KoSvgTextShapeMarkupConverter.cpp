@@ -272,6 +272,21 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 firstElement = false;
                 appendStyle = "text-decoration:underline";
             }
+            else if (elementName == "font") {
+                debugFlake << "\tstart Element" << elementName;
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
+                appendStyle = QString();
+                if (htmlReader.attributes().hasAttribute("color")) {
+                    svgWriter.writeAttribute("fill", htmlReader.attributes().value("color").toString());
+                }
+            }
+            else if (elementName == "pre") {
+                debugFlake << "\tstart Element" << elementName;
+                svgWriter.writeStartElement(elName);
+                firstElement = false;
+                appendStyle = "white-space:pre";
+            }
 
             QXmlStreamAttributes attributes = htmlReader.attributes();
 
@@ -353,10 +368,11 @@ bool KoSvgTextShapeMarkupConverter::convertFromHtml(const QString &htmlText, QSt
                 *styles = htmlReader.text().toString();
             }
             else {
-                if (!htmlReader.isWhitespace()) {
+                //TODO: Think up what to do with mix of pretty-print and <BR> (what libreoffice uses).
+                //if (!htmlReader.isWhitespace()) {
                     debugFlake << "\tCharacters:" << htmlReader.text();
                     svgWriter.writeCharacters(htmlReader.text().toString());
-                }
+                //}
             }
             break;
         }

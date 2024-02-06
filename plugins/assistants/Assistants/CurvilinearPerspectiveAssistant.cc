@@ -52,18 +52,6 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
 
     gc.save();
     gc.resetTransform();
-
-    QPointF mousePos(0,0);
-
-    if (canvas){
-        //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
-        //...of course, you need to have access to a canvas-widget for that.//
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-    }
     
     if (isSnappingActive()) {
 
@@ -72,10 +60,6 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         QPainterPath mouseGuidePath;
 
         gc.setTransform(initialTransform);
-
-        if (m_followBrushPosition && m_adjustedPositionValid) {
-            mousePos = initialTransform.map(m_adjustedBrushPosition);
-        }
 
         /*
          * Curvilinear perspective is created by circular arcs that intersect 2 vanishing points.
@@ -160,6 +144,7 @@ void CurvilinearPerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& 
         
         if(previewVisible) {
             // Draw guideline for the mouse, based on mouse position.
+            QPointF mousePos = effectiveBrushPosition(converter, canvas);
             // Get location on the screen of handles.
             QPointF screenP1 = initialTransform.map(*handles()[0]);
             QPointF screenP2 = initialTransform.map(*handles()[1]);

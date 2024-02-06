@@ -374,7 +374,6 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 {
     gc.save();
     gc.resetTransform();
-    QPointF mousePos = QPointF(0, 0);
 
     bool isEditing = false;
     
@@ -397,81 +396,67 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
         }
     }
 
-    if (canvas){
-        // simplest, cheapest way to get the mouse-position
-        isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
-        mousePos = canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
-        // ...of course, you need to have access to a canvas-widget for that.
-        mousePos = QCursor::pos(); // this'll give an offset
-        dbgFile<<"canvas does not exist, you may have passed arguments incorrectly:"<<canvas;
-    }
-
-    if (m_followBrushPosition && m_adjustedPositionValid) {
-        mousePos = initialTransform.map(m_adjustedBrushPosition);
-    }
-
     // draw ellipse and axes
     if (isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
-         gc.setTransform(initialTransform);
-         gc.setTransform(d->simpleEllipse.getTransform().inverted(), true);
+        QPointF mousePos = effectiveBrushPosition(converter, canvas);
+        gc.setTransform(initialTransform);
+        gc.setTransform(d->simpleEllipse.getTransform().inverted(), true);
 
-         QPainterPath path;
-         path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
+        QPainterPath path;
+        path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
 
-         if (assistantVisible || isEditing) {
-             drawPath(gc, path, isSnappingActive());
-         } else if (previewVisible && isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos.toPoint()), false)) {
-             drawPreview(gc, path);
-         }
+        if (assistantVisible || isEditing) {
+            drawPath(gc, path, isSnappingActive());
+        } else if (previewVisible && isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos.toPoint()), false)) {
+            drawPreview(gc, path);
+        }
 
-         if (isEditing) {
-             QPainterPath axes;
-             axes.moveTo(QPointF(-d->simpleEllipse.semiMajor(), 0));
-             axes.lineTo(QPointF(d->simpleEllipse.semiMajor(), 0));
+        if (isEditing) {
+            QPainterPath axes;
+            axes.moveTo(QPointF(-d->simpleEllipse.semiMajor(), 0));
+            axes.lineTo(QPointF(d->simpleEllipse.semiMajor(), 0));
 
-             axes.moveTo(QPointF(0, -d->simpleEllipse.semiMinor()));
-             axes.lineTo(QPointF(0, d->simpleEllipse.semiMinor()));
+            axes.moveTo(QPointF(0, -d->simpleEllipse.semiMinor()));
+            axes.lineTo(QPointF(0, d->simpleEllipse.semiMinor()));
 
-             gc.save();
+            gc.save();
 
-             QPen p(gc.pen());
-             p.setCosmetic(true);
-             p.setStyle(Qt::DotLine);
-             QColor color = effectiveAssistantColor();
-             if (!isSnappingActive()) {
-                 color.setAlpha(color.alpha()*0.2);
-             }
-             p.setWidthF(1.5);
-             p.setColor(color);
-             gc.setPen(p);
+            QPen p(gc.pen());
+            p.setCosmetic(true);
+            p.setStyle(Qt::DotLine);
+            QColor color = effectiveAssistantColor();
+            if (!isSnappingActive()) {
+                color.setAlpha(color.alpha()*0.2);
+            }
+            p.setWidthF(1.5);
+            p.setColor(color);
+            gc.setPen(p);
 
-             gc.drawPath(axes);
+            gc.drawPath(axes);
 
-             gc.restore();
-         }
+            gc.restore();
+        }
 
-         gc.setTransform(converter->documentToWidgetTransform());
-         gc.setTransform(d->ellipseInPolygon.originalTransform, true);
+        gc.setTransform(converter->documentToWidgetTransform());
+        gc.setTransform(d->ellipseInPolygon.originalTransform, true);
 
-         // drawing original axes ("lines to touching points")
-         QPointF pt1 = QPointF(0.5, 1.0);
-         QPointF pt2 = QPointF(1.0, 0.5);
-         QPointF pt3 = QPointF(0.5, 0.0);
-         QPointF pt4 = QPointF(0.0, 0.5);
+        // drawing original axes ("lines to touching points")
+        QPointF pt1 = QPointF(0.5, 1.0);
+        QPointF pt2 = QPointF(1.0, 0.5);
+        QPointF pt3 = QPointF(0.5, 0.0);
+        QPointF pt4 = QPointF(0.0, 0.5);
 
-         QPainterPath touchingLine;
+        QPainterPath touchingLine;
 
-         touchingLine.moveTo(pt1);
-         touchingLine.lineTo(pt3);
+        touchingLine.moveTo(pt1);
+        touchingLine.lineTo(pt3);
 
-         touchingLine.moveTo(pt2);
-         touchingLine.lineTo(pt4);
+        touchingLine.moveTo(pt2);
+        touchingLine.lineTo(pt4);
 
-         if (assistantVisible) {
-             drawPath(gc, touchingLine, isSnappingActive());
-         }
+        if (assistantVisible) {
+            drawPath(gc, touchingLine, isSnappingActive());
+        }
     }
 
 

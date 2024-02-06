@@ -134,6 +134,9 @@ struct KisPaintingAssistant::Private {
         bool isLocked {false};
         //The isDuplicating flag only exists to draw the duplicate button depressed when pressed
         bool isDuplicating {false};
+        bool followBrushPosition {false};
+        bool adjustedPositionValid {false};
+        QPointF adjustedBrushPosition;
 
         KisCanvas2* m_canvas {nullptr};
 
@@ -254,10 +257,7 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 KisPaintingAssistant::KisPaintingAssistant(
     const KisPaintingAssistant &rhs,
     QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-    : m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
-    , m_hasBeenInsideLocalRect(rhs.m_hasBeenInsideLocalRect)
+    : m_hasBeenInsideLocalRect(rhs.m_hasBeenInsideLocalRect)
     , d(new Private(*(rhs.d)))
 {
     dbgUI << "creating handles...";
@@ -292,20 +292,20 @@ void KisPaintingAssistant::setSnappingActive(bool set)
 
 void KisPaintingAssistant::endStroke()
 {
-    m_adjustedPositionValid = false;
-    m_followBrushPosition = false;
+    d->s->adjustedPositionValid = false;
+    d->s->followBrushPosition = false;
     m_hasBeenInsideLocalRect = false;
 }
 
 void KisPaintingAssistant::setAdjustedBrushPosition(const QPointF position)
 {
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
+    d->s->adjustedBrushPosition = position;
+    d->s->adjustedPositionValid = true;
 }
 
 void KisPaintingAssistant::setFollowBrushPosition(bool follow)
 {
-    m_followBrushPosition = follow;
+    d->s->followBrushPosition = follow;
 }
 
 QPointF KisPaintingAssistant::getEditorPosition() const
@@ -1076,6 +1076,23 @@ QPointF KisPaintingAssistant::pixelToView(const QPoint pixelCoords) const
 {
     QPointF documentCoord = d->s->m_canvas->image()->pixelToDocument(pixelCoords);
     return d->s->m_canvas->viewConverter()->documentToView(documentCoord);
+}
+
+QPointF KisPaintingAssistant::effectiveBrushPosition(const KisCoordinatesConverter *converter, KisCanvas2* canvas) const
+{
+    QPointF mousePos;
+
+    if (d->s->followBrushPosition && d->s->adjustedPositionValid) {
+        mousePos = converter->documentToWidget(d->s->adjustedBrushPosition);
+    } else if (canvas) {
+        // FIXME: this may be simple and cheap, but it's only integer precision!
+        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+    } else {
+        //...of course, you need to have access to a canvas-widget for that.//
+        mousePos = QCursor::pos(); //this'll give an offset//
+        dbgUI << "no canvas given for assistant, you may have passed arguments incorrectly:";
+    }
+    return mousePos;
 }
 
 KisPaintingAssistantHandleSP KisPaintingAssistant::firstLocalHandle() const

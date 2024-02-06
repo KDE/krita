@@ -94,18 +94,6 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
     gc.save();
     gc.resetTransform();
-    QPointF mousePos(0,0);
-
-    if (canvas) {
-        //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-        m_canvas = canvas;
-    }
-    else {
-        //...of course, you need to have access to a canvas-widget for that.//
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-    }
 
     QRect viewport= gc.viewport();
 
@@ -120,10 +108,7 @@ void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRe
 
             QTransform initialTransform = converter->documentToWidgetTransform();
             QPointF startPoint = initialTransform.map(*handles()[0]);
-
-            if (m_followBrushPosition && m_adjustedPositionValid) {
-                mousePos = initialTransform.map(m_adjustedBrushPosition);
-            }
+            QPointF mousePos = effectiveBrushPosition(converter, canvas);
 
             QLineF snapLine= QLineF(startPoint, mousePos);
 

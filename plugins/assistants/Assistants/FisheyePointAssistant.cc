@@ -82,30 +82,14 @@ void FisheyePointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect
     gc.save();
     gc.resetTransform();
 
-    QPointF mousePos(0,0);
-
-    if (canvas){
-        //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
-        //...of course, you need to have access to a canvas-widget for that.//
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-    }
-
-
     if (isSnappingActive() && previewVisible == true ) {
 
         if (isAssistantComplete()){
 
             QTransform initialTransform = converter->documentToWidgetTransform();
 
-            if (m_followBrushPosition && m_adjustedPositionValid) {
-                mousePos = initialTransform.map(m_adjustedBrushPosition);
-            }
-
             if (e.set(*handles()[0], *handles()[1], *handles()[2])) {
+                QPointF mousePos = effectiveBrushPosition(converter, canvas);
                 if (extraE.set(*handles()[0], *handles()[1], initialTransform.inverted().map(mousePos))){
                     gc.setTransform(initialTransform);
                     gc.setTransform(e.getInverse(), true);

@@ -61,7 +61,7 @@ QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& st
     return m_extraEllipse.project(pt);
 }
 
-QPointF ConcentricEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
+QPointF ConcentricEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt, strokeBegin);
 }
@@ -75,19 +75,6 @@ void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updat
 {
     gc.save();
     gc.resetTransform();
-    QPointF mousePos;
-
-    if (canvas){
-        //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
-        //...of course, you need to have access to a canvas-widget for that.//
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in the ellipse assistant, you may have passed arguments incorrectly:"<<canvas;
-    }
-
-
 
     if (isSnappingActive() && previewVisible == true){
 
@@ -95,11 +82,8 @@ void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updat
 
             QTransform initialTransform = converter->documentToWidgetTransform();
 
-            if (m_followBrushPosition && m_adjustedPositionValid) {
-                mousePos = initialTransform.map(m_adjustedBrushPosition);
-            }
-
             if (m_ellipse.set(*handles()[0], *handles()[1], *handles()[2])) {
+                QPointF mousePos = effectiveBrushPosition(converter, canvas);
                 QPointF initial = m_ellipse.project(initialTransform.inverted().map(mousePos));
                 QPointF center = m_ellipse.boundingRect().center();
                 qreal Ratio = QLineF(center, initialTransform.inverted().map(mousePos)).length() /QLineF(center, initial).length();

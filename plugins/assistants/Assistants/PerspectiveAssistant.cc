@@ -159,24 +159,10 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         //find vanishing point, find mouse, draw line between both.
         QPainterPath path2;
         QPointF intersection(0, 0);//this is the position of the vanishing point.
-        QPointF mousePos(0,0);
+        QPointF mousePos = effectiveBrushPosition(converter, canvas);
         QLineF snapLine;
         QRect viewport= gc.viewport();
         QRect bounds;
-
-        if (canvas){
-            //simplest, cheapest way to get the mouse-position
-            mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-        }
-        else {
-            //...of course, you need to have access to a canvas-widget for that.
-            mousePos = QCursor::pos(); // this'll give an offset
-            dbgFile<<"canvas does not exist, you may have passed arguments incorrectly:"<<canvas;
-        }
-
-        if (m_followBrushPosition && m_adjustedPositionValid) {
-            mousePos = initialTransform.map(m_adjustedBrushPosition);
-        }
 
         //figure out if point is in the perspective grid
         QPointF intersectTransformed(0, 0); // dummy for holding transformed intersection so the code is more readable.

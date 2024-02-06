@@ -259,6 +259,13 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_handles;
 
     QPointF pixelToView(const QPoint pixelCoords) const;
+    /**
+     * @brief Query the effective brush position to be used for preview lines.
+     * This is inteded to be used for painting the dynamic preview lines for assistants
+     * that feature them. Affected by setAdjustedBrushPosition() and setFollowBrushPosition().
+     * @return the effective brush (cursor) position in widget coordinates
+     */
+    QPointF effectiveBrushPosition(const KisCoordinatesConverter *converter, KisCanvas2 *canvas) const;
 
     /**
      * @brief firstLocalHandle
@@ -297,11 +304,6 @@ public:
     static QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list);
 
 protected:
-
-    bool m_followBrushPosition {false};
-    bool m_adjustedPositionValid {false};
-    QPointF m_adjustedBrushPosition;
-
     bool m_hasBeenInsideLocalRect {false};
 
 private:

@@ -34,6 +34,12 @@ public:
 
     virtual bool hasDummyForNode(KisNodeSP node) const = 0;
     virtual KisNodeDummy* dummyForNode(KisNodeSP node) const = 0;
+
+    /**
+     * Return the root dummy of the graph. Since the call to setImage() causes
+     * an **asynchronous** update of the dummies graph, it may cause
+     * rootDummy() to be null at some moments, which is a valid state.
+     */
     virtual KisNodeDummy* rootDummy() const = 0;
     virtual int dummiesCount() const = 0;
 

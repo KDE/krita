@@ -85,6 +85,10 @@ class KRITAUI_EXPORT KisNodeDummiesGraph
 public:
     KisNodeDummiesGraph();
 
+    /**
+     * Returns the root dummy of the graph. Take it into account that
+     * root may be null, while the image is being switched.
+     */
     KisNodeDummy* rootDummy() const;
 
     KisNodeDummy* nodeToDummy(KisNodeSP node);

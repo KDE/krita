@@ -173,7 +173,10 @@ void KisNodeModel::regenerateItems(KisNodeDummy *dummy)
 
 void KisNodeModel::slotIsolatedModeChanged()
 {
-    regenerateItems(m_d->dummiesFacade->rootDummy());
+    KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
+    if (!rootDummy) return;
+
+    regenerateItems(rootDummy);
 }
 
 bool KisNodeModel::showGlobalSelection() const
@@ -299,7 +302,10 @@ void KisNodeModel::setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
     if (oldDummiesFacade && m_d->image) {
         m_d->image->disconnect(this);
         oldDummiesFacade->disconnect(this);
-        connectDummies(m_d->dummiesFacade->rootDummy(), false);
+        KisNodeDummy *oldRootDummy = m_d->dummiesFacade->rootDummy();
+        if (oldRootDummy) {
+            connectDummies(oldRootDummy, false);
+        }
     }
 
     m_d->image = image;

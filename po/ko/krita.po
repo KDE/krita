@@ -17985,6 +17985,9 @@ msgid "Change Image Resolution"
 msgstr "이미지 해상도 변경"
 
 #: libs/image/kis_image.cc:1033
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Scale Layer"
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgstr "레이어 크기 조정"
@@ -18000,6 +18003,9 @@ msgid "Rotate Mask"
 msgstr "마스크 회전"
 
 #: libs/image/kis_image.cc:1166
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Rotate Layer"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgstr "레이어 회전"
@@ -18010,6 +18016,9 @@ msgid "Shear Mask"
 msgstr "마스크 기울이기"
 
 #: libs/image/kis_image.cc:1250
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Shear Layer"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgstr "레이어 기울이기"
@@ -28793,7 +28802,8 @@ msgid "Layer Size"
 msgstr "레이어 크기"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Resize Layer"
 msgid "Resize Layer"
 msgstr "레이어 크기 변경"
 
@@ -43741,12 +43751,17 @@ msgid "Offset Image"
 msgstr "이미지 오프셋"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "레이어 오프셋"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, kde-format
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Offset Layer"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "레이어 오프셋"
@@ -44622,7 +44637,8 @@ msgid "Mirror Image Horizontally"
 msgstr "이미지 좌우 반전"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:144
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Rotate Layer"
 msgid "Rotate Layer"
 msgstr "레이어 회전"
 
@@ -44763,7 +44779,8 @@ msgid "Shear Image"
 msgstr "이미지 기울이기"
 
 #: plugins/extensions/shearimage/shearimage.cc:72
-#, kde-format
+#, fuzzy, kde-format
+#| msgid "Shear Layer"
 msgid "Shear Layer"
 msgstr "레이어 기울이기"
 

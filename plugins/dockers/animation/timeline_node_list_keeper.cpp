@@ -275,6 +275,10 @@ TimelineNodeListKeeper::OtherLayersList
 TimelineNodeListKeeper::otherLayersList() const
 {
     OtherLayersList list;
-    m_d->findOtherLayers(m_d->dummiesFacade->rootDummy(), &list, "");
+
+    KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
+    if (!rootDummy) return list;
+
+    m_d->findOtherLayers(rootDummy, &list, "");
     return list;
 }

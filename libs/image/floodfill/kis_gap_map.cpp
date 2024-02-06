@@ -307,7 +307,7 @@ void KisGapMap::copyFromScratchTile(const QRect& rect)
  *   (mx - gap, my - gap, gap + 1, gap + 1).
  * - Lastly, only some points in the half circle will be modified, it depends on the opacity checks.
  */
-template<bool BoundsCheck>
+template<bool BoundsCheck, typename CoordinateTransform>
 void KisGapMap::gapDistanceSearch(int x, int y, CoordinateTransform op)
 {
     if (isOpaque<BoundsCheck>(op(x, y, 0, -1)) ||

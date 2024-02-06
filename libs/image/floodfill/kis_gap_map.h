@@ -86,8 +86,6 @@ private:
     /** For the purpose of lazy loading, the data is fetched in tile increments. */
     static constexpr int TileSize = 64;
 
-    typedef QPoint (*CoordinateTransform)(int x, int y, int xOffset, int yOffset);
-
     typedef quint8 TileFlags;
     enum TileFlagBits
     {
@@ -112,7 +110,9 @@ private:
     // Templates are used to generate optimized versions of the same function
     // (i.e., the if conditions can be removed at compilation time).
 
-    template<bool BoundsCheck> void gapDistanceSearch(int x, int y, CoordinateTransform op);
+    template<bool BoundsCheck, typename CoordinateTransform>
+    void gapDistanceSearch(int x, int y, CoordinateTransform op);
+
     template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(int x, int y);
     template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(const QPoint& p);
     void updateDistance(const QPoint& globalPosition, quint16 newDistance);

@@ -312,8 +312,37 @@ public:
      */
     bool removeText(int &index, int &length);
 
-    KoSvgTextProperties propertiesForPos(int pos);
+    /// Return the properties at a given position.
+    KoSvgTextProperties propertiesForPos(const int pos) const;
+
+    /**
+     * @brief propertiesForRange
+     * get the properties for a range.
+     * @param startPos -- range start.
+     * @param endPos -- range end.
+     * @return list of properties.
+     */
+    QList<KoSvgTextProperties> propertiesForRange(const int startPos, const int endPos) const;
+
+    /**
+     * @brief setPropertiesAtPos
+     * will set the properties at pos.
+     * @param pos
+     * @param properties
+     */
     void setPropertiesAtPos(int pos, KoSvgTextProperties properties);
+
+    /**
+     * @brief mergePropertiesIntoRange
+     * Merge given properties into the given range. This will first split
+     * the nodes at the two range ends, and then merge in the properties
+     * into each leaf node. Won't do anything when startPos == endPos
+     * @param startPos -- cursor pos start.
+     * @param endPos -- cursor pos end.
+     * @param properties -- properties to merge in.
+     */
+    void mergePropertiesIntoRange(const int startPos, const int endPos, KoSvgTextProperties properties);
+
 
     /**
      * @brief copyRange

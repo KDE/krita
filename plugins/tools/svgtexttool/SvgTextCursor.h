@@ -8,6 +8,7 @@
 #define SVGTEXTCURSOR_H
 
 #include <KoSvgTextShape.h>
+#include <KoSvgTextProperties.h>
 #include <KoToolSelection.h>
 #include <QPainter>
 #include <KoShape.h>
@@ -124,6 +125,10 @@ public:
 
     void removeLastCodePoint();
 
+    KoSvgTextProperties currentTextProperties() const;
+
+    void mergePropertiesIntoSelection(const KoSvgTextProperties props);
+
     /**
      * @brief removeSelection
      * if there's a selection, creates a text-removal command.
@@ -181,6 +186,8 @@ private Q_SLOTS:
     void stopBlinkCursor();
 
     void updateInputMethodItemTransform();
+    void canvasResourceChanged(int key, const QVariant &value);
+    void toggleProperty(KoSvgTextProperties::PropertyId property);
 
 private:
 

@@ -481,7 +481,9 @@ public:
     static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index) {
         int currentIndex = 0;
         auto contentElement = findTextContentElementForIndex(tree, currentIndex, index, true);
-        if (contentElement.node()) {
+        if (contentElement.node()
+                && index > currentIndex
+                && index < currentIndex + contentElement->numChars(false)) {
             KoSvgTextContentElement duplicate = KoSvgTextContentElement();
             duplicate.text = contentElement->text;
             int start = index - currentIndex;

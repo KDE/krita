@@ -779,18 +779,37 @@ bool KoSvgTextShape::removeText(int &index, int &length)
     return succes;
 }
 
-KoSvgTextProperties KoSvgTextShape::propertiesForPos(int pos)
+KoSvgTextProperties KoSvgTextShape::propertiesForPos(const int pos) const
 {
-    KoSvgTextProperties props = KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties();
-    if (pos < 0 || d->cursorPos.isEmpty()) {
+    return propertiesForRange(pos, pos).first();
+}
+
+QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos, const int endPos) const
+{
+    QList<KoSvgTextProperties> props;
+    if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
+        props = {KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties()};
         return props;
     }
-    CursorPos cursorPos = d->cursorPos.at(pos);
-    CharacterResult res = d->result.at(cursorPos.cluster);
-    int currentIndex = 0;
-    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, res.plaintTextIndex);
-    if (!isEnd(siblingCurrent(it))) {
-        props = it->properties;
+
+    const int startIndex = d->cursorPos.at(startPos).index;
+    const int endIndex = d->cursorPos.at(endPos).index;
+    int sought = startIndex;
+    if (startIndex == endIndex) {
+        int currentIndex = 0;
+        auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought);
+        if (!isEnd(siblingCurrent(it))) {
+            props.append(it->properties);
+        }
+    } else {
+        while(sought < endIndex) {
+            int currentIndex = 0;
+            auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought);
+            if (!isEnd(siblingCurrent(it))) {
+                props.append(it->properties);
+            }
+            sought = currentIndex + it->numChars(false);
+        }
     }
 
     return props;
@@ -817,17 +836,57 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
     }
 }
 
+void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endPos, KoSvgTextProperties properties)
+{
+    if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
+        if (KisForestDetail::size(d->textData)) {
+            d->textData.childBegin()->properties = properties;
+        }
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+        return;
+    }
+    const int startIndex = d->cursorPos.at(startPos).index;
+    const int endIndex = d->cursorPos.at(endPos).index;
+    if (startIndex != endIndex) {
+        KoSvgTextShape::Private::splitContentElement(d->textData, startIndex);
+        KoSvgTextShape::Private::splitContentElement(d->textData, endIndex);
+    }
+    int sought = startIndex;
+    bool changed = false;
+    while(sought < endIndex) {
+        int currentIndex = 0;
+        auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought, true);
+        if (it.node()) {
+            Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
+                it->properties.setProperty(p, properties.property(p));
+            }
+            changed = true;
+        }
+        sought = currentIndex + it->numChars(false);
+    }
+    KoSvgTextShape::Private::cleanUp(d->textData);
+    if (changed){
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+        if (properties.hasProperty(KoSvgTextProperties::FillId)) {
+            shapeChangedPriv(BackgroundChanged);
+        }
+        if (properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+            shapeChangedPriv(StrokeChanged);
+        }
+    }
+}
+
 KoSvgTextShape *KoSvgTextShape::copyRange(int index, int length) const
 {
     KoSvgTextShape *clone = new KoSvgTextShape(*this);
     int zero = 0;
     int endRange = index + length;
     int size = KoSvgTextShape::Private::numChars(clone->d->textData.childBegin(), false) - endRange;
-    clone->debugParsing();
     clone->removeText(endRange, size);
     clone->removeText(zero, index);
     KoSvgTextShape::Private::cleanUp(clone->d->textData);
-    clone->debugParsing();
     return clone;
 }
 
@@ -836,13 +895,9 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
     bool succes = false;
     int currentIndex = 0;
     int index = 0;
-    int oldIndex = 0;
 
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-        CursorPos cursorPos = d->cursorPos.at(pos);
-        CharacterResult res = d->result.at(cursorPos.cluster);
-        index = res.plaintTextIndex;
-        oldIndex = cursorPos.index;
+        index = d->cursorPos.at(pos).index;
         index = qMin(index, d->result.size()-1);
     }
 

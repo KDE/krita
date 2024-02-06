@@ -8,15 +8,21 @@
 #include "KoSvgTextProperties.h"
 #include "SvgTextInsertCommand.h"
 #include "SvgTextInsertRichCommand.h"
+#include "SvgTextMergePropertiesRangeCommand.h"
 #include "SvgTextRemoveCommand.h"
 #include "SvgTextShapeManagerBlocker.h"
+
 #include "KoSvgTextShapeMarkupConverter.h"
 #include "KoSvgPaste.h"
+#include "KoColorBackground.h"
+#include "KoShapeStroke.h"
+#include "KoColor.h"
 
 #include "KoViewConverter.h"
 #include "kis_coordinates_converter.h"
 #include "kis_painting_tweaks.h"
 #include "KoCanvasController.h"
+#include "KoCanvasResourceProvider.h"
 
 #include "kundo2command.h"
 #include <QTimer>
@@ -137,6 +143,8 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
     if (d->canvas->canvasController()) {
         // Mockcanvas in the tests has no canvas controller.
         connect(d->canvas->canvasController()->proxyObject, SIGNAL(sizeChanged(QSize)), this, SLOT(updateInputMethodItemTransform()));
+        connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
+                this, SLOT(canvasResourceChanged(int,QVariant)));
     }
 }
 
@@ -293,6 +301,22 @@ void SvgTextCursor::removeLastCodePoint()
             removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1);
             addCommandToUndoAdapter(removeCmd);
         }
+    }
+}
+
+KoSvgTextProperties SvgTextCursor::currentTextProperties() const
+{
+    if (d->shape) {
+        return d->shape->propertiesForPos(d->pos);
+    }
+    return KoSvgTextProperties();
+}
+
+void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props)
+{
+    if (d->shape) {
+        KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, d->pos, d->anchor);
+        addCommandToUndoAdapter(cmd);
     }
 }
 
@@ -798,6 +822,54 @@ void SvgTextCursor::updateInputMethodItemTransform()
     }
 }
 
+void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
+{
+    KoSvgTextProperties props;
+    if (key == KoCanvasResource::ForegroundColor) {
+        QSharedPointer<KoShapeBackground> bg(new KoColorBackground(value.value<KoColor>().toQColor()));
+        props.setProperty(KoSvgTextProperties::FillId,
+                          QVariant::fromValue(KoSvgText::BackgroundProperty(bg)));
+    } else if (key == KoCanvasResource::BackgroundColor) {
+        // TODO figure out how not to override the whole stroke.
+        QSharedPointer<KoShapeStroke> stroke(new KoShapeStroke());
+        stroke->setColor(value.value<KoColor>().toQColor());
+        props.setProperty(KoSvgTextProperties::StrokeId,
+                          QVariant::fromValue(KoSvgText::StrokeProperty(stroke)));
+    }
+    mergePropertiesIntoSelection(props);
+}
+
+void SvgTextCursor::toggleProperty(KoSvgTextProperties::PropertyId property)
+{
+    QVariant newVal;
+    QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
+    for(auto it = p.begin(); it != p.end(); it++) {
+        if (property == KoSvgTextProperties::FontWeightId) {
+            int value = it->property(property, QVariant(400)).toInt();
+            newVal = value == 400? QVariant(700): QVariant(400);
+            if (value == 400) break;
+        } else if (property == KoSvgTextProperties::FontStyleId) {
+            QFont::Style value = QFont::Style(it->property(property, QVariant(QFont::StyleNormal)).toInt());
+            newVal = value == QFont::StyleNormal? QVariant(QFont::StyleItalic): QVariant(QFont::StyleNormal);
+            if (value == QFont::StyleNormal) break;
+        } else if (property == KoSvgTextProperties::TextDecorationLineId) {
+            KoSvgText::TextDecorations decor = it->propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<KoSvgText::TextDecorations>();
+            KoSvgText::TextDecorations newDecor;
+            if (decor.testFlag(KoSvgText::DecorationUnderline)) {
+                newDecor.setFlag(KoSvgText::DecorationUnderline, false);
+                newVal = QVariant::fromValue(newDecor);
+            } else {
+                newDecor.setFlag(KoSvgText::DecorationUnderline, true);
+                newVal = QVariant::fromValue(newDecor);
+                break;
+            }
+        }
+    }
+    KoSvgTextProperties properties;
+    properties.setProperty(property, newVal);
+    mergePropertiesIntoSelection(properties);
+}
+
 bool SvgTextCursor::hasSelection()
 {
     return d->pos != d->anchor;
@@ -946,6 +1018,18 @@ void SvgTextCursor::keyPressEvent(QKeyEvent *event)
     // We'll need to test format change actions before the standard
     // keys, as one of the standard keys for deleting a line is ctrl+u
     // which would probably be expected to do underline before deleting.
+
+    if (testSequence == QKeySequence::Bold) {
+        toggleProperty(KoSvgTextProperties::FontWeightId);
+        event->accept();
+    } else if (testSequence == QKeySequence::Italic) {
+        toggleProperty(KoSvgTextProperties::FontStyleId);
+        event->accept();
+    } else if (testSequence == QKeySequence::Underline) {
+        toggleProperty(KoSvgTextProperties::TextDecorationLineId);
+        event->accept();
+    }
+    if (event->isAccepted()) return;
 
     // This first set is already tested above, however, if they still
     // match, then it's one of the extra sequences for MacOs, which

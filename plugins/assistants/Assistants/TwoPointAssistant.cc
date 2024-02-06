@@ -154,26 +154,10 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     Q_UNUSED(cached);
     gc.save();
     gc.resetTransform();
-    QPointF mousePos(0,0);
 
     const QTransform initialTransform = converter->documentToWidgetTransform();
     bool isEditing = false;
     bool showLocal = isLocal() && handles().size() == 5;
-
-    if (canvas){
-        //simplest, cheapest way to get the mouse-position//
-        mousePos = canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-        isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
-        m_canvas = canvas;
-    }
-    else {
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-    }
-
-    if (m_followBrushPosition && m_adjustedPositionValid) {
-        mousePos = initialTransform.map(m_adjustedBrushPosition);
-    }
 
     if (isEditing) {
         Q_FOREACH (const QPointF* handle, handles()) {
@@ -242,6 +226,7 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     }
 
     if (handles().size() >= 2) {
+        QPointF mousePos = effectiveBrushPosition(converter, canvas);
         const QPointF p1 = *handles()[0];
         const QPointF p2 = *handles()[1];
         const QRect viewport= gc.viewport();

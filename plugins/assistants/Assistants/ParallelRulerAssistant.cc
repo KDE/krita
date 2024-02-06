@@ -83,18 +83,6 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
 {
     gc.save();
     gc.resetTransform();
-    QPointF mousePos(0,0);
-
-    if (canvas){
-        //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
-        //...of course, you need to have access to a canvas-widget for that.//
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-    }
-
 
     QTransform initialTransform = converter->documentToWidgetTransform();
     QRectF local = getLocalRect();
@@ -121,9 +109,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         //don't draw if invalid.
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
 
-        if (m_followBrushPosition && m_adjustedPositionValid) {
-            mousePos = initialTransform.map(m_adjustedBrushPosition);
-        }
+        QPointF mousePos = effectiveBrushPosition(converter, canvas);
 
         QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
         snapLine= snapLine.translated(translation);

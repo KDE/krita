@@ -15,6 +15,7 @@ class KisFillPainterTest : public QObject
 
 private:
     void benchmarkFillPainter(const QPoint &startPoint, bool useCompositing);
+    void benchmarkFillSelection(int closeGap);
 
 private Q_SLOTS:
 
@@ -24,6 +25,7 @@ private Q_SLOTS:
     void benchmarkFillPainterOffsetCompositing();
     void benchmarkFillingScanlineColor();
     void benchmarkFillingScanlineSelection();
+    void benchmarkFillingGapClosingSelection();
 
     void testPatternFill();
 };

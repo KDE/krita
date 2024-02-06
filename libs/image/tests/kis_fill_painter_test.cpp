@@ -105,7 +105,7 @@ void KisFillPainterTest::benchmarkFillingScanlineColor()
                                   "heavy_labyrinth_top_left"));
 }
 
-void KisFillPainterTest::benchmarkFillingScanlineSelection()
+void KisFillPainterTest::benchmarkFillSelection(int closeGap)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -123,6 +123,7 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
     QBENCHMARK_ONCE {
         KisScanlineFill gc(dev, QPoint(), imageRect);
         gc.setThreshold(THRESHOLD);
+        gc.setCloseGap(closeGap);
         gc.fillSelection(pixelSelection);
     }
 
@@ -135,6 +136,18 @@ void KisFillPainterTest::benchmarkFillingScanlineSelection()
                                   "fill_painter",
                                   "scanline_",
                                   "heavy_labyrinth_top_left_selection"));
+}
+
+void KisFillPainterTest::benchmarkFillingScanlineSelection()
+{
+    benchmarkFillSelection(0);
+}
+
+void KisFillPainterTest::benchmarkFillingGapClosingSelection()
+{
+    // This is the largest size that will produce the same result as the regular scanline fill.
+    // However, this is still useful because we are using the gap closing algorithm.
+    benchmarkFillSelection(24);
 }
 
 void KisFillPainterTest::testPatternFill()

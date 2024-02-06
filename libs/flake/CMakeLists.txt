@@ -13,7 +13,15 @@ add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(resources/tests)
 
-if(HAVE_XSIMD)
+set(DISABLE_CLIP_MASK_PAINTER_ON_MACOS FALSE)
+if (APPLE)
+    set(DISABLE_CLIP_MASK_PAINTER_ON_MACOS TRUE)
+endif()
+
+# generate krita_xsimd_macos_workaround.h
+configure_file(krita_xsimd_macos_workaround.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/krita_xsimd_macos_workaround.h)
+
+if(HAVE_XSIMD AND NOT DISABLE_CLIP_MASK_PAINTER_ON_MACOS)
     ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs xsimd/KoClipMaskApplicatorFactoryImpl.cpp)
 else()
     set(__per_arch_alpha_applicator_factory_objs xsimd/KoClipMaskApplicatorFactoryImpl.cpp)

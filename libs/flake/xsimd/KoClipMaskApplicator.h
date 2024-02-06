@@ -7,6 +7,8 @@
 #ifndef KOCLIPMASKAPPLICATOR_H
 #define KOCLIPMASKAPPLICATOR_H
 
+#include <krita_xsimd_macos_workaround.h>
+
 #include <KoStreamedMath.h>
 #include <KoClipMaskApplicatorBase.h>
 #include <QDebug>
@@ -19,7 +21,7 @@ struct KoClipMaskApplicator : public KoClipMaskApplicatorBase {
     }
 };
 
-#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
+#if defined(HAVE_XSIMD) && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE) && !defined(DISABLE_CLIP_MASK_PAINTER_ON_MACOS)
 
 template<typename _impl>
 struct KoClipMaskApplicator<_impl,

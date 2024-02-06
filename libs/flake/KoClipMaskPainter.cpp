@@ -17,7 +17,11 @@
 
 struct KoClipMaskApplicatorFactory {
     static KoClipMaskApplicatorBase* createApplicator() {
+#ifndef DISABLE_CLIP_MASK_PAINTER_ON_MACOS
         return createOptimizedClass<KoClipMaskApplicatorFactoryImpl>();
+#else
+        return KoClipMaskApplicatorFactoryImpl::create<xsimd::generic>();
+#endif
     }
 };
 

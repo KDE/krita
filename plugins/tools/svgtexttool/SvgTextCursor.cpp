@@ -834,6 +834,9 @@ void SvgTextCursor::updateInputMethodItemTransform()
 
 void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
 {
+    if (!d->shape)
+        return;
+
     KoSvgTextProperties props;
     if (key == KoCanvasResource::ForegroundColor) {
         QSharedPointer<KoShapeBackground> bg(new KoColorBackground(value.value<KoColor>().toQColor()));
@@ -851,33 +854,35 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
 
 void SvgTextCursor::toggleProperty(KoSvgTextProperties::PropertyId property)
 {
-    QVariant newVal;
-    QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
-    for(auto it = p.begin(); it != p.end(); it++) {
-        if (property == KoSvgTextProperties::FontWeightId) {
-            int value = it->property(property, QVariant(400)).toInt();
-            newVal = value == 400? QVariant(700): QVariant(400);
-            if (value == 400) break;
-        } else if (property == KoSvgTextProperties::FontStyleId) {
-            QFont::Style value = QFont::Style(it->property(property, QVariant(QFont::StyleNormal)).toInt());
-            newVal = value == QFont::StyleNormal? QVariant(QFont::StyleItalic): QVariant(QFont::StyleNormal);
-            if (value == QFont::StyleNormal) break;
-        } else if (property == KoSvgTextProperties::TextDecorationLineId) {
-            KoSvgText::TextDecorations decor = it->propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<KoSvgText::TextDecorations>();
-            KoSvgText::TextDecorations newDecor;
-            if (decor.testFlag(KoSvgText::DecorationUnderline)) {
-                newDecor.setFlag(KoSvgText::DecorationUnderline, false);
-                newVal = QVariant::fromValue(newDecor);
-            } else {
-                newDecor.setFlag(KoSvgText::DecorationUnderline, true);
-                newVal = QVariant::fromValue(newDecor);
-                break;
+    if (d->shape) {
+        QVariant newVal;
+        QList<KoSvgTextProperties> p = d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
+        for(auto it = p.begin(); it != p.end(); it++) {
+            if (property == KoSvgTextProperties::FontWeightId) {
+                int value = it->property(property, QVariant(400)).toInt();
+                newVal = value == 400? QVariant(700): QVariant(400);
+                if (value == 400) break;
+            } else if (property == KoSvgTextProperties::FontStyleId) {
+                QFont::Style value = QFont::Style(it->property(property, QVariant(QFont::StyleNormal)).toInt());
+                newVal = value == QFont::StyleNormal? QVariant(QFont::StyleItalic): QVariant(QFont::StyleNormal);
+                if (value == QFont::StyleNormal) break;
+            } else if (property == KoSvgTextProperties::TextDecorationLineId) {
+                KoSvgText::TextDecorations decor = it->propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<KoSvgText::TextDecorations>();
+                KoSvgText::TextDecorations newDecor;
+                if (decor.testFlag(KoSvgText::DecorationUnderline)) {
+                    newDecor.setFlag(KoSvgText::DecorationUnderline, false);
+                    newVal = QVariant::fromValue(newDecor);
+                } else {
+                    newDecor.setFlag(KoSvgText::DecorationUnderline, true);
+                    newVal = QVariant::fromValue(newDecor);
+                    break;
+                }
             }
         }
+        KoSvgTextProperties properties;
+        properties.setProperty(property, newVal);
+        mergePropertiesIntoSelection(properties);
     }
-    KoSvgTextProperties properties;
-    properties.setProperty(property, newVal);
-    mergePropertiesIntoSelection(properties);
 }
 
 bool SvgTextCursor::hasSelection()

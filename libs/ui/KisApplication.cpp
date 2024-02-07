@@ -870,7 +870,6 @@ void KisApplication::verifyMetatypeRegistration()
     verifyTypeRegistered("KoSvgText::TextIndentInfo");
     verifyTypeRegistered("KoSvgText::TabSizeInfo");
     verifyTypeRegistered("KoSvgText::LineHeightInfo");
-    verifyTypeRegistered("KoSvgText::AssociatedShapeWrapper");
     verifyTypeRegistered("KisPaintopLodLimitations");
     verifyTypeRegistered("KisImageSP");
     verifyTypeRegistered("KisImageSignalType");

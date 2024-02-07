@@ -571,47 +571,6 @@ struct LineHeightInfo : public boost::equality_comparable<LineHeightInfo> {
 LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &context);
 QString writeLineHeight(LineHeightInfo lineHeight);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::LineHeightInfo &value);
-/**
- * @brief The AssociatedShapeWrapper struct is a special shared-pointer-like class
- * to store a safe reference to the associated shape. It implements the shape listener
- * interface and handles 'delete' signal to safely shutdown the link.
- *
- * It is used in KoSvgCharChunkFormat to store a backward link to a shape containing this
- * subchunk of text, so that the layout engine could notify the shape, where its text
- * is located.
- */
-struct AssociatedShapeWrapper : public KoShape::ShapeChangeListener
-{
-    AssociatedShapeWrapper();
-    AssociatedShapeWrapper(KoSvgTextChunkShape *shape);
-    AssociatedShapeWrapper(const AssociatedShapeWrapper &rhs);
-    AssociatedShapeWrapper& operator=(const AssociatedShapeWrapper &rhs);
-
-    /**
-     * @brief isValid shows whether the link to the associated shape is still valid
-     * @return true if the link is valid
-     */
-    bool isValid() const;
-
-    /**
-     * @brief addCharacterRect notifies the associated shape that one of its characters
-     *                         occupies the location \p rect. The shape is expected to add
-     *                         this rect to its outline.
-     * @param rect the rectangle associated by the shape
-     * @see KoSvgTextChunkShapeLayoutInterface::addAssociatedOutline
-     */
-    void addCharacterRect(const QRectF &rect);
-
-    void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
-
-    KoSvgTextChunkShape *shape()
-    {
-        return m_shape;
-    }
-
-private:
-    KoSvgTextChunkShape *m_shape = nullptr;
-};
 
 /**
  * @brief BackgroundProperty is a special wrapper around KoShapeBackground for managing it in KoSvgTextProperties
@@ -663,6 +622,5 @@ Q_DECLARE_METATYPE(KoSvgText::TextTransformInfo)
 Q_DECLARE_METATYPE(KoSvgText::TextIndentInfo)
 Q_DECLARE_METATYPE(KoSvgText::TabSizeInfo)
 Q_DECLARE_METATYPE(KoSvgText::LineHeightInfo)
-Q_DECLARE_METATYPE(KoSvgText::AssociatedShapeWrapper)
 
 #endif // KOSVGTEXT_H

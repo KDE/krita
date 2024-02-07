@@ -534,13 +534,16 @@ public:
                 } else {
                     // check if siblings are similar.
                     auto siblingPrev = siblingCurrent(it);
+                    KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(it->properties.property(KoSvgTextProperties::UnicodeBidiId,
+                                                                                                 QVariant(KoSvgText::BidiNormal)).toInt());
                     siblingPrev--;
                     if (siblingPrev.node()
                             && siblingPrev != siblingCurrent(it)
                             && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
                             && (!siblingPrev->textPath && !it->textPath)
                             && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
-                            && (siblingPrev->properties == it->properties)) {
+                            && (siblingPrev->properties == it->properties)
+                            && (bidi != KoSvgText::BidiIsolate && bidi != KoSvgText::BidiIsolateOverride)) {
                         // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
                         siblingPrev->text += it->text;
                         tree.erase(siblingCurrent(it));
@@ -552,8 +555,14 @@ public:
                 if ((child->localTransformations.isEmpty() && it->localTransformations.isEmpty())
                         && (!child->textPath && !it->textPath)
                         && (child->textLength.isAuto && it->textLength.isAuto)
-                        && (!child->properties.hasNonInheritableProperties() && !it->properties.hasNonInheritableProperties())) {
-                    child->properties.inheritFrom(it->properties);
+                        && (!child->properties.hasNonInheritableProperties() || !it->properties.hasNonInheritableProperties())) {
+                    if (it->properties.hasNonInheritableProperties()) {
+                        KoSvgTextProperties props = it->properties;
+                        props.setAllButNonInheritableProperties(child->properties);
+                        child->properties = props;
+                    } else {
+                        child->properties.inheritFrom(it->properties);
+                    }
                     tree.move(child, siblingCurrent(it));
                     tree.erase(siblingCurrent(it));
                 }

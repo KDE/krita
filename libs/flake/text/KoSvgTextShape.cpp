@@ -917,6 +917,8 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
 void KoSvgTextShape::cleanUp()
 {
     KoSvgTextShape::Private::cleanUp(d->textData);
+    notifyChanged();
+    shapeChangedPriv(ContentChanged);
 }
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const

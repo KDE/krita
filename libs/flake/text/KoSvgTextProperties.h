@@ -188,6 +188,9 @@ public:
     /// Test whether it has non-inheritable properties set.
     bool hasNonInheritableProperties() const;
 
+    /// Used to merge child properties into parent properties
+    void setAllButNonInheritableProperties(const KoSvgTextProperties &properties);
+
     /**
      * Return a set of properties that ar **not** inherited from \p
      * parentProperties. The property is considered "inherited" **iff* it is

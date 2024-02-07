@@ -133,6 +133,16 @@ bool KoSvgTextProperties::hasNonInheritableProperties() const
     return false;
 }
 
+void KoSvgTextProperties::setAllButNonInheritableProperties(const KoSvgTextProperties &properties)
+{
+    auto it = properties.m_d->properties.constBegin();
+    for (; it != properties.m_d->properties.constEnd(); ++it) {
+        if (m_d->isInheritable(it.key())) {
+            setProperty(it.key(), it.value());
+        }
+    }
+}
+
 KoSvgTextProperties KoSvgTextProperties::ownProperties(const KoSvgTextProperties &parentProperties, bool keepFontSize) const
 {
     KoSvgTextProperties result;

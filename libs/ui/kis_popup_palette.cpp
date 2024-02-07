@@ -289,6 +289,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
 KisPopupPalette::~KisPopupPalette()
 {
+    delete m_dockerIOULabel;
 }
 
 void KisPopupPalette::slotConfigurationChanged()
@@ -605,12 +606,12 @@ void KisPopupPalette::showDockerConfig()
         }
     }
 
-    KisDlgListPicker *config = new KisDlgListPicker(i18n("Configure Popup Palette dockers"),
+    KisDlgListPicker config = KisDlgListPicker(i18n("Configure Popup Palette dockers"),
                                                     i18n("Available dockers"), i18n("Current dockers"),
                                                     dockerNames, dockerIds, currentDockerNames, currentDockerIds, this);
 
-    if (config->exec() == QDialog::Accepted) {
-        writeDockerList(config->getChosenData());
+    if (config.exec() == QDialog::Accepted) {
+        writeDockerList(config.getChosenData());
         const QString currentDocker = readCurrentDocker();
         readDockerList();
         m_dockerComboBox->setCurrentIndex(m_dockerComboBox->findData(currentDocker, Qt::UserRole));

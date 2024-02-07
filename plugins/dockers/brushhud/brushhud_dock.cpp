@@ -32,9 +32,13 @@ void BrushHudDock::setCanvas(KoCanvasBase *canvas)
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    if (!m_canvas || !m_canvas->viewManager() || !m_canvas->resourceManager()) return;
-
-    m_brushHud = new KisBrushHud(m_canvas->viewManager()->canvasResourceProvider(), this);
-    setWidget(m_brushHud);
+    if (m_canvas && m_canvas->viewManager() && m_canvas->resourceManager()) {
+        m_brushHud = new KisBrushHud(m_canvas->viewManager()->canvasResourceProvider(), this);
+        setWidget(m_brushHud);
+    }
+    else {
+        setWidget(nullptr);
+        delete m_brushHud;
+    }
 }
 

@@ -7,6 +7,7 @@
 
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"
+#include "kis_command_ids.h"
 
 SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgTextShape *shape,
                                                                        KoSvgTextProperties props,
@@ -22,6 +23,9 @@ SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgText
     setText(kundo2_i18n("Change Text Properties"));
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
+    // Some properties may change cursor pos count, so we need the indices.
+    m_startIndex = m_shape->indexForPos(qMin(pos, anchor));
+    m_endIndex = m_shape->indexForPos(qMax(pos, anchor));
 }
 
 void SvgTextMergePropertiesRangeCommand::redo()
@@ -40,4 +44,24 @@ void SvgTextMergePropertiesRangeCommand::undo()
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
     m_shape->notifyCursorPosChanged(m_pos, m_anchor);
+}
+
+int SvgTextMergePropertiesRangeCommand::id() const
+{
+    return KisCommandUtils::SvgTextMergePropertiesRangeCommand;
+}
+
+bool SvgTextMergePropertiesRangeCommand::mergeWith(const KUndo2Command *other)
+{
+    const SvgTextMergePropertiesRangeCommand *command = dynamic_cast<const SvgTextMergePropertiesRangeCommand*>(other);
+
+    if (!command || command->m_shape != m_shape || m_startIndex != command->m_startIndex || m_endIndex != command->m_endIndex) {
+        return false;
+    }
+
+    Q_FOREACH(KoSvgTextProperties::PropertyId p, command->m_props.properties()) {
+        m_props.setProperty(p, command->m_props.property(p));
+    }
+
+    return true;
 }

@@ -23,12 +23,17 @@ public:
     void redo() override;
 
     void undo() override;
+
+    int id() const override;
+    bool mergeWith(const KUndo2Command *other) override;
 private:
     KoSvgTextShape *m_shape;
     KoSvgTextProperties m_props;
 
     int m_pos;
     int m_anchor;
+    int m_startIndex; // for testing merge.
+    int m_endIndex; // for testing merge.
     QString m_oldSvg;
     QString m_oldDefs;
 };

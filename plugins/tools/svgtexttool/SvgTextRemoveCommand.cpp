@@ -14,6 +14,7 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
                                            int endIndex, int pos,
                                            int anchor,
                                            int length,
+                                           bool allowCleanUp,
                                            KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
@@ -21,6 +22,7 @@ SvgTextRemoveCommand::SvgTextRemoveCommand(KoSvgTextShape *shape,
     , m_originalPos(pos)
     , m_anchor(anchor)
     , m_length(length)
+    , m_allowCleanUp(allowCleanUp)
 {
     Q_ASSERT(shape);
     setText(kundo2_i18n("Remove Text"));
@@ -37,6 +39,9 @@ void SvgTextRemoveCommand::redo()
     m_shape->removeText(idx, m_length);
     m_index = idx + m_length;
 
+    if (m_allowCleanUp) {
+        m_shape->cleanUp();
+    }
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
     int pos = qMax(0, m_shape->posForIndex(idx, false, false));

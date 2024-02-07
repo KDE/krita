@@ -26,6 +26,7 @@ void SvgTextInsertRichCommand::redo()
     KoSvgTextShapeMarkupConverter converter(m_shape);
     converter.convertToSvg(&m_oldSvg, &m_oldDefs);
     m_shape->insertRichText(m_pos, m_insert);
+    m_shape->cleanUp();
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
     int pos = m_shape->posForIndex(oldIndex + m_insert->plainText().size(), false, false);

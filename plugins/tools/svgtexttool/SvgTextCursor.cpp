@@ -257,7 +257,7 @@ void SvgTextCursor::insertText(QString text)
     if (d->shape) {
         //KUndo2Command *parentCmd = new KUndo2Command;
         if (hasSelection()) {
-            SvgTextRemoveCommand *removeCmd = removeSelectionImpl();
+            SvgTextRemoveCommand *removeCmd = removeSelectionImpl(false);
             addCommandToUndoAdapter(removeCmd);
         }
 
@@ -272,7 +272,7 @@ void SvgTextCursor::insertRichText(KoSvgTextShape *insert)
     if (d->shape) {
         //KUndo2Command *parentCmd = new KUndo2Command;
         if (hasSelection()) {
-            SvgTextRemoveCommand *removeCmd = removeSelectionImpl();
+            SvgTextRemoveCommand *removeCmd = removeSelectionImpl(false);
             addCommandToUndoAdapter(removeCmd);
         }
 
@@ -287,7 +287,7 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
     if (d->shape) {
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
-            removeCmd = removeSelectionImpl();
+            removeCmd = removeSelectionImpl(true);
             addCommandToUndoAdapter(removeCmd);
         } else {
             int posA = moveModeResult(first, d->pos, d->visualNavigation);
@@ -298,7 +298,7 @@ void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::Mov
             int indexEnd = d->shape->indexForPos(posEnd);
             int length = indexEnd - d->shape->indexForPos(posStart);
 
-            removeCmd = new SvgTextRemoveCommand(d->shape, indexEnd, d->pos, d->anchor, length);
+            removeCmd = new SvgTextRemoveCommand(d->shape, indexEnd, d->pos, d->anchor, length, true);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -309,11 +309,11 @@ void SvgTextCursor::removeLastCodePoint()
     if (d->shape) {
         SvgTextRemoveCommand *removeCmd;
         if (hasSelection()) {
-            removeCmd = removeSelectionImpl();
+            removeCmd = removeSelectionImpl(true);
             addCommandToUndoAdapter(removeCmd);
         } else {
             int lastIndex = d->shape->indexForPos(d->pos);
-            removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1);
+            removeCmd = new SvgTextRemoveCommand(d->shape, lastIndex, d->pos, d->anchor, 1, true);
             addCommandToUndoAdapter(removeCmd);
         }
     }
@@ -337,18 +337,18 @@ void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props
 
 void SvgTextCursor::removeSelection()
 {
-    KUndo2Command *removeCmd = removeSelectionImpl();
+    KUndo2Command *removeCmd = removeSelectionImpl(true);
     addCommandToUndoAdapter(removeCmd);
 }
 
-SvgTextRemoveCommand *SvgTextCursor::removeSelectionImpl(KUndo2Command *parent)
+SvgTextRemoveCommand *SvgTextCursor::removeSelectionImpl(bool allowCleanUp, KUndo2Command *parent)
 {
     SvgTextRemoveCommand *removeCmd = nullptr;
     if (d->shape) {
         if (d->anchor != d->pos) {
             int end = d->shape->indexForPos(qMax(d->anchor, d->pos));
             int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - d->shape->indexForPos(qMin(d->anchor, d->pos));
-            removeCmd = new SvgTextRemoveCommand(d->shape, end, d->pos, d->anchor, length, parent);
+            removeCmd = new SvgTextRemoveCommand(d->shape, end, d->pos, d->anchor, length, allowCleanUp, parent);
         }
     }
     return removeCmd;
@@ -616,7 +616,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 
 
     // remove the selection if any.
-    addCommandToUndoAdapter(removeSelectionImpl());
+    addCommandToUndoAdapter(removeSelectionImpl(false));
 
     // set the text insertion pos to replacement start and also remove replacement length, if any.
     int originalPos = d->pos;
@@ -627,7 +627,8 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
                                                              index + event->replacementLength(),
                                                              originalPos,
                                                              d->anchor,
-                                                             event->replacementLength());
+                                                             event->replacementLength(),
+                                                             false);
         addCommandToUndoAdapter(cmd);
     }
 

@@ -914,6 +914,11 @@ bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
     return succes;
 }
 
+void KoSvgTextShape::cleanUp()
+{
+    KoSvgTextShape::Private::cleanUp(d->textData);
+}
+
 KoSvgTextProperties KoSvgTextShape::textProperties() const
 {
     return KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties();

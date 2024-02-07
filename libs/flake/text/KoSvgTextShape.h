@@ -362,6 +362,9 @@ public:
      */
     bool insertRichText(int pos, const KoSvgTextShape *richText);
 
+    /// Cleans up the internal text data. Used by undo commands.
+    void cleanUp();
+
     /*--------------- Properties ---------------*/
 
     KoSvgTextProperties textProperties() const;

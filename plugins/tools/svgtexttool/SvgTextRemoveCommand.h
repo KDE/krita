@@ -15,11 +15,23 @@ class KoSvgTextShape;
 class KRITATOOLSVGTEXT_EXPORT SvgTextRemoveCommand : public KUndo2Command
 {
 public:
+    /**
+     * @brief SvgTextRemoveCommand
+     * Remove text from shape
+     * @param shape -- shape to remove text from
+     * @param endIndex -- end from which to remove.
+     * @param pos -- pos, only used to reset cursor pos upon undo.
+     * @param anchor -- anchor, only used to reset cursor pos upon undo.
+     * @param length -- length to remove from end index
+     * @param allowCleanUp -- whether to allow cleaning up the text shape data. Should be set false when inserting text directly after.
+     * @param parent -- parent undo command.
+     */
     SvgTextRemoveCommand(KoSvgTextShape *shape,
                          int endIndex,
                          int pos,
                          int anchor,
                          int length,
+                         bool allowCleanUp = true,
                          KUndo2Command *parent = 0);
     ~SvgTextRemoveCommand() override = default;
 
@@ -37,6 +49,7 @@ private:
     int m_originalPos;
     int m_anchor;
     int m_length;
+    bool m_allowCleanUp;
     QString m_oldSvg;
     QString m_oldDefs;
 };

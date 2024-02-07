@@ -200,7 +200,7 @@ private:
      * @param parent
      * @return the text-removal command, if possible, if there's no selection or shape, it'll return 0;
      */
-    SvgTextRemoveCommand *removeSelectionImpl(KUndo2Command *parent = 0);
+    SvgTextRemoveCommand *removeSelectionImpl(bool allowCleanUp, KUndo2Command *parent = 0);
 
 
     /// update the cursor shape. First update will block ensuring the canvas is visible so setShape won't cause this.

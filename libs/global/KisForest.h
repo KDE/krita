@@ -170,6 +170,10 @@ private:
     friend class boost::iterator_core_access;
     template <typename X>
     friend ChildIterator<X> parent(const ChildIterator<X> &it);
+    template <typename X>
+    friend ChildIterator<X> siblingBegin(const ChildIterator<X> &it);
+    template <typename X>
+    friend ChildIterator<X> siblingEnd(const ChildIterator<X> &it);
     template <typename X> friend class Forest;
 
     void increment() {
@@ -192,29 +196,44 @@ private:
     RootNode<T> *m_parent;
 };
 
-template <typename Iterator,
-          typename ResultIterator = ChildIterator<typename Iterator::value_type>>
-ResultIterator siblingBegin(Iterator it)
+template <typename value_type>
+ChildIterator<value_type> siblingCurrent(ChildIterator<value_type> it)
 {
-    using RootNodeType = RootNode<typename Iterator::value_type>;
-
-    RootNodeType *parent = it.node() ? it.node()->parent : nullptr;
-    return ResultIterator(parent ? parent->firstChild : nullptr, parent);
+    return it;
 }
 
+template <typename value_type>
+ChildIterator<value_type> siblingBegin(const ChildIterator<value_type> &it)
+{
+    RootNode<value_type> *parent = it.m_parent;
+    return ChildIterator<value_type>(parent ? parent->firstChild : nullptr, parent);
+}
+
+template <typename value_type>
+ChildIterator<value_type> siblingEnd(const ChildIterator<value_type> &it)
+{
+    return ChildIterator<value_type>(nullptr, it.m_parent);
+}
 
 template <typename Iterator,
-          typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+         typename ResultIterator = ChildIterator<typename Iterator::value_type>>
 ResultIterator siblingCurrent(Iterator it)
 {
     return ResultIterator(it.node(), it.node() ? it.node()->parent : nullptr);
 }
 
 template <typename Iterator,
-          typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+         typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+ResultIterator siblingBegin(Iterator it)
+{
+    return siblingBegin(siblingCurrent(it));
+}
+
+template <typename Iterator,
+         typename ResultIterator = ChildIterator<typename Iterator::value_type>>
 ResultIterator siblingEnd(Iterator it)
 {
-    return ResultIterator(nullptr, it.node() ? it.node()->parent : nullptr);
+    return siblingEnd(siblingCurrent(it));
 }
 
 template <typename Iterator,

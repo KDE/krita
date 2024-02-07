@@ -920,4 +920,29 @@ void KisForestTest::testCopyForest()
 
 }
 
+void KisForestTest::testSiblingsOnEndIterator()
+{
+    KisForest<int> forest;
+
+    QVERIFY(childBegin(forest) == childEnd(forest));
+
+    auto endIt = childEnd(forest);
+
+    QVERIFY(endIt == siblingBegin(endIt));
+    QVERIFY(endIt == siblingCurrent(endIt));
+    QVERIFY(endIt == siblingEnd(endIt));
+
+    auto it0 = forest.insert(endIt, 0);
+
+    QVERIFY(it0 == siblingBegin(it0));
+    QVERIFY(it0 == siblingCurrent(it0));
+    QVERIFY(endIt == siblingEnd(it0));
+
+    auto subordinateEnd = childEnd(it0);
+
+    QVERIFY(subordinateEnd == siblingBegin(subordinateEnd));
+    QVERIFY(subordinateEnd == siblingCurrent(subordinateEnd));
+    QVERIFY(subordinateEnd == siblingEnd(subordinateEnd));
+}
+
 SIMPLE_TEST_MAIN(KisForestTest)

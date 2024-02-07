@@ -267,6 +267,21 @@ void SvgTextCursor::insertText(QString text)
     }
 }
 
+void SvgTextCursor::insertRichText(KoSvgTextShape *insert)
+{
+    if (d->shape) {
+        //KUndo2Command *parentCmd = new KUndo2Command;
+        if (hasSelection()) {
+            SvgTextRemoveCommand *removeCmd = removeSelectionImpl();
+            addCommandToUndoAdapter(removeCmd);
+        }
+
+        SvgTextInsertRichCommand *cmd = new SvgTextInsertRichCommand(d->shape, insert, d->pos, d->anchor);
+        addCommandToUndoAdapter(cmd);
+
+    }
+}
+
 void SvgTextCursor::removeText(SvgTextCursor::MoveMode first, SvgTextCursor::MoveMode second)
 {
     if (d->shape) {
@@ -381,11 +396,8 @@ bool SvgTextCursor::paste()
             while (shapes.size() > 0) {
                 KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shapes.takeFirst());
                 if (textShape) {
-                    KUndo2Command *cmd = new SvgTextInsertRichCommand(d->shape, textShape, d->pos, d->anchor);
-                    if (cmd) {
-                        addCommandToUndoAdapter(cmd);
-                        success = true;
-                    }
+                    insertRichText(textShape);
+                    success = true;
                 }
             }
         } else if (d->pasteRichText && mimeData->hasHtml()) {
@@ -396,11 +408,8 @@ bool SvgTextCursor::paste()
             QString styles;
             if (converter.convertFromHtml(html, &svg, &styles)
                     && converter.convertFromSvg(svg, styles, d->shape->boundingRect(), 72.0) ) {
-                KUndo2Command *cmd = new SvgTextInsertRichCommand(d->shape, insert, d->pos, d->anchor);
-                if (cmd) {
-                    addCommandToUndoAdapter(cmd);
-                    success = true;
-                }
+                insertRichText(insert);
+                success = true;
             }
         }
 

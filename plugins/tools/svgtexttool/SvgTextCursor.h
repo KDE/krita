@@ -113,6 +113,9 @@ public:
     /// Insert text at getPos()
     void insertText(QString text);
 
+    /// Insert rich text at getPos();
+    void insertRichText(KoSvgTextShape *insert);
+
     /**
      * @brief removeText
      * remove text relative to the current position.

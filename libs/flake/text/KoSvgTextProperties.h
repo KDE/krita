@@ -185,6 +185,9 @@ public:
      */
     bool inheritsProperty(PropertyId id, const KoSvgTextProperties &parentProperties) const;
 
+    /// Test whether it has non-inheritable properties set.
+    bool hasNonInheritableProperties() const;
+
     /**
      * Return a set of properties that ar **not** inherited from \p
      * parentProperties. The property is considered "inherited" **iff* it is

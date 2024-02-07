@@ -2546,8 +2546,90 @@ void TestSvgText::testTextRichInsert()
     converter2.convertFromSvg(ref2, QString(), QRectF(0, 0, 300, 300), 72.0);
 
     textShape->insertRichText(10, insert);
-    QCOMPARE(textShape->plainText(), "Sphinx ofThe quick brown fox black quartz, judge my vow!");
+    QCOMPARE(textShape->plainText(), "Sphinx of The quick brown foxblack quartz, judge my vow!");
     QCOMPARE(size(textShape->d->textData), 7);
+}
+
+void TestSvgText::testTextSplit()
+{
+    // Test split root.
+    KisForest<KoSvgTextContentElement> forest;
+    KoSvgTextContentElement el;
+    el.text = "The quick brown fox jumps over the lazy dog.";
+    forest.insert(forest.childEnd(), el);
+    KoSvgTextShape::Private::splitContentElement(forest, 10);
+
+    QCOMPARE(size(forest), 3);
+    QCOMPARE(depth(forest), 2);
+
+    // test split text path
+    forest.erase(forest.childBegin(), forest.childEnd());
+    KoSvgTextContentElement textPath = el;
+    textPath.textPath.reset(new KoPathShape());
+    auto root = forest.insert(forest.childEnd(), KoSvgTextContentElement());
+    forest.insert(childEnd(root), textPath);
+    KoSvgTextShape::Private::splitContentElement(forest, 10);
+
+    QCOMPARE(size(forest), 4);
+    QCOMPARE(depth(forest), 3);
+
+    // test split text length
+    forest.erase(forest.childBegin(), forest.childEnd());
+    root = forest.insert(forest.childEnd(), KoSvgTextContentElement());
+    KoSvgTextContentElement textLength = el;
+    textLength.textLength.isAuto = false;
+    textLength.textLength.customValue = 100;
+    forest.insert(childEnd(root), textLength);
+    KoSvgTextShape::Private::splitContentElement(forest, 10);
+
+    QCOMPARE(size(forest), 4);
+    QCOMPARE(depth(forest), 3);
+
+    // test split transforms.
+    forest.erase(forest.childBegin(), forest.childEnd());
+    root = forest.insert(forest.childEnd(), KoSvgTextContentElement());
+    KoSvgTextContentElement textTF = el;
+    KoSvgText::CharTransformation tf;
+    tf.dxPos = 10;
+    textTF.localTransformations.append(tf);
+    forest.insert(childEnd(root), textTF);
+    KoSvgTextShape::Private::splitContentElement(forest, 10);
+    QCOMPARE(size(forest), 4);
+    QCOMPARE(depth(forest), 3);
+
+}
+
+void TestSvgText::testTextCleanUp()
+{
+    // test clearing empty entries.
+    KisForest<KoSvgTextContentElement> forest;
+    auto root = forest.insert(forest.childEnd(), KoSvgTextContentElement());
+    KoSvgTextContentElement el1;
+    el1.text = "The quick brown fox";
+    KoSvgTextContentElement el2;
+    el2.text = " jumps over the";
+    el2.properties.setProperty(KoSvgTextProperties::FontStyleId, QFont::StyleItalic);
+    KoSvgTextContentElement el3;
+    el3.text =  " lazy dog.";
+    auto child1 = forest.insert(childEnd(root), el1);
+    forest.insert(childEnd(root), KoSvgTextContentElement());
+    forest.insert(childEnd(root), el2);
+    auto child2 = forest.insert(childEnd(root), el3);
+    KoSvgTextShape::Private::cleanUp(forest);
+    QCOMPARE(size(forest), 4);
+    QCOMPARE(depth(forest), 2);
+
+    // test merging siblings with the same properties.
+    child1->properties.setProperty(KoSvgTextProperties::FontStyleId, QFont::StyleItalic);
+    KoSvgTextShape::Private::cleanUp(forest);
+    QCOMPARE(size(forest), 3);
+    QCOMPARE(depth(forest), 2);
+
+    // test merging children with parents.
+    child2->properties.setProperty(KoSvgTextProperties::FontStyleId, QFont::StyleItalic);
+    KoSvgTextShape::Private::cleanUp(forest);
+    QCOMPARE(size(forest), 1);
+    QCOMPARE(depth(forest), 1);
 }
 
 #include "kistest.h"

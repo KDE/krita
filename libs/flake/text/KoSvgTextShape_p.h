@@ -541,7 +541,6 @@ public:
                             && (!siblingPrev->textPath && !it->textPath)
                             && (siblingPrev->textLength.isAuto && it->textLength.isAuto)
                             && (siblingPrev->properties == it->properties)) {
-                        qDebug() << "merge siblings" << siblingPrev->text << it->text;
                         // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
                         siblingPrev->text += it->text;
                         tree.erase(siblingCurrent(it));
@@ -553,9 +552,8 @@ public:
                 if ((child->localTransformations.isEmpty() && it->localTransformations.isEmpty())
                         && (!child->textPath && !it->textPath)
                         && (child->textLength.isAuto && it->textLength.isAuto)
-                        && (child->properties == it->properties)) {
-                    qDebug() << "child to parent" << child->text;
-                    // TODO: handle merging of text properties, this is now too strict. Also mind uninheritable properties
+                        && (!child->properties.hasNonInheritableProperties() && !it->properties.hasNonInheritableProperties())) {
+                    child->properties.inheritFrom(it->properties);
                     tree.move(child, siblingCurrent(it));
                     tree.erase(siblingCurrent(it));
                 }

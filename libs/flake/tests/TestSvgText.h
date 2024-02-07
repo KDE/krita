@@ -97,6 +97,9 @@ private Q_SLOTS:
 
     void testTextRichCopy();
     void testTextRichInsert();
+
+    void testTextSplit();
+    void testTextCleanUp();
 };
 
 #endif // TESTSVGTEXT_H

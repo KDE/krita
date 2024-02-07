@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-06 01:58+0000\n"
-"PO-Revision-Date: 2024-02-02 18:41+0100\n"
+"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"PO-Revision-Date: 2024-02-06 08:50+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -25425,7 +25425,7 @@ msgstr "Koraki povečave med potencami števila 2"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr ""
+msgstr "Uporabi vodoravno os za dejanje povečave platna"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:748
@@ -29560,25 +29560,25 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Hitro razdruži"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Onemogočeno: maske na skupinah v prehodu niso podprte!"
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Onemogočeno: kloniranje skupin v prehodu ni podprto!"
 
-#: libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:601
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
 
-#: libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:604
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"

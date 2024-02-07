@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-06 01:58+0000\n"
-"PO-Revision-Date: 2024-01-29 16:45+0300\n"
+"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"PO-Revision-Date: 2024-02-06 16:33+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25422,7 +25422,7 @@ msgstr "Yakınlaştırma çentikleri 2'nin üssüdür"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr ""
+msgstr "Tuvale yakınlaştır eylemi için yatay ekseni kullan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:748
@@ -29541,25 +29541,25 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Tez Grubu Boz"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Devre dışı: Geçirgen grupların üstünde maskeler desteklenmiyor!"
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Devre dışı: Geçirgen gruplarını kopyalamak desteklenmiyor!"
 
-#: libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:601
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%​%1"
 
-#: libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:604
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"

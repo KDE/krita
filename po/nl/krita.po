@@ -62,8 +62,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-06 01:58+0000\n"
-"PO-Revision-Date: 2024-01-29 10:42+0100\n"
+"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"PO-Revision-Date: 2024-02-06 11:21+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -25544,7 +25544,7 @@ msgstr "Zoomstappen tussen machten van 2"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr ""
+msgstr "Horizontale as gebruiken voor de zoomactie van het werkveld"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:748
@@ -29696,25 +29696,25 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Snel groepering opheffen"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Uitgeschakeld: maskeren bij doorvoergroepen wordt niet ondersteund!"
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr "Uitgeschakeld: klonen bij doorvoergroepen wordt niet ondersteund!"
 
-#: libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:601
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
 
-#: libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:604
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"

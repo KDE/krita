@@ -57,7 +57,6 @@ BrushHudDockerPlugin::BrushHudDockerPlugin(QObject *parent, const QVariantList &
 
 BrushHudDockerPlugin::~BrushHudDockerPlugin()
 {
-    m_view = 0;
 }
 
 #include "brushhuddocker.moc"

@@ -5,16 +5,12 @@
  */
 
 #include "arrangedocker.h"
+#include "arrangedocker_dock.h"
 
-#include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <klocalizedstring.h>
 
 #include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
-#include "KisViewManager.h"
-
-#include "arrangedocker_dock.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(ArrangeDockerPluginFactory, "krita_arrangedocker.json", registerPlugin<ArrangeDockerPlugin>();)
 
@@ -60,7 +56,6 @@ ArrangeDockerPlugin::ArrangeDockerPlugin(QObject *parent, const QVariantList &)
 
 ArrangeDockerPlugin::~ArrangeDockerPlugin()
 {
-    m_view = 0;
 }
 
 #include "arrangedocker.moc"

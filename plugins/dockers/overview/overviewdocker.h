@@ -21,8 +21,6 @@ class OverviewDockerPlugin : public QObject
     public:
         OverviewDockerPlugin(QObject *parent, const QVariantList &);
         ~OverviewDockerPlugin() override;
-    private:
-        KisViewManager* m_view {nullptr};
 };
 
 #endif

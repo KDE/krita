@@ -21,8 +21,6 @@ class BrushHudDockerPlugin : public QObject
     public:
         BrushHudDockerPlugin(QObject *parent, const QVariantList &);
         ~BrushHudDockerPlugin() override;
-    private:
-        KisViewManager* m_view {nullptr};
 };
 
 #endif

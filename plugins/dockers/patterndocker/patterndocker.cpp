@@ -5,25 +5,11 @@
  */
 
 #include "patterndocker.h"
-
-#include <stdlib.h>
-
-#include <QTimer>
-
+#include "patterndocker_dock.h"
 
 #include <kpluginfactory.h>
-#include <klocalizedstring.h>
 
 #include <KoDockFactoryBase.h>
-
-#include <kis_debug.h>
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "KisViewManager.h"
-
-#include "patterndocker_dock.h"
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(PatternDockerPluginFactory, "krita_patterndocker.json", registerPlugin<PatternDockerPlugin>();)
@@ -70,7 +56,6 @@ PatternDockerPlugin::PatternDockerPlugin(QObject *parent, const QVariantList &)
 
 PatternDockerPlugin::~PatternDockerPlugin()
 {
-    m_view = 0;
 }
 
 #include "patterndocker.moc"

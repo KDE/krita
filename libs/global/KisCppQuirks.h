@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <optional>
 #include <version>
+#include <QDebug>
 
 namespace std {
 

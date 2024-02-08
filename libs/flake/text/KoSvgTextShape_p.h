@@ -293,7 +293,7 @@ struct SubChunk {
     QSharedPointer<KoShapeBackground> bg;
 };
 
-class KoSvgTextShape::Private
+class KRITAFLAKE_EXPORT KoSvgTextShape::Private
 {
 public:
     // NOTE: the cache data is shared between all the instances of

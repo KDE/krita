@@ -58,21 +58,24 @@ using RootNode = RootNodeImpl<Node<T>>;
 /*               BaseIterator                                            */
 /*************************************************************************/
 
-template <typename BaseClass, typename T, typename Tag>
+template <typename BaseClass, typename T, typename Tag, bool is_const = false>
 class BaseIterator :
         public boost::iterator_facade <BaseClass,
                                        T,
-                                       Tag>
+                                       Tag,
+                                       std::add_lvalue_reference_t<
+                                                       std::add_const_if_t<is_const, T>>>
 {
 public:
     using value_type = T;
+    using NodeType = std::add_const_if_t<is_const, Node<T>>;
 
-    BaseIterator(Node<T> *node)
+    BaseIterator(NodeType *node)
         : m_node(node)
     {
     }
 
-    Node<T>* node() const {
+    NodeType* node() const {
         return m_node;
     }
 
@@ -89,7 +92,7 @@ private:
     }
 
 protected:
-    Node<T> *m_node;
+    NodeType *m_node;
 };
 
 
@@ -153,34 +156,50 @@ protected:
  *          to undefined behavior.
  */
 
-template <typename T>
+template <typename T, bool is_const = false>
 class ChildIterator :
-        public BaseIterator <ChildIterator<T>,
-                              T,
-                              boost::bidirectional_traversal_tag>
+        public BaseIterator <ChildIterator<T, is_const>,
+                             T,
+                             boost::bidirectional_traversal_tag,
+                             is_const>
 {
+    using BaseClass =
+        BaseIterator <ChildIterator<T, is_const>,
+                     T,
+                     boost::bidirectional_traversal_tag,
+                     is_const>;
+
 public:
-    ChildIterator(Node<T> *node, RootNode<T> *parent, int offsetToParent)
-        : BaseIterator<ChildIterator<T>, T, boost::bidirectional_traversal_tag>(node),
+    using RootNodeType = std::add_const_if_t<is_const, RootNode<T>>;
+    using NodeType = typename BaseClass::NodeType;
+
+    ChildIterator(NodeType *node, RootNodeType *parent, int offsetToParent)
+        : BaseClass(node),
           m_parent(parent),
           m_offsetToParent(offsetToParent)
     {
     }
 
+    template <typename = std::enable_if<!is_const>>
+    operator ChildIterator<T, true>() const {
+        return ChildIterator<T, true>(this->m_node, m_parent, m_offsetToParent);
+    }
+
 private:
     friend class boost::iterator_core_access;
-    template <typename X>
-    friend ChildIterator<X> parent(const ChildIterator<X> &it);
-    template <typename X>
-    friend ChildIterator<X> siblingBegin(const ChildIterator<X> &it);
-    template <typename X>
-    friend ChildIterator<X> siblingEnd(const ChildIterator<X> &it);
-    template <typename X>
-    friend ChildIterator<X> childBegin(const ChildIterator<X> &it);
-    template <typename X>
-    friend ChildIterator<X> childEnd(const ChildIterator<X> &it);
-    template <typename X>
-    friend QDebug operator<<(QDebug dbg, const ChildIterator<X> &it);
+    template <typename X, bool c>
+    friend ChildIterator<X, c> parent(const ChildIterator<X, c> &it);
+    template <typename X, bool c>
+    friend ChildIterator<X, c> siblingBegin(const ChildIterator<X, c> &it);
+    template <typename X, bool c>
+    friend ChildIterator<X, c> siblingEnd(const ChildIterator<X, c> &it);
+    template <typename X, bool c>
+    friend ChildIterator<X, c> childBegin(const ChildIterator<X, c> &it);
+    template <typename X, bool c>
+    friend ChildIterator<X, c> childEnd(const ChildIterator<X, c> &it);
+
+    template <typename X, bool c>
+    friend QDebug operator<<(QDebug dbg, const ChildIterator<X, c> &it);
     template <typename X> friend class Forest;
 
     void increment() {
@@ -194,7 +213,7 @@ private:
             (m_parent && m_offsetToParent == 0) ? m_parent->lastChild : nullptr;
     }
 
-    bool equal(const ChildIterator<T> &other) const {
+    bool equal(const ChildIterator<T, is_const> &other) const {
         return this->m_node == other.m_node &&
             (this->m_node ||
              (this->m_parent == other.m_parent &&
@@ -202,12 +221,12 @@ private:
     }
 
 private:
-    RootNode<T> *m_parent;
+    RootNodeType *m_parent;
     int m_offsetToParent;
 };
 
-template <typename value_type>
-QDebug operator<<(QDebug dbg, const ChildIterator<value_type> &it)
+template <typename value_type, bool is_const>
+QDebug operator<<(QDebug dbg, const ChildIterator<value_type, is_const> &it)
 {
     if (it.node()) {
         dbg.nospace() << "ChildIterator(" << it.node() << "(" <<  it.node()->value << ")" << ", parent:" << it.m_parent << ")";
@@ -218,29 +237,31 @@ QDebug operator<<(QDebug dbg, const ChildIterator<value_type> &it)
 }
 
 
-template <typename value_type>
-ChildIterator<value_type> siblingCurrent(ChildIterator<value_type> it)
+template <typename value_type, bool is_const>
+ChildIterator<value_type, is_const> siblingCurrent(ChildIterator<value_type, is_const> it)
 {
     return it;
 }
 
-template <typename value_type>
-ChildIterator<value_type> siblingBegin(const ChildIterator<value_type> &it)
+template <typename value_type, bool is_const>
+ChildIterator<value_type, is_const> siblingBegin(const ChildIterator<value_type, is_const> &it)
 {
-    RootNode<value_type> *parent = it.m_parent;
+    using RootNodeType = typename ChildIterator<value_type, is_const>::RootNodeType;
     if (!it.node() && it.m_offsetToParent != 0) return it;
+    RootNodeType *parent = it.m_parent;
     return ChildIterator<value_type>(parent ? parent->firstChild : nullptr, parent, 0);
 }
 
-template <typename value_type>
-ChildIterator<value_type> siblingEnd(const ChildIterator<value_type> &it)
+template <typename value_type, bool is_const>
+ChildIterator<value_type, is_const> siblingEnd(const ChildIterator<value_type, is_const> &it)
 {
     if (!it.node() && it.m_offsetToParent != 0) return it;
-    return ChildIterator<value_type>(nullptr, it.m_parent, 0);
+    return ChildIterator<value_type, is_const>(nullptr, it.m_parent, 0);
 }
 
 template <typename Iterator,
-         typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator siblingCurrent(Iterator it)
 {
     // TODO: conversion of an end-iterator into a child iterator is still not implemented
@@ -251,69 +272,74 @@ ResultIterator siblingCurrent(Iterator it)
 }
 
 template <typename Iterator,
-         typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator siblingBegin(Iterator it)
 {
     return siblingBegin(siblingCurrent(it));
 }
 
 template <typename Iterator,
-         typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator siblingEnd(Iterator it)
 {
     return siblingEnd(siblingCurrent(it));
 }
 
- template <typename value_type>
- ChildIterator<value_type> childBegin(const ChildIterator<value_type> &it)
+ template <typename value_type, bool is_const>
+ ChildIterator<value_type, is_const> childBegin(const ChildIterator<value_type, is_const> &it)
 {
     if (it.node()) {
-        return ChildIterator<value_type>(it.node()->firstChild, it.node(), 0);
+        return ChildIterator<value_type, is_const>(it.node()->firstChild, it.node(), 0);
     } else {
-        return ChildIterator<value_type>(nullptr, it.m_parent, it.m_offsetToParent + 1);
+        return ChildIterator<value_type, is_const>(nullptr, it.m_parent, it.m_offsetToParent + 1);
     }
 }
 
-template <typename value_type>
-ChildIterator<value_type> childEnd(const ChildIterator<value_type> &it)
+template <typename value_type, bool is_const>
+ChildIterator<value_type, is_const> childEnd(const ChildIterator<value_type, is_const> &it)
 {
     if (it.node()) {
-        return ChildIterator<value_type>(nullptr, it.node(), 0);
+        return ChildIterator<value_type, is_const>(nullptr, it.node(), 0);
     } else {
-        return ChildIterator<value_type>(nullptr, it.m_parent, it.m_offsetToParent + 1);
+        return ChildIterator<value_type, is_const>(nullptr, it.m_parent, it.m_offsetToParent + 1);
     }
 }
 
 template <typename Iterator,
-          typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator childBegin(Iterator it)
 {
     return childBegin(siblingCurrent(it));
 }
 
 template <typename Iterator,
-          typename ResultIterator = ChildIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator childEnd(Iterator it)
 {
     return childEnd(siblingCurrent(it));
 }
 
 
-template <typename value_type>
-ChildIterator<value_type> parent(const ChildIterator<value_type> &it)
+template <typename value_type, bool is_const>
+ChildIterator<value_type, is_const> parent(const ChildIterator<value_type, is_const> &it)
 {
     if (it.m_parent->isRoot()) {
-        return ChildIterator<value_type>(nullptr, it.m_parent, qMax(-1, it.m_offsetToParent - 1));
+        return ChildIterator<value_type, is_const>(nullptr, it.m_parent, qMax(-1, it.m_offsetToParent - 1));
     } else if (it.m_offsetToParent == 0) {
-        Node<value_type> *parentNode = static_cast<Node<value_type>*>(it.m_parent);
-        return ChildIterator<value_type>(parentNode, parentNode->parent, 0);
+        using NodeType = typename ChildIterator<value_type, is_const>::NodeType;
+        NodeType *parentNode = static_cast<NodeType*>(it.m_parent);
+        return ChildIterator<value_type, is_const>(parentNode, parentNode->parent, 0);
     } else {
-        return ChildIterator<value_type>(nullptr, it.m_parent, it.m_offsetToParent - 1);
+        return ChildIterator<value_type, is_const>(nullptr, it.m_parent, it.m_offsetToParent - 1);
     }
 }
 
-template <typename T>
-inline bool isEnd(const ChildIterator<T> &it) {
+template <typename T, bool is_const>
+inline bool isEnd(const ChildIterator<T, is_const> &it) {
     return !it.node();
 }
 
@@ -732,7 +758,9 @@ public:
         }
     }
 
-    using child_iterator = ChildIterator<T>;
+    using value_type = T;
+    using child_iterator = ChildIterator<T, false>;
+    using const_child_iterator = ChildIterator<T, true>;
     using composition_iterator = CompositionIterator<T>;
     using hierarchy_iterator = HierarchyIterator<T>;
     using iterator = DepthFirstIterator<T, Enter>;
@@ -755,15 +783,39 @@ public:
     }
 
     child_iterator childBegin() {
-        return child_iterator(m_root.firstChild, &m_root, 0);
+        return childBeginImpl(*this);
     }
 
     child_iterator childEnd() {
-        return child_iterator(nullptr, &m_root, 0);
+        return childEndImpl(*this);
     }
 
     child_iterator parentEnd() {
-        return child_iterator(nullptr, &m_root, -1);
+        return parentEndImpl(*this);
+    }
+
+    const_child_iterator childBegin() const {
+        return childBeginImpl(*this);
+    }
+
+    const_child_iterator childEnd() const {
+        return childEndImpl(*this);
+    }
+
+    const_child_iterator parentEnd() const {
+        return parentEndImpl(*this);
+    }
+
+    const_child_iterator constChildBegin() const {
+        return childBeginImpl(*this);
+    }
+
+    const_child_iterator constChildEnd() const {
+        return childEndImpl(*this);
+    }
+
+    const_child_iterator constParentEnd() const {
+        return parentEndImpl(*this);
     }
 
     composition_iterator compositionBegin() {
@@ -916,6 +968,29 @@ private:
             cloneChildren(it, itClone);
         }
     }
+
+private:
+    template <class ForestType,
+              class IteratorType = ChildIterator<typename ForestType::value_type,
+                                                 std::is_const_v<ForestType>>>
+    static IteratorType childBeginImpl(ForestType &forest) {
+        return IteratorType(forest.m_root.firstChild, &forest.m_root, 0);
+    }
+
+    template <class ForestType,
+              class IteratorType = ChildIterator<typename ForestType::value_type,
+                                                 std::is_const_v<ForestType>>>
+    static IteratorType childEndImpl(ForestType &forest) {
+        return IteratorType(nullptr, &forest.m_root, 0);
+    }
+
+    template <class ForestType,
+              class IteratorType = ChildIterator<typename ForestType::value_type,
+                                                 std::is_const_v<ForestType>>>
+    static IteratorType parentEndImpl(ForestType &forest) {
+        return IteratorType(nullptr, &forest.m_root, -1);
+    }
+
 private:
     RootNode<T> m_root;
 };

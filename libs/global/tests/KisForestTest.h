@@ -42,6 +42,8 @@ private Q_SLOTS:
 
     void testSiblingsOnEndIterator();
     void testParentIterator();
+
+    void testConstChildIterators();
 };
 
 #endif // KISFORESTTEST_H

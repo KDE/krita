@@ -1021,4 +1021,41 @@ void KisForestTest::testParentIterator()
     }
 }
 
+void KisForestTest::testConstChildIterators()
+{
+    KisForest<int> forest;
+
+
+    const KisForest<int> &constForest = forest;
+
+    auto constBeginIt = constForest.constChildBegin();
+    auto constEndIt = constForest.constChildEnd();
+
+    QVERIFY(constBeginIt == constEndIt);
+
+    QVERIFY(constBeginIt == forest.childBegin());
+    QVERIFY(constEndIt == forest.childEnd());
+
+    forest.insert(forest.childEnd(), 10);
+
+    static_assert(std::is_same_v<decltype(*forest.childBegin()), int&>);
+    static_assert(std::is_same_v<decltype(*forest.constChildBegin()), const int&>);
+
+    static_assert(std::is_same_v<decltype(*constForest.constChildBegin()), const int&>);
+    static_assert(std::is_same_v<decltype(*constForest.childBegin()), const int&>);
+
+    static_assert(std::is_same_v<decltype(*forest.childEnd()), int&>);
+    static_assert(std::is_same_v<decltype(*forest.constChildEnd()), const int&>);
+
+    static_assert(std::is_same_v<decltype(*constForest.constChildEnd()), const int&>);
+    static_assert(std::is_same_v<decltype(*constForest.childEnd()), const int&>);
+
+    static_assert(std::is_same_v<decltype(*forest.parentEnd()), int&>);
+    static_assert(std::is_same_v<decltype(*forest.constParentEnd()), const int&>);
+
+    static_assert(std::is_same_v<decltype(*constForest.constParentEnd()), const int&>);
+    static_assert(std::is_same_v<decltype(*constForest.parentEnd()), const int&>);
+
+}
+
 SIMPLE_TEST_MAIN(KisForestTest)

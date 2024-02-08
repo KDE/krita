@@ -274,8 +274,9 @@ void KisForestTest::testSiblingIteration()
     QVERIFY(testForestIteration(siblingCurrent(tailSubtreeBegin(it2)), siblingEnd(tailSubtreeBegin(it2)), {2,3,4}));
     QVERIFY(testForestIteration(siblingCurrent(compositionBegin(it2)), siblingEnd(compositionBegin(it2)), {2,3,4}));
 
-    QVERIFY(testForestIteration(siblingCurrent(compositionBegin(childEnd(it0))),
-                              siblingEnd(compositionBegin(childEnd(it0))), {}));
+    // we cannot create a child iterator from an non-child end-iterator
+    //    QVERIFY(testForestIteration(siblingCurrent(compositionBegin(childEnd(it0))),
+    //                                siblingEnd(compositionBegin(childEnd(it0))), {}));
 }
 
 void KisForestTest::testCompositionIteration()
@@ -835,17 +836,20 @@ void KisForestTest::testConversionsFromEnd()
     QVERIFY(testForestIteration(siblingBegin(childEnd(it0)),
                               siblingEnd(childEnd(it0)), {1,2,3,4}));
 #endif
-    QVERIFY(testForestIteration(siblingBegin(hierarchyEnd(it0)),
-                              siblingEnd(hierarchyEnd(it0)), {}));
-    QVERIFY(testForestIteration(siblingBegin(compositionEnd(it0)),
-                              siblingEnd(compositionEnd(it0)), {0,8}));
+
+    // TODO: we currently don't allow creation of child-iterators from end-non-child-iterators
+//    QVERIFY(testForestIteration(siblingBegin(hierarchyEnd(it0)),
+//                                siblingEnd(hierarchyEnd(it0)), {}));
+//    QVERIFY(testForestIteration(siblingBegin(compositionEnd(it0)),
+//                                siblingEnd(compositionEnd(it0)), {0,8}));
 
 
 
     QVERIFY(testForestIteration(childBegin(childEnd(forest)),
                               childEnd(childEnd(forest)), {}));
-    QVERIFY(testForestIteration(childBegin(compositionEnd(forest)),
-                              childEnd(compositionEnd(forest)), {}));
+    // TODO: we currently don't allow creation of child-iterators from end-non-child-iterators
+//    QVERIFY(testForestIteration(childBegin(compositionEnd(forest)),
+//                                childEnd(compositionEnd(forest)), {}));
 
     QVERIFY(testForestIteration(hierarchyBegin(childEnd(forest)),
                               hierarchyEnd(childEnd(forest)), {}));
@@ -926,23 +930,95 @@ void KisForestTest::testSiblingsOnEndIterator()
 
     QVERIFY(childBegin(forest) == childEnd(forest));
 
-    auto endIt = childEnd(forest);
+    // toplevel **end** iterator on an empty forest
+    {
+        auto toplevelEndIt = childEnd(forest);
 
-    QVERIFY(endIt == siblingBegin(endIt));
-    QVERIFY(endIt == siblingCurrent(endIt));
-    QVERIFY(endIt == siblingEnd(endIt));
+        QVERIFY(toplevelEndIt == siblingBegin(toplevelEndIt));
+        QVERIFY(toplevelEndIt == siblingCurrent(toplevelEndIt));
+        QVERIFY(toplevelEndIt == siblingEnd(toplevelEndIt));
+    }
 
-    auto it0 = forest.insert(endIt, 0);
 
-    QVERIFY(it0 == siblingBegin(it0));
-    QVERIFY(it0 == siblingCurrent(it0));
-    QVERIFY(endIt == siblingEnd(it0));
+    auto it0 = forest.insert(childEnd(forest), 0);
+
+    // toplevel iterators on a non-empty forest
+    {
+        QVERIFY(it0 == siblingBegin(it0));
+        QVERIFY(it0 == siblingCurrent(it0));
+        QVERIFY(childEnd(forest) == siblingEnd(it0));
+    }
+
+    // toplevel **end** iterator on a non-empty forest
+    {
+        QVERIFY(it0 == siblingBegin(childEnd(forest)));
+        QVERIFY(childEnd(forest) == siblingCurrent(childEnd(forest)));
+        QVERIFY(childEnd(forest) == siblingEnd(childEnd(forest)));
+    }
 
     auto subordinateEnd = childEnd(it0);
 
-    QVERIFY(subordinateEnd == siblingBegin(subordinateEnd));
-    QVERIFY(subordinateEnd == siblingCurrent(subordinateEnd));
-    QVERIFY(subordinateEnd == siblingEnd(subordinateEnd));
+    // subordinate **end** iterators on an empty subtree
+    {
+        QVERIFY(subordinateEnd == siblingBegin(subordinateEnd));
+        QVERIFY(subordinateEnd == siblingCurrent(subordinateEnd));
+        QVERIFY(subordinateEnd == siblingEnd(subordinateEnd));
+    }
+
+    auto parentEnd = forest.parentEnd();
+
+    // iterators on the parentEnd iterator
+    {
+        QVERIFY(parentEnd == siblingBegin(parentEnd));
+        QVERIFY(parentEnd == siblingCurrent(parentEnd));
+        QVERIFY(parentEnd == siblingEnd(parentEnd));
+    }
+}
+
+void KisForestTest::testParentIterator()
+{
+    KisForest<int> forest;
+
+    auto nonExistentEnd = childEnd(forest);
+    QVERIFY(childBegin(nonExistentEnd) == childEnd(nonExistentEnd));
+    QVERIFY(forest.parentEnd() == KisForestDetail::parent(nonExistentEnd));
+
+    // dig into hierarchy of non-existent nodes
+    {
+        auto childOfNonExistentEnd = childEnd(nonExistentEnd);
+
+        QVERIFY(nonExistentEnd ==
+                KisForestDetail::parent(
+                    childOfNonExistentEnd));
+
+        QVERIFY(forest.parentEnd() ==
+                KisForestDetail::parent(
+                    KisForestDetail::parent(
+                        childOfNonExistentEnd)));
+
+        QVERIFY(childBegin(childOfNonExistentEnd) == childEnd(childOfNonExistentEnd));
+
+        QVERIFY(nonExistentEnd != forest.parentEnd());
+        QVERIFY(nonExistentEnd != childOfNonExistentEnd);
+        QVERIFY(KisForestDetail::parent(childOfNonExistentEnd) != forest.parentEnd());
+    }
+
+    auto it0 = forest.insert(childEnd(forest), 0);
+
+    // dig into hierarchy of an existent node
+    {
+        QVERIFY(forest.parentEnd() == KisForestDetail::parent(it0));
+
+        QVERIFY(childBegin(it0) == childEnd(it0));
+
+        auto childOfExistentNode = childEnd(it0);
+
+        QVERIFY(it0 == KisForestDetail::parent(childOfExistentNode));
+        QVERIFY(forest.parentEnd() ==
+                KisForestDetail::parent(
+                    KisForestDetail::parent(
+                        childOfExistentNode)));
+    }
 }
 
 SIMPLE_TEST_MAIN(KisForestTest)

@@ -160,9 +160,10 @@ class ChildIterator :
                               boost::bidirectional_traversal_tag>
 {
 public:
-    ChildIterator(Node<T> *node, RootNode<T> *parent)
+    ChildIterator(Node<T> *node, RootNode<T> *parent, int offsetToParent)
         : BaseIterator<ChildIterator<T>, T, boost::bidirectional_traversal_tag>(node),
-          m_parent(parent)
+          m_parent(parent),
+          m_offsetToParent(offsetToParent)
     {
     }
 
@@ -174,6 +175,12 @@ private:
     friend ChildIterator<X> siblingBegin(const ChildIterator<X> &it);
     template <typename X>
     friend ChildIterator<X> siblingEnd(const ChildIterator<X> &it);
+    template <typename X>
+    friend ChildIterator<X> childBegin(const ChildIterator<X> &it);
+    template <typename X>
+    friend ChildIterator<X> childEnd(const ChildIterator<X> &it);
+    template <typename X>
+    friend QDebug operator<<(QDebug dbg, const ChildIterator<X> &it);
     template <typename X> friend class Forest;
 
     void increment() {
@@ -184,17 +191,32 @@ private:
         this->m_node =
             this->m_node ?
             this->m_node->prevSibling :
-            m_parent ? m_parent->lastChild : nullptr;
+            (m_parent && m_offsetToParent == 0) ? m_parent->lastChild : nullptr;
     }
 
     bool equal(const ChildIterator<T> &other) const {
         return this->m_node == other.m_node &&
-             (this->m_node || this->m_parent == other.m_parent);
+            (this->m_node ||
+             (this->m_parent == other.m_parent &&
+              this->m_offsetToParent == other.m_offsetToParent));
     }
 
 private:
     RootNode<T> *m_parent;
+    int m_offsetToParent;
 };
+
+template <typename value_type>
+QDebug operator<<(QDebug dbg, const ChildIterator<value_type> &it)
+{
+    if (it.node()) {
+        dbg.nospace() << "ChildIterator(" << it.node() << "(" <<  it.node()->value << ")" << ", parent:" << it.m_parent << ")";
+    } else {
+        dbg.nospace() << "ChildIterator(" << "nullptr" << ", parent:" << it.m_parent << ", offset:" << it.m_offsetToParent << ")";
+    }
+    return dbg;
+}
+
 
 template <typename value_type>
 ChildIterator<value_type> siblingCurrent(ChildIterator<value_type> it)
@@ -206,20 +228,26 @@ template <typename value_type>
 ChildIterator<value_type> siblingBegin(const ChildIterator<value_type> &it)
 {
     RootNode<value_type> *parent = it.m_parent;
-    return ChildIterator<value_type>(parent ? parent->firstChild : nullptr, parent);
+    if (!it.node() && it.m_offsetToParent != 0) return it;
+    return ChildIterator<value_type>(parent ? parent->firstChild : nullptr, parent, 0);
 }
 
 template <typename value_type>
 ChildIterator<value_type> siblingEnd(const ChildIterator<value_type> &it)
 {
-    return ChildIterator<value_type>(nullptr, it.m_parent);
+    if (!it.node() && it.m_offsetToParent != 0) return it;
+    return ChildIterator<value_type>(nullptr, it.m_parent, 0);
 }
 
 template <typename Iterator,
          typename ResultIterator = ChildIterator<typename Iterator::value_type>>
 ResultIterator siblingCurrent(Iterator it)
 {
-    return ResultIterator(it.node(), it.node() ? it.node()->parent : nullptr);
+    // TODO: conversion of an end-iterator into a child iterator is still not implemented
+    //       and considered as UB. We need to implement all special-cases for that.
+    KIS_SAFE_ASSERT_RECOVER_NOOP(it.node());
+
+    return ResultIterator(it.node(), it.node() ? it.node()->parent : nullptr, 0);
 }
 
 template <typename Iterator,
@@ -236,25 +264,52 @@ ResultIterator siblingEnd(Iterator it)
     return siblingEnd(siblingCurrent(it));
 }
 
+ template <typename value_type>
+ ChildIterator<value_type> childBegin(const ChildIterator<value_type> &it)
+{
+    if (it.node()) {
+        return ChildIterator<value_type>(it.node()->firstChild, it.node(), 0);
+    } else {
+        return ChildIterator<value_type>(nullptr, it.m_parent, it.m_offsetToParent + 1);
+    }
+}
+
+template <typename value_type>
+ChildIterator<value_type> childEnd(const ChildIterator<value_type> &it)
+{
+    if (it.node()) {
+        return ChildIterator<value_type>(nullptr, it.node(), 0);
+    } else {
+        return ChildIterator<value_type>(nullptr, it.m_parent, it.m_offsetToParent + 1);
+    }
+}
+
 template <typename Iterator,
           typename ResultIterator = ChildIterator<typename Iterator::value_type>>
 ResultIterator childBegin(Iterator it)
 {
-    return ResultIterator(it.node() ? it.node()->firstChild : nullptr, it.node());
+    return childBegin(siblingCurrent(it));
 }
 
 template <typename Iterator,
           typename ResultIterator = ChildIterator<typename Iterator::value_type>>
 ResultIterator childEnd(Iterator it)
 {
-    return ResultIterator(nullptr, it.node());
+    return childEnd(siblingCurrent(it));
 }
 
-template <typename T>
-ChildIterator<T> parent(const ChildIterator<T> &it)
+
+template <typename value_type>
+ChildIterator<value_type> parent(const ChildIterator<value_type> &it)
 {
-    Node<T> *parent = static_cast<Node<T>*>(it.m_parent && !it.m_parent->isRoot() ? it.m_parent : nullptr);
-    return ChildIterator<T>(parent, parent ? parent->parent : 0);
+    if (it.m_parent->isRoot()) {
+        return ChildIterator<value_type>(nullptr, it.m_parent, qMax(-1, it.m_offsetToParent - 1));
+    } else if (it.m_offsetToParent == 0) {
+        Node<value_type> *parentNode = static_cast<Node<value_type>*>(it.m_parent);
+        return ChildIterator<value_type>(parentNode, parentNode->parent, 0);
+    } else {
+        return ChildIterator<value_type>(nullptr, it.m_parent, it.m_offsetToParent - 1);
+    }
 }
 
 template <typename T>
@@ -411,7 +466,7 @@ public:
 
 public:
     CompositionIterator(Node<T> *node, traversal_state state = Enter)
-        : BaseClass(ChildIterator<T>(node, node ? node->parent : nullptr)),
+        : BaseClass(ChildIterator<T>(node, node ? node->parent : nullptr, 0)),
           m_state(state)
     {
     }
@@ -449,7 +504,7 @@ private:
             break;
         }
 
-        this->base_reference() = ChildIterator<T>(nullptr, nullptr);
+        this->base_reference() = ChildIterator<T>(nullptr, nullptr, 0);
     }
 
 private:
@@ -700,11 +755,15 @@ public:
     }
 
     child_iterator childBegin() {
-        return child_iterator(m_root.firstChild, &m_root);
+        return child_iterator(m_root.firstChild, &m_root, 0);
     }
 
     child_iterator childEnd() {
-        return child_iterator(nullptr, &m_root);
+        return child_iterator(nullptr, &m_root, 0);
+    }
+
+    child_iterator parentEnd() {
+        return child_iterator(nullptr, &m_root, -1);
     }
 
     composition_iterator compositionBegin() {
@@ -727,7 +786,7 @@ public:
 
         linkNode(pos, node);
 
-        return child_iterator(node, node->parent);
+        return child_iterator(node, node->parent, 0);
     }
 
     /**
@@ -787,7 +846,7 @@ public:
         node->parent = nullptr;
 
         linkNode(newPos, node);
-        return child_iterator(node, node->parent);
+        return child_iterator(node, node->parent, 0);
     }
 
 private:

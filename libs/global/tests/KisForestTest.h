@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testCopyForest();
 
     void testSiblingsOnEndIterator();
+    void testParentIterator();
 };
 
 #endif // KISFORESTTEST_H

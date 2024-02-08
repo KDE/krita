@@ -12,6 +12,7 @@
 
 #include <klocalizedstring.h>
 #include <KoIcon.h>
+#include "kis_assert.h"
 
 
 KisUtilityTitleBar::KisUtilityTitleBar(QWidget *parent)
@@ -73,4 +74,16 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
 
         mainLayout->addWidget(widget);
     }
+}
+
+QWidget* KisUtilityTitleBar::widgetArea() {
+    return widgetAreaLayout->parentWidget();
+}
+
+void KisUtilityTitleBar::setWidgetArea(QWidget* widgetArea) {
+    QHBoxLayout *layout = dynamic_cast<QHBoxLayout*>(this->layout());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layout);
+    // It's the third widget;
+    //     title, spacer, widgetArea, spacer, float/close
+    layout->insertWidget(2, widgetArea);
 }

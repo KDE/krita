@@ -18,6 +18,7 @@
 #include "KisMainWindow.h"
 #include "KisPart.h"
 #include "KisDlgListPicker.h"
+#include "kis_utility_title_bar.h"
 
 #include "kis_canvas2.h"
 #include "kis_config.h"
@@ -141,15 +142,18 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     m_dockerHud->setAutoFillBackground(true); // so that it's not transparent
     QVBoxLayout *brushHudLayout = new QVBoxLayout();
     QHBoxLayout *brushHudMenuLayout = new QHBoxLayout();
-    m_dockerComboBox = new QComboBox();
-    brushHudMenuLayout->addWidget(m_dockerComboBox);
 
+    // Put the docker config button before the combobox,
+    // so it cannot go offscreen in case of a wide widget.
     m_dockerMenu = new QToolButton();
     m_dockerMenu->setAutoRaise(true);
     m_dockerMenu->setToolTip(i18n("Configure docker panel"));
     connect(m_dockerMenu, SIGNAL(clicked()), this, SLOT(showDockerConfig()));
-
     brushHudMenuLayout->addWidget(m_dockerMenu);
+
+    m_dockerComboBox = new QComboBox();
+    brushHudMenuLayout->addWidget(m_dockerComboBox);
+
     brushHudLayout->addLayout(brushHudMenuLayout);
     brushHudLayout->addWidget(new KSeparator());
     m_dockerLayout = new QVBoxLayout();
@@ -547,6 +551,14 @@ void KisPopupPalette::showHudWidget(bool visible)
 void KisPopupPalette::borrowOrReturnDocker()
 {
     if (m_isBorrowing) { // then return it
+        if (m_dockerLayout->count() == 2) {
+            // Return the animation dockers' titlebar widget as well
+            KisUtilityTitleBar *titleBar = dynamic_cast<KisUtilityTitleBar*>(m_oldDockerParent->titleBarWidget());
+            KIS_SAFE_ASSERT_RECOVER_NOOP(titleBar);
+            if (titleBar) {
+                titleBar->setWidgetArea(m_dockerLayout->takeAt(0)->widget());
+            }
+        }
         QWidget* dockerInside = m_dockerLayout->takeAt(0)->widget();
         m_oldDockerParent->setWidget(dockerInside);
         dockerInside->setParent(m_oldDockerParent);
@@ -577,8 +589,22 @@ void KisPopupPalette::borrowOrReturnDocker()
                 dbgKrita << "Popup Palette docker: showing Channels docker so it works";
             }
 
+            // Animation dockers have playback controls and such in the titlebar,
+            // so we borrow those as well.
+            if (docker->objectName() == "AnimationCurvesDocker" || docker->objectName() == "TimelineDocker") {
+                KisUtilityTitleBar *titleBar = dynamic_cast<KisUtilityTitleBar*>(docker->titleBarWidget());
+                KIS_SAFE_ASSERT_RECOVER_NOOP(titleBar);
+                if (titleBar) {
+                    QWidget *widgetArea = titleBar->widgetArea();
+                    m_dockerLayout->addWidget(widgetArea);
+                }
+            }
+
             m_dockerLayout->addWidget(docker->widget());
             docker->setWidget(m_dockerIOULabel);
+
+            // Hack: somewhat fixes Animation Curves's titlebar being too tall
+            m_dockerLayout->setStretch(m_dockerLayout->count()-1, 1);
 
             m_isBorrowing = true;
         }

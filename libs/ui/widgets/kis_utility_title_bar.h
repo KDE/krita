@@ -40,6 +40,9 @@ public:
         return QSize(32, 32);
     }
 
+    QWidget* widgetArea();
+    void setWidgetArea(QWidget* widgetArea);
+
 protected:
     QHBoxLayout *widgetAreaLayout;
 

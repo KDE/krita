@@ -17,7 +17,7 @@
 # Lasse Liehu <lasse.liehu@gmail.com>, 2013, 2015.
 # Jorma Karvonen <karvonen.jorma@gmail.com>, 2011.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2014.
-# Tommi Nieminen <translator@legisign.org>, 2011, 2018, 2019, 2020, 2021, 2022, 2023.
+# Tommi Nieminen <translator@legisign.org>, 2011, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2013, 2015.
 # Lasse Liehu <lasse.liehu@gmail.com>, 2012, 2014, 2015.
 # Copyright © 2010, 2012 This_file_is_part_of_KDE
@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-29 03:11+0000\n"
-"PO-Revision-Date: 2023-10-12 18:19+0300\n"
+"PO-Revision-Date: 2024-02-02 13:03+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -10842,7 +10842,7 @@ msgstr "Valitse lineaarinen varjostus sekoitustila"
 #, kde-format
 msgctxt "action"
 msgid "Select Overlay Blending Mode"
-msgstr "Valitse kerrostus sekoitustila"
+msgstr "Valitse kerrostussekoitustila"
 
 #. i18n: context: text @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -10851,12 +10851,10 @@ msgstr "Valitse kerrostus sekoitustila"
 #. i18n: context: toolTip @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (Select Hard Overlay Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #: krita/krita.action:1683 krita/krita.action:1685 krita/krita.action:1686
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select Overlay Blending Mode"
+#, kde-format
 msgctxt "action"
 msgid "Select Hard Overlay Blending Mode"
-msgstr "Valitse kerrostus sekoitustila"
+msgstr "Valitse kerrostussekoitustila"
 
 #. i18n: context: text @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (Select Soft Light Blending Mode), Actions (Blending Modes), ActionCollection (Krita)
@@ -26327,10 +26325,9 @@ msgstr "Viivan peittävyys"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:472
-#, fuzzy, kde-format
-#| msgid "Overlay Mode"
+#, kde-format
 msgid "Overlay color:"
-msgstr "Kerrostus tila"
+msgstr "Kerrostusväri:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:492
@@ -53133,7 +53130,7 @@ msgstr "Kaari"
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:36
 #, kde-format
 msgid "Overlay Mode"
-msgstr "Kerrostus tila"
+msgstr "Kerrostustila"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:47
 #, kde-format

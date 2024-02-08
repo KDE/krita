@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2024-02-06 11:21+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -37289,7 +37289,7 @@ msgstr "Assistentenset opslaan"
 msgid "Concentric Ellipse assistant"
 msgstr "Assistent voor Concentrische ellips"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Concentrische ellips"
@@ -37299,7 +37299,7 @@ msgstr "Concentrische ellips"
 msgid "Curvilinear Perspective assistant"
 msgstr "Perspectiefassistent voor kromlijnig"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, kde-format
 msgid "Curvilinear Perspective"
 msgstr "Kromlijnigperspectief"
@@ -37341,7 +37341,7 @@ msgstr "Ellips"
 msgid "Fish Eye Point assistant"
 msgstr "Assistent voor vissenoogpunt"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Vissenoogpunt"
@@ -37477,7 +37477,7 @@ msgstr "Hulpmiddel Assistent"
 msgid "Parallel Ruler assistant"
 msgstr "Perspectief lijn-assistent"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "Perspectief lijn"
@@ -37489,7 +37489,7 @@ msgstr "Perspectiefassistent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37501,7 +37501,7 @@ msgstr "Perspectief"
 msgid "Perspective Ellipse assistant"
 msgstr "Assistent voor perspectiefellips"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspectiefellips"
@@ -37532,7 +37532,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Twee punten-assistent"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "2 punten-perspectief"
@@ -37542,7 +37542,7 @@ msgstr "2 punten-perspectief"
 msgid "Vanishing Point assistant"
 msgstr "Verdwijnpuntassistent"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Verdwijnpunt"

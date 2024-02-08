@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -37480,7 +37480,7 @@ msgstr "सहायक :"
 msgid "Concentric Ellipse assistant"
 msgstr "लंबवर्तुळ सहायक"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "सर्व निवडा"
@@ -37491,7 +37491,7 @@ msgstr "सर्व निवडा"
 msgid "Curvilinear Perspective assistant"
 msgstr "आकलन सहायक"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Clear Perspective Grid"
 msgid "Curvilinear Perspective"
@@ -37538,7 +37538,7 @@ msgstr "लंबवर्तुळ"
 msgid "Fish Eye Point assistant"
 msgstr "पेंटिंग सहायक"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "बदलते अन्त्य बिंदू"
@@ -37677,7 +37677,7 @@ msgstr "सहायक :"
 msgid "Parallel Ruler assistant"
 msgstr "मोजपट्टी सहायक"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "मोजपट्टी सहायक"
@@ -37689,7 +37689,7 @@ msgstr "आकलन सहायक"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37702,7 +37702,7 @@ msgstr "आकलन"
 msgid "Perspective Ellipse assistant"
 msgstr "आकलन सहायक"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -37736,7 +37736,7 @@ msgstr "स्प्लाईन"
 msgid "Two point assistant"
 msgstr "स्प्लाईन सहायक"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "2 Point Perspective"
@@ -37747,7 +37747,7 @@ msgstr "आकलन"
 msgid "Vanishing Point assistant"
 msgstr "पेंटिंग सहायक"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "बदलते अन्त्य बिंदू"

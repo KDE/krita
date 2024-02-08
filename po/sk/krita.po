@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -37385,7 +37385,7 @@ msgstr "Uložiť sadu asistentov"
 msgid "Concentric Ellipse assistant"
 msgstr "Koncentrický elipsový asistent"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Koncentrická elipsa"
@@ -37396,7 +37396,7 @@ msgstr "Koncentrická elipsa"
 msgid "Curvilinear Perspective assistant"
 msgstr "Perspektívny asistent"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Clear Perspective Grid"
 msgid "Curvilinear Perspective"
@@ -37439,7 +37439,7 @@ msgstr "Elipsa"
 msgid "Fish Eye Point assistant"
 msgstr "Asistent bodu rybieho oka"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Bod rybieho oka"
@@ -37574,7 +37574,7 @@ msgstr "Nástroj asistenta"
 msgid "Parallel Ruler assistant"
 msgstr "Asistent paralelného pravítka"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "Paralelné pravítko"
@@ -37586,7 +37586,7 @@ msgstr "Perspektívny asistent"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37598,7 +37598,7 @@ msgstr "Perspektíva"
 msgid "Perspective Ellipse assistant"
 msgstr "Asistent perspektívnej elipsy"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektívna elipsa"
@@ -37629,7 +37629,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Asistent dvoch bodov"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Perspektíva 2 bodov"
@@ -37639,7 +37639,7 @@ msgstr "Perspektíva 2 bodov"
 msgid "Vanishing Point assistant"
 msgstr "Asistent úbežníka"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Úbežník"

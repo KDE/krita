@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -37661,7 +37661,7 @@ msgstr "Βοηθός:"
 msgid "Concentric Ellipse assistant"
 msgstr "Βοηθός έλλειψης"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "Επιλογή όλων"
@@ -37672,7 +37672,7 @@ msgstr "Επιλογή όλων"
 msgid "Curvilinear Perspective assistant"
 msgstr "Βοηθός προοπτικής"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Clear Perspective Grid"
 msgid "Curvilinear Perspective"
@@ -37719,7 +37719,7 @@ msgstr "Έλλειψη"
 msgid "Fish Eye Point assistant"
 msgstr "Βοηθοί ζωγραφικής"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "Επιλογές"
@@ -37857,7 +37857,7 @@ msgstr "Βοηθός:"
 msgid "Parallel Ruler assistant"
 msgstr "Βοηθός κανόνα"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "Βοηθός κανόνα"
@@ -37869,7 +37869,7 @@ msgstr "Βοηθός προοπτικής"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37882,7 +37882,7 @@ msgstr "Προοπτική"
 msgid "Perspective Ellipse assistant"
 msgstr "Βοηθός προοπτικής"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -37916,7 +37916,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Βοηθός spline"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "2 Point Perspective"
@@ -37927,7 +37927,7 @@ msgstr "Προοπτική"
 msgid "Vanishing Point assistant"
 msgstr "Βοηθοί ζωγραφικής"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Επιλογές"

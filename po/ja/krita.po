@@ -33,8 +33,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
-"PO-Revision-Date: 2024-01-07 21:20-0800\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
+"PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
@@ -5524,7 +5524,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "David_Revoy's_Electric_Arcs.kse"
 msgid "David Revoy's Electric Arcs"
-msgstr "David Revoyの電気アーク"
+msgstr "David Revoy の電気アーク"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -16256,10 +16256,9 @@ msgid "Resize"
 msgstr "サイズ変更"
 
 #: libs/flake/commands/KoShapeRunAroundCommand.cpp:59
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr "ページレイアウトを変更"
+msgstr "シェイプの回転を変更"
 
 #: libs/flake/commands/KoShapeShadowCommand.cpp:54
 #: libs/flake/commands/KoShapeShadowCommand.cpp:71
@@ -16377,6 +16376,9 @@ msgid ""
 "document, the text object will be converted into Krita 5 format that will no "
 "longer be compatible with Krita 4.x"
 msgstr ""
+"このドキュメントには Krita 4.x で作成されたベクターテキストが含まれています。"
+"ドキュメントを保存すると、テキストオブジェクトが Krita 5 のフォーマットに変換"
+"され、Krita 4.x との互換性がなくなります"
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
 #, kde-format
@@ -17533,7 +17535,7 @@ msgstr "選択範囲をアンチエイリアス化"
 #: libs/image/kis_selection_filters.cpp:1195
 msgctxt "(qtundo-format)"
 msgid "Grow Selection Until Darkest Pixel"
-msgstr ""
+msgstr "最も暗いピクセルまで選択範囲を広げる"
 
 #: libs/image/kis_switch_time_stroke_strategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -17561,15 +17563,14 @@ msgid "Mouse Speed:"
 msgstr "マウスの速度:"
 
 #: libs/image/kis_update_time_monitor.cpp:193
-#, fuzzy, kde-format
-#| msgid "Updated:"
+#, kde-format
 msgid "Jobs/Update:"
-msgstr "変更日時:"
+msgstr "ジョブ/更新時間:"
 
 #: libs/image/kis_update_time_monitor.cpp:194
-#, fuzzy, kde-format
+#, kde-format
 msgid "Non Update Time:"
-msgstr "プレビューを更新:"
+msgstr "非更新時間:"
 
 #: libs/image/kis_update_time_monitor.cpp:195
 #, kde-format
@@ -17725,7 +17726,7 @@ msgstr "複製"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "In Betweening"
-msgstr ""
+msgstr "中割り"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:79
 #, kde-format
@@ -17882,6 +17883,8 @@ msgid ""
 "millisecond</b>. The format cannot represent this, and the frame duration "
 "will be rounded to the nearest millisecond."
 msgstr ""
+"この画像は<b>ミリ秒の分数</b>でフレーム間隔が設定されています。この形式では表"
+"現できないため、フレーム間隔は最も近いミリ秒に丸められます。"
 
 #: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
 #, kde-format
@@ -18911,13 +18914,13 @@ msgstr "カラー比較 (明)"
 #, kde-format
 msgctxt "Blending mode - P-Norm A"
 msgid "P-Norm A"
-msgstr ""
+msgstr "Pノルム A"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:88
 #, kde-format
 msgctxt "Blending mode - P-Norm B"
 msgid "P-Norm B"
-msgstr ""
+msgstr "Pノルム B"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:89
 #, kde-format
@@ -19043,13 +19046,13 @@ msgstr "オーバーレイ"
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Linear)"
 msgid "Lambert Lighting (Linear)"
-msgstr ""
+msgstr "ランベルト照明 (線形)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:114
 #, kde-format
 msgctxt "Blending mode - Lambert Lighting (Gamma 2.2)"
 msgid "Lambert Lighting (Gamma 2.2)"
-msgstr ""
+msgstr "ランベルト照明 (ガンマ 2.2)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:115
 #, kde-format
@@ -19058,11 +19061,10 @@ msgid "Erase"
 msgstr "消去"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:116
-#, fuzzy, kde-format
-#| msgid "Alpha Darken"
+#, kde-format
 msgctxt "Blending mode - Alpha Darken"
 msgid "Alpha Darken"
-msgstr "相対暗色(アルファ)"
+msgstr "アルファ比較 (暗)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:117
 #, kde-format
@@ -19077,11 +19079,10 @@ msgid "Hard Mix (Photoshop)"
 msgstr "ハードミックス (Photoshop)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:119
-#, fuzzy, kde-format
-#| msgid "Hard Mix (Photoshop)"
+#, kde-format
 msgctxt "Blending mode - Hard Mix Softer (Photoshop)"
 msgid "Hard Mix Softer (Photoshop)"
-msgstr "ハードミックス (Photoshop)"
+msgstr "ハードミックス (Photoshop) (ソフト)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:120
 #, kde-format
@@ -19114,18 +19115,16 @@ msgid "Geometric Mean"
 msgstr "幾何平均"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:125
-#, fuzzy, kde-format
-#| msgid "Desaturation method:"
+#, kde-format
 msgctxt "Blending mode - Destination Atop"
 msgid "Destination Atop"
-msgstr "脱色方式:"
+msgstr "被覆"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:126
-#, fuzzy, kde-format
-#| msgid "Description"
+#, kde-format
 msgctxt "Blending mode - Destination In"
 msgid "Destination In"
-msgstr "詳細"
+msgstr "切り抜き"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:127
 #, kde-format
@@ -19149,25 +19148,25 @@ msgstr "補間 - 2X"
 #, kde-format
 msgctxt "Blending mode - Penumbra A"
 msgid "Penumbra A"
-msgstr ""
+msgstr "半影 A"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:131
 #, kde-format
 msgctxt "Blending mode - Penumbra B"
 msgid "Penumbra B"
-msgstr ""
+msgstr "半影 B"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:132
 #, kde-format
 msgctxt "Blending mode - Penumbra C"
 msgid "Penumbra C"
-msgstr ""
+msgstr "半影 C"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:133
 #, kde-format
 msgctxt "Blending mode - Penumbra D"
 msgid "Penumbra D"
-msgstr ""
+msgstr "半影 D"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:135
 #, kde-format
@@ -19176,8 +19175,7 @@ msgid "Bumpmap"
 msgstr "バンプマップ"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:136
-#, fuzzy, kde-format
-#| msgid "Combine Normal Map"
+#, kde-format
 msgctxt "Blending mode - Combine Normal Map"
 msgid "Combine Normal Map"
 msgstr "法線マップを結合"
@@ -19189,22 +19187,19 @@ msgid "Dissolve"
 msgstr "ディザ合成"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:138
-#, fuzzy, kde-format
-#| msgid "Copy Red"
+#, kde-format
 msgctxt "Blending mode - Copy Red"
 msgid "Copy Red"
 msgstr "赤をコピー"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:139
-#, fuzzy, kde-format
-#| msgid "Copy Green"
+#, kde-format
 msgctxt "Blending mode - Copy Green"
 msgid "Copy Green"
 msgstr "緑をコピー"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:140
-#, fuzzy, kde-format
-#| msgid "Copy Blue"
+#, kde-format
 msgctxt "Blending mode - Copy Blue"
 msgid "Copy Blue"
 msgstr "青をコピー"
@@ -19216,8 +19211,7 @@ msgid "Copy"
 msgstr "コピー"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:142
-#, fuzzy, kde-format
-#| msgid "Tangent Normalmap"
+#, kde-format
 msgctxt "Blending mode - Tangent Normalmap"
 msgid "Tangent Normalmap"
 msgstr "接線法線マップ"
@@ -19337,11 +19331,10 @@ msgid "Saturation HSL"
 msgstr "彩度 HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:165
-#, fuzzy, kde-format
-#| msgid "Lightness"
+#, kde-format
 msgctxt "Blending mode - Lightness HSI"
 msgid "Lightness"
-msgstr "輝度"
+msgstr "明度"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:166
 #, kde-format
@@ -19356,18 +19349,16 @@ msgid "Increase Saturation HSL"
 msgstr "彩度を上げる HSL"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:168
-#, fuzzy, kde-format
-#| msgid "Decrease Lightness"
+#, kde-format
 msgctxt "Blending mode - Decrease Lightness"
 msgid "Decrease Lightness"
-msgstr "輝度を下げる"
+msgstr "明度を下げる"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:169
-#, fuzzy, kde-format
-#| msgid "Increase Lightness"
+#, kde-format
 msgctxt "Blending mode - Increase Lightness"
 msgid "Increase Lightness"
-msgstr "輝度を上げる"
+msgstr "明度を上げる"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:171
 #, kde-format
@@ -19683,7 +19674,7 @@ msgstr "Id"
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:83
 #, kde-format
 msgid "Storage ID"
-msgstr ""
+msgstr "ストレージ ID"
 
 #: libs/resources/KisResourceModel.cpp:128
 #: libs/resources/KisStorageModel.cpp:488
@@ -19748,10 +19739,9 @@ msgstr "リソースの種類"
 #: libs/resources/KisResourceModel.cpp:144
 #: libs/resources/KisTagResourceModel.cpp:646
 #: libs/resources/KisTagResourceModel.cpp:676
-#, fuzzy, kde-format
-#| msgid "Storages"
+#, kde-format
 msgid "Storage Active"
-msgstr "ストレージ"
+msgstr "ストレージがアクティブ"
 
 #: libs/resources/KisResourceModel.cpp:146
 #: libs/resources/KisTagResourceModel.cpp:648
@@ -19771,16 +19761,15 @@ msgstr "タグ"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:652
-#, fuzzy, kde-format
-#| msgid "Clear Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "サムネイルのクリア"
+msgstr "大きなサムネイル"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:654
 #, kde-format
 msgid "Dirty"
-msgstr ""
+msgstr "変更あり"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: attribute (title), widget (QWidget, metadata)
@@ -19992,19 +19981,18 @@ msgstr "すべてのタグなしリソース"
 #: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
-msgstr ""
+msgstr "タグ ID"
 
 #: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "リソース"
+msgstr "リソース ID"
 
 #: libs/resources/KisTagResourceModel.cpp:668
 #, kde-format
 msgid "Tag Url"
-msgstr ""
+msgstr "タグ URL"
 
 #: libs/resources/KisTagResourceModel.cpp:670
 #, kde-format
@@ -20012,28 +20000,24 @@ msgid "Resource"
 msgstr "リソース"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resource View"
+#, kde-format
 msgid "Resource Active"
-msgstr "リソースビュー"
+msgstr "リソースがアクティブ"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "Storages"
+#, kde-format
 msgid "Tag Active"
-msgstr "ストレージ"
+msgstr "タグがアクティブ"
 
 #: libs/resources/KisTagResourceModel.cpp:678
-#, fuzzy, kde-format
-#| msgid "Resource Type"
+#, kde-format
 msgid "Resource Name"
-msgstr "リソースの種類"
+msgstr "リソース名"
 
 #: libs/resources/KisTagResourceModel.cpp:680
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "ファイル名"
+msgstr "タグファイル名"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:110
 #, kde-format
@@ -20042,11 +20026,9 @@ msgid "resource folder"
 msgstr "リソースフォルダ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
-msgstr "選択範囲を表示"
+msgstr "表示設定"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, kde-format
@@ -20133,6 +20115,8 @@ msgid ""
 "name for multiple resources?(If you decline now, the resource won't be "
 "renamed)."
 msgstr ""
+"この名前は既に他のリソースに使用されています。同じ名前を複数のリソースに使用"
+"しますか？(拒否するとリソース名は変更されません)"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:97
 #, kde-format
@@ -20178,6 +20162,8 @@ msgid ""
 "name for multiple resources? (If you decline now, the resource won't be "
 "added)."
 msgstr ""
+"この名前は既に他のリソースに使用されています。同じ名前を複数のリソースに使用"
+"しますか？(拒否するとリソースは追加されません)"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:150
 #, kde-format
@@ -20213,6 +20199,9 @@ msgid ""
 "use the same name for multiple resources?\n"
 "If you cancel, your changes won't be saved."
 msgstr ""
+"この名前は既に他のリソースに使用されています。同じ名前を複数のリソースに使用"
+"しますか？\n"
+"キャンセルすると変更は保存されません。"
 
 #: libs/resourcewidgets/KisStorageChooserWidget.cpp:156
 #, kde-format
@@ -20226,6 +20215,8 @@ msgid ""
 "There are no resources of type %1 available. Please enable at least one "
 "bundle."
 msgstr ""
+"\n"
+"%1 のリソースがありません。少なくとも 1 つのバンドルを有効にしてください。"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:52
 #: libs/resourcewidgets/KisTagToolButton.cpp:54
@@ -20272,6 +20263,10 @@ msgid ""
 "Tag to be removed: %1\n"
 "Tag's unique name: %2"
 msgstr ""
+"この名前を持つタグは既に存在します。名前を変更するには、既存のタグを削除する"
+"必要があります。続行しますか？\n"
+"削除されるタグ: %1\n"
+"タグの一意な名前: %2"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
@@ -20539,7 +20534,7 @@ msgstr "lanczos3"
 #, kde-format
 msgctxt "nearest neighbor filtering"
 msgid "neighbor"
-msgstr ""
+msgstr "最近傍"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:99
 #, kde-format
@@ -20548,10 +20543,7 @@ msgid "spline"
 msgstr "スプライン"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
 msgstr "該当なし"
@@ -20559,28 +20551,25 @@ msgstr "該当なし"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr ""
+msgstr "有効な FFmpeg バイナリが提供されていません..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
+"GIF 透過を有効にするには、FFmpeg が少なくともバージョン 4.2 以上である必要が"
+"あります"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:481
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><span style=\" font-weight:600;\">Warning:</span> "
-#| "animated gif images cannot have a framerate higher than 50. The framerate "
-#| "will be reduced to 50 frames per second.</p></body></html>"
+#, kde-format
 msgctxt "ffmpeg warning checks"
 msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"<html><head/><body><p><span style=\" font-weight:600;\"> 警告:</span>アニメー"
-"ション GIF 画像のフレームレートは50が上限です。フレームレートは50フレーム/秒"
-"に削減されます。</p></body></html>"
+"アニメーション GIF 画像のフレームレートは 50 を超えることはできません。フレー"
+"ムレートは 50 フレーム/秒に減少します。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1835
@@ -20594,16 +20583,17 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
+"提供された FFmpeg は圧縮されているようです。まず FFmpeg をアーカイブから抽出"
+"してください。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
-#, fuzzy, kde-format
-#| msgid ""
-#| "The location of FFmpeg is invalid. Please select the correct location of "
-#| "the FFmpeg executable on your system."
+#, kde-format
 msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
-msgstr "FFmpeg の位置が不正です。"
+msgstr ""
+"提供された FFmpeg は無効のようです。システム上の正しい FFmpeg 実行ファイルの"
+"場所を選択してください。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:733
 #, kde-format
@@ -20686,6 +20676,11 @@ msgid ""
 "If you want to edit a clip larger than 100 frames, consider using a real "
 "video editor, like Kdenlive (https://kdenlive.org)."
 msgstr ""
+"警告: Krita に 100 フレーム以上のフレームをインポートしようとしています。\n"
+"\n"
+"これはシステムを過負荷にする可能性があります。\n"
+"100 フレーム以上のクリップを編集したい場合は、Kdenlive (https://kdenlive."
+"org) のような本格的なビデオエディタを使用することを検討してください。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
 #, kde-format
@@ -20754,6 +20749,8 @@ msgid ""
 "*<font size='0.5em'><em>*FPS not right in file. Modified to see full "
 "duration</em></font>"
 msgstr ""
+"*<font size='0.5em'><em>*ファイル内の FPS が正しくありません。全体の長さを見"
+"るために変更されました</em></font>"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:487
 #, kde-format
@@ -20762,12 +20759,16 @@ msgid ""
 "<b>Warning:</b> you are trying to import %1 frames, the maximum amount you "
 "can import is %2."
 msgstr ""
+"<b>警告:</b> %1 フレームをインポートしようとしていますが、インポートできる最"
+"大数は %2 です。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:494
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid "Use a <a href=\"https://kdenlive.org\">video editor</a> instead!"
 msgstr ""
+"代わりに <a href=\"https://kdenlive.org\">ビデオエディタ</a> を使用してくださ"
+"い！"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:499
 #, kde-format
@@ -20776,13 +20777,15 @@ msgid ""
 "You do not have enough memory to load this many frames, the computer will be "
 "overloaded."
 msgstr ""
+"このフレーム数を読み込むための十分なメモリがありません。コンピュータが過負荷"
+"になります。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:507
 #, kde-format
 msgctxt "part of warning in video importer."
 msgid ""
 "This will take over half the available memory, editing will be difficult."
-msgstr ""
+msgstr "これは利用可能なメモリの半分以上を占めるため、編集が困難になります。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:516
 #, kde-format
@@ -20791,6 +20794,8 @@ msgid ""
 "Krita does not support the video transfer curve (%1), it will be loaded as "
 "linear."
 msgstr ""
+"Krita はビデオ転送曲線 (%1) をサポートしていません。線形として読み込まれま"
+"す。"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:549
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:551
@@ -20868,14 +20873,13 @@ msgstr "要求された%1 ファイルを作成中: %2/%3 フレーム"
 #: libs/ui/animation/video_export_options_dialog.ui:13
 #, kde-format
 msgid "Codec:"
-msgstr ""
+msgstr "コーデック:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "No options"
+#, kde-format
 msgid "Codec options"
-msgstr "オプションなし"
+msgstr "コーデックオプション"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20941,10 +20945,9 @@ msgstr "HDR メタデータ..."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate (MBit/s)"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "ビットレート (MBit/s)"
+msgstr "ビットレート (MBit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20966,17 +20969,15 @@ msgstr "アニメーションをループ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifTransDiff)
 #: libs/ui/animation/video_export_options_dialog.ui:293
-#, fuzzy, kde-format
-#| msgid "Transparency Checkerboard:"
+#, kde-format
 msgid "Transparency Difference"
-msgstr "透過を表す市松模様:"
+msgstr "透過差分"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "自動生成8ビットパレット"
+msgstr "自動生成8ビットパレット:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -20988,17 +20989,15 @@ msgstr "ディザリング:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseBayerScaleGIF)
 #: libs/ui/animation/video_export_options_dialog.ui:320
-#, fuzzy, kde-format
-#| msgid "Pattern Scale:"
+#, kde-format
 msgid "Bayer Scale:"
-msgstr "パターンスケール:"
+msgstr "Bayer スケール:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDiffModeGIF)
 #: libs/ui/animation/video_export_options_dialog.ui:337
-#, fuzzy, kde-format
-#| msgid "Difference"
+#, kde-format
 msgid "Difference Mode:"
-msgstr "差分"
+msgstr "差分モード:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:347
@@ -21019,13 +21018,24 @@ msgid ""
 "you need partial transparency, consider APNG or WEBP.</span><br/></p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>GIF 形式はフレーム/画像あたり最大 256 色をサポートしま"
+"す。このオプションを有効にすると、1 色を消費することで透過が有効になり、した"
+"がって GIF ではこのオプションが有効になっている場合、255 色のみが使用されま"
+"す。このオプションを無効にすると、より良い品質の出力のために GIF に 256 色が"
+"使用されます。</p><p><span style=\" font-style:italic;\">注 1: 透過が正しく機"
+"能するためには、画像シーケンスが透過が有効になっていること、および FFMpeg の"
+"バージョンが少なくとも 4.2 以上であることを確認する必要があります。GIF 出力に"
+"画面のちらつきの兆候が見られる場合、FFMpeg バージョン 4.4+ が強く推奨されま"
+"す。</span></p><p><span style=\" font-style:italic;\">注 2: GIF 形式は 100% "
+"透過または 0% 透過のみをサポートしています。部分的な透過はサポートされていま"
+"せん。部分的な透過が必要な場合は、APNG または WEBP を検討してください。</"
+"span><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, gifReserveTransparent)
 #: libs/ui/animation/video_export_options_dialog.ui:350
-#, fuzzy, kde-format
-#| msgid "Preserve alpha"
+#, kde-format
 msgid "Preserve Transparency"
-msgstr "アルファを保護"
+msgstr "透過を保持"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredAPNG)
 #: libs/ui/animation/video_export_options_dialog.ui:380
@@ -21047,21 +21057,19 @@ msgstr "画像品質:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom options"
-msgstr "カスタムオプション:"
+msgstr "カスタムオプション"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
-msgstr "ここに ffmpeg フィルタリングオプションを指定します。"
+msgstr ""
+"ここに任意の FFmpeg フィルタリングオプションを追加してください。これは "
+"FFmpeg インスタンスの入力と出力ストリームの間に配置されます"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21354,96 +21362,70 @@ msgid "text"
 msgstr "text"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:93
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Global/Full"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Global/Full"
 msgstr "Global/Full"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "Blending mode - Difference"
-#| msgid "Difference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
 msgstr "差分"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
-#, fuzzy, kde-format
-#| msgctxt "paletegen status mode option name"
-#| msgid "Per Single Frame"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Per Single Frame"
-msgstr "Per Single Frame"
+msgstr "単一フレームごと"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
-msgstr "none"
+msgstr "なし"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "bayer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
 msgstr "bayer"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "floyd_steinberg"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "floyd_steinberg"
 msgstr "floyd_steinberg"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:100
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "heckbert"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "heckbert"
 msgstr "heckbert"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:101
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2"
 msgstr "sierra2"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "paleteuse dither option name"
-#| msgid "sierra2_4a"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "sierra2_4a"
 msgstr "sierra2_4a"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
-msgstr "none"
+msgstr "なし"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
-msgstr "rectangle"
+msgstr "長方形"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:149
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:168
@@ -21453,11 +21435,10 @@ msgid "kbps"
 msgstr "kbps"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "開く"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
@@ -21674,10 +21655,9 @@ msgstr "全般"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "動画 FPS:"
+msgstr "動画ファイル:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21724,14 +21704,14 @@ msgid ""
 "Use ffmpeg to detect similar frames and reduce the total number of frames "
 "imported."
 msgstr ""
+"ffmpeg を使用して類似フレームを検出し、インポートされるフレームの総数を減らし"
+"ます。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionFilterDuplicates)
 #: libs/ui/animation/VideoImportDialog.ui:273
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Add duplicate frame"
+#, kde-format
 msgid "Filter duplicate frames"
-msgstr "複製フレームを挿入"
+msgstr "重複フレームをフィルタリングする"
 
 #. i18n: ectx: property (text), widget (QLabel, sensitivityLabel)
 #: libs/ui/animation/VideoImportDialog.ui:297
@@ -21747,6 +21727,9 @@ msgid ""
 "which frames are added to Krita.\n"
 "The higher the sensitivity, the more frames are added to Krita."
 msgstr ""
+"重複フレームフィルタが Krita に追加されるフレームを決定する際の感度を設定しま"
+"す。\n"
+"感度が高いほど、Krita に追加されるフレームが増えます。"
 
 #. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
 #: libs/ui/animation/VideoImportDialog.ui:325
@@ -21901,29 +21884,25 @@ msgstr "フィルタ:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFMpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFMpeg Path:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFMpeg のパス:"
+msgstr "FFmpeg のパス:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgid "FFProbe Path:"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "FFProbe のパス:"
+msgstr "FFprobe のパス:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
-#, fuzzy, kde-format
-#| msgid "AnimationRenderer Image"
+#, kde-format
 msgid "Animation Renderer Image"
 msgstr "アニメーションレンダラの画像"
 
@@ -21941,17 +21920,15 @@ msgstr "最後のフレーム:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyImageSequence)
 #: libs/ui/animation/wdg_animationrenderer.ui:49
-#, fuzzy, kde-format
-#| msgid "Export Images"
+#, kde-format
 msgid "Export as image sequence"
-msgstr "画像をエクスポート"
+msgstr "連番画像としてエクスポート"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Fi&le format:"
+#, kde-format
 msgid "File format:"
-msgstr "ファイル形式(&L):"
+msgstr "ファイル形式:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -22001,10 +21978,9 @@ msgstr "固有フレームのみ"
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "エクスポートのサイズ:"
+msgstr "動画としてエクスポート"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -22016,10 +21992,9 @@ msgstr "出力:"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnRenderOptions)
 #: libs/ui/animation/wdg_animationrenderer.ui:210
-#, fuzzy, kde-format
-#| msgid "Select the ffmpeg render options."
+#, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "ffmpeg の出力オプションを選択"
+msgstr "FFmpeg の出力オプションを選択"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -22037,17 +22012,15 @@ msgstr "音声を含める"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Image location:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "連番画像の保存場所:"
+msgstr "FFmpeg の場所:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "FFMpeg Version: None"
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "FFMpeg のバージョン: なし"
+msgstr "FFmpeg のバージョン:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22080,7 +22053,7 @@ msgstr "元のプリセットを再読み込み"
 #: libs/ui/brushhud/kis_brush_hud.cpp:82
 #, kde-format
 msgid "Configure the on-canvas brush editor"
-msgstr ""
+msgstr "キャンバス上のブラシエディタを設定"
 
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
@@ -22347,6 +22320,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">開発基金</h1><p align=\"center\"> <a "
+"href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 align=\"center"
+"\">ワンタイムスポンサー</h2><p align=\"center\"> <a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src="
+"\":/gamechuck.png\"></a> <p align=\"center\"> <a href=\"https://www.fosshub."
+"com/Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"> <a "
+"href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
+"body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -22413,10 +22396,9 @@ msgid "Save without waiting"
 msgstr "待機せずに保存"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Cancel Operation and Save"
+#, kde-format
 msgid "Cancel operation and save"
-msgstr "演算をキャンセルして保存"
+msgstr "操作をキャンセルして保存"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:59
 #, kde-format
@@ -22441,13 +22423,7 @@ msgstr "このフィルタには設定オプションはありません"
 
 #: libs/ui/dialogs/kis_dlg_file_layer.cpp:49
 #: plugins/tools/tool_transform2/kis_tool_transform_config_widget.cpp:75
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "<p>Select filtering mode:\n"
-#| "<ul><li><b>Bilinear</b> for areas with uniform color to avoid artifacts</"
-#| "li><li><b>Bicubic</b> for smoother results</li><li><b>Lanczos3</b> for "
-#| "sharp results. May produce aerials.</li></ul></p>"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "<p>Select filtering mode:\n"
@@ -22457,10 +22433,10 @@ msgid ""
 "sharp results. May produce aerials.</li></ul></p>"
 msgstr ""
 "<p>フィルタリングモードを選択:\n"
-"<ul><li>均一に色が塗られている範囲を作りものっぽく見せたくない場合は<b>バイリ"
-"ニア</b></li>より滑らかな結果を得たい場合は<li><b>バイキュービック</b></"
-"li><li>シャープな結果を得たい場合は <b>Lanczos3</b> ですが、細い線が生じるこ"
-"とがあります。</li></ul></p>"
+"<ul><li><b>最近傍</b> ピクセルアート用。新しい色を生成しません。</li><li><b>"
+"バイリニア</b> 均一な色の領域でアーティファクトを避けるため。</li><li><b>バイ"
+"キュービック</b> より滑らかな結果を得るため。</li><li><b>Lanczos3</b> より鮮"
+"明な結果を得るため。エアリアルが生じることがあります。</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
 #, kde-format
@@ -22468,6 +22444,9 @@ msgid ""
 "In addition to filtering the currently visible frame, \n"
 "filter all other keyframe selected in the Animation Timeline docker."
 msgstr ""
+"現在表示されているフレームに加えて、\n"
+"アニメーションタイムラインドッカーで選択された他のキーフレームにもフィルタを"
+"適用します。"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:140
 #, kde-format
@@ -22489,12 +22468,15 @@ msgid ""
 "support sending HLG to the monitor, so for import it is recommended to "
 "convert from scene linear to display linear.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>これは Hybrid Log Gamma 画像です。Krita は HLG をモニ"
+"ターに送信することをサポートしていません。そのため、インポートする際にはシー"
+"ンリニアからディスプレイリニアへの変換を推奨します。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkApplyOOTF)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:30
 #, kde-format
 msgid "Apply HLG OOTF"
-msgstr ""
+msgstr "HLG OOTF を適用"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -22511,17 +22493,13 @@ msgstr "ガンマ:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:44
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Store document metadata that is in the document "
-#| "information. This will override any layer metadata.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
 "from scene to display linear.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ドキュメント情報に含まれるドキュメントメタデータを格納"
-"します。これにより、すべてのレイヤーメタデータが上書きされます。</p></body></"
-"html>"
+"<html><head/><body><p>ガンマ値。デフォルトでは、シーンリニアからディスプレイ"
+"リニアへの変換には 1.2 が使用されます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
@@ -22539,16 +22517,13 @@ msgstr "明度:"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:64
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The display brightness in nits. By default this is set "
 "to 1000 for converting to display linear.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></body></"
-"html>"
+"<html><head/><body><p>画面の明るさをニットで指定します。デフォルトでは、ディ"
+"スプレイリニアへの変換には 1000 が使用されます。</p></body></html>"
 
 #. i18n: ectx: property (suffix), widget (QDoubleSpinBox, spnNits)
 #: libs/ui/dialogs/kis_dlg_hlg_import.ui:67
@@ -22658,7 +22633,7 @@ msgstr "レイヤーのプロパティ"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
-msgstr ""
+msgstr "{n}%"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:129
 #, kde-format
@@ -22893,23 +22868,22 @@ msgstr "変更を反映するには、Krita の再起動が必要です"
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
+"ファイルピッカーで選択した場所に保存すると、起動が遅くなることがあります!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:471
-#, fuzzy, kde-format
-#| msgid "Internal Pool:"
+#, kde-format
 msgid "Internal Storage"
-msgstr "キャンバス向け内部メモリプール:"
+msgstr "内部ストレージ"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:473
 #, kde-format
 msgid "SD-Card"
-msgstr ""
+msgstr "SD カード"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:511
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "ユーザ マニュアル"
+msgstr "手動で選択"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:576
 #, kde-format
@@ -22925,6 +22899,16 @@ msgid ""
 "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
 "%2</p>"
 msgstr ""
+"<p>Krita の Microsoft Store パッケージ版を使用しています。Krita はユーザの "
+"AppData の場所にリソースを配置するように設定できますが、Windows は実際には"
+"ファイルをプライベートアプリの場所に保存することがあります。</p>\n"
+"<p>ファイルの場所を特定するためには、両方の場所を確認する必要があります。</"
+"p>\n"
+"<p><b>ユーザーの AppData</b> (<a href=\"copyuser\">コピー</a>):<br/>\n"
+"%1</p>\n"
+"<p><b>プライベートアプリの場所</b> (<a href=\"copyprivate\">コピー</a>):<br/"
+">\n"
+"%2</p>"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:895
 #, kde-format
@@ -22938,11 +22922,10 @@ msgid "%1 is not a valid image file!"
 msgstr "%1 は有効な画像ファイルではありません!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:927
-#, fuzzy, kde-format
-#| msgid "Warning: this location is not writable."
+#, kde-format
 msgctxt "@info resource folder"
 msgid "<b>Warning:</b> this location is not writable."
-msgstr "警告:その場所へは書き込みできません。"
+msgstr "<b>警告:</b> この場所には書き込み権限がありません。"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1029
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1138
@@ -23078,17 +23061,17 @@ msgstr "最大全フレーム輝度: %1"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1798
 #, kde-format
 msgid "Red Primary: %1, %2"
-msgstr ""
+msgstr "三原色(赤): %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1799
 #, kde-format
 msgid "Green Primary: %1, %2"
-msgstr ""
+msgstr "三原色(緑): %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1800
 #, kde-format
 msgid "Blue Primary: %1, %2"
-msgstr ""
+msgstr "三原色(青): %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1801
 #, kde-format
@@ -23096,10 +23079,10 @@ msgid "White Point: %1, %2"
 msgstr "白色点: %1, %2"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1980
-#, fuzzy, kde-format
-#| msgid "WARNING: current display doesn't support HDR rendering"
+#, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
-msgstr "警告: 現在のディスプレイは HDR レンダリングをサポートしていません"
+msgstr ""
+"<b>警告:</b> 現在のディスプレイは HDR レンダリングをサポートしていません"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2065
 #, kde-format
@@ -23131,7 +23114,7 @@ msgstr "キャンバス入力"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, kde-format
 msgid "Color Management"
-msgstr "色管理"
+msgstr "カラーマネジメント"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2114
 #, kde-format
@@ -23247,10 +23230,9 @@ msgstr ""
 "出力はキャンセルされました。"
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
-#, fuzzy, kde-format
-#| msgid "Waiting for image operation to complete..."
+#, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "画像の処理が完了するのを待っています..."
+msgstr "既存のフレーム生成プロセスが完了するのを待っています..."
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -23297,26 +23279,28 @@ msgid ""
 "The amount of time during which the strokes will be kept unmerged. When a "
 "stroke becomes old enough, Krita will try to merge it"
 msgstr ""
+"ストロークが統合されない期間の長さ。ストロークが十分に古くなると、Krita はそ"
+"れを統合しようとします"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:60
 #, kde-format
 msgid "Wait before merging strokes:"
-msgstr ""
+msgstr "ストロークを統合する前に待機:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "Krita が区別して保存すべき最後の描線の数"
+msgstr ""
+"Krita が別々に保存する最後のストロークの数。これらのストロークは古くなっても"
+"統合されません"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr ""
+msgstr "最後のストロークを統合から除外:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23325,11 +23309,13 @@ msgid ""
 "If two strokes have short time interval (delay) between each other, then "
 "they will be considered as belonging to the same group and merged"
 msgstr ""
+"2つのストロークの間に短い時間間隔(遅延)がある場合、それらは同じグループに属し"
+"ていると見なされ、統合されます"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:82
 #, kde-format
 msgid "Max interval of grouped strokes:"
-msgstr ""
+msgstr "グループ化されたストロークの最大間隔:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:89
 #, kde-format
@@ -23339,12 +23325,13 @@ msgid ""
 "to be longer than this limit in the result of the merge, this merge will not "
 "happen."
 msgstr ""
+"統合後のグループの最大許容期間。統合の結果、グループがこの制限を超える場合、"
+"統合は行われません。"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Video duration:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "動画時間:"
+msgstr "グループの最大期間:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23357,6 +23344,13 @@ msgid ""
 "try  to merge this action into a group. The groups are formed using \"Max "
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
+"累積アンドゥは Krita がアンドゥアクションを統合し、アンドゥ履歴をクリーンに保"
+"つことを可能にします。Krita はまだ統合されていない最新のアクションをいくつか"
+"保持しますが、それは「ストロークを統合する前に待機」および「最後のストローク"
+"を統合から除外」オプションに従います。アクションが時間制限を超え、かつ「最後"
+"のストロークを統合から除外」で除外されていない場合、Krita はこのアクションを"
+"グループに統合しようとします。グループは「グループ化されたストロークの最大間"
+"隔」および「グループの最大期間」オプションを使用して形成されます。"
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -23633,10 +23627,9 @@ msgstr "常にこのテンプレートを使用する"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
 #: libs/ui/forms/KisWelcomePage.ui:66
-#, fuzzy, kde-format
-#| msgid "Support Krita"
+#, kde-format
 msgid "Support Krita!"
-msgstr "Krita を支援"
+msgstr "Krita を支援してください!"
 
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:146
@@ -23674,8 +23667,7 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:334
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
 msgstr "画像を開く"
 
@@ -23730,10 +23722,9 @@ msgstr "Krita のウェブサイト"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1087
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "画像を開く"
+msgstr "最近の画像"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1111
@@ -24034,16 +24025,13 @@ msgstr "作者"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "翻訳者"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
 msgstr "スポンサー"
 
@@ -24421,13 +24409,7 @@ msgstr "色空間ブラウザ"
 
 #. i18n: ectx: property (text), widget (QLabel, lbl_descriptionwidget)
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:27
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
-#| "\"><span style=\" font-weight:600; text-decoration: underline; color:"
-#| "#006e28;\">Color Spaces</span></a> determine how colors are encoded in "
-#| "your files. Different color spaces have different properties and are used "
-#| "for different purposes.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p><a href=\"https://en.wikipedia.org/wiki/Color_space"
 "\"><span style=\" font-weight:600; text-decoration: underline; color:#006e28;"
@@ -24508,15 +24490,7 @@ msgstr ""
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioRelativeColorimetric)
 #: libs/ui/forms/wdgconvertcolorspace.ui:73
-#, fuzzy, kde-format
-#| msgid ""
-#| "Within and outside gamut; same as Absolute\n"
-#| "Colorimetric. White point changed to result in\n"
-#| "neutral grays.\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
+#, kde-format
 msgid ""
 "Within and outside gamut; same as Absolute\n"
 "Colorimetric. White point changed to result in\n"
@@ -24526,7 +24500,7 @@ msgid ""
 "intent."
 msgstr ""
 "色域内および色域外の色の扱いは絶対的な色彩を\n"
-"で保持と同じすが、白点はニュートラルなグレーになる\n"
+"で保持と同じですが、白点はニュートラルなグレーになる\n"
 "ように変更されます。\n"
 "プロファイルに適切なテーブルがあれば、それを使用\n"
 "します。ない場合は、知覚的インテントを使用します。"
@@ -26083,8 +26057,8 @@ msgstr ""
 "<span style=\" font-style:italic;\">絶対的な色彩を保持</span>で画像の白色をど"
 "のように変化するかに影響を与えます。分かりやすく言えば、<span style=\" font-"
 "style:italic;\">絶対的な色彩を保持色</span>を色空間変換の方法として使っている"
-"際、色管理にどの程度紙の白色を画面の白色に補正させたいかということです。</"
-"p></body></html>"
+"際、カラーマネジメントにどの程度紙の白色を画面の白色に補正させたいかというこ"
+"とです。</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, ckbBlackPointComp)
 #: libs/ui/forms/wdgimageproperties.ui:364
@@ -27057,8 +27031,8 @@ msgid ""
 "experience performance problems and want to help us, enable this option and "
 "add the contents of the directory to a bug report.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>パフォーマンスログが有効な時、Krita は時間情報を"
-"<tt>&lt;作業ディレクトリ&gt;/log</tt>フォルダーに保存します(作業ディレクトリ"
+"<html><head/><body><p>パフォーマンスログが有効な時、Krita は時間情報を "
+"<tt>&lt;作業ディレクトリ&gt;/log</tt> フォルダーに保存します(作業ディレクトリ"
 "とは自動保存が保存されている場所です)。もし何か問題が発生してそのトラブルを"
 "我々開発に報告してくださる場合には、このオプションを有効にしてディレクトリの"
 "中の文字列をバグ報告に添付してください。</p></body></html>"
@@ -31126,8 +31100,8 @@ msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
-"Krita LittleCMS 色管理プラグインはインストールされていません。Krita は終了し"
-"ます。"
+"Krita LittleCMS カラーマネジメントプラグインはインストールされていません。"
+"Krita は終了します。"
 
 #: libs/ui/KisMainWindow.cpp:2849
 #, kde-format
@@ -33998,9 +33972,9 @@ msgid ""
 "that use LCMS as the Color Management Module. This includes Krita, digiKam/"
 "showFoto, and GIMP 2.9.</p>"
 msgstr ""
-"<p>V4 色プロファイルは LCMS を色管理モジュールとして使用する高ビット深度画像"
-"エディタ使用時に使ってください。それに当てはまる画像エディタは Krita、"
-"digiKam/showFoto、GIMP 2.9 です。</p>"
+"<p>V4 色プロファイルは LCMS をカラーマネジメントモジュールとして使用する高"
+"ビット深度画像エディタ使用時に使ってください。それに当てはまる画像エディタは "
+"Krita、digiKam/showFoto、GIMP 2.9 です。</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
@@ -37184,7 +37158,7 @@ msgstr "補助セットを保存"
 msgid "Concentric Ellipse assistant"
 msgstr "同心円補助線"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "同心円"
@@ -37196,7 +37170,7 @@ msgstr "同心円"
 msgid "Curvilinear Perspective assistant"
 msgstr "パースグリッド補助線"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "2 Point Perspective"
 msgid "Curvilinear Perspective"
@@ -37244,7 +37218,7 @@ msgstr "楕円"
 msgid "Fish Eye Point assistant"
 msgstr "魚眼レンズ視点補助線"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "魚眼レンズ視点"
@@ -37388,7 +37362,7 @@ msgstr "補助線ツール"
 msgid "Parallel Ruler assistant"
 msgstr "平行定規補助線"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "平行定規"
@@ -37401,7 +37375,7 @@ msgstr "パースグリッド補助線"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37415,7 +37389,7 @@ msgstr "パースグリッド"
 msgid "Perspective Ellipse assistant"
 msgstr "パースグリッド補助線"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "Perspective Ellipse"
@@ -37450,7 +37424,7 @@ msgstr "スプライン"
 msgid "Two point assistant"
 msgstr "2点補助線"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "2点パースグリッド"
@@ -37461,7 +37435,7 @@ msgstr "2点パースグリッド"
 msgid "Vanishing Point assistant"
 msgstr "消失点補助"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "消失点"
@@ -49782,10 +49756,10 @@ msgid ""
 msgstr ""
 "<p>有効にすると、すべての RAW ファイルは、リニアガンマカーブを使用して16ビッ"
 "トの色深度でデコードされます。エディタ上で暗い画像がレンダリングされないよう"
-"にするには、このモードで色管理を使用することを推奨します。</p><p>無効にする"
-"と、すべての RAW ファイルが8ビットの色深度で BT.709 ガンマカーブと99パーセン"
-"タイルの白色点でデコードされます。このモードは16ビットデコードより高速です。"
-"</p>"
+"にするには、このモードでカラーマネジメントを使用することを推奨します。</p><p>"
+"無効にすると、すべての RAW ファイルが8ビットの色深度で BT.709 ガンマカーブと"
+"99パーセンタイルの白色点でデコードされます。このモードは16ビットデコードより"
+"高速です。</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
 #, kde-format
@@ -50555,7 +50529,7 @@ msgstr "ICC ファイル (*.icc *.icm)"
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
-msgstr "色管理"
+msgstr "カラーマネジメント"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
 #, kde-format

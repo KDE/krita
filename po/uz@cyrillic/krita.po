@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -38162,7 +38162,7 @@ msgstr "%1 сифатида сақлаш"
 msgid "Concentric Ellipse assistant"
 msgstr "Ҳамма &кўринишларни ёпиш"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 #| msgid "&Close All Views"
 msgid "Concentric Ellipse"
@@ -38174,7 +38174,7 @@ msgstr "Ҳамма &кўринишларни ёпиш"
 msgid "Curvilinear Perspective assistant"
 msgstr "%1 намунани юклаш муваффақиятсиз тугади."
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Current Section"
 msgid "Curvilinear Perspective"
@@ -38224,7 +38224,7 @@ msgstr "Кўпроқ чизиқ ранглари"
 msgid "Fish Eye Point assistant"
 msgstr "Тўлқин"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "Тўлқин"
@@ -38370,7 +38370,7 @@ msgstr "Кўпроқ чизиқ ранглари"
 msgid "Parallel Ruler assistant"
 msgstr "Ўзгарувчи"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 #| msgid "Variable"
 msgid "Parallel Ruler"
@@ -38384,7 +38384,7 @@ msgstr "%1 намунани юклаш муваффақиятсиз тугади
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -38398,7 +38398,7 @@ msgstr "Жорий бўлим"
 msgid "Perspective Ellipse assistant"
 msgstr "%1 намунани юклаш муваффақиятсиз тугади."
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Current Section"
 msgid "Perspective Ellipse"
@@ -38432,7 +38432,7 @@ msgstr "Атиргул"
 msgid "Two point assistant"
 msgstr "Тўлқин"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 #| msgid "Current Section"
 msgid "2 Point Perspective"
@@ -38443,7 +38443,7 @@ msgstr "Жорий бўлим"
 msgid "Vanishing Point assistant"
 msgstr "Тўлқин"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr ""

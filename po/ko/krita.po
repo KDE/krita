@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -38241,7 +38241,7 @@ msgstr "도우미 모음 저장"
 msgid "Concentric Ellipse assistant"
 msgstr "동심원 도우미"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "동심원"
@@ -38252,7 +38252,7 @@ msgstr "동심원"
 msgid "Curvilinear Perspective assistant"
 msgstr "원근법 도우미"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Clear Perspective Grid"
 msgid "Curvilinear Perspective"
@@ -38295,7 +38295,7 @@ msgstr "타원"
 msgid "Fish Eye Point assistant"
 msgstr "어안 렌즈 점 도우미"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "어안 렌즈 점"
@@ -38432,7 +38432,7 @@ msgstr "도우미 도구"
 msgid "Parallel Ruler assistant"
 msgstr "평행한 눈금자 도우미"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "평행 눈금자"
@@ -38444,7 +38444,7 @@ msgstr "원근법 도우미"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -38457,7 +38457,7 @@ msgstr "원근법"
 msgid "Perspective Ellipse assistant"
 msgstr "원근법 도우미"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective Grid Tool"
 msgid "Perspective Ellipse"
@@ -38490,7 +38490,7 @@ msgstr "자유 곡선"
 msgid "Two point assistant"
 msgstr "2점 도우미"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "2점 원근법"
@@ -38500,7 +38500,7 @@ msgstr "2점 원근법"
 msgid "Vanishing Point assistant"
 msgstr "소실점 도우미"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "소실점"

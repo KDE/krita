@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -36417,7 +36417,7 @@ msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 msgid "Concentric Ellipse assistant"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "தேர்வு"
@@ -36427,7 +36427,7 @@ msgstr "தேர்வு"
 msgid "Curvilinear Perspective assistant"
 msgstr "அழிக்கும் கருவி"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 msgid "Curvilinear Perspective"
 msgstr "அழிக்கும் கருவி"
@@ -36472,7 +36472,7 @@ msgstr "நீள்வட்டம்"
 msgid "Fish Eye Point assistant"
 msgstr "அளவுகோல்களை காட்டு"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "Alpha"
@@ -36607,7 +36607,7 @@ msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 msgid "Parallel Ruler assistant"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
@@ -36619,7 +36619,7 @@ msgstr "அழிக்கும் கருவி"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -36631,7 +36631,7 @@ msgstr "அழிக்கும் கருவி"
 msgid "Perspective Ellipse assistant"
 msgstr "அழிக்கும் கருவி"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "அழிக்கும் கருவி"
@@ -36662,7 +36662,7 @@ msgstr "B-Spline"
 msgid "Two point assistant"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "அழிக்கும் கருவி"
@@ -36672,7 +36672,7 @@ msgstr "அழிக்கும் கருவி"
 msgid "Vanishing Point assistant"
 msgstr "அளவுகோல்களை காட்டு"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Alpha"

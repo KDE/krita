@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -36861,7 +36861,7 @@ msgstr "អ្នក​ជំនួយ​ការ ៖"
 msgid "Concentric Ellipse assistant"
 msgstr "អ្នក​ជំនួញ​ការ Ellipse​"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "ជ្រើស​ទាំងអស់"
@@ -36872,7 +36872,7 @@ msgstr "ជ្រើស​ទាំងអស់"
 msgid "Curvilinear Perspective assistant"
 msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Clear Perspective Grid"
 msgid "Curvilinear Perspective"
@@ -36919,7 +36919,7 @@ msgstr "ពង​ក្រពើ"
 msgid "Fish Eye Point assistant"
 msgstr "អ្នក​ជំនួយការ​គូរ"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "ចំណុច​ជម្រះ"
@@ -37057,7 +37057,7 @@ msgstr "អ្នក​ជំនួយ​ការ ៖"
 msgid "Parallel Ruler assistant"
 msgstr "អ្នក​ជំនួយការ​បន្ទាត់"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "អ្នក​ជំនួយការ​បន្ទាត់"
@@ -37069,7 +37069,7 @@ msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37082,7 +37082,7 @@ msgstr "យថា​ទស្សន៍"
 msgid "Perspective Ellipse assistant"
 msgstr "អ្នក​ជំនួយការ​យថាទស្សន៍​"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -37116,7 +37116,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "អ្នក​ជំនួយ Spline"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "2 Point Perspective"
@@ -37127,7 +37127,7 @@ msgstr "យថា​ទស្សន៍"
 msgid "Vanishing Point assistant"
 msgstr "អ្នក​ជំនួយការ​គូរ"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "ចំណុច​ជម្រះ"

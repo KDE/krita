@@ -68,7 +68,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-07 01:33+0000\n"
+"POT-Creation-Date: 2024-02-08 01:38+0000\n"
 "PO-Revision-Date: 2020-06-05 21:40+0300\n"
 "Last-Translator: Marek Laane <qiilaq69@gmail.com>\n"
 "Language-Team: Estonian <kde-et@lists.linux.ee>\n"
@@ -38940,7 +38940,7 @@ msgstr ""
 msgid "Concentric Ellipse assistant"
 msgstr "Kontsentrilise ellipsi  nõustaja"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Kontsentriline ellips"
@@ -38951,7 +38951,7 @@ msgstr "Kontsentriline ellips"
 msgid "Curvilinear Perspective assistant"
 msgstr "Perspektiivinõustaja"
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, fuzzy, kde-format
 #| msgid "Clear Perspective Grid"
 msgid "Curvilinear Perspective"
@@ -38994,7 +38994,7 @@ msgstr "Ellips"
 msgid "Fish Eye Point assistant"
 msgstr "Kalasilmavaate nõustaja"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Kalasilmavaade"
@@ -39131,7 +39131,7 @@ msgstr "Nõustaja tööriist"
 msgid "Parallel Ruler assistant"
 msgstr "Paralleeljoonlaua nõustaja"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "Paralleeljoonlaud"
@@ -39143,7 +39143,7 @@ msgstr "Perspektiivinõustaja"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -39156,7 +39156,7 @@ msgstr "Perspektiiv"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektiivinõustaja"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -39190,7 +39190,7 @@ msgstr "Splain"
 msgid "Two point assistant"
 msgstr "Splaininõustaja"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "2 Point Perspective"
@@ -39201,7 +39201,7 @@ msgstr "Perspektiiv"
 msgid "Vanishing Point assistant"
 msgstr "Koonduspunkti nõustaja"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Koonduspunkt"

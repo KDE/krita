@@ -39,7 +39,7 @@ public:
     static void saveSvgStyle(KoShape *shape, SvgSavingContext &context);
 
     /// Saves only stroke, fill and transparency of the shape
-    static void saveSvgBasicStyle(const bool isVisible, const qreal transparency, const QVector<KoShape::PaintOrder> paintOrder, bool inheritPaintorder, SvgSavingContext &context);
+    static void saveSvgBasicStyle(const bool isVisible, const qreal transparency, const QVector<KoShape::PaintOrder> paintOrder, bool inheritPaintorder, SvgSavingContext &context, bool textShape = false);
 
     /// Saves fill style of specified shape
     static void saveSvgFill(QSharedPointer<KoShapeBackground> background, const bool fillRuleEvenOdd, const QRectF outlineRect, const QSizeF size, const QTransform absoluteTransform, SvgSavingContext &context);

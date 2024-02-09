@@ -754,7 +754,7 @@ bool KoSvgTextShape::insertText(int pos, QString text)
         index = qMin(index, d->result.size()-1);
     }
     auto it = findTextChunkForIndex(d->textData, currentIndex, index);
-    if (it.node()) {
+    if (!isEnd(siblingCurrent(it))) {
         int offset = oldIndex - currentIndex;
         it->insertText(offset, text);
         notifyChanged();
@@ -775,7 +775,7 @@ bool KoSvgTextShape::removeText(int &index, int &length)
     while (currentLength > 0) {
         int currentIndex = 0;
         auto it = findTextChunkForIndex(d->textData, currentIndex, index, true);
-        if (it.node()) {
+        if (!isEnd(siblingCurrent(it))) {
             int offset = index > currentIndex? index - currentIndex: 0;
             int size = it->numChars(false);
             it->removeText(offset, currentLength);
@@ -809,7 +809,7 @@ KoSvgTextProperties KoSvgTextShape::propertiesForPos(int pos)
     CharacterResult res = d->result.at(cursorPos.cluster);
     int currentIndex = 0;
     auto it = findTextChunkForIndex(d->textData, currentIndex, res.plaintTextIndex);
-    if (it.node()) {
+    if (!isEnd(siblingCurrent(it))) {
         props = it->properties;
     }
 
@@ -830,7 +830,7 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
     CharacterResult res = d->result.at(cursorPos.cluster);
     int currentIndex = 0;
     auto it = findTextChunkForIndex(d->textData, currentIndex, res.plaintTextIndex);
-    if (it.node()) {
+    if (!isEnd(siblingCurrent(it))) {
         it->properties = properties;
         notifyChanged();
         shapeChangedPriv(ContentChanged);
@@ -839,7 +839,7 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
 
 KoSvgTextProperties KoSvgTextShape::textProperties() const
 {
-    return d->textData.childBegin().node()? d->textData.childBegin()->properties: KoSvgTextProperties();
+    return KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties();
 }
 
 QSharedPointer<KoShapeBackground> KoSvgTextShape::background() const
@@ -938,88 +938,6 @@ void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
     }
 }
 
-bool KoSvgTextShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
-{
-
-    KoSvgTextContentElement textNode;
-    textNode.loadSvg(element, context);
-    if (KisForestDetail::size(d->textData) == 0) {
-        d->currentNode = d->textData.insert(d->textData.childEnd(), textNode);
-    } else {
-        d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
-    }
-
-    return true;
-}
-
-bool KoSvgTextShape::loadSvgTextIntoNewLeaf(const QDomElement &parent, const QDomText &text, SvgLoadingContext &context) {
-    KoSvgTextContentElement textNode;
-    textNode.loadSvg(parent, context);
-    textNode.localTransformations.clear();
-    textNode.textLength = KoSvgText::AutoValue();
-    d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
-    return loadSvgText(text, context);
-}
-
-bool KoSvgTextShape::loadSvgText(const QDomText &text, SvgLoadingContext &context)
-{
-    if (d->currentNode.node()) {
-        d->currentNode.node()->value.loadSvgTextNode(text, context);
-    } else {
-        KoSvgTextContentElement textNode;
-        textNode.loadSvgTextNode(text, context);
-        d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), textNode);
-    }
-    return true;
-}
-
-void KoSvgTextShape::setStyleInfo(KoShape *s)
-{
-    if (d->currentNode.node()) {
-        // find closest parent stroke and fill so we can check for inheritance.
-        QSharedPointer<KoShapeBackground> parentBg;
-        KoShapeStrokeModelSP parentStroke;
-        for (auto it = KisForestDetail::hierarchyBegin(d->currentNode); it != KisForestDetail::hierarchyEnd(d->currentNode); it++) {
-            if (it->properties.hasProperty(KoSvgTextProperties::FillId)) {
-                parentBg = it->properties.background();
-                break;
-            }
-        }
-        for (auto it = KisForestDetail::hierarchyBegin(d->currentNode); it != KisForestDetail::hierarchyEnd(d->currentNode); it++) {
-            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
-                parentStroke = it->properties.stroke();
-                break;
-            }
-        }
-
-        if ((parentBg && !parentBg->compareTo(s->background().data()))
-                || (!parentBg && s->background())) {
-            d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
-                                                   QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
-        }
-        if ((parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data()))
-                || (!parentStroke && s->stroke())) {
-            d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
-                                                   QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
-        }
-        d->currentNode->properties.setProperty(KoSvgTextProperties::Opacity,
-                                               s->transparency());
-        d->currentNode->properties.setProperty(KoSvgTextProperties::Visiblity,
-                                               s->isVisible());
-        if (!s->inheritPaintOrder()) {
-            d->currentNode->properties.setProperty(KoSvgTextProperties::PaintOrder,
-                                                   QVariant::fromValue(s->paintOrder()));
-        }
-    }
-}
-
-void KoSvgTextShape::setTextPathOnCurrentNode(KoShape *s)
-{
-    if (d->currentNode.node()) {
-        d->currentNode.node()->value.textPath.reset(s);
-    }
-}
-
 #include "KoXmlWriter.h"
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {
@@ -1051,6 +969,8 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                     context.shapeWriter().addAttribute("text-rendering", textRenderingString());
                     SvgStyleWriter::saveSvgFill(this->background(), false, this->outlineRect(), this->size(), this->absoluteTransformation(), context);
                     SvgStyleWriter::saveSvgStroke(this->stroke(), context);
+                    SvgStyleWriter::saveSvgBasicStyle(true, 0, paintOrder(),
+                                                      inheritPaintOrder(), context, true);
                 }
                 shapeSpecificStyles = this->shapeTypeSpecificStyles(context);
             } else {
@@ -1059,12 +979,11 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                 } else {
                     context.shapeWriter().startElement("tspan", false);
                 }
-                if (!context.strippedTextMode()) {
-                    SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity).toBool(),
-                                                      it->properties.property(KoSvgTextProperties::Opacity).toReal(),
-                                                      it->properties.property(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>(),
-                                                      !it->properties.hasProperty(KoSvgTextProperties::PaintOrder), context);
-                }
+                SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity).toBool(),
+                                                  it->properties.property(KoSvgTextProperties::Opacity).toReal(),
+                                                  it->properties.property(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>(),
+                                                  !it->properties.hasProperty(KoSvgTextProperties::PaintOrder), context, true);
+
             }
 
             success = it->saveSvg(context,
@@ -1072,7 +991,7 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                                   it == d->textData.compositionBegin(),
                                   d->childCount(siblingCurrent(it)) == 0,
                                   shapeSpecificStyles);
-            parentProps.append(it.node()->value.properties);
+            parentProps.append(it->properties);
         } else {
             parentProps.pop_back();
             context.shapeWriter().endElement();
@@ -1150,22 +1069,12 @@ bool KoSvgTextShape::saveHtml(HtmlSavingContext &context)
 
 void KoSvgTextShape::enterNodeSubtree()
 {
-    if (!d->currentNode.node()) {
-        d->currentNode = d->textData.insert(childEnd(KisForestDetail::parent(d->currentNode)), KoSvgTextContentElement());
-    }
-    d->currentNode = childEnd(d->currentNode);
+
 }
 
 void KoSvgTextShape::leaveNodeSubtree()
 {
-    d->currentNode = KisForestDetail::parent(d->currentNode);
-}
 
-void KoSvgTextShape::resetParsing()
-{
-    d->textData.erase(d->textData.childBegin(), d->textData.childEnd());
-    d->currentNode = d->textData.childEnd();
-    d->relayout();
 }
 
 void KoSvgTextShape::debugParsing()
@@ -1186,7 +1095,7 @@ void KoSvgTextShape::debugParsing()
             qDebug() << QString(spaces + "| TextPath set: ") << (it->textPath);
             qDebug() << QString(spaces + "| Transforms set: ") << it->localTransformations;
             spaces.append(" ");
-            parentProps.append(it.node()->value.properties);
+            parentProps.append(it->properties);
         }
 
         if (it.state() == KisForestDetail::Leave) {
@@ -1422,18 +1331,12 @@ KoSvgTextShapeFactory::KoSvgTextShapeFactory()
 
 KoShape *KoSvgTextShapeFactory::createDefaultShape(KoDocumentResourceManager *documentResources) const
 {
+    Q_UNUSED(documentResources);
     debugFlake << "Create default svg text shape";
 
     KoSvgTextShape *shape = new KoSvgTextShape();
     shape->setShapeId(KoSvgTextShape_SHAPEID);
-
-    KoSvgTextShapeMarkupConverter converter(shape);
-    converter.convertFromSvg(i18nc("Default text for the text shape", "<text>Placeholder Text</text>"),
-                             "<defs/>",
-                             QRectF(0, 0, 200, 60),
-                             documentResources->documentResolution());
-
-    debugFlake << converter.errors() << converter.warnings();
+    shape->insertText(0, i18nc("Default text for the text shape", "Placeholder Text"));
 
     return shape;
 }
@@ -1477,4 +1380,109 @@ void KoSvgTextShape::TextCursorChangeListener::notifyShapeChanged(KoShape::Chang
 {
     Q_UNUSED(type);
     Q_UNUSED(shape);
+}
+
+struct KoSvgTextLoader::Private {
+
+    Private(KoSvgTextShape *shape)
+        : shape(shape)
+        , currentNode(shape->d->textData.childEnd())
+    {
+        shape->d->textData.erase(shape->d->textData.childBegin(), shape->d->textData.childEnd());
+        currentNode = shape->d->textData.childEnd();
+    }
+
+    KoSvgTextShape *shape;
+    KisForest<KoSvgTextContentElement>::child_iterator currentNode;
+};
+
+KoSvgTextLoader::KoSvgTextLoader(KoSvgTextShape *shape)
+    : d(new Private(shape))
+{
+
+}
+
+KoSvgTextLoader::~KoSvgTextLoader()
+{
+}
+
+void KoSvgTextLoader::enterNodeSubtree()
+{
+    if (KisForestDetail::isEnd(d->currentNode)) {
+        nextNode();
+    }
+    d->currentNode = childEnd(d->currentNode);
+}
+
+void KoSvgTextLoader::leaveNodeSubtree()
+{
+    d->currentNode = KisForestDetail::parent(d->currentNode);
+}
+
+void KoSvgTextLoader::nextNode()
+{
+    d->currentNode = d->shape->d->textData.insert(KisForestDetail::siblingEnd(d->currentNode), KoSvgTextContentElement());
+}
+
+bool KoSvgTextLoader::loadSvg(const QDomElement &element, SvgLoadingContext &context)
+{
+    if (KisForestDetail::isEnd(d->currentNode)) {
+        nextNode();
+    }
+    return d->currentNode->loadSvg(element, context);
+}
+
+bool KoSvgTextLoader::loadSvgText(const QDomText &text, SvgLoadingContext &context)
+{
+    if (KisForestDetail::isEnd(d->currentNode)) {
+        nextNode();
+    }
+    return d->currentNode->loadSvgTextNode(text, context);
+}
+
+void KoSvgTextLoader::setStyleInfo(KoShape *s)
+{
+    if (!KisForestDetail::isEnd(d->currentNode)) {
+        // find closest parent stroke and fill so we can check for inheritance.
+        QSharedPointer<KoShapeBackground> parentBg;
+        KoShapeStrokeModelSP parentStroke;
+        for (auto it = KisForestDetail::hierarchyBegin(d->currentNode); it != KisForestDetail::hierarchyEnd(d->currentNode); it++) {
+            if (it->properties.hasProperty(KoSvgTextProperties::FillId)) {
+                parentBg = it->properties.background();
+                break;
+            }
+        }
+        for (auto it = KisForestDetail::hierarchyBegin(d->currentNode); it != KisForestDetail::hierarchyEnd(d->currentNode); it++) {
+            if (it->properties.hasProperty(KoSvgTextProperties::StrokeId)) {
+                parentStroke = it->properties.stroke();
+                break;
+            }
+        }
+
+        if ((parentBg && !parentBg->compareTo(s->background().data()))
+                || (!parentBg && s->background())) {
+            d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
+                                                   QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
+        }
+        if ((parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data()))
+                || (!parentStroke && s->stroke())) {
+            d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
+                                                   QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));
+        }
+        d->currentNode->properties.setProperty(KoSvgTextProperties::Opacity,
+                                               s->transparency());
+        d->currentNode->properties.setProperty(KoSvgTextProperties::Visiblity,
+                                               s->isVisible());
+        if (!s->inheritPaintOrder()) {
+            d->currentNode->properties.setProperty(KoSvgTextProperties::PaintOrder,
+                                                   QVariant::fromValue(s->paintOrder()));
+        }
+    }
+}
+
+void KoSvgTextLoader::setTextPathOnCurrentNode(KoShape *s)
+{
+    if (!KisForestDetail::isEnd(d->currentNode)) {
+        d->currentNode->textPath.reset(s);
+    }
 }

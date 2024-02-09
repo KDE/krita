@@ -347,18 +347,6 @@ public:
 
     /*--------------- Loading / Saving ------------------*/
 
-    /// Create a new text node.
-    bool loadSvg(const QDomElement &element, SvgLoadingContext &context) override;
-    /// Creates a new node from parent and parses the textnode as this new nodes' text.
-    bool loadSvgTextIntoNewLeaf(const QDomElement &parent, const QDomText &text, SvgLoadingContext &context);
-    /// Loads the textt into the current node.
-    bool loadSvgText(const QDomText &text, SvgLoadingContext &context);
-
-    /// Set the style info from the shape. This is necessary because SVGParser only understands loading the basic style into a KoShape.
-    void setStyleInfo(KoShape* s);
-    /// Set the textPath on the current node.
-    void setTextPathOnCurrentNode(KoShape *s);
-
     /// Saves SVG data.
     bool saveSvg(SvgSavingContext &context) override;
     // Used by the html writer.
@@ -375,7 +363,7 @@ public:
      * upload the updated text into shape.
      * NOTE: This makes the textShape invalid because the tree is empty.
      */
-    void resetParsing();
+
     /// Outputs debug with the current textData tree.
     void debugParsing();
 
@@ -385,6 +373,7 @@ protected:
 
 private:
     friend class TestSvgText;
+    friend class KoSvgTextLoader;
     /**
      * @brief nextPos
      * get the next position.
@@ -413,6 +402,36 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoSvgTextShape::DebugElements)
+
+/// Loading an SVG text is somewhat intricate, so we use a KoSvgTextLoader to keep
+/// track of where we are in the tree.
+class KoSvgTextLoader {
+public:
+    KoSvgTextLoader(KoSvgTextShape *shape);
+    ~KoSvgTextLoader();
+
+    /// Set the current node to its first child, entering the subtree.
+    void enterNodeSubtree();
+
+    /// Set the current node to its parent, leaving the subtree.
+    void leaveNodeSubtree();
+
+    /// Switch to next node.
+    void nextNode();
+
+    /// Create a new text node.
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
+    /// Loads the textt into the current node.
+    bool loadSvgText(const QDomText &text, SvgLoadingContext &context);
+
+    /// Set the style info from the shape. This is necessary because SVGParser only understands loading the basic style into a KoShape.
+    void setStyleInfo(KoShape* s);
+    /// Set the textPath on the current node.
+    void setTextPathOnCurrentNode(KoShape *s);
+private:
+    class Private;
+    QScopedPointer<Private> d;
+};
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase
 {

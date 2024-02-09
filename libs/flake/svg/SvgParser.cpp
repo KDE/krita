@@ -1780,35 +1780,37 @@ KoShape* SvgParser::getTextPath(const QDomElement &e) {
     return nullptr;
 }
 
-void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextShape *rootTextShape) {
+void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader) {
     QDomText t = getTheOnlyTextChild(e);
     if (!t.isNull()) {
-        rootTextShape->loadSvgText(t, m_context);
+        textLoader.loadSvgText(t, m_context);
     } else {
-        rootTextShape->enterNodeSubtree();
+        textLoader.enterNodeSubtree();
         for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
             QDomElement b = n.toElement();
+            textLoader.nextNode();
             if (b.isNull()) {
-                rootTextShape->loadSvgTextIntoNewLeaf(e, n.toText(), m_context);
+                textLoader.loadSvg(e, m_context);
+                textLoader.loadSvgText(n.toText(), m_context);
                 KoShape *styleDummy = new KoPathShape();
                 applyCurrentBasicStyle(styleDummy);
-                rootTextShape->setStyleInfo(styleDummy);
+                textLoader.setStyleInfo(styleDummy);
             } else {
                 m_context.pushGraphicsContext(b);
                 uploadStyleToContext(b);
-                rootTextShape->loadSvg(b, m_context);
+                textLoader.loadSvg(b, m_context);
                 if (b.hasChildNodes()) {
-                    parseTextChildren(b, rootTextShape);
+                    parseTextChildren(b, textLoader);
                 }
-                rootTextShape->setTextPathOnCurrentNode(getTextPath(b));
+                textLoader.setTextPathOnCurrentNode(getTextPath(b));
                 m_context.popGraphicsContext();
             }
         }
-        rootTextShape->leaveNodeSubtree();
+        textLoader.leaveNodeSubtree();
     }
     KoShape *styleDummy = new KoPathShape();
     applyCurrentBasicStyle(styleDummy);
-    rootTextShape->setStyleInfo(styleDummy);
+    textLoader.setStyleInfo(styleDummy);
 }
 
 KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *mergeIntoShape)
@@ -1819,15 +1821,13 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     KoSvgTextShape *rootTextShape  = 0;
 
-    // XXX: Shapes need to be created by their factories
     if (mergeIntoShape) {
         rootTextShape = mergeIntoShape;
     } else {
-        rootTextShape = new KoSvgTextShape();
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
+        rootTextShape = dynamic_cast<KoSvgTextShape*>(factory->createDefaultShape(m_documentResourceManager));
     }
-    QVector<KoShape::PaintOrder> paintOrder = rootTextShape->paintOrder();
-    rootTextShape->resetParsing();
-
+    KoSvgTextLoader textLoader(rootTextShape);
 
     if (rootTextShape) {
         m_isInsideTextSubtree = true;
@@ -1877,7 +1877,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    rootTextShape->loadSvg(e, m_context);
+    textLoader.loadSvg(e, m_context);
 
     // 1) apply transformation only in case we are not overriding the shape!
     // 2) the transformation should be applied *before* the shape is added to the group!
@@ -1896,14 +1896,11 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     QDomText onlyTextChild = getTheOnlyTextChild(e);
     if (!onlyTextChild.isNull()) {
-        rootTextShape->loadSvgText(onlyTextChild, m_context);
+        textLoader.loadSvgText(onlyTextChild, m_context);
 
     } else {
-        parseTextChildren(e, rootTextShape);
+        parseTextChildren(e, textLoader);
 
-    }
-    if (mergeIntoShape) {
-        rootTextShape->setPaintOrder(paintOrder.at(0), paintOrder.at(1));
     }
 
     m_context.popGraphicsContext();

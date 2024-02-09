@@ -33,6 +33,7 @@ class KoVectorPatternBackground;
 class KoMarker;
 class KoPathShape;
 class KoSvgTextShape;
+class KoSvgTextLoader;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
@@ -86,7 +87,7 @@ protected:
     KoShape* getTextPath(const QDomElement &e);
 
     /// parse children of a <text /> element into the root shape.
-    void parseTextChildren(const QDomElement &e, KoSvgTextShape *rootTextShape);
+    void parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader);
     
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const QDomElement &, bool parseTextNodes = false);

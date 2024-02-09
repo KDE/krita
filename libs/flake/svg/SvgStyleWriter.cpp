@@ -66,28 +66,32 @@ void SvgStyleWriter::saveSvgStyle(KoShape *shape, SvgSavingContext &context)
     saveSvgMarkers(shape, context);
 }
 
-void SvgStyleWriter::saveSvgBasicStyle(const bool isVisible, const qreal transparency, const QVector<KoShape::PaintOrder> paintOrder, bool inheritPaintorder, SvgSavingContext &context)
+void SvgStyleWriter::saveSvgBasicStyle(const bool isVisible, const qreal transparency, const QVector<KoShape::PaintOrder> paintOrder, bool inheritPaintorder, SvgSavingContext &context, bool textShape)
 {
     if (!isVisible) {
         context.shapeWriter().addAttribute("display", "none");
     } else if (transparency > 0.0) {
         context.shapeWriter().addAttribute("opacity", 1.0 - transparency);
     }
-    if (paintOrder.at(0) != KoShape::Fill
-        && paintOrder.at(1) != KoShape::Stroke
-        && !inheritPaintorder) {
-        QStringList order;
-        Q_FOREACH(const KoShape::PaintOrder p, paintOrder) {
-            if (p == KoShape::Fill) {
-                order.append("fill");
-            } else if (p == KoShape::Stroke) {
-                order.append("stroke");
-            } else if (p == KoShape::Markers) {
-                order.append("markers");
+    if (!paintOrder.isEmpty() && !inheritPaintorder) {
+
+        bool notDefault = paintOrder.value(0, KoShape::Fill) != KoShape::Fill && paintOrder.value(1, KoShape::Stroke) != KoShape::Stroke;
+
+        if ((!textShape && notDefault) || textShape) {
+            QStringList order;
+            Q_FOREACH(const KoShape::PaintOrder p, paintOrder) {
+                if (p == KoShape::Fill) {
+                    order.append("fill");
+                } else if (p == KoShape::Stroke) {
+                    order.append("stroke");
+                } else if (p == KoShape::Markers) {
+                    order.append("markers");
+                }
             }
+            context.shapeWriter().addAttribute("paint-order", order.join(" "));
         }
-        context.shapeWriter().addAttribute("paint-order", order.join(" "));
     }
+
 }
 
 void SvgStyleWriter::saveSvgFill(QSharedPointer<KoShapeBackground> background, const bool fillRuleEvenOdd, const QRectF outlineRect, const QSizeF size, const QTransform absoluteTransform, SvgSavingContext &context)

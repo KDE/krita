@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-08 01:38+0000\n"
-"PO-Revision-Date: 2024-02-06 16:33+0300\n"
+"PO-Revision-Date: 2024-02-08 18:02+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -9990,7 +9990,7 @@ msgstr "Değişken Derinliği ile Kabart"
 #, kde-format
 msgctxt "action"
 msgid "Emboss &Horizontal && Vertical"
-msgstr "&Yatay ve&& Dikey Kabart"
+msgstr "&Yatay ve Dikey Kabart"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss horizontal and vertical), Actions (Filters), ActionCollection (Krita)
@@ -17052,7 +17052,7 @@ msgid ""
 "Adds pixels using the color of surrounding pixels. Produces smoother tonal "
 "gradations than Bilinear."
 msgstr ""
-"Çevreleyen piksellerin renklerini kullanarak pikseller ekler. İki çizgili "
+"Çevreleyen piksellerin renklerini kullanarak pikseller ekler. İki yönlü "
 "olanlardan daha yumuşak ton geçişleri sağlar."
 
 #: libs/image/kis_filter_strategy.h:86
@@ -17077,7 +17077,7 @@ msgstr ""
 #: libs/ui/widgets/KoFillConfigWidget.ui:416
 #, kde-format
 msgid "Bilinear"
-msgstr "İki Çizgili"
+msgstr "İki yönlü"
 
 #: libs/image/kis_filter_strategy.h:114
 #, kde-format
@@ -17112,7 +17112,7 @@ msgid ""
 "Offers similar results than Bicubic, but maybe a little bit sharper. Can "
 "produce light and dark halos along strong edges."
 msgstr ""
-"Bicubic'e benzer sonuçlar sunar; belki biraz daha keskin olabilir. Güçlü "
+"İki küplüye benzer sonuçlar sunar; belki biraz daha keskin olabilir. Güçlü "
 "kenarlar boyunca açık ve koyu ışık halkaları üretebilir."
 
 #: libs/image/kis_filter_strategy.h:163
@@ -20497,7 +20497,7 @@ msgstr "iki küplü"
 #, kde-format
 msgctxt "bilinear filtering"
 msgid "bilinear"
-msgstr "iki çizgili"
+msgstr "iki yönlü"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:97
 #, kde-format
@@ -22410,8 +22410,8 @@ msgid ""
 msgstr ""
 "<p>Süzme kipini seç:\n"
 "<ul><li>Piksel sanatı için <b>en yakın komşu</b>. Yeni renk üretmez.</"
-"li><li>Kalıntıları engellemek üzere tek renkli alanlar için <b>iki çizgili</"
-"b>.</li><li>Daha pürüzsüz sonuçlar için <b>iki küplü</b>.</li><li>Keskin "
+"li><li>Kalıntıları engellemek üzere tek renkli alanlar için <b>iki yönlü</b>."
+"</li><li>Daha pürüzsüz sonuçlar için <b>iki küplü</b>.</li><li>Keskin "
 "sonuçlar için <b>Lanczos3</b>. Hava görüntüleri üretebilir.</li></ul></p>"
 
 #: libs/ui/dialogs/kis_dlg_filter.cpp:114
@@ -34554,7 +34554,7 @@ msgstr "Orta tonları ayarlama"
 #, kde-format
 msgctxt "Use the median point of the histogram as midtone point in auto levels"
 msgid "Use the median to adjust the midtones"
-msgstr "Orta tonları ayarlamak için orta değeri kullan"
+msgstr "Orta tonları ayarlamak için ortancayı kullan"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxMidtonesMethod)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:181
@@ -46243,7 +46243,7 @@ msgstr "Doğrusal"
 #, kde-format
 msgctxt "the gradient will be drawn bilinearly"
 msgid "Bi-Linear"
-msgstr "İki Yönlü Doğrusal"
+msgstr "İki Yönlü"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:30
 #: plugins/tools/basictools/kis_tool_gradient.cc:254
@@ -49586,7 +49586,7 @@ msgstr "Kalite:"
 #, kde-format
 msgctxt "@item:inlistbox Quality"
 msgid "Bilinear"
-msgstr "İkili doğrusal"
+msgstr "İki yönlü"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:324
 #, kde-format
@@ -49688,39 +49688,45 @@ msgid ""
 "RawTherapee project.</li></ul></p><p>Note: some methods can be unavailable "
 "if RAW decoder have been built without extension packs.</p>"
 msgstr ""
-"<title>Kalite (aradeğerleme)</title><p>Burada, RAW görsellerin kodunu "
-"çözerken kullanılacak mozaik kaldırma yöntemini seçin. Bir mozaik kaldırma "
-"algoritması, renkli süzülmüş görsel algılayıcısından alınan kısmi ham "
-"verilerden, birçok sayısal kameraya dahili olarak, renkli piksel matrisi "
-"biçiminde komple bir görselin aradeğerlenmesi için kullanılan sayısal bir "
-"görüntü işlemidir. CFA aradeğerleme veya renk yeniden yapılandırma olarak da "
-"bilinen başka bir yaygın yazım hatası demosaicing'tir. RAW görsellerin "
-"demosaicing'i için aşağıdaki yöntemler vardır:</p><p><ul><li><emphasis "
-"strong='true'>İkili Doğrusal</emphasis>: Yüksek hızlı; ancak düşük kaliteli "
-"ikili doğrusal aradeğerleme kullanın (öntanımlı - yavaş bilgisayarlar için). "
-"Bu yöntemde, kırmızı olmayan bir pikselin kırmızı değeri bitişik kırmızı "
-"piksellerin ortalaması olarak hesaplanır ve benzer şekilde mavi ve yeşil "
-"için hesaplanır.</li><li><emphasis strong='true'>PPG</emphasis>: Patterned-"
-"Pixel-Grouping aradeğerlemesini kullanın. Pixel Gruplama, tahmin yapmakta "
-"doğal manzaralar hakkında varsayımlar kullanır. Doğal görüntülerde Değişken "
-"Gradyan Sayısı Yönteminden daha az sayıda renk oluşumuna sahiptir.</"
-"li><li><emphasis strong='true'>AHD</emphasis>: Adaptive Homogeneity-Directed "
-"aradeğerlemesini kullanın. Bu yöntem, bir homojenlik metriğini en yükseğe "
-"çıkarmak için aradeğerleme yönünü seçer, böylece renk oluşumlarını en aza "
-"indirir.</li><li><emphasis strong='true'>DCB</emphasis>: linuxphoto.org "
-"projesinden DCB aradeğerlemesi</li><li><emphasis strong='true'>AHD s2</"
-"emphasis>: Renk Farkları Varyans Metodu kullanılarak modifiye AHD "
-"aradeğerlemesi</li><li><emphasis strong='true'>AFD</emphasis>: PerfectRaw "
-"projesinden 5 geçiş ortalama süzgeci ile Uyarlamalı Süzgeçli Demosaicing "
-"aradeğerleme.</li><li><emphasis strong='true'>VCD</emphasis>: Renk Farkları "
-"aradeğerlemesinin varyansı.</li><li><emphasis strong='true'>VCD & AHD</"
-"emphasis>: VCD ve AHD arasında karışık demosaikasyon.</li><li><emphasis "
-"strong='true'>LMMSE</emphasis>: PerfectRaw'dan yönlendirmeli doğrusal "
-"minimum ortalama karesel hata tahmin aradeğerlemesi yoluyla renk demosaicing."
-"</li><li><emphasis strong='true'>AMaZE</emphasis>: RawTherapee projesinden "
-"renk sapması kaldırma uygulamak için Aliasing Minimizasyon aradeğerlemesi ve "
-"Fermuar Eleme.</li></ul></p><p>Not: RAW kod çözücü, genişletme paketleri "
-"olmadan oluşturulmuşsa bazı yöntemler kullanılamaz.</p>"
+"<title>Kalite (Aradeğerleme)</title><p>RAW görsellerinin kodunu çözerken "
+"kullanılacak mozaik giderme yöntemini buradan seçin. Mozaik giderme "
+"algoritması, birçok sayısal kameranın içindeki renk süzgeçli görüntü "
+"algılayıcısından alınan, renkli piksellerden oluşan bir matris biçimindeki "
+"kısımsal ham verilerden tam bir görüntünün aradeğerlemesini yapmak için "
+"kullanılan bir sayısal görsel işlemidir. CFA aradeğerlemesi veya renk "
+"yeniden yapılandırması olarak da bilinir ve mozaik giderme da başka bir "
+"adıdır. RAW görsellerin mozaiğinin giderilmesi için aşağıdaki yöntemler "
+"kullanılabilir:</p><p><ul><li><emphasis strong='true'>İki yönlü</emphasis>: "
+"Yüksek hızlı; ancak düşük kaliteli iki yönlü aradeğerleme kullanın "
+"(öntanımlı - yavaş bilgisayarlar için). Bu yöntemde, kırmızı olmayan bir "
+"pikselin kırmızı değeri, komşu kırmızı piksellerin ortalaması olarak "
+"hesaplanır ve benzer şekilde mavi ve yeşil için de yapılır.</"
+"li><li><emphasis strong='true'>VNG</emphasis>: Değişken Gradyan Sayısı "
+"aradeğerlemesini kullanın. Bu yöntem, ilgilenilen pikselin yakınındaki "
+"gradyanları hesaplar ve bir tahminde bulunmak için daha düşük gradyanları "
+"(görselin daha düzgün ve daha benzer kısımlarını temsil eden) kullanır.</"
+"li><li><emphasis strong='true'>PPG</emphasis>: Desenli Piksel Gruplandırma "
+"aradeğerlemesini kullanın. Piksel Gruplaması, tahminlerde bulunurken doğal "
+"manzaraya ilişkin varsayımları kullanır. Doğal görüntülerde Değişken Gradyan "
+"Sayısı yöntemine göre daha az renk kusuru vardır.</li><li><emphasis "
+"strong='true'>AHD</emphasis>: Uyarlanır Homojenliğe Yönelik aradeğerlemeyi "
+"kullanın. Bu yöntem, bir homojenlik ölçüsünü en üst düzeye çıkaracak ve "
+"böylece tipik olarak renk kalıntılarını en aza indirecek biçimde "
+"aradeğerleme yönünü seçer.</li><li><emphasis strong='true'>DCB</emphasis>: "
+"linuxphoto.org projesinden DCB aradeğerlemesi.</li><li><emphasis "
+"strong='true'>AHD v2</emphasis>: Renk Farklarının Varyansı yöntemi "
+"kullanılarak değiştirilmiş AHD aradeğerlemesi.</li><li><emphasis "
+"strong='true'>AFD</emphasis>: PerfectRaw projesinden 5 geçişli ortanca "
+"süzgeç aracılığıyla Uyarlanabilir Süzgeçli Mozaik Kaldırma aradeğerlemesi.</"
+"li><li><emphasis strong='true'>VCD</emphasis>: Renk Farklarının Varyansı "
+"aradeğerlemesi.</li><li><emphasis strong='true'>VCD ve AHD</emphasis>: VCD "
+"ve AHD arası karışık mozaik giderme.</li><li><emphasis strong='true'>LMMSE</"
+"emphasis>: PerfectRaw'dan yönsel doğrusal minimum ortalama kare hata tahmini "
+"aradeğerlemesi yoluyla renk giderme.</li><li><emphasis strong='true'>AMaZE</"
+"emphasis>: RawTherapee projesinden renk sapmalarının giderilmesini uygulamak "
+"için Arma Azaltımı aradeğerlemesi ve Fermuar Ortadan Kaldırma.</li></ul></"
+"p><p>Not: RAW kod çözücüsü, uzantı paketleri olmadan yapılmışsa bazı "
+"yöntemler kullanılamayabilir.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
@@ -49741,13 +49747,12 @@ msgid ""
 "strong='true'>VCD & AHD</emphasis>.</p>"
 msgstr ""
 "<title>Geçiş</title><p>Burada, Kırmızı-Yeşil ve Mavi-Yeşil kanallara "
-"aradeğerlemeden sonra uygulanan ortalama süzgeç tarafından kullanılan "
+"aradeğerlemeden sonra uygulanan ortanca süzgeç tarafından kullanılan "
 "geçişleri ayarlayın.</p><p>Bu ayar yalnızca bazı kalite seçenekleri için "
-"kullanılabilirdir:<emphasis strong='true'>İkili Doğrusal</emphasis>,"
-"<emphasis strong='true'>VNG</emphasis>, <emphasis strong='true'>PPG</"
-"emphasis>,<emphasis strong='true'>AHD</emphasis>, <emphasis "
-"strong='true'>DCB</emphasis> ve <emphasis strong='true'>VCD & AHD</emphasis>."
-"</p>"
+"kullanılabilir:<emphasis strong='true'>İki Yönlü</emphasis>,<emphasis "
+"strong='true'>VNG</emphasis>, <emphasis strong='true'>PPG</emphasis>,"
+"<emphasis strong='true'>AHD</emphasis>, <emphasis strong='true'>DCB</"
+"emphasis> ve <emphasis strong='true'>VCD & AHD</emphasis>.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:435
 #, kde-format
@@ -49765,17 +49770,17 @@ msgid ""
 "strong='true'>VCD & AHD</emphasis>: turn on the enhanced effective color "
 "interpolation (EECI) refine to improve sharpness.</li></ul></p>"
 msgstr ""
-"<title>Aradeğerlemeyi hassaslaştır</title><p>Bu ayar yalnızca bazı Kalite "
+"<title>Aradeğerlemeyi Hassaslaştır</title><p>Bu ayar yalnızca bazı Kalite "
 "seçenekleri için kullanılabilir:</p><p><ul><li><emphasis strong='true'>DCB</"
 "emphasis>: Aradeğerlemeli renkleri geliştir süzgecini aç.</li><li><emphasis "
-"strong='true'>VCD & AHD</emphasis>: Keskinliği artırmak için geliştirilmiş "
+"strong='true'>VCD ve AHD</emphasis>: Keskinliği artırmak için geliştirilmiş "
 "etkili renk aradeğerlemesini (EECI) etkinleştir.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:453
 #, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
-msgstr "Demosaicing"
+msgstr "Mozaik Giderme"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
@@ -49805,7 +49810,7 @@ msgstr "Otomatik"
 #, kde-format
 msgctxt "@item:inlistbox set white balance manually"
 msgid "Manual"
-msgstr "El ile"
+msgstr "Elle"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:468
 #, kde-format
@@ -50134,15 +50139,15 @@ msgid ""
 "li><li><emphasis strong='true'>Impulse Denoise</emphasis>: Impulse noise "
 "suppression. It's applied after interpolation.</li></ul></p>"
 msgstr ""
-"<title>Gürültü Azaltma</title><p>RAW çözme sırasında uygulanacak gürültü "
+"<title>Gürültü Azaltma</title><p>RAW çözümü sırasında uygulanacak gürültü "
 "azaltma yöntemini buradan seçin.</p><p><ul><li><emphasis strong='true'>Yok</"
 "emphasis>: Hiç gürültü azaltma yok.</li><li><emphasis "
 "strong='true'>Dalgacıklar</emphasis>: Gerçek ayrıntılar korunurken "
 "gürültünün silinmesi için dalgacık düzeltme. Aradeğerlemeden sonra uygulanır."
-"</li><li><emphasis strong='true'>FBDD</emphasis>: FBDD gürültü azaltma. "
+"</li><li><emphasis strong='true'>FBDD</emphasis>: FBDD gürültü azaltması. "
 "Aradeğerlemeden önce uygulanır.</li><li><emphasis strong='true'>CFA Satır "
-"Gürültü Kaldırma</emphasis>: Bant gürültü engelleme. Aradeğerlemeden sonra "
-"uygulanır.</li><li><emphasis strong='true'>Darbe Gürültüsünü Kaldır</"
+"Gürültü Kaldırma</emphasis>: Bant gürültüsü engelleme. Aradeğerlemeden sonra "
+"uygulanır.</li><li><emphasis strong='true'>Darbe gürültüsünü kaldır</"
 "emphasis>: Darbe gürültüsünü engelleme. Aradeğerlemeden sonra uygulanır.</"
 "li></ul></p>"
 
@@ -51669,7 +51674,7 @@ msgstr "Deforme miktarı:"
 #: plugins/paintops/deform/wdgdeformoptions.ui:170
 #, kde-format
 msgid "Bilinear interpolation"
-msgstr "Çift doğrusal aradeğerleme"
+msgstr "İki yönlü aradeğerleme"
 
 #. i18n: ectx: property (text), widget (QCheckBox, useCounter)
 #: plugins/paintops/deform/wdgdeformoptions.ui:180

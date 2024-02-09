@@ -45593,31 +45593,29 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgid "Flip selection horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "Převrátit výběr vodorovně"
-msgstr[1] "Převrátit výběr vodorovně"
-msgstr[2] "Převrátit výběr vodorovně"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgid "Flip selection vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "Převrátit výběr svisle"
-msgstr[1] "Převrátit výběr svisle"
-msgstr[2] "Převrátit výběr svisle"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -45632,9 +45630,7 @@ msgstr "Vzo&rek:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position:"
 msgstr "Pozice:"
 
@@ -59450,6 +59446,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgid "Backers"
-#~ msgstr "Podporovatelé"

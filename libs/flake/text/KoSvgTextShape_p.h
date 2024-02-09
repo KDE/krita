@@ -303,7 +303,7 @@ public:
     Private() = default;
 
     Private(const Private &rhs)
-        : textData(const_cast<Private&>(rhs).textData) {
+        : textData(rhs.textData) {
         Q_FOREACH (KoShape *shape, rhs.shapesInside) {
             KoShape *clonedShape = shape->cloneShape();
             KIS_ASSERT_RECOVER(clonedShape) { continue; }

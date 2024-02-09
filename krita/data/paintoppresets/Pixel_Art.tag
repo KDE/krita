@@ -52,6 +52,7 @@ Comment[hi]=अकेले पिक्सल के साथ काम कर
 Comment[hu]=Sablonok egy egyedi pixelek manipulálásához
 Comment[id]=Prasetel untuk bekerja dengan pixel individu
 Comment[it]=Preimpostazioni per lavorare con pixel singoli
+Comment[ja]=個々のピクセルを扱うための設定
 Comment[ka]=სათითაოდ პიქსელებთან სამუშაო პროფილები
 Comment[ko]=개별 픽셀을 다룰 때 사용할 사전 설정
 Comment[nl]=Voorinstellingen voor werken met individuele pixels

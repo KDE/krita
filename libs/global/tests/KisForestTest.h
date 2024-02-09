@@ -44,6 +44,11 @@ private Q_SLOTS:
     void testParentIterator();
 
     void testConstChildIterators();
+    void testConstHierarchyIterators();
+    void testConstSubtreeIterators();
+    void testConstTailSubtreeIterators();
+    void testConstTailFreeStandingForestFunctions();
+
 };
 
 #endif // KISFORESTTEST_H

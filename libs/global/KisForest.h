@@ -58,7 +58,7 @@ using RootNode = RootNodeImpl<Node<T>>;
 /*               BaseIterator                                            */
 /*************************************************************************/
 
-template <typename BaseClass, typename T, typename Tag, bool is_const = false>
+template <typename BaseClass, typename T, typename Tag, bool is_const>
 class BaseIterator :
         public boost::iterator_facade <BaseClass,
                                        T,
@@ -156,7 +156,7 @@ protected:
  *          to undefined behavior.
  */
 
-template <typename T, bool is_const = false>
+template <typename T, bool is_const>
 class ChildIterator :
         public BaseIterator <ChildIterator<T, is_const>,
                              T,
@@ -180,7 +180,6 @@ public:
     {
     }
 
-    template <typename = std::enable_if<!is_const>>
     operator ChildIterator<T, true>() const {
         return ChildIterator<T, true>(this->m_node, m_parent, m_offsetToParent);
     }
@@ -249,7 +248,7 @@ ChildIterator<value_type, is_const> siblingBegin(const ChildIterator<value_type,
     using RootNodeType = typename ChildIterator<value_type, is_const>::RootNodeType;
     if (!it.node() && it.m_offsetToParent != 0) return it;
     RootNodeType *parent = it.m_parent;
-    return ChildIterator<value_type>(parent ? parent->firstChild : nullptr, parent, 0);
+    return ChildIterator<value_type, is_const>(parent ? parent->firstChild : nullptr, parent, 0);
 }
 
 template <typename value_type, bool is_const>
@@ -260,7 +259,7 @@ ChildIterator<value_type, is_const> siblingEnd(const ChildIterator<value_type, i
 }
 
 template <typename Iterator,
-          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
           typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator siblingCurrent(Iterator it)
 {
@@ -272,7 +271,7 @@ ResultIterator siblingCurrent(Iterator it)
 }
 
 template <typename Iterator,
-          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
           typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator siblingBegin(Iterator it)
 {
@@ -280,7 +279,7 @@ ResultIterator siblingBegin(Iterator it)
 }
 
 template <typename Iterator,
-          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
           typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator siblingEnd(Iterator it)
 {
@@ -308,7 +307,7 @@ ChildIterator<value_type, is_const> childEnd(const ChildIterator<value_type, is_
 }
 
 template <typename Iterator,
-          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
           typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator childBegin(Iterator it)
 {
@@ -316,7 +315,7 @@ ResultIterator childBegin(Iterator it)
 }
 
 template <typename Iterator,
-          bool is_const = std::is_const_v<typename Iterator::value_type>,
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
           typename ResultIterator = ChildIterator<typename Iterator::value_type, is_const>>
 ResultIterator childEnd(Iterator it)
 {
@@ -378,40 +377,53 @@ inline bool isEnd(const ChildIterator<T, is_const> &it) {
  *          to undefined behavior.
  */
 
-template <typename T>
+template <typename T, bool is_const>
 class HierarchyIterator :
-        public BaseIterator <HierarchyIterator<T>,
-                              T,
-                              boost::forward_traversal_tag>
+        public BaseIterator <HierarchyIterator<T, is_const>,
+                             T,
+                             boost::forward_traversal_tag,
+                             is_const>
 {
+    using BaseClass = BaseIterator <HierarchyIterator<T, is_const>,
+                                   T,
+                                   boost::forward_traversal_tag,
+                                   is_const>;
 public:
-    HierarchyIterator(Node<T> *node)
-        : BaseIterator<HierarchyIterator<T>, T, boost::forward_traversal_tag>(node)
+    using RootNodeType = std::add_const_if_t<is_const, RootNode<T>>;
+    using NodeType = typename BaseClass::NodeType;
+
+    HierarchyIterator(NodeType *node)
+        : BaseClass(node)
     {
     }
 
+    operator HierarchyIterator<T, true>() const {
+        return HierarchyIterator<T, true>(this->m_node);
+    }
 
 private:
     friend class boost::iterator_core_access;
 
     void increment() {
-        RootNode<T> *parent = this->m_node->parent;
+        RootNodeType *parent = this->m_node->parent;
         this->m_node =
-            static_cast<Node<T>*>(
+            static_cast<NodeType*>(
                 parent && !parent->isRoot() ?
                 parent : nullptr);
     }
 };
 
 template <typename Iterator,
-          typename ResultIterator = HierarchyIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
+          typename ResultIterator = HierarchyIterator<typename Iterator::value_type, is_const>>
 ResultIterator hierarchyBegin(Iterator it)
 {
     return ResultIterator(it.node());
 }
 
 template <typename Iterator,
-          typename ResultIterator = HierarchyIterator<typename Iterator::value_type>>
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
+          typename ResultIterator = HierarchyIterator<typename Iterator::value_type, is_const>>
 ResultIterator hierarchyEnd(Iterator it)
 {
     Q_UNUSED(it);
@@ -469,30 +481,34 @@ enum TraversalState {
     Leave
 };
 
-template <typename T>
+template <typename T, bool is_const>
 class CompositionIterator :
         public boost::iterator_adaptor<
-            CompositionIterator<T>,
-            ChildIterator<T>,
+            CompositionIterator<T, is_const>,
+            ChildIterator<T, is_const>,
             boost::use_default,
             boost::forward_traversal_tag>
 {
     using BaseClass = boost::iterator_adaptor<
-        CompositionIterator<T>,
-        ChildIterator<T>,
+        CompositionIterator<T, is_const>,
+        ChildIterator<T, is_const>,
         boost::use_default,
         boost::forward_traversal_tag>;
 
+    using BaseIteratorType = typename CompositionIterator::base_type;
+
 public:
     using traversal_state = TraversalState;
+    using RootNodeType = typename BaseIteratorType::RootNodeType;
+    using NodeType = typename BaseIteratorType::NodeType;
 
-    Node<T>* node() const {
+    NodeType* node() const {
         return this->base().node();
     }
 
 public:
-    CompositionIterator(Node<T> *node, traversal_state state = Enter)
-        : BaseClass(ChildIterator<T>(node, node ? node->parent : nullptr, 0)),
+    CompositionIterator(NodeType *node, traversal_state state = Enter)
+        : BaseClass(BaseIteratorType(node, node ? node->parent : nullptr, 0)),
           m_state(state)
     {
     }
@@ -501,6 +517,9 @@ public:
         return m_state;
     }
 
+    operator CompositionIterator<T, true>() const {
+        return CompositionIterator<T, true>(this->m_node, this->m_state);
+    }
 
 private:
     friend class boost::iterator_core_access;
@@ -530,27 +549,29 @@ private:
             break;
         }
 
-        this->base_reference() = ChildIterator<T>(nullptr, nullptr, 0);
+        this->base_reference() = BaseIteratorType(nullptr, nullptr, 0);
     }
 
 private:
     traversal_state m_state = Enter;
 };
 
-template <typename Iterator>
-CompositionIterator<typename Iterator::value_type> compositionBegin(Iterator it)
+template <typename Iterator,
+         bool is_const = std::is_const_v<typename Iterator::NodeType>,
+         typename ResultIterator = CompositionIterator<typename Iterator::value_type, is_const>>
+ResultIterator compositionBegin(Iterator it)
 {
-    using CompositionIterator = CompositionIterator<typename Iterator::value_type>;
-    return CompositionIterator(it.node(), Enter);
+    return ResultIterator(it.node(), Enter);
 }
 
-template <typename Iterator>
-CompositionIterator<typename Iterator::value_type> compositionEnd(Iterator it)
+template <typename Iterator,
+         bool is_const = std::is_const_v<typename Iterator::NodeType>,
+         typename ResultIterator = CompositionIterator<typename Iterator::value_type, is_const>>
+ResultIterator compositionEnd(Iterator it)
 {
-    using CompositionIterator = CompositionIterator<typename Iterator::value_type>;
     return it.node() ?
-        std::next(CompositionIterator(it.node(), Leave)) :
-        CompositionIterator(nullptr, Leave);
+        std::next(ResultIterator(it.node(), Leave)) :
+        ResultIterator(nullptr, Leave);
 }
 
 
@@ -606,35 +627,43 @@ CompositionIterator<typename Iterator::value_type> compositionEnd(Iterator it)
  *          to undefined behavior.
  */
 
-template <typename T, TraversalState visit_on>
+template <typename T, TraversalState visit_on, bool is_const>
 class DepthFirstIterator :
         public boost::iterator_adaptor<
-            DepthFirstIterator<T, visit_on>,
-            CompositionIterator<T>,
+            DepthFirstIterator<T, visit_on, is_const>,
+            CompositionIterator<T, is_const>,
             boost::use_default,
             boost::forward_traversal_tag>
 {
     using BaseClass = boost::iterator_adaptor<
-        DepthFirstIterator<T, visit_on>,
-        CompositionIterator<T>,
+        DepthFirstIterator<T, visit_on, is_const>,
+        CompositionIterator<T, is_const>,
         boost::use_default,
         boost::forward_traversal_tag>;
 
+    using BaseIteratorType = typename DepthFirstIterator::base_type;
+
 public:
     using traversal_state = TraversalState;
+    using RootNodeType = typename BaseIteratorType::RootNodeType;
+    using NodeType = typename BaseIteratorType::NodeType;
 
-    DepthFirstIterator(Node<T> *node,
+    DepthFirstIterator(NodeType *node,
                        traversal_state state = traversal_state::Enter,
                        bool shouldSkipToBegin = false)
-        : BaseClass(CompositionIterator<T>(node, state))
+        : BaseClass(BaseIteratorType(node, state))
     {
         if (shouldSkipToBegin) {
             skipToState(visit_on);
         }
     }
 
-    Node<T>* node() const {
+    NodeType* node() const {
         return this->base().node();
+    }
+
+    operator DepthFirstIterator<T, visit_on, true>() const {
+        return DepthFirstIterator<T, visit_on, true>(this->m_node, this->m_state);
     }
 
 private:
@@ -654,14 +683,16 @@ private:
 };
 
 template <typename Iterator,
-          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Enter>>
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
+          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Enter, is_const>>
 ResultIterator subtreeBegin(Iterator it)
 {
     return ResultIterator(it.node(), Enter);
 }
 
 template <typename Iterator,
-          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Enter>>
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
+          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Enter, is_const>>
 ResultIterator subtreeEnd(Iterator it)
 {
     return it.node() ?
@@ -670,14 +701,16 @@ ResultIterator subtreeEnd(Iterator it)
 }
 
 template <typename Iterator,
-          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Leave>>
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
+          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Leave, is_const>>
 ResultIterator tailSubtreeBegin(Iterator it)
 {
     return ResultIterator(it.node(), Enter, true);
 }
 
 template <typename Iterator,
-          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Leave>>
+          bool is_const = std::is_const_v<typename Iterator::NodeType>,
+          typename ResultIterator = DepthFirstIterator<typename Iterator::value_type, Leave, is_const>>
 ResultIterator tailSubtreeEnd(Iterator it)
 {
     return it.node() ?
@@ -751,7 +784,7 @@ public:
         erase(childBegin(), childEnd());
     }
 
-    Forest(Forest<T> &rhs) {
+    Forest(const Forest<T> &rhs) {
         for (auto it = rhs.childBegin(); it != rhs.childEnd(); ++it) {
             auto cloneIt = this->insert(this->childEnd(), *it);
             cloneChildren(it, cloneIt);
@@ -759,19 +792,44 @@ public:
     }
 
     using value_type = T;
+
     using child_iterator = ChildIterator<T, false>;
     using const_child_iterator = ChildIterator<T, true>;
-    using composition_iterator = CompositionIterator<T>;
-    using hierarchy_iterator = HierarchyIterator<T>;
-    using iterator = DepthFirstIterator<T, Enter>;
-    using depth_first_tail_iterator = DepthFirstIterator<T, Leave>;
+
+    using composition_iterator = CompositionIterator<T, false>;
+    using const_composition_iterator = CompositionIterator<T, true>;
+
+    using hierarchy_iterator = HierarchyIterator<T, false>;
+    using const_hierarchy_iterator = HierarchyIterator<T, true>;
+
+    using iterator = DepthFirstIterator<T, Enter, false>;
+    using const_iterator = DepthFirstIterator<T, Enter, true>;
+
+    using depth_first_tail_iterator = DepthFirstIterator<T, Leave, false>;
+    using const_depth_first_tail_iterator = DepthFirstIterator<T, Leave, true>;
 
     iterator begin() {
-        return iterator(m_root.firstChild);
+        return beginImpl(*this);
     }
 
     iterator end() {
-        return iterator(nullptr);
+        return endImpl(*this);
+    }
+
+    const_iterator begin() const {
+        return beginImpl(*this);
+    }
+
+    const_iterator end() const {
+        return endImpl(*this);
+    }
+
+    const_iterator constBegin() const {
+        return beginImpl(*this);
+    }
+
+    const_iterator constEnd() const {
+        return endImpl(*this);
     }
 
     depth_first_tail_iterator depthFirstTailBegin() {
@@ -780,6 +838,22 @@ public:
 
     depth_first_tail_iterator depthFirstTailEnd() {
         return tailSubtreeEnd(end());
+    }
+
+    const_depth_first_tail_iterator depthFirstTailBegin() const {
+        return tailSubtreeBegin(constBegin());
+    }
+
+    const_depth_first_tail_iterator depthFirstTailEnd() const {
+        return tailSubtreeEnd(constEnd());
+    }
+
+    const_depth_first_tail_iterator constDepthFirstTailBegin() const {
+        return tailSubtreeBegin(constBegin());
+    }
+
+    const_depth_first_tail_iterator constDepthFirstTailEnd() const {
+        return tailSubtreeEnd(constEnd());
     }
 
     child_iterator childBegin() {
@@ -819,11 +893,27 @@ public:
     }
 
     composition_iterator compositionBegin() {
-        return composition_iterator(m_root.firstChild);
+        return compositionBeginImpl(*this);
     }
 
     composition_iterator compositionEnd() {
-        return composition_iterator(nullptr);
+        return compositionEndImpl(*this);
+    }
+
+    const_composition_iterator compositionBegin() const {
+        return compositionBeginImpl(*this);
+    }
+
+    const_composition_iterator compositionEnd() const {
+        return compositionEndImpl(*this);
+    }
+
+    const_composition_iterator constCompositionBegin() const {
+        return compositionBeginImpl(*this);
+    }
+
+    const_composition_iterator constCompositionEnd() const {
+        return compositionEndImpl(*this);
     }
 
     /**
@@ -960,7 +1050,7 @@ private:
         }
     }
 
-    void cloneChildren(child_iterator oldParent, child_iterator parent) {
+    void cloneChildren(const_child_iterator oldParent, child_iterator parent) {
         auto it = KisForestDetail::childBegin(oldParent);
         auto end = KisForestDetail::childEnd(oldParent);
         for (;it != end; ++it) {
@@ -991,6 +1081,38 @@ private:
         return IteratorType(nullptr, &forest.m_root, -1);
     }
 
+    template <class ForestType,
+              class IteratorType = DepthFirstIterator<typename ForestType::value_type,
+                                                      Enter,
+                                                      std::is_const_v<ForestType>>>
+    static IteratorType beginImpl(ForestType &forest) {
+        return IteratorType(forest.m_root.firstChild);
+    }
+
+    template <class ForestType,
+             class IteratorType = DepthFirstIterator<typename ForestType::value_type,
+                                                     Enter,
+                                                     std::is_const_v<ForestType>>>
+    static IteratorType endImpl(ForestType &forest) {
+        Q_UNUSED(forest);
+        return IteratorType(nullptr);
+    }
+
+    template <class ForestType,
+              class IteratorType = CompositionIterator<typename ForestType::value_type,
+                                                      std::is_const_v<ForestType>>>
+    static IteratorType compositionBeginImpl(ForestType &forest) {
+        return IteratorType(forest.m_root.firstChild);
+    }
+
+    template <class ForestType,
+              class IteratorType = CompositionIterator<typename ForestType::value_type,
+                                                       std::is_const_v<ForestType>>>
+    static IteratorType compositionEndImpl(ForestType &forest) {
+        Q_UNUSED(forest);
+        return IteratorType(nullptr);
+    }
+
 private:
     RootNode<T> m_root;
 };
@@ -1002,7 +1124,20 @@ typename Forest<T>::child_iterator childBegin(Forest<T> &forest)
 }
 
 template <typename T>
+typename Forest<T>::const_child_iterator childBegin(const Forest<T> &forest)
+{
+    return forest.childBegin();
+}
+
+
+template <typename T>
 typename Forest<T>::child_iterator childEnd(Forest<T> &forest)
+{
+    return forest.childEnd();
+}
+
+template <typename T>
+typename Forest<T>::const_child_iterator childEnd(const Forest<T> &forest)
 {
     return forest.childEnd();
 }
@@ -1014,13 +1149,33 @@ typename Forest<T>::composition_iterator compositionBegin(Forest<T> &forest)
 }
 
 template <typename T>
+typename Forest<T>::const_composition_iterator compositionBegin(const Forest<T> &forest)
+{
+    return forest.compositionBegin();
+}
+
+
+template <typename T>
 typename Forest<T>::composition_iterator compositionEnd(Forest<T> &forest)
 {
     return forest.compositionEnd();
 }
 
 template <typename T>
+typename Forest<T>::const_composition_iterator compositionEnd(const Forest<T> &forest)
+{
+    return forest.compositionEnd();
+}
+
+
+template <typename T>
 typename Forest<T>::depth_first_tail_iterator tailSubtreeBegin(Forest<T> &forest)
+{
+    return forest.depthFirstTailBegin();
+}
+
+template <typename T>
+typename Forest<T>::const_depth_first_tail_iterator tailSubtreeBegin(const Forest<T> &forest)
 {
     return forest.depthFirstTailBegin();
 }
@@ -1032,8 +1187,14 @@ typename Forest<T>::depth_first_tail_iterator tailSubtreeEnd(Forest<T> &forest)
 }
 
 template <typename T>
-int depth(typename Forest<T>::child_iterator beginIt,
-          typename Forest<T>::child_iterator endIt)
+typename Forest<T>::const_depth_first_tail_iterator tailSubtreeEnd(const Forest<T> &forest)
+{
+    return forest.depthFirstTailEnd();
+}
+
+template <typename T>
+int depth(typename Forest<T>::const_child_iterator beginIt,
+          typename Forest<T>::const_child_iterator endIt)
 {
 
     int currentDepth = 0;
@@ -1046,12 +1207,12 @@ int depth(typename Forest<T>::child_iterator beginIt,
 }
 
 template <typename T>
-int depth(Forest<T> &forest) {
+int depth(const Forest<T> &forest) {
     return depth<T>(childBegin(forest), childEnd(forest));
 }
 
 template <typename T>
-int size(Forest<T> &forest) {
+int size(const Forest<T> &forest) {
     return std::distance(begin(forest), end(forest));
 }
 

@@ -916,11 +916,23 @@ void KisForestTest::testCopyForest()
                                 end(forest),
                                 {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
 
-    KisForest<int> clonedForest = forest;
 
-    QVERIFY(testForestIteration(begin(clonedForest),
-                                end(clonedForest),
-                                {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
+    {
+        KisForest<int> clonedForest = forest;
+
+        QVERIFY(testForestIteration(begin(clonedForest),
+                                    end(clonedForest),
+                                    {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
+    }
+
+    {
+        const KisForest<int> &constForest = forest;
+        KisForest<int> clonedForest = constForest;
+
+        QVERIFY(testForestIteration(begin(clonedForest),
+                                    end(clonedForest),
+                                    {0, 1, 2, 3, 5, 6, 7, 4, 8, 9, 10}));
+    }
 
 }
 
@@ -1056,6 +1068,133 @@ void KisForestTest::testConstChildIterators()
     static_assert(std::is_same_v<decltype(*constForest.constParentEnd()), const int&>);
     static_assert(std::is_same_v<decltype(*constForest.parentEnd()), const int&>);
 
+}
+
+void KisForestTest::testConstHierarchyIterators()
+{
+    KisForest<int> forest;
+
+    // test on end-iterator
+    {
+        auto constIt = forest.constChildBegin();
+        auto it = forest.childBegin();
+
+        auto hBegin = hierarchyBegin(it);
+        auto hEnd = hierarchyBegin(it);
+
+        auto hConstBegin = hierarchyBegin(constIt);
+        auto hConstEnd = hierarchyBegin(constIt);
+
+        QVERIFY(hEnd == hConstEnd);
+
+        static_assert(std::is_same_v<decltype(*hBegin), int&>);
+        static_assert(std::is_same_v<decltype(*hEnd), int&>);
+
+        static_assert(std::is_same_v<decltype(*hConstBegin), const int&>);
+        static_assert(std::is_same_v<decltype(*hConstEnd), const int&>);
+    }
+
+    // test on a real element
+    {
+        forest.insert(forest.childEnd(), 10);
+
+        QVERIFY(forest.childBegin() != forest.childEnd());
+
+        auto hBegin = hierarchyBegin(forest.childBegin());
+        auto hConstBegin = hierarchyBegin(forest.constChildBegin());
+
+        QVERIFY(hBegin == hConstBegin);
+        QVERIFY(*hBegin == *hConstBegin);
+    }
+}
+
+void KisForestTest::testConstSubtreeIterators()
+{
+    KisForest<int> forest;
+
+           // test on end-iterator
+    {
+        auto constIt = forest.constBegin();
+        auto it = forest.begin();
+
+        QVERIFY(it == constIt);
+
+        static_assert(std::is_same_v<decltype(*it), int&>);
+        static_assert(std::is_same_v<decltype(*constIt), const int&>);
+    }
+
+           // test on a real element
+    {
+        forest.insert(forest.childEnd(), 10);
+
+        QVERIFY(forest.begin() != forest.end());
+
+        QVERIFY(forest.begin() == forest.constBegin());
+        QVERIFY(*forest.begin() == *forest.constBegin());
+    }
+}
+
+void KisForestTest::testConstTailSubtreeIterators()
+{
+    KisForest<int> forest;
+
+           // test on end-iterator
+    {
+        auto constIt = forest.constDepthFirstTailBegin();
+        auto it = forest.depthFirstTailBegin();
+
+        QVERIFY(it == constIt);
+
+        static_assert(std::is_same_v<decltype(*it), int&>);
+        static_assert(std::is_same_v<decltype(*constIt), const int&>);
+    }
+
+           // test on a real element
+    {
+        forest.insert(forest.childEnd(), 10);
+
+        QVERIFY(forest.depthFirstTailBegin() != forest.depthFirstTailEnd());
+
+        QVERIFY(forest.depthFirstTailBegin() == forest.constDepthFirstTailBegin());
+        QVERIFY(*forest.depthFirstTailBegin() == *forest.constDepthFirstTailBegin());
+    }
+}
+
+
+void KisForestTest::testConstTailFreeStandingForestFunctions()
+{
+    KisForest<int> forest;
+    forest.insert(forest.childEnd(), 10);
+
+    const KisForest<int> &constForest = forest;
+
+    auto comparePair = [] (auto beginIt, auto endIt)
+    {
+        static_assert(std::is_same_v<decltype(*beginIt), int&>);
+        static_assert(std::is_same_v<decltype(*endIt), int&>);
+
+        QVERIFY(beginIt != endIt);
+        QCOMPARE(*beginIt, 10);
+    };
+
+    auto compareConstPair = [] (auto beginIt, auto endIt)
+    {
+        static_assert(std::is_same_v<decltype(*beginIt), const int&>);
+        static_assert(std::is_same_v<decltype(*endIt), const int&>);
+
+        QVERIFY(beginIt != endIt);
+        QCOMPARE(*beginIt, 10);
+    };
+
+
+    comparePair(childBegin(forest), childEnd(forest));
+    compareConstPair(childBegin(constForest), childEnd(constForest));
+
+    comparePair(compositionBegin(forest), compositionEnd(forest));
+    compareConstPair(compositionBegin(constForest), compositionEnd(constForest));
+
+    comparePair(tailSubtreeBegin(forest), tailSubtreeEnd(forest));
+    compareConstPair(tailSubtreeBegin(constForest), tailSubtreeEnd(constForest));
 }
 
 SIMPLE_TEST_MAIN(KisForestTest)

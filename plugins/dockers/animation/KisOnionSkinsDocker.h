@@ -45,6 +45,7 @@ private:
 
 private:
     void loadSettings();
+    void initEqualizerSettings(bool useDefaults = false);
 
 private Q_SLOTS:
     void changed();

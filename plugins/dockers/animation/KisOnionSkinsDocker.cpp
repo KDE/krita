@@ -54,6 +54,9 @@ KisOnionSkinsDocker::KisOnionSkinsDocker(QWidget *parent) :
 
     m_equalizerWidget = new KisEqualizerWidget(10, this);
     connect(m_equalizerWidget, SIGNAL(sigConfigChanged()), &m_updatesCompressor, SLOT(start()));
+    connect(m_equalizerWidget, &KisEqualizerWidget::sigReset, this, [this](){
+        initEqualizerSettings(true);
+    });
     layout->addWidget(m_equalizerWidget, 1);
 
     connect(ui->btnBackwardColor, SIGNAL(changed(KoColor)), &m_updatesCompressor, SLOT(start()));
@@ -217,11 +220,28 @@ void KisOnionSkinsDocker::loadSettings()
     bcol.fromQColor(config.onionSkinTintColorForward());
     ui->btnForwardColor->setColor(bcol);
 
+    initEqualizerSettings();
+}
+
+void KisOnionSkinsDocker::initEqualizerSettings(bool useDefaults)
+{
+    KisImageConfig config(true);
+
     KisEqualizerWidget::EqualizerValues v;
     v.maxDistance = 10;
 
     for (int i = -v.maxDistance; i <= v.maxDistance; i++) {
-        v.value.insert(i, qRound(config.onionSkinOpacity(i) * 100.0 / 255.0));
+        qreal value = config.onionSkinOpacity(i);
+
+        if (value < 0 || useDefaults) { // Apply default value curve.
+            const int num = config.numberOfOnionSkins();
+            if (num > 0) {
+                const qreal dx = qreal(qAbs(i)) / num;
+                value = 0.7 * exp(-pow2(dx) / 0.5) * 255;
+            }
+        }
+        
+        v.value.insert(i, qRound(value * 100.0 / 255.0));
         v.state.insert(i, config.onionSkinState(i));
     }
 

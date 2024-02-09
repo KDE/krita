@@ -9,6 +9,9 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QHBoxLayout>
+#include <QMenu>
+
+#include <klocalizedstring.h>
 
 #include "kis_equalizer_column.h"
 #include "kis_signal_compressor.h"
@@ -16,7 +19,6 @@
 #include "KisAnimTimelineColors.h"
 
 #include "kis_debug.h"
-
 
 struct KisEqualizerWidget::Private
 {
@@ -29,6 +31,7 @@ struct KisEqualizerWidget::Private
     QMap<int, KisEqualizerColumn*> columns;
     int maxDistance;
     KisSignalCompressor updateCompressor;
+    QMenu *contextMenu; 
 };
 
 KisEqualizerWidget::KisEqualizerWidget(int maxDistance, QWidget *parent)
@@ -129,6 +132,24 @@ void KisEqualizerWidget::mouseMoveEvent(QMouseEvent *ev)
                           ev->modifiers() & ~Qt::ShiftModifier);
         qApp->sendEvent(w, &newEv);
     }
+}
+
+void KisEqualizerWidget::contextMenuEvent(QContextMenuEvent *event)
+{
+        KIS_ASSERT_RECOVER_RETURN(event);
+
+        if (!m_d->contextMenu) { // Lazy create and populate context menu.
+            m_d->contextMenu = new QMenu(this);
+
+            QAction *actReset = m_d->contextMenu->addAction(i18nc("Reset to default", "Reset"));
+            connect(actReset, &QAction::triggered, this, &KisEqualizerWidget::sigReset);
+        }
+
+        KIS_ASSERT_RECOVER_RETURN(m_d->contextMenu);
+
+        if (m_d->contextMenu) {
+            m_d->contextMenu->exec(QCursor::pos());
+        }
 }
 
 void KisEqualizerWidget::slotMasterColumnChanged(int, bool state, int)

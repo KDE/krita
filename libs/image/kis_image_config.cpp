@@ -339,14 +339,6 @@ int KisImageConfig::onionSkinOpacity(int offset) const
 {
     int value = m_config.readEntry("onionSkinOpacity_" + QString::number(offset), -1);
 
-    if (value < 0) {
-        const int num = numberOfOnionSkins();
-        if (num > 0) {
-            const qreal dx = qreal(qAbs(offset)) / num;
-            value = 0.7 * exp(-pow2(dx) / 0.5) * 255;
-        }
-    }
-
     return value;
 }
 

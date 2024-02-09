@@ -38,8 +38,11 @@ public:
 
     void mouseMoveEvent(QMouseEvent *ev) override;
 
+    void contextMenuEvent(QContextMenuEvent *event) override;
+
 Q_SIGNALS:
     void sigConfigChanged();
+    void sigReset();
 
 private Q_SLOTS:
     void slotMasterColumnChanged(int, bool, int);

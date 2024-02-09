@@ -38,7 +38,6 @@ void BrushHudDock::setCanvas(KoCanvasBase *canvas)
     }
     else {
         setWidget(nullptr);
-        delete m_brushHud;
     }
 }
 

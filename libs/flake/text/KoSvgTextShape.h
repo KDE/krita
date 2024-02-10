@@ -313,7 +313,7 @@ public:
     bool removeText(int &index, int &length);
 
     /// Return the properties at a given position.
-    KoSvgTextProperties propertiesForPos(const int pos) const;
+    KoSvgTextProperties propertiesForPos(const int pos, bool inherited = false) const;
 
     /**
      * @brief propertiesForRange
@@ -322,7 +322,7 @@ public:
      * @param endPos -- range end.
      * @return list of properties.
      */
-    QList<KoSvgTextProperties> propertiesForRange(const int startPos, const int endPos) const;
+    QList<KoSvgTextProperties> propertiesForRange(const int startPos, const int endPos, bool inherited = false) const;
 
     /**
      * @brief setPropertiesAtPos

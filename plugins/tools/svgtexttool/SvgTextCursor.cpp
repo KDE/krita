@@ -1178,6 +1178,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
     if (!d->blockQueryUpdates) {
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
+    updateCanvasResources();
     if (!(d->canvas->canvasWidget() && d->canvas->canvasController())) {
         // Mockcanvas in the tests has neither.
         return;
@@ -1359,4 +1360,25 @@ void SvgTextCursor::commitIMEPreEdit()
     d->preEditLength = 0;
     updateIMEDecoration();
     updateCursor();
+}
+
+void SvgTextCursor::updateCanvasResources()
+{
+    // Only update canvas resources when there's no selection.
+    // This relies on Krita not setting anything on the text when there's no selection.
+    if (d->shape && d->canvas->resourceManager() && d->pos == d->anchor) {
+        KoSvgTextProperties props = d->shape->propertiesForPos(d->pos, true);
+        KoColorBackground *bg = dynamic_cast<KoColorBackground *>(props.background().data());
+        if (bg) {
+            KoColor c;
+            c.fromQColor(bg->color());
+            d->canvas->resourceManager()->setForegroundColor(c);
+        }
+        KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(props.stroke().data());
+        if (stroke && stroke->color().isValid()) {
+            KoColor c;
+            c.fromQColor(stroke->color());
+            d->canvas->resourceManager()->setBackgroundColor(c);
+        }
+    }
 }

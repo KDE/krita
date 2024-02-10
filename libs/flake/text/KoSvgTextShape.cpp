@@ -779,12 +779,23 @@ bool KoSvgTextShape::removeText(int &index, int &length)
     return success;
 }
 
-KoSvgTextProperties KoSvgTextShape::propertiesForPos(const int pos) const
+KoSvgTextProperties KoSvgTextShape::propertiesForPos(const int pos, bool inherited) const
 {
-    return propertiesForRange(pos, pos).first();
+    return propertiesForRange(pos, pos, inherited).value(0, KoSvgTextProperties());
 }
 
-QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos, const int endPos) const
+KoSvgTextProperties inheritProperties(KisForest<KoSvgTextContentElement>::depth_first_tail_iterator it)  {
+    KoSvgTextProperties props = it->properties;
+    for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it));
+         parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
+         KoSvgTextProperties parentProps = parentIt->properties;
+         parentProps.setAllButNonInheritableProperties(props);
+         props = parentProps;
+    }
+    return props;
+}
+
+QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos, const int endPos, bool inherited) const
 {
     QList<KoSvgTextProperties> props;
     if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
@@ -798,15 +809,33 @@ QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos
     if (startIndex == endIndex) {
         int currentIndex = 0;
         auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought);
-        if (!isEnd(siblingCurrent(it))) {
-            props.append(it->properties);
+        if (it != d->textData.depthFirstTailEnd()) {
+            if (inherited) {
+                props.append(inheritProperties(it));
+            } else {
+                props.append(it->properties);
+            }
+        } else {
+            currentIndex = 0;
+            it = d->findTextContentElementForIndex(d->textData, currentIndex, sought - 1);
+            if (it != d->textData.depthFirstTailEnd()) {
+                if (inherited) {
+                    props.append(inheritProperties(it));
+                } else {
+                    props.append(it->properties);
+                }
+            }
         }
     } else {
         while(sought < endIndex) {
             int currentIndex = 0;
             auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought);
-            if (!isEnd(siblingCurrent(it))) {
-                props.append(it->properties);
+            if (it != d->textData.depthFirstTailEnd()) {
+                if (inherited) {
+                    props.append(inheritProperties(it));
+                } else {
+                    props.append(it->properties);
+                }
             }
             sought = currentIndex + it->numChars(false);
         }
@@ -829,7 +858,7 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
     CharacterResult res = d->result.at(cursorPos.cluster);
     int currentIndex = 0;
     auto it = d->findTextContentElementForIndex(d->textData, currentIndex, res.plaintTextIndex);
-    if (!isEnd(siblingCurrent(it))) {
+    if (it != d->textData.depthFirstTailEnd()) {
         it->properties = properties;
         notifyChanged();
         shapeChangedPriv(ContentChanged);
@@ -857,7 +886,7 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
     while(sought < endIndex) {
         int currentIndex = 0;
         auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought, true);
-        if (!isEnd(siblingCurrent(it))) {
+        if (it != d->textData.depthFirstTailEnd()) {
             Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
                 it->properties.setProperty(p, properties.property(p));
             }

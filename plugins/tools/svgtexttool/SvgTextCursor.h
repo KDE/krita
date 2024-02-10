@@ -214,6 +214,8 @@ private:
 
     void commitIMEPreEdit();
 
+    void updateCanvasResources();
+
     struct Private;
     const QScopedPointer<Private> d;
 };

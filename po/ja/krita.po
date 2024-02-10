@@ -24516,17 +24516,7 @@ msgstr "グラフとチャートに最適"
 
 #. i18n: ectx: property (whatsThis), widget (QRadioButton, radioSaturation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:96
-#, fuzzy, kde-format
-#| msgid ""
-#| "Hue and saturation maintained with lightness\n"
-#| "sacrificed to maintain saturation. White point\n"
-#| "changed to result in neutral grays. Intended for\n"
-#| "business graphics (make it colorful charts,\n"
-#| "graphs, overheads, ...)\n"
-#| "\n"
-#| "If adequate table is present in profile,\n"
-#| "then, it is used. Else reverts to perceptual\n"
-#| "intent."
+#, kde-format
 msgid ""
 "Hue and saturation maintained with lightness\n"
 "sacrificed to maintain saturation. White point\n"
@@ -24537,9 +24527,8 @@ msgid ""
 "then, it is used. Else reverts to perceptual\n"
 "intent."
 msgstr ""
-"彩度を保持するために明度を犠牲にします。色相は\n"
-"保持されます。白点はニュートラルなグレーになるよう\n"
-"に変更されます。ビジネス用グラフィックス (カラフルな\n"
+"色相と彩度を保持し、明度を犠牲にします。白点はニュートラルな\n"
+"グレーになるように変更されます。ビジネス用グラフィックス (カラフルな\n"
 "表やグラフなど) に適しています。\n"
 "\n"
 "プロファイルに適切なテーブルがあれば、それを使用\n"
@@ -24702,6 +24691,10 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>描画補助のパフォーマンスやアーティファクトの問題をトラ"
+"ブルシュートするために使用できます。\n"
+"              </p><p>Pixmap キャッシュサイズを変更するには再起動が必要です。"
+"</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
@@ -24950,6 +24943,9 @@ msgid ""
 "location of the file in the .kra. If you move the .kra but not the file, the "
 "file layer may be broken.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>警告: Krita は .kra にファイルの場所を保存するために相"
+"対パスを使用します。.kra を移動したがファイルを移動しなかった場合、ファイルレ"
+"イヤーが壊れる可能性があります。</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpScalingOptions)
 #: libs/ui/forms/wdgdlgfilelayer.ui:112
@@ -24977,10 +24973,9 @@ msgstr "画像の解像度に合わせる"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
-#, fuzzy, kde-format
-#| msgid "in Filters"
+#, kde-format
 msgid "&Scaling Filter:"
-msgstr "フィルタに"
+msgstr "拡大縮小フィルタ(&S):"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdlggeneratorlayer.ui:38
@@ -25244,7 +25239,7 @@ msgstr "ズームのマージンサイズ: "
 #: libs/ui/forms/wdggeneralsettings.ui:380
 #, kde-format
 msgid "Spacing between the image and the page when zoomed to fit, in pixels"
-msgstr ""
+msgstr "画像とページの間のスペース (ピクセル単位) をズームしてフィットします"
 
 #. i18n: ectx: property (title), widget (QGroupBox, group_subWinMode)
 #: libs/ui/forms/wdggeneralsettings.ui:408
@@ -25313,8 +25308,7 @@ msgstr "(Hi-DPI) フラクショナルスケール係数を有効化"
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: libs/ui/forms/wdggeneralsettings.ui:623
 #: libs/ui/forms/wdggeneralsettings.ui:807
-#, fuzzy, kde-format
-#| msgid "(Needs restart)"
+#, kde-format
 msgid "(needs restart)"
 msgstr "(再起動が必要です)"
 
@@ -25411,10 +25405,9 @@ msgstr "減算 (Krita 5.2+)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:839
-#, fuzzy, kde-format
-#| msgid "Hard (Krita 4.1 and earlier versions)"
+#, kde-format
 msgid "Additive (Krita 5.1 and earlier versions)"
-msgstr "Hard (Krita 4.1以前のバージョン)"
+msgstr "加算（Krita 5.1以前のバージョン）"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCmykBlendingMode)
 #: libs/ui/forms/wdggeneralsettings.ui:847
@@ -25743,6 +25736,16 @@ msgid ""
 "After saving the file in Krita 5.0 at least once, no conversions will be "
 "needed anymore."
 msgstr ""
+"Krita 5.0 以前のバージョンでは、テキストサイズが現在のディスプレイ DPI に依存"
+"することがありました (これはバグでした)。\n"
+"Krita 5.0 でこのバグが修正されたため、以前のバージョンで作成されたファイルが"
+"異なる見え方をすることがあります。\n"
+"\n"
+"古いファイルを読み込むとき、Krita はフォントサイズを現在の画面の DPI に合わせ"
+"ようとします。\n"
+"ファイルが異なるディスプレイで作成された場合、この値を手動で調整してみてくだ"
+"さい。\n"
+"ファイルを Krita 5.0 で少なくとも 1 回保存すると、変換は必要なくなります。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1431
@@ -25763,6 +25766,12 @@ msgid ""
 "To restore the old behavior you can force Krita to use Display DPI for fonts "
 "by entering it in this field."
 msgstr ""
+"Krita 4.4.3 以前のバージョンでは、テキストサイズが現在のディスプレイ DPI に依"
+"存することがありました (これはバグでした)。\n"
+"Krita 4.4.3 でこのバグが修正されたため、以前のバージョンで作成されたファイル"
+"が異なる見え方をすることがあります。\n"
+"古い挙動を復元するために、このフィールドにディスプレイ DPI を入力して Krita "
+"にフォントの DPI を使用させることができます。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1453
@@ -26064,16 +26073,13 @@ msgstr "順序"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, autoAddHoldframesBox)
 #: libs/ui/forms/wdgimportimagesequence.ui:72
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Adds the imported frames in their respective slots as "
 "per the sequence numbers in the file name</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></body></"
-"html>"
+"<html><head/><body><p>インポートされたフレームをファイル名のシーケンス番号に"
+"従ってそれぞれのスロットに追加します。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autoAddHoldframesBox)
 #: libs/ui/forms/wdgimportimagesequence.ui:75
@@ -26298,6 +26304,8 @@ msgid ""
 "The image data you are trying to paste has no color profile information. How "
 "do you want to interpret this data?"
 msgstr ""
+"貼り付けようとしている画像データには色プロファイル情報がありません。このデー"
+"タをどのように解釈しますか?"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExplanationWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:63
@@ -26306,6 +26314,8 @@ msgid ""
 "Use standard colors that are displayed from computer monitors. This is the "
 "most common way that images are stored."
 msgstr ""
+"コンピュータのモニタで表示される標準色を使用します。これは画像が保存される最"
+"も一般的な方法です。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnAsWeb)
 #: libs/ui/forms/wdgMissingColorProfile.ui:79
@@ -26326,6 +26336,8 @@ msgid ""
 "If you know a bit about color management and want to use your monitor to "
 "determine the color profile."
 msgstr ""
+"カラーマネジメントについて少し知っていて、モニタを使用して色プロファイルを決"
+"定したい場合に選択します。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dontPrompt)
 #: libs/ui/forms/wdgMissingColorProfile.ui:115
@@ -26684,6 +26696,8 @@ msgid ""
 "There are multiple formats for the image you're trying to paste. Which one "
 "do you want to use?"
 msgstr ""
+"貼り付けようとしている画像には複数のフォーマットがあります。どれを使用します"
+"か?"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnDownload)
 #: libs/ui/forms/wdgPasteFormat.ui:66
@@ -26695,7 +26709,7 @@ msgstr "リモート先からダウンロード(&D)"
 #: libs/ui/forms/wdgPasteFormat.ui:79
 #, kde-format
 msgid "Preserves the original metadata and color profile."
-msgstr ""
+msgstr "元のメタデータとカラープロファイルを保持します。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseLocal)
 #: libs/ui/forms/wdgPasteFormat.ui:92
@@ -26710,12 +26724,14 @@ msgid ""
 "Depending on the source application, it may not have all of the original's "
 "metadata or color profile."
 msgstr ""
+"コピー元のアプリケーションによっては、元のメタデータやカラープロファイルがす"
+"べて含まれていないことがあります。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, btnUseBitmap)
 #: libs/ui/forms/wdgPasteFormat.ui:118
 #, kde-format
 msgid "Paste the attached &bitmap"
-msgstr ""
+msgstr "添付されたビットマップを貼り付け(&B)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgPasteFormat.ui:131
@@ -26724,6 +26740,8 @@ msgid ""
 "Use the bitmap provided by the source application. You will be asked for its "
 "profile."
 msgstr ""
+"コピー元のアプリケーションが提供するビットマップを使用します。そのプロファイ"
+"ルを求められます。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRemember)
 #: libs/ui/forms/wdgPasteFormat.ui:144
@@ -26889,19 +26907,17 @@ msgstr "フレームレンダリングの中断"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, sliderFrameTimeout)
 #: libs/ui/forms/wdgperformancesettings.ui:316
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Size limit after which the frames will be scaled "
-#| "down</p><p><span style=\" font-weight:600;\">Recommended value:</span> "
-#| "2500&nbsp;px</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The timeout for rendering one frame. If your animation "
 "rendering fails regularly with a timeout, try increasing this value</"
 "p><p><br/></p><p><span style=\" font-weight:600;\">Recommended value:</span> "
 "30...60 seconds</p></body></html>"
 msgstr ""
-"<html><head/><body><p>フレームが縮小されるサイズの制限値</p> <p><span style="
-"\" font-weight:600;\">推奨値:</span>2500&nbsp;px</p></body></html>"
+"<html><head/><body><p>フレームのレンダリングにおけるタイムアウトです。アニ"
+"メーションのレンダリングがタイムアウトで頻繁に失敗する場合には、この値を増や"
+"してみてください。</p><p><br/></p><p><span style=\" font-weight:600;\">推奨"
+"値:</span> 30...60 秒</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:326
@@ -27141,17 +27157,15 @@ msgstr "高速プレビューを強制"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:563
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When the image is too big, render only currently "
-#| "visible part of it</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The filter dialog will always use instant preview, "
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>画像が大きすぎる場合は、現在表示されている部分のみをレ"
-"ンダリングします。</p></body></html>"
+"<html><head/><body><p>フィルタリングダイアログは、たとえ「表示」メニューで高"
+"速プレビューが無効になっていても、常に高速プレビューを使用します。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkFiltersForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:566
@@ -27161,17 +27175,15 @@ msgstr "フィルタに"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:573
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When the image is too big, render only currently "
-#| "visible part of it</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The transform tool preview will always use instant "
 "preview, even if instant preview is disabled in the &quot;View&quot; menu</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>画像が大きすぎる場合は、現在表示されている部分のみをレ"
-"ンダリングします。</p></body></html>"
+"<html><head/><body><p>変形ツールのプレビューは、たとえ「表示」メニューで高速"
+"プレビューが無効になっていても、常に高速プレビューを使用します。</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransformToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:576
@@ -27181,17 +27193,15 @@ msgstr "変形ツールに"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:583
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When the image is too big, render only currently "
-#| "visible part of it</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The move tool preview will always use instant preview, "
 "even if instant preview is disabled in the &quot;View&quot; menu</p></body></"
 "html>"
 msgstr ""
-"<html><head/><body><p>画像が大きすぎる場合は、現在表示されている部分のみをレ"
-"ンダリングします。</p></body></html>"
+"<html><head/><body><p>移動ツールのプレビューは、たとえ「表示」メニューで高速"
+"プレビューが無効になっていても、常に高速プレビューを使用します。</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMoveToolForceLodMode)
 #: libs/ui/forms/wdgperformancesettings.ui:586
@@ -27784,8 +27794,7 @@ msgid "Layer Size"
 msgstr "レイヤーサイズ"
 
 #: libs/ui/imagesize/imagesize.cc:119
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgstr "レイヤーの大きさを変える"
 
@@ -27886,8 +27895,7 @@ msgstr "ピクセル寸法"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, fuzzy, kde-format
-#| msgid "&Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "フィルタ(&F):"
@@ -27918,9 +27926,7 @@ msgstr "印刷サイズを個々に調整"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Resize intepolation method list label"
-#| msgid "Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "フィルタ:"
@@ -27980,7 +27986,7 @@ msgstr "操作"
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:271
 #, kde-format
 msgid "A conflict exists between two or more shortcuts."
-msgstr ""
+msgstr "他のショートカットとの競合が存在します。"
 
 #. i18n: ectx: property (text), widget (QPushButton, editProfilesButton)
 #: libs/ui/input/config/kis_edit_profiles_dialog.cpp:54
@@ -28047,14 +28053,14 @@ msgstr "入力プロファイル"
 #: libs/ui/input/config/kis_input_configuration_page.ui:83
 #, kde-format
 msgid "Manage canvas input profiles"
-msgstr ""
+msgstr "キャンバス入力プロファイルを管理"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, warningConflictButton)
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:27
 #: libs/ui/input/config/kis_input_configuration_page_item.ui:111
 #, kde-format
 msgid "Conflict found for a Shortcut in this Action."
-msgstr ""
+msgstr "このアクションのショートカットに競合が見つかりました。"
 
 #: libs/ui/input/config/kis_input_configuration_page_item.cpp:52
 #, kde-format
@@ -28151,11 +28157,7 @@ msgid "Alternate Invocation"
 msgstr "ツールの一時切り替え"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:28
-#, fuzzy, kde-format
-#| msgid ""
-#| "The <i>Alternate Invocation</i> action performs an alternate action with "
-#| "the current tool. For example, using the brush tool it picks a color from "
-#| "the canvas."
+#, kde-format
 msgid ""
 "The <i>Alternate Invocation</i> action performs an alternate action with the "
 "current tool. For example, using the brush tool it samples a color from the "
@@ -28163,7 +28165,7 @@ msgid ""
 msgstr ""
 "「<i>ツールの一時切り替え</i>」操作は現在のツールのまま一時的に別の操作を行い"
 "ます。例えば、ブラシツールを使っている状態でこの操作を使うことでキャンバスか"
-"ら色を採取することができます。"
+"ら色を抽出することができます。"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:30
 #, kde-format
@@ -28390,54 +28392,42 @@ msgid "Select Layer"
 msgstr "レイヤーを選択"
 
 #: libs/ui/input/kis_select_layer_action.cpp:117
-#, fuzzy, kde-format
-#| msgid "Selects a layer under cursor position"
+#, kde-format
 msgid "Select layers under the cursor position"
 msgstr "カーソル位置の下にあるレイヤーを選択"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "現在の選択を置換して不透明領域を選択(&O)"
+msgstr "最も上のレイヤーを選択(選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "現在の選択を置換して不透明領域を選択(&O)"
+msgstr "全てのレイヤーを選択(選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Selection Mode: Replace"
+#, kde-format
 msgid "Select from Menu (Replace Selection)"
-msgstr "選択モード: 除算"
+msgstr "メニューから選択(選択範囲を置換)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:126
 #, kde-format
 msgid "Select Top Layer (Add to Selection)"
-msgstr ""
+msgstr "最も上のレイヤーを選択(選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "すべてのレイヤーを新しいサイズにスケール"
+msgstr "全てのレイヤーを選択(選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
-#, fuzzy, kde-format
-#| msgid "Subtract fro&m current selection"
+#, kde-format
 msgid "Select from Menu (Add to Selection)"
-msgstr "現在の選択範囲から引く(&M)"
+msgstr "メニューから選択(選択範囲に追加)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:247
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "全レイヤーを選択"
@@ -28790,22 +28780,19 @@ msgid "Zoom to 100%"
 msgstr "倍率を100%にリセット"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
-msgstr "ページに合わせる"
+msgstr "表示領域に合わせる"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit to View Width"
-msgstr "幅に合わせる"
+msgstr "表示領域の幅に合わせる"
 
 #: libs/ui/input/kis_zoom_action.cpp:120
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit to View Height"
-msgstr "高さに合わせる"
+msgstr "表示領域の高さに合わせる"
 
 #: libs/ui/input/kis_zoom_and_rotate_action.cpp:37
 #, kde-format
@@ -28845,6 +28832,7 @@ msgstr "タッチジェスチャー"
 msgid ""
 "The Touch Gestures actions launch a single action for the specified gesture"
 msgstr ""
+"タッチジェスチャー操作は指定されたジェスチャーに対して単一の操作を実行します"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:23
 #, kde-format
@@ -28857,10 +28845,9 @@ msgid "Toggle Eraser"
 msgstr "消しゴムの切り替え"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Master Display:"
+#, kde-format
 msgid "Reset Display"
-msgstr "表示:"
+msgstr "表示をリセット"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, TabletTest)
 #: libs/ui/input/wintab/drawpile_tablettester/tablettest.ui:18
@@ -29208,6 +29195,8 @@ msgid ""
 "Non-animated layer is merged into the current frame. To merge it into the "
 "whole clip, create at least one frame"
 msgstr ""
+"アニメーションレイヤーではないレイヤーが現在のフレームに統合されます。全ての"
+"クリップに統合するには少なくとも 1 つフレームを作成してください"
 
 #: libs/ui/kis_layer_manager.cc:930
 #, kde-format
@@ -29330,9 +29319,6 @@ msgid "Remove Nodes"
 msgstr "レイヤーを削除"
 
 #: libs/ui/kis_node_manager.cpp:1038
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer X"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
 msgstr "レイヤーを反転 X"
@@ -29343,9 +29329,6 @@ msgid "Mirror Mask X"
 msgstr "マスクを反転 X"
 
 #: libs/ui/kis_node_manager.cpp:1051
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Mirror Layer Y"
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
 msgstr "レイヤーを反転 Y"
@@ -29442,13 +29425,12 @@ msgstr "マスクレイヤー"
 #: libs/ui/kis_node_manager.cpp:1590
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr ""
+msgstr "レイヤー \"%1\" を新しい親レイヤー \"%2\" に移動できません"
 
 #: libs/ui/kis_node_manager.cpp:1593
-#, fuzzy, kde-format
-#| msgid "Put every layer in its own, separate group layer"
+#, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "各レイヤーをそれぞれ独立したグループレイヤーに入れる"
+msgstr "レイヤー \"%1\" をルートレイヤーに移動できません"
 
 #: libs/ui/kis_node_manager.cpp:1601
 msgctxt "(qtundo-format)"
@@ -29603,10 +29585,9 @@ msgid "100%"
 msgstr "100%"
 
 #: libs/ui/kis_popup_palette.cpp:198
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgid "Fit Canvas to View"
-msgstr "キャンバスの大きさ"
+msgstr "キャンバスを表示領域に合わせる"
 
 #: libs/ui/kis_popup_palette.cpp:875
 #, kde-format
@@ -29677,27 +29658,7 @@ msgstr ""
 "したファイル</span></b></p>"
 
 #: libs/ui/kis_splash_screen.cpp:215
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><table width=\"100%\" cellpadding="
-#| "\"30\"><tr><td><p><span style=\" color:%1;\"><b>Using Krita</b></span></"
-#| "p><p><a href=\"https://krita.org/support-us/\"><span style=\" text-"
-#| "decoration: underline; color:%1;\">Support Krita's Development!</span></"
-#| "a></p><p><a href=\"https://docs.krita.org/en/user_manual/getting_started."
-#| "html\"><span style=\" text-decoration: underline; color:%1;\">Getting "
-#| "Started</span></a></p><p><a href=\"https://docs.krita.org/\"><span style="
-#| "\" text-decoration: underline; color:%1;\">Manual</span></a></p><p><a "
-#| "href=\"https://krita.org/\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Krita Website</span></a></p></td><td><p><span style=\" color:"
-#| "%1;\"><b>Coding Krita</b></span></p><p><a href=\"https://krita-artists.org"
-#| "\"><span style=\" text-decoration: underline; color:%1;\">User Community</"
-#| "span></a></p><p><a href=\"https://invent.kde.org/graphics/krita\"><span "
-#| "style=\" text-decoration: underline; color:%1;\">Source Code</span></a></"
-#| "p><p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/"
-#| "libkis/html/index.html\"><span style=\" text-decoration: underline; color:"
-#| "%1;\">Scripting API</span></a></p><p><a href=\"https://scripting.krita."
-#| "org/lessons/introduction\"><span style=\" text-decoration: underline; "
-#| "color:%1;\">Scripting School</span></a></p></td></table></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
 "style=\" color:%1;\"><b>Using Krita</b></span></p><p><a href=\"https://krita."
@@ -29732,11 +29693,11 @@ msgstr ""
 "underline; color:%1;\">ユーザコミュニティ</span></a></p><p><a href=\"https://"
 "invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; "
 "color:%1;\">ソースコード</span></a></p><p><a href=\"https://api.kde.org/"
-"appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" "
-"text-decoration: underline; color:%1;\">スクリプティング API</span></a></"
-"p><p><a href=\"https://scripting.krita.org/lessons/introduction\"><span "
-"style=\" text-decoration: underline; color:%1;\">スクリプトの学習</span></"
-"a></p></td></table></body></html>"
+"krita/html/classKrita.html\"><span style=\" text-decoration: underline; "
+"color:%1;\">スクリプティング API</span></a></p><p><a href=\"https://"
+"scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: "
+"underline; color:%1;\">スクリプトの学習</span></a></p></td></table></body></"
+"html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -29949,16 +29910,14 @@ msgid "Adding resource types..."
 msgstr "リソースの種類を追加..."
 
 #: libs/ui/KisApplication.cpp:465
-#, fuzzy, kde-format
-#| msgid "Loading Pages..."
+#, kde-format
 msgid "Loading plugins..."
-msgstr "ページを読み込み中..."
+msgstr "プラグインを読み込み中..."
 
 #: libs/ui/KisApplication.cpp:471
-#, fuzzy, kde-format
-#| msgid "Adding resource types..."
+#, kde-format
 msgid "Loading resources..."
-msgstr "リソースの種類を追加..."
+msgstr "リソースを読み込み中..."
 
 #: libs/ui/KisApplication.cpp:480
 #, kde-format
@@ -29966,10 +29925,9 @@ msgid "Loading Main Window..."
 msgstr "メインウィンドウを読み込み中..."
 
 #: libs/ui/KisApplication.cpp:512
-#, fuzzy, kde-format
-#| msgid "Scanning..."
+#, kde-format
 msgid "Launching..."
-msgstr "読み込み中..."
+msgstr "開始中..."
 
 #: libs/ui/KisApplication.cpp:581
 #, kde-format
@@ -30185,7 +30143,7 @@ msgstr "既存または新規のファイルに追加されるファイル参照
 #: libs/ui/KisApplicationArguments.cpp:99
 #, kde-format
 msgid "A location that overrides the configured location for Krita's resources"
-msgstr ""
+msgstr "Krita のリソースの場所を指定した場所にオーバーライドする"
 
 #: libs/ui/KisApplicationArguments.cpp:100
 #, kde-format
@@ -30281,7 +30239,7 @@ msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
 "document, %1 is the file path"
 msgid "%1 has been saved but is incomplete."
-msgstr ""
+msgstr "%1 は保存されましたが、不完全です。"
 
 #: libs/ui/KisDocument.cpp:1005
 #, kde-format
@@ -30341,14 +30299,12 @@ msgid "Opening document"
 msgstr "ドキュメントを開いています"
 
 #: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
-#, fuzzy, kde-format
-#| msgid "Could not open '%1'."
+#, kde-format
 msgid "Could not open %1."
-msgstr "'%1' を開けませんでした。"
+msgstr "%1 を開けませんでした。"
 
 #: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
-#, fuzzy, kde-format
-#| msgid "There were problems opening %1"
+#, kde-format
 msgid "There were problems opening %1."
 msgstr "%1 を開いている最中に問題が発生しました。"
 
@@ -30373,7 +30329,7 @@ msgstr "保存が完了するのを待っています..."
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 msgctxt "(qtundo-format)"
 msgid "Update overview thumbnail"
-msgstr ""
+msgstr "概要サムネイルを更新"
 
 #: libs/ui/KisImportExportErrorCode.cpp:19
 #, kde-format
@@ -30466,7 +30422,7 @@ msgstr "ファイルが書き込めないため開けませんでした。理由
 #: libs/ui/KisImportExportErrorCode.cpp:139
 #, kde-format
 msgid "Unexpected error."
-msgstr ""
+msgstr "予期しないエラー。"
 
 #: libs/ui/KisImportExportErrorCode.cpp:148
 #, kde-format
@@ -30731,11 +30687,9 @@ msgid "Also save your image as a Krita file."
 msgstr "この画像の.kraファイルへの保存も合わせて行ってください。"
 
 #: libs/ui/KisImportExportUtils.cpp:48
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert Image Color Space"
+#, kde-format
 msgid "Convert image color space on import"
-msgstr "画像の色空間を変換"
+msgstr "インポート時に画像の色空間を変換"
 
 #: libs/ui/KisImportExportUtils.cpp:51
 #, kde-format
@@ -30744,13 +30698,13 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
+"Krita で編集できないプロファイルが画像で使用されています (\"%1\")。編集用に変"
+"換する色空間を選択してください: \n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
-#, fuzzy
-#| msgid "Hide layer thumbnail popup"
 msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
-msgstr "レイヤーのサムネイルポップアップを表示しない"
+msgstr "レイヤーサムネイルを更新"
 
 #: libs/ui/KisMainWindow.cpp:183
 #, kde-format
@@ -30974,20 +30928,16 @@ msgid "New palette name:"
 msgstr "新しいパレット名:"
 
 #: libs/ui/KisPaletteEditor.cpp:102
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Krita Color Palette"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "Krita Palette (KPL)"
-msgstr "Krita カラーパレット"
+msgstr "Krita カラーパレット (Krita Palette, KPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:103
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "GIMP Patterns"
+#, kde-format
 msgctxt "Palette File Type"
 msgid "GIMP Palette (GPL)"
-msgstr "GIMP パターン"
+msgstr "GIMP パレット (GIMP Palette, GPL)"
 
 #: libs/ui/KisPaletteEditor.cpp:106
 #, kde-format
@@ -31118,6 +31068,8 @@ msgid ""
 "Do you want to download the image from %1?\n"
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
+"%1 から画像をダウンロードしますか？\n"
+"画像へのリンクを表示するには「詳細を表示」をクリックしてください。"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
@@ -31392,6 +31344,15 @@ msgid ""
 "<p><b>Private app location</b>:<br/>\n"
 "%2</p>"
 msgstr ""
+"<p>Microsoft Store パッケージ版の Krita を使用しています。Krita はユーザの "
+"AppData フォルダにリソースを配置するように設定できますが、Windows は実際には"
+"ファイルをプライベートなアプリの場所に保存することがあります。</p>\n"
+"<p>ファイルがどちらの場所に保存されているかを確認するために両方の場所をチェッ"
+"クする必要があります。</p>\n"
+"<p><b>ユーザの AppData</b>:<br/>\n"
+"%1</p>\n"
+"<p><b>プライベートアプリの場所</b>:<br/>\n"
+"%2</p>"
 
 #: libs/ui/KisViewManager.cpp:1377
 #, kde-format
@@ -31403,7 +31364,7 @@ msgstr "ユーザの AppData フォルダを開く(&U)"
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
-msgstr ""
+msgstr "プライベートアプリの場所を開く(&P)"
 
 #: libs/ui/KisViewManager.cpp:1491 libs/ui/KisViewManager.cpp:1509
 #, kde-format
@@ -32424,6 +32385,8 @@ msgid ""
 "Texture buffers are explicitly disabled on ANGLE renderer due to performance "
 "issues."
 msgstr ""
+"パフォーマンスの問題により、ANGLE レンダラーではテクスチャバッファが無効化さ"
+"れています。"
 
 #: libs/ui/opengl/kis_opengl.cpp:648
 #, kde-format
@@ -32600,30 +32563,24 @@ msgid "Decrease Brush Size"
 msgstr "ブラシのサイズを小さくする"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr "オブジェクトを時計回りに90°回転"
+msgstr "ブラシ形状を時計回りに回転させる"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
-#, fuzzy, kde-format
-#| msgid "Rotate the selection clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr "選択範囲を90°時計回りに回転させます。"
+msgstr "ブラシ形状を時計回りに回転させる (精密)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr "オブジェクトを反時計回りに90°回転"
+msgstr "ブラシ形状を反時計回りに回転させる"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
-#, fuzzy, kde-format
-#| msgid "Rotate selection counter-clockwise 90 degrees"
+#, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "選択範囲を90°反時計回りに回転させます。"
+msgstr "ブラシ形状を反時計回りに回転させる (精密)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -32734,6 +32691,8 @@ msgid ""
 "Converting a segment gradient to a stop gradient may cause loss of "
 "information"
 msgstr ""
+"セグメント方式のグラデーションをストップ方式のグラデーションに変換すると、情"
+"報が失われる可能性があります"
 
 #: libs/ui/widgets/gradient/KisGenericGradientEditor.cpp:135
 #, kde-format
@@ -32905,26 +32864,22 @@ msgid "Position: "
 msgstr "位置:"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:39
-#, fuzzy, kde-format
-#| msgid "Select the bundle"
+#, kde-format
 msgctxt "Action to select previous handle in the segment gradient editor"
 msgid "Select previous handle"
-msgstr "選択しているバンドル"
+msgstr "前のハンドルを選択"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:44
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Select Rectangle"
+#, kde-format
 msgctxt "Action to select next handle in the segment gradient editor"
 msgid "Select next handle"
-msgstr "矩形領域を選択"
+msgstr "次のハンドルを選択"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:48
-#, fuzzy, kde-format
-#| msgid "Edit Shape"
+#, kde-format
 msgctxt "Button to edit the selected handle in the segment gradient editor"
 msgid "Edit handle"
-msgstr "形状編集"
+msgstr "ハンドルを編集"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:53
 #, kde-format
@@ -33012,18 +32967,16 @@ msgid "Mid-Point #%1"
 msgstr "中間点 #%1"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:308
-#, fuzzy, kde-format
-#| msgid "Line selection"
+#, kde-format
 msgctxt "Text that indicates no handle is selected in the stop gradient editor"
 msgid "No handle selected"
-msgstr "フィルタの選択"
+msgstr "ハンドルが選択されていません"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:794
-#, fuzzy, kde-format
-#| msgid "Edit Shape"
+#, kde-format
 msgctxt "Title for the segment gradient handle editor"
 msgid "Edit Handle"
-msgstr "形状編集"
+msgstr "ハンドルを編集"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientSlider.cpp:1065
 #: libs/ui/widgets/gradient/KisStopGradientSlider.cpp:507
@@ -33301,20 +33254,7 @@ msgstr ""
 "じ画像にグレースケールレイヤーと RGB レイヤーを混在させることができます。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
-#, fuzzy, kde-format
-#| msgctxt "If the selected model is LAB"
-#| msgid ""
-#| "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></"
-#| "b>. <b>L<b> stands for Lightness, the <b>a</b> and <b>b</b> components "
-#| "represent color channels.<br/>L*a*b is a special model for color "
-#| "correction. It is based on human perception, meaning that it tries to "
-#| "encode the difference in lightness, red-green balance and yellow-blue "
-#| "balance. This makes it useful for color correction, but the vast majority "
-#| "of color maths in the blending modes do <b>not</b> work as expected here."
-#| "<br/>Similarly, Krita does not support HDR in LAB, meaning that HDR "
-#| "images converted to LAB lose color information. This colorspace is "
-#| "<b>not</b> recommended for painting, nor for export, but best as a space "
-#| "to do post-processing in. The TRC is assumed to be the L* TRC."
+#, kde-format
 msgctxt "If the selected model is LAB"
 msgid ""
 "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. "
@@ -33329,31 +33269,18 @@ msgid ""
 "painting, nor for export, but best as a space to do post-processing in. The "
 "TRC is assumed to be the L* TRC."
 msgstr ""
-"<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></"
-"b>(<b>L</b>は明度(Lightness)、<b>a</b>は補完次元A、<b>b</b>は補完次元B)</"
-"p><p>Lab は色の補正のための特殊な色モデルです。Lab は人間の視覚に基づいていま"
-"す。これは Lab が明度、赤-緑のバランス、黄色-青のバランスの差をエンコードする"
-"ことを狙ったものであることを意味します。これは Lab を色の補正に便利なものとし"
-"ていますが、合成モードでの色の計算の大半はその期待どおりには働きません。同様"
-"に我々は Lab では HDR をサポートしていないため、Lab に変換されたHDR画像は色の"
-"情報を失います。Lab はお絵描きにも出力にも推奨<b>されません</b>が、ポストプロ"
-"セッシングを行うのに最適な色空間です。TRC (トーン応答曲線)は L* TRC と見なさ"
-"れます。"
+"<b><a href=\"https://ja.wikipedia.org/wiki/Lab色空間\">L*a*b</a></b>。 <b>L</"
+"b>は明度を、<b>a</b> と <b>b</b> はカラーチャンネルを表します。<br/>L*a*b は"
+"色補正のための特別なモデルです。これは人間の視覚に基づいており、明度、赤と緑"
+"のバランス、黄色と青のバランスの差をエンコードしようとします。これは色補正に"
+"便利ですが、混色モードのほとんどの色計算はここで期待通りには動作しません。"
+"<br/>同様に、Krita は LAB で HDR をサポートしていません。これは HDR 画像を "
+"LAB に変換すると色情報が失われることを意味します。この色空間はお絵描きやエク"
+"スポートには<b>推奨されません</b>が、後処理には最適です。TRC は L* TRC と見な"
+"されます。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:442
-#, fuzzy, kde-format
-#| msgctxt "If the selected model is YCbCr"
-#| msgid ""
-#| "<b><a href=\"https://en.wikipedia.org/wiki/YCbCr\">YCbCr (Luma, Blue "
-#| "Chroma, Red Chroma)</a></b>, is a model designed for video encoding. It "
-#| "is based on human perception, meaning that it tries to encode the "
-#| "difference in lightness, red-green balance and yellow-blue balance. "
-#| "Chroma in this case is then a word indicating a special type of "
-#| "saturation, in these cases the saturation of Red and Blue, of which the "
-#| "desaturated equivalents are Green and Yellow respectively. It is "
-#| "available to open up certain images correctly, but Krita does not "
-#| "currently ship a profile for this due to lack of open source ICC profiles "
-#| "for YCrCb."
+#, kde-format
 msgctxt "If the selected model is YCbCr"
 msgid ""
 "<b><a href=\"https://en.wikipedia.org/wiki/YCbCr\">YCbCr (Luma, Blue Chroma, "
@@ -33364,14 +33291,11 @@ msgid ""
 "saturation of Red and Blue, of which the desaturated equivalents are Green "
 "and Yellow respectively."
 msgstr ""
-"<b><a href=\"https://en.wikipedia.org/wiki/YCbCr\">YCbCr (Yは輝度、Cbは青クロ"
-"マ、Crは赤クロマ)</a></b>はビデオエンコードのために設計された色モデルです。"
-"YCbCr は人間の視覚に基づいています。これは Lab が明度、赤-緑のバランス、黄色-"
-"青のバランスの差をエンコードすることを狙ったものであることを意味します。そし"
-"てこの場合クロマは彩度の特殊な場合を指し、この場合青と赤の彩度(同時にこの二つ"
-"はそれぞれ緑と黄色の彩度の逆値となる)を意味します。YCbCr 用のオープンな ICC "
-"プロファイルがないことから、現在 Krita には YCbCr の色プロファイルが入ってい"
-"ません。"
+"<b><a href=\"https://ja.wikipedia.org/wiki/YCbCr\">YCbCr (輝度, 青のクロマ, "
+"赤のクロマ)</a></b>はビデオエンコード用に設計されたモデルです。これは人間の視"
+"覚に基づいており、明度、赤と緑のバランス、黄色と青のバランスの差をエンコード"
+"しようとします。この場合のクロマは特別な彩度を示す言葉であり、今回の場合は赤"
+"と青の彩度であり、それぞれの彩度の低いものは緑と黄色です。"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:453
 #, kde-format
@@ -34425,10 +34349,7 @@ msgstr "チャンネルごとにコントラストを調整"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:83
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Percentage of the histogram to clip in the shadous side in auto levels"
-#| msgid "Shadows clipping:"
+#, kde-format
 msgctxt ""
 "Percentage of the histogram to clip in the shadows side in auto levels"
 msgid "Shadows clipping:"
@@ -34601,6 +34522,12 @@ msgid ""
 "krita.org/en/general_concepts/colors/color_managed_workflow.html\">More "
 "information</a></p></body></html>"
 msgstr ""
+"<html><body><p><b>警告:</b> 色プロファイルを変更すると、画像が異なる見え方に"
+"なることがあります。なぜなら、画像には以下のいずれかが含まれているからです:"
+"<ul><li>複数のレイヤー</li><li>透明なピクセルを含むレイヤー</li><li>「通常」"
+"以外のブレンドモードを持つレイヤー</li></ul></p><p><a href=\"https://docs."
+"krita.org/ja/general_concepts/colors/color_managed_workflow.html\">詳細情報</"
+"a></p></body></html>"
 
 #: libs/ui/widgets/KoDualColorButton.cpp:426
 #, kde-format
@@ -35105,6 +35032,11 @@ msgid ""
 "Inker,Letterer,Matte Painter,Painter,Penciller,Proofreader,Pixel Artist,"
 "Redliner,Sprite Artist,Typographer,Texture Artist,Translator,Writer,Other"
 msgstr ""
+"翻案者,アニメーター,アーティスト,アートディレクター,著者,アシスタント,編集者,"
+"背景,漫画家,カラーリスト,コンセプトアーティスト,校正者,表紙アーティスト,クリ"
+"エイター,デザイナー,インカー,レタラー,マットペインター,ペインター,ペンシラー,"
+"校正者,ドット絵アーティスト,レッドライナー,スプライトアーティスト,タイポグラ"
+"ファー,テクスチャアーティスト,翻訳者,作家,その他"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
@@ -35136,10 +35068,9 @@ msgid "Telephone"
 msgstr "電話番号"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:90
-#, fuzzy, kde-format
-#| msgid "Country:"
+#, kde-format
 msgid "Entry"
-msgstr "国:"
+msgstr "項目"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:94
 #, kde-format
@@ -35276,16 +35207,14 @@ msgid "Add/Remove Colors"
 msgstr "色を追加/削除"
 
 #: libs/widgets/KoResourceServerProvider.cpp:46
-#, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#, kde-format
 msgid "1. Foreground to Transparent"
-msgstr "描画色を透明値に変換"
+msgstr "1. 前景を透過に"
 
 #: libs/widgets/KoResourceServerProvider.cpp:59
-#, fuzzy, kde-format
-#| msgid "Foreground to Background"
+#, kde-format
 msgid "0. Foreground to Background"
-msgstr "描画色を背景色に変換"
+msgstr "0. 前景を背景に"
 
 #: libs/widgets/KoRuler.cpp:1329
 #, kde-format
@@ -35363,6 +35292,9 @@ msgid ""
 "Map the displayed canvas size between pixel size or print size\n"
 "Current Mapping: %1"
 msgstr ""
+"表示されているキャンバスのサイズをピクセルサイズまたは印刷サイズにマッピング"
+"します\n"
+"現在のマッピング: %1"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtFileName)
 #: libs/widgets/wdg_file_name_requester.ui:39
@@ -35922,6 +35854,9 @@ msgid ""
 "Full range: [%1, %2]\n"
 "Subrange: [%3, %4]"
 msgstr ""
+"全範囲と部分範囲を切り替えます。\n"
+"全範囲: [%1, %2]\n"
+"部分範囲: [%3, %4]"
 
 #: libs/widgetutils/kis_slider_spin_box_p.h:545
 #, kde-format
@@ -35966,7 +35901,7 @@ msgstr "角度 (°)"
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
-msgstr ""
+msgstr "角の数 (gon)"
 
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
@@ -36010,6 +35945,8 @@ msgid ""
 "understands.\n"
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
+"選択されたファイル名には Krita が理解できるファイル拡張子が付いていません。\n"
+"例えばファイル名が '.%1' で終わるようにしてください。"
 
 #: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
@@ -36187,14 +36124,7 @@ msgid "OS:"
 msgstr "OS:"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:157
-#, fuzzy, kde-format
-#| msgid ""
-#| "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
-#| "untranslatable_pages/reporting_bugs.html\">this guide</a></b> for "
-#| "reporting bugs first!</p><p>To submit a bug report, click on the button "
-#| "below. This will open a web browser window on <a href=\"https://bugs.kde."
-#| "org\">https://bugs.kde.org</a> where you will find a form to fill in. The "
-#| "information displayed above will be transferred to that server.</p></qt>"
+#, kde-format
 msgid ""
 "<qt><p>Please read <b><a href=\"https://docs.krita.org/en/"
 "untranslatable_pages/reporting_bugs.html\">this guide</a></b> for reporting "
@@ -36205,10 +36135,10 @@ msgid ""
 msgstr ""
 "<qt><p>バグレポートを報告する前に、<b><a href=\"https://docs.krita.org/en/ "
 "untranslatable_pages/reporting_bugs.html\">このガイド(英文)</a></b>をお読みく"
-"ださい。</p><p>バグレポートを提出するには、下のボタンをクリックしてください。"
+"ださい！</p><p>バグレポートを提出するには、下のボタンをクリックしてください。"
 "そうするとウェブブラウザのウィンドウで <a href=\"https://bugs.kde.org\"> "
-"https://bugs.kde.org</a> が開き、報告用のフォームが表示されます。上に表示され"
-"ている情報がサーバに送られます。</p></qt>"
+"https://bugs.kde.org</a> が開き、報告用のフォームが表示されます。</p><p><b>以"
+"下の情報をバグレポートに貼り付けてください！</b></p></qt>"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:207
 #, kde-format
@@ -36893,15 +36823,14 @@ msgstr "追加:"
 msgid ""
 "The assistant will have two additional points that describe the area the "
 "assistant works in"
-msgstr ""
+msgstr "補助ツールを機能させる領域を、追加の 2 点を用いて指定します"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #. i18n: ectx: property (text), widget (QCheckBox, localAssistantCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:47
-#, fuzzy, kde-format
-#| msgid "Assistant Editor"
+#, kde-format
 msgid "Limit assistant to area"
-msgstr "アシスタント編集者"
+msgstr "補助ツールを領域内で動かす"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, twoPointUseVerticalCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:81
@@ -36909,7 +36838,7 @@ msgstr "アシスタント編集者"
 msgid ""
 "When enabled, it gives assistance for drawing vertical lines (perpendicular "
 "to the horizon line)"
-msgstr ""
+msgstr "有効にすると、垂直線 (水平線に対して垂直な線) の描画を補助します"
 
 #. i18n: User/snap to vertical line in 2 point perspective assistant
 #. i18n: ectx: property (text), widget (QCheckBox, twoPointUseVerticalCheckbox)
@@ -36920,10 +36849,9 @@ msgstr "垂直方向の目盛を有効化"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fixedLengthCheckbox)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:117
-#, fuzzy, kde-format
-#| msgid "Fixed angle:"
+#, kde-format
 msgid "Fixed Length"
-msgstr "固定角:"
+msgstr "固定長"
 
 #. i18n: ectx: property (text), widget (QLabel, globalColorLabel)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:160
@@ -37045,16 +36973,14 @@ msgid "Density: "
 msgstr "密度:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1548
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivisions: "
-msgstr "サブグリッド:"
+msgstr "サブグリッド: "
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1552
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Minor Subdivisions: "
-msgstr "サブグリッド:"
+msgstr "細分サブグリッド: "
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #: plugins/assistants/Assistants/kis_assistant_tool.h:177
@@ -37164,16 +37090,14 @@ msgstr "パースグリッド"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:332
-#, fuzzy, kde-format
-#| msgid "Perspective assistant"
+#, kde-format
 msgid "Perspective Ellipse assistant"
-msgstr "パースグリッド補助線"
+msgstr "曲線パース補助線"
 
 #: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
-#, fuzzy, kde-format
-#| msgid "Perspective"
+#, kde-format
 msgid "Perspective Ellipse"
-msgstr "パースグリッド"
+msgstr "曲線パース"
 
 # assistant は、いわゆる「ウィザード (対話型ユーザインタフェース)」ではなく、画像編集中に画面上に表示し、作画を補助するツールを指しています
 #: plugins/assistants/Assistants/RulerAssistant.cc:25
@@ -37982,7 +37906,7 @@ msgstr "すべてのチャンネルをリセット"
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
 #, kde-format
 msgid "Hold constant value. No interpolation."
-msgstr ""
+msgstr "一定の値を保持。補間なし"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
 #, kde-format
@@ -37990,24 +37914,19 @@ msgid "Linear interpolation."
 msgstr "リニア補間"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
-#, fuzzy, kde-format
-#| msgid "Bilinear interpolation"
+#, kde-format
 msgid "Bezier curve interpolation."
-msgstr "バイリニア補間"
+msgstr "ベジェ曲線補間"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set interpolation mode"
+#, kde-format
 msgid "Sharp interpolation tangents."
-msgstr "補完モードを設定"
+msgstr "タンジェント補間を鮮明にする"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:517
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Set interpolation mode"
+#, kde-format
 msgid "Smooth interpolation tangents."
-msgstr "補完モードを設定"
+msgstr "タンジェント補間を滑らかにする"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
 #, kde-format
@@ -38060,11 +37979,10 @@ msgid "Animation Timeline"
 msgstr "アニメーションタイムライン"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:138
-#, fuzzy, kde-format
-#| msgid "&Import..."
+#, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "インポート(&I)..."
+msgstr "音声をインポート..."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:140
 #, kde-format
@@ -38073,37 +37991,31 @@ msgid "Remove audio"
 msgstr "音声を削除"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:142
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
-msgstr "消音"
+msgstr "ミュート"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:148
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu, slider"
-#| msgid "Volume:"
+#, kde-format
 msgctxt "@item:inmenu Volume slider"
 msgid "Volume: "
-msgstr "音量:"
+msgstr "音量: "
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:168
-#, fuzzy, kde-format
-#| msgid "Animation settings menu"
+#, kde-format
 msgid "Animation audio menu"
-msgstr "アニメーション設定メニュー"
+msgstr "アニメーションオーディオメニュー"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:211
 #, kde-format
 msgid "AutoKey Blank"
-msgstr ""
+msgstr "自動キー打鍵 空白"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
-#, fuzzy, kde-format
-#| msgid "Duplicate"
+#, kde-format
 msgid "AutoKey Duplicate"
-msgstr "複製"
+msgstr "自動キー打鍵 複製"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:524
 #, kde-format
@@ -38276,17 +38188,14 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "%1 キーフレームを複製"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:412
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Make line point"
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
-msgstr "直線アンカーポイントを作成"
+msgstr "クローンを独立したフレームにする"
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:46
 #, kde-format
 msgid "Tint: "
-msgstr "前後フレームの表示の不透明度: "
+msgstr "不透明度: "
 
 #: plugins/dockers/animation/KisOnionSkinsDocker.cpp:49
 #, kde-format
@@ -38365,7 +38274,7 @@ msgstr "フレームタイミング:"
 #, kde-format
 msgctxt "@label:group"
 msgid "Side:"
-msgstr ""
+msgstr "方向:"
 
 #: plugins/dockers/animation/timeline_insert_keyframe_dialog.cpp:52
 #, kde-format
@@ -38862,11 +38771,9 @@ msgid "Grid and Guides"
 msgstr "グリッドと基準線"
 
 #: plugins/dockers/histogram/HistogramComputationStrokeStrategy.cpp:37
-#, fuzzy
-#| msgid "Update color"
 msgctxt "(qtundo-format)"
 msgid "Update histogram"
-msgstr "色を更新"
+msgstr "ヒストグラムを更新"
 
 #: plugins/dockers/histogram/histogramdocker_dock.cpp:18
 #, kde-format
@@ -38909,11 +38816,10 @@ msgid "Tree Indentation"
 msgstr "階層の段落"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:371
-#, fuzzy, kde-format
-#| msgid "Blending Mode"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
-msgstr "合成モード"
+msgstr "合成情報のスタイル"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:373
 #, kde-format
@@ -38924,49 +38830,46 @@ msgid ""
 "Balanced: Show both opacity and blending mode if either are changed.\n"
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
+"なし: 何も表示しません。\n"
+"シンプル: 変更された不透明度や合成モードを表示します。\n"
+"バランス: 不透明度や合成モードのどちらかが変更された場合に表示します。\n"
+"詳細: 不透明度や合成モードが変更されていなくても表示します。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:378
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "なし"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:379
-#, fuzzy, kde-format
-#| msgid "Simple"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "シンプル"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:380
-#, fuzzy, kde-format
-#| msgid "Color Balance"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
-msgstr "色のバランス"
+msgstr "バランス"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:381
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
-msgstr "詳細表示"
+msgstr "詳細"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:394
-#, fuzzy, kde-format
-#| msgid "Opening next page"
+#, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
-msgstr "次のページを開いています"
+msgstr "合成情報のテキストの不透明度"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:412
-#, fuzzy, kde-format
-#| msgctxt "spline filtering"
-#| msgid "spline"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
-msgstr "スプライン"
+msgstr "行内に表示"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:414
 #, kde-format
@@ -38975,20 +38878,20 @@ msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
+"有効にすると、レイヤー名の横に合成情報を表示します。\n"
+"無効にすると、レイヤー名の下に表示します(十分なスペースがある場合)。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:426
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Copy Selection to New Layer"
+#, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "選択領域を新しいレイヤーにコピー"
+msgstr "レイヤーを選択するためのチェックボックスを表示する"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr ""
+msgstr "レイヤーを選択/選択解除するためのチェックボックスを表示します。"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:994
 msgctxt "(qtundo-format)"
@@ -39232,6 +39135,8 @@ msgid ""
 "Exposure and Gamma corrections are disabled in Internal mode. Switch to OCIO "
 "mode to use them"
 msgstr ""
+"内部モードでは露出とガンマ補正は無効です。これらを使用するにはOCIOモードに切"
+"り替えてください"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:441
 #, kde-format
@@ -39397,18 +39302,17 @@ msgid "Export Palette"
 msgstr "パレットをエクスポート"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:239
-#, fuzzy, kde-format
-#| msgid "Export Successful"
+#, kde-format
 msgctxt "Floating message about exporting successful"
 msgid "Palette exported successfully"
-msgstr "エクスポートが完了しました"
+msgstr "パレットのエクスポートに成功しました"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:401
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
-msgstr ""
+msgstr "パレットを保存します。Krita を終了する際にも自動的に行われます。"
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
@@ -39424,10 +39328,9 @@ msgstr "描画色を追加"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnLock)
 #: plugins/dockers/palettedocker/wdgpalettedock.ui:139
-#, fuzzy, kde-format
-#| msgid "Remove current palette"
+#, kde-format
 msgid "Lock the current palette."
-msgstr "現在のパレットを削除"
+msgstr "現在のパレットをロック"
 
 #: plugins/dockers/presetdocker/presetdocker_dock.cpp:25
 #, kde-format
@@ -39456,16 +39359,14 @@ msgid "Bubble Up on Repeated Use"
 msgstr "使用頻度の高いものを上に"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:206
-#, fuzzy, kde-format
-#| msgid "Number of resolutions:"
+#, kde-format
 msgid "Set Number of Brushes Shown"
-msgstr "解像度数:"
+msgstr "表示するブラシの数を設定"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:207
-#, fuzzy, kde-format
-#| msgid "Number of resolutions:"
+#, kde-format
 msgid "Number of Brushes Shown:"
-msgstr "解像度数:"
+msgstr "表示するブラシの数:"
 
 #: plugins/dockers/presethistory/presethistory_dock.cpp:309
 #, kde-format
@@ -39480,7 +39381,7 @@ msgstr "履歴の動作:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr ""
+msgstr "表示するブラシの数を設定..."
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -39622,6 +39523,10 @@ msgid ""
 "\n"
 "Do you wish to continue?"
 msgstr ""
+"このドキュメントの録画は削除され、タイムラプスを再度エクスポートすることはで"
+"きません。既にエクスポートされたタイムラプスは保持されます。\n"
+"\n"
+"続行しますか？"
 
 #: plugins/dockers/recorder/recorder_export.cpp:659
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
@@ -39659,6 +39564,9 @@ msgid ""
 "For example, to make your timelapse twice faster, the Input FPS should be "
 "twice larger of the Video FPS."
 msgstr ""
+"入力ストリームからの読み込み速度です。\n"
+"例えば、タイムラプスを2倍速にするには、入力 FPS は動画 FPS の2倍にする必要が"
+"あります。"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:233
@@ -39689,13 +39597,13 @@ msgstr "ffmpeg"
 #: plugins/dockers/recorder/recorder_export.ui:348
 #, kde-format
 msgid "Extend the last frame in the exported video by the specified duration"
-msgstr ""
+msgstr "エクスポートする動画の最後のフレームを指定した時間分延長"
 
 #. i18n: ectx: property (text), widget (QCheckBox, extendResultCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:351
 #, kde-format
 msgid "Extend result for:"
-msgstr ""
+msgstr "動画を延長:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseExport)
 #: plugins/dockers/recorder/recorder_export.ui:360
@@ -39710,13 +39618,14 @@ msgid ""
 "Prepend a preview to the exported video.\n"
 "The preview will show the last frame of the video for the specified duration"
 msgstr ""
+"エクスポートした動画にプレビューを追加します。\n"
+"プレビューは指定した時間分、動画の最後のフレームを表示します。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:409
-#, fuzzy, kde-format
-#| msgid "Unable to open file"
+#, kde-format
 msgid "Enable preview for:"
-msgstr "ファイルを開くことができません"
+msgstr "プレビューを有効:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseFfmpeg)
 #: plugins/dockers/recorder/recorder_export.ui:537
@@ -39897,6 +39806,9 @@ msgid ""
 "though).\n"
 "Do you wish to continue?"
 msgstr ""
+"選択した録画は削除され、再度タイムラプスをエクスポートすることはできません "
+"(既にエクスポートされたタイムラプスは保持されます)。\n"
+"続行しますか？"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:18
@@ -40000,6 +39912,10 @@ msgid ""
 "Depending on timelapse speed, this may cause flickering in the resulting "
 "video."
 msgstr ""
+"アイソレートレイヤーまたはアイソレートグループモードがアクティブの場合、フ"
+"レームを記録します。\n"
+"タイムラプスの速度によっては、結果の動画にちらつきが発生する可能性がありま"
+"す。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:308
@@ -40145,6 +40061,8 @@ msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
+"フレームの書き込み中にエラーが発生したため、レコーダーが停止しました。ディス"
+"クの空き容量を確認して、レコーダーを再起動してください。"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:478
 #, kde-format
@@ -40152,6 +40070,8 @@ msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time. Try increasing the capture interval."
 msgstr ""
+"低パフォーマンス警告。レコーダーが全てのフレームを時間内に書き込むことができ"
+"ません。キャプチャ間隔を増やしてみてください。"
 
 #: plugins/dockers/smallcolorselector/smallcolorselector_dock.cc:37
 #, kde-format
@@ -40259,7 +40179,7 @@ msgstr ""
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:214
 #, kde-format
 msgid "Please choose svg file to specify the layout for exporting."
-msgstr ""
+msgstr "エクスポートのレイアウトを指定する SVG ファイルを選択してください。"
 
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:219
 #, kde-format
@@ -40267,6 +40187,8 @@ msgid ""
 "The SVG file to specify layout doesn't exist. Please choose an existing SVG "
 "file."
 msgstr ""
+"レイアウトを指定する SVG ファイルが存在しません。存在する SVG ファイルを選択"
+"してください。"
 
 #: plugins/dockers/storyboarddocker/KisAddRemoveStoryboardCommand.cpp:20
 msgctxt "(qtundo-format)"
@@ -40349,6 +40271,7 @@ msgid ""
 "Please enter correct range. There are no panels in the range of frames "
 "provided."
 msgstr ""
+"正しい範囲を入力してください。指定されたフレーム範囲にパネルがありません。"
 
 #: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1262
 #, kde-format
@@ -41396,23 +41319,21 @@ msgstr "初期化"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:172
-#, fuzzy, kde-format
-#| msgid "Database Version"
+#, kde-format
 msgid "Database version:"
-msgstr "データベースバージョン"
+msgstr "データベースのバージョン:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:186
-#, fuzzy, kde-format
-#| msgid "Krita Version"
+#, kde-format
 msgid "Krita version:"
-msgstr "Krita バージョン"
+msgstr "Krita のバージョン"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpSchema)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:217
 #, kde-format
 msgid "Schema upgrades"
-msgstr ""
+msgstr "スキーマのアップグレード"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabResourceView)
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:230
@@ -41641,569 +41562,497 @@ msgstr "日付:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/extensions/metadataeditor/editors/exif.ui:31
-#, fuzzy, kde-format
-#| msgid "Exposure"
+#, kde-format
 msgctxt "EXIF"
 msgid "Exposure"
 msgstr "露出"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/metadataeditor/editors/exif.ui:37
-#, fuzzy, kde-format
-#| msgid "Brightness &value:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Brightness &value:"
-msgstr "明度値:"
+msgstr "明度値(&V):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/extensions/metadataeditor/editors/exif.ui:50
-#, fuzzy, kde-format
-#| msgid "&ISO:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "&ISO:"
-msgstr "ISO:"
+msgstr "ISO(&I):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_16)
 #: plugins/extensions/metadataeditor/editors/exif.ui:73
-#, fuzzy, kde-format
-#| msgid "Exposure &time:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure &time:"
-msgstr "露出時間:"
+msgstr "露出時間(&T):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/metadataeditor/editors/exif.ui:86
-#, fuzzy, kde-format
-#| msgid "E&xposure mode:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "E&xposure mode:"
-msgstr "露出モード:"
+msgstr "露出モード(&X):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:97
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto"
 msgstr "自動"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:102
-#, fuzzy, kde-format
-#| msgid "Manual"
+#, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Manual"
-msgstr "マニュアル"
+msgstr "手動"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:107
-#, fuzzy, kde-format
-#| msgid "Auto bracket"
+#, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto bracket"
-msgstr "オートブラケット"
+msgstr "自動ブラケット"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: plugins/extensions/metadataeditor/editors/exif.ui:115
-#, fuzzy, kde-format
-#| msgid "Exposure pro&gram:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure pro&gram:"
-msgstr "露出プログラム:"
+msgstr "露出プログラム(&G):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:126
-#, fuzzy, kde-format
-#| msgid "Not defined"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Not defined"
 msgstr "未定義"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:131
-#, fuzzy, kde-format
-#| msgid "Manual"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Manual"
-msgstr "マニュアル"
+msgstr "手動"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:136
-#, fuzzy, kde-format
-#| msgid "Normal program"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Normal program"
 msgstr "ノーマルプログラム"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:141
-#, fuzzy, kde-format
-#| msgid "Aperture priority"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Aperture priority"
 msgstr "絞り優先"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:146
-#, fuzzy, kde-format
-#| msgid "Shutter priority"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Shutter priority"
 msgstr "シャッター優先"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:151
-#, fuzzy, kde-format
-#| msgid "Creative program"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Creative program"
 msgstr "クリエイティブプログラム"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:156
-#, fuzzy, kde-format
-#| msgid "Action program"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Action program"
 msgstr "アクションプログラム"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:161
-#, fuzzy, kde-format
-#| msgid "Portrait mode"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Portrait mode"
 msgstr "ポートレートモード"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:166
-#, fuzzy, kde-format
-#| msgid "Landscape mode"
+#, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Landscape mode"
-msgstr "ランドスケープモード"
+msgstr "風景モード"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/metadataeditor/editors/exif.ui:174
-#, fuzzy, kde-format
-#| msgid "Exposure index:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure index:"
 msgstr "露出インデックス:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: plugins/extensions/metadataeditor/editors/exif.ui:187
-#, fuzzy, kde-format
-#| msgid "Exposure bias:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Exposure bias:"
 msgstr "露出補正値:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/extensions/metadataeditor/editors/exif.ui:200
-#, fuzzy, kde-format
-#| msgid "Ape&rture:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Ape&rture:"
-msgstr "絞り:"
+msgstr "絞り(&R):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/metadataeditor/editors/exif.ui:213
-#, fuzzy, kde-format
-#| msgid "Shutter speed:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "Shutter speed:"
 msgstr "シャッタースピード:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_25)
 #: plugins/extensions/metadataeditor/editors/exif.ui:226
-#, fuzzy, kde-format
-#| msgid "&F Number:"
+#, kde-format
 msgctxt "EXIF: exposure"
 msgid "&F Number:"
-msgstr "F 値:"
+msgstr "F 値(&F):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: plugins/extensions/metadataeditor/editors/exif.ui:240
-#, fuzzy, kde-format
-#| msgid "Lens"
+#, kde-format
 msgctxt "EXIF"
 msgid "Lens"
 msgstr "レンズ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/metadataeditor/editors/exif.ui:246
-#, fuzzy, kde-format
-#| msgid "&Focal length:"
+#, kde-format
 msgctxt "EXIF: lens"
 msgid "&Focal length:"
-msgstr "焦点距離:"
+msgstr "焦点距離(&F):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/extensions/metadataeditor/editors/exif.ui:269
-#, fuzzy, kde-format
-#| msgid "Focal length (&35mm equivalent):"
+#, kde-format
 msgctxt "EXIF: lens"
 msgid "Focal length (&35mm equivalent):"
-msgstr "焦点距離 (35mm 換算):"
+msgstr "焦点距離 (35mm 換算)(&3):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: plugins/extensions/metadataeditor/editors/exif.ui:292
-#, fuzzy, kde-format
-#| msgid "Max aperture:"
+#, kde-format
 msgctxt "EXIF: lens"
 msgid "Max aperture:"
 msgstr "最小絞り値:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: plugins/extensions/metadataeditor/editors/exif.ui:306
-#, fuzzy, kde-format
-#| msgid "Autofocus"
+#, kde-format
 msgctxt "EXIF"
 msgid "Autofocus"
-msgstr "オートフォーカス"
+msgstr "自動フォーカス"
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: plugins/extensions/metadataeditor/editors/exif.ui:312
-#, fuzzy, kde-format
-#| msgid "Sub&ject distance:"
+#, kde-format
 msgctxt "EXIF: autofocus"
 msgid "Sub&ject distance:"
 msgstr "被写体距離(&J):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_11)
 #: plugins/extensions/metadataeditor/editors/exif.ui:325
-#, fuzzy, kde-format
-#| msgid "Meterin&g mode:"
+#, kde-format
 msgctxt "EXIF: autofocus"
 msgid "Meterin&g mode:"
 msgstr "測光方式(&G):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:336
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Unknown"
 msgstr "不明"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:341
-#, fuzzy, kde-format
-#| msgid "Average"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Average"
 msgstr "平均測光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:346
-#, fuzzy, kde-format
-#| msgid "Center weighted average"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Center weighted average"
 msgstr "中央重点測光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:351
-#, fuzzy, kde-format
-#| msgctxt "Spot color"
-#| msgid "Spot"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Spot"
-msgstr "スポット"
+msgstr "スポット測光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:356
-#, fuzzy, kde-format
-#| msgid "Multi spot"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Multi spot"
 msgstr "マルチスポット測光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:361
-#, fuzzy, kde-format
-#| msgid "Pattern"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Pattern"
 msgstr "パターン"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:366
-#, fuzzy, kde-format
-#| msgid "Partial"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Partial"
 msgstr "部分測光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:371
-#, fuzzy, kde-format
-#| msgid "Other"
+#, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Other"
 msgstr "その他"
 
 #. i18n: ectx: property (text), widget (QLabel, label_24)
 #: plugins/extensions/metadataeditor/editors/exif.ui:379
-#, fuzzy, kde-format
-#| msgid "D&istance range:"
+#, kde-format
 msgctxt "EXIF: autofocus"
 msgid "D&istance range:"
-msgstr "距離範囲: "
+msgstr "距離範囲(&I): "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:390
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Unknown"
 msgstr "不明"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:395
-#, fuzzy, kde-format
-#| msgid "Macro"
+#, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Macro"
 msgstr "マクロ"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:400
-#, fuzzy, kde-format
-#| msgid "Close view"
+#, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Close view"
 msgstr "近景"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:405
-#, fuzzy, kde-format
-#| msgid "Distant view"
+#, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Distant view"
 msgstr "遠景"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_6)
 #: plugins/extensions/metadataeditor/editors/exif.ui:414
-#, fuzzy, kde-format
-#| msgid "Flash"
+#, kde-format
 msgctxt "EXIF"
 msgid "Flash"
 msgstr "フラッシュ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashFired)
 #: plugins/extensions/metadataeditor/editors/exif.ui:420
-#, fuzzy, kde-format
-#| msgid "Fired"
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Fired"
 msgstr "発光"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: plugins/extensions/metadataeditor/editors/exif.ui:427
-#, fuzzy, kde-format
-#| msgid "Stro&be return:"
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Stro&be return:"
-msgstr "ストロボのリターン:"
+msgstr "ストロボのリターン(&B):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:438
-#, fuzzy, kde-format
-#| msgid "No strobe return detection"
+#, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "No strobe return detection"
 msgstr "ストロボのリターン検出機能なし"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:443
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "Undefined"
 msgstr "未定義"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:448
-#, fuzzy, kde-format
-#| msgid "No strobe return light detected"
+#, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "No strobe return light detected"
-msgstr "ストロボのリターン検出されず"
+msgstr "ストロボのリターン検出なし"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashStrobeReturn)
 #: plugins/extensions/metadataeditor/editors/exif.ui:453
-#, fuzzy, kde-format
-#| msgid "Strobe return light detected"
+#, kde-format
 msgctxt "EXIF: flash - strobe return"
 msgid "Strobe return light detected"
 msgstr "ストロボのリターン検出"
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: plugins/extensions/metadataeditor/editors/exif.ui:461
-#, fuzzy, kde-format
-#| msgid "Mode:"
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Mode:"
 msgstr "モード:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:472
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Unknown"
 msgstr "不明"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:477
-#, fuzzy, kde-format
-#| msgid "Compulsory flash fired"
+#, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Compulsory flash fired"
 msgstr "フラッシュ強制発光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:482
-#, fuzzy, kde-format
-#| msgid "Compulsory flash suppression"
+#, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Compulsory flash suppression"
 msgstr "フラッシュ発光禁止"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editFlashMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:487
-#, fuzzy, kde-format
-#| msgid "Auto mode"
+#, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Auto mode"
 msgstr "自動モード"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashFunction)
 #: plugins/extensions/metadataeditor/editors/exif.ui:495
-#, fuzzy, kde-format
-#| msgid "Function"
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Function"
 msgstr "機能"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashRedEyeMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:502
-#, fuzzy, kde-format
-#| msgid "Red-eye removal"
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Red-eye removal"
 msgstr "赤目除去"
 
 #. i18n: ectx: property (text), widget (QLabel, label_23)
 #: plugins/extensions/metadataeditor/editors/exif.ui:509
-#, fuzzy, kde-format
-#| msgid "Flash ener&gy:"
+#, kde-format
 msgctxt "EXIF: flash"
 msgid "Flash ener&gy:"
-msgstr "フラッシュ強度:"
+msgstr "フラッシュ強度(&G):"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: plugins/extensions/metadataeditor/editors/exif.ui:523
-#, fuzzy, kde-format
-#| msgid "Postprocessing"
+#, kde-format
 msgctxt "EXIF"
 msgid "Postprocessing"
 msgstr "ポスト処理"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
 #: plugins/extensions/metadataeditor/editors/exif.ui:529
-#, fuzzy, kde-format
-#| msgid "&Gain control:"
+#, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "&Gain control:"
-msgstr "ゲインコントロール:"
+msgstr "ゲインコントロール(&G):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:546
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "None"
 msgstr "なし"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:551
-#, fuzzy, kde-format
-#| msgid "Low gain up"
+#, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "Low gain up"
 msgstr "増感、弱"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:556
-#, fuzzy, kde-format
-#| msgid "High gain up"
+#, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "High gain up"
 msgstr "増感、強"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:561
-#, fuzzy, kde-format
-#| msgid "Low gain down"
+#, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "Low gain down"
 msgstr "減感、弱"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:566
-#, fuzzy, kde-format
-#| msgid "High gain down"
+#, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "High gain down"
 msgstr "減感、強"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: plugins/extensions/metadataeditor/editors/exif.ui:574
-#, fuzzy, kde-format
-#| msgid "L&ight source:"
+#, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "L&ight source:"
-msgstr "光源:"
+msgstr "光源(&I):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:585
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Unknown"
 msgstr "不明"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:590
-#, fuzzy, kde-format
-#| msgid "Daylight"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Daylight"
 msgstr "昼光"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:595
-#, fuzzy, kde-format
-#| msgid "Fluorescent"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Fluorescent"
 msgstr "蛍光灯"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:600
-#, fuzzy, kde-format
-#| msgid "Tungsten"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Tungsten"
 msgstr "タングステン"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:605
-#, fuzzy, kde-format
-#| msgid "Flash"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Flash"
 msgstr "フラッシュ"
@@ -42214,144 +42063,126 @@ msgstr "フラッシュ"
 #: plugins/extensions/metadataeditor/editors/exif.ui:620
 #: plugins/extensions/metadataeditor/editors/exif.ui:625
 #: plugins/extensions/metadataeditor/editors/exif.ui:665
-#, fuzzy, kde-format
-#| msgid "Undefined"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Undefined"
 msgstr "未定義"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:630
-#, fuzzy, kde-format
-#| msgid "Fine weather"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Fine weather"
 msgstr "晴天"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:635
-#, fuzzy, kde-format
-#| msgid "Cloudy weather"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cloudy weather"
 msgstr "曇天"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:640
-#, fuzzy, kde-format
-#| msgid "Shade"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Shade"
 msgstr "色合い"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:645
-#, fuzzy, kde-format
-#| msgid "Daylight fluorescent (D5700 - 7100K)"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Daylight fluorescent (D5700 - 7100K)"
 msgstr "昼光色蛍光灯 (D5700 - 7100K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:650
-#, fuzzy, kde-format
-#| msgid "Day white fluorescent (N4600 - 5400K)"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Day white fluorescent (N4600 - 5400K)"
 msgstr "昼白色蛍光灯 (N4600 - 5400K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:655
-#, fuzzy, kde-format
-#| msgid "Cool white fluorescent (W3900 - 4500K)"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cool white fluorescent (W3900 - 4500K)"
 msgstr "白色蛍光灯 (W3900 - 4500K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:660
-#, fuzzy, kde-format
-#| msgid "White fluorescent (WW 3200 - 3700K)"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "White fluorescent (WW 3200 - 3700K)"
 msgstr "温白色蛍光灯 (WW 3200 - 3700K)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:670
-#, fuzzy, kde-format
-#| msgid "Standard light A"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light A"
 msgstr "標準光 A"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:675
-#, fuzzy, kde-format
-#| msgid "Standard light B"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light B"
 msgstr "標準光 B"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:680
-#, fuzzy, kde-format
-#| msgid "Standard light C"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light C"
 msgstr "標準光 C"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:685
-#, fuzzy, kde-format
-#| msgid "D55"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D55"
 msgstr "D55"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:690
-#, fuzzy, kde-format
-#| msgid "D65"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D65"
 msgstr "D65"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:695
-#, fuzzy, kde-format
-#| msgid "D75"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D75"
 msgstr "D75"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:700
-#, fuzzy, kde-format
-#| msgid "D50"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "D50"
 msgstr "D50"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:705
-#, fuzzy, kde-format
-#| msgid "ISO studio tungsten"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "ISO studio tungsten"
 msgstr "ISO スタジオタングステン"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:710
-#, fuzzy, kde-format
-#| msgid "other"
+#, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "other"
 msgstr "その他"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/extensions/metadataeditor/editors/exif.ui:718
-#, fuzzy, kde-format
-#| msgid "Sharpness:"
+#, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "Sharpness:"
 msgstr "シャープネス:"
@@ -42365,24 +42196,21 @@ msgstr "通常"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSharpness)
 #: plugins/extensions/metadataeditor/editors/exif.ui:734
-#, fuzzy, kde-format
-#| msgid "Soft"
+#, kde-format
 msgctxt "EXIF: postprocessing - sharpness"
 msgid "Soft"
 msgstr "ソフト"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSharpness)
 #: plugins/extensions/metadataeditor/editors/exif.ui:739
-#, fuzzy, kde-format
-#| msgid "Hard"
+#, kde-format
 msgctxt "EXIF: postprocessing - sharpness"
 msgid "Hard"
 msgstr "ハード"
 
 #. i18n: ectx: property (text), widget (QLabel, label_20)
 #: plugins/extensions/metadataeditor/editors/exif.ui:747
-#, fuzzy, kde-format
-#| msgid "Contrast:"
+#, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "Contrast:"
 msgstr "コントラスト:"
@@ -42396,169 +42224,148 @@ msgstr "通常"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editContrast)
 #: plugins/extensions/metadataeditor/editors/exif.ui:763
-#, fuzzy, kde-format
-#| msgid "Soft"
+#, kde-format
 msgctxt "EXIF: postprocessing - contrast"
 msgid "Soft"
 msgstr "ソフト"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editContrast)
 #: plugins/extensions/metadataeditor/editors/exif.ui:768
-#, fuzzy, kde-format
-#| msgid "Hard"
+#, kde-format
 msgctxt "EXIF: postprocessing - contrast"
 msgid "Hard"
 msgstr "ハード"
 
 #. i18n: ectx: property (text), widget (QLabel, label_28)
 #: plugins/extensions/metadataeditor/editors/exif.ui:776
-#, fuzzy, kde-format
-#| msgid "White &balance:"
+#, kde-format
 msgctxt "EXIF: postprocessing"
 msgid "White &balance:"
-msgstr "ホワイトバランス:"
+msgstr "ホワイトバランス(&B):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editWhiteBalance)
 #: plugins/extensions/metadataeditor/editors/exif.ui:787
-#, fuzzy, kde-format
-#| msgid "Auto"
+#, kde-format
 msgctxt "EXIF: postprocessing - whitebalance"
 msgid "Auto"
 msgstr "自動"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editWhiteBalance)
 #: plugins/extensions/metadataeditor/editors/exif.ui:792
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "EXIF: postprocessing - whitebalance"
 msgid "Custom"
 msgstr "カスタム"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #: plugins/extensions/metadataeditor/editors/exif.ui:801
-#, fuzzy, kde-format
-#| msgid "Misc"
+#, kde-format
 msgctxt "EXIF"
 msgid "Misc"
 msgstr "その他"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/extensions/metadataeditor/editors/exif.ui:807
-#, fuzzy, kde-format
-#| msgid "Scene capture t&ype:"
+#, kde-format
 msgctxt "EXIF: misc"
 msgid "Scene capture t&ype:"
-msgstr "シーン撮影タイプ:"
+msgstr "シーン撮影タイプ(&Y):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:818
-#, fuzzy, kde-format
-#| msgid "Standard"
+#, kde-format
 msgctxt "EXIF: misc - scene capture type"
 msgid "Standard"
 msgstr "標準"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:823
-#, fuzzy, kde-format
-#| msgid "Landscape"
+#, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of landscapes)"
 msgid "Landscape"
 msgstr "風景"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:828
-#, fuzzy, kde-format
-#| msgid "Portrait"
+#, kde-format
 msgctxt "EXIF: misc - scene capture type (Photos of people)"
 msgid "Portrait"
 msgstr "人物"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSceneCaptureType)
 #: plugins/extensions/metadataeditor/editors/exif.ui:833
-#, fuzzy, kde-format
-#| msgid "Night scene"
+#, kde-format
 msgctxt "EXIF: misc - scene capture type"
 msgid "Night scene"
 msgstr "夜景"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: plugins/extensions/metadataeditor/editors/exif.ui:841
-#, fuzzy, kde-format
-#| msgid "Ma&ker:"
+#, kde-format
 msgctxt "EXIF: misc"
 msgid "Ma&ker:"
-msgstr "メーカー:"
+msgstr "メーカー(&K):"
 
 #. i18n: ectx: property (text), widget (QLabel, label_26)
 #: plugins/extensions/metadataeditor/editors/exif.ui:854
-#, fuzzy, kde-format
-#| msgid "Model:"
+#, kde-format
 msgctxt "EXIF: misc (model name or model number)"
 msgid "Model:"
 msgstr "モデル:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_27)
 #: plugins/extensions/metadataeditor/editors/exif.ui:867
-#, fuzzy, kde-format
-#| msgid "Sens&ing method type:"
+#, kde-format
 msgctxt "EXIF: misc"
 msgid "Sens&ing method type:"
-msgstr "センサー方式:"
+msgstr "センサー方式(&I):"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:878
 #: plugins/extensions/metadataeditor/editors/exif.ui:883
-#, fuzzy, kde-format
-#| msgid "Not Defined"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Not Defined"
 msgstr "未定義"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:888
-#, fuzzy, kde-format
-#| msgid "One-chip color area sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "One-chip color area sensor"
 msgstr "単板カラーセンサー"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:893
-#, fuzzy, kde-format
-#| msgid "Two-chip color area sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Two-chip color area sensor"
 msgstr "二板カラーセンサー"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:898
-#, fuzzy, kde-format
-#| msgid "Three-chip color area sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Three-chip color area sensor"
 msgstr "三板カラーセンサー"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:903
-#, fuzzy, kde-format
-#| msgid "Color sequential area sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Color sequential area sensor"
 msgstr "色順次エリアセンサー"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:908
-#, fuzzy, kde-format
-#| msgid "Trilinear sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Trilinear sensor"
 msgstr "三線リニアセンサー"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:913
-#, fuzzy, kde-format
-#| msgid "Color sequential linear sensor"
+#, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Color sequential linear sensor"
 msgstr "色順次リニアセンサー"
@@ -42566,7 +42373,7 @@ msgstr "色順次リニアセンサー"
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:97
 #, kde-format
 msgid "Dublin Core"
-msgstr ""
+msgstr "ダブリンコア"
 
 #. i18n: ectx: property (text), widget (QCheckBox, exif)
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:162
@@ -42709,17 +42516,12 @@ msgid "Offset Image"
 msgstr "画像をオフセット"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Offset Layer"
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgstr "レイヤーをオフセット"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgstr "レイヤーをオフセット"
@@ -43026,6 +42828,10 @@ msgid ""
 "style=\" text-decoration: underline; color:#2980b9;\">Krita Scripting "
 "School</span></a>!</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Krita スクリプトの書き方を学びたい場合は、<a href="
+"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
+"decoration: underline; color:#2980b9;\">Krita Scripting School</span></a> を"
+"チェックしてください!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
@@ -43168,6 +42974,10 @@ msgid ""
 "presets before continuing.\n"
 "If there are no bundles, please import a bundle before continuing."
 msgstr ""
+"\n"
+"利用可能なブラシプリセットがありません。続行する前にプリセットを持つバンドル"
+"を有効にしてください。\n"
+"バンドルがない場合は、続行する前にバンドルをインポートしてください。"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:207
 #, kde-format

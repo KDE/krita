@@ -881,19 +881,22 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
         KoSvgTextShape::Private::splitContentElement(d->textData, startIndex);
         KoSvgTextShape::Private::splitContentElement(d->textData, endIndex);
     }
-    int sought = startIndex;
     bool changed = false;
-    while(sought < endIndex) {
-        int currentIndex = 0;
-        auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought, true);
-        if (it != d->textData.depthFirstTailEnd()) {
+    int currentIndex = 0;
+    for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
+        if (KoSvgTextShape::Private::childCount(siblingCurrent(it)) > 0) {
+            continue;
+        }
+
+        if (currentIndex >= startIndex && currentIndex < endIndex) {
             Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
                 it->properties.setProperty(p, properties.property(p));
             }
             changed = true;
         }
-        sought = currentIndex + it->numChars(false);
+        currentIndex += it->numChars(false);
     }
+
     KoSvgTextShape::Private::cleanUp(d->textData);
     if (changed){
         notifyChanged();

@@ -481,7 +481,7 @@ public:
     static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index) {
         int currentIndex = 0;
         auto contentElement = findTextContentElementForIndex(tree, currentIndex, index, true);
-        if (contentElement.node()
+        if (contentElement != tree.depthFirstTailEnd()
                 && index > currentIndex
                 && index < currentIndex + contentElement->numChars(false)) {
             KoSvgTextContentElement duplicate = KoSvgTextContentElement();
@@ -537,7 +537,7 @@ public:
                     KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(it->properties.property(KoSvgTextProperties::UnicodeBidiId,
                                                                                                  QVariant(KoSvgText::BidiNormal)).toInt());
                     siblingPrev--;
-                    if (siblingPrev.node()
+                    if (!isEnd(siblingPrev)
                             && siblingPrev != siblingCurrent(it)
                             && (siblingPrev->localTransformations.isEmpty() && it->localTransformations.isEmpty())
                             && (!siblingPrev->textPath && !it->textPath)

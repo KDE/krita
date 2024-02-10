@@ -721,7 +721,7 @@ QPointF KoSvgTextShape::initialTextPosition() const
 
 bool KoSvgTextShape::insertText(int pos, QString text)
 {
-    bool succes = false;
+    bool success = false;
     int currentIndex = 0;
     int index = 0;
     int oldIndex = 0;
@@ -733,21 +733,21 @@ bool KoSvgTextShape::insertText(int pos, QString text)
         index = qMin(index, d->result.size()-1);
     }
     auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
-    if (!isEnd(siblingCurrent(it))) {
+    if (it != d->textData.depthFirstTailEnd()) {
         int offset = oldIndex - currentIndex;
         it->insertText(offset, text);
         notifyChanged();
         shapeChangedPriv(ContentChanged);
-        succes = true;
+        success = true;
     }
-    return succes;
+    return success;
 }
 
 bool KoSvgTextShape::removeText(int &index, int &length)
 {
-    bool succes = false;
+    bool success = false;
     if (index < -1) {
-        return succes;
+        return success;
     }
     int currentLength = length;
     int endLength = 0;
@@ -755,7 +755,7 @@ bool KoSvgTextShape::removeText(int &index, int &length)
         int currentIndex = 0;
 
         auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index, true);
-        if (!isEnd(siblingCurrent(it))) {
+        if (it != d->textData.depthFirstTailEnd()) {
             int offset = index > currentIndex? index - currentIndex: 0;
             int size = it->numChars(false);
             it->removeText(offset, currentLength);
@@ -766,17 +766,17 @@ bool KoSvgTextShape::removeText(int &index, int &length)
             if (index >= currentIndex) {
                 index = currentIndex + offset;
             }
-            succes = true;
+            success = true;
         } else {
             currentLength = -1;
         }
     }
-    if (succes) {
+    if (success) {
         length = endLength;
         notifyChanged();
         shapeChangedPriv(ContentChanged);
     }
-    return succes;
+    return success;
 }
 
 KoSvgTextProperties KoSvgTextShape::propertiesForPos(const int pos) const
@@ -857,7 +857,7 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
     while(sought < endIndex) {
         int currentIndex = 0;
         auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought, true);
-        if (it.node()) {
+        if (!isEnd(siblingCurrent(it))) {
             Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
                 it->properties.setProperty(p, properties.property(p));
             }
@@ -892,26 +892,44 @@ KoSvgTextShape *KoSvgTextShape::copyRange(int index, int length) const
 
 bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)
 {
-    bool succes = false;
+    bool success = false;
     int currentIndex = 0;
     int index = 0;
+    int oldIndex = 0;
+
+    if (isEnd(richText->d->textData.childBegin())) {
+        // rich text is empty.
+        return success;
+    }
 
     if (pos > -1 && !d->cursorPos.isEmpty()) {
-        index = d->cursorPos.at(pos).index;
+        CursorPos cursorPos = d->cursorPos.at(pos);
+        CharacterResult res = d->result.at(cursorPos.cluster);
+        index = res.plaintTextIndex;
+        oldIndex = cursorPos.index;
         index = qMin(index, d->result.size()-1);
     }
 
-    KoSvgTextShape::Private::splitContentElement(this->d->textData, index);
+    KoSvgTextShape::Private::splitContentElement(this->d->textData, oldIndex);
 
-    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
-    if (it.node() && richText->d->textData.childBegin().node()) {
+    auto it = d->findTextContentElementForIndex(d->textData, currentIndex, oldIndex);
+    if (it != d->textData.depthFirstTailEnd()) {
         d->textData.move(richText->d->textData.childBegin(), siblingCurrent(it));
-        notifyChanged();
-        shapeChangedPriv(ContentChanged);
-        succes = true;
+        success = true;
+    } else {
+        currentIndex = 0;
+        it = d->findTextContentElementForIndex(d->textData, currentIndex, index);
+        if (it != d->textData.depthFirstTailEnd()) {
+            d->textData.move(richText->d->textData.childBegin(), siblingEnd(siblingCurrent(it)));
+            success = true;
+        }
     }
 
-    return succes;
+    if (success) {
+        notifyChanged();
+        shapeChangedPriv(ContentChanged);
+    }
+    return success;
 }
 
 void KoSvgTextShape::cleanUp()

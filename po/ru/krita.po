@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-08 01:38+0000\n"
+"POT-Creation-Date: 2024-02-10 01:50+0000\n"
 "PO-Revision-Date: 2023-11-10 14:24+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -16538,7 +16538,7 @@ msgstr "Параметры %1"
 msgid "Active tool: %1"
 msgstr "Активный инструмент: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1831
+#: libs/flake/svg/SvgParser.cpp:1869
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16551,6 +16551,7 @@ msgstr ""
 "который больше не будет совместим с Krita 4.x"
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
+#: libs/flake/text/KoSvgTextShape.cpp:1339
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -16558,48 +16559,47 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>Замещающий текст</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1053
+#: libs/flake/text/KoSvgTextShape.cpp:1318
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1055
-#: libs/flake/text/KoSvgTextShape.cpp:1063
+#: libs/flake/text/KoSvgTextShape.cpp:1320
+#: libs/flake/text/KoSvgTextShape.cpp:1328
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма текста SVG"
 
 # ?
-#: libs/flake/text/KoSvgTextShape.cpp:1061
+#: libs/flake/text/KoSvgTextShape.cpp:1326
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1075
-#: libs/flake/text/KoSvgTextShape.cpp:1090
+#: libs/flake/text/KoSvgTextShape.cpp:1349
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr "<text>Замещающий текст</text>"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:144
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr "Обнаружено несколько текстовых узлов."
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:153
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:151
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr "Обнаружен неизвестный узел типа «%1»."
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:159
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
 #, kde-format
 msgid "No 'text' node found!"
 msgstr "Текстовый узел не найден."
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:367
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:809
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:365
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:807
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Произошла неизвестная ошибка при записи текстового элемента SVG"
@@ -16889,7 +16889,7 @@ msgstr "по умолчанию"
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
 #, kde-format
 msgid "Size"
 msgstr "Размер"
@@ -19860,10 +19860,10 @@ msgstr "Локальные источники"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
-#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
-#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1065
+#: libs/ui/KisApplication.cpp:1068 libs/ui/KisApplication.cpp:1084
+#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1158 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
@@ -19913,7 +19913,7 @@ msgstr "Локальные источники"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22982,7 +22982,7 @@ msgstr "Свойства слоя"
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -26302,7 +26302,7 @@ msgstr "Цвет переднего плана"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
 #, kde-format
 msgid "Background Color"
 msgstr "Цвет фона"
@@ -30590,20 +30590,20 @@ msgstr "Тип MIME не найден, попробуйте использова
 msgid "Failed to render animation frames!"
 msgstr "Не удалось обработать кадры анимации."
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:938
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:937
 #, kde-format
 msgid "File layer"
 msgstr "Файловый слой"
 
 #: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
-#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:931 libs/ui/KisApplication.cpp:945
+#: libs/ui/KisApplication.cpp:950
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "Предупреждение Krita"
 
-#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:947
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:946
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "Не удалось добавить %1 в качестве файлового: файл не существует."
@@ -30640,32 +30640,32 @@ msgstr ""
 "Создайте новый документ с помощью опции создания изображения, либо откройте "
 "существующий файл."
 
-#: libs/ui/KisApplication.cpp:933
+#: libs/ui/KisApplication.cpp:932
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr "Не удалось открыть файл %1"
 
-#: libs/ui/KisApplication.cpp:952
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr "Не удалось добавить файловый слой: нет открытых документов."
 
-#: libs/ui/KisApplication.cpp:1067
+#: libs/ui/KisApplication.cpp:1066
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Не найдено шаблонов для: %1"
 
-#: libs/ui/KisApplication.cpp:1070
+#: libs/ui/KisApplication.cpp:1069
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Найдено слишком много шаблонов для: %1"
 
-#: libs/ui/KisApplication.cpp:1086
+#: libs/ui/KisApplication.cpp:1085
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Не удалось загрузить шаблон %1."
 
-#: libs/ui/KisApplication.cpp:1118
+#: libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30680,7 +30680,7 @@ msgstr ""
 "\n"
 "Чтобы изменения вступили в силу, перезапустите Krita."
 
-#: libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1131
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30691,7 +30691,7 @@ msgstr ""
 "\n"
 "Убедитесь, что другие программы не используют этот файл, и повторите попытку."
 
-#: libs/ui/KisApplication.cpp:1160
+#: libs/ui/KisApplication.cpp:1159
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr "Очистить файл параметров?"
@@ -38592,6 +38592,13 @@ msgstr "Зелёнее/Краснее: "
 #, kde-format
 msgid "Bluer/Yellower: "
 msgstr "Синее/Желтее: "
+
+#: plugins/dockers/animation/kis_equalizer_widget.cpp:144
+#, fuzzy, kde-format
+#| msgid "Reset"
+msgctxt "Reset to default"
+msgid "Reset"
+msgstr "Сброс"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
@@ -59789,7 +59796,7 @@ msgctxt "(qtundo-format)"
 msgid "Move text"
 msgstr "Переместить влево"
 
-#: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
+#: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr ""
@@ -59801,84 +59808,84 @@ msgstr ""
 msgid "Text Tool"
 msgstr "Текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
 #, kde-format
 msgid "Conversion failed"
 msgstr "Ошибка преобразования"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Find Text"
 msgstr "Найти текст"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Find:"
 msgstr "Искать:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
 #, kde-format
 msgid "Find and Replace all"
 msgstr "Найти и заменить все"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
 #, kde-format
 msgid "Replace:"
 msgstr "Заменить на:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr "Текст был изменён. Отклонить изменения?"
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr "Текст с форматированием"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #, kde-format
 msgid "SVG Source"
 msgstr "Источник SVG"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
 #, kde-format
 msgid "Font"
 msgstr "Шрифт"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
 #, kde-format
 msgid "Text Color"
 msgstr "Цвет текста"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
 #, kde-format
 msgid "Sample a Color"
 msgstr "Взять образец цвета"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
 #, kde-format
 msgid "Line height"
 msgstr "Высота строки"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
 #, fuzzy, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Нормальный"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, fuzzy, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"

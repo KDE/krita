@@ -178,6 +178,7 @@
     <p xml:lang="ia">Illo es perfecte pro schizzar e pinger, e presenta un solution ab fin al fin pro crear files de pictura digital ab grattamentos per maestros.</p>
     <p xml:lang="id">Ini adalah sempurna untuk mensketsa dan melukis, dan menghadirkan sebuah solusi untuk menciptakan file-file pelukisan digital dari goresan si pelukis ulung.</p>
     <p xml:lang="it">Perfetto per eseguire schizzi e dipingere, prevede una soluzione completa che consente agli artisti di creare file di dipinti digitali partendo da zero.</p>
+    <p xml:lang="ja">スケッチやペインティングに最適です。熟練者のみなさまに、デジタルペインティングをゼロから制作するための一貫した環境をご提供します。</p>
     <p xml:lang="ko">스케치, 페인팅에 사용할 완벽한 도구이며, 생각으로부터 디지털 페인팅 파일을 만들어 낼 수 있는 종합적인 도구를 제공합니다.</p>
     <p xml:lang="nl">Het is perfect voor schetsen en schilderen en zet een end–to–end oplossing voor het maken van digitale bestanden voor schilderingen vanuit het niets door meesters.</p>
     <p xml:lang="nn">Passar perfekt til både teikning og måling, og dekkjer alle ledd i prosessen med å laga digitale måleri frå grunnen av.</p>
@@ -291,6 +292,7 @@
       <caption xml:lang="ia">Krita es un studio de pictura digital complete</caption>
       <caption xml:lang="id">Krita adalah sebuah aplikasi studio pelukisan digital yang berfitur lengkap</caption>
       <caption xml:lang="it">Krita è uno studio d'arte digitale completo</caption>
+      <caption xml:lang="ja">Krita はフル装備のデジタルペイントスタジオです。</caption>
       <caption xml:lang="ka">Krita არის სრულფასოვანი ციფრული ფერწერის სტუდია</caption>
       <caption xml:lang="ko">Krita는 다기능 디지털 예술 스튜디오입니다</caption>
       <caption xml:lang="nl">Krita is een digitale schilderstudio vol mogelijkheden</caption>
@@ -327,6 +329,7 @@
       <caption xml:lang="ia">Le fenestra de initio nunc anque te da le ultime novas re Krita</caption>
       <caption xml:lang="id">Jendela pemulaian kini juga memberikan kamu kabar terkini tentang Krita</caption>
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità riguardo il programma</caption>
+      <caption xml:lang="ja">起動ウィンドウには現在、Krita の最新情報も表示されます。</caption>
       <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다</caption>
       <caption xml:lang="nl">Het opstartvenster geeft u nu ook you het laatste nieuws over Krita</caption>
       <caption xml:lang="nn">Oppstartsvindauget viser no siste nytt om Krita</caption>
@@ -399,6 +402,7 @@
       <caption xml:lang="ia">In animation? Krita forni toto lo que tu necessita per animation traditional, a mano libere</caption>
       <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional</caption>
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti serve per l'animazione tradizionale disegnata a mano</caption>
+      <caption xml:lang="ja">アニメーションに興味がありますか？Krita は、伝統的な手描きアニメーションに必要なすべてを提供します。</caption>
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다</caption>
       <caption xml:lang="nl">Naar animatie? Krita biedt alles wat u nodig hebt voor traditionele, met de hand getekende animatie</caption>
       <caption xml:lang="nn">Interessert i animasjon? Krita har alt du treng for tradisjonelle, handteikna animasjonar</caption>
@@ -434,6 +438,7 @@
       <caption xml:lang="ia">Si tu es nove al pictura digiral, il ha un extensive manual actualisate (in anglese)</caption>
       <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, di situ ada buku manual panjang-lebar yang ter-update</caption>
       <caption xml:lang="it">Se non hai esperienza col disegno digitale, è disponibile un manuale completo e aggiornato</caption>
+      <caption xml:lang="ja">デジタルペインティングに初めて取り組む方には、最新の広範なマニュアルがあります。</caption>
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오</caption>
       <caption xml:lang="nl">Als u nieuw bent in digitaal schilderen, dan is er een uitgebreide, bijgewerkte handleiding.</caption>
       <caption xml:lang="nn">Viss du er nybegynnar innan digital teikning, finst det ei omfattande og oppdatert brukarhandbok</caption>
@@ -497,6 +502,7 @@
       <caption xml:lang="fr">Et, il existe également une intégration avec « G-Mic », ajoutant des centaines de filtres, de plus.</caption>
       <caption xml:lang="id">Dan, juga ada integrasi dengan G'Mic, yang menambahkan ratusan saringan lainnya</caption>
       <caption xml:lang="it">Ed è presente anche un'integrazione con G'Mic, che aggiunge centinaia di filtri</caption>
+      <caption xml:lang="ja">さらに、G'Mic との統合もあり、数百のフィルタが追加されています。</caption>
       <caption xml:lang="nl">En er is ook integratie met G'Mic, die honderden filters meer toevoegt</caption>
       <caption xml:lang="nn">Og har integrasjonstøtte for G’Mic, som gjev tilgang til fleire hundre ekstra filter</caption>
       <caption xml:lang="pl">Wplecione jest także G'Mic, co dodaje setki więcej filtrów</caption>
@@ -558,6 +564,7 @@
       <caption xml:lang="fr">Ou l'active <a href="https://krita-artists.org">La communauté d'artistes de Krita</a></caption>
       <caption xml:lang="id">Atau <a href="https://krita-artists.org">Komunitas Pelukis Krita</a> yang aktif</caption>
       <caption xml:lang="it">O l'attiva <a href="https://krita-artists.org">Comunità degli Artisti di Krita</a></caption>
+      <caption xml:lang="ja">または、活発な <a href="https://krita-artists.org">Krita アーティストコミュニティー</a></caption>
       <caption xml:lang="ka">ან აქტიური <a href="https://krita-artists.org">Krita -ის ხელვნების საზოგადოება</a></caption>
       <caption xml:lang="nl">Of het actieve <a href="https://krita-artists.org">Krita-artiestengemeenschap</a></caption>
       <caption xml:lang="nn">Eller det populære <a href="https://krita-artists.org">forumet for Krita-kunstnarar</a></caption>

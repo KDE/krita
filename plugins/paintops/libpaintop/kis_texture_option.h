@@ -61,6 +61,7 @@ private:
     int m_offsetX {0};
     int m_offsetY {0};
     KisTextureOptionData::TexturingMode m_texturingMode {KisTextureOptionData::MULTIPLY};
+    bool m_useSoftTexturing {false};
     KoAbstractGradientSP m_gradient;
     KoCachedGradient m_cachedGradient;
 

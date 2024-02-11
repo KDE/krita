@@ -34,6 +34,7 @@ public:
     LAGER_QT_CURSOR(bool, isRandomOffsetX);
     LAGER_QT_CURSOR(bool, isRandomOffsetY);
     LAGER_QT_CURSOR(int, texturingMode);
+    LAGER_QT_CURSOR(bool, useSoftTexturing);
     LAGER_QT_CURSOR(int, cutOffPolicy);
     LAGER_QT_CURSOR(qreal, cutOffLeftNormalized);
     LAGER_QT_CURSOR(qreal, cutOffRightNormalized);

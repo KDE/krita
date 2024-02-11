@@ -69,6 +69,7 @@ void KisTextureOption::fillProperties(const KisPropertiesConfiguration *setting,
     }
 
     m_texturingMode = data.texturingMode;
+    m_useSoftTexturing = data.useSoftTexturing;
 
     if (!(m_flags & SupportsLightnessMode) && (m_texturingMode == KisTextureOptionData::LIGHTNESS)) {
         m_texturingMode = KisTextureOptionData::SUBTRACT;
@@ -295,52 +296,28 @@ void KisTextureOption::apply(KisFixedPaintDeviceSP dab, const QPoint &offset, co
     }
 
     QScopedPointer<KisMaskingBrushCompositeOpBase> compositeOp;
+    QString compositeOpId;
 
     switch (m_texturingMode) {
-    case KisTextureOptionData::MULTIPLY:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_MULT, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::SUBTRACT:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_SUBTRACT, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::DARKEN:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_DARKEN, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::OVERLAY:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_OVERLAY, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::COLOR_DODGE:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_DODGE, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::COLOR_BURN:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_BURN, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::LINEAR_DODGE:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_LINEAR_DODGE, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::LINEAR_BURN:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_LINEAR_BURN, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::HARD_MIX_PHOTOSHOP:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_HARD_MIX_PHOTOSHOP, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::HARD_MIX_SOFTER_PHOTOSHOP:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::HEIGHT:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("height", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::LINEAR_HEIGHT:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("linear_height", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::HEIGHT_PHOTOSHOP:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("height_photoshop", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
-    case KisTextureOptionData::LINEAR_HEIGHT_PHOTOSHOP:
-        compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc("linear_height_photoshop", alphaChannelType, dab->pixelSize(), alphaChannelOffset, strength));
-        break;
+    case KisTextureOptionData::MULTIPLY: compositeOpId = COMPOSITE_MULT; break;
+    case KisTextureOptionData::SUBTRACT: compositeOpId = COMPOSITE_SUBTRACT; break;
+    case KisTextureOptionData::DARKEN: compositeOpId = COMPOSITE_DARKEN; break;
+    case KisTextureOptionData::OVERLAY: compositeOpId = COMPOSITE_OVERLAY; break;
+    case KisTextureOptionData::COLOR_DODGE: compositeOpId = COMPOSITE_DODGE; break;
+    case KisTextureOptionData::COLOR_BURN: compositeOpId = COMPOSITE_BURN; break;
+    case KisTextureOptionData::LINEAR_DODGE: compositeOpId = COMPOSITE_LINEAR_DODGE; break;
+    case KisTextureOptionData::LINEAR_BURN: compositeOpId = COMPOSITE_LINEAR_BURN; break;
+    case KisTextureOptionData::HARD_MIX_PHOTOSHOP: compositeOpId = COMPOSITE_HARD_MIX_PHOTOSHOP; break;
+    case KisTextureOptionData::HARD_MIX_SOFTER_PHOTOSHOP: compositeOpId = COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP; break;
+    case KisTextureOptionData::HEIGHT: compositeOpId = "height"; break;
+    case KisTextureOptionData::LINEAR_HEIGHT: compositeOpId = "linear_height"; break;
+    case KisTextureOptionData::HEIGHT_PHOTOSHOP: compositeOpId = "height_photoshop"; break;
+    case KisTextureOptionData::LINEAR_HEIGHT_PHOTOSHOP: compositeOpId = "linear_height_photoshop"; break;
     default: return;
     }
+    compositeOp.reset(KisMaskingBrushCompositeOpFactory::createForAlphaSrc(
+                        compositeOpId, alphaChannelType, dab->pixelSize(),
+                        alphaChannelOffset, strength, m_useSoftTexturing));
 
     // Apply the mask to the dab
     {

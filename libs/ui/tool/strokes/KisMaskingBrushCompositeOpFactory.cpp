@@ -28,25 +28,25 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
     KisMaskingBrushCompositeOpBase *result = 0;
 
     if (id == COMPOSITE_MULT) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_MULT, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_MULT, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_DARKEN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DARKEN, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DARKEN, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_OVERLAY) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_DODGE) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DODGE, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DODGE, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_BURN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_BURN, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_BURN, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_LINEAR_BURN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_BURN, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_BURN, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_LINEAR_DODGE) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_HARD_MIX_PHOTOSHOP) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHOTOSHOP, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHOTOSHOP, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, mask_is_alpha>(pixelSize, alphaOffset);
     } else if (id == COMPOSITE_SUBTRACT) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_SUBTRACT, mask_is_alpha, false>(pixelSize, alphaOffset);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_SUBTRACT, mask_is_alpha>(pixelSize, alphaOffset);
     }
 
     KIS_SAFE_ASSERT_RECOVER (result && "Unknown composite op for masked brush!") {
@@ -56,40 +56,68 @@ KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, 
     return result;
 }
 
-template <typename channel_type, bool mask_is_alpha = false>
+template <typename channel_type, bool mask_is_alpha = false, bool use_soft_texturing = false>
 KisMaskingBrushCompositeOpBase *createTypedOp(const QString &id, int pixelSize, int alphaOffset, qreal strength)
 {
     KisMaskingBrushCompositeOpBase *result = 0;
 
     if (id == COMPOSITE_MULT) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_MULT, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_MULT,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_DARKEN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DARKEN, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DARKEN,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_OVERLAY) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_OVERLAY,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_DODGE) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DODGE, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_DODGE,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_BURN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_BURN, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_BURN,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_LINEAR_BURN) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_BURN, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_BURN,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_LINEAR_DODGE) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_DODGE,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_HARD_MIX_PHOTOSHOP) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHOTOSHOP, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_PHOTOSHOP,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == COMPOSITE_SUBTRACT) {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_SUBTRACT, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_SUBTRACT,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     // Special modes that useful when used with strength
     } else if (id == "height") {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HEIGHT, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HEIGHT,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == "linear_height") {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_HEIGHT, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_HEIGHT,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == "height_photoshop") {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HEIGHT_PHOTOSHOP, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_HEIGHT_PHOTOSHOP,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     } else if (id == "linear_height_photoshop") {
-        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_HEIGHT_PHOTOSHOP, mask_is_alpha, true>(pixelSize, alphaOffset, strength);
+        result = new KisMaskingBrushCompositeOp<channel_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_HEIGHT_PHOTOSHOP,
+                                                mask_is_alpha, true, use_soft_texturing>
+                                               (pixelSize, alphaOffset, strength);
     }
 
     KIS_SAFE_ASSERT_RECOVER (result && "Unknown composite op for masked brush!") {
@@ -143,36 +171,36 @@ KisMaskingBrushCompositeOpBase *createImpl(const QString &id, KoChannelInfo::enu
     return result;
 }
 
-template <bool mask_is_alpha>
+template <bool mask_is_alpha, bool use_soft_texturing>
 KisMaskingBrushCompositeOpBase *createImpl(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset, qreal strength)
 {
     KisMaskingBrushCompositeOpBase *result = 0;
 
     switch (channelType) {
     case KoChannelInfo::UINT8:
-        result = createTypedOp<quint8, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<quint8, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
     case KoChannelInfo::UINT16:
-        result = createTypedOp<quint16, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<quint16, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
     case KoChannelInfo::UINT32:
-        result = createTypedOp<quint32, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<quint32, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
 
 #ifdef HAVE_OPENEXR
     case KoChannelInfo::FLOAT16:
-        result = createTypedOp<half, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<half, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
 #endif /* HAVE_OPENEXR */
 
     case KoChannelInfo::FLOAT32:
-        result = createTypedOp<float, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<float, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
     case KoChannelInfo::FLOAT64:
-        result = createTypedOp<double, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<double, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
     case KoChannelInfo::INT16:
-        result = createTypedOp<qint16, mask_is_alpha>(id, pixelSize, alphaOffset, strength);
+        result = createTypedOp<qint16, mask_is_alpha, use_soft_texturing>(id, pixelSize, alphaOffset, strength);
         break;
     default:
         KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "Unknown channel type for masked brush!");
@@ -181,24 +209,40 @@ KisMaskingBrushCompositeOpBase *createImpl(const QString &id, KoChannelInfo::enu
     return result;
 }
 
-KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::create(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset)
+KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::create(
+                                    const QString &id, KoChannelInfo::enumChannelValueType channelType,
+                                    int pixelSize, int alphaOffset)
 {
     return createImpl<false>(id, channelType, pixelSize, alphaOffset);
 }
 
-KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::create(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset, qreal strength)
+KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::create(
+                                    const QString &id, KoChannelInfo::enumChannelValueType channelType,
+                                    int pixelSize, int alphaOffset, qreal strength, bool useSoftTexturing)
 {
-    return createImpl<false>(id, channelType, pixelSize, alphaOffset, strength);
+    if (useSoftTexturing) {
+        return createImpl<false, true>(id, channelType, pixelSize, alphaOffset, strength);
+    } else {
+        return createImpl<false, false>(id, channelType, pixelSize, alphaOffset, strength);
+    }
 }
 
-KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::createForAlphaSrc(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset)
+KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::createForAlphaSrc(
+                                    const QString &id, KoChannelInfo::enumChannelValueType channelType,
+                                    int pixelSize, int alphaOffset)
 {
     return createImpl<true>(id, channelType, pixelSize, alphaOffset);
 }
 
-KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::createForAlphaSrc(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset, qreal strength)
+KisMaskingBrushCompositeOpBase *KisMaskingBrushCompositeOpFactory::createForAlphaSrc(
+                                    const QString &id, KoChannelInfo::enumChannelValueType channelType,
+                                    int pixelSize, int alphaOffset, qreal strength, bool useSoftTexturing)
 {
-    return createImpl<true>(id, channelType, pixelSize, alphaOffset, strength);
+    if (useSoftTexturing) {
+        return createImpl<true, true>(id, channelType, pixelSize, alphaOffset, strength);
+    } else {
+        return createImpl<true, false>(id, channelType, pixelSize, alphaOffset, strength);
+    }
 }
 
 QStringList KisMaskingBrushCompositeOpFactory::supportedCompositeOpIds()

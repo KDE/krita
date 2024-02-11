@@ -17,11 +17,19 @@ class KisMaskingBrushCompositeOpBase;
 class KRITAUI_EXPORT KisMaskingBrushCompositeOpFactory
 {
 public:
-    static KisMaskingBrushCompositeOpBase* create(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset);
-    static KisMaskingBrushCompositeOpBase* create(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset, qreal strength);
+    static KisMaskingBrushCompositeOpBase* create(const QString &id, KoChannelInfo::enumChannelValueType channelType,
+                                                  int pixelSize, int alphaOffset);
+    static KisMaskingBrushCompositeOpBase* create(const QString &id, KoChannelInfo::enumChannelValueType channelType,
+                                                  int pixelSize, int alphaOffset, qreal strength,
+                                                  bool useSoftTexturing = false);
 
-    static KisMaskingBrushCompositeOpBase* createForAlphaSrc(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset);
-    static KisMaskingBrushCompositeOpBase* createForAlphaSrc(const QString &id, KoChannelInfo::enumChannelValueType channelType, int pixelSize, int alphaOffset, qreal strength);
+    static KisMaskingBrushCompositeOpBase* createForAlphaSrc(const QString &id,
+                                                             KoChannelInfo::enumChannelValueType channelType,
+                                                             int pixelSize, int alphaOffset);
+    static KisMaskingBrushCompositeOpBase* createForAlphaSrc(const QString &id,
+                                                             KoChannelInfo::enumChannelValueType channelType,
+                                                             int pixelSize, int alphaOffset, qreal strength,
+                                                             bool useSoftTexturing = false);
 
     static QStringList supportedCompositeOpIds();
 };

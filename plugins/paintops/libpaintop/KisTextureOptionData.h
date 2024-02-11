@@ -59,6 +59,7 @@ struct  PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisText
                 lhs.isRandomOffsetX == rhs.isRandomOffsetX &&
                 lhs.isRandomOffsetY == rhs.isRandomOffsetY &&
                 lhs.texturingMode == rhs.texturingMode &&
+                lhs.useSoftTexturing == rhs.useSoftTexturing &&
                 lhs.cutOffPolicy == rhs.cutOffPolicy &&
                 lhs.cutOffLeft == rhs.cutOffLeft &&
                 lhs.cutOffRight == rhs.cutOffRight &&
@@ -79,6 +80,7 @@ struct  PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisText
     bool isRandomOffsetX {false};
     bool isRandomOffsetY {false};
     TexturingMode texturingMode {MULTIPLY};
+    bool useSoftTexturing {false};
     int cutOffPolicy {0};
     int cutOffLeft {0};
     int cutOffRight {255};

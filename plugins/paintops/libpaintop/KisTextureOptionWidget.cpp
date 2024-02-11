@@ -61,6 +61,7 @@ KisTextureOptionWidget::KisTextureOptionWidget(lager::cursor<KisTextureOptionDat
     connectControl(chooserWidget->randomOffsetY, &m_d->model, "isRandomOffsetY");
     connectControl(chooserWidget->offsetSliderY, &m_d->model, "offsetY");
     connectControl(chooserWidget->cmbTexturingMode, &m_d->model, "texturingMode");
+    connectControl(chooserWidget->checkBoxSoftTexturing, &m_d->model, "useSoftTexturing");
     connectControl(chooserWidget->cmbCutoffPolicy, &m_d->model, "cutOffPolicy");
     connectControl(chooserWidget->chkInvert, &m_d->model, "invert");
 

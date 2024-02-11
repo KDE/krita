@@ -24,6 +24,7 @@ bool KisTextureOptionData::read(const KisPropertiesConfiguration *setting)
     maximumOffsetX = setting->getInt("Texture/Pattern/MaximumOffsetX");
     maximumOffsetY = setting->getInt("Texture/Pattern/MaximumOffsetY");
     texturingMode = static_cast<TexturingMode>(setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY));
+    useSoftTexturing = setting->getBool("Texture/Pattern/UseSoftTexturing");
     cutOffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy");
     cutOffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
     cutOffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
@@ -45,6 +46,7 @@ void KisTextureOptionData::write(KisPropertiesConfiguration *setting) const
     setting->setProperty("Texture/Pattern/OffsetX", offsetX);
     setting->setProperty("Texture/Pattern/OffsetY", offsetY);
     setting->setProperty("Texture/Pattern/TexturingMode", texturingMode);
+    setting->setProperty("Texture/Pattern/UseSoftTexturing", useSoftTexturing);
     setting->setProperty("Texture/Pattern/CutoffLeft", cutOffLeft);
     setting->setProperty("Texture/Pattern/CutoffRight", cutOffRight);
     setting->setProperty("Texture/Pattern/CutoffPolicy", cutOffPolicy);

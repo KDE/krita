@@ -55,6 +55,7 @@ KisTextureOptionModel::KisTextureOptionModel(lager::cursor<KisTextureOptionData>
     , LAGER_QT(isRandomOffsetY) {optionData[&KisTextureOptionData::isRandomOffsetY]}
     , LAGER_QT(texturingMode) {optionData[&KisTextureOptionData::texturingMode]
             .zoom(kislager::lenses::do_static_cast<KisTextureOptionData::TexturingMode, int>)}
+    , LAGER_QT(useSoftTexturing) {optionData[&KisTextureOptionData::useSoftTexturing]}
     , LAGER_QT(cutOffPolicy) {optionData[&KisTextureOptionData::cutOffPolicy]}
     , LAGER_QT(cutOffLeftNormalized) {optionData[&KisTextureOptionData::cutOffLeft]
             .zoom(kislager::lenses::scale_int_to_real(1.0/255.0))}

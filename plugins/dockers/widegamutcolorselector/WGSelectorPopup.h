@@ -7,6 +7,7 @@
 #define WGSELECTORPOPUP_H
 
 #include <QWidget>
+#include <QTimer>
 
 class KisVisualColorSelector;
 class WGShadeSelector;
@@ -24,7 +25,7 @@ public Q_SLOTS:
     void slotShowPopup();
 protected:
     void paintEvent(QPaintEvent *event) override;
-    //void enterEvent(QEvent *event) override;
+    void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     void keyPressEvent(QKeyEvent *event);
     void hideEvent(QHideEvent *event) override;
@@ -39,6 +40,7 @@ private:
     int m_margin {10};
     bool m_isInteracting {false};
     WGSelectorWidgetBase *m_selectorWidget {0};
+    QTimer *m_hideTimer;
 };
 
 #endif // WGSELECTORPOPUP_H

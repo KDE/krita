@@ -18,13 +18,17 @@
 #include <WGShadeSelector.h>
 
 WGSelectorPopup::WGSelectorPopup(QWidget *parent)
-    : QWidget(parent, Qt::Popup | Qt::FramelessWindowHint)
+    : QWidget(parent, Qt::Popup | Qt::FramelessWindowHint), m_hideTimer(new QTimer(this))
 {
     setAttribute(Qt::WA_TranslucentBackground);
     QBoxLayout *lo = new QBoxLayout(QBoxLayout::LeftToRight, this);
     lo->setObjectName("WGSelectorPopupLayout");
     lo->setSizeConstraint(QLayout::SetFixedSize);
     lo->setMargin(m_margin);
+    m_hideTimer->setSingleShot(true);
+    m_hideTimer->setInterval(50);
+    connect(m_hideTimer, SIGNAL(timeout()), this, SLOT(hide()));
+
 }
 
 void WGSelectorPopup::setSelectorWidget(KisVisualColorSelector *selector)
@@ -79,11 +83,21 @@ void WGSelectorPopup::paintEvent(QPaintEvent *event)
     painter.drawRoundedRect(QRect(0, 0, width(), height()), m_margin, m_margin);
 }
 
+
+void WGSelectorPopup::enterEvent(QEvent *event)
+{
+    Q_UNUSED(event);
+    if (m_hideTimer->isActive())  {
+        m_hideTimer->stop();
+    }
+}
+
 void WGSelectorPopup::leaveEvent(QEvent *event)
 {
     Q_UNUSED(event);
+
     if (!m_isInteracting) {
-        hide();
+        m_hideTimer->start();
     }
 }
 
@@ -119,3 +133,5 @@ void WGSelectorPopup::replaceCentranWidget(QWidget *widget)
     layout()->update();
     adjustSize();
 }
+
+

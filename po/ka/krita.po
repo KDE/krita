@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-10 01:50+0000\n"
-"PO-Revision-Date: 2023-12-24 05:13+0100\n"
+"PO-Revision-Date: 2024-02-11 02:15+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -23710,7 +23710,7 @@ msgstr "მთარგმნელები"
 #: libs/ui/forms/wdgaboutapplication.ui:66
 #, kde-format
 msgid "Sponsors"
-msgstr ""
+msgstr "სპონსორები"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83
@@ -25517,7 +25517,7 @@ msgstr "შაბლონი"
 #: libs/ui/forms/wdggeometryoptions.ui:82
 #, kde-format
 msgid "Outline:"
-msgstr ""
+msgstr "კონტური:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:96
@@ -27859,7 +27859,7 @@ msgstr ""
 #: libs/ui/input/kis_pan_action.cpp:44
 #, kde-format
 msgid "Pan Mode"
-msgstr ""
+msgstr "პანორამის რეჟიმი"
 
 #: libs/ui/input/kis_pan_action.cpp:45
 #, kde-format
@@ -37012,11 +37012,10 @@ msgid "Bluer/Yellower: "
 msgstr ""
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
-msgstr "დაბრუნება"
+msgstr "ჩამოყრა"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
@@ -37654,12 +37653,12 @@ msgstr "ნაგულისხმებ მნიშვნელობაზ�
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, kde-format
 msgid "Compositions"
-msgstr ""
+msgstr "კომპოზიციები"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:67
 #, kde-format
 msgid "Delete Composition"
-msgstr ""
+msgstr "კომპოზიციის წაშლა"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:68
 #, kde-format
@@ -37962,7 +37961,7 @@ msgstr ""
 #: plugins/dockers/griddocker/grid_config_widget.ui:560
 #, kde-format
 msgid "Lock guides"
-msgstr ""
+msgstr "მიმმართველების ჩაკეტვა"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRulers)
 #: plugins/dockers/griddocker/grid_config_widget.ui:567
@@ -45481,9 +45480,7 @@ msgstr "&შაბლონი:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position:"
 msgstr "მდებარეობა:"
 
@@ -50235,7 +50232,7 @@ msgstr "მაგარ წიბო"
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:138
 #, kde-format
 msgid "Fill Style"
-msgstr ""
+msgstr "შევსების სტილი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, patternButton)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:166
@@ -50780,7 +50777,7 @@ msgstr "ვერტიკალური:"
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:288
 #, kde-format
 msgid "Softness:"
-msgstr ""
+msgstr "სირბილე:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:337
@@ -58886,7 +58883,7 @@ msgstr ""
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1485
 #, kde-format
 msgid "Anchor Points"
-msgstr ""
+msgstr "მიმაგრების წერტილი"
 
 #. i18n: ectx: property (text), widget (QRadioButton, defaultRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520

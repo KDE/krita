@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-06 01:58+0000\n"
+"POT-Creation-Date: 2024-02-10 01:50+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -16293,7 +16293,7 @@ msgstr "%1-molssaeavttut"
 msgid "Active tool: %1"
 msgstr ""
 
-#: libs/flake/svg/SvgParser.cpp:1831
+#: libs/flake/svg/SvgParser.cpp:1869
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16303,52 +16303,52 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:68
+#: libs/flake/text/KoSvgTextShape.cpp:1339
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1053
+#: libs/flake/text/KoSvgTextShape.cpp:1318
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1055
-#: libs/flake/text/KoSvgTextShape.cpp:1063
+#: libs/flake/text/KoSvgTextShape.cpp:1320
+#: libs/flake/text/KoSvgTextShape.cpp:1328
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1061
+#: libs/flake/text/KoSvgTextShape.cpp:1326
 #, kde-format
 msgid "SVG Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1075
-#: libs/flake/text/KoSvgTextShape.cpp:1090
+#: libs/flake/text/KoSvgTextShape.cpp:1349
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:144
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
 #, kde-format
 msgid "More than one 'text' node found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:153
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:151
 #, kde-format
 msgid "Unknown node of type '%1' found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:159
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
 #, kde-format
 msgid "No 'text' node found!"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:367
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:809
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:365
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:807
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr ""
@@ -16630,7 +16630,7 @@ msgstr ""
 #: libs/ui/forms/wdgrectangleconstraints.ui:24
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:11
 #: plugins/python/quick_settings_docker/quick_settings_docker.py:53
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1538
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1540
 #, kde-format
 msgid "Size"
 msgstr "Sturrodat"
@@ -19408,10 +19408,10 @@ msgstr ""
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
-#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
-#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1065
+#: libs/ui/KisApplication.cpp:1068 libs/ui/KisApplication.cpp:1084
+#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1130
+#: libs/ui/KisApplication.cpp:1158 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
@@ -19461,7 +19461,7 @@ msgstr ""
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
 #, kde-format
 msgctxt "@title:window"
@@ -22374,7 +22374,7 @@ msgstr ""
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:29
 #: plugins/paintops/tangentnormal/KisTangentTiltOptionWidget.cpp:32
 #: plugins/tools/basictools/kis_tool_colorsampler.cc:283
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1578
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1580
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "{n}%"
@@ -25488,7 +25488,7 @@ msgstr "Ovdabealivdni"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFill)
 #: libs/ui/forms/wdggeometryoptions.ui:69
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1554
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1556
 #, kde-format
 msgid "Background Color"
 msgstr "Duogášivdni"
@@ -29003,25 +29003,25 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:595
+#: libs/ui/kis_node_model.cpp:601
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:598
+#: libs/ui/kis_node_model.cpp:604
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
@@ -29485,20 +29485,20 @@ msgstr "Ii gávdnan mime-šlája, geahččal «-mimetype» molssaeavttuin"
 msgid "Failed to render animation frames!"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:938
+#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:937
 #, kde-format
 msgid "File layer"
 msgstr ""
 
 #: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
-#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:931 libs/ui/KisApplication.cpp:945
+#: libs/ui/KisApplication.cpp:950
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:947
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:946
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
@@ -29524,32 +29524,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:933
+#: libs/ui/KisApplication.cpp:932
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:952
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1067
+#: libs/ui/KisApplication.cpp:1066
 #, kde-format
 msgid "No template found for: %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1070
+#: libs/ui/KisApplication.cpp:1069
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Menddo máŋga málle gávdnon %1 várás"
 
-#: libs/ui/KisApplication.cpp:1086
+#: libs/ui/KisApplication.cpp:1085
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Ii sáhttán viežžat málle %1."
 
-#: libs/ui/KisApplication.cpp:1118
+#: libs/ui/KisApplication.cpp:1117
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29559,7 +29559,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1132
+#: libs/ui/KisApplication.cpp:1131
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29567,7 +29567,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1160
+#: libs/ui/KisApplication.cpp:1159
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -36066,7 +36066,7 @@ msgstr ""
 msgid "Concentric Ellipse assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr ""
@@ -36076,7 +36076,7 @@ msgstr ""
 msgid "Curvilinear Perspective assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:285
+#: plugins/assistants/Assistants/CurvilinearPerspectiveAssistant.cc:261
 #, kde-format
 msgid "Curvilinear Perspective"
 msgstr ""
@@ -36118,7 +36118,7 @@ msgstr "Gierdu"
 msgid "Fish Eye Point assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr ""
@@ -36253,7 +36253,7 @@ msgstr ""
 msgid "Parallel Ruler assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr ""
@@ -36265,7 +36265,7 @@ msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -36277,7 +36277,7 @@ msgstr ""
 msgid "Perspective Ellipse assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr ""
@@ -36308,7 +36308,7 @@ msgstr ""
 msgid "Two point assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr ""
@@ -36318,7 +36318,7 @@ msgstr ""
 msgid "Vanishing Point assistant"
 msgstr ""
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr ""
@@ -36985,6 +36985,12 @@ msgstr ""
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1129
 #, kde-format
 msgid "Bluer/Yellower: "
+msgstr ""
+
+#: plugins/dockers/animation/kis_equalizer_widget.cpp:144
+#, kde-format
+msgctxt "Reset to default"
+msgid "Reset"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
@@ -57033,7 +57039,7 @@ msgctxt "(qtundo-format)"
 msgid "Move text"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:27
+#: plugins/tools/svgtexttool/SvgTextChangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change SvgTextTool"
 msgstr ""
@@ -57043,84 +57049,84 @@ msgstr ""
 msgid "Text Tool"
 msgstr "Teakstareaidu"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:397
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:399
 #, kde-format
 msgid "Conversion failed"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:648
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:650
 #, kde-format
 msgid "Find Text"
 msgstr "Oza teavstta"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:651
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:694
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:653
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
 #, kde-format
 msgid "Find:"
 msgstr "Oza:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:690
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:692
 #, kde-format
 msgid "Find and Replace all"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:696
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:698
 #, kde-format
 msgid "Replace:"
 msgstr "Buhtte:"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1204
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
 #, kde-format
 msgid "You have modified the text. Discard changes?"
 msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, richTab)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1381
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1383
 #: plugins/tools/svgtexttool/WdgSvgTextEditor.ui:28
 #, kde-format
 msgid "Rich text"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1382
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1384
 #, kde-format
 msgid "SVG Source"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1529
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1531
 #, kde-format
 msgid "Font"
 msgstr "Fonta"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1546
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1548
 #, kde-format
 msgid "Text Color"
 msgstr "Teakstaivdni"
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1561
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
 #, kde-format
 msgid "Sample a Color"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1575
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
 #, kde-format
 msgid "Line height"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1579
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1588
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1592
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
-#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1606
+#: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:111
 #, kde-format
 msgid "Letter Spacing"

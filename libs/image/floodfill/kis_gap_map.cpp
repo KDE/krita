@@ -31,9 +31,6 @@
 #include <QElapsedTimer>
 #endif
 
-// Asserts are disabled by default in performance-critical code.
-#define DEBUG_LOGGING_AND_ASSERTS 0
-
 namespace
 {
 
@@ -65,7 +62,7 @@ ALWAYS_INLINE QPoint TransformMirrorHorizontally(int x, int y, int xOffset, int 
 template<bool BoundsCheck>
 bool KisGapMap::isOpaque(int x, int y)
 {
-#if DEBUG_LOGGING_AND_ASSERTS
+#if KIS_GAP_MAP_DEBUG_LOGGING_AND_ASSERTS
     const TileFlags flags = *tileFlagsPtr(x / TileSize, y / TileSize);
     KIS_SAFE_ASSERT_RECOVER((flags & TILE_OPACITY_LOADED) != 0) {
         qDebug() << "ERROR: opacity at (" << x << "," << y << ") not loaded";
@@ -92,14 +89,15 @@ bool KisGapMap::isOpaque(const QPoint& p)
 KisGapMap::KisGapMap(int gapSize,
                      const QRect& mapBounds,
                      const FillOpacityFunc& fillOpacityFunc)
-    :
-    m_gapSize(gapSize),
-    m_size(mapBounds.size()),
-    m_numTiles(qCeil(static_cast<float>(m_size.width()) / TileSize),
-               qCeil(static_cast<float>(m_size.height()) / TileSize)),
-    m_fillOpacityFunc(fillOpacityFunc),
-    m_deviceSp(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8())),
-    m_accessorSp(m_deviceSp->createRandomAccessorNG())
+    : m_gapSize(gapSize)
+    , m_size(mapBounds.size())
+    , m_numTiles(qCeil(static_cast<float>(m_size.width()) / TileSize),
+                qCeil(static_cast<float>(m_size.height()) / TileSize))
+    , m_fillOpacityFunc(fillOpacityFunc)
+    , m_deviceSp(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
+    , m_accessor(std::make_unique<KisTileOptimizedAccessor>(
+          m_deviceSp->createRandomAccessorNG(),
+          m_deviceSp->pixelSize()))
 {
     // Ensure the scanline fill uses the same coordinates.
     KIS_ASSERT((mapBounds.x() == 0) && (mapBounds.y() == 0) &&
@@ -132,7 +130,7 @@ void KisGapMap::loadOpacityTiles(const QRect& tileRect)
                 rect.setRight(qMin(rect.right(), m_size.width() - 1));
                 rect.setBottom(qMin(rect.bottom(), m_size.height() - 1));
 
-#if DEBUG_LOGGING_AND_ASSERTS
+#if KIS_GAP_MAP_DEBUG_LOGGING_AND_ASSERTS
                 qDebug() << "loadOpacityTiles()" << rect;
 #endif
                 // It's not too elegant to pass the device, but this performs the best for now.
@@ -269,20 +267,8 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
 void KisGapMap::copyFromScratchTile(const QRect& rect)
 {
     for (int iy = 0, y = rect.top(); y <= rect.bottom(); ++iy, ++y) {
-        int numPixelsLeft = 0;
-        Data* dataPtr;
-
         for (int ix = 0, x = rect.left(); x <= rect.right(); ++ix, ++x) {
-            if (numPixelsLeft <= 0) {
-                m_accessorSp->moveTo(x, y);
-                numPixelsLeft = m_accessorSp->numContiguousColumns(x) - 1;
-                dataPtr = reinterpret_cast<Data*>(m_accessorSp->rawData());
-            } else {
-                numPixelsLeft--;
-                dataPtr++;
-            }
-
-            dataPtr->distance = m_scratchTile[ix + iy * TileSize];
+            dataPtr(x, y)->distance = m_scratchTile[ix + iy * TileSize];
         }
     }
 }
@@ -363,7 +349,7 @@ void KisGapMap::updateDistance(const QPoint& globalPosition, quint16 newDistance
 /** Load the required tiles and return pixel's distance data. */
 quint16 KisGapMap::lazyDistance(int x, int y)
 {
-#if DEBUG_LOGGING_AND_ASSERTS
+#if KIS_GAP_MAP_DEBUG_LOGGING_AND_ASSERTS
     qDebug() << "lazyDistance() at (" << x << "," << y << ")";
 #endif
 

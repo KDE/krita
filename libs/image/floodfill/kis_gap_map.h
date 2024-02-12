@@ -16,6 +16,54 @@
 
 #define KIS_GAP_MAP_MEASURE_ELAPSED_TIME 0
 
+// Asserts are disabled by default in performance-critical code.
+#define KIS_GAP_MAP_DEBUG_LOGGING_AND_ASSERTS 0
+
+class KisTileOptimizedAccessor
+{
+public:
+    KisTileOptimizedAccessor(KisRandomAccessorSP accessorSP, quint32 pixelSize)
+        : m_accessor(accessorSP)
+        , m_pixelSize(pixelSize)
+        , m_tile(-1, -1)
+        , m_rawData(nullptr)
+    {
+      // We start in an invalid state ((-1,-1) tile), so that the data pointer is fetched
+      // after the paint device has been set up (e.g. default color and fill).
+    }
+
+    quint8* rawData(int x, int y)
+    {
+        const int tx = x / TileSize;
+        const int ty = y / TileSize;
+
+        if ((m_tile.x() != tx) || (m_tile.y() != ty)) {
+            m_accessor->moveTo(tx * TileSize, ty * TileSize);
+            m_rawData = m_accessor->rawData();
+            m_tile.setX(tx);
+            m_tile.setY(ty);
+
+#if KIS_GAP_MAP_DEBUG_LOGGING_AND_ASSERTS
+            KIS_ASSERT(m_accessor->numContiguousRows(ty * TileSize) == TileSize);
+            KIS_ASSERT(m_accessor->numContiguousColumns(tx * TileSize) == TileSize);
+#endif
+        }
+
+        const int localX = x & (TileSize - 1);
+        const int localY = y & (TileSize - 1);
+
+        return m_rawData + m_pixelSize * (localX + TileSize * localY);
+    }
+
+private:
+    static constexpr int TileSize = 64;
+
+    KisRandomAccessorSP m_accessor;
+    const quint32 m_pixelSize;
+    QPoint m_tile;
+    quint8* m_rawData;
+};
+
 /**
  * Creates a "gap map", which is a pixel map of distances from lineart gaps
  * (discontinuities in opaque lines), that helps detect these gaps and stop
@@ -125,14 +173,13 @@ private:
 
     ALWAYS_INLINE Data* dataPtr(int x, int y)
     {
-        m_accessorSp->moveTo(x, y);
-        return reinterpret_cast<Data*>(m_accessorSp->rawData());
+        return reinterpret_cast<Data*>(m_accessor->rawData(x, y));
     }
 
     ALWAYS_INLINE TileFlags* tileFlagsPtr(int tileX, int tileY)
     {
-        m_accessorSp->moveTo(TileSize * tileX, TileSize * tileY);
-        return reinterpret_cast<TileFlags*>(m_accessorSp->rawData() + offsetof(Data, flags));
+        return reinterpret_cast<TileFlags*>(
+            m_accessor->rawData(TileSize * tileX, TileSize * tileY) + offsetof(Data, flags));
     }
 
     const int m_gapSize;                      ///< Gap size in pixels for this map
@@ -143,8 +190,8 @@ private:
     QPoint m_scratchTilePosition;             ///< The position of the scratch tile compared to the whole region
     std::vector<quint16> m_scratchTile;       ///< Scratch memory to perform computations
 
-    KisPaintDeviceSP m_deviceSp;              ///< A 32-bit per pixel paint device that holds the distance and other data
-    KisRandomAccessorSP m_accessorSp;         ///< An accessor for the paint device
+    KisPaintDeviceSP m_deviceSp;                            ///< A 32-bit per pixel paint device that holds the distance and other data
+    std::unique_ptr<KisTileOptimizedAccessor> m_accessor;   ///< An accessor for the paint device
 };
 
 #endif /* __KIS_GAP_MAP_H */

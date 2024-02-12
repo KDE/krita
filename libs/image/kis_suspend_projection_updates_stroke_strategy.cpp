@@ -129,23 +129,6 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             return true;
         }
 
-        static inline QRect alignRect(const QRect &rc, const int step) {
-            static const int decstep = step - 1;
-            static const int invstep = ~decstep;
-
-            int x0, y0, x1, y1;
-            rc.getCoords(&x0, &y0, &x1, &y1);
-
-            x0 &= invstep;
-            y0 &= invstep;
-            x1 |= decstep;
-            y1 |= decstep;
-
-            QRect result;
-            result.setCoords(x0, y0, x1, y1);
-            return result;
-        }
-
         void notifyUpdates(KisImageSP image) {
             const int step = 64;
 

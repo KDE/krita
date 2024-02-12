@@ -1,20 +1,16 @@
-<!DOCTYPE RCC>
-<!--
-  SPDX-FileCopyrightText: none
-  SPDX-License-Identifier: CC0-1.0
--->
-<RCC version="1.0">
+<RCC>
     <qresource prefix="/kxmlgui5">
         <file alias="svgtexttool.xmlgui">svgtexttool.xmlgui</file>
     </qresource>
     <qresource prefix="/">
-      <file>tool_text_basic.xpm</file>
-      <file>tool_text_inline_horizontal.xpm</file>
-      <file>tool_text_inline_vertical.xpm</file>
-      <file>tool_text_on_path.xpm</file>
-      <file>tool_text_in_shape.xpm</file>
-      <file>tool_text_i_beam_horizontal.xpm</file>
-      <file>tool_text_i_beam_vertical.xpm</file>
-      <file>tool_text_i_beam_horizontal_done.xpm</file>
+        <file>tool_text_basic.xpm</file>
+        <file>tool_text_inline_horizontal.xpm</file>
+        <file>tool_text_inline_vertical.xpm</file>
+        <file>tool_text_on_path.xpm</file>
+        <file>tool_text_in_shape.xpm</file>
+        <file>tool_text_i_beam_horizontal.xpm</file>
+        <file>tool_text_i_beam_vertical.xpm</file>
+        <file>tool_text_i_beam_horizontal_done.xpm</file>
+        <file alias="GlyphPalette.qml">glyphpalette/GlyphPalette.qml</file>
     </qresource>
 </RCC>

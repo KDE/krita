@@ -23,6 +23,8 @@ set (SvgTextTool_SRCS
     SvgTextToolFactory.cpp
     FontSizeAction.cpp
     SvgTextShapeManagerBlocker.cpp
+
+    glyphpalette/GlyphPaletteDialog.cpp
 )
 
 ki18n_wrap_ui(SvgTextTool_SRCS 

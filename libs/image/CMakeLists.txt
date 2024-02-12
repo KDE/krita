@@ -99,6 +99,7 @@ set(kritaimage_LIB_SRCS
    commands/KisNodeRenameCommand.cpp
    commands/KisChangeDeselectedMaskCommand.cpp
    commands/KisNotifySelectionChangedCommand.cpp
+   commands/KisBatchUpdateLayerModificationCommand
    commands_new/kis_saved_commands.cpp
    commands_new/kis_processing_command.cpp
    commands_new/kis_image_resize_command.cpp

@@ -53,6 +53,7 @@
 #include "kis_command_ids.h"
 #include "kis_image_config.h"
 #include "KisFutureUtils.h"
+#include "KisBatchUpdateLayerModificationCommand.h"
 
 
 namespace KisLayerUtils {
@@ -892,7 +893,13 @@ namespace Private {
      * the clone --- first, the source --- last.
      */
     void RemoveNodeHelper::safeRemoveMultipleNodes(KisNodeList nodes, KisImageSP image) {
-        const bool lastLayer = scanForLastLayer(image, nodes);
+        safeReplaceMultipleNodes(nodes, image, std::nullopt);
+    }
+
+    void RemoveNodeHelper::safeReplaceMultipleNodes(KisNodeList removedNodes, KisImageSP image,
+                                                    std::optional<ReplacementNode> replacementNode) {
+
+        const bool lastLayer = !replacementNode && scanForLastLayer(image, removedNodes);
 
         auto isNodeWeird = [] (KisNodeSP node) {
             const bool normalCompositeMode = node->compositeOpId() == COMPOSITE_OVER;
@@ -902,21 +909,54 @@ namespace Private {
             return !normalCompositeMode && !hasInheritAlpha;
         };
 
-        while (!nodes.isEmpty()) {
-            KisNodeList::iterator it = nodes.begin();
 
-            while (it != nodes.end()) {
-                if (!checkIsSourceForClone(*it, nodes)) {
+        using Recipe = KisBatchUpdateLayerModificationCommand::Recipe;
+        using RecipeSP = KisBatchUpdateLayerModificationCommand::RecipeSP;
+        RecipeSP updateRecipe(new Recipe());
+
+        if (replacementNode) {
+            updateRecipe->nodesToAdd.push_back({replacementNode->node,
+                                                replacementNode->doRedoUpdates,
+                                                replacementNode->doUndoUpdates});
+        }
+
+        Q_FOREACH (KisNodeSP node, removedNodes) {
+            updateRecipe->nodesToRemove.push_back({node, !isNodeWeird(node), true});
+        }
+
+        addCommandImpl(new KisBatchUpdateLayerModificationCommand(image, updateRecipe, KisBatchUpdateLayerModificationCommand::INITIALIZING));
+
+        if (replacementNode) {
+            addCommandImpl(new KisImageLayerAddCommand(image,
+                                                       replacementNode->node,
+                                                       replacementNode->parent,
+                                                       replacementNode->putAfter,
+                                                       false, false));
+
+            Q_FOREACH (KisSelectionMaskSP mask, replacementNode->selectionMasks) {
+                addCommandImpl(new KisImageLayerMoveCommand(image, mask, replacementNode->node, replacementNode->node->lastChild(), false));
+                addCommandImpl(new KisActivateSelectionMaskCommand(mask, false));
+            }
+        }
+
+        while (!removedNodes.isEmpty()) {
+            KisNodeList::iterator it = removedNodes.begin();
+
+            while (it != removedNodes.end()) {
+                if (!checkIsSourceForClone(*it, removedNodes)) {
                     KisNodeSP node = *it;
 
-                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, !isNodeWeird(node), true));
-                    it = nodes.erase(it);
+                    addCommandImpl(new KisImageLayerRemoveCommand(image, node, false, false));
+                    it = removedNodes.erase(it);
                 } else {
                     ++it;
                 }
             }
         }
 
+        addCommandImpl(new KisBatchUpdateLayerModificationCommand(image, updateRecipe, KisBatchUpdateLayerModificationCommand::FINALIZING));
+
+        // Hint: we shouldn't include that into the batch update since this layer doesn't trigger any updates
         if (lastLayer) {
             KisLayerSP newLayer = new KisPaintLayer(image.data(), image->nextLayerName(), OPACITY_OPAQUE_U8, image->colorSpace());
             addCommandImpl(new KisImageLayerAddCommand(image, newLayer,
@@ -1177,22 +1217,6 @@ namespace Private {
 
             }
             else {
-                addCommand(new KisImageLayerAddCommand(m_info->image,
-                                                       m_info->dstNode,
-                                                       parent,
-                                                       m_putAfter,
-                                                       true, false));
-
-
-                /**
-                 * We can merge selection masks, in this case dstLayer is not defined!
-                 */
-                if (m_info->dstLayer()) {
-                    reparentSelectionMasks(m_info->image,
-                                           m_info->dstLayer(),
-                                           m_info->selectionMasks);
-                }
-
                 KisNodeList safeNodesToDelete = m_info->allSrcNodes();
                 KisNodeList safeNodesToHide;
 
@@ -1202,7 +1226,13 @@ namespace Private {
                     addCommand(new KisImageChangeVisibilityCommand(false, node));
                 }
 
-                safeRemoveMultipleNodes(safeNodesToDelete, m_info->image);
+                safeReplaceMultipleNodes(safeNodesToDelete, m_info->image,
+                                         std::make_optional<ReplacementNode>(
+                                             {m_info->dstNode,
+                                             parent,
+                                             m_putAfter,
+                                             true, false,
+                                             m_info->selectionMasks}));
             }
 
 
@@ -1213,17 +1243,6 @@ namespace Private {
             addCommand(cmd);
         }
 
-        void reparentSelectionMasks(KisImageSP image,
-                                    KisLayerSP newLayer,
-                                    const QVector<KisSelectionMaskSP> &selectionMasks) {
-
-            KIS_SAFE_ASSERT_RECOVER_RETURN(newLayer);
-
-            foreach (KisSelectionMaskSP mask, selectionMasks) {
-                addCommand(new KisImageLayerMoveCommand(image, mask, newLayer, newLayer->lastChild()));
-                addCommand(new KisActivateSelectionMaskCommand(mask, false));
-            }
-        }
     private:
         MergeDownInfoBaseSP m_info;
         KisNodeSP m_putAfter;

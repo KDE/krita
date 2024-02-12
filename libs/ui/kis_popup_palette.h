@@ -150,7 +150,6 @@ private:
     QComboBox *m_dockerComboBox;
     QVBoxLayout *m_dockerLayout;
     QDockWidget* m_oldDockerParent {};
-    bool m_oldDockerVis {false};
     bool m_isBorrowing {false};
     QLabel* m_dockerIOULabel {};
     QToolButton* m_dockerMenu {};

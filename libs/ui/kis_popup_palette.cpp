@@ -563,12 +563,6 @@ void KisPopupPalette::borrowOrReturnDocker()
         m_oldDockerParent->setWidget(dockerInside);
         dockerInside->setParent(m_oldDockerParent);
 
-        // Old visibility only needed for Channels docker hack
-        if (m_oldDockerParent->objectName() == "ChannelDocker") {
-            m_oldDockerParent->setVisible(m_oldDockerVis);
-            m_oldDockerVis = false;
-        }
-
         m_oldDockerParent = nullptr;
         m_isBorrowing = false;
     }
@@ -580,14 +574,6 @@ void KisPopupPalette::borrowOrReturnDocker()
         QDockWidget *docker = mainWindow->findChild<QDockWidget*>(m_dockerComboBox->currentData().toString());
         if (docker != nullptr) {
             m_oldDockerParent = docker;
-
-            // Hack: Channels docker's widget doesn't work if not shown
-            // Todo: investigate why this is
-            if (docker->objectName() == "ChannelDocker" && docker->isHidden()) {
-                m_oldDockerVis = docker->isVisible();
-                docker->show();
-                dbgKrita << "Popup Palette docker: showing Channels docker so it works";
-            }
 
             // Animation dockers have playback controls and such in the titlebar,
             // so we borrow those as well.

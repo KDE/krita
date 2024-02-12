@@ -6,47 +6,17 @@
 
 #include "channeldocker_dock.h"
 
-#include <QGridLayout>
-#include <QTableView>
-#include <QHeaderView>
-#include <klocalizedstring.h>
+#include "ChannelDockerWidget.h"
 
 #include <KoCanvasBase.h>
-#include "channelmodel.h"
-#include <KisViewManager.h>
 #include <kis_canvas2.h>
-#include <kis_layer.h>
-#include <kis_node_manager.h>
-#include <kis_image.h>
-#include <kis_group_layer.h>
-#include <kis_paint_device.h>
-#include <KisView.h>
-#include <kis_idle_watcher.h>
-#include "KisChannelsThumbnailsStrokeStrategy.h"
-#include <kis_display_color_converter.h>
 
 ChannelDockerDock::ChannelDockerDock()
 {
     setWindowTitle(i18nc("Channel as in Color Channels", "Channels"));
 
-    m_channelTable = new QTableView(this);
-    m_model = new ChannelModel(this);
-    m_channelTable->setModel(m_model);
-    m_channelTable->setShowGrid(false);
-    m_channelTable->horizontalHeader()->setStretchLastSection(true);
-    m_channelTable->verticalHeader()->setVisible(false);
-    m_channelTable->horizontalHeader()->setVisible(false);
-    m_channelTable->setSelectionBehavior( QAbstractItemView::SelectRows );
-
-    QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(m_channelTable);
-    if (scroller){
-        connect(scroller, SIGNAL(stateChanged(QScroller::State)),
-                this, SLOT(slotScrollerStateChanged(QScroller::State)));
-    }
-
-    setWidget(m_channelTable);
-
-    connect(m_channelTable,&QTableView::activated, m_model, &ChannelModel::rowActivated);
+    m_widget = new ChannelDockerWidget(this);
+    setWidget(m_widget);
 }
 
 void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
@@ -58,13 +28,7 @@ void ChannelDockerDock::setCanvas(KoCanvasBase * canvas)
 
     KisCanvas2 *newCanvas = canvas ? dynamic_cast<KisCanvas2*>(canvas) : nullptr;
 
-    KisWidgetWithIdleTask<QDockWidget>::setCanvas(newCanvas);
-    m_model->setCanvas(newCanvas);
-
-    if (m_canvas) {
-        connect(m_canvas->displayColorConverter(), SIGNAL(displayConfigurationChanged()), SLOT(startUpdateCanvasProjection()));
-        connect(m_model, SIGNAL(channelFlagsChanged()), m_canvas, SLOT(channelSelectionChanged()));
-    }
+    m_widget->setCanvas(newCanvas);
 
     setEnabled(bool(canvas));
 }
@@ -73,49 +37,3 @@ void ChannelDockerDock::unsetCanvas()
 {
     setCanvas(0);
 }
-
-void ChannelDockerDock::startUpdateCanvasProjection()
-{
-    triggerCacheUpdate();
-}
-
-KisIdleTasksManager::TaskGuard ChannelDockerDock::registerIdleTask(KisCanvas2 *canvas)
-{
-    return
-        canvas->viewManager()->idleTasksManager()->
-        addIdleTaskWithGuard([this](KisImageSP image) {
-            const KoColorProfile *profile =
-                m_canvas->displayColorConverter()->monitorProfile();
-            KoColorConversionTransformation::ConversionFlags conversionFlags =
-                m_canvas->displayColorConverter()->conversionFlags();
-            KoColorConversionTransformation::Intent renderingIntent =
-                m_canvas->displayColorConverter()->renderingIntent();
-
-            const QSize previewSize = m_model->thumbnailSizeLimit();
-
-            KisChannelsThumbnailsStrokeStrategy *strategy =
-                new KisChannelsThumbnailsStrokeStrategy(image->projection(), image->bounds(),
-                                                        previewSize, false, profile,
-                                                        renderingIntent, conversionFlags);
-
-            connect(strategy, SIGNAL(thumbnailsUpdated(QVector<QImage>, const KoColorSpace*)), this, SLOT(updateImageThumbnails(QVector<QImage>, const KoColorSpace*)));
-
-            return strategy;
-        });
-}
-
-void ChannelDockerDock::updateImageThumbnails(const QVector<QImage> &channels, const KoColorSpace *cs)
-{
-    m_model->setChannelThumbnails(channels, cs);
-    m_channelTable->resizeRowsToContents();
-    m_channelTable->resizeColumnsToContents();
-}
-
-void ChannelDockerDock::clearCachedState()
-{
-    m_model->setChannelThumbnails({}, nullptr);
-}
-
-
-
-

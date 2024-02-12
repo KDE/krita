@@ -11,15 +11,11 @@
 #include <QDockWidget>
 
 #include <KoCanvasObserverBase.h>
-#include <KisKineticScroller.h>
 
-#include "KisWidgetWithIdleTask.h"
 #include <kis_canvas2.h>
+#include "ChannelDockerWidget.h"
 
-class ChannelModel;
-class QTableView;
-
-class ChannelDockerDock : public KisWidgetWithIdleTask<QDockWidget>, public KoCanvasObserverBase {
+class ChannelDockerDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     ChannelDockerDock();
@@ -28,20 +24,9 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-public Q_SLOTS:
-    void startUpdateCanvasProjection();
-    void slotScrollerStateChanged(QScroller::State state){KisKineticScroller::updateCursor(this, state);}
-
-private Q_SLOTS:
-    void updateImageThumbnails(const QVector<QImage> &channels, const KoColorSpace *cs);
-
 private:
-    KisIdleTasksManager::TaskGuard registerIdleTask(KisCanvas2 *canvas) override;
-    void clearCachedState() override;
-
-private:
-    QTableView *m_channelTable {nullptr};
-    ChannelModel *m_model {nullptr};
+    ChannelDockerWidget *m_widget {nullptr};
+    QPointer<KisCanvas2> m_canvas;
 };
 
 

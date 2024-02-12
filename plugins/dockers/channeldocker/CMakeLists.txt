@@ -2,6 +2,7 @@ set(KRITA_CHANNELDOCKER_SOURCES
     channelmodel.cpp
     channeldocker.cpp
     channeldocker_dock.cpp
+    ChannelDockerWidget.cpp
     KisChannelsThumbnailsStrokeStrategy.cpp
 )
 kis_add_library(kritachanneldocker MODULE ${KRITA_CHANNELDOCKER_SOURCES})

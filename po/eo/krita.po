@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-10 01:50+0000\n"
-"PO-Revision-Date: 2024-02-10 07:05+0100\n"
+"PO-Revision-Date: 2024-02-11 05:33+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -37962,7 +37962,7 @@ msgstr "Ĝisdatigi post ĉiu bato"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1058
 #, kde-format
 msgid "Lightness, Saturation and Hue hotkey steps"
-msgstr "Leĝereco, Saturado kaj Nuanco klavoklavo paŝoj"
+msgstr "Leĝereco, Saturado kaj Nuanco fulmoklavo paŝoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1064
@@ -38000,7 +38000,7 @@ msgstr "Nuanco:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1109
 #, kde-format
 msgid "YUV Redder/Greener/Bluer/Yellower hotkey steps"
-msgstr "YUV Pli Ruĝaj/Pli Verdaj/Pli Bluaj/Pli Flava klavklavopaŝoj"
+msgstr "YUV Pli Ruĝaj/Pli Verdaj/Pli Bluaj/Pli Flava fulmklavopaŝoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1115
@@ -57778,7 +57778,7 @@ msgstr "Multipliktilo:"
 #: plugins/tools/basictools/wdgmovetool.ui:128
 #, kde-format
 msgid "Number of units to move after move shortcut keypress."
-msgstr "Nombro de unuoj por movi post movo klavklavoklavo."
+msgstr "Nombro de unuoj por movi post movo ŝparvojan klavpremon."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:150

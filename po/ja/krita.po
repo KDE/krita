@@ -22281,13 +22281,15 @@ msgstr "<html><head/><body><p align=\"center\"><b>作成者</b></p>"
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Noboru Sinohara,Yukiko Bando, Tokiedian"
+msgstr "Noboru Sinohara, Yukiko Bando, Tokiedian, Hiroki Tokunaga"
 
 #: libs/ui/dialogs/kis_about_application.cpp:68
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "shinobo@leo.bekkoame.ne.jp,ybando@k6.dion.ne.jp, lamentisimo@gmail.com"
+msgstr ""
+"shinobo@leo.bekkoame.ne.jp, ybando@k6.dion.ne.jp, lamentisimo@gmail.com, "
+"tokusan441@gmail.com"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
@@ -43328,14 +43330,11 @@ msgid "Could not load bundle %1."
 msgstr "バンドル %1 を読み込めませんでした。"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:250
-#, fuzzy, kde-format
-#| msgid ""
-#| "A profile with that name already exists.\n"
-#| "Do you want to overwrite it?"
+#, kde-format
 msgid ""
 "There is already a bundle with this name installed. Do you want to overwrite "
 "it?"
-msgstr "そのファイル名は既に存在しています。上書きしますか？"
+msgstr "この名前のバンドルは既に存在しています。上書きしますか？"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:279
 #, kde-format
@@ -43380,19 +43379,14 @@ msgstr "タグを選択"
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
 #: plugins/extensions/resourcemanager/wdgside.ui:99
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Enter Bundle Details"
-msgstr "毛筆 (細部)"
+msgstr "バンドルの詳細を入力"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:133
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Enter Save Location"
-msgstr "保存場所:"
+msgstr "保存場所を入力"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:138
 #, kde-format
@@ -43400,31 +43394,24 @@ msgid "Edit Resource Bundle"
 msgstr "リソースバンドルを編集する"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Edit Resources"
-msgstr "リソース"
+msgstr "リソースを編集する"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Text"
+#, kde-format
 msgid "Edit Tags"
-msgstr "テキスト編集"
+msgstr "タグを編集する"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Bristle_Details.kpp"
-#| msgid "Bristle Details"
+#, kde-format
 msgid "Edit Bundle Details"
-msgstr "毛筆 (細部)"
+msgstr "バンドルの詳細を入力"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:144
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Edit Save Location"
-msgstr "保存場所:"
+msgstr "保存場所を入力"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:221
 #, kde-format
@@ -43433,6 +43420,8 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
+"同じファイル名 '%1' を共有するリソースが複数あります。それらを別々のバンドル"
+"にエクスポートしてください。"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
 #, kde-format
@@ -43481,14 +43470,13 @@ msgid "Manage Resources"
 msgstr "リソースを管理する"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:116
-#, fuzzy, kde-format
-#| msgid "Duplicate selected mask"
+#, kde-format
 msgctxt ""
 "In Resource manager, this is text shown instead of filename, name or "
 "location, when multiple resources are shown so there is no one specific "
 "filename"
 msgid "(Multiple selected)"
-msgstr "選択されたマスクを複製"
+msgstr "(複数選択済み)"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:135
 #, kde-format
@@ -43499,11 +43487,9 @@ msgid "(None selected)"
 msgstr "(選択なし)"
 
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:242
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "Delete resource"
+#, kde-format
 msgid "Undelete Resources"
-msgstr "リソースを削除"
+msgstr "リソースの削除を取り消し"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnDeleteResource)
 #: plugins/extensions/resourcemanager/DlgResourceManager.cpp:244
@@ -43529,7 +43515,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the PNG "
 "files belong to: brush tips or patterns"
 msgid "What resource do you want to import these PNG files as?"
-msgstr ""
+msgstr "これらの PNG ファイルをどのリソースとしてインポートしますか？"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:37
 #, kde-format
@@ -43537,7 +43523,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the SVG "
 "files belong to: brush tips or patterns or symbols"
 msgid "What resource do you want to import these SVG files as?"
-msgstr ""
+msgstr "これらの SVG ファイルをどのリソースとしてインポートしますか？"
 
 #: plugins/extensions/resourcemanager/DlgResourceTypeForFile.cpp:40
 #, kde-format
@@ -43545,7 +43531,7 @@ msgctxt ""
 "Question in a dialog so the user can choose which resource type the files of "
 "type %1 belongs to; % will be rather untranslatable noun (a mimetype)"
 msgid "What resource do you want to import these %1 files as?"
-msgstr ""
+msgstr "これらの %1 ファイルをどのリソースとしてインポートしますか？"
 
 #: plugins/extensions/resourcemanager/page_bundle_saver.cpp:93
 #, kde-format
@@ -43623,11 +43609,9 @@ msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "Group as Swatch Group in a Palette"
-#| msgid "Remove selected group"
+#, kde-format
 msgid "Remove Selected"
-msgstr "選択されたグループを削除"
+msgstr "選択されているものを削除"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -43635,31 +43619,28 @@ msgid "Import of some files failed"
 msgstr "複数ファイルのインポートに失敗しました。"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:54
-#, fuzzy, kde-format
-#| msgid "The following plugins were imported:"
+#, kde-format
 msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The following files couldn't be opened as resources:"
-msgstr "次のプラグインがインポートされました:"
+msgstr "以下のファイルをリソースとして開けませんでした:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:57
-#, fuzzy, kde-format
-#| msgid "Select the exposure (stops) for HDR images."
+#, kde-format
 msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The resource type of following files is unknown:"
-msgstr "HDR 画像に露出を選択します。"
+msgstr "以下のファイルのリソースの種類は不明です:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:60
-#, fuzzy, kde-format
-#| msgid "The following autosave files can be recovered:"
+#, kde-format
 msgctxt ""
 "Warning message after failed attempt to import resources, after this label "
 "there is a box with a list of files"
 msgid "The import of following files has been cancelled:"
-msgstr "以下の自動保存ファイルが回復可能です:"
+msgstr "以下のファイルのインポートは取り消されました:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:63
 #, kde-format
@@ -43670,6 +43651,8 @@ msgid ""
 "A resources bundle, an ASL or an ABR file with the same name already exists "
 "in the resources folder:"
 msgstr ""
+"同じ名前のリソースバンドルや ASL ファイル、 ABR ファイルが既にリソースフォル"
+"ダに存在します:"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:120
 #, kde-format
@@ -43694,10 +43677,9 @@ msgstr "リソース(&R)"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnEdit)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:92
-#, fuzzy, kde-format
-#| msgid "Import a resource library"
+#, kde-format
 msgid "Edit a resource library"
-msgstr "リソースライブラリをインポートする"
+msgstr "リソースライブラリを編集する"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, bnNew)
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:108
@@ -43772,6 +43754,8 @@ msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
 "on upgrading Krita"
 msgstr ""
+"Krita の更新時になくさないよう、リソースフォルダにあるすべてのタグのバック"
+"アップを取ります"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
@@ -43805,10 +43789,9 @@ msgstr "削除されたリソースを表示"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnSaveLocation)
 #: plugins/extensions/resourcemanager/wdgside.ui:118
-#, fuzzy, kde-format
-#| msgid "Save Location:"
+#, kde-format
 msgid "Choose Save Location"
-msgstr "保存場所:"
+msgstr "保存場所を選択する"
 
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:262
 #, kde-format
@@ -43831,11 +43814,10 @@ msgid "Mirror Image Horizontally"
 msgstr "画像を左右反転"
 
 #: plugins/extensions/rotateimage/rotateimage.cc:148
-#, fuzzy, kde-format
-#| msgid "Rotate Layer"
+#, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] "レイヤーを回転"
+msgstr[0] "%1 レイヤーを回転"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43978,11 +43960,10 @@ msgid "Shear Image"
 msgstr "画像を剪断変形"
 
 #: plugins/extensions/shearimage/shearimage.cc:76
-#, fuzzy, kde-format
-#| msgid "Shear Layer"
+#, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] "レイヤーを剪断変形"
+msgstr[0] "%1 レイヤーを剪断変形"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -44190,26 +44171,20 @@ msgstr "ウェーブレット倍率:"
 #: plugins/filters/asccdl/asccdl.action:7
 #: plugins/filters/asccdl/asccdl.action:9
 #: plugins/filters/asccdl/asccdl.action:10
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgctxt "action"
 msgid "Slope, Offset, Power Filter"
-msgstr "レイヤーをオフセット(&O)..."
+msgstr "スロープ、オフセット、パワーフィルタ"
 
 #: plugins/filters/asccdl/kis_asccdl_filter.cpp:31
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgid "&Slope, Offset, Power..."
-msgstr "レイヤーをオフセット(&O)..."
+msgstr "スロープ、オフセット、パワー(&S)..."
 
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgid "Slope, Offset, Power(ASC-CDL)"
-msgstr "レイヤーをオフセット(&O)..."
+msgstr "スロープ、オフセット、パワー(ASC-CDL)"
 
 #. i18n: ectx: property (text), widget (QLabel, lblBase)
 #: plugins/filters/asccdl/wdg_asccdl.ui:42
@@ -44455,10 +44430,9 @@ msgstr "しきい値:"
 
 #. i18n: ectx: property (text), widget (QLabel, samplerLabel)
 #: plugins/filters/colors/wdgcolortoalphabase.ui:164
-#, fuzzy, kde-format
-#| msgid "Color name:"
+#, kde-format
 msgid "Color Sampler:"
-msgstr "色名:"
+msgstr "カラーサンプラー:"
 
 #. i18n: context: text @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_crosschannel), Actions (Filters), ActionCollection (Krita)
@@ -44469,11 +44443,10 @@ msgstr "色名:"
 #: plugins/filters/colorsfilters/colorsfilters.action:7
 #: plugins/filters/colorsfilters/colorsfilters.action:9
 #: plugins/filters/colorsfilters/colorsfilters.action:10
-#, fuzzy, kde-format
-#| msgid "&Cross-channel adjustment curves..."
+#, kde-format
 msgctxt "action"
 msgid "Cross-channel adjustment Filter"
-msgstr "クロスチャンネル補正カーブ(&C)..."
+msgstr "クロスチャンネル補正フィルタ"
 
 #: plugins/filters/colorsfilters/colorsfilters.cpp:77
 #, kde-format
@@ -44558,16 +44531,14 @@ msgid "Intensity"
 msgstr "強度"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:232
-#, fuzzy, kde-format
-#| msgid "Yellow"
+#, kde-format
 msgid "Yellow-Blue"
-msgstr "イエロー"
+msgstr "黄色-青"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:233
-#, fuzzy, kde-format
-#| msgid "Green"
+#, kde-format
 msgid "Green-Red"
-msgstr "緑"
+msgstr "緑-赤"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
@@ -44801,11 +44772,10 @@ msgstr "ドライバチャンネル"
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:7
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:9
 #: plugins/filters/convertheightnormalmap/convertheightnormalmap.action:10
-#, fuzzy, kde-format
-#| msgid "Height to Normal Map"
+#, kde-format
 msgctxt "action"
 msgid "Height to Normal Map Filter"
-msgstr "高さマップを法線マップに"
+msgstr "高さマップから法線マップへのフィルター"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
@@ -44818,16 +44788,15 @@ msgid "Height to Normal Map"
 msgstr "高さマップを法線マップに"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
-#, fuzzy, kde-format
-#| msgid "Color sampler does not work on this layer."
+#, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "色の採取はこのレイヤーでは使用できません。"
+msgstr "このレイヤーでは高さマップから法線マップへの変換はできません。"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
 #, kde-format
 msgid "Prewitt"
-msgstr ""
+msgstr "プレヴィット"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -44974,6 +44943,8 @@ msgid ""
 "The formula decides how the kernel is created, so different formulas choose "
 "different values in the kernel, and thus give subtly different results."
 msgstr ""
+"式はカーネルの作成方法を決定します。したがって、異なる式を選択すると、カーネ"
+"ル内の異なる値が選択され、微妙に異なる結果が得られます。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkTransparent)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:54
@@ -44982,6 +44953,8 @@ msgid ""
 "This will take a desaturated result and use it to determine what is "
 "transparent. This is useful for creating edge and fringe effects."
 msgstr ""
+"これにより、脱色された結果が透明かどうかを判断し、エッジやフリンジ効果を作成"
+"するのに役立ちます。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTransparent)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:57
@@ -45175,10 +45148,9 @@ msgstr "ハードネス:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelInvert)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:130
-#, fuzzy, kde-format
-#| msgid "Invert"
+#, kde-format
 msgid "Invert:"
-msgstr "色調反転"
+msgstr "色調反転:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelForeground)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:144
@@ -45190,7 +45162,7 @@ msgstr "描画色:"
 #: plugins/filters/halftone/KisHalftoneConfigWidget.cpp:37
 #, kde-format
 msgid "Independent Channels"
-msgstr ""
+msgstr "独立チャンネル"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, labelMode)
@@ -45342,17 +45314,14 @@ msgid "Alpha Steps"
 msgstr "透過 (アルファ) の階調数"
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
-#, fuzzy, kde-format
-#| msgid ""
-#| "The current configuration was created for a different colorspace and "
-#| "cannot be used. All curves will be reset."
+#, kde-format
 msgid ""
 "The current configuration was created for a different colorspace and cannot "
 "be used.\n"
 "The channels will be reset."
 msgstr ""
-"現在の設定は別の色空間用に作成されたもので、使用できません。すべてのカーブが"
-"リセットされます。"
+"現在の設定は別の色空間用に作成されたもので、使用できません。\n"
+"チャンネルはリセットされます。"
 
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:621
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:672
@@ -45380,7 +45349,7 @@ msgstr "輝度補正のみ"
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:71
 #, kde-format
 msgid "Modify all channels independently"
-msgstr ""
+msgstr "すべてのチャンネルを個別に補正"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAll)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:108
@@ -45396,38 +45365,33 @@ msgstr "<b>入力レベル</b>"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLinearHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:158
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show linear histogram"
-msgstr "色の履歴を表示"
+msgstr "線形ヒストグラムを表示"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonLogarithmicHistogram)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:180
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show color history"
+#, kde-format
 msgid "Show logarithmic histogram"
-msgstr "色の履歴を表示"
+msgstr "対数ヒストグラムを表示"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToFit)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:201
 #, kde-format
 msgid "Scale the histogram to fit"
-msgstr ""
+msgstr "ヒストグラムをフィットさせる"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonScaleHistogramToCutLongPeaks)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:214
 #, kde-format
 msgid "Scale the histogram to cut long peaks "
-msgstr ""
+msgstr "長いピークをカットするためにヒストグラムをスケール"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonAutoLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:240
-#, fuzzy, kde-format
-#| msgid "Apply result to alpha channel"
+#, kde-format
 msgid "Apply auto levels to this channel"
-msgstr "アルファチャンネルに結果を適用"
+msgstr "自動レベルをこのチャンネルに適用"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetInputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:250
@@ -45567,22 +45531,20 @@ msgid "Index:"
 msgstr "インデックス:"
 
 #: plugins/filters/palettize/palettize.cpp:190
-#, fuzzy, kde-format
-#| msgid "&Pixelize..."
+#, kde-format
 msgid "&Palettize..."
-msgstr "モザイク(&P)..."
+msgstr "パレット化(&P)..."
 
 #: plugins/filters/palettize/palettize.h:67
-#, fuzzy, kde-format
-#| msgid "Palette"
+#, kde-format
 msgid "Palettize"
-msgstr "パレット"
+msgstr "パレット化"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorspaceComboBox)
 #: plugins/filters/palettize/palettize.ui:67
 #, kde-format
 msgid "Lab"
-msgstr ""
+msgstr "Lab"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:90
@@ -45844,10 +45806,9 @@ msgstr "ウィンドウのサイズ:"
 
 #: plugins/filters/resettransparent/KisResetTransparentFilter.cpp:33
 #: plugins/filters/resettransparent/KisResetTransparentFilter.h:29
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgid "Reset Transparent"
-msgstr "透過"
+msgstr "透過をリセット"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
@@ -45917,8 +45878,7 @@ msgstr "アンシャープマスク"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/unsharp/wdgunsharp.ui:56
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Amount in Unsharp mask filter"
 msgid "Amount:"
 msgstr "量:"
@@ -46348,8 +46308,7 @@ msgid "Alternating"
 msgstr "反転して繰り返し"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:44
-#, fuzzy, kde-format
-#| msgid "Pixels"
+#, kde-format
 msgctxt "The position will be set in pixels"
 msgid "Pixels"
 msgstr "ピクセル"
@@ -46370,26 +46329,25 @@ msgstr "高さ幅の割合"
 #, kde-format
 msgctxt "The position will be a percentage of the longest image side"
 msgid "Percent of the Longest Side"
-msgstr ""
+msgstr "最長辺の割合"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:48
 #, kde-format
 msgctxt "The position will be a percentage of the shortest image side"
 msgid "Percent of the Shortest Side"
-msgstr ""
+msgstr "最短辺の割合"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:51
 #, kde-format
 msgctxt "The position will be relative to the top-left corner of the image"
 msgid "Absolute"
-msgstr ""
+msgstr "絶対"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:52
-#, fuzzy, kde-format
-#| msgid "Negative"
+#, kde-format
 msgctxt "The position will be relative to the start point"
 msgid "Relative"
-msgstr "ネガ"
+msgstr "相対"
 
 #. i18n: ectx: property (text), widget (QLabel, labelAntiAliasThreshold)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:101
@@ -46600,35 +46558,25 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "水平 {n} セルごと"
+msgstr[0] "水平 {n} 回の繰り返しごと"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "垂直 {n} セルごと"
+msgstr[0] "垂直 {n} 回の繰り返しごと"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -46899,9 +46847,7 @@ msgid "Sine Wave"
 msgstr "正弦波"
 
 #: plugins/generators/screentone/KisScreentoneGeneratorConfiguration.cpp:38
-#, fuzzy, kde-format
-#| msgctxt "Screentone Pattern - Trianular Wave Lines"
-#| msgid "Triangular Wave"
+#, kde-format
 msgctxt "Screentone Pattern - Triangular Wave Lines"
 msgid "Triangular Wave"
 msgstr "三角波"
@@ -46951,13 +46897,13 @@ msgstr "プリセットを再読み込み"
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Normalized X axis coordinate of the image from its top-left corner"
-msgstr ""
+msgstr "画像の左上からの正規化された X 軸座標"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:54
 #, kde-format
 msgctxt "SeExpr variable"
 msgid "Normalized Y axis coordinate of the image from its top-left corner"
-msgstr ""
+msgstr "画像の左上からの正規化された Y 軸座標"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:55
 #, kde-format
@@ -46975,6 +46921,7 @@ msgstr "画像の高さ"
 #, kde-format
 msgid "Expected this script to output color, got '%1'"
 msgstr ""
+"このスクリプトはカラー出力することが期待されていますが、'%1' が出力されました"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:69
 #, kde-format
@@ -47022,10 +46969,9 @@ msgstr "プリセット名:"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadRenderFromScriptButton)
 #: plugins/generators/seexpr/wdgseexprsavepreset.ui:126
-#, fuzzy, kde-format
-#| msgid "Load Scratchpad Thumbnail"
+#, kde-format
 msgid "&Render Script to Thumbnail"
-msgstr "スクラッチパッドのサムネイルを読み込み"
+msgstr "スクリプトをサムネイルにレンダリング(&R)"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, kde-format
@@ -47274,7 +47220,7 @@ msgctxt "@tooltip"
 msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved in both dimensions."
-msgstr ""
+msgstr "画像の明度はフル解像度で、彩度は両方向で半分になります。"
 
 #: plugins/impex/heif/HeifExport.cpp:529
 #, kde-format
@@ -47282,14 +47228,14 @@ msgctxt "@tooltip"
 msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved horizontally."
-msgstr ""
+msgstr "画像の明度はフル解像度で、彩度は水平方向で半分になります。"
 
 #: plugins/impex/heif/HeifExport.cpp:530
 #, kde-format
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr ""
+msgstr "画像の明度と彩度はフル解像度で表示されます。"
 
 #: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
@@ -47314,6 +47260,8 @@ msgid ""
 "a perceptual quantizer curve (also known as SMPTE 2048 curve). Recommended "
 "for HDR images where the absolute brightness is important."
 msgstr ""
+"画像はまず Rec 2020 線形に変換され、その後、PQカーブ (SMPTE 2048 曲線とも呼ば"
+"れる) でエンコードされます。絶対的な明るさが重要な HDR 画像におすすめです。"
 
 #: plugins/impex/heif/HeifExport.cpp:547
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:186
@@ -47324,13 +47272,16 @@ msgid ""
 "a Hybrid Log Gamma curve. Recommended for HDR images where the display may "
 "not understand HDR."
 msgstr ""
+"画像はまず Rec 2020 線形に変換され、その後、ハイブリッド・ログ = ガンマ曲線で"
+"エンコードされます。HDR 画像で、ディスプレイが HDR に対応していない場合におす"
+"すめです。"
 
 #: plugins/impex/heif/HeifExport.cpp:553
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:193
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode PQ"
-msgstr ""
+msgstr "色彩を保持し、PQ でエンコード"
 
 #: plugins/impex/heif/HeifExport.cpp:554
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:195
@@ -47341,13 +47292,15 @@ msgid ""
 "quantizer curve (also known as the SMPTE 2048 curve). Recommended for images "
 "where the absolute brightness is important."
 msgstr ""
+"画像はまず線形化され、その後、PQカーブ (SMPTE 2048 曲線とも呼ばれる) でエン"
+"コードされます。絶対的な明度が重要な画像におすすめです。"
 
 #: plugins/impex/heif/HeifExport.cpp:558
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:201
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode HLG"
-msgstr ""
+msgstr "色彩を保持し、HLG でエンコード"
 
 #: plugins/impex/heif/HeifExport.cpp:559
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:203
@@ -47357,13 +47310,15 @@ msgid ""
 "The image will be linearized first, and then encoded with a Hybrid Log Gamma "
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
+"画像はまず線形化され、その後、ハイブリッド・ログ = ガンマ曲線でエンコードされ"
+"ます。PQ に対応していないディスプレイ向けの画像におすすめです。"
 
 #: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:208
 #, kde-format
 msgctxt "Color space option plus transfer function name"
 msgid "Keep colorants, encode SMPTE ST 428"
-msgstr ""
+msgstr "色彩を保持し、SMPTE ST 428 でエンコード"
 
 #: plugins/impex/heif/HeifExport.cpp:564
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:210
@@ -47374,12 +47329,15 @@ msgid ""
 "Krita always opens images like these as linear floating point, this option "
 "is there to reverse that"
 msgstr ""
+"画像はまず線形化され、その後、SMPTE ST 428 でエンコードされます。Krita は常に"
+"このような画像を線形浮動小数点として開きます。このオプションはそれを元に戻す"
+"ためのものです"
 
 #: plugins/impex/heif/HeifExport.cpp:569
 #, kde-format
 msgctxt "Color space option"
 msgid "No changes, clip"
-msgstr ""
+msgstr "変更なし、クリップ"
 
 #: plugins/impex/heif/HeifExport.cpp:570
 #, kde-format
@@ -47388,6 +47346,8 @@ msgid ""
 "The image will be converted plainly to 12bit integer, and values that are "
 "out of bounds are clipped, the icc profile will be embedded."
 msgstr ""
+"画像は単純に 12 ビット整数に変換され、範囲外の値は範囲内に収められ、ICC プロ"
+"ファイルが埋め込まれます。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossySettings)
 #: plugins/impex/heif/WdgHeifExport.ui:21
@@ -47425,6 +47385,9 @@ msgid ""
 "will need to be converted. Rec 2100 PQ or Rec 2100 HLG is expected for HDR "
 "images.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>現在の画像を正確に 12 ビットに変換するには、変換が必要"
+"です。HDR 画像には Rec 2100 PQ または Rec 2100 HLG が求められます。</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, spaceLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:79
@@ -47436,30 +47399,24 @@ msgstr "スペース:"
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnGamma)
 #: plugins/impex/heif/WdgHeifExport.ui:96
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:298
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
 "from PQ.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></body></"
-"html>"
+"<html><head/><body><p>ガンマ値を指定します。デフォルトでは PQ から変換するた"
+"めに 1.2 に設定されています。</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
 #: plugins/impex/heif/WdgHeifExport.ui:113
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:315
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>Use the tilt of the tablet to determine the normals."
-#| "</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>The display brightness in nits. By default this is set "
 "to 1000 for converting from PQ.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>ペンタブペンの傾きを用いて法線を決定します</p></body></"
-"html>"
+"<html><head/><body><p>ディスプレイの明るさをニットで指定します。デフォルトで"
+"は PQ から変換するために 1000 に設定されています。</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
@@ -47472,6 +47429,10 @@ msgid ""
 "Therefore we apply the HLG opto-optical curve to convert from display to "
 "scene linear.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ハイブリッド・ログ = ガンマは、Krita が現在ディスプレイ"
+"に HLG データを直接送信できないため、その間に追加の変換ステップが必要です。そ"
+"のため、ディスプレイからシーンリニアに変換するために HLG 光学光学曲線を適用し"
+"ます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (title), widget (QGroupBox, chkHLGOOTF)
@@ -47479,7 +47440,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:282
 #, kde-format
 msgid "Apply reverse Hybrid Log Gamma OOTF"
-msgstr ""
+msgstr "逆ハイブリッド・ログ = ガンマ OOTF を適用"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLossless)
 #: plugins/impex/heif/WdgHeifExport.ui:151
@@ -47496,12 +47457,17 @@ msgid ""
 "these files just fine, but not all programs do. Converting to sRGB first "
 "before saving solves this at the cost of larger file size.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>AV1 および拡張された avif のすべてのエンコーダがモノク"
+"ロームの保存をサポートしているわけではありません。Krita はこれらのファイルを"
+"問題なく開くことができますが、すべてのプログラムがそうであるわけではありませ"
+"ん。保存前に sRGB に変換することで、これを解決できますが、ファイルサイズが大"
+"きくなるというコストがかかります。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMonochromesRGB)
 #: plugins/impex/heif/WdgHeifExport.ui:164
 #, kde-format
 msgid "Convert to sRGB for extra compatibility"
-msgstr ""
+msgstr "互換性を高めるために sRGB に変換"
 
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:70
 #, kde-format
@@ -47849,6 +47815,8 @@ msgctxt "JPEG-XL errors"
 msgid ""
 "Detected JPEG-XL image with spot color channels, importing flattened image."
 msgstr ""
+"スポットカラーチャンネルを持つ JPEG-XL 画像が検出されました。フラット化された"
+"画像をインポートします。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:647
 #: plugins/impex/jxl/JPEGXLImport.cpp:659
@@ -47866,12 +47834,14 @@ msgid ""
 "Detected multi layer JPEG-XL image with unsupported blending mode, importing "
 "flattened image."
 msgstr ""
+"サポートされていない合成モードを持つマルチレイヤー JPEG-XL 画像が検出されまし"
+"た。フラット化された画像をインポートします。"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:846
 #, kde-format
 msgctxt "JPEG-XL"
 msgid "Invalid JPEG-XL layer name length"
-msgstr ""
+msgstr "無効な JPEG-XL レイヤー名の長さ"
 
 #: plugins/impex/jxl/JPEGXLImport.cpp:905
 #, kde-format
@@ -47888,11 +47858,10 @@ msgstr "通常(低品質の場合のみ)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:20
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:26
-#, fuzzy, kde-format
-#| msgid "No Scaling"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "No downsampling"
-msgstr "拡大縮小なし"
+msgstr "ダウンサンプリングなし"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
@@ -47940,7 +47909,7 @@ msgstr "8x8 下方標本化周波数変換"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Default (encoder chooses)"
-msgstr ""
+msgstr "デフォルト(エンコーダが選択)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:34
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:40
@@ -47952,11 +47921,10 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:88
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:95
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:129
-#, fuzzy, kde-format
-#| msgid "Cut Off Disabled"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Disabled"
-msgstr "すべてで適用"
+msgstr "無効"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:35
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:41
@@ -47967,8 +47935,7 @@ msgstr "すべてで適用"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:83
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:96
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:130
-#, fuzzy, kde-format
-#| msgid "Enabled"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Enabled"
 msgstr "有効"
@@ -47977,41 +47944,37 @@ msgstr "有効"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "VarDCT mode (e.g. for photographic images)"
-msgstr ""
+msgstr "VarDCT モード(写真など)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:53
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular mode (e.g. for lossless images)"
-msgstr ""
+msgstr "モジュラーモード(ロスレス画像など)"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:64
-#, fuzzy, kde-format
-#| msgid "Vertical border:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Scanline order"
-msgstr "グリッドの点を横列に分離する帯の幅:"
+msgstr "スキャンラインの順序"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:65
-#, fuzzy, kde-format
-#| msgctxt "Action to center the selected stop in the segment gradient editor"
-#| msgid "Center stop"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
-msgstr "グラデーションストップを中央へ"
+msgstr "中央有線の順序"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:89
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "X 解像度:"
+msgstr "64x64 下方解像度パス"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr ""
+msgstr "512x512 + 64x64 下方解像度パス"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
 #, kde-format
@@ -48044,17 +48007,13 @@ msgid "Zero"
 msgstr "0"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:110
-#, fuzzy, kde-format
-#| msgctxt "Left Mouse Button"
-#| msgid "Left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left"
 msgstr "左"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:111
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top"
 msgstr "上"
@@ -48063,49 +48022,40 @@ msgstr "上"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg0"
-msgstr ""
+msgstr "平均値 0"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:113
-#, fuzzy, kde-format
-#| msgid "Select"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Select"
 msgstr "選択"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:114
-#, fuzzy, kde-format
-#| msgid "Gradient"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient"
 msgstr "グラデーション"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:115
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Brush Smoothing"
-#| msgid "Weighted"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Weighted"
 msgstr "重み付け"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:116
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Move right"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
-msgstr "右に移動"
+msgstr "右上"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:117
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Move left"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
-msgstr "左に移動"
+msgstr "左上"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:118
-#, fuzzy, kde-format
-#| msgid "Left indent"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Left left"
 msgstr "左の字下げ"
@@ -48114,46 +48064,43 @@ msgstr "左の字下げ"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg1"
-msgstr ""
+msgstr "平均値 1"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg2"
-msgstr ""
+msgstr "平均値 2"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:121
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Avg3"
-msgstr ""
+msgstr "平均値 3"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:122
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Toptop predictive average"
-msgstr ""
+msgstr "上上予測平均"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:123
-#, fuzzy, kde-format
-#| msgid "Gradient Map"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gradient + Weighted"
-msgstr "グラデーションマップ"
+msgstr "グラデーション + 重み付け"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:124
-#, fuzzy, kde-format
-#| msgid "Use last preset"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Use all predictors"
-msgstr "最後のプリセットを使用"
+msgstr "すべての予測子を使用"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:172
-#, fuzzy, kde-format
-#| msgid "Save as %1"
+#, kde-format
 msgctxt "Color space option"
 msgid "Save as is"
-msgstr "%1 として保存"
+msgstr "そのまま保存"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:174
 #, kde-format
@@ -48162,12 +48109,14 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
+"画像は変換せずに保存され、ICC プロファイルは CICP に変換されるか、埋め込まれ"
+"ます。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
 #, kde-format
 msgid "If this is not enabled, only the first frame will be saved."
-msgstr ""
+msgstr "これが有効でない場合、最初のフレームのみが保存されます。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -48187,14 +48136,13 @@ msgstr "エンコードのオプション"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
 #, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr ""
+msgstr "これが有効でない場合、画像はロスレスで保存されます。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
-#, fuzzy, kde-format
-#| msgid "Lossless encoding"
+#, kde-format
 msgid "Lossy encoding"
-msgstr "Lossless エンコーディング"
+msgstr "ロスレスエンコーディング"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:77
@@ -48211,6 +48159,8 @@ msgid ""
 "Set the lossy quality of JPEG-XL export.\n"
 "Default: 90 (visually lossless)."
 msgstr ""
+"JPEG-XL エクスポートのロス品質を設定します。\n"
+"デフォルト: 90 (視覚的にはロスレス)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:107
@@ -48228,12 +48178,16 @@ msgid ""
 "(e.g. for non-photographic images).\n"
 "Default: disabled."
 msgstr ""
+"ロス圧縮のためのデフォルトの VarDCT ではなく、モジュラーエンコードを使用しま"
+"す\n"
+"(写真以外の画像など)。\n"
+"デフォルト: 無効。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceModular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:121
 #, kde-format
 msgid "Use modular mode"
-msgstr ""
+msgstr "モジュラーモードを使用"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
@@ -48265,6 +48219,11 @@ msgid ""
 "falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.\n"
 "Default: squirrel (7)."
 msgstr ""
+"デコード速度に影響を与えることなく、エンコーダの努力/速度レベルを設定しま"
+"す。\n"
+"有効な値は、速度が速い順に次のとおりです: 1:稲妻 2:雷鳴 3:隼 4:チーター 5:野"
+"ウサギ 6:ウォンバット 7:リス 8:子猫 9:カメ。\n"
+"デフォルト: リス (7)。"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:177
@@ -48293,6 +48252,10 @@ msgid ""
 "(fastest to decode, at the cost of some quality/density).\n"
 "Default is 0."
 msgstr ""
+"提供されたオプションのデコード速度ティアーを設定します。\n"
+"最小値は 0 (最も遅いデコード、最高の品質/密度) で、最大値は 4 (一部の品質/密"
+"度を犠牲にして最も速いデコード) です。\n"
+"デフォルトは 0 です。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:236
@@ -48303,13 +48266,16 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>これが有効でない場合、レイヤーはラスター化されて保存さ"
+"れます。ただし、この設定に関係なく、アニメーションエクスポートは常にフラット"
+"化されます。</p><p>Web 配信や他のアプリケーションとの一般的な互換性のために、"
+"このオプションをチェックしたままにすることをお勧めします。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:239
-#, fuzzy, kde-format
-#| msgid "Flatten the &image"
+#, kde-format
 msgid "Flatten the image"
-msgstr "画像を統合(&I)"
+msgstr "画像を統合"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:256
@@ -48318,22 +48284,22 @@ msgid ""
 "Applications like Google Chrome expect HDR images to store their color "
 "profile as CICP values. You can adjust the ICC profile conversion below."
 msgstr ""
+"Google Chrome などのアプリケーションは、HDR 画像がその色プロファイルを CICP "
+"値として格納することを期待しています。以下で ICC プロファイルの変換を調整でき"
+"ます。"
 
 #. i18n: ectx: attribute (title), widget (QWidget, encoderParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:345
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Encoder parameters"
-msgstr "パラメータを変更"
+msgstr "エンコーダのパラメータ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:351
-#, fuzzy, kde-format
-#| msgid "Color channels in color"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Color channel resampling"
-msgstr "色チャンネル"
+msgstr "カラーチャンネルの再サンプリング"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, resampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:358
@@ -48343,13 +48309,15 @@ msgid ""
 "downsampled before compression, and upsampled to original size in the "
 "decoder."
 msgstr ""
+"再サンプリングオプションを設定します。有効にすると、画像のカラーチャンネルは"
+"圧縮前にダウンサンプリングされ、デコーダで元のサイズにアップサンプリングされ"
+"ます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:365
-#, fuzzy, kde-format
-#| msgid "Kra File Compression"
+#, kde-format
 msgid "Alpha channel resampling"
-msgstr "Kra ファイルの圧縮"
+msgstr "アルファチャンネルの再サンプリング"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, extraChannelResampling)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:372
@@ -48358,13 +48326,16 @@ msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
 "before compression, and upsampled to original size in the decoder."
 msgstr ""
+"再サンプリングオプションを設定します。有効にすると、画像のアルファチャンネル"
+"は圧縮前にダウンサンプリングされ、デコーダで元のサイズにアップサンプリングさ"
+"れます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:379
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Photon noise"
-msgstr ""
+msgstr "フォトンノイズ"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, photonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:394
@@ -48376,51 +48347,48 @@ msgid ""
 "a lot of noise.\n"
 "The default value is 0."
 msgstr ""
+"写真フィルムのノイズをエミュレートするために画像にノイズを追加し、与えられた"
+"数値が高いほど画像は粒状になります。\n"
+"例えば、100 にすると低いノイズを、3200 にすると多くのノイズを与えます。\n"
+"デフォルト値は 0 です。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:404
-#, fuzzy, kde-format
-#| msgid "Generate"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate dots"
-msgstr "生成"
+msgstr "ドットを生成"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, dots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:411
-#, fuzzy, kde-format
-#| msgid "Enable background cache generation"
+#, kde-format
 msgid "Enables or disables dots generation."
-msgstr "バックグラウンドでのキャッシュ生成を有効化"
+msgstr "ドットの生成を有効または無効にします。"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:418
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Reverse paths"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Generate patches"
-msgstr "ベクターパスを反転"
+msgstr "パッチを生成"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, patches)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:425
-#, fuzzy, kde-format
-#| msgid "Enable background cache generation"
+#, kde-format
 msgid "Enables or disables patches generation."
-msgstr "バックグラウンドでのキャッシュ生成を有効化"
+msgstr "パッチの生成を有効または無効にします。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEpf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:432
-#, fuzzy, kde-format
-#| msgid "Processing layer"
+#, kde-format
 msgid "Edge preserving filter"
-msgstr "レイヤーを処理中"
+msgstr "エッジ保存フィルタ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMax)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:453
-#, fuzzy, kde-format
-#| msgid "Maximum Height"
+#, kde-format
 msgid "Maximum strength"
-msgstr "最大高さ"
+msgstr "最大強度"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, epf)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:470
@@ -48429,40 +48397,40 @@ msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
+"エッジ保存フィルタレベル、-1 から 3 までの値を使用します。デフォルト(エンコー"
+"ダが選択) は -1、強度を設定するには 0 から 3 を使用します。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:485
 #, kde-format
 msgid "Enables or disables the gaborish filter."
-msgstr ""
+msgstr "ガボールフィルタを有効または無効にします。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGaborishFilter)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:492
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Gaborish filter"
-msgstr ""
+msgstr "ガボールフィルタ"
 
 #. i18n: ectx: property (text), widget (QLabel, lbModularEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:499
-#, fuzzy, kde-format
-#| msgid "Recovered"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Modular encoding"
-msgstr "復元"
+msgstr "モジュラーエンコード"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modular)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:506
-#, fuzzy, kde-format
-#| msgid "Enable Touch Painting"
+#, kde-format
 msgid "Enables modular encoding."
-msgstr "タッチによる描画を有効化"
+msgstr "モジュラーエンコードを有効にします。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, keepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:513
 #, kde-format
 msgid "Enables or disables preserving color of invisible pixels."
-msgstr ""
+msgstr "不可視ピクセルの色を保持を有効または無効にします。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, groupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:520
@@ -48471,42 +48439,40 @@ msgid ""
 "Determines the order in which 256x256 regions are stored in the codestream "
 "for progressive rendering."
 msgstr ""
+"256x256 領域がプログレッシブレンダリングのためにコードストリームに保存される"
+"順序を決定します。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblKeepInvisible)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:530
 #, kde-format
 msgid "Keep color of invisible pixels"
-msgstr ""
+msgstr "不可視ピクセルの色を保持"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGroupOrder)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:537
-#, fuzzy, kde-format
-#| msgid "Group time"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group order"
-msgstr "グループ化の時間"
+msgstr "グループの順序"
 
 #. i18n: ectx: property (text), widget (QLabel, lblJPEGReconCFL)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:544
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Chroma-from-luma"
-msgstr ""
+msgstr "Chroma from Luma (CfL)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, varDCTParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:552
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "VarDCT parameters"
-msgstr "パラメータを変更"
+msgstr "VarDCT パラメータ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:558
-#, fuzzy, kde-format
-#| msgid "Subpixel precision"
+#, kde-format
 msgid "Spectral progression"
-msgstr "サブピクセル精度"
+msgstr "スペクトル相"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveAC)
 #. i18n: ectx: property (toolTip), widget (QComboBox, qProgressiveAC)
@@ -48517,58 +48483,50 @@ msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
 "progression from the DCT coefficients."
 msgstr ""
+"VarDCT の AC 係数のプログレッシブモードを設定し、DCT 係数からのスペクトル相を"
+"使用します。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:575
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "animation"
+#, kde-format
 msgid "Quantization"
-msgstr "animation"
+msgstr "量子化"
 
 #. i18n: ectx: property (text), widget (QLabel, lblProgressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
-#, fuzzy, kde-format
-#| msgid "X resolution:"
+#, kde-format
 msgid "Low resolution DC"
-msgstr "X 解像度:"
+msgstr "低解像度 DC"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
-msgstr ""
+msgstr "VarDCT に低解像度 DC 画像を使用してプログレッシブモードを設定します。"
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:604
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change parameter"
+#, kde-format
 msgid "Modular parameters"
-msgstr "パラメータを変更"
+msgstr "モジュラーパラメータ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResponsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:610
-#, fuzzy, kde-format
-#| msgctxt "A progressive jpeg file can be displayed while loading."
-#| msgid "Progressive"
+#, kde-format
 msgid "Progressive encoding"
-msgstr "プログレッシブ方式"
+msgstr "プログレッシブエンコード"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, responsive)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:617
 #, kde-format
 msgid "Enables or disables progressive encoding for modular mode."
-msgstr ""
+msgstr "モジュラーモードのプログレッシブエンコードを有効または無効にします。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:624
-#, fuzzy, kde-format
-#| msgid "Global Pattern"
+#, kde-format
 msgid "Global channel palette range"
-msgstr "グローバルパターン"
+msgstr "グローバルチャンネルパレットの範囲"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGlobalPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:635
@@ -48579,13 +48537,17 @@ msgid ""
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
+"パレットの色の数が範囲のこの割合より小さい場合、グローバルチャンネルパレット"
+"を使用します。\n"
+"明示的に割合を設定するには 0-100 を使用し、エンコーダのデフォルトを使用するに"
+"は -1 を使用します。\n"
+"モジュラーエンコードに使用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:676
-#, fuzzy, kde-format
-#| msgid "Load a palette"
+#, kde-format
 msgid "Local channel palette range"
-msgstr "パレットを読み込み"
+msgstr "ローカルチャンネルパレットの範囲"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, channelColorsGroupPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:687
@@ -48596,12 +48558,17 @@ msgid ""
 "Use 0-100 to set an explicit percentage, -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
+"パレットの色の数が範囲のこの割合より小さい場合、ローカル (グループごと) チャ"
+"ンネルパレットを使用します。\n"
+"明示的に割合を設定するには 0-100 を使用し、エンコーダのデフォルトを使用するに"
+"は -1 を使用します。\n"
+"モジュラーエンコードに使用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:728
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr ""
+msgstr "... 色以下の場合にカラーパレットを使用します"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:742
@@ -48611,55 +48578,55 @@ msgid ""
 "amount, or -1 to use the encoder default.\n"
 "Used for modular encoding."
 msgstr ""
+"色数がこの数以下の場合、カラーパレットを使用します。またはエンコーダのデフォ"
+"ルトを使用するには -1 を使用します。\n"
+"モジュラーエンコードに使用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:764
-#, fuzzy, kde-format
-#| msgid "Load a palette"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Delta palette"
-msgstr "パレットを読み込み"
+msgstr "デルタパレット"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, lossyPalette)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:771
-#, fuzzy, kde-format
-#| msgid "Enable background cache generation"
+#, kde-format
 msgid "Enables or disables delta palette. Used in modular mode."
-msgstr "バックグラウンドでのキャッシュ生成を有効化"
+msgstr ""
+"デルタパレットを有効または無効にします。モジュラーモードで使用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:778
-#, fuzzy, kde-format
-#| msgid "Drop size"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Group size"
-msgstr "雨滴のサイズ"
+msgstr "グループの大きさ"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularGroupSize)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:785
 #, kde-format
 msgid "Group size for modular encoding."
-msgstr ""
+msgstr "モジュラーエンコードのグループの大きさ。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, modularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:792
 #, kde-format
 msgid "Predictor for modular encoding."
-msgstr ""
+msgstr "モジュラーエンコードの予測子。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularPredictor)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:799
-#, fuzzy, kde-format
-#| msgid "Predictor:"
+#, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Predictor"
-msgstr "予測子:"
+msgstr "予測子"
 
 #. i18n: ectx: property (text), widget (QLabel, lblModularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:806
 #, kde-format
 msgid "Pixels for MA tree learning"
-msgstr ""
+msgstr "MA 木学習のピクセル"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, modularMATreeLearningPercent)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:834
@@ -48669,6 +48636,10 @@ msgid ""
 "-1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all.\n"
 "Higher values use more encoder memory."
 msgstr ""
+"MA 木を学習するために使用されるピクセルの割合を%で指定します。\n"
+"-1 = デフォルト、0 = MA なしで高速デコード、50 = デフォルト値、100 = すべ"
+"て。\n"
+"高い値にするとエンコーダのメモリを多く使用します。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:907
@@ -48712,7 +48683,7 @@ msgctxt "Warning during loading a kra file with a filter layer"
 msgid ""
 "Selection on layer %s couldn't be loaded. It will be replaced by an empty "
 "selection."
-msgstr ""
+msgstr "レイヤー %s の選択を読み込めませんでした。空の選択に置き換えられます。"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:326
 #, kde-format
@@ -48824,18 +48795,22 @@ msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr ""
+"埋め込まれたパレットが空であり、読み込むことができません。パレットの名前: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:578
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr ""
+"埋め込まれたリソースを読み込むことができません。リソースのファイル名: %1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:587
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
+"埋め込まれたリソースをインポートすることができません。リソースのファイル名: "
+"%1"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:671
 #, kde-format
@@ -48861,6 +48836,8 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
+"アクティブな状態のグローバル選択マスクが2つ見つかりました。\"%1\" がアクティ"
+"ブに保たれ、\"%2\" が非アクティブになります"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:900
 #, kde-format
@@ -48890,6 +48867,10 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
+"レイヤー\"%1\"には、Krita 5.2でCMYKカラーの動作が変更された\"%2\"というブレン"
+"ディングモードがあります。結果を確認し、設定->Kritaの設定を変更...->全般->"
+"ツール->CMYK混色モードでレガシーの\"加算\"アルゴリズムを有効にすることを検討"
+"してください"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1105
 #, kde-format
@@ -49013,110 +48994,97 @@ msgid "Could not write for %1 metadata to the file."
 msgstr "%1メタデータをファイルに書き込みできませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:195
-#, fuzzy, kde-format
-#| msgid "Could not encode or write image."
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
-msgstr "画像をエンコードまたは書き込みできませんでした。"
+msgstr "リソースを埋め込むためにエクスポートできませんでした: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:210
-#, fuzzy, kde-format
-#| msgid "could not save keyframes"
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
-msgstr "キーフレームの保存に失敗しました"
+msgstr "リソースを書き込めませんでした: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:222
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
-msgstr ""
+msgstr "書き込まれたリソースは空です: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:228
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
-msgstr ""
+msgstr "書き込まれたリソースが不完全です: %1"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:245
 #: plugins/impex/libkra/kis_kra_saver.cpp:267
-#, fuzzy, kde-format
-#| msgid "could not save keyframes"
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
-msgstr "キーフレームの保存に失敗しました"
+msgstr "絵コンテを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:279
 #: plugins/impex/libkra/kis_kra_saver.cpp:303
-#, fuzzy, kde-format
-#| msgid "could not save palettes"
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
-msgstr "パレットを保存できませんでした"
+msgstr "アニメーションのメタデータを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:316
 #: plugins/impex/libkra/kis_kra_saver.cpp:339
-#, fuzzy, kde-format
-#| msgid "could not save palettes"
+#, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
-msgstr "パレットを保存できませんでした"
+msgstr "音声のメタデータを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:452
-#, fuzzy, kde-format
-#| msgid "could not save keyframes"
+#, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
-msgstr "キーフレームの保存に失敗しました"
+msgstr "キーフレームを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:496
-#, fuzzy, kde-format
-#| msgid "could not save palettes"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
-msgstr "パレットを保存できませんでした"
+msgstr "アノテーションを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:530
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
-msgstr "プロファイルを読み込めませんでした: %1"
+msgstr "画像のプロファイルを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:560
-#, fuzzy, kde-format
-#| msgid "Could not load profile: %1."
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
-msgstr "プロファイルを読み込めませんでした: %1"
+msgstr "ソフトプルーフのカラープロファイルを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:595
-#, fuzzy, kde-format
-#| msgid "could not save palettes"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
-msgstr "パレットを保存できませんでした"
+msgstr "追加のアノテーションを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:628
-#, fuzzy, kde-format
-#| msgid "Could not save the layer. %1"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
-msgstr "レイヤーの保存に失敗しました。%1"
+msgstr "レイヤースタイルを保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:643
-#, fuzzy, kde-format
-#| msgid "Could not save the layer. %1"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
-msgstr "レイヤーの保存に失敗しました。%1"
+msgstr "統合された画像を保存できませんでした"
 
 #: plugins/impex/libkra/kis_kra_saver.cpp:738
-#, fuzzy, kde-format
-#| msgid "could not save palettes"
+#, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
-msgstr "パレットを保存できませんでした"
+msgstr "補助線を保存できませんでした"
 
 #: plugins/impex/libkra/kra_converter.cpp:75
 #, kde-format
@@ -49704,6 +49672,35 @@ msgid ""
 "RawTherapee project.</li></ul></p><p>Note: some methods can be unavailable "
 "if RAW decoder have been built without extension packs.</p>"
 msgstr ""
+"<title>品質 (補間)</title><p>RAW 画像をデコードする際に使用するデモザイク方法"
+"をここで選択します。デモザイクアルゴリズムはデジタル画像処理において、カラー"
+"フィルタ付きイメージセンサから受信した部分的な生データから完全な画像を補間す"
+"るために使用されます。これは多くのデジタルカメラ内部に存在し、カラーピクセル"
+"の行列として表されます。CFA 補間や色再構成とも呼ばれ、デモザイクとも呼ばれま"
+"す。以下の方法が RAW 画像のデモザイクに使用可能です:</p><p><ul><li><emphasis "
+"strong='true'>バイリニア</emphasis>: 高速ですが低品質なバイリニア補間を使用し"
+"ます (デフォルト - 低速なコンピュータ用)。この方法では、赤ではないピクセルの"
+"赤の値は隣接する赤のピクセルの平均として計算され、青と緑も同様です。</"
+"li><li><emphasis strong='true'>VNG</emphasis>: 可変勾配数補間を使用します。こ"
+"の方法は、ピクセルの近くの勾配を計算し、対象となるピクセルの近くの勾配 (より"
+"滑らかで似た部分の勾配) を使用して推定を行います。</li><li><emphasis "
+"strong='true'>PPG</emphasis>: パターンピクセルグループ補間を使用します。ピク"
+"セルグループにおいては推定を行う際に自然な風景についての仮定を用います。自然"
+"な画像では、可変勾配数法よりも色のアーティファクトが少なくなります。</"
+"li><li><emphasis strong='true'>AHD</emphasis>: 適応的均質性指向補間を使用しま"
+"す。この方法は、均質性メトリックを最大化するように補間の方向を選択し、通常は"
+"色に関するアーティファクトを最小限に抑えます。</li><li><emphasis "
+"strong='true'>DCB</emphasis>: linuxphoto.org プロジェクトの DCB 補間。</"
+"li><li><emphasis strong='true'>AHD v2</emphasis>: 分散色差法を使用した修正"
+"AHD 補間。</li><li><emphasis strong='true'>AFD</emphasis>: PerfectRaw プロ"
+"ジェクトの5パス平均フィルタを使用した適応フィルタデモザイク補間。</"
+"li><li><emphasis strong='true'>VCD</emphasis>: 色差の分散補間。</"
+"li><li><emphasis strong='true'>VCD & AHD</emphasis>: VCD と AHD の混合デモザ"
+"イク。</li><li><emphasis strong='true'>LMMSE</emphasis>: PerfectRaw の方向性"
+"線形最小二乗誤差推定補間。</li><li><emphasis strong='true'>AMaZE</emphasis>: "
+"RawTherapee プロジェクトのエイリアシング最小化補間とジッパー除去を適用した色"
+"収差除去。</li></ul></p><p>注意: 一部のメソッドは、RAW デコーダが拡張パックな"
+"しでビルドされている場合に使用できないことがあります。</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
@@ -50298,6 +50295,19 @@ msgid ""
 "in mind.</li><li><emphasis strong='true'>Custom</emphasis>: use a custom "
 "output color space profile.</li></ul></p>"
 msgstr ""
+"<title>ワークスペース</title><p>RAW データのデコードに 使用する出力色空間を選"
+"択します。</p><p><ul><li><emphasis strong='true'>プロファイルなし</"
+"emphasis>: このモードでは、RAW デコード中に出力色空間は使用されません。</"
+"li><li><emphasis strong='true'>sRGB</emphasis>: これは Hewlett-Packard と "
+"Microsoft によって共同で作成された RGB 色空間です。Web および肖像写真向けの画"
+"像に最適です。</li><li><emphasis strong='true'>Adobe RGB</emphasis>: この色空"
+"間は Adobe によって開発された拡張 RGB 色空間です。広告やファインアートなどの"
+"写真アプリケーションで使用されます。</li><li><emphasis strong='true'>広色域</"
+"emphasis>: この色空間は Adobe RGB 色空間の拡張版です。</li><li><emphasis "
+"strong='true'>Pro-Photo</emphasis>: この色空間は Kodak によって開発された "
+"RGB 色空間で、とりわけ写真出力を考慮して特に大きな色域を提供します。</"
+"li><li><emphasis strong='true'>カスタム</emphasis>: カスタム出力色空間プロ"
+"ファイルを使用します。</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
 #, kde-format
@@ -50435,6 +50445,9 @@ msgid ""
 "coefficient quantization and/or Huffman coding tables. Please upgrade your "
 "version of libjpeg-turbo and try again."
 msgstr ""
+"この TIFF ファイルは JPEG で圧縮されていますが、libjpeg-turbo はその係数量子"
+"化および/またはハフマン符号化テーブルを読み込むことができませんでした。"
+"libjpeg-turbo のバージョンをアップグレードしてからもう一度お試しください。"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1147
 #: plugins/impex/tiff/kis_tiff_import.cc:1330
@@ -50442,12 +50455,14 @@ msgstr ""
 msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr ""
+"JPEG で圧縮された、サブサンプリングされた YCbCr TIFF ファイルは読み込むことが"
+"できません。"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1577
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
-msgstr ""
+msgstr "PSD データを含む TIFF 画像"
 
 #: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
@@ -50456,6 +50471,8 @@ msgid ""
 "The TIFF image contains valid PSD data embedded. Would you like to use PSD "
 "data instead of normal TIFF data?"
 msgstr ""
+"TIFF 画像に有効な PSD データが埋め込まれています。通常の TIFF データの代わり"
+"に PSD データを使用しますか?"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsTIFF)
 #. i18n: ectx: property (title), widget (QGroupBox, tiffOptions)
@@ -50473,11 +50490,10 @@ msgstr "圧縮の種類"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:56
-#, fuzzy, kde-format
-#| msgid "Predictor:"
+#, kde-format
 msgctxt "TIFF encoder options"
 msgid "Predictor"
-msgstr "予測子:"
+msgstr "予測子"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, kComboBoxPredictor)
 #: plugins/impex/tiff/kis_wdg_options_tiff.ui:69
@@ -50659,17 +50675,16 @@ msgid "None"
 msgstr "なし"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:49
-#, fuzzy, kde-format
-#| msgid "Smooth"
+#, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Segment-smooth"
-msgstr "平滑化"
+msgstr "セグメント-スムーズ"
 
 #: plugins/impex/webp/kis_wdg_options_webp.cpp:52
 #, kde-format
 msgctxt "WebP preprocessing filters"
 msgid "Pseudo-random dithering"
-msgstr ""
+msgstr "疑似ランダムディザリング"
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:37
@@ -50699,12 +50714,15 @@ msgid ""
 "better.\n"
 "If Lossless is disabled: 0 = smallest size, 100 = largest size."
 msgstr ""
+"ロスレスが有効の場合: 0 = 最速だがファイルサイズが大きくなる, 100 = 遅くなる"
+"がもっと良くなる。\n"
+"ロスレスが無効の場合: 0 = サイズ最小, 100 = サイズ最大"
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, tradeoff)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:121
 #, kde-format
 msgid "Quality/speed trade-off (0 = fast, 6 = slower-better)"
-msgstr ""
+msgstr "品質/速度のトレードオフ (0 = 速い, 6 = 遅くなるが良くなる)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dithering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:136
@@ -50721,6 +50739,8 @@ msgid ""
 "If non-zero, sets the desired target size in bytes. Takes precedence over "
 "the compression parameters."
 msgstr ""
+"非ゼロの場合、バイト単位で目標サイズを設定します。圧縮パラメータより優先され"
+"ます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:205
@@ -50742,7 +50762,7 @@ msgstr " B (バイト)"
 msgid ""
 "If non-zero, specifies the minimal distortion to try to achieve. Takes "
 "precedence over Target Size."
-msgstr ""
+msgstr "非ゼロの場合、最小の歪みを指定します。目標サイズより優先されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTargetPSNR)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:234
@@ -50770,14 +50790,13 @@ msgstr "セグメント"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:302
 #, kde-format
 msgid "Spatial Noise Shaping: 0 = off, 100 = maximum."
-msgstr ""
+msgstr "空間ノイズシェイピング: 0 = オフ, 100 = 最大"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSNSStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:295
-#, fuzzy, kde-format
-#| msgid "Strength"
+#, kde-format
 msgid "SNS Strength"
-msgstr "強さ"
+msgstr "空間ノイズシェイピングの強度"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterStrength)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterStrength)
@@ -50785,15 +50804,14 @@ msgstr "強さ"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:325
 #, kde-format
 msgid "Filter strength: 0 = off, 100 = strongest."
-msgstr ""
+msgstr "フィルタの強度: 0 = オフ, 100 = 最強"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterStrength)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:318
-#, fuzzy, kde-format
-#| msgid "Filter Settings"
+#, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Strength"
-msgstr "フィルタの設定"
+msgstr "フィルタの強度"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterSharpness)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, filterSharpness)
@@ -50801,15 +50819,14 @@ msgstr "フィルタの設定"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:348
 #, kde-format
 msgid "Filter sharpness: 0 = off, 7 = least sharp."
-msgstr ""
+msgstr "フィルタの鮮明さ: 0 = オフ, 7 = 最も鮮明"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterSharpness)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:341
-#, fuzzy, kde-format
-#| msgid "Filter Settings"
+#, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Sharpness"
-msgstr "フィルタの設定"
+msgstr "フィルタの鮮明さ"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblFilterType)
 #. i18n: ectx: property (toolTip), widget (QComboBox, filterType)
@@ -50820,20 +50837,21 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
+"0 = 単純, 1 = 強。フィルタの強度が 0 より大きいか、フィルタの強度の自動調整が"
+"有効な場合のみ使用されます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:364
-#, fuzzy, kde-format
-#| msgid "File Type"
+#, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Filter Type"
-msgstr "ファイルの種類"
+msgstr "フィルタの種類"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAutofilter)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:378
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr ""
+msgstr "フィルタの強度を自動調整"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -50860,19 +50878,20 @@ msgid ""
 "Algorithm for encoding the alpha plane (0 = None, 1 = compressed with WebP "
 "lossless). Default is 1."
 msgstr ""
+"アルファプレーンのエンコードアルゴリズム (0 = なし, 1 = WebP のロスレスで圧"
+"縮)。デフォルトは 1。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:395
-#, fuzzy, kde-format
-#| msgid "Kra File Compression"
+#, kde-format
 msgid "Alpha Plane Compression"
-msgstr "Kra ファイルの圧縮"
+msgstr "アルファプレーンの圧縮"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaFiltering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:405
 #, kde-format
 msgid "Predictive Filtering for Alpha Plane"
-msgstr ""
+msgstr "アルファプレーンの予測フィルタリング"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbPreviewMode)
 #. i18n: ectx: property (text), widget (QLabel, lblFast)
@@ -50889,14 +50908,13 @@ msgstr "高速"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:463
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
-msgstr ""
+msgstr "0 = サイズ最小, 100 = 損失なし。デフォルトは 100。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:456
-#, fuzzy, kde-format
-#| msgid "Advanced quality"
+#, kde-format
 msgid "Alpha Plane Quality"
-msgstr "拡張(品質)"
+msgstr "アルファプレーンの品質"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPass)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, pass)
@@ -50904,13 +50922,13 @@ msgstr "拡張(品質)"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:495
 #, kde-format
 msgid "Number of entropy-analysis passes (1 to 10)."
-msgstr ""
+msgstr "エントロピー解析のパスの数 (1 から 10)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPass)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:482
 #, kde-format
 msgid "Entropy Passes"
-msgstr ""
+msgstr "エントロピーのパス"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblShowCompressed)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, showCompressed)
@@ -50921,21 +50939,21 @@ msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
 "applied."
 msgstr ""
+"有効にすると、圧縮された画像をエクスポートします。ループ内フィルタリングは適"
+"用されません。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:517
-#, fuzzy, kde-format
-#| msgid "Compress:"
+#, kde-format
 msgid "Show Compressed"
-msgstr "圧縮:"
+msgstr "圧縮を表示"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreprocessing)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:534
-#, fuzzy, kde-format
-#| msgid "Processing layer"
+#, kde-format
 msgctxt "Filter options specifically for WebP"
 msgid "Preprocessing Filter"
-msgstr "レイヤーを処理中"
+msgstr "前処理フィルタ"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitions)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitions)
@@ -50946,13 +50964,14 @@ msgid ""
 "log2(number of token partitions) between 0 and 3. Default is 0 for easier "
 "progressive decoding."
 msgstr ""
+"トークンのパーティションの log2 の数。0 から 3 まで。デフォルトは 0 で、簡単"
+"なプログレッシブデコードになります。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:547
-#, fuzzy, kde-format
-#| msgid "Patch Options"
+#, kde-format
 msgid "Partitions"
-msgstr "色の表示オプション"
+msgstr "パーティション"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblPartitionLimit)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, partitionLimit)
@@ -50963,26 +50982,26 @@ msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
 "coding (0 = no degradation, 100 = maximum possible degradation)."
 msgstr ""
+"予測モードのコーディングで 512KB の制限に合わせるために許容される品質の劣化"
+"(0 = 劣化なし, 100 = 劣化最大)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:567
 #, kde-format
 msgid "Partition Limit"
-msgstr ""
+msgstr "パーティションの制限"
 
 #. i18n: ectx: property (text), widget (QLabel, lblMaximumDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:576
-#, fuzzy, kde-format
-#| msgid "Maximum Height"
+#, kde-format
 msgid "Maximum degradation"
-msgstr "最大高さ"
+msgstr "劣化最大"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNoDegradation)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:586
-#, fuzzy, kde-format
-#| msgid "Negation"
+#, kde-format
 msgid "No degradation"
-msgstr "NOT"
+msgstr "劣化なし"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblEmulateJPEGSize)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, emulateJPEGSize)
@@ -50994,12 +51013,14 @@ msgid ""
 "expected output size from JPEG compression. Generally, the output size will "
 "be similar but the degradation will be lower."
 msgstr ""
+"有効にすると、圧縮パラメータが JPEG 圧縮からの出力サイズに合わせて再マップさ"
+"れます。一般的に、出力サイズは似ていますが、劣化は小さくなります。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblEmulateJPEGSize)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:614
 #, kde-format
 msgid "Emulate JPEG Size"
-msgstr ""
+msgstr "JPEG サイズをエミュレート"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblThreadLevel)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, threadLevel)
@@ -51007,14 +51028,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
-msgstr ""
+msgstr "有効にすると、マルチスレッドによるエンコーディングを試みます。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:634
-#, fuzzy, kde-format
-#| msgid "Multithreading"
+#, kde-format
 msgid "Multithreaded Encoding"
-msgstr "マルチスレッド"
+msgstr "マルチスレッドによるエンコーディング"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblLowMemory)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, lowMemory)
@@ -51022,13 +51042,13 @@ msgstr "マルチスレッド"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:661
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
-msgstr ""
+msgstr "有効にすると、メモリ使用量を減らします (ただし CPU 使用量が増えます)。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:654
 #, kde-format
 msgid "Reduce Memory Usage"
-msgstr ""
+msgstr "メモリ使用量を減らす"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblNearLossless)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, nearLossless)
@@ -51037,13 +51057,13 @@ msgstr ""
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
+"準ロスレスエンコーディング: 0 = 損失最大, 100 = オフ。デフォルトは 100。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:674
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Near Lossless"
-msgstr "Lossless (可逆方式)"
+msgstr "準ロスレス"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblExact)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, exact)
@@ -51055,13 +51075,14 @@ msgid ""
 "Otherwise, discard this invisible RGB information for better compression. "
 "The default is disabled."
 msgstr ""
+"有効にすると、透明な領域における正確な RGB 値を保持します。それ以外の場合、こ"
+"の不可視の RGB 情報を破棄してもっと圧縮します。デフォルトは無効です。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblExact)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:700
-#, fuzzy, kde-format
-#| msgid "Exactness:"
+#, kde-format
 msgid "Exact"
-msgstr "確度:"
+msgstr "正確性"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblUseSharpYUV)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, useSharpYUV)
@@ -51069,13 +51090,13 @@ msgstr "確度:"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:727
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
-msgstr ""
+msgstr "有効にすると、鮮明 (遅い) RGB から YUV への変換を許可します。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:720
 #, kde-format
 msgid "Use Sharp YUV"
-msgstr ""
+msgstr "鮮明な YUV を使用"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMin)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMin)
@@ -51083,14 +51104,13 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:747
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
-msgstr ""
+msgstr "許容される最小品質ファクタ。デフォルトは 0。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:740
-#, fuzzy, kde-format
-#| msgid "Quality"
+#, kde-format
 msgid "Minimum Quality"
-msgstr "品質"
+msgstr "最小品質"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblQMax)
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, qMax)
@@ -51098,14 +51118,13 @@ msgstr "品質"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:770
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
-msgstr ""
+msgstr "許容される最大品質ファクタ。デフォルトは 100。"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:763
-#, fuzzy, kde-format
-#| msgid "Maximum Width"
+#, kde-format
 msgid "Maximum Quality"
-msgstr "最大幅"
+msgstr "最大品質"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:829
@@ -51115,10 +51134,9 @@ msgid "Filters:"
 msgstr "フィルタ:"
 
 #: plugins/impex/webp/kis_webp_import.cpp:129
-#, fuzzy, kde-format
-#| msgid "New Image"
+#, kde-format
 msgid "WebP Image"
-msgstr "新しい画像"
+msgstr "WebP 画像"
 
 #: plugins/impex/xcf/kis_xcf_import.cpp:156
 #, kde-format
@@ -51159,23 +51177,19 @@ msgid "Dulling"
 msgstr "混色して描画"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:105
-#, fuzzy, kde-format
-#| msgid "Smear alpha:"
+#, kde-format
 msgid "Smear Alpha"
-msgstr "塗り付けのアルファ:"
+msgstr "塗り付けのアルファ"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:141
-#, fuzzy, kde-format
-#| msgid "Painting Mode"
+#, kde-format
 msgid "Paint Thickness Mode"
-msgstr "描画モード"
+msgstr "塗膜モード"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings.cpp:145
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Paint Layer"
+#, kde-format
 msgid "Paint over"
-msgstr "ペイントレイヤー"
+msgstr "上書き"
 
 #: plugins/paintops/colorsmudge/kis_colorsmudgeop_settings_widget.cpp:110
 #: plugins/paintops/defaultpaintops/duplicate/kis_duplicateop_settings_widget.cpp:46
@@ -51190,39 +51204,37 @@ msgid "Weak"
 msgstr "弱い"
 
 #: plugins/paintops/colorsmudge/KisColorSmudgeStandardOptionData.h:15
-#, fuzzy, kde-format
-#| msgid "Color Rate"
+#, kde-format
 msgctxt "Color rate of active Foreground color"
 msgid "Color Rate"
-msgstr "描画色の割合"
+msgstr "色の比率"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionData.h:40
-#, fuzzy, kde-format
-#| msgid "Thickness"
+#, kde-format
 msgid "Paint Thickness"
-msgstr "ハッチング線の太さ"
+msgstr "塗膜"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:38
 #: plugins/paintops/libpaintop/KisLightnessStrengthOptionWidget.cpp:30
 #, kde-format
 msgid "Disabled: brush must be in Lightness mode for this option to apply"
 msgstr ""
+"無効: このオプションを適用するにはブラシは輝度モードである必要があります"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:43
 #, kde-format
 msgid "Overwrite (Smooth out when low) existing paint thickness"
-msgstr ""
+msgstr "既存の塗膜を上書き (低い場合は滑らかに)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:44
 #, kde-format
 msgid "Paint over existing paint thickness (controlled by Smudge Length)"
-msgstr ""
+msgstr "既存の塗膜を上書き (混色の持続で制御)"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Painting Mode"
+#, kde-format
 msgid "Paint Thickness Mode:"
-msgstr "描画モード"
+msgstr "塗膜モード:"
 
 #: plugins/paintops/colorsmudge/KisPaintThicknessOptionWidget.cpp:48
 #, kde-format
@@ -51230,6 +51242,8 @@ msgid ""
 "Describes how the brush's paint thickness interacts with existing thick "
 "paint, especially at low values."
 msgstr ""
+"ブラシの塗膜が既存の厚い塗膜とどのように相互作用するかを設定します。特に低い"
+"値において影響します。"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionData.h:39
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:332
@@ -51250,12 +51264,12 @@ msgstr "塗り付けのアルファ:"
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:61
 #, kde-format
 msgid "Use new smudge algorithm:"
-msgstr ""
+msgstr "新しい混色アルゴリズムを使用:"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:62
 #, kde-format
 msgid "(required for Color Image, Lightness Map, and Gradient Map brushes)"
-msgstr ""
+msgstr "(カラー画像、輝度マップ、グラデーションマップのブラシで必要)"
 
 #: plugins/paintops/colorsmudge/KisSmudgeLengthOptionWidget.cpp:111
 #, kde-format
@@ -51284,28 +51298,20 @@ msgid "Overlay Mode"
 msgstr "オーバーレイモード"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid ""
-#| "Paints on the current layer\n"
-#| "            but uses all layers that are currently visible for smudge "
-#| "input\n"
-#| "            NOTE: This mode is only able to work correctly with a fully "
-#| "opaque background"
+#, kde-format
 msgid ""
 "Paints on the current layer\n"
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
-"通常混色ブラシの入力にサンプルとして使用されるのは現在のレイヤーのみです"
-"が、\n"
-"これを有効にした場合現在表示されている全レイヤーをサンプルとして使用しま"
-"す。\n"
-"           注: このモードは完全不透明の背景でのみ正常に働きます"
+"現在のレイヤーに描画します\n"
+"が、混色の入力には現在表示されている全てのレイヤーを使用します\n"
+"注意: このモードは完全に不透明な背景でのみ正しく動作します"
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format
 msgid "Disabled: overlay mode is not supported in Lightness mode of the brush"
-msgstr ""
+msgstr "無効: オーバーレイモードはブラシの輝度モードではサポートされていません"
 
 #: plugins/paintops/colorsmudge/KisSmudgeRadiusOptionData.cpp:11
 #, kde-format
@@ -51525,8 +51531,7 @@ msgstr "拡大"
 #. i18n: ectx: property (text), widget (QRadioButton, shrinkBtn)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:140
 #: plugins/paintops/deform/wdgdeformoptions.ui:55
-#, fuzzy, kde-format
-#| msgid "Shrink"
+#, kde-format
 msgctxt "Shrink as in deform brush engine"
 msgid "Shrink"
 msgstr "縮める"
@@ -51567,11 +51572,10 @@ msgid "Lens Zoom Out"
 msgstr "凹レンズ縮小"
 
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:146
-#, fuzzy, kde-format
-#| msgid "Color Deformation"
+#, kde-format
 msgctxt "Rearrange the positions of the pixels under the cursor"
 msgid "Color Deformation"
-msgstr "色ノイズ"
+msgstr "色変形"
 
 #: plugins/paintops/deform/KisDeformOptionData.cpp:43
 #, kde-format
@@ -51586,11 +51590,10 @@ msgstr "変形のオプション"
 
 #. i18n: ectx: property (text), widget (QRadioButton, colorBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:86
-#, fuzzy, kde-format
-#| msgid "Color deformation"
+#, kde-format
 msgctxt "Rearrange the pixels positions under the cursor"
 msgid "Color deformation"
-msgstr "色ノイズ"
+msgstr "色変形"
 
 #. i18n: ectx: property (text), widget (QRadioButton, lensOutBtn)
 #: plugins/paintops/deform/wdgdeformoptions.ui:93
@@ -51661,11 +51664,9 @@ msgid "Hard Edge"
 msgstr "アンチエイリアスなし"
 
 #: plugins/paintops/experiment/KisExperimentOpOptionWidget.cpp:60
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Displacement Option"
+#, kde-format
 msgid "Experiment Option"
-msgstr "変位のオプション"
+msgstr "実験オプション"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/paintops/experiment/wdgexperimentoptions.ui:33
@@ -52371,11 +52372,9 @@ msgstr "Yの範囲:"
 #: plugins/paintops/libpaintop/forms/wdgcurveoption.ui:603
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:486
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:608
-#, fuzzy, kde-format
-#| msgctxt "toolbar position string"
-#| msgid "Top"
+#, kde-format
 msgid "To"
-msgstr "上"
+msgstr "から"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (toolTip), widget (QComboBox, curveMode)
@@ -52636,11 +52635,10 @@ msgstr "テクスチャの適用モード:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing_2)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:179
-#, fuzzy, kde-format
-#| msgid "Cutoff"
+#, kde-format
 msgctxt "Texture lightness range cutoff range slider"
 msgid "Cutoff:"
-msgstr "カットオフ"
+msgstr "適用範囲:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:199
@@ -52676,10 +52674,9 @@ msgstr "垂直方向のずらし:"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
-#, fuzzy, kde-format
-#| msgid "Spacing"
+#, kde-format
 msgid "Auto Spacing"
-msgstr "描点間隔"
+msgstr "自動描点間隔"
 
 # tip は筆記具の先端 (Krita では描線のセグメントとなる画像データ) を指します
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
@@ -52852,7 +52849,7 @@ msgstr "テクスチャを明るくまたは暗くします"
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:40
 #, kde-format
 msgid "Set gray value to be considered neutral for lightness mode"
-msgstr ""
+msgstr "輝度モードで中間点として扱うグレー値を設定します"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:54
 #, kde-format
@@ -52998,8 +52995,7 @@ msgid "Lock"
 msgstr "ロック"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryDrawingAngle.cpp:57
-#, fuzzy, kde-format
-#| msgid "Fan Corners"
+#, kde-format
 msgctxt "Smoothing Drawing angle when a stroke is making a sharp turn"
 msgid "Fan Corners"
 msgstr "角を丸くする"
@@ -53049,7 +53045,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -53155,6 +53151,8 @@ msgid ""
 "WARNING: Dependent size of the masked brush grew too big (%1 pixels). Its "
 "value has been cropped to %2 pixels."
 msgstr ""
+"警告: マスクされたブラシの依存サイズが大きすぎます (%1 ピクセル)。その値は "
+"%2 ピクセルに切り詰められました。"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:180
 #, kde-format
@@ -53197,7 +53195,7 @@ msgstr "ブラシ形状画像の光度は、描線のアルファチャンネル
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:29
 #, kde-format
 msgid "Color Image"
-msgstr "色のイメージ"
+msgstr "カラー画像"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:30
 #, kde-format
@@ -53222,19 +53220,14 @@ msgstr ""
 "アルファチャンネルは、最終的な描線のアルファとして使用されます。"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Luminosity of the brush tip image is used as lightness correction for the "
-#| "painting color. Alpha channel of the brush tip image is used as alpha for "
-#| "the final stroke"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The brush tip maps its value to the currently selected gradient. Alpha "
 "channel of the brush tip image is used as alpha for the final stroke"
 msgstr ""
-"ブラシ形状画像の光度は、描画色の輝度補正として使用されます。ブラシ形状画像の"
-"アルファチャンネルは、最終的な描線のアルファとして使用されます。"
+"ブラシ形状の値は現在選択されているグラデーションにマップされます。ブラシ形状"
+"画像のアルファチャンネルは、最終的な描線のアルファとして使用されます。"
 
 #: plugins/paintops/libpaintop/KisPredefinedBrushModel.cpp:57
 #, kde-format
@@ -53272,10 +53265,9 @@ msgid "Sharpness"
 msgstr "ブラシ端の硬さ"
 
 #: plugins/paintops/libpaintop/KisSharpnessOptionWidget.cpp:43
-#, fuzzy, kde-format
-#| msgid "So&ften:"
+#, kde-format
 msgid "Soften edge:"
-msgstr "ソフト(&T)："
+msgstr "端を柔らかくする:"
 
 #: plugins/paintops/libpaintop/KisSizeOptionData.cpp:23
 #, kde-format
@@ -53297,7 +53289,7 @@ msgstr "ブラシ間隔を方向に依存させない"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
 msgid "Update Between Dabs"
-msgstr ""
+msgstr "描点間で更新"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:21
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:86
@@ -53391,18 +53383,16 @@ msgid "More saturation"
 msgstr "彩度高"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:132
-#, fuzzy, kde-format
-#| msgid "Lower value "
+#, kde-format
 msgctxt "Lower HSV brightness"
 msgid "Lower value "
-msgstr "明度低"
+msgstr "明度低 "
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:144
-#, fuzzy, kde-format
-#| msgid "Higher value"
+#, kde-format
 msgctxt "Higher HSV brightness"
 msgid "Higher value"
-msgstr "明度高"
+msgstr "明度高 "
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.h:40
 #, kde-format
@@ -53461,68 +53451,58 @@ msgid "repeat"
 msgstr "繰り返し"
 
 #: plugins/paintops/mypaint/MyPaintBasicOptionWidget.cpp:31
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "MyPaint option name"
 msgid "Basic"
 msgstr "基本"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:29
-#, fuzzy, kde-format
-#| msgid "CPU Limit:"
+#, kde-format
 msgid "Y limit: "
-msgstr "CPU の上限:"
+msgstr "Y 軸の制限:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:35
-#, fuzzy, kde-format
-#| msgctxt "Suffix: “Every x min”"
-#| msgid " min"
+#, kde-format
 msgid "X min: "
-msgstr " 分"
+msgstr "X 軸の最小:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionRangeControlsStrategy.cpp:40
 #, kde-format
 msgid "X max: "
-msgstr ""
+msgstr "X 軸の最大:"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:22
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
-msgstr "描点間隔が0.5以上の場合詳細度(LOD)が使えなくなることにご注意ください"
+msgstr ""
+"ランダムセンサーが %1 オプションで有効です。高速プレビューを無効にしてみてく"
+"ださい"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
-#, fuzzy, kde-format
-#| msgid "Base name:"
+#, kde-format
 msgid "Base Value: "
-msgstr "基本名:"
+msgstr "基本値:"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpPlugin.cpp:32
-#, fuzzy, kde-format
-#| msgctxt "description of a file type"
-#| msgid "Krita Brush Preset"
+#, kde-format
 msgid "MyPaint Brush Presets"
-msgstr "Krita ブラシプリセット"
+msgstr "MyPaint ブラシプリセット"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:186
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "Option Category"
 msgid "Basic"
 msgstr "基本"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:192
-#, fuzzy, kde-format
-#| msgid "Color"
+#, kde-format
 msgctxt "Option Category"
 msgid "Color"
 msgstr "色"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:195
-#, fuzzy, kde-format
-#| msgid "Speed"
+#, kde-format
 msgctxt "Option Category"
 msgid "Speed"
 msgstr "速度"
@@ -53531,58 +53511,50 @@ msgstr "速度"
 #, kde-format
 msgctxt "Option Category"
 msgid "Dabs"
-msgstr ""
+msgstr "描点"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:201
-#, fuzzy, kde-format
-#| msgid "Opacity"
+#, kde-format
 msgctxt "Option Category"
 msgid "Opacity"
 msgstr "不透明度"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:204
-#, fuzzy, kde-format
-#| msgid "Trackpad Pan"
+#, kde-format
 msgctxt "Option Category"
 msgid "Tracking"
-msgstr "トラックパッドでの平行移動"
+msgstr "追跡"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:207
-#, fuzzy, kde-format
-#| msgid "Smudge Mode"
+#, kde-format
 msgctxt "Option Category"
 msgid "Smudge"
-msgstr "ぼかしモード"
+msgstr "ぼかし"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:210
-#, fuzzy, kde-format
-#| msgid "Stroke"
+#, kde-format
 msgctxt "Option Category"
 msgid "Stroke"
 msgstr "縁取り"
 
 #: plugins/paintops/mypaint/MyPaintPaintOpSettingsWidget.cpp:213
-#, fuzzy, kde-format
-#| msgid "Custom"
+#, kde-format
 msgctxt "Option Category"
 msgid "Custom"
 msgstr "カスタム"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:18
-#, fuzzy, kde-format
-#| msgid "Speed"
+#, kde-format
 msgid "Fine Speed"
-msgstr "速度"
+msgstr "速度（機敏）"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:19
-#, fuzzy, kde-format
-#| msgid "Cursor Shape:"
+#, kde-format
 msgid "Gross Speed"
-msgstr "カーソルの形状:"
+msgstr "速度（鈍重）"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:21
-#, fuzzy, kde-format
-#| msgid "Stroke"
+#, kde-format
 msgctxt "The duration of a brush stroke"
 msgid "Stroke"
 msgstr "縁取り"
@@ -53590,294 +53562,246 @@ msgstr "縁取り"
 #. i18n: ectx: property (text), widget (QRadioButton, optionDirection)
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:22
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:243
-#, fuzzy, kde-format
-#| msgid "Direction"
+#, kde-format
 msgctxt "Drawing Angle"
 msgid "Direction"
 msgstr "方向"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:23
-#, fuzzy, kde-format
-#| msgid "Inclination:"
+#, kde-format
 msgctxt "Pen tilt declination"
 msgid "Declination"
-msgstr "傾斜:"
+msgstr "偏角:"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:24
-#, fuzzy, kde-format
-#| msgid "Ascending"
+#, kde-format
 msgctxt "Pen tilt ascension"
 msgid "Ascension"
 msgstr "昇順"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Radius Logarithmic"
-msgstr "対数目盛"
+msgstr "半径（対数）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:78
-#, fuzzy, kde-format
-#| msgid "Sharpness:"
+#, kde-format
 msgid "Hardness"
-msgstr "シャープネス:"
+msgstr "硬さ"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:31
 #, kde-format
 msgid "Radius by Random"
-msgstr ""
+msgstr "ランダム半径"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:39
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "描点間隔が0.5以上の場合詳細度(LOD)が使えなくなることにご注意ください"
+msgstr "ランダム半径が有効です。高速プレビューを無効にしてみてください"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgid "Anti Aliasing"
 msgstr "アンチエイリアシング"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
-#, fuzzy, kde-format
-#| msgid "Elliptical Selection"
+#, kde-format
 msgid "Elliptical Dab Angle"
-msgstr "楕円選択"
+msgstr "楕円描点（角度）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:67
-#, fuzzy, kde-format
-#| msgid "Elliptical Selection"
+#, kde-format
 msgid "Elliptical Dab Ratio"
-msgstr "楕円選択"
+msgstr "楕円描点（比率）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:77
-#, fuzzy, kde-format
-#| msgid "Direction"
+#, kde-format
 msgid "Direction Filter"
-msgstr "方向"
+msgstr "方向フィルタリング"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Snap Pixel"
+#, kde-format
 msgid "Snap To Pixel"
 msgstr "ピクセルにスナップ"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
-#, fuzzy, kde-format
-#| msgctxt "Context: dynamic sensors"
-#| msgid "PressureIn"
+#, kde-format
 msgid "Pressure Gain"
-msgstr "筆圧 (加圧のみ)"
+msgstr "筆圧 (加圧)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:106
-#, fuzzy, kde-format
-#| msgid "Change Folder"
+#, kde-format
 msgid "Change Color H"
-msgstr "フォルダ変更"
+msgstr "色相変化"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:115
-#, fuzzy, kde-format
-#| msgid "Change Clone Layer"
+#, kde-format
 msgid "Change Color L"
-msgstr "クローンレイヤーを変更"
+msgstr "輝度変化"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:124
-#, fuzzy, kde-format
-#| msgid "Change Folder"
+#, kde-format
 msgid "Change Color V"
-msgstr "フォルダ変更"
+msgstr "明度変化"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:133
-#, fuzzy, kde-format
-#| msgid "Change Clone Layer"
+#, kde-format
 msgid "Change Color HSL S"
-msgstr "クローンレイヤーを変更"
+msgstr "彩度変化(HSL)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:142
-#, fuzzy, kde-format
-#| msgid "Color HSV"
+#, kde-format
 msgid "Change Color HSV S"
-msgstr "色 HSV"
+msgstr "彩度変化(HSV)"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:151
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Colorize"
+#, kde-format
 msgid "Colorize"
 msgstr "着色"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:169
-#, fuzzy, kde-format
-#| msgid "Posterize"
+#, kde-format
 msgid "Posterization Levels"
-msgstr "ポスタリゼーション"
+msgstr "ポスタリゼーション段階"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:178
 #, kde-format
 msgid "Fine Speed Gamma"
-msgstr ""
+msgstr "速度ガンマ（機敏）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:187
 #, kde-format
 msgid "Gross Speed Gamma"
-msgstr ""
+msgstr "速度ガンマ（鈍重）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:196
 #, kde-format
 msgid "Fine Speed Slowness"
-msgstr ""
+msgstr "速度（機敏）の遅さ"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:205
 #, kde-format
 msgid "Gross Speed Slowness"
-msgstr ""
+msgstr "速度（鈍重）の遅さ"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgid "Offset By Speed"
-msgstr "レイヤーをオフセット"
+msgstr "速度によるオフセット"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgid "Offset by Speed Filter"
-msgstr "レイヤーをオフセット"
+msgstr "速度フィルタによるオフセット"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
 msgid "Offset By Random"
-msgstr ""
+msgstr "ランダムオフセット"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "描点間隔が0.5以上の場合詳細度(LOD)が使えなくなることにご注意ください"
+msgstr "ランダムオフセットが有効です。高速プレビューを無効にしてみてください"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
-#, fuzzy, kde-format
-#| msgid "Vertical Radius:"
+#, kde-format
 msgid "Dabs Per Basic Radius"
-msgstr "垂直方向の半径:"
+msgstr "基本半径あたりの描点数"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:259
-#, fuzzy, kde-format
-#| msgid "Vertical Radius:"
+#, kde-format
 msgid "Dabs Per Actual Radius"
-msgstr "垂直方向の半径:"
+msgstr "実際の半径あたりの描点数"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:268
 #, kde-format
 msgid "Dabs per Second"
-msgstr ""
+msgstr "秒あたりの描点数"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:278
 #, kde-format
 msgid "Opaque Linearize"
-msgstr ""
+msgstr "不透明度の線形化"
 
-# 画像合成方法の名称です。GIMP、Inkscape などにおける翻訳に倣っています
+# 画像合成方法の名称です。Gimp、Inkscape などにおける翻訳に倣っています
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:287
-#, fuzzy, kde-format
-#| msgid "Multiply"
+#, kde-format
 msgid "Opaque Multiply"
-msgstr "乗算"
+msgstr "不透明度の乗算"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:296
 #, kde-format
 msgid "Slow tracking per dab"
-msgstr ""
+msgstr "描点ごとの遅延追跡"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:305
 #, kde-format
 msgid "Slow Tracking"
-msgstr ""
+msgstr "遅延追跡"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:314
-#, fuzzy, kde-format
-#| msgid "Random Noise"
+#, kde-format
 msgid "Tracking Noise"
-msgstr "ランダムノイズ"
+msgstr "ノイズ付き追跡"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:323
-#, fuzzy, kde-format
-#| msgid "Smudge Mode"
+#, kde-format
 msgid "Smudge"
-msgstr "ぼかしモード"
+msgstr "ぼかし"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:341
-#, fuzzy, kde-format
-#| msgid "Smudge Radius"
+#, kde-format
 msgid "Smudge Radius Log"
-msgstr "混色範囲の半径"
+msgstr "ぼかし範囲の半径"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:350
-#, fuzzy, kde-format
-#| msgid "Smudge Length"
+#, kde-format
 msgid "Smudge Length Multiplier"
-msgstr "混色の持続"
+msgstr "ぼかしの持続"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:359
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/"
-#| "Smudge_rake.kpp"
-#| msgid "Smudge rake"
+#, kde-format
 msgid "Smudge Bucket"
-msgstr "ぼかし (レーキ)"
+msgstr "ぼかし（バケツ）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:368
-#, fuzzy, kde-format
-#| msgctxt "Region selection method in enclose and fill tool"
-#| msgid "Transparency"
+#, kde-format
 msgid "Smudge Transparency"
-msgstr "透過"
+msgstr "ぼかしの透明度"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:377
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgid "Stroke Duration log"
-msgstr "彩度:"
+msgstr "描線の持続（対数）"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:386
-#, fuzzy, kde-format
-#| msgid "Stroke Time:"
+#, kde-format
 msgid "Stroke Holdtime"
-msgstr "はらいの長さ:"
+msgstr "描線の保持時間"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:395
-#, fuzzy, kde-format
-#| msgid "Threshold"
+#, kde-format
 msgid "Stroke Threshold"
-msgstr "しきい値"
+msgstr "描線のしきい値"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:404
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom Input"
-msgstr "カスタムオプション:"
+msgstr "カスタム入力"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:413
-#, fuzzy, kde-format
-#| msgid "Custom Options:"
+#, kde-format
 msgid "Custom Input Slowness"
-msgstr "カスタムオプション:"
+msgstr "カスタム入力の遅さ"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLbl)
 #: plugins/paintops/mypaint/wdgmypaintoptions.ui:110
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Radius Logarithmic:"
-msgstr "対数目盛"
+msgstr "半径（対数）:"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:50
 #, kde-format
@@ -54031,6 +53955,8 @@ msgid ""
 "Select how the particles are distributed as a function of the angle to the "
 "center of the spray area."
 msgstr ""
+"スプレー範囲の中心からの角度に応じて、粒子がどのように分布するかを選択しま"
+"す。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:67
 #, kde-format
@@ -54042,6 +53968,10 @@ msgid ""
 "The higher the curve at a given angle, the more particles will end at that "
 "angle."
 msgstr ""
+"粒子の分布を設定します。\n"
+"水平軸は 0 から 360 度までの角度を表します。\n"
+"垂直軸は、その角度で粒子が飛散する可能性を表します。\n"
+"特定の角度で曲線が高いほど、その角度で終了する粒子が多くなります。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:72
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:108
@@ -54060,7 +53990,7 @@ msgstr "x"
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from 0 degrees to 360 degrees."
-msgstr ""
+msgstr "曲線が 0 度から 360 度まで何回繰り返されるかを設定します。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:79
 #, kde-format
@@ -54068,6 +53998,8 @@ msgid ""
 "Select how the particles are distributed as a function of the distance from "
 "the center of the spray area."
 msgstr ""
+"スプレー範囲の中心からの距離に応じて、粒子がどのように分布するかを選択しま"
+"す。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:82
 #, kde-format
@@ -54075,12 +54007,13 @@ msgid ""
 "Activates the old behavior where the particles are more accumulated towards "
 "the center of the spray area."
 msgstr ""
+"旧来の挙動を有効にし、粒子がスプレー範囲の中心に向かってより集中するようにし"
+"ます。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:84
-#, fuzzy, kde-format
-#| msgid "Standard light A"
+#, kde-format
 msgid "Standard deviation: "
-msgstr "標準光 A"
+msgstr "標準偏差: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:88
 #, kde-format
@@ -54089,12 +54022,13 @@ msgid ""
 "Lower values will make the particles concentrate towards the center of the "
 "spray area."
 msgstr ""
+"ガウス分布の標準偏差を設定します。\n"
+"低い値にすると、粒子がスプレー範囲の中心に集中します。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:92
-#, fuzzy, kde-format
-#| msgid "Deform amount:"
+#, kde-format
 msgid "Clustering amount: "
-msgstr "変形量:"
+msgstr "凝集度: "
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:96
 #, kde-format
@@ -54106,6 +54040,10 @@ msgid ""
 "the spray area.\n"
 "Values near 0 will make the particles spread more uniformly."
 msgstr ""
+"粒子がスプレー範囲内でどのように広がるかを設定します。\n"
+"正の値にすると、粒子がスプレー範囲の中心に集中します。\n"
+"負の値にすると、粒子がスプレー範囲の境界に集中します。\n"
+"0 に近い値にすると、粒子がより均等に広がります。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:103
 #, kde-format
@@ -54118,13 +54056,17 @@ msgid ""
 "The higher the curve at a given distance, the more particles will end at "
 "that distance."
 msgstr ""
+"粒子の分布を設定します。\n"
+"水平軸はスプレー範囲の中心から境界までの距離を表します。\n"
+"垂直軸は、その距離で粒子が飛散する可能性を表します。\n"
+"特定の距離で曲線が高いほど、その距離で飛散する粒子が多くなります。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:112
 #, kde-format
 msgid ""
 "Set how many times should the curve repeat from the center to the border of "
 "the spray area."
-msgstr ""
+msgstr "曲線がスプレー範囲の中心から境界まで何回繰り返されるかを設定します。"
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:177
 #, kde-format
@@ -54137,10 +54079,9 @@ msgid "Shape dynamics"
 msgstr "粒子の形状の変化"
 
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:58
-#, fuzzy, kde-format
-#| msgid "Spray shape"
+#, kde-format
 msgid "Spray Shape"
-msgstr "スプレー粒子"
+msgstr "スプレー形状"
 
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
@@ -54191,81 +54132,69 @@ msgstr "角度重みづけ:"
 msgctxt ""
 "Name of the group of options related to the spay area in the spray engine"
 msgid "Area"
-msgstr ""
+msgstr "範囲"
 
 #. i18n: ectx: property (text), widget (QLabel, diameterLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:48
-#, fuzzy, kde-format
-#| msgid "Diameter:"
+#, kde-format
 msgctxt "Label for the diameter of the spray area in the spray engine"
 msgid "Diameter:"
 msgstr "直径:"
 
 #. i18n: ectx: property (text), widget (QLabel, aspectLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:67
-#, fuzzy, kde-format
-#| msgid "Aspect ratio:"
+#, kde-format
 msgctxt "Label for the aspect ratio of the spray area in the spray engine"
 msgid "Aspect ratio:"
 msgstr "アスペクト比:"
 
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:86
-#, fuzzy, kde-format
-#| msgid "Angle:"
+#, kde-format
 msgctxt "Label for the angle of the spray area in the spray engine"
 msgid "Angle:"
 msgstr "角度:"
 
 #. i18n: ectx: property (text), widget (QLabel, scaleLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:125
-#, fuzzy, kde-format
-#| msgid "Scale:"
+#, kde-format
 msgctxt "Label for the scale of the spray area in the spray engine"
 msgid "Scale:"
 msgstr "倍率:"
 
 #. i18n: ectx: property (text), widget (QLabel, spacingLabel)
 #: plugins/paintops/spray/wdgsprayoptions.ui:138
-#, fuzzy, kde-format
-#| msgid "Spacing:"
+#, kde-format
 msgctxt "Label for the spacing of the spray area in the spray engine"
 msgid "Spacing:"
 msgstr "描点間隔:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelJitter)
 #: plugins/paintops/spray/wdgsprayoptions.ui:151
-#, fuzzy, kde-format
-#| msgid "Jitter Movement"
+#, kde-format
 msgctxt "Label for the jitter movement of the spray area in the spray engine"
 msgid "Jitter Movement:"
 msgstr "スプレー範囲のランダム化"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:185
-#, fuzzy, kde-format
-#| msgid "Particles"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the spay particles in the spray "
 "engine"
 msgid "Particles"
-msgstr "パーティクルの数"
+msgstr "粒子"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/spray/wdgsprayoptions.ui:194
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "How much the midtone point used in auto levels is close to the center of "
-#| "the histogram (0%) or to the point selected in the method (100%)"
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Label for the amount of particles in the spray engine"
 msgid "Amount:"
 msgstr "量:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, countRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:203
-#, fuzzy, kde-format
-#| msgid "Count"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the exact number of particles "
 "in the spray engine"
@@ -54274,8 +54203,7 @@ msgstr "個数"
 
 #. i18n: ectx: property (text), widget (QRadioButton, densityRadioButton)
 #: plugins/paintops/spray/wdgsprayoptions.ui:213
-#, fuzzy, kde-format
-#| msgid "Density"
+#, kde-format
 msgctxt ""
 "Check box to indicate that the user should set the number of particles in "
 "terms of density relative to the spray area in the spray engine"
@@ -54284,8 +54212,7 @@ msgstr "密度"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxAngularDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:237
-#, fuzzy, kde-format
-#| msgid "Angular"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the angular distribution of "
 "particles in the spray engine"
@@ -54296,26 +54223,23 @@ msgstr "描線の屈曲"
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:262
 #: plugins/paintops/spray/wdgsprayoptions.ui:347
-#, fuzzy, kde-format
-#| msgid "Uniform random"
+#, kde-format
 msgctxt "Uniform distribution in spray engine"
 msgid "Uniform"
-msgstr "各描点でランダム"
+msgstr "一様分布"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, angularDistCombo)
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:267
 #: plugins/paintops/spray/wdgsprayoptions.ui:362
-#, fuzzy, kde-format
-#| msgid "Curve"
+#, kde-format
 msgctxt "Custom curve based distribution in spray engine"
 msgid "Curve"
-msgstr "カーブ"
+msgstr "曲線"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
-#, fuzzy, kde-format
-#| msgid "Radial"
+#, kde-format
 msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
@@ -54324,21 +54248,17 @@ msgstr "球状"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
-#, fuzzy, kde-format
-#| msgid "Gaussian"
+#, kde-format
 msgctxt "Gaussian distribution in spray engine"
 msgid "Gaussian"
 msgstr "ガウシアン"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:357
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 preset name, check simplescreenrecorder for standard translations"
-#| msgid "faster"
+#, kde-format
 msgctxt "Clustering based distribution in spray engine"
 msgid "Cluster"
-msgstr "faster"
+msgstr "クラスタ"
 
 #. i18n: ectx: property (text), widget (QCheckBox, centerBiasedPolarDistanceBox)
 #: plugins/paintops/spray/wdgsprayoptions.ui:407
@@ -54348,15 +54268,14 @@ msgctxt ""
 "where particles are biased towards the center of the spray area in the spray "
 "engine"
 msgid "Center-biased spread (legacy)"
-msgstr ""
+msgstr "中心に偏った広がり (旧来の方法)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/paintops/spray/wdgsprayoptions.ui:432
-#, fuzzy, kde-format
-#| msgid "Distribute"
+#, kde-format
 msgctxt "Label for the distribution of particles in the spray engine"
 msgid "Distribution:"
-msgstr "分布"
+msgstr "分布:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, proportionalBox)
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:158
@@ -54507,8 +54426,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:230
-#, fuzzy, kde-format
-#| msgid "Tilt"
+#, kde-format
 msgctxt "Tilt elevation"
 msgid "Tilt"
 msgstr "傾き"
@@ -54536,8 +54454,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
-#, fuzzy, kde-format
-#| msgid "Rotation"
+#, kde-format
 msgctxt "Pen Rotation"
 msgid "Rotation"
 msgstr "回転"
@@ -54683,8 +54600,6 @@ msgid "Color profile:"
 msgstr "色プロファイル:"
 
 #: plugins/python/colorspace/uicolorspace.py:129
-#, fuzzy
-#| msgid "The selected documents has been converted."
 msgid "The selected documents have been converted."
 msgstr "選択したドキュメントは変換されました。"
 
@@ -54940,16 +54855,12 @@ msgid "Text Colors"
 msgstr "テキスト色"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:369
-#, fuzzy
-#| msgid "Regular"
 msgid "Regular Text"
-msgstr "普通"
+msgstr "通常のテキスト"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:371
-#, fuzzy
-#| msgid "Indented at"
 msgid "Inverted Text"
-msgstr "字下げ"
+msgstr "反転テキスト"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:386
 msgid "Document Info"
@@ -54986,7 +54897,7 @@ msgstr "TIFF"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:423
 #, python-brace-format
 msgid "v{version}-in this version..."
-msgstr ""
+msgstr "v{version} - このバージョンでは..."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:525
@@ -55182,7 +55093,7 @@ msgstr "ロマンス"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
 msgid "Children"
-msgstr ""
+msgstr "子供向け"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:220
 msgid "Non Fiction"
@@ -55207,7 +55118,7 @@ msgstr "原作者"
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Adapter"
-msgstr ""
+msgstr "翻案者"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
@@ -55357,10 +55268,8 @@ msgid "Other:"
 msgstr "その他:"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:335
-#, fuzzy
-#| msgid "Workspace"
 msgid "Work"
-msgstr "ワークスペース"
+msgstr "作品"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:340
 msgid ""
@@ -55693,10 +55602,8 @@ msgid "Default template:"
 msgstr "デフォルトテンプレート:"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:128
-#, fuzzy
-#| msgid "Page Edge:"
 msgid "Extra keys folder:"
-msgstr "ページの端:"
+msgstr "追加キーのフォルダ:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:54
 msgid "Where should the comic project go?"
@@ -55806,7 +55713,7 @@ msgstr "主要言語:"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:129
 msgid "Folder names and other."
-msgstr ""
+msgstr "フォルダ名などです。"
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:132
 msgid "Project directory:"
@@ -55889,11 +55796,11 @@ msgstr "テンプレートを作成中"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Abridger"
-msgstr ""
+msgstr "要約担当"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Art copyist"
-msgstr ""
+msgstr "（職業としての）模写担当"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Actor"
@@ -55909,37 +55816,28 @@ msgid "Annotator"
 msgstr "注釈者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Bibliography"
 msgid "Bibliographic antecedent"
-msgstr "書誌情報"
+msgstr "時代考証"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Architect"
-msgstr ""
+msgstr "建築家"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Artistic director"
 msgstr "芸術監督"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Animated Image"
 msgid "Associated name"
-msgstr "アニメーション画像"
+msgstr "関連名称"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Auto bracket"
 msgid "Autographer"
-msgstr "オートブラケット"
+msgstr "署名者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Distribute Top"
 msgid "Attributed name"
-msgstr "上に配置"
+msgstr "属性名"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Author of dialog"
@@ -55951,7 +55849,7 @@ msgstr "製本デザイナー"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Bookjacket designer"
-msgstr ""
+msgstr "本のカバーのデザイナー"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Book designer"
@@ -56019,7 +55917,7 @@ msgstr "推定上の作者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Etcher"
-msgstr ""
+msgstr "エッチング作業者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Expert"
@@ -56039,7 +55937,7 @@ msgstr "照明技師"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Inscriber"
-msgstr ""
+msgstr "銘文彫刻家"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Licensee"
@@ -56054,10 +55952,8 @@ msgid "Lithographer"
 msgstr "石版工"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "Metadata"
 msgid "Metadata contact"
-msgstr "メタデータ"
+msgstr "メタデータの連絡先"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Owner"
@@ -56080,10 +55976,8 @@ msgid "Scenarist"
 msgstr "脚本家"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
-#, fuzzy
-#| msgid "QtScript"
 msgid "Scribe"
-msgstr "QtScript"
+msgstr "スクライブ"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Sponsor"
@@ -56111,7 +56005,7 @@ msgstr "注釈筆者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Writer of added lyrics"
-msgstr ""
+msgstr "追加歌詞の筆者"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Writer of accompanying material"
@@ -56188,10 +56082,8 @@ msgid "Export in batchmode"
 msgstr "バッチモード (batchmode) でエクスポート"
 
 #: plugins/python/exportlayers/uiexportlayers.py:33
-#, fuzzy
-#| msgid "Group Layer"
 msgid "Group as layer"
-msgstr "グループレイヤー"
+msgstr "レイヤーとしてグループ化"
 
 #: plugins/python/exportlayers/uiexportlayers.py:35
 msgid "Ignore invisible layers"
@@ -56238,8 +56130,6 @@ msgid "Select the initial directory."
 msgstr "初期ディレクトリを選択します。"
 
 #: plugins/python/exportlayers/uiexportlayers.py:142
-#, fuzzy
-#| msgid "All layers has been exported."
 msgid "All layers have been exported."
 msgstr "すべてのレイヤーがエクスポートされました。"
 
@@ -56261,8 +56151,6 @@ msgid "Document Tree Model"
 msgstr "ドキュメントツリーモデル"
 
 #: plugins/python/filtermanager/uifiltermanager.py:42
-#, fuzzy
-#| msgid "Filters:"
 msgctxt "Python filters"
 msgid "Filters:"
 msgstr "フィルタ:"
@@ -56284,8 +56172,6 @@ msgid "Keep original layer"
 msgstr "オリジナルのレイヤーを保持する"
 
 #: plugins/python/highpass/highpass.py:52
-#, fuzzy
-#| msgid "Filter radius:"
 msgctxt "Filter radius in Highpass filter settings"
 msgid "Filter radius:"
 msgstr "フィルタの半径:"
@@ -56294,7 +56180,7 @@ msgstr "フィルタの半径:"
 #: plugins/python/krita_script_starter/bbdkss.ui:40
 #, kde-format
 msgid "BBD's Krita Script Starter"
-msgstr ""
+msgstr "BBD による Krita スクリプトのスターター"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/python/krita_script_starter/bbdkss.ui:54
@@ -56340,11 +56226,7 @@ msgstr "簡単な説明"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, e_comment)
 #: plugins/python/krita_script_starter/bbdkss.ui:99
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>This will appear in the \"comment\" entry in the "
-#| "dialog where a user can enable or disable Krita scripts. </p></body></"
-#| "html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>This will appear in the &quot;comment&quot; entry in "
 "the dialog where a user can enable or disable Krita scripts. </p></body></"
@@ -56398,11 +56280,8 @@ msgid "Create Script"
 msgstr "スクリプトを作成"
 
 #: plugins/python/lastdocumentsdocker/lastdocumentsdocker.py:29
-#, fuzzy
-#| msgctxt "@info:tooltip"
-#| msgid "Lock Docker"
 msgid "Last Documents Docker"
-msgstr "ドッキングパネルのロック"
+msgstr "最近のドキュメントドッキングパネル"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:41
 msgid "Change settings"
@@ -56425,8 +56304,6 @@ msgid "Set"
 msgstr "セット"
 
 #: plugins/python/palette_docker/palette_docker.py:72
-#, fuzzy
-#| msgid "Add Group"
 msgctxt "Group as Color Group in a Palette"
 msgid "Add Group"
 msgstr "グループを追加"
@@ -56504,22 +56381,19 @@ msgstr "参照フォルダを設定"
 
 #. i18n: ectx: property (placeholderText), widget (QLineEdit, filterTextEdit)
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Filter Layer..."
+#, kde-format
 msgid "Filter images by words..."
-msgstr "フィルタレイヤー(&F)..."
+msgstr "単語で画像をフィルタリング..."
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
-#, fuzzy, kde-format
-#| msgid "Rotate Canvas"
+#, kde-format
 msgid "Scale To Canvas"
-msgstr "キャンバスを回転"
+msgstr "キャンバスに合わせる"
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
-msgstr ""
+msgstr "URL からダウンロードリンクを特定できませんでした"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:4
@@ -56589,6 +56463,9 @@ msgid ""
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
 "(https://github.com/test/plugin)</li>"
 msgstr ""
+"<p><strong>ダウンロード URL を入力</strong></p><p>例:<ul><li>Zip ダウンロード"
+"リンク (http://example.com/plugin.zip)</li><li>Github リポジトリ (https://"
+"github.com/test/plugin)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102
 #: plugins/python/plugin_importer/plugin_importer_extension.py:116
@@ -56722,14 +56599,12 @@ msgstr "フォント:"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
 msgid "Scope"
-msgstr ""
+msgstr "スコープ"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/debuggertable.py:16
-#, fuzzy
-#| msgid "Value"
 msgctxt "Value in DebuggerTable"
 msgid "Value"
-msgstr "明度"
+msgstr "値"
 
 #: plugins/python/scripter/ui_scripter/tabwidgets/debuggerwidget/stepaction.py:22
 msgid "Step Over"
@@ -56740,10 +56615,8 @@ msgid "Error Running Script"
 msgstr "スクリプト実行エラー"
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:20
-#, fuzzy
-#| msgid "Selection Mask"
 msgid "Selections Bag"
-msgstr "選択マスク"
+msgstr "選択バッグ"
 
 #. i18n: ectx: property (text), widget (QPushButton, pushButtonSave)
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.ui:27
@@ -56854,23 +56727,17 @@ msgstr ""
 "選択済み"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:23
-#, fuzzy
-#| msgid ""
-#| "&Activate previous brush when pressing the shortcut for the second time"
 msgid ""
 "&Activate previous brush preset when pressing the shortcut for the second "
 "time"
-msgstr "ショートカットを2回押すとその前使用したブラシをアクティブにする(&A)"
+msgstr ""
+"ショートカットを2回押すとその前使用したブラシプリセットをアクティブにする(&A)"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:28
 msgid "&Select freehand brush tool when pressing a shortcut"
-msgstr ""
+msgstr "ショートカットを押すとフリーハンドブラシツールを選択する(&S)"
 
 #: plugins/python/tenbrushes/uitenbrushes.py:47
-#, fuzzy
-#| msgid ""
-#| "Select the brush preset, then click on the button you want to use to "
-#| "select the preset"
 msgid ""
 "Select the brush preset, then click on the button you want to use to select "
 "the preset."
@@ -56884,6 +56751,8 @@ msgid ""
 "Shortcuts are configurable through the <i>Keyboard Shortcuts</i> interface "
 "in Krita's settings."
 msgstr ""
+"ショートカットは Krita の設定の <i>キーボードショートカット</i> で設定できま"
+"す。"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenscripts/tenscripts.action:4
@@ -57003,8 +56872,7 @@ msgid "Sample count:"
 msgstr "サンプル数:"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:188
-#, fuzzy, kde-format
-#| msgid "Distance:"
+#, kde-format
 msgctxt ""
 "Label of Distance value in Freehand brush tool's Weighted Smoothing mode"
 msgid "Distance:"
@@ -57119,11 +56987,7 @@ msgid "Snap to Single Line"
 msgstr "一つの補助線にスナップ"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:468
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid ""
-#| "Make it only snap to a single assistant, prevents snapping mess while "
-#| "using the infinite assistants."
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "Make it only snap to a single assistant line, prevents snapping mess while "
@@ -57142,7 +57006,7 @@ msgstr "消しゴムにスナップ"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Enable snapping when using erasers"
-msgstr ""
+msgstr "消しゴムを使用する際にスナップを有効にします"
 
 #: plugins/tools/basictools/kis_tool_brush.h:137
 #, kde-format
@@ -57182,21 +57046,18 @@ msgid "Flood Fill"
 msgstr "塗りつぶし"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:542
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "倍率: "
+msgstr "倍率: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:546
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
-#, fuzzy, kde-format
-#| msgid "Encoding options"
+#, kde-format
 msgid "Use custom blending options"
-msgstr "エンコードのオプション"
+msgstr "カスタム混色オプションを使用する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:561
 #, kde-format
@@ -57205,14 +57066,12 @@ msgid "Threshold: "
 msgstr "しきい値: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:568
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "拡張: "
+msgstr "拡張: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:572
 #, kde-format
@@ -57241,67 +57100,60 @@ msgid "Reset"
 msgstr "リセット"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:622
-#, fuzzy, kde-format
-#| msgid "Failed to save the selection for filter mask %1."
+#, kde-format
 msgid "Fill the active selection, or the entire canvas"
-msgstr "フィルタマスク%1の選択範囲の保存に失敗しました。"
+msgstr "アクティブな選択範囲またはキャンバス全体を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:623
-#, fuzzy, kde-format
-#| msgid "Include translator's comments"
+#, kde-format
 msgid "Fill a contiguous region"
-msgstr "翻訳者のコメントを含める"
+msgstr "連続した領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:624
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill all regions of a similar color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "類似色の領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:629
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set the scale of the pattern"
-msgstr "レイヤーの合成モードを設定"
+msgstr "パターンの拡大率を設定する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set the rotation of the pattern"
-msgstr "レイヤーのマスター不透明度を設定"
+msgstr "パターンの回転を設定する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:631
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
+"ブラシの混色オプションを使用せずにカスタマイズした混色オプションを設定する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:632
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
-#, fuzzy, kde-format
-#| msgid "Set the master opacity for the layer"
+#, kde-format
 msgid "Set a custom opacity for the fill"
-msgstr "レイヤーのマスター不透明度を設定"
+msgstr "塗りつぶしの不透明度を設定する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:633
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
-#, fuzzy, kde-format
-#| msgid "Set the blend mode for the layer"
+#, kde-format
 msgid "Set a custom blend mode for the fill"
-msgstr "レイヤーの合成モードを設定"
+msgstr "塗りつぶしのためのカスタム混色モードを設定する"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:635
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
-msgstr ""
+msgstr "クリックした領域と類似色の領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill all regions until a specific boundary color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "指定した境界色までの全ての領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
@@ -57316,6 +57168,8 @@ msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
 "increases the range of similar colors to be filled."
 msgstr ""
+"塗りつぶしの色の類似度の許容範囲を設定します。しきい値を上げると、塗りつぶす"
+"類似色の範囲が広がります。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:639
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
@@ -57324,6 +57178,8 @@ msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
+"塗りつぶしの不透明部分の範囲を設定します。拡張を減らすと、色の類似度に応じて"
+"塗りつぶしの不透明度が減少します。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -57355,30 +57211,27 @@ msgstr "設定した量だけ，塗りつぶしをぼかす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Fill regions found from the active layer"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "アクティブなレイヤーにある領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
-msgstr ""
+msgstr "全てのレイヤーを統合してできた領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定の色ラベルを持つレイヤーを統合してできた領域を塗りつぶす"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Dragging will fill regions of any color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "ドラッグすると、任意の色の領域を塗りつぶします。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:652
 #, kde-format
@@ -57386,6 +57239,8 @@ msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
+"ドラッグすると、最初の領域と類似している色の領域のみを塗りつぶします（線画を"
+"塗りつぶすのに便利です）"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
@@ -57446,11 +57301,10 @@ msgid "Reverse"
 msgstr "反対"
 
 #: plugins/tools/basictools/kis_tool_gradient.cc:287
-#, fuzzy, kde-format
-#| msgid "Dither"
+#, kde-format
 msgctxt "the gradient will be dithered"
 msgid "Dither"
-msgstr "ディザ(ゆらぎ)"
+msgstr "ディザリング"
 
 #: plugins/tools/basictools/kis_tool_gradient.h:107
 #, kde-format
@@ -57567,16 +57421,17 @@ msgid "Copy Translate"
 msgstr "コピー移動"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
-#, fuzzy, kde-format
-#| msgid "Copy Translate"
+#, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "コピー移動"
+msgstr "間隔を空けてコピー移動"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
 msgstr ""
+"対称ブラシツールは %1 本以上のブラシをサポートしていません。間隔をもっと空け"
+"てください。"
 
 #: plugins/tools/basictools/kis_tool_multihand.h:97
 #, kde-format
@@ -57664,31 +57519,24 @@ msgstr "合成: "
 
 #. i18n: ectx: property (toolTip), widget (KisSliderSpinBox, blend)
 #: plugins/tools/basictools/wdgcolorsampler.ui:48
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Blending controls the percentage of color that is picked</nobr> and "
-#| "mixed with your current brush color. A full blending value picks colors "
-#| "completely, ignoring brush color."
+#, kde-format
 msgid ""
 "<nobr>Blending controls the percentage of color that is sampled</nobr> and "
 "mixed with your current brush color. A full blending value samples colors "
 "completely, ignoring brush color."
 msgstr ""
-"<nobr>合成では選択した色の割合を制御し、現在のブラシ色と混合します。</nobr>最"
-"大の合成値ではブラシ色を無視して、完全に選択された色になります。"
+"<nobr>合成では抽出した色の割合を制御し、現在のブラシ色と混合します。</nobr>最"
+"大の合成値ではブラシ色を無視して、完全に抽出された色になります。"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:75
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Determines whether the color picker will sample</nobr> colors from "
-#| "all visible layers or only the currently selected layer."
+#, kde-format
 msgid ""
 "<nobr>Determines whether the color sampler will sample</nobr> colors from "
 "all visible layers or only the currently selected layer."
 msgstr ""
-"<nobr>カラーピッカーで表示されているすべてのレイヤーから</nobr> 色をサンプリ"
-"ングするか、現在選択されているレイヤーのみを サンプリングするか指定します。"
+"<nobr>カラーサンプラーで表示されているすべてのレイヤーから</nobr>色をサンプリ"
+"ングするか、現在選択されているレイヤーのみをサンプリングするか指定します。"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSources)
 #: plugins/tools/basictools/wdgcolorsampler.ui:82
@@ -57736,23 +57584,17 @@ msgstr "半径: "
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, radius)
 #: plugins/tools/basictools/wdgcolorsampler.ui:183
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Radius controls the color picker's sampling area.</nobr> Pixel "
-#| "colors within this radius are mixed together."
+#, kde-format
 msgid ""
 "<nobr>Radius controls the color sampler's sampling area.</nobr> Pixel colors "
 "within this radius are mixed together."
 msgstr ""
-"<nobr>ピッカーのサンプリング領域を半径で制御します。</nobr> この半径内のピク"
-"セル色は混合されます。"
+"<nobr>カラーサンプラーのサンプリング領域を半径で制御します。</nobr> この半径"
+"内のピクセル色は混合されます。"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:218
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Checking this box will add a new color swatch</nobr> to a palette "
-#| "each time you pick a color."
+#, kde-format
 msgid ""
 "<nobr>Checking this box will add a new color swatch</nobr> to a palette each "
 "time you sample a color."
@@ -57768,15 +57610,12 @@ msgstr "パレットに追加:"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:235
-#, fuzzy, kde-format
-#| msgid ""
-#| "<nobr>Controls whether the color picker updates the</nobr> current "
-#| "foreground or not."
+#, kde-format
 msgid ""
 "<nobr>Controls whether the color sampler updates the</nobr> current "
 "foreground or not."
 msgstr ""
-"<nobr>カラーピッカーが現在の描画色を更新するか</nobr> をコントロールします。"
+"<nobr>カラーサンプラーが現在の描画色を更新するか</nobr>をコントロールします。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbUpdateCurrentColor)
 #: plugins/tools/basictools/wdgcolorsampler.ui:238
@@ -57808,14 +57647,11 @@ msgstr "現在のレイヤーを移動(&M)"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:46
-#, fuzzy, kde-format
-#| msgid ""
-#| "Move the first layer with visible content at the place where you click. "
-#| "This will also select that layer in the layerbox."
+#, kde-format
 msgid "Move the first layer with visible content at the place where you click."
 msgstr ""
 "表示されているコンテンツを含む1番目のレイヤーをクリックしたところへ移動しま"
-"す。またこれによりレイヤーボックス内のレイヤーも選択されます。"
+"す。"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioFirstLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:49
@@ -57868,8 +57704,7 @@ msgstr "移動距離の短縮キーを押した後に移動する単位数です
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:150
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Amount of shortcut key movement for Move Tool"
 msgid "Amount:"
 msgstr "量:"
@@ -57963,8 +57798,7 @@ msgstr "垂直に"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmultihandtool.ui:216
-#, fuzzy, kde-format
-#| msgid "Origin:"
+#, kde-format
 msgctxt "Origin in Multihand Tool"
 msgid "Origin:"
 msgstr "原点:"
@@ -57983,17 +57817,15 @@ msgstr "すべて削除"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "内部"
+msgstr "X軸の間隔:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "内部"
+msgstr "Y軸の間隔:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
 #, kde-format
@@ -58030,6 +57862,8 @@ msgstr ""
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
+"このツールはベクターレイヤーのみで動作します。もしかして移動ツールを使いたい"
+"ですか？"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
 msgctxt "(qtundo-format)"
@@ -58099,46 +57933,44 @@ msgstr "形状選択ツール"
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:109
 #, kde-format
 msgid "Fill, Stroke, Markers"
-msgstr ""
+msgstr "塗りつぶし、描線、マーカー"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:110
 #, kde-format
 msgid "Fill, Markers, Stroke"
-msgstr ""
+msgstr "塗りつぶし、マーカー、描線"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:111
 #, kde-format
 msgid "Stroke, Fill, Markers"
-msgstr ""
+msgstr "描線、塗りつぶし、マーカー"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:112
 #, kde-format
 msgid "Stroke, Markers, Fill"
-msgstr ""
+msgstr "描線、マーカー、塗りつぶし"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:113
 #, kde-format
 msgid "Markers, Fill, Stroke"
-msgstr ""
+msgstr "マーカー、塗りつぶし、描線"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:114
 #, kde-format
 msgid "Markers, Stroke, Fill"
-msgstr ""
+msgstr "マーカー、描線、塗りつぶし"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
-#| msgid "Opacity: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "不透明度:"
+msgstr "不透明度: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "不透明度[*変数*]:"
+msgstr "不透明度 [*変数*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -58148,13 +57980,7 @@ msgstr "制御点ロック"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:202
-#, fuzzy, kde-format
-#| msgid ""
-#| "<html><head/><body><p>When \"Scale Styles\" is <span style=\" font-"
-#| "weight:600;\">enabled</span>, the shape's stroke is scaled with the shape "
-#| "itself.</p><p>In the <span style=\" font-weight:600;\">disabled</span> "
-#| "state, only the shape is resized, keeping the stroke width and style "
-#| "unaltered.</p></body></html>"
+#, kde-format
 msgid ""
 "<html><head/><body><p>When &quot;Scale Styles&quot; is <span style=\" font-"
 "weight:600;\">enabled</span>, the shape's stroke is scaled with the shape "
@@ -58162,17 +57988,16 @@ msgid ""
 "state, only the shape is resized, keeping the stroke width and style "
 "unaltered.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>\"Scale Styles\"が<span style=\" font-weight:600;\">有"
-"効</span>の場合、シェイプの描線はシェイプ自体でスケールされます。</"
-"p><p><span style=\" font-weight:600;\">無効</span>状態では、シェイプのみがサ"
-"イズ変更され、描線の幅とスタイルは変更されません。</p></body></html>"
+"<html><head/><body><p>「スタイルを拡大縮小する」が<span style=\" font-"
+"weight:600;\">有効</span>の場合、シェイプ自体とともに描線も拡大縮小されます。"
+"</p><p><span style=\" font-weight:600;\">無効</span>状態では、シェイプのみが"
+"拡大縮小され、描線の幅やスタイルは変更されません。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUniformScaling)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:205
-#, fuzzy, kde-format
-#| msgid "Layer Styles"
+#, kde-format
 msgid "Scale Styles"
-msgstr "レイヤースタイル"
+msgstr "スタイルを拡大縮小する"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:218
@@ -58185,6 +58010,11 @@ msgid ""
 "fields show the shape's &quot;local&quot; size, before application of any "
 "transformations.</p></body></html>"
 msgstr ""
+"<html><head/><body><p>「グローバル座標」モードでは、幅および高さには、シェイ"
+"プを回転した場合や その他の変換が行われた場合でも、画像に位置合わせされた座標"
+"で 形状のバウンディングボックスのサイズが表示されます。</p><p>\"グローバル座"
+"標\"モードが無効の場合、 幅および高さフィールドには、変換を適用する前の形状"
+"の \"ローカル\"サイズが表示されます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkGlobalCoordinates)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:221
@@ -58242,10 +58072,9 @@ msgid "Select a Reference Image"
 msgstr "資料画像を選択"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
-#, fuzzy, kde-format
-#| msgid "Could not load reference images from '%1'."
+#, kde-format
 msgid "Could not load reference image from clipboard"
-msgstr "%1 から資料画像を読み込めませんでした。"
+msgstr "クリップボードから資料画像を読み込めませんでした。"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
 #, kde-format
@@ -58273,10 +58102,9 @@ msgid "Failed to save reference images."
 msgstr "資料画像を保存できませんでした。"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:305
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgid "Reference Image Actions"
-msgstr "資料画像ツール"
+msgstr "資料画像アクション"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:92
 #, kde-format
@@ -58284,25 +58112,22 @@ msgid "Reference Images Tool"
 msgstr "資料画像ツール"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "不透明度[*変数*]:"
+msgstr "不透明度[*可変*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "彩度:"
+msgstr "彩度: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Saturation Rings:"
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "彩度環の階調色数:"
+msgstr "彩度[*可変*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -58557,14 +58382,12 @@ msgid "Threshold: "
 msgstr "しきい値: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "拡張: "
+msgstr "拡張: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
 #, kde-format
@@ -58577,13 +58400,12 @@ msgstr "選択を境界値として使用"
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
-msgstr ""
+msgstr "クリックした領域と色が似ている領域を選択します。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgid "Select all regions until a specific boundary color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定の境界色までのすべての領域を選択します。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
@@ -58593,6 +58415,8 @@ msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
+"選択の色の類似度の許容度を設定します。しきい値を増やすと、選択される類似色の"
+"範囲が広がります。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
@@ -58601,6 +58425,8 @@ msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
+"選択範囲の不透明部分の範囲を設定します。拡張を減らすと、色の類似度に応じて選"
+"択領域の不透明度が低下します。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
@@ -58710,21 +58536,18 @@ msgid "Select Similar Color"
 msgstr "近似色の領域を選択"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:234
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "しきい値: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "拡張: "
+msgstr "拡張: {n}%"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
@@ -58796,46 +58619,40 @@ msgid "Magnetic Selection"
 msgstr "磁気的選択"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:734
-#, fuzzy, kde-format
-#| msgid "Filter Radius: "
+#, kde-format
 msgctxt "Filter radius in Magnetic Select Tool settings"
 msgid "Filter Radius: "
-msgstr "フィルタ半径:"
+msgstr "フィルタ半径: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:741
-#, fuzzy, kde-format
-#| msgid "Threshold: "
+#, kde-format
 msgctxt "Threshold in Magnetic Selection's Tool options"
 msgid "Threshold: "
 msgstr "しきい値: "
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:749
-#, fuzzy, kde-format
-#| msgid "Search Radius: "
+#, kde-format
 msgctxt "Search Radius in Magnetic Selection's Tool options"
 msgid "Search Radius: "
 msgstr "探索半径:"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:758
-#, fuzzy, kde-format
-#| msgid "Anchor Gap: "
+#, kde-format
 msgctxt "Anchor Gap in Magnetic Selection's Tool options"
 msgid "Anchor Gap: "
 msgstr "アンカー間隔:"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:762
-#, fuzzy, kde-format
-#| msgid "Computer"
+#, kde-format
 msgctxt "Complete the selection"
 msgid "Complete"
-msgstr "コンピュータ"
+msgstr "選択を完了する"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:767
-#, fuzzy, kde-format
-#| msgid "Discard All"
+#, kde-format
 msgctxt "Discard the selection"
 msgid "Discard"
-msgstr "すべてを破棄"
+msgstr "選択を取り消す"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:773
 #, kde-format
@@ -58843,48 +58660,43 @@ msgctxt "@info:tooltip"
 msgid ""
 "Radius of the filter for the detecting edges, might take some time to "
 "calculate"
-msgstr ""
+msgstr "縁検出フィルタの半径。計算に時間がかかる場合があります。"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:777
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Threshold for determining the minimum intensity of the edges"
-msgstr ""
+msgstr "縁の最小強度を決定するためのしきい値"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:779
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Extra area to be searched"
-msgstr ""
+msgstr "追加で検索する領域"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:781
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Gap between 2 anchors in interactive mode"
-msgstr ""
+msgstr "インタラクティブモードでの2つのアンカー間の間隔"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:783
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Crop Selections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Complete Selection"
-msgstr "選択範囲を切り取り"
+msgstr "選択を完了する"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:785
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Discard Selection"
-msgstr "選択範囲を表示"
+msgstr "選択を取り消す"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.cc:792
-#, fuzzy, kde-format
-#| msgid "Patch Options"
+#, kde-format
 msgctxt "The 'path options' section label in magnetic selection's tool options"
 msgid "Path options"
-msgstr "色の表示オプション"
+msgstr "経路のオプション"
 
 #: plugins/tools/selectiontools/KisToolSelectMagnetic.h:102
 #, kde-format
@@ -58961,12 +58773,9 @@ msgstr "近似色選択ツール"
 #: plugins/tools/svgtexttool/SvgInlineSizeChangeCommand.cpp:44
 msgctxt "(qtundo-format)"
 msgid "Adjust text auto wrap"
-msgstr ""
+msgstr "テキストの自動折り返しを調整"
 
 #: plugins/tools/svgtexttool/SvgMoveTextCommand.cpp:23
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Move left"
 msgctxt "(qtundo-format)"
 msgid "Move text"
 msgstr "左に移動"
@@ -59035,10 +58844,9 @@ msgid "Text Color"
 msgstr "テキスト色"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgid "Sample a Color"
-msgstr "色を選択"
+msgstr "色をサンプリング"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
 #, kde-format
@@ -59047,15 +58855,13 @@ msgstr "ライン幅"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "通常"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
@@ -59068,19 +58874,14 @@ msgid "Letter Spacing"
 msgstr "文字の間隔"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Indented at"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "字下げ"
+msgstr "テキストを挿入"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "テンプレートを削除"
+msgstr "テキストを削除"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -59176,7 +58977,7 @@ msgstr "文字の大きさ、フォント、太字、イタリックなどを変
 #, kde-format
 msgctxt "action"
 msgid "Change the attributes of the currently selected characters."
-msgstr ""
+msgstr "現在選択されている文字の属性を変更します。"
 
 #. i18n: context: iconText @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59198,12 +58999,10 @@ msgstr "キーボードにない記号や文字を挿入"
 
 #. i18n: context: whatsThis @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:60
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Insert one or more symbols or characters not found on the keyboard"
+#, kde-format
 msgctxt "action"
 msgid "Insert one or more symbols or characters not found on the keyboard."
-msgstr "キーボードにない記号や文字を挿入"
+msgstr "キーボードにない記号や文字を挿入します。"
 
 #. i18n: context: iconText @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_align_justified), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59371,7 +59170,7 @@ msgstr "通常"
 #, kde-format
 msgctxt "action"
 msgid "Demi"
-msgstr ""
+msgstr "デミ"
 
 #. i18n: context: iconText @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_weight_black), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59428,9 +59227,7 @@ msgstr "テキストエディタの設定"
 
 #. i18n: context: text @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:243
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Settings..."
+#, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
 msgstr "設定..."
@@ -59446,11 +59243,10 @@ msgstr "設定..."
 #: plugins/tools/svgtexttool/SvgTextTool.action:246
 #: plugins/tools/svgtexttool/SvgTextTool.action:253
 #: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, fuzzy, kde-format
-#| msgid "Color Space"
+#, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "色空間"
+msgstr "カラーサンプラー"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59464,7 +59260,7 @@ msgstr "色空間"
 #, kde-format
 msgctxt "action"
 msgid "Kerning"
-msgstr ""
+msgstr "カーニング"
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59475,7 +59271,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Legacy Hard Wrap"
-msgstr ""
+msgstr "従来のハードラップ"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_legacy), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:268
@@ -59485,6 +59281,8 @@ msgid ""
 "Use legacy hard-wrapping mode (same as Krita 5.1 and earlier). Each lines "
 "are explicitly positioned, but the line height may be slightly inaccurate."
 msgstr ""
+"従来のハードラップモードを使用します (Krita 5.1 以前と同じ)。各行は明示的に配"
+"置されますが、行の高さがわずかに不正確になることがあります。"
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59495,14 +59293,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Hard Wrap"
-msgstr ""
+msgstr "SVG ハードラップ"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:278
 #, kde-format
 msgctxt "action"
 msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr ""
+msgstr "SVG の CSS `white-space: pre` ハードラップモードを使用します。"
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59513,7 +59311,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "SVG Auto Wrap with Fixed Width"
-msgstr ""
+msgstr "固定幅の SVG 自動ラップ"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:288
@@ -59523,6 +59321,8 @@ msgid ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 msgstr ""
+"SVG の CSS `white-space: pre-wrap` ラップモードを使用し、`inline-size` でテキ"
+"ストの幅を定義します。"
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:287
 #, kde-format
@@ -59549,7 +59349,7 @@ msgstr "幅(&W)"
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:107
 #, kde-format
 msgid "Text W&rapping"
-msgstr ""
+msgstr "テキストの自動改行(&R)"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
@@ -59612,42 +59412,37 @@ msgstr "テキストを右にアンカーします。"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:131
 #, kde-format
 msgid "Text flows horizontal, top to bottom."
-msgstr ""
+msgstr "テキストは水平方向に上から下に流れます。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalRl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:157
 #, kde-format
 msgid "Text flows vertical, right to left."
-msgstr ""
+msgstr "テキストは垂直方向に右から左に流れます。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, modeVerticalLr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:183
 #, kde-format
 msgid "Text flows vertical, left to right."
-msgstr ""
+msgstr "テキストは垂直方向に左から右に流れます。"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Left Edge Detection"
+#, kde-format
 msgid "Left to right text direction."
-msgstr "左エッジ検知"
+msgstr "テキストの方向：左から右"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Right Edge Detection"
+#, kde-format
 msgid "Right to left text direction."
-msgstr "右エッジ検知"
+msgstr "テキストの方向：右から左"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnEditSvg)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:286
-#, fuzzy, kde-format
-#| msgid "SVG Source"
+#, kde-format
 msgid "Edit SVG Source"
-msgstr "SVG ソース"
+msgstr "SVG ソースコードを編集する"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:33
@@ -59669,11 +59464,10 @@ msgstr "Attribute"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:117
-#, fuzzy, kde-format
-#| msgid "Value"
+#, kde-format
 msgctxt "The Value label used by SVG Text Tool"
 msgid "Value"
-msgstr "明度"
+msgstr "Value"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:173
@@ -59953,14 +59747,12 @@ msgid "Include contour regions"
 msgstr "輪郭領域を含める"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "倍率: "
+msgstr "倍率: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
 #, kde-format
@@ -59969,14 +59761,12 @@ msgid "Threshold: "
 msgstr "しきい値: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "拡張: "
+msgstr "拡張: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
 #, kde-format
@@ -60023,13 +59813,13 @@ msgstr "投げ縄"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr ""
+msgstr "領域を反転して塗りつぶします"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
-msgstr ""
+msgstr "囲み領域の輪郭に接触する形状も塗りつぶすようにします"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
 #, kde-format
@@ -60110,25 +59900,22 @@ msgid "All, excluding a specific color or transparency"
 msgstr "すべて。特定色もしくは透過を含まない"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:876
-#, fuzzy, kde-format
-#| msgid "Fill area with background color"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
-msgstr "背景色で領域を塗りつぶす"
+msgstr "特定の色に囲まれた領域を塗りつぶし"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:879
-#, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
-msgstr "描画色を透明値に変換"
+msgstr "透過に囲まれた領域を塗りつぶし"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:882
-#, fuzzy, kde-format
-#| msgid "Foreground to Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"
-msgstr "描画色を透明値に変換"
+msgstr "特定の色もしくは透過に囲まれた領域を塗りつぶし"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFillFactory.h:23
 #, kde-format
@@ -60176,11 +59963,10 @@ msgstr ""
 "がった線であると判断します"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
-#, fuzzy, kde-format
-#| msgid "Clean up: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Clean up: {n}%"
-msgstr "塗り分け線を整理: "
+msgstr "塗り分け線を整理: {n}%"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:128
 #, kde-format
@@ -60230,8 +60016,7 @@ msgstr "制御描線"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTransparent)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:149
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "The label of the button that assigns a selected color as transparent"
 msgid "Transparent"
 msgstr "透過"
@@ -60340,43 +60125,37 @@ msgstr ""
 "ションウィジェットを使用してください。"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:124
-#, fuzzy, kde-format
-#| msgid "Warp"
+#, kde-format
 msgctxt "Warp Transform Tab Label"
 msgid "Warp"
 msgstr "格子点"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:125
-#, fuzzy, kde-format
-#| msgid "Liquify"
+#, kde-format
 msgctxt "Liquify Transform Tab Label"
 msgid "Liquify"
 msgstr "ゆがみ"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:126
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
-msgstr "ブラシのサイズ"
+msgstr "メッシュ"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:127
-#, fuzzy, kde-format
-#| msgid "Cage"
+#, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
 msgstr "ケージ"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:128
-#, fuzzy, kde-format
-#| msgid "Free"
+#, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "自由"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:129
-#, fuzzy, kde-format
-#| msgid "Perspective"
+#, kde-format
 msgctxt "Perspective Transform Tab Label"
 msgid "Perspective"
 msgstr "パースグリッド"
@@ -60710,10 +60489,9 @@ msgstr "剪断"
 
 #. i18n: ectx: property (text), widget (QLabel, tooBigLabelWidget)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:700
-#, fuzzy, kde-format
-#| msgid "Zoom Canvas"
+#, kde-format
 msgid "off canvas"
-msgstr "キャンバスの表示倍率変更"
+msgstr "キャンバス外"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateX)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aXBox)
@@ -60751,7 +60529,7 @@ msgstr "z:"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:905
 #, kde-format
 msgid "Z-coordinate of the camera position over the scene"
-msgstr ""
+msgstr "シーン上のカメラ位置の Z 座標"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCameraHeight)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:886
@@ -60889,10 +60667,9 @@ msgstr "制御点を追加/編集(&I)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, cageDeformRadio)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1679
-#, fuzzy, kde-format
-#| msgid "Vector Selection"
+#, kde-format
 msgid "Defor&m Selection"
-msgstr "ベクター選択"
+msgstr "選択範囲の変形(&M)"
 
 #. i18n: ectx: property (text), widget (QLabel, adjustGranularity)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1711
@@ -60922,8 +60699,7 @@ msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029
-#, fuzzy, kde-format
-#| msgid "Amount:"
+#, kde-format
 msgctxt "Amount of transformation"
 msgid "Amount:"
 msgstr "量:"
@@ -60948,17 +60724,15 @@ msgstr "ハンドルを表示"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSymmetricalHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2189
-#, fuzzy, kde-format
-#| msgctxt "the gradient will be drawn as a symmetric cone"
-#| msgid "Conical Symmetric"
+#, kde-format
 msgid "Lock handles symmetrically"
-msgstr "円すい状(対称)"
+msgstr "ハンドルを対称にロック"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkScaleHandles)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2196
 #, kde-format
 msgid "Scale handles proportionally"
-msgstr ""
+msgstr "ハンドルを比例的に拡大縮小"
 
 #. i18n: context: text @ Action (KritaShape/KisToolDyna), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (KritaShape/KisToolDyna), Actions (tool-shortcuts), ActionCollection (Tools)

@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-10 01:50+0000\n"
-"PO-Revision-Date: 2024-02-07 08:55+0100\n"
+"PO-Revision-Date: 2024-02-11 10:15+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -38399,8 +38399,7 @@ msgid "Bluer/Yellower: "
 msgstr "Bleu-Jaune :"
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Ré-initialiser"

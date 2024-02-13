@@ -37152,11 +37152,10 @@ msgid "Bluer/Yellower: "
 msgstr ""
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
-msgstr "Obnovit"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261

@@ -86,6 +86,7 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->image()->disconnect(this);
+        m_canvas = nullptr;
     }
 
     if (m_zoomSlider) {
@@ -120,6 +121,7 @@ void OverviewDockerPage::setCanvas(KoCanvasBase * canvas)
     m_controlsLayout->removeItem(m_controlsSecondRowLayout);
 
     delete m_controlsSecondRowLayout;
+    m_controlsSecondRowLayout = nullptr;
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 

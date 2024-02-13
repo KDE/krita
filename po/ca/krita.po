@@ -60697,14 +60697,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><p align=\"center\"><b>Ajudat per</b></p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ""
-#~ ".</p><p><i>Gràcies! Tots sou <b>magnífics</b>!</i></p></body></html>"
-
-#~ msgid "Backers"
-#~ msgstr "Han ajudat"

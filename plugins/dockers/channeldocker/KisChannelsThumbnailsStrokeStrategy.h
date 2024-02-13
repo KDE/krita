@@ -2,7 +2,7 @@
 #define KISCHANNELSTHUMBNAILSSTROKESTRATEGY_H
 
 #include <KisImageThumbnailStrokeStrategy.h>
-
+#include <KisChannelsThumbnailsStrokeStrategyMetatypes.h>
 
 class KisChannelsThumbnailsStrokeStrategy : public KisImageThumbnailStrokeStrategyBase
 {
@@ -18,7 +18,5 @@ Q_SIGNALS:
     void thumbnailsUpdated(const QVector<QImage> &channels, const KoColorSpace *cs);
 
 };
-
-//Q_DECLARE_METATYPE(QVector<QImage>)
 
 #endif // KISCHANNELSTHUMBNAILSSTROKESTRATEGY_H

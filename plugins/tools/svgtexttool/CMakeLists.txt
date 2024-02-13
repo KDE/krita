@@ -25,6 +25,7 @@ set (SvgTextTool_SRCS
     SvgTextShapeManagerBlocker.cpp
 
     glyphpalette/GlyphPaletteDialog.cpp
+    glyphpalette/SvgTextLabel.cpp
 )
 
 ki18n_wrap_ui(SvgTextTool_SRCS 

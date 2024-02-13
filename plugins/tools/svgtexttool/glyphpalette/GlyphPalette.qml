@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 import QtQuick 2.0
-import QtQuick.Controls 1.4
 import QtQuick.Controls 2.5
+import org.krita.tools.text 1.0
 
 Rectangle {
     id: root;
@@ -13,6 +13,10 @@ Rectangle {
     property string titleText;
     property QtObject model;
     property alias currentIndex: charMap.currentIndex;
+    property var fontFamilies: [];
+    property double fontSize :10.0;
+    property int fontWeight : 400;
+    property int fontStyle;
     SystemPalette {
         id: palette;
         colorGroup: SystemPalette.Active
@@ -20,9 +24,10 @@ Rectangle {
     color: palette.window
 
     Text {
-        id: title
-        text: titleText
-        color: palette.windowText
+        id: title;
+        text: titleText;
+        color: palette.text;
+
         anchors.left: parent.left;
         anchors.right: parent.right;
         anchors.top: parent.top;
@@ -33,29 +38,36 @@ Rectangle {
         anchors.right: parent.right;
         anchors.top: title.bottom;
         anchors.bottom: parent.bottom;
+
+        property int scrollWidth: ScrollBar.implicitWidth;
         GridView {
             id: charMap;
             model: root.model;
             focus: true;
 
             anchors.fill: parent;
-            cellWidth: 25;
-            cellHeight: 25;
+            cellWidth: (root.width - parent.scrollWidth)/8;
+            cellHeight: cellWidth;
 
-            delegate: Rectangle {
+            delegate:SvgTextLabel {
+                textColor: palette.windowText;
+                fillColor: palette.base;
+                fontFamilies: root.fontFamilies;
+                fontSize: root.fontSize;
+                fontStyle: root.fontStyle;
+                fontWeight: root.fontWeight;
+                text: model.display;
+                padding: height/8;
+
                 width: charMap.cellWidth;
                 height: charMap.cellHeight;
 
-                color: palette.base
-                border.color: GridView.isCurrentItem? palette.highlight: palette.alternateBase;
-
-                Text {
-                    clip: true;
-                    text: model.display
-                    color: palette.windowText
-                    anchors.centerIn: parent;
+                property bool currentItem: GridView.isCurrentItem;
+                Rectangle {
+                    anchors.fill: parent;
+                    color: "transparent";
+                    border.color: parent.currentItem? palette.highlight: palette.alternateBase;
                 }
-
                 MouseArea {
                     anchors.fill: parent;
                     onClicked: {
@@ -67,7 +79,8 @@ Rectangle {
                     ToolTip.visible: containsMouse;
                 }
             }
+
+
         }
     }
-
 }

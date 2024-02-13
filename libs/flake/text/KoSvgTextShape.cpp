@@ -1053,7 +1053,6 @@ KoSvgTextProperties KoSvgTextShape::textProperties() const
 
 QSharedPointer<KoShapeBackground> KoSvgTextShape::background() const
 {
-    QSharedPointer<KoShapeBackground> bg(new KoColorBackground(Qt::black));
     KoSvgTextProperties props = KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties();
     if (props.hasProperty(KoSvgTextProperties::FillId)) {
         return props.property(KoSvgTextProperties::FillId).value<KoSvgText::BackgroundProperty>().property;

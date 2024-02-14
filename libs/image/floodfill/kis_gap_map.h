@@ -22,46 +22,54 @@
 class KisTileOptimizedAccessor
 {
 public:
-    KisTileOptimizedAccessor(KisRandomAccessorSP accessorSP, quint32 pixelSize)
-        : m_accessor(accessorSP)
-        , m_pixelSize(pixelSize)
+    KisTileOptimizedAccessor(KisPaintDeviceSP& paintDevice)
+        : m_pixelSize(paintDevice->pixelSize())
+        , m_accessor(paintDevice->createRandomAccessorNG())
         , m_tile(-1, -1)
-        , m_rawData(nullptr)
+        , m_tileRawData(nullptr)
     {
       // We start in an invalid state ((-1,-1) tile), so that the data pointer is fetched
       // after the paint device has been set up (e.g. default color and fill).
     }
 
-    quint8* rawData(int x, int y)
+    quint8* tileRawData(int tileX, int tileY)
     {
-        const int tx = x / TileSize;
-        const int ty = y / TileSize;
+        if ((m_tile.x() != tileX) || (m_tile.y() != tileY)) {
+            m_accessor->moveTo(tileX * TileSize, tileY * TileSize);
+            m_tileRawData = m_accessor->rawData();
 
-        if ((m_tile.x() != tx) || (m_tile.y() != ty)) {
-            m_accessor->moveTo(tx * TileSize, ty * TileSize);
-            m_rawData = m_accessor->rawData();
-            m_tile.setX(tx);
-            m_tile.setY(ty);
+            m_tile.setX(tileX);
+            m_tile.setY(tileY);
 
 #if KIS_GAP_MAP_DEBUG_LOGGING_AND_ASSERTS
-            KIS_ASSERT(m_accessor->numContiguousRows(ty * TileSize) == TileSize);
-            KIS_ASSERT(m_accessor->numContiguousColumns(tx * TileSize) == TileSize);
+            KIS_ASSERT(m_accessor->numContiguousRows(tileY * TileSize) == TileSize);
+            KIS_ASSERT(m_accessor->numContiguousColumns(tileX * TileSize) == TileSize);
 #endif
         }
 
+        return m_tileRawData;
+    }
+
+    ALWAYS_INLINE quint8* rawData(int x, int y)
+    {
+        const int tileX = x / TileSize;
+        const int tileY = y / TileSize;
         const int localX = x & (TileSize - 1);
         const int localY = y & (TileSize - 1);
 
-        return m_rawData + m_pixelSize * (localX + TileSize * localY);
+        m_tileRawData = tileRawData(tileX, tileY);
+
+        return m_tileRawData + m_pixelSize * (localX + TileSize * localY);
     }
 
 private:
     static constexpr int TileSize = 64;
 
-    KisRandomAccessorSP m_accessor;
     const quint32 m_pixelSize;
+
+    KisRandomAccessorSP m_accessor;
     QPoint m_tile;
-    quint8* m_rawData;
+    quint8* m_tileRawData;
 };
 
 /**
@@ -164,7 +172,6 @@ private:
     template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(int x, int y);
     template<bool BoundsCheck> ALWAYS_INLINE bool isOpaque(const QPoint& p);
     void updateDistance(const QPoint& globalPosition, quint16 newDistance);
-    void copyFromScratchTile(const QRect& rect);
 
     ALWAYS_INLINE bool isDistanceAvailable(int x, int y)
     {
@@ -179,7 +186,7 @@ private:
     ALWAYS_INLINE TileFlags* tileFlagsPtr(int tileX, int tileY)
     {
         return reinterpret_cast<TileFlags*>(
-            m_accessor->rawData(TileSize * tileX, TileSize * tileY) + offsetof(Data, flags));
+            m_accessor->tileRawData(tileX, tileY) + offsetof(Data, flags));
     }
 
     const int m_gapSize;                      ///< Gap size in pixels for this map
@@ -187,8 +194,8 @@ private:
     const QSize m_numTiles;                   ///< Map size in tiles
     const FillOpacityFunc m_fillOpacityFunc;  ///< A callback to get the opacity data from the fill class
 
-    QPoint m_scratchTilePosition;             ///< The position of the scratch tile compared to the whole region
-    std::vector<quint16> m_scratchTile;       ///< Scratch memory to perform computations
+    QPoint m_tilePosition;                    ///< The position of the currently computed tile compared to the whole region
+    Data* m_tileDataPtr;                      ///< The pointer to the currently computed tile data
 
     KisPaintDeviceSP m_deviceSp;                            ///< A 32-bit per pixel paint device that holds the distance and other data
     std::unique_ptr<KisTileOptimizedAccessor> m_accessor;   ///< An accessor for the paint device

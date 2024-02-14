@@ -92,12 +92,10 @@ KisGapMap::KisGapMap(int gapSize,
     : m_gapSize(gapSize)
     , m_size(mapBounds.size())
     , m_numTiles(qCeil(static_cast<float>(m_size.width()) / TileSize),
-                qCeil(static_cast<float>(m_size.height()) / TileSize))
+                 qCeil(static_cast<float>(m_size.height()) / TileSize))
     , m_fillOpacityFunc(fillOpacityFunc)
     , m_deviceSp(new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
-    , m_accessor(std::make_unique<KisTileOptimizedAccessor>(
-          m_deviceSp->createRandomAccessorNG(),
-          m_deviceSp->pixelSize()))
+    , m_accessor(std::make_unique<KisTileOptimizedAccessor>(m_deviceSp))
 {
     // Ensure the scanline fill uses the same coordinates.
     KIS_ASSERT((mapBounds.x() == 0) && (mapBounds.y() == 0) &&
@@ -110,8 +108,6 @@ KisGapMap::KisGapMap(int gapSize,
     KoColor color(reinterpret_cast<quint8*>(&defaultPixel), KoColorSpaceRegistry::instance()->rgb8());
     m_deviceSp->setDefaultPixel(color);
     m_deviceSp->fill(mapBounds, color);
-
-    m_scratchTile.resize(TileSize * TileSize);
 }
 
 void KisGapMap::loadOpacityTiles(const QRect& tileRect)
@@ -239,8 +235,8 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
         (rect.right() + (m_gapSize + 1) >= m_size.width()) ||  // no risk of accessing x<0
         (y1 - (m_gapSize + 1) < 0) || (y2 + (m_gapSize + 1) >= m_size.height());
 
-    m_scratchTilePosition = rect.topLeft();
-    std::fill(m_scratchTile.begin(), m_scratchTile.end(), DISTANCE_INFINITE);
+    m_tilePosition = rect.topLeft();
+    m_tileDataPtr = reinterpret_cast<Data*>(m_accessor->tileRawData(tile.x(), tile.y()));
 
     // Process the tile and its neighborhood in three passes:
     // Top (the top guard bands)
@@ -256,21 +252,9 @@ void KisGapMap::loadDistanceTile(const QPoint& tile, const QRect& nearbyTilesRec
         distanceSearchRowInnerLoop(boundsCheck, y, x1Bottom, x2Bottom);
     }
 
-    copyFromScratchTile(rect);
-
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
     m_distanceElapsedNanos += timer.nsecsElapsed();
 #endif
-}
-
-/** Copy the distance values from the scratch tile to the paint device. */
-void KisGapMap::copyFromScratchTile(const QRect& rect)
-{
-    for (int iy = 0, y = rect.top(); y <= rect.bottom(); ++iy, ++y) {
-        for (int ix = 0, x = rect.left(); x <= rect.right(); ++ix, ++x) {
-            dataPtr(x, y)->distance = m_scratchTile[ix + iy * TileSize];
-        }
-    }
 }
 
 /**
@@ -334,15 +318,15 @@ void KisGapMap::gapDistanceSearch(int x, int y, CoordinateTransform op)
 
 void KisGapMap::updateDistance(const QPoint& globalPosition, quint16 newDistance)
 {
-    const QPoint p = globalPosition - m_scratchTilePosition;
+    const QPoint p = globalPosition - m_tilePosition;
 
     if ((p.x() < 0) || (p.x() >= TileSize) || (p.y() < 0) || (p.y() >= TileSize)) {
         return;
     }
 
-    quint16* ptr = &m_scratchTile[p.x() + p.y() * TileSize];
-    if (*ptr > newDistance) {
-        *ptr = newDistance;
+    Data* ptr = m_tileDataPtr + p.x() + TileSize * p.y();
+    if (ptr->distance > newDistance) {
+        ptr->distance = newDistance;
     }
 }
 

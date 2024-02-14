@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 01:50+0000\n"
+"POT-Creation-Date: 2024-02-14 01:38+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -17222,7 +17222,7 @@ msgid "Reselect"
 msgstr "Athroghnaigh"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:1999
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17751,73 +17751,73 @@ msgstr "Oscail pailéad"
 msgid "Error"
 msgstr "Scáthán"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:619
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Cóipeáil Dearg"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1417
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "X-Ais"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1665
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Cóipeáil Ó"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1738
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Athraigh Ceangal"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1962
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Bain an Dath Roghnaithe"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy
 #| msgid "Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Próifíl"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Infheicthe"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2048
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Masc Roghnaithe"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2071
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Maolaigh Sraith"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2084
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Maolaigh Íomhá"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2308
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Roghanna Alfa"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2334
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -22480,64 +22480,6 @@ msgstr "Leagan"
 #, kde-format
 msgid "None"
 msgstr "Neamhní"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, fuzzy, kde-format
-msgid "Reload Original Preset"
-msgstr "Bain Mírlíne"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:82
-#, kde-format
-msgid "Configure the on-canvas brush editor"
-msgstr ""
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
-#, fuzzy, kde-format
-#| msgid "New configuration %1"
-msgid "Brush HUD configuration"
-msgstr "Cumraíocht nua %1"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
-#, fuzzy, kde-format
-msgid "Available properties:"
-msgstr "Airíonna na Sraithe"
-
-#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:64
-#: libs/ui/forms/wdgpresetselectorstrip.ui:92
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:71
-#: libs/ui/forms/wdgpresetselectorstrip.ui:51
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
-#, fuzzy, kde-format
-#| msgid "Current preset"
-msgid "Current properties:"
-msgstr "Réamhshocrú reatha"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnUp)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
-#, kde-format
-msgid "Up"
-msgstr "Suas"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnDown)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
-#, fuzzy, kde-format
-msgid "Down"
-msgstr "Síos"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, fuzzy, kde-format
@@ -27676,6 +27618,24 @@ msgstr ""
 msgid "Tool image:"
 msgstr "Go híomhánna"
 
+#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:51
+#: libs/ui/widgets/KisDlgListPicker.ui:65
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:71
+#, kde-format
+msgid "<"
+msgstr "<"
+
+#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:92
+#: libs/ui/widgets/KisDlgListPicker.ui:58
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:64
+#, kde-format
+msgid ">"
+msgstr ">"
+
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
@@ -29143,7 +29103,7 @@ msgstr "Súmáil Isteach"
 msgid "Zoom Out"
 msgstr "Súmáil Amach"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:228
 #, fuzzy, kde-format
 msgid "Zoom to 100%"
 msgstr "Athroghnaigh"
@@ -30043,22 +30003,32 @@ msgctxt "option category"
 msgid "Masked Brush"
 msgstr "Geamhú Gaussach"
 
-#: libs/ui/kis_popup_palette.cpp:153
+#: libs/ui/kis_popup_palette.cpp:150
+#, fuzzy, kde-format
+msgid "Configure docker panel"
+msgstr "Cumraigh..."
+
+#: libs/ui/kis_popup_palette.cpp:163
+#, kde-format
+msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+msgstr ""
+
+#: libs/ui/kis_popup_palette.cpp:189
 #, fuzzy, kde-format
 msgid "Clear color history"
 msgstr "Líon na gcolún"
 
-#: libs/ui/kis_popup_palette.cpp:176
+#: libs/ui/kis_popup_palette.cpp:212
 #, fuzzy, kde-format
 msgid "Mirror Canvas"
 msgstr "Scáthánaigh Masc X"
 
-#: libs/ui/kis_popup_palette.cpp:185
+#: libs/ui/kis_popup_palette.cpp:221
 #, fuzzy, kde-format
 msgid "Canvas Only"
 msgstr "Dath an chanbháis:"
 
-#: libs/ui/kis_popup_palette.cpp:189
+#: libs/ui/kis_popup_palette.cpp:225
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
@@ -30069,19 +30039,35 @@ msgstr "Dath an chanbháis:"
 msgid "100%"
 msgstr "10×10"
 
-#: libs/ui/kis_popup_palette.cpp:198
+#: libs/ui/kis_popup_palette.cpp:234
 #, fuzzy, kde-format
 msgid "Fit Canvas to View"
 msgstr "&Canbhás"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:621
+#, fuzzy, kde-format
+msgid "Configure Popup Palette dockers"
+msgstr "Taispeáin Dugairí"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+msgid "Available dockers"
+msgstr "Airíonna na Sraithe"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Current Layer"
+msgid "Current dockers"
+msgstr "Sraith Reatha"
+
+#: libs/ui/kis_popup_palette.cpp:1020
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "Dath an Tulra"
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1158
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -34504,7 +34490,7 @@ msgstr "Ar Aghaidh"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:18
+#: libs/ui/widgets/kis_utility_title_bar.cpp:19
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
@@ -34751,6 +34737,20 @@ msgstr ""
 #| msgid "Random size"
 msgid "Randomize"
 msgstr "Méid randamach"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnUp)
+#: libs/ui/widgets/KisDlgListPicker.ui:98
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:107
+#, kde-format
+msgid "Up"
+msgstr "Suas"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDown)
+#: libs/ui/widgets/KisDlgListPicker.ui:105
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:114
+#, fuzzy, kde-format
+msgid "Down"
+msgstr "Síos"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
 #, kde-format
@@ -35573,7 +35573,7 @@ msgstr "Roghnaigh Uile"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:16
 #, fuzzy, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -38773,6 +38773,42 @@ msgstr "Sáithiú"
 msgid "Reset to default"
 msgstr "Réamhshocrú"
 
+#: plugins/dockers/brushhud/brushhud_dock.cpp:20
+#, fuzzy, kde-format
+msgctxt "@title:window On-Canvas Brush Editor docker"
+msgid "On-Canvas Brush Editor"
+msgstr "Stair an Chealaithe"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#, fuzzy, kde-format
+msgid "Reload Original Preset"
+msgstr "Bain Mírlíne"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#, kde-format
+msgid "Configure the on-canvas brush editor"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24
+#, fuzzy, kde-format
+#| msgid "New configuration %1"
+msgid "Brush HUD configuration"
+msgstr "Cumraíocht nua %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
+#, fuzzy, kde-format
+msgid "Available properties:"
+msgstr "Airíonna na Sraithe"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
+#, fuzzy, kde-format
+#| msgid "Current preset"
+msgid "Current properties:"
+msgstr "Réamhshocrú reatha"
+
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, fuzzy, kde-format
 msgid "Compositions"
@@ -39609,12 +39645,12 @@ msgstr ""
 msgid "Configure black and white points of the view"
 msgstr ""
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:38
+#: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
 msgid "Overview"
 msgstr "Foramharc"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:156
+#: plugins/dockers/overview/overviewdocker_page.cpp:157
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"

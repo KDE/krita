@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 01:50+0000\n"
+"POT-Creation-Date: 2024-02-14 01:38+0000\n"
 "PO-Revision-Date: 2024-02-02 13:03+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -17992,7 +17992,7 @@ msgstr ""
 "uudestaan valitseminen"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:1999
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 #| msgctxt "action"
@@ -18560,22 +18560,22 @@ msgstr "Avaa tiedosto"
 msgid "Error"
 msgstr "Virhe"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:619
 #, kde-format
 msgid "Merged"
 msgstr "Yhdistetty"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1417
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Yhdistä alas"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1665
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "%1 – kopio"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1738
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
@@ -18583,50 +18583,50 @@ msgstr ""
 "Muuta kytköstä\n"
 "kytköksen muuttaminen"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1962
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Yhdistä valitut solmut"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy
 #| msgid "New Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Uusi profiili"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Näkyvä"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Yhdistä valintamaskit"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2071
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Tasoita taso\n"
 "tason tasoittaminen"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2084
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Tasoita kuva\n"
 "kuvan tasoittaminen"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2308
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Jaa alfa maskiksi"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -23497,66 +23497,6 @@ msgstr "Versio:"
 #, kde-format
 msgid "None"
 msgstr "Ei mitään"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, kde-format
-msgid "Reload Original Preset"
-msgstr "Lataa alkuperäinen esiasetus uudelleen"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:82
-#, kde-format
-msgid "Configure the on-canvas brush editor"
-msgstr ""
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
-#, fuzzy, kde-format
-#| msgid "New configuration %1"
-msgid "Brush HUD configuration"
-msgstr "Uusi määritys %1"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
-#, fuzzy, kde-format
-msgid "Available properties:"
-msgstr "Maskin asetukset"
-
-#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:64
-#: libs/ui/forms/wdgpresetselectorstrip.ui:92
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:71
-#: libs/ui/forms/wdgpresetselectorstrip.ui:51
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
-#, fuzzy, kde-format
-#| msgid "Current preset"
-msgid "Current properties:"
-msgstr "Nykyinen esiasetus"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnUp)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
-#, kde-format
-msgid "Up"
-msgstr "Ylös"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnDown)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
-#, fuzzy, kde-format
-#| msgctxt "@item:inlistbox Bevel direction"
-#| msgid "Down"
-msgid "Down"
-msgstr "Alas"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, kde-format
@@ -28934,6 +28874,24 @@ msgstr ""
 msgid "Tool image:"
 msgstr "Kuville"
 
+#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:51
+#: libs/ui/widgets/KisDlgListPicker.ui:65
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:71
+#, kde-format
+msgid "<"
+msgstr "<"
+
+#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:92
+#: libs/ui/widgets/KisDlgListPicker.ui:58
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:64
+#, kde-format
+msgid ">"
+msgstr ">"
+
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
@@ -30433,7 +30391,7 @@ msgstr "Lähennä"
 msgid "Zoom Out"
 msgstr "Loitonna"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:228
 #, fuzzy, kde-format
 #| msgid "Reset Zoom to 100%"
 msgid "Zoom to 100%"
@@ -31399,23 +31357,34 @@ msgctxt "option category"
 msgid "Masked Brush"
 msgstr "Sekoitussivellin"
 
-#: libs/ui/kis_popup_palette.cpp:153
+#: libs/ui/kis_popup_palette.cpp:150
+#, fuzzy, kde-format
+#| msgid "Configure Krita"
+msgid "Configure docker panel"
+msgstr "Kritan asetukset"
+
+#: libs/ui/kis_popup_palette.cpp:163
+#, kde-format
+msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+msgstr ""
+
+#: libs/ui/kis_popup_palette.cpp:189
 #, fuzzy, kde-format
 msgid "Clear color history"
 msgstr "Sarakkeiden määrä"
 
-#: libs/ui/kis_popup_palette.cpp:176
+#: libs/ui/kis_popup_palette.cpp:212
 #, kde-format
 msgid "Mirror Canvas"
 msgstr "Peilaa kangas"
 
-#: libs/ui/kis_popup_palette.cpp:185
+#: libs/ui/kis_popup_palette.cpp:221
 #, fuzzy, kde-format
 #| msgid "Canvas-only"
 msgid "Canvas Only"
 msgstr "Vain kangas -tila"
 
-#: libs/ui/kis_popup_palette.cpp:189
+#: libs/ui/kis_popup_palette.cpp:225
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
@@ -31426,13 +31395,30 @@ msgstr "Vain kangas -tila"
 msgid "100%"
 msgstr "100 %"
 
-#: libs/ui/kis_popup_palette.cpp:198
+#: libs/ui/kis_popup_palette.cpp:234
 #, fuzzy, kde-format
 #| msgid "Canvas Size"
 msgid "Fit Canvas to View"
 msgstr "Kankaan koko"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:621
+#, fuzzy, kde-format
+#| msgid "Show a palette docker"
+msgid "Configure Popup Palette dockers"
+msgstr "Näytä telakoitu paletti"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+msgid "Available dockers"
+msgstr "Maskin asetukset"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Current Layer"
+msgid "Current dockers"
+msgstr "Nykyinen taso"
+
+#: libs/ui/kis_popup_palette.cpp:1020
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Reset Foreground and Background Color"
@@ -31441,7 +31427,7 @@ msgid ""
 "Right click to set to black and white."
 msgstr "Alusta piirto- ja taustavärit"
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1158
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -36164,7 +36150,7 @@ msgstr "Hyppää eteenpäin"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:18
+#: libs/ui/widgets/kis_utility_title_bar.cpp:19
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
@@ -36421,6 +36407,22 @@ msgstr "Nopeus"
 #, kde-format
 msgid "Randomize"
 msgstr "Satunnaista"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnUp)
+#: libs/ui/widgets/KisDlgListPicker.ui:98
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:107
+#, kde-format
+msgid "Up"
+msgstr "Ylös"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDown)
+#: libs/ui/widgets/KisDlgListPicker.ui:105
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:114
+#, fuzzy, kde-format
+#| msgctxt "@item:inlistbox Bevel direction"
+#| msgid "Down"
+msgid "Down"
+msgstr "Alas"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
 #, kde-format
@@ -37274,7 +37276,7 @@ msgstr "Valitse tiedostonimi…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:16
 #, fuzzy, kde-format
 #| msgid "Channels"
 msgctxt "Channel as in Color Channels"
@@ -40594,6 +40596,44 @@ msgstr "Käännä kylläisyys"
 msgid "Reset to default"
 msgstr "Palauta oletus"
 
+#: plugins/dockers/brushhud/brushhud_dock.cpp:20
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Show Brush Editor"
+msgctxt "@title:window On-Canvas Brush Editor docker"
+msgid "On-Canvas Brush Editor"
+msgstr "Näytä sivellinmuokkain"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#, kde-format
+msgid "Reload Original Preset"
+msgstr "Lataa alkuperäinen esiasetus uudelleen"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#, kde-format
+msgid "Configure the on-canvas brush editor"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24
+#, fuzzy, kde-format
+#| msgid "New configuration %1"
+msgid "Brush HUD configuration"
+msgstr "Uusi määritys %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
+#, fuzzy, kde-format
+msgid "Available properties:"
+msgstr "Maskin asetukset"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
+#, fuzzy, kde-format
+#| msgid "Current preset"
+msgid "Current properties:"
+msgstr "Nykyinen esiasetus"
+
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, kde-format
 msgid "Compositions"
@@ -41442,12 +41482,12 @@ msgstr ""
 msgid "Configure black and white points of the view"
 msgstr ""
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:38
+#: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
 msgid "Overview"
 msgstr "Yleiskuva"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:156
+#: plugins/dockers/overview/overviewdocker_page.cpp:157
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
@@ -101759,9 +101799,6 @@ msgstr "Viitekuvatyökalu"
 
 #~ msgid "Scripting filters for Krita"
 #~ msgstr "Kritan komentojonosuotimet"
-
-#~ msgid "Show a palette docker"
-#~ msgstr "Näytä telakoitu paletti"
 
 #, fuzzy
 #~| msgid "Show Rulers"

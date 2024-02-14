@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 01:50+0000\n"
+"POT-Creation-Date: 2024-02-14 01:38+0000\n"
 "PO-Revision-Date: 2024-02-10 08:38+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -17025,7 +17025,7 @@ msgstr ""
 "повторний вибір"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:1999
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17587,79 +17587,79 @@ msgstr "Відкриття файла"
 msgid "Error"
 msgstr "Помилка"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:619
 #, kde-format
 msgid "Merged"
 msgstr "Об’єднано"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1417
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 "Об’єднати вниз\n"
 "об’єднання вниз"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1665
 #, kde-format
 msgid "Copy of"
 msgstr "Копія"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1738
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Змінити колір проєкції\n"
 "зміну кольору проєкції"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1962
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Об’єднати позначені вузли\n"
 "об’єднання позначених вузлів"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Створити з видимого\n"
 "створення з видимого"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видиме"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Об’єднати маски позначення\n"
 "об’єднання масок позначення"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2071
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Звести шар\n"
 "зведення шару"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2084
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Звести зображення\n"
 "зведення зображення"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2308
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Відділити прозорість як маску\n"
 "відділення прозорості як маски"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -22307,62 +22307,6 @@ msgstr "Версія FFmpeg:"
 #, kde-format
 msgid "None"
 msgstr "Жодного"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, kde-format
-msgid "Reload Original Preset"
-msgstr "Перезавантажити початковий набір"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:82
-#, kde-format
-msgid "Configure the on-canvas brush editor"
-msgstr "Налаштувати редактор пензля на полотні"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
-#, kde-format
-msgid "Brush HUD configuration"
-msgstr "Налаштування панелі пензля"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
-#, kde-format
-msgid "Available properties:"
-msgstr "Доступні властивості:"
-
-#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:64
-#: libs/ui/forms/wdgpresetselectorstrip.ui:92
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:71
-#: libs/ui/forms/wdgpresetselectorstrip.ui:51
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
-#, kde-format
-msgid "Current properties:"
-msgstr "Поточні властивості:"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnUp)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
-#, kde-format
-msgid "Up"
-msgstr "Вгору"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnDown)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
-#, kde-format
-msgid "Down"
-msgstr "Вниз"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, kde-format
@@ -27725,6 +27669,24 @@ msgstr ""
 msgid "Tool image:"
 msgstr "Зображення інструмента:"
 
+#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:51
+#: libs/ui/widgets/KisDlgListPicker.ui:65
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:71
+#, kde-format
+msgid "<"
+msgstr "<"
+
+#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:92
+#: libs/ui/widgets/KisDlgListPicker.ui:58
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:64
+#, kde-format
+msgid ">"
+msgstr ">"
+
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
@@ -29192,7 +29154,7 @@ msgstr "Збільшити"
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:228
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Масштаб у 100%"
@@ -30136,22 +30098,33 @@ msgctxt "option category"
 msgid "Masked Brush"
 msgstr "Маскування"
 
-#: libs/ui/kis_popup_palette.cpp:153
+#: libs/ui/kis_popup_palette.cpp:150
+#, fuzzy, kde-format
+#| msgid "Configure Krita"
+msgid "Configure docker panel"
+msgstr "Налаштувати Krita"
+
+#: libs/ui/kis_popup_palette.cpp:163
+#, kde-format
+msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+msgstr ""
+
+#: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
 msgid "Clear color history"
 msgstr "Спорожнити журнал кольорів"
 
-#: libs/ui/kis_popup_palette.cpp:176
+#: libs/ui/kis_popup_palette.cpp:212
 #, kde-format
 msgid "Mirror Canvas"
 msgstr "Віддзеркалити полотно"
 
-#: libs/ui/kis_popup_palette.cpp:185
+#: libs/ui/kis_popup_palette.cpp:221
 #, kde-format
 msgid "Canvas Only"
 msgstr "Лише полотно"
 
-#: libs/ui/kis_popup_palette.cpp:189
+#: libs/ui/kis_popup_palette.cpp:225
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
@@ -30162,12 +30135,30 @@ msgstr "Лише полотно"
 msgid "100%"
 msgstr "100%"
 
-#: libs/ui/kis_popup_palette.cpp:198
+#: libs/ui/kis_popup_palette.cpp:234
 #, kde-format
 msgid "Fit Canvas to View"
 msgstr "Розмір полотна за переглядом"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:621
+#, fuzzy, kde-format
+#| msgid "Python Palette Docker"
+msgid "Configure Popup Palette dockers"
+msgstr "Бічна панель палітр Python"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Available properties:"
+msgid "Available dockers"
+msgstr "Доступні властивості:"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Current Layer"
+msgid "Current dockers"
+msgstr "Поточний шар"
+
+#: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -30176,7 +30167,7 @@ msgstr ""
 "Натисніть, щоб поміняти місцями кольори переднього і заднього планів.\n"
 "Клацніть правою, щоб встановити чорно-білий режим."
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1158
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -34935,7 +34926,7 @@ msgstr "Перемотати вперед"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:18
+#: libs/ui/widgets/kis_utility_title_bar.cpp:19
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
@@ -35177,6 +35168,20 @@ msgstr "База"
 #, kde-format
 msgid "Randomize"
 msgstr "Випадково"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnUp)
+#: libs/ui/widgets/KisDlgListPicker.ui:98
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:107
+#, kde-format
+msgid "Up"
+msgstr "Вгору"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDown)
+#: libs/ui/widgets/KisDlgListPicker.ui:105
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:114
+#, kde-format
+msgid "Down"
+msgstr "Вниз"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
 #, kde-format
@@ -35985,7 +35990,7 @@ msgstr "Виберіть назву файла…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:16
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -39302,6 +39307,41 @@ msgstr "Інвертувати насиченість"
 msgid "Reset to default"
 msgstr "Повернутися до типового"
 
+#: plugins/dockers/brushhud/brushhud_dock.cpp:20
+#, fuzzy, kde-format
+#| msgid "Brush Editor"
+msgctxt "@title:window On-Canvas Brush Editor docker"
+msgid "On-Canvas Brush Editor"
+msgstr "Редактор пензлів"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#, kde-format
+msgid "Reload Original Preset"
+msgstr "Перезавантажити початковий набір"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#, kde-format
+msgid "Configure the on-canvas brush editor"
+msgstr "Налаштувати редактор пензля на полотні"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24
+#, kde-format
+msgid "Brush HUD configuration"
+msgstr "Налаштування панелі пензля"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
+#, kde-format
+msgid "Available properties:"
+msgstr "Доступні властивості:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
+#, kde-format
+msgid "Current properties:"
+msgstr "Поточні властивості:"
+
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, kde-format
 msgid "Compositions"
@@ -40128,12 +40168,12 @@ msgstr ""
 msgid "Configure black and white points of the view"
 msgstr "Налаштувати точки чорного і білого на панелі перегляду"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:38
+#: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
 msgid "Overview"
 msgstr "Огляд"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:156
+#: plugins/dockers/overview/overviewdocker_page.cpp:157
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"

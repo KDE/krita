@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 01:50+0000\n"
+"POT-Creation-Date: 2024-02-14 01:38+0000\n"
 "PO-Revision-Date: 2024-01-21 08:50+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -16988,7 +16988,7 @@ msgid "Reselect"
 msgstr "Zaznacz ponownie"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:1999
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17477,63 +17477,63 @@ msgstr "Otwórz plik"
 msgid "Error"
 msgstr "Błąd"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:619
 #, kde-format
 msgid "Merged"
 msgstr "Scalone"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1417
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Scal w dół"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1665
 #, kde-format
 msgid "Copy of"
 msgstr "Kopia"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1738
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Zmień barwę projekcji"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1962
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Scal wybrane węzły"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nowa z widocznych"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Widoczne"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2048
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Scal maski zaznaczenia"
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2071
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Spłaszcz warstwę"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2084
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Spłaszcz obraz"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2308
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Oddziel alfę do maski"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Przekształć do warstwy malowania"
@@ -22112,62 +22112,6 @@ msgstr "Wersja FFmpeg:"
 #, kde-format
 msgid "None"
 msgstr "Brak"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, kde-format
-msgid "Reload Original Preset"
-msgstr "Wczytaj ponownie pierwotną nastawę"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:82
-#, kde-format
-msgid "Configure the on-canvas brush editor"
-msgstr "Ustawienia edytora pędzli na-płótnie"
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
-#, kde-format
-msgid "Brush HUD configuration"
-msgstr "Ustawienia panelu pędzli"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
-#, kde-format
-msgid "Available properties:"
-msgstr "Dostępne właściwości:"
-
-#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:64
-#: libs/ui/forms/wdgpresetselectorstrip.ui:92
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:71
-#: libs/ui/forms/wdgpresetselectorstrip.ui:51
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
-#, kde-format
-msgid "Current properties:"
-msgstr "Bieżące właściwości:"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnUp)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
-#, kde-format
-msgid "Up"
-msgstr "W górę"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnDown)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
-#, kde-format
-msgid "Down"
-msgstr "W dół"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, kde-format
@@ -27490,6 +27434,24 @@ msgstr "Obraz narzędzia podstawowego, na którym oprzeć tę nastawę."
 msgid "Tool image:"
 msgstr "Obraz narzędzia:"
 
+#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:51
+#: libs/ui/widgets/KisDlgListPicker.ui:65
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:71
+#, kde-format
+msgid "<"
+msgstr "<"
+
+#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:92
+#: libs/ui/widgets/KisDlgListPicker.ui:58
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:64
+#, kde-format
+msgid ">"
+msgstr ">"
+
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
@@ -28947,7 +28909,7 @@ msgstr "Powiększenie"
 msgid "Zoom Out"
 msgstr "Pomniejszenie"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:228
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Powiększ do 100%"
@@ -29824,22 +29786,33 @@ msgctxt "option category"
 msgid "Masked Brush"
 msgstr "Maskowany pędzel"
 
-#: libs/ui/kis_popup_palette.cpp:153
+#: libs/ui/kis_popup_palette.cpp:150
+#, fuzzy, kde-format
+#| msgid "Configure Krita"
+msgid "Configure docker panel"
+msgstr "Ustawienia Krity"
+
+#: libs/ui/kis_popup_palette.cpp:163
+#, kde-format
+msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+msgstr ""
+
+#: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
 msgid "Clear color history"
 msgstr "Wyczyść historię barw"
 
-#: libs/ui/kis_popup_palette.cpp:176
+#: libs/ui/kis_popup_palette.cpp:212
 #, kde-format
 msgid "Mirror Canvas"
 msgstr "Odbij płótno"
 
-#: libs/ui/kis_popup_palette.cpp:185
+#: libs/ui/kis_popup_palette.cpp:221
 #, kde-format
 msgid "Canvas Only"
 msgstr "Tylko płótno"
 
-#: libs/ui/kis_popup_palette.cpp:189
+#: libs/ui/kis_popup_palette.cpp:225
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
@@ -29850,12 +29823,30 @@ msgstr "Tylko płótno"
 msgid "100%"
 msgstr "100%"
 
-#: libs/ui/kis_popup_palette.cpp:198
+#: libs/ui/kis_popup_palette.cpp:234
 #, kde-format
 msgid "Fit Canvas to View"
 msgstr "Przewymiaruj płótno do widoku"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:621
+#, fuzzy, kde-format
+#| msgid "Show a palette docker"
+msgid "Configure Popup Palette dockers"
+msgstr "Pokaż dokowanie palety"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Available properties:"
+msgid "Available dockers"
+msgstr "Dostępne właściwości:"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Current Layer"
+msgid "Current dockers"
+msgstr "Bieżąca warstwa"
+
+#: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
@@ -29864,7 +29855,7 @@ msgstr ""
 "Naciśnij, aby zamienić ze sobą barwę pierwszo- i drugoplanową.\n"
 "Naciśnij prawym, aby ustawić na czarną i białą."
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1158
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -34568,7 +34559,7 @@ msgstr "Przejdź naprzód"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:18
+#: libs/ui/widgets/kis_utility_title_bar.cpp:19
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
@@ -34808,6 +34799,20 @@ msgstr "Ziarno"
 #, kde-format
 msgid "Randomize"
 msgstr "Losowo"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnUp)
+#: libs/ui/widgets/KisDlgListPicker.ui:98
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:107
+#, kde-format
+msgid "Up"
+msgstr "W górę"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDown)
+#: libs/ui/widgets/KisDlgListPicker.ui:105
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:114
+#, kde-format
+msgid "Down"
+msgstr "W dół"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
 #, kde-format
@@ -35610,7 +35615,7 @@ msgstr "Wybierz nazwę pliku..."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:16
 #, kde-format
 msgctxt "Channel as in Color Channels"
 msgid "Channels"
@@ -38825,6 +38830,41 @@ msgstr "Odwróć nasycenie"
 msgid "Reset to default"
 msgstr "Wyzeruj do domyślnych"
 
+#: plugins/dockers/brushhud/brushhud_dock.cpp:20
+#, fuzzy, kde-format
+#| msgid "Brush Editor"
+msgctxt "@title:window On-Canvas Brush Editor docker"
+msgid "On-Canvas Brush Editor"
+msgstr "Edytor pędzla"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#, kde-format
+msgid "Reload Original Preset"
+msgstr "Wczytaj ponownie pierwotną nastawę"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#, kde-format
+msgid "Configure the on-canvas brush editor"
+msgstr "Ustawienia edytora pędzli na-płótnie"
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24
+#, kde-format
+msgid "Brush HUD configuration"
+msgstr "Ustawienia panelu pędzli"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
+#, kde-format
+msgid "Available properties:"
+msgstr "Dostępne właściwości:"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
+#, kde-format
+msgid "Current properties:"
+msgstr "Bieżące właściwości:"
+
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, kde-format
 msgid "Compositions"
@@ -39648,12 +39688,12 @@ msgstr ""
 msgid "Configure black and white points of the view"
 msgstr "Ustawienia czarnych i białych punktów widoku"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:38
+#: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
 msgid "Overview"
 msgstr "Przegląd"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:156
+#: plugins/dockers/overview/overviewdocker_page.cpp:157
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
@@ -95838,9 +95878,6 @@ msgstr "Narzędzie obrazów wzorcowych"
 
 #~ msgid "Generate a completely random image"
 #~ msgstr "Generuj całkowicie losowy obraz"
-
-#~ msgid "Show a palette docker"
-#~ msgstr "Pokaż dokowanie palety"
 
 #~ msgid "Show the flipbook docker"
 #~ msgstr "Pokaż dokowanie flipbook"

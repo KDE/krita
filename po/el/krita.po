@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-10 01:50+0000\n"
+"POT-Creation-Date: 2024-02-14 01:38+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -17389,7 +17389,7 @@ msgid "Reselect"
 msgstr "Επανεπιλογή"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1980
+#: libs/image/kis_layer_utils.cpp:1999
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17913,73 +17913,73 @@ msgstr "Άνοιγμα παλέτας"
 msgid "Error"
 msgstr "Κάτοπτρο"
 
-#: libs/image/kis_layer_utils.cpp:618
+#: libs/image/kis_layer_utils.cpp:619
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Αποκοπή εικόνας"
 
-#: libs/image/kis_layer_utils.cpp:1398
+#: libs/image/kis_layer_utils.cpp:1417
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Καθαρά σημεία"
 
-#: libs/image/kis_layer_utils.cpp:1646
+#: libs/image/kis_layer_utils.cpp:1665
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Αντιγραφή από"
 
-#: libs/image/kis_layer_utils.cpp:1719
+#: libs/image/kis_layer_utils.cpp:1738
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Τροποποίηση σύνδεσης"
 
-#: libs/image/kis_layer_utils.cpp:1943
+#: libs/image/kis_layer_utils.cpp:1962
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Αφαίρεση επιλεγμένου χρώματος"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy
 #| msgid "Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Προφίλ"
 
-#: libs/image/kis_layer_utils.cpp:1951
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Ορατό"
 
-#: libs/image/kis_layer_utils.cpp:2029
+#: libs/image/kis_layer_utils.cpp:2048
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Μάσκα επιλογής..."
 
-#: libs/image/kis_layer_utils.cpp:2052
+#: libs/image/kis_layer_utils.cpp:2071
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Ισοπέδωση στρώματος"
 
-#: libs/image/kis_layer_utils.cpp:2065
+#: libs/image/kis_layer_utils.cpp:2084
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Ισοπέδωση εικόνας"
 
-#: libs/image/kis_layer_utils.cpp:2289
+#: libs/image/kis_layer_utils.cpp:2308
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Επιλογές άλφα"
 
-#: libs/image/kis_layer_utils.cpp:2315
+#: libs/image/kis_layer_utils.cpp:2334
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -22781,65 +22781,6 @@ msgstr "Έκδοση"
 #, kde-format
 msgid "None"
 msgstr "Κανένα"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:78
-#, fuzzy, kde-format
-#| msgid "Remove Preset"
-msgid "Reload Original Preset"
-msgstr "Αφαίρεση προρύθμισης"
-
-#: libs/ui/brushhud/kis_brush_hud.cpp:82
-#, kde-format
-msgid "Configure the on-canvas brush editor"
-msgstr ""
-
-#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:24
-#, fuzzy, kde-format
-#| msgid "New configuration %1"
-msgid "Brush HUD configuration"
-msgstr "Νέα διαμόρφωση %1"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
-#, fuzzy, kde-format
-msgid "Available properties:"
-msgstr "Παράμετροι υλικού"
-
-#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:64
-#: libs/ui/forms/wdgpresetselectorstrip.ui:92
-#, kde-format
-msgid ">"
-msgstr ">"
-
-#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
-#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:71
-#: libs/ui/forms/wdgpresetselectorstrip.ui:51
-#, kde-format
-msgid "<"
-msgstr "<"
-
-#. i18n: ectx: property (text), widget (QLabel, label_2)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
-#, fuzzy, kde-format
-#| msgid "Current preset"
-msgid "Current properties:"
-msgstr "τρέχουσα προεπιλογή"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnUp)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
-#, kde-format
-msgid "Up"
-msgstr "επάνω"
-
-#. i18n: ectx: property (text), widget (QPushButton, btnDown)
-#: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:114
-#, fuzzy, kde-format
-msgid "Down"
-msgstr "Κλίση κάτω"
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:171
 #, fuzzy, kde-format
@@ -28101,6 +28042,24 @@ msgstr ""
 msgid "Tool image:"
 msgstr "Σε εικόνες"
 
+#. i18n: ectx: property (text), widget (QPushButton, leftScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnRemove)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:51
+#: libs/ui/widgets/KisDlgListPicker.ui:65
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:71
+#, kde-format
+msgid "<"
+msgstr "<"
+
+#. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
+#. i18n: ectx: property (text), widget (QToolButton, btnAdd)
+#: libs/ui/forms/wdgpresetselectorstrip.ui:92
+#: libs/ui/widgets/KisDlgListPicker.ui:58
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:64
+#, kde-format
+msgid ">"
+msgstr ">"
+
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, spinScaleWidth)
@@ -29582,7 +29541,7 @@ msgstr "Μεγέθυνση"
 msgid "Zoom Out"
 msgstr "Σμίκρυνση"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:228
 #, fuzzy, kde-format
 #| msgid "Reset Zoom to 100%"
 msgid "Zoom to 100%"
@@ -30492,22 +30451,32 @@ msgctxt "option category"
 msgid "Masked Brush"
 msgstr "Πινέλο μίξης"
 
-#: libs/ui/kis_popup_palette.cpp:153
+#: libs/ui/kis_popup_palette.cpp:150
+#, fuzzy, kde-format
+msgid "Configure docker panel"
+msgstr "Κομφετί"
+
+#: libs/ui/kis_popup_palette.cpp:163
+#, kde-format
+msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+msgstr ""
+
+#: libs/ui/kis_popup_palette.cpp:189
 #, fuzzy, kde-format
 msgid "Clear color history"
 msgstr "Αριθμός στηλών"
 
-#: libs/ui/kis_popup_palette.cpp:176
+#: libs/ui/kis_popup_palette.cpp:212
 #, fuzzy, kde-format
 msgid "Mirror Canvas"
 msgstr "Καθρεπτισμός στρώματος κατά Χ"
 
-#: libs/ui/kis_popup_palette.cpp:185
+#: libs/ui/kis_popup_palette.cpp:221
 #, fuzzy, kde-format
 msgid "Canvas Only"
 msgstr "Χρώμα καμβά:"
 
-#: libs/ui/kis_popup_palette.cpp:189
+#: libs/ui/kis_popup_palette.cpp:225
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:24
 #: plugins/paintops/curvebrush/kis_curve_paintop_settings_widget.cpp:25
 #: plugins/paintops/libpaintop/KisCurveOptionWidget.cpp:47
@@ -30518,20 +30487,37 @@ msgstr "Χρώμα καμβά:"
 msgid "100%"
 msgstr "100%"
 
-#: libs/ui/kis_popup_palette.cpp:198
+#: libs/ui/kis_popup_palette.cpp:234
 #, fuzzy, kde-format
 #| msgid "Canvas Size"
 msgid "Fit Canvas to View"
 msgstr "Μέγεθος καμβά"
 
-#: libs/ui/kis_popup_palette.cpp:875
+#: libs/ui/kis_popup_palette.cpp:621
+#, fuzzy, kde-format
+#| msgid "Show a palette docker"
+msgid "Configure Popup Palette dockers"
+msgstr "Εμφάνιση προσάρτησης παλέτας"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+msgid "Available dockers"
+msgstr "Παράμετροι υλικού"
+
+#: libs/ui/kis_popup_palette.cpp:622
+#, fuzzy, kde-format
+#| msgid "Current Layer"
+msgid "Current dockers"
+msgstr "Τρέχον στρώμα"
+
+#: libs/ui/kis_popup_palette.cpp:1020
 #, fuzzy, kde-format
 msgid ""
 "Click to swap foreground and background colors.\n"
 "Right click to set to black and white."
 msgstr "Επαναφορά χρωμάτων προσκηνίου και παρασκηνίου"
 
-#: libs/ui/kis_popup_palette.cpp:1013
+#: libs/ui/kis_popup_palette.cpp:1158
 #, kde-format
 msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
@@ -35015,7 +35001,7 @@ msgstr "Προς τα εμπρός"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:18
+#: libs/ui/widgets/kis_utility_title_bar.cpp:19
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
@@ -35265,6 +35251,20 @@ msgstr "Ταχύτητα"
 #| msgid "Random size"
 msgid "Randomize"
 msgstr "Τυχαίο μέγεθος"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnUp)
+#: libs/ui/widgets/KisDlgListPicker.ui:98
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:107
+#, kde-format
+msgid "Up"
+msgstr "επάνω"
+
+#. i18n: ectx: property (text), widget (QPushButton, btnDown)
+#: libs/ui/widgets/KisDlgListPicker.ui:105
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:114
+#, fuzzy, kde-format
+msgid "Down"
+msgstr "Κλίση κάτω"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
 #, kde-format
@@ -36096,7 +36096,7 @@ msgstr "Επιλογή LUT αρχείου"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
-#: plugins/dockers/channeldocker/channeldocker_dock.cpp:30
+#: plugins/dockers/channeldocker/channeldocker_dock.cpp:16
 #, fuzzy, kde-format
 #| msgid "Channels"
 msgctxt "Channel as in Color Channels"
@@ -39307,6 +39307,43 @@ msgstr "Αντιστροφή κορεσμού"
 msgid "Reset to default"
 msgstr "Επαναφορά στο προκαθορισμένο"
 
+#: plugins/dockers/brushhud/brushhud_dock.cpp:20
+#, fuzzy, kde-format
+msgctxt "@title:window On-Canvas Brush Editor docker"
+msgid "On-Canvas Brush Editor"
+msgstr "Άκρη πινέλου"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:78
+#, fuzzy, kde-format
+#| msgid "Remove Preset"
+msgid "Reload Original Preset"
+msgstr "Αφαίρεση προρύθμισης"
+
+#: plugins/dockers/brushhud/kis_brush_hud.cpp:82
+#, kde-format
+msgid "Configure the on-canvas brush editor"
+msgstr ""
+
+#. i18n: ectx: property (windowTitle), widget (QDialog, KisDlgConfigureBrushHud)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:24
+#, fuzzy, kde-format
+#| msgid "New configuration %1"
+msgid "Brush HUD configuration"
+msgstr "Νέα διαμόρφωση %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
+#, fuzzy, kde-format
+msgid "Available properties:"
+msgstr "Παράμετροι υλικού"
+
+#. i18n: ectx: property (text), widget (QLabel, label_2)
+#: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
+#, fuzzy, kde-format
+#| msgid "Current preset"
+msgid "Current properties:"
+msgstr "τρέχουσα προεπιλογή"
+
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, kde-format
 msgid "Compositions"
@@ -40154,12 +40191,12 @@ msgstr ""
 msgid "Configure black and white points of the view"
 msgstr ""
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:38
+#: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
 msgid "Overview"
 msgstr "Περίληψη"
 
-#: plugins/dockers/overview/overviewdocker_dock.cpp:156
+#: plugins/dockers/overview/overviewdocker_page.cpp:157
 #, kde-format
 msgctxt "Make the controls in the overview docker auto-hide or always visible"
 msgid "Pin navigation controls"
@@ -96390,9 +96427,6 @@ msgstr "Εικόνες αναφοράς"
 
 #~ msgid "Generate a completely random image"
 #~ msgstr "Δημιουργία μιας εντελώς τυχαίας εικόνας"
-
-#~ msgid "Show a palette docker"
-#~ msgstr "Εμφάνιση προσάρτησης παλέτας"
 
 #~ msgid "Show the flipbook docker"
 #~ msgstr "Εμφάνιση προσάρτησης flipbook"

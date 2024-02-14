@@ -8,34 +8,54 @@
 #include <hb.h>
 #include <hb-ft.h>
 
-struct KoFontGlyphModel::GlyphInfo {
 
-    GlyphInfo()
-    {
-    }
-    GlyphInfo(uint utf)
-        : ucs(utf)
-    {
-    }
-    uint ucs;
-    GlyphType type = Base;
-    QString baseString;
-};
-
-struct KoFontGlyphModel::CodePointInfo {
-    uint ucs = -1;
-    uint glyphIndex = 0;
-    QString utfString = QString();
-
-    QVector<GlyphInfo> glyphs;
-};
 
 struct KoFontGlyphModel::Private {
+    struct InfoNode {
+        virtual ~InfoNode() {}
+        uint ucs = 0;
+        uint parentUcs = 0;
+        virtual int childCount() = 0;
+    };
+
+    struct GlyphInfo
+            : public InfoNode {
+
+        GlyphInfo()
+        {
+        }
+        GlyphInfo(uint utf)
+        {
+            ucs = utf;
+            parentUcs = utf;
+        }
+        ~GlyphInfo() override {}
+        GlyphType type = Base;
+        QString baseString;
+        int layoutIndex = 0;
+        int childCount() override {
+            return 0;
+        }
+    };
+
+    struct CodePointInfo
+            : public InfoNode {
+        ~CodePointInfo() override {}
+
+        uint glyphIndex = 0;
+        QString utfString = QString();
+
+        QVector<GlyphInfo> glyphs;
+        int childCount() override {
+            return glyphs.size();
+        }
+    };
     QVector<CodePointInfo> codePoints;
 
     ~Private() = default;
 
-    static QVector<KoFontGlyphModel::CodePointInfo> charMap(FT_FaceSP face) {
+
+    static QVector<CodePointInfo> charMap(FT_FaceSP face) {
         QVector<CodePointInfo> codePoints;
         FT_UInt   gindex;
         FT_ULong  charcode = FT_Get_First_Char(face.data(), &gindex);
@@ -142,6 +162,7 @@ struct KoFontGlyphModel::Private {
                     GlyphInfo gci;
                     gci.type = OpenType;
                     gci.baseString = tagName;
+                    gci.layoutIndex = i;
                     hb_codepoint_t hbGlyphPoint  = HB_SET_VALUE_INVALID;
                     while(hb_set_next(glyphsInput.data(), &hbGlyphPoint)) {
                         QVector<GlyphInfo> glyphs = otfData.value(hbGlyphPoint);
@@ -160,22 +181,15 @@ struct KoFontGlyphModel::Private {
 
 
 
-KoFontGlyphModel::KoFontGlyphModel(FT_FaceSP face)
+
+KoFontGlyphModel::KoFontGlyphModel()
     : QAbstractItemModel()
     , d(new Private)
 {
+}
 
-    d->codePoints = Private::charMap(face);
-    QMap<uint, QVector<GlyphInfo>> otfData = Private::getOpenTypeTables(face);
-    QMap<uint, QVector<GlyphInfo>> VSData = Private::getVSData(face);
-    for(auto it = d->codePoints.begin(); it != d->codePoints.end(); it++) {
-        it->glyphs.append(VSData.value(it->ucs));
-        QVector<GlyphInfo> otfTable = otfData.value(it->glyphIndex);
-        for (auto glyphInfo = otfTable.begin(); glyphInfo != otfTable.end(); glyphInfo++) {
-            glyphInfo->ucs = it->ucs;
-            it->glyphs.append(*glyphInfo);
-        }
-    }
+KoFontGlyphModel::~KoFontGlyphModel()
+{
 
 }
 
@@ -185,52 +199,86 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
         return QVariant();
     }
     if (role == Qt::DisplayRole) {
+        //qDebug() << Q_FUNC_INFO<< index << index.parent().isValid() << index.parent();
         if (!index.parent().isValid()) {
             return d->codePoints.value(index.row()).utfString;
         } else {
-            return d->codePoints.value(index.parent().row()).glyphs.value(index.row()).baseString;
+            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
+            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            //qDebug () << index.parent().row() << index.row() << codePoint.utfString << codePoint.ucs;
+            if (glyph.type == UnicodeVaritionSelector) {
+                return QString(codePoint.utfString + glyph.baseString);
+            } else {
+                return codePoint.utfString;
+            }
         }
     } else if (role == Qt::ToolTipRole) {
         if (!index.parent().isValid()) {
             QStringList glyphNames;
             QString base = d->codePoints.value(index.row()).utfString;
-            QVector<GlyphInfo> glyphList = d->codePoints.value(index.row()).glyphs;
+            QVector<Private::GlyphInfo> glyphList = d->codePoints.value(index.row()).glyphs;
             glyphNames.append(QString("%1 glyph variants:").arg(glyphList.size()));
             for(auto glyph = glyphList.begin(); glyph != glyphList.end(); glyph++) {
                 if (glyph->type == UnicodeVaritionSelector) {
                     glyphNames.append("UVS:"+base+glyph->baseString);
                 } else if (glyph->type == OpenType) {
-                    glyphNames.append("OTF:"+glyph->baseString);
+                    glyphNames.append("OTF:"+glyph->baseString+" "+QString::number(glyph->layoutIndex));
                 }
             }
             return glyphNames.join(" ");
+        } else {
+            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
+            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            if (glyph.type == OpenType) {
+                return QString("OTF:"+glyph.baseString+" "+QString::number(glyph.layoutIndex));
+            } else {
+                return QString(codePoint.utfString + glyph.baseString);
+            }
         }
+    } else if (role == OpenTypeFeatures) {
+        QStringList features;
+        if (index.parent().isValid()) {
+            Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
+            Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
+            //qDebug () << index.parent().row() << index.row() << codePoint.utfString << codePoint.ucs;
+            if (glyph.type == OpenType) {
+                features.append("'"+glyph.baseString+"' 1");
+            }
+
+        }
+        return features;
     }
     return QVariant();
 }
 
 QModelIndex KoFontGlyphModel::index(int row, int column, const QModelIndex &parent) const
 {
-    if (!parent.isValid()) {
-        CodePointInfo cpi = d->codePoints.value(row);
-        return createIndex(row, column, &cpi);
-    } else {
-        GlyphInfo gpi = d->codePoints.value(parent.row()).glyphs.value(row);
-        return createIndex(row, column, &gpi);
+    //qDebug() << Q_FUNC_INFO << row  << column << parent;
+    if (parent.isValid() && parent.row() >= 0 && parent.row() < d->codePoints.size()) {
+        Private::CodePointInfo info = d->codePoints.at(parent.row());
+        if (row >= 0 && row < info.glyphs.size()) {
+            return createIndex(row, column, &info.glyphs[row]);
+        }
+
+    } else if (row >= 0 && row < d->codePoints.size()) {
+        return createIndex(row, column);
     }
     return QModelIndex();
 }
 
 QModelIndex KoFontGlyphModel::parent(const QModelIndex &child) const
 {
-    if (!child.isValid() || static_cast<CodePointInfo*>(child.internalPointer())) {
+    if (!child.isValid() || !child.internalPointer()) {
         return QModelIndex();
     }
-    GlyphInfo *gpi = static_cast<GlyphInfo*>(child.internalPointer());
-    for (int i = 0; i < d->codePoints.size(); i++) {
-        CodePointInfo cpi = d->codePoints.at(i);
-        if (cpi.ucs == gpi->ucs) {
-            return createIndex(i, 0, &cpi);
+    Private::InfoNode *node = static_cast<Private::InfoNode*>(child.internalPointer());
+
+    if (node->parentUcs == node->ucs) {
+        for(int i = 0; i < d->codePoints.size(); i++) {
+            Private::CodePointInfo info = d->codePoints.at(i);
+            if (info.ucs == node->ucs) {
+                return index(i, 0, QModelIndex());
+            }
         }
     }
 
@@ -253,8 +301,9 @@ int KoFontGlyphModel::columnCount(const QModelIndex &parent) const
 
 bool KoFontGlyphModel::hasChildren(const QModelIndex &parent) const
 {
-    if (parent.isValid())
+    if (parent.isValid()) {
         return !d->codePoints.value(parent.row()).glyphs.isEmpty();
+    }
     return false;
 }
 
@@ -262,9 +311,34 @@ QModelIndex KoFontGlyphModel::indexForString(QString grapheme)
 {
     for (int i = 0; i < d->codePoints.size(); i++) {
         if (grapheme.toUcs4().startsWith(d->codePoints.at(i).ucs)) {
-            CodePointInfo cpi = d->codePoints.at(i);
-            return createIndex(i, 1, &cpi);
+            QModelIndex idx = index(i, 0, QModelIndex());
+            return idx;
         }
     }
     return QModelIndex();
+}
+
+void KoFontGlyphModel::setFace(FT_FaceSP face)
+{
+    beginResetModel();
+    d->codePoints = Private::charMap(face);
+    QMap<uint, QVector<Private::GlyphInfo>> otfData = Private::getOpenTypeTables(face);
+    QMap<uint, QVector<Private::GlyphInfo>> VSData = Private::getVSData(face);
+    for(auto it = d->codePoints.begin(); it != d->codePoints.end(); it++) {
+        it->glyphs.append(VSData.value(it->ucs));
+        QVector<Private::GlyphInfo> otfTable = otfData.value(it->glyphIndex);
+        for (auto glyphInfo = otfTable.begin(); glyphInfo != otfTable.end(); glyphInfo++) {
+            glyphInfo->ucs = it->ucs;
+            glyphInfo->parentUcs = it->ucs;
+            it->glyphs.append(*glyphInfo);
+        }
+    }
+    endResetModel();
+}
+
+QHash<int, QByteArray> KoFontGlyphModel::roleNames() const
+{
+    QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
+    roles[OpenTypeFeatures] = "openType";
+    return roles;
 }

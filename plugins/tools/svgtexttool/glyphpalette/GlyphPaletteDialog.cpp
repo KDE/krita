@@ -20,7 +20,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
 }
 
-GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent): KoDialog(parent)
+GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
+    : KoDialog(parent)
+    , m_model(new KoFontGlyphModel)
 {
     setMinimumSize(500, 300);
 
@@ -39,6 +41,7 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent): KoDialog(parent)
 
     if (m_quickWidget->rootObject()) {
         m_quickWidget->rootObject()->setProperty("titleText", "Glyph palette");
+        m_quickWidget->rootObject()->setProperty("model", QVariant::fromValue(m_model));
     }
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
@@ -48,16 +51,13 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent): KoDialog(parent)
 void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties properties, QString text)
 {
     if (m_lastUsedProperties == properties) {
-        if (m_quickWidget->rootObject()) {
-            KoFontGlyphModel *model = dynamic_cast<KoFontGlyphModel*>(m_quickWidget->rootObject()->property("model").value<QAbstractItemModel*>());
-            if (model) {
-                QModelIndex idx = model->indexForString(text);
-                if (idx.isValid()) {
-                    m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.row()));
-                }
+        if (m_model && m_model->rowCount() > 0) {
+            QModelIndex idx = m_model->indexForString(text);
+            if (idx.isValid() && m_quickWidget->rootObject()) {
+                m_quickWidget->rootObject()->setProperty("currentIndex", QVariant::fromValue(idx.row()));
+                return;
             }
         }
-        return;
     }
     qreal res = 72.0;
     QVector<int> lengths;
@@ -81,12 +81,11 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
         properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
         properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
         style != QFont::StyleNormal);
-    KoFontGlyphModel *model = new KoFontGlyphModel(faces.front());
-    QModelIndex idx = model->indexForString(text);
+    m_model->setFace(faces.front());
+    QModelIndex idx = m_model->indexForString(text);
     if (m_quickWidget->rootObject()) {
         QString name = faces.front().data()->family_name;
         m_quickWidget->rootObject()->setProperty("titleText", QString("Glyph palette: "+name));
-        m_quickWidget->rootObject()->setProperty("model", QVariant::fromValue(model));
         m_quickWidget->rootObject()->setProperty("fontFamilies", QVariant::fromValue(families));
         m_quickWidget->rootObject()->setProperty("fontSize", QVariant::fromValue(size));
         m_quickWidget->rootObject()->setProperty("fontWeight", QVariant::fromValue(weight));

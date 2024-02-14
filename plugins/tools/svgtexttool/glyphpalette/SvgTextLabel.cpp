@@ -11,7 +11,6 @@
 #include <QImage>
 
 struct Q_DECL_HIDDEN SvgTextLabel::Private {
-    QStringList openTypeFeatures;
     KoSvgTextShape* shape{nullptr};
     int padding = 2;
 };
@@ -80,7 +79,7 @@ QColor SvgTextLabel::textColor() const
 
 QStringList SvgTextLabel::openTypeFeatures() const
 {
-    return d->openTypeFeatures;
+    return d->shape->textProperties().property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
 }
 
 QString SvgTextLabel::text() const
@@ -159,11 +158,14 @@ void SvgTextLabel::setTextColor(QColor textColor)
 
 void SvgTextLabel::setOpenTypeFeatures(QStringList openTypeFeatures)
 {
-    if (d->openTypeFeatures == openTypeFeatures)
+    KoSvgTextProperties props = d->shape->textProperties();
+    QStringList otf = props.property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
+    if (otf == openTypeFeatures)
         return;
 
-    d->openTypeFeatures = openTypeFeatures;
-    emit openTypeFeaturesChanged(d->openTypeFeatures);
+    props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, openTypeFeatures);
+    d->shape->setPropertiesAtPos(-1, props);
+    emit openTypeFeaturesChanged(openTypeFeatures);
 }
 
 void SvgTextLabel::setText(QString text)

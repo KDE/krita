@@ -7,6 +7,7 @@
 #define KOFONTGLYPHMODEL_H
 
 #include <QAbstractItemModel>
+#include <QScopedPointer>
 #include "KoFontLibraryResourceUtils.h"
 #include "kritaflake_export.h"
 
@@ -19,6 +20,7 @@
  */
 class KRITAFLAKE_EXPORT KoFontGlyphModel: public QAbstractItemModel
 {
+    Q_OBJECT
 public:
     enum GlyphType {
         Base,
@@ -26,7 +28,12 @@ public:
         OpenType
     };
 
-    KoFontGlyphModel(FT_FaceSP face);
+    KoFontGlyphModel();
+    ~KoFontGlyphModel();
+
+    enum Roles {
+        OpenTypeFeatures = Qt::UserRole + 1
+    };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
@@ -37,11 +44,12 @@ public:
     bool hasChildren(const QModelIndex &parent = QModelIndex()) const override;
 
     QModelIndex indexForString(QString grapheme);
+    void setFace(FT_FaceSP face);
+
+    QHash<int, QByteArray> roleNames() const override;
 
 private:
-    class Private;
-    struct GlyphInfo;
-    struct CodePointInfo;
+    struct Private;
     QScopedPointer<Private> d;
 };
 

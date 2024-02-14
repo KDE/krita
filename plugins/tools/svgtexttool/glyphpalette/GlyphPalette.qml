@@ -3,8 +3,10 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-import QtQuick 2.0
+import QtQuick 2.15
+import QtQml.Models 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.15
 import org.krita.tools.text 1.0
 
 Rectangle {
@@ -33,53 +35,106 @@ Rectangle {
         anchors.top: parent.top;
     }
 
-    ScrollView {
+    TabBar {
+        id: tabs;
         anchors.left: parent.left;
         anchors.right: parent.right;
         anchors.top: title.bottom;
-        anchors.bottom: parent.bottom;
 
-        property int scrollWidth: ScrollBar.implicitWidth;
+        TabButton {
+            text: "Glyph Alternates"
+        }
+        TabButton {
+            text: "Character Map"
+        }
+    }
+
+    Component {
+        id: glyphDelegate;
+        SvgTextLabel {
+            textColor: palette.windowText;
+            fillColor: palette.base;
+            fontFamilies: root.fontFamilies;
+            fontSize: root.fontSize;
+            fontStyle: root.fontStyle;
+            fontWeight: root.fontWeight;
+            openTypeFeatures: model.openType;
+            text: model.display;
+            padding: height/8;
+
+            width: charMap.cellWidth;
+            height: charMap.cellHeight;
+
+            property bool currentItem: GridView.isCurrentItem;
+            Rectangle {
+                anchors.fill: parent;
+                color: "transparent";
+                border.color: parent.currentItem? palette.highlight: palette.alternateBase;
+            }
+            MouseArea {
+                anchors.fill: parent;
+                onClicked: {
+                    //parent.currentIndex = index;
+                    console.log(model.toolTip)
+                }
+                hoverEnabled: true;
+                ToolTip.text: model.toolTip;
+                ToolTip.visible: containsMouse;
+            }
+        }
+    }
+
+
+    StackLayout {
+        id: stack;
+        currentIndex: tabs.currentIndex;
+        anchors.left: parent.left;
+        anchors.right: parent.right;
+        anchors.top: tabs.bottom;
+        anchors.bottom: parent.bottom;
+        // Glyph alts.
+        GridView {
+            id: glyphAlts;
+            model: DelegateModel {
+                id: glyphAltModel
+                model: root.model
+                property alias rIndex: root.currentIndex;
+                onRIndexChanged: {
+                    console.log("start");
+                    rootIndex = parentModelIndex()
+                    rootIndex = modelIndex(root.currentIndex);
+                    console.log(rootIndex , root.currentIndex);
+                }
+
+                delegate: glyphDelegate;
+            }
+            focus: true;
+            clip: true;
+
+            cellWidth: (parent.width - glyphAltScroll.implicitBackgroundWidth)/8;
+            cellHeight: cellWidth;
+
+            ScrollBar.vertical: ScrollBar {
+                id: glyphAltScroll;
+            }
+
+        }
+
+        // Charmap.
         GridView {
             id: charMap;
             model: root.model;
             focus: true;
+            clip: true;
 
-            anchors.fill: parent;
-            cellWidth: (root.width - parent.scrollWidth)/8;
+            cellWidth: (parent.width - charMapScroll.implicitBackgroundWidth)/8;
             cellHeight: cellWidth;
 
-            delegate:SvgTextLabel {
-                textColor: palette.windowText;
-                fillColor: palette.base;
-                fontFamilies: root.fontFamilies;
-                fontSize: root.fontSize;
-                fontStyle: root.fontStyle;
-                fontWeight: root.fontWeight;
-                text: model.display;
-                padding: height/8;
+            delegate: glyphDelegate;
 
-                width: charMap.cellWidth;
-                height: charMap.cellHeight;
-
-                property bool currentItem: GridView.isCurrentItem;
-                Rectangle {
-                    anchors.fill: parent;
-                    color: "transparent";
-                    border.color: parent.currentItem? palette.highlight: palette.alternateBase;
-                }
-                MouseArea {
-                    anchors.fill: parent;
-                    onClicked: {
-                        charMap.currentIndex = index;
-                        console.log(model.toolTip)
-                    }
-                    hoverEnabled: true;
-                    ToolTip.text: model.toolTip;
-                    ToolTip.visible: containsMouse;
-                }
+            ScrollBar.vertical: ScrollBar {
+                id: charMapScroll;
             }
-
 
         }
     }

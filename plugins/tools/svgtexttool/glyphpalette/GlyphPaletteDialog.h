@@ -9,6 +9,7 @@
 #include <KoDialog.h>
 #include <QtQuickWidgets/QQuickWidget>
 #include <KoSvgTextProperties.h>
+#include <KoFontGlyphModel.h>
 
 class GlyphPaletteDialog: public KoDialog
 {
@@ -20,6 +21,7 @@ public:
 private:
     QQuickWidget *m_quickWidget {0};
     KoSvgTextProperties m_lastUsedProperties;
+    KoFontGlyphModel *m_model;
 };
 
 #endif // GLYPHPALETTEDIALOG_H

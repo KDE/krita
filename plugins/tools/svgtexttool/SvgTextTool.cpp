@@ -105,6 +105,9 @@ SvgTextTool::~SvgTextTool()
     if(m_editor) {
         m_editor->close();
     }
+    if(m_glyphPalette) {
+        m_glyphPalette->close();
+    }
     delete m_defAlignment;
 }
 

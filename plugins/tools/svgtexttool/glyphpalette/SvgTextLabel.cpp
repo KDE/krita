@@ -34,11 +34,15 @@ void SvgTextLabel::paint(QPainter *painter)
 {
     painter->save();
     painter->fillRect(0, 0, width(), height(), fillColor());
-    qreal scale = (height()- d->padding*2) / fontSize();
+
+    QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
+    qreal boxHeight = bbox.isEmpty()? fontSize(): bbox.height();
+    bbox = bbox.isEmpty()? d->shape->boundingRect(): bbox;
+    qreal scale = (height()- d->padding*2) / boxHeight;
 
     painter->translate(boundingRect().center());
     painter->scale(scale, scale);
-    painter->translate(-d->shape->boundingRect().center());
+    painter->translate(-bbox.center());
 
 
     painter->setClipRect(painter->transform().inverted().mapRect(this->boundingRect()));

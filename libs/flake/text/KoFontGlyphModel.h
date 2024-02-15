@@ -24,7 +24,7 @@ class KRITAFLAKE_EXPORT KoFontGlyphModel: public QAbstractItemModel
 public:
     enum GlyphType {
         Base,
-        UnicodeVaritionSelector,
+        UnicodeVariationSelector,
         OpenType
     };
 
@@ -32,7 +32,9 @@ public:
     ~KoFontGlyphModel();
 
     enum Roles {
-        OpenTypeFeatures = Qt::UserRole + 1
+        OpenTypeFeatures = Qt::UserRole + 1,
+        GlyphLabel,
+        ChildCount
     };
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;

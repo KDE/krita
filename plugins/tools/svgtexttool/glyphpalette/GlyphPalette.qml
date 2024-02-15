@@ -52,7 +52,7 @@ Rectangle {
     Component {
         id: glyphDelegate;
         SvgTextLabel {
-            textColor: palette.windowText;
+            textColor: palette.text;
             fillColor: palette.base;
             fontFamilies: root.fontFamilies;
             fontSize: root.fontSize;
@@ -61,6 +61,7 @@ Rectangle {
             openTypeFeatures: model.openType;
             text: model.display;
             padding: height/8;
+            clip: true;
 
             width: charMap.cellWidth;
             height: charMap.cellHeight;
@@ -70,16 +71,46 @@ Rectangle {
                 anchors.fill: parent;
                 color: "transparent";
                 border.color: parent.currentItem? palette.highlight: palette.alternateBase;
+                border.width: parent.currentItem? 2: 1;
             }
+            Rectangle {
+                anchors.top: parent.top;
+                anchors.left: parent.left;
+                color: palette.text;
+                opacity: 0.3;
+                layer.enabled: true
+                width: childrenRect.width;
+                height: childrenRect.height;
+                Text {
+                    padding: 2;
+                    text: model.glyphLabel;
+                    color: palette.base;
+                    font.pointSize: 9;
+                }
+                visible: glyphMouseArea.containsMouse;
+            }
+            Rectangle {
+                anchors.top: parent.top;
+                anchors.right: parent.right;
+                width: 8;
+                height: 8;
+                radius: 4;
+                color: palette.text;
+                opacity: 0.3;
+                visible: model.childCount > 1;
+            }
+
             MouseArea {
                 anchors.fill: parent;
+                id: glyphMouseArea
                 onClicked: {
-                    //parent.currentIndex = index;
+                    parent.GridView.view.currentIndex = index;
                     console.log(model.toolTip)
                 }
                 hoverEnabled: true;
                 ToolTip.text: model.toolTip;
                 ToolTip.visible: containsMouse;
+                ToolTip.delay: 1000;
             }
         }
     }
@@ -99,11 +130,10 @@ Rectangle {
                 id: glyphAltModel
                 model: root.model
                 property alias rIndex: root.currentIndex;
+                property var defaultIndex: modelIndex(-1);
                 onRIndexChanged: {
-                    console.log("start");
-                    rootIndex = parentModelIndex()
+                    rootIndex = defaultIndex;
                     rootIndex = modelIndex(root.currentIndex);
-                    console.log(rootIndex , root.currentIndex);
                 }
 
                 delegate: glyphDelegate;

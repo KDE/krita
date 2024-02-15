@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-10 11:04+0100\n"
+"PO-Revision-Date: 2024-02-14 11:16+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -29747,15 +29747,16 @@ msgid "Masked Brush"
 msgstr "Pinzell emmascarat"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Configuració del Krita"
+msgstr "Configuració del plafó de l'acoblador"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"L'acoblador està obert a la paleta emergent. Tanqueu la paleta emergent per "
+"a mostrar-lo aquí."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29789,22 +29790,19 @@ msgid "Fit Canvas to View"
 msgstr "Ajusta el llenç a la vista"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Python Palette Docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Acoblador Paleta en Python"
+msgstr "Configuració dels acobladors de la paleta emergent"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Propietats disponibles:"
+msgstr "Acobladors disponibles"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Capa actual"
+msgstr "Acobladors actuals"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -38796,11 +38794,10 @@ msgid "Reset to default"
 msgstr "Restableix als valors predeterminats"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor de pinzells"
+msgstr "Editor de pinzells en el llenç"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

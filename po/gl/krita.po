@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-11 11:41+0100\n"
+"PO-Revision-Date: 2024-02-14 15:25+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -29749,15 +29749,15 @@ msgid "Masked Brush"
 msgstr "Pincel con máscara"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Configurar Krita"
+msgstr "Configurar o panel de docas"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"A doca está aberta nunha paleta emerxente. Péchea para que se amose aquí."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29791,22 +29791,19 @@ msgid "Fit Canvas to View"
 msgstr "Axustar o lenzo á vista"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Show a palette docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Mostrar unha paleta nun docker"
+msgstr "Configurar as docas de paletas emerxentes"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Propiedades dispoñíbeis:"
+msgstr "Docas dispoñíbeis"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Capa actual"
+msgstr "Docas actuais"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -38780,11 +38777,10 @@ msgid "Reset to default"
 msgstr "Restaurar os valores predeterminados"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor de pinceis"
+msgstr "Editor de pinceis no lenzo"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

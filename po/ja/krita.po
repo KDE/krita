@@ -38009,8 +38009,7 @@ msgid "Bluer/Yellower: "
 msgstr "青みを増す/黄みを増す: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "リセット"

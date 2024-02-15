@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-10 08:38+0200\n"
+"PO-Revision-Date: 2024-02-14 09:32+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -30099,15 +30099,16 @@ msgid "Masked Brush"
 msgstr "Маскування"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Налаштувати Krita"
+msgstr "Налаштувати бічну панель"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"Бічну панель відкрито у контекстній палітрі. Закрийте контекстну палітру, "
+"щоб бічна панель з'явилася тут."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -30141,22 +30142,19 @@ msgid "Fit Canvas to View"
 msgstr "Розмір полотна за переглядом"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Python Palette Docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Бічна панель палітр Python"
+msgstr "Налаштувати бічні панелі контекстної палітри"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Доступні властивості:"
+msgstr "Доступні бічні панелі"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Поточний шар"
+msgstr "Поточні бічні панелі"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -39308,11 +39306,10 @@ msgid "Reset to default"
 msgstr "Повернутися до типового"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Редактор пензлів"
+msgstr "Редактор пензлів на полотні"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

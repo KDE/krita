@@ -344,6 +344,7 @@ void SvgTextTool::showGlyphPalette()
         m_glyphPalette->setAttribute( Qt::WA_QuitOnClose, false );
 
         connect(&m_textCursor, SIGNAL(selectionChanged()), this, SLOT(updateGlyphPalette()));
+        connect(m_glyphPalette, SIGNAL(signalInsertRichText(KoSvgTextShape*)), this, SLOT(insertRichText(KoSvgTextShape*)));
 
         m_glyphPalette->activateWindow();
     }
@@ -366,6 +367,11 @@ void SvgTextTool::updateGlyphPalette()
         }
         m_glyphPalette->setGlyphModelFromProperties(m_textCursor.currentTextProperties(), grapheme);
     }
+}
+
+void SvgTextTool::insertRichText(KoSvgTextShape *richText)
+{
+    m_textCursor.insertRichText(richText);
 }
 
 void SvgTextTool::slotTextEditorClosed()

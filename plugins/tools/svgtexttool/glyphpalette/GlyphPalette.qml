@@ -51,7 +51,9 @@ Rectangle {
 
     Component {
         id: glyphDelegate;
+
         SvgTextLabel {
+            id: glyphLabel;
             textColor: palette.text;
             fillColor: palette.base;
             fontFamilies: root.fontFamilies;
@@ -67,6 +69,7 @@ Rectangle {
             height: charMap.cellHeight;
 
             property bool currentItem: GridView.isCurrentItem;
+
             Rectangle {
                 anchors.fill: parent;
                 color: "transparent";
@@ -107,6 +110,7 @@ Rectangle {
                     parent.GridView.view.currentIndex = index;
                     console.log(model.toolTip)
                 }
+                onDoubleClicked: {model.childCount === 0? mainWindow.slotInsertRichText(root.currentIndex, index): mainWindow.slotInsertRichText(index)}
                 hoverEnabled: true;
                 ToolTip.text: model.toolTip;
                 ToolTip.visible: containsMouse;
@@ -137,6 +141,7 @@ Rectangle {
                 }
 
                 delegate: glyphDelegate;
+
             }
             focus: true;
             clip: true;

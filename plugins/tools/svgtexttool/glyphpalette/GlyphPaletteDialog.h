@@ -10,6 +10,7 @@
 #include <QtQuickWidgets/QQuickWidget>
 #include <KoSvgTextProperties.h>
 #include <KoFontGlyphModel.h>
+#include <KoSvgTextShape.h>
 
 class GlyphPaletteDialog: public KoDialog
 {
@@ -18,6 +19,12 @@ public:
     GlyphPaletteDialog(QWidget *parent = nullptr);
 
     void setGlyphModelFromProperties(KoSvgTextProperties properties, QString text = QString());
+
+Q_SIGNALS:
+    void signalInsertRichText(KoSvgTextShape *text);
+public Q_SLOTS:
+
+    void slotInsertRichText(int charRow, int glyphRow = -1);
 private:
     QQuickWidget *m_quickWidget {0};
     KoSvgTextProperties m_lastUsedProperties;

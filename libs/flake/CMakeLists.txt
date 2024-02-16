@@ -238,6 +238,7 @@ set(kritaflake_SRCS
     text/KoFontChangeTracker.cpp
     text/KoWritingSystemUtils.cpp
     text/KoFontGlyphModel.cpp
+    text/KoOpenTypeFeatureInfoFactory.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp

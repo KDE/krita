@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KoFontGlyphModel.h"
+#include "KoOpenTypeFeatureInfoFactory.h"
 #include <QDebug>
 #include <hb.h>
 #include <hb-ft.h>
@@ -32,7 +33,6 @@ struct KoFontGlyphModel::Private {
         ~GlyphInfo() override {}
         GlyphType type = Base;
         QString baseString;
-        int layoutIndex = 0;
         int featureIndex = -1;
         int childCount() override {
             return 0;
@@ -52,6 +52,7 @@ struct KoFontGlyphModel::Private {
         }
     };
     QVector<CodePointInfo> codePoints;
+    QMap<QString, KoOpenTypeFeatureInfo> featureData;
 
     ~Private() = default;
 
@@ -99,15 +100,15 @@ struct KoFontGlyphModel::Private {
         return vsData;
     }
 
-    static QMap<uint, QVector<GlyphInfo>> getOpenTypeTables(FT_FaceSP face, QLatin1String lang = QLatin1String()) {
+    static QMap<QString, KoOpenTypeFeatureInfo> getOpenTypeTables(FT_FaceSP face, QVector<CodePointInfo> &charMap, QLatin1String lang = QLatin1String()) {
         // All of this was referenced from Inkscape's OpenTypeUtil.cpp::readOpenTypeGsubTable
-        QMap<uint, QVector<GlyphInfo>> otfData;
+        QMap<QString, KoOpenTypeFeatureInfo> featureInfo;
         hb_face_t_sp hbFace(hb_ft_face_create_referenced(face.data()));
         hb_tag_t table = HB_OT_TAG_GSUB;
         uint targetLanguage = HB_OT_LAYOUT_DEFAULT_LANGUAGE_INDEX;
         uint targetScript = 0;
 
-        hb_language_t languagTag = hb_language_from_string(lang.data(), lang.size());
+        hb_language_t languageTag = lang.isEmpty()? HB_LANGUAGE_INVALID: hb_language_from_string(lang.data(), lang.size());
         uint scriptCount = hb_ot_layout_table_get_script_tags(hbFace.data(), table, 0, nullptr, nullptr);
         QVector<hb_tag_t> tags;
         for (uint script = 0; script < scriptCount; script++) {
@@ -118,7 +119,8 @@ struct KoFontGlyphModel::Private {
                     hb_tag_t langTag;
                     uint count = 1;
                     hb_ot_layout_script_get_language_tags(hbFace.data(), table, script, j, &count, &langTag);
-                    if (count > 0 && hb_ot_tag_to_language(langTag) == languagTag) {
+                    if (count < 1) continue;
+                    if (hb_ot_tag_to_language(langTag) == languageTag) {
                         targetLanguage = j;
                         targetScript = script;
                         break;
@@ -131,18 +133,24 @@ struct KoFontGlyphModel::Private {
                                                                    targetScript,
                                                                    targetLanguage,
                                                                    0, nullptr, nullptr);
-        hb_tag_t features[featureCount];
         hb_ot_layout_language_get_feature_tags(hbFace.data(), table, targetScript,
                                                targetLanguage,
-                                               0, &featureCount, features);
+                                               0, nullptr, nullptr);
         for(uint k = 0; k < featureCount; k++) {
-            tags.append(features[k]);
+            uint count = 1;
+            hb_tag_t features;
+            hb_ot_layout_language_get_feature_tags(hbFace.data(), table, targetScript,
+                                                   targetLanguage,
+                                                   k, &count, &features);
+            if (count < 1) continue;
+            tags.append(features);
         }
 
+        KoOpenTypeFeatureInfoFactory factory;
         for (auto it = tags.begin(); it != tags.end(); it++) {
             char c[4];
             hb_tag_to_string(*it, c);
-            QString tagName(c);
+            QLatin1String tagName(c);
             uint featureIndex;
 
             QVector<uint> lookUpsProcessed;
@@ -151,66 +159,112 @@ struct KoFontGlyphModel::Private {
                                                              targetLanguage,
                                                              *it,
                                                              &featureIndex );
-            if (found) {
-                int lookupCount = hb_ot_layout_feature_get_lookups (hbFace.data(), table,
-                                                                    featureIndex,
-                                                                    0,
-                                                                    nullptr,
-                                                                    nullptr );
-                for (int i = 0; i < lookupCount; ++i) {
-                    uint maxCount = 1;
-                    uint lookUpIndex = 0;
-                    hb_ot_layout_feature_get_lookups (hbFace.data(), table,
-                                                      featureIndex,
-                                                      i,
-                                                      &maxCount,
-                                                      &lookUpIndex );
-                    if (maxCount < 1 || lookUpsProcessed.contains(lookUpIndex)) {
-                        continue;
-                    }
-                    hb_set_t_sp glyphsBefore (hb_set_create());
-                    hb_set_t_sp glyphsInput (hb_set_create());
-                    hb_set_t_sp glyphsAfter (hb_set_create());
-                    hb_set_t_sp glyphsOutput (hb_set_create());
 
-                    hb_ot_layout_lookup_collect_glyphs (hbFace.data(), table,
-                                                        lookUpIndex,
-                                                        glyphsBefore.data(),
-                                                        glyphsInput.data(),
-                                                        glyphsAfter.data(),
-                                                        glyphsOutput.data() );
+            if (!found) {
+                continue;
+            }
 
-                    GlyphInfo gci;
-                    gci.type = OpenType;
-                    gci.baseString = tagName;
-                    gci.layoutIndex = i;
-                    hb_codepoint_t hbGlyphPoint  = HB_SET_VALUE_INVALID;
-                    while(hb_set_next(glyphsInput.data(), &hbGlyphPoint)) {
-
-                        uint alt_count = hb_ot_layout_lookup_get_glyph_alternates (hbFace.data(),
-                                                                  lookUpIndex, hbGlyphPoint,
-                                                                  0,
-                                                                  nullptr, nullptr);
-                        QVector<GlyphInfo> glyphs = otfData.value(hbGlyphPoint);
-                        if (alt_count > 0) {
-                            for(uint j = 0; j < alt_count; ++j) {
-                                gci.featureIndex = j;
-                                glyphs.append(gci);
-                            }
-                        } else {
-                            gci.featureIndex = 1;
-                            glyphs.append(gci);
-                        }
-                        otfData.insert(hbGlyphPoint, glyphs);
-                    }
-                    lookUpsProcessed.append(lookUpIndex);
-
+            hb_ot_name_id_t labelId;
+            hb_ot_name_id_t toolTipId;
+            hb_ot_name_id_t sampleId;
+            uint namedParameters;
+            hb_ot_name_id_t firstParamId;
+            KoOpenTypeFeatureInfo info = factory.infoByTag(tagName);
+            if (hb_ot_layout_feature_get_name_ids(hbFace.data(), table, featureIndex, &labelId, &toolTipId, &sampleId, &namedParameters, &firstParamId)) {
+                QVector<hb_ot_name_id_t> nameIds = {labelId, toolTipId, sampleId};
+                for (uint i = 0; i < namedParameters; i++) {
+                    nameIds += firstParamId + i;
                 }
+
+                for(auto nameId = nameIds.begin(); nameId != nameIds.end(); nameId++) {
+                    uint length = hb_ot_name_get_utf8(hbFace.data(), *nameId, languageTag, nullptr, nullptr)+1;
+                    char buff[length];
+                    hb_ot_name_get_utf8(hbFace.data(), *nameId, languageTag, &length, buff);
+                    if (length > 0) {
+                        if (*nameId == labelId) {
+                            info.name = QString::fromUtf8(buff, length);
+                        } else if (*nameId == toolTipId) {
+                            info.description = QString::fromUtf8(buff, length);
+                        } else if (*nameId == sampleId) {
+                            info.sample = QString::fromUtf8(buff, length);
+                        } else {
+                            info.namedParameters.append(QString::fromUtf8(buff, length));
+                        }
+                    }
+                }
+            }
+
+            featureInfo.insert(tagName, info);
+            if (!info.glyphPalette) {
+                continue;
+            }
+
+            int lookupCount = hb_ot_layout_feature_get_lookups (hbFace.data(), table,
+                                                                featureIndex,
+                                                                0,
+                                                                nullptr,
+                                                                nullptr );
+            for (int i = 0; i < lookupCount; ++i) {
+                uint maxCount = 1;
+                uint lookUpIndex = 0;
+                hb_ot_layout_feature_get_lookups (hbFace.data(), table,
+                                                  featureIndex,
+                                                  i,
+                                                  &maxCount,
+                                                  &lookUpIndex );
+                if (maxCount < 1 || lookUpsProcessed.contains(lookUpIndex)) {
+                    continue;
+                }
+
+                // https://github.com/harfbuzz/harfbuzz/issues/673 suggest against checking the lookups,
+                // but if we only check for alternates, features like small-caps etc. won't be found (being gpos type 1 instead of type 3)
+                // Given this is run only when the model is created, this should be fine for now.
+
+                hb_set_t_sp glyphsBefore (hb_set_create());
+                hb_set_t_sp glyphsInput (hb_set_create());
+                hb_set_t_sp glyphsAfter (hb_set_create());
+                hb_set_t_sp glyphsOutput (hb_set_create());
+
+                hb_ot_layout_lookup_collect_glyphs (hbFace.data(), table,
+                                                    lookUpIndex,
+                                                    glyphsBefore.data(),
+                                                    glyphsInput.data(),
+                                                    glyphsAfter.data(),
+                                                    glyphsOutput.data() );
+
+
+                GlyphInfo gci;
+                gci.type = OpenType;
+                gci.baseString = tagName;
+
+                for(auto it = charMap.begin(); it != charMap.end(); it++) {
+                    gci.ucs = it->ucs;
+                    hb_codepoint_t glyphIndex = it->glyphIndex;
+
+                    uint alt_count = hb_ot_layout_lookup_get_glyph_alternates (hbFace.data(),
+                                                                               lookUpIndex, glyphIndex,
+                                                                               0,
+                                                                               nullptr, nullptr);
+
+                    if (alt_count > 0) {
+                        // 0 is the default value.
+                        for(uint j = 1; j < alt_count; ++j) {
+                            gci.featureIndex = j;
+                            it->glyphs.append(gci);
+                        }
+                    } else if (hb_set_has(glyphsInput.data(), glyphIndex)) {
+                        gci.featureIndex = 1;
+                        it->glyphs.append(gci);
+                    }
+                }
+                lookUpsProcessed.append(lookUpIndex);
 
             }
 
         }
-        return otfData;
+
+
+        return featureInfo;
     }
 };
 
@@ -257,7 +311,7 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
                 if (glyph->type == UnicodeVariationSelector) {
                     glyphNames.append("UVS:"+base+glyph->baseString);
                 } else if (glyph->type == OpenType) {
-                    glyphNames.append("OTF:"+glyph->baseString+" "+QString::number(glyph->layoutIndex));
+                    glyphNames.append("OTF:"+glyph->baseString+" "+QString::number(glyph->featureIndex));
                 }
             }
             return glyphNames.join(" ");
@@ -265,7 +319,13 @@ QVariant KoFontGlyphModel::data(const QModelIndex &index, int role) const
             Private::CodePointInfo codePoint = d->codePoints.value(index.parent().row());
             Private::GlyphInfo glyph = codePoint.glyphs.value(index.row());
             if (glyph.type == OpenType) {
-                return QString("OTF:"+glyph.baseString+" "+QString::number(glyph.layoutIndex)+" "+QString::number(glyph.featureIndex));
+                KoOpenTypeFeatureInfo info = d->featureData.value(glyph.baseString);
+                QString parameterString = info.namedParameters.value(glyph.featureIndex-1);
+                if (parameterString.isEmpty()) {
+                    return info.name.isEmpty()? glyph.baseString: info.name;
+                } else {
+                    return QString("%1: %2").arg(info.name).arg(parameterString);
+                }
             } else {
                 return QString(codePoint.utfString + glyph.baseString);
             }
@@ -336,14 +396,13 @@ QModelIndex KoFontGlyphModel::parent(const QModelIndex &child) const
     }
     Private::InfoNode *node = static_cast<Private::InfoNode*>(child.internalPointer());
 
-    if (node->parentUcs == node->ucs) {
-        for(int i = 0; i < d->codePoints.size(); i++) {
-            Private::CodePointInfo info = d->codePoints.at(i);
-            if (info.ucs == node->ucs) {
-                return index(i, 0, QModelIndex());
-            }
+    for(int i = 0; i < d->codePoints.size(); i++) {
+        Private::CodePointInfo info = d->codePoints.at(i);
+        if (info.ucs == node->ucs) {
+            return index(i, 0, QModelIndex());
         }
     }
+
 
     return QModelIndex();
 }
@@ -385,17 +444,12 @@ void KoFontGlyphModel::setFace(FT_FaceSP face)
 {
     beginResetModel();
     d->codePoints = Private::charMap(face);
-    QMap<uint, QVector<Private::GlyphInfo>> otfData = Private::getOpenTypeTables(face);
     QMap<uint, QVector<Private::GlyphInfo>> VSData = Private::getVSData(face);
     for(auto it = d->codePoints.begin(); it != d->codePoints.end(); it++) {
         it->glyphs.append(VSData.value(it->ucs));
-        QVector<Private::GlyphInfo> otfTable = otfData.value(it->glyphIndex);
-        for (auto glyphInfo = otfTable.begin(); glyphInfo != otfTable.end(); glyphInfo++) {
-            glyphInfo->ucs = it->ucs;
-            glyphInfo->parentUcs = it->ucs;
-            it->glyphs.append(*glyphInfo);
-        }
     }
+    d->featureData = Private::getOpenTypeTables(face, d->codePoints);
+
     endResetModel();
 }
 

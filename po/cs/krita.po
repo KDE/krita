@@ -29244,10 +29244,9 @@ msgid "Masked Brush"
 msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Nastavit aplikaci Krita"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
@@ -29291,16 +29290,14 @@ msgid "Configure Popup Palette dockers"
 msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Dostupné vlastnosti:"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Aktuální vrstva"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -37803,11 +37800,10 @@ msgid "Reset to default"
 msgstr "Obnovit výchozí"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor štětců"
+msgstr ""
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

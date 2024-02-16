@@ -54023,8 +54023,8 @@ msgid ""
 "<html><head/><body><p>Mix Tilt and Drawing angle to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>傾きと描画方向の久美早生でX軸とY軸を決定します。Z軸には"
-"ペンタブペンの傾きの絶対が用いられます。</p></body></html>"
+"<html><head/><body><p>傾きと描画方向の組み合わせでX軸とY軸を決定します。Z軸に"
+"はペンタブペンの傾きの絶対が用いられます。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263

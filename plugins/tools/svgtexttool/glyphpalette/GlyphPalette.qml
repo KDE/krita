@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 import QtQuick 2.15
-import QtQml.Models 2.12
+import QtQml.Models 2.15
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.15
 import org.krita.tools.text 1.0
@@ -14,7 +14,10 @@ Rectangle {
     anchors.fill: parent;
     property string titleText;
     property QtObject model;
-    property alias currentIndex: charMap.currentIndex;
+    property QtObject charMapModel;
+    property QtObject charMapFilterModel;
+
+    property int currentIndex: 0;
     property var fontFamilies: [];
     property double fontSize :10.0;
     property int fontWeight : 400;
@@ -65,8 +68,8 @@ Rectangle {
             padding: height/8;
             clip: true;
 
-            width: charMap.cellWidth;
-            height: charMap.cellHeight;
+            width: GridView.view.cellWidth;
+            height: GridView.view.cellHeight;
 
             property bool currentItem: GridView.isCurrentItem;
 
@@ -108,7 +111,6 @@ Rectangle {
                 id: glyphMouseArea
                 onClicked: {
                     parent.GridView.view.currentIndex = index;
-                    console.log(model.toolTip)
                 }
                 onDoubleClicked: {model.childCount === 0? mainWindow.slotInsertRichText(root.currentIndex, index): mainWindow.slotInsertRichText(index)}
                 hoverEnabled: true;
@@ -156,21 +158,52 @@ Rectangle {
         }
 
         // Charmap.
-        GridView {
-            id: charMap;
-            model: root.model;
-            focus: true;
-            clip: true;
+        Item {
+            ListView {
+                id: charMapFilter
+                model: root.charMapFilterModel;
+                anchors.top: parent.top;
+                anchors.bottom: parent.bottom;
+                anchors.left: parent.left;
+                width: 100;
 
-            cellWidth: (parent.width - charMapScroll.implicitBackgroundWidth)/8;
-            cellHeight: cellWidth;
+                onCurrentIndexChanged: {
+                    mainWindow.slotChangeFilter(currentIndex);
+                    console.log(currentIndex)
+                }
 
-            delegate: glyphDelegate;
-
-            ScrollBar.vertical: ScrollBar {
-                id: charMapScroll;
+                clip: true;
+                delegate: ItemDelegate {
+                    width: parent.width;
+                    text: model.display;
+                    highlighted: ListView.isCurrentItem;
+                    onClicked: {
+                        charMapFilter.currentIndex = index;
+                    }
+                }
             }
 
+            GridView {
+                id: charMap;
+                model: root.charMapModel;
+                focus: true;
+                clip: true;
+
+                anchors.top: parent.top;
+                anchors.bottom: parent.bottom;
+                anchors.left: charMapFilter.right;
+                anchors.right: parent.right;
+
+                cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
+                cellHeight: cellWidth;
+
+                delegate: glyphDelegate;
+
+                ScrollBar.vertical: ScrollBar {
+                    id: charMapScroll;
+                }
+
+            }
         }
     }
 }

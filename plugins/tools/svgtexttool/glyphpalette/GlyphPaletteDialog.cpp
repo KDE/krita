@@ -4,10 +4,12 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "GlyphPaletteDialog.h"
+
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickItem>
 #include <QHBoxLayout>
+
 #include <KoResourcePaths.h>
 #include <KoFontGlyphModel.h>
 #include <KoFontRegistry.h>
@@ -23,6 +25,8 @@ KIS_DECLARE_STATIC_INITIALIZER {
 GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     : KoDialog(parent)
     , m_model(new KoFontGlyphModel)
+    , m_charMapModel(new GlyphPaletteProxyModel)
+    , m_filters(new QStandardItemModel)
 {
     setMinimumSize(500, 300);
 
@@ -39,9 +43,20 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/GlyphPalette.qml"));
 
+    m_charMapModel->setSourceModel(m_model);
+    for (int i = 0; i< m_charMapModel->filterLabels().size(); i++) {
+        int key = m_charMapModel->filterLabels().keys().at(i);
+        QString label = m_charMapModel->filterLabels().value(key);
+        QStandardItem *item = new QStandardItem(label);
+        item->setData(key, Qt::UserRole+1);
+        m_filters->appendRow(item);
+    }
+
     if (m_quickWidget->rootObject()) {
         m_quickWidget->rootObject()->setProperty("titleText", "Glyph palette");
         m_quickWidget->rootObject()->setProperty("model", QVariant::fromValue(m_model));
+        m_quickWidget->rootObject()->setProperty("charMapModel", QVariant::fromValue(m_charMapModel));
+        m_quickWidget->rootObject()->setProperty("charMapFilterModel", QVariant::fromValue(m_filters));
     }
     if (!m_quickWidget->errors().empty()) {
         qWarning() << "Errors in " << windowTitle() << ":" << m_quickWidget->errors();
@@ -103,19 +118,33 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
 void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow)
 {
     if (m_quickWidget->rootObject()) {
-        QModelIndex idx = m_model->index(charRow, 0);
-        if (glyphRow > -1) {
-            idx = m_model->index(glyphRow, 0, idx);
-        }
-        KoSvgTextShape *richText = new KoSvgTextShape();
+        QModelIndex idx = glyphRow > -1? m_model->index(charRow, 0): m_charMapModel->index(charRow, 0);
+        QString  text;
         KoSvgTextProperties props = m_lastUsedProperties;
         QStringList otf = props.property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
-        otf.append(m_model->data(idx, KoFontGlyphModel::OpenTypeFeatures).value<QStringList>());
+        if (glyphRow > -1) {
+            idx = m_model->index(glyphRow, 0, idx);
+            text = m_model->data(idx, Qt::DisplayRole).toString();
+            otf.append(m_model->data(idx, KoFontGlyphModel::OpenTypeFeatures).value<QStringList>());
+        } else {
+            text = m_charMapModel->data(idx, Qt::DisplayRole).toString();
+        }
+        KoSvgTextShape *richText = new KoSvgTextShape();
         props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, otf);
 
         richText->setPropertiesAtPos(-1, props);
-        richText->insertText(0, m_model->data(idx, Qt::DisplayRole).toString());
+        richText->insertText(0, text);
         emit signalInsertRichText(richText);
     }
 
+}
+
+void GlyphPaletteDialog::slotChangeFilter(int filterRow)
+{
+    QModelIndex idx = m_filters->index(filterRow, 0);
+    if (idx.isValid()) {
+        const int filter = idx.data(Qt::UserRole+1).toInt();
+        qDebug() << Q_FUNC_INFO << filter;
+        m_charMapModel->setFilter(filter);
+    }
 }

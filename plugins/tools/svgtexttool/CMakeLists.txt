@@ -25,6 +25,7 @@ set (SvgTextTool_SRCS
     SvgTextShapeManagerBlocker.cpp
 
     glyphpalette/GlyphPaletteDialog.cpp
+    glyphpalette/GlyphPaletteProxyModel.cpp
     glyphpalette/SvgTextLabel.cpp
 )
 

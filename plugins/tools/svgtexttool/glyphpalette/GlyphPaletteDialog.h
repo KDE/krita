@@ -8,9 +8,13 @@
 
 #include <KoDialog.h>
 #include <QtQuickWidgets/QQuickWidget>
+
 #include <KoSvgTextProperties.h>
 #include <KoFontGlyphModel.h>
 #include <KoSvgTextShape.h>
+#include <QStandardItemModel>
+
+#include "GlyphPaletteProxyModel.h"
 
 class GlyphPaletteDialog: public KoDialog
 {
@@ -25,10 +29,14 @@ Q_SIGNALS:
 public Q_SLOTS:
 
     void slotInsertRichText(int charRow, int glyphRow = -1);
+
+    void slotChangeFilter(int filterRow);
 private:
     QQuickWidget *m_quickWidget {0};
     KoSvgTextProperties m_lastUsedProperties;
     KoFontGlyphModel *m_model;
+    GlyphPaletteProxyModel *m_charMapModel;
+    QStandardItemModel *m_filters;
 };
 
 #endif // GLYPHPALETTEDIALOG_H

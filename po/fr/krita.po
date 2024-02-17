@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-11 10:15+0100\n"
+"PO-Revision-Date: 2024-02-15 09:17+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -29906,15 +29906,16 @@ msgid "Masked Brush"
 msgstr "Brosse masquée"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Configuration de Krita"
+msgstr "Configurer un panneau"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"Le panneau est ouvert dans la palette contextuelle. Veuillez fermer la "
+"paletter pour affichage ici."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29948,22 +29949,19 @@ msgid "Fit Canvas to View"
 msgstr "Ajuster le tableau à la vue"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Show a palette docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Afficher une palette de couleurs à l'aide d'un panneau"
+msgstr "Configurer les panneaux contextuels de palettes"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Propriétés disponibles :"
+msgstr "Panneaux disponibles"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Calque actif"
+msgstr "Panneaux courants"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -39046,11 +39044,10 @@ msgid "Reset to default"
 msgstr "Restaurer les valeurs par défaut"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Éditeur de brosses"
+msgstr "Éditeur de brosses pour canevas"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

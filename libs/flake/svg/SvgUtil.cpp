@@ -215,7 +215,7 @@ void SvgUtil::parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF 
     }
 }
 
-qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
+qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox)
 {
     if (unit.isEmpty())
         return 0.0;
@@ -229,26 +229,24 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
     const char *end = parseNumber(start, value);
 
     if (int(end - start) < unit.length()) {
-        if (unit.right(2) == "px")
+        if (unit.right(2) == QLatin1String("px"))
             value = SvgUtil::fromUserSpace(value);
-        else if (unit.right(2) == "pt")
+        else if (unit.right(2) == QLatin1String("pt"))
             value = ptToPx(gc, value);
-        else if (unit.right(2) == "cm")
+        else if (unit.right(2) == QLatin1String("cm"))
             value = ptToPx(gc, CM_TO_POINT(value));
-        else if (unit.right(2) == "pc")
+        else if (unit.right(2) == QLatin1String("pc"))
             value = ptToPx(gc, PI_TO_POINT(value));
-        else if (unit.right(2) == "mm")
+        else if (unit.right(2) == QLatin1String("mm"))
             value = ptToPx(gc, MM_TO_POINT(value));
-        else if (unit.right(2) == "in")
+        else if (unit.right(2) == QLatin1String("in"))
             value = ptToPx(gc, INCH_TO_POINT(value));
-        else if (unit.right(2) == "em") {
+        else if (unit.right(2) == QLatin1String("em")) {
             value = value * gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
-        }
-        else if (unit.right(2) == "ex") {
-
+        } else if (unit.right(2) == QLatin1String("ex")) {
             QFontMetrics metrics(gc->textProperties.generateFont());
             value = value * metrics.xHeight();
-        } else if (unit.right(1) == "%") {
+        } else if (unit.right(1) == QLatin1Char('%')) {
             if (horiz && vert)
                 value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
             else if (horiz)

@@ -86,7 +86,11 @@ public:
     static void parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF &elementBounds, const QRectF &viewRect, QTransform *_viewTransform);
 
     /// Parses a length attribute
-    static qreal parseUnit(SvgGraphicsContext *gc, const QString &, bool horiz = false, bool vert = false, const QRectF &bbox = QRectF());
+    static qreal parseUnit(SvgGraphicsContext *gc,
+                           QStringView,
+                           bool horiz = false,
+                           bool vert = false,
+                           const QRectF &bbox = QRectF());
 
     /// parses a length attribute in x-direction
     static qreal parseUnitX(SvgGraphicsContext *gc, const QString &unit);

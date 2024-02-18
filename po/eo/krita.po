@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-11 05:33+0100\n"
+"PO-Revision-Date: 2024-02-17 11:46+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -12753,7 +12753,7 @@ msgstr "Movu Tavolon aŭ Maskon Suben"
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
-msgstr "&Propraĵoj..."
+msgstr "&Proprecoj..."
 
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
@@ -22592,7 +22592,7 @@ msgstr "*varias*"
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:208
 msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
-msgstr "Ŝanĝi Tavolajn Propraĵojn"
+msgstr "Ŝanĝi Tavolajn Proprecojn"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:66
 #, kde-format
@@ -23118,7 +23118,7 @@ msgstr "Restarigi defaŭltojn"
 #, kde-format
 msgctxt "@title:window"
 msgid "Stroke Selection Properties"
-msgstr "Propraĵoj de Elekto de Trako"
+msgstr "Proprecoj de Elekto de Trako"
 
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
 #, kde-format
@@ -24400,7 +24400,7 @@ msgstr "Profilo"
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:151
 #, kde-format
 msgid "Profile Properties"
-msgstr "Profilaj Propraĵoj"
+msgstr "Profilaj Proprecoj"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
@@ -26197,7 +26197,7 @@ msgstr "Dimensioj:"
 #: libs/ui/forms/wdglayerproperties.ui:244
 #, kde-format
 msgid "Properties"
-msgstr "Propraĵoj"
+msgstr "Proprecoj"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, grpActiveChannels)
 #: libs/ui/forms/wdglayerproperties.ui:258
@@ -26486,7 +26486,7 @@ msgid ""
 "reconfigured in `Image > Properties.`"
 msgstr ""
 "Uzu fonkoloron kaj opakecon kiel la bazan kanvasan koloron. Ĉi tio povas "
-"esti reagordita en `Bildo > Propraĵoj.`"
+"esti reagordita en `Bildo > Proprecoj.`"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -26502,7 +26502,7 @@ msgid ""
 "color for this layer can be reconfigured in the layer's properties."
 msgstr ""
 "Uzu fonkoloron kaj opakecon por krei fonan plenigtavolon. La koloro por ĉi "
-"tiu tavolo povas esti reagordita en la propraĵoj de la tavolo."
+"tiu tavolo povas esti reagordita en la proprecoj de la tavolo."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
 #: libs/ui/forms/wdgnewimage.ui:586
@@ -29175,7 +29175,7 @@ msgstr "Tavolo estas malplena"
 #: libs/ui/kis_layer_manager.cc:246
 #, kde-format
 msgid "Filter Layer Properties"
-msgstr "Filtrila Tavolo Propraĵoj"
+msgstr "Filtrila Tavolo Proprecoj"
 
 #: libs/ui/kis_layer_manager.cc:290
 #, kde-format
@@ -29185,7 +29185,7 @@ msgstr "Plenig-Tavolaj Trajtoj"
 #: libs/ui/kis_layer_manager.cc:306
 #, kde-format
 msgid "File Layer Properties"
-msgstr "Propraĵoj de Dosiera Tavolo"
+msgstr "Propraecj de Dosiera Tavolo"
 
 #: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
 #, kde-format
@@ -29320,7 +29320,7 @@ msgstr "Aldoni Transform Maskon"
 #: libs/ui/kis_mask_manager.cc:309
 #, kde-format
 msgid "Filter Mask Properties"
-msgstr "Filtrila Masko Propraĵoj"
+msgstr "Filtrila Masko Proprecoj"
 
 #: libs/ui/kis_mirror_manager.cpp:37
 #, kde-format
@@ -29671,20 +29671,21 @@ msgid "Masked Brush"
 msgstr "Maskita Peniko"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Agordi Krita"
+msgstr "Agordi doker-panelon"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"Dokero estas malferma en Popup-Paletro. Fermu Popup-Paletron por montri ĉi "
+"tie."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
 msgid "Clear color history"
-msgstr "Klara kolorhistorio"
+msgstr "Malplenigi kolorhistorion"
 
 #: libs/ui/kis_popup_palette.cpp:212
 #, kde-format
@@ -29713,22 +29714,19 @@ msgid "Fit Canvas to View"
 msgstr "Adapti Kanvason al Vido"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Python Palette Docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Python Palette Docker"
+msgstr "Agordi Popup-Paletrajn dokerojn"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Disponeblaj propraĵoj:"
+msgstr "Disponeblaj dokeroj:"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Aktuala Tavolo"
+msgstr "Aktualaj dokeroj"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -33457,7 +33455,7 @@ msgstr ""
 "<b>16-bita entjero</b>: Ankaŭ konata kiel 'profunda koloro'. 16 bitoj estas "
 "ideala por redakti bildojn kun lineara TRC, granda kolorspaco, aŭ ĝuste kiam "
 "vi bezonas pli precizan kolormiksadon. Ĉi tio okupas duoble pli da spaco sur "
-"la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj propraĵoj, kaj "
+"la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj proprecoj, kaj "
 "por iuj aparatoj ĝi bezonas multe pli da pretigpovo. Ni rekomendas rigardi "
 "la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 bitojn se via komputilo "
 "malrapidiĝas. Zorgu malŝalti konvertiĝan optimumigon dum konvertado de 16 "
@@ -33482,7 +33480,7 @@ msgstr ""
 "bildojn kun lineara Tona Responda Kurbo, granda kolorspaco, aŭ ĝuste kiam vi "
 "bezonas pli precizan kolormiksadon. Ĝi estas glitpunkto estas absoluta "
 "postulo por Scene Referitaj (HDR) bildoj. Ĉi tio okupas duoble pli da spaco "
-"sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj propraĵoj, "
+"sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj proprecoj, "
 "kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. Ni rekomendas "
 "rigardi la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 bitojn se via "
 "komputilo malrapidiĝas."
@@ -33505,7 +33503,7 @@ msgstr ""
 "aŭ ĝuste kiam vi bezonas pli precizan kolormiksadon. Ĝi estas glitpunkto "
 "estas absoluta postulo por Scene Referitaj (HDR) bildoj. Ĉi tio ja prenas "
 "kvaroble pli da spaco sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de "
-"la samaj propraĵoj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
+"la samaj proprecoj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
 "Ni rekomendas rigardi la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 "
 "bitojn se via komputilo malrapidiĝas."
 
@@ -33529,7 +33527,7 @@ msgstr ""
 "estas generitaj aŭ uzataj kiel enigo por programaro. Ĝi estas glitpunkto "
 "estas absoluta postulo por Scene Referitaj (HDR) bildoj. Ĉi tio ja prenas ok "
 "fojojn pli da spaco sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de "
-"la samaj propraĵoj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
+"la samaj propraecj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
 "Ni rekomendas rigardi la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 "
 "bitojn se via komputilo malrapidiĝas."
 
@@ -38659,11 +38657,10 @@ msgid "Reset to default"
 msgstr "Restarigi al defaŭlta"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Peniko-Redaktilo"
+msgstr "Sur-Kanvasa Penik-Redaktilo"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -38685,13 +38682,13 @@ msgstr "Peniko HUD-agordo"
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:37
 #, kde-format
 msgid "Available properties:"
-msgstr "Disponeblaj propraĵoj:"
+msgstr "Disponeblaj proprecoj:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:95
 #, kde-format
 msgid "Current properties:"
-msgstr "Nunaj propraĵoj:"
+msgstr "Nunaj proprecoj:"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:54
 #, kde-format
@@ -45660,7 +45657,7 @@ msgstr "Ĝeneralaj Agordoj"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:76
 #, kde-format
 msgid "Material properties"
-msgstr "Materialaj propraĵoj"
+msgstr "Materialaj proprecoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, specularReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:85

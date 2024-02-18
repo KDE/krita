@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-10 10:00+0100\n"
+"PO-Revision-Date: 2024-02-15 18:22+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -29676,15 +29676,16 @@ msgid "Masked Brush"
 msgstr "Maskiran čopič"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Prilagodi Krito"
+msgstr "Prilagodi podokno zloženega okna"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"Zloženo okno je odprto v pojavni paleti. Zaprite pojavno paleto, da se "
+"pokaže tukaj."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29718,22 +29719,19 @@ msgid "Fit Canvas to View"
 msgstr "Prilagodi platno pogledu"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Python Palette Docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Zloženo okno palet Python"
+msgstr "Prilagodi zložena okna pojavnih palet"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Parametri na voljo:"
+msgstr "Razpoložljiva zložena okna"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Trenutna plast"
+msgstr "Trenutna zložena okna"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -38715,11 +38713,10 @@ msgid "Reset to default"
 msgstr "Ponastavi na privzeto"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Urejevalnik čopičev"
+msgstr "Urejevalnik čopičev na platnu"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

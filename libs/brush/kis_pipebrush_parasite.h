@@ -11,12 +11,11 @@
 #include <math.h>
 #include <limits.h>
 
+#include <QFile>
 #include <QImage>
 #include <QPoint>
-#include <QVector>
-#include <QFile>
-#include <QRegExp>
 #include <QStringList>
+#include <QVector>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -67,7 +66,7 @@ public:
     void setBrushesCount();
 
     /// Load the parasite from the source string
-    KisPipeBrushParasite(const QString& source);
+    KisPipeBrushParasite(QStringView source);
 
     /**
      * Saves a GIMP-compatible representation of this parasite to the device. Also writes the

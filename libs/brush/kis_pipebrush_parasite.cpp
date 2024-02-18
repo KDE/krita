@@ -6,82 +6,62 @@
  */
 #include "kis_pipebrush_parasite.h"
 
-KisPipeBrushParasite::KisPipeBrushParasite(const QString& source)
+KisPipeBrushParasite::KisPipeBrushParasite(QStringView source)
 {
     init();
     needsMovement = false;
-    QRegExp basicSplitter(" ");
-    QRegExp parasiteSplitter(":");
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-    QStringList parasites = source.split(basicSplitter, Qt::SkipEmptyParts);
-#else
-    QStringList parasites = source.split(basicSplitter, QString::SkipEmptyParts);
-#endif
+    const QList<QStringView> parasites = source.split(QLatin1Char(' '), Qt::SkipEmptyParts);
 
     for (int i = 0; i < parasites.count(); i++) {
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
-        QStringList split = parasites.at(i).split(parasiteSplitter, Qt::SkipEmptyParts);
-#else
-        QStringList split = parasites.at(i).split(parasiteSplitter, QString::SkipEmptyParts);
-#endif
+        const QList<QStringView> split = parasites.at(i).split(QLatin1Char(':'), Qt::SkipEmptyParts);
 
         if (split.count() != 2) {
             warnImage << "Wrong count for this parasite key/value:" << parasites.at(i);
             continue;
         }
-        QString index = split.at(0);
-        if (index == "dim") {
+        const QStringView &index = split.at(0);
+        if (index == QLatin1String("dim")) {
             dim = (split.at(1)).toInt();
             if (dim < 1 || dim > MaxDim) {
                 dim = 1;
             }
-        } else if (index.startsWith(QString("sel"))) {
+        } else if (index.startsWith(QLatin1String("sel"))) {
             int selIndex = index.mid(strlen("sel")).toInt();
 
             if (selIndex >= 0 && selIndex < dim) {
-                selectionMode = split.at(1);
+                selectionMode = split.at(1).toString();
 
-                if (selectionMode == "incremental") {
-                    selection[selIndex] = KisParasite::Incremental;                    
-                }
-                else if (selectionMode == "angular") {
+                if (selectionMode == QLatin1String("incremental")) {
+                    selection[selIndex] = KisParasite::Incremental;
+                } else if (selectionMode == QLatin1String("angular")) {
                     selection[selIndex] = KisParasite::Angular;
                     needsMovement = true;
-                }
-                else if (selectionMode == "random") {
+                } else if (selectionMode == QLatin1String("random")) {
                     selection[selIndex] = KisParasite::Random;
-                }
-                else if (selectionMode == "pressure") {
+                } else if (selectionMode == QLatin1String("pressure")) {
                     selection[selIndex] = KisParasite::Pressure;
-                }
-                else if (selectionMode == "xtilt") {
+                } else if (selectionMode == QLatin1String("xtilt")) {
                     selection[selIndex] = KisParasite::TiltX;
-                }
-                else if (selectionMode == "ytilt") {
+                } else if (selectionMode == QLatin1String("ytilt")) {
                     selection[selIndex] = KisParasite::TiltY;
-                }
-                else if (selectionMode == "velocity") {
+                } else if (selectionMode == QLatin1String("velocity")) {
                     selection[selIndex] = KisParasite::Velocity;
-                }
-                else {
+                } else {
                     selection[selIndex] = KisParasite::Constant;
                 }
             }
             else {
                 warnImage << "Sel: wrong index: " << selIndex << "(dim = " << dim << ")";
             }
-        }
-        else if (index.startsWith(QString("rank"))) {
+        } else if (index.startsWith(QLatin1String("rank"))) {
             int rankIndex = index.mid(strlen("rank")).toInt();
             if (rankIndex < 0 || rankIndex > dim) {
                 warnImage << "Rankindex out of range: " << rankIndex;
                 continue;
             }
             rank[rankIndex] = (split.at(1)).toInt();
-        }
-        else if (index == "ncells") {
+        } else if (index == QLatin1String("ncells")) {
             ncells = (split.at(1)).toInt();
             if (ncells < 1) {
                 warnImage << "ncells out of range: " << ncells;
@@ -128,7 +108,7 @@ void KisPipeBrushParasite::setBrushesCount()
     else {
         brushesCount[0] = ncells;
     }
-    
+
     for (int i = 1; i < dim; i++) {
         if (rank[i] == 0) {
             brushesCount[i] = brushesCount[i - 1];

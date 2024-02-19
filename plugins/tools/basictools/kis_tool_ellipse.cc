@@ -84,3 +84,7 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
     }
 }
 
+bool KisToolEllipse::supportsPaintingAssistants() const
+{
+    return true;
+}

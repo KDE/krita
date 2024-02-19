@@ -23,6 +23,9 @@ class KisToolPolygon : public KisToolPolylineBase
 public:
     KisToolPolygon(KoCanvasBase *canvas);
     ~KisToolPolygon() override;
+
+    bool supportsPaintingAssistants() const override;
+
 protected:
     void finishPolyline(const QVector<QPointF>& points) override;
 protected Q_SLOTS:

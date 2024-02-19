@@ -74,3 +74,7 @@ void KisToolPolyline::finishPolyline(const QVector<QPointF>& points)
     }
 }
 
+bool KisToolPolyline::supportsPaintingAssistants() const
+{
+    return true;
+}

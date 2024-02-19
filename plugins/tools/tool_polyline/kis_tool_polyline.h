@@ -22,6 +22,8 @@ public:
     KisToolPolyline(KoCanvasBase * canvas);
     ~KisToolPolyline() override;
 
+    bool supportsPaintingAssistants() const override;
+
 protected:
     QWidget* createOptionWidget() override;
     void finishPolyline(const QVector<QPointF>& points) override;

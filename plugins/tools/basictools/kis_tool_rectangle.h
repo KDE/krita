@@ -32,6 +32,8 @@ public:
     KisToolRectangle(KoCanvasBase * canvas);
     ~KisToolRectangle() override;
 
+    bool supportsPaintingAssistants() const override;
+
 protected:
     void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 

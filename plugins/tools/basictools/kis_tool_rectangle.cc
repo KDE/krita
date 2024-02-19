@@ -102,3 +102,7 @@ void KisToolRectangle::finishRect(const QRectF &rect, qreal roundCornersX, qreal
     }
 }
 
+bool KisToolRectangle::supportsPaintingAssistants() const
+{
+    return true;
+}

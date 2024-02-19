@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-12 16:01+0100\n"
+"PO-Revision-Date: 2024-02-18 01:38+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -29784,15 +29784,16 @@ msgid "Masked Brush"
 msgstr "Pincel enmascarado"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Configurar Krita"
+msgstr "Configurar panel"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"El panel está abierto en la paleta emergente. Cierre la paleta emergente "
+"para mostrarla aquí."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29826,22 +29827,19 @@ msgid "Fit Canvas to View"
 msgstr "Ajustar el lienzo a la vista"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Show a palette docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Mostrar un acoplable de paleta"
+msgstr "Configurar los paneles de la paleta emergente"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Propiedades disponibles:"
+msgstr "Paneles disponibles"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Capa actual"
+msgstr "Paneles actuales"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -38855,11 +38853,10 @@ msgid "Reset to default"
 msgstr "Restablecer los valores predeterminados"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor de pincel"
+msgstr "Editor de pincel sobre el lienzo"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format

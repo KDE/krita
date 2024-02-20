@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2008-05-29 11:19+0100\n"
 "Last-Translator: Berend Ytsma <berendy@gmail.com>\n"
 "Language-Team: Frisian <kde-i18n-doc@lists.kde.org>\n"
@@ -57275,7 +57275,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Tekenje in ellips"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, fuzzy, kde-format
 msgid "Ellipse Tool"
 msgstr "Ellips"
@@ -57718,7 +57718,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Tekenje in rjochthoeke"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, fuzzy, kde-format
 msgid "Rectangle Tool"
 msgstr "Rjochthoeke"
@@ -60320,7 +60320,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Polyhoeke"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, fuzzy, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr "Tekenje in polyhoeke. Shift-klik beëinicht de polyhoeke."
@@ -60343,7 +60343,7 @@ msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr "Tekenje in polyhoeke. Shift-klik beëinicht de polyhoeke."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, fuzzy, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr "Tekenje in brutsen line. Shift-klik einicht de brutsen line."

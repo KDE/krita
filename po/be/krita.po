@@ -37,7 +37,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2008-01-01 23:08+0200\n"
 "Last-Translator: Darafei Praliaskouski <komzpa@gmail.com>\n"
 "Language-Team: Belarusian (Official spelling) <i18n@mova.org>\n"
@@ -56009,7 +56009,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Намаляваць эліпс"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, fuzzy, kde-format
 msgid "Ellipse Tool"
 msgstr "Эліпс"
@@ -56439,7 +56439,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Намаляваць прастакутнік"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, fuzzy, kde-format
 msgid "Rectangle Tool"
 msgstr "Прамакутнік"
@@ -58970,7 +58970,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Шматкутнік"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, fuzzy, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr "Намаляваць шматкутнік. Shift+пстрычка мышшу завяршае шматкутнік."
@@ -58993,7 +58993,7 @@ msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr "Намаляваць шматкутнік. Shift+пстрычка мышшу завяршае шматкутнік."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, fuzzy, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr "Намаляваць ламаную лінію. Shift+пстрычка мышшу завяршае лінію."

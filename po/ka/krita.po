@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
-"PO-Revision-Date: 2024-02-11 02:15+0100\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"PO-Revision-Date: 2024-02-19 05:58+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -29121,10 +29121,9 @@ msgid "Masked Brush"
 msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Krita-ის მორგება"
+msgstr "პანელის მორგება"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
@@ -29168,16 +29167,14 @@ msgid "Configure Popup Palette dockers"
 msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "ხელმისაწვდომი თვისებები:"
+msgstr "ხელმისაწვდომი პანელები"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "მიმდინარე ფენა"
+msgstr "მიმდინარე პანელები"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -37655,11 +37652,10 @@ msgid "Reset to default"
 msgstr "ნაგულისხმებ მნიშვნელობაზე დაბრუნება"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "ფუნჯის მორგება"
+msgstr "ტილოზე მდებარე ფუნჯის რედაქტორი"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -55398,7 +55394,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "ოვალის დახატვა"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, kde-format
 msgid "Ellipse Tool"
 msgstr ""
@@ -55821,7 +55817,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "მართკუთხედის დახაზვა"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, kde-format
 msgid "Rectangle Tool"
 msgstr ""
@@ -58321,7 +58317,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr ""
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr ""
@@ -58344,7 +58340,7 @@ msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr ""
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr ""

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -59097,7 +59097,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Тўлқин"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, fuzzy, kde-format
 #| msgid "More Line Colors..."
 msgid "Ellipse Tool"
@@ -59557,7 +59557,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Намунани яратиш"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, fuzzy, kde-format
 msgid "Rectangle Tool"
 msgstr "Намунани яратиш"
@@ -62238,7 +62238,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Шрифтни танлаш"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr ""
@@ -62262,7 +62262,7 @@ msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr ""
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr ""

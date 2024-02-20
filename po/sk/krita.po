@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -57600,7 +57600,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Kresliť elipsu"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Nástroj elipsa"
@@ -58045,7 +58045,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Kresliť obdĺžnik"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, kde-format
 msgid "Rectangle Tool"
 msgstr "Nástroj obdĺžnik"
@@ -60636,7 +60636,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Kresliť polygón"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr "Nástroj polygónu: Shift-kliknutie myšou ukončí polygón."
@@ -60659,7 +60659,7 @@ msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr "Nástroj polygónu: Shift-kliknutie myšou ukončí polygón."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr "Nástroj lomenej čiary: Shift-kliknutie myši ukončí lomenú čiaru."

@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -57982,7 +57982,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "En Ellips teken"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, fuzzy, kde-format
 msgid "Ellipse Tool"
 msgstr "Ellips"
@@ -58432,7 +58432,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "En Rechteck teken"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, fuzzy, kde-format
 msgid "Rectangle Tool"
 msgstr "Rechteck"
@@ -61077,7 +61077,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Veeleck"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, fuzzy, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr ""
@@ -61102,7 +61102,7 @@ msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr ""
 "En Veeleck teken. En Muusklick bi daalhollen Ümschalttast slutt dat af."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, fuzzy, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr ""

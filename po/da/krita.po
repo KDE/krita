@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -58705,7 +58705,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Tegn ellipse"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Ellipseværktøj"
@@ -59155,7 +59155,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Tegn et rektangel"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, fuzzy, kde-format
 msgid "Rectangle Tool"
 msgstr "Rektangel"
@@ -61848,7 +61848,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Polygon"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, fuzzy, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr ""
@@ -61873,7 +61873,7 @@ msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr ""
 "Tegn en polygon. At holde Skift-tasten nede og klikke afslutter polygonen."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, fuzzy, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr ""

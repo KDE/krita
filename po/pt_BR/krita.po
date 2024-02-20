@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -57901,7 +57901,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Desenhar uma elipse"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Ferramenta de elipse"
@@ -58369,7 +58369,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Desenhar retângulo"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, kde-format
 msgid "Rectangle Tool"
 msgstr "Ferramenta de retângulo"
@@ -60995,7 +60995,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Desenhar polígono"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr ""
@@ -61022,7 +61022,7 @@ msgstr ""
 "Ferramenta de polígonos. Clicar com o mouse com o Shift pressionado termina "
 "o polígono."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr ""

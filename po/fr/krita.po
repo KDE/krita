@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-14 01:38+0000\n"
+"POT-Creation-Date: 2024-02-20 01:38+0000\n"
 "PO-Revision-Date: 2024-02-15 09:17+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
@@ -57752,7 +57752,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Ellipse"
 msgstr "Dessiner une ellipse"
 
-#: plugins/tools/basictools/kis_tool_ellipse.h:45
+#: plugins/tools/basictools/kis_tool_ellipse.h:47
 #, kde-format
 msgid "Ellipse Tool"
 msgstr "Ellipse"
@@ -58196,7 +58196,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Rectangle"
 msgstr "Dessiner un rectangle"
 
-#: plugins/tools/basictools/kis_tool_rectangle.h:48
+#: plugins/tools/basictools/kis_tool_rectangle.h:50
 #, kde-format
 msgid "Rectangle Tool"
 msgstr "Rectangle"
@@ -60785,7 +60785,7 @@ msgctxt "(qtundo-format)"
 msgid "Draw Polygon"
 msgstr "Tracer un polygone"
 
-#: plugins/tools/tool_polygon/kis_tool_polygon.h:41
+#: plugins/tools/tool_polygon/kis_tool_polygon.h:44
 #, kde-format
 msgid "Polygon Tool: Shift-mouseclick ends the polygon."
 msgstr "Polygone : Maj-clic ferme le polygone."
@@ -60808,7 +60808,7 @@ msgctxt "action"
 msgid "Polygon Tool. Shift-mouseclick ends the polygon."
 msgstr "Dessinez un polygone. Maj-clic ferme ce polygone."
 
-#: plugins/tools/tool_polyline/kis_tool_polyline.h:42
+#: plugins/tools/tool_polyline/kis_tool_polyline.h:44
 #, kde-format
 msgid "Polyline Tool: Shift-mouseclick ends the polyline."
 msgstr "Polyligne : Maj-clic pour mettre fin au tracé."

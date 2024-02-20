@@ -7,17 +7,23 @@ windows-build:
     KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
     KDECI_CACHE_PATH: "C:\\Gitlab\\Artifacts\\krita-windows"
     KDECI_GITLAB_SERVER: https://invent.kde.org/
-    KDECI_PACKAGE_PROJECT: teams/ci-artifacts/windows-qt5.15
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-windows-qt5.15
+    KDECI_REPO_METADATA_PATH: "$CI_PROJECT_DIR\\krita-deps-management\\repo-metadata"
+    KDECI_WORKDIR_PATH: "C:\\_"
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "True"
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/dkazakov/ci-utilities
-    - git clone https://invent.kde.org/sysadmin/repo-metadata ci-utilities/repo-metadata/
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management
+    - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities
+    - python -m venv venv --upgrade-deps
+    - . venv\Scripts\Activate.ps1
+    - pip install -r krita-deps-management/requirements.txt
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
       # TODO: bake this variable into the docker image
     - $env:PATH = "c:\Program Files\CMake\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\x86_64-w64-mingw32\bin;$env:PATH"
-    - python -u build-tools/ci-scripts/download-deps.py
-    - python -u ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared
+    - python -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared
     - python -u build-tools/ci-scripts/build-windows-package.py --skip-debug-package
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:

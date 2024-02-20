@@ -10,7 +10,7 @@ linux-build:
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-appimage-qt5.15
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
-    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "True"
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management

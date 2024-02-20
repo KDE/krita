@@ -6,19 +6,19 @@ import shutil
 import os
 from sys import platform
 
-projectURL = ""
 projectArtifact = ""
+depsUrl = ""
 
 if platform == "linux":
     import tarfile
-    projectURL = "https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Dependency_Build/api/json/"
     projectArtifact = "krita-appimage-deps.tar"
+    depsUrl = "https://files.kde.org/krita/dependencies/krita-appimage-deps.tar"
 elif platform == "darwin":
     raise RuntimeError("MacOS support is not yet implemented")
 elif platform == "win32":
     import zipfile
-    projectURL = "https://binary-factory.kde.org/job/Krita_Nightly_Windows_Dependency_Build/api/json/"
-    projectArtifact = "krita-deps.zip"
+    projectArtifact = "krita-windows-deps.tar" # yes, even though the extension in .tar, is it still .zip...
+    depsUrl = "https://files.kde.org/krita/dependencies/krita-windows-deps.tar"
     
 
 localCachePath = os.environ.pop('KDECI_CACHE_PATH')
@@ -35,23 +35,6 @@ def download_url_with_compression(url, filePath):
                 #if chunk: 
                 f.write(chunk)
             f.flush()
-
-print ("Fetching job metadata...")
-
-res = requests.get(projectURL)
-
-if not res:
-    print("Couldn't fetch the API object: {}".format(res.reason))
-    res.raise_for_status
-
-jobUrl = res.json()['lastSuccessfulBuild']['url']
-
-print ("Last successful job URL: {}".format(jobUrl))
-
-if jobUrl is None:
-    raise FileNotFoundError()
-
-depsUrl = '{}artifact/{}'.format(jobUrl, projectArtifact)
 
 kritaCacheDir = os.path.join(localCachePath, 'krita-deps')
 if not os.path.isdir(kritaCacheDir):

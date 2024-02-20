@@ -14,7 +14,7 @@ ExternalProject_Add(
        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
        DOWNLOAD_NO_EXTRACT TRUE
 
-       URL https://binary-factory.kde.org/job/Krita_Nightly_Windows_Dependency_Build/lastSuccessfulBuild/artifact/krita-deps.zip
+       URL https://files.kde.org/krita/dependencies/krita-windows-deps.tar
 #       URL_MD5 884d65fb6ed9777966370ad5eb24f2c7
 
        CONFIGURE_COMMAND ""

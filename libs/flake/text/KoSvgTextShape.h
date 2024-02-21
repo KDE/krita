@@ -411,9 +411,14 @@ public:
     /// Set the current node to its parent, leaving the subtree.
     void leaveNodeSubtree();
 
+    /// Get a memento holding the current textdata and layout info.
     KoSvgTextShapeMementoSP getMemento();
 
+    /// Set the text data and layout info, reset listening cursors to 0.
     void setMemento(const KoSvgTextShapeMementoSP memento);
+
+    /// Set the text data, layout info and also adjust any listening cursors.
+    void setMemento(const KoSvgTextShapeMementoSP memento, int pos, int anchor);
 
     /// Outputs debug with the current textData tree.
     void debugParsing();
@@ -447,6 +452,8 @@ private:
      * @return a QPainterPath for a cursor.
      */
     QPainterPath defaultCursorShape();
+
+    void setMementoImpl(const KoSvgTextShapeMementoSP memento);
 
     class Private;
     QScopedPointer<Private> d;

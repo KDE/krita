@@ -1283,9 +1283,8 @@ KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
                                                                  d->initialTextPosition));
 }
 
-void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
+void KoSvgTextShape::setMementoImpl(const KoSvgTextShapeMementoSP memento)
 {
-    debugParsing();
     KoSvgTextShapeMementoImpl *impl = dynamic_cast<KoSvgTextShapeMementoImpl*>(memento.data());
     if (impl) {
         d->textData = impl->textData;
@@ -1297,7 +1296,18 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
         d->isBidi = impl->isBidi;
         d->initialTextPosition = impl->initialTextPosition;
     }
-    debugParsing();
+}
+
+void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
+{
+    setMementoImpl(memento);
+    notifyCursorPosChanged(0, 0);
+}
+
+void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento, int pos, int anchor)
+{
+    setMementoImpl(memento);
+    notifyCursorPosChanged(pos, anchor);
 }
 
 void KoSvgTextShape::debugParsing()

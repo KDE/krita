@@ -37,10 +37,8 @@ void SvgTextMergePropertiesRangeCommand::redo()
 void SvgTextMergePropertiesRangeCommand::undo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    m_shape->setMemento(m_textData);
+    m_shape->setMemento(m_textData, m_pos, m_anchor);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
-
-    m_shape->notifyCursorPosChanged(m_pos, m_anchor);
 }
 
 int SvgTextMergePropertiesRangeCommand::id() const

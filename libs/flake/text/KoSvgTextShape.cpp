@@ -43,6 +43,47 @@
 
 #include <FlakeDebug.h>
 
+// Memento pointer to hold data for Undo commands.
+
+class KoSvgTextShapeMementoImpl : public KoSvgTextShapeMemento
+{
+public:
+    KoSvgTextShapeMementoImpl(const KisForest<KoSvgTextContentElement> &textData,
+                              const QVector<CharacterResult> &result,
+                              const QVector<LineBox> &lineBoxes,
+                              const QVector<CursorPos> &cursorPos,
+                              const QMap<int, int> &logicalToVisualCursorPos,
+                              const QString &plainText,
+                              const bool &isBidi,
+                              const QPointF &initialTextPosition)
+        : KoSvgTextShapeMemento()
+        , textData(textData)
+        , result(result)
+        , lineBoxes(lineBoxes)
+        , cursorPos(cursorPos)
+        , logicalToVisualCursorPos(logicalToVisualCursorPos)
+        , plainText(plainText)
+        , isBidi(isBidi)
+        , initialTextPosition(initialTextPosition)
+    {
+    }
+
+    ~KoSvgTextShapeMementoImpl() {}
+
+private:
+    friend class KoSvgTextShape;
+    KisForest<KoSvgTextContentElement> textData;
+    QVector<CharacterResult> result;
+    QVector<LineBox> lineBoxes;
+
+    QVector<CursorPos> cursorPos;
+    QMap<int, int> logicalToVisualCursorPos;
+
+    QString plainText;
+    bool isBidi = false;
+    QPointF initialTextPosition = QPointF();
+};
+
 
 KoSvgTextShape::KoSvgTextShape()
     : KoShape()
@@ -1232,15 +1273,30 @@ void KoSvgTextShape::leaveNodeSubtree()
 
 KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
 {
-    return new KoSvgTextShapeMemento(d->textData);
+    return KoSvgTextShapeMementoSP(new KoSvgTextShapeMementoImpl(d->textData,
+                                                                 d->result,
+                                                                 d->lineBoxes,
+                                                                 d->cursorPos,
+                                                                 d->logicalToVisualCursorPos,
+                                                                 d->plainText,
+                                                                 d->isBidi,
+                                                                 d->initialTextPosition));
 }
 
 void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
 {
     debugParsing();
-
-    d->textData = memento->textData;
-    relayout();
+    KoSvgTextShapeMementoImpl *impl = dynamic_cast<KoSvgTextShapeMementoImpl*>(memento.data());
+    if (impl) {
+        d->textData = impl->textData;
+        d->result = impl->result;
+        d->lineBoxes = impl->lineBoxes;
+        d->cursorPos = impl->cursorPos;
+        d->logicalToVisualCursorPos = impl->logicalToVisualCursorPos;
+        d->plainText = impl->plainText;
+        d->isBidi = impl->isBidi;
+        d->initialTextPosition = impl->initialTextPosition;
+    }
     debugParsing();
 }
 
@@ -1548,3 +1604,4 @@ void KoSvgTextShape::TextCursorChangeListener::notifyShapeChanged(KoShape::Chang
     Q_UNUSED(type);
     Q_UNUSED(shape);
 }
+

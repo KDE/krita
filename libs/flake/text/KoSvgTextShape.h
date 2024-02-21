@@ -14,12 +14,11 @@
 #include <KoShape.h>
 #include <KoSvgText.h>
 #include "html/HtmlSavingContext.h"
-#include <kis_shared_ptr.h>
 #include <QFlags>
 
 class KoSvgTextProperties;
 class KoSvgTextShapeMemento;
-typedef KisSharedPtr<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
+typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
@@ -455,26 +454,12 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoSvgTextShape::DebugElements)
 
-
-#include <KoSvgTextContentElement.h>
-#include <KisForest.h>
-#include <kis_shared.h>
-
-// Memento pointer to hold data for Undo commands.
-
-class KRITAFLAKE_EXPORT KoSvgTextShapeMemento : public KisShared
-{
+class KRITAFLAKE_EXPORT KoSvgTextShapeMemento {
 public:
-    KoSvgTextShapeMemento(const KisForest<KoSvgTextContentElement> &textData)
-        : textData(textData)
-    {
-    }
-
-    ~KoSvgTextShapeMemento() {}
-
+    KoSvgTextShapeMemento() {}
+    virtual ~KoSvgTextShapeMemento() {};
 private:
     friend class KoSvgTextShape;
-    KisForest<KoSvgTextContentElement> textData;
 };
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase

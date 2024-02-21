@@ -235,14 +235,6 @@ KoColorSpaceRegistry::~KoColorSpaceRegistry()
 void KoColorSpaceRegistry::add(KoColorSpaceFactory* item)
 {
     QWriteLocker l(&d->registrylock);
-    if (d->colorSpaceFactoryRegistry.contains(item->id())) {
-        const KoColorSpaceFactory *original =
-            d->colorSpaceFactoryRegistry.get(item->id());
-        warnPigment << "Replacing color space factory"
-                    << original->id() << original->name()
-                    << "with"
-                    << item->id() << item->name();
-    }
     d->colorSpaceFactoryRegistry.add(item);
     d->colorConversionSystem->insertColorSpace(item);
 }

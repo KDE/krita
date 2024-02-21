@@ -791,6 +791,15 @@ public:
         }
     }
 
+    Forest<T>& operator=(const Forest<T> &rhs) {
+        erase(childBegin(), childEnd());
+        for (auto it = rhs.childBegin(); it != rhs.childEnd(); ++it) {
+            auto cloneIt = this->insert(this->childEnd(), *it);
+            cloneChildren(it, cloneIt);
+        }
+        return *this;
+    }
+
     using value_type = T;
 
     using child_iterator = ChildIterator<T, false>;

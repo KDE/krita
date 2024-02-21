@@ -10,6 +10,7 @@
 #include "kritatoolsvgtext_export.h"
 
 #include "KoSvgTextProperties.h"
+#include <KoSvgTextShape.h>
 
 class KoSvgTextShape;
 class KoSvgTextProperties;
@@ -34,8 +35,7 @@ private:
     int m_anchor;
     int m_startIndex; // for testing merge.
     int m_endIndex; // for testing merge.
-    QString m_oldSvg;
-    QString m_oldDefs;
+    KoSvgTextShapeMementoSP m_textData;
 };
 
 #endif // SVGTEXTMERGEPROPERTIESRANGECOMMAND_H

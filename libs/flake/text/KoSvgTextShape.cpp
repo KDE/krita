@@ -76,6 +76,9 @@ KoShape *KoSvgTextShape::cloneShape() const
 
 void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 {
+    if (d->isLoading) {
+        return;
+    }
     KoShape::shapeChanged(type, shape);
 
     if (type == StrokeChanged || type == BackgroundChanged || type == ContentChanged) {
@@ -897,8 +900,8 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
         currentIndex += it->numChars(false);
     }
 
-    KoSvgTextShape::Private::cleanUp(d->textData);
     if (changed){
+        KoSvgTextShape::Private::cleanUp(d->textData);
         notifyChanged();
         shapeChangedPriv(ContentChanged);
         if (properties.hasProperty(KoSvgTextProperties::FillId)) {
@@ -1064,6 +1067,9 @@ KoSvgText::WritingMode KoSvgTextShape::writingMode() const
 
 void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
 {
+    if (d->isLoading) {
+        return;
+    }
     Q_FOREACH (KoShape::ShapeChangeListener *listener, listeners()) {
         TextCursorChangeListener *cursorListener = dynamic_cast<TextCursorChangeListener*>(listener);
         if (cursorListener) {
@@ -1224,6 +1230,20 @@ void KoSvgTextShape::leaveNodeSubtree()
 
 }
 
+KoSvgTextShapeMementoSP KoSvgTextShape::getMemento()
+{
+    return new KoSvgTextShapeMemento(d->textData);
+}
+
+void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
+{
+    debugParsing();
+
+    d->textData = memento->textData;
+    relayout();
+    debugParsing();
+}
+
 void KoSvgTextShape::debugParsing()
 {
     qDebug() << "Tree size:" << KisForestDetail::size(d->textData);
@@ -1336,12 +1356,12 @@ QRectF KoSvgTextShape::boundingRect() const
             stroke = it->properties.property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
         }
         if (stroke) {
-            QRectF bb = outlineRect();
+            QRectF bb = it->associatedOutline.boundingRect();
             KoInsets insets;
             stroke->strokeInsets(this, insets);
             result |= bb.adjusted(-insets.left, -insets.top, insets.right, insets.bottom);
         } else {
-            result |= outlineRect();
+            result |= it->associatedOutline.boundingRect();
         }
     }
     return this->absoluteTransformation().mapRect(result);

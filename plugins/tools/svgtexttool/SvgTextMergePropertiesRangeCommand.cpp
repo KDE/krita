@@ -6,7 +6,6 @@
 #include "SvgTextMergePropertiesRangeCommand.h"
 
 #include "KoSvgTextShape.h"
-#include "KoSvgTextShapeMarkupConverter.h"
 #include "kis_command_ids.h"
 
 SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgTextShape *shape,
@@ -19,10 +18,10 @@ SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgText
     , m_props(props)
     , m_pos(pos)
     , m_anchor(anchor)
+    , m_textData(m_shape->getMemento())
 {
     setText(kundo2_i18n("Change Text Properties"));
-    KoSvgTextShapeMarkupConverter converter(m_shape);
-    converter.convertToSvg(&m_oldSvg, &m_oldDefs);
+
     // Some properties may change cursor pos count, so we need the indices.
     m_startIndex = m_shape->indexForPos(qMin(pos, anchor));
     m_endIndex = m_shape->indexForPos(qMax(pos, anchor));
@@ -38,9 +37,7 @@ void SvgTextMergePropertiesRangeCommand::redo()
 void SvgTextMergePropertiesRangeCommand::undo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    KoSvgTextShapeMarkupConverter converter(m_shape);
-    // Hardcoded resolution?
-    converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
+    m_shape->setMemento(m_textData);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 
     m_shape->notifyCursorPosChanged(m_pos, m_anchor);

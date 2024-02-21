@@ -13,6 +13,7 @@ struct KoSvgTextLoader::Private {
         : shape(shape)
         , currentNode(shape->d->textData.childEnd())
     {
+        shape->d->isLoading = true;
         shape->d->textData.erase(shape->d->textData.childBegin(), shape->d->textData.childEnd());
         currentNode = shape->d->textData.childEnd();
     }
@@ -29,6 +30,7 @@ KoSvgTextLoader::KoSvgTextLoader(KoSvgTextShape *shape)
 
 KoSvgTextLoader::~KoSvgTextLoader()
 {
+    d->shape->d->isLoading = false;
 }
 
 void KoSvgTextLoader::enterNodeSubtree()

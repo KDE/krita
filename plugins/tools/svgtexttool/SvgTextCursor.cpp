@@ -329,7 +329,7 @@ KoSvgTextProperties SvgTextCursor::currentTextProperties() const
 
 void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props)
 {
-    if (d->shape) {
+    if (d->shape && hasSelection()) {
         KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, d->pos, d->anchor);
         addCommandToUndoAdapter(cmd);
     }
@@ -834,22 +834,29 @@ void SvgTextCursor::updateInputMethodItemTransform()
 
 void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
 {
-    if (!d->shape)
+    if (!d->shape || (key != KoCanvasResource::ForegroundColor && key != KoCanvasResource::BackgroundColor))
         return;
 
     KoSvgTextProperties props;
+    KoSvgTextProperties shapeProps = d->shape->propertiesForPos(d->pos, true);
     if (key == KoCanvasResource::ForegroundColor) {
         QSharedPointer<KoShapeBackground> bg(new KoColorBackground(value.value<KoColor>().toQColor()));
-        props.setProperty(KoSvgTextProperties::FillId,
-                          QVariant::fromValue(KoSvgText::BackgroundProperty(bg)));
+        if (bg != shapeProps.background()) {
+            props.setProperty(KoSvgTextProperties::FillId,
+                              QVariant::fromValue(KoSvgText::BackgroundProperty(bg)));
+        }
     } else if (key == KoCanvasResource::BackgroundColor) {
         // TODO figure out how not to override the whole stroke.
         QSharedPointer<KoShapeStroke> stroke(new KoShapeStroke());
         stroke->setColor(value.value<KoColor>().toQColor());
-        props.setProperty(KoSvgTextProperties::StrokeId,
-                          QVariant::fromValue(KoSvgText::StrokeProperty(stroke)));
+        if (stroke != shapeProps.stroke()) {
+            props.setProperty(KoSvgTextProperties::StrokeId,
+                              QVariant::fromValue(KoSvgText::StrokeProperty(stroke)));
+        }
     }
-    mergePropertiesIntoSelection(props);
+    if (!props.isEmpty()) {
+        mergePropertiesIntoSelection(props);
+    }
 }
 
 void SvgTextCursor::toggleProperty(KoSvgTextProperties::PropertyId property)

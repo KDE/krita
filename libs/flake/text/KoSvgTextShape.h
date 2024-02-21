@@ -14,10 +14,12 @@
 #include <KoShape.h>
 #include <KoSvgText.h>
 #include "html/HtmlSavingContext.h"
-
+#include <kis_shared_ptr.h>
 #include <QFlags>
 
 class KoSvgTextProperties;
+class KoSvgTextShapeMemento;
+typedef KisSharedPtr<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
 #define KoSvgTextShape_SHAPEID "KoSvgTextShapeID"
 /**
@@ -409,13 +411,10 @@ public:
     void enterNodeSubtree();
     /// Set the current node to its parent, leaving the subtree.
     void leaveNodeSubtree();
-    /**
-     * Completely empties the current textData.
-     * Resets the text shape into initial shape, removing all the child shapes
-     * and precalculated layouts. This method is used by text-parsing code to
-     * upload the updated text into shape.
-     * NOTE: This makes the textShape invalid because the tree is empty.
-     */
+
+    KoSvgTextShapeMementoSP getMemento();
+
+    void setMemento(const KoSvgTextShapeMementoSP memento);
 
     /// Outputs debug with the current textData tree.
     void debugParsing();
@@ -457,6 +456,26 @@ private:
 Q_DECLARE_OPERATORS_FOR_FLAGS(KoSvgTextShape::DebugElements)
 
 
+#include <KoSvgTextContentElement.h>
+#include <KisForest.h>
+#include <kis_shared.h>
+
+// Memento pointer to hold data for Undo commands.
+
+class KRITAFLAKE_EXPORT KoSvgTextShapeMemento : public KisShared
+{
+public:
+    KoSvgTextShapeMemento(const KisForest<KoSvgTextContentElement> &textData)
+        : textData(textData)
+    {
+    }
+
+    ~KoSvgTextShapeMemento() {}
+
+private:
+    friend class KoSvgTextShape;
+    KisForest<KoSvgTextContentElement> textData;
+};
 
 class KoSvgTextShapeFactory : public KoShapeFactoryBase
 {

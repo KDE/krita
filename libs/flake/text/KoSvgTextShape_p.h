@@ -330,6 +330,7 @@ public:
     QList<KoShape*> shapesSubtract;
 
     KisForest<KoSvgTextContentElement> textData;
+    bool isLoading = false; ///< Turned on when loading in text data, blocks updates to shape listeners.
 
 
     QVector<CharacterResult> result;

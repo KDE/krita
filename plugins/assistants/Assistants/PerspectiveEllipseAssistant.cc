@@ -162,6 +162,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
         //if (!(m_followBrushPosition && m_adjustedPositionValid)) // that would mean we're drawing, in which case, leave it alone
         //{
+        // TODO: since the above doesn't work anymore, what do we do? save the last brush thingy?...
 
             d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon, false);
             normalEllipseSeemsValid = d->concentricEllipseInPolygon.setSimpleEllipseVertices(d->simpleConcentricEllipse);

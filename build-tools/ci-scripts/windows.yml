@@ -9,7 +9,7 @@ windows-build:
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-windows-qt5.15
     KDECI_REPO_METADATA_PATH: "$CI_PROJECT_DIR\\krita-deps-management\\repo-metadata"
-    KDECI_WORKDIR_PATH: "C:\\_"
+    # KDECI_WORKDIR_PATH: "C:\\_" # don't use separate workdir since package script will fail!
     KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
   interruptible: true
   before_script:

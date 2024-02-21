@@ -5,6 +5,7 @@ import subprocess
 import multiprocessing
 import shutil
 
+sourcesPath = os.environ.pop('KDECI_SOURCES_DIR')
 localCachePath = os.environ.pop('KDECI_CACHE_PATH')
 kritaCacheDir = os.path.join(localCachePath, 'krita-deps')
 if not os.path.isdir(kritaCacheDir):
@@ -25,7 +26,7 @@ cmakeCommand = [
     '-DINSTALL_ROOT={}'.format(os.path.join(os.getcwd(), '_install')),
     '-DEXTERNALS_DOWNLOAD_DIR={}'.format(kritaCacheDir),
     '-DCMAKE_BUILD_TYPE={}'.format(os.environ.pop('KDECI_BUILD_TYPE')),
-    os.path.join(os.getcwd(), '3rdparty_plugins')
+    os.path.join(sourcesPath, '3rdparty_plugins')
 ]
 
 if useCcacheForBuilds:

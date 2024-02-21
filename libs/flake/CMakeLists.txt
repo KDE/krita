@@ -214,6 +214,7 @@ set(kritaflake_SRCS
     text/KoSvgTextProperties.cpp
     text/KoSvgTextContentElement.cpp
     text/KoSvgTextShape.cpp
+    text/KoSvgTextLoader.cpp
     text/KoSvgTextShape_p_glyphs.cpp
     text/KoSvgTextShape_p_layout.cpp
     text/KoSvgTextShape_p_output.cpp

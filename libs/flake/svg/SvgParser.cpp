@@ -58,6 +58,7 @@
 #include <KoMarker.h>
 
 #include <text/KoSvgTextShape.h>
+#include <text/KoSvgTextLoader.h>
 
 #include "kis_dom_utils.h"
 

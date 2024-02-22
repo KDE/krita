@@ -120,6 +120,9 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     gc.resetTransform();
 
     bool isEditing = false;
+    if (canvas){
+        isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+   }
     
     QTransform initialTransform = converter->documentToWidgetTransform();
 
@@ -230,7 +233,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 #endif
     }
 
-    if (!d->cache.horizon.isNull()) {
+    if (isEllipseValid() && !d->cache.horizon.isNull()) {
 
         QPainterPath path2 = QPainterPath();
         QLineF horizonExtended = d->cache.horizon;
@@ -253,6 +256,9 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     gc.setPen(pen10);
 
     pathError.addEllipse(QPointF(100, 100), 5, 5);
+    if (isEditing) {
+        pathError.addEllipse(QPointF(130, 130), 5, 5);
+    }
 
     gc.drawPath(pathError);
     QTransform tempTr = gc.transform();
@@ -322,7 +328,8 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             gc.drawPath(path2);
             //gc.restore();
         }
-        if (!isEditing && d->isConcentric) {
+
+        if (d->isConcentric) { // TODO: if isEditing, then only if the assistant is selected
             paintConcentricEllipse(gc, updateRect, initialTransform);
         }
 
@@ -384,6 +391,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
         touchingLine.lineTo(pt4);
 
         if (assistantVisible) {
+            // this draws the X inside the ellipse
             drawPath(gc, touchingLine, isSnappingActive());
         }
 
@@ -428,6 +436,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
                 path.lineTo(line.p2());
             }
 
+            // this draws the rectangle around the ellipse
             drawPath(gc, path, isSnappingActive());
         }
     }

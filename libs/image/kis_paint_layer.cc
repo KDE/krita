@@ -262,6 +262,9 @@ bool KisPaintLayer::alphaLocked() const
 
 void KisPaintLayer::setAlphaLocked(bool lock)
 {
+    const bool oldAlphaLocked = alphaLocked();
+    if (oldAlphaLocked == lock) return;
+
     if(m_d->paintChannelFlags.isEmpty())
         m_d->paintChannelFlags = colorSpace()->channelFlags(true, true);
 

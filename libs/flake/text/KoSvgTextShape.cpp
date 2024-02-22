@@ -954,7 +954,7 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
     }
 }
 
-KoSvgTextShape *KoSvgTextShape::copyRange(int index, int length) const
+std::unique_ptr<KoSvgTextShape> KoSvgTextShape::copyRange(int index, int length) const
 {
     KoSvgTextShape *clone = new KoSvgTextShape(*this);
     int zero = 0;
@@ -963,7 +963,7 @@ KoSvgTextShape *KoSvgTextShape::copyRange(int index, int length) const
     clone->removeText(endRange, size);
     clone->removeText(zero, index);
     KoSvgTextShape::Private::cleanUp(clone->d->textData);
-    return clone;
+    return std::unique_ptr<KoSvgTextShape>(clone);
 }
 
 bool KoSvgTextShape::insertRichText(int pos, const KoSvgTextShape *richText)

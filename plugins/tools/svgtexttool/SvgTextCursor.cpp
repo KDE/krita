@@ -360,11 +360,11 @@ void SvgTextCursor::copy() const
         int start = d->shape->indexForPos(qMin(d->anchor, d->pos));
         int length = d->shape->indexForPos(qMax(d->anchor, d->pos)) - start;
         QString copied = d->shape->plainText().mid(start, length);
-        KoSvgTextShape *copy = d->shape->copyRange(start, length);
+        std::unique_ptr<KoSvgTextShape> copy = d->shape->copyRange(start, length);
         QClipboard *cb = QApplication::clipboard();
 
         if (copy) {
-            KoSvgTextShapeMarkupConverter converter(copy);
+            KoSvgTextShapeMarkupConverter converter(copy.get());
             QString svg;
             QString styles;
             QString html;

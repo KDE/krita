@@ -2528,7 +2528,7 @@ void TestSvgText::testTextRichCopy()
     KoSvgTextShapeMarkupConverter converter(textShape);
     converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
 
-    KoSvgTextShape *copy = textShape->copyRange(10, 10);
+    std::unique_ptr<KoSvgTextShape> copy = textShape->copyRange(10, 10);
     QCOMPARE(copy->plainText(), "brown fox ");
     QCOMPARE(size(copy->d->textData), 3);
 }

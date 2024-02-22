@@ -352,7 +352,7 @@ public:
      * @param length -- length of the range.
      * @return a KoSvgTextShape with only the content elements inside the range.
      */
-    KoSvgTextShape *copyRange(int index, int length) const;
+    std::unique_ptr<KoSvgTextShape> copyRange(int index, int length) const;
 
     /**
      * @brief insertRichText

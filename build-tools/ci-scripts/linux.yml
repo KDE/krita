@@ -19,7 +19,7 @@ linux-build:
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
     - python3 -u build-tools/ci-scripts/build-appimage.py
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:

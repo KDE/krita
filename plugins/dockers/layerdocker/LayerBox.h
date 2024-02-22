@@ -163,7 +163,6 @@ private:
     QPointer<KisColorLabelSelectorWidgetMenuWrapper> m_colorSelector;
     QPointer<QWidgetAction> m_colorSelectorAction;
     Ui_WdgLayerBox* m_wdgLayerBox;
-    QTimer m_opacityDelayTimer;
     int m_newOpacity;
     KisNodeSP m_changedOpacityNode;
 
@@ -176,6 +175,7 @@ private:
     KisSignalCompressor m_thumbnailSizeCompressor;
     KisSignalCompressor m_treeIndentationCompressor;
     KisSignalCompressor m_infoTextOpacityCompressor;
+    KisSignalCompressor m_nodeOpacityCompressor;
 
     KisLayerFilterWidget* layerFilterWidget;
     QSlider *thumbnailSizeSlider;
@@ -187,7 +187,6 @@ private:
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
-    bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
 };
 

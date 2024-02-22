@@ -165,12 +165,12 @@ LayerBox::LayerBox()
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     , m_infoTextOpacityCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_nodeOpacityCompressor(200, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
-    m_opacityDelayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
 
@@ -214,7 +214,7 @@ LayerBox::LayerBox()
     }
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
-    connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
+    connect(&m_nodeOpacityCompressor, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
@@ -861,16 +861,14 @@ void LayerBox::slotCompositeOpChanged(int index)
 void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
-    m_blockOpacityUpdate = true;
     m_nodeManager->setNodeOpacity(m_changedOpacityNode, convertOpacityToInt(m_newOpacity));
-    m_blockOpacityUpdate = false;
 }
 
 void LayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
     m_changedOpacityNode = m_activeNode;
-    m_opacityDelayTimer.start(200);
+    m_nodeOpacityCompressor.start();
 }
 
 void LayerBox::slotCollapsed(const QModelIndex &index)

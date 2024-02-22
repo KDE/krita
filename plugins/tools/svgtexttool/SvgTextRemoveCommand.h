@@ -9,6 +9,7 @@
 
 #include <kundo2command.h>
 #include "kritatoolsvgtext_export.h"
+#include <KoSvgTextShape.h>
 
 class KoSvgTextShape;
 
@@ -50,8 +51,7 @@ private:
     int m_anchor;
     int m_length;
     bool m_allowCleanUp;
-    QString m_oldSvg;
-    QString m_oldDefs;
+    KoSvgTextShapeMementoSP m_textData;
 };
 
 #endif // SVGTEXTREMOVECOMMAND_H

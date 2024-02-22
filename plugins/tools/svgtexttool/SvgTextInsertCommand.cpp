@@ -37,8 +37,7 @@ void SvgTextInsertCommand::redo()
     // Index defaults to -1 when there's no text in the shape.
     int oldIndex = qMax(0, m_shape->indexForPos(m_pos));
 
-    KoSvgTextShapeMarkupConverter converter(m_shape);
-    converter.convertToSvg(&m_oldSvg, &m_oldDefs);
+    m_textData = m_shape->getMemento();
     m_shape->insertText(m_pos, m_text);
     m_shape->cleanUp();
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
@@ -51,12 +50,8 @@ void SvgTextInsertCommand::redo()
 void SvgTextInsertCommand::undo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    KoSvgTextShapeMarkupConverter converter(m_shape);
-    // Hardcoded resolution?
-    converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
+    m_shape->setMemento(m_textData, m_pos, m_anchor);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
-
-    m_shape->notifyCursorPosChanged(m_pos, m_anchor);
 }
 
 int SvgTextInsertCommand::id() const

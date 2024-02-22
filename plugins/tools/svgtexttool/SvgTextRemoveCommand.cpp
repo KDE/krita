@@ -32,8 +32,7 @@ void SvgTextRemoveCommand::redo()
 {
     QRectF updateRect = m_shape->boundingRect();
 
-    KoSvgTextShapeMarkupConverter converter(m_shape);
-    converter.convertToSvg(&m_oldSvg, &m_oldDefs);
+    m_textData = m_shape->getMemento();
 
     int idx = m_index - m_length;
     m_shape->removeText(idx, m_length);
@@ -51,12 +50,8 @@ void SvgTextRemoveCommand::redo()
 void SvgTextRemoveCommand::undo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    KoSvgTextShapeMarkupConverter converter(m_shape);
-    // Hardcoded resolution?
-    converter.convertFromSvg(m_oldSvg, m_oldDefs, m_shape->boundingRect(), 72.0);
+    m_shape->setMemento(m_textData, m_originalPos, m_anchor);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
-
-    m_shape->notifyCursorPosChanged(m_originalPos, m_anchor);
 }
 
 int SvgTextRemoveCommand::id() const

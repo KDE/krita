@@ -8,8 +8,7 @@
 
 #include <kundo2command.h>
 #include "kritatoolsvgtext_export.h"
-
-class KoSvgTextShape;
+#include <KoSvgTextShape.h>
 
 class KRITATOOLSVGTEXT_EXPORT SvgTextInsertCommand : public KUndo2Command
 {
@@ -30,8 +29,7 @@ private:
     int m_pos;
     int m_anchor;
     QString m_text;
-    QString m_oldSvg;
-    QString m_oldDefs;
+    KoSvgTextShapeMementoSP m_textData;
 };
 
 #endif // SVGTEXTINSERTCOMMAND_H

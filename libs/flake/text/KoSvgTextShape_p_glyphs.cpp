@@ -494,7 +494,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
     std::tie(glyphObliqueTf, bitmapScale) = loadGlyphOnly(ftTF, faceLoadFlags, isHorizontal, currentGlyph, charResult);
 
     if (charResult.visualIndex == -1) {
-        hb_font_t_up font(hb_ft_font_create_referenced(currentGlyph.ftface));
+        hb_font_t_sp font(hb_ft_font_create_referenced(currentGlyph.ftface));
         CursorInfo cursorInfo = charResult.cursorInfo;
         qreal lineHeight = (charResult.fontAscent-charResult.fontDescent) * bitmapScale;
         qreal descender = charResult.fontDescent * bitmapScale;

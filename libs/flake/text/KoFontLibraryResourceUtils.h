@@ -57,17 +57,18 @@ public:
 
 /**
  * Shared pointer that holds a standard allocated resource.
- * The only difference is in the signature of the deleter.
+ * The only difference is that the deleter supports being called
+ * for null pointer, so we can call it directly without any wrapper.
  */
 template<typename T, int (*P)(T *)>
-struct KisFreeTypeResourcePointer : private QSharedPointer<T> {
+struct KisLibraryResourcePointerAllowsNull : private QSharedPointer<T> {
 public:
-    KisFreeTypeResourcePointer()
+    KisLibraryResourcePointerAllowsNull()
         : QSharedPointer<T>(nullptr, P)
     {
     }
 
-    KisFreeTypeResourcePointer(T *ptr)
+    KisLibraryResourcePointerAllowsNull(T *ptr)
         : QSharedPointer<T>(ptr, P)
     {
     }
@@ -81,13 +82,13 @@ public:
     }
 };
 
-using FcConfigUP = KisLibraryResourcePointer<FcConfig, FcConfigDestroy>;
-using FcCharSetUP = KisLibraryResourcePointer<FcCharSet, FcCharSetDestroy>;
-using FcPatternUP = KisLibraryResourcePointer<FcPattern, FcPatternDestroy>;
-using FcFontSetUP = KisLibraryResourcePointer<FcFontSet, FcFontSetDestroy>;
-using FT_LibraryUP = KisFreeTypeResourcePointer<std::remove_pointer_t<FT_Library>, FT_Done_FreeType>;
-using FT_FaceUP = KisFreeTypeResourcePointer<std::remove_pointer_t<FT_Face>, FT_Done_Face>;
+using FcConfigSP = KisLibraryResourcePointer<FcConfig, FcConfigDestroy>;
+using FcCharSetSP = KisLibraryResourcePointer<FcCharSet, FcCharSetDestroy>;
+using FcPatternSP = KisLibraryResourcePointer<FcPattern, FcPatternDestroy>;
+using FcFontSetSP = KisLibraryResourcePointer<FcFontSet, FcFontSetDestroy>;
+using FT_LibrarySP = KisLibraryResourcePointerAllowsNull<std::remove_pointer_t<FT_Library>, FT_Done_FreeType>;
+using FT_FaceSP = KisLibraryResourcePointerAllowsNull<std::remove_pointer_t<FT_Face>, FT_Done_Face>;
 
-using hb_font_t_up = KisLibraryResourcePointer<hb_font_t, hb_font_destroy>;
+using hb_font_t_sp = KisLibraryResourcePointer<hb_font_t, hb_font_destroy>;
 
 #endif // KOFONTLIBRARYRESOURCEUTILS_H

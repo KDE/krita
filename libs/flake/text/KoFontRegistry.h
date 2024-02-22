@@ -42,7 +42,7 @@ public:
      * will be filled with the lengths of consequetive characters
      * a face can be set on.
      */
-    std::vector<FT_FaceUP> facesForCSSValues(const QStringList &families,
+    std::vector<FT_FaceSP> facesForCSSValues(const QStringList &families,
                                              QVector<int> &lengths,
                                              const QMap<QString, qreal> &axisSettings,
                                              const QString &text = "",
@@ -66,7 +66,7 @@ public:
      *
      * @returns whether the configuration was successful.
      */
-    bool configureFaces(const std::vector<FT_FaceUP> &faces,
+    bool configureFaces(const std::vector<FT_FaceSP> &faces,
                         qreal size,
                         qreal fontSizeAdjust,
                         quint32 xRes,

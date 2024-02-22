@@ -39,7 +39,7 @@
 
 #include <raqm.h>
 
-using raqm_t_up = KisLibraryResourcePointer<raqm_t, raqm_destroy>;
+using raqm_t_sp = KisLibraryResourcePointer<raqm_t, raqm_destroy>;
 
 using KoSvgTextShapeLayoutFunc::calculateLineHeight;
 using KoSvgTextShapeLayoutFunc::breakLines;
@@ -256,7 +256,7 @@ void KoSvgTextShape::Private::relayout()
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
-    raqm_t_up layout(raqm_create());
+    raqm_t_sp layout(raqm_create());
 
     if (raqm_set_text_utf16(layout.data(), text.utf16(), static_cast<size_t>(text.size()))) {
         if (writingMode == KoSvgText::VerticalRL || writingMode == KoSvgText::VerticalLR) {
@@ -393,7 +393,7 @@ void KoSvgTextShape::Private::relayout()
             if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
                 fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
             }
-            const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
+            const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
                 properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
                 lengths,
                 properties.fontAxisSettings(),
@@ -432,7 +432,7 @@ void KoSvgTextShape::Private::relayout()
 
             for (int i = 0; i < lengths.size(); i++) {
                 length = lengths.at(i);
-                const FT_FaceUP &face = faces.at(static_cast<size_t>(i));
+                const FT_FaceSP &face = faces.at(static_cast<size_t>(i));
                 const FT_Int32 faceLoadFlags = loadFlagsForFace(face.data());
                 if (start == 0) {
                     raqm_set_freetype_face(layout.data(), face.data());
@@ -449,7 +449,7 @@ void KoSvgTextShape::Private::relayout()
                                                        static_cast<size_t>(length));
                 }
 
-                hb_font_t_up font(hb_ft_font_create_referenced(face.data()));
+                hb_font_t_sp font(hb_ft_font_create_referenced(face.data()));
                 hb_position_t ascender = 0;
                 hb_position_t descender = 0;
                 hb_position_t lineGap = 0;
@@ -1159,7 +1159,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
         fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
     }
-    const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
+    const std::vector<FT_FaceSP> faces = KoFontRegistry::instance()->facesForCSSValues(
         properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
         lengths,
         properties.fontAxisSettings(),
@@ -1172,7 +1172,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
         style != QFont::StyleNormal);
 
-    hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
+    hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);
 
     hb_direction_t dir = HB_DIRECTION_LTR;

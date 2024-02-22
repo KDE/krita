@@ -1379,13 +1379,17 @@ void SvgTextCursor::updateCanvasResources()
         if (bg) {
             KoColor c;
             c.fromQColor(bg->color());
-            d->canvas->resourceManager()->setForegroundColor(c);
+            if (c != d->canvas->resourceManager()->foregroundColor()) {
+                d->canvas->resourceManager()->setForegroundColor(c);
+            }
         }
         KoShapeStroke *stroke = dynamic_cast<KoShapeStroke *>(props.stroke().data());
         if (stroke && stroke->color().isValid()) {
             KoColor c;
             c.fromQColor(stroke->color());
-            d->canvas->resourceManager()->setBackgroundColor(c);
+            if (c != d->canvas->resourceManager()->backgroundColor()) {
+                d->canvas->resourceManager()->setBackgroundColor(c);
+            }
         }
     }
 }

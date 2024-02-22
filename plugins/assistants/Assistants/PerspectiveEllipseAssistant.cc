@@ -184,53 +184,6 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
         //}
 
-        //ENTER_FUNCTION() << "Set points to simple ellipse:" << d->concentricEllipseInPolygon.finalVertices[0]
-        //                 << d->concentricEllipseInPolygon.finalVertices[1] << d->concentricEllipseInPolygon.finalVertices[2];
-        //ENTER_FUNCTION() << "Is transform identity? " << d->simpleConcentricEllipse.getTransform().isIdentity();
-        //ENTER_FUNCTION() << "Transform:" << d->simpleConcentricEllipse.getTransform();
-
-        // 1000 points horizontal
-        // 500 vertical
-        int vertSkip = gc.viewport().height()/50;
-        int horiSkip = gc.viewport().width()/100;
-
-        ENTER_FUNCTION() << ppVar(vertSkip) << ppVar(horiSkip);
-
-        QPen redPen = QPen(Qt::red);
-        QPen bluePen = QPen(Qt::blue);
-        QPen pen;
-
-#if 0
-        gc.save();
-
-        int loops = 0;
-        QPointF p;
-        for (int i = vertSkip; i < gc.viewport().height()/2; i += vertSkip) {
-            for (int j = horiSkip; j < gc.viewport().width()/2; j+= horiSkip) {
-                loops++;
-                //if (loops > 10) break;
-                p = QPointF(gc.viewport().y() + j, gc.viewport().x() + i);
-                if (d->ellipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(p))) {
-                    pen = bluePen;
-                } else {
-                    pen = redPen;
-                }
-                gc.setPen(pen);
-                gc.drawEllipse(p, 5, 5);
-                ENTER_FUNCTION() << "Painting on " << p;
-            }
-        }
-        p = mousePos;
-        if (d->ellipseInPolygon.onTheCorrectSideOfHorizon(initialTransform.inverted().map(p))) {
-            pen = bluePen;
-        } else {
-            pen = redPen;
-        }
-        gc.setPen(pen);
-        gc.drawEllipse(p, 5, 5);
-
-        gc.restore();
-#endif
     }
 
     if (isEllipseValid() && !d->cache.horizon.isNull()) {
@@ -246,31 +199,6 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
         gc.drawPath(path2);
         //gc.restore();
     }
-
-
-    QPainterPath pathError;
-    QPen pen10((qIsNaN(d->simpleConcentricEllipse.semiMajor()) || qIsInf(d->simpleConcentricEllipse.semiMajor()) || d->simpleConcentricEllipse.semiMajor() > 10000) ? Qt::darkBlue : Qt::darkMagenta);
-    pen10.setWidth(10);
-
-    gc.save();
-    gc.setPen(pen10);
-
-    pathError.addEllipse(QPointF(100, 100), 5, 5);
-    if (isEditing) {
-        pathError.addEllipse(QPointF(130, 130), 5, 5);
-    }
-
-    gc.drawPath(pathError);
-    QTransform tempTr = gc.transform();
-    gc.setTransform(QTransform());
-    gc.setFont(QFont("Helvetica", 6));
-    QString semiM = QString::number(d->simpleConcentricEllipse.semiMajor());
-    QTransform checkedTr = d->simpleConcentricEllipse.getTransform().inverted();
-    QString message = semiM + " | " + QString::number(checkedTr.determinant()) + " | " + QString::number(checkedTr.m11()) + ", " + QString::number(checkedTr.m12()) + ", " + QString::number(checkedTr.m13());
-    //KisPart::instance()->currentMainwindow()->viewManager()->showFloatingMessage(message, QIcon());
-    gc.drawText(QPointF(200, 100), QString::number(d->simpleConcentricEllipse.semiMajor()));
-    gc.setTransform(tempTr);
-    gc.restore();
 
     // draw ellipse and axes
     if (isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one

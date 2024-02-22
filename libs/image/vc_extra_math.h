@@ -20,6 +20,12 @@ public:
     template<typename A>
     static inline xsimd::batch<float, A> erf(const xsimd::batch<float, A> x)
     {
+        /**
+         * Our version of erf() is about 10% faster than the version in
+         * xsimd::erf(), because we require less precision. We don't need
+         * too much of precision to calculate 8-bit masks anyway.
+         */
+
         using float_v = xsimd::batch<float, A>;
         using float_m = typename float_v::batch_bool_type;
         float_v xa = xsimd::abs(x);

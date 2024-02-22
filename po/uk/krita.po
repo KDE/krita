@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-20 01:38+0000\n"
+"POT-Creation-Date: 2024-02-22 01:36+0000\n"
 "PO-Revision-Date: 2024-02-14 09:32+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -22734,7 +22734,7 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:767
 #: plugins/impex/heif/WdgHeifExport.ui:106
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:308
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:128
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:99
 #, kde-format
 msgid "Brightness:"
 msgstr "Яскравість:"
@@ -26237,7 +26237,7 @@ msgstr "Обернути:"
 #: plugins/paintops/gridbrush/wdggridoptions.ui:75
 #: plugins/paintops/hairy/wdgbristleoptions.ui:134
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:121
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:76
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:115
 #, kde-format
 msgid "Scale:"
 msgstr "Масштаб:"
@@ -35337,7 +35337,7 @@ msgstr "Точка:"
 #: plugins/filters/asccdl/wdg_asccdl.ui:21
 #: plugins/filters/asccdl/wdg_asccdl.ui:28
 #: plugins/filters/asccdl/wdg_asccdl.ui:49
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:189
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:195
 #, kde-format
 msgid "PushButton"
 msgstr "Кнопка"
@@ -47581,7 +47581,7 @@ msgstr "Інвертувати:"
 #. i18n: ectx: property (text), widget (QLabel, lblAngle)
 #. i18n: ectx: property (text), widget (QLabel, labelContrast)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:787
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:102
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:73
 #, kde-format
 msgid "Contrast:"
 msgstr "Контрастність:"
@@ -53111,7 +53111,7 @@ msgstr "Квадрат"
 #. i18n: ectx: property (toolTip), widget (QCheckBox, btnAntialiasing)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkInvert)
 #: plugins/paintops/libpaintop/forms/wdgautobrush.ui:109
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:235
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:262
 #, kde-format
 msgid "The border of the brush will be smoothed to avoid aliasing"
 msgstr "Край пензля буде згладжено, щоб уникнути різких переходів кольору"
@@ -53523,14 +53523,20 @@ msgstr "використовувати лише одну літеру за ра�
 msgid "Pipe mode"
 msgstr "Режим каналу"
 
+#. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:83
+#, kde-format
+msgid "Neutral Point:"
+msgstr "Нейтральна точка:"
+
 #. i18n: ectx: property (text), widget (QLabel, lblSpacing)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:144
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:141
 #, kde-format
 msgid "Cutoff Policy:"
 msgstr "Правила обрізання:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblDensity)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:160
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:157
 #, kde-format
 msgid "Texturing Mode:"
 msgstr "Режим текстурування:"
@@ -53542,37 +53548,46 @@ msgctxt "Texture lightness range cutoff range slider"
 msgid "Cutoff:"
 msgstr "Обрізання:"
 
-#. i18n: ectx: property (text), widget (QLabel, lblNeutralPoint)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:199
+#. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxSoftTexturing)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:217
 #, kde-format
-msgid "Neutral Point:"
-msgstr "Нейтральна точка:"
+msgid ""
+"Apply less texture when the strength is lower. Use this option if you want "
+"the brush to transition between un-textured and textured appearance"
+msgstr ""
 
-#. i18n: ectx: property (text), widget (QLabel, lblSpikes)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:222
+#. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
+#, fuzzy, kde-format
+#| msgid "Soft Proofing"
+msgid "Soft texturing"
+msgstr "Проба кольорів"
+
+#. i18n: ectx: property (text), widget (QLabel, lblRandomness)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
 #, kde-format
-msgid "Horizontal Offset:"
-msgstr "Горизонтальний відступ:"
+msgid "Vertical Offset:"
+msgstr "Вертикальний відступ:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkInvert)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:238
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:265
 #, kde-format
 msgid "Invert Pattern"
 msgstr "Інвертування візерунка"
 
+#. i18n: ectx: property (text), widget (QLabel, lblSpikes)
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:278
+#, kde-format
+msgid "Horizontal Offset:"
+msgstr "Горизонтальний відступ:"
+
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetY)
 #. i18n: ectx: property (text), widget (QCheckBox, randomOffsetX)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:248
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:277
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:294
+#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:307
 #, kde-format
 msgid "Random Offset"
 msgstr "Випадковий відступ"
-
-#. i18n: ectx: property (text), widget (QLabel, lblRandomness)
-#: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:261
-#, kde-format
-msgid "Vertical Offset:"
-msgstr "Вертикальний відступ:"
 
 #: plugins/paintops/libpaintop/kis_brush_based_paintop_settings.cpp:251
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
@@ -54345,7 +54360,7 @@ msgstr "Потужність"
 msgid "Lightness Strength"
 msgstr "Потужність освітленості"
 
-#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:62
+#: plugins/paintops/libpaintop/KisTextureOptionData.cpp:64
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Texture->Pattern (low quality preview)"

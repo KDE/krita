@@ -23,7 +23,7 @@ windows-build:
       # TODO: bake this variable into the docker image
     - $env:PATH = "c:\Program Files\CMake\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\x86_64-w64-mingw32\bin;$env:PATH"
     - python -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared
+    - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared  --skip-publishing
     - python -u build-tools/ci-scripts/build-windows-package.py --skip-debug-package
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:

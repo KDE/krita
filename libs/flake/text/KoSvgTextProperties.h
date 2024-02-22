@@ -14,6 +14,8 @@
 #include <QVariant>
 #include <QList>
 
+#include <boost/operators.hpp>
+
 class SvgLoadingContext;
 class KoShapeBackground;
 
@@ -35,7 +37,7 @@ class KoShapeBackground;
  * QVariant-based comparison operator. If the property value in a child and a
  * parent is not the same, then it is not inherited.
  */
-class KRITAFLAKE_EXPORT KoSvgTextProperties
+class KRITAFLAKE_EXPORT KoSvgTextProperties : public boost::equality_comparable<KoSvgTextProperties>
 {
 public:
     /**

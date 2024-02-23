@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-22 01:36+0000\n"
+"POT-Creation-Date: 2024-02-23 01:34+0000\n"
 "PO-Revision-Date: 2024-02-19 05:58+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -12814,7 +12814,7 @@ msgstr "&შეტანა/გატანა"
 msgid "Import"
 msgstr "იმპორტი"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "&Convert"
 msgstr "&გარდაქმნა"
@@ -12822,14 +12822,14 @@ msgstr "&გარდაქმნა"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1218
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&არჩევა"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12850,7 +12850,7 @@ msgstr "&ყველა ფენის გარდაქმნა"
 msgid "S&plit"
 msgstr "&გაყოფა"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "ალფას &გაყოფა"
@@ -16290,7 +16290,7 @@ msgstr "%1-ის მორგება"
 msgid "Active tool: %1"
 msgstr "აქტიური ხელსაწყო: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1869
+#: libs/flake/svg/SvgParser.cpp:1870
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16299,31 +16299,31 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:68
-#: libs/flake/text/KoSvgTextShape.cpp:1339
+#: libs/flake/text/KoSvgTextShape.cpp:109
+#: libs/flake/text/KoSvgTextShape.cpp:1572
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "ადგილმჭერი ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1318
+#: libs/flake/text/KoSvgTextShape.cpp:1551
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1320
-#: libs/flake/text/KoSvgTextShape.cpp:1328
+#: libs/flake/text/KoSvgTextShape.cpp:1553
+#: libs/flake/text/KoSvgTextShape.cpp:1561
 #, kde-format
 msgid "SVG Text Shape"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1326
+#: libs/flake/text/KoSvgTextShape.cpp:1559
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG ტექსტი"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1349
+#: libs/flake/text/KoSvgTextShape.cpp:1582
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16344,8 +16344,8 @@ msgstr "ნაპოვნია უცნობი კვანძი ტიპ
 msgid "No 'text' node found!"
 msgstr "კვანძი ტიპით 'text' აღმოჩენილი არაა!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:365
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:807
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:831
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr ""
@@ -38131,23 +38131,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:998
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1020
+#: plugins/dockers/layerdocker/LayerBox.cpp:1018
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1237
-#: plugins/dockers/layerdocker/LayerBox.cpp:1260
+#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1258
 #, kde-format
 msgid "&Add"
 msgstr "&დამატება"
@@ -57202,7 +57202,23 @@ msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "ტექსტის ჩასმა"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Rich Text"
+msgstr "ტექსტის ჩასმა"
+
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Layer Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Properties"
+msgstr "ფენის თვისებების შეცვლა"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "ტექსტის წაშლა"

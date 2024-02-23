@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-22 01:36+0000\n"
-"PO-Revision-Date: 2024-02-14 09:32+0200\n"
+"POT-Creation-Date: 2024-02-23 01:34+0000\n"
+"PO-Revision-Date: 2024-02-22 08:51+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -12841,7 +12841,7 @@ msgstr "&Імпортування/Експортування"
 msgid "Import"
 msgstr "Імпортувати"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "&Convert"
 msgstr "П&еретворити"
@@ -12849,14 +12849,14 @@ msgstr "П&еретворити"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1218
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Вибір"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12877,7 +12877,7 @@ msgstr "Перетворити &усі шари"
 msgid "S&plit"
 msgstr "П&оділ"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Розділити прозорість"
@@ -16448,7 +16448,7 @@ msgstr "Параметри %1"
 msgid "Active tool: %1"
 msgstr "Активний засіб: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1869
+#: libs/flake/svg/SvgParser.cpp:1870
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16460,31 +16460,31 @@ msgstr ""
 "зберігатимете документ, текстовий об'єкт буде перетворено у формат Krita 5, "
 "який є несумісним із подальшим редагуванням у Krita 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:68
-#: libs/flake/text/KoSvgTextShape.cpp:1339
+#: libs/flake/text/KoSvgTextShape.cpp:109
+#: libs/flake/text/KoSvgTextShape.cpp:1572
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Текст-замінник"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1318
+#: libs/flake/text/KoSvgTextShape.cpp:1551
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1320
-#: libs/flake/text/KoSvgTextShape.cpp:1328
+#: libs/flake/text/KoSvgTextShape.cpp:1553
+#: libs/flake/text/KoSvgTextShape.cpp:1561
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма-текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1326
+#: libs/flake/text/KoSvgTextShape.cpp:1559
 #, kde-format
 msgid "SVG Text"
 msgstr "Текст SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1349
+#: libs/flake/text/KoSvgTextShape.cpp:1582
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16505,8 +16505,8 @@ msgstr "Виявлено невідомий вузол типу «%1»!"
 msgid "No 'text' node found!"
 msgstr "Не знайдено вузла «text»!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:365
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:807
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:831
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Невідома помилка під час спроби записати текстовий елемент SVG"
@@ -39798,27 +39798,27 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Показати пункт для позначення шарів та зняття з них позначення."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:998
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr ""
 "Маска швидкого позначення\n"
 "маску швидкого позначення"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1020
+#: plugins/dockers/layerdocker/LayerBox.cpp:1018
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr ""
 "Скасувати маску швидкого позначення\n"
 "скасування маски швидкого позначення"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Пе&ремкнути блокування і видимість"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1237
-#: plugins/dockers/layerdocker/LayerBox.cpp:1260
+#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1258
 #, kde-format
 msgid "&Add"
 msgstr "&Додати"
@@ -53555,13 +53555,15 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Застосувати менше текстури, якщо потужність нижча. Скористайтеся цим "
+"пунктом, якщо вам потрібен пензель для переходу між нетекстурованою і "
+"текстурованою поверхнями"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "Проба кольорів"
+msgstr "М'яке текстурування"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -59904,7 +59906,27 @@ msgstr ""
 "Вставити текст\n"
 "вставлення тексту"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Rich Text"
+msgstr ""
+"Вставити текст\n"
+"вставлення тексту"
+
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Layer Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Properties"
+msgstr ""
+"Змінити властивості шару\n"
+"зміну властивостей шару"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr ""

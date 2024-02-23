@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-22 01:36+0000\n"
-"PO-Revision-Date: 2024-02-15 18:22+0100\n"
+"POT-Creation-Date: 2024-02-23 01:34+0000\n"
+"PO-Revision-Date: 2024-02-22 06:44+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -12844,7 +12844,7 @@ msgstr "&Uvozi/izvozi"
 msgid "Import"
 msgstr "Uvozi"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "&Convert"
 msgstr "P&retvori"
@@ -12852,14 +12852,14 @@ msgstr "P&retvori"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1218
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "Iz&beri"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12880,7 +12880,7 @@ msgstr "Preoblikuj &vse plasti"
 msgid "S&plit"
 msgstr "&Razdeli"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Razdeli alfo"
@@ -16346,7 +16346,7 @@ msgstr "Možnosti za %1"
 msgid "Active tool: %1"
 msgstr "Dejavno orodje: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1869
+#: libs/flake/svg/SvgParser.cpp:1870
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16358,31 +16358,31 @@ msgstr ""
 "dokument, bo besedilni predmet pretvorjen v obliko Krita 5, ki ne bo več "
 "združljiv s Krito 4.x"
 
-#: libs/flake/text/KoSvgTextShape.cpp:68
-#: libs/flake/text/KoSvgTextShape.cpp:1339
+#: libs/flake/text/KoSvgTextShape.cpp:109
+#: libs/flake/text/KoSvgTextShape.cpp:1572
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Besedilo ograde"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1318
+#: libs/flake/text/KoSvgTextShape.cpp:1551
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Besedilo"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1320
-#: libs/flake/text/KoSvgTextShape.cpp:1328
+#: libs/flake/text/KoSvgTextShape.cpp:1553
+#: libs/flake/text/KoSvgTextShape.cpp:1561
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Besedilna oblika SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1326
+#: libs/flake/text/KoSvgTextShape.cpp:1559
 #, kde-format
 msgid "SVG Text"
 msgstr "Besedilo SVG"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1349
+#: libs/flake/text/KoSvgTextShape.cpp:1582
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16403,8 +16403,8 @@ msgstr "Najdeno neznano vozlišče vrste »%1«!"
 msgid "No 'text' node found!"
 msgstr "Nobenega »besedilnega« vozlišča ni mogoče najti!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:365
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:807
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:831
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "Neznana napaka pri pisanju besedilnega elementa SVG"
@@ -39203,23 +39203,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Pokaži potrditveno polje za izbor/preklic izbora plasti."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:998
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Maska za hiter izbor"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1020
+#: plugins/dockers/layerdocker/LayerBox.cpp:1018
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Prekliči masko za hitri izbor"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Preklopi zaklepe in vidljivost"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1237
-#: plugins/dockers/layerdocker/LayerBox.cpp:1260
+#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1258
 #, kde-format
 msgid "&Add"
 msgstr "Dod&aj"
@@ -52846,13 +52846,14 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Nanesite manj teksture, ko je moč nižja. To možnost uporabite, če želite, da "
+"čopič prehaja med neteksturiranim in teksturiranim videzom."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "Preverjanje videza"
+msgstr "Mehko teksturiranje"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -59091,7 +59092,23 @@ msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "Vstavi besedilo"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Insert Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Rich Text"
+msgstr "Vstavi besedilo"
+
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Layer Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Properties"
+msgstr "Spremeni lastnosti plasti"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
 msgstr "Odstrani besedilo"

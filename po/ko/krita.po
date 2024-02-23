@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-22 01:36+0000\n"
+"POT-Creation-Date: 2024-02-23 01:34+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -13704,7 +13704,7 @@ msgstr "가져오기/내보내기(&I)"
 msgid "Import"
 msgstr "가져오기"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1246
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
 #, kde-format
 msgid "&Convert"
 msgstr "변환(&C)"
@@ -13712,14 +13712,14 @@ msgstr "변환(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: plugins/dockers/layerdocker/LayerBox.cpp:1218
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "선택(&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, fuzzy, kde-format
 #| msgid "&Group"
 msgctxt "A group of layers"
@@ -13741,7 +13741,7 @@ msgstr "모든 레이어 변형(&A)"
 msgid "S&plit"
 msgstr "분할(&P)"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1255
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "알파 분할(&P)"
@@ -17272,7 +17272,7 @@ msgstr "%1 옵션"
 msgid "Active tool: %1"
 msgstr "활성 도구: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1869
+#: libs/flake/svg/SvgParser.cpp:1870
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -17281,8 +17281,8 @@ msgid ""
 "longer be compatible with Krita 4.x"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:68
-#: libs/flake/text/KoSvgTextShape.cpp:1339
+#: libs/flake/text/KoSvgTextShape.cpp:109
+#: libs/flake/text/KoSvgTextShape.cpp:1572
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -17290,24 +17290,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>텍스트를 입력하십시오</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1318
+#: libs/flake/text/KoSvgTextShape.cpp:1551
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1320
-#: libs/flake/text/KoSvgTextShape.cpp:1328
+#: libs/flake/text/KoSvgTextShape.cpp:1553
+#: libs/flake/text/KoSvgTextShape.cpp:1561
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 텍스트 모양"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1326
+#: libs/flake/text/KoSvgTextShape.cpp:1559
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 텍스트"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1349
+#: libs/flake/text/KoSvgTextShape.cpp:1582
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17328,8 +17328,8 @@ msgstr "알 수 없는 노드 형식 '%1'이(가) 있습니다!"
 msgid "No 'text' node found!"
 msgstr "'text' 노드를 찾을 수 없습니다!"
 
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:365
-#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:807
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
+#: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:831
 #, kde-format
 msgid "Unknown error writing SVG text element"
 msgstr "SVG text 원소를 기록하는 중 알 수 없는 오류"
@@ -40331,23 +40331,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:998
+#: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "빠른 선택 마스크"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1020
+#: plugins/dockers/layerdocker/LayerBox.cpp:1018
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "빠른 선택 마스크 취소"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1230
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "잠금 및 표시 전환(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1237
-#: plugins/dockers/layerdocker/LayerBox.cpp:1260
+#: plugins/dockers/layerdocker/LayerBox.cpp:1235
+#: plugins/dockers/layerdocker/LayerBox.cpp:1258
 #, kde-format
 msgid "&Add"
 msgstr "추가(&A)"
@@ -60402,7 +60402,22 @@ msgctxt "(qtundo-format)"
 msgid "Insert Text"
 msgstr "반전 텍스트"
 
-#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:26
+#: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
+#, fuzzy
+#| msgid "Inverted Text"
+msgctxt "(qtundo-format)"
+msgid "Insert Rich Text"
+msgstr "반전 텍스트"
+
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Layer Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Properties"
+msgstr "레이어 속성 변경"
+
+#: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 #, fuzzy
 #| msgctxt "@title:window"
 #| msgid "Remove Template"

@@ -173,6 +173,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-lame-Install-pkg-config-file.patch
 
     CONFIGURE_ARGS --prefix=${PREFIX_ext_ffmpeg}
+            -Dtools=disabled
             ${EXTRA_MESON_FLAGS}
 
     DEPENDS ${MESON_DEP} ${PKG_CONFIG_DEP} ext_libmp3lame_meson

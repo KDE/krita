@@ -6,6 +6,8 @@
 
 #include "kis_wdg_options_jpegxl.h"
 
+#include <jxl/version.h>
+
 #include <tuple>
 
 #include <KoColorModelStandardIds.h>
@@ -165,6 +167,11 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     lossyQuality->setValue(cfg->getInt("lossyQuality", 100));
     forceModular->setChecked(cfg->getBool("forceModular", false));
 
+#if JPEGXL_NUMERIC_VERSION < JPEGXL_COMPUTE_NUMERIC_VERSION(0, 9, 0)
+    losslessAlpha->setEnabled(false);
+#endif
+    losslessAlpha->setChecked(cfg->getBool("losslessAlpha", false));
+
     const int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, PRIMARIES_UNSPECIFIED);
     hdrConversionGrp->setEnabled(cfg->getBool(KisImportExportFilter::HDRTag, false)
                                  && cfg->getString(KisImportExportFilter::ColorModelIDTag) != GrayAColorModelID.id());
@@ -270,6 +277,7 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     cfg->setProperty("lossyQuality", lossyQuality->value());
     cfg->setProperty("forceModular", forceModular->isChecked());
     cfg->setProperty("modularSetVal", modular->currentData());
+    cfg->setProperty("losslessAlpha", losslessAlpha->isChecked());
 
     cfg->setProperty("forceCicpLossless", forceCicpLossless->isChecked());
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole).toString());

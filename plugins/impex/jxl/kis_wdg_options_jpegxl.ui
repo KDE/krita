@@ -122,6 +122,16 @@ Default: disabled.</string>
                </property>
               </widget>
              </item>
+             <item row="2" column="1">
+              <widget class="QCheckBox" name="losslessAlpha">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, this will set alpha channel (transparency) to lossless. Useful to reduce transparency artifact on lossy export.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Lossless alpha</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </widget>
           </item>

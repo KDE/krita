@@ -825,7 +825,33 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                                    : v >= 30 ? 0.1 + (100 - v) * 0.09
                                        : 53.0 / 3000.0 * v * v - 23.0 / 20.0 * v + 25.0;
             dbgFile << "libjxl distance equivalent: " << distance;
-            return JxlEncoderSetFrameDistance(frameSettings, distance) == JXL_ENC_SUCCESS;
+            if (JxlEncoderSetFrameDistance(frameSettings, distance) != JXL_ENC_SUCCESS) {
+                errFile << "JxlEncoderSetFrameDistance failed";
+                return false;
+            }
+#if JPEGXL_NUMERIC_VERSION >= JPEGXL_COMPUTE_NUMERIC_VERSION(0, 9, 0)
+            // Lossless alpha (extra channel), only available on libjxl 0.9.0+
+            if (!cfg->getBool("lossless")) {
+                if (cfg->getBool("losslessAlpha")) {
+                    if (JxlEncoderSetExtraChannelDistance(frameSettings,
+                                                          (cs->colorModelId() == CMYKAColorModelID) ? 1 : 0,
+                                                          0)
+                        != JXL_ENC_SUCCESS) {
+                        errFile << "JxlEncoderSetExtraChannelDistance failed";
+                        return false;
+                    }
+                } else {
+                    if (JxlEncoderSetExtraChannelDistance(frameSettings,
+                                                          (cs->colorModelId() == CMYKAColorModelID) ? 1 : 0,
+                                                          distance)
+                        != JXL_ENC_SUCCESS) {
+                        errFile << "JxlEncoderSetExtraChannelDistance failed";
+                        return false;
+                    }
+                }
+            }
+#endif
+            return true;
         };
 
         // XXX: Workaround for a buggy lossy F32.
@@ -1315,6 +1341,7 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     cfg->setProperty("lossyQuality", 100);
     cfg->setProperty("forceModular", false);
     cfg->setProperty("modularSetVal", -1);
+    cfg->setProperty("losslessAlpha", false);
 
     cfg->setProperty("forceCicpLossless", false);
     cfg->setProperty("floatingPointConversionOption", "KeepSame");

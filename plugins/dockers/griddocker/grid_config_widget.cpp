@@ -13,6 +13,7 @@
 #include "kis_aspect_ratio_locker.h"
 #include "kis_int_parse_spin_box.h"
 
+#include <kis_icon_utils.h>
 #include <kis_config.h>
 #include <kis_config_notifier.h>
 
@@ -47,7 +48,10 @@ GridConfigWidget::GridConfigWidget(QWidget *parent) :
     ui->angleLeftAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
     ui->angleRightAngleSelector->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_NoFlipOptions);
     ui->cellSpacingSpinbox->setSuffix(i18n(" px"));
+    ui->deleteAllGuidesButton->setIcon(KisIconUtils::loadIcon("edit-delete"));
+    ui->deleteAllGuidesButton->setIconSize(QSize(16, 16));
 
+    connect(ui->deleteAllGuidesButton, SIGNAL(clicked()), SLOT(removeAllGuides()));
 
     ui->gridTypeCombobox->addItem(i18n("Rectangle"));
     ui->gridTypeCombobox->addItem(i18n("Isometric"));
@@ -200,6 +204,12 @@ KisGridConfig GridConfigWidget::gridConfig() const
 KisGuidesConfig GridConfigWidget::guidesConfig() const
 {
     return m_d->guidesConfig;
+}
+
+
+void GridConfigWidget::removeAllGuides() {
+    m_d->guidesConfig.removeAllGuides();
+    emit guidesValueChanged();
 }
 
 KisGridConfig GridConfigWidget::fetchGuiGridConfig() const

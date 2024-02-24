@@ -287,14 +287,14 @@
            <property name="text">
             <string/>
            </property>
-           <property name="color">
+           <property name="color" stdset="0">
             <color>
              <red>0</red>
              <green>0</green>
              <blue>0</blue>
             </color>
            </property>
-           <property name="defaultColor">
+           <property name="defaultColor" stdset="0">
             <color>
              <red>0</red>
              <green>0</green>
@@ -627,14 +627,14 @@
              <property name="text">
               <string/>
              </property>
-             <property name="color">
+             <property name="color" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
                <blue>0</blue>
               </color>
              </property>
-             <property name="defaultColor">
+             <property name="defaultColor" stdset="0">
               <color>
                <red>0</red>
                <green>0</green>
@@ -644,6 +644,37 @@
             </widget>
            </item>
           </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="deleteAllGuidesButton">
+           <property name="text">
+            <string>All</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

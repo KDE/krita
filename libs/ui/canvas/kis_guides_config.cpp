@@ -108,6 +108,13 @@ void KisGuidesConfig::addGuideLine(Qt::Orientation o, qreal pos)
     }
 }
 
+void KisGuidesConfig::removeAllGuides()
+{
+    QList<qreal> emptyGuides ;
+    setVerticalGuideLines(emptyGuides);
+    setHorizontalGuideLines(emptyGuides);
+}
+
 bool KisGuidesConfig::showGuides() const
 {
     return d->showGuides;

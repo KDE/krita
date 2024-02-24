@@ -60,6 +60,7 @@ public:
      * @param position the position in document coordinates of the guide line
      */
     void addGuideLine(Qt::Orientation orientation, qreal position);
+    void removeAllGuides();
 
     bool showGuides() const;
     void setShowGuides(bool value);

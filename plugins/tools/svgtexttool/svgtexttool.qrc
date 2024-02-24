@@ -12,5 +12,6 @@
         <file>tool_text_i_beam_vertical.xpm</file>
         <file>tool_text_i_beam_horizontal_done.xpm</file>
         <file alias="GlyphPalette.qml">glyphpalette/GlyphPalette.qml</file>
+        <file alias="GlyphDelegate.qml">glyphpalette/GlyphDelegate.qml</file>
     </qresource>
 </RCC>

@@ -25,10 +25,10 @@ public:
     void setGlyphModelFromProperties(KoSvgTextProperties properties, QString text = QString());
 
 Q_SIGNALS:
-    void signalInsertRichText(KoSvgTextShape *text);
+    void signalInsertRichText(KoSvgTextShape *text, bool replace);
 public Q_SLOTS:
 
-    void slotInsertRichText(int charRow, int glyphRow = -1);
+    void slotInsertRichText(int charRow, int glyphRow = -1, bool replace = false);
 
     void slotChangeFilter(int filterRow);
 private:

@@ -114,7 +114,7 @@ private Q_SLOTS:
 
     void showGlyphPalette();
     void updateGlyphPalette();
-    void insertRichText(KoSvgTextShape *richText);
+    void insertRichText(KoSvgTextShape *richText, bool replaceLastGlyph = false);
 
     /**
      * @brief generateDefs

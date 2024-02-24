@@ -12,7 +12,6 @@ import org.krita.tools.text 1.0
 Rectangle {
     id: root;
     anchors.fill: parent;
-    property string titleText;
     property QtObject model;
     property QtObject charMapModel;
     property QtObject charMapFilterModel;
@@ -28,96 +27,18 @@ Rectangle {
     }
     color: palette.window
 
-    Text {
-        id: title;
-        text: titleText;
-        color: palette.text;
-
-        anchors.left: parent.left;
-        anchors.right: parent.right;
-        anchors.top: parent.top;
-    }
-
     TabBar {
         id: tabs;
+        anchors.top: parent.top;
         anchors.left: parent.left;
         anchors.right: parent.right;
-        anchors.top: title.bottom;
 
+        /// How are we going to translate this?
         TabButton {
             text: "Glyph Alternates"
         }
         TabButton {
             text: "Character Map"
-        }
-    }
-
-    Component {
-        id: glyphDelegate;
-
-        SvgTextLabel {
-            id: glyphLabel;
-            textColor: palette.text;
-            fillColor: palette.base;
-            fontFamilies: root.fontFamilies;
-            fontSize: root.fontSize;
-            fontStyle: root.fontStyle;
-            fontWeight: root.fontWeight;
-            openTypeFeatures: model.openType;
-            text: model.display;
-            padding: height/8;
-            clip: true;
-
-            width: GridView.view.cellWidth;
-            height: GridView.view.cellHeight;
-
-            property bool currentItem: GridView.isCurrentItem;
-
-            Rectangle {
-                anchors.fill: parent;
-                color: "transparent";
-                border.color: parent.currentItem? palette.highlight: palette.alternateBase;
-                border.width: parent.currentItem? 2: 1;
-            }
-            Rectangle {
-                anchors.top: parent.top;
-                anchors.left: parent.left;
-                color: palette.text;
-                opacity: 0.3;
-                layer.enabled: true
-                width: childrenRect.width;
-                height: childrenRect.height;
-                Text {
-                    padding: 2;
-                    text: model.glyphLabel;
-                    color: palette.base;
-                    font.pointSize: 9;
-                }
-                visible: glyphMouseArea.containsMouse;
-            }
-            Rectangle {
-                anchors.top: parent.top;
-                anchors.right: parent.right;
-                width: 8;
-                height: 8;
-                radius: 4;
-                color: palette.text;
-                opacity: 0.3;
-                visible: model.childCount > 1;
-            }
-
-            MouseArea {
-                anchors.fill: parent;
-                id: glyphMouseArea
-                onClicked: {
-                    parent.GridView.view.currentIndex = index;
-                }
-                onDoubleClicked: {model.childCount === 0? mainWindow.slotInsertRichText(root.currentIndex, index): mainWindow.slotInsertRichText(index)}
-                hoverEnabled: true;
-                ToolTip.text: model.toolTip;
-                ToolTip.visible: containsMouse;
-                ToolTip.delay: 1000;
-            }
         }
     }
 
@@ -142,7 +63,15 @@ Rectangle {
                     rootIndex = modelIndex(root.currentIndex);
                 }
 
-                delegate: glyphDelegate;
+                delegate: GlyphDelegate {
+                    textColor: palette.text;
+                    fillColor: palette.base;
+                    fontFamilies: root.fontFamilies;
+                    fontSize: root.fontSize;
+                    fontStyle: root.fontStyle;
+                    fontWeight: root.fontWeight;
+                    onGlyphDoubleClicked: (index)=> {mainWindow.slotInsertRichText(root.currentIndex, index, true)};
+                }
 
             }
             focus: true;
@@ -169,7 +98,6 @@ Rectangle {
 
                 onCurrentIndexChanged: {
                     mainWindow.slotChangeFilter(currentIndex);
-                    console.log(currentIndex)
                 }
 
                 clip: true;
@@ -197,10 +125,72 @@ Rectangle {
                 cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
                 cellHeight: cellWidth;
 
-                delegate: glyphDelegate;
+                delegate: GlyphDelegate {
+                    textColor: palette.text;
+                    fillColor: palette.base;
+                    fontFamilies: root.fontFamilies;
+                    fontSize: root.fontSize;
+                    fontStyle: root.fontStyle;
+                    fontWeight: root.fontWeight;
+                    onGlyphDoubleClicked: (index)=> {mainWindow.slotInsertRichText(index)};
+                    onGlyphClicked: (index)=> {
+                                        if (model.childCount > 1){
+                                            charMapAltGlyphs.open()
+                                        }
+                                    }
+                }
 
                 ScrollBar.vertical: ScrollBar {
                     id: charMapScroll;
+                }
+
+                Popup {
+                    id: charMapAltGlyphs
+                    x: 0
+                    y: 0
+                    width: charMap.width
+                    height: charMap.cellHeight*3;
+                    modal: true
+                    focus: true
+                    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                    GridView {
+                        anchors.fill: parent;
+
+                        cellWidth: (width - charMapAltGlyphsScroll.implicitBackgroundWidth)/8;
+                        cellHeight: cellWidth;
+
+                        ScrollBar.vertical: ScrollBar {
+                            id: charMapAltGlyphsScroll;
+                        }
+
+                        model: DelegateModel {
+                            model: charMap.model
+                            property alias rIndex: charMap.currentIndex;
+                            property var defaultIndex: modelIndex(-1);
+                            onRIndexChanged: {
+                                rootIndex = defaultIndex;
+                                rootIndex = modelIndex(rIndex);
+                            }
+
+                            delegate: GlyphDelegate {
+                                textColor: palette.text;
+                                fillColor: palette.base;
+                                fontFamilies: root.fontFamilies;
+                                fontSize: root.fontSize;
+                                fontStyle: root.fontStyle;
+                                fontWeight: root.fontWeight;
+                                onGlyphDoubleClicked: (index)=> {
+                                                          mainWindow.slotInsertRichText(charMap.currentIndex, index);
+                                                          charMapAltGlyphs.close()
+                                                      };
+                                onGlyphClicked: (index)=> {
+                                                    mainWindow.slotInsertRichText(charMap.currentIndex, index);
+                                                    charMapAltGlyphs.close()
+                                                };
+                            }
+
+                        }
+                    }
                 }
 
             }

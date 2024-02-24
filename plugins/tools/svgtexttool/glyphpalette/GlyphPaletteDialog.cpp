@@ -10,6 +10,8 @@
 #include <QQuickItem>
 #include <QHBoxLayout>
 
+#include <KLocalizedString>
+
 #include <KoResourcePaths.h>
 #include <KoFontGlyphModel.h>
 #include <KoFontRegistry.h>
@@ -43,6 +45,8 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/GlyphPalette.qml"));
 
+    this->setWindowTitle(i18nc("@windowTitle", "Glyph Palette"));
+
     m_charMapModel->setSourceModel(m_model);
     for (int i = 0; i< m_charMapModel->filterLabels().size(); i++) {
         int key = m_charMapModel->filterLabels().keys().at(i);
@@ -53,7 +57,6 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     }
 
     if (m_quickWidget->rootObject()) {
-        m_quickWidget->rootObject()->setProperty("titleText", "Glyph palette");
         m_quickWidget->rootObject()->setProperty("model", QVariant::fromValue(m_model));
         m_quickWidget->rootObject()->setProperty("charMapModel", QVariant::fromValue(m_charMapModel));
         m_quickWidget->rootObject()->setProperty("charMapFilterModel", QVariant::fromValue(m_filters));
@@ -103,7 +106,6 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
     QModelIndex idx = m_model->indexForString(text);
     if (m_quickWidget->rootObject()) {
         QString name = faces.front().data()->family_name;
-        m_quickWidget->rootObject()->setProperty("titleText", QString("Glyph palette: "+name));
         m_quickWidget->rootObject()->setProperty("fontFamilies", QVariant::fromValue(families));
         m_quickWidget->rootObject()->setProperty("fontSize", QVariant::fromValue(size));
         m_quickWidget->rootObject()->setProperty("fontWeight", QVariant::fromValue(weight));
@@ -115,7 +117,7 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
     m_lastUsedProperties = properties;
 }
 
-void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow)
+void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow, bool replace)
 {
     if (m_quickWidget->rootObject()) {
         QModelIndex idx = glyphRow > -1? m_model->index(charRow, 0): m_charMapModel->index(charRow, 0);
@@ -134,7 +136,7 @@ void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow)
 
         richText->setPropertiesAtPos(-1, props);
         richText->insertText(0, text);
-        emit signalInsertRichText(richText);
+        emit signalInsertRichText(richText, replace);
     }
 
 }

@@ -559,6 +559,12 @@ public:
     bool trimFramesImport(bool defaultValue = false) const;
     void setTrimFramesImport(bool trim);
 
+    int exportFileType(bool defaultValue = false) const;
+    void setExportFileType(int defaultExport);
+
+    QString exportMimeType(bool defaultValue) const;
+    void setExportMimeType(const QString &defaultExportMimeType);
+
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 

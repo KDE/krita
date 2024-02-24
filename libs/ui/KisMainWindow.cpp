@@ -1340,7 +1340,12 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             dialog.setDefaultDir(proposedPath + "/" + proposedFileName + "." + proposedExtension, true);
             dialog.setMimeTypeFilters(mimeFilter, proposedMimeType);
         }
-        else {
+        else { 
+            //This section only runs when the user haven't exported yet during the session, behavior set in the File Handling, Default MimeType setting.
+            KisConfig cfg(true);
+            QByteArray default_mime_type = cfg.exportMimeType(false).toUtf8();
+            QString proposedMimeType = QString::fromLatin1(default_mime_type);
+
             // Get the last used location for saving
             KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
             QString proposedPath = group.readEntry("SaveAs", "");
@@ -1354,12 +1359,19 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             }
             // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
             // open the location where the document currently is.
-            dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : suggestedURL.toLocalFile(), true);
 
-            // If exporting, default to all supported file types if user is exporting
-            QByteArray default_mime_type = "";
+            if(default_mime_type != ""){
+                QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
+                //This line is responsible for setting filename, which also manipulates filters.
+                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath :  QFileInfo(suggestedURL.toLocalFile()).completeBaseName() + "." + proposedExtension, true);
+            }
+            //For if the user picked All Files Supported as the default, where there would not be an extension
+            else{
+                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : QFileInfo(suggestedURL.toLocalFile()).completeBaseName(), true);
+            }
+
             if (!isExporting) {
-                // otherwise use the document's mimetype, or if that is empty, kra, which is the safest.
+                // If Saving, use the document's mimetype, or if that is empty, kra, which is the safest.
                 default_mime_type = document->mimeType().isEmpty() ? nativeFormat : document->mimeType();
             }
             dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));

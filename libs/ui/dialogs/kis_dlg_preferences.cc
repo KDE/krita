@@ -79,7 +79,7 @@
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
 #include "KisMainWindow.h"
-
+#include "KisMimeDatabase.h"
 #include "kis_file_name_requester.h"
 
 #include "slider_and_spin_box_sync.h"
@@ -356,6 +356,30 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     QValidator *validator = new BackupSuffixValidator(txtBackupFileSuffix);
     txtBackupFileSuffix->setValidator(validator);
     intNumBackupFiles->setValue(cfg.readEntry<int>("numberofbackupfiles", 1));
+
+    cmbDefaultExportFileType->clear(); 
+    QStringList mimeFilter = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
+
+        QMap<QString, QString> mimeTypeMap;
+
+        foreach (const QString &mimeType, mimeFilter) {
+            QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
+            mimeTypeMap.insert(description, mimeType);
+        }
+
+        // Sort after we get the description because mimeType values have image, application, etc... in front
+        QStringList sortedDescriptions = mimeTypeMap.keys();
+        sortedDescriptions.sort(Qt::CaseInsensitive);
+
+        cmbDefaultExportFileType->addItem(i18n("All Supported Files"));
+        foreach (const QString &description, sortedDescriptions) {
+            const QString &mimeType = mimeTypeMap.value(description);
+            cmbDefaultExportFileType->addItem(description, mimeType);
+        }
+
+
+    cmbDefaultExportFileType->setCurrentIndex(cfg.exportFileType(false));
+    QString selectedMimeType = cmbDefaultExportFileType->currentData().toString();
 
     //
     // Miscellaneous
@@ -812,6 +836,16 @@ bool GeneralTab::trimKra()
 bool GeneralTab::trimFramesImport()
 {
     return m_chkTrimFramesImport->isChecked();
+}
+
+int GeneralTab::exportFileType()
+{
+    return cmbDefaultExportFileType->currentIndex();
+}
+
+QString GeneralTab::exportMimeType()
+{
+    return cmbDefaultExportFileType->currentData().toString();
 }
 
 bool GeneralTab::useZip64()
@@ -2326,6 +2360,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCompressKra(m_general->compressKra());
         cfg.setTrimKra(m_general->trimKra());
         cfg.setTrimFramesImport(m_general->trimFramesImport());
+        cfg.setExportFileType(m_general->exportFileType());
+        cfg.setExportMimeType(m_general->exportMimeType());
         cfg.setUseZip64(m_general->useZip64());
         cfg.setPasteFormat(m_general->m_pasteFormatGroup.checkedId());
 

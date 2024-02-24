@@ -94,7 +94,8 @@ public:
     bool adaptivePlaybackRange();
     bool renameMergedLayers();
     bool renamePastedLayers();
-
+    int exportFileType();
+    QString exportMimeType();
     int forcedFontDpi();
 
 private Q_SLOTS:

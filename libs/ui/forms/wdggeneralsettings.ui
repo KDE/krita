@@ -1032,17 +1032,20 @@
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
-        <spacer name="verticalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
+        <widget class="QGroupBox" name="m_defaultExportFileTypeBox">
+         <layout class="QFormLayout" name="formLayout_15">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Default Export Filetype: </string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="cmbDefaultExportFileType"/>
+          </item>
+         </layout>
+        </widget>
        </item>
       </layout>
      </widget>

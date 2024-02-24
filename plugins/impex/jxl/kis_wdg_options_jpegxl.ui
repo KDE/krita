@@ -249,84 +249,125 @@ Default is 0.</string>
       <attribute name="title">
        <string>Conversion settings</string>
       </attribute>
-      <layout class="QFormLayout" name="formLayout">
-       <item row="0" column="0" colspan="2">
-        <widget class="QLabel" name="explanationLabel">
-         <property name="text">
-          <string>Applications like Google Chrome expect HDR images to store their color profile as CICP values. You can adjust the ICC profile conversion below.</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignJustify|Qt::AlignVCenter</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="spaceLabel">
-         <property name="text">
-          <string>Space:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QComboBox" name="cmbConversionPolicy"/>
-       </item>
-       <item row="2" column="0" colspan="2">
-        <widget class="QGroupBox" name="chkHLGOOTF">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita currently cannot send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QGroupBox" name="colorProfileGrp">
          <property name="title">
-          <string>Apply reverse Hybrid Log Gamma OOTF</string>
+          <string>Color profile</string>
          </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <layout class="QFormLayout" name="formLayout_9">
+         <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>Gamma:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="spnGamma">
+           <widget class="QCheckBox" name="forceCicpLossless">
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use CICP if ICC profile is convertible to CICP on lossless, otherwise keep using ICC. Useful to make filesize even smaller (eg. for web delivery).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
-            <property name="maximum">
-             <double>3.000000000000000</double>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>Brightness:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="spnNits">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The display brightness in nits. By default this is set to 1000 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="suffix">
-             <string> cd/m²</string>
-            </property>
-            <property name="maximum">
-             <double>100000.000000000000000</double>
-            </property>
-            <property name="value">
-             <double>0.000000000000000</double>
+             <string>(Lossless) Use CICP instead of ICC if possible</string>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="hdrConversionGrp">
+         <property name="title">
+          <string>HDR conversion</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="explanationLabel">
+            <property name="text">
+             <string>Applications like Google Chrome expect HDR images to store their color profile as CICP values. You can adjust the ICC profile conversion below.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="spaceLabel">
+            <property name="text">
+             <string>Space:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="cmbConversionPolicy"/>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QGroupBox" name="chkHLGOOTF">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita currently cannot send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="title">
+             <string>Apply reverse Hybrid Log Gamma OOTF</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <layout class="QFormLayout" name="formLayout_9">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Gamma:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="spnGamma">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="maximum">
+                <double>3.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Brightness:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="spnNits">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The display brightness in nits. By default this is set to 1000 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="suffix">
+                <string> cd/m²</string>
+               </property>
+               <property name="maximum">
+                <double>100000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

@@ -640,9 +640,12 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 
         const ColorPrimaries primaries = cs->profile()->getColorPrimaries();
 
-        if ((cfg->getBool("lossless") && conversionPolicy == ConversionPolicy::KeepTheSame)
+        if ((cfg->getBool("lossless") && conversionPolicy == ConversionPolicy::KeepTheSame
+             && !cfg->getBool("forceCicpLossless"))
             || (!hasPrimaries && !(cs->colorModelId() == GrayAColorModelID)) || !isSupportedTRC) {
             const QByteArray profile = cs->profile()->rawData();
+
+            dbgFile << "Saving with ICC profile";
 
             if (JXL_ENC_SUCCESS
                 != JxlEncoderSetICCProfile(enc.get(), reinterpret_cast<const uint8_t *>(profile.constData()), static_cast<size_t>(profile.size()))) {
@@ -650,6 +653,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 return ImportExportCodes::InternalError;
             }
         } else {
+            dbgFile << "Saving with CICP profile";
+
             if (cs->colorModelId() == GrayAColorModelID) {
                 // XXX: JXL can't parse custom white point for grayscale (yet) and returned as linear on roundtrip so
                 // let's use default D65 as whitepoint instead...
@@ -1311,6 +1316,7 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     cfg->setProperty("forceModular", false);
     cfg->setProperty("modularSetVal", -1);
 
+    cfg->setProperty("forceCicpLossless", false);
     cfg->setProperty("floatingPointConversionOption", "KeepSame");
     cfg->setProperty("HLGnominalPeak", 1000.0);
     cfg->setProperty("HLGgamma", 1.2);

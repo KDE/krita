@@ -166,8 +166,10 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     forceModular->setChecked(cfg->getBool("forceModular", false));
 
     const int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, PRIMARIES_UNSPECIFIED);
-    tabWidget->setTabEnabled(1, cfg->getBool(KisImportExportFilter::HDRTag, false)
-                                   && cfg->getString(KisImportExportFilter::ColorModelIDTag) != GrayAColorModelID.id());
+    hdrConversionGrp->setEnabled(cfg->getBool(KisImportExportFilter::HDRTag, false)
+                                 && cfg->getString(KisImportExportFilter::ColorModelIDTag) != GrayAColorModelID.id());
+    forceCicpLossless->setChecked(cfg->getBool("forceCicpLossless", false));
+
     SpaceList conversionOptionsList = {
         {i18nc("Color space option", "Save as is"),
          i18nc("@tooltip",
@@ -269,6 +271,7 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     cfg->setProperty("forceModular", forceModular->isChecked());
     cfg->setProperty("modularSetVal", modular->currentData());
 
+    cfg->setProperty("forceCicpLossless", forceCicpLossless->isChecked());
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole).toString());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-23 01:34+0000\n"
+"POT-Creation-Date: 2024-02-24 01:32+0000\n"
 "PO-Revision-Date: 2024-01-01 20:13+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -16816,14 +16816,16 @@ msgstr "Storlek"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
-#: plugins/tools/basictools/kis_tool_fill.cc:583
-#: plugins/tools/basictools/kis_tool_fill.cc:595
+#: plugins/tools/basictools/kis_tool_fill.cc:575
+#: plugins/tools/basictools/kis_tool_fill.cc:591
+#: plugins/tools/basictools/kis_tool_fill.cc:603
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:486
 #: plugins/tools/basictools/kis_tool_multihand.cpp:497
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -25872,7 +25874,7 @@ msgstr "Bakgrundsfärg"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Pattern"
@@ -27618,7 +27620,7 @@ msgstr "Linje:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/basictools/kis_tool_fill.cc:634
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Foreground color"
@@ -27628,7 +27630,7 @@ msgstr "Förgrundsfärg"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Background color"
@@ -29573,7 +29575,7 @@ msgstr "Välj penselförinställning"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
-#: plugins/tools/basictools/kis_tool_fill.cc:550
+#: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
 #, kde-format
@@ -34223,7 +34225,7 @@ msgid "No Preview for this engine"
 msgstr "Ingen förhandsgranskning för det här gränssnittet"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:576
+#: plugins/tools/basictools/kis_tool_fill.cc:584
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
@@ -34299,7 +34301,7 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Öka eller minska markeringen med angivet värde"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/basictools/kis_tool_fill.cc:644
+#: plugins/tools/basictools/kis_tool_fill.cc:653
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
@@ -57224,7 +57226,7 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Fyll ut"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:542
+#: plugins/tools/basictools/kis_tool_fill.cc:544
 #, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
@@ -57232,19 +57234,19 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Skala: {n} %"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:546
+#: plugins/tools/basictools/kis_tool_fill.cc:548
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, kde-format
 msgid "Use custom blending options"
 msgstr "Använd egna blandningsalternativ"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:561
+#: plugins/tools/basictools/kis_tool_fill.cc:563
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Tröskel: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:568
+#: plugins/tools/basictools/kis_tool_fill.cc:570
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
@@ -57252,7 +57254,14 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Spridning: {n} %"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:572
+#: plugins/tools/basictools/kis_tool_fill.cc:573
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in fill tool options"
+msgid "Close Gap: "
+msgstr "Stäng"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
@@ -57260,86 +57269,86 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Använd markering som gräns"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:580
+#: plugins/tools/basictools/kis_tool_fill.cc:588
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Öka: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:592
+#: plugins/tools/basictools/kis_tool_fill.cc:600
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Vävning: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:619
+#: plugins/tools/basictools/kis_tool_fill.cc:627
 #, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Återställ"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:630
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Fyll i den aktiva markeringen, eller hela duken"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:623
+#: plugins/tools/basictools/kis_tool_fill.cc:631
 #, kde-format
 msgid "Fill a contiguous region"
 msgstr "Fyll i ett sammanhängande område"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:624
+#: plugins/tools/basictools/kis_tool_fill.cc:632
 #, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Fyll i alla områden med liknande färg"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Ställ in mönstrets skala"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:630
+#: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Ställ in mönstrets rotation"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/basictools/kis_tool_fill.cc:639
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr "Ange egna blandningsalternativ istället för att använda penselns"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Ställ in egen ogenomskinlighet för ifyllnad"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:641
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Ställ in eget blandningsläge för ifyllnad"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:643
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr "Fyll i områden med en färg som liknar det klickade området"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
+#: plugins/tools/basictools/kis_tool_fill.cc:644
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Markera alla områden till en specifik kantfärg"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, kde-format
 msgid "Boundary color"
 msgstr "Kantfärg"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/basictools/kis_tool_fill.cc:646
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid ""
@@ -57349,7 +57358,7 @@ msgstr ""
 "Ange ifyllnadens tolerans för färglikhet Att öka tröskeln ökar omfattningen "
 "av liknande färger som fylls i."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:639
+#: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
@@ -57359,7 +57368,13 @@ msgstr ""
 "Ange utsträckning av ifyllnadens ogenomskinliga del Att minska spridning "
 "minskar ogenomskinligheten hos ifyllda områden beroende på färglikhet."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:640
+#: plugins/tools/basictools/kis_tool_fill.cc:648
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
+msgid "Close gaps in lines up to the set amount"
+msgstr "Gör markeringen suddig med angivet värde"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid ""
@@ -57369,37 +57384,37 @@ msgstr ""
 "Aktivera om den aktuella markeringens kontur ska behandlas som en gräns när "
 "området fylls i"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:642
+#: plugins/tools/basictools/kis_tool_fill.cc:651
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Jämnar ut ifyllnadens kanter"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:643
+#: plugins/tools/basictools/kis_tool_fill.cc:652
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Öka eller minska ifyllnad med angivet värde"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/basictools/kis_tool_fill.cc:654
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Gör ifyllnad suddigt med angivet värde"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/basictools/kis_tool_fill.cc:656
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Fyll i området hittade från det aktiva lagret"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Fyll i områden som hittas från sammanfogning av alla lager"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:649
+#: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, kde-format
 msgid ""
@@ -57408,12 +57423,12 @@ msgstr ""
 "Fyll i områden som hittas från sammanfogning av lager med specifika "
 "färgbeteckningar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:651
+#: plugins/tools/basictools/kis_tool_fill.cc:660
 #, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "Att dra fyller i områden med vilken färg som helst"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:652
+#: plugins/tools/basictools/kis_tool_fill.cc:661
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
@@ -57422,49 +57437,49 @@ msgstr ""
 "Att dra fyller bara i områden med en färg som liknar det ursprungliga "
 "området (användbart för att fylla i teckningar)"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:654
+#: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Återställ alternativen till sina standardvärden"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:663
+#: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Ifyllnadsläge"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:670
+#: plugins/tools/basictools/kis_tool_fill.cc:679
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Ifyllnadskälla"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:684
+#: plugins/tools/basictools/kis_tool_fill.cc:693
 #, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Referens"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:693
+#: plugins/tools/basictools/kis_tool_fill.cc:702
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Ifyllnadsutsträckning"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:705
+#: plugins/tools/basictools/kis_tool_fill.cc:715
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Justeringar"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:714
+#: plugins/tools/basictools/kis_tool_fill.cc:724
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr "Drag och fyll"
 
-#: plugins/tools/basictools/kis_tool_fill.h:234
+#: plugins/tools/basictools/kis_tool_fill.h:237
 #, kde-format
 msgid "Fill Tool"
 msgstr "Fyllverktyg"
@@ -58554,18 +58569,18 @@ msgid "Contiguous Area Selection"
 msgstr "Markera sammanhängande områden"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:111
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:236
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "Markera sammanhängande område"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:379
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Tröskel: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
@@ -58573,7 +58588,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Spridning: {n} %"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
@@ -58581,17 +58596,17 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Använd markering som gräns"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr "Markera områden med en färg som liknar det klickade området"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Markera alla områden till en specifik kantfärg"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:250
 #, kde-format
@@ -58602,7 +58617,7 @@ msgstr ""
 "Ange markeringens tolerans för färglikhet. Att öka tröskeln ökar "
 "omfattningen av liknande färger som markeras."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
 #, kde-format
 msgid ""
@@ -58612,7 +58627,7 @@ msgstr ""
 "Ange utsträckning av markeringens ogenomskinliga del. Att minska spridning "
 "minskar ogenomskinligheten hos markerade områden beroende på färglikhet."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:408
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -58621,14 +58636,21 @@ msgstr ""
 "Aktivera om den aktiva markeringens kontur ska behandlas som en gräns när en "
 "ny markering görs"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
+msgid "Close Gap: "
+msgstr "Stäng"
+
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
 msgstr "Markeringens utsträckning"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
 #, kde-format
 msgid "Contiguous Selection Tool"
 msgstr "Sammanhängande markeringsverktyg"

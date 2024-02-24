@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-23 01:34+0000\n"
+"POT-Creation-Date: 2024-02-24 01:32+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -17281,14 +17281,16 @@ msgstr "Veličina"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
-#: plugins/tools/basictools/kis_tool_fill.cc:583
-#: plugins/tools/basictools/kis_tool_fill.cc:595
+#: plugins/tools/basictools/kis_tool_fill.cc:575
+#: plugins/tools/basictools/kis_tool_fill.cc:591
+#: plugins/tools/basictools/kis_tool_fill.cc:603
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:486
 #: plugins/tools/basictools/kis_tool_multihand.cpp:497
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -26778,7 +26780,7 @@ msgstr "Boja pozadine"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Pattern"
@@ -28524,7 +28526,7 @@ msgstr "Linija"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/basictools/kis_tool_fill.cc:634
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, fuzzy, kde-format
 #| msgid "Foreground Color"
@@ -28535,7 +28537,7 @@ msgstr "Boja iscrtavanja"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Background color"
@@ -30590,7 +30592,7 @@ msgstr "Izaberi pripremljene postavke četke"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
-#: plugins/tools/basictools/kis_tool_fill.cc:550
+#: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
 #, fuzzy, kde-format
@@ -35164,7 +35166,7 @@ msgid "No Preview for this engine"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:576
+#: plugins/tools/basictools/kis_tool_fill.cc:584
 #, fuzzy, kde-format
 #| msgid "Anti-aliasing"
 msgctxt "The anti-alias checkbox in fill tool options"
@@ -35250,7 +35252,7 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Povećaj/Smanji izbor: "
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/basictools/kis_tool_fill.cc:644
+#: plugins/tools/basictools/kis_tool_fill.cc:653
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
@@ -59205,7 +59207,7 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Popunjavanje"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:542
+#: plugins/tools/basictools/kis_tool_fill.cc:544
 #, fuzzy, kde-format
 #| msgid "Scale: "
 msgctxt ""
@@ -59214,21 +59216,21 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Razmjera: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:546
+#: plugins/tools/basictools/kis_tool_fill.cc:548
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, fuzzy, kde-format
 #| msgid "Hatching options"
 msgid "Use custom blending options"
 msgstr "Opcije šrafure"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:561
+#: plugins/tools/basictools/kis_tool_fill.cc:563
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Prag: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:568
+#: plugins/tools/basictools/kis_tool_fill.cc:570
 #, fuzzy, kde-format
 #| msgid "Opacity:"
 msgctxt ""
@@ -59237,7 +59239,14 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Providnost:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:572
+#: plugins/tools/basictools/kis_tool_fill.cc:573
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in fill tool options"
+msgid "Close Gap: "
+msgstr "Zatvori"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:580
 #, fuzzy, kde-format
 #| msgid "Border selection by"
 msgctxt ""
@@ -59246,93 +59255,93 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Izbor granica za"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:580
+#: plugins/tools/basictools/kis_tool_fill.cc:588
 #, fuzzy, kde-format
 #| msgid "Grow"
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Izrasti"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:592
+#: plugins/tools/basictools/kis_tool_fill.cc:600
 #, fuzzy, kde-format
 #| msgid "Feather radius:"
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Poluprečnik perja:"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:619
+#: plugins/tools/basictools/kis_tool_fill.cc:627
 #, fuzzy, kde-format
 #| msgid "Reset"
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Resetuj"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:630
 #, fuzzy, kde-format
 #| msgid "Failed to save the selection for filter mask %1."
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Nije uspijelo spašavanje selekcije za filter masku %1."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:623
+#: plugins/tools/basictools/kis_tool_fill.cc:631
 #, fuzzy, kde-format
 msgid "Fill a contiguous region"
 msgstr "Umetni Ime"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:624
+#: plugins/tools/basictools/kis_tool_fill.cc:632
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill all regions of a similar color"
 msgstr "Popuni područje  bojom pozadine"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, fuzzy, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Izaberi način miješanja za sloj"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:630
+#: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, fuzzy, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Izaberi način miješanja za sloj"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/basictools/kis_tool_fill.cc:639
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, fuzzy, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Izaberi način miješanja za sloj"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:641
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, fuzzy, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Izaberi način miješanja za sloj"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:643
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
+#: plugins/tools/basictools/kis_tool_fill.cc:644
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill all regions until a specific boundary color"
 msgstr "Popuni područje  bojom pozadine"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
 msgstr "Boja pozadine"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/basictools/kis_tool_fill.cc:646
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid ""
@@ -59340,7 +59349,7 @@ msgid ""
 "increases the range of similar colors to be filled."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:639
+#: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
@@ -59348,7 +59357,12 @@ msgid ""
 "decreases opacity of fill areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:640
+#: plugins/tools/basictools/kis_tool_fill.cc:648
+#, kde-format
+msgid "Close gaps in lines up to the set amount"
+msgstr ""
+
+#: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid ""
@@ -59356,38 +59370,38 @@ msgid ""
 "when filling the region"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:642
+#: plugins/tools/basictools/kis_tool_fill.cc:651
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:643
+#: plugins/tools/basictools/kis_tool_fill.cc:652
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/basictools/kis_tool_fill.cc:654
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/basictools/kis_tool_fill.cc:656
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill regions found from the active layer"
 msgstr "Popuni područje  bojom pozadine"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:649
+#: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
@@ -59395,66 +59409,66 @@ msgid ""
 "Fill regions found from the merging of layers with specific color labels"
 msgstr "Popuni područje  bojom pozadine"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:651
+#: plugins/tools/basictools/kis_tool_fill.cc:660
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Dragging will fill regions of any color"
 msgstr "Popuni područje  bojom pozadine"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:652
+#: plugins/tools/basictools/kis_tool_fill.cc:661
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
 "(useful for filling line-art)"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.cc:654
+#: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
 #, fuzzy, kde-format
 msgid "Reset the options to their default values"
 msgstr "Resetuj na podrazumijevano"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:663
+#: plugins/tools/basictools/kis_tool_fill.cc:672
 #, fuzzy, kde-format
 #| msgid "Simple mode"
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Jednostavni režim"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:670
+#: plugins/tools/basictools/kis_tool_fill.cc:679
 #, fuzzy, kde-format
 #| msgid "Add Resources"
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Dodaj resurse"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:684
+#: plugins/tools/basictools/kis_tool_fill.cc:693
 #, fuzzy, kde-format
 #| msgid "References"
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Reference"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:693
+#: plugins/tools/basictools/kis_tool_fill.cc:702
 #, fuzzy, kde-format
 #| msgid "&Image Selection"
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "&Izbor slike"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:705
+#: plugins/tools/basictools/kis_tool_fill.cc:715
 #, fuzzy, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "&HSV prilagođenje..."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:714
+#: plugins/tools/basictools/kis_tool_fill.cc:724
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_fill.h:234
+#: plugins/tools/basictools/kis_tool_fill.h:237
 #, fuzzy, kde-format
 msgid "Fill Tool"
 msgstr "Alat za elipse"
@@ -60596,19 +60610,19 @@ msgid "Contiguous Area Selection"
 msgstr "Izbor dodirne oblasti"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:111
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:236
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "Selektiraj susjednu oblast"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:379
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Prag: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
 #, fuzzy, kde-format
 #| msgid "Opacity:"
 msgctxt ""
@@ -60617,7 +60631,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Providnost:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, fuzzy, kde-format
 #| msgid "Border selection by"
 msgctxt ""
@@ -60626,18 +60640,18 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Izbor granica za"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Select all regions until a specific boundary color"
 msgstr "Popuni područje  bojom pozadine"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:250
 #, kde-format
@@ -60646,7 +60660,7 @@ msgid ""
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
 #, kde-format
 msgid ""
@@ -60654,14 +60668,21 @@ msgid ""
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:408
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
+msgid "Close Gap: "
+msgstr "Zatvori"
+
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, fuzzy, kde-format
 #| msgid "Rendering Intent"
 msgctxt ""
@@ -60669,7 +60690,7 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Namjera sjenčenja"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
 #, kde-format
 msgid "Contiguous Selection Tool"
 msgstr "Alat sa selektiranje susjedne oblasti"

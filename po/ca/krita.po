@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-23 01:34+0000\n"
-"PO-Revision-Date: 2024-02-22 09:08+0100\n"
+"POT-Creation-Date: 2024-02-24 01:32+0000\n"
+"PO-Revision-Date: 2024-02-23 10:33+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -16817,14 +16817,16 @@ msgstr "Mida"
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:36
 #: plugins/paintops/spray/KisSprayShapeOptionWidget.cpp:40
 #: plugins/tools/basictools/kis_tool_brush.cc:388
-#: plugins/tools/basictools/kis_tool_fill.cc:583
-#: plugins/tools/basictools/kis_tool_fill.cc:595
+#: plugins/tools/basictools/kis_tool_fill.cc:575
+#: plugins/tools/basictools/kis_tool_fill.cc:591
+#: plugins/tools/basictools/kis_tool_fill.cc:603
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:486
 #: plugins/tools/basictools/kis_tool_multihand.cpp:497
 #: plugins/tools/basictools/kis_tool_multihand.cpp:499
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -25921,7 +25923,7 @@ msgstr "Color de fons"
 #: plugins/generators/pattern/wdgpatternoptions.ui:21
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
-#: plugins/tools/basictools/kis_tool_fill.cc:628
+#: plugins/tools/basictools/kis_tool_fill.cc:636
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Pattern"
@@ -27685,7 +27687,7 @@ msgstr "Línia:"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
-#: plugins/tools/basictools/kis_tool_fill.cc:626
+#: plugins/tools/basictools/kis_tool_fill.cc:634
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Foreground color"
@@ -27695,7 +27697,7 @@ msgstr "Color de primer pla"
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
-#: plugins/tools/basictools/kis_tool_fill.cc:627
+#: plugins/tools/basictools/kis_tool_fill.cc:635
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Background color"
@@ -29645,7 +29647,7 @@ msgstr "Escull el pinzell predefinit"
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
-#: plugins/tools/basictools/kis_tool_fill.cc:550
+#: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
 #, kde-format
@@ -34326,7 +34328,7 @@ msgid "No Preview for this engine"
 msgstr "No hi ha vista prèvia per a aquest motor"
 
 #: libs/ui/widgets/kis_selection_options.cc:179
-#: plugins/tools/basictools/kis_tool_fill.cc:576
+#: plugins/tools/basictools/kis_tool_fill.cc:584
 #, kde-format
 msgctxt "The anti-alias checkbox in fill tool options"
 msgid "Anti-aliasing"
@@ -34402,7 +34404,7 @@ msgid "Grow or shrink the selection by the set amount"
 msgstr "Fa créixer o encongir la selecció segons la quantitat definida"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/basictools/kis_tool_fill.cc:644
+#: plugins/tools/basictools/kis_tool_fill.cc:653
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
@@ -57445,7 +57447,7 @@ msgctxt "(qtundo-format)"
 msgid "Flood Fill"
 msgstr "Emplenat per flux"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:542
+#: plugins/tools/basictools/kis_tool_fill.cc:544
 #, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
@@ -57453,19 +57455,19 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Escala: {n}%"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:546
+#: plugins/tools/basictools/kis_tool_fill.cc:548
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
 #, kde-format
 msgid "Use custom blending options"
 msgstr "Usa opcions personalitzades de barreja"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:561
+#: plugins/tools/basictools/kis_tool_fill.cc:563
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in fill tool options"
 msgid "Threshold: "
 msgstr "Llindar: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:568
+#: plugins/tools/basictools/kis_tool_fill.cc:570
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
@@ -57473,7 +57475,14 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Extensió: {n}%"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:572
+#: plugins/tools/basictools/kis_tool_fill.cc:573
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in fill tool options"
+msgid "Close Gap: "
+msgstr "Tanca"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in fill tool to use selection "
@@ -57481,88 +57490,88 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Empra la selecció com a límit"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:580
+#: plugins/tools/basictools/kis_tool_fill.cc:588
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in fill tool options"
 msgid "Grow: "
 msgstr "Fes créixer: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:592
+#: plugins/tools/basictools/kis_tool_fill.cc:600
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in fill tool options"
 msgid "Feather: "
 msgstr "Ploma: "
 
-#: plugins/tools/basictools/kis_tool_fill.cc:619
+#: plugins/tools/basictools/kis_tool_fill.cc:627
 #, kde-format
 msgctxt "The 'reset' button in fill tool options"
 msgid "Reset"
 msgstr "Reinicia"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:622
+#: plugins/tools/basictools/kis_tool_fill.cc:630
 #, kde-format
 msgid "Fill the active selection, or the entire canvas"
 msgstr "Emplena la selecció activa, o el llenç sencer"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:623
+#: plugins/tools/basictools/kis_tool_fill.cc:631
 #, kde-format
 msgid "Fill a contiguous region"
 msgstr "Emplena una regió contigua"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:624
+#: plugins/tools/basictools/kis_tool_fill.cc:632
 #, kde-format
 msgid "Fill all regions of a similar color"
 msgstr "Emplena totes les regions d'un color semblant"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:629
+#: plugins/tools/basictools/kis_tool_fill.cc:637
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Estableix l'escala del patró"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:630
+#: plugins/tools/basictools/kis_tool_fill.cc:638
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Estableix el gir del patró"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:631
+#: plugins/tools/basictools/kis_tool_fill.cc:639
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 "Estableix opcions personalitzades de barreja en lloc d'emprar les del pinzell"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:632
+#: plugins/tools/basictools/kis_tool_fill.cc:640
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Estableix una opacitat personalitzada per a l'emplenat"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:633
+#: plugins/tools/basictools/kis_tool_fill.cc:641
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Estableix un mode personalitzat de barreja per a l'emplenat"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:635
+#: plugins/tools/basictools/kis_tool_fill.cc:643
 #, kde-format
 msgid "Fill regions similar in color to the clicked region"
 msgstr ""
 "Emplena les regions similars en color a la regió en la qual s'ha fet clic"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:636
+#: plugins/tools/basictools/kis_tool_fill.cc:644
 #, kde-format
 msgid "Fill all regions until a specific boundary color"
 msgstr "Emplena totes les regions fins a un color de límit específic"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:400
 #, kde-format
 msgid "Boundary color"
 msgstr "Color de límit"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:638
+#: plugins/tools/basictools/kis_tool_fill.cc:646
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid ""
@@ -57572,7 +57581,7 @@ msgstr ""
 "Estableix la tolerància de la similitud del color de l'emplenat. L'augment "
 "del llindar augmenta l'interval de colors similars a emplenar."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:639
+#: plugins/tools/basictools/kis_tool_fill.cc:647
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
@@ -57583,7 +57592,13 @@ msgstr ""
 "propagació disminueix l'opacitat de les àrees d'emplenat depenent de la "
 "similitud del color."
 
-#: plugins/tools/basictools/kis_tool_fill.cc:640
+#: plugins/tools/basictools/kis_tool_fill.cc:648
+#, fuzzy, kde-format
+#| msgid "Blur the selection by the set amount"
+msgid "Close gaps in lines up to the set amount"
+msgstr "Difumina la selecció segons la quantitat definida"
+
+#: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid ""
@@ -57593,37 +57608,37 @@ msgstr ""
 "Estableix si el contorn de la selecció activa s'ha de tractar com un límit "
 "en emplenar la regió"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:642
+#: plugins/tools/basictools/kis_tool_fill.cc:651
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Suavitza les vores de l'emplenat"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:643
+#: plugins/tools/basictools/kis_tool_fill.cc:652
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Fa créixer o encongir l'emplenat segons la quantitat definida"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:645
+#: plugins/tools/basictools/kis_tool_fill.cc:654
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Difumina l'emplenat segons la quantitat definida"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:647
+#: plugins/tools/basictools/kis_tool_fill.cc:656
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Emplena les regions trobades a partir de la capa activa"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Emplena les regions trobades a partir de la fusió de totes les capes"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:649
+#: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, kde-format
 msgid ""
@@ -57632,12 +57647,12 @@ msgstr ""
 "Emplena les regions trobades a partir de les capes amb etiquetes de colors "
 "específics"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:651
+#: plugins/tools/basictools/kis_tool_fill.cc:660
 #, kde-format
 msgid "Dragging will fill regions of any color"
 msgstr "En arrossegar s'emplenaran les regions de qualsevol color"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:652
+#: plugins/tools/basictools/kis_tool_fill.cc:661
 #, kde-format
 msgid ""
 "Dragging will fill only regions similar in color to the initial region "
@@ -57646,49 +57661,49 @@ msgstr ""
 "En arrossegar només s'emplenaran les regions similars en color a la regió "
 "inicial (útil per a emplenar la línia artística)"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:654
+#: plugins/tools/basictools/kis_tool_fill.cc:663
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Restableix les opcions als seus valors predeterminats"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:663
+#: plugins/tools/basictools/kis_tool_fill.cc:672
 #, kde-format
 msgctxt "The 'fill mode' section label in fill tool options"
 msgid "Fill mode"
 msgstr "Mode d'emplenament"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:670
+#: plugins/tools/basictools/kis_tool_fill.cc:679
 #, kde-format
 msgctxt "The 'fill source' section label in fill tool options"
 msgid "Fill source"
 msgstr "Origen de l'emplenament"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:684
+#: plugins/tools/basictools/kis_tool_fill.cc:693
 #, kde-format
 msgctxt "The 'reference' section label in fill tool options"
 msgid "Reference"
 msgstr "Referència"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:693
+#: plugins/tools/basictools/kis_tool_fill.cc:702
 #, kde-format
 msgctxt "The 'fill extent' section label in fill tool options"
 msgid "Fill extent"
 msgstr "Extensió de l'emplenament"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:705
+#: plugins/tools/basictools/kis_tool_fill.cc:715
 #, kde-format
 msgctxt "The 'adjustments' section label in fill tool options"
 msgid "Adjustments"
 msgstr "Ajustaments"
 
-#: plugins/tools/basictools/kis_tool_fill.cc:714
+#: plugins/tools/basictools/kis_tool_fill.cc:724
 #, kde-format
 msgctxt "The 'drag-fill mode' section label in fill tool options"
 msgid "Drag-fill mode"
 msgstr "Mode d'emplenament en arrossegar"
 
-#: plugins/tools/basictools/kis_tool_fill.h:234
+#: plugins/tools/basictools/kis_tool_fill.h:237
 #, kde-format
 msgid "Fill Tool"
 msgstr "Eina d'emplenat"
@@ -58779,18 +58794,18 @@ msgid "Contiguous Area Selection"
 msgstr "Selecció d'àrea contigua"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:111
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:233
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:236
 msgctxt "(qtundo-format)"
 msgid "Select Contiguous Area"
 msgstr "Selecciona una àrea contigua"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:370
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:379
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in contiguous selection tool options"
 msgid "Threshold: "
 msgstr "Llindar: "
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:378
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
 #, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
@@ -58798,7 +58813,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Extensió: {n}%"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:382
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in contiguous selection tool to use "
@@ -58806,18 +58821,18 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Empra la selecció com a límit"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 "Selecciona regions similars en color a la regió en la qual s'ha fet clic"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:390
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Selecciona totes les regions fins a un color de límit específic"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:238
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:250
 #, kde-format
@@ -58828,7 +58843,7 @@ msgstr ""
 "Estableix la tolerància de la similitud del color de la selecció. L'augment "
 "del llindar augmenta l'interval de colors similars a seleccionar."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:396
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:253
 #, kde-format
 msgid ""
@@ -58839,7 +58854,7 @@ msgstr ""
 "propagació disminueix l'opacitat de les àrees de selecció depenent de la "
 "similitud del color."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:408
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -58848,14 +58863,21 @@ msgstr ""
 "Estableix si el contorn de la selecció activa s'ha de tractar com un límit "
 "en obtenir-ne una de nova"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
+msgid "Close Gap: "
+msgstr "Tanca"
+
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
 msgid "Selection extent"
 msgstr "Extensió de la selecció"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:95
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.h:97
 #, kde-format
 msgid "Contiguous Selection Tool"
 msgstr "Eina de selecció d'àrees contigües"
@@ -59289,23 +59311,17 @@ msgstr "Espaiat de les lletres"
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Insereix un text"
+msgstr "Inserció de text"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Insereix un text"
+msgstr "Inserció de text enriquit"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Canvia les propietats de la capa"
+msgstr "Canvi de les propietats del text"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

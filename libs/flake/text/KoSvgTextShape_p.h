@@ -484,11 +484,12 @@ public:
 
         // If there's only a single root element, don't bother searching.
         auto contentElement = depth(tree) == 1? tree.depthFirstTailBegin(): findTextContentElementForIndex(tree, currentIndex, index, true);
+        if (contentElement == tree.depthFirstTailEnd()) return false;
 
         bool suitableStartIndex = siblingCurrent(contentElement) == tree.childBegin()? index >= currentIndex: index > currentIndex;
         bool suitableEndIndex = siblingCurrent(contentElement) == tree.childBegin()? true: index < currentIndex + contentElement->numChars(false);
 
-        if (contentElement != tree.depthFirstTailEnd() && suitableStartIndex && suitableEndIndex) {
+        if (suitableStartIndex && suitableEndIndex) {
             KoSvgTextContentElement duplicate = KoSvgTextContentElement();
             duplicate.text = contentElement->text;
             int start = index - currentIndex;

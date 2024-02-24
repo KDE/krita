@@ -481,17 +481,21 @@ public:
      */
     static bool splitContentElement(KisForest<KoSvgTextContentElement> &tree, int index) {
         int currentIndex = 0;
-        auto contentElement = findTextContentElementForIndex(tree, currentIndex, index, true);
+
+        // If there's only a single root element, don't bother searching.
+        auto contentElement = depth(tree) == 1? tree.depthFirstTailBegin(): findTextContentElementForIndex(tree, currentIndex, index, true);
+
         bool suitableStartIndex = siblingCurrent(contentElement) == tree.childBegin()? index >= currentIndex: index > currentIndex;
-        if (contentElement != tree.depthFirstTailEnd()
-                && suitableStartIndex
-                && index < currentIndex + contentElement->numChars(false)) {
+        bool suitableEndIndex = siblingCurrent(contentElement) == tree.childBegin()? true: index < currentIndex + contentElement->numChars(false);
+
+        if (contentElement != tree.depthFirstTailEnd() && suitableStartIndex && suitableEndIndex) {
             KoSvgTextContentElement duplicate = KoSvgTextContentElement();
             duplicate.text = contentElement->text;
             int start = index - currentIndex;
             int length = contentElement->numChars(false) - start;
             int zero = 0;
             duplicate.removeText(start, length);
+
             // TODO: handle localtransforms better; annoyingly, this requires whitespace handling
 
             if (siblingCurrent(contentElement) != tree.childBegin()

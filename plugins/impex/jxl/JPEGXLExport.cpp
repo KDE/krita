@@ -357,6 +357,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(io->isWritable(), ImportExportCodes::NoAccessToWrite);
 
+    dbgFile << QString("libjxl version: %1.%2.%3")
+                   .arg(JPEGXL_MAJOR_VERSION)
+                   .arg(JPEGXL_MINOR_VERSION)
+                   .arg(JPEGXL_PATCH_VERSION);
+
     KisImageSP image = document->savingImage();
     const QRect bounds = image->bounds();
 

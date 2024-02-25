@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 01:32+0000\n"
-"PO-Revision-Date: 2024-02-17 11:46+0100\n"
+"PO-Revision-Date: 2024-02-24 22:21+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -52763,13 +52763,15 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Apliki malpli da teksturo kiam la forto estas pli malalta. Uzu ĉi tiun "
+"opcion se vi volas ke la peniko transiru inter sen-tekstura kaj teksturita "
+"aspekto"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "Mola Pruvado"
+msgstr "Mola teksturado"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -57211,11 +57213,10 @@ msgid "Spread: {n}%"
 msgstr "Disvastigo: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Fermi"
+msgstr "Fermi Breĉon:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57325,10 +57326,9 @@ msgstr ""
 "disvastiĝo malpliigas opakecon de plenigregionoj depende de kolorsimileco."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Malklarigi la elekton per la fiksita kvanto"
+msgstr "Fermi breĉojn en linioj ĝis la fiksita kvanto"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -58587,11 +58587,10 @@ msgstr ""
 "faras novan elekton"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Fermi"
+msgstr "Fermi Breĉon: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -59037,20 +59036,14 @@ msgid "Insert Text"
 msgstr "Enmeti Tekston"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Enmeti Tekston"
+msgstr "Enmeti Riĉan Tekston"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Ŝanĝi Tavolajn Proprecojn"
+msgstr "Ŝanĝi Tektstajn Proprecojn"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

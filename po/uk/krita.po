@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 01:32+0000\n"
-"PO-Revision-Date: 2024-02-23 08:55+0200\n"
+"PO-Revision-Date: 2024-02-24 08:43+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -58034,11 +58034,10 @@ msgid "Spread: {n}%"
 msgstr "Розсіювання: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Закрити"
+msgstr "Закрити прогалину: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -58150,10 +58149,9 @@ msgstr ""
 "зменшує непрозорість областей заповнення залежно від подібності кольорів."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Розмити позначену область за встановленою потужністю"
+msgstr "Закривати прогалини у лініях до встановленої величини"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -59458,11 +59456,10 @@ msgstr ""
 "нової позначеної області"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Закрити"
+msgstr "Закрити прогалину: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format

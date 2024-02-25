@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 01:32+0000\n"
-"PO-Revision-Date: 2024-02-23 12:34+0100\n"
+"PO-Revision-Date: 2024-02-24 10:57+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -57516,11 +57516,10 @@ msgid "Spread: {n}%"
 msgstr "Spreiding: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Sluiten"
+msgstr "Gat sluiten: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57634,10 +57633,9 @@ msgstr ""
 "kleur."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "De selectie vervagen met de ingestelde hoeveelheid"
+msgstr "Gaten in lijnen sluiten tot de ingestelde hoeveelheid"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -58911,11 +58909,10 @@ msgstr ""
 "als een grens bij het maken van een nieuwe selectie"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Sluiten"
+msgstr "Gat sluiten: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format

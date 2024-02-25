@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-24 01:32+0000\n"
-"PO-Revision-Date: 2024-02-23 12:18+0300\n"
+"PO-Revision-Date: 2024-02-24 22:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -27742,7 +27742,7 @@ msgstr ""
 "düğmesi tıklamalarını geçemez. Böyle bir aygıtınız varsa bu geçici çözümü "
 "etkinleştirmeyi deneyebilirsiniz. Krita, fare olayları akışından sağ ve orta "
 "düğme tıklamalarını okumaya çalışacaktır. Aygıtınızda çalışabilir veya "
-"çalışmayabilir (tablet sürücüsünün gerçekleştirmesine bağlıdır).</p><p><br/"
+"çalışmayabilir (tablet sürücüsünün gerçeklenme biçimine bağlıdır).</p><p><br/"
 "></p><p>Bu seçenek değiştirildikten sonra Krita yeniden başlatılmalıdır</p></"
 "body></html>"
 
@@ -57199,11 +57199,10 @@ msgid "Spread: {n}%"
 msgstr "Yay: %{n}"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Kapat"
+msgstr "Boşluğu kapat: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57313,10 +57312,9 @@ msgstr ""
 "benzerliğine bağlı olarak dolgu alanlarının matlığını azaltır."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Seçimi, küme miktarı kadar bulanıklaştır"
+msgstr "Ayarlı miktar kadar çizgilerdeki boşlukları kapat"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -58583,11 +58581,10 @@ msgstr ""
 "işlenmeyeceğini ayarla"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Kapat"
+msgstr "Boşluğu kapat: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format

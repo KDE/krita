@@ -867,6 +867,7 @@ void KisView::dropEvent(QDropEvent *event)
             const int grow = configGroup.readEntry("growSelection", 0);
             const bool stopGrowingAtDarkestPixel = configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
             const int feather = configGroup.readEntry("featherAmount", 0);
+            const int closeGap = configGroup.readEntry("closeGapAmount", 0);
             QString sampleLayersMode = configGroup.readEntry("sampleLayersMode", "");
             if (sampleLayersMode.isEmpty()) {
                 if (configGroup.readEntry("sampleMerged", false)) {
@@ -970,6 +971,7 @@ void KisView::dropEvent(QDropEvent *event)
                                          opacitySpread == 100 &&
                                          useSelectionAsBoundary == false &&
                                          !antiAlias && grow == 0 && feather == 0 &&
+                                         closeGap == 0 &&
                                          sampleLayersMode == "currentLayer";
 
                 FillProcessingVisitor *visitor = new FillProcessingVisitor(referencePaintDevice,
@@ -987,6 +989,7 @@ void KisView::dropEvent(QDropEvent *event)
                 }
                 visitor->setFillThreshold(threshold);
                 visitor->setOpacitySpread(opacitySpread);
+                visitor->setCloseGap(closeGap);
                 visitor->setAntiAlias(antiAlias);
                 visitor->setUseCustomBlendingOptions(useCustomBlendingOptions);
                 if (useCustomBlendingOptions) {

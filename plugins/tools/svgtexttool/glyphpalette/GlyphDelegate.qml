@@ -25,13 +25,13 @@ SvgTextLabel {
     Rectangle {
         anchors.fill: parent;
         color: "transparent";
-        border.color: parent.currentItem? palette.highlight: palette.alternateBase;
+        border.color: parent.currentItem? sysPalette.highlight: sysPalette.alternateBase;
         border.width: parent.currentItem? 2: 1;
     }
     Rectangle {
         anchors.top: parent.top;
         anchors.left: parent.left;
-        color: palette.text;
+        color: sysPalette.text;
         opacity: 0.3;
         layer.enabled: true
         width: childrenRect.width;
@@ -39,7 +39,7 @@ SvgTextLabel {
         Text {
             padding: 2;
             text: model.glyphLabel;
-            color: palette.base;
+            color: sysPalette.base;
             font.pointSize: 9;
         }
         visible: glyphMouseArea.containsMouse;
@@ -50,7 +50,7 @@ SvgTextLabel {
         width: 8;
         height: 8;
         radius: 4;
-        color: palette.text;
+        color: sysPalette.text;
         opacity: 0.3;
         visible: model.childCount > 1;
     }

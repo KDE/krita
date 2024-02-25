@@ -22,10 +22,10 @@ Rectangle {
     property int fontWeight : 400;
     property int fontStyle;
     SystemPalette {
-        id: palette;
+        id: sysPalette;
         colorGroup: SystemPalette.Active
     }
-    color: palette.window
+    color: sysPalette.window
 
     TabBar {
         id: tabs;
@@ -64,8 +64,8 @@ Rectangle {
                 }
 
                 delegate: GlyphDelegate {
-                    textColor: palette.text;
-                    fillColor: palette.base;
+                    textColor: sysPalette.text;
+                    fillColor: sysPalette.base;
                     fontFamilies: root.fontFamilies;
                     fontSize: root.fontSize;
                     fontStyle: root.fontStyle;
@@ -126,8 +126,8 @@ Rectangle {
                 cellHeight: cellWidth;
 
                 delegate: GlyphDelegate {
-                    textColor: palette.text;
-                    fillColor: palette.base;
+                    textColor: sysPalette.text;
+                    fillColor: sysPalette.base;
                     fontFamilies: root.fontFamilies;
                     fontSize: root.fontSize;
                     fontStyle: root.fontStyle;
@@ -173,8 +173,8 @@ Rectangle {
                             }
 
                             delegate: GlyphDelegate {
-                                textColor: palette.text;
-                                fillColor: palette.base;
+                                textColor: sysPalette.text;
+                                fillColor: sysPalette.base;
                                 fontFamilies: root.fontFamilies;
                                 fontSize: root.fontSize;
                                 fontStyle: root.fontStyle;

@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-24 01:32+0000\n"
+"POT-Creation-Date: 2024-02-26 01:37+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -19887,7 +19887,7 @@ msgstr "Amach"
 #: libs/pigment/resources/KoColorSet.cpp:1472
 #: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1181
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1184
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, fuzzy, kde-format
 msgid "Untitled"
@@ -19958,7 +19958,7 @@ msgstr "&Acmhainní"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1184 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisView.cpp:1187 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -31638,7 +31638,7 @@ msgstr "Méid an tSratha"
 msgid "Layer is invisible."
 msgstr "Méid an tSratha"
 
-#: libs/ui/KisView.cpp:1185
+#: libs/ui/KisView.cpp:1188
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31647,51 +31647,51 @@ msgstr ""
 "<p>Athraíodh an cháipéis <b>'%1'</b>.</p><p>An bhfuil fonn ort í a shábháil?"
 "</p>"
 
-#: libs/ui/KisView.cpp:1259
+#: libs/ui/KisView.cpp:1262
 #, fuzzy, kde-format
 #| msgid "(write protected)"
 msgid "Write Protected"
 msgstr "(cosaint ar scríobh)"
 
-#: libs/ui/KisView.cpp:1263
+#: libs/ui/KisView.cpp:1266
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgid "Recovered"
 msgstr "Taifeadadh á dhéanamh"
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1420
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1422
+#: libs/ui/KisView.cpp:1425
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1424
+#: libs/ui/KisView.cpp:1427
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1436
+#: libs/ui/KisView.cpp:1439
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Rabhadh"
 
-#: libs/ui/KisView.cpp:1442
+#: libs/ui/KisView.cpp:1445
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Rabhadh"
 
-#: libs/ui/KisView.cpp:1444
+#: libs/ui/KisView.cpp:1447
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Roghanna Uirlise"
 
-#: libs/ui/KisView.cpp:1447
+#: libs/ui/KisView.cpp:1450
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."

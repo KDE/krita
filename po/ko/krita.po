@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-24 01:32+0000\n"
+"POT-Creation-Date: 2024-02-26 01:37+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -20398,7 +20398,7 @@ msgstr "종점"
 #: libs/pigment/resources/KoColorSet.cpp:1472
 #: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1181
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1184
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -20469,7 +20469,7 @@ msgstr "로컬 리소스"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1184 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisView.cpp:1187 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -32525,54 +32525,54 @@ msgstr "레이어가 잠김 상태입니다."
 msgid "Layer is invisible."
 msgstr "레이어가 숨김 상태입니다."
 
-#: libs/ui/KisView.cpp:1185
+#: libs/ui/KisView.cpp:1188
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr "<p>문서 <b>'%1'</b>을(를) 수정했습니다.</p><p>저장하시겠습니까?</p>"
 
-#: libs/ui/KisView.cpp:1259
+#: libs/ui/KisView.cpp:1262
 #, kde-format
 msgid "Write Protected"
 msgstr "쓰기 금지됨"
 
-#: libs/ui/KisView.cpp:1263
+#: libs/ui/KisView.cpp:1266
 #, kde-format
 msgid "Recovered"
 msgstr "복구됨"
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1420
 #, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "소프트 프루핑은 부동 소수점에서 동작하지 않습니다."
 
-#: libs/ui/KisView.cpp:1422
+#: libs/ui/KisView.cpp:1425
 #, kde-format
 msgid "Soft Proofing turned on."
 msgstr "소프트 프루핑이 켜졌습니다."
 
-#: libs/ui/KisView.cpp:1424
+#: libs/ui/KisView.cpp:1427
 #, kde-format
 msgid "Soft Proofing turned off."
 msgstr "소프트 프루핑이 꺼졌습니다."
 
-#: libs/ui/KisView.cpp:1436
+#: libs/ui/KisView.cpp:1439
 #, kde-format
 msgid "Gamut Warnings don't work in floating point."
 msgstr "색역 경고는 부동 소수점에서 동작하지 않습니다."
 
-#: libs/ui/KisView.cpp:1442
+#: libs/ui/KisView.cpp:1445
 #, kde-format
 msgid "Gamut Warnings turned on."
 msgstr "색역 경고가 켜졌습니다."
 
-#: libs/ui/KisView.cpp:1444
+#: libs/ui/KisView.cpp:1447
 #, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "그러나 소프트 프루핑은 아직 꺼져 있습니다."
 
-#: libs/ui/KisView.cpp:1447
+#: libs/ui/KisView.cpp:1450
 #, kde-format
 msgid "Gamut Warnings turned off."
 msgstr "색역 경고가 꺼졌습니다."

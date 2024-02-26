@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-24 01:32+0000\n"
+"POT-Creation-Date: 2024-02-26 01:37+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -19886,7 +19886,7 @@ msgstr "Fora"
 #: libs/pigment/resources/KoColorSet.cpp:1472
 #: libs/pigment/resources/KoColorSet.cpp:1721
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
-#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1181
+#: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1184
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
 #, kde-format
 msgid "Untitled"
@@ -19957,7 +19957,7 @@ msgstr "Crea insimul de Ressources"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1184 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisView.cpp:1187 libs/ui/KisWelcomePageWidget.cpp:748
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -31747,7 +31747,7 @@ msgstr "Stilo de strato (Layer)"
 msgid "Layer is invisible."
 msgstr "Omnes invisibile"
 
-#: libs/ui/KisView.cpp:1185
+#: libs/ui/KisView.cpp:1188
 #, kde-format
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
@@ -31756,49 +31756,49 @@ msgstr ""
 "<p>Le documento <b>'%1'</b> ha essite modificate </p><p>Tu vole salveguardar "
 "lo? </p>"
 
-#: libs/ui/KisView.cpp:1259
+#: libs/ui/KisView.cpp:1262
 #, fuzzy, kde-format
 msgid "Write Protected"
 msgstr "Proprietates de Mascara de filtro"
 
-#: libs/ui/KisView.cpp:1263
+#: libs/ui/KisView.cpp:1266
 #, kde-format
 msgid "Recovered"
 msgstr "Recuperate"
 
-#: libs/ui/KisView.cpp:1417
+#: libs/ui/KisView.cpp:1420
 #, fuzzy, kde-format
 msgid "Soft Proofing doesn't work in floating point."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1422
+#: libs/ui/KisView.cpp:1425
 #, fuzzy, kde-format
 msgid "Soft Proofing turned on."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1424
+#: libs/ui/KisView.cpp:1427
 #, fuzzy, kde-format
 msgid "Soft Proofing turned off."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1436
+#: libs/ui/KisView.cpp:1439
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings don't work in floating point."
 msgstr "Aviso"
 
-#: libs/ui/KisView.cpp:1442
+#: libs/ui/KisView.cpp:1445
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned on."
 msgstr "Aviso"
 
-#: libs/ui/KisView.cpp:1444
+#: libs/ui/KisView.cpp:1447
 #, fuzzy, kde-format
 msgid "But Soft Proofing is still off."
 msgstr "Optiones per scalar"
 
-#: libs/ui/KisView.cpp:1447
+#: libs/ui/KisView.cpp:1450
 #, fuzzy, kde-format
 #| msgid "Warning"
 msgid "Gamut Warnings turned off."

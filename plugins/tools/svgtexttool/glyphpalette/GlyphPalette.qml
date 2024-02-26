@@ -87,14 +87,17 @@ Rectangle {
         }
 
         // Charmap.
-        Item {
+        RowLayout {
+            Layout.fillHeight: true;
+            Layout.fillWidth: true;
+            spacing: 1;
             ListView {
                 id: charMapFilter
-                model: root.charMapFilterModel;
-                anchors.top: parent.top;
-                anchors.bottom: parent.bottom;
-                anchors.left: parent.left;
-                width: 100;
+                model: charMapFilterModel;
+                Layout.minimumWidth: 100;
+                Layout.maximumWidth: 200;
+                Layout.fillHeight: true;
+                Layout.fillWidth: true;
 
                 onCurrentIndexChanged: {
                     mainWindow.slotChangeFilter(currentIndex);
@@ -116,11 +119,9 @@ Rectangle {
                 model: root.charMapModel;
                 focus: true;
                 clip: true;
-
-                anchors.top: parent.top;
-                anchors.bottom: parent.bottom;
-                anchors.left: charMapFilter.right;
-                anchors.right: parent.right;
+                Layout.minimumWidth: 180;
+                Layout.fillHeight: true;
+                Layout.fillWidth: true;
 
                 cellWidth: (width - charMapScroll.implicitBackgroundWidth)/8;
                 cellHeight: cellWidth;
@@ -152,9 +153,11 @@ Rectangle {
                     height: charMap.cellHeight*3;
                     modal: true
                     focus: true
+                    padding: 2;
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
                     GridView {
                         anchors.fill: parent;
+                        clip: true;
 
                         cellWidth: (width - charMapAltGlyphsScroll.implicitBackgroundWidth)/8;
                         cellHeight: cellWidth;

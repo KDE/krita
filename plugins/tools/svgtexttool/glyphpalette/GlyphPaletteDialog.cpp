@@ -121,19 +121,23 @@ void GlyphPaletteDialog::setGlyphModelFromProperties(KoSvgTextProperties propert
 void GlyphPaletteDialog::slotInsertRichText(int charRow, int glyphRow, bool replace)
 {
     if (m_quickWidget->rootObject()) {
-        QModelIndex idx = glyphRow > -1? m_model->index(charRow, 0): m_charMapModel->index(charRow, 0);
+        QModelIndex idx = replace? m_model->index(charRow, 0): m_charMapModel->index(charRow, 0);
         QString  text;
         KoSvgTextProperties props = m_lastUsedProperties;
-        QStringList otf = props.property(KoSvgTextProperties::FontFeatureSettingsId).value<QStringList>();
-        if (glyphRow > -1) {
+        QStringList otf;
+        if (replace) {
             idx = m_model->index(glyphRow, 0, idx);
             text = m_model->data(idx, Qt::DisplayRole).toString();
             otf.append(m_model->data(idx, KoFontGlyphModel::OpenTypeFeatures).value<QStringList>());
         } else {
+            idx = m_charMapModel->index(glyphRow, 0, idx);
             text = m_charMapModel->data(idx, Qt::DisplayRole).toString();
+            otf.append(m_charMapModel->data(idx, KoFontGlyphModel::OpenTypeFeatures).value<QStringList>());
         }
         KoSvgTextShape *richText = new KoSvgTextShape();
-        props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, otf);
+        if (!otf.isEmpty()) {
+            props.setProperty(KoSvgTextProperties::FontFeatureSettingsId, otf);
+        }
 
         richText->setPropertiesAtPos(-1, props);
         richText->insertText(0, text);

@@ -44,6 +44,7 @@ void GlyphPaletteProxyModel::setFilter(int filter)
 
 bool GlyphPaletteProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &sourceParent) const
 {
+    if (sourceParent.isValid()) return true;
     QModelIndex idx = sourceModel()->index(sourceRow, 0, sourceParent);
     QString main = sourceModel()->data(idx).toString();
     QChar::Script script = main.isEmpty()? QChar::Script_Unknown :main.front().script();

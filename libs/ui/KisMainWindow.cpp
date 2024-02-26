@@ -1372,6 +1372,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
             if (!isExporting) {
                 // If Saving, use the document's mimetype, or if that is empty, kra, which is the safest.
+                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : suggestedURL.toLocalFile(), true);
                 default_mime_type = document->mimeType().isEmpty() ? nativeFormat : document->mimeType();
             }
             dialog.setMimeTypeFilters(mimeFilter, QString::fromLatin1(default_mime_type));

@@ -453,6 +453,9 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
             m_d->profile->set_frame_rate(activeCanvas()->image()->animationInterface()->framerate(), 1);
         });
 
+        // cold init the framerate
+        m_d->profile->set_frame_rate(activeCanvas()->image()->animationInterface()->framerate(), 1);
+
         connect(image->animationInterface(), &KisImageAnimationInterface::sigPlaybackRangeChanged, this, [this](){
             QSharedPointer<Mlt::Producer> producer = m_d->canvasProducers[activeCanvas()];
             auto image = activeCanvas()->image();

@@ -185,7 +185,7 @@ void KisPlaybackEngineQT::seek(int frameIndex, SeekOptionFlags flags)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(frameIndex >= 0);
 
-    if (displayProxy->activeFrame() != frameIndex) {
+    if (displayProxy->activeFrame() != frameIndex || flags & SEEK_FINALIZE) {
         displayProxy->displayFrame(frameIndex, flags & SEEK_FINALIZE);
     }
 }

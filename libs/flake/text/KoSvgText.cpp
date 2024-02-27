@@ -22,6 +22,10 @@
 #include <KisStaticInitializer.h>
 
 KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KoSvgText::CssLengthPercentage>("KoSvgText::CssLengthPercentage");
+    QMetaType::registerEqualsComparator<KoSvgText::CssLengthPercentage>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::CssLengthPercentage>();
+
     qRegisterMetaType<KoSvgText::AutoValue>("KoSvgText::AutoValue");
     QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
     QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
@@ -973,6 +977,40 @@ QDebug operator<<(QDebug dbg, const LineHeightInfo &value)
 
     dbg.nospace() << ")";
     return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const CssLengthPercentage &value)
+{
+    dbg.nospace() << "Length(";
+
+    if (value.unit == CssLengthPercentage::Percentage) {
+        dbg.nospace() << value.value << "%";
+    } else if (value.unit == CssLengthPercentage::Em) {
+        dbg.nospace() << value.value << "em";
+    } else if (value.unit == CssLengthPercentage::Ex) {
+        dbg.nospace() << value.value << "ex";
+    } else {
+        dbg.nospace() << value.value << "(pt)";
+    }
+
+    dbg.nospace() << ")";
+    return dbg.space();
+}
+
+QString writeLengthPercentage(const CssLengthPercentage &length)
+{
+    QString val;
+    if (length.unit == CssLengthPercentage::Percentage) {
+        val = KisDomUtils::toString(length.value*100.0) + "%";
+    } else {
+        val = KisDomUtils::toString(length.value);
+        if (length.unit == CssLengthPercentage::Em) {
+            val += "em";
+        } else if (length.unit == CssLengthPercentage::Ex) {
+            val += "ex";
+        }
+    }
+    return val;
 }
 
 } // namespace KoSvgText

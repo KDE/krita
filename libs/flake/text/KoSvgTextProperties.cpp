@@ -98,12 +98,17 @@ bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
         && id != TextDecorationColorId && id != TextDecorationStyleId && id != InlineSizeId && id != TextTrimId;
 }
 
-void KoSvgTextProperties::resetNonInheritableToDefault()
+void KoSvgTextProperties::resetNonInheritableToDefault(qreal fontSize, qreal xHeight)
 {
     auto it = m_d->properties.begin();
     for (; it != m_d->properties.end(); ++it) {
         if (!m_d->isInheritable(it.key())) {
             it.value() = defaultProperties().property(it.key());
+        }
+        if (it.value().canConvert<KoSvgText::CssLengthPercentage>()) {
+            KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
+            length.convertToAbsolute(fontSize, xHeight);
+            it.value() = QVariant::fromValue(length);
         }
     }
 }
@@ -205,7 +210,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 setProperty(BaselineShiftValueId, SvgUtil::fromPercentage(value));
             } else {
                 const qreal parsedValue = SvgUtil::parseUnitXY(context.currentGC(), value);
-                const qreal lineHeight = propertyOrDefault(FontSizeId).toReal();
+                const qreal lineHeight = context.currentGC()->fontSize;
 
                 if (lineHeight != 0.0) {
                     setProperty(BaselineShiftValueId, parsedValue / lineHeight);
@@ -372,9 +377,14 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(FontWeightId, weight);
 
     } else if (command == "font-size") {
-        const qreal pointSize = SvgUtil::parseUnitY(context.currentGC(), value);
-        if (pointSize > 0.0) {
-            setProperty(FontSizeId, pointSize);
+        KoSvgText::WritingMode mode = KoSvgText::WritingMode(propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+        const KoSvgText::CssLengthPercentage pointSize = SvgUtil::parseUnitStruct(context.currentGC(),
+                                                                                  value,
+                                                                                  mode != KoSvgText::HorizontalTB,
+                                                                                  mode == KoSvgText::HorizontalTB,
+                                                                                  context.currentGC()->currentBoundingBox);
+        if (pointSize.value > 0.0) {
+            setProperty(FontSizeId, QVariant::fromValue(pointSize));
         }
     } else if (command == "font-size-adjust") {
         setProperty(FontSizeAdjustId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueY(value, context, "none")));
@@ -694,8 +704,7 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
 
     if (hasProperty(FontSizeId)) {
-        const qreal size = property(FontSizeId).toReal();
-        result.insert("font-size", KisDomUtils::toString(size));
+        result.insert("font-size", writeLengthPercentage(fontSize()));
     }
 
     if (hasProperty(FontSizeAdjustId)) {
@@ -891,9 +900,11 @@ QFont KoSvgTextProperties::generateFont() const
     const QFont::Style style =
         QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
 
+    KoSvgText::CssLengthPercentage fontSize = this->fontSize();
+
     // for rounding see a comment below!
     QFont font(fontFamily
-               , qRound(propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal())
+               , qMax(qRound(fontSize.value), 1)
                , propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt()
                , style != QFont::StyleNormal);
     font.setStyle(style);
@@ -902,7 +913,7 @@ QFont KoSvgTextProperties::generateFont() const
      * The constructor of QFont cannot accept fractional font size, so we pass
      * a rounded one to it and set the correct one later on
      */
-    font.setPointSizeF(propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
+    font.setPointSizeF(fontSize.value);
 
     font.setStretch(propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
 
@@ -935,6 +946,12 @@ QFont KoSvgTextProperties::generateFont() const
     // we can delete it right after creation of the font
     FakePaintDevice fake72DpiPaintDevice;
     return QFont(font, &fake72DpiPaintDevice);
+}
+
+qreal KoSvgTextProperties::xHeight() const
+{
+    QFontMetrics metrics(this->generateFont());
+    return metrics.xHeight();
 }
 
 QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) const
@@ -1025,7 +1042,7 @@ QMap<QString, qreal> KoSvgTextProperties::fontAxisSettings() const
     settings.insert("wght", propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
     settings.insert("wdth", propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
     if (propertyOrDefault(KoSvgTextProperties::FontOpticalSizingId).toBool()) {
-        settings.insert("opsz", propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
+        settings.insert("opsz", fontSize().value);
     }
     const QFont::Style style = QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
     if (style == QFont::StyleItalic) {
@@ -1065,6 +1082,16 @@ QSharedPointer<KoShapeBackground> KoSvgTextProperties::background() const
 KoShapeStrokeModelSP KoSvgTextProperties::stroke() const
 {
     return property(KoSvgTextProperties::StrokeId).value<KoSvgText::StrokeProperty>().property;
+}
+
+KoSvgText::CssLengthPercentage KoSvgTextProperties::fontSize() const
+{
+    return propertyOrDefault(KoSvgTextProperties::FontSizeId).value<KoSvgText::CssLengthPercentage>();
+}
+
+void KoSvgTextProperties::setFontSize(const KoSvgText::CssLengthPercentage length)
+{
+    setProperty(KoSvgTextProperties::FontSizeId, QVariant::fromValue(length));
 }
 
 QStringList KoSvgTextProperties::supportedXmlAttributes()
@@ -1113,7 +1140,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(FontStyleId, QFont::StyleNormal);
         s_defaultProperties->setProperty(FontStretchId, 100);
         s_defaultProperties->setProperty(FontWeightId, 400);
-        s_defaultProperties->setProperty(FontSizeId, 12.0);
+        s_defaultProperties->setProperty(FontSizeId, QVariant::fromValue(KoSvgText::CssLengthPercentage(12.0)));
         s_defaultProperties->setProperty(FontSizeAdjustId, fromAutoValue(AutoValue()));
 
         s_defaultProperties->setProperty(FontOpticalSizingId, true);

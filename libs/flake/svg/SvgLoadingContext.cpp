@@ -89,7 +89,10 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const QDomElement &el
         gc = new SvgGraphicsContext();
     }
 
-    gc->textProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited
+    gc->textProperties.resetNonInheritableToDefault(gc->fontSize, gc->fontExHeight); // some of the text properties are not inherited
+    gc->fontSize = gc->textProperties.fontSize().value;
+    gc->fontExHeight = gc->textProperties.xHeight();
+
     gc->filterId.clear(); // filters are not inherited
     gc->clipPathId.clear(); // clip paths are not inherited
     gc->clipMaskId.clear(); // clip masks are not inherited

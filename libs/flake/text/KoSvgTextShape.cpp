@@ -483,7 +483,7 @@ int KoSvgTextShape::wordStart(int pos)
 QPainterPath KoSvgTextShape::defaultCursorShape()
 {
     KoSvgText::WritingMode mode = writingMode();
-    double fontSize = this->textProperties().propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    double fontSize = this->textProperties().fontSize().value;
     QPainterPath p;
     if (mode == KoSvgText::HorizontalTB) {
         p.moveTo(0, fontSize*0.2);

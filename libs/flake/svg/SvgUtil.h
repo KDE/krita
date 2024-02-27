@@ -9,6 +9,7 @@
 
 #include "kritaflake_export.h"
 #include <QRectF>
+#include <KoSvgText.h>
 
 class QString;
 class QTransform;
@@ -91,6 +92,12 @@ public:
                            bool horiz = false,
                            bool vert = false,
                            const QRectF &bbox = QRectF());
+    static KoSvgText::CssLengthPercentage parseUnitStruct(SvgGraphicsContext *gc,
+                                                          QStringView,
+                                                          bool horiz = false,
+                                                          bool vert = false,
+                                                          const QRectF &bbox = QRectF(),
+                                                          bool percentageViewBox = false);
 
     /// parses a length attribute in x-direction
     static qreal parseUnitX(SvgGraphicsContext *gc, const QString &unit);

@@ -150,7 +150,7 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "baseline-shift", "10%", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
     QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.1);
 
-    context.currentGC()->textProperties.setProperty(KoSvgTextProperties::FontSizeId, 180.0);
+    context.currentGC()->textProperties.setFontSize(KoSvgText::CssLengthPercentage(180.0));
 
     addProp(context, props, "baseline-shift", "36", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
     QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 3.6);
@@ -253,7 +253,7 @@ void TestSvgText::testParseFontStyles()
         QCOMPARE(getFont().property(KoSvgTextProperties::FontFamiliesId).toStringList(), expectedFonts);
     }
 
-    QCOMPARE(getFont().property(KoSvgTextProperties::FontSizeId).toReal(), 15.0);
+    QCOMPARE(getFont().fontSize().value, 15.0);
     QCOMPARE(QFont::Style(getFont().property(KoSvgTextProperties::FontStyleId).toInt()), QFont::StyleOblique);
     QCOMPARE(getFont().property(KoSvgTextProperties::FontVariantCapsId).toInt(), KoSvgText::SmallCaps);
     QCOMPARE(getFont().property(KoSvgTextProperties::FontWeightId).toInt(), 600);
@@ -920,7 +920,7 @@ void TestSvgText::testConvertToStrippedSvg()
         KoSvgTextProperties props = baseShape->textProperties();
         QVERIFY(props.hasProperty(KoSvgTextProperties::FontSizeId));
 
-        const qreal fontSize = props.property(KoSvgTextProperties::FontSizeId).toReal();
+        const qreal fontSize = props.fontSize().value;
         QCOMPARE(fontSize, 19.0);
     }
 

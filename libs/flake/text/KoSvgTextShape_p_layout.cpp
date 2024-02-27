@@ -387,7 +387,7 @@ void KoSvgTextShape::Private::relayout()
             QVector<int> lengths;
             QStringList fontFeatures = properties.fontFeaturesForText(start, length);
 
-            qreal fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
+            qreal fontSize = properties.fontSize().value;
             const QFont::Style style = QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
             KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
             if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
@@ -1139,7 +1139,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
 
     KoSvgTextProperties properties = parent->properties;
 
-    const qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    const qreal fontSize = properties.fontSize().value;
     const qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
     QPointF baselineShiftTotal;
     KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());

@@ -9,6 +9,7 @@
 
 #include "kritaflake_export.h"
 #include "KoFlakeTypes.h"
+#include "KoSvgText.h"
 
 #include <QScopedPointer>
 #include <QVariant>
@@ -169,7 +170,7 @@ public:
      * non-inheritable properties is define by SVG 1.1. Used by the loading
      * code for resetting state automata's properties on entering a \<tspan\>.
      */
-    void resetNonInheritableToDefault();
+    void resetNonInheritableToDefault(qreal fontSize = 12.0, qreal xHeight = 6.0);
 
 
     /**
@@ -229,6 +230,8 @@ public:
 
     QFont generateFont() const;
 
+    qreal xHeight() const;
+
     /**
      * @brief fontFeaturesForText
      * Returns a harfbuzz friendly list of opentype font-feature settings using
@@ -251,6 +254,9 @@ public:
 
     QSharedPointer<KoShapeBackground> background() const;
     KoShapeStrokeModelSP stroke() const;
+
+    KoSvgText::CssLengthPercentage fontSize() const;
+    void setFontSize(const KoSvgText::CssLengthPercentage length);
 
     /**
      * Return a list of supported XML attribute names (defined in SVG)

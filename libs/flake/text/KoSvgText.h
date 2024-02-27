@@ -345,6 +345,42 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TextSpaceTrims)
 Q_DECLARE_FLAGS(HangingPunctuations, HangingPunctuation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(HangingPunctuations)
 
+struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercentage> {
+    enum UnitType {
+        Absolute, ///< Pt, everything needs to be converted to pt for this to work.
+        Percentage, /// 0 to 1.0
+        Em, /// multiply by Font-size
+        Ex, /// multiply by font-x-height.
+    };
+
+    CssLengthPercentage() {}
+    CssLengthPercentage(qreal value, UnitType unit = Absolute): value(value), unit(unit) {}
+
+    qreal value = 0.0;
+    UnitType unit = Absolute;
+
+    void convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const UnitType percentageUnit = Em) {
+        UnitType u = unit;
+        if (u == Percentage) {
+            u = percentageUnit;
+        }
+        if (u == Em) {
+            value = value * fontSizeInPt;
+        } else if (u == Ex) {
+            value = value * fontXHeightInPt;
+        }
+        unit = Absolute;
+    }
+
+    bool operator==(const CssLengthPercentage & other) const {
+        return value == other.value && unit == other.unit;
+    }
+};
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CssLengthPercentage &value);
+
+QString writeLengthPercentage(const CssLengthPercentage &length);
+
 /**
  * AutoValue represents the "auto-or-real" values used in SVG
  *
@@ -612,6 +648,7 @@ QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::StrokeProperty 
 
 } // namespace KoSvgText
 
+Q_DECLARE_METATYPE(KoSvgText::CssLengthPercentage)
 Q_DECLARE_METATYPE(KoSvgText::AutoValue)
 Q_DECLARE_METATYPE(KoSvgText::TextDecorations)
 Q_DECLARE_METATYPE(KoSvgText::HangingPunctuations)

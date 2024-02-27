@@ -8,6 +8,7 @@
 #include "SvgGraphicContext.h"
 
 #include <KoUnit.h>
+#include <KoSvgText.h>
 
 #include <QString>
 #include <QRectF>
@@ -225,53 +226,66 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, QStringView unit, bool horiz, b
     if (!start) {
         return 0.0;
     }
-    qreal value = 0.0;
-    const char *end = parseNumber(start, value);
+    KoSvgText::CssLengthPercentage length = parseUnitStruct(gc, unit, horiz, vert, bbox, true);
+    KoSvgTextProperties props = gc->textProperties;
+    KoSvgText::CssLengthPercentage fontSize = props.fontSize();
+    fontSize.convertToAbsolute(gc->fontSize, gc->fontExHeight);
+    props.setFontSize(fontSize);
+    length.convertToAbsolute(fontSize.value, props.xHeight());
+
+    return length.value;
+}
+
+KoSvgText::CssLengthPercentage SvgUtil::parseUnitStruct(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox, bool percentageViewBox)
+{
+    KoSvgText::CssLengthPercentage length;
+
+    if (unit.isEmpty())
+        return length;
+    QByteArray unitLatin1 = unit.trimmed().toLatin1();
+    // TODO : percentage?
+    const char *start = unitLatin1.data();
+    if (!start) {
+        return length;
+    }
+    const char *end = parseNumber(start, length.value);
 
     if (int(end - start) < unit.length()) {
         if (unit.right(2) == QLatin1String("px"))
-            value = SvgUtil::fromUserSpace(value);
+            length.value = SvgUtil::fromUserSpace(length.value);
         else if (unit.right(2) == QLatin1String("pt"))
-            value = ptToPx(gc, value);
+            length.value = ptToPx(gc, length.value);
         else if (unit.right(2) == QLatin1String("cm"))
-            value = ptToPx(gc, CM_TO_POINT(value));
+            length.value = ptToPx(gc, CM_TO_POINT(length.value));
         else if (unit.right(2) == QLatin1String("pc"))
-            value = ptToPx(gc, PI_TO_POINT(value));
+            length.value = ptToPx(gc, PI_TO_POINT(length.value));
         else if (unit.right(2) == QLatin1String("mm"))
-            value = ptToPx(gc, MM_TO_POINT(value));
+            length.value = ptToPx(gc, MM_TO_POINT(length.value));
         else if (unit.right(2) == QLatin1String("in"))
-            value = ptToPx(gc, INCH_TO_POINT(value));
+            length.value = ptToPx(gc, INCH_TO_POINT(length.value));
         else if (unit.right(2) == QLatin1String("em")) {
-            value = value * gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+            length.unit = KoSvgText::CssLengthPercentage::Em;
         } else if (unit.right(2) == QLatin1String("ex")) {
-            QFontMetrics metrics(gc->textProperties.generateFont());
-            value = value * metrics.xHeight();
+            length.unit = KoSvgText::CssLengthPercentage::Ex;
         } else if (unit.right(1) == QLatin1Char('%')) {
-            if (horiz && vert)
-                value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
-            else if (horiz)
-                value = (value / 100.0) * bbox.width();
-            else if (vert)
-                value = (value / 100.0) * bbox.height();
+
+            if (percentageViewBox) {
+                if (horiz && vert)
+                    length.value = (length.value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
+                else if (horiz)
+                    length.value = (length.value / 100.0) * bbox.width();
+                else if (vert)
+                    length.value = (length.value / 100.0) * bbox.height();
+            } else {
+                length.value = (length.value / 100.0);
+                length.unit = KoSvgText::CssLengthPercentage::Percentage;
+            }
         }
     } else {
-        value = SvgUtil::fromUserSpace(value);
+        length.value = SvgUtil::fromUserSpace(length.value);
     }
-    /*else
-    {
-        if( m_gc.top() )
-        {
-            if( horiz && vert )
-                value *= sqrt( pow( m_gc.top()->matrix.m11(), 2 ) + pow( m_gc.top()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
-            else if( horiz )
-                value /= m_gc.top()->matrix.m11();
-            else if( vert )
-                value /= m_gc.top()->matrix.m22();
-        }
-    }*/
-    //value *= 90.0 / DPI;
 
-    return value;
+    return length;
 }
 
 qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const QString &unit)

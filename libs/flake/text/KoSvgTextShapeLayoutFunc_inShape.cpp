@@ -488,7 +488,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
     }
     {
         // Calculate the default pos.
-        qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+        qreal fontSize = properties.fontSize().value;
         QRectF wordBox = isHorizontal? QRectF(0, fontSize * -0.8, SHAPE_PRECISION, fontSize)
                                      : QRectF(fontSize * -0.5, 0, fontSize, SHAPE_PRECISION);
         getFirstPosition(startPos, shapes.first(), wordBox, currentPos, writingMode, ltr);

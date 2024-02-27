@@ -141,9 +141,9 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
         result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2 &&
         forcedFontDPI > 0) {
 
-        qreal fontSize = result.property(KoSvgTextProperties::FontSizeId).toReal();
+        qreal fontSize = result.fontSize().value;
         fontSize *= qreal(forcedFontDPI) / 72.0;
-        result.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
+        result.setFontSize(KoSvgText::CssLengthPercentage(fontSize));
     }
     if (result.hasProperty(KoSvgTextProperties::KraTextVersionId) && result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3
         && result.hasProperty(KoSvgTextProperties::FontSizeAdjustId)) {

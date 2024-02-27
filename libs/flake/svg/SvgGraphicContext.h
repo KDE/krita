@@ -65,6 +65,8 @@ public:
     bool autoFillMarkers {false};
 
     KoSvgTextProperties textProperties;
+    qreal fontSize{KoSvgTextProperties::defaultProperties().fontSize().value};
+    qreal fontExHeight{fontSize * 0.5};
     QString shapeInsideValue; ///< String of value shape-inside, will be parsed later.
     QString shapeSubtractValue; ///< String of value shape-subtract, will be parsed later.
 

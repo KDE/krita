@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-01-29 03:11+0000\n"
-"PO-Revision-Date: 2024-01-22 22:02+0100\n"
+"PO-Revision-Date: 2024-02-25 12:31+0100\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -16470,7 +16470,9 @@ msgstr "Tirer pour déplacer la poignée"
 #: libs/flake/tools/KoPathTool.cpp:662
 #, kde-format
 msgid "Drag to move point. Shift click to change point type."
-msgstr "Tirer pour déplacer le point. Maj+clic pour modifier le type de point."
+msgstr ""
+"Tirer pour déplacer le point. Faites un clic avec la touche « Maj » enfoncée "
+"pour modifier le type de point."
 
 #: libs/flake/tools/KoPathTool.cpp:664
 #, kde-format
@@ -24856,8 +24858,8 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
-"<html><head/><body><p>Peut être utilisé en cas de problème de performanceou "
-"d'artefact avec les assistants de dessin. \n"
+"<html><head/><body><p>Peut être utilisé en cas de problème de performance ou "
+"d'artefacts avec les assistants de dessin. \n"
 "</p><p>Modifier la taille du cache pixmap requiert un redémarrage.</p></"
 "body></html>"
 
@@ -25117,19 +25119,19 @@ msgstr ""
 #: libs/ui/forms/wdgdlgfilelayer.ui:112
 #, kde-format
 msgid "Scaling Options"
-msgstr "Options de redimensionnement"
+msgstr "Options de mise à l'échelle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioDontScale)
 #: libs/ui/forms/wdgdlgfilelayer.ui:118
 #, kde-format
 msgid "No Scaling"
-msgstr "Pas de redimensionnement"
+msgstr "Aucune mise à l'échelle"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioScaleToImageSize)
 #: libs/ui/forms/wdgdlgfilelayer.ui:128
 #, kde-format
 msgid "Scale to Image Size"
-msgstr "Redimensionner à la taille de l'image"
+msgstr "Mettre à l'échelle vers la taille de l'image"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioScalePPI)
 #: libs/ui/forms/wdgdlgfilelayer.ui:135
@@ -25528,7 +25530,8 @@ msgstr "Fort (Krita 4.1 et versions ultérieures)"
 #: libs/ui/forms/wdggeneralsettings.ui:703
 #, kde-format
 msgid "Switch Control/Alt Selection Modifiers"
-msgstr "Activer la touche Ctrl/Alt pour modifier les sélections"
+msgstr ""
+"Modifier les modificateurs de sélection entre les touches « CTRL » / « ALT »"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkEnableTouch)
 #: libs/ui/forms/wdggeneralsettings.ui:710
@@ -40226,8 +40229,8 @@ msgid ""
 "though).\n"
 "Do you wish to continue?"
 msgstr ""
-"Les enregistrements sélectionnés vont être supprimés et vous ne pourrez "
-"plusexporter de vidéo en accéléré avec eux (les vidéos en accéléré déjà "
+"Les enregistrements sélectionnés vont être supprimés et vous ne pourrez plus "
+"exporter de vidéo en accéléré avec eux (les vidéos en accéléré déjà "
 "exportées seront tout de même préservées).\n"
 "Voulez-vous vraiment continuer ?"
 

@@ -5,6 +5,7 @@
  */
 
 #include "kis_animation_frame_cache.h"
+#include "kis_animation_frame_cache_p.h"
 
 #include <QMap>
 
@@ -253,6 +254,104 @@ bool KisAnimationFrameCache::shouldUploadNewFrame(int newTime, int oldTime) cons
 KisAnimationFrameCache::CacheStatus KisAnimationFrameCache::frameStatus(int time) const
 {
     return m_d->hasFrame(time) ? Cached : Uncached;
+}
+
+FramesGluerBase::~FramesGluerBase()
+{
+}
+
+bool FramesGluerBase::glueFrames(const KisTimeSpan &range) {
+    bool framesChanged = false;
+
+    if (frames.isEmpty()) return framesChanged;
+
+    // find the first element, which `end` is greater or equal to `range.start()`
+    auto it = frames.begin();
+    for (; it != frames.end(); ++it) {
+        if (it.key() + it.value() - 1 >= range.start()) {
+            break;
+        }
+    }
+
+    if (it != frames.end()) {
+        if (it.key() > range.start()) {
+            // Reinsert with an earilier start
+            const int oldStart = it.key();
+            const int newStart = range.start();
+            const int newLength = range.isInfinite() ? -1 : range.duration();
+
+            it = frames.erase(it);
+            it = frames.insert(newStart, newLength);
+            this->moveFrame(oldStart, newStart);
+            framesChanged = true;
+        }
+
+        if (range.isInfinite()) {
+            it.value() = -1;
+            framesChanged = true;
+        } else if (it.value() != -1 && it.key() + it.value() - 1 < range.end()) {
+            it.value() = range.end() - it.key() + 1;
+            framesChanged = true;
+        }
+
+        it = std::next(it);
+
+        while (it != frames.end()) {
+            if (range.isInfinite() || (it.value() != -1 && it.key() + it.value() - 1 <= range.end())) {
+                this->forgetFrame(it.key());
+                it = frames.erase(it);
+                framesChanged = true;
+            } else if (it.key() > range.end()) {
+                break;
+            } else if (it.value() == -1 || it.key() + it.value() - 1 > range.end()) {
+                // Reinsert with a later start
+                int oldStart = it.key();
+                int newStart = range.end() + 1;
+                int newLength = it.value() == -1 ? -1 : (it.key() + it.value() - 1 - newStart + 1);
+
+                frames.erase(it);
+                frames.insert(newStart, newLength);
+                this->moveFrame(oldStart, newStart);
+                framesChanged = true;
+                break;
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_BREAK(0 && "we should never get here");
+            }
+        }
+    }
+
+    return framesChanged;
+}
+
+bool KisAnimationFrameCache::tryGlueSameFrames(const KisTimeSpan &range)
+{
+    struct FramesGluer : FramesGluerBase
+    {
+        KisAbstractFrameCacheSwapper *swapper {nullptr};
+
+        FramesGluer(KisAbstractFrameCacheSwapper *_swapper, QMap<int, int> &_frames)
+            : FramesGluerBase(_frames)
+            , swapper(_swapper)
+        {}
+
+        void moveFrame(int oldStart, int newStart) override {
+            swapper->moveFrame(oldStart, newStart);
+        }
+
+        void forgetFrame(int start) override{
+            swapper->forgetFrame(start);
+        }
+    };
+
+    FramesGluer gluer(m_d->swapper.data(), m_d->newFrames);
+
+    const bool cacheChanged = gluer.glueFrames(range);
+
+    if (cacheChanged) {
+        emit changed();
+    }
+
+    return cacheChanged;
 }
 
 KisImageWSP KisAnimationFrameCache::image()

@@ -49,6 +49,8 @@ public:
     };
 
     CacheStatus frameStatus(int time) const;
+    bool tryGlueSameFrames(const KisTimeSpan &range);
+
 
     KisImageWSP image();
 

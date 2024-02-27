@@ -36,6 +36,8 @@ QList<int> calcDirtyFramesList(KisAnimationFrameCacheSP cache, const KisTimeSpan
 
             if (cache->frameStatus(stillFrameRange.start()) == KisAnimationFrameCache::Uncached) {
                 result.append(stillFrameRange.start());
+            } else {
+                cache->tryGlueSameFrames(stillFrameRange);
             }
 
             if (stillFrameRange.isInfinite()) {

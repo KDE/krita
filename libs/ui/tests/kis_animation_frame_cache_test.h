@@ -18,6 +18,9 @@ class KisAnimationFrameCacheTest : public QObject
 private Q_SLOTS:
     void testCache();
 
+    void testFrameGlueing_data();
+    void testFrameGlueing();
+
     void slotFrameGenerationFinished(int time);
 
 private:

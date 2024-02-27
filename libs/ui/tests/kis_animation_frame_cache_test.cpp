@@ -101,4 +101,240 @@ void KisAnimationFrameCacheTest::slotFrameGenerationFinished(int time)
 
 }
 
+#include <kis_animation_frame_cache_p.h>
+
+using MapType = QMap<int, int>;
+using DroppedFramesType = std::vector<int>;
+using MovedFramesType = std::vector<std::pair<int, int>>;
+
+
+struct TestingFramesGluer : FramesGluerBase
+{
+    TestingFramesGluer(QMap<int, int> &_frames) : FramesGluerBase(_frames) {}
+
+    DroppedFramesType droppedSwapFrames;
+    MovedFramesType movedSwapFrames;
+
+    void moveFrame(int oldStart, int newStart) override
+    {
+        movedSwapFrames.emplace_back(oldStart, newStart);
+    }
+    void forgetFrame(int start) override
+    {
+        droppedSwapFrames.emplace_back(start);
+    }
+};
+
+
+void KisAnimationFrameCacheTest::testFrameGlueing_data()
+{
+    QTest::addColumn<KisTimeSpan>("glueRange");
+    QTest::addColumn<MapType>("referenceFrames");
+    QTest::addColumn<DroppedFramesType>("droppedSwapFrames");
+    QTest::addColumn<MovedFramesType>("movedSwapFrames");
+    QTest::addColumn<bool>("framesChanged");
+
+    QTest::newRow("overlap-first")
+        << KisTimeSpan::fromTimeWithDuration(0, 3)
+        << QMap<int, int> {
+               {0, 3},
+               {5, 3},
+               {8, 3},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{}
+        << false;
+
+    QTest::newRow("extend-first")
+        << KisTimeSpan::fromTimeWithDuration(1, 3)
+        << QMap<int, int> {
+               {0, 4},
+               {5, 3},
+               {8, 3},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("extend-first-up-to-next")
+        << KisTimeSpan::fromTimeWithDuration(2, 3)
+        << QMap<int, int> {
+               {0, 5},
+               {5, 3},
+               {8, 3},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("extend-first-consume-next")
+        << KisTimeSpan::fromTimeWithDuration(2, 4)
+        << QMap<int, int> {
+               {0, 6},
+               {6, 2},
+               {8, 3},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{{5, 6}}
+        << true;
+
+    QTest::newRow("extend-first-consume-next-fully")
+        << KisTimeSpan::fromTimeWithDuration(2, 6)
+        << QMap<int, int> {
+               {0, 8},
+               {8, 3},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{5}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("extend-first-consume-1.5")
+        << KisTimeSpan::fromTimeWithDuration(2, 7)
+        << QMap<int, int> {
+               {0, 9},
+               {9, 2},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{5}
+        << MovedFramesType{{8, 9}}
+        << true;
+
+    QTest::newRow("extend-first-consume-2")
+        << KisTimeSpan::fromTimeWithDuration(2, 9)
+        << QMap<int, int> {
+               {0, 11},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{5, 8}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("extend-first-infinite")
+        << KisTimeSpan::infinite(2)
+        << QMap<int, int> {
+               {0, -1}
+           }
+        << DroppedFramesType{5, 8, 11, 16}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("extend-middle")
+        << KisTimeSpan::fromTimeWithDuration(12, 3)
+        << QMap<int, int> {
+               {0, 3},
+               {5, 3},
+               {8, 3},
+               {11, 4},
+               {16, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("extend-middle-half-consume-infinite")
+        << KisTimeSpan::fromTimeWithDuration(12, 5)
+        << QMap<int, int> {
+               {0, 3},
+               {5, 3},
+               {8, 3},
+               {11, 6},
+               {17, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{{16, 17}}
+        << true;
+
+    QTest::newRow("extend-middle-consume-infinite")
+        << KisTimeSpan::infinite(12)
+        << QMap<int, int> {
+               {0, 3},
+               {5, 3},
+               {8, 3},
+               {11, -1}
+           }
+        << DroppedFramesType{16}
+        << MovedFramesType{}
+        << true;
+
+    QTest::newRow("end-consume-infinite")
+        << KisTimeSpan::infinite(17)
+        << QMap<int, int> {
+               {0, 3},
+               {5, 3},
+               {8, 3},
+               {11, 3},
+               {16, -1}
+           }
+        << DroppedFramesType{}
+        << MovedFramesType{}
+        << false;
+}
+
+void KisAnimationFrameCacheTest::testFrameGlueing()
+{
+    QMap<int, int> frames;
+
+    frames.insert(0, 3);
+    frames.insert(5, 3);
+    frames.insert(8, 3);
+    frames.insert(11, 3);
+    frames.insert(16, -1);
+
+    const QMap<int, int> originalFrames = frames;
+
+    QFETCH(KisTimeSpan, glueRange);
+    QFETCH(MapType, referenceFrames);
+    QFETCH(bool, framesChanged);
+    QFETCH(DroppedFramesType, droppedSwapFrames);
+    QFETCH(MovedFramesType, movedSwapFrames);
+
+    TestingFramesGluer gluer(frames);
+
+    const bool result = gluer.glueFrames(glueRange);
+
+    if (frames != referenceFrames) {
+        qDebug() << "=== FAILURE ===";
+        qDebug() << ppVar(originalFrames);
+        qDebug() << ppVar(glueRange);
+        qDebug() << "===============";
+        qDebug() << ppVar(frames);
+        qDebug() << ppVar(referenceFrames);
+        qDebug() << "===============";
+
+        QFAIL("unexpected frames after gluing");
+    }
+
+    if (gluer.droppedSwapFrames != droppedSwapFrames ||
+        gluer.movedSwapFrames != movedSwapFrames) {
+
+        qDebug() << "=== FAILURE (swapper callbacks) ===";
+        qDebug() << ppVar(originalFrames);
+        qDebug() << ppVar(glueRange);
+        qDebug() << "===================================";
+        qDebug() << ppVar(frames);
+        qDebug() << ppVar(referenceFrames);
+        qDebug() << ppVar(droppedSwapFrames);
+        qDebug() << ppVar(gluer.droppedSwapFrames);
+        qDebug() << ppVar(movedSwapFrames);
+        qDebug() << ppVar(gluer.movedSwapFrames);
+        qDebug() << "===================================";
+
+        QFAIL("unexpected swapper callbacks");
+    }
+
+    QCOMPARE(result, framesChanged);
+}
+
 KISTEST_MAIN(KisAnimationFrameCacheTest)

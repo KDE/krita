@@ -11,20 +11,25 @@ windows-build:
     KDECI_REPO_METADATA_PATH: "$CI_PROJECT_DIR\\krita-deps-management\\repo-metadata"
     # KDECI_WORKDIR_PATH: "C:\\_" # don't use separate workdir since package script will fail!
     KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF"
+    KRITACI_SKIP_DEBUG_PACKAGE: "True"
+    KRITACI_BUILD_INSTALLERS: "False"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management
     - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git
     - python -m venv venv --upgrade-deps
     - . venv\Scripts\Activate.ps1
     - pip install -r krita-deps-management/requirements.txt
+    - pip install -r ci-notary-service/requirements.txt
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
       # TODO: bake this variable into the docker image
     - $env:PATH = "c:\Program Files\CMake\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\bin;c:\tools\llvm-mingw-20220906-ucrt-x86_64\x86_64-w64-mingw32\bin;$env:PATH"
     - python -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared  --skip-publishing
-    - python -u build-tools/ci-scripts/build-windows-package.py --skip-debug-package
+    - python -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Windows/Qt5/Shared --skip-publishing
+    - python -u build-tools/ci-scripts/build-windows-package.py
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME
@@ -32,8 +37,20 @@ windows-build:
     when: always
     paths:
       - "krita-*.zip"
+      - "krita-*-setup.exe"
+      - "krita-*.msix"
     reports:
       junit: JUnitTestResults.xml
       coverage_report:
         coverage_format: cobertura
         path: CoberturaLcovResults.xml
+
+windows-packages:
+  extends:
+  - windows-build
+  when: manual
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KRITACI_SKIP_DEBUG_PACKAGE: "False"
+    KRITACI_BUILD_INSTALLERS: "True"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF"

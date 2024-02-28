@@ -11,6 +11,7 @@ linux-build:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-appimage-qt5.15
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
     KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management
@@ -36,3 +37,11 @@ linux-build:
       coverage_report:
         coverage_format: cobertura
         path: CoberturaLcovResults.xml
+
+linux-packages:
+  extends:
+  - linux-build
+  when: manual
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF"

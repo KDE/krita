@@ -212,7 +212,7 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
 void SvgParser::setDefaultKraTextVersion(int version)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_context.currentGC());
-    m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
+    m_context.currentGC()->newTextProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -1791,7 +1791,6 @@ void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoa
             QDomElement b = n.toElement();
             textLoader.nextNode();
             if (b.isNull()) {
-                textLoader.loadSvg(e, m_context);
                 textLoader.loadSvgText(n.toText(), m_context);
                 KoShape *styleDummy = new KoPathShape();
                 applyCurrentBasicStyle(styleDummy);
@@ -1850,7 +1849,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     }
 
     if (e.hasAttribute("krita:textVersion")) {
-        m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
+        m_context.currentGC()->newTextProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
 
         if (m_isInsideTextSubtree) {
             debugFlake << "WARNING: \"krita:textVersion\" attribute appeared in non-root text shape";
@@ -1862,8 +1861,8 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     }
 
 
-    if (m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
-        m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
+    if (m_context.currentGC()->newTextProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
+        m_context.currentGC()->newTextProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
 
         static const KoID warning("warn_text_version_1",
                                   i18nc("warning while loading SVG text",

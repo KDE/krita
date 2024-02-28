@@ -98,16 +98,26 @@ bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
         && id != TextDecorationColorId && id != TextDecorationStyleId && id != InlineSizeId && id != TextTrimId;
 }
 
-void KoSvgTextProperties::resetNonInheritableToDefault(qreal fontSize, qreal xHeight)
+void KoSvgTextProperties::resetNonInheritableToDefault(const qreal fontSize, const qreal xHeight)
 {
+    // First resolve 'font-*' properties.
+    // See https://www.w3.org/TR/css-values-4/#font-relative-lengths
+    // Note: if we ever support lh (lineheight unit) that needs to be resolved here first too.
+    KoSvgText::CssLengthPercentage size = this->fontSize();
+    size.convertToAbsolute(fontSize, xHeight);
+    this->setFontSize(size);
+
+    qreal usedSize = size.value;
+    qreal usedXHeight = this->xHeight();
+
     auto it = m_d->properties.begin();
     for (; it != m_d->properties.end(); ++it) {
         if (!m_d->isInheritable(it.key())) {
             it.value() = defaultProperties().property(it.key());
         }
-        if (it.value().canConvert<KoSvgText::CssLengthPercentage>()) {
+        if (it.value().canConvert<KoSvgText::CssLengthPercentage>() && it.key() != KoSvgTextProperties::FontSizeId) {
             KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
-            length.convertToAbsolute(fontSize, xHeight);
+            length.convertToAbsolute(usedSize, usedXHeight);
             it.value() = QVariant::fromValue(length);
         }
     }
@@ -210,7 +220,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 setProperty(BaselineShiftValueId, SvgUtil::fromPercentage(value));
             } else {
                 const qreal parsedValue = SvgUtil::parseUnitXY(context.currentGC(), value);
-                const qreal lineHeight = context.currentGC()->fontSize;
+                const qreal lineHeight = context.currentGC()->textProperties.fontSize().value;
 
                 if (lineHeight != 0.0) {
                     setProperty(BaselineShiftValueId, parsedValue / lineHeight);
@@ -409,6 +419,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         TextDecorationUnderlinePosition underlinePosV = TextDecorationUnderlinePosition(propertyOrDefault(TextDecorationPositionVerticalId).toInt());
         ;
         QColor textDecorationColor = propertyOrDefault(TextDecorationStyleId).value<QColor>();
+        bool setPosition = false;
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         Q_FOREACH (const QString &param, value.split(' ', Qt::SkipEmptyParts)) {
@@ -433,12 +444,16 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 style = Wavy;
             } else if (param == "auto") {
                 underlinePosH = UnderlineAuto;
+                setPosition = true;
             } else if (param == "under") {
                 underlinePosH = UnderlineUnder;
+                setPosition = true;
             } else if (param == "left") {
                 underlinePosV = UnderlineLeft;
+                setPosition = true;
             } else if (param == "right") {
                 underlinePosV = UnderlineRight;
+                setPosition = true;
             } else if (QColor::isValidColor(param)) {
                 // TODO: Convert to KoColor::fromSvg11.
                 textDecorationColor = QColor(param);
@@ -454,7 +469,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         if (command == "text-decoration" || command == "text-decoration-color") {
             setProperty(TextDecorationColorId, QVariant::fromValue(textDecorationColor));
         }
-        if (command == "text-decoration" || command == "text-decoration-position") {
+        if ((command == "text-decoration" || command == "text-decoration-position") && setPosition) {
             setProperty(TextDecorationPositionHorizontalId, underlinePosH);
             setProperty(TextDecorationPositionVerticalId, underlinePosV);
         }

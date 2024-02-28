@@ -227,9 +227,9 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, QStringView unit, bool horiz, b
         return 0.0;
     }
     KoSvgText::CssLengthPercentage length = parseUnitStruct(gc, unit, horiz, vert, bbox, true);
-    KoSvgTextProperties props = gc->textProperties;
+    KoSvgTextProperties props = gc->newTextProperties;
     KoSvgText::CssLengthPercentage fontSize = props.fontSize();
-    fontSize.convertToAbsolute(gc->fontSize, gc->fontExHeight);
+    fontSize.convertToAbsolute(gc->textProperties.fontSize().value, gc->textProperties.xHeight());
     props.setFontSize(fontSize);
     length.convertToAbsolute(fontSize.value, props.xHeight());
 

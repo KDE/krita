@@ -290,6 +290,7 @@ struct SubChunk {
     bool textInPath = false;
     bool firstTextInPath = false; ///< We need to mark the first text in path as an anchored chunk.
                                   ///< original index matches which new index;
+    KoSvgTextProperties inheritedProps;
     QSharedPointer<KoShapeBackground> bg;
 };
 
@@ -396,7 +397,9 @@ public:
                                 int &currentIndex,
                                 bool isHorizontal,
                                 bool ltr,
-                                bool wrapping);
+                                bool wrapping,
+                                const KoSvgText::TextDecorationUnderlinePosition underlinePosH = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto,
+                                const KoSvgText::TextDecorationUnderlinePosition underlinePosV = KoSvgText::TextDecorationUnderlinePosition::UnderlineAuto);
     QMap<KoSvgText::TextDecoration, QPainterPath> generateDecorationPaths(KisForest<KoSvgTextContentElement>::child_iterator currentTextElement,
                                                                           const int &start, const int &end,
                                                                           const QVector<CharacterResult> &result,
@@ -438,7 +441,7 @@ public:
     /**
      * Return a linearized representation of a subtree of text "subchunks".
      */
-    static QVector<SubChunk> collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath);
+    static QVector<SubChunk> collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, KoSvgTextProperties parent, bool textInPath, bool &firstTextInPath);
 
     /**
      * @brief findTextContentElementForIndex

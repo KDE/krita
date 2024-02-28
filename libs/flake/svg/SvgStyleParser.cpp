@@ -236,33 +236,33 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "paint-order") {
         gc->paintOrder = params;
     } else if (command == "font-family") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-style") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "font-variant" || command == "font-variant-caps" || command == "font-variant-alternates" || command == "font-variant-ligatures"
                || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-position") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "font-feature-settings") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-stretch") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-weight") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-variation-settings") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-optical-sizing") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size-adjust") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font") {
         qWarning() << "Krita does not support the 'font' shorthand";
     } else if (command == "text-decoration" || command == "text-decoration-line" || command == "text-decoration-style" || command == "text-decoration-color"
                || command == "text-decoration-position") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "color") {
         QColor color;
@@ -332,11 +332,11 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
                || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align"
                || command ==  "shape-padding" || command ==   "shape-margin" || command ==   "text-orientation") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";
     } else if (d->textAttributes.contains(command)) {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
     }
 
     gc->fillColor = fillcolor;

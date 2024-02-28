@@ -18,9 +18,6 @@ SvgGraphicsContext::SvgGraphicsContext()
     stroke->setLineWidth(1.0);
     stroke->setCapStyle(Qt::FlatCap);
     stroke->setJoinStyle(Qt::MiterJoin);
-
-    fontSize = textProperties.fontSize().value;
-    fontExHeight = textProperties.xHeight();
 }
 
 SvgGraphicsContext::SvgGraphicsContext(const SvgGraphicsContext &gc)

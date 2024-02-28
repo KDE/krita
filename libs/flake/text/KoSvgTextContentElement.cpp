@@ -162,7 +162,7 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
-    KoSvgTextProperties props = gc->textProperties;
+    KoSvgTextProperties props = gc->newTextProperties;
     QVector<KoSvgTextProperties::PropertyId> generic = {KoSvgTextProperties::FillId,
                                                         KoSvgTextProperties::StrokeId,
                                                         KoSvgTextProperties::PaintOrder,
@@ -173,7 +173,7 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
             props.setProperty(*it.i, properties.property(*it.i));
         }
     }
-    properties = gc->textProperties;
+    properties = props;
 
     textLength = KoSvgText::parseAutoValueXY(e.attribute("textLength", ""), context, "");
     lengthAdjust = KoSvgText::parseLengthAdjust(e.attribute("lengthAdjust", "spacing"));

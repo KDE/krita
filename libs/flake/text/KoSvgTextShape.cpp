@@ -1314,12 +1314,11 @@ void KoSvgTextShape::debugParsing()
 {
     qDebug() << "Tree size:" << KisForestDetail::size(d->textData);
     QString spaces;
-    QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
     for (auto it = compositionBegin(d->textData); it != compositionEnd(d->textData); it++) {
         if (it.state() == KisForestDetail::Enter) {
 
             qDebug() << QString(spaces + "+") << it->text;
-            qDebug() << QString(spaces + "|") << it->properties.ownProperties(parentProps.last()).convertToSvgTextAttributes();
+            qDebug() << QString(spaces + "|") << it->properties.convertToSvgTextAttributes();
             qDebug() << QString(spaces + "| Fill set: ") << it->properties.hasProperty(KoSvgTextProperties::FillId);
             qDebug() << QString(spaces + "| Stroke set: ") << it->properties.hasProperty(KoSvgTextProperties::StrokeId);
             qDebug() << QString(spaces + "| Opacity: ") << it->properties.property(KoSvgTextProperties::Opacity);
@@ -1328,12 +1327,10 @@ void KoSvgTextShape::debugParsing()
             qDebug() << QString(spaces + "| TextPath set: ") << (it->textPath);
             qDebug() << QString(spaces + "| Transforms set: ") << it->localTransformations;
             spaces.append(" ");
-            parentProps.append(it->properties);
         }
 
         if (it.state() == KisForestDetail::Leave) {
             spaces.chop(1);
-            parentProps.pop_back();
         }
     }
 }

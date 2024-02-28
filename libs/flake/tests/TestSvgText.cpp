@@ -400,7 +400,7 @@ void TestSvgText::testSimpleText()
     QCOMPARE(*transform[0].yPos, 27.0);
 
     bool dummy = false;
-    QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(chunkShape->d->textData.childBegin(), false, dummy);
+    QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(chunkShape->d->textData.childBegin(), KoSvgTextProperties::defaultProperties(), false, dummy);
 
     QCOMPARE(subChunks.size(), 1);
     QCOMPARE(subChunks[0].text.size(), 35);
@@ -459,7 +459,7 @@ void TestSvgText::testComplexText()
         QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
-        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, KoSvgTextProperties::defaultProperties(), false, dummy);
 
         QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggresive subchunking.
         QCOMPARE(subChunks[0].text.size(), 20);
@@ -478,7 +478,7 @@ void TestSvgText::testComplexText()
         QVERIFY(bool(transform[0].xPos));
 
         bool dummy = false;
-        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, KoSvgTextProperties::defaultProperties(), false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 4);
@@ -497,7 +497,7 @@ void TestSvgText::testComplexText()
         QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
-        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, KoSvgTextProperties::defaultProperties(), false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 7);
@@ -516,7 +516,7 @@ void TestSvgText::testComplexText()
         QCOMPARE(transform.size(), 0);
 
         bool dummy = false;
-        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, false, dummy);
+        QVector<SubChunk> subChunks = KoSvgTextShape::Private::collectSubChunks(child, KoSvgTextProperties::defaultProperties(), false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 24);

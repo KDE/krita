@@ -166,7 +166,7 @@ void KoSvgTextShape::Private::relayout()
 
     bool _ignore = false;
     const QVector<SubChunk> textChunks =
-        collectSubChunks(textData.childBegin(),false, _ignore);
+        collectSubChunks(textData.childBegin(), KoSvgTextProperties::defaultProperties(),false, _ignore);
     QString text;
     QVector<QPair<int, int>> clusterToOriginalString;
     QString plainText;
@@ -270,7 +270,7 @@ void KoSvgTextShape::Private::relayout()
         int start = 0;
         Q_FOREACH (const SubChunk &chunk, textChunks) {
             int length = chunk.text.size();
-            KoSvgTextProperties properties = chunk.associatedLeaf->properties;
+            KoSvgTextProperties properties = chunk.inheritedProps;
 
             // In this section we retrieve the resolved transforms and
             // direction/anchoring that we can get from the subchunks.
@@ -1451,7 +1451,9 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
     int &currentIndex,
     bool isHorizontal,
     bool ltr,
-    bool wrapping)
+    bool wrapping,
+    const KoSvgText::TextDecorationUnderlinePosition underlinePosH,
+    const KoSvgText::TextDecorationUnderlinePosition underlinePosV)
 {
 
     const int i = currentIndex;
@@ -1475,6 +1477,17 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
         }
     }
 
+    TextDecorationUnderlinePosition newUnderlinePosH =
+        TextDecorationUnderlinePosition(
+                currentTextElement->properties.property(
+                    KoSvgTextProperties::TextDecorationPositionHorizontalId,
+                    underlinePosH).toInt());
+    TextDecorationUnderlinePosition newUnderlinePosV =
+        TextDecorationUnderlinePosition(
+                currentTextElement->properties.property(
+                    KoSvgTextProperties::TextDecorationPositionVerticalId,
+                    underlinePosV).toInt());
+
     for (auto child = KisForestDetail::childBegin(currentTextElement); child != KisForestDetail::childEnd(currentTextElement); child++) {
         computeTextDecorations(child,
                                result,
@@ -1486,17 +1499,17 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                                currentIndex,
                                isHorizontal,
                                ltr,
-                               wrapping);
+                               wrapping,
+                               newUnderlinePosH,
+                               newUnderlinePosV);
     }
 
     TextDecorations decor = currentTextElement->properties.propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<TextDecorations>();
     if (decor != DecorationNone && currentTextElement->properties.hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
         KoSvgTextProperties properties =currentTextElement->properties;
-        TextDecorationStyle style = TextDecorationStyle(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationStyleId).toInt());
-        TextDecorationUnderlinePosition underlinePosH =
-            TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
-        TextDecorationUnderlinePosition underlinePosV =
-            TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
+        TextDecorationStyle style = TextDecorationStyle(
+                    properties.propertyOrDefault(
+                        KoSvgTextProperties::TextDecorationStyleId).toInt());
 
         QPainterPathStroker stroker;
 
@@ -1504,7 +1517,7 @@ void KoSvgTextShape::Private::computeTextDecorations(// NOLINT(readability-funct
                 generateDecorationPaths(currentTextElement, i, j,
                                         result, stroker, isHorizontal, decor,
                                         minimumDecorationThickness, style, false, currentTextPath,
-                                        currentTextPathOffset, textPathSide, underlinePosH, underlinePosV
+                                        currentTextPathOffset, textPathSide, newUnderlinePosH, newUnderlinePosV
                                         );
 
         // And finally add the paths to the chunkshape.
@@ -1963,7 +1976,7 @@ void KoSvgTextShape::Private::applyTextPath(KisForest<KoSvgTextContentElement>::
         currentIndex = endIndex;
     }
 }
-QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, bool textInPath, bool &firstTextInPath)
+QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextContentElement>::child_iterator it, KoSvgTextProperties parentProps, bool textInPath, bool &firstTextInPath)
 {
     QVector<SubChunk> result;
     if (it->textPath) {
@@ -1971,18 +1984,20 @@ QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextC
         firstTextInPath = true;
     }
 
+    KoSvgTextProperties currentProps = it->properties;
+    currentProps.inheritFrom(parentProps);
+    currentProps.resetNonInheritableToDefault(parentProps.fontSize().value, parentProps.xHeight());
+
+
     if (childCount(it)) {
         for (auto child = KisForestDetail::childBegin(it); child != KisForestDetail::childEnd(it); child++) {
-         result += collectSubChunks(child, textInPath, firstTextInPath);
+         result += collectSubChunks(child, currentProps, textInPath, firstTextInPath);
         }
     } else {
         SubChunk chunk(it);
-        for (auto parentIt = KisForestDetail::hierarchyBegin(siblingCurrent(it)); parentIt != KisForestDetail::hierarchyEnd(siblingCurrent(it)); parentIt++) {
-            if (parentIt->properties.hasProperty(KoSvgTextProperties::FillId)) {
-                chunk.bg = parentIt->properties.background();
-                break;
-            }
-        }
+        chunk.inheritedProps = currentProps;
+        chunk.bg = chunk.inheritedProps.background();
+
 
         KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(it->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
         KoSvgText::Direction direction = KoSvgText::Direction(it->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());

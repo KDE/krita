@@ -1877,7 +1877,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    textLoader.loadSvg(e, m_context);
+    textLoader.loadSvg(e, m_context, true);
 
     // 1) apply transformation only in case we are not overriding the shape!
     // 2) the transformation should be applied *before* the shape is added to the group!

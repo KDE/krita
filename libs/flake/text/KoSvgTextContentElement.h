@@ -77,7 +77,7 @@ public:
     /// The associated outline. Currently only a bounding box.
     QPainterPath associatedOutline;
 
-    bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context, bool root = false);
 
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 

@@ -157,12 +157,16 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
 
 }
 
-bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context)
+bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context, bool root)
 {
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
     KoSvgTextProperties props = gc->newTextProperties;
+    if (root) {
+        props.inheritFrom(gc->textProperties, true);
+    }
+
     QVector<KoSvgTextProperties::PropertyId> generic = {KoSvgTextProperties::FillId,
                                                         KoSvgTextProperties::StrokeId,
                                                         KoSvgTextProperties::PaintOrder,

@@ -51,12 +51,12 @@ void KoSvgTextLoader::nextNode()
     d->currentNode = d->shape->d->textData.insert(KisForestDetail::siblingEnd(d->currentNode), KoSvgTextContentElement());
 }
 
-bool KoSvgTextLoader::loadSvg(const QDomElement &element, SvgLoadingContext &context)
+bool KoSvgTextLoader::loadSvg(const QDomElement &element, SvgLoadingContext &context, bool root)
 {
     if (KisForestDetail::isEnd(d->currentNode)) {
         nextNode();
     }
-    return d->currentNode->loadSvg(element, context);
+    return d->currentNode->loadSvg(element, context, root);
 }
 
 bool KoSvgTextLoader::loadSvgText(const QDomText &text, SvgLoadingContext &context)

@@ -27,7 +27,7 @@ public:
     void nextNode();
 
     /// Create a new text node.
-    bool loadSvg(const QDomElement &element, SvgLoadingContext &context);
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context, bool root = false);
     /// Loads the textt into the current node.
     bool loadSvgText(const QDomText &text, SvgLoadingContext &context);
 

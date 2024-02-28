@@ -147,12 +147,12 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "baseline-shift", "super", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftSuper);
     addProp(context, props, "baseline-shift", "baseline", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftNone);
 
-    addProp(context, props, "baseline-shift", "10%", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
+    addProp(context, props, "baseline-shift", "10%", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftLengthPercentage);
     QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.1);
 
     context.currentGC()->textProperties.setFontSize(KoSvgText::CssLengthPercentage(180.0));
 
-    addProp(context, props, "baseline-shift", "36", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftPercentage);
+    addProp(context, props, "baseline-shift", "36", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftLengthPercentage);
     QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 3.6);
 
     addProp(context, props, "kerning", "auto", KoSvgTextProperties::KerningId, KoSvgText::AutoValue());
@@ -193,7 +193,7 @@ void TestSvgText::testTextPropertiesDifference()
     props.setProperty(KoSvgTextProperties::TextAnchorId, AnchorEnd);
     props.setProperty(KoSvgTextProperties::DominantBaselineId, BaselineNoChange);
     props.setProperty(KoSvgTextProperties::AlignmentBaselineId, BaselineIdeographic);
-    props.setProperty(KoSvgTextProperties::BaselineShiftModeId, ShiftPercentage);
+    props.setProperty(KoSvgTextProperties::BaselineShiftModeId, ShiftLengthPercentage);
     props.setProperty(KoSvgTextProperties::BaselineShiftValueId, 0.5);
     props.setProperty(KoSvgTextProperties::KerningId, fromAutoValue(AutoValue(10)));
     props.setProperty(KoSvgTextProperties::TextOrientationId, OrientationSideWays);

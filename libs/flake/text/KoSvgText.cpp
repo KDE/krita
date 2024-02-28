@@ -141,7 +141,7 @@ BaselineShiftMode parseBaselineShiftMode(const QString &value)
     return value == "baseline" ? ShiftNone :
            value == "sub" ? ShiftSub :
            value == "super" ? ShiftSuper :
-           ShiftPercentage;
+           ShiftLengthPercentage;
 }
 
 LengthAdjust parseLengthAdjust(const QString &value)
@@ -222,12 +222,12 @@ QString writeAlignmentBaseline(Baseline value)
         "auto";
 }
 
-QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion)
+QString writeBaselineShiftMode(BaselineShiftMode value, CssLengthPercentage shift)
 {
     return value == ShiftNone ? "baseline" :
            value == ShiftSub ? "sub" :
            value == ShiftSuper ? "super" :
-           SvgUtil::toPercentage(portion);
+           writeLengthPercentage(shift);
 }
 
 QString writeLengthAdjust(LengthAdjust value)
@@ -796,24 +796,18 @@ TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &co
     const QStringList values = value.toLower().split(" ");
     TextIndentInfo textIndent;
     Q_FOREACH (const QString &param, values) {
-        bool ok = false;
-        qreal parsed = 0.0;
-        if (param.endsWith("%")) {
-            parsed = SvgUtil::fromPercentage(param, &ok);
-            textIndent.isPercentage = true;
-        } else {
-            parsed = SvgUtil::parseUnitXY(context.currentGC(), param);
-            ok = true;
-        }
-
         if (param == "hanging") {
             textIndent.hanging = true;
         } else if (param == "each-line") {
             textIndent.eachLine = true;
-        } else if (ok) {
-            textIndent.value = parsed;
         } else {
-            qWarning() << "Unknown parameter in text-indent" << param;
+            textIndent.length = SvgUtil::parseUnitStruct(context.currentGC(), param);
+            textIndent.isPercentage = textIndent.length.unit == CssLengthPercentage::Percentage;
+            if (textIndent.isPercentage) {
+                textIndent.value = textIndent.length.value;
+            }
+            //ToDo: figure out how to detect value is number.
+            //qWarning() << "Unknown parameter in text-indent" << param;
         }
     }
     return textIndent;
@@ -822,9 +816,11 @@ TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &co
 QString writeTextIndent(const TextIndentInfo textIndent)
 {
     QStringList values;
-    QString indentVal = QString::number(textIndent.value);
+    QString indentVal = QString::number(textIndent.value * 100.0);
     if (textIndent.isPercentage) {
         indentVal += "%";
+    } else {
+        indentVal = writeLengthPercentage(textIndent.length);
     }
     values.append(indentVal);
     if (textIndent.hanging) {
@@ -839,13 +835,10 @@ QString writeTextIndent(const TextIndentInfo textIndent)
 TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context)
 {
     TabSizeInfo tabSizeInfo;
-    bool ok = false;
-    qreal parsed = KisDomUtils::toDouble(value, &ok);
-    if (!ok) {
-        parsed = SvgUtil::parseUnitXY(context.currentGC(), value);
+    tabSizeInfo.value = KisDomUtils::toDouble(value, &tabSizeInfo.isNumber);
+    if (!tabSizeInfo.isNumber) {
+        tabSizeInfo.length = SvgUtil::parseUnitStruct(context.currentGC(), value);
     }
-    tabSizeInfo.value = parsed;
-    tabSizeInfo.isNumber = ok;
     return tabSizeInfo;
 }
 
@@ -853,7 +846,10 @@ QString writeTabSize(const TabSizeInfo tabSize)
 {
     QString val = KisDomUtils::toString(tabSize.value);
     if (!tabSize.isNumber) {
-        val += "pt";
+        val = writeLengthPercentage(tabSize.length);
+        if (tabSize.length.unit == CssLengthPercentage::Absolute) {
+            val += "px"; // In SVG, due to browsers, the default unit is css px. Krita scales these to pt.
+        }
     }
     return val;
 }
@@ -935,19 +931,15 @@ LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &co
     if (lineHeight.isNumber) {
         lineHeight.value = parsed;
     } else {
-        if (value.endsWith("%")) {
-            qreal percent = SvgUtil::fromPercentage(value);
-            lineHeight.value = SvgUtil::parseUnitXY(context.currentGC(), QString::number(percent)+"em");
-        } else {
-            lineHeight.value = SvgUtil::parseUnitXY(context.currentGC(), value);
-        }
+        lineHeight.length = SvgUtil::parseUnitStruct(context.currentGC(), value);
     }
 
     // Negative line-height is invalid
-    if (!lineHeight.isNormal && lineHeight.value < 0) {
+    if (!lineHeight.isNormal && (lineHeight.value < 0 || lineHeight.length.value < 0)) {
         lineHeight.isNormal = true;
         lineHeight.isNumber = false;
         lineHeight.value = 0;
+        lineHeight.length.value = 0;
     }
 
     return lineHeight;
@@ -958,7 +950,10 @@ QString writeLineHeight(LineHeightInfo lineHeight)
     if (lineHeight.isNormal) return QString("normal");
     QString val = KisDomUtils::toString(lineHeight.value);
     if (!lineHeight.isNumber) {
-        val += "pt";
+        val = writeLengthPercentage(lineHeight.length);
+        if (lineHeight.length.unit == CssLengthPercentage::Absolute) {
+            val += "px"; // In SVG, due to browsers, the default unit is css px. Krita scales these to pt.
+        }
     }
     return val;
 }

@@ -226,8 +226,7 @@ enum BaselineShiftMode {
     ShiftNone, ///< No shift.
     ShiftSub, ///< Use parent font metric for 'subscript'.
     ShiftSuper, ///< Use parent font metric for 'superscript'.
-    ShiftPercentage ///< Percentage of the current fontsize.
-    // note: we convert all the <length> values into the relative font values!
+    ShiftLengthPercentage ///< Css Length Percentage, percentage is em.
 };
 
 enum LengthAdjust {
@@ -485,7 +484,7 @@ QString writeTextOrientation(TextOrientation orientation);
 QString writeTextAnchor(TextAnchor value);
 QString writeDominantBaseline(Baseline value);
 QString writeAlignmentBaseline(Baseline value);
-QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion);
+QString writeBaselineShiftMode(BaselineShiftMode value, CssLengthPercentage shift);
 QString writeLengthAdjust(LengthAdjust value);
 
 QString writeTextPathMethod(TextPathMethod value);
@@ -560,13 +559,15 @@ struct TextIndentInfo : public boost::equality_comparable<TextIndentInfo> {
     TextIndentInfo() = default;
 
     qreal value = 0.0; ///< The indentation length or percentage.
+    CssLengthPercentage length;
     bool isPercentage = false; ///< Interpret the value as a percentage of the
                                ///< total run length of a box.
     bool hanging = false; ///< Flip the lines to which text-indent is applied.
     bool eachLine = false; ///< Apply the text-indent to each line following a hardbreak.
     bool operator==(const TextIndentInfo &rhs) const
     {
-        return (value == rhs.value) && (isPercentage == rhs.isPercentage) && (hanging == rhs.hanging) && (eachLine == rhs.eachLine);
+        bool val = isPercentage? value == rhs.value: length == rhs.length;
+        return (val) && (isPercentage == rhs.isPercentage) && (hanging == rhs.hanging) && (eachLine == rhs.eachLine);
     }
 };
 
@@ -581,11 +582,13 @@ struct TabSizeInfo : public boost::equality_comparable<TabSizeInfo> {
     qreal value = 8; ///< A length or a number. Length is currently marked 'at-risk'.
     bool isNumber = true; ///< Multiply by width of 'space' character, including
                           ///< word- and letter-spacing.
+    CssLengthPercentage length;
     qreal extraSpacing = 0.0; ///< Extra spacing due word or letter-spacing. Not
                               ///< written to css and only used during layout.
     bool operator==(const TabSizeInfo &rhs) const
     {
-        return (value == rhs.value) && (isNumber == rhs.isNumber);
+        bool val = isNumber? value == rhs.value: length == rhs.length;
+        return (val) && (isNumber == rhs.isNumber);
     }
 };
 TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context);
@@ -594,13 +597,16 @@ QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &va
 
 
 struct LineHeightInfo : public boost::equality_comparable<LineHeightInfo> {
+    CssLengthPercentage length;
     qreal value = 1.0; /// Length or number.
     bool isNumber = false; /// It's a number indicating the lineHeight;
     bool isNormal = true; /// The 'auto' value.
 
     bool operator==(const LineHeightInfo &rhs) const
     {
-        return (value == rhs.value) && (isNumber == rhs.isNumber)  && (isNormal == rhs.isNormal);
+        bool toggles = (isNumber == rhs.isNumber && isNormal == rhs.isNormal);
+        bool val = isNumber? value == rhs.value: length == rhs.length;
+        return (toggles && val);
     }
 };
 

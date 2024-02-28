@@ -556,7 +556,7 @@ bool KoSvgTextShape::Private::loadGlyph(const QTransform &ftTF,
         QPointF advance(currentGlyph.x_advance, currentGlyph.y_advance);
         if (tabSizeInfo.contains(cluster)) {
             KoSvgText::TabSizeInfo tabSize = tabSizeInfo.value(cluster);
-            qreal newAdvance = tabSize.value * ftFontUnit;
+            qreal newAdvance = tabSize.length.value * ftFontUnit;
             if (tabSize.isNumber) {
                 QPointF extraSpacing = isHorizontal ? QPointF(tabSize.extraSpacing * ftFontUnit, 0) : QPointF(0, tabSize.extraSpacing * ftFontUnit);
                 advance = (spaceAdvance + extraSpacing) * tabSize.value;

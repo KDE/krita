@@ -178,7 +178,15 @@ public:
      * property is inheritable according to SVG and this set does not define
      * it.
      */
-    void inheritFrom(const KoSvgTextProperties &parentProperties);
+    void inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve = false);
+
+    /**
+     * @brief resolveRelativeValues
+     * resolve the font-relative values.
+     * @param fontSize -- fontsize to resolve 'em' to.
+     * @param xHeight -- xHeight to resolve 'ex' to.
+     */
+    void resolveRelativeValues(const qreal fontSize = 12.0, const qreal xHeight = 6.0);
 
     /**
      * Return true if the property \p id is inherited from \p parentProperties.

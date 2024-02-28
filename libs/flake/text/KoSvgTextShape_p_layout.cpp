@@ -106,6 +106,7 @@ void KoSvgTextShape::Private::relayout()
     }
     // The following is based on the text-layout algorithm in SVG 2.
     KoSvgTextProperties rootProperties = textData.childBegin()->properties;
+    rootProperties.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
     KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(rootProperties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
     KoSvgText::Direction direction = KoSvgText::Direction(rootProperties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     KoSvgText::AutoValue inlineSize = rootProperties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
@@ -543,7 +544,7 @@ void KoSvgTextShape::Private::relayout()
                             leading = (fontSize*scaleToPixel*ftFontUnit)*lineHeight.value;
                             leading -= (ascender-descender);
                         } else {
-                            QPointF val = ftTF.inverted().map(QPointF(lineHeight.value, lineHeight.value));
+                            QPointF val = ftTF.inverted().map(QPointF(lineHeight.length.value, lineHeight.length.value));
                             leading = isHorizontal? val.x(): val.y();
                             leading -= (ascender-descender);
                         }
@@ -718,7 +719,7 @@ void KoSvgTextShape::Private::relayout()
 
     // Compute baseline alignment.
     globalIndex = 0;
-    this->computeFontMetrics(textData.childBegin(), QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
+    this->computeFontMetrics(textData.childBegin(), KoSvgTextProperties::defaultProperties(), QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
 
     // Handle linebreaking.
     QPointF startPos = resolvedTransforms[0].absolutePos();
@@ -1123,6 +1124,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
 
 void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function-cognitive-complexity)
     KisForest<KoSvgTextContentElement>::child_iterator parent,
+    KoSvgTextProperties parentProps,
     const QMap<int, int> &parentBaselineTable,
     qreal parentFontSize,
     QPointF superScript,
@@ -1138,9 +1140,10 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     const int j = qMin(i + numChars(parent, true), result.size());
 
     KoSvgTextProperties properties = parent->properties;
+    properties.inheritFrom(parentProps, true);
 
     const qreal fontSize = properties.fontSize().value;
-    const qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
+    const KoSvgText::CssLengthPercentage baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>();
     QPointF baselineShiftTotal;
     KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
@@ -1148,9 +1151,9 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         baselineShiftTotal = isHorizontal ? superScript : QPointF(-superScript.y(), superScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftSub) {
         baselineShiftTotal = isHorizontal ? subScript : QPointF(-subScript.y(), subScript.x());
-    } else if (baselineShiftMode == KoSvgText::ShiftPercentage) {
+    } else if (baselineShiftMode == KoSvgText::ShiftLengthPercentage) {
         // Positive baseline-shift goes up in the inline-direction, which is up in horizontal and right in vertical.
-        baselineShiftTotal = isHorizontal ? QPointF(0, -baselineShift) : QPointF(baselineShift, 0);
+        baselineShiftTotal = isHorizontal ? QPointF(0, -baselineShift.value) : QPointF(baselineShift.value, 0);
     }
 
     QVector<int> lengths;
@@ -1338,7 +1341,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     for (auto child = KisForestDetail::childBegin(parent); child != KisForestDetail::childEnd(parent); child++) {
-        computeFontMetrics(child, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal);
+        computeFontMetrics(child, properties, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal);
     }
 
     KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
@@ -1985,8 +1988,7 @@ QVector<SubChunk> KoSvgTextShape::Private::collectSubChunks(KisForest<KoSvgTextC
     }
 
     KoSvgTextProperties currentProps = it->properties;
-    currentProps.inheritFrom(parentProps);
-    currentProps.resetNonInheritableToDefault(parentProps.fontSize().value, parentProps.xHeight());
+    currentProps.inheritFrom(parentProps, true);
 
 
     if (childCount(it)) {

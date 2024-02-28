@@ -455,10 +455,7 @@ QVector<LineBox> breakLines(const KoSvgTextProperties &properties,
     KoSvgText::TextIndentInfo textIndentInfo = properties.propertyOrDefault(KoSvgTextProperties::TextIndentId).value<KoSvgText::TextIndentInfo>();
     QPointF textIndent;
     if (!inlineSize.isAuto) {
-        qreal textIdentValue = textIndentInfo.value;
-        if (textIndentInfo.isPercentage) {
-            textIndent *= inlineSize.customValue;
-        }
+        qreal textIdentValue = textIndentInfo.isPercentage? textIndentInfo.value * inlineSize.customValue: textIndentInfo.length.value;
         if (isHorizontal) {
             textIndent = QPointF(textIdentValue, 0);
             endPos = ltr ? QPointF(startPos.x() + inlineSize.customValue, 0) : QPointF(startPos.x() - inlineSize.customValue, 0);

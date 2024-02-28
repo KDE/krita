@@ -100,35 +100,57 @@ bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
 
 void KoSvgTextProperties::resetNonInheritableToDefault(const qreal fontSize, const qreal xHeight)
 {
+    auto it = m_d->properties.begin();
+    for (; it != m_d->properties.end(); ++it) {
+        if (!m_d->isInheritable(it.key())) {
+            it.value() = defaultProperties().property(it.key());
+        }
+    }
+    resolveRelativeValues(fontSize, xHeight);
+}
+
+void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve)
+{
+    auto it = parentProperties.m_d->properties.constBegin();
+    for (; it != parentProperties.m_d->properties.constEnd(); ++it) {
+        if (!hasProperty(it.key()) && m_d->isInheritable(it.key())) {
+            setProperty(it.key(), it.value());
+        }
+    }
+
+    if (resolve) {
+        resolveRelativeValues(parentProperties.fontSize().value, parentProperties.xHeight());
+    }
+}
+
+void KoSvgTextProperties::resolveRelativeValues(const qreal fontSize, const qreal xHeight)
+{
     // First resolve 'font-*' properties.
     // See https://www.w3.org/TR/css-values-4/#font-relative-lengths
     // Note: if we ever support lh (lineheight unit) that needs to be resolved here first too.
     KoSvgText::CssLengthPercentage size = this->fontSize();
     size.convertToAbsolute(fontSize, xHeight);
     this->setFontSize(size);
-
     qreal usedSize = size.value;
     qreal usedXHeight = this->xHeight();
 
-    auto it = m_d->properties.begin();
-    for (; it != m_d->properties.end(); ++it) {
-        if (!m_d->isInheritable(it.key())) {
-            it.value() = defaultProperties().property(it.key());
-        }
+    for (auto it = this->m_d->properties.begin(); it != this->m_d->properties.end(); it++) {
         if (it.value().canConvert<KoSvgText::CssLengthPercentage>() && it.key() != KoSvgTextProperties::FontSizeId) {
             KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
             length.convertToAbsolute(usedSize, usedXHeight);
             it.value() = QVariant::fromValue(length);
-        }
-    }
-}
-
-void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentProperties)
-{
-    auto it = parentProperties.m_d->properties.constBegin();
-    for (; it != parentProperties.m_d->properties.constEnd(); ++it) {
-        if (!hasProperty(it.key()) && m_d->isInheritable(it.key())) {
-            setProperty(it.key(), it.value());
+        } else if (it.key() == KoSvgTextProperties::LineHeightId) {
+            KoSvgText::LineHeightInfo lineHeight = it.value().value<KoSvgText::LineHeightInfo>();
+            lineHeight.length.convertToAbsolute(usedSize, usedXHeight);
+            it.value() = QVariant::fromValue(lineHeight);
+        } else if (it.key() == KoSvgTextProperties::TabSizeId) {
+            KoSvgText::TabSizeInfo tabSize = it.value().value<KoSvgText::TabSizeInfo>();
+            tabSize.length.convertToAbsolute(usedSize, usedXHeight);
+            it.value() = QVariant::fromValue(tabSize);
+        } else if (it.key() == KoSvgTextProperties::TextIndentId) {
+            KoSvgText::TextIndentInfo indent = it.value().value<KoSvgText::TextIndentInfo>();
+            indent.length.convertToAbsolute(usedSize, usedXHeight);
+            it.value() = QVariant::fromValue(indent);
         }
     }
 }
@@ -215,17 +237,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "baseline-shift") {
         KoSvgText::BaselineShiftMode mode = KoSvgText::parseBaselineShiftMode(value);
         setProperty(BaselineShiftModeId, mode);
-        if (mode == KoSvgText::ShiftPercentage) {
-            if (value.endsWith("%")) {
-                setProperty(BaselineShiftValueId, SvgUtil::fromPercentage(value));
-            } else {
-                const qreal parsedValue = SvgUtil::parseUnitXY(context.currentGC(), value);
-                const qreal lineHeight = context.currentGC()->textProperties.fontSize().value;
-
-                if (lineHeight != 0.0) {
-                    setProperty(BaselineShiftValueId, parsedValue / lineHeight);
-                }
-            }
+        if (mode == KoSvgText::ShiftLengthPercentage) {
+            KoSvgText::CssLengthPercentage shift = SvgUtil::parseUnitStruct(context.currentGC(), value, true, true, context.currentGC()->currentBoundingBox);
+            setProperty(BaselineShiftValueId, QVariant::fromValue(shift));
         }
     } else if (command == "vertical-align") {
         QRegExp digits = QRegExp("\\d");
@@ -387,11 +401,10 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(FontWeightId, weight);
 
     } else if (command == "font-size") {
-        KoSvgText::WritingMode mode = KoSvgText::WritingMode(propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
         const KoSvgText::CssLengthPercentage pointSize = SvgUtil::parseUnitStruct(context.currentGC(),
                                                                                   value,
-                                                                                  mode != KoSvgText::HorizontalTB,
-                                                                                  mode == KoSvgText::HorizontalTB,
+                                                                                  true,
+                                                                                  true,
                                                                                   context.currentGC()->currentBoundingBox);
         if (pointSize.value > 0.0) {
             setProperty(FontSizeId, QVariant::fromValue(pointSize));
@@ -606,8 +619,9 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
 
         if (hasProperty(BaselineShiftModeId)) {
+            KoSvgText::CssLengthPercentage shift = property(BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>();
             result.insert("baseline-shift",
-                          writeBaselineShiftMode(BaselineShiftMode(property(BaselineShiftModeId).toInt()), property(BaselineShiftValueId).toReal()));
+                          writeBaselineShiftMode(BaselineShiftMode(property(BaselineShiftModeId).toInt()), shift));
         }
     } else {
         QStringList verticalAlign;
@@ -616,7 +630,8 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
 
         if (hasProperty(BaselineShiftModeId)) {
-            verticalAlign.append(writeBaselineShiftMode(BaselineShiftMode(property(BaselineShiftModeId).toInt()), property(BaselineShiftValueId).toReal()));
+            KoSvgText::CssLengthPercentage shift = property(BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>();
+            verticalAlign.append(writeBaselineShiftMode(BaselineShiftMode(property(BaselineShiftModeId).toInt()), shift));
         }
         if (!verticalAlign.isEmpty()) {
             result.insert("vertical-align", verticalAlign.join(" "));
@@ -1145,7 +1160,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(DominantBaselineId, BaselineAuto);
         s_defaultProperties->setProperty(AlignmentBaselineId, BaselineAuto);
         s_defaultProperties->setProperty(BaselineShiftModeId, ShiftNone);
-        s_defaultProperties->setProperty(BaselineShiftValueId, 0.0);
+        s_defaultProperties->setProperty(BaselineShiftValueId, QVariant::fromValue(KoSvgText::CssLengthPercentage()));
         s_defaultProperties->setProperty(KerningId, fromAutoValue(AutoValue()));
         s_defaultProperties->setProperty(TextOrientationId, OrientationMixed);
         s_defaultProperties->setProperty(LetterSpacingId, fromAutoValue(AutoValue()));

@@ -598,7 +598,7 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                     break;
                 }
                 currentShape = shapesIt.next();
-                qreal textIdentValue = textIndentInfo.value;
+                qreal textIdentValue = textIndentInfo.isPercentage? textIndentInfo.value: textIndentInfo.length.value;
                 if (isHorizontal) {
                     if (textIndentInfo.isPercentage) {
                         textIndent *= currentShape.boundingRect().width();

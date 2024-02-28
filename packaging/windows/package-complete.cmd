@@ -25,11 +25,14 @@ setlocal
 set FULL_PATH=%~f2
 if not exist "%FULL_PATH%" (
     set FULL_PATH=
-) else (
-    if exist "%FULL_PATH%\" (
-        set FULL_PATH=
-    )
 )
+:: else (
+    :: TODO: do NOT use this way of checking! On Windows Server with docker,
+    ::       this check triggers for normal files as well!
+    :: if exist "%FULL_PATH%\" (
+    ::     set FULL_PATH=
+    :: )
+:: )
 endlocal & set "%1=%FULL_PATH%"
 goto :EOF
 
@@ -322,6 +325,24 @@ if "%MINGW_BIN_DIR%" == "" (
     )
 )
 echo mingw-w64: %MINGW_BIN_DIR%
+
+if "%PYTHON_BIN_DIR%" == "" (
+    call :find_on_path PYTHON_BIN_DIR_PYTHON_EXE python.exe
+    if "!PYTHON_BIN_DIR_PYTHON_EXE!" == "" (
+        if not "%ARG_NO_INTERACTIVE%" == "1" (
+            call :prompt_for_file PYTHON_BIN_DIR_PYTHON_EXE "Provide path to python.exe"
+        )
+        if "!PYTHON_BIN_DIR_PYTHON_EXE!" == "" (
+            echo ERROR: python.exe not found! 1>&2
+            exit /b 102
+        )
+        call :get_dir_path PYTHON_BIN_DIR "!PYTHON_BIN_DIR_PYTHON_EXE!"
+    ) else (
+        call :get_dir_path PYTHON_BIN_DIR "!PYTHON_BIN_DIR_PYTHON_EXE!"
+        echo Found python.exe on PATH: !PYTHON_BIN_DIR!
+    )
+)
+echo "Python path found: %PYTHON_BIN_DIR%"
 
 :: Windows SDK is needed for windeployqt to get d3dcompiler_xx.dll
 if "%WindowsSdkDir%" == "" if not "%ProgramFiles(x86)%" == "" set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
@@ -809,6 +830,8 @@ endlocal
 if not "%ARG_PRE_ZIP_HOOK%" == "" (
     echo Running pre-zip-hook...
     setlocal
+    :: add python to PATH of the pre-zip hook
+    set "PATH=%PYTHON_BIN_DIR%;%PATH%"
     cmd /c ""%ARG_PRE_ZIP_HOOK%" "%pkg_root%\""
     if errorlevel 1 (
         echo ERROR: Got exit code !errorlevel! from pre-zip-hook! 1>&2

@@ -47220,10 +47220,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Bezeztrátový"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -47302,10 +47301,9 @@ msgstr "Zploštit obraz"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "Profil barev:"
+msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -47324,10 +47322,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "Verze databáze"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -55714,11 +55711,10 @@ msgid "Spread: {n}%"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Zavřít"
+msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57037,11 +57033,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Zavřít"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -57485,19 +57480,14 @@ msgid "Insert Text"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Insert point"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Vložit bod"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgid "Image Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Vlastnosti obrázku"
+msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

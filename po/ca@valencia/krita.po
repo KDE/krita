@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-02-14 11:16+0100\n"
+"PO-Revision-Date: 2024-02-27 16:07+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -48463,13 +48463,15 @@ msgid ""
 "to lossless. Useful to reduce transparency artifact on lossy export.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Si està habilitada, açò establirà el canal alfa "
+"(transparència) a sense pèrdua. És útil per a reduir defectes visuals de "
+"transparència en l'exportació amb pèrdua.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Sense pèrdua"
+msgstr "Alfa sense pèrdua"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -48565,10 +48567,9 @@ msgstr "Aplana la imatge"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "Perfil de color:"
+msgstr "Perfil de color"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -48578,19 +48579,22 @@ msgid ""
 "lossless, otherwise keep using ICC. Useful to make filesize even smaller "
 "(eg. for web delivery).</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Utilitzeu CICP si el perfil ICC és convertible a CICP "
+"sense pèrdua, en cas contrari, continueu utilitzant ICC. És útil per a fer "
+"la mida del fitxer encara més xicoteta (p. ex., per a enviament web).</p></"
+"body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:275
 #, kde-format
 msgid "(Lossless) Use CICP instead of ICC if possible"
-msgstr ""
+msgstr "(Sense pèrdua) Utilitza CICP en lloc d'ICC si és possible"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "Versió de la base de dades"
+msgstr "Conversió HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -53060,13 +53064,14 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Aplica menys textura quan la força siga menor. Utilitzeu esta opció si voleu "
+"que el pinzell canvie entre l'aparença sense textura i amb textura"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "Provatura suau"
+msgstr "Textura suau"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -57527,11 +57532,10 @@ msgid "Spread: {n}%"
 msgstr "Extensió: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Tanca"
+msgstr "Separació de tancament:"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57644,10 +57648,9 @@ msgstr ""
 "similitud del color."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Difumina la selecció segons la quantitat establida"
+msgstr "Separacions de tancament en les línies fins a la quantitat definida"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -58915,11 +58918,10 @@ msgstr ""
 "obtindre'n una de nova"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Tanca"
+msgstr "Separació de tancament:"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -59362,23 +59364,17 @@ msgstr "Espaiat de les lletres"
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Inserix un text"
+msgstr "Inserció de text"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Inserix un text"
+msgstr "Inserció de text enriquit"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Canvia les propietats de la capa"
+msgstr "Canvi de les propietats del text"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

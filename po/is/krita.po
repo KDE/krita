@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-29 03:11+0000\n"
+"POT-Creation-Date: 2024-02-29 03:09+0000\n"
 "PO-Revision-Date: 2018-01-04 15:20+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
@@ -13034,7 +13034,7 @@ msgstr "Flytja inn / Flytja út"
 msgid "Import"
 msgstr "Flytja inn"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
 #, kde-format
 msgid "&Convert"
 msgstr "&Umbreyta"
@@ -13042,14 +13042,14 @@ msgstr "&Umbreyta"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1214
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, fuzzy, kde-format
 msgid "&Select"
 msgstr "Valið"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13070,7 +13070,7 @@ msgstr "Breyta lagi"
 msgid "S&plit"
 msgstr "Kljúfa"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Mynstur"
@@ -17043,8 +17043,6 @@ msgstr "Stærð"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -17188,7 +17186,7 @@ msgid "Set Image Resolution"
 msgstr "Breyta myndupplausn"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move"
@@ -17306,7 +17304,7 @@ msgstr "Mjúk"
 msgid "Gaussian"
 msgstr "Gaussískt"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "grænt"
@@ -17400,7 +17398,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Innflutt mynd"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17674,54 +17672,54 @@ msgstr "Opna skrá"
 msgid "Error"
 msgstr "Villa: "
 
-#: libs/image/kis_layer_utils.cpp:617
+#: libs/image/kis_layer_utils.cpp:618
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Blandað"
 
-#: libs/image/kis_layer_utils.cpp:1397
+#: libs/image/kis_layer_utils.cpp:1398
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Tvinna niður"
 
-#: libs/image/kis_layer_utils.cpp:1645
+#: libs/image/kis_layer_utils.cpp:1646
 #, kde-format
 msgid "Copy of"
 msgstr "Afrita af"
 
-#: libs/image/kis_layer_utils.cpp:1718
+#: libs/image/kis_layer_utils.cpp:1719
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Breyta tengingu"
 
-#: libs/image/kis_layer_utils.cpp:1884
+#: libs/image/kis_layer_utils.cpp:1943
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Kvarða lag"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nafn:"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, fuzzy, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Sýnilegt"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:2029
 #, fuzzy
 #| msgid "Selection Mask"
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Valhula"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2052
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Flatten image"
@@ -17729,20 +17727,20 @@ msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Fletja mynd"
 
-#: libs/image/kis_layer_utils.cpp:2006
+#: libs/image/kis_layer_utils.cpp:2065
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Fletja mynd"
 
-#: libs/image/kis_layer_utils.cpp:2230
+#: libs/image/kis_layer_utils.cpp:2289
 #, fuzzy
 #| msgid "Alpha mask"
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alpha maski"
 
-#: libs/image/kis_layer_utils.cpp:2256
+#: libs/image/kis_layer_utils.cpp:2315
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Paste Layer"
@@ -22835,8 +22833,8 @@ msgstr "Eiginleikar mynda"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:604 libs/ui/kis_paintop_box.cc:276
 #: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -22910,6 +22908,7 @@ msgstr "Eiginleikar mynda"
 #: plugins/tools/basictools/kis_tool_fill.cc:547
 #: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -23494,7 +23493,7 @@ msgctxt "@title:window"
 msgid "Stroke Selection Properties"
 msgstr "Draga í val"
 
-#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
+#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
 msgstr ""
@@ -29650,13 +29649,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Taka úr hóp"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -34059,7 +34058,6 @@ msgid "Smooths the edges of the selection"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Víkka val"
@@ -34072,7 +34070,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
@@ -37866,6 +37863,12 @@ msgstr ""
 msgid "Zoom view to fit curve."
 msgstr "Renna að gluggastærð"
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Setja inn athugasemd"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -38100,7 +38103,7 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
@@ -38108,7 +38111,7 @@ msgid_plural "Remove Keyframes"
 msgstr[0] "Setja inn athugasemd"
 msgstr[1] "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -38116,7 +38119,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Setja inn athugasemd"
 msgstr[1] "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -38124,7 +38127,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Setja inn athugasemd"
 msgstr[1] "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -38132,7 +38135,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Setja inn athugasemd"
 msgstr[1] "Setja inn athugasemd"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Merge points"
@@ -38849,26 +38852,26 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:992
 #, fuzzy
 #| msgid "Selection Mask"
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Valhula"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Ekkert valið"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: plugins/dockers/layerdocker/LayerBox.cpp:1252
 #, fuzzy, kde-format
 msgid "&Add"
 msgstr "Bæt&a við"
@@ -48217,71 +48220,71 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, fuzzy, kde-format
 #| msgid "Could not create the file for saving"
 msgid "Could not create transform mask params"
 msgstr "Gat ekki búið til skrá til vistunar"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Fjaðra val"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not read pixel data: %1."
 msgstr "Gat ekki fundið %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not load pixel data: %1."
 msgstr "Gat ekki fundið %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, fuzzy, kde-format
 #| msgid "Could not find %1"
 msgid "Could not load profile: %1."
 msgstr "Gat ekki fundið %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, fuzzy, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Fjaðra val"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, fuzzy, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Fjaðra val"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, fuzzy, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Fjaðra val"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, fuzzy, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Fjaðra val"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Fjaðra val"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, fuzzy, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48290,7 +48293,7 @@ msgstr ""
 "Þáttunarvilla í %1 á línu %2, dálki %3\n"
 "Villuboð: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr ""
@@ -56878,7 +56881,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Fylla með bakgrunnslit"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, fuzzy, kde-format
 msgid "Boundary color"
 msgstr "Bakgrunnslitur"
@@ -58052,51 +58055,41 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Ramma myndval með"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Stækka"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Ytri radíus:"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, fuzzy, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
@@ -58194,33 +58187,39 @@ msgstr "Valtól"
 msgid "Rectangular Selection Tool"
 msgstr "Rétthyrnt val"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
 msgid "Similar Color Selection"
 msgstr "Fjaðra val"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Valtól"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Málaratól"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "Dreifa"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, fuzzy, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Valhamur"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, fuzzy, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Valtól"
@@ -59769,19 +59768,19 @@ msgstr "Virkja"
 msgid "Transform Tool Actions"
 msgstr "Ummyndunarverkfæri"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Málaratól"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Málaratól"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59789,20 +59788,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Breyta"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59954,8 +59953,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr ""
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Transform"
@@ -60559,6 +60558,17 @@ msgstr "S&tækkunaráhald"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Stillingar"
+
+#, fuzzy
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Stækka"
+
+#, fuzzy
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Ytri radíus:"
 
 #, fuzzy
 #~| msgctxt "./krita/data/palettes/marker.gpl"

@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-29 03:11+0000\n"
+"POT-Creation-Date: 2024-02-29 03:09+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -13180,7 +13180,7 @@ msgstr "Bild importeren"
 msgid "Import"
 msgstr "Bild importeren"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "Ü&mdreihen"
@@ -13188,14 +13188,14 @@ msgstr "Ü&mdreihen"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1214
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Utsöken"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -13219,7 +13219,7 @@ msgstr "Knütt wanneln"
 msgid "S&plit"
 msgstr "Klöör na Alpha"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "Klöör na Alpha"
@@ -17141,8 +17141,6 @@ msgstr "Grött"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -17271,7 +17269,7 @@ msgid "Set Image Resolution"
 msgstr "Bildoplösen fastleggen"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Verschuven"
@@ -17393,7 +17391,7 @@ msgstr "Week"
 msgid "Gaussian"
 msgstr "Gauß'sch"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Koperen vun"
@@ -17488,7 +17486,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Bild importeren"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17770,73 +17768,73 @@ msgstr "Klörensett opmaken"
 msgid "Error"
 msgstr "Spegeln"
 
-#: libs/image/kis_layer_utils.cpp:617
+#: libs/image/kis_layer_utils.cpp:618
 #, fuzzy, kde-format
 msgid "Merged"
 msgstr "Tosamenföhrt koperen"
 
-#: libs/image/kis_layer_utils.cpp:1397
+#: libs/image/kis_layer_utils.cpp:1398
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Pünkt leddig maken"
 
-#: libs/image/kis_layer_utils.cpp:1645
+#: libs/image/kis_layer_utils.cpp:1646
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Koperen vun"
 
-#: libs/image/kis_layer_utils.cpp:1718
+#: libs/image/kis_layer_utils.cpp:1719
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Verbinnen ännern"
 
-#: libs/image/kis_layer_utils.cpp:1884
+#: libs/image/kis_layer_utils.cpp:1943
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Utsöcht Klöör wegdoon"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, fuzzy
 #| msgid "Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Profil"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Sichtbor"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:2029
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Köörmask..."
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2052
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Laag glattmaken"
 
-#: libs/image/kis_layer_utils.cpp:2006
+#: libs/image/kis_layer_utils.cpp:2065
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Bild glattmaken"
 
-#: libs/image/kis_layer_utils.cpp:2230
+#: libs/image/kis_layer_utils.cpp:2289
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alphaoptschonen"
 
-#: libs/image/kis_layer_utils.cpp:2256
+#: libs/image/kis_layer_utils.cpp:2315
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
@@ -23055,8 +23053,8 @@ msgstr "Laag-Egenschappen"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:604 libs/ui/kis_paintop_box.cc:276
 #: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -23130,6 +23128,7 @@ msgstr "Laag-Egenschappen"
 #: plugins/tools/basictools/kis_tool_fill.cc:547
 #: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -23726,7 +23725,7 @@ msgctxt "@title:window"
 msgid "Stroke Selection Properties"
 msgstr "Flake-Formen"
 
-#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
+#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
 msgstr ""
@@ -29993,13 +29992,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Koppel oplösen"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr ""
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -34469,7 +34468,6 @@ msgid "Smooths the edges of the selection"
 msgstr "Lienenbreed vun de aktuell Köör fastleggen"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Köör schrimpen üm"
@@ -34482,7 +34480,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
@@ -38255,6 +38252,12 @@ msgstr ""
 msgid "Zoom view to fit curve."
 msgstr "Ansichtgrött op all"
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Naam infögen"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -38495,7 +38498,7 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
@@ -38503,7 +38506,7 @@ msgid_plural "Remove Keyframes"
 msgstr[0] "Naam infögen"
 msgstr[1] "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -38511,7 +38514,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Naam infögen"
 msgstr[1] "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, fuzzy, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -38519,7 +38522,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Naam infögen"
 msgstr[1] "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -38527,7 +38530,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Naam infögen"
 msgstr[1] "Naam infögen"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
@@ -39266,25 +39269,25 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:992
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Köörmask..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Köörmask..."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Eerst Laag ut Twischenaflaag"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: plugins/dockers/layerdocker/LayerBox.cpp:1252
 #, kde-format
 msgid "&Add"
 msgstr ""
@@ -48871,67 +48874,67 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, fuzzy, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, fuzzy, kde-format
 msgid "Could not create transform mask params"
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, fuzzy, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, fuzzy, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, fuzzy, kde-format
 msgid "Could not load profile: %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, fuzzy, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Nieg Instellen %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, fuzzy, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, fuzzy, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Vektorköör"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, fuzzy, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, fuzzy, kde-format
 #| msgid ""
 #| "Parsing error in %1 at line %2, column %3\n"
@@ -48943,7 +48946,7 @@ msgstr ""
 "Inleesfehler in %1 in Reeg %2, Striep %3\n"
 "Fehlermellen: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, fuzzy, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Laag lett sik nich dat Bild tofögen."
@@ -57614,7 +57617,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Mit Achtergrundklöör infarven"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
@@ -58819,53 +58822,41 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Köör ümrannen"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgid "Grow"
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Utdehnen"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-#| msgid "Feather..."
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Afswachen..."
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, fuzzy, kde-format
 #| msgid "Selection Mode"
 msgctxt ""
@@ -58964,26 +58955,32 @@ msgstr "En rechteckig Rebeet utsöken"
 msgid "Rectangular Selection Tool"
 msgstr "Rechteck-Köör"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, fuzzy, kde-format
 msgid "Similar Color Selection"
 msgstr "Liekheit-Köör"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Lieke Klören utsöken"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, fuzzy, kde-format
 #| msgid "Threshold: "
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Grenzweert: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, kde-format
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr ""
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, fuzzy, kde-format
 #| msgid "Selection Mode"
 msgctxt ""
@@ -58991,7 +58988,7 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "Köörbedrief"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, fuzzy, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Liekheit-Köör"
@@ -60575,19 +60572,19 @@ msgstr "Anwennen"
 msgid "Transform Tool Actions"
 msgstr "Wanneln"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Aktiv Laag"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr "Aktiv Laag"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60595,20 +60592,20 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, fuzzy, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Knütt wanneln"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60760,8 +60757,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "En Laag oder Köör ümwanneln"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Wanneln"
@@ -61374,6 +61371,19 @@ msgstr "Ansichtgrött op all"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Betogbild:"
+
+#, fuzzy
+#~| msgid "Grow"
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Utdehnen"
+
+#, fuzzy
+#~| msgid "Feather..."
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Afswachen..."
 
 #, fuzzy
 #~ msgid "Backers"

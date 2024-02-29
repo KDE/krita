@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-29 03:11+0000\n"
+"POT-Creation-Date: 2024-02-29 03:09+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -13617,7 +13617,7 @@ msgstr "가져오기/내보내기(&I)"
 msgid "Import"
 msgstr "가져오기"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
 #, kde-format
 msgid "&Convert"
 msgstr "변환(&C)"
@@ -13625,14 +13625,14 @@ msgstr "변환(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1214
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "선택(&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, fuzzy, kde-format
 #| msgid "&Group"
 msgctxt "A group of layers"
@@ -13654,7 +13654,7 @@ msgstr "모든 레이어 변형(&A)"
 msgid "S&plit"
 msgstr "분할(&P)"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "알파 분할(&P)"
@@ -17601,8 +17601,6 @@ msgstr "크기"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -17728,7 +17726,7 @@ msgid "Set Image Resolution"
 msgstr "이미지 해상도 설정"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "이동"
@@ -17838,7 +17836,7 @@ msgstr "부드러움"
 msgid "Gaussian"
 msgstr "가우시안"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "다음에서 복사"
@@ -17940,7 +17938,7 @@ msgstr "통과"
 msgid "Imported Image"
 msgstr "가져온 이미지"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -18197,63 +18195,63 @@ msgstr "파일 열기"
 msgid "Error"
 msgstr "오류"
 
-#: libs/image/kis_layer_utils.cpp:617
+#: libs/image/kis_layer_utils.cpp:618
 #, kde-format
 msgid "Merged"
 msgstr "병합됨"
 
-#: libs/image/kis_layer_utils.cpp:1397
+#: libs/image/kis_layer_utils.cpp:1398
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "아래 병합"
 
-#: libs/image/kis_layer_utils.cpp:1645
+#: libs/image/kis_layer_utils.cpp:1646
 #, kde-format
 msgid "Copy of"
 msgstr "사본"
 
-#: libs/image/kis_layer_utils.cpp:1718
+#: libs/image/kis_layer_utils.cpp:1719
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "투영 색상 변경"
 
-#: libs/image/kis_layer_utils.cpp:1884
+#: libs/image/kis_layer_utils.cpp:1943
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "선택한 노드 병합"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "보이는 항목에서 새로 만들기"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "보이기"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:2029
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "선택 마스크 병합"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2052
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "레이어 병합"
 
-#: libs/image/kis_layer_utils.cpp:2006
+#: libs/image/kis_layer_utils.cpp:2065
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "이미지 병합"
 
-#: libs/image/kis_layer_utils.cpp:2230
+#: libs/image/kis_layer_utils.cpp:2289
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "알파를 마스크로 분할"
 
-#: libs/image/kis_layer_utils.cpp:2256
+#: libs/image/kis_layer_utils.cpp:2315
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "칠하기 레이어로 변환"
@@ -23467,8 +23465,8 @@ msgstr "레이어 속성"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:604 libs/ui/kis_paintop_box.cc:276
 #: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -23542,6 +23540,7 @@ msgstr "레이어 속성"
 #: plugins/tools/basictools/kis_tool_fill.cc:547
 #: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -24134,7 +24133,7 @@ msgctxt "@title:window"
 msgid "Stroke Selection Properties"
 msgstr "선택 영역을 따라 획 그리기 속성"
 
-#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
+#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
 msgstr "캐시 재생성 중..."
@@ -30482,13 +30481,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "빠른 그룹 해제"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "사용 안 함: 패스스루 그룹의 마스크는 지원하지 않습니다!"
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -35236,7 +35235,6 @@ msgid "Smooths the edges of the selection"
 msgstr "실제 선택의 선 굵기 설정"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
 #| msgid "Grow/shrink selection: "
 msgid "Grow or shrink the selection by the set amount"
@@ -35250,7 +35248,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr ""
@@ -39032,6 +39029,14 @@ msgstr "채널 변화에 맞도록 보기 크기를 조정합니다."
 msgid "Zoom view to fit curve."
 msgstr "곡선에 맞도록 보기 크기를 조정합니다."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "스칼라 키프레임 추가"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -39262,34 +39267,34 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "키프레임 추가"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "키프레임 삭제"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
 msgid_plural "Move %1 Keyframes"
 msgstr[0] "키프레임 %1개 이동"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
 msgid_plural "Copy %1 Keyframes"
 msgstr[0] "키프레임 %1개 복사"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
 msgid_plural "Clone %1 Keyframes"
 msgstr[0] "키프레임 %1개 복제"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
 msgstr "중복된 복제본 삭제"
@@ -40002,23 +40007,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:992
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "빠른 선택 마스크"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "빠른 선택 마스크 취소"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "잠금 및 표시 전환(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: plugins/dockers/layerdocker/LayerBox.cpp:1252
 #, kde-format
 msgid "&Add"
 msgstr "추가(&A)"
@@ -49529,67 +49534,67 @@ msgstr ""
 "파일에 잘못된 소스 노드 ID가 있는 복제 레이어가 있습니다. 이 레이어는 칠하기 "
 "레이어로 변환됩니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "변형 마스크의 \"id\"를 불러올 수 없음"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "변형 마스크 인자를 만들 수 없음"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "%2의 프레임 %1에서 키프레임 픽셀 데이터를 찾을 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "%2의 프레임 %1에서 키프레임 픽셀 데이터를 불러올 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "픽셀 데이터를 읽을 수 없음: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "픽셀 데이터를 불러올 수 없음: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "프로필을 불러올 수 없음: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "구성 %1을(를) 필터링할 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "%1 레이어의 메타데이터를 불러올 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "벡터 선택 %1을(를) 불러올 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "래스터 선택 %1을(를) 불러올 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "%1에서 키프레임을 불러올 수 없습니다."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49598,7 +49603,7 @@ msgstr ""
 "키프레임 파일 %1의 %2행, %3열에서 해석 오류\n"
 "오류 메시지: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "알 수 없는 키프레임 채널 종류: %2의 %1"
@@ -58038,7 +58043,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "영역을 배경색으로 채우기"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, fuzzy, kde-format
 #| msgid "Background color"
 msgid "Boundary color"
@@ -59230,54 +59235,41 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "선택 영역을 경계선으로 사용:"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgctxt "Grow as in deform brush engine"
-#| msgid "Grow"
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "확장"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, fuzzy, kde-format
-#| msgid "Feather radius:"
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "페더 반지름:"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
 "increases the range of similar colors to be selected."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
 "decreases opacity of selection areas depending on color similarity."
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
 "when making a new selection"
 msgstr ""
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, fuzzy, kde-format
 #| msgid "Selection Mode"
 msgctxt ""
@@ -59370,18 +59362,18 @@ msgstr "사각형으로 선택"
 msgid "Rectangular Selection Tool"
 msgstr "사각형 선택 도구"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
 msgstr "비슷한 색상 선택"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "비슷한 색상 선택"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, fuzzy, kde-format
 #| msgctxt "The Threshold label in Fill tool options"
 #| msgid "Threshold: "
@@ -59389,7 +59381,14 @@ msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "임곗값: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgid "Spread:"
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "퍼짐:"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, fuzzy, kde-format
 #| msgid "Selection Mode"
 msgctxt ""
@@ -59397,7 +59396,7 @@ msgctxt ""
 msgid "Selection extent"
 msgstr "선택 모드"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "비슷한 색상 선택 도구"
@@ -60963,13 +60962,13 @@ msgstr "적용"
 msgid "Transform Tool Actions"
 msgstr "변형 도구 동작"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "레이어 형식에서 변형 도구를 사용할 수 없음"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60977,7 +60976,7 @@ msgstr ""
 "레이어 형식에서 변형 도구를 사용할 수 없습니다. 대신 변형 마스크를 사용하십시"
 "오."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60987,20 +60986,20 @@ msgstr ""
 "레이어에 변형 마스크가 있는 자식 레이어가 있습니다. 변형을 실행하기 전에 비활"
 "성화하십시오."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "변형 마스크를 편집할 때는 선택 항목이 사용되지 않습니다 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "빈 레이어를 변환할 수 없음 "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -61157,8 +61156,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "레이어 또는 선택 영역 변형"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "변형"
@@ -61757,6 +61756,20 @@ msgstr "확대/축소 도구"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "참조 이미지 도구"
+
+#, fuzzy
+#~| msgctxt "Grow as in deform brush engine"
+#~| msgid "Grow"
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "확장"
+
+#, fuzzy
+#~| msgid "Feather radius:"
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "페더 반지름:"
 
 #~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 #~ msgstr "<html><head/><body><h1 align=\"center\">후원자</h1><p>"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-29 03:11+0000\n"
+"POT-Creation-Date: 2024-02-29 03:09+0000\n"
 "PO-Revision-Date: 2024-01-29 19:55+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -12813,7 +12813,7 @@ msgstr "&Importa/exporta"
 msgid "Import"
 msgstr "Importa"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
 #, kde-format
 msgid "&Convert"
 msgstr "&Converteix"
@@ -12821,14 +12821,14 @@ msgstr "&Converteix"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1214
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selecciona"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12849,7 +12849,7 @@ msgstr "Transforma &totes les capes"
 msgid "S&plit"
 msgstr "Di&videix"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Di&videix l'alfa"
@@ -16737,8 +16737,6 @@ msgstr "Mida"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -16864,7 +16862,7 @@ msgid "Set Image Resolution"
 msgstr "Estableix la resolució de la imatge"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Mou"
@@ -16974,7 +16972,7 @@ msgstr "Suau"
 msgid "Gaussian"
 msgstr "Gaussià"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Copia des de"
@@ -17077,7 +17075,7 @@ msgstr "Curtcircuitat"
 msgid "Imported Image"
 msgstr "Imatge importada"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17324,63 +17322,63 @@ msgstr "Obre un fitxer"
 msgid "Error"
 msgstr "Error"
 
-#: libs/image/kis_layer_utils.cpp:617
+#: libs/image/kis_layer_utils.cpp:618
 #, kde-format
 msgid "Merged"
 msgstr "Fusionades"
 
-#: libs/image/kis_layer_utils.cpp:1397
+#: libs/image/kis_layer_utils.cpp:1398
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Fusiona cap avall"
 
-#: libs/image/kis_layer_utils.cpp:1645
+#: libs/image/kis_layer_utils.cpp:1646
 #, kde-format
 msgid "Copy of"
 msgstr "Còpia de"
 
-#: libs/image/kis_layer_utils.cpp:1718
+#: libs/image/kis_layer_utils.cpp:1719
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Canvia el color de la projecció"
 
-#: libs/image/kis_layer_utils.cpp:1884
+#: libs/image/kis_layer_utils.cpp:1943
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Fusiona els nodes seleccionats"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nova des de la visible"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Visible"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:2029
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Fusiona les màscares de selecció"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2052
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Aplana la capa"
 
-#: libs/image/kis_layer_utils.cpp:2006
+#: libs/image/kis_layer_utils.cpp:2065
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Aplana la imatge"
 
-#: libs/image/kis_layer_utils.cpp:2230
+#: libs/image/kis_layer_utils.cpp:2289
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Divideix l'alfa en una màscara"
 
-#: libs/image/kis_layer_utils.cpp:2256
+#: libs/image/kis_layer_utils.cpp:2315
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Converteix a una capa de pintura"
@@ -22521,8 +22519,8 @@ msgstr "Propietats de la capa"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:604 libs/ui/kis_paintop_box.cc:276
 #: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -22596,6 +22594,7 @@ msgstr "Propietats de la capa"
 #: plugins/tools/basictools/kis_tool_fill.cc:547
 #: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -23190,7 +23189,7 @@ msgctxt "@title:window"
 msgid "Stroke Selection Properties"
 msgstr "Propietats de la selecció del traç"
 
-#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
+#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
 msgstr "S'està regenerant la memòria cau..."
@@ -29493,13 +29492,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Desagrupa ràpid"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Desactivat: no es permeten les màscares en grups de pas a través!"
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -34247,7 +34246,6 @@ msgid "Smooths the edges of the selection"
 msgstr "Suavitza les vores de la selecció"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Fa créixer o encongir la selecció segons la quantitat definida"
@@ -34260,7 +34258,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "Atura el creixement en els píxels més foscos/opacs"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "Difumina la selecció segons la quantitat definida"
@@ -38060,6 +38057,14 @@ msgstr "Vista de zoom per a ajustar l'interval del canal."
 msgid "Zoom view to fit curve."
 msgstr "Vista de zoom per a ajustar la corba."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Afegeix fotogrames clau escalars"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -38286,14 +38291,14 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Afegeix un fotograma clau"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "Elimina el fotograma clau"
 msgstr[1] "Elimina els fotogrames clau"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -38301,7 +38306,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Mou el fotograma clau"
 msgstr[1] "Mou els %1 fotogrames clau"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -38309,7 +38314,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Copia el fotograma clau"
 msgstr[1] "Copia %1 fotogrames clau"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -38317,7 +38322,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Clona un fotograma clau"
 msgstr[1] "Clona %1 fotogrames clau"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
 msgstr "Fes únics els clons"
@@ -39025,23 +39030,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Mostra una casella de selecció per a seleccionar/desseleccionar capes."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:992
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Cancel·la la màscara de selecció ràpida"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Commuta els bloquejos i la visibilitat"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: plugins/dockers/layerdocker/LayerBox.cpp:1252
 #, kde-format
 msgid "&Add"
 msgstr "&Afegeix"
@@ -48444,71 +48449,71 @@ msgstr ""
 "El fitxer conté una capa clonada que té un ID de node origen incorrecte. "
 "Aquesta capa es convertirà en una capa de pintura."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "No s'ha pogut carregar l'«id» de la màscara de transformació"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "No s'han pogut crear els paràmetres de la màscara de transformació"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "No s'han pogut trobar les dades dels píxels del fotograma clau per al "
 "fotograma %1 a %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "No s'han pogut carregar les dades dels píxels del fotograma clau per al "
 "fotograma %1 a %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "No s'ha pogut llegir les dades dels píxels: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "No s'ha pogut carregar les dades dels píxels: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "No s'ha pogut carregar el perfil: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "No s'ha pogut filtrar la configuració %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "No s'han pogut carregar les metadades per a la capa %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "No s'ha pogut carregar la selecció amb vectors %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "No s'ha pogut carregar la selecció ràster %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "No s'han pogut carregar els fotogrames clau des de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48517,7 +48522,7 @@ msgstr ""
 "Error d'anàlisi al fitxer de fotogrames clau %1 a la línia %2, columna %3\n"
 "Missatge d'error: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Tipus de canal desconegut de fotograma clau: %1 a %2"
@@ -57023,7 +57028,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Emplena totes les regions fins a un color de límit específic"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, kde-format
 msgid "Boundary color"
 msgstr "Color de límit"
@@ -58202,31 +58207,20 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Empra la selecció com a límit"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, kde-format
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Fes créixer: "
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, kde-format
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Ploma: "
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr ""
 "Selecciona regions similars en color a la regió en la qual s'ha fet clic"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Selecciona totes les regions fins a un color de límit específic"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
@@ -58235,7 +58229,8 @@ msgstr ""
 "Estableix la tolerància de la similitud del color de la selecció. L'augment "
 "del llindar augmenta l'interval de colors similars a seleccionar."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
@@ -58245,7 +58240,7 @@ msgstr ""
 "propagació disminueix l'opacitat de les àrees de selecció depenent de la "
 "similitud del color."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -58254,7 +58249,7 @@ msgstr ""
 "Estableix si el contorn de la selecció activa s'ha de tractar com un límit "
 "en obtenir-ne una de nova"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
@@ -58346,31 +58341,39 @@ msgstr "Selecciona un rectangle"
 msgid "Rectangular Selection Tool"
 msgstr "Eina de selecció rectangular"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
 msgstr "Selecció de color similar"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Selecciona un color similar"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Llindar: "
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgctxt "The 'spread' spinbox prefix in fill tool options"
+#| msgid "Spread: "
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "Extensió: "
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Extensió de la selecció"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Eina de selecció de colors similars"
@@ -59897,13 +59900,13 @@ msgstr "Aplica"
 msgid "Transform Tool Actions"
 msgstr "Accions de l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "El tipus de capa no pot usar l'eina de transformació"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -59911,7 +59914,7 @@ msgstr ""
 "El tipus de capa no pot usar l'eina de transformació. En el seu lloc empreu "
 "la màscara de transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59921,20 +59924,20 @@ msgstr ""
 "La capa té fills amb màscares de transformació. Si us plau, inhabiliteu-los "
 "abans de fer la transformació."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Les seleccions no s'usen en editar les màscares de transformació "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "No es pot transformar una capa buida "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60097,8 +60100,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transforma una capa o una selecció"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transforma"
@@ -60697,3 +60700,12 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
+
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Fes créixer: "
+
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Ploma: "

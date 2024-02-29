@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-01-29 03:11+0000\n"
+"POT-Creation-Date: 2024-02-29 03:09+0000\n"
 "PO-Revision-Date: 2024-01-04 21:03+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -12822,7 +12822,7 @@ msgstr "&Importi/Eksporti"
 msgid "Import"
 msgstr "Importi"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1242
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
 #, kde-format
 msgid "&Convert"
 msgstr "&Konverti"
@@ -12830,14 +12830,14 @@ msgstr "&Konverti"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1216
+#: plugins/dockers/layerdocker/LayerBox.cpp:1214
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selekti"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1222
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12858,7 +12858,7 @@ msgstr "Tr&ansformi Ĉiujn Tavolojn"
 msgid "S&plit"
 msgstr "Di&vidi"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1249
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Di&vidi Alfa"
@@ -16739,8 +16739,6 @@ msgstr "Grandeco"
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
 #: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:395
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
@@ -16866,7 +16864,7 @@ msgid "Set Image Resolution"
 msgstr "Meti Bildrezolucion"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
-#: libs/ui/tool/strokes/move_stroke_strategy.cpp:225
+#: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
 msgctxt "(qtundo-format)"
 msgid "Move"
 msgstr "Movi"
@@ -16976,7 +16974,7 @@ msgstr "Mola"
 msgid "Gaussian"
 msgstr "Gaŭsa"
 
-#: libs/image/kis_clone_layer.cpp:320
+#: libs/image/kis_clone_layer.cpp:321
 #, kde-format
 msgid "Copy From"
 msgstr "Kopii De"
@@ -17079,7 +17077,7 @@ msgstr "Trapasi"
 msgid "Imported Image"
 msgstr "Importita Bildo"
 
-#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1921
+#: libs/image/kis_image.cc:688 libs/image/kis_layer_utils.cpp:1980
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17326,63 +17324,63 @@ msgstr "Malfermi Dosieron"
 msgid "Error"
 msgstr "Eraro"
 
-#: libs/image/kis_layer_utils.cpp:617
+#: libs/image/kis_layer_utils.cpp:618
 #, kde-format
 msgid "Merged"
 msgstr "Kunfandita"
 
-#: libs/image/kis_layer_utils.cpp:1397
+#: libs/image/kis_layer_utils.cpp:1398
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Kunfandi Malsupren"
 
-#: libs/image/kis_layer_utils.cpp:1645
+#: libs/image/kis_layer_utils.cpp:1646
 #, kde-format
 msgid "Copy of"
 msgstr "Kopio de"
 
-#: libs/image/kis_layer_utils.cpp:1718
+#: libs/image/kis_layer_utils.cpp:1719
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Ŝanĝi projekcian koloron"
 
-#: libs/image/kis_layer_utils.cpp:1884
+#: libs/image/kis_layer_utils.cpp:1943
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Kunfandi Elektitajn Nodojn"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nova De Videbla"
 
-#: libs/image/kis_layer_utils.cpp:1892
+#: libs/image/kis_layer_utils.cpp:1951
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Videbla"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:2029
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Kunfandi Elektajn Maskojn"
 
-#: libs/image/kis_layer_utils.cpp:1993
+#: libs/image/kis_layer_utils.cpp:2052
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Platigi Tavolon"
 
-#: libs/image/kis_layer_utils.cpp:2006
+#: libs/image/kis_layer_utils.cpp:2065
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Platigi Bildon"
 
-#: libs/image/kis_layer_utils.cpp:2230
+#: libs/image/kis_layer_utils.cpp:2289
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Dividi Alfa en Maskon"
 
-#: libs/image/kis_layer_utils.cpp:2256
+#: libs/image/kis_layer_utils.cpp:2315
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konverti al Farbo-Tavolo"
@@ -22500,8 +22498,8 @@ msgstr "Ecoj de Tavolo"
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleWidth)
 #. i18n: ectx: property (suffix), widget (KisDoubleParseSpinBox, spbScaleHeight)
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:97
-#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:595
-#: libs/ui/kis_node_model.cpp:598 libs/ui/kis_paintop_box.cc:276
+#: libs/ui/forms/wdgdisplaysettings.ui:434 libs/ui/kis_node_model.cpp:601
+#: libs/ui/kis_node_model.cpp:604 libs/ui/kis_paintop_box.cc:276
 #: libs/ui/kis_paintop_box.cc:284 libs/ui/layerstyles/wdgInnerGlow.ui:220
 #: libs/ui/layerstyles/wdgInnerGlow.ui:322
 #: libs/ui/layerstyles/wdgInnerGlow.ui:351
@@ -22575,6 +22573,7 @@ msgstr "Ecoj de Tavolo"
 #: plugins/tools/basictools/kis_tool_fill.cc:547
 #: plugins/tools/basictools/kis_tool_fill.cc:562
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:375
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:244
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1482
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:445
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
@@ -23165,7 +23164,7 @@ msgctxt "@title:window"
 msgid "Stroke Selection Properties"
 msgstr "Propraĵoj de Elekto de Trako"
 
-#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:102
+#: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
 msgstr "Regenerante kaŝmemoron..."
@@ -29429,13 +29428,13 @@ msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Rapida Malgrupigo"
 
-#: libs/ui/kis_node_model.cpp:552
+#: libs/ui/kis_node_model.cpp:558
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: masks on pass-through groups are not supported!"
 msgstr "Malebligita: maskoj ĉe trapasaj grupoj ne estas subtenataj!"
 
-#: libs/ui/kis_node_model.cpp:554
+#: libs/ui/kis_node_model.cpp:560
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Disabled: cloning pass-through groups is not supported!"
@@ -34142,7 +34141,6 @@ msgid "Smooths the edges of the selection"
 msgstr "Glatigas la randojn de la elekto"
 
 #: libs/ui/widgets/kis_selection_options.cc:235
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, kde-format
 msgid "Grow or shrink the selection by the set amount"
 msgstr "Kreski aŭ malgrandigi la elekton per la fiksita kvanto"
@@ -34155,7 +34153,6 @@ msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "Ĉesi kreski ĉe la plej malhelaj kaj/aŭ plej maldiafanaj rastrumeroj"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:414
 #, kde-format
 msgid "Blur the selection by the set amount"
 msgstr "Malklarigi la elekton per la fiksita kvanto"
@@ -37937,6 +37934,14 @@ msgstr "Zoma vido por konveni kanalan gamon."
 msgid "Zoom view to fit curve."
 msgstr "Zomi vido por konveni kurbon."
 
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#, fuzzy
+#| msgctxt "action"
+#| msgid "Add scalar keyframes"
+msgctxt "(qtundo-format)"
+msgid "Add Scalar Keyframes"
+msgstr "Aldonu skalarajn ŝlosilkadrojn"
+
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
 msgid "Adjust keyframe"
@@ -38161,14 +38166,14 @@ msgctxt "(qtundo-format)"
 msgid "Add Keyframe"
 msgstr "Aldoni Ŝlosilkadron"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:131
+#: plugins/dockers/animation/KisAnimUtils.cpp:146
 msgctxt "(qtundo-format)"
 msgid "Remove Keyframe"
 msgid_plural "Remove Keyframes"
 msgstr[0] "Forigi Ŝlosilkadron"
 msgstr[1] "Forigi Ŝlosilkadrojn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:304
+#: plugins/dockers/animation/KisAnimUtils.cpp:319
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Move Keyframe"
@@ -38176,7 +38181,7 @@ msgid_plural "Move %1 Keyframes"
 msgstr[0] "Movi Ŝlosilkadron"
 msgstr[1] "Movi %1 Ŝlosilkadrojn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:308
+#: plugins/dockers/animation/KisAnimUtils.cpp:323
 #, kde-format
 msgctxt "(qtundo-format) Copy one or several keyframes"
 msgid "Copy Keyframe"
@@ -38184,7 +38189,7 @@ msgid_plural "Copy %1 Keyframes"
 msgstr[0] "Kopii Ŝlosilkadron"
 msgstr[1] "Kopii %1 Ŝlosilkadrojn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:381
+#: plugins/dockers/animation/KisAnimUtils.cpp:396
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Clone Keyframe"
@@ -38192,7 +38197,7 @@ msgid_plural "Clone %1 Keyframes"
 msgstr[0] "Kloni Ŝlosilkadron"
 msgstr[1] "Kloni %1 Ŝlosilkadrojn"
 
-#: plugins/dockers/animation/KisAnimUtils.cpp:412
+#: plugins/dockers/animation/KisAnimUtils.cpp:427
 msgctxt "(qtundo-format)"
 msgid "Make clones Unique"
 msgstr "Igi klonojn Unikaj"
@@ -38897,23 +38902,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Montri markobutonon por elekti/malelekti tavolojn."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:994
+#: plugins/dockers/layerdocker/LayerBox.cpp:992
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Rapida Elekto Masko"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1016
+#: plugins/dockers/layerdocker/LayerBox.cpp:1014
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Nuligi Rapidan Elektan Maskon"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1226
+#: plugins/dockers/layerdocker/LayerBox.cpp:1224
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Baskuligi Ŝlosojn && Videblecon"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1233
-#: plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: plugins/dockers/layerdocker/LayerBox.cpp:1231
+#: plugins/dockers/layerdocker/LayerBox.cpp:1252
 #, kde-format
 msgid "&Add"
 msgstr "&Aldoni"
@@ -48266,67 +48271,67 @@ msgstr ""
 "La dosiero enhavas klonan tavolon kiu havas malĝustan fontnodan id. Ĉi tiu "
 "tavolo estos konvertita en farbotavolon."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Ne eblis ŝargi \"id\" de la transformmasko"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:408
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Ne eblis krei transformajn maskajn parametrojn"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Ne eblis trovi ŝlosilkadrajn rastrumerojn por kadro %1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Ne eblis ŝargi ŝlosilkadrajn rastrumerojn por kadro %1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Ne eblis legi rastrumerojn: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Ne eblis ŝargi pikserajn datumojn: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Ne eblis ŝargi profilon: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Ne eblis filtri agordon %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Ne eblis ŝargi metadatumojn por tavolo %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Ne eblis ŝargi vektoran elekton %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Ne eblis ŝargi rastruman elekton %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Ne eblis ŝargi ŝlosilkadrojn de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -48335,7 +48340,7 @@ msgstr ""
 "analiza eraro en la ĉefkadra dosiero %1 ĉe linio %2, kolumno %3\n"
 "Erara mesaĝo: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "nekonata ĉefkadra kanaltipo: %1 en %2"
@@ -56775,7 +56780,7 @@ msgid "Fill all regions until a specific boundary color"
 msgstr "Plenigi ĉiujn regionojn ĝis specifa limkoloro"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:630
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:402
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:389
 #, kde-format
 msgid "Boundary color"
 msgstr "Limkoloro"
@@ -57947,30 +57952,19 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Uzi elekton kiel limon"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, kde-format
-msgctxt "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-msgid "Grow: "
-msgstr "Kreski:"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:393
-#, kde-format
-msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-msgid "Feather: "
-msgstr "Plumo:"
-
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:399
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:386
 #, kde-format
 msgid "Select regions similar in color to the clicked region"
 msgstr "Elekti regionojn similajn en koloro al la klakita regiono"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:401
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:388
 #, kde-format
 msgid "Select all regions until a specific boundary color"
 msgstr "Elekti ĉiujn regionojn ĝis specifa limkoloro"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:404
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:465
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:237
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:249
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the selection. Increasing threshold "
@@ -57979,7 +57973,8 @@ msgstr ""
 "Agordu la toleremon de kolorsimileco de la elekto. Pliiĝanta sojlo pliigas "
 "la gamon de similaj koloroj elektotaj."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:407
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:394
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:252
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the selection. Decreasing spread "
@@ -57988,7 +57983,7 @@ msgstr ""
 "Agordu la amplekson de la maldiafana parto de la elekto. Malkreskanta "
 "disvastiĝo malpliigas opakecon de elektareoj depende de kolorsimileco."
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:410
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:397
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -57997,7 +57992,7 @@ msgstr ""
 "Agordu ĉu la konturo de la aktiva elekto estu traktata kiel limo kiam oni "
 "faras novan elekton"
 
-#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:421
+#: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:405
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in contiguous selection tool options"
@@ -58089,31 +58084,38 @@ msgstr "Elekti Rektangulon"
 msgid "Rectangular Selection Tool"
 msgstr "Rektangula Elekta Ilo"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:87
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:42
 #, kde-format
 msgid "Similar Color Selection"
 msgstr "Simila Kolora Elekto"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:137
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:429
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:88
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:196
 msgctxt "(qtundo-format)"
 msgid "Select Similar Color"
 msgstr "Elekti Similan Koloron"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:461
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:233
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in similar selection tool options"
 msgid "Threshold: "
 msgstr "Pentrosojlo:"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.cc:472
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
+#, fuzzy, kde-format
+#| msgid "Spread:"
+msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
+msgid "Spread: "
+msgstr "Disvastigi:"
+
+#: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
 msgctxt ""
 "The 'selection extent' section label in similar selection tool options"
 msgid "Selection extent"
 msgstr "Amplekso de elekto"
 
-#: plugins/tools/selectiontools/kis_tool_select_similar.h:57
+#: plugins/tools/selectiontools/kis_tool_select_similar.h:59
 #, kde-format
 msgid "Similar Color Selection Tool"
 msgstr "Simila Kolora Elekta Ilo"
@@ -59638,20 +59640,20 @@ msgstr "Apliki"
 msgid "Transform Tool Actions"
 msgstr "Transformi Ilajn Agojn"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:861
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:863
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Tavolspeco ne povas uzi la transformilon"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:868
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:870
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 "Tavolspeco ne povas uzi la transformilon. Uzu transform maskon anstataŭe."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:888
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:890
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59661,20 +59663,20 @@ msgstr ""
 "Tavolo havas infanojn kun transformaj maskoj. Bonvolu malŝalti ilin antaŭ ol "
 "fari transformon."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:902
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:904
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Elektoj ne estas uzataj dum redaktado de transformmaskoj"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:986
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1025
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:987
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1026
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Ne povas transformi malplenan tavolon"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1012
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1013
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -59833,8 +59835,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformi tavolon aŭ elekton"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:145
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:59
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformi"
@@ -60432,6 +60434,15 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
+
+#~ msgctxt ""
+#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
+#~ msgid "Grow: "
+#~ msgstr "Kreski:"
+
+#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
+#~ msgid "Feather: "
+#~ msgstr "Plumo:"
 
 #~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
 #~ msgstr "<html><head/><body><h1 align=\"center\">Apogita De</h1><p>"

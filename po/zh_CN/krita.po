@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-29 03:09+0000\n"
-"PO-Revision-Date: 2024-02-05 11:43\n"
+"PO-Revision-Date: 2024-02-29 13:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -23666,11 +23666,12 @@ msgstr ""
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body>\n"
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
-"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita 是一款由社区驱动、自"
-"由开源的绘画软件，让每一位画师都能自由且有尊严地进行创作。<br />您可以作为<a "
-"href=\"https://docs.krita.org/en/contributors_manual.html\">代码贡献者、志愿"
-"者</a>贡献力量，也可以作为<a href=\"https://fund.krita.org/\">发展基金会员、"
-"赞助商</a>为项目提供资金支持。</p></body></html>"
+"right:0px; -qt-block-indent:0; text-indent:0px;\">Krita 是一款自由开源且免费"
+"的专业绘画软件，无需注册、无广告、试用期或者商用限制，助力每一位画师随心所欲"
+"地表达创意。<br />您可以作为<a href=\"https://docs.krita.org/en/"
+"contributors_manual.html\">代码贡献者、志愿者</a>贡献力量，也可以作为<a href="
+"\"https://fund.krita.org/\">发展基金会员、赞助商</a>为项目提供资金支持。</"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblLastPrintedDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:28
@@ -58681,7 +58682,7 @@ msgstr "请在线稿含有大面积实心色块时勾选此项，并将数值设
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #, kde-format
 msgid "Gap close hint: "
-msgstr "线稿缺口宽容度："
+msgstr "缺口自动闭合上限："
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:119
 #, kde-format
@@ -58689,7 +58690,7 @@ msgctxt "@info:tooltip"
 msgid ""
 "The mask will try to close non-closed contours if the gap is smaller than "
 "\"Gap close hint\" value"
-msgstr "只要围住某个区域的线条的缺口宽度不超过此值，均将其视作闭合区域。"
+msgstr "只要围住某个区域的轮廓的缺口宽度不超过此值，均将其视作闭合区域。"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:124
 #, kde-format

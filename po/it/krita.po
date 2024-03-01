@@ -38117,9 +38117,6 @@ msgid "Zoom view to fit curve."
 msgstr "Adatta la vista alla curva"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
 msgstr "Aggiungi fotogrammi chiave scalari"
@@ -58443,9 +58440,7 @@ msgid "Threshold: "
 msgstr "Soglia: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
 msgstr "Estensione: "

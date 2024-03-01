@@ -442,6 +442,7 @@ void RecorderExport::onSpinInputFpsValueChanged(int value)
     RecorderExportConfig config(false);
     config.setInputFps(value);
     d->updateFps(config, true);
+    d->updateVideoDuration();
 }
 
 void RecorderExport::onSpinFpsValueChanged(int value)
@@ -450,6 +451,7 @@ void RecorderExport::onSpinFpsValueChanged(int value)
     RecorderExportConfig config(false);
     config.setFps(value);
     d->updateFps(config, false);
+    d->updateVideoDuration();
 }
 
 void RecorderExport::onCheckResultPreviewToggled(bool checked)

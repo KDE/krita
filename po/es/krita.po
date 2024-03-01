@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-02-24 20:20+0100\n"
+"PO-Revision-Date: 2024-02-29 20:51+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -48514,13 +48514,15 @@ msgid ""
 "to lossless. Useful to reduce transparency artifact on lossy export.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Si se activa, el canal de alfa (transparencia) se "
+"configura para que no tenga pérdidas. Útil para reducir los defectos de la "
+"transparencia en exportaciones con pérdida.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Sin pérdida"
+msgstr "Alfa sin pérdida"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -48615,10 +48617,9 @@ msgstr "Aplanar la imagen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "Perfil de color:"
+msgstr "Perfil de color"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -48628,19 +48629,22 @@ msgid ""
 "lossless, otherwise keep using ICC. Useful to make filesize even smaller "
 "(eg. for web delivery).</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Use CICP si el perfil ICC se puede convertir a CICP "
+"cuando no se trabaja sin pérdida; en caso contrario, siga usando ICC. Útil "
+"para hacer que el tamaño de archivo sea todavía más pequeño (por ejemplo, "
+"para entrega web).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:275
 #, kde-format
 msgid "(Lossless) Use CICP instead of ICC if possible"
-msgstr ""
+msgstr "(Sin pérdida) Usar CICP en lugar de ICC, si es posible"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "Versión de la base de datos"
+msgstr "Conversión HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291

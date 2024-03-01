@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-02-19 05:58+0100\n"
+"PO-Revision-Date: 2024-02-29 03:14+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -47062,10 +47062,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "კარგვის გარეშე"
+msgstr "კარგვის გარეშე ალფა"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -47144,10 +47143,9 @@ msgstr "გამოსახულების გაბრტყელებ�
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "ფერის პროფილი:"
+msgstr "ფერის პროფილი"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -47166,10 +47164,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "ბაზის ვერსია"
+msgstr "HDR გადაყვანა"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -51244,11 +51241,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "ფერების პროგრამული დამუშავება"
+msgstr "პროგრამული ტექსტურები"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -55504,11 +55499,10 @@ msgid "Spread: {n}%"
 msgstr "გავრცელება: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "დახურვა"
+msgstr "დაშორების დახურვა: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -56823,11 +56817,10 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "დახურვა"
+msgstr "დაშორების დახურვა: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -57271,20 +57264,14 @@ msgid "Insert Text"
 msgstr "ტექსტის ჩასმა"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "ტექსტის ჩასმა"
+msgstr "მდიდარი ტექსტის ჩასმა"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "ფენის თვისებების შეცვლა"
+msgstr "ტექსტის თვისებების შეცვლა"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

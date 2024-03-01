@@ -391,12 +391,12 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "font-stretch") {
         int newStretch = 100;
 
-        newStretch = KoSvgText::parseCSSFontStretch(value, propertyOrDefault(FontStretchId).toInt());
+        newStretch = KoSvgText::parseCSSFontStretch(value, context.currentGC()->textProperties.propertyOrDefault(FontStretchId).toInt());
 
         setProperty(FontStretchId, newStretch);
 
     } else if (command == "font-weight") {
-        int weight = KoSvgText::parseCSSFontWeight(value, propertyOrDefault(FontWeightId).toInt());
+        int weight = KoSvgText::parseCSSFontWeight(value, context.currentGC()->textProperties.propertyOrDefault(FontWeightId).toInt());
 
         setProperty(FontWeightId, weight);
 
@@ -1193,8 +1193,8 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             s_defaultProperties->setProperty(TextAlignAllId, AlignStart);
             s_defaultProperties->setProperty(TextAlignLastId, AlignLastAuto);
             s_defaultProperties->setProperty(TextTransformId, TextTransformNone);
-            s_defaultProperties->setProperty(LineHeightId, fromAutoValue(AutoValue()));
-            s_defaultProperties->setProperty(TabSizeId, 8);
+            s_defaultProperties->setProperty(LineHeightId, QVariant::fromValue(KoSvgText::LineHeightInfo()));
+            s_defaultProperties->setProperty(TabSizeId, QVariant::fromValue(KoSvgText::TabSizeInfo()));
             HangingPunctuations hang = HangNone;
             s_defaultProperties->setProperty(HangingPunctuationId, QVariant::fromValue(hang));
         }

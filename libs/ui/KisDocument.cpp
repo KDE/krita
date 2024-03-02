@@ -409,7 +409,7 @@ public:
     bool batchMode { false };
     bool decorationsSyncingDisabled = false;
     bool wasStorageAdded = false;
-
+    bool documentIsClosing = false;
 
     // Resources saved in the .kra document
     QString linkedResourcesStorageID;
@@ -646,6 +646,8 @@ KisDocument::KisDocument(const KisDocument &rhs, bool addStorage)
 
 KisDocument::~KisDocument()
 {
+    d->documentIsClosing = true;
+
     // wait until all the pending operations are in progress
     waitForSavingToComplete();
     d->imageIdleWatcher.setTrackedImage(0);
@@ -697,6 +699,7 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
+
     if (d->wasStorageAdded) {
         if (KisResourceLocator::instance()->hasStorage(d->linkedResourcesStorageID)) {
             KisResourceLocator::instance()->removeStorage(d->linkedResourcesStorageID);
@@ -2028,7 +2031,7 @@ void KisDocument::setModified(bool mod)
         updateEditingTime(false);
     }
 
-    if (d->isAutosaving)   // ignore setModified calls due to autosaving
+    if (d->isAutosaving || d->documentIsClosing)   // ignore setModified calls due to autosaving
         return;
 
     //dbgUI<<" url:" << url.path();

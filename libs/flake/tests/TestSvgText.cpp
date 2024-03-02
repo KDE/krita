@@ -83,7 +83,7 @@ void addProp(SvgLoadingContext &context,
     if (props.property(id).value<KoSvgText::AutoLengthPercentage>() != newValue) {
         qDebug() << "Failed to load the property:";
         qDebug() << ppVar(attribute) << ppVar(value);
-        //qDebug() << ppVar(newValue);
+        qDebug() << ppVar(newValue);
         qDebug() << ppVar(props.property(id));
         QFAIL("Fail :(");
     }
@@ -166,12 +166,13 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "baseline-shift", "baseline", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftNone);
 
     addProp(context, props, "baseline-shift", "10%", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftLengthPercentage);
-    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 0.1);
+    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>().value, 0.1);
+    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>().unit, KoSvgText::CssLengthPercentage::Percentage);
 
     context.currentGC()->textProperties.setFontSize(KoSvgText::CssLengthPercentage(180.0));
 
     addProp(context, props, "baseline-shift", "36", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftLengthPercentage);
-    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).toDouble(), 3.6);
+    QCOMPARE(props.property(KoSvgTextProperties::BaselineShiftValueId).value<KoSvgText::CssLengthPercentage>().value, 36);
 
     addProp(context, props, "kerning", "auto", KoSvgTextProperties::KerningId, KoSvgText::AutoValue());
     addProp(context, props, "kerning", "20", KoSvgTextProperties::KerningId, KoSvgText::AutoValue(20.0));
@@ -179,8 +180,8 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "letter-spacing", "normal", KoSvgTextProperties::LetterSpacingId, KoSvgText::AutoLengthPercentage());
     addProp(context, props, "letter-spacing", "20", KoSvgTextProperties::LetterSpacingId, KoSvgText::AutoLengthPercentage(20.0));
 
-    addProp(context, props, "word-spacing", "normal", KoSvgTextProperties::WordSpacingId, KoSvgText::AutoValue());
-    addProp(context, props, "word-spacing", "20", KoSvgTextProperties::WordSpacingId, KoSvgText::AutoValue(20.0));
+    addProp(context, props, "word-spacing", "normal", KoSvgTextProperties::WordSpacingId, KoSvgText::AutoLengthPercentage());
+    addProp(context, props, "word-spacing", "20", KoSvgTextProperties::WordSpacingId, KoSvgText::AutoLengthPercentage(20.0));
 }
 
 void TestSvgText::testDefaultTextProperties()
@@ -263,7 +264,9 @@ void TestSvgText::testParseFontStyles()
     context.styleParser().parseFont(styles);
 
     auto getFont = [&context]() {
-        return context.currentGC()->textProperties;
+        KoSvgTextProperties props = context.currentGC()->newTextProperties;
+        props.inheritFrom(context.currentGC()->textProperties, true);
+        return props;
     };
 
     {
@@ -279,31 +282,39 @@ void TestSvgText::testParseFontStyles()
     {
         SvgStyles fontModifier;
         fontModifier["font-weight"] = "bolder";
+        context.pushGraphicsContext();
         context.styleParser().parseFont(fontModifier);
         QCOMPARE(getFont().property(KoSvgTextProperties::FontWeightId).toInt(), 700);
+        context.popGraphicsContext();
     }
 
     {
         SvgStyles fontModifier;
+        context.pushGraphicsContext();
         fontModifier["font-weight"] = "lighter";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(getFont().property(KoSvgTextProperties::FontWeightId).toInt(), 600);
+        QCOMPARE(getFont().property(KoSvgTextProperties::FontWeightId).toInt(), 500);
+        context.popGraphicsContext();
     }
 
     QCOMPARE(getFont().property(KoSvgTextProperties::FontStretchId).toInt(), int(QFont::ExtraCondensed));
 
     {
         SvgStyles fontModifier;
+        context.pushGraphicsContext();
         fontModifier["font-stretch"] = "narrower";
         context.styleParser().parseFont(fontModifier);
         QCOMPARE(getFont().property(KoSvgTextProperties::FontStretchId).toInt(), int(QFont::UltraCondensed));
+        context.popGraphicsContext();
     }
 
     {
         SvgStyles fontModifier;
+        context.pushGraphicsContext();
         fontModifier["font-stretch"] = "wider";
         context.styleParser().parseFont(fontModifier);
-        QCOMPARE(getFont().property(KoSvgTextProperties::FontStretchId).toInt(), int(QFont::ExtraCondensed));
+        QCOMPARE(getFont().property(KoSvgTextProperties::FontStretchId).toInt(), int(QFont::Condensed));
+        context.popGraphicsContext();
     }
 
     {
@@ -339,6 +350,7 @@ void TestSvgText::testParseFontStyles()
         QCOMPARE(deco.testFlag(KoSvgText::DecorationLineThrough), true);
         QCOMPARE((deco.testFlag(KoSvgText::DecorationOverline)), true);
     }
+    context.popGraphicsContext();
 
 }
 
@@ -364,15 +376,20 @@ void TestSvgText::testParseTextStyles()
     context.styleParser().parseFont(styles);
 
     auto getFont = [&context] () {
-        return context.currentGC()->textProperties.generateFont();
+        KoSvgTextProperties props = context.currentGC()->newTextProperties;
+        props.inheritFrom(context.currentGC()->textProperties, true);
+        return props.generateFont();
     };
 
     QCOMPARE(getFont().family(), QString("Verdana"));
 
-    KoSvgTextProperties &props = context.currentGC()->textProperties;
+    KoSvgTextProperties &props = context.currentGC()->newTextProperties;
+    props.inheritFrom(context.currentGC()->textProperties, true);
 
     QCOMPARE(props.property(KoSvgTextProperties::WritingModeId).toInt(), int(KoSvgText::VerticalRL));
     QCOMPARE(props.property(KoSvgTextProperties::TextOrientationId).toInt(), int(KoSvgText::OrientationSideWays));
+
+    context.popGraphicsContext();
 }
 
 #include <text/KoSvgTextShape.h>

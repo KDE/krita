@@ -30,6 +30,10 @@ KIS_DECLARE_STATIC_INITIALIZER {
     QMetaType::registerEqualsComparator<KoSvgText::AutoValue>();
     QMetaType::registerDebugStreamOperator<KoSvgText::AutoValue>();
 
+    qRegisterMetaType<KoSvgText::AutoLengthPercentage>("KoSvgText::AutoLengthPercentage");
+    QMetaType::registerEqualsComparator<KoSvgText::AutoLengthPercentage>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::AutoLengthPercentage>();
+
     qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
     QMetaType::registerEqualsComparator<KoSvgText::BackgroundProperty>();
     QMetaType::registerDebugStreamOperator<KoSvgText::BackgroundProperty>();
@@ -802,10 +806,6 @@ TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &co
             textIndent.eachLine = true;
         } else {
             textIndent.length = SvgUtil::parseUnitStruct(context.currentGC(), param);
-            textIndent.isPercentage = textIndent.length.unit == CssLengthPercentage::Percentage;
-            if (textIndent.isPercentage) {
-                textIndent.value = textIndent.length.value;
-            }
             //ToDo: figure out how to detect value is number.
             //qWarning() << "Unknown parameter in text-indent" << param;
         }
@@ -816,13 +816,7 @@ TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &co
 QString writeTextIndent(const TextIndentInfo textIndent)
 {
     QStringList values;
-    QString indentVal = QString::number(textIndent.value * 100.0);
-    if (textIndent.isPercentage) {
-        indentVal += "%";
-    } else {
-        indentVal = writeLengthPercentage(textIndent.length);
-    }
-    values.append(indentVal);
+    values.append(writeLengthPercentage(textIndent.length));
     if (textIndent.hanging) {
         values.append("hanging");
     }
@@ -846,8 +840,10 @@ QString writeTabSize(const TabSizeInfo tabSize)
 {
     QString val = KisDomUtils::toString(tabSize.value);
     if (!tabSize.isNumber) {
-        val = writeLengthPercentage(tabSize.length);
-        if (tabSize.length.unit == CssLengthPercentage::Absolute) {
+
+        // Tabsize does not support percentage, so if we accidentally set it somewhere, convert to em.
+        val = writeLengthPercentage(tabSize.length, true);
+        if (tabSize.length == CssLengthPercentage::Absolute) {
             val += "px"; // In SVG, due to browsers, the default unit is css px. Krita scales these to pt.
         }
     }
@@ -992,20 +988,54 @@ QDebug operator<<(QDebug dbg, const CssLengthPercentage &value)
     return dbg.space();
 }
 
-QString writeLengthPercentage(const CssLengthPercentage &length)
+QString writeLengthPercentage(const CssLengthPercentage &length, bool percentageAsEm)
 {
     QString val;
-    if (length.unit == CssLengthPercentage::Percentage) {
+    if (length.unit == CssLengthPercentage::Percentage && !percentageAsEm) {
         val = KisDomUtils::toString(length.value*100.0) + "%";
     } else {
         val = KisDomUtils::toString(length.value);
-        if (length.unit == CssLengthPercentage::Em) {
+        if (length.unit == CssLengthPercentage::Em || length.unit == CssLengthPercentage::Percentage) {
             val += "em";
         } else if (length.unit == CssLengthPercentage::Ex) {
             val += "ex";
         }
     }
     return val;
+}
+
+void CssLengthPercentage::convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const CssLengthPercentage::UnitType percentageUnit) {
+    UnitType u = unit;
+    if (u == Percentage) {
+        u = percentageUnit;
+    }
+    if (u == Em) {
+        value = value * fontSizeInPt;
+    } else if (u == Ex) {
+        value = value * fontXHeightInPt;
+    }
+    unit = Absolute;
+}
+
+AutoLengthPercentage parseAutoLengthPercentageXY(const QString &value, const SvgLoadingContext &context, const QString &autoKeyword, QRectF bbox, bool percentageIsViewPort)
+{
+    return value == autoKeyword ? AutoLengthPercentage()
+                                : AutoLengthPercentage(SvgUtil::parseUnitStruct(context.currentGC(), value, true, true, bbox, percentageIsViewPort));
+}
+
+QString writeAutoLengthPercentage(const AutoLengthPercentage &value, const QString &autoKeyword, bool percentageToEm)
+{
+    return value.isAuto ? autoKeyword : writeLengthPercentage(value.length, percentageToEm);
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::AutoLengthPercentage &value)
+{
+    if (value.isAuto) {
+        dbg.nospace() << "auto";
+    } else {
+        dbg.nospace() << value.length;
+    }
+    return dbg.space();
 }
 
 } // namespace KoSvgText

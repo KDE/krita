@@ -55,8 +55,8 @@ public:
         BaselineShiftValueId, ///< Double
         KerningId, ///< KoSvgText::AutoValue
         TextOrientationId, ///< KoSvgText::TextOrientation
-        LetterSpacingId, ///< KoSvgText::AutoValue
-        WordSpacingId, ///< KoSvgText::AutoValue
+        LetterSpacingId, ///< KoSvgText::AutoLengthPercentage
+        WordSpacingId, ///< KoSvgText::AutoLengthPercentage
 
         FontFamiliesId, ///< QStringList
         FontStyleId, ///< QFont::Style

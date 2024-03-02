@@ -139,6 +139,10 @@ void KoSvgTextProperties::resolveRelativeValues(const qreal fontSize, const qrea
             KoSvgText::CssLengthPercentage length = it.value().value<KoSvgText::CssLengthPercentage>();
             length.convertToAbsolute(usedSize, usedXHeight);
             it.value() = QVariant::fromValue(length);
+        } else if (it.value().canConvert<KoSvgText::AutoLengthPercentage>()) {
+            KoSvgText::AutoLengthPercentage val = it.value().value<KoSvgText::AutoLengthPercentage>();
+            val.length.convertToAbsolute(usedSize, usedXHeight);
+            it.value() = QVariant::fromValue(val);
         } else if (it.key() == KoSvgTextProperties::LineHeightId) {
             KoSvgText::LineHeightInfo lineHeight = it.value().value<KoSvgText::LineHeightInfo>();
             lineHeight.length.convertToAbsolute(usedSize, usedXHeight);
@@ -149,7 +153,9 @@ void KoSvgTextProperties::resolveRelativeValues(const qreal fontSize, const qrea
             it.value() = QVariant::fromValue(tabSize);
         } else if (it.key() == KoSvgTextProperties::TextIndentId) {
             KoSvgText::TextIndentInfo indent = it.value().value<KoSvgText::TextIndentInfo>();
-            indent.length.convertToAbsolute(usedSize, usedXHeight);
+            if (indent.length.unit != KoSvgText::CssLengthPercentage::Percentage) {
+                indent.length.convertToAbsolute(usedSize, usedXHeight);
+            }
             it.value() = QVariant::fromValue(indent);
         }
     }
@@ -267,9 +273,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         }
         setProperty(KerningId, KoSvgText::fromAutoValue(kerning));
     } else if (command == "letter-spacing") {
-        setProperty(LetterSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
+        setProperty(LetterSpacingId, QVariant::fromValue(KoSvgText::parseAutoLengthPercentageXY(value, context, "normal", context.currentGC()->currentBoundingBox, true)));
     } else if (command == "word-spacing") {
-        setProperty(WordSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
+        setProperty(WordSpacingId, QVariant::fromValue(KoSvgText::parseAutoLengthPercentageXY(value, context, "normal", context.currentGC()->currentBoundingBox, true)));
     } else if (command == "font-family") {
         QStringList familiesList;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
@@ -653,12 +659,13 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
 
+    // Word-spacing and letter-spacing don't support % until css-text-4, and in svg 1.1, % were viewport, so save % as em for now.
     if (hasProperty(LetterSpacingId)) {
-        result.insert("letter-spacing", writeAutoValue(property(LetterSpacingId).value<AutoValue>(), "normal"));
+        result.insert("letter-spacing", writeAutoLengthPercentage(property(LetterSpacingId).value<AutoLengthPercentage>(), "normal", true));
     }
 
     if (hasProperty(WordSpacingId)) {
-        result.insert("word-spacing", writeAutoValue(property(WordSpacingId).value<AutoValue>(), "normal"));
+        result.insert("word-spacing", writeAutoLengthPercentage(property(WordSpacingId).value<AutoLengthPercentage>(), "normal", true));
     }
 
     if (hasProperty(FontFamiliesId)) {
@@ -1163,8 +1170,8 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(BaselineShiftValueId, QVariant::fromValue(KoSvgText::CssLengthPercentage()));
         s_defaultProperties->setProperty(KerningId, fromAutoValue(AutoValue()));
         s_defaultProperties->setProperty(TextOrientationId, OrientationMixed);
-        s_defaultProperties->setProperty(LetterSpacingId, fromAutoValue(AutoValue()));
-        s_defaultProperties->setProperty(WordSpacingId, fromAutoValue(AutoValue()));
+        s_defaultProperties->setProperty(LetterSpacingId, QVariant::fromValue(AutoLengthPercentage()));
+        s_defaultProperties->setProperty(WordSpacingId, QVariant::fromValue(AutoLengthPercentage()));
 
         s_defaultProperties->setProperty(FontFamiliesId, QStringLiteral("sans-serif"));
         s_defaultProperties->setProperty(FontStyleId, QFont::StyleNormal);

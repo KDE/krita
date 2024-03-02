@@ -72,6 +72,24 @@ void addProp(SvgLoadingContext &context,
     }
 }
 
+void addProp(SvgLoadingContext &context,
+             KoSvgTextProperties &props,
+             const QString &attribute,
+             const QString &value,
+             KoSvgTextProperties::PropertyId id,
+             KoSvgText::AutoLengthPercentage newValue)
+{
+    props.parseSvgTextAttribute(context, attribute, value);
+    if (props.property(id).value<KoSvgText::AutoLengthPercentage>() != newValue) {
+        qDebug() << "Failed to load the property:";
+        qDebug() << ppVar(attribute) << ppVar(value);
+        //qDebug() << ppVar(newValue);
+        qDebug() << ppVar(props.property(id));
+        QFAIL("Fail :(");
+    }
+    QCOMPARE(props.property(id), QVariant::fromValue(newValue));
+}
+
 void TestSvgText::initTestCase()
 {
     /// The test initialization function sets Qt::AA_Use96Dpi
@@ -158,8 +176,8 @@ void TestSvgText::testTextProperties()
     addProp(context, props, "kerning", "auto", KoSvgTextProperties::KerningId, KoSvgText::AutoValue());
     addProp(context, props, "kerning", "20", KoSvgTextProperties::KerningId, KoSvgText::AutoValue(20.0));
 
-    addProp(context, props, "letter-spacing", "normal", KoSvgTextProperties::LetterSpacingId, KoSvgText::AutoValue());
-    addProp(context, props, "letter-spacing", "20", KoSvgTextProperties::LetterSpacingId, KoSvgText::AutoValue(20.0));
+    addProp(context, props, "letter-spacing", "normal", KoSvgTextProperties::LetterSpacingId, KoSvgText::AutoLengthPercentage());
+    addProp(context, props, "letter-spacing", "20", KoSvgTextProperties::LetterSpacingId, KoSvgText::AutoLengthPercentage(20.0));
 
     addProp(context, props, "word-spacing", "normal", KoSvgTextProperties::WordSpacingId, KoSvgText::AutoValue());
     addProp(context, props, "word-spacing", "20", KoSvgTextProperties::WordSpacingId, KoSvgText::AutoValue(20.0));
@@ -197,15 +215,15 @@ void TestSvgText::testTextPropertiesDifference()
     props.setProperty(KoSvgTextProperties::BaselineShiftValueId, 0.5);
     props.setProperty(KoSvgTextProperties::KerningId, fromAutoValue(AutoValue(10)));
     props.setProperty(KoSvgTextProperties::TextOrientationId, OrientationSideWays);
-    props.setProperty(KoSvgTextProperties::LetterSpacingId, fromAutoValue(AutoValue(20)));
-    props.setProperty(KoSvgTextProperties::WordSpacingId, fromAutoValue(AutoValue(30)));
+    props.setProperty(KoSvgTextProperties::LetterSpacingId, QVariant::fromValue(AutoLengthPercentage(20)));
+    props.setProperty(KoSvgTextProperties::WordSpacingId, QVariant::fromValue(AutoLengthPercentage(30)));
     props.setProperty(KoSvgTextProperties::FontSizeId,
                       KoSvgTextProperties::defaultProperties().property(KoSvgTextProperties::FontSizeId));
 
     KoSvgTextProperties newProps = props;
 
     newProps.setProperty(KoSvgTextProperties::KerningId, fromAutoValue(AutoValue(11)));
-    newProps.setProperty(KoSvgTextProperties::LetterSpacingId, fromAutoValue(AutoValue(21)));
+    newProps.setProperty(KoSvgTextProperties::LetterSpacingId, QVariant::fromValue(AutoLengthPercentage(21)));
 
     KoSvgTextProperties diff = newProps.ownProperties(props);
 

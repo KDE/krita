@@ -281,8 +281,8 @@ void KoSvgTextShape::Private::relayout()
             KoSvgText::HangingPunctuations hang =
                 properties.propertyOrDefault(KoSvgTextProperties::HangingPunctuationId).value<KoSvgText::HangingPunctuations>();
             KoSvgText::TabSizeInfo tabInfo = properties.propertyOrDefault(KoSvgTextProperties::TabSizeId).value<KoSvgText::TabSizeInfo>();
-            KoSvgText::AutoValue letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
-            KoSvgText::AutoValue wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoValue>();
+            KoSvgText::AutoLengthPercentage letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoLengthPercentage>();
+            KoSvgText::AutoLengthPercentage wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoLengthPercentage>();
             KoSvgText::LineHeightInfo lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::LineHeightInfo>();
             bool overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt()) != KoSvgText::OverflowWrapNormal;
 
@@ -293,10 +293,10 @@ void KoSvgTextShape::Private::relayout()
                 fillColor = b->color();
             }
             if (!letterSpacing.isAuto) {
-                tabInfo.extraSpacing += letterSpacing.customValue;
+                tabInfo.extraSpacing += letterSpacing.length.value;
             }
             if (!wordSpacing.isAuto) {
-                tabInfo.extraSpacing += wordSpacing.customValue;
+                tabInfo.extraSpacing += wordSpacing.length.value;
             }
 
             for (int i = 0; i < length; i++) {
@@ -419,14 +419,14 @@ void KoSvgTextShape::Private::relayout()
 
             if (!letterSpacing.isAuto) {
                 raqm_set_letter_spacing_range(layout.data(),
-                                              static_cast<int>(letterSpacing.customValue * ftFontUnit * scaleToPixel),
+                                              static_cast<int>(letterSpacing.length.value * ftFontUnit * scaleToPixel),
                                               static_cast<size_t>(start),
                                               static_cast<size_t>(length));
             }
 
             if (!wordSpacing.isAuto) {
                 raqm_set_word_spacing_range(layout.data(),
-                                            static_cast<int>(wordSpacing.customValue * ftFontUnit * scaleToPixel),
+                                            static_cast<int>(wordSpacing.length.value * ftFontUnit * scaleToPixel),
                                             static_cast<size_t>(start),
                                             static_cast<size_t>(length));
             }

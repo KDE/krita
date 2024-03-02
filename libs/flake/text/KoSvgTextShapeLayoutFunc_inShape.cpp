@@ -598,14 +598,15 @@ QVector<LineBox> flowTextInShapes(const KoSvgTextProperties &properties,
                     break;
                 }
                 currentShape = shapesIt.next();
-                qreal textIdentValue = textIndentInfo.isPercentage? textIndentInfo.value: textIndentInfo.length.value;
+                bool indentPercent = textIndentInfo.length.unit == KoSvgText::CssLengthPercentage::Percentage;
+                qreal textIdentValue = textIndentInfo.length.value;
                 if (isHorizontal) {
-                    if (textIndentInfo.isPercentage) {
+                    if (indentPercent) {
                         textIndent *= currentShape.boundingRect().width();
                     }
                     textIndent = QPointF(textIdentValue, 0);
                 } else {
-                    if (textIndentInfo.isPercentage) {
+                    if (indentPercent) {
                         textIndent *= currentShape.boundingRect().height();
                     }
                     textIndent = QPointF(0, textIdentValue);

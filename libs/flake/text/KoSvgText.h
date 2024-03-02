@@ -358,18 +358,7 @@ struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercenta
     qreal value = 0.0;
     UnitType unit = Absolute;
 
-    void convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const UnitType percentageUnit = Em) {
-        UnitType u = unit;
-        if (u == Percentage) {
-            u = percentageUnit;
-        }
-        if (u == Em) {
-            value = value * fontSizeInPt;
-        } else if (u == Ex) {
-            value = value * fontXHeightInPt;
-        }
-        unit = Absolute;
-    }
+    void convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const UnitType percentageUnit = Em);
 
     bool operator==(const CssLengthPercentage & other) const {
         return value == other.value && unit == other.unit;
@@ -378,7 +367,8 @@ struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercenta
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CssLengthPercentage &value);
 
-QString writeLengthPercentage(const CssLengthPercentage &length);
+// Not all properties support percentage, so this ensures % is saved as em as a fallback.
+QString writeLengthPercentage(const CssLengthPercentage &length, bool percentageAsEm = false);
 
 /**
  * AutoValue represents the "auto-or-real" values used in SVG
@@ -401,7 +391,26 @@ struct AutoValue : public boost::equality_comparable<AutoValue>
     }
 };
 
+struct AutoLengthPercentage : public boost::equality_comparable<AutoLengthPercentage>
+{
+    AutoLengthPercentage() {}
+    AutoLengthPercentage(CssLengthPercentage _length)
+        : isAuto(false), length(_length) {}
+    AutoLengthPercentage(qreal _customValue, CssLengthPercentage::UnitType unit = CssLengthPercentage::Absolute)
+        : isAuto(false), length(_customValue, unit) {}
+
+    bool isAuto = true;
+    CssLengthPercentage length;
+
+    bool operator==(const AutoLengthPercentage & other) const {
+        return isAuto == other.isAuto && (isAuto || length == other.length);
+    }
+};
+
+
+
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::AutoValue &value);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::AutoLengthPercentage &value);
 
 inline QVariant fromAutoValue(const KoSvgText::AutoValue &value) {
     return QVariant::fromValue(value);
@@ -411,6 +420,8 @@ AutoValue parseAutoValueX(const QString &value, const SvgLoadingContext &context
 AutoValue parseAutoValueY(const QString &value, const SvgLoadingContext &context, const QString &autoKeyword = "auto");
 AutoValue parseAutoValueXY(const QString &value, const SvgLoadingContext &context, const QString &autoKeyword = "auto");
 AutoValue parseAutoValueAngular(const QString &value, const SvgLoadingContext &context, const QString &autoKeyword = "auto");
+
+AutoLengthPercentage parseAutoLengthPercentageXY(const QString &value, const SvgLoadingContext &context, const QString &autoKeyword = "auto", QRectF bbox = QRectF(), bool percentageIsViewPort = true);
 
 WritingMode parseWritingMode(const QString &value);
 Direction parseDirection(const QString &value);
@@ -476,6 +487,9 @@ TextPathSpacing parseTextPathSpacing(const QString &value);
 TextPathSide parseTextPathSide(const QString &value);
 
 QString writeAutoValue(const AutoValue &value, const QString &autoKeyword = "auto");
+
+// Not all properties support percentages, so in that case, save percentage as em.
+QString writeAutoLengthPercentage(const AutoLengthPercentage &value, const QString &autoKeyword = "auto", bool percentageToEm = false);
 
 QString writeWritingMode(WritingMode value, bool svg1_1 = false);
 QString writeDirection(Direction value);
@@ -558,16 +572,12 @@ QString writeTextTransform(TextTransformInfo textTransform);
 struct TextIndentInfo : public boost::equality_comparable<TextIndentInfo> {
     TextIndentInfo() = default;
 
-    qreal value = 0.0; ///< The indentation length or percentage.
     CssLengthPercentage length;
-    bool isPercentage = false; ///< Interpret the value as a percentage of the
-                               ///< total run length of a box.
     bool hanging = false; ///< Flip the lines to which text-indent is applied.
     bool eachLine = false; ///< Apply the text-indent to each line following a hardbreak.
     bool operator==(const TextIndentInfo &rhs) const
     {
-        bool val = isPercentage? value == rhs.value: length == rhs.length;
-        return (val) && (isPercentage == rhs.isPercentage) && (hanging == rhs.hanging) && (eachLine == rhs.eachLine);
+        return (length == rhs.length) && (hanging == rhs.hanging) && (eachLine == rhs.eachLine);
     }
 };
 
@@ -656,6 +666,7 @@ QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::StrokeProperty 
 
 Q_DECLARE_METATYPE(KoSvgText::CssLengthPercentage)
 Q_DECLARE_METATYPE(KoSvgText::AutoValue)
+Q_DECLARE_METATYPE(KoSvgText::AutoLengthPercentage)
 Q_DECLARE_METATYPE(KoSvgText::TextDecorations)
 Q_DECLARE_METATYPE(KoSvgText::HangingPunctuations)
 Q_DECLARE_METATYPE(KoSvgText::TextSpaceTrims)

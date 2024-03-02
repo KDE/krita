@@ -98,7 +98,7 @@ bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
         && id != TextDecorationColorId && id != TextDecorationStyleId && id != InlineSizeId && id != TextTrimId;
 }
 
-void KoSvgTextProperties::resetNonInheritableToDefault(const qreal fontSize, const qreal xHeight)
+void KoSvgTextProperties::resetNonInheritableToDefault()
 {
     auto it = m_d->properties.begin();
     for (; it != m_d->properties.end(); ++it) {
@@ -106,7 +106,6 @@ void KoSvgTextProperties::resetNonInheritableToDefault(const qreal fontSize, con
             it.value() = defaultProperties().property(it.key());
         }
     }
-    resolveRelativeValues(fontSize, xHeight);
 }
 
 void KoSvgTextProperties::inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve)

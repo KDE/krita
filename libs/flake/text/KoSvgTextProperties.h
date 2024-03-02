@@ -170,7 +170,7 @@ public:
      * non-inheritable properties is define by SVG 1.1. Used by the loading
      * code for resetting state automata's properties on entering a \<tspan\>.
      */
-    void resetNonInheritableToDefault(const qreal fontSize = 12.0, const qreal xHeight = 6.0);
+    void resetNonInheritableToDefault();
 
 
     /**

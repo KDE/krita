@@ -1123,7 +1123,6 @@ void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {
     bool success = false;
-    QList<KoSvgTextProperties> parentProps = {KoSvgTextProperties::defaultProperties()};
     for (auto it = d->textData.compositionBegin(); it != d->textData.compositionEnd(); it++) {
         if (it.state() == KisForestDetail::Enter) {
             bool isTextPath = false;
@@ -1160,21 +1159,20 @@ bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
                 } else {
                     context.shapeWriter().startElement("tspan", false);
                 }
-                SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity).toBool(),
-                                                  it->properties.property(KoSvgTextProperties::Opacity).toReal(),
-                                                  it->properties.property(KoSvgTextProperties::PaintOrder).value<QVector<KoShape::PaintOrder>>(),
+                SvgStyleWriter::saveSvgBasicStyle(it->properties.property(KoSvgTextProperties::Visiblity, true).toBool(),
+                                                  it->properties.property(KoSvgTextProperties::Opacity, 0).toReal(),
+                                                  it->properties.property(KoSvgTextProperties::PaintOrder,
+                                                                          QVariant::fromValue(paintOrder())
+                                                                          ).value<QVector<KoShape::PaintOrder>>(),
                                                   !it->properties.hasProperty(KoSvgTextProperties::PaintOrder), context, true);
 
             }
 
             success = it->saveSvg(context,
-                                  parentProps.last(),
                                   it == d->textData.compositionBegin(),
                                   d->childCount(siblingCurrent(it)) == 0,
                                   shapeSpecificStyles);
-            parentProps.append(it->properties);
         } else {
-            parentProps.pop_back();
             context.shapeWriter().endElement();
         }
     }

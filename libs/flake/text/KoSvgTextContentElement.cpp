@@ -253,7 +253,6 @@ bool KoSvgTextContentElement::loadSvgTextNode(const QDomText &text, SvgLoadingCo
 }
 
 bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
-                                      KoSvgTextProperties parentProperties,
                                       bool rootText,
                                       bool saveText,
                                       QMap<QString, QString> shapeSpecificAttributes)
@@ -315,7 +314,7 @@ bool KoSvgTextContentElement::saveSvg(SvgSavingContext &context,
         }
     }
 
-    KoSvgTextProperties ownProperties = properties.ownProperties(parentProperties, rootText);
+    KoSvgTextProperties ownProperties = rootText? properties.ownProperties(KoSvgTextProperties::defaultProperties(), true): properties;
 
     ownProperties = adjustPropertiesForFontSizeWorkaround(ownProperties);
 

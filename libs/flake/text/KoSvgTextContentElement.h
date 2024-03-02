@@ -81,7 +81,7 @@ public:
 
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 
-    bool saveSvg(SvgSavingContext &context, KoSvgTextProperties parentProperties, bool rootText, bool saveText, QMap<QString, QString> shapeSpecificAttributes);
+    bool saveSvg(SvgSavingContext &context, bool rootText, bool saveText, QMap<QString, QString> shapeSpecificAttributes);
 
     /**
      * The number of characters contained in the currentChunk.

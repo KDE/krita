@@ -91,7 +91,7 @@ void KoSvgTextLoader::setStyleInfo(KoShape *s)
             d->currentNode->properties.setProperty(KoSvgTextProperties::FillId,
                                                    QVariant::fromValue(KoSvgText::BackgroundProperty(s->background())));
         }
-        if ((parentStroke && !parentStroke->compareFillTo(s->stroke().data()) && !parentStroke->compareStyleTo(s->stroke().data()))
+        if ((parentStroke && (!parentStroke->compareFillTo(s->stroke().data()) || !parentStroke->compareStyleTo(s->stroke().data())))
                 || (!parentStroke && s->stroke())) {
             d->currentNode->properties.setProperty(KoSvgTextProperties::StrokeId,
                                                    QVariant::fromValue(KoSvgText::StrokeProperty(s->stroke())));

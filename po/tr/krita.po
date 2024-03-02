@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-02-27 13:18+0300\n"
+"PO-Revision-Date: 2024-03-01 15:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4644,7 +4644,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "y)_Screentone_Pressure.kpp"
 msgid "y) Screentone Pressure"
-msgstr "y) Ekran Tonu Baskısı"
+msgstr "y) Ekran Tonu Basıncı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -8780,7 +8780,7 @@ msgstr "Alfayı Koru"
 #, kde-format
 msgctxt "action"
 msgid "Use Pen Pressure"
-msgstr "Kalem Baskısını Kullan"
+msgstr "Kalem Basıncını Kullan"
 
 #. i18n: context: text @ Action (hmirror_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (hmirror_action), Actions (Painting), ActionCollection (Krita)
@@ -23224,7 +23224,7 @@ msgstr ""
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
 msgid "Exclude last strokes from merge:"
-msgstr "Son vuruşları birleştirme dışında tut:"
+msgstr "Son vuruşları birleştirmeden dışla:"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:77
 #, kde-format
@@ -23274,9 +23274,9 @@ msgstr ""
 "önce bekle\" ve \"Son vuruşları birleştirme dışında tut\" seçeneklerine "
 "bağlı olarak birkaç son eylemi birleştirilmemiş olarak tutar. Zaman sınırına "
 "göre bir eylem eskirse ve bu eylem \"Son vuruşları birleştirme dışında tut\" "
-"kullanılarak dışarıda tutulmazsa Krita bu eylemi bir gruba birleştirmeye "
-"çalışır. Gruplar, \"Gruplanan vuruşların en uzun aralığı\" ve \"En uzun grup "
-"süresi\" kullanılarak oluşturulurlar."
+"kullanılarak dışlanmazsa Krita bu eylemi bir gruba birleştirmeye çalışır. "
+"Gruplar, \"Gruplanan vuruşların en uzun aralığı\" ve \"En uzun grup süresi\" "
+"kullanılarak oluşturulurlar."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
 #, kde-format
@@ -53275,13 +53275,13 @@ msgstr "Basınç Türü"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "X-Tilt"
-msgstr "X Eğik"
+msgstr "X Eğimi"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:22
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Y-Tilt"
-msgstr "Y Eğik"
+msgstr "Y Eğimi"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:30
 #, kde-format
@@ -53305,7 +53305,7 @@ msgstr "Perspektif"
 #, kde-format
 msgctxt "Context: dynamic sensors"
 msgid "Tangential pressure"
-msgstr "Tanjantsal basıç"
+msgstr "Tanjantsal basınç"
 
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:47
 #, kde-format
@@ -54586,7 +54586,7 @@ msgstr "- Z"
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:219
 #, kde-format
 msgid "Tilt Options"
-msgstr "Tilt Seçenekleri"
+msgstr "Eğim Seçenekleri"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionTilt)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:227
@@ -54612,8 +54612,8 @@ msgid ""
 "<html><head/><body><p>Use the drawing direction to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Eğim-yükseltme Z-ekseni için kullanılırken X ve Y-"
-"eksenlerini belirlemek için çizim yönünü kullan.</p></body></html>"
+"<html><head/><body><p>Eğim yükseltmesi Z ekseni için kullanılırken X ve Y "
+"eksenlerini belirlemek için çizim yönünü kullanın.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:250
@@ -54623,9 +54623,9 @@ msgid ""
 "determine the X and Y-axes, while tilt-elevation is used for the Z-axis.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Eğim-yükseltme Z-ekseni için kullanılırken X ve Y-"
+"<html><head/><body><p>Eğim yükseltmesi Z ekseni için kullanılırken X ve Y "
 "eksenlerini belirlemek için belirli kalemlerde kullanılabilir olan döndürme "
-"algılayıcısını kullan.</p></body></html>"
+"algılayıcısını kullanın.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:253
@@ -54641,14 +54641,15 @@ msgid ""
 "<html><head/><body><p>Mix Tilt and Drawing angle to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Eğim-yükseltme Z-ekseni için kullanılırken X ve Y "
-"eksenlerini belirlemek için Eğim ve Çizim açısını karıştır.</p></body></html>"
+"<html><head/><body><p>Eğim yükseltmesi Z ekseni için kullanılırken X ve Y "
+"eksenlerini belirlemek için Eğim ve Çizim açısını karıştırın.</p></body></"
+"html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:263
 #, kde-format
 msgid "Direction/Tilt Mix"
-msgstr "Yön/Eğri Karışımı"
+msgstr "Yön/Eğim Karışımı"
 
 #. i18n: ectx: property (text), widget (QLabel, L_elevation)
 #: plugins/paintops/tangentnormal/wdgtangenttiltoption.ui:274
@@ -58402,7 +58403,7 @@ msgstr "&Seçili yolu izle"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:77
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr "Tablet &baskısı kullan"
+msgstr "Tablet &basıncını kullan"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
 #, kde-format

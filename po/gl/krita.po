@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-02-28 15:56+0100\n"
+"PO-Revision-Date: 2024-03-02 21:38+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -1399,6 +1399,7 @@ msgctxt ""
 msgid "LJF_Foliage_Brush_02"
 msgstr "Pincel de follaxe de LJF 02"
 
+# well-spelled: Corobolas
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
 msgctxt ""
@@ -7031,6 +7032,7 @@ msgctxt ""
 msgid "S_Splats 2"
 msgstr "S Salpicaduras 2"
 
+# well-spelled: Deevad
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/vegetal_stylised.gih:1
 #, kde-format
@@ -7494,7 +7496,7 @@ msgstr "Distribuír os esquerdos"
 #, kde-format
 msgctxt "action"
 msgid "Distribute left edges equidistantly"
-msgstr "Distribuír os bordos esquerdos de maneira equidistainte."
+msgstr "Distribuír os bordos esquerdos de maneira equidistante."
 
 #. i18n: context: text @ Action (object_distribute_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:136
@@ -7522,7 +7524,7 @@ msgstr "Distribuír os dereitos"
 #, kde-format
 msgctxt "action"
 msgid "Distribute right edges equidistantly"
-msgstr "Distribuír os bordos dereitos de maneira equidistainte."
+msgstr "Distribuír os bordos dereitos de maneira equidistante."
 
 #. i18n: context: text @ Action (object_distribute_horizontal_gaps), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:154
@@ -7550,7 +7552,7 @@ msgstr "Distribuír os superiores"
 #, kde-format
 msgctxt "action"
 msgid "Distribute top edges equidistantly"
-msgstr "Distribuír os bordos superiores de maneira equidistainte."
+msgstr "Distribuír os bordos superiores de maneira equidistante."
 
 #. i18n: context: text @ Action (object_distribute_vertical_center), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:173
@@ -7578,7 +7580,7 @@ msgstr "Distribuír os inferiores"
 #, kde-format
 msgctxt "action"
 msgid "Distribute bottom edges equidistantly"
-msgstr "Distribuír os bordos inferiores de maneira equidistainte."
+msgstr "Distribuír os bordos inferiores de maneira equidistante."
 
 #. i18n: context: text @ Action (object_distribute_vertical_gaps), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:191
@@ -8572,7 +8574,7 @@ msgstr "Cambiar o ton da cor do pincel en sentido horario"
 #, kde-format
 msgctxt "action"
 msgid "Shift brush color hue counter-clockwise"
-msgstr "Cambiar o ton da cor do pincel en sentido anti-horario"
+msgstr "Cambiar o ton da cor do pincel en sentido antihorario"
 
 #. i18n: context: text @ Action (make_brush_color_redder), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (make_brush_color_redder), Actions (Painting), ActionCollection (Krita)
@@ -9547,7 +9549,7 @@ msgstr "Eliminación sobre da media"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "Desenfoque &Gausiano…"
+msgstr "Desenfoque de &Gauss…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9557,7 +9559,7 @@ msgstr "Desenfoque &Gausiano…"
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Blur"
-msgstr "Desenfoque gausiano"
+msgstr "Desenfoque de Gauss"
 
 #. i18n: context: text @ Action (krita_filter_emboss all directions), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1118
@@ -9717,7 +9719,7 @@ msgstr "Pixelizar"
 #, kde-format
 msgctxt "action"
 msgid "Emboss (&Laplacian)"
-msgstr "Moldear (&Laplaciano)"
+msgstr "Moldear (de &Laplace)"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss laplascian), Actions (Filters), ActionCollection (Krita)
@@ -9727,7 +9729,7 @@ msgstr "Moldear (&Laplaciano)"
 #, kde-format
 msgctxt "action"
 msgid "Emboss (Laplacian)"
-msgstr "Moldear (Laplaciano)"
+msgstr "Moldear (de Laplace)"
 
 #. i18n: context: text @ Action (krita_filter_left edge detections), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1238
@@ -10030,7 +10032,7 @@ msgstr "Arredondar os cantos"
 #, kde-format
 msgctxt "action"
 msgid "&Unsharp Mask..."
-msgstr "&Máscara de desfocalización…"
+msgstr "&Máscara de desenfoque…"
 
 #. i18n: context: toolTip @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
@@ -10040,7 +10042,7 @@ msgstr "&Máscara de desfocalización…"
 #, kde-format
 msgctxt "action"
 msgid "Unsharp Mask"
-msgstr "Máscara de desfocalización"
+msgstr "Máscara de desenfoque"
 
 #. i18n: context: text @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1454
@@ -10098,7 +10100,7 @@ msgstr "Escolla aleatoria"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Noise Reduction..."
-msgstr "Redución de ruído &Gaussiano…"
+msgstr "Redución de ruído de &Gauss…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10108,7 +10110,7 @@ msgstr "Redución de ruído &Gaussiano…"
 #, kde-format
 msgctxt "action"
 msgid "Gaussian Noise Reduction"
-msgstr "Redución de ruído Gaussiano"
+msgstr "Redución de ruído de Gauss"
 
 #. i18n: context: text @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1502
@@ -10132,7 +10134,7 @@ msgstr "Cartelizar"
 #, kde-format
 msgctxt "action"
 msgid "&Wavelet Noise Reducer..."
-msgstr "Redución de ruído &onduleta…"
+msgstr "Redución de ruído &ondiña…"
 
 #. i18n: context: toolTip @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10142,7 +10144,7 @@ msgstr "Redución de ruído &onduleta…"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Noise Reducer"
-msgstr "Redución de ruído onduleta"
+msgstr "Redución de ruído ondiña"
 
 #. i18n: context: text @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1526
@@ -10502,7 +10504,7 @@ msgstr "Seleccionar o método de fusión por cor"
 #, kde-format
 msgctxt "action"
 msgid "Select Luminosity Blending Mode"
-msgstr "Seleccionar o método de fusión por luminusidade"
+msgstr "Seleccionar o método de fusión por luminosidade"
 
 #. i18n: context: text @ Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:1873
@@ -12285,7 +12287,7 @@ msgstr "Dividir a capa"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr "Descomposición onduleta…"
+msgstr "Descomposición ondiña…"
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -12295,7 +12297,7 @@ msgstr "Descomposición onduleta…"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose"
-msgstr "Descomposición onduleta"
+msgstr "Descomposición ondiña"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3206
@@ -13168,7 +13170,7 @@ msgstr "E&xportar…"
 #, kde-format
 msgctxt "action"
 msgid "Export"
-msgstr "xportar"
+msgstr "Exportar"
 
 #. i18n: context: text @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:104
@@ -13484,7 +13486,7 @@ msgstr "Copiar"
 #, kde-format
 msgctxt "action"
 msgid "C&opy (sharp)"
-msgstr "C&opiar (sen semitransparencias)"
+msgstr "C&opiar (enfoque)"
 
 #. i18n: context: toolTip @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (copy_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13494,14 +13496,14 @@ msgstr "C&opiar (sen semitransparencias)"
 #, kde-format
 msgctxt "action"
 msgid "Copy (sharp)"
-msgstr "Copiar (sen semitransparencias)"
+msgstr "Copiar (enfoque)"
 
 #. i18n: context: text @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:325
 #, kde-format
 msgctxt "action"
 msgid "Cut (&sharp)"
-msgstr "Cortar (sen &semitransparencias)"
+msgstr "Cortar (&enfoque)"
 
 #. i18n: context: toolTip @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (cut_sharp), Actions (Edit), ActionCollection (Menu)
@@ -13511,7 +13513,7 @@ msgstr "Cortar (sen &semitransparencias)"
 #, kde-format
 msgctxt "action"
 msgid "Cut (sharp)"
-msgstr "Cortar (sen semitransparencias)"
+msgstr "Cortar (enfoque)"
 
 #. i18n: context: text @ Action (copy_merged), Actions (Edit), ActionCollection (Menu)
 #: krita/kritamenu.action:337
@@ -17104,7 +17106,7 @@ msgstr "Suave"
 #: libs/image/kis_base_mask_generator.h:24
 #, kde-format
 msgid "Gaussian"
-msgstr "Gausiano"
+msgstr "de Gauss"
 
 #: libs/image/kis_clone_layer.cpp:321
 #, kde-format
@@ -17130,7 +17132,7 @@ msgid ""
 "Adds pixels using the color of surrounding pixels. Produces smoother tonal "
 "gradations than Bilinear."
 msgstr ""
-"Engade píxeles usando a cor dos píxeles dos arredorres. Produce degradacións "
+"Engade píxeles usando a cor dos píxeles dos arredores. Produce degradacións "
 "máis suaves que o modo bilinear."
 
 #: libs/image/kis_filter_strategy.h:86
@@ -18220,7 +18222,7 @@ msgstr "Ficheiros RAW de cámara"
 #, kde-format
 msgctxt "description of a file type"
 msgid "OpenEXR (Extended)"
-msgstr "OpenEXR (extendido)"
+msgstr "OpenEXR (estendido)"
 
 #: libs/koplugin/KisMimeDatabase.cpp:309
 #, kde-format
@@ -21312,7 +21314,7 @@ msgstr "ssim"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "fastdecode"
-msgstr "decodificación rápida"
+msgstr "descodificación rápida"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:68
 #, kde-format
@@ -24665,19 +24667,19 @@ msgstr "Usar un búfer de texturas."
 #: libs/ui/forms/wdgdisplaysettings.ui:115
 #, kde-format
 msgid "Bilinear Filtering"
-msgstr "Filtraxe bilineal"
+msgstr "Filtro bilineal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:120
 #, kde-format
 msgid "Trilinear Filtering"
-msgstr "Filtraxe trilineal"
+msgstr "Filtro triliñal"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
 #, kde-format
 msgid "High Quality Filtering"
-msgstr "Filtraxe de gran calidade"
+msgstr "Filtro de gran calidade"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:139
@@ -25008,7 +25010,7 @@ msgid ""
 "location of the file in the .kra. If you move the .kra but not the file, the "
 "file layer may be broken.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Advertencia: Krita usa unha rita relativa para "
+"<html><head/><body><p>Advertencia: Krita usa unha ruta relativa para "
 "almacenar a localización do ficheiro en .kra. Se move o .kra pero non o "
 "ficheiro, a capa do ficheiro podería estar rota.</p></body></html>"
 
@@ -27098,8 +27100,8 @@ msgstr ""
 "\">AVISO:</span> asegúrese de que o computador ten RAM dabondo <span style="
 "\" text-decoration: underline;\">superior</span> á cantidade solicitada no "
 "separador «Xeral». Senón pode que se lle conxele o sistema.</p><p>* Para 1 "
-"segundo de vídeo FullHD a 25 fps necesita 200 MiB adicionais de memoria</"
-"p><p>* Para 1 segundo de vídeo 4K UltraHD a 25 fps necesita 800 MiB "
+"segundo de vídeo FullHD a 25 FPS necesita 200 MiB adicionais de memoria</"
+"p><p>* Para 1 segundo de vídeo 4K UltraHD a 25 FPS necesita 800 MiB "
 "adicionais de memoria</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optInMemory)
@@ -32058,7 +32060,7 @@ msgstr "Fusionar os efectos &internos en grupo."
 #: libs/ui/layerstyles/wdgblendingoptions.ui:248
 #, kde-format
 msgid "Blend clipping group before blending with document"
-msgstr "Fusionar o grupo de recorte antes de fucionar co documento."
+msgstr "Fusionar o grupo de recorte antes de fusionar co documento."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox_8)
 #: libs/ui/layerstyles/wdgblendingoptions.ui:251
@@ -33495,12 +33497,12 @@ msgid ""
 msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. "
 "<b>L</b> corresponde á claridade, mentres que <b>a</b> e <b>b</b> "
-"representan as canles de cores.<br/> L*a*b é un modelo epecial de corrección "
-"de cor. Está baseado na percepción humana, é dicir, intenta codificar a "
-"diferencia de claridade, equilibrio entre vermello e verde e equilibrio "
-"entre amarelo e azul. Isto faino útil para a corrección de cores, pero a "
-"meirande parte da matemática de cores nos métodos de fusión <b>non</b> "
-"funciona da maneira esperada con isto.<br/> De maneira similar, Krita non "
+"representan as canles de cores.<br/> L*a*b é un modelo especial de "
+"corrección de cor. Está baseado na percepción humana, é dicir, intenta "
+"codificar a diferencia de claridade, equilibrio entre vermello e verde e "
+"equilibrio entre amarelo e azul. Isto faino útil para a corrección de cores, "
+"pero a meirande parte da matemática de cores nos métodos de fusión <b>non</"
+"b> funciona da maneira esperada con isto.<br/> De maneira similar, Krita non "
 "permite HDR en LAB, é dicir, as imaxes HDR que se converten a LAB perden a "
 "información da cor. Este espazo de cores <b>non</b> se recomenda para pintar "
 "nin para exportar, senón simplemente para facer post-procesamento. Asúmese "
@@ -33558,7 +33560,7 @@ msgstr ""
 "amplo espazo de cores, ou simplemente cando necesita máis fusión de cores. É "
 "certo que ocupa o dobre de espazo de memoria e de almacenamento que unha "
 "imaxe equivalente de 8 bits, e para algúns dispositivos require moito máis "
-"procesamento. Recomendamos vixiar o consumo de meomoria RAM do ficheiro "
+"procesamento. Recomendamos vixiar o consumo de memoria RAM do ficheiro "
 "coidadosamente, e usar 8 bits se o computador vai máis lento. Procura "
 "desactivar a optimización da conversión ao pasar de 16 bits por canle a 8 "
 "bits por canle."
@@ -33582,10 +33584,10 @@ msgstr ""
 "flotante de 16 bits son ideais para editar imaxes cunha curva de resposta de "
 "tons lineal, un gran espazo de cores, ou simplemente cando necesite unha "
 "fusión de cores máis precisa. Que se trate dun valor en coma flotante é un "
-"requisito indispensábel para oas imaxes con referencias a escenas (HDR). É "
+"requisito indispensábel para as imaxes con referencias a escenas (HDR). É "
 "certo que ocupa o dobre de espazo de memoria e de almacenamento que unha "
 "imaxe equivalente de 8 bits, e para algúns dispositivos require moito máis "
-"procesamento. Recomendamos vixiar o consumo de meomoria RAM do ficheiro "
+"procesamento. Recomendamos vixiar o consumo de memoria RAM do ficheiro "
 "coidadosamente, e usar 8 bits se o computador vai máis lento."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
@@ -33605,12 +33607,12 @@ msgstr ""
 "flotante». Os números en coma flotante de 32 bits son ideais para editar "
 "imaxes cunha TRC lineal, un gran espazo de cores, ou simplemente cando "
 "necesite unha fusión de cores máis precisa. Que se trate dun valor en coma "
-"flotante é un requisito indispensábel para oas imaxes con referencias a "
+"flotante é un requisito indispensábel para as imaxes con referencias a "
 "escenas (HDR). É certo que ocupa catro veces o espazo de memoria e de "
 "almacenamento que unha imaxe equivalente de 8 bits, e para algúns "
 "dispositivos require moito máis procesamento. Recomendamos vixiar o consumo "
-"de meomoria RAM do ficheiro coidadosamente, e usar 8 bits se o computador "
-"vai máis lento."
+"de memoria RAM do ficheiro coidadosamente, e usar 8 bits se o computador vai "
+"máis lento."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
@@ -33631,10 +33633,10 @@ msgstr ""
 "preciso que pode conseguir coa tecnoloxía actual, e é a profundidade que se "
 "usa case sempre para imaxes que se xeran ou que se usan como entrada para "
 "software. Que se trate dun valor en coma flotante é un requisito "
-"indispensábel para oas imaxes con referencias a escenas (HDR). É certo que "
+"indispensábel para as imaxes con referencias a escenas (HDR). É certo que "
 "ocupa oito veces o espazo de memoria e de almacenamento que unha imaxe "
 "equivalente de 8 bits, e para algúns dispositivos require moito máis "
-"procesamento. Recomendamos vixiar o consumo de meomoria RAM do ficheiro "
+"procesamento. Recomendamos vixiar o consumo de memoria RAM do ficheiro "
 "coidadosamente, e usar 8 bits se o computador vai máis lento."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:494
@@ -33715,7 +33717,7 @@ msgstr ""
 "técnica de inxección. BetaRGB (que non forma parte do grupo de perfís) e "
 "Rec.2020 son máis axeitadas para as gamas de cores das impresoras de ampla "
 "gama actuais.</p> <p>A gama de cores Adobe RGB de 1998 é unha aproximación "
-"razonábel a algúns dos monitores de última xeración de ampla gama.</p>"
+"razoábel a algúns dos monitores de última xeración de ampla gama.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
@@ -33766,9 +33768,9 @@ msgstr ""
 "orixinais que levaron á creación do espazo de cores de referencia XYZ.</p> "
 "<p> O punto branco ASTM E é probabelmente o punto branco E para usar ao "
 "facer o perfil do espazo de cores CIERRGM. Non teño claro cales son as cores "
-"primarias correctas de CIERRGB. Lindbloom di que son unhas. O titorial da "
+"primarias correctas de CIERGB. Lindbloom di que son unhas. O titorial da "
 "versión 1 de LCMS di que son outras. Os expertos do campo din que as cores "
-"primarias reais deben calcularse desde as lonxutudes de onda espectrais, que "
+"primarias reais deben calcularse desde as lonxitudes de onda espectrais, que "
 "foi o que fixen eu.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:578
@@ -33784,7 +33786,7 @@ msgstr ""
 "<p>O espazo de traballo IdentityRGB inclúese porque é un xeito obvio, desde "
 "un punto de vista matemático, de incluír todas as cores visíbeis posíbeis, "
 "aínda que ten unha porcentaxe de cores imaxinarias máis alta que a dos "
-"espazos de cores ACES e AllCollorsRGB. Non se me ocorre ningunha razón pola "
+"espazos de cores ACES e AllColorsRGB. Non se me ocorre ningunha razón pola "
 "que poderías querer editar imaxes no espazo de traballo IdentityRGB.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:586
@@ -33914,11 +33916,11 @@ msgid ""
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
 "<p>Estes perfís están para usarse con imaxes RGB que se converteron a gris "
-"monoton (blanco e negro). O motivo principal para converter RGB a gris é "
+"monoton (branco e negro). O motivo principal para converter RGB a gris é "
 "para aforrar o almacenamento necesario para codificar o ficheiro da imaxe. "
 "Google premia as páxinas web que se cargan rapidamente, e as imaxes son uns "
-"dos elementos das páxinas web que máis tardan en cargarse. Así que convertir "
-"as imaxes en blanco e negro a escala de grises aforra algúns kilobytes. Para "
+"dos elementos das páxinas web que máis tardan en cargarse. Así que converter "
+"as imaxes en branco e negro a escala de grises aforra algúns kilobytes. Para "
 "imaxes en escala de grises enviadas a Internet, converta a imaxe ao perfil "
 "V2 Gris coa TRC de sRGB.</p>"
 
@@ -33946,10 +33948,10 @@ msgid ""
 "few editing operations really should be done on perceptually uniform RGB. "
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
-"<p>Os perfís que rematan en «-labl.icc» teñen TRC perceptualmente uniformes. "
-"Unhas poucas operacións de edición deberían facerse en RGB perceptualmente "
-"uniforme. Asegúrese de que usa as versións V4 para editar imaxes de gran "
-"profundidade de bits.</p>"
+"<p>Os perfís que rematan en «-labl.icc» teñen TRC perceptibelmente "
+"uniformes. Unhas poucas operacións de edición deberían facerse en RGB "
+"perceptibelmente uniforme. Asegúrese de que usa as versións V4 para editar "
+"imaxes de gran profundidade de bits.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:658
 #, kde-format
@@ -33960,8 +33962,8 @@ msgid ""
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
 "<p>Os perfís que rematan en «-srgbtrc.icc», «-g22.icc» e «-rec709.icc» teñen "
-"TRC aproximadamente perceptualmente uniformes. A TRC de gamma=1,8 de "
-"ProPhotoRGB non está tan preto de ser perceptualmente uniforme.</p>"
+"TRC aproximadamente perceptibelmente uniformes. A TRC de gamma=1,8 de "
+"ProPhotoRGB non está tan preto de ser perceptibelmente uniforme.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
 #, kde-format
@@ -33976,12 +33978,12 @@ msgid ""
 "8-bit editing.</p>"
 msgstr ""
 "<p>Ao editar imaxes de 8 bits, debería usar un perfil cunha gama de cores "
-"reducida e unha TRC perceptualmente uniforme, aproximada ou exactamente. Dos "
-"perfís do meu grupo, só os espazos de cores sRGB e AdobeRGB1998 (ClayRGB) "
-"son pequenos dabondo para editar 8 bits. Incluso co espazo de cores "
-"AdobeRGB1998 necesita ter coidado de non causar cartelización. E por suposto "
-"non pode usar as versións de gamma lineal deses perfís para editar 8 bits.</"
-"p>"
+"reducida e unha TRC perceptibelmente uniforme, aproximada ou exactamente. "
+"Dos perfís do meu grupo, só os espazos de cores sRGB e AdobeRGB1998 "
+"(ClayRGB) son pequenos dabondo para editar 8 bits. Incluso co espazo de "
+"cores AdobeRGB1998 necesita ter coidado de non causar cartelización. E por "
+"suposto non pode usar as versións de gamma lineal deses perfís para editar 8 "
+"bits.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:671
 #, kde-format
@@ -33992,7 +33994,7 @@ msgid ""
 "showFoto, and GIMP 2.9.</p>"
 msgstr ""
 "<p>Use perfís V4 para editar imaxes usando editores de imaxes de gran "
-"profundidade de vits que usan LCMS como módulo de xestión de cores. É dicir, "
+"profundidade de bits que usan LCMS como módulo de xestión de cores. É dicir, "
 "editores como Krita, digiKam/showFoto, e GIMP 2.9.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
@@ -35303,9 +35305,9 @@ msgid ""
 msgstr ""
 "Adaptador,Animador,Artista,Director artístico,Autor,Asistente,Editor,"
 "Paisaxista,Debuxante,Colorista,Artista conceptual,Corrector,Artista de "
-"portadas,Creador,Deseñador,Finalista de arte,Carteiro,Pintor de matte,Pintor,"
+"portadas,Creador,Deseñador,Finalista de arte,Carteiro,Pintor de mate,Pintor,"
 "Lapiseiro,Revisor,Artista de píxeles,Artistas de liña vermella,Artista de "
-"sprites,Tipógrafo,Artista de textura,Tradutor,Escritor,Outro"
+"píxeles,Tipógrafo,Artista de textura,Tradutor,Escritor,Outro"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:312
@@ -35486,7 +35488,7 @@ msgstr "0. Primeiro plano a fondo"
 #: libs/widgets/KoRuler.cpp:1329
 #, kde-format
 msgid "First line indent"
-msgstr "Indentación da primeira liña"
+msgstr "Sangrado da primeira liña"
 
 #: libs/widgets/KoRuler.cpp:1330
 #, kde-format
@@ -35851,7 +35853,7 @@ msgstr "&Axustar á páxina"
 #: libs/widgetutils/config/kstandardaction_p.h:56
 #, kde-format
 msgid "Zoom to fit page in window"
-msgstr "Axustar o tamaño da páxino ao da xanela"
+msgstr "Axustar o tamaño da páxina ao da xanela"
 
 #: libs/widgetutils/config/kstandardaction_p.h:57
 #, kde-format
@@ -36411,8 +36413,8 @@ msgstr ""
 "informar de fallos!</p><p>Para enviar un informe do fallo, prema o seguinte "
 "botón. Isto abrirá unha xanela do navegador web en <a href=\"https://bugs."
 "kde.org\">https://bugs.kde.org</a> na que poderá atopar un formulario para "
-"preencher.</p><p><b>Pegue a seguinte información no informe de fallo!</b></"
-"p></qt>"
+"encher.</p><p><b>Pegue a seguinte información no informe de fallo!</b></p></"
+"qt>"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:207
 #, kde-format
@@ -37205,7 +37207,7 @@ msgstr "Gardar o grupo de asistentes"
 #: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:24
 #, kde-format
 msgid "Concentric Ellipse assistant"
-msgstr "Asistente de elipse concénctrica"
+msgstr "Asistente de elipse concéntrica"
 
 #: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
@@ -39634,7 +39636,7 @@ msgstr ""
 #: plugins/dockers/lut/wdglut.ui:399
 #, kde-format
 msgid "Configure black and white points of the view"
-msgstr "Configurar os puntos negros e blancos da vista"
+msgstr "Configurar os puntos negros e brancos da vista"
 
 #: plugins/dockers/overview/overviewdocker_dock.cpp:13
 #, kde-format
@@ -44337,23 +44339,23 @@ msgstr "WaveletDecompose"
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:18
 #, kde-format
 msgid "Wavelet Decompose"
-msgstr "Descomposición onduleta"
+msgstr "Descomposición de ondiña"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:112
 msgctxt "(qtundo-format)"
 msgid "Wavelet decompose"
-msgstr "Descomposición onduleta"
+msgstr "Descomposición de ondiña"
 
 #: plugins/extensions/waveletdecompose/waveletdecompose.cpp:119
 #, kde-format
 msgid "Wavelet decompose"
-msgstr "Descomposición onduleta"
+msgstr "Descomposición de ondiña"
 
 #. i18n: ectx: property (text), widget (QLabel, lblWaveletScales)
 #: plugins/extensions/waveletdecompose/wdg_waveletdecompose.ui:24
 #, kde-format
 msgid "Wavelet scales:"
-msgstr "Escalas de onduleta:"
+msgstr "Escalas de ondiña:"
 
 #. i18n: context: text @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_asc-cdl), Actions (Filters), ActionCollection (Krita)
@@ -44410,12 +44412,12 @@ msgstr "Desenfoque"
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "Desenfoque &Gausiano…"
+msgstr "Desenfoque de &Gauss…"
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
 msgid "Gaussian Blur"
-msgstr "Desenfoque Gausiano"
+msgstr "Desenfoque de Gauss"
 
 #: plugins/filters/blur/kis_lens_blur_filter.cpp:33
 #, kde-format
@@ -45023,7 +45025,7 @@ msgstr "Eliminación da &media"
 #: plugins/filters/convolutionfilters/convolutionfilters.h:43
 #, kde-format
 msgid "Emboss (Laplacian)"
-msgstr "Moldear (Laplaciano)"
+msgstr "Moldear (de Laplace)"
 
 #: plugins/filters/convolutionfilters/convolutionfilters.cpp:91
 #: plugins/filters/convolutionfilters/convolutionfilters.h:53
@@ -45316,7 +45318,7 @@ msgstr "Tramado"
 #, kde-format
 msgctxt "action"
 msgid "Halftone Filter"
-msgstr "Filtro de semitono"
+msgstr "Filtro de semiton"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabScreenGenerator)
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.ui:49
@@ -45370,17 +45372,17 @@ msgstr "Modo:"
 #: plugins/filters/halftone/KisHalftoneFilter.cpp:43
 #, kde-format
 msgid "&Halftone..."
-msgstr "&Semitono…"
+msgstr "&Semiton…"
 
 #: plugins/filters/halftone/KisHalftoneFilter.h:37
 #, kde-format
 msgid "Halftone"
-msgstr "Semitono"
+msgstr "Semiton"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
 msgid "&Gaussian Noise Reduction..."
-msgstr "Redución de ruído &Gaussiano…"
+msgstr "Redución de ruído de &Gauss…"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:44
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:40
@@ -45397,17 +45399,17 @@ msgstr "Tamaño da xanela"
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.h:30
 #, kde-format
 msgid "Gaussian Noise Reducer"
-msgstr "Redución de ruído Gaussiano"
+msgstr "Redución de ruído de Gauss"
 
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:26
 #, kde-format
 msgid "&Wavelet Noise Reducer..."
-msgstr "Redución de ruído &onduleta…"
+msgstr "Redución de ruído de &ondiña…"
 
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.h:37
 #, kde-format
 msgid "Wavelet Noise Reducer"
-msgstr "Redución de ruído onduleta"
+msgstr "Redución de ruído de ondiña"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:33
 #, kde-format
@@ -45455,7 +45457,7 @@ msgstr[1] "cores"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:33
 #, kde-format
 msgid "Ramps"
-msgstr "Rampas"
+msgstr "Ramplas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, diagCheck)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:72
@@ -45479,7 +45481,7 @@ msgstr "Limitar a"
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:127
 #, kde-format
 msgid "In-between ramps"
-msgstr "Entre rampas"
+msgstr "Entre ramplas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/filters/indexcolors/kiswdgindexcolors.ui:153
@@ -46064,13 +46066,13 @@ msgstr "Nivel de &limiar:"
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
 msgid "&Unsharp Mask..."
-msgstr "&Máscara de desfocalización…"
+msgstr "&Máscara de desenfoque…"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:76
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
 #, kde-format
 msgid "Unsharp Mask"
-msgstr "Máscara de desfocalización"
+msgstr "Máscara de desenfoque"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel3)
 #: plugins/filters/unsharp/wdgunsharp.ui:56
@@ -47913,7 +47915,7 @@ msgstr "Suavizado:"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:192
 #, kde-format
 msgid "Subsampling:"
-msgstr "Submostreo:"
+msgstr "Toma de submostras:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, subsampling)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:203
@@ -47984,7 +47986,7 @@ msgid ""
 "<html><head/><body><p>Store document metadata that is in the document "
 "information. This will override any layer metadata.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Almacenar os metadados do documento que están na "
+"<html><head/><body><p>Almacenar os metadatos do documento que están na "
 "información do documento. Sobrescribirá calquera capa de metadatos.</p></"
 "body></html>"
 
@@ -48452,7 +48454,7 @@ msgstr ""
 "Define o nivel de esforzo/velocidade do codificador sen afectar á velocidade "
 "de descodificación.\n"
 "Os valores válidos son, de máis rápido a máis lento: 1 (raio), 2 (lóstrego), "
-"3 (falcón), 4 (guepardo), 5 (lebre), 6 (uombat), 7 (esquío), 8 (minino), 9 "
+"3 (falcón), 4 (guepardo), 5 (lebre), 6 (uombat), 7 (esquío), 8 (gatiño), 9 "
 "(tartaruga).\n"
 "Predeterminado: esquío (7)."
 
@@ -48960,7 +48962,7 @@ msgid ""
 "The file contains a clone layer that has an incorrect source node id. This "
 "layer will be converted into a paint layer."
 msgstr ""
-"O ficheiro contén unha capa clo que ten un identificador de nodo de orixe "
+"O ficheiro contén unha capa clon que ten un identificador de nodo de orixe "
 "incorrecto. Esta capa converterase nunha capa de pintura."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
@@ -48971,7 +48973,7 @@ msgstr "Non foi posíbel cargar o identificador da máscara de transformación."
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
 #, kde-format
 msgid "Could not create transform mask params"
-msgstr "Non foi posíbel crear os párametros da máscara de transformación."
+msgstr "Non foi posíbel crear os parámetros da máscara de transformación."
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
 #, kde-format
@@ -49968,22 +49970,22 @@ msgstr ""
 "dirección da interpolación de tal xeito que se maximice unha métrica de "
 "homoxeneidade, polo que xeralmente  se minimizan os artefactos das cores.</"
 "item> <item><emphasis strong='true'>DCB</emphasis>: usa unha interpolación "
-"DCB do proxecto LinuxPhoto (linuxphoto.org).</item> <item><emphasis "
-"strong='true'>AHD v2</emphasis>: usa unha interpolación AHD modificada, co "
-"método de diferencias de varianza da cor.</li> <li><emphasis "
-"strong='true'>AFD</emphasis>: usa unha interpolación de redución de mosaico "
-"filtrada e adaptábel, usando o filtro mediano de cinco pasos do proxecto "
-"PerfectRaw.</li> <li><emphasis strong='true'>VCD</emphasis>: usa unha "
-"interpolación de diferenzas de variación da cor.</li> <li><emphasis "
-"strong='true'>VCD e AHD</emphasis>: usa unha mestura de redución de mosaico "
-"mediante VCD e AHD.</li> <li><emphasis strong='true'>LMMSE</emphasis>: usa "
-"unha interpolación redución de mosaico nas cores mediante estimación do "
-"mínimo erro cuadrático medio direccional e lineal, de PerfectRaw.</item> "
-"<item><emphasis strong='true'>AMaZE</emphasis>: usa unha interpolación de "
-"redución do suavizado e eliminación de cremalleira para aplicar unha "
-"eliminación de anormalidade de cor, do proxecto RawTherapee.</li></ul></p> "
-"<p>Nota: algúns métodos poden non estas dispoñíbeis se o descodificador de "
-"RAW foi construído sen os paquetes de extensión.</p>"
+"DCB do proxecto «linuxphoto.org».</item> <item><emphasis strong='true'>AHD "
+"v2</emphasis>: usa unha interpolación AHD modificada, co método de "
+"diferencias de varianza da cor.</li> <li><emphasis strong='true'>AFD</"
+"emphasis>: usa unha interpolación de redución de mosaico filtrada e "
+"adaptábel, usando o filtro mediano de cinco pasos do proxecto PerfectRaw.</"
+"li> <li><emphasis strong='true'>VCD</emphasis>: usa unha interpolación de "
+"diferenzas de variación da cor.</li> <li><emphasis strong='true'>VCD e AHD</"
+"emphasis>: usa unha mestura de redución de mosaico mediante VCD e AHD.</li> "
+"<li><emphasis strong='true'>LMMSE</emphasis>: usa unha interpolación "
+"redución de mosaico nas cores mediante estimación do mínimo erro cuadrático "
+"medio direccional e lineal, de PerfectRaw.</item> <item><emphasis "
+"strong='true'>AMaZE</emphasis>: usa unha interpolación de redución do "
+"suavizado e eliminación de cremalleira para aplicar unha eliminación de "
+"anormalidade de cor, do proxecto RawTherapee.</li></ul></p> <p>Nota: algúns "
+"métodos poden non estas dispoñíbeis se o descodificador de RAW foi "
+"construído sen os paquetes de extensión.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:422
 #, kde-format
@@ -50250,9 +50252,9 @@ msgid ""
 "accurately, without 'pink clouds' (and blue highlights under tungsten lamps)."
 "</p>"
 msgstr ""
-"<p>Se activa esta opción as imaxes en canles sobrevalorizados procésanse "
-"moito máis eficientemente, sen «nubeiros arrosados» (nin realces azuis baixo "
-"as lámpadas de tungsteno).</p>"
+"<p>Se activa esta opción as imaxes en canles sobrevalorados procésanse moito "
+"máis eficientemente, sen «nubeiros rosas» (nin realces azuis baixo as "
+"lámpadas de tungsteno).</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:547
 #, kde-format
@@ -50364,7 +50366,7 @@ msgstr "Ningunha"
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
-msgstr "Onduleta"
+msgstr "Ondiñas"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
@@ -50402,16 +50404,16 @@ msgstr ""
 "<title>Redución de ruído</title><p> Escolle o método de redución de ruído "
 "para aplicar durante a descodificación de RAW.</"
 "para><para><list><item><emphasis strong='true'>Ningunha</emphasis>: sen "
-"redución de ruído.</item><item><emphasis strong='true'>Onduleta</emphasis>: "
-"corrección de onduleta (wavelets) correction para borrar o ruído pero "
-"preservando o detalle real. Aplícase despois da interpolación.</"
-"item><item><emphasis strong='true'>FBDD</emphasis>: simular a redución de "
-"ruído antes por eliminación de mosaicos (Fake Before Demosaicing Denoising). "
-"Aplícase despois da interpolación.</item><item><emphasis "
-"strong='true'>Eliminación de ruído de liñas CFA</emphasis>: supresión do "
-"ruído por bandas. Aplícase despois da interpolación.</item><item><emphasis "
-"strong='true'>Redución do ruído por impulsos</emphasis>: Supresión do ruído "
-"por impulsos.Aplícase despois da interpolación</item></list></p>"
+"redución de ruído.</item><item><emphasis strong='true'>Ondiñas</emphasis>: "
+"corrección de ondiñas para borrar o ruído pero preservando o detalle real. "
+"Aplícase despois da interpolación.</item><item><emphasis strong='true'>FBDD</"
+"emphasis>: simular a redución de ruído antes por eliminación de mosaicos "
+"(Fake Before Demosaicing Denoising). Aplícase despois da interpolación.</"
+"item><item><emphasis strong='true'>Eliminación de ruído de liñas CFA</"
+"emphasis>: supresión do ruído por bandas. Aplícase despois da interpolación."
+"</item><item><emphasis strong='true'>Redución do ruído por impulsos</"
+"emphasis>: Supresión do ruído por impulsos.Aplícase despois da "
+"interpolación</item></list></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
 #, kde-format
@@ -50434,7 +50436,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
-msgstr "Axustes automáticos nos eixos de cores"
+msgstr "Axustes automáticos nos eixes de cores"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
 #, kde-format
@@ -51633,7 +51635,7 @@ msgid ""
 msgstr ""
 "Pinta na capa actual\n"
 "pero usa calquera das capas visíbeis ao borrar\n"
-"NOTA: Este modo é só axeitado para traballar cun fondo totalmenteopaco."
+"NOTA: Este modo é só axeitado para traballar cun fondo totalmente opaco."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionWidget.cpp:56
 #, kde-format
@@ -52496,7 +52498,7 @@ msgstr "Trucaxes gráficas"
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:36
 #, kde-format
 msgid "Antialiased lines"
-msgstr "Liñas antisuavizado"
+msgstr "Liñas suavizadas"
 
 #. i18n: ectx: property (text), widget (QCheckBox, subpixelPrecisionCheckBox)
 #: plugins/paintops/hatching/wdghatchingpreferences.ui:46
@@ -53633,7 +53635,7 @@ msgstr "Tamaño → Esvaecer (sensor)"
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:38
 #, kde-format
 msgid "Isotropic Spacing"
-msgstr "Espazamento isotrópico"
+msgstr "Espazamento isótropo"
 
 #: plugins/paintops/libpaintop/KisSpacingOptionWidget.cpp:39
 #, kde-format
@@ -54239,7 +54241,7 @@ msgstr "Pincel rápido"
 msgctxt "PaintOp instant preview limitation"
 msgid "Sketch brush (differences in connecting lines are possible)"
 msgstr ""
-"Pincel de esbozar (é posíbel que haxa diferenzas ans conexións entre liñas)"
+"Pincel de esbozar (é posíbel que haxa diferenzas nas conexións entre liñas)"
 
 #: plugins/paintops/sketch/KisSketchStandardOptionData.h:15
 #, kde-format
@@ -54801,7 +54803,7 @@ msgid ""
 "<html><head/><body><p>Use the drawing direction to determine the X and Y-"
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Usar a dirección de debuxo para determinar os eixos X "
+"<html><head/><body><p>Usar a dirección de debuxo para determinar os eixes X "
 "e Y, mentres e a elevación da inclinación se usa para o eixo Z.</p></body></"
 "html>"
 
@@ -54814,7 +54816,7 @@ msgid ""
 "p></body></html>"
 msgstr ""
 "<html><head/><body><p>Usar o sensor de rotación dispoñíbel en certos "
-"bolígrafos para determinar os eixos X e Y, mentres e a elevación da "
+"bolígrafos para determinar os eixes X e Y, mentres e a elevación da "
 "inclinación se usa para o eixo Z.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionRotation)
@@ -54832,7 +54834,7 @@ msgid ""
 "axes, while tilt-elevation is used for the Z-axis.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Mesturar os ángulos de inclinación e debuxo para "
-"determinar os eixos X e Y, mentres e a elevación da inclinación se usa para "
+"determinar os eixes X e Y, mentres e a elevación da inclinación se usa para "
 "o eixo Z.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionMix)
@@ -55483,7 +55485,7 @@ msgstr "Libro de arte"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 msgid "Writer"
-msgstr "Guionista"
+msgstr "Escritora"
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:221
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
@@ -55647,7 +55649,7 @@ msgid ""
 msgstr ""
 "A seguinte é unha táboa dos autores que colaboraron neste cómic. Pode "
 "definir o seu alcume, os seus nomes (primeiro, segundo e apelidos), rol "
-"(lapiseiro, finalizador de arte, etc.), correo electrónico e páxina web."
+"(lapiseiro, tinteiro, etc.), correo electrónico e páxina web."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 msgid "Role"
@@ -56168,7 +56170,7 @@ msgstr "Crear un modelo"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Abridger"
-msgstr "Resumidor"
+msgstr "Resumidora"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Art copyist"
@@ -57806,7 +57808,7 @@ msgstr "Copiar e recolocar"
 #: plugins/tools/basictools/kis_tool_multihand.cpp:459
 #, kde-format
 msgid "Copy Translate at Intervals"
-msgstr "Copiar a recolocación en intervalos"
+msgstr "Copiar a colocación en intervalos"
 
 #: plugins/tools/basictools/kis_tool_multihand.cpp:570
 #, kde-format
@@ -58028,7 +58030,7 @@ msgid ""
 "masks. Shortcut: ctrl-click."
 msgstr ""
 "Mover a capa que ten seleccionada para a caixa de capas coas súas máscaras. "
-"Atallo: crtl-clic."
+"Atallo: Ctrl + clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:36
@@ -58055,8 +58057,8 @@ msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-shift-click."
 msgstr ""
-"Mover o grupo que contén a primeira capa con contido visíbel. Atallo: crtl-"
-"Maiús-clic."
+"Mover o grupo que contén a primeira capa con contido visíbel. Atallo: Ctrl + "
+"Maiús + clic."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:62
@@ -59379,7 +59381,7 @@ msgstr "Tipo de letra…"
 #, kde-format
 msgctxt "action"
 msgid "Change character size, font, boldface, italics etc."
-msgstr "Cambiar tamaño de letra, tipografía, negriñas, cursivas etc."
+msgstr "Cambiar tamaño de letra, tipografía, grosa, cursiva, etc."
 
 #. i18n: context: whatsThis @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:50

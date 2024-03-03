@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-01-15 19:26+0100\n"
+"PO-Revision-Date: 2024-02-29 22:26+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -25447,7 +25447,7 @@ msgstr "Passi ingrandimento tra potenze di 2"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr ""
+msgstr "Usa l'asse orizzontale per l'azione di ingrandimento sulla tela"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:748
@@ -29779,15 +29779,16 @@ msgid "Masked Brush"
 msgstr "Pennello con maschera"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Configura Krita"
+msgstr "Configura pannello dell'area di aggancio"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"L'area di aggancio è aperta nella Tavolozza a comparsa. Chiudi la Tavolozza "
+"a comparsa per mostrarla qui."
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29821,22 +29822,19 @@ msgid "Fit Canvas to View"
 msgstr "Adatta tela alla vista"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Show a palette docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Mostra un gancio della tavolozza"
+msgstr "Configura le aree di aggancio della Tavolozza a comparsa"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Proprietà disponibili:"
+msgstr "Aree di aggancio disponibili"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Livello attuale"
+msgstr "Aree di aggancio attuali"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -38201,11 +38199,10 @@ msgid "Bluer/Yellower: "
 msgstr "Più blu/più giallo: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
-msgstr "Azzera"
+msgstr "Reimposta"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
@@ -38844,11 +38841,10 @@ msgid "Reset to default"
 msgstr "Azzera al predefinito"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Editor del pennello"
+msgstr "Editor del pennello sulla tela"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -40708,10 +40704,9 @@ msgstr "Imposta lo spazio dei colori"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Limit to current layer"
+#, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "Limita al livello attuale"
+msgstr "Blocca allo spazio dei colori del livello attuale"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
@@ -46847,36 +46842,26 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "Ogni {n} cella orizzontalmente"
+msgstr[0] "Ogni {n} ripetizione orizzontalmente"
 msgstr[1] "Ogni {n} celle orizzontalmente"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "Ogni {n} cella verticalmente"
+msgstr[0] "Ogni {n} ripetizione verticalmente"
 msgstr[1] "Ogni {n} celle verticalmente"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
@@ -48516,13 +48501,15 @@ msgid ""
 "to lossless. Useful to reduce transparency artifact on lossy export.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Se attivata, imposta il canale alfa (trasparenza) in "
+"modalità senza perdita di dati. Utile per ridurre gli artefatti della "
+"trasparenza durante l'esportazione con perdita di dati.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Senza perdita"
+msgstr "Alfa senza perdita di dati"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -48616,8 +48603,7 @@ msgstr "Appiattisci l'immagine"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
 msgstr "Profilo del colore: "
 
@@ -48629,19 +48615,22 @@ msgid ""
 "lossless, otherwise keep using ICC. Useful to make filesize even smaller "
 "(eg. for web delivery).</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Usa CICP se il profilo ICC è convertibile in CICP "
+"nella modalità senza perdita di dati, in caso contrario mantiene l'uso di "
+"ICC. Utile per creare file di dimensioni ancora più piccole (per es. per "
+"l'invio via web).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:275
 #, kde-format
 msgid "(Lossless) Use CICP instead of ICC if possible"
-msgstr ""
+msgstr "(Senza perdita di dati) Usa CICP al posto di ICC, se possibile"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Color conversion"
+#, kde-format
 msgid "HDR conversion"
-msgstr "Conversione di colore"
+msgstr "Conversione HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -53115,13 +53104,14 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Applica meno trama quando la forza è minore. Usa questa opzione se vuoi che "
+"il pennello passi da un aspetto senza trama a uno con trama in modo graduale"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "Prova colore"
+msgstr "Trama morbida"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -57595,11 +57585,10 @@ msgid "Spread: {n}%"
 msgstr "Estensione: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Chiudi"
+msgstr "Chiudi spazio: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57713,10 +57702,9 @@ msgstr ""
 "somiglianza tra i colori."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Offusca la selezione della quantità impostata"
+msgstr "Chiudi spazi nelle linee fino alla quantità impostata"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -58990,11 +58978,10 @@ msgstr ""
 "confine, quando ne crei una nuova"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Chiudi"
+msgstr "Chiudi spazio: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -59440,20 +59427,14 @@ msgid "Insert Text"
 msgstr "Inserisci testo"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Inserisci testo"
+msgstr "Inserisci testo formattato"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Cambia proprietà del livello"
+msgstr "Cambia proprietà del testo"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

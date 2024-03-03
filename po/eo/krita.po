@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-02-28 01:34+0000\n"
-"PO-Revision-Date: 2024-02-24 22:21+0100\n"
+"PO-Revision-Date: 2024-03-02 16:58+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -48276,13 +48276,15 @@ msgid ""
 "to lossless. Useful to reduce transparency artifact on lossy export.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Se ebligita, ĉi tio metos alfa-kanalon (travideblon) "
+"al senperda. Utila por redukti travideblecan artefakton en perdema eksporto."
+"</body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Senperdo"
+msgstr "Senperda alfo"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -48374,10 +48376,9 @@ msgstr "Platigi la bildon"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "Kolora profilo:"
+msgstr "Kolora profilo"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -48396,10 +48397,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "Datumbaza versio"
+msgstr "HDR-konverto"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291

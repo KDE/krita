@@ -12,7 +12,7 @@
 
 SvgGraphicsContext::SvgGraphicsContext()
 : stroke(toQShared(new KoShapeStroke()))
-, textProperties(KoSvgTextProperties::defaultProperties())
+, textProperties(KoSvgTextProperties())
 {
     stroke->setLineStyle(Qt::NoPen, QVector<qreal>());   // default is no stroke
     stroke->setLineWidth(1.0);

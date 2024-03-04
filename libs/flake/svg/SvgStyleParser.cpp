@@ -186,7 +186,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             parseColor(strokecolor, params);
         }
     } else if (command == "stroke-width") {
-        gc->stroke->setLineWidth(SvgUtil::parseUnitXY(gc, params));
+        gc->stroke->setLineWidth(SvgUtil::parseUnitXY(gc, d->context.resolvedProperties(), params));
     } else if (command == "stroke-linejoin") {
         if (params == "miter")
             gc->stroke->setJoinStyle(Qt::MiterJoin);
@@ -209,7 +209,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             QString dashString = params;
             QStringList dashes = dashString.replace(',', ' ').simplified().split(' ');
             for (QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it) {
-                array.append(SvgUtil::parseUnitXY(gc, *it));
+                array.append(SvgUtil::parseUnitXY(gc, d->context.resolvedProperties(), *it));
             }
 
             // if the array is odd repeat it according to the standard
@@ -236,33 +236,33 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "paint-order") {
         gc->paintOrder = params;
     } else if (command == "font-family") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-style") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "font-variant" || command == "font-variant-caps" || command == "font-variant-alternates" || command == "font-variant-ligatures"
                || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-position") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "font-feature-settings") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-stretch") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-weight") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-variation-settings") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-optical-sizing") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size-adjust") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font") {
         qWarning() << "Krita does not support the 'font' shorthand";
     } else if (command == "text-decoration" || command == "text-decoration-line" || command == "text-decoration-style" || command == "text-decoration-color"
                || command == "text-decoration-position") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "color") {
         QColor color;
@@ -332,11 +332,11 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
                || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align"
                || command ==  "shape-padding" || command ==   "shape-margin" || command ==   "text-orientation") {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";
     } else if (d->textAttributes.contains(command)) {
-        gc->newTextProperties.parseSvgTextAttribute(d->context, command, params);
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     }
 
     gc->fillColor = fillcolor;

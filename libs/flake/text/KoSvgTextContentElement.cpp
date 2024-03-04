@@ -56,7 +56,7 @@ QVector<qreal> parseListAttributeX(const QString &value, SvgLoadingContext &cont
 
     QStringList list = SvgUtil::simplifyList(value);
     Q_FOREACH (const QString &str, list) {
-        result << SvgUtil::parseUnitX(context.currentGC(), str);
+        result << SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), str);
     }
 
     return result;
@@ -68,7 +68,7 @@ QVector<qreal> parseListAttributeY(const QString &value, SvgLoadingContext &cont
 
     QStringList list = SvgUtil::simplifyList(value);
     Q_FOREACH (const QString &str, list) {
-        result << SvgUtil::parseUnitY(context.currentGC(), str);
+        result << SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), str);
     }
 
     return result;
@@ -157,15 +157,13 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
 
 }
 
-bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context, bool root)
+bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &context, bool rootNode)
 {
     SvgGraphicsContext *gc = context.currentGC();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(gc, false);
 
-    KoSvgTextProperties props = gc->newTextProperties;
-    if (root) {
-        props.inheritFrom(gc->textProperties, true);
-    }
+    KoSvgTextProperties props = rootNode? context.resolvedProperties(): gc->textProperties;
+
 
     QVector<KoSvgTextProperties::PropertyId> generic = {KoSvgTextProperties::FillId,
                                                         KoSvgTextProperties::StrokeId,
@@ -225,7 +223,7 @@ bool KoSvgTextContentElement::loadSvg(const QDomElement &e, SvgLoadingContext &c
                 textPathInfo.startOffset = SvgUtil::parseNumber(offset.left(offset.size() - 1));
                 textPathInfo.startOffsetIsPercentage = true;
             } else {
-                textPathInfo.startOffset = SvgUtil::parseUnit(context.currentGC(), offset);
+                textPathInfo.startOffset = SvgUtil::parseUnit(context.currentGC(), context.resolvedProperties(), offset);
             }
         }
     }

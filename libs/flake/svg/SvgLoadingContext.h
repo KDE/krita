@@ -11,6 +11,7 @@
 #include <QStringList>
 #include <QDomDocument>
 #include <QScopedPointer>
+#include <KoSvgTextProperties.h>
 
 #include "kritaflake_export.h"
 
@@ -79,6 +80,9 @@ public:
 
     /// Return the profiles in the context.
     QHash<QString, const KoColorProfile*> profiles();
+
+    /// These are the text properties, completely resolved, ensuring that everything is inherited and the sizes are converted to pt.
+    KoSvgTextProperties resolvedProperties() const;
 
     bool isRootContext() const;
 

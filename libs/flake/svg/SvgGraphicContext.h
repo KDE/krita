@@ -64,8 +64,7 @@ public:
 
     bool autoFillMarkers {false};
 
-    KoSvgTextProperties textProperties; ///< Stores combined properties.
-    KoSvgTextProperties newTextProperties; ///< Stores properties of the current node.
+    KoSvgTextProperties textProperties; ///< Stores textProperties
     QString shapeInsideValue; ///< String of value shape-inside, will be parsed later.
     QString shapeSubtractValue; ///< String of value shape-subtract, will be parsed later.
 

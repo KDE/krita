@@ -216,7 +216,7 @@ void SvgUtil::parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF 
     }
 }
 
-qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox)
+qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, QStringView unit, bool horiz, bool vert, const QRectF &bbox)
 {
     if (unit.isEmpty())
         return 0.0;
@@ -227,9 +227,7 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, QStringView unit, bool horiz, b
         return 0.0;
     }
     KoSvgText::CssLengthPercentage length = parseUnitStruct(gc, unit, horiz, vert, bbox, true);
-    KoSvgTextProperties props = gc->newTextProperties;
-    props.inheritFrom(gc->textProperties, true);
-    length.convertToAbsolute(props.fontSize().value, props.xHeight());
+    length.convertToAbsolute(resolved.fontSize().value, resolved.xHeight());
 
     return length.value;
 }
@@ -286,31 +284,31 @@ KoSvgText::CssLengthPercentage SvgUtil::parseUnitStruct(SvgGraphicsContext *gc, 
     return length;
 }
 
-qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const QString &unit)
+qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, const QString &unit)
 {
     if (gc->forcePercentage) {
         return SvgUtil::fromPercentage(unit) * gc->currentBoundingBox.width();
     } else {
-        return SvgUtil::parseUnit(gc, unit, true, false, gc->currentBoundingBox);
+        return SvgUtil::parseUnit(gc, resolved, unit, true, false, gc->currentBoundingBox);
     }
 }
 
-qreal SvgUtil::parseUnitY(SvgGraphicsContext *gc, const QString &unit)
+qreal SvgUtil::parseUnitY(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, const QString &unit)
 {
     if (gc->forcePercentage) {
         return SvgUtil::fromPercentage(unit) * gc->currentBoundingBox.height();
     } else {
-        return SvgUtil::parseUnit(gc, unit, false, true, gc->currentBoundingBox);
+        return SvgUtil::parseUnit(gc, resolved, unit, false, true, gc->currentBoundingBox);
     }
 }
 
-qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
+qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, const QString &unit)
 {
     if (gc->forcePercentage) {
         const qreal value = SvgUtil::fromPercentage(unit);
         return value * sqrt(pow(gc->currentBoundingBox.width(), 2) + pow(gc->currentBoundingBox.height(), 2)) / sqrt(2.0);
     } else {
-        return SvgUtil::parseUnit(gc, unit, true, true, gc->currentBoundingBox);
+        return SvgUtil::parseUnit(gc, resolved, unit, true, true, gc->currentBoundingBox);
     }
 }
 

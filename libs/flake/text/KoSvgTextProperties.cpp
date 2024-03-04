@@ -396,12 +396,12 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "font-stretch") {
         int newStretch = 100;
 
-        newStretch = KoSvgText::parseCSSFontStretch(value, context.currentGC()->textProperties.propertyOrDefault(FontStretchId).toInt());
+        newStretch = KoSvgText::parseCSSFontStretch(value, context.resolvedProperties().propertyOrDefault(FontStretchId).toInt());
 
         setProperty(FontStretchId, newStretch);
 
     } else if (command == "font-weight") {
-        int weight = KoSvgText::parseCSSFontWeight(value, context.currentGC()->textProperties.propertyOrDefault(FontWeightId).toInt());
+        int weight = KoSvgText::parseCSSFontWeight(value, context.resolvedProperties().propertyOrDefault(FontWeightId).toInt());
 
         setProperty(FontWeightId, weight);
 
@@ -567,9 +567,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "tab-size") {
         setProperty(TabSizeId, QVariant::fromValue(KoSvgText::parseTabSize(value, context)));
     } else if (command == "shape-padding") {
-        setProperty(ShapePaddingId, SvgUtil::parseUnitXY(context.currentGC(), value));
+        setProperty(ShapePaddingId, SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), value));
     } else if (command == "shape-margin") {
-        setProperty(ShapeMarginId, SvgUtil::parseUnitXY(context.currentGC(), value));
+        setProperty(ShapeMarginId, SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), value));
     } else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }

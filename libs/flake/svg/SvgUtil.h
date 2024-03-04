@@ -15,6 +15,7 @@ class QString;
 class QTransform;
 class QStringList;
 class KoXmlWriter;
+class KoSvgTextProperties;
 
 #include <QDomDocument>
 
@@ -88,6 +89,7 @@ public:
 
     /// Parses a length attribute
     static qreal parseUnit(SvgGraphicsContext *gc,
+                           const KoSvgTextProperties resolved,
                            QStringView,
                            bool horiz = false,
                            bool vert = false,
@@ -100,13 +102,13 @@ public:
                                                           bool percentageViewBox = false);
 
     /// parses a length attribute in x-direction
-    static qreal parseUnitX(SvgGraphicsContext *gc, const QString &unit);
+    static qreal parseUnitX(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, const QString &unit);
 
     /// parses a length attribute in y-direction
-    static qreal parseUnitY(SvgGraphicsContext *gc, const QString &unit);
+    static qreal parseUnitY(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, const QString &unit);
 
     /// parses a length attribute in xy-direction
-    static qreal parseUnitXY(SvgGraphicsContext *gc, const QString &unit);
+    static qreal parseUnitXY(SvgGraphicsContext *gc, const KoSvgTextProperties resolved, const QString &unit);
 
     /// parses angle, result in *radians*!
     static qreal parseUnitAngular(SvgGraphicsContext *gc, const QString &unit);

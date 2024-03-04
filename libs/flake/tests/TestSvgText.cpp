@@ -264,9 +264,7 @@ void TestSvgText::testParseFontStyles()
     context.styleParser().parseFont(styles);
 
     auto getFont = [&context]() {
-        KoSvgTextProperties props = context.currentGC()->newTextProperties;
-        props.inheritFrom(context.currentGC()->textProperties, true);
-        return props;
+        return context.resolvedProperties();
     };
 
     {
@@ -376,15 +374,13 @@ void TestSvgText::testParseTextStyles()
     context.styleParser().parseFont(styles);
 
     auto getFont = [&context] () {
-        KoSvgTextProperties props = context.currentGC()->newTextProperties;
-        props.inheritFrom(context.currentGC()->textProperties, true);
+        KoSvgTextProperties props = context.resolvedProperties();
         return props.generateFont();
     };
 
     QCOMPARE(getFont().family(), QString("Verdana"));
 
-    KoSvgTextProperties &props = context.currentGC()->newTextProperties;
-    props.inheritFrom(context.currentGC()->textProperties, true);
+    KoSvgTextProperties props = context.resolvedProperties();
 
     QCOMPARE(props.property(KoSvgTextProperties::WritingModeId).toInt(), int(KoSvgText::VerticalRL));
     QCOMPARE(props.property(KoSvgTextProperties::TextOrientationId).toInt(), int(KoSvgText::OrientationSideWays));

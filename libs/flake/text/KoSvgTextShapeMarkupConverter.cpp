@@ -1378,6 +1378,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
     charFormat.setTextOutline(currentCharFormat.textOutline());
     QTextBlockFormat blockFormat;
     QScopedPointer<SvgGraphicsContext> context(new SvgGraphicsContext());
+    const KoSvgTextProperties resolved = KoSvgTextProperties::defaultProperties();
 
     for (int i=0; i<styles.size(); i++) {
         if (!styles.at(i).isEmpty()){
@@ -1396,7 +1397,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "font-size") {
-                qreal val = SvgUtil::parseUnitX(context.data(), value);
+                qreal val = SvgUtil::parseUnitX(context.data(), resolved, value);
                 charFormat.setFontPointSize(val);
             }
 
@@ -1508,13 +1509,13 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "letter-spacing") {
-                qreal val = SvgUtil::parseUnitX(context.data(), value);
+                qreal val = SvgUtil::parseUnitX(context.data(), resolved, value);
                 charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
                 charFormat.setFontLetterSpacing(val);
             }
 
             if (property == "word-spacing") {
-                qreal val = SvgUtil::parseUnitX(context.data(), value);
+                qreal val = SvgUtil::parseUnitX(context.data(), resolved, value);
                 charFormat.setFontWordSpacing(val);
             }
 
@@ -1522,7 +1523,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
                 if (value == "auto") {
                     charFormat.setFontKerning(true);
                 } else {
-                    qreal val = SvgUtil::parseUnitX(context.data(), value);
+                    qreal val = SvgUtil::parseUnitX(context.data(), resolved, value);
                     charFormat.setFontKerning(false);
                     charFormat.setFontLetterSpacingType(QFont::AbsoluteSpacing);
                     charFormat.setFontLetterSpacing(charFormat.fontLetterSpacing() + val);
@@ -1623,7 +1624,7 @@ QVector<QTextFormat> KoSvgTextShapeMarkupConverter::stylesFromString(QStringList
             }
 
             if (property == "inline-size") {
-                const qreal val = SvgUtil::parseUnitX(context.data(), value);
+                const qreal val = SvgUtil::parseUnitX(context.data(), resolved, value);
                 if (val > 0.0) {
                     extraStyles.inlineSize = val;
                 }

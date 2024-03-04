@@ -89,10 +89,10 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const QDomElement &el
         gc = new SvgGraphicsContext();
     }
 
-    gc->newTextProperties.inheritFrom(gc->textProperties, true);
-    gc->newTextProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited
-    gc->textProperties = gc->newTextProperties;
-    gc->newTextProperties = KoSvgTextProperties();
+    gc->textProperties.inheritFrom(gc->textProperties, true);
+    gc->textProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited
+    gc->textProperties = gc->textProperties;
+    gc->textProperties = KoSvgTextProperties();
 
     gc->filterId.clear(); // filters are not inherited
     gc->clipPathId.clear(); // clip paths are not inherited
@@ -282,6 +282,19 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
 QHash<QString, const KoColorProfile *> SvgLoadingContext::profiles()
 {
     return d->profiles;
+}
+
+KoSvgTextProperties SvgLoadingContext::resolvedProperties() const
+{
+    KoSvgTextProperties props = KoSvgTextProperties::defaultProperties();
+    for (auto it = d->gcStack.begin(); it != d->gcStack.end(); it++) {
+        SvgGraphicsContext *gc = *it;
+        KoSvgTextProperties props2 = gc->textProperties;
+        props.resetNonInheritableToDefault();
+        props2.inheritFrom(props, true);
+        props = props2;
+    }
+    return props;
 }
 
 bool SvgLoadingContext::isRootContext() const

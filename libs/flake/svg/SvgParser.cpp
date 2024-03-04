@@ -212,7 +212,7 @@ void SvgParser::setResolution(const QRectF boundsInPixels, qreal pixelsPerInch)
 void SvgParser::setDefaultKraTextVersion(int version)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_context.currentGC());
-    m_context.currentGC()->newTextProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
+    m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, version);
 }
 
 QList<KoShape*> SvgParser::shapes() const
@@ -314,22 +314,22 @@ SvgClipPathHelper* SvgParser::findClipPath(const QString &id)
 
 qreal SvgParser::parseUnit(const QString &unit, bool horiz, bool vert, const QRectF &bbox)
 {
-    return SvgUtil::parseUnit(m_context.currentGC(), unit, horiz, vert, bbox);
+    return SvgUtil::parseUnit(m_context.currentGC(), m_context.resolvedProperties(), unit, horiz, vert, bbox);
 }
 
 qreal SvgParser::parseUnitX(const QString &unit)
 {
-    return SvgUtil::parseUnitX(m_context.currentGC(), unit);
+    return SvgUtil::parseUnitX(m_context.currentGC(), m_context.resolvedProperties(), unit);
 }
 
 qreal SvgParser::parseUnitY(const QString &unit)
 {
-    return SvgUtil::parseUnitY(m_context.currentGC(), unit);
+    return SvgUtil::parseUnitY(m_context.currentGC(), m_context.resolvedProperties(), unit);
 }
 
 qreal SvgParser::parseUnitXY(const QString &unit)
 {
-    return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
+    return SvgUtil::parseUnitXY(m_context.currentGC(), m_context.resolvedProperties(), unit);
 }
 
 qreal SvgParser::parseAngular(const QString &unit)
@@ -1849,7 +1849,7 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     }
 
     if (e.hasAttribute("krita:textVersion")) {
-        m_context.currentGC()->newTextProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
+        m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
 
         if (m_isInsideTextSubtree) {
             debugFlake << "WARNING: \"krita:textVersion\" attribute appeared in non-root text shape";
@@ -1861,8 +1861,8 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     }
 
 
-    if (m_context.currentGC()->newTextProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
-        m_context.currentGC()->newTextProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
+    if (m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
+        m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
 
         static const KoID warning("warn_text_version_1",
                                   i18nc("warning while loading SVG text",
@@ -2253,21 +2253,21 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
     } else if (value.startsWith("circle(")) {
         el = e.ownerDocument().createElement("circle");
         QStringList params = val.split(" ");
-        el.setAttribute("r", SvgUtil::parseUnitXY(context.currentGC(), params.first()));
+        el.setAttribute("r", SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), params.first()));
         if (params.contains("at")) {
             // 1 == "at"
-            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), params.at(2)));
-            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), params.at(3)));
+            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), params.at(2)));
+            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), params.at(3)));
         }
     } else if (value.startsWith("ellipse(")) {
         el = e.ownerDocument().createElement("ellipse");
         QStringList params = val.split(" ");
-        el.setAttribute("rx", SvgUtil::parseUnitX(context.currentGC(), params.at(0)));
-        el.setAttribute("ry", SvgUtil::parseUnitY(context.currentGC(), params.at(1)));
+        el.setAttribute("rx", SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), params.at(0)));
+        el.setAttribute("ry", SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), params.at(1)));
         if (params.contains("at")) {
             // 2 == "at"
-            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), params.at(3)));
-            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), params.at(4)));
+            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), params.at(3)));
+            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), params.at(4)));
         }
     } else if (value.startsWith("polygon(")) {
         el = e.ownerDocument().createElement("polygon");
@@ -2275,9 +2275,9 @@ KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value,
         Q_FOREACH(QString point,  SvgUtil::simplifyList(val)) {
             bool xVal = points.size() % 2;
             if (xVal) {
-                points.append(QString::number(SvgUtil::parseUnitX(context.currentGC(), point)));
+                points.append(QString::number(SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), point)));
             } else {
-                points.append(QString::number(SvgUtil::parseUnitY(context.currentGC(), point)));
+                points.append(QString::number(SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), point)));
             }
         }
         el.setAttribute("points", points.join(" "));

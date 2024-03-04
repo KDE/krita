@@ -393,20 +393,20 @@ bool EllipseShape::loadSvg(const QDomElement &element, SvgLoadingContext &contex
             element.attribute("krita:type") == "arc" ? "krita" : "";
 
     if (element.tagName() == "ellipse") {
-        rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("rx"));
-        ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute("ry"));
-        cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
-        cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
+        rx = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute("rx"));
+        ry = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute("ry"));
+        cx = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute("cx", "0"));
+        cy = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute("cy", "0"));
     } else if (element.tagName() == "circle") {
-        rx = ry = SvgUtil::parseUnitXY(context.currentGC(), element.attribute("r"));
-        cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute("cx", "0"));
-        cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute("cy", "0"));
+        rx = ry = SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), element.attribute("r"));
+        cx = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute("cx", "0"));
+        cy = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute("cy", "0"));
 
     } else if (element.tagName() == "path" && !extendedNamespace.isEmpty()) {
-        rx = SvgUtil::parseUnitX(context.currentGC(), element.attribute(extendedNamespace + ":rx"));
-        ry = SvgUtil::parseUnitY(context.currentGC(), element.attribute(extendedNamespace + ":ry"));
-        cx = SvgUtil::parseUnitX(context.currentGC(), element.attribute(extendedNamespace + ":cx", "0"));
-        cy = SvgUtil::parseUnitY(context.currentGC(), element.attribute(extendedNamespace + ":cy", "0"));
+        rx = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute(extendedNamespace + ":rx"));
+        ry = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute(extendedNamespace + ":ry"));
+        cx = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute(extendedNamespace + ":cx", "0"));
+        cy = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute(extendedNamespace + ":cy", "0"));
         start = 2 * M_PI - SvgUtil::parseNumber(element.attribute(extendedNamespace + ":end"));
         end = 2 * M_PI - SvgUtil::parseNumber(element.attribute(extendedNamespace + ":start"));
 

@@ -361,7 +361,7 @@ struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercenta
     void convertToAbsolute(const qreal fontSizeInPt, const qreal fontXHeightInPt, const UnitType percentageUnit = Em);
 
     bool operator==(const CssLengthPercentage & other) const {
-        return value == other.value && unit == other.unit;
+        return qFuzzyCompare(value, other.value) && unit == other.unit;
     }
 };
 
@@ -387,7 +387,7 @@ struct AutoValue : public boost::equality_comparable<AutoValue>
     qreal customValue = 0.0;
 
     bool operator==(const AutoValue & other) const {
-        return isAuto == other.isAuto && (isAuto || customValue == other.customValue);
+        return isAuto == other.isAuto && (isAuto || qFuzzyCompare(customValue, other.customValue));
     }
 };
 

@@ -140,8 +140,10 @@ void KoSvgTextProperties::resolveRelativeValues(const qreal fontSize, const qrea
             it.value() = QVariant::fromValue(length);
         } else if (it.value().canConvert<KoSvgText::AutoLengthPercentage>()) {
             KoSvgText::AutoLengthPercentage val = it.value().value<KoSvgText::AutoLengthPercentage>();
-            val.length.convertToAbsolute(usedSize, usedXHeight);
-            it.value() = QVariant::fromValue(val);
+            if (!val.isAuto) {
+                val.length.convertToAbsolute(usedSize, usedXHeight);
+                it.value() = QVariant::fromValue(val);
+            }
         } else if (it.key() == KoSvgTextProperties::LineHeightId) {
             KoSvgText::LineHeightInfo lineHeight = it.value().value<KoSvgText::LineHeightInfo>();
             lineHeight.length.convertToAbsolute(usedSize, usedXHeight);

@@ -597,7 +597,7 @@ struct TabSizeInfo : public boost::equality_comparable<TabSizeInfo> {
                               ///< written to css and only used during layout.
     bool operator==(const TabSizeInfo &rhs) const
     {
-        bool val = isNumber? value == rhs.value: length == rhs.length;
+        bool val = isNumber? qFuzzyCompare(value, rhs.value): length == rhs.length;
         return (val) && (isNumber == rhs.isNumber);
     }
 };
@@ -615,7 +615,7 @@ struct LineHeightInfo : public boost::equality_comparable<LineHeightInfo> {
     bool operator==(const LineHeightInfo &rhs) const
     {
         bool toggles = (isNumber == rhs.isNumber && isNormal == rhs.isNormal);
-        bool val = isNumber? value == rhs.value: length == rhs.length;
+        bool val = isNumber? qFuzzyCompare(value, rhs.value): length == rhs.length;
         return (toggles && val);
     }
 };

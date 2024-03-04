@@ -146,12 +146,16 @@ void KoSvgTextProperties::resolveRelativeValues(const qreal fontSize, const qrea
             }
         } else if (it.key() == KoSvgTextProperties::LineHeightId) {
             KoSvgText::LineHeightInfo lineHeight = it.value().value<KoSvgText::LineHeightInfo>();
-            lineHeight.length.convertToAbsolute(usedSize, usedXHeight);
-            it.value() = QVariant::fromValue(lineHeight);
+            if (!lineHeight.isNormal && !lineHeight.isNumber) {
+                lineHeight.length.convertToAbsolute(usedSize, usedXHeight);
+                it.value() = QVariant::fromValue(lineHeight);
+            }
         } else if (it.key() == KoSvgTextProperties::TabSizeId) {
             KoSvgText::TabSizeInfo tabSize = it.value().value<KoSvgText::TabSizeInfo>();
-            tabSize.length.convertToAbsolute(usedSize, usedXHeight);
-            it.value() = QVariant::fromValue(tabSize);
+            if (!tabSize.isNumber) {
+                tabSize.length.convertToAbsolute(usedSize, usedXHeight);
+                it.value() = QVariant::fromValue(tabSize);
+            }
         } else if (it.key() == KoSvgTextProperties::TextIndentId) {
             KoSvgText::TextIndentInfo indent = it.value().value<KoSvgText::TextIndentInfo>();
             if (indent.length.unit != KoSvgText::CssLengthPercentage::Percentage) {

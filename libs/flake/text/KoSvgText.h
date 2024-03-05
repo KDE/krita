@@ -344,6 +344,24 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(TextSpaceTrims)
 Q_DECLARE_FLAGS(HangingPunctuations, HangingPunctuation)
 Q_DECLARE_OPERATORS_FOR_FLAGS(HangingPunctuations)
 
+/**
+ * CssLengthPercentage is a struct that represents the CSS length-percentage,
+ * which is Css' way of saying that an attribute can be either a length (which
+ * are unit-based, including font-relative units) or a percentage (which is
+ * relative to a value on a case-by-case basis).
+ *
+ * Most percentages in SVG are viewport based, which we just resolve during
+ * parsing, because KoShapes do not know anything about the doc they're in. A
+ * handful are font-size based, which we resolve to em, and this is also what
+ * this struct defaults to. A very small subset (text-indent and text path
+ * start-offset) are relative to other things, and these are solved during
+ * text-layout.
+ *
+ * We currently use this for both Lengths and LengthPercentages (always saving
+ * as EM when it is a Length, in the case of TabSize). Whether and how a
+ * percentage should be resolved is defined in the CSS specs in the section a
+ * given property is specified.
+ */
 struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercentage> {
     enum UnitType {
         Absolute, ///< Pt, everything needs to be converted to pt for this to work.

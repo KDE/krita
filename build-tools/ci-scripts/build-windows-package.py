@@ -14,11 +14,11 @@ parser.add_argument('--build-installers', default=False, action='store_true')
 arguments = parser.parse_args()
 
 if 'KRITACI_SKIP_DEBUG_PACKAGE' in os.environ:
-    arguments.skip_debug_package = bool(os.environ['KRITACI_SKIP_DEBUG_PACKAGE'])
+    arguments.skip_debug_package = (os.environ['KRITACI_SKIP_DEBUG_PACKAGE'].lower() in ['true', '1', 't', 'y', 'yes'])
     print ('## Overriding --skip-debug-package from environment: {}'.format(arguments.skip_debug_package))
 
 if 'KRITACI_BUILD_INSTALLERS' in os.environ:
-    arguments.build_installers = bool(os.environ['KRITACI_BUILD_INSTALLERS'])
+    arguments.build_installers = (os.environ['KRITACI_BUILD_INSTALLERS'].lower() in ['true', '1', 't', 'y', 'yes'])
     print ('## Overriding --build-installers from environment: {}'.format(arguments.build_installers))
 
 buildPath = os.path.abspath('_build')

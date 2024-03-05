@@ -29670,15 +29670,16 @@ msgid "Masked Brush"
 msgstr "マスクされたブラシ"
 
 #: libs/ui/kis_popup_palette.cpp:150
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Krita の設定"
+msgstr "ドッキングパネルの設定"
 
 #: libs/ui/kis_popup_palette.cpp:163
 #, kde-format
 msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
 msgstr ""
+"ドッキングパネルはポップアップパレット上に表示されています。ここに表示するに"
+"はポップアップパレットを閉じてください。"
 
 #: libs/ui/kis_popup_palette.cpp:189
 #, kde-format
@@ -29712,22 +29713,19 @@ msgid "Fit Canvas to View"
 msgstr "キャンバスを表示領域に合わせる"
 
 #: libs/ui/kis_popup_palette.cpp:621
-#, fuzzy, kde-format
-#| msgid "Python Palette Docker"
+#, kde-format
 msgid "Configure Popup Palette dockers"
-msgstr "Python パレットドッキングパネル"
+msgstr "ポップアップパレット上のドッキングパネルを設定する"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "表示可能なプロパティ:"
+msgstr "利用可能なドッキングパネル"
 
 #: libs/ui/kis_popup_palette.cpp:622
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "現在のレイヤー"
+msgstr "現在のドッキングパネル"
 
 #: libs/ui/kis_popup_palette.cpp:1020
 #, kde-format
@@ -38647,11 +38645,10 @@ msgid "Reset to default"
 msgstr "デフォルトにリセット"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "ブラシエディタ"
+msgstr "キャンバス上ブラシエディタ"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -48240,13 +48237,15 @@ msgid ""
 "to lossless. Useful to reduce transparency artifact on lossy export.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>有効にすると、アルファチャンネル(透明度)をロスレスに設"
+"定します。ロスレスエクスポートで透明度のアーティファクトを減らすのに便利で"
+"す。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Lossless (可逆方式)"
+msgstr "ロスレスなアルファ"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -48338,10 +48337,9 @@ msgstr "画像を統合"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "色プロファイル:"
+msgstr "色プロファイル"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -48351,19 +48349,21 @@ msgid ""
 "lossless, otherwise keep using ICC. Useful to make filesize even smaller "
 "(eg. for web delivery).</p></body></html>"
 msgstr ""
+"<html><head/><body><p>ICC プロファイルがロスレスで CICP に変換可能な場合、"
+"CICP を使用し、それ以外の場合は ICC を使用します。ファイルサイズをさらに小さ"
+"くするのに便利です(例: Web 配信用)。</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:275
 #, kde-format
 msgid "(Lossless) Use CICP instead of ICC if possible"
-msgstr ""
+msgstr "(ロスレス) 可能な場合は ICC ではなく CICP を使用"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "データベースのバージョン"
+msgstr "HDR 変換"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -52741,13 +52741,15 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"強度が低いときにテクスチャを少なくします。ブラシのテクスチャなしの状態とテク"
+"スチャありの状態を切り替えるようにしたい場合にこのオプションを使用してくださ"
+"い。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "ソフトプルーフ"
+msgstr "ソフトなテクスチャリング"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -57177,11 +57179,10 @@ msgid "Spread: {n}%"
 msgstr "拡張: {n}%"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:573
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "閉じる"
+msgstr "隙間を埋める: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, kde-format
@@ -57292,10 +57293,9 @@ msgstr ""
 "塗りつぶしの不透明度が減少します。"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "設定した値だけ選択範囲をぼかします"
+msgstr "設定された量だけ線の隙間を埋めます"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
@@ -58554,11 +58554,10 @@ msgstr ""
 "す。"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "閉じる"
+msgstr "隙間を埋める: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -59002,20 +59001,14 @@ msgid "Insert Text"
 msgstr "テキストを挿入"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "テキストを挿入"
+msgstr "リッチテキストを挿入"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "レイヤーのプロパティの変更"
+msgstr "テキストのプロパティを変更"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"

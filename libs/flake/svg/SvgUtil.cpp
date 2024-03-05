@@ -226,13 +226,23 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const KoSvgTextProperties resol
     if (!start) {
         return 0.0;
     }
-    KoSvgText::CssLengthPercentage length = parseUnitStruct(gc, unit, horiz, vert, bbox, true);
+    KoSvgText::CssLengthPercentage length = parseUnitStruct(gc, unit, horiz, vert, bbox);
     length.convertToAbsolute(resolved.fontSize().value, resolved.xHeight());
 
     return length.value;
 }
 
-KoSvgText::CssLengthPercentage SvgUtil::parseUnitStruct(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox, bool percentageViewBox)
+KoSvgText::CssLengthPercentage SvgUtil::parseUnitStruct(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox)
+{
+    return parseUnitStructImpl(gc, unit, horiz, vert, bbox, true);
+}
+
+KoSvgText::CssLengthPercentage SvgUtil::parseTextUnitStruct(SvgGraphicsContext *gc, QStringView unit)
+{
+    return parseUnitStructImpl(gc, unit, false, false, QRectF(), false);
+}
+
+KoSvgText::CssLengthPercentage SvgUtil::parseUnitStructImpl(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox, bool percentageViewBox)
 {
     KoSvgText::CssLengthPercentage length;
 

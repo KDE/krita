@@ -805,7 +805,7 @@ TextIndentInfo parseTextIndent(const QString &value, const SvgLoadingContext &co
         } else if (param == "each-line") {
             textIndent.eachLine = true;
         } else {
-            textIndent.length = SvgUtil::parseUnitStruct(context.currentGC(), param);
+            textIndent.length = SvgUtil::parseTextUnitStruct(context.currentGC(), param);
             //ToDo: figure out how to detect value is number.
             //qWarning() << "Unknown parameter in text-indent" << param;
         }
@@ -831,7 +831,7 @@ TabSizeInfo parseTabSize(const QString &value, const SvgLoadingContext &context)
     TabSizeInfo tabSizeInfo;
     tabSizeInfo.value = KisDomUtils::toDouble(value, &tabSizeInfo.isNumber);
     if (!tabSizeInfo.isNumber) {
-        tabSizeInfo.length = SvgUtil::parseUnitStruct(context.currentGC(), value);
+        tabSizeInfo.length = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
     }
     return tabSizeInfo;
 }
@@ -927,7 +927,7 @@ LineHeightInfo parseLineHeight(const QString &value, const SvgLoadingContext &co
     if (lineHeight.isNumber) {
         lineHeight.value = parsed;
     } else {
-        lineHeight.length = SvgUtil::parseUnitStruct(context.currentGC(), value);
+        lineHeight.length = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
     }
 
     // Negative line-height is invalid
@@ -1020,7 +1020,8 @@ void CssLengthPercentage::convertToAbsolute(const qreal fontSizeInPt, const qrea
 AutoLengthPercentage parseAutoLengthPercentageXY(const QString &value, const SvgLoadingContext &context, const QString &autoKeyword, QRectF bbox, bool percentageIsViewPort)
 {
     return value == autoKeyword ? AutoLengthPercentage()
-                                : AutoLengthPercentage(SvgUtil::parseUnitStruct(context.currentGC(), value, true, true, bbox, percentageIsViewPort));
+                                : percentageIsViewPort? AutoLengthPercentage(SvgUtil::parseUnitStruct(context.currentGC(), value, true, true, bbox))
+                                                      : AutoLengthPercentage(SvgUtil::parseTextUnitStruct(context.currentGC(), value));
 }
 
 QString writeAutoLengthPercentage(const AutoLengthPercentage &value, const QString &autoKeyword, bool percentageToEm)

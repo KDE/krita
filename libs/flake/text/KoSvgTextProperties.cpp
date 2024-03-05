@@ -249,7 +249,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         KoSvgText::BaselineShiftMode mode = KoSvgText::parseBaselineShiftMode(value);
         setProperty(BaselineShiftModeId, mode);
         if (mode == KoSvgText::ShiftLengthPercentage) {
-            KoSvgText::CssLengthPercentage shift = SvgUtil::parseUnitStruct(context.currentGC(), value, true, true, context.currentGC()->currentBoundingBox);
+            KoSvgText::CssLengthPercentage shift = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
             setProperty(BaselineShiftValueId, QVariant::fromValue(shift));
         }
     } else if (command == "vertical-align") {
@@ -412,11 +412,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(FontWeightId, weight);
 
     } else if (command == "font-size") {
-        const KoSvgText::CssLengthPercentage pointSize = SvgUtil::parseUnitStruct(context.currentGC(),
-                                                                                  value,
-                                                                                  true,
-                                                                                  true,
-                                                                                  context.currentGC()->currentBoundingBox);
+        const KoSvgText::CssLengthPercentage pointSize = SvgUtil::parseTextUnitStruct(context.currentGC(), value);
         if (pointSize.value > 0.0) {
             setProperty(FontSizeId, QVariant::fromValue(pointSize));
         }

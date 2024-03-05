@@ -94,7 +94,18 @@ public:
                            bool horiz = false,
                            bool vert = false,
                            const QRectF &bbox = QRectF());
+    /// Parse length attribute into a struct, always resolving the percentage to viewport
     static KoSvgText::CssLengthPercentage parseUnitStruct(SvgGraphicsContext *gc,
+                           QStringView unit,
+                           bool horiz = false,
+                           bool vert = false,
+                           const QRectF &bbox = QRectF());
+
+    /// Unit structs for text do not need the percentage to be resolved to viewport in most cases.
+    static KoSvgText::CssLengthPercentage parseTextUnitStruct(SvgGraphicsContext *gc, QStringView unit);
+
+    /// Parse length attribute into struct.
+    static KoSvgText::CssLengthPercentage parseUnitStructImpl(SvgGraphicsContext *gc,
                                                           QStringView,
                                                           bool horiz = false,
                                                           bool vert = false,

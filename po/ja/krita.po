@@ -37938,9 +37938,6 @@ msgid "Zoom view to fit curve."
 msgstr "表示をカーブに合わせる"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
 msgstr "スカラーキーフレームを追加"
@@ -60369,12 +60366,3 @@ msgstr "表示拡大縮小ツール"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "資料画像ツール"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "拡大:"
-
-#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-#~ msgid "Feather: "
-#~ msgstr "塗り広げ:"

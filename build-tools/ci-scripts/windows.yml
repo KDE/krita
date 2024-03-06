@@ -49,6 +49,7 @@ windows-packages:
   extends:
   - windows-build
   when: manual
+  interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"
     KRITACI_SKIP_DEBUG_PACKAGE: "False"

@@ -844,8 +844,8 @@ void KoSvgTextShape::Private::relayout()
     debugFlake << "9. return result.";
     globalIndex = 0;
     QVector<CursorPos> cursorPos;
-    for (auto it = textData.depthFirstTailBegin(); it != textData.depthFirstTailEnd(); it++) {
-        const int j = it->text.size();
+    for (auto chunk = textChunks.begin(); chunk != textChunks.end(); chunk++) {
+        const int j = chunk->text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
             if (result.at(i).addressable && !result.at(i).middle) {
 
@@ -889,7 +889,7 @@ void KoSvgTextShape::Private::relayout()
 
                 if (!result.at(i).hidden) {
                     const QTransform tf = result.at(i).finalTransform();
-                    it->associatedOutline.addRect(tf.mapRect(result.at(i).boundingBox));
+                    chunk->associatedLeaf->associatedOutline.addRect(tf.mapRect(result.at(i).boundingBox));
                 }
             }
         }

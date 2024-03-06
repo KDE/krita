@@ -42,6 +42,7 @@ linux-packages:
   extends:
   - linux-build
   when: manual
+  interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF"

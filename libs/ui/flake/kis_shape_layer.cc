@@ -67,6 +67,8 @@
 #include <QThread>
 #include <QApplication>
 
+#include "kis_layer_properties_icons.h"
+
 
 #include <SimpleShapeContainerModel.h>
 class ShapeLayerContainerModel : public SimpleShapeContainerModel
@@ -127,6 +129,7 @@ public:
         , controller(0)
         , x(0)
         , y(0)
+        , isAntialiased(true)
          {}
 
     KisPaintDeviceSP paintDevice;
@@ -134,6 +137,7 @@ public:
     KoShapeControllerBase* controller;
     int x;
     int y;
+    bool isAntialiased;
     KisSignalAutoConnectionsStore imageConnections;
 };
 
@@ -170,6 +174,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
         , m_d(new Private())
 {
     initShapeLayerImpl(controller, canvasFactory());
+    m_d->isAntialiased = _rhs.m_d->isAntialiased;
 
     /**
      * The transformations of the added shapes are automatically merged into the transformation
@@ -196,6 +201,8 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
 {
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
+
+    m_d->isAntialiased = _rhs.m_d->isAntialiased;
 
     const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(_rhs.canvas());
     KIS_ASSERT(shapeLayerCanvas);
@@ -314,6 +321,27 @@ void KisShapeLayer::setImage(KisImageWSP _image)
         m_d->imageConnections.addUniqueConnection(_image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageResolutionChanged()));
         slotImageResolutionChanged();
     }
+}
+
+
+KisBaseNode::PropertyList KisShapeLayer::sectionModelProperties() const
+{
+    KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
+
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::antialiased, antialiased());
+
+    return l;
+}
+
+void KisShapeLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
+{
+    Q_FOREACH (const KisBaseNode::Property &property, properties) {
+        if (property.name == i18n("Antialiased")) {
+            setAntialiased(property.state.toBool());
+        }
+    }
+
+    KisLayer::setSectionModelProperties(properties);
 }
 
 KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
@@ -741,5 +769,22 @@ void KisShapeLayer::slotImageResolutionChanged()
     KIS_SAFE_ASSERT_RECOVER_RETURN(model);
     if (this->image()) {
         model->setResolution(image()->xRes() * 72.0, image()->yRes() * 72.0);
+    }
+}
+
+
+bool KisShapeLayer::antialiased() const
+{
+    return m_d->isAntialiased;
+}
+
+void KisShapeLayer::setAntialiased(const bool antialiased)
+{
+    const bool oldAntialiased = m_d->isAntialiased;
+
+    if (antialiased != oldAntialiased) {
+        m_d->isAntialiased = antialiased;
+        // is it the best way to rerender the vector layer?
+        if(m_d->canvas) m_d->canvas->resetCache();
     }
 }

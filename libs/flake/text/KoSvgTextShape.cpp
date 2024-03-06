@@ -1336,7 +1336,8 @@ void KoSvgTextShape::debugParsing()
 void KoSvgTextShape::paint(QPainter &painter) const
 {
     painter.save();
-    if (d->textRendering == OptimizeSpeed) {
+    if (d->textRendering == OptimizeSpeed || !painter.testRenderHint(QPainter::Antialiasing)) {
+        // also apply antialiasing only if antialiasing is active on provided target QPainter
         painter.setRenderHint(QPainter::Antialiasing, false);
         painter.setRenderHint(QPainter::SmoothPixmapTransform, false);
     } else {

@@ -421,8 +421,10 @@ void KisShapeLayerCanvas::repaint()
     QImage image(MASK_IMAGE_WIDTH, MASK_IMAGE_HEIGHT, QImage::Format_ARGB32);
     QPainter tempPainter(&image);
 
-    tempPainter.setRenderHint(QPainter::Antialiasing);
-    tempPainter.setRenderHint(QPainter::TextAntialiasing);
+    if(m_parentLayer->antialiased()) {
+        tempPainter.setRenderHint(QPainter::Antialiasing);
+        tempPainter.setRenderHint(QPainter::TextAntialiasing);
+    }
 
     quint8 * dstData = new quint8[MASK_IMAGE_WIDTH * MASK_IMAGE_HEIGHT * m_projection->pixelSize()];
 

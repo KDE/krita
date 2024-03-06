@@ -33,6 +33,7 @@ public:
     static const KoID colorizeShowColoring;
     static const KoID openFileLayerFile;
     static const KoID layerError;
+    static const KoID antialiased;
 
     static KisLayerPropertiesIcons* instance();
 

@@ -63,6 +63,10 @@ public:
      */
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     ~KisShapeLayer() override;
+
+    KisBaseNode::PropertyList sectionModelProperties() const override;
+    void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;
+
 protected:
     KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, std::function<KisShapeLayerCanvasBase *()> canvasFactory);
 private:
@@ -162,6 +166,9 @@ public:
      * used for certain undo commands.
      */
     KoSelectedShapesProxy* selectedShapesProxy();
+
+    bool antialiased() const;
+    void setAntialiased(const bool antialiased);
 
 protected:
     using KoShape::isVisible;

@@ -71,6 +71,7 @@ const QString LAYER = "layer";
 const QString LAYERS = "layers";
 const QString NODE_TYPE = "nodetype";
 const QString LOCKED = "locked";
+const QString ANTIALIASED = "antialiased";
 const QString MASK = "mask";
 const QString MASKS = "masks";
 const QString MIME = "mime";

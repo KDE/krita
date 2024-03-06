@@ -344,6 +344,11 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
             warnKrita << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
         }
     }
+
+    if (layer->inherits("KisShapeLayer") && el.hasAttribute(ANTIALIASED)) {
+        KisShapeLayer *shapeLayer = static_cast<KisShapeLayer*>(layer);
+        shapeLayer->setAntialiased(el.attribute(ANTIALIASED).toInt());
+    }
 }
 
 void KisSaveXmlVisitor::saveNodeKeyframes(const KisNode* node, QString nodeFilename, QDomElement& nodeElement)
@@ -373,6 +378,11 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(COLLAPSED, layer->collapsed());
     el.setAttribute(COLOR_LABEL, layer->colorLabelIndex());
     el.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
+
+    if(layerType == SHAPE_LAYER) {
+        const KisShapeLayer *shapeLayer = static_cast<const KisShapeLayer*>(layer);
+        el.setAttribute(ANTIALIASED, shapeLayer->antialiased());
+    }
 
     if (layer->layerStyle()) {
         el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());

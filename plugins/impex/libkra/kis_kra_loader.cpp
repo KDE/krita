@@ -1026,6 +1026,16 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
         }
     }
 
+    if (node->inherits("KisShapeLayer")) {
+        if (element.hasAttribute(ANTIALIASED)) {
+            bool value = element.attribute(ANTIALIASED, "0") != "0";
+
+            KisShapeLayer *shapeLayer = qobject_cast<KisShapeLayer*>(node.data());
+            shapeLayer->setAntialiased(value);
+        }
+    }
+
+
     const bool timelineEnabled = element.attribute(VISIBLE_IN_TIMELINE, "0") == "0" ? false : true;
     node->setPinnedToTimeline(timelineEnabled);
 

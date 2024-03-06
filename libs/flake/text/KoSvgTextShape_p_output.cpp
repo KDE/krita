@@ -108,7 +108,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                     if (background) {
                         background->paint(*fillPainter.shapePainter(), rootOutline);
                         fillPainter.maskPainter()->fillPath(rootOutline, Qt::black);
-                        if (textRendering != OptimizeSpeed) {
+                        if (textRendering != OptimizeSpeed && painter.testRenderHint(QPainter::Antialiasing)) {
+                            // also apply antialiasing only if antialiasing is active on provided target QPainter
                             fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
                             fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, true);
                         } else {
@@ -199,7 +200,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                         maskStroke->setColor(Qt::white);
                                         maskStroke->setLineBrush(Qt::white);
                                         strokePainter.maskPainter()->fillPath(rootOutline, Qt::black);
-                                        if (textRendering != OptimizeSpeed) {
+                                        if (textRendering != OptimizeSpeed && painter.testRenderHint(QPainter::Antialiasing)) {
+                                            // also apply antialiasing only if antialiasing is active on provided target QPainter
                                             strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
                                         } else {
                                             strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);

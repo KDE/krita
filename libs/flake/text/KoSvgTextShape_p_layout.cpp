@@ -1124,7 +1124,7 @@ void KoSvgTextShape::Private::applyTextLength(KisForest<KoSvgTextContentElement>
 
 void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function-cognitive-complexity)
     KisForest<KoSvgTextContentElement>::child_iterator parent,
-    KoSvgTextProperties parentProps,
+    const KoSvgTextProperties &parentProps,
     const QMap<int, int> &parentBaselineTable,
     qreal parentFontSize,
     QPointF superScript,

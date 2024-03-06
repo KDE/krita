@@ -89,9 +89,6 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const QDomElement &el
         gc = new SvgGraphicsContext();
     }
 
-    gc->textProperties.inheritFrom(gc->textProperties, true);
-    gc->textProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited
-    gc->textProperties = gc->textProperties;
     gc->textProperties = KoSvgTextProperties();
 
     gc->filterId.clear(); // filters are not inherited

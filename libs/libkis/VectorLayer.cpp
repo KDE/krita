@@ -232,3 +232,16 @@ Shape* VectorLayer::createGroupShape(const QString &name, QList<Shape *> shapes)
 
     return new GroupShape(group);
 }
+
+
+bool VectorLayer::isAntialiased() const
+{
+    KisShapeLayerSP vectorLayer = KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(this->node().data()));
+    return vectorLayer->antialiased();
+}
+
+void VectorLayer::setAntialiased(const bool antialiased)
+{
+    KisShapeLayerSP vectorLayer = KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(this->node().data()));
+    vectorLayer->setAntialiased(antialiased);
+}

@@ -26,6 +26,8 @@ public Q_SLOTS:
     Shape* shapeAtPosition(const QPointF &point) const /Factory/;
     QList<Shape *> shapesInRect(const QRectF &rect, bool omitHiddenShapes = true, bool containedMode = false) const /Factory/;
     Shape* createGroupShape(const QString &name, QList<Shape *> shapes) const /Factory/;
+    bool isAntialiased() const;
+    void setAntialiased(const bool antialiased);
 Q_SIGNALS:
 private:
 };

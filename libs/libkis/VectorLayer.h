@@ -95,6 +95,17 @@ public Q_SLOTS:
      */
     Shape* createGroupShape(const QString &name, QList<Shape *> shapes) const;
 
+    /**
+     * @brief return antialiasing status for the Vector layer
+     * @return True if antialiasing is active for the layer
+     */
+    bool isAntialiased() const;
+
+    /**
+     * @brief set antialiasing status for the Vector layer
+     * @param antialiased set to True to activate antialiasing
+     */
+    void setAntialiased(const bool antialiased);
 };
 
 #endif // LIBKIS_VECTORLAYER_H

@@ -77,7 +77,18 @@ public:
     /// The associated outline. Currently only a bounding box.
     QPainterPath associatedOutline;
 
-    bool loadSvg(const QDomElement &element, SvgLoadingContext &context, bool root = false);
+    /**
+     * @brief loadSvg
+     * load SVG style data into the current content element.
+     * @param element -- xml element to load the data from.
+     * @param context -- loading context.
+     * @param rootNode -- whether this content element is a <text /> node. During text layout,
+     * text properties are inherited dynamically. However, we can only start at the root text node,
+     * while SVG can have properties that are set on the document root and inherit. Therefore, when
+     * loading we inherit and resolve those properties dynamically for the root node only.
+     * @return whether successful.
+     */
+    bool loadSvg(const QDomElement &element, SvgLoadingContext &context, bool rootNode = false);
 
     bool loadSvgTextNode(const QDomText &text, SvgLoadingContext &context);
 

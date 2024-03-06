@@ -17,6 +17,6 @@ for /r "%pkg_root%\" %%F in (*.exe *.com *.dll *.pyd) do (
     echo %%F >> files-to-sign.txt
 )
 
-python.exe -u ci-notary-service/signwindowsbinaries.py --config krita-deps-management/ci-utilities/signing/windowsbinariessigner.ini --files-from files-to-sign.txt
+python.exe -u ci-notary-service/signwindowsbinaries.py --config krita-deps-management/ci-utilities/signing/signwindowsbinaries.ini --files-from files-to-sign.txt
 
 endlocal

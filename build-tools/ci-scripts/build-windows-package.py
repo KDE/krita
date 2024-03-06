@@ -85,7 +85,7 @@ if arguments.build_installers:
 
     commandToRun = ' '.join([sys.executable,
                             os.path.join('ci-notary-service', 'signwindowsbinaries.py'),
-                            '--config', os.path.join('krita-deps-management', 'ci-utilities', 'signing', 'windowsbinariessigner.ini'),
+                            '--config', os.path.join('krita-deps-management', 'ci-utilities', 'signing', 'signwindowsbinaries.ini'),
                             installerFileName
                             ])
 

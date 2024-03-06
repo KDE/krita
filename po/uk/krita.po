@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2024-03-01 20:07+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -37409,7 +37409,7 @@ msgstr "Зберегти допоміжний набір"
 msgid "Concentric Ellipse assistant"
 msgstr "Допоміжний інструмент концентричного еліпса"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Концентричний еліпс"
@@ -37457,7 +37457,7 @@ msgstr "Еліпс"
 msgid "Fish Eye Point assistant"
 msgstr "Допоміжний засіб точки «риб’ячого ока»"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Точка «риб’ячого ока»"
@@ -37587,7 +37587,7 @@ msgstr "Допоміжний інструмент"
 msgid "Parallel Ruler assistant"
 msgstr "Допоміжна паралельна лінійка"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "Паралельна лінійка"
@@ -37599,7 +37599,7 @@ msgstr "Інструмент створення перспективи"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37611,7 +37611,7 @@ msgstr "Перспектива"
 msgid "Perspective Ellipse assistant"
 msgstr "Інструмент створення перспективи еліпса"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Перспектива еліпса"
@@ -37642,7 +37642,7 @@ msgstr "Сплайни"
 msgid "Two point assistant"
 msgstr "Допоміжний інструмент двоточкової перспективи"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Двоточкова перспектива"
@@ -37652,7 +37652,7 @@ msgstr "Двоточкова перспектива"
 msgid "Vanishing Point assistant"
 msgstr "Допоміжна точка сходу"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Точка сходу"

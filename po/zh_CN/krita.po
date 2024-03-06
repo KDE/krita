@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2024-02-29 13:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -36507,7 +36507,7 @@ msgstr "保存辅助尺布局"
 msgid "Concentric Ellipse assistant"
 msgstr "同心椭圆辅助尺"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "同心椭圆"
@@ -36549,7 +36549,7 @@ msgstr "椭圆"
 msgid "Fish Eye Point assistant"
 msgstr "鱼眼透视辅助尺"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "鱼眼透视"
@@ -36678,7 +36678,7 @@ msgstr "辅助尺工具"
 msgid "Parallel Ruler assistant"
 msgstr "平行线辅助尺"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "平行线"
@@ -36690,7 +36690,7 @@ msgstr "透视辅助尺"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -36702,7 +36702,7 @@ msgstr "透视"
 msgid "Perspective Ellipse assistant"
 msgstr "透视椭圆辅助尺"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "透视椭圆"
@@ -36733,7 +36733,7 @@ msgstr "曲线"
 msgid "Two point assistant"
 msgstr "两点透视辅助尺"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "两点透视"
@@ -36743,7 +36743,7 @@ msgstr "两点透视"
 msgid "Vanishing Point assistant"
 msgstr "灭点辅助尺"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "灭点"

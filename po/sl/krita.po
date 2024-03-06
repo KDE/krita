@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2024-03-03 09:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -36935,7 +36935,7 @@ msgstr "Shrani nabor pomočnika"
 msgid "Concentric Ellipse assistant"
 msgstr "Pomočnik za koncentrične elipse"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Koncentrična elipsa"
@@ -36977,7 +36977,7 @@ msgstr "Elipsa"
 msgid "Fish Eye Point assistant"
 msgstr "Pomočnik točke ribjega očesa"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Točka ribjega očesa"
@@ -37106,7 +37106,7 @@ msgstr "Orodje Pomočnik"
 msgid "Parallel Ruler assistant"
 msgstr "Pomočnik za vzporedno merilo"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "Vzporedno ravnilo"
@@ -37118,7 +37118,7 @@ msgstr "Pomočnik za perspektivo"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37130,7 +37130,7 @@ msgstr "Perspektiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Pomočnik za elipso v perspektivi"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Elipsa v perspektivi"
@@ -37161,7 +37161,7 @@ msgstr "Zlepek"
 msgid "Two point assistant"
 msgstr "Pomočnik za dve točki"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Perspektiva dveh točk"
@@ -37171,7 +37171,7 @@ msgstr "Perspektiva dveh točk"
 msgid "Vanishing Point assistant"
 msgstr "Pomočnik za točko izginotja"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Točka izginotja"

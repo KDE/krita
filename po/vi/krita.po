@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2022-05-31 11:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -36511,7 +36511,7 @@ msgstr "Khoảng cách:"
 msgid "Concentric Ellipse assistant"
 msgstr "Khoảng cách:"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "Chọn Tất cả"
@@ -36556,7 +36556,7 @@ msgstr "Hình êlíp"
 msgid "Fish Eye Point assistant"
 msgstr "Hiện thước kẻ"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "tuỳ chọn"
@@ -36685,7 +36685,7 @@ msgstr "Khoảng cách:"
 msgid "Parallel Ruler assistant"
 msgstr "Khoảng cách:"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "Khoảng cách:"
@@ -36697,7 +36697,7 @@ msgstr "Công cụ &xoá"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -36709,7 +36709,7 @@ msgstr "Công cụ &xoá"
 msgid "Perspective Ellipse assistant"
 msgstr "Công cụ &xoá"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "Công cụ &xoá"
@@ -36740,7 +36740,7 @@ msgstr "Hình sin"
 msgid "Two point assistant"
 msgstr "Khoảng cách:"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "Công cụ &xoá"
@@ -36750,7 +36750,7 @@ msgstr "Công cụ &xoá"
 msgid "Vanishing Point assistant"
 msgstr "Hiện thước kẻ"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "tuỳ chọn"

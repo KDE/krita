@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -36935,7 +36935,7 @@ msgstr "Cúntóir:"
 msgid "Concentric Ellipse assistant"
 msgstr "Uirlis Éilipse"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "Roghnaigh Uile"
@@ -36981,7 +36981,7 @@ msgstr "Éilips"
 msgid "Fish Eye Point assistant"
 msgstr "Cúntóir:"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "Súil an éisc"
@@ -37113,7 +37113,7 @@ msgstr "Cúntóir:"
 msgid "Parallel Ruler assistant"
 msgstr "Uirlis Éilipse"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "Uirlis Éilipse"
@@ -37125,7 +37125,7 @@ msgstr "Greille pheirspictíochta"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -37137,7 +37137,7 @@ msgstr "Greille pheirspictíochta"
 msgid "Perspective Ellipse assistant"
 msgstr "Greille pheirspictíochta"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -37169,7 +37169,7 @@ msgstr "B-Splíona"
 msgid "Two point assistant"
 msgstr "Cúntóir:"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "Greille pheirspictíochta"
@@ -37179,7 +37179,7 @@ msgstr "Greille pheirspictíochta"
 msgid "Vanishing Point assistant"
 msgstr "Cúntóir:"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "Súil an éisc"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2024-03-01 15:28+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -36896,7 +36896,7 @@ msgstr "Yardımcı Kümesini Kaydet"
 msgid "Concentric Ellipse assistant"
 msgstr "Ortak Merkezli Elips yardımcısı"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, kde-format
 msgid "Concentric Ellipse"
 msgstr "Ortak Merkezli Elips"
@@ -36938,7 +36938,7 @@ msgstr "Elips"
 msgid "Fish Eye Point assistant"
 msgstr "Balık Gözü Noktası yardımcısı"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, kde-format
 msgid "Fish Eye Point"
 msgstr "Balık Gözü Noktası"
@@ -37067,7 +37067,7 @@ msgstr "Yardımcı Araç"
 msgid "Parallel Ruler assistant"
 msgstr "Paralel Cetvel yardımcısı"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, kde-format
 msgid "Parallel Ruler"
 msgstr "Paralel Cetvel"
@@ -37079,7 +37079,7 @@ msgstr "Perspektif yardımcısı"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, kde-format
@@ -37091,7 +37091,7 @@ msgstr "Perspektif"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektif Elips yardımcısı"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektif Elips"
@@ -37122,7 +37122,7 @@ msgstr "Şerit"
 msgid "Two point assistant"
 msgstr "İki nokta yardımcısı"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "2 Noktalı Perspektif"
@@ -37132,7 +37132,7 @@ msgstr "2 Noktalı Perspektif"
 msgid "Vanishing Point assistant"
 msgstr "Ufuk Noktası Yardımcısı"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, kde-format
 msgid "Vanishing Point"
 msgstr "Ufuk Noktası"

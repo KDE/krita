@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-29 03:09+0000\n"
+"POT-Creation-Date: 2024-03-06 02:57+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -36275,7 +36275,7 @@ msgstr "ละลาย"
 msgid "Concentric Ellipse assistant"
 msgstr "ตัวช่วยไม้บรรทัด"
 
-#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:219
+#: plugins/assistants/Assistants/ConcentricEllipseAssistant.cc:198
 #, fuzzy, kde-format
 msgid "Concentric Ellipse"
 msgstr "เลือกทั้งหมด"
@@ -36320,7 +36320,7 @@ msgstr "เครื่องมือวาด&วงรี"
 msgid "Fish Eye Point assistant"
 msgstr "ตัวช่วยไม้บรรทัด"
 
-#: plugins/assistants/Assistants/FisheyePointAssistant.cc:229
+#: plugins/assistants/Assistants/FisheyePointAssistant.cc:208
 #, fuzzy, kde-format
 msgid "Fish Eye Point"
 msgstr "ตัวเลือกสี"
@@ -36449,7 +36449,7 @@ msgstr "ละลาย"
 msgid "Parallel Ruler assistant"
 msgstr "ตัวช่วยไม้บรรทัด"
 
-#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:238
+#: plugins/assistants/Assistants/ParallelRulerAssistant.cc:215
 #, fuzzy, kde-format
 msgid "Parallel Ruler"
 msgstr "ตัวช่วยไม้บรรทัด"
@@ -36461,7 +36461,7 @@ msgstr "เครื่องมือ&ย้ายภาพ"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, perspectiveTransformButton)
 #. i18n: ectx: property (text), widget (QToolButton, perspectiveTransformButton)
-#: plugins/assistants/Assistants/PerspectiveAssistant.cc:376
+#: plugins/assistants/Assistants/PerspectiveAssistant.cc:362
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:152
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:155
 #, fuzzy, kde-format
@@ -36473,7 +36473,7 @@ msgstr "เครื่องมือ&ย้ายภาพ"
 msgid "Perspective Ellipse assistant"
 msgstr "เครื่องมือ&ย้ายภาพ"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:640
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "เครื่องมือ&ย้ายภาพ"
@@ -36504,7 +36504,7 @@ msgstr "ลิงค์"
 msgid "Two point assistant"
 msgstr "ตัวช่วยไม้บรรทัด"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:547
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "เครื่องมือ&ย้ายภาพ"
@@ -36514,7 +36514,7 @@ msgstr "เครื่องมือ&ย้ายภาพ"
 msgid "Vanishing Point assistant"
 msgstr "ตัวช่วยไม้บรรทัด"
 
-#: plugins/assistants/Assistants/VanishingPointAssistant.cc:364
+#: plugins/assistants/Assistants/VanishingPointAssistant.cc:341
 #, fuzzy, kde-format
 msgid "Vanishing Point"
 msgstr "ตัวเลือกสี"

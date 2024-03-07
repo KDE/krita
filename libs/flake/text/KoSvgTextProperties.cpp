@@ -49,7 +49,7 @@ KoSvgTextProperties &KoSvgTextProperties::operator=(const KoSvgTextProperties &r
     return *this;
 }
 
-bool KoSvgTextProperties::operator==(const KoSvgTextProperties &rhs) {
+bool KoSvgTextProperties::operator==(const KoSvgTextProperties &rhs) const {
     return m_d->properties == rhs.m_d->properties;
 }
 

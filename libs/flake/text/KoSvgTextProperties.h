@@ -126,7 +126,7 @@ public:
 
     KoSvgTextProperties(const KoSvgTextProperties &rhs);
     KoSvgTextProperties& operator=(const KoSvgTextProperties &rhs);
-    bool operator==(const KoSvgTextProperties &rhs);
+    bool operator==(const KoSvgTextProperties &rhs) const;
 
     /**
      * Set the property \p id to \p value

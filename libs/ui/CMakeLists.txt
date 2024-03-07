@@ -164,6 +164,7 @@ set(kritaui_LIB_SRCS
     KisIdleTasksManager.cpp
     KisIdleTaskStrokeStrategy.cpp
     KisImageThumbnailStrokeStrategy.cpp
+    KisTextPropertiesManager.cpp
 
     opengl/kis_opengl.cpp
     opengl/kis_opengl_canvas2.cpp

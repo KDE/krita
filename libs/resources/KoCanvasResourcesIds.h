@@ -63,7 +63,8 @@ enum CanvasResourceId {
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     DecorationThickness, ///< Integer, the thickness of single px decorations, will be adjusted by HiDPI settings. Because most of our decorations are drawn without anti-aliasing, this is an integer, so that line thickness won't vary as the painter tries round the floating point.
     UsingOtherColor,    ///<- a boolean that is controlled by the tool invocation action
-    ColorHistory // Color history if not per document
+    ColorHistory, ///< Color history if not per document
+    SvgTextPropertyData, ///< KoSvgTextPropertyDataStruct
 };
 
 }

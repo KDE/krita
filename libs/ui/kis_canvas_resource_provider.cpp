@@ -18,6 +18,7 @@
 #include <resources/KoStopGradient.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoResource.h>
+#include <KoSvgTextPropertyData.h>
 
 #include <resources/KoPattern.h>
 #include <kis_paint_device.h>
@@ -543,6 +544,16 @@ void KisCanvasResourceProvider::setDisablePressure(bool value)
 bool KisCanvasResourceProvider::disablePressure() const
 {
     return m_resourceManager->resource(KoCanvasResource::DisablePressure).toBool();
+}
+
+void KisCanvasResourceProvider::setTextPropertyData(KoSvgTextPropertyData data)
+{
+    m_resourceManager->setResource(KoCanvasResource::SvgTextPropertyData, QVariant::fromValue(data));
+}
+
+KoSvgTextPropertyData KisCanvasResourceProvider::textPropertyData() const
+{
+    return m_resourceManager->resource(KoCanvasResource::SvgTextPropertyData).value<KoSvgTextPropertyData>();
 }
 
 void KisCanvasResourceProvider::notifyLoadingWorkspace(KisWorkspaceResourceSP workspace)

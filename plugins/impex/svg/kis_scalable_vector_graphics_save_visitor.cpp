@@ -3,7 +3,7 @@
 
 #include <QDomElement>
 #include <QImage>
-
+#include <QBuffer>
 #include <KoCompositeOpRegistry.h>
 
 #include "kis_adjustment_layer.h"

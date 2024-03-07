@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-28 01:34+0000\n"
+"POT-Creation-Date: 2024-03-07 01:32+0000\n"
 "PO-Revision-Date: 2024-02-29 12:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -16300,7 +16300,7 @@ msgstr "%1的选项"
 msgid "Active tool: %1"
 msgstr "活动工具：%1"
 
-#: libs/flake/svg/SvgParser.cpp:1870
+#: libs/flake/svg/SvgParser.cpp:1869
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16312,30 +16312,30 @@ msgstr ""
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1572
+#: libs/flake/text/KoSvgTextShape.cpp:1567
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "占位符文本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1551
+#: libs/flake/text/KoSvgTextShape.cpp:1546
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1553
-#: libs/flake/text/KoSvgTextShape.cpp:1561
+#: libs/flake/text/KoSvgTextShape.cpp:1548
+#: libs/flake/text/KoSvgTextShape.cpp:1556
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1559
+#: libs/flake/text/KoSvgTextShape.cpp:1554
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1582
+#: libs/flake/text/KoSvgTextShape.cpp:1577
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

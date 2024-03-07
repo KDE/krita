@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-02-28 01:34+0000\n"
+"POT-Creation-Date: 2024-03-07 01:32+0000\n"
 "PO-Revision-Date: 2023-11-10 14:24+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -16538,7 +16538,7 @@ msgstr "Параметры %1"
 msgid "Active tool: %1"
 msgstr "Активный инструмент: %1"
 
-#: libs/flake/svg/SvgParser.cpp:1870
+#: libs/flake/svg/SvgParser.cpp:1869
 #, kde-format
 msgctxt "warning while loading SVG text"
 msgid ""
@@ -16551,7 +16551,7 @@ msgstr ""
 "который больше не будет совместим с Krita 4.x"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1572
+#: libs/flake/text/KoSvgTextShape.cpp:1567
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -16559,25 +16559,25 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>Замещающий текст</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1551
+#: libs/flake/text/KoSvgTextShape.cpp:1546
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1553
-#: libs/flake/text/KoSvgTextShape.cpp:1561
+#: libs/flake/text/KoSvgTextShape.cpp:1548
+#: libs/flake/text/KoSvgTextShape.cpp:1556
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма текста SVG"
 
 # ?
-#: libs/flake/text/KoSvgTextShape.cpp:1559
+#: libs/flake/text/KoSvgTextShape.cpp:1554
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1582
+#: libs/flake/text/KoSvgTextShape.cpp:1577
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"

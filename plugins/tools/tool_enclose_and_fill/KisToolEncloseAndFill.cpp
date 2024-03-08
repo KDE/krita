@@ -450,6 +450,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
     m_checkBoxCustomBlendingOptions = new QCheckBox(i18n("Use custom blending options"));
+    m_checkBoxCustomBlendingOptions->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
     m_sliderCustomOpacity = new KisSliderSpinBox;
     m_sliderCustomOpacity->setRange(0, 100);
     KisSpinBoxI18nHelper::setText(m_sliderCustomOpacity,
@@ -634,6 +635,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_checkBoxRegionSelectionIncludeContourRegions->setChecked(m_regionSelectionIncludeContourRegions);
     sectionWhatToFill->setWidgetVisible(
         "checkBoxRegionSelectionIncludeContourRegions",
+        m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegions ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithSpecificColor ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithTransparent ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent ||
@@ -1037,6 +1039,7 @@ void KisToolEncloseAndFill::slot_comboBoxRegionSelectionMethod_currentIndexChang
     );
     sectionWhatToFill->setWidgetVisible(
         "checkBoxRegionSelectionIncludeContourRegions",
+        m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegions ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithSpecificColor ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithTransparent ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsFilledWithSpecificColorOrTransparent ||

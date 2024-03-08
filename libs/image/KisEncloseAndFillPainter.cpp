@@ -318,9 +318,13 @@ void KisEncloseAndFillPainter::encloseAndFillColor(KisPixelSelectionSP enclosing
 {
     genericEncloseAndFillStart(enclosingMask, referenceDevice);
 
+    const QRect fillRect = currentFillSelection()->selectedExactRect();
+    if (fillRect.isEmpty()) {
+        return;
+    }
+
     // Now create a layer and fill it
     KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
-    const QRect fillRect = currentFillSelection()->selectedExactRect();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRect(fillRect, paintColor());
@@ -335,9 +339,13 @@ void KisEncloseAndFillPainter::encloseAndFillPattern(KisPixelSelectionSP enclosi
 {
     genericEncloseAndFillStart(enclosingMask, referenceDevice);
 
+    const QRect fillRect = currentFillSelection()->selectedExactRect();
+    if (fillRect.isEmpty()) {
+        return;
+    }
+
     // Now create a layer and fill it
     KisPaintDeviceSP filled = device()->createCompositionSourceDevice();
-    const QRect fillRect = currentFillSelection()->selectedExactRect();
     Q_CHECK_PTR(filled);
     KisFillPainter painter(filled);
     painter.fillRectNoCompose(fillRect, pattern(), patternTransform);
@@ -498,10 +506,16 @@ void KisEncloseAndFillPainter::Private::selectAllRegions(KisPixelSelectionSP res
                                                          const QRect &enclosingMaskRect,
                                                          KisPaintDeviceSP referenceDevice) const
 {
+    if (regionSelectionIncludeContourRegions && regionSelectionInvert) {
+        // Nothing is selected in this case, so return early
+        return;
+    }
     resultMask->applySelection(enclosingMask, SELECTION_REPLACE);
-    KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
-    selectRegionsFromContour(mask, enclosingMask, enclosingMaskRect, referenceDevice);
-    resultMask->applySelection(mask, SELECTION_SUBTRACT);
+    if (!regionSelectionIncludeContourRegions) {
+        KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
+        selectRegionsFromContour(mask, enclosingMask, enclosingMaskRect, referenceDevice);
+        resultMask->applySelection(mask, SELECTION_SUBTRACT);
+    }
     if (resultMaskRect) {
         *resultMaskRect = resultMask->selectedExactRect();
     }

@@ -37075,12 +37075,9 @@ msgid "Zoom view to fit curve."
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Add Keyframe"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Přidat klíčový snímek"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -56521,12 +56518,10 @@ msgid "Threshold: "
 msgstr "Práh: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
-msgstr "Rozptyl: "
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -58828,8 +58823,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "Zvětšit: "

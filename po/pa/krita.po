@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 01:32+0000\n"
+"POT-Creation-Date: 2024-03-09 01:41+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18081,8 +18081,8 @@ msgstr "ਸਾਈਜ਼"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:481
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:493
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:494
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -27738,7 +27738,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Pattern"
@@ -27762,7 +27762,7 @@ msgstr "ਗਰਿੱਡ"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"
 msgid "Brush"
@@ -29538,7 +29538,7 @@ msgstr "ਲਾਈਨਾਂ"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
 #: plugins/tools/basictools/kis_tool_fill.cc:634
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Foreground color"
@@ -29549,7 +29549,7 @@ msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Background color"
@@ -31741,7 +31741,7 @@ msgstr "...ਸੰਰਚਨਾ"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
 #: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt "{n} is the number value, % is the percent sign"
@@ -36541,7 +36541,7 @@ msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/basictools/kis_tool_fill.cc:653
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
@@ -39589,7 +39589,7 @@ msgstr "ਸ਼ਕਲ"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgid "Ellipse"
@@ -41549,7 +41549,7 @@ msgstr ""
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, fuzzy, kde-format
 #| msgid "Line Style"
 msgid "Rectangle"
@@ -61511,7 +61511,7 @@ msgid "Fill all regions of a similar color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -61522,7 +61522,7 @@ msgstr ""
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -61533,13 +61533,13 @@ msgstr ""
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:639
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -61550,7 +61550,7 @@ msgstr ""
 "ਇੰਪੋਰਟ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਿਆ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not import\n"
@@ -61579,7 +61579,7 @@ msgid "Boundary color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
@@ -61587,7 +61587,7 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
@@ -61600,7 +61600,7 @@ msgid "Close gaps in lines up to the set amount"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -61608,38 +61608,38 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:652
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid "Fill regions found from the active layer"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:657
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgid ""
@@ -61660,7 +61660,7 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:663
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
 #, fuzzy, kde-format
 #| msgid "Remove points"
 msgid "Reset the options to their default values"
@@ -64449,14 +64449,14 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:467
 #, fuzzy, kde-format
 #| msgid "Set background"
 msgctxt ""
@@ -64465,7 +64465,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
 #, fuzzy, kde-format
 #| msgid "Insert page"
 msgctxt ""
@@ -64474,158 +64474,158 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:475
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:479
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:490
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
 #, fuzzy, kde-format
 #| msgid "Replace"
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "ਤਬਦੀਲ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Bezier Curve"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #, kde-format
 msgid "Lasso"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:552
 #, fuzzy, kde-format
 #| msgid "View mode"
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "ਵੇਖਣ ਮੋਡ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:558
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
 #, fuzzy, kde-format
 #| msgid "Configure"
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "ਸੰਰਚਨਾ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, fuzzy, kde-format
 #| msgid "Delete shape"
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "ਸ਼ਕਲ ਹਟਾਓ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:592
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:593
 #, fuzzy, kde-format
 #| msgid "Create shape"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:601
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:602
 #, fuzzy, kde-format
 #| msgid "Document"
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "ਡੌਕੂਮੈਂਟ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:855
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:858
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:861
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:864
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, fuzzy, kde-format
 #| msgid "Line Color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "ਰੇਖਾ ਰੰਗ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:867
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:870
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:873
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:876
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:879
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਰੰਗ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:882
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:884
 #, fuzzy, kde-format
 #| msgid "Background Color"
 msgctxt "Region selection method in enclose and fill tool"

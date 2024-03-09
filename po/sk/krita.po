@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-07 01:32+0000\n"
+"POT-Creation-Date: 2024-03-09 01:41+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -16880,8 +16880,8 @@ msgstr "Veľkosť"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:481
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:493
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:494
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -26028,7 +26028,7 @@ msgstr "Farba pozadia"
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
 #, kde-format
 msgid "Pattern"
 msgstr "Vzorka"
@@ -26049,7 +26049,7 @@ msgstr "Bez obrysu"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
 #, kde-format
 msgid "Brush"
 msgstr "Štetec"
@@ -27780,7 +27780,7 @@ msgstr "Čiara:"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
 #: plugins/tools/basictools/kis_tool_fill.cc:634
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Foreground color"
 msgstr "Farba popredia"
@@ -27790,7 +27790,7 @@ msgstr "Farba popredia"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Background color"
 msgstr "Farba pozadia"
@@ -29786,7 +29786,7 @@ msgstr "Vybrať predvoľbu štetca"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
 #: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:456
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
 #, fuzzy, kde-format
 #| msgid "Opacity: "
 msgctxt "{n} is the number value, % is the percent sign"
@@ -34576,7 +34576,7 @@ msgstr "Zväčšiť alebo zmenšiť výber o nastavenú hodnotu"
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/basictools/kis_tool_fill.cc:653
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
@@ -37438,7 +37438,7 @@ msgstr "Elipsový asistent"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
 #, kde-format
 msgid "Ellipse"
 msgstr "Elipsa"
@@ -39205,7 +39205,7 @@ msgstr "Naozaj chcete vymazať masku <b>'%1'</b>?"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:512
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
 #, kde-format
 msgid "Rectangle"
 msgstr "Obdĺžnikový"
@@ -57762,32 +57762,32 @@ msgid "Fill all regions of a similar color"
 msgstr "Vyplniť všetky oblasti podobnej farby"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Nastaviť  mierku vzoru"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Nastaviť  otočenie vzoru"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:639
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, fuzzy, kde-format
 #| msgid "Set the master opacity for the layer"
 msgid "Set a custom opacity for the fill"
 msgstr "Nastaviť hlavnú nepriehľadnosť pre vrstvu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, fuzzy, kde-format
 #| msgid "Set the blend mode for the layer"
 msgid "Set a custom blend mode for the fill"
@@ -57810,7 +57810,7 @@ msgid "Boundary color"
 msgstr "Hraničná farba"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
@@ -57820,7 +57820,7 @@ msgstr ""
 "podobných farieb, ktoré sa majú vyplniť."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
@@ -57836,7 +57836,7 @@ msgid "Close gaps in lines up to the set amount"
 msgstr "Rozmazať výber o nastavenú hodnotu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -57846,37 +57846,37 @@ msgstr ""
 "vypĺňaní oblasti"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Vyhladí okraje výplne"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:652
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Zväčšiť alebo zmenšiť výplň o nastavenú hodnotu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Rozmazať výplň o nastavenú hodnotu"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Vyplniť nájdené oblasti z aktívnej vrstvy"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:657
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Vyplniť nájdené oblasti zo zlúčenia všetkých vrstiev"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
 #, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
@@ -57899,7 +57899,7 @@ msgstr ""
 "oblasť (užitočné pri vypĺňaní line-art)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:663
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Vrátiť voľby na ich predvolené hodnoty"
@@ -60459,13 +60459,13 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Mierka:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:460
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Prah:"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:466
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:467
 #, fuzzy, kde-format
 #| msgctxt "The 'spread' spinbox prefix in fill tool options"
 #| msgid "Spread: "
@@ -60475,7 +60475,7 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Rozprestrenie: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in enclose and fill tool to use "
@@ -60483,143 +60483,143 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Použiť výber ako ohraničenie"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:475
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
 #, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "Vyhladzovanie"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:479
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
 msgstr "Zväčšiť"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:490
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "Rozotrieť: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:509
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
 #, kde-format
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "Obnoviť"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, kde-format
 msgid "Bezier Curve"
 msgstr "Bézierova krivka"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
 #, kde-format
 msgid "Lasso"
 msgstr "Laso"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr "Umožniť vyplnenie namiesto opačných oblastí"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 "Umožniť vyplnenie aj tvarov, ktoré sa dotýkajú obrysu obklopujúcej oblasti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:551
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:552
 #, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "Metóda uzavretia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:558
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
 #, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Referencia"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:568
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
 #, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Cieľové oblasti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:578
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Zdroj výplne"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:592
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:593
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Rozsah výplne"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:601
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:602
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Úpravy"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:855
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Všetko"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:858
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Špecifická farba"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:861
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Priehľadnosť"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:864
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Konkrétna farba alebo priehľadnosť"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:867
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Všetko, okrem konkrétnej farby"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:870
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Všetko, okrem priehľadnosti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:873
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Všetko, okrem konkrétnej farby alebo priehľadnosti"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:876
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Akékoľvek obklopené konkrétnou farbou"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:879
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Akékoľvek obklopené priehľadnosťou"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:882
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:884
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

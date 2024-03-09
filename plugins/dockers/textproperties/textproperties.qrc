@@ -1,0 +1,33 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="TextProperties.qml">qml/TextProperties.qml</file>
+        <file alias="TextPropertyBase.qml">qml/TextPropertyBase.qml</file>
+        <file alias="CollapsibleGroupProperty.qml">qml/CollapsibleGroupProperty.qml</file>
+        <file alias="FontSize.qml">qml/FontSize.qml</file>
+        <file alias="FontStyle.qml">qml/FontStyle.qml</file>
+        <file alias="FontFamily.qml">qml/FontFamily.qml</file>
+        <file alias="WritingMode.qml">qml/WritingMode.qml</file>
+        <file alias="TextAlign.qml">qml/TextAlign.qml</file>
+        <file alias="Direction.qml">qml/Direction.qml</file>
+        <file alias="TextIndent.qml">qml/TextIndent.qml</file>
+        <file alias="LetterSpacing.qml">qml/LetterSpacing.qml</file>
+        <file alias="WordSpacing.qml">qml/WordSpacing.qml</file>
+        <file alias="LineBreak.qml">qml/LineBreak.qml</file>
+        <file alias="WordBreak.qml">qml/WordBreak.qml</file>
+        <file alias="LineHeight.qml">qml/LineHeight.qml</file>
+        <file alias="TextTransform.qml">qml/TextTransform.qml</file>
+        <file alias="TextDecoration.qml">qml/TextDecoration.qml</file>
+        <file alias="OTLigatures.qml">qml/OTLigatures.qml</file>
+        <file alias="OTCaps.qml">qml/OTCaps.qml</file>
+        <file alias="OTPosition.qml">qml/OTPosition.qml</file>
+        <file alias="OTNumeric.qml">qml/OTNumeric.qml</file>
+        <file alias="OTEastAsian.qml">qml/OTEastAsian.qml</file>
+        <file alias="BaselineShift.qml">qml/BaselineShift.qml</file>
+        <file alias="DominantBaseline.qml">qml/DominantBaseline.qml</file>
+        <file alias="AlignmentBaseline.qml">qml/AlignmentBaseline.qml</file>
+        <file alias="HangingPunctuation.qml">qml/HangingPunctuation.qml</file>
+        <file alias="TabSize.qml">qml/TabSize.qml</file>
+        <file alias="WhiteSpace.qml">qml/WhiteSpace.qml</file>
+        <file alias="UnderlinePosition.qml">qml/UnderlinePosition.qml</file>
+    </qresource>
+</RCC>

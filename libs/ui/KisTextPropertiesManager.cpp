@@ -37,7 +37,9 @@ void KisTextPropertiesManager::setView(QPointer<KisView> imageView)
     }
 
     d->view = imageView;
-    connect(d->view->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
+    if (d->view) {
+        connect(d->view->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
+    }
 }
 
 void KisTextPropertiesManager::setCanvasResourceProvider(KisCanvasResourceProvider *provider)

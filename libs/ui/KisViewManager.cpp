@@ -35,6 +35,7 @@
 #include <QPrintDialog>
 #include <QPushButton>
 #include <QRect>
+#include <QScreen>
 #include <QScrollBar>
 #include <QStatusBar>
 #include <QToolBar>
@@ -266,6 +267,7 @@ public:
         }
     };
     std::optional<CanvasOnlyOptions> canvasOnlyOptions;
+    QPoint canvasOnlyOffsetCompensation;
 
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
@@ -1227,6 +1229,25 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         d->canvasOnlyOptions = options;
     }
 
+    const bool toggleFullscreen = (options.hideTitlebarFullscreen && !cfg.fullscreenMode());
+    const bool hasCanvasController = (d->currentImageView && d->currentImageView->canvasController());
+
+    // Canvas offset compensation (step 1)
+    if (hasCanvasController && !main->canvasDetached()) {
+        if (toggled) {
+            // Capture the initial canvas position.
+            QPoint origin;
+            if (toggleFullscreen) {
+                // We're windowed, so also capture the position of the window in the screen.
+                origin = main->geometry().topLeft() - main->screen()->geometry().topLeft();
+            }
+            d->canvasOnlyOffsetCompensation = d->currentImageView->mapTo(main, origin);
+        } else {
+            // Restore the original canvas position. The result is more stable if we pan before showing the UI elements.
+            d->currentImageView->canvasController()->pan(- d->canvasOnlyOffsetCompensation);
+        }
+    }
+
     if (options.hideStatusbarFullscreen) {
         if (main->statusBar()) {
             if (!toggled) {
@@ -1262,7 +1283,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
 
     // QT in windows does not return to maximized upon 4th tab in a row
     // https://bugreports.qt.io/browse/QTBUG-57882, https://bugreports.qt.io/browse/QTBUG-52555, https://codereview.qt-project.org/#/c/185016/
-    if (options.hideTitlebarFullscreen && !cfg.fullscreenMode()) {
+    if (toggleFullscreen) {
         if(toggled) {
             main->setWindowState( main->windowState() | Qt::WindowFullScreen);
         } else {
@@ -1334,6 +1355,24 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
+    // Canvas offset compensation (step 2)
+    if (hasCanvasController && !main->canvasDetached() && toggled) {
+        const bool allowedZoomMode =
+            (zoomController()->zoomMode() == KoZoomMode::ZOOM_CONSTANT) ||
+            (zoomController()->zoomMode() == KoZoomMode::ZOOM_HEIGHT);
+
+        if (allowedZoomMode) {
+            // Defer the pan action until the layout is fully settled in (including the menu bars, etc.).
+            QTimer::singleShot(0, this, [this] () {
+                // Compensate by the difference of (after - before) layout.
+                d->canvasOnlyOffsetCompensation = d->currentImageView->mapTo(this->mainWindow(), QPoint()) - d->canvasOnlyOffsetCompensation;
+                d->currentImageView->canvasController()->pan(d->canvasOnlyOffsetCompensation);
+            });
+        } else {
+            // Nothing to restore.
+            d->canvasOnlyOffsetCompensation = QPoint();
+        }
+    }
 }
 
 void KisViewManager::toggleTabletLogger()

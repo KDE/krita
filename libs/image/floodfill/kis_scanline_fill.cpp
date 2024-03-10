@@ -361,7 +361,7 @@ bool KisScanlineFill::tryPushingCloseGapSeed(int x, int y, bool allowExpand)
 {
     bool pushed = false;
 
-    if (m_d->closeGap > 0) {
+    if (m_d->gapMapSp && m_d->gapMapSp->gapSize() > 0) {
         const quint32 distance = m_d->gapMapSp->distance(x, y);
 
         if (distance != KisGapMap::DISTANCE_INFINITE) {
@@ -610,6 +610,11 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->forwardStack.isEmpty());
 
+    int gapSize = m_d->closeGap;
+    KIS_SAFE_ASSERT_RECOVER(gapSize == 0 || (gapSize > 0 && m_d->filledSelectionIterator)) {
+        gapSize = 0;
+    }
+
 #if MEASURE_FILL_TIME
     QElapsedTimer timerTotal;
     QElapsedTimer timerScanlineFill;
@@ -620,7 +625,7 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
     timerTotal.start();
 #endif
 
-    if (m_d->closeGap > 0) {
+    if (gapSize > 0) {
         // We need to reuse the complex policies used by this class and only provide the final
         // "projection" of opacity for the distance map calculation.
         auto opacityFunc = [&](KisPaintDevice* devicePtr, const QRect& rect) {
@@ -629,7 +634,7 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
 
         // Prime the resources. The computations are made lazily, when distance at a pixel is requested.
         // Resources are freed automatically when the object is destroyed, that is together with the KisScanlineFill object.
-        m_d->gapMapSp = KisGapMapSP(new KisGapMap(m_d->closeGap, m_d->boundingRect, opacityFunc));
+        m_d->gapMapSp = KisGapMapSP(new KisGapMap(gapSize, m_d->boundingRect, opacityFunc));
     }
 
     KisFillInterval startInterval(m_d->startPoint.x(), m_d->startPoint.x(), m_d->startPoint.y());
@@ -712,7 +717,7 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
              << qSetRealNumberPrecision(3) << static_cast<double>(totalGapClosingFillNanos) / totalTime << ")";
     qDebug() << "fill total =" << (totalTime / MillisDivisor) << "ms";
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
-    if (m_d->closeGap > 0) {
+    if (gapSize > 0) {
         qDebug() << "incl. opacity load" << m_d->gapMapSp->opacityElapsedMillis() << "ms";
         qDebug() << "incl. distance load" << m_d->gapMapSp->distanceElapsedMillis() << "ms";
     }
@@ -929,6 +934,10 @@ void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP p
     
     CopyToSelectionPixelAccessPolicy pap(m_d->device, pixelSelection);
 
+    if (m_d->closeGap > 0) {
+        m_d->filledSelectionIterator = pixelSelection->createRandomAccessorNG();
+    }
+
     if (softness == 0) {
         MaskedSelectionPolicy<SelectAllUntilColorHardSelectionPolicy>
             sp(SelectAllUntilColorHardSelectionPolicy(m_d->threshold), boundarySelection);
@@ -955,6 +964,10 @@ void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP p
     
     CopyToSelectionPixelAccessPolicy pap(m_d->device, pixelSelection);
 
+    if (m_d->closeGap > 0) {
+        m_d->filledSelectionIterator = pixelSelection->createRandomAccessorNG();
+    }
+
     if (softness == 0) {
         SelectionPolicy<SelectAllUntilColorHardSelectionPolicy>
             sp(SelectAllUntilColorHardSelectionPolicy(m_d->threshold));
@@ -979,6 +992,10 @@ void KisScanlineFill::clearNonZeroComponent()
     
     FillWithColorPixelAccessPolicy pap(m_d->device, srcColor);
     SelectionPolicy<HardSelectionPolicy> sp(HardSelectionPolicy(m_d->threshold));
+
+    if (m_d->closeGap > 0) {
+        m_d->filledSelectionIterator = m_d->device->createRandomAccessorNG();
+    }
 
     if (pixelSize == 1) {
         OptimizedIsNonNullDifferencePolicy<quint8> dp;

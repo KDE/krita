@@ -119,6 +119,11 @@ public:
         }
     }
 
+    ALWAYS_INLINE int gapSize() const
+    {
+        return m_gapSize;
+    }
+
 #if KIS_GAP_MAP_MEASURE_ELAPSED_TIME
 public:
     quint64 opacityElapsedMillis() const

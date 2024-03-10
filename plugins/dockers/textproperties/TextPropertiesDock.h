@@ -9,7 +9,7 @@
 
 #include <QDockWidget>
 #include <QIcon>
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 #include <QPointer>
 
 #include <kis_canvas2.h>
@@ -17,14 +17,18 @@
 class KoDialog;
 class QQuickWidget;
 
-class TextPropertiesDock : public QDockWidget, public KoCanvasObserverBase {
+class TextPropertiesDock : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     TextPropertiesDock();
     ~TextPropertiesDock();
     QString observerName() override { return "TextPropertiesDock"; }
+    void setViewManager(KisViewManager *kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
+
+public Q_SLOTS:
+    void slotCanvasResourcesChanged(int key, const QVariant &value);
 
 private:
     QPointer<KisCanvas2> m_canvas;

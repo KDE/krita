@@ -8,6 +8,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property alias writingMode: writingModeCmb.currentIndex;
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;

@@ -225,6 +225,7 @@ set(kritaflake_SRCS
     text/KoCssTextUtils.cpp
     text/KoPolygonUtils.cpp
     text/KoSvgTextPropertyData.cpp
+    text/lager/KoSvgTextPropertiesModel.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp

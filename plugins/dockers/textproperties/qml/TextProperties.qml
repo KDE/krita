@@ -7,12 +7,17 @@ import QtQuick 2.0
 import QtQml.Models 2.1
 import QtQuick.Controls 2.5
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 
 Rectangle {
     id: root;
     color: sysPalette.window;
     anchors.fill: parent;
+
+    property KoSvgTextPropertiesModel textPropertyModel : textPropertiesModel;
+
+    onTextPropertyModelChanged: console.log("Writing Mode:" ,textPropertyModel.writingMode);
 
     SystemPalette {
         id: sysPalette;
@@ -115,6 +120,7 @@ Rectangle {
                 model: ObjectModel {
                     WritingMode {
                         width: parent.width;
+                        writingMode: root.textPropertyModel.writingMode;
                     }
                     Direction{
                         width: parent.width;

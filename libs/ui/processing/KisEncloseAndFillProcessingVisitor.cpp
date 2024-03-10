@@ -26,6 +26,7 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         bool regionSelectionIncludeSurroundingRegions,
         int fillThreshold,
         int fillOpacitySpread,
+        int closeGap,
         bool antiAlias,
         int expand,
         bool stopGrowingAtDarkestPixel,
@@ -49,6 +50,7 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
     , m_regionSelectionIncludeSurroundingRegions(regionSelectionIncludeSurroundingRegions)
     , m_fillThreshold(fillThreshold)
     , m_fillOpacitySpread(fillOpacitySpread)
+    , m_closeGap(closeGap)
     , m_useSelectionAsBoundary(useSelectionAsBoundary)
     , m_antiAlias(antiAlias)
     , m_expand(expand)
@@ -99,6 +101,7 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setRegionSelectionIncludeSurroundingRegions(m_regionSelectionIncludeSurroundingRegions);
     painter.setFillThreshold(m_fillThreshold);
     painter.setOpacitySpread(m_fillOpacitySpread);
+    painter.setCloseGap(m_closeGap);
     painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     painter.setAntiAlias(m_antiAlias);
     painter.setSizemod(m_expand);

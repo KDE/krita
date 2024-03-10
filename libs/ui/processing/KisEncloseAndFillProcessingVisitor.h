@@ -32,6 +32,7 @@ public:
         bool regionSelectionIncludeSurroundingRegions,
         int fillThreshold,
         int fillOpacitySpread,
+        int closeGap,
         bool antiAlias,
         int expand,
         bool stopGrowingAtDarkestPixel,
@@ -64,6 +65,7 @@ private:
     bool m_regionSelectionIncludeSurroundingRegions {true};
     int m_fillThreshold {8};
     int m_fillOpacitySpread {100};
+    int m_closeGap {0};
     bool m_useSelectionAsBoundary {true};
     bool m_antiAlias {false};
     int m_expand {0};

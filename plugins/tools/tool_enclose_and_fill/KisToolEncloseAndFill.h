@@ -102,6 +102,7 @@ private:
 
     int m_fillThreshold {8};
     int m_fillOpacitySpread {100};
+    int m_closeGap {0};
     bool m_useSelectionAsBoundary {true};
 
     bool m_antiAlias {false};
@@ -141,6 +142,7 @@ private:
 
     KisSliderSpinBox *m_sliderFillThreshold {nullptr};
     KisSliderSpinBox *m_sliderFillOpacitySpread {nullptr};
+    KisSliderSpinBox *m_sliderCloseGap {nullptr};
     QCheckBox *m_checkBoxSelectionAsBoundary {nullptr};
 
     QCheckBox *m_checkBoxAntiAlias {nullptr};
@@ -203,6 +205,7 @@ private Q_SLOTS:
     void slot_comboBoxCustomCompositeOp_currentIndexChanged(int index);
     void slot_sliderFillThreshold_valueChanged(int value);
     void slot_sliderFillOpacitySpread_valueChanged(int value);
+    void slot_sliderCloseGap_valueChanged(int value);
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderExpand_valueChanged(int value);

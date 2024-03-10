@@ -325,6 +325,7 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
                                                false,
                                                m_fillThreshold,
                                                m_fillOpacitySpread,
+                                               m_closeGap,
                                                m_antiAlias,
                                                m_expand,
                                                m_stopGrowingAtDarkestPixel,
@@ -466,6 +467,10 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
         i18nc("The 'spread' spinbox in enclose and fill tool options; {n} is the number value, % is the percent sign",
               "Spread: {n}%"));
     m_sliderFillOpacitySpread->setRange(0, 100);
+    m_sliderCloseGap = new KisSliderSpinBox;
+    m_sliderCloseGap->setPrefix(i18nc("The 'close gap' spinbox prefix in enclose and fill tool options", "Close Gap: "));
+    m_sliderCloseGap->setRange(0, 32);
+    m_sliderCloseGap->setSuffix(i18n(" px"));
     m_checkBoxSelectionAsBoundary =
         new QCheckBox(
             i18nc("The 'use selection as boundary' checkbox in enclose and fill tool to use selection borders as boundary when filling",
@@ -529,6 +534,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
 
     m_sliderFillThreshold->setToolTip(i18n("Set the color similarity tolerance of the fill. Increasing threshold increases the range of similar colors to be filled."));
     m_sliderFillOpacitySpread->setToolTip(i18n("Set the extent of the opaque portion of the fill. Decreasing spread decreases opacity of fill areas depending on color similarity."));
+    m_sliderCloseGap->setToolTip(i18n("Close gaps in lines up to the set amount"));
     m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the active selection should be treated as a boundary when filling the region"));
 
     m_checkBoxAntiAlias->setToolTip(i18n("Smooths the edges of the fill"));
@@ -594,6 +600,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
         );
     sectionRegionExtent->appendWidget("sliderThreshold", m_sliderFillThreshold);
     sectionRegionExtent->appendWidget("sliderSpread", m_sliderFillOpacitySpread);
+    sectionRegionExtent->appendWidget("sliderCloseGap", m_sliderCloseGap);
     sectionRegionExtent->appendWidget("checkBoxSelectionAsBoundary", m_checkBoxSelectionAsBoundary);
     m_optionWidget->appendWidget("sectionRegionExtent", sectionRegionExtent);
 
@@ -664,6 +671,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     }
     m_sliderFillThreshold->setValue(m_fillThreshold);
     m_sliderFillOpacitySpread->setValue(m_fillOpacitySpread);
+    m_sliderCloseGap->setValue(m_closeGap);
     m_checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
     m_checkBoxAntiAlias->setChecked(m_antiAlias);
     m_sliderExpand->setValue(m_expand);
@@ -719,6 +727,9 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     connect(m_sliderFillOpacitySpread,
             SIGNAL(valueChanged(int)),
             SLOT(slot_sliderFillOpacitySpread_valueChanged(int)));
+    connect(m_sliderCloseGap,
+            SIGNAL(valueChanged(int)),
+            SLOT(slot_sliderCloseGap_valueChanged(int)));
     connect(m_checkBoxSelectionAsBoundary,
             SIGNAL(toggled(bool)),
             SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
@@ -780,6 +791,7 @@ void KisToolEncloseAndFill::loadConfiguration()
     }
     m_fillThreshold = m_configGroup.readEntry<int>("fillThreshold", 8);
     m_fillOpacitySpread = m_configGroup.readEntry<int>("fillOpacitySpread", 100);
+    m_closeGap = m_configGroup.readEntry<int>("closeGapAmount", 0);
     m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
     m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", false);
     m_expand = m_configGroup.readEntry<int>("expand", 0);
@@ -1168,6 +1180,15 @@ void KisToolEncloseAndFill::slot_sliderFillOpacitySpread_valueChanged(int value)
     m_configGroup.writeEntry("fillOpacitySpread", value);
 }
 
+void KisToolEncloseAndFill::slot_sliderCloseGap_valueChanged(int value)
+{
+    if (value == m_closeGap) {
+        return;
+    }
+    m_closeGap = value;
+    m_configGroup.writeEntry("closeGapAmount", value);
+}
+
 void KisToolEncloseAndFill::slot_checkBoxSelectionAsBoundary_toggled(bool checked)
 {
     if (checked == m_useSelectionAsBoundary) {
@@ -1267,6 +1288,7 @@ void KisToolEncloseAndFill::slot_buttonReset_clicked()
     m_comboBoxCustomCompositeOp->selectCompositeOp(KoID(COMPOSITE_OVER));
     m_sliderFillThreshold->setValue(8);
     m_sliderFillOpacitySpread->setValue(100);
+    m_sliderCloseGap->setValue(0);
     m_checkBoxSelectionAsBoundary->setChecked(true);
     m_checkBoxAntiAlias->setChecked(false);
     m_sliderExpand->setValue(0);

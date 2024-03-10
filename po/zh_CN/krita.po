@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-06 02:57+0000\n"
-"PO-Revision-Date: 2024-02-29 13:00\n"
+"PO-Revision-Date: 2024-03-09 04:52\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -37552,9 +37552,6 @@ msgid "Zoom view to fit curve."
 msgstr "缩放视图以适合曲线"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
 msgstr "添加属性关键帧"
@@ -57388,9 +57385,7 @@ msgid "Threshold: "
 msgstr "色差阈值："
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
 msgstr "边缘扩展："
@@ -59702,12 +59697,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "扩大/缩小："
-
-#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-#~ msgid "Feather: "
-#~ msgstr "羽化半径："

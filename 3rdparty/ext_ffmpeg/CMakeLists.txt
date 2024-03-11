@@ -129,6 +129,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
     MESON
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    DOWNLOAD_NAME openh264-v2.3.1.tar.gz
     URL https://github.com/cisco/openh264/archive/v2.3.1.tar.gz
     URL_HASH SHA256=453afa66dacb560bc5fd0468aabee90c483741571bca820a39a1c07f0362dc32
 

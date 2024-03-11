@@ -13,6 +13,7 @@ endif()
 
 ExternalProject_Add( ext_highway
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    DOWNLOAD_NAME highway-1.0.7.tar.gz
     URL https://github.com/google/highway/archive/refs/tags/1.0.7.tar.gz
     URL_HASH SHA256=5434488108186c170a5e2fca5e3c9b6ef59a1caa4d520b008a9b8be6b8abe6c5
 
@@ -24,6 +25,7 @@ ExternalProject_Add( ext_highway
 
 ExternalProject_Add( ext_brotli
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    DOWNLOAD_NAME brotli-v1.1.0.tar.gz
     URL https://github.com/google/brotli/archive/v1.1.0.tar.gz
     URL_HASH SHA256=e720a6ca29428b803f4ad165371771f5398faba397edf6778837a18599ea13ff
 
@@ -35,12 +37,13 @@ ExternalProject_Add( ext_brotli
 
 ExternalProject_Add( ext_jpegxl
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/libjxl/libjxl/archive/refs/tags/v0.9.1.tar.gz
-    URL_HASH SHA256=a0e72e9ece26878147069ad4888ac3382021d4bbee71c2e1b687d5bde7fd7e01
+    DOWNLOAD_NAME libjxl-v0.10.0.tar.gz
+    URL https://github.com/libjxl/libjxl/archive/refs/tags/v0.10.0.tar.gz
+    URL_HASH SHA256=ab32d52b033c814d24762db4942a3b45315d9db37bf5c8a9741ccc1bb0a52d97
 
     INSTALL_DIR ${PREFIX_ext_jpegxl}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_jpegxl} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
-        -DJPEGXL_VERSION=0.9.1
+        -DJPEGXL_VERSION=0.10.0
         -DJPEGXL_ENABLE_BENCHMARK=OFF
         -DJPEGXL_ENABLE_COVERAGE=OFF
         -DJPEGXL_ENABLE_EXAMPLES=OFF

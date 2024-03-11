@@ -104,73 +104,65 @@ else()
     set(x265_12bit_LIBRARY libx265_main12.a)
     set(x265_EXTRA_LINK_FLAGS -L${EXTPREFIX_heif}/lib)
 endif()
-ExternalProject_Add(ext_libx265_10bit
+
+set(LIBX265_SOURCE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/libx265_src")
+file(MAKE_DIRECTORY ${LIBX265_SOURCE_DIRECTORY})
+file(WRITE ${LIBX265_SOURCE_DIRECTORY}/foobar "yet-to-be-deleted-and-repopulated-at-build-stage")
+
+ExternalProject_Add(
+    ext_libx265_src
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+
     URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220709-12716.tar.gz
     URL_HASH SHA256=19ef8b21301f13d795601184884859e9f4a2f87fcda83757bd7dcd588056e926
 
-    SOURCE_SUBDIR source/
+    SOURCE_DIR ${LIBX265_SOURCE_DIRECTORY}
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-build-fix.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A03-threads-pool-adjustments.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A04-64-bit_for_aarch64.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A05-disable-scanPosLast-aarch64-asm.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A06-common-threading.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A03-threads-pool-adjustments.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A04-64-bit_for_aarch64.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A05-disable-scanPosLast-aarch64-asm.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A06-common-threading.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
+          COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
+
+    BUILD_COMMAND ""
+    CONFIGURE_COMMAND ""
+    INSTALL_COMMAND ""
+    UPDATE_COMMAND ""
+)
+
+ExternalProject_Add(ext_libx265_10bit
+    SOURCE_DIR ${LIBX265_SOURCE_DIRECTORY}
+    SOURCE_SUBDIR source
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DHIGH_BIT_DEPTH=TRUE -DEXPORT_C_API=FALSE -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${x265_LIBDIR}${x265_LIBRARY} ${EXTPREFIX_heif}/lib/${x265_10bit_LIBRARY}
     UPDATE_COMMAND ""
 
-    DEPENDS ext_nasm
+    DEPENDS ext_nasm ext_libx265_src
 )
+
 ExternalProject_Add(ext_libx265_12bit
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220709-12716.tar.gz
-    URL_HASH SHA256=19ef8b21301f13d795601184884859e9f4a2f87fcda83757bd7dcd588056e926
+    SOURCE_DIR ${LIBX265_SOURCE_DIRECTORY}
+    SOURCE_SUBDIR source
 
-    SOURCE_SUBDIR source/
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-build-fix.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A03-threads-pool-adjustments.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A04-64-bit_for_aarch64.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A05-disable-scanPosLast-aarch64-asm.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A06-common-threading.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
-
-    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} 
-    -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+               -DHIGH_BIT_DEPTH=TRUE -DMAIN12=TRUE -DEXPORT_C_API=FALSE  -DENABLE_CLI=FALSE -DENABLE_SHARED=FALSE
     INSTALL_COMMAND ${CMAKE_COMMAND} -E copy ${x265_LIBDIR}${x265_LIBRARY} ${EXTPREFIX_heif}/lib/${x265_12bit_LIBRARY}
     UPDATE_COMMAND ""
 
-    DEPENDS ext_nasm ext_libx265_10bit
+    DEPENDS ext_nasm ext_libx265_10bit ext_libx265_src
 )
-ExternalProject_Add(
-    ext_libx265
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220709-12716.tar.gz
-    URL_HASH SHA256=19ef8b21301f13d795601184884859e9f4a2f87fcda83757bd7dcd588056e926
-
-    SOURCE_SUBDIR source/
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A01-build-fix.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A02-threads-priority.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A03-threads-pool-adjustments.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A04-64-bit_for_aarch64.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A05-disable-scanPosLast-aarch64-asm.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/A06-common-threading.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Silence-nasm-2.15-warnings.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Skip-PDB-in-MinGW.patch
+ExternalProject_Add(ext_libx265
+    SOURCE_DIR ${LIBX265_SOURCE_DIRECTORY}
+    SOURCE_SUBDIR source
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DENABLE_SHARED=TRUE  -DENABLE_HDR10_PLUS=TRUE -DEXTRA_LIB:String=${x265_10bit_LIBRARY}$<SEMICOLON>${x265_12bit_LIBRARY} -DEXTRA_LINK_FLAGS:String=${x265_EXTRA_LINK_FLAGS} -DLINKED_10BIT=TRUE -DLINKED_12BIT=TRUE
-
     UPDATE_COMMAND ""
 
-    DEPENDS ext_nasm ext_libx265_12bit
+    DEPENDS ext_nasm ext_libx265_12bit ext_libx265_src
 )
 
 ExternalProject_Add(

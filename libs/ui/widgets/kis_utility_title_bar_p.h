@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2024 Reinold Rojas <rojasreinold@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
 #ifndef KIS_UTILITY_TITLE_BAR_P_H
 #define KIS_UTILITY_TITLE_BAR_P_H
 

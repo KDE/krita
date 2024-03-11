@@ -1,0 +1,28 @@
+From 628d705280068a9ebecc666acf1265315e7a3dfb Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Mon, 11 Mar 2024 12:58:32 +0100
+Subject: [PATCH] [ext_heif] Make sure that pthreads are not linked it on
+ Android
+
+---
+ source/CMakeLists.txt | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
+index fbc17f0..75c2414 100755
+--- a/source/CMakeLists.txt
++++ b/source/CMakeLists.txt
+@@ -94,7 +94,9 @@ else()
+ endif()
+ 
+ if(UNIX)
+-    list(APPEND PLATFORM_LIBS pthread)
++    if(NOT ANDROID)
++      list(APPEND PLATFORM_LIBS pthread)
++    endif()
+     find_library(LIBRT rt)
+     if(LIBRT)
+         list(APPEND PLATFORM_LIBS rt)
+-- 
+2.25.1
+

@@ -3,6 +3,7 @@ SET(EXTPREFIX_fcitx5-qt "${EXTPREFIX}" )
 ExternalProject_Add(
     ext_fcitx5-qt
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    DOWNLOAD_NAME fcitx5-qt-5.1.3.tar.gz
     URL https://github.com/fcitx/fcitx5-qt/archive/refs/tags/5.1.3.tar.gz
     URL_HASH SHA256=fbf5060e94632cdb80cbe8352c217821ebf7bb961b057ab34153f5e53290109e
 

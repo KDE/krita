@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 01:41+0000\n"
+"POT-Creation-Date: 2024-03-11 01:34+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -16421,7 +16421,7 @@ msgstr "%1 को एचटीएमएल मे्ं सहेज नही�
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:551
+#: libs/ui/flake/kis_shape_layer.cc:579
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16460,7 +16460,7 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1567
+#: libs/flake/text/KoSvgTextShape.cpp:1568
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -16468,24 +16468,24 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>स्थानधारक पाठ</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1546
+#: libs/flake/text/KoSvgTextShape.cpp:1547
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1548
-#: libs/flake/text/KoSvgTextShape.cpp:1556
+#: libs/flake/text/KoSvgTextShape.cpp:1549
+#: libs/flake/text/KoSvgTextShape.cpp:1557
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "एसवीजी पाठ आकृति"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1554
+#: libs/flake/text/KoSvgTextShape.cpp:1555
 #, kde-format
 msgid "SVG Text"
 msgstr "एसवीजी पाठ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1577
+#: libs/flake/text/KoSvgTextShape.cpp:1578
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -16901,8 +16901,9 @@ msgstr "आकार"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:494
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:473
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:499
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -17496,6 +17497,13 @@ msgstr "फ़ाइल खोलें"
 msgid "Error"
 msgstr "एरर"
 
+#: libs/image/kis_layer_properties_icons.cpp:34
+#: libs/ui/flake/kis_shape_layer.cc:339
+#, fuzzy, kde-format
+#| msgid "Anti-aliased"
+msgid "Antialiased"
+msgstr "एन्टी-अलियास"
+
 #: libs/image/kis_layer_utils.cpp:619
 #, kde-format
 msgid "Merged"
@@ -17563,8 +17571,8 @@ msgid "Processing"
 msgstr "प्रसंस्करण"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1368
-#: libs/ui/KisMainWindow.cpp:1740 libs/ui/KisMainWindow.cpp:1753
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1741 libs/ui/KisMainWindow.cpp:1754
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18305,8 +18313,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "छवि अलग करें"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2111
-#: libs/ui/KisMainWindow.cpp:2194
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2112
+#: libs/ui/KisMainWindow.cpp:2195
 #, kde-format
 msgid "Import frames"
 msgstr "फ़्रेमों को आयात करें"
@@ -19615,12 +19623,12 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
-#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1169
-#: libs/ui/KisMainWindow.cpp:1266 libs/ui/KisMainWindow.cpp:1971
-#: libs/ui/KisMainWindow.cpp:1980 libs/ui/KisMainWindow.cpp:2119
-#: libs/ui/KisMainWindow.cpp:2180 libs/ui/KisMainWindow.cpp:2201
-#: libs/ui/KisMainWindow.cpp:2810 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
+#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1972
+#: libs/ui/KisMainWindow.cpp:1981 libs/ui/KisMainWindow.cpp:2120
+#: libs/ui/KisMainWindow.cpp:2181 libs/ui/KisMainWindow.cpp:2202
+#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20130,7 +20138,7 @@ msgid "Delete resource"
 msgstr "संसाधन मिटाएँ"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2609
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20577,7 +20585,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "ऐनिमेशन फ़्रेम रेंडर करने में विफल! आउटपुट फ़ाइलें अपूर्ण हैं।"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2222
 #, kde-format
 msgid "Render Animation"
 msgstr "एनिमेशन रेंडर करें"
@@ -22543,7 +22551,7 @@ msgid "Numerical"
 msgstr "संख्यात्मक"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1134
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Import Images"
 msgstr "चित्रों का आयात"
@@ -22645,7 +22653,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "शैली के लिए नया नाम दर्ज करें"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25822,7 +25830,7 @@ msgstr "पृष्ठभूमि रंग"
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Pattern"
 msgstr "पैटर्न"
@@ -25843,7 +25851,7 @@ msgstr "कोई सीमारेखा नहीं"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Brush"
 msgstr "ब्रश"
@@ -26503,7 +26511,7 @@ msgstr "वर्तमान ब्रश प्रीसेट"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1021
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1022
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -27479,7 +27487,7 @@ msgstr "रेखा :"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
 #: plugins/tools/basictools/kis_tool_fill.cc:634
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Foreground color"
 msgstr "अग्रभूमि का रंग"
@@ -27489,7 +27497,7 @@ msgstr "अग्रभूमि का रंग"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Background color"
 msgstr "पृष्ठभूमि का रंग"
@@ -29445,7 +29453,7 @@ msgstr "ब्रश नमूना चुनें"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
 #: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:458
 #, fuzzy, kde-format
 #| msgid "Opacity: "
 msgctxt "{n} is the number value, % is the percent sign"
@@ -30693,64 +30701,64 @@ msgctxt "(qtundo-format)"
 msgid "Update layer thumbnails"
 msgstr "परत लघुछवि पॉपअप को छुपाएं"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "शैलियाँ"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "डॉकरर्स (&D)"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "विंडो (&W)"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "नया दृश्य (&V)"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "कार्यक्षेत्र (&k)"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "औज़ार पट्टी %1 दिखाएँ"
 
-#: libs/ui/KisMainWindow.cpp:588
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "औज़ार-पट्टी %1 छुपाएँ"
 
-#: libs/ui/KisMainWindow.cpp:1018
+#: libs/ui/KisMainWindow.cpp:1019
 #, kde-format
 msgid "Save as %1"
 msgstr "ऐसे सहेजें %1"
 
-#: libs/ui/KisMainWindow.cpp:1040
+#: libs/ui/KisMainWindow.cpp:1041
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "फ़ाइल %1 अस्तित्व में नहीं है."
 
-#: libs/ui/KisMainWindow.cpp:1134
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Open Images"
 msgstr "छवियाँ खोलें"
 
-#: libs/ui/KisMainWindow.cpp:1267
+#: libs/ui/KisMainWindow.cpp:1268
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30759,45 +30767,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1323
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Exporting"
 msgstr "११निर्यात किया जा रहा है"
 
-#: libs/ui/KisMainWindow.cpp:1323
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Saving As"
 msgstr "सहेजा जा रहा है"
 
-#: libs/ui/KisMainWindow.cpp:1719
+#: libs/ui/KisMainWindow.cpp:1720
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "नया दस्तावेज़ बनाएँ"
 
-#: libs/ui/KisMainWindow.cpp:1743
+#: libs/ui/KisMainWindow.cpp:1744
 #, kde-format
 msgid "Custom Document"
 msgstr "तदनुकूल दस्तावेज़"
 
-#: libs/ui/KisMainWindow.cpp:1755
+#: libs/ui/KisMainWindow.cpp:1756
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "क्लिपबोर्ड से बनाएँ"
 
-#: libs/ui/KisMainWindow.cpp:1940
+#: libs/ui/KisMainWindow.cpp:1941
 #, kde-format
 msgid "Layers/Masks"
 msgstr "परतें/मास्क"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1967
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "आपके पास कोई संसाधन बंडल सक्षम नहीं है।"
 
-#: libs/ui/KisMainWindow.cpp:1970
+#: libs/ui/KisMainWindow.cpp:1971
 #, kde-format
 msgid ""
 "\n"
@@ -30805,7 +30813,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1980
+#: libs/ui/KisMainWindow.cpp:1981
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -30814,7 +30822,7 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2119 libs/ui/KisMainWindow.cpp:2201
+#: libs/ui/KisMainWindow.cpp:2120 libs/ui/KisMainWindow.cpp:2202
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30823,63 +30831,63 @@ msgstr ""
 "एनिमेशन आयात समाप्त नहीं कर सका :\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2180
+#: libs/ui/KisMainWindow.cpp:2181
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "नया दस्तावेज़ बनाने में विफल. एनिमेशन आयात रद्द किया गया।"
 
-#: libs/ui/KisMainWindow.cpp:2600
+#: libs/ui/KisMainWindow.cpp:2605
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "कार्यक्षेत्र आयात करें... (&I)"
 
-#: libs/ui/KisMainWindow.cpp:2615
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "नया कार्यक्षेत्र... (&N)"
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2624
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "नया कार्यक्षेत्र..."
 
-#: libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/KisMainWindow.cpp:2668
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu opened document, %1=index %2=document path"
 #| msgid "&%1 %2"
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2671
 #, fuzzy, kde-format
 #| msgctxt "@item:inmenu opened document, %1=index %2=document path"
 #| msgid "%1 %2"
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2833
+#: libs/ui/KisMainWindow.cpp:2838
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2849
+#: libs/ui/KisMainWindow.cpp:2854
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "संस्थापन त्रुटि"
 
-#: libs/ui/KisMainWindow.cpp:2958
+#: libs/ui/KisMainWindow.cpp:2963
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "थीम (&T)"
 
-#: libs/ui/KisMainWindow.cpp:3016
+#: libs/ui/KisMainWindow.cpp:3021
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "विस्तार होने वाला स्पेसर "
@@ -33944,7 +33952,7 @@ msgstr "चयन फैलाएँ/सिकोड़ें : "
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/basictools/kis_tool_fill.cc:653
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr ""
@@ -34066,12 +34074,19 @@ msgstr "छोड़कर आगे जाएँ"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:19
+#: libs/ui/widgets/kis_utility_title_bar.cpp:20
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
 msgid "Title"
 msgstr "शीर्षक"
+
+#: libs/ui/widgets/kis_utility_title_bar.cpp:42
+#: libs/widgets/KoDockWidgetTitleBar.cpp:61
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "डॉकर लॉक करें"
 
 #: libs/ui/widgets/kis_wdg_generator.cpp:148
 #: libs/ui/widgets/kis_wdg_generator.cpp:160
@@ -34989,12 +35004,6 @@ msgstr "डॉकर को बाहर निकालें"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "डॉकर बंद करें"
-
-#: libs/widgets/KoDockWidgetTitleBar.cpp:61
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Lock Docker"
-msgstr "डॉकर लॉक करें"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
@@ -36764,7 +36773,7 @@ msgstr "दीर्घवृत्त सहायक"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Ellipse"
 msgstr "दीर्घवृत्त"
@@ -38548,7 +38557,7 @@ msgstr ""
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Rectangle"
 msgstr "चतुर्भुज"
@@ -48541,7 +48550,7 @@ msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
 #: plugins/impex/libkra/kis_kra_loader.cpp:676
-#: plugins/impex/libkra/kis_kra_loader.cpp:1110
+#: plugins/impex/libkra/kis_kra_loader.cpp:1120
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -48727,7 +48736,7 @@ msgid ""
 "blending mode"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1105
+#: plugins/impex/libkra/kis_kra_loader.cpp:1115
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -56803,7 +56812,7 @@ msgid "Scale: {n}%"
 msgstr "स्केल (&S)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:548
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #, fuzzy, kde-format
 msgid "Use custom blending options"
 msgstr "स्मीयरी ब्रश"
@@ -56883,34 +56892,34 @@ msgid "Fill all regions of a similar color"
 msgstr "पृष्ठभूमि रंग से क्षेत्र भरें"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, fuzzy, kde-format
 #| msgid "Set the blend mode for the layer"
 msgid "Set the scale of the pattern"
 msgstr "परत के लिए सम्मिश्रण मोड निर्धारित करें"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, fuzzy, kde-format
 #| msgid "Set the master opacity for the layer"
 msgid "Set the rotation of the pattern"
 msgstr "परत के लिए मूल अपारदर्शिता निर्धारित करें"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:639
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, fuzzy, kde-format
 #| msgid "Set the master opacity for the layer"
 msgid "Set a custom opacity for the fill"
 msgstr "परत के लिए मूल अपारदर्शिता निर्धारित करें"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, fuzzy, kde-format
 #| msgid "Set the blend mode for the layer"
 msgid "Set a custom blend mode for the fill"
@@ -56935,7 +56944,7 @@ msgid "Boundary color"
 msgstr "पृष्ठभूमि का रंग"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
@@ -56943,7 +56952,7 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
@@ -56951,12 +56960,13 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
 #, kde-format
 msgid "Close gaps in lines up to the set amount"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -56964,38 +56974,38 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:652
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid "Fill regions found from the active layer"
 msgstr "पृष्ठभूमि रंग से क्षेत्र भरें"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:657
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:546
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:547
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgid ""
@@ -57016,7 +57026,7 @@ msgid ""
 msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:663
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
 #, fuzzy, kde-format
 msgid "Reset the options to their default values"
 msgstr "डिफ़ॉल्ट"
@@ -59528,20 +59538,20 @@ msgctxt "(qtundo-format)"
 msgid "Enclose and Fill"
 msgstr "पूरा भरें"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:425
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:426
 #, fuzzy, kde-format
 #| msgid "Invert"
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "उलटें"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:430
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:431
 #, fuzzy, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
 msgstr "परत का नाम :"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
 #, fuzzy, kde-format
 #| msgid "&Scale"
 msgctxt ""
@@ -59550,7 +59560,7 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "स्केल (&S)"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:462
 #, fuzzy, kde-format
 #| msgctxt "Threshold label in Magnetic Selection's Tool options"
 #| msgid "Threshold: "
@@ -59558,7 +59568,7 @@ msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "देहलीज : "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:467
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:468
 #, fuzzy, kde-format
 #| msgid "Spread:"
 msgctxt ""
@@ -59567,7 +59577,14 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "फैलाव :"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
+msgid "Close Gap: "
+msgstr "बंद करें"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "Description for a checkbox in a Fill Tool to use selection borders as "
@@ -59579,14 +59596,14 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "सीमा के रूप में चयन का प्रयोग करें :"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:481
 #, fuzzy, kde-format
 #| msgid "Anti-aliasing"
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "एन्टी-अलियासिंग"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:479
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:484
 #, fuzzy, kde-format
 #| msgctxt "Grow as in deform brush engine"
 #| msgid "Grow"
@@ -59594,77 +59611,77 @@ msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
 msgstr "बढ़त"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:496
 #, fuzzy, kde-format
 #| msgid "Feather..."
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "पंख..."
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, fuzzy, kde-format
 #| msgid "Reset"
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "रीसेट"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, fuzzy, kde-format
 #| msgid "Bezier Curve"
 msgid "Bezier Curve"
 msgstr "बेजियर वक्र"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Lasso"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:552
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:558
 #, fuzzy, kde-format
 #| msgid "Sensing method type:"
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "सेंसिंग विधि क़िस्म :"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, fuzzy, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "प्राथमिकताएँ"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:575
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "पारदर्शी"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
 #, fuzzy, kde-format
 #| msgid "All Resources"
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "सभी संसाधनें"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:593
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:599
 #, fuzzy, kde-format
 #| msgid "File extension:"
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "फ़ाइल एक्सटेंशन :"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:602
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:609
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "HSV Adjustment"
@@ -59672,69 +59689,69 @@ msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "एचएसवी समायोजन"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, fuzzy, kde-format
 #| msgid "All"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "सभी"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "विशिष्ट रंग चयनक"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, fuzzy, kde-format
 #| msgid "Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "पारदर्शी"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, fuzzy, kde-format
 #| msgid "Specific Color Selector"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "विशिष्ट रंग चयनक"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "पृष्ठभूमि रंग से क्षेत्र भरें"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:884
 #, fuzzy, kde-format
 #| msgid "Burning Transparency"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "जलती पारदर्शिता"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:887
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr ""
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:890
 #, fuzzy, kde-format
 #| msgid "Fill area with background color"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "पृष्ठभूमि रंग से क्षेत्र भरें"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:893
 #, fuzzy, kde-format
 #| msgid "1. Foreground to Transparent"
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "१. अग्रभूमि रंग से पारदर्शिता तक"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:884
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:896
 #, fuzzy, kde-format
 #| msgid "1. Foreground to Transparent"
 msgctxt "Region selection method in enclose and fill tool"

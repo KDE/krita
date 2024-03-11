@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-09 01:41+0000\n"
+"POT-Creation-Date: 2024-03-11 01:34+0000\n"
 "PO-Revision-Date: 2023-11-10 14:24+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -16508,7 +16508,7 @@ msgstr "Не удаётся сохранить %1 в html-файл"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
-#: libs/ui/flake/kis_shape_layer.cc:551
+#: libs/ui/flake/kis_shape_layer.cc:579
 #, kde-format
 msgid ""
 "Parsing error in the main document at line %1, column %2\n"
@@ -16551,7 +16551,7 @@ msgstr ""
 "который больше не будет совместим с Krita 4.x"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1567
+#: libs/flake/text/KoSvgTextShape.cpp:1568
 #, fuzzy, kde-format
 #| msgctxt "Default text for the text shape"
 #| msgid "<text>Placeholder Text</text>"
@@ -16559,25 +16559,25 @@ msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>Замещающий текст</text>"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1546
+#: libs/flake/text/KoSvgTextShape.cpp:1547
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1548
-#: libs/flake/text/KoSvgTextShape.cpp:1556
+#: libs/flake/text/KoSvgTextShape.cpp:1549
+#: libs/flake/text/KoSvgTextShape.cpp:1557
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "Форма текста SVG"
 
 # ?
-#: libs/flake/text/KoSvgTextShape.cpp:1554
+#: libs/flake/text/KoSvgTextShape.cpp:1555
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-текст"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1577
+#: libs/flake/text/KoSvgTextShape.cpp:1578
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -17001,8 +17001,9 @@ msgstr "Размер"
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:142
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:250
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:275
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:494
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:473
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:487
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:499
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:106
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:116
 #: plugins/tools/tool_smart_patch/kis_tool_smart_patch_options_widget.ui:134
@@ -17685,6 +17686,13 @@ msgstr "Открыть файл"
 msgid "Error"
 msgstr "Ошибка"
 
+#: libs/image/kis_layer_properties_icons.cpp:34
+#: libs/ui/flake/kis_shape_layer.cc:339
+#, fuzzy, kde-format
+#| msgid "Anti-aliased"
+msgid "Antialiased"
+msgstr "Сглаживание"
+
 #: libs/image/kis_layer_utils.cpp:619
 #, kde-format
 msgid "Merged"
@@ -17770,8 +17778,8 @@ msgid "Processing"
 msgstr "Обработка"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1368
-#: libs/ui/KisMainWindow.cpp:1740 libs/ui/KisMainWindow.cpp:1753
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
+#: libs/ui/KisMainWindow.cpp:1741 libs/ui/KisMainWindow.cpp:1754
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18556,8 +18564,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Заменить изображение"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2111
-#: libs/ui/KisMainWindow.cpp:2194
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2112
+#: libs/ui/KisMainWindow.cpp:2195
 #, kde-format
 msgid "Import frames"
 msgstr "Импорт кадров"
@@ -19869,12 +19877,12 @@ msgstr "Локальные источники"
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:970
-#: libs/ui/KisMainWindow.cpp:1040 libs/ui/KisMainWindow.cpp:1169
-#: libs/ui/KisMainWindow.cpp:1266 libs/ui/KisMainWindow.cpp:1971
-#: libs/ui/KisMainWindow.cpp:1980 libs/ui/KisMainWindow.cpp:2119
-#: libs/ui/KisMainWindow.cpp:2180 libs/ui/KisMainWindow.cpp:2201
-#: libs/ui/KisMainWindow.cpp:2810 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
+#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1972
+#: libs/ui/KisMainWindow.cpp:1981 libs/ui/KisMainWindow.cpp:2120
+#: libs/ui/KisMainWindow.cpp:2181 libs/ui/KisMainWindow.cpp:2202
+#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20380,7 +20388,7 @@ msgid "Delete resource"
 msgstr "Удалить ресурс"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2609
+#: libs/ui/KisMainWindow.cpp:2614
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20858,7 +20866,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Не удалось обработать кадры анимации. Конечные файлы неполные."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2222
 #, kde-format
 msgid "Render Animation"
 msgstr "Обработка анимации"
@@ -22863,7 +22871,7 @@ msgid "Numerical"
 msgstr "Нумерованный"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1134
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Import Images"
 msgstr "Импорт изображений"
@@ -22967,7 +22975,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ввод названия нового стиля"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26268,7 +26276,7 @@ msgstr "Цвет фона"
 #: plugins/paintops/libpaintop/KisColorSourceOptionData.cpp:20
 #: plugins/paintops/libpaintop/KisTextureOptionWidget.cpp:27
 #: plugins/tools/basictools/kis_tool_fill.cc:636
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:523
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
 #, kde-format
 msgid "Pattern"
 msgstr "Текстура"
@@ -26289,7 +26297,7 @@ msgstr "Без контура"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbOutline)
 #: libs/ui/forms/wdggeometryoptions.ui:101
 #: plugins/paintops/roundmarker/KisRoundMarkerOpOptionWidget.cpp:49
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:517
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
 #, kde-format
 msgid "Brush"
 msgstr "Кисть"
@@ -26980,7 +26988,7 @@ msgstr "Текущий профиль кисти"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1021
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1022
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -28037,7 +28045,7 @@ msgstr "Линия:"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:96
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:224
 #: plugins/tools/basictools/kis_tool_fill.cc:634
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
 #, kde-format
 msgid "Foreground color"
 msgstr "Цвет переднего плана"
@@ -28047,7 +28055,7 @@ msgstr "Цвет переднего плана"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:101
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:214
 #: plugins/tools/basictools/kis_tool_fill.cc:635
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:522
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
 #, kde-format
 msgid "Background color"
 msgstr "Цвет фона"
@@ -30061,7 +30069,7 @@ msgstr "Выбрать профиль кисти"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:42
 #: plugins/tools/basictools/kis_tool_fill.cc:552
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:46
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:457
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:458
 #, fuzzy, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
@@ -31363,64 +31371,64 @@ msgstr ""
 "Обновление миниатюр слоёв\n"
 "обновление миниатюр слоёв"
 
-#: libs/ui/KisMainWindow.cpp:185
+#: libs/ui/KisMainWindow.cpp:186
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
 msgstr "Стили"
 
-#: libs/ui/KisMainWindow.cpp:186
+#: libs/ui/KisMainWindow.cpp:187
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Dockers"
 msgstr "&Панели"
 
-#: libs/ui/KisMainWindow.cpp:187
+#: libs/ui/KisMainWindow.cpp:188
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Window"
 msgstr "&Окно"
 
-#: libs/ui/KisMainWindow.cpp:188
+#: libs/ui/KisMainWindow.cpp:189
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "New &View"
 msgstr "Новый &вид"
 
-#: libs/ui/KisMainWindow.cpp:189
+#: libs/ui/KisMainWindow.cpp:190
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Рабо&чее пространство"
 
-#: libs/ui/KisMainWindow.cpp:586
+#: libs/ui/KisMainWindow.cpp:587
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Показать панель инструментов %1"
 
-#: libs/ui/KisMainWindow.cpp:588
+#: libs/ui/KisMainWindow.cpp:589
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Скрыть панель инструментов %1"
 
-#: libs/ui/KisMainWindow.cpp:1018
+#: libs/ui/KisMainWindow.cpp:1019
 #, kde-format
 msgid "Save as %1"
 msgstr "Сохранить как %1"
 
-#: libs/ui/KisMainWindow.cpp:1040
+#: libs/ui/KisMainWindow.cpp:1041
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr "Файл %1 не существует."
 
-#: libs/ui/KisMainWindow.cpp:1134
+#: libs/ui/KisMainWindow.cpp:1135
 #, kde-format
 msgid "Open Images"
 msgstr "Открытие изображений"
 
-#: libs/ui/KisMainWindow.cpp:1267
+#: libs/ui/KisMainWindow.cpp:1268
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31433,45 +31441,45 @@ msgstr ""
 "\n"
 "Выберите место, где оригинальный файл не будет перезаписан."
 
-#: libs/ui/KisMainWindow.cpp:1323
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Exporting"
 msgstr "Экспорт"
 
-#: libs/ui/KisMainWindow.cpp:1323
+#: libs/ui/KisMainWindow.cpp:1324
 #, kde-format
 msgid "Saving As"
 msgstr "Сохранение как"
 
-#: libs/ui/KisMainWindow.cpp:1719
+#: libs/ui/KisMainWindow.cpp:1720
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Создать новый документ"
 
-#: libs/ui/KisMainWindow.cpp:1743
+#: libs/ui/KisMainWindow.cpp:1744
 #, kde-format
 msgid "Custom Document"
 msgstr "Пользовательский документ"
 
-#: libs/ui/KisMainWindow.cpp:1755
+#: libs/ui/KisMainWindow.cpp:1756
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Создать из буфера обмена"
 
-#: libs/ui/KisMainWindow.cpp:1940
+#: libs/ui/KisMainWindow.cpp:1941
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Слои/Маски"
 
-#: libs/ui/KisMainWindow.cpp:1966
+#: libs/ui/KisMainWindow.cpp:1967
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Не включены пакеты ресурсов."
 
-#: libs/ui/KisMainWindow.cpp:1970
+#: libs/ui/KisMainWindow.cpp:1971
 #, kde-format
 msgid ""
 "\n"
@@ -31482,7 +31490,7 @@ msgstr ""
 "Профили кистей недоступны. Перед тем как продолжить включите пакет, который "
 "содержит профили.\n"
 
-#: libs/ui/KisMainWindow.cpp:1980
+#: libs/ui/KisMainWindow.cpp:1981
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -31493,7 +31501,7 @@ msgstr ""
 "\n"
 "Доступны только локальные источники."
 
-#: libs/ui/KisMainWindow.cpp:2119 libs/ui/KisMainWindow.cpp:2201
+#: libs/ui/KisMainWindow.cpp:2120 libs/ui/KisMainWindow.cpp:2202
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -31502,40 +31510,40 @@ msgstr ""
 "Не удалось закончить импорт анимации:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2180
+#: libs/ui/KisMainWindow.cpp:2181
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Не удалось создать новый документ. Импорт анимации прерван."
 
-#: libs/ui/KisMainWindow.cpp:2600
+#: libs/ui/KisMainWindow.cpp:2605
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Импорт рабочих пространств..."
 
-#: libs/ui/KisMainWindow.cpp:2615
+#: libs/ui/KisMainWindow.cpp:2620
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Новое рабочее пространство..."
 
-#: libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/KisMainWindow.cpp:2624
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Новое рабочее пространство..."
 
-#: libs/ui/KisMainWindow.cpp:2663
+#: libs/ui/KisMainWindow.cpp:2668
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2666
+#: libs/ui/KisMainWindow.cpp:2671
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2833
+#: libs/ui/KisMainWindow.cpp:2838
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -31544,19 +31552,19 @@ msgstr ""
 "Модуль Krita LittleCMS для управления цветом не установлен. Работа Krita "
 "будет завершена."
 
-#: libs/ui/KisMainWindow.cpp:2849
+#: libs/ui/KisMainWindow.cpp:2854
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Ошибка установки"
 
-#: libs/ui/KisMainWindow.cpp:2958
+#: libs/ui/KisMainWindow.cpp:2963
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Темы"
 
-#: libs/ui/KisMainWindow.cpp:3016
+#: libs/ui/KisMainWindow.cpp:3021
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Расширяющийся заполнитель"
@@ -34832,7 +34840,7 @@ msgstr "Увеличить или уменьшить выделение на у�
 
 #: libs/ui/widgets/kis_selection_options.cc:239
 #: plugins/tools/basictools/kis_tool_fill.cc:653
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:542
 #, kde-format
 msgid "Stop growing at the darkest and/or most opaque pixels"
 msgstr "Остановить увеличение на самых тёмных и/или непрозрачных пикселах"
@@ -34952,12 +34960,19 @@ msgstr "Перемотать вперёд"
 
 #. i18n: ectx: property (text), widget (QLabel, maskTitleLabel)
 #. i18n: ectx: property (title), widget (QGroupBox, BundleSelectedGroupBox)
-#: libs/ui/widgets/kis_utility_title_bar.cpp:19
+#: libs/ui/widgets/kis_utility_title_bar.cpp:20
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:137
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:166
 #, kde-format
 msgid "Title"
 msgstr "Заголовок"
+
+#: libs/ui/widgets/kis_utility_title_bar.cpp:42
+#: libs/widgets/KoDockWidgetTitleBar.cpp:61
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Lock Docker"
+msgstr "Закрепить панель"
 
 #: libs/ui/widgets/kis_wdg_generator.cpp:148
 #: libs/ui/widgets/kis_wdg_generator.cpp:160
@@ -35885,12 +35900,6 @@ msgstr "Плавающая панель"
 msgctxt "@info:tooltip"
 msgid "Close Docker"
 msgstr "Закрыть панель"
-
-#: libs/widgets/KoDockWidgetTitleBar.cpp:61
-#, kde-format
-msgctxt "@info:tooltip"
-msgid "Lock Docker"
-msgstr "Закрепить панель"
 
 #: libs/widgets/KoEditColorSetDialog.cpp:159
 #, kde-format
@@ -37707,7 +37716,7 @@ msgstr "Вспомогательный эллипс"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:41
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:262
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:70
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:514
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
 #, kde-format
 msgid "Ellipse"
 msgstr "Эллипс"
@@ -39560,7 +39569,7 @@ msgstr "Удалить маску <b>«%1»</b>?"
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:267
 #: plugins/paintops/spray/wdgsprayshapeoptions.ui:75
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:513
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:518
 #, kde-format
 msgid "Rectangle"
 msgstr "Прямоугольник"
@@ -49594,7 +49603,7 @@ msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
 #: plugins/impex/libkra/kis_kra_loader.cpp:676
-#: plugins/impex/libkra/kis_kra_loader.cpp:1110
+#: plugins/impex/libkra/kis_kra_loader.cpp:1120
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -49796,7 +49805,7 @@ msgstr ""
 "поддержку устаревшего алгоритма «Аддитивный» в разделе «Настройка->Настроить "
 "Krita…->Общие->Инструменты->Режим наложения CMYK»"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1105
+#: plugins/impex/libkra/kis_kra_loader.cpp:1115
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -58100,7 +58109,7 @@ msgid "Scale: {n}%"
 msgstr "Масштаб: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:548
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:452
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:453
 #, kde-format
 msgid "Use custom blending options"
 msgstr "Использовать нестандартные параметры наложения"
@@ -58170,19 +58179,19 @@ msgid "Fill all regions of a similar color"
 msgstr "Залить все области схожего цвета"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:637
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:529
 #, kde-format
 msgid "Set the scale of the pattern"
 msgstr "Установить масштаб текстуры"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:638
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
 #, kde-format
 msgid "Set the rotation of the pattern"
 msgstr "Установить вращение текстуры"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:639
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:526
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
 #, kde-format
 msgid "Set custom blending options instead of using the brush ones"
 msgstr ""
@@ -58190,13 +58199,13 @@ msgstr ""
 "кисти"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:640
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:527
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
 #, kde-format
 msgid "Set a custom opacity for the fill"
 msgstr "Установить нестандартную непрозрачность для заливки"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:641
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:528
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:533
 #, kde-format
 msgid "Set a custom blend mode for the fill"
 msgstr "Установить нестандартный режим наложения для заливки"
@@ -58218,7 +58227,7 @@ msgid "Boundary color"
 msgstr "Граничный цвет"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:646
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:530
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
 #, kde-format
 msgid ""
 "Set the color similarity tolerance of the fill. Increasing threshold "
@@ -58228,7 +58237,7 @@ msgstr ""
 "увеличивает диапазон схожих цветов для заливки."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:647
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:531
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:536
 #, kde-format
 msgid ""
 "Set the extent of the opaque portion of the fill. Decreasing spread "
@@ -58238,13 +58247,14 @@ msgstr ""
 "непрозрачность областей заливки в зависимости от схожести цветов."
 
 #: plugins/tools/basictools/kis_tool_fill.cc:648
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
 #, fuzzy, kde-format
 #| msgid "Blur the selection by the set amount"
 msgid "Close gaps in lines up to the set amount"
 msgstr "Размыть выделение на указанную величину"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:649
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:532
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:538
 #, kde-format
 msgid ""
 "Set if the contour of the active selection should be treated as a boundary "
@@ -58254,37 +58264,37 @@ msgstr ""
 "области"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:651
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:534
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
 #, kde-format
 msgid "Smooths the edges of the fill"
 msgstr "Сглаживает края заливки"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:652
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:535
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
 #, kde-format
 msgid "Grow or shrink the fill by the set amount"
 msgstr "Увеличить или уменьшить заливку на указанную величину"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:654
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:537
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
 #, kde-format
 msgid "Blur the fill by the set amount"
 msgstr "Размыть заливку на указанную величину"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:656
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:539
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:545
 #, kde-format
 msgid "Fill regions found from the active layer"
 msgstr "Залить области, обнаруженные в активном слое"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:657
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:540
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:546
 #, kde-format
 msgid "Fill regions found from the merging of all layers"
 msgstr "Залить области, обнаруженные в результате объединения всех слоёв"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:541
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:547
 #, kde-format
 msgid ""
 "Fill regions found from the merging of layers with specific color labels"
@@ -58307,7 +58317,7 @@ msgstr ""
 "областью (полезно для заливки штриховой графики)"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:663
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:543
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:549
 #, kde-format
 msgid "Reset the options to their default values"
 msgstr "Восстановить стандартные значения параметров"
@@ -60899,19 +60909,19 @@ msgstr ""
 "Охват и заливка\n"
 "охват и заливку"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:425
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:426
 #, kde-format
 msgctxt "The 'invert' checkbox in enclose and fill tool"
 msgid "Invert"
 msgstr "Инвертировать"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:430
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:431
 #, kde-format
 msgctxt "The 'include contour regions' checkbox in enclose and fill tool"
 msgid "Include contour regions"
 msgstr "Включить контуры областей"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:448
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:449
 #, fuzzy, kde-format
 #| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
 #| msgid "Scale: "
@@ -60921,13 +60931,13 @@ msgctxt ""
 msgid "Scale: {n}%"
 msgstr "Масштаб: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:461
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:462
 #, kde-format
 msgctxt "The 'threshold' spinbox prefix in enclose and fill tool options"
 msgid "Threshold: "
 msgstr "Порог: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:467
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:468
 #, fuzzy, kde-format
 #| msgctxt "The 'spread' spinbox prefix in fill tool options"
 #| msgid "Spread: "
@@ -60937,7 +60947,14 @@ msgctxt ""
 msgid "Spread: {n}%"
 msgstr "Размах: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:472
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
+#, fuzzy, kde-format
+#| msgid "Close"
+msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
+msgid "Close Gap: "
+msgstr "Закрыть"
+
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
 #, kde-format
 msgctxt ""
 "The 'use selection as boundary' checkbox in enclose and fill tool to use "
@@ -60945,143 +60962,143 @@ msgctxt ""
 msgid "Use selection as boundary"
 msgstr "Использовать выделение как границу"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:476
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:481
 #, kde-format
 msgctxt "The anti-alias checkbox in enclose and fill tool options"
 msgid "Anti-aliasing"
 msgstr "Сглаживание"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:479
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:484
 #, kde-format
 msgctxt "The 'grow/shrink' spinbox prefix in enclose and fill tool options"
 msgid "Grow: "
 msgstr "Увеличение: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:496
 #, kde-format
 msgctxt "The 'feather' spinbox prefix in enclose and fill tool options"
 msgid "Feather: "
 msgstr "Растушёвка: "
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:510
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
 #, kde-format
 msgctxt "The 'reset' button in enclose and fill tool options"
 msgid "Reset"
 msgstr "Сброс"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:515
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
 #, kde-format
 msgid "Bezier Curve"
 msgstr "Кривая Безье"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:516
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:521
 #, kde-format
 msgid "Lasso"
 msgstr "Лассо"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:519
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:524
 #, kde-format
 msgid "Enable to fill opposite regions instead"
 msgstr "Включите, чтобы залить противоположные области"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:520
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:525
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
 "Включите, чтобы также залить формы, которые касаются контура области охвата"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:552
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:558
 #, kde-format
 msgctxt "The 'enclosing method' section label in enclose and fill tool options"
 msgid "Enclosing method"
 msgstr "Метод охвата"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:559
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:565
 #, kde-format
 msgctxt "The 'reference' section label in enclose and fill tool options"
 msgid "Reference"
 msgstr "Эталон"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:569
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:575
 #, kde-format
 msgctxt "The 'target regions' section label in enclose and fill tool options"
 msgid "Target regions"
 msgstr "Целевые области"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:579
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:585
 #, kde-format
 msgctxt "The 'fill source' section label in enclose and fill tool options"
 msgid "Fill source"
 msgstr "Источник заливки"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:593
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:599
 #, kde-format
 msgctxt "The 'fill extent' section label in enclose and fill tool options"
 msgid "Fill extent"
 msgstr "Охват заливки"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:602
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:609
 #, kde-format
 msgctxt "The 'adjustments' section label in enclose and fill tool options"
 msgid "Adjustments"
 msgstr "Коррекция"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:857
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Все"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:860
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color"
 msgstr "Определённый цвет"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:863
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
 msgstr "Прозрачность"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:866
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Specific color or transparency"
 msgstr "Определённый цвет или прозрачность"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color"
 msgstr "Все, исключая определённый цвет"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:872
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:884
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding transparency"
 msgstr "Все, исключая прозрачность"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:887
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All, excluding a specific color or transparency"
 msgstr "Все, исключая определённый цвет или прозрачность"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:890
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color"
 msgstr "Все, окружённые определённым цветом"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:881
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:893
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by transparency"
 msgstr "Все, окружённые прозрачностью"
 
-#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:884
+#: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:896
 #, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Any surrounded by a specific color or transparency"

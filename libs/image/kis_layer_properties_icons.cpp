@@ -31,7 +31,7 @@ const KoID KisLayerPropertiesIcons::colorizeEditKeyStrokes("colorize-show-key-st
 const KoID KisLayerPropertiesIcons::colorizeShowColoring("colorize-show-coloring", ki18n("Show Coloring"));
 const KoID KisLayerPropertiesIcons::openFileLayerFile("open-file-layer-file", ki18n("Open File"));
 const KoID KisLayerPropertiesIcons::layerError("layer-error", ki18n("Error"));
-const KoID KisLayerPropertiesIcons::antialiased("antialiased", ki18n("Antialiased"));
+const KoID KisLayerPropertiesIcons::antialiased("antialiased", ki18n("Anti-aliasing"));
 
 struct IconsPair {
     IconsPair() {}
@@ -81,7 +81,7 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoringOff")));
     m_d->icons.insert(openFileLayerFile.id(), IconsPair(KisIconUtils::loadIcon("document-open"), KisIconUtils::loadIcon("document-open")));
     m_d->icons.insert(layerError.id(), IconsPair(KisIconUtils::loadIcon("warning"), KisIconUtils::loadIcon("warning")));
-    m_d->icons.insert(antialiased.id(), IconsPair(KisIconUtils::loadIcon("curve-preset-s"), KisIconUtils::loadIcon("curve-preset-s")));
+    m_d->icons.insert(antialiased.id(), IconsPair(KisIconUtils::loadIcon("select-shape"), KisIconUtils::loadIcon("select-pixel")));
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)

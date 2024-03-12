@@ -336,7 +336,7 @@ KisBaseNode::PropertyList KisShapeLayer::sectionModelProperties() const
 void KisShapeLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
 {
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
-        if (property.name == i18n("Antialiased")) {
+        if (property.name == i18n("Anti-aliasing")) {
             setAntialiased(property.state.toBool());
         }
     }

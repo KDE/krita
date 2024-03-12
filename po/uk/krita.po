@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-11 01:34+0000\n"
-"PO-Revision-Date: 2024-02-27 08:15+0200\n"
+"PO-Revision-Date: 2024-03-11 08:57+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -17592,10 +17592,9 @@ msgstr "Помилка"
 
 #: libs/image/kis_layer_properties_icons.cpp:34
 #: libs/ui/flake/kis_shape_layer.cc:339
-#, fuzzy, kde-format
-#| msgid "Anti-aliased"
+#, kde-format
 msgid "Antialiased"
-msgstr "Згладжування"
+msgstr "Згладжена"
 
 #: libs/image/kis_layer_utils.cpp:619
 #, kde-format
@@ -60897,12 +60896,10 @@ msgid "Spread: {n}%"
 msgstr "Розсіювання: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
-#, fuzzy, kde-format
-#| msgctxt "The 'close gap' spinbox prefix in fill tool options"
-#| msgid "Close Gap: "
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Закрити прогалину: "
+msgstr "Закриття прогалин: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
 #, kde-format

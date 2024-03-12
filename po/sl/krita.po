@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-11 01:34+0000\n"
-"PO-Revision-Date: 2024-02-27 08:55+0100\n"
+"PO-Revision-Date: 2024-03-11 16:22+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -17399,8 +17399,7 @@ msgstr "Napaka"
 
 #: libs/image/kis_layer_properties_icons.cpp:34
 #: libs/ui/flake/kis_shape_layer.cc:339
-#, fuzzy, kde-format
-#| msgid "Anti-aliased"
+#, kde-format
 msgid "Antialiased"
 msgstr "Z glajenimi robovi"
 
@@ -60074,9 +60073,7 @@ msgid "Spread: {n}%"
 msgstr "Širjenje: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
-#, fuzzy, kde-format
-#| msgctxt "The 'close gap' spinbox prefix in fill tool options"
-#| msgid "Close Gap: "
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
 msgstr "Skleni vrzel:"

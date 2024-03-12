@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-11 01:34+0000\n"
-"PO-Revision-Date: 2024-03-02 21:38+0100\n"
+"PO-Revision-Date: 2024-03-11 09:21+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.02.0\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17465,10 +17465,9 @@ msgstr "Erro"
 
 #: libs/image/kis_layer_properties_icons.cpp:34
 #: libs/ui/flake/kis_shape_layer.cc:339
-#, fuzzy, kde-format
-#| msgid "Anti-aliased"
+#, kde-format
 msgid "Antialiased"
-msgstr "Curvas suavizadas."
+msgstr "Suavizada"
 
 #: libs/image/kis_layer_utils.cpp:619
 #, kde-format
@@ -60192,9 +60191,7 @@ msgid "Spread: {n}%"
 msgstr "Esparexemento: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
-#, fuzzy, kde-format
-#| msgctxt "The 'close gap' spinbox prefix in fill tool options"
-#| msgid "Close Gap: "
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
 msgstr "Reducir a separación: "

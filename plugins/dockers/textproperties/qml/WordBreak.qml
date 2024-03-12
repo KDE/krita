@@ -25,13 +25,17 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Word Break:"
+            text:  i18nc("@label:listbox", "Word Break:")
         }
 
 
         ComboBox {
             id: wordBreakCmb
-            model: ["Normal", "Keep-all", "Break-all"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Keep-all"),
+                i18nc("@label:inlistbox", "Break-all")
+            ]
             Layout.fillWidth: true;
         }
     }

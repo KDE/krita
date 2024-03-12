@@ -25,7 +25,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Word Spacing:"
+            text:  i18nc("@title:group", "Word Spacing:")
         }
 
         SpinBox {

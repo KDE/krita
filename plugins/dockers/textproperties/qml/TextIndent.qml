@@ -8,7 +8,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 CollapsibleGroupProperty {
-    propertyName: "Text Indent:";
+    propertyName: i18nc("@title:group", "Text Indent:");
 
     titleItem: RowLayout {
         spacing: columnSpacing;
@@ -38,7 +38,7 @@ CollapsibleGroupProperty {
 
         CheckBox {
             id: indentHangingCkb;
-            text: "Hanging indentation"
+            text: i18nc("@option:check", "Hanging indentation")
             Layout.fillWidth: true
         }
 
@@ -50,7 +50,7 @@ CollapsibleGroupProperty {
 
         CheckBox {
             id: eachLineCkb;
-            text: "Indent after hardbreaks"
+            text: i18nc("@option:check", "Indent after hardbreaks")
             Layout.fillWidth: true
         }
 

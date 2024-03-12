@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Text Decoration:"
+            text: i18nc("@title:group", "Text Decoration:")
             Layout.columnSpan: 2;
         }
 
@@ -36,7 +36,7 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Line:"
+            text: i18nc("@title:group", "Line:")
             Layout.columnSpan: 2;
         }
 
@@ -46,7 +46,7 @@ TextPropertyBase {
         }
         CheckBox {
             Layout.columnSpan: 2;
-            text: "Underline"
+            text: i18nc("@option:check", "Underline")
             id: underlineCbx;
         }
         Item {
@@ -55,7 +55,7 @@ TextPropertyBase {
         }
         CheckBox {
             Layout.columnSpan: 2;
-            text: "Overline"
+            text: i18nc("@option:check", "Overline")
             id: overlineCbx;
         }
         Item {
@@ -64,7 +64,7 @@ TextPropertyBase {
         }
         CheckBox {
             Layout.columnSpan: 2;
-            text: "Line-through"
+            text: i18nc("@option:check", "Line-through")
             id: linethoughCbx;
         }
 
@@ -75,7 +75,7 @@ TextPropertyBase {
         }
 
         CheckBox {
-            text: "Color"
+            text: i18nc("@label:chooser", "Color")
             id: colorCbx;
         }
         Rectangle {
@@ -89,11 +89,17 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Style:"
+            text: i18nc("@label:listbox", "Style:")
         }
 
         ComboBox {
-            model: ["Solid", "Dotted", "Dashed", "Double", "Wavy"]
+            model: [
+                i18nc("@label:inlistbox", "Solid"),
+                i18nc("@label:inlistbox", "Dotted"),
+                i18nc("@label:inlistbox", "Dashed"),
+                i18nc("@label:inlistbox", "Double"),
+                i18nc("@label:inlistbox", "Wavy")
+            ]
             Layout.fillWidth: true;
         }
     }

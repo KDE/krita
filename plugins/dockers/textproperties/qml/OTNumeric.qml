@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Glyphs: Numeric:"
+            text:  i18nc("@title:group", "Glyphs: Numeric:")
             Layout.columnSpan: 2;
         }
 
@@ -36,10 +36,14 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Style:"
+            text:  i18nc("@label:listbox", "Style:")
         }
         ComboBox {
-            model: ["Normal", "Lining", "Oldstyle"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Lining"),
+                i18nc("@label:inlistbox", "Oldstyle")
+            ]
             Layout.fillWidth: true;
             id: styleCmb;
         }
@@ -49,10 +53,14 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Spacing:"
+            text:  i18nc("@label:listbox", "Spacing:")
         }
         ComboBox {
-            model: ["Normal", "Proportional", "Tabular"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Proportional"),
+                i18nc("@label:inlistbox", "Tabular")
+            ]
             Layout.fillWidth: true;
             id: spacingCmb;
         }
@@ -62,10 +70,14 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Fractions:"
+            text:  i18nc("@label:listbox", "Fractions:")
         }
         ComboBox {
-            model: ["Normal", "Diagonal", "Stacked"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Diagonal"),
+                i18nc("@label:inlistbox", "Stacked")
+            ]
             Layout.fillWidth: true;
             id: fractionCmb;
         }
@@ -77,7 +89,7 @@ TextPropertyBase {
         }
         CheckBox {
 
-            text: "Ordinals"
+            text: i18nc("@option:check", "Ordinals")
             id: ordinalsCbx;
         }
         Item {
@@ -87,7 +99,7 @@ TextPropertyBase {
         }
         CheckBox {
 
-            text: "Slashed Zero"
+            text: i18nc("@option:check", "Slashed Zero")
             id: slashZeroCbx;
         }
 

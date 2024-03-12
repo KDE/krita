@@ -28,7 +28,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Font Size:"
+            text: i18nc("@label:spinbox", "Font Size:")
         }
 
         SpinBox {
@@ -37,7 +37,14 @@ TextPropertyBase {
         }
 
         ComboBox {
-            model: ["Pt", "Em", "Ex"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Pt"), value: 0},
+                {text: i18nc("@label:inlistbox", "Em"), value: 1},
+                {text: i18nc("@label:inlistbox", "Ex"), value: 2},
+                {text: i18nc("@label:inlistbox", "%"), value: 3}
+            ]
+            textRole: "text";
+            valueRole: "value";
         }
     }
 }

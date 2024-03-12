@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Glyphs: Capitals:"
+            text: i18nc("@label:listbox", "Glyphs: Capitals:")
         }
 
         Item {
@@ -34,7 +34,14 @@ TextPropertyBase {
             height: 1;
         }
         ComboBox {
-            model: ["Normal", "Small Caps", "All Small Caps", "Petite Caps", "All Petite Caps", "Unicase", "Titling Caps"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Small Caps"),
+                i18nc("@label:inlistbox", "All Small Caps"),
+                i18nc("@label:inlistbox", "Petite Caps"),
+                i18nc("@label:inlistbox", "All Petite Caps"),
+                i18nc("@label:inlistbox", "Unicase"),
+                i18nc("@label:inlistbox", "Titling Caps")]
             Layout.fillWidth: true;
             id: positionCmb;
         }

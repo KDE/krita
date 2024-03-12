@@ -23,13 +23,20 @@ CollapsibleGroupProperty {
             icon.source: "qrc:///light_view-refresh.svg"
         }
         Label {
-            text: "Text Align:"
+            text: i18nc("@label:listbox", "Text Align:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         }
 
         ComboBox {
             id: textAlignAllCmb;
-            model: ["Left", "Start", "Center", "End", "Right", "Justified"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Left")},
+                {text: i18nc("@label:inlistbox", "Start")},
+                {text: i18nc("@label:inlistbox", "Center")},
+                {text: i18nc("@label:inlistbox", "End")},
+                {text: i18nc("@label:inlistbox", "Right")},
+                {text: i18nc("@label:inlistbox", "Justified")}
+            ]
             Layout.fillWidth: true
         }
 
@@ -41,13 +48,16 @@ CollapsibleGroupProperty {
             icon.source: "qrc:///light_view-refresh.svg"
         }
         Label {
-            text: "Text Anchor:"
+            text: i18nc("@label:listbox", "Text Anchor:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         }
 
         ComboBox {
             id: textAnchorCmb;
-            model: ["Start", "Middle", "End"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Start")},
+                {text: i18nc("@label:inlistbox", "Middle")},
+                {text: i18nc("@label:inlistbox", "End")}]
             Layout.fillWidth: true
         }
 

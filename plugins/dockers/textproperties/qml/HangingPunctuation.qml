@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Hanging-punctuation:"
+            text: i18nc("@label", "Hanging-punctuation:")
         }
 
         Item {
@@ -34,7 +34,7 @@ TextPropertyBase {
             height: 1;
         }
         CheckBox {
-            text: "Hang First"
+            text: i18nc("@option:check", "Hang First")
             id: paragraphStartCbx;
         }
 
@@ -43,14 +43,17 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Line End:"
+            text: i18nc("@label:listbox", "Line End:")
         }
         Item {
             width: firstColumnWidth;
             height: 1;
         }
         ComboBox {
-            model: ["No Hanging", "Allow hanging commas", "Force hanging commas"]
+            model: [
+                i18nc("@label:inlistbox", "No Hanging"),
+                i18nc("@label:inlistbox", "Allow hanging commas"),
+                i18nc("@label:inlistbox", "Force hanging commas")]
             Layout.fillWidth: true;
             id: lineEndCmb;
         }
@@ -61,7 +64,7 @@ TextPropertyBase {
         }
 
         CheckBox {
-            text: "Hang Last"
+            text: i18nc("@option:check", "Hang Last")
             id: paragraphEndCbx;
         }
 

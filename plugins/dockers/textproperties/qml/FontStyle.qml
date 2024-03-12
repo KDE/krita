@@ -8,11 +8,12 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 CollapsibleGroupProperty {
-    propertyName: "Font Style";
+    propertyName: i18nc("@label", "Font Style");
 
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
-    property alias fontSlant: fontSlantCmb.currentIndex;
+    property var fontSlant;
+    onFontSlantChanged: fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant)
     property alias fontOptical: opticalSizeCbx.checked;
 
     titleItem: ComboBox {
@@ -33,7 +34,7 @@ CollapsibleGroupProperty {
             icon.source: "qrc:///light_view-refresh.svg"
         }
         Label {
-            text: "Weight:"
+            text: i18nc("@label:spinbox", "Weight:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
         }
@@ -53,7 +54,7 @@ CollapsibleGroupProperty {
             icon.source: "qrc:///light_view-refresh.svg"
         }
         Label {
-            text: "Width:"
+            text: i18nc("@label:spinbox", "Width:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
         }
@@ -72,15 +73,22 @@ CollapsibleGroupProperty {
             icon.source: "qrc:///light_view-refresh.svg"
         }
         Label {
-            text: "Slant:"
+            text: i18nc("@label:listbox", "Slant:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
         }
 
         ComboBox {
             id: fontSlantCmb
-            model: ["Normal", "Italic", "Oblique"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Normal"), value: 0},
+                {text: i18nc("@label:inlistbox", "Italic"), value: 1},
+                {text: i18nc("@label:inlistbox", "Oblique"), value: 2}
+            ]
             Layout.fillWidth: true
+            textRole: "text";
+            valueRole: "value";
+            onActivated: fontSlant = currentValue;
         }
 
         ToolButton {
@@ -94,7 +102,7 @@ CollapsibleGroupProperty {
         height: 1;}
         CheckBox {
             id: opticalSizeCbx
-            text: "Optical Size"
+            text: i18nc("@option:check", "Optical Size")
             Layout.fillWidth: true
         }
 

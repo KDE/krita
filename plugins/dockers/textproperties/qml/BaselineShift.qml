@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Baseline-Shift:"
+            text: i18nc("@label", "Baseline-Shift:")
             Layout.columnSpan: 2;
         }
 
@@ -38,7 +38,9 @@ TextPropertyBase {
 
         ComboBox {
             Layout.columnSpan: 2;
-            model: ["Number", "Super", "Sub"]
+            model: [i18nc("@label:inlistbox", "Number"),
+                i18nc("@label:inlistbox", "Super"),
+                i18nc("@label:inlistbox", "Sub")]
             id: baselineShiftCmb;
         }
 

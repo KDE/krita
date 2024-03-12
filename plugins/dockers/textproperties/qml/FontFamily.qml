@@ -8,7 +8,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
 
 CollapsibleGroupProperty {
-    propertyName: "Font Family:";
+    propertyName: i18nc("@label", "Font Family:");
 
     property var fontFamilies: [];
     property var fontFamilyModel : [];

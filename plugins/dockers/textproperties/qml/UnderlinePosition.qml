@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Underline Position:"
+            text:  i18nc("@label:listbox", "Underline Position:")
         }
 
 
@@ -35,7 +35,10 @@ TextPropertyBase {
             height: 1;
         }
         ComboBox {
-            model: ["Vertical Left", "Vertical Right"]
+            model: [
+                i18nc("@label:inlistbox", "Vertical Left"),
+                i18nc("@label:inlistbox", "Vertical Right")
+            ]
             Layout.fillWidth: true;
             id: verticalPositionCmb;
         }
@@ -45,7 +48,7 @@ TextPropertyBase {
             height: 1;
         }
         CheckBox {
-            text: "Horizontal Auto";
+            text:  i18nc("@option:check", "Horizontal Auto");
         }
     }
 }

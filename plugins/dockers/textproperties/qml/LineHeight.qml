@@ -32,7 +32,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Line Height:"
+            text: i18nc("@label", "Line Height:")
             Layout.columnSpan: 2;
         }
 
@@ -44,7 +44,7 @@ TextPropertyBase {
 
         CheckBox {
             Layout.columnSpan: 2;
-            text: "Normal"
+            text: i18nc("@option:check", "Normal")
             id: lineHeightNormalCbx;
             onCheckedChanged: {
                 lineHeightSpn.enabled = !checked;
@@ -64,11 +64,11 @@ TextPropertyBase {
         ComboBox {
             id: lineHeightUnitCmb
             model: [
-                { text: "Pt", value: LineHeightModel.Pt},
-                { text: "Em", value: LineHeightModel.Em},
-                { text: "Ex", value: LineHeightModel.Ex},
-                { text: "%", value: LineHeightModel.Percentage},
-                { text: "Lines", value: LineHeightModel.Lines},
+                { text: i18nc("@label:inlistbox", "Pt"), value: LineHeightModel.Pt},
+                { text: i18nc("@label:inlistbox", "Em"), value: LineHeightModel.Em},
+                { text: i18nc("@label:inlistbox", "Ex"), value: LineHeightModel.Ex},
+                { text: i18nc("@label:inlistbox", "%"), value: LineHeightModel.Percentage},
+                { text: i18nc("@label:inlistbox", "Lines"), value: LineHeightModel.Lines},
             ]
             textRole: "text";
             valueRole: "value";

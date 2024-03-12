@@ -21,7 +21,7 @@ TextPropertyBase {
             icon.source: "qrc:///light_view-refresh.svg"
         }
         Label {
-            text: "Tab Size:"
+            text: i18nc("@title:group", "Tab Size:")
             Layout.columnSpan: 2;
             Layout.fillWidth: true;
         }
@@ -36,7 +36,12 @@ TextPropertyBase {
             Layout.fillWidth: true;
         }
         ComboBox {
-            model: ["Spaces", "Pt", "Em", "Ex"]
+            model: [
+                i18nc("@label:inlistbox", "Spaces"),
+                i18nc("@label:inlistbox", "Pt"),
+                i18nc("@label:inlistbox", "Em"),
+                i18nc("@label:inlistbox", "Ex")
+            ]
         }
 
     }

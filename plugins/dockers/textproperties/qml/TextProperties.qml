@@ -26,10 +26,10 @@ Rectangle {
         anchors.left: parent.left;
         anchors.top: parent.top;
         TabButton {
-            text: "Character"
+            text: i18nc("@title:tab", "Character")
         }
         TabButton {
-            text: "Paragraph"
+            text: i18nc("@title:tab", "Paragraph")
         }
     }
 
@@ -142,6 +142,8 @@ Rectangle {
                     }
                     Direction{
                         width: parent.width;
+                        direction: textPropertiesModel.direction;
+                        onDirectionChanged: textPropertiesModel.direction = direction;
                     }
                     TextIndent{
                         width: parent.width;

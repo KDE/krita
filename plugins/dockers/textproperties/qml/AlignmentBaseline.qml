@@ -8,6 +8,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property int baselineSelection;
+    onBaselineSelectionChanged: baselineCmb.currentIndex = baselineCmb.indexOfValue(baselineSelection);
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;
@@ -26,7 +28,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Alignment Baseline:"
+            text: i18nc("@label:listbox", "Alignment Baseline:")
         }
 
 
@@ -35,9 +37,22 @@ TextPropertyBase {
             height: 1;
         }
         ComboBox {
-            model: ["Baseline", "Alphabetic", "Ideographic", "Central", "Hanging", "Middle", "Mathematical", "Text-Top", "Text-Bottom"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Baseline"), value: 0},
+                {text: i18nc("@label:inlistbox", "Alphabetic"), value: 6},
+                {text: i18nc("@label:inlistbox", "Ideographic"), value: 5},
+                {text: i18nc("@label:inlistbox", "Central"), value: 9},
+                {text: i18nc("@label:inlistbox", "Hanging"), value: 7},
+                {text: i18nc("@label:inlistbox", "Middle"), value: 10},
+                {text: i18nc("@label:inlistbox", "Mathematical"), value: 8},
+                {text: i18nc("@label:inlistbox", "Text-Top"), value: 11},
+                {text: i18nc("@label:inlistbox", "Text-Bottom"), value: 12}
+            ]
             Layout.fillWidth: true;
             id: baselineCmb;
+            textRole: "text";
+            valueRole: "value";
+            onActivated: baselineSelection = currentValue;
         }
     }
 }

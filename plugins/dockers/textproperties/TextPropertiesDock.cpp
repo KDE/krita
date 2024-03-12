@@ -19,6 +19,8 @@
 #include <kis_canvas_resource_provider.h>
 #include <KisStaticInitializer.h>
 
+#include <KLocalizedContext>
+
 #include <KoResourcePaths.h>
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -48,6 +50,7 @@ TextPropertiesDock::TextPropertiesDock()
     setEnabled(true);
 
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
+    m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
 
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");

@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Glyphs: Ligatures:"
+            text: i18nc("@title:group", "Glyphs: Ligatures:")
             Layout.fillWidth: true;
         }
 
@@ -36,7 +36,7 @@ TextPropertyBase {
             height: 1;
         }
         CheckBox {
-            text: "Common"
+            text: i18nc("@option:check", "Common")
             id: commonLigaCbx;
         }
         Item {
@@ -44,7 +44,7 @@ TextPropertyBase {
             height: 1;
         }
         CheckBox {
-            text: "Discretionary"
+            text: i18nc("@option:check", "Discretionary")
             id: discretionaryLigaCbx;
         }
         Item {
@@ -52,7 +52,7 @@ TextPropertyBase {
             height: 1;
         }
         CheckBox {
-            text: "Historical"
+            text: i18nc("@option:check", "Historical")
             id: historicalLigaCbx;
         }
         Item {
@@ -60,7 +60,7 @@ TextPropertyBase {
             height: 1;
         }
         CheckBox {
-            text: "Contextual"
+            text: i18nc("@option:check", "Contextual")
             id: contextualLigaCbx;
         }
 

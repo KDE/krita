@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Glyphs: Position:"
+            text: i18nc("@label:listbox", "Glyphs: Position:")
         }
 
 
@@ -35,7 +35,11 @@ TextPropertyBase {
             height: 1;
         }
         ComboBox {
-            model: ["Normal", "Super", "Sub"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Super"),
+                i18nc("@label:inlistbox", "Sub")
+            ]
             Layout.fillWidth: true;
             id: positionCmb;
         }

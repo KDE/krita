@@ -25,7 +25,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Letter Spacing:"
+            text: i18nc("@label:spinbox", "Letter Spacing:")
         }
 
         SpinBox {

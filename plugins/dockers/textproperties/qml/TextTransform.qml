@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Text Transform:"
+            text: i18nc("@title:group", "Text Transform:")
             Layout.columnSpan: 2;
         }
 
@@ -37,12 +37,17 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Case:"
+            text:  i18nc("@label:listbox", "Case:")
         }
 
         ComboBox {
             id: textTransformCaseCmb;
-            model: ["None", "Capitalize", "UpperCase", "Lowercase"]
+            model: [
+                i18nc("@label:inlistbox", "None"),
+                i18nc("@label:inlistbox", "Capitalize"),
+                i18nc("@label:inlistbox", "UpperCase"),
+                i18nc("@label:inlistbox", "Lowercase")
+            ]
             Layout.fillWidth: true
         }
 
@@ -53,7 +58,7 @@ TextPropertyBase {
         }
         CheckBox {
             id: fullWidthChk;
-            text: "Full-width"
+            text: i18nc("@option:check", "Full-width")
             Layout.fillWidth: true;
         }
 
@@ -64,7 +69,7 @@ TextPropertyBase {
         }
         CheckBox {
             id: fullSizeKanaChk;
-            text: "Full-size Kana"
+            text: i18nc("@option:check", "Full-size Kana")
             Layout.fillWidth: true;
         }
     }

@@ -8,6 +8,9 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property int direction;
+    onDirectionChanged: directionCmb.currentIndex = directionCmb.indexOfValue(direction)
+
     RowLayout {
         id: row
         spacing: columnSpacing;
@@ -26,13 +29,19 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Direction:";
+            text: i18nc("@label:listbox", "Direction:");
         }
 
         ComboBox {
             id: directionCmb
             Layout.fillWidth: true;
-            model: ["Left to Right", "Right to Left"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Left to Right"), value: 0},
+                {text: i18nc("@label:inlistbox", "Right to Left"), value: 1}
+            ]
+            textRole: "text";
+            valueRole: "value";
+            onActivated: direction = currentValue;
         }
     }
 }

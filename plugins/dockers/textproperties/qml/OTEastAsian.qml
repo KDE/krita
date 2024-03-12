@@ -26,7 +26,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Glyphs: East-Asian:"
+            text: i18nc("@title:group", "Glyphs: East-Asian:")
             Layout.columnSpan: 2;
         }
 
@@ -36,10 +36,18 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Variant:"
+            text: i18nc("@label:listbox", "Variant:")
         }
         ComboBox {
-            model: ["Normal", "JIS78", "JIS83", "JIS90", "JIS04", "Simplified", "Traditional"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "JIS78"),
+                i18nc("@label:inlistbox", "JIS83"),
+                i18nc("@label:inlistbox", "JIS90"),
+                i18nc("@label:inlistbox", "JIS04"),
+                i18nc("@label:inlistbox", "Simplified"),
+                i18nc("@label:inlistbox", "Traditional")
+            ]
             Layout.fillWidth: true;
             id: variantCmb;
         }
@@ -49,10 +57,14 @@ TextPropertyBase {
             height: 1;
         }
         Label {
-            text: "Width:"
+            text: i18nc("@label:listbox", "Width:")
         }
         ComboBox {
-            model: ["Normal", "Full width", "Proportional"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Full width"),
+                i18nc("@label:inlistbox", "Proportional")
+            ]
             Layout.fillWidth: true;
             id: widthCmb;
         }
@@ -63,7 +75,7 @@ TextPropertyBase {
             Layout.columnSpan: 2;
         }
         CheckBox {
-            text: "Ruby"
+            text: i18nc("@option:check", "Ruby")
             id: rubyCbx;
         }
 

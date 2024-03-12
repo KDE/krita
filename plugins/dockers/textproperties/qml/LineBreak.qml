@@ -25,12 +25,18 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Line Break:"
+            text: i18nc("@label:listbox", "Line Break:")
         }
 
         ComboBox {
             id: lineBreakCmb
-            model: ["Auto", "Loose", "Normal", "Strict", "Anywhere"]
+            model: [
+                i18nc("@label:inlistbox", "Auto"),
+                i18nc("@label:inlistbox", "Loose"),
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Strict"),
+                i18nc("@label:inlistbox", "Anywhere")
+            ]
             Layout.fillWidth: true;
         }
     }

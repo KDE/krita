@@ -25,7 +25,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Writing Mode:"
+            text: i18nc("@title:group", "Overflow Wrap:")
         }
 
 

@@ -25,13 +25,20 @@ TextPropertyBase {
         }
 
         Label {
-            text: "White Space:"
+            text:  i18nc("@label:listbox", "White Space:")
         }
 
 
         ComboBox {
             id: wordBreakCmb
-            model: ["Normal", "Pre", "No Wrap", "Pre Wrap", "Break Spaces", "Pre Line"]
+            model: [
+                i18nc("@label:inlistbox", "Normal"),
+                i18nc("@label:inlistbox", "Pre"),
+                i18nc("@label:inlistbox", "No Wrap"),
+                i18nc("@label:inlistbox", "Pre Wrap"),
+                i18nc("@label:inlistbox", "Break Spaces"),
+                i18nc("@label:inlistbox", "Pre Line")
+            ]
             Layout.fillWidth: true;
         }
     }

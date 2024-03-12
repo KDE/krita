@@ -8,7 +8,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
-    property alias writingMode: writingModeCmb.currentIndex;
+    property int writingMode;
+    onWritingModeChanged: writingModeCmb.currentIndex = writingModeCmb.indexOfValue(writingMode);
 
     RowLayout {
         spacing: columnSpacing;
@@ -27,14 +28,21 @@ TextPropertyBase {
         }
 
         Label {
-            text: "Writing Mode:"
+            text: i18nc("@label:listbox", "Writing Mode:")
         }
 
 
         ComboBox {
             id: writingModeCmb
-            model: ["Horizontal", "Vertical, Right to Left", "Vertical, Left To Right"]
+            model: [
+                {text: i18nc("@label:inlistbox", "Horizontal"), value: 0},
+                {text: i18nc("@label:inlistbox", "Vertical, Right to Left"), value: 1},
+                {text: i18nc("@label:inlistbox", "Vertical, Left To Right"), value: 2}
+            ]
             Layout.fillWidth: true;
+            textRole: "text";
+            valueRole: "value";
+            onActivated: writingMode = currentValue;
         }
     }
 }

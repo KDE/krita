@@ -10,6 +10,7 @@
 #include "kritaflake_export.h"
 
 #include <boost/operators.hpp>
+#include <QDebug>
 
 /**
  * @brief The KoSvgTextPropertyData struct

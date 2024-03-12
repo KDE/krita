@@ -29,12 +29,13 @@ public:
 
 public Q_SLOTS:
     void slotCanvasResourcesChanged(int key, const QVariant &value);
+    void slotTextPropertiesChanged();
 
 private:
     QPointer<KisCanvas2> m_canvas;
     QQuickWidget *m_quickWidget {0};
 
-    class Private;
+    struct Private;
     const QScopedPointer<Private> d;
 };
 

@@ -6,8 +6,14 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    property alias isNormal: lineHeightNormalCbx.checked;
+    property alias lineHeight: lineHeightSpn.value;
+    property var lineHeightUnit;
+    onLineHeightUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(lineHeightUnit);
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -40,6 +46,10 @@ TextPropertyBase {
             Layout.columnSpan: 2;
             text: "Normal"
             id: lineHeightNormalCbx;
+            onCheckedChanged: {
+                lineHeightSpn.enabled = !checked;
+                lineHeightUnitCmb.enabled = !checked;
+            }
         }
         Item {
             width: firstColumnWidth;
@@ -48,10 +58,22 @@ TextPropertyBase {
         SpinBox {
             id: lineHeightSpn
             Layout.fillWidth: true;
+            enabled: !lineHeightNormalCbx.enabled;
         }
 
         ComboBox {
-            model: ["Pt", "Em", "Ex"]
+            id: lineHeightUnitCmb
+            model: [
+                { text: "Pt", value: LineHeightModel.Pt},
+                { text: "Em", value: LineHeightModel.Em},
+                { text: "Ex", value: LineHeightModel.Ex},
+                { text: "%", value: LineHeightModel.Percentage},
+                { text: "Lines", value: LineHeightModel.Lines},
+            ]
+            textRole: "text";
+            valueRole: "value";
+            enabled: !lineHeightNormalCbx.enabled;
+            onActivated: lineHeightUnit = lineHeightUnitCmb.currentValue;
         }
     }
 }

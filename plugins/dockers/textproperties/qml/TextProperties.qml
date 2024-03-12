@@ -15,10 +15,6 @@ Rectangle {
     color: sysPalette.window;
     anchors.fill: parent;
 
-    property KoSvgTextPropertiesModel textPropertyModel : textPropertiesModel;
-
-    onTextPropertyModelChanged: console.log("Writing Mode:" ,textPropertyModel.writingMode);
-
     SystemPalette {
         id: sysPalette;
         colorGroup: SystemPalette.Active
@@ -56,12 +52,27 @@ Rectangle {
                 model: ObjectModel {
                     FontSize {
                         width: characterProperties.width;
+
+                        fontSize: fontSizeModel.value;
+                        onFontSizeChanged: {fontSizeModel.value = fontSize; console.log(fontSizeModel.value);}
+
                     }
                     FontFamily {
                         width: characterProperties.width;
+                        fontFamilies: textPropertiesModel.fontFamilies;
+                        onFontFamiliesChanged: textPropertiesModel.fontFamilies = fontFamilies;
+                        fontFamilyModel: fontFamiliesModel;
                     }
                     FontStyle {
                         width: characterProperties.width;
+                        fontWeight: textPropertiesModel.fontWeight;
+                        onFontWeightChanged: {textPropertiesModel.fontWeight = fontWeight;}
+                        fontWidth: textPropertiesModel.fontWidth;
+                        onFontWidthChanged: textPropertiesModel.fontWidth = fontWidth;
+                        fontSlant: textPropertiesModel.fontStyle;
+                        onFontSlantChanged: textPropertiesModel.fontStyle = fontSlant;
+                        fontOptical: textPropertiesModel.fontOpticalSizeLink;
+                        onFontOpticalChanged: textPropertiesModel.fontOpticalSizeLink = fontOptical;
                     }
                     LetterSpacing {
                         width: characterProperties.width;
@@ -71,6 +82,12 @@ Rectangle {
                     }
                     LineHeight {
                         width: characterProperties.width;
+                        isNormal: lineHeightModel.isNormal;
+                        onIsNormalChanged: lineHeightModel.isNormal = isNormal;
+                        lineHeight: lineHeightModel.value;
+                        onLineHeightChanged: lineHeightModel.value = lineHeight;
+                        lineHeightUnit: lineHeightModel.unit;
+                        onLineHeightUnitChanged: lineHeightModel.unit = lineHeightUnit;
                     }
                     LineBreak {
                         width: characterProperties.width;
@@ -120,7 +137,8 @@ Rectangle {
                 model: ObjectModel {
                     WritingMode {
                         width: parent.width;
-                        writingMode: root.textPropertyModel.writingMode;
+                        writingMode: textPropertiesModel.writingMode;
+                        onWritingModeChanged: {textPropertiesModel.writingMode = writingMode;}
                     }
                     Direction{
                         width: parent.width;

@@ -12,6 +12,8 @@
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickItem>
+#include <QFontDatabase>
+#include <QStringListModel>
 
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
@@ -21,15 +23,20 @@
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
 #include <text/lager/KoSvgTextPropertiesModel.h>
+#include <text/lager/CssLengthPercentageModel.h>
+#include <text/lager/LineHeightModel.h>
+#include <lager/state.hpp>
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<KoSvgTextPropertiesModel>("org.krita.flake.text", 1, 0, "KoSvgTextPropertiesModel");
+    qmlRegisterType<CssLengthPercentageModel>("org.krita.flake.text", 1, 0, "CssLengthPercentageModel");
+    qmlRegisterType<LineHeightModel>("org.krita.flake.text", 1, 0, "LineHeightModel");
 }
 
-class TextPropertiesDock::Private
+struct TextPropertiesDock::Private
 {
-
+    KoSvgTextPropertiesModel *textData {new KoSvgTextPropertiesModel()};
 };
 
 TextPropertiesDock::TextPropertiesDock()
@@ -51,10 +58,17 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setPalette(this->palette());
     m_quickWidget->setMinimumHeight(100);
 
-    m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", new KoSvgTextPropertiesModel());
+    QFontDatabase fontDataBase = QFontDatabase();
 
+    m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textData);
+    m_quickWidget->rootContext()->setContextProperty("fontSizeModel", &d->textData->fontSizeModel);
+    m_quickWidget->rootContext()->setContextProperty("lineHeightModel", &d->textData->lineHeightModel);
+    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(fontDataBase.families()));
+    connect(d->textData, SIGNAL(textPropertyChanged()),
+            this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
+
 }
 
 TextPropertiesDock::~TextPropertiesDock()
@@ -101,7 +115,11 @@ void TextPropertiesDock::slotCanvasResourcesChanged(int key, const QVariant &val
 {
     if (key == KoCanvasResource::SvgTextPropertyData) {
         KoSvgTextPropertyData data = value.value<KoSvgTextPropertyData>();
-        KoSvgTextPropertiesModel textPropertyModel((lager::make_state(data)));
-        m_quickWidget->engine()->rootContext()->setContextProperty("textPropertiesModel", &textPropertyModel);
+        d->textData->textData.set(data);
     }
+}
+
+void TextPropertiesDock::slotTextPropertiesChanged()
+{
+    qDebug() << Q_FUNC_INFO << d->textData->textData.get();
 }

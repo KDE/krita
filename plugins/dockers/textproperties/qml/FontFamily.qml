@@ -10,9 +10,24 @@ import QtQuick.Layouts 1.12
 CollapsibleGroupProperty {
     propertyName: "Font Family:";
 
+    property var fontFamilies: [];
+    property var fontFamilyModel : [];
+    onFontFamiliesChanged: {
+        if (fontFamilies.length >0) {
+            mainFamilyCmb.currentIndex = mainFamilyCmb.find(fontFamilies[0]);
+        }
+        familyListView.model = fontFamilies;
+        height: childrenRect.height;
+    }
+
     titleItem: ComboBox {
         id: mainFamilyCmb;
+        model: fontFamilyModel;
         Layout.fillWidth: true;
+        onActivated: {if (fontFamilies.length >0) {
+                fontFamilies[0] = currentText;
+            }
+        }
     }
 
     contentItem: GridLayout {
@@ -31,28 +46,18 @@ CollapsibleGroupProperty {
         ScrollView {
             id: fullFamilyList;
             Layout.fillWidth: true;
+            Layout.preferredHeight: ItemDelegate.implicitHeight*3;
             background: Rectangle {
                 color: sysPalette.alternateBase;
                 border.color: sysPalette.text;
                 border.width: 1;
             }
-
-            Layout.preferredHeight: childrenRect.height;
             ListView {
+                id: familyListView;
                 anchors.fill: parent;
-                model: ListModel {
-                    ListElement {
-                        text: "Font A";
-                    }
-                    ListElement {
-                        text: "Font B";
-                    }
-                    ListElement {
-                        text: "Font C";
-                    }
-                }
+                model: []
                 delegate: ItemDelegate {
-                    text: model.text;
+                    text: modelData;
                     width: parent.width;
                 }
             }

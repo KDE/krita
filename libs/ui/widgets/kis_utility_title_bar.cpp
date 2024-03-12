@@ -41,6 +41,7 @@ KisUtilityTitleBar::KisUtilityTitleBar(QLabel *title, QWidget *parent)
     d->lockButton->setVisible(true);
     d->lockButton->setToolTip(i18nc("@info:tooltip", "Lock Docker"));
     d->lockButton->setStyleSheet("border: 0");
+    d->lockButton->setFixedSize(QSize(22,22));
 
     d->mainLayout->addWidget(d->lockButton);
 

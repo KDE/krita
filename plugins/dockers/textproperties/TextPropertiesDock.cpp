@@ -45,6 +45,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
 struct TextPropertiesDock::Private
 {
     KoSvgTextPropertiesModel *textData {new KoSvgTextPropertiesModel()};
+    KisCanvasResourceProvider *provider{nullptr};
 };
 
 TextPropertiesDock::TextPropertiesDock()
@@ -87,9 +88,11 @@ TextPropertiesDock::~TextPropertiesDock()
 
 void TextPropertiesDock::setViewManager(KisViewManager *kisview)
 {
-    KisCanvasResourceProvider* resourceProvider = kisview->canvasResourceProvider();
-    connect(resourceProvider->resourceManager(), SIGNAL(canvasResourceChanged(int, QVariant)),
-            this, SLOT(slotCanvasResourcesChanged(int, QVariant)));
+    d->provider = kisview->canvasResourceProvider();
+    if (d->provider) {
+        connect(d->provider->resourceManager(), SIGNAL(canvasResourceChanged(int, QVariant)),
+                this, SLOT(slotCanvasResourcesChanged(int, QVariant)));
+    }
 }
 
 void TextPropertiesDock::setCanvas(KoCanvasBase *canvas)
@@ -129,4 +132,7 @@ void TextPropertiesDock::slotCanvasResourcesChanged(int key, const QVariant &val
 void TextPropertiesDock::slotTextPropertiesChanged()
 {
     qDebug() << Q_FUNC_INFO << d->textData->textData.get();
+    if (d->provider) {
+        d->provider->setTextPropertyData(d->textData->textData.get());
+    }
 }

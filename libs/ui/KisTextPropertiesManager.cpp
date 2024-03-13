@@ -9,6 +9,7 @@
 #include <KoSvgTextPropertyData.h>
 #include <KoSelection.h>
 #include <KoSvgTextShape.h>
+#include <KoSvgTextPropertiesInterface.h>
 
 #include <KisView.h>
 #include <kis_canvas2.h>
@@ -16,8 +17,9 @@
 #include <QPointer>
 
 struct KisTextPropertiesManager::Private {
-    KisCanvasResourceProvider *provider;
-    QPointer<KisView> view {0};
+    KisCanvasResourceProvider *provider {nullptr};
+    QPointer<KisView> view {nullptr};
+    KoSvgTextPropertiesInterface *interface {nullptr};
 };
 
 KisTextPropertiesManager::KisTextPropertiesManager(QObject *parent)
@@ -32,19 +34,57 @@ KisTextPropertiesManager::~KisTextPropertiesManager()
 
 void KisTextPropertiesManager::setView(QPointer<KisView> imageView)
 {
-    if (d->view) {
-        disconnect(d->view->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
-    }
+    //if (d->view) {
+    //    disconnect(d->view->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
+    //}
 
     d->view = imageView;
-    if (d->view) {
-        connect(d->view->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
-    }
+    //if (d->view) {
+    //    connect(d->view->canvasBase()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
+    //}
 }
 
 void KisTextPropertiesManager::setCanvasResourceProvider(KisCanvasResourceProvider *provider)
 {
+    if (d->provider) {
+        disconnect(d->provider, SIGNAL(sigTextPropertiesChanged()), this, SLOT(slotTextPropertiesChanged()));
+    }
     d->provider = provider;
+    if (d->provider) {
+        connect(d->provider, SIGNAL(sigTextPropertiesChanged()), this, SLOT(slotTextPropertiesChanged()));
+    }
+}
+
+void KisTextPropertiesManager::setTextPropertiesInterface(KoSvgTextPropertiesInterface *interface)
+{
+    if (d->interface) {
+        disconnect(d->interface, SIGNAL(textSelectionChanged()), this, SLOT(slotInterfaceSelectionChanged()));
+    }
+    d->interface = interface;
+    if (d->interface) {
+        connect(d->interface, SIGNAL(textSelectionChanged()), this, SLOT(slotInterfaceSelectionChanged()));
+    }
+}
+
+KoSvgTextPropertyData textDataProperties(QList<KoSvgTextProperties> props, QSet<KoSvgTextProperties::PropertyId> propIds) {
+    KoSvgTextPropertyData textData;
+    textData.commonProperties = props.first();
+
+    for (auto it = props.begin(); it != props.end(); it++) {
+        for (int i = 0; i < propIds.size(); i++) {
+            KoSvgTextProperties::PropertyId p = propIds.values().at(i);
+            if (it->hasProperty(p)) {
+                if (textData.commonProperties.property(p) != it->property(p)) {
+                    textData.commonProperties.removeProperty(p);
+                    textData.tristate.insert(p);
+                }
+            } else {
+                textData.commonProperties.removeProperty(p);
+                textData.tristate.insert(p);
+            }
+        }
+    }
+    return textData;
 }
 
 void KisTextPropertiesManager::slotShapeSelectionChanged()
@@ -55,7 +95,7 @@ void KisTextPropertiesManager::slotShapeSelectionChanged()
             || !d->view->canvasBase()->selectedShapesProxy()->selection()
             || !d->provider) return;
 
-    KoSvgTextPropertyData textData;
+
 
     const QList<KoShape*> shapes = d->view->canvasBase()->selectedShapesProxy()->selection()->selectedEditableShapes();
     QList<KoSvgTextProperties> props;
@@ -75,25 +115,35 @@ void KisTextPropertiesManager::slotShapeSelectionChanged()
 
     // Find common properties, and mark all non-common properties as tristate.
 
-    textData.commonProperties = props.first();
+    KoSvgTextPropertyData textData = textDataProperties(props, propIds);
+
+    d->provider->setTextPropertyData(textData);
+}
+
+void KisTextPropertiesManager::slotInterfaceSelectionChanged() {
+    if (!d->interface || !d->provider) return;
+
+    QList<KoSvgTextProperties> props = d->interface->getSelectedProperties();
+    if (props.isEmpty()) return;
+
+    QSet<KoSvgTextProperties::PropertyId> propIds;
 
     for (auto it = props.begin(); it != props.end(); it++) {
-        for (int i = 0; i < propIds.size(); i++) {
-            KoSvgTextProperties::PropertyId p = propIds.values().at(i);
-            if (it->hasProperty(p)) {
-                if (textData.commonProperties.property(p) != it->property(p)) {
-                    textData.commonProperties.removeProperty(p);
-                    textData.tristate.insert(p);
-                }
-            } else {
-                textData.commonProperties.removeProperty(p);
-                textData.tristate.insert(p);
-            }
+        KoSvgTextProperties p = *it;
+        for (int i = 0; i < p.properties().size(); i++) {
+            propIds.insert(p.properties().at(i));
         }
     }
 
-    qDebug() << "Setting text data on canvas resources";
-    qDebug() << textData;
+    KoSvgTextPropertyData textData = textDataProperties(props, propIds);
 
     d->provider->setTextPropertyData(textData);
+
+}
+
+void KisTextPropertiesManager::slotTextPropertiesChanged()
+{
+    if (!d->interface || !d->provider) return;
+
+    d->interface->setPropertiesOnSelected(d->provider->textPropertyData().commonProperties);
 }

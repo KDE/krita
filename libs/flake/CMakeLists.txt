@@ -225,6 +225,7 @@ set(kritaflake_SRCS
     text/KoCssTextUtils.cpp
     text/KoPolygonUtils.cpp
     text/KoSvgTextPropertyData.cpp
+    text/KoSvgTextPropertiesInterface.h
     text/lager/KoSvgTextPropertiesModel.cpp
     text/lager/CssLengthPercentageModel.cpp
     text/lager/LineHeightModel.cpp

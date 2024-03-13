@@ -7,9 +7,11 @@
 #define KISTEXTPROPERTYMANAGER_H
 
 #include <QObject>
+#include "kritaui_export.h"
 
 class KisView;
 class KisCanvasResourceProvider;
+class KoSvgTextPropertiesInterface;
 
 /**
  * @brief The KisTextPropertyManager class
@@ -17,7 +19,7 @@ class KisCanvasResourceProvider;
  * This class handles taking text property data from the currently selected
  * text objects and then setting it on the resource provider.
  */
-class KisTextPropertiesManager : public QObject
+class KRITAUI_EXPORT KisTextPropertiesManager : public QObject
 {
     Q_OBJECT
 public:
@@ -26,9 +28,12 @@ public:
 
     void setView(QPointer<KisView> imageView);
     void setCanvasResourceProvider(KisCanvasResourceProvider *provider);
+    void setTextPropertiesInterface(KoSvgTextPropertiesInterface *interface);
 
 private Q_SLOTS:
     void slotShapeSelectionChanged();
+    void slotInterfaceSelectionChanged();
+    void slotTextPropertiesChanged();
 private:
 
     struct Private;

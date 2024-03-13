@@ -191,6 +191,8 @@ Q_SIGNALS:
     void sigGamutMaskPreviewUpdate();
     void sigGamutMaskDeactivated();
 
+    void sigTextPropertiesChanged();
+
 private:
 
     KisViewManager * m_view {nullptr};

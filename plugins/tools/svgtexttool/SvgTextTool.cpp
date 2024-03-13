@@ -57,6 +57,9 @@
 #include <KoPathShape.h>
 #include <KoPathSegment.h>
 
+#include <KisViewManager.h>
+#include <KisTextPropertiesManager.h>
+
 #include "KisHandlePainterHelper.h"
 #include "kis_tool_utils.h"
 #include <commands/KoKeepShapesSelectedCommand.h>
@@ -110,6 +113,11 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
     KoToolBase::activate(shapes);
     m_canvasConnections.addConnection(canvas()->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(slotShapeSelectionChanged()));
 
+    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    if (canvas2) {
+        canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(m_textCursor.textPropertyInterface());
+    }
+
     useCursor(m_base_cursor);
     slotShapeSelectionChanged();
 
@@ -120,6 +128,10 @@ void SvgTextTool::deactivate()
 {
     KoToolBase::deactivate();
     m_canvasConnections.clear();
+    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    if (canvas2) {
+        canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(nullptr);
+    }
 
     m_hoveredShapeHighlightRect = QPainterPath();
 

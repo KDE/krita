@@ -134,6 +134,8 @@ struct Q_DECL_HIDDEN SvgTextCursor::Private {
     QPainterPath IMEDecoration; ///< The decorations for the current preedit string.
     QRectF oldIMEDecorationRect; ///< Update Rectangle of previous decoration.
     bool blockQueryUpdates = false; ///< Block qApp->inputMethod->update(), enabled during the inputmethod event flow.
+
+    SvgTextPropertyCursor *interface{nullptr};
 };
 
 SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
@@ -146,6 +148,7 @@ SvgTextCursor::SvgTextCursor(KoCanvasBase *canvas) :
         connect(d->canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
                 this, SLOT(canvasResourceChanged(int,QVariant)));
     }
+    d->interface = new SvgTextPropertyCursor(this);
 }
 
 SvgTextCursor::~SvgTextCursor()
@@ -325,6 +328,12 @@ KoSvgTextProperties SvgTextCursor::currentTextProperties() const
         return d->shape->propertiesForPos(d->pos);
     }
     return KoSvgTextProperties();
+}
+
+QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
+{
+    if (!d->shape) return QList<KoSvgTextProperties>();
+    return d->shape->propertiesForRange(d->pos, d->anchor);
 }
 
 void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props)
@@ -1172,6 +1181,11 @@ void SvgTextCursor::focusOut()
     stopBlinkCursor();
 }
 
+KoSvgTextPropertiesInterface *SvgTextCursor::textPropertyInterface()
+{
+    return d->interface;
+}
+
 void SvgTextCursor::updateCursor(bool firstUpdate)
 {
     if (d->shape) {
@@ -1186,6 +1200,7 @@ void SvgTextCursor::updateCursor(bool firstUpdate)
         qApp->inputMethod()->update(Qt::ImQueryInput);
     }
     updateCanvasResources();
+    d->interface->emitSelectionChange();
     if (!(d->canvas->canvasWidget() && d->canvas->canvasController())) {
         // Mockcanvas in the tests has neither.
         return;
@@ -1392,4 +1407,24 @@ void SvgTextCursor::updateCanvasResources()
             }
         }
     }
+}
+
+SvgTextPropertyCursor::SvgTextPropertyCursor(SvgTextCursor *parent)
+    : KoSvgTextPropertiesInterface(parent), m_parent(parent)
+{
+
+}
+QList<KoSvgTextProperties> SvgTextPropertyCursor::getSelectedProperties()
+{
+    return m_parent->propertiesForRange();
+}
+
+void SvgTextPropertyCursor::setPropertiesOnSelected(KoSvgTextProperties properties)
+{
+    m_parent->mergePropertiesIntoSelection(properties);
+}
+
+void SvgTextPropertyCursor::emitSelectionChange()
+{
+    emit textSelectionChanged();
 }

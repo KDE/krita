@@ -9,6 +9,7 @@
 
 #include <KoSvgTextShape.h>
 #include <KoSvgTextProperties.h>
+#include <KoSvgTextPropertiesInterface.h>
 #include <KoToolSelection.h>
 #include <QPainter>
 #include <KoShape.h>
@@ -130,6 +131,8 @@ public:
 
     KoSvgTextProperties currentTextProperties() const;
 
+    QList<KoSvgTextProperties> propertiesForRange() const;
+
     void mergePropertiesIntoSelection(const KoSvgTextProperties props);
 
     /**
@@ -181,6 +184,8 @@ public:
     /// Stops blinking cursor.
     void focusOut();
 
+    KoSvgTextPropertiesInterface *textPropertyInterface();
+
 Q_SIGNALS:
 
     void updateCursorDecoration(QRectF updateRect);
@@ -218,6 +223,18 @@ private:
 
     struct Private;
     const QScopedPointer<Private> d;
+};
+
+class KRITATOOLSVGTEXT_EXPORT SvgTextPropertyCursor : public KoSvgTextPropertiesInterface
+{
+public:
+    SvgTextPropertyCursor(SvgTextCursor *parent);
+    virtual QList<KoSvgTextProperties> getSelectedProperties() override;
+    virtual void setPropertiesOnSelected(KoSvgTextProperties properties) override;
+
+    void emitSelectionChange();
+private:
+    SvgTextCursor *m_parent{nullptr};
 };
 
 Q_DECLARE_METATYPE(SvgTextCursor::MoveMode)

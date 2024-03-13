@@ -549,6 +549,7 @@ bool KisCanvasResourceProvider::disablePressure() const
 void KisCanvasResourceProvider::setTextPropertyData(KoSvgTextPropertyData data)
 {
     m_resourceManager->setResource(KoCanvasResource::SvgTextPropertyData, QVariant::fromValue(data));
+    emit sigTextPropertiesChanged();
 }
 
 KoSvgTextPropertyData KisCanvasResourceProvider::textPropertyData() const

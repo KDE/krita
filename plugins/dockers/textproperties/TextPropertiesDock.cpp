@@ -27,6 +27,9 @@
 #include <text/lager/KoSvgTextPropertiesModel.h>
 #include <text/lager/CssLengthPercentageModel.h>
 #include <text/lager/LineHeightModel.h>
+#include <text/lager/TextIndentModel.h>
+#include <text/lager/TabSizeModel.h>
+#include <text/lager/TextTransformModel.h>
 #include <lager/state.hpp>
 
 /// Strange place to put this, do we have a better spot?
@@ -34,6 +37,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<KoSvgTextPropertiesModel>("org.krita.flake.text", 1, 0, "KoSvgTextPropertiesModel");
     qmlRegisterType<CssLengthPercentageModel>("org.krita.flake.text", 1, 0, "CssLengthPercentageModel");
     qmlRegisterType<LineHeightModel>("org.krita.flake.text", 1, 0, "LineHeightModel");
+    qmlRegisterType<TextIndentModel>("org.krita.flake.text", 1, 0, "TextIndentModel");
+    qmlRegisterType<TabSizeModel>("org.krita.flake.text", 1, 0, "TabSizeModel");
+    qmlRegisterType<TextTransformModel>("org.krita.flake.text", 1, 0, "TextTransformModel");
 }
 
 struct TextPropertiesDock::Private
@@ -64,8 +70,6 @@ TextPropertiesDock::TextPropertiesDock()
     QFontDatabase fontDataBase = QFontDatabase();
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textData);
-    m_quickWidget->rootContext()->setContextProperty("fontSizeModel", &d->textData->fontSizeModel);
-    m_quickWidget->rootContext()->setContextProperty("lineHeightModel", &d->textData->lineHeightModel);
     m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(fontDataBase.families()));
     connect(d->textData, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));

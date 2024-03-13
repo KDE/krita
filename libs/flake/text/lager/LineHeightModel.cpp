@@ -6,15 +6,6 @@
 #include "LineHeightModel.h"
 
 namespace  {
-auto lengthPercentage = lager::lenses::getset (
-            [] (const KoSvgText::LineHeightInfo &value) -> KoSvgText::CssLengthPercentage {
-    return value.length;
-},
-[] (KoSvgText::LineHeightInfo data, const KoSvgText::CssLengthPercentage &val) -> KoSvgText::LineHeightInfo {
-    data.length = val;
-    return data;
-}
-            );
 
 auto getValue =  lager::lenses::getset (
             [] (const KoSvgText::LineHeightInfo &data) -> qreal {

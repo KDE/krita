@@ -10,6 +10,10 @@ import QtQuick.Layouts 1.12
 CollapsibleGroupProperty {
     propertyName: i18nc("@title:group", "Text Indent:");
 
+    property alias textIndentValue: textIndentSpn.value;
+    property alias hanging: indentHangingCkb.checked;
+    property alias eachLine: eachLineCkb.checked;
+
     titleItem: RowLayout {
         spacing: columnSpacing;
         Layout.fillWidth: true;

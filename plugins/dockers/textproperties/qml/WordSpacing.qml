@@ -8,6 +8,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property alias wordSpacing: wordSpacingSpn.value
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;
@@ -29,7 +30,7 @@ TextPropertyBase {
         }
 
         SpinBox {
-            id: fontSizeSpn
+            id: wordSpacingSpn
             Layout.fillWidth: true;
         }
 

@@ -12,7 +12,7 @@ CollapsibleGroupProperty {
 
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
-    property var fontSlant;
+    property int fontSlant;
     onFontSlantChanged: fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant)
     property alias fontOptical: opticalSizeCbx.checked;
 

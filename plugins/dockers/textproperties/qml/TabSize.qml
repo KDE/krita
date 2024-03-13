@@ -6,8 +6,14 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
+
+    property alias tabSize: tabSizeSpn.value;
+    property var tabSizeUnit;
+    onTabSizeUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(tabSizeUnit);
+
     GridLayout {
         columns: 3
         anchors.left: parent.left
@@ -36,12 +42,16 @@ TextPropertyBase {
             Layout.fillWidth: true;
         }
         ComboBox {
+            id: tabSizeUnitCmb
             model: [
-                i18nc("@label:inlistbox", "Spaces"),
-                i18nc("@label:inlistbox", "Pt"),
-                i18nc("@label:inlistbox", "Em"),
-                i18nc("@label:inlistbox", "Ex")
+                {text: i18nc("@label:inlistbox", "Spaces"), value: TabSizeModel.Spaces},
+                {text: i18nc("@label:inlistbox", "Pt"), value: TabSizeModel.Absolute},
+                {text: i18nc("@label:inlistbox", "Em"), value: TabSizeModel.Em},
+                {text: i18nc("@label:inlistbox", "Ex"), value: TabSizeModel.Ex}
             ]
+            textRole: "text";
+            valueRole: "value";
+            onActivated: tabSizeUnit = currentValue;
         }
 
     }

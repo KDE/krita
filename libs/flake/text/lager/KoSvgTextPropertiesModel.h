@@ -15,12 +15,23 @@
 #include "KoSvgTextPropertyData.h"
 #include "CssLengthPercentageModel.h"
 #include "LineHeightModel.h"
+#include "TextIndentModel.h"
+#include "TabSizeModel.h"
+#include "TextTransformModel.h"
 
 #include <kritaflake_export.h>
 
 class KRITAFLAKE_EXPORT KoSvgTextPropertiesModel : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(CssLengthPercentageModel *fontSize READ fontSize NOTIFY fontSizeChanged);
+    Q_PROPERTY(LineHeightModel *lineHeight READ lineHeight NOTIFY lineHeightChanged);
+    Q_PROPERTY(CssLengthPercentageModel *letterSpacing READ letterSpacing NOTIFY letterSpacingChanged);
+    Q_PROPERTY(CssLengthPercentageModel *wordSpacing READ wordSpacing NOTIFY wordSpacingChanged);
+    Q_PROPERTY(CssLengthPercentageModel *baselineShiftValue READ baselineShiftValue NOTIFY baselineShiftValueChanged);
+    Q_PROPERTY(TextIndentModel *textIndent READ textIndent NOTIFY textIndentChanged)
+    Q_PROPERTY(TabSizeModel *tabSize READ tabSize NOTIFY tabSizeChanged)
+    Q_PROPERTY(TextTransformModel *textTransform READ textTransform NOTIFY textTransformChanged)
 public:
     KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData = lager::make_state(KoSvgTextPropertyData(), lager::automatic_tag{}));
 
@@ -28,9 +39,35 @@ public:
     lager::cursor<KoSvgTextProperties> commonProperties;
     lager::cursor<KoSvgText::CssLengthPercentage> fontSizeData;
     lager::cursor<KoSvgText::LineHeightInfo> lineHeightData;
+    lager::cursor<KoSvgText::CssLengthPercentage> letterSpacingData;
+    lager::cursor<KoSvgText::CssLengthPercentage> wordSpacingData;
+    lager::cursor<KoSvgText::CssLengthPercentage> baselineShiftValueData;
+    lager::cursor<KoSvgText::TextIndentInfo> textIndentData;
+    lager::cursor<KoSvgText::TabSizeInfo> tabSizeData;
+    lager::cursor<KoSvgText::TextTransformInfo> textTransformData;
+
 
     CssLengthPercentageModel fontSizeModel;
     LineHeightModel lineHeightModel;
+
+    CssLengthPercentageModel letterSpacingModel;
+    CssLengthPercentageModel wordSpacingModel;
+    CssLengthPercentageModel baselineShiftValueModel;
+
+    TextIndentModel textIndentModel;
+    TabSizeModel tabSizeModel;
+    TextTransformModel textTransformModel;
+
+    CssLengthPercentageModel *fontSize();
+    LineHeightModel *lineHeight();
+
+    CssLengthPercentageModel *letterSpacing();
+    CssLengthPercentageModel *wordSpacing();
+    CssLengthPercentageModel *baselineShiftValue();
+
+    TextIndentModel *textIndent();
+    TabSizeModel *tabSize();
+    TextTransformModel *textTransform();
 
     LAGER_QT_CURSOR(int, writingMode);
     LAGER_QT_CURSOR(int, direction);
@@ -47,6 +84,15 @@ public:
 Q_SIGNALS:
     void textPropertyChanged();
     void fontSizeChanged();
+    void lineHeightChanged();
+
+    void letterSpacingChanged();
+    void wordSpacingChanged();
+    void baselineShiftValueChanged();
+
+    void textIndentChanged();
+    void tabSizeChanged();
+    void textTransformChanged();
 };
 
 #endif // KOSVGTEXTPROPERTIESMODEL_H

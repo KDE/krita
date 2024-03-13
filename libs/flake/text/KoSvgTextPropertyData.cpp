@@ -17,7 +17,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
 QDebug operator<<(QDebug dbg, const KoSvgTextPropertyData &prop)
 {
     dbg.nospace() << "TextPropertyData(";
-    dbg.nospace() << " Common properties:" << prop.commonProperties.convertToSvgTextAttributes();
+    dbg.nospace() << " Common properties:" << prop.commonProperties.convertParagraphProperties() << prop.commonProperties.convertToSvgTextAttributes();
     dbg.nospace() << " Tristate:" << prop.tristate;
     dbg.nospace() << " )";
     return dbg.space();

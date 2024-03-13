@@ -8,6 +8,10 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property alias fullWidth: fullWidthChk.checked;
+    property alias fullSizeKana: fullSizeKanaChk.checked;
+    property int capitals;
+    onCapitalsChanged: textTransformCaseCmb.currentIndex = textTransformCaseCmb.indexOfValue(capitals);
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -43,12 +47,15 @@ TextPropertyBase {
         ComboBox {
             id: textTransformCaseCmb;
             model: [
-                i18nc("@label:inlistbox", "None"),
-                i18nc("@label:inlistbox", "Capitalize"),
-                i18nc("@label:inlistbox", "UpperCase"),
-                i18nc("@label:inlistbox", "Lowercase")
+                {text: i18nc("@label:inlistbox", "None"), value: 0},
+                {text: i18nc("@label:inlistbox", "Capitalize"), value: 1},
+                {text: i18nc("@label:inlistbox", "UpperCase"), value: 2},
+                {text: i18nc("@label:inlistbox", "Lowercase"), value: 4}
             ]
             Layout.fillWidth: true
+            textRole: "text";
+            valueRole: "value";
+            onActivated: capitals = currentValue;
         }
 
         Item {

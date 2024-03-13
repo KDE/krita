@@ -53,8 +53,8 @@ Rectangle {
                     FontSize {
                         width: characterProperties.width;
 
-                        fontSize: fontSizeModel.value;
-                        onFontSizeChanged: {fontSizeModel.value = fontSize; console.log(fontSizeModel.value);}
+                        fontSize: textPropertiesModel.fontSize.value;
+                        onFontSizeChanged: {textPropertiesModel.fontSize.value = fontSize; console.log(textPropertiesModel.fontSize.value);}
 
                     }
                     FontFamily {
@@ -76,18 +76,22 @@ Rectangle {
                     }
                     LetterSpacing {
                         width: characterProperties.width;
+                        letterSpacing: textPropertiesModel.letterSpacing.value;
+                        onLetterSpacingChanged: textPropertiesModel.letterSpacing.value = letterSpacing;
                     }
                     WordSpacing {
                         width: characterProperties.width;
+                        wordSpacing: textPropertiesModel.wordSpacing.value;
+                        onWordSpacingChanged: textPropertiesModel.wordSpacing.value = wordSpacing;
                     }
                     LineHeight {
                         width: characterProperties.width;
-                        isNormal: lineHeightModel.isNormal;
-                        onIsNormalChanged: lineHeightModel.isNormal = isNormal;
-                        lineHeight: lineHeightModel.value;
-                        onLineHeightChanged: lineHeightModel.value = lineHeight;
-                        lineHeightUnit: lineHeightModel.unit;
-                        onLineHeightUnitChanged: lineHeightModel.unit = lineHeightUnit;
+                        isNormal: textPropertiesModel.lineHeight.isNormal;
+                        onIsNormalChanged: textPropertiesModel.lineHeight.isNormal = isNormal;
+                        lineHeight: textPropertiesModel.lineHeight.value;
+                        onLineHeightChanged: textPropertiesModel.lineHeight.value = lineHeight;
+                        lineHeightUnit: textPropertiesModel.lineHeight.unit;
+                        onLineHeightUnitChanged: textPropertiesModel.lineHeight.unit = lineHeightUnit;
                     }
                     LineBreak {
                         width: characterProperties.width;
@@ -97,6 +101,12 @@ Rectangle {
                     }
                     TextTransform {
                         width: characterProperties.width;
+                        fullWidth: textPropertiesModel.textTransform.fullWidth;
+                        onFullWidthChanged: textPropertiesModel.textTransform.fullWidth = fullWidth;
+                        fullSizeKana: textPropertiesModel.textTransform.fullSizeKana;
+                        onFullSizeKanaChanged: textPropertiesModel.textTransform.fullSizeKana = fullSizeKana;
+                        capitals: textPropertiesModel.textTransform.capitals;
+                        onCapitalsChanged: textPropertiesModel.textTransform.capitals = capitals;
                     }
                     TextDecoration {
                         width: characterProperties.width;
@@ -118,6 +128,8 @@ Rectangle {
                     }
                     BaselineShift {
                         width: characterProperties.width;
+                        baselineShiftValue: textPropertiesModel.baselineShiftValue.value;
+                        onBaselineShiftValueChanged: textPropertiesModel.baselineShiftValue.value = baselineShiftValue;
                     }
                     AlignmentBaseline {
                         width: characterProperties.width;
@@ -147,6 +159,12 @@ Rectangle {
                     }
                     TextIndent{
                         width: parent.width;
+                        textIndentValue: textPropertiesModel.textIndent.length.value;
+                        onTextIndentValueChanged: textPropertiesModel.textIndent.length.value = textIndentValue;
+                        hanging: textPropertiesModel.textIndent.hanging;
+                        onHangingChanged: textPropertiesModel.textIndent.hanging = hanging;
+                        eachLine: textPropertiesModel.textIndent.eachLine;
+                        onEachLineChanged: textPropertiesModel.textIndent.eachLine = eachLine;
                     }
                     TextAlign{
                         width: parent.width;
@@ -165,6 +183,10 @@ Rectangle {
                     }
                     TabSize {
                         width: parent.width;
+                        tabSize: textPropertiesModel.tabSize.value;
+                        onTabSizeChanged: textPropertiesModel.tabSize.value = tabSize;
+                        tabSizeUnit: textPropertiesModel.tabSize.unit;
+                        onTabSizeUnitChanged: textPropertiesModel.tabSize.unit = tabSizeUnit;
                     }
                 }
             }

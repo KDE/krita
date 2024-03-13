@@ -8,6 +8,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property alias baselineShiftValue: baselineShiftSpn.value
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;

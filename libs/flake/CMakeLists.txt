@@ -228,6 +228,9 @@ set(kritaflake_SRCS
     text/lager/KoSvgTextPropertiesModel.cpp
     text/lager/CssLengthPercentageModel.cpp
     text/lager/LineHeightModel.cpp
+    text/lager/TextIndentModel.cpp
+    text/lager/TabSizeModel.cpp
+    text/lager/TextTransformModel.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp

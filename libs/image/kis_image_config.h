@@ -72,7 +72,7 @@ public:
     int onionSkinTintFactor() const;
     void setOnionSkinTintFactor(int value);
 
-    int onionSkinOpacity(int offset) const;
+    int onionSkinOpacity(int offset, bool requestDefault = false) const;
     void setOnionSkinOpacity(int offset, int value);
 
     bool onionSkinState(int offset) const;

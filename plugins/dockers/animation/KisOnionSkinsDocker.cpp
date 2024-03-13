@@ -232,15 +232,7 @@ void KisOnionSkinsDocker::initEqualizerSettings(bool useDefaults)
     v.maxDistance = 10;
 
     for (int i = -v.maxDistance; i <= v.maxDistance; i++) {
-        qreal value = config.onionSkinOpacity(i);
-
-        if (value < 0 || useDefaults) { // Apply default value curve.
-            const int num = config.numberOfOnionSkins();
-            if (num > 0) {
-                const qreal dx = qreal(qAbs(i)) / num;
-                value = 0.7 * exp(-pow2(dx) / 0.5) * 255;
-            }
-        }
+        int value = config.onionSkinOpacity(i, useDefaults);
         
         v.value.insert(i, qRound(value * 100.0 / 255.0));
         v.state.insert(i, config.onionSkinState(i));

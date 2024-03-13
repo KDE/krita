@@ -10,11 +10,11 @@ import QtQuick.Layouts 1.12
 CollapsibleGroupProperty {
     propertyName: "Text Align";
 
-    property int textAlignAll;
+    property int textAlignAll: 1;
     onTextAlignAllChanged: textAlignAllCmb.currentIndex = textAlignAllCmb.indexOfValue(textAlignAll);
-    property int textAlignLast;
+    property int textAlignLast: 0;
     onTextAlignLastChanged: textAlignLastCmb.currentIndex = textAlignLastCmb.indexOfValue(textAlignLast);
-    property int textAnchor;
+    property int textAnchor: 0;
     onTextAnchorChanged: textAnchorCmb.currentIndex = textAnchorCmb.indexOfValue(textAnchor);
 
     contentItem: GridLayout {

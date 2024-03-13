@@ -64,6 +64,7 @@ TextPropertyBase {
         SpinBox {
             id: baselineShiftSpn
             Layout.fillWidth: true;
+            enabled: baselineShiftMode == 3;
         }
 
         ComboBox {

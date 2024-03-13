@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     property alias hangStart: paragraphStartCbx.checked;
     property alias hangEnd: paragraphEndCbx.checked;
-    property var hangComma;
+    property int hangComma: KoSvgTextPropertiesModel.NoHang;
     onHangCommaChanged: lineEndCmb.currentIndex = lineEndCmb.indexOfValue(hangComma)
     GridLayout {
         columns: 2;

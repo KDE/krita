@@ -74,8 +74,16 @@ void KisDummiesFacadeBaseTest::verifyMovedDummies(const QString &nodes)
 void KisDummiesFacadeBaseTest::testSetImage()
 {
     constructImage();
+    QVERIFY(!m_dummiesFacade->rootDummy());
 
     m_dummiesFacade->setImage(m_image);
+
+    // set image is asynchronous, so we should wait for
+    // the changes to propagate
+    QVERIFY(!m_dummiesFacade->rootDummy());
+    QTest::qWait(200);
+
+    QVERIFY(m_dummiesFacade->rootDummy());
 
     QString actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     QString expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -84,6 +92,13 @@ void KisDummiesFacadeBaseTest::testSetImage()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_dummiesFacade->setImage(0);
+
+    // set image is asynchronous, so we should wait for
+    // the changes to propagate
+    QTest::qWait(200);
+
+    QVERIFY(!m_dummiesFacade->rootDummy());
+
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
     verifyActivatedNodes("layer1 __null");
@@ -97,6 +112,7 @@ void KisDummiesFacadeBaseTest::testAddNode()
     QString expectedGraph;
 
     m_dummiesFacade->setImage(m_image);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root";
@@ -105,6 +121,7 @@ void KisDummiesFacadeBaseTest::testAddNode()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 1);
 
     constructImage();
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -113,6 +130,8 @@ void KisDummiesFacadeBaseTest::testAddNode()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_dummiesFacade->setImage(0);
+    QTest::qWait(200);
+
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
     verifyActivatedNodes("__null layer1 layer2 layer3 layer4 mask1 __null");
@@ -128,6 +147,7 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     constructImage();
 
     m_dummiesFacade->setImage(m_image);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -136,6 +156,7 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_image->removeNode(m_layer2);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer3 mask1 layer4";
@@ -144,6 +165,7 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 5);
 
     m_image->removeNode(m_layer3);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer4";
@@ -152,6 +174,7 @@ void KisDummiesFacadeBaseTest::testRemoveNode()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 3);
 
     m_dummiesFacade->setImage(0);
+    QTest::qWait(200);
 
     // we are not expected to handle nodes removal, it is done by Qt
     verifyActivatedNodes("layer1 __null");
@@ -168,6 +191,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
     constructImage();
 
     m_dummiesFacade->setImage(m_image);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -176,6 +200,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_image->moveNode(m_layer2, m_image->root(), m_layer3);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer3 mask1 layer2 layer4";
@@ -184,6 +209,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeSameParent()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_dummiesFacade->setImage(0);
+    QTest::qWait(200);
 
     // layer is first removed then added again
     verifyActivatedNodes("layer1 layer2 __null");
@@ -201,6 +227,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     constructImage();
 
     m_dummiesFacade->setImage(m_image);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -209,6 +236,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_image->moveNode(m_layer2, m_image->root(), m_layer4);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer3 mask1 layer4 layer2";
@@ -217,6 +245,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_image->moveNode(m_layer3, m_layer4, m_layer4->lastChild());
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer4 layer3 mask1 layer2";
@@ -225,6 +254,7 @@ void KisDummiesFacadeBaseTest::testMoveNodeDifferentParent()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 6);
 
     m_dummiesFacade->setImage(0);
+    QTest::qWait(200);
 
     // layer is first removed then added again
     verifyActivatedNodes("layer1 layer2 layer3 __null");
@@ -242,6 +272,7 @@ void KisDummiesFacadeBaseTest::testSubstituteRootNode()
     constructImage();
 
     m_dummiesFacade->setImage(m_image);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -260,6 +291,7 @@ void KisDummiesFacadeBaseTest::testSubstituteRootNode()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 2);
 
     m_dummiesFacade->setImage(0);
+    QTest::qWait(200);
 
     verifyActivatedNodes("layer1 __null root Merged __null");
     verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
@@ -274,6 +306,7 @@ void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
     QString expectedGraph;
 
     m_dummiesFacade->setImage(m_image);
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root";
@@ -283,6 +316,7 @@ void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
 
     constructImage();
     addSelectionMasks();
+    QTest::qWait(200);
 
     actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     expectedGraph = "root sel1 layer1 layer2 sel2 layer3 mask1 sel3 layer4";
@@ -291,6 +325,7 @@ void KisDummiesFacadeBaseTest::testAddSelectionMasksNoActivation()
     QCOMPARE(m_dummiesFacade->dummiesCount(), 9);
 
     m_dummiesFacade->setImage(0);
+    QTest::qWait(200);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
     verifyActivatedNodes("__null layer1 layer2 layer3 layer4 mask1 __null");

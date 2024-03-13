@@ -550,7 +550,7 @@ public:
         : m_locked(false)
         , m_image(image)
         , m_savingLock(savingMutex)
-        , m_imageLock(image)
+        , m_imageLock(image, std::defer_lock)
 
     {
         /**
@@ -590,7 +590,7 @@ private:
     bool m_locked;
     KisImageSP m_image;
     QMutex *m_savingLock;
-    KisImageReadOnlyBarrierLockAdapter m_imageLock;
+    KisImageReadOnlyBarrierLock m_imageLock;
 };
 
 KisDocument::KisDocument(bool addStorage)

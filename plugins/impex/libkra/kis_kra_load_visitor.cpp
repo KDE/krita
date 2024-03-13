@@ -402,6 +402,7 @@ bool KisKraLoadVisitor::visit(KisTransformMask *mask)
             QDomElement data;
 
             if (!KisDomUtils::findOnlyElement(rootElement, "data", &data, &m_errorMessages)) {
+                m_errorMessages << i18n("Could not find transform mask XML element");
                 return false;
             }
 

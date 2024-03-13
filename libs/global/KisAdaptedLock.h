@@ -74,6 +74,7 @@ public:
     using std::unique_lock<Adapter>::try_lock;
     using std::unique_lock<Adapter>::lock;
     using std::unique_lock<Adapter>::unlock;
+    using std::unique_lock<Adapter>::owns_lock;
 };
 
 /**

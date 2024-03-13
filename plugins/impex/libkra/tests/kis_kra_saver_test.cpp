@@ -77,17 +77,19 @@ void KisKraSaverTest::testCrashyShapeLayer()
 
 void KisKraSaverTest::testRoundTrip()
 {
-    KisDocument* doc = createCompleteDocument();
+    QScopedPointer<KisDocument> doc(createCompleteDocument());
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
-    doc->exportDocumentSync("roundtriptest.kra", doc->mimeType());
+    doc->image()->waitForDone(); // wait to make sure the image can be locked for saving!
+    bool result = doc->exportDocumentSync("roundtriptest.kra", doc->mimeType());
+    QVERIFY(result);
 
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDocument *doc2 = KisPart::instance()->createDocument();
-    bool result = doc2->loadNativeFormat("roundtriptest.kra");
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    result = doc2->loadNativeFormat("roundtriptest.kra");
     QVERIFY(result);
 
     KisCountVisitor cv2(list, KoProperties());
@@ -103,14 +105,10 @@ void KisKraSaverTest::testRoundTrip()
     QVERIFY(tnode);
     KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode);
     QVERIFY(tmask);
-    KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams*>(tmask->transformParams().data());
+    QSharedPointer<KisDumbTransformMaskParams> params = tmask->transformParams().dynamicCast<KisDumbTransformMaskParams>();
     QVERIFY(params);
     QTransform t = params->testingGetTransform();
     QCOMPARE(t, createTestingTransform());
-
-
-    delete doc2;
-    delete doc;
 }
 
 void KisKraSaverTest::testSaveEmpty()

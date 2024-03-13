@@ -85,6 +85,8 @@ void TimelineModelTest::testConverter()
     m_layer2->setPinnedToTimeline(true);
     m_sel3->setPinnedToTimeline(true);
 
+    QTest::qWait(200);
+
     TimelineFramesIndexConverter converter(m_shapeController);
 
     QCOMPARE(converter.rowCount(), 3);

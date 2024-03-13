@@ -213,11 +213,17 @@ public:
     quint32 getGridSubdivisionStyle(bool defaultValue = false) const;
     void setGridSubdivisionStyle(quint32 v) const;
 
+    quint32 getGridIsoVerticalStyle(bool defaultValue = false) const;
+    void setGridIsoVerticalStyle(quint32 v) const;
+
     QColor getGridMainColor(bool defaultValue = false) const;
     void setGridMainColor(const QColor & v) const;
 
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
+
+    QColor getGridIsoVerticalColor(bool defaultValue = false) const;
+    void setGridIsoVerticalColor(const QColor & v) const;
 
     QColor getPixelGridColor(bool defaultValue = false) const;
     void setPixelGridColor(const QColor & v) const;

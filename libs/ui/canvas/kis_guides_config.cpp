@@ -234,6 +234,8 @@ QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) co
     KisDomUtils::saveValue(&guidesElement, "showGuides", d->showGuides);
     KisDomUtils::saveValue(&guidesElement, "snapToGuides", d->snapToGuides);
     KisDomUtils::saveValue(&guidesElement, "lockGuides", d->lockGuides);
+    KisDomUtils::saveValue(&guidesElement, "colorGuides", d->guidesColor);
+    KisDomUtils::saveValue(&guidesElement, "lineTypeGuides", d->guidesLineType);
 
     KisDomUtils::saveValue(&guidesElement, "horizontalGuides", d->horzGuideLines.toVector());
     KisDomUtils::saveValue(&guidesElement, "verticalGuides", d->vertGuideLines.toVector());
@@ -247,6 +249,7 @@ QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) co
 
 bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
 {
+    KisConfig cfg(false);
     bool result = true;
 
     result &= KisDomUtils::loadValue(parent, "showGuides", &d->showGuides);
@@ -272,6 +275,13 @@ bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
     }
     result &= ok;
 
+    // following variables may not be present in older files; do not update result variable
+    int guidesLineType = cfg.guidesLineStyle();
+    KisDomUtils::loadValue(parent, "lineTypeGuides", &guidesLineType);
+    d->guidesLineType = LineTypeInternal(guidesLineType);
+
+    d->guidesColor = cfg.guidesColor();
+    KisDomUtils::loadValue(parent, "colorGuides", &d->guidesColor);
 
     return result;
 }

@@ -27,6 +27,9 @@ public:
     template <class SpinBoxType>
         void connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *spinTwo, KoAspectButton *aspectButton);
 
+    template <class AngleBoxType>
+        void connectAngleBoxes(AngleBoxType *spinOne, AngleBoxType *spinTwo, KoAspectButton *aspectButton);
+
     void setBlockUpdateSignalOnDrag(bool block);
     void updateAspect();
 

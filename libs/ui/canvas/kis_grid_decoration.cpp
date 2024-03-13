@@ -75,9 +75,6 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
 
     gc.save();
     gc.setTransform(transform);
-    gc.setRenderHints(QPainter::Antialiasing, false);
-    gc.setRenderHints(QPainter::Antialiasing, false);
-
 
     const QRect imageRectInImagePixels = converter->imageRectInImagePixels();
     const QRectF updateRectInImagePixels =
@@ -89,6 +86,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
     KisGridConfig::GridType gridType = m_d->config.gridType();
 
     if (gridType == KisGridConfig::GRID_RECTANGULAR) {
+        gc.setRenderHints(QPainter::Antialiasing, false);
         qreal x1, y1, x2, y2;
         updateRectInImagePixels.getCoords(&x1, &y1, &x2, &y2);
 
@@ -97,9 +95,12 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         x2++;
         y2++;
 
-        {
+        if (m_d->config.xSpacingActive()) {
             // vertical lines
-            const int offset = m_d->config.offset().x();
+            int offset = 0;
+            if (m_d->config.offsetActive()) {
+                offset = m_d->config.offset().x();
+            }
             const int step = scaleCoeff * m_d->config.spacing().x();
             const int lineIndexFirst = qCeil((x1 - offset) / step);
             const int lineIndexLast = qFloor((x2 - offset) / step);
@@ -115,9 +116,12 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             }
         }
 
-        {
+        if (m_d->config.ySpacingActive()) {
             // horizontal lines
-            const int offset = m_d->config.offset().y();
+            int offset = 0;
+            if (m_d->config.offsetActive()) {
+                offset = m_d->config.offset().y();
+            }
             const int step = scaleCoeff * m_d->config.spacing().y();
             const int lineIndexFirst = qCeil((y1 - offset) / step);
             const int lineIndexLast = qFloor((y2 - offset) / step);
@@ -132,9 +136,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
                 gc.drawLine(QPointF(x1, w),QPointF(qMin(x2, qreal(imageRectInImagePixels.right() + 1)), w));
             }
         }
-    }
-
-    if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
+    } else if (gridType == KisGridConfig::GRID_ISOMETRIC_LEGACY)  {
         qreal x1, y1, x2, y2;
 
         // get true coordinates, not just the updateArea
@@ -146,15 +148,19 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         x2++;
         y2++;
 
-        const int offset = m_d->config.offset().x();
-        const int offsetY = m_d->config.offset().y();
+        int offset = 0;
+        int offsetY = 0;
+        if (m_d->config.offsetActive()) {
+            offset = m_d->config.offset().x();
+            offsetY = m_d->config.offset().y();
+        }
         const int cellSpacing = m_d->config.cellSpacing();
 
         gc.setClipping(true);
         gc.setClipRect(updateRectInImagePixels, Qt::IntersectClip);
 
         // left angle
-        {
+        if (m_d->config.angleLeftActive()) {
             const qreal gridXAngle = m_d->config.angleLeft();
             const qreal bottomRightOfImageY = y2; // this should be the height of the image
             qreal finalY = 0.0;
@@ -164,6 +170,10 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             qreal correctedAngleSpacing = cellSpacing;
             if (gridXAngle > 0.0) {
                 correctedAngleSpacing = cellSpacing / qCos(qDegreesToRadians(gridXAngle));
+                gc.setRenderHints(QPainter::Antialiasing, true);
+            } else {
+                // horizontal line: don't want to be antialiased
+                gc.setRenderHints(QPainter::Antialiasing, false);
             }
 
             qreal counter = qFloor((-(offset + offsetY)) / correctedAngleSpacing);
@@ -181,6 +191,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
                 const qreal length2 = qTan(qDegreesToRadians(gridXAngle)) * x2;
 
                 finalY = startingY - length2;
+
                 gc.drawLine(QPointF(x1, w), QPointF(horizontalDistance, finalY));
 
                 counter = counter + 1.0;
@@ -188,7 +199,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         }
 
         // right angle (almost the same thing, except starting the lines on the right side)
-        {
+        if (m_d->config.angleRightActive()) {
             const qreal gridXAngle = m_d->config.angleRight(); // TODO: add another angle property
             const qreal bottomLeftOfImageY = y2;
 
@@ -196,6 +207,10 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             qreal correctedAngleSpacing = cellSpacing;
             if (gridXAngle > 0.0) {
                 correctedAngleSpacing = cellSpacing / qCos(qDegreesToRadians(gridXAngle));
+                gc.setRenderHints(QPainter::Antialiasing, true);
+            } else {
+                // horizontal line: don't want to be antialiased
+                gc.setRenderHints(QPainter::Antialiasing, false);
             }
 
             // distance is the same (width of the image)
@@ -221,13 +236,135 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
                 const qreal startingY = w;
 
                 finalY = startingY - length2;
+
                 gc.drawLine(QPointF(x2, w), QPointF(0.0, finalY));
 
                 counter = counter + 1.0;
             }
         }
+    } else if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
+        qreal x1, y1, xRight, yBottom;
 
+        // get true coordinates, not just the updateArea
+        QRectF trueImageRect = converter->imageRectInImagePixels();
+        trueImageRect.getCoords(&x1, &y1, &xRight, &yBottom);
 
+        // compensate the fact the getCoordt returns off-by-one pixel
+        // at the bottom right of the rect.
+        xRight++;
+        yBottom++;
+
+        const KisGridConfig::TrigoCache trigoCache = m_d->config.trigoCache();
+
+        int offsetX = 0;
+        int offsetY = 0;
+        if (m_d->config.offsetActive()) {
+            offsetX = trigoCache.correctedAngleRightOffsetX;
+            offsetY = m_d->config.offset().y();
+        }
+
+        gc.setClipping(true);
+        gc.setClipRect(updateRectInImagePixels, Qt::IntersectClip);
+
+        // left angle
+        if (trigoCache.correctedAngleLeftCellSize > 0 && m_d->config.angleLeftActive()) {
+            if (m_d->config.angleLeft() > 0.0) {
+                gc.setRenderHints(QPainter::Antialiasing, true);
+            } else {
+                // horizontal line: don't want to be antialiased
+                gc.setRenderHints(QPainter::Antialiasing, false);
+            }
+
+            const qreal length2 = trigoCache.tanAngleLeft * xRight;
+
+            // let's get x, y of the line that starts in the top right corner
+            const qreal yLower = 0.0;
+            const qreal yHigher = yLower - length2;
+
+            const qreal yLeftFirst = qCeil(yHigher / trigoCache.correctedAngleLeftCellSize) * trigoCache.correctedAngleLeftCellSize;
+            const qreal additionalOffset = yLeftFirst - yHigher;
+
+            qreal finalY = 0.0;
+
+            // define line number used to determinate if is a subdivision or not
+            int subdivisionIndex = qCeil(yHigher / trigoCache.correctedAngleLeftCellSize);
+
+            qreal startingY = yLeftFirst + offsetY + offsetX + additionalOffset;
+
+            while (finalY < yBottom) {
+                // calculate where the ending point will be based off the angle
+                finalY = startingY - length2;
+
+                gc.setPen(qAbs(subdivisionIndex) % subdivision == 0 ? mainPen : subdivisionPen);
+                gc.drawLine(QPointF(0.0, startingY), QPointF(xRight, finalY));
+
+                subdivisionIndex++;
+                startingY += trigoCache.correctedAngleLeftCellSize;
+            }
+        }
+
+        // right angle (almost the same thing, except starting the lines on the right side)
+        if (trigoCache.correctedAngleRightCellSize > 0 && m_d->config.angleRightActive()) {
+            if (m_d->config.angleRight() > 0.0) {
+                gc.setRenderHints(QPainter::Antialiasing, true);
+            } else {
+                // horizontal line: don't want to be antialiased
+                gc.setRenderHints(QPainter::Antialiasing, false);
+            }
+
+            const qreal length2 = trigoCache.tanAngleRight * xRight;
+
+            // let's get x, y of the line that starts in the top right corner
+            const qreal yLower = 0.0;
+            const qreal yHigher = yLower - length2;
+
+            const qreal yLeftFirst = qCeil(yHigher / trigoCache.correctedAngleRightCellSize) * trigoCache.correctedAngleRightCellSize;
+            const qreal additionalOffset = yLeftFirst - yHigher;
+
+            qreal finalY = 0.0;
+
+            // define line number used to determinate if is a subdivision or not
+            int subdivisionIndex = qCeil(yHigher / trigoCache.correctedAngleRightCellSize);
+
+            qreal startingY = yLeftFirst + offsetY - offsetX + additionalOffset;
+
+            while (finalY < yBottom) {
+                // calculate where the ending point will be based off the angle
+                finalY = startingY - length2;
+
+                gc.setPen(qAbs(subdivisionIndex) % subdivision == 0 ? mainPen : subdivisionPen);
+                gc.drawLine(QPointF(xRight, startingY), QPointF(0.0, finalY));
+
+                subdivisionIndex++;
+                startingY += trigoCache.correctedAngleRightCellSize;
+            }
+        }
+
+        // vertical
+        if (trigoCache.verticalSpace > 0) {
+            QPen verticalPen = m_d->config.penVertical();
+            if (verticalPen.style() != Qt::SolidLine) {
+                verticalPen.setDashOffset(updateRectInImagePixels.top() * scale);
+            }
+            gc.setPen(verticalPen);
+            gc.setRenderHints(QPainter::Antialiasing, false);
+
+            int offset = 0;
+            if (m_d->config.offsetActive()) {
+                offset = m_d->config.offset().x();
+            }
+
+            qreal pX = (xRight - x1)/(2*trigoCache.verticalSpace);
+            pX = offset + (pX - qFloor(pX)) * trigoCache.verticalSpace;
+            pX = pX - trigoCache.verticalSpace * qFloor(pX/trigoCache.verticalSpace);
+
+            while(pX <= updateRectInImagePixels.right()) {
+                if (pX > updateRectInImagePixels.left()) {
+                    gc.drawLine(QPointF(pX, updateRectInImagePixels.top()),QPointF(pX, qMin(yBottom, qreal(updateRectInImagePixels.bottom() + 1))));
+                }
+                pX += trigoCache.verticalSpace;
+            }
+        }
     }
 
     gc.restore();

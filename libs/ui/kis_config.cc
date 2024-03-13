@@ -918,6 +918,18 @@ void KisConfig::setGridSubdivisionStyle(quint32 v) const
     m_cfg.writeEntry("gridsubdivisionstyle", v);
 }
 
+quint32 KisConfig::getGridIsoVerticalStyle(bool defaultValue) const
+{
+    int v = m_cfg.readEntry("gridisoverticalstyle", 0);
+    v = qBound(0, v, 3);
+    return (defaultValue ? 0 : v);
+}
+
+void KisConfig::setGridIsoVerticalStyle(quint32 v) const
+{
+    m_cfg.writeEntry("gridisoverticalstyle", v);
+}
+
 QColor KisConfig::getGridMainColor(bool defaultValue) const
 {
     QColor col(99, 99, 99);
@@ -938,6 +950,17 @@ QColor KisConfig::getGridSubdivisionColor(bool defaultValue) const
 void KisConfig::setGridSubdivisionColor(const QColor & v) const
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
+}
+
+QColor KisConfig::getGridIsoVerticalColor(bool defaultValue) const
+{
+    QColor col(150, 150, 150);
+    return (defaultValue ? col : m_cfg.readEntry("gridisoverticalcolor", col));
+}
+
+void KisConfig::setGridIsoVerticalColor(const QColor & v) const
+{
+    m_cfg.writeEntry("gridisoverticalcolor", v);
 }
 
 QColor KisConfig::getPixelGridColor(bool defaultValue) const

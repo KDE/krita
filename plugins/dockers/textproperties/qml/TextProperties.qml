@@ -54,7 +54,7 @@ Rectangle {
                         width: characterProperties.width;
 
                         fontSize: textPropertiesModel.fontSize.value;
-                        onFontSizeChanged: {textPropertiesModel.fontSize.value = fontSize; console.log(textPropertiesModel.fontSize.value);}
+                        onFontSizeChanged: {textPropertiesModel.fontSize.value = fontSize;}
 
                     }
                     FontFamily {
@@ -95,9 +95,13 @@ Rectangle {
                     }
                     LineBreak {
                         width: characterProperties.width;
+                        breakType: textPropertiesModel.lineBreak;
+                        onBreakTypeChanged: textPropertiesModel.lineBreak = breakType;
                     }
                     WordBreak {
                         width: characterProperties.width;
+                        breakType: textPropertiesModel.wordBreak;
+                        onBreakTypeChanged: textPropertiesModel.wordBreak = breakType;
                     }
                     TextTransform {
                         width: characterProperties.width;
@@ -116,7 +120,11 @@ Rectangle {
                         onOverlineChanged: textPropertiesModel.textDecorationOverline = overline;
                         linethrough: textPropertiesModel.textDecorationLineThrough;
                         onLinethroughChanged: textPropertiesModel.textDecorationLineThrough = linethrough;
+                        lineStyle: textPropertiesModel.textDecorationStyle;
+                        onLineStyleChanged: textPropertiesModel.textDecorationStyle = lineStyle;
+                        lineColor: textPropertiesModel.textDecorationColor;
                     }
+                    /*
                     OTLigatures {
                         width: characterProperties.width;
                     }
@@ -131,14 +139,18 @@ Rectangle {
                     }
                     OTEastAsian {
                         width: characterProperties.width;
-                    }
+                    }*/
                     BaselineShift {
                         width: characterProperties.width;
                         baselineShiftValue: textPropertiesModel.baselineShiftValue.value;
                         onBaselineShiftValueChanged: textPropertiesModel.baselineShiftValue.value = baselineShiftValue;
+                        baselineShiftMode: textPropertiesModel.baselineShiftMode;
+                        onBaselineShiftModeChanged: textPropertiesModel.baselineShiftMode = baselineShiftMode;
                     }
                     AlignmentBaseline {
                         width: characterProperties.width;
+                        baselineSelection: textPropertiesModel.alignmentBaseline;
+                        onBaselineSelectionChanged: textPropertiesModel.alignmentBaseline = baselineSelection;
                     }
                 }
             }
@@ -174,16 +186,25 @@ Rectangle {
                     }
                     TextAlign{
                         width: parent.width;
+                        textAlignAll: textPropertiesModel.textAlignAll;
+                        onTextAlignAllChanged: textPropertiesModel.textAlignAll = textAlignAll;
+                        textAlignLast: textPropertiesModel.textAlignLast;
+                        onTextAlignLastChanged: textPropertiesModel.textAlignLast = textAlignLast;
+                        textAnchor: textPropertiesModel.textAnchor;
+                        onTextAnchorChanged: textPropertiesModel.textAnchor = textAnchor;
                     }
                     DominantBaseline {
                         width: parent.width;
+                        baselineSelection: textPropertiesModel.dominantBaseline;
+                        onBaselineSelectionChanged: textPropertiesModel.dominantBaseline = baselineSelection;
                     }
+                    /*
                     WhiteSpace {
                         width: parent.width;
                     }
                     UnderlinePosition {
                         width: parent.width;
-                    }
+                    }*/
                     HangingPunctuation {
                         width: parent.width;
                         hangStart: textPropertiesModel.hangingPunctuationFirst;

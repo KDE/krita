@@ -8,6 +8,8 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    property int breakType;
+    onBreakTypeChanged: lineBreakCmb.currentIndex = lineBreakCmb.indexOfValue(breakType);
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;
@@ -31,13 +33,16 @@ TextPropertyBase {
         ComboBox {
             id: lineBreakCmb
             model: [
-                i18nc("@label:inlistbox", "Auto"),
-                i18nc("@label:inlistbox", "Loose"),
-                i18nc("@label:inlistbox", "Normal"),
-                i18nc("@label:inlistbox", "Strict"),
-                i18nc("@label:inlistbox", "Anywhere")
+                { text: i18nc("@label:inlistbox", "Auto"), value: 0},
+                { text: i18nc("@label:inlistbox", "Loose"), value: 1},
+                { text: i18nc("@label:inlistbox", "Normal"), value: 2},
+                { text: i18nc("@label:inlistbox", "Strict"), value: 3},
+                { text: i18nc("@label:inlistbox", "Anywhere"), value: 4}
             ]
             Layout.fillWidth: true;
+            textRole: "text";
+            valueRole: "value";
+            onActivated: breakType = currentValue;
         }
     }
 }

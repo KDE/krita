@@ -8,7 +8,13 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
-    property alias baselineShiftValue: baselineShiftSpn.value
+    property alias baselineShiftValue: baselineShiftSpn.value;
+    property int baselineShiftMode;
+    onBaselineShiftModeChanged: {
+        baselineShiftCmb.currentIndex = baselineShiftCmb.indexOfValue(baselineShiftMode);
+        baselineShiftSpn.enabled = baselineShiftMode == 3;
+    }
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -39,10 +45,16 @@ TextPropertyBase {
 
         ComboBox {
             Layout.columnSpan: 2;
-            model: [i18nc("@label:inlistbox", "Number"),
-                i18nc("@label:inlistbox", "Super"),
-                i18nc("@label:inlistbox", "Sub")]
+            model: [
+                { text: i18nc("@label:inlistbox", "None"), value: 0},
+                { text: i18nc("@label:inlistbox", "Length"), value: 3},
+                { text: i18nc("@label:inlistbox", "Super"), value: 2},
+                { text: i18nc("@label:inlistbox", "Sub"), value: 1}
+            ]
             id: baselineShiftCmb;
+            textRole: "text";
+            valueRole: "value";
+            onActivated: baselineShiftMode = currentValue;
         }
 
         Item {

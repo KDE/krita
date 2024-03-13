@@ -72,10 +72,21 @@ public:
     LAGER_QT_CURSOR(int, writingMode);
     LAGER_QT_CURSOR(int, direction);
     LAGER_QT_CURSOR(int, textAlignAll);
+    LAGER_QT_CURSOR(int, textAlignLast);
+    LAGER_QT_CURSOR(int, textAnchor);
 
     LAGER_QT_CURSOR(int, fontWeight);
     LAGER_QT_CURSOR(int, fontWidth);
-    LAGER_QT_CURSOR(int, fontStyle);
+
+    // QFont::Style isn't exposed to qml.
+    enum FontStyle {
+        StyleNormal = QFont::StyleNormal,
+        StyleItalic = QFont::StyleItalic,
+        StyleOblique = QFont::StyleOblique
+    };
+    Q_ENUM(FontStyle);
+
+    LAGER_QT_CURSOR(FontStyle, fontStyle);
     LAGER_QT_CURSOR(bool, fontOpticalSizeLink);
 
     LAGER_QT_CURSOR(QStringList, fontFamilies);
@@ -83,6 +94,10 @@ public:
     LAGER_QT_CURSOR(bool, textDecorationUnderline);
     LAGER_QT_CURSOR(bool, textDecorationOverline);
     LAGER_QT_CURSOR(bool, textDecorationLineThrough);
+
+    LAGER_QT_CURSOR(int, textDecorationStyle);
+
+    LAGER_QT_CURSOR(QColor, textDecorationColor);
 
     enum HangComma {
         NoHang,
@@ -93,6 +108,13 @@ public:
     LAGER_QT_CURSOR(bool, hangingPunctuationFirst);
     LAGER_QT_CURSOR(HangComma, hangingPunctuationComma);
     LAGER_QT_CURSOR(bool, hangingPunctuationLast);
+
+    LAGER_QT_CURSOR(int, alignmentBaseline);
+    LAGER_QT_CURSOR(int, dominantBaseline);
+    LAGER_QT_CURSOR(int, baselineShiftMode);
+
+    LAGER_QT_CURSOR(int, wordBreak);
+    LAGER_QT_CURSOR(int, lineBreak);
 
 
 Q_SIGNALS:

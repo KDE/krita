@@ -6,13 +6,14 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: i18nc("@label", "Font Style");
 
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
-    property int fontSlant;
+    property int fontSlant: KoSvgTextPropertiesModel.StyleNormal;
     onFontSlantChanged: fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant)
     property alias fontOptical: opticalSizeCbx.checked;
 
@@ -81,9 +82,9 @@ CollapsibleGroupProperty {
         ComboBox {
             id: fontSlantCmb
             model: [
-                {text: i18nc("@label:inlistbox", "Normal"), value: 0},
-                {text: i18nc("@label:inlistbox", "Italic"), value: 1},
-                {text: i18nc("@label:inlistbox", "Oblique"), value: 2}
+                {text: i18nc("@label:inlistbox", "Normal"), value: KoSvgTextPropertiesModel.StyleNormal},
+                {text: i18nc("@label:inlistbox", "Italic"), value: KoSvgTextPropertiesModel.StyleItalic},
+                {text: i18nc("@label:inlistbox", "Oblique"), value: KoSvgTextPropertiesModel.StyleOblique}
             ]
             Layout.fillWidth: true
             textRole: "text";

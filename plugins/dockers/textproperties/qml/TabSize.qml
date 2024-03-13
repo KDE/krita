@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
 
     property alias tabSize: tabSizeSpn.value;
-    property var tabSizeUnit;
+    property int tabSizeUnit: TabSizeModel.Spaces;
     onTabSizeUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(tabSizeUnit);
 
     GridLayout {

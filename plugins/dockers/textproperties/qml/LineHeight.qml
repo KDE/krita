@@ -11,7 +11,7 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     property alias isNormal: lineHeightNormalCbx.checked;
     property alias lineHeight: lineHeightSpn.value;
-    property var lineHeightUnit;
+    property int lineHeightUnit: LineHeightModel.Lines;
     onLineHeightUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(lineHeightUnit);
 
     GridLayout {

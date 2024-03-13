@@ -12,6 +12,9 @@ TextPropertyBase {
     property alias underline: underlineCbx.checked;
     property alias overline: overlineCbx.checked;
     property alias linethrough: linethroughCbx.checked;
+    property int lineStyle;
+    property color lineColor;
+    onLineStyleChanged: lineStyleCmb.currentIndex = lineStyleCmb.indexOfValue(lineStyle)
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -81,9 +84,11 @@ TextPropertyBase {
         CheckBox {
             text: i18nc("@label:chooser", "Color")
             id: colorCbx;
+            enabled: false;
         }
         Rectangle {
             // replace with color picker?
+            color: lineColor;
             Layout.fillWidth: true;
             Layout.fillHeight: true;
         }
@@ -97,14 +102,18 @@ TextPropertyBase {
         }
 
         ComboBox {
+            id: lineStyleCmb;
             model: [
-                i18nc("@label:inlistbox", "Solid"),
-                i18nc("@label:inlistbox", "Dotted"),
-                i18nc("@label:inlistbox", "Dashed"),
-                i18nc("@label:inlistbox", "Double"),
-                i18nc("@label:inlistbox", "Wavy")
+                { text: i18nc("@label:inlistbox", "Solid"), value: 0},
+                { text: i18nc("@label:inlistbox", "Dotted"), value: 2},
+                { text: i18nc("@label:inlistbox", "Dashed"), value: 3},
+                { text: i18nc("@label:inlistbox", "Double"), value: 1},
+                { text: i18nc("@label:inlistbox", "Wavy"), value: 4},
             ]
             Layout.fillWidth: true;
+            textRole: "text";
+            valueRole: "value";
+            onActivated: lineStyle = currentValue;
         }
     }
 }

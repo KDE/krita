@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-11 01:34+0000\n"
-"PO-Revision-Date: 2024-02-27 16:07+0100\n"
+"PO-Revision-Date: 2024-03-11 12:59+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -17422,10 +17422,9 @@ msgstr "S'ha produït un error"
 
 #: libs/image/kis_layer_properties_icons.cpp:34
 #: libs/ui/flake/kis_shape_layer.cc:339
-#, fuzzy, kde-format
-#| msgid "Anti-aliased"
+#, kde-format
 msgid "Antialiased"
-msgstr "Antialiàsing"
+msgstr "Amb antialiàsing"
 
 #: libs/image/kis_layer_utils.cpp:619
 #, kde-format
@@ -29911,7 +29910,7 @@ msgstr ""
 "style=\"color:%1;\"><b>Utilitzar Krita</b></span></p><p><a href=\"https://"
 "krita.org/support-vos/\"><span style=\"text-decoration: underline; color:%1;"
 "\">Dona suport al desenvolupament de Krita!</span></a></p><p><a href="
-"\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style="
+"\"https://docs.krita.org/ca/user_manual/getting_started.html\"><span style="
 "\"text-decoration: underline; color:%1;\">Com començar</span></a></p><p> <a "
 "href=\"https://docs.krita.org/\"><span style=\"text-decoration: underline; "
 "color:%1;\">Manual</span></a></p><p><a href=\"https://krita.org/\"><span "
@@ -34817,7 +34816,7 @@ msgstr ""
 "<html><body><p><b>AVÍS:</b> La imatge apareixerà diferent després de canviar "
 "el perfil de color perquè pot contindre:<ul><li>més d'una capa</li><li>una o "
 "més capes amb píxels transparents</li><li>capes amb modes de barreja "
-"diferents del «Normal»</li></ul></p><p><a href=\"https://docs.krita.org/en/"
+"diferents del «Normal»</li></ul></p><p><a href=\"https://docs.krita.org/ca/"
 "general_concepts/colors/color_managed_workflow.html\">Més informació</a></"
 "p></body></html>"
 
@@ -60278,12 +60277,10 @@ msgid "Spread: {n}%"
 msgstr "Extensió: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
-#, fuzzy, kde-format
-#| msgctxt "The 'close gap' spinbox prefix in fill tool options"
-#| msgid "Close Gap: "
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Separació de tancament:"
+msgstr "Separació de tancament: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
 #, kde-format

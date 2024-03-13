@@ -1230,10 +1230,13 @@ void KisViewManager::switchCanvasOnly(bool toggled)
     }
 
     const bool toggleFullscreen = (options.hideTitlebarFullscreen && !cfg.fullscreenMode());
-    const bool hasCanvasController = (d->currentImageView && d->currentImageView->canvasController());
+    const bool useCanvasOffsetCompensation = d->currentImageView &&
+                                             d->currentImageView->canvasController() &&
+                                             d->currentImageView->isMaximized() &&
+                                             !main->canvasDetached();
 
-    // Canvas offset compensation (step 1)
-    if (hasCanvasController && !main->canvasDetached()) {
+    if (useCanvasOffsetCompensation) {
+        // The offset is calculated in two steps; this is the first step.
         if (toggled) {
             // Capture the initial canvas position.
             QPoint origin;
@@ -1355,8 +1358,7 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         }
     }
 
-    // Canvas offset compensation (step 2)
-    if (hasCanvasController && !main->canvasDetached() && toggled) {
+    if (useCanvasOffsetCompensation && toggled) {
         const bool allowedZoomMode =
             (zoomController()->zoomMode() == KoZoomMode::ZOOM_CONSTANT) ||
             (zoomController()->zoomMode() == KoZoomMode::ZOOM_HEIGHT);

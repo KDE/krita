@@ -63,6 +63,62 @@ auto tabSizeProperty = lager::lenses::getset(
 auto textTransformProperty = lager::lenses::getset(
             [](const QVariant &value) -> KoSvgText::TextTransformInfo {return value.value<KoSvgText::TextTransformInfo>();},
             [](QVariant value, const KoSvgText::TextTransformInfo &val){value = QVariant::fromValue(val); return value;});
+auto textDecorLineProp = [](KoSvgText::TextDecoration flag) {
+    return lager::lenses::getset(
+        [flag](const QVariant &value) -> bool {
+            return value.value<KoSvgText::TextDecorations>().testFlag(flag);
+        },
+        [flag](QVariant value, const bool &val){
+            KoSvgText::TextDecorations decor = value.value<KoSvgText::TextDecorations>();
+            decor.setFlag(flag, val);
+            value = QVariant::fromValue(decor);
+            return value;
+        }
+    );
+};
+auto hangPunctuationProp = [](KoSvgText::HangingPunctuation flag) {
+    return lager::lenses::getset(
+        [flag](const QVariant &value) -> bool {
+            return value.value<KoSvgText::HangingPunctuations>().testFlag(flag);
+        },
+        [flag](QVariant value, const bool &val){
+            KoSvgText::HangingPunctuations hang = value.value<KoSvgText::HangingPunctuations>();
+            hang.setFlag(flag, val);
+            value = QVariant::fromValue(hang);
+            return value;
+        }
+    );
+};
+auto hangingPunactuationCommaProp = lager::lenses::getset(
+            [](const QVariant &value) -> KoSvgTextPropertiesModel::HangComma {
+                KoSvgText::HangingPunctuations hang = value.value<KoSvgText::HangingPunctuations>();
+                if (hang.testFlag(KoSvgText::HangEnd)) {
+                    return hang.testFlag(KoSvgText::HangForce)?
+                                KoSvgTextPropertiesModel::HangComma::ForceHang:
+                                KoSvgTextPropertiesModel::HangComma::AllowHang;
+                }
+                return KoSvgTextPropertiesModel::NoHang;
+            },
+            [](QVariant value, const KoSvgTextPropertiesModel::HangComma &val){
+            KoSvgText::HangingPunctuations hang = value.value<KoSvgText::HangingPunctuations>();
+            switch (val) {
+            case KoSvgTextPropertiesModel::NoHang:
+                hang.setFlag(KoSvgText::HangEnd, false);
+                hang.setFlag(KoSvgText::HangForce, false);
+                break;
+            case KoSvgTextPropertiesModel::AllowHang:
+                hang.setFlag(KoSvgText::HangEnd, true);
+                hang.setFlag(KoSvgText::HangForce, false);
+                break;
+            case KoSvgTextPropertiesModel::ForceHang:
+                hang.setFlag(KoSvgText::HangEnd, true);
+                hang.setFlag(KoSvgText::HangForce, true);
+                break;
+            }
+            value = QVariant::fromValue(hang);
+            return value;
+            }
+        );
 }
 
 KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData)
@@ -92,6 +148,12 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontStyle) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(integerProperty)}
     , LAGER_QT(fontOpticalSizeLink) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontOpticalSizingId)).zoom(boolProperty)}
     , LAGER_QT(fontFamilies) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(stringListProperty)}
+    , LAGER_QT(textDecorationUnderline){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationUnderline))}
+    , LAGER_QT(textDecorationOverline){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationOverline))}
+    , LAGER_QT(textDecorationLineThrough){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationLineThrough))}
+    , LAGER_QT(hangingPunctuationFirst){commonProperties.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangFirst))}
+    , LAGER_QT(hangingPunctuationComma){commonProperties.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangingPunactuationCommaProp)}
+    , LAGER_QT(hangingPunctuationLast){commonProperties.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangLast))}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));
     lager::watch(fontSizeData, std::bind(&KoSvgTextPropertiesModel::fontSizeChanged, this));

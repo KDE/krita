@@ -110,6 +110,12 @@ Rectangle {
                     }
                     TextDecoration {
                         width: characterProperties.width;
+                        underline: textPropertiesModel.textDecorationUnderline;
+                        onUnderlineChanged: textPropertiesModel.textDecorationUnderline = underline;
+                        overline: textPropertiesModel.textDecorationOverline;
+                        onOverlineChanged: textPropertiesModel.textDecorationOverline = overline;
+                        linethrough: textPropertiesModel.textDecorationLineThrough;
+                        onLinethroughChanged: textPropertiesModel.textDecorationLineThrough = linethrough;
                     }
                     OTLigatures {
                         width: characterProperties.width;
@@ -180,6 +186,12 @@ Rectangle {
                     }
                     HangingPunctuation {
                         width: parent.width;
+                        hangStart: textPropertiesModel.hangingPunctuationFirst;
+                        onHangStartChanged: textPropertiesModel.hangingPunctuationFirst = hangStart;
+                        hangEnd: textPropertiesModel.hangingPunctuationLast;
+                        onHangEndChanged: textPropertiesModel.hangingPunctuationLast = hangEnd;
+                        hangComma: textPropertiesModel.hangingPunctuationComma;
+                        onHangCommaChanged: textPropertiesModel.hangingPunctuationComma = hangComma;
                     }
                     TabSize {
                         width: parent.width;

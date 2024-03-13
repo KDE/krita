@@ -8,6 +8,10 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+
+    property alias underline: underlineCbx.checked;
+    property alias overline: overlineCbx.checked;
+    property alias linethrough: linethroughCbx.checked;
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -65,7 +69,7 @@ TextPropertyBase {
         CheckBox {
             Layout.columnSpan: 2;
             text: i18nc("@option:check", "Line-through")
-            id: linethoughCbx;
+            id: linethroughCbx;
         }
 
 

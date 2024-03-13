@@ -6,8 +6,13 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    property alias hangStart: paragraphStartCbx.checked;
+    property alias hangEnd: paragraphEndCbx.checked;
+    property var hangComma;
+    onHangCommaChanged: lineEndCmb.currentIndex = lineEndCmb.indexOfValue(hangComma)
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;
@@ -51,11 +56,15 @@ TextPropertyBase {
         }
         ComboBox {
             model: [
-                i18nc("@label:inlistbox", "No Hanging"),
-                i18nc("@label:inlistbox", "Allow hanging commas"),
-                i18nc("@label:inlistbox", "Force hanging commas")]
+                {text: i18nc("@label:inlistbox", "No Hanging"), value: KoSvgTextPropertiesModel.NoHang},
+                {text: i18nc("@label:inlistbox", "Allow hanging commas"), value: KoSvgTextPropertiesModel.AllowHang},
+                {text: i18nc("@label:inlistbox", "Force hanging commas"), value: KoSvgTextPropertiesModel.ForceHang}
+            ]
             Layout.fillWidth: true;
             id: lineEndCmb;
+            textRole: "text";
+            valueRole: "value";
+            onActivated: hangComma = currentValue;
         }
 
         Item {

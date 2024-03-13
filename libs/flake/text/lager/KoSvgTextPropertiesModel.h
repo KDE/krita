@@ -80,6 +80,20 @@ public:
 
     LAGER_QT_CURSOR(QStringList, fontFamilies);
 
+    LAGER_QT_CURSOR(bool, textDecorationUnderline);
+    LAGER_QT_CURSOR(bool, textDecorationOverline);
+    LAGER_QT_CURSOR(bool, textDecorationLineThrough);
+
+    enum HangComma {
+        NoHang,
+        AllowHang,
+        ForceHang
+    };
+    Q_ENUM(HangComma)
+    LAGER_QT_CURSOR(bool, hangingPunctuationFirst);
+    LAGER_QT_CURSOR(HangComma, hangingPunctuationComma);
+    LAGER_QT_CURSOR(bool, hangingPunctuationLast);
+
 
 Q_SIGNALS:
     void textPropertyChanged();

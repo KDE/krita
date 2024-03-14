@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-11 01:34+0000\n"
+"POT-Creation-Date: 2024-03-14 01:58+0000\n"
 "PO-Revision-Date: 2024-03-11 09:21+0100\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -16819,11 +16819,12 @@ msgstr "Tamaño"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:672
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
-#: plugins/dockers/griddocker/grid_config_widget.cpp:50
-#: plugins/dockers/griddocker/grid_config_widget.ui:198
-#: plugins/dockers/griddocker/grid_config_widget.ui:230
-#: plugins/dockers/griddocker/grid_config_widget.ui:444
-#: plugins/dockers/griddocker/grid_config_widget.ui:489
+#: plugins/dockers/griddocker/grid_config_widget.cpp:51
+#: plugins/dockers/griddocker/grid_config_widget.cpp:52
+#: plugins/dockers/griddocker/grid_config_widget.ui:420
+#: plugins/dockers/griddocker/grid_config_widget.ui:442
+#: plugins/dockers/griddocker/grid_config_widget.ui:654
+#: plugins/dockers/griddocker/grid_config_widget.ui:717
 #: plugins/dockers/recorder/recorder_export.ui:478
 #: plugins/dockers/recorder/recorder_export.ui:516
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:472
@@ -17463,11 +17464,15 @@ msgstr "Abrir o ficheiro"
 msgid "Error"
 msgstr "Erro"
 
+#. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
+#. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
 #: libs/image/kis_layer_properties_icons.cpp:34
 #: libs/ui/flake/kis_shape_layer.cc:339
+#: plugins/extensions/modify_selection/wdg_border_selection.ui:127
+#: plugins/paintops/sketch/wdgsketchoptions.ui:179
 #, kde-format
-msgid "Antialiased"
-msgstr "Suavizada"
+msgid "Anti-aliasing"
+msgstr "Suavizado das curvas"
 
 #: libs/image/kis_layer_utils.cpp:619
 #, kde-format
@@ -20015,7 +20020,7 @@ msgstr "Miniatura"
 #: libs/resources/KisTagModel.cpp:126 libs/resources/KisTagModel.cpp:302
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:609
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:425
-#: plugins/dockers/griddocker/grid_config_widget.ui:675
+#: plugins/dockers/griddocker/grid_config_widget.ui:885
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:866
@@ -22088,6 +22093,7 @@ msgstr "Versión de FFmpeg:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbGradientRepeat)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbDecor)
 #. i18n: ectx: property (text), widget (QLabel, lblNone)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbPopupScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbScrolling)
 #. i18n: ectx: property (text), item, widget (QComboBox, cbCommonColorsScrolling)
@@ -22095,6 +22101,7 @@ msgstr "Versión de FFmpeg:"
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:204
 #: libs/ui/widgets/KoFillConfigWidget.ui:41
 #: libs/ui/widgets/KoFillConfigWidget.ui:275
+#: plugins/dockers/griddocker/grid_config_widget.ui:259
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:284
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:623
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:830
@@ -22221,7 +22228,7 @@ msgstr "Grade"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/canvas/kis_guides_manager.cpp:777
-#: plugins/dockers/griddocker/grid_config_widget.ui:536
+#: plugins/dockers/griddocker/grid_config_widget.ui:746
 #, kde-format
 msgid "Guides"
 msgstr "Guías"
@@ -23443,7 +23450,6 @@ msgstr "px"
 #. i18n: ectx: property (text), widget (QLabel, lblXOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:88
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:98
-#: plugins/dockers/griddocker/grid_config_widget.ui:463
 #, kde-format
 msgid "X offset:"
 msgstr "Desprazamento en X:"
@@ -23451,7 +23457,6 @@ msgstr "Desprazamento en X:"
 #. i18n: ectx: property (text), widget (QLabel, lblYOffset)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:125
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:135
-#: plugins/dockers/griddocker/grid_config_widget.ui:476
 #, kde-format
 msgid "Y offset:"
 msgstr "Desprazamento en Y:"
@@ -27966,10 +27971,12 @@ msgstr "Desprazamento"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXOff)
 #. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: ectx: property (text), widget (QLabel, lblXOffset)
 #. i18n: ectx: property (text), widget (QLabel, xLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratiox_label)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/imagesize/wdg_canvassize.ui:196
+#: plugins/dockers/griddocker/grid_config_widget.ui:673
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:44
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:241
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:394
@@ -27981,10 +27988,12 @@ msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYOff)
 #. i18n: ectx: property (text), widget (QLabel, label_2)
+#. i18n: ectx: property (text), widget (QLabel, lblYOffset)
 #. i18n: ectx: property (text), widget (QLabel, yLabel)
 #. i18n: ectx: property (text), widget (QLabel, ratioy_label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/imagesize/wdg_canvassize.ui:530
+#: plugins/dockers/griddocker/grid_config_widget.ui:704
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:74
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:251
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:404
@@ -39003,7 +39012,7 @@ msgstr "Seguro que quere eliminar a máscara <b>'%1'</b>?"
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
 #. i18n: ectx: property (text), item, widget (KComboBox, cbShape)
-#: plugins/dockers/griddocker/grid_config_widget.cpp:56
+#: plugins/dockers/griddocker/grid_config_widget.cpp:63
 #: plugins/filters/blur/wdgblur.ui:81
 #: plugins/flake/pathshapes/rectangle/RectangleShapeFactory.cpp:23
 #: plugins/paintops/gridbrush/wdggridbrushshapeoptions.ui:46
@@ -39014,15 +39023,22 @@ msgstr "Seguro que quere eliminar a máscara <b>'%1'</b>?"
 msgid "Rectangle"
 msgstr "Rectángulo"
 
-#: plugins/dockers/griddocker/grid_config_widget.cpp:57
-#: plugins/dockers/griddocker/grid_config_widget.cpp:356
+#: plugins/dockers/griddocker/grid_config_widget.cpp:64
+#: plugins/dockers/griddocker/grid_config_widget.cpp:418
+#, fuzzy, kde-format
+#| msgid "Isometric"
+msgid "Isometric (Legacy)"
+msgstr "Isométrica"
+
+#: plugins/dockers/griddocker/grid_config_widget.cpp:65
 #, kde-format
 msgid "Isometric"
 msgstr "Isométrica"
 
-#: plugins/dockers/griddocker/grid_config_widget.cpp:358
-#, kde-format
-msgid "Isometric (requires OpenGL)"
+#: plugins/dockers/griddocker/grid_config_widget.cpp:420
+#, fuzzy, kde-format
+#| msgid "Isometric (requires OpenGL)"
+msgid "Isometric (Legacy - requires OpenGL)"
 msgstr "Isométrica (require OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
@@ -39037,117 +39053,138 @@ msgstr "Amosar a grade."
 msgid "Snap to grid"
 msgstr "Axustar á grade."
 
-#. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
-#: plugins/dockers/griddocker/grid_config_widget.ui:142
-#, kde-format
-msgid "Cell Spacing:"
-msgstr "Espazo entre celas:"
-
-#. i18n: ectx: property (text), widget (QLabel, rightAngleLabel)
-#: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, kde-format
-msgid "Right Angle:"
-msgstr "Ángulo dereito:"
-
-#. i18n: ectx: property (text), widget (QLabel, leftAngleLabel)
-#: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, kde-format
-msgid "Left Angle:"
-msgstr "Ángulo esquerdo:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
-#: plugins/dockers/griddocker/grid_config_widget.ui:191
-#, kde-format
-msgid "X spacing:"
-msgstr "Espazamento en X:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblYSpacing)
-#: plugins/dockers/griddocker/grid_config_widget.ui:223
-#, kde-format
-msgid "Y spacing:"
-msgstr "Espazamento en Y:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
-#: plugins/dockers/griddocker/grid_config_widget.ui:246
-#, kde-format
-msgid "Subdivision:"
-msgstr "Subdivisión:"
-
-#. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
-#: plugins/dockers/griddocker/grid_config_widget.ui:315
-#, kde-format
-msgid "Div Style:"
-msgstr "Estilo das divisións:"
-
-#. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectGuidesStyle)
-#: plugins/dockers/griddocker/grid_config_widget.ui:329
-#: plugins/dockers/griddocker/grid_config_widget.ui:370
-#: plugins/dockers/griddocker/grid_config_widget.ui:598
+#: plugins/dockers/griddocker/grid_config_widget.ui:118
+#: plugins/dockers/griddocker/grid_config_widget.ui:244
+#: plugins/dockers/griddocker/grid_config_widget.ui:300
+#: plugins/dockers/griddocker/grid_config_widget.ui:808
 #, kde-format
 msgctxt "Grid line style - Solid Lines"
 msgid "Lines"
 msgstr "Liñas"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectGuidesStyle)
-#: plugins/dockers/griddocker/grid_config_widget.ui:334
-#: plugins/dockers/griddocker/grid_config_widget.ui:375
-#: plugins/dockers/griddocker/grid_config_widget.ui:603
+#: plugins/dockers/griddocker/grid_config_widget.ui:123
+#: plugins/dockers/griddocker/grid_config_widget.ui:249
+#: plugins/dockers/griddocker/grid_config_widget.ui:305
+#: plugins/dockers/griddocker/grid_config_widget.ui:813
 #, kde-format
 msgid "Dashed"
 msgstr "Riscos"
 
-#. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectMainStyle)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectVerticalStyle)
+#. i18n: ectx: property (text), item, widget (KComboBox, selectSubdivisionStyle)
 #. i18n: ectx: property (text), item, widget (KComboBox, selectGuidesStyle)
-#: plugins/dockers/griddocker/grid_config_widget.ui:339
-#: plugins/dockers/griddocker/grid_config_widget.ui:380
-#: plugins/dockers/griddocker/grid_config_widget.ui:608
+#: plugins/dockers/griddocker/grid_config_widget.ui:128
+#: plugins/dockers/griddocker/grid_config_widget.ui:254
+#: plugins/dockers/griddocker/grid_config_widget.ui:310
+#: plugins/dockers/griddocker/grid_config_widget.ui:818
 #, kde-format
 msgid "Dots"
 msgstr "Puntos"
 
+#. i18n: ectx: property (text), widget (QLabel, leftAngleLabel)
+#: plugins/dockers/griddocker/grid_config_widget.ui:142
+#, kde-format
+msgid "Left Angle:"
+msgstr "Ángulo esquerdo:"
+
+#. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
+#: plugins/dockers/griddocker/grid_config_widget.ui:155
+#, fuzzy, kde-format
+#| msgid "Pixel Size"
+msgid "Cell Size:"
+msgstr "Tamaño dos píxeles"
+
+#. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
+#: plugins/dockers/griddocker/grid_config_widget.ui:168
+#, fuzzy, kde-format
+#| msgid "Vertical Scale"
+msgid "Vertical Style:"
+msgstr "Escala vertical"
+
+#. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
+#: plugins/dockers/griddocker/grid_config_widget.ui:184
+#, kde-format
+msgid "Cell Spacing:"
+msgstr "Espazo entre celas:"
+
+#. i18n: ectx: property (text), widget (QLabel, rightAngleLabel)
+#: plugins/dockers/griddocker/grid_config_widget.ui:197
+#, kde-format
+msgid "Right Angle:"
+msgstr "Ángulo dereito:"
+
 #. i18n: ectx: property (text), widget (QLabel, lblMainStyle)
-#: plugins/dockers/griddocker/grid_config_widget.ui:394
+#: plugins/dockers/griddocker/grid_config_widget.ui:210
 #, kde-format
 msgid "Main Style:"
 msgstr "Estilo principal:"
 
+#. i18n: ectx: property (text), widget (QLabel, lblSubdivision)
+#: plugins/dockers/griddocker/grid_config_widget.ui:233
+#, kde-format
+msgid "Subdivision:"
+msgstr "Subdivisión:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
+#: plugins/dockers/griddocker/grid_config_widget.ui:273
+#, fuzzy, kde-format
+#| msgid "Subdivision:"
+msgid "Subdivision Style:"
+msgstr "Subdivisión:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
+#: plugins/dockers/griddocker/grid_config_widget.ui:568
+#, kde-format
+msgid "X spacing:"
+msgstr "Espazamento en X:"
+
+#. i18n: ectx: property (text), widget (QLabel, lblYSpacing)
+#: plugins/dockers/griddocker/grid_config_widget.ui:581
+#, kde-format
+msgid "Y spacing:"
+msgstr "Espazamento en Y:"
+
 #. i18n: ectx: property (text), widget (QCheckBox, chkOffset)
-#: plugins/dockers/griddocker/grid_config_widget.ui:424
+#: plugins/dockers/griddocker/grid_config_widget.ui:634
 #, kde-format
 msgid "Grid Offset"
 msgstr "Desprazamento da grade."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGuides)
-#: plugins/dockers/griddocker/grid_config_widget.ui:546
+#: plugins/dockers/griddocker/grid_config_widget.ui:756
 #, kde-format
 msgid "Show guides"
 msgstr "Amosar as guías."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSnapToGuides)
-#: plugins/dockers/griddocker/grid_config_widget.ui:553
+#: plugins/dockers/griddocker/grid_config_widget.ui:763
 #, kde-format
 msgid "Snap to guides"
 msgstr "Axustar ás guías."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkLockGuides)
-#: plugins/dockers/griddocker/grid_config_widget.ui:560
+#: plugins/dockers/griddocker/grid_config_widget.ui:770
 #, kde-format
 msgid "Lock guides"
 msgstr "Bloquear as guías."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowRulers)
-#: plugins/dockers/griddocker/grid_config_widget.ui:567
+#: plugins/dockers/griddocker/grid_config_widget.ui:777
 #, kde-format
 msgid "Show rulers"
 msgstr "Amosar as regras"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGuidesStyle)
-#: plugins/dockers/griddocker/grid_config_widget.ui:584
+#: plugins/dockers/griddocker/grid_config_widget.ui:794
 #, kde-format
 msgid "Guides:"
 msgstr "Guías:"
@@ -43001,14 +43038,6 @@ msgstr "Reducir a selección"
 #, kde-format
 msgid "Border width:"
 msgstr "Largo do bordo:"
-
-#. i18n: ectx: property (text), widget (QCheckBox, antiAliasingCHBox)
-#. i18n: ectx: property (text), widget (QCheckBox, chkAntialiasing)
-#: plugins/extensions/modify_selection/wdg_border_selection.ui:127
-#: plugins/paintops/sketch/wdgsketchoptions.ui:179
-#, kde-format
-msgid "Anti-aliasing"
-msgstr "Suavizado das curvas"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/extensions/modify_selection/wdg_feather_selection.ui:21
@@ -48978,66 +49007,72 @@ msgstr ""
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Non foi posíbel cargar o identificador da máscara de transformación."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:412
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
+#, fuzzy, kde-format
+#| msgid "Could not create transform mask params"
+msgid "Could not find transform mask XML element"
+msgstr "Non foi posíbel crear os parámetros da máscara de transformación."
+
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Non foi posíbel crear os parámetros da máscara de transformación."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:564
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:565
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Non foi posíbel atopar os datos de píxeles de fotograma clave no fotograma "
 "%1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:572
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:573
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr ""
 "Non foi posíbel cargar os datos de píxeles de fotograma clave no fotograma "
 "%1 en %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:601
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:602
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Non foi posíbel ler os datos dos píxeles: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:608
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:609
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Non foi posíbel cargar os datos dos píxeles: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:624
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:625
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Non foi posíbel cargar o perfil: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:679
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:680
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Non foi posíbel filtrar a configuración: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:720
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:721
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Non foi posíbel cargar os metadatos da capa %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:763
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:764
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Non foi posíbel cargar a selección vectorial %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:779
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:780
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Non foi posíbel cargar a selección raster %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:809
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:810
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Non foi posíbel cargar os fotogramas clave de %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:823
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:824
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49047,7 +49082,7 @@ msgstr ""
 "columna %3.\n"
 "Mensaxe de erro: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:836
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Tipo descoñecido de canle de fotograma clave: %1 en %2."
@@ -61433,6 +61468,12 @@ msgstr "Ferramenta de ampliación"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ferramenta de imaxes de referencia"
+
+#~ msgid "Antialiased"
+#~ msgstr "Suavizada"
+
+#~ msgid "Div Style:"
+#~ msgstr "Estilo das divisións:"
 
 #~ msgid "3d Rotation:"
 #~ msgstr "Rotación 3D:"

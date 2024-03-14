@@ -20,6 +20,8 @@ struct KisTextPropertiesManager::Private {
     KisCanvasResourceProvider *provider {nullptr};
     QPointer<KisView> view {nullptr};
     KoSvgTextPropertiesInterface *interface {nullptr};
+
+    KoSvgTextPropertyData lastSetTextData;
 };
 
 KisTextPropertiesManager::KisTextPropertiesManager(QObject *parent)
@@ -138,6 +140,7 @@ void KisTextPropertiesManager::slotInterfaceSelectionChanged() {
     KoSvgTextPropertyData textData = textDataProperties(props, propIds);
     textData.inheritedProperties = d->interface->getInheritedProperties();
 
+    d->lastSetTextData = textData;
     d->provider->setTextPropertyData(textData);
 
 }
@@ -145,6 +148,9 @@ void KisTextPropertiesManager::slotInterfaceSelectionChanged() {
 void KisTextPropertiesManager::slotTextPropertiesChanged()
 {
     if (!d->interface || !d->provider) return;
+    if (d->lastSetTextData == d->provider->textPropertyData()) return;
 
-    d->interface->setPropertiesOnSelected(d->provider->textPropertyData().commonProperties);
+    KoSvgTextProperties newProps = d->provider->textPropertyData().commonProperties.ownProperties(d->lastSetTextData.commonProperties);
+    if (newProps.isEmpty()) return;
+    d->interface->setPropertiesOnSelected(newProps);
 }

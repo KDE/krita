@@ -44,7 +44,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
 struct TextPropertiesDock::Private
 {
-    KoSvgTextPropertiesModel *textData {new KoSvgTextPropertiesModel()};
+    KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
     KisCanvasResourceProvider *provider{nullptr};
 };
 
@@ -70,9 +70,9 @@ TextPropertiesDock::TextPropertiesDock()
 
     QFontDatabase fontDataBase = QFontDatabase();
 
-    m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textData);
+    m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(fontDataBase.families()));
-    connect(d->textData, SIGNAL(textPropertyChanged()),
+    connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/TextProperties.qml"));
@@ -125,14 +125,18 @@ void TextPropertiesDock::slotCanvasResourcesChanged(int key, const QVariant &val
 {
     if (key == KoCanvasResource::SvgTextPropertyData) {
         KoSvgTextPropertyData data = value.value<KoSvgTextPropertyData>();
-        d->textData->textData.set(data);
+        if (d->textModel->textData.get() != data) {
+            d->textModel->textData.set(data);
+        }
     }
 }
 
 void TextPropertiesDock::slotTextPropertiesChanged()
 {
-    qDebug() << Q_FUNC_INFO << d->textData->textData.get();
-    if (d->provider) {
-        d->provider->setTextPropertyData(d->textData->textData.get());
+
+    KoSvgTextPropertyData textData = d->textModel->textData.get();
+    qDebug() << Q_FUNC_INFO << textData;
+    if (d->provider && d->provider->textPropertyData() != textData) {
+        d->provider->setTextPropertyData(textData);
     }
 }

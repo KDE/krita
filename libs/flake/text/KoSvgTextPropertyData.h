@@ -34,7 +34,7 @@ struct KRITAFLAKE_EXPORT KoSvgTextPropertyData : public boost::equality_comparab
     QSet<KoSvgTextProperties::PropertyId> tristate;
 
     bool operator==(const KoSvgTextPropertyData &rhs) const {
-        return commonProperties == rhs.commonProperties && tristate == rhs.tristate;
+        return commonProperties == rhs.commonProperties && inheritedProperties == rhs.inheritedProperties && tristate == rhs.tristate;
     }
 };
 

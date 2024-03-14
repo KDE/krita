@@ -15,6 +15,7 @@
 #include <commands/KoShapeReorderCommand.h>
 #include "SelectionDecorator.h"
 #include "KoShapeMeshGradientHandles.h"
+#include <KoSvgTextPropertiesInterface.h>
 
 #include <QPolygonF>
 #include <QTime>
@@ -25,6 +26,7 @@ class KoShapeMoveCommand;
 class KoSelection;
 class DefaultToolTabbedWidget;
 class KisViewManager;
+class DefaultToolTextPropertiesInterface;
 
 /**
  * The default tool (associated with the arrow icon) implements the default
@@ -198,6 +200,19 @@ private:
     KisSignalMapper *m_distributeSignalsMapper {0};
     KisSignalMapper *m_transformSignalsMapper {0};
     KisSignalMapper *m_booleanSignalsMapper {0};
+
+    DefaultToolTextPropertiesInterface *m_textPropertyInterface{0};
+};
+
+class DefaultToolTextPropertiesInterface: public KoSvgTextPropertiesInterface
+{
+public:
+    DefaultToolTextPropertiesInterface(DefaultTool *parent);
+    virtual QList<KoSvgTextProperties> getSelectedProperties() override;
+    virtual KoSvgTextProperties getInheritedProperties() override;
+    virtual void setPropertiesOnSelected(KoSvgTextProperties properties) override;
+private:
+    DefaultTool *m_parent{nullptr};
 };
 
 

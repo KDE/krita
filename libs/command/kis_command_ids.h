@@ -39,7 +39,8 @@ enum CommandId {
     SvgInsertTextCommand,
     SvgRemoveTextCommand,
     ChangePaintOrderCommand,
-    SvgTextMergePropertiesRangeCommand
+    SvgTextMergePropertiesRangeCommand,
+    KoShapeMergeTextPropertiesCommandId
 };
 
 }

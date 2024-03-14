@@ -913,7 +913,9 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
 {
     if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
         if (KisForestDetail::size(d->textData)) {
-            d->textData.childBegin()->properties = properties;
+            Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
+                d->textData.childBegin()->properties.setProperty(p, properties.property(p));
+            }
         }
         notifyChanged();
         shapeChangedPriv(ContentChanged);

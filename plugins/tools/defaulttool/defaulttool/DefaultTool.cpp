@@ -31,6 +31,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoShapeRubberSelectStrategy.h>
+#include <KoSvgTextShape.h>
 #include <commands/KoShapeMoveCommand.h>
 #include <commands/KoShapeTransformCommand.h>
 #include <commands/KoShapeDeleteCommand.h>
@@ -39,6 +40,7 @@
 #include <commands/KoShapeUngroupCommand.h>
 #include <commands/KoShapeDistributeCommand.h>
 #include <commands/KoKeepShapesSelectedCommand.h>
+#include <commands/KoShapeMergeTextPropertiesCommand.h>
 #include <KoSnapGuide.h>
 #include <KoStrokeConfigWidget.h>
 #include "kis_action_registry.h"
@@ -47,6 +49,7 @@
 #include "KisViewManager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
+#include "KisTextPropertiesManager.h"
 #include <KoInteractionStrategyFactory.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
@@ -414,6 +417,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
     , m_mouseWasInsideHandles(false)
     , m_selectionHandler(new SelectionHandler(this))
     , m_tabbedOptionWidget(0)
+    , m_textPropertyInterface(new DefaultToolTextPropertiesInterface(this))
 {
     setupActions();
 
@@ -462,6 +466,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
 
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(repaintDecorations()));
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), m_textPropertyInterface, SIGNAL(textSelectionChanged()));
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     }
 }
@@ -1195,6 +1200,11 @@ void DefaultTool::activate(const QSet<KoShape *> &shapes)
     repaintDecorations();
     updateActions();
 
+    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    if (canvas2) {
+        canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(m_textPropertyInterface);
+    }
+
     if (m_tabbedOptionWidget) {
         m_tabbedOptionWidget->activate();
     }
@@ -1230,6 +1240,10 @@ void DefaultTool::deactivate()
     disconnect(m_transformSignalsMapper, 0, this, 0);
     disconnect(m_booleanSignalsMapper, 0, this, 0);
 
+    const KisCanvas2 *canvas2 = qobject_cast<const KisCanvas2 *>(this->canvas());
+    if (canvas2) {
+        canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(nullptr);
+    }
 
     if (m_tabbedOptionWidget) {
         m_tabbedOptionWidget->deactivate();
@@ -1913,4 +1927,42 @@ void DefaultTool::explicitUserStrokeEndRequest()
     QTimer::singleShot(0, [tool = std::move(tool)]() {
         KoToolManager::instance()->switchToolRequested(tool);
     });
+}
+
+DefaultToolTextPropertiesInterface::DefaultToolTextPropertiesInterface(DefaultTool *parent)
+    : KoSvgTextPropertiesInterface(parent)
+    , m_parent(parent)
+{
+
+}
+
+QList<KoSvgTextProperties> DefaultToolTextPropertiesInterface::getSelectedProperties()
+{
+    QList<KoSvgTextProperties> props = QList<KoSvgTextProperties>();
+    if (!m_parent->selection()->hasSelection()) return props;
+
+    QList<KoShape*> shapes = m_parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
+    for (auto it = shapes.begin(); it != shapes.end(); it++) {
+        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*it);
+        if (!textShape) continue;
+        KoSvgTextProperties p = textShape->textProperties();
+        props.append(p);
+    }
+
+    return props;
+}
+
+KoSvgTextProperties DefaultToolTextPropertiesInterface::getInheritedProperties()
+{
+    return KoSvgTextProperties::defaultProperties();
+}
+
+void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProperties properties)
+{
+    QList<KoShape*> shapes = m_parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
+    if (shapes.isEmpty()) return;
+    KUndo2Command *cmd = new KoShapeMergeTextPropertiesCommand(shapes, properties);
+    if (cmd) {
+        m_parent->canvas()->addCommand(cmd);
+    }
 }

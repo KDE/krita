@@ -167,6 +167,7 @@ set(kritaflake_SRCS
     commands/KoPathMergeUtils.cpp
     commands/KoAddRemoveShapeCommands.cpp
     commands/KoShapePaintOrderCommand.cpp
+    commands/KoShapeMergeTextPropertiesCommand.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp

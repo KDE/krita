@@ -36,7 +36,7 @@ void TestSvgParser::testUnitPx()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -61,7 +61,7 @@ void TestSvgParser::testUnitPxResolution()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -87,7 +87,7 @@ void TestSvgParser::testUnitPt()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -112,7 +112,7 @@ void TestSvgParser::testUnitIn()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -137,7 +137,7 @@ void TestSvgParser::testUnitPercentInitial()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 80, 80) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 80, 80) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -162,7 +162,7 @@ void TestSvgParser::testScalingViewport()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -188,7 +188,7 @@ void TestSvgParser::testScalingViewportNoScale()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -218,7 +218,7 @@ void TestSvgParser::testScalingViewportKeepMeet1()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -245,7 +245,7 @@ void TestSvgParser::testScalingViewportKeepMeet2()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -272,7 +272,7 @@ void TestSvgParser::testScalingViewportKeepMeetAlign()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -299,7 +299,7 @@ void TestSvgParser::testScalingViewportKeepSlice1()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -326,7 +326,7 @@ void TestSvgParser::testScalingViewportKeepSlice2()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -352,7 +352,7 @@ void TestSvgParser::testScalingViewportResolution()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -378,7 +378,7 @@ void TestSvgParser::testScalingViewportPercentInternal()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -525,7 +525,7 @@ void TestSvgParser::testScalingViewportTransform()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -552,7 +552,7 @@ void TestSvgParser::testTransformNesting()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -579,7 +579,7 @@ void TestSvgParser::testTransformNestingGroups()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -604,7 +604,7 @@ void TestSvgParser::testTransformRotation1()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -629,7 +629,7 @@ void TestSvgParser::testTransformRotation2()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -998,7 +998,7 @@ void TestSvgParser::testRenderDisplayAttribute()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -1020,7 +1020,7 @@ void TestSvgParser::testRenderVisibilityAttribute()
                 "</svg>";
 
         SvgTester t (data);
-        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
         t.run();
 
         KoShape *shape = t.findShape("testRect");
@@ -1040,7 +1040,7 @@ void TestSvgParser::testRenderVisibilityAttribute()
                 "</svg>";
 
         SvgTester t (data);
-        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
         t.run();
 
         KoShape *shape = t.findShape("testRect");
@@ -1060,7 +1060,7 @@ void TestSvgParser::testRenderVisibilityAttribute()
                 "</svg>";
 
         SvgTester t (data);
-        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
         t.run();
 
         KoShape *shape = t.findShape("testRect");
@@ -1084,7 +1084,7 @@ void TestSvgParser::testRenderVisibilityInheritance()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -1108,7 +1108,7 @@ void TestSvgParser::testRenderDisplayInheritance()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -1190,7 +1190,7 @@ void TestSvgParser::testIccColor()
 
     int numFetches = 0;
 
-    t.parser.setFileFetcher(
+    t.parser().setFileFetcher(
         [&numFetches](const QString &name) {
             numFetches++;
             QString fileName = TestUtil::fetchDataFileLazy(name);
@@ -3305,7 +3305,7 @@ void TestSvgParser::testRenderImage_AspectDefault()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.parser.setFileFetcher(fileFetcherFunc);
+    t.parser().setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_default", false);
 }
@@ -3338,7 +3338,7 @@ void TestSvgParser::testRenderImage_AspectNone()
 
     SvgRenderTester t (data);
     t.setFuzzyThreshold(5);
-    t.parser.setFileFetcher(fileFetcherFunc);
+    t.parser().setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_none", false);
 }
@@ -3370,7 +3370,7 @@ void TestSvgParser::testRenderImage_AspectMeet()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.parser.setFileFetcher(fileFetcherFunc);
+    t.parser().setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_meet", false);
 }

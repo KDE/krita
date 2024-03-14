@@ -24,12 +24,12 @@
 struct SvgTester
 {
     SvgTester (const QString &data)
-        : parser(&resourceManager),
+        : m_parser(new SvgParser(&resourceManager)),
           doc(SvgParser::createDocumentFromSvg(data))
     {
         root = doc.documentElement();
 
-        parser.setXmlBaseDir("./");
+        parser().setXmlBaseDir("./");
 
 
         savedData = data;
@@ -43,7 +43,7 @@ struct SvgTester
     }
 
     void run() {
-        shapes = parser.parseSvg(root, &fragmentSize);
+        shapes = parser().parseSvg(root, &fragmentSize);
     }
 
     KoShape* findShape(const QString &name, KoShape *parent = 0) {
@@ -81,15 +81,19 @@ struct SvgTester
         return group;
     }
 
-
+    SvgParser& parser() {
+        return *m_parser;
+    }
 
     KoDocumentResourceManager resourceManager;
-    SvgParser parser;
     QDomDocument doc;
     QDomElement root;
     QSizeF fragmentSize;
     QList<KoShape*> shapes;
     QString savedData;
+
+protected:
+    QScopedPointer<SvgParser> m_parser;
 };
 
 #include <qimage_test_util.h>
@@ -154,7 +158,7 @@ struct SvgRenderTester : public SvgTester
         Q_UNUSED(sizeInPt); // used in some definitions only!
 
 
-        parser.setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
+        parser().setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
         run();
 
 #ifdef USE_CLONED_SHAPES
@@ -194,6 +198,12 @@ struct SvgRenderTester : public SvgTester
 
         QVERIFY(doc.setContent(writeBuf.data()));
         root = doc.documentElement();
+
+        // reset the parser to avoid name conflicts
+
+        m_parser.reset(new SvgParser(&resourceManager));
+        parser().setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
+
         run();
 #endif /* USE_ROUND_TRIP */
 

@@ -911,7 +911,7 @@ void TestSvgText::testConvertToStrippedSvg()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
+    t.parser().setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
     t.run();
 
     KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
@@ -979,7 +979,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
+    t.parser().setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
     t.run();
 
     KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape("testRect"));
@@ -1050,7 +1050,7 @@ void TestSvgText::testEmptyTextChunk()
     SvgRenderTester t (data);
 
     // it just shouldn't assert or fail when seeing an empty text block
-    t.parser.setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
+    t.parser().setResolution(QRectF(QPointF(), QSizeF(30,30)) /* px */, 72.0/* ppi */);
     t.run();
 }
 
@@ -2314,7 +2314,7 @@ void TestSvgText::testCssShapeParsing()
     data.setData(file.readAll());
 
     SvgTester t(data.data());
-    t.parser.setResolution(QRectF(0, 0, 380, 380) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 380, 380) /* px */, 72 /* ppi */);
     t.run();
 
     QStringList tests = {"circle" , "ellipse", "polygon", "path", "uri"};

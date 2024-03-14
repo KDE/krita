@@ -83,7 +83,6 @@ set(krita_QRCS
     ${CMAKE_SOURCE_DIR}/plugins/paintops/defaultpresets/defaultpresets.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/branding/${BRANDING}/branding.qrc
     ${CMAKE_SOURCE_DIR}/krita/data/splash/splash.qrc
-    ${CMAKE_SOURCE_DIR}/krita/banner/banner.qrc
     ${CMAKE_SOURCE_DIR}/krita/pics/sponsors/sponsors.qrc
     CACHE INTERNAL "krita_QRCS"
 )

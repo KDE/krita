@@ -27,6 +27,9 @@ struct KRITAFLAKE_EXPORT KoSvgTextPropertyData : public boost::equality_comparab
     /// The properties common between all the selected text.
     KoSvgTextProperties commonProperties;
 
+    /// The properties that are inherited, so that widgets may be set correctly.
+    KoSvgTextProperties inheritedProperties = KoSvgTextProperties::defaultProperties();
+
     /// The properties that are not common (tri-state) between the selected text.
     QSet<KoSvgTextProperties::PropertyId> tristate;
 

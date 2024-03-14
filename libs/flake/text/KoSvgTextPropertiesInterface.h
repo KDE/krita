@@ -27,6 +27,15 @@ public:
      * @return all KoSvgTextProperties for the given selection.
      */
     virtual QList<KoSvgTextProperties> getSelectedProperties() = 0;
+
+    /**
+     * @brief getInheritedProperties
+     * The properties that should be visible when a given property
+     * isn't available in common properties. This is typically the
+     * paragraph properties.
+     * @return what counts as the inherited properties for the given selection.
+     */
+    virtual KoSvgTextProperties getInheritedProperties() = 0;
     /**
      * @brief setPropertiesOnSelected
      * This sets the properties on the selection. The implementation is responsible

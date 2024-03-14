@@ -136,6 +136,7 @@ void KisTextPropertiesManager::slotInterfaceSelectionChanged() {
     }
 
     KoSvgTextPropertyData textData = textDataProperties(props, propIds);
+    textData.inheritedProperties = d->interface->getInheritedProperties();
 
     d->provider->setTextPropertyData(textData);
 

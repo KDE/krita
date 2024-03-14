@@ -21,11 +21,12 @@ auto createCommonProperties = lager::lenses::getset (
             );
 
 auto createTextProperty = [](KoSvgTextProperties::PropertyId propId) { return lager::lenses::getset(
-                [propId](const KoSvgTextProperties &value) -> QVariant {
-        return value.propertyOrDefault(propId);
+                [propId](const KoSvgTextPropertyData &value) -> QVariant {
+        QVariant defaultVar = value.inheritedProperties.propertyOrDefault(propId);
+        return value.commonProperties.property(propId, defaultVar);
     },
-    [propId](KoSvgTextProperties value, const QVariant &variant) -> KoSvgTextProperties {
-        value.setProperty(propId, variant);
+    [propId](KoSvgTextPropertyData value, const QVariant &variant) -> KoSvgTextPropertyData {
+        value.commonProperties.setProperty(propId, variant);
         return value;
     }
     );
@@ -130,14 +131,14 @@ auto qColorProperty = lager::lenses::getset(
 KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData)
     : textData(_textData)
     , commonProperties(textData.zoom(createCommonProperties))
-    , fontSizeData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontSizeId)).zoom(lengthPercentageProperty))
-    , lineHeightData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::LineHeightId)).zoom(lineHeightProperty))
-    , letterSpacingData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::LetterSpacingId)).zoom(simplifiedAutoLengthProperty))
-    , wordSpacingData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::WordSpacingId)).zoom(simplifiedAutoLengthProperty))
-    , baselineShiftValueData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftValueId)).zoom(lengthPercentageProperty))
-    , textIndentData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextIndentId)).zoom(textIndentProperty))
-    , tabSizeData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::TabSizeId)).zoom(tabSizeProperty))
-    , textTransformData(commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextTransformId)).zoom(textTransformProperty))
+    , fontSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::FontSizeId)).zoom(lengthPercentageProperty))
+    , lineHeightData(textData.zoom(createTextProperty(KoSvgTextProperties::LineHeightId)).zoom(lineHeightProperty))
+    , letterSpacingData(textData.zoom(createTextProperty(KoSvgTextProperties::LetterSpacingId)).zoom(simplifiedAutoLengthProperty))
+    , wordSpacingData(textData.zoom(createTextProperty(KoSvgTextProperties::WordSpacingId)).zoom(simplifiedAutoLengthProperty))
+    , baselineShiftValueData(textData.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftValueId)).zoom(lengthPercentageProperty))
+    , textIndentData(textData.zoom(createTextProperty(KoSvgTextProperties::TextIndentId)).zoom(textIndentProperty))
+    , tabSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::TabSizeId)).zoom(tabSizeProperty))
+    , textTransformData(textData.zoom(createTextProperty(KoSvgTextProperties::TextTransformId)).zoom(textTransformProperty))
     , fontSizeModel(fontSizeData)
     , lineHeightModel(lineHeightData)
     , letterSpacingModel(letterSpacingData)
@@ -146,29 +147,29 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , textIndentModel(textIndentData)
     , tabSizeModel(tabSizeData)
     , textTransformModel(textTransformData)
-    , LAGER_QT(writingMode) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::WritingModeId)).zoom(integerProperty)}
-    , LAGER_QT(direction) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::DirectionId)).zoom(integerProperty)}
-    , LAGER_QT(textAlignAll) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextAlignAllId)).zoom(integerProperty)}
-    , LAGER_QT(textAlignLast) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextAlignLastId)).zoom(integerProperty)}
-    , LAGER_QT(textAnchor) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextAnchorId)).zoom(integerProperty)}
-    , LAGER_QT(fontWeight) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontWeightId)).zoom(integerProperty)}
-    , LAGER_QT(fontWidth) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontStretchId)).zoom(integerProperty)}
-    , LAGER_QT(fontStyle) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(fontStyleProperty)}
-    , LAGER_QT(fontOpticalSizeLink) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontOpticalSizingId)).zoom(boolProperty)}
-    , LAGER_QT(fontFamilies) {commonProperties.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(stringListProperty)}
-    , LAGER_QT(textDecorationUnderline){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationUnderline))}
-    , LAGER_QT(textDecorationOverline){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationOverline))}
-    , LAGER_QT(textDecorationLineThrough){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationLineThrough))}
-    , LAGER_QT(textDecorationStyle){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationStyleId)).zoom(integerProperty)}
-    , LAGER_QT(textDecorationColor){commonProperties.zoom(createTextProperty(KoSvgTextProperties::TextDecorationColorId)).zoom(qColorProperty)}
-    , LAGER_QT(hangingPunctuationFirst){commonProperties.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangFirst))}
-    , LAGER_QT(hangingPunctuationComma){commonProperties.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangingPunactuationCommaProp)}
-    , LAGER_QT(hangingPunctuationLast){commonProperties.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangLast))}
-    , LAGER_QT(alignmentBaseline){commonProperties.zoom(createTextProperty(KoSvgTextProperties::AlignmentBaselineId)).zoom(integerProperty)}
-    , LAGER_QT(dominantBaseline){commonProperties.zoom(createTextProperty(KoSvgTextProperties::DominantBaselineId)).zoom(integerProperty)}
-    , LAGER_QT(baselineShiftMode){commonProperties.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftModeId)).zoom(integerProperty)}
-    , LAGER_QT(wordBreak){commonProperties.zoom(createTextProperty(KoSvgTextProperties::WordBreakId)).zoom(integerProperty)}
-    , LAGER_QT(lineBreak){commonProperties.zoom(createTextProperty(KoSvgTextProperties::LineBreakId)).zoom(integerProperty)}
+    , LAGER_QT(writingMode) {textData.zoom(createTextProperty(KoSvgTextProperties::WritingModeId)).zoom(integerProperty)}
+    , LAGER_QT(direction) {textData.zoom(createTextProperty(KoSvgTextProperties::DirectionId)).zoom(integerProperty)}
+    , LAGER_QT(textAlignAll) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAlignAllId)).zoom(integerProperty)}
+    , LAGER_QT(textAlignLast) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAlignLastId)).zoom(integerProperty)}
+    , LAGER_QT(textAnchor) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAnchorId)).zoom(integerProperty)}
+    , LAGER_QT(fontWeight) {textData.zoom(createTextProperty(KoSvgTextProperties::FontWeightId)).zoom(integerProperty)}
+    , LAGER_QT(fontWidth) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStretchId)).zoom(integerProperty)}
+    , LAGER_QT(fontStyle) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(fontStyleProperty)}
+    , LAGER_QT(fontOpticalSizeLink) {textData.zoom(createTextProperty(KoSvgTextProperties::FontOpticalSizingId)).zoom(boolProperty)}
+    , LAGER_QT(fontFamilies) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(stringListProperty)}
+    , LAGER_QT(textDecorationUnderline){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationUnderline))}
+    , LAGER_QT(textDecorationOverline){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationOverline))}
+    , LAGER_QT(textDecorationLineThrough){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationLineThrough))}
+    , LAGER_QT(textDecorationStyle){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationStyleId)).zoom(integerProperty)}
+    , LAGER_QT(textDecorationColor){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationColorId)).zoom(qColorProperty)}
+    , LAGER_QT(hangingPunctuationFirst){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangFirst))}
+    , LAGER_QT(hangingPunctuationComma){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangingPunactuationCommaProp)}
+    , LAGER_QT(hangingPunctuationLast){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangLast))}
+    , LAGER_QT(alignmentBaseline){textData.zoom(createTextProperty(KoSvgTextProperties::AlignmentBaselineId)).zoom(integerProperty)}
+    , LAGER_QT(dominantBaseline){textData.zoom(createTextProperty(KoSvgTextProperties::DominantBaselineId)).zoom(integerProperty)}
+    , LAGER_QT(baselineShiftMode){textData.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftModeId)).zoom(integerProperty)}
+    , LAGER_QT(wordBreak){textData.zoom(createTextProperty(KoSvgTextProperties::WordBreakId)).zoom(integerProperty)}
+    , LAGER_QT(lineBreak){textData.zoom(createTextProperty(KoSvgTextProperties::LineBreakId)).zoom(integerProperty)}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));
     lager::watch(fontSizeData, std::bind(&KoSvgTextPropertiesModel::fontSizeChanged, this));

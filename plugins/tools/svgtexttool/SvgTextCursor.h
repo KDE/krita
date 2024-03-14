@@ -230,6 +230,7 @@ class KRITATOOLSVGTEXT_EXPORT SvgTextPropertyCursor : public KoSvgTextProperties
 public:
     SvgTextPropertyCursor(SvgTextCursor *parent);
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
+    virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties) override;
 
     void emitSelectionChange();

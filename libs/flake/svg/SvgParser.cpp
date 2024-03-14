@@ -1429,7 +1429,7 @@ void SvgParser::applyPaintOrder(KoShape *shape)
             }
         }
         if (paintOrder.size() == 1 && order.isEmpty()) { // Normal
-            order = {KoShape::Fill, KoShape::Stroke, KoShape::Markers};
+            order = KoShape::defaultPaintOrder();
         }
         if (order.size() == 1) {
             if (order.first() == KoShape::Fill) {

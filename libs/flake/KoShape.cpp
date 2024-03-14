@@ -76,7 +76,7 @@ KoShape::SharedData::SharedData()
     , textRunAroundDistanceBottom(0.0)
     , textRunAroundThreshold(0.0)
     , textRunAroundContour(KoShape::ContourFull)
-    , paintOrder(QVector<PaintOrder>({Fill, Stroke, Markers}))
+    , paintOrder(defaultPaintOrder())
     , inheritPaintOrder(true)
 { }
 
@@ -750,7 +750,7 @@ KoInsets KoShape::strokeInsets() const
 void KoShape::setPaintOrder(KoShape::PaintOrder first, KoShape::PaintOrder second)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(first != second);
-    QVector<PaintOrder> order = {Fill, Stroke, Markers};
+    QVector<PaintOrder> order = defaultPaintOrder();
 
     if (first != Fill) {
         if (order.at(1) == first) {
@@ -773,12 +773,18 @@ void KoShape::setPaintOrder(KoShape::PaintOrder first, KoShape::PaintOrder secon
 
 QVector<KoShape::PaintOrder> KoShape::paintOrder() const
 {
-    QVector<PaintOrder> order = {Fill, Stroke, Markers};
+    QVector<PaintOrder> order = defaultPaintOrder();
     if (!s->inheritPaintOrder) {
         order = s->paintOrder;
     } else if (parent()) {
         order = parent()->paintOrder();
     }
+    return order;
+}
+
+QVector<KoShape::PaintOrder> KoShape::defaultPaintOrder()
+{
+    static QVector<PaintOrder> order = {Fill, Stroke, Markers};
     return order;
 }
 

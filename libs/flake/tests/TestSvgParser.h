@@ -176,6 +176,7 @@ private Q_SLOTS:
 
     void testMarkersFillAsShape();
 
+    void testRenderPaintOrderProperty_data();
     void testRenderPaintOrderProperty();
 private:
 

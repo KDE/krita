@@ -75,7 +75,7 @@ void SvgStyleWriter::saveSvgBasicStyle(const bool isVisible, const qreal transpa
     }
     if (!paintOrder.isEmpty() && !inheritPaintorder) {
 
-        bool notDefault = paintOrder.value(0, KoShape::Fill) != KoShape::Fill && paintOrder.value(1, KoShape::Stroke) != KoShape::Stroke;
+        const bool notDefault = paintOrder != KoShape::defaultPaintOrder();
 
         if ((!textShape && notDefault) || textShape) {
             QStringList order;

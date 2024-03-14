@@ -3879,10 +3879,20 @@ void TestSvgParser::testMarkersFillAsShape()
     t.test_standard_30px_72ppi("markers_scaled_fill_as_shape", false);
 }
 
+void TestSvgParser::testRenderPaintOrderProperty_data()
+{
+    QTest::addColumn<QString>("paintOrderChunk");
+
+    QTest::newRow("fill-stroke-markers") << "";
+    QTest::newRow("stroke-fill-markers") << " paint-order=\"stroke\"";
+    QTest::newRow("stroke-markers-fill") << " paint-order=\"stroke markers\"";
+    QTest::newRow("fill-markers-stroke") << " paint-order=\"fill markers\"";
+    QTest::newRow("markers-fill-stroke") << " paint-order=\"markers\"";
+    QTest::newRow("markers-stroke-fill") << " paint-order=\"markers stroke\"";
+}
+
 void TestSvgParser::testRenderPaintOrderProperty()
 {
-    QMap<QString, QString> tests;
-
     const QString dataBefore = "<svg width=\"30px\" height=\"30px\""
                                "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
@@ -3903,28 +3913,13 @@ void TestSvgParser::testRenderPaintOrderProperty()
 
                               "</svg>";
 
-    QString data = dataBefore + dataAfter;
-    tests.insert("fill-stroke-markers", data);
+    const QString name = QTest::currentDataTag();
+    QFETCH(QString, paintOrderChunk);
 
-    data = dataBefore + " paint-order=\"stroke\"" + dataAfter;
-    tests.insert("stroke-fill-markers", data);
+    const QString data = dataBefore + paintOrderChunk + dataAfter;
 
-    data = dataBefore + " paint-order=\"stroke markers\"" + dataAfter;
-    tests.insert("stroke-markers-fill", data);
-
-    data = dataBefore + " paint-order=\"fill markers\"" + dataAfter;
-    tests.insert("fill-markers-stroke", data);
-
-    data = dataBefore + " paint-order=\"markers\"" + dataAfter;
-    tests.insert("markers-fill-stroke", data);
-
-    data = dataBefore + " paint-order=\"markers stroke\"" + dataAfter;
-    tests.insert("markers-stroke-fill", data);
-
-    Q_FOREACH(const QString key, tests.keys()) {
-        SvgRenderTester t (tests.value(key));
-        t.test_standard_30px_72ppi(key, false);
-    }
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi(name, false);
 }
 
 void TestSvgParser::testMarkersOnClosedPath()

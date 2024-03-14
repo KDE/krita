@@ -1074,7 +1074,7 @@ void KoSvgTextShape::setPaintOrder(KoShape::PaintOrder first, KoShape::PaintOrde
         d->textData.insert(d->textData.childBegin(), KoSvgTextContentElement());
     }
     KIS_SAFE_ASSERT_RECOVER_RETURN(first != second);
-    QVector<PaintOrder> order = {Fill, Stroke, Markers};
+    QVector<PaintOrder> order = KoShape::defaultPaintOrder();
 
     if (first != Fill) {
         if (order.at(1) == first) {

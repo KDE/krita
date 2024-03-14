@@ -756,6 +756,12 @@ public:
     virtual QVector<PaintOrder> paintOrder() const;
 
     /**
+     * @brief default paint order as per SVG specification
+     * @return constant value of {Fill, Stroke, Markers}
+     */
+    static QVector<PaintOrder> defaultPaintOrder();
+
+    /**
      * @brief setInheritPaintOrder
      * set inherit paint order.
      * @param value

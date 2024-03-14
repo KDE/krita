@@ -63,7 +63,6 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotNewFileClicked();
     void slotOpenFileClicked();
-    void slotBannerClicked();
 
     void recentDocumentClicked(QModelIndex index);
     void slotRecentDocContextMenuRequest(const QPoint &pos);
@@ -97,7 +96,6 @@ protected:
 
 
 private:
-    void setupBanner();
     void setupNewsLangSelection(QMenu *newsOptionMenu);
     void showDevVersionHighlight();
 
@@ -132,11 +130,6 @@ public:
     static QLabel* donationBannerImage;
 #endif
     QScopedPointer<RecentItemDelegate> recentItemDelegate;
-
-    QString m_bannerUrl;
-    QImage m_bannerImage;
-    bool m_bannerOverride {false};
-    bool m_showBanner {true};
 
 };
 

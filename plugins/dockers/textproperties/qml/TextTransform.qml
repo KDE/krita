@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property alias fullWidth: fullWidthChk.checked;
@@ -47,10 +48,10 @@ TextPropertyBase {
         ComboBox {
             id: textTransformCaseCmb;
             model: [
-                {text: i18nc("@label:inlistbox", "None"), value: 0},
-                {text: i18nc("@label:inlistbox", "Capitalize"), value: 1},
-                {text: i18nc("@label:inlistbox", "UpperCase"), value: 2},
-                {text: i18nc("@label:inlistbox", "Lowercase"), value: 4}
+                {text: i18nc("@label:inlistbox", "None"), value: KoSvgText.TextTransformNone},
+                {text: i18nc("@label:inlistbox", "Capitalize"), value: KoSvgText.TextTransformCapitalize},
+                {text: i18nc("@label:inlistbox", "Upper Case"), value: KoSvgText.TextTransformUppercase},
+                {text: i18nc("@label:inlistbox", "Lower Case"), value: KoSvgText.TextTransformLowercase}
             ]
             Layout.fillWidth: true
             textRole: "text";

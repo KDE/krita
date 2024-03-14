@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int writingMode;
@@ -35,9 +36,9 @@ TextPropertyBase {
         ComboBox {
             id: writingModeCmb
             model: [
-                {text: i18nc("@label:inlistbox", "Horizontal"), value: 0},
-                {text: i18nc("@label:inlistbox", "Vertical, Right to Left"), value: 1},
-                {text: i18nc("@label:inlistbox", "Vertical, Left To Right"), value: 2}
+                {text: i18nc("@label:inlistbox", "Horizontal"), value: KoSvgText.HorizontalTB},
+                {text: i18nc("@label:inlistbox", "Vertical, Right to Left"), value: KoSvgText.VerticalRL},
+                {text: i18nc("@label:inlistbox", "Vertical, Left To Right"), value: KoSvgText.VerticalLR}
             ]
             Layout.fillWidth: true;
             textRole: "text";

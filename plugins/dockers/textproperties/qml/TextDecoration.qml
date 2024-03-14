@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
 
@@ -104,11 +105,11 @@ TextPropertyBase {
         ComboBox {
             id: lineStyleCmb;
             model: [
-                { text: i18nc("@label:inlistbox", "Solid"), value: 0},
-                { text: i18nc("@label:inlistbox", "Dotted"), value: 2},
-                { text: i18nc("@label:inlistbox", "Dashed"), value: 3},
-                { text: i18nc("@label:inlistbox", "Double"), value: 1},
-                { text: i18nc("@label:inlistbox", "Wavy"), value: 4},
+                { text: i18nc("@label:inlistbox", "Solid"), value: KoSvgText.Solid},
+                { text: i18nc("@label:inlistbox", "Dotted"), value: KoSvgText.Dotted},
+                { text: i18nc("@label:inlistbox", "Dashed"), value: KoSvgText.Dashed},
+                { text: i18nc("@label:inlistbox", "Double"), value: KoSvgText.Double},
+                { text: i18nc("@label:inlistbox", "Wavy"), value: KoSvgText.Wavy},
             ]
             Layout.fillWidth: true;
             textRole: "text";

@@ -40,6 +40,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<TextIndentModel>("org.krita.flake.text", 1, 0, "TextIndentModel");
     qmlRegisterType<TabSizeModel>("org.krita.flake.text", 1, 0, "TabSizeModel");
     qmlRegisterType<TextTransformModel>("org.krita.flake.text", 1, 0, "TextTransformModel");
+    qmlRegisterUncreatableMetaObject(KoSvgText::staticMetaObject, "org.krita.flake.text", 1, 0, "KoSvgText", "Error: Namespace with enums");
 }
 
 struct TextPropertiesDock::Private

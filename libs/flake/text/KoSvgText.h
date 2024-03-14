@@ -33,6 +33,8 @@ class KoSvgTextChunkShape;
 
 namespace KoSvgText
 {
+    Q_NAMESPACE_EXPORT(KRITAFLAKE_EXPORT)
+
 enum WritingMode {
     HorizontalTB, ///< Left to right, lay out new lines bottom of previous. RTL
                   ///< scripts use this with BIDI reordering.
@@ -41,12 +43,14 @@ enum WritingMode {
     VerticalLR ///< Top to bottom, lay out new lines left of the previous. Used
                ///< for Mongolian.
 };
+Q_ENUM_NS(WritingMode)
 
 /// Base direction used by Bidi algorithm.
 enum Direction {
     DirectionLeftToRight,
     DirectionRightToLeft
 };
+Q_ENUM_NS(Direction)
 
 /// These values control the type of bidi-controls we'll inject into the final
 /// text.
@@ -61,6 +65,7 @@ enum UnicodeBidi {
     BidiPlainText ///< Behaves like isolate, except using heuristics defined in
                   ///< P2 and P3 of the unicode bidirectional algorithm.
 };
+Q_ENUM_NS(UnicodeBidi)
 
 /// Orientation of the glyphs, used for vertical writing modes.
 enum TextOrientation {
@@ -69,6 +74,7 @@ enum TextOrientation {
     OrientationUpright, ///< Set all characters upright.
     OrientationSideWays ///< Set all characters sideways.
 };
+Q_ENUM_NS(TextOrientation)
 
 /// Where the text is anchored for SVG 1.1 text and 'inline-size'.
 enum TextAnchor {
@@ -76,6 +82,7 @@ enum TextAnchor {
     AnchorMiddle, ///< Anchor to the middle.
     AnchorEnd ///< Anchor right for LTR, left for RTL.
 };
+Q_ENUM_NS(TextAnchor)
 
 /*
  * CSS-Text-3 defines the white space property, and SVG 2 adopts this, except,
@@ -124,6 +131,7 @@ enum WordBreak {
     WordBreakKeepAll, ///< Never break inside words.
     WordBreakBreakAll, ///< Always break inside words.
 };
+Q_ENUM_NS(WordBreak)
 
 /// Line breaking strictness. A number of these values are values to be handed
 /// over to the line/word breaking algorithm.
@@ -134,6 +142,7 @@ enum LineBreak {
     LineBreakStrict, ///< Use strict method, language specific.
     LineBreakAnywhere ///< Break between any typographic clusters.
 };
+Q_ENUM_NS(LineBreak)
 
 /// What to do with words that cannot be broken, but still overflow.
 enum OverflowWrap {
@@ -164,6 +173,7 @@ enum TextAlign {
     AlignMatchParent ///< Inherit, except Start and End are matched against the
                      ///< parent values... We don't support this.
 };
+Q_ENUM_NS(TextAlign)
 
 /// Whether and how to transform text. Not strictly necessary according to SVG2.
 /// Fullwidth and FullSizeKana are inside the textTransform Struct.
@@ -174,6 +184,7 @@ enum TextTransform {
     TextTransformUppercase = 0x2, ///< Convert all bicarmel text to upper-case, locale dependant.
     TextTransformLowercase = 0x4, ///< Convert all bicarmel text to lower-case, locale dependant.
 };
+Q_ENUM_NS(TextTransform)
 
 /// How to handle overflow.
 enum TextOverflow {
@@ -220,6 +231,7 @@ enum Baseline {
     BaselineTextBottom, ///< Bottom side of the inline line-box.
     BaselineTextTop ///< Top side of the inline line-box.
 };
+Q_ENUM_NS(Baseline)
 
 /// Mode of the baseline shift.
 enum BaselineShiftMode {
@@ -228,11 +240,13 @@ enum BaselineShiftMode {
     ShiftSuper, ///< Use parent font metric for 'superscript'.
     ShiftLengthPercentage ///< Css Length Percentage, percentage is em.
 };
+Q_ENUM_NS(BaselineShiftMode)
 
 enum LengthAdjust {
     LengthAdjustSpacing, ///< Only stretch the spaces.
     LengthAdjustSpacingAndGlyphs ///< Stretches the glyphs as well.
 };
+Q_ENUM_NS(LengthAdjust)
 
 /// Flags for text-decoration, for underline, overline and strikethrough.
 enum TextDecoration {
@@ -250,6 +264,7 @@ enum TextDecorationStyle {
     Dashed, ///< Draw a dashed line. Ex: - - - - -
     Wavy ///< Draw a wavy line. We currently make a zigzag, ex: ^^^^^
 };
+Q_ENUM_NS(TextDecorationStyle)
 
 /// Which location to choose for the underline.
 enum TextDecorationUnderlinePosition {
@@ -260,6 +275,7 @@ enum TextDecorationUnderlinePosition {
     UnderlineRight ///< Put the underline on the right of the text decoration
                    ///< bounding box, overline left.
 };
+Q_ENUM_NS(TextDecorationUnderlinePosition)
 
 /// Whether to stretch the glyphs along a path.
 enum TextPathMethod {
@@ -362,6 +378,7 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(HangingPunctuations)
  * percentage should be resolved is defined in the CSS specs in the section a
  * given property is specified.
  */
+
 struct CssLengthPercentage : public boost::equality_comparable<CssLengthPercentage> {
     enum UnitType {
         Absolute, ///< Pt, everything needs to be converted to pt for this to work.

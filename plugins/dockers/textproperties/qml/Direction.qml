@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int direction;
@@ -36,8 +37,8 @@ TextPropertyBase {
             id: directionCmb
             Layout.fillWidth: true;
             model: [
-                {text: i18nc("@label:inlistbox", "Left to Right"), value: 0},
-                {text: i18nc("@label:inlistbox", "Right to Left"), value: 1}
+                {text: i18nc("@label:inlistbox", "Left to Right"), value: KoSvgText.DirectionLeftToRight},
+                {text: i18nc("@label:inlistbox", "Right to Left"), value: KoSvgText.DirectionRightToLeft}
             ]
             textRole: "text";
             valueRole: "value";

@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property alias baselineShiftValue: baselineShiftSpn.value;
@@ -46,10 +47,10 @@ TextPropertyBase {
         ComboBox {
             Layout.columnSpan: 2;
             model: [
-                { text: i18nc("@label:inlistbox", "None"), value: 0},
-                { text: i18nc("@label:inlistbox", "Length"), value: 3},
-                { text: i18nc("@label:inlistbox", "Super"), value: 2},
-                { text: i18nc("@label:inlistbox", "Sub"), value: 1}
+                { text: i18nc("@label:inlistbox", "None"), value: KoSvgText.ShiftNone},
+                { text: i18nc("@label:inlistbox", "Length"), value: KoSvgText.ShiftLengthPercentage},
+                { text: i18nc("@label:inlistbox", "Super"), value: KoSvgText.ShiftSuper},
+                { text: i18nc("@label:inlistbox", "Sub"), value: KoSvgText.ShiftSub}
             ]
             id: baselineShiftCmb;
             textRole: "text";

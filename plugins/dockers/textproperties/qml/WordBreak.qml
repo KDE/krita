@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int breakType;
@@ -34,9 +35,9 @@ TextPropertyBase {
         ComboBox {
             id: wordBreakCmb
             model: [
-                { text: i18nc("@label:inlistbox", "Normal"), value: 0},
-                { text: i18nc("@label:inlistbox", "Keep-all"), value: 1},
-                { text: i18nc("@label:inlistbox", "Break-all"), value: 2}
+                { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.WordBreakNormal},
+                { text: i18nc("@label:inlistbox", "Keep-all"), value: KoSvgText.WordBreakKeepAll},
+                { text: i18nc("@label:inlistbox", "Break-all"), value: KoSvgText.WordBreakBreakAll}
             ]
             Layout.fillWidth: true;
             textRole: "text";

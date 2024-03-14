@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int breakType;
@@ -33,11 +34,11 @@ TextPropertyBase {
         ComboBox {
             id: lineBreakCmb
             model: [
-                { text: i18nc("@label:inlistbox", "Auto"), value: 0},
-                { text: i18nc("@label:inlistbox", "Loose"), value: 1},
-                { text: i18nc("@label:inlistbox", "Normal"), value: 2},
-                { text: i18nc("@label:inlistbox", "Strict"), value: 3},
-                { text: i18nc("@label:inlistbox", "Anywhere"), value: 4}
+                { text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.LineBreakAuto},
+                { text: i18nc("@label:inlistbox", "Loose"), value: KoSvgText.LineBreakLoose},
+                { text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.LineBreakNormal},
+                { text: i18nc("@label:inlistbox", "Strict"), value: KoSvgText.LineBreakStrict},
+                { text: i18nc("@label:inlistbox", "Anywhere"), value: KoSvgText.LineBreakAnywhere}
             ]
             Layout.fillWidth: true;
             textRole: "text";

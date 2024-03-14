@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: "Text Align";
@@ -37,12 +38,12 @@ CollapsibleGroupProperty {
         ComboBox {
             id: textAlignAllCmb;
             model: [
-                {text: i18nc("@label:inlistbox", "Left"), value: 3},
-                {text: i18nc("@label:inlistbox", "Start"), value: 1},
-                {text: i18nc("@label:inlistbox", "Center"), value: 5},
-                {text: i18nc("@label:inlistbox", "End"), value: 2},
-                {text: i18nc("@label:inlistbox", "Right"), value: 4},
-                {text: i18nc("@label:inlistbox", "Justified"), value: 6}
+                {text: i18nc("@label:inlistbox", "Left"), value: KoSvgText.AlignLeft},
+                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AlignStart},
+                {text: i18nc("@label:inlistbox", "Center"), value: KoSvgText.AlignCenter},
+                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AlignEnd},
+                {text: i18nc("@label:inlistbox", "Right"), value: KoSvgText.AlignRight},
+                {text: i18nc("@label:inlistbox", "Justified"), value: KoSvgText.AlignJustify}
             ]
             Layout.fillWidth: true
             textRole: "text";
@@ -64,12 +65,12 @@ CollapsibleGroupProperty {
         ComboBox {
             id: textAlignLastCmb;
             model: [
-                {text: i18nc("@label:inlistbox", "Auto"), value: 0},
-                {text: i18nc("@label:inlistbox", "Left"), value: 3},
-                {text: i18nc("@label:inlistbox", "Start"), value: 1},
-                {text: i18nc("@label:inlistbox", "Center"), value: 5},
-                {text: i18nc("@label:inlistbox", "End"), value: 2},
-                {text: i18nc("@label:inlistbox", "Right"), value: 4}
+                {text: i18nc("@label:inlistbox", "Auto"), value: KoSvgText.AlignLastAuto},
+                {text: i18nc("@label:inlistbox", "Left"), value: KoSvgText.AlignLeft},
+                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AlignStart},
+                {text: i18nc("@label:inlistbox", "Center"), value: KoSvgText.AlignCenter},
+                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AlignEnd},
+                {text: i18nc("@label:inlistbox", "Right"), value: KoSvgText.AlignRight}
             ]
             Layout.fillWidth: true
             textRole: "text";
@@ -92,9 +93,9 @@ CollapsibleGroupProperty {
         ComboBox {
             id: textAnchorCmb;
             model: [
-                {text: i18nc("@label:inlistbox", "Start"), value: 0},
-                {text: i18nc("@label:inlistbox", "Middle"), value: 1},
-                {text: i18nc("@label:inlistbox", "End"), value: 2}]
+                {text: i18nc("@label:inlistbox", "Start"), value: KoSvgText.AnchorStart},
+                {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.AnchorMiddle},
+                {text: i18nc("@label:inlistbox", "End"), value: KoSvgText.AnchorEnd}]
             Layout.fillWidth: true
             textRole: "text";
             valueRole: "value";

@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int baselineSelection;
@@ -38,15 +39,15 @@ TextPropertyBase {
         }
         ComboBox {
             model: [
-                {text: i18nc("@label:inlistbox", "Baseline"), value: 0},
-                {text: i18nc("@label:inlistbox", "Alphabetic"), value: 6},
-                {text: i18nc("@label:inlistbox", "Ideographic"), value: 5},
-                {text: i18nc("@label:inlistbox", "Central"), value: 9},
-                {text: i18nc("@label:inlistbox", "Hanging"), value: 7},
-                {text: i18nc("@label:inlistbox", "Middle"), value: 10},
-                {text: i18nc("@label:inlistbox", "Mathematical"), value: 8},
-                {text: i18nc("@label:inlistbox", "Text-Top"), value: 11},
-                {text: i18nc("@label:inlistbox", "Text-Bottom"), value: 12}
+                {text: i18nc("@label:inlistbox", "Baseline"), value: KoSvgText.BaselineAuto},
+                {text: i18nc("@label:inlistbox", "Alphabetic"), value: KoSvgText.BaselineAlphabetic},
+                {text: i18nc("@label:inlistbox", "Ideographic"), value: KoSvgText.BaselineIdeographic},
+                {text: i18nc("@label:inlistbox", "Central"), value: KoSvgText.BaselineCentral},
+                {text: i18nc("@label:inlistbox", "Hanging"), value: KoSvgText.BaselineHanging},
+                {text: i18nc("@label:inlistbox", "Middle"), value: KoSvgText.BaselineMiddle},
+                {text: i18nc("@label:inlistbox", "Mathematical"), value: KoSvgText.BaselineMathematical},
+                {text: i18nc("@label:inlistbox", "Text-Top"), value: KoSvgText.BaselineTextTop},
+                {text: i18nc("@label:inlistbox", "Text-Bottom"), value: KoSvgText.BaselineTextBottom}
             ]
             Layout.fillWidth: true;
             id: baselineCmb;

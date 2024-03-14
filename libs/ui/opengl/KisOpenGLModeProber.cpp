@@ -160,7 +160,6 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     char *argv = probeAppName.data();
 
 
-
     if (adjustGlobalState) {
         sharedContextSetter.reset(new AppAttributeSetter(Qt::AA_ShareOpenGLContexts, false));
 
@@ -175,9 +174,19 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
 
         // Disable this workaround for plasma (BUG:408015), because it causes 
         // a crash on Windows with Qt 5.15.7
-        //QGuiApplication::setDesktopSettingsAware(false);
+        const bool runningInKDE =  qEnvironmentVariableIsSet("KDE_FULL_SESSION");
+        const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
+
+        if (runningInKDE && !isInAppimage) {
+            QGuiApplication::setDesktopSettingsAware(false);
+        }
+
         application.reset(new QGuiApplication(argc, &argv));
-        //QGuiApplication::setDesktopSettingsAware(true);
+
+        if (runningInKDE && !isInAppimage) {
+            QGuiApplication::setDesktopSettingsAware(true);
+        }
+
     }
 
     QWindow surface;

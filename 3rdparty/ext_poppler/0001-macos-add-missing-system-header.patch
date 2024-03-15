@@ -1,0 +1,24 @@
+From 8e1a02ef3b6436522dfa01be6a3c81f372fedc02 Mon Sep 17 00:00:00 2001
+From: Ivan Yossi <ghevan@gmail.com>
+Date: Fri, 15 Mar 2024 00:09:48 -0600
+Subject: [PATCH] macos add missing system header
+
+---
+ poppler/ImageEmbeddingUtils.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/poppler/ImageEmbeddingUtils.cc b/poppler/ImageEmbeddingUtils.cc
+index 0c13fe9..c7b90f1 100644
+--- a/poppler/ImageEmbeddingUtils.cc
++++ b/poppler/ImageEmbeddingUtils.cc
+@@ -11,6 +11,7 @@
+ //========================================================================
+ 
+ #include <config.h>
++#include <stdio.h>
+ 
+ #include <memory>
+ #ifdef ENABLE_LIBJPEG
+-- 
+2.37.1 (Apple Git-137.1)
+

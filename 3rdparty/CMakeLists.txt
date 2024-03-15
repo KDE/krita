@@ -293,9 +293,14 @@ if (APPLE)
     endforeach()
     string(STRIP "${MACOS_ARCH_FLAGS}" MACOS_ARCH_FLAGS)
 
-    set(GLOBAL_AUTOMAKE_PROFILE 
-        "CFLAGS=${MACOS_ARCH_FLAGS}"
-        "CXXFLAGS=${MACOS_ARCH_FLAGS}"
+    # its recommended to set ld_classic as our target is below macOS 12
+    if(CMAKE_C_COMPILER_VERSION VERSION_GREATER_EQUAL 15)
+        set(XCODE15_FLAGS "-Wno-error=int-conversion -Wno-error=incompatible-pointer-types -Xlinker -ld_classic")
+    endif()
+
+    set(GLOBAL_AUTOMAKE_PROFILE
+        "CFLAGS=${MACOS_ARCH_FLAGS} ${XCODE15_FLAGS}"
+        "CXXFLAGS=${MACOS_ARCH_FLAGS} ${XCODE15_FLAGS}"
     )
 
     set(PATCH_COMMAND patch)

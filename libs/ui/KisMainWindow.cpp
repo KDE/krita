@@ -285,9 +285,9 @@ public:
     KoToolDocker *toolOptionsDocker {nullptr};
 
     QCloseEvent *deferredClosingEvent {nullptr};
-
+#ifndef Q_OS_HAIKU
     Digikam::ThemeManager *themeManager {nullptr};
-
+#endif
     QScrollArea *welcomeScroller {nullptr};
     KisWelcomePageWidget *welcomePage {nullptr};
 
@@ -355,8 +355,9 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
+#ifndef Q_OS_HAIKU
     d->themeManager = new Digikam::ThemeManager(group.readEntry("Theme", "Krita dark"), this);
-
+#endif
     d->windowStateConfig = KSharedConfig::openConfig()->group("MainWindow");
 
     setStandardToolBarMenuEnabled(true);
@@ -880,12 +881,12 @@ void KisMainWindow::updateTheme()
 void KisMainWindow::slotThemeChanged()
 {
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
-
+#ifndef Q_OS_HAIKU
     if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
 
     // save theme changes instantly
     group.writeEntry("Theme", d->themeManager->currentThemeName());
-
+#endif
     updateTheme();
 
     // Make the other top level windows update as well
@@ -2771,7 +2772,9 @@ void KisMainWindow::configChanged()
 #endif
 
     KConfigGroup group( KSharedConfig::openConfig(), "theme");
+#ifndef Q_OS_HAIKU
     d->themeManager->setCurrentTheme(group.readEntry("Theme", "Krita dark"));
+#endif
     d->actionManager()->updateGUI();
 
     QString s = cfg.getMDIBackgroundColor();
@@ -2959,11 +2962,12 @@ void KisMainWindow::createActions()
         intends to show data this entry should not have a trailing ellipses (...).  */
     d->showDocumentInfo  = actionManager->createAction("file_documentinfo");
     connect(d->showDocumentInfo, SIGNAL(triggered(bool)), this, SLOT(slotDocumentInfo()));
-
+#ifndef Q_OS_HAIKU
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::QueuedConnection);
     connect(this, SIGNAL(themeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
+#endif
     d->toggleDockers = actionManager->createAction("view_toggledockers");
 
 

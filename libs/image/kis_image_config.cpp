@@ -410,6 +410,8 @@ void KisImageConfig::setAutoKeyModeDuplicate(bool value)
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>
+#elif defined Q_OS_HAIKU
+#include <OS.h>
 #elif defined Q_OS_FREEBSD || defined Q_OS_NETBSD || defined Q_OS_OPENBSD
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
@@ -432,6 +434,13 @@ int KisImageConfig::totalRAM()
     if(!error) {
         totalMemory = info.totalram * info.mem_unit / (1UL << 20);
     }
+#elif defined Q_OS_HAIKU
+	system_info info;
+	error = get_system_info(&info) == B_OK ? 0 : 1;
+	if (!error) {
+		uint64_t size = (info.max_pages * B_PAGE_SIZE);
+	totalMemory = size >> 20;
+	}
 #elif defined Q_OS_FREEBSD || defined Q_OS_NETBSD || defined Q_OS_OPENBSD
     u_long physmem;
 #   if defined HW_PHYSMEM64 // NetBSD only

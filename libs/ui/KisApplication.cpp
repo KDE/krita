@@ -210,7 +210,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
     setWindowIcon(KisIconUtils::loadIcon("krita-branding"));
 
     if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
-        QStringList styles = QStringList() << "macintosh" << "breeze" << "fusion";
+        QStringList styles = QStringList() << "haiku" << "macintosh" << "breeze" << "fusion";
         if (!styles.contains(style()->objectName().toLower())) {
             Q_FOREACH (const QString & style, styles) {
                 if (!setStyle(style)) {
@@ -451,9 +451,10 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
 
     KConfigGroup group(KSharedConfig::openConfig(), "theme");
+#ifndef Q_OS_HAIKU
     Digikam::ThemeManager themeManager;
     themeManager.setCurrentTheme(group.readEntry("Theme", "Krita dark"));
-
+#endif
 
     ResetStarting resetStarting(d->splashScreen, args.filenames().count()); // remove the splash when done
     Q_UNUSED(resetStarting);

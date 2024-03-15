@@ -80,6 +80,12 @@
 #include "libs/macosutils/KisMacosSystemProber.h"
 #endif
 
+#ifdef Q_OS_HAIKU
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
+#endif
+
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
@@ -423,6 +429,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         // NOTE: This line helps also fontconfig have a user-accessible location on Android (see the commit).
         qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
     }
+#elif defined(Q_OS_HAIKU)
+	qputenv("KRITA_PLUGIN_PATH", QFile::encodeName(root + "lib"));
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(QDir(root + "share").absolutePath()));
 #endif
@@ -773,6 +782,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     if (logUsage) {
         KisUsageLogger::close();
     }
+
+#ifdef Q_OS_HAIKU
+	kill(::getpid(), SIGKILL);
+#endif
 
     return state;
 }

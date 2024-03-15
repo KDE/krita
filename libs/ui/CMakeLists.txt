@@ -709,9 +709,13 @@ if (ANDROID)
     target_link_libraries(kritaui PRIVATE Qt5::AndroidExtras)
 endif()
 
-if (NOT WIN32 AND NOT APPLE AND NOT ANDROID)
+if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
   target_link_libraries(kritaui PRIVATE ${X11_X11_LIB}
                                 ${X11_Xinput_LIB})
+endif()
+
+if (HAIKU)
+  target_link_libraries(kritaui PRIVATE network expat iconv intl)
 endif()
 
 if(APPLE)
@@ -730,7 +734,7 @@ if(OpenEXR_FOUND)
 endif()
 
 # Add VSync disable workaround
-if(NOT WIN32 AND NOT APPLE AND NOT ANDROID)
+if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
     target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt5::X11Extras)
 endif()
 

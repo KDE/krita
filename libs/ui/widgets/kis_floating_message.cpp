@@ -88,6 +88,7 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
                                             KisFloatingMessage::Priority priority,
                                             int alignment)
 {
+#ifndef Q_OS_HAIKU
     if ((int)priority > (int)m_priority) return;
 
     m_message = message;
@@ -98,6 +99,7 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
     m_alignment = alignment;
     showMessage();
     update();
+#endif
 }
 
 void KisFloatingMessage::showMessage()

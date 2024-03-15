@@ -139,6 +139,8 @@ QString getInstallationPrefix() {
     }
 
     return bundlePath;
+#elif defined(Q_OS_HAIKU)
+	return qApp->applicationDirPath() + "/";
 #elif defined(Q_OS_ANDROID)
     // qApp->applicationDirPath() isn't writable and android system won't allow
     // any files other than libraries

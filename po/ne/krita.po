@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-14 01:58+0000\n"
+"POT-Creation-Date: 2024-03-15 01:58+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -19852,7 +19852,7 @@ msgstr "स्रोत फाइल:"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1187 libs/ui/KisWelcomePageWidget.cpp:748
+#: libs/ui/KisView.cpp:1187 libs/ui/KisWelcomePageWidget.cpp:731
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -23801,20 +23801,14 @@ msgstr "अनुप्रयोग सुरुआतमा सधै यो �
 msgid "Always use this template"
 msgstr "सधै यो टेम्प्लेट प्रयोग गर्नुहोस्"
 
-#. i18n: ectx: property (text), widget (KisClickableLabel, lblBanner)
-#: libs/ui/forms/KisWelcomePage.ui:66
-#, fuzzy, kde-format
-msgid "Support Krita!"
-msgstr "क्रिता"
-
 #. i18n: ectx: property (text), widget (QLabel, startTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:146
+#: libs/ui/forms/KisWelcomePage.ui:97
 #, fuzzy, kde-format
 msgid "Start"
 msgstr "तारा"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:213 libs/ui/KisWelcomePageWidget.cpp:642
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
 #, kde-format
 msgid "DEV BUILD"
 msgstr ""
@@ -23823,7 +23817,7 @@ msgstr ""
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgImageProperties)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgStrokeSelection)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgNewImage)
-#: libs/ui/forms/KisWelcomePage.ui:267 libs/ui/forms/wdgimageproperties.ui:18
+#: libs/ui/forms/KisWelcomePage.ui:221 libs/ui/forms/wdgimageproperties.ui:18
 #: libs/ui/forms/wdgnewimage.ui:18
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:24
 #, kde-format
@@ -23832,7 +23826,7 @@ msgstr "नयाँ छवि"
 
 #. i18n: ectx: property (text), widget (QLabel, newFileLinkShortcut)
 #. i18n: ectx: property (text), widget (QLabel, openFileShortcut)
-#: libs/ui/forms/KisWelcomePage.ui:306 libs/ui/forms/KisWelcomePage.ui:373
+#: libs/ui/forms/KisWelcomePage.ui:260 libs/ui/forms/KisWelcomePage.ui:327
 #: plugins/color/lcms2engine/colorspaces/xyz_f16/XyzF16ColorSpace.cpp:22
 #: plugins/color/lcms2engine/colorspaces/xyz_f32/XyzF32ColorSpace.cpp:27
 #: plugins/color/lcms2engine/colorspaces/xyz_u16/XyzU16ColorSpace.cpp:22
@@ -23842,69 +23836,69 @@ msgid "X"
 msgstr "X:"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
-#: libs/ui/forms/KisWelcomePage.ui:334
+#: libs/ui/forms/KisWelcomePage.ui:288
 #, fuzzy, kde-format
 msgid "Open Image"
 msgstr "छवि"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:412
+#: libs/ui/forms/KisWelcomePage.ui:366
 #, fuzzy, kde-format
 msgid "Community"
 msgstr "टिप्पणी:"
 
 #. i18n: ectx: property (text), widget (QLabel, manualLink)
-#: libs/ui/forms/KisWelcomePage.ui:481 libs/ui/KisWelcomePageWidget.cpp:401
+#: libs/ui/forms/KisWelcomePage.ui:435 libs/ui/KisWelcomePageWidget.cpp:389
 #, fuzzy, kde-format
 #| msgid "Manual"
 msgid "User Manual"
 msgstr "म्यानुअल"
 
 #. i18n: ectx: property (text), widget (QLabel, supportKritaLink)
-#: libs/ui/forms/KisWelcomePage.ui:571 libs/ui/KisWelcomePageWidget.cpp:404
+#: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:392
 #, fuzzy, kde-format
 msgid "Support Krita"
 msgstr "क्रिता"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
-#: libs/ui/forms/KisWelcomePage.ui:661 libs/ui/KisWelcomePageWidget.cpp:413
+#: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:401
 #, kde-format
 msgid "Powered by KDE"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
-#: libs/ui/forms/KisWelcomePage.ui:751 libs/ui/KisWelcomePageWidget.cpp:410
+#: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:398
 #, fuzzy, kde-format
 #| msgid "Source"
 msgid "Source Code"
 msgstr "स्रोत"
 
 #. i18n: ectx: property (text), widget (QLabel, gettingStartedLink)
-#: libs/ui/forms/KisWelcomePage.ui:838 libs/ui/KisWelcomePageWidget.cpp:398
+#: libs/ui/forms/KisWelcomePage.ui:792 libs/ui/KisWelcomePageWidget.cpp:386
 #, fuzzy, kde-format
 msgid "Getting Started"
 msgstr "परिक्रमण"
 
 #. i18n: ectx: property (text), widget (QLabel, userCommunityLink)
-#: libs/ui/forms/KisWelcomePage.ui:925 libs/ui/KisWelcomePageWidget.cpp:395
+#: libs/ui/forms/KisWelcomePage.ui:879 libs/ui/KisWelcomePageWidget.cpp:383
 #, fuzzy, kde-format
 msgid "User Community"
 msgstr "तह नाम:"
 
 #. i18n: ectx: property (text), widget (QLabel, kritaWebsiteLink)
-#: libs/ui/forms/KisWelcomePage.ui:1012 libs/ui/KisWelcomePageWidget.cpp:407
+#: libs/ui/forms/KisWelcomePage.ui:966 libs/ui/KisWelcomePageWidget.cpp:395
 #, fuzzy, kde-format
 msgid "Krita Website"
 msgstr "स्पष्ट सन्तुलन:"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1087
+#: libs/ui/forms/KisWelcomePage.ui:1041
 #, fuzzy, kde-format
 msgid "Recent Images"
 msgstr "छवि विभाजन गर्नुहोस्"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
-#: libs/ui/forms/KisWelcomePage.ui:1111
+#: libs/ui/forms/KisWelcomePage.ui:1065
 #, fuzzy, kde-format
 #| msgid "Clear"
 msgctxt "Welcome Screen Recent Document List's Clear link Label"
@@ -23912,7 +23906,7 @@ msgid "Clear"
 msgstr "खालि गर्नुहोस्"
 
 #. i18n: ectx: property (text), widget (QLabel, labelNoRecentDocs)
-#: libs/ui/forms/KisWelcomePage.ui:1162
+#: libs/ui/forms/KisWelcomePage.ui:1116
 #, fuzzy, kde-format
 msgid ""
 "You don't seem to have any\n"
@@ -23920,38 +23914,38 @@ msgid ""
 msgstr "बचत गर्नका लागि फाइल सिर्जना गर्न सकिएन"
 
 #. i18n: ectx: property (text), widget (QLabel, newsTitleLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1293
+#: libs/ui/forms/KisWelcomePage.ui:1247
 #, kde-format
 msgid "News"
 msgstr ""
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, btnNewsOptions)
-#: libs/ui/forms/KisWelcomePage.ui:1316
+#: libs/ui/forms/KisWelcomePage.ui:1270
 #, fuzzy, kde-format
 msgid "News options"
 msgstr "विकल्प"
 
 #. i18n: ectx: property (text), widget (QLabel, versionNotificationLabel)
-#: libs/ui/forms/KisWelcomePage.ui:1423
+#: libs/ui/forms/KisWelcomePage.ui:1377
 #, fuzzy, kde-format
 msgid "Krita Version X.X.X Available"
 msgstr "क्रिता"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnVersionUpdate)
-#: libs/ui/forms/KisWelcomePage.ui:1474
+#: libs/ui/forms/KisWelcomePage.ui:1428
 #, fuzzy, kde-format
 msgid "Update now!"
 msgstr "पूर्वावलोकन अद्यावधिक गर्नुहोस्"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnErrorDetails)
-#: libs/ui/forms/KisWelcomePage.ui:1481
+#: libs/ui/forms/KisWelcomePage.ui:1435
 #, fuzzy, kde-format
 #| msgid "Show Mask"
 msgid "Show details"
 msgstr "मास्क देखाउनुहोस्"
 
 #. i18n: ectx: property (text), widget (KisClickableLabel, labelNoFeed)
-#: libs/ui/forms/KisWelcomePage.ui:1533 libs/ui/KisWelcomePageWidget.cpp:415
+#: libs/ui/forms/KisWelcomePage.ui:1487 libs/ui/KisWelcomePageWidget.cpp:403
 #, kde-format
 msgid ""
 "You can <a href=\"ignored\" style=\"color: COLOR_PLACEHOLDER; text-"
@@ -23960,7 +23954,7 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelSupportText)
-#: libs/ui/forms/KisWelcomePage.ui:1605
+#: libs/ui/forms/KisWelcomePage.ui:1559
 #, fuzzy, kde-format
 msgid ""
 "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/"
@@ -31622,46 +31616,46 @@ msgctxt "choice for author profile"
 msgid "Anonymous"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:158
+#: libs/ui/KisWelcomePageWidget.cpp:156
 #, kde-format
 msgid "Enable news and check for new releases"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:160
+#: libs/ui/KisWelcomePageWidget.cpp:158
 #, kde-format
 msgid ""
 "Show news about Krita: this needs internet to retrieve information from the "
 "krita.org website"
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:163
+#: libs/ui/KisWelcomePageWidget.cpp:161
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, fuzzy, kde-format
 msgid "Language"
 msgstr "भाषा"
 
-#: libs/ui/KisWelcomePageWidget.cpp:164
+#: libs/ui/KisWelcomePageWidget.cpp:162
 #, kde-format
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:665
+#: libs/ui/KisWelcomePageWidget.cpp:653
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, fuzzy, kde-format
 msgid "Forget \"%1\""
 msgstr "निर्यात:"
 
-#: libs/ui/KisWelcomePageWidget.cpp:767
+#: libs/ui/KisWelcomePageWidget.cpp:750
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:796
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, fuzzy, kde-format
 msgid "An error occurred during the update"
 msgstr "सक्रिय च्यानलको सेट चयन गर्नुहोस्।"
 
-#: libs/ui/KisWelcomePageWidget.cpp:802
+#: libs/ui/KisWelcomePageWidget.cpp:785
 #, kde-format
 msgid "Restart is required."
 msgstr ""
@@ -61242,6 +61236,10 @@ msgstr "जुम उपकरण"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "सन्दर्भ छवि:"
+
+#, fuzzy
+#~ msgid "Support Krita!"
+#~ msgstr "क्रिता"
 
 #, fuzzy
 #~ msgid "Antialiased"

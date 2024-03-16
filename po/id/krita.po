@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:58+0000\n"
+"POT-Creation-Date: 2024-03-16 02:02+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -15822,27 +15822,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Ruang Kerja"
 
-#: krita/main.cc:548
+#: krita/main.cc:557
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kesalahan Fatal"
 
-#: krita/main.cc:549
+#: krita/main.cc:558
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:667 libs/ui/KisApplication.cpp:413
-#: libs/ui/KisApplication.cpp:684
+#: krita/main.cc:676 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr ""
 
-#: krita/main.cc:668
+#: krita/main.cc:677
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15854,12 +15854,12 @@ msgstr ""
 "Silakan perbarui ke Windows dengan versi yang didukung: Windows 7, 8, 8.1, "
 "atau 10."
 
-#: krita/main.cc:690 krita/main.cc:695
+#: krita/main.cc:699 krita/main.cc:704
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr ""
 
-#: krita/main.cc:691
+#: krita/main.cc:700
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15867,7 +15867,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:696
+#: krita/main.cc:705
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17416,8 +17416,8 @@ msgid "Processing"
 msgstr "Memproses"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
-#: libs/ui/KisMainWindow.cpp:1741 libs/ui/KisMainWindow.cpp:1754
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1742 libs/ui/KisMainWindow.cpp:1755
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18136,8 +18136,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr ""
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2112
-#: libs/ui/KisMainWindow.cpp:2195
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2113
+#: libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid "Import frames"
 msgstr "Impor frame"
@@ -19447,19 +19447,19 @@ msgstr "Sumber Daya Lokal"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1065
-#: libs/ui/KisApplication.cpp:1068 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1130
-#: libs/ui/KisApplication.cpp:1158 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
-#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1972
-#: libs/ui/KisMainWindow.cpp:1981 libs/ui/KisMainWindow.cpp:2120
-#: libs/ui/KisMainWindow.cpp:2181 libs/ui/KisMainWindow.cpp:2202
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
+#: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1973
+#: libs/ui/KisMainWindow.cpp:1982 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2182 libs/ui/KisMainWindow.cpp:2203
+#: libs/ui/KisMainWindow.cpp:2818 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19963,7 +19963,7 @@ msgid "Delete resource"
 msgstr "Hapus sumber daya"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2615
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20400,7 +20400,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2222
+#: libs/ui/KisMainWindow.cpp:2223
 #, kde-format
 msgid "Render Animation"
 msgstr "Render Animasi"
@@ -22320,7 +22320,7 @@ msgid "Numerical"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1136
 #, kde-format
 msgid "Import Images"
 msgstr ""
@@ -22422,7 +22422,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2625
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2626
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26217,7 +26217,7 @@ msgstr "Prasetel kuas saat ini"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1022
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1023
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -29564,60 +29564,60 @@ msgstr "Kamu menjalankan 32 bit build pada sebuah Windows 64 bit."
 msgid "Initializing Globals..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, kde-format
 msgid "Adding resource types..."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:466
+#: libs/ui/KisApplication.cpp:467
 #, kde-format
 msgid "Loading plugins..."
 msgstr "Memuat plugin..."
 
-#: libs/ui/KisApplication.cpp:472
+#: libs/ui/KisApplication.cpp:473
 #, kde-format
 msgid "Loading resources..."
 msgstr "Memuat sumber daya..."
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:482
 #, kde-format
 msgid "Loading Main Window..."
 msgstr "Memuat Jendela Utama..."
 
-#: libs/ui/KisApplication.cpp:513
+#: libs/ui/KisApplication.cpp:514
 #, kde-format
 msgid "Launching..."
 msgstr "Peluncuran..."
 
-#: libs/ui/KisApplication.cpp:582
+#: libs/ui/KisApplication.cpp:583
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr "Tipe mime tidak ditemukan, cobalah menggunakan - opsi tipe mime"
 
-#: libs/ui/KisApplication.cpp:638
+#: libs/ui/KisApplication.cpp:639
 #, kde-format
 msgid "Failed to render animation frames!"
 msgstr "Gagal merender frame animasi!"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:937
+#: libs/ui/KisApplication.cpp:666 libs/ui/KisApplication.cpp:938
 #, kde-format
 msgid "File layer"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
-#: libs/ui/KisApplication.cpp:931 libs/ui/KisApplication.cpp:945
-#: libs/ui/KisApplication.cpp:950
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:679
+#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:951
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:675 libs/ui/KisApplication.cpp:947
 #, kde-format
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:679
+#: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29630,7 +29630,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:685
+#: libs/ui/KisApplication.cpp:686
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -29638,32 +29638,32 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:932
+#: libs/ui/KisApplication.cpp:933
 #, kde-format
 msgid "Couldn't open file %1"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:952
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1067
 #, kde-format
 msgid "No template found for: %1"
 msgstr "Tidak ada templat yang ditemukan untuk: %1"
 
-#: libs/ui/KisApplication.cpp:1069
+#: libs/ui/KisApplication.cpp:1070
 #, kde-format
 msgid "Too many templates found for: %1"
 msgstr "Terlalu banyak templat yang ditemukan untuk: %1"
 
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Template %1 failed to load."
 msgstr "Templat %1 gagal dimuat."
 
-#: libs/ui/KisApplication.cpp:1117
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -29673,7 +29673,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -29681,7 +29681,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1159
+#: libs/ui/KisApplication.cpp:1160
 #, kde-format
 msgid "Do you want to clear the settings file?"
 msgstr ""
@@ -30335,34 +30335,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "Ruang &Kerja"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, kde-format
 msgid "Show %1 Toolbar"
 msgstr "Tampilkan Bilah Alat %1"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "Sembunyikan Bilah Alat %1"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1020
 #, kde-format
 msgid "Save as %1"
 msgstr "Simpan sebagai %1"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1042
 #, kde-format
 msgid "The file %1 does not exist."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1136
 #, kde-format
 msgid "Open Images"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1268
+#: libs/ui/KisMainWindow.cpp:1269
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -30371,45 +30371,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1325
 #, kde-format
 msgid "Exporting"
 msgstr "Pengeksporan"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1325
 #, kde-format
 msgid "Saving As"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1720
+#: libs/ui/KisMainWindow.cpp:1721
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Buat dokumen baru"
 
-#: libs/ui/KisMainWindow.cpp:1744
+#: libs/ui/KisMainWindow.cpp:1745
 #, kde-format
 msgid "Custom Document"
 msgstr "Kustom Dokumen"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1757
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Buat dari Papan Klip"
 
-#: libs/ui/KisMainWindow.cpp:1941
+#: libs/ui/KisMainWindow.cpp:1942
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lapisan/Mask"
 
-#: libs/ui/KisMainWindow.cpp:1967
+#: libs/ui/KisMainWindow.cpp:1968
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1972
 #, kde-format
 msgid ""
 "\n"
@@ -30417,7 +30417,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1982
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -30426,66 +30426,66 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2120 libs/ui/KisMainWindow.cpp:2202
+#: libs/ui/KisMainWindow.cpp:2121 libs/ui/KisMainWindow.cpp:2203
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2181
+#: libs/ui/KisMainWindow.cpp:2182
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2605
+#: libs/ui/KisMainWindow.cpp:2606
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Impor Ruang Kerja..."
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2621
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "Ruang Kerja &Baru..."
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2625
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ruang Kerja Baru..."
 
-#: libs/ui/KisMainWindow.cpp:2668
+#: libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2671
+#: libs/ui/KisMainWindow.cpp:2672
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2841
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2857
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Galat Penginstalan"
 
-#: libs/ui/KisMainWindow.cpp:2963
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Tema-tema"
 
-#: libs/ui/KisMainWindow.cpp:3021
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

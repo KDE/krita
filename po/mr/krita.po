@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-15 01:58+0000\n"
+"POT-Creation-Date: 2024-03-16 02:02+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -16238,27 +16238,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "कार्यक्षेत्रे"
 
-#: krita/main.cc:548
+#: krita/main.cc:557
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "उभी किनार :"
 
-#: krita/main.cc:549
+#: krita/main.cc:558
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:667 libs/ui/KisApplication.cpp:413
-#: libs/ui/KisApplication.cpp:684
+#: krita/main.cc:676 libs/ui/KisApplication.cpp:413
+#: libs/ui/KisApplication.cpp:685
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "इशारा"
 
-#: krita/main.cc:668
+#: krita/main.cc:677
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16266,12 +16266,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:690 krita/main.cc:695
+#: krita/main.cc:699 krita/main.cc:704
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "क्रिता PNG निर्यात"
 
-#: krita/main.cc:691
+#: krita/main.cc:700
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16279,7 +16279,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:696
+#: krita/main.cc:705
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17959,8 +17959,8 @@ msgid "Processing"
 msgstr "पोस्ट प्रोसेसिंग"
 
 #: libs/image/kis_psd_layer_style.cpp:104
-#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
-#: libs/ui/KisMainWindow.cpp:1741 libs/ui/KisMainWindow.cpp:1754
+#: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1370
+#: libs/ui/KisMainWindow.cpp:1742 libs/ui/KisMainWindow.cpp:1755
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18723,8 +18723,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "वेगळी प्रतिमा"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2112
-#: libs/ui/KisMainWindow.cpp:2195
+#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2113
+#: libs/ui/KisMainWindow.cpp:2196
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "प्रतिमा आयात करा"
@@ -20112,19 +20112,19 @@ msgstr "संसाधन फाईल्स साफ करा"
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1065
-#: libs/ui/KisApplication.cpp:1068 libs/ui/KisApplication.cpp:1084
-#: libs/ui/KisApplication.cpp:1116 libs/ui/KisApplication.cpp:1130
-#: libs/ui/KisApplication.cpp:1158 libs/ui/KisDocument.cpp:969
+#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
 #: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
 #: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
-#: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
-#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1972
-#: libs/ui/KisMainWindow.cpp:1981 libs/ui/KisMainWindow.cpp:2120
-#: libs/ui/KisMainWindow.cpp:2181 libs/ui/KisMainWindow.cpp:2202
-#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
+#: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1973
+#: libs/ui/KisMainWindow.cpp:1982 libs/ui/KisMainWindow.cpp:2121
+#: libs/ui/KisMainWindow.cpp:2182 libs/ui/KisMainWindow.cpp:2203
+#: libs/ui/KisMainWindow.cpp:2818 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20653,7 +20653,7 @@ msgid "Delete resource"
 msgstr "संसाधन काढून टाका"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2615
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 msgctxt "@title:window"
@@ -21134,7 +21134,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "कार्य तयार करण्यात अपयश"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2222
+#: libs/ui/KisMainWindow.cpp:2223
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "कल"
@@ -23115,7 +23115,7 @@ msgid "Numerical"
 msgstr "शंक्वाकृती"
 
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:143
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1136
 #, fuzzy, kde-format
 msgid "Import Images"
 msgstr "प्रतिमा आयात करा"
@@ -23219,7 +23219,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "पूर्वनिश्चीत उतरणी"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2625
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2626
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -27203,7 +27203,7 @@ msgstr "वर्तमान प्रीसेट"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1022
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1023
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30675,62 +30675,62 @@ msgstr ""
 msgid "Initializing Globals..."
 msgstr "संसाधने (&R)"
 
-#: libs/ui/KisApplication.cpp:462
+#: libs/ui/KisApplication.cpp:463
 #, fuzzy, kde-format
 msgid "Adding resource types..."
 msgstr "संसाधने (&R)"
 
-#: libs/ui/KisApplication.cpp:466
+#: libs/ui/KisApplication.cpp:467
 #, fuzzy, kde-format
 msgid "Loading plugins..."
 msgstr "पूर्वलक्षित कुंचले"
 
-#: libs/ui/KisApplication.cpp:472
+#: libs/ui/KisApplication.cpp:473
 #, fuzzy, kde-format
 msgid "Loading resources..."
 msgstr "संसाधन फाईल्स साफ करा"
 
-#: libs/ui/KisApplication.cpp:481
+#: libs/ui/KisApplication.cpp:482
 #, fuzzy, kde-format
 msgid "Loading Main Window..."
 msgstr "ग्रेडियंट"
 
-#: libs/ui/KisApplication.cpp:513
+#: libs/ui/KisApplication.cpp:514
 #, fuzzy, kde-format
 msgid "Launching..."
 msgstr "संयोजना"
 
-#: libs/ui/KisApplication.cpp:582
+#: libs/ui/KisApplication.cpp:583
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:638
+#: libs/ui/KisApplication.cpp:639
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to render animation frames!"
 msgstr "कार्य तयार करण्यात अपयश"
 
-#: libs/ui/KisApplication.cpp:665 libs/ui/KisApplication.cpp:937
+#: libs/ui/KisApplication.cpp:666 libs/ui/KisApplication.cpp:938
 #, fuzzy, kde-format
 msgid "File layer"
 msgstr "गाळणी स्तर (&F)..."
 
-#: libs/ui/KisApplication.cpp:673 libs/ui/KisApplication.cpp:678
-#: libs/ui/KisApplication.cpp:931 libs/ui/KisApplication.cpp:945
-#: libs/ui/KisApplication.cpp:950
+#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:679
+#: libs/ui/KisApplication.cpp:932 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:951
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita:Warning"
 msgstr "इशारा"
 
-#: libs/ui/KisApplication.cpp:674 libs/ui/KisApplication.cpp:946
+#: libs/ui/KisApplication.cpp:675 libs/ui/KisApplication.cpp:947
 #, fuzzy, kde-format
 #| msgid "Cannot pick a color as the active layer is not visible."
 msgid "Cannot add %1 as a file layer: the file does not exist."
 msgstr "सक्रिय स्तर  दिसत नसल्यानेकोणताही रंग घेता येत नाही."
 
-#: libs/ui/KisApplication.cpp:679
+#: libs/ui/KisApplication.cpp:680
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30743,7 +30743,7 @@ msgid ""
 "checkbox in the settings (Settings -> General -> Window)."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:685
+#: libs/ui/KisApplication.cpp:686
 #, kde-format
 msgid ""
 "Cannot add the file layer: no document is open.\n"
@@ -30751,34 +30751,34 @@ msgid ""
 "open an existing file."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:932
+#: libs/ui/KisApplication.cpp:933
 #, fuzzy, kde-format
 msgid "Couldn't open file %1"
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisApplication.cpp:951
+#: libs/ui/KisApplication.cpp:952
 #, kde-format
 msgid "Cannot add the file layer: no document is open."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1066
+#: libs/ui/KisApplication.cpp:1067
 #, fuzzy, kde-format
 #| msgid "No shapes found in file: %1"
 msgid "No template found for: %1"
 msgstr "%1 या फाईल मध्ये आकार आढळला नाही"
 
-#: libs/ui/KisApplication.cpp:1069
+#: libs/ui/KisApplication.cpp:1070
 #, fuzzy, kde-format
 #| msgid "No shapes found in file: %1"
 msgid "Too many templates found for: %1"
 msgstr "%1 या फाईल मध्ये आकार आढळला नाही"
 
-#: libs/ui/KisApplication.cpp:1085
+#: libs/ui/KisApplication.cpp:1086
 #, fuzzy, kde-format
 msgid "Template %1 failed to load."
 msgstr "लुट फाईल निवडा"
 
-#: libs/ui/KisApplication.cpp:1117
+#: libs/ui/KisApplication.cpp:1118
 #, kde-format
 msgid ""
 "Krita configurations reset!\n"
@@ -30788,7 +30788,7 @@ msgid ""
 "Restart Krita for changes to take effect."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1131
+#: libs/ui/KisApplication.cpp:1132
 #, kde-format
 msgid ""
 "Failed to clear %1\n"
@@ -30796,7 +30796,7 @@ msgid ""
 "Please make sure no other program is using the file and try again."
 msgstr ""
 
-#: libs/ui/KisApplication.cpp:1159
+#: libs/ui/KisApplication.cpp:1160
 #, fuzzy, kde-format
 #| msgid "Move and rotate your canvas"
 msgid "Do you want to clear the settings file?"
@@ -31468,34 +31468,34 @@ msgctxt "@action:inmenu"
 msgid "Wor&kspace"
 msgstr "कार्यक्षेत्र"
 
-#: libs/ui/KisMainWindow.cpp:587
+#: libs/ui/KisMainWindow.cpp:588
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:319
 #, fuzzy, kde-format
 msgid "Show %1 Toolbar"
 msgstr "मूळ स्तर दर्शवा"
 
-#: libs/ui/KisMainWindow.cpp:589
+#: libs/ui/KisMainWindow.cpp:590
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:321
 #, fuzzy, kde-format
 msgid "Hide %1 Toolbar"
 msgstr "स्क्रोलबार्स"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1020
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "मॅक्रो साठवा"
 
-#: libs/ui/KisMainWindow.cpp:1041
+#: libs/ui/KisMainWindow.cpp:1042
 #, fuzzy, kde-format
 msgid "The file %1 does not exist."
 msgstr "स्तर चढवा"
 
-#: libs/ui/KisMainWindow.cpp:1135
+#: libs/ui/KisMainWindow.cpp:1136
 #, fuzzy, kde-format
 msgid "Open Images"
 msgstr "प्रतिमा"
 
-#: libs/ui/KisMainWindow.cpp:1268
+#: libs/ui/KisMainWindow.cpp:1269
 #, kde-format
 msgid ""
 "You are saving a file while the image is still rendering. The saved file may "
@@ -31504,45 +31504,45 @@ msgid ""
 "Please select a location where the original file will not be overridden!"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1325
 #, fuzzy, kde-format
 msgid "Exporting"
 msgstr "एक्सपोजर"
 
-#: libs/ui/KisMainWindow.cpp:1324
+#: libs/ui/KisMainWindow.cpp:1325
 #, fuzzy, kde-format
 msgid "Saving As"
 msgstr "दस्तऐवज साठवा"
 
-#: libs/ui/KisMainWindow.cpp:1720
+#: libs/ui/KisMainWindow.cpp:1721
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "अलिकडील दस्तऐवज"
 
-#: libs/ui/KisMainWindow.cpp:1744
+#: libs/ui/KisMainWindow.cpp:1745
 #, fuzzy, kde-format
 msgid "Custom Document"
 msgstr "ऐच्छिक ग्रेडियंट"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1757
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "चिकटपट्टीवरील पहिला स्तर (&F)"
 
-#: libs/ui/KisMainWindow.cpp:1941
+#: libs/ui/KisMainWindow.cpp:1942
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "स्तर/मुखवटा साठवा..."
 
-#: libs/ui/KisMainWindow.cpp:1967
+#: libs/ui/KisMainWindow.cpp:1968
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1972
 #, kde-format
 msgid ""
 "\n"
@@ -31550,7 +31550,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1982
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -31559,48 +31559,48 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2120 libs/ui/KisMainWindow.cpp:2202
+#: libs/ui/KisMainWindow.cpp:2121 libs/ui/KisMainWindow.cpp:2203
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr "नवीन संयोजना %1"
 
-#: libs/ui/KisMainWindow.cpp:2181
+#: libs/ui/KisMainWindow.cpp:2182
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgid "Failed to create new document. Animation import aborted."
 msgstr "कार्य तयार करण्यात अपयश"
 
-#: libs/ui/KisMainWindow.cpp:2605
+#: libs/ui/KisMainWindow.cpp:2606
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2621
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2624
+#: libs/ui/KisMainWindow.cpp:2625
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "आरेखन आयात करा (&I)..."
 
-#: libs/ui/KisMainWindow.cpp:2668
+#: libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2671
+#: libs/ui/KisMainWindow.cpp:2672
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2838
+#: libs/ui/KisMainWindow.cpp:2841
 #, fuzzy, kde-format
 #| msgid ""
 #| "The Calligra LittleCMS color management plugin is not installed. Krita "
@@ -31612,19 +31612,19 @@ msgstr ""
 "The Calligra LittleCMS color management plugin स्थापित केलेली नाही. क्रिटा आता "
 "बंद होईल."
 
-#: libs/ui/KisMainWindow.cpp:2854
+#: libs/ui/KisMainWindow.cpp:2857
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "प्रतिष्ठापना त्रुटी"
 
-#: libs/ui/KisMainWindow.cpp:2963
+#: libs/ui/KisMainWindow.cpp:2966
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3021
+#: libs/ui/KisMainWindow.cpp:3025
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""

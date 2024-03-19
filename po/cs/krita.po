@@ -38037,10 +38037,9 @@ msgstr "Obdélníkový"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:64
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
-#, fuzzy, kde-format
-#| msgid "Isometric"
+#, kde-format
 msgid "Isometric (Legacy)"
-msgstr "Isometricky"
+msgstr ""
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:65
 #, kde-format
@@ -38109,17 +38108,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, fuzzy, kde-format
-#| msgid "Pixel Size"
+#, kde-format
 msgid "Cell Size:"
-msgstr "Velikost v pixelech"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, fuzzy, kde-format
-#| msgid "Vertical Scale"
+#, kde-format
 msgid "Vertical Style:"
-msgstr "Svislé měřítko"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
@@ -38147,10 +38144,9 @@ msgstr "Další členění:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivision Style:"
-msgstr "Další členění:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
@@ -47736,10 +47732,9 @@ msgid "Could not load \"id\" of the transform mask"
 msgstr "Nelze načíst \"id\" masky transformace"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
-#, fuzzy, kde-format
-#| msgid "Could not load \"id\" of the transform mask"
+#, kde-format
 msgid "Could not find transform mask XML element"
-msgstr "Nelze načíst \"id\" masky transformace"
+msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
 #, kde-format
@@ -58406,11 +58401,10 @@ msgid "Spread: {n}%"
 msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Zavřít"
+msgstr ""
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
 #, kde-format
@@ -59618,8 +59612,3 @@ msgstr "Nástroj pro přiblížení"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr ""
-
-#, fuzzy
-#~| msgid "Anti-aliased"
-#~ msgid "Antialiased"
-#~ msgstr "Vyhlazovaný"

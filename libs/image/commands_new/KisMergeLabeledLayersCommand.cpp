@@ -94,74 +94,79 @@ KisPaintDeviceSP KisMergeLabeledLayersCommand::createRefPaintDevice(KisImageSP o
 
 QPair<KisNodeSP, QPair<bool, bool>> KisMergeLabeledLayersCommand::collectNode(KisNodeSP node) const
 {
-    KisNodeSP transformedNode = nullptr;
-    bool visitNextSibling, visitChildren;
+    if (!node->parent()) {
+        // This is the root node. Do not use nor visit the siblings,
+        // but always visit the children
+        return {nullptr, {false, true}};
+    }
+
+    if (node->inherits("KisMask")) {
+        // This is the a mask node. Do not use, nor visit the siblings,
+        // nor visit the children
+        return {nullptr, {false, false}};
+    }
 
     if (!node->visible()) {
-        // Do not visit the children if the node is hidden but visit the next sibling
-        visitNextSibling = true;
-        visitChildren = false;
+        // Do not use the node and do not visit the children if the node is
+        // hidden, but do visit the next sibling
+        return {nullptr, {true, false}};
+    }
 
-    } else if (!m_selectedLabels.contains(node->colorLabelIndex())) {
-        // If the node is not labeled appropriately it's children are still
-        // visited if it is a group, as well as the next sibling
-        visitNextSibling = true;
-        visitChildren = true;
+    if (!m_selectedLabels.contains(node->colorLabelIndex())) {
+        // Do not use this node if it is not labeled appropriately. The children
+        // should still be visited if it is a group. The next sibling should
+        // also be visited
+        return {nullptr, {true, node->inherits("KisGroupLayer")}};
+    }
 
-    } else if (node->inherits("KisCloneLayer")) {
+    if (node->inherits("KisCloneLayer")) {
         // Make a copy of the clone layer as a paint layer. The source layer
         // may not be color labeled and therefore not added to the temporary
         // image. So this ensures that the real contents are represented
         // in any case
         KisCloneLayerSP cloneLayer = dynamic_cast<KisCloneLayer*>(node.data());
-        transformedNode = cloneLayer->reincarnateAsPaintLayer();
-        // The next sibling is visited. Although this is not a group
-        // and does not have children, visitChildren is initialized to true
-        visitNextSibling = true;
-        visitChildren = true;
-
-    } else if (node->inherits("KisAdjustmentLayer")) {
+        KisNodeSP transformedNode = cloneLayer->reincarnateAsPaintLayer();
+        // Use the transformed node. The next sibling is visited, but not the
+        // children, which may be some masks
+        return {transformedNode, {true, false}};
+    }
+    
+    if (node->inherits("KisAdjustmentLayer")) {
         // Similar to the clone layer case. The filter layer uses the
         // composition of the layers below as source to apply the effect
         // so we must use a paint layer representation of the result
         // because the next sibling nodes may not be color labeled and
-        // therefore not added to the temporary image.
+        // therefore not added to the temporary image
         KisPaintDeviceSP proj = new KisPaintDevice(*(node->projection()));
-        KisPaintLayerSP newLayer = new KisPaintLayer(node->image(), node->name(), node->opacity(), proj);
-        newLayer->setX(newLayer->x() + node->x());
-        newLayer->setY(newLayer->y() + node->y());
-        newLayer->mergeNodeProperties(node->nodeProperties());
-        transformedNode = newLayer;
-        // This new node already has the contents of the next layers on
-        // the same level baked, so the next sibling nodes are not visited.
-        // Although this is not a group and does not have children,
-        // visitChildren is initialized to true
-        visitNextSibling = false;
-        visitChildren = true;
-
-    } else if (node->inherits("KisGroupLayer")) {
-        if (m_groupSelectionPolicy == GroupSelectionPolicy_NeverSelect ||
-            (m_groupSelectionPolicy == GroupSelectionPolicy_SelectIfColorLabeled && node->colorLabelIndex() == 0)) {
-            // If the node is a group and should not be selected, it's children
-            // are still visited as well as the next sibling
-            visitNextSibling = true;
-            visitChildren = true;
-
-        } else {
-            // Just add the group node, which adds also all the children
-            transformedNode = node;
-            // This group node already has all the children, so the child nodes
-            // are not visited. The next sibling is visited
-            visitNextSibling = true;
-            visitChildren = false;
-        }
-    } else {
-        transformedNode = node;
-        visitNextSibling = true;
-        visitChildren = true;
+        KisPaintLayerSP transformedNode = new KisPaintLayer(node->image(), node->name(), node->opacity(), proj);
+        transformedNode->setX(transformedNode->x() + node->x());
+        transformedNode->setY(transformedNode->y() + node->y());
+        transformedNode->mergeNodeProperties(node->nodeProperties());
+        // Use the transformed node. This new node already has the contents of
+        // the next layers on the same level baked, so the next sibling nodes
+        // are not visited. Do not visit the children, which may be some masks
+        return {transformedNode, {false, false}};
     }
     
-    return {transformedNode, {visitNextSibling, visitChildren}};
+    if (node->inherits("KisGroupLayer")) {
+        if (m_groupSelectionPolicy == GroupSelectionPolicy_NeverSelect ||
+            (m_groupSelectionPolicy == GroupSelectionPolicy_SelectIfColorLabeled && node->colorLabelIndex() == 0)) {
+            // If this group node should not be used (that is, the projection of
+            // it's contents), it's children are always visited as well as
+            // the next sibling
+            return {nullptr, {true, true}};
+        } else {
+            // If this group node should be used (that is, the projection of
+            // it's contents), just add the node, which adds
+            // also all the children. This group node already has all the
+            // children, so the child nodes are not visited.
+            // The next sibling is visited
+            return {node, {true, false}};
+        }
+    }
+    
+    // By default, visit the next sibling, but not the children
+    return {node, {true, false}};
 }
 
 bool KisMergeLabeledLayersCommand::collectNodes(KisNodeSP node, QList<KisNodeSP> &nodeList, ReferenceNodeInfoList &nodeInfoList) const

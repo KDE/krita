@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-16 02:02+0000\n"
-"PO-Revision-Date: 2024-03-14 14:13+0300\n"
+"PO-Revision-Date: 2024-03-19 17:50+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -5500,7 +5500,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "David_Revoy's_Electric_Arcs.kse"
 msgid "David Revoy's Electric Arcs"
-msgstr "David Revoy'un Elektrik Arkları"
+msgstr "David Revoy’un Elektrik Arkları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5508,7 +5508,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "David_Revoy's_Example.kse"
 msgid "David Revoy's Example"
-msgstr "David Revoy'un Örneği"
+msgstr "David Revoy’un Örneği"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5516,7 +5516,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Black_Clouds.kse"
 msgid "Wolthera's Black Clouds"
-msgstr "Wolthera'nın Kara Bulutları"
+msgstr "Wolthera’nın Kara Bulutları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5524,7 +5524,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Cellnoise.kse"
 msgid "Wolthera's Cellnoise"
-msgstr "Wolthera'nın Hücre Gürültüsü"
+msgstr "Wolthera’nın Hücre Gürültüsü"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5532,7 +5532,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Circles_with_Voronoi.kse"
 msgid "Wolthera's Circles with Voronoi"
-msgstr "Voronoi ile Wolthera'nın Çemberleri"
+msgstr "Voronoi ile Wolthera’nın Çemberleri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5540,7 +5540,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Classic_Truchet.kse"
 msgid "Wolthera's Classic Truchet"
-msgstr "Wolthera'nın Klasik Truşeti"
+msgstr "Wolthera’nın Klasik Truşeti"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5548,7 +5548,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_Cellnoise.kse"
 msgid "Wolthera's Color Cellnoise"
-msgstr "Wolthera'nın Renk Hücresi Gürültüsü"
+msgstr "Wolthera’nın Renk Hücresi Gürültüsü"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5556,7 +5556,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_Perlin_Noise_1983.kse"
 msgid "Wolthera's Color Perlin Noise 1983"
-msgstr "Wolthera'nın Renk Perlin Gürültüsü 1983"
+msgstr "Wolthera’nın Renk Perlin Gürültüsü 1983"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5564,7 +5564,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_Turbulence.kse"
 msgid "Wolthera's Color Turbulence"
-msgstr "Wolthera'nın Renk Türbülansı"
+msgstr "Wolthera’nın Renk Türbülansı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5572,7 +5572,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_Voronoi.kse"
 msgid "Wolthera's Color Voronoi"
-msgstr "Wolthera'nın Renk Voronoi'i"
+msgstr "Wolthera’nın Renk Voronoi’i"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5580,7 +5580,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Color_fractal_Brownian_Motion.kse"
 msgid "Wolthera's Color fractal Brownian Motion"
-msgstr "Wolthera'nın Kesirsel Renk Kahverengi Hareketi"
+msgstr "Wolthera’nın Kesirsel Renk Kahverengi Hareketi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5588,7 +5588,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Conical_Gradient.kse"
 msgid "Wolthera's Conical Gradient"
-msgstr "Wolthera'nın Konik Gradyanı"
+msgstr "Wolthera’nın Konik Gradyanı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5596,7 +5596,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Dendrite_Clouds.kse"
 msgid "Wolthera's Dendrite Clouds"
-msgstr "Wolthera'nın Dallantı Bulutları"
+msgstr "Wolthera’nın Dallantı Bulutları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5604,7 +5604,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Dirty_Screentone.kse"
 msgid "Wolthera's Dirty Screentone"
-msgstr "Wolthera'nın Kirli Ekran Tonu"
+msgstr "Wolthera’nın Kirli Ekran Tonu"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5612,7 +5612,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Dirty_Squares-Lines.kse"
 msgid "Wolthera's Dirty Squares-Lines"
-msgstr "Wolthera'nın Kirli Kare Çizgileri"
+msgstr "Wolthera’nın Kirli Kare Çizgileri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5620,7 +5620,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Dotted_Field.kse"
 msgid "Wolthera's Dotted Field"
-msgstr "Wolthera'nın Noktalı Alanı"
+msgstr "Wolthera’nın Noktalı Alanı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5628,7 +5628,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Grey_Clouds.kse"
 msgid "Wolthera's Grey Clouds"
-msgstr "Wolthera'nın Gri Bulutları"
+msgstr "Wolthera’nın Gri Bulutları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5636,7 +5636,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Halfround_Truchet.kse"
 msgid "Wolthera's Halfround Truchet"
-msgstr "Wolthera'nın Yarı Yuvarlak Truşeti"
+msgstr "Wolthera’nın Yarı Yuvarlak Truşeti"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5644,7 +5644,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Linear_Gradient.kse"
 msgid "Wolthera's Linear Gradient"
-msgstr "Wolthera'nın Doğrusal Gradyanı"
+msgstr "Wolthera’nın Doğrusal Gradyanı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5652,7 +5652,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Malachite.kse"
 msgid "Wolthera's Malachite"
-msgstr "Wolthera'nın Bakır Taşı"
+msgstr "Wolthera’nın Bakır Taşı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5660,7 +5660,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Maze_Truchet.kse"
 msgid "Wolthera's Maze Truchet"
-msgstr "Wolthera'nın Labirent Truşeti"
+msgstr "Wolthera’nın Labirent Truşeti"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5668,7 +5668,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Mercurial.kse"
 msgid "Wolthera's Mercurial"
-msgstr "Wolthera'nın Cıvası"
+msgstr "Wolthera’nın Cıvası"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5676,7 +5676,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Moiré_Pattern.kse"
 msgid "Wolthera's Moiré Pattern"
-msgstr "Wolthera'nın Hare Deseni"
+msgstr "Wolthera’nın Hare Deseni"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5684,7 +5684,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Perlin_Noise_1983.kse"
 msgid "Wolthera's Perlin Noise 1983"
-msgstr "Wolthera'nın Perlin Gürültüsü 1983"
+msgstr "Wolthera’nın Perlin Gürültüsü 1983"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5692,7 +5692,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Petri_Dish.kse"
 msgid "Wolthera's Petri Dish"
-msgstr "Wolthera'nın Petri Kabı"
+msgstr "Wolthera’nın Petri Kabı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5700,7 +5700,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Radial_Lines.kse"
 msgid "Wolthera's Radial Lines"
-msgstr "Wolthera'nın Yarıçap Çizgileri"
+msgstr "Wolthera’nın Yarıçap Çizgileri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5708,7 +5708,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Random_Rotated_Hatches.kse"
 msgid "Wolthera's Random Rotated Hatches"
-msgstr "Wolthera'nın Rastgele Döndürülmüş Baltaları"
+msgstr "Wolthera’nın Rastgele Döndürülmüş Baltaları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5716,7 +5716,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Screentones.kse"
 msgid "Wolthera's Screentones"
-msgstr "Wolthera'nın Ekran Tonları"
+msgstr "Wolthera’nın Ekran Tonları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5724,7 +5724,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Tiled_Dots.kse"
 msgid "Wolthera's Tiled Dots"
-msgstr "Wolthera'nın Döşeli Noktaları"
+msgstr "Wolthera’nın Döşeli Noktaları"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5732,7 +5732,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Tiled_Squares.kse"
 msgid "Wolthera's Tiled Squares"
-msgstr "Wolthera'nın Döşeli Kareleri"
+msgstr "Wolthera’nın Döşeli Kareleri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5740,7 +5740,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Turbulence.kse"
 msgid "Wolthera's Turbulence"
-msgstr "Wolthera'nın Türbülansı"
+msgstr "Wolthera’nın Türbülansı"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5748,7 +5748,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Voronoi_cells.kse"
 msgid "Wolthera's Voronoi cells"
-msgstr "Wolthera'nın Voronoi Hücreleri"
+msgstr "Wolthera’nın Voronoi Hücreleri"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5756,7 +5756,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_Weird_Rectangle_Pattern.kse"
 msgid "Wolthera's Weird Rectangle Pattern"
-msgstr "Wolthera'nın Garip Dörtgen Deseni"
+msgstr "Wolthera’nın Garip Dörtgen Deseni"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -5764,7 +5764,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_Artists_SeExpr_examples.bundle:seexpr_scripts/"
 "Wolthera's_fractional_Brownian_Motion.kse"
 msgid "Wolthera's fractional Brownian Motion"
-msgstr "Wolthera'nın Kesirsel Kahverengi Hareketi"
+msgstr "Wolthera’nın Kesirsel Kahverengi Hareketi"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8009,7 +8009,7 @@ msgid ""
 "Opens a file browser at the location Krita saves resources such as brushes "
 "to."
 msgstr ""
-"Krita'nın kaynakları (örn. fırçalar) kaydettiği dizini bir tarayıcı ile açar."
+"Krita’nın kaynakları (örn. fırçalar) kaydettiği dizini bir tarayıcı ile açar."
 
 #. i18n: context: text @ Action (windows_cascade), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:19
@@ -8319,7 +8319,7 @@ msgstr "Kompozisyonu Güncelle"
 #, kde-format
 msgctxt "action"
 msgid "Use multiple of 2 for pixel scale"
-msgstr "Piksel ölçeği için 2'nin katlarını kullan"
+msgstr "Piksel ölçeği için 2’nin katlarını kullan"
 
 #. i18n: context: text @ Action (invert_selection), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:253
@@ -9922,7 +9922,7 @@ msgstr "Sağ Kenar Algılama"
 #, kde-format
 msgctxt "action"
 msgid "&Auto Contrast"
-msgstr "&Otomatik Karşıtlık"
+msgstr "&Kendiliğinden Karşıtlık"
 
 #. i18n: context: toolTip @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_autocontrast), Actions (Filters), ActionCollection (Krita)
@@ -9932,7 +9932,7 @@ msgstr "&Otomatik Karşıtlık"
 #, kde-format
 msgctxt "action"
 msgid "Auto Contrast"
-msgstr "Otomatik Karşıtlık"
+msgstr "Kendiliğinden Karşıtlık"
 
 #. i18n: context: text @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1430
@@ -10662,7 +10662,7 @@ msgstr "Son Kare"
 #, kde-format
 msgctxt "action"
 msgid "Auto Frame Mode"
-msgstr "Otomatik Kare Kipi"
+msgstr "Kendiliğinden Kare Kipi"
 
 #. i18n: context: text @ Action (drop_frames), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2065
@@ -13986,7 +13986,7 @@ msgstr "Görünümü Tuval Yakınında Yansıt"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "%​100'e &Yakınlaştır"
+msgstr "%​100’e &Yakınlaştır"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -13996,7 +13996,7 @@ msgstr "%​100'e &Yakınlaştır"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "%​100'e Yakınlaştır"
+msgstr "%​100’e Yakınlaştır"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -14088,7 +14088,7 @@ msgstr "Tuvali Görünüm Yüksekliğine Sığdır"
 #, kde-format
 msgctxt "action"
 msgid "Toggle Fit to View"
-msgstr "Görünüme Sığdır'ı Aç/Kapat"
+msgstr "Görünüme Sığdır’ı Aç/Kapat"
 
 #. i18n: context: text @ Action (rotate_canvas_right), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:838
@@ -15305,7 +15305,7 @@ msgstr "Diğer"
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
-msgstr "G'MIC-Qt'yi Başlat"
+msgstr "G’Mic-Qt’yi Başlat"
 
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
@@ -15315,14 +15315,14 @@ msgstr "G'MIC-Qt'yi Başlat"
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
-msgstr "G'Mic-Qt'yi Başlat"
+msgstr "G’Mic-Qt’yi Başlat"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1725
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
-msgstr "Son G'MIC Süzgecini Yeniden Uygula"
+msgstr "Son G’Mic Süzgecini Yeniden Uygula"
 
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
@@ -15332,7 +15332,7 @@ msgstr "Son G'MIC Süzgecini Yeniden Uygula"
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
-msgstr "Son G'Mic-Qt Eylemini Yeniden Uygula"
+msgstr "Son G’Mic-Qt Eylemini Yeniden Uygula"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -15353,7 +15353,7 @@ msgstr "Ayarlar"
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
-msgstr "Krita'yı &Yapılandır…"
+msgstr "Krita’yı &Yapılandır…"
 
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
@@ -15363,7 +15363,7 @@ msgstr "Krita'yı &Yapılandır…"
 #, kde-format
 msgctxt "action"
 msgid "Configure Krita"
-msgstr "Krita'yı Yapılandır"
+msgstr "Krita’yı Yapılandır"
 
 #. i18n: context: text @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1751
@@ -15860,7 +15860,7 @@ msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
-"Krita, Wayland platformunu desteklemiyor. Krita'yi Wayland üzerinde "
+"Krita, Wayland platformunu desteklemiyor. Krita’yı Wayland üzerinde "
 "çalıştırmak için XWayland kullanın. Krita şimdi kapanacak."
 
 #: krita/main.cc:676 libs/ui/KisApplication.cpp:413
@@ -15917,7 +15917,7 @@ msgstr "Yol seçenekleri"
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format
 msgid "Autosmooth curve"
-msgstr "Eğriyi otomatik pürüzsüzleştir"
+msgstr "Eğriyi kendiliğinden pürüzsüzleştir"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:558
 #, kde-format
@@ -16191,7 +16191,7 @@ msgstr "Gruba Şekiller Ekle"
 #: libs/flake/commands/KoShapeKeepAspectRatioCommand.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Keep Aspect Ratio"
-msgstr "En-Boy Oranını Koru"
+msgstr "En–Boy Oranını Koru"
 
 #: libs/flake/commands/KoShapeLockCommand.cpp:22
 msgctxt "(qtundo-format)"
@@ -16228,7 +16228,7 @@ msgstr "Yeniden Boyutlandır"
 #: libs/flake/commands/KoShapeRunAroundCommand.cpp:59
 msgctxt "(qtundo-format)"
 msgid "Change Shape RunAround"
-msgstr "Şekil RunAround'unu Değiştir"
+msgstr "Şekil RunAround’unu Değiştir"
 
 #: libs/flake/commands/KoShapeShadowCommand.cpp:54
 #: libs/flake/commands/KoShapeShadowCommand.cpp:71
@@ -16290,22 +16290,22 @@ msgstr "Alt Yolu Kaldır"
 #: libs/flake/html/HtmlWriter.cpp:70
 #, kde-format
 msgid "Saving KoShapeLayer to html is not implemented yet!"
-msgstr "KoShapeGroup'dan html'e kaydetme henüz gerçeklenmedi!"
+msgstr "KoShapeGroup’dan HTML’ye kaydetme henüz gerçeklenmedi!"
 
 #: libs/flake/html/HtmlWriter.cpp:74
 #, kde-format
 msgid "KoShapeGroup to html is not implemented yet!"
-msgstr "KoShapeGroup'dan html'e henüz gerçeklenmedi!"
+msgstr "KoShapeGroup’dan HTML’ye dönüştürme henüz gerçeklenmedi!"
 
 #: libs/flake/html/HtmlWriter.cpp:80
 #, kde-format
 msgid "saving to html failed"
-msgstr "html'e kaydetme başarısız oldu"
+msgstr "HTML’ye kaydetme başarısız oldu"
 
 #: libs/flake/html/HtmlWriter.cpp:84
 #, kde-format
 msgid "Cannot save %1 to html"
-msgstr "%1 html'e kaydedilemez"
+msgstr "%1, HTML’ye kaydedilemez"
 
 #: libs/flake/KoMarkerCollection.cpp:67
 #: libs/flake/resources/KoSvgSymbolCollectionResource.cpp:123
@@ -16383,17 +16383,17 @@ msgstr "<text>Yer Tutucu Metin</text>"
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:142
 #, kde-format
 msgid "More than one 'text' node found!"
-msgstr "Birden fazla 'metin' düğümü bulundu!"
+msgstr "Birden fazla “metin” düğümü bulundu!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:151
 #, kde-format
 msgid "Unknown node of type '%1' found!"
-msgstr "Bilinmeyen '%1' türü düğümü bulundu!"
+msgstr "Bilinmeyen “%1” türü düğümü bulundu!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:157
 #, kde-format
 msgid "No 'text' node found!"
-msgstr "'Metin' düğümü bulunamadı!"
+msgstr "“metin” düğümü bulunamadı!"
 
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:389
 #: libs/flake/text/KoSvgTextShapeMarkupConverter.cpp:831
@@ -16438,12 +16438,12 @@ msgstr ""
 #: libs/flake/tools/KoPathTool.cpp:695
 #, kde-format
 msgid "Press B to break path at selected point."
-msgstr "Seçili noktada yolu kesmek için B'ye basın."
+msgstr "Seçili noktada yolu kesmek için B’ye basın."
 
 #: libs/flake/tools/KoPathTool.cpp:697
 #, kde-format
 msgid "Press B to break path at selected segments."
-msgstr "Seçili bölütlerdeki yolu sonlandırmak için B'ye basın."
+msgstr "Seçili bölütlerdeki yolu sonlandırmak için B’ye basın."
 
 #: libs/flake/tools/KoPathToolFactory.cpp:18
 #, kde-format
@@ -16613,7 +16613,7 @@ msgstr "Krita: İç Hata"
 #: libs/global/kis_dom_utils.cpp:127
 #, kde-format
 msgid "Could not find \"%1\" XML tag in \"%2\""
-msgstr "\"%2\" içinde \"%1\" XML etiketi bulunamadı"
+msgstr "“%2” içinde “%1” XML künyeyi bulunamadı"
 
 #: libs/global/kis_dom_utils.cpp:157
 #, kde-format
@@ -17987,7 +17987,7 @@ msgid ""
 "The image is not tagged as <b>non-linear gamma sRGB</b>. The image will be "
 "converted to sRGB."
 msgstr ""
-"Görsel, <b>doğrusal olmayan gama sRGB</b> olarak etiketlenmedi. sRGB'ye "
+"Görsel, <b>doğrusal olmayan gama sRGB</b> olarak künyelenmedi. sRGB’ye "
 "dönüştürülecek."
 
 #: libs/koplugin/KisMimeDatabase.cpp:169
@@ -18540,7 +18540,7 @@ msgstr "CMYK/Alfa"
 #: libs/pigment/KoColorModelStandardIds.cpp:17
 #, kde-format
 msgid "Grayscale/Alpha"
-msgstr "Siyah-beyaz/Alfa"
+msgstr "Gri Tonlu/Alfa"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:18
 #, kde-format
@@ -18863,7 +18863,7 @@ msgstr "Yumuşak Işık (IFS Yanılsama)"
 #, kde-format
 msgctxt "Blending mode - Soft Light (Pegtop-Delphi)"
 msgid "Soft Light (Pegtop-Delphi)"
-msgstr "Yumuşak Işık (Pegtop-Delphi)"
+msgstr "Yumuşak Işık (Pegtop–Delphi)"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:82
 #, kde-format
@@ -19421,31 +19421,31 @@ msgstr "Sıcaklık"
 #, kde-format
 msgctxt "Blending mode - Glow-Heat"
 msgid "Glow-Heat"
-msgstr "Parıltı-Sıcaklık"
+msgstr "Parıltı–Sıcaklık"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:185
 #, kde-format
 msgctxt "Blending mode - Heat-Glow"
 msgid "Heat-Glow"
-msgstr "Sıcaklık-Parıltı"
+msgstr "Sıcaklık–Parıltı"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:186
 #, kde-format
 msgctxt "Blending mode - Reflect-Freeze"
 msgid "Reflect-Freeze"
-msgstr "Yansıt-Dondur"
+msgstr "Yansıt–Dondur"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:187
 #, kde-format
 msgctxt "Blending mode - Freeze-Reflect"
 msgid "Freeze-Reflect"
-msgstr "Dondur-Yansıt"
+msgstr "Dondur–Yansıt"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:188
 #, kde-format
 msgctxt "Blending mode - Heat-Glow & Freeze-Reflect Hybrid"
 msgid "Heat-Glow & Freeze-Reflect Hybrid"
-msgstr "Sıcaklık-Parıltı ve Dondur-Yansıt Hibrit"
+msgstr "Sıcaklık–Parıltı ve Dondur–Yansıt Hibrit"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:212
 #, kde-format
@@ -19742,7 +19742,7 @@ msgstr "md5sum"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:139
 #, kde-format
 msgid "Tags"
-msgstr "Etiketler"
+msgstr "Künyeler"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:652
@@ -19952,7 +19952,7 @@ msgstr "Tümü"
 #: libs/resources/KisTagModel.cpp:153 libs/resources/KisTagModel.cpp:312
 #, kde-format
 msgid "All Untagged"
-msgstr "Tüm Etiketlenmemiş"
+msgstr "Tüm Künyesiz"
 
 #: libs/resources/KisTagModel.cpp:305
 #, kde-format
@@ -19962,12 +19962,12 @@ msgstr "Tüm Özkaynaklar"
 #: libs/resources/KisTagModel.cpp:315
 #, kde-format
 msgid "All Untagged Resources"
-msgstr "Tüm Etiketlenmemiş Özkaynaklar"
+msgstr "Tüm Künyesiz Özkaynaklar"
 
 #: libs/resources/KisTagResourceModel.cpp:664
 #, kde-format
 msgid "Tag ID"
-msgstr "Etiket Kimliği"
+msgstr "Künye Kimliği"
 
 #: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
@@ -19978,7 +19978,7 @@ msgstr "Özkaynak Kimliği"
 #: libs/resources/KisTagResourceModel.cpp:668
 #, kde-format
 msgid "Tag Url"
-msgstr "Etiket URL'si"
+msgstr "Künye URL’si"
 
 #: libs/resources/KisTagResourceModel.cpp:670
 #, kde-format
@@ -19993,7 +19993,7 @@ msgstr "Özkaynak Etkin"
 #: libs/resources/KisTagResourceModel.cpp:674
 #, kde-format
 msgid "Tag Active"
-msgstr "Etiket Etkin"
+msgstr "Künye Etkin"
 
 #: libs/resources/KisTagResourceModel.cpp:678
 #, kde-format
@@ -20003,7 +20003,7 @@ msgstr "Özkaynak Adı"
 #: libs/resources/KisTagResourceModel.cpp:680
 #, kde-format
 msgid "Tag File Name"
-msgstr "Etiket Dosya Adı"
+msgstr "Künye Dosya Adı"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:110
 #, kde-format
@@ -20045,17 +20045,17 @@ msgstr "Eklenecek Dosyayı Seç"
 #: libs/widgets/KisTagSelectionWidget.cpp:122
 #, kde-format
 msgid "Assign to tag"
-msgstr "Etikete Ata"
+msgstr "Künyeye Ata"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:94
 #, kde-format
 msgid "Remove from this tag"
-msgstr "Bu Etiketten Kaldır"
+msgstr "Bu Künyeden Kaldır"
 
 #: libs/resourcewidgets/KisResourceItemChooserContextMenu.cpp:103
 #, kde-format
 msgid "Remove from other tag"
-msgstr "Diğer Etiketten Kaldır"
+msgstr "Diğer Künyeden Kaldır"
 
 #: libs/resourcewidgets/KisResourceUserOperations.cpp:25
 #, kde-format
@@ -20213,19 +20213,19 @@ msgstr ""
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:106
 #, kde-format
 msgid "Tag"
-msgstr "Etiket"
+msgstr "Künye"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
-msgstr "Etiket seçenekleri"
+msgstr "Künye seçenekleri"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:145
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:306
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't rename the tag"
-msgstr "Etiket yeniden adlandırılamıyor"
+msgstr "Künye yeniden adlandırılamıyor"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:145
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:278
@@ -20233,13 +20233,13 @@ msgstr "Etiket yeniden adlandırılamıyor"
 #, kde-format
 msgctxt "Dialog message"
 msgid "You can't use this name for your custom tags."
-msgstr "Özel etiketleriniz için bu adı kullanamazsınız."
+msgstr "Özel künyeleriniz için bu adı kullanamazsınız."
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:158
 #, kde-format
 msgctxt "Dialog title"
 msgid "Remove existing tag with that name?"
-msgstr "Aynı adlı var olan etiket kaldırılsın mı?"
+msgstr "Aynı adlı var olan künye kaldırılsın mı?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:160
 #, kde-format
@@ -20253,11 +20253,11 @@ msgid ""
 "Tag to be removed: %1\n"
 "Tag's unique name: %2"
 msgstr ""
-"Bu benzersiz adla başka bir etiket halihazırda var. Yeniden adlandırmayı "
-"sürdürmek için var olan etiketin kaldırılması gerekiyor. Sürdürmek istiyor "
+"Bu benzersiz adla başka bir künye halihazırda var. Yeniden adlandırmayı "
+"sürdürmek için var olan künyenin kaldırılması gerekiyor. Sürdürmek istiyor "
 "musunuz?\n"
-"Kaldırılacak etiket: %1\n"
-"Etiketin benzersiz adı: %2"
+"Kaldırılacak künye: %1\n"
+"Künyenin benzersiz adı: %2"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:266
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:113
@@ -20266,21 +20266,21 @@ msgctxt ""
 "Option in a dialog to undelete (reactivate) existing tag with its old "
 "assigned resources"
 msgid "Restore previous tag"
-msgstr "Önceki etiketi geri getir"
+msgstr "Önceki künyeyi geri getir"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:267
 #, kde-format
 msgctxt ""
 "Option in a dialog to use existing tag with its old assigned resources"
 msgid "Use existing tag"
-msgstr "Var olan etiketi kullan"
+msgstr "Var olan künyeyi kullan"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:269
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:110
 #, kde-format
 msgctxt "Dialog title"
 msgid "Overwrite tag?"
-msgstr "Etiketin üzerine yazılsın mı?"
+msgstr "Künyenin üzerine yazılsın mı?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:270
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:111
@@ -20288,7 +20288,7 @@ msgstr "Etiketin üzerine yazılsın mı?"
 msgctxt "Question to the user in a dialog about creating a tag"
 msgid "A tag with this unique name already exists. Do you want to replace it?"
 msgstr ""
-"Bu benzersiz adla başka bir etiket halihazırda var. Değiştirmek istiyor "
+"Bu benzersiz adla başka bir künye halihazırda var. Değiştirmek istiyor "
 "musunuz?"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:271
@@ -20298,7 +20298,7 @@ msgctxt ""
 "Option in a dialog to discard the previously existing tag and creating a new "
 "one in its place"
 msgid "Replace (overwrite) tag"
-msgstr "Etiketi değiştir (üzerine yaz)"
+msgstr "Künyeyi değiştir (üzerine yaz)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btCancel)
 #. i18n: ectx: property (text), widget (QPushButton, cancelBrushNameUpdateButton)
@@ -20327,7 +20327,7 @@ msgstr "İptal"
 #, kde-format
 msgctxt "Dialog title"
 msgid "Can't create the tag"
-msgstr "Etiket oluşturulamıyor"
+msgstr "Künye oluşturulamıyor"
 
 #: libs/resourcewidgets/KisTagFilterWidget.cpp:46
 #, kde-format
@@ -20348,30 +20348,30 @@ msgctxt ""
 "It appears in the checkbox next to the filter box in resources dockers; must "
 "be short."
 msgid "Filter in Tag"
-msgstr "Etikette süz"
+msgstr "Künyede süz"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:56
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "<qt>Show the tag box options.</qt>"
-msgstr "<qt>Etiket kutusu seçeneklerini göster.</qt>"
+msgstr "<qt>Künye kutusu seçeneklerini göster.</qt>"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:67
 #: libs/resourcewidgets/TagActions.cpp:139
 #: libs/resourcewidgets/TagActions.cpp:158
 #, kde-format
 msgid "New tag"
-msgstr "Yeni etiket"
+msgstr "Yeni künye"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:75
 #, kde-format
 msgid "Rename tag"
-msgstr "Etiketi yeniden adlandır"
+msgstr "Künyeyi yeniden adlandır"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:85
 #, kde-format
 msgid "Delete this tag"
-msgstr "Bu etiketi sil"
+msgstr "Bu künyeyi sil"
 
 #: libs/resourcewidgets/KisTagToolButton.cpp:125
 #, kde-format
@@ -20559,7 +20559,7 @@ msgid ""
 "Animated GIF images cannot have a framerate higher than 50. The framerate "
 "will be reduced to 50 frames per second"
 msgstr ""
-"Canlandırılmış GIF görseller 50'den daha yüksek kare hızına sahip olamaz. "
+"Canlandırılmış GIF görseller 50’den daha yüksek kare hızına sahip olamaz. "
 "Kare hızı saniyede 50 kareye düşürülür"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:488
@@ -20575,7 +20575,7 @@ msgid ""
 "extract FFmpeg from the archive first."
 msgstr ""
 "Bize verdiğiniz FFmpeg ikilisi sıkıştırılmış gibi görünüyor. Lütfen önce "
-"FFmpeg'i arşivden çıkarmayı deneyin."
+"FFmpeg’i arşivden çıkarmayı deneyin."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
 #, kde-format
@@ -20600,8 +20600,7 @@ msgstr "Video Canlandırma İçe Aktar"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:65
 #, kde-format
 msgid "FFMpeg not found! Please add a path to FFMpeg in the \"Advanced\" tab"
-msgstr ""
-"FFmpeg bulunamadı! Lütfen, \"Gelişmiş\" sekmesinde FFmpeg yolunu ekleyin"
+msgstr "FFmpeg bulunamadı! Lütfen, ‘Gelişmiş’ sekmesinde FFmpeg yolunu ekleyin"
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:81
 #, kde-format
@@ -20666,11 +20665,11 @@ msgid ""
 "If you want to edit a clip larger than 100 frames, consider using a real "
 "video editor, like Kdenlive (https://kdenlive.org)."
 msgstr ""
-"Uyarı: Krita'ya 100'den fazla kare içe aktarmaya çalışıyorsunuz.\n"
+"Uyarı: Krita’ya 100’den fazla kare içe aktarmaya çalışıyorsunuz.\n"
 "\n"
 "Bu, sisteminizi aşırı yüklediğiniz anlamına gelebilir.\n"
 "100 kareden daha büyük bir klip düzenlemek istiyorsanız Kdenlive (https://"
-"kdenlive.org) gibi gerçek bir video düzenleyicisi kullanmayı düşünün."
+"kdenlive.org) gibi gerçek bir video düzenleyicisini kullanmayı düşünün."
 
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:236
 #, kde-format
@@ -20968,7 +20967,7 @@ msgstr "Saydamlık Farkı"
 #: libs/ui/animation/video_export_options_dialog.ui:300
 #, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "8 bit paleti otomatik oluştur:"
+msgstr "8 bit paleti kendiliğinden oluştur:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -21011,14 +21010,14 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>GIF biçimi, kare başına 256 renge kadar destekler. Bu "
 "seçenek, 1 renk maliyetiyle saydamlığı etkinleştirir; dolayısıyla bu seçenek "
-"etkinken GIF'ler için yalnızca 255 renk kullanılır. Bu seçeneği devre dışı "
+"etkinken GIF’ler için yalnızca 255 renk kullanılır. Bu seçeneği devre dışı "
 "bırakmak, daha iyi kalite çıktısı için 256 rengin tümünü kullanmanıza izin "
 "verir.</p><p><span style=\" font-style:italic;\">Not 1: Saydamlığın düzgün "
 "çalışması için görsel sekansının saydamlık etkin olarak dışa aktardığından "
 "ve FFmpeg sürümünün en az 4.2 ve üzeri olduğundan emin olun. Eğer GIF "
 "çıktınız ekran yırtılması işaretleri gösteriyorsa FFmpeg 4.4 ve üzeri "
 "sürümler şiddetle tavsiye edilir.</span></p><p><span style=\" font-style:"
-"italic;\">Not 2: GIF biçimi, yalnızca ya %​100  ya da %​0 saydamlık destekler. "
+"italic;\">Not 2: GIF biçimi, yalnızca ya %​100 ya da %​0 saydamlık destekler. "
 "Kısımsal saydamlık </span><span style=\" font-style:italic; text-decoration: "
 "underline;\">desteklenmez</span><span style=\" font-style:italic;\">. "
 "Kısımsal saydamlığa gereksiniminiz varsa APNG veya WEBP biçimlerini "
@@ -21486,7 +21485,7 @@ msgstr "Dışa aktarılan canlandırma HDR biçimini desteklemiyor"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "HDR metadata available only with \"main10\" profile"
-msgstr "HDR üst verisi yalnızca \"main10\" profiliyle kullanılabilir"
+msgstr "HDR üst verisi yalnızca “main10” profiliyle kullanılabilir"
 
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.cpp:25
 #, kde-format
@@ -21720,9 +21719,9 @@ msgid ""
 "which frames are added to Krita.\n"
 "The higher the sensitivity, the more frames are added to Krita."
 msgstr ""
-"Krita'ya hangi karelerin ekleneceğini belirlerken yinelenmiş kare\n"
+"Krita’ya hangi karelerin ekleneceğini belirlerken yinelenmiş kare\n"
 "süzgecinin ne kadar hassas olacağı.\n"
-"Hassaslık ne kadar yüksekse Krita'ya o kadar çok kare eklenir."
+"Hassaslık ne kadar yüksekse Krita’ya o kadar çok kare eklenir."
 
 #. i18n: ectx: property (text), widget (QLabel, importDocumentLabel)
 #: libs/ui/animation/VideoImportDialog.ui:325
@@ -22070,7 +22069,7 @@ msgid ""
 "To visualize wrap-around mode, enable OpenGL."
 msgstr ""
 "Sarmalama kipini etkinleştirdiniz; ancak OpenGL hâlâ kapalı.\n"
-"Sarmalama kipini görselleştirmek için OpenGL'i etkinleştirin."
+"Sarmalama kipini görselleştirmek için OpenGL’yi etkinleştirin."
 
 #: libs/ui/canvas/kis_canvas_controller.cpp:359
 #, kde-format
@@ -22239,8 +22238,8 @@ msgid ""
 "internationalization visit <a href=\"http://l10n.kde.org\">http://l10n.kde."
 "org</a></p>"
 msgstr ""
-"<p>KDE birçok dile çevrilmiştir; dünyanın dört bir yanındaki çeviri "
-"ekiplerine çalışmaları için teşekkür ederiz.</p><p>KDE "
+"<p>KDE yazılımları birçok dile çevrilmiştir; dünyanın dört bir yanındaki "
+"çeviri ekiplerine çalışmaları için teşekkür ederiz.</p><p>KDE "
 "uluslararasılaştırılması hakkında daha fazla bilgi almak için <a href="
 "\"http://l10n.kde.org\">http://l10n.kde.org</a> adresini ziyaret edin.</p>"
 
@@ -22280,7 +22279,7 @@ msgid ""
 ".</p><p><i>For supporting Krita development with advice, icons, brush sets "
 "and more.</i></p></body></html>"
 msgstr ""
-".</p><p><i>Krita'nın geliştirme sürecini tavsiye, simgeler, fırça kümeleri "
+".</p><p><i>Krita’nın geliştirme sürecini tavsiye, simgeler, fırça kümeleri "
 "ve daha fazlasıyla destekledikleri için.</i></p></body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:137
@@ -22303,14 +22302,14 @@ msgid ""
 msgstr ""
 "<html><head/><body><h1 align=\"center\"><b>Haklarınız</b></h1><p>Krita, GNU "
 "Genel Kamu Lisansı (sürüm 3 veya daha üstü) ile dağıtılmaktadır.</p><p>Bu "
-"lisans size bazı özgürlükler sağlar:</p><ul><li>Krita'yı herhangi bir amaçla "
-"kullanabilirsiniz</li><li>Krita'yı özgürce dağıtabilirsiniz</"
-"li><li>Krita'nın nasıl çalıştığını öğrenebilir ve onu değiştirebilirsiniz</"
-"li><li>Krita'nın değiştirilmiş sürümlerini dağıtabilirsiniz</li></"
-"ul><p>Krita Vakfı ve krita.org üzerindeki projeler Krita'yı bir özgür "
+"lisans size bazı özgürlükler sağlar:</p><ul><li>Krita’yı herhangi bir amaçla "
+"kullanabilirsiniz</li><li>Krita’yı özgürce dağıtabilirsiniz</"
+"li><li>Krita’nın nasıl çalıştığını öğrenebilir ve onu değiştirebilirsiniz</"
+"li><li>Krita’nın değiştirilmiş sürümlerini dağıtabilirsiniz</li></"
+"ul><p>Krita Vakfı ve krita.org üzerindeki projeler Krita’yı bir özgür "
 "yazılım olarak korumayı <b>taahhüt etmektedir</b>.</p><h1 align=\"center"
 "\">Eseriniz</h1><p>Krita ile oluşturduğunuz şeyler sizin mülkiyetinizdedir. "
-"Eserlerinizi istediğiniz gibi kullanmakta özgürsünüz.</p><p>Bu, Krita'nın "
+"Eserlerinizi istediğiniz gibi kullanmakta özgürsünüz.</p><p>Bu, Krita’nın "
 "herhangi bir amaçla ticari olarak kullanılabileceği anlamına gelir. Bununla "
 "ilgili hiçbir kısıtlama yoktur.</p><p>Krita’nın GNU GPL lisansı, sizin "
 "özgürlüğünüzü garanti eder. Ticari yazılımların deneme veya eğitim "
@@ -22436,7 +22435,7 @@ msgid ""
 "from scene to display linear.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Gamayı göster. Öntanımlı olarak bu, sahneden doğrusal "
-"ekrana dönüştürme için 1,2'dir.</p></body></html>"
+"ekrana dönüştürme için 1,2’dir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #. i18n: ectx: property (text), widget (QLabel, lblRatio)
@@ -22507,7 +22506,7 @@ msgstr "Görseller İçe Aktar"
 #: libs/ui/dialogs/kis_dlg_import_image_sequence.cpp:166
 #, kde-format
 msgid "Source fps: %1"
-msgstr "Kaynak FPS'si: %1"
+msgstr "Kaynak FPS’si: %1"
 
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:79
 #, kde-format
@@ -22798,14 +22797,14 @@ msgstr "Oturum yöneticisini göster"
 #, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
-"Değişikliklerin etkili olması için Krita'yı yeniden başlatmanız gerekecek."
+"Değişikliklerin etkili olması için Krita’yı yeniden başlatmanız gerekecek."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:439
 #, kde-format
 msgid ""
 "Saving at a Location picked from the File Picker may slow down the startup!"
 msgstr ""
-"Dosya Seçicisi'den seçilmiş bir konuma kaydetmek başlangıcı yavaşlatabilir!"
+"Dosya Seçicisi’den seçilmiş bir konuma kaydetmek başlangıcı yavaşlatabilir!"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:471
 #, kde-format
@@ -22836,7 +22835,7 @@ msgid ""
 "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
 "%2</p>"
 msgstr ""
-"<p>Krita'nın Microsoft Store sürümünü kullanıyorsunuz. Krita, özkaynakları "
+"<p>Krita’nın Microsoft Store sürümünü kullanıyorsunuz. Krita, özkaynakları "
 "AppData konumuna yerleştirmesi için yapılandırılabilir; ancak Windows "
 "gerçekte dosyaları özel bir uygulama konumunun içine koyabilir.</p>\n"
 "<p>Dosyaların nerede olduğunu anlamak için her iki konumu da "
@@ -22887,7 +22886,7 @@ msgid ""
 "when using WinTab tablet API)"
 msgstr ""
 "Fırça hızı için tablet sürücüsü zaman damgalarını kullan (WinTab tablet "
-"API'sini kullanırken yüksek derecede kalıntılara neden olabilir)"
+"API’sini kullanırken yüksek derecede kalıntılara neden olabilir)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1310
 #, kde-format
@@ -22970,7 +22969,7 @@ msgstr "Bilinmeyen"
 #, kde-format
 msgctxt "canvas renderer"
 msgid "Auto (%1)"
-msgstr "Otomatik (%1)"
+msgstr "Kendiliğinden (%1)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1793
 #, kde-format
@@ -23025,7 +23024,7 @@ msgstr "<b>Uyarı:</b> Geçerli ekran HDR olarak sunmayı desteklemiyor"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2065
 #, kde-format
 msgid "Configure Krita"
-msgstr "Krita'yı Yapılandır"
+msgstr "Krita’yı Yapılandır"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2082
 #, kde-format
@@ -23232,7 +23231,7 @@ msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
 msgstr ""
-"Krita'nın birleştirmeyeceği son vuruşların sayısı (yeterince eski olsalar "
+"Krita’nın birleştirmeyeceği son vuruşların sayısı (yeterince eski olsalar "
 "bile)"
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
@@ -23284,12 +23283,12 @@ msgid ""
 "group strokes delay\" and \"Max group duration\" options."
 msgstr ""
 "Birikimli Geri Al, Krita\"nın geri al eylemlerini birleştirmesine izin verir "
-"ve geri al geçmişini daha temiz kılar. Krita, \"Vuruşları birleştirmeden "
-"önce bekle\" ve \"Son vuruşları birleştirme dışında tut\" seçeneklerine "
-"bağlı olarak birkaç son eylemi birleştirilmemiş olarak tutar. Zaman sınırına "
-"göre bir eylem eskirse ve bu eylem \"Son vuruşları birleştirme dışında tut\" "
+"ve geri al geçmişini daha temiz kılar. Krita, ‘Vuruşları birleştirmeden önce "
+"bekle’ ve ‘Son vuruşları birleştirme dışında tut’ seçeneklerine bağlı olarak "
+"birkaç son eylemi birleştirilmemiş olarak tutar. Zaman sınırına göre bir "
+"eylem eskirse ve bu eylem ‘Son vuruşları birleştirme dışında tut’ "
 "kullanılarak dışlanmazsa Krita bu eylemi bir gruba birleştirmeye çalışır. "
-"Gruplar, \"Gruplanan vuruşların en uzun aralığı\" ve \"En uzun grup süresi\" "
+"Gruplar, ‘Gruplanan vuruşların en uzun aralığı’ ve ‘En uzun grup süresi’ "
 "kullanılarak oluşturulurlar."
 
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.cpp:52
@@ -23477,8 +23476,8 @@ msgid ""
 "An autosave for this file exists. How do you want to proceed?\n"
 "Warning: if you discard the autosave now, it will be removed."
 msgstr ""
-"Bu dosya için bir otomatik kayıt var. Ne yapmak istiyorsunuz?\n"
-"Uyarı: Otomatik kaydı şimdi atarsanız tümüyle kaldırılır."
+"Bu dosya için bir kendiliğinden kayıt var. Ne yapmak istiyorsunuz?\n"
+"Uyarı: Kendiliğinden kaydı şimdi atarsanız tümüyle kaldırılır."
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgSplash)
 #. i18n: ectx: property (windowTitle), widget (QDialog, KisRecoverNamedAutosaveDialog)
@@ -23491,13 +23490,13 @@ msgstr "Krita"
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:37
 #, kde-format
 msgid "Open the autosave file"
-msgstr "Otomatik kayıt dosyasını aç"
+msgstr "Kendiliğinden kayıt dosyasını aç"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbDiscardAutosave)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:44
 #, kde-format
 msgid "Discard autosave, open the main file"
-msgstr "Otomatik kaydı at, ana dosyayı aç"
+msgstr "Kendiliğinden kaydı at, ana dosyayı aç"
 
 #. i18n: ectx: property (text), widget (QPushButton, btOk)
 #: libs/ui/dialogs/KisRecoverNamedAutosaveDialog.ui:53
@@ -23619,13 +23618,13 @@ msgstr "Kullanıcı Kılavuzu"
 #: libs/ui/forms/KisWelcomePage.ui:525 libs/ui/KisWelcomePageWidget.cpp:392
 #, kde-format
 msgid "Support Krita"
-msgstr "Krita'yı Destekle"
+msgstr "Krita’yı Destekle"
 
 #. i18n: ectx: property (text), widget (QLabel, poweredByKDELink)
 #: libs/ui/forms/KisWelcomePage.ui:615 libs/ui/KisWelcomePageWidget.cpp:401
 #, kde-format
 msgid "Powered by KDE"
-msgstr "Gücünü KDE'den Alır"
+msgstr "Gücünü KDE’den Alır"
 
 #. i18n: ectx: property (text), widget (QLabel, sourceCodeLink)
 #: libs/ui/forms/KisWelcomePage.ui:705 libs/ui/KisWelcomePageWidget.cpp:398
@@ -23712,7 +23711,7 @@ msgid ""
 "decoration: underline;\">enable news</a> from krita.org in various languages "
 "with the menu above"
 msgstr ""
-"Üstteki menüden, krita.org'da değişik dillerde yayımlanan <a href=\"ignored"
+"Üstteki menüden, krita.org’da değişik dillerde yayımlanan <a href=\"ignored"
 "\" style=\"color: COLOR_PLACEHOLDER; text-decoration: underline;\">haberleri "
 "etkinleştirebilirsiniz</a>"
 
@@ -24165,7 +24164,7 @@ msgstr "Yeni görseller için öntanımlı renk modelini kullan"
 #: libs/ui/forms/wdggeneralsettings.ui:1057
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
-msgstr "Diğer Uygulamalardan Krita'ya Yapıştırırken"
+msgstr "Diğer Uygulamalardan Krita’ya Yapıştırırken"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteWeb)
 #: libs/ui/forms/wdgcolorsettings.ui:75
@@ -24936,7 +24935,7 @@ msgid ""
 "file layer may be broken.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Uyarı: Krita, dosyanın konumunu depolamak için .kra "
-"içinde bir göreceli yol kullanır. .kra'yı taşır; ancak dosyayı taşımazsanız "
+"içinde bir göreceli yol kullanır. .kra’yı taşır; ancak dosyayı taşımazsanız "
 "dosya katman bozulabilir.</p></body></html>"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpScalingOptions)
@@ -25050,7 +25049,7 @@ msgstr "Önayarları Düzenle"
 #: libs/ui/forms/wdgfilterselector.ui:137
 #, kde-format
 msgid "Get the XML for the current filter configuration."
-msgstr "XML'i geçerli süzgeç yapılandırmasından getir."
+msgstr "XML’yi geçerli süzgeç yapılandırmasından getir."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnXML)
 #: libs/ui/forms/wdgfilterselector.ui:140
@@ -25063,7 +25062,7 @@ msgstr "XML"
 #, kde-format
 msgid "Select which parts of Krita will be hidden in canvas-only mode."
 msgstr ""
-"Yalnızca Tuval kipinde Krita'nın hangi bölümlerinin gizleneceğini seçin."
+"Yalnızca Tuval kipinde Krita’nın hangi bölümlerinin gizleneceğini seçin."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMenu)
 #: libs/ui/forms/wdgfullscreensettings.ui:35
@@ -25093,7 +25092,7 @@ msgstr "Sarma Çubukları"
 #: libs/ui/forms/wdgfullscreensettings.ui:63
 #, kde-format
 msgid "Titlebar (hiding the titlebar will make Krita go full-screen)"
-msgstr "Başlık çubuğu (başlık çubuğunu kaldırmak Krita'yı tam ekran yapar)"
+msgstr "Başlık çubuğu (başlık çubuğunu kaldırmak Krita’yı tam ekran yapar)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkStatusbar)
 #: libs/ui/forms/wdgfullscreensettings.ui:70
@@ -25112,7 +25111,7 @@ msgstr "Gam Maskesini Aç/Kapat"
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:23
 #, kde-format
 msgid "Select a mask in \"Gamut Masks\" docker"
-msgstr "\"Gam Maskesi\" panelinde bir maske seç"
+msgstr "‘Gam Maskesi’ panelinde bir maske seç"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdggeneralsettings.ui:49
@@ -25370,7 +25369,7 @@ msgstr "Yapıştırdıktan Sonra Dönüşüm Aracını Etkinleştir"
 #: libs/ui/forms/wdggeneralsettings.ui:724
 #, kde-format
 msgid "Zoom steps between powers of 2"
-msgstr "Yakınlaştırma çentikleri 2'nin üssüdür"
+msgstr "Yakınlaştırma çentikleri 2’nin üssüdür"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZoomHorizontally)
 #: libs/ui/forms/wdggeneralsettings.ui:741
@@ -25424,13 +25423,13 @@ msgstr "Dosya Kullanımı"
 #: libs/ui/forms/wdggeneralsettings.ui:868
 #, kde-format
 msgid "Enable Autosaving"
-msgstr "Otomatik Kaydetmeyi Etkinleştir"
+msgstr "Kendiliğinden Kaydetmeyi Etkinleştir"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdggeneralsettings.ui:877
 #, kde-format
 msgid "Autosave Interval:"
-msgstr "Otomatik kaydetme aralığı:"
+msgstr "Kendiliğinden kayıt aralığı:"
 
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, m_autosaveSpinBox)
 #: libs/ui/forms/wdggeneralsettings.ui:884
@@ -25450,7 +25449,7 @@ msgstr "Her "
 #: libs/ui/forms/wdggeneralsettings.ui:906
 #, kde-format
 msgid "Unnamed autosave files are hidden by default"
-msgstr "Adsız otomatik kaydet dosyaları öntanımlı olarak gizlidir"
+msgstr "Adsız kendiliğinden kayıt dosyaları öntanımlı olarak gizlidir"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_backupFileCheckBox)
 #: libs/ui/forms/wdggeneralsettings.ui:919
@@ -25515,7 +25514,7 @@ msgid ""
 "body></html>"
 msgstr ""
 "<html><head/><body><p>Bu seçeneği yalnızca <span style=\" font-weight:600;"
-"\">çok büyük dosyalar</span> için; sabit sürücüde 4 GB'dan fazla alan "
+"\">çok büyük dosyalar</span> için; sabit sürücüde 4 GB’dan fazla alan "
 "kaplayan dosyalar için kullanın.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkZip64)
@@ -25714,7 +25713,7 @@ msgstr "Oynatma erimini anahtar karelere uyarla"
 #: libs/ui/forms/wdggeneralsettings.ui:1420
 #, kde-format
 msgid "Font DPI Workaround"
-msgstr "Font DPI'si Geçici Çözümü"
+msgstr "Font DPI’si Geçici Çözümü"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_17)
 #: libs/ui/forms/wdggeneralsettings.ui:1435
@@ -25733,14 +25732,14 @@ msgid ""
 "After saving the file in Krita 5.0 at least once, no conversions will be "
 "needed anymore."
 msgstr ""
-"5.0 öncesi bazı Krita sürümlerinde, metin boyutu geçerli ekranın DPI'sine "
+"5.0 öncesi bazı Krita sürümlerinde, metin boyutu geçerli ekranın DPI’sine "
 "bağlı olabiliyordu (bu bir hata idi).\n"
 "Krita 5.0 sürümünde bu hata giderildi; ancak eski sürümlerde oluşturulan "
 "dosyalar farklı görünebilir. \n"
 "\n"
-"Eski dosyaları yüklerken, Krita yazıtipi boyutunu geçerli ekranın DPI'sine "
+"Eski dosyaları yüklerken, Krita yazıtipi boyutunu geçerli ekranın DPI’sine "
 "göre ayarlamaya çalışacak.\n"
-"Dosya başka bir ekranda oluşturulmuşsa değeri el ile ayarlamayı deneyin.\n"
+"Dosya başka bir ekranda oluşturulmuşsa değeri elle ayarlamayı deneyin.\n"
 "\n"
 "Dosyayı Krita 5.0 ile en az bir kere kaydettikten sonra başka bir dönüşüme "
 "gerek kalmayacaktır."
@@ -25764,30 +25763,30 @@ msgid ""
 "To restore the old behavior you can force Krita to use Display DPI for fonts "
 "by entering it in this field."
 msgstr ""
-"Krita'nın 4.4.3 sürümü öncesi bazı sürümlerinde, metin boyutu geçerli ekran "
-"DPI'sine bağımlı olabiliyordu (bu bir hata idi).\n"
+"Krita’nın 4.4.3 sürümü öncesi bazı sürümlerinde, metin boyutu geçerli ekran "
+"DPI’sine bağımlı olabiliyordu (bu bir hata idi).\n"
 "Krita 4.4.3 ile bu hata giderildi; ancak eski sürümlerde oluşturulan "
 "dosyalar farklı görünebilir.\n"
-"Eski davranışı geri yüklemek için bu alana bir değer girerek Krita'nın ekran "
-"DPI'sini kullanmasını zorlayabilirsiniz."
+"Eski davranışı geri yüklemek için bu alana bir değer girerek Krita’nın ekran "
+"DPI’sini kullanmasını zorlayabilirsiniz."
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_51)
 #: libs/ui/forms/wdggeneralsettings.ui:1460
 #, kde-format
 msgid "Automatic layer suffixes"
-msgstr "Otomatik katman sonekleri"
+msgstr "Kendiliğinden katman sonekleri"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenameMergedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1466
 #, kde-format
 msgid "Add \"Merged\" to merged group layers"
-msgstr "Birleştirilmiş grup katmanlara \"Birleştirilmiş\"i ekle"
+msgstr "Birleştirilmiş grup katmanlara “Birleştirilmiş”i ekle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkRenamePastedLayers)
 #: libs/ui/forms/wdggeneralsettings.ui:1473
 #, kde-format
 msgid "Add \"(pasted)\" to pasted layers"
-msgstr "Yapıştırılan katmanlara \"(yapıştırılmış)\" ekle"
+msgstr "Yapıştırılan katmanlara “(yapıştırılmış)” ekle"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1498
@@ -25936,7 +25935,7 @@ msgstr "Boyutlar"
 #: libs/ui/forms/wdgimageproperties.ui:119
 #, kde-format
 msgid "pixels-per-inch"
-msgstr "inç-başına-düşen-piksel"
+msgstr "inç başına piksel"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgimageproperties.ui:122
@@ -26000,11 +25999,11 @@ msgid ""
 "Colorimetric</span>?</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Uyum durumunu ne kadar doğrulamayı istediğinizi seçin. "
-"Bu <span style=\" font-style:italic;\">Mutlak Renkölçer</span>'in "
-"görselinizin beyazlarını nasıl değiştireceğini etkiler. Layman'ın "
-"şartlarında: <span style=\" font-style:italic;\">Mutlak Renkölçer</span> "
-"kullanırken renk yönetiminin kağıt rengini beyaza çevirmesini ne kadar "
-"istiyorsunuz?</p></body></html>"
+"Bu <span style=\" font-style:italic;\">Mutlak Renkölçer</span>’in "
+"görselinizin beyazlarını nasıl değiştireceğini etkiler. Herkesin "
+"anlayabileceği biçimde: <span style=\" font-style:italic;\">Mutlak "
+"Renkölçer</span> kullanırken renk yönetiminin kağıt rengini beyaza "
+"çevirmesini ne kadar istiyorsunuz?</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, ckbBlackPointComp)
 #: libs/ui/forms/wdgimageproperties.ui:364
@@ -26131,7 +26130,7 @@ msgstr "Görseller arası kare sayısı"
 #: libs/ui/forms/wdgimportimagesequence.ui:135
 #, kde-format
 msgid "Source FPS:"
-msgstr "Kaynak FPS'si:"
+msgstr "Kaynak FPS’si:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblName)
 #: libs/ui/forms/wdglayerproperties.ui:28 libs/ui/forms/wdgnewimage.ui:430
@@ -26424,7 +26423,7 @@ msgstr "&Kaydet"
 #: libs/ui/forms/wdgnewimage.ui:449
 #, kde-format
 msgid "untitled-1"
-msgstr "başlıksız-1"
+msgstr "başlıksız–1"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgnewimage.ui:456
@@ -26479,8 +26478,8 @@ msgid ""
 "Use background color and opacity as the base canvas color. This can be "
 "reconfigured in `Image > Properties.`"
 msgstr ""
-"Temel tuval rengi için arka plan rengini ve matlığını kullan. Bu, 'Görsel > "
-"Özellikler' konumunda yeniden yapılandırılabilir"
+"Temel tuval rengi için arka plan rengini ve matlığını kullan. Bu, “Görsel → "
+"Özellikler” konumunda yeniden yapılandırılabilir"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -26753,7 +26752,7 @@ msgstr "&Anımsa"
 #, kde-format
 msgid "Note: Krita will need to be restarted for changes to take effect"
 msgstr ""
-"Not: Değişikliklerin etkili olabilmesi için Krita'nın yeniden başlatılması "
+"Not: Değişikliklerin etkili olabilmesi için Krita’nın yeniden başlatılması "
 "gerekecek"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
@@ -26894,10 +26893,10 @@ msgstr ""
 "<html><head/><body><p>Canlandırma kareleri dokunurken (dosyalara veya "
 "canlandırma önbelleği yeniden üretilirken), Krita, görselinizin belirli bir "
 "sayıda kopyasını yapar ve üzerilerinde paralel olarak çalışır. Her bir kopya "
-"depolama için daha çok RAM talep eder (görselinizin boyutunun %​20'si kadar); "
-"dolayısıyla yalnızca yeterli RAM'iniz varsa bu sınırı yükseltin.</p><p><br/"
+"depolama için daha çok RAM talep eder (görselinizin boyutunun %​20’si kadar); "
+"dolayısıyla yalnızca yeterli RAM’iniz varsa bu sınırı yükseltin.</p><p><br/"
 "></p><p><span style=\" font-weight:600;\">Önerilen değer:</span> Klonlar "
-"Sınırını, CPU'nuzun iye olduğu <span style=\" text-decoration: underline;"
+"Sınırını, CPU’nuzun iye olduğu <span style=\" text-decoration: underline;"
 "\">fiziksel</span> (hiper iş parçacıksız) çekirdek sayısına ayarlayın.</p></"
 "body></html>"
 
@@ -27022,12 +27021,12 @@ msgid ""
 "4K UltraHD@25fps video you need extra 800 MiB of memory</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Canlandırma karesi önbelleği, herhangi bir sınırlama "
-"olmadan tümüyle RAM'de saklanır</p><p><span style=\"font-weight:600;\">UYARI:"
+"olmadan tümüyle RAM’de saklanır</p><p><span style=\"font-weight:600;\">UYARI:"
 "</span> Lütfen bilgisayarınızda Genel sekmesinden talep edilenden <span "
 "style=\" text-decoration: underline;\">daha fazla</span> ve yeterli RAM "
 "olduğundan emin olun. Aksi takdirde donmalar yaşanabilir.</p><p>* 1 "
-"saniyelik FullHD@25 fps video 200 MB belleğe,</p><p>* 1 saniyelik 4K "
-"UltraHD@25 fps video 800 MB belleğe gereksinim duyar.</p></body></html>"
+"saniyelik FullHD@25 FPS video 200 MB belleğe,</p><p>* 1 saniyelik 4K "
+"UltraHD@25 FPS video 800 MB belleğe gereksinim duyar.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optInMemory)
 #: libs/ui/forms/wdgperformancesettings.ui:442
@@ -27073,7 +27072,7 @@ msgid ""
 "using on-disk storage backend.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Görsel belirtilen sınırdan büyükse karenin küçültülmüş "
-"sürümünü sun. \"Disk üzerinde\" önbellek depolama arka ucunu kullanırken bu "
+"sürümünü sun. Disk üzerinde önbellek depolama arka ucunu kullanırken bu "
 "seçeneği etkinleştirdiğinizden emin olun..</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
@@ -27091,7 +27090,7 @@ msgid ""
 "px</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Karelerin küçültüleceği boyut sınırı</p><p><span style="
-"\" font-weight:600;\">Önerilen değer:</span> 2500&nbsp;pks</p></body></html>"
+"\" font-weight:600;\">Önerilen değer:</span> 2500 pks</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkUseRegionOfInterest)
 #: libs/ui/forms/wdgperformancesettings.ui:491
@@ -27149,7 +27148,7 @@ msgstr "Anında Önizleme"
 #: libs/ui/forms/wdgperformancesettings.ui:550
 #, kde-format
 msgid "Use in-stack preview in Transform Tool"
-msgstr "Dönüşüm Aracı'nda yığın içi önizlemeyi kullan"
+msgstr "Dönüşüm Aracı’nda yığın içi önizlemeyi kullan"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/forms/wdgperformancesettings.ui:557
@@ -27385,7 +27384,7 @@ msgstr "Yükseklik: "
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:297
 #, kde-format
 msgid "Aspect ratio"
-msgstr "En-boy oranı"
+msgstr "En–boy oranı"
 
 #. i18n: ectx: property (prefix), widget (KisDoubleParseSpinBox, doubleRatio)
 #: libs/ui/forms/wdgrectangleconstraints.ui:137
@@ -27746,7 +27745,7 @@ msgid ""
 "tablet driver implementation).</p><p><br/></p><p>After changing this option "
 "Krita should be restarted.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Bazı tabletler, tablet API'si aracılığıyla barel-"
+"<html><head/><body><p>Bazı tabletler, tablet API’si aracılığıyla barel-"
 "düğmesi tıklamalarını geçemez. Böyle bir aygıtınız varsa bu geçici çözümü "
 "etkinleştirmeyi deneyebilirsiniz. Krita, fare olayları akışından sağ ve orta "
 "düğme tıklamalarını okumaya çalışacaktır. Aygıtınızda çalışabilir veya "
@@ -27781,7 +27780,7 @@ msgid ""
 "Amount of smoothing Krita should do to speed sensor. This value is very "
 "hardware-dependent"
 msgstr ""
-"Krita'nın hız algılayıcısına yapması gereken pürüzsüzleştirme miktarı. Bu "
+"Krita’nın hız algılayıcısına yapması gereken pürüzsüzleştirme miktarı. Bu "
 "değer, donanıma çok bağlıdır"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnTabletTest)
@@ -27851,7 +27850,7 @@ msgstr "Yeni Boyut"
 #: libs/ui/imagesize/wdg_layersize.ui:139
 #, kde-format
 msgid "Constrain aspect ratio"
-msgstr "En-boy oranını kısıtla"
+msgstr "En–boy oranını kısıtla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, constrainProportionsCkb)
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonLockRatio)
@@ -28260,8 +28259,8 @@ msgid ""
 "The <i>Change Primary Setting</i> action changes a tool's \"Primary Setting"
 "\", for example the brush size for the brush tool."
 msgstr ""
-"<i>Ana Ayarı Değiştir</i> eylemi, bir aracın \"Ana Ayarı\"nı değiştirir; "
-"örneğin fırça aracı için fırçanın boyutunu."
+"<i>Ana Ayarı Değiştir</i> eylemi, bir aracın “Ana Ayarı”nı değiştirir; "
+"örneğin, fırça aracı için fırçanın boyutunu."
 
 #: libs/ui/input/kis_change_primary_setting_action.cpp:25
 #, kde-format
@@ -28803,7 +28802,7 @@ msgstr "Uzaklaştır"
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:228
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "%​100'e Yakınlaştır"
+msgstr "%​100’e Yakınlaştır"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, kde-format
@@ -28972,7 +28971,7 @@ msgstr "Her ikisi de hatalıysa boyutu elle girin:"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:159
 #, kde-format
 msgid "Do not ask again (hold Shift to ask again)"
-msgstr "Bir daha sorma (yeniden sormak için Üst Karakter'i basılı tutun)"
+msgstr "Bir daha sorma (yeniden sormak için Üst Karakter’i basılı tutun)"
 
 #: libs/ui/kis_animation_importer.cpp:65
 msgctxt "(qtundo-format)"
@@ -29131,13 +29130,13 @@ msgstr "Süzgeç, kilitli katmana uygulanamaz."
 #, kde-format
 msgid ""
 "The %1 filter will convert your %2 data to 16-bit L*a*b* and vice versa. "
-msgstr "%1 süzgeci, %2 verinizi 16 bit L*a*b*'ye veya tam tersine dönüştürür. "
+msgstr "%1 süzgeci, %2 verinizi 16 bit L*a*b*’ye veya tam tersine dönüştürür. "
 
 #: libs/ui/kis_filter_manager.cc:244
 #, kde-format
 msgid "The %1 filter will convert your %2 data to 16-bit RGBA and vice versa. "
 msgstr ""
-"%1 süzgeci, %2 verinizi 16 bit RGBA'ya veya tam tersine dönüştürecektir. "
+"%1 süzgeci, %2 verinizi 16 bit RGBA’ya veya tam tersine dönüştürecektir. "
 
 #: libs/ui/kis_filter_manager.cc:355
 #, kde-format
@@ -29345,7 +29344,7 @@ msgstr "Katman kilitli"
 #: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
 #, kde-format
 msgid "Layer \"%1\" is locked"
-msgstr "\"%1\" katmanı kilitli"
+msgstr "“%1” katmanı kilitli"
 
 #: libs/ui/kis_node_manager.cpp:508
 msgctxt "(qtundo-format)"
@@ -29431,7 +29430,7 @@ msgstr "Tüm Katmanları Dikey Yansıt"
 #: libs/ui/kis_node_manager.cpp:1202
 #, kde-format
 msgid "Export \"%1\""
-msgstr "Dışa Aktar \"%1\""
+msgstr "Dışa Aktar “%1”"
 
 #: libs/ui/kis_node_manager.cpp:1232
 #, kde-format
@@ -29448,12 +29447,12 @@ msgstr "Katmanda piksek verisi yok"
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
-msgstr "SVG'ye Dışa Aktar"
+msgstr "SVG’ye Dışa Aktar"
 
 #: libs/ui/kis_node_manager.cpp:1294
 #, kde-format
 msgid "Could not save to svg: %1"
-msgstr "SVG'ye kaydedilemedi: %1"
+msgstr "SVG’ye kaydedilemedi: %1"
 
 #: libs/ui/kis_node_manager.cpp:1320
 #, kde-format
@@ -29467,7 +29466,7 @@ msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
-"Ana katmanın alfa kanalı yazılamıyor \"%1\".\n"
+"Ana katmanın alfa kanalı yazılamıyor “%1”.\n"
 "İşlem iptal edilecek."
 
 #: libs/ui/kis_node_manager.cpp:1352
@@ -29505,12 +29504,12 @@ msgstr "Maske Katmanı"
 #: libs/ui/kis_node_manager.cpp:1603
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
-msgstr "\"%1\" katmanı, yeni \"%2\" üst ögesine taşınamıyor"
+msgstr "“%1” katmanı, yeni “%2” üst ögesine taşınamıyor"
 
 #: libs/ui/kis_node_manager.cpp:1606
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
-msgstr "\"%1\" katmanı, kök katmana taşınamıyor"
+msgstr "“%1” katmanı, kök katmana taşınamıyor"
 
 #: libs/ui/kis_node_manager.cpp:1614
 msgctxt "(qtundo-format)"
@@ -29742,8 +29741,8 @@ msgid ""
 "There are no tags available to show in this popup. To add presets, you need "
 "to tag them and then select the tag here."
 msgstr ""
-"Bu açılır pencerede göstermek için uygun etiket yok. Önayarlar eklemek için "
-"etiketlemeniz ve etiketi burada seçmeniz gerekiyor."
+"Bu açılır pencerede göstermek için uygun künye yok. Önayarlar eklemek için "
+"künyelemeniz ve künyeyi burada seçmeniz gerekiyor."
 
 #: libs/ui/kis_selection_manager.cc:611
 #, kde-format
@@ -29818,21 +29817,21 @@ msgid ""
 "\">Scripting School</span></a></p></td></table></body></html>"
 msgstr ""
 "<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
-"style=\" color:%1;\"><b>Krita'yı Kullanmak</b></span></p><p><a href="
+"style=\" color:%1;\"><b>Krita’yı Kullanmak</b></span></p><p><a href="
 "\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; "
-"color:%1;\">Krita'nın Geliştirmesini Destekle!</span></a></p><p><a href="
+"color:%1;\">Krita’nın Geliştirmesini Destekle!</span></a></p><p><a href="
 "\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style="
 "\" text-decoration: underline; color:%1;\">Başlarken</span></a></p><p><a "
 "href=\"https://docs.krita.org/\"><span style=\" text-decoration: underline; "
 "color:%1;\">Kılavuz</span></a></p><p><a href=\"https://krita.org/\"><span "
 "style=\" text-decoration: underline; color:%1;\">Krita Web Sitesi</span></"
-"a></p></td><td><p><span style=\" color:%1;\"><b>Krita'yı Kodlamak</b></"
+"a></p></td><td><p><span style=\" color:%1;\"><b>Krita’yı Kodlamak</b></"
 "span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
 "decoration: underline; color:%1;\">Kullanıcı Topluluğu</span></a></p><p><a "
 "href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
 "decoration: underline; color:%1;\">Kaynak Kodu</span></a></p><p><a href="
 "\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-"
-"decoration: underline; color:%1;\">Betik Yazım API'si</span></a></p><p><a "
+"decoration: underline; color:%1;\">Betik Yazım API’si</span></a></p><p><a "
 "href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
 "text-decoration: underline; color:%1;\">Betik Yazım Okulu</span></a></p></"
 "td></table></body></html>"
@@ -30112,9 +30111,9 @@ msgstr ""
 "--new-image seçeneğini kullanarak yeni bir belge oluşturabilir veya var olan "
 "bir dosyayı açabilirsiniz.\n"
 "\n"
-"Bunun yerine, dosya katmanı Krita'nın halihazırda çalışan bir örneğinde açık "
-"olan bir belgeye eklemek istiyorsanız ayarlarda \"Krita'nın yalnızca bir "
-"örneğine izin ver\" onay kutusunu imleyin (Ayarlar → Genel → Pencere)."
+"Bunun yerine, dosya katmanı Krita’nın halihazırda çalışan bir örneğinde açık "
+"olan bir belgeye eklemek istiyorsanız ayarlarda ‘Krita’nın yalnızca bir "
+"örneğine izin ver’ onay kutusunu işaretleyin (Ayarlar → Genel → Pencere)."
 
 #: libs/ui/KisApplication.cpp:686
 #, kde-format
@@ -30165,7 +30164,7 @@ msgstr ""
 "\n"
 "Şu konumda bir yedekleme dosyası oluşturuldu: %1\n"
 "\n"
-"Değişikliklerin etkin olması için Krita'yı yeniden başlatın."
+"Değişikliklerin etkin olması için Krita’yı yeniden başlatın."
 
 #: libs/ui/KisApplication.cpp:1132
 #, kde-format
@@ -30222,7 +30221,7 @@ msgstr ""
 #: libs/ui/KisApplicationArguments.cpp:84
 #, kde-format
 msgid "The name of the workspace to open Krita with"
-msgstr "Krita'yla birlikte açılacak çalışma alanının adı"
+msgstr "Krita’yla birlikte açılacak çalışma alanının adı"
 
 #: libs/ui/KisApplicationArguments.cpp:85
 #, kde-format
@@ -30232,12 +30231,12 @@ msgstr "Krita ile birlikte açılacak pencere düzeninin adı"
 #: libs/ui/KisApplicationArguments.cpp:86
 #, kde-format
 msgid "The name of the session to open Krita with"
-msgstr "Krita'yla birlikte açılacak oturumun adı"
+msgstr "Krita’yla birlikte açılacak oturumun adı"
 
 #: libs/ui/KisApplicationArguments.cpp:87
 #, kde-format
 msgid "Start Krita in canvas-only mode"
-msgstr "Krita'yı yalnızca tuval kipinde başlat"
+msgstr "Krita’yı yalnızca tuval kipinde başlat"
 
 #: libs/ui/KisApplicationArguments.cpp:88
 #, kde-format
@@ -30247,7 +30246,7 @@ msgstr "Açılış ekranını gösterme"
 #: libs/ui/KisApplicationArguments.cpp:89
 #, kde-format
 msgid "Start Krita in full-screen mode"
-msgstr "Krita'yı tam ekran kipinde başlat"
+msgstr "Krita’yı tam ekran kipinde başlat"
 
 #: libs/ui/KisApplicationArguments.cpp:91
 #, kde-format
@@ -30278,7 +30277,7 @@ msgstr "Dosya katman var olan veya yeni dosyaya eklenecek"
 #, kde-format
 msgid "A location that overrides the configured location for Krita's resources"
 msgstr ""
-"Krita'nın özkaynakları için yapılandırılan konumu geçersiz kılan bir konum"
+"Krita’nın özkaynakları için yapılandırılan konumu geçersiz kılan bir konum"
 
 #: libs/ui/KisApplicationArguments.cpp:100
 #, kde-format
@@ -30299,12 +30298,12 @@ msgstr "Tümünü At"
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:177
 #, kde-format
 msgid "The following autosave file can be recovered:"
-msgstr "Aşağıdaki otomatik kaydetme dosyası kurtarılabilir:"
+msgstr "Aşağıdaki kendiliğinden kaydedilen dosya kurtarılabilir:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:180
 #, kde-format
 msgid "The following autosave files can be recovered:"
-msgstr "Aşağıdaki otomatik kaydetme dosyaları kurtarılabilir:"
+msgstr "Aşağıdaki kendiliğinden kaydedilen dosyalar kurtarılabilir:"
 
 #: libs/ui/KisAutoSaveRecoveryDialog.cpp:234
 #, kde-format
@@ -30313,8 +30312,8 @@ msgid ""
 "If you press OK, selected files will be recovered, the unselected files "
 "discarded."
 msgstr ""
-"Eğer İptal'e tıklarsanız tüm kurtarılabilir dosyalar saklanacaktır.\n"
-"Tamam'a tıkladığınızda seçili dosyalar kurtarılır diğerleri yok sayılır."
+"Eğer İptal’e tıklarsanız tüm kurtarılabilir dosyalar saklanacaktır.\n"
+"Tamam’a tıkladığınızda seçili dosyalar kurtarılır diğerleri yok sayılır."
 
 #: libs/ui/KisCloneDocumentStroke.cpp:25
 msgctxt "(qtundo-format)"
@@ -30391,28 +30390,28 @@ msgstr "%1 kaydedildi"
 #: libs/ui/KisDocument.cpp:1425
 #, kde-format
 msgid "Autosaving... %1"
-msgstr "Otomatik kaydediliyor… %1"
+msgstr "Kendiliğinden kaydediliyor… %1"
 
 #: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
-msgstr "Otomatik kaydediliyor…"
+msgstr "Kendiliğinden kaydediliyor…"
 
 #: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
-msgstr "Otomatik kaydetme ertelendi: Belge meşgul…"
+msgstr "Kendiliğinden kaydetme ertelendi: Belge meşgul…"
 
 #: libs/ui/KisDocument.cpp:1582
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
-msgstr "%1 otomatik kaydederken hata: %2"
+msgstr "%1 kendiliğinden kaydedilirken hata: %2"
 
 #: libs/ui/KisDocument.cpp:1596
 #, kde-format
 msgid "Finished autosaving %1"
-msgstr "%1 otomatik kaydedildi"
+msgstr "%1 kendiliğinden kaydedildi"
 
 #: libs/ui/KisDocument.cpp:1843
 #, kde-format
@@ -30536,7 +30535,7 @@ msgstr "Dosya yeniden boyutlandırılamadı."
 #, kde-format
 msgid "Permission denied. Krita is not allowed to read or write to the file."
 msgstr ""
-"İzin reddedildi. Krita'nın dosyayı okumasına veya yazmasına izin verilmiyor."
+"İzin reddedildi. Krita’nın dosyayı okumasına veya yazmasına izin verilmiyor."
 
 #: libs/ui/KisImportExportErrorCode.cpp:52
 #, kde-format
@@ -30566,7 +30565,7 @@ msgstr "Dosya yok."
 #: libs/ui/KisImportExportErrorCode.cpp:150
 #, kde-format
 msgid "Permission denied: Krita is not allowed to read the file."
-msgstr "İzin reddedildi. Krita'nın dosyayı okumasına izin verilmiyor."
+msgstr "İzin reddedildi. Krita’nın dosyayı okumasına izin verilmiyor."
 
 #: libs/ui/KisImportExportErrorCode.cpp:152
 #, kde-format
@@ -30596,7 +30595,7 @@ msgstr "Dosya oluşturulamıyor."
 #: libs/ui/KisImportExportErrorCode.cpp:164
 #, kde-format
 msgid "Permission denied: Krita is not allowed to write to the file."
-msgstr "İzin reddedldi. Krita'nın dosyaya yazmasına izin verilmiyor."
+msgstr "İzin reddedldi. Krita’nın dosyaya yazmasına izin verilmiyor."
 
 #: libs/ui/KisImportExportErrorCode.cpp:166
 #, kde-format
@@ -30834,7 +30833,7 @@ msgid ""
 "The image has a profile attached that Krita cannot edit images in (\"%1\"), "
 "please select a space to convert to for editing: \n"
 msgstr ""
-"Görsele, Krita'nın içinde görselleri düzenleyemediği bir profil ilişik (%1); "
+"Görsele, Krita’nın içinde görselleri düzenleyemediği bir profil ilişik (%1); "
 "düzenlemek için kendisine dönüştürülecek bir uzay seçin:\n"
 
 #: libs/ui/KisLayerThumbnailCache.cpp:30
@@ -31202,7 +31201,7 @@ msgid ""
 "Click \"Show Details\" to view the full link to the image."
 msgstr ""
 "Görseli %1 konumundan indirmek istiyor musunuz?\n"
-"Görselin tam bağlantısını görüntülemek için \"Ayrıntıları Göster\"e tıklayın."
+"Görselin tam bağlantısını görüntülemek için ‘Ayrıntıları Göster’e tıklayın."
 
 #: libs/ui/KisRemoteFileFetcher.cpp:63
 #, kde-format
@@ -31285,7 +31284,7 @@ msgstr "Krita her başlatıldığında yeni şablonu kullan"
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "Var olan \"%1\" şablonunun üzerine yazmayı gerçekten istiyor musunuz?"
+msgstr "Var olan “%1” şablonunun üzerine yazmayı gerçekten istiyor musunuz?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
@@ -31373,7 +31372,7 @@ msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
 msgstr ""
-"<p><b>'%1'</b> adlı belge değiştirildi. </p><p>Kaydetmek istiyor musunuz?</p>"
+"<p><b>“%1”</b> adlı belge değiştirildi. </p><p>Kaydetmek istiyor musunuz?</p>"
 
 #: libs/ui/KisView.cpp:1262
 #, kde-format
@@ -31477,7 +31476,7 @@ msgid ""
 "<p><b>Private app location</b>:<br/>\n"
 "%2</p>"
 msgstr ""
-"<p>Krita'nın Microsoft Store sürümünü kullanıyorsunuz. Krita, özkaynakları "
+"<p>Krita’nın Microsoft Store sürümünü kullanıyorsunuz. Krita, özkaynakları "
 "AppData konumuna yerleştirmesi için yapılandırılabilir; ancak Windows "
 "gerçekte dosyaları özel bir uygulama konumunun içine koyabilir.</p>\n"
 "<p>Dosyaların nerede olduğunu anlamak için her iki konumu da "
@@ -31534,12 +31533,12 @@ msgstr "İngilizce haberler her zaman günceldir."
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
-msgstr "Unut: \"%1\""
+msgstr "Unut: “%1”"
 
 #: libs/ui/KisWelcomePageWidget.cpp:750
 #, kde-format
 msgid "New version of Krita is available."
-msgstr "Krita'nın yeni bir sürümü kullanılabilir."
+msgstr "Krita’nın yeni bir sürümü kullanılabilir."
 
 #: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
@@ -31564,7 +31563,7 @@ msgstr "Son kaydeden kişi"
 #: libs/ui/KoDocumentInfoDlg.cpp:170
 #, kde-format
 msgid "Use ';' (Example: Office;KDE;Calligra)"
-msgstr "';' kullanın (Örnek: Office;KDE;Calligra)"
+msgstr "‘;’ kullanın (Örnek: Office;KDE;Calligra)"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:296
 #, kde-format
@@ -32542,7 +32541,7 @@ msgid ""
 "work properly."
 msgstr ""
 "Intel grafik sürücüleri OpenGL ile ilgili sorunlara sahip olma "
-"eğilimindedir, dolayısıyla ANGLE öntanımlı olarak kullanılır. OpenGL'e elle "
+"eğilimindedir, dolayısıyla ANGLE öntanımlı olarak kullanılır. OpenGL’ye elle "
 "geçebilirsiniz, ancak düzgün çalışacağı garanti edilmez."
 
 #: libs/ui/opengl/kis_opengl.cpp:1064
@@ -32578,7 +32577,7 @@ msgstr ""
 "\n"
 "%1\n"
 "\n"
-" Krita OpenGL'i devre dışı bırakacak ve şimdi kapanacak."
+" Krita OpenGL’yi devre dışı bırakacak ve şimdi kapanacak."
 
 #: libs/ui/tool/kis_selection_tool_helper.cpp:175
 #, kde-format
@@ -32726,7 +32725,7 @@ msgstr "Fırça Ucunu Saat Yönünün Tersine Döndür (Kesin)"
 #, kde-format
 msgctxt "(qtundo-format) Filter as an effect"
 msgid "Filter \"%1\""
-msgstr "Süz: \"%1\""
+msgstr "Süz: “%1”"
 
 #: libs/ui/toolbox/KoToolBox.cpp:347 libs/widgetutils/xmlgui/ktoolbar.cpp:346
 #, kde-format
@@ -32763,7 +32762,7 @@ msgstr "Yerleşim"
 #, kde-format
 msgctxt "@item:inmenu Toolbox layout direction"
 msgid "&Automatic"
-msgstr "&Otomatik"
+msgstr "&Kendiliğinden"
 
 #: libs/ui/toolbox/KoToolBoxDocker.cpp:154
 #, kde-format
@@ -32783,8 +32782,8 @@ msgid ""
 "New AppImage was downloaded to %1. To complete the update, close Krita and "
 "run the new AppImage."
 msgstr ""
-"Yeni AppImage, %1 konumuna indirildi. Güncellemeyi tamamlamak için Krita'yı "
-"kapatın ve yeni AppImage'i çalıştırın."
+"Yeni AppImage, %1 konumuna indirildi. Güncellemeyi tamamlamak için Krita’yı "
+"kapatın ve yeni AppImage’i çalıştırın."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLinks)
 #: libs/ui/wdgsplash.ui:439
@@ -33319,7 +33318,7 @@ msgstr ""
 "araya getirmek onları daha parlak yapar. Bu renk modeli, tüm renk "
 "modellerinin en kapsamlısıdır ve boyama için daha sonra diğer alanlara "
 "dönüştürebileceğiniz bir model olarak önerilir. RGB, HDR düzenleme için "
-"önerilen renk aralığıdır."
+"önerilen renk uzayıdır."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:408
 #, kde-format
@@ -33334,14 +33333,14 @@ msgid ""
 "<b>not</b> recommended for painting.Unfortunately, Krita cannot retrieve "
 "colorants or the TRC for this space."
 msgstr ""
-"<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK (Cam "
-"göbeği, Macenta, Sarı, Anahtar)</a></b>, yazıcılar ve diğer mürekkep tabanlı "
+"<b><a href=\"https://en.wikipedia.org/wiki/CMYK_color_model\">CMYK "
+"(Camgöbeği, Mor, Sarı, Anahtar)</a></b>, yazıcılar ve diğer mürekkep tabanlı "
 "medyalar tarafından kullanılan modeldir.<br/>CMYK, renkleri bir araya "
 "getirmenin onları daha koyu hale getireceği, çıkarımcı bir modeldir. CMYK "
 "profilleri yazıcı başına çok spesifik olduğundan, RGB alanında çalışılması "
 "ve daha sonra tercihen CMYK profiline, tercihen yazıcınız tarafından "
 "gönderilen bir profile dönüştürülmesi önerilir.<br/>CMYK boyama için "
-"<b>önerilmez</b>. Maalesef, Krita bu alan için renklendiriciler veya TRC'yi "
+"<b>önerilmez</b>. Maalesef, Krita bu alan için renklendiriciler veya TRC’yi "
 "alamaz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:417
@@ -33360,7 +33359,7 @@ msgstr ""
 "dönüştürmek için kullanılan alan olarak CIE tarafından belirlenen uzaydır. "
 "XYZ, renkleri birlikte ekleyerek onları daha parlak hale getiren eklemeli "
 "renk modelidir. XYZ boyama için <b>önerilmez</b>, ancak kodlamada kullanışlı "
-"olabilir. Ton Yanıt Eğrisinin doğrusal olduğu kabul edilir."
+"olabilir. Ton Yanıt Eğrisi’nin doğrusal olduğu kabul edilir."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:424
 #, kde-format
@@ -33376,7 +33375,7 @@ msgstr ""
 "yalnızca gri değerlere ve saydam değerlere izin verir. Gri tonlamalı "
 "görseller, aynı bit derinlikli bir RGB görseline kıyasla bellek ve disk "
 "alanının yarısını kullanır.<br/> Gri tonlama, mürekkep püskürtme ve gri "
-"tonlamalı görseller için kullanışlıdır. Krita'da, Gri Tonlama ve RGB "
+"tonlamalı görseller için kullanışlıdır. Krita’da, Gri Tonlama ve RGB "
 "katmanlarını aynı görselde karıştırabilirsiniz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:431
@@ -33398,11 +33397,11 @@ msgstr ""
 "<b><a href=\"https://en.wikipedia.org/wiki/Lab_color_space\">L*a*b</a></b>. "
 "<b>L</b>, Açıklığı temsil eder, <b>a</b> ve <b>b</b> bileşenleri renk "
 "kanallarını temsil eder.<br/>L*a*b renk tamamlama için özel bir modeldir. "
-"İnsanın algısına dayanır, yani açıklık, kırmızı-yeşil denge ve sarı-mavi "
+"İnsanın algısına dayanır, yani açıklık, kırmızı–yeşil denge ve sarı–mavi "
 "denge arasındaki farkı kodlamaya çalışır. Bu, renk düzeltme için kullanışlı "
 "kılar, ancak harmanlama kiplerindeki renk matematiklerinin büyük çoğunluğu "
-"burada beklendiği gibi <b>çalışmaz</b>.<br/>Benzer şekilde Krita, LAB'de "
-"HDR'yi desteklemez; bu, LAB'e dönüştürülen HDR görsellerin renk bilgisini "
+"burada beklendiği gibi <b>çalışmaz</b>.<br/>Benzer şekilde Krita, LAB’de "
+"HDR’yi desteklemez; bu, LAB’e dönüştürülen HDR görsellerin renk bilgisini "
 "kaybettiği anlamına gelir. Bu renk aralığı boyama için değil, dışa aktarma "
 "için de <b>önerilmez</b>; ancak en iyisi sonradan işleme yapmak için bir "
 "alan olarak kullanılır. TRC, L * TRC olarak kabul edilir."
@@ -33452,7 +33451,7 @@ msgid ""
 "slows down. Take care to disable conversion optimization when converting "
 "from 16 bit/channel to 8 bit/channel."
 msgstr ""
-"<b>16 bit tamsayı</b>: Ayrıca 'derin renk' olarak da bilinir. 16 bit, "
+"<b>16 bit tamsayı</b>: Ayrıca “derin renk” olarak da bilinir. 16 bit, "
 "doğrusal bir TRC, geniş renk alanı veya daha hassas renk uyumu gerektiren "
 "durumlarda düzenleme yapmak için idealdir. Bu, aynı özelliklerin herhangi "
 "bir 8 bit görselden RAM ve sabit sürücüde iki kat daha fazla alan alır ve "
@@ -33475,15 +33474,15 @@ msgid ""
 "recommend watching the RAM usage of the file carefully, or otherwise use 8 "
 "bit if your computer slows down."
 msgstr ""
-"<b>16 bit kayan noktalı sayı</b>: \"Yarım Kayan Nokta\" olarak da bilinir ve "
-"VFX endüstrisi görsellerinde standarttır. 16 bit kayan noktalı, doğrusal Ton "
-"Yanıt Eğrisi, geniş renk alanı veya daha hassas renk karışımına gereksinim "
-"duyduğunuzda görselleri düzenlemek için idealdir. Kayan nokta olması, Yüksek "
-"Devingen Erimli (HDR) görseller için mutlak bir gerekliliktir. Bu, aynı "
-"özelliklerin herhangi bir 8 bit görselden RAM ve sabit sürücüde iki kat daha "
-"fazla alan alır ve bazı aygıtlar için daha fazla işlem gücü alır. Dosyanın "
-"RAM kullanımını dikkatli bir şekilde izlemenizi veya aksi takdirde "
-"bilgisayarınız yavaşlarsa 8 bit kullanmanızı öneririz."
+"<b>16 bit kayan noktalı sayı</b>: “Yarım Kayan Noktalı Değer”olarak da "
+"bilinir ve VFX endüstrisi görsellerinde standarttır. 16 bit kayan noktalı, "
+"doğrusal Ton Yanıt Eğrisi, geniş renk alanı veya daha hassas renk karışımına "
+"gereksinim duyduğunuzda görselleri düzenlemek için idealdir. Kayan nokta "
+"olması, Yüksek Devingen Erimli (HDR) görseller için mutlak bir "
+"gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bit görselden RAM ve "
+"sabit sürücüde iki kat daha fazla alan alır ve bazı aygıtlar için daha fazla "
+"işlem gücü alır. Dosyanın RAM kullanımını dikkatli bir şekilde izlemenizi "
+"veya aksi takdirde bilgisayarınız yavaşlarsa 8 bit kullanmanızı öneririz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:477
 #, kde-format
@@ -33498,15 +33497,15 @@ msgid ""
 "power. We recommend watching the RAM usage of the file carefully, or "
 "otherwise use 8 bit if your computer slows down."
 msgstr ""
-"<b>32 bit ondalıklı sayı</b>: Ayrıca 'Tam kayan nokta' olarak da bilinir. 32 "
-"bit float, doğrusal bir TRC, geniş renk alanı veya daha hassas renk "
-"karışımına gereksinim duyduğunuzda görselleri düzenlemek için idealdir. "
-"Kayan nokta olması, Yüksek Devingen Erimli (HDR) görseller için mutlak bir "
-"gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bitlik görselden RAM ve "
-"sabit sürücüde dört kat daha fazla alan alır ve bazı aygıtlar için daha "
-"fazla işlem gücü kullanır. Dosyanın RAM kullanımını dikkatli bir şekilde "
-"izlemenizi veya aksi takdirde bilgisayarınız yavaşlarsa 8 bit kullanmanızı "
-"öneririz."
+"<b>32 bit ondalıklı sayı</b>: Ayrıca “Tam kayan nokta” olarak da bilinir. 32 "
+"bit kayan noktarlı değer, doğrusal bir TRC, geniş renk alanı veya daha "
+"hassas renk karışımına gereksinim duyduğunuzda görselleri düzenlemek için "
+"idealdir. Kayan nokta olması, Yüksek Devingen Erim’li (HDR) görseller için "
+"mutlak bir gerekliliktir. Bu, aynı özelliklerin herhangi bir 8 bitlik "
+"görselden RAM ve sabit sürücüde dört kat daha fazla alan alır ve bazı "
+"aygıtlar için daha fazla işlem gücü kullanır. Dosyanın RAM kullanımını "
+"dikkatli bir şekilde izlemenizi veya aksi takdirde bilgisayarınız yavaşlarsa "
+"8 bit kullanmanızı öneririz."
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:486
 #, kde-format
@@ -33564,11 +33563,11 @@ msgid ""
 "'seamless interchange of high quality motion picture images regardless of "
 "source'.</p>"
 msgstr ""
-"<p>Vikipedi'den alıntı, 'Akademi Renk Kodlama Sistemi (ACES), Academy of "
+"<p>Vikipedi’den alıntı, “Akademi Renk Kodlama Sistemi (ACES), Academy of "
 "Motion Picture Arts and Sciences tarafından önerilen bir renk görseli "
 "kodlama sistemidir. Bu, kaynaktan bağımsız olarak yüksek kalite hareket "
 "görsellerinin kesintisiz değişimleri ile renk gerçek iş akışını tamamen "
-"kapsamaya izin verir'.</p>"
+"kapsamaya izin verir”.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:529
 #, kde-format
@@ -33579,8 +33578,8 @@ msgid ""
 "color space it has no negative values and contains only few colors that fall "
 "just barely outside the area of real colors humans can see</p>"
 msgstr ""
-"<p>ACEScg renk uzayı ACES renk uzayından daha küçük; ancak 'Rec-2020 gam ve "
-"DCI-P3 gamını içerecek kadar büyük; ACES renk uzayının aksine negatif "
+"<p>ACEScg renk uzayı ACES renk uzayından daha küçük; ancak “Rec-2020 gamını "
+"ve DCI-P3 gamını” içerecek kadar büyük; ACES renk uzayının aksine negatif "
 "değerlere sahip değil ve insanların görebileceği gerçek renklerin alanı "
 "dışında yalnızca birkaç renk içerir </p>"
 
@@ -33601,16 +33600,17 @@ msgid ""
 "to some of today's high-end wide gamut monitors.</p>"
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için bu profillerin temel "
-"adı olarak 'ClayRGB (ArgyllCMS'yi takip ettim) kullandım. Aşağıda kullanılan "
-"'Adobe RGB 1998 ile uyumlu' terimi, Adobe RGB 1998 renk uzayı özelliklerinin "
-"başlangıcında önerilen terminolojidir.</p><p>Adobe RGB 1998 renk gamı, "
-"sRGB'den daha fazla gerçek dünya camgöbeği renklerini, yeşil ve sarı "
-"yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, mürekkep "
-"püskürtmeli yazıcılar kullanarak yazdırırken, özellikle yazdırılabilir "
-"camgöbeği renklerini, yeşil, sarı-yeşili içermez. BetaRGB (profil paketine "
-"dahil değildir) ve Rec.2020, bugünün geniş gam yazıcılarının renk gamları "
-"için daha iyi eşleşmelerdir.</p><p>Adobe RGB 1998 renk yelpazesi, günümüzün "
-"ileri düzey geniş gam monitörlerinin makul bir yaklaşımıdır.</p>"
+"adı olarak “ClayRGB” (ArgyllCMS’yi takip ettim) kullandım. Aşağıda "
+"kullanılan “Adobe RGB 1998 ile uyumlu” terimi, Adobe RGB 1998 renk uzayı "
+"özelliklerinin başlangıcında önerilen terminolojidir.</p><p>Adobe RGB 1998 "
+"renk gamı, sRGB’den daha fazla gerçek dünya camgöbeği renklerini, yeşil ve "
+"sarı yeşillikleri kapsar, ancak günümüzün en üst sınıf geniş menzil, "
+"mürekkep püskürtmeli yazıcılar kullanarak yazdırırken, özellikle "
+"yazdırılabilir camgöbeği renklerini, yeşil, sarı–yeşili içermez. BetaRGB "
+"(profil paketine dahil değildir) ve Rec.2020, bugünün geniş gam "
+"yazıcılarının renk gamları için daha iyi eşleşmelerdir.</p><p>Adobe RGB 1998 "
+"renk yelpazesi, günümüzün ileri düzey geniş gam monitörlerinin makul bir "
+"yaklaşımıdır.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
 #, kde-format
@@ -33637,7 +33637,7 @@ msgstr ""
 "kullanır.</p><p>ACES renk uzayında olduğu gibi, AllColorsRGB da yüksek "
 "oranda hayali renk tutar. Hayali renkler için Tamamen <a href=\"http://"
 "ninedegreesbelow.com/photography/xyz-rgb.html\">Acısız Programcıların XYZ, "
-"RGB, ICC, xyY ve TRCs Kılavuzu</a>na bakınız.</p><p>Eğer birisinin renk "
+"RGB, ICC, xyY ve TRCs Kılavuzu</a>’na bakın.</p><p>Eğer birisinin renk "
 "uzayının gerçekten olası tüm gerçek renkleri taşıyıp taşımadığından emin "
 "olması gerekmiyorsa birinin neden bu profili düzenlemek için kullanmak "
 "isteyeceğinin belirli bir gerekçesi yoktur.</p>"
@@ -33701,14 +33701,14 @@ msgid ""
 "and cons of changing your workflow.</p>"
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için, bu profillerin "
-"temel adı olarak 'LargeRGB' (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
+"temel adı olarak “LargeRGB” (aşağıdaki RawTherapee'yi kullandım) kullandım.</"
 "p><p>Kodak, RIMM / ROMM (ProPhotoRGB) renk gamını yazdırılabilir ve en "
 "gerçek dünya renklerini içerecek şekilde tasarladı. Bazı hayali renkleri "
 "içerir ve sayısal kameralar tarafından yakalanabilecek gerçek dünya mavileri "
 "ve mor renklerinden bazılarını dışlar. Ayrıca, bazı (ve muhtemelen çok "
 "sayıda) kamera matrisi giriş profilleri tarafından yorumlandığı şekliyle, "
-"bazı çok doymuş \"kamera tarafından yakalanan\" sarıları hariç tutuyor.</"
-"p><p>ProPhotoRGB ana renkleri, Lightroom ve Dng-DCP kamera 'profilleri' gibi "
+"bazı çok doymuş “kamera tarafından yakalanan” sarıları hariç tutuyor.</"
+"p><p>ProPhotoRGB ana renkleri, Lightroom ve Dng-DCP kamera “profilleri” gibi "
 "Adobe ürünlerine kodlanmış. Bununla birlikte, çok renk tutabilecek kadar "
 "büyük olmanın ötesinde, ProPhotoRGB, RGB çalışma alanı olarak herhangi bir "
 "özelliğe sahip değildir. Şahsen BetaRGB, Rec2020 veya ACEScg profilleri "
@@ -33732,8 +33732,8 @@ msgstr ""
 "<p>Rec.2020, tümüyle modası geçmiş sRGB renk alanının gelecek vaat eden "
 "alternatifidir. Haziran 2015 itibarıyla, çok az sayıda görüntüleme aygıtı "
 "(varsa) (ve kesinlikle uygun fiyatlı görüntüleme aygıtlarının hiçbiri), "
-"Rec.2020'nin tamamını görüntüleyebilir. Ancak görüntü teknolojisi "
-"Rec.2020'ye ayak uyduruyor, Rec.2020 için filmler yapılıyor ve çeşitli "
+"Rec.2020’nin tamamını görüntüleyebilir. Ancak görüntü teknolojisi "
+"Rec.2020’ye ayak uyduruyor, Rec.2020 için filmler yapılıyor ve çeşitli "
 "kameralar Rec.2020 için destek sunuyor. Ve sayısal karanlık odada Rec.2020 "
 "genel RGB çalışma alanı olarak son derece küçük olan sRGB renk alanından çok "
 "daha uygundur.</p>"
@@ -33758,17 +33758,17 @@ msgid ""
 "all the other the RGB profiles provided in my profile pack) is a matrix "
 "profile, and matrix profiles don't have perceptual intent tables.</p>"
 msgstr ""
-"<p>Hewlett-Packard ve Microsoft, 1990'lı yıllardan gelen tüketici dereceli "
-"CRT'lerin renk gamıyla eşleştirmek için sRGB'yi tasarladılar. SRGB, dünya "
+"<p>Hewlett–Packard ve Microsoft, 1990’lı yıllardan gelen tüketici dereceli "
+"CRT’lerin renk gamıyla eşleştirmek için sRGB’yi tasarladılar. SRGB, dünya "
 "çapında web için standart renk alanıdır ve halen görüntüleri internete "
 "aktarmak için en iyi seçimdir.</p><p>SRGB renk gamı, kalibre edilmiş iyi "
-"kalite CRT'lerle iyi bir eşleşme oluşturuyordu. Ancak sRGB, daha doymuş sRGB "
+"kalite CRT’lerle iyi bir eşleşme oluşturuyordu. Ancak sRGB, daha doymuş sRGB "
 "blues ve magentalarını sık sık görüntüleyemeyen tüketici sınıfı LCD "
-"monitörlerle iyi bir uyum oluşturmaz (iyi haber: teknoloji ilerledikçe, daha "
+"monitörlerle iyi bir uyum oluşturmaz (İyi haber: Teknoloji ilerledikçe, daha "
 "geniş gamlar tüketici dereceli monitörlere doğru kayar).</p><p>Yazıcı renk "
-"gamları, cam göbekleri, yeşillikler ve sarı-yeşil renklerde sRGB renk gamını "
+"gamları, camgöbekleri, yeşillikler ve sarı–yeşil renklerde sRGB renk gamını "
 "kolayca aşabilir. Aradeğerlemeli kamera ham dosyalarındaki renkler "
-"genellikle sRGB renk gamını da aşar.</p><p>Algılama amacı sRGB'ye "
+"genellikle sRGB renk gamını da aşar.</p><p>Algılama amacı sRGB‘ye "
 "dönüştürülürken sihirli bir şekilde gam renklerinin dışına çıkarmamasını "
 "sRGB renk gamına dahil etmemektedir! Standart sRGB renk alanı (profil "
 "paketinde sağlanan diğer tüm RGB profilleri ile birlikte) bir matris "
@@ -33787,9 +33787,9 @@ msgid ""
 "color space.</p>"
 msgstr ""
 "<p>Olası telif hakkı ihlali sorunlarından kaçınmak için bu profillerin temel "
-"adı olarak 'WideRGB' kullandım.</p><p>WideGamutRGB, tayfsal renkleri "
+"adı olarak “WideRGB” kullandım.</p><p>WideGamutRGB, tayfsal renkleri "
 "birincil alanlar olarak kullanan geniş bir renk gama alanı olarak Adobe "
-"tarafından tasarlandı. Pascale'ın temel değerleri, Adobe ve Canon'un eski V2 "
+"tarafından tasarlandı. Pascale‘ın temel değerleri, Adobe ve Canon‘un eski V2 "
 "Widegamut profilleriyle eşleşen bir profil oluşturuyor. İlginç bir renk "
 "alanı; ancak tanıtımından kısa süre sonra Adobe, vurgularını ProPhotoRGB "
 "renk alanına değiştirdi.</p>"
@@ -33807,13 +33807,13 @@ msgid ""
 "internet, convert the image to the V2 Gray profile with the sRGB TRC.</p>"
 msgstr ""
 "<p>Bu profiller, monoton griye (siyah beyaz) dönüştürülen RGB görüntüleriyle "
-"kullanılır. RGB'den Gri'ye dönüştürmenin başlıca nedeni, görseli kodlamak "
-"için gereken dosya alanını kurtarmaktır. Google, hızlı yüklenen web "
+"kullanılır. RGB’den Gri Tonlu’ya dönüştürmenin başlıca nedeni, görseli "
+"kodlamak için gereken dosya alanını kurtarmaktır. Google, hızlı yüklenen web "
 "sayfalarına prim yüklemektedir ve görseller bir web sayfasının yavaş "
 "yükleyen unsurlarından biridir. Bu nedenle siyah beyaz görselleri Gri "
-"tonlamalı görüntülere dönüştürmek birkaç kilobayt tasarruf eder.  İnternet'e "
-"yüklenen gri tonlamalı görüntüler için, görseli sRGB TRC ile V2 Gri "
-"profiline dönüştürün.</p>"
+"tonlamalı görüntülere dönüştürmek birkaç kilobayt tasarruf eder. İnternet’e "
+"yüklenen gri tonlamalı görüntüler için görseli sRGB TRC ile V2 Gri profiline "
+"dönüştürün.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:645
 #, kde-format
@@ -33825,7 +33825,7 @@ msgid ""
 "integer). Many editing operations produce better results in linear gamma "
 "color spaces.</p>"
 msgstr ""
-"<p>'-g10.icc' ile biten profiller doğrusal gama (gama = 1.0, 'linear light' "
+"<p>“-g10.icc” ile biten profiller doğrusal gama (gama = 1.0, “linear light” "
 "vb.) profilleridir ve yalnızca yüksek bit derinliklerinde (16 bit kayan "
 "nokta, 16 bit tamsayı, 32 bit kayan nokta, 32 bit tamsayı). Birçok düzenleme "
 "işlemi doğrusal gamma renk uzaylarında daha iyi sonuçlar verir.</p>"
@@ -33838,7 +33838,7 @@ msgid ""
 "few editing operations really should be done on perceptually uniform RGB. "
 "Make sure you use the V4 versions for editing high bit depth images.</p>"
 msgstr ""
-"<p>'-labl.icc' ile biten profillerin algısal olarak tek biçimli TRC'leri "
+"<p>“-labl.icc” ile biten profillerin algısal olarak tek biçimli TRC’leri "
 "var. Algısal olarak tekdüze RGB üzerinde birkaç düzenleme işlemi "
 "yapılmalıdır. Yüksek bit derinlikli görselleri düzenlemek için V4 "
 "sürümlerini kullandığınızdan emin olun.</p>"
@@ -33851,8 +33851,8 @@ msgid ""
 "have approximately but not exactly perceptually uniform TRCs. ProPhotoRGB's "
 "gamma=1.8 TRC is not quite as close to being perceptually uniform.</p>"
 msgstr ""
-"<p>'-srgbtrc.icc', '-g22.icc' ve '-rec709.icc' ile biten profillerin "
-"yaklaşık olarak algısal olarak tekdüze TRC'leri yoktur. ProPhotoRGB'ın gama "
+"<p>“-srgbtrc.icc”, “-g22.icc” ve “-rec709.icc” ile biten profillerin "
+"yaklaşık olarak algısal olarak tekdüze TRC’leri yoktur. ProPhotoRGB’nin gama "
 "= 1,8 TRC, algısal olarak tek biçimli olma kadar yakın değildir.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:663
@@ -33883,9 +33883,9 @@ msgid ""
 "that use LCMS as the Color Management Module. This includes Krita, digiKam/"
 "showFoto, and GIMP 2.9.</p>"
 msgstr ""
-"<p>Renk Yönetimi Modülü olarak LCMS'yi kullanan yüksek bit derinlikli görsel "
+"<p>Renk Yönetimi Modülü olarak LCMS’yi kullanan yüksek bit derinlikli görsel "
 "düzenleyicilerini kullanarak görselleri düzenlemek için V4 profillerini "
-"kullanın. Buna Krita, digiKam / FotoGöster ve GIMP 2.9 dahildir.</p>"
+"kullanın. Buna Krita, digiKam/FotoGöster ve GIMP 2.9 dahildir.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:676
 #, kde-format
@@ -33894,7 +33894,7 @@ msgid ""
 "<p>Use V2 profiles for exporting finished images to be uploaded to the web "
 "or for use with imaging software that cannot read V4 profiles.</p>"
 msgstr ""
-"<p>Web'e yüklenecek bitmiş görselleri dışa aktarmak veya V4 profillerini "
+"<p>Web’e yüklenecek bitmiş görselleri dışa aktarmak veya V4 profillerini "
 "okuyamayan görüntüleme yazılımı ile kullanmak için V2 profillerini kullanın."
 "</p>"
 
@@ -33969,7 +33969,7 @@ msgstr "Kullanılabilir profil yok…"
 #, kde-format
 msgctxt "Automatic"
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: libs/ui/widgets/kis_color_filter_combo.cpp:215
 #, kde-format
@@ -34007,8 +34007,8 @@ msgstr ""
 "beklenmemektedir. Doğrusal profiller için 16 bitlik tamsayı veya herhangi "
 "bir kayan noktalı renk alanı kullanmanız önerilir.\n"
 "\n"
-"8 bit tamsayılı doğrusal RGB renk alanı oluşturmak için \"Sürdür\"e basın "
-"veya ayarlar diyaloğuna dönmek için \"İptal\" düğmesine basın."
+"8 bit tamsayılı doğrusal RGB renk alanı oluşturmak için ‘Sürdür’ düğmesine "
+"veya ‘Ayarlar’ iletişim kutusuna dönmek için ‘İptal’ düğmesine basın."
 
 #: libs/ui/widgets/kis_custom_image_widget.cc:536
 #, kde-format
@@ -34025,7 +34025,7 @@ msgstr ""
 #: libs/ui/widgets/kis_filter_selector_widget.cc:157
 #, kde-format
 msgid "Filter configuration XML"
-msgstr "Süzgeç yapılandırma XML'si"
+msgstr "Süzgeç yapılandırma XML’si"
 
 #: libs/ui/widgets/kis_filter_selector_widget.cc:214
 #, kde-format
@@ -34629,7 +34629,7 @@ msgstr "Değer Kipi"
 #: plugins/paintops/libpaintop/forms/wdgpredefinedbrushchooser.ui:257
 #, kde-format
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, patternValueModeComboBox)
 #: libs/ui/widgets/KisDitherWidget.ui:124
@@ -34689,10 +34689,10 @@ msgid ""
 msgstr ""
 "<html><body><p><b>UYARI:</b> Renk profilini değiştirdikten sonra görsel "
 "farklı görünecek; çünkü şunlardan birini içeriyor:<ul><li>birden çok katman</"
-"li><li>saydam pikselli bir veya birden çok katman</li><li>\"Normal\"den "
-"başka harmanlama kipine iye katmanlar</li></ul></p><p><a href=\"https://docs."
-"krita.org/en/general_concepts/colors/color_managed_workflow.html\">Daha "
-"Fazla Bilgi</a></p></body></html>"
+"li><li>saydam pikselli bir veya birden çok katman</li><li>“Normal”den başka "
+"harmanlama kipine iye katmanlar</li></ul></p><p><a href=\"https://docs.krita."
+"org/en/general_concepts/colors/color_managed_workflow.html\">Daha Fazla "
+"Bilgi</a></p></body></html>"
 
 #: libs/ui/widgets/KoDualColorButton.cpp:426
 #, kde-format
@@ -34752,7 +34752,7 @@ msgstr "Ad Halihazırda Var"
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:208
 #, kde-format
 msgid "The name '%1' already exists, do you wish to overwrite it?"
-msgstr "'%1' adı halihazırda var, üzerine yazmak istiyor musunuz?"
+msgstr "“%1” adı halihazırda var, üzerine yazmak istiyor musunuz?"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, btnNoFill)
 #: libs/ui/widgets/KoFillConfigWidget.ui:38
@@ -35014,7 +35014,7 @@ msgstr "Grup Kaldırılıyor"
 #, kde-format
 msgctxt "@action:button"
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: libs/widgets/kis_spacing_selection_widget.cpp:52
 #, kde-format
@@ -35023,7 +35023,7 @@ msgid ""
 "In auto mode the spacing of the brush will be calculated automatically "
 "depending on its size"
 msgstr ""
-"Otomatik kipte fırçanın boşluğu boyutuna göre otomatik olarak hesaplanacak"
+"Kendiliğinden kipte fırçanın boşluğu boyutuna göre kendiliğinden hesaplanır"
 
 #: libs/widgets/KisAngleSelector.cpp:214
 #, kde-format
@@ -35165,7 +35165,7 @@ msgstr "Luma:"
 #: libs/widgets/KisTagSelectionWidget.cpp:60
 #, kde-format
 msgid "Remove from tag"
-msgstr "Etiketten çıkar"
+msgstr "Künyeden çıkar"
 
 #: libs/widgets/KoColorSetWidget.cpp:78
 #, kde-format
@@ -36101,8 +36101,8 @@ msgid ""
 "understands.\n"
 "Make sure the file name ends in '.%1' for example."
 msgstr ""
-"Seçili dosya adında Krita'nın anlamadığı bir uzantı var.\n"
-"Dosya adının örneğin '.%1' ile bittiğinden emin olun."
+"Seçili dosya adında Krita’nın anlamadığı bir uzantı var.\n"
+"Dosya adının örneğin “.%1” ile bittiğinden emin olun."
 
 #: libs/widgetutils/KoFileDialog.cpp:533
 #, kde-format
@@ -36145,9 +36145,9 @@ msgstr ""
 "uygulamaları destekleyen çok sayıda yazılım kitaplığını geliştirir. KDE, "
 "katılımcı bir girişimdir ve KDE ürünlerini veya çalışmalarını denetleyen "
 "tekil bir kişilik yoktur. Bunun yerine, birlikte çalışarak dünyanın en iyi "
-"Özgür Yazılımları'nı geliştirmek olan ortak amacı paylaşarak çalışıyoruz. "
+"Özgür Yazılımları‘nı geliştirmek olan ortak amacı paylaşarak çalışıyoruz. "
 "KDE Projesine siz de dahil herkes katılıp katkıda bulunabilir. KDE topluluğu "
-"ve ürettiği  yazılımlar hakkında daha fazla bilgi almak için <a href=\"%2\">"
+"ve ürettiği yazılımlar hakkında daha fazla bilgi almak için <a href=\"%2\">"
 "%2</a> adresini ziyaret edin.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:69
@@ -36164,12 +36164,12 @@ msgstr ""
 "<html>Bir yazılım, doğası gereği her zaman iyileştirmeye açıktır ve KDE "
 "takımının tek amacı budur. Kullanıcılar olarak, bir şeyler beklediğiniz gibi "
 "çalışmadığında veya kimi şeylerin daha iyi olabileceğini düşündüğünüzde "
-"lütfen bize bunları bildirin.<br /><br />KDE Masaüstü Ortamı'nın bir hata "
+"lütfen bize bunları bildirin.<br /><br />KDE Masaüstü Ortamı’nın bir hata "
 "izleme sistemi vardır. Hataları bildirmek için <a href=\"%1\">%1</a> "
-"adresini veya uygulamaların \"Yardım\" menüsünde bulunan \"Hata Bildir…\" "
+"adresini veya uygulamaların ‘Yardım’ menüsünde bulunan ‘Hata Bildir…’ "
 "ögesini kullanın.<br /><br />Bir iyileştirme önerisinde bulunmak için de "
-"hata izleme sistemini kullanabilirsiniz. \"Wishlist\" önceliğini "
-"seçtiğinizden emin olun.</html>"
+"hata izleme sistemini kullanabilirsiniz. ‘Wishlist’ önceliğini seçtiğinizden "
+"emin olun.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:87
 #, kde-format
@@ -36208,14 +36208,14 @@ msgid ""
 msgstr ""
 "<html>KDE yazılımları ücretsizdir ve her zaman ücretsiz kalacaktır; ancak "
 "onları yapmak bedava değildir.<br /><br />KDE topluluğu, kar amacı gütmeyen "
-"bir organizasyon olan KDE e.V'i  Almanya'da kurmuştur. KDE e.V, KDE "
+"bir organizasyon olan KDE e.V'i Almanya'da kurmuştur. KDE e.V, KDE "
 "topluluğunu finansal ve hukuki konularda temsil etmektedir. KDE e.V hakkında "
 "bilgi almak için <a href=\"%1\">%1</a> adresini ziyaret edin. <br /><br /"
-">KDE Takımı'nın  her zaman finansal desteğe gereksinimi vardır. Yapılan "
-"bağışlar; yasal destek, KDE geliştiricilerinin KDE'ye yaptıkları desteğin "
+">KDE Takımı’nın  her zaman finansal desteğe gereksinimi vardır. Yapılan "
+"bağışlar; yasal destek, KDE geliştiricilerinin KDE’ye yaptıkları desteğin "
 "sürekliliğini sağlamak ve toplantıların/konferansların organizasyonu için "
 "harcanır. <br /><br />Sizin de <a href=\"%2\">%2</a> adresinde anlatılan "
-"biçimde KDE'ye yardımlarınızı bekliyoruz.<br /><br />Desteğiniz için "
+"biçimde KDE’ye yardımlarınızı bekliyoruz.<br /><br />Desteğiniz için "
 "şimdiden teşekkürler.</html>"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:128
@@ -36310,13 +36310,13 @@ msgstr "&Hata Raporu Gönder"
 #, kde-format
 msgctxt "@title:window"
 msgid "Dr. Klash' Accelerator Diagnosis"
-msgstr "Dr. Klash'ın Hızlandırıcı Teşhisi"
+msgstr "Dr. Klash’ın İvmelendirici Tanısı"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:223
 #, kde-format
 msgctxt "@option:check"
 msgid "Disable automatic checking"
-msgstr "Otomatik denetlemeyi kapat"
+msgstr "Kendiliğinden denetlemeyi kapat"
 
 #: libs/widgetutils/xmlgui/kcheckaccelerators.cpp:267
 #, kde-format
@@ -36525,7 +36525,7 @@ msgid ""
 "Ctrl+V) shown in the right column."
 msgstr ""
 "Düğme bağıntılarını burada görebilirsiniz; örneğin sol sütunda gösterilen "
-"eylemler (ör. 'Kopyala') ile sağ sütunda gösterilen düğmeler veya düğme "
+"eylemler (örn. ‘Kopyala’) ile sağ sütunda gösterilen düğmeler veya düğme "
 "kombinasyonları arasındaki bağlantıları."
 
 #. i18n: ectx: property (text), widget (QTreeWidget, list)
@@ -36599,7 +36599,7 @@ msgstr[1] "Kısayol Çakışmaları"
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:174
 #, kde-format
 msgid "Shortcut '%1' for action '%2'\n"
-msgstr "'%2' eylemi için '%1' kısayolu\n"
+msgstr "“%2” eylemi için “%1” kısayolu\n"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:179
 #, kde-format
@@ -36613,11 +36613,11 @@ msgid_plural ""
 "Do you want to assign an empty shortcut to these actions?\n"
 "%3"
 msgstr[0] ""
-"\"%2\" kısayolu aşağıdaki kısayol ile çakışıyor.\n"
+"“%2” kısayolu aşağıdaki kısayol ile çakışıyor.\n"
 "Bu eyleme boş bir kısayol atamak istermisiniz?\n"
 "%3"
 msgstr[1] ""
-"\"%2\" kısayolu aşağıdaki kısayollar ile çakışıyor.\n"
+"“%2” kısayolu aşağıdaki kısayollar ile çakışıyor.\n"
 "Bu eylemlere boş bir kısayol atamak istermisiniz?\n"
 "%3"
 
@@ -36638,7 +36638,7 @@ msgid ""
 "<qt>The '%1' key combination is already used by the <b>%2</b> action."
 "<br>Please select a different one.</qt>"
 msgstr ""
-"<qt>'%1' kısayolu <b>%2</b> eylemi için kullanılıyor.<br>Lütfen başka bir "
+"<qt>“%1” kısayolu <b>%2</b> eylemi için kullanılıyor.<br>Lütfen başka bir "
 "tane seçin.</qt>"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:229
@@ -36663,8 +36663,8 @@ msgid ""
 "some applications use.\n"
 "Do you really want to use it as a global shortcut as well?"
 msgstr ""
-"\"%1\" düğme kombinasyonu, halihazırda başka bir uygulamanın kullandığı "
-"\"%2\" standart eylemi için de kullanılıyor.\n"
+"“%1” düğme kombinasyonu, halihazırda başka bir uygulamanın kullandığı “%2” "
+"standart eylemi için de kullanılıyor.\n"
 "Onu bir global kısayol olarak da kullanmak istiyor musunuz?"
 
 #: libs/widgetutils/xmlgui/kkeysequencewidget.cpp:588
@@ -37645,7 +37645,7 @@ msgid ""
 "values are set to 'rec 709'."
 msgstr ""
 "Luma (Y'), ayarlanabilir katsayıları ile ağırlıklandırılır. Öntanımlı "
-"değerler 'rec 709' olarak ayarlanmıştır."
+"değerler “rec 709” olarak ayarlanmıştır."
 
 #: plugins/dockers/advancedcolorselector/kis_common_colors.cpp:35
 #, kde-format
@@ -38225,12 +38225,12 @@ msgstr "Canlandırma sesi menüsü"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:213
 #, kde-format
 msgid "AutoKey Blank"
-msgstr "Boş Otomatik Anahtar"
+msgstr "Boş Kendiliğinden Anahtar"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:215
 #, kde-format
 msgid "AutoKey Duplicate"
-msgstr "Yinelenmiş Otomatik Anahtar"
+msgstr "Kendiliğinden Anahtar Yinelemesi"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
 #, kde-format
@@ -38334,7 +38334,7 @@ msgstr "Kare Sütunlarını Tut"
 #: plugins/dockers/animation/KisAnimUtils.cpp:26
 #, kde-format
 msgid "Auto Frame Mode"
-msgstr "Otomatik Kare Kipi"
+msgstr "Kendiliğinden Kare Kipi"
 
 #: plugins/dockers/animation/KisAnimUtils.cpp:27
 #, kde-format
@@ -38840,7 +38840,7 @@ msgstr "Düzenleyici şablonu bulunamadı."
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:263
 #, kde-format
 msgid "Saving of gamut mask '%1' was aborted."
-msgstr "'%1' gam maskesinin kaydı iptal edildi."
+msgstr "“%1” gam maskesinin kaydı iptal edildi."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:264
 #, kde-format
@@ -38850,14 +38850,14 @@ msgid ""
 "one or more vector shapes on the 'maskShapesLayer'</li></ul></p>"
 msgstr ""
 "<p>Maske şablonu geçersiz.</p><p>Lütfen şunları denetleyin:<ul><li>Şablonu "
-"'maskShapesLayer' adlı bir vektör katmanı adı içeriyor mu</"
-"li><li>'maskShapesLayer'da bir veya birden çok vektör şekli var mı</li></"
+"“maskShapesLayer” adlı bir vektör katmanı adı içeriyor mu?</"
+"li><li>“maskShapesLayer”da bir veya birden çok vektör şekli var mı?</li></"
 "ul></p>"
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:310
 #, kde-format
 msgid "Gamut mask <b>'%1'</b> has been modified."
-msgstr "Gam maskesi <b>'%1'</b> değiştirildi."
+msgstr "Gam maskesi <b>“%1”</b> değiştirildi."
 
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:311
 #, kde-format
@@ -38867,7 +38867,7 @@ msgstr "Kaydetmek istiyor musunuz?"
 #: plugins/dockers/gamutmask/gamutmask_dock.cpp:563
 #, kde-format
 msgid "Are you sure you want to delete mask <b>'%1'</b>?"
-msgstr "<b>'%1'</b> maskesini silmek istediğinizden emin misiniz?"
+msgstr "<b>“%1”</b> maskesini silmek istediğinizden emin misiniz?"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeBox)
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
@@ -39596,7 +39596,7 @@ msgctxt "@tooltip"
 msgid ""
 "Save palette explicitly, will also happen automatically on exiting Krita."
 msgstr ""
-"Paleti ayrıca kaydet; Krita'dan çıkarken de otomatik olarak gerçekleştirilir."
+"Paleti ayrıca kaydet; Krita’dan çıkarken de kendiliğinden gerçekleştirilir."
 
 #: plugins/dockers/palettedocker/palettedocker_dock.cpp:404
 #, kde-format
@@ -39856,27 +39856,27 @@ msgid ""
 "twice larger of the Video FPS."
 msgstr ""
 "Girdi akışını okuma hızı.\n"
-"Örneğin, yavaş çekim videonuzu iki kat daha hızlı yapmak için Girdi FPS'si "
-"Video FPS'sinin iki katı olmalıdır."
+"Örneğin, yavaş çekim videonuzu iki kat daha hızlı yapmak için Girdi FPS’si "
+"Video FPS’sinin iki katı olmalıdır."
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:246
 #, kde-format
 msgctxt "Input FPS of recorded timelapses."
 msgid "Input FPS:"
-msgstr "Girdi FPS'si:"
+msgstr "Girdi FPS’si:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonLockFps)
 #: plugins/dockers/recorder/recorder_export.ui:259
 #, kde-format
 msgid "Use the same rate for Input FPS and Video FPS"
-msgstr "Girdi FPS'si ve Video FPS'si için aynı hızı kullan"
+msgstr "Girdi FPS’si ve Video FPS’si için aynı hızı kullan"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFps)
 #: plugins/dockers/recorder/recorder_export.ui:289
 #, kde-format
 msgid "Video FPS:"
-msgstr "Video FPS'si:"
+msgstr "Video FPS’si:"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonEditProfile)
 #: plugins/dockers/recorder/recorder_export.ui:320
@@ -40226,7 +40226,7 @@ msgid ""
 "Calculate the Capture Interval from the Video FPS export settings.\n"
 "Please handle with care, may cause performance issues."
 msgstr ""
-"Video FPS'si dışa aktarma ayarlarından Yakalama Aralığı'nı hesaplayın.\n"
+"Video FPS’si dışa aktarma ayarlarından Yakalama Aralığı’nı hesaplayın.\n"
 "Lütfen dikkatli olun; bu, başarım sorunlarına neden olabilir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -40267,7 +40267,7 @@ msgstr ""
 #: plugins/dockers/recorder/recorderdocker.ui:369
 #, kde-format
 msgid "Record automatically"
-msgstr "Otomatik olarak kaydet"
+msgstr "Kendiliğinden kaydet"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonRecordToggle)
 #: plugins/dockers/recorder/recorderdocker.ui:388
@@ -40297,7 +40297,7 @@ msgid ""
 msgstr ""
 "Daha yüksek bir değer daha büyük ve daha kaliteli bir dosya üretir. CPU "
 "tüketimini etkilemez.\n"
-"Yüksek kalıntı izi nedeniyle 50'den küçük değerler önerilmez."
+"Yüksek kalıntı izi nedeniyle 50’den küçük değerler önerilmez."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:155
 #, kde-format
@@ -40314,16 +40314,16 @@ msgid ""
 "Compression set to 0 is not recommended due to high disk space consumption.\n"
 "Values above 3 are not recommended due to high performance impact."
 msgstr ""
-"Daha yüksek bir değer daha küçük bir dosya üretir; ancak CPU'nuzu daha çok "
+"Daha yüksek bir değer daha küçük bir dosya üretir; ancak CPU’nuzu daha çok "
 "kullanır. Kaliteyi etkilemez.\n"
 "Sıkıştırmayı 0 yapmak, yüksek disk alanı kullanımı nedeniyle önerilmez.\n"
-"Yüksek başarım etkisi nedeniyle 3'ün üzerindeki değerler önerilmez."
+"Yüksek başarım etkisi nedeniyle 3’ün üzerindeki değerler önerilmez."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:184
 #, kde-format
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
-msgstr "Video FPS'si:"
+msgstr "Video FPS’si:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:193
 #, kde-format
@@ -40450,7 +40450,7 @@ msgstr ""
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
-"Krita, büyük olasılıkla kayıtçıyı durduramadı. Lütfen Krita'yı yeniden "
+"Krita, büyük olasılıkla kayıtçıyı durduramadı. Lütfen Krita’yı yeniden "
 "başlatmaya çalışın."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:714
@@ -41162,7 +41162,7 @@ msgstr "Görselin &Renkleri"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
 #, kde-format
 msgid "Auto Update"
-msgstr "Otomatik Güncelle"
+msgstr "Kendiliğinden Güncelle"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
@@ -41761,7 +41761,7 @@ msgstr "Özkaynak türü:"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:246
 #, kde-format
 msgid "Tag:"
-msgstr "Etiket:"
+msgstr "Künye:"
 
 #: plugins/extensions/imagesplit/dlg_imagesplit.cpp:34
 #, kde-format
@@ -41835,7 +41835,7 @@ msgstr "Dosya Türü"
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:152
 #, kde-format
 msgid "Autosave on Split"
-msgstr "Bölmede Otomatik Kaydet"
+msgstr "Bölünce kendiliğinden kaydet"
 
 #: plugins/extensions/layergroupswitcher/layergroupswitcher.cpp:31
 #, kde-format
@@ -42010,7 +42010,7 @@ msgstr "P&ozlama kipi:"
 #, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:102
@@ -42024,7 +42024,7 @@ msgstr "El ile"
 #, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto bracket"
-msgstr "Otomatik ayraç"
+msgstr "Kendiliğinden ayraç"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: plugins/extensions/metadataeditor/editors/exif.ui:115
@@ -42164,7 +42164,7 @@ msgstr "En yüksek pozlama:"
 #, kde-format
 msgctxt "EXIF"
 msgid "Autofocus"
-msgstr "Otomatik odak"
+msgstr "Kendiliğinden odak"
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
 #: plugins/extensions/metadataeditor/editors/exif.ui:312
@@ -42353,7 +42353,7 @@ msgstr "Zorunlu flaş bastırması"
 #, kde-format
 msgctxt "EXIF: flash - mode"
 msgid "Auto mode"
-msgstr "Otomatik kip"
+msgstr "Kendiliğinden kip"
 
 #. i18n: ectx: property (text), widget (QCheckBox, editFlashFunction)
 #: plugins/extensions/metadataeditor/editors/exif.ui:495
@@ -42658,7 +42658,7 @@ msgstr "Beyaz d&engesi:"
 #, kde-format
 msgctxt "EXIF: postprocessing - whitebalance"
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editWhiteBalance)
 #: plugins/extensions/metadataeditor/editors/exif.ui:792
@@ -42937,7 +42937,7 @@ msgstr[1] "%1 Katmanı Ofsetle"
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
 #, kde-format
 msgid "Offset by x/2, y/2"
-msgstr "x/2, y/2'ye göre göreli konum"
+msgstr "x/2, y/2’ye göre göreli konum"
 
 #: plugins/extensions/pykrita/kritarunner/main.cpp:77
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
@@ -42974,7 +42974,7 @@ msgid ""
 "or a custom QPixmap or QIcon, or None."
 msgstr ""
 "Simge bu eylem ile ilişkili. Gerektiğinde menü çubuğunda ve araç çubuğunda "
-"metin ile birlikte gösterilir. KDE'nin görsel yükleme sistemini veya özel "
+"metin ile birlikte gösterilir. KDE’nin görsel yükleme sistemini veya özel "
 "QPixmap veya QIcon veya hiçbirini kullanmak için bir söz dizisi."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
@@ -42984,8 +42984,8 @@ msgid ""
 "The shortcut to fire this action, such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"Bu eylemi başlatmak için bir kısayol, 'Kontrol+1' veya bir QKeySequence "
-"örneği veya Yok gibi."
+"Bu eylemi başlatmak için bir kısayol, “Kontrol + 1” veya bir QKeySequence "
+"örneği veya Yok."
 
 #. i18n: ectx: property (text), widget (QLabel, labelText)
 #: plugins/extensions/pykrita/plugin/info.ui:68
@@ -43011,7 +43011,7 @@ msgid ""
 "The menu under which to place this item, such as 'tools' or 'settings', or "
 "None."
 msgstr ""
-"Altına bu ögenin yerleştirileceği menü, 'araçlar' veya 'ayarlar' gibi veya "
+"Altına bu ögenin yerleştirileceği menü, ‘Araçlar’ veya ‘Ayarlar’ gibi veya "
 "Yok."
 
 #. i18n: ectx: property (text), widget (QLabel, labelShortcut)
@@ -43055,8 +43055,8 @@ msgid ""
 "The shortcut to fire this action such as 'Ctrl+1', or a QKeySequence "
 "instance, or None."
 msgstr ""
-"'Kontrol+1' veya bir QKeySequence örneği gibi bu eylemi başlatacak kısayol, "
-"veya Yok."
+"“Kontrol + 1” veya bir QKeySequence örneği gibi bu eylemi başlatacak "
+"kısayol, veya Yok."
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/extensions/pykrita/plugin/info.ui:240
@@ -43216,7 +43216,7 @@ msgid ""
 "need to restart Krita to enable or disable plugins.</p></body></html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Not:</span> "
-"Eklentileri etkinleştirmek veya devre dışı bırakmak için Krita'yı yeniden "
+"Eklentileri etkinleştirmek veya devre dışı bırakmak için Krita’yı yeniden "
 "başlatmanız gerekmektedir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, errorLabel)
@@ -43237,7 +43237,7 @@ msgstr ""
 "<html><head/><body><p>Krita için betik yazımını öğrenmek istiyorsanız <a "
 "href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" "
 "text-decoration: underline; color:#2980b9;\">Krita Betik Yazımı Okulu</"
-"span></a>'na bir göz atın!</p></body></html>"
+"span></a>’na bir göz atın!</p></body></html>"
 
 #: plugins/extensions/pykrita/plugin/pyqtpluginsettings.cpp:61
 #, kde-format
@@ -43330,12 +43330,12 @@ msgstr "Yorum"
 #: plugins/extensions/qmic/kis_qmic_interface.cpp:233
 msgctxt "(qtundo-format)"
 msgid "G'MIC filter"
-msgstr "G'MIC Süzgeci"
+msgstr "G’Mic Süzgeci"
 
 #: plugins/extensions/qmic/QMic.cpp:54
 #, kde-format
 msgid "The GMic plugin is not installed or could not be loaded."
-msgstr "G'MIC süzgeci kurulu değil veya yüklenemedi."
+msgstr "G’Mic süzgeci kurulu değil veya yüklenemedi."
 
 #: plugins/extensions/qmic/QMic.cpp:79
 #, kde-format
@@ -43451,7 +43451,7 @@ msgstr "Özkaynakları Seç"
 #: plugins/extensions/resourcemanager/wdgside.ui:80
 #, kde-format
 msgid "Choose Tags"
-msgstr "Etiketleri Seç"
+msgstr "Künyeleri Seç"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnBundleInfo)
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:132
@@ -43478,7 +43478,7 @@ msgstr "Özkaynakları Düzenle"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
 #, kde-format
 msgid "Edit Tags"
-msgstr "Etiketleri Düzenle"
+msgstr "Künyeleri Düzenle"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
 #, kde-format
@@ -43497,7 +43497,7 @@ msgid ""
 "More than one resource share the same file name '%1'. Please export them in "
 "separate bundles."
 msgstr ""
-"Birden çok özkaynak '%1' adını paylaşıyor. Lütfen onları ayrı demetlerde "
+"Birden çok özkaynak “%1” adını paylaşıyor. Lütfen onları ayrı demetlerde "
 "dışa aktarın."
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:331
@@ -43527,7 +43527,7 @@ msgstr "Var olan demetin üzerine yazmak istiyor musunuz?"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #, kde-format
 msgid "Could not open '%1' for saving."
-msgstr "'%1' kaydetmek için açılamadı."
+msgstr "“%1” kaydetmek için açılamadı."
 
 #: plugins/extensions/resourcemanager/dlg_embed_tags.cpp:61
 #: plugins/extensions/resourcemanager/page_tag_chooser.cpp:60
@@ -43834,14 +43834,14 @@ msgid ""
 "Make a backup of all your tags in the resource folder so they won't get lost "
 "on upgrading Krita"
 msgstr ""
-"Özkaynaklar klasöründeki tüm etiketlerin bir yedeğini yapın; böylece "
-"Krita'yı yükseltirken kaybolmazlar"
+"Özkaynaklar klasöründeki tüm künyelerin bir yedeğini yapın; böylece Krita’yı "
+"yükseltirken kaybolmazlar"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnExtractTagsToResourceFolder)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:119
 #, kde-format
 msgid "Save Tags to Folder"
-msgstr "Etiketleri Klasöre Kaydet"
+msgstr "Künyeleri Klasöre Kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:212
@@ -43859,7 +43859,7 @@ msgstr "Dosya adı:"
 #: plugins/extensions/resourcemanager/WdgDlgResourceManager.ui:254
 #, kde-format
 msgid "Tags:"
-msgstr "Etiketler:"
+msgstr "Künyeler:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowDeleted)
 #: plugins/extensions/resourcemanager/wdgresourcepreview.ui:107
@@ -44529,12 +44529,12 @@ msgstr "Çapraz Kanal Ayarlama Süzgeci"
 #: plugins/filters/colorsfilters/colorsfilters.cpp:77
 #, kde-format
 msgid "&Auto Contrast"
-msgstr "&Otomatik Karşıtlık"
+msgstr "&Kendiliğinden Karşıtlık"
 
 #: plugins/filters/colorsfilters/colorsfilters.h:37
 #, kde-format
 msgid "Auto Contrast"
-msgstr "Otomatik Karşıtlık"
+msgstr "Kendiliğinden Karşıtlık"
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
@@ -44611,12 +44611,12 @@ msgstr "Yoğunluk"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:232
 #, kde-format
 msgid "Yellow-Blue"
-msgstr "Sarı-Mavi"
+msgstr "Sarı–Mavi"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:233
 #, kde-format
 msgid "Green-Red"
-msgstr "Yeşil-Kırmızı"
+msgstr "Yeşil–Kırmızı"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
@@ -44868,7 +44868,7 @@ msgstr "Yükselti Eşleminden Normal Eşleme"
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:21
 #, kde-format
 msgid "Height to Normal Map does not work on this colorspace."
-msgstr "Yükselti Eşlemi'nden Normal Eşlem'e dönüşüm bu renk uzayında çalışmaz."
+msgstr "Yükselti Eşlemi’nden Normal Eşlem’e dönüşüm bu renk uzayında çalışmaz."
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -45409,7 +45409,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Auto Levels"
-msgstr "Otomatik Düzeyler"
+msgstr "Kendiliğinden Düzeyler"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgThreshold)
 #. i18n: ectx: property (windowTitle), widget (QWidget, LevelsConfigWidget)
@@ -45472,7 +45472,7 @@ msgstr "Histogramı uzun tavanları kesecek biçimde ölçekle "
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:240
 #, kde-format
 msgid "Apply auto levels to this channel"
-msgstr "Otomatik düzeyleri bu kanala uygula"
+msgstr "Kendiliğinden düzeyleri bu kanala uygula"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetInputLevels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:250
@@ -45502,7 +45502,7 @@ msgstr "<b>Tüm Kanallar</b>"
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:575
 #, kde-format
 msgid "Apply auto levels to all the channels"
-msgstr "Otomatik düzeylerini tüm kanallara uygula"
+msgstr "Kendiliğinden düzeyleri tüm kanallara uygula"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, buttonResetAllChannels)
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.ui:585
@@ -47004,7 +47004,7 @@ msgstr "Görsel yüksekliği"
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:359
 #, kde-format
 msgid "Expected this script to output color, got '%1'"
-msgstr "Bu betiğin renk çıktılaması bekleniyordu, '%1' alındı"
+msgstr "Bu betiğin renk çıktılaması bekleniyordu, “%1” alındı"
 
 #: plugins/generators/seexpr/kis_wdg_seexpr_presets_save.cpp:69
 #, kde-format
@@ -47239,7 +47239,7 @@ msgstr "EXR görseli değiştirildi"
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
-msgstr "%1 (Tür: \"%2\")"
+msgstr "%1 (Tür: “%2”)"
 
 #: plugins/impex/exr/exr_converter.cc:1328
 #, kde-format
@@ -47359,7 +47359,7 @@ msgid ""
 "not understand HDR."
 msgstr ""
 "Görsel önce Rec 2020 doğrusalına dönüştürülecek ve ardından Hybrid Log Gamma "
-"eğrisi ile kodlanacaktır. Ekranın HDR'yi anlayamayabileceği HDR görseller "
+"eğrisi ile kodlanacaktır. Ekranın HDR’yi anlayamayabileceği HDR görseller "
 "için önerilir."
 
 #: plugins/impex/heif/HeifExport.cpp:553
@@ -47398,7 +47398,7 @@ msgid ""
 "curve. Recommended for images intended for screens which cannot understand PQ"
 msgstr ""
 "Görsel önce doğrusallaştırılacak ve ardından Hybrid Log Gamma eğrisi ile "
-"kodlanacaktır. PQ'yu anlayamayan ekranlara yönelik görüntüler için önerilir"
+"kodlanacaktır. PQ’yu anlayamayan ekranlara yönelik görüntüler için önerilir"
 
 #: plugins/impex/heif/HeifExport.cpp:563
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:217
@@ -47472,9 +47472,9 @@ msgid ""
 "will need to be converted. Rec 2100 PQ or Rec 2100 HLG is expected for HDR "
 "images.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Geçerli görseller doğru bir şekilde 12 bit'e "
-"dönüştürmek için dönüştürülmesi gerekir. HDR görseller için Rec 2100 PQ veya "
-"Rec 2100 HLG beklenmektedir.</p></body></html>"
+"<html><head/><body><p>Geçerli görsellerin düzgünce 12 bit’e dönüştürmek için "
+"dönüştürülmesi gerekir. HDR görseller için Rec 2100 PQ veya Rec 2100 HLG "
+"beklenmektedir.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, spaceLabel)
 #: plugins/impex/heif/WdgHeifExport.ui:79
@@ -47491,8 +47491,8 @@ msgid ""
 "<html><head/><body><p>Display gamma. By default this is 1.2 for converting "
 "from PQ.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Gamayı görüntüle. Öntanımlı olarak bu, PQ'den "
-"dönüştürmek için 1,2'dir.</p></body></html>"
+"<html><head/><body><p>Gamayı görüntüle. Öntanımlı olarak bu, PQ’den "
+"dönüştürmek için 1,2’dir.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, spnNits)
 #: plugins/impex/heif/WdgHeifExport.ui:113
@@ -47503,7 +47503,7 @@ msgid ""
 "to 1000 for converting from PQ.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Nit türünden ekran parlaklığı. Öntanımlı olarak bu, "
-"PQ'den dönüştürmek için 1000 olarak ayarlanmıştır.</p></body></html>"
+"PQ’den dönüştürmek için 1000 olarak ayarlanmıştır.</p></body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkHLGOOTF)
 #. i18n: ectx: property (toolTip), widget (QGroupBox, chkHLGOOTF)
@@ -47517,7 +47517,7 @@ msgid ""
 "scene linear.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Krita şu anda HLG verilerini doğrudan ekrana "
-"gönderemediğinden Hybrid Log Gamma'nın arada fazladan bir dönüştürme adımına "
+"gönderemediğinden Hybrid Log Gamma’nın arada fazladan bir dönüştürme adımına "
 "gereksinimi var. Bu nedenle, ekrandan doğrusal sahneye dönüştürmek için HLG "
 "opto-optik eğrisini uyguluyoruz.</p></body></html>"
 
@@ -47547,14 +47547,14 @@ msgstr ""
 "<html><head/><body><p>AV1 ve uzantılı avif desteği sunan kodlayıcıların "
 "hepsi tek renge kaydetmeyi desteklemez ve bir YCbCr yedeği kullanır. Krita "
 "bu dosyaları açabilir; ancak tüm programlar bunu yapamaz. Kaydetmeden önce "
-"ilk olarak sRGB'ye dönüştürmek bu sorunu çözer; ancak dosya boyutu biraz "
+"ilk olarak sRGB’ye dönüştürmek bu sorunu çözer; ancak dosya boyutu biraz "
 "daha büyük olur.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkMonochromesRGB)
 #: plugins/impex/heif/WdgHeifExport.ui:164
 #, kde-format
 msgid "Convert to sRGB for extra compatibility"
-msgstr "Ek uyumluluk için sRGB'ye dönüştür"
+msgstr "Ek uyumluluk için sRGB’ye dönüştür"
 
 #: plugins/impex/heightmap/kis_heightmap_import.cpp:70
 #, kde-format
@@ -47673,7 +47673,7 @@ msgid ""
 "set to 0 will be updated."
 msgstr ""
 "Dosya boyutuna ve piksel başına bit sayısına göre genişlik ve yüksekliği "
-"tahmin et. Yalnızca 0'a ayarlanan değerler güncellenecektir."
+"tahmin edin. Yalnızca 0’a ayarlanan değerler güncellenecektir."
 
 #. i18n: ectx: property (text), widget (QPushButton, guessButton)
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.ui:105
@@ -47743,7 +47743,7 @@ msgstr "Aşamalı"
 #: plugins/impex/png/kis_wdg_options_png.ui:105
 #, kde-format
 msgid "Force convert to sRGB"
-msgstr "sRGB'ye dönüşüme zorla"
+msgstr "sRGB’ye dönüşüme zorla"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -47819,7 +47819,7 @@ msgstr "1 × 1, 1 × 1, 1 × 1 (en iyi kalite)"
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:228
 #, kde-format
 msgid "Force baseline JPEG"
-msgstr "Temel JPEG'i zorla"
+msgstr "Temel JPEG’i zorla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, optimize)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:238
@@ -47935,7 +47935,7 @@ msgstr "Geçersiz JPEG-XL katmanı adı uzunluğu"
 #, kde-format
 msgctxt "JPEG-XL errors"
 msgid "The animation declares a frame rate of more than 240 FPS."
-msgstr "Canlandırma 240 FPS'ten daha fazla bir kare hızı beyan eder."
+msgstr "Canlandırma 240 FPS’ten daha fazla bir kare hızı beyan eder."
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:21
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:27
@@ -48050,7 +48050,7 @@ msgstr "Tarama çizgisi sırası"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Center-first order"
-msgstr "Merkez-ilk sırası"
+msgstr "Merkez–ilk sırası"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:91
 #, kde-format
@@ -48197,7 +48197,7 @@ msgid ""
 "The image will be stored without conversion, the ICC profile will be "
 "converted to CICP or embedded if it was not possible."
 msgstr ""
-"Görsel dönüştürülmeden saklanacak, olanaklı değilse ICC profili CICP'ye "
+"Görsel dönüştürülmeden saklanacak, olanaklı değilse ICC profili CICP’ye "
 "dönüştürülecek veya gömülecektir."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, haveAnimation)
@@ -48360,7 +48360,7 @@ msgstr ""
 "Sağlanan seçenekler için kod çözme hızı katmanını ayarlar.\n"
 "Minimum 0 (en yavaş kod çözme, en iyi kalite/yoğunluk) ve maksimum 4 (bir "
 "miktar kalite/yoğunluk pahasına kod çözme en hızlı).\n"
-"Öntanımlı 0'dır."
+"Öntanımlı 0’dır."
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, flattenLayers)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:246
@@ -48487,7 +48487,7 @@ msgstr ""
 "kadar yüksek olursa görsel o kadar taneli olur.\n"
 "Örnek olarak, 100 değeri düşük gürültü verirken, 3200 değeri çok fazla "
 "gürültü ekler.\n"
-"Öntanımlı değer 0'dır."
+"Öntanımlı değer 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblDots)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:455
@@ -48534,8 +48534,8 @@ msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
-"Kenar koruyucu süzgeç düzeyi, -1 ile 3 arası. Öntanımlı olarak -1'i "
-"(kodlayıcı seçer), bir güç ayarlamak için 0 ila 3'ü kullanın."
+"Kenar koruyucu süzgeç düzeyi, -1 ile 3 arası. Öntanımlı olarak -1’i "
+"(kodlayıcı seçer), bir güç ayarlamak için 0 ila 3’ü kullanın."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:536
@@ -48621,7 +48621,7 @@ msgid ""
 "Set the progressive mode for the AC coefficients of VarDCT, using spectral "
 "progression from the DCT coefficients."
 msgstr ""
-"DCT katsayılarından tayfsal ilerlemeyi kullanarak, VarDCT'nin AC katsayıları "
+"DCT katsayılarından tayfsal ilerlemeyi kullanarak, VarDCT’nin AC katsayıları "
 "için aşamalı kipi ayarlayın."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQProgressiveAC)
@@ -48678,7 +48678,7 @@ msgid ""
 "Used for modular encoding."
 msgstr ""
 "Renk miktarı erimin bu yüzdesinden küçükse Global kanal paletini kullanın.\n"
-"Belirgin bir yüzde ayarlamak için 0-100, kodlayıcı öntanımlısını kullanmak "
+"Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı öntanımlısını kullanmak "
 "için -1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
@@ -48699,7 +48699,7 @@ msgid ""
 msgstr ""
 "Renk miktarı bu erim yüzdesinden küçükse Yerel (grup başına) kanal paletini "
 "kullanın.\n"
-"Belirgin bir yüzde ayarlamak için 0-100, kodlayıcı öntanımlısını kullanmak "
+"Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı öntanımlısını kullanmak "
 "için -1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
@@ -48718,7 +48718,7 @@ msgid ""
 "Used for modular encoding."
 msgstr ""
 "Renk miktarı bu miktardan küçük veya ona eşitse renk paletini veya kodlayıcı "
-"öntanımlısını kullanmak için -1'i kullanın.\n"
+"öntanımlısını kullanmak için -1’i kullanın.\n"
 "Modüler kodlama için kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
@@ -48838,7 +48838,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
-msgstr "Dönüşüm maskesinin \"ID\"si yüklenemedi"
+msgstr "Dönüşüm maskesinin “ID”si yüklenemedi"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
 #, kde-format
@@ -48964,7 +48964,7 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
-"Ses kanalı dosyası \"%1\" yok!\n"
+"Ses kanalı dosyası “%1” yok!\n"
 "\n"
 "Beklenen yok:\n"
 "%2\n"
@@ -48977,8 +48977,8 @@ msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
 "\"%2\" is deactivated"
 msgstr ""
-"Etkin durumda iki global seçim maskesi bulundu. \"%1\" etkin olarak "
-"tutuluyor; ancak \"%2\" devre dışı bırakıldı"
+"Etkin durumda iki global seçim maskesi bulundu. “%1” etkin olarak tutuluyor; "
+"ancak “%2” devre dışı bırakıldı"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:900
 #, kde-format
@@ -49008,9 +49008,9 @@ msgid ""
 "\"Additive\" algorithm in Settings->Configure Krita->General->Tools->CMYK "
 "blending mode"
 msgstr ""
-"\"%1\" katmanı, Krita 5.2'de CMYK için davranışını değiştiren \"%2\" "
-"harmanlama kipine sahip. Lütfen sonucu denetleyin ve gerekirse Tercihler → "
-"Genel → Araçlar → CMYK Harmanlama Kipi yolunu izleyerek eski \"Toplamalı\" "
+"“%1” katmanı, Krita 5.2’de CMYK için davranışını değiştiren “%2” harmanlama "
+"kipine sahip. Lütfen sonucu denetleyin ve gerekirse Tercihler → Genel → "
+"Araçlar → CMYK Harmanlama Kipi yolunu izleyerek eski ‘Toplamalı’ "
 "algoritmasını etkinleştirmeyi düşünün."
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1115
@@ -49024,7 +49024,7 @@ msgid ""
 "\n"
 "Do you want to locate it manually?"
 msgstr ""
-"\"%1\" adıyla ilişkili bir dosya katman bulunamadı.\n"
+"“%1” adıyla ilişkili bir dosya katman bulunamadı.\n"
 "\n"
 "Beklenen yol:\n"
 "%2\n"
@@ -49233,7 +49233,7 @@ msgstr "Geçerli bir Krita dosyası değil"
 #: plugins/impex/libkra/kra_converter.cpp:93
 #, kde-format
 msgid "Invalid document: no file 'maindoc.xml'."
-msgstr "Geçersiz belge: 'maindoc.xml' dosyası yok."
+msgstr "Geçersiz belge: “maindoc.xml” dosyası yok."
 
 #: plugins/impex/libkra/kra_converter.cpp:149
 #, kde-format
@@ -49243,7 +49243,7 @@ msgstr "Dosya kaydetmek için oluşturulamadı"
 #: plugins/impex/libkra/kra_converter.cpp:228
 #, kde-format
 msgid "Not able to write '%1'. Partition full?"
-msgstr "'%1' yazılamadı. Bölüntü dolu olabilir mi?"
+msgstr "“%1” yazılamadı. Bölüntü dolu olabilir mi?"
 
 #: plugins/impex/libkra/kra_converter.cpp:320
 #, kde-format
@@ -49446,7 +49446,7 @@ msgstr "Olanaklıysa indekslenmiş PNG olarak kaydet"
 #: plugins/impex/png/kis_wdg_options_png.ui:125
 #, kde-format
 msgid "Use interlacing when publishing on the Internet."
-msgstr "İnternet'te yayınlarken karıştırma kullan."
+msgstr "İnternet’te yayınlarken karıştırma kullan."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, interlacing)
 #: plugins/impex/png/kis_wdg_options_png.ui:129
@@ -49533,10 +49533,10 @@ msgid ""
 msgstr ""
 "<html><head/><body><p><span style=\"font-weight:600;\"> PNG</span> "
 "dosyaları, <span style=\" font-weight:600;\">aRGB</span> bilgisini kaydetmek "
-"için <span style=\" font-style:italic;\">iki</span> seçeneğe sahiptir: "
-"etiket olarak veya harici bir profil olarak. Websiteleri ile kullanmak için, "
-"bu seçeneği <span style=\"font-style:italic;\">devre dışı bırakın</span>. "
-"Diğer uygulamalarla değişim yapmak için bu seçeneği <span style=\"font-style:"
+"için <span style=\" font-style:italic;\">iki</span> seçeneğe sahiptir: künye "
+"olarak veya harici bir profil olarak. Web siteleri ile kullanmak için bu "
+"seçeneği <span style=\"font-style:italic;\">devre dışı bırakın</span>. Diğer "
+"uygulamalarla değişim yapmak için bu seçeneği <span style=\"font-style:"
 "italic;\">devreye alın</span>.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkSRGB)
@@ -49622,8 +49622,8 @@ msgid ""
 "compression similar to (but often more efficient than) PNG.</p>"
 msgstr ""
 "<p>Görsel kalitesini ayarlayın. Kalite düştükçe, daha fazla sıkıştırma "
-"kalıntıları ortaya çıkar. <br/> Not: Kalite değerinin 100'e ayarlanması "
-"PNG'ye benzer (ancak genellikle daha verimli) kayıpsız bir sıkıştırmayı "
+"kalıntıları ortaya çıkar. <br/> Not: Kalite değerinin 100’e ayarlanması "
+"PNG’ye benzer (ancak genellikle daha verimli) kayıpsız bir sıkıştırmayı "
 "ortaya koyar.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:264
@@ -49667,7 +49667,7 @@ msgid ""
 "it eliminates false 2x2 mesh patterns with VNG quality method or mazes with "
 "AHD quality method.</p>"
 msgstr ""
-"<title>RGB'yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
+"<title>RGB’yi dört renk olarak ekle</title><p>Tüm yeşil piksellerin aynı "
 "olduğunu varsaymak öntanımlıdır. Çift satır yeşil pikselleri bile "
 "ultraviyole ışınlara tek satırdan daha hassassa bu fark çıktıda kafes deseni "
 "oluşmasına yol açar; bu seçeneği kullanmak bu problemi en az ayrıntı "
@@ -49698,7 +49698,7 @@ msgid ""
 msgstr ""
 "<title>Pikselleri sıkıştırma veya döndürme</title><p>Fuji Super CCD "
 "kameralar için, görüntüyü 45 derece eğimli olarak gösterin. Kare olmayan "
-"pikselli kameralar için, görseli doğru en-boy oranına kadar uzatmayın. Her "
+"pikselli kameralar için, görseli doğru en–boy oranına kadar uzatmayın. Her "
 "durumda, bu seçenek her çıktı pikselinin bir RAW piksele karşılık geldiğini "
 "garanti eder.</p>"
 
@@ -49872,7 +49872,7 @@ msgid ""
 "emphasis>, <emphasis strong='true'>DCB</emphasis>, and <emphasis "
 "strong='true'>VCD & AHD</emphasis>.</p>"
 msgstr ""
-"<title>Geçiş</title><p>Burada, Kırmızı-Yeşil ve Mavi-Yeşil kanallara "
+"<title>Geçiş</title><p>Burada, kırmızı–yeşil ve mavi–yeşil kanallara "
 "aradeğerlemeden sonra uygulanan ortanca süzgeç tarafından kullanılan "
 "geçişleri ayarlayın.</p><p>Bu ayar yalnızca bazı kalite seçenekleri için "
 "kullanılabilir:<emphasis strong='true'>İki Yönlü</emphasis>,<emphasis "
@@ -49930,7 +49930,7 @@ msgstr "Kamera"
 #, kde-format
 msgctxt "@item:inlistbox set while balance automatically"
 msgid "Automatic"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:466
 #, kde-format
@@ -49956,7 +49956,7 @@ msgstr ""
 "ışığı D65 beyaz dengesini kullanın.</li><li><emphasis strong='true'>Kamera</"
 "emphasis>: Kamera tarafından belirlenen beyaz dengesini kullanın. "
 "Kullanılabilir değilse öntanımlı beyaz dengesine geri döner.</"
-"li><li><emphasis strong='true'>Otomatik</emphasis>: Tüm görselin "
+"li><li><emphasis strong='true'>Kendiliğinden</emphasis>: Tüm görselin "
 "ortalamasını alarak otomatik beyaz dengesini hesaplar.</li><li><emphasis "
 "strong='true'>Elle</emphasis>: Özel sıcaklık ve yeşil dengesi değerlerini "
 "ayarla.</li></ul></p>"
@@ -50099,8 +50099,8 @@ msgid ""
 "correction before interpolation in E.V. Only take effect if Shift Correction "
 "is > 1.0 E.V</p>"
 msgstr ""
-"<title>Vurgu</title><p>E.V.'de aradeğerleme öncesi pozlama düzeltmesi için "
-"vurgu korumanın miktarı. Kaydırma Düzeltmesi> 1.0 E.V ise etkinleşirler.</p>"
+"<title>Vurgu</title><p>E.V.’de aradeğerleme öncesi pozlama düzeltmesi için "
+"vurgu korumanın miktarı. Kaydırma Düzeltmesi > 1,0 E.V ise etkinleşirler.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:542
 #, kde-format
@@ -50116,7 +50116,7 @@ msgid ""
 "accurately, without 'pink clouds' (and blue highlights under tungsten lamps)."
 "</p>"
 msgstr ""
-"<p>Etkinleştirilirse aşırı kanalı olan görüntüler 'pembe bulutlar' olmadan "
+"<p>Etkinleştirilirse aşırı kanalı olan görüntüler “pembe bulutlar” olmadan "
 "(ve tungsten lambaların altındaki mavi renk vurguları) daha doğru şekilde "
 "işlenir.</p>"
 
@@ -50124,7 +50124,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
-msgstr "Otomatik Parlaklık"
+msgstr "Kendiliğinden Parlaklık"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:548
 #, kde-format
@@ -50168,7 +50168,7 @@ msgid ""
 msgstr ""
 "<title>Siyah nokta</title><p>RAW görselleri çözmek için belirli bir siyah "
 "nokta değeri kullan. Eğer bu seçeneği kapatırsanız Siyah Nokta değeri "
-"otomatik hesaplanacaktır.</p>"
+"kendiliğinden hesaplanır.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:574
 #, kde-format
@@ -50195,8 +50195,8 @@ msgid ""
 "automatically computed.</p>"
 msgstr ""
 "<title>Beyaz nokta</title><p>RAW görselleri çözmek için belirli bir beyaz "
-"nokta değeri kullan. Eğer bu seçenek kapalıysa Beyaz Nokta değeri otomatik "
-"olarak hesaplanacak.</p>"
+"nokta değeri kullanın. Eğer bu seçenek kapalıysa Beyaz Nokta değeri "
+"kendiliğinden hesaplanır.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:585
 #, kde-format
@@ -50291,14 +50291,14 @@ msgid ""
 "green and blue-yellow axis by the given factors (automatic by default).</p>"
 msgstr ""
 "<title>Kromatik Görüntü Bozulması düzeltmesini etkinleştir</title><p>Verilen "
-"etmenlere göre (öntanımlı otomatik) ham kırmızı-yeşil ve mavi-sarı eksenleri "
-"genişlet.</p>"
+"etmenlere göre (öntanımlı: kendiliğinden) ham kırmızı–yeşil ve mavi–sarı "
+"eksenleri genişletin.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
-msgstr "Otomatik renk ekseni ayarları"
+msgstr "Kendiliğinden renk ekseni ayarları"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
 #, kde-format
@@ -50310,17 +50310,17 @@ msgid ""
 "method may fail. In this case, disable this option and tune manually color "
 "factors.</p>"
 msgstr ""
-"<title>Otomatik Kromatik Görüntü Bozulma düzeltmesi</title><p>Bu seçenek "
-"açılırsa görüntü kanallarını hafifçe kaydırmaya ve Kromatik Görüntü "
-"Bozulması değişimini hesaplamaya çalışacak. Eğer mavi-kırmızı desene "
+"<title>Kendiliğinden Kromatik Görüntü Bozulma düzeltmesi</title><p>Bu "
+"seçenek açılırsa görsel kanallarını hafifçe kaydırmaya ve Kromatik Görüntü "
+"Bozulması değişimini hesaplamaya çalışacak. Eğer mavi–kırmızı desene "
 "çarparsanız yöntem başarısız olacaktır. Bu durumda, bu seçeneği devre dışı "
-"bırakıp renk etmenlerini el ile ayarlayın.</p>"
+"bırakıp renk etmenlerini elle ayarlayın.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
-msgstr "Kırmızı-Yeşil:"
+msgstr "Kırmızı–Yeşil:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
 #, kde-format
@@ -50329,14 +50329,14 @@ msgid ""
 "<title>Red-Green multiplier</title><p>Set here the amount of correction on "
 "red-green axis</p>"
 msgstr ""
-"<title>Kırmızı-Yeşil çarpan</title><p>Buradan kırmızı-yeşil eksen üzerindeki "
+"<title>Kırmızı–Yeşil çarpan</title><p>Burada kırmızı–yeşil eksen üzerindeki "
 "düzeltme miktarını ayarlayın</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
-msgstr "Mavi-Sarı:"
+msgstr "Mavi–Sarı:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
 #, kde-format
@@ -50345,7 +50345,7 @@ msgid ""
 "<title>Blue-Yellow multiplier</title><p>Set here the amount of correction on "
 "blue-yellow axis</p>"
 msgstr ""
-"<title>Mavi-Sarı çarpan</title><p>Burada mavi-sarı eksen üzerindeki düzeltme "
+"<title>Mavi–Sarı çarpan</title><p>Burada mavi–sarı eksen üzerindeki düzeltme "
 "miktarını ayarlayın</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
@@ -50392,9 +50392,9 @@ msgstr ""
 "<title>Kamera Profili</title><p>Buradan RAW veriyi çözmek için kullanılan "
 "girdi renk uzayını seçin.</p><p><ul><li><emphasis strong='true'>Yok</"
 "emphasis>: RAW kod çözme sırasında hiçbir girdi renk profili kullanılmadı.</"
-"li><li><emphasis strong='true'>Gömülü</emphasis>: eğer varsa RAW dosyadan "
+"li><li><emphasis strong='true'>Gömülü</emphasis>: Eğer varsa RAW dosyadan "
 "gömülü renk profilini kullanın.</li><li><emphasis strong='true'>Özel</"
-"emphasis>: özel girdi renk uzayı profili kullan.</li></ul></p>"
+"emphasis>: Özel girdi renk uzayı profili kullan.</li></ul></p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
 #, kde-format
@@ -50563,7 +50563,7 @@ msgstr "SVG İçe Aktar"
 #: plugins/impex/svg/kis_svg_import.cc:49
 #, kde-format
 msgid "Enter preferred resolution (PPI) for \"%1\""
-msgstr "\"%1\" için tercih edilen çözünürlüğü gir (PPI)"
+msgstr "“%1” için tercih edilen çözünürlüğü gir (PPI)"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
@@ -50588,7 +50588,7 @@ msgstr "Söndürme (ZIP)"
 #, kde-format
 msgctxt "TIFF options"
 msgid "Lempel-Ziv & Welch"
-msgstr "Lempel-Ziv ve Welch"
+msgstr "Lempel–Ziv ve Welch"
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:46
 #, kde-format
@@ -50893,7 +50893,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:121
 #, kde-format
 msgid "Quality/speed trade-off (0 = fast, 6 = slower-better)"
-msgstr "Kalite/hız değiş tokuşu (0 = hızlı, 6 = daha yavaş-daha iyi)"
+msgstr "Kalite/hız değiş tokuşu (0 = hızlı, 6 = daha yavaş–daha iyi)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, dithering)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:136
@@ -50949,7 +50949,7 @@ msgstr "Hedef PSNR"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:276
 #, kde-format
 msgid "Maximum number of segments (1 to 4)."
-msgstr "En çok bölüt sayısı (1-4)."
+msgstr "En çok bölüt sayısı (1–4)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblSegments)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:263
@@ -51010,7 +51010,7 @@ msgid ""
 "0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or "
 "Auto Adjust Filter is enabled."
 msgstr ""
-"0 = Basit, 1 = Güçlü. Yalnızca Süzgeç Gücü 0'dan büyükse veya Otomatik "
+"0 = Basit, 1 = Güçlü. Yalnızca Süzgeç Gücü 0’dan büyükse veya Kendiliğinden "
 "Ayarlama Süzgeci etkinleştirilmişse kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilterType)
@@ -51024,7 +51024,7 @@ msgstr "Süzgeç Türü"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:378
 #, kde-format
 msgid "Auto Adjust Filter Strength"
-msgstr "Süzgeç Gücünü Otomatik Ayarla"
+msgstr "Süzgeç Gücünü Kendiliğinden Ayarla"
 
 #. i18n: ectx: property (text), widget (QCheckBox, autofilter)
 #. i18n: ectx: property (text), widget (QCheckBox, showCompressed)
@@ -51052,7 +51052,7 @@ msgid ""
 "lossless). Default is 1."
 msgstr ""
 "Alfa düzlemini kodlamak için algoritma (0 = Yok, 1 = WebP kayıpsız ile "
-"sıkıştırılmış). Öntanımlı 0'dır."
+"sıkıştırılmış). Öntanımlı 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaCompression)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:395
@@ -51081,7 +51081,7 @@ msgstr "Hızlı"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:463
 #, kde-format
 msgid "0 = smallest size, 100 = lossless. Default is 100."
-msgstr "0 = en küçük boyut, 100 = kayıpsız. Öntanımlı 100'dür."
+msgstr "0 = en küçük boyut, 100 = kayıpsız. Öntanımlı 100’dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblAlphaQuality)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:456
@@ -51095,7 +51095,7 @@ msgstr "Alfa Düzlemi Kalitesi"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:495
 #, kde-format
 msgid "Number of entropy-analysis passes (1 to 10)."
-msgstr "Entropi çözümleme geçişlerinin sayısı (1-10)."
+msgstr "Entropi çözümleme geçişlerinin sayısı (1–10)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPass)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:482
@@ -51138,7 +51138,7 @@ msgid ""
 "progressive decoding."
 msgstr ""
 "log2(jeton bölüntülerin sayısı) 0 ile 3 arası. Daha kolay aşamalı kod çözümü "
-"için öntanımlı değer 0'dır."
+"için öntanımlı değer 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitions)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:547
@@ -51155,7 +51155,7 @@ msgid ""
 "Quality degradation allowed to fit the 512KB limit on prediction modes "
 "coding (0 = no degradation, 100 = maximum possible degradation)."
 msgstr ""
-"Öngörme kipleri kodlamada 512 KB'lik sınıra kadar izin verilen kalite "
+"Öngörme kipleri kodlamada 512 KB’lik sınıra kadar izin verilen kalite "
 "düşürümü (0 = düşürüm yok, 100 = olası en yüksek düşürüm)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPartitionLimit)
@@ -51233,7 +51233,7 @@ msgstr "Bellek Kullanımını Azalt"
 #, kde-format
 msgid "Near lossless encoding: 0 = max loss, 100 = off. Default is 100."
 msgstr ""
-"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı 100'dür."
+"Kayıpsıza yakın kodlama: 0 = en çok kayıp, 100 = kapalı. Öntanımlı 100’dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblNearLossless)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:674
@@ -51282,7 +51282,7 @@ msgstr "Keskin YUV Kullan"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:747
 #, kde-format
 msgid "Minimum permissible quality factor. Default is 0."
-msgstr "En düşük izin verilebilir kalite çarpanı. Öntanımlı 0'dır."
+msgstr "En düşük izin verilebilir kalite çarpanı. Öntanımlı 0’dır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMin)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:740
@@ -51296,7 +51296,7 @@ msgstr "En Düşük Kalite"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:770
 #, kde-format
 msgid "Maximum permissible quality factor. Default is 100."
-msgstr "En yüksek izin verilebilir kalite çarpanı. Öntanımlı 100'dür."
+msgstr "En yüksek izin verilebilir kalite çarpanı. Öntanımlı 100’dür."
 
 #. i18n: ectx: property (text), widget (QLabel, lblQMax)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:763
@@ -51464,8 +51464,8 @@ msgid ""
 "This brush has transparent pixels in its center. \"Dulling\" mode may give "
 "unstable results. Consider using \"Smearing\" mode instead."
 msgstr ""
-"Bu fırçanın merkezinde saydam pikseller var. \"Matlaşma\" kipi kararsız "
-"sonuçlar verebilir. \"Bulaşma\" kipini kullanmayı deneyin."
+"Bu fırçanın merkezinde saydam pikseller var. ‘Matlaşma’ kipi kararsız "
+"sonuçlar verebilir. ‘Bulaşma’ kipini kullanmayı deneyin."
 
 #: plugins/paintops/colorsmudge/KisSmudgeOverlayModeOptionData.cpp:26
 #, kde-format
@@ -51682,9 +51682,9 @@ msgid ""
 "html>"
 msgstr ""
 "<html><head/><body><p><span style=\" font-weight:600;\">Klon Fırçası:</"
-"span></p><p>Geçerli katmandan kaynak noktayı Kontrol-tık ile seçin. Önceden "
-"seçilmiş katmandan bir kaynak seçmek için Kontrol+Seçenek+tık düğme "
-"kombinasyonunu kullanın.</p></body></html>"
+"span></p><p>Geçerli katmandan kaynak noktayı “Kontrol + Tık” ile seçin. "
+"Önceden seçilmiş katmandan bir kaynak seçmek için “Kontrol + Seçenek + Tık” "
+"düğme kombinasyonunu kullanın.</p></body></html>"
 
 #: plugins/paintops/deform/deform_paintop_plugin.cpp:29
 #, kde-format
@@ -52455,7 +52455,7 @@ msgstr "Değişim Hareketi"
 #: plugins/paintops/libpaintop/forms/wdgBrushSizeOptions.ui:185
 #, kde-format
 msgid "Aspect ratio:"
-msgstr "En-boy oranı:"
+msgstr "En–boy oranı:"
 
 #. i18n: ectx: property (text), widget (QCheckBox, preserveAlpha)
 #: plugins/paintops/libpaintop/forms/wdgclipboardbrush.ui:133
@@ -52708,7 +52708,7 @@ msgid ""
 "Krita 1.6 freehand tool options.</p></html>"
 msgstr ""
 "<html>\n"
-"<p><b>Not:</b> Bu, Krita 1.6 eller serbest araç seçeneklerindeki \"artımlı\" "
+"<p><b>Not:</b> Bu, Krita 1.6 eller serbest araç seçeneklerindeki “artımlı” "
 "seçeneği ile aynıdır.</p></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
@@ -52872,7 +52872,7 @@ msgstr "Rastgele Ofset"
 #: plugins/paintops/roundmarker/kis_roundmarkerop_settings.cpp:101
 #, kde-format
 msgid "Auto Spacing"
-msgstr "Otomatik Boşluklandırma"
+msgstr "Kendiliğinden Boşluklandırma"
 
 #: plugins/paintops/libpaintop/kis_brush_option_widget.cpp:52
 #: plugins/paintops/libpaintop/KisMaskingBrushOption.cpp:211
@@ -52934,7 +52934,7 @@ msgstr ""
 "Alt piksel kesinliği: %​50\n"
 "Fırça boyutu kesinliği: Tam\n"
 "\n"
-"Düzey 5 ile kıyaslandığında %​50'ye kadar daha iyi başarım verir"
+"Düzey 5 ile kıyaslandığında %​50’ye kadar daha iyi başarım verir"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:80
 #, kde-format
@@ -52955,7 +52955,7 @@ msgstr ""
 #, kde-format
 msgctxt "Autobrush Brush tip mode"
 msgid "Auto"
-msgstr "Otomatik"
+msgstr "Kendiliğinden"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:146
 #, kde-format
@@ -53672,7 +53672,7 @@ msgstr "En yüksek X: "
 msgctxt "PaintOp instant preview limitation"
 msgid "Random Sensor Active in %1 option, consider disabling Instant Preview"
 msgstr ""
-"%1 seçeneğinde Rastgele Algılayıcı Etkin, Anında Önizleme'yi devre dışı "
+"%1 seçeneğinde Rastgele Algılayıcı Etkin; Anında Önizleme’yi devre dışı "
 "bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintCurveOptionWidget.cpp:43
@@ -53794,7 +53794,7 @@ msgstr "Rastgele Radyan"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "Rastgele Radyan; Anında Önizleme'yi devre dışı bırakmayı düşünün"
+msgstr "Rastgele Radyan; Anında Önizleme’yi devre dışı bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
 #, kde-format
@@ -53900,7 +53900,7 @@ msgstr "Rastgele Ofset"
 #, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "Rastgele Ofset; Anında Önizleme'yi devre dışı bırakmayı düşünün"
+msgstr "Rastgele Ofset; Anında Önizleme’yi devre dışı bırakmayı düşünün"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, kde-format
@@ -54244,7 +54244,7 @@ msgstr ""
 "yoğunlaşmasını sağlar.\n"
 "Negatif değerler parçacıkların püskürtme alanının sınırına doğru "
 "yoğunlaşmasına neden olur.\n"
-"0'a yakın değerler, parçacıkların daha düzgün yayılmasını sağlayacaktır."
+"0’a yakın değerler, parçacıkların daha düzgün yayılmasını sağlayacaktır."
 
 #: plugins/paintops/spray/KisSprayOpOptionWidget.cpp:103
 #, kde-format
@@ -54351,7 +54351,7 @@ msgstr "Çap:"
 #, kde-format
 msgctxt "Label for the aspect ratio of the spray area in the spray engine"
 msgid "Aspect ratio:"
-msgstr "En-boy oranı:"
+msgstr "En–boy oranı:"
 
 #. i18n: ectx: property (text), widget (QLabel, rotationLbl)
 #: plugins/paintops/spray/wdgsprayoptions.ui:86
@@ -54961,7 +54961,7 @@ msgstr ""
 "doldurulacaktır. Kimlik tek başına yalnızca çizgi roman kitaplık yönetim "
 "programlarının bu özel çizgi romanın kendi veritabanında olup olmadığını ve "
 "derecelendirilip derecelendirilmediğini anlayabilmesi içindir. Elbette, UUID "
-"JSON'un elle değiştirilmesiyle başka bir şeyle değiştirilebilir; ancak bu "
+"JSON’un elle değiştirilmesiyle başka bir şeyle değiştirilebilir; ancak bu "
 "ileri bir kullanımdır."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:292
@@ -55090,7 +55090,7 @@ msgstr "ACBF"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:395
 msgid "Export to EPUB"
-msgstr "EPUB'a Dışa Aktar"
+msgstr "EPUB’a Dışa Aktar"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:400
 msgid "EPUB"
@@ -55098,7 +55098,7 @@ msgstr "EPUB"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:405
 msgid "Export to TIFF"
-msgstr "TIFF'e Dışa Aktar"
+msgstr "TIFF’e Dışa Aktar"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:410
 msgid "TIFF"
@@ -55399,7 +55399,7 @@ msgid ""
 "in your own. Separate genres with commas. Try to limit the amount to about "
 "two or three."
 msgstr ""
-"İşin türü. Önceden doldurulmuş değerler ACBF'ye aittir, ancak kendinizinkini "
+"İşin türü. Önceden doldurulmuş değerler ACBF’ye aittir, ancak kendinizinkini "
 "doldurabilirsiniz. Türleri virgülle ayırın. Miktarı iki veya üç ile "
 "sınırlamaya çalışın."
 
@@ -55542,7 +55542,7 @@ msgid ""
 msgstr ""
 "Çizgi romanın var olan bir kaynağın uyarlanması olup olmadığı ve öyleyse bu "
 "kaynak hakkında nasıl bilgi bulunacağı. Dolayısıyla, uyarlanmış bir web "
-"çizgi romanı için resmi web sitesi URL'si buraya eklenmelidir."
+"çizgi romanı için resmi web sitesi URL’si buraya eklenmelidir."
 
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:405
 msgid "City:"
@@ -55770,7 +55770,7 @@ msgstr "Çeviriler nerede?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:117
 msgid "Where are the extra auto-completion keys located?"
-msgstr "İlave otomatik tamamlama anahtarları nerede?"
+msgstr "Ek kendiliğinden tamamlama anahtarları nerede?"
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:118
 msgid ""
@@ -55780,11 +55780,11 @@ msgid ""
 "the extra auto-completion keys, each on a new line. This path is stored in "
 "the Krita configuration, and not the project configuration."
 msgstr ""
-"Üst veri düzenleyicideki ek otomatik tamamlama anahtarlarının konumu. Bunu, "
-"her biri yeni bir satırda olmak üzere ek otomatik tamamlama anahtarlarını "
-"içeren içsel txt dosyalarıyla (derecelendirme için csv) key_characters/"
-"key_format/key_genre/key_rating/key_author_roles/key_other içeren bir "
-"klasöre doğrultun. Bu yol, proje yapılandırmasında değil, Krita "
+"Üst veri düzenleyicideki ek kendiliğinden tamamlama anahtarlarının konumu. "
+"Bunu, her biri yeni bir satırda olmak üzere ek otomatik tamamlama "
+"anahtarlarını içeren içsel txt dosyalarıyla (derecelendirme için csv) "
+"key_characters/key_format/key_genre/key_rating/key_author_roles/key_other "
+"içeren bir klasöre doğrultun. Bu yol, proje yapılandırmasında değil, Krita "
 "yapılandırmasında saklanır."
 
 #: plugins/python/comics_project_management_tools/comics_project_settings_dialog.py:121
@@ -55832,7 +55832,7 @@ msgstr "Klasör kullanılamaz"
 msgid ""
 "Krita doesn't have write access to this folder, so files cannot be made. "
 "Please choose a different folder."
-msgstr "Krita'nın bu klasöre yazma izni yok. Lütfen farklı bir klasör seçin."
+msgstr "Krita’nın bu klasöre yazma izni yok. Lütfen farklı bir klasör seçin."
 
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:64
 msgid "Comic Project Setup"
@@ -56427,7 +56427,7 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Araçlar-&gt;Betikler menüsünde görünmesini istediğiniz "
 "şey. Bunu boş bırakırsanız betiğin adına göre öntanımlı bir giriş "
-"oluşturulur..</p></body></html>"
+"oluşturulur.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: plugins/python/krita_script_starter/bbdkss.ui:92
@@ -56474,10 +56474,10 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>İşaretlendiğinde, betiğiniz Krita'da otomatik olarak "
+"<html><head/><body><p>İşaretlendiğinde, betiğiniz Krita’da otomatik olarak "
 "etkinleştirilecektir. Diğer bir deyişle, Betikler menüsünde veya panel "
-"listesinde görüntülenir. Aksi takdirde, betiği Krita-&gt;Ayarlar menü "
-"yoluyla elle etkinleştirmeniz gerekir. </p></body></html>"
+"listesinde görüntülenir. Aksi takdirde, betiği Krita → Ayarlar menü yoluyla "
+"elle etkinleştirmeniz gerekir. </p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, cb_enable_script)
 #: plugins/python/krita_script_starter/bbdkss.ui:155
@@ -56534,7 +56534,7 @@ msgstr "GIMP Palet Dosyası Olarak Dışa Aktar"
 
 #: plugins/python/palette_docker/palette_docker.py:101
 msgid "Export as Inkscape SVG with Swatches"
-msgstr "Inkscape SVG'si Olarak Dışa Aktar (Örnekler İçinde)"
+msgstr "Inkscape SVG’si Olarak Dışa Aktar (Örnekler İçinde)"
 
 #: plugins/python/palette_docker/palette_docker.py:105
 msgid "Sort Colors"
@@ -56605,7 +56605,7 @@ msgstr "Tuvale Ölçekle"
 
 #: plugins/python/plugin_importer/plugin_downloader.py:70
 msgid "Could not determine download link from URL"
-msgstr "URL'den indirme bağlantısı algılanamadı"
+msgstr "URL’den indirme bağlantısı algılanamadı"
 
 #. i18n: context: text @ Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:4
@@ -56626,7 +56626,7 @@ msgstr "Dosyadan Python Eklentisi İçe Aktar…"
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "Web'den Python Eklentisi İçe Aktar…"
+msgstr "Web’den Python Eklentisi İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
@@ -56642,7 +56642,7 @@ msgstr "Dosyadan Python Eklentisi İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:37
 msgid "Import Python Plugin from Web..."
-msgstr "Web'den Python Eklentisi İçe Aktar…"
+msgstr "Web’den Python Eklentisi İçe Aktar…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:44
 msgid "Overwrite Plugin"
@@ -56651,7 +56651,7 @@ msgstr "Eklenti Üzerine Yaz"
 #: plugins/python/plugin_importer/plugin_importer_extension.py:45
 #, python-format
 msgid "The plugin \"%s\" already exists. Overwrite it?"
-msgstr "\"%s\" eklentisi halihazırda var. Üzerine yazılsın mı?"
+msgstr "“%s” eklentisi halihazırda var. Üzerine yazılsın mı?"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:53
 msgid "The following plugins were imported:"
@@ -56675,7 +56675,7 @@ msgid ""
 "download link (http://example.com/plugin.zip)</li><li>Github repository "
 "(https://github.com/test/plugin)</li>"
 msgstr ""
-"<p><strong>İndirme URL'sini girin</strong></p><p>Örnek:<ul><li>Zip indirme "
+"<p><strong>İndirme URL’sini girin</strong></p><p>Örnek:<ul><li>Zip indirme "
 "bağlantısı (http://example.com/plugin.zip)</li><li>Github deposu (https://"
 "github.com/test/plugin)</li>"
 
@@ -56852,70 +56852,70 @@ msgstr "On Fırça"
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 1"
-msgstr "Fırça Önayarı 1'i Etkinleştir"
+msgstr "Fırça Önayarı 1’i Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_2), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:34
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 2"
-msgstr "Fırça Önayarı 2'yi Etkinleştir"
+msgstr "Fırça Önayarı 2’yi Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_3), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:47
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 3"
-msgstr "Fırça Önayarı 3'ü Etkinleştir"
+msgstr "Fırça Önayarı 3’ü Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_4), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:60
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 4"
-msgstr "Fırça Önayarı 4'ü Etkinleştir"
+msgstr "Fırça Önayarı 4’ü Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_5), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:73
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 5"
-msgstr "Fırça Önayarı 5'i Etkinleştir"
+msgstr "Fırça Önayarı 5’i Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_6), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:86
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 6"
-msgstr "Fırça Önayarı 6'yı Etkinleştir"
+msgstr "Fırça Önayarı 6’yı Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_7), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:99
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 7"
-msgstr "Fırça Önayarı 7'yi Etkinleştir"
+msgstr "Fırça Önayarı 7’yi Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_8), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:112
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 8"
-msgstr "Fırça Önayarı 8'i Etkinleştir"
+msgstr "Fırça Önayarı 8’i Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_9), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:125
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 9"
-msgstr "Fırça Önayarı 9'u Etkinleştir"
+msgstr "Fırça Önayarı 9’u Etkinleştir"
 
 #. i18n: context: text @ Action (activate_preset_0), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/tenbrushes/tenbrushes.action:138
 #, kde-format
 msgctxt "action"
 msgid "Activate Brush Preset 10"
-msgstr "Fırça Önayarı 10'u Etkinleştir"
+msgstr "Fırça Önayarı 10’u Etkinleştir"
 
 #: plugins/python/tenbrushes/tenbrushes.py:28
 msgid "Ten Brushes"
@@ -57671,7 +57671,7 @@ msgstr "Bézier Eğrisi Çiz"
 #: plugins/tools/basictools/kis_tool_path.h:84
 #, kde-format
 msgid "Bezier Curve Tool: Shift-mouseclick ends the curve."
-msgstr "Bézier eğrisi aracı: Üst Karakter-fare tıklaması eğriyi sonlandırır."
+msgstr "Bézier eğrisi aracı: Üst Karakter + Tık, eğriyi sonlandırır."
 
 #: plugins/tools/basictools/kis_tool_pencil.cc:130
 msgctxt "(qtundo-format)"
@@ -57862,7 +57862,7 @@ msgid ""
 "masks. Shortcut: ctrl-click."
 msgstr ""
 "Seçtiğiniz katmanı maskesiyle birlikte katman kutusuna taşıyın. Kısayol: "
-"crtl-tıklama."
+"Kontrol + Tık."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSelectedLayer)
 #: plugins/tools/basictools/wdgmovetool.ui:36
@@ -57889,8 +57889,8 @@ msgid ""
 "Move the group containing the first layer that contains visible content. "
 "Shortcut: ctrl-shift-click."
 msgstr ""
-"Görünür içerik içeren ilk katmanı içeren grubu taşıyın. Kısayol: crtl-shift-"
-"tıklama."
+"Görünür içerik içeren ilk katmanı içeren grubu taşıyın. Kısayol: Kontrol + "
+"Üst Karakter + Tık."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioGroup)
 #: plugins/tools/basictools/wdgmovetool.ui:62
@@ -58259,7 +58259,7 @@ msgstr "Doldur"
 #: plugins/tools/defaulttool/defaulttool/ShapeMoveStrategy.cpp:47
 #, kde-format
 msgid "Press Shift to hold x- or y-position."
-msgstr "x- veya y- konumunu tutmak için Üst Karakter'e basın."
+msgstr "x- veya y- konumunu tutmak için Üst Karakter’e basın."
 
 #: plugins/tools/defaulttool/defaulttool/ShapeResizeStrategy.cpp:96
 #, kde-format
@@ -58309,12 +58309,12 @@ msgstr "Başvuru Görseller Yükle"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:166
 #, kde-format
 msgid "Could not open '%1'."
-msgstr "'%1' açılamadı."
+msgstr "“%1” açılamadı."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
 #, kde-format
 msgid "Could not load reference images from '%1'."
-msgstr "Başvuru görseller, '%1' konumundan yüklenemedi."
+msgstr "Başvuru görseller, “%1” konumundan yüklenemedi."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:204
 #, kde-format
@@ -59546,7 +59546,7 @@ msgstr "SVG Mutlak Kaydırma"
 #, kde-format
 msgctxt "action"
 msgid "Use SVG's CSS `white-space: pre` hard-wrapping mode."
-msgstr "SVG'nin CSS `white-space: pre` mutlak kaydırma kipini kullanın."
+msgstr "SVG’nin CSS `white-space: pre` mutlak kaydırma kipini kullanın."
 
 #. i18n: context: iconText @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59557,7 +59557,7 @@ msgstr "SVG'nin CSS `white-space: pre` mutlak kaydırma kipini kullanın."
 #, kde-format
 msgctxt "action"
 msgid "SVG Auto Wrap with Fixed Width"
-msgstr "Sabit Genişlikli SVG Otomatik Kaydırma"
+msgstr "Sabit Genişlikli SVG Kendiliğinden Kaydırma"
 
 #. i18n: context: toolTip @ Action (svg_text_wrapping_css_pre_wrap), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:288
@@ -59567,7 +59567,7 @@ msgid ""
 "Use SVG's CSS `white-space: pre-wrap` wrapping mode, with `inline-size` "
 "defining the text width."
 msgstr ""
-"SVG'nin CSS `white-space: pre` mutlak kaydırma kipini, metin genişliğini "
+"SVG’nin CSS `white-space: pre` mutlak kaydırma kipini, metin genişliğini "
 "tanımlayan `inline-size` ile kullanın."
 
 #: plugins/tools/svgtexttool/SvgTextTool.cpp:287
@@ -60211,7 +60211,7 @@ msgid ""
 "The mask will try to close non-closed contours if the gap is smaller than "
 "\"Gap close hint\" value"
 msgstr ""
-"Boşluk \"Boşluk kapatma ipucu\" değerinden daha küçükse maske kapalı olmayan "
+"Boşluk, ‘Boşluk kapatma ipucu’ değerinden daha küçükse maske kapalı olmayan "
 "konturları kapatmaya çalışır"
 
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.cpp:125
@@ -60234,7 +60234,7 @@ msgstr ""
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23
 #, kde-format
 msgid "Auto updates"
-msgstr "Otomatik güncellemeler"
+msgstr "Kendiliğinden güncellemeler"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnUpdate)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:30
@@ -60374,7 +60374,7 @@ msgid ""
 "manually."
 msgstr ""
 "Üzgünüz, Krita GNU Bilimsel Kitaplığı desteği olmadan derlendiğinden seçimi "
-"tutaçları kullanıp ölçekleyemezsiniz. Lütfen ya Krita'yı GNU Bilimsel "
+"tutaçları kullanıp ölçekleyemezsiniz. Lütfen ya Krita’yı GNU Bilimsel "
 "Kitaplık desteğiyle derleyin ya da ölçek değerlerini elle değiştirmek için "
 "program seçeneklerini kullanın."
 
@@ -60756,7 +60756,7 @@ msgstr "tuval dışı"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:782
 #, kde-format
 msgid "Rotate around X-Axis"
-msgstr "X-Ekseni etrafında döndür"
+msgstr "X ekseni etrafında döndür"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateY)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aYBox)
@@ -60764,7 +60764,7 @@ msgstr "X-Ekseni etrafında döndür"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:817
 #, kde-format
 msgid "Rotate around Y-Axis"
-msgstr "Y-Ekseni etrafında döndür"
+msgstr "Y ekseni etrafında döndür"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_rotateZ)
 #. i18n: ectx: property (toolTip), widget (KisAngleSelector, aZBox)
@@ -60772,7 +60772,7 @@ msgstr "Y-Ekseni etrafında döndür"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:861
 #, kde-format
 msgid "Rotate around Z-Axis"
-msgstr "Z-Ekseni etrafında döndür"
+msgstr "Z ekseni etrafında döndür"
 
 #. i18n: ectx: property (text), widget (QLabel, label_rotateZ)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:842
@@ -60902,7 +60902,7 @@ msgstr "Sabitleyici Noktalar"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1520
 #, kde-format
 msgid "Subdi&vide"
-msgstr "Alt-&bölme"
+msgstr "Alt &bölme"
 
 #. i18n: ectx: property (text), widget (QRadioButton, customRadioButton)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1577

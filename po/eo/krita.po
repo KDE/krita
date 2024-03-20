@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-16 02:02+0000\n"
-"PO-Revision-Date: 2024-03-08 21:37+0100\n"
+"PO-Revision-Date: 2024-03-19 07:25+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -38897,10 +38897,9 @@ msgstr "Rektangulo"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:64
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
-#, fuzzy, kde-format
-#| msgid "Isometric"
+#, kde-format
 msgid "Isometric (Legacy)"
-msgstr "Izometria"
+msgstr "Izometria (Heredaĵa)"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:65
 #, kde-format
@@ -38908,10 +38907,9 @@ msgid "Isometric"
 msgstr "Izometria"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
-#, fuzzy, kde-format
-#| msgid "Isometric (requires OpenGL)"
+#, kde-format
 msgid "Isometric (Legacy - requires OpenGL)"
-msgstr "Izometria (postulas OpenGL)"
+msgstr "Izometria (Heredaĵa - postulas OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -38970,17 +38968,15 @@ msgstr "Maldekstra Angulo:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, fuzzy, kde-format
-#| msgid "Pixel Size"
+#, kde-format
 msgid "Cell Size:"
-msgstr "Pixel Grandeco"
+msgstr "Ĉelgrandeco:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, fuzzy, kde-format
-#| msgid "Vertical Scale"
+#, kde-format
 msgid "Vertical Style:"
-msgstr "Vertikala Skalo"
+msgstr "Vertikala Stilo:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
@@ -39008,10 +39004,9 @@ msgstr "Subdivido:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivision Style:"
-msgstr "Subdivido:"
+msgstr "Subdivida Stilo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
@@ -48862,10 +48857,9 @@ msgid "Could not load \"id\" of the transform mask"
 msgstr "Ne eblis ŝargi \"id\" de la transformmasko"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
-#, fuzzy, kde-format
-#| msgid "Could not create transform mask params"
+#, kde-format
 msgid "Could not find transform mask XML element"
-msgstr "Ne eblis krei transformajn maskajn parametrojn"
+msgstr "Ne eblis trovi transformmaskan XML-elementon"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
 #, kde-format
@@ -60023,12 +60017,10 @@ msgid "Spread: {n}%"
 msgstr "Disvastiĝo: {n}%"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:471
-#, fuzzy, kde-format
-#| msgctxt "The 'close gap' spinbox prefix in fill tool options"
-#| msgid "Close Gap: "
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Fermi Breĉon:"
+msgstr "Ferma Breĉo:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:477
 #, kde-format
@@ -61255,14 +61247,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Subtenu Krita!"
-
-#, fuzzy
-#~| msgid "Anti-aliased"
-#~ msgid "Antialiased"
-#~ msgstr "Kontraŭaliasita"
-
-#~ msgid "Div Style:"
-#~ msgstr "Div-stilo:"

@@ -933,48 +933,44 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     }
 
     QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
+    QString dstModel = device->colorSpace()->colorModelId().id();
+    QString dstDepth = device->colorSpace()->colorDepthId().id();
+    const KoColorProfile *dstProfile = device->colorSpace()->profile();
+    bool needColorTransform = false;
+
     if (options.saveAsHDR || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
-        const KoColorSpace *dstCS =
-            KoColorSpaceRegistry::instance()->colorSpace(
-                RGBAColorModelID.id(),
-                device->colorSpace()->colorDepthId().id(),
-                KoColorSpaceRegistry::instance()->p709SRGBProfile());
+        dstModel = RGBAColorModelID.id();
+        dstProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+        needColorTransform = true;
 
         if (options.saveAsHDR) {
-            dstCS =
-                KoColorSpaceRegistry::instance()->colorSpace(
-                    RGBAColorModelID.id(),
-                    device->colorSpace()->colorDepthId().id(),
-                    KoColorSpaceRegistry::instance()->p2020PQProfile());
+            dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
         }
-
-        KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
-        tmp->makeCloneFromRough(device, imageRect);
-        tmp->convertTo(dstCS);
-
-        device = tmp;
     }
 
     if (options.downsample
             || device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
-        const KoColorSpace* cs = 
-            KoColorSpaceRegistry::instance()->colorSpace(
-                RGBAColorModelID.id(),
-                Integer16BitsColorDepthID.id(),
-                device->colorSpace()->profile());
+        dstDepth = Integer16BitsColorDepthID.id();
+
+        needColorTransform = true;
 
         if (options.downsample) {
-            cs = 
-                KoColorSpaceRegistry::instance()->colorSpace(
-                    RGBAColorModelID.id(),
-                    Integer8BitsColorDepthID.id(),
-                    device->colorSpace()->profile());
+            dstDepth = Integer8BitsColorDepthID.id();
+        }
+    }
+
+    if (needColorTransform) {
+        const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(dstModel, dstDepth, dstProfile);
+
+        if (!dstCs) {
+            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
 
         device = new KisPaintDevice(*device);
-        device->convertTo(cs);
+        device->convertTo(dstCs);
     }
 
     KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {

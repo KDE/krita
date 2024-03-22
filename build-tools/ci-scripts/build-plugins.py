@@ -5,6 +5,10 @@ import subprocess
 import multiprocessing
 import shutil
 
+if 'ANDROID_HOME' in os.environ or 'KDECI_ANDROID_ABI' in os.environ:
+    print ('## Skip building GMic plugin for Android...')
+    sys.exit(0)
+
 sourcesPath = os.environ.pop('KDECI_SOURCES_DIR')
 localCachePath = os.environ.pop('KDECI_CACHE_PATH')
 kritaCacheDir = os.path.join(localCachePath, 'krita-deps')

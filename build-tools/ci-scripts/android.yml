@@ -3,6 +3,7 @@
   image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
   tags:
     - Linux
+  when: manual
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_CC_CACHE: /mnt/caches/krita-android/
@@ -23,7 +24,7 @@
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --build-only
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build
     - python3 -u build-tools/ci-scripts/build-android-package.py
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG
@@ -35,7 +36,7 @@
 
 .android-packages-base:
   extends:
-  - android-build
+  - .android-build-base
   when: manual
   interruptible: false
   variables:

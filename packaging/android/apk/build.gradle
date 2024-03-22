@@ -22,9 +22,9 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
-    ndkpath = System.getenv('ANDROID_NDK_HOME') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
-    installPrefix = '../krita-android-build'
-    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../i/src/android/java' : ""
+    ndkpath = System.getenv('KDECI_ANDROID_NDK_ROOT') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
+    installPrefix = System.getenv('KRITA_INSTALL_PREFIX')
+    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../../_install/src/android/java' : ""
 }
 
 task configure() {
@@ -60,8 +60,7 @@ task copyLibs(type: Copy) {
 }
 
 task copyFonts(type: Copy) {
-    def etcDir = "../i/"
-    from "$etcDir/etc"
+    from "$installPrefix/etc"
     into 'assets/etc/'
     include '**'
 }
@@ -78,16 +77,14 @@ task copyAssets(type: Copy) {
 }
 
 task copyLocaleFiles(type: Copy) {
-    def libsDir = "../i/"
-    from "$libsDir/share/locale"
-    from "$libsDir/translations"
+    from "$installPrefix/share/locale"
+    from "$installPrefix/translations"
     into 'assets/locale/'
     include '**'
 }
 
 task copyExtraMltFiles(type: Copy) {
-    def libsDir = "../i/"
-    from "$libsDir/share/mlt-7"
+    from "$installPrefix/share/mlt-7"
     into 'assets/mlt'
     include '**'
 }
@@ -193,5 +190,5 @@ android {
 dependencies {
     implementation 'com.android.billingclient:billing:5.0.0'
     implementation 'androidx.annotation:annotation:1.4.0'
-    implementation files('../i/jar/SDL2Android.jar')
+    implementation files("$System.env.KRITA_INSTALL_PREFIX/jar/SDL2Android.jar")
 }

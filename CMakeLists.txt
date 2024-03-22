@@ -759,10 +759,13 @@ endif()
 # set custom krita plugin installdir
 if (ANDROID)
     # use default ABI
-    if (NOT ANDROID_ABI)
+    if (NOT DEFINED ANDROID_ABI)
         set (ANDROID_ABI arm64-v8a)
     endif()
-    set (ANDROID_SDK_ROOT $ENV{ANDROID_SDK_ROOT})
+    if (NOT DEFINED ANDROID_SDK_ROOT)
+        message (FATAL_ERROR "ANDROID_SDK_ROOT argument is not set")
+    endif()
+
     set (KRITA_PLUGIN_INSTALL_DIR ${LIB_INSTALL_DIR})
     # set (DATA_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/assets)
 
@@ -784,10 +787,7 @@ endif()
 
 # FIXME: Still hardcoded
 if (ANDROID)
-    set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_80)
-    set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
-    set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
-
+    set (Boost_COMPILER clang)
     find_package(unwindstack REQUIRED)
 endif()
 
@@ -1285,9 +1285,6 @@ if (ANDROID)
 
   # To assist stdcpp-path in deployment.json file
   set(ANDROID_SYSROOT_PREFIX "${ANDROID_TOOLCHAIN_ROOT}/sysroot/usr" CACHE STRING "" FORCE)
-
-  # otherwise ECM can't find the libs and throws a big error at us.
-  list (APPEND ECM_ADDITIONAL_FIND_ROOT_PATH ${KRITA_3rdparty_LIB_PREFIX})
 
   # copied regex from ECM's toolchain
   string(REGEX REPLACE "-(clang)?([0-9].[0-9])?$" "" ECM_ANDROID_STL_ARCH ${ANDROID_TOOLCHAIN_NAME})

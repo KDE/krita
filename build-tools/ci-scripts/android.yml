@@ -6,8 +6,6 @@
   when: manual
   variables:
     KDECI_BUILD_TYPE: Release
-    KDECI_CC_CACHE: /mnt/caches/krita-android/
-    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
     KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
@@ -50,6 +48,8 @@ android-build-x86_64:
   variables:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-x86_64-qt5.15
     KDECI_ANDROID_ABI: x86_64
+    KDECI_CC_CACHE: /mnt/caches/krita-android/x86_64/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/x86_64/
 
 android-build-arm64-v8a:
   extends:
@@ -57,6 +57,8 @@ android-build-arm64-v8a:
   variables:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-arm64-v8a-qt5.15
     KDECI_ANDROID_ABI: arm64-v8a
+    KDECI_CC_CACHE: /mnt/caches/krita-android/arm64-v8a/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/arm64-v8a/
 
 android-build-armeabi-v7a:
   extends:
@@ -64,3 +66,5 @@ android-build-armeabi-v7a:
   variables:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-armeabi-v7a-qt5.15
     KDECI_ANDROID_ABI: armeabi-v7a
+    KDECI_CC_CACHE: /mnt/caches/krita-android/armeabi-v7a/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/armeabi-v7a/

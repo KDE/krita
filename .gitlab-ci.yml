@@ -34,3 +34,4 @@ include:
   - local: /build-tools/ci-scripts/cppcheck.yml
   - local: /build-tools/ci-scripts/linux.yml
   - local: /build-tools/ci-scripts/windows.yml
+  - local: /build-tools/ci-scripts/android.yml

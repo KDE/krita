@@ -15,7 +15,7 @@
     # ANDROID_HOME: /opt/android-tooling # <-- set up in the base image!
     # KDECI_ANDROID_SDK_ROOT: $ANDROID_HOME/sdk # <-- set up in the base image!
     # KDECI_ANDROID_NDK_ROOT: $ANDROID_HOME/android-ndk-r22b/ # <-- set up in the base image!
-    KDECI_EXTRA_CMAKE_ARGS: "-DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain.cmake"
+    KDECI_EXTRA_CMAKE_ARGS: "-DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management

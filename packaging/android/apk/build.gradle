@@ -65,6 +65,12 @@ task copyFonts(type: Copy) {
     include '**'
 }
 
+task copySDLJar(type: Copy) {
+    from "$installPrefix/jar"
+    into 'libs/'
+    include 'SDL2Android.jar'
+}
+
 /*
  * androiddeployqt doesn't fully copy the directories. Hidden directories
  * to be specific. That's why we copy manually and then delete the partial
@@ -183,6 +189,7 @@ android {
     configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(copyLocaleFiles)
+    configure.finalizedBy(copySDLJar)
     configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
@@ -190,5 +197,5 @@ android {
 dependencies {
     implementation 'com.android.billingclient:billing:5.0.0'
     implementation 'androidx.annotation:annotation:1.4.0'
-    implementation files("$System.env.KRITA_INSTALL_PREFIX/jar/SDL2Android.jar")
+    implementation files("libs/SDL2Android.jar")
 }

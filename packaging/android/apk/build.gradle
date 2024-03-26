@@ -24,6 +24,16 @@ ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
     ndkpath = System.getenv('KDECI_ANDROID_NDK_ROOT') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
     installPrefix = System.getenv('KRITA_INSTALL_PREFIX')
+
+    // Note about qtResPath vs qt5AndroidDir:
+    //
+    // qt5AndroidDir is set up by androiddeployqt and points to exact files
+    // in _install directory, which is not available on the builder that builds
+    // AppBundle packages, so we should access these files from a manually copied
+    // location.
+    //
+    // tldr; at one time, either qt5AndroidDir or qtResPath is valid and points
+    //       to the same files
     qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? 'extra-bundle-deps/android/java' : ""
 }
 

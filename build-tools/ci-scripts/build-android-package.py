@@ -126,8 +126,11 @@ if arguments.archive_artifacts:
             shutil.move(os.path.join(repackagePath, file),
                         os.path.join(artifactsFolder, file))
 
-        # move the translation folder that is used during the bundle build
-        # TODO: why it is not needed during the normal package build?
-
+        # Move the translation folder that is used during the bundle build.
+        #
+        # During normal package builds this folder is accessed via qt5AndroidDir,
+        # which stores an absolute path to _install directory. After moving to the
+        # bundler node, _install folder is not available anymore, hence we should
+        # copy it manually
         shutil.move(os.path.join(depsPath, 'src', 'android', 'java'),
                     os.path.join(artifactsFolder, 'extra-bundle-deps', 'android', 'java'))

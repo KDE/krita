@@ -101,8 +101,8 @@ if arguments.archive_artifacts:
     os.makedirs(artifactsFolder)
 
     if arguments.skip_common_artifacts:
-        shutil.copytree(os.path.join(repackagePath, 'libs', os.environ['KDECI_ANDROID_ABI']),
-                        os.path.join(artifactsFolder, 'libs', os.environ['KDECI_ANDROID_ABI']))
+        shutil.move(os.path.join(repackagePath, 'libs', os.environ['KDECI_ANDROID_ABI']),
+                    os.path.join(artifactsFolder, 'libs', os.environ['KDECI_ANDROID_ABI']))
     else:
         folders = ['libs',
                    'res',
@@ -112,8 +112,8 @@ if arguments.archive_artifacts:
                    'src']
 
         for folder in folders:
-            shutil.copytree(os.path.join(repackagePath, folder),
-                            os.path.join(artifactsFolder, folder))
+            shutil.move(os.path.join(repackagePath, folder),
+                        os.path.join(artifactsFolder, folder))
 
         files = ['AndroidManifest.xml',
                  'proguard-rules.pro',
@@ -123,11 +123,11 @@ if arguments.archive_artifacts:
                  'local.properties',]
 
         for file in files:
-            shutil.copy2(os.path.join(repackagePath, file),
-                         os.path.join(artifactsFolder, file))
+            shutil.move(os.path.join(repackagePath, file),
+                        os.path.join(artifactsFolder, file))
 
-        # copy the translation folder that is used during the bundle build
+        # move the translation folder that is used during the bundle build
         # TODO: why it is not needed during the normal package build?
 
-        shutil.copytree(os.path.join(depsPath, 'src', 'android', 'java'),
-                        os.path.join(artifactsFolder, 'extra-bundle-deps', 'android', 'java'))
+        shutil.move(os.path.join(depsPath, 'src', 'android', 'java'),
+                    os.path.join(artifactsFolder, 'extra-bundle-deps', 'android', 'java'))

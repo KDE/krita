@@ -22,6 +22,7 @@
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1
     - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+    - if [ "$KRITACI_SIGN_PACKAGE" == "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml

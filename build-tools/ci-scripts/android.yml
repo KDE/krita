@@ -15,26 +15,33 @@
     # KDECI_ANDROID_SDK_ROOT: $ANDROID_HOME/sdk # <-- set up in the base image!
     # KDECI_ANDROID_NDK_ROOT: $ANDROID_HOME/android-ndk-r22b/ # <-- set up in the base image!
     KDECI_EXTRA_CMAKE_ARGS: "-DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
-    KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
-    KRITACI_SIGN_PACKAGE: "True"
+    KRITACI_ANDROID_PACKAGE_TYPE: "debug"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1
     - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
-    - if [ "$KRITACI_SIGN_PACKAGE" == "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then pip install -r ci-notary-service/requirements.txt; fi
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build
     - python3 -u build-tools/ci-scripts/build-android-package.py
-    - if [ "$KRITACI_SIGN_PACKAGE" == "True" ]; then python3 -u ci-notary-service/signapk.py -v --config krita-deps-management/ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk; fi
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config krita-deps-management/ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk; fi
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG
     expire_in: 10 days
     when: always
     paths:
       - "_packaging"
+
+.android-packages-nightly-base:
+  extends:
+  - .android-build-base
+  when: manual
+  interruptible: false
+  variables:
+    KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
 
 .android-packages-base:
   extends:

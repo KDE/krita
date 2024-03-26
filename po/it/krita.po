@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-16 02:02+0000\n"
-"PO-Revision-Date: 2024-03-13 21:46+0100\n"
+"PO-Revision-Date: 2024-03-16 21:50+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -39077,10 +39077,9 @@ msgstr "Rettangolo"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:64
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
-#, fuzzy, kde-format
-#| msgid "Isometric"
+#, kde-format
 msgid "Isometric (Legacy)"
-msgstr "Isometrico"
+msgstr "Isometrico (compatibilità)"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:65
 #, kde-format
@@ -39088,10 +39087,9 @@ msgid "Isometric"
 msgstr "Isometrico"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
-#, fuzzy, kde-format
-#| msgid "Isometric (requires OpenGL)"
+#, kde-format
 msgid "Isometric (Legacy - requires OpenGL)"
-msgstr "Isometrico (richiede OpenGL)"
+msgstr "Isometrico (compatibilità - richiede OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -39150,17 +39148,15 @@ msgstr "Angolo sinistro:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, fuzzy, kde-format
-#| msgid "Pixel Size"
+#, kde-format
 msgid "Cell Size:"
-msgstr "Numero di pixel"
+msgstr "Dimensione cella:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, fuzzy, kde-format
-#| msgid "Vertical Scale"
+#, kde-format
 msgid "Vertical Style:"
-msgstr "Scala verticale"
+msgstr "Stile verticale:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
@@ -39188,10 +39184,9 @@ msgstr "Suddivisione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivision Style:"
-msgstr "Suddivisione:"
+msgstr "Stile suddivisione:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
@@ -49095,10 +49090,9 @@ msgid "Could not load \"id\" of the transform mask"
 msgstr "Impossibile caricare l'«ID» della maschera di trasformazione"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
-#, fuzzy, kde-format
-#| msgid "Could not create transform mask params"
+#, kde-format
 msgid "Could not find transform mask XML element"
-msgstr "Impossibile creare parametri per la maschera di trasformazione"
+msgstr "Impossibile trovare l'elemento XML della maschera di trasformazione"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
 #, kde-format

@@ -24,7 +24,7 @@ ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
     ndkpath = System.getenv('KDECI_ANDROID_NDK_ROOT') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
     installPrefix = System.getenv('KRITA_INSTALL_PREFIX')
-    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../../_install/src/android/java' : ""
+    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? 'extra-bundle-deps/android/java' : ""
 }
 
 task configure() {

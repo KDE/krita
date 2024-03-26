@@ -125,3 +125,9 @@ if arguments.archive_artifacts:
         for file in files:
             shutil.copy2(os.path.join(repackagePath, file),
                          os.path.join(artifactsFolder, file))
+
+        # copy the translation folder that is used during the bundle build
+        # TODO: why it is not needed during the normal package build?
+
+        shutil.copytree(os.path.join(depsPath, 'src', 'android', 'java'),
+                        os.path.join(artifactsFolder, 'extra-bundle-deps', 'android', 'java'))

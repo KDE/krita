@@ -42,6 +42,7 @@ KoPointerEvent* KisScratchPadEventFilter::createTabletEvent(QEvent *event)
     return new KoPointerEvent(tabletEvent, m_widgetToDocument.map(pos));
 }
 
+
 bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
@@ -49,6 +50,9 @@ bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
 
     QScopedPointer<KoPointerEvent> ev;
 
+    if (shouldResetWheelDelta(event)) {
+        m_scratchPad->resetWheelDelta();
+    }
 
     switch(event->type()) {
     case QEvent::MouseButtonPress:
@@ -104,6 +108,13 @@ bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
         m_tabletPressed = false;
         m_pressedButton = Qt::NoButton;
         break;
+    case QEvent::Wheel:
+        if (m_pressedButton != Qt::NoButton) break;
+
+        m_pressedButton = Qt::NoButton;
+        m_scratchPad->wheelDelta(static_cast<QWheelEvent*>(event));
+        result = true;
+        break;
     default:
         result = false;
     }
@@ -115,3 +126,22 @@ bool KisScratchPadEventFilter::eventFilter(QObject *obj, QEvent *event)
 
     return result;
 }
+
+bool KisScratchPadEventFilter::shouldResetWheelDelta(QEvent * event)
+{
+    return
+        event->type() == QEvent::FocusIn ||
+        event->type() == QEvent::FocusOut ||
+        event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonRelease ||
+        event->type() == QEvent::MouseButtonDblClick ||
+        event->type() == QEvent::TabletPress ||
+        event->type() == QEvent::TabletRelease ||
+        event->type() == QEvent::Enter ||
+        event->type() == QEvent::Leave ||
+        event->type() == QEvent::TouchBegin ||
+        event->type() == QEvent::TouchEnd ||
+        event->type() == QEvent::TouchCancel ||
+        event->type() == QEvent::NativeGesture;
+}
+

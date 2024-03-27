@@ -31,6 +31,8 @@ private:
     inline KoPointerEvent* createMouseEvent(QEvent *event);
     inline KoPointerEvent* createTabletEvent(QEvent *event);
 
+    bool shouldResetWheelDelta(QEvent *event);
+
 private:
     QTransform m_widgetToDocument;
     bool m_tabletPressed;

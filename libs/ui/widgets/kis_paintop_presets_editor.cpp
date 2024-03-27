@@ -240,7 +240,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDefault()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.fillLayer, SIGNAL(clicked()),
-            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillLayer()));
+            m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillDocument()));
 
     connect(m_d->uiWdgPaintOpPresetSettings.fillGradient, SIGNAL(clicked()),
             m_d->uiWdgPaintOpPresetSettings.scratchPad, SLOT(fillGradient()));

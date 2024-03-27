@@ -16,6 +16,7 @@
 
 #include <brushengine/kis_paintop_preset.h>
 #include <kis_types.h>
+#include <kis_gradient_painter.h>
 #include <kritaui_export.h>
 
 class QColor;
@@ -67,11 +68,53 @@ public:
     void setModeType(QString modeName);
 
     /**
+     * @brief return True if the scratchpad zoom level stay in sync with canvas
+     */
+    bool canvasZoomLink();
+
+    /**
      * @brief should the scratchpad zoom level stay in sync with canvas
      * @param should we link zoom level
      */
-    void linkCanvasToZoomLevel(bool value);
+    void setCanvasZoomLink(bool value);
 
+    /**
+     * @brief allow to manually set scratchpad scale when NOT linked to canvas zoom
+     * @param scaleX zoom level for X
+     * @param scaleY zoom level for Y
+     * @return if scale is applied, return true otherwise false
+     */
+    bool setScale(qreal scaleX, qreal scaleY);
+
+    /**
+     * @brief return current scale X applied on scratchpad (whatever the zoom source is - canvas zoom or set manually)
+     */
+    qreal scaleX();
+    /**
+     * @brief return current scale Y applied on scratchpad (whatever the zoom source is - canvas zoom or set manually)
+     */
+    qreal scaleY();
+
+    /**
+     * @brief calculate and apply scale to fit content in viewport
+     */
+    void scaleToFit();
+    /**
+     * @brief reset scale value (to 1.0) and reinit position
+     */
+    void scaleReset();
+
+    /**
+     * @brief pan scratchpad content to given position
+     * @param x absissa position to pan to
+     * @param y ordinate position to pan to
+     */
+    void panTo(qint32 x, qint32 y);
+
+    /**
+     * @brief pan scratchpad content to center content in viewport
+     */
+    void panCenter();
 
     /// return the contents of the area under the cutoutOverlay rect
     QImage cutoutOverlay() const;
@@ -81,9 +124,14 @@ public:
 
     // A callback for scratch pad default bounds
     QRect imageBounds() const;
+    QRect viewportBounds() const;
+
+    // A callback for scratch pad content bounds
+    QRect contentBounds() const;
 
 
     // Called by the event filter
+    void wheelDelta(QWheelEvent *event);
     void pointerPress(KoPointerEvent *event);
     void pointerRelease(KoPointerEvent *event);
     void pointerMove(KoPointerEvent *event);
@@ -91,15 +139,24 @@ public:
 
 public Q_SLOTS:
     void fillDefault();
+    void fillPattern(QTransform transform);
+    void fillGradient(const QPoint &gradientVectorStart,
+                      const QPoint &gradientVectorEnd,
+                      KisGradientPainter::enumGradientShape gradientShape,
+                      KisGradientPainter::enumGradientRepeat gradientRepeat,
+                      bool reverseGradient,
+                      bool dither);
     void fillGradient();
     void fillBackground();
+    void fillForeground();
     void fillTransparent();
 
     void setFillColor(QColor newColor);
 
     /// Fill the area with what is on your current canvas
-    void fillLayer();
-
+    void fillLayer(bool fullContent);
+    void fillDocument();
+    void fillDocument(bool fullContent);
 
     /**
      * Set the icon of the current preset
@@ -125,6 +182,24 @@ public Q_SLOTS:
 
     QImage copyScratchpadImageData();
 
+Q_SIGNALS:
+    /**
+     * @brief signal is emitted when scratchpad scale is changed (from zoom canvas or manually)
+     * @param scale updated scale value
+     */
+    void scaleChanged(qreal scale);
+
+    /**
+     * @brief signal is emitted when scratchpad content is changed (stroke or fill)
+     */
+    void contentChanged();
+
+    /**
+     * @brief signal is emitted when scratchpad viewport has been modified (pan, zoom)
+     * @param rect new viewport bounds
+     */
+    void viewportChanged(const QRect rect);
+
 private Q_SLOTS:
     void setOnScreenResolution(qreal scaleX, qreal scaleY);
     void setDisplayProfile(const KoColorProfile* colorProfile);
@@ -136,7 +211,7 @@ Q_SIGNALS:
 
 protected:
     void paintEvent ( QPaintEvent * event ) override;
-
+    void resizeEvent( QResizeEvent *event) override;
 
 private:
     void beginStroke(KoPointerEvent *event);
@@ -151,10 +226,20 @@ private:
 
     void updateTransformations();
 
+    bool setScaleImpl(qreal scaleX, qreal scaleY);
+
+    void updateViewport();
+    bool updateViewportImpl();
+
     QTransform documentToWidget() const;
     QTransform widgetToDocument() const;
 
     friend class KisScratchPadPaintingInformationBuilder;
+
+private:
+    friend KisScratchPadEventFilter;
+
+    void resetWheelDelta();
 
 private:
     enum Mode {
@@ -172,7 +257,22 @@ private:
     Mode m_toolMode;
     bool isModeManuallySet;
     bool isMouseDown;
-    bool linkCanvasZoomLevel;
+    bool m_linkCanvasZoomLevel;
+
+    // canvasScaleX & canvasScaleY: keep in memory current canvas zoom level
+    qreal m_canvasScaleX;
+    qreal m_canvasScaleY;
+
+    // scratchpadScaleX & scratchpadScaleY: keep in memory current scratchpad zoom level
+    qreal m_scratchpadScaleX;
+    qreal m_scratchpadScaleY;
+
+    // store accumulated mouse delta from mouseWheel
+    int m_accumulatedMouseDelta;
+
+    // keep viewport in memory
+    QRect m_viewport;
+
     KisPaintLayerSP m_paintLayer;
     const KoColorProfile* m_displayProfile;
     QCursor m_cursor;

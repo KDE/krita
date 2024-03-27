@@ -61538,6 +61538,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Ajudeu a Krita"

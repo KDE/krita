@@ -1238,7 +1238,35 @@ void KisViewManager::switchCanvasOnly(bool toggled)
     if (useCanvasOffsetCompensation) {
         // The offset is calculated in two steps; this is the first step.
         if (toggled) {
-            // Capture the initial canvas position.
+            /**
+             *  Capture the initial canvas position.
+             *
+             *  Going into a fullscreen mode is a multistage process that includes making
+             *  the window fullscreen. It means that it is not easy to catch a moment,
+             *  when the new state is "fully established". First, it hides the dockers, then
+             *  it hides the menu, then it makes the window fullscreen (hiding titlebar
+             *  and "start" menu). And these actions happen in the course of dozens of
+             *  milliseconds.
+             *
+             *  And since we cannot catch the moment when the new state is "fully
+             *  established" we use a heuristic (read "a hack") that just pre-scrolls
+             *  the canves into an expected offset. The prescroll offset is saved
+             *  **globally**, so that when exiting the fullscreen mode we would know
+             *  how big the new offset should (since we cannot get the real value of
+             *  it).
+             *
+             *  Here are the list of cases when this approach fails:
+             *
+             *  1) When the fullscreen window migrates to a different screen,
+             *     potentially with a different resolution (while being fullscreen)
+             *
+             *  2) When dockers or toolbars are visible, and the user resizes
+             *     them while the window is fullscreen.
+             *
+             *  In both the cases the saved offset in `d->canvasOnlyOffsetCompensation`
+             *  becomes invalid and the window jumps in an offset direction on exiting
+             *  the fullscreen mode.
+             */
             QPoint origin;
             if (toggleFullscreen) {
                 // We're windowed, so also capture the position of the window in the screen.

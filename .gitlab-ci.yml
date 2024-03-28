@@ -23,6 +23,8 @@ workflow:
     # Prevent branch pipelines if an MR is open on the branch.
     - if: $CI_COMMIT_BRANCH && $CI_PIPELINE_SOURCE == "push" && $CI_OPEN_MERGE_REQUESTS
       when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     # Allow merge request pipelines.
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     # Build tags and branches too

@@ -3,7 +3,10 @@
   image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
   tags:
     - Linux
-  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE != "schedule"
+      when: manual
+    - when: never
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_GITLAB_SERVER: https://invent.kde.org/
@@ -35,13 +38,16 @@
     paths:
       - "_packaging"
 
-.android-packages-nightly-base:
+.android-nightly-base:
   extends:
   - .android-build-base
-  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: always
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON"
 
 .android-packages-base:
   extends:
@@ -52,11 +58,8 @@
     KRITACI_ANDROID_PACKAGE_TYPE: "release"
     KRITACI_RELEASE: 1
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF"
-    KRITACI_SIGN_PACKAGE: False # release packages are signed manually by Krita Foundation
 
-android-build-x86_64:
-  extends:
-  - .android-build-base
+.android-x86_64-mixin:
   variables:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-x86_64-qt5.15
     KDECI_ANDROID_ABI: x86_64
@@ -65,9 +68,7 @@ android-build-x86_64:
     KRITACI_ARCHIVE_ARTIFACTS: "True"
     KRITACI_SKIP_COMMON_ARTIFACTS: "True"
 
-android-build-arm64-v8a:
-  extends:
-  - .android-build-base
+.android-arm64-v8a-mixin:
   variables:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-arm64-v8a-qt5.15
     KDECI_ANDROID_ABI: arm64-v8a
@@ -76,9 +77,7 @@ android-build-arm64-v8a:
     KRITACI_ARCHIVE_ARTIFACTS: "True"
     KRITACI_SKIP_COMMON_ARTIFACTS: "False" # only arm64-v8a packages common artifacts
 
-android-build-armeabi-v7a:
-  extends:
-  - .android-build-base
+.android-armeabi-v7a-mixin:
   variables:
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-armeabi-v7a-qt5.15
     KDECI_ANDROID_ABI: armeabi-v7a
@@ -110,3 +109,33 @@ android-build-appbundle:
     when: always
     paths:
       - "_packaging/*.aab"
+
+android-build-x86_64:
+  extends:
+  - .android-build-base
+  - .android-x86_64-mixin
+
+android-build-arm64-v8a:
+  extends:
+  - .android-build-base
+  - .android-arm64-v8a-mixin
+
+android-build-armeabi-v7a:
+  extends:
+  - .android-build-base
+  - .android-armeabi-v7a-mixin
+
+android-build-x86_64-nightly:
+  extends:
+  - .android-nightly-base
+  - .android-x86_64-mixin
+
+android-build-arm64-v8a-nightly:
+  extends:
+  - .android-nightly-base
+  - .android-arm64-v8a-mixin
+
+android-build-armeabi-v7a-nightly:
+  extends:
+  - .android-nightly-base
+  - .android-armeabi-v7a-mixin

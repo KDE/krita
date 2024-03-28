@@ -22,6 +22,7 @@ linux-build:
     - git clone https://invent.kde.org/dkazakov/ci-utilities.git -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
+    - if [ "$KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE" != "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
     - export PATH="$HOME/tools/bin:$PATH"
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR

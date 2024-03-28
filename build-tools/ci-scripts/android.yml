@@ -1,0 +1,136 @@
+.android-build-base:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
+  tags:
+    - Linux
+  extends:
+    .ci-manual-job-mixin
+  variables:
+    KDECI_BUILD_TYPE: Release
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
+    KDECI_SKIP_ECM_ANDROID_TOOLCHAIN: "True"
+    # ANDROID_HOME: /opt/android-tooling # <-- set up in the base image!
+    # KDECI_ANDROID_SDK_ROOT: $ANDROID_HOME/sdk # <-- set up in the base image!
+    # KDECI_ANDROID_NDK_ROOT: $ANDROID_HOME/android-ndk-r22b/ # <-- set up in the base image!
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+    KRITACI_ANDROID_PACKAGE_TYPE: "debug"
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1
+    - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then pip install -r ci-notary-service/requirements.txt; fi
+  script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build
+    - python3 -u build-tools/ci-scripts/build-android-package.py
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config krita-deps-management/ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk; fi
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG
+    expire_in: 10 days
+    when: always
+    paths:
+      - "_packaging"
+
+.android-nightly-base:
+  extends:
+    - .android-build-base
+    - .nightly-job-mixin
+  interruptible: false
+  variables:
+    KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+
+.android-packages-base:
+  extends:
+  - .android-build-base
+  interruptible: false
+  variables:
+    KRITACI_ANDROID_PACKAGE_TYPE: "release"
+    KRITACI_RELEASE: 1
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+
+.android-x86_64-mixin:
+  variables:
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-x86_64-qt5.15
+    KDECI_ANDROID_ABI: x86_64
+    KDECI_CC_CACHE: /mnt/caches/krita-android/x86_64/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/x86_64/
+    KRITACI_ARCHIVE_ARTIFACTS: "True"
+    KRITACI_SKIP_COMMON_ARTIFACTS: "True"
+
+.android-arm64-v8a-mixin:
+  variables:
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-arm64-v8a-qt5.15
+    KDECI_ANDROID_ABI: arm64-v8a
+    KDECI_CC_CACHE: /mnt/caches/krita-android/arm64-v8a/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/arm64-v8a/
+    KRITACI_ARCHIVE_ARTIFACTS: "True"
+    KRITACI_SKIP_COMMON_ARTIFACTS: "False" # only arm64-v8a packages common artifacts
+
+.android-armeabi-v7a-mixin:
+  variables:
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-android-armeabi-v7a-qt5.15
+    KDECI_ANDROID_ABI: armeabi-v7a
+    KDECI_CC_CACHE: /mnt/caches/krita-android/armeabi-v7a/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-android/armeabi-v7a/
+    KRITACI_ARCHIVE_ARTIFACTS: "True"
+    KRITACI_SKIP_COMMON_ARTIFACTS: "True"
+
+android-build-appbundle:
+  stage: deploy
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
+  tags:
+    - Linux
+  extends:
+    - .ci-manual-job-mixin
+  interruptible: true
+  needs:
+    - job: android-build-armeabi-v7a
+      artifacts: true
+    - job: android-build-arm64-v8a
+      artifacts: true
+    - job: android-build-x86_64
+      artifacts: true
+  script:
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - python3 -u build-tools/ci-scripts/build-android-appbundle.py
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG
+    expire_in: 10 days
+    when: always
+    paths:
+      - "_packaging/*.aab"
+
+android-build-x86_64:
+  extends:
+  - .android-build-base
+  - .android-x86_64-mixin
+
+android-build-arm64-v8a:
+  extends:
+  - .android-build-base
+  - .android-arm64-v8a-mixin
+
+android-build-armeabi-v7a:
+  extends:
+  - .android-build-base
+  - .android-armeabi-v7a-mixin
+
+android-build-x86_64-nightly:
+  extends:
+  - .android-nightly-base
+  - .android-x86_64-mixin
+
+android-build-arm64-v8a-nightly:
+  extends:
+  - .android-nightly-base
+  - .android-arm64-v8a-mixin
+
+android-build-armeabi-v7a-nightly:
+  extends:
+  - .android-nightly-base
+  - .android-armeabi-v7a-mixin

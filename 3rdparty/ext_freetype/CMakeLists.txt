@@ -8,11 +8,27 @@ endif()
 set(FREETYPE_URL https://downloads.sourceforge.net/project/freetype/freetype2/2.12.1/freetype-2.12.1.tar.xz)
 set(FREETYPE_SHA256 4766f20157cc4cf0cd292f80bf917f92d1c439b243ac3018debf6b9140c41a7f)
 
-ExternalProject_Add(ext_freetype_bootstrap
+set(FREETYPE_SOURCE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/freetype_src")
+file(MAKE_DIRECTORY ${FREETYPE_SOURCE_DIRECTORY})
+file(WRITE ${FREETYPE_SOURCE_DIRECTORY}/foobar "yet-to-be-deleted-and-repopulated-at-build-stage")
+
+ExternalProject_Add(
+    ext_freetype_src
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
     URL ${FREETYPE_URL}
     URL_HASH SHA256=${FREETYPE_SHA256}
+
+    SOURCE_DIR ${FREETYPE_SOURCE_DIRECTORY}
+
+    BUILD_COMMAND ""
+    CONFIGURE_COMMAND ""
+    INSTALL_COMMAND ""
+    UPDATE_COMMAND ""
+)
+
+ExternalProject_Add(ext_freetype_bootstrap
+    SOURCE_DIR ${FREETYPE_SOURCE_DIRECTORY}
 
     INSTALL_DIR ${PREFIX_ext_freetype}
 
@@ -27,7 +43,7 @@ ExternalProject_Add(ext_freetype_bootstrap
 
     UPDATE_COMMAND ""
 
-    DEPENDS ext_png
+    DEPENDS ext_png ext_freetype_src
 )
 
 kis_ExternalProject_Add_with_separate_builds_apple(
@@ -54,9 +70,7 @@ kis_ExternalProject_Add_with_separate_builds_apple(
 
 # Amyspark: just run roughshod!
 ExternalProject_Add( ext_freetype
-    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL ${FREETYPE_URL}
-    URL_HASH SHA256=${FREETYPE_SHA256}
+    SOURCE_DIR ${FREETYPE_SOURCE_DIRECTORY}
 
     INSTALL_DIR ${PREFIX_ext_freetype}
 
@@ -70,5 +84,5 @@ ExternalProject_Add( ext_freetype
         ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_harfbuzz ext_png
+    DEPENDS ext_harfbuzz ext_png ext_freetype_src
 )

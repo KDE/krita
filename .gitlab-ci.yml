@@ -5,6 +5,23 @@
 variables:
   DEBIAN_FRONTEND: "noninteractive"
 
+.nightly-job-mixin:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $KRITACI_SCHEDULED_JOB_NAME == "nightly"
+      when: always
+
+.ci-manual-job-mixin:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: manual
+
+.ci-always-job-mixin:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: always
+
 clang_format:
   stage: build
   image: debian:testing
@@ -15,6 +32,8 @@ clang_format:
   script:
     - ./.gitlab-ci.script
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - when: manual
       allow_failure: true
 
@@ -34,3 +53,4 @@ include:
   - local: /build-tools/ci-scripts/cppcheck.yml
   - local: /build-tools/ci-scripts/linux.yml
   - local: /build-tools/ci-scripts/windows.yml
+  - local: /build-tools/ci-scripts/android.yml

@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
@@ -22,9 +22,19 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
-    ndkpath = System.getenv('ANDROID_NDK_HOME') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
-    installPrefix = '../krita-android-build'
-    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../i/src/android/java' : ""
+    ndkpath = System.getenv('KDECI_ANDROID_NDK_ROOT') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
+    installPrefix = System.getenv('KRITA_INSTALL_PREFIX')
+
+    // Note about qtResPath vs qt5AndroidDir:
+    //
+    // qt5AndroidDir is set up by androiddeployqt and points to exact files
+    // in _install directory, which is not available on the builder that builds
+    // AppBundle packages, so we should access these files from a manually copied
+    // location.
+    //
+    // tldr; at one time, either qt5AndroidDir or qtResPath is valid and points
+    //       to the same files
+    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? 'extra-bundle-deps/android/java' : ""
 }
 
 task configure() {
@@ -60,10 +70,15 @@ task copyLibs(type: Copy) {
 }
 
 task copyFonts(type: Copy) {
-    def etcDir = "../i/"
-    from "$etcDir/etc"
+    from "$installPrefix/etc"
     into 'assets/etc/'
     include '**'
+}
+
+task copySDLJar(type: Copy) {
+    from "$installPrefix/jar"
+    into 'libs/'
+    include 'SDL2Android.jar'
 }
 
 /*
@@ -78,16 +93,14 @@ task copyAssets(type: Copy) {
 }
 
 task copyLocaleFiles(type: Copy) {
-    def libsDir = "../i/"
-    from "$libsDir/share/locale"
-    from "$libsDir/translations"
+    from "$installPrefix/share/locale"
+    from "$installPrefix/translations"
     into 'assets/locale/'
     include '**'
 }
 
 task copyExtraMltFiles(type: Copy) {
-    def libsDir = "../i/"
-    from "$libsDir/share/mlt-7"
+    from "$installPrefix/share/mlt-7"
     into 'assets/mlt'
     include '**'
 }
@@ -186,6 +199,7 @@ android {
     configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(copyLocaleFiles)
+    configure.finalizedBy(copySDLJar)
     configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
@@ -193,5 +207,5 @@ android {
 dependencies {
     implementation 'com.android.billingclient:billing:5.0.0'
     implementation 'androidx.annotation:annotation:1.4.0'
-    implementation files('../i/jar/SDL2Android.jar')
+    implementation files("libs/SDL2Android.jar")
 }

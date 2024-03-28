@@ -2,6 +2,7 @@ SET(PREFIX_ext_iconv "${EXTPREFIX}" )
 if (WIN32)
 ExternalProject_Add( ext_iconv
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+	DOWNLOAD_NAME win-iconv-v0.0.8.tar.gz
 	URL https://github.com/win-iconv/win-iconv/archive/v0.0.8.tar.gz
 	URL_MD5 e4574721c2d9667af32283175c828833
 

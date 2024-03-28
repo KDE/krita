@@ -3,6 +3,8 @@ windows-build:
   image: invent-registry.kde.org/sysadmin/ci-images/krita-windows-builder:latest
   tags:
     - Windows
+  extends:
+    - .ci-always-job-mixin
   variables:
     KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
     KDECI_CACHE_PATH: "C:\\Gitlab\\Artifacts\\krita-windows"
@@ -47,8 +49,8 @@ windows-build:
 
 windows-packages:
   extends:
-  - windows-build
-  when: manual
+    - windows-build
+    - .ci-manual-job-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"

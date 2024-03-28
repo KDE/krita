@@ -179,7 +179,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 #endif
 
 #ifdef Q_OS_ANDROID
-    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);5
+    newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 
     donationLink = new QPushButton(dropFrameBorder);

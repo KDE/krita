@@ -57,11 +57,11 @@ commandToRun = ' '.join(['cmd.exe /c',
                          '--src-dir',  srcPath,
                          '--deps-install-dir', depsPath,
                          '--krita-install-dir', depsPath,
-                         ('--pre-zip-hook', '\"{}\"'.format(os.path.join(srcPath,
+                         '--pre-zip-hook', '\"{}\"'.format(os.path.join(srcPath,
                                                                         'build-tools',
                                                                         'ci-scripts',
                                                                         'sign-windows-package-at-notary-service.cmd')
-                            if signPackages else ''))
+                            if signPackages else '')
                         ])
 
 # Run the command

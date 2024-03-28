@@ -9,6 +9,11 @@ if not exist "%pkg_root%\" (
     exit /b 1
 )
 
+if not exist "%KRITACI_WINDOWS_SIGN_CONFIG%\" (
+    echo ERROR: No signing config file found: %KRITACI_WINDOWS_SIGN_CONFIG% 1>&2
+    exit /b 1
+)
+
 if exist files-to-sign.txt (
     del /F files-to-sign.txt
 )
@@ -17,6 +22,6 @@ for /r "%pkg_root%\" %%F in (*.exe *.com *.dll *.pyd) do (
     echo %%F >> files-to-sign.txt
 )
 
-python.exe -u ci-notary-service/signwindowsbinaries.py --config krita-deps-management/ci-utilities/signing/signwindowsbinaries.ini --files-from files-to-sign.txt
+python.exe -u ci-notary-service/signwindowsbinaries.py --config %KRITACI_WINDOWS_SIGN_CONFIG% --files-from files-to-sign.txt
 
 endlocal

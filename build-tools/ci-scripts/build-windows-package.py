@@ -21,6 +21,16 @@ if 'KRITACI_BUILD_INSTALLERS' in os.environ:
     arguments.build_installers = (os.environ['KRITACI_BUILD_INSTALLERS'].lower() in ['true', '1', 't', 'y', 'yes'])
     print ('## Overriding --build-installers from environment: {}'.format(arguments.build_installers))
 
+signPackages = True
+
+if not 'KRITACI_WINDOWS_SIGN_CONFIG' in os.environ:
+    print('## WARNING: KRITACI_WINDOWS_SIGN_CONFIG is not defined, signing will be skipped')
+    signPackages = False
+elif os.path.exists(os.environ['KRITACI_WINDOWS_SIGN_CONFIG']):
+    print('## WARNING: the file in KRITACI_WINDOWS_SIGN_CONFIG does not exist, signing will be skipped: {}'
+          .format(os.environ['KRITACI_WINDOWS_SIGN_CONFIG']))
+    signPackages = False
+
 buildPath = os.path.abspath('_build')
 depsPath = os.path.abspath('_install')
 srcPath = os.path.abspath(os.getcwd())
@@ -47,7 +57,12 @@ commandToRun = ' '.join(['cmd.exe /c',
                          '--src-dir',  srcPath,
                          '--deps-install-dir', depsPath,
                          '--krita-install-dir', depsPath,
-                         '--pre-zip-hook', '\"{}\"'.format(os.path.join(srcPath, 'build-tools', 'ci-scripts', 'sign-windows-package-at-notary-service.cmd'))])
+                         ('--pre-zip-hook', '\"{}\"'.format(os.path.join(srcPath,
+                                                                        'build-tools',
+                                                                        'ci-scripts',
+                                                                        'sign-windows-package-at-notary-service.cmd')
+                            if signPackages else ''))
+                        ])
 
 # Run the command
 try:
@@ -83,19 +98,20 @@ if arguments.build_installers:
 
     shutil.move(os.path.join(installerFolder, 'krita-nsis', installerFileName), os.getcwd())
 
-    commandToRun = ' '.join([sys.executable,
-                            os.path.join('ci-notary-service', 'signwindowsbinaries.py'),
-                            '--config', os.path.join('krita-deps-management', 'ci-utilities', 'signing', 'signwindowsbinaries.ini'),
-                            installerFileName
-                            ])
+    if signPackages:
+        commandToRun = ' '.join([sys.executable,
+                                os.path.join('ci-notary-service', 'signwindowsbinaries.py'),
+                                '--config', os.environ['KRITACI_WINDOWS_SIGN_CONFIG'],
+                                installerFileName
+                                ])
 
-    # Run the command
-    try:
-        print( "## RUNNING: " + commandToRun )
-        subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
-    except Exception:
-        print("## Failed to sign the installer")
-        sys.exit(1)
+        # Run the command
+        try:
+            print( "## RUNNING: " + commandToRun )
+            subprocess.check_call( commandToRun, stdout=sys.stdout, stderr=sys.stderr, shell=True )
+        except Exception:
+            print("## Failed to sign the installer")
+            sys.exit(1)
 
     msixFolder = os.path.join(os.getcwd(), '_msix')
     os.makedirs(msixFolder)

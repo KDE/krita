@@ -16,8 +16,8 @@ linux-build:
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF"
   interruptible: true
   before_script:
-    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management
-    - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1
+    - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
     - export PATH="$HOME/tools/bin:$PATH"
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR

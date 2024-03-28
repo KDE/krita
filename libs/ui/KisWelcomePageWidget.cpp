@@ -178,7 +178,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     connect(showNewsAction, SIGNAL(toggled(bool)), this, SLOT(slotToggleUpdateChecks(bool)));
 #endif
 
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID && defined DISABLED_FOR_BEING_BROKEN
     newFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     openFileLink->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
 

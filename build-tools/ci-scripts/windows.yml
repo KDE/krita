@@ -6,6 +6,7 @@ windows-build:
   extends:
     - .ci-always-job-mixin
   variables:
+    KDECI_BUILD_TYPE: Release
     KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
     KDECI_CACHE_PATH: "C:\\Gitlab\\Artifacts\\krita-windows"
     KDECI_GITLAB_SERVER: https://invent.kde.org/
@@ -48,6 +49,19 @@ windows-build:
       coverage_report:
         coverage_format: cobertura
         path: CoberturaLcovResults.xml
+
+windows-nightly:
+  extends:
+    - windows-build
+    - .nightly-job-mixin
+  interruptible: false
+  variables:
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_ONLY_BUILD: "True"
+    KRITACI_SKIP_DEBUG_PACKAGE: "False"
+    KRITACI_BUILD_INSTALLERS: "True"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=OFF"
+
 
 windows-packages:
   extends:

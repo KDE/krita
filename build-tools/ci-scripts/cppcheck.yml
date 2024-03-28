@@ -9,6 +9,8 @@ cppcheck:
   script:
     - python3 -u ci-utilities/run-cppcheck.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - changes:
       - "**/*.c"
       - "**/*.h"

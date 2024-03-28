@@ -26,7 +26,7 @@ signPackages = True
 if not 'KRITACI_WINDOWS_SIGN_CONFIG' in os.environ:
     print('## WARNING: KRITACI_WINDOWS_SIGN_CONFIG is not defined, signing will be skipped')
     signPackages = False
-elif os.path.exists(os.environ['KRITACI_WINDOWS_SIGN_CONFIG']):
+elif not os.path.exists(os.environ['KRITACI_WINDOWS_SIGN_CONFIG']):
     print('## WARNING: the file in KRITACI_WINDOWS_SIGN_CONFIG does not exist, signing will be skipped: {}'
           .format(os.environ['KRITACI_WINDOWS_SIGN_CONFIG']))
     signPackages = False

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:02+0000\n"
+"POT-Creation-Date: 2024-03-28 02:05+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -31697,34 +31697,34 @@ msgstr "Mäkké overenie je stále vypnuté."
 msgid "Gamut Warnings turned off."
 msgstr "Upozornenia škály vypnuté."
 
-#: libs/ui/KisViewManager.cpp:778
+#: libs/ui/KisViewManager.cpp:780
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Aktívny profil autora"
 
-#: libs/ui/KisViewManager.cpp:908
+#: libs/ui/KisViewManager.cpp:910
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopírovať)"
 
-#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "Alternatívne názvy vyčerpané, skúste ručne uložiť s vyšším číslom"
 
-#: libs/ui/KisViewManager.cpp:1051
+#: libs/ui/KisViewManager.cpp:1053
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Nebolo možné uložiť inkrementálnu verziu"
 
-#: libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Nebolo možné uložiť inkrementálnu zálohu"
 
-#: libs/ui/KisViewManager.cpp:1326
+#: libs/ui/KisViewManager.cpp:1378
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31733,13 +31733,13 @@ msgstr ""
 "Prechádzam do režimu iba plátna.\n"
 "Stlačte %1 pre návrat."
 
-#: libs/ui/KisViewManager.cpp:1368
+#: libs/ui/KisViewManager.cpp:1437
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Otvoriť priečinok zdrojov"
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1441
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31764,19 +31764,19 @@ msgstr ""
 "<p><b>Súkromné umiestnenie aplikácie</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1387
+#: libs/ui/KisViewManager.cpp:1456
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Otvoriť v AppData po&užívateľa"
 
-#: libs/ui/KisViewManager.cpp:1388
+#: libs/ui/KisViewManager.cpp:1457
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Otvoriť v súkromnom umiestnení a&plikácie"
 
-#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
+#: libs/ui/KisViewManager.cpp:1570 libs/ui/KisViewManager.cpp:1588
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

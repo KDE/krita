@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:02+0000\n"
+"POT-Creation-Date: 2024-03-28 02:05+0000\n"
 "PO-Revision-Date: 2024-03-14 03:29+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -31561,36 +31561,36 @@ msgstr "Aunque las pruebas en pantalla siguen estando desactivadas."
 msgid "Gamut Warnings turned off."
 msgstr "Advertencias de gama desactivadas."
 
-#: libs/ui/KisViewManager.cpp:778
+#: libs/ui/KisViewManager.cpp:780
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Perfil de autor activo"
 
-#: libs/ui/KisViewManager.cpp:908
+#: libs/ui/KisViewManager.cpp:910
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Copiar)"
 
-#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Se han agotado los nombres alternativos, intente guardar manualmente con un "
 "número mayor"
 
-#: libs/ui/KisViewManager.cpp:1051
+#: libs/ui/KisViewManager.cpp:1053
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "No se ha podido guardar la versión incremental"
 
-#: libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "No se ha podido guardar la copia de respaldo incremental"
 
-#: libs/ui/KisViewManager.cpp:1326
+#: libs/ui/KisViewManager.cpp:1378
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31599,13 +31599,13 @@ msgstr ""
 "Ir al modo de solo el lienzo.\n"
 "Pulse %1 para volver."
 
-#: libs/ui/KisViewManager.cpp:1368
+#: libs/ui/KisViewManager.cpp:1437
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Abrir carpeta de recursos"
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1441
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31630,19 +31630,19 @@ msgstr ""
 "<p><b>Ubicación privada de la aplicación</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1387
+#: libs/ui/KisViewManager.cpp:1456
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Abrir en AppData del &usuario"
 
-#: libs/ui/KisViewManager.cpp:1388
+#: libs/ui/KisViewManager.cpp:1457
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Abrir en la ubicación &privada de la aplicación"
 
-#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
+#: libs/ui/KisViewManager.cpp:1570 libs/ui/KisViewManager.cpp:1588
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"

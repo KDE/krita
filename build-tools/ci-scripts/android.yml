@@ -52,7 +52,6 @@
 .android-packages-base:
   extends:
   - .android-build-base
-  when: manual
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "release"
@@ -91,7 +90,10 @@ android-build-appbundle:
   image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
   tags:
     - Linux
-  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: manual
   interruptible: true
   needs:
     - job: android-build-armeabi-v7a

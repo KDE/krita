@@ -3,10 +3,8 @@ linux-build:
   image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
   tags:
     - Linux
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: always
+  extends:
+    - .ci-always-job-mixin
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_CC_CACHE: /mnt/caches/krita-appimage/
@@ -45,10 +43,7 @@ linux-build:
 linux-packages:
   extends:
   - linux-build
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: manual
+  - .ci-manual-job-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"

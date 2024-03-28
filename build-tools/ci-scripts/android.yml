@@ -3,10 +3,8 @@
   image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
   tags:
     - Linux
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: manual
+  extends:
+    .ci-manual-job-mixin
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_GITLAB_SERVER: https://invent.kde.org/
@@ -39,10 +37,8 @@
 
 .android-nightly-base:
   extends:
-  - .android-build-base
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: always
+    - .android-build-base
+    - .nightly-job-mixin
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
@@ -89,10 +85,8 @@ android-build-appbundle:
   image: invent-registry.kde.org/sysadmin/ci-images/krita-android-builder:latest
   tags:
     - Linux
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - when: manual
+  extends:
+    - .ci-manual-job-mixin
   interruptible: true
   needs:
     - job: android-build-armeabi-v7a

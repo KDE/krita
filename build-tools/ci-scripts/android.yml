@@ -25,7 +25,7 @@
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build --skip-publishing
     - python3 -u build-tools/ci-scripts/build-android-package.py
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config krita-deps-management/ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk; fi
   artifacts:

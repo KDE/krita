@@ -3,6 +3,10 @@ windows-build:
   image: invent-registry.kde.org/sysadmin/ci-images/krita-windows-builder:latest
   tags:
     - Windows
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: always
   variables:
     KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
     KDECI_CACHE_PATH: "C:\\Gitlab\\Artifacts\\krita-windows"
@@ -48,7 +52,10 @@ windows-build:
 windows-packages:
   extends:
   - windows-build
-  when: manual
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: manual
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"

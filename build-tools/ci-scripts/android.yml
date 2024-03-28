@@ -4,9 +4,9 @@
   tags:
     - Linux
   rules:
-    - if: $CI_PIPELINE_SOURCE != "schedule"
-      when: manual
-    - when: never
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - when: manual
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_GITLAB_SERVER: https://invent.kde.org/

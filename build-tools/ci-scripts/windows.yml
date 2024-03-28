@@ -16,11 +16,13 @@ windows-build:
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF"
     KRITACI_SKIP_DEBUG_PACKAGE: "True"
     KRITACI_BUILD_INSTALLERS: "False"
+    KRITACI_WINDOWS_SIGN_CONFIG: "upstream-ci-utilities/signing/signwindowsbinaries.ini"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management
     - git clone https://invent.kde.org/dkazakov/ci-utilities -b work/split-ci-branch krita-deps-management/ci-utilities
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
     - python -m venv venv --upgrade-deps
     - . venv\Scripts\Activate.ps1
     - pip install -r krita-deps-management/requirements.txt

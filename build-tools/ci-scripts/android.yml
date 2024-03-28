@@ -16,6 +16,8 @@
     # KDECI_ANDROID_NDK_ROOT: $ANDROID_HOME/android-ndk-r22b/ # <-- set up in the base image!
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
     KRITACI_ANDROID_PACKAGE_TYPE: "debug"
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "True"
+    KRITACI_PUBLISH_BUILD_CONFIG: "upstream-ci-utilities/signing/publishbuild.ini"
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1
@@ -29,6 +31,7 @@
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build --skip-publishing
     - python3 -u build-tools/ci-scripts/build-android-package.py
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config upstream-ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk; fi
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform android-$KDECI_ANDROID_ABI --folder $CI_PROJECT_DIR/_packaging
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG
     expire_in: 10 days
@@ -44,8 +47,9 @@
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
 
-.android-packages-base:
+.android-release-base:
   extends:
   - .android-build-base
   interruptible: false

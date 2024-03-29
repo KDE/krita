@@ -10,7 +10,6 @@ set -x
 # Read in our parameters
 export BUILD_PREFIX=$1
 export KRITA_SOURCES=$2
-export CHANNEL="${3}"
 
 # Save some frequently referenced locations in variables for ease of use / updating
 export APPDIR=${KRITA_APPDIR_PATH:-$BUILD_PREFIX/krita.appdir}
@@ -40,6 +39,79 @@ fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
 source ${KRITA_SOURCES}/packaging/linux/appimage/override_compiler.sh.inc
+
+if [[ $ARCH == "arm64" ]]; then
+  APPIMAGE_ARCHITECTURE="aarch64"
+elif [[ $ARCH == "amd64" ]]; then
+  APPIMAGE_ARCHITECTURE="x86_64"
+else
+  APPIMAGE_ARCHITECTURE=$ARCH
+fi
+
+# Step 0: Find out what version of Krita we built and give the Appimage a proper name
+cd $BUILD_DIR
+
+KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
+# Also find out the revision of Git we built
+# Then use that to generate a combined name we'll distribute
+cd $KRITA_SOURCES
+
+if [[ "${CI_COMMIT_TAG}" =~ v.* ]]; then
+    STRIPPED_COMMIT_TAG="$(echo ${CI_COMMIT_TAG} | sed -e 's/v\(.*\)/\1/')"
+    echo "Found a released tag: ${CI_COMMIT_TAG} ${STRIPPED_COMMIT_TAG}"
+
+    export VERSION=$KRITA_VERSION
+    NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
+
+    pushd $BUILD_DIR
+
+    #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
+    is_beta=0
+    grep "define KRITA_BETA 1" libs/version/kritaversion.h || is_beta=$?
+
+    is_rc=0
+    grep "define KRITA_RC 1" libs/version/kritaversion.h || is_rc=$?
+
+    popd
+
+    if [ $is_beta -eq 0 ]; then
+        VERSION_TYPE="development"
+    else
+        VERSION_TYPE="stable"
+    fi
+
+    if [ $is_beta -eq 0 ] || [ $is_rc -eq 0 ]; then
+        CHANNEL="Beta"
+        ZSYNC_URL="zsync|https://download.kde.org/unstable/krita/updates/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://download.kde.org/unstable/krita/${STRIPPED_COMMIT_TAG}/${NEW_APPIMAGE_NAME}"
+    else
+        CHANNEL="Stable"
+        ZSYNC_URL="zsync|https://download.kde.org/stable/krita/updates/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://download.kde.org/stable/krita/${STRIPPED_COMMIT_TAG}/${NEW_APPIMAGE_NAME}"
+    fi
+
+else
+    VERSION_TYPE="development"
+
+    if git rev-parse --is-inside-work-tree; then
+        GIT_REVISION=$(git rev-parse --short HEAD)
+        export VERSION=$KRITA_VERSION-$GIT_REVISION
+    else
+        export VERSION=$KRITA_VERSION
+    fi
+
+    NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
+
+    if [[ "${CI_COMMIT_BRANCH}" =~ krita/.* ]]; then
+        CHANNEL="Plus"
+        ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/${CI_COMMIT_BRANCH}/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://cdn.kde.org/ci-builds/graphics/krita/${CI_COMMIT_BRANCH}/linux/${NEW_APPIMAGE_NAME}"
+    else
+        CHANNEL="Next"
+        ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/master/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://cdn.kde.org/ci-builds/graphics/krita/master/linux/${NEW_APPIMAGE_NAME}"
+    fi
+fi
 
 # Switch over to our build prefix
 cd $BUILD_PREFIX
@@ -171,59 +243,9 @@ if [ -f $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so ] ; then
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.10/site-packages/PyQt5/sip.so
 fi
 
-# Step 4: Find out what version of Krita we built and give the Appimage a proper name
-cd $BUILD_DIR
+# Step 4: Update version and update information
 
-KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
-# Also find out the revision of Git we built
-# Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
-if git rev-parse --is-inside-work-tree; then
-    GIT_REVISION=$(git rev-parse --short HEAD)
-    export VERSION=$KRITA_VERSION-$GIT_REVISION
-    VERSION_TYPE="development"
-
-    if [ -z "${CHANNEL}" ]; then
-        BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-
-        if [ "${JOB_NAME}" == "Krita_Nightly_Appimage_Build" ]; then
-            CHANNEL="Next"
-        elif [ "${JOB_NAME}" == "Krita_Stable_Appimage_Build" ]; then
-            CHANNEL="Plus"
-        elif [ "$BRANCH" = "master" ]; then
-            CHANNEL="Next"
-        elif [[ "${BRANCH}" =~ krita/.* ]]; then
-            CHANNEL="Plus"
-        fi
-    fi
-else
-	export VERSION=$KRITA_VERSION
-
-    pushd $BUILD_DIR
-
-    #if KRITA_BETA is set, set channel to Beta, otherwise set it to stable
-    is_beta=0
-    grep "define KRITA_BETA 1" libs/version/kritaversion.h || is_beta=$?
-
-    is_rc=0
-    grep "define KRITA_RC 1" libs/version/kritaversion.h || is_rc=$?
-
-    popd
-
-    if [ $is_beta -eq 0 ]; then
-        VERSION_TYPE="development"
-    else
-        VERSION_TYPE="stable"
-    fi
-
-    if [ -z "${CHANNEL}" ]; then
-        if [ $is_beta -eq 0 ] || [ $is_rc -eq 0 ]; then
-            CHANNEL="Beta"
-        else
-            CHANNEL="Stable"
-        fi
-    fi
-fi
 
 DATE=$(git log -1 --format="%ct" | xargs -I{} date -d @{} +%Y-%m-%d)
 if [ "$DATE" = "" ] ; then
@@ -231,19 +253,6 @@ if [ "$DATE" = "" ] ; then
 fi
 
 sed -e "s|<release version=\"\" date=\"\" />|<release version=\"$VERSION\" date=\"$DATE\" type=\"$VERSION_TYPE\"/>|" -i $APPDIR/usr/share/metainfo/org.kde.krita.appdata.xml
-
-if [ -n "${CHANNEL}" ]; then # if channel argument is set, we wish to embed update information
-    # set zsync url for linuxdeployqt
-    if [ "$CHANNEL" = "Next" ]; then
-        ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/lastSuccessfulBuild/artifact/Krita-${CHANNEL}-x86_64.appimage.zsync"
-    elif [ "$CHANNEL" = "Plus" ]; then
-        ZSYNC_URL="zsync|https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/lastSuccessfulBuild/artifact/Krita-${CHANNEL}-x86_64.appimage.zsync"
-    elif [ "$CHANNEL" = "Stable" ]; then
-        ZSYNC_URL="zsync|https://download.kde.org/stable/krita/updates/Krita-${CHANNEL}-x86_64.appimage.zsync"
-    elif [ "$CHANNEL" = "Beta" ]; then
-        ZSYNC_URL="zsync|https://download.kde.org/unstable/krita/updates/Krita-${CHANNEL}-x86_64.appimage.zsync"
-    fi
-fi
 
 # Return to our build root
 cd $BUILD_PREFIX
@@ -313,14 +322,13 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
 
 # Generate a new name for the Appimage file and rename it accordingly
 
-if [[ $ARCH == "arm64" ]]; then
-  APPIMAGE_ARCHITECTURE="aarch64"
-elif [[ $ARCH == "amd64" ]]; then
-  APPIMAGE_ARCHITECTURE="x86_64"
-else
-  APPIMAGE_ARCHITECTURE=$ARCH
-fi
-
 OLD_APPIMAGE_NAME="Krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.AppImage"
-NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
 mv ${OLD_APPIMAGE_NAME} ${NEW_APPIMAGE_NAME}
+
+# TODO: when signing is implemented, make sure the package is signed **before**
+#       the zsync file is generated (since singing changes the packages)
+
+# remove the autogenerated zsync file and create the custom one
+rm -f *.zsync
+zsyncmake -u "${ZSYNC_SOURCE_URL}" ${NEW_APPIMAGE_NAME}
+mv ${NEW_APPIMAGE_NAME}.zsync Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync

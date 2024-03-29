@@ -31,6 +31,9 @@
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Android/$KDECI_ANDROID_ABI/Qt5/Shared --only-build --skip-publishing
     - python3 -u build-tools/ci-scripts/build-android-package.py
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u ci-notary-service/signapk.py -v --config upstream-ci-utilities/signing/signapk.ini $CI_PROJECT_DIR/_packaging/*.apk; fi
+      # WARNING: we don't actually check if the package is signed or not, since the notary service
+      # could "silently" skip signing due to security reasons
+    - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u build-tools/ci-scripts/rename-signed-apk-packages.py --folder $CI_PROJECT_DIR/_packaging; fi
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform android-$KDECI_ANDROID_ABI --folder $CI_PROJECT_DIR/_packaging
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG

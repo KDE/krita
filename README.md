@@ -1,22 +1,16 @@
-![Picture](https://krita.org/wp-content/uploads/2019/04/krita-logo-2019.png)
+![Picture](https://krita.org/images/krita-logo-light.svg)
 
-| Jenkins CI Name     | Master / Nightly | Stable | Release |
+| CI Name     | Master | Stable | Release |
 | ------------------- | ---------------- | ------ | ------- |
-| Windows             | [![Build Status](https://binary-factory.kde.org/job/Krita_Nightly_Windows_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Nightly_Windows_Build/) | [![Build Status](https://binary-factory.kde.org/job/Krita_Stable_Windows_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Stable_Windows_Build/) | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Windows64_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Windows64_Build/) |
-| MacOS               | [![Build Status](https://binary-factory.kde.org/job/Krita_Nightly_MacOS_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Nightly_MacOS_Build/) | [![Build Status](https://binary-factory.kde.org/job/Krita_Stable_MacOS_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Stable_MacOS_Build/) | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_MacOS_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_MacOS_Build/) |
-| Appimage            | [![Build Status](https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/) | [![Build Status](https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/) | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Appimage_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Appimage_Build/) |
-| Android_x86         | - | - | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Android_x86_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Android_x86_Build/) |
-| Android_x86_64      | [![Build Status](https://binary-factory.kde.org/job/Krita_Nightly_Android_x86_64_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Nightly_Android_x86_64_Build/) | - | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Android_x86_64_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Android_x86_64_Build/) |
-| Android_armeabi-v7a | - | - | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Android_armeabi-v7a_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Android_armeabi-v7a_Build/) |
-| Android_arm64-v8a   | [![Build Status](https://binary-factory.kde.org/job/Krita_Nightly_Android_arm64-v8a_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Nightly_Android_arm64-v8a_Build/) | - | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Android_arm64-v8a_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Android_arm64-v8a_Build/) |
-| Android_AppBundle   | - | - | [![Build Status](https://binary-factory.kde.org/job/Krita_Release_Android_AppBundle_Build/badge/icon)](https://binary-factory.kde.org/job/Krita_Release_Android_AppBundle_Build/) |
-| Flatpak             | [![Build Status](https://binary-factory.kde.org/job/Krita_nightly_x86_64_flatpak/badge/icon)](https://binary-factory.kde.org/job/Krita_nightly_x86_64_flatpak/) | - | - |
+| Pipeline | [![pipeline status](https://invent.kde.org/graphics/krita/badges/master/pipeline.svg)](https://invent.kde.org/graphics/krita/-/commits/master) | [![pipeline status](https://invent.kde.org/graphics/krita/badges/krita/5.2/pipeline.svg)](https://invent.kde.org/graphics/krita/-/commits/krita/5.2) | [![Latest Release](https://invent.kde.org/graphics/krita/-/badges/release.svg)](https://invent.kde.org/graphics/krita/-/releases) |
+
+Note: Nightly builds are not covered by this table atm
 
 Krita is a free and open source digital painting application. It is for artists who want to create professional work from start to end. Krita is used by comic book artists, illustrators, concept artists, matte and texture painters and in the digital VFX industry.
 
 If you are reading this on GitHub, be aware that this is just a mirror. Our real code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
 
-![Picture](https://krita.org/wp-content/uploads/2020/05/kiki_4.3.3_sm.png)
+![Picture](https://krita.org/images/hero-image-50.webp)
 
 
 ### User Manual

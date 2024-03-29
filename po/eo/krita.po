@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-17 03:45+0000\n"
-"PO-Revision-Date: 2024-01-04 21:03+0100\n"
+"PO-Revision-Date: 2024-03-28 08:18+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -12717,7 +12717,7 @@ msgstr "&Ecoj..."
 #, kde-format
 msgctxt "Layer Properties"
 msgid "Properties"
-msgstr "Propraĵoj"
+msgstr "Proprecoj"
 
 #. i18n: context: text @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3552
@@ -14156,7 +14156,7 @@ msgstr "Vidi Presan Grandecon"
 msgctxt "action"
 msgid "Map the canvas display to print size, based on the image resolution."
 msgstr ""
-"Mapu la kanvasan ekranon por presi grandecon, surbaze de la bilda rezolucio."
+"Mapu la kanvasan ekranon por presi grandecon, surbaze de la bilda distingivo."
 
 #. i18n: context: text @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:894
@@ -14517,7 +14517,7 @@ msgstr "&Ecoj..."
 #, kde-format
 msgctxt "Image Properties"
 msgid "Properties"
-msgstr "Propraĵoj"
+msgstr "Proprecoj"
 
 #. i18n: context: text @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1161
@@ -16861,7 +16861,7 @@ msgstr "Regrandigi Bildon"
 #: libs/image/commands_new/kis_image_set_resolution_command.cpp:14
 msgctxt "(qtundo-format)"
 msgid "Set Image Resolution"
-msgstr "Meti Bildrezolucion"
+msgstr "Meti Bilddistingivon"
 
 #: libs/image/commands_new/kis_move_command_common.h:28
 #: libs/ui/tool/strokes/move_stroke_strategy.cpp:215
@@ -17118,7 +17118,7 @@ msgstr "Skali Bildon"
 #: libs/image/kis_image.cc:986
 msgctxt "(qtundo-format)"
 msgid "Change Image Resolution"
-msgstr "Ŝanĝi Bildrezolucion"
+msgstr "Ŝanĝi Bilddistingivon"
 
 #: libs/image/kis_image.cc:1033
 msgctxt "(qtundo-format)"
@@ -21976,7 +21976,7 @@ msgstr "Peniko HUD-agordo"
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:37
 #, kde-format
 msgid "Available properties:"
-msgstr "Disponeblaj propraĵoj:"
+msgstr "Disponeblaj proprecoj:"
 
 #. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
 #. i18n: ectx: property (text), widget (QToolButton, btnAdd)
@@ -21998,7 +21998,7 @@ msgstr "<"
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:95
 #, kde-format
 msgid "Current properties:"
-msgstr "Nunaj propraĵoj:"
+msgstr "Nunaj proprecoj:"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnUp)
 #: libs/ui/brushhud/kis_dlg_brush_hud_config.ui:107
@@ -22232,6 +22232,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Disvolva Fonduso</h1><p align="
+"\"center\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 "
+"align=\"center\">Unufojaj Sponsoroj</h2><p align=\"center\"> <a href="
+"\"https://www.unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></"
+"a> <p align=\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/"
+"broken_rules.png\"></a> <p align=\"center\"> <a href=\"https://game-chuck."
+"com/\"><img src=\":/gamechuck.png\"></a> <p align=\"center\"> <a href="
+"\"https://www.fosshub.com/Krita.html\"><img src=\":/fosshub.png\"></a> <p "
+"align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
+"asifa.png\"></a> </body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -22598,7 +22608,7 @@ msgstr "*varias*"
 #: libs/ui/dialogs/kis_dlg_layer_properties.cc:207
 msgctxt "(qtundo-format)"
 msgid "Change Layer Properties"
-msgstr "Ŝanĝi Tavolajn Propraĵojn"
+msgstr "Ŝanĝi Tavolajn Proprecojn"
 
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:65
 #, kde-format
@@ -23162,7 +23172,7 @@ msgstr "Restarigi defaŭltojn"
 #, kde-format
 msgctxt "@title:window"
 msgid "Stroke Selection Properties"
-msgstr "Propraĵoj de Elekto de Trako"
+msgstr "Proprecoj de Elekto de Trako"
 
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
@@ -23973,13 +23983,13 @@ msgstr "Bild-distingivo"
 #: libs/ui/forms/wdg_resolution.ui:52
 #, kde-format
 msgid "X resolution:"
-msgstr "X-rezolucio:"
+msgstr "X-distingivo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution)
 #: libs/ui/forms/wdg_resolution.ui:81
 #, kde-format
 msgid "Y resolution:"
-msgstr "Y rezolucio:"
+msgstr "Y-distingivo:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblResolution)
 #. i18n: ectx: property (text), widget (QLabel, lblYResolution_3)
@@ -23990,7 +24000,7 @@ msgstr "Y rezolucio:"
 #: plugins/python/documenttools/tools/scaletool/scaletool.py:42
 #, kde-format
 msgid "Resolution:"
-msgstr "Rezolucio:"
+msgstr "Distingivo:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, aboutTab)
 #: libs/ui/forms/wdgaboutapplication.ui:29
@@ -24013,10 +24023,9 @@ msgstr "Tradukistoj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
-msgstr "Sponsoro"
+msgstr "Sponsoroj"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83
@@ -24440,7 +24449,7 @@ msgstr "Profilo"
 #: libs/ui/forms/wdgcolorspaceselectoradvanced.ui:151
 #, kde-format
 msgid "Profile Properties"
-msgstr "Profilaj Propraĵoj"
+msgstr "Profilaj Proprecoj"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgConvertColorSpace)
 #: libs/ui/forms/wdgconvertcolorspace.ui:18
@@ -24953,7 +24962,7 @@ msgstr "Skali al Bilda Grandeco"
 #: libs/ui/forms/wdgdlgfilelayer.ui:135
 #, kde-format
 msgid "Adapt to Image Resolution (ppi)"
-msgstr "Adaptiĝi al Bilda Rezolucio (ppi)"
+msgstr "Adaptiĝi al Bilda Distingivo (ppi)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdlgfilelayer.ui:147
@@ -26177,7 +26186,7 @@ msgstr "Dimensioj:"
 #: libs/ui/forms/wdglayerproperties.ui:244
 #, kde-format
 msgid "Properties"
-msgstr "Propraĵoj"
+msgstr "Proprecoj"
 
 #. i18n: ectx: property (toolTip), widget (QGroupBox, grpActiveChannels)
 #: libs/ui/forms/wdglayerproperties.ui:258
@@ -26466,7 +26475,7 @@ msgid ""
 "reconfigured in `Image > Properties.`"
 msgstr ""
 "Uzu fonkoloron kaj opakecon kiel la bazan kanvasan koloron. Ĉi tio povas "
-"esti reagordita en `Bildo > Propraĵoj.`"
+"esti reagordita en `Bildo > Proprecoj.`"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsProjection)
 #: libs/ui/forms/wdgnewimage.ui:570
@@ -26482,7 +26491,7 @@ msgid ""
 "color for this layer can be reconfigured in the layer's properties."
 msgstr ""
 "Uzu fonkoloron kaj opakecon por krei fonan plenigtavolon. La koloro por ĉi "
-"tiu tavolo povas esti reagordita en la propraĵoj de la tavolo."
+"tiu tavolo povas esti reagordita en la proprecoj de la tavolo."
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioBackgroundAsFill)
 #: libs/ui/forms/wdgnewimage.ui:586
@@ -28860,7 +28869,7 @@ msgstr "%1 (Qt)"
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:18
 #, kde-format
 msgid "Choose screen resolution"
-msgstr "Elekti ekranan rezolucion"
+msgstr "Elekti ekranan distingivon"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleMessage)
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:24
@@ -29086,7 +29095,7 @@ msgstr "Tavolo estas malplena"
 #: libs/ui/kis_layer_manager.cc:246
 #, kde-format
 msgid "Filter Layer Properties"
-msgstr "Filtrila Tavolo Propraĵoj"
+msgstr "Filtrila Tavolo Proprecoj"
 
 #: libs/ui/kis_layer_manager.cc:290
 #, kde-format
@@ -29096,7 +29105,7 @@ msgstr "Plenig-Tavolaj Trajtoj"
 #: libs/ui/kis_layer_manager.cc:306
 #, kde-format
 msgid "File Layer Properties"
-msgstr "Propraĵoj de Dosiera Tavolo"
+msgstr "Propraecj de Dosiera Tavolo"
 
 #: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
 #, kde-format
@@ -29231,7 +29240,7 @@ msgstr "Aldoni Transform Maskon"
 #: libs/ui/kis_mask_manager.cc:309
 #, kde-format
 msgid "Filter Mask Properties"
-msgstr "Filtrila Masko Propraĵoj"
+msgstr "Filtrila Masko Proprecoj"
 
 #: libs/ui/kis_mirror_manager.cpp:37
 #, kde-format
@@ -29546,7 +29555,7 @@ msgstr "Maskita Peniko"
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
 msgid "Clear color history"
-msgstr "Klara kolorhistorio"
+msgstr "Malplenigi kolorhistorion"
 
 #: libs/ui/kis_popup_palette.cpp:176
 #, kde-format
@@ -33313,7 +33322,7 @@ msgstr ""
 "<b>16-bita entjero</b>: Ankaŭ konata kiel 'profunda koloro'. 16 bitoj estas "
 "ideala por redakti bildojn kun lineara TRC, granda kolorspaco, aŭ ĝuste kiam "
 "vi bezonas pli precizan kolormiksadon. Ĉi tio okupas duoble pli da spaco sur "
-"la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj propraĵoj, kaj "
+"la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj proprecoj, kaj "
 "por iuj aparatoj ĝi bezonas multe pli da pretigpovo. Ni rekomendas rigardi "
 "la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 bitojn se via komputilo "
 "malrapidiĝas. Zorgu malŝalti konvertiĝan optimumigon dum konvertado de 16 "
@@ -33338,7 +33347,7 @@ msgstr ""
 "bildojn kun lineara Tona Responda Kurbo, granda kolorspaco, aŭ ĝuste kiam vi "
 "bezonas pli precizan kolormiksadon. Ĝi estas glitpunkto estas absoluta "
 "postulo por Scene Referitaj (HDR) bildoj. Ĉi tio okupas duoble pli da spaco "
-"sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj propraĵoj, "
+"sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de la samaj proprecoj, "
 "kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. Ni rekomendas "
 "rigardi la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 bitojn se via "
 "komputilo malrapidiĝas."
@@ -33361,7 +33370,7 @@ msgstr ""
 "aŭ ĝuste kiam vi bezonas pli precizan kolormiksadon. Ĝi estas glitpunkto "
 "estas absoluta postulo por Scene Referitaj (HDR) bildoj. Ĉi tio ja prenas "
 "kvaroble pli da spaco sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de "
-"la samaj propraĵoj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
+"la samaj proprecoj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
 "Ni rekomendas rigardi la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 "
 "bitojn se via komputilo malrapidiĝas."
 
@@ -33385,7 +33394,7 @@ msgstr ""
 "estas generitaj aŭ uzataj kiel enigo por programaro. Ĝi estas glitpunkto "
 "estas absoluta postulo por Scene Referitaj (HDR) bildoj. Ĉi tio ja prenas ok "
 "fojojn pli da spaco sur la RAM kaj malmola disko ol iu ajn 8-bita bildo de "
-"la samaj propraĵoj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
+"la samaj propraecj, kaj por iuj aparatoj ĝi bezonas multe pli da pretigpovo. "
 "Ni rekomendas rigardi la RAM-uzadon de la dosiero zorge, aŭ alie uzi 8 "
 "bitojn se via komputilo malrapidiĝas."
 
@@ -33466,7 +33475,7 @@ msgstr ""
 "la hodiaŭaj altnivelaj, pli larĝa gamo, inkŝelaj presiloj. BetaRGB (ne "
 "inkluzivita en la profila pako) kaj Rec.2020 estas pli bonaj kongruoj por la "
 "kolorgamoj de la hodiaŭaj larĝa gamo-printiloj.</p><p>La Adobe RGB 1998-"
-"kolorgamo estas akceptebla aproksimado al iuj el la hodiaŭaj altnivelaj "
+"kolorgamo estas akceptebla alproksimiĝo al iuj el la hodiaŭaj altnivelaj "
 "gamoj. larĝa gamo monitoroj.</p>"
 
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:550
@@ -37754,7 +37763,7 @@ msgstr "Ĝisdatigi post ĉiu bato"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1058
 #, kde-format
 msgid "Lightness, Saturation and Hue hotkey steps"
-msgstr "Leĝereco, Saturado kaj Nuanco klavoklavo paŝoj"
+msgstr "Leĝereco, Saturado kaj Nuanco fulmoklavo paŝoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1064
@@ -37793,7 +37802,7 @@ msgstr "Nuanco:"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1109
 #, kde-format
 msgid "YUV Redder/Greener/Bluer/Yellower hotkey steps"
-msgstr "YUV Pli Ruĝaj/Pli Verdaj/Pli Bluaj/Pli Flava klavklavopaŝoj"
+msgstr "YUV Pli Ruĝaj/Pli Verdaj/Pli Bluaj/Pli Flava fulmklavopaŝoj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1115
@@ -37929,12 +37938,9 @@ msgid "Zoom view to fit curve."
 msgstr "Zomi vido por konveni kurbon."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Aldonu skalarajn ŝlosilkadrojn"
+msgstr "Aldoni Skalarajn Ŝlosilkadrojn"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -39886,7 +39892,7 @@ msgstr "Kvalito:"
 #, kde-format
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:"
-msgstr "Rezolucio:"
+msgstr "Distingivo:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:248
@@ -45191,7 +45197,7 @@ msgstr "Ĝeneralaj Agordoj"
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:76
 #, kde-format
 msgid "Material properties"
-msgstr "Materialaj propraĵoj"
+msgstr "Materialaj proprecoj"
 
 #. i18n: ectx: property (title), widget (QGroupBox, specularReflectivityGroup)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:85
@@ -46281,13 +46287,13 @@ msgstr "Grandeca Reĝimo:"
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:257
 #, kde-format
 msgid "Resolution based"
-msgstr "Rezolucio bazita"
+msgstr "Distingiv-bazita"
 
 #. i18n: ectx: property (text), widget (KoGroupButton, buttonSizeModePixelBased)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:273
 #, kde-format
 msgid "Pixel based"
-msgstr "Bazita en rastrumeroj"
+msgstr "Surbaze de rastrumeroj"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboBoxUnits)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:337
@@ -46782,7 +46788,7 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved in both dimensions."
 msgstr ""
-"La brileco de la bildo estos je plena rezolucio, dum la bunteco estos "
+"La brileco de la bildo estos je plena distingivo, dum la bunteco estos "
 "duonigita en ambaŭ dimensioj."
 
 #: plugins/impex/heif/HeifExport.cpp:529
@@ -46792,7 +46798,7 @@ msgid ""
 "The brightness of the image will be at full resolution, while the "
 "colorfulness will be halved horizontally."
 msgstr ""
-"La brileco de la bildo estos je plena rezolucio, dum la bunteco estos "
+"La brileco de la bildo estos je plena distingivo, dum la bunteco estos "
 "duonigita horizontale."
 
 #: plugins/impex/heif/HeifExport.cpp:530
@@ -46800,7 +46806,7 @@ msgstr ""
 msgctxt "@tooltip"
 msgid ""
 "Both brightness and colorfulness of the image will be at full resolution."
-msgstr "Ambaŭ brileco kaj bunteco de la bildo estos je plena rezolucio."
+msgstr "Ambaŭ brileco kaj bunteco de la bildo estos je plena distingivo."
 
 #: plugins/impex/heif/HeifExport.cpp:544
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:184
@@ -47205,7 +47211,7 @@ msgstr ""
 #: plugins/impex/jp2/kis_wdg_options_jp2.ui:78
 #, kde-format
 msgid "Number of resolutions:"
-msgstr "Nombro da rezolucioj:"
+msgstr "Nombro da distingivoj:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: plugins/impex/jpeg/kis_wdg_options_jpeg.ui:25
@@ -47536,13 +47542,13 @@ msgstr "Centro-unua ordo"
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "64x64 lower resolution pass"
-msgstr "64x64 pli malalta rezolucio-paso"
+msgstr "64x64 pli malalta distingivo-paso"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:90
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "512x512 + 64x64 lower resolution passes"
-msgstr "512x512 + 64x64 pli malalta rezolucio pasas"
+msgstr "512x512 + 64x64 pli malalta distingivo pasas"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:101
 #, kde-format
@@ -48063,15 +48069,15 @@ msgstr "Kvantigo"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:589
 #, kde-format
 msgid "Low resolution DC"
-msgstr "Malalta rezolucio DC"
+msgstr "Malalt-distingiva DC"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, progressiveDC)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:596
 #, kde-format
 msgid "Set the progressive mode using lower-resolution DC images for VarDCT."
 msgstr ""
-"Agordu la progreseman reĝimon uzante pli malaltajn rezoluciajn DC-bildojn "
-"por VarDCT."
+"Agordu la progreseman reĝimon uzante pli malalt-distingivajn DC-bildojn por "
+"VarDCT."
 
 #. i18n: ectx: attribute (title), widget (QWidget, modularEncodingParameters)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:604
@@ -48763,7 +48769,7 @@ msgstr "dpi"
 #, kde-format
 msgctxt "horizontal resolution"
 msgid "Resolution:"
-msgstr "Rezolucio:"
+msgstr "Distingivo:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisWdgOptionsPNG)
 #: plugins/impex/png/kis_wdg_options_png.ui:18
@@ -49981,7 +49987,7 @@ msgstr "Importi SVG"
 #: plugins/impex/svg/kis_svg_import.cc:49
 #, kde-format
 msgid "Enter preferred resolution (PPI) for \"%1\""
-msgstr "Enigu preferatan rezolucion (PPI) por \"%1\""
+msgstr "Enigu preferatan distingivon (PPI) por \"%1\""
 
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:37
 #: plugins/impex/tiff/kis_dlg_options_tiff.cpp:57
@@ -57308,7 +57314,7 @@ msgstr "Multipliktilo:"
 #: plugins/tools/basictools/wdgmovetool.ui:128
 #, kde-format
 msgid "Number of units to move after move shortcut keypress."
-msgstr "Nombro de unuoj por movi post movo klavklavoklavo."
+msgstr "Nombro de unuoj por movi post movo ŝparvojan klavpremon."
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/basictools/wdgmovetool.ui:150
@@ -58096,11 +58102,10 @@ msgid "Threshold: "
 msgstr "Pentrosojlo:"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgid "Spread:"
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
-msgstr "Disvastigi:"
+msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format
@@ -60428,26 +60433,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Subtenu Krita!"
-
-#~ msgctxt ""
-#~ "The 'grow/shrink' spinbox prefix in contiguous selection tool options"
-#~ msgid "Grow: "
-#~ msgstr "Kreski:"
-
-#~ msgctxt "The 'feather' spinbox prefix in contiguous selection tool options"
-#~ msgid "Feather: "
-#~ msgstr "Plumo:"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><h1 align=\"center\">Apogita De</h1><p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ""
-#~ ".</p><p><i>Dankon! Vi ĉiuj estis <b>mirindaj</b>!</i></p></body></html>"
-
-#~ msgid "Backers"
-#~ msgstr "Subtenantoj"

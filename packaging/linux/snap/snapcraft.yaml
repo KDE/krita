@@ -43,16 +43,16 @@ plugs:
         interface: content
         target: $SNAP/data-dir/sounds
         default-provider: gtk-common-themes
-    kf5-5-111-qt-5-15-11-core22:
-        content: kf5-5-111-qt-5-15-11-core22-all
+    kf5-5-113-qt-5-15-11-core22:
+        content: kf5-5-113-qt-5-15-11-core22-all
         interface: content
-        default-provider: kf5-5-111-qt-5-15-11-core22
+        default-provider: kf5-5-113-qt-5-15-11-core22
         target: $SNAP/kf5
     foo-install-cups:
         interface: content
-        content: foo
+        content: cups
         default-provider: cups
-        target: $SNAP_DATA/foo
+        target: $SNAP_DATA/cups
 environment:
     SNAP_DESKTOP_RUNTIME: $SNAP/kf5
     QML2_IMPORT_PATH: "$QML2_IMPORT_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qml:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml"
@@ -90,18 +90,18 @@ parts:
         source-type: local
         plugin: make
         make-parameters:
-        - PLATFORM_PLUG=kf5-5-111-qt-5-15-11-core22
+        - PLATFORM_PLUG=kf5-5-113-qt-5-15-11-core22
         build-snaps:
-        - kf5-5-111-qt-5-15-11-core22-sdk
+        - kf5-5-113-qt-5-15-11-core22-sdk
         build-environment:
         - &id001
-            PATH: /snap/kf5-5-111-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
+            PATH: /snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/bin${PATH:+:$PATH}
         - &id002
-            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-111-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
+            XDG_DATA_DIRS: $CRAFT_STAGE/usr/share:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/usr/share:/usr/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}
         - &id003
-            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-111-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
+            XDG_CONFIG_HOME: $CRAFT_STAGE/etc/xdg:/snap/kf5-5-113-qt-5-15-11-core22-sdk/current/etc/xdg:/etc/xdg${XDG_CONFIG_HOME:+:$XDG_CONFIG_HOME}
         - &id004
-            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-111-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
+            CRAFT_CMAKE_ARGS: -DCMAKE_FIND_ROOT_PATH=/snap/kf5-5-113-qt-5-15-11-core22-sdk/current${CRAFT_CMAKE_ARGS:+:$CRAFT_CMAKE_ARGS}
     harfbuzz:
         after:
         - kde-neon
@@ -117,7 +117,7 @@ parts:
         - -DKDE_SKIP_TEST_SETTINGS=ON
         - -DBUILD_SHARED_LIBS=ON
         - -DHB_HAVE_FREETYPE=ON
-        - -DCMAKE_FIND_ROOT_PATH="$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current\\;/usr"
+        - -DCMAKE_FIND_ROOT_PATH="$CRAFT_STAGE\\;/snap/kf5-5-113-qt-5-15-11-core22-sdk/current\\;/usr"
         build-packages:
         - cmake
         - meson
@@ -144,7 +144,7 @@ parts:
         - -DENABLE_TESTING=OFF
         - -DBUILD_TESTING=OFF
         - -DKDE_SKIP_TEST_SETTINGS=ON
-        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-111-qt-5-15-11-core22-sdk/current"
+        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-113-qt-5-15-11-core22-sdk/current"
         - -DBUILD_KRITA_QT_DESIGNER_PLUGINS=OFF
         build-packages:
         - cmake
@@ -268,7 +268,7 @@ parts:
         - *id002
         - *id003
         - *id004
-        - LD_LIBRARY_PATH: "$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/:/snap/kf5-5-111-qt-5-15-11-core22-sdk/usr/lib/$CRAFT_ARCH_TRIPLET"
+        - LD_LIBRARY_PATH: "$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET/:/snap/kf5-5-113-qt-5-15-11-core22-sdk/usr/lib/$CRAFT_ARCH_TRIPLET"
         - LDFLAGS: "-L$CRAFT_STAGE/usr/lib/$CRAFT_ARCH_TRIPLET"
         - CFLAGS: "-I$CRAFT_STAGE/usr/include"
     cleanup:

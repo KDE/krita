@@ -65,6 +65,8 @@ windows-nightly:
     KRITACI_BUILD_INSTALLERS: "True"
     KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=OFF"
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
+  # no artifacts for nightly jobs, they are uploaded to ci-builds
+  artifacts:
 
 
 windows-release:

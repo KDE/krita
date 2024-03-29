@@ -96,6 +96,9 @@ public:
     void setTopFont(const QString &family);
     void setInitialized();
 
+private Q_SLOTS:
+    void slotTextChanged(const QString &input);
+
 private:
     QStringList m_pinnedFonts;
     QStringList m_blacklistedFonts;

@@ -1,16 +1,16 @@
-![Picture](https://krita.org/wp-content/uploads/2019/04/krita-logo-2019.png)
+![Picture](https://krita.org/images/krita-logo-light.svg)
 
-| Jenkins CI Name | Master | Stable |
-| --------------- | ------ | ------ |
-| OpenSuse Qt 5.15 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20SUSEQt5.15/) |[![Build Status](https://build.kde.org/buildStatus/icon?https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20SUSEQt5.15/)|
-| FreeBSD Qt 5.15 | [![Build Status](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/kf5-qt5%20FreeBSDQt5.15/) |[![Build Status](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/badge/icon)](https://build.kde.org/job/Extragear/job/krita/job/stable-kf5-qt5%20FreeBSDQt5.15/)|
+| CI Name     | Master | Stable | Release |
+| ------------------- | ---------------- | ------ | ------- |
+| Pipeline | [![pipeline status](https://invent.kde.org/graphics/krita/badges/master/pipeline.svg)](https://invent.kde.org/graphics/krita/-/commits/master) | [![pipeline status](https://invent.kde.org/graphics/krita/badges/krita/5.2/pipeline.svg)](https://invent.kde.org/graphics/krita/-/commits/krita/5.2) | [![Latest Release](https://invent.kde.org/graphics/krita/-/badges/release.svg)](https://invent.kde.org/graphics/krita/-/releases) |
 
+Note: Nightly builds are not covered by this table atm
 
 Krita is a free and open source digital painting application. It is for artists who want to create professional work from start to end. Krita is used by comic book artists, illustrators, concept artists, matte and texture painters and in the digital VFX industry.
 
 If you are reading this on GitHub, be aware that this is just a mirror. Our real code repository is provided by KDE: https://invent.kde.org/graphics/krita.git
 
-![Picture](https://krita.org/wp-content/uploads/2020/05/kiki_4.3.3_sm.png)
+![Picture](https://krita.org/images/hero-image-50.webp)
 
 
 ### User Manual

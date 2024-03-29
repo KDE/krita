@@ -345,7 +345,7 @@ public:
             ui->spinThreads->setPalette(pal);
             ui->sliderThreads->setPalette(pal);
             toolTipText = QString(
-                i18n("Set the number of recording threads.\nAccordingly to your hardware setup you should record with no more than %1 threads.\nYou can play around with one or two more threads, but keep an eye on your overall system performance.")
+                i18n("Set the number of recording threads.\nAccording to your hardware setup you should record with no more than %1 threads.\nYou can play around with one or two more threads, but keep an eye on your overall system performance.")
                     .arg(ThreadSystemValue::IdealRecordThreadCount));
         } else {
             ui->spinThreads->setPalette(threadsSpinPalette);

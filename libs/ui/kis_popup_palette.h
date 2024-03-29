@@ -26,6 +26,7 @@ class KoColor;
 class KoTriangleColorSelector;
 class KisSignalCompressor;
 class KisRoundHudButton;
+class KisDockerHud;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
@@ -146,13 +147,7 @@ private:
     KisKActionCollection *m_actionCollection;
 
     QSpacerItem *m_mainArea {0};
-    QWidget *m_dockerHud {0};
-    QComboBox *m_dockerComboBox;
-    QVBoxLayout *m_dockerLayout;
-    QDockWidget* m_oldDockerParent {};
-    bool m_isBorrowing {false};
-    QLabel* m_dockerIOULabel {};
-    QToolButton* m_dockerMenu {};
+    KisDockerHud *m_dockerHud {0};
     QWidget* m_bottomBarWidget {0};
     qreal m_popupPaletteSize {385.0};
     qreal m_colorHistoryInnerRadius {72.0};
@@ -210,12 +205,6 @@ private Q_SLOTS:
     void slotUpdate();
     void slotShowTagsPopup();
     void showHudWidget(bool visible);
-    void borrowOrReturnDocker();
-    void showDockerConfig();
-    void writeDockerList(QList<QVariant>);
-    void readDockerList();
-    void writeCurrentDocker();
-    QString readCurrentDocker();
     void showBottomBarWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();
     void slotFitToViewClicked();

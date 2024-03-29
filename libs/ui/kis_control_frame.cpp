@@ -44,11 +44,13 @@
 #include "KisViewManager.h"
 #include "kis_config.h"
 #include "kis_paintop_box.h"
+#include "KisDockerHud.h"
 #include "kis_custom_pattern.h"
 #include "widgets/kis_pattern_chooser.h"
 #include "kis_favorite_resource_manager.h"
 #include "kis_display_color_converter.h"
 #include <kis_canvas2.h>
+#include "kis_action_registry.h"
 
 
 KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)
@@ -123,6 +125,13 @@ void KisControlFrame::setup(QWidget *parent)
     action->setText(i18n("&Open Background color selector"));
     m_viewManager->actionCollection()->addAction("chooseBackgroundColor", action);
     connect(action, SIGNAL(triggered()), m_dual, SLOT(openBackgroundDialog()));
+
+    createDockerBox(m_viewManager);
+
+    action = new QWidgetAction(this);
+    action->setText(i18n("&Docker Box"));
+    m_viewManager->actionCollection()->addAction("dockerBox", action);
+    action->setDefaultWidget(m_dockerPopupButton);
 }
 
 void KisControlFrame::slotUpdateDisplayRenderer()
@@ -260,3 +269,31 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
 }
 
 
+void KisControlFrame::createDockerBox(KisViewManager * view)
+{
+    KConfigGroup grp =  KSharedConfig::openConfig()->group("krita").group("Toolbar BrushesAndStuff");
+    int iconsize = grp.readEntry("IconSize", 22);
+    // NOTE: buttonsize should be the same value as the one used in ktoolbar for all QToolButton
+    int buttonsize = grp.readEntry("ButtonSize", 32);
+
+    m_dockerPopupButton = new KisIconWidget();
+    m_dockerPopupButton->setIcon(KisIconUtils::loadIcon("view-list-details"));
+    m_dockerPopupButton->setToolTip(i18n("Docker box"));
+    m_dockerPopupButton->setFixedSize(buttonsize, buttonsize);
+    m_dockerPopupButton->setIconSize(QSize(iconsize, iconsize));
+    m_dockerPopupButton->setAutoRaise(true);
+    m_dockerPopupButton->setArrowVisible(false);
+
+    m_dockerPopup = new KisDockerHud(i18n("Toolbar Docker Box"), "toolbar");
+    // Set a reasonable minimum size so that dockers capable of being tiny are not,
+    // but are not too big either
+    m_dockerPopup->setMinimumHeight(300);
+    m_dockerPopup->setMinimumWidth(300);
+    m_dockerPopupButton->setPopupWidget(m_dockerPopup);
+
+    QWidgetAction* action = new QWidgetAction(this);
+    KisActionRegistry::instance()->propertizeAction("docker_box", action);
+    view->actionCollection()->addAction("docker_box", action);
+    connect(action, SIGNAL(triggered()), m_dockerPopupButton, SLOT(showPopupWidget()));
+    m_dockerPopup->addAction(action);
+}

@@ -10,15 +10,8 @@
 #include <QMenu>
 #include <QWhatsThis>
 #include <QVBoxLayout>
-#include <QDockWidget>
 
 #include <KisTagModel.h>
-
-#include <kseparator.h>
-#include "KisMainWindow.h"
-#include "KisPart.h"
-#include "KisDlgListPicker.h"
-#include "kis_utility_title_bar.h"
 
 #include "kis_canvas2.h"
 #include "kis_config.h"
@@ -32,6 +25,7 @@
 #include <kis_config_notifier.h>
 #include "kis_signal_compressor.h"
 #include "widgets/kis_round_hud_button.h"
+#include "KisDockerHud.h"
 #include "kis_signals_blocker.h"
 #include "kis_canvas_controller.h"
 #include "kis_acyclic_signal_connector.h"
@@ -137,37 +131,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     setHoveredColor(-1);
     setSelectedColor(-1);
 
-    m_dockerHud = new QWidget();
-    m_dockerHud->setObjectName("dockerHud");
-    m_dockerHud->setAutoFillBackground(true); // so that it's not transparent
-    QVBoxLayout *brushHudLayout = new QVBoxLayout();
-    QHBoxLayout *brushHudMenuLayout = new QHBoxLayout();
-
-    // Put the docker config button before the combobox,
-    // so it cannot go offscreen in case of a wide widget.
-    m_dockerMenu = new QToolButton();
-    m_dockerMenu->setAutoRaise(true);
-    m_dockerMenu->setToolTip(i18n("Configure docker panel"));
-    connect(m_dockerMenu, SIGNAL(clicked()), this, SLOT(showDockerConfig()));
-    brushHudMenuLayout->addWidget(m_dockerMenu);
-
-    m_dockerComboBox = new QComboBox();
-    brushHudMenuLayout->addWidget(m_dockerComboBox);
-
-    brushHudLayout->addLayout(brushHudMenuLayout);
-    brushHudLayout->addWidget(new KSeparator());
-    m_dockerLayout = new QVBoxLayout();
-    brushHudLayout->addLayout(m_dockerLayout);
-    m_dockerHud->setLayout(brushHudLayout);
-
-    m_dockerIOULabel = new QLabel(i18n("Docker is open in Popup Palette. Close Popup Palette to show here."));
-    m_dockerIOULabel->setWordWrap(true);
-    m_dockerIOULabel->setAlignment(Qt::AlignCenter);
-
-    readDockerList();
-    m_dockerComboBox->setCurrentIndex(m_dockerComboBox->findData(readCurrentDocker()));
-    connect(m_dockerComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(borrowOrReturnDocker()));
-    connect(m_dockerComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(writeCurrentDocker()));
+    m_dockerHud = new KisDockerHud(i18n("Popup Palette"), "popuppalette");
 
     m_tagsButton = new KisRoundHudButton(this);
 
@@ -293,7 +257,6 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
 KisPopupPalette::~KisPopupPalette()
 {
-    delete m_dockerIOULabel;
 }
 
 void KisPopupPalette::slotConfigurationChanged()
@@ -530,7 +493,7 @@ void KisPopupPalette::slotUpdateIcons()
     }
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
     fitToViewButton->setIcon(m_actionCollection->action("zoom_to_fit")->icon());
-    m_dockerMenu->setIcon(KisIconUtils::loadIcon("applications-system"));
+    m_dockerHud->slotUpdateIcons();
     m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_clearColorHistoryButton->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
     m_bottomBarButton->setOnOffIcons(KisIconUtils::loadIcon("arrow-up"), KisIconUtils::loadIcon("arrow-down"));
@@ -539,124 +502,12 @@ void KisPopupPalette::slotUpdateIcons()
 
 void KisPopupPalette::showHudWidget(bool visible)
 {
+    m_dockerHud->setIsShown(m_dockerHudButton->isChecked());
     const bool reallyVisible = visible && m_dockerHudButton->isChecked();
     m_dockerHud->setVisible(reallyVisible);
 
-    borrowOrReturnDocker();
-
     KisConfig cfg(false);
     cfg.setShowBrushHud(visible);
-}
-
-void KisPopupPalette::borrowOrReturnDocker()
-{
-    if (m_isBorrowing) { // then return it
-        if (m_dockerLayout->count() == 2) {
-            // Return the animation dockers' titlebar widget as well
-            KisUtilityTitleBar *titleBar = dynamic_cast<KisUtilityTitleBar*>(m_oldDockerParent->titleBarWidget());
-            KIS_SAFE_ASSERT_RECOVER_NOOP(titleBar);
-            if (titleBar) {
-                titleBar->setWidgetArea(m_dockerLayout->takeAt(0)->widget());
-            }
-        }
-        QWidget* dockerInside = m_dockerLayout->takeAt(0)->widget();
-        m_oldDockerParent->setWidget(dockerInside);
-        dockerInside->setParent(m_oldDockerParent);
-
-        m_oldDockerParent = nullptr;
-        m_isBorrowing = false;
-    }
-
-    // If really visible, borrow it
-    if (m_dockerHud->isVisible() && m_dockerHudButton->isChecked()) {
-        KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-
-        QDockWidget *docker = mainWindow->findChild<QDockWidget*>(m_dockerComboBox->currentData().toString());
-        if (docker != nullptr) {
-            m_oldDockerParent = docker;
-
-            // Animation dockers have playback controls and such in the titlebar,
-            // so we borrow those as well.
-            if (docker->objectName() == "AnimationCurvesDocker" || docker->objectName() == "TimelineDocker") {
-                KisUtilityTitleBar *titleBar = dynamic_cast<KisUtilityTitleBar*>(docker->titleBarWidget());
-                KIS_SAFE_ASSERT_RECOVER_NOOP(titleBar);
-                if (titleBar) {
-                    QWidget *widgetArea = titleBar->widgetArea();
-                    m_dockerLayout->addWidget(widgetArea);
-                }
-            }
-
-            m_dockerLayout->addWidget(docker->widget());
-            docker->setWidget(m_dockerIOULabel);
-
-            // Hack: somewhat fixes Animation Curves's titlebar being too tall
-            m_dockerLayout->setStretch(m_dockerLayout->count()-1, 1);
-
-            m_isBorrowing = true;
-        }
-    }
-}
-
-void KisPopupPalette::showDockerConfig()
-{
-    QList<QString> currentDockerNames;
-    QList<QVariant> currentDockerIds;
-    for(int i = 0; i < m_dockerComboBox->count(); i++) {
-        currentDockerNames.append(m_dockerComboBox->itemText(i));
-        currentDockerIds.append(m_dockerComboBox->itemData(i));
-    }
-
-    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    const QList<QDockWidget*> dockers = mainWindow->dockWidgets();
-
-    QList<QString> dockerNames;
-    QList<QVariant> dockerIds;
-    Q_FOREACH(QDockWidget* docker, dockers) {
-        if (!currentDockerIds.contains(docker->objectName())) {
-            dockerNames.append(docker->windowTitle());
-            dockerIds.append(docker->objectName());
-        }
-    }
-
-    KisDlgListPicker config = KisDlgListPicker(i18n("Configure Popup Palette dockers"),
-                                                    i18n("Available dockers"), i18n("Current dockers"),
-                                                    dockerNames, dockerIds, currentDockerNames, currentDockerIds, this);
-
-    if (config.exec() == QDialog::Accepted) {
-        writeDockerList(config.getChosenData());
-        const QString currentDocker = readCurrentDocker();
-        readDockerList();
-        m_dockerComboBox->setCurrentIndex(m_dockerComboBox->findData(currentDocker, Qt::UserRole));
-    }
-}
-
-void KisPopupPalette::writeDockerList(QList<QVariant> currentList)
-{
-    KisConfig(false).writeList("popuppalette/dockerList", currentList);
-}
-void KisPopupPalette::readDockerList()
-{
-    m_dockerComboBox->clear();
-    const QList<QString> defaultDockers = QList<QString>({"BrushHudDocker", "KisLayerBox"});
-    const QList<QString> dockerList = KisConfig(true).readList("popuppalette/dockerList", defaultDockers);
-
-    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
-    // for an ordered list
-    Q_FOREACH(QString objName, dockerList) {
-        QDockWidget *docker = mainWindow->findChild<QDockWidget*>(objName);
-        if (docker != nullptr) {
-            m_dockerComboBox->addItem(docker->windowTitle(), docker->objectName());
-        }
-    }
-}
-
-void KisPopupPalette::writeCurrentDocker()
-{
-    KisConfig(false).writeEntry("popuppalette/currentDocker", m_dockerComboBox->currentData(Qt::UserRole));
-}
-QString KisPopupPalette::readCurrentDocker()
-{
-    return KisConfig(true).readEntry("popuppalette/currentDocker", QString("BrushHudDocker"));
 }
 
 void KisPopupPalette::showBottomBarWidget(bool visible)
@@ -1193,13 +1044,11 @@ void KisPopupPalette::popup(const QPoint &position) {
     setVisible(true);
     ensureWithinParent(position, false);
     m_mirrorPos = QCursor::pos();
-    borrowOrReturnDocker();
 }
 
 void KisPopupPalette::dismiss()
 {
     setVisible(false);
-    borrowOrReturnDocker();
 }
 
 bool KisPopupPalette::onScreen()

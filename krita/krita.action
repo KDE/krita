@@ -316,6 +316,18 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="docker_box">
+      <icon></icon>
+      <text>Show Docker Box</text>
+      <whatsThis/>
+      <toolTip>Show Docker Box</toolTip>
+      <iconText>Show Docker Box</iconText>
+      <activationFlags>0</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
   </Actions>
   <Actions category="Painting">
     <text>Painting</text>

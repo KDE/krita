@@ -24,6 +24,7 @@ class QTabWidget;
 class KisGradientChooser;
 class KisPatternChooser;
 class KisPaintopBox;
+class KisDockerHud;
 class KisViewManager;
 class KisIconWidget;
 class KoDualColorButton;
@@ -56,6 +57,7 @@ private:
 
     void createPatternsChooser(KisViewManager * view);
     void createGradientsChooser(KisViewManager * view);
+    void createDockerBox(KisViewManager * view);
 
 private:
 
@@ -74,6 +76,9 @@ private:
     KisPatternChooser *m_patternChooser {nullptr};
 
     KisPaintopBox *m_paintopBox {nullptr};
+
+    KisDockerHud *m_dockerPopup {nullptr};
+    KisIconWidget *m_dockerPopupButton {nullptr};
 
     KoDualColorButton *m_dual {nullptr};
     KoCheckerBoardPainter m_checkersPainter;

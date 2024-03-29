@@ -299,6 +299,7 @@ set(kritaui_LIB_SRCS
     widgets/kis_zoom_scrollbar.cpp
     widgets/KisDlgListPicker.cpp
     widgets/kis_round_hud_button.cpp
+    widgets/KisDockerHud.cpp
 
     # Gradient related widgets
     widgets/gradient/KisStopGradientEditor.cpp

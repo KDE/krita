@@ -70,7 +70,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         }
     }
 
-    const QPen mainPen = m_d->config.penMain();
+    QPen mainPen = m_d->config.penMain();
     QPen subdivisionPen = m_d->config.penSubdivision();
 
     gc.save();
@@ -105,7 +105,12 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             const int lineIndexFirst = qCeil((x1 - offset) / step);
             const int lineIndexLast = qFloor((x2 - offset) / step);
 
-            subdivisionPen.setDashOffset(y1 * scale);
+            if (mainPen.style() != Qt::SolidLine) {
+                mainPen.setDashOffset(y1 * scale);
+            }
+            if (subdivisionPen.style() != Qt::SolidLine) {
+                subdivisionPen.setDashOffset(y1 * scale);
+            }
 
             for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
                 int w = offset + i * step;
@@ -126,7 +131,12 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             const int lineIndexFirst = qCeil((y1 - offset) / step);
             const int lineIndexLast = qFloor((y2 - offset) / step);
 
-            subdivisionPen.setDashOffset(x1 * scale);
+            if (mainPen.style() != Qt::SolidLine) {
+                mainPen.setDashOffset(x1 * scale);
+            }
+            if (subdivisionPen.style() != Qt::SolidLine) {
+                subdivisionPen.setDashOffset(x1 * scale);
+            }
 
             for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
                 int w = offset + i * step;

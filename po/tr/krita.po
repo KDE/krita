@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 02:05+0000\n"
+"POT-Creation-Date: 2024-03-30 01:33+0000\n"
 "PO-Revision-Date: 2024-03-22 16:18+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -35986,12 +35986,12 @@ msgstr "%1 &Hakkında"
 msgid "About &KDE"
 msgstr "&KDE Hakkında"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:207
+#: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
 msgstr "Yazıtipi Ailesi"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:208
+#: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
 msgstr "Yazıtipi Biçemi"
@@ -40395,10 +40395,16 @@ msgstr ""
 "vermeyeceğini dikkate alın."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set the number of recording threads.\n"
+#| "Accordingly to your hardware setup you should record with no more than %1 "
+#| "threads.\n"
+#| "You can play around with one or two more threads, but keep an eye on your "
+#| "overall system performance."
 msgid ""
 "Set the number of recording threads.\n"
-"Accordingly to your hardware setup you should record with no more than %1 "
+"According to your hardware setup you should record with no more than %1 "
 "threads.\n"
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."

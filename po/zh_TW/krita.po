@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 02:05+0000\n"
+"POT-Creation-Date: 2024-03-30 01:33+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -35629,12 +35629,12 @@ msgstr "關於 %1(&A)"
 msgid "About &KDE"
 msgstr "關於 KDE(&K)"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:207
+#: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
 msgstr "字型系列"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:208
+#: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
 msgstr "字型樣式"
@@ -39978,7 +39978,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
-"Accordingly to your hardware setup you should record with no more than %1 "
+"According to your hardware setup you should record with no more than %1 "
 "threads.\n"
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."

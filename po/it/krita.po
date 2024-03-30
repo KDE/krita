@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 02:05+0000\n"
+"POT-Creation-Date: 2024-03-30 01:33+0000\n"
 "PO-Revision-Date: 2024-03-16 21:50+0100\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -36162,12 +36162,12 @@ msgstr "Inform&azioni su %1"
 msgid "About &KDE"
 msgstr "Informazioni su &KDE"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:207
+#: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
 msgstr "Famiglia di caratteri"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:208
+#: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
 msgstr "Stile del carattere"
@@ -40599,10 +40599,16 @@ msgstr ""
 "aumento delle prestazioni."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set the number of recording threads.\n"
+#| "Accordingly to your hardware setup you should record with no more than %1 "
+#| "threads.\n"
+#| "You can play around with one or two more threads, but keep an eye on your "
+#| "overall system performance."
 msgid ""
 "Set the number of recording threads.\n"
-"Accordingly to your hardware setup you should record with no more than %1 "
+"According to your hardware setup you should record with no more than %1 "
 "threads.\n"
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-28 02:05+0000\n"
+"POT-Creation-Date: 2024-03-30 01:33+0000\n"
 "PO-Revision-Date: 2024-03-17 20:44\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -35624,12 +35624,12 @@ msgstr "关于 %1(&A)"
 msgid "About &KDE"
 msgstr "关于 KDE(&K)"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:207
+#: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
 msgstr "字体系列"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:208
+#: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
 msgstr "字体风格"
@@ -39980,10 +39980,16 @@ msgstr ""
 "提示：线程数大于 %1 时可能不会带来任何性能提升。"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, kde-format
+#, fuzzy, kde-format
+#| msgid ""
+#| "Set the number of recording threads.\n"
+#| "Accordingly to your hardware setup you should record with no more than %1 "
+#| "threads.\n"
+#| "You can play around with one or two more threads, but keep an eye on your "
+#| "overall system performance."
 msgid ""
 "Set the number of recording threads.\n"
-"Accordingly to your hardware setup you should record with no more than %1 "
+"According to your hardware setup you should record with no more than %1 "
 "threads.\n"
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."

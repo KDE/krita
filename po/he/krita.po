@@ -36,19 +36,20 @@
 #
 # tahmar1900 <tahmar1900@gmail.com>, 2005, 2008.
 # Elkana Bardugo <ttv200@gmail.com>, 2017. #zanata
+# SPDX-FileCopyrightText: 2024 Yaron Shahrabani <sh.yaron@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-30 01:33+0000\n"
-"PO-Revision-Date: 2017-05-16 06:47-0400\n"
-"Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
-"Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
+"PO-Revision-Date: 2024-03-31 09:20+0300\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Zanata 3.9.6\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -16687,7 +16688,7 @@ msgstr "קיקרו (cc)"
 #: libs/global/KoUnit.cpp:48
 #, kde-format
 msgid "Points (pt)"
-msgstr "נקודות (נק')"
+msgstr "נקודות (נק׳)"
 
 #: libs/global/KoUnit.cpp:50
 #, fuzzy, kde-format
@@ -23042,7 +23043,7 @@ msgstr "מחבר"
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
-msgstr "מחבר"
+msgstr "יוצר"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2171
 #, fuzzy, kde-format
@@ -23735,7 +23736,7 @@ msgstr "ערוך נתיב"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:197
 #, kde-format
 msgid "&Reset"
-msgstr "&שחזר"
+msgstr "&איפוס"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTitleDesc)
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:228
@@ -28768,7 +28769,7 @@ msgstr "תבניות"
 #: plugins/extensions/resourcemanager/wdgtagselection.cpp:263
 #, kde-format
 msgid "Gradients"
-msgstr "עירובים"
+msgstr "מדרגים"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, fuzzy, kde-format
@@ -28824,7 +28825,7 @@ msgstr "מאפייני שכבה..."
 #: libs/ui/kis_image_manager.cc:106
 #, kde-format
 msgid "Import Image"
-msgstr "ייצוא תמונה"
+msgstr "ייבוא תמונה"
 
 #: libs/ui/kis_image_manager.cc:197 libs/ui/widgets/KoDualColorButton.cpp:92
 #, fuzzy, kde-format
@@ -30009,7 +30010,7 @@ msgstr "מבצע שמירה אוטומטית..."
 #: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
-msgstr "מבצע שמירה אוטומטית..."
+msgstr "מתבצעת שמירה אוטומטית…"
 
 #: libs/ui/KisDocument.cpp:1439
 #, kde-format
@@ -30875,7 +30876,7 @@ msgstr ""
 #: libs/ui/KisTemplateCreateDia.cpp:285
 #, kde-format
 msgid "Do you really want to overwrite the existing '%1' template?"
-msgstr "האם אתה בטוח שברצונך לכתוב על התבנית הקיימת \"%1\"?"
+msgstr "לכתוב על התבנית הקיימת ‚%1’?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, fuzzy, kde-format
@@ -30918,7 +30919,7 @@ msgstr "הסר שכבה"
 #: libs/ui/KisTemplateCreateDia.cpp:437
 #, kde-format
 msgid "Do you really want to remove that template?"
-msgstr "האם אתה בטוח שברצונך להסיר תבנית זו?"
+msgstr "להסיר את התבנית הזאת?"
 
 #: libs/ui/KisTemplateCreateDia.cpp:438
 #, fuzzy, kde-format
@@ -30966,7 +30967,7 @@ msgstr "&תמונה"
 msgid ""
 "<p>The document <b>'%1'</b> has been modified.</p><p>Do you want to save it?"
 "</p>"
-msgstr "<p>המסמך <b>\"%1\"</b> שונה.</p><p>האם ברצונך לשמור אותו?</p>"
+msgstr "<p>המסמך <b>‚%1’</b> נערך.</p><p>לשמור אותו?</p>"
 
 #: libs/ui/KisView.cpp:1262
 #, fuzzy, kde-format
@@ -31133,7 +31134,7 @@ msgstr ""
 #: libs/ui/KoDocumentInfoDlg.cpp:73
 #, kde-format
 msgid "Document Information"
-msgstr "מידע מסמך"
+msgstr "פרטי מסמך"
 
 #: libs/ui/KoDocumentInfoDlg.cpp:115
 #, fuzzy, kde-format
@@ -34519,7 +34520,7 @@ msgstr ""
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:343
 #, kde-format
 msgid "Email"
-msgstr "דוא\"ל"
+msgstr "דוא״ל"
 
 #: libs/widgets/KoConfigAuthorPage.cpp:87
 #, fuzzy, kde-format
@@ -35297,7 +35298,7 @@ msgstr "Krita"
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
-msgstr "גופן"
+msgstr "משפחת גופנים"
 
 #: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, fuzzy, kde-format
@@ -42793,7 +42794,7 @@ msgstr "מחבר"
 #: plugins/extensions/resourcemanager/wdgdlgbundlemanager.ui:389
 #, kde-format
 msgid "Email:"
-msgstr "דוא\"ל:"
+msgstr "דוא״ל:"
 
 #. i18n: ectx: property (text), widget (QLabel, website)
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -44786,7 +44787,7 @@ msgstr "העתק בחירה לשכבה חדשה"
 #: plugins/filters/palettize/palettize.ui:186
 #, kde-format
 msgid "Index"
-msgstr "אינדקס"
+msgstr "מפתח"
 
 #: plugins/filters/phongbumpmap/kis_phong_bumpmap_filter.cpp:25
 #, kde-format
@@ -45024,7 +45025,7 @@ msgstr "מצבע הקידמה לשקוף"
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
-msgstr "&עגל פינות..."
+msgstr "&עיגול פינות…"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
 #, fuzzy, kde-format

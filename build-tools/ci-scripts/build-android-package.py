@@ -37,10 +37,13 @@ if 'KRITACI_ANDROID_PACKAGE_TYPE' in os.environ:
         sys.exit(1)
     print ('## Overriding --package-type from environment: {}'.format(arguments.package_type))
 
-buildPath = os.path.abspath('_build')
-depsPath = os.path.abspath('_install')
-srcPath = os.path.abspath(os.getcwd())
-packagingFolder = os.path.join(srcPath, '_packaging')
+baseWorkDirectoryPath = os.getcwd()
+if 'KDECI_WORKDIR_PATH' in os.environ:
+    baseWorkDirectoryPath = os.path.join(os.environ['KDECI_WORKDIR_PATH'], 'krita')
+
+buildPath = os.path.abspath(os.path.join(baseWorkDirectoryPath, '_build'))
+depsPath = os.path.abspath(os.environ.get('KDECI_SHARED_INSTALL_PATH', os.path.join(baseWorkDirectoryPath, '_install')))
+packagingFolder = os.path.join(baseWorkDirectoryPath, '_packaging')
 
 buildEnvironment = dict(os.environ)
 buildEnvironment['ANDROID_ABI'] = os.environ['KDECI_ANDROID_ABI']

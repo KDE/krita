@@ -51,21 +51,11 @@ https://www.krita.org
 
 #### Unstable
 
-* https://binary-factory.kde.org/job/Krita_Nightly_Appimage_Build/
-* https://binary-factory.kde.org/job/Krita_Nightly_Windows_Build/
-* https://binary-factory.kde.org/job/Krita_Nightly_MacOS_Build/
-* https://binary-factory.kde.org/job/Krita_Nightly_Android_arm64-v8a_Build/
-* https://binary-factory.kde.org/job/Krita_nightly_flatpak/
-* https://binary-factory.kde.org/job/Krita_nightly_arm_flatpak/
+* https://cdn.kde.org/ci-builds/graphics/krita/master/
 
 #### Stable
 
-* https://binary-factory.kde.org/job/Krita_Stable_Appimage_Build/
-* https://binary-factory.kde.org/job/Krita_Stable_Windows_Build/
-* https://binary-factory.kde.org/job/Krita_Stable_MacOS_Build/
-* https://binary-factory.kde.org/job/Krita_stable_flatpak/
-* https://binary-factory.kde.org/job/Krita_stable_flatpak/
-
+* https://cdn.kde.org/ci-builds/graphics/krita/krita/5.2/
 
 ### License
 

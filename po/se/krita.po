@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:02+0000\n"
+"POT-Creation-Date: 2024-03-30 01:33+0000\n"
 "PO-Revision-Date: 2007-05-13 00:25+0200\n"
 "Last-Translator: Børre Gaup <boerre@skolelinux.no>\n"
 "Language-Team: Northern Sami <l10n-no@lister.huftis.org>\n"
@@ -30745,47 +30745,47 @@ msgstr ""
 msgid "Gamut Warnings turned off."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:778
+#: libs/ui/KisViewManager.cpp:780
 #, kde-format
 msgid "Active Author Profile"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:908
+#: libs/ui/KisViewManager.cpp:910
 #, kde-format
 msgid "%1 (Copy)"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1051
+#: libs/ui/KisViewManager.cpp:1053
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1326
+#: libs/ui/KisViewManager.cpp:1378
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
 "Press %1 to go back."
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1368
+#: libs/ui/KisViewManager.cpp:1437
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1441
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -30800,19 +30800,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1387
+#: libs/ui/KisViewManager.cpp:1456
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1388
+#: libs/ui/KisViewManager.cpp:1457
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
+#: libs/ui/KisViewManager.cpp:1570 libs/ui/KisViewManager.cpp:1588
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -35014,12 +35014,12 @@ msgstr "%1 &dieđut"
 msgid "About &KDE"
 msgstr "KDE &dieđut"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:207
+#: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
 msgstr "Fontabearaš"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:208
+#: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
 msgstr ""
@@ -39329,7 +39329,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
-"Accordingly to your hardware setup you should record with no more than %1 "
+"According to your hardware setup you should record with no more than %1 "
 "threads.\n"
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."

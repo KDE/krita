@@ -8,13 +8,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# SPDX-FileCopyrightText: 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Josep M. Ferrer <txemaq@gmail.com>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-03-30 01:33+0000\n"
-"PO-Revision-Date: 2024-03-14 12:14+0100\n"
+"PO-Revision-Date: 2024-03-30 08:42+0100\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 22.12.3\n"
+"X-Generator: Lokalize 24.02.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -40558,13 +40558,7 @@ msgstr ""
 "el rendiment."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the number of recording threads.\n"
-#| "Accordingly to your hardware setup you should record with no more than %1 "
-#| "threads.\n"
-#| "You can play around with one or two more threads, but keep an eye on your "
-#| "overall system performance."
+#, kde-format
 msgid ""
 "Set the number of recording threads.\n"
 "According to your hardware setup you should record with no more than %1 "

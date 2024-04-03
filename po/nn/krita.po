@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-03-16 02:02+0000\n"
+"POT-Creation-Date: 2024-03-30 01:33+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -31448,35 +31448,35 @@ msgstr "Men utskriftssimulering er framleis av."
 msgid "Gamut Warnings turned off."
 msgstr "Fargeområde-åtvaringar er slått av."
 
-#: libs/ui/KisViewManager.cpp:778
+#: libs/ui/KisViewManager.cpp:780
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Gjeldande forfattarprofil"
 
-#: libs/ui/KisViewManager.cpp:908
+#: libs/ui/KisViewManager.cpp:910
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (kopi)"
 
-#: libs/ui/KisViewManager.cpp:1051 libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Slapp opp for alternative filnamn. Prøv å lagra manuelt, med eit høgare tal."
 
-#: libs/ui/KisViewManager.cpp:1051
+#: libs/ui/KisViewManager.cpp:1053
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Klarte ikkje lagra inkrementell versjon"
 
-#: libs/ui/KisViewManager.cpp:1127
+#: libs/ui/KisViewManager.cpp:1129
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Klarte ikkje lagra inkrementell reservekopi"
 
-#: libs/ui/KisViewManager.cpp:1326
+#: libs/ui/KisViewManager.cpp:1378
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31485,13 +31485,13 @@ msgstr ""
 "Går over til «berre lerretet»-modus.\n"
 "Trykk «%1» for å gå tilbake."
 
-#: libs/ui/KisViewManager.cpp:1368
+#: libs/ui/KisViewManager.cpp:1437
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Opna ressursmappe"
 
-#: libs/ui/KisViewManager.cpp:1372
+#: libs/ui/KisViewManager.cpp:1441
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31514,19 +31514,19 @@ msgstr ""
 "<p><b>Privat appmappe</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1387
+#: libs/ui/KisViewManager.cpp:1456
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "Opna i AppData-mappa for &brukaren"
 
-#: libs/ui/KisViewManager.cpp:1388
+#: libs/ui/KisViewManager.cpp:1457
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "Opna i &privat appmappe"
 
-#: libs/ui/KisViewManager.cpp:1501 libs/ui/KisViewManager.cpp:1519
+#: libs/ui/KisViewManager.cpp:1570 libs/ui/KisViewManager.cpp:1588
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -36028,12 +36028,12 @@ msgstr "&Om %1"
 msgid "About &KDE"
 msgstr "Om &KDE"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:207
+#: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
 msgstr "Skriftfamilie"
 
-#: libs/widgetutils/kis_font_family_combo_box.cpp:208
+#: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
 msgstr "Skriftstil"
@@ -40440,7 +40440,7 @@ msgstr ""
 #, kde-format
 msgid ""
 "Set the number of recording threads.\n"
-"Accordingly to your hardware setup you should record with no more than %1 "
+"According to your hardware setup you should record with no more than %1 "
 "threads.\n"
 "You can play around with one or two more threads, but keep an eye on your "
 "overall system performance."

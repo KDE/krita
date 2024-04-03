@@ -46,6 +46,15 @@ libera.chat, #krita
 
 https://www.krita.org
 
+### Nightly builds
+
+#### Unstable
+
+* https://cdn.kde.org/ci-builds/graphics/krita/master/
+
+#### Stable
+
+* https://cdn.kde.org/ci-builds/graphics/krita/krita/5.2/
 
 ### License
 

@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-02 02:58+0000\n"
-"PO-Revision-Date: 2024-03-01 20:07+0200\n"
+"PO-Revision-Date: 2024-03-21 22:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
 "Language: uk\n"
@@ -25117,7 +25117,7 @@ msgstr "Накладка позначення:"
 #: libs/ui/forms/wdgdisplaysettings.ui:459
 #, kde-format
 msgid "Outline opacity:"
-msgstr "Непрозорість контура:"
+msgstr "Непрозорість контуру:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:472
@@ -60088,7 +60088,7 @@ msgstr "Увімкнути заповнення протилежних обла�
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Позначте цей пункт, щоб також заповнити форми, як дотикаються до контура "
+"Позначте цей пункт, щоб також заповнити форми, як дотикаються до контуру "
 "охоплювальної області"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:544

@@ -103,9 +103,11 @@ else
     NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
 
     if [[ "${CI_COMMIT_BRANCH}" =~ krita/.* ]]; then
+        ESCAPED_COMMIT_BRANCH="${CI_COMMIT_BRANCH//\//-}"
+
         CHANNEL="Plus"
-        ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/${CI_COMMIT_BRANCH}/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
-        ZSYNC_SOURCE_URL="https://cdn.kde.org/ci-builds/graphics/krita/${CI_COMMIT_BRANCH}/linux/${NEW_APPIMAGE_NAME}"
+        ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/${ESCAPED_COMMIT_BRANCH}/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://cdn.kde.org/ci-builds/graphics/krita/${ESCAPED_COMMIT_BRANCH}/linux/${NEW_APPIMAGE_NAME}"
     else
         CHANNEL="Next"
         ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/master/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"

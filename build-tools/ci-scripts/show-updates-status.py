@@ -56,7 +56,7 @@ printZSyncStat("Channel: Stable", 'https://download.kde.org/stable/krita/updates
 print('')
 printZSyncStat("Channel: Beta (unstable)", 'https://download.kde.org/unstable/krita/updates/Krita-Beta-x86_64.appimage.zsync')
 print('')
-printZSyncStat("Channel: Plus", 'https://cdn.kde.org/ci-builds/graphics/krita/krita/5.2/linux/Krita-Plus-x86_64.appimage.zsync')
+printZSyncStat("Channel: Plus", 'https://cdn.kde.org/ci-builds/graphics/krita/krita-5.2/linux/Krita-Plus-x86_64.appimage.zsync')
 print('')
 printZSyncStat("Channel: Next", 'https://cdn.kde.org/ci-builds/graphics/krita/master/linux/Krita-Next-x86_64.appimage.zsync')
 print('')

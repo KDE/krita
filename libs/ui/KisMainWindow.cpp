@@ -1380,35 +1380,35 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
         QString newFilePath = dialog.filename();
 
-        if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
-            QString fn = newFilePath;
-            QFileInfo info(fn);
-            document->documentInfo()->setAboutInfo("title", info.completeBaseName());
-        }
-
-        QByteArray outputFormat = nativeFormat;
-
-        QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newFilePath, false);
-        outputFormat = outputFormatString.toLatin1();
-
-
-        if (!isExporting) {
-            justChangingFilterOptions = (newFilePath == document->path()) && (outputFormat == document->mimeType());
-        }
-        else {
-            QString path = QFileInfo(d->lastExportLocation).absolutePath();
-            QString filename = QFileInfo(document->path()).completeBaseName();
-            justChangingFilterOptions = (QFileInfo(newFilePath).absolutePath() == path)
-                    && (QFileInfo(newFilePath).completeBaseName() == filename)
-                    && (outputFormat == d->lastExportedFormat);
-        }
-
         bool bOk = true;
         if (newFilePath.isEmpty()) {
             bOk = false;
         }
 
         if (bOk) {
+            if (document->documentInfo()->aboutInfo("title") == i18n("Unnamed")) {
+                QString fn = newFilePath;
+                QFileInfo info(fn);
+                document->documentInfo()->setAboutInfo("title", info.completeBaseName());
+            }
+
+            QByteArray outputFormat = nativeFormat;
+
+            QString outputFormatString = KisMimeDatabase::mimeTypeForFile(newFilePath, false);
+            outputFormat = outputFormatString.toLatin1();
+
+
+            if (!isExporting) {
+                justChangingFilterOptions = (newFilePath == document->path()) && (outputFormat == document->mimeType());
+            }
+            else {
+                QString path = QFileInfo(d->lastExportLocation).absolutePath();
+                QString filename = QFileInfo(document->path()).completeBaseName();
+                justChangingFilterOptions = (QFileInfo(newFilePath).absolutePath() == path)
+                        && (QFileInfo(newFilePath).completeBaseName() == filename)
+                        && (outputFormat == d->lastExportedFormat);
+            }
+
             bool wantToSave = true;
 
             // don't change this line unless you know what you're doing :)

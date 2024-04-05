@@ -1360,7 +1360,7 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
             // But only use that if the suggestedUrl, that is, the document's own url is empty, otherwise
             // open the location where the document currently is.
 
-            if(default_mime_type != ""){
+            if (!default_mime_type.isEmpty()) {
                 QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
                 //This line is responsible for setting filename, which also manipulates filters.
                 dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath :  QFileInfo(suggestedURL.toLocalFile()).completeBaseName() + "." + proposedExtension, true);

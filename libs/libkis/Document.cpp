@@ -812,6 +812,7 @@ void Document::unlock()
 void Document::waitForDone()
 {
     if (!d->document || !d->document->image()) return;
+    KisLayerUtils::forceAllDelayedNodesUpdate(d->document->image()->rootLayer());
     d->document->image()->waitForDone();
 }
 

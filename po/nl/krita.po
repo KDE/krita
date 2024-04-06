@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-03-30 15:46+0100\n"
+"PO-Revision-Date: 2024-04-05 11:04+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -8514,12 +8514,10 @@ msgstr "Monster van een schermkleur (Monster van het echte werkveld)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Vastzet-panelen tonen"
+msgstr "Vastzetvak tonen"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29241,10 +29239,9 @@ msgid "&Open Background color selector"
 msgstr "Kiezer van achtergrondkleur &openen"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "V&erankering"
+msgstr "&Vastzetvak"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29270,16 +29267,14 @@ msgid "Gradients"
 msgstr "Kleurverloop"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "vastzet-paneel:"
+msgstr "Vastzetvak"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Hulpmiddelen en vastzetters"
+msgstr "Werkbladmet vastzetvak"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29858,10 +29853,9 @@ msgid "Masked Brush"
 msgstr "Gemaskeerd penseel"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
-msgstr "Palet tonen"
+msgstr "Palet voor pop-up"
 
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
@@ -34896,19 +34890,16 @@ msgstr "Verankerpaneel configureren"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"Vastzetter is open in opduikpalet. Opduikpalet sluiten om hier te tonen."
+msgstr "Vastzetter is open in %1. %1 sluiten om hier te tonen."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Verankerpaneel configureren"
+msgstr "%1 vastzetters configureren"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format

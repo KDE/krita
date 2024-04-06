@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-03-30 14:14+0300\n"
+"PO-Revision-Date: 2024-04-05 12:16+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -8432,12 +8432,10 @@ msgstr "Ekran Rengini Örnekle (Gerçek Tuvali Örnekle)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Panelleri Göster"
+msgstr "Panel Kutusunu Göster"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29085,10 +29083,9 @@ msgid "&Open Background color selector"
 msgstr "&Arka plan renk seçicisini aç"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Panel"
+msgstr "&Panel Kutusu"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29114,16 +29111,14 @@ msgid "Gradients"
 msgstr "Gradyanlar"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Panel:"
+msgstr "Panel kutusu"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Araç kutusu ve paneller"
+msgstr "Araç Çubuğu Paneli Kutusu"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29702,8 +29697,7 @@ msgid "Masked Brush"
 msgstr "Maskeli Fırça"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Açılır Palet"
 
@@ -34690,19 +34684,16 @@ msgstr "Paneli yapılandır"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"Panel, açılır palette açık. Burada göstermek için açılır paleti kapatın."
+msgstr "Panel, %1 içinde açık. Burada göstermek için %1 ögesini kapatın."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Paneli yapılandır"
+msgstr "%1 panellerini yapılandır"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format

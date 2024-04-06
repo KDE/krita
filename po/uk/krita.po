@@ -11,9 +11,9 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-03-30 11:07+0200\n"
+"PO-Revision-Date: 2024-04-05 15:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
-"Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
+"Language-Team: Ukrainian\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -8430,12 +8430,10 @@ msgstr "Зразок кольору з екрана (зразок з реаль�
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Показати панелі"
+msgstr "Показати панель швартування"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29457,10 +29455,9 @@ msgid "&Open Background color selector"
 msgstr "В&ідкрити засіб вибору кольору тла"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Панель"
+msgstr "Панель &швартування"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29486,16 +29483,14 @@ msgid "Gradients"
 msgstr "Градієнти"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Панель:"
+msgstr "Панель швартування"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Набір інструментів і бічні панелі"
+msgstr "Панель швартування панелі інструментів"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -30145,8 +30140,7 @@ msgid "Masked Brush"
 msgstr "Маскування"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Контекстна палітра"
 
@@ -35220,20 +35214,16 @@ msgstr "Налаштувати бічну панель"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"Бічну панель відкрито у контекстній палітрі. Закрийте контекстну палітру, "
-"щоб бічна панель з'явилася тут."
+msgstr "Бічну панель відкрито у %1. Закрийте %1, щоб її було показано тут."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Налаштувати бічну панель"
+msgstr "Налаштувати бічні панелі %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format

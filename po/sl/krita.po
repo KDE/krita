@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-03-30 16:01+0100\n"
+"PO-Revision-Date: 2024-04-05 14:34+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -8441,12 +8441,10 @@ msgstr "Vzorči barvo z zaslona (vzorči pravo platno)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Pokaži zložena okna"
+msgstr "Pokaži polje zloženih oken"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29101,10 +29099,9 @@ msgid "&Open Background color selector"
 msgstr "&Odpri izbirnik barv ozadja"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Sidrišče"
+msgstr "Polje &zloženega okna"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29130,16 +29127,14 @@ msgid "Gradients"
 msgstr "Prelivi"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Sidrišče:"
+msgstr "Polje zloženega okna"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Orodjarna in zložena okna"
+msgstr "Polje zloženega okna Orodjarna"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29722,8 +29717,7 @@ msgid "Masked Brush"
 msgstr "Maskiran čopič"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Pojavna paleta"
 
@@ -34730,20 +34724,17 @@ msgstr "Prilagodi podokno zloženega okna"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
-"Zloženo okno je odprto v pojavni paleti. Zaprite pojavno paleto, da se "
-"pokaže tukaj."
+"Zloženo okno je odprto za gradnik %1. Zaprite gradnik %1, da se pokaže tukaj."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Prilagodi podokno zloženega okna"
+msgstr "Prilagodi zložena okna %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -61371,6 +61362,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "Configure Popup Palette dockers"
-#~ msgstr "Prilagodi zložena okna pojavnih palet"

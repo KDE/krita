@@ -463,14 +463,15 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
         return;
 
     KisDocument *document = d->canvas->imageView()->document();
-    if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId()))
-        onRecordButtonToggled(true);
-
     d->updateComboResolution(document->image()->width(), document->image()->height());
 
     d->prefix = d->getPrefix();
-    d->updateWriterSettings();
-    d->updateUiFormat();
+    if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId())) {
+        onRecordButtonToggled(true);
+    } else { // onRecordButtonToggled(true) calls these, don't call them twice.
+        d->updateWriterSettings();
+        d->updateUiFormat();
+    }
     d->updateUiForRealTimeMode();
 
     bool enabled = d->enabledIds.value(document->linkedResourcesStorageId(), false);

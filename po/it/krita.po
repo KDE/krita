@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-04-01 12:45+0200\n"
+"PO-Revision-Date: 2024-04-06 20:55+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -8464,12 +8464,10 @@ msgstr "Campiona colore schermo (campiona tela reale)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Mostra le aree di aggancio"
+msgstr "Mostra riquadro area di aggancio"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29203,10 +29201,9 @@ msgid "&Open Background color selector"
 msgstr "&Apri selettore colore di sfondo"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Area di aggancio"
+msgstr "Riquadro &area di aggancio"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29232,16 +29229,14 @@ msgid "Gradients"
 msgstr "Sfumature"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Area di aggancio:"
+msgstr "Riquadro area di aggancio"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Cassetta degli strumenti e aree di aggancio"
+msgstr "Riquadro area di aggancio barra degli strumenti"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29821,8 +29816,7 @@ msgid "Masked Brush"
 msgstr "Pennello con maschera"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Tavolozza a comparsa"
 
@@ -34860,20 +34854,16 @@ msgstr "Configura pannello dell'area di aggancio"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"L'area di aggancio è aperta nella Tavolozza a comparsa. Chiudi la Tavolozza "
-"a comparsa per mostrarla qui."
+msgstr "L'area di aggancio è aperta in %1. Chiudi %1 per mostrarla qui."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Configura pannello dell'area di aggancio"
+msgstr "Configura aree di aggancio di %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format

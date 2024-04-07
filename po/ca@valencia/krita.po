@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-02 02:58+0000\n"
-"PO-Revision-Date: 2024-02-29 11:43+0100\n"
+"PO-Revision-Date: 2024-04-05 10:38+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -36804,7 +36804,7 @@ msgstr "Mostra el text"
 #, kde-format
 msgctxt "@title:menu"
 msgid "Toolbar Settings"
-msgstr "Configuració per a la barra d'eines"
+msgstr "Configureu la barra d'eines"
 
 #: libs/widgetutils/xmlgui/ktoolbar.cpp:294
 #, kde-format

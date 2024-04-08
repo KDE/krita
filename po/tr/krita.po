@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-02 02:58+0000\n"
-"PO-Revision-Date: 2024-03-19 17:50+0300\n"
+"PO-Revision-Date: 2024-04-07 12:23+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.04.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -59184,7 +59184,7 @@ msgstr "Devingen Fırça Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Enclose and Fill Tool"
-msgstr "Çevreleme ve Dolgu Aracı"
+msgstr "Çevrele ve Doldur Aracı"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:267
 msgctxt "(qtundo-format)"

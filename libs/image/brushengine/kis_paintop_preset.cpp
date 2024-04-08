@@ -236,7 +236,18 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
 
     setValid(d->settings->isValid());
 
-    setImage(img);
+    if (!img.textKeys().isEmpty()) {
+        QImage strippedImage(img.size(), img.format());
+        memcpy(strippedImage.bits(), img.bits(), img.sizeInBytes());
+
+        if (img.format() == QImage::Format_Indexed8) {
+            strippedImage.setColorTable(img.colorTable());
+        }
+
+        setImage(strippedImage);
+    } else {
+        setImage(img);
+    }
 
     return true;
 }

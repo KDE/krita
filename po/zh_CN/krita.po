@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-04-07 00:33\n"
+"PO-Revision-Date: 2024-04-07 14:32\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -8421,12 +8421,10 @@ msgstr "拾取屏幕颜色 (拾取画布实际颜色)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "显示面板"
+msgstr ""
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -28870,10 +28868,9 @@ msgid "&Open Background color selector"
 msgstr "打开背景色拾色器(&O)"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "面板(&D)"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -28899,16 +28896,14 @@ msgid "Gradients"
 msgstr "渐变"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "面板："
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "工具箱和面板"
+msgstr ""
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29477,10 +29472,9 @@ msgid "Masked Brush"
 msgstr "蒙版笔刷"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
-msgstr "弹出面板"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
@@ -34338,18 +34332,16 @@ msgstr "配置可用面板"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr "此面板正在通过弹出面板显示。关闭弹出面板后将重新显示此面板。"
+msgstr ""
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "配置可用面板"
+msgstr ""
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -60524,6 +60516,3 @@ msgstr "缩放工具"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "参考图像工具"
-
-#~ msgid "Configure Popup Palette dockers"
-#~ msgstr "配置弹出面板中显示的面板"

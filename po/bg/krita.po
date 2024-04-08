@@ -3,13 +3,13 @@
 #
 # Zlatko Popov <zlatkopopov@fsa-bg.org>, 2006, 2007, 2008.
 # Yasen Pramatarov <yasen@lindeas.com>, 2009, 2010, 2011, 2012, 2013.
-# Mincho Kondarev <mkondarev@yahoo.de>, 2022.
+# SPDX-FileCopyrightText: 2022, 2024 Mincho Kondarev <mkondarev@yahoo.de>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2022-12-09 17:44+0100\n"
+"PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.08.3\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Poedit-Bookmarks: -1,-1,-1,-1,-1,-1,1000,-1,-1,-1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -2492,7 +2492,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_3_Default_Resources.bundle:paintoppresets/Sketch."
 "kpp"
 msgid "Sketch"
-msgstr ""
+msgstr "Скица"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3550,7 +3550,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/chalk.png"
 msgid "chalk"
-msgstr ""
+msgstr "мел"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3633,7 +3633,7 @@ msgstr "градиент"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/hair.png"
 msgid "hair"
-msgstr ""
+msgstr "коса"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3720,7 +3720,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/rock.png"
 msgid "rock"
-msgstr ""
+msgstr "скала"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -3748,7 +3748,7 @@ msgstr ""
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/smoke.png"
 msgid "smoke"
-msgstr ""
+msgstr "дим"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -7241,7 +7241,7 @@ msgstr "&Повдигане"
 #, kde-format
 msgctxt "action"
 msgid "Align Right"
-msgstr ""
+msgstr "Дясно подравняване"
 
 #. i18n: context: iconText @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_ungroup), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7255,7 +7255,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Ungroup"
-msgstr ""
+msgstr "Разгрупиране"
 
 #. i18n: context: iconText @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_back), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7305,7 +7305,7 @@ msgstr "На преден план"
 #, kde-format
 msgctxt "action"
 msgid "Vertically Center"
-msgstr ""
+msgstr "Вертикално центриране"
 
 #. i18n: context: iconText @ Action (object_group), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:66
@@ -7348,7 +7348,7 @@ msgstr "Група"
 #, kde-format
 msgctxt "action"
 msgid "Align Left"
-msgstr ""
+msgstr "Ляво подравняване"
 
 #. i18n: context: iconText @ Action (object_align_vertical_top), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_vertical_top), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7362,7 +7362,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Align Top"
-msgstr ""
+msgstr "Подравняване в горния край"
 
 #. i18n: context: iconText @ Action (object_align_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_align_horizontal_center), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7376,7 +7376,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Horizontally Center"
-msgstr ""
+msgstr "Хоризонтално центриране"
 
 #. i18n: context: iconText @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (object_order_lower), Actions (Interaction Tool), ActionCollection (Tools)
@@ -7408,7 +7408,7 @@ msgstr "&Понижаване"
 #, kde-format
 msgctxt "action"
 msgid "Align Bottom"
-msgstr ""
+msgstr "Подравняване в долния край"
 
 #. i18n: context: text @ Action (object_distribute_horizontal_left), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:127
@@ -7625,7 +7625,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Intersect"
-msgstr ""
+msgstr "Сечение"
 
 #. i18n: context: toolTip @ Action (object_intersect), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:272
@@ -7639,7 +7639,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Subtract"
-msgstr ""
+msgstr "Изваждане"
 
 #. i18n: context: toolTip @ Action (object_subtract), Actions (Interaction Tool), ActionCollection (Tools)
 #: krita/data/actions/InteractionTool.action:282
@@ -7814,7 +7814,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Remove point"
-msgstr ""
+msgstr "Премахване на точка"
 
 #. i18n: context: iconText @ Action (path-break-segment), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (path-break-segment), Actions (Path Tool), ActionCollection (Tools)
@@ -7827,7 +7827,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Break at segment"
-msgstr ""
+msgstr "Прекъсване в участък"
 
 #. i18n: context: iconText @ Action (pathsegment-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-line), Actions (Path Tool), ActionCollection (Tools)
@@ -7853,7 +7853,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Break at point"
-msgstr ""
+msgstr "Прекъсване в точка"
 
 #. i18n: context: iconText @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-line), Actions (Path Tool), ActionCollection (Tools)
@@ -7892,7 +7892,7 @@ msgstr "Симетрична точка"
 #, kde-format
 msgctxt "action"
 msgid "Make curve point"
-msgstr ""
+msgstr "Превръщане в точка от крива"
 
 #. i18n: context: iconText @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathsegment-curve), Actions (Path Tool), ActionCollection (Tools)
@@ -7932,7 +7932,7 @@ msgstr "Вмъкване на точка"
 #, kde-format
 msgctxt "action"
 msgid "Corner point"
-msgstr ""
+msgstr "Ъглова точка"
 
 #. i18n: context: iconText @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-merge), Actions (Path Tool), ActionCollection (Tools)
@@ -7960,7 +7960,7 @@ msgstr "Сливане на точки"
 #, kde-format
 msgctxt "action"
 msgid "Join with segment"
-msgstr ""
+msgstr "Свързване с участък"
 
 #. i18n: context: iconText @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (pathpoint-smooth), Actions (Path Tool), ActionCollection (Tools)
@@ -7974,7 +7974,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Smooth point"
-msgstr ""
+msgstr "Заоблена точка"
 
 #. i18n: context: text @ Actions (General), ActionCollection (Krita)
 #: krita/krita.action:4
@@ -8075,11 +8075,10 @@ msgstr "Показване на лентата с инструменти за ф
 #. i18n: context: toolTip @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (lock_toolbars), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:65 krita/krita.action:67 krita/krita.action:68
-#, fuzzy, kde-format
-#| msgid "Toolbars"
+#, kde-format
 msgctxt "action"
 msgid "Lock Toolbars"
-msgstr "Ленти с инструменти"
+msgstr "Заключване на лентата с инструменти"
 
 #. i18n: context: text @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (show_color_selector), Actions (General), ActionCollection (Krita)
@@ -8390,11 +8389,10 @@ msgstr ""
 
 #. i18n: context: iconText @ Action (sample_screen_color), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:304
-#, fuzzy, kde-format
-#| msgid "Select a Color"
+#, kde-format
 msgctxt "action"
 msgid "Sample Screen Color"
-msgstr "Избор на цвят"
+msgstr "Избор на цвят за екрана"
 
 #. i18n: context: text @ Action (sample_screen_color_real_canvas), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:311
@@ -8426,12 +8424,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Показване на панели"
+msgstr "Показване на панел"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -8715,22 +8711,20 @@ msgstr "Режим изтриване на гумата"
 #. i18n: context: toolTip @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:548 krita/krita.action:550 krita/krita.action:551
-#, fuzzy, kde-format
-#| msgid "Use last preset"
+#, kde-format
 msgctxt "action"
 msgid "Toggle eraser preset"
-msgstr "последно използвани"
+msgstr "Превключване на набора от гуми"
 
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: text @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:560 krita/krita.action:563
-#, fuzzy, kde-format
-#| msgid "Use last preset"
+#, kde-format
 msgctxt "action"
 msgid "Select eraser preset"
-msgstr "последно използвани"
+msgstr "Избор на набор от гуми"
 
 #. i18n: context: toolTip @ Action (eraser_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:562
@@ -8744,11 +8738,10 @@ msgstr ""
 #. i18n: context: text @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:572 krita/krita.action:575
-#, fuzzy, kde-format
-#| msgid "Current brush preset"
+#, kde-format
 msgctxt "action"
 msgid "Select brush preset"
-msgstr "Текущи настройки на четка"
+msgstr "Избор на набор от четки"
 
 #. i18n: context: toolTip @ Action (brush_select_preset_action), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:574
@@ -9134,12 +9127,10 @@ msgstr "Увеличаване размера на четка"
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:891 krita/krita.action:893 krita/krita.action:894
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° clockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip clockwise"
-msgstr "Завъртване на обект 90° по часовникова стрелка"
+msgstr "Завъртване на върха на четката на 90° по часовникова стрелка"
 
 #. i18n: context: text @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9160,12 +9151,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:915 krita/krita.action:917 krita/krita.action:918
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise"
-msgstr "Завъртване на обект 90° обратно на часовникова стрелка"
+msgstr "Завъртване на върха на четката обратно на часовниковата стрелка"
 
 #. i18n: context: text @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
@@ -9174,12 +9163,11 @@ msgstr "Завъртване на обект 90° обратно на часов
 #. i18n: context: toolTip @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotate_brush_tip_counter_clockwise_precise), Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:927 krita/krita.action:929 krita/krita.action:930
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate object 90° counterclockwise"
+#, kde-format
 msgctxt "action"
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr "Завъртване на обект 90° обратно на часовникова стрелка"
+msgstr ""
+"Завъртване на върха на четката обратно на часовниковата стрелка (прецизно)"
 
 #. i18n: context: text @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (toggle_assistant), Actions (Painting), ActionCollection (Krita)
@@ -10786,7 +10774,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Column Left"
-msgstr ""
+msgstr "Вмъкване на колона отляво"
 
 #. i18n: context: toolTip @ Action (insert_column_left), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2161
@@ -10802,7 +10790,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Insert Column Right"
-msgstr ""
+msgstr "Вмъкване на колона отдясно"
 
 #. i18n: context: toolTip @ Action (insert_column_right), Actions (Animation), ActionCollection (Krita)
 #: krita/krita.action:2173
@@ -11966,12 +11954,10 @@ msgstr "Преобразуване на слой в кадър на анимац
 
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3038
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
+#, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Преобразуване в слой на файл"
+msgstr "Преобразуване в &слой на файл..."
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3040
@@ -12227,9 +12213,7 @@ msgstr "Wavelet разлагане"
 
 #. i18n: context: text @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3218
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Hori&zontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
 msgstr "Огледално завъртане на слой по &хоризонтала"
@@ -12239,18 +12223,14 @@ msgstr "Огледално завъртане на слой по &хоризон
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3220 krita/krita.action:3221
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
 msgstr "Огледално завъртане на слой по хоризонтала"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer &Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
 msgstr "Огледално завъртане на слой по &вертикала"
@@ -12260,18 +12240,14 @@ msgstr "Огледално завъртане на слой по &вертика
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3232 krita/krita.action:3233
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
 msgstr "Огледално завъртане на слой по вертикала"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Rotate Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
 msgstr "&Завъртване на слой..."
@@ -12281,18 +12257,14 @@ msgstr "&Завъртване на слой..."
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3244 krita/krita.action:3245
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
 msgstr "Завъртване на слой"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate &Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
 msgstr "Завъртване на &слой 90° надясно"
@@ -12302,18 +12274,14 @@ msgstr "Завъртване на &слой 90° надясно"
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3256 krita/krita.action:3257
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Right"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
 msgstr "Завъртване на слой 90° надясно"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3266
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
 msgstr "Завъртване на слой &90° наляво"
@@ -12323,18 +12291,14 @@ msgstr "Завъртване на слой &90° наляво"
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3268 krita/krita.action:3269
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 90° to the Left"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
 msgstr "Завъртване на слой 90° наляво"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3278
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer &180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
 msgstr "Завъртване на слой &180°"
@@ -12344,18 +12308,14 @@ msgstr "Завъртване на слой &180°"
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3280 krita/krita.action:3281
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Rotate Layer 180°"
+#, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
 msgstr "Завъртване на слой 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3290
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale &Layer to new Size..."
+#, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
 msgstr "Преоразмеряване на &слой..."
@@ -12365,18 +12325,14 @@ msgstr "Преоразмеряване на &слой..."
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3292 krita/krita.action:3293
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale Layer to new Size"
+#, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
 msgstr "Преоразмеряване на слой"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3302
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Shear Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
 msgstr "&Наклоняване на слой..."
@@ -12386,9 +12342,7 @@ msgstr "&Наклоняване на слой..."
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3304 krita/krita.action:3305
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "action"
 msgid "Shear Layers"
 msgstr "Наклоняване на слой"
@@ -12531,9 +12485,7 @@ msgstr "Наклоняване на всички слоеве"
 
 #. i18n: context: text @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3410
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "&Offset Layer..."
+#, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
 msgstr "&Отместване на слой..."
@@ -12543,9 +12495,7 @@ msgstr "&Отместване на слой..."
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3412 krita/krita.action:3413
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Offset Layer"
+#, kde-format
 msgctxt "action"
 msgid "Offset Layers"
 msgstr "Отместване на слой"
@@ -12825,11 +12775,9 @@ msgid "&View"
 msgstr "&Изглед"
 
 #: krita/krita5.xmlgui:89
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgid "Wrap Around Mode Direction"
-msgstr "Режим на плочковидно запълване"
+msgstr "Посока на плочковидно запълване"
 
 #: krita/krita5.xmlgui:99
 #, kde-format
@@ -12961,11 +12909,9 @@ msgid "File"
 msgstr "Файл"
 
 #: krita/krita5.xmlgui:429
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Edit"
+#, kde-format
 msgid "Edit"
-msgstr "&Редактиране"
+msgstr "Редактиране"
 
 #: krita/krita5.xmlgui:434
 #, kde-format
@@ -13866,9 +13812,7 @@ msgstr "Режим на цял екран"
 #. i18n: context: text @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_detached_canvas), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:640 krita/kritamenu.action:643
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Detach canvas"
+#, kde-format
 msgctxt "action"
 msgid "Detach Canvas"
 msgstr "Платно в отделен прозорец"
@@ -13905,12 +13849,10 @@ msgstr "Режим на плочковидно запълване"
 #. i18n: context: iconText @ Action (wrap_around_hv_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:664 krita/kritamenu.action:666
 #: krita/kritamenu.action:667
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Wrap Around Mode"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Both Directions"
-msgstr "Режим на плочковидно запълване"
+msgstr "Двустранно плочковидно запълване"
 
 #. i18n: context: text @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
@@ -13920,12 +13862,10 @@ msgstr "Режим на плочковидно запълване"
 #. i18n: context: iconText @ Action (wrap_around_h_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:676 krita/kritamenu.action:678
 #: krita/kritamenu.action:679
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Horizontally"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Horizontally"
-msgstr "Огледално завъртане по хоризонтала"
+msgstr "Хоризонтално плочковидно запълване"
 
 #. i18n: context: text @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
@@ -13935,12 +13875,10 @@ msgstr "Огледално завъртане по хоризонтала"
 #. i18n: context: iconText @ Action (wrap_around_v_axis), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:688 krita/kritamenu.action:690
 #: krita/kritamenu.action:691
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Vertically"
+#, kde-format
 msgctxt "action"
 msgid "Wrap Around Vertically"
-msgstr "Огледално завъртане по вертикала"
+msgstr "Вертикално плочковидно запълване"
 
 #. i18n: context: text @ Action (level_of_detail_mode), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:700
@@ -14038,22 +13976,20 @@ msgstr "Огледален изглед около платното"
 
 #. i18n: context: text @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:762
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "МащабиранеУвеличаване до 100%"
+msgstr "&Мащабиране до 100%"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:764 krita/kritamenu.action:765
-#, fuzzy, no-c-format, kde-format
-#| msgid "Zoom to 100%"
+#, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "МащабиранеУвеличаване до 100%"
+msgstr "Мащабиране до 100%"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -14088,57 +14024,51 @@ msgstr "Намаляване на мащаба"
 #. i18n: context: text @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:798 krita/kritamenu.action:801
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View"
-msgstr "Мащабиране до размера на страницата"
+msgstr "Мащабиране до размера на прозореца"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:800
-#, fuzzy, kde-format
-#| msgid "Canvas Size"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View"
-msgstr "Размер на платното"
+msgstr "Мащабиране на платното до размера на прозореца"
 
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:808 krita/kritamenu.action:811
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Width"
 msgstr "Напасване по широчина"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_width), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:810
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Width"
-msgstr "Напасване по широчина"
+msgstr "Напасване на платното по широчина"
 
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:818 krita/kritamenu.action:821
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit to View Height"
 msgstr "Напасване на височина"
 
 #. i18n: context: toolTip @ Action (zoom_to_fit_height), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:820
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgctxt "action"
 msgid "Fit Canvas to View Height"
-msgstr "Напасване на височина"
+msgstr "Напасване на платното по височина"
 
 #. i18n: context: text @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (toggle_zoom_to_fit), Actions (View), ActionCollection (Menu)
@@ -14205,27 +14135,26 @@ msgstr "Нулиране на завъртването на платното"
 #. i18n: context: text @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:874 krita/kritamenu.action:877
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgctxt "action"
 msgid "Reset Display"
-msgstr "Показване"
+msgstr "Нулиране на екрана"
 
 #. i18n: context: toolTip @ Action (reset_display), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:876
-#, fuzzy, kde-format
-#| msgid "Reset the options to their default values"
+#, kde-format
 msgctxt "action"
 msgid "Reset zoom, rotation, and mirroring to their default states."
-msgstr "Връщане на всички настройки до стойностите им по подразбиране"
+msgstr ""
+"Връщане на мащабирането, завъртването и огледалното обръщане до стойностите "
+"им по подразбиране"
 
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: text @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_print_size), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:884 krita/kritamenu.action:887
-#, fuzzy, kde-format
-#| msgid "Print Size"
+#, kde-format
 msgctxt "action"
 msgid "View Print Size"
 msgstr "Размер за отпечатване"
@@ -15543,7 +15472,7 @@ msgstr "Конфигуриране на лентата с инструменти
 #, kde-format
 msgctxt "action"
 msgid "Dockers"
-msgstr ""
+msgstr "Контейнери"
 
 #. i18n: context: text @ Action (theme_menu), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1831
@@ -15977,7 +15906,7 @@ msgstr "Активиране на ъглово прилепване"
 #: plugins/paintops/libpaintop/forms/wdgbrushchooser.ui:85
 #, kde-format
 msgid "Precision:"
-msgstr ""
+msgstr "Точност:"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:299
 #, kde-format
@@ -15990,7 +15919,7 @@ msgstr "Необработено"
 #: plugins/paintops/curvebrush/curve_paintop_plugin.cpp:30
 #, kde-format
 msgid "Curve"
-msgstr ""
+msgstr "Крива"
 
 #: libs/basicflakes/tools/KoPencilTool.cpp:301
 #, kde-format
@@ -16012,7 +15941,7 @@ msgstr "Точност:"
 #: libs/basicflakes/tools/KoPencilTool.cpp:356
 #, kde-format
 msgid "Pencil"
-msgstr ""
+msgstr "Молив"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, shapeCBox)
 #: libs/basicflakes/tools/KoPencilTool.cpp:361
@@ -16204,8 +16133,8 @@ msgstr "Закачане на фигура"
 msgctxt "(qtundo-format)"
 msgid "Create shape"
 msgid_plural "Create %1 shapes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Създаване на форма"
+msgstr[1] "Създаване на %1 форми"
 
 #: libs/flake/commands/KoShapeDeleteCommand.cpp:43
 msgctxt "(qtundo-format) Delete one shape"
@@ -16253,17 +16182,14 @@ msgid "Move shapes"
 msgstr "Преместване на форми"
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
-msgstr "Задаване вида на точка"
+msgstr "Задаване подреждането на палитрата"
 
 #: libs/flake/commands/KoShapeRenameCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Rename Shape"
-msgstr ""
+msgstr "Преименуване на форма"
 
 #: libs/flake/commands/KoShapeReorderCommand.cpp:53
 #: libs/flake/commands/KoShapeReorderCommand.cpp:66
@@ -16457,7 +16383,7 @@ msgstr "Промяна на участък"
 #: libs/flake/tools/KoPathTool.cpp:126
 #, kde-format
 msgid "Edit Shape"
-msgstr ""
+msgstr "Редактиране на форма"
 
 #: libs/flake/tools/KoPathTool.cpp:608
 #, kde-format
@@ -17177,8 +17103,7 @@ msgstr ""
 
 #: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
 #: plugins/impex/psd/psd_loader.cpp:193
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
@@ -17214,14 +17139,12 @@ msgid "Change Image Resolution"
 msgstr ""
 
 #: libs/image/kis_image.cc:1012
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Scale Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
 msgid_plural "Scale %1 Layers"
 msgstr[0] "Преоразмеряване на слой"
-msgstr[1] "Преоразмеряване на слой"
+msgstr[1] "Преоразмеряване на %1слоя"
 
 #: libs/image/kis_image.cc:1153
 msgctxt "(qtundo-format)"
@@ -17234,14 +17157,12 @@ msgid "Rotate Mask"
 msgstr "Завъртване на маска"
 
 #: libs/image/kis_image.cc:1166
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Rotate Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
 msgstr[0] "Завъртване на слой"
-msgstr[1] "Завъртване на слой"
+msgstr[1] "Завъртване на %1 слоя"
 
 #: libs/image/kis_image.cc:1266
 msgctxt "(qtundo-format)"
@@ -17249,14 +17170,12 @@ msgid "Shear Mask"
 msgstr "Наклоняване на маска"
 
 #: libs/image/kis_image.cc:1270
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Shear Layer"
+#, kde-format
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
 msgstr[0] "Наклоняване на слой"
-msgstr[1] "Наклоняване на слой"
+msgstr[1] "Наклоняване на %1 слоя"
 
 #: libs/image/kis_image.cc:1277
 msgctxt "(qtundo-format)"
@@ -17506,7 +17425,7 @@ msgstr "Преобразуване в слой за рисуване"
 #: libs/image/kis_processing_visitor.cpp:24
 #, kde-format
 msgid "Processing"
-msgstr ""
+msgstr "Обработване"
 
 #: libs/image/kis_psd_layer_style.cpp:104
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1370
@@ -17664,7 +17583,7 @@ msgstr "Цветове"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Sketch"
-msgstr ""
+msgstr "Скица"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:63
 #, kde-format
@@ -17736,7 +17655,7 @@ msgstr ""
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "Textures"
-msgstr ""
+msgstr "Текстури"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:75
 #, kde-format
@@ -17778,7 +17697,7 @@ msgstr "изключен"
 #: plugins/dockers/animation/KisAnimTimelineLayersHeader.cpp:252
 #, kde-format
 msgid "on"
-msgstr ""
+msgstr "на"
 
 #: libs/image/layerstyles/kis_ls_bevel_emboss_filter.cpp:45
 #: libs/image/layerstyles/kis_ls_stroke_filter.cpp:67
@@ -17962,18 +17881,14 @@ msgid "Transparency Mask"
 msgstr "Маска за прозрачност"
 
 #: libs/impex/LayerOpacityCheck.h:109
-#, fuzzy, kde-format
-#| msgctxt "Loading a .kra file"
-#| msgid ""
-#| "The file contains a clone layer that has an incorrect source node id. "
-#| "This layer will be converted into a paint layer."
+#, kde-format
 msgctxt "image conversion warning"
 msgid ""
 "Your image contains layers with a partial opacity. The layers will be "
 "exported at full opacity."
 msgstr ""
-"Файлът съдържа клониран слой, който има неправилен идентификатор на изходния "
-"възел. Този слойще бъде преобразуван в слой за рисуване."
+"Вашето изображение съдържа слоеве с частична непрозрачност. Слоевете ще "
+"бъдат експортирани с пълна непрозрачност."
 
 #: libs/impex/MultiLayerCheck.h:24
 #, kde-format
@@ -18226,11 +18141,10 @@ msgid "JPEG-XL Image"
 msgstr ""
 
 #: libs/koplugin/KisMimeDatabase.cpp:349
-#, fuzzy, kde-format
-#| msgid "Document"
+#, kde-format
 msgctxt "description of a file type"
 msgid "CSV Document"
-msgstr "Документ"
+msgstr "CSV документ"
 
 #: libs/koplugin/KisMimeDatabase.cpp:354
 #, kde-format
@@ -18523,7 +18437,7 @@ msgstr "С"
 #: libs/pigment/KoBasicHistogramProducers.cpp:433
 #, kde-format
 msgid "L*a*b* Histogram"
-msgstr ""
+msgstr "L*a*b* Histogram"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/pigment/KoBasicHistogramProducers.cpp:437
@@ -18535,7 +18449,7 @@ msgstr "L*"
 #: libs/pigment/KoBasicHistogramProducers.cpp:511
 #, kde-format
 msgid "Generic L*a*b* Histogram"
-msgstr ""
+msgstr "Generic L*a*b* Histogram"
 
 #: libs/pigment/KoColorModelStandardIds.cpp:12
 #, kde-format
@@ -18642,7 +18556,7 @@ msgstr "Остатък след деление"
 #, kde-format
 msgctxt "Blending mode - category Negative"
 msgid "Negative"
-msgstr ""
+msgstr "Негатив"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:37
 #, kde-format
@@ -18660,7 +18574,7 @@ msgstr "Разни"
 #, kde-format
 msgctxt "Blending mode - category HSY"
 msgid "HSY"
-msgstr ""
+msgstr "HSY"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:40
 #, kde-format
@@ -18684,37 +18598,37 @@ msgstr "HSV"
 #, kde-format
 msgctxt "Blending mode - category Quadratic"
 msgid "Quadratic"
-msgstr ""
+msgstr "Квадратен"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:45
 #, kde-format
 msgctxt "Blending mode - Addition"
 msgid "Addition"
-msgstr ""
+msgstr "Добавяне"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:46
 #, kde-format
 msgctxt "Blending mode - Subtract"
 msgid "Subtract"
-msgstr ""
+msgstr "Изваждане"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:47
 #, kde-format
 msgctxt "Blending mode - Multiply"
 msgid "Multiply"
-msgstr ""
+msgstr "Умножение"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:48
 #, kde-format
 msgctxt "Blending mode - Divide"
 msgid "Divide"
-msgstr ""
+msgstr "Разделяне"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:49
 #, kde-format
 msgctxt "Blending mode - Inverse Subtract"
 msgid "Inverse Subtract"
-msgstr ""
+msgstr "Обратно извличане"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:51
 #, kde-format
@@ -18726,7 +18640,7 @@ msgstr "XOR"
 #, kde-format
 msgctxt "Blending mode - OR"
 msgid "OR"
-msgstr ""
+msgstr "ИЛИ"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:53
 #, kde-format
@@ -18786,7 +18700,7 @@ msgstr "Потъмняване"
 #, kde-format
 msgctxt "Blending mode - Linear Burn"
 msgid "Linear Burn"
-msgstr ""
+msgstr "Линейно изгаряне"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:64
 #, kde-format
@@ -19002,7 +18916,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Difference"
 msgid "Difference"
-msgstr ""
+msgstr "Разлика"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:103
 #, kde-format
@@ -19020,13 +18934,13 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Exclusion"
 msgid "Exclusion"
-msgstr ""
+msgstr "Изключване"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:106
 #, kde-format
 msgctxt "Blending mode - Arcus Tangent"
 msgid "Arcus Tangent"
-msgstr ""
+msgstr "Аркотангенс"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:107
 #, kde-format
@@ -19050,7 +18964,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Overlay"
 msgid "Overlay"
-msgstr ""
+msgstr "Припокриване"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:113
 #, kde-format
@@ -19068,7 +18982,7 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Erase"
 msgid "Erase"
-msgstr ""
+msgstr "Изтриване"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:116
 #, kde-format
@@ -19098,19 +19012,19 @@ msgstr ""
 #, kde-format
 msgctxt "Blending mode - Grain Merge"
 msgid "Grain Merge"
-msgstr ""
+msgstr "Зърнесто сливане"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:121
 #, kde-format
 msgctxt "Blending mode - Grain Extract"
 msgid "Grain Extract"
-msgstr ""
+msgstr "Зърнесто извличане"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:122
 #, kde-format
 msgctxt "Blending mode - Parallel"
 msgid "Parallel"
-msgstr ""
+msgstr "Успоредна права"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:123
 #, kde-format
@@ -19254,13 +19168,13 @@ msgstr "Яркост"
 #, kde-format
 msgctxt "Blending mode - Decrease Saturation HSY"
 msgid "Decrease Saturation"
-msgstr ""
+msgstr "Намаляване на насищането"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:149
 #, kde-format
 msgctxt "Blending mode - Increase Saturation HSY"
 msgid "Increase Saturation"
-msgstr ""
+msgstr "Увеличаване на насищането"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:150
 #, kde-format
@@ -19314,13 +19228,13 @@ msgstr "Увеличаване на насищане на HSI:"
 #, kde-format
 msgctxt "Blending mode - Decrease Intensity"
 msgid "Decrease Intensity"
-msgstr ""
+msgstr "Намаляване на интензивността"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:160
 #, kde-format
 msgctxt "Blending mode - Increase Intensity"
 msgid "Increase Intensity"
-msgstr ""
+msgstr "Увеличаване на интензивността"
 
 #: libs/pigment/KoCompositeOpRegistry.cpp:162
 #, kde-format
@@ -19742,7 +19656,7 @@ msgstr "Местоположение"
 #: plugins/extensions/dbexplorer/WdgDbExplorer.ui:43
 #, kde-format
 msgid "Resource Type"
-msgstr ""
+msgstr "Тип на ресурса"
 
 #: libs/resources/KisResourceModel.cpp:144
 #: libs/resources/KisTagResourceModel.cpp:646
@@ -19769,10 +19683,9 @@ msgstr "Етикети"
 
 #: libs/resources/KisResourceModel.cpp:150
 #: libs/resources/KisTagResourceModel.cpp:652
-#, fuzzy, kde-format
-#| msgid "Thumbnail"
+#, kde-format
 msgid "Large Thumbnail"
-msgstr "Миниатюра"
+msgstr "Големи миниатюри"
 
 #: libs/resources/KisResourceModel.cpp:152
 #: libs/resources/KisTagResourceModel.cpp:654
@@ -19995,10 +19908,9 @@ msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:666
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:82
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource ID"
-msgstr "Ресурси"
+msgstr "Идентификатор на ресурс"
 
 #: libs/resources/KisTagResourceModel.cpp:668
 #, kde-format
@@ -20006,34 +19918,29 @@ msgid "Tag Url"
 msgstr ""
 
 #: libs/resources/KisTagResourceModel.cpp:670
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource"
-msgstr "Ресурси"
+msgstr "Ресурс"
 
 #: libs/resources/KisTagResourceModel.cpp:672
-#, fuzzy, kde-format
-#| msgid "Resources"
+#, kde-format
 msgid "Resource Active"
-msgstr "Ресурси"
+msgstr "Активен ресурс"
 
 #: libs/resources/KisTagResourceModel.cpp:674
-#, fuzzy, kde-format
-#| msgid "Active"
+#, kde-format
 msgid "Tag Active"
-msgstr "Активен"
+msgstr "Активен етикет"
 
 #: libs/resources/KisTagResourceModel.cpp:678
-#, fuzzy, kde-format
-#| msgid "Resource Management"
+#, kde-format
 msgid "Resource Name"
-msgstr "Управление на ресурси"
+msgstr "Име на ресурси"
 
 #: libs/resources/KisTagResourceModel.cpp:680
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "Tag File Name"
-msgstr "Име на файл"
+msgstr "Име на етикет на файл"
 
 #: libs/resourcewidgets/KisIconToolTip.cpp:110
 #, kde-format
@@ -20042,11 +19949,9 @@ msgid "resource folder"
 msgstr ""
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:127
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Display Selection"
+#, kde-format
 msgid "Display settings"
-msgstr "Показване на селекцията"
+msgstr "Настройки на екрана"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:134
 #, kde-format
@@ -20234,7 +20139,7 @@ msgstr "Етикет"
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:74
 #, kde-format
 msgid "Tag options"
-msgstr ""
+msgstr "Опции на таг"
 
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:145
 #: libs/resourcewidgets/KisTagChooserWidget.cpp:306
@@ -20544,13 +20449,10 @@ msgid "spline"
 msgstr ""
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:106
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Not Applicable, used where there's no colorants or gamma curve found"
-#| msgid "N/A"
+#, kde-format
 msgctxt "Not applicable. No render types without valid ffmpeg path."
 msgid "N/A"
-msgstr "N/A"
+msgstr "не е налично"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
@@ -20856,10 +20758,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, wdgCodecOptions)
 #: libs/ui/animation/video_export_options_dialog.ui:23
-#, fuzzy, kde-format
-#| msgid "Color options"
+#, kde-format
 msgid "Codec options"
-msgstr "Цветни опции"
+msgstr "Опции на кодеци"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOpenH264bitrate)
 #. i18n: ectx: property (text), widget (QLabel, label_3)
@@ -20925,10 +20826,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
-#, fuzzy, kde-format
-#| msgid "Bitrate:"
+#, kde-format
 msgid "Bitrate (MBit/s):"
-msgstr "Битрейт:"
+msgstr "Битрейт (MBit/s):"
 
 #. i18n: ectx: property (text), widget (QCheckBox, vp9Lossless)
 #. i18n: ectx: property (text), widget (QCheckBox, webpLossless)
@@ -20956,10 +20856,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/animation/video_export_options_dialog.ui:300
-#, fuzzy, kde-format
-#| msgid "Auto-generate 8bit Palette"
+#, kde-format
 msgid "Auto-generate 8bit Palette:"
-msgstr "Автоматична палитра с 8-битова палитра"
+msgstr "Автоматична 8-битова палитра"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteuseDitherGIF)
 #. i18n: ectx: property (text), widget (QLabel, labelDither)
@@ -21027,23 +20926,19 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, chkCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:457
-#, fuzzy, kde-format
-#| msgid "Color options"
+#, kde-format
 msgid "Custom options"
-msgstr "Цветни опции"
+msgstr "Потребителски настройки"
 
 #. i18n: ectx: property (toolTip), widget (QLineEdit, txtCustomLine)
 #: libs/ui/animation/video_export_options_dialog.ui:466
-#, fuzzy, kde-format
-#| msgid ""
-#| "Add any ffmpeg filtering options here. It will be put between source and "
-#| "destination streams of the ffmpeg"
+#, kde-format
 msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Добавете всички опции за филтриране на ffmpeg тук. Тя ще бъде поставена "
-"между изходния и целевия поток на ffmpeg"
+"Добавете всички опции за филтриране на FFmpeg тук. Тя ще бъде поставена "
+"между изходния и целевия поток на FFmpeg"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -21203,7 +21098,7 @@ msgstr "анимация"
 msgctxt ""
 "h264 tune option name, check simplescreenrecorder for standard translations"
 msgid "grain"
-msgstr ""
+msgstr "зърно"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:64
 #, kde-format
@@ -21342,12 +21237,10 @@ msgid "Global/Full"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:94
-#, fuzzy, kde-format
-#| msgctxt "The 'reference' section label in selection tools options"
-#| msgid "Reference"
+#, kde-format
 msgctxt "palettegen status mode option name"
 msgid "Difference"
-msgstr "Справка"
+msgstr "Разлика"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:95
 #, kde-format
@@ -21356,21 +21249,16 @@ msgid "Per Single Frame"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:97
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "none"
 msgstr "без"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:98
-#, fuzzy, kde-format
-#| msgid "Layer"
+#, kde-format
 msgctxt "paletteuse dither option name"
 msgid "bayer"
-msgstr "Слой"
+msgstr "байер"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:99
 #, kde-format
@@ -21397,19 +21285,13 @@ msgid "sierra2_4a"
 msgstr ""
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:104
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "h264 tune option name, check simplescreenrecorder for standard "
-#| "translations"
-#| msgid "none"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "none"
 msgstr "без"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:105
-#, fuzzy, kde-format
-#| msgctxt "paleteuse diff mode option name"
-#| msgid "rectangle"
+#, kde-format
 msgctxt "paletteuse diff mode option name"
 msgid "rectangle"
 msgstr "правоъгълник"
@@ -21422,11 +21304,10 @@ msgid "kbps"
 msgstr "кбита/сек"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:292
-#, fuzzy, kde-format
-#| msgid "Open"
+#, kde-format
 msgctxt "openh264 codec name"
 msgid "OpenH264"
-msgstr "Отворете"
+msgstr "OpenH264"
 
 #: libs/ui/animation/VideoExportOptionsDialog.cpp:293
 #, kde-format
@@ -21643,10 +21524,9 @@ msgstr "Общи"
 
 #. i18n: ectx: property (text), widget (QLabel, fileLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:40
-#, fuzzy, kde-format
-#| msgid "Video FPS:"
+#, kde-format
 msgid "Video file:"
-msgstr "Видео FPS:"
+msgstr "Видео файл:"
 
 #. i18n: ectx: property (text), widget (QLabel, thumbnailImageHolder)
 #: libs/ui/animation/VideoImportDialog.ui:77
@@ -21867,25 +21747,21 @@ msgstr "Филтър:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, optionsFFMpegGroup)
 #: libs/ui/animation/VideoImportDialog.ui:601
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg:"
+msgstr "FFmpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
-#, fuzzy, kde-format
-#| msgid "FFmpeg:"
+#, kde-format
 msgid "FFmpeg path:"
-msgstr "FFmpeg:"
+msgstr "Път към FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, ffprobeLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:634
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Combine paths"
+#, kde-format
 msgid "FFprobe path:"
-msgstr "Комбиниране на пътища"
+msgstr "Път към FFmpeg:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgAnimationRenderer)
 #: libs/ui/animation/wdg_animationrenderer.ui:10
@@ -21913,10 +21789,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: libs/ui/animation/wdg_animationrenderer.ui:58
-#, fuzzy, kde-format
-#| msgid "Format:"
+#, kde-format
 msgid "File format:"
-msgstr "Формат:"
+msgstr "Файлов формат:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbMimetype)
 #: libs/ui/animation/wdg_animationrenderer.ui:67
@@ -21964,10 +21839,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, shouldExportOnlyVideo)
 #: libs/ui/animation/wdg_animationrenderer.ui:134
-#, fuzzy, kde-format
-#| msgid "Export size:"
+#, kde-format
 msgid "Export as video"
-msgstr "Размер на експортиране:"
+msgstr "Експортиране като видео"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
@@ -21999,17 +21873,15 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "FFmpeg location:"
-msgstr "Версия:"
+msgstr "Местоположение на FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/animation/wdg_animationrenderer.ui:249
-#, fuzzy, kde-format
-#| msgid "Version:"
+#, kde-format
 msgid "FFmpeg version:"
-msgstr "Версия:"
+msgstr "Версия на FFmpeg:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblFFMpegVersion)
 #. i18n: ectx: property (text), item, widget (QComboBox, fillBox)
@@ -22317,10 +22189,9 @@ msgid "Save without waiting"
 msgstr "Запазване без изчакване"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:58
-#, fuzzy, kde-format
-#| msgid "Channel Operations"
+#, kde-format
 msgid "Cancel operation and save"
-msgstr "Действия с канали"
+msgstr "Отмяна на операцията и запазване"
 
 #: libs/ui/dialogs/kis_delayed_save_dialog.cpp:59
 #, kde-format
@@ -22645,7 +22516,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Missing Color Profile"
-msgstr ""
+msgstr "Липсващ цветен профил"
 
 #: libs/ui/dialogs/kis_dlg_paste_format.cpp:18
 #, kde-format
@@ -22765,13 +22636,11 @@ msgid "Show session manager"
 msgstr "Управление на сесии"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:433
-#, fuzzy, kde-format
-#| msgid ""
-#| "<b>Note: Krita will need to be restarted for changes to take effect</b>"
+#, kde-format
 msgid "You will need to Restart Krita for the changes to take an effect."
 msgstr ""
-"<b> Забележка: Krita ще трябва да бъде рестартирана, за да влязат в сила "
-"промените </b>"
+"Забележка: Krita ще трябва да бъде рестартирана, за да влязат в сила "
+"промените."
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:439
 #, kde-format
@@ -22782,7 +22651,7 @@ msgstr ""
 #: libs/ui/dialogs/kis_dlg_preferences.cc:471
 #, kde-format
 msgid "Internal Storage"
-msgstr ""
+msgstr "Вътрешно хранилище"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:473
 #, kde-format
@@ -22790,10 +22659,9 @@ msgid "SD-Card"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:511
-#, fuzzy, kde-format
-#| msgid "User Manual"
+#, kde-format
 msgid "Choose Manually"
-msgstr "Ръководство за потребителя"
+msgstr "Ръчно избиране"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:576
 #, kde-format
@@ -23185,14 +23053,12 @@ msgid "Wait before merging strokes:"
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:67
-#, fuzzy, kde-format
-#| msgctxt "@info:tooltip"
-#| msgid "The number of last strokes which Krita should store separately"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid ""
 "The number of last strokes that Krita will not merge (even if they are old "
 "enough)"
-msgstr "Броят на последните очертания, които трябва да се съхранят отделно"
+msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:70
 #, kde-format
@@ -23222,10 +23088,9 @@ msgid ""
 msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:94
-#, fuzzy, kde-format
-#| msgid "Saturation:"
+#, kde-format
 msgid "Max group duration:"
-msgstr "Насищане:"
+msgstr ""
 
 #: libs/ui/dialogs/KisDlgConfigureCumulativeUndo.cpp:101
 #, kde-format
@@ -23547,10 +23412,9 @@ msgstr "X"
 
 #. i18n: ectx: property (text), widget (QToolButton, openFileLink)
 #: libs/ui/forms/KisWelcomePage.ui:288
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Open Image"
-msgstr "Отваряне на изображения"
+msgstr "Отваряне на изображение"
 
 #. i18n: ectx: property (text), widget (QLabel, helpTitleLabel)
 #: libs/ui/forms/KisWelcomePage.ui:366
@@ -23602,10 +23466,9 @@ msgstr "Интернет страница на Krita"
 
 #. i18n: ectx: property (text), widget (QLabel, recentDocumentsLabel)
 #: libs/ui/forms/KisWelcomePage.ui:1041
-#, fuzzy, kde-format
-#| msgid "Open Images"
+#, kde-format
 msgid "Recent Images"
-msgstr "Отваряне на изображения"
+msgstr "Скорошни изображения"
 
 #. i18n: ectx: property (text), widget (QPushButton, clearRecentFilesLink)
 #: libs/ui/forms/KisWelcomePage.ui:1065
@@ -23899,17 +23762,14 @@ msgstr "За програмата"
 
 #. i18n: ectx: attribute (title), widget (QWidget, authorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:35
-#, fuzzy, kde-format
-#| msgid "Authors"
+#, kde-format
 msgctxt "Heading for the list of Krita authors/developers"
 msgid "Authors"
 msgstr "Автори"
 
 #. i18n: ectx: attribute (title), widget (QWidget, translatorsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:49
-#, fuzzy, kde-format
-#| msgctxt "@title:tab"
-#| msgid "Translators"
+#, kde-format
 msgid "Translators"
 msgstr "Преводачи"
 
@@ -24504,10 +24364,9 @@ msgstr "&Добавяне на предварително зададени ша�
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgdisplaysettings.ui:46
-#, fuzzy, kde-format
-#| msgid "Channel Operations"
+#, kde-format
 msgid "Canvas Acceleration"
-msgstr "Действия с канали"
+msgstr "Ускорение на платното"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpOpenGL)
 #: libs/ui/forms/wdgdisplaysettings.ui:58
@@ -24532,39 +24391,33 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:115
-#, fuzzy, kde-format
-#| msgid "Bilinear"
+#, kde-format
 msgid "Bilinear Filtering"
-msgstr "Двулинейно"
+msgstr "Двулинейно филтриране"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Normalize Filter"
+#, kde-format
 msgid "Trilinear Filtering"
-msgstr "Филтър за нормализиране"
+msgstr "Трилинейно филтриране"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbFilterMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:125
-#, fuzzy, kde-format
-#| msgid "High Pass Filter"
+#, kde-format
 msgid "High Quality Filtering"
-msgstr "Филтър на високи честоти"
+msgstr "Високо качествено филтриране"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgdisplaysettings.ui:139
-#, fuzzy, kde-format
-#| msgid "Blending Mode:"
+#, kde-format
 msgid "Scaling Mode:"
-msgstr "Режим на смесване:"
+msgstr "Режим на мащабиране:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
-#| msgid "Assistant Tool"
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Асистент"
+msgstr "Асистиран режим:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -24602,31 +24455,27 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: libs/ui/forms/wdgdisplaysettings.ui:220
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current Renderer:"
-msgstr "Текущ слой"
+msgstr "Текущ рендер:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabHDR)
 #: libs/ui/forms/wdgdisplaysettings.ui:250
-#, fuzzy, kde-format
-#| msgid "Settings"
+#, kde-format
 msgid "HDR Settings"
-msgstr "Настройки"
+msgstr "Настройки на HDR"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentDisplayFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:256
-#, fuzzy, kde-format
-#| msgid "Current layer"
+#, kde-format
 msgid "Current Display Format"
-msgstr "Текущ слой"
+msgstr "Текущ формат на екрана"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: libs/ui/forms/wdgdisplaysettings.ui:263
-#, fuzzy, kde-format
-#| msgid "Display Name"
+#, kde-format
 msgid "Display Format:"
-msgstr "Показвано име"
+msgstr "Формат на екрана:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCurrentRootSurfaceFormat)
 #: libs/ui/forms/wdgdisplaysettings.ui:270
@@ -24648,10 +24497,9 @@ msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:315
-#, fuzzy, kde-format
-#| msgid "Decoration:"
+#, kde-format
 msgid "Canvas Decorations"
-msgstr "Декорация:"
+msgstr "Декорация на платното:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #: libs/ui/forms/wdgdisplaysettings.ui:321
@@ -24662,18 +24510,15 @@ msgstr "Маска за прозрачност"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/forms/wdgdisplaysettings.ui:327
-#, fuzzy, kde-format
-#| msgctxt "Default name for a color swatch"
-#| msgid "Color %1"
+#, kde-format
 msgid "Color 1:"
-msgstr "Цвят %1"
+msgstr "Цвят 1:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #: libs/ui/forms/wdgdisplaysettings.ui:354
-#, fuzzy, kde-format
-#| msgid "Color:"
+#, kde-format
 msgid "Color 2:"
-msgstr "Цвят:"
+msgstr "Цвят 2:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCheckSize)
 #. i18n: ectx: property (text), widget (QLabel, brushSizeLabel)
@@ -24692,19 +24537,15 @@ msgstr "Размер:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblCanvasBorderColor)
 #: libs/ui/forms/wdgdisplaysettings.ui:384
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Choose Foreground Color"
+#, kde-format
 msgid "Canvas Border Color:"
-msgstr "Избиране на цвят на преден план"
+msgstr "Цвят на рамката на платното:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:404
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Pixel Grid"
+#, kde-format
 msgid "Pixel Grid:"
-msgstr "Показване на пикселна мрежа"
+msgstr "Пикселна мрежа:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_11)
@@ -24729,8 +24570,7 @@ msgstr "Цвят:"
 
 #. i18n: ectx: property (text), widget (QLabel, gridThresholdLabel)
 #: libs/ui/forms/wdgdisplaysettings.ui:427
-#, fuzzy, kde-format
-#| msgid "Start at: "
+#, kde-format
 msgid "Start showing at:"
 msgstr "Започване от:"
 
@@ -24792,17 +24632,15 @@ msgstr "%"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:447
-#, fuzzy, kde-format
-#| msgid "Selection mode:"
+#, kde-format
 msgid "Selection Overlay:"
-msgstr "Режим на маркиране:"
+msgstr "Наслагване на селекцията:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: libs/ui/forms/wdgdisplaysettings.ui:459
-#, fuzzy, kde-format
-#| msgid "Selection mode:"
+#, kde-format
 msgid "Outline opacity:"
-msgstr "Режим на маркиране:"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_12)
 #: libs/ui/forms/wdgdisplaysettings.ui:472
@@ -24812,10 +24650,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/forms/wdgdisplaysettings.ui:492
-#, fuzzy, kde-format
-#| msgid "Opacity:"
+#, kde-format
 msgid "Overlay opacity:"
-msgstr "Непрозрачност:"
+msgstr "Непрозрачност на наслагването:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, Miscellaneous)
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
@@ -25744,9 +25581,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QPushButton, btnAdvancedCumulativeUndo)
 #: libs/ui/forms/wdggeneralsettings.ui:1518
-#, fuzzy, kde-format
-#| msgctxt "Tablet mapping settings"
-#| msgid "Advanced..."
+#, kde-format
 msgid "Advanced..."
 msgstr "Разширени…"
 
@@ -26236,7 +26071,7 @@ msgstr "Стратегия на сливане:"
 #: libs/ui/forms/wdgMissingColorProfile.ui:20
 #, kde-format
 msgid "Missing Color Profile"
-msgstr ""
+msgstr "Липсващ цветен профил"
 
 #. i18n: ectx: property (text), widget (QLabel, lblQuestion)
 #: libs/ui/forms/wdgMissingColorProfile.ui:32
@@ -26549,7 +26384,7 @@ msgstr "Презаписване на настройки на четка"
 #: libs/ui/forms/wdgpaintopsettings.ui:427
 #, kde-format
 msgid "Presets"
-msgstr ""
+msgstr "Предварително зададени настройки"
 
 #. i18n: ectx: property (text), widget (QLabel, engineFilterLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:444
@@ -27219,7 +27054,7 @@ msgstr ""
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:71
 #, kde-format
 msgid "<"
-msgstr ""
+msgstr "<"
 
 #. i18n: ectx: property (text), widget (QPushButton, rightScrollBtn)
 #. i18n: ectx: property (text), widget (QToolButton, btnAdd)
@@ -27228,7 +27063,7 @@ msgstr ""
 #: plugins/dockers/brushhud/kis_dlg_brush_hud_config.ui:64
 #, kde-format
 msgid ">"
-msgstr ""
+msgstr ">"
 
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, intWidth)
 #. i18n: ectx: property (toolTip), widget (QLabel, widthLabel)
@@ -27379,7 +27214,7 @@ msgstr ""
 #, kde-format
 msgctxt "Edit interpolation of segment in segment editor"
 msgid "Interpolation:"
-msgstr ""
+msgstr "Интерполация:"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #. i18n: ectx: property (text), item, widget (QComboBox, segmentInterpolationTypeComboBox)
@@ -27695,12 +27530,11 @@ msgid "Layer Size"
 msgstr "Размер на слой"
 
 #: libs/ui/imagesize/imagesize.cc:126
-#, fuzzy, kde-format
-#| msgid "Resize Layer"
+#, kde-format
 msgid "Resize Layer"
 msgid_plural "Resize %1 Layers"
-msgstr[0] "Преоразмеряване на слоя"
-msgstr[1] "Преоразмеряване на слоя"
+msgstr[0] "Преоразмеряване на слой"
+msgstr[1] "Преоразмеряване на %1 слоя"
 
 #: libs/ui/imagesize/imagesize.cc:174
 #, kde-format
@@ -27797,8 +27631,7 @@ msgstr "Размер на пикселите"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPixelFilter)
 #: libs/ui/imagesize/wdg_imagesize.ui:81
-#, fuzzy, kde-format
-#| msgid "&Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "&Filter:"
 msgstr "&Филтър:"
@@ -27829,9 +27662,7 @@ msgstr "Отделно настройване на размера за отпе�
 
 #. i18n: ectx: property (text), widget (QLabel, lblFilter)
 #: libs/ui/imagesize/wdg_layersize.ui:119
-#, fuzzy, kde-format
-#| msgctxt "Resize intepolation method list label"
-#| msgid "Filter:"
+#, kde-format
 msgctxt "Resize interpolation method list label"
 msgid "Filter:"
 msgstr "Филтър:"
@@ -28296,18 +28127,14 @@ msgid "Select layers under the cursor position"
 msgstr ""
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select Top Layer (Replace Selection)"
-msgstr "Селектиране на непрозрачна област (Заместване)"
+msgstr "Селектиране на горния слой (Заместване на селекцията)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:122
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select &Opaque (Replace)"
+#, kde-format
 msgid "Select All Layers (Replace Selection)"
-msgstr "Селектиране на непрозрачна област (Заместване)"
+msgstr "Селектиране на всичките слоеве (Заместване на селекцията)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:124
 #, kde-format
@@ -28320,11 +28147,9 @@ msgid "Select Top Layer (Add to Selection)"
 msgstr ""
 
 #: libs/ui/input/kis_select_layer_action.cpp:128
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Scale All Layers to new Size"
+#, kde-format
 msgid "Select All Layers (Add to Selection)"
-msgstr "Преоразмеряване на всички слоеве"
+msgstr "Селектиране на всичките слоеве (Добавяне на селекцията)"
 
 #: libs/ui/input/kis_select_layer_action.cpp:130
 #, kde-format
@@ -28332,9 +28157,7 @@ msgid "Select from Menu (Add to Selection)"
 msgstr ""
 
 #: libs/ui/input/kis_select_layer_action.cpp:247
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Select all layers"
+#, kde-format
 msgctxt "Menu entry for the select layer under cursor canvas input action"
 msgid "Select all layers"
 msgstr "Избиране на всички слоеве"
@@ -28686,20 +28509,17 @@ msgid "Zoom to 100%"
 msgstr "МащабиранеУвеличаване до 100%"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
-#, fuzzy, kde-format
-#| msgid "Fit to Page"
+#, kde-format
 msgid "Fit to View"
 msgstr "Мащабиране до размера на страницата"
 
 #: libs/ui/input/kis_zoom_action.cpp:119
-#, fuzzy, kde-format
-#| msgid "Fit to Width"
+#, kde-format
 msgid "Fit to View Width"
 msgstr "Напасване по широчина"
 
 #: libs/ui/input/kis_zoom_action.cpp:120
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit to View Height"
 msgstr "Напасване на височина"
 
@@ -28752,10 +28572,9 @@ msgid "Toggle Eraser"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:25
-#, fuzzy, kde-format
-#| msgid "Display"
+#, kde-format
 msgid "Reset Display"
-msgstr "Показване"
+msgstr "Нулиране на екрана"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:26
 #, fuzzy, kde-format
@@ -28771,11 +28590,9 @@ msgid "Color Sampler"
 msgstr ""
 
 #: libs/ui/input/KisTouchGestureAction.cpp:28
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Deselect"
+#, kde-format
 msgid "Deselect"
-msgstr "Отмяна на селекцията"
+msgstr "Размаркиране"
 
 #: libs/ui/input/KisTouchGestureAction.cpp:29
 #, fuzzy, kde-format
@@ -29444,8 +29261,7 @@ msgid "Disabled: cloning pass-through groups is not supported!"
 msgstr ""
 
 #: libs/ui/kis_node_model.cpp:601
-#, fuzzy, kde-format
-#| msgid "%1%"
+#, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
 msgstr "%1%"
@@ -29464,7 +29280,7 @@ msgstr "Инструменти за рисуване"
 #: libs/ui/kis_paintop_box.cc:113
 #, kde-format
 msgid "Tool Settings"
-msgstr ""
+msgstr "Настройки на инструмента"
 
 #: libs/ui/kis_paintop_box.cc:121
 #, kde-format
@@ -29970,7 +29786,7 @@ msgstr "Претърсване..."
 #: libs/ui/KisApplication.cpp:583
 #, kde-format
 msgid "Mimetype not found, try using the -mimetype option"
-msgstr ""
+msgstr "Не е намерен видът по MIME. Опитайте с параметъра \"-mimetype\""
 
 #: libs/ui/KisApplication.cpp:639
 #, kde-format
@@ -30039,7 +29855,7 @@ msgstr "Открити са много шаблони за: %1"
 #: libs/ui/KisApplication.cpp:1086
 #, kde-format
 msgid "Template %1 failed to load."
-msgstr ""
+msgstr "Неуспешно зареждане на шаблон %1."
 
 #: libs/ui/KisApplication.cpp:1118
 #, kde-format
@@ -30768,7 +30584,7 @@ msgstr ""
 #: libs/ui/KisMainWindow.cpp:1325
 #, kde-format
 msgid "Exporting"
-msgstr ""
+msgstr "Експортиране"
 
 #: libs/ui/KisMainWindow.cpp:1325
 #, kde-format
@@ -30863,9 +30679,7 @@ msgid "&%1 %2"
 msgstr "&%1 %2"
 
 #: libs/ui/KisMainWindow.cpp:2672
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu opened document, %1=index %2=document path"
-#| msgid "%1 %2"
+#, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
@@ -31141,7 +30955,7 @@ msgstr "Наистина ли искате съществуващият шабл
 #: libs/ui/KisTemplateCreateDia.cpp:379
 #, kde-format
 msgid "Select an image"
-msgstr ""
+msgstr "Избиране на изображение"
 
 #: libs/ui/KisTemplateCreateDia.cpp:407 libs/ui/KisTemplateCreateDia.cpp:410
 #, kde-format
@@ -31153,7 +30967,7 @@ msgstr "Добавяне на група"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "Enter group name:"
-msgstr ""
+msgstr "Въведете име на групата:"
 
 #: libs/ui/KisTemplateCreateDia.cpp:410
 #, kde-format
@@ -31186,7 +31000,7 @@ msgstr "Премахване на шаблон"
 #: libs/ui/KisTemplateCreateDia.cpp:495
 #, kde-format
 msgid "Could not load picture."
-msgstr ""
+msgstr "Грешка при зареждане на изображение."
 
 #: libs/ui/KisTemplateCreateDia.cpp:499
 #, kde-format
@@ -31902,7 +31716,7 @@ msgstr ""
 #: libs/ui/layerstyles/wdgTexture.ui:27
 #, kde-format
 msgid "Elements"
-msgstr ""
+msgstr "Елементи"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #. i18n: ectx: property (text), widget (QLabel, label_6)
@@ -32063,7 +31877,7 @@ msgstr "&Обратно"
 #: libs/ui/widgets/KoFillConfigWidget.ui:247
 #, kde-format
 msgid "Radial"
-msgstr ""
+msgstr "Радиално"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbStyle)
 #: libs/ui/layerstyles/WdgGradientOverlay.ui:148
@@ -33644,12 +33458,12 @@ msgstr ""
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:658
 #, kde-format
 msgid "Uncalibrated color space"
-msgstr ""
+msgstr "Некалибрирано цветово пространство"
 
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:664
 #, kde-format
 msgid "No profile available..."
-msgstr ""
+msgstr "Няма наличен профил..."
 
 #: libs/ui/widgets/kis_cmb_idlist.cc:28
 #, kde-format
@@ -33932,7 +33746,7 @@ msgstr "Заместване"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Intersect"
-msgstr ""
+msgstr "Сечение"
 
 #: libs/ui/widgets/kis_selection_options.cc:228
 #: libs/ui/widgets/kis_selection_options.cc:465
@@ -33946,7 +33760,7 @@ msgstr "Добавяне"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Subtract"
-msgstr ""
+msgstr "Изваждане"
 
 #: libs/ui/widgets/kis_selection_options.cc:232
 #: libs/ui/widgets/kis_selection_options.cc:480
@@ -34073,7 +33887,7 @@ msgstr "Спиране"
 #: libs/ui/widgets/kis_transport_controls.cpp:54
 #, kde-format
 msgid "Play/Pause"
-msgstr ""
+msgstr "Изпълнение/Пауза"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:63
 #, kde-format
@@ -34580,7 +34394,7 @@ msgstr "Колони:"
 #: libs/ui/widgets/KoFillConfigWidget.ui:408
 #, kde-format
 msgid "Smoothing:"
-msgstr ""
+msgstr "Изглаждане:"
 
 #: libs/ui/widgets/KoStrokeConfigWidget.cpp:90
 #, kde-format
@@ -35118,17 +34932,14 @@ msgid "Tool Options"
 msgstr "Настройки на инструмент"
 
 #: libs/widgets/KoZoomMode.cpp:14
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "View"
+#, kde-format
 msgid "Fit View"
-msgstr "Изглед"
+msgstr "Мащабиране на изгледа"
 
 #: libs/widgets/KoZoomMode.cpp:15
-#, fuzzy, kde-format
-#| msgid "Fit Page Width"
+#, kde-format
 msgid "Fit View Width"
-msgstr "Напасване по широчина"
+msgstr "Напасване на изгледа по широчина"
 
 #: libs/widgets/KoZoomMode.cpp:17
 #, kde-format
@@ -35141,15 +34952,14 @@ msgid "Fit Text Width"
 msgstr "Напасване на широчината на текста"
 
 #: libs/widgets/KoZoomMode.cpp:29
-#, fuzzy, kde-format
-#| msgid "Fit to Height"
+#, kde-format
 msgid "Fit View Height"
-msgstr "Напасване на височина"
+msgstr "Напасване на изгледа на височина"
 
 #: libs/widgets/KoZoomWidget.cpp:124
 #, kde-format
 msgid "Pixel Size"
-msgstr ""
+msgstr "Размер на пикселите"
 
 #: libs/widgets/KoZoomWidget.cpp:128
 #, kde-format
@@ -36750,10 +36560,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, showMove)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
-#, fuzzy, kde-format
-#| msgid "Show outline"
+#, kde-format
 msgid "Show Move"
-msgstr "Показване на контур"
+msgstr "Показване на ходовете"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
@@ -36883,7 +36692,7 @@ msgstr ""
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1624
 #, kde-format
 msgid "Save Assistant"
-msgstr ""
+msgstr "Помощник за записване"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1716
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
@@ -37726,11 +37535,10 @@ msgid "Bluer/Yellower: "
 msgstr ""
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
-msgstr "Нулиране"
+msgstr "Възстановяване"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
@@ -37796,7 +37604,7 @@ msgstr "Край на клип:"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:205
 #, kde-format
 msgid "Frame Rate: "
-msgstr ""
+msgstr "Честота на кадрите: "
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
 #, kde-format
@@ -37913,12 +37721,10 @@ msgid "Remove audio"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:143
-#, fuzzy, kde-format
-#| msgctxt "@item:inmenu"
-#| msgid "Mute"
+#, kde-format
 msgctxt "@item:inmenu Mute audio playback."
 msgid "Mute"
-msgstr "Изключване на звука"
+msgstr "Заглушаване"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:150
 #, fuzzy, kde-format
@@ -38482,7 +38288,7 @@ msgstr "Ново име:"
 #: plugins/dockers/compositiondocker/compositionmodel.cpp:65
 #, kde-format
 msgid "Composition"
-msgstr ""
+msgstr "Съставяне"
 
 #. i18n: ectx: property (toolTip), widget (QListView, compositionView)
 #: plugins/dockers/compositiondocker/wdgcompositiondocker.ui:24
@@ -38829,8 +38635,7 @@ msgid ""
 msgstr ""
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:382
-#, fuzzy, kde-format
-#| msgid "None"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Без"
@@ -38850,8 +38655,7 @@ msgid "Balanced"
 msgstr "Цветови баланс"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:385
-#, fuzzy, kde-format
-#| msgid "Details"
+#, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Подробен"
@@ -39030,7 +38834,7 @@ msgstr ""
 #: plugins/dockers/logdocker/LogDockerDock.cpp:172
 #, kde-format
 msgid "Scripting"
-msgstr ""
+msgstr "Скриптове"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:176
 #, kde-format
@@ -39086,7 +38890,7 @@ msgstr "Черно:"
 #: plugins/dockers/lut/black_white_point_chooser.cpp:44
 #, kde-format
 msgid "White:"
-msgstr ""
+msgstr "Бялo:"
 
 #: plugins/dockers/lut/lutdocker_dock.cpp:84
 #, kde-format
@@ -39193,7 +38997,7 @@ msgstr ""
 #: plugins/dockers/lut/wdglut.ui:175
 #, kde-format
 msgid "Configuration:"
-msgstr ""
+msgstr "Настройка:"
 
 #. i18n: ectx: property (text), widget (QLabel, m_lblLut)
 #: plugins/dockers/lut/wdglut.ui:209
@@ -39217,7 +39021,7 @@ msgstr ""
 #: plugins/dockers/lut/wdglut.ui:310
 #, kde-format
 msgid "Internal"
-msgstr ""
+msgstr "Вътрешен"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, m_colorManagement)
 #: plugins/dockers/lut/wdglut.ui:315
@@ -39922,10 +39726,9 @@ msgstr "Моля, изберете езика, който трябва да се
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
-#, fuzzy, kde-format
-#| msgid "Threshold:"
+#, kde-format
 msgid "Threads:"
-msgstr "Праг:"
+msgstr "Нишки:"
 
 #. i18n: Tooltip for check box
 #. i18n: ectx: property (toolTip), widget (QCheckBox, checkBoxRealTimeCaptureMode)
@@ -40193,10 +39996,9 @@ msgid "Snapshot Docker"
 msgstr "Панел за екранни снимки"
 
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:70
-#, fuzzy, kde-format
-#| msgid "HSY'"
+#, kde-format
 msgid "HSY"
-msgstr "HSY'"
+msgstr "HSY"
 
 #: plugins/dockers/specificcolorselector/specificcolorselector_dock.cc:22
 #, kde-format
@@ -40617,10 +40419,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorModelBox)
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:20
-#, fuzzy, kde-format
-#| msgid "Color Mode"
+#, kde-format
 msgid "Color Model"
-msgstr "Цветен режим"
+msgstr "Цветови модел"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:42
@@ -40667,10 +40468,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (KisPopupButton, btnFavoriteSelectors)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
-#, fuzzy, kde-format
-#| msgid "&Select..."
+#, kde-format
 msgid "Select..."
-msgstr "&Избор..."
+msgstr "Избор..."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
@@ -40723,10 +40523,9 @@ msgstr "Цветова палитра"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:233
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:560
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:767
-#, fuzzy, kde-format
-#| msgid "Orientation"
+#, kde-format
 msgid "Orientation:"
-msgstr "Ориентация"
+msgstr "Ориентация:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbPopupHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, rbHistoryHorizontal)
@@ -40789,10 +40588,9 @@ msgstr "Разстояние:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:322
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:651
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:858
-#, fuzzy, kde-format
-#| msgid "Inches"
+#, kde-format
 msgid "Patches"
-msgstr "Инчове"
+msgstr "Кръпки"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
 #. i18n: ectx: property (text), widget (QLabel, label_15)
@@ -40866,17 +40664,15 @@ msgstr "Показване на цветовете в из&ображениет�
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBox)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:933
-#, fuzzy, kde-format
-#| msgid "Auto updates"
+#, kde-format
 msgid "Auto Update"
 msgstr "Автоматично обновяване"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRange)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:38
-#, fuzzy, kde-format
-#| msgid "Arrange"
+#, kde-format
 msgid "Range:"
-msgstr "Подреждане"
+msgstr "Поредица:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblOffset)
 #. i18n: ectx: property (text), widget (QLabel, labelOffset)
@@ -40911,10 +40707,9 @@ msgstr "Цветова палитра"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPreview)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:196
-#, fuzzy, kde-format
-#| msgid "Preview"
+#, kde-format
 msgid "Preview:"
-msgstr "Предварителен изглед"
+msgstr "Преглед:"
 
 #. i18n: context: text @ Actions (Krita), ActionCollection (Krita)
 #: plugins/dockers/widegamutcolorselector/WGColorSelector.action:4
@@ -41097,11 +40892,10 @@ msgid "Wide Gamut Color Selector"
 msgstr "Избор на цвят"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorDock.cpp:300
-#, fuzzy, kde-format
-#| msgid "&Configure %1..."
+#, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "&Конфигуриране на %1..."
+msgstr "Конфигуриране..."
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, fuzzy, kde-format
@@ -41396,15 +41190,13 @@ msgid "Resources Cache Database Explorer"
 msgstr ""
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:84
-#, fuzzy, kde-format
-#| msgid "Versions"
+#, kde-format
 msgid "Version"
-msgstr "Версии"
+msgstr "Версия"
 
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:85
 #: plugins/extensions/dbexplorer/DlgDbExplorer.cpp:109
-#, fuzzy, kde-format
-#| msgid "File Name"
+#, kde-format
 msgid "File name"
 msgstr "Име на файл"
 
@@ -41762,7 +41554,7 @@ msgstr "Ръчно"
 #, kde-format
 msgctxt "EXIF: exposure - exposure mode"
 msgid "Auto bracket"
-msgstr ""
+msgstr "Автоматичен клин"
 
 #. i18n: ectx: property (text), widget (QLabel, label_14)
 #: plugins/extensions/metadataeditor/editors/exif.ui:115
@@ -41776,7 +41568,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Not defined"
-msgstr ""
+msgstr "Неопределено"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:131
@@ -41797,42 +41589,42 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Aperture priority"
-msgstr ""
+msgstr "Приоритет на блендата"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:146
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Shutter priority"
-msgstr ""
+msgstr "Приоритет на скоростта"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:151
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Creative program"
-msgstr ""
+msgstr "Творческа програма"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:156
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Action program"
-msgstr ""
+msgstr "Програма за действие"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:161
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Portrait mode"
-msgstr ""
+msgstr "Портретен режим"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editExposureProgram)
 #: plugins/extensions/metadataeditor/editors/exif.ui:166
 #, kde-format
 msgctxt "EXIF: exposure - exposure program"
 msgid "Landscape mode"
-msgstr ""
+msgstr "Пейзажен режим"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/metadataeditor/editors/exif.ui:174
@@ -41930,21 +41722,21 @@ msgstr "Неизвестно"
 #, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Average"
-msgstr ""
+msgstr "Средно"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:346
 #, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Center weighted average"
-msgstr ""
+msgstr "Централно претеглен усреднен"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:351
 #, kde-format
 msgctxt "EXIF: autofocus - metering mode"
 msgid "Spot"
-msgstr ""
+msgstr "Точков"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editMeteringMode)
 #: plugins/extensions/metadataeditor/editors/exif.ui:356
@@ -41993,7 +41785,7 @@ msgstr "Неизвестно"
 #, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Macro"
-msgstr ""
+msgstr "Макрос"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSubjectDistanceRange)
 #: plugins/extensions/metadataeditor/editors/exif.ui:400
@@ -42007,7 +41799,7 @@ msgstr "Затваряне на изглед"
 #, kde-format
 msgctxt "EXIF: autofocus - distance range"
 msgid "Distant view"
-msgstr ""
+msgstr "Отдалечен изглед"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_6)
 #: plugins/extensions/metadataeditor/editors/exif.ui:414
@@ -42140,28 +41932,28 @@ msgstr "Без"
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "Low gain up"
-msgstr ""
+msgstr "Усилване на ниските тонове"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:556
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "High gain up"
-msgstr ""
+msgstr "Усилване на високите тонове"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:561
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "Low gain down"
-msgstr ""
+msgstr "Намаляване на ниските тонове"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editGainControl)
 #: plugins/extensions/metadataeditor/editors/exif.ui:566
 #, kde-format
 msgctxt "EXIF: postprocessing - gain control"
 msgid "High gain down"
-msgstr ""
+msgstr "Намаляване на високите тонове"
 
 #. i18n: ectx: property (text), widget (QLabel, label_15)
 #: plugins/extensions/metadataeditor/editors/exif.ui:574
@@ -42221,14 +42013,14 @@ msgstr "Неопределено"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Fine weather"
-msgstr ""
+msgstr "Хубаво време"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:635
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Cloudy weather"
-msgstr ""
+msgstr "Облачно време"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:640
@@ -42263,28 +42055,28 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "White fluorescent (WW 3200 - 3700K)"
-msgstr ""
+msgstr "Бяла флуоресцентна (WW 3200 - 3700К)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:670
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light A"
-msgstr ""
+msgstr "Стандартна светлина А"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:675
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light B"
-msgstr ""
+msgstr "Стандартна светлина Б"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:680
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "Standard light C"
-msgstr ""
+msgstr "Стандартна светлина В"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:685
@@ -42319,7 +42111,7 @@ msgstr "D50"
 #, kde-format
 msgctxt "EXIF: postprocessing - light source"
 msgid "ISO studio tungsten"
-msgstr ""
+msgstr "ISO студийна волфрамова лампа"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editLightSource)
 #: plugins/extensions/metadataeditor/editors/exif.ui:710
@@ -42445,7 +42237,7 @@ msgstr "Портрет"
 #, kde-format
 msgctxt "EXIF: misc - scene capture type"
 msgid "Night scene"
-msgstr ""
+msgstr "Нощна сцена"
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
 #: plugins/extensions/metadataeditor/editors/exif.ui:841
@@ -42509,7 +42301,7 @@ msgstr ""
 #, kde-format
 msgctxt "EXIF: misc - sensing method type"
 msgid "Trilinear sensor"
-msgstr ""
+msgstr "Трилинеен сензор"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, editSensingMethod)
 #: plugins/extensions/metadataeditor/editors/exif.ui:913
@@ -42581,7 +42373,7 @@ msgstr ""
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:74
 #, kde-format
 msgid "Rational"
-msgstr ""
+msgstr "Рационален"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_model.cpp:95
 #, kde-format
@@ -43203,10 +42995,9 @@ msgid "Edit Resources"
 msgstr "Ресурси"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
-#, fuzzy, kde-format
-#| msgid "Edit Layers:"
+#, kde-format
 msgid "Edit Tags"
-msgstr "Редактиране на слоеве:"
+msgstr "Редактиране на етикетите"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:143
 #, kde-format
@@ -43415,11 +43206,9 @@ msgstr "(256 x 256)"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRemoveSelected)
 #: plugins/extensions/resourcemanager/pageresourcechooser.ui:74
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Remove Selected Snapshot"
+#, kde-format
 msgid "Remove Selected"
-msgstr "Премахване на избраната екранна снимка"
+msgstr "Премахване на избраното"
 
 #: plugins/extensions/resourcemanager/ResourceImporter.cpp:39
 #, kde-format
@@ -44770,7 +44559,7 @@ msgstr ""
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:64
 #, kde-format
 msgid "Formula:"
-msgstr ""
+msgstr "Формула:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/filters/edgedetection/wdg_edge_detection.ui:74
@@ -45131,7 +44920,7 @@ msgstr ""
 #, kde-format
 msgctxt "@title:window"
 msgid "Auto Levels"
-msgstr ""
+msgstr "Автоматична настройка на нивата"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgThreshold)
 #. i18n: ectx: property (windowTitle), widget (QWidget, LevelsConfigWidget)
@@ -45347,7 +45136,7 @@ msgstr "Палитризация"
 #: plugins/filters/palettize/palettize.ui:67
 #, kde-format
 msgid "Lab"
-msgstr ""
+msgstr "Лаборатория"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, colorModeComboBox)
 #: plugins/filters/palettize/palettize.ui:90
@@ -45433,7 +45222,7 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:259
 #, kde-format
 msgid "Ambient"
-msgstr ""
+msgstr "Ембиънт"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHeightmapChannel)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:334
@@ -45483,7 +45272,7 @@ msgstr ""
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:783
 #, kde-format
 msgid "Azimuth:"
-msgstr ""
+msgstr "Азимут:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, inclinationLabel4)
 #. i18n: ectx: property (toolTip), widget (QLabel, inclinationLabel2)
@@ -46045,7 +45834,7 @@ msgstr ""
 #, kde-format
 msgctxt "the gradient will be drawn radially"
 msgid "Radial"
-msgstr ""
+msgstr "Радиално"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:31
 #: plugins/tools/basictools/kis_tool_gradient.cc:255
@@ -46059,7 +45848,7 @@ msgstr "Квадрат"
 #, kde-format
 msgctxt "the gradient will be drawn as an asymmetric cone"
 msgid "Conical"
-msgstr ""
+msgstr "Конично"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:33
 #: plugins/tools/basictools/kis_tool_gradient.cc:257
@@ -46194,13 +45983,13 @@ msgstr "Край:"
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:285
 #, kde-format
 msgid "Cartesian Coordinates"
-msgstr ""
+msgstr "Декартови координати"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioButtonEndPositionPolarCoordinates)
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.ui:298
 #, kde-format
 msgid "Polar Coordinates"
-msgstr ""
+msgstr "Полярни координати"
 
 #: plugins/generators/multigridpattern/kis_wdg_multigrid_pattern.cpp:36
 #, kde-format
@@ -46276,7 +46065,7 @@ msgstr ""
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:25
 #, kde-format
 msgid "Shapes"
-msgstr ""
+msgstr "Форми"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tabLines)
 #: plugins/generators/multigridpattern/wdgmultigridpatternoptions.ui:54
@@ -46406,9 +46195,7 @@ msgstr "&Шарка:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position:"
 msgstr "Позиция:"
 
@@ -46499,7 +46286,7 @@ msgstr ""
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:112
 #, kde-format
 msgid "Interpolation:"
-msgstr ""
+msgstr "Интерполация:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelEqualize)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:129
@@ -46577,7 +46364,7 @@ msgstr ""
 #: plugins/generators/simplexnoise/wdgsimplexnoiseoptions.ui:53
 #, kde-format
 msgid "Frequency:"
-msgstr ""
+msgstr "Честота:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelPosition)
 #: plugins/generators/screentone/KisScreentoneConfigWidget.ui:586
@@ -47810,13 +47597,13 @@ msgstr ""
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top right"
-msgstr ""
+msgstr "Горе вдясно"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:119
 #, kde-format
 msgctxt "JPEG-XL encoder options"
 msgid "Top left"
-msgstr ""
+msgstr "Горе вляво"
 
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.cpp:120
 #, kde-format
@@ -49203,7 +48990,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "16 bits color depth"
-msgstr ""
+msgstr "16 битова дълбочина на цвета"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:265
 #, kde-format
@@ -49239,7 +49026,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Visit LibRaw project website"
-msgstr ""
+msgstr "Посетете уебсайта на проекта LibRaw"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:309
 #, kde-format
@@ -49374,7 +49161,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Pass:"
-msgstr ""
+msgstr "Прилагания:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:423
 #, kde-format
@@ -49393,7 +49180,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Refine interpolation"
-msgstr ""
+msgstr "Прецизиране на интерполацията"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:436
 #, kde-format
@@ -49410,7 +49197,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label"
 msgid "Demosaicing"
-msgstr ""
+msgstr "Демозаициране"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:461
 #, kde-format
@@ -49422,7 +49209,7 @@ msgstr "Метод:"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Default D65"
-msgstr ""
+msgstr "По подразбиране D65"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:464
 #, kde-format
@@ -49510,7 +49297,7 @@ msgstr "Смесване"
 #, kde-format
 msgctxt "@item:inlistbox"
 msgid "Rebuild"
-msgstr ""
+msgstr "Повторно изграждане"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:502
 #, kde-format
@@ -49543,7 +49330,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Exposure Correction (E.V)"
-msgstr ""
+msgstr "Корекция на експозицията (E.V)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:522
 #, kde-format
@@ -49555,7 +49342,7 @@ msgstr ""
 #, kde-format
 msgctxt "@label:slider"
 msgid "Linear Shift:"
-msgstr ""
+msgstr "Линейно отместване:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:530
 #, kde-format
@@ -49584,7 +49371,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Correct false colors in highlights"
-msgstr ""
+msgstr "Коригиране на фалшиви цветове в светлите участъци"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:543
 #, kde-format
@@ -49599,7 +49386,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check"
 msgid "Auto Brightness"
-msgstr ""
+msgstr "Автоматична яркост"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:548
 #, kde-format
@@ -49655,7 +49442,7 @@ msgstr ""
 #, kde-format
 msgctxt "@option:check White point"
 msgid "White:"
-msgstr ""
+msgstr "Бялo:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:578
 #, kde-format
@@ -49686,7 +49473,7 @@ msgstr "Бял баланс"
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
-msgstr ""
+msgstr "Намаляване на шума:"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
@@ -49815,7 +49602,7 @@ msgstr "Без"
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
-msgstr ""
+msgstr "Вграден"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
 #, kde-format
@@ -49850,7 +49637,7 @@ msgstr "Работна среда:"
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
-msgstr ""
+msgstr "Raw (без профил)"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
@@ -50308,7 +50095,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:136
 #, kde-format
 msgid "Dithering"
-msgstr ""
+msgstr "Смесване"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblTargetSize)
 #. i18n: ectx: property (toolTip), widget (QSpinBox, targetSize)
@@ -50647,7 +50434,7 @@ msgstr ""
 #: plugins/impex/webp/kis_wdg_options_webp.ui:700
 #, kde-format
 msgid "Exact"
-msgstr ""
+msgstr "Точно"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblUseSharpYUV)
 #. i18n: ectx: property (toolTip), widget (QCheckBox, useSharpYUV)
@@ -51064,7 +50851,7 @@ msgstr ""
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:108
 #, kde-format
 msgid "Amount"
-msgstr ""
+msgstr "Сума"
 
 #. i18n: ectx: property (text), widget (QLabel, deformLabel)
 #: plugins/paintops/deform/kis_deform_paintop_settings.cpp:136
@@ -51467,7 +51254,7 @@ msgstr "радиус"
 #: plugins/paintops/hairy/wdghairyshapeoptions.ui:59
 #, kde-format
 msgid "sigma"
-msgstr ""
+msgstr "сигма"
 
 #. i18n: ectx: property (title), widget (QGroupBox, movementGroup)
 #: plugins/paintops/hairy/wdghairyeoptions.ui:175
@@ -51924,7 +51711,7 @@ msgstr ""
 #: plugins/paintops/mypaint/wdgmypaintcurveoption.ui:608
 #, kde-format
 msgid "To"
-msgstr ""
+msgstr "До"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblCurveMode)
 #. i18n: ectx: property (toolTip), widget (QComboBox, curveMode)
@@ -52563,7 +52350,7 @@ msgstr " ms"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryTime.cpp:70
 #, kde-format
 msgid "%1 ms"
-msgstr ""
+msgstr "%1 ms"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorIds.h:11
 #, kde-format
@@ -52826,18 +52613,16 @@ msgid "Hard"
 msgstr "Остро"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:74
-#, fuzzy, kde-format
-#| msgid "Background"
+#, kde-format
 msgctxt "Background painting color"
 msgid "Background"
 msgstr "Фон"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:75
-#, fuzzy, kde-format
-#| msgid "Foreground"
+#, kde-format
 msgctxt "Foreground painting color"
 msgid "Foreground"
-msgstr "Текст"
+msgstr "Шрифт"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:82
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:93
@@ -53085,7 +52870,7 @@ msgstr "Посока"
 #, kde-format
 msgctxt "Pen tilt declination"
 msgid "Declination"
-msgstr ""
+msgstr "Деклинация"
 
 #: plugins/paintops/mypaint/MyPaintSensorPack.h:24
 #, kde-format
@@ -53350,7 +53135,7 @@ msgstr ""
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:166
 #, kde-format
 msgid "Gravity"
-msgstr ""
+msgstr "Гравитация"
 
 #: plugins/paintops/particle/kis_particle_paintop_settings.cpp:194
 #, kde-format
@@ -53384,7 +53169,7 @@ msgstr ""
 #: plugins/paintops/particle/wdgparticleoptions.ui:108
 #, kde-format
 msgid "Iterations:"
-msgstr ""
+msgstr "Повторения:"
 
 #. i18n: ectx: property (text), widget (QLabel, radiusLabel_2)
 #: plugins/paintops/particle/wdgparticleoptions.ui:118
@@ -53430,7 +53215,7 @@ msgstr "Плътност"
 #: plugins/python/comics_project_management_tools/comics_template_dialog.py:334
 #, kde-format
 msgid "Sketch"
-msgstr ""
+msgstr "Скица"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/paintops/sketch/wdgsketchoptions.ui:64
@@ -53741,7 +53526,7 @@ msgstr ""
 #, kde-format
 msgctxt "Custom curve based distribution in spray engine"
 msgid "Curve"
-msgstr ""
+msgstr "Крива"
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBoxRadialDistribution)
 #: plugins/paintops/spray/wdgsprayoptions.ui:322
@@ -53750,7 +53535,7 @@ msgctxt ""
 "Name of the group of options related to the radial distribution of particles "
 "in the spray engine"
 msgid "Radial"
-msgstr ""
+msgstr "Радиално"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, radialDistCombo)
 #: plugins/paintops/spray/wdgsprayoptions.ui:352
@@ -54132,7 +53917,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:43
 msgid " DPI"
-msgstr ""
+msgstr " DPI"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:65
 msgid "Method:"
@@ -54149,7 +53934,7 @@ msgstr "Експортиране на настройки"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:222
 msgid "Crop Settings"
-msgstr ""
+msgstr "Настройки на изрязване"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:225
 msgid "Crop to outmost guides"
@@ -54834,11 +54619,11 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:250
 msgid "Open Project"
-msgstr ""
+msgstr "Отваряне на проект"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:262
 msgid "Project Settings"
-msgstr ""
+msgstr "Настройки на проекта"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:264
 #: plugins/python/comics_project_management_tools/comics_project_setup_wizard.py:123
@@ -55239,7 +55024,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Actor"
-msgstr ""
+msgstr "Участник"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Art director"
@@ -55363,7 +55148,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Illustrator"
-msgstr ""
+msgstr "Illustrator"
 
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 msgid "Illuminator"
@@ -56034,7 +55819,7 @@ msgstr "Застъпване"
 
 #: plugins/python/scripter/uicontroller.py:165
 msgid "Error Running Script"
-msgstr ""
+msgstr "Грешка в работата на скрипта"
 
 #: plugins/python/selectionsbagdocker/selectionsbagdocker.py:20
 msgid "Selections Bag"
@@ -56454,7 +56239,7 @@ msgstr "Не можете да използвате този инструмен�
 #: plugins/tools/basictools/kis_tool_fill.cc:250
 msgctxt "(qtundo-format)"
 msgid "Flood Fill"
-msgstr ""
+msgstr "Запълване"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:544
 #, fuzzy, kde-format
@@ -57126,7 +56911,7 @@ msgstr "Количество:"
 #: plugins/tools/basictools/wdgmovetool.ui:163
 #, kde-format
 msgid "Unit:"
-msgstr ""
+msgstr "Единица:"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, label_offsetX)
 #. i18n: ectx: property (toolTip), widget (KisIntParseSpinBox, translateXBox)
@@ -57714,7 +57499,7 @@ msgstr "Графична писалка"
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: increase width"
-msgstr ""
+msgstr "Калиграфия: увеличаване на широчината"
 
 #. i18n: context: text @ Action (calligraphy_increase_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_increase_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -57728,7 +57513,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: increase angle"
-msgstr ""
+msgstr "Калиграфия: увеличаване на ъгъла"
 
 #. i18n: context: text @ Action (calligraphy_decrease_width), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_width), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -57742,7 +57527,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease width"
-msgstr ""
+msgstr "Калиграфия: намаляване на широчината"
 
 #. i18n: context: text @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: toolTip @ Action (calligraphy_decrease_angle), Actions (tool-shortcuts), ActionCollection (Tools)
@@ -57756,7 +57541,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Calligraphy: decrease angle"
-msgstr ""
+msgstr "Калиграфия: намаляване на ъгъла"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyTool.cpp:425
 #, kde-format
@@ -58273,15 +58058,13 @@ msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1581
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1590
-#, fuzzy, kde-format
-#| msgid "Normal"
+#, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
 msgstr "Нормално"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
-#, fuzzy, kde-format
-#| msgid "100%"
+#, kde-format
 msgctxt "line height for text"
 msgid "100%"
 msgstr "100%"
@@ -58294,11 +58077,9 @@ msgid "Letter Spacing"
 msgstr ""
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Insert name"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Въведете име"
+msgstr "Вмъкване на текст"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
 #, fuzzy
@@ -58469,7 +58250,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Align Center"
-msgstr ""
+msgstr "Центрирано"
 
 #. i18n: context: iconText @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_decrease_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -58497,7 +58278,7 @@ msgstr "Намаляване размера на шрифта"
 #, kde-format
 msgctxt "action"
 msgid "Increase Font Size"
-msgstr ""
+msgstr "Увеличаване кегела на шрифта"
 
 #. i18n: context: iconText @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_format_subscript), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -58789,7 +58570,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:87
 #, kde-format
 msgid "Font Settings"
-msgstr ""
+msgstr "Настройки на шрифта"
 
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:96
 #, kde-format
@@ -58892,7 +58673,7 @@ msgstr "Ключова дума"
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:61
 #, kde-format
 msgid "Element"
-msgstr ""
+msgstr "Елемент"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: plugins/tools/svgtexttool/WdgSvgTextSettings.ui:89
@@ -59304,8 +59085,7 @@ msgid "Adjustments"
 msgstr "Корекции"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:869
-#, fuzzy, kde-format
-#| msgid "All"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "All"
 msgstr "Всички"
@@ -59318,11 +59098,10 @@ msgid "Specific color"
 msgstr "Солиден цвят:"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:875
-#, fuzzy, kde-format
-#| msgid "Transparent"
+#, kde-format
 msgctxt "Region selection method in enclose and fill tool"
 msgid "Transparency"
-msgstr "Прозрачен"
+msgstr "Прозрачност"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:878
 #, fuzzy, kde-format
@@ -60137,7 +59916,7 @@ msgstr "Реално"
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:1784
 #, kde-format
 msgid "<html><head/><body><p><br/></p></body></html>"
-msgstr ""
+msgstr "<html><head/><body><p><br/></p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAmount)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2029

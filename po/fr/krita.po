@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-05 01:39+0000\n"
-"PO-Revision-Date: 2024-03-31 10:57+0200\n"
+"PO-Revision-Date: 2024-04-06 14:31+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -8531,12 +8531,10 @@ msgstr "Échantillonner une couleur d'écran (Échantillonner un tableau réel)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Afficher les panneaux"
+msgstr "Afficher la boîte de panneaux"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29334,10 +29332,9 @@ msgid "&Open Background color selector"
 msgstr "&Ouvrir le sélecteur de couleurs d'arrière-plan"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Panneau"
+msgstr "Boîte de &panneaux"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29363,16 +29360,14 @@ msgid "Gradients"
 msgstr "Dégradés"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Panneau :"
+msgstr "Boîte de panneaux"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Boîte à outils et panneaux"
+msgstr "Boîte de panneaux de la barre d'outils"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29955,8 +29950,7 @@ msgid "Masked Brush"
 msgstr "Brosse masquée"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Palette contextuelle"
 
@@ -35053,20 +35047,16 @@ msgstr "Configurer un panneau"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"Le panneau est ouvert dans la palette contextuelle. Veuillez fermer la "
-"paletter pour affichage ici."
+msgstr "Le panneau est ouvert dans %1. Veuillez fermer %1 pour affichage ici."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Configurer un panneau"
+msgstr "Configurer les %1 panneaux"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format

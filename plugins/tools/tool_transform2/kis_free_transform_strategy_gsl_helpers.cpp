@@ -345,8 +345,8 @@ namespace GSL
 
         /// We are solving an system of two equations:
         ///
-        /// T' * projP' * S' * SC' * TS' * P_src1 = P_dst2
-        /// T' * projP' * S' * SC' * TS' * P_src2 = P_dst2
+        /// T' * projP' * BR' * S' * SC' * BRI' * TS' * P_src1 = P_dst2
+        /// T' * projP' * BR' * S' * SC' * BRI' * TS' * P_src2 = P_dst2
         ///
         /// When projP is an affine transformation matrix,
         /// this system has a trivial solution. For the
@@ -356,15 +356,17 @@ namespace GSL
         Eigen::Matrix3d TS_t = KisAlgebra2D::fromQTransformStraight(m.TS.transposed());
         Eigen::Matrix3d S_t = KisAlgebra2D::fromQTransformStraight(m.S.transposed());
         Eigen::Matrix3d projP_t = KisAlgebra2D::fromQTransformStraight(m.projectedP.transposed());
+        Eigen::Matrix3d BR_t = KisAlgebra2D::fromQTransformStraight(m.BR.transposed());
+        Eigen::Matrix3d BRI_t = KisAlgebra2D::fromQTransformStraight(m.BRI.transposed());
 
-        Eigen::Matrix3d M1 = projP_t * S_t;
+        Eigen::Matrix3d M1 = projP_t * BR_t * S_t;
 
         Eigen::Matrix<double, 3, 2> P_src;
         P_src << staticPointSrc.x(), movingPointSrc.x(),
                  staticPointSrc.y(), movingPointSrc.y(),
                  1, 1;
 
-        P_src = TS_t * P_src;
+        P_src = BRI_t * TS_t * P_src;
 
         Eigen::Matrix<double, 3, 2> P_dst;
         P_dst << staticPointDst.x(), movingPointDst.x(),

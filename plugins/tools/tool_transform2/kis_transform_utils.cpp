@@ -162,6 +162,8 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
     S.shear(0, args.shearY()); S.shear(args.shearX(), 0);
 
     if (args.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        BR.rotate(180. * args.boundsRotation() / M_PI);
+        BRI.rotate(180. * -args.boundsRotation() / M_PI);
         P.rotate(180. * normalizeAngle(args.aX()) / M_PI, QVector3D(1, 0, 0));
         P.rotate(180. * normalizeAngle(args.aY()) / M_PI, QVector3D(0, 1, 0));
         P.rotate(180. * normalizeAngle(args.aZ()) / M_PI, QVector3D(0, 0, 1));
@@ -183,7 +185,31 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
 
 QTransform KisTransformUtils::MatricesPack::finalTransform() const
 {
-    return TS * SC * S * projectedP * T;
+    return TS * BRI * SC * S * BR * projectedP * T;
+}
+
+KisTransformUtils::ScaleShearSolution KisTransformUtils::solveScaleShear(QTransform transform) {
+    // scale x y, shearX by u, shearY by v
+    // | 1 0 | | 1 u | | x 0 | = | a b |
+    // | v 1 | | 0 1 | | 0 y |   | c d |
+
+    // QTransform is transposed from the usual 3x2 2D affine transform
+    ScaleShearSolution result;
+    qreal a = transform.m11();
+    qreal b = transform.m21();
+    qreal c = transform.m12();
+    qreal d = transform.m22();
+
+    result.isValid = !(qFuzzyIsNull(a) || qFuzzyIsNull(a * d - b * c));
+    
+    if (result.isValid) {
+        result.scaleX = a;
+        result.scaleY = (a * d - b * c) / a;
+        result.shearX = (a * b) / (a * d - b * c);
+        result.shearY = c / a;
+    }
+
+    return result;
 }
 
 bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight)
@@ -217,11 +243,28 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
                                                             KisPaintDeviceSP device,
                                                             KoUpdaterPtr updater)
 {
+    double scaleX = config.scaleX();
+    double scaleY = config.scaleY();
+    double shearX = config.shearX();
+    double shearY = config.shearY();
+
+    if (config.boundsRotation() != 0.0) {
+        const KisTransformUtils::MatricesPack m(config);
+        QTransform desired = m.BRI * m.SC * m.S * m.BR;
+        KisTransformUtils::ScaleShearSolution solution = KisTransformUtils::solveScaleShear(desired);
+        if (solution.isValid) {
+            scaleX = solution.scaleX;
+            scaleY = solution.scaleY;
+            shearX = solution.shearX;
+            shearY = solution.shearY;
+        }
+    }
+
     QPointF transformedCenter;
     {
         KisTransformWorker t(0,
-                             config.scaleX(), config.scaleY(),
-                             config.shearX(), config.shearY(),
+                             scaleX, scaleY,
+                             shearX, shearY,
                              config.aZ(),
                              0, // set X and Y translation
                              0, // to null for calculation
@@ -234,8 +277,8 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
     QPointF translation = config.transformedCenter() - transformedCenter;
 
     KisTransformWorker transformWorker(device,
-                                       config.scaleX(), config.scaleY(),
-                                       config.shearX(), config.shearY(),
+                                       scaleX, scaleY,
+                                       shearX, shearY,
                                        normalizeAngle(config.aZ()),
                                        translation.x(),
                                        translation.y(),

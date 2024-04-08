@@ -66,6 +66,7 @@ public:
                       double aX, double aY, double aZ,
                       double scaleX, double scaleY,
                       double shearX, double shearY,
+                      double boundsRotation,
                       KisWarpTransformWorker::WarpType warpType,
                       double alpha,
                       bool defaultPoints,
@@ -204,6 +205,9 @@ public:
     inline double shearY() const {
         return m_shearY;
     }
+    inline double boundsRotation() const {
+        return m_boundsRotation;
+    }
 
     inline void setTransformedCenter(QPointF transformedCenter) {
         m_transformedCenter = transformedCenter;
@@ -242,6 +246,9 @@ public:
     }
     inline void setShearY(double shearY) {
         m_shearY = shearY;
+    }
+    inline void setBoundsRotation(double boundsRotation) {
+        m_boundsRotation = boundsRotation;
     }
 
     inline QString filterId() const {
@@ -352,6 +359,7 @@ private:
     double m_scaleY {1.0};
     double m_shearX {0.0};
     double m_shearY {0.0};
+    double m_boundsRotation {0.0};
     bool m_keepAspectRatio {false};
 
     // perspective transform related

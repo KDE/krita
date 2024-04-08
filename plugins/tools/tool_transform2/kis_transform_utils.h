@@ -74,10 +74,23 @@ public:
         QTransform projectedP;
         QTransform T;
 
+        QTransform BR;
+        QTransform BRI;
+
         // the final transformation looks like
-        // transform = TS * SC * S * projectedP * T
+        // transform = TS * BRI * SC * S * BR * projectedP * T
         QTransform finalTransform() const;
     };
+
+    struct ScaleShearSolution {
+        bool isValid;
+        qreal scaleX;
+        qreal scaleY;
+        qreal shearX;
+        qreal shearY;
+    };
+
+    static ScaleShearSolution solveScaleShear(QTransform transform);
 
     static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight);
 

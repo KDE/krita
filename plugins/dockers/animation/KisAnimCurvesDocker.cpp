@@ -144,7 +144,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     btnZoomHori = new KisZoomButton(this);
     btnZoomHori->setAutoRaise(true);
     btnZoomHori->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
-    btnZoomVert->setToolTip(i18n("Zoom horizontally"));
+    btnZoomHori->setToolTip(i18n("Zoom horizontally"));
     btnZoomHori->setIconSize(QSize(22, 22));
     widgetAreaLayout->addWidget(btnZoomHori);
 

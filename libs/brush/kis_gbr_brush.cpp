@@ -138,7 +138,7 @@ bool KisGbrBrush::init()
         return false;
     }
 
-    memcpy(&bh, d->data, sizeof(GimpBrushHeader));
+    memcpy(&bh, d->data.constData(), sizeof(GimpBrushHeader));
     bh.header_size = qFromBigEndian(bh.header_size);
     d->header_size = bh.header_size;
 
@@ -233,7 +233,7 @@ bool KisGbrBrush::init()
         for (quint32 y = 0; y < bh.height; y++) {
             uchar *pixel = reinterpret_cast<uchar *>(image.scanLine(y));
             for (quint32 x = 0; x < bh.width; x++, k++) {
-                qint32 val = 255 - static_cast<uchar>(d->data[k]);
+                qint32 val = 255 - static_cast<uchar>(d->data.at(k));
                 *pixel = val;
                 ++pixel;
             }
@@ -253,7 +253,7 @@ bool KisGbrBrush::init()
         for (quint32 y = 0; y < bh.height; y++) {
             QRgb *pixel = reinterpret_cast<QRgb *>(image.scanLine(y));
             for (quint32 x = 0; x < bh.width; x++, k += 4) {
-                *pixel = qRgba(d->data[k], d->data[k + 1], d->data[k + 2], d->data[k + 3]);
+                *pixel = qRgba(d->data.at(k), d->data.at(k + 1), d->data.at(k + 2), d->data.at(k + 3));
                 ++pixel;
             }
         }
@@ -268,7 +268,7 @@ bool KisGbrBrush::init()
     setWidth(image.width());
     setHeight(image.height());
     if (!d->data.isEmpty()) {
-        d->data.resize(0); // Save some memory, we're using enough of it as it is.
+        d->data.clear(); // Save some memory, we're using enough of it as it is.
     }
     setValid(image.width() != 0 && image.height() != 0);
     setBrushTipImage(image);

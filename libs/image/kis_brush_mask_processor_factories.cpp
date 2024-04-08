@@ -415,7 +415,6 @@ void FastRowProcessor<KisGaussRectangleMaskGenerator>::process<xsimd::current_ar
 
         // check if we need to apply fader on values
         float_m excludeMask = d->fadeMaker.needFade(xr, yr);
-        const float_v vValue = xsimd::select(excludeMask, vOne, vValue);
 
         if (!xsimd::all(excludeMask)) {
             float_v fullFade = vValMax
@@ -436,12 +435,11 @@ void FastRowProcessor<KisGaussRectangleMaskGenerator>::process<xsimd::current_ar
             // Mask (value - value), precision errors.
             float_v vFade = fullFade / vValMax;
 
-            // return original vValue values before vFade transform
-            vFade = xsimd::select(excludeMask, vValue, vFade);
+            vFade = xsimd::select(excludeMask, vOne, vFade);
             vFade.store_aligned(bufferPointer);
 
         } else {
-            vValue.store_aligned(bufferPointer);
+            vOne.store_aligned(bufferPointer);
         }
         currentIndices = currentIndices + increment;
 

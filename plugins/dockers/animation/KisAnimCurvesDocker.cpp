@@ -129,6 +129,7 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
 
     sbValueRegister = new KisDoubleParseSpinBox(this);
     sbValueRegister->setPrefix(i18nc("Value (Keep short!)", "Val:"));
+    sbValueRegister->setToolTip(i18n("Value register"));
     sbValueRegister->setRange(-99000.f, 99000.f);
     widgetAreaLayout->addWidget(sbValueRegister);
 
@@ -143,12 +144,14 @@ KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :
     btnZoomHori = new KisZoomButton(this);
     btnZoomHori->setAutoRaise(true);
     btnZoomHori->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    btnZoomVert->setToolTip(i18n("Zoom horizontally."));
     btnZoomHori->setIconSize(QSize(22, 22));
     widgetAreaLayout->addWidget(btnZoomHori);
 
     btnZoomVert = new KisZoomButton(this);
     btnZoomVert->setAutoRaise(true);
     btnZoomVert->setIcon(KisIconUtils::loadIcon("zoom-vertical"));
+    btnZoomVert->setToolTip(i18n("Zoom vertically."));
     btnZoomVert->setIconSize(QSize(22, 22));
     widgetAreaLayout->addWidget(btnZoomVert);
 

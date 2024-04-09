@@ -11115,7 +11115,7 @@ msgstr "Bitiş Zamanını Ayarla"
 #, kde-format
 msgctxt "action"
 msgid "Update Playback Range"
-msgstr "Oynatma Aralığını Güncelle"
+msgstr "Oynatma Erimini Güncelle"
 
 #. i18n: context: text @ Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2461
@@ -37926,12 +37926,9 @@ msgid "Zoom view to fit curve."
 msgstr "Görünümü, eğriye sığacak biçimde yakınlaştır."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Sayıl anahtar kareler ekle"
+msgstr "Sayıl Anahtar Kareler Ekle"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -58102,9 +58099,7 @@ msgid "Threshold: "
 msgstr "Eşik: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
 msgstr "Yay: "

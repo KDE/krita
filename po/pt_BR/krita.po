@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-05 01:39+0000\n"
+"POT-Creation-Date: 2024-04-09 01:43+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -18319,7 +18319,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Substituir imagem"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2113
+#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2113
 #: libs/ui/KisMainWindow.cpp:2196
 #, kde-format
 msgid "Import frames"
@@ -38492,7 +38492,7 @@ msgid "Reset"
 msgstr "Reiniciar"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:264
 #, kde-format
 msgid "Animation Curves"
 msgstr "Curvas de animação"
@@ -38522,97 +38522,115 @@ msgctxt "Value (Keep short!)"
 msgid "Val:"
 msgstr "Val:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
+#, fuzzy, kde-format
+#| msgid "Frame register"
+msgid "Value register"
+msgstr "Registro de quadro"
+
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Sobel horizontally"
+msgid "Zoom horizontally"
+msgstr "Sobel horizontal"
+
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
+#, fuzzy, kde-format
+#| msgid "Flip vertically"
+msgid "Zoom vertically"
+msgstr "Virar verticalmente"
+
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
 #, kde-format
 msgid "Onion skins menu"
 msgstr "Menu cascas de cebola"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:176
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:179
 #, kde-format
 msgid "Audio menu"
 msgstr "Menu de áudio"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:184
 #, kde-format
 msgid "Animation settings menu"
 msgstr "Menu de configurações de animação"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
 #, kde-format
 msgid "Clip Start: "
 msgstr "Início do clipe:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:200
 #, kde-format
 msgid "Clip End: "
 msgstr "Final do clipe:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:205
 #, kde-format
 msgid "Frame Rate: "
 msgstr "Taxa de quadros: "
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:284
 #, kde-format
 msgid "Channel Operations"
 msgstr "Operações de Canal"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:282
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
 #, kde-format
 msgid "Layer Operations"
 msgstr "Operações de Camada"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:288
 #, kde-format
 msgid "Reset Channel"
 msgstr "Reiniciar canal"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:291
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:294
 #, kde-format
 msgid "Reset All Channels"
 msgstr "Reinicializar todos os canais"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:492
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr "Mantenha um valor constante. Sem interpolação."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:499
 #, kde-format
 msgid "Linear interpolation."
 msgstr "Interpolação linear."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:506
 #, kde-format
 msgid "Bezier curve interpolation."
 msgstr "Interpolação da curva de Bezier."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:513
 #, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "Tangentes de interpolação nítidas."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:517
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:520
 #, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "Tangentes de interpolação suaves."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:527
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr "Vista de zoom para caber na faixa do canal."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:531
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:534
 #, kde-format
 msgid "Zoom view to fit curve."
 msgstr "Amplie a visualização para ajustar a curva."
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:663
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Add scalar keyframes"
@@ -40932,19 +40950,19 @@ msgstr "Gravador"
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:581
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:582
 #, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Selecione uma pasta para gravações"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:702
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:708
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:703
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:709
 #, kde-format
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Gravador"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:703
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:704
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
@@ -40953,13 +40971,13 @@ msgstr ""
 "O gravador foi interrompido devido a uma falha ao gravar um quadro. "
 "Verifique o espaço livre em disco e reinicie o gravador."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:709
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:710
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:714
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:715
 #, fuzzy, kde-format
 #| msgid ""
 #| "Low performance warning. The recorder is not able to write all the frames "
@@ -40973,7 +40991,7 @@ msgstr ""
 "Aviso de baixa performance. O gravador não é capaz de gravar os quadros a "
 "tempo. Tente aumentar o intervalo de captura."
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:716
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
 #, fuzzy, kde-format
 #| msgid ""
 #| "Low performance warning. The recorder is not able to write all the frames "
@@ -62953,9 +62971,6 @@ msgstr "Ferramenta Imagens de Referência"
 
 #~ msgid "Information"
 #~ msgstr "Informação"
-
-#~ msgid "Flip vertically"
-#~ msgstr "Virar verticalmente"
 
 #~ msgid "Bypass filtering"
 #~ msgstr "Filtragem de bypass"
@@ -97566,12 +97581,6 @@ msgstr "Ferramenta Imagens de Referência"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "&Sobel..."
 #~ msgstr "&Sobel..."
-
-#, fuzzy
-#~| msgid "Sobel horizontally"
-#~ msgctxt "(qtundo-format)"
-#~ msgid "Sobel horizontally"
-#~ msgstr "Sobel horizontal"
 
 #, fuzzy
 #~| msgid "Keep sign of result"

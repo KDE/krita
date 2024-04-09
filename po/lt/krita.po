@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-05 01:39+0000\n"
+"POT-Creation-Date: 2024-04-09 01:43+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -18663,7 +18663,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Keisti paveikslėlio dydį"
 
-#: libs/libkis/Document.cpp:966 libs/ui/KisMainWindow.cpp:2113
+#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2113
 #: libs/ui/KisMainWindow.cpp:2196
 #, fuzzy, kde-format
 msgid "Import frames"
@@ -38315,7 +38315,7 @@ msgid "Reset"
 msgstr "Atstatyti"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:261
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:264
 #, fuzzy, kde-format
 #| msgid "&Paint Layer"
 msgid "Animation Curves"
@@ -38347,103 +38347,119 @@ msgctxt "Value (Keep short!)"
 msgid "Val:"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:168
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
+#, fuzzy, kde-format
+msgid "Value register"
+msgstr "Liudas Ališauskas"
+
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
+#, fuzzy, kde-format
+#| msgid "Horizontally"
+msgid "Zoom horizontally"
+msgstr "Horizontaliai"
+
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
+#, fuzzy, kde-format
+msgid "Zoom vertically"
+msgstr "Žymėjimo veiksena"
+
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
 #, fuzzy, kde-format
 msgid "Onion skins menu"
 msgstr "&Išlaikyti proporcijas"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:176
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:179
 #, kde-format
 msgid "Audio menu"
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:184
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:187
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:184
 #, fuzzy, kde-format
 #| msgid "&Paint Layer"
 msgid "Animation settings menu"
 msgstr "&Piešimo sluoksnis"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:196
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:199
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:196
 #, fuzzy, kde-format
 msgid "Clip Start: "
 msgstr "Pradėti nuo"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:200
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:203
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:200
 #, kde-format
 msgid "Clip End: "
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:205
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:208
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:205
 #, fuzzy, kde-format
 msgid "Frame Rate: "
 msgstr "Liudas Ališauskas"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:281
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:284
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Channel Operations"
 msgstr "Operacija"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:282
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Layer Operations"
 msgstr "Operacija"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:285
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:288
 #, fuzzy, kde-format
 #| msgid "Rectangle"
 msgid "Reset Channel"
 msgstr "Stačiakampis"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:291
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:294
 #, fuzzy, kde-format
 #| msgid "All Channels"
 msgid "Reset All Channels"
 msgstr "Visi kanalai"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:489
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:492
 #, kde-format
 msgid "Hold constant value. No interpolation."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:496
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:499
 #, fuzzy, kde-format
 msgid "Linear interpolation."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:503
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:506
 #, fuzzy, kde-format
 msgid "Bezier curve interpolation."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:510
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:513
 #, fuzzy, kde-format
 msgid "Sharp interpolation tangents."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:517
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:520
 #, fuzzy, kde-format
 msgid "Smooth interpolation tangents."
 msgstr "&Skiriamoji geba:"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:524
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:527
 #, kde-format
 msgid "Zoom view to fit channel range."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:531
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:534
 #, fuzzy, kde-format
 #| msgid "zoom to size"
 msgid "Zoom view to fit curve."
 msgstr "mastelis iki dydžio"
 
-#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
+#: plugins/dockers/animation/KisAnimCurvesDocker.cpp:663
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
@@ -40806,33 +40822,33 @@ msgstr "Įrašymas"
 msgid "Your system is not efficient enough for this feature"
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:581
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:582
 #, fuzzy, kde-format
 msgid "Select a Directory for Recordings"
 msgstr "Pažymėti nepermatomumą"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:702
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:708
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:703
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:709
 #, fuzzy, kde-format
 #| msgid "Recording"
 msgctxt "@title:window"
 msgid "Recorder"
 msgstr "Įrašymas"
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:703
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:704
 #, kde-format
 msgid ""
 "The recorder has been stopped due to failure while writing a frame. Please "
 "check free disk space and start the recorder again."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:709
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:710
 #, kde-format
 msgid ""
 "Krita was unable to stop the recorder probably. Please try to restart Krita."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:714
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:715
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -40841,7 +40857,7 @@ msgid ""
 "filtering in the canvas acceleration settings."
 msgstr ""
 
-#: plugins/dockers/recorder/recorderdocker_dock.cpp:716
+#: plugins/dockers/recorder/recorderdocker_dock.cpp:717
 #, kde-format
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
@@ -62587,10 +62603,6 @@ msgstr "Pasirinkimai"
 #~| msgid "Reset Transformations"
 #~ msgid "Information"
 #~ msgstr "Atstatyti transformacijas"
-
-#, fuzzy
-#~ msgid "Flip vertically"
-#~ msgstr "Žymėjimo veiksena"
 
 #, fuzzy
 #~ msgid "Bypass filtering"

@@ -1484,17 +1484,6 @@ void KisView::slotLoadingFinished()
     connect(image(), SIGNAL(sigProfileChanged(const KoColorProfile*)), this, SIGNAL(sigProfileChanged(const KoColorProfile*)));
     connect(image(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SIGNAL(sigSizeChanged(QPointF,QPointF)));
 
-    KisNodeSP activeNode = document()->preActivatedNode();
-
-    if (!activeNode) {
-        activeNode = image()->rootLayer()->lastChild();
-    }
-
-    while (activeNode && !activeNode->inherits("KisLayer")) {
-        activeNode = activeNode->prevSibling();
-    }
-
-    setCurrentNode(activeNode);
     connect(&d->screenMigrationTracker, SIGNAL(sigScreenChanged(QScreen*)), this, SLOT(slotMigratedToScreen(QScreen*)));
     connect(&d->screenMigrationTracker, SIGNAL(sigScreenOrResolutionChanged(QScreen*)), this, SLOT(slotScreenOrResolutionChanged()));
     zoomManager()->updateImageBoundsSnapping();

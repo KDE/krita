@@ -31,6 +31,7 @@ private Q_SLOTS:
     void init();
     void cleanup();
 
+    void testSetImage_data();
     void testSetImage();
     void testAddNode();
     void testRemoveNode();

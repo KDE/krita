@@ -238,7 +238,7 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
     }
 }
 
-void KisShapeController::setImage(KisImageWSP image)
+void KisShapeController::setImage(KisImageWSP image, KisNodeSP activeNode)
 {
     m_d->imageConnections.clear();
 
@@ -247,7 +247,7 @@ void KisShapeController::setImage(KisImageWSP image)
         m_d->imageConnections.addConnection(image, SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
     }
 
-    KisDummiesFacadeBase::setImage(image);
+    KisDummiesFacadeBase::setImage(image, activeNode);
 
     slotUpdateDocumentResolution();
     slotUpdateDocumentSize();

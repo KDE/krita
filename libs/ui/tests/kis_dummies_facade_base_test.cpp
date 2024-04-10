@@ -71,11 +71,29 @@ void KisDummiesFacadeBaseTest::verifyMovedDummies(const QString &nodes)
     QCOMPARE(m_movedDummies, nodes);
 }
 
+void KisDummiesFacadeBaseTest::testSetImage_data()
+{
+    QTest::addColumn<QString>("activeNodeName");
+    QTest::addColumn<QString>("expectedActiveNodeName");
+    QTest::newRow("activate-default") << "" << "layer1";
+    QTest::newRow("activate-layer2") << "layer2" << "layer2";
+}
+
 void KisDummiesFacadeBaseTest::testSetImage()
 {
+    KisSynchronizedConnectionBase::setAutoModeForUnittestsEnabled(false);
+
+    QFETCH(QString, activeNodeName);
+    QFETCH(QString, expectedActiveNodeName);
+
     constructImage();
 
-    m_dummiesFacade->setImage(m_image);
+    KisNodeSP activeNode;
+    if (!activeNodeName.isEmpty()) {
+        activeNode = KisLayerUtils::findNodeByName(m_image->root(), activeNodeName);
+    }
+
+    m_dummiesFacade->setImage(m_image, activeNode);
 
     QString actualGraph = collectGraphPatternFull(m_dummiesFacade->rootDummy());
     QString expectedGraph = "root layer1 layer2 layer3 mask1 layer4";
@@ -86,9 +104,11 @@ void KisDummiesFacadeBaseTest::testSetImage()
     m_dummiesFacade->setImage(0);
     QCOMPARE(m_dummiesFacade->dummiesCount(), 0);
 
-    verifyActivatedNodes("layer1 __null");
+    verifyActivatedNodes(QString("%1 __null").arg(expectedActiveNodeName));
     verifyMovedDummies("A_root A_layer1 A_layer2 A_layer3 A_mask1 A_layer4 "
                        "R_layer4 R_mask1 R_layer3 R_layer2 R_layer1 R_root");
+
+    KisSynchronizedConnectionBase::setAutoModeForUnittestsEnabled(true);
 }
 
 void KisDummiesFacadeBaseTest::testAddNode()

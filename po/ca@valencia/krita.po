@@ -9,13 +9,12 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
-# Josep M. Ferrer <txemaq@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-05 10:38+0200\n"
+"PO-Revision-Date: 2024-04-09 12:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -38239,22 +38238,19 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Registre dels fotogrames"
+msgstr "Valor del registre"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Horitzontalment"
+msgstr "Fa zoom horitzontalment"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Verticalment"
+msgstr "Fa zoom verticalment"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131

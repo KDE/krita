@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-05 11:04+0200\n"
+"PO-Revision-Date: 2024-04-09 15:50+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -38310,23 +38310,19 @@ msgid "Val:"
 msgstr "Waarde:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Frameregister"
+msgstr "Waarderegister"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Sobel horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Sobel horizontaal"
+msgstr "Horizontaal zoomen"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Flip vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Verticaal spiegelen"
+msgstr "Verticaal zoomen"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131

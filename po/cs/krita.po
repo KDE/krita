@@ -8463,12 +8463,10 @@ msgstr ""
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Zobrazit doky"
+msgstr ""
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -28677,10 +28675,9 @@ msgid "&Open Background color selector"
 msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Dok"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -28706,10 +28703,9 @@ msgid "Gradients"
 msgstr "Přechody"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Dok:"
+msgstr ""
 
 #: libs/ui/kis_control_frame.cpp:287
 #, kde-format
@@ -29289,10 +29285,9 @@ msgid "Masked Brush"
 msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
-msgstr "Vyskakovací paleta"
+msgstr ""
 
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
@@ -33882,11 +33877,10 @@ msgid "Docker is open in %1. Close %1 to show here."
 msgstr ""
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure Toolbars"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Nastavit panely nástrojů"
+msgstr ""
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -37251,16 +37245,14 @@ msgid "Value register"
 msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Vodorovně"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Svisle"
+msgstr ""
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131

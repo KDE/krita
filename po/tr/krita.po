@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-07 12:23+0300\n"
+"PO-Revision-Date: 2024-04-09 13:55+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -38091,22 +38091,19 @@ msgid "Val:"
 msgstr "Değ:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Kare kaydı"
+msgstr "Değer yazmacı"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Yatay"
+msgstr "Yatay yakınlaştır"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Dikey"
+msgstr "Dikey yakınlaştır"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131

@@ -2740,7 +2740,7 @@ KisImageSP KisDocument::savingImage() const
 }
 
 
-void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
+void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate, KisNodeSP preActivatedNode)
 {
     if (d->image) {
         // Disconnect existing sig/slot connections
@@ -2758,7 +2758,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
 
     d->setImageAndInitIdleWatcher(image);
     d->image->setUndoStore(new KisDocumentUndoStore(this));
-    d->shapeController->setImage(image);
+    d->shapeController->setImage(image, preActivatedNode);
     d->image->setMirrorAxesCenter(KisAlgebra2D::absoluteToRelative(d->mirrorAxisConfig.axisPosition(), image->bounds()));
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);

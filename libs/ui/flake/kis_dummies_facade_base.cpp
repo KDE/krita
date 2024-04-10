@@ -50,6 +50,11 @@ KisDummiesFacadeBase::~KisDummiesFacadeBase()
 
 void KisDummiesFacadeBase::setImage(KisImageWSP image)
 {
+    setImage(image, nullptr);
+}
+
+void KisDummiesFacadeBase::setImage(KisImageWSP image, KisNodeSP activeNode)
+{
     if (m_d->image) {
         emit sigActivateNode(0);
         m_d->image->disconnect(this);
@@ -87,7 +92,11 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->nodeChangedConnection.connectInputSignal(image, &KisImage::sigNodeChanged);
         m_d->activateNodeConnection.connectInputSignal(image, &KisImage::sigNodeAddedAsync);
 
-        m_d->activateNodeConnection.start(findFirstLayer(image->root()));
+        if (!activeNode) {
+            activeNode = findFirstLayer(image->root());
+        }
+
+        m_d->activateNodeConnection.start(activeNode);
     }
 }
 

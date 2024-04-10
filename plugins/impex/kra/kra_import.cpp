@@ -29,10 +29,9 @@ KisImportExportErrorCode KraImport::convert(KisDocument *document, QIODevice *io
     KraConverter kraConverter(document);
     KisImportExportErrorCode result = kraConverter.buildImage(io);
     if (result.isOk()) {
-        document->setCurrentImage(kraConverter.image());
-        if (kraConverter.activeNodes().size() > 0) {
-            document->setPreActivatedNode(kraConverter.activeNodes()[0]);
-        }
+        KisNodeSP preActivatedNode = !kraConverter.activeNodes().isEmpty() ? kraConverter.activeNodes().first() : nullptr;
+        document->setCurrentImage(kraConverter.image(), true, preActivatedNode);
+
         if (kraConverter.assistants().size() > 0) {
             document->setAssistants(kraConverter.assistants());
         }

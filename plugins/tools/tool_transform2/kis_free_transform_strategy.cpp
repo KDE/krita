@@ -441,6 +441,10 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         const qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
         const qreal a2 = atan2(mouseImagePosClickSpace.y(), mouseImagePosClickSpace.x());
 
+        /**
+         * We use determinant of `clickM.SC` instead of `clickT` to be able to catch
+         * the case when the image is flipped by 0x or 0y perspective rotations.
+         */
         const qreal theta = KisAlgebra2D::signZZ(clickM.SC.determinant()) * (a2 - a1);
 
         // Snap with shift key

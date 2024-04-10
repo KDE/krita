@@ -441,7 +441,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         const qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
         const qreal a2 = atan2(mouseImagePosClickSpace.y(), mouseImagePosClickSpace.x());
 
-        const qreal theta = KisAlgebra2D::signZZ(clickT.determinant()) * (a2 - a1);
+        const qreal theta = KisAlgebra2D::signZZ(clickM.SC.determinant()) * (a2 - a1);
 
         // Snap with shift key
         if (shiftModifierActive) {

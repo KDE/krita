@@ -50,9 +50,9 @@ plugs:
         target: $SNAP/kf5
     foo-install-cups:
         interface: content
-        content: cups
+        content: foo
         default-provider: cups
-        target: $SNAP_DATA/cups
+        target: $SNAP_DATA/foo
 environment:
     SNAP_DESKTOP_RUNTIME: $SNAP/kf5
     QML2_IMPORT_PATH: "$QML2_IMPORT_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qml:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml"
@@ -130,10 +130,49 @@ parts:
         - libgraphite2-dev
         - libgirepository1.0-dev
         - gtk-doc-tools
+    kdcraw:
+        after:
+        - kde-neon
+        - harfbuzz
+        source: https://invent.kde.org/graphics/libkdcraw.git
+        source-branch: release/23.08
+        plugin: cmake
+        cmake-parameters:
+        - -DKDE_INSTALL_USE_QT_SYS_PATHS=FALSE
+        - -DCMAKE_INSTALL_PREFIX=/usr
+        - -DCMAKE_BUILD_TYPE=Release
+        - -DENABLE_TESTING=OFF
+        - -DBUILD_TESTING=OFF
+        - -DKDE_SKIP_TEST_SETTINGS=ON
+        - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kf5-5-113-qt-5-15-11-core22-sdk/current"
+        build-packages:
+        - cmake
+        - libraw-dev
+        - libx11-dev
+        - pkg-config
+        stage:
+        - -usr/lib/*/libQt5*
+        - -usr/lib/*/libQt6*
+        prime:
+        - -usr/lib/*/cmake/*
+        - -usr/include/*
+        - -usr/share/ECM/*
+        - -usr/share/doc/*
+        - -usr/share/man/*
+        - -usr/share/icons/breeze-dark*
+        - -usr/bin/X11
+        - -usr/lib/gcc/$CRAFT_ARCH_TRIPLET/6.0.0
+        - -usr/lib/aspell/*
+        build-environment:
+        - *id001
+        - *id002
+        - *id003
+        - *id004
     krita:
         after:
         - kde-neon
         - harfbuzz
+        - kdcraw
         source: .
         source-type: local
         plugin: cmake
@@ -160,7 +199,6 @@ parts:
         - libheif-dev
         - libimmer-dev
         - libjpeg-dev
-        - libkf5kdcraw-dev
         - liblager-dev
         - liblcms2-dev
         - libmypaint-dev
@@ -215,7 +253,6 @@ parts:
         - libheif1
         - libilmbase25
         - libjpeg-turbo8
-        - libkf5kdcraw5
         - libkseexpr4
         - libkseexprui4
         - liblcms2-2
@@ -247,6 +284,9 @@ parts:
         - python3-pyqt5
         stage-snaps:
         - ffmpeg-2204
+        stage:
+        - -usr/lib/*/libQt5*
+        - -usr/lib/*/libQt6*
         prime:
         - -usr/lib/*/cmake/*
         - -usr/include/*

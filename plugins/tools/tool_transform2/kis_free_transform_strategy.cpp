@@ -167,14 +167,7 @@ QPointF topMiddle(const QRectF &rect)
 void KisFreeTransformStrategy::Private::recalculateBounds()
 {
     QTransform BRI = boundsTransform.inverted();
-
-    QList<QPointF> corners;
-    corners
-        << BRI.map(transaction.originalTopLeft())
-        << BRI.map(transaction.originalTopRight())
-        << BRI.map(transaction.originalBottomLeft())
-        << BRI.map(transaction.originalBottomRight());
-    bounds = KisAlgebra2D::accumulateBounds(corners);
+    bounds = BRI.map(QPolygonF(transaction.originalRect())).boundingRect();
 }
 
 void KisFreeTransformStrategy::Private::recalculateTransformedHandles()

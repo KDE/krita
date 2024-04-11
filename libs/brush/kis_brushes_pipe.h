@@ -8,7 +8,12 @@
 #define __KIS_BRUSHES_PIPE_H
 
 #include <kis_fixed_paint_device.h>
+#include "kis_paint_information.h"
 #include <kis_brush.h>
+
+class KisRandomSource;
+typedef KisSharedPtr<KisRandomSource> KisRandomSourceSP;
+
 
 template<class BrushType>
 class KisBrushesPipe
@@ -103,8 +108,13 @@ public:
     }
 
     void prepareForSeqNo(const KisPaintInformation& info, int seqNo) {
+        /**
+         * We first need to initialize the brush index to satisfy the
+         * current sequence number, and only after that choose the
+         * brush
+         */
+        updateBrushIndexes(info.randomSource(), seqNo);
         chooseNextBrush(info);
-        updateBrushIndexes(info, seqNo);
     }
 
     void generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst, KisBrush::ColoringInformation* coloringInformation,
@@ -143,8 +153,8 @@ public:
     }
 
     void testingSelectNextBrush(const KisPaintInformation& info) {
+        updateBrushIndexes(info.randomSource(), -1);
         (void) chooseNextBrush(info);
-        updateBrushIndexes(info, -1);
     }
 
     /**
@@ -189,7 +199,7 @@ protected:
      * If \p seqNo is equal or greater than zero, then incremental iteration is
      * overridden by this seqNo value
      */
-    virtual void updateBrushIndexes(const KisPaintInformation& info, int seqNo) = 0;
+    virtual void updateBrushIndexes(KisRandomSourceSP randomSource, int seqNo) = 0;
 
 protected:
     QVector<QSharedPointer<BrushType>> m_brushes;

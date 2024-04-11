@@ -131,7 +131,6 @@ struct KisFreeTransformStrategy::Private
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
     void recalculateTransformations();
     void recalculateTransformedHandles();
-    void recalculateBounds();
 };
 
 KisFreeTransformStrategy::KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
@@ -162,12 +161,6 @@ QPointF bottomMiddle(const QRectF &rect)
 QPointF topMiddle(const QRectF &rect)
 {
     return (rect.topLeft() + rect.topRight()) * 0.5;
-}
-
-void KisFreeTransformStrategy::Private::recalculateBounds()
-{
-    QTransform BRI = boundsTransform.inverted();
-    bounds = BRI.map(QPolygonF(transaction.originalRect())).boundingRect();
 }
 
 void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
@@ -836,8 +829,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
 
     transform = m.finalTransform();
     boundsTransform = m.BR;
-    
-    recalculateBounds();
+    bounds = m.BRI.map(QPolygonF(transaction.originalRect())).boundingRect();
 
     QTransform viewScaleTransform = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
     handlesTransform = boundsTransform * transform * viewScaleTransform;

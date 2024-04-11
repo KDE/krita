@@ -32,7 +32,7 @@ set(kritatooltransform_SOURCES
   tool_transform.cc
 )
 
-qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
+qt6_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
 kis_add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 
 target_link_libraries(kritatooltransform_static

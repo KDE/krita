@@ -5,7 +5,7 @@ add_subdirectory( integration )
 add_subdirectory( "pics/branding/${BRANDING}" )
 
 if (ANDROID)
-    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+    include_directories (${Qt6AndroidExtras_INCLUDE_DIRS})
 endif()
 
 set(krita_SRCS main.cc)
@@ -87,11 +87,11 @@ set(krita_QRCS
     CACHE INTERNAL "krita_QRCS"
 )
 
-qt5_add_resources(krita_SRCS ${krita_QRCS})
+qt6_add_resources(krita_SRCS ${krita_QRCS})
 
 if (ANDROID)
     kis_add_library(krita SHARED ${krita_SRCS})
-    target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
+    target_link_libraries(krita PRIVATE Qt6::AndroidExtras)
 elseif (WIN32)
     # Build the main implementation into a DLL to be called by a stub EXE.
     kis_add_library(krita SHARED ${krita_SRCS})
@@ -103,16 +103,16 @@ target_link_libraries(krita
     PRIVATE
                       kritamultiarch
                       kritaui
-                      Qt5::Core
-                      Qt5::Gui
-                      Qt5::Widgets
-                      Qt5::Xml
-                      Qt5::Network
-                      Qt5::PrintSupport
-                      Qt5::Svg
-                      Qt5::Concurrent)
+                      Qt6::Core
+                      Qt6::Gui
+                      Qt6::Widgets
+                      Qt6::Xml
+                      Qt6::Network
+                      Qt6::PrintSupport
+                      Qt6::Svg
+                      Qt6::Concurrent)
 if(HAVE_KCRASH)
-    target_link_libraries(krita PRIVATE KF5::Crash)
+    target_link_libraries(krita PRIVATE KF6::Crash)
 endif()
 
 if (APPLE)
@@ -134,7 +134,7 @@ if (NOT ANDROID)
   add_executable(krita_version ${KRITAVERSION_SRCS})
   target_link_libraries(krita_version
     PRIVATE
-        Qt5::Core
+        Qt6::Core
         kritaversion
   )
 
@@ -172,7 +172,7 @@ if (WIN32)
         ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
         ${KRITA_MANIFEST_SRC}
     )
-    target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt5::WinMain)
+    target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt6::WinMain)
     set_target_properties(krita_windows_stub_exe
         PROPERTIES
             OUTPUT_NAME "krita"

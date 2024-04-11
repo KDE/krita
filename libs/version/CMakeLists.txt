@@ -9,7 +9,7 @@ set(kritaversion_LIB_SRCS
 )
 
 kis_add_library(kritaversion SHARED ${kritaversion_LIB_SRCS})
-target_link_libraries(kritaversion Qt5::Core)
+target_link_libraries(kritaversion Qt6::Core)
 generate_export_header(kritaversion BASE_NAME kritaversion)
 
 set_target_properties(kritaversion PROPERTIES

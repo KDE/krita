@@ -10,7 +10,7 @@ generate_export_header(kritaxmp)
 target_link_libraries(kritaxmp
     PRIVATE
         kritametadata
-        KF5::CoreAddons
+        KF6::CoreAddons
         LibExiv2::LibExiv2
 )
 

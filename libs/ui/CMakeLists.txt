@@ -8,7 +8,7 @@ if (ANDROID)
     # See also: https://bugreports.qt.io/browse/QTBUG-64703
     # This is not needed for ARM GNU/Linux environments.
     add_definitions(-DQT_OPENGL_ES_3)
-    include_directories (${Qt5AndroidExtras_INCLUDE_DIRS})
+    include_directories (${Qt6AndroidExtras_INCLUDE_DIRS})
 endif()
 
 add_subdirectory( tests )
@@ -485,7 +485,7 @@ if(WIN32)
     # Private headers are needed for:
     #    * KisDlgCustomTabletResolution
     #    * KisScreenInformationAdapter
-    include_directories(SYSTEM ${Qt5Gui_PRIVATE_INCLUDE_DIRS})
+    include_directories(SYSTEM ${Qt6Gui_PRIVATE_INCLUDE_DIRS})
 
     set(kritaui_LIB_SRCS
         ${kritaui_LIB_SRCS}
@@ -679,12 +679,12 @@ generate_export_header(kritaui BASE_NAME kritaui)
 
 target_link_libraries(kritaui
     PUBLIC
-        KF5::CoreAddons
-        KF5::Completion
-        KF5::I18n
-        KF5::ItemViews
+        KF6::CoreAddons
+        KF6::Completion
+        KF6::I18n
+        KF6::ItemViews
 
-        Qt5::Network
+        Qt6::Network
 
         Eigen3::Eigen
         Boost::boost
@@ -706,8 +706,8 @@ endif()
 
 if (ANDROID)
     target_link_libraries(kritaui PRIVATE GLESv3)
-    target_link_libraries(kritaui PUBLIC Qt5::Gui)
-    target_link_libraries(kritaui PRIVATE Qt5::AndroidExtras)
+    target_link_libraries(kritaui PUBLIC Qt6::Gui)
+    target_link_libraries(kritaui PRIVATE Qt6::AndroidExtras)
 endif()
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
@@ -736,12 +736,12 @@ endif()
 
 # Add VSync disable workaround
 if(NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)
-    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS} Qt5::X11Extras)
+    target_link_libraries(kritaui PRIVATE ${CMAKE_DL_LIBS})
 endif()
 
-if(X11_FOUND)
-    target_link_libraries(kritaui PRIVATE Qt5::X11Extras ${X11_LIBRARIES})
-endif()
+#if(X11_FOUND)
+#    target_link_libraries(kritaui PRIVATE Qt6::X11Extras ${X11_LIBRARIES})
+#endif()
 
 target_include_directories(kritaui
     PUBLIC

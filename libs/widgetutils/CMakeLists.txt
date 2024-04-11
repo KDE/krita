@@ -110,7 +110,7 @@ ki18n_wrap_ui(kritawidgetutils_LIB_SRCS
     xmlgui/kshortcutwidget.ui
 )
 
-qt5_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
+qt6_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
 kis_add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
 
@@ -119,13 +119,13 @@ target_include_directories(kritawidgetutils
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/config>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/xmlgui>
     PRIVATE
-    ${Qt5Gui_PRIVATE_INCLUDE_DIRS}
+    ${Qt6Gui_PRIVATE_INCLUDE_DIRS}
 )
 
 generate_export_header(kritawidgetutils BASE_NAME kritawidgetutils)
 
 if (HAVE_DBUS)
-   set (KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} Qt5::DBus)
+   set (KRITA_WIDGET_UTILS_EXTRA_LIBS ${KRITA_WIDGET_UTILS_EXTRA_LIBS} Qt6::DBus)
 endif ()
 
 if (APPLE)
@@ -139,22 +139,22 @@ endif ()
 
 target_link_libraries(kritawidgetutils
     PUBLIC
-        Qt5::Widgets
-        Qt5::Gui
-        Qt5::Xml
-        Qt5::Core
-        KF5::ItemViews
+        Qt6::Widgets
+        Qt6::Gui
+        Qt6::Xml
+        Qt6::Core
+        KF6::ItemViews
         kritaglobal
         kritaresources
     PRIVATE
-        Qt5::PrintSupport
-        KF5::I18n
-        KF5::ConfigCore
-        KF5::CoreAddons
-        KF5::ConfigGui
-        KF5::GuiAddons
-        KF5::WidgetsAddons
-        KF5::WindowSystem
+        Qt6::PrintSupport
+        KF6::I18n
+        KF6::ConfigCore
+        KF6::CoreAddons
+        KF6::ConfigGui
+        KF6::GuiAddons
+        KF6::WidgetsAddons
+        KF6::WindowSystem
         kritaplugin
         
         ${KRITA_WIDGET_UTILS_EXTRA_LIBS}

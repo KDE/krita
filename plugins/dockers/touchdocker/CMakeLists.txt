@@ -9,14 +9,14 @@ set(KRITA_TOUCHDOCKER_SOURCES ${KRITA_TOUCHDOCKER_SOURCES}
 )
 endif(WIN32)
 
-qt5_add_resources(KRITA_TOUCHDOCKER_SOURCES touchdocker.qrc)
+qt6_add_resources(KRITA_TOUCHDOCKER_SOURCES touchdocker.qrc)
 
 kis_add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES})
 target_link_libraries(kritatouchdocker 
     kritaui 
     kritaqml
-    Qt5::Quick  
-    Qt5::QuickWidgets 
-    Qt5::Qml
+    Qt6::Quick  
+    Qt6::QuickWidgets 
+    Qt6::Qml
 )
 install(TARGETS kritatouchdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

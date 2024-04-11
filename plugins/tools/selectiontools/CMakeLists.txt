@@ -12,7 +12,7 @@ set(kritaselectiontools_SOURCES
     KisToolSelectMagnetic.cc
 )
 
-qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
+qt6_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
 kis_add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
 

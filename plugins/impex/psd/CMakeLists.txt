@@ -20,7 +20,7 @@ set(kritapsdimport_SOURCES
 
 kis_add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
 
-target_link_libraries(kritapsdimport kritapsd_static kritaglobal kritaui KF5::I18n)
+target_link_libraries(kritapsdimport kritapsd_static kritaglobal kritaui KF6::I18n)
 
 install(TARGETS kritapsdimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -39,4 +39,4 @@ target_link_libraries(kritapsdexport kritapsd_static kritaui kritapsd kritaimpex
 
 install(TARGETS kritapsdexport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_psd.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_psd.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

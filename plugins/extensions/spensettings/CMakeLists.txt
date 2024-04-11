@@ -7,7 +7,7 @@ ki18n_wrap_ui(kritaspensettings_SOURCES
     wdg_spensettings.ui
     )
 
-qt5_add_resources(kritaspensettings_SOURCES
+qt6_add_resources(kritaspensettings_SOURCES
     spensettings.qrc
 )
 

@@ -36,7 +36,7 @@ set(kritadefaulttools_SOURCES
     default_tools.cc
 )
 
-qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
+qt6_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 
 kis_add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 

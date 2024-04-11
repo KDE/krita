@@ -11,5 +11,5 @@ kis_add_tests(
     TestLcmsRGBP2020PQColorSpace.cpp
     TestProfileGeneration.cpp
     NAME_PREFIX "plugins-lcmsengine-"
-    LINK_LIBRARIES kritawidgets kritapigment KF5::I18n kritatestsdk ${LCMS2_LIBRARIES}
+    LINK_LIBRARIES kritawidgets kritapigment KF6::I18n kritatestsdk ${LCMS2_LIBRARIES}
     )

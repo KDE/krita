@@ -19,7 +19,7 @@ if(OpenEXR_FOUND)
     add_subdirectory(exr)
 endif()
 
-if(Poppler_Qt5_FOUND)
+if(Poppler_Qt6_FOUND)
     add_subdirectory(pdf)
 endif()
 
@@ -27,7 +27,7 @@ if(OpenJPEG_FOUND AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "FreeBSD")
     add_subdirectory(jp2)
 endif()
 
-if(KF5KDcraw_FOUND)
+if(KF6KDcraw_FOUND)
     add_subdirectory(raw)
 endif()
 

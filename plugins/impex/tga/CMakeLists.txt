@@ -23,4 +23,4 @@ kis_add_library(kritatgaimport MODULE ${kritatgaimport_SOURCES})
 target_link_libraries(kritatgaimport kritaui)
 
 install(TARGETS kritatgaimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_tga.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_tga.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

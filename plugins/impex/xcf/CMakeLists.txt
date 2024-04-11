@@ -80,4 +80,4 @@ kis_add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
 target_link_libraries(kritaxcfimport kritaui xcftools)
 
 install(TARGETS kritaxcfimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_xcf.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_xcf.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

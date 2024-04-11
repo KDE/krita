@@ -12,5 +12,5 @@ set( extensions_plugin_SOURCES
 )
 
 kis_add_library(krita_colorspaces_extensions MODULE ${extensions_plugin_SOURCES})
-target_link_libraries(krita_colorspaces_extensions kritapigment kritaglobal ${LINK_OPENEXR_LIB} KF5::I18n KF5::CoreAddons)
+target_link_libraries(krita_colorspaces_extensions kritapigment kritaglobal ${LINK_OPENEXR_LIB} KF6::I18n KF6::CoreAddons)
 install( TARGETS krita_colorspaces_extensions DESTINATION ${KRITA_PLUGIN_INSTALL_DIR} )

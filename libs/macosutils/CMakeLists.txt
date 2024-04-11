@@ -16,10 +16,10 @@ target_link_libraries(kritamacosutils
         ${FOUNDATION_LIBRARY}
         ${SECURITY_LIBRARY}
         ${APPKIT_LIBRARY}
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Widgets
-        KF5::I18n
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Widgets
+        KF6::I18n
     )
 
 set_target_properties(kritamacosutils PROPERTIES

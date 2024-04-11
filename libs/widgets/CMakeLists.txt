@@ -102,18 +102,18 @@ target_link_libraries(kritawidgets
     kritawidgetutils
     kritaresources
     kritaresourcewidgets
-    Qt5::PrintSupport
-    KF5::CoreAddons
-    KF5::ConfigGui
-    KF5::GuiAddons
-    KF5::WidgetsAddons
-    KF5::ConfigCore
-    KF5::Completion
+    Qt6::PrintSupport
+    KF6::CoreAddons
+    KF6::ConfigGui
+    KF6::GuiAddons
+    KF6::WidgetsAddons
+    KF6::ConfigCore
+    KF6::Completion
 )
 
-if(X11_FOUND)
-    target_link_libraries(kritawidgets Qt5::X11Extras ${X11_LIBRARIES})
-endif()
+#if(X11_FOUND)
+#    target_link_libraries(kritawidgets Qt6::X11Extras ${X11_LIBRARIES})
+#endif()
 
 set_target_properties(kritawidgets PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

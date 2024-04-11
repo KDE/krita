@@ -14,7 +14,7 @@ set(kritaqml_SRCS
     KisSketchView.cpp
 )
 
-qt5_add_resources(kritaqml_SRCS qml/qml.qrc)
+qt6_add_resources(kritaqml_SRCS qml/qml.qrc)
 
 kis_add_library(kritaqml SHARED ${kritaqml_SRCS})
 generate_export_header(kritaqml BASE_NAME krita_sketch)
@@ -23,9 +23,9 @@ set_target_properties(kritaqml
 )
 
 target_link_libraries(kritaqml
-    Qt5::Quick
-    Qt5::Gui
-    Qt5::Core
+    Qt6::Quick
+    Qt6::Gui
+    Qt6::Core
     kritawidgets
     kritaui
 )

@@ -3,7 +3,7 @@ set(kritatoolpolyline_SOURCES
     kis_tool_polyline.cc
     )
 
-qt5_add_resources(kritatoolpolyline_SOURCES polyline.qrc)
+qt6_add_resources(kritatoolpolyline_SOURCES polyline.qrc)
 
 kis_add_library(kritatoolpolyline MODULE ${kritatoolpolyline_SOURCES})
 

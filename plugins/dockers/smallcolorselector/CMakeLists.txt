@@ -11,7 +11,7 @@ set(small_color_selector_QRCS
     ${CMAKE_CURRENT_SOURCE_DIR}/kis_gl_image_widget.qrc
     CACHE INTERNAL "small_color_selector_QRCS"
 )
-qt5_add_resources(KRITA_smallCOLORSELECTOR_SOURCES ${small_color_selector_QRCS})
+qt6_add_resources(KRITA_smallCOLORSELECTOR_SOURCES ${small_color_selector_QRCS})
 
 kis_add_library(kritasmallcolorselector MODULE ${KRITA_smallCOLORSELECTOR_SOURCES})
 target_link_libraries(kritasmallcolorselector kritaui)

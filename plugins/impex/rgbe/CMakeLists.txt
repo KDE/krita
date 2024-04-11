@@ -22,4 +22,4 @@ target_link_libraries(kritargbeexport kritaui kritalibkra kritaimpex)
 
 install(TARGETS kritargbeexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install(PROGRAMS krita_rgbe.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(PROGRAMS krita_rgbe.desktop DESTINATION ${KDE_INSTALL_APPDIR})

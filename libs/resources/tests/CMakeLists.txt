@@ -18,5 +18,5 @@ kis_add_tests(
     TestStorageFilterProxyModel.cpp
     TestTagResourceModel.cpp
     NAME_PREFIX "libs-kritaresources-"
-    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF5::ConfigCore Qt5::Sql kritatestsdk
+    LINK_LIBRARIES kritaglobal kritapigment kritaplugin kritaresources kritawidgets kritaversion KF6::ConfigCore Qt6::Sql kritatestsdk
     )

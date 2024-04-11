@@ -20,9 +20,9 @@ target_link_libraries(kritastore
     PRIVATE
         kritaversion 
         kritaglobal 
-        KF5::ConfigCore
-        Qt5::Xml 
-        Qt5::Gui 
+        KF6::ConfigCore
+        Qt6::Xml 
+        Qt6::Gui 
         ${QUAZIP_LIBRARIES}
 )
 

@@ -24,4 +24,4 @@ target_link_libraries(kritaqimageioimport kritaui)
 
 install(TARGETS kritaqimageioimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_qimageio.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_qimageio.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

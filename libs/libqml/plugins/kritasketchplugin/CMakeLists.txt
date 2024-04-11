@@ -72,10 +72,10 @@ else()
 endif()
 
 target_link_libraries(kritasketchplugin
-    Qt5::Quick
-    Qt5::Gui
-    Qt5::Network
-    Qt5::Core
+    Qt6::Quick
+    Qt6::Gui
+    Qt6::Network
+    Qt6::Core
     kritawidgets
     kritaui
     kritaqml

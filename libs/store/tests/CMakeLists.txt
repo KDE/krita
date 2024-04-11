@@ -10,7 +10,7 @@ kis_add_test(
 
 ########### manual test for file contents ###############
 add_executable(storedroptest storedroptest.cpp)
-target_link_libraries(storedroptest kritastore Qt5::Widgets)
+target_link_libraries(storedroptest kritastore Qt6::Widgets)
 ecm_mark_as_test(storedroptest)
 
 macos_test_fixrpath( storedroptest )

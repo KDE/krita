@@ -18,7 +18,7 @@ kis_add_test(
     ${KRITA_LUTDOCKER_SOURCES}
      $<TARGET_PROPERTY:kritatestsdk,SOURCE_DIR>/stroke_testing_utils.cpp
     TEST_NAME KisOcioDisplayFilterTest
-    LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF5::I18n kritatestsdk kritalutdocker_static
+    LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF6::I18n kritatestsdk kritalutdocker_static
     NAME_PREFIX "plugins-dockers-lut-"
     )
 

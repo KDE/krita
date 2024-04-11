@@ -23,4 +23,4 @@ target_link_libraries(kritajxlexport kritaui kritalibkra kritaimpex ${JPEGXL_LIB
 
 install(TARGETS kritajxlexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_jxl.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_jxl.desktop  DESTINATION ${KDE_INSTALL_APPDIR})

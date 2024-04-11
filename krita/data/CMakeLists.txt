@@ -31,8 +31,8 @@ add_subdirectory( donation )
 
 ########### install files ###############
 
-install( FILES
-    kritarc
-    DESTINATION ${CONFIG_INSTALL_DIR} 
-)
+#install( FILES
+#    kritarc
+#    DESTINATION ${CONFIG_INSTALL_DIR} 
+#)
 

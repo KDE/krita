@@ -18,8 +18,8 @@ target_link_libraries(kritapsdutils
     PUBLIC
         kritapigment
         kritaglobal
-        Qt5::Core
-        Qt5::Gui
+        Qt6::Core
+        Qt6::Gui
     PRIVATE
         ZLIB::ZLIB
 )

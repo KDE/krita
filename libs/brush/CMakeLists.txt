@@ -28,7 +28,7 @@ set(kritalibbrush_LIB_SRCS
 kis_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS})
 generate_export_header(kritalibbrush BASE_NAME kritabrush EXPORT_MACRO_NAME BRUSH_EXPORT)
 
-target_link_libraries(kritalibbrush kritaimage Qt5::Svg kritamultiarch lager)
+target_link_libraries(kritalibbrush kritaimage Qt6::Svg kritamultiarch lager)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

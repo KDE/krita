@@ -55,7 +55,7 @@ endif(WIN32)
 if (ANDROID)
     set (kritaglobal_LIB_SRCS ${kritaglobal_LIB_SRCS} KisAndroidCrashHandler.cpp)
     include_directories(${unwindstack_INCLUDE_DIR})
-    include_directories(${Qt5AndroidExtras_INCLUDE_DIRS})
+    include_directories(${Qt6AndroidExtras_INCLUDE_DIRS})
 endif()
 
 kis_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS}
@@ -65,12 +65,12 @@ generate_export_header(kritaglobal BASE_NAME kritaglobal)
 target_link_libraries(kritaglobal 
     PUBLIC
         kritaversion
-        Qt5::Concurrent 
-        Qt5::Core 
-        Qt5::Gui 
-        Qt5::Widgets 
-        Qt5::Xml 
-        KF5::I18n
+        Qt6::Concurrent 
+        Qt6::Core 
+        Qt6::Gui 
+        Qt6::Widgets 
+        Qt6::Xml 
+        KF6::I18n
         Boost::boost
         zug
         lager
@@ -83,7 +83,7 @@ if (GSL_FOUND)
 endif ()
 
 if (ANDROID)
-    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
+    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt6::AndroidExtras log)
 endif()
 
 if(APPLE)

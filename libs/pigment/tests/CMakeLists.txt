@@ -1,7 +1,7 @@
 include(KritaAddBrokenUnitTest)
 
 add_executable(CCSGraph CCSGraph.cpp)
-target_link_libraries(CCSGraph kritapigment KF5::I18n)
+target_link_libraries(CCSGraph kritapigment KF6::I18n)
 ecm_mark_as_test(CCSGraph)
 
 
@@ -19,7 +19,7 @@ kis_add_tests(
     TestKoChannelInfo.cpp
     TestCompositeOpInversion.cpp
     NAME_PREFIX "libs-pigment-"
-    LINK_LIBRARIES kritapigment KF5::I18n kritatestsdk
+    LINK_LIBRARIES kritapigment KF6::I18n kritatestsdk
     )
 
 

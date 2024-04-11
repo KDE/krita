@@ -30,5 +30,5 @@ target_link_libraries(kritaoraexport kritaui kritaimpex)
 
 install(TARGETS kritaoraexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_ora.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( PROGRAMS  krita_ora.desktop  DESTINATION ${KDE_INSTALL_APPDIR})
 

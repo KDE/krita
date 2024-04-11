@@ -3,7 +3,7 @@ set(kritatoolpolygon_SOURCES
     kis_tool_polygon.cc
     )
 
-qt5_add_resources(kritatoolpolygon_SOURCES tool_polygon.qrc)
+qt6_add_resources(kritatoolpolygon_SOURCES tool_polygon.qrc)
 kis_add_library(kritatoolpolygon MODULE ${kritatoolpolygon_SOURCES})
 
 target_link_libraries(kritatoolpolygon kritaui)

@@ -27,7 +27,7 @@ ki18n_wrap_ui(defaulttools_SRCS
     referenceimagestool/WdgToolOptions.ui
 )
 
-qt5_add_resources(defaulttools_SRCS defaulttools.qrc)
+qt6_add_resources(defaulttools_SRCS defaulttools.qrc)
 
 kis_add_library(krita_flaketools MODULE ${defaulttools_SRCS})
 target_link_libraries(krita_flaketools kritaflake kritawidgets kritaui)

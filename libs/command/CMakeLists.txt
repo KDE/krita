@@ -19,10 +19,10 @@ generate_export_header(kritacommand BASE_NAME kritacommand)
 target_link_libraries(kritacommand
     PUBLIC
         kritawidgetutils 
-        KF5::I18n 
-        KF5::ConfigGui
-        Qt5::Core 
-        Qt5::Widgets
+        KF6::I18n 
+        KF6::ConfigGui
+        Qt6::Core 
+        Qt6::Widgets
         Boost::boost
 )
 

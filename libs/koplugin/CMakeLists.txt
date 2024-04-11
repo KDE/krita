@@ -15,12 +15,12 @@ generate_export_header(kritaplugin BASE_NAME kritaplugin)
 
 target_link_libraries(kritaplugin
     PUBLIC
-        Qt5::Core
+        Qt6::Core
     PRIVATE
         kritaglobal
-        KF5::ConfigCore
-        KF5::CoreAddons
-        KF5::I18n
+        KF6::ConfigCore
+        KF6::CoreAddons
+        KF6::I18n
 )
 
 set_target_properties(kritaplugin PROPERTIES

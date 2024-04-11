@@ -102,11 +102,11 @@ target_link_libraries( kritapigment
         kritacommand
         ${LINK_OPENEXR_LIB}
         kritamultiarch
-        KF5::I18n 
-        KF5::ConfigCore
-        Qt5::Core
-        Qt5::Gui
-        Qt5::Xml
+        KF6::I18n 
+        KF6::ConfigCore
+        Qt6::Core
+        Qt6::Gui
+        Qt6::Xml
         Boost::boost
 )
 

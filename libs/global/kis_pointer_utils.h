@@ -8,6 +8,7 @@
 #define KIS_POINTER_UTILS_H
 
 #include <QSharedPointer>
+#include <QForeach>
 
 /**
  * Convert a raw pointer into a shared pointer

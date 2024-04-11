@@ -133,8 +133,8 @@ protected:
         return m_currentBrushIndex;
     }
 
-    void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
-        Q_UNUSED(info);
+    void updateBrushIndexes(KisRandomSourceSP randomSource, int seqNo) override {
+        Q_UNUSED(randomSource);
 
         if (m_text.size()) {
             m_charIndex = (seqNo >= 0 ? seqNo : (m_charIndex + 1)) % m_text.size();

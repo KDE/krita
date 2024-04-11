@@ -79,7 +79,7 @@ protected:
 
     static int selectPost(KisParasite::SelectionMode mode,
                           int index, int rank,
-                          const KisPaintInformation& info,
+                          KisRandomSourceSP randomSource,
                           int seqNo) {
 
         switch (mode) {
@@ -88,7 +88,7 @@ protected:
             index = (seqNo >= 0 ? seqNo : (index + 1)) % rank;
             break;
         case KisParasite::Random:
-            index = info.randomSource()->generate(0, rank-1);
+            index = randomSource->generate(0, rank-1);
             break;
         case KisParasite::Pressure:
         case KisParasite::Angular:
@@ -108,16 +108,8 @@ protected:
     int chooseNextBrush(const KisPaintInformation& info) override {
         quint32 brushIndex = 0;
 
-        if (!m_isInitialized) {
-            /**
-             * Reset all the indexes to the initial values and do the
-             * generation based on parameters.
-             */
-            for (int i = 0; i < m_parasite.dim; i++) {
-                m_parasite.index[i] = 0;
-            }
-            updateBrushIndexes(info, 0);
-            m_isInitialized = true;
+        KIS_SAFE_ASSERT_RECOVER(m_isInitialized) {
+            updateBrushIndexes(info.randomSource(), 0);
         }
 
         for (int i = 0; i < m_parasite.dim; i++) {
@@ -132,12 +124,14 @@ protected:
         return brushIndex;
     }
 
-    void updateBrushIndexes(const KisPaintInformation& info, int seqNo) override {
+    void updateBrushIndexes(KisRandomSourceSP randomSource, int seqNo) override {
+        m_isInitialized = true;
+
         for (int i = 0; i < m_parasite.dim; i++) {
             m_parasite.index[i] = selectPost(m_parasite.selection[i],
                                              m_parasite.index[i],
                                              m_parasite.rank[i],
-                                             info,
+                                             randomSource,
                                              seqNo);
         }
     }

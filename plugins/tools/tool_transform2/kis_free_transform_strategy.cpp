@@ -829,7 +829,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
 
     transform = m.finalTransform();
     boundsTransform = m.BR;
-    bounds = m.BRI.map(QPolygonF(transaction.originalRect())).boundingRect();
+    bounds = m.BRI.mapRect(transaction.originalRect());
 
     QTransform viewScaleTransform = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
     handlesTransform = boundsTransform * transform * viewScaleTransform;

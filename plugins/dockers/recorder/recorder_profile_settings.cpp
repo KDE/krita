@@ -84,7 +84,7 @@ void RecorderProfileSettings::onLinkActivated(const QString &link)
 void RecorderProfileSettings::onPreviewToggled(bool checked)
 {
     if (checked)
-        emit requestPreview(ui->editFfmpegArguments->toPlainText());
+        Q_EMIT requestPreview(ui->editFfmpegArguments->toPlainText());
 
     ui->stackedWidget->setCurrentIndex(checked ? ArgumentsPageIndex::PagePreview : ArgumentsPageIndex::PageEdit);
 }

@@ -120,7 +120,7 @@ void KisHalftoneConfigPageWidget::setConfiguration(const KisHalftoneFilterConfig
         ui()->buttonBackgroundColor->setColor(config->backgroundColor(prefix));
         ui()->sliderBackgroundOpacity->setValue(config->backgroundOpacity(prefix));
     }
-    emit signal_configurationUpdated();
+    Q_EMIT signal_configurationUpdated();
 }
 
 void KisHalftoneConfigPageWidget::configuration(KisHalftoneFilterConfigurationSP config, const QString & prefix) const
@@ -218,5 +218,5 @@ void KisHalftoneConfigPageWidget::slot_comboBoxGenerator_currentIndexChanged(int
         setGenerator(generatorId, nullptr);
     }
 
-    emit signal_configurationUpdated();
+    Q_EMIT signal_configurationUpdated();
 }

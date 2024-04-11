@@ -401,7 +401,7 @@ void KisShapeLayer::setX(qint32 x)
 {
     qint32 delta = x - this->x();
     QPointF diff = QPointF(m_d->canvas->viewConverter()->viewToDocumentX(delta), 0);
-    emit sigMoveShapes(diff);
+    Q_EMIT sigMoveShapes(diff);
 
     // Save new value to satisfy LSP
     m_d->x = x;
@@ -411,7 +411,7 @@ void KisShapeLayer::setY(qint32 y)
 {
     qint32 delta = y - this->y();
     QPointF diff = QPointF(0, m_d->canvas->viewConverter()->viewToDocumentY(delta));
-    emit sigMoveShapes(diff);
+    Q_EMIT sigMoveShapes(diff);
 
     // Save new value to satisfy LSP
     m_d->y = y;
@@ -719,7 +719,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(shapes.size() == 1 && shapes.first() == this, 0);
 
     /**
-     * We cannot transform shapes in the worker thread. Therefor we emit blocking-queued
+     * We cannot transform shapes in the worker thread. Therefor we Q_EMIT blocking-queued
      * signal to transform them in the GUI thread and then return.
      */
     const KisImageViewConverter *converter = dynamic_cast<const KisImageViewConverter*>(this->converter());

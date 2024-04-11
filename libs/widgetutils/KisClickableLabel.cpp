@@ -18,7 +18,7 @@ KisClickableLabel::KisClickableLabel(QWidget* parent)
     m_closeButton->setFlat(true);
     m_closeButton->setIcon(KisIconUtils::loadIcon("dark_close-tab"));
     connect(m_closeButton, &QPushButton::clicked, this, [&](){
-        emit dismissed();
+        Q_EMIT dismissed();
     });
 
     setDismissable(true);
@@ -79,7 +79,7 @@ bool KisClickableLabel::isDismissable()
 void KisClickableLabel::mousePressEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    emit clicked();
+    Q_EMIT clicked();
 }
 
 void KisClickableLabel::resizeEvent(QResizeEvent */*event*/)

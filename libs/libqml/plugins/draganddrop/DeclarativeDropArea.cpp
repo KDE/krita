@@ -31,7 +31,7 @@ void DeclarativeDropArea::temporaryInhibitParent(bool inhibit)
         if (DeclarativeDropArea *da = qobject_cast<DeclarativeDropArea *>(candidate)) {
             da->m_temporaryInhibition = inhibit;
             if (inhibit) {
-                emit da->dragLeaveEvent(0);
+                Q_EMIT da->dragLeaveEvent(0);
             }
         }
         candidate = candidate->parentItem();
@@ -53,7 +53,7 @@ void DeclarativeDropArea::dragEnterEvent(QDragEnterEvent *event)
 
     m_oldDragMovePos = event->pos();
 
-    emit dragEnter(&dde);
+    Q_EMIT dragEnter(&dde);
     setContainsDrag(true);
 }
 
@@ -65,7 +65,7 @@ void DeclarativeDropArea::dragLeaveEvent(QDragLeaveEvent *event)
 
     m_oldDragMovePos = QPoint(-1,-1);
     DeclarativeDragDropEvent dde(event, this);
-    emit dragLeave(&dde);
+    Q_EMIT dragLeave(&dde);
     setContainsDrag(false);
 }
 
@@ -84,7 +84,7 @@ void DeclarativeDropArea::dragMoveEvent(QDragMoveEvent *event)
     m_oldDragMovePos = event->pos();
     DeclarativeDragDropEvent dde(event, this);
     event->accept();
-    emit dragMove(&dde);
+    Q_EMIT dragMove(&dde);
 }
 
 void DeclarativeDropArea::dropEvent(QDropEvent *event)
@@ -101,7 +101,7 @@ void DeclarativeDropArea::dropEvent(QDropEvent *event)
     }
 
     DeclarativeDragDropEvent dde(event, this);
-    emit drop(&dde);
+    Q_EMIT drop(&dde);
     setContainsDrag(false);
 }
 
@@ -119,7 +119,7 @@ void DeclarativeDropArea::setEnabled(bool enabled)
     m_enabled = enabled;
     setAcceptHoverEvents(m_enabled);
     setFlag(ItemAcceptsDrops, m_enabled);
-    emit enabledChanged();
+    Q_EMIT enabledChanged();
 }
 
 bool DeclarativeDropArea::preventStealing() const
@@ -134,7 +134,7 @@ void DeclarativeDropArea::setPreventStealing(bool prevent)
     }
 
     m_preventStealing = prevent;
-    emit preventStealingChanged();
+    Q_EMIT preventStealingChanged();
 }
 
 void DeclarativeDropArea::setContainsDrag(bool dragging)

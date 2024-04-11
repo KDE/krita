@@ -81,7 +81,7 @@ void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.widgetDither->setConfiguration(*filterConfig, "dither/");
     }
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisGradientMapFilterConfigWidget::setView(KisViewManager *view)

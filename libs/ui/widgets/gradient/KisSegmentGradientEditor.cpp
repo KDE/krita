@@ -197,7 +197,7 @@ void KisSegmentGradientEditor::setGradient(KoSegmentGradientSP gradient)
         gradientSlider->setGradientResource(m_gradient);
     }
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
@@ -325,7 +325,7 @@ void KisSegmentGradientEditor::on_gradientSlider_selectedHandleChanged()
     m_centerMidPointAction->setVisible(handle.type == KisSegmentGradientSlider::HandleType_MidPoint);
     midPointButtonsContainer->setVisible(handle.type == KisSegmentGradientSlider::HandleType_MidPoint);
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentLeftEditor_positionChanged(double position)
@@ -341,8 +341,8 @@ void KisSegmentGradientEditor::on_segmentLeftEditor_positionChanged(double posit
         // Set the clamped value
         segmentLeftEditor->setPosition(segment->startOffset() * 100.0);
     }
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentLeftEditor_colorTypeChanged(KisGradientWidgetsUtils::ColorType type)
@@ -380,8 +380,8 @@ void KisSegmentGradientEditor::on_segmentLeftEditor_colorTypeChanged(KisGradient
     segmentLeftEditor->setColor(color);
     segmentLeftEditor->setOpacity(opacity * 100.0);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentLeftEditor_transparentToggled(bool checked)
@@ -396,8 +396,8 @@ void KisSegmentGradientEditor::on_segmentLeftEditor_transparentToggled(bool chec
     color.setOpacity(opacity);
     segment->setStartColor(color);
     segmentLeftEditor->setOpacity(opacity * 100.0);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentLeftEditor_colorChanged(KoColor color)
@@ -409,8 +409,8 @@ void KisSegmentGradientEditor::on_segmentLeftEditor_colorChanged(KoColor color)
     KoColor c(color, segment->startColor().colorSpace());
     c.setOpacity(segmentLeftEditor->opacity() / 100.0);
     segment->setStartColor(c);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentLeftEditor_opacityChanged(double opacity)
@@ -422,8 +422,8 @@ void KisSegmentGradientEditor::on_segmentLeftEditor_opacityChanged(double opacit
     KoColor color = segment->startColor();
     color.setOpacity(opacity / 100.0);
     segment->setStartColor(color);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentRightEditor_positionChanged(double position)
@@ -439,8 +439,8 @@ void KisSegmentGradientEditor::on_segmentRightEditor_positionChanged(double posi
         // Set the clamped value
         segmentLeftEditor->setPosition(segment->startOffset() * 100.0);
     }
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentRightEditor_colorTypeChanged(KisGradientWidgetsUtils::ColorType type)
@@ -478,8 +478,8 @@ void KisSegmentGradientEditor::on_segmentRightEditor_colorTypeChanged(KisGradien
     segmentRightEditor->setColor(color);
     segmentRightEditor->setOpacity(opacity * 100.0);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentRightEditor_transparentToggled(bool checked)
@@ -494,8 +494,8 @@ void KisSegmentGradientEditor::on_segmentRightEditor_transparentToggled(bool che
     color.setOpacity(opacity);
     segment->setEndColor(color);
     segmentRightEditor->setOpacity(opacity * 100.0);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentRightEditor_colorChanged(KoColor color)
@@ -507,8 +507,8 @@ void KisSegmentGradientEditor::on_segmentRightEditor_colorChanged(KoColor color)
     KoColor c(color, segment->endColor().colorSpace());
     c.setOpacity(segmentRightEditor->opacity() / 100.0);
     segment->setEndColor(c);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentRightEditor_opacityChanged(double opacity)
@@ -520,8 +520,8 @@ void KisSegmentGradientEditor::on_segmentRightEditor_opacityChanged(double opaci
     KoColor color = segment->endColor();
     color.setOpacity(opacity / 100.0);
     segment->setEndColor(color);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentInterpolationTypeComboBox_activated(int value)
@@ -531,8 +531,8 @@ void KisSegmentGradientEditor::on_segmentInterpolationTypeComboBox_activated(int
     }
     KoGradientSegment *segment = m_gradient->segments()[gradientSlider->selectedHandle().index];
     segment->setInterpolation(value);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_segmentColorInterpolationTypeComboBox_activated(int value)
@@ -542,8 +542,8 @@ void KisSegmentGradientEditor::on_segmentColorInterpolationTypeComboBox_activate
     }
     KoGradientSegment *segment = m_gradient->segments()[gradientSlider->selectedHandle().index];
     segment->setColorInterpolation(value);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_stopPositionSlider_valueChanged(double position)
@@ -558,8 +558,8 @@ void KisSegmentGradientEditor::on_stopPositionSlider_valueChanged(double positio
         // Set the clamped value
         stopPositionSlider->setValue(segment->startOffset() * 100.0);
     }
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_stopLeftEditor_colorTypeChanged(KisGradientWidgetsUtils::ColorType type)
@@ -597,8 +597,8 @@ void KisSegmentGradientEditor::on_stopLeftEditor_colorTypeChanged(KisGradientWid
     stopLeftEditor->setColor(color);
     stopLeftEditor->setOpacity(opacity * 100.0);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 
     if (constrainStopButton->keepAspectRatio() &&
         gradientSlider->selectedHandle().index < m_gradient->segments().size()) {
@@ -618,8 +618,8 @@ void KisSegmentGradientEditor::on_stopLeftEditor_transparentToggled(bool checked
     color.setOpacity(opacity);
     segment->setEndColor(color);
     stopLeftEditor->setOpacity(opacity * 100.0);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() &&
         gradientSlider->selectedHandle().index < m_gradient->segments().size()) {
         stopRightEditor->setTransparent(stopLeftEditor->transparent());
@@ -635,8 +635,8 @@ void KisSegmentGradientEditor::on_stopLeftEditor_colorChanged(KoColor color)
     KoColor c(color, segment->endColor().colorSpace());
     c.setOpacity(stopLeftEditor->opacity() / 100.0);
     segment->setEndColor(c);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() &&
         gradientSlider->selectedHandle().index < m_gradient->segments().size()) {
         stopRightEditor->setColor(stopLeftEditor->color());
@@ -652,8 +652,8 @@ void KisSegmentGradientEditor::on_stopLeftEditor_opacityChanged(double opacity)
     KoColor color = segment->endColor();
     color.setOpacity(opacity / 100.0);
     segment->setEndColor(color);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() &&
         gradientSlider->selectedHandle().index < m_gradient->segments().size()) {
         stopRightEditor->setOpacity(stopLeftEditor->opacity());
@@ -695,8 +695,8 @@ void KisSegmentGradientEditor::on_stopRightEditor_colorTypeChanged(KisGradientWi
     stopRightEditor->setColor(color);
     stopRightEditor->setOpacity(opacity * 100.0);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 
     if (constrainStopButton->keepAspectRatio() && gradientSlider->selectedHandle().index > 0) {
         stopLeftEditor->setColorType(stopRightEditor->colorType());
@@ -715,8 +715,8 @@ void KisSegmentGradientEditor::on_stopRightEditor_transparentToggled(bool checke
     color.setOpacity(opacity);
     segment->setStartColor(color);
     stopRightEditor->setOpacity(opacity * 100.0);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() && gradientSlider->selectedHandle().index > 0) {
         stopLeftEditor->setTransparent(stopRightEditor->transparent());
     }
@@ -731,8 +731,8 @@ void KisSegmentGradientEditor::on_stopRightEditor_colorChanged(KoColor color)
     KoColor c(color, segment->startColor().colorSpace());
     c.setOpacity(stopRightEditor->opacity() / 100.0);
     segment->setStartColor(c);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() && gradientSlider->selectedHandle().index > 0) {
         stopLeftEditor->setColor(stopRightEditor->color());
     }
@@ -747,8 +747,8 @@ void KisSegmentGradientEditor::on_stopRightEditor_opacityChanged(double opacity)
     KoColor color = segment->startColor();
     color.setOpacity(opacity / 100.0);
     segment->setStartColor(color);
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
     if (constrainStopButton->keepAspectRatio() && gradientSlider->selectedHandle().index > 0) {
         stopLeftEditor->setOpacity(stopRightEditor->opacity());
     }
@@ -763,7 +763,7 @@ void KisSegmentGradientEditor::on_constrainStopButton_keepAspectRatioChanged(boo
     stopRightEditor->setTransparent(stopLeftEditor->transparent());
     stopRightEditor->setColor(stopLeftEditor->color());
     stopRightEditor->setOpacity(stopLeftEditor->opacity());
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_midPointPositionSlider_valueChanged(double position)
@@ -773,15 +773,15 @@ void KisSegmentGradientEditor::on_midPointPositionSlider_valueChanged(double pos
     } 
     KoGradientSegment *segment = m_gradient->segments()[gradientSlider->selectedHandle().index];
     segment->setMiddleOffset(segment->startOffset() + (position / 100.0) * (segment->endOffset() - segment->startOffset()));    
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::on_nameedit_editingFinished()
 {
     m_gradient->setName(nameedit->text());
     m_gradient->setFilename(nameedit->text() + m_gradient->defaultFileExtension());
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisSegmentGradientEditor::editSelectedHandle()

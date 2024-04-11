@@ -176,5 +176,5 @@ void QtLocalPeer::receiveConnection()
     // ### async this
     socket->write(ack, qstrlen(ack));
     socket->waitForBytesWritten(1000);
-    emit messageReceived(uMsg, socket); // ##(might take a long time to return)
+    Q_EMIT messageReceived(uMsg, socket); // ##(might take a long time to return)
 }

@@ -137,11 +137,11 @@ public:
         KIS_SAFE_ASSERT_RECOVER_NOOP(compareUpdateInfo(info, loadedInfo));
 
 
-        emit sigCompleteRegenerationInternal(frame);
+        Q_EMIT sigCompleteRegenerationInternal(frame);
     }
 
     void frameCancelledCallback(int frame, CancelReason cancelReason) override {
-        emit sigCancelRegenerationInternal(frame, cancelReason);
+        Q_EMIT sigCancelRegenerationInternal(frame, cancelReason);
     }
 
 Q_SIGNALS:

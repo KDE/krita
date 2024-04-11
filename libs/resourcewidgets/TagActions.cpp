@@ -40,7 +40,7 @@ SimpleExistingTagAction::~SimpleExistingTagAction()
 void SimpleExistingTagAction::onTriggered()
 {
     if (!m_tag) return;
-    emit triggered(m_tag, m_resource);
+    Q_EMIT triggered(m_tag, m_resource);
 }
 
 
@@ -146,7 +146,7 @@ UserInputTagAction::~UserInputTagAction()
 
 void UserInputTagAction::onTriggered()
 {
-    emit triggered(userText());
+    Q_EMIT triggered(userText());
 }
 
 // ############ New Tag Resource ##############
@@ -171,7 +171,7 @@ void NewTagResourceAction::setResource(KoResourceSP resource)
 
 void NewTagResourceAction::onTriggered()
 {
-    emit triggered(userText(), m_resource);
+    Q_EMIT triggered(userText(), m_resource);
 }
 
 // ############ TAG COMPARER ##############

@@ -308,7 +308,7 @@ void WdgStrokeSelection::on_fillBox_currentIndexChanged(int index)
     }
     else {
         colorFillSelector->setDisabled(false);
-        emit colorFillSelectorChanged();
+        Q_EMIT colorFillSelectorChanged();
     }
     m_options.colorFillSource = static_cast<ColorFillSource>(index);
 }
@@ -333,7 +333,7 @@ void WdgStrokeSelection::on_typeBox_currentIndexChanged(int arg1)
 
 void WdgStrokeSelection::on_lineColorBox_currentIndexChanged(int/*arg1*/)
 {
-    emit colorSelectorChanged();
+    Q_EMIT colorSelectorChanged();
 }
 
 

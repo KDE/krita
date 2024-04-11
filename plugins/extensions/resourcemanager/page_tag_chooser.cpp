@@ -136,5 +136,5 @@ void PageTagChooser::updateTags(bool flag, QString tag)
         }
     }
 
-    emit tagsUpdated();
+    Q_EMIT tagsUpdated();
 }

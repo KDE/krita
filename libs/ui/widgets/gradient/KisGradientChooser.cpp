@@ -549,7 +549,7 @@ void KisGradientChooser::Private::addGradient(KoAbstractGradientSP gradient, boo
         }
         itemChooser->tagFilterModel()->sort(Qt::DisplayRole);
         itemChooser->setCurrentResource(gradient);
-        emit q->gradientEdited(gradient);
+        Q_EMIT q->gradientEdited(gradient);
     }
 }
 

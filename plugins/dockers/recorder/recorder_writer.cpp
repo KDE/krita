@@ -46,7 +46,7 @@ void ThreadCounter::setAndNotify(int value)
     auto oldValue = get();
     if (set(value)) {
         // Emit signal to GUI that the value has been changed
-        emit notifyValueChange(oldValue < get());
+        Q_EMIT notifyValueChange(oldValue < get());
     }
 }
 
@@ -67,7 +67,7 @@ void ThreadCounter::setUsedAndNotify(int value)
     auto oldValue = getUsed();
     if (setUsedImpl(value)) {
         // Emit signal to GUI that the value has been changed
-        emit notifyInUseChange(oldValue < getUsed());
+        Q_EMIT notifyInUseChange(oldValue < getUsed());
     }
 }
 
@@ -77,7 +77,7 @@ void ThreadCounter::incUsedAndNotify()
    auto oldValue = getUsed();
    if (setUsedImpl(inUse + 1)) {
         // Emit signal to GUI that the value has been changed
-        emit notifyInUseChange(oldValue < getUsed());
+        Q_EMIT notifyInUseChange(oldValue < getUsed());
     }
 }
 void ThreadCounter::decUsedAndNotify()
@@ -85,7 +85,7 @@ void ThreadCounter::decUsedAndNotify()
     QMutexLocker lock(&inUseMutex);
     if (setUsedImpl(inUse - 1)) {
         // Emit signal to GUI that the value has been changed
-        emit notifyInUseChange(false);
+        Q_EMIT notifyInUseChange(false);
     }
 }
 
@@ -311,7 +311,7 @@ void  RecorderWriter::onCaptureImage(int writerId, int index)
 
     bool isFrameWritten = d->writeFrame();
 
-    emit capturingDone(id, isFrameWritten);
+    Q_EMIT capturingDone(id, isFrameWritten);
 }
 
 
@@ -421,7 +421,7 @@ public:
         freeWriterId = -1;
 
         if (!result)
-            emit q->recorderStopWarning();
+            Q_EMIT q->recorderStopWarning();
 
         return result;
     }
@@ -523,7 +523,7 @@ void RecorderWriterManager::start()
     }
     d->enlargeWriterPool();
     d->timer.start(d->interval);
-    emit started();
+    Q_EMIT started();
 }
 
 bool RecorderWriterManager::stop()
@@ -534,7 +534,7 @@ bool RecorderWriterManager::stop()
     d->timer.stop();
     auto result = d->clearWriterPool();
     recorderThreads.setUsed(0);
-    emit stopped();
+    Q_EMIT stopped();
     return result;
 }
 
@@ -570,14 +570,14 @@ void RecorderWriterManager::onTimer()
 
     if (d->freeWriterId == -1)
     {
-        emit lowPerformanceWarning();
+        Q_EMIT lowPerformanceWarning();
         return;
     }
 
     d->writerPool[d->freeWriterId].inUse = true;
     d->writerPool[d->freeWriterId].thread->setPriority(QThread::HighPriority);
     recorderThreads.incUsedAndNotify();
-    emit startCapturing(d->freeWriterId, ++d->partIndex);
+    Q_EMIT startCapturing(d->freeWriterId, ++d->partIndex);
 }
 
 void RecorderWriterManager::onCapturingDone(int workerId, bool success)
@@ -589,7 +589,7 @@ void RecorderWriterManager::onCapturingDone(int workerId, bool success)
     recorderThreads.decUsedAndNotify();
     if (!success) {
         stop();
-        emit frameWriteFailed();
+        Q_EMIT frameWriteFailed();
     }
 }
 

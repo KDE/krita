@@ -111,7 +111,7 @@ void KisToolRectangleBase::activate(const QSet<KoShape *> &shapes)
 {
     KisToolShape::activate(shapes);
 
-    emit sigRequestReloadConfig();
+    Q_EMIT sigRequestReloadConfig();
 }
 
 void KisToolRectangleBase::deactivate()
@@ -405,7 +405,7 @@ void KisToolRectangleBase::updateArea() {
 
     canvas()->updateCanvas(convertToPt(bound).adjusted(-100, -100, +200, +200));
 
-    emit rectangleChanged(bound);
+    Q_EMIT rectangleChanged(bound);
 }
 
 qreal KisToolRectangleBase::getRotationAngle() {

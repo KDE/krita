@@ -81,7 +81,7 @@ void WdgTagPreview::onTagAdded(KoID custom)
         }
     }
 
-    emit tagsAdded(tagSP);
+    Q_EMIT tagsAdded(tagSP);
 }
 void WdgTagPreview::onTagRemoved(KoID custom)
 {
@@ -91,5 +91,5 @@ void WdgTagPreview::onTagRemoved(KoID custom)
     KisTagLabel *label = new KisTagLabel(tagSP->name());
     m_layout->addWidget(label);
 
-    emit tagsRemoved(tagSP);
+    Q_EMIT tagsRemoved(tagSP);
 }

@@ -156,7 +156,7 @@ void FiltersCategoryModel::activateItem(int index)
     if (index > -1 && index < d->categories.count())
     {
         d->currentCategory = index;
-        emit filterModelChanged();
+        Q_EMIT filterModelChanged();
     }
 }
 
@@ -180,7 +180,7 @@ void FiltersCategoryModel::setView(QObject* newView)
 //        connect(d->view->nodeManager(), SIGNAL(sigLayerActivated(KisLayerSP)), this, SLOT(activeLayerChanged(KisLayerSP)));
         connect(d->view->selectionManager(), SIGNAL(currentSelectionChanged()), this, SLOT(activeSelectionChanged()));
     }
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 void FiltersCategoryModel::activeLayerChanged(KisLayerSP layer)
@@ -254,7 +254,7 @@ void FiltersCategoryModel::setPreviewEnabled(bool enabled)
     if (d->previewEnabled != enabled)
     {
         d->previewEnabled = enabled;
-        emit previewEnabledChanged();
+        Q_EMIT previewEnabledChanged();
 
         if (enabled)
             filterConfigurationChanged(d->previewFilterID, d->categories[d->currentCategory]);

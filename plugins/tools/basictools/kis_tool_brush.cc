@@ -166,7 +166,7 @@ void KisToolBrush::slotSetSmoothingType(int index)
     }
     updateSmoothnessDistanceLabel();
 
-    emit smoothingTypeChanged();
+    Q_EMIT smoothingTypeChanged();
 }
 
 void KisToolBrush::updateSmoothnessDistanceLabel()
@@ -180,7 +180,7 @@ void KisToolBrush::updateSmoothnessDistanceLabel()
         m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
 
         if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
-            // the slider will emit the change signal automatically
+            // the slider will Q_EMIT the change signal automatically
             m_sliderSmoothnessDistance->setValue(qRound(oldValue));
         }
 
@@ -191,7 +191,7 @@ void KisToolBrush::updateSmoothnessDistanceLabel()
         m_sliderSmoothnessDistance->setExponentRatio(3.0); // help pick smaller values
 
         if (!qFuzzyCompare(m_sliderSmoothnessDistance->value(), oldValue)) {
-            // the slider will emit the change signal automatically
+            // the slider will Q_EMIT the change signal automatically
             m_sliderSmoothnessDistance->setValue(oldValue);
         }
     }
@@ -200,13 +200,13 @@ void KisToolBrush::updateSmoothnessDistanceLabel()
 void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
 {
     smoothingOptions()->setSmoothnessDistance(distance);
-    emit smoothnessQualityChanged();
+    Q_EMIT smoothnessQualityChanged();
 }
 
 void KisToolBrush::slotSetTailAggressiveness(qreal argh_rhhrr)
 {
     smoothingOptions()->setTailAggressiveness(argh_rhhrr);
-    emit smoothnessFactorChanged();
+    Q_EMIT smoothnessFactorChanged();
 }
 
 // used with weighted smoothing
@@ -230,7 +230,7 @@ void KisToolBrush::setUseScalableDistance(bool value)
 {
     smoothingOptions()->setUseScalableDistance(value);
 
-    emit useScalableDistanceChanged();
+    Q_EMIT useScalableDistanceChanged();
 }
 
 void KisToolBrush::resetCursorStyle()
@@ -270,20 +270,20 @@ void KisToolBrush::setUseDelayDistance(bool value)
     m_sliderDelayDistance->setEnabled(value);
     enableControl(m_chkFinishStabilizedCurve, !value);
 
-    emit useDelayDistanceChanged();
+    Q_EMIT useDelayDistanceChanged();
 }
 
 void KisToolBrush::setDelayDistance(qreal value)
 {
     smoothingOptions()->setDelayDistance(value);
-    emit delayDistanceChanged();
+    Q_EMIT delayDistanceChanged();
 }
 
 void KisToolBrush::setFinishStabilizedCurve(bool value)
 {
     smoothingOptions()->setFinishStabilizedCurve(value);
 
-    emit finishStabilizedCurveChanged();
+    Q_EMIT finishStabilizedCurveChanged();
 }
 
 bool KisToolBrush::finishStabilizedCurve() const
@@ -294,7 +294,7 @@ bool KisToolBrush::finishStabilizedCurve() const
 void KisToolBrush::setStabilizeSensors(bool value)
 {
     smoothingOptions()->setStabilizeSensors(value);
-    emit stabilizeSensorsChanged();
+    Q_EMIT stabilizeSensorsChanged();
 }
 
 bool KisToolBrush::stabilizeSensors() const
@@ -315,15 +315,15 @@ void KisToolBrush::updateSettingsViews()
     m_cmbSmoothingType->setCurrentIndex((int)smoothingOptions()->smoothingType());
     m_chkStabilizeSensors->setChecked(smoothingOptions()->stabilizeSensors());
 
-    emit smoothnessQualityChanged();
-    emit smoothnessFactorChanged();
-    emit smoothPressureChanged();
-    emit smoothingTypeChanged();
-    emit useScalableDistanceChanged();
-    emit useDelayDistanceChanged();
-    emit delayDistanceChanged();
-    emit finishStabilizedCurveChanged();
-    emit stabilizeSensorsChanged();
+    Q_EMIT smoothnessQualityChanged();
+    Q_EMIT smoothnessFactorChanged();
+    Q_EMIT smoothPressureChanged();
+    Q_EMIT smoothingTypeChanged();
+    Q_EMIT useScalableDistanceChanged();
+    Q_EMIT useDelayDistanceChanged();
+    Q_EMIT delayDistanceChanged();
+    Q_EMIT finishStabilizedCurveChanged();
+    Q_EMIT stabilizeSensorsChanged();
 
     KisTool::updateSettingsViews();
 }

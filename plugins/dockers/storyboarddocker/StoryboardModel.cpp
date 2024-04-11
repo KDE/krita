@@ -247,7 +247,7 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
             else {
                 child->setData(value);
             }
-            emit dataChanged(index, index);
+            Q_EMIT dataChanged(index, index);
             emit(sigStoryboardItemListChanged());
             return true;
         }
@@ -286,7 +286,7 @@ bool StoryboardModel::setThumbnailPixmapData(const QModelIndex & parentIndex, co
         ThumbnailData thumbnailData = qvariant_cast<ThumbnailData>(child->data());
         thumbnailData.pixmap = pxmap;
         child->setData(QVariant::fromValue<ThumbnailData>(thumbnailData));
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
         return true;
     }
     return false;
@@ -1064,7 +1064,7 @@ void StoryboardModel::slotKeyframeAdded(const KisKeyframeChannel* channel, int t
         frameElement->setData(QVariant::fromValue<int>(duration % getFramesPerSecond()));
         secondElement->setData(QVariant::fromValue<int>(duration / getFramesPerSecond()));
 
-        emit dataChanged(lastScene, lastScene);
+        Q_EMIT dataChanged(lastScene, lastScene);
     }
 
     QModelIndexList affected = affectedIndexes(KisTimeSpan::fromTimeToTime(time, channel->nextKeyframeTime(time)));
@@ -1116,7 +1116,7 @@ void StoryboardModel::slotFramerateChanged()
             nextScene = index(sceneIndex.row() + 1, sceneIndex.column());
         }
 
-        emit dataChanged(index(0,0), sceneIndex);
+        Q_EMIT dataChanged(index(0,0), sceneIndex);
     } else if (sceneIndex.isValid()) {
 
         StoryboardItemSP item = m_items.at(sceneIndex.row());
@@ -1130,7 +1130,7 @@ void StoryboardModel::slotFramerateChanged()
         item->child(StoryboardItem::DurationFrame)->setData(QVariant::fromValue<int>(durationFrames));
         item->child(StoryboardItem::DurationSecond)->setData(QVariant::fromValue<int>(durationSeconds));
 
-        emit dataChanged(sceneIndex, sceneIndex);
+        Q_EMIT dataChanged(sceneIndex, sceneIndex);
     }
 }
 
@@ -1381,7 +1381,7 @@ bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRo
 
         if (!dryrun) {
             reorderKeyframes();
-            emit sigStoryboardItemListChanged();
+            Q_EMIT sigStoryboardItemListChanged();
         }
 
         return true;
@@ -1403,7 +1403,7 @@ bool StoryboardModel::moveRowsImpl(const QModelIndex &sourceParent, int sourceRo
 
         if (!dryrun) {
             reorderKeyframes();
-            emit sigStoryboardItemListChanged();
+            Q_EMIT sigStoryboardItemListChanged();
         }
 
         return true;

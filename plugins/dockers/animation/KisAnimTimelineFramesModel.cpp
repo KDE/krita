@@ -298,7 +298,7 @@ void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesF
     }
 
     if (m_d->dummiesFacade) {
-        emit sigInfiniteTimelineUpdateNeeded();
+        Q_EMIT sigInfiniteTimelineUpdateNeeded();
         slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
     }
 }
@@ -329,8 +329,8 @@ void KisAnimTimelineFramesModel::processUpdateQueue()
         int row = m_d->converter->rowForDummy(dummy);
 
         if (row >= 0) {
-            emit headerDataChanged (Qt::Vertical, row, row);
-            emit dataChanged(this->index(row, 0), this->index(row, columnCount() - 1));
+            Q_EMIT headerDataChanged (Qt::Vertical, row, row);
+            Q_EMIT dataChanged(this->index(row, 0), this->index(row, columnCount() - 1));
         }
     }
     m_d->updateQueue.clear();
@@ -442,17 +442,17 @@ bool KisAnimTimelineFramesModel::setData(const QModelIndex &index, const QVarian
             int prevLayer = m_d->activeLayerIndex;
             m_d->activeLayerIndex = index.row();
 
-            emit dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
-            emit dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
+            Q_EMIT dataChanged(this->index(prevLayer, 0), this->index(prevLayer, columnCount() - 1));
+            Q_EMIT dataChanged(this->index(m_d->activeLayerIndex, 0), this->index(m_d->activeLayerIndex, columnCount() - 1));
 
-            emit headerDataChanged(Qt::Vertical, prevLayer, prevLayer);
-            emit headerDataChanged(Qt::Vertical, m_d->activeLayerIndex, m_d->activeLayerIndex);
+            Q_EMIT headerDataChanged(Qt::Vertical, prevLayer, prevLayer);
+            Q_EMIT headerDataChanged(Qt::Vertical, m_d->activeLayerIndex, m_d->activeLayerIndex);
 
             KisNodeDummy *dummy = m_d->converter->dummyFromRow(m_d->activeLayerIndex);
             KIS_ASSERT_RECOVER(dummy) { return true; }
 
-            emit requestCurrentNodeChanged(dummy->node());
-            emit sigEnsureRowVisible(m_d->activeLayerIndex);
+            Q_EMIT requestCurrentNodeChanged(dummy->node());
+            Q_EMIT sigEnsureRowVisible(m_d->activeLayerIndex);
         }
         break;
     }
@@ -554,7 +554,7 @@ bool KisAnimTimelineFramesModel::setHeaderData(int section, Qt::Orientation orie
             KisAnimTimelineFramesModel::PropertyList props = value.value<KisAnimTimelineFramesModel::PropertyList>();
 
             int result = m_d->setLayerProperties(section, props);
-            emit headerDataChanged (Qt::Vertical, section, section);
+            Q_EMIT headerDataChanged (Qt::Vertical, section, section);
             return result;
         }
         case PinnedToTimelineRole: {

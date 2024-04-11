@@ -127,7 +127,7 @@ void KisHalftoneConfigWidget::setConfiguration(const KisPropertiesConfigurationS
 
         slot_comboBoxMode_currentIndexChanged(m_ui.comboBoxMode->currentIndex());
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisHalftoneConfigWidget::configuration() const
@@ -231,5 +231,5 @@ void KisHalftoneConfigWidget::slot_comboBoxMode_currentIndexChanged(int index)
         }
     }
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }

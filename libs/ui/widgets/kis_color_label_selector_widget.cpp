@@ -66,14 +66,14 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
             [this](QAbstractButton *button, bool state)
             {
                 const int index = m_d->colorButtonGroup->id(button);
-                emit buttonToggled(index, state);
+                Q_EMIT buttonToggled(index, state);
                 if (m_d->colorButtonGroup->exclusive()) {
                     if (!state) {
                         return;
                     }
-                    emit currentIndexChanged(index);
+                    Q_EMIT currentIndexChanged(index);
                 } else {
-                    emit selectionChanged();
+                    Q_EMIT selectionChanged();
                 }
             }
         );
@@ -120,7 +120,7 @@ void KisColorLabelSelectorWidget::setCurrentIndex(int index)
         }
     }
 
-    emit currentIndexChanged(index);
+    Q_EMIT currentIndexChanged(index);
 }
 
 QList<int> KisColorLabelSelectorWidget::selection() const
@@ -143,7 +143,7 @@ void KisColorLabelSelectorWidget::setSelection(const QList<int> &indices)
     for (int index : indices) {
         m_d->colorButtonGroup->button(index)->setChecked(true);
     }
-    emit selectionChanged();
+    Q_EMIT selectionChanged();
 }
 
 bool KisColorLabelSelectorWidget::exclusive() const

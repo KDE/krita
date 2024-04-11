@@ -381,7 +381,7 @@ void KisHSVConfigWidget::configureSliderLimitsAndLabels()
     m_page->chkCompatibilityMode->setEnabled(compat);
     m_prevColorize = colorize;
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisHSVConfigWidget::recolorSliders()

@@ -291,7 +291,7 @@ private Q_SLOTS:
     /**
      * A special connection for KisResourceLocator, which can remove the resource
      * while importing something with overwrite. In such a case the locator will
-     * emit both, remove and insert signals for both the resources.
+     * Q_EMIT both, remove and insert signals for both the resources.
      */
     void beginExternalResourceRemove(const QString &resourceType, const QVector<int> &resourceId);
 

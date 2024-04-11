@@ -102,7 +102,7 @@ void KisImageFromClipboardWidget::createImage()
             layer->setDirty();
         }
         doc->setModified(true);
-        emit m_openPane->documentSelected(doc);
+        Q_EMIT m_openPane->documentSelected(doc);
         m_openPane->accept();
     }
 

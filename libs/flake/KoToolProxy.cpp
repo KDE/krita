@@ -92,7 +92,7 @@ void KoToolProxyPrivate::selectionChanged(bool newSelection)
     if (hasSelection == newSelection)
         return;
     hasSelection = newSelection;
-    emit parent->selectionChanged(hasSelection);
+    Q_EMIT parent->selectionChanged(hasSelection);
 }
 
 bool KoToolProxyPrivate::isActiveLayerEditable()
@@ -407,7 +407,7 @@ void KoToolProxy::setActiveTool(KoToolBase *tool)
 
         connect(d->activeTool, SIGNAL(selectionChanged(bool)), this, SLOT(selectionChanged(bool)));
         d->selectionChanged(hasSelection());
-        emit toolChanged(tool->toolId());
+        Q_EMIT toolChanged(tool->toolId());
     }
 }
 

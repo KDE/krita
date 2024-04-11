@@ -273,7 +273,7 @@ void KeyboardModel::setKeyboardMode(KeyboardModel::KeyboardMode mode)
         beginInsertRows(QModelIndex(), 0, d->currentKeys->count() - 1);
         endInsertRows();
 
-        emit keyboardModeChanged();
+        Q_EMIT keyboardModeChanged();
     }
 }
 

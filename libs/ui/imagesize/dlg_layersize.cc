@@ -174,7 +174,7 @@ void DlgLayerSize::slotWidthChanged(double w)
         m_page->newHeightDouble->blockSignals(false);
     }
 
-    emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), m_resolution);
+    Q_EMIT sigDesiredSizeChanged(desiredWidth(), desiredHeight(), m_resolution);
 }
 
 void DlgLayerSize::slotHeightChanged(double h)
@@ -191,7 +191,7 @@ void DlgLayerSize::slotHeightChanged(double h)
         m_page->newWidthDouble->blockSignals(false);
     }
 
-    emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), m_resolution);
+    Q_EMIT sigDesiredSizeChanged(desiredWidth(), desiredHeight(), m_resolution);
 }
 
 void DlgLayerSize::slotAspectChanged(bool keep)

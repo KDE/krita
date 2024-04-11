@@ -94,5 +94,5 @@ Connector::Connector(KoShapeManager *parent)
 
 void Connector::selectionChanged()
 {
-    emit selectionChanged(m_shapeManager->selection()->selectedShapes());
+    Q_EMIT selectionChanged(m_shapeManager->selection()->selectedShapes());
 }

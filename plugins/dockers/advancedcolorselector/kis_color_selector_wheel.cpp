@@ -46,35 +46,35 @@ KoColor KisColorSelectorWheel::selectColor(int x, int y)
 
     switch (m_parameter) {
     case KisColorSelectorConfiguration::hsvSH:
-        emit paramChanged(angle, radius, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(angle, radius, -1, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hslSH:
-        emit paramChanged(angle, -1, -1, radius, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(angle, -1, -1, radius, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsiSH:
-        emit paramChanged(angle, -1, -1, -1, -1, radius, -1, -1, -1);
+        Q_EMIT paramChanged(angle, -1, -1, -1, -1, radius, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::hsySH:
-        emit paramChanged(angle, -1, -1, -1, -1, -1, -1, radius, -1);
+        Q_EMIT paramChanged(angle, -1, -1, -1, -1, -1, -1, radius, -1);
         break;
     case KisColorSelectorConfiguration::VH:
-        emit paramChanged(angle, -1, radius, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(angle, -1, radius, -1, -1, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::LH:
-        emit paramChanged(angle, -1, -1, -1, radius, -1, -1, -1, -1);
+        Q_EMIT paramChanged(angle, -1, -1, -1, radius, -1, -1, -1, -1);
         break;
     case KisColorSelectorConfiguration::IH:
-        emit paramChanged(angle, -1, -1, -1, -1, -1, radius, -1, -1);
+        Q_EMIT paramChanged(angle, -1, -1, -1, -1, -1, radius, -1, -1);
         break;
     case KisColorSelectorConfiguration::YH:
-        emit paramChanged(angle, -1, -1, -1, -1, -1, -1, -1, radius);
+        Q_EMIT paramChanged(angle, -1, -1, -1, -1, -1, -1, -1, radius);
         break;
     default:
         Q_ASSERT(false);
         break;
     }
 
-    emit update();
+    Q_EMIT update();
 
     angle *= 2. * M_PI;
     angle -= M_PI;
@@ -104,42 +104,42 @@ void KisColorSelectorWheel::setColor(const KoColor &color)
     qreal angle = 0.0, radius = 0.0;
     switch (m_parameter) {
     case KisColorSelectorConfiguration::LH:
-        emit paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hslH, -1, -1, -1, hslL, -1, -1, -1, -1);
         angle = hslH;
         radius = hslL;
         break;
     case KisColorSelectorConfiguration::VH:
-        emit paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsvH, -1, hsvV, -1, -1, -1, -1, -1, -1);
         angle = hsvH;
         radius = hsvV;
         break;
     case KisColorSelectorConfiguration::IH:
-        emit paramChanged(hslH, -1, -1, -1, -1, -1, hsiI, -1, -1);
+        Q_EMIT paramChanged(hslH, -1, -1, -1, -1, -1, hsiI, -1, -1);
         angle = hsiH;
         radius = hsiI;
         break;
     case KisColorSelectorConfiguration::YH:
-        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, hsyY);
+        Q_EMIT paramChanged(hsyH, -1, -1, -1, -1, -1, -1, -1, hsyY);
         angle = hsyH;
         radius = hsyY;
         break;
     case KisColorSelectorConfiguration::hsvSH:
-        emit paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hsvH, hsvS, -1, -1, -1, -1, -1, -1, -1);
         angle = hsvH;
         radius = hsvS;
         break;
     case KisColorSelectorConfiguration::hslSH:
-        emit paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
+        Q_EMIT paramChanged(hslH, -1, -1, hslS, -1, -1, -1, -1, -1);
         angle = hslH;
         radius = hslS;
         break;
     case KisColorSelectorConfiguration::hsiSH:
-        emit paramChanged(hsiH, -1, -1, -1, -1, hsiS, -1, -1, -1);
+        Q_EMIT paramChanged(hsiH, -1, -1, -1, -1, hsiS, -1, -1, -1);
         angle = hsiH;
         radius = hsiS;
         break;
     case KisColorSelectorConfiguration::hsySH:
-        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
+        Q_EMIT paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
         angle = hsyH;
         radius = hsyS;
         break;

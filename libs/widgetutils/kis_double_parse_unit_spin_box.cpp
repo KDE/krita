@@ -320,7 +320,7 @@ void KisDoubleParseUnitSpinBox::preventDecimalsChangeFromUnitManager(bool preven
 
 void KisDoubleParseUnitSpinBox::privateValueChanged()
 {
-    emit valueChangedPt( value() );
+    Q_EMIT valueChangedPt( value() );
 }
 
 QString KisDoubleParseUnitSpinBox::detectUnit()

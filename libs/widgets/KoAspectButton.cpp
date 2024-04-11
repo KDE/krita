@@ -51,7 +51,7 @@ void KoAspectButton::setKeepAspectRatio(bool on) {
 
     if(d->keepAspect != on) {
         d->keepAspect = on;
-        emit keepAspectRatioChanged(d->keepAspect);
+        Q_EMIT keepAspectRatioChanged(d->keepAspect);
     }
 }
 

@@ -78,7 +78,7 @@ void KisPaletteChooser::setCurrentItem(KoResourceSP currentResource)
 void KisPaletteChooser::paletteSelected(KoResourceSP r)
 {
     KoColorSetSP g = r.staticCast<KoColorSet>();
-    emit sigPaletteSelected(g);
+    Q_EMIT sigPaletteSelected(g);
     m_ui->bnRemove->setEnabled(true);
 }
 
@@ -87,21 +87,21 @@ void KisPaletteChooser::slotAdd()
     // Don't select any palette,
     //  because it doesn't need to be added at the end of the list.
     // The PaletteEditor will select the newly added palette.
-    emit sigAddPalette();
+    Q_EMIT sigAddPalette();
 }
 
 void KisPaletteChooser::slotRemove()
 {
     if (m_d->itemChooser->currentResource()) {
         KoColorSetSP cs = m_d->itemChooser->currentResource().staticCast<KoColorSet>();
-        emit sigRemovePalette(cs);
+        Q_EMIT sigRemovePalette(cs);
     }
     m_d->itemChooser->setCurrentItem(0);
 }
 
 void KisPaletteChooser::slotImport()
 {
-    emit sigImportPalette();
+    Q_EMIT sigImportPalette();
 }
 
 void KisPaletteChooser::slotExport()
@@ -110,7 +110,7 @@ void KisPaletteChooser::slotExport()
         m_d->itemChooser->setCurrentItem(0);
     }
     KoColorSetSP palette = m_d->itemChooser->currentResource().dynamicCast<KoColorSet>();
-    emit sigExportPalette(palette);
+    Q_EMIT sigExportPalette(palette);
 }
 
 /************************* KisPaletteChooserPrivate **********************/

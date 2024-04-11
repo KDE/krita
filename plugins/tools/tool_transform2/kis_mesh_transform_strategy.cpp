@@ -256,7 +256,7 @@ void KisMeshTransformStrategy::verifyExpectedMeshSize()
     m_d->lastMeshSize = currentMeshSize;
 
     if (shouldUpdate) {
-        emit requestCanvasUpdate();
+        Q_EMIT requestCanvasUpdate();
     }
 }
 

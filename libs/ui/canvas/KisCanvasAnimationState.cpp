@@ -63,7 +63,7 @@ public Q_SLOTS:
     void tryFire() {
         if (!lock) {
             lock = true;
-            emit output();
+            Q_EMIT output();
         }
     }
 
@@ -336,7 +336,7 @@ void KisCanvasAnimationState::setupAudioTracks()
             KisPart::instance()->upgradeToPlaybackEngineMLT(m_d->canvas);
         }
 
-        emit sigPlaybackMediaChanged();
+        Q_EMIT sigPlaybackMediaChanged();
     }
 }
 
@@ -384,6 +384,6 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
             Q_EMIT sigPlaybackStatisticsUpdated();
         }
 
-        emit sigPlaybackStateChanged(m_d->state);
+        Q_EMIT sigPlaybackStateChanged(m_d->state);
     }
 }

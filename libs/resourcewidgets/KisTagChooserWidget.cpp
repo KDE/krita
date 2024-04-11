@@ -130,7 +130,7 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
         KConfigGroup group =  KSharedConfig::openConfig()->group("SelectedTags");
         group.writeEntry(d->resourceType, currentlySelectedTag()->url());
         d->model->sort(KisAllTagsModel::Name);
-        emit sigTagChosen(tag);
+        Q_EMIT sigTagChosen(tag);
     } else {
         setCurrentIndex(0);
     }

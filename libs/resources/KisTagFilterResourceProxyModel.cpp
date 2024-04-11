@@ -59,20 +59,20 @@ KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
 
 void KisTagFilterResourceProxyModel::setResourceFilter(ResourceFilter filter)
 {
-    emit beforeFilterChanges();
+    Q_EMIT beforeFilterChanges();
     d->resourceModel->setResourceFilter(filter);
     d->tagResourceModel->setResourceFilter(filter);
     invalidateFilter();
-    emit afterFilterChanged();
+    Q_EMIT afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setStorageFilter(StorageFilter filter)
 {
-    emit beforeFilterChanges();
+    Q_EMIT beforeFilterChanges();
     d->resourceModel->setStorageFilter(filter);
     d->tagResourceModel->setStorageFilter(filter);
     invalidateFilter();
-    emit afterFilterChanged();
+    Q_EMIT afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setResourceModel(KisResourceModel *resourceModel)
@@ -205,10 +205,10 @@ bool KisTagFilterResourceProxyModel::setResourceMetaData(KoResourceSP resource, 
 
 void KisTagFilterResourceProxyModel::setMetaDataFilter(QMap<QString, QVariant> metaDataMap)
 {
-    emit beforeFilterChanges();
+    Q_EMIT beforeFilterChanges();
     d->metaDataMapFilter = metaDataMap;
     invalidateFilter();
-    emit afterFilterChanged();
+    Q_EMIT afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
@@ -219,18 +219,18 @@ void KisTagFilterResourceProxyModel::setTagFilter(const KisTagSP tag)
 
 void KisTagFilterResourceProxyModel::setStorageFilter(bool useFilter, int storageId)
 {
-    emit beforeFilterChanges();
+    Q_EMIT beforeFilterChanges();
     d->useStorageIdFilter = useFilter;
     if (useFilter) {
         d->storageId = storageId;
     }
     invalidateFilter();
-    emit afterFilterChanged();
+    Q_EMIT afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::updateTagFilter()
 {
-    emit beforeFilterChanges();
+    Q_EMIT beforeFilterChanges();
     const bool ignoreTagFiltering =
         !d->filteringWithinCurrentTag && !d->filter->isEmpty();
 
@@ -285,7 +285,7 @@ void KisTagFilterResourceProxyModel::updateTagFilter()
     }
 
     invalidateFilter();
-    emit afterFilterChanged();
+    Q_EMIT afterFilterChanged();
 }
 
 void KisTagFilterResourceProxyModel::setResourceFilter(const KoResourceSP resource)

@@ -254,7 +254,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
     }
 
     addJobSequential(jobs, [this] () {
-        emit sigFinished(m_d->prefilterOnly);
+        Q_EMIT sigFinished(m_d->prefilterOnly);
     });
 
     runnableJobsInterface()->addRunnableJobs(jobs);
@@ -262,7 +262,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 
 void KisColorizeStrokeStrategy::cancelStrokeCallback()
 {
-    emit sigCancelled();
+    Q_EMIT sigCancelled();
 }
 
 void KisColorizeStrokeStrategy::tryCancelCurrentStrokeJobAsync()

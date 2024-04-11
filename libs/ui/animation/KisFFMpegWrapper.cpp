@@ -260,7 +260,7 @@ void KisFFMpegWrapper::slotReadyReadSTDERR()
 {
     QByteArray stderrRawBuffer = m_process->readAllStandardError();
     
-    emit sigReadSTDERR(stderrRawBuffer);
+    Q_EMIT sigReadSTDERR(stderrRawBuffer);
     m_stderrBuffer += stderrRawBuffer;
     
     int frameNo = -1;
@@ -272,7 +272,7 @@ void KisFFMpegWrapper::slotReadyReadSTDERR()
 
         if (m_processSettings.storeOutput) m_processSTDERR += line + "\n";
                 
-        emit sigReadLine(2,line);
+        Q_EMIT sigReadLine(2,line);
         
         for (const QString &word : errorWords) {
             if (line.contains(word)) {
@@ -296,7 +296,7 @@ void KisFFMpegWrapper::slotReadyReadSTDERR()
     
     if (frameNo != -1) {
         updateProgressDialog(frameNo);
-        emit sigProgressUpdated(frameNo);
+        Q_EMIT sigProgressUpdated(frameNo);
     }
     
 }
@@ -305,7 +305,7 @@ void KisFFMpegWrapper::slotReadyReadSTDOUT()
 {
     QByteArray stdoutRawBuffer = m_process->readAllStandardOutput();
     
-    emit sigReadSTDOUT(stdoutRawBuffer);
+    Q_EMIT sigReadSTDOUT(stdoutRawBuffer);
     m_stdoutBuffer += stdoutRawBuffer;
 
   
@@ -324,7 +324,7 @@ void KisFFMpegWrapper::slotReadyReadSTDOUT()
             const QString &line = m_stdoutBuffer.mid(startPos, endPos - startPos).trimmed();
 
             dbgFile << "ffmpeg stdout:" << line;
-            emit sigReadLine(1,line);
+            Q_EMIT sigReadLine(1,line);
             startPos = endPos + 1;
         }
         
@@ -338,7 +338,7 @@ void KisFFMpegWrapper::slotStarted()
 {
     dbgFile << "ffmpeg process started!";
 
-    emit sigStarted();
+    Q_EMIT sigStarted();
 }
 
 void KisFFMpegWrapper::slotFinished(int exitCode)
@@ -354,9 +354,9 @@ void KisFFMpegWrapper::slotFinished(int exitCode)
             m_errorMessage = i18n("FFMpeg Crashed") % "\n" % m_errorMessage;
         }
 
-        emit sigFinishedWithError(m_errorMessage);
+        Q_EMIT sigFinishedWithError(m_errorMessage);
     } else {
-        emit sigFinished();
+        Q_EMIT sigFinished();
     }
 }
 

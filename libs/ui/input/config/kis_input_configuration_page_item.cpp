@@ -46,7 +46,7 @@ KisInputConfigurationPageItem::KisInputConfigurationPageItem(QWidget *parent, Qt
     });
 
     connect(m_shortcutsModel, &KisActionShortcutsModel::dataChanged, this, [&]() {
-        emit inputConfigurationChanged();
+        Q_EMIT inputConfigurationChanged();
     });
 
     QAction *deleteAction = new QAction(KisIconUtils::loadIcon("edit-delete"), i18n("Delete Shortcut"), ui->shortcutsView);
@@ -106,7 +106,7 @@ void KisInputConfigurationPageItem::deleteShortcut()
 
     if (m_shortcutsModel->canRemoveRow(row)) {
         m_shortcutsModel->removeRow(row, QModelIndex());
-        emit inputConfigurationChanged();
+        Q_EMIT inputConfigurationChanged();
     } else {
         QMessageBox shortcutMessage;
         shortcutMessage.setText(i18n("Deleting last shortcut for this action!"));

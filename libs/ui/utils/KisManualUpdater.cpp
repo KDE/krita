@@ -78,7 +78,7 @@ void KisManualUpdater::rssDataChanged()
     m_updaterStatus.setAvailableVersion(availableVersion);
     m_updaterStatus.setDownloadLink(downloadLink);
 
-    emit sigUpdateCheckStateChange(m_updaterStatus);
+    Q_EMIT sigUpdateCheckStateChange(m_updaterStatus);
 }
 
 bool KisManualUpdater::availableVersionIsHigher(QString currentVersion, QString availableVersion)

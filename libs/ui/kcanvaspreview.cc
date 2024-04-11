@@ -61,10 +61,10 @@ void KCanvasPreview::mouseMoveEvent(QMouseEvent *event)
         }
         m_prevDragPoint = event->pos();
         if(!xOffsetLocked()) {
-          emit sigModifiedXOffset(newXOffset);
+          Q_EMIT sigModifiedXOffset(newXOffset);
         }
         if(!yOffsetLocked()) {
-          emit sigModifiedYOffset(newYOffset);
+          Q_EMIT sigModifiedYOffset(newYOffset);
         }
     } else {
         QCursor cursor;

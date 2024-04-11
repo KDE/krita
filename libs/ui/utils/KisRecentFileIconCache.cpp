@@ -166,7 +166,7 @@ void KisRecentFileIconCache::iconFetched()
     findItem.value().fetchingFuture = QFuture<IconFetchResult>();
     if (result.m_iconWasFetchedOk) {
         findItem.value().cachedIcon = result.m_icon;
-        emit fileIconChanged(result.m_documentUrl, result.m_icon);
+        Q_EMIT fileIconChanged(result.m_documentUrl, result.m_icon);
     }
 }
 

@@ -142,7 +142,7 @@ void KisKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2
     }
 
     m_d->keys.insert(time, keyframe);
-    emit sigAddedKeyframe(this, time);
+    Q_EMIT sigAddedKeyframe(this, time);
 }
 
 void KisKeyframeChannel::removeKeyframeImpl(int time, KUndo2Command *parentUndoCmd)
@@ -155,12 +155,12 @@ void KisKeyframeChannel::removeKeyframeImpl(int time, KUndo2Command *parentUndoC
     }
 
     m_d->keys.remove(time);
-    emit sigKeyframeHasBeenRemoved(this, time);
+    Q_EMIT sigKeyframeHasBeenRemoved(this, time);
 }
 
 void KisKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
-    emit sigKeyframeAboutToBeRemoved(this, time);
+    Q_EMIT sigKeyframeAboutToBeRemoved(this, time);
     removeKeyframeImpl(time, parentUndoCmd);
 }
 

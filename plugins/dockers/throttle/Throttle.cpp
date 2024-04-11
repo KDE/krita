@@ -59,7 +59,7 @@ void ThreadManager::setThreadCount(int threadCount)
     if (m_threadCount != threadCount) {
         m_threadCount = threadCount;
         m_configUpdateCompressor->start();
-        emit threadCountChanged();
+        Q_EMIT threadCountChanged();
     }
 }
 

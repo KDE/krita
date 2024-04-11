@@ -71,7 +71,7 @@ void ColorProfileModel::setColorModelId(const QString& id)
     if(id != d->colorModelId) {
         d->colorModelId = id;
         d->updateProfiles();
-        emit colorModelIdChanged();
+        Q_EMIT colorModelIdChanged();
     }
 }
 
@@ -85,7 +85,7 @@ void ColorProfileModel::setColorDepthId(const QString& id)
     if(id != d->colorDepthId) {
         d->colorDepthId = id;
         d->updateProfiles();
-        emit colorDepthIdChanged();
+        Q_EMIT colorDepthIdChanged();
     }
 }
 
@@ -119,5 +119,5 @@ void ColorProfileModel::Private::updateProfiles()
 
     q->endResetModel();
 
-    emit q->defaultProfileChanged();
+    Q_EMIT q->defaultProfileChanged();
 }

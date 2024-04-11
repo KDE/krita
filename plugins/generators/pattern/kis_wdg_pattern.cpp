@@ -136,7 +136,7 @@ void KisWdgPattern::setConfiguration(const KisPropertiesConfigurationSP config)
         m_widget->sliderAlignToPixelGridX->setValue(config->getInt("transform_align_to_pixel_grid_x", 1));
         m_widget->sliderAlignToPixelGridY->setValue(config->getInt("transform_align_to_pixel_grid_y", 1));
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisWdgPattern::configuration() const
@@ -180,7 +180,7 @@ void KisWdgPattern::slotWidthChanged(double w)
         KisSignalsBlocker blocker(m_widget->spbScaleHeight);
         m_widget->spbScaleHeight->setValue(w);
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisWdgPattern::slotHeightChanged(double h)
@@ -189,7 +189,7 @@ void KisWdgPattern::slotHeightChanged(double h)
         KisSignalsBlocker blocker(m_widget->spbScaleWidth);
         m_widget->spbScaleWidth->setValue(h);
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisWdgPattern::slotScaleAspectRatioChanged(bool checked)
@@ -197,7 +197,7 @@ void KisWdgPattern::slotScaleAspectRatioChanged(bool checked)
     if (checked && m_widget->spbScaleHeight->value() != m_widget->spbScaleWidth->value()) {
         KisSignalsBlocker blocker(m_widget->spbScaleHeight);
         m_widget->spbScaleHeight->setValue(m_widget->spbScaleWidth->value());
-        emit sigConfigurationItemChanged();
+        Q_EMIT sigConfigurationItemChanged();
     }
 }
 
@@ -205,7 +205,7 @@ void KisWdgPattern::slot_sliderAlignToPixelGridX_valueChanged(int value)
 {
     Q_UNUSED(value);
     if (m_widget->checkBoxAlignToPixelGrid->isChecked()) {
-        emit sigConfigurationItemChanged();
+        Q_EMIT sigConfigurationItemChanged();
     }
 }
 
@@ -213,7 +213,7 @@ void KisWdgPattern::slot_sliderAlignToPixelGridY_valueChanged(int value)
 {
     Q_UNUSED(value);
     if (m_widget->checkBoxAlignToPixelGrid->isChecked()) {
-        emit sigConfigurationItemChanged();
+        Q_EMIT sigConfigurationItemChanged();
     }
 }
 

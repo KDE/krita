@@ -823,7 +823,7 @@ void DcrawSettingsWidget::setup(int advSettings)
     connect(d->expoCorrectionShiftSpinBox, &RDoubleNumInput::valueChanged,
             this, &DcrawSettingsWidget::slotExpoCorrectionShiftChanged);
 
-    // Wrapper to emit signal when something is changed in settings.
+    // Wrapper to Q_EMIT signal when something is changed in settings.
 
     connect(d->inIccUrlEdit->lineEdit(), &QLineEdit::textChanged,
             this, &DcrawSettingsWidget::signalSettingsChanged);
@@ -943,7 +943,7 @@ void DcrawSettingsWidget::resetToDefault()
 void DcrawSettingsWidget::slotsixteenBitsImageToggled(bool b)
 {
     setEnabledBrightnessSettings(!b);
-    emit signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
+    Q_EMIT signalSixteenBitsImageToggled(d->sixteenBitsImage->isChecked());
 }
 
 void DcrawSettingsWidget::slotWhiteBalanceToggled(int v)
@@ -1018,7 +1018,7 @@ void DcrawSettingsWidget::slotNoiseReductionChanged(int item)
             break;
     }
 
-    emit signalSettingsChanged();
+    Q_EMIT signalSettingsChanged();
 }
 
 void DcrawSettingsWidget::slotCACorrectionToggled(bool b)
@@ -1040,7 +1040,7 @@ void DcrawSettingsWidget::slotAutoCAToggled(bool b)
     d->caBlueMultSpinBox->setEnabled(mult);
     d->caRedMultLabel->setEnabled(mult);
     d->caBlueMultLabel->setEnabled(mult);
-    emit signalSettingsChanged();
+    Q_EMIT signalSettingsChanged();
 }
 
 void DcrawSettingsWidget::slotExposureCorrectionToggled(bool b)
@@ -1061,7 +1061,7 @@ void DcrawSettingsWidget::slotExpoCorrectionShiftChanged(double ev)
     d->expoCorrectionHighlightLabel->setEnabled(b);
     d->expoCorrectionHighlightSpinBox->setEnabled(b);
 
-    emit signalSettingsChanged();
+    Q_EMIT signalSettingsChanged();
 }
 
 void DcrawSettingsWidget::slotInputColorSpaceChanged(int item)
@@ -1103,7 +1103,7 @@ void DcrawSettingsWidget::slotRAWQualityChanged(int quality)
             break;
     }
 
-    emit signalSettingsChanged();
+    Q_EMIT signalSettingsChanged();
 }
 
 void DcrawSettingsWidget::setEnabledBrightnessSettings(bool b)

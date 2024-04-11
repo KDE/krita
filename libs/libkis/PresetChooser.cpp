@@ -35,10 +35,10 @@ Resource *PresetChooser::currentPreset() const
 
 void PresetChooser::slotResourceSelected(KoResourceSP r)
 {
-    emit presetSelected(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
+    Q_EMIT presetSelected(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
 }
 
 void PresetChooser::slotResourceClicked(KoResourceSP r)
 {
-    emit presetClicked(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
+    Q_EMIT presetClicked(Resource(r->resourceId(), "paintoppreset", r->name(), r->filename(), r->image()));
 }

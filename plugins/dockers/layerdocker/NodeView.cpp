@@ -299,7 +299,7 @@ void NodeView::contextMenuEvent(QContextMenuEvent *e)
 
 void NodeView::showContextMenu(const QPoint &globalPos, const QModelIndex &index)
 {
-    emit contextMenuRequested(globalPos, index);
+    Q_EMIT contextMenuRequested(globalPos, index);
 }
 
 void NodeView::currentChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -334,7 +334,7 @@ void NodeView::selectionChanged(const QItemSelection &selected, const QItemSelec
 {
     QTreeView::selectionChanged(selected, deselected);
     // XXX: selectedIndexes() does not include hidden (collapsed) items, is this really intended?
-    emit selectionChanged(selectedIndexes());
+    Q_EMIT selectionChanged(selectedIndexes());
 }
 
 void NodeView::slotActionToggled(bool on, const QPersistentModelIndex &index, int num)

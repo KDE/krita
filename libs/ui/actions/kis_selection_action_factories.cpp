@@ -519,7 +519,7 @@ void KisSelectionToRasterActionFactory::run(KisViewManager *view)
 
         KUndo2Command* paint() override {
             // just create an empty transaction: it will rasterize the
-            // selection and emit the necessary signals
+            // selection and Q_EMIT the necessary signals
 
             KisTransaction transaction(m_sel->pixelSelection());
             return transaction.endAndTake();

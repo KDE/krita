@@ -68,7 +68,7 @@ void DeclarativeMimeData::setUrl(const QUrl &url)
     QList<QUrl> urlList;
     urlList.append(url);
     QMimeData::setUrls(urlList);
-    emit urlChanged();
+    Q_EMIT urlChanged();
 }
 
 QJsonArray DeclarativeMimeData::urls() const
@@ -87,7 +87,7 @@ void DeclarativeMimeData::setUrls(const QJsonArray &urls)
         urlList << varUrl.value<QUrl>();
     }
     QMimeData::setUrls(urlList);
-    emit urlsChanged();
+    Q_EMIT urlsChanged();
 }
 
 // color
@@ -109,7 +109,7 @@ void DeclarativeMimeData::setColor(const QColor &color)
 {
     if (this->color() != color) {
         this->setColorData(color);
-        emit colorChanged();
+        Q_EMIT colorChanged();
     }
 }
 
@@ -139,7 +139,7 @@ void DeclarativeMimeData::setSource(QQuickItem* source)
 {
     if (m_source != source) {
         m_source = source;
-        emit sourceChanged();
+        Q_EMIT sourceChanged();
     }
 }
 

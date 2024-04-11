@@ -214,8 +214,8 @@ void KisPart::addDocument(KisDocument *document, bool notify)
     if (!d->documents.contains(document)) {
         d->documents.append(document);
         if (notify){
-            emit documentOpened('/'+ objectName());
-            emit sigDocumentAdded(document);
+            Q_EMIT documentOpened('/'+ objectName());
+            Q_EMIT sigDocumentAdded(document);
         }
         connect(document, SIGNAL(sigSavingFinished(QString)), SLOT(slotDocumentSaved(QString)));
     }
@@ -248,8 +248,8 @@ void KisPart::removeDocument(KisDocument *document, bool deleteDocument)
 {
     if (document) {
         d->documents.removeAll(document);
-        emit documentClosed('/' + objectName());
-        emit sigDocumentRemoved(document->path());
+        Q_EMIT documentClosed('/' + objectName());
+        Q_EMIT sigDocumentRemoved(document->path());
         if (deleteDocument) {
             document->deleteLater();
         }
@@ -293,7 +293,7 @@ KisMainWindow *KisPart::createMainWindow(QUuid id)
 
 void KisPart::notifyMainWindowIsBeingCreated(KisMainWindow *mainWindow)
 {
-    emit sigMainWindowIsBeingCreated(mainWindow);
+    Q_EMIT sigMainWindowIsBeingCreated(mainWindow);
 }
 
 
@@ -337,7 +337,7 @@ void KisPart::addView(KisView *view)
         d->views.append(view);
     }
 
-    emit sigViewAdded(view);
+    Q_EMIT sigViewAdded(view);
 }
 
 void KisPart::removeView(KisView *view)
@@ -352,7 +352,7 @@ void KisPart::removeView(KisView *view)
      */
     KIS_ASSERT_RECOVER_RETURN(!view->mainWindow()->hackIsSaving());
 
-    emit sigViewRemoved(view);
+    Q_EMIT sigViewRemoved(view);
 
     QPointer<KisDocument> doc = view->document();
     d->views.removeAll(view);
@@ -449,7 +449,7 @@ void KisPart::slotDocumentSaved(const QString &filePath)
     // file path when doing an export, therefore we now pass it directly from
     // the sigSavingFinished signal.
     // KisDocument *doc = qobject_cast<KisDocument*>(sender());
-    emit sigDocumentSaved(filePath);
+    Q_EMIT sigDocumentSaved(filePath);
 
     QUrl url = QUrl::fromLocalFile(filePath);
     KisRecentFileIconCache::instance()->reloadFileIcon(url);
@@ -713,7 +713,7 @@ void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
     QScopedPointer backup(p_playbackEngine);
     d->playbackEngine.swap(backup);
 
-    emit playbackEngineChanged(p_playbackEngine);
+    Q_EMIT playbackEngineChanged(p_playbackEngine);
 }
 
 #include "moc_KisPart.cpp"

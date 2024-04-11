@@ -51,7 +51,7 @@ void KisPresetUpdateMediator::connectResource(QVariant sourceResource)
 
 void KisPresetUpdateMediator::slotSettingsChanged()
 {
-    emit sigResourceChanged(key());
+    Q_EMIT sigResourceChanged(key());
 }
 
 void KisPresetUpdateMediator::slotResourceChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
@@ -64,7 +64,7 @@ void KisPresetUpdateMediator::slotResourceChanged(const QModelIndex &topLeft, co
     if (m_d->linkedResourceIndex.row() >= topLeft.row() &&
             m_d->linkedResourceIndex.row() <= bottomRight.row()) {
 
-        emit sigResourceChanged(key());
+        Q_EMIT sigResourceChanged(key());
     }
 }
 

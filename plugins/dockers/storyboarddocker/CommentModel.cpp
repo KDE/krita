@@ -75,15 +75,15 @@ bool StoryboardCommentModel::setData(const QModelIndex & index, const QVariant &
         }
 
         m_commentList[index.row()].name = desiredName;
-        emit dataChanged(index, index);
-        emit sigCommentListChanged();
+        Q_EMIT dataChanged(index, index);
+        Q_EMIT sigCommentListChanged();
         return true;
     }
     
     if (index.isValid() && role == Qt::DecorationRole) {
         m_commentList[index.row()].visibility = !m_commentList[index.row()].visibility;
-        emit dataChanged(index, index);
-        emit sigCommentListChanged();
+        Q_EMIT dataChanged(index, index);
+        Q_EMIT sigCommentListChanged();
         return true;
     }
     return false;
@@ -114,7 +114,7 @@ bool StoryboardCommentModel::insertRows(int position, int rows, const QModelInde
     }
 
     endInsertRows();
-    emit sigCommentListChanged();
+    Q_EMIT sigCommentListChanged();
     return true;
 }
 
@@ -132,7 +132,7 @@ bool StoryboardCommentModel::removeRows(int position, int rows, const QModelInde
         m_commentList.removeAt(position);
     }
     endRemoveRows();
-    emit sigCommentListChanged();
+    Q_EMIT sigCommentListChanged();
     return true;
 }
 
@@ -160,7 +160,7 @@ bool StoryboardCommentModel::moveRows(const QModelIndex &sourceParent, int sourc
         m_commentList.move(sourceRow, destinationChild + row);
     }
     endMoveRows();
-    emit sigCommentListChanged();
+    Q_EMIT sigCommentListChanged();
     return true;
 }
 
@@ -232,7 +232,7 @@ void StoryboardCommentModel::resetData(QVector<StoryboardComment> list)
 {
     beginResetModel();
     m_commentList = list;
-    emit dataChanged(QModelIndex(), QModelIndex());
+    Q_EMIT dataChanged(QModelIndex(), QModelIndex());
     endResetModel();
 }
 

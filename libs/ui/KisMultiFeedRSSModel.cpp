@@ -101,7 +101,7 @@ void MultiFeedRssModel::appendFeedData(QNetworkReply *reply)
     setArticleCount(m_aggregatedFeed.size());
     endResetModel();
 
-    emit feedDataChanged();
+    Q_EMIT feedDataChanged();
 }
 
 void MultiFeedRssModel::sortAggregatedFeed()
@@ -129,7 +129,7 @@ void MultiFeedRssModel::removeFeed(const QString &feed)
         setArticleCount(m_aggregatedFeed.size());
         endResetModel();
 
-        emit feedDataChanged();
+        Q_EMIT feedDataChanged();
     }
 }
 

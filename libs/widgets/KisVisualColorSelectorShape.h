@@ -120,7 +120,7 @@ public:
       * @brief setCursorPosition
       * Set the cursor to normalized shape coordinates. This will only repaint the cursor.
       * @param position normalized shape coordinates ([0,1] range, not yet transformed to actual channel values!)
-      * @param signal if true, emit a sigCursorMoved signal
+      * @param signal if true, Q_EMIT a sigCursorMoved signal
       */
     void setCursorPosition(QPointF position, bool signal = false);
 

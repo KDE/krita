@@ -138,7 +138,7 @@ void KisIdleWatcher::slotIdleCheckTick()
 
             stopIdleCheck();
             if (!m_d->trackedImages.isEmpty()) {
-                emit startedIdleMode();
+                Q_EMIT startedIdleMode();
             }
         } else {
             m_d->idleCheckCounter++;

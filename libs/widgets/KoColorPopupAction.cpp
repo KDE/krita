@@ -194,7 +194,7 @@ void KoColorPopupAction::updateIcon()
 
 void KoColorPopupAction::emitColorChanged()
 {
-    emit colorChanged( d->currentColor );
+    Q_EMIT colorChanged( d->currentColor );
 }
 
 void KoColorPopupAction::colorWasSelected(const KoColor &color, bool final)

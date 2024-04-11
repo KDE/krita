@@ -153,7 +153,7 @@ void KisStopGradientEditor::setGradient(KoStopGradientSP gradient)
         // stopChanged(gradientSlider->selectedStop());
     }
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
@@ -232,7 +232,7 @@ void KisStopGradientEditor::stopChanged(int stop)
         selectedStopLabel->setText(i18nc("Text that indicates no stop is selected in the stop gradient editor", "No stop selected"));
     }
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::stopTypeChanged(KisGradientWidgetsUtils::ColorType type) {
@@ -261,8 +261,8 @@ void KisStopGradientEditor::stopTypeChanged(KisGradientWidgetsUtils::ColorType t
     m_gradient->setStops(stops);
     stopEditor->setColor(stop.color);
     stopEditor->setOpacity(100.0);
-    emit gradientSlider->updateRequested(); //setSelectedStopType(type);
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested(); //setSelectedStopType(type);
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::colorChanged(const KoColor& color)
@@ -281,8 +281,8 @@ void KisStopGradientEditor::colorChanged(const KoColor& color)
     stops.insert(currentStop, stop);
     m_gradient->setStops(stops);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::opacityChanged(qreal value)
@@ -299,8 +299,8 @@ void KisStopGradientEditor::opacityChanged(qreal value)
     stops.insert(currentStop, stop);
     m_gradient->setStops(stops);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::positionChanged(qreal value)
@@ -325,8 +325,8 @@ void KisStopGradientEditor::positionChanged(qreal value)
     m_gradient->setStops(stops);
     gradientSlider->setSelectedStop(currentStop);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::nameChanged()
@@ -335,7 +335,7 @@ void KisStopGradientEditor::nameChanged()
 
     m_gradient->setName(nameedit->text());
     m_gradient->setFilename(nameedit->text() + m_gradient->defaultFileExtension());
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::reverse()
@@ -351,10 +351,10 @@ void KisStopGradientEditor::reverse()
     if (gradientSlider->selectedStop() >= 0) {
         gradientSlider->setSelectedStop(stops.size() - 1 - gradientSlider->selectedStop());
     } else {
-        emit gradientSlider->updateRequested();
+        Q_EMIT gradientSlider->updateRequested();
     }
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::distributeStopsEvenly()
@@ -370,8 +370,8 @@ void KisStopGradientEditor::distributeStopsEvenly()
     if (gradientSlider->selectedStop() >= 0) {
         stopEditor->setPosition(stops[gradientSlider->selectedStop()].position * 100.0);
     }
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
@@ -404,8 +404,8 @@ void KisStopGradientEditor::sortByValue( SortFlags flags = SORT_ASCENDING )
     m_gradient->setStops(sortedStops);
     gradientSlider->setSelectedStop(stopCount - 1);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::sortByHue( SortFlags flags = SORT_ASCENDING )
@@ -438,8 +438,8 @@ void KisStopGradientEditor::sortByHue( SortFlags flags = SORT_ASCENDING )
     m_gradient->setStops(sortedStops);
     gradientSlider->setSelectedStop(stopCount - 1);
 
-    emit gradientSlider->updateRequested();
-    emit sigGradientChanged();
+    Q_EMIT gradientSlider->updateRequested();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisStopGradientEditor::editSelectedStop()

@@ -36,13 +36,13 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
             KisCanvasAnimationState* state = m_d->canvas->animationState();
             if (state->playbackState() != PLAYING) {
                 m_d->intendedFrame = frame;
-                emit sigFrameChange();
+                Q_EMIT sigFrameChange();
             }
         }
 
         if (m_d->displayedFrame != frame) {
             m_d->displayedFrame = frame;
-            emit sigFrameDisplayRefreshed();
+            Q_EMIT sigFrameDisplayRefreshed();
         }
     });
 
@@ -53,11 +53,11 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
            KisCanvasAnimationState* state = m_d->canvas->animationState();
            if (state->playbackState() != PLAYING) {
                m_d->intendedFrame = frame;
-               emit sigFrameChange();
+               Q_EMIT sigFrameChange();
            }
        }
 
-       emit sigFrameRefreshSkipped();
+       Q_EMIT sigFrameRefreshSkipped();
     });
 
     m_d->displayedFrame = m_d->canvas->image()->animationInterface()->currentUITime();
@@ -75,7 +75,7 @@ bool KisFrameDisplayProxy::displayFrame(int frame, bool forceReproject)
 
     if (frame != m_d->intendedFrame) {
         m_d->intendedFrame = frame;
-        emit sigFrameChange();
+        Q_EMIT sigFrameChange();
     }
 
     if (forceReproject || needsReprojection(cache, m_d->displayedFrame, frame)) {
@@ -91,7 +91,7 @@ bool KisFrameDisplayProxy::displayFrame(int frame, bool forceReproject)
     } else if ( shouldUploadFrame(cache, m_d->displayedFrame, frame) && cache->uploadFrame(frame) ) {
         m_d->canvas->updateCanvas();
         m_d->displayedFrame = frame;
-        emit sigFrameDisplayRefreshed();
+        Q_EMIT sigFrameDisplayRefreshed();
         return true;
 
     } else if (!cache && ai->hasAnimation() && ai->currentUITime() != frame){

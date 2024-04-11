@@ -43,7 +43,7 @@ KisTimedSignalThreshold::~KisTimedSignalThreshold()
 void KisTimedSignalThreshold::forceDone()
 {
     stop();
-    emit timeout();
+    Q_EMIT timeout();
 }
 
 void KisTimedSignalThreshold::start()

@@ -440,7 +440,7 @@ void KoCanvasControllerWidget::updateDocumentSize(const QSizeF &sz, bool recalcu
     d->viewportWidget->setDocumentSize(sz);
     resetScrollBars();
 
-    // Always emit the new offset.
+    // Always Q_EMIT the new offset.
     updateCanvasOffsetX();
     updateCanvasOffsetY();
 

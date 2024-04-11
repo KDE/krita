@@ -32,7 +32,7 @@ void ProgressProxy::setFormat(const QString& format)
 {
     if ( format != d->taskName ) {
         d->taskName = format;
-        emit taskNameChanged();
+        Q_EMIT taskNameChanged();
     }
 }
 
@@ -45,14 +45,14 @@ void ProgressProxy::setRange(int minimum, int maximum)
 void ProgressProxy::setValue(int value)
 {
     if (value == d->minimum) {
-        emit taskStarted();
+        Q_EMIT taskStarted();
     }
 
     if (value == d->maximum) {
-        emit taskEnded();
+        Q_EMIT taskEnded();
     }
 
-    emit valueChanged(value);
+    Q_EMIT valueChanged(value);
 }
 
 int ProgressProxy::maximum() const

@@ -77,7 +77,7 @@ Q_SIGNALS:
 public Q_SLOTS:
     void slotRankChanged()
     {
-        emit sigRankChanged(dimension);
+        Q_EMIT sigRankChanged(dimension);
     }
 
 };

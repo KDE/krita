@@ -58,7 +58,7 @@ void Settings::setCurrentFile(const QString& fileName)
     qApp->processEvents();
     if (fileName != d->currentFile) {
         d->currentFile = fileName;
-        emit currentFileChanged();
+        Q_EMIT currentFileChanged();
     }
 }
 
@@ -71,7 +71,7 @@ void Settings::setTemporaryFile(bool temp)
 {
     if (temp != d->temporaryFile) {
         d->temporaryFile = temp;
-        emit temporaryFileChanged();
+        Q_EMIT temporaryFileChanged();
     }
 }
 
@@ -84,7 +84,7 @@ void Settings::setFocusItem(QQuickItem* item)
 {
     if (item != d->focusItem) {
         d->focusItem = item;
-        emit focusItemChanged();
+        Q_EMIT focusItemChanged();
     }
 }
 
@@ -112,7 +112,7 @@ void Settings::setThemeID(const QString& /*id*/)
 //        d->theme = Theme::load(id, this);
 //        KSharedConfig::openConfig()->group("General").writeEntry<QString>("theme", id);
 
-//        emit themeChanged();
+//        Q_EMIT themeChanged();
 //    }
 }
 

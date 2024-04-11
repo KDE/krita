@@ -144,7 +144,7 @@ KisOpenPane::KisOpenPane(QWidget *parent, const QStringList& mimeFilter, const Q
     KConfigGroup cfgGrp( KSharedConfig::openConfig(), "TemplateChooserDialog"); sizes = cfgGrp.readEntry("DetailsPaneSplitterSizes", sizes);
 
     if (!sizes.isEmpty())
-        emit splitterResized(0, sizes);
+        Q_EMIT splitterResized(0, sizes);
 
     connect(this, SIGNAL(splitterResized(KisDetailsPane*,QList<int>)),
             this, SLOT(saveSplitterSizes(KisDetailsPane*,QList<int>)));
@@ -178,13 +178,13 @@ void KisOpenPane::openFileDialog()
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(m_mimeFilter);
     Q_FOREACH (const QString &filename, dialog.filenames()) {
-        emit openExistingFile(QUrl::fromUserInput(filename));
+        Q_EMIT openExistingFile(QUrl::fromUserInput(filename));
     }
 }
 
 void KisOpenPane::slotOpenTemplate(const QUrl &url)
 {
-    emit openTemplate(url);
+    Q_EMIT openTemplate(url);
     accept();
 }
 
@@ -261,7 +261,7 @@ void KisOpenPane::dropEvent(QDropEvent *event)
         // XXX: when the MVC refactoring is done, this can open a bunch of
         //      urls, but since the part/document combination is still 1:1
         //      that won't work for now.
-        emit openExistingFile(event->mimeData()->urls().first());
+        Q_EMIT openExistingFile(event->mimeData()->urls().first());
 
     }
 }

@@ -76,5 +76,5 @@ void KisShadeSelectorLinesSettings::setLineCount(int count)
     }
 
     if(emitSignal)
-        emit lineCountChanged(count);
+        Q_EMIT lineCountChanged(count);
 }

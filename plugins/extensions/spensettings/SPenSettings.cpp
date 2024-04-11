@@ -37,7 +37,7 @@ SPenSettings::SPenSettings(QObject* parent, const QVariantList&)
     KisSPenSettingsFactory* settingsFactory = new KisSPenSettingsFactory();
     preferenceSetRegistry->add("KisSPenSettingsFactory", settingsFactory);
 
-    //emit settingsChanged() if the settings are changed in krita preferences
+    //Q_EMIT settingsChanged() if the settings are changed in krita preferences
     connect(&(settingsFactory->repeater), SIGNAL(settingsUpdated()), this, SLOT(slotLoadSettings()), Qt::UniqueConnection);
 
     slotLoadSettings();

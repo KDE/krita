@@ -793,7 +793,7 @@ void SvgTextCursor::inputMethodEvent(QInputMethodEvent *event)
 void SvgTextCursor::blinkCursor()
 {
     if (d->shape) {
-        emit updateCursorDecoration(d->shape->shapeToDocument(d->cursorShape.boundingRect()) | d->oldCursorRect);
+        Q_EMIT updateCursorDecoration(d->shape->shapeToDocument(d->cursorShape.boundingRect()) | d->oldCursorRect);
         d->cursorVisible = !d->cursorVisible;
     }
 }
@@ -804,7 +804,7 @@ void SvgTextCursor::stopBlinkCursor()
     d->cursorFlashLimit.stop();
     d->cursorVisible = true;
     if (d->shape) {
-        emit updateCursorDecoration(d->shape->shapeToDocument(d->cursorShape.boundingRect()) | d->oldCursorRect);
+        Q_EMIT updateCursorDecoration(d->shape->shapeToDocument(d->cursorShape.boundingRect()) | d->oldCursorRect);
     }
 }
 
@@ -1208,7 +1208,7 @@ void SvgTextCursor::updateSelection()
         d->oldSelectionRect = d->shape->shapeToDocument(d->selection.boundingRect());
         d->shape->cursorForPos(d->anchor, d->anchorCaret, d->cursorColor);
         d->selection = d->shape->selectionBoxes(d->pos, d->anchor);
-        emit updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
+        Q_EMIT updateCursorDecoration(d->shape->shapeToDocument(d->selection.boundingRect()) | d->oldSelectionRect);
     }
 }
 
@@ -1235,7 +1235,7 @@ void SvgTextCursor::updateIMEDecoration()
             }
         }
 
-        emit updateCursorDecoration(d->shape->shapeToDocument(d->IMEDecoration.boundingRect()) | d->oldIMEDecorationRect);
+        Q_EMIT updateCursorDecoration(d->shape->shapeToDocument(d->IMEDecoration.boundingRect()) | d->oldIMEDecorationRect);
     }
 }
 

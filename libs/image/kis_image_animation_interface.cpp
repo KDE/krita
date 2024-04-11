@@ -151,7 +151,7 @@ void KisImageAnimationInterface::setDocumentRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->documentRange = range;
-    emit sigPlaybackRangeChanged();
+    Q_EMIT sigPlaybackRangeChanged();
 }
 
 void KisImageAnimationInterface::setDocumentRangeStartFrame(int column)
@@ -175,7 +175,7 @@ void KisImageAnimationInterface::setActivePlaybackRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->activePlaybackRange = range;
-    emit sigPlaybackRangeChanged();
+    Q_EMIT sigPlaybackRangeChanged();
 }
 
 int KisImageAnimationInterface::framerate() const
@@ -227,7 +227,7 @@ void KisImageAnimationInterface::setFramerate(int fps)
 {
     if (fps > 0) {
         m_d->framerate = fps;
-        emit sigFramerateChanged();
+        Q_EMIT sigFramerateChanged();
     }
 }
 
@@ -258,7 +258,7 @@ void KisImageAnimationInterface::setDefaultProjectionColor(const KoColor &color)
 
 void KisImageAnimationInterface::requestTimeSwitchNonGUI(int time, bool useUndo)
 {
-    emit sigInternalRequestTimeSwitch(time, useUndo);
+    Q_EMIT sigInternalRequestTimeSwitch(time, useUndo);
 }
 
 void KisImageAnimationInterface::explicitlySetCurrentTime(int frameId)
@@ -309,7 +309,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, SwitchTimeA
 
 
     m_d->setCurrentUITime(frameId);
-    emit sigUiTimeChanged(frameId);
+    Q_EMIT sigUiTimeChanged(frameId);
 }
 
 void KisImageAnimationInterface::requestFrameRegeneration(int frameId, const KisRegion &dirtyRegion, bool isCancellable, KisLockFrameGenerationLock &&lock)
@@ -345,17 +345,17 @@ void KisImageAnimationInterface::restoreCurrentTime(int *savedValue)
 
 void KisImageAnimationInterface::notifyFrameReady()
 {
-    emit sigFrameReady(m_d->currentTime());
+    Q_EMIT sigFrameReady(m_d->currentTime());
 }
 
 void KisImageAnimationInterface::notifyFrameCancelled()
 {
-    emit sigFrameCancelled();
+    Q_EMIT sigFrameCancelled();
 }
 
 void KisImageAnimationInterface::notifyFrameRegenerated()
 {
-    emit sigFrameRegenerated(m_d->currentTime());
+    Q_EMIT sigFrameRegenerated(m_d->currentTime());
 }
 
 bool KisImageAnimationInterface::requiresOnionSkinRendering() {
@@ -427,18 +427,18 @@ void KisImageAnimationInterface::notifyNodeChanged(const KisNode *node,
 void KisImageAnimationInterface::invalidateFrames(const KisTimeSpan &range, const QRect &rect)
 {
     m_d->cachedLastFrameValue = -1;
-    emit sigFramesChanged(range, rect);
+    Q_EMIT sigFramesChanged(range, rect);
 }
 
 void KisImageAnimationInterface::invalidateFrame(const int time, KisNodeSP target)
 {
     m_d->cachedLastFrameValue = -1;
 
-    emit sigFramesChanged(KisLayerUtils::fetchLayerActiveRasterFrameSpan(target, time), m_d->image->bounds());
+    Q_EMIT sigFramesChanged(KisLayerUtils::fetchLayerActiveRasterFrameSpan(target, time), m_d->image->bounds());
 
     QSet<int> identicalFrames = KisLayerUtils::fetchLayerIdenticalRasterFrameTimes(target, time);
     Q_FOREACH(const int& identicalTime, identicalFrames) {
-        emit sigFramesChanged(KisLayerUtils::fetchLayerActiveRasterFrameSpan(target, identicalTime), m_d->image->bounds());
+        Q_EMIT sigFramesChanged(KisLayerUtils::fetchLayerActiveRasterFrameSpan(target, identicalTime), m_d->image->bounds());
     }
 }
 

@@ -46,10 +46,10 @@ void KisCloneDocumentStroke::finishStrokeCallback()
 {
     KisDocument *doc = m_d->document->clone();
     doc->moveToThread(qApp->thread());
-    emit sigDocumentCloned(doc);
+    Q_EMIT sigDocumentCloned(doc);
 }
 
 void KisCloneDocumentStroke::cancelStrokeCallback()
 {
-    emit sigCloningCancelled();
+    Q_EMIT sigCloningCancelled();
 }

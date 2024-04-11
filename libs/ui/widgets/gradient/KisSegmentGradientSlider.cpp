@@ -56,8 +56,8 @@ void KisSegmentGradientSlider::setGradientResource(KoSegmentGradientSP agr)
 {
     m_gradient = agr;
     m_selectedHandle = { HandleType_Stop, 0 };
-    emit selectedHandleChanged();
-    emit updateRequested();
+    Q_EMIT selectedHandleChanged();
+    Q_EMIT updateRequested();
 }
 
 void KisSegmentGradientSlider::paintEvent(QPaintEvent*)
@@ -317,8 +317,8 @@ void KisSegmentGradientSlider::mousePressEvent(QMouseEvent * e)
                 m_gradient->segments()[i]->setEndColor(color);
                 m_gradient->segments()[i + 1]->setStartColor(color);
                 m_drag = true;
-                emit selectedHandleChanged();
-                emit updateRequested();
+                Q_EMIT selectedHandleChanged();
+                Q_EMIT updateRequested();
                 return;
             } else if (e->modifiers() & Qt::ShiftModifier) {
                 m_selectedHandle = selectedHandle;
@@ -337,8 +337,8 @@ void KisSegmentGradientSlider::mousePressEvent(QMouseEvent * e)
 
     if (m_selectedHandle.type != selectedHandle.type || m_selectedHandle.index != selectedHandle.index) {
         m_selectedHandle = selectedHandle;
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -470,8 +470,8 @@ void KisSegmentGradientSlider::mouseMoveEvent(QMouseEvent * e)
                         }
                     }
                 }
-                emit selectedHandleChanged();
-                emit updateRequested();
+                Q_EMIT selectedHandleChanged();
+                Q_EMIT updateRequested();
             }
 
         } else if (m_selectedHandle.type == HandleType_Stop) {
@@ -535,15 +535,15 @@ void KisSegmentGradientSlider::mouseMoveEvent(QMouseEvent * e)
                         }
                     }
                 }
-                emit selectedHandleChanged();
-                emit updateRequested();
+                Q_EMIT selectedHandleChanged();
+                Q_EMIT updateRequested();
             }
 
         } else if (m_selectedHandle.type == HandleType_MidPoint) {
             KoGradientSegment *segment = m_gradient->segments()[m_selectedHandle.index];
             segment->setMiddleOffset(qBound(segment->startOffset(), t, segment->endOffset()));
-            emit selectedHandleChanged();
-            emit updateRequested();
+            Q_EMIT selectedHandleChanged();
+            Q_EMIT updateRequested();
         }
 
     } else {
@@ -576,7 +576,7 @@ void KisSegmentGradientSlider::mouseMoveEvent(QMouseEvent * e)
             }
         }
         m_hoveredHandle = hoveredHandle;
-        emit updateRequested();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -604,19 +604,19 @@ void KisSegmentGradientSlider::selectPreviousHandle()
 {
     if (m_selectedHandle.type == HandleType_Segment) {
         m_selectedHandle.type = HandleType_Stop;
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     } else if (m_selectedHandle.type == HandleType_Stop) {
         if (m_selectedHandle.index > 0) {
             m_selectedHandle.type = HandleType_MidPoint;
             --m_selectedHandle.index;
-            emit selectedHandleChanged();
-            emit updateRequested();
+            Q_EMIT selectedHandleChanged();
+            Q_EMIT updateRequested();
         }
     } else if (m_selectedHandle.type == HandleType_MidPoint) {
         m_selectedHandle.type = HandleType_Segment;
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -624,19 +624,19 @@ void KisSegmentGradientSlider::selectNextHandle()
 {
     if (m_selectedHandle.type == HandleType_Segment) {
         m_selectedHandle.type = HandleType_MidPoint;
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     } else if (m_selectedHandle.type == HandleType_Stop) {
         if (m_selectedHandle.index < m_gradient->segments().size()) {
             m_selectedHandle.type = HandleType_Segment;
-            emit selectedHandleChanged();
-            emit updateRequested();
+            Q_EMIT selectedHandleChanged();
+            Q_EMIT updateRequested();
         }
     } else if (m_selectedHandle.type == HandleType_MidPoint) {
         m_selectedHandle.type = HandleType_Stop;
         ++m_selectedHandle.index;
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -692,7 +692,7 @@ void KisSegmentGradientSlider::keyPressEvent(QKeyEvent *e)
 void KisSegmentGradientSlider::leaveEvent(QEvent *e)
 {
     m_hoveredHandle = {};
-    emit updateRequested();
+    Q_EMIT updateRequested();
     QWidget::leaveEvent(e);
 }
 
@@ -742,8 +742,8 @@ void KisSegmentGradientSlider::moveHandle(Handle handle, qreal distance, bool us
                 segment->setEndOffset(1.0);
             }
         }
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     } else if (handle.type == HandleType_Stop) {
         KoGradientSegment *previousSegment = handle.index == 0 ? nullptr : m_gradient->segments()[handle.index - 1];
         KoGradientSegment *nextSegment = handle.index == m_gradient->segments().size() ? nullptr : m_gradient->segments()[handle.index];
@@ -780,13 +780,13 @@ void KisSegmentGradientSlider::moveHandle(Handle handle, qreal distance, bool us
                 previousSegment->setEndOffset(1.0);
             }
         }
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     } else if (handle.type == HandleType_MidPoint) {
         KoGradientSegment *segment = m_gradient->segments()[handle.index];
         segment->setMiddleOffset(qBound(segment->startOffset(), segment->middleOffset() + distance, segment->endOffset()));
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -845,8 +845,8 @@ bool KisSegmentGradientSlider::deleteHandleImpl(Handle handle)
 void KisSegmentGradientSlider::deleteHandle(Handle handle)
 {
     if (deleteHandleImpl(handle)) {
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -864,8 +864,8 @@ void KisSegmentGradientSlider::collapseSelectedSegment()
         if (m_selectedHandle.index == m_gradient->segments().size()) {
             --m_selectedHandle.index;
         }
-        emit selectedHandleChanged();
-        emit updateRequested();
+        Q_EMIT selectedHandleChanged();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -900,8 +900,8 @@ void KisSegmentGradientSlider::splitSelectedSegment()
         return;
     }
     m_gradient->splitSegment(m_gradient->segments()[m_selectedHandle.index]);
-    emit selectedHandleChanged();
-    emit updateRequested();
+    Q_EMIT selectedHandleChanged();
+    Q_EMIT updateRequested();
 }
 
 void KisSegmentGradientSlider::duplicateSelectedSegment()
@@ -910,8 +910,8 @@ void KisSegmentGradientSlider::duplicateSelectedSegment()
         return;
     }
     m_gradient->duplicateSegment(m_gradient->segments()[m_selectedHandle.index]);
-    emit selectedHandleChanged();
-    emit updateRequested();
+    Q_EMIT selectedHandleChanged();
+    Q_EMIT updateRequested();
 }
 
 void KisSegmentGradientSlider::mirrorSelectedSegment()
@@ -920,8 +920,8 @@ void KisSegmentGradientSlider::mirrorSelectedSegment()
         return;
     }
     m_gradient->mirrorSegment(m_gradient->segments()[m_selectedHandle.index]);
-    emit selectedHandleChanged();
-    emit updateRequested();
+    Q_EMIT selectedHandleChanged();
+    Q_EMIT updateRequested();
 }
 
 void KisSegmentGradientSlider::flipGradient()
@@ -961,8 +961,8 @@ void KisSegmentGradientSlider::flipGradient()
     } else {
         m_selectedHandle.index = newSegments.size() - 1 - m_selectedHandle.index;
     }
-    emit selectedHandleChanged();
-    emit updateRequested();
+    Q_EMIT selectedHandleChanged();
+    Q_EMIT updateRequested();
 }
 
 void KisSegmentGradientSlider::distributeStopsEvenly()
@@ -979,8 +979,8 @@ void KisSegmentGradientSlider::distributeStopsEvenly()
             segment->startOffset() + relativeMidPointPosition *
             (segment->endOffset() - segment->startOffset()));
     }
-    emit selectedHandleChanged();
-    emit updateRequested();
+    Q_EMIT selectedHandleChanged();
+    Q_EMIT updateRequested();
 }
 
 QRect KisSegmentGradientSlider::sliderRect() const
@@ -1077,8 +1077,8 @@ void KisSegmentGradientSlider::chooseSelectedStopColor()
                                     segments[m_selectedHandle.index]->setStartColor(dialog->getCurrentColor());
                                 }
                             }
-                            emit selectedHandleChanged();
-                            emit updateRequested();
+                            Q_EMIT selectedHandleChanged();
+                            Q_EMIT updateRequested();
                         };
         connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
         connect(dialog, &QDialog::accepted, setColorFn);
@@ -1101,8 +1101,8 @@ void KisSegmentGradientSlider::chooseSelectedStopColor()
                                     segments[m_selectedHandle.index]->setStartColor(color);
                                 }
                             }
-                            emit selectedHandleChanged();
-                            emit updateRequested();
+                            Q_EMIT selectedHandleChanged();
+                            Q_EMIT updateRequested();
                         };
         connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
         connect(dialog, &QDialog::accepted, setColorFn);
@@ -1122,8 +1122,8 @@ void KisSegmentGradientSlider::chooseSelectedStopColor()
                                                          segments[m_selectedHandle.index]->setStartColor(color2);
                                                      }
                                                  }
-                                                 emit selectedHandleChanged();
-                                                 emit updateRequested();
+                                                 Q_EMIT selectedHandleChanged();
+                                                 Q_EMIT updateRequested();
                                              });
     colorDialog->setAttribute(Qt::WA_DeleteOnClose);
     colorDialog->show();

@@ -63,7 +63,7 @@ void WGCommonColorSet::slotUpdateColors()
     }
 
     m_idle = false;
-    emit sigIdle(false);
+    Q_EMIT sigIdle(false);
 
     m_commonColors->clear();
     WGCommonColorsCalculationRunner* runner = new WGCommonColorsCalculationRunner(m_image, m_numColors, m_commonColors);
@@ -81,7 +81,7 @@ void WGCommonColorSet::slotCalculationDone()
     }
 
     blockSignals(false);
-    emit sigReset();
+    Q_EMIT sigReset();
     m_idle = true;
-    emit sigIdle(true);
+    Q_EMIT sigIdle(true);
 }

@@ -38,7 +38,7 @@ void KisAsyncAnimationCacheRenderer::frameCompletedCallback(int frame, const Kis
     if (!cache || !image) return;
 
     m_d->requestInfo = cache->fetchFrameData(frame, image, requestedRegion);
-    emit sigCompleteRegenerationInternal(frame);
+    Q_EMIT sigCompleteRegenerationInternal(frame);
 }
 
 void KisAsyncAnimationCacheRenderer::slotCompleteRegenerationInternal(int frame)

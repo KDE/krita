@@ -104,7 +104,7 @@ void KisSPenSettings::savePreferences() const
     cfg.writeEntry("actionGestureCircleCW", actionNameForIndex(mUi->cmbGestureCircleCW->currentIndex()));
     cfg.writeEntry("actionGestureCircleCCW", actionNameForIndex(mUi->cmbGestureCircleCCW->currentIndex()));
 
-    emit settingsChanged();
+    Q_EMIT settingsChanged();
 }
 
 void KisSPenSettings::loadPreferences()

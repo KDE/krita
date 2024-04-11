@@ -317,7 +317,7 @@ QAction *KisKActionCollection::addAction(const QString &name, QAction *action)
         connect(action, SIGNAL(triggered(bool)), SLOT(slotActionTriggered()));
     }
 
-    emit inserted(action);
+    Q_EMIT inserted(action);
     return action;
 }
 
@@ -589,7 +589,7 @@ void KisKActionCollection::slotActionTriggered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
-        emit actionTriggered(action);
+        Q_EMIT actionTriggered(action);
     }
 }
 
@@ -602,8 +602,8 @@ void KisKActionCollection::slotActionHovered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
-        emit actionHighlighted(action);
-        emit actionHovered(action);
+        Q_EMIT actionHighlighted(action);
+        Q_EMIT actionHovered(action);
     }
 }
 

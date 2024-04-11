@@ -137,7 +137,7 @@ KRecentFilesAction::~KRecentFilesAction()
 void KRecentFilesActionPrivate::_k_urlSelected(QAction *action)
 {
     Q_Q(KRecentFilesAction);
-    emit q->urlSelected(m_urls[action]);
+    Q_EMIT q->urlSelected(m_urls[action]);
 }
 
 void KRecentFilesActionPrivate::updateIcon(const QStandardItem *item)

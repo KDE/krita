@@ -565,7 +565,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_image = m_canvas->image();
-        emit imageChanged();
+        Q_EMIT imageChanged();
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController =

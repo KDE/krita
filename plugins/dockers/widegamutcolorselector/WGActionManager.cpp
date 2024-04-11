@@ -305,7 +305,7 @@ void WGActionManager::slotShiftHueCCW()
 void WGActionManager::slotChannelValuesChanged()
 {
     // FIXME: KoColorDisplayRendererInterface's displayConfigurationChanged()
-    // signal (e.g. layer switches) makes the color model emit new channel values
+    // signal (e.g. layer switches) makes the color model Q_EMIT new channel values
     // and this would overwrite the color resources with outdated data!
     // so make sure a popup is actually active
     if (!m_isSynchronizing && m_currentPopup) {

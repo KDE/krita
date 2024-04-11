@@ -198,7 +198,7 @@ void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
 
 void KisCurveWidget::Private::syncIOControls()
 {
-    emit m_curveWidget->shouldSyncIOControls();
+    Q_EMIT m_curveWidget->shouldSyncIOControls();
 }
 
 void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues)
@@ -208,7 +208,7 @@ void KisCurveWidget::Private::setCurveModified(bool rewriteSpinBoxesValues)
     }
     m_splineDirty = true;
     m_curveWidget->update();
-    emit m_curveWidget->compressorShouldEmitModified();
+    Q_EMIT m_curveWidget->compressorShouldEmitModified();
 }
 
 void KisCurveWidget::Private::setCurveRepaint()

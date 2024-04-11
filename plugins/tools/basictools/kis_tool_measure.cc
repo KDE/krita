@@ -191,8 +191,8 @@ void KisToolMeasure::beginPrimaryAction(KoPointerEvent *event)
     m_endPos = m_startPos;
     m_baseLineVec = QVector2D(1.0f, 0.0f);
 
-    emit sigDistanceChanged(0.0);
-    emit sigAngleChanged(0.0);
+    Q_EMIT sigDistanceChanged(0.0);
+    Q_EMIT sigAngleChanged(0.0);
 }
 
 void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
@@ -222,8 +222,8 @@ void KisToolMeasure::continuePrimaryAction(KoPointerEvent *event)
     }
 
     canvas()->updateCanvas(convertToPt(boundingRect()));
-    emit sigDistanceChanged(distance());
-    emit sigAngleChanged(angle());
+    Q_EMIT sigDistanceChanged(distance());
+    Q_EMIT sigAngleChanged(angle());
     showDistanceAngleOnCanvas();
 }
 

@@ -122,13 +122,13 @@ void KisAppimageUpdater::slotUpdateCheckFinished(int result, QProcess::ExitStatu
     m_updaterStatus.setStatus(updateStatus);
     m_updaterStatus.setUpdaterOutput(m_updateOutput);
 
-    emit sigUpdateCheckStateChange(m_updaterStatus);
+    Q_EMIT sigUpdateCheckStateChange(m_updaterStatus);
 }
 
 void KisAppimageUpdater::slotUpdateCheckStarted()
 {
     m_updaterStatus.setStatus(UpdaterStatus::StatusID::IN_PROGRESS);
-    emit sigUpdateCheckStateChange(m_updaterStatus);
+    Q_EMIT sigUpdateCheckStateChange(m_updaterStatus);
 }
 
 void KisAppimageUpdater::slotUpdateCheckErrorOccurred(QProcess::ProcessError error)
@@ -144,7 +144,7 @@ void KisAppimageUpdater::slotUpdateCheckErrorOccurred(QProcess::ProcessError err
 
     m_updaterStatus.setStatus(UpdaterStatus::StatusID::CHECK_ERROR);
 
-    emit sigUpdateCheckStateChange(m_updaterStatus);
+    Q_EMIT sigUpdateCheckStateChange(m_updaterStatus);
 }
 
 void KisAppimageUpdater::slotUpdateFinished(int result, QProcess::ExitStatus exitStatus)
@@ -183,7 +183,7 @@ void KisAppimageUpdater::slotUpdateFinished(int result, QProcess::ExitStatus exi
     m_updaterStatus.setUpdaterOutput(m_updateOutput);
     m_updaterStatus.setDetails(statusDetails);
 
-    emit sigUpdateCheckStateChange(m_updaterStatus);
+    Q_EMIT sigUpdateCheckStateChange(m_updaterStatus);
 }
 
 void KisAppimageUpdater::slotUpdateErrorOccurred(QProcess::ProcessError error)
@@ -200,7 +200,7 @@ void KisAppimageUpdater::slotUpdateErrorOccurred(QProcess::ProcessError error)
     m_updaterStatus.setStatus(UpdaterStatus::StatusID::UPDATE_ERROR);
     m_updaterStatus.setUpdaterOutput(m_updateOutput);
 
-    emit sigUpdateCheckStateChange(m_updaterStatus);
+    Q_EMIT sigUpdateCheckStateChange(m_updaterStatus);
 }
 
 void KisAppimageUpdater::slotAppendCheckOutput()

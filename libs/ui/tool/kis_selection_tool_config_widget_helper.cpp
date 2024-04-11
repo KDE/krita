@@ -145,7 +145,7 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     cfg.writeEntry("selectionAction", static_cast<int>(action));
-    emit selectionActionChanged(action);
+    Q_EMIT selectionActionChanged(action);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged(bool value)

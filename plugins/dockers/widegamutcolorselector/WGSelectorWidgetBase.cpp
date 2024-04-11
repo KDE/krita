@@ -26,7 +26,7 @@ void WGSelectorDisplayConfig::setDisplayConverter(const KisDisplayColorConverter
         }
         m_displayConverter = converter;
 
-        emit sigDisplayConfigurationChanged();
+        Q_EMIT sigDisplayConfigurationChanged();
     }
 }
 
@@ -34,7 +34,7 @@ void WGSelectorDisplayConfig::setPreviewInPaintingCS(bool enabled)
 {
     if (enabled != m_previewInPaintingCS) {
         m_previewInPaintingCS = enabled;
-        emit sigDisplayConfigurationChanged();
+        Q_EMIT sigDisplayConfigurationChanged();
     }
 }
 

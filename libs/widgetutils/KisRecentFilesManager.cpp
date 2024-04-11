@@ -96,7 +96,7 @@ KisRecentFilesManager *KisRecentFilesManager::instance()
 void KisRecentFilesManager::clear()
 {
     m_d->m_entries.clear();
-    emit listRenewed();
+    Q_EMIT listRenewed();
     m_d->requestSaveOnNextTick();
 }
 
@@ -105,7 +105,7 @@ void KisRecentFilesManager::remove(const QUrl &url)
     int removeIndex = m_d->indexOfUrl(url);
     if (removeIndex >= 0) {
         m_d->m_entries.removeAt(removeIndex);
-        emit fileRemoved(url);
+        Q_EMIT fileRemoved(url);
         m_d->requestSaveOnNextTick();
     }
 }

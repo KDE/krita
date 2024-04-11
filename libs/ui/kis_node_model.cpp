@@ -162,7 +162,7 @@ KisModelIndexConverterBase *KisNodeModel::createIndexConverter()
 void KisNodeModel::regenerateItems(KisNodeDummy *dummy)
 {
     const QModelIndex &index = m_d->indexConverter->indexFromDummy(dummy);
-    emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
+    Q_EMIT dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
 
     dummy = dummy->firstChild();
     while (dummy) {
@@ -221,7 +221,7 @@ void KisNodeModel::progressPercentageChanged(int, const KisNodeSP node)
     if (m_d->dummiesFacade->hasDummyForNode(node)) {
         QModelIndex index = indexFromNode(node);
 
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     }
 }
 
@@ -230,7 +230,7 @@ void KisNodeModel::slotLayerThumbnailUpdated(KisNodeSP node)
     QModelIndex index = indexFromNode(node);
     if (!index.isValid()) return;
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 }
 
 KisModelIndexConverterBase * KisNodeModel::indexConverter() const
@@ -394,7 +394,7 @@ void KisNodeModel::slotBeginRemoveDummy(KisNodeDummy *dummy)
 
     if (itemIndex.isValid()) {
         connectDummy(dummy, false);
-        emit sigBeforeBeginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
+        Q_EMIT sigBeforeBeginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         beginRemoveRows(parentIndex, itemIndex.row(), itemIndex.row());
         m_d->needFinishRemoveRows = true;
     }
@@ -441,7 +441,7 @@ void KisNodeModel::processUpdateQueue()
     }
 
     Q_FOREACH (const QModelIndex &index, indexes) {
-        emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
+        Q_EMIT dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
     }
 
     m_d->updateQueue.clear();
@@ -694,10 +694,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
 
         if (role == KisNodeModel::AlternateActiveRole) {
-            emit toggleIsolateActiveNode();
+            Q_EMIT toggleIsolateActiveNode();
         }
 
-        emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
+        Q_EMIT dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
         return true;
     }
 
@@ -738,10 +738,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             QSet<QModelIndex> indexes;
             addChangedIndex(index, &indexes);
             Q_FOREACH (const QModelIndex &idx, indexes) {
-                emit dataChanged(idx.siblingAtColumn(0), idx.siblingAtColumn(m_d->dummyColumns));
+                Q_EMIT dataChanged(idx.siblingAtColumn(0), idx.siblingAtColumn(m_d->dummyColumns));
             }
         } else {
-            emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
+            Q_EMIT dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
         }
     }
 
@@ -863,7 +863,7 @@ void KisNodeModel::updateDropEnabled(const QList<KisNodeSP> &nodes, QModelIndex 
         if (dropEnabled) {
             m_d->dropEnabled.insert(idx.internalId());
         }
-        emit dataChanged(idx, idx); // indicate to QT that flags() have changed
+        Q_EMIT dataChanged(idx, idx); // indicate to QT that flags() have changed
 
         if (hasChildren(idx)) {
             updateDropEnabled(nodes, idx);

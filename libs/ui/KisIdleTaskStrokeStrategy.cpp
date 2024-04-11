@@ -41,7 +41,7 @@ KisStrokeStrategy *KisIdleTaskStrokeStrategy::createLodClone(int levelOfDetail)
 
 void KisIdleTaskStrokeStrategy::finishStrokeCallback()
 {
-    emit sigIdleTaskFinished();
+    Q_EMIT sigIdleTaskFinished();
 }
 
 QWeakPointer<boost::none_t> KisIdleTaskStrokeStrategy::idleTaskCookie()

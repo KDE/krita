@@ -159,16 +159,16 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 
 void KarbonCalligraphyOptionWidget::emitAll()
 {
-    emit usePathChanged(m_usePath->isChecked());
-    emit usePressureChanged(m_usePressure->isChecked());
-    emit useAngleChanged(m_useAngle->isChecked());
-    emit widthChanged(m_widthBox->value());
-    emit thinningChanged(m_thinningBox->value());
-    emit angleChanged(static_cast<int>(m_angleBox->angle()));
-    emit fixationChanged(m_fixationBox->value());
-    emit capsChanged(m_capsBox->value());
-    emit massChanged(m_massBox->value());
-    emit dragChanged(m_dragBox->value());
+    Q_EMIT usePathChanged(m_usePath->isChecked());
+    Q_EMIT usePressureChanged(m_usePressure->isChecked());
+    Q_EMIT useAngleChanged(m_useAngle->isChecked());
+    Q_EMIT widthChanged(m_widthBox->value());
+    Q_EMIT thinningChanged(m_thinningBox->value());
+    Q_EMIT angleChanged(static_cast<int>(m_angleBox->angle()));
+    Q_EMIT fixationChanged(m_fixationBox->value());
+    Q_EMIT capsChanged(m_capsBox->value());
+    Q_EMIT massChanged(m_massBox->value());
+    Q_EMIT dragChanged(m_dragBox->value());
 }
 
 void KarbonCalligraphyOptionWidget::loadProfile(const QString &name)
@@ -605,5 +605,5 @@ void KarbonCalligraphyOptionWidget::setUsePathEnabled(bool enabled)
 
 void KarbonCalligraphyOptionWidget::on_m_angleBox_angleChanged(qreal angle)
 {
-    emit angleChanged(static_cast<int>(angle));
+    Q_EMIT angleChanged(static_cast<int>(angle));
 }

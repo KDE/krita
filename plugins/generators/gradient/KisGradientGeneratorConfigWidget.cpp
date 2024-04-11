@@ -157,7 +157,7 @@ void KisGradientGeneratorConfigWidget::setConfiguration(const KisPropertiesConfi
         m_ui.widgetGradientEditor->setGradient(generatorConfig->gradient(fallbackGradient));
     }
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() const
@@ -221,7 +221,7 @@ void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionCartesianCoord
     }
 
     m_ui.stackedWidgetEndPosition->setCurrentIndex(0);
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionPolarCoordinates_toggled(bool enabled)
@@ -231,5 +231,5 @@ void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionPolarCoordinat
     }
 
     m_ui.stackedWidgetEndPosition->setCurrentIndex(1);
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }

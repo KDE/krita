@@ -271,7 +271,7 @@ void TimelineModelTest::setCurrentLayer(int row)
         qDebug() << "NonGUI changed active node: " << dummy->node()->name();
     }
 
-    emit sigRequestNodeChange(dummy->node());
+    Q_EMIT sigRequestNodeChange(dummy->node());
 }
 
 void TimelineModelTest::slotGuiChangedNode(KisNodeSP node)

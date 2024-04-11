@@ -37,7 +37,7 @@ KisConfigNotifier *KisConfigNotifier::instance()
 
 void KisConfigNotifier::notifyConfigChanged(void)
 {
-    emit configChanged();
+    Q_EMIT configChanged();
 }
 
 void KisConfigNotifier::notifyDropFramesModeChanged()
@@ -47,5 +47,5 @@ void KisConfigNotifier::notifyDropFramesModeChanged()
 
 void KisConfigNotifier::notifyPixelGridModeChanged()
 {
-    emit pixelGridModeChanged();
+    Q_EMIT pixelGridModeChanged();
 }

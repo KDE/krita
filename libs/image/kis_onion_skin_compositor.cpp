@@ -328,5 +328,5 @@ QRect KisOnionSkinCompositor::updateExtentOnAddition(const KisPaintDeviceSP devi
 void KisOnionSkinCompositor::configChanged()
 {
     m_d->refreshConfig();
-    emit sigOnionSkinChanged();
+    Q_EMIT sigOnionSkinChanged();
 }

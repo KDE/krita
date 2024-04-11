@@ -166,12 +166,12 @@ void MoveToolOptionsWidget::on_translateXBox_valueChanged(int arg1)
 {
     m_TranslateX = arg1;
     m_configGroup.writeEntry("moveToolChangedValueX", m_TranslateX);
-    emit sigSetTranslateX(arg1);
+    Q_EMIT sigSetTranslateX(arg1);
 }
 
 void MoveToolOptionsWidget::on_translateYBox_valueChanged(int arg1)
 {
     m_TranslateY = arg1;
     m_configGroup.writeEntry("moveToolChangedValueY", m_TranslateY);
-    emit sigSetTranslateY(arg1);
+    Q_EMIT sigSetTranslateY(arg1);
 }

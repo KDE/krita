@@ -25,7 +25,7 @@ class KoColorSpace;
  *
  * When the user clicks on the foreground or background rectangle the
  * rectangle is first sunken and the selectionChanged() signal is emitted.
- * Further clicks will present a color dialog and emit either the foregroundColorChanged()
+ * Further clicks will present a color dialog and Q_EMIT either the foregroundColorChanged()
  * or backgroundColorChanged() if a new color is selected.
  *
  * Note: With drag and drop when dropping a color the current selected color

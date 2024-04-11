@@ -221,7 +221,7 @@ void KisWdgTagSelectionControllerBundleTags::slotRemoveTag(KoID custom)
         }
     }
     
-    emit tagRemoved(custom);
+    Q_EMIT tagRemoved(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
@@ -234,7 +234,7 @@ void KisWdgTagSelectionControllerBundleTags::slotAddTag(KoID custom)
         updateView();
     }
 
-    emit tagAdded(custom);
+    Q_EMIT tagAdded(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::addTag(KoID custom)
@@ -247,7 +247,7 @@ void KisWdgTagSelectionControllerBundleTags::addTag(KoID custom)
         updateView();
     }
 
-    emit tagAdded(custom);
+    Q_EMIT tagAdded(custom);
 }
 
 void KisWdgTagSelectionControllerBundleTags::updateView()

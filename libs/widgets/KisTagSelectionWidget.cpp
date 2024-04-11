@@ -63,7 +63,7 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
         m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
 
         connect(m_closeIconLabel, &QAbstractButton::clicked, this, [&]() {
-            emit sigRemoveTagFromSelection(m_tag);
+            Q_EMIT sigRemoveTagFromSelection(m_tag);
         });
         layout->addWidget(m_closeIconLabel);
     }
@@ -177,9 +177,9 @@ void WdgAddTagButton::setAvailableTagsList(QList<KoID> &notSelected)
 void WdgAddTagButton::slotFinishLastAction()
 {
     if (m_lastAction == CreateNewTag) {
-        emit sigCreateNewTag(m_lastTagToCreate);
+        Q_EMIT sigCreateNewTag(m_lastTagToCreate);
     } else {
-        emit sigAddNewTag(m_lastTagToAdd);
+        Q_EMIT sigAddNewTag(m_lastTagToAdd);
     }
 }
 
@@ -320,11 +320,11 @@ void KisTagSelectionWidget::slotAddTagToSelection(QAction *action)
 
     if (!action->data().isNull()) {
         KoID custom = action->data().value <KoID>();
-        emit sigAddTagToSelection(custom);
+        Q_EMIT sigAddTagToSelection(custom);
     }
 }
 
 void KisTagSelectionWidget::slotRemoveTagFromSelection(KoID tag)
 {
-    emit sigRemoveTagFromSelection(tag);
+    Q_EMIT sigRemoveTagFromSelection(tag);
 }

@@ -153,7 +153,7 @@ void KisWdgSeExprPresetsSave::savePreset()
         m_currentPreset->setValid(true);
         r = KisResourceUserOperations::updateResourceWithUserInput(this, m_currentPreset);
         if (r) {
-            emit resourceSelected(m_currentPreset);
+            Q_EMIT resourceSelected(m_currentPreset);
         }
     } else {
         // Saving a completely new preset
@@ -175,7 +175,7 @@ void KisWdgSeExprPresetsSave::savePreset()
             // trying to get brush preset to load after it is created
             if (r) {
                 m_currentPreset = newPreset;
-                emit resourceSelected(m_currentPreset);
+                Q_EMIT resourceSelected(m_currentPreset);
             }
         }
     }

@@ -52,7 +52,7 @@ void KisBrushEnclosingProducer::finishStroke(const QPainterPath &stroke)
 
     painter.fillPainterPath(stroke);
 
-    emit enclosingMaskProduced(enclosingMask);
+    Q_EMIT enclosingMaskProduced(enclosingMask);
 }
 
 bool KisBrushEnclosingProducer::hasUserInteractionRunning() const

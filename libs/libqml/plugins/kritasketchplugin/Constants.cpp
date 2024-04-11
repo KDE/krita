@@ -31,7 +31,7 @@ void Constants::setGridHeight( qreal height )
 {
     m_gridHeight = height;
     m_toolbarButtonSize = m_gridHeight;
-    emit gridSizeChanged();
+    Q_EMIT gridSizeChanged();
 }
 
 qreal Constants::gridWidth() const
@@ -43,7 +43,7 @@ void Constants::setGridWidth( qreal width )
 {
     m_gridWidth = width;
     m_toolbarButtonSize = m_gridHeight;
-    emit gridSizeChanged();
+    Q_EMIT gridSizeChanged();
 }
 
 qreal Constants::toolbarButtonSize() const

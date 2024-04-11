@@ -494,7 +494,7 @@ bool KisAllResourcesModel::updateResource(KoResourceSP resource)
     }
     bool r = resetQuery();
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return r;
 }
 
@@ -516,7 +516,7 @@ bool KisAllResourcesModel::reloadResource(KoResourceSP resource)
      */
 
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return true;
 }
 
@@ -533,7 +533,7 @@ bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &
     }
     bool r = resetQuery();
     QModelIndex index = indexForResource(resource);
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
     return r;
 }
 

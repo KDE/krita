@@ -259,7 +259,7 @@ void KisPresetChooser::slotCurrentPresetChanged()
     if (!currentResource) return;
 
     QModelIndex index = m_chooser->tagFilterModel()->indexForResource(currentResource);
-    emit m_chooser->tagFilterModel()->dataChanged(index,
+    Q_EMIT m_chooser->tagFilterModel()->dataChanged(index,
                                                index,
                                                {Qt::UserRole + KisAbstractResourceModel::Thumbnail});
 }

@@ -133,7 +133,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     case KoCanvasResource::CurrentPaintOpPresetName: {
         if (isActive()) {
             const QString formattedBrushName = v.toString().replace("_", " ");
-            emit statusTextChanged(formattedBrushName);
+            Q_EMIT statusTextChanged(formattedBrushName);
         }
         break;
     }
@@ -187,7 +187,7 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 {
     if (currentPaintOpPreset()) {
         const QString formattedBrushName = currentPaintOpPreset() ? currentPaintOpPreset()->name().replace("_", " ") : QString();
-        emit statusTextChanged(formattedBrushName);
+        Q_EMIT statusTextChanged(formattedBrushName);
     }
 
     KisTool::activate(shapes);
@@ -220,7 +220,7 @@ void KisToolPaint::deactivate()
     disconnect(action("rotate_brush_tip_counter_clockwise_precise"), 0, this, 0);
 
     tryRestoreOpacitySnapshot();
-    emit statusTextChanged(QString());
+    Q_EMIT statusTextChanged(QString());
 
     KisTool::deactivate();
 }
@@ -303,7 +303,7 @@ void KisToolPaint::setMode(ToolMode mode)
             mode != KisTool::PAINT_MODE) {
 
         // Let's add history information about recently used colors
-        emit sigPaintingFinished();
+        Q_EMIT sigPaintingFinished();
     }
 
     KisTool::setMode(mode);

@@ -39,7 +39,7 @@ public:
 
     /**
      * @return true if \p source does really depend on \p target and the
-     * manager should emit notification about \p target's change
+     * manager should Q_EMIT notification about \p target's change
      */
     virtual bool shouldUpdateSource(QVariant &source, const QVariant &target) = 0;
 

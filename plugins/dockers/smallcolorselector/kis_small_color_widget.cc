@@ -492,7 +492,7 @@ void KisSmallColorWidget::slotTellColorChanged()
 
     KoColor c(cs);
     cs->fromNormalisedChannelsValue(c.data(), values);
-    emit colorChanged(c);
+    Q_EMIT colorChanged(c);
 
     d->updateAllowed = true;
 }

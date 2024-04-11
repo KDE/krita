@@ -442,7 +442,7 @@ void KisBaseNode::enableAnimation()
 void KisBaseNode::addKeyframeChannel(KisKeyframeChannel *channel)
 {
     m_d->keyframeChannels.insert(channel->id(), channel);
-    emit keyframeChannelAdded(channel);
+    Q_EMIT keyframeChannelAdded(channel);
 }
 
 KisKeyframeChannel *KisBaseNode::requestKeyframeChannel(const QString &id)

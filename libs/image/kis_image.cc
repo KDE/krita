@@ -420,7 +420,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     /**
      * We should replace the root before emitting any signals, because some of the layers
      * may be subscribed to sigSizeChanged() signal (e.g. KisSelectionBasedLayer). So the
-     * old layers should be fully detached before we actually emit this signal.
+     * old layers should be fully detached before we actually Q_EMIT this signal.
      *
      * See bug 447599 for more details.
      */
@@ -440,18 +440,18 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     }
 
 
-    // only when replacing do we need to emit signals
+    // only when replacing do we need to Q_EMIT signals
 #define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else emit
 
     if (policy & REPLACE) { // if we are constructing the image, these are already set
         if (m_d->width != rhs.width() || m_d->height != rhs.height()) {
             m_d->width = rhs.width();
             m_d->height = rhs.height();
-            emit sigSizeChanged(QPointF(), QPointF());
+            Q_EMIT sigSizeChanged(QPointF(), QPointF());
         }
         if (m_d->colorSpace != rhs.colorSpace()) {
             m_d->colorSpace = rhs.colorSpace();
-            emit sigColorSpaceChanged(m_d->colorSpace);
+            Q_EMIT sigColorSpaceChanged(m_d->colorSpace);
         }
     }
 
@@ -594,7 +594,7 @@ void KisImage::aboutToRemoveANode(KisNode *parent, int index)
     if (!dynamic_cast<KisSelectionMask*>(deletedNode.data()) &&
         deletedNode == m_d->isolationRootNode) {
 
-        emit sigInternalStopIsolatedModeRequested();
+        Q_EMIT sigInternalStopIsolatedModeRequested();
     }
 
     KisLayerUtils::recursiveApplyNodes(KisSharedPtr<KisNode>(parent), [this](KisNodeSP node){
@@ -1631,7 +1631,7 @@ void KisImage::flattenLayer(KisLayerSP layer)
 void KisImage::setModifiedWithoutUndo()
 {
     m_d->signalRouter.emitNotification(ModifiedWithoutUndoSignal);
-    emit sigImageModified();
+    Q_EMIT sigImageModified();
 }
 
 QImage KisImage::convertToQImage(QRect imageRect,
@@ -1767,7 +1767,7 @@ KoColor KisImage::defaultProjectionColor() const
 
 void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 {
-    emit sigInternalStopIsolatedModeRequested();
+    Q_EMIT sigInternalStopIsolatedModeRequested();
 
     KoColor defaultProjectionColor = KoColor::createTransparent(m_d->colorSpace);
 
@@ -1845,7 +1845,7 @@ vKisAnnotationSP_it KisImage::endAnnotations()
 
 void KisImage::notifyAboutToBeDeleted()
 {
-    emit sigAboutToBeDeleted();
+    Q_EMIT sigAboutToBeDeleted();
 }
 
 KisImageSignalRouter* KisImage::signalRouter()
@@ -1934,7 +1934,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
             const bool prevRootBeforeVisibility = m_prevRoot ? m_prevRoot->projectionLeaf()->visible() : false;
 
             m_image->m_d->isolationRootNode = m_newRoot;
-            emit m_image->sigIsolatedModeChanged();
+            Q_EMIT m_image->sigIsolatedModeChanged();
 
             const bool afterVisibility = m_newRoot->projectionLeaf()->visible();
             const bool prevRootAfterVisibility = m_prevRoot ? m_prevRoot->projectionLeaf()->visible() : false;
@@ -1945,7 +1945,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
 
         void finishStrokeCallback() override {
             // the GUI uses our thread to do the color space conversion so we
-            // need to emit this signal in multiple threads
+            // need to Q_EMIT this signal in multiple threads
 
             if (m_prevRoot && m_prevRootNeedsFullRefresh) {
                 m_image->refreshGraphAsync(m_prevRoot);
@@ -2007,7 +2007,7 @@ void KisImage::stopIsolatedMode()
             m_image->m_d->isolationRootNode = 0;
             m_image->m_d->isolateLayer = false;
             m_image->m_d->isolateGroup = false;
-            emit m_image->sigIsolatedModeChanged();
+            Q_EMIT m_image->sigIsolatedModeChanged();
             const bool afterVisibility = m_oldRootNode->projectionLeaf()->visible();
 
             m_oldNodeNeedsRefresh = (beforeVisibility != afterVisibility);
@@ -2079,18 +2079,18 @@ bool KisImage::KisImagePrivate::tryCancelCurrentStrokeAsync()
 
 void KisImage::requestUndoDuringStroke()
 {
-    emit sigUndoDuringStrokeRequested();
+    Q_EMIT sigUndoDuringStrokeRequested();
 }
 
 void KisImage::requestRedoDuringStroke()
 {
-    emit sigRedoDuringStrokeRequested();
+    Q_EMIT sigRedoDuringStrokeRequested();
 }
 
 void KisImage::requestStrokeCancellation()
 {
     if (!m_d->tryCancelCurrentStrokeAsync()) {
-        emit sigStrokeCancellationRequested();
+        Q_EMIT sigStrokeCancellationRequested();
     }
 }
 
@@ -2101,13 +2101,13 @@ UndoResult KisImage::tryUndoUnfinishedLod0Stroke()
 
 void KisImage::requestStrokeEnd()
 {
-    emit sigStrokeEndRequested();
-    emit sigStrokeEndRequestedActiveNodeFiltered();
+    Q_EMIT sigStrokeEndRequested();
+    Q_EMIT sigStrokeEndRequestedActiveNodeFiltered();
 }
 
 void KisImage::requestStrokeEndActiveNode()
 {
-    emit sigStrokeEndRequested();
+    Q_EMIT sigStrokeEndRequested();
 }
 
 void KisImage::refreshGraph(KisNodeSP root)
@@ -2311,7 +2311,7 @@ void KisImage::notifyProjectionUpdated(const QRect &rc)
 
         if (dirtyRect.isEmpty()) return;
 
-        emit sigImageUpdated(dirtyRect);
+        Q_EMIT sigImageUpdated(dirtyRect);
     } else {
         m_d->savedDisabledUIUpdates.push(rc);
     }
@@ -2562,7 +2562,7 @@ KisLodPreferences KisImage::lodPreferences() const
 void KisImage::nodeCollapsedChanged(KisNode * node)
 {
     Q_UNUSED(node);
-    emit sigNodeCollapsedChanged();
+    Q_EMIT sigNodeCollapsedChanged();
 }
 
 KisImageAnimationInterface* KisImage::animationInterface() const
@@ -2573,7 +2573,7 @@ KisImageAnimationInterface* KisImage::animationInterface() const
 void KisImage::setProofingConfiguration(KisProofingConfigurationSP proofingConfig)
 {
     m_d->proofingConfig = proofingConfig;
-    emit sigProofingConfigChanged();
+    Q_EMIT sigProofingConfigChanged();
 }
 
 KisProofingConfigurationSP KisImage::proofingConfiguration() const

@@ -88,7 +88,7 @@ void KisColorSelectorTriangle::updatePixelCache(qreal devicePixelRatioF)
 
 KoColor KisColorSelectorTriangle::selectColor(int x, int y)
 {
-    emit update();
+    Q_EMIT update();
 
     QPoint triangleCoords = widgetToTriangleCoordinates(QPoint(x,y));
 
@@ -126,8 +126,8 @@ void KisColorSelectorTriangle::setColor(const KoColor &color)
     // Workaround for Bug 287001
     setLastMousePosition(tmp.x(), tmp.y());
 
-    emit paramChanged(-1, s, v, -1, -1, -1, -1, -1, -1);
-    emit update();
+    Q_EMIT paramChanged(-1, s, v, -1, -1, -1, -1, -1, -1);
+    Q_EMIT update();
     KisColorSelectorComponent::setColor(color);
 }
 

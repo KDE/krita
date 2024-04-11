@@ -768,7 +768,7 @@ void KisTransformMask::threadSafeForceStaticImageUpdate(const QRect &extraUpdate
     if (!extraUpdateRect.isEmpty()) {
         m_d->forcedStaticUpdateExtraUpdateRect.addRect(extraUpdateRect);
     }
-    emit sigInternalForceStaticImageUpdate();
+    Q_EMIT sigInternalForceStaticImageUpdate();
 }
 
 void KisTransformMask::slotInternalForceStaticImageUpdate()

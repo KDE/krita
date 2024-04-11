@@ -305,13 +305,13 @@ bool KisStorageModel::setData(const QModelIndex &index, const QVariant &value, i
 
         }
 
-        emit dataChanged(index, index, {role});
+        Q_EMIT dataChanged(index, index, {role});
 
         if (value.toBool()) {
-            emit storageEnabled(data(index, Qt::UserRole + Location).toString());
+            Q_EMIT storageEnabled(data(index, Qt::UserRole + Location).toString());
         }
         else {
-            emit storageDisabled(data(index, Qt::UserRole + Location).toString());
+            Q_EMIT storageDisabled(data(index, Qt::UserRole + Location).toString());
         }
 
     }

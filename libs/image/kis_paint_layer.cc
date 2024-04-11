@@ -361,7 +361,7 @@ KisFrameChangeUpdateRecipe KisPaintLayer::Private::handleRasterKeyframeChannelUp
 void KisPaintLayer::handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time)
 {
     if (channel->id() == KisKeyframeChannel::Raster.id()) {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "raster channel is not supposed to emit sigKeyframeChanged");
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "raster channel is not supposed to Q_EMIT sigKeyframeChanged");
     } else {
         KisLayer::handleKeyframeChannelFrameChange(channel, time);
     }

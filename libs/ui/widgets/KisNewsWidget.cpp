@@ -181,6 +181,6 @@ void KisNewsWidget::itemSelected(const QModelIndex &idx)
 
 void KisNewsWidget::rssDataChanged()
 {
-    emit newsDataChanged();
+    Q_EMIT newsDataChanged();
 }
 

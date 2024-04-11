@@ -29,7 +29,7 @@ public:
     void emitAll();
 
 Q_SIGNALS:
-    // all the following signals emit user friendly values, not the internal
+    // all the following signals Q_EMIT user friendly values, not the internal
     // values which are instead computed directly by KarbonCalligraphyTool
     void usePathChanged(bool);
     void usePressureChanged(bool);

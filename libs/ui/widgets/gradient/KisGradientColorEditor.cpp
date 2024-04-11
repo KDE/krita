@@ -44,7 +44,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
             if (toggled) {
                 setColorType(KisGradientWidgetsUtils::Foreground);
             }
-            emit colorTypeChanged(KisGradientWidgetsUtils::Foreground);
+            Q_EMIT colorTypeChanged(KisGradientWidgetsUtils::Foreground);
         });
 
     m_d->colorTypeBackgroundButton = new QToolButton;
@@ -59,7 +59,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
             if (toggled) {
                 setColorType(KisGradientWidgetsUtils::Background);
             }
-            emit colorTypeChanged(KisGradientWidgetsUtils::Background);
+            Q_EMIT colorTypeChanged(KisGradientWidgetsUtils::Background);
         });
 
     m_d->colorTypeCustomButton = new QToolButton;
@@ -74,7 +74,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
             if (toggled) {
                 setColorType(KisGradientWidgetsUtils::Custom);
             }
-            emit colorTypeChanged(KisGradientWidgetsUtils::Custom);
+            Q_EMIT colorTypeChanged(KisGradientWidgetsUtils::Custom);
         });
 
     QWidget *colorTypeButtonsContainer = new QWidget;
@@ -194,7 +194,7 @@ void KisGradientColorEditor::setColorType(KisGradientWidgetsUtils::ColorType typ
     }
 
     if (type != colorType()) {
-        emit colorTypeChanged(type);
+        Q_EMIT colorTypeChanged(type);
     }
 }
 

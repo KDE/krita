@@ -120,7 +120,7 @@ public:
         }
         const SelectionMode mode = buttonIndexToMode(index);
         q->setAdjustmentsSectionVisible(mode == PIXEL_SELECTION);
-        emit q->modeChanged(mode);
+        Q_EMIT q->modeChanged(mode);
     }
 
     void on_optionButtonStripAction_buttonToggled(int index, bool checked)
@@ -128,7 +128,7 @@ public:
         if (!checked) {
             return;
         }
-        emit q->actionChanged(buttonIndexToAction(index));
+        Q_EMIT q->actionChanged(buttonIndexToAction(index));
     }
 
     void on_optionButtonStripReference_buttonToggled(int index, bool checked)
@@ -145,7 +145,7 @@ public:
                                            referenceLayers
                                                == ColorLabeledLayers);
 
-        emit q->referenceLayersChanged(referenceLayers);
+        Q_EMIT q->referenceLayersChanged(referenceLayers);
     }
 };
 

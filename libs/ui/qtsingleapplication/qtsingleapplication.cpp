@@ -122,7 +122,7 @@ bool QtSingleApplication::event(QEvent *event)
 {
     if (event->type() == QEvent::FileOpen) {
         QFileOpenEvent *foe = static_cast<QFileOpenEvent*>(event);
-        emit fileOpenRequest(foe->file());
+        Q_EMIT fileOpenRequest(foe->file());
         return true;
     }
     return QApplication::event(event);

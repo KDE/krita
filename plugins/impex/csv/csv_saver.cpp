@@ -160,8 +160,8 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
 
     if (!m_batchMode) {
         // TODO: use other systems of progress reporting (KisViewManager::createUnthreadedUpdater()
-        //emit m_doc->statusBarMessage(i18n("Saving CSV file..."));
-        //emit m_doc->sigProgress(0);
+        //Q_EMIT m_doc->statusBarMessage(i18n("Saving CSV file..."));
+        //Q_EMIT m_doc->sigProgress(0);
         //connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
     }
     int frame = start;
@@ -304,7 +304,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
                 if ( keyframe || (frame == start) ) {
 
                     if (!m_batchMode) {
-                        //emit m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
+                        //Q_EMIT m_doc->sigProgress(((frame - start) * layers.size() + idx) * 100 /
                         //                        ((end - start) * layers.size()));
                     }
                     retval = getLayer(layer, exportDoc.data(), keyframe, path, frame, idx);
@@ -333,8 +333,8 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
 
     if (!m_batchMode) {
         //disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
-        //emit m_doc->sigProgress(100);
-        //emit m_doc->clearStatusBarMessage();
+        //Q_EMIT m_doc->sigProgress(100);
+        //Q_EMIT m_doc->clearStatusBarMessage();
     }
 
     return retval;

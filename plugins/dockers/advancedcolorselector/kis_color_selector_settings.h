@@ -54,7 +54,7 @@ Q_SIGNALS:
     void settingsUpdated();
 public Q_SLOTS:
     void updateSettings() {
-        emit settingsUpdated();
+        Q_EMIT settingsUpdated();
     }
 };
 

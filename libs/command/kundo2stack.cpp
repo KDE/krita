@@ -553,11 +553,11 @@ void KUndo2QStack::setIndex(int idx, bool clean)
 
     if (idx != m_index) {
         m_index = idx;
-        emit indexChanged(m_index);
-        emit canUndoChanged(canUndo());
-        emit undoTextChanged(undoText());
-        emit canRedoChanged(canRedo());
-        emit redoTextChanged(redoText());
+        Q_EMIT indexChanged(m_index);
+        Q_EMIT canUndoChanged(canUndo());
+        Q_EMIT undoTextChanged(undoText());
+        Q_EMIT canRedoChanged(canRedo());
+        Q_EMIT redoTextChanged(redoText());
     }
 
     if (clean)
@@ -565,7 +565,7 @@ void KUndo2QStack::setIndex(int idx, bool clean)
 
     bool is_clean = m_index == m_clean_index;
     if (is_clean != was_clean)
-        emit cleanChanged(is_clean);
+        Q_EMIT cleanChanged(is_clean);
 }
 
 void KUndo2QStack::purgeRedoState()
@@ -587,12 +587,12 @@ void KUndo2QStack::purgeRedoState()
     }
 
     if (redoStateChanged) {
-        emit canRedoChanged(canRedo());
-        emit redoTextChanged(redoText());
+        Q_EMIT canRedoChanged(canRedo());
+        Q_EMIT redoTextChanged(redoText());
     }
 
     if (cleanStateChanged) {
-        emit cleanChanged(isClean());
+        Q_EMIT cleanChanged(isClean());
     }
 }
 
@@ -686,14 +686,14 @@ void KUndo2QStack::clear()
     m_index = 0;
     m_clean_index = 0;
 
-    emit indexChanged(0);
-    emit canUndoChanged(false);
-    emit undoTextChanged(QString());
-    emit canRedoChanged(false);
-    emit redoTextChanged(QString());
+    Q_EMIT indexChanged(0);
+    Q_EMIT canUndoChanged(false);
+    Q_EMIT undoTextChanged(QString());
+    Q_EMIT canRedoChanged(false);
+    Q_EMIT redoTextChanged(QString());
 
     if (!was_clean)
-        emit cleanChanged(true);
+        Q_EMIT cleanChanged(true);
 }
 
 /*!
@@ -861,11 +861,11 @@ void KUndo2QStack::push(KUndo2Command *cmd)
             delete m_command_list.takeLast();
             m_index--;
 
-            emit indexChanged(m_index);
-            emit canUndoChanged(canUndo());
-            emit undoTextChanged(undoText());
-            emit canRedoChanged(canRedo());
-            emit redoTextChanged(redoText());
+            Q_EMIT indexChanged(m_index);
+            Q_EMIT canUndoChanged(canUndo());
+            Q_EMIT undoTextChanged(undoText());
+            Q_EMIT canRedoChanged(canRedo());
+            Q_EMIT redoTextChanged(redoText());
         } else {
             delete m_macro_stack.takeLast();
         }
@@ -873,11 +873,11 @@ void KUndo2QStack::push(KUndo2Command *cmd)
     } else if (try_merge && cur->mergeWith(cmd)) {
         delete cmd;
         if (!macro) {
-            emit indexChanged(m_index);
-            emit canUndoChanged(canUndo());
-            emit undoTextChanged(undoText());
-            emit canRedoChanged(canRedo());
-            emit redoTextChanged(redoText());
+            Q_EMIT indexChanged(m_index);
+            Q_EMIT canUndoChanged(canUndo());
+            Q_EMIT undoTextChanged(undoText());
+            Q_EMIT canRedoChanged(canRedo());
+            Q_EMIT redoTextChanged(redoText());
         }
     } else {
         if (macro) {
@@ -1228,10 +1228,10 @@ void KUndo2QStack::beginMacro(const KUndo2MagicString &text)
     m_macro_stack.append(cmd);
 
     if (m_macro_stack.count() == 1) {
-        emit canUndoChanged(false);
-        emit undoTextChanged(QString());
-        emit canRedoChanged(false);
-        emit redoTextChanged(QString());
+        Q_EMIT canUndoChanged(false);
+        Q_EMIT undoTextChanged(QString());
+        Q_EMIT canRedoChanged(false);
+        Q_EMIT redoTextChanged(QString());
     }
 }
 

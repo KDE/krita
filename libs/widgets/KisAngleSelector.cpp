@@ -414,7 +414,7 @@ void KisAngleSelector::setAngle(qreal newAngle)
         return;
     }
 
-    emit angleChanged(m_d->spinBox->value());
+    Q_EMIT angleChanged(m_d->spinBox->value());
 }
 
 void KisAngleSelector::setSnapAngle(qreal newSnapAngle)
@@ -621,7 +621,7 @@ void KisAngleSelector::Private::on_spinBox_valueChanged(double value)
 
     angleGauge->setAngle(value);
 
-    emit q->angleChanged(value);
+    Q_EMIT q->angleChanged(value);
 }
 
 void KisAngleSelector::Private::on_actionFlipHorizontally_triggered()

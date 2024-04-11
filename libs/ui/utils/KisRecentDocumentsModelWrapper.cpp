@@ -151,7 +151,7 @@ void KisRecentDocumentsModelWrapper::setFiles(const QList<QUrl> &urls)
         m_filesAndThumbnailsModel.setItem(i, item);
     }
 
-    emit sigModelIsUpToDate();
+    Q_EMIT sigModelIsUpToDate();
 }
 
 void KisRecentDocumentsModelWrapper::slotFileIconChanged(const QUrl &url, const QIcon &icon)
@@ -169,7 +169,7 @@ void KisRecentDocumentsModelWrapper::slotFileIconChanged(const QUrl &url, const 
 void KisRecentDocumentsModelWrapper::fileAdded(const QUrl &url)
 {
     m_filesAndThumbnailsModel.insertRow(0, new KisRecentDocumentsModelItem(url));
-    emit sigModelIsUpToDate();
+    Q_EMIT sigModelIsUpToDate();
 }
 
 void KisRecentDocumentsModelWrapper::fileRemoved(const QUrl &url)
@@ -179,7 +179,7 @@ void KisRecentDocumentsModelWrapper::fileRemoved(const QUrl &url)
         QStandardItem *item = m_filesAndThumbnailsModel.item(i);
         if (item && item->data() == url) {
             m_filesAndThumbnailsModel.removeRow(i);
-            emit sigModelIsUpToDate();
+            Q_EMIT sigModelIsUpToDate();
             return;
         }
     }

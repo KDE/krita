@@ -98,7 +98,7 @@ static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_fra
     KIS_SAFE_ASSERT_RECOVER_RETURN(!iface->waitingForFrame);
     iface->waitingForFrame = true;
 
-    emit self->sigChangeActiveCanvasFrame(position);
+    Q_EMIT self->sigChangeActiveCanvasFrame(position);
 
     while (iface->renderingAllowed && iface->waitingForFrame) {
         iface->renderingWaitCondition.wait(&iface->renderingControlMutex);

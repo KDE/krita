@@ -110,13 +110,13 @@ QValidator::State KoUnitDoubleSpinBox::validate(QString &input, int &pos) const
 void KoUnitDoubleSpinBox::changeValue( double val )
 {
     QDoubleSpinBox::setValue( d->unit.toUserValue( val ) );
-    // TODO: emit valueChanged ONLY if the value was out-of-bounds
+    // TODO: Q_EMIT valueChanged ONLY if the value was out-of-bounds
     // This will allow the 'user' dialog to set a dirty bool and ensure
     // a proper value is getting saved.
 }
 
 void KoUnitDoubleSpinBox::privateValueChanged() {
-    emit valueChangedPt( value () );
+    Q_EMIT valueChangedPt( value () );
 }
 
 void KoUnitDoubleSpinBox::setUnit( const KoUnit &unit )

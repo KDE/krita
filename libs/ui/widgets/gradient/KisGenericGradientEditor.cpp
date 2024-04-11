@@ -419,7 +419,7 @@ void KisGenericGradientEditor::setGradient(KoAbstractGradientSP newGradient)
     }
     m_d->updateCachedSizeHint();
 
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }
 
 void KisGenericGradientEditor::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP newCanvasResourcesInterface)
@@ -658,5 +658,5 @@ void KisGenericGradientEditor::on_widgetGradientEditor_sigGradientChanged()
 {
     updateUpdateGradientButton();
     updateAddGradientButton();
-    emit sigGradientChanged();
+    Q_EMIT sigGradientChanged();
 }

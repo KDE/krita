@@ -710,7 +710,7 @@ void KisMainWindow::addView(KisView *view, QMdiSubWindow *subWindow)
     viewManager()->inputManager()->addTrackedCanvas(view->canvasBase());
 
     showView(view, subWindow);
-    emit restoringDone();
+    Q_EMIT restoringDone();
 
 //    QTabBar *tabBar = d->findTabBarHACK();
 //    Q_FOREACH(QObject *c, tabBar->children()) {
@@ -777,14 +777,14 @@ void KisMainWindow::showView(KisView *imageView, QMdiSubWindow *subwin)
         /**
          * Hack alert!
          *
-         * Here we explicitly request KoToolManager to emit all the tool
+         * Here we explicitly request KoToolManager to Q_EMIT all the tool
          * activation signals, to reinitialize the tool options docker.
          *
          * That is needed due to a design flaw we have in the
          * initialization procedure.  The tool in the KoToolManager is
          * initialized in KisView::setViewManager() calls, which
          * happens early enough. During this call the tool manager
-         * requests KoCanvasControllerWidget to emit the signal to
+         * requests KoCanvasControllerWidget to Q_EMIT the signal to
          * update the widgets in the tool docker. *But* at that moment
          * of time the view is not yet connected to the main window,
          * because it happens in KisViewManager::setCurrentView a bit
@@ -902,7 +902,7 @@ void KisMainWindow::slotThemeChanged()
         KisMainWindow *topLevelMainWindow = qobject_cast<KisMainWindow*>(topLevelWidget);
         if (topLevelMainWindow) {
             topLevelMainWindow->updateTheme();
-            emit topLevelMainWindow->themeChanged();
+            Q_EMIT topLevelMainWindow->themeChanged();
         } else {
             QObjectList objects;
             objects.append(topLevelWidget);
@@ -916,7 +916,7 @@ void KisMainWindow::slotThemeChanged()
         }
     }
 
-    emit themeChanged();
+    Q_EMIT themeChanged();
 }
 
 void KisMainWindow::customizeTabBar()
@@ -1123,7 +1123,7 @@ KisView* KisMainWindow::addViewAndNotifyLoadingCompleted(KisDocument *document,
     KisView *view = KisPart::instance()->createView(document, d->viewManager, this);
     addView(view, subWindow);
 
-    emit guiLoadingFinished();
+    Q_EMIT guiLoadingFinished();
 
     return view;
 }
@@ -1151,7 +1151,7 @@ void KisMainWindow::slotLoadCompleted()
         disconnect(newdoc, SIGNAL(completed()), this, SLOT(slotLoadCompleted()));
         disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(slotLoadCanceled(QString)));
 
-        emit loadCompleted();
+        Q_EMIT loadCompleted();
     }
 }
 
@@ -1647,7 +1647,7 @@ void KisMainWindow::setActiveView(KisView* view)
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
-    emit activeViewChanged();
+    Q_EMIT activeViewChanged();
 }
 
 void KisMainWindow::unsetActiveView()
@@ -1800,27 +1800,27 @@ void KisMainWindow::slotFileOpenRecent(const QUrl &url)
 void KisMainWindow::slotFileSave()
 {
     if (saveDocument(d->activeView->document(), false, false,false)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 
 void KisMainWindow::slotFileSaveAs()
 {
     if (saveDocument(d->activeView->document(), true, false,false)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 
 void KisMainWindow::slotExportFile()
 {
     if (saveDocument(d->activeView->document(), true, true,false)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 void KisMainWindow::slotExportAdvance()
 {
     if (saveDocument(d->activeView->document(), true, true,true)) {
-        emit documentSaved();
+        Q_EMIT documentSaved();
     }
 }
 
@@ -2849,7 +2849,7 @@ void KisMainWindow::checkSanity()
     // window is created signal (used in Python)
     // there must be some asynchronous things happening in the constructor, because the window cannot
     // be referenced until after this timeout is done
-    emit KisPart::instance()->sigMainWindowCreated();
+    Q_EMIT KisPart::instance()->sigMainWindowCreated();
 }
 
 void KisMainWindow::showErrorAndDie()

@@ -89,7 +89,7 @@ bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
 }
 void KisPaintOpOptionListModel::signalDataChanged(const QModelIndex& index)
 {
-    emit dataChanged(index,index);
+    Q_EMIT dataChanged(index,index);
 }
 
 void KisPaintOpOptionListModel::slotCheckedEnabledStateChanged(int row)
@@ -107,5 +107,5 @@ void KisPaintOpOptionListModel::slotCheckedEnabledStateChanged(int row)
         item->setChecked(item->data()->option->isChecked());
     }
 
-    emit dataChanged(idx, idx);
+    Q_EMIT dataChanged(idx, idx);
 }

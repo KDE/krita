@@ -271,7 +271,7 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
                                      i18n("A conflict exists between two or more shortcuts."));
             }
             // change was done on the object
-            emit dataChanged(index, index);
+            Q_EMIT dataChanged(index, index);
             return true;
         }
 
@@ -288,7 +288,7 @@ bool KisActionShortcutsModel::setData(const QModelIndex &index, const QVariant &
         break;
     }
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 
     return true;
 }

@@ -185,9 +185,9 @@ void KisZoomableScrollBar::mouseMoveEvent(QMouseEvent *event)
 void KisZoomableScrollBar::mouseReleaseEvent(QMouseEvent *event)
 {
     //If there's nowhere for our slider to  go, we should
-    //still emit the slider release value.
+    //still Q_EMIT the slider release value.
     if (maximum() == minimum()) {
-        emit sliderReleased();
+        Q_EMIT sliderReleased();
     }
     const QPoint maximumCoordinates = mapToGlobal(QPoint(width() * devicePixelRatio(), height() * devicePixelRatio()));
     const QPoint minimumCoordinates = mapToGlobal(QPoint(0,0));

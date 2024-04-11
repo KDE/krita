@@ -161,7 +161,7 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
             if (KisResourceUserOperations::addResourceWithUserInput(this, resource)) {
-                emit sigNewPredefinedBrush(resource);
+                Q_EMIT sigNewPredefinedBrush(resource);
             }
         }
         else {
@@ -169,7 +169,7 @@ void KisCustomBrushWidget::slotAddPredefined()
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
             if (KisResourceUserOperations::addResourceWithUserInput(this, resource)) {
-                emit sigNewPredefinedBrush(resource);
+                Q_EMIT sigNewPredefinedBrush(resource);
             }
         }
     }

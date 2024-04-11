@@ -188,7 +188,7 @@ void KisPresetSaveWidget::savePreset()
         }
 
         // trying to get brush preset to load after it is created
-        if (success) emit resourceSelected(newPreset);
+        if (success) Q_EMIT resourceSelected(newPreset);
 
     }
     else { // saving a preset that is replacing an existing one
@@ -202,7 +202,7 @@ void KisPresetSaveWidget::savePreset()
         }
 
         // this helps updating the thumbnail in the big label in the editor
-        if (success) emit resourceSelected(curPreset);
+        if (success) Q_EMIT resourceSelected(curPreset);
     }
 
 

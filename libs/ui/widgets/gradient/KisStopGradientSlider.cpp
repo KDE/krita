@@ -78,8 +78,8 @@ void KisStopGradientSlider::setGradientResource(KoStopGradientSP gradient)
     } else {
         m_selectedStop = -1;
     }
-    emit sigSelectedStop(m_selectedStop);
-    emit updateRequested();
+    Q_EMIT sigSelectedStop(m_selectedStop);
+    Q_EMIT updateRequested();
 }
 
 void KisStopGradientSlider::paintEvent(QPaintEvent*)
@@ -182,7 +182,7 @@ void KisStopGradientSlider::mousePressEvent(QMouseEvent *e)
     if (clickedStop >= 0) {
         if (m_selectedStop != clickedStop) {
             m_selectedStop = clickedStop;
-            emit sigSelectedStop(m_selectedStop);
+            Q_EMIT sigSelectedStop(m_selectedStop);
         }
         m_drag = true;
     } else {
@@ -191,7 +191,7 @@ void KisStopGradientSlider::mousePressEvent(QMouseEvent *e)
     }
 
     updateHoveredStop(e->pos());
-    emit updateRequested();
+    Q_EMIT updateRequested();
 }
 
 void KisStopGradientSlider::mouseReleaseEvent(QMouseEvent *e)
@@ -201,7 +201,7 @@ void KisStopGradientSlider::mouseReleaseEvent(QMouseEvent *e)
     int previousHoveredStop = m_hoveredStop;
     updateHoveredStop(e->pos());
     if (previousHoveredStop != m_hoveredStop) {
-        emit updateRequested();
+        Q_EMIT updateRequested();
     }
 }
 
@@ -258,12 +258,12 @@ void KisStopGradientSlider::mouseMoveEvent(QMouseEvent *e)
         }
 
         m_gradient->setStops(stops);
-        emit sigSelectedStop(m_selectedStop);
+        Q_EMIT sigSelectedStop(m_selectedStop);
         
-        emit updateRequested();
+        Q_EMIT updateRequested();
     } else {
         if (previousHoveredStop != m_hoveredStop) {
-            emit updateRequested();
+            Q_EMIT updateRequested();
         }
         QWidget::mouseMoveEvent(e);
     }
@@ -306,8 +306,8 @@ void KisStopGradientSlider::handleIncrementInput(int direction, Qt::KeyboardModi
         m_selectedStop = newPos;
         m_gradient->setStops(stops);
     }
-    emit sigSelectedStop(m_selectedStop);
-    emit updateRequested();
+    Q_EMIT sigSelectedStop(m_selectedStop);
+    Q_EMIT updateRequested();
 }
 
 void KisStopGradientSlider::wheelEvent(QWheelEvent *e)
@@ -345,7 +345,7 @@ void KisStopGradientSlider::keyPressEvent(QKeyEvent *e)
 void KisStopGradientSlider::leaveEvent(QEvent *e)
 {
     m_hoveredStop = -1;
-    emit updateRequested();
+    Q_EMIT updateRequested();
     QWidget::leaveEvent(e);
 }
 
@@ -384,7 +384,7 @@ void KisStopGradientSlider::insertStop(double t)
     m_gradient->setStops(stops);
 
     m_selectedStop = newPos;
-    emit sigSelectedStop(m_selectedStop);
+    Q_EMIT sigSelectedStop(m_selectedStop);
 }
 
 QRect KisStopGradientSlider::sliderRect() const
@@ -422,9 +422,9 @@ int KisStopGradientSlider::selectedStop()
 void KisStopGradientSlider::setSelectedStop(int selected)
 {
     m_selectedStop = selected;
-    emit sigSelectedStop(m_selectedStop);
+    Q_EMIT sigSelectedStop(m_selectedStop);
 
-    emit updateRequested();
+    Q_EMIT updateRequested();
 }
 
 void KisStopGradientSlider::selectPreviousStop()
@@ -465,7 +465,7 @@ void KisStopGradientSlider::deleteSelectedStop(bool selectNeighborStop)
         m_selectedStop = -1;
     }
     m_gradient->setStops(stops);
-    emit sigSelectedStop(m_selectedStop);
+    Q_EMIT sigSelectedStop(m_selectedStop);
 }
 
 int KisStopGradientSlider::minimalHeight() const
@@ -511,8 +511,8 @@ void KisStopGradientSlider::chooseSelectedStopColor()
                               stops[m_selectedStop].type = COLORSTOP;
                               stops[m_selectedStop].color = dialog->getCurrentColor();
                               m_gradient->setStops(stops);
-                              emit sigSelectedStop(m_selectedStop);
-                              emit updateRequested();
+                              Q_EMIT sigSelectedStop(m_selectedStop);
+                              Q_EMIT updateRequested();
                           };
         connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
         connect(dialog, &QDialog::accepted, setColorFn);
@@ -525,8 +525,8 @@ void KisStopGradientSlider::chooseSelectedStopColor()
                               stops[m_selectedStop].type = COLORSTOP;
                               stops[m_selectedStop].color.fromQColor(dialog->currentColor());
                               m_gradient->setStops(stops);
-                              emit sigSelectedStop(m_selectedStop);
-                              emit updateRequested();
+                              Q_EMIT sigSelectedStop(m_selectedStop);
+                              Q_EMIT updateRequested();
                           };
         connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
         connect(dialog, &QDialog::accepted, setColorFn);
@@ -536,8 +536,8 @@ void KisStopGradientSlider::chooseSelectedStopColor()
     connect(colorDialog, &QDialog::rejected, [stops, this]()
                                              {
                                                  m_gradient->setStops(stops);
-                                                 emit sigSelectedStop(m_selectedStop);
-                                                 emit updateRequested();
+                                                 Q_EMIT sigSelectedStop(m_selectedStop);
+                                                 Q_EMIT updateRequested();
                                              });
     colorDialog->setAttribute(Qt::WA_DeleteOnClose);
     colorDialog->show();

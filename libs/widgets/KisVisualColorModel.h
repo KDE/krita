@@ -46,7 +46,7 @@ public:
     /**
      * @brief Copy the internal state of another KisVisualColorModel
      *
-     * This will emit all necessary signals to update widgets so they
+     * This will Q_EMIT all necessary signals to update widgets so they
      * can reflect the new state correctly.
      *
      * @param other the model to copy

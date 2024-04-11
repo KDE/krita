@@ -110,7 +110,7 @@ void WGSelectorPopup::keyPressEvent(QKeyEvent *event)
 void WGSelectorPopup::hideEvent(QHideEvent *event)
 {
     QWidget::hideEvent(event);
-    emit sigPopupClosed(this);
+    Q_EMIT sigPopupClosed(this);
 }
 
 void WGSelectorPopup::slotInteraction(bool active)

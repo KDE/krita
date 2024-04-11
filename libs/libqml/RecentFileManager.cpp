@@ -147,7 +147,7 @@ void RecentFileManager::addRecent(const QString &_url)
     d->recentFilesIndex.insert(0, fileName);
 
     d->saveEntries(KSharedConfig::openConfig()->group("RecentFiles"));
-    emit recentFilesListChanged();
+    Q_EMIT recentFilesListChanged();
 }
 
 int RecentFileManager::size()

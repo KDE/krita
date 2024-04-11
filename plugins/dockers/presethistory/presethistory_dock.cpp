@@ -40,7 +40,7 @@ void PresetHistoryList::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton)
     {
-        emit mouseReleased(currentItem());
+        Q_EMIT mouseReleased(currentItem());
     }
     QListWidget::mouseReleaseEvent(e); // forward the event to the QListWidget
 }

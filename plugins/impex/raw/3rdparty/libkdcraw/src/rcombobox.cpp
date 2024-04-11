@@ -138,19 +138,19 @@ void RComboBox::slotReset()
     d->combo->setCurrentIndex(d->defaultIndex);
     d->resetButton->setEnabled(false);
     slotItemActivated(d->defaultIndex);
-    emit reset();
+    Q_EMIT reset();
 }
 
 void RComboBox::slotItemActivated(int v)
 {
     d->resetButton->setEnabled(v != d->defaultIndex);
-    emit activated(v);
+    Q_EMIT activated(v);
 }
 
 void RComboBox::slotCurrentIndexChanged(int v)
 {
     d->resetButton->setEnabled(v != d->defaultIndex);
-    emit currentIndexChanged(v);
+    Q_EMIT currentIndexChanged(v);
 }
 
 }  // namespace KDcrawIface

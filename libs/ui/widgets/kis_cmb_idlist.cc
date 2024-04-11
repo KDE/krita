@@ -85,14 +85,14 @@ void KisCmbIDList::slotIDActivated(int index)
 {
     if (index > m_idList.count() - 1 || index < 0) return;
 
-    emit activated(m_idList[index]);
+    Q_EMIT activated(m_idList[index]);
 }
 
 void KisCmbIDList::slotIDHighlighted(int index)
 {
     if (index > m_idList.count() - 1 || index < 0) return;
 
-    emit highlighted(m_idList[index]);
+    Q_EMIT highlighted(m_idList[index]);
 }
 
 void KisCmbIDList::buildItems()

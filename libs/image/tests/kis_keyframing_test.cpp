@@ -105,7 +105,7 @@ void KisKeyframingTest::testChannelSignals()
     scalarChannel->addScalarKeyframe(10, 64);
     QSignalSpy spyScalarKeyframeChanged(scalarChannel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)));
 
-    {   // Test changing value of scalar keyframe. Should always emit **1** signal per assignment, undo or redo.
+    {   // Test changing value of scalar keyframe. Should always Q_EMIT **1** signal per assignment, undo or redo.
         KUndo2Command undoCmd;
         KisScalarKeyframeSP scalarKey = scalarChannel->keyframeAt<KisScalarKeyframe>(0);
         scalarKey->setValue(20, &undoCmd);

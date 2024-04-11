@@ -279,7 +279,7 @@ void KisPaletteView::slotAdditionalGuiUpdate()
         setRowHeight(rowNumber, fontMetrics().lineSpacing() + 6);
         verticalHeader()->resizeSection(rowNumber, fontMetrics().lineSpacing() + 6);
     }
-    emit sigPaletteUpdatedFromModel();
+    Q_EMIT sigPaletteUpdatedFromModel();
 }
 
 void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
@@ -291,13 +291,13 @@ void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
 
     const KisSwatch newEntry = d->model->getSwatch(newCurrent);
 
-    emit sigIndexSelected(newCurrent);
+    Q_EMIT sigIndexSelected(newCurrent);
     if (isGroupName) {
         return;
     }
 
     if (isCheckSlot) {
-        emit sigColorSelected(newEntry.color());
+        Q_EMIT sigColorSelected(newEntry.color());
     }
 }
 

@@ -203,7 +203,7 @@ void WGSelectorConfigGrid::slotActionTriggered(QAction *action)
         SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
         KIS_SAFE_ASSERT_RECOVER_RETURN(sa);
 
-        emit sigConfigSelected(sa->configuration());
+        Q_EMIT sigConfigSelected(sa->configuration());
     }
 }
 

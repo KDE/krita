@@ -27,7 +27,7 @@ void KisTransformToolActivationCommand::redo()
     if(m_firstRedo)
     {
         m_firstRedo = false;
-        emit requestTransformTool();
+        Q_EMIT requestTransformTool();
     }
 }
 

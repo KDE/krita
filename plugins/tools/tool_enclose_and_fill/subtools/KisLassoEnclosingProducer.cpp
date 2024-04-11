@@ -54,7 +54,7 @@ void KisLassoEnclosingProducer::finishOutline(const QVector<QPointF> &points)
 
     painter.paintPolygon(points);
 
-    emit enclosingMaskProduced(enclosingMask);
+    Q_EMIT enclosingMaskProduced(enclosingMask);
 }
 
 bool KisLassoEnclosingProducer::hasUserInteractionRunning() const

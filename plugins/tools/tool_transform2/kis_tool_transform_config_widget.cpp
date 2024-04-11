@@ -297,7 +297,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     // Liquify
     //
     // liquify brush options do not affect the image directly and are not
-    // saved to undo, so we don't emit notifyEditingFinished() for them
+    // saved to undo, so we don't Q_EMIT notifyEditingFinished() for them
 
     // Connect Apply/Reset buttons
     connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(slotButtonBoxClicked(QAbstractButton*)));
@@ -721,7 +721,7 @@ void KisToolTransformConfigWidget::unblockNotifications()
 void KisToolTransformConfigWidget::notifyConfigChanged(bool needsPreviewRecalculation)
 {
     if (!m_notificationsBlocked) {
-        emit sigConfigChanged(needsPreviewRecalculation);
+        Q_EMIT sigConfigChanged(needsPreviewRecalculation);
     }
     m_configChanged = true;
 }
@@ -740,7 +740,7 @@ void KisToolTransformConfigWidget::notifyEditingFinished()
 {
     if (m_uiSlotsBlocked || m_notificationsBlocked || !m_configChanged) return;
 
-    emit sigEditingFinished();
+    Q_EMIT sigEditingFinished();
     m_configChanged = false;
 }
 
@@ -772,10 +772,10 @@ void KisToolTransformConfigWidget::slotButtonBoxClicked(QAbstractButton *button)
     resetUIOptions();
 
     if (button == applyButton) {
-        emit sigApplyTransform();
+        Q_EMIT sigApplyTransform();
     }
     else if (button == resetButton) {
-        emit sigCancelTransform();
+        Q_EMIT sigCancelTransform();
     }
 
 }
@@ -786,7 +786,7 @@ void KisToolTransformConfigWidget::slotSetMeshModeButtonClicked(bool value)
 
     lblTransformType->setText(meshButton->toolTip());
 
-    emit sigResetTransform(ToolTransformArgs::MESH);
+    Q_EMIT sigResetTransform(ToolTransformArgs::MESH);
 }
 
 void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool value)
@@ -795,7 +795,7 @@ void KisToolTransformConfigWidget::slotSetFreeTransformModeButtonClicked(bool va
 
     lblTransformType->setText(freeTransformButton->toolTip());
 
-    emit sigResetTransform(ToolTransformArgs::FREE_TRANSFORM);
+    Q_EMIT sigResetTransform(ToolTransformArgs::FREE_TRANSFORM);
 }
 
 void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
@@ -804,7 +804,7 @@ void KisToolTransformConfigWidget::slotSetWarpModeButtonClicked(bool value)
 
     lblTransformType->setText(warpButton->toolTip());
 
-    emit sigResetTransform(ToolTransformArgs::WARP);
+    Q_EMIT sigResetTransform(ToolTransformArgs::WARP);
 }
 
 void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
@@ -813,7 +813,7 @@ void KisToolTransformConfigWidget::slotSetCageModeButtonClicked(bool value)
 
     lblTransformType->setText(cageButton->toolTip());
 
-    emit sigResetTransform(ToolTransformArgs::CAGE);
+    Q_EMIT sigResetTransform(ToolTransformArgs::CAGE);
 }
 
 void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
@@ -822,7 +822,7 @@ void KisToolTransformConfigWidget::slotSetLiquifyModeButtonClicked(bool value)
 
     lblTransformType->setText(liquifyButton->toolTip());
 
-    emit sigResetTransform(ToolTransformArgs::LIQUIFY);
+    Q_EMIT sigResetTransform(ToolTransformArgs::LIQUIFY);
 }
 
 void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool value)
@@ -831,7 +831,7 @@ void KisToolTransformConfigWidget::slotSetPerspectiveModeButtonClicked(bool valu
 
     lblTransformType->setText(perspectiveTransformButton->toolTip());
 
-    emit sigResetTransform(ToolTransformArgs::PERSPECTIVE_4POINT);
+    Q_EMIT sigResetTransform(ToolTransformArgs::PERSPECTIVE_4POINT);
 }
 
 void KisToolTransformConfigWidget::slotFilterChanged(const KoID &filterId)
@@ -1369,6 +1369,6 @@ void KisToolTransformConfigWidget::slotPreviewChanged(int index)
      * requires too many updates in the GUI, which can theoretically
      * lead to deadlocks
      */
-    emit sigUpdateGlobalConfig();
-    emit sigRestartAndContinueTransform();
+    Q_EMIT sigUpdateGlobalConfig();
+    Q_EMIT sigRestartAndContinueTransform();
 }

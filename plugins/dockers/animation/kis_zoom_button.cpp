@@ -24,5 +24,5 @@ void KisZoomButton::slotValueChanged(int value)
 {
     const int unitRadius = 200;
 
-    emit zoom(qreal(value) / unitRadius);
+    Q_EMIT zoom(qreal(value) / unitRadius);
 }

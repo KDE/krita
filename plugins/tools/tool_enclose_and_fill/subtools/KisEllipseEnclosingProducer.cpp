@@ -62,7 +62,7 @@ void KisEllipseEnclosingProducer::finishRect(const QRectF& rect, qreal roundCorn
 
     painter.paintPainterPath(path);
 
-    emit enclosingMaskProduced(enclosingMask);
+    Q_EMIT enclosingMaskProduced(enclosingMask);
 }
 
 bool KisEllipseEnclosingProducer::hasUserInteractionRunning() const

@@ -7,8 +7,10 @@
 # QUAZIP_LIBRARIES           - List of QuaZip libraries
 # QUAZIP_ZLIB_INCLUDE_DIR    - The include dir of zlib headers
 
-find_package(QuaZip-Qt5 QUIET)
-IF (QuaZip-Qt5_FOUND)
+find_package(QuaZip-Qt6)
+
+IF (QuaZip-Qt6_FOUND)
+        message("Found quazip")
         set(QUAZIP_INCLUDE_DIRS QuaZip::QuaZip)
         set(QUAZIP_LIBRARIES QuaZip::QuaZip)
         set(QUAZIP_FOUND TRUE)
@@ -16,8 +18,8 @@ ELSEIF (QUAZIP_INCLUDE_DIRS AND QUAZIP_LIBRARIES)
 	# in cache already
 	SET(QUAZIP_FOUND TRUE)
 ELSE ()
-    IF (Qt5Core_FOUND)
-        set(QUAZIP_LIB_VERSION_SUFFIX 5)
+    IF (qt6Core_FOUND)
+        set(QUAZIP_LIB_VERSION_SUFFIX 6)
     ENDIF()
 	IF (WIN32)
 		FIND_PATH(QUAZIP_LIBRARY_DIR

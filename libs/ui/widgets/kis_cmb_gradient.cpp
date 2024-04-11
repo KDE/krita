@@ -59,7 +59,7 @@ void KisCmbGradient::gradientSelected(KoResourceSP resource)
 
     setIcon(QIcon(QPixmap::fromImage(thumbnail)));
 
-    emit gradientChanged(gradient);
+    Q_EMIT gradientChanged(gradient);
 }
 
 QSize KisCmbGradient::sizeHint() const

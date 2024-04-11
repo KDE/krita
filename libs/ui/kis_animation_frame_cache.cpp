@@ -348,7 +348,7 @@ bool KisAnimationFrameCache::tryGlueSameFrames(const KisTimeSpan &range)
     const bool cacheChanged = gluer.glueFrames(range);
 
     if (cacheChanged) {
-        emit changed();
+        Q_EMIT changed();
     }
 
     return cacheChanged;
@@ -368,7 +368,7 @@ void KisAnimationFrameCache::framesChanged(const KisTimeSpan &range, const QRect
     bool cacheChanged = m_d->invalidate(range);
 
     if (cacheChanged) {
-        emit changed();
+        Q_EMIT changed();
     }
 }
 
@@ -385,7 +385,7 @@ void KisAnimationFrameCache::slotConfigChanged()
     }
 
     m_d->frameSizeLimit = cfg.useAnimationCacheFrameSizeLimit() ? cfg.animationCacheFrameSizeLimit() : 0;
-    emit changed();
+    Q_EMIT changed();
 }
 
 KisOpenGLUpdateInfoSP KisAnimationFrameCache::Private::fetchFrameDataImpl(KisImageSP image, const QRect &requestedRect, int lod)
@@ -436,7 +436,7 @@ void KisAnimationFrameCache::addConvertedFrameData(KisOpenGLUpdateInfoSP info, i
 
     m_d->addFrame(info, identicalRange);
 
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KisAnimationFrameCache::dropLowQualityFrames(const KisTimeSpan &range, const QRect &regionOfInterest, const QRect &minimalRect)

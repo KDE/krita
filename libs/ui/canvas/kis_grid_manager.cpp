@@ -124,7 +124,7 @@ void KisGridManager::slotChangeGridVisibilityTriggered(bool value)
     config.setShowGrid(value);
 
     setGridConfig(config);
-    emit sigRequestUpdateGridConfig(config);
+    Q_EMIT sigRequestUpdateGridConfig(config);
 }
 
 void KisGridManager::slotSnapToGridTriggered(bool value)
@@ -135,6 +135,6 @@ void KisGridManager::slotSnapToGridTriggered(bool value)
     config.setSnapToGrid(value);
 
     setGridConfig(config);
-    emit sigRequestUpdateGridConfig(config);
+    Q_EMIT sigRequestUpdateGridConfig(config);
 }
 

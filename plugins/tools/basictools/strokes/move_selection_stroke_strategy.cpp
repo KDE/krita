@@ -93,9 +93,9 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
         handlesRect = t.mapInverted(handlesRect);
 
         if (!handlesRect.isEmpty()) {
-            emit this->sigHandlesRectCalculated(handlesRect);
+            Q_EMIT this->sigHandlesRectCalculated(handlesRect);
         } else {
-            emit this->sigStrokeStartedEmpty();
+            Q_EMIT this->sigStrokeStartedEmpty();
         }
 
     }

@@ -64,7 +64,7 @@ void KisUniqueColorSet::addColor(const KoColor &color)
             d->history.erase(historyEl);
             node->key = ++d->key;
             d->history.push_front(node);
-            emit sigColorMoved(oldPos, 0);
+            Q_EMIT sigColorMoved(oldPos, 0);
         }
         else {
             qDebug() << "inconsistent color history state!";
@@ -78,14 +78,14 @@ void KisUniqueColorSet::addColor(const KoColor &color)
             KIS_ASSERT(d->colorHash.remove(entry->color) == 1);
             entry->color = color;
             entry->key = ++d->key;
-            emit sigColorRemoved(d->maxSize - 1);
+            Q_EMIT sigColorRemoved(d->maxSize - 1);
         }
         else {
             entry = new ColorEntry {color, ++d->key};
         }
         d->colorHash.insert(color, entry);
         d->history.push_front(entry);
-        emit sigColorAdded(0);
+        Q_EMIT sigColorAdded(0);
     }
 }
 
@@ -110,5 +110,5 @@ void KisUniqueColorSet::clear()
     d->history.clear();
     d->colorHash.clear();
     d->key = 0;
-    emit sigReset();
+    Q_EMIT sigReset();
 }

@@ -890,7 +890,7 @@ void InplaceTransformStrokeStrategy::reapplyTransform(ToolTransformArgs args,
         }
 
         /**
-         * We also emit the updates manually, because KisUpdateCommandEx is
+         * We also Q_EMIT the updates manually, because KisUpdateCommandEx is
          * still blocked by m_d->commandUpdatesBlockerCookie (for easy undo
          * purposes)
          */

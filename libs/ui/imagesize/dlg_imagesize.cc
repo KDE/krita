@@ -108,10 +108,10 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page->pixelWidthDouble->setFocus();
 
     connect(m_page->pixelWidthDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
-        emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
+        Q_EMIT sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
     });
     connect(m_page->pixelHeightDouble, qOverload<double>(&KisDoubleParseUnitSpinBox::valueChanged), [this](){
-        emit sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
+        Q_EMIT sigDesiredSizeChanged(desiredWidth(), desiredHeight(), desiredResolution());
     });
 
     /// add custom units

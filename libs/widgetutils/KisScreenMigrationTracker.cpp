@@ -51,8 +51,8 @@ void KisScreenMigrationTracker::slotScreenChanged(QScreen *screen)
 {
     connectScreenSignals(screen);
 
-    emit sigScreenChanged(screen);
-    emit sigScreenOrResolutionChanged(screen);
+    Q_EMIT sigScreenChanged(screen);
+    Q_EMIT sigScreenOrResolutionChanged(screen);
 }
 
 void KisScreenMigrationTracker::slotScreenResolutionChanged(qreal value)

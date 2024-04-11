@@ -41,7 +41,7 @@ class QSize;
  * restore the last used one at next restart.
  *
  * The special canvasMappingMode toggle is only a UI element. It does nothing
- * except emit the canvasMappingModeChanged signal.
+ * except Q_EMIT the canvasMappingModeChanged signal.
  *
  */
 class KRITAWIDGETS_EXPORT KoZoomController : public QObject {

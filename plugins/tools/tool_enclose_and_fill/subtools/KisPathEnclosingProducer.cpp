@@ -184,7 +184,7 @@ void KisPathEnclosingProducer::addPathShape(KoPathShape* pathShape)
 
     delete pathShape;
 
-    emit enclosingMaskProduced(enclosingMask);
+    Q_EMIT enclosingMaskProduced(enclosingMask);
 }
 
 bool KisPathEnclosingProducer::hasUserInteractionRunning() const

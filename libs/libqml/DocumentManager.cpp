@@ -164,7 +164,7 @@ void DocumentManager::delayedNewDocument()
 
     d->temporaryFile = true;
 
-    emit documentChanged();
+    Q_EMIT documentChanged();
 }
 
 void DocumentManager::openDocument(const QString& document, bool import)
@@ -207,7 +207,7 @@ void DocumentManager::onLoadCompleted()
     disconnect(newdoc, SIGNAL(completed()), this, SLOT(onLoadCompleted()));
     disconnect(newdoc, SIGNAL(canceled(QString)), this, SLOT(onLoadCanceled(QString)));
 
-    emit documentChanged();
+    Q_EMIT documentChanged();
 }
 
 void DocumentManager::onLoadCanceled(const QString &/*errMsg*/)
@@ -225,7 +225,7 @@ void DocumentManager::onLoadCanceled(const QString &/*errMsg*/)
 void DocumentManager::closeDocument()
 {
     if (d->document) {
-        emit aboutToDeleteDocument();
+        Q_EMIT aboutToDeleteDocument();
         d->document->closePath(false);
         //d->document->deleteLater();
         d->document = 0;
@@ -238,7 +238,7 @@ bool DocumentManager::save()
 //    {
 //        d->recentFileManager->addRecent(d->document->url().toLocalFile());
 //        d->settingsManager->setCurrentFile(d->document->url().toLocalFile());
-//        emit documentSaved();
+//        Q_EMIT documentSaved();
 //        return true;
 //    }
     return false;
@@ -260,7 +260,7 @@ void DocumentManager::delayedSaveAs()
     //d->document->saveAs(d->saveAsFilename);
     d->settingsManager->setCurrentFile(d->saveAsFilename);
     d->recentFileManager->addRecent(d->saveAsFilename);
-    emit documentSaved();
+    Q_EMIT documentSaved();
 }
 
 void DocumentManager::reload()
@@ -274,7 +274,7 @@ void DocumentManager::reload()
 void DocumentManager::setTemporaryFile(bool temp)
 {
     d->temporaryFile = temp;
-    emit documentSaved();
+    Q_EMIT documentSaved();
 }
 
 DocumentManager* DocumentManager::instance()

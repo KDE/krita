@@ -27,16 +27,16 @@ void KisAsyncStoryboardThumbnailRenderer::frameCompletedCallback(int frameTime, 
     KisPaintDeviceSP requestedFrame = image ? new KisPaintDevice(*image->projection(), KritaUtils::CopySnapshot) : nullptr;
 
     if (requestedFrame) {
-        emit sigNotifyFrameCompleted(frameTime);
-        emit sigNotifyFrameCompleted(frameTime, requestedFrame);
+        Q_EMIT sigNotifyFrameCompleted(frameTime);
+        Q_EMIT sigNotifyFrameCompleted(frameTime, requestedFrame);
     } else {
-        emit sigNotifyFrameCancelled(frameTime, KisAsyncAnimationRendererBase::RenderingFailed);
+        Q_EMIT sigNotifyFrameCancelled(frameTime, KisAsyncAnimationRendererBase::RenderingFailed);
     }
 }
 
 void KisAsyncStoryboardThumbnailRenderer::frameCancelledCallback(int frame, CancelReason cancelReason)
 {
-    emit sigNotifyFrameCancelled(frame, cancelReason);
+    Q_EMIT sigNotifyFrameCancelled(frame, cancelReason);
 }
 
 void KisAsyncStoryboardThumbnailRenderer::clearFrameRegenerationState(bool isCancelled)

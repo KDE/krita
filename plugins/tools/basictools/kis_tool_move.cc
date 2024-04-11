@@ -280,7 +280,7 @@ void KisToolMove::notifyGuiAfterMove(bool showFloatingMessage)
     const QPoint currentTopLeft = m_handlesRect.topLeft() + currentOffset();
 
     KisSignalsBlocker b(m_optionsWidget);
-    emit moveInNewPosition(currentTopLeft);
+    Q_EMIT moveInNewPosition(currentTopLeft);
 
     // TODO: fetch this info not from options widget, but from config
     const bool showCoordinates = m_optionsWidget->showCoordinates();

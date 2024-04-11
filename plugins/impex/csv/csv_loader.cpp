@@ -108,10 +108,10 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
 //                sb->showMessage(i18n("Loading CSV file..."));
 //            }
 //        } else {
-//            emit m_doc->statusBarMessage(i18n("Loading CSV file..."));
+//            Q_EMIT m_doc->statusBarMessage(i18n("Loading CSV file..."));
 //        }
 
-//        emit m_doc->sigProgress(0);
+//        Q_EMIT m_doc->sigProgress(0);
 //        connect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
     }
     int step = 0;
@@ -265,7 +265,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
 
                 if (layer->last != field) {
                     if (!m_batchMode) {
-                        //emit m_doc->sigProgress((frame * layers.size() + idx) * 100 /
+                        //Q_EMIT m_doc->sigProgress((frame * layers.size() + idx) * 100 /
                         //                        (frameCount * layers.size()));
                     }
                     retval = setLayer(layer, importDoc.data(), path);
@@ -320,7 +320,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
 
     if (!m_batchMode) {
         // disconnect(m_doc, SIGNAL(sigProgressCanceled()), this, SLOT(cancel()));
-        // emit m_doc->sigProgress(100);
+        // Q_EMIT m_doc->sigProgress(100);
 
         if (!setView) {
             QStatusBar *sb = KisPart::instance()->currentMainwindow()->statusBar();
@@ -328,7 +328,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
                 sb->clearMessage();
             }
         } else {
-            emit m_doc->clearStatusBarMessage();
+            Q_EMIT m_doc->clearStatusBarMessage();
         }
     }
 

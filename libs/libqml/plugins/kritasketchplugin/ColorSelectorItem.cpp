@@ -101,7 +101,7 @@ void ColorSelectorItem::Private::commitColor(const KoColor& color, Acs::ColorRol
     colorUpdateAllowed = false;
     Acs::setCurrentColor(view->canvasResourceProvider(), role, color);
     QColor qcolor = selector->converter()->toQColor(currentColor);
-    emit q->colorChanged(qcolor, color.opacityF(), false);
+    Q_EMIT q->colorChanged(qcolor, color.opacityF(), false);
     colorUpdateAllowed = true;
 }
 
@@ -248,7 +248,7 @@ void ColorSelectorItem::setView(QObject* newView)
         d->commitColor(d->currentColor, d->colorRole);
         setChangeBackground(changeBackground());
     }
-    emit viewChanged();
+    Q_EMIT viewChanged();
 }
 
 bool ColorSelectorItem::changeBackground() const
@@ -260,7 +260,7 @@ void ColorSelectorItem::setChangeBackground(bool newChangeBackground)
 {
     d->changeBackground = newChangeBackground;
     d->colorRole = newChangeBackground ? Acs::Background : Acs::Foreground;
-    emit changeBackgroundChanged();
+    Q_EMIT changeBackgroundChanged();
     if (!d->view)
         return;
 
@@ -280,7 +280,7 @@ bool ColorSelectorItem::shown() const
 void ColorSelectorItem::setShown(bool newShown)
 {
     d->shown = newShown;
-    emit shownChanged();
+    Q_EMIT shownChanged();
 }
 
 void ColorSelectorItem::setAlpha(int percentValue)
@@ -304,7 +304,7 @@ void ColorSelectorItem::Private::colorChangedImpl(const KoColor &newColor, Acs::
     sub->setColor(newColor);
     commitColor(currentColor, colorRole);
     QColor qcolor = selector->converter()->toQColor(currentColor);
-    emit q->colorChanged(qcolor, currentColor.opacityF(), false);
+    Q_EMIT q->colorChanged(qcolor, currentColor.opacityF(), false);
     repaintTimer->start();
 }
 

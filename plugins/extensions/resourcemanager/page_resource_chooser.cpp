@@ -134,7 +134,7 @@ void PageResourceChooser::updateResources(QString resourceType, int count)
         wizard->m_count[resourceType] = count;
         qDebug() << resourceType << ": " << count;
     }
-    emit countUpdated();
+    Q_EMIT countUpdated();
 
 }
 
@@ -294,7 +294,7 @@ void PageResourceChooser::updateCount(bool flag)
         flag == true? wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] += 1 : wizard->m_count[m_wdgResourcePreview->getCurrentResourceType()] -= 1;
     }
 
-    emit countUpdated();
+    Q_EMIT countUpdated();
 }
 
 PageResourceChooser::~PageResourceChooser()

@@ -201,7 +201,7 @@ void GamutMaskDock::cancelMaskEdit()
         m_selectedMask->clearPreview();
 
         if (m_resourceProvider->currentGamutMask() == m_selectedMask) {
-            emit sigGamutMaskChanged(m_selectedMask);
+            Q_EMIT sigGamutMaskChanged(m_selectedMask);
         }
     }
 
@@ -222,7 +222,7 @@ void GamutMaskDock::selectMask(KoGamutMaskSP mask, bool notifyItemChooser)
         m_selfSelectingMask = false;
     }
 
-    emit sigGamutMaskSet(m_selectedMask);
+    Q_EMIT sigGamutMaskSet(m_selectedMask);
 }
 
 bool GamutMaskDock::saveSelectedMaskResource()
@@ -456,7 +456,7 @@ void GamutMaskDock::slotGamutMaskSave()
 
     bool maskSaved = saveSelectedMaskResource();
     if (maskSaved) {
-        emit sigGamutMaskSet(m_selectedMask);
+        Q_EMIT sigGamutMaskSet(m_selectedMask);
         closeMaskDocument();
     }
 }
@@ -477,7 +477,7 @@ void GamutMaskDock::slotGamutMaskPreview()
     }
 
     m_selectedMask->setPreviewMaskShapes(getShapesFromLayer());
-    emit sigGamutMaskPreviewUpdate();
+    Q_EMIT sigGamutMaskPreviewUpdate();
 }
 
 void GamutMaskDock::slotGamutMaskSelected(KoGamutMaskSP mask)
@@ -515,7 +515,7 @@ void GamutMaskDock::removingResource(KoGamutMaskSP resource)
 {
     // if deleting previously set mask, notify selectors to unset their mask
     if (resource == m_resourceProvider->currentGamutMask()) {
-        emit sigGamutMaskUnset();
+        Q_EMIT sigGamutMaskUnset();
         m_selectedMask = nullptr;
     }
 }

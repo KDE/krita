@@ -155,7 +155,7 @@ DocumentListModel::DocumentType DocumentListModel::typeForFile ( const QString& 
 
 void DocumentListModel::Private::relayout()
 {
-    emit q->layoutAboutToBeChanged();
+    Q_EMIT q->layoutAboutToBeChanged();
 
     QList<DocumentInfo> newList;
     Q_FOREACH (const DocumentInfo &docInfo, allDocumentInfos) {
@@ -167,7 +167,7 @@ void DocumentListModel::Private::relayout()
     }
 
     currentDocumentInfos = newList;
-    emit q->layoutChanged();
+    Q_EMIT q->layoutChanged();
     q->beginResetModel();
     q->endResetModel();
 }

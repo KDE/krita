@@ -150,7 +150,7 @@ WGCommonColorsCalculationRunner::WGCommonColorsCalculationRunner(KisImageSP imag
 void WGCommonColorsCalculationRunner::run()
 {
     extractColors();
-    emit sigDone();
+    Q_EMIT sigDone();
 }
 
 void WGCommonColorsCalculationRunner::extractColors()

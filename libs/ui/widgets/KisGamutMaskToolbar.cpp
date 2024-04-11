@@ -106,7 +106,7 @@ void KisGamutMaskToolbar::slotGamutMaskRotate(qreal angle)
 
     m_selectedMask->setRotation(angle);
     m_selfUpdate = true;
-    emit sigGamutMaskChanged(m_selectedMask);
+    Q_EMIT sigGamutMaskChanged(m_selectedMask);
     m_selfUpdate = false;
 }
 
@@ -128,7 +128,7 @@ void KisGamutMaskToolbar::updateMaskState(bool maskEnabled, bool internalChange)
 
         if (internalChange) {
             m_selfUpdate = true;
-            emit sigGamutMaskChanged(m_selectedMask);
+            Q_EMIT sigGamutMaskChanged(m_selectedMask);
             m_selfUpdate = false;
         }
 
@@ -140,7 +140,7 @@ void KisGamutMaskToolbar::updateMaskState(bool maskEnabled, bool internalChange)
 
         if (internalChange) {
             m_selfUpdate = true;
-            emit sigGamutMaskDeactivated();
+            Q_EMIT sigGamutMaskDeactivated();
             m_selfUpdate = false;
         }
     }

@@ -85,7 +85,7 @@ void KisASCCDLConfigWidget::slopeColorChanged(const KoColor &c)
     } else {
         m_page->btnSlope->setColor(c);
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisASCCDLConfigWidget::offsetColorChanged(const KoColor &c)
@@ -95,7 +95,7 @@ void KisASCCDLConfigWidget::offsetColorChanged(const KoColor &c)
     } else {
         m_page->btnOffset->setColor(c);
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisASCCDLConfigWidget::powerColorChanged(const KoColor &c)
@@ -105,5 +105,5 @@ void KisASCCDLConfigWidget::powerColorChanged(const KoColor &c)
     } else {
         m_page->btnPower->setColor(c);
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }

@@ -109,5 +109,5 @@ void KisSpinboxHSXSelector::slotSpinBoxChanged()
                   m_d->spinBoxes[1]->value() / 100.0,
                   m_d->spinBoxes[2]->value() / 100.0,
                   0);
-    emit sigChannelValuesChanged(hsx);
+    Q_EMIT sigChannelValuesChanged(hsx);
 }

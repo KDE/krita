@@ -138,6 +138,6 @@ qreal FontSizeAction::fontSize() const
 
 void FontSizeAction::actionTriggered(QAction *action)
 {
-    emit fontSizeChanged(action->text().toDouble());
+    Q_EMIT fontSizeChanged(action->text().toDouble());
     KSelectAction::actionTriggered(action);
 }

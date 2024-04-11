@@ -32,7 +32,7 @@
 
     The class supports the mapping of particular strings or integers
     with particular objects using setMapping(). The objects' signals
-    can then be connected to the map() slot which will emit the
+    can then be connected to the map() slot which will Q_EMIT the
     mapped() signal with the string or integer associated with the
     original signaling object. Mappings can be removed later using
     removeMappings().
@@ -64,7 +64,7 @@
     mapper from each button to the button's text. Finally we connect
     the signal mapper's mapped() signal to the custom widget's \c
     clicked() signal. When the user clicks a button, the custom
-    widget will emit a single \c clicked() signal whose argument is
+    widget will Q_EMIT a single \c clicked() signal whose argument is
     the text of the button the user clicked.
 
     This class was mostly useful before lambda functions could be used as

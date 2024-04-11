@@ -577,11 +577,11 @@ void KisAnimCurvesView::mousePressEvent(QMouseEvent *e)
             QModelIndex prevCurrent = selectionModel()->currentIndex();
             selectionModel()->select(clickedIndex, QItemSelectionModel::Select);
             selectionModel()->setCurrentIndex(clickedIndex, QItemSelectionModel::NoUpdate);
-            emit currentChanged(clickedIndex, prevCurrent);
+            Q_EMIT currentChanged(clickedIndex, prevCurrent);
         }
 
-        emit clicked(clickedIndex);
-        emit activeDataChanged(selectionModel()->currentIndex());
+        Q_EMIT clicked(clickedIndex);
+        Q_EMIT activeDataChanged(selectionModel()->currentIndex());
     } else {
         QAbstractItemView::mousePressEvent(e);
     }
@@ -815,7 +815,7 @@ void KisAnimCurvesView::slotDataChanged(const QModelIndex &topLeft, const QModel
 
     if (selectionModel()->selection().count() != 0 &&
         selectionModel()->currentIndex().isValid()) {
-        emit activeDataChanged(selectionModel()->currentIndex());
+        Q_EMIT activeDataChanged(selectionModel()->currentIndex());
     }
 }
 

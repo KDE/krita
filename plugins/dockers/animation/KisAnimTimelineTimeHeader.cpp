@@ -421,7 +421,7 @@ bool KisAnimTimelineTimeHeader::setZoom(qreal zoom)
 
     if (newSectionSize != defaultSectionSize()) {
         setDefaultSectionSize(newSectionSize);
-        emit sigZoomChanged(zoom);
+        Q_EMIT sigZoomChanged(zoom);
         return true;
     }
 

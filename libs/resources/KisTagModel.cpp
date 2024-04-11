@@ -242,7 +242,7 @@ bool KisAllTagsModel::setData(const QModelIndex &index, const QVariant &value, i
         KisResourceLocator::instance()->purgeTag(data(index, Qt::UserRole + Url).toString(), d->resourceType);
     }
     resetQuery();
-    emit dataChanged(index, index, {role});
+    Q_EMIT dataChanged(index, index, {role});
     return true;
 }
 

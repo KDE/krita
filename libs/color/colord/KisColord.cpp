@@ -151,7 +151,7 @@ void KisColord::serviceOwnerChanged(const QString &serviceName, const QString &o
         qDeleteAll(m_devices);
         m_devices.clear();
     }
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KisColord::gotDevices(QDBusPendingCallWatcher *call)
@@ -166,7 +166,7 @@ void KisColord::gotDevices(QDBusPendingCallWatcher *call)
         Q_FOREACH (const QDBusObjectPath &device, devices) {
             deviceAdded(device, false);
         }
-        emit changed();
+        Q_EMIT changed();
     }
     //dbgKrita << "gotDevices" << m_devices.count();
     call->deleteLater();
@@ -197,7 +197,7 @@ void KisColord::deviceChanged(const QDBusObjectPath &objectPath)
 
     //dbgKrita << "deviceChanged" << dev->id << "with" << profiles.size() << "profiles";
 
-    emit changed(dev->id);
+    Q_EMIT changed(dev->id);
 }
 
 void KisColord::deviceAdded(const QDBusObjectPath &objectPath, bool emitChanged)
@@ -235,7 +235,7 @@ void KisColord::deviceAdded(const QDBusObjectPath &objectPath, bool emitChanged)
 //             << "with" << profiles.size() << "profiles";
 
     if (emitChanged) {
-        emit changed();
+        Q_EMIT changed();
     }
 }
 
@@ -244,7 +244,7 @@ void KisColord::deviceRemoved(const QDBusObjectPath &objectPath)
     if (m_devices.contains(objectPath)) {
         delete m_devices.take(objectPath);
     }
-    emit changed();
+    Q_EMIT changed();
 }
 
 void KisColord::addProfilesToDevice(Device *dev, QList<QDBusObjectPath> profiles) const

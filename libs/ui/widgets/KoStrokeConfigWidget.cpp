@@ -510,7 +510,7 @@ void KoStrokeConfigWidget::applyDashStyleChanges()
         stroke->setLineStyle(lineStyle(), lineDashes());
     });
 
-    emit sigStrokeChanged();
+    Q_EMIT sigStrokeChanged();
 }
 
 void KoStrokeConfigWidget::applyLineWidthChanges()
@@ -521,7 +521,7 @@ void KoStrokeConfigWidget::applyLineWidthChanges()
         stroke->setLineWidth(lineWidth());
     });
 
-    emit sigStrokeChanged();
+    Q_EMIT sigStrokeChanged();
 }
 
 void KoStrokeConfigWidget::applyJoinCapChanges()
@@ -535,14 +535,14 @@ void KoStrokeConfigWidget::applyJoinCapChanges()
         stroke->setMiterLimit(miterLimit());
     });
 
-    emit sigStrokeChanged();
+    Q_EMIT sigStrokeChanged();
 }
 
 void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
 {
     KoSelection *selection = d->canvas->selectedShapesProxy()->selection();
     if (!selection) {
-        emit sigStrokeChanged();
+        Q_EMIT sigStrokeChanged();
         return;
     }
 
@@ -556,7 +556,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
     }
 
     if (pathShapes.isEmpty()) {
-        emit sigStrokeChanged();
+        Q_EMIT sigStrokeChanged();
         return;
     }
 
@@ -585,7 +585,7 @@ void KoStrokeConfigWidget::applyMarkerChanges(int rawPosition)
     KUndo2Command* command = new KoPathShapeMarkerCommand(pathShapes, marker.take(), position);
     d->canvas->addCommand(command);
 
-    emit sigStrokeChanged();
+    Q_EMIT sigStrokeChanged();
 }
 
 // ----------------------------------------------------------------
@@ -783,6 +783,6 @@ void KoStrokeConfigWidget::loadCurrentStrokeFillFromResourceServer()
 
         updateStyleControlsAvailability(true);
 
-        emit sigStrokeChanged();
+        Q_EMIT sigStrokeChanged();
     }
 }

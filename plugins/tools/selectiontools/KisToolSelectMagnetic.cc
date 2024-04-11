@@ -233,7 +233,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
     } else {
         beginSelectInteraction();
         updateInitialAnchorBounds(temp.toPoint());
-        emit setButtonsEnabled(true);
+        Q_EMIT setButtonsEnabled(true);
     }
 
     m_lastAnchor = temp.toPoint();

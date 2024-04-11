@@ -232,7 +232,7 @@ void KisDlgLayerStyle::slotNotifyOnAccept()
 {
     if (m_configChangedCompressor->isActive()) {
         m_configChangedCompressor->stop();
-        emit configChanged();
+        Q_EMIT configChanged();
     }
 }
 
@@ -241,7 +241,7 @@ void KisDlgLayerStyle::slotNotifyOnReject()
     notifyPredefinedStyleSelected(m_initialLayerStyle);
 
     m_configChangedCompressor->stop();
-    emit configChanged();
+    Q_EMIT configChanged();
 }
 
 bool checkCustomNameAvailable(const QString &name)
@@ -671,13 +671,13 @@ void StylesSelector::selectStyle(QModelIndex current)
     KisPSDLayerStyleSP layerStyle = resource.dynamicCast<KisPSDLayerStyle>();
     qDebug() << "StylesSelector::selectStyle" << (resource.isNull() ? "(null)" : resource->name()) << (layerStyle.isNull() ? "(null)" : layerStyle->name());
     if (layerStyle) {
-        emit styleSelected(layerStyle);
+        Q_EMIT styleSelected(layerStyle);
     }
 
     /*
     StyleItem *item = dynamic_cast<StyleItem*>(current);
     if (item) {
-        emit styleSelected(item->m_style);
+        Q_EMIT styleSelected(item->m_style);
     }
     */
 }

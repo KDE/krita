@@ -283,7 +283,7 @@ public:
     {
         m_currentHandle = handleAt(ev->point);
         q->m_selectedMeshHandle = m_currentHandle;
-        emit q->meshgradientHandleSelected(m_currentHandle);
+        Q_EMIT q->meshgradientHandleSelected(m_currentHandle);
 
 
         if (m_currentHandle.type != KoShapeMeshGradientHandles::Handle::None) {
@@ -800,7 +800,7 @@ void DefaultTool::updateCursor()
     }
     useCursor(cursor);
     if (currentStrategy() == 0) {
-        emit statusTextChanged(statusText);
+        Q_EMIT statusTextChanged(statusText);
     }
 }
 
@@ -1799,7 +1799,7 @@ void DefaultTool::updateActions()
 
     updateDistinctiveActions(editableShapes);
 
-    emit selectionChanged(editableShapes.size());
+    Q_EMIT selectionChanged(editableShapes.size());
 }
 
 void DefaultTool::updateDistinctiveActions(const QList<KoShape*> &editableShapes) {

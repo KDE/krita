@@ -37,7 +37,7 @@ void KisToolChangesTracker::requestUndo()
     m_d->redoStack.append(m_d->undoStack.last());
     m_d->undoStack.removeLast();
     if (!m_d->undoStack.isEmpty()) {
-        emit sigConfigChanged(m_d->undoStack.last());
+        Q_EMIT sigConfigChanged(m_d->undoStack.last());
     }
 }
 
@@ -48,7 +48,7 @@ void KisToolChangesTracker::requestRedo()
     m_d->undoStack.append(m_d->redoStack.last());
     m_d->redoStack.removeLast();
     if (!m_d->undoStack.isEmpty()) {
-        emit sigConfigChanged(m_d->undoStack.last());
+        Q_EMIT sigConfigChanged(m_d->undoStack.last());
     }
 }
 

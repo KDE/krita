@@ -1176,8 +1176,8 @@ bool NodeDelegate::eventFilter(QObject *object, QEvent *event)
         if (d->edit) {
             QMouseEvent *me = static_cast<QMouseEvent*>(event);
             if (!QRect(d->edit->mapToGlobal(QPoint()), d->edit->size()).contains(me->globalPos())) {
-                emit commitData(d->edit);
-                emit closeEditor(d->edit);
+                Q_EMIT commitData(d->edit);
+                Q_EMIT closeEditor(d->edit);
             }
         }
     } break;
@@ -1187,20 +1187,20 @@ bool NodeDelegate::eventFilter(QObject *object, QEvent *event)
             QKeyEvent *ke = static_cast<QKeyEvent*>(event);
             switch (ke->key()) {
             case Qt::Key_Escape:
-                emit closeEditor(edit);
+                Q_EMIT closeEditor(edit);
                 return true;
             case Qt::Key_Tab:
-                emit commitData(edit);
-                emit closeEditor(edit, EditNextItem);
+                Q_EMIT commitData(edit);
+                Q_EMIT closeEditor(edit, EditNextItem);
                 return true;
             case Qt::Key_Backtab:
-                emit commitData(edit);
-                emit closeEditor(edit, EditPreviousItem);
+                Q_EMIT commitData(edit);
+                Q_EMIT closeEditor(edit, EditPreviousItem);
                 return true;
             case Qt::Key_Return:
             case Qt::Key_Enter:
-                emit commitData(edit);
-                emit closeEditor(edit);
+                Q_EMIT commitData(edit);
+                Q_EMIT closeEditor(edit);
                 return true;
             default: break;
             }
@@ -1228,8 +1228,8 @@ bool NodeDelegate::eventFilter(QObject *object, QEvent *event)
     case QEvent::FocusOut : {
         QLineEdit *edit = qobject_cast<QLineEdit*>(object);
         if (edit && edit == d->edit) {
-            emit commitData(edit);
-            emit closeEditor(edit);
+            Q_EMIT commitData(edit);
+            Q_EMIT closeEditor(edit);
         }
     }
     default: break;
@@ -1327,7 +1327,7 @@ void NodeDelegate::slotConfigChanged()
 
     if (d->rowHeight != oldHeight) {
         // QAbstractItemView/QTreeView don't even look at the index and redo the whole layout...
-        emit sizeHintChanged(QModelIndex());
+        Q_EMIT sizeHintChanged(QModelIndex());
     }
 }
 

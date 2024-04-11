@@ -430,9 +430,9 @@ void SvgTextEditor::save()
                     qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
-            emit textUpdated(m_shape, svg, styles);
+            Q_EMIT textUpdated(m_shape, svg, styles);
         } else if (isSvgSourceEditorTabActive()) {
-            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
+            Q_EMIT textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
@@ -497,7 +497,7 @@ void SvgTextEditor::checkFormat()
     QTextCharFormat format = m_textEditorWidget.richTextEdit->textCursor().charFormat();
     QTextBlockFormat blockFormat = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
 
-    // checkboxes do not emit signals on manual switching, so we
+    // checkboxes do not Q_EMIT signals on manual switching, so we
     // can avoid blocking them
 
     if (format.fontWeight() > QFont::Normal) {
@@ -1640,7 +1640,7 @@ bool SvgTextEditor::isSvgSourceEditorTabActive() {
 void SvgTextEditor::slotCloseEditor()
 {
     close();
-    emit textEditorClosed();
+    Q_EMIT textEditorClosed();
 }
 
 bool SvgTextEditor::eventFilter(QObject *const watched, QEvent *const event)

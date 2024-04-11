@@ -285,13 +285,13 @@ KisShapeSelectionFactory::KisShapeSelectionFactory()
 void KisShapeSelection::moveX(qint32 x)
 {
     const QPointF diff(x / m_resolutionProxy->xRes(), 0);
-    emit sigMoveShapes(diff);
+    Q_EMIT sigMoveShapes(diff);
 }
 
 void KisShapeSelection::moveY(qint32 y)
 {
     const QPointF diff(0, y / m_resolutionProxy->yRes());
-    emit sigMoveShapes(diff);
+    Q_EMIT sigMoveShapes(diff);
 }
 
 void KisShapeSelection::slotMoveShapes(const QPointF &diff)

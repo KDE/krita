@@ -138,7 +138,7 @@ void KisAsyncAnimationRendererBase::notifyFrameCompleted(int frame)
     }
 
 
-    emit sigFrameCompleted(frame);
+    Q_EMIT sigFrameCompleted(frame);
 }
 
 void KisAsyncAnimationRendererBase::notifyFrameCancelled(int frame, CancelReason cancelReason)
@@ -159,7 +159,7 @@ void KisAsyncAnimationRendererBase::notifyFrameCancelled(int frame, CancelReason
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->requestedFrame == frame);
     }
 
-    emit sigFrameCancelled(frame, cancelReason);
+    Q_EMIT sigFrameCancelled(frame, cancelReason);
 }
 
 void KisAsyncAnimationRendererBase::clearFrameRegenerationState(bool isCancelled)

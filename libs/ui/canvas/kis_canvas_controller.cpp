@@ -158,7 +158,7 @@ void KisCanvasController::updateDocumentSize(const QSizeF &sz, bool recalculateC
 {
     KoCanvasControllerWidget::updateDocumentSize(sz, recalculateCenter);
 
-    emit documentSizeChanged();
+    Q_EMIT documentSizeChanged();
 }
 
 void KisCanvasController::Private::showMirrorStateOnCanvas()
@@ -179,7 +179,7 @@ void KisCanvasController::mirrorCanvas(bool enable)
     setScrollBarValue(newOffset);
     m_d->showMirrorStateOnCanvas();
 
-    emit canvasMirrorModeChanged(enable);
+    Q_EMIT canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
@@ -201,7 +201,7 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
         m_d->showMirrorStateOnCanvas();
     }
 
-    emit canvasMirrorModeChanged(enable);
+    Q_EMIT canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
@@ -222,7 +222,7 @@ void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
     m_d->updateDocumentSizeAfterTransform();
     m_d->showMirrorStateOnCanvas();
 
-    emit canvasMirrorModeChanged(enable);
+    Q_EMIT canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::Private::showRotationValueOnCanvas()

@@ -939,7 +939,7 @@ bool KisTagResourceModel::updateResource(KoResourceSP resource)
     if (r) {
         QModelIndex index = indexForResource(resource);
         if (index.isValid()) {
-            emit dataChanged(index, index, {Qt::EditRole});
+            Q_EMIT dataChanged(index, index, {Qt::EditRole});
         }
     }
     return r;
@@ -952,7 +952,7 @@ bool KisTagResourceModel::reloadResource(KoResourceSP resource)
     if (r) {
         QModelIndex index = indexForResource(resource);
         if (index.isValid()) {
-            emit dataChanged(index, index, {Qt::EditRole});
+            Q_EMIT dataChanged(index, index, {Qt::EditRole});
         }
     }
     return r;
@@ -965,7 +965,7 @@ bool KisTagResourceModel::renameResource(KoResourceSP resource, const QString &n
     if (r) {
         QModelIndex index = indexForResource(resource);
         if (index.isValid()) {
-            emit dataChanged(index, index, {Qt::EditRole});
+            Q_EMIT dataChanged(index, index, {Qt::EditRole});
         }
     }
     return r;

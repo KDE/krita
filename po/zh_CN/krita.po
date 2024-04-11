@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-09 19:29\n"
+"PO-Revision-Date: 2024-04-10 19:56\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -37683,7 +37683,7 @@ msgstr "动画曲线"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:72
 #, kde-format
 msgid "Frame register"
-msgstr "帧编号数值框"
+msgstr "帧编号输入框"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:86
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:89
@@ -37707,17 +37707,17 @@ msgstr "数值："
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
 #, kde-format
 msgid "Value register"
-msgstr ""
+msgstr "数值输入框"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
 #, kde-format
 msgid "Zoom horizontally"
-msgstr ""
+msgstr "水平缩放"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
 #, kde-format
 msgid "Zoom vertically"
-msgstr ""
+msgstr "垂直缩放"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131

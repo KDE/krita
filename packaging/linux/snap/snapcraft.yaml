@@ -48,11 +48,6 @@ plugs:
         interface: content
         default-provider: kf5-5-113-qt-5-15-11-core22
         target: $SNAP/kf5
-    foo-install-cups:
-        interface: content
-        content: foo
-        default-provider: cups
-        target: $SNAP_DATA/foo
 environment:
     SNAP_DESKTOP_RUNTIME: $SNAP/kf5
     QML2_IMPORT_PATH: "$QML2_IMPORT_PATH:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qml:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml:$SNAP/kf5/usr/lib/$CRAFT_ARCH_TRIPLET/qt5/qml"

@@ -169,19 +169,12 @@ void KisFreeTransformStrategy::Private::recalculateBounds()
     QTransform BRI = boundsTransform.inverted();
 
     QList<QPointF> corners;
-    corners << transaction.originalTopLeft() << transaction.originalTopRight() << transaction.originalBottomLeft() << transaction.originalBottomRight();
-    qreal maxX = -std::numeric_limits<qreal>::infinity();
-    qreal minX = std::numeric_limits<qreal>::infinity();
-    qreal maxY = -std::numeric_limits<qreal>::infinity();
-    qreal minY = std::numeric_limits<qreal>::infinity();
-    for (const QPointF &corner : corners) {
-        QPointF mappedCorner = BRI.map(corner);
-        maxX = std::max(maxX, mappedCorner.x());
-        minX = std::min(minX, mappedCorner.x());
-        maxY = std::max(maxY, mappedCorner.y());
-        minY = std::min(minY, mappedCorner.y());
-    }
-    bounds = QRectF(QPointF(minX, minY), QPointF(maxX, maxY));
+    corners
+        << BRI.map(transaction.originalTopLeft())
+        << BRI.map(transaction.originalTopRight())
+        << BRI.map(transaction.originalBottomLeft())
+        << BRI.map(transaction.originalBottomRight());
+    bounds = KisAlgebra2D::accumulateBounds(corners);
 }
 
 void KisFreeTransformStrategy::Private::recalculateTransformedHandles()

@@ -2057,16 +2057,6 @@ void KisConfig::setTrimFramesImport(bool trim)
     m_cfg.writeEntry("TrimFramesImport", trim);
 }
 
-int KisConfig::exportFileType(bool defaultValue) const
-{
-    return (defaultValue ? 0 : m_cfg.readEntry("defaultExportFileType", 0));
-}
-
-void KisConfig::setExportFileType(int defaultExport)
-{
-    m_cfg.writeEntry("defaultExportFileType", defaultExport);
-} 
-
 QString KisConfig::exportMimeType(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("defaultExportMimeType", QString()));

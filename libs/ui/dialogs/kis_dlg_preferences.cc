@@ -371,14 +371,29 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         QStringList sortedDescriptions = mimeTypeMap.keys();
         sortedDescriptions.sort(Qt::CaseInsensitive);
 
-        cmbDefaultExportFileType->addItem(i18n("All Supported Files"));
+        cmbDefaultExportFileType->addItem(i18n("All Supported Files"), "all/mime");
         foreach (const QString &description, sortedDescriptions) {
             const QString &mimeType = mimeTypeMap.value(description);
             cmbDefaultExportFileType->addItem(description, mimeType);
         }
 
+        const QString mimeTypeToFind = cfg.exportMimeType(false).toUtf8();
+        const int index = cmbDefaultExportFileType->findData(mimeTypeToFind);
 
-    cmbDefaultExportFileType->setCurrentIndex(cfg.exportFileType(false));
+        if (index >= 0) {
+            cmbDefaultExportFileType->setCurrentIndex(index);
+        } else {
+            // Index can't be found, default set to image/png
+            const QString defaultMimeType = "image/png";
+            const int defaultIndex = cmbDefaultExportFileType->findData(defaultMimeType);
+            if (defaultIndex >= 0) {
+                cmbDefaultExportFileType->setCurrentIndex(defaultIndex);
+            } else {
+                // Case where the default mime type is also not found in the combo box
+                qDebug() << "Default mime type not found in the combo box.";
+            }
+        }
+
     QString selectedMimeType = cmbDefaultExportFileType->currentData().toString();
 
     //
@@ -836,11 +851,6 @@ bool GeneralTab::trimKra()
 bool GeneralTab::trimFramesImport()
 {
     return m_chkTrimFramesImport->isChecked();
-}
-
-int GeneralTab::exportFileType()
-{
-    return cmbDefaultExportFileType->currentIndex();
 }
 
 QString GeneralTab::exportMimeType()
@@ -2360,7 +2370,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setCompressKra(m_general->compressKra());
         cfg.setTrimKra(m_general->trimKra());
         cfg.setTrimFramesImport(m_general->trimFramesImport());
-        cfg.setExportFileType(m_general->exportFileType());
         cfg.setExportMimeType(m_general->exportMimeType());
         cfg.setUseZip64(m_general->useZip64());
         cfg.setPasteFormat(m_general->m_pasteFormatGroup.checkedId());

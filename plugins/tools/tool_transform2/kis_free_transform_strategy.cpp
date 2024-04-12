@@ -763,11 +763,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         qreal sign = m_d->function == BOTTOMSHEAR ? 1.0 : -1.0;
 
         // get the dx pixels corresponding to the current shearX factor
-        qreal dx = sign * m_d->clickArgs.shearX() * m_d->clickArgs.scaleY() * m_d->transaction.originalHalfHeight(); // get the dx pixels corresponding to the current shearX factor
+        qreal dx = sign * m_d->clickArgs.shearX() * m_d->clickArgs.scaleY() * (m_d->bounds.height() / 2.0); // get the dx pixels corresponding to the current shearX factor
         dx += diff.x();
 
         // calculate the new shearX factor
-        m_d->currentArgs.setShearX(sign * dx / m_d->currentArgs.scaleY() / m_d->transaction.originalHalfHeight()); // calculate the new shearX factor
+        m_d->currentArgs.setShearX(sign * dx / m_d->currentArgs.scaleY() / (m_d->bounds.height() / 2.0)); // calculate the new shearX factor
 
         KisTransformUtils::MatricesPack currentM(m_d->currentArgs);
         QTransform t = currentM.finalTransform();
@@ -788,11 +788,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         qreal sign = m_d->function == RIGHTSHEAR ? 1.0 : -1.0;
 
         // get the dx pixels corresponding to the current shearX factor
-        qreal dy = sign *  m_d->clickArgs.shearY() * m_d->clickArgs.scaleX() * m_d->transaction.originalHalfWidth();
+        qreal dy = sign *  m_d->clickArgs.shearY() * m_d->clickArgs.scaleX() * (m_d->bounds.width() / 2.0);
         dy += diff.y();
 
         // calculate the new shearY factor
-        m_d->currentArgs.setShearY(sign * dy / m_d->clickArgs.scaleX() / m_d->transaction.originalHalfWidth());
+        m_d->currentArgs.setShearY(sign * dy / m_d->clickArgs.scaleX() / (m_d->bounds.width() / 2.0));
 
         KisTransformUtils::MatricesPack currentM(m_d->currentArgs);
         QTransform t = currentM.finalTransform();

@@ -74,11 +74,10 @@ public:
         QTransform projectedP;
         QTransform T;
 
-        QTransform BR;
         QTransform BRI;
 
         // the final transformation looks like
-        // transform = TS * BRI * SC * S * BR * projectedP * T
+        // transform = TS * BRI * SC * S * projectedP * T
         QTransform finalTransform() const;
     };
 

@@ -162,7 +162,6 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
     S.shear(0, args.shearY()); S.shear(args.shearX(), 0);
 
     if (args.mode() == ToolTransformArgs::FREE_TRANSFORM) {
-        BR.rotate(180. * args.boundsRotation() / M_PI);
         BRI.rotate(180. * -args.boundsRotation() / M_PI);
         P.rotate(180. * normalizeAngle(args.aX()) / M_PI, QVector3D(1, 0, 0));
         P.rotate(180. * normalizeAngle(args.aY()) / M_PI, QVector3D(0, 1, 0));
@@ -185,7 +184,7 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
 
 QTransform KisTransformUtils::MatricesPack::finalTransform() const
 {
-    return TS * BRI * SC * S * BR * projectedP * T;
+    return TS * BRI * SC * S * projectedP * T;
 }
 
 bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight)
@@ -228,7 +227,7 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
     if (config.boundsRotation() != 0.0) {
         const KisTransformUtils::MatricesPack m(config);
         QTransform Z; Z.rotateRadians(aZ);
-        QTransform desired = m.BRI * m.SC * m.S * m.BR * Z;
+        QTransform desired = m.BRI * m.SC * m.S * Z;
         KisAlgebra2D::DecomposedMatrix dm(desired);
         if (dm.isValid()) {
             scaleX = dm.scaleX;

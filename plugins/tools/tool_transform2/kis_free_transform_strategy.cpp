@@ -442,7 +442,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         if (shiftModifierActive) {
 
             KisTransformUtils::MatricesPack m(m_d->clickArgs);
-            QTransform t = m.S * m.BR * m.projectedP;
+            QTransform t = m.S * m.projectedP;
             QPointF originalDiff = t.inverted().map(diff);
 
             if (qAbs(originalDiff.x()) >= qAbs(originalDiff.y())) {
@@ -477,16 +477,16 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         // Find new scale/shear/rotation for the rotated bounds
         QTransform newBR; newBR.rotateRadians(m_d->currentArgs.boundsRotation());
         QTransform clickZ; clickZ.rotateRadians(m_d->clickArgs.aZ());
-        // newM.BRI * newM.SC * newM.S * newM.BR * newZ = clickM.BRI * clickM.SC * clickM.S * clickM.BR * clickZ
-        // newM.SC * newM.S * (newM.BR * newZ) = newM.BR * clickM.BRI * clickM.SC * clickM.S * clickM.BR * clickZ
-        QTransform desired = newBR * clickM.BRI * clickM.SC * clickM.S * clickM.BR * clickZ;
+        // newM.BRI * newM.SC * newM.S * newZ = clickM.BRI * clickM.SC * clickM.S * clickZ
+        // newM.SC * newM.S * newZ = newM.BR * clickM.BRI * clickM.SC * clickM.S * clickZ
+        QTransform desired = newBR * clickM.BRI * clickM.SC * clickM.S * clickZ;
         KisAlgebra2D::DecomposedMatrix dm(desired);
         if (dm.isValid()) {
             m_d->currentArgs.setScaleX(dm.scaleX);
             m_d->currentArgs.setScaleY(dm.scaleY);
             m_d->currentArgs.setShearX(dm.shearXY);
             m_d->currentArgs.setShearY(0);
-            m_d->currentArgs.setAZ(kisDegreesToRadians(dm.angle) - m_d->currentArgs.boundsRotation());
+            m_d->currentArgs.setAZ(kisDegreesToRadians(dm.angle));
         }
 
         // Snap with shift key
@@ -757,7 +757,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         QPointF oldStaticPoint = m.finalTransform().map(m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset());
 
-        QTransform backwardT = (m.S * m.BR * m.projectedP).inverted();
+        QTransform backwardT = (m.S * m.projectedP).inverted();
         QPointF diff = backwardT.map(mousePos - m_d->clickPos);
 
         qreal sign = m_d->function == BOTTOMSHEAR ? 1.0 : -1.0;
@@ -782,7 +782,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         QPointF oldStaticPoint = m.finalTransform().map(m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset());
 
-        QTransform backwardT = (m.S * m.BR * m.projectedP).inverted();
+        QTransform backwardT = (m.S * m.projectedP).inverted();
         QPointF diff = backwardT.map(mousePos - m_d->clickPos);
 
         qreal sign = m_d->function == RIGHTSHEAR ? 1.0 : -1.0;
@@ -830,7 +830,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(currentArgs.originalCenter()).manhattanLength() < 1e-4);
 
     transform = m.finalTransform();
-    boundsTransform = m.BR;
+    boundsTransform = m.BRI.inverted();
     bounds = m.BRI.mapRect(transaction.originalRect());
 
     QTransform viewScaleTransform = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();

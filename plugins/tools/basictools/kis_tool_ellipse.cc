@@ -72,10 +72,13 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
         getRotatedPath(path, rect.center(), getRotationAngle());
         helper.paintPainterPath(path);
     } else {
+        KisResourcesSnapshot resources(image(),
+                                       currentNode(),
+                                       canvas()->resourceManager());
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);
         shape->rotate(qRadiansToDegrees(getRotationAngle()));
-        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
+        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), resources.currentFgColor().toQColor()));
         shape->setStroke(border);
 
         info.markAsSelectionShapeIfNeeded(shape);

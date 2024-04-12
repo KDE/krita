@@ -33,6 +33,7 @@ public:
         RectSelToolShortcut,
         ContigSelToolShortcut,
         FreehandSelToolShortcut,
+        ActivateWithOtherColorShortcut,
     };
 
     explicit KisToolInvocationAction();

@@ -129,7 +129,10 @@ void KisToolColorSampler::deactivate()
 void KisToolColorSampler::beginPrimaryAction(KoPointerEvent *event)
 {
     m_helper.setUpdateGlobalColor(m_config->updateColor);
-    m_helper.activate(!m_config->sampleMerged, m_config->toForegroundColor);
+
+    bool useOtherColor = canvas()->resourceManager()->boolResource(KoCanvasResource::UsingOtherColor);
+    // if useOtherColor is true, apply to the other color than that configured in the tool options
+    m_helper.activate(!m_config->sampleMerged, m_config->toForegroundColor != useOtherColor);
     m_helper.startAction(event->point, m_config->radius, m_config->blend);
     requestUpdateOutline(event->point, event);
 
@@ -163,7 +166,9 @@ void KisToolColorSampler::activatePrimaryAction()
      * We explicitly avoid calling KisTool::activatePrimaryAction()
      * here, because it resets the cursor, causing cursor blinking
      */
-    m_helper.updateCursor(!m_config->sampleMerged, m_config->toForegroundColor);
+    bool useOtherColor = canvas()->resourceManager()->boolResource(KoCanvasResource::UsingOtherColor);
+    // if useOtherColor is true, apply to the other color than that configured in the tool options
+    m_helper.updateCursor(!m_config->sampleMerged, m_config->toForegroundColor != useOtherColor);
 }
 
 void KisToolColorSampler::deactivatePrimaryAction()

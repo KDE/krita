@@ -201,6 +201,19 @@ public:
     int decorationThickness() const;
 
     /**
+     * @brief setUsingOtherColor
+     * Set whether the user requested the current action to use the colors the other way around.
+     * @param usingOtherColor whether user requested such
+     */
+    void setUsingOtherColor(bool usingOtherColor);
+
+    /**
+     * @brief isUsingOtherColor
+     * @return whether the user requested the current action to use the colors the other way around
+     */
+    bool isUsingOtherColor() const;
+
+    /**
      * Returns true if there is a resource set with the requested key.
      * @param key the identifying key for the resource
      * @see KoCanvasResource::CanvasResourceId

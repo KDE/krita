@@ -74,6 +74,7 @@ public:
     KisPaintOpPresetSP currentPaintOpPreset() const;
     KoAbstractGradientSP currentGradient() const;
     KisFilterConfigurationSP currentGenerator() const;
+    bool isUsingOtherColor() const;
 
     QTransform fillTransform() const;
 

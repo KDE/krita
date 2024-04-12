@@ -339,6 +339,9 @@ void KisToolLine::endStroke()
         m_helper->end();
     }
     else {
+        KisResourcesSnapshot resources(image(),
+                                       currentNode(),
+                                       canvas()->resourceManager());
         KoPathShape* path = new KoPathShape();
         path->setShapeId(KoPathShapeId);
 
@@ -348,7 +351,7 @@ void KisToolLine::endStroke()
         path->lineTo(resolutionMatrix.map(m_endPoint));
         path->normalize();
 
-        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), currentFgColor().toQColor()));
+        KoShapeStrokeSP border(new KoShapeStroke(currentStrokeWidth(), resources.currentFgColor().toQColor()));
         path->setStroke(border);
 
         KUndo2Command * cmd = canvas()->shapeController()->addShape(path, nullptr);

@@ -25,6 +25,7 @@ class KisToolInvocationAction::Private
 public:
     bool active {false};
     bool deactivating {false};
+    bool isUsingOtherColor {false};
 
     QPointer<KisToolProxy> activatedToolProxy;
     QPointer<KisToolProxy> runningToolProxy;
@@ -52,6 +53,7 @@ KisToolInvocationAction::KisToolInvocationAction()
     indexes.insert(i18n("Activate Rectangular Selection Tool"), RectSelToolShortcut);
     indexes.insert(i18n("Activate Contiguous Selection Tool"), ContigSelToolShortcut);
     indexes.insert(i18n("Activate Freehand Selection Tool"), FreehandSelToolShortcut);
+    indexes.insert(i18n("Activate with Other Color"), ActivateWithOtherColorShortcut);
 
     setShortcutIndexes(indexes);
 }
@@ -108,6 +110,13 @@ void KisToolInvocationAction::activate(int shortcut)
     }
 
     d->activatedToolProxy = inputManager()->toolProxy();
+
+    d->isUsingOtherColor = shortcut == ActivateWithOtherColorShortcut;
+
+    if (d->isUsingOtherColor) {
+        inputManager()->canvas()->resourceManager()->setUsingOtherColor(true);
+    }
+
     d->activatedToolProxy->activateToolAction(KisTool::Primary);
 }
 
@@ -115,6 +124,11 @@ void KisToolInvocationAction::deactivate(int shortcut)
 {
     Q_UNUSED(shortcut);
     if (!inputManager()) return;
+
+    // Revert UsingOtherColor
+    if (d->isUsingOtherColor) {
+        inputManager()->canvas()->resourceManager()->setUsingOtherColor(false);
+    }
 
     /**
      * Activate call might have come before actual input manager or tool proxy
@@ -125,7 +139,7 @@ void KisToolInvocationAction::deactivate(int shortcut)
         d->activatedToolProxy.clear();
     }
 
-    if (shortcut != ActivateShortcut && shortcut != ConfirmShortcut && shortcut != CancelShortcut && !d->deactivating) {
+    if (shortcut != ActivateShortcut && shortcut != ConfirmShortcut && shortcut != CancelShortcut && shortcut != ActivateWithOtherColorShortcut && !d->deactivating) {
         // Switching tool will force deactivation and will re-enter
         d->deactivating = true;
         KoToolManager::instance()->switchBackRequested();

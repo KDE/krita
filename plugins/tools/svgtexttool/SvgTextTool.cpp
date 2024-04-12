@@ -350,7 +350,9 @@ QString SvgTextTool::generateDefs(const QString &extraProperties)
         direction = m_defDirection->button(0)->isChecked()? "ltr" : "rtl";
     }
 
-    QString fontColor = canvas()->resourceManager()->foregroundColor().toQColor().name();
+    QString fontColor = (canvas()->resourceManager()->isUsingOtherColor()
+                ? canvas()->resourceManager()->backgroundColor()
+                : canvas()->resourceManager()->foregroundColor()).toQColor().name();
     QString letterSpacing = QString::number(optionUi.defLetterSpacing->value());
 
     return QString("<defs>\n <style>\n  text {\n   font-family:'%1';\n   font-size:%2 ; fill:%3 ;  text-anchor:%4; letter-spacing:%5; writing-mode:%6; direction: %7; %8\n  white-space:pre-wrap;\n  }\n </style>\n</defs>")

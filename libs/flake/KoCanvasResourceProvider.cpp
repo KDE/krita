@@ -160,6 +160,18 @@ int KoCanvasResourceProvider::decorationThickness() const
     return 1;
 }
 
+void KoCanvasResourceProvider::setUsingOtherColor(bool usingOtherColor)
+{
+    setResource(KoCanvasResource::UsingOtherColor, QVariant(usingOtherColor));
+}
+
+bool KoCanvasResourceProvider::isUsingOtherColor() const
+{
+    if (hasResource(KoCanvasResource::UsingOtherColor))
+        return boolResource(KoCanvasResource::UsingOtherColor);
+    return false;
+}
+
 bool KoCanvasResourceProvider::boolResource(int key) const
 {
     return d->manager.boolResource(key);

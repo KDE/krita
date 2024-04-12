@@ -40,6 +40,7 @@ struct KisResourcesSnapshot::Private {
     qreal currentExposure {0.0};
     KisFilterConfigurationSP currentGenerator;
     KisNodeList selectedNodes;
+    bool isUsingOtherColor {false};
 
     QPointF axesCenter;
     bool mirrorMaskHorizontal {false};
@@ -78,6 +79,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
         m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()
                 ->cloneAndBakeVariableColors(m_d->globalCanvasResourcesInterface);
     }
+    m_d->isUsingOtherColor = resourceManager->boolResource(KoCanvasResource::UsingOtherColor);
 
     /**
      * We should deep-copy the preset, so that long-running actions
@@ -196,8 +198,8 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
 
 void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 {
-    painter->setPaintColor(m_d->currentFgColor);
-    painter->setBackgroundColor(m_d->currentBgColor);
+    painter->setPaintColor(currentFgColor());
+    painter->setBackgroundColor(currentBgColor());
     painter->setGenerator(m_d->currentGenerator);
     painter->setPattern(m_d->currentPattern);
     painter->setGradient(m_d->currentGradient);
@@ -374,12 +376,22 @@ KoPatternSP KisResourcesSnapshot::currentPattern() const
 
 KoColor KisResourcesSnapshot::currentFgColor() const
 {
-    return m_d->currentFgColor;
+    if (m_d->isUsingOtherColor) {
+        // temporarily swap colors if requested by user
+        return m_d->currentBgColor;
+    } else {
+        return m_d->currentFgColor;
+    }
 }
 
 KoColor KisResourcesSnapshot::currentBgColor() const
 {
-    return m_d->currentBgColor;
+    if (m_d->isUsingOtherColor) {
+        // temporarily swap colors if requested by user
+        return m_d->currentFgColor;
+    } else {
+        return m_d->currentBgColor;
+    }
 }
 
 KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
@@ -400,6 +412,11 @@ KoAbstractGradientSP KisResourcesSnapshot::currentGradient() const
 KisFilterConfigurationSP KisResourcesSnapshot::currentGenerator() const
 {
     return m_d->currentGenerator;
+}
+
+bool KisResourcesSnapshot::isUsingOtherColor() const
+{
+    return m_d->isUsingOtherColor;
 }
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const

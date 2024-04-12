@@ -195,12 +195,15 @@ void KisToolShape::addShape(KoShape* shape)
 {
     using namespace KisToolShapeUtils;
 
+    KisResourcesSnapshot resources(image(),
+                                   currentNode(),
+                                   canvas()->resourceManager());
     switch(fillStyle()) {
         case FillStyleForegroundColor:
-            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
+            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(resources.currentFgColor().toQColor())));
             break;
         case FillStyleBackgroundColor:
-            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
+            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(resources.currentBgColor().toQColor())));
             break;
         case FillStylePattern:
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
@@ -219,8 +222,8 @@ void KisToolShape::addShape(KoShape* shape)
         KoShapeStrokeSP stroke(new KoShapeStroke());
         stroke->setLineWidth(currentStrokeWidth());
         const QColor color = strokeStyle() == KisToolShapeUtils::StrokeStyleForeground ?
-                    canvas()->resourceManager()->foregroundColor().toQColor() :
-                    canvas()->resourceManager()->backgroundColor().toQColor();
+                    resources.currentFgColor().toQColor() :
+                    resources.currentBgColor().toQColor();
         stroke->setColor(color);
         shape->setStroke(stroke);
         break;

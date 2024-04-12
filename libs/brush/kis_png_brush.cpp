@@ -103,7 +103,9 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         setHasColorAndTransparency(false);
     }
     else {
-        if ((int)image.format() < (int)QImage::Format_RGB32) {
+        // see bug https://bugs.kde.org/show_bug.cgi?id=484115 if you want to edit this condition
+        // keep it in sync with KisColorfulBrush code
+        if ((int)image.format() != (int)QImage::Format_ARGB32) {
             image.convertTo(QImage::Format_ARGB32);
         }
 

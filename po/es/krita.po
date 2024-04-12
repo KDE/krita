@@ -66,7 +66,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-05 21:38+0100\n"
+"PO-Revision-Date: 2024-04-10 00:25+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -14067,7 +14067,7 @@ msgstr "Reflejar vista alrededor del lienzo"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "&Zoom to 100%"
-msgstr "A&mpliar al 100%"
+msgstr "A&mpliar al 100 %"
 
 #. i18n: context: toolTip @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (zoom_to_100pct), Actions (View), ActionCollection (Menu)
@@ -14077,7 +14077,7 @@ msgstr "A&mpliar al 100%"
 #, no-c-format, kde-format
 msgctxt "action"
 msgid "Zoom to 100%"
-msgstr "Ampliar al 100%"
+msgstr "Ampliar al 100 %"
 
 #. i18n: context: text @ Action (view_zoom_in), Actions (View), ActionCollection (Menu)
 #: krita/kritamenu.action:774
@@ -17379,7 +17379,7 @@ msgstr "Rotación (Z)"
 #: libs/widgets/KoZoomAction.cpp:206 libs/widgets/KoZoomMode.cpp:13
 #, kde-format
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #. i18n: ectx: property (toolTip), widget (KisCompositeOpComboBox, cmbComposite)
 #: libs/image/kis_layer.cc:281 libs/ui/widgets/kis_cmb_composite.cc:76
@@ -21104,7 +21104,7 @@ msgstr ""
 "muestra signos de defectos en la pantalla, se le recomienda encarecidamente "
 "que use FFMpeg versión 4.4 o superior.</span></p><p><span style=\" font-"
 "style:italic;\">Nota 2: El formato GIF solo permite una transparencia del "
-"100% o del 0%. La transparencia parcial </span><span style=\" font-style:"
+"100 % o del 0 %. La transparencia parcial </span><span style=\" font-style:"
 "italic; text-decoration: underline;\">no</span><span style=\" font-style:"
 "italic;\"> está permitida. Si necesita transparencia parcial, considere el "
 "uso de los formatos APNG o WEBP.</span><br/></p></body></html>"
@@ -27018,7 +27018,7 @@ msgstr ""
 "archivos o durante la regeneración de la caché de animación), Krita hará el "
 "número de copias indicado de la imagen y no trabajará sobre ellas en "
 "paralelo. Cada copia solicitará más memoria para almacenamiento (alrededor "
-"del 20% del tamaño de cada imagen), por lo que solo debería aumentar este "
+"del 20 % del tamaño de cada imagen), por lo que solo debería aumentar este "
 "límite si dispone de suficiente memoria en su equipo.</p><p><br/></"
 "p><p><span style=\" font-weight:600;\">Valor recomendado:</span> defina el "
 "límite de clones al mismo valor que el número de núcleos <span style=\" text-"
@@ -27248,8 +27248,8 @@ msgid ""
 msgstr ""
 "<html><head/><body><p>Añadir área adicional a la región de interés a cada "
 "lado del lienzo.</p><p><span style=\" font-weight:600;\">Valor recomendado:</"
-"span> 25%. La región de interés se extenderá un 25% a cada lado.</p></body></"
-"html>"
+"span> 25 %. La región de interés se extenderá un 25 % a cada lado.</p></"
+"body></html>"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, chkBackgroundCacheGeneration)
 #: libs/ui/forms/wdgperformancesettings.ui:514
@@ -28942,7 +28942,7 @@ msgstr "Reducir"
 #: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
-msgstr "Ampliar al 100%"
+msgstr "Ampliar al 100 %"
 
 #: libs/ui/input/kis_zoom_action.cpp:118
 #, kde-format
@@ -29133,13 +29133,13 @@ msgstr "Último uso"
 #: libs/ui/kis_canvas_controls_manager.cpp:287
 #, kde-format
 msgid "Brush Opacity: %1%"
-msgstr "Opacidad del pincel: %1%"
+msgstr "Opacidad del pincel: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:319
 #, kde-format
 msgctxt "Brush Option Flow"
 msgid "Flow: %1%"
-msgstr "Flujo: %1%"
+msgstr "Flujo: %1 %"
 
 #: libs/ui/kis_canvas_controls_manager.cpp:347
 #, kde-format
@@ -29151,7 +29151,7 @@ msgstr "Desvanecimiento: %1"
 #, kde-format
 msgctxt "Brush Option Scatter"
 msgid "Scatter: %1%"
-msgstr "Dispersión: %1%"
+msgstr "Dispersión: %1 %"
 
 #: libs/ui/kis_change_file_layer_command.h:24
 msgctxt "(qtundo-format)"
@@ -29687,13 +29687,13 @@ msgstr "Desactivado: no está permitido clonar grupos de traspaso."
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: libs/ui/kis_node_model.cpp:604
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr "%1% %2"
+msgstr "%1 % %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
@@ -29853,7 +29853,7 @@ msgstr "Solo el lienzo"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #: libs/ui/kis_popup_palette.cpp:198
 #, kde-format
@@ -38295,23 +38295,19 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Registro de fotogramas"
+msgstr "Registro de valores"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Sobel horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Sobel horizontalmente"
+msgstr "Ampliar horizontalmente"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Flip vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Voltear verticalmente"
+msgstr "Ampliar verticalmente"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
@@ -38507,7 +38503,7 @@ msgstr "FPS reales:\t%1"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:536
 #, kde-format
 msgid "Frames dropped:\t%1%"
-msgstr "Fotogramas descartados:\t%1%"
+msgstr "Fotogramas descartados:\t%1 %"
 
 #: plugins/dockers/animation/KisAnimTimelineFramesModel.cpp:695
 #, kde-format
@@ -49979,7 +49975,7 @@ msgstr ""
 "que se renderice una imagen oscura en el editor, en este modo se recomienda "
 "el uso del gestor de color.</p><p>Si se desactiva, todos los archivos RAW se "
 "descodificarán con una profundidad de color de 8 bits con una curva gamma "
-"BT.709 y un punto blanco superior al 99%. Este modo es más rápido que la "
+"BT.709 y un punto blanco superior al 99 %. Este modo es más rápido que la "
 "descodificación de 16 bits.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:284
@@ -51883,7 +51879,7 @@ msgstr "Línea de conexión"
 #: plugins/paintops/sketch/kis_sketch_paintop_settings_widget.cpp:34
 #, kde-format
 msgid "0%"
-msgstr "0%"
+msgstr "0 %"
 
 #: plugins/paintops/curvebrush/KisCurveOpOptionWidget.cpp:55
 #, kde-format
@@ -53255,7 +53251,7 @@ msgid ""
 msgstr ""
 "Nivel de precisión 1 (más rápido)\n"
 "Precisión de subpíxel: desactivada\n"
-"Precisión del tamaño del pincel: 5%\n"
+"Precisión del tamaño del pincel: 5 %\n"
 "\n"
 "Óptimo para pinceles muy grandes"
 
@@ -53270,7 +53266,7 @@ msgid ""
 msgstr ""
 "Nivel de precisión 2\n"
 "Precisión de subpíxel: desactivada\n"
-"Precisión del tamaño del pincel: 1%\n"
+"Precisión del tamaño del pincel: 1 %\n"
 "\n"
 "Óptimo para pinceles grandes"
 
@@ -53295,10 +53291,10 @@ msgid ""
 "Gives up to 50% better performance in comparison to Level 5"
 msgstr ""
 "Nivel de precisión 4 (óptimo)\n"
-"Precisión de subpíxel: 50%\n"
+"Precisión de subpíxel: 50 %\n"
 "Precisión del tamaño del pincel: exacta\n"
 "\n"
-"Ofrece un rendimiento hasta un 50% mejor en comparación al nivel 5"
+"Ofrece un rendimiento hasta un 50 % mejor en comparación al nivel 5"
 
 #: plugins/paintops/libpaintop/kis_brush_selection_widget.cpp:80
 #, kde-format
@@ -53397,8 +53393,8 @@ msgid ""
 msgstr ""
 "Reinicia todos los ajustes a su valor predeterminado:\n"
 " Punto neutral: 127\n"
-" Brillo: 0%\n"
-" Contraste: 0%"
+" Brillo: 0 %\n"
+" Contraste: 0 %"
 
 #: plugins/paintops/libpaintop/kis_texture_chooser.cpp:31
 #, kde-format
@@ -53916,7 +53912,7 @@ msgstr "Tono en sentido horario"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:139
 #, no-c-format, kde-format
 msgid "(50% is active color)"
-msgstr "(50% es el color activo)"
+msgstr "(50 % es el color activo)"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:106
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:118
@@ -53924,7 +53920,7 @@ msgstr "(50% es el color activo)"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:141
 #, kde-format
 msgid "+100%"
-msgstr "+100%"
+msgstr "+100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:107
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:119
@@ -53932,7 +53928,7 @@ msgstr "+100%"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:142
 #, kde-format
 msgid "-100%"
-msgstr "-100%"
+msgstr "-100 %"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:109
 #, kde-format
@@ -59503,7 +59499,7 @@ msgstr "Normal"
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
@@ -60636,7 +60632,7 @@ msgid ""
 "the closed contours. 0% - no effect, 100% - max effect"
 msgstr ""
 "La máscara intentará eliminar partes de los trazos clave situados fuera de "
-"los contornos cerrados. 0% no tendrá efecto, 100% tendrá un efecto máximo."
+"los contornos cerrados. 0 % no tendrá efecto, 100 % tendrá un efecto máximo."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAutoUpdates)
 #: plugins/tools/tool_lazybrush/kis_tool_lazy_brush_options_widget.ui:23

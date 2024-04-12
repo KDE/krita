@@ -474,17 +474,19 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         const qreal theta = a2 - a1;
         m_d->currentArgs.setBoundsRotation(m_d->clickArgs.boundsRotation() + theta);
         
-        // Rotate scale/shear to compensate
-        qreal phi = -m_d->currentArgs.boundsRotation() + m_d->clickArgs.boundsRotation();
-        QTransform BR; BR.rotateRadians(phi);
-        QTransform BRI; BRI.rotateRadians(-phi);
-        QTransform desired = BRI * clickM.SC * clickM.S * BR;
-        KisTransformUtils::ScaleShearSolution solution = KisTransformUtils::solveScaleShear(desired);
-        if (solution.isValid) {
-            m_d->currentArgs.setScaleX(solution.scaleX);
-            m_d->currentArgs.setScaleY(solution.scaleY);
-            m_d->currentArgs.setShearX(solution.shearX);
-            m_d->currentArgs.setShearY(solution.shearY);
+        // Find new scale/shear/rotation for the rotated bounds
+        QTransform newBR; newBR.rotateRadians(m_d->currentArgs.boundsRotation());
+        QTransform clickZ; clickZ.rotateRadians(m_d->clickArgs.aZ());
+        // newM.BRI * newM.SC * newM.S * newM.BR * newZ = clickM.BRI * clickM.SC * clickM.S * clickM.BR * clickZ
+        // newM.SC * newM.S * (newM.BR * newZ) = newM.BR * clickM.BRI * clickM.SC * clickM.S * clickM.BR * clickZ
+        QTransform desired = newBR * clickM.BRI * clickM.SC * clickM.S * clickM.BR * clickZ;
+        KisAlgebra2D::DecomposedMatrix dm(desired);
+        if (dm.isValid()) {
+            m_d->currentArgs.setScaleX(dm.scaleX);
+            m_d->currentArgs.setScaleY(dm.scaleY);
+            m_d->currentArgs.setShearX(dm.shearXY);
+            m_d->currentArgs.setShearY(0);
+            m_d->currentArgs.setAZ(kisDegreesToRadians(dm.angle) - m_d->currentArgs.boundsRotation());
         }
 
         // Snap with shift key

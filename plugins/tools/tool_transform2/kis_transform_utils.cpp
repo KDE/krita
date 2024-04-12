@@ -188,30 +188,6 @@ QTransform KisTransformUtils::MatricesPack::finalTransform() const
     return TS * BRI * SC * S * BR * projectedP * T;
 }
 
-KisTransformUtils::ScaleShearSolution KisTransformUtils::solveScaleShear(QTransform transform) {
-    // scale x y, shearX by u, shearY by v
-    // | 1 0 | | 1 u | | x 0 | = | a b |
-    // | v 1 | | 0 1 | | 0 y |   | c d |
-
-    // QTransform is transposed from the usual 3x2 2D affine transform
-    ScaleShearSolution result;
-    qreal a = transform.m11();
-    qreal b = transform.m21();
-    qreal c = transform.m12();
-    qreal d = transform.m22();
-
-    result.isValid = !(qFuzzyIsNull(a) || qFuzzyIsNull(a * d - b * c));
-    
-    if (result.isValid) {
-        result.scaleX = a;
-        result.scaleY = (a * d - b * c) / a;
-        result.shearX = (a * b) / (a * d - b * c);
-        result.shearY = c / a;
-    }
-
-    return result;
-}
-
 bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight)
 {
     bool imageTooBig = false;
@@ -247,16 +223,19 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
     double scaleY = config.scaleY();
     double shearX = config.shearX();
     double shearY = config.shearY();
+    double aZ = config.aZ();
 
     if (config.boundsRotation() != 0.0) {
         const KisTransformUtils::MatricesPack m(config);
-        QTransform desired = m.BRI * m.SC * m.S * m.BR;
-        KisTransformUtils::ScaleShearSolution solution = KisTransformUtils::solveScaleShear(desired);
-        if (solution.isValid) {
-            scaleX = solution.scaleX;
-            scaleY = solution.scaleY;
-            shearX = solution.shearX;
-            shearY = solution.shearY;
+        QTransform Z; Z.rotateRadians(aZ);
+        QTransform desired = m.BRI * m.SC * m.S * m.BR * Z;
+        KisAlgebra2D::DecomposedMatrix dm(desired);
+        if (dm.isValid()) {
+            scaleX = dm.scaleX;
+            scaleY = dm.scaleY;
+            shearX = dm.shearXY;
+            shearY = 0;
+            aZ = kisDegreesToRadians(dm.angle);
         }
     }
 
@@ -265,7 +244,7 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
         KisTransformWorker t(0,
                              scaleX, scaleY,
                              shearX, shearY,
-                             config.aZ(),
+                             aZ,
                              0, // set X and Y translation
                              0, // to null for calculation
                              0,
@@ -279,7 +258,7 @@ KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformA
     KisTransformWorker transformWorker(device,
                                        scaleX, scaleY,
                                        shearX, shearY,
-                                       normalizeAngle(config.aZ()),
+                                       normalizeAngle(aZ),
                                        translation.x(),
                                        translation.y(),
                                        updater,

@@ -82,16 +82,6 @@ public:
         QTransform finalTransform() const;
     };
 
-    struct ScaleShearSolution {
-        bool isValid;
-        qreal scaleX;
-        qreal scaleY;
-        qreal shearX;
-        qreal shearY;
-    };
-
-    static ScaleShearSolution solveScaleShear(QTransform transform);
-
     static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight);
 
     static KisTransformWorker createTransformWorker(const ToolTransformArgs &config,

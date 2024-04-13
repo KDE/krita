@@ -43,7 +43,7 @@ private Q_SLOTS:
     void onThreadsChanged(int threads);
     void onManageRecordingsButtonClicked();
     void onSelectRecordFolderButtonClicked();
-    void onRecordButtonToggled(bool checked);
+    bool onRecordButtonToggled(bool checked);
     void onExportButtonClicked();
 
     void onWriterStarted();

@@ -466,9 +466,11 @@ void RecorderDockerDock::setCanvas(KoCanvasBase* canvas)
     d->updateComboResolution(document->image()->width(), document->image()->height());
 
     d->prefix = d->getPrefix();
+    bool wasToggled = false;
     if (d->recordAutomatically && !d->enabledIds.contains(document->linkedResourcesStorageId())) {
-        onRecordButtonToggled(true);
-    } else { // onRecordButtonToggled(true) calls these, don't call them twice.
+        wasToggled = onRecordButtonToggled(true);
+    }
+    if (!wasToggled) { // onRecordButtonToggled(true) may call these, don't call them twice.
         d->updateWriterSettings();
         d->updateUiFormat();
     }
@@ -497,13 +499,13 @@ void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
     actionCollection->addAction(keyActionExport, d->exportAction);
 }
 
-void RecorderDockerDock::onRecordButtonToggled(bool checked)
+bool RecorderDockerDock::onRecordButtonToggled(bool checked)
 {
     QSignalBlocker blocker(d->ui->buttonRecordToggle);
     d->recordToggleAction->setChecked(checked);
 
     if (!d->canvas)
-        return;
+        return false;
 
     const QString &id = d->canvas->imageView()->document()->linkedResourcesStorageId();
 
@@ -517,7 +519,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
 
     if (isEmpty == wasEmpty) {
         d->updateRecordStatus(checked);
-        return;
+        return false;
     }
 
 
@@ -545,6 +547,7 @@ void RecorderDockerDock::onRecordButtonToggled(bool checked)
         d->paused = true;
     }
 
+    return true;
 }
 
 void RecorderDockerDock::onExportButtonClicked()

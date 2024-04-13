@@ -106,13 +106,13 @@ public:
     RecorderWriterManager& operator=(const RecorderWriterManager&) = delete;
     RecorderWriterManager& operator=(RecorderWriterManager&&) = delete;
 
-    // stops current recording
+    // restarts recorder
     void setCanvas(QPointer<KisCanvas2> canvas);
-    // stops current recording
+    // restarts recorder
     void setup(const RecorderWriterSettings &settings);
 
-    void start();
-    bool stop();
+    void start(bool toggleEnabled = true);
+    bool stop(bool toggleEnabled = true);
 
     void setEnabled(bool enabled);
 

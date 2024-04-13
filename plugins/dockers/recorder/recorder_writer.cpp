@@ -473,9 +473,11 @@ RecorderWriterManager::~RecorderWriterManager()
 
 void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
 {
-    // Stop current recording if canvas is about to be changed
-    if (d->timer.isActive())
-        stop();
+    // Restart writers if canvas changes
+    bool restart = d->timer.isActive();
+    if (restart) {
+        stop(false);
+    }
 
     if (d->canvas) {
         disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)));
@@ -490,21 +492,31 @@ void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
         connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()),
                 Qt::DirectConnection); // because it spams
     }
+
+    if (restart) {
+        start(false);
+    }
 }
 
 void RecorderWriterManager::setup(const RecorderWriterSettings &settings)
 {
-    // Stop current recording, if setup is called again
-    if (d->timer.isActive())
-        stop();
+    // Restart writers if setup changes
+    bool restart = d->timer.isActive();
+    if (restart) {
+        stop(false);
+    }
 
     d->settings = settings;
     d->outputDir.setPath(settings.outputDirectory);
 
     d->partIndex = d->findLastIndex(d->settings.outputDirectory);
+
+    if (restart) {
+        start(false);
+    }
 }
 
-void RecorderWriterManager::start()
+void RecorderWriterManager::start(bool toggleEnabled)
 {
     if (d->timer.isActive())
         return;
@@ -523,10 +535,12 @@ void RecorderWriterManager::start()
     }
     d->enlargeWriterPool();
     d->timer.start(d->interval);
-    emit started();
+    if (toggleEnabled) {
+        emit started();
+    }
 }
 
-bool RecorderWriterManager::stop()
+bool RecorderWriterManager::stop(bool toggleEnabled)
 {
     if (!d->timer.isActive())
         return true;
@@ -534,11 +548,13 @@ bool RecorderWriterManager::stop()
     d->timer.stop();
     auto result = d->clearWriterPool();
     recorderThreads.setUsed(0);
-    emit stopped();
+    if (toggleEnabled) {
+        emit stopped();
+    }
     return result;
 }
 
-void RecorderWriterManager::setEnabled(bool enabled)
+void RecorderWriterManager::setEnabled(bool enabled = false)
 {
     d->enabled = enabled;
 }

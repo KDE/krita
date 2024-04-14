@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-03-28 08:18+0100\n"
+"PO-Revision-Date: 2024-04-13 08:59+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -8461,12 +8461,10 @@ msgstr "Ekzempla Ekrana Koloro (Prova Reala Kanvaso)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Montri Docker-ojn"
+msgstr "Montri Docker-ujon"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29099,10 +29097,9 @@ msgid "&Open Background color selector"
 msgstr "Malfermi F&onkolorelektilon"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Docker"
+msgstr "&Docker-ujo"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29128,16 +29125,14 @@ msgid "Gradients"
 msgstr "Kolortransiroj"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Docker:"
+msgstr "Docker-ujo:"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Ilujo kaj dockers"
+msgstr "Docker-uja Ilbreto"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29717,8 +29712,7 @@ msgid "Masked Brush"
 msgstr "Maskita Peniko"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Ŝprucfenestra Paletro"
 
@@ -30138,7 +30132,7 @@ msgstr ""
 "malfermi ekzistantan dosieron.\n"
 "\n"
 "Se vi anstataŭe volas aldoni la dosiertavolon al dokumenton en jam "
-"funkcianta kazo de Krita, marku la markobutonon \"Permesi nur unu ekzemplon "
+"funkcianta kazo de Krita, marku la markokeston \"Permesi nur unu ekzemplon "
 "de Krita\" en la agordoj (Agordoj -> Ĝenerala -> Fenestro)."
 
 #: libs/ui/KisApplication.cpp:686
@@ -34699,20 +34693,16 @@ msgstr "Agordi doker-panelon"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"Dokero estas malferma en Popup-Paletro. Fermu Popup-Paletron por montri ĉi "
-"tie."
+msgstr "Dokero estas malferma en %1. Fermu %1 por montri ĉi tie."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Agordi doker-panelon"
+msgstr "Agordi dokerojn %1"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -38113,22 +38103,19 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Kadra registro"
+msgstr "Valor-registro"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Horizontale"
+msgstr "Zomi horizontale"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Vertikale"
+msgstr "Zomi vertikale"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
@@ -39237,13 +39224,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Markobutono por Elektado de Tavoloj"
+msgstr "Markokesto por Elektado de Tavoloj"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr "Montri markobutonon por elekti/malelekti tavolojn."
+msgstr "Montri markokeston por elekti/malelekti tavolojn."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:996
 msgctxt "(qtundo-format)"
@@ -40467,13 +40454,7 @@ msgstr ""
 "rendimentan akcelon."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the number of recording threads.\n"
-#| "Accordingly to your hardware setup you should record with no more than %1 "
-#| "threads.\n"
-#| "You can play around with one or two more threads, but keep an eye on your "
-#| "overall system performance."
+#, kde-format
 msgid ""
 "Set the number of recording threads.\n"
 "According to your hardware setup you should record with no more than %1 "
@@ -61314,6 +61295,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid "Configure Popup Palette dockers"
-#~ msgstr "Agordi Popup-Paletrajn dokerojn"

@@ -66,7 +66,8 @@ public:
         KPL,                // KoColor-based XML palette
         SBZ,                // SwatchBooker
         ASE,                // Adobe swatch exchange
-        ACB                 // Adobe Color Book.
+        ACB,                // Adobe Color Book.
+        CSS                 // CSS palette
     };
 
 

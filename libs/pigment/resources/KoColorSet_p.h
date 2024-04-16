@@ -51,6 +51,7 @@ public:
     bool loadSbz();
     bool loadAse();
     bool loadAcb();
+    bool loadCss();
 
     bool saveKpl(QIODevice *dev) const;
     bool loadKpl();

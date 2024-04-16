@@ -25,6 +25,8 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamAttributes>
 #include <QtEndian> // qFromLittleEndian
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 
 #include <DebugPigment.h>
 #include <klocalizedstring.h>
@@ -510,6 +512,9 @@ private:
             break;
         case KoColorSet::SBZ:
             suffix = ".sbz";
+            break;
+        case KoColorSet::CSS:
+            suffix = ".css";
             break;
         default:
             suffix = m_colorSet->defaultFileExtension();
@@ -1031,6 +1036,9 @@ KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileNam
     else if (fi.suffix().toLower() == "acb" || ba.startsWith("8BCB")) {
         return KoColorSet::ACB;
     }
+    else if (fi.suffix().toLower() == "css") {
+        return KoColorSet::CSS;
+    }
     return KoColorSet::UNKNOWN;
 }
 
@@ -1268,6 +1276,9 @@ bool KoColorSet::Private::init()
     case ACB:
         res = loadAcb();
         break;
+    case CSS:
+        res = loadCss();
+        break;
     default:
         res = false;
     }
@@ -1473,6 +1484,158 @@ bool KoColorSet::Private::loadPsp()
 
         global->addSwatch(swatch);
     }
+    return true;
+}
+
+bool KoColorSet::Private::loadCss()
+{
+    QFileInfo info(colorSet->filename());
+    colorSet->setName(info.completeBaseName());
+    
+    QString text = readAllLinesSafe(&data).join("").replace("\t", "").replace(" ", ""); 
+    
+    QRegularExpression re("/\\*.*?\\*/");
+
+    text.remove(re); // Remove comments
+
+    KisSwatch swatch;
+    
+    // Regex to detect a color in the palette
+    QRegularExpression palette("(.*?){(?:[^:;]+:[^;]+;)*?color:(.*?)(?:;.*?)*?}");
+
+    QRegularExpressionMatchIterator colors = palette.globalMatch(text);
+
+    if (!colors.hasNext()) {
+        warnPigment << "No color found in CSS palette : " << colorSet->filename();
+        return false;
+    }
+    
+    while (colors.hasNext()) {
+        QRegularExpressionMatch match = colors.next();
+        QString colorInfo = match.captured();
+        QString colorName = match.captured(1);
+        QString colorValue = match.captured(2);
+        
+        if (!colorInfo.startsWith(".") || colorValue.isEmpty()) {
+            warnPigment << "Illegal CSS palette syntax : " << colorInfo;
+            return false;
+        }
+
+        QColor qColor;
+
+        colorName.remove(".");
+        swatch.setName(colorName);
+
+        if (colorValue.startsWith("rgb")) {
+            QStringList color;
+            int alpha = 255;
+            if (colorValue.startsWith("rgba")) {
+                colorValue.remove("rgba(").remove(")");
+                color = colorValue.split(",");
+
+                if (color.size() != 4) {
+                    warnPigment << "Invalid RGBA color definition : " << colorInfo;
+                    return false;
+                }
+                
+                alpha = color[3].toFloat() * 255;
+                
+                if (alpha < 0 || alpha > 255) {
+                    warnPigment << "Invalid alpha parameter : " << colorInfo;
+                    return false;
+                }
+            }
+            else {
+                colorValue.remove("rgb(").remove(")");
+                
+                color = colorValue.split(",");
+
+                if (color.size() != 3) {
+                    warnPigment << "Invalid RGB color definition : " << colorInfo;
+                    return false;
+                }
+            }
+
+            int r = color[0].toInt();
+            int g = color[1].toInt();
+            int b = color[2].toInt();
+
+            qColor = QColor(r, g, b, alpha);
+        }
+        else if (colorValue.startsWith("hsl")) {
+            QStringList color;
+            float alpha = 1.0;
+
+            if (colorValue.startsWith("hsla")) {
+                colorValue.remove("hsla(").remove(")").replace("%", "");
+                color = colorValue.split(",");
+                if (color.size() != 4) {
+                    warnPigment << "Invalid HSLA color definition : " << colorInfo;
+                    return false;
+                }
+
+                float alpha = color[3].toFloat();
+
+                if (alpha < 0.0 || alpha > 1.0) {
+                    warnPigment << "Invalid alpha parameter : " << colorInfo;
+                    return false;
+                }
+
+            }
+            else {
+                colorValue.remove("hsl(").remove(")").replace("%", "");
+                color = colorValue.split(",");
+                if (color.size() != 3) {
+                    warnPigment << "Invalid HSL color definition : " << colorInfo;
+                    return false;
+                }
+            }
+            
+            float hue = color[0].toFloat() / 359;
+            float saturation = color[1].toFloat() / 100;
+            float lightness = color[2].toFloat() / 100;
+
+            if (hue < 0.0 || hue > 1.0) {
+                warnPigment << "Invalid hue parameter : " << colorInfo;
+                return false;
+            }
+
+            if (saturation < 0.0 || saturation > 1.0) {
+                warnPigment << "Invalid saturation parameter : " << colorInfo;
+                return false;
+            }
+
+            if (lightness < 0.0 || lightness > 1.0) {
+                warnPigment << "Invalid lightness parameter : " << colorInfo;
+                return false;
+            }
+
+            qColor = QColor::fromHslF(hue, saturation, lightness, alpha);
+
+        }
+        else if (colorValue.startsWith("#")) {
+            if (colorValue.size() == 9) {
+                // Convert the format to #AARRGGBB (QColor's format) instead of CSS #RRGGBBAA
+                colorValue.insert(1, colorValue.right(2)).remove(colorValue.size() - 2, 2);
+            }
+            
+            qColor = QColor(colorValue);
+        }
+        else {
+            warnPigment << "Unknown color declaration : " << colorInfo;
+            return false;
+        }
+ 
+        if (!qColor.isValid()) {
+            warnPigment << "Invalid color definition : " << colorInfo;
+            return false;
+        }
+
+        swatch.setColor(KoColor(qColor, KoColorSpaceRegistry::instance()->rgb8()));
+
+        global()->addSwatch(swatch);
+    }
+
     return true;
 }
 

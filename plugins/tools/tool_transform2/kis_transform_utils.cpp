@@ -285,7 +285,7 @@ QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device)
             }
         }
         if (rowEmpty) continue;
-        for (qint32 x = rect.right(); x >= 0; x--) {
+        for (qint32 x = rect.right(); x >= rect.left(); x--) {
             accessor->moveTo(x, y);
             if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
                 points << QPoint(x + 1, y);

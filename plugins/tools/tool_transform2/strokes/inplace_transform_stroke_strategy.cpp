@@ -289,38 +289,45 @@ void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *c
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
 }
 
+namespace {
+void addRectPoints(QVector<QPoint> &points, QRect rect)
+{
+    points << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft();
+}
+}
 
 void InplaceTransformStrokeStrategy::calculateConvexHull()
 {
-    QRect srcRect;
-
     KisPaintDeviceSP externalSource =
         m_d->externalSource ? m_d->externalSource :
         m_d->initialTransformArgs.externalSource() ?
             m_d->initialTransformArgs.externalSource() : 0;
 
+    QVector<QPoint> points;
     if (externalSource) {
         // Start the transformation around the visible pixels of the external image
-        srcRect = externalSource->exactBounds();
+        addRectPoints(points, externalSource->exactBounds()); // TODO
     } else if (m_d->selection) {
-        srcRect = m_d->selection->selectedExactRect();
+        points = KisTransformUtils::findConvexHull(m_d->selection->pixelSelection());
     } else {
-        srcRect = QRect();
+        int numContributions = 0;
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
             // group layers may have a projection of layers
             // that are locked and will not be transformed
             if (node->inherits("KisGroupLayer")) continue;
 
             if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
-                srcRect |= mask->sourceDataBounds();
+                addRectPoints(points, mask->sourceDataBounds()); // TODO
+                numContributions += 1;
             } else if (const KisSelectionMask *mask = dynamic_cast<const KisSelectionMask*>(node.data())) {
-                srcRect |= mask->selection()->selectedExactRect();
+                addRectPoints(points, mask->selection()->selectedExactRect()); // TODO
+                numContributions += 1;
             } else if (const KisTransparencyMask *mask = dynamic_cast<const KisTransparencyMask*>(node.data())) {
-                srcRect |= mask->selection()->selectedExactRect();
+                addRectPoints(points, mask->selection()->selectedExactRect()); // TODO
+                numContributions += 1;
             } else {
                 /// We shouldn't include masks or layer styles into the handles rect,
                 /// in the end, we process the paint device only
-                //srcRect |= node->paintDevice() ? node->paintDevice()->exactBounds() : node->exactBounds();
                 KisPaintDeviceSP device = node->paintDevice();
                 if (device) {
                     KisPaintDeviceSP cached;
@@ -329,15 +336,18 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
                         cached = m_d->devicesCacheHash[device.data()];
                     }
                     KIS_SAFE_ASSERT_RECOVER_RETURN(cached);
-                    srcRect |= cached->exactBounds();
+                    points.append(KisTransformUtils::findConvexHull(cached));
+                    numContributions += 1;
                 } else {
-                    srcRect |= node->exactBounds();
+                    addRectPoints(points, node->exactBounds());
+                    numContributions += 1;
                 }
             }
         }
+        if (numContributions > 1) {
+            points = KisTransformUtils::findConvexHull(points);
+        }
     }
-    QVector<QPoint> points;
-    points << srcRect.topLeft() << srcRect.topRight() << srcRect.bottomRight() << srcRect.bottomLeft();
     Q_EMIT sigConvexHullCalculated(QPolygon(points), this);
 }
 

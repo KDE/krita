@@ -29,6 +29,7 @@
 #include "kis_selection.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
+#include "kis_random_accessor_ng.h"
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
 const int KisTransformUtils::rotationHandleRadius = 8;
@@ -213,6 +214,101 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
 
     return imageTooBig;
 }
+
+namespace {
+struct PointWithAngle {
+    QPoint point;
+    qreal angle;
+};
+qreal ccw(QPoint a, QPoint b, QPoint c)
+{
+    return KisAlgebra2D::crossProduct(b - a, c - b);
+}
+QPolygon grahamScan(const QVector<QPoint> &points)
+{
+    if (points.size() <= 3) return points;
+    QPoint pivot = points[0];
+    int pivotIndex = 0;
+    for (int i = 1; i < points.size(); i++) {
+        QPoint candidate = points[i];
+        if (candidate.y() < pivot.y() || (candidate.y() == pivot.y() && candidate.x() < pivot.x())) {
+            pivot = candidate;
+            pivotIndex = i;
+        }
+    }
+
+    QVector<PointWithAngle> pointsWithAngles;
+    for (const QPoint &p : points) {
+        pointsWithAngles.push_back({p, atan2(p.y() - pivot.y(), p.x() - pivot.x())});
+    }
+    pointsWithAngles[pivotIndex] = pointsWithAngles[pointsWithAngles.size() - 1];
+    pointsWithAngles.pop_back();
+
+    std::sort(pointsWithAngles.begin(), pointsWithAngles.end(), [pivot](PointWithAngle a, PointWithAngle b)
+        {
+            qreal r = a.angle - b.angle;
+            if (r == 0.0) {
+                r = kisSquareDistance(a.point, pivot) - kisSquareDistance(b.point, pivot);
+            }
+            return r < 0.0;
+        }
+    );
+
+    QPolygon hull;
+    hull.push_back(pivot);
+    for (const PointWithAngle &p : pointsWithAngles) {
+        while (hull.size() > 1 && ccw(hull[hull.size() - 2], hull[hull.size() - 1], p.point) <= 0.0) {
+            hull.pop_back();
+        }
+        hull.push_back(p.point);
+    }
+    return hull;
+}
+
+QVector<QPoint> retrieveAllBoundaryPixels(const KisPaintDevice *device)
+{
+    QVector<QPoint> points;
+    const QRect rect = device->extent();
+    ENTER_FUNCTION() << ppVar(rect);
+    const KoColorSpace *colorSpace = device->colorSpace();
+
+    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
+    for (qint32 y = rect.top(); y <= rect.bottom(); y++) {
+        qint32 leftmost = rect.right();
+        for (qint32 x = rect.left(); x <= rect.right(); x++) {
+            accessor->moveTo(x, y);
+            if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+                points << QPoint(x, y);
+                leftmost = x;
+                break;
+            }
+        }
+        for (qint32 x = rect.right(); x > leftmost; x--) {
+            accessor->moveTo(x, y);
+            if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+                points << QPoint(x, y);
+                break;
+            }
+        }
+    }
+    
+    return points;
+}
+}
+
+QPolygon KisTransformUtils::findConvexHull(const QVector<QPoint> &points)
+{
+    ENTER_FUNCTION() << ppVar(points.size());
+    QPolygon hull = grahamScan(points);
+    ENTER_FUNCTION() << ppVar(hull.size());
+    return hull;
+}
+
+QPolygon KisTransformUtils::findConvexHull(KisPaintDeviceSP device)
+{
+    return findConvexHull(retrieveAllBoundaryPixels(device));
+}
+
 
 KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformArgs &config,
                                                             KisPaintDeviceSP device,

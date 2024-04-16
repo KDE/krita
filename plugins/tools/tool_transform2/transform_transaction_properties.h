@@ -12,6 +12,7 @@
 #include "kis_node.h"
 #include "kis_layer_utils.h"
 #include "kis_external_layer_iface.h"
+#include "kis_transform_mask.h"
 
 class ToolTransformArgs;
 
@@ -30,7 +31,8 @@ TransformTransactionProperties(const QRectF &originalRect,
           m_currentConfig(currentConfig),
           m_rootNodes(rootNodes),
           m_transformedNodes(transformedNodes),
-          m_shouldAvoidPerspectiveTransform(false)
+          m_shouldAvoidPerspectiveTransform(false),
+          m_boundsRotationAllowed(true)
     {
         m_hasInvisibleNodes = false;
         Q_FOREACH (KisNodeSP node, transformedNodes) {
@@ -39,6 +41,9 @@ TransformTransactionProperties(const QRectF &originalRect,
                     m_shouldAvoidPerspectiveTransform = true;
                     break;
                 }
+            }
+            if (dynamic_cast<const KisTransformMask*>(node.data())) {
+                m_boundsRotationAllowed = false;
             }
 
             m_hasInvisibleNodes |= !node->visible(false);
@@ -126,6 +131,10 @@ TransformTransactionProperties(const QRectF &originalRect,
         return m_hasInvisibleNodes;
     }
 
+    bool boundsRotationAllowed() const {
+        return m_boundsRotationAllowed;
+    }
+
     void setCurrentConfigLocation(ToolTransformArgs *config) {
         m_currentConfig = config;
     }
@@ -141,6 +150,7 @@ private:
     KisNodeList m_transformedNodes;
     bool m_shouldAvoidPerspectiveTransform {false};
     bool m_hasInvisibleNodes {false};
+    bool m_boundsRotationAllowed {true};
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

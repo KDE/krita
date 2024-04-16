@@ -68,8 +68,6 @@ struct KisFreeTransformStrategy::Private
         scaleCursors[7] = KisCursor::sizeBDiagCursor();
 
         shearCursorPixmap.load(":/shear_cursor.png");
-
-        bounds = transaction.originalRect();
     }
 
     KisFreeTransformStrategy *q;
@@ -146,6 +144,7 @@ KisFreeTransformStrategy::~KisFreeTransformStrategy()
 {
 }
 
+namespace {
 QPointF middleLeft(const QRectF &rect)
 {
     return (rect.topLeft() + rect.bottomLeft()) * 0.5;
@@ -161,6 +160,7 @@ QPointF bottomMiddle(const QRectF &rect)
 QPointF topMiddle(const QRectF &rect)
 {
     return (rect.topLeft() + rect.topRight()) * 0.5;
+}
 }
 
 void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
@@ -197,8 +197,13 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     qreal rotationHandleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
 
-    StrokeFunction defaultFunction =
-        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : (shiftModifierActive ? ROTATEBOUNDS : ROTATE);
+    StrokeFunction defaultFunction;
+    if (transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill))
+        defaultFunction = MOVE;
+    else if (m_d->transaction.boundsRotationAllowed() && shiftModifierActive)
+        defaultFunction = ROTATEBOUNDS;
+    else
+        defaultFunction = ROTATE;
     KisTransformUtils::HandleChooser<StrokeFunction>
         handleChooser(mousePos, defaultFunction);
 

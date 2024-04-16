@@ -265,7 +265,7 @@ QPolygon grahamScan(const QVector<QPoint> &points)
     return hull;
 }
 
-QVector<QPoint> retrieveAllBoundaryPixels(const KisPaintDevice *device)
+QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device)
 {
     QVector<QPoint> points;
     const QRect rect = device->extent();
@@ -274,19 +274,22 @@ QVector<QPoint> retrieveAllBoundaryPixels(const KisPaintDevice *device)
 
     KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
     for (qint32 y = rect.top(); y <= rect.bottom(); y++) {
-        qint32 leftmost = rect.right();
+        bool rowEmpty = true;
         for (qint32 x = rect.left(); x <= rect.right(); x++) {
             accessor->moveTo(x, y);
             if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
                 points << QPoint(x, y);
-                leftmost = x;
+                points << QPoint(x, y + 1);
+                rowEmpty = false;
                 break;
             }
         }
-        for (qint32 x = rect.right(); x > leftmost; x--) {
+        if (rowEmpty) continue;
+        for (qint32 x = rect.right(); x >= 0; x--) {
             accessor->moveTo(x, y);
             if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
-                points << QPoint(x, y);
+                points << QPoint(x + 1, y);
+                points << QPoint(x + 1, y + 1);
                 break;
             }
         }
@@ -306,7 +309,7 @@ QPolygon KisTransformUtils::findConvexHull(const QVector<QPoint> &points)
 
 QPolygon KisTransformUtils::findConvexHull(KisPaintDeviceSP device)
 {
-    return findConvexHull(retrieveAllBoundaryPixels(device));
+    return findConvexHull(retrieveAllBoundaryPoints(device));
 }
 
 

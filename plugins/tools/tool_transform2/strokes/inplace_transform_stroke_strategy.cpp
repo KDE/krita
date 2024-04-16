@@ -292,7 +292,13 @@ void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *c
 namespace {
 void addRectPoints(QVector<QPoint> &points, QRect rect)
 {
-    points << rect.topLeft() << rect.topRight() << rect.bottomRight() << rect.bottomLeft();
+    int x, y, w, h;
+    rect.getRect(&x, &y, &w, &h); 
+    points
+        << QPoint(x, y)
+        << QPoint(x + w, y)
+        << QPoint(x + w, y + h)
+        << QPoint(x, y + h);
 }
 }
 

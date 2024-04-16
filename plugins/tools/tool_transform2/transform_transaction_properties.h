@@ -123,6 +123,10 @@ TransformTransactionProperties(const QRectF &originalRect,
         return 0.9 * qreal(m_rootNodes[0]->opacity()) / 255.0;
     }
 
+    const QPolygon &convexHull() {
+        return m_convexHull;
+    }
+
     bool shouldAvoidPerspectiveTransform() const {
         return m_shouldAvoidPerspectiveTransform;
     }
@@ -139,6 +143,10 @@ TransformTransactionProperties(const QRectF &originalRect,
         m_currentConfig = config;
     }
 
+    void setConvexHull(QPolygon hull) {
+        m_convexHull = std::move(hull);
+    }
+
 private:
     /**
      * Information about the original selected rect
@@ -148,6 +156,7 @@ private:
     ToolTransformArgs *m_currentConfig {0};
     KisNodeList m_rootNodes;
     KisNodeList m_transformedNodes;
+    QPolygon m_convexHull;
     bool m_shouldAvoidPerspectiveTransform {false};
     bool m_hasInvisibleNodes {false};
     bool m_boundsRotationAllowed {true};

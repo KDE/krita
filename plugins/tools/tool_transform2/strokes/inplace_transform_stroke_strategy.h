@@ -63,6 +63,13 @@ public:
         Destination destination;
     };
 
+    class CalculateConvexHullData : public KisStrokeJobData {
+    public:
+        CalculateConvexHullData()
+            : KisStrokeJobData(SEQUENTIAL, NORMAL) // Is this right?
+        {}
+    };
+
 private:
 
     /**
@@ -135,6 +142,7 @@ public:
 
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
+    void sigConvexHullCalculated(QPolygon convexHull, void *cookie);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -146,6 +154,7 @@ private:
 
     void tryPostUpdateJob(bool forceUpdate);
     void doCanvasUpdate(bool forceUpdate);
+    void calculateConvexHull();
 
     int calculatePreferredLevelOfDetail(const QRect &srcRect);
 

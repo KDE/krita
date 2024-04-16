@@ -129,6 +129,7 @@ struct KisFreeTransformStrategy::Private
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
     void recalculateTransformations();
     void recalculateTransformedHandles();
+    void recalculateBounds();
 };
 
 KisFreeTransformStrategy::KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
@@ -161,7 +162,41 @@ QPointF topMiddle(const QRectF &rect)
 {
     return (rect.topLeft() + rect.topRight()) * 0.5;
 }
+
+qreal getExtreme(const QPolygon &points, QPointF dir)
+{
+    qreal extreme = QPointF::dotProduct(dir, points[0]);
+    for (QPointF p : points) {
+        extreme = std::max(extreme, QPointF::dotProduct(dir, p));
+    }
+    return extreme;
 }
+}
+
+void KisFreeTransformStrategy::Private::recalculateBounds()
+{
+    static const QPolygon pixelPoints{QVector<QPoint>{QPoint(0, 0), QPoint(1, 0), QPoint(0, 1), QPoint(1, 1)}};
+    const QPolygon &convexHull = transaction.convexHull();
+    if (convexHull.size() > 0) {
+        // convexHull is of the topLeft of every pixel, not the whole 1x1 square, so have to add the size of a pixel back in
+        // bounds = boundsTransform.inverted().map(QPolygonF(convexHull)).boundingRect() + height/width of mapped 1x1 rect
+        // TODO switch to QPolygonF and include each pixel's dimensions for a real convex hull
+
+        QPointF axisX = boundsTransform.map(QPointF(1.0, 0.0));
+        QPointF axisY = boundsTransform.map(QPointF(0.0, 1.0));
+
+        // Minkowski sum of convexHull and a single pixel
+        qreal maxX =  getExtreme(convexHull,  axisX) + getExtreme(pixelPoints,  axisX);
+        qreal minX = -getExtreme(convexHull, -axisX) - getExtreme(pixelPoints, -axisX);
+        qreal maxY =  getExtreme(convexHull,  axisY) + getExtreme(pixelPoints,  axisY);
+        qreal minY = -getExtreme(convexHull, -axisY) - getExtreme(pixelPoints, -axisY);
+
+        bounds = QRectF(QPointF(minX, minY), QPointF(maxX, maxY));
+    } else {
+        bounds = boundsTransform.inverted().mapRect(transaction.originalRect());
+    }
+}
+
 
 void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
 {
@@ -426,6 +461,10 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
 
     KisTransformUtils::MatricesPack m(m_d->clickArgs);
     m_d->clickTransform = m.finalTransform();
+
+    if (m_d->function == ROTATEBOUNDS && m_d->transaction.convexHull().size() == 0) {
+        emit requestConvexHullCalculation();
+    }
 
     return true;
 }
@@ -836,7 +875,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
 
     transform = m.finalTransform();
     boundsTransform = m.BRI.inverted();
-    bounds = m.BRI.mapRect(transaction.originalRect());
+    recalculateBounds();
 
     QTransform viewScaleTransform = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
     handlesTransform = boundsTransform * transform * viewScaleTransform;

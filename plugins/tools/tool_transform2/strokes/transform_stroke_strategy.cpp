@@ -132,6 +132,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     ClearSelectionData *csd = dynamic_cast<ClearSelectionData*>(data);
     PreparePreviewData *ppd = dynamic_cast<PreparePreviewData*>(data);
     TransformAllData *runAllData = dynamic_cast<TransformAllData*>(data);
+    CalculateConvexHullData *cch = dynamic_cast<CalculateConvexHullData*>(data);
 
 
     if (runAllData) {
@@ -401,6 +402,8 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::SEQUENTIAL,
                                   KisStrokeJobData::NORMAL);
         }
+    } else if (cch) {
+        calculateConvexHull();    
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
     }
@@ -431,6 +434,59 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
                                                   m_overriddenCommand);
 
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
+}
+
+void TransformStrokeStrategy::calculateConvexHull()
+{
+    // Best effort attempt to calculate the convex hull, mimicking the
+    // approach that computes srcRect in initStrokeCallback below
+    QVector<QPoint> points;
+    if (m_selection) {
+        points = KisTransformUtils::findConvexHull(m_selection->pixelSelection());
+    } else {
+        int numContributions = 0;
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            if (node->inherits("KisGroupLayer")) continue;
+
+            if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
+                return; // Produce no convex hull if a KisTransformMask is present
+            } else {
+                KisPaintDeviceSP device;
+                if (KisExternalLayer *extLayer = dynamic_cast<KisExternalLayer*>(node.data())) {
+                    device = extLayer->projection();
+                } else {
+                    device = node->paintDevice();
+                }
+                if (device) {
+                    KisPaintDeviceSP toUse;
+                    // Use the original device to get the cached device containing the original image data
+                    if (haveDeviceInCache(device)) {
+                        toUse = getDeviceCache(device);
+                    } else {
+                        toUse = device;
+                    }
+                    // KIS_SAFE_ASSERT_RECOVER_RETURN(cached);
+                    /* This sometimes does not agree with the original exactBounds
+                       because of colorspace changes between the original device
+                       and cached. E.g. When the defaultPixel changes as follows it
+                       triggers different behavior in calculateExactBounds:
+                       KoColor ("ALPHA", "Alpha":0) => KoColor ("GRAYA", "Gray":0, "Alpha":255) 
+                    */
+                    ENTER_FUNCTION() << "Finding convex hull of" << ppVar(node);
+                    points.append(KisTransformUtils::findConvexHull(toUse));
+                    numContributions += 1;
+                } else {
+                    // When can this happen?  Should it continue instead?
+                    ENTER_FUNCTION() << "Bailing out, device was null" << ppVar(node);
+                    return;
+                }
+            }
+        }
+        if (numContributions > 1) {
+            points = KisTransformUtils::findConvexHull(points);
+        }
+    }
+    Q_EMIT sigConvexHullCalculated(QPolygon(std::move(points)), this);
 }
 
 void TransformStrokeStrategy::initStrokeCallback()

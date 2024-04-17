@@ -220,10 +220,12 @@ void KisToolTransform::imageTooBigRequested(bool value)
 void KisToolTransform::convexHullCalculationRequested()
 {
     ENTER_FUNCTION() << "convex hull recalculation requested!";
-    if (!m_currentlyUsingOverlayPreviewStyle && m_strokeId && !m_transaction.rootNodes().isEmpty()) {
-        image()->addJob(
-            m_strokeId,
-            new InplaceTransformStrokeStrategy::CalculateConvexHullData());
+    if (m_strokeId && !m_transaction.rootNodes().isEmpty()) {
+        if (m_currentlyUsingOverlayPreviewStyle) {
+            image()->addJob(m_strokeId, new TransformStrokeStrategy::CalculateConvexHullData());
+        } else {
+            image()->addJob(m_strokeId, new InplaceTransformStrokeStrategy::CalculateConvexHullData());
+        }
     }
 }
 void KisToolTransform::slotConvexHullCalculated(QPolygon hull, void *strokeStrategyCookie)
@@ -938,6 +940,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
         TransformStrokeStrategy *transformStrategy = new TransformStrokeStrategy(mode, m_currentArgs.filterId(), forceReset, rootNodes, selection, image().data(), image().data());
         connect(transformStrategy, SIGNAL(sigPreviewDeviceReady(KisPaintDeviceSP)), SLOT(slotPreviewDeviceGenerated(KisPaintDeviceSP)));
         connect(transformStrategy, SIGNAL(sigTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)), SLOT(slotTransactionGenerated(TransformTransactionProperties, ToolTransformArgs, void*)));
+        connect(transformStrategy, SIGNAL(sigConvexHullCalculated(QPolygon, void*)), SLOT(slotConvexHullCalculated(QPolygon, void*)));
         strategy = transformStrategy;
 
         // save unique identifier of the stroke so we could

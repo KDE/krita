@@ -53,9 +53,9 @@ macos-build:
     - git config --global --add safe.directory $CI_PROJECT_DIR
   script:
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing | tee build-krita.log
+    - env BUILDROOT=$CI_PROJECT_DIR $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-dmg.log
     
-    # TODO: build a package and put it into _packaging
     # TODO: sign packages in _packaging
     # TODO: rename packages and remove 'unsigned' suffix
     #- python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging
@@ -68,6 +68,7 @@ macos-build:
       - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
       - "**/appium_artifact_*"
       - "_packaging"
+      - "build-*.log"
     reports:
       junit: JUnitTestResults.xml
 

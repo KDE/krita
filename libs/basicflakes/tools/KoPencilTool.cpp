@@ -42,17 +42,6 @@
 
 KoPencilTool::KoPencilTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_mode(ModeCurve)
-    , m_optimizeRaw(false)
-    , m_optimizeCurve(false)
-    , m_combineAngle(15.0)
-    , m_fittingError(5.0)
-    , m_close(false)
-    , m_shape(0)
-    , m_existingStartPoint(0)
-    , m_existingEndPoint(0)
-    , m_hoveredPoint(0)
-    , m_strokeWidget(0)
 {
 }
 
@@ -175,6 +164,7 @@ void KoPencilTool::activate(const QSet<KoShape*> &shapes)
     if (m_strokeWidget) {
         m_strokeWidget->activate();
     }
+    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 void KoPencilTool::deactivate()
@@ -289,6 +279,12 @@ void KoPencilTool::finish(bool closePath)
 
 QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
 {
+    m_mode = static_cast<PencilMode>(m_configGroup.readEntry<int>("pencilMode", m_mode));
+    m_optimizeRaw = m_configGroup.readEntry<bool>("optimizeRaw", m_optimizeRaw);
+    m_optimizeCurve = m_configGroup.readEntry<bool>("optimizeCurve", m_optimizeCurve);
+    m_combineAngle = m_configGroup.readEntry<qreal>("combineAngle", m_combineAngle);
+    m_fittingError = m_configGroup.readEntry<qreal>("fittingError", m_fittingError);
+
     QList<QPointer<QWidget> > widgets;
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout(optionWidget);
@@ -309,17 +305,19 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     QWidget * rawBox = new QWidget(stackedWidget);
     QVBoxLayout * rawLayout = new QVBoxLayout(rawBox);
     QCheckBox * optimizeRaw = new QCheckBox(i18n("Optimize"), rawBox);
+    optimizeRaw->setChecked(m_optimizeRaw);
     rawLayout->addWidget(optimizeRaw);
     rawLayout->setContentsMargins(0, 0, 0, 0);
 
     QWidget * curveBox = new QWidget(stackedWidget);
     QHBoxLayout * curveLayout = new QHBoxLayout(curveBox);
     QCheckBox * optimizeCurve = new QCheckBox(i18n("Optimize"), curveBox);
+    optimizeCurve->setChecked(m_optimizeCurve);
     QDoubleSpinBox * fittingError = new KisDoubleParseSpinBox(curveBox);
-    fittingError->setValue(0.50);
+    fittingError->setSingleStep(0.50);
     fittingError->setMaximum(400.0);
     fittingError->setMinimum(0.0);
-    fittingError->setSingleStep(m_fittingError);
+    fittingError->setValue(m_fittingError);
     fittingError->setToolTip(i18n("Exactness:"));
     curveLayout->addWidget(optimizeCurve);
     curveLayout->addWidget(fittingError);
@@ -328,10 +326,10 @@ QList<QPointer<QWidget> > KoPencilTool::createOptionWidgets()
     QWidget *straightBox = new QWidget(stackedWidget);
     QVBoxLayout *straightLayout = new QVBoxLayout(straightBox);
     QDoubleSpinBox *combineAngle = new KisDoubleParseSpinBox(straightBox);
-    combineAngle->setValue(0.50);
+    combineAngle->setSingleStep(0.50);
     combineAngle->setMaximum(360.0);
     combineAngle->setMinimum(0.0);
-    combineAngle->setSingleStep(m_combineAngle);
+    combineAngle->setValue(m_combineAngle);
     combineAngle->setSuffix(" deg");
     // QT5TODO
     //combineAngle->setLabel(i18n("Combine angle:"), Qt::AlignLeft | Qt::AlignVCenter);
@@ -407,22 +405,31 @@ void KoPencilTool::addPathShape(KoPathShape* path, bool closePath)
 void KoPencilTool::selectMode(int mode)
 {
     m_mode = static_cast<PencilMode>(mode);
+    m_configGroup.writeEntry("pencilMode", mode);
 }
 
 void KoPencilTool::setOptimize(int state)
 {
-    if (m_mode == ModeRaw)
+    if (m_mode == ModeRaw) {
         m_optimizeRaw = state == Qt::Checked ? true : false;
-    else
+        m_configGroup.writeEntry("optimizeRaw", m_optimizeRaw);
+    }
+    else {
         m_optimizeCurve = state == Qt::Checked ? true : false;
+        m_configGroup.writeEntry("optimizeCurve", m_optimizeCurve);
+    }
 }
 
 void KoPencilTool::setDelta(double delta)
 {
-    if (m_mode == ModeCurve)
+    if (m_mode == ModeCurve) {
         m_fittingError = delta;
-    else if (m_mode == ModeStraight)
+        m_configGroup.writeEntry("fittingError", m_fittingError);
+    }
+    else if (m_mode == ModeStraight) {
         m_combineAngle = delta;
+        m_configGroup.writeEntry("combineAngle", m_combineAngle);
+    }
 }
 
 KoShapeStrokeSP KoPencilTool::createStroke()

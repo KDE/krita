@@ -229,9 +229,12 @@ void KisToolTransform::convexHullCalculationRequested()
 void KisToolTransform::slotConvexHullCalculated(QPolygon hull, void *strokeStrategyCookie)
 {
     if (!m_strokeId || strokeStrategyCookie != m_strokeStrategyCookie) return;
-    ENTER_FUNCTION() << "convex hull calculated!" << ppVar(hull.size());
-    m_transaction.setConvexHull(std::move(hull));
-    currentStrategy()->externalConfigChanged();
+    QPolygonF hullF = hull;
+    // Only use the convex hull if it matches the original bounding rect
+    if (hullF.boundingRect() == m_transaction.originalRect()) {
+        m_transaction.setConvexHull(std::move(hullF));
+        currentStrategy()->externalConfigChanged();
+    }
 }
 
 KisTransformStrategyBase* KisToolTransform::currentStrategy() const

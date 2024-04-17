@@ -265,29 +265,63 @@ QPolygon grahamScan(const QVector<QPoint> &points)
     return hull;
 }
 
-QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device)
+// From libs/image/kis_paint_device.cc
+struct CheckFullyTransparent {
+    CheckFullyTransparent(const KoColorSpace *colorSpace)
+        : m_colorSpace(colorSpace)
+    {
+    }
+
+    bool isPixelEmpty(const quint8 *pixelData)
+    {
+        return m_colorSpace->opacityU8(pixelData) == OPACITY_TRANSPARENT_U8;
+    }
+
+private:
+    const KoColorSpace *m_colorSpace;
+};
+
+struct CheckNonDefault {
+    CheckNonDefault(int pixelSize, const quint8 *defaultPixel)
+        : m_pixelSize(pixelSize),
+          m_defaultPixel(defaultPixel)
+    {
+    }
+
+    bool isPixelEmpty(const quint8 *pixelData)
+    {
+        return memcmp(m_defaultPixel, pixelData, m_pixelSize) == 0;
+    }
+
+private:
+    int m_pixelSize;
+    const quint8 *m_defaultPixel;
+};
+
+template <class ComparePixelOp>
+QVector<QPoint> retrieveAllBoundaryPointsImpl(const KisPaintDevice *device, const QRect &rect, const QRect &skip, ComparePixelOp compareOp)
 {
     QVector<QPoint> points;
-    const QRect rect = device->extent();
-    ENTER_FUNCTION() << ppVar(rect);
-    const KoColorSpace *colorSpace = device->colorSpace();
 
     KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
     for (qint32 y = rect.top(); y <= rect.bottom(); y++) {
-        bool rowEmpty = true;
-        for (qint32 x = rect.left(); x <= rect.right(); x++) {
+        qint32 maxRight = !skip.isEmpty() && y >= skip.top() && y <= skip.bottom() ? skip.left() : rect.right();
+        qint32 x;
+        for (x = rect.left(); x <= maxRight; x++) {
             accessor->moveTo(x, y);
-            if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+            if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                 points << QPoint(x, y);
                 points << QPoint(x, y + 1);
-                rowEmpty = false;
                 break;
             }
         }
-        if (rowEmpty) continue;
-        for (qint32 x = rect.right(); x >= rect.left(); x--) {
+        
+        if (x == rect.right()) continue; // Row empty, don't need to search it backwards
+
+        qint32 minLeft = !skip.isEmpty() && y >= skip.top() && y <= skip.bottom() ? skip.right() : rect.left();
+        for (qint32 x = rect.right(); x >= minLeft; x--) {
             accessor->moveTo(x, y);
-            if (colorSpace->opacityU8(accessor->rawDataConst()) != OPACITY_TRANSPARENT_U8) {
+            if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                 points << QPoint(x + 1, y);
                 points << QPoint(x + 1, y + 1);
                 break;
@@ -295,6 +329,29 @@ QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device)
         }
     }
     
+    return points;
+}
+// This matches the behavior of KisPaintDevice::calculateExactBounds(false), whose result is returned by KisPaintDevice::exactBounds()
+QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device) {
+    QRect rect = device->extent();
+
+    quint8 defaultOpacity = device->defaultPixel().opacityU8();
+    QVector<QPoint> points;
+    if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
+        QRect skip = device->defaultBounds()->bounds();
+        const KoColor defaultPixel = device->defaultPixel();
+        CheckNonDefault compareOp(device->pixelSize(), defaultPixel.data());
+
+        points = retrieveAllBoundaryPointsImpl(device, rect, skip, compareOp);
+        if (!skip.isEmpty()) {
+            int x, y, w, h;
+            skip.getRect(&x, &y, &w, &h);
+            points << QPoint(x, y) << QPoint(x + w, y) << QPoint(x + w, y + h) << QPoint(x, y + h);
+        }
+    } else {
+        CheckFullyTransparent compareOp(device->colorSpace());
+        points = retrieveAllBoundaryPointsImpl(device, rect, QRect(), compareOp);
+    }
     return points;
 }
 }

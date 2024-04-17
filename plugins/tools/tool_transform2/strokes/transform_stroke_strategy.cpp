@@ -403,7 +403,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                                   KisStrokeJobData::NORMAL);
         }
     } else if (cch) {
-        calculateConvexHull();    
+        if (!m_convexHullHasBeenCalculated) {
+            m_convexHullHasBeenCalculated = true;
+            calculateConvexHull();
+        }
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
     }

@@ -153,6 +153,7 @@ private:
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;
 
     bool m_finalizingActionsStarted = false;
+    bool m_convexHullHasBeenCalculated = false;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

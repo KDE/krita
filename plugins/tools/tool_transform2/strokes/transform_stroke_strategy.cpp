@@ -451,7 +451,7 @@ void TransformStrokeStrategy::calculateConvexHull()
         Q_FOREACH (KisNodeSP node, m_processedNodes) {
             if (node->inherits("KisGroupLayer")) continue;
 
-            if (const KisTransformMask *mask = dynamic_cast<const KisTransformMask*>(node.data())) {
+            if (dynamic_cast<const KisTransformMask*>(node.data())) {
                 return; // Produce no convex hull if a KisTransformMask is present
             } else {
                 KisPaintDeviceSP device;

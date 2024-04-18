@@ -33,6 +33,7 @@ include(FindPackageHandleStandardArgs)
 
 if (WIN32 OR APPLE)
     set(Python_FIND_STRATEGY LOCATION)
+    # on APPLE we search python using Python_ROOT_DIR set by the toolchain file
     find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
 else()
     find_package(Python 3.8 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
@@ -63,25 +64,22 @@ if (Python_Interpreter_FOUND)
 
     message(STATUS "Python system site-packages directory: ${PYTHON_SITE_PACKAGES_DIR}")
 
+    if (NOT CMAKE_PREFIX_PATH)
+        message (WARNING "CMAKE_PREFIX_PATH variable is not set, we might NOT be able to detect SIP modules")
+    endif()
+
     unset(KRITA_PYTHONPATH_V4 CACHE)
     unset(KRITA_PYTHONPATH_V5 CACHE)
 
-    # TODO: we don't use cmake_path(CONVERT TO_NATIVE_PATH_LIST) here, because
-    #       it is unknown if it is going to work on Windows. Currently, our paths
-    #       on Windows use '/' as well. We need to test if switching them into '\'
-    #       will still work
-    set(_path_list_separator ":")
-    if (WIN32)
-        set(_path_list_separator ";")
-    endif()
-
-    set(_python_prefix_path_v4 ${CMAKE_PREFIX_PATH})
+    cmake_path(CONVERT "${CMAKE_PREFIX_PATH}" TO_CMAKE_PATH_LIST _python_prefix_path_v4 NORMALIZE)
+    list(REMOVE_ITEM _python_prefix_path_v4 "")
     list(TRANSFORM _python_prefix_path_v4 APPEND "/lib/krita-python-libs")
-    list(JOIN _python_prefix_path_v4 ${_path_list_separator} KRITA_PYTHONPATH_V4)
+    cmake_path(CONVERT "${_python_prefix_path_v4}" TO_NATIVE_PATH_LIST KRITA_PYTHONPATH_V4 NORMALIZE)
 
-    set(_python_prefix_path_v5 ${CMAKE_PREFIX_PATH})
+    cmake_path(CONVERT "${CMAKE_PREFIX_PATH}" TO_CMAKE_PATH_LIST _python_prefix_path_v5 NORMALIZE)
+    list(REMOVE_ITEM _python_prefix_path_v5 "")
     list(TRANSFORM _python_prefix_path_v5 APPEND "/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
-    list(JOIN _python_prefix_path_v5 ${_path_list_separator} KRITA_PYTHONPATH_V5)
+    cmake_path(CONVERT "${_python_prefix_path_v5}" TO_NATIVE_PATH_LIST KRITA_PYTHONPATH_V5 NORMALIZE)
 
     message(STATUS "Krita site-packages directories for SIP v4: ${KRITA_PYTHONPATH_V4}")
     message(STATUS "Krita site-packages directories for SIP v5+: ${KRITA_PYTHONPATH_V5}")

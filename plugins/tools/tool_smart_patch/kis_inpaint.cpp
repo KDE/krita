@@ -309,11 +309,11 @@ public:
         ImageData newMask(newW, newH, 1);
 
         KoDummyUpdaterHolder updaterHolder;
-        KisTransformWorker worker(imageDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        KisTransformWorker worker(imageDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0,
                                   updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bicubic"));
         worker.run();
 
-        KisTransformWorker workerMask(maskDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        KisTransformWorker workerMask(maskDev, 1. / 2., 1. / 2., 0.0, 0.0, 0.0, 0.0, 0.0,
                                       updaterHolder.updater(), KisFilterStrategyRegistry::instance()->value("Bicubic"));
         workerMask.run();
 

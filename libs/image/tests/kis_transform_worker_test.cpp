@@ -34,7 +34,6 @@ void KisTransformWorkerTest::testCreation()
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           1.0, 1.0,
-                          0.0, 0.0,
                           1.5,
                           0, 0, updater, filter);
 }
@@ -219,7 +218,6 @@ void KisTransformWorkerTest::testScaleUp()
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 2.4, 2.4,
                           0.0, 0.0,
-                          0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
     tw.run();
@@ -255,7 +253,6 @@ void KisTransformWorkerTest::testXScaleUp()
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 2.0, 1.0,
-                          0.0, 0.0,
                           0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
@@ -293,7 +290,6 @@ void KisTransformWorkerTest::testYScaleUp()
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 2.0,
                           0.0, 0.0,
-                          0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
     tw.run();
@@ -329,7 +325,6 @@ void KisTransformWorkerTest::testIdentity()
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           0.0, 0.0,
-                          0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
     tw.run();
@@ -363,7 +358,6 @@ void KisTransformWorkerTest::testScaleDown()
 
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 0.123, 0.123,
-                          0.0, 0.0,
                           0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
@@ -412,7 +406,6 @@ void KisTransformWorkerTest::testXScaleDown()
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 0.123, 1.0,
                           0.0, 0.0,
-                          0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
     tw.run();
@@ -443,7 +436,6 @@ void KisTransformWorkerTest::testYScaleDown()
     KisFilterStrategy * filter = new KisBoxFilterStrategy();
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 0.123,
-                          0.0, 0.0,
                           0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
@@ -481,7 +473,6 @@ void KisTransformWorkerTest::testXShear()
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           1.0, 0.0,
-                          300., 200.,
                           0.0,
                           0, 0, updater, filter);
     tw.run();
@@ -529,7 +520,6 @@ void KisTransformWorkerTest::testYShear()
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
                           0.0, 1.0,
-                          300., 200.,
                           0.0,
                           0, 0, updater, filter);
     tw.run();
@@ -597,14 +587,12 @@ void KisTransformWorkerTest::testMatrices()
 
     qreal scaleX = 1.5, scaleY = 1.5;
     qreal shearX = 1, shearY = 1.33;
-    qreal shearOrigX = 150, shearOrigY = 100;
     qreal angle = M_PI/6;
     qreal transX = 77, transY = 33;
 
     KisTransaction t(dev);
     KisTransformWorker tw(dev, scaleX, scaleY,
                           shearX, shearY,
-                          shearOrigX, shearOrigY,
                           angle,
                           transX, transY,
                           updater, filter);
@@ -642,7 +630,6 @@ void testRotationImpl(qreal angle, QString filePrefix, bool useUniformColor = fa
 
     KisTransaction t(dev);
     KisTransformWorker tw(dev, 1.0, 1.0,
-                          0.0, 0.0,
                           0.0, 0.0,
                           angle,
                           0, 0, updater, filter);
@@ -696,14 +683,12 @@ void KisTransformWorkerTest::testRotationSpecialCases()
 
     qreal scaleX = 0.5, scaleY = 0.5;
     qreal shearX = 0, shearY = 0;
-    qreal shearOrigX = 0, shearOrigY = 0;
     qreal angle = M_PI;
     qreal transX = 300, transY = 150;
 
     KisTransaction t(dev);
     KisTransformWorker tw(dev, scaleX, scaleY,
                           shearX, shearY,
-                          shearOrigX, shearOrigY,
                           angle,
                           transX, transY,
                           updater, filter);
@@ -745,7 +730,6 @@ void KisTransformWorkerTest::testScaleUp5times()
     qreal SCALE = 5.0;
 
     KisTransformWorker tw(dev, SCALE, SCALE,
-                          0.0, 0.0,
                           0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);
@@ -861,7 +845,6 @@ void generateTestImage(QString inputFileName, qreal scale, qreal rotation, qreal
 
     KisTransformWorker tw(dev, scale, scale,
                           xshear, 0.0,
-                          0.0, 0.0,
                           rotation,
                           0, 0,
                           updater, filter);
@@ -1010,7 +993,6 @@ void KisTransformWorkerTest::testXScaleUpPixelAlignment()
 
     KisTransaction t(dev);
     KisTransformWorker tw(dev, qreal(newSize) / 35.0, 1.0,
-                          0.0, 0.0,
                           0.0, 0.0,
                           0.0,
                           0, 0, updater, filter);

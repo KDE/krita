@@ -61,14 +61,14 @@ void KisMirrorProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, Kis
     if (m_orientation == Qt::Horizontal) {
         KisTransformProcessingVisitor visitor(-1.0, 1.0,
                                               0.0, 0.0,
-                                              QPointF(), 0.0,
+                                              0.0,
                                               m_bounds.width(), 0.0,
                                               0);
         visitor.visit(layer, undoAdapter);
     } else {
         KisTransformProcessingVisitor visitor(1.0, -1.0,
                                               0.0, 0.0,
-                                              QPointF(), 0.0,
+                                              0.0,
                                               0.0, m_bounds.height(),
                                               0);
         visitor.visit(layer, undoAdapter);

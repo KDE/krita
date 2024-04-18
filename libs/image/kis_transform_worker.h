@@ -22,23 +22,10 @@ class QTransform;
 class KRITAIMAGE_EXPORT KisTransformWorker
 {
 
-/* What are xshearOrigin, yshearOrigin :
- *
- * let's keep it simple and say we only have horizontal shearing (it's similar with vertical shearing)
- * that means we will apply the transformation :
- * x' = x + xshear * y and y' = y, where x,y are the old coordinates of the pixels, and x' y' the new coordinates
- * that means, the more we go down in the image (y++), the more x' is different from x
- * most of the times, we want to shear a part of the image centered at y = y0 != 0.
- * i.e. we want x' = x at y = y0
- * in that case, it's good to apply instead x' = x + xshear * (y - yshearOrigin), y' = y.
- * please note that it's still possible to obtain the same result by copying the part you want to shear at
- * in another paintDevice at y = -y0 and use the transformWorker with yshearOrigin = 0.
-*/
 public:
     KisTransformWorker(KisPaintDeviceSP dev,
                        double  xscale, double  yscale,
                        double  xshear, double  yshear,
-                       double  xshearOrigin, double yshearOrigin,
                        double rotation,
                        qreal xtranslate, qreal ytranslate,
                        KoUpdaterPtr progress,
@@ -85,14 +72,13 @@ public:
      * Resulting transformation has the following form (in Qt's matrix
      * notation (all the matrices are transposed)):
      *
-     * transform = TS.inverted() * S * TS * SC * R * T
+     * transform = SC * S * R * T
      *
      * ,where:
-     * TS - shear origin transpose
-     * S  - shear itself (shearX * shearY)
      * SC - scale
+     * S  - shear itself (shearX * shearY)
      * R  - rotation (@p rotation parameter)
-     * T  - transpose (@p xtranslate, @p ytranslate)
+     * T  - translation (@p xtranslate, @p ytranslate)
      *
      * WARNING: due to some rounding problems in the worker
      * the work it does not correspond to the matrix exactly!

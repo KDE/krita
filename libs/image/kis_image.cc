@@ -981,7 +981,6 @@ void KisImage::scaleImage(const QSize &size, qreal xres, qreal yres, KisFilterSt
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(sx, sy,
                                           0, 0,
-                                          QPointF(),
                                           0,
                                           0, 0,
                                           filterStrategy,
@@ -1016,7 +1015,7 @@ void KisImage::scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX
     {
         KisTransformWorker worker(0,
                                   scaleX, scaleY,
-                                  0, 0, 0, 0,
+                                  0, 0,
                                   0.0,
                                   0, 0, 0, 0);
         QTransform transform = worker.transform();
@@ -1031,7 +1030,6 @@ void KisImage::scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX
     KisTransformProcessingVisitor *visitor =
         new KisTransformProcessingVisitor(scaleX, scaleY,
                                           0, 0,
-                                          QPointF(),
                                           0,
                                           offset.x(), offset.y(),
                                           filterStrategy);
@@ -1086,7 +1084,7 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
     {
         KisTransformWorker worker(0,
                                   1.0, 1.0,
-                                  0, 0, 0, 0,
+                                  0, 0,
                                   radians,
                                   0, 0, 0, 0);
         QTransform transform = worker.transform();
@@ -1127,7 +1125,6 @@ void KisImage::rotateImpl(const KUndo2MagicString &actionName,
 
     KisTransformProcessingVisitor *visitor =
             new KisTransformProcessingVisitor(1.0, 1.0, 0.0, 0.0,
-                                              QPointF(),
                                               radians,
                                               offset.x(), offset.y(),
                                               filter);
@@ -1208,13 +1205,14 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
     {
         KisTransformWorker worker(0,
                                   1.0, 1.0,
-                                  tanX, tanY, origin.x(), origin.y(),
+                                  tanX, tanY,
                                   0,
                                   0, 0, 0, 0);
 
         QRect newRect = worker.transform().mapRect(baseBounds);
         newSize = newRect.size();
         if (resizeImage) offset = -newRect.topLeft();
+        else offset = origin - worker.transform().map(origin);
     }
 
     if (newSize == baseBounds.size()) return;
@@ -1234,7 +1232,7 @@ void KisImage::shearImpl(const KUndo2MagicString &actionName,
 
     KisTransformProcessingVisitor *visitor =
             new KisTransformProcessingVisitor(1.0, 1.0,
-                                              tanX, tanY, origin,
+                                              tanX, tanY,
                                               0,
                                               offset.x(), offset.y(),
                                               filter);
@@ -1687,7 +1685,7 @@ QImage KisImage::convertToQImage(const QSize& scaledImageSize, const KoColorProf
     KoDummyUpdaterHolder updaterHolder;
     QPointer<KoUpdater> updater = updaterHolder.updater();
 
-    KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
+    KisTransformWorker worker(dev, scaleX, scaleY, 0.0, 0.0, 0.0, 0.0, 0.0, updater, KisFilterStrategyRegistry::instance()->value("Bicubic"));
     worker.run();
 
     return dev->convertToQImage(profile);

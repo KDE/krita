@@ -215,36 +215,35 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
 
 KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformArgs &config,
                                                             KisPaintDeviceSP device,
-                                                            KoUpdaterPtr updater,
-                                                            QVector3D *transformedCenter /* OUT */)
+                                                            KoUpdaterPtr updater)
 {
+    QPointF transformedCenter;
     {
         KisTransformWorker t(0,
                              config.scaleX(), config.scaleY(),
                              config.shearX(), config.shearY(),
-                             config.originalCenter().x(),
-                             config.originalCenter().y(),
                              config.aZ(),
                              0, // set X and Y translation
                              0, // to null for calculation
                              0,
                              config.filter());
 
-        *transformedCenter = QVector3D(t.transform().map(config.originalCenter()));
+        transformedCenter = t.transform().map(config.originalCenter());
     }
 
-    QPointF translation = config.transformedCenter() - (*transformedCenter).toPointF();
+    QPointF translation = config.transformedCenter() - transformedCenter;
 
     KisTransformWorker transformWorker(device,
                                        config.scaleX(), config.scaleY(),
                                        config.shearX(), config.shearY(),
-                                       config.originalCenter().x(),
-                                       config.originalCenter().y(),
                                        normalizeAngle(config.aZ()),
                                        translation.x(),
                                        translation.y(),
                                        updater,
                                        config.filter());
+
+    // MatricesPack m(config);
+    // ENTER_FUNCTION() << ppVar(m.finalTransform() - transformWorker.transform());
 
     return transformWorker;
 }
@@ -304,14 +303,13 @@ void transformDeviceImpl(const ToolTransformArgs &config,
         config.meshTransform()->transformMesh(srcDevice, dstDevice);
 
     } else {
-        QVector3D transformedCenter;
         KoUpdaterPtr updater1 = helper->updater();
         KoUpdaterPtr updater2 = helper->updater();
 
         dstDevice->makeCloneFromRough(srcDevice, srcDevice->extent());
 
         KisTransformWorker transformWorker =
-            KisTransformUtils::createTransformWorker(config, dstDevice, updater1, &transformedCenter);
+            KisTransformUtils::createTransformWorker(config, dstDevice, updater1);
 
         transformWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
         transformWorker.run();

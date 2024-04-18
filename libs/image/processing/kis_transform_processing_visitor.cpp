@@ -41,7 +41,6 @@
 KisTransformProcessingVisitor::
 KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
                               qreal  xshear, qreal  yshear,
-                              const QPointF &shearOrigin,
                               qreal angle,
                               qreal  tx, qreal  ty,
                               KisFilterStrategy *filter,
@@ -49,7 +48,6 @@ KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
     : m_sx(xscale), m_sy(yscale)
     , m_tx(tx), m_ty(ty)
     , m_shearx(xshear), m_sheary(yshear)
-    , m_shearOrigin(shearOrigin)
     , m_filter(filter)
     , m_angle(angle)
     , m_shapesCorrection(shapesCorrection)
@@ -105,7 +103,6 @@ void KisTransformProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdap
 void KisTransformProcessingVisitor::visit(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
 {
     KisTransformWorker tw(layer->projection(), m_sx, m_sy, m_shearx, m_sheary,
-                          m_shearOrigin.x(), m_shearOrigin.y(),
                           m_angle, m_tx, m_ty, 0,
                           m_filter);
 
@@ -143,7 +140,6 @@ void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter
     Q_UNUSED(undoAdapter);
 
     KisTransformWorker tw(0, m_sx, m_sy, m_shearx, m_sheary,
-                          m_shearOrigin.x(), m_shearOrigin.y(),
                           m_angle, m_tx, m_ty, 0,
                           m_filter);
 
@@ -182,7 +178,6 @@ void KisTransformProcessingVisitor::transformClones(KisLayer *layer, KisUndoAdap
         if(!clone) continue;
 
         KisTransformWorker tw(clone->projection(), m_sx, m_sy, m_shearx, m_sheary,
-                              m_shearOrigin.x(), m_shearOrigin.y(),
                               m_angle, m_tx, m_ty, 0,
                               m_filter);
 
@@ -212,7 +207,6 @@ void KisTransformProcessingVisitor::transformOneDevice(KisPaintDeviceSP device,
                                                        KoUpdater *updater)
 {
     KisTransformWorker tw(device, m_sx, m_sy, m_shearx, m_sheary,
-                          m_shearOrigin.x(), m_shearOrigin.y(),
                           m_angle, m_tx, m_ty, updater,
                           m_filter);
     tw.run();
@@ -222,7 +216,6 @@ void KisTransformProcessingVisitor::transformSelection(KisSelectionSP selection,
 {
     if (selection->hasShapeSelection()) {
         KisTransformWorker tw(selection->projection(), m_sx, m_sy, m_shearx, m_sheary,
-                              m_shearOrigin.x(), m_shearOrigin.y(),
                               m_angle, m_tx, m_ty, 0,
                               m_filter);
 

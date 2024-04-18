@@ -35,7 +35,6 @@
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
                                        double xscale, double yscale,
                                        double xshear, double yshear,
-                                       double xshearOrigin, double yshearOrigin,
                                        double rotation,
                                        qreal xtranslate, qreal ytranslate,
                                        KoUpdaterPtr progress,
@@ -46,8 +45,6 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_yscale = yscale;
     m_xshear = xshear;
     m_yshear = yshear;
-    m_xshearOrigin = xshearOrigin;
-    m_yshearOrigin = yshearOrigin;
     m_rotation = rotation,
     m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
@@ -61,13 +58,12 @@ KisTransformWorker::~KisTransformWorker()
 
 QTransform KisTransformWorker::transform() const
 {
-    QTransform TS = QTransform::fromTranslate(m_xshearOrigin, m_yshearOrigin);
-    QTransform S; S.shear(0, m_yshear); S.shear(m_xshear, 0);
     QTransform SC = QTransform::fromScale(m_xscale, m_yscale);
+    QTransform S; S.shear(0, m_yshear); S.shear(m_xshear, 0);
     QTransform R; R.rotateRadians(m_rotation);
     QTransform T = QTransform::fromTranslate(m_xtranslate, m_ytranslate);
 
-    return TS.inverted() * S * TS * SC * R * T;
+    return SC * S * R * T;
 }
 
 void KisTransformWorker::transformPixelSelectionOutline(KisPixelSelectionSP pixelSelection) const
@@ -269,24 +265,17 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     if (m_xshear != 0 || m_yshear != 0) {
         int portion = 50;
 
-        int dx = - qRound(m_yshearOrigin * yscale * m_xshear);
-        int dy = - qRound(m_xshearOrigin * xscale * m_yshear);
-
         bool scalePresent = !(qFuzzyCompare(xscale, 1.0) && qFuzzyCompare(yscale, 1.0));
         bool xShearPresent = !qFuzzyCompare(m_xshear, 0.0);
         bool yShearPresent = !qFuzzyCompare(m_yshear, 0.0);
 
         if (scalePresent || (xShearPresent && yShearPresent)) {
-            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, yscale *  m_xshear, dx, m_filter, portion);
-            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, dy, m_filter, portion);
+            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, yscale *  m_xshear, 0, m_filter, portion);
+            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, 0, m_filter, portion);
         } else if (xShearPresent) {
-            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, m_xshear, dx, m_filter, portion);
-            m_boundRect.translate(0, dy);
-            m_dev->moveTo(m_dev->x(), m_dev->y() + dy);
+            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, m_xshear, 0, m_filter, portion);
         } else if (yShearPresent) {
-            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, dy, m_filter, portion);
-            m_boundRect.translate(dx, 0);
-            m_dev->moveTo(m_dev->x() + dx, m_dev->y());
+            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, 0, m_filter, portion);
         }
 
         yscale = 1.;

@@ -246,7 +246,7 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
             qreal xscale = image->xRes() / xRes;
             qreal yscale = image->yRes() / yRes;
 
-            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get(m_scalingFilter));
+            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get(m_scalingFilter));
             worker.run();
         }
         else if (m_scalingMethod == ToImageSize && size != image->size()) {
@@ -255,7 +255,7 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
             qreal xscale =  (qreal)sz.width() / (qreal)size.width();
             qreal yscale = (qreal)sz.height() / (qreal)size.height();
 
-            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get(m_scalingFilter));
+            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get(m_scalingFilter));
             worker.run();
         }
 

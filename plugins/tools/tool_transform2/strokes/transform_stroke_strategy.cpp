@@ -320,8 +320,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
                     QRect oldDirtyRect = oldExtent | extLayer->theoreticalBoundingRect();
 
-                    QVector3D transformedCenter;
-                    KisTransformWorker w = KisTransformUtils::createTransformWorker(td->config, 0, 0, &transformedCenter);
+                    KisTransformWorker w = KisTransformUtils::createTransformWorker(td->config, 0, 0);
                     QTransform t = w.transform();
 
                     runAndSaveCommand(KUndo2CommandSP(extLayer->transform(t)),

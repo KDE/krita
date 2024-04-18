@@ -82,7 +82,7 @@ void KisProcessingsTest::testTransformVisitorScale()
 
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(0.5, 0.5,
-                                          0,0,QPointF(),
+                                          0,0,
                                           0,
                                           0,0,
                                           filter);
@@ -98,7 +98,7 @@ void KisProcessingsTest::testTransformVisitorScaleRotate()
 
     KisProcessingVisitorSP visitor =
         new KisTransformProcessingVisitor(0.5, 0.5,
-                                          0,0,QPointF(),
+                                          0,0,
                                           M_PI,
                                           320,220.5,
                                           filter);

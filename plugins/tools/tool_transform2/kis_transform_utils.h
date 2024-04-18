@@ -83,8 +83,7 @@ public:
 
     static KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
                                                     KisPaintDeviceSP device,
-                                                    KoUpdaterPtr updater,
-                                                    QVector3D *transformedCenter /* OUT */);
+                                                    KoUpdaterPtr updater);
 
     static void transformDevice(const ToolTransformArgs &config,
                                 KisPaintDeviceSP device,

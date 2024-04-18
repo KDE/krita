@@ -675,8 +675,7 @@ void InplaceTransformStrokeStrategy::transformNode(KisNodeSP node, const ToolTra
                 if (levelOfDetail <= 0) {
                     const QRect oldDirtyRect = extLayer->projectionPlane()->tightUserVisibleBounds() | extLayer->theoreticalBoundingRect();
 
-                    QVector3D transformedCenter;
-                    KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0, &transformedCenter);
+                    KisTransformWorker w = KisTransformUtils::createTransformWorker(config, 0, 0);
                     QTransform t = w.transform();
                     KUndo2Command *cmd = extLayer->transform(t);
 

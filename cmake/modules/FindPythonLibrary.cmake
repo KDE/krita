@@ -65,18 +65,23 @@ if (Python_Interpreter_FOUND)
 
     unset(KRITA_PYTHONPATH_V4 CACHE)
     unset(KRITA_PYTHONPATH_V5 CACHE)
-    set(_python_prefix_path ${CMAKE_PREFIX_PATH})
+
+    # TODO: we don't use cmake_path(CONVERT TO_NATIVE_PATH_LIST) here, because
+    #       it is unknown if it is going to work on Windows. Currently, our paths
+    #       on Windows use '/' as well. We need to test if switching them into '\'
+    #       will still work
+    set(_path_list_separator ":")
     if (WIN32)
-        foreach(__p ${_python_prefix_path})
-            set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs;${KRITA_PYTHONPATH_V4}")
-            set(KRITA_PYTHONPATH_V5 "${__p}/Lib/site-packages;${KRITA_PYTHONPATH_V5}")
-        endforeach()
-    else()
-        foreach(__p ${_python_prefix_path})
-            set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs:${KRITA_PYTHONPATH_V4}")
-            set(KRITA_PYTHONPATH_V5 "${__p}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages:${KRITA_PYTHONPATH_V5}")
-        endforeach()
+        set(_path_list_separator ";")
     endif()
+
+    set(_python_prefix_path_v4 ${CMAKE_PREFIX_PATH})
+    list(TRANSFORM _python_prefix_path_v4 APPEND "/lib/krita-python-libs")
+    list(JOIN _python_prefix_path_v4 ${_path_list_separator} KRITA_PYTHONPATH_V4)
+
+    set(_python_prefix_path_v5 ${CMAKE_PREFIX_PATH})
+    list(TRANSFORM _python_prefix_path_v5 APPEND "/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
+    list(JOIN _python_prefix_path_v5 ${_path_list_separator} KRITA_PYTHONPATH_V5)
 
     message(STATUS "Krita site-packages directories for SIP v4: ${KRITA_PYTHONPATH_V4}")
     message(STATUS "Krita site-packages directories for SIP v5+: ${KRITA_PYTHONPATH_V5}")

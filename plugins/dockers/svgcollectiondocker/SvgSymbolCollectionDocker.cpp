@@ -59,8 +59,13 @@ QVariant SvgCollectionModel::data(const QModelIndex &index, int role) const
         return m_symbolCollection->symbols()[index.row()]->id;
 
     case Qt::DisplayRole:
-        return m_symbolCollection->symbols()[index.row()]->title;
-
+    {
+        if (m_showDescription) {
+            return m_symbolCollection->symbols()[index.row()]->title;
+        } else {
+            return QVariant();
+        }
+    }
     default:
         return QVariant();
     }
@@ -121,6 +126,12 @@ void SvgCollectionModel::setIconSize(int size)
 {
     m_iconSize = size;
 }
+
+void SvgCollectionModel::setShowDescription(bool showDescription)
+{
+    m_showDescription = showDescription;
+}
+
 void SvgCollectionModel::setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource)
 {
     m_symbolCollection = resource;
@@ -202,11 +213,35 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     QWidgetAction *sliderAction= new QWidgetAction(this);
     sliderAction->setDefaultWidget(m_iconSizeSlider);
 
+    m_thumbnailsRadioButton = new QRadioButton("Thumbnails", this);
+    m_detailsRadioButton = new QRadioButton("Details", this);
+
+
+    QWidgetAction *thumbnailsAction = new QWidgetAction(this);
+    thumbnailsAction->setDefaultWidget(m_thumbnailsRadioButton);
+
+    QWidgetAction *detailsAction = new QWidgetAction(this);
+    detailsAction->setDefaultWidget(m_detailsRadioButton);
+
+    bool displayThumbnails = m_configGroup.readEntry<bool>("displayThumbnails", false);
+    if (displayThumbnails) {
+        m_thumbnailsRadioButton->setChecked(true);
+    } else {
+        m_detailsRadioButton->setChecked(true);
+    }
+
+
+    configureMenu->addSection(i18n("Display"));
+    configureMenu->addAction(detailsAction);
+    configureMenu->addAction(thumbnailsAction);
+
     configureMenu->addSection(i18n("Icon Size"));
     configureMenu->addAction(sliderAction);
 
     m_wdgSvgCollection->vectorPresetsConfigureButton->setMenu(configureMenu);
     connect(m_iconSizeSlider, SIGNAL(sliderReleased()), this, SLOT(slotSetIconSize())); // resizing while sliding is too heavy of an operation
+    connect(m_thumbnailsRadioButton, SIGNAL(toggled(bool)), this, SLOT(slotChangeDisplay()));
+    connect(m_detailsRadioButton, SIGNAL(toggled(bool)), this, SLOT(slotChangeDisplay()));
 
     int i = m_configGroup.readEntry("currentCollection", 0);
     if (i > m_wdgSvgCollection->cmbCollections->count()) {
@@ -218,7 +253,13 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     connect(m_resourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(slotResourceModelAboutToBeReset()));
     connect(m_resourceModel, SIGNAL(modelReset()), this, SLOT(slotResourceModelReset()));
 
+    m_wdgSvgCollection->listCollection->setResizeMode(QListView::Adjust);
+
+
+
     slotSetIconSize();
+    slotChangeDisplay();
+
 }
 
 SvgSymbolCollectionDocker::~SvgSymbolCollectionDocker()
@@ -237,6 +278,28 @@ void SvgSymbolCollectionDocker::slotSetIconSize()
         svgModel->setIconSize(size*devicePixelRatioF());
     }
 }
+
+void SvgSymbolCollectionDocker::slotChangeDisplay()
+{
+    QAbstractItemModel* model = m_wdgSvgCollection->listCollection->model();
+    SvgCollectionModel* svgModel = 0;
+    if (model) {
+        svgModel = dynamic_cast<SvgCollectionModel*>(model);
+    }
+
+    if (m_thumbnailsRadioButton->isChecked()) {
+        m_wdgSvgCollection->listCollection->setViewMode(QListView::IconMode);
+        if (svgModel) {
+            svgModel->setShowDescription(false);
+        }
+        m_configGroup.writeEntry<bool>("displayThumbnails", true);
+    } else {
+        m_wdgSvgCollection->listCollection->setViewMode(QListView::ListMode);
+        if (svgModel) {
+            svgModel->setShowDescription(true);
+        }
+        m_configGroup.writeEntry<bool>("displayThumbnails", false);
+    }
 }
 
 void SvgSymbolCollectionDocker::slotResourceModelAboutToBeReset()
@@ -302,6 +365,7 @@ void SvgSymbolCollectionDocker::collectionActivated(int index)
         m_wdgSvgCollection->listCollection->setModel(model);
 
     }
+    slotChangeDisplay(); // to ensure the ShowDescription is set to the model
     slotSetIconSize(); // to ensure the icon size is correct and they are not scaled up or down by the listview
 
 }

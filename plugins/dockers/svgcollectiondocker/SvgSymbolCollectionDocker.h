@@ -10,6 +10,8 @@
 #include <QAbstractItemModel>
 #include <QModelIndex>
 #include <QMap>
+#include <QIcon>
+#include <QRadioButton>
 
 #include <KoDockFactoryBase.h>
 #include <KoCanvasObserverBase.h>
@@ -34,11 +36,13 @@ public:
     Qt::DropActions supportedDragActions() const override;
 
     void setIconSize(int size);
+    void setShowDescription(bool showDescription);
 public:
     void setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource);
 private:
     QSharedPointer<KoSvgSymbolCollectionResource> m_symbolCollection;
     int m_iconSize {256};
+    bool m_showDescription {true};
 };
 
 
@@ -74,6 +78,7 @@ private Q_SLOTS:
 
     void collectionActivated(int index);
     void slotSetIconSize();
+    void slotChangeDisplay();
 
     void slotResourceModelAboutToBeReset();
     void slotResourceModelReset();
@@ -86,6 +91,9 @@ private:
     QScopedPointer<Ui_WdgSvgCollection> m_wdgSvgCollection;
     QMap<int, SvgCollectionModel*> m_collectionsModelsCache;
     QSlider* m_iconSizeSlider {0};
+    QRadioButton* m_thumbnailsRadioButton {0};
+    QRadioButton* m_detailsRadioButton {0};
+
 
     KisResourceModel* m_resourceModel {0};
     int m_rememberedSvgCollectionId {-1};

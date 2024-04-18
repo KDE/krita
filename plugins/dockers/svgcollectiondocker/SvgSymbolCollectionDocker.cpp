@@ -51,7 +51,7 @@ QVariant SvgCollectionModel::data(const QModelIndex &index, int role) const
 
     case Qt::DecorationRole:
     {
-        QPixmap px = QPixmap::fromImage(m_symbolCollection->symbols()[index.row()]->icon());
+        QPixmap px = QPixmap::fromImage(m_symbolCollection->symbols()[index.row()]->icon(m_iconSize));
         QIcon icon(px);
         return icon;
     }
@@ -117,6 +117,10 @@ Qt::DropActions SvgCollectionModel::supportedDragActions() const
     return Qt::CopyAction;
 }
 
+void SvgCollectionModel::setIconSize(int size)
+{
+    m_iconSize = size;
+}
 void SvgCollectionModel::setSvgSymbolCollectionResource(QSharedPointer<KoSvgSymbolCollectionResource> resource)
 {
     m_symbolCollection = resource;
@@ -183,12 +187,13 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     m_wdgSvgCollection->vectorPresetsConfigureButton->setAutoRaise(true);
 
 
+    m_configGroup = KSharedConfig::openConfig()->group("SvgSymbolCollection");
 
     // add horizontal slider for changing the icon size
     m_iconSizeSlider = new QSlider(this);
     m_iconSizeSlider->setOrientation(Qt::Horizontal);
     m_iconSizeSlider->setRange(20, 80);
-    m_iconSizeSlider->setValue(20);  // defaults to small icon size
+    m_iconSizeSlider->setValue(m_configGroup.readEntry<int>("iconSize", 20));  // defaults to small icon size
     m_iconSizeSlider->setMinimumHeight(20);
     m_iconSizeSlider->setMinimumWidth(40);
     m_iconSizeSlider->setTickInterval(10);
@@ -203,9 +208,7 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
     m_wdgSvgCollection->vectorPresetsConfigureButton->setMenu(configureMenu);
     connect(m_iconSizeSlider, SIGNAL(sliderReleased()), this, SLOT(slotSetIconSize())); // resizing while sliding is too heavy of an operation
 
-
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("SvgSymbolCollection");
-    int i = cfg.readEntry("currentCollection", 0);
+    int i = m_configGroup.readEntry("currentCollection", 0);
     if (i > m_wdgSvgCollection->cmbCollections->count()) {
         i = 0;
     }
@@ -214,6 +217,8 @@ SvgSymbolCollectionDocker::SvgSymbolCollectionDocker(QWidget *parent)
 
     connect(m_resourceModel, SIGNAL(modelAboutToBeReset()), this, SLOT(slotResourceModelAboutToBeReset()));
     connect(m_resourceModel, SIGNAL(modelReset()), this, SLOT(slotResourceModelReset()));
+
+    slotSetIconSize();
 }
 
 SvgSymbolCollectionDocker::~SvgSymbolCollectionDocker()
@@ -223,7 +228,15 @@ SvgSymbolCollectionDocker::~SvgSymbolCollectionDocker()
 
 void SvgSymbolCollectionDocker::slotSetIconSize()
 {
-    m_wdgSvgCollection->listCollection->setIconSize(QSize(m_iconSizeSlider->value(),m_iconSizeSlider->value()));
+    int size = m_iconSizeSlider->value();
+    m_configGroup.writeEntry("iconSize", size);
+    m_wdgSvgCollection->listCollection->setIconSize(QSize(size, size));
+    QAbstractItemModel* model = m_wdgSvgCollection->listCollection->model();
+    if (model) {
+        SvgCollectionModel* svgModel = dynamic_cast<SvgCollectionModel*>(model);
+        svgModel->setIconSize(size*devicePixelRatioF());
+    }
+}
 }
 
 void SvgSymbolCollectionDocker::slotResourceModelAboutToBeReset()
@@ -283,12 +296,13 @@ void SvgSymbolCollectionDocker::collectionActivated(int index)
             m_collectionsModelsCache.insert(index, model);
         }
 
-        KConfigGroup cfg =  KSharedConfig::openConfig()->group("SvgSymbolCollection");
-        cfg.writeEntry("currentCollection", index);
+
+        m_configGroup.writeEntry("currentCollection", index);
 
         m_wdgSvgCollection->listCollection->setModel(model);
 
     }
+    slotSetIconSize(); // to ensure the icon size is correct and they are not scaled up or down by the listview
 
 }
 

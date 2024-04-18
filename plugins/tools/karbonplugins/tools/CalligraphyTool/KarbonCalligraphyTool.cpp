@@ -198,7 +198,7 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
 
     // setting m_angle to the angle of the device
     if (event->xTilt() != 0 || event->yTilt() != 0) {
-        m_deviceSupportsTilt = false;
+        m_deviceSupportsTilt = true;
     }
 
     if (m_deviceSupportsTilt) {

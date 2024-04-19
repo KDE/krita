@@ -1528,7 +1528,7 @@ bool KoColorSet::Private::loadCss()
 
         if (colorValue.startsWith("rgb")) {
             QStringList color;
-            int alpha = 255;
+            
             if (colorValue.startsWith("rgba")) {
                 colorValue.remove("rgba(").remove(")");
                 color = colorValue.split(",");
@@ -1538,7 +1538,7 @@ bool KoColorSet::Private::loadCss()
                     return false;
                 }
                 
-                alpha = color[3].toFloat() * 255;
+                int alpha = color[3].toFloat() * 255;
                 
                 if (alpha < 0 || alpha > 255) {
                     warnPigment << "Invalid alpha parameter : " << colorInfo;
@@ -1556,15 +1556,22 @@ bool KoColorSet::Private::loadCss()
                 }
             }
 
-            int r = color[0].toInt();
-            int g = color[1].toInt();
-            int b = color[2].toInt();
+            int rgb[3];
 
-            qColor = QColor(r, g, b, alpha);
+            for (int i = 0; i < 3; i++) {
+                if (color[i].endsWith("%")) {
+                    color[i].replace("%", "");
+                    rgb[i] = color[i].toFloat() / 100 * 255 ;
+                }
+                else {
+                    rgb[i] = color[i].toInt();
+                };
+            }
+
+            qColor = QColor(rgb[0], rgb[1], rgb[2]);
         }
         else if (colorValue.startsWith("hsl")) {
             QStringList color;
-            float alpha = 1.0;
 
             if (colorValue.startsWith("hsla")) {
                 colorValue.remove("hsla(").remove(")").replace("%", "");
@@ -1610,13 +1617,14 @@ bool KoColorSet::Private::loadCss()
                 return false;
             }
 
-            qColor = QColor::fromHslF(hue, saturation, lightness, alpha);
+            qColor = QColor::fromHslF(hue, saturation, lightness);
 
         }
         else if (colorValue.startsWith("#")) {
             if (colorValue.size() == 9) {
-                // Convert the format to #AARRGGBB (QColor's format) instead of CSS #RRGGBBAA
-                colorValue.insert(1, colorValue.right(2)).remove(colorValue.size() - 2, 2);
+                // Convert the CSS format #RRGGBBAA to #RRGGBB 
+                // Due to QColor's 8 digits format being #AARRGGBB and that we do not load the alpha channel
+                colorValue.truncate(7);
             }
             
             qColor = QColor(colorValue);

@@ -254,6 +254,7 @@ public:
         const QSize &outSize = resize ? size : imageSize;
         const int previewLength = resultPreview ? firstFrameSec : 0;
         const int resultLength = extendResult ? lastFrameSec : 0;
+        const float transitionLength = resultPreview ? 0.7 : 0;
         return QString(templateArguments)
                .replace("$IN_FPS", QString::number(inputFps))
                .replace("$OUT_FPS", QString::number(fps))
@@ -262,6 +263,7 @@ public:
                .replace("$FRAMES", QString::number(framesCount))
                .replace("$INPUT_DIR", settings.inputDirectory)
                .replace("$FIRST_FRAME_SEC", QString::number(previewLength))
+               .replace("$TRANSITION_LENGTH", QString::number(transitionLength))
                .replace("$LAST_FRAME_SEC", QString::number(resultLength))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }

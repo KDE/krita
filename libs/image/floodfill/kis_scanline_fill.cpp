@@ -289,6 +289,8 @@ struct Q_DECL_HIDDEN KisScanlineFill::Private
     int closeGap;           ///< try to close gaps up to this size in pixels
     KisGapMapSP gapMapSp;   ///< maintains the distance and opacity maps required for the algorithm
 
+    QRect fillExtent;
+
     // The priority queue is required to correctly handle the fill "expansion" case
     // (starting in a corner and filling towards open areas, where distance is DISTANCE_INFINITE).
     // Holds the next pixel to consider for filling, among with the contextual information.
@@ -344,6 +346,12 @@ void KisScanlineFill::setCloseGap(int closeGap)
 {
     m_d->closeGap = closeGap;
 }
+
+QRect KisScanlineFill::fillExtent() const
+{
+    return m_d->fillExtent;
+}
+
 
 /**
  * Used with the scanline fill algorithm.
@@ -426,6 +434,11 @@ void KisScanlineFill::extendedPass(KisFillInterval *currentInterval, int srcRow,
             *intervalBorder = x;
             *backwardIntervalBorder = x;
             pixelAccessPolicy.fillPixel(pixelPtr, opacity, x, srcRow);
+            if (extendRight) {
+                m_d->fillExtent.setRight(qMax(m_d->fillExtent.right(), x));
+            } else {
+                m_d->fillExtent.setLeft(qMin(m_d->fillExtent.left(), x));
+            }
         } else {
             break;
         }
@@ -485,6 +498,7 @@ void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncreme
             }
 
             pixelAccessPolicy.fillPixel(pixelPtr, opacity, x, row);
+            m_d->fillExtent = m_d->fillExtent.united(QRect(x, row, 1, 1));
 
             if (x == firstX) {
                 extendedPass(&currentForwardInterval, row, false,
@@ -571,6 +585,7 @@ KisFillInterval KisScanlineFill::closeGapPass(DifferencePolicy &differencePolicy
                     // We still continue the loop, to process all the pixels we can fill.
                 } else {
                     pixelAccessPolicy.fillPixel(pixelPtr, opacity, p.x, p.y);
+                    m_d->fillExtent = m_d->fillExtent.united(QRect(p.x, p.y, 1, 1));
 
                     // Forward the context information to the next pixels.
                     // Spread the fill in four directions: up, down, left, right.
@@ -636,6 +651,8 @@ void KisScanlineFill::runImpl(DifferencePolicy &differencePolicy,
         // Resources are freed automatically when the object is destroyed, that is together with the KisScanlineFill object.
         m_d->gapMapSp = KisGapMapSP(new KisGapMap(gapSize, m_d->boundingRect, opacityFunc));
     }
+
+    m_d->fillExtent = QRect();
 
     KisFillInterval startInterval(m_d->startPoint.x(), m_d->startPoint.x(), m_d->startPoint.y());
 

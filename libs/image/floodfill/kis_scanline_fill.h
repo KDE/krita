@@ -132,6 +132,11 @@ public:
      */
     void setCloseGap(int closeGap);
 
+    /**
+     * Returns the extent of the last filled region
+     */
+    QRect fillExtent() const;
+
 private:
     friend class KisScanlineFillTest;
     Q_DISABLE_COPY(KisScanlineFill)

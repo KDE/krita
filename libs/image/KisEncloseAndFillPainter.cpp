@@ -224,7 +224,7 @@ public:
     void applyPostProcessing(KisPixelSelectionSP mask,
                              KisPaintDeviceSP referenceDevice) const;
 
-    void invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask) const;
+    void invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask, const QRect &enclosingMaskRect) const;
 
     template <typename SelectionPolicy>
     int selectSimilarRegions(KisPixelSelectionSP resultMask,
@@ -282,6 +282,8 @@ public:
                               const QVector<QPoint> &enclosingPoints,
                               const QRect &enclosingMaskRect,
                               KisPaintDeviceSP referenceDevice) const;
+
+    void invertMaskRect(KisPixelSelectionSP resultMask, const QRect &rect) const;
 
 };
 
@@ -397,7 +399,7 @@ KisPixelSelectionSP KisEncloseAndFillPainter::createEncloseAndFillSelection(KisP
         return newSelection;
     }
     // Invert
-    m_d->invertIfNeeded(newSelection, enclosingMask);
+    m_d->invertIfNeeded(newSelection, enclosingMask, enclosingMaskRect);
     // Intersect the regions mask with the current selection if it should be used as boundary
     if (useSelectionAsBoundary() && existingSelection) {
         newSelection->applySelection(existingSelection, SELECTION_INTERSECT);
@@ -768,7 +770,7 @@ void KisEncloseAndFillPainter::Private::selectRegionsSurroundedBySpecificColorGe
     // Invert the mask since it contains the regions surrounding the regions we
     // want, that is, the regions that touch the enclosing area contour and that
     // are not equal to the surrounding color. We want the opposite
-    resultMask->invert();
+    invertMaskRect(resultMask, enclosingMaskRect);
     // Since, after inverting, the mask includes the region outside the enclosing
     // mask, we must intersect the current mask with the enclosing mask. The result
     // is a mask that includes all the closed regions inside the enclosing mask
@@ -780,7 +782,7 @@ void KisEncloseAndFillPainter::Private::selectRegionsSurroundedBySpecificColorGe
     } else {
         // Remove the surrounding regions. Also there shouldn't be any regions
         // that touch the enclosing area contour after this step
-        KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
+        KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(resultMask));
         selectSimilarRegions(mask, enclosingMask, enclosingMaskRect, referenceDevice, selectionPolicy);
         resultMask->applySelection(mask, SELECTION_SUBTRACT);
     }
@@ -904,12 +906,12 @@ void KisEncloseAndFillPainter::Private::applyPostProcessing(KisPixelSelectionSP 
     }
 }
 
-void KisEncloseAndFillPainter::Private::invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask) const
+void KisEncloseAndFillPainter::Private::invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask, const QRect &enclosingMaskRect) const
 {
     if (!regionSelectionInvert) {
         return;
     }
-    resultMask->invert();
+    invertMaskRect(resultMask, enclosingMaskRect);
     // Since, after inverting, the mask includes the region outside the enclosing
     // mask, we must intersect the current mask with the enclosing mask. The result
     // is a mask that includes all the closed regions inside the enclosing mask
@@ -1118,4 +1120,12 @@ void KisEncloseAndFillPainter::Private::removeContourRegions(KisPixelSelectionSP
     KisPixelSelectionSP contourRegionsMask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
     selectRegionsFromContour(contourRegionsMask, enclosingMask, enclosingMaskRect, referenceDevice);
     resultMask->applySelection(contourRegionsMask, SELECTION_SUBTRACT);
+}
+
+void KisEncloseAndFillPainter::Private::invertMaskRect(KisPixelSelectionSP resultMask, const QRect &rect) const
+{
+    KisSequentialIterator resultMaskIterator(resultMask, rect);
+    while (resultMaskIterator.nextPixel()) {
+        *resultMaskIterator.rawData() = MAX_SELECTED - *resultMaskIterator.oldRawData();
+    }
 }

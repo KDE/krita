@@ -14,6 +14,7 @@
 #include <QQuickItem>
 #include <QFontDatabase>
 #include <QStringListModel>
+#include <QQuickStyle>
 
 #include <KisViewManager.h>
 #include <kis_canvas_resource_provider.h>
@@ -59,6 +60,11 @@ TextPropertiesDock::TextPropertiesDock()
 
     m_quickWidget->engine()->rootContext()->setContextProperty("mainWindow", this);
     m_quickWidget->engine()->rootContext()->setContextObject(new KLocalizedContext(this));
+
+    // Default to fusion style unless the user forces another style
+    if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
+         QQuickStyle::setStyle(QStringLiteral("Fusion"));
+    }
 
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");

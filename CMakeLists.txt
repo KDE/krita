@@ -547,7 +547,17 @@ if (Qt5QuickWidgets_FOUND)
     # This is needed because Qt dependencies aren't added by ECM but by androideployqt,
     # so it doesn't benefit from our patch in ECM.
     list (APPEND ANDROID_EXTRA_LIBS $<TARGET_FILE:Qt5::QuickWidgets>)
+
+    find_package(Qt5QuickControls2 ${MIN_QT_VERSION})
+    set_package_properties(Qt5QuickControls2 PROPERTIES
+            DESCRIPTION "QtQuickControls"
+            URL "https://www.qt.io/"
+            TYPE OPTIONAL
+            PURPOSE "Optionally used for the touch gui for Krita")
+
 endif()
+
+
 
 
 if (NOT WIN32 AND NOT APPLE AND NOT ANDROID AND NOT HAIKU)

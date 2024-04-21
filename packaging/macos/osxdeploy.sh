@@ -561,6 +561,10 @@ krita_deploy () {
 
     cd ${KRITA_DMG}/krita.app/Contents
     ln -shF Resources share
+    ln -shF Frameworks lib
+
+    echo "Copying mandatory libs..."
+    rsync -priul ${KIS_INSTALL_DIR}/lib/libKF5* ${KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     echo "Copying qml..."
     rsync -prul ${KIS_INSTALL_DIR}/qml Resources/qml

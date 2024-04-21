@@ -375,7 +375,7 @@ copy_missing_libs () {
 }
 
 krita_findmissinglibs() {
-    neededLibs=$(find_needed_libs "${@}")
+    neededLibs=$(find_needed_libs ${@})
     missingLibs=$(find_missing_libs ${neededLibs})
 
     if [[ $(countArgs ${missingLibs}) -gt 0 ]]; then
@@ -441,7 +441,6 @@ fix_python_framework() {
     install_name_tool -add_rpath @executable_path/../../../../../../../ "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
     install_name_tool -change "${KIS_INSTALL_DIR}/lib/Python.framework/Versions/${PY_VERSION}/Python" @executable_path/../../../../../../Python "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}"
-    install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
 
     # Fix rpaths from Python.Framework
     find "${PythonFrameworkBase}" -type f -perm 755 | delete_install_rpath
@@ -657,7 +656,7 @@ krita_deploy () {
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
 #    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
-    echo "Done!"
+    echo "## Finished preparing krita.app bundle!"
 }
 
 
@@ -878,16 +877,16 @@ fi
 
 # Manually check every single Mach-O file for signature status
 if [[ "${NOTARIZE}" = "true" ]]; then
-print_msg "Checking if all files are signed before sending for notarization..."
-if [[ $(sign_hasError) -eq 1 ]]; then
-    print_error "CodeSign errors cannot send to notarize!"
-    echo "krita.app not sent to notarization, stopping...."
-    exit 1
-fi
-print_msg "Done! all files appear to be correct."
+    print_msg "Checking if all files are signed before sending for notarization..."
+    if [[ $(sign_hasError) -eq 1 ]]; then
+        print_error "CodeSign errors cannot send to notarize!"
+        echo "krita.app not sent to notarization, stopping...."
+        exit 1
+    fi
+    print_msg "Done! all files appear to be correct."
 
-# notarize apple
-notarize_build "${KRITA_DMG}" krita.app
+    # notarize apple
+    notarize_build "${KRITA_DMG}" krita.app
 fi
 
 # Create DMG from files inside ${KRITA_DMG} folder

@@ -83,7 +83,8 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         undoAdapter->addCommand(autoKeyframeCommand);
     }
 
-    if (m_selectionOnly) {
+    if (m_selectionOnly ||
+        (m_refPaintDevice->nonDefaultPixelArea().isEmpty() && m_sizemod == 0 && m_feather == 0 && !m_antiAlias)) {
         if (device->defaultBounds()->wrapAroundMode()) {
             // Always fill if wrap around mode is on
             selectionFill(device, fillRect, undoAdapter);

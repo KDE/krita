@@ -57,6 +57,9 @@
 #include <KisReferenceImagesLayer.h>
 
 #include <processing/fill_processing_visitor.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <commands_new/kis_processing_command.h>
+#include <commands_new/kis_update_command.h>
 #include <kis_selection_tool_helper.h>
 
 #include "kis_figure_painting_tool_helper.h"
@@ -217,47 +220,62 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     KisNodeSP node = view->activeNode();
     if (!node || !node->hasEditablePaintDevice()) return;
 
+    KisImageWSP image = view->image();
+
     KisSelectionSP selection = view->selection();
-    QRect selectedRect = selection ?
-                         selection->selectedRect() : view->image()->bounds();
-    Q_UNUSED(selectedRect);
-    KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
-    Q_UNUSED(filled);
+
     bool usePattern = false;
     bool useBgColor = false;
-
     if (fillSource.contains("pattern")) {
         usePattern = true;
     } else if (fillSource.contains("bg")) {
         useBgColor = true;
     }
 
-    KisProcessingApplicator applicator(view->image(), node,
-                                       KisProcessingApplicator::NONE,
-                                       KisImageSignalVector(),
-                                       kundo2_i18n("Flood Fill Layer"));
-
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, view->canvasResourceProvider()->resourceManager());
+        new KisResourcesSnapshot(image, node, view->canvasResourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
 
-    FillProcessingVisitor *visitor =
-        new FillProcessingVisitor(resources->image()->projection(),
-                                  selection,
-                                  resources);
+    KisStrokeStrategyUndoCommandBased *strategy =
+            new KisStrokeStrategyUndoCommandBased(
+                kundo2_i18n("Flood Fill Layer"), false, image.data()
+            );
+    strategy->setSupportsWrapAroundMode(true);
+    KisStrokeId fillStrokeId = image->startStroke(strategy);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(fillStrokeId);
 
+    QSharedPointer<QRect> dirtyRect = QSharedPointer<QRect>(new QRect);
+
+    FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr, selection, resources);
     visitor->setSeedPoint(QPoint(0, 0));
-    visitor->setUsePattern(usePattern);
     visitor->setSelectionOnly(true);
+    visitor->setOutDirtyRect(dirtyRect);
+    visitor->setUsePattern(usePattern);
     visitor->setUseBgColor(useBgColor);
 
-    applicator.applyVisitor(visitor,
-                            KisStrokeJobData::SEQUENTIAL,
-                            KisStrokeJobData::EXCLUSIVE);
+    image->addJob(
+        fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisProcessingCommand(visitor, node)),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
 
-    applicator.end();
+    image->addJob(
+        fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisUpdateCommand(node, dirtyRect, image.data())),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
+
+    image->endStroke(fillStrokeId);
 
     view->canvasResourceProvider()->slotPainting();
 }

@@ -117,6 +117,8 @@ private:
     KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList {nullptr};
     int m_previousTime {0};
     KisNodeSP m_previousNode {nullptr};
+    QSharedPointer<QRect> m_dirtyRect {nullptr};
+    KisStrokeId m_fillStrokeId {nullptr};
 
     KisOptionCollectionWidget *m_optionWidget {nullptr};
 

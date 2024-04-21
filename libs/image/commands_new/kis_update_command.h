@@ -21,6 +21,9 @@ public:
     KisUpdateCommand(KisNodeSP node, QRect dirtyRect,
                      KisUpdatesFacade *updatesFacade,
                      bool needsFullRefresh = false);
+    KisUpdateCommand(KisNodeSP node, QSharedPointer<QRect> dirtyRect,
+                     KisUpdatesFacade *updatesFacade,
+                     bool needsFullRefresh = false);
     ~KisUpdateCommand() override;
 
     void undo() override;
@@ -32,6 +35,7 @@ private:
 private:
     KisNodeSP m_node;
     QRect m_dirtyRect;
+    QSharedPointer<QRect> m_sharedDirtyRect;
     KisUpdatesFacade *m_updatesFacade;
     bool m_needsFullRefresh;
 };

@@ -37,7 +37,8 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         bool useBgColor,
         bool useCustomBlendingOptions,
         int customOpacity,
-        const QString &customCompositeOp
+        const QString &customCompositeOp,
+        QSharedPointer<QRect> outDirtyRect
 )
     : m_referencePaintDevice(referencePaintDevice)
     , m_enclosingMask(enclosingMask)
@@ -62,6 +63,7 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
     , m_useCustomBlendingOptions(useCustomBlendingOptions)
     , m_customOpacity(customOpacity)
     , m_customCompositeOp(customCompositeOp)
+    , m_outDirtyRect(outDirtyRect)
 {}
 
 void KisEncloseAndFillProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
@@ -121,6 +123,14 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     }
 
     painter.endTransaction(undoAdapter);
+
+    if (m_outDirtyRect) {
+        *m_outDirtyRect = m_enclosingMask->selectedRect();
+        QVector<QRect> dirtyRects = painter.takeDirtyRegion();
+        Q_FOREACH(const QRect &r, dirtyRects) {
+            *m_outDirtyRect = m_outDirtyRect->united(r);
+        }
+    }
 }
 
 void KisEncloseAndFillProcessingVisitor::visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)

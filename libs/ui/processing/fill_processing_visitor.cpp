@@ -113,20 +113,17 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
 
 void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter)
 {
+    const QRect fillRect_ = m_selection ? m_selection->selectedRect() : fillRect;
     KisPaintDeviceSP filledDevice = device->createCompositionSourceDevice();
     KisFillPainter fillPainter(filledDevice);
     fillPainter.setProgress(m_progressHelper->updater());
 
     if (m_usePattern) {
-        fillPainter.fillRectNoCompose(fillRect, m_resources->currentPattern(), m_resources->fillTransform());
+        fillPainter.fillRectNoCompose(fillRect_, m_resources->currentPattern(), m_resources->fillTransform());
     } else if (m_useBgColor) {
-        fillPainter.fillRect(fillRect,
-                             m_resources->currentBgColor(),
-                             OPACITY_OPAQUE_U8);
+        fillPainter.fillRect(fillRect_, m_resources->currentBgColor(), OPACITY_OPAQUE_U8);
     } else {
-        fillPainter.fillRect(fillRect,
-                             m_resources->currentFgColor(),
-                             OPACITY_OPAQUE_U8);
+        fillPainter.fillRect(fillRect_, m_resources->currentFgColor(), OPACITY_OPAQUE_U8);
     }
 
     QVector<QRect> dirtyRect = fillPainter.takeDirtyRegion();
@@ -143,6 +140,9 @@ void FillProcessingVisitor::selectionFill(KisPaintDeviceSP device, const QRect &
 
     Q_FOREACH (const QRect &rc, dirtyRect) {
         painter.bitBlt(rc.topLeft(), filledDevice, rc);
+        if (m_outDirtyRect) {
+            *m_outDirtyRect = m_outDirtyRect->united(rc);
+        }
     }
 
     painter.endTransaction(undoAdapter);
@@ -189,6 +189,13 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     }
 
     fillPainter.endTransaction(undoAdapter);
+
+    if (m_outDirtyRect) {
+        QVector<QRect> dirtyRects = fillPainter.takeDirtyRegion();
+        Q_FOREACH(const QRect &r, dirtyRects) {
+            *m_outDirtyRect = m_outDirtyRect->united(r);
+        }
+    }
 }
 
 void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter)
@@ -410,6 +417,11 @@ void FillProcessingVisitor::setCustomOpacity(int customOpacity)
 void FillProcessingVisitor::setCustomCompositeOp(const QString &customCompositeOp)
 {
     m_customCompositeOp = customCompositeOp;
+}
+
+void FillProcessingVisitor::setOutDirtyRect(QSharedPointer<QRect> outDirtyRect)
+{
+    m_outDirtyRect = outDirtyRect;
 }
 
 void FillProcessingVisitor::setProgressHelper(QSharedPointer<ProgressHelper> progressHelper)

@@ -52,6 +52,7 @@ public:
     void setUseCustomBlendingOptions(bool useCustomBlendingOptions);
     void setCustomOpacity(int customOpacity);
     void setCustomCompositeOp(const QString &customCompositeOp);
+    void setOutDirtyRect(QSharedPointer<QRect> outDirtyRect);
     void setProgressHelper(QSharedPointer<ProgressHelper> progressHelper);
 
 private:
@@ -95,6 +96,8 @@ private:
     bool m_useCustomBlendingOptions;
     int m_customOpacity;
     QString m_customCompositeOp;
+
+    QSharedPointer<QRect> m_outDirtyRect;
 
     QSharedPointer<ProgressHelper> m_progressHelper {nullptr};
 };

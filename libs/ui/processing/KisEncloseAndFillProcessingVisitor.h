@@ -43,7 +43,8 @@ public:
         bool useBgColor,
         bool useCustomBlendingOptions,
         int customOpacity,
-        const QString &customCompositeOp
+        const QString &customCompositeOp,
+        QSharedPointer<QRect> outDirtyRect
     );
 
 private:
@@ -77,6 +78,7 @@ private:
     bool m_useCustomBlendingOptions;
     int m_customOpacity;
     QString m_customCompositeOp;
+    QSharedPointer<QRect> m_outDirtyRect;
 };
 
 #endif

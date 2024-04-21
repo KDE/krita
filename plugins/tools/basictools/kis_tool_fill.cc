@@ -72,6 +72,7 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
     , m_referenceNodeList(nullptr)
     , m_previousTime(0)
     , m_compressorFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
+    , m_dirtyRect(nullptr)
     , m_fillStrokeId(nullptr)
 {
     setObjectName("tool_fill");
@@ -328,6 +329,7 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
         m_fillMask = new KisSelection;
     }
 
+    m_dirtyRect.reset(new QRect);
     m_transform.reset();
     m_transform.rotate(m_patternRotation);
     const qreal normalizedScale = m_patternScale * 0.01;
@@ -402,6 +404,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
             visitor->setContinuousFillMask(m_fillMask);
             visitor->setContinuousFillReferenceColor(m_referenceColor);
         }
+        visitor->setOutDirtyRect(m_dirtyRect);
 
         image()->addJob(
             m_fillStrokeId,
@@ -457,6 +460,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
                 visitor->setCustomOpacity(customOpacity);
                 visitor->setCustomCompositeOp(m_customCompositeOp);
             }
+            visitor->setOutDirtyRect(m_dirtyRect);
             visitor->setProgressHelper(progressHelper);
 
             image()->addJob(
@@ -479,7 +483,7 @@ void KisToolFill::addUpdateOperation()
     image()->addJob(
         m_fillStrokeId,
         new KisStrokeStrategyUndoCommandBased::Data(
-            KUndo2CommandSP(new KisUpdateCommand(currentNode(), image()->bounds(), image().data())),
+            KUndo2CommandSP(new KisUpdateCommand(currentNode(), m_dirtyRect, image().data())),
             false,
             KisStrokeJobData::SEQUENTIAL,
             KisStrokeJobData::EXCLUSIVE
@@ -496,6 +500,7 @@ void KisToolFill::endFilling()
     image()->endStroke(m_fillStrokeId);
     m_fillStrokeId = nullptr;
     m_fillMask = nullptr;
+    m_dirtyRect = nullptr;
 }
 
 void KisToolFill::slotUpdateFill()
@@ -1231,8 +1236,8 @@ void KisToolFill::slot_optionButtonStripDragFill_buttonToggled(
         return;
     }
     m_continuousFillMode = button == m_buttonDragFillAny
-                                     ? ContinuousFillMode_FillAnyRegion
-                                     : ContinuousFillMode_FillSimilarRegions;
+                            ? ContinuousFillMode_FillAnyRegion
+                            : ContinuousFillMode_FillSimilarRegions;
     m_configGroup.writeEntry(
         "continuousFillMode",
         button == m_buttonDragFillAny ? "fillAnyRegion" : "fillSimilarRegions"

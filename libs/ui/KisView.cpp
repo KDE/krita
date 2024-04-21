@@ -797,6 +797,8 @@ void KisView::dropEvent(QDropEvent *event)
         KisStrokeId fillStrokeId = image()->startStroke(strategy);
         KIS_SAFE_ASSERT_RECOVER_RETURN(fillStrokeId);
 
+        QSharedPointer<QRect> dirtyRect = QSharedPointer<QRect>(new QRect);
+
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), d->viewManager->activeNode(), d->viewManager->canvasResourceProvider()->resourceManager());
 
@@ -851,6 +853,8 @@ void KisView::dropEvent(QDropEvent *event)
                 visitor->setCustomOpacity(customOpacity);
                 visitor->setCustomCompositeOp(customCompositeOp);
             }
+            visitor->setOutDirtyRect(dirtyRect);
+
             image()->addJob(
                 fillStrokeId,
                 new KisStrokeStrategyUndoCommandBased::Data(
@@ -996,6 +1000,7 @@ void KisView::dropEvent(QDropEvent *event)
                     visitor->setCustomOpacity(customOpacity);
                     visitor->setCustomCompositeOp(customCompositeOp);
                 }
+                visitor->setOutDirtyRect(dirtyRect);
                 
                 image()->addJob(
                     fillStrokeId,
@@ -1045,6 +1050,7 @@ void KisView::dropEvent(QDropEvent *event)
                     visitor->setSeedPoint(imgCursorPos);
                     visitor->setSelectionOnly(true);
                     visitor->setProgressHelper(progressHelper);
+                    visitor->setOutDirtyRect(dirtyRect);
 
                     image()->addJob(
                         fillStrokeId,
@@ -1062,7 +1068,7 @@ void KisView::dropEvent(QDropEvent *event)
         image()->addJob(
             fillStrokeId,
             new KisStrokeStrategyUndoCommandBased::Data(
-                KUndo2CommandSP(new KisUpdateCommand(d->viewManager->activeNode(), image()->bounds(), image().data())),
+                KUndo2CommandSP(new KisUpdateCommand(d->viewManager->activeNode(), dirtyRect, image().data())),
                 false,
                 KisStrokeJobData::SEQUENTIAL,
                 KisStrokeJobData::EXCLUSIVE

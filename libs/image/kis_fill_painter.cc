@@ -260,6 +260,8 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
             gc.fillUntilColor(paintColor(), m_regionFillingBoundaryColor);
         }
 
+        addDirtyRect(gc.fillExtent());
+
     } else {
         genericFillStart(startX, startY, sourceDevice);
 

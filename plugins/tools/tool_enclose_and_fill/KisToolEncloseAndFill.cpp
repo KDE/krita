@@ -41,7 +41,9 @@
 #include <kis_cmb_composite.h>
 #include <kis_image_animation_interface.h>
 
-#include <kis_processing_applicator.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <commands_new/kis_processing_command.h>
+#include <commands_new/kis_update_command.h>
 #include <kis_command_utils.h>
 #include <functional>
 #include <kis_group_layer.h>
@@ -262,10 +264,13 @@ void KisToolEncloseAndFill::beginAlternateDoubleClickAction(KoPointerEvent *even
 
 void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSelectionSP enclosingMask)
 {
-    KisProcessingApplicator applicator(currentImage(), currentNode(),
-                                       KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
-                                       KisImageSignalVector(),
-                                       kundo2_i18n("Enclose and Fill"));
+    KisStrokeStrategyUndoCommandBased *strategy =
+            new KisStrokeStrategyUndoCommandBased(kundo2_i18n("Enclose and Fill"), false, image().data());
+    strategy->setSupportsWrapAroundMode(true);
+    m_fillStrokeId = image()->startStroke(strategy);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
+
+    m_dirtyRect.reset(new QRect);
 
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
@@ -282,19 +287,23 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
         KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
         KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
         const int currentTime = image()->animationInterface()->currentTime();
-        applicator.applyCommand(
-            new KisMergeLabeledLayersCommand(
-                image(),
-                m_referenceNodeList,
-                newReferenceNodeList,
-                m_referencePaintDevice,
-                newReferencePaintDevice,
-                m_selectedColorLabels,
-                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
-                m_previousTime != currentTime
-            ),
-            KisStrokeJobData::SEQUENTIAL,
-            KisStrokeJobData::EXCLUSIVE
+        image()->addJob(
+            m_fillStrokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisMergeLabeledLayersCommand(
+                    image(),
+                    m_referenceNodeList,
+                    newReferenceNodeList,
+                    m_referencePaintDevice,
+                    newReferencePaintDevice,
+                    m_selectedColorLabels,
+                    KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                    m_previousTime != currentTime
+                )),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
         );
         m_referencePaintDevice = newReferencePaintDevice;
         m_referenceNodeList = newReferenceNodeList;
@@ -336,13 +345,33 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
                                                m_fillType == FillWithBackgroundColor,
                                                m_useCustomBlendingOptions,
                                                m_customOpacity * OPACITY_OPAQUE_U8 / 100,
-                                               m_customCompositeOp);
+                                               m_customCompositeOp,
+                                               m_dirtyRect);
 
-    applicator.applyVisitor(visitor,
-                            KisStrokeJobData::SEQUENTIAL,
-                            KisStrokeJobData::EXCLUSIVE);
+    image()->addJob(
+        m_fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
 
-    applicator.end();
+    image()->addJob(
+        m_fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisUpdateCommand(currentNode(), m_dirtyRect, image().data())),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
+
+    image()->endStroke(m_fillStrokeId);
+
+    m_fillStrokeId = nullptr;
+    m_dirtyRect = nullptr;
 }
 
 int KisToolEncloseAndFill::flags() const

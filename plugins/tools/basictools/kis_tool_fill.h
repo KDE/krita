@@ -142,6 +142,7 @@ private:
     bool m_isDragging {false};
     QPoint m_fillStartWidgetPosition;
     KisSignalCompressor m_compressorFillUpdate;
+    QSharedPointer<QRect> m_dirtyRect;
     QVector<QPoint> m_seedPoints;
     KisStrokeId m_fillStrokeId;
     KisNodeSP m_previousNode {nullptr};

@@ -82,8 +82,8 @@ export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
 # We only support from 10.13 up
-export MACOSX_DEPLOYMENT_TARGET=10.13
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
+export MACOSX_DEPLOYMENT_TARGET=10.14
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.14
 
 KRITA_VERSION="$(${KIS_INSTALL_DIR}/bin/krita_version -v)"
 

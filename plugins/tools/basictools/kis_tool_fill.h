@@ -72,6 +72,7 @@ public:
 
     enum ContinuousFillMode
     {
+        ContinuousFillMode_DoNotUse,
         ContinuousFillMode_FillAnyRegion,
         ContinuousFillMode_FillSimilarRegions
     };
@@ -182,6 +183,7 @@ private:
     KoGroupButton *m_buttonReferenceLabeled {nullptr};
     KisColorLabelSelectorWidget *m_widgetLabels {nullptr};
 
+    KoGroupButton *m_buttonDragFillDoNotUse {nullptr};
     KoGroupButton *m_buttonDragFillAny {nullptr};
     KoGroupButton *m_buttonDragFillSimilar {nullptr};
 

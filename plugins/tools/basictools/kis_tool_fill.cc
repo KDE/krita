@@ -177,11 +177,14 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
     m_seedPoints.append(lastImagePosition);
     beginFilling(lastImagePosition);
     m_isFilling = true;
+
+    slotUpdateFill();
 }
 
 void KisToolFill::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (!m_isFilling || m_effectiveFillMode != FillMode_FillContiguousRegion) {
+    if (!m_isFilling || m_effectiveFillMode != FillMode_FillContiguousRegion ||
+        m_continuousFillMode == ContinuousFillMode_DoNotUse) {
         return;
     }
     
@@ -207,7 +210,6 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *)
 {
     if (m_isFilling) {
         m_compressorFillUpdate.stop();
-        slotUpdateFill();
         endFilling();
     }
 
@@ -623,6 +625,8 @@ QWidget* KisToolFill::createOptionWidget()
 
     KisOptionButtonStrip *optionButtonStripDragFill =
         new KisOptionButtonStrip;
+    m_buttonDragFillDoNotUse = optionButtonStripDragFill->addButton(
+        KisIconUtils::loadIcon("dialog-cancel"));
     m_buttonDragFillAny = optionButtonStripDragFill->addButton(
         KisIconUtils::loadIcon("different-regions"));
     m_buttonDragFillSimilar = optionButtonStripDragFill->addButton(
@@ -662,6 +666,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_buttonReferenceAll->setToolTip(i18n("Fill regions found from the merging of all layers"));
     m_buttonReferenceLabeled->setToolTip(i18n("Fill regions found from the merging of layers with specific color labels"));
 
+    m_buttonDragFillDoNotUse->setToolTip(i18n("Dragging will not fill different regions"));
     m_buttonDragFillAny->setToolTip(i18n("Dragging will fill regions of any color"));
     m_buttonDragFillSimilar->setToolTip(i18n("Dragging will fill only regions similar in color to the initial region (useful for filling line-art)"));
 
@@ -786,7 +791,9 @@ QWidget* KisToolFill::createOptionWidget()
         m_buttonReferenceLabeled->setChecked(true);
         sectionReference->setWidgetVisible("widgetLabels", true);
     }
-    if (m_continuousFillMode == ContinuousFillMode_FillSimilarRegions) {
+    if (m_continuousFillMode == ContinuousFillMode_DoNotUse) {
+        m_buttonDragFillDoNotUse->setChecked(true);
+    } else if (m_continuousFillMode == ContinuousFillMode_FillSimilarRegions) {
         m_buttonDragFillSimilar->setChecked(true);
     }
     m_widgetLabels->setSelection(m_selectedColorLabels);
@@ -934,7 +941,9 @@ void KisToolFill::loadConfiguration()
     }
     {
         const QString continuousFillModeStr = m_configGroup.readEntry<QString>("continuousFillMode", "fillAnyRegion");
-        if (continuousFillModeStr == "fillSimilarRegions") {
+        if (continuousFillModeStr == "doNotUse") {
+            m_continuousFillMode = ContinuousFillMode_DoNotUse;
+        } else if (continuousFillModeStr == "fillSimilarRegions") {
             m_continuousFillMode = ContinuousFillMode_FillSimilarRegions;
         } else {
             m_continuousFillMode = ContinuousFillMode_FillAnyRegion;
@@ -1237,10 +1246,16 @@ void KisToolFill::slot_optionButtonStripDragFill_buttonToggled(
     }
     m_continuousFillMode = button == m_buttonDragFillAny
                             ? ContinuousFillMode_FillAnyRegion
-                            : ContinuousFillMode_FillSimilarRegions;
+                            : button == m_buttonDragFillDoNotUse
+                                ? ContinuousFillMode_DoNotUse
+                                : ContinuousFillMode_FillSimilarRegions;
     m_configGroup.writeEntry(
         "continuousFillMode",
-        button == m_buttonDragFillAny ? "fillAnyRegion" : "fillSimilarRegions"
+        button == m_buttonDragFillAny
+            ? "fillAnyRegion"
+            : button == m_buttonDragFillDoNotUse
+                ? "doNotUse"
+                : "fillSimilarRegions"
     );
 }
 

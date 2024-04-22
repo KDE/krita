@@ -44,7 +44,7 @@ ELSE(SIP_VERSION)
 
   set(all_paths ${KRITA_PYTHONPATH_V4} ${KRITA_PYTHONPATH_V5} $ENV{PYTHONPATH})
   list(REMOVE_ITEM all_paths "")
-  list(JOIN all_paths ${_path_list_separator} _pyqt5_python_path)
+  list(JOIN all_paths "${_path_list_separator}" _pyqt5_python_path)
 
   EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
     "PYTHONPATH=${_pyqt5_python_path}"

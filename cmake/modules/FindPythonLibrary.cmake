@@ -33,6 +33,7 @@ include(FindPackageHandleStandardArgs)
 
 if (WIN32 OR APPLE)
     set(Python_FIND_STRATEGY LOCATION)
+    # on APPLE we search python using Python_ROOT_DIR set by the toolchain file
     find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
 else()
     find_package(Python 3.8 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
@@ -63,20 +64,26 @@ if (Python_Interpreter_FOUND)
 
     message(STATUS "Python system site-packages directory: ${PYTHON_SITE_PACKAGES_DIR}")
 
+    if (NOT CMAKE_PREFIX_PATH)
+        message (WARNING "CMAKE_PREFIX_PATH variable is not set, we might NOT be able to detect SIP modules")
+        # use install prefix as a fallback
+        set(_all_prefix_paths ${CMAKE_INSTALL_PREFIX})
+    else()
+        set(_all_prefix_paths ${CMAKE_PREFIX_PATH})
+    endif()
+
     unset(KRITA_PYTHONPATH_V4 CACHE)
     unset(KRITA_PYTHONPATH_V5 CACHE)
-    set(_python_prefix_path ${CMAKE_PREFIX_PATH})
-    if (WIN32)
-        foreach(__p ${_python_prefix_path})
-            set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs;${KRITA_PYTHONPATH_V4}")
-            set(KRITA_PYTHONPATH_V5 "${__p}/Lib/site-packages;${KRITA_PYTHONPATH_V5}")
-        endforeach()
-    else()
-        foreach(__p ${_python_prefix_path})
-            set(KRITA_PYTHONPATH_V4 "${__p}/lib/krita-python-libs:${KRITA_PYTHONPATH_V4}")
-            set(KRITA_PYTHONPATH_V5 "${__p}/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages:${KRITA_PYTHONPATH_V5}")
-        endforeach()
-    endif()
+
+    cmake_path(CONVERT "${_all_prefix_paths}" TO_CMAKE_PATH_LIST _python_prefix_path_v4 NORMALIZE)
+    list(REMOVE_ITEM _python_prefix_path_v4 "")
+    list(TRANSFORM _python_prefix_path_v4 APPEND "/lib/krita-python-libs")
+    cmake_path(CONVERT "${_python_prefix_path_v4}" TO_NATIVE_PATH_LIST KRITA_PYTHONPATH_V4 NORMALIZE)
+
+    cmake_path(CONVERT "${_all_prefix_paths}" TO_CMAKE_PATH_LIST _python_prefix_path_v5 NORMALIZE)
+    list(REMOVE_ITEM _python_prefix_path_v5 "")
+    list(TRANSFORM _python_prefix_path_v5 APPEND "/lib/python${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}/site-packages")
+    cmake_path(CONVERT "${_python_prefix_path_v5}" TO_NATIVE_PATH_LIST KRITA_PYTHONPATH_V5 NORMALIZE)
 
     message(STATUS "Krita site-packages directories for SIP v4: ${KRITA_PYTHONPATH_V4}")
     message(STATUS "Krita site-packages directories for SIP v5+: ${KRITA_PYTHONPATH_V5}")

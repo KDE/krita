@@ -33,21 +33,23 @@ ELSE(SIP_VERSION)
 
   FIND_FILE(_find_sip_py FindSIP.py PATHS ${CMAKE_MODULE_PATH})
 
+  # TODO: we don't use cmake_path(CONVERT TO_NATIVE_PATH_LIST) here, because
+  #       it is unknown if it is going to work on Windows. Currently, our paths
+  #       on Windows use '/' as well. We need to test if switching them into '\'
+  #       will still work
+  set(_path_list_separator ":")
   if (WIN32)
-    set(_sip_python_path "${KRITA_PYTHONPATH_V4};${KRITA_PYTHONPATH_V5};$ENV{PYTHONPATH}")
+      set(_path_list_separator ";")
+  endif()
 
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
-      "PYTHONPATH=${_sip_python_path}"
-      ${Python_EXECUTABLE} ${_find_sip_py}
-      OUTPUT_VARIABLE sip_config)
-  else (WIN32)
-    set(_pyqt5_python_path "${KRITA_PYTHONPATH_V4}:${KRITA_PYTHONPATH_V5}:$ENV{PYTHONPATH}")
+  set(all_paths ${KRITA_PYTHONPATH_V4} ${KRITA_PYTHONPATH_V5} $ENV{PYTHONPATH})
+  list(REMOVE_ITEM all_paths "")
+  list(JOIN all_paths "${_path_list_separator}" _pyqt5_python_path)
 
-    EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env 
-      "PYTHONPATH=${_sip_python_path}"
-      ${Python_EXECUTABLE} ${_find_sip_py}
-      OUTPUT_VARIABLE sip_config)
-  endif (WIN32)
+  EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E env
+    "PYTHONPATH=${_pyqt5_python_path}"
+    ${Python_EXECUTABLE} ${_find_sip_py}
+    OUTPUT_VARIABLE sip_config)
 
   IF(sip_config)
     STRING(REGEX REPLACE "^sip_version:([^\n]+).*$" "\\1" SIP_VERSION ${sip_config})

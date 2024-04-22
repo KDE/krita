@@ -64,47 +64,26 @@ print_error() {
     printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
 }
 
-get_script_dir() {
-    if [[ -n "$ZSH_VERSION" ]]; then
-        script_source="${(%):-%x}"
-    else
-        # transitional, macos should use ZSH
-        script_source="${BASH_SOURCE[0]}"
-    fi
-    # go to target until finding root.
-    while [ -L "${script_source}" ]; do
-        script_target="$(readlink ${script_source})"
-        if [[ "${script_source}" = /* ]]; then
-            script_source="$script_target"
-        else
-            script_dir="$(dirname "${script_source}")"
-            script_source="${script_dir}/${script_target}"
-        fi
-    done
-    echo "$(dirname ${script_source})"
-}
-
 DMG_title="krita" #if changed krita.temp.dmg must be deleted manually
-SCRIPT_SOURCE_DIR="$(get_script_dir)"
 
 # There is some duplication between build and deploy scripts
 # a config env file could would be a nice idea.
 if [[ -z "${KIS_SRC_DIR}" ]]; then
-    KIS_SRC_DIR=${BUILDROOT}/krita
+    KIS_SRC_DIR=${BUILDROOT}/
 fi
 if [[ -z "${KIS_BUILD_DIR}" ]]; then
-    KIS_BUILD_DIR=${BUILDROOT}/kisbuild
+    KIS_BUILD_DIR=${BUILDROOT}/_build
 fi
-KIS_INSTALL_DIR=${BUILDROOT}/i
-KRITA_DMG=${BUILDROOT}/kritadmg
-KRITA_DMG_TEMPLATE=${BUILDROOT}/kritadmg-template
+KIS_INSTALL_DIR=${BUILDROOT}/_install
+KRITA_DMG=${BUILDROOT}/_dmg
+KRITA_DMG_TEMPLATE=${BUILDROOT}/_kritadmg-template
 
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 
 # flags for OSX environment
 # We only support from 10.13 up
-export MACOSX_DEPLOYMENT_TARGET=10.13
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
+export MACOSX_DEPLOYMENT_TARGET=10.14
+export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.14
 
 KRITA_VERSION="$(${KIS_INSTALL_DIR}/bin/krita_version -v)"
 
@@ -271,7 +250,7 @@ fi
 
 ### STYLE for DMG
 if [[ ! ${DMG_STYLE} ]]; then
-    DMG_STYLE="${SCRIPT_SOURCE_DIR}/default.style"
+    DMG_STYLE="${KIS_SRC_DIR}/packaging/macos/default.style"
 fi
 
 print_msg "Using style from: %s" "${DMG_STYLE}"
@@ -280,7 +259,7 @@ print_msg "Using style from: %s" "${DMG_STYLE}"
 if [[ ${DMG_validBG} -eq 0 ]]; then
     echo "No jpg or png valid file detected!!"
     echo "Using default style"
-    DMG_background="${SCRIPT_SOURCE_DIR}/krita_dmgBG.jpg"
+    DMG_background="${KIS_SRC_DIR}/packaging/macos/krita_dmgBG.jpg"
 fi
 
 
@@ -371,7 +350,7 @@ find_missing_libs (){
 
 copy_missing_libs () {
     for lib in ${@}; do
-        result=$(find -L "${BUILDROOT}/i" -name "${lib}")
+        result=$(find -L "${KIS_INSTALL_DIR}" -name "${lib}")
 
         if [[ $(countArgs ${result}) -eq 1 ]]; then
             if [ "$(stringContains "${result}" "plugin")" ]; then
@@ -384,11 +363,11 @@ copy_missing_libs () {
         else
             echo "${lib} might be a missing framework"
             if [ "$(stringContains "${result}" "framework")" ]; then
-                echo "copying framework ${BUILDROOT}/i/lib/${lib}.framework to dmg"
+                echo "copying framework ${KIS_INSTALL_DIR}/lib/${lib}.framework to dmg"
                 # rsync only included ${lib} Resources Versions
-                rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
-                rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
-                rsync -priul ${BUILDROOT}/i/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul ${KIS_INSTALL_DIR}/lib/${lib}.framework/${lib} ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul ${KIS_INSTALL_DIR}/lib/${lib}.framework/Resources ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul ${KIS_INSTALL_DIR}/lib/${lib}.framework/Versions ${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/
                 krita_findmissinglibs "$(find "${KRITA_DMG}/krita.app/Contents/Frameworks/${lib}.framework/" -type f -perm 755)"
             fi
         fi
@@ -396,7 +375,7 @@ copy_missing_libs () {
 }
 
 krita_findmissinglibs() {
-    neededLibs=$(find_needed_libs "${@}")
+    neededLibs=$(find_needed_libs ${@})
     missingLibs=$(find_missing_libs ${neededLibs})
 
     if [[ $(countArgs ${missingLibs}) -gt 0 ]]; then
@@ -440,7 +419,7 @@ libs_clean_rpath () {
 # Multithreaded version
 # of libs_clean_rpath, but makes assumptions
 delete_install_rpath() {
-    xargs -P4 -I FILE install_name_tool -delete_rpath "${BUILDROOT}/i/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
+    xargs -P4 -I FILE install_name_tool -delete_rpath "${KIS_INSTALL_DIR}/lib" FILE 2> "${BUILDROOT}/deploy_error.log"
 }
 
 fix_python_framework() {
@@ -462,7 +441,6 @@ fix_python_framework() {
     install_name_tool -add_rpath @executable_path/../../../../../../../ "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
     install_name_tool -change "${KIS_INSTALL_DIR}/lib/Python.framework/Versions/${PY_VERSION}/Python" @executable_path/../../../../../../Python "${PythonFrameworkBase}/Versions/Current/Resources/Python.app/Contents/MacOS/Python"
     install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}"
-    install_name_tool -add_rpath @executable_path/../../../../ "${PythonFrameworkBase}/Versions/Current/bin/python${PY_VERSION}m"
 
     # Fix rpaths from Python.Framework
     find "${PythonFrameworkBase}" -type f -perm 755 | delete_install_rpath
@@ -582,6 +560,10 @@ krita_deploy () {
 
     cd ${KRITA_DMG}/krita.app/Contents
     ln -shF Resources share
+    ln -shF Frameworks lib
+
+    echo "Copying mandatory libs..."
+    rsync -priul ${KIS_INSTALL_DIR}/lib/libKF5* ${KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
     echo "Copying qml..."
     rsync -prul ${KIS_INSTALL_DIR}/qml Resources/qml
@@ -602,10 +584,8 @@ krita_deploy () {
     
     echo "Adding ffmpeg to bundle"
     cd ${KRITA_DMG}/krita.app/Contents/MacOS
-    cp ${KIS_INSTALL_DIR}/bin/ffmpeg .
-    cp ${KIS_INSTALL_DIR}/bin/ffprobe .
     for bin in ffmpeg ffprobe; do
-        cp ${KIS_INSTALL_DIR}/bin/${bin}
+        cp ${KIS_INSTALL_DIR}/bin/${bin} ./
         install_name_tool -add_rpath @executable_path/../Frameworks/ ${bin}
     done
 
@@ -676,7 +656,7 @@ krita_deploy () {
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
 #    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
-    echo "Done!"
+    echo "## Finished preparing krita.app bundle!"
 }
 
 
@@ -853,7 +833,7 @@ createDMG () {
     printf "${style}" "${DMG_title}" "${DMG_background##*/}" | osascript
 
     #Set Icon for DMG
-    cp -v "${SCRIPT_SOURCE_DIR}/KritaIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
+    cp -v "${KIS_SRC_DIR}/packaging/macos/KritaIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
     SetFile -a C "/Volumes/${DMG_title}"
 
     chmod -Rf go-w "/Volumes/${DMG_title}"
@@ -875,6 +855,12 @@ createDMG () {
 
     notarize_build "${BUILDROOT}" "${DMG_NAME}"
 
+    if [[ ! -d "${BUILDROOT}/_packaging" ]]; then
+        mkdir "${BUILDROOT}/_packaging"
+    fi
+
+    mv ${DMG_NAME} ${BUILDROOT}/_packaging/
+
     echo "dmg done!"
 }
 
@@ -891,16 +877,16 @@ fi
 
 # Manually check every single Mach-O file for signature status
 if [[ "${NOTARIZE}" = "true" ]]; then
-print_msg "Checking if all files are signed before sending for notarization..."
-if [[ $(sign_hasError) -eq 1 ]]; then
-    print_error "CodeSign errors cannot send to notarize!"
-    echo "krita.app not sent to notarization, stopping...."
-    exit 1
-fi
-print_msg "Done! all files appear to be correct."
+    print_msg "Checking if all files are signed before sending for notarization..."
+    if [[ $(sign_hasError) -eq 1 ]]; then
+        print_error "CodeSign errors cannot send to notarize!"
+        echo "krita.app not sent to notarization, stopping...."
+        exit 1
+    fi
+    print_msg "Done! all files appear to be correct."
 
-# notarize apple
-notarize_build "${KRITA_DMG}" krita.app
+    # notarize apple
+    notarize_build "${KRITA_DMG}" krita.app
 fi
 
 # Create DMG from files inside ${KRITA_DMG} folder

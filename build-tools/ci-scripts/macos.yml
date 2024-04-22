@@ -1,0 +1,98 @@
+macos-build:
+  stage: build
+  tags:
+    - macOS
+  extends:
+    - .ci-manual-job-mixin
+  variables:
+    KDECI_BUILD_TYPE: Release
+    # ccache is not present on macOS
+    # KDECI_CC_CACHE: /Users/gitlab/caches/krita-macos/cache
+    KDECI_CACHE_PATH: /Users/gitlab/caches/krita-macos/artifacts
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-macos-qt5.15
+    EXTERNALS_DOWNLOAD_DIR: /Users/gitlab/caches/krita-macos/downloads
+    KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
+    MACOSX_DEPLOYMENT_TARGET: "10.14"
+    QMAKE_MACOSX_DEPLOYMENT_TARGET: "10.14"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake"
+
+    KDECI_CRAFT_DOWNLOADS: /Users/gitlab/caches/krita-macos/craft-downloads
+    KDECI_CRAFT_CONFIG: $CI_PROJECT_DIR/upstream-ci-utilities/craft/qt5/CraftConfig.ini
+    KDECI_CRAFT_PROJECT_CONFIG: $CI_PROJECT_DIR/.craft.ini
+    KDECI_CRAFT_PLATFORM: macos-arm-clang
+
+    #KDECI_REMOVE_INSTALL_FOLDERS_AFTER_BUILD: True
+
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "True"
+    KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1
+    - git clone https://invent.kde.org/dkazakov/ci-utilities.git -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
+    - git clone https://invent.kde.org/packaging/craftmaster.git --depth=1
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1 upstream-ci-utilities
+
+    - python3 -m venv venv --upgrade-deps
+    - . venv/bin/activate
+    - pip install -r krita-deps-management/requirements.txt
+
+    # framework for signing, notarization and package upload
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+    - pip install -r ci-notary-service/requirements.txt
+
+    - touch $KDECI_CRAFT_PROJECT_CONFIG
+    - function craftmaster { python3 craftmaster/CraftMaster.py --config $KDECI_CRAFT_CONFIG --config-override $KDECI_CRAFT_PROJECT_CONFIG --target $KDECI_CRAFT_PLATFORM --variables DownloadDir=$KDECI_CRAFT_DOWNLOADS $@; }
+
+    - craftmaster --setup
+    - craftmaster -c -i --options virtual.ignored=True --update craft
+    - craftmaster -c -i core/cacert dev-utils/7zip-base dev-utils/cmake-base dev-utils/7zip dev-utils/cmake dev-utils/patchelf dev-utils/ninja
+
+    - export PATH=$CI_PROJECT_DIR/$KDECI_CRAFT_PLATFORM/dev-utils/bin/:$PATH
+
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+  script:
+    - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing | tee build-krita.log
+    - env BUILDROOT=$CI_PROJECT_DIR $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-dmg.log
+    
+    - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini _packaging/*.dmg | tee dmg-sign.log
+    - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini _packaging/*.dmg | tee dmg-notarize.log
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging | tee dmg-publish.log
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG
+    expire_in: 10 days
+    when: always
+    paths:
+      - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
+      - "**/appium_artifact_*"
+      - "_packaging"
+      - "*.log"
+    reports:
+      junit: JUnitTestResults.xml
+
+
+macos-nightly:
+  extends:
+  - macos-build
+  - .nightly-job-mixin
+  interruptible: false
+  variables:
+    # still run the tests, since we don't run them for every commit!
+    KDECI_ONLY_BUILD: "False"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain.cmake"
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
+  # no artifacts for nightly jobs, they are uploaded to ci-builds
+  artifacts:
+
+# TODO: this pipeline is hidden currently (not implemented)
+.macos-release:
+  extends:
+  - macos-build
+  - .ci-manual-job-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain.cmake"

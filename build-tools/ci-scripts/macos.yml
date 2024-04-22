@@ -73,8 +73,8 @@ macos-build:
     reports:
       junit: JUnitTestResults.xml
 
-# TODO: this pipeline is hidden currently (not implemented)
-.macos-nightly:
+
+macos-nightly:
   extends:
   - macos-build
   - .nightly-job-mixin
@@ -86,7 +86,6 @@ macos-build:
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
   # no artifacts for nightly jobs, they are uploaded to ci-builds
   artifacts:
-
 
 # TODO: this pipeline is hidden currently (not implemented)
 .macos-release:

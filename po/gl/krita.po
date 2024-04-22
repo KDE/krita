@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-03-16 23:28+0100\n"
+"PO-Revision-Date: 2024-04-21 10:12+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.02.0\n"
+"X-Generator: Lokalize 24.02.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8504,12 +8504,10 @@ msgstr "Tomar unha mostra dunha cor da pantalla (do lenzo real)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Amosar as docas"
+msgstr "Amosar a caixa de docas"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -29182,10 +29180,9 @@ msgid "&Open Background color selector"
 msgstr "Abrir &o selector da cor do fondo"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Doca"
+msgstr "Caixa de &docas"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29211,16 +29208,14 @@ msgid "Gradients"
 msgstr "Gradacións"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Doca:"
+msgstr "Caixa de docas"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Caixa de ferramentas e docas."
+msgstr "Caixa de docas da barra de ferramentas"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29797,8 +29792,7 @@ msgid "Masked Brush"
 msgstr "Pincel con máscara"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Paleta emerxente"
 
@@ -34811,19 +34805,16 @@ msgstr "Configurar o panel de docas"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
-"A doca está aberta nunha paleta emerxente. Péchea para que se amose aquí."
+msgstr "A doca está aberta en %1. Peche %1 para que se amose aquí."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Configurar o panel de docas"
+msgstr "Configurar %1 docas"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -38234,22 +38225,19 @@ msgid "Val:"
 msgstr "Val:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Rexistro de fotogramas"
+msgstr "Rexistro de valor"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgid "Sobel horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Sobel horizontal"
+msgstr "Ampliar horizontalmente"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Sobel vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Sobel vertical"
+msgstr "Ampliar verticalmente"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
@@ -40596,13 +40584,7 @@ msgstr ""
 "rendemento."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the number of recording threads.\n"
-#| "Accordingly to your hardware setup you should record with no more than %1 "
-#| "threads.\n"
-#| "You can play around with one or two more threads, but keep an eye on your "
-#| "overall system performance."
+#, kde-format
 msgid ""
 "Set the number of recording threads.\n"
 "According to your hardware setup you should record with no more than %1 "
@@ -40611,8 +40593,7 @@ msgid ""
 "overall system performance."
 msgstr ""
 "Definir o número de fíos de gravación.\n"
-"Tendo en conta o seu soporte físico, debería gravar con non máis de %1 "
-"fíos.\n"
+"Segundo o seu soporte físico, debería gravar con non máis de %1 fíos.\n"
 "Pode probar con un ou dous fíos máis, pero preste atención ao rendemento "
 "xeral do sistema."
 

@@ -14,8 +14,39 @@ CollapsibleGroupProperty {
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
     property int fontSlant: KoSvgTextPropertiesModel.StyleNormal;
-    onFontSlantChanged: fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant)
+    onFontSlantChanged: {
+        fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
+        if (!blockSignals) {
+            properties.fontStyle = fontSlant;
+        }
+    }
     property alias fontOptical: opticalSizeCbx.checked;
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        fontWeight = properties.fontWeight;
+        fontWidth = properties.fontWidth;
+        fontOptical = properties.fontOpticalSizeLink;
+        fontSlant = properties.fontStyle;
+        blockSignals = false;
+    }
+    onFontWeightChanged: {
+        if (!blockSignals) {
+            properties.fontWeight = fontWeight;
+        }
+    }
+
+    onFontWidthChanged: {
+        if (!blockSignals) {
+            properties.fontWidth = fontWidth;
+        }
+    }
+
+    onFontOpticalChanged: {
+        if (!blockSignals) {
+            properties.fontOpticalSizeLink = fontOptical;
+        }
+    }
 
     titleItem: ComboBox {
         id: styleCmb;

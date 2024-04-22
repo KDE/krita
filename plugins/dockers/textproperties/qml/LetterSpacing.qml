@@ -9,6 +9,18 @@ import QtQuick.Layouts 1.12
 
 TextPropertyBase {
     property alias letterSpacing: letterSpacingSpn.value;
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        letterSpacing = properties.letterSpacing.value;
+        blockSignals = false;
+    }
+    onLetterSpacingChanged: {
+        if (!blockSignals) {
+            properties.letterSpacing.value = letterSpacing;
+        }
+    }
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;

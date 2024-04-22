@@ -9,14 +9,40 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
-    propertyName: "Text Align";
+    propertyName: i18nc("@title:group", "Text Align");
 
     property int textAlignAll: 1;
-    onTextAlignAllChanged: textAlignAllCmb.currentIndex = textAlignAllCmb.indexOfValue(textAlignAll);
     property int textAlignLast: 0;
-    onTextAlignLastChanged: textAlignLastCmb.currentIndex = textAlignLastCmb.indexOfValue(textAlignLast);
     property int textAnchor: 0;
-    onTextAnchorChanged: textAnchorCmb.currentIndex = textAnchorCmb.indexOfValue(textAnchor);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        textAlignAll = properties.textAlignAll;
+        textAlignLast = properties.textAlignLast;
+        textAnchor = properties.textAnchor;
+        blockSignals = false;
+    }
+
+    onTextAlignAllChanged: {
+        textAlignAllCmb.currentIndex = textAlignAllCmb.indexOfValue(textAlignAll);
+        if (!blockSignals) {
+            properties.textAlignAll = textAlignAll;
+        }
+    }
+
+    onTextAlignLastChanged: {
+        textAlignLastCmb.currentIndex = textAlignLastCmb.indexOfValue(textAlignLast);
+        if (!blockSignals) {
+            properties.textAlignLast = textAlignLast;
+        }
+    }
+
+    onTextAnchorChanged: {
+        textAnchorCmb.currentIndex = textAnchorCmb.indexOfValue(textAnchor);
+        if (!blockSignals) {
+            properties.textAnchor = textAnchor;
+        }
+    }
 
     contentItem: GridLayout {
         columns: 3

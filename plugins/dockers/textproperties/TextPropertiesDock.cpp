@@ -66,6 +66,7 @@ TextPropertiesDock::TextPropertiesDock()
          QQuickStyle::setStyle(QStringLiteral("Fusion"));
     }
 
+
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
@@ -134,6 +135,7 @@ void TextPropertiesDock::slotCanvasResourcesChanged(int key, const QVariant &val
         KoSvgTextPropertyData data = value.value<KoSvgTextPropertyData>();
         if (d->textModel->textData.get() != data) {
             d->textModel->textData.set(data);
+            QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
         }
     }
 }

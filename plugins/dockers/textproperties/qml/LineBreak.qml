@@ -10,7 +10,20 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int breakType;
-    onBreakTypeChanged: lineBreakCmb.currentIndex = lineBreakCmb.indexOfValue(breakType);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        breakType = properties.lineBreak;
+        blockSignals = false;
+    }
+
+    onBreakTypeChanged: {
+        lineBreakCmb.currentIndex = lineBreakCmb.indexOfValue(breakType)
+        if (!blockSignals) {
+            properties.lineBreak = breakType;
+        }
+    }
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;

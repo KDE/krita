@@ -15,7 +15,42 @@ TextPropertyBase {
     property alias linethrough: linethroughCbx.checked;
     property int lineStyle;
     property color lineColor;
-    onLineStyleChanged: lineStyleCmb.currentIndex = lineStyleCmb.indexOfValue(lineStyle)
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        underline = properties.textDecorationUnderline;
+        overline = properties.textDecorationOverline;
+        linethrough = properties.textDecorationLineThrough;
+        lineStyle = properties.textDecorationStyle;
+        lineColor = properties.textDecorationColor;
+        blockSignals = false;
+    }
+
+    onLineStyleChanged: {
+        lineStyleCmb.currentIndex = lineStyleCmb.indexOfValue(lineStyle);
+        if (!blockSignals) {
+            properties.textDecorationStyle = lineStyle;
+        }
+    }
+
+    onUnderlineChanged: {
+        if (!blockSignals) {
+            properties.textDecorationUnderline = underline;
+        }
+    }
+
+    onOverlineChanged: {
+        if (!blockSignals) {
+            properties.textDecorationOverline = overline;
+        }
+    }
+
+    onLinethroughChanged: {
+        if (!blockSignals) {
+            properties.textDecorationLineThrough = linethrough;
+        }
+    }
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;

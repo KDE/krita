@@ -12,7 +12,34 @@ TextPropertyBase {
     property alias fullWidth: fullWidthChk.checked;
     property alias fullSizeKana: fullSizeKanaChk.checked;
     property int capitals;
-    onCapitalsChanged: textTransformCaseCmb.currentIndex = textTransformCaseCmb.indexOfValue(capitals);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        fullWidth = properties.textTransform.fullWidth;
+        fullSizeKana = properties.textTransform.fullSizeKana;
+        capitals = properties.textTransform.capitals;
+        blockSignals = false;
+    }
+
+    onCapitalsChanged: {
+        textTransformCaseCmb.currentIndex = textTransformCaseCmb.indexOfValue(capitals)
+        if (!blockSignals) {
+            properties.textTransform.capitals = capitals;
+        }
+    }
+
+    onFullWidthChanged: {
+        if (!blockSignals) {
+            properties.textTransform.fullWidth = fullWidth;
+        }
+    }
+
+    onFullSizeKanaChanged: {
+        if (!blockSignals) {
+            properties.textTransform.fullSizeKana = fullSizeKana;
+        }
+    }
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;

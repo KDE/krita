@@ -11,6 +11,17 @@ TextPropertyBase {
 
     property alias fontSize: fontSizeSpn.value;
 
+    onPropertiesUpdated: {
+        blockSignals = true;
+        fontSize = properties.fontSize.value;
+        blockSignals = false;
+    }
+    onFontSizeChanged: {
+        if (!blockSignals) {
+            properties.fontSize.value = fontSize;
+        }
+    }
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;

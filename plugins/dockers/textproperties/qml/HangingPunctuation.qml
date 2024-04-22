@@ -12,7 +12,33 @@ TextPropertyBase {
     property alias hangStart: paragraphStartCbx.checked;
     property alias hangEnd: paragraphEndCbx.checked;
     property int hangComma: KoSvgTextPropertiesModel.NoHang;
-    onHangCommaChanged: lineEndCmb.currentIndex = lineEndCmb.indexOfValue(hangComma)
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        hangStart = properties.hangingPunctuationFirst;
+        hangEnd = properties.hangingPunctuationLast;
+        hangComma = properties.hangingPunctuationComma;
+        blockSignals = false;
+    }
+
+    onHangStartChanged: {
+        if (!blockSignals) {
+            properties.hangingPunctuationFirst = hangStart;
+        }
+    }
+
+    onHangEndChanged: {
+        if (!blockSignals) {
+            properties.hangingPunctuationLast = hangEnd;
+        }
+    }
+
+    onHangCommaChanged: {
+        lineEndCmb.currentIndex = lineEndCmb.indexOfValue(hangComma);
+        if (!blockSignals) {
+            properties.hangingPunctuationComma = hangComma
+        }
+    }
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;

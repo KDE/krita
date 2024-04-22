@@ -11,9 +11,26 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     property alias baselineShiftValue: baselineShiftSpn.value;
     property int baselineShiftMode;
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        baselineShiftValue = properties.baselineShiftValue.value;
+        baselineShiftMode = properties.baselineShiftMode;
+        blockSignals = false;
+    }
+
+    onBaselineShiftValueChanged: {
+        if (!blockSignals) {
+            properties.baselineShiftValue.value = baselineShiftValue;
+        }
+    }
+
     onBaselineShiftModeChanged: {
         baselineShiftCmb.currentIndex = baselineShiftCmb.indexOfValue(baselineShiftMode);
         baselineShiftSpn.enabled = baselineShiftMode == 3;
+        if (!blockSignals) {
+            properties.baselineShiftMode = baselineShiftMode;
+        }
     }
 
     GridLayout {

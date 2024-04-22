@@ -10,7 +10,19 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int writingMode;
-    onWritingModeChanged: writingModeCmb.currentIndex = writingModeCmb.indexOfValue(writingMode);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        writingMode = properties.writingMode;
+        blockSignals = false;
+    }
+
+    onWritingModeChanged: {
+        writingModeCmb.currentIndex = writingModeCmb.indexOfValue(writingMode)
+        if (!blockSignals) {
+            properties.writingMode = writingMode;
+        }
+    }
 
     RowLayout {
         spacing: columnSpacing;

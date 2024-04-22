@@ -12,7 +12,26 @@ TextPropertyBase {
 
     property alias tabSize: tabSizeSpn.value;
     property int tabSizeUnit: TabSizeModel.Spaces;
-    onTabSizeUnitChanged: tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(tabSizeUnit);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        tabSize = properties.tabSize.value;
+        tabSizeUnit = properties.tabSize.unit;
+        blockSignals = false;
+    }
+
+    onTabSizeChanged: {
+        if (!blockSignals) {
+            properties.tabSize.value = tabSize;
+        }
+    }
+
+    onTabSizeUnitChanged: {
+        tabSizeUnitCmb.currentIndex = tabSizeUnitCmb.indexOfValue(tabSizeUnit);
+        if (!blockSignals) {
+            properties.tabSize.unit = tabSizeUnit;
+        }
+    }
 
     GridLayout {
         columns: 3

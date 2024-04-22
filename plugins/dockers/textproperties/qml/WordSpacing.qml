@@ -9,6 +9,18 @@ import QtQuick.Layouts 1.12
 
 TextPropertyBase {
     property alias wordSpacing: wordSpacingSpn.value
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        wordSpacing = properties.wordSpacing.value;
+        blockSignals = false;
+    }
+    onWordSpacingChanged: {
+        if (!blockSignals) {
+            properties.wordSpacing.value = wordSpacing;
+        }
+    }
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;

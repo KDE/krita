@@ -10,7 +10,19 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int direction;
-    onDirectionChanged: directionCmb.currentIndex = directionCmb.indexOfValue(direction)
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        direction = properties.direction;
+        blockSignals = false;
+    }
+
+    onDirectionChanged: {
+        directionCmb.currentIndex = directionCmb.indexOfValue(direction);
+        if (!blockSignals) {
+            properties.direction = direction;
+        }
+    }
 
     RowLayout {
         id: row

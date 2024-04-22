@@ -14,6 +14,32 @@ CollapsibleGroupProperty {
     property alias hanging: indentHangingCkb.checked;
     property alias eachLine: eachLineCkb.checked;
 
+    onPropertiesUpdated: {
+        blockSignals = true;
+        textIndentValue = properties.textIndent.length.value;
+        hanging = properties.textIndent.hanging;
+        eachLine = properties.textIndent.eachLine;
+        blockSignals = false;
+    }
+
+    onTextIndentValueChanged: {
+        if (!blockSignals) {
+            properties.textIndent.length.value = textIndentValue;
+        }
+    }
+
+    onHangingChanged: {
+        if (!blockSignals) {
+            properties.textIndent.hanging = hanging;
+        }
+    }
+
+    onEachLineChanged: {
+        if (!blockSignals) {
+            properties.textIndent.eachLine = eachLine;
+        }
+    }
+
     titleItem: RowLayout {
         spacing: columnSpacing;
         Layout.fillWidth: true;

@@ -12,7 +12,32 @@ TextPropertyBase {
     property alias isNormal: lineHeightNormalCbx.checked;
     property alias lineHeight: lineHeightSpn.value;
     property int lineHeightUnit: LineHeightModel.Lines;
-    onLineHeightUnitChanged: lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(lineHeightUnit);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        isNormal = properties.lineHeight.isNormal;
+        lineHeight = properties.lineHeight.value;
+        lineHeightUnit = properties.lineHeight.unit;
+        blockSignals = false;
+    }
+
+    onLineHeightUnitChanged: {
+        lineHeightUnitCmb.currentIndex = lineHeightUnitCmb.indexOfValue(lineHeightUnit)
+        if (!blockSignals) {
+            properties.lineHeight.unit = lineHeightUnit
+        }
+    }
+    onIsNormalChanged: {
+        if (!blockSignals) {
+            properties.lineHeight.isNormal = isNormal;
+        }
+    }
+
+    onLineHeightChanged: {
+        if (!blockSignals) {
+            properties.lineHeight.value = lineHeight;
+        }
+    }
 
     GridLayout {
         columns: 3;

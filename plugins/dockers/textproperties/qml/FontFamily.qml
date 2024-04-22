@@ -12,12 +12,23 @@ CollapsibleGroupProperty {
 
     property var fontFamilies: [];
     property var fontFamilyModel : [];
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        fontFamilies: properties.fontFamilies;
+        blockSignals = false;
+    }
+
     onFontFamiliesChanged: {
-        if (fontFamilies.length >0) {
-            mainFamilyCmb.currentIndex = mainFamilyCmb.find(fontFamilies[0]);
+        if (blockSignals) {
+            if (fontFamilies.length >0) {
+                mainFamilyCmb.currentIndex = mainFamilyCmb.find(fontFamilies[0]);
+            }
+            familyListView.model = fontFamilies;
+            height: childrenRect.height;
+        } else {
+            properties.fontFamilies = fontFamilies;
         }
-        familyListView.model = fontFamilies;
-        height: childrenRect.height;
     }
 
     titleItem: ComboBox {

@@ -10,7 +10,20 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int baselineSelection;
-    onBaselineSelectionChanged: baselineCmb.currentIndex = baselineCmb.indexOfValue(baselineSelection);
+
+    onPropertiesUpdated: {
+        blockSignals = true;
+        baselineSelection = properties.alignmentBaseline;
+        blockSignals = false;
+    }
+
+    onBaselineSelectionChanged: {
+        baselineCmb.currentIndex = baselineCmb.indexOfValue(baselineSelection);
+        if (!blockSignals) {
+            properties.alignmentBaseline = baselineSelection;
+        }
+    }
+
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;

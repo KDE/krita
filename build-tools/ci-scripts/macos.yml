@@ -38,8 +38,9 @@ macos-build:
     - . venv/bin/activate
     - pip install -r krita-deps-management/requirements.txt
 
-    - if [ "$KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE" != "True" ]; then git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1; fi
-    - if [ "$KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE" != "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
+    # framework for signing, notarization and package upload
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+    - pip install -r ci-notary-service/requirements.txt
 
     - touch $KDECI_CRAFT_PROJECT_CONFIG
     - function craftmaster { python3 craftmaster/CraftMaster.py --config $KDECI_CRAFT_CONFIG --config-override $KDECI_CRAFT_PROJECT_CONFIG --target $KDECI_CRAFT_PLATFORM --variables DownloadDir=$KDECI_CRAFT_DOWNLOADS $@; }
@@ -56,9 +57,9 @@ macos-build:
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing | tee build-krita.log
     - env BUILDROOT=$CI_PROJECT_DIR $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-dmg.log
     
-    # TODO: sign packages in _packaging
-    # TODO: rename packages and remove 'unsigned' suffix
-    #- python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging
+    - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini _packaging/*.dmg | tee dmg-sign.log
+    - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini _packaging/*.dmg | tee dmg-notarize.log
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging | tee dmg-publish.log
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG
@@ -68,7 +69,7 @@ macos-build:
       - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
       - "**/appium_artifact_*"
       - "_packaging"
-      - "build-*.log"
+      - "*.log"
     reports:
       junit: JUnitTestResults.xml
 

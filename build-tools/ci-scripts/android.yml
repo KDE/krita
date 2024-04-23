@@ -14,7 +14,10 @@
     # ANDROID_HOME: /opt/android-tooling # <-- set up in the base image!
     # KDECI_ANDROID_SDK_ROOT: $ANDROID_HOME/sdk # <-- set up in the base image!
     # KDECI_ANDROID_NDK_ROOT: $ANDROID_HOME/android-ndk-r22b/ # <-- set up in the base image!
-    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=ON
+      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake
     KRITACI_ANDROID_PACKAGE_TYPE: "debug"
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "True"
     KRITACI_PUBLISH_BUILD_CONFIG: "upstream-ci-utilities/signing/publishbuild.ini"
@@ -50,7 +53,10 @@
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
-    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=ON
+      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
   # no artifacts for nightly jobs, they are uploaded to ci-builds
   artifacts:
@@ -62,7 +68,10 @@
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "release"
     KRITACI_RELEASE: 1
-    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake"
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=ON
+      -DBUILD_TESTING=OFF
+      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake
 
 .android-x86_64-mixin:
   variables:

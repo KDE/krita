@@ -362,7 +362,7 @@ QStringList KisDlgAnimationRenderer::filterMimeTypeListByAvailableEncoders(const
                 retValue << mime;
             }
         } else if (mime == "video/ogg") {
-            if ( ffmpegCodecs.contains("dirac") ) {
+            if ( ffmpegCodecs.contains("theora") ) {
                 retValue << mime;
             }
         }

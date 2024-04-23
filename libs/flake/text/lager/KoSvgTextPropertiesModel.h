@@ -24,11 +24,11 @@
 class KRITAFLAKE_EXPORT KoSvgTextPropertiesModel : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(CssLengthPercentageModel *fontSize READ fontSize NOTIFY fontSizeChanged);
-    Q_PROPERTY(LineHeightModel *lineHeight READ lineHeight NOTIFY lineHeightChanged);
-    Q_PROPERTY(CssLengthPercentageModel *letterSpacing READ letterSpacing NOTIFY letterSpacingChanged);
-    Q_PROPERTY(CssLengthPercentageModel *wordSpacing READ wordSpacing NOTIFY wordSpacingChanged);
-    Q_PROPERTY(CssLengthPercentageModel *baselineShiftValue READ baselineShiftValue NOTIFY baselineShiftValueChanged);
+    Q_PROPERTY(CssLengthPercentageModel *fontSize READ fontSize NOTIFY fontSizeChanged)
+    Q_PROPERTY(LineHeightModel *lineHeight READ lineHeight NOTIFY lineHeightChanged)
+    Q_PROPERTY(CssLengthPercentageModel *letterSpacing READ letterSpacing NOTIFY letterSpacingChanged)
+    Q_PROPERTY(CssLengthPercentageModel *wordSpacing READ wordSpacing NOTIFY wordSpacingChanged)
+    Q_PROPERTY(CssLengthPercentageModel *baselineShiftValue READ baselineShiftValue NOTIFY baselineShiftValueChanged)
     Q_PROPERTY(TextIndentModel *textIndent READ textIndent NOTIFY textIndentChanged)
     Q_PROPERTY(TabSizeModel *tabSize READ tabSize NOTIFY tabSizeChanged)
     Q_PROPERTY(TextTransformModel *textTransform READ textTransform NOTIFY textTransformChanged)
@@ -58,25 +58,47 @@ public:
     TabSizeModel tabSizeModel;
     TextTransformModel textTransformModel;
 
+    // Whether a given property is set, unset or tristate.
+    enum PropertyState {
+        PropertyUnset,
+        PropertySet,
+        PropertyTriState
+    };
+    Q_ENUM(PropertyState)
+
     CssLengthPercentageModel *fontSize();
+    LAGER_QT_READER(PropertyState, fontSizeState);
     LineHeightModel *lineHeight();
+    LAGER_QT_READER(PropertyState, lineHeightState);
 
     CssLengthPercentageModel *letterSpacing();
+    LAGER_QT_READER(PropertyState, letterSpacingState);
     CssLengthPercentageModel *wordSpacing();
+    LAGER_QT_READER(PropertyState, wordSpacingState);
     CssLengthPercentageModel *baselineShiftValue();
 
     TextIndentModel *textIndent();
+    LAGER_QT_READER(PropertyState, textIndentState);
     TabSizeModel *tabSize();
+    LAGER_QT_READER(PropertyState, tabSizeState);
     TextTransformModel *textTransform();
+    LAGER_QT_READER(PropertyState, textTransformState);
 
     LAGER_QT_CURSOR(int, writingMode);
+    LAGER_QT_READER(PropertyState, writingModeState);
     LAGER_QT_CURSOR(int, direction);
+    LAGER_QT_READER(PropertyState, directionState);
     LAGER_QT_CURSOR(int, textAlignAll);
+    LAGER_QT_READER(PropertyState, textAlignAllState);
     LAGER_QT_CURSOR(int, textAlignLast);
+    LAGER_QT_READER(PropertyState, textAlignLastState);
     LAGER_QT_CURSOR(int, textAnchor);
+    LAGER_QT_READER(PropertyState, textAnchorState);
 
     LAGER_QT_CURSOR(int, fontWeight);
+    LAGER_QT_READER(PropertyState, fontWeightState);
     LAGER_QT_CURSOR(int, fontWidth);
+    LAGER_QT_READER(PropertyState, fontWidthState);
 
     // QFont::Style isn't exposed to qml.
     enum FontStyle {
@@ -84,16 +106,20 @@ public:
         StyleItalic = QFont::StyleItalic,
         StyleOblique = QFont::StyleOblique
     };
-    Q_ENUM(FontStyle);
+    Q_ENUM(FontStyle)
 
     LAGER_QT_CURSOR(FontStyle, fontStyle);
+    LAGER_QT_READER(PropertyState, fontStyleState);
     LAGER_QT_CURSOR(bool, fontOpticalSizeLink);
+    LAGER_QT_READER(PropertyState, fontOpticalSizeLinkState);
 
     LAGER_QT_CURSOR(QStringList, fontFamilies);
+    LAGER_QT_READER(PropertyState, fontFamiliesState);
 
     LAGER_QT_CURSOR(bool, textDecorationUnderline);
     LAGER_QT_CURSOR(bool, textDecorationOverline);
     LAGER_QT_CURSOR(bool, textDecorationLineThrough);
+    LAGER_QT_READER(PropertyState, textDecorationLineState);
 
     LAGER_QT_CURSOR(int, textDecorationStyle);
 
@@ -108,13 +134,19 @@ public:
     LAGER_QT_CURSOR(bool, hangingPunctuationFirst);
     LAGER_QT_CURSOR(HangComma, hangingPunctuationComma);
     LAGER_QT_CURSOR(bool, hangingPunctuationLast);
+    LAGER_QT_READER(PropertyState, hangingPunctuationState);
 
     LAGER_QT_CURSOR(int, alignmentBaseline);
+    LAGER_QT_READER(PropertyState, alignmentBaselineState);
     LAGER_QT_CURSOR(int, dominantBaseline);
+    LAGER_QT_READER(PropertyState, dominantBaselineState);
     LAGER_QT_CURSOR(int, baselineShiftMode);
+    LAGER_QT_READER(PropertyState, baselineShiftState);
 
     LAGER_QT_CURSOR(int, wordBreak);
+    LAGER_QT_READER(PropertyState, wordBreakState);
     LAGER_QT_CURSOR(int, lineBreak);
+    LAGER_QT_READER(PropertyState, lineBreakState);
 
 
 Q_SIGNALS:

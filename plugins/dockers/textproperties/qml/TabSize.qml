@@ -39,11 +39,8 @@ TextPropertyBase {
         anchors.right: parent.right
         columnSpacing: columnSpacing;
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            revertEnabled: properties.tabSizeState === KoSvgTextPropertiesModel.PropertySet;
         }
         Label {
             text: i18nc("@title:group", "Tab Size:")

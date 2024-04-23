@@ -22,11 +22,9 @@ Rectangle {
 
     function setProperties() {
         for (var i = 0; i < characterPropertiesModel.count; i++) {
-            characterPropertiesModel.get(i).properties = textPropertiesModel;
             characterPropertiesModel.get(i).propertiesUpdated();
         }
         for (var l = 0; l < paragraphPropertiesModel.count; l++) {
-            paragraphPropertiesModel.get(l).properties = textPropertiesModel;
             paragraphPropertiesModel.get(l).propertiesUpdated();
         }
     }
@@ -109,6 +107,7 @@ Rectangle {
                 border.color: sysPalette.base;
                 border.width: 1;
             }
+            clip: true;
             ListView {
                 id: paragraphProperties
                 model: ObjectModel {

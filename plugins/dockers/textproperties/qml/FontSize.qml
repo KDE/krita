@@ -6,10 +6,12 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 TextPropertyBase {
 
     property alias fontSize: fontSizeSpn.value;
+    visible: properties.fontSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
 
     onPropertiesUpdated: {
         blockSignals = true;
@@ -26,16 +28,9 @@ TextPropertyBase {
         spacing: columnSpacing;
         width: parent.width;
 
-        Item {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            ToolButton {
-                id: revert;
-                icon.width: 22;
-                icon.height: 22;
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:///light_view-refresh.svg"
-            }
+        RevertPropertyButton {
+            id: revertFontSize;
+            revertEnabled: properties.fontSizeState === KoSvgTextPropertiesModel.PropertySet;
         }
 
         Label {

@@ -14,6 +14,11 @@ CollapsibleGroupProperty {
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
     property int fontSlant: KoSvgTextPropertiesModel.StyleNormal;
+
+    visible: properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
+             || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+             || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset;
+
     onFontSlantChanged: {
         fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
         if (!blockSignals) {
@@ -59,12 +64,11 @@ CollapsibleGroupProperty {
         anchors.right: parent.right
         columnSpacing: 5;
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            id: revertWeight;
+            revertEnabled: properties.fontWeightState === KoSvgTextPropertiesModel.PropertySet;
         }
+
         Label {
             text: i18nc("@label:spinbox", "Weight:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
@@ -79,11 +83,9 @@ CollapsibleGroupProperty {
         }
 
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            id: revertWidth;
+            revertEnabled: properties.fontWidthState === KoSvgTextPropertiesModel.PropertySet;
         }
         Label {
             text: i18nc("@label:spinbox", "Width:")
@@ -98,11 +100,9 @@ CollapsibleGroupProperty {
             Layout.fillWidth: true
         }
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            id: revertStyle;
+            revertEnabled: properties.fontStyleState === KoSvgTextPropertiesModel.PropertySet;
         }
         Label {
             text: i18nc("@label:listbox", "Slant:")
@@ -123,11 +123,9 @@ CollapsibleGroupProperty {
             onActivated: fontSlant = currentValue;
         }
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            id: revertOpticalLink;
+            revertEnabled: properties.fontOpticalSizeLinkState === KoSvgTextPropertiesModel.PropertySet;
         }
         Item {
         width: 1;

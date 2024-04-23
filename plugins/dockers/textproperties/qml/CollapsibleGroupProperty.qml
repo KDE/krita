@@ -33,6 +33,7 @@ TextPropertyBase {
                 id: collapse;
                 display: AbstractButton.IconOnly
                 icon.source: contentItemContainer.visible? "qrc:///light_groupOpened.svg" : "qrc:///light_groupClosed.svg";
+                icon.color: sysPalette.text;
                 icon.width: 12;
                 icon.height: 12;
                 onClicked: contentItemContainer.visible = !contentItemContainer.visible;
@@ -61,6 +62,6 @@ TextPropertyBase {
     Item {
         id: contentItemContainer;
         width: parent.width;
-        height: childrenRect.height;
+        height: visible? childrenRect.height: 0;
     }
 }

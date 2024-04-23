@@ -29,5 +29,6 @@
         <file alias="TabSize.qml">qml/TabSize.qml</file>
         <file alias="WhiteSpace.qml">qml/WhiteSpace.qml</file>
         <file alias="UnderlinePosition.qml">qml/UnderlinePosition.qml</file>
+        <file alias="RevertPropertyButton.qml">qml/RevertPropertyButton.qml</file>
     </qresource>
 </RCC>

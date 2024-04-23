@@ -9,9 +9,12 @@ import org.krita.flake.text 1.0
 Column {
     property int firstColumnWidth: 32;
     property int columnSpacing: 5;
-    width: parent? parent.width: 100;
+    padding: columnSpacing;
+    width: parent? parent.width - (padding*2): 100;
+    height: visible? childrenRect.height+padding: 0;
 
-    property KoSvgTextPropertiesModel properties;
+
+    property KoSvgTextPropertiesModel properties : textPropertiesModel;
     signal propertiesUpdated; ///< Used by each text property panel to update the data on the controls.
     property bool blockSignals; ///< When setting the data on the controls, this needs to be enabled and checked while returning data from the controls.
 

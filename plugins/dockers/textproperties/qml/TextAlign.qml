@@ -50,11 +50,8 @@ CollapsibleGroupProperty {
         anchors.right: parent.right
         columnSpacing: columnSpacing;
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            revertEnabled: properties.textAlignAllState === KoSvgTextPropertiesModel.PropertySet;
         }
         Label {
             text: i18nc("@label:listbox", "Text Align:")
@@ -77,11 +74,8 @@ CollapsibleGroupProperty {
             onActivated: textAlignAll = currentValue;
         }
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            revertEnabled: properties.textAlignLastState === KoSvgTextPropertiesModel.PropertySet;
         }
         Label {
             text: i18nc("@label:listbox", "Align Last:")
@@ -105,11 +99,8 @@ CollapsibleGroupProperty {
         }
 
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            revertEnabled: properties.textAnchorState === KoSvgTextPropertiesModel.PropertySet;
         }
         Label {
             text: i18nc("@label:listbox", "Text Anchor:")

@@ -6,6 +6,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.12
+import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: i18nc("@label", "Font Family:");
@@ -47,11 +48,8 @@ CollapsibleGroupProperty {
         anchors.right: parent.right
         columnSpacing: columnSpacing;
 
-        ToolButton {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            display: AbstractButton.IconOnly
-            icon.source: "qrc:///light_view-refresh.svg"
+        RevertPropertyButton {
+            revertEnabled: properties.fontFamiliesState === KoSvgTextPropertiesModel.PropertySet;
         }
 
         ScrollView {

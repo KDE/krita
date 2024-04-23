@@ -56,16 +56,9 @@ TextPropertyBase {
         columnSpacing: columnSpacing;
         width: parent.width;
 
-        Item {
-            width: firstColumnWidth;
-            height: firstColumnWidth;
-            ToolButton {
-                id: revert;
-                icon.width: 22;
-                icon.height: 22;
-                display: AbstractButton.IconOnly
-                icon.source: "qrc:///light_view-refresh.svg"
-            }
+        RevertPropertyButton {
+            revertEnabled: properties.textDecorationLineState === KoSvgTextPropertiesModel.PropertySet;
+            inheritable: false;
         }
 
         Label {

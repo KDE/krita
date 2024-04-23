@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-09 13:55+0300\n"
+"PO-Revision-Date: 2024-04-23 00:51+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 24.04.70\n"
+"X-Generator: Lokalize 24.07.70\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -15766,7 +15766,7 @@ msgstr "Arka Plan Rengi Seç"
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 1"
-msgstr "Fırça seçeneği kaydırıcı 1"
+msgstr "Fırça seçeneği sürgüsü 1"
 
 #. i18n: context: text @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider2), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -15779,7 +15779,7 @@ msgstr "Fırça seçeneği kaydırıcı 1"
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 2"
-msgstr "Fırça seçeneği kaydırıcı 2"
+msgstr "Fırça seçeneği sürgüsü 2"
 
 #. i18n: context: text @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider3), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -15792,7 +15792,7 @@ msgstr "Fırça seçeneği kaydırıcı 2"
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 3"
-msgstr "Fırça seçeneği kaydırıcı 3"
+msgstr "Fırça seçeneği sürgüsü 3"
 
 #. i18n: context: text @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider4), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -15805,7 +15805,7 @@ msgstr "Fırça seçeneği kaydırıcı 3"
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 4"
-msgstr "Fırça seçeneği kaydırıcı 4"
+msgstr "Fırça seçeneği sürgüsü 4"
 
 #. i18n: context: text @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (brushslider5), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -15818,7 +15818,7 @@ msgstr "Fırça seçeneği kaydırıcı 4"
 #, kde-format
 msgctxt "action"
 msgid "Brush option slider 5"
-msgstr "Fırça seçeneği kaydırıcı 5"
+msgstr "Fırça seçeneği sürgüsü 5"
 
 #. i18n: context: text @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (mirror_actions), Actions (BrushesAndStuff), ActionCollection (Menu)
@@ -41239,7 +41239,7 @@ msgstr "Görüntü:"
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:164
 #, kde-format
 msgid "S&lider"
-msgstr "&Kaydırıcı"
+msgstr "&Sürgü"
 
 #. i18n: ectx: property (text), widget (QRadioButton, rbColorPatches)
 #: plugins/dockers/widegamutcolorselector/WdgWGShadeLineEditor.ui:174
@@ -53152,7 +53152,7 @@ msgid ""
 "When pattern texture values are outside the range specified by the slider, "
 "the cut-off policy will be applied."
 msgstr ""
-"Desen doku değerleri kaydırıcıda tanımlı erimin dışındaysa kesme politikası "
+"Desen doku değerleri sürgüde tanımlı erimin dışındaysa kesme politikası "
 "uygulanacaktır."
 
 #: plugins/paintops/libpaintop/KisAirbrushOptionWidget.cpp:56
@@ -56550,11 +56550,11 @@ msgstr "Ayarları değiştir"
 
 #: plugins/python/mixer_slider_docker/mixer_slider_docker.py:58
 msgid "Mixer Slider Docker"
-msgstr "Karıştırıcı Kaydırıcısı Paneli"
+msgstr "Karıştırıcı Sürgüsü Paneli"
 
 #: plugins/python/mixer_slider_docker/ui_mixer_slider_docker.py:36
 msgid "Number of slider lines: "
-msgstr "Kaydırıcı çizgilerinin sayısı: "
+msgstr "Sürgü çizgilerinin sayısı: "
 
 #: plugins/python/palette_docker/palette_docker.py:37
 msgid "Python Palette Docker"

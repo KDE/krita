@@ -56,6 +56,7 @@ Rectangle {
                 border.width: 1;
             }
             clip: true;
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
 
             ListView {
                 id: characterProperties
@@ -108,6 +109,7 @@ Rectangle {
                 border.width: 1;
             }
             clip: true;
+            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
             ListView {
                 id: paragraphProperties
                 model: ObjectModel {

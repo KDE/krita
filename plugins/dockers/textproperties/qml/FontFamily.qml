@@ -16,7 +16,7 @@ CollapsibleGroupProperty {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        fontFamilies: properties.fontFamilies;
+        fontFamilies = properties.fontFamilies;
         blockSignals = false;
     }
 
@@ -26,7 +26,6 @@ CollapsibleGroupProperty {
                 mainFamilyCmb.currentIndex = mainFamilyCmb.find(fontFamilies[0]);
             }
             familyListView.model = fontFamilies;
-            height: childrenRect.height;
         } else {
             properties.fontFamilies = fontFamilies;
         }
@@ -46,7 +45,7 @@ CollapsibleGroupProperty {
         columns: 2
         anchors.left: parent.left
         anchors.right: parent.right
-        columnSpacing: columnSpacing;
+        columnSpacing: parent.columnSpacing;
 
         RevertPropertyButton {
             revertEnabled: properties.fontFamiliesState === KoSvgTextPropertiesModel.PropertySet;
@@ -55,7 +54,7 @@ CollapsibleGroupProperty {
         ScrollView {
             id: fullFamilyList;
             Layout.fillWidth: true;
-            Layout.preferredHeight: ItemDelegate.implicitHeight*3;
+            Layout.preferredHeight: ItemDelegate.implicitHeight * 3;
             background: Rectangle {
                 color: sysPalette.alternateBase;
                 border.color: sysPalette.text;

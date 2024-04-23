@@ -82,7 +82,7 @@ macos-nightly:
   variables:
     # still run the tests, since we don't run them for every commit!
     KDECI_ONLY_BUILD: "False"
-    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain.cmake"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=OFF -DBUILD_TESTING=ON -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake"
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
   # no artifacts for nightly jobs, they are uploaded to ci-builds
   artifacts:
@@ -95,4 +95,4 @@ macos-nightly:
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"
-    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain.cmake"
+    KDECI_EXTRA_CMAKE_ARGS: "-DHIDE_SAFE_ASSERTS=ON -DBUILD_TESTING=OFF -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake"

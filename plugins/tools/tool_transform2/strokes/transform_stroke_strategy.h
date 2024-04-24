@@ -122,7 +122,7 @@ private:
     void finishStrokeImpl(bool applyTransform,
                           const ToolTransformArgs &args);
 
-    void calculateConvexHull();
+    QPolygon calculateConvexHull();
 
 private:
     KisUpdatesFacade *m_updatesFacade;

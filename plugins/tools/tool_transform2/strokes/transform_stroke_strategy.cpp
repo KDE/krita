@@ -406,7 +406,10 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     } else if (cch) {
         if (!m_convexHullHasBeenCalculated) {
             m_convexHullHasBeenCalculated = true;
-            calculateConvexHull();
+            QPolygon hull = calculateConvexHull();
+            if (!hull.isEmpty()) {
+                Q_EMIT sigConvexHullCalculated(hull, this);
+            }
         }
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
@@ -440,7 +443,7 @@ void TransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *command)
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
 }
 
-void TransformStrokeStrategy::calculateConvexHull()
+QPolygon TransformStrokeStrategy::calculateConvexHull()
 {
     // Best effort attempt to calculate the convex hull, mimicking the
     // approach that computes srcRect in initStrokeCallback below
@@ -453,7 +456,7 @@ void TransformStrokeStrategy::calculateConvexHull()
             if (node->inherits("KisGroupLayer")) continue;
 
             if (dynamic_cast<const KisTransformMask*>(node.data())) {
-                return; // Produce no convex hull if a KisTransformMask is present
+                return QPolygon(); // Produce no convex hull if a KisTransformMask is present
             } else {
                 KisPaintDeviceSP device;
                 if (KisExternalLayer *extLayer = dynamic_cast<KisExternalLayer*>(node.data())) {
@@ -469,7 +472,6 @@ void TransformStrokeStrategy::calculateConvexHull()
                     } else {
                         toUse = device;
                     }
-                    // KIS_SAFE_ASSERT_RECOVER_RETURN(cached);
                     /* This sometimes does not agree with the original exactBounds
                        because of colorspace changes between the original device
                        and cached. E.g. When the defaultPixel changes as follows it
@@ -482,7 +484,7 @@ void TransformStrokeStrategy::calculateConvexHull()
                 } else {
                     // When can this happen?  Should it continue instead?
                     ENTER_FUNCTION() << "Bailing out, device was null" << ppVar(node);
-                    return;
+                    return QPolygon();
                 }
             }
         }
@@ -490,7 +492,7 @@ void TransformStrokeStrategy::calculateConvexHull()
             points = KisConvexHull::findConvexHull(points);
         }
     }
-    Q_EMIT sigConvexHullCalculated(QPolygon(points), this);
+    return QPolygon(points);
 }
 
 void TransformStrokeStrategy::initStrokeCallback()
@@ -637,6 +639,11 @@ void TransformStrokeStrategy::initStrokeCallback()
         }
 
         this->m_initialTransformArgs = initialTransformArgs;
+        if (transaction.currentConfig()->boundsRotation() != 0.0) {
+            this->m_convexHullHasBeenCalculated = true;
+            transaction.setConvexHull(calculateConvexHull());
+            transaction.setConvexHullHasBeenRequested(true);
+        }
         emit this->sigTransactionGenerated(transaction, initialTransformArgs, this);
     });
 

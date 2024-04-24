@@ -154,7 +154,7 @@ private:
 
     void tryPostUpdateJob(bool forceUpdate);
     void doCanvasUpdate(bool forceUpdate);
-    void calculateConvexHull();
+    QPolygon calculateConvexHull();
 
     int calculatePreferredLevelOfDetail(const QRect &srcRect);
 

@@ -211,7 +211,10 @@ void InplaceTransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         if (!m_d->convexHullHasBeenCalculated) {
             m_d->convexHullHasBeenCalculated = true;
-            calculateConvexHull();
+            QPolygon hull = calculateConvexHull();
+            if (!hull.isEmpty()) {
+                Q_EMIT sigConvexHullCalculated(hull, this);
+            }
         }
 
     } else {
@@ -290,7 +293,7 @@ void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *c
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
 }
 
-void InplaceTransformStrokeStrategy::calculateConvexHull()
+QPolygon InplaceTransformStrokeStrategy::calculateConvexHull()
 {
     // Best effort attempt to calculate the convex hull, mimicking the
     // approach that computes srcRect in initStrokeCallback below
@@ -310,7 +313,7 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
             if (node->inherits("KisGroupLayer")) continue;
 
             if (dynamic_cast<const KisTransformMask*>(node.data())) {
-                return; // Produce no convex hull if a KisTransformMask is present
+                return QPolygon(); // Produce no convex hull if a KisTransformMask is present
             } else {
                 KisPaintDeviceSP device;
                 // Get the original device as per createCacheAndClearNode below
@@ -321,12 +324,15 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
                 }
                 if (device) {
                     // Use the original device to get the cached device containing the original image data
-                    KisPaintDeviceSP cached;
+                    KisPaintDeviceSP toUse;
                     {
                         QMutexLocker l(&m_d->devicesCacheMutex);
-                        cached = m_d->devicesCacheHash[device.data()];
+                        if (m_d->devicesCacheHash.contains(device.data())) {
+                            toUse = m_d->devicesCacheHash[device.data()];
+                        } else {
+                            toUse = device;
+                        }
                     }
-                    KIS_SAFE_ASSERT_RECOVER_RETURN(cached);
                     /* This sometimes does not agree with the original exactBounds
                        because of colorspace changes between the original device
                        and cached. E.g. When the defaultPixel changes as follows it
@@ -334,12 +340,12 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
                        KoColor ("ALPHA", "Alpha":0) => KoColor ("GRAYA", "Gray":0, "Alpha":255) 
                     */
                     ENTER_FUNCTION() << "Finding convex hull of" << ppVar(node);
-                    points.append(KisConvexHull::findConvexHull(cached));
+                    points.append(KisConvexHull::findConvexHull(toUse));
                     numContributions += 1;
                 } else {
                     // When can this happen?  Should it continue instead?
                     ENTER_FUNCTION() << "Bailing out, device was null" << ppVar(node);
-                    return;
+                    return QPolygon();
                 }
             }
         }
@@ -347,7 +353,7 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
             points = KisConvexHull::findConvexHull(points);
         }
     }
-    Q_EMIT sigConvexHullCalculated(QPolygon(points), this);
+    return QPolygon(points);
 }
 
 
@@ -557,6 +563,12 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                 KisLodTransform t(m_d->previewLevelOfDetail);
                 m_d->prevDirtyPreviewRects.addUpdate(it->first, t.map(it->second));
             }
+        }
+
+        if (transaction.currentConfig()->boundsRotation() != 0.0) {
+            m_d->convexHullHasBeenCalculated = true;
+            transaction.setConvexHull(calculateConvexHull());
+            transaction.setConvexHullHasBeenRequested(true);
         }
 
         Q_EMIT sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);

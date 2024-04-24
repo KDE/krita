@@ -172,7 +172,6 @@ public:
 
         if (QMessageBox::question(q, q->windowTitle(), i18n("Abort encoding the timelapse video?"))
             == QMessageBox::Yes) {
-            ffmpeg->reset();
             cleanupFFMpeg();
             return true;
         }
@@ -250,7 +249,10 @@ public:
 
     void cleanupFFMpeg()
     {
-        ffmpeg.reset();
+        if (ffmpeg) {
+            ffmpeg->reset();
+            ffmpeg.reset();
+        }
     }
 
     QString applyVariables(const QString &templateArguments)

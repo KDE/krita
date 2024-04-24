@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-09 01:43+0000\n"
-"PO-Revision-Date: 2024-04-13 08:59+0100\n"
+"PO-Revision-Date: 2024-04-23 21:12+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -28873,7 +28873,7 @@ msgstr "Montri Ŝprucfenestraĵon"
 #: libs/ui/input/KisPopupWidgetAction.cpp:45
 #, kde-format
 msgid "Show the current tool's popup widget."
-msgstr "Montri la ŝprucfenestaĵon de la nuna ilo."
+msgstr "Montri la ŝprucfenestraĵon de la nuna ilo."
 
 #: libs/ui/input/KisTouchGestureAction.cpp:17
 #, kde-format

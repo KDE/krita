@@ -194,9 +194,7 @@ void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
 
 void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive)
 {
-    // Q_UNUSED(shiftModifierActive);
-    Q_UNUSED(altModifierActive);
-    //printf("Ctrl: %i, Shift: %i, Alt: %i\n", perspectiveModifierActive, shiftModifierActive, altModifierActive);
+    Q_UNUSED(shiftModifierActive);
 
     if (perspectiveModifierActive && !m_d->transaction.shouldAvoidPerspectiveTransform()) {
         m_d->function = PERSPECTIVE;
@@ -212,7 +210,7 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     StrokeFunction defaultFunction;
     if (transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill))
         defaultFunction = MOVE;
-    else if (m_d->transaction.boundsRotationAllowed() && shiftModifierActive)
+    else if (m_d->transaction.boundsRotationAllowed() && altModifierActive)
         defaultFunction = ROTATEBOUNDS;
     else
         defaultFunction = ROTATE;

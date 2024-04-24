@@ -489,7 +489,7 @@ void TransformStrokeStrategy::calculateConvexHull()
             points = KisTransformUtils::findConvexHull(points);
         }
     }
-    Q_EMIT sigConvexHullCalculated(QPolygon(std::move(points)), this);
+    Q_EMIT sigConvexHullCalculated(QPolygon(points), this);
 }
 
 void TransformStrokeStrategy::initStrokeCallback()

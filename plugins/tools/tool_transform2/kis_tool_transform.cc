@@ -234,7 +234,7 @@ void KisToolTransform::slotConvexHullCalculated(QPolygon hull, void *strokeStrat
     QPolygonF hullF = hull;
     // Only use the convex hull if it matches the original bounding rect
     if (hullF.boundingRect() == m_transaction.originalRect()) {
-        m_transaction.setConvexHull(std::move(hullF));
+        m_transaction.setConvexHull(hullF);
         currentStrategy()->externalConfigChanged();
     }
 }

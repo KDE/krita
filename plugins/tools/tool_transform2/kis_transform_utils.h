@@ -83,9 +83,6 @@ public:
 
     static bool checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight);
 
-    static QPolygon findConvexHull(const QVector<QPoint> &points);
-    static QPolygon findConvexHull(KisPaintDeviceSP device);
-
     static KisTransformWorker createTransformWorker(const ToolTransformArgs &config,
                                                     KisPaintDeviceSP device,
                                                     KoUpdaterPtr updater);

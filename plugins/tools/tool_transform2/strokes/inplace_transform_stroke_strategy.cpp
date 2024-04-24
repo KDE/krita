@@ -21,6 +21,7 @@
 #include <kis_transform_mask.h>
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
+#include "kis_convex_hull.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_recalculate_transform_mask_job.h"
 
@@ -300,9 +301,9 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
 
     QVector<QPoint> points;
     if (externalSource) {
-        points = KisTransformUtils::findConvexHull(externalSource);
+        points = KisConvexHull::findConvexHull(externalSource);
     } else if (m_d->selection) {
-        points = KisTransformUtils::findConvexHull(m_d->selection->pixelSelection());
+        points = KisConvexHull::findConvexHull(m_d->selection->pixelSelection());
     } else {
         int numContributions = 0;
         Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
@@ -333,7 +334,7 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
                        KoColor ("ALPHA", "Alpha":0) => KoColor ("GRAYA", "Gray":0, "Alpha":255) 
                     */
                     ENTER_FUNCTION() << "Finding convex hull of" << ppVar(node);
-                    points.append(KisTransformUtils::findConvexHull(cached));
+                    points.append(KisConvexHull::findConvexHull(cached));
                     numContributions += 1;
                 } else {
                     // When can this happen?  Should it continue instead?
@@ -343,7 +344,7 @@ void InplaceTransformStrokeStrategy::calculateConvexHull()
             }
         }
         if (numContributions > 1) {
-            points = KisTransformUtils::findConvexHull(points);
+            points = KisConvexHull::findConvexHull(points);
         }
     }
     Q_EMIT sigConvexHullCalculated(QPolygon(points), this);

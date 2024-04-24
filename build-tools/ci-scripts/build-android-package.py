@@ -96,6 +96,7 @@ for package in glob.glob(os.path.join(repackagePath, 'build', 'outputs', 'apk', 
 
 if arguments.archive_artifacts:
     artifactsFolder = os.path.join(packagingFolder, 'krita_build_apk')
+    xmlFolder = os.path.join(artifactsFolder, 'res/values/')
 
     if os.path.isdir(artifactsFolder):
         print("## WARNING: artifacts folder already exists, removing {}".format(artifactsFolder))
@@ -106,6 +107,9 @@ if arguments.archive_artifacts:
     if arguments.skip_common_artifacts:
         shutil.move(os.path.join(repackagePath, 'libs', os.environ['KDECI_ANDROID_ABI']),
                     os.path.join(artifactsFolder, 'libs', os.environ['KDECI_ANDROID_ABI']))
+        os.makedirs(xmlFolder)
+        shutil.move(os.path.join(repackagePath, 'res/values/libs.xml'),
+                    os.path.join(xmlFolder, f'libs-{os.environ["KDECI_ANDROID_ABI"]}.xml'))
     else:
         folders = ['libs',
                    'res',
@@ -128,6 +132,10 @@ if arguments.archive_artifacts:
         for file in files:
             shutil.move(os.path.join(repackagePath, file),
                         os.path.join(artifactsFolder, file))
+
+        # We then finally copy the file at the end so we don't conflict with previous copy res procedure.
+        shutil.move(os.path.join(artifactsFolder, 'res/values/libs.xml'),
+                    os.path.join(xmlFolder, f'libs-{os.environ["KDECI_ANDROID_ABI"]}.xml'))
 
         # Move the translation folder that is used during the bundle build.
         #

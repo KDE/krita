@@ -333,7 +333,7 @@ bool ToolTransformArgs::isIdentity() const
     if (m_mode == FREE_TRANSFORM) {
         return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                 && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
-                && m_aX == 0 && m_aY == 0 && m_aZ == 0);
+                && m_aX == 0 && m_aY == 0 && m_aZ == 0 && m_boundsRotation == 0);
     } else if (m_mode == PERSPECTIVE_4POINT) {
             return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                     && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0

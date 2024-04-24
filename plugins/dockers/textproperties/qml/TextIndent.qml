@@ -61,6 +61,7 @@ CollapsibleGroupProperty {
 
         RevertPropertyButton {
             revertEnabled: properties.textIndentState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.textIndentState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
 

@@ -31,6 +31,7 @@ TextPropertyBase {
 
         RevertPropertyButton {
             revertEnabled: properties.directionState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.directionState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

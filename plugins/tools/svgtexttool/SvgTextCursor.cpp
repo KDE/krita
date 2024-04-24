@@ -336,10 +336,10 @@ QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
     return d->shape->propertiesForRange(d->pos, d->anchor);
 }
 
-void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props)
+void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
     if (d->shape && hasSelection()) {
-        KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, d->pos, d->anchor);
+        KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, d->pos, d->anchor, removeProperties);
         addCommandToUndoAdapter(cmd);
     }
 }
@@ -1426,9 +1426,9 @@ KoSvgTextProperties SvgTextPropertyCursor::getInheritedProperties()
     return m_parent->shape()? m_parent->shape()->textProperties(): KoSvgTextProperties::defaultProperties();
 }
 
-void SvgTextPropertyCursor::setPropertiesOnSelected(KoSvgTextProperties properties)
+void SvgTextPropertyCursor::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
-    m_parent->mergePropertiesIntoSelection(properties);
+    m_parent->mergePropertiesIntoSelection(properties, removeProperties);
 }
 
 void SvgTextPropertyCursor::emitSelectionChange()

@@ -133,7 +133,7 @@ public:
 
     QList<KoSvgTextProperties> propertiesForRange() const;
 
-    void mergePropertiesIntoSelection(const KoSvgTextProperties props);
+    void mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>());
 
     /**
      * @brief removeSelection
@@ -231,7 +231,7 @@ public:
     SvgTextPropertyCursor(SvgTextCursor *parent);
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
-    virtual void setPropertiesOnSelected(KoSvgTextProperties properties) override;
+    virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
 
     void emitSelectionChange();
 private:

@@ -30,6 +30,7 @@ TextPropertyBase {
 
         RevertPropertyButton {
             revertEnabled: properties.writingModeState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.writingModeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

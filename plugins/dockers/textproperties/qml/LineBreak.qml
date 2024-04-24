@@ -30,8 +30,8 @@ TextPropertyBase {
         width: parent.width;
 
         RevertPropertyButton {
-            id: revertLineBreak;
-            revertEnabled: properties.lineBreakState === KoSvgTextPropertiesModel.PropertySet
+            revertEnabled: properties.lineBreakState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.lineBreakState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

@@ -52,6 +52,7 @@ CollapsibleGroupProperty {
 
         RevertPropertyButton {
             revertEnabled: properties.textAlignAllState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.textAlignAllState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
             text: i18nc("@label:listbox", "Text Align:")
@@ -76,6 +77,7 @@ CollapsibleGroupProperty {
 
         RevertPropertyButton {
             revertEnabled: properties.textAlignLastState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.textAlignLastState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
             text: i18nc("@label:listbox", "Align Last:")
@@ -101,6 +103,7 @@ CollapsibleGroupProperty {
 
         RevertPropertyButton {
             revertEnabled: properties.textAnchorState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.textAnchorState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
             text: i18nc("@label:listbox", "Text Anchor:")

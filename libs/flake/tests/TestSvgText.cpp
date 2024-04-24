@@ -2663,6 +2663,28 @@ void TestSvgText::testTextCleanUp()
     QCOMPARE(depth(forest), 1);
 }
 
+// Tests merging in properties as well as removing properties.
+void TestSvgText::testTextRichTextMerge()
+{
+    KoSvgTextShape *textShape = new KoSvgTextShape();
+    QString ref ("<text style=\"font-size:10.0;font-family:Deja Vu Sans\">The quick <tspan fill=\"brown\">brown</tspan> fox jumps over the lazy dog.</text>");
+    KoSvgTextShapeMarkupConverter converter(textShape);
+    converter.convertFromSvg(ref, QString(), QRectF(0, 0, 300, 300), 72.0);
+
+    KoSvgTextProperties bold;
+    bold.setProperty(KoSvgTextProperties::FontWeightId, 700);
+
+    QSet<KoSvgTextProperties::PropertyId> remove;
+    remove.insert(KoSvgTextProperties::FillId);
+
+    textShape->mergePropertiesIntoRange(10, 15, bold, remove);
+
+    KoSvgTextProperties test = textShape->propertiesForRange(10, 15).first();
+
+    QVERIFY(test.hasProperty(KoSvgTextProperties::FontWeightId));
+    QVERIFY(!test.hasProperty(KoSvgTextProperties::FillId));
+}
+
 #include "kistest.h"
 
 

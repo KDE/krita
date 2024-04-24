@@ -49,6 +49,7 @@ CollapsibleGroupProperty {
 
         RevertPropertyButton {
             revertEnabled: properties.fontFamiliesState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         ScrollView {

@@ -210,7 +210,7 @@ public:
     DefaultToolTextPropertiesInterface(DefaultTool *parent);
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
-    virtual void setPropertiesOnSelected(KoSvgTextProperties properties) override;
+    virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
 private:
     DefaultTool *m_parent{nullptr};
 };

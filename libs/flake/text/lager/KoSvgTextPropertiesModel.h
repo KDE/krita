@@ -67,38 +67,38 @@ public:
     Q_ENUM(PropertyState)
 
     CssLengthPercentageModel *fontSize();
-    LAGER_QT_READER(PropertyState, fontSizeState);
+    LAGER_QT_CURSOR(PropertyState, fontSizeState);
     LineHeightModel *lineHeight();
-    LAGER_QT_READER(PropertyState, lineHeightState);
+    LAGER_QT_CURSOR(PropertyState, lineHeightState);
 
     CssLengthPercentageModel *letterSpacing();
-    LAGER_QT_READER(PropertyState, letterSpacingState);
+    LAGER_QT_CURSOR(PropertyState, letterSpacingState);
     CssLengthPercentageModel *wordSpacing();
-    LAGER_QT_READER(PropertyState, wordSpacingState);
+    LAGER_QT_CURSOR(PropertyState, wordSpacingState);
     CssLengthPercentageModel *baselineShiftValue();
 
     TextIndentModel *textIndent();
-    LAGER_QT_READER(PropertyState, textIndentState);
+    LAGER_QT_CURSOR(PropertyState, textIndentState);
     TabSizeModel *tabSize();
-    LAGER_QT_READER(PropertyState, tabSizeState);
+    LAGER_QT_CURSOR(PropertyState, tabSizeState);
     TextTransformModel *textTransform();
-    LAGER_QT_READER(PropertyState, textTransformState);
+    LAGER_QT_CURSOR(PropertyState, textTransformState);
 
     LAGER_QT_CURSOR(int, writingMode);
-    LAGER_QT_READER(PropertyState, writingModeState);
+    LAGER_QT_CURSOR(PropertyState, writingModeState);
     LAGER_QT_CURSOR(int, direction);
-    LAGER_QT_READER(PropertyState, directionState);
+    LAGER_QT_CURSOR(PropertyState, directionState);
     LAGER_QT_CURSOR(int, textAlignAll);
-    LAGER_QT_READER(PropertyState, textAlignAllState);
+    LAGER_QT_CURSOR(PropertyState, textAlignAllState);
     LAGER_QT_CURSOR(int, textAlignLast);
-    LAGER_QT_READER(PropertyState, textAlignLastState);
+    LAGER_QT_CURSOR(PropertyState, textAlignLastState);
     LAGER_QT_CURSOR(int, textAnchor);
-    LAGER_QT_READER(PropertyState, textAnchorState);
+    LAGER_QT_CURSOR(PropertyState, textAnchorState);
 
     LAGER_QT_CURSOR(int, fontWeight);
-    LAGER_QT_READER(PropertyState, fontWeightState);
+    LAGER_QT_CURSOR(PropertyState, fontWeightState);
     LAGER_QT_CURSOR(int, fontWidth);
-    LAGER_QT_READER(PropertyState, fontWidthState);
+    LAGER_QT_CURSOR(PropertyState, fontWidthState);
 
     // QFont::Style isn't exposed to qml.
     enum FontStyle {
@@ -109,17 +109,17 @@ public:
     Q_ENUM(FontStyle)
 
     LAGER_QT_CURSOR(FontStyle, fontStyle);
-    LAGER_QT_READER(PropertyState, fontStyleState);
+    LAGER_QT_CURSOR(PropertyState, fontStyleState);
     LAGER_QT_CURSOR(bool, fontOpticalSizeLink);
-    LAGER_QT_READER(PropertyState, fontOpticalSizeLinkState);
+    LAGER_QT_CURSOR(PropertyState, fontOpticalSizeLinkState);
 
     LAGER_QT_CURSOR(QStringList, fontFamilies);
-    LAGER_QT_READER(PropertyState, fontFamiliesState);
+    LAGER_QT_CURSOR(PropertyState, fontFamiliesState);
 
     LAGER_QT_CURSOR(bool, textDecorationUnderline);
     LAGER_QT_CURSOR(bool, textDecorationOverline);
     LAGER_QT_CURSOR(bool, textDecorationLineThrough);
-    LAGER_QT_READER(PropertyState, textDecorationLineState);
+    LAGER_QT_CURSOR(PropertyState, textDecorationLineState);
 
     LAGER_QT_CURSOR(int, textDecorationStyle);
 
@@ -134,19 +134,19 @@ public:
     LAGER_QT_CURSOR(bool, hangingPunctuationFirst);
     LAGER_QT_CURSOR(HangComma, hangingPunctuationComma);
     LAGER_QT_CURSOR(bool, hangingPunctuationLast);
-    LAGER_QT_READER(PropertyState, hangingPunctuationState);
+    LAGER_QT_CURSOR(PropertyState, hangingPunctuationState);
 
     LAGER_QT_CURSOR(int, alignmentBaseline);
-    LAGER_QT_READER(PropertyState, alignmentBaselineState);
+    LAGER_QT_CURSOR(PropertyState, alignmentBaselineState);
     LAGER_QT_CURSOR(int, dominantBaseline);
-    LAGER_QT_READER(PropertyState, dominantBaselineState);
+    LAGER_QT_CURSOR(PropertyState, dominantBaselineState);
     LAGER_QT_CURSOR(int, baselineShiftMode);
-    LAGER_QT_READER(PropertyState, baselineShiftState);
+    LAGER_QT_CURSOR(PropertyState, baselineShiftState);
 
     LAGER_QT_CURSOR(int, wordBreak);
-    LAGER_QT_READER(PropertyState, wordBreakState);
+    LAGER_QT_CURSOR(PropertyState, wordBreakState);
     LAGER_QT_CURSOR(int, lineBreak);
-    LAGER_QT_READER(PropertyState, lineBreakState);
+    LAGER_QT_CURSOR(PropertyState, lineBreakState);
 
 
 Q_SIGNALS:

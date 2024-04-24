@@ -100,6 +100,8 @@ private Q_SLOTS:
 
     void testTextSplit();
     void testTextCleanUp();
+
+    void testTextRichTextMerge();
 };
 
 #endif // TESTSVGTEXT_H

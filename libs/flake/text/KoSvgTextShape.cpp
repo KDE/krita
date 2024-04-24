@@ -909,12 +909,18 @@ void KoSvgTextShape::setPropertiesAtPos(int pos, KoSvgTextProperties properties)
     }
 }
 
-void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endPos, KoSvgTextProperties properties)
+void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
+                                              const int endPos,
+                                              const KoSvgTextProperties properties,
+                                              const QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
     if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
         if (KisForestDetail::size(d->textData)) {
             Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
                 d->textData.childBegin()->properties.setProperty(p, properties.property(p));
+            }
+            Q_FOREACH(KoSvgTextProperties::PropertyId p, removeProperties) {
+                d->textData.childBegin()->properties.removeProperty(p);
             }
         }
         notifyChanged();
@@ -938,6 +944,10 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos, const int endP
             Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
                 it->properties.setProperty(p, properties.property(p));
             }
+            Q_FOREACH(KoSvgTextProperties::PropertyId p, removeProperties) {
+                it->properties.removeProperty(p);
+            }
+
             changed = true;
         }
         currentIndex += it->numChars(false);

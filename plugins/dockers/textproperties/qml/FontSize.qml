@@ -29,8 +29,8 @@ TextPropertyBase {
         width: parent.width;
 
         RevertPropertyButton {
-            id: revertFontSize;
             revertEnabled: properties.fontSizeState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.fontSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

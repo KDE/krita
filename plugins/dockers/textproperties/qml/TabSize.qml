@@ -41,6 +41,7 @@ TextPropertyBase {
 
         RevertPropertyButton {
             revertEnabled: properties.tabSizeState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.tabSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
             text: i18nc("@title:group", "Tab Size:")

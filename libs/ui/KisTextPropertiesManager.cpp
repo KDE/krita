@@ -150,7 +150,21 @@ void KisTextPropertiesManager::slotTextPropertiesChanged()
     if (!d->interface || !d->provider) return;
     if (d->lastSetTextData == d->provider->textPropertyData()) return;
 
-    KoSvgTextProperties newProps = d->provider->textPropertyData().commonProperties.ownProperties(d->lastSetTextData.commonProperties);
-    if (newProps.isEmpty()) return;
-    d->interface->setPropertiesOnSelected(newProps);
+    KoSvgTextPropertyData textData = d->provider->textPropertyData();
+
+    KoSvgTextProperties newProps = textData.commonProperties.ownProperties(d->lastSetTextData.commonProperties);
+    QSet<KoSvgTextProperties::PropertyId> removeProperties;
+
+    QList<KoSvgTextProperties::PropertyId> oldPropIds = d->lastSetTextData.commonProperties.properties();
+    oldPropIds.append(d->lastSetTextData.tristate.values());
+    for (auto it = oldPropIds.begin(); it != oldPropIds.end(); it++) {
+        KoSvgTextProperties::PropertyId p = *it;
+        if (!textData.commonProperties.hasProperty(p) && !textData.tristate.contains(p)) {
+            removeProperties.insert(p);
+        }
+    }
+
+    if (newProps.isEmpty() && removeProperties.isEmpty()) return;
+    d->interface->setPropertiesOnSelected(newProps, removeProperties);
+    d->lastSetTextData = textData;
 }

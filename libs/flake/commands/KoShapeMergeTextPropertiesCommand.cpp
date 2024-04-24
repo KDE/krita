@@ -14,13 +14,16 @@ struct KoShapeMergeTextPropertiesCommand::Private {
     QList<KoShape *> shapes;
     QMap<KoShape*, KoSvgTextShapeMementoSP> mementos;
     KoSvgTextProperties newProperties;
+    QSet<KoSvgTextProperties::PropertyId> removeProperties;
+
 };
 
-KoShapeMergeTextPropertiesCommand::KoShapeMergeTextPropertiesCommand(const QList<KoShape *> &shapes, const KoSvgTextProperties &props, KUndo2Command *parent)
+KoShapeMergeTextPropertiesCommand::KoShapeMergeTextPropertiesCommand(const QList<KoShape *> &shapes, const KoSvgTextProperties &props, const QSet<KoSvgTextProperties::PropertyId> removeProperties, KUndo2Command *parent)
     : KUndo2Command(parent),
     d(new Private(shapes))
 {
     d->newProperties = props;
+    d->removeProperties = removeProperties;
 }
 
 void KoShapeMergeTextPropertiesCommand::redo()
@@ -30,7 +33,7 @@ void KoShapeMergeTextPropertiesCommand::redo()
         if (shape) {
             d->mementos.insert(*it, shape->getMemento());
             const QRectF oldDirtyRect = shape->boundingRect();
-            shape->mergePropertiesIntoRange(-1, -1, d->newProperties);
+            shape->mergePropertiesIntoRange(-1, -1, d->newProperties, d->removeProperties);
             shape->updateAbsolute(oldDirtyRect | shape->boundingRect());
         }
     }
@@ -61,8 +64,15 @@ bool KoShapeMergeTextPropertiesCommand::mergeWith(const KUndo2Command *other)
         return false;
     }
 
+    Q_FOREACH(KoSvgTextProperties::PropertyId p, command->d->removeProperties) {
+        d->newProperties.removeProperty(p);
+        d->removeProperties.insert(p);
+    }
     Q_FOREACH(KoSvgTextProperties::PropertyId p, command->d->newProperties.properties()) {
-        d->newProperties.setProperty(p, command->d->newProperties.property(p));
+        if (!command->d->removeProperties.contains(p)) {
+            d->newProperties.setProperty(p, command->d->newProperties.property(p));
+            d->removeProperties.remove(p);
+        }
     }
 
     return true;

@@ -18,7 +18,11 @@ class KoSvgTextProperties;
 class KRITATOOLSVGTEXT_EXPORT SvgTextMergePropertiesRangeCommand : public KUndo2Command
 {
 public:
-    SvgTextMergePropertiesRangeCommand(KoSvgTextShape *shape, KoSvgTextProperties props, int pos, int anchor, KUndo2Command *parent = 0);
+    SvgTextMergePropertiesRangeCommand(KoSvgTextShape *shape,
+                                       const KoSvgTextProperties props,
+                                       const int pos, const int anchor,
+                                       const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>(),
+                                       KUndo2Command *parent = 0);
     ~SvgTextMergePropertiesRangeCommand() override = default;
 
     void redo() override;
@@ -30,6 +34,7 @@ public:
 private:
     KoSvgTextShape *m_shape;
     KoSvgTextProperties m_props;
+    QSet<KoSvgTextProperties::PropertyId> m_removeProperties;
 
     int m_pos;
     int m_anchor;

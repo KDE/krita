@@ -46,6 +46,7 @@ TextPropertyBase {
 
         RevertPropertyButton {
             revertEnabled: properties.hangingPunctuationState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.hangingPunctuationState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

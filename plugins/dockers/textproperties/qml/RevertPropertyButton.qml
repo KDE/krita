@@ -12,6 +12,7 @@ Item {
 
     property alias revertEnabled: revert.enabled;
     property bool inheritable: true;
+    signal clicked;
 
     ToolButton {
         id: revert;
@@ -21,5 +22,6 @@ Item {
         opacity: enabled? 1.0: 0.5;
         display: AbstractButton.IconOnly
         icon.source: parent.inheritable? "qrc:///light_edit-undo.svg": "qrc:///22_light_trash-empty.svg";
+        onClicked: parent.clicked();
     }
 }

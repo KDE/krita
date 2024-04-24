@@ -1957,11 +1957,11 @@ KoSvgTextProperties DefaultToolTextPropertiesInterface::getInheritedProperties()
     return KoSvgTextProperties::defaultProperties();
 }
 
-void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProperties properties)
+void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
     QList<KoShape*> shapes = m_parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
     if (shapes.isEmpty()) return;
-    KUndo2Command *cmd = new KoShapeMergeTextPropertiesCommand(shapes, properties);
+    KUndo2Command *cmd = new KoShapeMergeTextPropertiesCommand(shapes, properties, removeProperties);
     if (cmd) {
         m_parent->canvas()->addCommand(cmd);
     }

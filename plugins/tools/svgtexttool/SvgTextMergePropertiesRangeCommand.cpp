@@ -9,13 +9,15 @@
 #include "kis_command_ids.h"
 
 SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgTextShape *shape,
-                                                                       KoSvgTextProperties props,
-                                                                       int pos,
-                                                                       int anchor,
+                                                                       const KoSvgTextProperties props,
+                                                                       const int pos,
+                                                                       const int anchor,
+                                                                       const QSet<KoSvgTextProperties::PropertyId> removeProperties,
                                                                        KUndo2Command *parent)
     : KUndo2Command(parent)
     , m_shape(shape)
     , m_props(props)
+    , m_removeProperties(removeProperties)
     , m_pos(pos)
     , m_anchor(anchor)
     , m_textData(m_shape->getMemento())
@@ -30,7 +32,7 @@ SvgTextMergePropertiesRangeCommand::SvgTextMergePropertiesRangeCommand(KoSvgText
 void SvgTextMergePropertiesRangeCommand::redo()
 {
     QRectF updateRect = m_shape->boundingRect();
-    m_shape->mergePropertiesIntoRange(qMin(m_pos, m_anchor), qMax(m_pos, m_anchor), m_props);
+    m_shape->mergePropertiesIntoRange(qMin(m_pos, m_anchor), qMax(m_pos, m_anchor), m_props, m_removeProperties);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
 }
 
@@ -54,8 +56,16 @@ bool SvgTextMergePropertiesRangeCommand::mergeWith(const KUndo2Command *other)
         return false;
     }
 
+    Q_FOREACH(KoSvgTextProperties::PropertyId p, command->m_removeProperties) {
+        m_props.removeProperty(p);
+        m_removeProperties.insert(p);
+    }
+
     Q_FOREACH(KoSvgTextProperties::PropertyId p, command->m_props.properties()) {
-        m_props.setProperty(p, command->m_props.property(p));
+        if (!command->m_removeProperties.contains(p)) {
+            m_props.setProperty(p, command->m_props.property(p));
+            m_removeProperties.remove(p);
+        }
     }
 
     return true;

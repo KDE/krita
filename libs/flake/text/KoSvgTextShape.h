@@ -8,6 +8,7 @@
 #define KOSVGTEXTSHAPE_H
 
 #include "kritaflake_export.h"
+#include <KoSvgTextProperties.h>
 
 #include <KoShapeFactoryBase.h>
 #include <SvgShape.h>
@@ -16,7 +17,6 @@
 #include "html/HtmlSavingContext.h"
 #include <QFlags>
 
-class KoSvgTextProperties;
 class KoSvgTextShapeMemento;
 typedef QSharedPointer<KoSvgTextShapeMemento> KoSvgTextShapeMementoSP;
 
@@ -341,8 +341,12 @@ public:
      * @param startPos -- cursor pos start.
      * @param endPos -- cursor pos end.
      * @param properties -- properties to merge in.
+     * @param removeProperties -- optional list of properties to remove, these will always apply after merging.
      */
-    void mergePropertiesIntoRange(const int startPos, const int endPos, KoSvgTextProperties properties);
+    void mergePropertiesIntoRange(const int startPos,
+                                  const int endPos,
+                                  const KoSvgTextProperties properties,
+                                  const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>());
 
 
     /**

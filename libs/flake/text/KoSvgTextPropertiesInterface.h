@@ -42,7 +42,7 @@ public:
      * for handling the undo states.
      * @param properties -- the properties to set.
      */
-    virtual void setPropertiesOnSelected(KoSvgTextProperties properties) = 0;
+    virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) = 0;
 Q_SIGNALS:
     void textSelectionChanged();
 };

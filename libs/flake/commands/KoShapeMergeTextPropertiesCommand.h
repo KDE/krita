@@ -8,6 +8,7 @@
 
 #include "kritaflake_export.h"
 #include <kundo2command.h>
+#include <KoSvgTextProperties.h>
 
 class KoShape;
 class KoSvgTextProperties;
@@ -15,7 +16,7 @@ class KoSvgTextProperties;
 class KRITAFLAKE_EXPORT KoShapeMergeTextPropertiesCommand : public KUndo2Command
 {
 public:
-    KoShapeMergeTextPropertiesCommand(const QList<KoShape*> &shapes, const KoSvgTextProperties &props, KUndo2Command *parent = nullptr);
+    KoShapeMergeTextPropertiesCommand(const QList<KoShape*> &shapes, const KoSvgTextProperties &props, const QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>(), KUndo2Command *parent = nullptr);
     ~KoShapeMergeTextPropertiesCommand() = default;
 
     void redo() override;

@@ -65,8 +65,8 @@ CollapsibleGroupProperty {
         columnSpacing: 5;
 
         RevertPropertyButton {
-            id: revertWeight;
             revertEnabled: properties.fontWeightState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.fontWeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {
@@ -84,8 +84,8 @@ CollapsibleGroupProperty {
 
 
         RevertPropertyButton {
-            id: revertWidth;
             revertEnabled: properties.fontWidthState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.fontWidthState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
             text: i18nc("@label:spinbox", "Width:")
@@ -101,8 +101,8 @@ CollapsibleGroupProperty {
         }
 
         RevertPropertyButton {
-            id: revertStyle;
             revertEnabled: properties.fontStyleState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.fontStyleState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
             text: i18nc("@label:listbox", "Slant:")
@@ -124,8 +124,8 @@ CollapsibleGroupProperty {
         }
 
         RevertPropertyButton {
-            id: revertOpticalLink;
             revertEnabled: properties.fontOpticalSizeLinkState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.fontOpticalSizeLinkState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Item {
         width: 1;

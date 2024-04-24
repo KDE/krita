@@ -30,8 +30,8 @@ TextPropertyBase {
         width: parent.width;
 
         RevertPropertyButton {
-            id: revertWordBreak;
             revertEnabled: properties.wordBreakState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.wordBreakState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

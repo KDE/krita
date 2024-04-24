@@ -46,8 +46,8 @@ TextPropertyBase {
         width: parent.width;
 
         RevertPropertyButton {
-            id: revertLineHeight;
             revertEnabled: properties.lineHeightState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.lineHeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

@@ -29,6 +29,7 @@ TextPropertyBase {
 
         RevertPropertyButton {
             revertEnabled: properties.wordSpacingState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.wordSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
         Label {

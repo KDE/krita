@@ -220,6 +220,7 @@ void KisToolTransform::imageTooBigRequested(bool value)
 void KisToolTransform::convexHullCalculationRequested()
 {
     ENTER_FUNCTION() << "convex hull recalculation requested!";
+    m_transaction.setConvexHullHasBeenRequested(true);
     if (m_strokeId && !m_transaction.rootNodes().isEmpty()) {
         if (m_currentlyUsingOverlayPreviewStyle) {
             image()->addJob(m_strokeId, new TransformStrokeStrategy::CalculateConvexHullData());

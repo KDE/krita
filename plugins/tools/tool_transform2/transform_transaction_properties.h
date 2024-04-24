@@ -147,7 +147,7 @@ TransformTransactionProperties(const QRectF &originalRect,
         m_currentConfig = config;
     }
 
-    void setConvexHull(QPolygonF hull) {
+    void setConvexHull(const QPolygonF &hull) {
         m_convexHull = hull;
     }
 

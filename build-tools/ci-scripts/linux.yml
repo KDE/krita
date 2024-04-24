@@ -25,11 +25,14 @@ linux-build:
     - if [ "$KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE" != "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
     - export PATH="$HOME/tools/bin:$PATH"
   script:
+    # GitLab freaks out when we try to use `tee` to save the logs manually, the job
+    # just silently hangs up. For this reason we don't use extra logging on Linux.
+
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
-    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing 2>&1 | tee build-krita.log
-    - python3 -u build-tools/ci-scripts/build-appimage.py 2>&1 | tee build-appimage.log
-    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform linux --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee appimage-publish.log
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
+    - python3 -u build-tools/ci-scripts/build-appimage.py
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform linux --folder $CI_PROJECT_DIR/_packaging
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG

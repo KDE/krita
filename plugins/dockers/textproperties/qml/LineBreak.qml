@@ -10,11 +10,13 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     property int breakType;
-    visible: properties.lineBreakState !== KoSvgTextPropertiesModel.PropertyUnset;
+
+    propertyName: i18nc("@label:listbox", "Line Break");
 
     onPropertiesUpdated: {
         blockSignals = true;
         breakType = properties.lineBreak;
+        visible = properties.lineBreakState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -35,7 +37,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label:listbox", "Line Break:")
+            text: propertyName;
         }
 
         ComboBox {

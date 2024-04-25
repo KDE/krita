@@ -9,16 +9,17 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label", "Line Height");
     property alias isNormal: lineHeightNormalCbx.checked;
     property alias lineHeight: lineHeightSpn.value;
     property int lineHeightUnit: LineHeightModel.Lines;
-    visible: properties.lineHeightState !== KoSvgTextPropertiesModel.PropertyUnset;
 
     onPropertiesUpdated: {
         blockSignals = true;
         isNormal = properties.lineHeight.isNormal;
         lineHeight = properties.lineHeight.value;
         lineHeightUnit = properties.lineHeight.unit;
+        visible = properties.lineHeightState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -51,7 +52,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label", "Line Height:")
+            text: propertyName;
             Layout.columnSpan: 2;
         }
 

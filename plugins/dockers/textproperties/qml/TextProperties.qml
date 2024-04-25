@@ -20,6 +20,32 @@ Rectangle {
         colorGroup: SystemPalette.Active
     }
 
+    ListModel {
+        id: characterPropertyList;
+    }
+    ListModel {
+        id: paragraphPropertyList;
+    }
+
+    Component.onCompleted: fillPropertyModels();
+
+    function fillPropertyModels() {
+        for (var i = 0; i < characterPropertiesModel.count; i++) {
+            characterPropertyList.append({"name": characterPropertiesModel.get(i).propertyName,
+                                          "tooltip": characterPropertiesModel.get(i).toolTip,
+                                          "searchTerms": characterPropertiesModel.get(i).searchTerms,
+                                          "visible": characterPropertiesModel.get(i).visible,
+                                          "item": characterPropertiesModel.get(i)});
+        }
+        for (var l = 0; l < paragraphPropertiesModel.count; l++) {
+            paragraphPropertyList.append({"name": paragraphPropertiesModel.get(l).propertyName,
+                                          "tooltip": paragraphPropertiesModel.get(l).toolTip,
+                                          "searchTerms": paragraphPropertiesModel.get(l).searchTerms,
+                                          "visible": paragraphPropertiesModel.get(l).visible,
+                                          "item": paragraphPropertiesModel.get(l)});
+        }
+    }
+
     function setProperties() {
         for (var i = 0; i < characterPropertiesModel.count; i++) {
             characterPropertiesModel.get(i).propertiesUpdated();
@@ -49,41 +75,45 @@ Rectangle {
         anchors.left: parent.left;
         anchors.top: tabs.bottom;
 
-        ScrollView {
-            background: Rectangle {
-                color: sysPalette.alternateBase;
-                border.color: sysPalette.base;
-                border.width: 1;
-            }
-            clip: true;
-            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
+        ColumnLayout {
+            Frame {
+                id: characterFrame;
+                Layout.fillHeight: true;
+                Layout.fillWidth: true;
+                clip: true;
+                padding: 0;
 
-            ListView {
-                id: characterProperties
-                model: ObjectModel {
-                    id: characterPropertiesModel;
-                    FontSize {
+                ListView {
+                    id: characterProperties
+
+                    anchors.fill: parent;
+                    ScrollBar.vertical: ScrollBar {
                     }
-                    FontFamily {
-                        fontFamilyModel: fontFamiliesModel;
-                    }
-                    FontStyle {
-                    }
-                    LetterSpacing {
-                    }
-                    WordSpacing {
-                    }
-                    LineHeight {
-                    }
-                    LineBreak {
-                    }
-                    WordBreak {
-                    }
-                    TextTransform {
-                    }
-                    TextDecoration {
-                    }
-                    /*
+
+                    model: ObjectModel {
+                        id: characterPropertiesModel;
+                        FontSize {
+                        }
+                        FontFamily {
+                            fontFamilyModel: fontFamiliesModel;
+                        }
+                        FontStyle {
+                        }
+                        LetterSpacing {
+                        }
+                        WordSpacing {
+                        }
+                        LineHeight {
+                        }
+                        LineBreak {
+                        }
+                        WordBreak {
+                        }
+                        TextTransform {
+                        }
+                        TextDecoration {
+                        }
+                        /*
                     OTLigatures {
                     }
                     OTPosition {
@@ -94,45 +124,73 @@ Rectangle {
                     }
                     OTEastAsian {
                     }*/
-                    BaselineShift {
+                        BaselineShift {
+                        }
+                        AlignmentBaseline {
+                        }
                     }
-                    AlignmentBaseline {
-                    }
+                }
+            }
+
+            ComboBox {
+                Layout.fillWidth: true;
+                Layout.minimumHeight: implicitHeight;
+                model: characterPropertyList;
+                textRole: "name";
+                displayText: i18nc("@label:listbox", "Add Property");
+                onActivated: {
+                    model.get(currentIndex).item.visible = true;
                 }
             }
         }
 
-        ScrollView {
-            background: Rectangle {
-                color: sysPalette.alternateBase;
-                border.color: sysPalette.base;
-                border.width: 1;
+        ColumnLayout {
+            Frame {
+                Layout.fillHeight: true;
+                Layout.fillWidth: true;
+                clip: true;
+                padding: 0;
+
+                ListView {
+                    id: paragraphProperties;
+
+                    clip: true;
+                    anchors.fill: parent;
+                    ScrollBar.vertical: ScrollBar {
+                    }
+
+                    model: ObjectModel {
+                        id: paragraphPropertiesModel;
+                        WritingMode {
+                        }
+                        Direction{
+                        }
+                        TextIndent{
+                        }
+                        TextAlign{
+                        }
+                        DominantBaseline {
+                        }
+                        /*
+                        WhiteSpace {
+                        }
+                        UnderlinePosition {
+                        }*/
+                        HangingPunctuation {
+                        }
+                        TabSize {
+                        }
+                    }
+                }
             }
-            clip: true;
-            ScrollBar.horizontal.policy: ScrollBar.AlwaysOff
-            ListView {
-                id: paragraphProperties
-                model: ObjectModel {
-                    id: paragraphPropertiesModel;
-                    WritingMode {
-                    }
-                    Direction{
-                    }
-                    TextIndent{
-                    }
-                    TextAlign{
-                    }
-                    DominantBaseline {
-                    }
-                    /*
-                    WhiteSpace {
-                    }
-                    UnderlinePosition {
-                    }*/
-                    HangingPunctuation {
-                    }
-                    TabSize {
-                    }
+            ComboBox {
+                Layout.fillWidth: true;
+                Layout.minimumHeight: implicitHeight;
+                model: paragraphPropertyList;
+                textRole: "name";
+                displayText: i18nc("@label:listbox", "Add Property");
+                onActivated: {
+                    model.get(currentIndex).item.visible = true;
                 }
             }
         }

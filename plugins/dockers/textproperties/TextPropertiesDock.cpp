@@ -146,6 +146,7 @@ void TextPropertiesDock::slotTextPropertiesChanged()
     KoSvgTextPropertyData textData = d->textModel->textData.get();
     qDebug() << Q_FUNC_INFO << textData;
     if (d->provider && d->provider->textPropertyData() != textData) {
+        QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
         d->provider->setTextPropertyData(textData);
     }
 }

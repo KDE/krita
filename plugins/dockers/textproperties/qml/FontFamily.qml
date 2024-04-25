@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
-    propertyName: i18nc("@label", "Font Family:");
+    propertyName: i18nc("@label", "Font Family");
 
     property var fontFamilies: [];
     property var fontFamilyModel : [];
@@ -17,6 +17,7 @@ CollapsibleGroupProperty {
     onPropertiesUpdated: {
         blockSignals = true;
         fontFamilies = properties.fontFamilies;
+        visible = properties.fontFamiliesState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -45,7 +46,7 @@ CollapsibleGroupProperty {
         columns: 2
         anchors.left: parent.left
         anchors.right: parent.right
-        columnSpacing: parent.columnSpacing;
+        columnSpacing: columnSpacing;
 
         RevertPropertyButton {
             revertEnabled: properties.fontFamiliesState === KoSvgTextPropertiesModel.PropertySet;

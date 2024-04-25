@@ -9,13 +9,14 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label:spinbox", "Font Size");
 
     property alias fontSize: fontSizeSpn.value;
-    visible: properties.fontSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
 
     onPropertiesUpdated: {
         blockSignals = true;
         fontSize = properties.fontSize.value;
+        visible = properties.fontSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onFontSizeChanged: {
@@ -34,11 +35,12 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label:spinbox", "Font Size:")
+            text: propertyName
         }
 
         SpinBox {
-            id: fontSizeSpn
+            id: fontSizeSpn;
+            editable: true;
             Layout.fillWidth: true;
         }
 
@@ -51,6 +53,7 @@ TextPropertyBase {
             ]
             textRole: "text";
             valueRole: "value";
+            Layout.fillWidth: true;
         }
     }
 }

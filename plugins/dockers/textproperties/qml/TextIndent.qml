@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
-    propertyName: i18nc("@title:group", "Text Indent:");
+    propertyName: i18nc("@title:group", "Text Indent");
 
     property alias textIndentValue: textIndentSpn.value;
     property alias hanging: indentHangingCkb.checked;
@@ -20,6 +20,7 @@ CollapsibleGroupProperty {
         textIndentValue = properties.textIndent.length.value;
         hanging = properties.textIndent.hanging;
         eachLine = properties.textIndent.eachLine;
+        visible = properties.textIndentState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -50,6 +51,7 @@ CollapsibleGroupProperty {
         }
         ComboBox {
             model: ["Pt", "Em", "Ex"]
+            Layout.fillWidth: true;
         }
     }
 

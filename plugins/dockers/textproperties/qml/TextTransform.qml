@@ -9,6 +9,7 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@title:group", "Text Transform");
     property alias fullWidth: fullWidthChk.checked;
     property alias fullSizeKana: fullSizeKanaChk.checked;
     property int capitals;
@@ -18,6 +19,7 @@ TextPropertyBase {
         fullWidth = properties.textTransform.fullWidth;
         fullSizeKana = properties.textTransform.fullSizeKana;
         capitals = properties.textTransform.capitals;
+        visible = properties.textTransformState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -51,7 +53,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@title:group", "Text Transform:")
+            text: propertyName;
             Layout.columnSpan: 2;
         }
 

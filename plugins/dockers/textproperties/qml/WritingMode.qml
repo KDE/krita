@@ -9,11 +9,13 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label:listbox", "Writing Mode");
     property int writingMode;
 
     onPropertiesUpdated: {
         blockSignals = true;
         writingMode = properties.writingMode;
+        visible = properties.writingModeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -34,7 +36,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label:listbox", "Writing Mode:")
+            text: propertyName;
         }
 
 

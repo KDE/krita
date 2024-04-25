@@ -15,10 +15,6 @@ CollapsibleGroupProperty {
     property alias fontWidth: fontStretchSpn.value;
     property int fontSlant: KoSvgTextPropertiesModel.StyleNormal;
 
-    visible: properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
-             || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-             || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset;
-
     onFontSlantChanged: {
         fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
         if (!blockSignals) {
@@ -33,6 +29,9 @@ CollapsibleGroupProperty {
         fontWidth = properties.fontWidth;
         fontOptical = properties.fontOpticalSizeLink;
         fontSlant = properties.fontStyle;
+        visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
+                 || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                 || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onFontWeightChanged: {
@@ -79,6 +78,7 @@ CollapsibleGroupProperty {
             id: fontWeightSpn
             from: 0;
             to: 1000;
+            editable: true;
             Layout.fillWidth: true
         }
 
@@ -97,6 +97,7 @@ CollapsibleGroupProperty {
             id: fontStretchSpn
             from: 0;
             to: 200;
+            editable: true;
             Layout.fillWidth: true
         }
 

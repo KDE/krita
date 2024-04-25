@@ -9,6 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label", "Baseline-Shift")
+
     property alias baselineShiftValue: baselineShiftSpn.value;
     property int baselineShiftMode;
 
@@ -16,6 +18,7 @@ TextPropertyBase {
         blockSignals = true;
         baselineShiftValue = properties.baselineShiftValue.value;
         baselineShiftMode = properties.baselineShiftMode;
+        visible = properties.baselineShiftState !== KoSvgTextPropertiesModel.PropertyUnset
         blockSignals = false;
     }
 
@@ -44,7 +47,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label", "Baseline-Shift:")
+            text: propertyName
             Layout.columnSpan: 2;
         }
 

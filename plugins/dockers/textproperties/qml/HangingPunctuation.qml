@@ -9,6 +9,7 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label", "Hanging-punctuation");
     property alias hangStart: paragraphStartCbx.checked;
     property alias hangEnd: paragraphEndCbx.checked;
     property int hangComma: KoSvgTextPropertiesModel.NoHang;
@@ -18,6 +19,7 @@ TextPropertyBase {
         hangStart = properties.hangingPunctuationFirst;
         hangEnd = properties.hangingPunctuationLast;
         hangComma = properties.hangingPunctuationComma;
+        visible = properties.hangingPunctuationState !== KoSvgTextPropertiesModel.PropertySet;
         blockSignals = false;
     }
 
@@ -50,7 +52,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label", "Hanging-punctuation:")
+            text: propertyName;
         }
 
         Item {

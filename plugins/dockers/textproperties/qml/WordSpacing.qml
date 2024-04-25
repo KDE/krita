@@ -9,12 +9,14 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@title:group", "Word Spacing");
     property alias wordSpacing: wordSpacingSpn.value;
     visible: properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
 
     onPropertiesUpdated: {
         blockSignals = true;
         wordSpacing = properties.wordSpacing.value;
+        visible = properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onWordSpacingChanged: {
@@ -33,16 +35,18 @@ TextPropertyBase {
         }
 
         Label {
-            text:  i18nc("@title:group", "Word Spacing:")
+            text: propertyName
         }
 
         SpinBox {
             id: wordSpacingSpn
+            editable: true;
             Layout.fillWidth: true;
         }
 
         ComboBox {
-            model: ["Pt", "Em", "Ex"]
+            model: ["Pt", "Em", "Ex"];
+            Layout.fillWidth: true;
         }
     }
 }

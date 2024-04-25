@@ -9,11 +9,13 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label:listbox", "Alignment Baseline:");
     property int baselineSelection;
 
     onPropertiesUpdated: {
         blockSignals = true;
         baselineSelection = properties.alignmentBaseline;
+        visible = properties.alignmentBaselineState !== KoSvgTextPropertiesModel.PropertyUnset
         blockSignals = false;
     }
 
@@ -35,7 +37,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label:listbox", "Alignment Baseline:")
+            text: propertyName;
         }
 
 

@@ -20,6 +20,9 @@ CollapsibleGroupProperty {
         textAlignAll = properties.textAlignAll;
         textAlignLast = properties.textAlignLast;
         textAnchor = properties.textAnchor;
+        visible = properties.textAlignAllState !== KoSvgTextPropertiesModel.PropertyUnset ||
+                properties.textAlignLastState !== KoSvgTextPropertiesModel.PropertyUnset ||
+                properties.textAnchorState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 

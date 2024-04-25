@@ -9,11 +9,13 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label:listbox", "Direction")
     property int direction;
 
     onPropertiesUpdated: {
         blockSignals = true;
         direction = properties.direction;
+        visible = properties.directionState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -35,7 +37,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@label:listbox", "Direction:");
+            text: propertyName;
         }
 
         ComboBox {

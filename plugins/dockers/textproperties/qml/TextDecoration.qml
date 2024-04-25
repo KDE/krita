@@ -9,6 +9,8 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@title:group", "Text Decoration");
+    visible: properties.textDecorationLineState !== KoSvgTextPropertiesModel.PropertyUnset
 
     property alias underline: underlineCbx.checked;
     property alias overline: overlineCbx.checked;
@@ -63,7 +65,7 @@ TextPropertyBase {
         }
 
         Label {
-            text: i18nc("@title:group", "Text Decoration:")
+            text: propertyName;
             Layout.columnSpan: 2;
         }
 

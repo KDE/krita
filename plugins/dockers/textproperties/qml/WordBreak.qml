@@ -9,12 +9,14 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label:listbox", "Word Break");
     property int breakType;
-    visible: properties.wordBreakState !== KoSvgTextPropertiesModel.PropertyUnset;
+
 
     onPropertiesUpdated: {
         blockSignals = true;
         breakType = properties.wordBreak;
+        visible = properties.wordBreakState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
@@ -35,7 +37,7 @@ TextPropertyBase {
         }
 
         Label {
-            text:  i18nc("@label:listbox", "Word Break:")
+            text: propertyName
         }
 
 

@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-
+    propertyName: i18nc("@title:group", "Tab Size");
     property alias tabSize: tabSizeSpn.value;
     property int tabSizeUnit: TabSizeModel.Spaces;
 
@@ -17,6 +17,7 @@ TextPropertyBase {
         blockSignals = true;
         tabSize = properties.tabSize.value;
         tabSizeUnit = properties.tabSize.unit;
+        visible = properties.tabSizeState !== KoSvgTextPropertiesModel.PropertySet;
         blockSignals = false;
     }
 
@@ -44,7 +45,7 @@ TextPropertyBase {
             onClicked: properties.tabSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
-            text: i18nc("@title:group", "Tab Size:")
+            text: propertyName
             Layout.columnSpan: 2;
             Layout.fillWidth: true;
         }

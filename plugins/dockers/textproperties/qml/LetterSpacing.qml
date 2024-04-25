@@ -9,12 +9,13 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
+    propertyName: i18nc("@label:spinbox", "Letter Spacing");
     property alias letterSpacing: letterSpacingSpn.value;
-    visible: properties.letterSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
 
     onPropertiesUpdated: {
         blockSignals = true;
         letterSpacing = properties.letterSpacing.value;
+        visible = properties.letterSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onLetterSpacingChanged: {
@@ -32,17 +33,19 @@ TextPropertyBase {
             onClicked: properties.letterSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
-        Label {
-            text: i18nc("@label:spinbox", "Letter Spacing:")
-        }
+            Label {
+                text: propertyName
+            }
 
-        SpinBox {
-            id: letterSpacingSpn
-            Layout.fillWidth: true;
-        }
+            SpinBox {
+                id: letterSpacingSpn
+                editable: true;
+                Layout.fillWidth: true;
+            }
 
-        ComboBox {
-            model: ["Pt", "Em", "Ex"]
-        }
+            ComboBox {
+                model: ["Pt", "Em", "Ex"];
+                Layout.fillWidth: true;
+            }
     }
 }

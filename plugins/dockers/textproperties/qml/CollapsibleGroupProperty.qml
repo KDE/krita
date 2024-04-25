@@ -9,7 +9,6 @@ import QtQuick.Controls 2.15
 
 TextPropertyBase {
     id: root;
-    property alias propertyName: propertyTitle.text;
     property alias contentItem: contentItemContainer.data;
     property alias titleItem: titleItemContainer.data;
     spacing: columnSpacing;
@@ -50,7 +49,7 @@ TextPropertyBase {
             spacing: columnSpacing;
             Label {
                 id: propertyTitle;
-                text: "property name";
+                text: root.propertyName;
                 height: parent.height;
                 verticalAlignment: Text.AlignVCenter
                 color: sysPalette.text;

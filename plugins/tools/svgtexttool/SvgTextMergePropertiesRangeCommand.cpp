@@ -34,6 +34,8 @@ void SvgTextMergePropertiesRangeCommand::redo()
     QRectF updateRect = m_shape->boundingRect();
     m_shape->mergePropertiesIntoRange(qMin(m_pos, m_anchor), qMax(m_pos, m_anchor), m_props, m_removeProperties);
     m_shape->updateAbsolute( updateRect| m_shape->boundingRect());
+
+    m_shape->notifyMarkupChanged();
 }
 
 void SvgTextMergePropertiesRangeCommand::undo()

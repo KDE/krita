@@ -333,7 +333,7 @@ KoSvgTextProperties SvgTextCursor::currentTextProperties() const
 QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
 {
     if (!d->shape) return QList<KoSvgTextProperties>();
-    return d->shape->propertiesForRange(d->pos, d->anchor);
+    return d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
 }
 
 void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties)
@@ -923,6 +923,11 @@ void SvgTextCursor::notifyCursorPosChanged(int pos, int anchor)
     d->anchor = anchor;
     updateCursor();
     updateSelection();
+}
+
+void SvgTextCursor::notifyMarkupChanged()
+{
+    d->interface->emitSelectionChange();
 }
 
 void SvgTextCursor::keyPressEvent(QKeyEvent *event)

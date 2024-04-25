@@ -399,9 +399,12 @@ public:
     struct KRITAFLAKE_EXPORT TextCursorChangeListener : public ShapeChangeListener {
         void notifyShapeChanged(ChangeType type, KoShape *shape) override;
         virtual void notifyCursorPosChanged(int pos, int anchor) = 0;
+        virtual void notifyMarkupChanged() = 0;
     };
     /// Notify that the cursor position has changed.
     void notifyCursorPosChanged(int pos, int anchor);
+    /// Notify that the markup has changed.
+    void notifyMarkupChanged();
 
     /*--------------- Loading / Saving ------------------*/
 

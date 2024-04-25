@@ -29,6 +29,7 @@ void SvgTextInsertRichCommand::redo()
 
     int pos = m_shape->posForIndex(oldIndex + m_insert->plainText().size(), false, false);
     m_shape->notifyCursorPosChanged(pos, pos);
+    m_shape->notifyMarkupChanged();
 }
 
 void SvgTextInsertRichCommand::undo()

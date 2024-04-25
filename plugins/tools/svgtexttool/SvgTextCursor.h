@@ -172,6 +172,8 @@ public:
     /// to update the cursor without having the cursor owned by the command.
     void notifyCursorPosChanged(int pos, int anchor) override;
 
+    void notifyMarkupChanged() override;
+
     /// Handle the cursor-related key events.
     void keyPressEvent(QKeyEvent *event);
 

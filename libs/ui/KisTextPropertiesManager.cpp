@@ -166,5 +166,4 @@ void KisTextPropertiesManager::slotTextPropertiesChanged()
 
     if (newProps.isEmpty() && removeProperties.isEmpty()) return;
     d->interface->setPropertiesOnSelected(newProps, removeProperties);
-    d->lastSetTextData = textData;
 }

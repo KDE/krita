@@ -1131,6 +1131,16 @@ void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
     }
 }
 
+void KoSvgTextShape::notifyMarkupChanged()
+{
+    Q_FOREACH (KoShape::ShapeChangeListener *listener, listeners()) {
+        TextCursorChangeListener *cursorListener = dynamic_cast<TextCursorChangeListener*>(listener);
+        if (cursorListener) {
+            cursorListener->notifyMarkupChanged();
+        }
+    }
+}
+
 #include "KoXmlWriter.h"
 bool KoSvgTextShape::saveSvg(SvgSavingContext &context)
 {
@@ -1312,12 +1322,14 @@ void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento)
 {
     setMementoImpl(memento);
     notifyCursorPosChanged(0, 0);
+    notifyMarkupChanged();
 }
 
 void KoSvgTextShape::setMemento(const KoSvgTextShapeMementoSP memento, int pos, int anchor)
 {
     setMementoImpl(memento);
     notifyCursorPosChanged(pos, anchor);
+    notifyMarkupChanged();
 }
 
 void KoSvgTextShape::debugParsing()

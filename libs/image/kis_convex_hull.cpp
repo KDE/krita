@@ -131,30 +131,51 @@ template <class ComparePixelOp>
 QVector<QPoint> retrieveAllBoundaryPointsImpl(const KisPaintDevice *device, const QRect &rect, const QRect &skip, ComparePixelOp compareOp)
 {
     QVector<QPoint> points;
-
-    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
-    for (qint32 y = rect.top(); y <= rect.bottom(); y++) {
-        qint32 maxRight = !skip.isEmpty() && y >= skip.top() && y <= skip.bottom() ? skip.left() : rect.right();
-        qint32 x;
-        for (x = rect.left(); x <= maxRight; x++) {
-            accessor->moveTo(x, y);
-            if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
-                points << QPoint(x, y);
-                points << QPoint(x, y + 1);
-                break;
-            }
+    int defaultMin = rect.x() + rect.width() + 1;
+    int defaultMax = rect.x() - 1;
+    QVector<int> minX(rect.height(), defaultMin);
+    QVector<int> maxX(rect.height(), defaultMax);
+    int base = rect.top();
+    if (!skip.isEmpty()) {
+        for (int y = skip.top(); y <= skip.bottom(); y++) {
+            minX[y - base] = skip.left();
+            maxX[y - base] = skip.right();
         }
-        
-        if (x == rect.right()) continue; // Row empty, don't need to search it backwards
+    }
 
-        qint32 minLeft = !skip.isEmpty() && y >= skip.top() && y <= skip.bottom() ? skip.right() : rect.left();
-        for (qint32 x = rect.right(); x >= minLeft; x--) {
+    int pixelSize = device->pixelSize();
+    KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
+    for (int y = rect.top(); y <= rect.bottom();) {
+        int rows = accessor->numContiguousRows(y);
+        for (int x = rect.left(); x <= rect.right();) {
+            int columns = accessor->numContiguousColumns(x);
             accessor->moveTo(x, y);
-            if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
-                points << QPoint(x + 1, y);
-                points << QPoint(x + 1, y + 1);
-                break;
+            int strideBytes = accessor->rowStride(x, y);
+            const quint8 *data = accessor->rawDataConst();
+            for (int r = 0; r < rows; r++) {
+                for (int c = 0; c < columns; c++) {
+                    if (!compareOp.isPixelEmpty(data + c * pixelSize)) {
+                        int index = y + r - base;
+                        minX[index] = std::min(minX[index], x + c);
+                        maxX[index] = std::max(maxX[index], x + c);
+                    }
+                }
+                data += strideBytes;
             }
+            x += columns;
+        }
+        y += rows;
+    }
+
+    for (int y = rect.top(); y <= rect.bottom(); y++) {
+        int index = y - base;
+        if (minX[index] < defaultMin) {
+            points << QPoint(minX[index], y);
+            points << QPoint(minX[index], y + 1);
+        }
+        if (maxX[index] > defaultMax) {
+            points << QPoint(maxX[index] + 1, y);
+            points << QPoint(maxX[index] + 1, y + 1);
         }
     }
     

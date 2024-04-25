@@ -51,3 +51,7 @@ try:
 except Exception:
     print("## Failed to build the appimage")
     sys.exit(1)
+
+# cleanup temporary artifacts that we don't want to upload
+shutil.rmtree(appdirPath)
+shutil.rmtree(downloadsPath)

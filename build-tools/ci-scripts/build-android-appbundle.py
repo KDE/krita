@@ -31,7 +31,7 @@ try:
     xml_paths = [f'{packagingFolder}/krita_build_apk/res/values/libs-{arch}.xml'
                  for arch in ['arm64-v8a', 'x86_64', 'armeabi-v7a']]
     xml_paths_str = ",".join(xml_paths)
-    subprocess.check_call(f'python3 merge-libs-xml.py -p {xml_paths_str} --output {packagingFolder}/krita_build_apk/res/values/libs.xml',
+    subprocess.check_call(f'{sys.executable} merge-libs-xml.py -p {xml_paths_str} --output {packagingFolder}/krita_build_apk/res/values/libs.xml',
                           stdout=sys.stdout, stderr=sys.stderr, shell=True, cwd=currentFileDirectoryPath, env=buildEnvironment)
 except Exception:
     print("## Failed to merge libs.xml files")

@@ -22,6 +22,44 @@ variables:
       when: never
     - when: always
 
+.ci-artifacts-with-packages-mixin:
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME
+    expire_in: 10 days
+    when: always
+    paths:
+      - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
+      - "**/appium_artifact_*"
+      - "*.log"
+      # Windows packages
+      - "krita-*.zip"
+      - "krita-*-setup.exe"
+      - "krita-*.msix"
+      # Linux, MacOS and Android packages
+      - "_packaging"
+    reports:
+      junit: JUnitTestResults.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: CoberturaLcovResults.xml
+
+# nightly packages should not store the packages, since
+# they are uploaded to CDN
+.ci-artifacts-without-packages-mixin:
+  artifacts:
+    name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME-no-packages
+    expire_in: 10 days
+    when: always
+    paths:
+      - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
+      - "**/appium_artifact_*"
+      - "*.log"
+    reports:
+      junit: JUnitTestResults.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: CoberturaLcovResults.xml
+
 clang_format:
   stage: build
   image: debian:testing

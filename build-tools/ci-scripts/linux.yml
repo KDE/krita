@@ -5,6 +5,7 @@ linux-build:
     - Linux
   extends:
     - .ci-always-job-mixin
+    - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_CC_CACHE: /mnt/caches/krita-appimage/
@@ -34,26 +35,12 @@ linux-build:
     - python3 -u build-tools/ci-scripts/build-appimage.py
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform linux --folder $CI_PROJECT_DIR/_packaging
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
-  artifacts:
-    name: krita-$CI_COMMIT_REF_SLUG
-    expire_in: 10 days
-    when: always
-    paths:
-      - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
-      - "**/appium_artifact_*"
-      - "_packaging/*.appimage"
-      - "_packaging/*.zsync"
-      - "*.log"
-    reports:
-      junit: JUnitTestResults.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: CoberturaLcovResults.xml
 
 linux-nightly:
   extends:
   - linux-build
   - .nightly-job-mixin
+  - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"
@@ -61,9 +48,6 @@ linux-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
-  # no artifacts for nightly jobs, they are uploaded to ci-builds
-  artifacts:
-
 
 linux-release:
   extends:

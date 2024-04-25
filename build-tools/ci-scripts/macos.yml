@@ -4,6 +4,7 @@ macos-build:
     - macOS
   extends:
     - .ci-manual-job-mixin
+    - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
     # ccache is not present on macOS
@@ -63,23 +64,12 @@ macos-build:
     - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini _packaging/*.dmg 2>&1 | tee dmg-notarize.log
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee dmg-publish.log
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
-  artifacts:
-    name: krita-$CI_COMMIT_REF_SLUG
-    expire_in: 10 days
-    when: always
-    paths:
-      - "**/failed_test_shot_*.png" # deprecated use appium_artifact_ instead
-      - "**/appium_artifact_*"
-      - "_packaging"
-      - "*.log"
-    reports:
-      junit: JUnitTestResults.xml
-
 
 macos-nightly:
   extends:
   - macos-build
   - .nightly-job-mixin
+  - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     # still run the tests, since we don't run them for every commit!
@@ -89,8 +79,6 @@ macos-nightly:
       -DBUILD_TESTING=ON
       -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
-  # no artifacts for nightly jobs, they are uploaded to ci-builds
-  artifacts:
 
 # TODO: this pipeline is hidden currently (not implemented)
 .macos-release:

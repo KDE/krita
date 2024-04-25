@@ -399,6 +399,7 @@ void ToolTransformArgs::toXML(QDomElement *e) const
         KisDomUtils::saveValue(&freeEl, "shearY", m_shearY);
 
         // KisDomUtils::saveValue(&freeEl, "boundsRotation", m_boundsRotation);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(m_boundsRotation));
 
         KisDomUtils::saveValue(&freeEl, "keepAspectRatio", m_keepAspectRatio);
         KisDomUtils::saveValue(&freeEl, "flattenedPerspectiveTransform", m_flattenedPerspectiveTransform);

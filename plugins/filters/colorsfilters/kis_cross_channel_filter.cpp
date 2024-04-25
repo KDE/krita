@@ -47,6 +47,7 @@
 
 KisCrossChannelFilterConfiguration::KisCrossChannelFilterConfiguration(int channelCount, const KoColorSpace *cs, KisResourcesInterfaceSP resourcesInterface)
     : KisMultiChannelFilterConfiguration(channelCount, "crosschannel", 1, resourcesInterface)
+    , m_colorSpace(cs)
 {
     init();
 
@@ -82,14 +83,31 @@ const QVector<int> KisCrossChannelFilterConfiguration::driverChannels() const
 void KisCrossChannelFilterConfiguration::setDriverChannels(QVector<int> driverChannels)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(driverChannels.size() == m_curves.size());
+
+    // Clean unused properties
+    if (driverChannels.size() < m_driverChannels.size()) {
+        for (int i = driverChannels.size(); i < m_driverChannels.size(); ++i) {
+            const QString name = QLatin1String("driver") + QString::number(i);
+            KisColorTransformationConfiguration::removeProperty(name);
+        }
+    }
+
     m_driverChannels = driverChannels;
+
+    // Update properties for python
+    for (int i = 0; i < m_driverChannels.size(); ++i) {
+        const QString name = QLatin1String("driver") + QString::number(i);
+        const int value = m_driverChannels[i];
+        KisColorTransformationConfiguration::setProperty(name, value);
+    }
 }
 
 void KisCrossChannelFilterConfiguration::fromXML(const QDomElement& root)
 {
     KisMultiChannelFilterConfiguration::fromXML(root);
 
-    m_driverChannels.resize(m_curves.size());
+    QVector<int> driverChannels;
+    driverChannels.resize(m_curves.size());
 
     QRegExp rx("driver(\\d+)");
     for (QDomElement e = root.firstChildElement(); !e.isNull(); e = e.nextSiblingElement()) {
@@ -99,11 +117,13 @@ void KisCrossChannelFilterConfiguration::fromXML(const QDomElement& root)
             int channel = rx.cap(1).toUShort();
             int driver = KisDomUtils::toInt(e.text());
 
-            if (0 <= channel && channel < m_driverChannels.size()) {
-                m_driverChannels[channel] = driver;
+            if (0 <= channel && channel < driverChannels.size()) {
+                driverChannels[channel] = driver;
             }
         }
     }
+
+    setDriverChannels(driverChannels);
 }
 
 void KisCrossChannelFilterConfiguration::toXML(QDomDocument& doc, QDomElement& root) const
@@ -134,6 +154,73 @@ bool KisCrossChannelFilterConfiguration::compareTo(const KisPropertiesConfigurat
     return otherConfig
         && KisMultiChannelFilterConfiguration::compareTo(rhs)
         && m_driverChannels == otherConfig->m_driverChannels;
+}
+
+void KisCrossChannelFilterConfiguration::setProperty(const QString& name, const QVariant& value)
+{
+    if (name == "nTransfers") {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(value.canConvert<int>());
+
+        const qint32 newChannelCount = value.toInt();
+        const qint32 prevChannelCount = m_channelCount;
+
+        if (newChannelCount == prevChannelCount) {
+            return;
+        }
+
+        KisMultiChannelFilterConfiguration::setProperty(name, value);
+        
+        m_driverChannels.resize(newChannelCount);
+
+        if (newChannelCount > prevChannelCount) {
+            int defaultDriver = 0;
+
+            if (m_colorSpace) {
+                QVector<VirtualChannelInfo> virtualChannels = KisMultiChannelFilter::getVirtualChannels(m_colorSpace);
+                defaultDriver = qMax(0, KisMultiChannelFilter::findChannel(virtualChannels, VirtualChannelInfo::LIGHTNESS));
+            }
+
+            for (qint32 i = prevChannelCount; i < newChannelCount; ++i) {
+                m_driverChannels[i] = defaultDriver;
+
+                const QString name = QLatin1String("driver") + QString::number(i);
+                KisColorTransformationConfiguration::setProperty(name, defaultDriver);
+            }
+        } else {
+            for (qint32 i = newChannelCount; i < prevChannelCount; ++i) {
+                const QString name = QLatin1String("driver") + QString::number(i);
+                KisColorTransformationConfiguration::removeProperty(name);
+            }
+        }
+
+        return;
+    }
+
+    int channelIndex;
+    if (!channelIndexFromDriverPropertyName(name, channelIndex)) {
+        KisMultiChannelFilterConfiguration::setProperty(name, value);
+        return;
+    }
+    if (channelIndex < 0 || channelIndex >= m_channelCount) {
+        return;
+    }
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(value.canConvert<int>());
+
+    const int driver = value.toInt();
+    m_driverChannels[channelIndex] = driver;
+    KisColorTransformationConfiguration::setProperty(name, driver);
+}
+
+bool KisCrossChannelFilterConfiguration::channelIndexFromDriverPropertyName(const QString& name, int& driverIndex) const
+{
+    QRegExp rx("driver(\\d+)");
+    if (rx.indexIn(name, 0) == -1) {
+        return false;
+    }
+
+    driverIndex = rx.cap(1).toUShort();
+    return true;
 }
 
 KisCrossChannelConfigWidget::KisCrossChannelConfigWidget(QWidget * parent, KisPaintDeviceSP dev, Qt::WindowFlags f)

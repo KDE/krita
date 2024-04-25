@@ -68,11 +68,7 @@ public:
 
     virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
-    bool hasProperty(const QString& name) const override;
     void setProperty(const QString& name, const QVariant& value) override;
-    bool getProperty(const QString& name, QVariant & value) const override;
-    QVariant getProperty(const QString& name) const override;
-    QMap<QString, QVariant> getProperties() const override;
 
 protected:
     int m_channelCount {0};

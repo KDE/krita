@@ -72,7 +72,6 @@ KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(int chann
         : KisColorTransformationConfiguration(name, version, resourcesInterface)
         , m_channelCount(channelCount)
 {
-    m_transfers.resize(m_channelCount);
 }
 
 KisMultiChannelFilterConfiguration::KisMultiChannelFilterConfiguration(const KisMultiChannelFilterConfiguration &rhs)
@@ -89,9 +88,17 @@ KisMultiChannelFilterConfiguration::~KisMultiChannelFilterConfiguration()
 void KisMultiChannelFilterConfiguration::init()
 {
     m_curves.clear();
+    
+    KisColorTransformationConfiguration::setProperty("nTransfers", m_channelCount);
+
     for (int i = 0; i < m_channelCount; ++i) {
         m_curves.append(getDefaultCurve());
+
+        const QString name = QLatin1String("curve") + QString::number(i);
+        const QString value = m_curves.last().toString();
+        KisColorTransformationConfiguration::setProperty(name, value);
     }
+
     updateTransfers();
 }
 
@@ -102,11 +109,28 @@ bool KisMultiChannelFilterConfiguration::isCompatible(const KisPaintDeviceSP dev
 
 void KisMultiChannelFilterConfiguration::setCurves(QList<KisCubicCurve> &curves)
 {
+    // Clean unused properties
+    if (curves.size() < m_curves.size()) {
+        for (int i = curves.size(); i < m_curves.size(); ++i) {
+            const QString name = QLatin1String("curve") + QString::number(i);
+            KisColorTransformationConfiguration::removeProperty(name);
+        }
+    }
+
     m_curves.clear();
     m_curves = curves;
     m_channelCount = curves.size();
 
     updateTransfers();
+
+    // Update properties for python
+    KisColorTransformationConfiguration::setProperty("nTransfers", m_channelCount);
+
+    for (int i = 0; i < m_curves.size(); ++i) {
+        const QString name = QLatin1String("curve") + QString::number(i);
+        const QString value = m_curves[i].toString();
+        KisColorTransformationConfiguration::setProperty(name, value);
+    }
 }
 
 void KisMultiChannelFilterConfiguration::updateTransfer(int index)
@@ -255,83 +279,59 @@ bool KisMultiChannelFilterConfiguration::compareTo(const KisPropertiesConfigurat
         && m_transfers == otherConfig->m_transfers;
 }
 
-bool KisMultiChannelFilterConfiguration::hasProperty(const QString& name) const
-{
-    if (KisColorTransformationConfiguration::hasProperty(name)) {
-        return true;
-    }
-    if (name == "nTransfers") {
-        return true;
-    }
-    int curveIndex;
-    if (!curveIndexFromCurvePropertyName(name, curveIndex)) {
-        return false;
-    }
-    return curveIndex >= 0 && curveIndex < m_channelCount;
-}
-
 void KisMultiChannelFilterConfiguration::setProperty(const QString& name, const QVariant& value)
 {
     if (name == "nTransfers") {
-        // No Op
+        KIS_SAFE_ASSERT_RECOVER_RETURN(value.canConvert<int>());
+
+        const qint32 newChannelCount = value.toInt();
+
+        if (newChannelCount == m_channelCount) {
+            return;
+        }
+
+        KisColorTransformationConfiguration::setProperty(name, value);
+
+        m_transfers.resize(newChannelCount);
+        if (newChannelCount > m_channelCount) {
+            for (qint32 i = m_channelCount; i < newChannelCount; ++i) {
+                m_curves.append(getDefaultCurve());
+                updateTransfer(i);
+
+                const QString name = QLatin1String("curve") + QString::number(i);
+                const QString value = m_curves.last().toString();
+                KisColorTransformationConfiguration::setProperty(name, value);
+            }
+        } else {
+            for (qint32 i = newChannelCount; i < m_channelCount; ++i) {
+                m_curves.removeLast();
+
+                const QString name = QLatin1String("curve") + QString::number(i);
+                KisColorTransformationConfiguration::removeProperty(name);
+            }
+        }
+
+        m_channelCount = newChannelCount;
+        invalidateColorTransformationCache();
+
+
         return;
     }
+
     int curveIndex;
     if (!curveIndexFromCurvePropertyName(name, curveIndex) ||
         curveIndex < 0 || curveIndex >= m_channelCount) {
-        KisColorTransformationConfiguration::setProperty(name, value);
         return;
     }
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(value.canConvert<QString>());
+
     m_curves[curveIndex] = KisCubicCurve(value.toString());
     updateTransfer(curveIndex);
     invalidateColorTransformationCache();
-}
 
-bool KisMultiChannelFilterConfiguration::getProperty(const QString& name, QVariant& value) const
-{
-    if (KisColorTransformationConfiguration::hasProperty(name)) {
-        return KisColorTransformationConfiguration::getProperty(name, value);
-    }
-    if (name == "nTransfers") {
-        value = m_curves.size();
-        return true;
-    }
-    int curveIndex;
-    if (!curveIndexFromCurvePropertyName(name, curveIndex) ||
-        curveIndex < 0 || curveIndex >= m_channelCount) {
-        return false;
-    }
-    value = m_curves[curveIndex].toString();
-    return true;
-}
-
-QVariant KisMultiChannelFilterConfiguration::getProperty(const QString& name) const
-{
-    if (KisColorTransformationConfiguration::hasProperty(name)) {
-        return KisColorTransformationConfiguration::getProperty(name);
-    }
-    if (name == "nTransfers") {
-        return m_curves.size();
-    }
-    int curveIndex;
-    if (!curveIndexFromCurvePropertyName(name, curveIndex) ||
-        curveIndex < 0 || curveIndex >= m_channelCount) {
-        return false;
-    }
-    return m_curves[curveIndex].toString();
-}
-
-QMap<QString, QVariant> KisMultiChannelFilterConfiguration::getProperties() const
-{
-    QMap<QString, QVariant> propertyMap = KisColorTransformationConfiguration::getProperties();
-    propertyMap.insert("nTransfers", m_curves.size());
-    for (int i = 0; i < m_curves.size(); ++i) {
-        const QString name = QLatin1String("curve") + QString::number(i);
-        const QString value = m_curves[i].toString();
-        propertyMap.insert(name, value);
-    }
-    return propertyMap;
+    // Query the curve instead of using the value directly, in case of not valid curve string
+    KisColorTransformationConfiguration::setProperty(name, m_curves[curveIndex].toString());
 }
 
 bool KisMultiChannelFilterConfiguration::curveIndexFromCurvePropertyName(const QString& name, int& curveIndex) const

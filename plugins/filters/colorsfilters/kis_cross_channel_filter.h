@@ -67,8 +67,22 @@ public:
 
     virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
+    void setProperty(const QString& name, const QVariant& value) override;
+
 private:
+    const KoColorSpace *m_colorSpace {nullptr};
     QVector<int> m_driverChannels;
+
+    /**
+     * @brief Takes a driver property name with format "driver#", where # is the
+     *        index of the channel and puts the index on the "channelIndex"
+     *        parameter
+     * @param name A string with format "driver#"
+     * @param channelIndex An int where the decoded channel index is stored
+     * @return true if "name" had a valid format
+     * @return false if "name" had an invalid format
+     */
+    bool channelIndexFromDriverPropertyName(const QString& name, int& channelIndex) const;
 };
 
 class KisCrossChannelConfigWidget : public KisMultiChannelConfigWidget

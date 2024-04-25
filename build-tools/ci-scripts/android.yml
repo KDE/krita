@@ -4,7 +4,8 @@
   tags:
     - Linux
   extends:
-    .ci-manual-job-mixin
+    - .ci-manual-job-mixin
+    - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_GITLAB_SERVER: https://invent.kde.org/
@@ -38,18 +39,12 @@
       # could "silently" skip signing due to security reasons
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then python3 -u build-tools/ci-scripts/rename-signed-apk-packages.py --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee apk-rename.log; fi
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform android-$KDECI_ANDROID_ABI --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee apk-publish.log
-  artifacts:
-    name: krita-$CI_COMMIT_REF_SLUG
-    expire_in: 10 days
-    when: always
-    paths:
-      - "_packaging"
-      - "*.log"
 
 .android-nightly-base:
   extends:
     - .android-build-base
     - .nightly-job-mixin
+    - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
@@ -58,8 +53,6 @@
       -DBUILD_TESTING=ON
       -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
-  # no artifacts for nightly jobs, they are uploaded to ci-builds
-  artifacts:
 
 .android-release-base:
   extends:

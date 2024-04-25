@@ -5,6 +5,7 @@ windows-build:
     - Windows
   extends:
     - .ci-always-job-mixin
+    - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
     KDECI_CC_CACHE: "C:\\Gitlab\\Caches\\krita-windows"
@@ -39,25 +40,12 @@ windows-build:
     - python -u build-tools/ci-scripts/build-windows-package.py 2>&1 | Tee-Object -FilePath "build-installers.log"
     - python -u build-tools/ci-scripts/upload-nightly-packages.py --platform windows --folder $CI_PROJECT_DIR 2>&1 | Tee-Object -FilePath "installers-publish.log"
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
-  artifacts:
-    name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME
-    expire_in: 10 days
-    when: always
-    paths:
-      - "krita-*.zip"
-      - "krita-*-setup.exe"
-      - "krita-*.msix"
-      - "*.log"
-    reports:
-      junit: JUnitTestResults.xml
-      coverage_report:
-        coverage_format: cobertura
-        path: CoberturaLcovResults.xml
 
 windows-nightly:
   extends:
     - windows-build
     - .nightly-job-mixin
+    - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
     KDECI_BUILD_TYPE: RelWithDebInfo
@@ -68,9 +56,6 @@ windows-nightly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
-  # no artifacts for nightly jobs, they are uploaded to ci-builds
-  artifacts:
-
 
 windows-release:
   extends:

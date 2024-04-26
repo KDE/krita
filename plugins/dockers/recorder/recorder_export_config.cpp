@@ -65,40 +65,7 @@ const QList<RecorderProfile> defaultProfiles = {
                                             " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
                                             " [final1]setpts=PTS-STARTPTS\n"
 
-                                            "\"\n-stats\n-loglevel error\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "MP4 openh264",   "mp4",  profilePrefix % "-filter_complex \"\n"
-                                        /* Filter documentation https://trac.ffmpeg.org/wiki/FilteringGuide
-                                         * Inside the complex filter command each line is a different filter that is applied to an input stream.
-                                         * The input stream to transform is specified at the start of each line in the format '[$STREAM_NAME]' (ex. [p1], [v1], [v2]).
-                                         * Immediatly following the input stream name will be the filter to apply (ex: trim, scale, loop)
-                                         * Depending on the filter it may or may have various options set
-                                         * After all options for the filter a name can be specified that will correspond to the output stream of the filter. If no name is specified it will be used as the final result for the output file.
-                                         */
-                                        " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
-                                        " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
-                                        " [hold2]setsar=1:1[hold3];\n"
-                                        " [hold3]split=3[preview1][transition1][end1];\n"
-
-                                        " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
-                                        " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-
-                                        " [transition1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[transition2];\n"
-                                        " [transition2]setpts=PTS-STARTPTS[transition3];\n"
-                                        " [transition3]framerate=$OUT_FPS[transition4];\n"
-
-                                        " [0]fps=$OUT_FPS[main1];\n"
-                                        " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
-                                        " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
-                                        " [main3]setsar=1:1[main4];\n"
-                                        " [transition4][main4]xfade=transition=smoothright:duration=$TRANSITION_LENGTH:offset=0[main5];\n"
-
-                                        " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
-                                        " [end2]setpts=PTS-STARTPTS[end3];\n"
-
-                                        " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
-                                        " [final1]setpts=PTS-STARTPTS\n"
-
-                                        "\"\n-stats\n-loglevel error\n-c:v libopenh264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+                                            "\"\n-stats\n-loglevel error\n-c:v $H264_ENCODER\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "GIF",        "gif",  profilePrefix % "-filter_complex \"\n"
                                             " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
                                             " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
@@ -201,32 +168,7 @@ const QList<RecorderProfile> defaultProfiles = {
 
                                             " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
                                             " [final1]setpts=PTS-STARTPTS\n"
-                                            "\"\n-stats\n-loglevel error\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "MP4 openh264 (Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
-                                                        " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
-                                                        " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
-                                                        " [hold2]setsar=1:1[hold3];\n"
-                                                        " [hold3]split=3[preview1][fade1][end1];\n"
-
-                                                        " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
-                                                        " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-
-                                                        " [fade1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[fade2];\n"
-                                                        " [fade2]setpts=PTS-STARTPTS[fade3];\n"
-                                                        " [fade3]fade=out:duration=$TRANSITION_LENGTH:color=white[fade4];\n"
-
-                                                        " [0]fps=$OUT_FPS[main1];\n"
-                                                        " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
-                                                        " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
-                                                        " [main3]setsar=1:1[main4];\n"
-                                                        " [fade4][main4]concat[main5];\n"
-
-                                                        " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
-                                                        " [end2]setpts=PTS-STARTPTS[end3];\n"
-
-                                                        " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
-                                                        " [final1]setpts=PTS-STARTPTS\n"
-                                                        "\"\n-stats\n-loglevel error\n-c:v libopenh264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+                                            "\"\n-stats\n-loglevel error\n-c:v $H264_ENCODER\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "Custom1",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "Custom2",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "Custom3",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },

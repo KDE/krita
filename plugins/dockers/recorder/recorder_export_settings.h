@@ -37,6 +37,7 @@ struct RecorderExportSettings {
     QSize size;
     QString ffmpegPath;
     QString videoDirectory;
+    QString h264Encoder;
     QList<RecorderProfile> profiles;
     QList<RecorderProfile> defaultProfiles;
 

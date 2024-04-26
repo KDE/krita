@@ -25,6 +25,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QImageReader>
 #include <QElapsedTimer>
 
@@ -60,6 +61,7 @@ public:
     QList<RecorderProfile> defaultProfiles;
     int profileIndex = 0;
     QString videoDirectory;
+    QString h264Encoder;
     QString videoFileName;
     QString videoFilePath;
     int framesCount = 0;
@@ -95,7 +97,9 @@ public:
             action = ui->editFfmpegPath->addAction(icon, QLineEdit::TrailingPosition);
         }
         if (success) {
+            const QJsonArray h264Encoders = ffmpegJson["codecs"].toObject()["h264"].toObject()["encoders"].toArray();
             ffmpegPath = ffmpegJson["path"].toString();
+            h264Encoder = h264Encoders.contains("libopenh264") ? "libopenh264" : "libx264";
             ui->editFfmpegPath->setText(ffmpegPath);
             action->setToolTip("Version: "+ffmpegJson["version"].toString()
                                 +(ffmpegJson["codecs"].toObject()["h264"].toObject()["encoding"].toBool() ? "":" (MP4/MKV UNSUPPORTED)")
@@ -266,6 +270,7 @@ public:
                .replace("$INPUT_DIR", settings.inputDirectory)
                .replace("$FIRST_FRAME_SEC", QString::number(previewLength))
                .replace("$TRANSITION_LENGTH", QString::number(transitionLength))
+               .replace("$H264_ENCODER", h264Encoder)
                .replace("$LAST_FRAME_SEC", QString::number(resultLength))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }

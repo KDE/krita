@@ -303,13 +303,16 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
      *
      * See: https://bugs.kde.org/show_bug.cgi?id=445714
      */
-    const bool simpleTranslation =
+    const bool simpleTransform =
         !m_forceSubPixelTranslation &&
-        qFuzzyCompare(rotation, 0.0) &&
-        qFuzzyCompare(xscale, 1.0) &&
-        qFuzzyCompare(yscale, 1.0);
+        (qFuzzyCompare(rotation, 0.0)) &&
+        (qFuzzyCompare(xscale, 1.0) ||
+         qFuzzyCompare(xscale, -1.0)) &&
+        (qFuzzyCompare(yscale, 1.0) ||
+         qFuzzyCompare(yscale, -1.0));
 
-    int progressTotalSteps = qMax(1, 2 * (!simpleTranslation) + (rotQuadrant != 0));
+
+    int progressTotalSteps = qMax(1, 2 * (!simpleTransform) + (rotQuadrant != 0));
     int progressPortion = 100 / progressTotalSteps;
 
     /**
@@ -334,12 +337,31 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
         break;
     }
 
-    if (simpleTranslation) {
+    if (simpleTransform) {
+
+        // Flipping horizontally
+        if (qFuzzyCompare(xscale, -1.0)) {
+            QRect bounds = m_dev->exactBounds();
+            double center_x = bounds.topLeft().x() + bounds.width() / 2.0;
+            xtranslate -= 2 * center_x;
+            mirrorX(m_dev);
+        }
+
+        // Flipping vertically
+        if (qFuzzyCompare(yscale, -1.0)) {
+            QRect bounds = m_dev->exactBounds();
+            double center_y = bounds.topLeft().y() + bounds.height() / 2.0;
+            ytranslate -= 2 * center_y;
+            mirrorY(m_dev);
+        }
+
+        // Simple translation
         const int intXTranslate = qRound(xtranslate);
         const int intYTranslate = qRound(ytranslate);
 
         m_boundRect.translate(intXTranslate, intYTranslate);
         m_dev->moveTo(m_dev->x() + intXTranslate, m_dev->y() + intYTranslate);
+
     } else {
         QTransform SC = QTransform::fromScale(xscale, yscale);
         QTransform R; R.rotateRadians(rotation);

@@ -514,8 +514,6 @@ public:
                 duplicate2.text = contentElement->text;
                 duplicate2.removeText(zero, start);
                 contentElement->text.clear();
-                duplicate.properties.inheritFrom(contentElement->properties);
-                duplicate2.properties.inheritFrom(contentElement->properties);
                 tree.insert(childBegin(contentElement), duplicate);
                 tree.insert(childEnd(contentElement), duplicate2);
             }

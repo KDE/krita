@@ -9,12 +9,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
+# Josep M. Ferrer <txemaq@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-09 12:04+0200\n"
+"PO-Revision-Date: 2024-04-25 12:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -22845,10 +22846,9 @@ msgid "On Middle-Click Drag"
 msgstr "Arrossega amb el clic del mig"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Tots els formats acceptats"
+msgstr "Tots els fitxers admesos"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25632,10 +25632,9 @@ msgstr "Retalla els fotogrames en importar animacions"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Plantilla predeterminada:"
+msgstr "Tipus de fitxer d'exportació predeterminat: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28876,10 +28875,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Activa l'eina de selecció a mà alçada"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Activa l'eina de línies"
+msgstr "Activa amb un altre color"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57796,10 +57794,9 @@ msgstr ""
 "específics"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "En arrossegar s'emplenaran les regions de qualsevol color"
+msgstr "En arrossegar no s'emplenaran les diferents regions"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

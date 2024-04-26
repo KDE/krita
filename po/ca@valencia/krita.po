@@ -9,12 +9,13 @@
 # Xavier Batlle i Pèlach <tevibp@wanadoo.es>, 2006.
 # Rafael Carreras <rcarreras@caliu.cat>, 2006, 2007, 2008, 2009, 2010, 2011.
 # Manuel Tortosa Moreno <manutortosa@gmail.com>, 2009.
+# Josep M. Ferrer <txemaq@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-09 12:04+0200\n"
+"PO-Revision-Date: 2024-04-25 12:47+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -10723,7 +10724,7 @@ msgid ""
 "If checked, layer becomes pinned to the timeline, making it visible even "
 "when inactive."
 msgstr ""
-"Si se selecciona, la capa es fixarà en la línia de temps, fent-la visible "
+"Si està marcada, la capa es fixarà en la línia de temps, fent-la visible "
 "encara que estiga inactiva."
 
 #. i18n: context: text @ Action (insert_keyframe_left), Actions (Animation), ActionCollection (Krita)
@@ -14242,7 +14243,7 @@ msgid ""
 msgstr ""
 "Els regles mostren les posicions horitzontals i verticals del ratolí damunt "
 "de la imatge i es poden utilitzar per a posicionar el ratolí al lloc "
-"correcte del llenç. <p>Desseleccioneu-la per a ocultar els regles.</p>"
+"correcte del llenç. <p>Desmarqueu-la per a ocultar els regles.</p>"
 
 #. i18n: context: toolTip @ Action (view_ruler), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_ruler), Actions (View), ActionCollection (Menu)
@@ -22846,10 +22847,9 @@ msgid "On Middle-Click Drag"
 msgstr "Arrossega amb el clic del mig"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Tots els formats acceptats"
+msgstr "Tots els fitxers admesos"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -24979,7 +24979,7 @@ msgstr "Activa la selecció de contorn antialiàsing"
 #, kde-format
 msgid "If checked, the checkers will move when scrolling the canvas."
 msgstr ""
-"Si se selecciona, els quadros d'escacs es mouran quan es desplace el llenç."
+"Si està marcada, els quadros d'escacs es mouran quan es desplace el llenç."
 
 #. i18n: ectx: property (whatsThis), widget (QCheckBox, chkMoving)
 #: libs/ui/forms/wdgdisplaysettings.ui:576
@@ -25634,10 +25634,9 @@ msgstr "Retalla els fotogrames en importar animacions"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Plantilla predeterminada:"
+msgstr "Tipus de fitxer d'exportació predeterminat: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -25748,7 +25747,7 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
-"Avís: Si seleccioneu esta opció de configuració i els diàlegs de fitxer fan "
+"Avís: Si marqueu esta opció de configuració i els diàlegs de fitxer fan "
 "coses rares, no informeu de cap error."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
@@ -27094,7 +27093,7 @@ msgstr ""
 "<html><head/><body><p>Quan la gravació del rendiment està actiu, Krita "
 "guardarà informació del cronometratge a dins de la carpeta <tt>&lt;"
 "working_dir&gt;/log</tt>. Si experimenteu problemes de rendiment i voleu "
-"ajudar-nos, seleccioneu esta opció i afegiu el contingut del directori a un "
+"ajudar-nos, marqueu esta opció i afegiu el contingut del directori a un "
 "informe d'error.</p></body></html>"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
@@ -27176,8 +27175,8 @@ msgid ""
 "using on-disk storage backend.</p></body></html>"
 msgstr ""
 "<html><head/><body><p>La renderització reduïx l'escalat del fotograma si la "
-"imatge és més gran que el límit proporcionat. Assegureu-vos que seleccioneu "
-"esta opció en utilitzar el dorsal d'emmagatzematge en disc.</p></body></html>"
+"imatge és més gran que el límit proporcionat. Assegureu-vos que marqueu esta "
+"opció en utilitzar el dorsal d'emmagatzematge en disc.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCachedFramesSizeLimit)
 #: libs/ui/forms/wdgperformancesettings.ui:471
@@ -28877,10 +28876,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Activa l'eina de selecció a mà alçada"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Activa l'eina de línies"
+msgstr "Activa amb un altre color"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -30230,9 +30228,9 @@ msgstr ""
 "un fitxer existent.\n"
 "\n"
 "Si en lloc d'açò voleu afegir la capa de fitxer a un document que ja es "
-"troba en una instància en execució de Krita, seleccioneu la casella de "
-"selecció «Permet només una única instància de Krita» en la configuració "
-"(Configuració -> General -> Finestra)."
+"troba en una instància en execució de Krita, marqueu la casella de selecció "
+"«Permet només una única instància de Krita» en la configuració (Configuració "
+"-> General -> Finestra)."
 
 #: libs/ui/KisApplication.cpp:686
 #, kde-format
@@ -34546,7 +34544,7 @@ msgstr "Para"
 #: libs/ui/widgets/kis_transport_controls.cpp:54
 #, kde-format
 msgid "Play/Pause"
-msgstr "Reproducció/Pausa"
+msgstr "Reproduïu o pausa"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:63
 #, kde-format
@@ -38450,7 +38448,7 @@ msgstr "Duplica la clau automàtica"
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:526
 #, kde-format
 msgid "Enable to preserve playback timing."
-msgstr "Seleccioneu-la per a mantindre el cronometratge de la reproducció."
+msgstr "Activeu-la per a mantindre el cronometratge de la reproducció."
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:534
 #, kde-format
@@ -39374,9 +39372,9 @@ msgid ""
 "If enabled, show blending info beside layer names.\n"
 "If disabled, show below layer names (when enough space)."
 msgstr ""
-"Si se selecciona, mostra la informació de la barreja al costat dels noms de "
+"Si està marcada, mostra la informació de la barreja al costat dels noms de "
 "les capes.\n"
-"Si no se selecciona, mostra davall els noms de les capes (si hi ha prou "
+"Si no està marcada, mostra davall els noms de les capes (si hi ha prou "
 "espai)."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:430
@@ -47527,8 +47525,8 @@ msgid ""
 "This option will merge all layers. It is advisable to check this option, "
 "otherwise other applications might not be able to read your file correctly."
 msgstr ""
-"Esta opció fusionarà totes les capes. És aconsellable seleccionar esta "
-"opció, en cas contrari altres aplicacions podrien llegir el fitxer de manera "
+"Esta opció fusionarà totes les capes. És aconsellable marcar esta opció, en "
+"cas contrari altres aplicacions podrien llegir el fitxer de manera "
 "incorrecta."
 
 #. i18n: ectx: property (text), widget (QCheckBox, flatten)
@@ -48475,7 +48473,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:37
 #, kde-format
 msgid "If this is not enabled, only the first frame will be saved."
-msgstr "Si no se selecciona, només es guardarà el primer fotograma."
+msgstr "Si no està marcada, només es guardarà el primer fotograma."
 
 #. i18n: ectx: property (text), widget (QCheckBox, haveAnimation)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:40
@@ -48495,7 +48493,7 @@ msgstr "Opcions de codificació"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:56
 #, kde-format
 msgid "If this is not enabled, the image will be saved losslessly."
-msgstr "Si no se selecciona, la imatge es guardarà sense pèrdua."
+msgstr "Si no està marcada, la imatge es guardarà sense pèrdua."
 
 #. i18n: ectx: property (title), widget (QGroupBox, lossyEncoding)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
@@ -48646,7 +48644,7 @@ msgid ""
 "setting.</p><p>It is advised to leave this option checked for web delivery "
 "and general compatibility with other applications.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si no se selecciona, les capes es rasteritzaran i "
+"<html><head/><body><p>Si no està marcada, les capes es rasteritzaran i "
 "guardaran. No obstant açò, les exportacions d'animacions sempre s'aplanen "
 "independentment d'este paràmetre.</p><p>Es recomana deixar esta opció "
 "marcada per al lliurament per web i per compatibilitat general amb altres "
@@ -48721,7 +48719,7 @@ msgid ""
 "downsampled before compression, and upsampled to original size in the "
 "decoder."
 msgstr ""
-"Establix l'opció de remostreig. Si se selecciona, es reduïx el mostreig dels "
+"Establix l'opció de remostreig. Si s'activa, es reduïx el mostreig dels "
 "canals de color de la imatge abans de la compressió, i s'eleva el mostreig a "
 "la mida original en el descodificador."
 
@@ -48738,9 +48736,9 @@ msgid ""
 "Sets resampling option. If enabled, the image's alpha channel is downsampled "
 "before compression, and upsampled to original size in the decoder."
 msgstr ""
-"Establix l'opció de remostreig. Si se selecciona, es reduïx de mostreig del "
-"canal alfa de la imatge abans de la compressió, i s'eleva el mostreig a la "
-"mida original en el descodificador."
+"Establix l'opció de remostreig. Si s'activa, es reduïx de mostreig del canal "
+"alfa de la imatge abans de la compressió, i s'eleva el mostreig a la mida "
+"original en el descodificador."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPhotonNoise)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:430
@@ -49724,7 +49722,7 @@ msgid ""
 "Indexed PNG images are smaller. If you enabled this option, your image will "
 "be analyzed to see whether it is possible to save as an indexed PNG."
 msgstr ""
-"Les imatges PNG indexades són més xicotetes. Si seleccioneu esta opció, la "
+"Les imatges PNG indexades són més xicotetes. Si marqueu esta opció, la "
 "imatge s'analitzarà per a determinar si és possible guardar-la com a un PNG "
 "indexat."
 
@@ -49936,11 +49934,11 @@ msgid ""
 "files will be decoded in 8-bit color depth with a BT.709 gamma curve and a "
 "99th-percentile white point. This mode is faster than 16-bit decoding.</p>"
 msgstr ""
-"<p>Si se selecciona, tots els fitxers RAW es descodificaran amb una "
+"<p>Si està marcada, tots els fitxers RAW es descodificaran amb una "
 "profunditat de color de 16 bits utilitzant una corba amb interval lineal. "
 "Per a evitar la renderització d'imatges fosques en l'editor, es recomana "
-"utilitzar la gestió del color en este mode.</p><p>Si està desactivada, tots "
-"els fitxers RAW es descodificaran amb una profunditat de color de 8 bits "
+"utilitzar la gestió del color en este mode.</p><p>Si està marcada, tots els "
+"fitxers RAW es descodificaran amb una profunditat de color de 8 bits "
 "utilitzant una corba amb interval BT.709 i un 99% de punt blanc. Este mode "
 "és més ràpid que la descodificació amb 16 bits.</p>"
 
@@ -50422,7 +50420,7 @@ msgid ""
 "accurately, without 'pink clouds' (and blue highlights under tungsten lamps)."
 "</p>"
 msgstr ""
-"<p>Si se selecciona, les imatges amb canals sobreexposats es processaran amb "
+"<p>Si està marcada, les imatges amb canals sobreexposats es processaran amb "
 "més precisió, sense «núvols roses» (i llums blaves intenses en làmpades de "
 "tungstè).</p>"
 
@@ -50474,8 +50472,8 @@ msgid ""
 "automatically computed.</p>"
 msgstr ""
 "<title>Punt negre</title><p>Utilitza un valor de punt negre específic per a "
-"descodificar les imatges RAW. Si heu desseleccionat esta opció, el valor del "
-"punt negre es calcularà automàticament.</p>"
+"descodificar les imatges RAW. Si heu desmarcat esta opció, el valor del punt "
+"negre es calcularà automàticament.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:574
 #, kde-format
@@ -50502,8 +50500,8 @@ msgid ""
 "automatically computed.</p>"
 msgstr ""
 "<title>Punt blanc</title><p>Utilitza un valor de punt blanc específic per a "
-"descodificar les imatges RAW. Si heu desseleccionat esta opció, el valor del "
-"punt blanc es calcularà automàticament.</p>"
+"descodificar les imatges RAW. Si heu desmarcat esta opció, el valor del punt "
+"blanc es calcularà automàticament.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:585
 #, kde-format
@@ -50619,12 +50617,11 @@ msgid ""
 "method may fail. In this case, disable this option and tune manually color "
 "factors.</p>"
 msgstr ""
-"<title>Correcció automàtica de l'aberració cromàtica</title><p>Si se "
-"selecciona esta opció, s'intentarà desplaçar lleugerament els canals de la "
-"imatge i avaluar el canvi en l'aberració cromàtica. Cal tindre en compte que "
-"si la fotografia té un patró blau-roig, el mètode podria fallar. En este "
-"cas, desseleccioneu esta opció i ajusteu manualment els factors dels colors."
-"</p>"
+"<title>Correcció automàtica de l'aberració cromàtica</title><p>Si està "
+"marcada, s'intentarà desplaçar lleugerament els canals de la imatge i "
+"avaluar el canvi en l'aberració cromàtica. Cal tindre en compte que si la "
+"fotografia té un patró blau-roig, el mètode podria fallar. En este cas, "
+"desmarqueu esta opció i ajusteu manualment els factors dels colors.</p>"
 
 #: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
 #, kde-format
@@ -51201,8 +51198,8 @@ msgid ""
 "better.\n"
 "If Lossless is disabled: 0 = smallest size, 100 = largest size."
 msgstr ""
-"Si s'ha seleccionat la compressió sense pèrdua: 0 = ràpida però fitxers "
-"grans, 100 = més lenta però millor.\n"
+"Si s'ha marcat la compressió sense pèrdua: 0 = ràpida però fitxers grans, "
+"100 = més lenta però millor.\n"
 "Si s'ha desactivat la compressió sense pèrdua: 0 = mida més xicoteta, 100 = "
 "mida més gran."
 
@@ -51430,7 +51427,7 @@ msgid ""
 "If enabled, export the compressed picture back. In-loop filtering is not "
 "applied."
 msgstr ""
-"Si se selecciona, s'exportarà la imatge comprimida cap arrere. No s'aplicarà "
+"Si està marcada, s'exportarà la imatge comprimida cap arrere. No s'aplicarà "
 "el filtratge en bucle."
 
 #. i18n: ectx: property (text), widget (QLabel, lblShowCompressed)
@@ -51505,7 +51502,7 @@ msgid ""
 "expected output size from JPEG compression. Generally, the output size will "
 "be similar but the degradation will be lower."
 msgstr ""
-"Si se selecciona, els paràmetres de compressió es tornaran a mapar per a "
+"Si està marcada, els paràmetres de compressió es tornaran a mapar per a "
 "coincidir millor amb la mida esperada d'eixida de la compressió JPEG. "
 "Generalment, la mida d'eixida serà similar, però la degradació serà més "
 "baixa."
@@ -51522,7 +51519,7 @@ msgstr "Emula la mida JPEG"
 #: plugins/impex/webp/kis_wdg_options_webp.ui:641
 #, kde-format
 msgid "If enabled, try and use multithreaded encoding."
-msgstr "Si se selecciona, s'intentarà i utilitzarà la codificació multifil."
+msgstr "Si està marcada, s'intentarà i utilitzarà la codificació multifil."
 
 #. i18n: ectx: property (text), widget (QLabel, lblThreadLevel)
 #: plugins/impex/webp/kis_wdg_options_webp.ui:634
@@ -51537,7 +51534,7 @@ msgstr "Codificació multifil"
 #, kde-format
 msgid "If enabled, reduce memory usage (but increase CPU use)."
 msgstr ""
-"Si se selecciona, es reduirà l'ús de la memòria (però farà augmentar l'ús de "
+"Si està marcada, es reduirà l'ús de la memòria (però farà augmentar l'ús de "
 "la CPU)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLowMemory)
@@ -51572,7 +51569,7 @@ msgid ""
 "Otherwise, discard this invisible RGB information for better compression. "
 "The default is disabled."
 msgstr ""
-"Si se selecciona, es mantindran els valors RGB exactes davall les àrees "
+"Si està marcada, es mantindran els valors RGB exactes davall les àrees "
 "transparents. Altrament, es descartarà esta informació RGB invisible per a "
 "una compressió millor. El valor predeterminat és desactivat."
 
@@ -51589,7 +51586,7 @@ msgstr "Exacte"
 #, kde-format
 msgid "If enabled, allows use of the sharp (and slow) RGB to YUV conversion."
 msgstr ""
-"Si se selecciona, es permetrà l'ús de la conversió RGB a YUV definida (i "
+"Si està marcada, es permetrà l'ús de la conversió RGB a YUV definida (i "
 "lenta)."
 
 #. i18n: ectx: property (text), widget (QLabel, lblUseSharpYUV)
@@ -51989,8 +51986,8 @@ msgid ""
 "When checked, clone from all visible layers. Otherwise, clone from the "
 "active layer."
 msgstr ""
-"Quan se selecciona, es clonarà des de totes les capes visibles. Altrament, "
-"clona des de la capa activa."
+"Quan es marca, clona des de totes les capes visibles. Altrament, clona des "
+"de la capa activa."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkCloneProjection)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:74
@@ -52818,7 +52815,7 @@ msgid ""
 "color. The background of particle is rectangle of grid width and height and "
 "by default it is transparent."
 msgstr ""
-"Si se selecciona, el pinzell de reixa emplena cada fons de partícula amb el "
+"Si està marcada, el pinzell de reixa emplena cada fons de partícula amb el "
 "color de fons. El fons de partícula és el rectangle de l'amplària i alçària "
 "de la quadrícula, i que de manera predeterminada és transparent."
 
@@ -55316,7 +55313,7 @@ msgid ""
 "A PO file can contain translator's comments. If this is checked, the "
 "translations comments will be added as references into the ACBF file."
 msgstr ""
-"Un fitxer PO pot contindre comentaris del traductor. Si se selecciona, els "
+"Un fitxer PO pot contindre comentaris del traductor. Si està marcada, els "
 "comentaris de les traduccions s'afegiran com a referències en el fitxer ACBF."
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:299
@@ -56821,7 +56818,7 @@ msgid ""
 "list. If not, you will need to manually enable the script through the Krita-"
 "&gt;Settings menu entry. </p></body></html>"
 msgstr ""
-"<html><head/><body><p>Si se selecciona, l'script s'activarà automàticament a "
+"<html><head/><body><p>Si està marcada, l'script s'activarà automàticament a "
 "Krita. És a dir, es mostrarà en el menú Scripts o en la llista de "
 "l'acoblador. Si no, caldrà seleccionar-la manualment mitjançant l'entrada de "
 "menú «Configuració» de Krita. </p></body></html>"
@@ -57801,10 +57798,9 @@ msgstr ""
 "específics"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "En arrossegar s'emplenaran les regions de qualsevol color"
+msgstr "En arrossegar no s'emplenaran les diferents regions"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format
@@ -58179,8 +58175,8 @@ msgid ""
 "<nobr>Checking this box will add a new color swatch</nobr> to a palette each "
 "time you sample a color."
 msgstr ""
-"<nobr>En seleccionar esta casella s'afegirà una mostra nova de color</nobr> "
-"a la paleta cada vegada que trieu un color."
+"<nobr>Quan es marca esta casella s'afegirà una mostra nova de color</nobr> a "
+"la paleta cada vegada que trieu un color."
 
 #. i18n: ectx: property (text), widget (QCheckBox, cbPalette)
 #: plugins/tools/basictools/wdgcolorsampler.ui:221
@@ -60423,15 +60419,15 @@ msgstr "Llaç"
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:553
 #, kde-format
 msgid "Enable to fill opposite regions instead"
-msgstr "Activeu per a emplenar regions oposades"
+msgstr "Marqueu-la per a emplenar regions oposades"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:554
 #, kde-format
 msgid ""
 "Enable to also fill shapes that touch the contour of the enclosing region"
 msgstr ""
-"Seleccioneu-la per a emplenar també les formes que toquen el contorn de la "
-"regió delimitada"
+"Activeu-la per a emplenar també les formes que toquen el contorn de la regió "
+"delimitada"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:587
 #, kde-format

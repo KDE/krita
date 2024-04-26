@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-23 00:51+0300\n"
+"PO-Revision-Date: 2024-04-25 13:42+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -22791,10 +22791,9 @@ msgid "On Middle-Click Drag"
 msgstr "Orta Tıkla Sürükle"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Desteklenen tüm biçimler"
+msgstr "Desteklenen tüm dosyalar"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25565,10 +25564,9 @@ msgstr "Canlandırmaları içe aktarırken kareleri kırp"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Öntanımlı şablon:"
+msgstr "Öntanımlı dışa aktarma dosya türü:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28785,10 +28783,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Serbest Seçim Aracını Etkinleştir"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Çizgi Aracını Etkinleştir"
+msgstr "Diğer Renkle Etkinleştir"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57518,10 +57515,9 @@ msgstr ""
 "doldur"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Sürüklemek, herhangi bir renkli bölgeleri dolduracaktır"
+msgstr "Sürüklemek, farklı bölgeleri doldurmayacaktır"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

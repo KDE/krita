@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-09 15:30+0300\n"
+"PO-Revision-Date: 2024-04-25 08:05+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -23099,10 +23099,9 @@ msgid "On Middle-Click Drag"
 msgstr "Перетягування із затисканням середньої кнопки"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Усі підтримувані формати"
+msgstr "усі підтримувані файли"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25894,10 +25893,9 @@ msgstr "Обрізати кадри при імпортуванні анімац
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Export File Name : "
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Назва файла для експортування: "
+msgstr "Типовий тип файлів для експортування: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -29152,10 +29150,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Задіяти інструмент «Довільне позначення»"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Задіяти інструмент «Пряма»"
+msgstr "Задіяти з іншим кольором"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -58353,10 +58350,9 @@ msgstr ""
 "кольоровими мітками"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Перетягування заповнюватиме області будь-якого кольору"
+msgstr "Перетягування не заповнюватиме різні області"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

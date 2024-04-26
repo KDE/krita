@@ -72,6 +72,8 @@ CollapsibleGroupProperty {
             text: i18nc("@label:spinbox", "Weight:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
+            Layout.preferredWidth: implicitWidth;
+            elide: Text.ElideRight;
         }
 
         SpinBox {
@@ -91,6 +93,8 @@ CollapsibleGroupProperty {
             text: i18nc("@label:spinbox", "Width:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
+            Layout.preferredWidth: implicitWidth;
+            elide: Text.ElideRight;
         }
 
         SpinBox {
@@ -109,6 +113,8 @@ CollapsibleGroupProperty {
             text: i18nc("@label:listbox", "Slant:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
+            Layout.preferredWidth: implicitWidth;
+            elide: Text.ElideRight;
         }
 
         ComboBox {

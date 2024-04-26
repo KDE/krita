@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
 
 TextPropertyBase {
-    propertyName: i18nc("@label:listbox", "Alignment Baseline:");
+    propertyName: i18nc("@label:listbox", "Alignment Baseline");
     property int baselineSelection;
 
     onPropertiesUpdated: {
@@ -38,6 +38,8 @@ TextPropertyBase {
 
         Label {
             text: propertyName;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
         }
 
 

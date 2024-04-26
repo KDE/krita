@@ -67,6 +67,8 @@ TextPropertyBase {
         Label {
             text: propertyName;
             Layout.columnSpan: 2;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
         }
 
 
@@ -131,6 +133,9 @@ TextPropertyBase {
         }
         Label {
             text: i18nc("@label:listbox", "Style:")
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
         }
 
         ComboBox {

@@ -47,7 +47,9 @@ TextPropertyBase {
         }
 
         Label {
-            text: propertyName
+            text: propertyName;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
             Layout.columnSpan: 2;
         }
 
@@ -59,6 +61,7 @@ TextPropertyBase {
 
         ComboBox {
             Layout.columnSpan: 2;
+            Layout.fillWidth: true;
             model: [
                 { text: i18nc("@label:inlistbox", "None"), value: KoSvgText.ShiftNone},
                 { text: i18nc("@label:inlistbox", "Length"), value: KoSvgText.ShiftLengthPercentage},
@@ -82,7 +85,8 @@ TextPropertyBase {
         }
 
         ComboBox {
-            model: ["Pt", "Em", "Ex"]
+            model: ["Pt", "Em", "Ex"];
+            Layout.fillWidth: true;
         }
     }
 }

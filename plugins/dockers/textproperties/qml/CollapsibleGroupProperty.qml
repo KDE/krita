@@ -53,6 +53,8 @@ TextPropertyBase {
                 height: parent.height;
                 verticalAlignment: Text.AlignVCenter
                 color: sysPalette.text;
+                elide: Text.ElideRight;
+                Layout.fillWidth: true;
 
             }
         }

@@ -37,6 +37,8 @@ TextPropertyBase {
 
         Label {
             text: propertyName;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
         }
 
 

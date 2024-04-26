@@ -59,7 +59,9 @@ CollapsibleGroupProperty {
         }
         Label {
             text: i18nc("@label:listbox", "Text Align:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+            elide: Text.ElideRight;
+            Layout.maximumWidth: implicitWidth;
         }
 
         ComboBox {
@@ -84,7 +86,9 @@ CollapsibleGroupProperty {
         }
         Label {
             text: i18nc("@label:listbox", "Align Last:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+            elide: Text.ElideRight;
+            Layout.preferredWidth: implicitWidth;
         }
 
         ComboBox {
@@ -110,7 +114,9 @@ CollapsibleGroupProperty {
         }
         Label {
             text: i18nc("@label:listbox", "Text Anchor:")
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
+            elide: Text.ElideRight;
+            Layout.preferredWidth: implicitWidth;
         }
 
         ComboBox {

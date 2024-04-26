@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import org.krita.flake.text 1.0
 
 Column {
@@ -22,9 +23,7 @@ Column {
     property string toolTip;
     property var searchTerms: [];
 
-    Rectangle {
-        color: sysPalette.base;
-        height: 1;
+    MenuSeparator {
         width: parent.width;
     }
 }

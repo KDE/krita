@@ -47,6 +47,7 @@ TextPropertyBase {
         Label {
             text: propertyName
             Layout.columnSpan: 2;
+            elide: Text.ElideRight;
             Layout.fillWidth: true;
         }
 
@@ -70,6 +71,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: tabSizeUnit = currentValue;
+            Layout.fillWidth: true;
         }
 
     }

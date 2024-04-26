@@ -53,17 +53,11 @@ TextPropertyBase {
 
         Label {
             text: propertyName;
-            Layout.columnSpan: 2;
-        }
-
-
-        Item {
-            width: firstColumnWidth;
-            height: 1;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
         }
 
         CheckBox {
-            Layout.columnSpan: 2;
             text: i18nc("@option:check", "Normal")
             id: lineHeightNormalCbx;
             onCheckedChanged: {

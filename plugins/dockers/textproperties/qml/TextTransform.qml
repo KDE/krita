@@ -55,6 +55,8 @@ TextPropertyBase {
         Label {
             text: propertyName;
             Layout.columnSpan: 2;
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
         }
 
 

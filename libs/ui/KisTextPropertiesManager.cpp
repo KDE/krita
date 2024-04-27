@@ -65,6 +65,7 @@ void KisTextPropertiesManager::setTextPropertiesInterface(KoSvgTextPropertiesInt
     d->interface = interface;
     if (d->interface) {
         connect(d->interface, SIGNAL(textSelectionChanged()), this, SLOT(slotInterfaceSelectionChanged()));
+        slotInterfaceSelectionChanged();
     }
 }
 

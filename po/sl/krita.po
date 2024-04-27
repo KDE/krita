@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-10 15:09+0200\n"
+"PO-Revision-Date: 2024-04-26 18:47+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -22795,8 +22795,7 @@ msgid "On Middle-Click Drag"
 msgstr "ob srednjem kliku povleci"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
 msgstr "Vse podprte vrste datotek"
 
@@ -25569,10 +25568,9 @@ msgstr "Obreži sličice pri uvozu animacij"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Privzeta predloga:"
+msgstr "Privzeta vrsta datotek za izvoz: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28802,10 +28800,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Aktiviraj orodje Prostoročni izbor"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Aktiviraj orodje Črta"
+msgstr "Aktiviraj z drugo barvo"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57604,10 +57601,9 @@ msgstr ""
 "Zapolni območja, nastala s spajanjem plasti z določenimi barvnimi oznakami"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Vlečenje bo zapolnilo področja poljubne barve"
+msgstr "Vlečenje ne bo zapolnilo različnih področij"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

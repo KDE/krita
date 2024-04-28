@@ -66,14 +66,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-10 00:25+0100\n"
+"PO-Revision-Date: 2024-04-27 12:14+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 24.02.1\n"
+"X-Generator: Lokalize 24.02.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -22871,10 +22871,9 @@ msgid "On Middle-Click Drag"
 msgstr "Al arrastrar con el botón central"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Todos los formatos permitidos"
+msgstr "Todos los archivos permitidos"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25672,10 +25671,9 @@ msgstr "Recortar marcos al importar animaciones"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default &printer profile:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Perfil predeterminado de la im&presora:"
+msgstr "Tipo de archivo predeterminado para exportar:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28913,10 +28911,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Activar la herramienta de selección a mano alzada"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Activar la herramienta de línea"
+msgstr "Activar con otro color"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57863,10 +57860,9 @@ msgstr ""
 "etiquetas de color especificadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "El arrastre rellenará las regiones con cualquier color"
+msgstr "El arrastre no rellenará regiones diferentes"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

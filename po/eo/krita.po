@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-23 21:12+0100\n"
+"PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -22814,10 +22814,9 @@ msgid "On Middle-Click Drag"
 msgstr "Sur Meza-Alklako Trenado"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Ĉiuj subtenataj formatoj"
+msgstr "Ĉiuj Subtenataj Dosieroj"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25584,10 +25583,9 @@ msgstr "Tondi kadrojn dum importado de animacioj"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Defaŭlta ŝablono:"
+msgstr "Defaŭlta Dosiertipo de Elporto:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28801,10 +28799,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Aktivigi Libermanan Elektilon"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Aktivigi Linian Ilon"
+msgstr "Aktivigi kun Alia Koloro"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57529,10 +57526,9 @@ msgstr ""
 "etikedoj"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Trenado plenigos regionojn de ajna koloro"
+msgstr "Trenado ne plenigos malsamajn regionojn"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

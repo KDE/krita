@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-21 10:12+0200\n"
+"PO-Revision-Date: 2024-04-27 10:23+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -22870,10 +22870,9 @@ msgid "On Middle-Click Drag"
 msgstr "Ao arrastrar un clic central"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Todos os formatos compatíbeis"
+msgstr "Todos os ficheiros admitidos"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25649,10 +25648,9 @@ msgstr "Recortar os fotogramas ao importar animacións"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default &printer profile:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "perfil da &impresora por defecto:"
+msgstr "Tipo de ficheiro de exportación predeterminado: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28881,10 +28879,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Activar a ferramenta de selección a man alzada"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Activar a ferramenta de liñas"
+msgstr "Activar con outra cor"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57714,10 +57711,9 @@ msgstr ""
 "indicadas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Arrastrar encherá as rexións de calquera cor"
+msgstr "Arrastrar non encherá rexións distintas"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

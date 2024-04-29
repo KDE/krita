@@ -25,6 +25,7 @@ KisColorSamplerStrokeStrategy::KisColorSamplerStrokeStrategy(int radius, int ble
       m_d(new Private)
 {
     setSupportsWrapAroundMode(true);
+    setClearsRedoOnStart(false);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
     m_d->radius = qMax(1, qRound(radius * KisLodTransform::lodToScale(lod)));

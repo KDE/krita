@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-02 02:58+0000\n"
-"PO-Revision-Date: 2024-03-28 08:18+0100\n"
+"PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -28812,7 +28812,7 @@ msgstr "Montri Ŝprucfenestraĵon"
 #: libs/ui/input/KisPopupWidgetAction.cpp:45
 #, kde-format
 msgid "Show the current tool's popup widget."
-msgstr "Montri la ŝprucfenestaĵon de la nuna ilo."
+msgstr "Montri la ŝprucfenestraĵon de la nuna ilo."
 
 #: libs/ui/input/KisTouchGestureAction.cpp:17
 #, kde-format
@@ -29966,7 +29966,7 @@ msgstr ""
 "malfermi ekzistantan dosieron.\n"
 "\n"
 "Se vi anstataŭe volas aldoni la dosiertavolon al dokumenton en jam "
-"funkcianta kazo de Krita, marku la markobutonon \"Permesi nur unu ekzemplon "
+"funkcianta kazo de Krita, marku la markokeston \"Permesi nur unu ekzemplon "
 "de Krita\" en la agordoj (Agordoj -> Ĝenerala -> Fenestro)."
 
 #: libs/ui/KisApplication.cpp:685
@@ -38894,13 +38894,13 @@ msgstr ""
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
-msgstr "Markobutono por Elektado de Tavoloj"
+msgstr "Markokesto por Elektado de Tavoloj"
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:427
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
-msgstr "Montri markobutonon por elekti/malelekti tavolojn."
+msgstr "Montri markokeston por elekti/malelekti tavolojn."
 
 #: plugins/dockers/layerdocker/LayerBox.cpp:992
 msgctxt "(qtundo-format)"

@@ -186,6 +186,18 @@ cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libharfbuzz.so.0* $APPDIR/usr/l
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfribidi.so.0* $APPDIR/usr/lib/
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfreetype.so.6* $APPDIR/usr/lib/
 
+## For some reason linuxdeployqt fails to deploy QtQuick.Layouts library into
+## the AppImage, so just copy it manually for now
+##
+## See the following related bugs for details:
+##     * https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues/1
+##     * https://github.com/probonopd/linuxdeployqt/issues/25
+
+if [ -d $DEPS_INSTALL_PREFIX/qml/QtQuick/Layouts ]; then
+    mkdir -p $APPDIR/usr/qml/QtQuick/Layouts
+    rsync -prul $DEPS_INSTALL_PREFIX/qml/QtQuick/Layouts $APPDIR/usr/qml/QtQuick/
+fi
+
 ## == MLT Dependencies and Resources ==
 cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt-7
 cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt-7

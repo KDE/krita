@@ -9,7 +9,7 @@ Options:
     use-asan: False
     run-gcovr: False
     per-test-timeout: 4:00
-    cmake-options: '-DKRITA_ENABLE_PCH=OFF'
+    cmake-options: '-DKRITA_ENABLE_PCH=OFF -DFOUNDATION_BUILD=ON'
     tests-run-in-parallel: True
     ccache-large-cache: True
     run-cppcheck: True

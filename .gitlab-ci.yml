@@ -22,6 +22,13 @@ variables:
       when: never
     - when: always
 
+.ci-release-job-mixin:
+  interruptible: false
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG
+      when: manual
+
+
 .ci-artifacts-with-packages-mixin:
   artifacts:
     name: krita-$CI_COMMIT_REF_SLUG-$CI_COMMIT_REF_NAME

@@ -57,6 +57,7 @@
 .android-release-base:
   extends:
   - .android-build-base
+  - .ci-release-job-mixin
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "release"
@@ -148,3 +149,31 @@ android-build-armeabi-v7a-nightly:
   extends:
   - .android-nightly-base
   - .android-armeabi-v7a-mixin
+
+android-build-x86_64-release:
+  extends:
+  - .android-release-base
+  - .android-x86_64-mixin
+
+android-build-arm64-v8a-release:
+  extends:
+  - .android-release-base
+  - .android-arm64-v8a-mixin
+
+android-build-armeabi-v7a-release:
+  extends:
+  - .android-release-base
+  - .android-armeabi-v7a-mixin
+
+android-build-appbundle-release:
+  extends:
+    - android-build-appbundle
+    - .ci-release-job-mixin
+  interruptible: false
+  needs:
+    - job: android-build-armeabi-v7a-release
+      artifacts: true
+    - job: android-build-arm64-v8a-release
+      artifacts: true
+    - job: android-build-x86_64-release
+      artifacts: true

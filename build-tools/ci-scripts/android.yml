@@ -60,7 +60,7 @@
   interruptible: false
   variables:
     KRITACI_ANDROID_PACKAGE_TYPE: "release"
-    KRITACI_RELEASE: 1
+    KRITACI_ANDROID_RELEASE_MODE: 1
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF

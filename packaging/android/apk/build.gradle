@@ -182,7 +182,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 25
+    def versionRelease  = 26 // 5.2.2.1 was released with version '26', increment on releasing
 
     defaultConfig {
         targetSdkVersion 33

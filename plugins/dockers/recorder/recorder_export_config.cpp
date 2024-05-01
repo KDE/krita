@@ -30,7 +30,7 @@ const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
 const QString keyEditedProfiles = "recorder_export/editedprofiles";
 
-const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n-framerate $IN_FPS\n-start_number $FRAMES-1\n-i \"$INPUT_DIR%07d.$EXT\"\n";
+const QString profilePrefix = "-reinit_filter 0\n-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n-framerate $OUT_FPS\n-start_number $FRAMES-1\n-i \"$INPUT_DIR%07d.$EXT\"\n";
 
 const QList<RecorderProfile> defaultProfiles = {
     { "MP4 x264",   "mp4",  profilePrefix % "-filter_complex \"\n"
@@ -41,173 +41,134 @@ const QList<RecorderProfile> defaultProfiles = {
        * Depending on the filter it may or may have various options set
        * After all options for the filter a name can be specified that will correspond to the output stream of the filter. If no name is specified it will be used as the final result for the output file.
        */
-                                            " [0]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=$FRAMES[main1];\n"
-                                            " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                            " [main2]loop=1:size=1:start=0[main3];\n"
-                                            " [main3]setpts=PTS-STARTPTS[main4];\n"
+                                            " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
+                                            " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
+                                            " [hold2]setsar=1:1[hold3];\n"
+                                            " [hold3]split=3[preview1][transition1][end1];\n"
 
-                                            " [1]split [first1][transition1];\n"
-                                            " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                            " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                            " [transition3]setpts=PTS-STARTPTS[transition4];\n"
-
-                                            " [transition4][main4]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                            " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                            " [v2]trim=start_frame=1[v3];\n"
-
-                                            " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                            " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
+                                            " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
                                             " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                            " [preview3][v3] concat [final1];\n"
-                                            " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                            " [final2] trim=start_frame=1\n"
 
-                                            "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "MP4 openh264",   "mp4",  profilePrefix % "-filter_complex \"\n"
-                                        /* Filter documentation https://trac.ffmpeg.org/wiki/FilteringGuide
-                                         * Inside the complex filter command each line is a different filter that is applied to an input stream.
-                                         * The input stream to transform is specified at the start of each line in the format '[$STREAM_NAME]' (ex. [p1], [v1], [v2]).
-                                         * Immediatly following the input stream name will be the filter to apply (ex: trim, scale, loop)
-                                         * Depending on the filter it may or may have various options set
-                                         * After all options for the filter a name can be specified that will correspond to the output stream of the filter. If no name is specified it will be used as the final result for the output file.
-                                         */
-                                        " [0]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=$FRAMES[main1];\n"
-                                        " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                        " [main2]loop=1:size=1:start=0[main3];\n"
-                                        " [main3]setpts=PTS-STARTPTS[main4];\n"
+                                            " [transition1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[transition2];\n"
+                                            " [transition2]setpts=PTS-STARTPTS[transition3];\n"
+                                            " [transition3]framerate=$OUT_FPS[transition4];\n"
 
-                                        " [1]split [first1][transition1];\n"
-                                        " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                        " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                        " [transition3]setpts=PTS-STARTPTS[transition4];\n"
+                                            " [0]fps=$OUT_FPS[main1];\n"
+                                            " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
+                                            " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
+                                            " [main3]setsar=1:1[main4];\n"
+                                            " [transition4][main4]xfade=transition=smoothright:duration=$TRANSITION_LENGTH:offset=0[main5];\n"
 
-                                        " [transition4][main4]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                        " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                        " [v2]trim=start_frame=1[v3];\n"
+                                            " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
+                                            " [end2]setpts=PTS-STARTPTS[end3];\n"
 
-                                        " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                        " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
-                                        " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                        " [preview3][v3] concat [final1];\n"
-                                        " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                        " [final2] trim=start_frame=1\n"
+                                            " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
+                                            " [final1]setpts=PTS-STARTPTS\n"
 
-                                        "\"\n-c:v libopenh264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+                                            "\"\n-stats\n-loglevel error\n-c:v $H264_ENCODER\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "GIF",        "gif",  profilePrefix % "-filter_complex \"\n"
-                                            " [0]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=$FRAMES[main1];\n"
-                                            " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                            " [main2]loop=1:size=1:start=0[main3];\n"
-                                            " [main3]setpts=PTS-STARTPTS[main4];\n"
-                                            " [1]split [first1][transition1];\n"
-                                            " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                            " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                            " [transition3]setpts=PTS-STARTPTS[transition4];\n"
-                                            " [transition4][main4]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                            " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                            " [v2]trim=start_frame=1[v3];\n"
-                                            " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                            " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
+                                            " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
+                                            " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
+                                            " [hold2]setsar=1:1[hold3];\n"
+                                            " [hold3]split=3[preview1][transition1][end1];\n"
+
+                                            " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
                                             " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                            " [preview3][v3] concat [final1];\n"
-                                            " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                            " [final2] trim=start_frame=1[final3];\n"
-                                            " [final3]split[final4][final5];\n"
-                                            " [final4]palettegen[palettegen];\n"
-                                            " [final5][palettegen]paletteuse\"\n-loop -1" },
+
+                                            " [transition1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[transition2];\n"
+                                            " [transition2]setpts=PTS-STARTPTS[transition3];\n"
+                                            " [transition3]framerate=$OUT_FPS[transition4];\n"
+
+                                            " [0]fps=$OUT_FPS[main1];\n"
+                                            " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
+                                            " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
+                                            " [main3]setsar=1:1[main4];\n"
+                                            " [transition4][main4]xfade=transition=smoothright:duration=$TRANSITION_LENGTH:offset=0[main5];\n"
+
+                                            " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
+                                            " [end2]setpts=PTS-STARTPTS[end3];\n"
+
+                                            " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
+                                            " [final1]setpts=PTS-STARTPTS[final2];\n"
+                                            " [final2]split[final3][final4];\n"
+                                            " [final3]palettegen[palettegen];\n"
+                                            " [final4][palettegen]paletteuse\n"
+                                            "\"\n-stats\n-loglevel error\n-r $OUT_FPS" },
     { "Matroska",   "mkv",  profilePrefix % "-filter_complex \"\n"
-                                            " [0]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=$FRAMES[main1];\n"
-                                            " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                            " [main2]loop=1:size=1:start=0[main3];\n"
-                                            " [main3]setpts=PTS-STARTPTS[main4];\n"
+                                            " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
+                                            " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
+                                            " [hold2]setsar=1:1[hold3];\n"
+                                            " [hold3]split=3[preview1][transition1][end1];\n"
 
-                                            " [1]split [first1][transition1];\n"
-                                            " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                            " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                            " [transition3]setpts=PTS-STARTPTS[transition4];\n"
-
-                                            " [transition4][main4]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                            " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                            " [v2]trim=start_frame=1[v3];\n"
-
-                                            " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                            " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
+                                            " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
                                             " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                            " [preview3][v3] concat [final1];\n"
-                                            " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                            " [final2] trim=start_frame=1\n"
-                                            "\"\n-r $OUT_FPS" },
+
+                                            " [transition1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[transition2];\n"
+                                            " [transition2]setpts=PTS-STARTPTS[transition3];\n"
+                                            " [transition3]framerate=$OUT_FPS[transition4];\n"
+
+                                            " [0]fps=$OUT_FPS[main1];\n"
+                                            " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
+                                            " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
+                                            " [main3]setsar=1:1[main4];\n"
+                                            " [transition4][main4]xfade=transition=smoothright:duration=$TRANSITION_LENGTH:offset=0[main5];\n"
+
+                                            " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
+                                            " [end2]setpts=PTS-STARTPTS[end3];\n"
+
+                                            " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
+                                            " [final1]setpts=PTS-STARTPTS\n"
+                                            "\"\n-stats\n-loglevel error\n-pix_fmt yuv420p\n-r $OUT_FPS" },
     { "WebM",       "webm", profilePrefix % "-filter_complex \"\n"
-                                            " [0]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=$FRAMES[main1];\n"
-                                            " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                            " [main2]loop=1:size=1:start=0[main3];\n"
-                                            " [main3]setpts=PTS-STARTPTS[main4];\n"
+                                            " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
+                                            " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
+                                            " [hold2]setsar=1:1[hold3];\n"
+                                            " [hold3]split=3[preview1][transition1][end1];\n"
 
-                                            " [1]split [first1][transition1];\n"
-                                            " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                            " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                            " [transition3]setpts=PTS-STARTPTS[transition4];\n"
-
-                                            " [transition4][main4]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                            " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                            " [v2]trim=start_frame=1[v3];\n"
-
-                                            " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                            " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
+                                            " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
                                             " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                            " [preview3][v3] concat [final1];\n"
-                                            " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                            " [final2] trim=start_frame=1\n"
-                                            "\"\n-r $OUT_FPS" },
+
+                                            " [transition1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[transition2];\n"
+                                            " [transition2]setpts=PTS-STARTPTS[transition3];\n"
+                                            " [transition3]framerate=$OUT_FPS[transition4];\n"
+
+                                            " [0]fps=$OUT_FPS[main1];\n"
+                                            " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
+                                            " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
+                                            " [main3]setsar=1:1[main4];\n"
+                                            " [transition4][main4]xfade=transition=smoothright:duration=$TRANSITION_LENGTH:offset=0[main5];\n"
+
+                                            " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
+                                            " [end2]setpts=PTS-STARTPTS[end3];\n"
+
+                                            " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
+                                            " [final1]setpts=PTS-STARTPTS\n"
+                                            "\"\n-stats\n-loglevel error\n-r $OUT_FPS" },
     { "MP4 x264 (Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
-                                            " [1]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=0[fade1];\n"
-                                            " [fade1]fps=$OUT_FPS[fade2];\n"
-                                            " [fade2]fade=type=in:color=white:start_time=0.7:duration=0.7[fade3];\n"
-                                            " [fade3]setsar=1[fade4];\n"
-                                            " [0]setsar=1[main0];\n"
-                                            " [main0][fade4] concat=n=2:v=1[main1];\n"
-                                            " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                            " [main2]loop=1:size=1:start=0[main3];\n"
-                                            " [main3]setpts=PTS-STARTPTS[main4];\n"
-                                            " [main4]fps=fps=$IN_FPS[main5];\n"
-                                            " [1]split [first1][transition1];\n"
-                                            " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                            " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                            " [transition3]setpts=PTS-STARTPTS[transition4];\n"
-                                            " [transition4][main5]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                            " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                            " [v2]trim=start_frame=1[v3];\n"
-                                            " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                            " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
+                                            " [1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))'[hold1];\n"
+                                            " [hold1]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2[hold2];\n"
+                                            " [hold2]setsar=1:1[hold3];\n"
+                                            " [hold3]split=3[preview1][fade1][end1];\n"
+
+                                            " [preview1]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[preview2];\n"
                                             " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                            " [preview3][v3] concat [final1];\n"
-                                            " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                            " [final2] trim=start_frame=1\n"
-                                            "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "MP4 openh264 (Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
-                                                       " [1]loop=$LAST_FRAME_SEC*$IN_FPS:size=1:start=0[fade1];\n"
-                                                       " [fade1]fps=$OUT_FPS[fade2];\n"
-                                                       " [fade2]fade=type=in:color=white:start_time=0.7:duration=0.7[fade3];\n"
-                                                       " [fade3]setsar=1[fade4];\n"
-                                                       " [0]setsar=1[main0];\n"
-                                                       " [main0][fade4] concat=n=2:v=1[main1];\n"
-                                                       " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
-                                                       " [main2]loop=1:size=1:start=0[main3];\n"
-                                                       " [main3]setpts=PTS-STARTPTS[main4];\n"
-                                                       " [main4]fps=fps=$IN_FPS[main5];\n"
-                                                       " [1]split [first1][transition1];\n"
-                                                       " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
-                                                       " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$IN_FPS, 0)':size=1:start=1[transition3];\n"
-                                                       " [transition3]setpts=PTS-STARTPTS[transition4];\n"
-                                                       " [transition4][main5]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
-                                                       " [v1]setpts=PTS-STARTPTS[v2];\n"
-                                                       " [v2]trim=start_frame=1[v3];\n"
-                                                       " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$IN_FPS) - 0.5*$IN_FPS, $FIRST_FRAME_SEC*$IN_FPS)':size=1:start=1[preview1];\n"
-                                                       " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
-                                                       " [preview2]setpts=PTS-STARTPTS[preview3];\n"
-                                                       " [preview3][v3] concat [final1];\n"
-                                                       " [final1] setpts=PTS-STARTPTS[final2];\n"
-                                                       " [final2] trim=start_frame=1\n"
-                                                       "\"\n-c:v libopenh264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+
+                                            " [fade1]tpad=stop_mode=clone:stop_duration=$TRANSITION_LENGTH[fade2];\n"
+                                            " [fade2]setpts=PTS-STARTPTS[fade3];\n"
+                                            " [fade3]fade=out:duration=$TRANSITION_LENGTH:color=white[fade4];\n"
+
+                                            " [0]fps=$OUT_FPS[main1];\n"
+                                            " [main1]scale='min($WIDTH, iw*($HEIGHT/ih))':'min($HEIGHT, ih*($WIDTH/iw))':eval=frame[main2];\n"
+                                            " [main2]pad=$WIDTH:$HEIGHT:(ow-iw)/2:(oh-ih)/2:eval=frame[main3];\n"
+                                            " [main3]setsar=1:1[main4];\n"
+                                            " [fade4][main4]concat[main5];\n"
+
+                                            " [end1]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[end2];\n"
+                                            " [end2]setpts=PTS-STARTPTS[end3];\n"
+
+                                            " [preview3][main5][end3]concat=n=3:v=1:a=0[final1];\n"
+                                            " [final1]setpts=PTS-STARTPTS\n"
+                                            "\"\n-stats\n-loglevel error\n-c:v $H264_ENCODER\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "Custom1",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "Custom2",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "Custom3",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },

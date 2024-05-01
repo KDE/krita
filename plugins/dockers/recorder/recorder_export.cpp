@@ -26,6 +26,7 @@
 #include <QCloseEvent>
 #include <QMessageBox>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QImageReader>
 #include <QElapsedTimer>
 
@@ -80,7 +81,9 @@ public:
             action = ui->editFfmpegPath->addAction(icon, QLineEdit::TrailingPosition);
         }
         if (success) {
+            const QJsonArray h264Encoders = ffmpegJson["codecs"].toObject()["h264"].toObject()["encoders"].toArray();
             settings->ffmpegPath = ffmpegJson["path"].toString();
+            settings->h264Encoder = h264Encoders.contains("libopenh264") ? "libopenh264" : "libx264";
             ui->editFfmpegPath->setText(settings->ffmpegPath);
             action->setToolTip("Version: "+ffmpegJson["version"].toString()
                                 +(ffmpegJson["codecs"].toObject()["h264"].toObject()["encoding"].toBool() ? "":" (MP4/MKV UNSUPPORTED)")
@@ -172,7 +175,6 @@ public:
 
         if (QMessageBox::question(q, q->windowTitle(), i18n("Abort encoding the timelapse video?"))
             == QMessageBox::Yes) {
-            ffmpeg->reset();
             cleanupFFMpeg();
             return true;
         }
@@ -250,7 +252,10 @@ public:
 
     void cleanupFFMpeg()
     {
-        ffmpeg.reset();
+        if (ffmpeg) {
+            ffmpeg->reset();
+            ffmpeg.reset();
+        }
     }
 
     QString applyVariables(const QString &templateArguments)
@@ -258,6 +263,7 @@ public:
         const QSize &outSize = settings->resize ? settings->size : settings->imageSize;
         const int previewLength = settings->resultPreview ? settings->firstFrameSec : 0;
         const int resultLength = settings->extendResult ? settings->lastFrameSec : 0;
+        const float transitionLength = settings->resultPreview ? 0.7 : 0;
         return QString(templateArguments)
                .replace("$IN_FPS", QString::number(settings->inputFps))
                .replace("$OUT_FPS", QString::number(settings->fps))
@@ -266,6 +272,8 @@ public:
                .replace("$FRAMES", QString::number(settings->framesCount))
                .replace("$INPUT_DIR", settings->inputDirectory)
                .replace("$FIRST_FRAME_SEC", QString::number(previewLength))
+               .replace("$TRANSITION_LENGTH", QString::number(transitionLength))
+               .replace("$H264_ENCODER", settings->h264Encoder)
                .replace("$LAST_FRAME_SEC", QString::number(resultLength))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings->format));
     }

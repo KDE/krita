@@ -204,15 +204,26 @@ private:
     DefaultToolTextPropertiesInterface *m_textPropertyInterface{0};
 };
 
-class DefaultToolTextPropertiesInterface: public KoSvgTextPropertiesInterface
+#include <KoSvgTextShape.h>
+
+class DefaultToolTextPropertiesInterface: public KoSvgTextPropertiesInterface, public KoSvgTextShape::TextCursorChangeListener
 {
+    Q_OBJECT
 public:
     DefaultToolTextPropertiesInterface(DefaultTool *parent);
+    ~DefaultToolTextPropertiesInterface();
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
+
+    virtual void notifyCursorPosChanged(int pos, int anchor) override;
+    virtual void notifyMarkupChanged() override;
+    virtual void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
+public Q_SLOTS:
+    void slotSelectionChanged();
 private:
-    DefaultTool *m_parent{nullptr};
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 

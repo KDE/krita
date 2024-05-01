@@ -466,7 +466,7 @@ DefaultTool::DefaultTool(KoCanvasBase *canvas, bool connectToSelectedShapesProxy
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(updateActions()));
 
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), this, SLOT(repaintDecorations()));
-        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), m_textPropertyInterface, SIGNAL(textSelectionChanged()));
+        connect(canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), m_textPropertyInterface, SLOT(slotSelectionChanged()));
         connect(canvas->selectedShapesProxy(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
     }
 }
@@ -1929,9 +1929,22 @@ void DefaultTool::explicitUserStrokeEndRequest()
     });
 }
 
+struct Q_DECL_HIDDEN DefaultToolTextPropertiesInterface::Private {
+
+    Private(DefaultTool *parent): parent(parent) {}
+
+    DefaultTool *parent;
+    QList<KoShape*> shapes;
+};
+
 DefaultToolTextPropertiesInterface::DefaultToolTextPropertiesInterface(DefaultTool *parent)
     : KoSvgTextPropertiesInterface(parent)
-    , m_parent(parent)
+    , d(new Private(parent))
+{
+
+}
+
+DefaultToolTextPropertiesInterface::~DefaultToolTextPropertiesInterface()
 {
 
 }
@@ -1939,9 +1952,9 @@ DefaultToolTextPropertiesInterface::DefaultToolTextPropertiesInterface(DefaultTo
 QList<KoSvgTextProperties> DefaultToolTextPropertiesInterface::getSelectedProperties()
 {
     QList<KoSvgTextProperties> props = QList<KoSvgTextProperties>();
-    if (!m_parent->selection()->hasSelection()) return props;
+    if (!d->parent->selection()->hasSelection()) return props;
 
-    QList<KoShape*> shapes = m_parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
+    QList<KoShape*> shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
     for (auto it = shapes.begin(); it != shapes.end(); it++) {
         KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*it);
         if (!textShape) continue;
@@ -1959,10 +1972,44 @@ KoSvgTextProperties DefaultToolTextPropertiesInterface::getInheritedProperties()
 
 void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
-    QList<KoShape*> shapes = m_parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
+    QList<KoShape*> shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
     if (shapes.isEmpty()) return;
     KUndo2Command *cmd = new KoShapeMergeTextPropertiesCommand(shapes, properties, removeProperties);
     if (cmd) {
-        m_parent->canvas()->addCommand(cmd);
+        d->parent->canvas()->addCommand(cmd);
     }
+}
+
+void DefaultToolTextPropertiesInterface::notifyCursorPosChanged(int pos, int anchor)
+{
+    emit textSelectionChanged();
+}
+
+void DefaultToolTextPropertiesInterface::notifyMarkupChanged()
+{
+    emit textSelectionChanged();
+}
+
+void DefaultToolTextPropertiesInterface::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
+{
+    emit textSelectionChanged();
+}
+
+void DefaultToolTextPropertiesInterface::slotSelectionChanged()
+{
+    if (!d->shapes.isEmpty()) {
+        for (int i = 0; i< d->shapes.size(); i++) {
+            KoShape *shape = d->shapes.takeFirst();
+            shape->removeShapeChangeListener(this);
+        }
+    }
+    QList<KoShape*> shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
+    if (!shapes.isEmpty()) {
+        for (int i = 0; i< shapes.size(); i++) {
+            KoShape *shape = shapes.takeFirst();
+            shape->addShapeChangeListener(this);
+            d->shapes.append(shape);
+        }
+    }
+    emit textSelectionChanged();
 }

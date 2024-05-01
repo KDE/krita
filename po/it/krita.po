@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-02 02:58+0000\n"
-"PO-Revision-Date: 2024-01-15 19:26+0100\n"
+"PO-Revision-Date: 2024-04-27 10:24+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15902,7 +15902,7 @@ msgstr ""
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:547
 #, kde-format
 msgid "Path options"
-msgstr "Opzioni percorso"
+msgstr "Opzioni tracciato"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:549
 #, kde-format

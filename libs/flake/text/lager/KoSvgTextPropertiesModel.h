@@ -148,6 +148,8 @@ public:
     LAGER_QT_CURSOR(int, lineBreak);
     LAGER_QT_CURSOR(PropertyState, lineBreakState);
 
+    /// We're selecting a span of text instead of the whole paragraph.
+    LAGER_QT_CURSOR(bool, spanSelection);
 
 Q_SIGNALS:
     void textPropertyChanged();

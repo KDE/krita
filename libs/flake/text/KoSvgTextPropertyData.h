@@ -28,13 +28,16 @@ struct KRITAFLAKE_EXPORT KoSvgTextPropertyData : public boost::equality_comparab
     KoSvgTextProperties commonProperties;
 
     /// The properties that are inherited, so that widgets may be set correctly.
-    KoSvgTextProperties inheritedProperties = KoSvgTextProperties::defaultProperties();
+    KoSvgTextProperties inheritedProperties {KoSvgTextProperties::defaultProperties()};
 
     /// The properties that are not common (tri-state) between the selected text.
     QSet<KoSvgTextProperties::PropertyId> tristate;
 
+    /// Whether we're currently selecting a span of text as opposed to editing the whole paragraph.
+    bool spanSelection {false};
+
     bool operator==(const KoSvgTextPropertyData &rhs) const {
-        return commonProperties == rhs.commonProperties && inheritedProperties == rhs.inheritedProperties && tristate == rhs.tristate;
+        return commonProperties == rhs.commonProperties && inheritedProperties == rhs.inheritedProperties && tristate == rhs.tristate && spanSelection == rhs.spanSelection;
     }
 };
 

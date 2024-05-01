@@ -215,6 +215,7 @@ public:
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
+    virtual bool spanSelection() override;
 
     virtual void notifyCursorPosChanged(int pos, int anchor) override;
     virtual void notifyMarkupChanged() override;

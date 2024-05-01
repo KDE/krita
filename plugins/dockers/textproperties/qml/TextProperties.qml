@@ -164,6 +164,7 @@ Rectangle {
                         WritingMode {
                         }
                         Direction{
+                            enabled: !properties.spanSelection;
                         }
                         TextIndent{
                         }

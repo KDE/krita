@@ -1980,8 +1980,15 @@ void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProper
     }
 }
 
+bool DefaultToolTextPropertiesInterface::spanSelection()
+{
+    return true;
+}
+
 void DefaultToolTextPropertiesInterface::notifyCursorPosChanged(int pos, int anchor)
 {
+    Q_UNUSED(pos)
+    Q_UNUSED(anchor)
     emit textSelectionChanged();
 }
 
@@ -1992,24 +1999,22 @@ void DefaultToolTextPropertiesInterface::notifyMarkupChanged()
 
 void DefaultToolTextPropertiesInterface::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
+    Q_UNUSED(type)
+    Q_UNUSED(shape)
     emit textSelectionChanged();
 }
 
 void DefaultToolTextPropertiesInterface::slotSelectionChanged()
 {
-    if (!d->shapes.isEmpty()) {
-        for (int i = 0; i< d->shapes.size(); i++) {
-            KoShape *shape = d->shapes.takeFirst();
-            shape->removeShapeChangeListener(this);
-        }
-    }
     QList<KoShape*> shapes = d->parent->canvas()->selectedShapesProxy()->selection()->selectedShapes();
-    if (!shapes.isEmpty()) {
-        for (int i = 0; i< shapes.size(); i++) {
-            KoShape *shape = shapes.takeFirst();
-            shape->addShapeChangeListener(this);
-            d->shapes.append(shape);
-        }
+    Q_FOREACH(KoShape *shape, d->shapes) {
+        shape->removeShapeChangeListener(this);
+    }
+
+    d->shapes = shapes;
+
+    Q_FOREACH(KoShape *shape, d->shapes) {
+        shape->addShapeChangeListener(this);
     }
     emit textSelectionChanged();
 }

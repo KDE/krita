@@ -333,13 +333,25 @@ KoSvgTextProperties SvgTextCursor::currentTextProperties() const
 QList<KoSvgTextProperties> SvgTextCursor::propertiesForRange() const
 {
     if (!d->shape) return QList<KoSvgTextProperties>();
-    return d->shape->propertiesForRange(qMin(d->pos, d->anchor), qMax(d->pos, d->anchor));
+    int start = -1;
+    int end = -1;
+    if (d->pos != d->anchor) {
+        start = qMin(d->pos, d->anchor);
+        end = qMax(d->pos, d->anchor);
+    }
+    return d->shape->propertiesForRange(start, end);
 }
 
 void SvgTextCursor::mergePropertiesIntoSelection(const KoSvgTextProperties props, const QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
-    if (d->shape && hasSelection()) {
-        KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, d->pos, d->anchor, removeProperties);
+    if (d->shape) {
+        int start = -1;
+        int end = -1;
+        if (hasSelection()) {
+            start = d->pos;
+            end = d->anchor;
+        }
+        KUndo2Command *cmd = new SvgTextMergePropertiesRangeCommand(d->shape, props, start, end, removeProperties);
         addCommandToUndoAdapter(cmd);
     }
 }
@@ -1444,6 +1456,11 @@ KoSvgTextProperties SvgTextPropertyCursor::getInheritedProperties()
 void SvgTextPropertyCursor::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
     d->parent->mergePropertiesIntoSelection(properties, removeProperties);
+}
+
+bool SvgTextPropertyCursor::spanSelection()
+{
+    return d->parent->hasSelection();
 }
 
 void SvgTextPropertyCursor::emitSelectionChange()

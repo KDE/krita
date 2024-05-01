@@ -66,7 +66,6 @@ TextPropertiesDock::TextPropertiesDock()
          QQuickStyle::setStyle(QStringLiteral("Fusion"));
     }
 
-
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addImportPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
@@ -98,8 +97,8 @@ void TextPropertiesDock::setViewManager(KisViewManager *kisview)
 {
     d->provider = kisview->canvasResourceProvider();
     if (d->provider) {
-        connect(d->provider->resourceManager(), SIGNAL(canvasResourceChanged(int, QVariant)),
-                this, SLOT(slotCanvasResourcesChanged(int, QVariant)));
+        connect(d->provider, SIGNAL(sigTextPropertiesChanged()),
+                this, SLOT(slotCanvasTextPropertiesChanged()));
     }
 }
 
@@ -129,14 +128,12 @@ void TextPropertiesDock::unsetCanvas()
     m_canvas = 0;
 }
 
-void TextPropertiesDock::slotCanvasResourcesChanged(int key, const QVariant &value)
+void TextPropertiesDock::slotCanvasTextPropertiesChanged()
 {
-    if (key == KoCanvasResource::SvgTextPropertyData) {
-        KoSvgTextPropertyData data = value.value<KoSvgTextPropertyData>();
-        if (d->textModel->textData.get() != data) {
-            d->textModel->textData.set(data);
-            QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
-        }
+    KoSvgTextPropertyData data = d->provider->textPropertyData();
+    if (d->textModel->textData.get() != data) {
+        d->textModel->textData.set(data);
+        QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
     }
 }
 

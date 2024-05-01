@@ -28,7 +28,7 @@ public:
     void unsetCanvas() override;
 
 public Q_SLOTS:
-    void slotCanvasResourcesChanged(int key, const QVariant &value);
+    void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
 
 private:

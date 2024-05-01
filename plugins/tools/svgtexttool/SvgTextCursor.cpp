@@ -1414,26 +1414,36 @@ void SvgTextCursor::updateCanvasResources()
     }
 }
 
+struct SvgTextPropertyCursor::Private {
+    Private(SvgTextCursor *parent): parent(parent) {}
+    SvgTextCursor *parent{nullptr};
+};
+
 SvgTextPropertyCursor::SvgTextPropertyCursor(SvgTextCursor *parent)
-    : KoSvgTextPropertiesInterface(parent), m_parent(parent)
+    : KoSvgTextPropertiesInterface(parent), d(new Private(parent))
+{
+
+}
+
+SvgTextPropertyCursor::~SvgTextPropertyCursor()
 {
 
 }
 QList<KoSvgTextProperties> SvgTextPropertyCursor::getSelectedProperties()
 {
-    return m_parent->propertiesForRange();
+    return d->parent->propertiesForRange();
 }
 
 KoSvgTextProperties SvgTextPropertyCursor::getInheritedProperties()
 {
     // 9 times out of 10 this is correct, though we could do better by actually
     // getting inherited properties for the range and not just defaulting to the paragraph.
-    return m_parent->shape()? m_parent->shape()->textProperties(): KoSvgTextProperties::defaultProperties();
+    return d->parent->shape()? d->parent->shape()->textProperties(): KoSvgTextProperties::defaultProperties();
 }
 
 void SvgTextPropertyCursor::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)
 {
-    m_parent->mergePropertiesIntoSelection(properties, removeProperties);
+    d->parent->mergePropertiesIntoSelection(properties, removeProperties);
 }
 
 void SvgTextPropertyCursor::emitSelectionChange()

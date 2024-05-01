@@ -231,13 +231,15 @@ class KRITATOOLSVGTEXT_EXPORT SvgTextPropertyCursor : public KoSvgTextProperties
 {
 public:
     SvgTextPropertyCursor(SvgTextCursor *parent);
+    ~SvgTextPropertyCursor();
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;
 
     void emitSelectionChange();
 private:
-    SvgTextCursor *m_parent{nullptr};
+    struct Private;
+    const QScopedPointer<Private> d;
 };
 
 Q_DECLARE_METATYPE(SvgTextCursor::MoveMode)

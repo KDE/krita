@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Tab Size");
+    propertyType: TextPropertyBase.Paragraph;
     property alias tabSize: tabSizeSpn.value;
     property int tabSizeUnit: TabSizeModel.Spaces;
 

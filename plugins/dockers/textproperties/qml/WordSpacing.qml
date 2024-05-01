@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Word Spacing");
+    propertyType: TextPropertyBase.Character;
     property alias wordSpacing: wordSpacingSpn.value;
     visible: properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
 

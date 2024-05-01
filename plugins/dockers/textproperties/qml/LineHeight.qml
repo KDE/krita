@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label", "Line Height");
+    propertyType: TextPropertyBase.Character;
     property alias isNormal: lineHeightNormalCbx.checked;
     property alias lineHeight: lineHeightSpn.value;
     property int lineHeightUnit: LineHeightModel.Lines;

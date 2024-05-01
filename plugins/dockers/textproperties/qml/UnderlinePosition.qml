@@ -8,6 +8,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 
 TextPropertyBase {
+    propertyType: TextPropertyBase.Paragraph;
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;

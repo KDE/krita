@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: i18nc("@label", "Font Family");
+    propertyType: TextPropertyBase.Character;
 
     property var fontFamilies: [];
     property var fontFamilyModel : [];

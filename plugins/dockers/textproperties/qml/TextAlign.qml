@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: i18nc("@title:group", "Text Align");
+    propertyType: TextPropertyBase.Paragraph;
 
     property int textAlignAll: 1;
     property int textAlignLast: 0;

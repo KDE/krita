@@ -88,6 +88,8 @@ public:
     LAGER_QT_CURSOR(PropertyState, writingModeState);
     LAGER_QT_CURSOR(int, direction);
     LAGER_QT_CURSOR(PropertyState, directionState);
+    LAGER_QT_CURSOR(int, unicodeBidi);
+    LAGER_QT_CURSOR(PropertyState, unicodeBidiState);
     LAGER_QT_CURSOR(int, textAlignAll);
     LAGER_QT_CURSOR(PropertyState, textAlignAllState);
     LAGER_QT_CURSOR(int, textAlignLast);

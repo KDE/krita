@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Word Break");
+    propertyType: TextPropertyBase.Character;
     property int breakType;
 
 

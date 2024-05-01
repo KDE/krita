@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Text Transform");
+    propertyType: TextPropertyBase.Character;
     property alias fullWidth: fullWidthChk.checked;
     property alias fullSizeKana: fullSizeKanaChk.checked;
     property int capitals;

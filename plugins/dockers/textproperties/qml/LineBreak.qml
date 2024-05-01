@@ -12,6 +12,7 @@ TextPropertyBase {
     property int breakType;
 
     propertyName: i18nc("@label:listbox", "Line Break");
+    propertyType: TextPropertyBase.Character;
 
     onPropertiesUpdated: {
         blockSignals = true;

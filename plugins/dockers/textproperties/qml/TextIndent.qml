@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: i18nc("@title:group", "Text Indent");
+    propertyType: TextPropertyBase.Paragraph;
 
     property alias textIndentValue: textIndentSpn.value;
     property alias hanging: indentHangingCkb.checked;

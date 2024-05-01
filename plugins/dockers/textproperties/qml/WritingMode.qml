@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Writing Mode");
+    propertyType: TextPropertyBase.Paragraph;
     property int writingMode;
 
     onPropertiesUpdated: {

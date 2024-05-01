@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Text Decoration");
+    propertyType: TextPropertyBase.Character;
     visible: properties.textDecorationLineState !== KoSvgTextPropertiesModel.PropertyUnset
 
     property alias underline: underlineCbx.checked;

@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label", "Hanging-punctuation");
+    propertyType: TextPropertyBase.Paragraph;
     property alias hangStart: paragraphStartCbx.checked;
     property alias hangEnd: paragraphEndCbx.checked;
     property int hangComma: KoSvgTextPropertiesModel.NoHang;

@@ -1982,7 +1982,7 @@ void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProper
 
 bool DefaultToolTextPropertiesInterface::spanSelection()
 {
-    return true;
+    return false;
 }
 
 void DefaultToolTextPropertiesInterface::notifyCursorPosChanged(int pos, int anchor)

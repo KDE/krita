@@ -10,12 +10,18 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Direction")
+    propertyType: TextPropertyBase.Mixed;
     property int direction;
+    property int unicodeBidi;
 
     onPropertiesUpdated: {
         blockSignals = true;
         direction = properties.direction;
-        visible = properties.directionState !== KoSvgTextPropertiesModel.PropertyUnset;
+        unicodeBidi = properties.unicodeBidi;
+        var set = properties.directionState !== KoSvgTextPropertiesModel.PropertyUnset;
+        var pType = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
+        console.log("set", set, "type matches", pType)
+        visible = set && pType;
         blockSignals = false;
     }
 
@@ -26,9 +32,17 @@ TextPropertyBase {
         }
     }
 
-    RowLayout {
+    onUnicodeBidiChanged: {
+        unicodeBidiCmb.currentIndex = unicodeBidiCmb.indexOfValue(unicodeBidi);
+        if (!blockSignals) {
+            properties.unicodeBidi = unicodeBidi;
+        }
+    }
+
+    GridLayout {
         id: row
-        spacing: columnSpacing;
+        columns: 3
+        columnSpacing: parent.columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
@@ -52,6 +66,36 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: direction = currentValue;
+        }
+
+        RevertPropertyButton {
+            visible: parentPropertyType === TextPropertyBase.Character;
+            revertEnabled: properties.unicodeBidiState === KoSvgTextPropertiesModel.PropertySet;
+            onClicked: properties.unicodeBidiState = KoSvgTextPropertiesModel.PropertyUnset;
+        }
+
+        Label {
+            text: i18nc("@label:listbox", "Unicode-Bidi");
+            elide: Text.ElideRight;
+            Layout.fillWidth: true;
+            visible: parentPropertyType === TextPropertyBase.Character;
+        }
+
+        ComboBox {
+            id: unicodeBidiCmb
+            visible: parentPropertyType === TextPropertyBase.Character;
+            Layout.fillWidth: true;
+            model: [
+                {text: i18nc("@label:inlistbox", "Normal"), value: KoSvgText.BidiNormal},
+                {text: i18nc("@label:inlistbox", "Embed"), value: KoSvgText.BidiEmbed},
+                {text: i18nc("@label:inlistbox", "Override"), value: KoSvgText.BidiOverride},
+                {text: i18nc("@label:inlistbox", "Isolate"), value: KoSvgText.BidiIsolate},
+                {text: i18nc("@label:inlistbox", "Isolate-Override"), value: KoSvgText.BidiIsolateOverride},
+                {text: i18nc("@label:inlistbox", "Plain Text"), value: KoSvgText.BidiPlainText}
+            ]
+            textRole: "text";
+            valueRole: "value";
+            onActivated: unicodeBidi = currentValue;
         }
     }
 }

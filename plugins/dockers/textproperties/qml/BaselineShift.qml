@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 TextPropertyBase {
     propertyName: i18nc("@label", "Baseline-Shift")
+    propertyType: TextPropertyBase.Character;
 
     property alias baselineShiftValue: baselineShiftSpn.value;
     property int baselineShiftMode;

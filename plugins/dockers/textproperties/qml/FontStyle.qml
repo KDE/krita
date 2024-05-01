@@ -10,6 +10,7 @@ import org.krita.flake.text 1.0
 
 CollapsibleGroupProperty {
     propertyName: i18nc("@label", "Font Style");
+    propertyType: TextPropertyBase.Character;
 
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;

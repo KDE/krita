@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-25 01:39+0000\n"
-"PO-Revision-Date: 2024-04-09 23:17+0200\n"
+"PO-Revision-Date: 2024-04-27 10:24+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -15977,7 +15977,7 @@ msgstr ""
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:552
 #, kde-format
 msgid "Path options"
-msgstr "Opzioni percorso"
+msgstr "Opzioni tracciato"
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:554
 #, kde-format
@@ -22859,10 +22859,9 @@ msgid "On Middle-Click Drag"
 msgstr "Trascina al clic centrale"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Tutti i formati supportati"
+msgstr "Tutti i file supportati"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25646,10 +25645,9 @@ msgstr "Ritaglia i fotogrammi quando importi animazioni"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default &printer profile:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Profilo predefinito della stam&pante:"
+msgstr "Tipo file di esportazione predefinito:"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28902,10 +28900,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Attiva strumento Selezione a mano libera"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Attiva strumento Linea"
+msgstr "Attiva con altro colore"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -57855,10 +57852,9 @@ msgstr ""
 "di colore"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Il trascinamento riempie le regioni di qualsiasi colore"
+msgstr "Il trascinamento non riempie le regioni differenti"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

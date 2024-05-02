@@ -147,6 +147,13 @@ void KisScreenColorSampler::setCurrentColor(KoColor c)
     m_d->currentColor = c;
 }
 
+void KisScreenColorSampler::cancel()
+{
+    releaseColorSampling();
+    setCurrentColor(m_d->beforeScreenColorSampling);
+    Q_EMIT sigNewColorSampled(currentColor());
+}
+
 KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
 {
      // First check whether we're clicking on a Krita window for some real color sampling
@@ -221,9 +228,7 @@ bool KisScreenColorSampler::handleColorSamplingMouseButtonRelease(QMouseEvent *e
 bool KisScreenColorSampler::handleColorSamplingKeyPress(QKeyEvent *e)
 {
     if (e->matches(QKeySequence::Cancel)) {
-        releaseColorSampling();
-        setCurrentColor(m_d->beforeScreenColorSampling);
-        Q_EMIT sigNewColorSampled(currentColor());
+        cancel();
     } else if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) {
         setCurrentColor(grabScreenColor(QCursor::pos()));
         Q_EMIT sigNewColorSampled(currentColor());

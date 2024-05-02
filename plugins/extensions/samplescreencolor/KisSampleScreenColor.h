@@ -13,6 +13,8 @@
 #include <KisActionPlugin.h>
 #include "kis_types.h"
 
+class KisScreenColorSampler;
+
 class KisSampleScreenColor : public KisActionPlugin
 {
     Q_OBJECT
@@ -23,6 +25,10 @@ public:
 
 private Q_SLOTS:
     void slotSampleScreenColor(bool sampleRealCanvas);
+
+private:
+    KisScreenColorSampler *m_screenColorSampler {nullptr};
+    bool m_lastSampleRealCanvas;
 };
 
 #endif // KISSAMPLESCREENCOLOR_H

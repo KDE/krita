@@ -48,6 +48,7 @@ public Q_SLOTS:
     void sampleScreenColor();
     void setPerformRealColorSamplingOfCanvas(bool enable);
     void setCurrentColor(KoColor c);
+    void cancel();
 
 private Q_SLOTS:
     void updateColorSampling();

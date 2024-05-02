@@ -30,26 +30,38 @@ KisSampleScreenColor::~KisSampleScreenColor()
 
 void KisSampleScreenColor::slotSampleScreenColor(bool sampleRealCanvas)
 {
-    KisScreenColorSampler *screenColorSampler = new KisScreenColorSampler(false);
-    screenColorSampler->setPerformRealColorSamplingOfCanvas(sampleRealCanvas);
-    screenColorSampler->setCurrentColor(viewManager()->canvasResourceProvider()->fgColor());
+    if (m_screenColorSampler) {
+        // The action will cancel the previous one if it is still active
+        m_screenColorSampler->cancel();
+        // If the new action type is the same as the previous, cancelling is
+        // enough, so we return. Otherwise, a new operation is started 
+        if (sampleRealCanvas == m_lastSampleRealCanvas) {
+            return;
+        }
+    }
+
+    m_lastSampleRealCanvas = sampleRealCanvas;
+    m_screenColorSampler = new KisScreenColorSampler(false);
+    m_screenColorSampler->setPerformRealColorSamplingOfCanvas(sampleRealCanvas);
+    m_screenColorSampler->setCurrentColor(viewManager()->canvasResourceProvider()->fgColor());
     // screenColorSampler is a temporary top level widget own by no other
     // QObject, so it must be automatically deleted when it is closed 
-    screenColorSampler->setAttribute(Qt::WA_DeleteOnClose);
-    connect(screenColorSampler, &KisScreenColorSampler::sigNewColorSampled,
-        [this, screenColorSampler](KoColor sampledColor)
+    m_screenColorSampler->setAttribute(Qt::WA_DeleteOnClose);
+    connect(m_screenColorSampler, &KisScreenColorSampler::sigNewColorSampled, this,
+        [this](KoColor sampledColor)
         {
             viewManager()->canvasResourceProvider()->slotSetFGColor(sampledColor);
-            screenColorSampler->close();
+            m_screenColorSampler->close();
+            m_screenColorSampler = nullptr;
         }
     );
-    connect(screenColorSampler, &KisScreenColorSampler::sigNewColorHovered,
-        [this, screenColorSampler](KoColor sampledColor)
+    connect(m_screenColorSampler, &KisScreenColorSampler::sigNewColorHovered, this,
+        [this](KoColor sampledColor)
         {
             viewManager()->canvasResourceProvider()->slotSetFGColor(sampledColor);
         }
     );
-    screenColorSampler->sampleScreenColor();
+    m_screenColorSampler->sampleScreenColor();
 }
 
 #include "KisSampleScreenColor.moc"

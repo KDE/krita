@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 01:39+0000\n"
+"POT-Creation-Date: 2024-05-02 01:39+0000\n"
 "PO-Revision-Date: 2024-01-01 20:13+0100\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -25044,7 +25044,7 @@ msgstr "Profil:"
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
-#: plugins/dockers/recorder/recorder_profile_settings.ui:177
+#: plugins/dockers/recorder/recorder_profile_settings.ui:179
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -39817,7 +39817,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "Exporterar tidsförlopp..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:89
+#: plugins/dockers/recorder/recorder_export.cpp:92
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -39825,7 +39825,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[Hittades inte]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:90
+#: plugins/dockers/recorder/recorder_export.cpp:93
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -39834,86 +39834,86 @@ msgstr ""
 "Plats för FFmpeg körbart program kunde inte detekteras. Installera det eller "
 "ange dess plats manuellt."
 
-#: plugins/dockers/recorder/recorder_export.cpp:173
+#: plugins/dockers/recorder/recorder_export.cpp:176
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "Avbryt kodning av tidsförloppsvideo?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:245
+#: plugins/dockers/recorder/recorder_export.cpp:247
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "Startar FFmpeg ..."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:364
+#: plugins/dockers/recorder/recorder_export.cpp:372
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Exportera"
 
-#: plugins/dockers/recorder/recorder_export.cpp:379
+#: plugins/dockers/recorder/recorder_export.cpp:387
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Inga bildrutor att exportera"
 
-#: plugins/dockers/recorder/recorder_export.cpp:383
+#: plugins/dockers/recorder/recorder_export.cpp:391
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Inspelningsinformation"
 
-#: plugins/dockers/recorder/recorder_export.cpp:386
+#: plugins/dockers/recorder/recorder_export.cpp:394
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "bildpunkter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:388
+#: plugins/dockers/recorder/recorder_export.cpp:396
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "bildrutor (b)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:434
+#: plugins/dockers/recorder/recorder_export.cpp:442
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Inga bildrutor att bläddra bland."
 
-#: plugins/dockers/recorder/recorder_export.cpp:545
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Välj FFmpeg körbart program"
 
-#: plugins/dockers/recorder/recorder_export.cpp:592
+#: plugins/dockers/recorder/recorder_export.cpp:600
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Exportera tidsförloppsvideo som"
 
-#: plugins/dockers/recorder/recorder_export.cpp:608
+#: plugins/dockers/recorder/recorder_export.cpp:616
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "Videofilen finns redan. Vill du skriva över den?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:613
+#: plugins/dockers/recorder/recorder_export.cpp:621
 #, kde-format
 msgid "No frames to export."
 msgstr "Inga bildrutor att exportera."
 
-#: plugins/dockers/recorder/recorder_export.cpp:640
+#: plugins/dockers/recorder/recorder_export.cpp:648
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "Tidsförloppsvideon kodas..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:655
+#: plugins/dockers/recorder/recorder_export.cpp:663
 #, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "Export misslyckades: FFmpeg-meddelande:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:676
+#: plugins/dockers/recorder/recorder_export.cpp:684
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -39928,7 +39928,7 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:683
+#: plugins/dockers/recorder/recorder_export.cpp:691
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -40153,19 +40153,19 @@ msgid "Insert variable:"
 msgstr "Infoga variabel:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:167
+#: plugins/dockers/recorder/recorder_profile_settings.ui:169
 #, kde-format
 msgid "FFMpeg arguments:"
 msgstr "FFmpeg-argument:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:194
+#: plugins/dockers/recorder/recorder_profile_settings.ui:196
 #, kde-format
 msgid "Profile name:"
 msgstr "Profilnamn:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:214
+#: plugins/dockers/recorder/recorder_profile_settings.ui:216
 #, kde-format
 msgid "File extension:"
 msgstr "Filändelse:"

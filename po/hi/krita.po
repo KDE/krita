@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-25 01:39+0000\n"
+"POT-Creation-Date: 2024-05-02 01:39+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -25000,7 +25000,7 @@ msgstr "प्रोफ़ाइल :"
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
-#: plugins/dockers/recorder/recorder_profile_settings.ui:177
+#: plugins/dockers/recorder/recorder_profile_settings.ui:179
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -39469,7 +39469,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "टाइमलैप्स निर्यात करें"
 
-#: plugins/dockers/recorder/recorder_export.cpp:89
+#: plugins/dockers/recorder/recorder_export.cpp:92
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -39477,7 +39477,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[नहीं मिला]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:90
+#: plugins/dockers/recorder/recorder_export.cpp:93
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -39486,86 +39486,86 @@ msgstr ""
 "एफएफएमपेग अनुप्रयोग का स्थान का पता नहीं लगाया जा सका, कृपया इसे स्थापित करें या आप खुद "
 "इसके स्थान का चयन करें"
 
-#: plugins/dockers/recorder/recorder_export.cpp:173
+#: plugins/dockers/recorder/recorder_export.cpp:176
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "टाइमलैप्स वीडियो को एन्कोड करना बंद करें?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:245
+#: plugins/dockers/recorder/recorder_export.cpp:247
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "एफएफएमपेग शुरू हो रहा है.."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:364
+#: plugins/dockers/recorder/recorder_export.cpp:372
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "निर्यात"
 
-#: plugins/dockers/recorder/recorder_export.cpp:379
+#: plugins/dockers/recorder/recorder_export.cpp:387
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "निर्यात करने के लिए कोई फ़्रेम नहीं"
 
-#: plugins/dockers/recorder/recorder_export.cpp:383
+#: plugins/dockers/recorder/recorder_export.cpp:391
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "रेकॉर्डिंग जानकारी"
 
-#: plugins/dockers/recorder/recorder_export.cpp:386
+#: plugins/dockers/recorder/recorder_export.cpp:394
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:388
+#: plugins/dockers/recorder/recorder_export.cpp:396
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "फ़्रेम(में)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:434
+#: plugins/dockers/recorder/recorder_export.cpp:442
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "ब्राउज़ करने के लिए कोई फ़्रेम नहीं।"
 
-#: plugins/dockers/recorder/recorder_export.cpp:545
+#: plugins/dockers/recorder/recorder_export.cpp:553
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "एफएफएमपेग निष्पादन योग्य फ़ाइल का चयन करें"
 
-#: plugins/dockers/recorder/recorder_export.cpp:592
+#: plugins/dockers/recorder/recorder_export.cpp:600
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "टाइमलैप्स वीडियो को इस रूप में निर्यात करें "
 
-#: plugins/dockers/recorder/recorder_export.cpp:608
+#: plugins/dockers/recorder/recorder_export.cpp:616
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "वीडियो फ़ाइल पहले से मौजूद है। क्या आप इसे अधिलेखित करना चाहते हैं?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:613
+#: plugins/dockers/recorder/recorder_export.cpp:621
 #, kde-format
 msgid "No frames to export."
 msgstr "निर्यात करने के लिए कोई फ़्रेम नहीं ।"
 
-#: plugins/dockers/recorder/recorder_export.cpp:640
+#: plugins/dockers/recorder/recorder_export.cpp:648
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "टाइमलैप्स वीडियो को एन्कोड किया जा रहा है..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:655
+#: plugins/dockers/recorder/recorder_export.cpp:663
 #, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "निर्यात विफल। एफएफएमपेग संदेश :"
 
-#: plugins/dockers/recorder/recorder_export.cpp:676
+#: plugins/dockers/recorder/recorder_export.cpp:684
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -39579,7 +39579,7 @@ msgstr ""
 "\n"
 "क्या आप जारी रखना चाहते हैं?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:683
+#: plugins/dockers/recorder/recorder_export.cpp:691
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -39810,19 +39810,19 @@ msgid "Insert variable:"
 msgstr "वैरिएबल प्रविष्ट करें :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:167
+#: plugins/dockers/recorder/recorder_profile_settings.ui:169
 #, kde-format
 msgid "FFMpeg arguments:"
 msgstr "एफएफएमपेग आर्गुमेंट्स :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:194
+#: plugins/dockers/recorder/recorder_profile_settings.ui:196
 #, kde-format
 msgid "Profile name:"
 msgstr "प्रोफ़ाइल का नाम :"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:214
+#: plugins/dockers/recorder/recorder_profile_settings.ui:216
 #, kde-format
 msgid "File extension:"
 msgstr "फ़ाइल एक्सटेंशन :"

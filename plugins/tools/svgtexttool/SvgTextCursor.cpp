@@ -218,7 +218,7 @@ void SvgTextCursor::setPos(int pos, int anchor)
 void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
 {
     if (d->shape) {
-        int pos = d->pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
+        int pos = d->shape->posForPointLineSensitive(d->shape->documentToShape(point));
         if (d->preEditCommand) {
             int start = d->shape->indexForPos(d->preEditStart);
             int end = start + d->preEditLength;
@@ -231,8 +231,9 @@ void SvgTextCursor::setPosToPoint(QPointF point, bool moveAnchor)
             }
         }
 
-        d->pos = pos;
-        if (moveAnchor) {
+        const int finalPos = d->shape->posForIndex(d->shape->plainText().size());
+        d->pos = qBound(0, pos, finalPos);
+        if (moveAnchor || d->anchor < 0 || d->anchor > finalPos) {
             d->anchor = d->pos;
         }
         updateCursor();
@@ -244,7 +245,8 @@ void SvgTextCursor::moveCursor(MoveMode mode, bool moveAnchor)
 {
     if (d->shape) {
 
-        d->pos = moveModeResult(mode, d->pos, d->visualNavigation);
+        const int finalPos = d->shape->posForIndex(d->shape->plainText().size());
+        d->pos = qBound(0, moveModeResult(mode, d->pos, d->visualNavigation), finalPos);
 
         if (moveAnchor) {
             d->anchor = d->pos;

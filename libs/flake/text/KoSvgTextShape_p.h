@@ -322,7 +322,13 @@ public:
         xRes = rhs.xRes;
         result = rhs.result;
         lineBoxes = rhs.lineBoxes;
-    };
+
+        cursorPos = rhs.cursorPos;
+        logicalToVisualCursorPos = rhs.logicalToVisualCursorPos;
+        plainText = rhs.plainText;
+        isBidi = rhs.isBidi;
+        initialTextPosition = rhs.initialTextPosition;
+    }
 
     TextRendering textRendering = Auto;
     int xRes = 72;

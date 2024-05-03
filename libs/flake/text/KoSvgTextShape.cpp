@@ -664,7 +664,7 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlap
         b = qMin(end, b);
     }
     double closest = std::numeric_limits<double>::max();
-    int candidate = -1;
+    int candidate = 0;
     for (int i = a; i < b; i++) {
         CursorPos pos = d->cursorPos.at(i);
         CharacterResult res = d->result.at(pos.cluster);
@@ -674,9 +674,9 @@ int KoSvgTextShape::posForPoint(QPointF point, int start, int end, bool *overlap
         if (distance < closest) {
             candidate = i;
             closest = distance;
-        }
-        if (res.finalTransform().map(res.boundingBox).containsPoint(point, Qt::WindingFill) && overlaps) {
-            *overlaps = true;
+            if (overlaps) {
+               *overlaps = res.finalTransform().map(res.boundingBox).containsPoint(point, Qt::WindingFill);
+            }
         }
     }
     return candidate;
@@ -693,7 +693,7 @@ int KoSvgTextShape::posForPointLineSensitive(QPointF point)
 
     KoSvgText::WritingMode mode = writingMode();
 
-    int candidateLineStart = -1;
+    int candidateLineStart = 0;
     double closest = std::numeric_limits<double>::max();
     for (int i = 0; i < d->cursorPos.size(); i++) {
         CursorPos pos = d->cursorPos.at(i);
@@ -842,13 +842,13 @@ KoSvgTextProperties inheritProperties(KisForest<KoSvgTextContentElement>::depth_
 QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos, const int endPos, bool inherited) const
 {
     QList<KoSvgTextProperties> props;
-    if ((startPos < 0 && startPos == endPos) || d->cursorPos.isEmpty()) {
+    if (((startPos < 0 || startPos >= d->cursorPos.size()) && startPos == endPos) || d->cursorPos.isEmpty()) {
         props = {KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties()};
         return props;
     }
-
-    const int startIndex = d->cursorPos.at(startPos).index;
-    const int endIndex = d->cursorPos.at(endPos).index;
+    const int finalPos = d->cursorPos.size() - 1;
+    const int startIndex = d->cursorPos.at(qBound(0, startPos, finalPos)).index;
+    const int endIndex = d->cursorPos.at(qBound(0, endPos, finalPos)).index;
     int sought = startIndex;
     if (startIndex == endIndex) {
         int currentIndex = 0;

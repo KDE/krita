@@ -943,6 +943,9 @@ void KoSvgTextShape::Private::resolveTransforms(KisForest<KoSvgTextContentElemen
         textInPath = true;
     } else {
         for (int k = index; k < j; k++ ) {
+            if (k >= text.size()) {
+                continue;
+            }
             bool bidi = (text.at(k).unicode() >= 8234 && text.at(k).unicode() <= 8238)
                     || (text.at(k).unicode() >= 8294 && text.at(k).unicode() <= 8297);
             bool softHyphen = text.at(k) == QChar::SoftHyphen;

@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-02 01:39+0000\n"
-"PO-Revision-Date: 2024-04-25 12:47+0200\n"
+"PO-Revision-Date: 2024-05-02 17:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -17763,7 +17763,7 @@ msgstr "Clon"
 #, kde-format
 msgctxt "Layer name for translation of template"
 msgid "In Betweening"
-msgstr "Enmig"
+msgstr "Intermediació"
 
 #: libs/image/KisTranslateLayerNamesVisitor.cpp:79
 #, kde-format

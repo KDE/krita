@@ -103,7 +103,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-02 01:39+0000\n"
-"PO-Revision-Date: 2024-04-10 09:38+0200\n"
+"PO-Revision-Date: 2024-05-02 15:59+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -17977,7 +17977,7 @@ msgctxt "image conversion warning"
 msgid ""
 "The image contains <b>Exif</b> metadata. The metadata will not be saved."
 msgstr ""
-"L'image contient des métadonnées <b>Exif</b>, qui ne seront pas enregistrées."
+"L'image contient des métadonnées <b>EXIF</b>, qui ne seront pas enregistrées."
 
 #: libs/impex/ExifCheck.h:75
 #, kde-format
@@ -17986,7 +17986,7 @@ msgid ""
 "The image has <b>Exif</b> metadata and multiple layers. Only metadata <b>in "
 "the first layer</b> will be saved."
 msgstr ""
-"L'image contient des métadonnées <b>Exif</b> et plusieurs calques. Seules "
+"L'image contient des métadonnées <b>EXIF</b> et plusieurs calques. Seules "
 "les métadonnées du premier calque seront enregistrées."
 
 #: libs/impex/FillLayerTypeCheck.h:92
@@ -20695,14 +20695,14 @@ msgstr "N / A"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr "Aucun programme binaire valable de « FFmpeg » n'a été fourni..."
+msgstr "Aucun programme binaire valable de « FFMpeg » n'a été fourni..."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
 msgctxt "ffmpeg warning checks"
 msgid "FFmpeg must be at least version 4.2+ for GIF transparency to work"
 msgstr ""
-"FFmpeg doit être au moins en version 4.2+ pour que la transparence du GIF "
+"FFMpeg doit être au moins en version 4.2+ pour que la transparence du GIF "
 "fonctionne."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:481
@@ -20727,7 +20727,7 @@ msgid ""
 "The FFmpeg that you've given us appears to be compressed. Please try to "
 "extract FFmpeg from the archive first."
 msgstr ""
-"Le programme « FFmpeg » que vous avez fourni semble être sous forme "
+"Le programme « FFMpeg » que vous avez fourni semble être sous forme "
 "compressée. Veuillez tenter de l'extraire tout d'abord de l'archive."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:721
@@ -20736,7 +20736,7 @@ msgid ""
 "The FFmpeg that you've given us appears to be invalid. Please select the "
 "correct location of an FFmpeg executable on your system."
 msgstr ""
-"L'emplacement de l'exécutable « FFmpeg » que vous avez fourni semble non "
+"L'emplacement de l'exécutable « FFMpeg » que vous avez fourni semble non "
 "valable. Veuillez sélectionner un emplacement correct sur votre système pour "
 "celui-ci."
 
@@ -21222,8 +21222,8 @@ msgid ""
 "Add any FFmpeg filtering options here. It will be put between source and "
 "destination streams of the FFmpeg instance"
 msgstr ""
-"Ajouter ici les options de filtrage « FFmpeg ». Elles seront insérées entre "
-"les flux de source et de destination de l'instance « FFmpeg »."
+"Ajouter ici les options de filtrage « FFMpeg ». Elles seront insérées entre "
+"les flux de source et de destination de l'instance « FFMpeg »."
 
 #. i18n: ectx: property (text), widget (QPushButton, btnResetCustomLine)
 #. i18n: ectx: property (text), widget (QPushButton, resetOriginButton)
@@ -22042,7 +22042,7 @@ msgstr "Filtre :"
 #: libs/ui/animation/VideoImportDialog.ui:601
 #, kde-format
 msgid "FFmpeg"
-msgstr "FFmpeg"
+msgstr "FFMpeg"
 
 #. i18n: ectx: property (text), widget (QLabel, ffmpegLocationLabel)
 #: libs/ui/animation/VideoImportDialog.ui:607
@@ -22151,7 +22151,7 @@ msgstr "Faire un rendu en :"
 #: libs/ui/animation/wdg_animationrenderer.ui:210
 #, kde-format
 msgid "Select the FFmpeg render options."
-msgstr "Sélectionner les options pour le moteur de rendu « FFmpeg »."
+msgstr "Sélectionner les options pour le moteur de rendu « FFMpeg »."
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #. i18n: ectx: property (text), widget (QLabel, labelExportTo)
@@ -23118,7 +23118,7 @@ msgstr " sec"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1495
 #, kde-format
 msgid " fps"
-msgstr " fps"
+msgstr " FPS"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1724
 #, kde-format
@@ -27268,10 +27268,10 @@ msgstr ""
 "ordinateur intègre assez de mémoire « RAM » <span style=\" text-decoration: "
 "underline;\"> au dessus </span> de la quantité que vous avez demandé dans "
 "l'onglet « Général ». Dans le cas contraire, vous pourriez être confronté à "
-"des gels du système.</p><p>* pour 1 seconde de vidéo « FullHD@25fps », vous "
+"des gels du système.</p><p>* pour 1 seconde de vidéo « FullHD@25 FPS », vous "
 "avez besoin de 200 Mo de mémoire en plus,</p><p>* pour 1 seconde de vidéo "
-"« 4K UltraHD@25fps », vous avez besoin de 800 Mo de mémoire en plus.</p>/p></"
-"body></html>"
+"« 4K UltraHD@25 FPS », vous avez besoin de 800 Mo de mémoire en plus.</p>/"
+"p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optInMemory)
 #: libs/ui/forms/wdgperformancesettings.ui:442
@@ -40426,7 +40426,7 @@ msgstr " sec."
 #: plugins/dockers/recorder/recorder_export.ui:617
 #, kde-format
 msgid "FFmpeg:"
-msgstr "FFmpeg :"
+msgstr "FFMpeg :"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkResize)
 #: plugins/dockers/recorder/recorder_export.ui:654
@@ -43303,7 +43303,7 @@ msgstr "Cœur de Dublin"
 #: plugins/metadata/exif/kis_exif_io.h:28
 #, kde-format
 msgid "Exif"
-msgstr "Exif"
+msgstr "EXIF"
 
 #: plugins/extensions/metadataeditor/kis_meta_data_editor.cc:174
 #, kde-format

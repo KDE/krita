@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-02 01:39+0000\n"
-"PO-Revision-Date: 2024-01-01 20:13+0100\n"
+"PO-Revision-Date: 2024-05-03 13:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -8470,12 +8470,10 @@ msgstr "Hämta skärmfärg (hämta från verklig duk)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Visa paneler"
+msgstr "Visa panelruta"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -14651,7 +14649,7 @@ msgstr "Beskär till bildstorlek"
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current &Layer"
-msgstr "Beskär till nuvarande &lager"
+msgstr "Beskär till aktuellt &lager"
 
 #. i18n: context: toolTip @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (resizeimagetolayer), Actions (Image), ActionCollection (Menu)
@@ -14661,7 +14659,7 @@ msgstr "Beskär till nuvarande &lager"
 #, kde-format
 msgctxt "action"
 msgid "Trim to Current Layer"
-msgstr "Beskär till nuvarande lager"
+msgstr "Beskär till aktuellt lager"
 
 #. i18n: context: text @ Action (resizeimagetoselection), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1209
@@ -22301,6 +22299,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Utvecklingsfond</h1><p align=\"center"
+"\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 align="
+"\"center\">Engångssponsorer</h2><p align=\"center\"> <a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src="
+"\":/gamechuck.png\"></a> <p align=\"center\"> <a href=\"https://www.fosshub."
+"com/Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"> <a "
+"href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
+"body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -22813,10 +22821,9 @@ msgid "On Middle-Click Drag"
 msgstr "Vid mittenklickberöring"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Alla format som stöds"
+msgstr "Alla filer som stöds"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -24004,10 +24011,9 @@ msgstr "Översättare"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
-msgstr "Sponsor"
+msgstr "Sponsorer"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83
@@ -25416,7 +25422,7 @@ msgstr "Zooma i steg mellan tvåpotenser"
 #: libs/ui/forms/wdggeneralsettings.ui:741
 #, kde-format
 msgid "Use horizontal axis for Canvas Zoom Action"
-msgstr ""
+msgstr "Använd horisontella axeln för dukens zoomåtgärd"
 
 #. i18n: ectx: property (title), widget (QGroupBox, m_groupBoxKineticScrollingSettings)
 #: libs/ui/forms/wdggeneralsettings.ui:748
@@ -25588,10 +25594,9 @@ msgstr "Beskär bildrutor när animeringarna importeras"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default &printer profile:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Förvald &skrivarprofil:"
+msgstr "Förvald exportfiltyp: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28259,12 +28264,12 @@ msgstr "Tertiärläge"
 #: libs/ui/input/kis_alternate_invocation_action.cpp:35
 #, kde-format
 msgid "Sample Foreground Color from Current Layer"
-msgstr "Hämta förgrundsfärg från nuvarande lager"
+msgstr "Hämta förgrundsfärg från aktuellt lager"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:36
 #, kde-format
 msgid "Sample Background Color from Current Layer"
-msgstr "Hämta bakgrundsfärg från nuvarande lager"
+msgstr "Hämta bakgrundsfärg från aktuellt lager"
 
 #: libs/ui/input/kis_alternate_invocation_action.cpp:38
 #, kde-format
@@ -28809,10 +28814,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Aktivera frihandsmarkeringsverktyg"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Aktivera linjeverktyg"
+msgstr "Aktivera med annan färg"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -29124,10 +29128,9 @@ msgid "&Open Background color selector"
 msgstr "Ö&ppna bakgrundsfärgväljare"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Panel"
+msgstr "&Panelruta"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29153,16 +29156,14 @@ msgid "Gradients"
 msgstr "Toningar"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Panel:"
+msgstr "Panelruta"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Verktygslåda och paneler"
+msgstr "Verktygsradens panelruta"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29740,8 +29741,7 @@ msgid "Masked Brush"
 msgstr "Maskerad pensel"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Palettruta"
 
@@ -34726,36 +34726,32 @@ msgid "Down"
 msgstr "Ner"
 
 #: libs/ui/widgets/KisDockerHud.cpp:60
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgid "Configure docker panel"
-msgstr "Anpassa Krita"
+msgstr "Anpassa paneler"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
 #, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr ""
+msgstr "En panel är öppen i %1. Stäng %1 för att visa den här."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure Krita"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Anpassa Krita"
+msgstr "Anpassa %1 paneler"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
-#, fuzzy, kde-format
-#| msgid "Available properties:"
+#, kde-format
 msgid "Available dockers"
-msgstr "Tillgängliga egenskaper:"
+msgstr "Tillgängliga paneler"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
-#, fuzzy, kde-format
-#| msgid "Current Layer"
+#, kde-format
 msgid "Current dockers"
-msgstr "Aktuellt lager"
+msgstr "Nuvarande paneler"
 
 #: libs/ui/widgets/KisGamutMaskToolbar.cpp:24
 #, kde-format
@@ -38109,8 +38105,7 @@ msgid "Bluer/Yellower: "
 msgstr "Blåare eller gulare:"
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
-#, fuzzy, kde-format
-#| msgid "Reset"
+#, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Återställ"
@@ -38147,23 +38142,19 @@ msgid "Val:"
 msgstr "Värde:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Bildruteregister"
+msgstr "Värderegister"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Sobel horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Horisontell Sobel"
+msgstr "Zooma horisontellt"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Flip vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Vänd vertikalt"
+msgstr "Zooma vertikalt"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
@@ -38769,11 +38760,10 @@ msgid "Reset to default"
 msgstr "Återställ till förval"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
-#, fuzzy, kde-format
-#| msgid "Brush Editor"
+#, kde-format
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
-msgstr "Penseleditor"
+msgstr "Penseleditor på duken"
 
 #: plugins/dockers/brushhud/kis_brush_hud.cpp:78
 #, kde-format
@@ -38995,10 +38985,9 @@ msgstr "Rektangel"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:64
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
-#, fuzzy, kde-format
-#| msgid "Isometric"
+#, kde-format
 msgid "Isometric (Legacy)"
-msgstr "Isometrisk"
+msgstr "Isometrisk (föråldrad)"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:65
 #, kde-format
@@ -39006,10 +38995,9 @@ msgid "Isometric"
 msgstr "Isometrisk"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
-#, fuzzy, kde-format
-#| msgid "Isometric (requires OpenGL)"
+#, kde-format
 msgid "Isometric (Legacy - requires OpenGL)"
-msgstr "Isometrisk (kräver OpenGL)"
+msgstr "Isometrisk (föråldrad, kräver OpenGL)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowGrid)
 #: plugins/dockers/griddocker/grid_config_widget.ui:60
@@ -39068,17 +39056,15 @@ msgstr "Vänstervinkel:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
-#, fuzzy, kde-format
-#| msgid "Pixel Size"
+#, kde-format
 msgid "Cell Size:"
-msgstr "Bildpunktsstorlek"
+msgstr "Cellstorlek:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
-#, fuzzy, kde-format
-#| msgid "Vertical Scale"
+#, kde-format
 msgid "Vertical Style:"
-msgstr "Vertikal skala"
+msgstr "Vertikal stil:"
 
 #. i18n: ectx: property (text), widget (QLabel, cellSpacingLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:184
@@ -39106,10 +39092,9 @@ msgstr "Underdelning:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
-#, fuzzy, kde-format
-#| msgid "Subdivision:"
+#, kde-format
 msgid "Subdivision Style:"
-msgstr "Underdelning:"
+msgstr "Underdelningsstil:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblXSpacing)
 #: plugins/dockers/griddocker/grid_config_widget.ui:568
@@ -40514,13 +40499,7 @@ msgstr ""
 "prestandaökning."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the number of recording threads.\n"
-#| "Accordingly to your hardware setup you should record with no more than %1 "
-#| "threads.\n"
-#| "You can play around with one or two more threads, but keep an eye on your "
-#| "overall system performance."
+#, kde-format
 msgid ""
 "Set the number of recording threads.\n"
 "According to your hardware setup you should record with no more than %1 "
@@ -40656,10 +40635,9 @@ msgstr "Ställ in färgrymd"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
-#, fuzzy, kde-format
-#| msgid "Limit to current layer"
+#, kde-format
 msgid "Lock to current layer colorspace"
-msgstr "Begränsa till nuvarande lager"
+msgstr "Lås till aktuellt lagers färgrymd"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, chkUsePercentage)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:79
@@ -46762,37 +46740,27 @@ msgstr "Y: "
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
+#, kde-format
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition horizontally"
 msgid_plural "Every {n} repetitions horizontally"
-msgstr[0] "Med {n} cells mellanrum horisontellt"
-msgstr[1] "Med {n} cellers mellanrum horisontellt"
+msgstr[0] "Med {n} upprepning horisontellt"
+msgstr[1] "Med {n} upprepningar horisontellt"
 
 #. i18n: This is meant to be used in a spinbox so keep the {n} in the text
 #. and it will be substituted by the number. The text before will be
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
+#, kde-format
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
 msgid "Every {n} repetition vertically"
 msgid_plural "Every {n} repetitions vertically"
-msgstr[0] "Med {n} cells mellanrum vertikalt"
-msgstr[1] "Med {n} cellers mellanrum vertikalt"
+msgstr[0] "Med {n} upprepning vertikalt"
+msgstr[1] "Med {n} upprepningar vertikalt"
 
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
@@ -46807,9 +46775,7 @@ msgstr "&Mönster:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
-#, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
+#, kde-format
 msgid "Position:"
 msgstr "Position:"
 
@@ -48424,13 +48390,15 @@ msgid ""
 "to lossless. Useful to reduce transparency artifact on lossy export.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Om aktiverat, ställer det in alfakanalen (transparens) "
+"till förlustfri. Användbart för att minska transparensförvrängning vid "
+"förstörande export.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
-#, fuzzy, kde-format
-#| msgid "Lossless"
+#, kde-format
 msgid "Lossless alpha"
-msgstr "Förlustfri"
+msgstr "Förlustfri alfa"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:141
@@ -48524,10 +48492,9 @@ msgstr "Platta ut bild"
 
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
-#, fuzzy, kde-format
-#| msgid "Color profile:"
+#, kde-format
 msgid "Color profile"
-msgstr "Färgprofil: "
+msgstr "Färgprofil"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -48537,19 +48504,21 @@ msgid ""
 "lossless, otherwise keep using ICC. Useful to make filesize even smaller "
 "(eg. for web delivery).</p></body></html>"
 msgstr ""
+"<html><head/><body><p>Använd CICP om ICC-profilen går att konvertera till "
+"CICP för förlustfria filer, fortsätt annars använda ICC. Användbart för att "
+"göra filstorleken ännu mindre (t.ex. för webbleverans).</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:275
 #, kde-format
 msgid "(Lossless) Use CICP instead of ICC if possible"
-msgstr ""
+msgstr "(Förlustfri) Använd CICP istället för ICC om möjligt"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
-#, fuzzy, kde-format
-#| msgid "Database version"
+#, kde-format
 msgid "HDR conversion"
-msgstr "Databasversion"
+msgstr "HDR-konvertering"
 
 #. i18n: ectx: property (text), widget (QLabel, explanationLabel)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:291
@@ -48977,10 +48946,9 @@ msgid "Could not load \"id\" of the transform mask"
 msgstr "Kunde inte läsa in transformeringsmaskens \"id\""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
-#, fuzzy, kde-format
-#| msgid "Could not create transform mask params"
+#, kde-format
 msgid "Could not find transform mask XML element"
-msgstr "Kunde inte skapa transformeringsmaskens parametrar"
+msgstr "Kunde inte hitta transformeringsmaskens XML-element"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
 #, kde-format
@@ -51623,7 +51591,7 @@ msgid ""
 "but uses all layers that are currently visible for smudge input\n"
 "NOTE: This mode is only able to work correctly with a fully opaque background"
 msgstr ""
-"Målar på nuvarande lager\n"
+"Målar på aktuellt lager\n"
 "men använder alla för närvarande synliga lager för smetningsindata\n"
 "Observera: Läget fungerar bara riktigt med en fullständigt ogenomskinlig "
 "bakgrund"
@@ -52973,13 +52941,14 @@ msgid ""
 "Apply less texture when the strength is lower. Use this option if you want "
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
+"Använd mindre struktur när styrkan är lägre. Använd alternativet om penseln "
+"ska gå mellan ostrukturerat och strukturerat utseende."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
-#, fuzzy, kde-format
-#| msgid "Soft Proofing"
+#, kde-format
 msgid "Soft texturing"
-msgstr "Bildskärmskorrektur"
+msgstr "Mjuk struktur"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRandomness)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:239
@@ -57424,11 +57393,10 @@ msgid "Spread: {n}%"
 msgstr "Spridning: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
-msgstr "Stäng"
+msgstr "Stäng gap: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:587
 #, kde-format
@@ -57539,10 +57507,9 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
-#, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
+#, kde-format
 msgid "Close gaps in lines up to the set amount"
-msgstr "Gör markeringen suddig med angivet värde"
+msgstr "Stäng gap i linjer upp till angivet värde"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:658
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:567
@@ -57594,10 +57561,9 @@ msgstr ""
 "färgbeteckningar"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Att dra fyller i områden med vilken färg som helst"
+msgstr "Att dra fyller inte olika områden"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format
@@ -58813,11 +58779,10 @@ msgstr ""
 "ny markering görs"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
-msgstr "Stäng"
+msgstr "Stäng gap: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:422
 #, kde-format
@@ -59261,20 +59226,14 @@ msgid "Insert Text"
 msgstr "Infoga text"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Insert Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Infoga text"
+msgstr "Infoga Rich text"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Ändra lageregenskaper"
+msgstr "Ändra textegenskaper"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"
@@ -60167,11 +60126,10 @@ msgid "Spread: {n}%"
 msgstr "Spridning: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
-#, fuzzy, kde-format
-#| msgid "Close"
+#, kde-format
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
-msgstr "Stäng"
+msgstr "Stäng gap: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:506
 #, kde-format
@@ -61239,7 +61197,7 @@ msgstr "Formväljarverktyg"
 #, kde-format
 msgctxt "action"
 msgid "Sample a color from the image or current layer"
-msgstr "Hämta en färg från bilden eller nuvarande lager"
+msgstr "Hämta en färg från bilden eller aktuellt lager"
 
 #. i18n: context: text @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)
 #. i18n: context: iconText @ Action (KritaFill/KisToolFill), Actions (tool-shortcuts), ActionCollection (Tools)

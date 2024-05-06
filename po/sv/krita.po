@@ -42,19 +42,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
-# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2023, 2024 Stefan Asserhäll <stefan.asserhall@bredband.net>
-# Stefan Asserhall <stefan.asserhall@bredband.net>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
+# SPDX-FileCopyrightText: 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2023, 2024 Stefan Asserhäll <stefan.asserhall@gmail.com>
+# Stefan Asserhall <stefan.asserhall@gmail.com>, 2005, 2010, 2011, 2012, 2013, 2014, 2015, 2016.
 # Arve Eriksson <031299870@telia.com>, 2011.
 # Arve Eriksson <031299870@telia.com>, 2010.
-# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2015, 2016.
-# Stefan Asserhäll <stefan.asserhall@bredband.net>, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
+# Stefan Asserhäll <stefan.asserhall@gmail.com>, 2015, 2016.
+# Stefan Asserhäll <stefan.asserhall@gmail.com>, 2015, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-04-02 02:58+0000\n"
 "PO-Revision-Date: 2024-05-01 07:42+0200\n"
-"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
@@ -22206,7 +22206,7 @@ msgstr "Mattias Newzella,Stefan Asserhäll"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "newzella@linux.nu,stefan.asserhall@bredband.net"
+msgstr "newzella@linux.nu,stefan.asserhall@gmail.com"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format

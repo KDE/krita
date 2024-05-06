@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-02 01:39+0000\n"
-"PO-Revision-Date: 2024-04-25 13:42+0300\n"
+"PO-Revision-Date: 2024-05-06 00:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -26648,7 +26648,7 @@ msgstr "Silme kipi ayrı bir fırça boyutunu kullanacak"
 #: libs/ui/forms/wdgpaintopsettings.ui:618
 #, kde-format
 msgid "Eraser switch size"
-msgstr "Silgi değiştirme boyutu"
+msgstr "Silgi ögesi boyutu"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, eraserBrushOpacityCheckBox)
 #: libs/ui/forms/wdgpaintopsettings.ui:634
@@ -26666,13 +26666,13 @@ msgstr "Silgi değiştirme matlığı"
 #: libs/ui/forms/wdgpaintopsettings.ui:653
 #, kde-format
 msgid "Temporarily Save Tweaks To Presets"
-msgstr "İnce Ayarları Geçici Olarak Önayarlara Kaydet"
+msgstr "İnce ayarları geçici olarak önayarlara kaydet"
 
 #. i18n: ectx: property (text), widget (QLabel, scratchpadSidebarLabel)
 #: libs/ui/forms/wdgpaintopsettings.ui:780
 #, kde-format
 msgid "Scratchpad"
-msgstr "Karalama Defteri"
+msgstr "Eskiz Defteri"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, paintPresetIcon)
 #: libs/ui/forms/wdgpaintopsettings.ui:843
@@ -27468,7 +27468,7 @@ msgstr "Var Olan Küçük Görseli Yükle"
 #: libs/ui/forms/wdgsavebrushpreset.ui:150
 #, kde-format
 msgid "Load Scratchpad Thumbnail"
-msgstr "Karalama Defteri Küçük Görselini Yükle"
+msgstr "Eskiz Defteri Küçük Görselini Yükle"
 
 #. i18n: ectx: property (text), widget (QPushButton, loadImageIntoThumbnailButton)
 #: libs/ui/forms/wdgsavebrushpreset.ui:157
@@ -28324,7 +28324,7 @@ msgstr "+0,5 Pozlama"
 #: libs/ui/input/kis_gamma_exposure_action.cpp:71
 #, kde-format
 msgid "Exposure -0.5"
-msgstr "-0,5 Pozlama"
+msgstr "−0,5 Pozlama"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:72
 #, kde-format
@@ -28334,7 +28334,7 @@ msgstr "+0,5 Gama"
 #: libs/ui/input/kis_gamma_exposure_action.cpp:73
 #, kde-format
 msgid "Gamma -0.5"
-msgstr "-0,5 Gama"
+msgstr "−0,5 Gama"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:75
 #, kde-format
@@ -28344,7 +28344,7 @@ msgstr "+0,2 Pozlama"
 #: libs/ui/input/kis_gamma_exposure_action.cpp:76
 #, kde-format
 msgid "Exposure -0.2"
-msgstr "-0,2 Pozlama"
+msgstr "−0,2 Pozlama"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:77
 #, kde-format
@@ -28354,7 +28354,7 @@ msgstr "+0,2 Gama"
 #: libs/ui/input/kis_gamma_exposure_action.cpp:78
 #, kde-format
 msgid "Gamma -0.2"
-msgstr "-0,2 Gama"
+msgstr "−0,2 Gama"
 
 #: libs/ui/input/kis_gamma_exposure_action.cpp:80
 #, kde-format
@@ -34204,7 +34204,7 @@ msgstr "Önayar gösterimini aç/kapat"
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:107
 #, kde-format
 msgid "Toggle showing scratchpad"
-msgstr "Karalama defteri gösterimini aç/kapat"
+msgstr "Eskiz defteri gösterimini aç/kapat"
 
 #: libs/ui/widgets/kis_paintop_presets_editor.cpp:109
 #, kde-format
@@ -48599,7 +48599,7 @@ msgid ""
 "Edge preserving filter level, -1 to 3. Use -1 for the default (encoder "
 "chooses), 0 to 3 to set a strength."
 msgstr ""
-"Kenar koruyucu süzgeç düzeyi, -1 ile 3 arası. Öntanımlı olarak -1’i "
+"Kenar koruyucu süzgeç düzeyi, −1 ile 3 arası. Öntanımlı olarak −1’i "
 "(kodlayıcı seçer), bir güç ayarlamak için 0 ila 3’ü kullanın."
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, gaborish)
@@ -48744,7 +48744,7 @@ msgid ""
 msgstr ""
 "Renk miktarı erimin bu yüzdesinden küçükse Global kanal paletini kullanın.\n"
 "Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı öntanımlısını kullanmak "
-"için -1 kullanın.\n"
+"için −1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblChannelColorsGroupPercent)
@@ -48765,7 +48765,7 @@ msgstr ""
 "Renk miktarı bu erim yüzdesinden küçükse Yerel (grup başına) kanal paletini "
 "kullanın.\n"
 "Belirgin bir yüzde ayarlamak için 0–100, kodlayıcı öntanımlısını kullanmak "
-"için -1 kullanın.\n"
+"için −1 kullanın.\n"
 "Modüler kodlama için kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblPaletteColors)
@@ -48783,7 +48783,7 @@ msgid ""
 "Used for modular encoding."
 msgstr ""
 "Renk miktarı bu miktardan küçük veya ona eşitse renk paletini veya kodlayıcı "
-"öntanımlısını kullanmak için -1’i kullanın.\n"
+"öntanımlısını kullanmak için −1’i kullanın.\n"
 "Modüler kodlama için kullanılır."
 
 #. i18n: ectx: property (text), widget (QLabel, lblLossyPalette)
@@ -48842,7 +48842,7 @@ msgid ""
 "Higher values use more encoder memory."
 msgstr ""
 "MA ağaçlarını yüzde olarak öğrenmek için kullanılan piksel oranı.\n"
-"-1 = öntanımlı, 0 = MA yok ve hızlı kod çözme, 50 = öntanımlı değer, 100 = "
+"−1 = öntanımlı, 0 = MA yok ve hızlı kod çözme, 50 = öntanımlı değer, 100 = "
 "tümü.\n"
 "Daha yüksek değerler daha fazla kodlayıcı belleği kullanır."
 
@@ -52378,13 +52378,13 @@ msgstr "Yalnızca di&key düzlem"
 #: plugins/paintops/hatching/wdghatchingoptions.ui:330
 #, kde-format
 msgid "-&45° plane then +45° plane"
-msgstr "-&45° düzlem daha sonra +45° düzlem"
+msgstr "−&45° düzlem daha sonra +45° düzlem"
 
 #. i18n: ectx: property (text), widget (QRadioButton, plusThenMinusRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:349
 #, kde-format
 msgid "+45° plane &then -45° plane"
-msgstr "+45° düzlem &daha sonra -45° düzlem"
+msgstr "+45° düzlem &daha sonra −45° düzlem"
 
 #. i18n: ectx: property (text), widget (QRadioButton, moirePatternRadioButton)
 #: plugins/paintops/hatching/wdghatchingoptions.ui:368
@@ -53289,7 +53289,7 @@ msgstr "Yakın"
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:30
 #, kde-format
 msgid "-60°"
-msgstr "-60°"
+msgstr "−60°"
 
 #: plugins/paintops/libpaintop/KisDynamicSensorFactoryRegistry.cpp:32
 #, kde-format
@@ -53563,7 +53563,7 @@ msgstr "Mat"
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:96
 #, kde-format
 msgid "-180°"
-msgstr "-180°"
+msgstr "−180°"
 
 #: plugins/paintops/libpaintop/KisStandardOptionData.cpp:28
 #, kde-format
@@ -61317,35 +61317,3 @@ msgstr "Yakınlaştırma Aracı"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Başvuru Görseller Aracı"
-
-#~ msgid "Configure Popup Palette dockers"
-#~ msgstr "Açılır palet panellerini yapılandır"
-
-#~ msgid "Support Krita!"
-#~ msgstr "Krita'yı Destekle!"
-
-#~ msgid "Antialiased"
-#~ msgstr "Yumuşatılmış"
-
-#~ msgid "Div Style:"
-#~ msgstr "Div biçemi:"
-
-#~ msgid "3d Rotation:"
-#~ msgstr "3B döndürme:"
-
-#~ msgid "X-Rotation:"
-#~ msgstr "X döndürme:"
-
-#~ msgid "Y-Rotation:"
-#~ msgstr "Y döndürme:"
-
-#~ msgid "<html><head/><body><h1 align=\"center\">Backed By</h1><p>"
-#~ msgstr "<html><head/><body><h1 align=\"center\">Destekçiler</h1><p>"
-
-#~ msgid ""
-#~ ".</p><p><i>Thanks! You were all <b>awesome</b>!</i></p></body></html>"
-#~ msgstr ""
-#~ ".</p><p><i>Teşekkürler! Hepiniz <b>harikasınız</b>!</i></p></body></html>"
-
-#~ msgid "Backers"
-#~ msgstr "Destekçiler"

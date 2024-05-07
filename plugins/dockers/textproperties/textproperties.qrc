@@ -31,5 +31,7 @@
         <file alias="UnderlinePosition.qml">qml/UnderlinePosition.qml</file>
         <file alias="RevertPropertyButton.qml">qml/RevertPropertyButton.qml</file>
         <file alias="TextPropertyBaseList.qml">qml/TextPropertyBaseList.qml</file>
+        <file alias="UnitComboBox.qml">qml/UnitComboBox.qml</file>
+        <file alias="DoubleSpinBox.qml">qml/DoubleSpinBox.qml</file>
     </qresource>
 </RCC>

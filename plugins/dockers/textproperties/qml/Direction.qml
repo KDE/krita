@@ -20,7 +20,6 @@ TextPropertyBase {
         unicodeBidi = properties.unicodeBidi;
         var set = properties.directionState !== KoSvgTextPropertiesModel.PropertyUnset;
         var pType = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
-        console.log("set", set, "type matches", pType)
         visible = set && pType;
         blockSignals = false;
     }

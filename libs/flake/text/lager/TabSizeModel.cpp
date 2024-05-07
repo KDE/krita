@@ -44,6 +44,7 @@ auto getUnit =  lager::lenses::getset (
         if (val == TabSizeModel::TabSizeType::Spaces) {
             data.isNumber = true;
         } else {
+            data.isNumber = false;
         switch(val) {
         case TabSizeModel::TabSizeType::Absolute:
             data.length.unit = KoSvgText::CssLengthPercentage::Absolute;

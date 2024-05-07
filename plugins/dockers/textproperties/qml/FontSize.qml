@@ -13,16 +13,24 @@ TextPropertyBase {
     propertyType: TextPropertyBase.Character;
 
     property alias fontSize: fontSizeSpn.value;
+    property alias fontSizeUnit: fontSizeUnitCmb.comboBoxUnit;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        fontSize = properties.fontSize.value;
+        fontSize = properties.fontSize.value * fontSizeSpn.multiplier;
+        fontSizeUnit = properties.fontSize.unitType;
         visible = properties.fontSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onFontSizeChanged: {
         if (!blockSignals) {
-            properties.fontSize.value = fontSize;
+            properties.fontSize.value = fontSize / fontSizeSpn.multiplier;
+        }
+    }
+    onFontSizeUnitChanged: {
+        fontSizeUnitCmb.currentIndex = fontSizeUnitCmb.indexOfValue(fontSizeUnit);
+        if (!blockSignals) {
+            properties.fontSize.unitType = fontSizeUnitCmb.comboBoxUnit;
         }
     }
 
@@ -41,21 +49,20 @@ TextPropertyBase {
             Layout.fillWidth: true;
         }
 
-        SpinBox {
+        DoubleSpinBox {
             id: fontSizeSpn;
             editable: true;
             Layout.fillWidth: true;
+
+            from: 0;
+            to: 999 * multiplier;
+            stepSize: 100;
         }
 
-        ComboBox {
-            model: [
-                {text: i18nc("@label:inlistbox", "Pt"), value: 0},
-                {text: i18nc("@label:inlistbox", "Em"), value: 1},
-                {text: i18nc("@label:inlistbox", "Ex"), value: 2},
-                {text: i18nc("@label:inlistbox", "%"), value: 3}
-            ]
-            textRole: "text";
-            valueRole: "value";
+        UnitComboBox {
+            id: fontSizeUnitCmb;
+            spinBoxControl: fontSizeSpn;
+            isFontSize: true;
             Layout.fillWidth: true;
         }
     }

@@ -1452,7 +1452,7 @@ KoSvgTextProperties SvgTextPropertyCursor::getInheritedProperties()
 {
     // 9 times out of 10 this is correct, though we could do better by actually
     // getting inherited properties for the range and not just defaulting to the paragraph.
-    return d->parent->shape()? d->parent->shape()->textProperties(): KoSvgTextProperties::defaultProperties();
+    return (d->parent->shape() && spanSelection())? d->parent->shape()->textProperties(): KoSvgTextProperties::defaultProperties();
 }
 
 void SvgTextPropertyCursor::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)

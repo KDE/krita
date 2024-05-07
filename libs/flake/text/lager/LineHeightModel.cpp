@@ -12,13 +12,21 @@ auto getValue =  lager::lenses::getset (
     if (data.isNumber) {
         return data.value;
     } else {
-        return data.length.value;
+        if (data.length.unit == KoSvgText::CssLengthPercentage::Percentage) {
+            return data.length.value * 100;
+        } else {
+            return data.length.value;
+        }
     }
 }, [] (KoSvgText::LineHeightInfo data, const qreal &val) -> KoSvgText::LineHeightInfo {
         if (data.isNumber) {
         data.value = val;
         } else {
-            data.length.value = val;
+            if (data.length.unit == KoSvgText::CssLengthPercentage::Percentage) {
+                data.length.value = val * 0.01;
+            } else {
+                data.length.value = val;
+            }
         }
         return data;
 });
@@ -41,9 +49,10 @@ auto getUnit =  lager::lenses::getset (
         return LineHeightModel::LineHeightType::Absolute;
     }
 }, [] (KoSvgText::LineHeightInfo data, const LineHeightModel::LineHeightType &val) -> KoSvgText::LineHeightInfo {
-        if (val == LineHeightModel::Lines) {
+        if (val == LineHeightModel::LineHeightType::Lines) {
             data.isNumber = true;
         } else {
+            data.isNumber = false;
         switch(val) {
         case LineHeightModel::LineHeightType::Absolute:
             data.length.unit = KoSvgText::CssLengthPercentage::Absolute;

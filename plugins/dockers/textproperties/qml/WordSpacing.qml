@@ -13,16 +13,25 @@ TextPropertyBase {
     propertyType: TextPropertyBase.Character;
     property alias wordSpacing: wordSpacingSpn.value;
     visible: properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
+    property alias wordSpacingUnit: wordSpacingUnitCmb.comboBoxUnit;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        wordSpacing = properties.wordSpacing.value;
+        wordSpacing = properties.wordSpacing.value * wordSpacingSpn.multiplier;
+        wordSpacingUnit = properties.wordSpacing.unitType;
         visible = properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onWordSpacingChanged: {
         if (!blockSignals) {
-            properties.wordSpacing.value = wordSpacing;
+            properties.wordSpacing.value = wordSpacing / wordSpacingSpn.multiplier;
+        }
+    }
+
+    onWordSpacingUnitChanged: {
+        wordSpacingUnitCmb.currentIndex = wordSpacingUnitCmb.indexOfValue(wordSpacingUnit);
+        if (!blockSignals) {
+            properties.wordSpacing.unitType = wordSpacingUnit;
         }
     }
 
@@ -41,14 +50,18 @@ TextPropertyBase {
             Layout.fillWidth: true;
         }
 
-        SpinBox {
+        DoubleSpinBox {
             id: wordSpacingSpn
             editable: true;
             Layout.fillWidth: true;
+            from: -999 * multiplier;
+            to: 999 * multiplier;
         }
 
-        ComboBox {
-            model: ["Pt", "Em", "Ex"];
+        UnitComboBox {
+            id: wordSpacingUnitCmb
+            spinBoxControl: wordSpacingSpn;
+            isFontSize: false;
             Layout.fillWidth: true;
         }
     }

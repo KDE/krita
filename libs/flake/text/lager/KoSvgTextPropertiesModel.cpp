@@ -291,3 +291,31 @@ TextTransformModel *KoSvgTextPropertiesModel::textTransform()
 {
     return &this->textTransformModel;
 }
+
+qreal KoSvgTextPropertiesModel::resolvedFontSize(bool fontSize)
+{
+    KoSvgTextPropertyData data = textData.get();
+    KoSvgTextProperties inherited = data.inheritedProperties;
+    inherited.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
+    if (fontSize) {
+        return inherited.fontSize().value;
+    } else {
+        KoSvgTextProperties commonProperties = data.commonProperties;
+        commonProperties.inheritFrom(inherited, true);
+        return commonProperties.fontSize().value;
+    }
+}
+
+qreal KoSvgTextPropertiesModel::resolvedXHeight(bool fontSize)
+{
+    KoSvgTextPropertyData data = textData.get();
+    KoSvgTextProperties inherited = data.inheritedProperties;
+    inherited.inheritFrom(KoSvgTextProperties::defaultProperties(), true);
+    if (fontSize) {
+        return inherited.xHeight();
+    } else {
+        KoSvgTextProperties commonProperties = data.commonProperties;
+        commonProperties.inheritFrom(inherited, true);
+        return commonProperties.xHeight();
+    }
+}

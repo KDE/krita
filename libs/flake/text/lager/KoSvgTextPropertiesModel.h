@@ -153,6 +153,9 @@ public:
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 
+    Q_INVOKABLE qreal resolvedFontSize(bool fontSize = false);
+    Q_INVOKABLE qreal resolvedXHeight(bool fontSize = false);
+
 Q_SIGNALS:
     void textPropertyChanged();
     void fontSizeChanged();

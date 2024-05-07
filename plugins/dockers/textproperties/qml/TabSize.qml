@@ -16,15 +16,15 @@ TextPropertyBase {
 
     onPropertiesUpdated: {
         blockSignals = true;
-        tabSize = properties.tabSize.value;
+        tabSize = properties.tabSize.value * tabSizeSpn.multiplier;
         tabSizeUnit = properties.tabSize.unit;
-        visible = properties.tabSizeState !== KoSvgTextPropertiesModel.PropertySet;
+        visible = properties.tabSizeState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 
     onTabSizeChanged: {
         if (!blockSignals) {
-            properties.tabSize.value = tabSize;
+            properties.tabSize.value = tabSize / tabSizeSpn.multiplier;
         }
     }
 
@@ -57,12 +57,15 @@ TextPropertyBase {
             height: 1;
         }
 
-        SpinBox {
+        DoubleSpinBox {
             id: tabSizeSpn;
             Layout.fillWidth: true;
+            from: 0;
+            to: 100 * multiplier;
         }
         ComboBox {
-            id: tabSizeUnitCmb
+            id: tabSizeUnitCmb;
+            property QtObject spinBoxControl: tabSizeSpn;
             model: [
                 {text: i18nc("@label:inlistbox", "Spaces"), value: TabSizeModel.Spaces},
                 {text: i18nc("@label:inlistbox", "Pt"), value: TabSizeModel.Absolute},
@@ -71,8 +74,35 @@ TextPropertyBase {
             ]
             textRole: "text";
             valueRole: "value";
-            onActivated: tabSizeUnit = currentValue;
             Layout.fillWidth: true;
+
+            onActivated: {
+                if (currentValue === TabSizeModel.Spaces) {
+                    tabSizeUnit = currentValue;
+                    spinBoxControl.value = properties.tabSize.value * tabSizeSpn.multiplier;
+                } else {
+
+                    var currentValueInPt = 0;
+                    if (tabSizeUnit === TabSizeModel.Absolute) {
+                        currentValueInPt = spinBoxControl.value;
+                    } else if (tabSizeUnit === TabSizeModel.Ex) {
+                        currentValueInPt = spinBoxControl.value * properties.resolvedXHeight(false);
+                    } else { // EM, Lines
+                        currentValueInPt = spinBoxControl.value * properties.resolvedFontSize(false);
+                    }
+
+                    var newValue = 0;
+                    if (currentValue === TabSizeModel.Absolute) {
+                        newValue = currentValueInPt
+                    } else if (currentValue === TabSizeModel.Ex) {
+                        newValue = currentValueInPt / properties.resolvedXHeight(false);
+                    } else { // Em
+                        newValue = currentValueInPt / properties.resolvedFontSize(false);
+                    }
+                    tabSizeUnit = currentValue;
+                    spinBoxControl.value = newValue;
+                }
+            }
         }
 
     }

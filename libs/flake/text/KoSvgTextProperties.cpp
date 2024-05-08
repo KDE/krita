@@ -1210,3 +1210,12 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
     return *s_defaultProperties;
 }
 
+bool KoSvgTextProperties::propertyIsBlockOnly(PropertyId id)
+{
+    return id == WritingModeId ||
+            id == TextAlignAllId ||
+            id == TextAlignLastId ||
+            id == TextIndentId ||
+            id == HangingPunctuationId;
+}
+

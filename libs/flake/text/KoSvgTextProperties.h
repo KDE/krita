@@ -277,6 +277,14 @@ public:
      */
     static const KoSvgTextProperties& defaultProperties();
 
+    /**
+     * Returns whether the property only applies to paragraphs (what CSS calls blocks).
+     * Within SVG, all paragraphs are blocks and all text inside is inline. There are
+     * some potential caveats to this (text-combine-upright, ruby), but those are also
+     * unique in other ways.
+     */
+    static bool propertyIsBlockOnly(KoSvgTextProperties::PropertyId id);
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

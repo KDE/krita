@@ -939,6 +939,8 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
     }
     bool changed = false;
     int currentIndex = 0;
+    KoSvgText::AutoValue inlineSize = d->textData.childBegin()->properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    bool isWrapping = !d->shapesInside.isEmpty() || !inlineSize.isAuto;
     for (auto it = d->textData.depthFirstTailBegin(); it != d->textData.depthFirstTailEnd(); it++) {
         if (KoSvgTextShape::Private::childCount(siblingCurrent(it)) > 0) {
             continue;
@@ -946,10 +948,18 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
 
         if (currentIndex >= startIndex && currentIndex < endIndex) {
             Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
-                it->properties.setProperty(p, properties.property(p));
+                if (KoSvgTextProperties::propertyIsBlockOnly(p) || (p == KoSvgTextProperties::TextAnchorId && isWrapping)) {
+                    d->textData.childBegin()->properties.setProperty(p, properties.property(p));
+                } else {
+                    it->properties.setProperty(p, properties.property(p));
+                }
             }
             Q_FOREACH(KoSvgTextProperties::PropertyId p, removeProperties) {
-                it->properties.removeProperty(p);
+                if (KoSvgTextProperties::propertyIsBlockOnly(p)) {
+                    d->textData.childBegin()->properties.removeProperty(p);
+                } else {
+                    it->properties.removeProperty(p);
+                }
             }
 
             changed = true;

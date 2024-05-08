@@ -869,8 +869,10 @@ void SvgTextCursor::canvasResourceChanged(int key, const QVariant &value)
                               QVariant::fromValue(KoSvgText::BackgroundProperty(bg)));
         }
     } else if (key == KoCanvasResource::BackgroundColor) {
-        // TODO figure out how not to override the whole stroke.
         QSharedPointer<KoShapeStroke> stroke(new KoShapeStroke());
+        if (shapeProps.stroke()) {
+            stroke = qSharedPointerDynamicCast<KoShapeStroke>(shapeProps.stroke());
+        }
         stroke->setColor(value.value<KoColor>().toQColor());
         if (stroke != shapeProps.stroke()) {
             props.setProperty(KoSvgTextProperties::StrokeId,
@@ -1413,6 +1415,7 @@ void SvgTextCursor::updateCanvasResources()
         if (bg) {
             KoColor c;
             c.fromQColor(bg->color());
+            c.setOpacity(1.0);
             if (c != d->canvas->resourceManager()->foregroundColor()) {
                 d->canvas->resourceManager()->setForegroundColor(c);
             }
@@ -1421,6 +1424,7 @@ void SvgTextCursor::updateCanvasResources()
         if (stroke && stroke->color().isValid()) {
             KoColor c;
             c.fromQColor(stroke->color());
+            c.setOpacity(1.0);
             if (c != d->canvas->resourceManager()->backgroundColor()) {
                 d->canvas->resourceManager()->setBackgroundColor(c);
             }

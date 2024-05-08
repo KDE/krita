@@ -253,7 +253,6 @@ KoCompositeOpRegistry::KoIDMap KoCompositeOpRegistry::getLayerStylesCompositeOps
     ids << COMPOSITE_LINEAR_LIGHT;
     ids << COMPOSITE_PIN_LIGHT;
     ids << COMPOSITE_HARD_MIX_PHOTOSHOP;
-    ids << COMPOSITE_HARD_MIX_SOFTER_PHOTOSHOP;
     ids << COMPOSITE_DIFF;
     ids << COMPOSITE_EXCLUSION;
     ids << COMPOSITE_SUBTRACT;

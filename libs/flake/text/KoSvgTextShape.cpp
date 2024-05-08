@@ -842,6 +842,10 @@ KoSvgTextProperties inheritProperties(KisForest<KoSvgTextContentElement>::depth_
 QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos, const int endPos, bool inherited) const
 {
     QList<KoSvgTextProperties> props;
+
+    /// Sometimes this gets called when xml data is uploaded into the shape, at which point the tree is empty.
+    if (d->isLoading) return props;
+
     if (((startPos < 0 || startPos >= d->cursorPos.size()) && startPos == endPos) || d->cursorPos.isEmpty()) {
         props = {KisForestDetail::size(d->textData)? d->textData.childBegin()->properties: KoSvgTextProperties()};
         return props;
@@ -1133,6 +1137,9 @@ void KoSvgTextShape::notifyCursorPosChanged(int pos, int anchor)
 
 void KoSvgTextShape::notifyMarkupChanged()
 {
+    if (d->isLoading) {
+        return;
+    }
     Q_FOREACH (KoShape::ShapeChangeListener *listener, listeners()) {
         TextCursorChangeListener *cursorListener = dynamic_cast<TextCursorChangeListener*>(listener);
         if (cursorListener) {

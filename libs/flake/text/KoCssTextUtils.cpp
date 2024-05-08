@@ -9,6 +9,7 @@
 
 QVector<QPair<int, int>> positionDifference(QStringList a, QStringList b) {
     QVector<QPair<int, int>> positions;
+    if (a.isEmpty() && b.isEmpty()) return positions;
 
     int countA = 0;
     int countB = 0;
@@ -35,6 +36,7 @@ QVector<QPair<int, int>> positionDifference(QStringList a, QStringList b) {
 
 QString KoCssTextUtils::transformTextToUpperCase(const QString &text, const QString &langCode, QVector<QPair<int, int> > &positions)
 {
+    if (text.isEmpty()) return text;
     QLocale locale(langCode.split("-").join("_"));
     QString transformedText = locale.toUpper(text);
     positions = positionDifference(textToUnicodeGraphemeClusters(text, langCode), textToUnicodeGraphemeClusters(transformedText, langCode));
@@ -43,14 +45,16 @@ QString KoCssTextUtils::transformTextToUpperCase(const QString &text, const QStr
 
 QString KoCssTextUtils::transformTextToLowerCase(const QString &text, const QString &langCode, QVector<QPair<int, int> > &positions)
 {
+    if (text.isEmpty()) return text;
     QLocale locale(langCode.split("-").join("_"));
     QString transformedText = locale.toLower(text);
     positions = positionDifference(textToUnicodeGraphemeClusters(text, langCode), textToUnicodeGraphemeClusters(transformedText, langCode));
     return transformedText;
-};
+}
 
 QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode, QVector<QPair<int, int>> &positions)
 {
+    if (text.isEmpty()) return text;
     QLocale locale(langCode);
 
     QStringList graphemes = textToUnicodeGraphemeClusters(text, langCode);
@@ -97,6 +101,7 @@ static QChar findProportionalToFullWidth(const QChar &value, const QChar &defaul
 
 QString KoCssTextUtils::transformTextFullWidth(const QString &text)
 {
+    if (text.isEmpty()) return text;
     QString transformedText;
     Q_FOREACH (const QChar &c, text) {
         if (c.decompositionTag() == QChar::Narrow) {
@@ -121,11 +126,15 @@ static QChar findSmallKanaToBigKana(const QChar &value, const QChar &defaultValu
         {{0x3049}, {0x304A}},
         {{0x3095}, {0x304B}},
         {{0x3096}, {0x3051}},
+        {{0x1B132}, {0x3053}},
         {{0x3063}, {0x3064}},
         {{0x3083}, {0x3084}},
         {{0x3085}, {0x3086}},
         {{0x3087}, {0x3088}},
         {{0x308E}, {0x308F}},
+        {{0x1B150}, {0x3090}},
+        {{0x1B151}, {0x3091}},
+        {{0x1B152}, {0x3092}},
 
         {{0x30A1}, {0x30A2}},
         {{0x30A3}, {0x30A4}},
@@ -135,6 +144,7 @@ static QChar findSmallKanaToBigKana(const QChar &value, const QChar &defaultValu
         {{0x30F5}, {0x30AB}},
         {{0x31F0}, {0x30AF}},
         {{0x30F6}, {0x30B1}},
+        {{0x1B155}, {0x30B3}},
         {{0x31F1}, {0x30B7}},
         {{0x31F2}, {0x30B9}},
         {{0x30C3}, {0x30C4}},
@@ -155,6 +165,10 @@ static QChar findSmallKanaToBigKana(const QChar &value, const QChar &defaultValu
         {{0x31FE}, {0x30EC}},
         {{0x31FF}, {0x30ED}},
         {{0x30EE}, {0x30EF}},
+        {{0x1B164}, {0x30F0}},
+        {{0x1B165}, {0x30F1}},
+        {{0x1B166}, {0x30F2}},
+        {{0x1B167}, {0x30F3}},
 
         {{0xFF67}, {0xFF71}},
         {{0xFF68}, {0xFF72}},

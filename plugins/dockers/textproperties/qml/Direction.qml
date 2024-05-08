@@ -19,8 +19,8 @@ TextPropertyBase {
         direction = properties.direction;
         unicodeBidi = properties.unicodeBidi;
         var set = properties.directionState !== KoSvgTextPropertiesModel.PropertyUnset;
-        var pType = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
-        visible = set && pType;
+        enabled = parentPropertyType === TextPropertyBase.Paragraph? !properties.spanSelection: properties.spanSelection;
+        visible = set;
         blockSignals = false;
     }
 

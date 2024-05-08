@@ -676,13 +676,6 @@ bool isOpenGLRendererBlacklisted(const QString &rendererString,
                 qDebug() << "Detected Intel driver build 4358, making ANGLE the preferred renderer";
                 isBlacklisted = true;
                 *warningMessage << knownBadIntelWarning;
-            } else {
-                // Intel tends to randomly break OpenGL in some of their new driver
-                // builds, therefore we just shouldn't use OpenGL by default to
-                // reduce bug report noises.
-                qDebug() << "Detected Intel driver, making ANGLE the preferred renderer";
-                isBlacklisted = true;
-                *warningMessage << grossIntelWarning;
             }
         } else {
             // In case Intel changed the driver version format to something that

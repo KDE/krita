@@ -20,7 +20,7 @@ TextPropertyBase {
         hangStart = properties.hangingPunctuationFirst;
         hangEnd = properties.hangingPunctuationLast;
         hangComma = properties.hangingPunctuationComma;
-        visible = properties.hangingPunctuationState !== KoSvgTextPropertiesModel.PropertySet;
+        visible = properties.hangingPunctuationState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
 

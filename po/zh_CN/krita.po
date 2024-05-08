@@ -22686,10 +22686,9 @@ msgid "On Middle-Click Drag"
 msgstr "中键拖动面板"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "所有支持的格式"
+msgstr "所有支持的文件"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25412,10 +25411,9 @@ msgstr "导入动画时裁切帧"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "默认模板："
+msgstr "默认导出文件类型："
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28574,10 +28572,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "激活手绘轮廓选区工具"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "激活直线工具"
+msgstr "激活其他颜色"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -56808,10 +56805,9 @@ msgid ""
 msgstr "对带有指定颜色标签的图层进行采样并进行填充"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "任意颜色"
+msgstr "不填充不同区域"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

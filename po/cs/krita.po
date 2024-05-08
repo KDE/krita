@@ -22627,10 +22627,9 @@ msgid "On Middle-Click Drag"
 msgstr ""
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Všechny podporované formáty"
+msgstr "Všechny podporované soubory"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:402
 #, kde-format
@@ -25299,10 +25298,9 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default template:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Výchozí šablona:"
+msgstr ""
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -28383,10 +28381,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr ""
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Aktivovat nástroj pro čáry"
+msgstr ""
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format

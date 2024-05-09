@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-02 01:39+0000\n"
-"PO-Revision-Date: 2024-05-02 15:59+0200\n"
+"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"PO-Revision-Date: 2024-05-07 12:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -22951,8 +22951,7 @@ msgid "On Middle-Click Drag"
 msgstr "Sur un glisser / clic central"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
 msgstr "Tous les formats pris en charge"
 
@@ -23940,7 +23939,7 @@ msgstr ""
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita est un outil "
 "communautaire open-source destiné aux artistes numériques du monde entier."
-"<br />Son développement  est possible grâce au soutien continu de notre "
+"<br />Son développement est possible grâce au soutien continu de notre "
 "communauté de <a href=\"https://docs.krita.org/en/contributors_manual.html"
 "\">contributeurs</a>, de sponsors et des participants au <a href=\"https://"
 "fund.krita.org/\">fonds de développement </a>.</p></body></html>"
@@ -25766,10 +25765,9 @@ msgstr "Adapter les trames lors de l'importation des animations."
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
-#, fuzzy, kde-format
-#| msgid "Default &printer profile:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Profil d'im&primante par défaut :"
+msgstr "Type de fichier d'exportation par défaut :"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1054
@@ -25882,7 +25880,7 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
-"Attention : Si vous activez cette option et que les dialogues génèrent des "
+"Attention : si vous activez cette option et que les dialogues génèrent des "
 "anomalies, ne faites pas de rapport de bogue."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
@@ -29030,10 +29028,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Activer l'outil Sélection à main levée"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Activer l'outil Ligne"
+msgstr "Activer avec une autre couleur"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -31073,7 +31070,7 @@ msgstr ""
 #: libs/ui/KisImportExportManager.cpp:596
 #, kde-format
 msgid "Error: cannot save this image as a %1."
-msgstr "Erreur : Impossible d'enregistrer cette image comme %1."
+msgstr "Erreur : impossible d'enregistrer cette image comme %1."
 
 #: libs/ui/KisImportExportManager.cpp:597
 #: libs/ui/KisImportExportManager.cpp:640
@@ -32868,7 +32865,7 @@ msgstr ""
 "manuellement basculer vers « OpenGL » mais il n'y a aucune garantie que cela "
 "fonctionne correctement."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32877,7 +32874,7 @@ msgstr ""
 "Le moteur de rendu préféré ne prend pas en charge le format demandé de "
 "surface. Un autre moteur d rendu a été choisi."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -48952,7 +48949,7 @@ msgid ""
 "(eg. for web delivery).</p></body></html>"
 msgstr ""
 "<html><head/><body><p>Utiliser « CICP » si le profil « ICC » peut être "
-"converti en « CICP » sans perte . Ceci est utile pour rendre les tailles de "
+"converti en « CICP » sans perte. Ceci est utile pour rendre les tailles de "
 "fichiers encore plus petites (Par exemple pour des usages Internet).</p></"
 "body></html>"
 
@@ -49264,7 +49261,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:779
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr "Utiliser la palette de couleurs pour ... couleurs ou moins"
+msgstr "Utiliser la palette de couleurs pour x couleurs ou moins"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:793
@@ -53472,7 +53469,7 @@ msgid ""
 "the brush to transition between un-textured and textured appearance"
 msgstr ""
 "Appliquez moins de texture lorsque la force est plus faible. Utilisez cette "
-"option si vous souhaitez que la brosse fasse la transition entre l’aspect "
+"option si vous souhaitez que la brosse fasse la transition entre l'aspect "
 "non texturé et texturé."
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
@@ -58140,10 +58137,9 @@ msgstr ""
 "étiquettes spécifiques de couleur"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Le glisser remplira les régions de n'importe quelle couleur"
+msgstr "Le glisser ne remplira pas les régions différentes"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format

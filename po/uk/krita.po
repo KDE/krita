@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-02 01:39+0000\n"
+"POT-Creation-Date: 2024-05-09 01:50+0000\n"
 "PO-Revision-Date: 2024-04-25 08:05+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -33058,7 +33058,7 @@ msgstr ""
 "буде використано ANGLE. Ви можете вручну перемкнутися на OpenGL, але при "
 "цьому належну роботу програми не гарантовано."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -33067,7 +33067,7 @@ msgstr ""
 "Для бажаного засобу обробки не передбачено потрібного вам формату поверхні. "
 "Вибрано інший засіб обробки."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

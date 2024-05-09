@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-02 01:39+0000\n"
+"POT-Creation-Date: 2024-05-09 01:50+0000\n"
 "PO-Revision-Date: 2024-05-03 13:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -32597,7 +32597,7 @@ msgstr ""
 "istället. Du kan byta manuellt till OpenGL, men det finns inga garantier att "
 "att det fungerar riktigt."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32606,7 +32606,7 @@ msgstr ""
 "Föredragen återgivning stöder inte begärt ytformat. En annan återgivning har "
 "valts."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Föredraget utmatningsformat stöds inte av tillgängliga återgivningar."

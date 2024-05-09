@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-02 01:39+0000\n"
+"POT-Creation-Date: 2024-05-09 01:50+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -32852,7 +32852,7 @@ msgstr ""
 "bude používať v predvolenom nastavení. Môžete ručne prepnúť na OpenGL, ale "
 "nie je zaručené, že bude správne pracovať."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32861,7 +32861,7 @@ msgstr ""
 "Preferované vykresľovanie nepodporuje požadovaný formát povrchu. Bol vybrané "
 "iné vykresľovanie."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Dostupné vykresľovania nepodporujú preferovaný výstupný formát"

@@ -437,7 +437,7 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
     KisTransformUtils::MatricesPack m(m_d->clickArgs);
     m_d->clickTransform = m.finalTransform();
 
-    if (m_d->function == ROTATEBOUNDS && !m_d->transaction.convexHullHasBeenRequested()) {
+    if (m_d->function == ROTATEBOUNDS) {
         emit requestConvexHullCalculation();
     }
 

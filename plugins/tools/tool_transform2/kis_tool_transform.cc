@@ -219,9 +219,19 @@ void KisToolTransform::imageTooBigRequested(bool value)
 
 void KisToolTransform::convexHullCalculationRequested()
 {
-    ENTER_FUNCTION() << "convex hull recalculation requested!";
-    m_transaction.setConvexHullHasBeenRequested(true);
     if (m_strokeId && !m_transaction.rootNodes().isEmpty()) {
+        /**
+         * Free transform strategy issues the recalcualtion request every time
+         * the user performs a bounds rotation action, so we should skip actual
+         * recalculation, when it is not necessary anymore
+         */
+
+        if (m_transaction.convexHullHasBeenRequested()) {
+            return;
+        }
+
+        m_transaction.setConvexHullHasBeenRequested(true);
+
         if (m_currentlyUsingOverlayPreviewStyle) {
             image()->addJob(m_strokeId, new TransformStrokeStrategy::CalculateConvexHullData());
         } else {
@@ -233,10 +243,19 @@ void KisToolTransform::slotConvexHullCalculated(QPolygon hull, void *strokeStrat
 {
     if (!m_strokeId || strokeStrategyCookie != m_strokeStrategyCookie) return;
     QPolygonF hullF = hull;
-    // Only use the convex hull if it matches the original bounding rect
+    /**
+     * Only use the convex hull if it matches the original bounding rect.
+     * When we skip setConvexHull() call, nothing serious happens, except that
+     * rotatted bounds are rotated around the entire clip rect, not actual
+     * clip's data.
+     */
     if (hullF.boundingRect() == m_transaction.originalRect()) {
         m_transaction.setConvexHull(hullF);
         currentStrategy()->externalConfigChanged();
+    } else {
+        warnTools << "WARNING: KisToolTransform: calculated convex hull's bounds "
+                     "differ from the bounding rect of the source clip. It shouldn't "
+                     "have happened";
     }
 }
 

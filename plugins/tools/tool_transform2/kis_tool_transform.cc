@@ -252,6 +252,7 @@ void KisToolTransform::slotConvexHullCalculated(QPolygon hull, void *strokeStrat
     if (hullF.boundingRect() == m_transaction.originalRect()) {
         m_transaction.setConvexHull(hullF);
         currentStrategy()->externalConfigChanged();
+        canvasUpdateRequested();
     } else {
         warnTools << "WARNING: KisToolTransform: calculated convex hull's bounds "
                      "differ from the bounding rect of the source clip. It shouldn't "

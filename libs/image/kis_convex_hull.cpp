@@ -1,6 +1,6 @@
 #include "kis_convex_hull.h"
 
-#include "kis_image.h"
+#include "kis_paint_device.h"
 #include "kis_random_accessor_ng.h"
 #include "KoColorSpace.h"
 #include "KoColor.h"

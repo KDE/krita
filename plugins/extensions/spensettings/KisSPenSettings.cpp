@@ -28,6 +28,7 @@ KisSPenSettings::KisSPenSettings(QWidget *parent)
     , m_model(new QStandardItemModel())
 {
     mUi = new WdgSPenSettings(this);
+    mUi->setupUi(this);
 
     m_model->setColumnCount(2);
 

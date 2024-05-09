@@ -22,7 +22,6 @@ class WdgSPenSettings : public QWidget, public Ui::WdgSPenSettings
 
 public:
     WdgSPenSettings(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
     }
 };
 

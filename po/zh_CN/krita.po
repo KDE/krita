@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -32128,14 +32128,14 @@ msgstr ""
 "Intel 核芯显卡的驱动程序与 OpenGL 的兼容性不好，Krita 将默认使用 Direct3D 11 "
 "模式。您也可以手动切换成 OpenGL 模式，但是它不一定能正常工作。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首选渲染器不支持请求的表面格式。已选择另一个渲染器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用渲染器不支持首选输出格式"

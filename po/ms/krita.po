@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Mimos\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2006-10-05 19:46+0800\n"
 "Last-Translator: Sharuzzaman Ahmat Raslan <sharuzzaman@myrealbox.com>\n"
 "Language-Team: Malay <kedidiemas@yahoogroups.com>\n"
@@ -32268,14 +32268,14 @@ msgid ""
 "work properly."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

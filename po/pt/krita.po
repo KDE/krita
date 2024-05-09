@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -33657,7 +33657,7 @@ msgstr ""
 "OpenGL, pelo que será usado o ANGLE por omissão. Poderá mudar manualmente "
 "para o OpenGL, mas não é garantido que funcione correctamente."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -33666,7 +33666,7 @@ msgstr ""
 "O sistema de desenho preferido não suporta o formato da superfície pedido. "
 "Foi seleccionado outro sistema de desenho."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

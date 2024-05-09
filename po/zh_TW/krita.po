@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -32121,14 +32121,14 @@ msgstr ""
 "Intel 核芯顯示卡的驅動程式在 OpenGL 支援方面常常存在各種問題，因此預設將使用 "
 "ANGLE 繪製器。您可以手動切換成 OpenGL 模式，但是無法保證正常作業。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
 "renderer has been selected."
 msgstr "首選繪製器不支援請求的表面格式。已選用另一個繪製器。"
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用繪製器不支援首選輸出格式"

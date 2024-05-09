@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -32556,7 +32556,7 @@ msgstr ""
 "ANGLE erabiliko du era lehenetsian. Eskuz OpenGL-ra aldatzeko aukera izango "
 "duzu, baina, ez dago ondo ibiliko den bermerik."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32565,7 +32565,7 @@ msgstr ""
 "Hobetsitako errendatzaileak ez du onartzen eskatutako gainazal-formatua. "
 "Beste errendatzaile bat hautatu du."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""

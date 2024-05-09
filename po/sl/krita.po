@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2024-03-03 09:08+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -32402,7 +32402,7 @@ msgstr ""
 "uporabljen ANGLE. Lahko ročno preklopite na OpenGL, vendar pravilno "
 "delovanje ni zagotovljeno."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32411,7 +32411,7 @@ msgstr ""
 "Želeni upodabljalnik ne podpira zahtevane oblike površine. Izbran je bil "
 "drug upodabljalnik."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Razpoložljivi upodobljevalniki ne podpirajo želene oblike izhoda"

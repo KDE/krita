@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
 "PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -32398,7 +32398,7 @@ msgstr ""
 "uzata defaŭlte. Vi povas permane ŝanĝi al OpenGL sed ĝi ne garantias ke ĝi "
 "funkcias ĝuste."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32407,7 +32407,7 @@ msgstr ""
 "Preferata bildilo ne subtenas petitan surfacformaton. Alia bildilo estas "
 "elektita."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr "Preferata eligoformato ne estas subtenata de disponeblaj bildiloj"

@@ -102,8 +102,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
-"PO-Revision-Date: 2024-05-02 15:59+0200\n"
+"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"PO-Revision-Date: 2024-05-07 12:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
 "Language: fr\n"
@@ -23956,7 +23956,7 @@ msgstr ""
 "<p style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-"
 "right:0px; -qt-block-indent:0; text-indent:0px;\">Krita est un outil "
 "communautaire open-source destiné aux artistes numériques du monde entier."
-"<br />Son développement  est possible grâce au soutien continu de notre "
+"<br />Son développement est possible grâce au soutien continu de notre "
 "communauté de <a href=\"https://docs.krita.org/en/contributors_manual.html"
 "\">contributeurs</a>, de sponsors et des participants au <a href=\"https://"
 "fund.krita.org/\">fonds de développement </a>.</p></body></html>"
@@ -25828,7 +25828,7 @@ msgid ""
 "Warning: if you enable this setting and the file dialogs do weird stuff, do "
 "not report a bug."
 msgstr ""
-"Attention : Si vous activez cette option et que les dialogues génèrent des "
+"Attention : si vous activez cette option et que les dialogues génèrent des "
 "anomalies, ne faites pas de rapport de bogue."
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_chkNativeFileDialog)
@@ -30883,7 +30883,7 @@ msgstr ""
 #: libs/ui/KisImportExportManager.cpp:596
 #, kde-format
 msgid "Error: cannot save this image as a %1."
-msgstr "Erreur : Impossible d'enregistrer cette image comme %1."
+msgstr "Erreur : impossible d'enregistrer cette image comme %1."
 
 #: libs/ui/KisImportExportManager.cpp:597
 #: libs/ui/KisImportExportManager.cpp:640
@@ -32678,7 +32678,7 @@ msgstr ""
 "manuellement basculer vers « OpenGL » mais il n'y a aucune garantie que cela "
 "fonctionne correctement."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32687,7 +32687,7 @@ msgstr ""
 "Le moteur de rendu préféré ne prend pas en charge le format demandé de "
 "surface. Un autre moteur d rendu a été choisi."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -48608,7 +48608,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:728
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr "Utiliser la palette de couleurs pour ... couleurs ou moins"
+msgstr "Utiliser la palette de couleurs pour x couleurs ou moins"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:742

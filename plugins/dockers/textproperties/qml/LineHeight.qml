@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label", "Line Height");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Line Height controls the line height used for the range of text.");
+    searchTerms: i18nc("comma separated search terms for the line-height property, matching is case-insensitive",
+                       "line-height, line-spacing");
     property alias isNormal: lineHeightNormalCbx.checked;
     property alias lineHeight: lineHeightSpn.value;
     property int lineHeightUnit: LineHeightModel.Lines;
@@ -42,13 +46,15 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.lineHeightState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.lineHeightState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.lineHeightState;
             onClicked: properties.lineHeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

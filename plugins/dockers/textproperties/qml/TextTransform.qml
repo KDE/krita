@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Text Transform");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Text Transform allows transforming the given range of characters, for example, by setting them uppercase, or switching out half-width forms for full-width forms.");
+    searchTerms: i18nc("comma separated search terms for the text-transform property, matching is case-insensitive",
+                       "text-transform, uppercase, capitalization, lowercase, full-width, full-size kana");
     property alias fullWidth: fullWidthChk.checked;
     property alias fullSizeKana: fullSizeKanaChk.checked;
     property int capitals;
@@ -43,13 +47,15 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.textTransformState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.textTransformState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.textTransformState;
             onClicked: properties.textTransformState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 CollapsibleGroupProperty {
     propertyName: i18nc("@title:group", "Text Align");
     propertyType: TextPropertyBase.Paragraph;
+    toolTip: i18nc("@info:tooltip",
+                   "Text Align sets the alignment for the given block of characters.");
+    searchTerms: i18nc("comma separated search terms for the text-anchor property, matching is case-insensitive",
+                       "text-align, justification, text-anchor");
 
     property int textAlignAll: 1;
     property int textAlignLast: 0;
@@ -48,6 +52,8 @@ CollapsibleGroupProperty {
         }
     }
 
+    onEnableProperty: properties.textAnchorState = KoSvgTextPropertiesModel.PropertySet;
+
     contentItem: GridLayout {
         columns: 3
         anchors.left: parent.left
@@ -55,7 +61,7 @@ CollapsibleGroupProperty {
         columnSpacing: columnSpacing;
 
         RevertPropertyButton {
-            revertEnabled: properties.textAlignAllState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.textAlignAllState;
             onClicked: properties.textAlignAllState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
@@ -82,7 +88,7 @@ CollapsibleGroupProperty {
         }
 
         RevertPropertyButton {
-            revertEnabled: properties.textAlignLastState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.textAlignLastState;
             onClicked: properties.textAlignLastState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
@@ -110,7 +116,7 @@ CollapsibleGroupProperty {
 
 
         RevertPropertyButton {
-            revertEnabled: properties.textAnchorState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.textAnchorState;
             onClicked: properties.textAnchorState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {

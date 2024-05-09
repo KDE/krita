@@ -36,8 +36,10 @@ auto propertyModifyState = [](KoSvgTextProperties::PropertyId propId) { return l
                 [propId](const KoSvgTextPropertyData &value) -> KoSvgTextPropertiesModel::PropertyState {
         if (value.commonProperties.hasProperty(propId)) {
             return KoSvgTextPropertiesModel::PropertySet;
-        } else if (value.tristate.contains(propId) || value.inheritedProperties.hasProperty(propId)) {
+        } else if (value.tristate.contains(propId)) {
             return KoSvgTextPropertiesModel::PropertyTriState;
+        } else if (value.inheritedProperties.hasProperty(propId)) {
+            return KoSvgTextPropertiesModel::PropertyInherited;
         }
         return KoSvgTextPropertiesModel::PropertyUnset;
     },
@@ -47,8 +49,8 @@ auto propertyModifyState = [](KoSvgTextProperties::PropertyId propId) { return l
         } else {
             // Because tristate represents properties that are set but mixed, there's no value in being able to set them from the UX.
             // so if we receive such a signal, it is incorrect.
-            if (state == KoSvgTextPropertiesModel::PropertyTriState) {
-                qWarning() << "Receiving request to set property tristate, this will unset the property instead";
+            if (state == KoSvgTextPropertiesModel::PropertyTriState || state == KoSvgTextPropertiesModel::PropertyInherited) {
+                qWarning() << "Receiving request to set property tristate or inherited, this will unset the property instead";
             }
             value.commonProperties.removeProperty(propId);
         }

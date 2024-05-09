@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 CollapsibleGroupProperty {
     propertyName: i18nc("@title:group", "Text Indent");
     propertyType: TextPropertyBase.Paragraph;
+    toolTip: i18nc("@info:tooltip",
+                   "Text Indent allows setting indentation at the line start. Only works when the text is wrapping.");
+    searchTerms: i18nc("comma separated search terms for the text-indent property, matching is case-insensitive",
+                       "text-indent");
 
     property alias textIndentValue: textIndentSpn.value;
     property alias hanging: indentHangingCkb.checked;
@@ -52,6 +56,8 @@ CollapsibleGroupProperty {
         }
     }
 
+    onEnableProperty: properties.textIndentState = KoSvgTextPropertiesModel.PropertySet;
+
     titleItem: RowLayout {
         spacing: columnSpacing;
         Layout.fillWidth: true;
@@ -77,7 +83,7 @@ CollapsibleGroupProperty {
         columnSpacing: columnSpacing;
 
         RevertPropertyButton {
-            revertEnabled: properties.textIndentState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.textIndentState;
             onClicked: properties.textIndentState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

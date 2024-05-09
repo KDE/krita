@@ -12,6 +12,10 @@ TextPropertyBase {
     property int breakType;
 
     propertyName: i18nc("@label:listbox", "Line Break");
+    toolTip: i18nc("@info:tooltip",
+                   "Line Break allows choosing a strictness for the line breaking algorithm. Mostly used for CJK scripts, requires language being set.");
+    searchTerms: i18nc("comma separated search terms for the line-break property, matching is case-insensitive",
+                       "line-break, line breaking, strictness, kinsoku");
     propertyType: TextPropertyBase.Character;
 
     onPropertiesUpdated: {
@@ -28,12 +32,14 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.lineBreakState = KoSvgTextPropertiesModel.PropertySet;
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.lineBreakState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.lineBreakState;
             onClicked: properties.lineBreakState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

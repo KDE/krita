@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Writing Mode");
     propertyType: TextPropertyBase.Paragraph;
+    toolTip: i18nc("@info:tooltip",
+                   "Writing Mode sets whether the text flows horizontally or vertically, and in the latter case, whether the block flows right to left or left to right.");
+    searchTerms: i18nc("comma separated search terms for the writing-mode property, matching is case-insensitive",
+                       "writing-mode, horizontal, vertical, top-to-bottom");
     property int writingMode;
 
     onPropertiesUpdated: {
@@ -27,12 +31,14 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.writingModeState = KoSvgTextPropertiesModel.PropertySet;
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.writingModeState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.writingModeState;
             onClicked: properties.writingModeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 CollapsibleGroupProperty {
     propertyName: i18nc("@label", "Font Family");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Font family allows selecting a list of fonts that should be used for the current text. The first font family is the primary font used, while each font family after that is used for fallback.");
+    searchTerms: i18nc("comma separated search terms for the font-family property, matching is case-insensitive",
+                       "font-family, typeface, font, fallback");
 
     property var fontFamilies: [];
     property var fontFamilyModel : [];
@@ -43,6 +47,8 @@ CollapsibleGroupProperty {
         }
     }
 
+    onEnableProperty: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertySet;
+
     contentItem: GridLayout {
         columns: 2
         anchors.left: parent.left
@@ -50,7 +56,7 @@ CollapsibleGroupProperty {
         columnSpacing: columnSpacing;
 
         RevertPropertyButton {
-            revertEnabled: properties.fontFamiliesState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.fontFamiliesState;
             onClicked: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Dominant Baseline")
     propertyType: TextPropertyBase.Paragraph;
+    toolTip: i18nc("@info:tooltip",
+                   "Dominant Baseline specifies how stretches of text of different sizes are aligned, it is also the default for Alignment Baseline.");
+    searchTerms: i18nc("comma separated search terms for the dominant-baseline property, matching is case-insensitive",
+                       "dominant-baseline, mojisoroe");
     property int baselineSelection
 
     onPropertiesUpdated: {
@@ -27,13 +31,15 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.dominantBaselineState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.dominantBaselineState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.dominantBaselineState;
             onClicked: properties.dominantBaselineState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Tab Size");
     propertyType: TextPropertyBase.Paragraph;
+    toolTip: i18nc("@info:tooltip",
+                   "Tab Size allows defining the size of tabulation characters.");
+    searchTerms: i18nc("comma separated search terms for the tab-size property, matching is case-insensitive",
+                       "tab-size");
     property alias tabSize: tabSizeSpn.value;
     property int tabSizeUnit: TabSizeModel.Spaces;
 
@@ -35,6 +39,8 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.tabSizeState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 3
         anchors.left: parent.left
@@ -42,7 +48,7 @@ TextPropertyBase {
         columnSpacing: columnSpacing;
 
         RevertPropertyButton {
-            revertEnabled: properties.tabSizeState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.tabSizeState;
             onClicked: properties.tabSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {

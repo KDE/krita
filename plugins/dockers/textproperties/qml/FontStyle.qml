@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 CollapsibleGroupProperty {
     propertyName: i18nc("@label", "Font Style");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Font style allows setting the sub style of the given font family, such as italics and bold");
+    searchTerms: i18nc("comma separated search terms for the fontsize property, matching is case-insensitive",
+                       "weight, width, style, italics, oblique, font-style, font-stretch, font-weight, bold, optical-size, variation");
 
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
@@ -53,6 +57,10 @@ CollapsibleGroupProperty {
         }
     }
 
+    onEnableProperty: {
+        properties.fontWeightState = KoSvgTextPropertiesModel.PropertySet;
+    }
+
     titleItem: ComboBox {
         id: styleCmb;
         Layout.fillWidth: true;
@@ -65,7 +73,7 @@ CollapsibleGroupProperty {
         columnSpacing: 5;
 
         RevertPropertyButton {
-            revertEnabled: properties.fontWeightState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.fontWeightState;
             onClicked: properties.fontWeightState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
@@ -87,7 +95,7 @@ CollapsibleGroupProperty {
 
 
         RevertPropertyButton {
-            revertEnabled: properties.fontWidthState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.fontWidthState;
             onClicked: properties.fontWidthState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
@@ -107,7 +115,7 @@ CollapsibleGroupProperty {
         }
 
         RevertPropertyButton {
-            revertEnabled: properties.fontStyleState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.fontStyleState;
             onClicked: properties.fontStyleState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
@@ -132,7 +140,7 @@ CollapsibleGroupProperty {
         }
 
         RevertPropertyButton {
-            revertEnabled: properties.fontOpticalSizeLinkState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.fontOpticalSizeLinkState;
             onClicked: properties.fontOpticalSizeLinkState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Item {

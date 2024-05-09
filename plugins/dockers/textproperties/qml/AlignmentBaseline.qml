@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Alignment Baseline");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Alignment Baseline allows controling how this range of text is aligned to the parent text.");
+    searchTerms: i18nc("comma separated search terms for the alignment-baseline property, matching is case-insensitive",
+                       "alignment-baseline, mojisoroe");
     property int baselineSelection;
 
     onPropertiesUpdated: {
@@ -27,13 +31,15 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.alignmentBaselineState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 2;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.alignmentBaselineState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.alignmentBaselineState;
             onClicked: properties.alignmentBaselineState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

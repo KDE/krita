@@ -11,6 +11,11 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label:listbox", "Direction")
     propertyType: TextPropertyBase.Mixed;
+    toolTip: i18nc("@info:tooltip",
+                   "Direction sets whether the text is left-to-right or right-to-left.");
+    searchTerms: i18nc("comma separated search terms for the direction property, matching is case-insensitive",
+                       "right to left, rtl, direction, bidirectional, isolate, embed, override");
+
     property int direction;
     property int unicodeBidi;
 
@@ -38,6 +43,8 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.directionState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         id: row
         columns: 3
@@ -45,7 +52,7 @@ TextPropertyBase {
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.directionState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.directionState;
             onClicked: properties.directionState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
@@ -69,7 +76,7 @@ TextPropertyBase {
 
         RevertPropertyButton {
             visible: parentPropertyType === TextPropertyBase.Character;
-            revertEnabled: properties.unicodeBidiState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.unicodeBidiState;
             onClicked: properties.unicodeBidiState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

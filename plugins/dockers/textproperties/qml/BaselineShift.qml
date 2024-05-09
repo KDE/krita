@@ -11,21 +11,34 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label", "Baseline-Shift")
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Baseline shift allows moving the text away from the baseline, either by predefined super and subscript values, or by a fixed amount.");
+    searchTerms: i18nc("comma separated search terms for the baseline-shift property, matching is case-insensitive",
+                       "baseline-shift, superscript, subscript");
 
     property alias baselineShiftValue: baselineShiftSpn.value;
+    property alias baselineShiftUnit: baselineShiftUnitCmb.comboBoxUnit;
     property int baselineShiftMode;
 
     onPropertiesUpdated: {
         blockSignals = true;
-        baselineShiftValue = properties.baselineShiftValue.value;
+        baselineShiftValue = properties.baselineShiftValue.value * baselineShiftSpn.multiplier;
         baselineShiftMode = properties.baselineShiftMode;
+        baselineShiftUnit = properties.baselineShiftValue.unitType;
         visible = properties.baselineShiftState !== KoSvgTextPropertiesModel.PropertyUnset
         blockSignals = false;
     }
 
     onBaselineShiftValueChanged: {
         if (!blockSignals) {
-            properties.baselineShiftValue.value = baselineShiftValue;
+            properties.baselineShiftValue.value = baselineShiftValue / baselineShiftSpn.multiplier;
+        }
+    }
+
+    onBaselineShiftUnitChanged: {
+        baselineShiftUnitCmb.currentIndex = baselineShiftUnitCmb.indexOfValue(baselineShiftUnit);
+        if (!blockSignals) {
+            properties.baselineShiftValue.unitType = baselineShiftUnit;
         }
     }
 
@@ -37,13 +50,15 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.baselineShiftState = KoSvgTextPropertiesModel.PropertySet;
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.baselineShiftState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.baselineShiftState;
             onClicked: properties.baselineShiftState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 
@@ -79,14 +94,17 @@ TextPropertyBase {
             width: firstColumnWidth;
             height: 1;
         }
-        SpinBox {
+        DoubleSpinBox {
             id: baselineShiftSpn
             Layout.fillWidth: true;
             enabled: baselineShiftMode == 3;
+            from: -999 * multiplier;
+            to: 999 * multiplier;
         }
 
-        ComboBox {
-            model: ["Pt", "Em", "Ex"];
+        UnitComboBox {
+            id: baselineShiftUnitCmb;
+            spinBoxControl: baselineShiftSpn;
             Layout.fillWidth: true;
         }
     }

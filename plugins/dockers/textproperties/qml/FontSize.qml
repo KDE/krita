@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@label:spinbox", "Font Size");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Font size allows setting the size of the characters.");
+    searchTerms: i18nc("comma separated search terms for the fontsize property, matching is case-insensitive",
+                       "size, small, big, medium");
 
     property alias fontSize: fontSizeSpn.value;
     property alias fontSizeUnit: fontSizeUnitCmb.comboBoxUnit;
@@ -34,12 +38,14 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.fontSizeState = KoSvgTextPropertiesModel.PropertySet;
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.fontSizeState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.fontSizeState;
             onClicked: properties.fontSizeState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

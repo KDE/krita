@@ -5,12 +5,13 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.0
+import org.krita.flake.text 1.0
 
 Item {
     width: firstColumnWidth;
     height: firstColumnWidth;
 
-    property alias revertEnabled: revert.enabled;
+    property int revertState: 0;
     property bool inheritable: true;
     signal clicked;
 
@@ -18,7 +19,8 @@ Item {
         id: revert;
         icon.width: 22;
         icon.height: 22;
-        icon.color: sysPalette.text;
+        icon.color: revertState === KoSvgTextPropertiesModel.PropertyTriState? sysPalette.highlight: sysPalette.text;
+        enabled: revertState !== KoSvgTextPropertiesModel.PropertyUnset && revertState !== KoSvgTextPropertiesModel.PropertyInherited;
         opacity: enabled? 1.0: 0.5;
         display: AbstractButton.IconOnly
         icon.source: parent.inheritable? "qrc:///light_edit-undo.svg": "qrc:///22_light_trash-empty.svg";

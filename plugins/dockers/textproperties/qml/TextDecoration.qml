@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Text Decoration");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Text Decoration allows drawing underlines, overlines and striking through text.");
+    searchTerms: i18nc("comma separated search terms for the text-decoration property, matching is case-insensitive",
+                       "underline, overline, strikethrough, line-through");
 
     property alias underline: underlineCbx.checked;
     property alias overline: overlineCbx.checked;
@@ -55,13 +59,17 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: {
+        properties.textDecorationLineState = KoSvgTextPropertiesModel.PropertySet;
+    }
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.textDecorationLineState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.textDecorationLineState;
             inheritable: false;
             onClicked: properties.textDecorationLineState = KoSvgTextPropertiesModel.PropertyUnset;
         }

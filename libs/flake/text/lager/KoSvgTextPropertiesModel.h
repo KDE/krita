@@ -62,7 +62,8 @@ public:
     enum PropertyState {
         PropertyUnset,
         PropertySet,
-        PropertyTriState
+        PropertyTriState,
+        PropertyInherited
     };
     Q_ENUM(PropertyState)
 

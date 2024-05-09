@@ -11,6 +11,10 @@ import org.krita.flake.text 1.0
 TextPropertyBase {
     propertyName: i18nc("@title:group", "Word Spacing");
     propertyType: TextPropertyBase.Character;
+    toolTip: i18nc("@info:tooltip",
+                   "Word spacing controls the size of word-break characters, such as the space character.");
+    searchTerms: i18nc("comma separated search terms for the word-spacing property, matching is case-insensitive",
+                       "word-spacing, tracking, white space,");
     property alias wordSpacing: wordSpacingSpn.value;
     visible: properties.wordSpacingState !== KoSvgTextPropertiesModel.PropertyUnset;
     property alias wordSpacingUnit: wordSpacingUnitCmb.comboBoxUnit;
@@ -35,12 +39,14 @@ TextPropertyBase {
         }
     }
 
+    onEnableProperty: properties.wordSpacingState = KoSvgTextPropertiesModel.PropertySet;
+
     RowLayout {
         spacing: columnSpacing;
         width: parent.width;
 
         RevertPropertyButton {
-            revertEnabled: properties.wordSpacingState === KoSvgTextPropertiesModel.PropertySet;
+            revertState: properties.wordSpacingState;
             onClicked: properties.wordSpacingState = KoSvgTextPropertiesModel.PropertyUnset;
         }
 

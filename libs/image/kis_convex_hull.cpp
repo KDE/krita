@@ -4,6 +4,7 @@
 #include "kis_random_accessor_ng.h"
 #include "KoColorSpace.h"
 #include "KoColor.h"
+#include "KoColorModelStandardIds.h"
 
 #include <boost/geometry.hpp>
 
@@ -127,6 +128,28 @@ private:
     const quint8 *m_defaultPixel;
 };
 
+struct CheckDeselected {
+    CheckDeselected(const KoColorSpace *colorSpace)
+        : m_colorSpace(colorSpace),
+          m_deselectedColor(Qt::black, colorSpace),
+          m_pixelSize(colorSpace->pixelSize())
+    {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(colorSpace->colorModelId() == AlphaColorModelID ||
+                                     colorSpace->colorModelId() == GrayAColorModelID);
+    }
+
+    bool isPixelEmpty(const quint8 *pixelData)
+    {
+        return m_colorSpace->opacityU8(pixelData) == OPACITY_TRANSPARENT_U8 ||
+            memcmp(m_deselectedColor.data(), pixelData, m_pixelSize) == 0;
+    }
+
+private:
+    const KoColorSpace *m_colorSpace;
+    const KoColor m_deselectedColor;
+    const int m_pixelSize;
+};
+
 template <class ComparePixelOp>
 QVector<QPoint> retrieveAllBoundaryPointsImpl(const KisPaintDevice *device, const QRect &rect, const QRect &skip, ComparePixelOp compareOp)
 {
@@ -185,11 +208,13 @@ QVector<QPoint> retrieveAllBoundaryPointsImpl(const KisPaintDevice *device, cons
 QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device) {
     QRect rect = device->extent();
 
-    quint8 defaultOpacity = device->defaultPixel().opacityU8();
+    const KoColor defaultPixel = device->defaultPixel();
+    const quint8 defaultOpacity = defaultPixel.opacityU8();
+
     QVector<QPoint> points;
+
     if (defaultOpacity != OPACITY_TRANSPARENT_U8) {
         QRect skip = device->defaultBounds()->bounds();
-        const KoColor defaultPixel = device->defaultPixel();
         CheckNonDefault compareOp(device->pixelSize(), defaultPixel.data());
 
         points = retrieveAllBoundaryPointsImpl(device, rect, skip, compareOp);
@@ -204,6 +229,41 @@ QVector<QPoint> retrieveAllBoundaryPoints(const KisPaintDevice *device) {
     }
     return points;
 }
+
+QVector<QPoint> retrieveAllBoundaryPointsSelectionLike(const KisPaintDevice *device) {
+    QRect rect = device->extent();
+
+    const KoColor defaultPixel = device->defaultPixel();
+    const quint8 defaultOpacity = defaultPixel.opacityU8();
+
+    QVector<QPoint> points;
+
+    if (defaultOpacity != OPACITY_TRANSPARENT_U8 &&
+        defaultPixel != KoColor(Qt::black, defaultPixel.colorSpace())) {
+
+        QRect skip = device->defaultBounds()->bounds();
+        CheckNonDefault compareOp(device->pixelSize(), defaultPixel.data());
+
+        points = retrieveAllBoundaryPointsImpl(device, rect, skip, compareOp);
+        if (!skip.isEmpty()) {
+            int x, y, w, h;
+            skip.getRect(&x, &y, &w, &h);
+            points << QPoint(x, y) << QPoint(x + w, y) << QPoint(x + w, y + h) << QPoint(x, y + h);
+        }
+    } else if (device->colorSpace()->colorModelId() == AlphaColorModelID) {
+        CheckFullyTransparent compareOp(device->colorSpace());
+        points = retrieveAllBoundaryPointsImpl(device, rect, QRect(), compareOp);
+    } else {
+        // pre-condition:
+        // defaultOpacity == OPACITY_TRANSPARENT_U8 ||
+        // defaultPixel == "deselected"
+
+        CheckDeselected compareOp(device->colorSpace());
+        points = retrieveAllBoundaryPointsImpl(device, rect, QRect(), compareOp);
+    }
+    return points;
+}
+
 }
 
 namespace KisConvexHull {
@@ -221,6 +281,17 @@ QPolygon findConvexHull(KisPaintDeviceSP device)
     QElapsedTimer timer;
     timer.start();
     auto ps = retrieveAllBoundaryPoints(device);
+    ENTER_FUNCTION() << "found boundary points in" << timer.nsecsElapsed() / 1000;
+    auto p = findConvexHull(ps);
+    ENTER_FUNCTION() << "found hull in" << timer.nsecsElapsed() / 1000;
+    return p;
+}
+
+QPolygon findConvexHullSelectionLike(KisPaintDeviceSP device)
+{
+    QElapsedTimer timer;
+    timer.start();
+    auto ps = retrieveAllBoundaryPointsSelectionLike(device);
     ENTER_FUNCTION() << "found boundary points in" << timer.nsecsElapsed() / 1000;
     auto p = findConvexHull(ps);
     ENTER_FUNCTION() << "found hull in" << timer.nsecsElapsed() / 1000;

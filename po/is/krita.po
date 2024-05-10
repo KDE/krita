@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-10 01:43+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -44633,7 +44633,7 @@ msgstr "Litavægi"
 msgid "Color Balance"
 msgstr "Litavægi"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, fuzzy, kde-format
 #| msgctxt "@option:check"
 #| msgid "Automatic color axis adjustments"

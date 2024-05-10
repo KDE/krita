@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-10 01:43+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -45091,7 +45091,7 @@ msgstr "Vyváženie farieb..."
 msgid "Color Balance"
 msgstr "Vyváženie farieb"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Krivky úpravy naprieč kanálmi..."

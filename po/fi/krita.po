@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-10 01:43+0000\n"
 "PO-Revision-Date: 2024-02-02 13:03+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -46810,7 +46810,7 @@ msgstr "&Väritasapaino…"
 msgid "Color Balance"
 msgstr "Väritasapaino"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, fuzzy, kde-format
 #| msgid "&Color Adjustment curves..."
 msgid "&Cross-channel adjustment curves..."

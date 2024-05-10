@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-10 01:43+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -44914,7 +44914,7 @@ msgstr "Raon &Datha..."
 msgid "Color Balance"
 msgstr "Spás Datha"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, fuzzy, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "Coigeartú na nDathanna"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-10 01:43+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -28574,7 +28574,7 @@ msgstr "激活手绘轮廓选区工具"
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, kde-format
 msgid "Activate with Other Color"
-msgstr "激活其他颜色"
+msgstr "激活 (前景色/背景色对调)"
 
 #: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
@@ -39347,7 +39347,7 @@ msgstr "录像工具"
 #, kde-format
 msgctxt "action"
 msgid "Record Timelapse"
-msgstr "录制录像"
+msgstr "录制缩时视频"
 
 #. i18n: context: iconText @ Action (recorder_export), Actions (Recorder), ActionCollection (Recorder)
 #. i18n: context: toolTip @ Action (recorder_export), Actions (Recorder), ActionCollection (Recorder)
@@ -39361,7 +39361,7 @@ msgstr "录制录像"
 #, kde-format
 msgctxt "action"
 msgid "Export Timelapse..."
-msgstr "导出录像..."
+msgstr "导出缩时视频..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:92
 #, kde-format
@@ -39381,7 +39381,7 @@ msgstr "无法检测到 FFmpeg 可执行文件位置。请安装该软件包，�
 #: plugins/dockers/recorder/recorder_export.cpp:176
 #, kde-format
 msgid "Abort encoding the timelapse video?"
-msgstr "中止编码录像视频吗？"
+msgstr "中止编码缩时视频吗？"
 
 #: plugins/dockers/recorder/recorder_export.cpp:247
 #, kde-format
@@ -39435,7 +39435,7 @@ msgstr "选择 FFmpeg 可执行程序位置"
 #: plugins/dockers/recorder/recorder_export.cpp:600
 #, kde-format
 msgid "Export Timelapse Video As"
-msgstr "导出录像视频为"
+msgstr "导出缩时视频为"
 
 #: plugins/dockers/recorder/recorder_export.cpp:616
 #, kde-format
@@ -39450,7 +39450,7 @@ msgstr "没有可供导出的帧。"
 #: plugins/dockers/recorder/recorder_export.cpp:648
 #, kde-format
 msgid "The timelapse video is being encoded..."
-msgstr "正在编码录像视频..."
+msgstr "正在编码缩时视频..."
 
 #: plugins/dockers/recorder/recorder_export.cpp:663
 #, kde-format
@@ -39468,7 +39468,7 @@ msgid ""
 msgstr ""
 "这将删除当前图像的录像数据，\n"
 "\n"
-"您将无法再次导出它的视频 (已经导出的视频会被保留)。\n"
+"您将无法再次导出它的缩时视频 (已经导出的视频会被保留)。\n"
 "您确定要删除它吗？"
 
 #: plugins/dockers/recorder/recorder_export.cpp:691
@@ -39482,7 +39482,7 @@ msgstr "正在清理..."
 #: plugins/dockers/recorder/recorder_export.ui:18
 #, kde-format
 msgid "Export Timelapse"
-msgstr "导出录像"
+msgstr "导出缩时视频"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowseDirectory)
 #: plugins/dockers/recorder/recorder_export.ui:64
@@ -39515,7 +39515,7 @@ msgid ""
 msgstr ""
 "设置输入流的每秒帧数。\n"
 "例如：输入每秒帧数为视频每秒帧数的 2 倍时，\n"
-"视频中的绘画速度将是实际的 2 倍。"
+"缩时视频中的绘画速度将是实际的 2 倍。"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFpsInput)
 #: plugins/dockers/recorder/recorder_export.ui:246
@@ -39564,7 +39564,7 @@ msgstr "延长显示绘制结果："
 #: plugins/dockers/recorder/recorder_export.ui:390
 #, kde-format
 msgid "Select a file location for the exported timelapse video"
-msgstr "选择录像视频导出的位置"
+msgstr "选择缩时视频导出的位置"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, resultPreviewCheckBox)
 #: plugins/dockers/recorder/recorder_export.ui:433
@@ -39630,7 +39630,7 @@ msgstr "播放此段视频"
 #: plugins/dockers/recorder/recorder_export.ui:971
 #, kde-format
 msgid "The timelapse video has been written to:"
-msgstr "录像视频已导出为："
+msgstr "缩时视频已导出为："
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonShowInFolder)
 #: plugins/dockers/recorder/recorder_export.ui:989
@@ -39762,7 +39762,7 @@ msgid ""
 "Do you wish to continue?"
 msgstr ""
 "这将删除所有选中的录像数据，\n"
-"您将无法再次导出它们的视频 (已经导出的视频会被保留)。\n"
+"您将无法再次导出它们的缩时视频 (已经导出的视频会被保留)。\n"
 "您确定要删除它们吗？"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderSnapshotsManager)
@@ -39901,7 +39901,7 @@ msgid ""
 "video."
 msgstr ""
 "在单独显示活动图层 (组) 时依然录制画面。\n"
-"在某些速度下可能会导致视频闪烁。"
+"在某些缩时视频速度下可能会导致视频闪烁。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRecordIsolateMode)
 #: plugins/dockers/recorder/recorderdocker.ui:359
@@ -44155,7 +44155,7 @@ msgstr "色彩平衡(&C)..."
 msgid "Color Balance"
 msgstr "色彩平衡"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "曲线 - 跨通道颜色调整(&C)..."

@@ -2,43 +2,43 @@
 # Copyright (C).
 #
 # --- kritalibs
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita_shape_text
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- kritacolorspaces
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita-dockers
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- kritafiltereffects
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita_flaketools
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita_karbontools
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita_shape_artistictext
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita_shape_paths
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # --- krita_shape_vector
-# Copyright (C) YEAR This_file_is_part_of_KDE
+# Copyright (C) 2024 This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Mattias Newzella <newzella@linux.nu>, 2003.
@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 01:50+0000\n"
+"POT-Creation-Date: 2024-05-10 01:43+0000\n"
 "PO-Revision-Date: 2024-05-03 13:35+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -44648,7 +44648,7 @@ msgstr "&Färgbalans.."
 msgid "Color Balance"
 msgstr "Färgbalans"
 
-#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:231
+#: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
 msgstr "&Korskanaljusteringskurvor..."

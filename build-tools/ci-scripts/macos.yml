@@ -54,11 +54,8 @@ macos-build:
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing 2>&1 | tee build-krita.log
     - env BUILDROOT=$CI_PROJECT_DIR $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-dmg.log
     
-    # FIXME: disable signing of the macOS packages until the signer issue is fixed:
-    # https://phabricator.kde.org/T17301
-    # - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini _packaging/*.dmg 2>&1 | tee dmg-sign.log
-    # - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini _packaging/*.dmg 2>&1 | tee dmg-notarize.log
-
+    - python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini _packaging/*.dmg 2>&1 | tee dmg-sign.log
+    - python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini _packaging/*.dmg 2>&1 | tee dmg-notarize.log
     - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee dmg-publish.log
   coverage: '/^TOTAL.*\s+(\d+\%)$/'
 

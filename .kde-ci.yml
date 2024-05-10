@@ -15,3 +15,5 @@ Options:
     run-cppcheck: True
     cppcheck-ignore-files:
         - libs/pigment/KoAlphaMaskApplicatorFactory.cpp
+    force-build-target: all
+    force-install-target: install

@@ -159,6 +159,10 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
     bool isEditing = false;
     bool showLocal = isLocal() && handles().size() == 5;
 
+    if (canvas) {
+        isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+    }
+
     if (isEditing) {
         Q_FOREACH (const QPointF* handle, handles()) {
             QPointF h = initialTransform.map(*handle);

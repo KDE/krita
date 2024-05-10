@@ -377,6 +377,10 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
     bool isEditing = false;
     
+    if (canvas) {
+        isEditing = canvas->paintingAssistantsDecoration()->isEditingAssistants();
+    }
+    
     QTransform initialTransform = converter->documentToWidgetTransform();
 
     // need to update ellipse cache

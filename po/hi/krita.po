@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:43+0000\n"
+"POT-Creation-Date: 2024-05-12 01:55+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -37004,7 +37004,7 @@ msgstr "परिप्रेक्ष्य"
 msgid "Perspective Ellipse assistant"
 msgstr "परिप्रेक्ष्य सहायक"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -37036,7 +37036,7 @@ msgstr "स्प्लाइन"
 msgid "Two point assistant"
 msgstr "दो बिंदु सहायक"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "दो बिंदु परिप्रेक्ष्य"
@@ -43931,12 +43931,12 @@ msgstr "कोण X कतरें :"
 msgid "Shear angle Y:"
 msgstr "कोण Y कतरें :"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
 msgid "Do nothing"
 msgstr "कुछ नहीं करें"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, kde-format
 msgid "S-Pen Actions"
 msgstr "एस-पेन क्रियाएं"

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:43+0000\n"
+"POT-Creation-Date: 2024-05-12 01:55+0000\n"
 "PO-Revision-Date: 2022-10-02 20:22+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -38372,7 +38372,7 @@ msgstr "منظور"
 msgid "Perspective Ellipse assistant"
 msgstr "مساعد الرّسم المنظوريّ"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "الرّسم المنظوريّ"
@@ -38407,7 +38407,7 @@ msgstr "Spline36"
 msgid "Two point assistant"
 msgstr "أداة المسطرة"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "الرّسم المنظوريّ"
@@ -45525,12 +45525,12 @@ msgstr "زاوية البداية:"
 msgid "Shear angle Y:"
 msgstr "زاوية البداية:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
 msgid "Do nothing"
 msgstr "لا تفعل شيئًا"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
 #| msgid "Selection Mask"
 msgid "S-Pen Actions"

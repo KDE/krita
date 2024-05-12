@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:43+0000\n"
+"POT-Creation-Date: 2024-05-12 01:55+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -36698,7 +36698,7 @@ msgstr "அழிக்கும் கருவி"
 msgid "Perspective Ellipse assistant"
 msgstr "அழிக்கும் கருவி"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "அழிக்கும் கருவி"
@@ -36729,7 +36729,7 @@ msgstr "B-Spline"
 msgid "Two point assistant"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "அழிக்கும் கருவி"
@@ -43414,12 +43414,12 @@ msgstr "X கோணத்தை வெட்டு:"
 msgid "Shear angle Y:"
 msgstr "Y கோணத்தை வெட்டு:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, fuzzy, kde-format
 msgid "Do nothing"
 msgstr "மழுங்கலான..."
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
 msgid "S-Pen Actions"
 msgstr "நிகழ்வுள்ள நிறத்தை மேல்லுள்ளதாக்கு"

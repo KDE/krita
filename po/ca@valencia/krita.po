@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-10 01:43+0000\n"
+"POT-Creation-Date: 2024-05-12 01:55+0000\n"
 "PO-Revision-Date: 2024-05-02 17:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -8059,7 +8059,7 @@ msgstr "Mosaic"
 #, kde-format
 msgctxt "action"
 msgid "Create Resource Bundle..."
-msgstr "Crea un paquet de recursos..."
+msgstr "Crea un paquet de recursos…"
 
 #. i18n: context: toolTip @ Action (create_bundle), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (create_bundle), Actions (General), ActionCollection (Krita)
@@ -8291,7 +8291,7 @@ msgstr "Obri la barra d'ordres per a buscar a través de les accions."
 #, kde-format
 msgctxt "action"
 msgid "Rename Composition..."
-msgstr "Canvia el nom de la composició..."
+msgstr "Canvia el nom de la composició…"
 
 #. i18n: context: toolTip @ Action (rename_composition), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rename_composition), Actions (General), ActionCollection (Krita)
@@ -9364,7 +9364,7 @@ msgstr "Filtres"
 #, kde-format
 msgctxt "action"
 msgid "&Color to Alpha..."
-msgstr "&Color a alfa..."
+msgstr "&Color a alfa…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortoalpha), Actions (Filters), ActionCollection (Krita)
@@ -9398,7 +9398,7 @@ msgstr "Detecció de la vora superior"
 #, kde-format
 msgctxt "action"
 msgid "&Index Colors..."
-msgstr "Í&ndex del color..."
+msgstr "Í&ndex del color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_indexcolors), Actions (Filters), ActionCollection (Krita)
@@ -9500,7 +9500,7 @@ msgstr "Eliminació dels mitjos"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Blur..."
-msgstr "Difuminat &gaussià..."
+msgstr "Difuminat &gaussià…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussian blur), Actions (Filters), ActionCollection (Krita)
@@ -9534,7 +9534,7 @@ msgstr "Relleu en totes les direccions"
 #, kde-format
 msgctxt "action"
 msgid "&Small Tiles..."
-msgstr "&Mosaics petits..."
+msgstr "&Mosaics petits…"
 
 #. i18n: context: toolTip @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_smalltiles), Actions (Filters), ActionCollection (Krita)
@@ -9551,7 +9551,7 @@ msgstr "Mosaics petits"
 #, kde-format
 msgctxt "action"
 msgid "&Levels..."
-msgstr "Nive&lls..."
+msgstr "Nive&lls…"
 
 #. i18n: context: toolTip @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_levels), Actions (Filters), ActionCollection (Krita)
@@ -9568,7 +9568,7 @@ msgstr "Nivells"
 #, kde-format
 msgctxt "action"
 msgid "&Sobel..."
-msgstr "&Sobel..."
+msgstr "&Sobel…"
 
 #. i18n: context: toolTip @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_sobel), Actions (Filters), ActionCollection (Krita)
@@ -9585,7 +9585,7 @@ msgstr "Sobel"
 #, kde-format
 msgctxt "action"
 msgid "&Wave..."
-msgstr "&Ona..."
+msgstr "&Ona…"
 
 #. i18n: context: toolTip @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_wave), Actions (Filters), ActionCollection (Krita)
@@ -9602,7 +9602,7 @@ msgstr "Ona"
 #, kde-format
 msgctxt "action"
 msgid "&Motion Blur..."
-msgstr "Difuminat per &moviment..."
+msgstr "Difuminat per &moviment…"
 
 #. i18n: context: toolTip @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_motion blur), Actions (Filters), ActionCollection (Krita)
@@ -9636,7 +9636,7 @@ msgstr "Invertix"
 #, kde-format
 msgctxt "action"
 msgid "&Color Adjustment curves..."
-msgstr "Corbes d'ajust del &color..."
+msgstr "Corbes d'ajust del &color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_perchannel), Actions (Filters), ActionCollection (Krita)
@@ -9653,7 +9653,7 @@ msgstr "Corbes d'ajust del &color"
 #, kde-format
 msgctxt "action"
 msgid "Pi&xelize..."
-msgstr "&Pixela..."
+msgstr "&Pixela…"
 
 #. i18n: context: toolTip @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_pixelize), Actions (Filters), ActionCollection (Krita)
@@ -9704,7 +9704,7 @@ msgstr "Detecció de la vora esquerra"
 #, kde-format
 msgctxt "action"
 msgid "&Blur..."
-msgstr "&Difumina..."
+msgstr "&Difumina…"
 
 #. i18n: context: text @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (blur_filters), Actions (Filter), ActionCollection (Menu)
@@ -9728,7 +9728,7 @@ msgstr "Difumina"
 #, kde-format
 msgctxt "action"
 msgid "&Raindrops..."
-msgstr "&Gotes de pluja..."
+msgstr "&Gotes de pluja…"
 
 #. i18n: context: toolTip @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_raindrops), Actions (Filters), ActionCollection (Krita)
@@ -9762,7 +9762,7 @@ msgstr "Detecció de la vora inferior"
 #, kde-format
 msgctxt "action"
 msgid "&Random Noise..."
-msgstr "So&roll aleatori..."
+msgstr "So&roll aleatori…"
 
 #. i18n: context: toolTip @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_noise), Actions (Filters), ActionCollection (Krita)
@@ -9779,7 +9779,7 @@ msgstr "Soroll aleatori"
 #, kde-format
 msgctxt "action"
 msgid "Colo&r Balance..."
-msgstr "Equilib&ri de color..."
+msgstr "Equilib&ri de color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colorbalance), Actions (Filters), ActionCollection (Krita)
@@ -9796,7 +9796,7 @@ msgstr "Equilibri de color"
 #, kde-format
 msgctxt "action"
 msgid "&Phong Bumpmap..."
-msgstr "Mapa de relleu &Phong..."
+msgstr "Mapa de relleu &Phong…"
 
 #. i18n: context: toolTip @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_phongbumpmap), Actions (Filters), ActionCollection (Krita)
@@ -9830,7 +9830,7 @@ msgstr "Dessatura"
 #, kde-format
 msgctxt "action"
 msgid "Color &Transfer..."
-msgstr "&Transferència de color..."
+msgstr "&Transferència de color…"
 
 #. i18n: context: toolTip @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_colortransfer), Actions (Filters), ActionCollection (Krita)
@@ -9864,7 +9864,7 @@ msgstr "Relleu només en vertical"
 #, kde-format
 msgctxt "action"
 msgid "&Lens Blur..."
-msgstr "Difuminat de la &lent..."
+msgstr "Difuminat de la &lent…"
 
 #. i18n: context: toolTip @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_lens blur), Actions (Filters), ActionCollection (Krita)
@@ -9915,7 +9915,7 @@ msgstr "Maximitza el canal"
 #, kde-format
 msgctxt "action"
 msgid "&Oilpaint..."
-msgstr "Pintura a l'&oli..."
+msgstr "Pintura a l'&oli…"
 
 #. i18n: context: toolTip @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_oilpaint), Actions (Filters), ActionCollection (Krita)
@@ -9966,7 +9966,7 @@ msgstr "Contrast automàtic"
 #, kde-format
 msgctxt "action"
 msgid "&Round Corners..."
-msgstr "Cantons a&rredonits..."
+msgstr "Cantons a&rredonits…"
 
 #. i18n: context: toolTip @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_roundcorners), Actions (Filters), ActionCollection (Krita)
@@ -9983,7 +9983,7 @@ msgstr "Cantons arredonits"
 #, kde-format
 msgctxt "action"
 msgid "&Unsharp Mask..."
-msgstr "&Màscara de desenfocament..."
+msgstr "&Màscara de desenfocament…"
 
 #. i18n: context: toolTip @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_unsharp), Actions (Filters), ActionCollection (Krita)
@@ -10000,7 +10000,7 @@ msgstr "Màscara de desenfocament"
 #, kde-format
 msgctxt "action"
 msgid "&Emboss with Variable Depth..."
-msgstr "R&elleu amb profunditat variable..."
+msgstr "R&elleu amb profunditat variable…"
 
 #. i18n: context: toolTip @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_emboss), Actions (Filters), ActionCollection (Krita)
@@ -10034,7 +10034,7 @@ msgstr "Relleu en horitzontal i vertical"
 #, kde-format
 msgctxt "action"
 msgid "Random &Pick..."
-msgstr "&Elecció aleatòria..."
+msgstr "&Elecció aleatòria…"
 
 #. i18n: context: toolTip @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_randompick), Actions (Filters), ActionCollection (Krita)
@@ -10051,7 +10051,7 @@ msgstr "Elecció aleatòria"
 #, kde-format
 msgctxt "action"
 msgid "&Gaussian Noise Reduction..."
-msgstr "Reducció del soroll &gaussià..."
+msgstr "Reducció del soroll &gaussià…"
 
 #. i18n: context: toolTip @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_gaussiannoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10068,7 +10068,7 @@ msgstr "Reducció del soroll gaussià"
 #, kde-format
 msgctxt "action"
 msgid "&Posterize..."
-msgstr "&Posteritza..."
+msgstr "&Posteritza…"
 
 #. i18n: context: toolTip @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_posterize), Actions (Filters), ActionCollection (Krita)
@@ -10085,7 +10085,7 @@ msgstr "Posteritza"
 #, kde-format
 msgctxt "action"
 msgid "&Wavelet Noise Reducer..."
-msgstr "Reducció del soroll per &ondetes..."
+msgstr "Reducció del soroll per &ondetes…"
 
 #. i18n: context: toolTip @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_waveletnoisereducer), Actions (Filters), ActionCollection (Krita)
@@ -10102,7 +10102,7 @@ msgstr "Reducció del soroll per ondetes"
 #, kde-format
 msgctxt "action"
 msgid "&HSV Adjustment..."
-msgstr "Ajust &HSV..."
+msgstr "Ajust &HSV…"
 
 #. i18n: context: toolTip @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (krita_filter_hsvadjustment), Actions (Filters), ActionCollection (Krita)
@@ -11343,7 +11343,7 @@ msgstr "Capa vectorial"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Layer..."
-msgstr "Afig una capa de &filtratge..."
+msgstr "Afig una capa de &filtratge…"
 
 #. i18n: context: toolTip @ Action (add_new_adjustment_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2608
@@ -11364,7 +11364,7 @@ msgstr "Capa de filtratge"
 #, kde-format
 msgctxt "action"
 msgid "Add &Fill Layer..."
-msgstr "Afig una capa d'e&mplenat..."
+msgstr "Afig una capa d'e&mplenat…"
 
 #. i18n: context: toolTip @ Action (add_new_fill_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2620
@@ -11385,7 +11385,7 @@ msgstr "Capa d'emplenat"
 #, kde-format
 msgctxt "action"
 msgid "Add &File Layer..."
-msgstr "Afig una capa de fi&txer..."
+msgstr "Afig una capa de fi&txer…"
 
 #. i18n: context: toolTip @ Action (add_new_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2632
@@ -11427,7 +11427,7 @@ msgstr "Màscara de transparència"
 #, kde-format
 msgctxt "action"
 msgid "Add &Filter Mask..."
-msgstr "Afig una màscara de &filtratge..."
+msgstr "Afig una màscara de &filtratge…"
 
 #. i18n: context: toolTip @ Action (add_new_filter_mask), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:2656
@@ -11915,7 +11915,7 @@ msgstr "Selecciona totes les capes desbloquejades"
 #, kde-format
 msgctxt "action"
 msgid "&Save Layer/Mask..."
-msgstr "Guar&da la capa/màscara..."
+msgstr "Guar&da la capa/màscara…"
 
 #. i18n: context: toolTip @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_node_as_image), Actions (Layers), ActionCollection (Krita)
@@ -11932,7 +11932,7 @@ msgstr "Guarda la capa/màscara"
 #, kde-format
 msgctxt "action"
 msgid "Save Vector Layer as SVG..."
-msgstr "Guarda la capa vectorial com a SVG..."
+msgstr "Guarda la capa vectorial com a SVG…"
 
 #. i18n: context: toolTip @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_vector_node_to_svg), Actions (Layers), ActionCollection (Krita)
@@ -11949,7 +11949,7 @@ msgstr "Guarda la capa vectorial com a SVG"
 #, kde-format
 msgctxt "action"
 msgid "Save &Group Layers..."
-msgstr "Guarda les capes de &grup..."
+msgstr "Guarda les capes de &grup…"
 
 #. i18n: context: toolTip @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (save_groups_as_images), Actions (Layers), ActionCollection (Krita)
@@ -12000,7 +12000,7 @@ msgstr "Convertix la capa en fotogrames d'animació"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &File Layer..."
-msgstr "Convertix a una capa de fi&txer..."
+msgstr "Convertix a una capa de fi&txer…"
 
 #. i18n: context: toolTip @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3040
@@ -12021,7 +12021,7 @@ msgstr "Convertix a una capa de fitxer"
 #, kde-format
 msgctxt "action"
 msgid "I&mport Layer..."
-msgstr "I&mporta una capa..."
+msgstr "I&mporta una capa…"
 
 #. i18n: context: toolTip @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_from_file), Actions (Layers), ActionCollection (Krita)
@@ -12038,7 +12038,7 @@ msgstr "Importa una capa"
 #, kde-format
 msgctxt "action"
 msgid "&as Paint Layer..."
-msgstr "Com &a capa de pintura..."
+msgstr "Com &a capa de pintura…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_paint_layer), Actions (Layers), ActionCollection (Krita)
@@ -12055,7 +12055,7 @@ msgstr "Com a capa de pintura"
 #, kde-format
 msgctxt "action"
 msgid "as &Transparency Mask..."
-msgstr "Com a màscara de &transparència..."
+msgstr "Com a màscara de &transparència…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_transparency_mask), Actions (Layers), ActionCollection (Krita)
@@ -12072,7 +12072,7 @@ msgstr "Com a màscara de transparència"
 #, kde-format
 msgctxt "action"
 msgid "as &Filter Mask..."
-msgstr "Com a màscara de &filtratge..."
+msgstr "Com a màscara de &filtratge…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12089,7 +12089,7 @@ msgstr "Com a màscara de filtratge"
 #, kde-format
 msgctxt "action"
 msgid "as &Selection Mask..."
-msgstr "Com a màscara de &selecció..."
+msgstr "Com a màscara de &selecció…"
 
 #. i18n: context: toolTip @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (import_layer_as_selection_mask), Actions (Layers), ActionCollection (Krita)
@@ -12140,7 +12140,7 @@ msgstr "A una màscara de transparència"
 #, kde-format
 msgctxt "action"
 msgid "Convert to &Filter Mask..."
-msgstr "Convertix a una màscara de &filtratge..."
+msgstr "Convertix a una màscara de &filtratge…"
 
 #. i18n: context: toolTip @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (convert_to_filter_mask), Actions (Layers), ActionCollection (Krita)
@@ -12208,7 +12208,7 @@ msgstr "Escriu com a alfa"
 #, kde-format
 msgctxt "action"
 msgid "&Save Merged..."
-msgstr "Guar&da la fusió..."
+msgstr "Guar&da la fusió…"
 
 #. i18n: context: toolTip @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (split_alpha_save_merged), Actions (Layers), ActionCollection (Krita)
@@ -12225,7 +12225,7 @@ msgstr "Guarda la fusió"
 #, kde-format
 msgctxt "action"
 msgid "Split Layer..."
-msgstr "Dividix la capa..."
+msgstr "Dividix la capa…"
 
 #. i18n: context: toolTip @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersplit), Actions (Layers), ActionCollection (Krita)
@@ -12242,7 +12242,7 @@ msgstr "Dividix la capa"
 #, kde-format
 msgctxt "action"
 msgid "Wavelet Decompose ..."
-msgstr "Descompondre per ondetes..."
+msgstr "Descompondre per ondetes…"
 
 #. i18n: context: toolTip @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (waveletdecompose), Actions (Layers), ActionCollection (Krita)
@@ -12293,7 +12293,7 @@ msgstr "Emmiralla les capes verticalment"
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr "Gi&ra les capes..."
+msgstr "Gi&ra les capes…"
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
@@ -12361,7 +12361,7 @@ msgstr "Gira les capes 180°"
 #, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr "Escala les &capes a una mida nova..."
+msgstr "Escala les &capes a una mida nova…"
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
@@ -12378,7 +12378,7 @@ msgstr "Escala les capes a una mida nova"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr "&Inclina les capes..."
+msgstr "&Inclina les capes…"
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
@@ -12429,7 +12429,7 @@ msgstr "Emmiralla totes les capes verticalment"
 #, kde-format
 msgctxt "action"
 msgid "&Rotate All Layers..."
-msgstr "Gi&ra totes les capes..."
+msgstr "Gi&ra totes les capes…"
 
 #. i18n: context: toolTip @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12497,7 +12497,7 @@ msgstr "Gira totes les capes 180°"
 #, kde-format
 msgctxt "action"
 msgid "Scale All &Layers to new Size..."
-msgstr "Escala totes les &capes a una mida nova..."
+msgstr "Escala totes les &capes a una mida nova…"
 
 #. i18n: context: toolTip @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (scaleAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12514,7 +12514,7 @@ msgstr "Escala totes les capes a una mida nova"
 #, kde-format
 msgctxt "action"
 msgid "&Shear All Layers..."
-msgstr "&Inclina totes les capes..."
+msgstr "&Inclina totes les capes…"
 
 #. i18n: context: toolTip @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearAllLayers), Actions (Layers), ActionCollection (Krita)
@@ -12531,7 +12531,7 @@ msgstr "Inclina totes les capes"
 #, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr "Des&plaça les capes..."
+msgstr "Des&plaça les capes…"
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
@@ -12548,7 +12548,7 @@ msgstr "Desplaça les capes"
 #, kde-format
 msgctxt "action"
 msgid "Clones &Array..."
-msgstr "M&atriu de clons..."
+msgstr "M&atriu de clons…"
 
 #. i18n: context: toolTip @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
@@ -12565,7 +12565,7 @@ msgstr "Matriu de clons"
 #, kde-format
 msgctxt "action"
 msgid "&Edit metadata..."
-msgstr "&Edita les metadades..."
+msgstr "&Edita les metadades…"
 
 #. i18n: context: toolTip @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (EditLayerMetaData), Actions (Layers), ActionCollection (Krita)
@@ -12582,7 +12582,7 @@ msgstr "Edita les metadades"
 #, kde-format
 msgctxt "action"
 msgid "&Histogram..."
-msgstr "&Histograma..."
+msgstr "&Histograma…"
 
 #. i18n: context: toolTip @ Action (histogram), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (histogram), Actions (Layers), ActionCollection (Krita)
@@ -12599,7 +12599,7 @@ msgstr "Histograma"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Layer Color Space..."
-msgstr "Con&vertix l'espai de color de la capa..."
+msgstr "Con&vertix l'espai de color de la capa…"
 
 #. i18n: context: toolTip @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layercolorspaceconversion), Actions (Layers), ActionCollection (Krita)
@@ -12667,7 +12667,7 @@ msgstr "Aplana la imatge"
 #, kde-format
 msgctxt "action"
 msgid "La&yer Style..."
-msgstr "Est&il de la capa..."
+msgstr "Est&il de la capa…"
 
 #. i18n: context: toolTip @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_style), Actions (Layers), ActionCollection (Krita)
@@ -12757,7 +12757,7 @@ msgstr "Mou cap avall la capa o màscara"
 #, kde-format
 msgctxt "action"
 msgid "&Properties..."
-msgstr "&Propietats..."
+msgstr "&Propietats…"
 
 #. i18n: context: toolTip @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layer_properties), Actions (Layers), ActionCollection (Krita)
@@ -12774,7 +12774,7 @@ msgstr "Propietats"
 #, kde-format
 msgctxt "action"
 msgid "Set Copy F&rom..."
-msgstr "Establix la còpia &des de..."
+msgstr "Establix la còpia &des de…"
 
 #. i18n: context: toolTip @ Action (set-copy-from), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3600
@@ -12977,7 +12977,7 @@ msgstr "Fitxer"
 #, kde-format
 msgctxt "New document"
 msgid "&New..."
-msgstr "&Nou..."
+msgstr "&Nou…"
 
 #. i18n: context: toolTip @ Action (file_new), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:9
@@ -12998,7 +12998,7 @@ msgstr "Nou"
 #, kde-format
 msgctxt "action"
 msgid "&Open..."
-msgstr "O&bri..."
+msgstr "O&bri…"
 
 #. i18n: context: toolTip @ Action (file_open), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:21
@@ -13057,7 +13057,7 @@ msgstr "Guarda"
 #, kde-format
 msgctxt "action"
 msgid "Save &As..."
-msgstr "Anomena i gu&arda..."
+msgstr "Anomena i gu&arda…"
 
 #. i18n: context: toolTip @ Action (file_save_as), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:57
@@ -13078,7 +13078,7 @@ msgstr "Anomena i guarda"
 #, kde-format
 msgctxt "action"
 msgid "Sessions..."
-msgstr "Sessions..."
+msgstr "Sessions…"
 
 #. i18n: context: toolTip @ Action (file_sessions), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:69
@@ -13099,7 +13099,7 @@ msgstr "Sessions"
 #, kde-format
 msgctxt "action"
 msgid "Open ex&isting Document as Untitled Document..."
-msgstr "Obri un document ex&istent com a un document sense títol..."
+msgstr "Obri un document ex&istent com a un document sense títol…"
 
 #. i18n: context: toolTip @ Action (file_import_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_file), Actions (File), ActionCollection (Menu)
@@ -13116,7 +13116,7 @@ msgstr "Obri un document existent com a un document sense títol"
 #, kde-format
 msgctxt "action"
 msgid "E&xport..."
-msgstr "E&xporta..."
+msgstr "E&xporta…"
 
 #. i18n: context: toolTip @ Action (file_export_file), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_export_file), Actions (File), ActionCollection (Menu)
@@ -13136,7 +13136,7 @@ msgstr "Exporta"
 #, kde-format
 msgctxt "action"
 msgid "Export Advanced..."
-msgstr "Exportació avançada..."
+msgstr "Exportació avançada…"
 
 #. i18n: context: toolTip @ Action (file_export_advanced), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:106
@@ -13150,7 +13150,7 @@ msgstr "Exportació avançada"
 #, kde-format
 msgctxt "action"
 msgid "Import animation frames..."
-msgstr "Importa fotogrames d'animació..."
+msgstr "Importa fotogrames d'animació…"
 
 #. i18n: context: toolTip @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_animation), Actions (File), ActionCollection (Menu)
@@ -13167,7 +13167,7 @@ msgstr "Importa els fotogrames de l'animació"
 #, kde-format
 msgctxt "action"
 msgid "Import video animation..."
-msgstr "Importa una animació de vídeo..."
+msgstr "Importa una animació de vídeo…"
 
 #. i18n: context: toolTip @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (file_import_video_animation), Actions (File), ActionCollection (Menu)
@@ -13184,7 +13184,7 @@ msgstr "Importa una animació"
 #, kde-format
 msgctxt "action"
 msgid "&Render Animation..."
-msgstr "&Renderitza una animació..."
+msgstr "&Renderitza una animació…"
 
 #. i18n: context: toolTip @ Action (render_animation), Actions (File), ActionCollection (Menu)
 #: krita/kritamenu.action:143
@@ -13256,7 +13256,7 @@ msgstr "Guarda una còpia de seguretat incremental"
 #, kde-format
 msgctxt "action"
 msgid "&Create Template From Image..."
-msgstr "&Crea una plantilla des de la imatge..."
+msgstr "&Crea una plantilla des de la imatge…"
 
 #. i18n: context: toolTip @ Action (create_template), Actions (File), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (create_template), Actions (File), ActionCollection (Menu)
@@ -13720,7 +13720,7 @@ msgstr "Traça les formes seleccionades"
 #, kde-format
 msgctxt "action"
 msgid "Stroke Selec&tion..."
-msgstr "Selecciona el &traç..."
+msgstr "Selecciona el &traç…"
 
 #. i18n: context: toolTip @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (stroke_selection), Actions (EditFill), ActionCollection (Menu)
@@ -14574,7 +14574,7 @@ msgstr "Imatge"
 #, kde-format
 msgctxt "Image Properties"
 msgid "&Properties..."
-msgstr "&Propietats..."
+msgstr "&Propietats…"
 
 #. i18n: context: toolTip @ Action (image_properties), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (image_properties), Actions (Image), ActionCollection (Menu)
@@ -14591,7 +14591,7 @@ msgstr "Propietats"
 #, kde-format
 msgctxt "action"
 msgid "&Image Background Color and Transparency..."
-msgstr "Color i transparència del fons de la &imatge..."
+msgstr "Color i transparència del fons de la &imatge…"
 
 #. i18n: context: toolTip @ Action (image_color), Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1163
@@ -14612,7 +14612,7 @@ msgstr "Color i transparència del fons de la imatge"
 #, kde-format
 msgctxt "action"
 msgid "&Convert Image Color Space..."
-msgstr "Con&vertix l'espai de color de la imatge..."
+msgstr "Con&vertix l'espai de color de la imatge…"
 
 #. i18n: context: toolTip @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagecolorspaceconversion), Actions (Image), ActionCollection (Menu)
@@ -14680,7 +14680,7 @@ msgstr "Retalla a la selecció"
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Image..."
-msgstr "&Gira la imatge..."
+msgstr "&Gira la imatge…"
 
 #. i18n: context: toolTip @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (rotateimage), Actions (Image), ActionCollection (Menu)
@@ -14748,7 +14748,7 @@ msgstr "Gira la imatge 180°"
 #, kde-format
 msgctxt "action"
 msgid "&Shear Image..."
-msgstr "&Inclina la imatge..."
+msgstr "&Inclina la imatge…"
 
 #. i18n: context: toolTip @ Action (shearimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shearimage), Actions (Image), ActionCollection (Menu)
@@ -14799,7 +14799,7 @@ msgstr "Emmiralla verticalment la imatge"
 #, kde-format
 msgctxt "action"
 msgid "Scale Image To &New Size..."
-msgstr "Escala la imatge a una mida &nova..."
+msgstr "Escala la imatge a una mida &nova…"
 
 #. i18n: context: toolTip @ Action (imagesize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (imagesize), Actions (Image), ActionCollection (Menu)
@@ -14816,7 +14816,7 @@ msgstr "Escala la imatge a una mida nova"
 #, kde-format
 msgctxt "action"
 msgid "&Offset Image..."
-msgstr "&Desplaçament de la imatge..."
+msgstr "&Desplaçament de la imatge…"
 
 #. i18n: context: toolTip @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (offsetimage), Actions (Image), ActionCollection (Menu)
@@ -14833,7 +14833,7 @@ msgstr "Desplaçament de la imatge"
 #, kde-format
 msgctxt "action"
 msgid "R&esize Canvas..."
-msgstr "R&edimensiona el llenç..."
+msgstr "R&edimensiona el llenç…"
 
 #. i18n: context: toolTip @ Action (canvassize), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (canvassize), Actions (Image), ActionCollection (Menu)
@@ -14867,7 +14867,7 @@ msgstr "Divisió de la imatge"
 #, kde-format
 msgctxt "action"
 msgid "Separate Ima&ge..."
-msgstr "Descompon la imat&ge..."
+msgstr "Descompon la imat&ge…"
 
 #. i18n: context: toolTip @ Action (separate), Actions (Image), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (separate), Actions (Image), ActionCollection (Menu)
@@ -15006,7 +15006,7 @@ msgstr "Convertix les formes a selecció amb vectors"
 #, kde-format
 msgctxt "action"
 msgid "&Feather Selection..."
-msgstr "&Selecciona suau..."
+msgstr "&Selecciona suau…"
 
 #. i18n: context: toolTip @ Action (featherselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (featherselection), Actions (Select), ActionCollection (Menu)
@@ -15040,7 +15040,7 @@ msgstr "Mostra la selecció"
 #, kde-format
 msgctxt "action"
 msgid "Sca&le..."
-msgstr "Esca&la..."
+msgstr "Esca&la…"
 
 #. i18n: context: toolTip @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (selectionscale), Actions (Select), ActionCollection (Menu)
@@ -15057,7 +15057,7 @@ msgstr "Escala"
 #, kde-format
 msgctxt "action"
 msgid "S&elect from Color Range..."
-msgstr "S&elecciona des d'un interval de color..."
+msgstr "S&elecciona des d'un interval de color…"
 
 #. i18n: context: toolTip @ Action (colorrange), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (colorrange), Actions (Select), ActionCollection (Menu)
@@ -15142,7 +15142,7 @@ msgstr "Selecciona l'opac (intersecció)"
 #, kde-format
 msgctxt "action"
 msgid "&Grow Selection..."
-msgstr "Fes créi&xer la selecció..."
+msgstr "Fes créi&xer la selecció…"
 
 #. i18n: context: toolTip @ Action (growselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (growselection), Actions (Select), ActionCollection (Menu)
@@ -15159,7 +15159,7 @@ msgstr "Fa créixer la selecció"
 #, kde-format
 msgctxt "action"
 msgid "S&hrink Selection..."
-msgstr "Fes encolli&r la selecció..."
+msgstr "Fes encolli&r la selecció…"
 
 #. i18n: context: toolTip @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (shrinkselection), Actions (Select), ActionCollection (Menu)
@@ -15176,7 +15176,7 @@ msgstr "Fa encollir la selecció"
 #, kde-format
 msgctxt "action"
 msgid "&Border Selection..."
-msgstr "Selecciona les &vores..."
+msgstr "Selecciona les &vores…"
 
 #. i18n: context: toolTip @ Action (borderselection), Actions (Select), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (borderselection), Actions (Select), ActionCollection (Menu)
@@ -15403,7 +15403,7 @@ msgstr "Configuració"
 #, kde-format
 msgctxt "action"
 msgid "&Configure Krita..."
-msgstr "&Configura Krita..."
+msgstr "&Configura Krita…"
 
 #. i18n: context: toolTip @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure), Actions (Settings), ActionCollection (Menu)
@@ -15420,7 +15420,7 @@ msgstr "Configura Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Manage Resource Libraries..."
-msgstr "&Gestiona les biblioteques de recursos..."
+msgstr "&Gestiona les biblioteques de recursos…"
 
 #. i18n: context: toolTip @ Action (manage_bundles), Actions (Settings), ActionCollection (Menu)
 #: krita/kritamenu.action:1753
@@ -15441,7 +15441,7 @@ msgstr "Gestiona les biblioteques de recursos"
 #, kde-format
 msgctxt "action"
 msgid "Manage Resources..."
-msgstr "Gestiona els recursos..."
+msgstr "Gestiona els recursos…"
 
 #. i18n: context: toolTip @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (manage_resources), Actions (Settings), ActionCollection (Menu)
@@ -15458,7 +15458,7 @@ msgstr "Gestiona els recursos"
 #, kde-format
 msgctxt "action"
 msgid "Switch Application &Language..."
-msgstr "Canvia l'i&dioma de l'aplicació..."
+msgstr "Canvia l'i&dioma de l'aplicació…"
 
 #. i18n: context: toolTip @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (switch_application_language), Actions (Settings), ActionCollection (Menu)
@@ -15509,7 +15509,7 @@ msgstr "Mostra les barres de títol en els acobladors"
 #, kde-format
 msgctxt "action"
 msgid "Configure Tool&bars..."
-msgstr "Configura les &barres d'eines..."
+msgstr "Configura les &barres d'eines…"
 
 #. i18n: context: toolTip @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_toolbars), Actions (Settings), ActionCollection (Menu)
@@ -15607,7 +15607,7 @@ msgstr "Reinicia la configuració"
 #, kde-format
 msgctxt "action"
 msgid "Configure S&hortcuts..."
-msgstr "Configura les &dreceres..."
+msgstr "Configura les &dreceres…"
 
 #. i18n: context: toolTip @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (options_configure_keybinding), Actions (Settings), ActionCollection (Menu)
@@ -15655,7 +15655,7 @@ msgstr "Manual de Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
-msgstr "&Informeu d'un error..."
+msgstr "&Informeu d'un error…"
 
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
@@ -16644,7 +16644,7 @@ msgstr "Red&uix"
 #: plugins/python/tenscripts/uitenscripts.py:59
 #, kde-format
 msgid "..."
-msgstr "..."
+msgstr "…"
 
 #. i18n: ectx: property (text), widget (QPushButton, convertToPath)
 #: libs/flake/tools/PathToolOptionWidgetBase.ui:235
@@ -17586,7 +17586,7 @@ msgstr "Vista prèvia instantània"
 #: libs/image/kis_update_scheduler.cpp:126
 #, kde-format
 msgid "Updating..."
-msgstr "S'està actualitzant..."
+msgstr "S'està actualitzant…"
 
 #: libs/image/kis_update_time_monitor.cpp:191
 #, kde-format
@@ -18276,7 +18276,7 @@ msgstr "Anonimitzador"
 #: libs/metadata/kis_meta_data_filter_p.cc:44
 #, kde-format
 msgid "Remove personal information: author, location..."
-msgstr "Elimina la informació personal: autor, lloc..."
+msgstr "Elimina la informació personal: autor, lloc…"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:84
 #, kde-format
@@ -20598,7 +20598,7 @@ msgstr "N/A"
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:401
 #, kde-format
 msgid "No valid FFmpeg binary supplied..."
-msgstr "No s'ha proporcionat un binari vàlid de FFmpeg..."
+msgstr "No s'ha proporcionat un binari vàlid de FFmpeg…"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:474
 #, kde-format
@@ -20899,7 +20899,7 @@ msgstr "FFmpeg ha fallat"
 #, kde-format
 msgctxt "Video information probing dialog. arg1: frame number."
 msgid "Loading video data... %1 frames examined."
-msgstr "S'estan carregant les dades del vídeo... s'han examinat %1 fotogrames."
+msgstr "S'estan carregant les dades del vídeo… s'han examinat %1 fotogrames."
 
 #: libs/ui/animation/KisVideoSaver.cpp:52
 #, kde-format
@@ -20992,7 +20992,7 @@ msgstr "Mode HDR"
 #: libs/ui/animation/video_export_options_dialog.ui:197
 #, kde-format
 msgid "HDR Metadata..."
-msgstr "Metadades HDR..."
+msgstr "Metadades HDR…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/animation/video_export_options_dialog.ui:249
@@ -22412,7 +22412,7 @@ msgstr "Tanca, no guardes"
 #: libs/ui/dialogs/kis_delayed_save_dialog.ui:31
 #, kde-format
 msgid "Waiting for image operation to complete..."
-msgstr "S'està esperant que l'operació damunt de la imatge es complete..."
+msgstr "S'està esperant que l'operació damunt de la imatge es complete…"
 
 #: libs/ui/dialogs/kis_dlg_adj_layer_props.cc:68
 #, kde-format
@@ -23196,12 +23196,12 @@ msgstr "Propietats de la selecció del traç"
 #: libs/ui/dialogs/KisAsyncAnimationCacheRenderDialog.cpp:104
 #, kde-format
 msgid "Regenerating cache..."
-msgstr "S'està regenerant la memòria cau..."
+msgstr "S'està regenerant la memòria cau…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:64
 #, kde-format
 msgid "Saving frames..."
-msgstr "S'estan guardant els fotogrames..."
+msgstr "S'estan guardant els fotogrames…"
 
 #: libs/ui/dialogs/KisAsyncAnimationFramesSaveDialog.cpp:106
 #, kde-format
@@ -23246,7 +23246,7 @@ msgstr ""
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:156
 #, kde-format
 msgid "Wait for existing frame generation process to complete..."
-msgstr "Espereu que es complete el procés de generació de fotogrames..."
+msgstr "Espereu que es complete el procés de generació de fotogrames…"
 
 #: libs/ui/dialogs/KisAsyncAnimationRenderDialogBase.cpp:348
 #, kde-format
@@ -24155,7 +24155,7 @@ msgstr ""
 "El to i la saturació es mantenen, la claredat se sacrifica per a mantindre "
 "la saturació. El punt blanc es canvia per a obtindre grisos neutres. "
 "Orientat a gràfiques comercials (diagrames acolorits, gràfiques, despeses "
-"generals,...)"
+"generals…)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioSaturation)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
@@ -24184,7 +24184,7 @@ msgstr ""
 "saturació es mantenen. Fora de la gamma; el to i la claredat es mantenen, la "
 "saturació se sacrifica. El punt blanc de l'origen i la destinació no es "
 "modifiquen. Orientat a colors directes (Pantone, TruMatch, colors de "
-"logotips,...)"
+"logotips…)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioAbsoluteColorimetric)
 #: libs/ui/forms/wdgapplyprofile.ui:130
@@ -24545,7 +24545,7 @@ msgstr ""
 "El to i la saturació es mantenen, la claredat se sacrifica per a mantindre "
 "la saturació. El punt blanc es canvia per a obtindre grisos neutres. "
 "Orientat a gràfiques comercials (diagrames acolorits, gràfiques, despeses "
-"generals,...)\n"
+"generals…)\n"
 "Si existix la taula adequada dins del perfil, s'utilitzarà. Si no, es "
 "tornarà al propòsit perceptiu."
 
@@ -24570,7 +24570,7 @@ msgstr ""
 "saturació es mantenen. Fora de la gamma; el to i la claredat es mantenen, la "
 "saturació se sacrifica. El punt blanc de l'origen i la destinació no es "
 "modifiquen. Orientat a colors directes (Pantone, TruMatch, colors de "
-"logotips,...)"
+"logotips…)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpointCompensation)
 #: libs/ui/forms/wdgconvertcolorspace.ui:133
@@ -25219,7 +25219,7 @@ msgstr "Forma del contorn del pinzell:"
 #: libs/ui/forms/wdggeneralsettings.ui:111
 #, kde-format
 msgid "While painting..."
-msgstr "Mentre es pinta..."
+msgstr "Mentre es pinta…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, m_showOutlinePainting)
 #. i18n: ectx: property (text), widget (QCheckBox, m_showEraserOutlinePainting)
@@ -25259,7 +25259,7 @@ msgstr "Forma del contorn d'esborrador:"
 #: libs/ui/forms/wdggeneralsettings.ui:232
 #, kde-format
 msgid "While painting with an eraser..."
-msgstr "Mentre es pinta amb un esborrador..."
+msgstr "Mentre es pinta amb un esborrador…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_21)
 #: libs/ui/forms/wdggeneralsettings.ui:267
@@ -25895,7 +25895,7 @@ msgstr "Utilitza el fet de desfer acumulatiu"
 #: libs/ui/forms/wdggeneralsettings.ui:1521
 #, kde-format
 msgid "Advanced..."
-msgstr "Avançat..."
+msgstr "Avançat…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_4)
 #. i18n: ectx: attribute (title), widget (QWidget, tabResources)
@@ -26141,7 +26141,7 @@ msgstr "EtiquetaDeText"
 #: libs/ui/forms/wdgimportimagesequence.ui:37
 #, kde-format
 msgid "Add images..."
-msgstr "Afig imatges..."
+msgstr "Afig imatges…"
 
 #. i18n: ectx: property (text), widget (QPushButton, removeButton)
 #. i18n: ectx: property (text), widget (QPushButton, btnRemove)
@@ -26607,7 +26607,7 @@ msgstr "Com a capa d'em&plenat"
 #: libs/ui/forms/wdgnewimage.ui:651
 #, kde-format
 msgid "This document..."
-msgstr "Este document..."
+msgstr "Este document…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, DlgNewWindowLayout)
 #: libs/ui/forms/wdgnewwindowlayout.ui:24
@@ -26695,7 +26695,7 @@ msgstr "Motor del pinzell actual"
 #: libs/ui/forms/wdgpaintopsettings.ui:340
 #, kde-format
 msgid "Save New Brush Preset..."
-msgstr "Guarda el pinzell predefinit nou..."
+msgstr "Guarda el pinzell predefinit nou…"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: libs/ui/forms/wdgpaintopsettings.ui:359
@@ -27016,7 +27016,7 @@ msgstr ""
 "<html><head/><body><p>El temps d'espera per a representar un fotograma. Si "
 "falla habitualment la representació de l'animació amb un temps d'espera, "
 "intenteu augmentar este valor</p><p><span style=\" font-weight:600;\">Valor "
-"recomanat:</span> 30...60&nbsp;segons</p></body></html>"
+"recomanat:</span> 30…60&nbsp;segons</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QLabel, label_fps)
 #: libs/ui/forms/wdgperformancesettings.ui:326
@@ -27671,13 +27671,13 @@ msgstr "Sessions"
 #, kde-format
 msgctxt "New session"
 msgid "New..."
-msgstr "Nova..."
+msgstr "Nova…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnRename)
 #: libs/ui/forms/wdgsessionmanager.ui:41
 #, kde-format
 msgid "Rename..."
-msgstr "Canvia el nom..."
+msgstr "Canvia el nom…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnSwitchTo)
 #: libs/ui/forms/wdgsessionmanager.ui:48
@@ -27689,7 +27689,7 @@ msgstr "Canvia a"
 #: libs/ui/forms/wdgsessionmanager.ui:55
 #, kde-format
 msgid "Delete..."
-msgstr "Suprimix..."
+msgstr "Suprimix…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab)
 #: libs/ui/forms/wdgstrokeselectionproperties.ui:34
@@ -27836,7 +27836,7 @@ msgstr "WinTab"
 #, kde-format
 msgctxt "Tablet mapping settings"
 msgid "Advanced..."
-msgstr "Avançat..."
+msgstr "Avançat…"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioWin8PointerInput)
 #: libs/ui/forms/wdgtabletsettings.ui:167
@@ -27898,7 +27898,7 @@ msgstr ""
 #: libs/ui/forms/wdgtabletsettings.ui:220
 #, kde-format
 msgid "Open Tablet Tester..."
-msgstr "Obri el provador de la tauleta..."
+msgstr "Obri el provador de la tauleta…"
 
 #: libs/ui/imagesize/dlg_canvassize.cc:41
 #, kde-format
@@ -28070,7 +28070,7 @@ msgstr "Filtre:"
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:58
 #, kde-format
 msgid "Add shortcut..."
-msgstr "Afig una drecera..."
+msgstr "Afig una drecera…"
 
 #: libs/ui/input/config/kis_action_shortcuts_model.cpp:70
 #, kde-format
@@ -28178,7 +28178,7 @@ msgstr "Sense"
 #, kde-format
 msgctxt "Waiting for user input"
 msgid "Input..."
-msgstr "Entrada..."
+msgstr "Entrada…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/input/config/kis_input_configuration_page.ui:48
@@ -29342,7 +29342,7 @@ msgstr "Convertix a una capa animada"
 #: libs/ui/kis_layer_manager.cc:506
 #, kde-format
 msgid "Save layers to..."
-msgstr "Guarda les capes a..."
+msgstr "Guarda les capes a…"
 
 #: libs/ui/kis_layer_manager.cc:507
 #, kde-format
@@ -30155,32 +30155,32 @@ msgstr ""
 #: libs/ui/KisApplication.cpp:431
 #, kde-format
 msgid "Initializing Globals..."
-msgstr "S'estan inicialitzant els globals..."
+msgstr "S'estan inicialitzant els globals…"
 
 #: libs/ui/KisApplication.cpp:463
 #, kde-format
 msgid "Adding resource types..."
-msgstr "S'estan afegint els tipus de recursos..."
+msgstr "S'estan afegint els tipus de recursos…"
 
 #: libs/ui/KisApplication.cpp:467
 #, kde-format
 msgid "Loading plugins..."
-msgstr "S'estan carregant els connectors..."
+msgstr "S'estan carregant els connectors…"
 
 #: libs/ui/KisApplication.cpp:473
 #, kde-format
 msgid "Loading resources..."
-msgstr "S'estan carregant els recursos..."
+msgstr "S'estan carregant els recursos…"
 
 #: libs/ui/KisApplication.cpp:482
 #, kde-format
 msgid "Loading Main Window..."
-msgstr "S'està carregant la finestra principal..."
+msgstr "S'està carregant la finestra principal…"
 
 #: libs/ui/KisApplication.cpp:514
 #, kde-format
 msgid "Launching..."
-msgstr "S'està llançant..."
+msgstr "S'està llançant…"
 
 #: libs/ui/KisApplication.cpp:583
 #, kde-format
@@ -30459,12 +30459,12 @@ msgstr "No s'ha pogut crear un fitxer de còpia de seguretat numerat"
 #: libs/ui/KisDocument.cpp:822
 #, kde-format
 msgid "Exporting Document..."
-msgstr "S'està exportant el document..."
+msgstr "S'està exportant el document…"
 
 #: libs/ui/KisDocument.cpp:823
 #, kde-format
 msgid "Saving Document..."
-msgstr "S'està guardant el document..."
+msgstr "S'està guardant el document…"
 
 #: libs/ui/KisDocument.cpp:833
 #, kde-format
@@ -30509,17 +30509,17 @@ msgstr "%1 ha finalitzat la guardada"
 #: libs/ui/KisDocument.cpp:1425
 #, kde-format
 msgid "Autosaving... %1"
-msgstr "S'està guardant automàticament... %1"
+msgstr "S'està guardant automàticament… %1"
 
 #: libs/ui/KisDocument.cpp:1433
 #, kde-format
 msgid "Autosaving..."
-msgstr "S'està guardant automàticament..."
+msgstr "S'està guardant automàticament…"
 
 #: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
-msgstr "La guardada automàtica es posposa: el document està ocupat..."
+msgstr "La guardada automàtica es posposa: el document està ocupat…"
 
 #: libs/ui/KisDocument.cpp:1582
 #, kde-format
@@ -30577,7 +30577,7 @@ msgstr "Emplenat del fons"
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
 msgid "Waiting for saving to complete..."
-msgstr "S'està esperant que es complete la guardada..."
+msgstr "S'està esperant que es complete la guardada…"
 
 #: libs/ui/KisImageThumbnailStrokeStrategy.cpp:32
 msgctxt "(qtundo-format)"
@@ -30850,12 +30850,12 @@ msgstr "Obri l'àudio"
 #: libs/ui/KisImportExportManager.cpp:420
 #, kde-format
 msgid "Opening document..."
-msgstr "Obrint un document..."
+msgstr "Obrint un document…"
 
 #: libs/ui/KisImportExportManager.cpp:488
 #, kde-format
 msgid "Saving document..."
-msgstr "S'està guardant el document..."
+msgstr "S'està guardant el document…"
 
 #: libs/ui/KisImportExportManager.cpp:582
 #, kde-format
@@ -31113,19 +31113,19 @@ msgstr ""
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
-msgstr "&Importa espais de treball..."
+msgstr "&Importa espais de treball…"
 
 #: libs/ui/KisMainWindow.cpp:2635
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
-msgstr "Espai de treball &nou..."
+msgstr "Espai de treball &nou…"
 
 #: libs/ui/KisMainWindow.cpp:2639
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
-msgstr "Espai de treball nou..."
+msgstr "Espai de treball nou…"
 
 #: libs/ui/KisMainWindow.cpp:2683
 #, kde-format
@@ -31336,13 +31336,13 @@ msgstr ""
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
-msgstr "S'està baixant la imatge des de %1..."
+msgstr "S'està baixant la imatge des de %1…"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:77
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
-msgstr "S'està baixant la imatge des de %1... (%2 / %3)"
+msgstr "S'està baixant la imatge des de %1… (%2 / %3)"
 
 #: libs/ui/KisRemoteFileFetcher.cpp:94
 #, kde-format
@@ -31372,7 +31372,7 @@ msgstr "Grup:"
 #, kde-format
 msgctxt "Group as in Template Group"
 msgid "&Add Group..."
-msgstr "Afi&g un grup..."
+msgstr "Afi&g un grup…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:123
 #, kde-format
@@ -31398,7 +31398,7 @@ msgstr "Personalitzada:"
 #: libs/ui/KisTemplateCreateDia.cpp:141
 #, kde-format
 msgid "&Select..."
-msgstr "&Selecciona..."
+msgstr "&Selecciona…"
 
 #: libs/ui/KisTemplateCreateDia.cpp:150
 #, kde-format
@@ -32532,19 +32532,19 @@ msgstr "Traç"
 #, kde-format
 msgctxt "Save as new layer style..."
 msgid "&Save as..."
-msgstr "Anomena i gu&arda..."
+msgstr "Anomena i gu&arda…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnLoadStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:163
 #, kde-format
 msgid "&Import..."
-msgstr "&Importa..."
+msgstr "&Importa…"
 
 #. i18n: ectx: property (text), widget (QPushButton, btnSaveStyle)
 #: libs/ui/layerstyles/wdglayerstyles.ui:170
 #, kde-format
 msgid "&Export..."
-msgstr "&Exporta..."
+msgstr "&Exporta…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkPreview)
 #: libs/ui/layerstyles/wdglayerstyles.ui:177
@@ -33067,7 +33067,7 @@ msgstr "Elements de mida personalitzada"
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:238
 #, kde-format
 msgid "Add..."
-msgstr "Afig..."
+msgstr "Afig…"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:243
 #, kde-format
@@ -33082,7 +33082,7 @@ msgstr "Degradat segmentat"
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:252
 #, kde-format
 msgid "Edit..."
-msgstr "Edita..."
+msgstr "Edita…"
 
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:490
 #: libs/ui/widgets/gradient/KisGradientChooser.cpp:499
@@ -34109,7 +34109,7 @@ msgstr "Espai de color sense calibrar"
 #: libs/ui/widgets/kis_cie_tongue_widget.cpp:664
 #, kde-format
 msgid "No profile available..."
-msgstr "Sense perfil disponible..."
+msgstr "Sense perfil disponible…"
 
 #: libs/ui/widgets/kis_cmb_idlist.cc:28
 #, kde-format
@@ -34187,12 +34187,12 @@ msgstr "El porta-retalls està buit o no hi ha cap imatge."
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:42
 #, kde-format
 msgid "Filter by name..."
-msgstr "Filtra per nom..."
+msgstr "Filtra per nom…"
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:59
 #, kde-format
 msgid "Filter by color label..."
-msgstr "Filtra per etiqueta de color..."
+msgstr "Filtra per etiqueta de color…"
 
 #: libs/ui/widgets/kis_layer_filter_widget.cpp:81
 #, kde-format
@@ -34523,7 +34523,7 @@ msgstr "Diferència simètrica (%1)"
 #: libs/ui/widgets/kis_tone_curve_widget.cpp:318
 #, kde-format
 msgid "No tone curve available..."
-msgstr "No hi ha cap corba de to disponible..."
+msgstr "No hi ha cap corba de to disponible…"
 
 #: libs/ui/widgets/kis_transport_controls.cpp:27
 #, kde-format
@@ -35146,12 +35146,12 @@ msgstr "Nom del color:"
 #: libs/widgets/kis_file_name_requester.cpp:86
 #, kde-format
 msgid "Select a file to load..."
-msgstr "Seleccioneu un fitxer que s'haja de carregar..."
+msgstr "Seleccioneu un fitxer que s'haja de carregar…"
 
 #: libs/widgets/kis_file_name_requester.cpp:90
 #, kde-format
 msgid "Select a directory to load..."
-msgstr "Seleccioneu un directori que s'haja de carregar..."
+msgstr "Seleccioneu un directori que s'haja de carregar…"
 
 #: libs/widgets/kis_palette_view.cpp:106
 #, kde-format
@@ -35506,7 +35506,7 @@ msgstr "&Detalls"
 #: libs/widgets/KoDialog.cpp:922
 #, kde-format
 msgid "Get help..."
-msgstr "Obtín ajuda..."
+msgstr "Obtín ajuda…"
 
 # skip-rule: kct-snapshot
 #: libs/widgets/KoDockWidgetTitleBar.cpp:44
@@ -35645,7 +35645,7 @@ msgstr "Nom de fitxer seleccionat"
 #: libs/widgets/wdg_file_name_requester.ui:46
 #, kde-format
 msgid "Select file name..."
-msgstr "Seleccioneu el nom de fitxer..."
+msgstr "Seleccioneu el nom de fitxer…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_channel)
 #: libs/widgets/WdgDlgInternalColorSelector.ui:57
@@ -35733,7 +35733,7 @@ msgstr "&Nou"
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
 msgid "&Open..."
-msgstr "O&bri..."
+msgstr "O&bri…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:30
 #, kde-format
@@ -35758,7 +35758,7 @@ msgstr "Guarda el document"
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
 msgid "Save &As..."
-msgstr "Anomena i gu&arda..."
+msgstr "Anomena i gu&arda…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:33
 #, kde-format
@@ -35783,7 +35783,7 @@ msgstr "Tanca el document"
 #: libs/widgetutils/config/kstandardaction_p.h:36
 #, kde-format
 msgid "&Print..."
-msgstr "Im&primix..."
+msgstr "Im&primix…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:36
 #, kde-format
@@ -35803,7 +35803,7 @@ msgstr "Mostra una vista prèvia d'impressió del document"
 #: libs/widgetutils/config/kstandardaction_p.h:38
 #, kde-format
 msgid "&Mail..."
-msgstr "&Correu..."
+msgstr "&Correu…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:38
 #, kde-format
@@ -35890,7 +35890,7 @@ msgstr "Desse&lecciona"
 #: libs/widgetutils/config/kstandardaction_p.h:50
 #, kde-format
 msgid "&Find..."
-msgstr "Bu&sca..."
+msgstr "Bu&sca…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:51
 #, kde-format
@@ -35905,7 +35905,7 @@ msgstr "Busca l'a&nterior"
 #: libs/widgetutils/config/kstandardaction_p.h:53
 #, kde-format
 msgid "&Replace..."
-msgstr "Su&bstituïx..."
+msgstr "Su&bstituïx…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:55
 #, kde-format
@@ -35960,7 +35960,7 @@ msgstr "Red&uix"
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
 msgid "&Zoom..."
-msgstr "&Zoom..."
+msgstr "&Zoom…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:61
 #, kde-format
@@ -36010,17 +36010,17 @@ msgstr "Va fins a la pàgina següent"
 #: libs/widgetutils/config/kstandardaction_p.h:71
 #, kde-format
 msgid "&Go To..."
-msgstr "&Ves fins a..."
+msgstr "&Ves fins a…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:72
 #, kde-format
 msgid "&Go to Page..."
-msgstr "&Ves fins a la pàgina..."
+msgstr "&Ves fins a la pàgina…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:73
 #, kde-format
 msgid "&Go to Line..."
-msgstr "&Ves fins a la línia..."
+msgstr "&Ves fins a la línia…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:74
 #, kde-format
@@ -36070,12 +36070,12 @@ msgstr "Afi&g una adreça d'interés"
 #: libs/widgetutils/config/kstandardaction_p.h:80
 #, kde-format
 msgid "&Edit Bookmarks..."
-msgstr "&Edita les adreces d'interés..."
+msgstr "&Edita les adreces d'interés…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:82
 #, kde-format
 msgid "&Spelling..."
-msgstr "&Ortografia..."
+msgstr "&Ortografia…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:82
 #, kde-format
@@ -36115,22 +36115,22 @@ msgstr "Guar&da la configuració"
 #: libs/widgetutils/config/kstandardaction_p.h:89
 #, kde-format
 msgid "Configure S&hortcuts..."
-msgstr "Configura les &dreceres..."
+msgstr "Configura les &dreceres…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:90
 #, kde-format
 msgid "&Configure %1..."
-msgstr "&Configura %1..."
+msgstr "&Configura %1…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:91
 #, kde-format
 msgid "Configure Tool&bars..."
-msgstr "Configura les &barres d'eines..."
+msgstr "Configura les &barres d'eines…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:92
 #, kde-format
 msgid "Configure &Notifications..."
-msgstr "Configura les &notificacions..."
+msgstr "Configura les &notificacions…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:93
 #, kde-format
@@ -36155,12 +36155,12 @@ msgstr "Consell del &dia"
 #: libs/widgetutils/config/kstandardaction_p.h:102
 #, kde-format
 msgid "&Report Bug..."
-msgstr "&Informeu d'un error..."
+msgstr "&Informeu d'un error…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:103
 #, kde-format
 msgid "Switch Application &Language..."
-msgstr "Canvia l'i&dioma de l'aplicació..."
+msgstr "Canvia l'i&dioma de l'aplicació…"
 
 #: libs/widgetutils/config/kstandardaction_p.h:104
 #, kde-format
@@ -36351,8 +36351,8 @@ msgstr ""
 "per a fer-ho. En canvi, vós - l'usuari - heu de dir-nos quan alguna cosa no "
 "funciona tal com s'espera o es pot fer millor.<br /><br />KDE té un sistema "
 "de seguiment d'errors. Visiteu <a href=\"%1\">%1</a> o utilitzeu el diàleg "
-"«Informe d'un error...» des del menú «Ajuda» per a informar dels errors. "
-"<br /><br /> Si teniu un suggeriment de millora, us convidem a utilitzar el "
+"«Informe d'un error…» des del menú «Ajuda» per a informar dels errors. <br /"
+"><br /> Si teniu un suggeriment de millora, us convidem a utilitzar el "
 "sistema de seguiment d'errors per a registrar la vostra petició. Assegureu-"
 "vos d'utilitzar el nivell de gravetat anomenat «Llista de desitjos».</html>"
 
@@ -36394,7 +36394,7 @@ msgstr ""
 "<html>KDE és i sempre serà disponible sense càrrecs, però la seua creació no "
 "és debades.<br /><br />Per a donar suport al desenvolupament, la comunitat "
 "KDE va formar la KDE e.V., una organització sense ànim de lucre, fundada "
-"legalment a Alemanya. La KDE e.V. representa la comunitat KDE en qüestions "
+"legalment en Alemanya. La KDE e.V. representa la comunitat KDE en qüestions "
 "legals i financeres. Consulteu a <a href=\"%1\">%1</a> la informació quant a "
 "KDE e.V.<br /><br />KDE es beneficia de molts tipus de col·laboracions, "
 "inclosa la financera. Els fons obtinguts s'empraran per a tornar als seus "
@@ -36884,7 +36884,7 @@ msgstr "Esquemes de dreceres:"
 #, kde-format
 msgctxt "New shortcut scheme"
 msgid "New..."
-msgstr "Nou..."
+msgstr "Nou…"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:67
 #, kde-format
@@ -36906,12 +36906,12 @@ msgstr "Carrega les dreceres personalitzades"
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:78
 #, kde-format
 msgid "Export Scheme..."
-msgstr "Exporta un esquema..."
+msgstr "Exporta un esquema…"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:80
 #, kde-format
 msgid "Import Scheme..."
-msgstr "Importa un esquema..."
+msgstr "Importa un esquema…"
 
 #: libs/widgetutils/xmlgui/kshortcutschemeseditor.cpp:96
 #, kde-format
@@ -37498,7 +37498,7 @@ msgstr "Perspectiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Assistent de perspectiva d'el·lipses"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspectiva d'el·lipses"
@@ -37529,7 +37529,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Assistents de dos punts"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Perspectiva de 2 punts"
@@ -38409,7 +38409,7 @@ msgstr "Línia de temps de l'animació"
 #, kde-format
 msgctxt "@item:inmenu Load audio file into Krita from disk."
 msgid "Import Audio..."
-msgstr "Importa un àudio..."
+msgstr "Importa un àudio…"
 
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:141
 #, kde-format
@@ -38961,12 +38961,12 @@ msgstr "Seleccioneu un directori"
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
 #, kde-format
 msgid "Exporting Compositions..."
-msgstr "Exporteu les composicions..."
+msgstr "Exporteu les composicions…"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
 #, kde-format
 msgid "Exporting composition: %1..."
-msgstr "S'està exportant la composició: %1..."
+msgstr "S'està exportant la composició: %1…"
 
 #: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
 #, kde-format
@@ -39884,7 +39884,7 @@ msgstr "Comportament de l'historial:"
 #: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr "Configura el nombre de pinzells mostrats..."
+msgstr "Configura el nombre de pinzells mostrats…"
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -39919,7 +39919,7 @@ msgstr "Grava una filmació a intervals"
 #, kde-format
 msgctxt "action"
 msgid "Export Timelapse..."
-msgstr "Exporta una filmació a intervals..."
+msgstr "Exporta una filmació a intervals…"
 
 #: plugins/dockers/recorder/recorder_export.cpp:92
 #, kde-format
@@ -39947,7 +39947,7 @@ msgstr "Voleu interrompre la codificació del vídeo de la filmació a intervals
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
-msgstr "S'està iniciant FFmpeg..."
+msgstr "S'està iniciant FFmpeg…"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
 #: plugins/dockers/recorder/recorder_export.cpp:372
@@ -40010,7 +40010,7 @@ msgstr "No hi ha cap fotograma que s'haja d'exportar."
 #: plugins/dockers/recorder/recorder_export.cpp:648
 #, kde-format
 msgid "The timelapse video is being encoded..."
-msgstr "S'està codificant el vídeo de la filmació a intervals..."
+msgstr "S'està codificant el vídeo de la filmació a intervals…"
 
 #: plugins/dockers/recorder/recorder_export.cpp:663
 #, kde-format
@@ -40037,7 +40037,7 @@ msgstr ""
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
 msgid "Cleaning up..."
-msgstr "S'està netejant..."
+msgstr "S'està netejant…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, RecorderExport)
 #: plugins/dockers/recorder/recorder_export.ui:18
@@ -40305,7 +40305,7 @@ msgstr "Última modificació"
 #, kde-format
 msgctxt "Label title, Scanning for directory, files, etc.."
 msgid "Scanning..."
-msgstr "S'està explorant..."
+msgstr "S'està explorant…"
 
 #. i18n: ectx: property (text), widget (QPushButton, buttonSelectAll)
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:221
@@ -40341,7 +40341,7 @@ msgstr "Neteja les gravacions"
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:95
 #, kde-format
 msgid "Scanning..."
-msgstr "S'està explorant..."
+msgstr "S'està explorant…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:198
@@ -40372,13 +40372,13 @@ msgstr "Carpeta de gravacions:"
 #: plugins/dockers/recorder/recorderdocker.ui:105
 #, kde-format
 msgid "Manage recordings..."
-msgstr "Gestiona les gravacions..."
+msgstr "Gestiona les gravacions…"
 
 #. i18n: ectx: property (toolTip), widget (QPushButton, buttonBrowse)
 #: plugins/dockers/recorder/recorderdocker.ui:130
 #, kde-format
 msgid "Select the recordings directory..."
-msgstr "Seleccioneu la carpeta de gravacions..."
+msgstr "Seleccioneu la carpeta de gravacions…"
 
 #. i18n: This value changes for RealtTimeCapture mode switched to on. It can alter the column width of the labels, if this value is the longest of all labels. Please ensure, that at least one other label has more characters than this one (by stuffing space characters after the colon of one label).
 #. i18n: ectx: property (text), widget (QLabel, labelRate)
@@ -40503,7 +40503,7 @@ msgstr "Grava"
 #: plugins/dockers/recorder/recorderdocker.ui:411
 #, kde-format
 msgid "Export..."
-msgstr "Exporta..."
+msgstr "Exporta…"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:146
 #, kde-format
@@ -41228,7 +41228,7 @@ msgstr "Disposicions preferides del selector:"
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:131
 #, kde-format
 msgid "Select..."
-msgstr "Selecció..."
+msgstr "Selecció…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:143
@@ -41610,7 +41610,7 @@ msgstr "Selector de color de gamma àmplia"
 #, kde-format
 msgctxt "Wide Gamut Color Selector"
 msgid "Configure..."
-msgstr "Configura..."
+msgstr "Configura…"
 
 #: plugins/dockers/widegamutcolorselector/WGColorSelectorSettings.cpp:75
 #, kde-format
@@ -41890,7 +41890,7 @@ msgstr "Convertix la capa actual de %1"
 #, kde-format
 msgctxt "action"
 msgid "&Explore Resources Cache Database..."
-msgstr "&Explora els recursos al cau de la base de dades..."
+msgstr "&Explora els recursos al cau de la base de dades…"
 
 #. i18n: context: whatsThis @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (dbexplorer), Actions (Settings), ActionCollection (Krita)
@@ -43526,7 +43526,7 @@ msgid ""
 msgstr ""
 "<p>No s'ha pogut comprovar la versió de la dependència <application>%1</"
 "application>: El mòdul no té l'atribut <code>__version__</code> del PEP396. "
-"No es desactiva, però el comportament pot ser impredictible...</p>"
+"No es desactiva, però el comportament pot ser impredictible…</p>"
 
 #: plugins/extensions/pykrita/plugin/PythonPluginManager.cpp:226
 #, kde-format
@@ -43991,12 +43991,12 @@ msgstr "Importa els recursos i les biblioteques de recursos"
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:38
 #, kde-format
 msgid "Manage Resource Libraries..."
-msgstr "Gestiona les biblioteques de recursos..."
+msgstr "Gestiona les biblioteques de recursos…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.cpp:42
 #, kde-format
 msgid "Manage Resources..."
-msgstr "Gestiona els recursos..."
+msgstr "Gestiona els recursos…"
 
 #: plugins/extensions/resourcemanager/resourcemanager.xmlgui:5
 #, kde-format
@@ -44039,7 +44039,7 @@ msgstr "Actualitzat:"
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:24
 #, kde-format
 msgid "New Bundle..."
-msgstr "Paquet nou..."
+msgstr "Paquet nou…"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, label_4)
@@ -44305,12 +44305,12 @@ msgstr "Angle d'inclinació X:"
 msgid "Shear angle Y:"
 msgstr "Angle d'inclinació Y:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
 msgid "Do nothing"
 msgstr "No faces res"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, kde-format
 msgid "S-Pen Actions"
 msgstr "Accions S-Pen"
@@ -44509,7 +44509,7 @@ msgstr "Filtre de desnivell, desplaçament, potència"
 #: plugins/filters/asccdl/kis_asccdl_filter.cpp:31
 #, kde-format
 msgid "&Slope, Offset, Power..."
-msgstr "De&snivell, desplaçament, potència..."
+msgstr "De&snivell, desplaçament, potència…"
 
 #: plugins/filters/asccdl/kis_asccdl_filter.h:28
 #, kde-format
@@ -44537,7 +44537,7 @@ msgstr "Desnivell:"
 #: plugins/filters/blur/kis_blur_filter.cpp:27
 #, kde-format
 msgid "&Blur..."
-msgstr "&Difumina..."
+msgstr "&Difumina…"
 
 #: plugins/filters/blur/kis_blur_filter.h:26
 #, kde-format
@@ -44547,7 +44547,7 @@ msgstr "Difuminat"
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "Difuminat &gaussià..."
+msgstr "Difuminat &gaussià…"
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
@@ -44557,7 +44557,7 @@ msgstr "Difuminat gaussià"
 #: plugins/filters/blur/kis_lens_blur_filter.cpp:33
 #, kde-format
 msgid "&Lens Blur..."
-msgstr "Difuminat de la &lent..."
+msgstr "Difuminat de la &lent…"
 
 #: plugins/filters/blur/kis_lens_blur_filter.h:30
 #, kde-format
@@ -44567,7 +44567,7 @@ msgstr "Difuminat de la lent"
 #: plugins/filters/blur/kis_motion_blur_filter.cpp:33
 #, kde-format
 msgid "&Motion Blur..."
-msgstr "Difuminat per &moviment..."
+msgstr "Difuminat per &moviment…"
 
 #: plugins/filters/blur/kis_motion_blur_filter.h:30
 #, kde-format
@@ -44721,7 +44721,7 @@ msgstr "Intensitat:"
 #: plugins/filters/colors/kis_color_to_alpha.cpp:30
 #, kde-format
 msgid "&Color to Alpha..."
-msgstr "&Color a alfa..."
+msgstr "&Color a alfa…"
 
 #: plugins/filters/colors/kis_color_to_alpha.h:28
 #, kde-format
@@ -44791,7 +44791,7 @@ msgstr "Contrast automàtic"
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
 msgid "&Color Balance..."
-msgstr "Equilibri de &color..."
+msgstr "Equilibri de &color…"
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.h:40
 #, kde-format
@@ -44801,7 +44801,7 @@ msgstr "Equilibri de color"
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.cpp:318
 #, kde-format
 msgid "&Cross-channel adjustment curves..."
-msgstr "Corbes d'ajust entre &canals..."
+msgstr "Corbes d'ajust entre &canals…"
 
 #: plugins/filters/colorsfilters/kis_cross_channel_filter.h:43
 #, kde-format
@@ -44811,7 +44811,7 @@ msgstr "Ajust del color entre canals"
 #: plugins/filters/colorsfilters/kis_desaturate_filter.cpp:48
 #, kde-format
 msgid "&Desaturate..."
-msgstr "&Dessatura..."
+msgstr "&Dessatura…"
 
 #: plugins/filters/colorsfilters/kis_desaturate_filter.h:34
 #, kde-format
@@ -44873,7 +44873,7 @@ msgstr "Verd-roig"
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
 msgid "&HSV Adjustment..."
-msgstr "Ajust &HSV..."
+msgstr "Ajust &HSV…"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.h:38
 #, kde-format
@@ -44892,7 +44892,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/kis_perchannel_filter.cpp:161
 #, kde-format
 msgid "&Color Adjustment curves..."
-msgstr "Corbes d'ajust del &color..."
+msgstr "Corbes d'ajust del &color…"
 
 #: plugins/filters/colorsfilters/kis_perchannel_filter.h:54
 #, kde-format
@@ -45112,7 +45112,7 @@ msgstr "Filtre de mapa d'alçades a normal"
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.cpp:29
 #, kde-format
 msgid "&Height to Normal Map..."
-msgstr "Mapa d'a&lçades a normal..."
+msgstr "Mapa d'a&lçades a normal…"
 
 #: plugins/filters/convertheightnormalmap/kis_convert_height_to_normal_map_filter.h:29
 #, kde-format
@@ -45215,17 +45215,17 @@ msgstr "Relleu en diagonal"
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:19
 #, kde-format
 msgid "Dodge..."
-msgstr "Esvaïment..."
+msgstr "Esvaïment…"
 
 #: plugins/filters/dodgeburn/DodgeBurnPlugin.cpp:20
 #, kde-format
 msgid "Burn..."
-msgstr "Cremat..."
+msgstr "Cremat…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.cpp:39
 #, kde-format
 msgid "&Edge Detection..."
-msgstr "D&etecció de les vores..."
+msgstr "D&etecció de les vores…"
 
 #: plugins/filters/edgedetection/kis_edge_detection_filter.h:31
 #, kde-format
@@ -45310,7 +45310,7 @@ msgstr "Eixida:"
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:43
 #, kde-format
 msgid "&Emboss with Variable Depth..."
-msgstr "R&elleu amb profunditat variable..."
+msgstr "R&elleu amb profunditat variable…"
 
 #: plugins/filters/embossfilter/kis_emboss_filter.cpp:144
 #, kde-format
@@ -45331,7 +45331,7 @@ msgstr "Invertix"
 #: plugins/filters/fastcolortransfer/fastcolortransfer.cpp:48
 #, kde-format
 msgid "&Color Transfer..."
-msgstr "&Transferència de color..."
+msgstr "&Transferència de color…"
 
 #: plugins/filters/fastcolortransfer/fastcolortransfer.h:35
 #, kde-format
@@ -45361,7 +45361,7 @@ msgstr "Filtre de passaalt gaussià"
 #: plugins/filters/gaussianhighpass/gaussianhighpass_filter.cpp:37
 #, kde-format
 msgid "&Gaussian High Pass..."
-msgstr "Passaalt &gaussià..."
+msgstr "Passaalt &gaussià…"
 
 #: plugins/filters/gaussianhighpass/gaussianhighpass_filter.h:29
 #, kde-format
@@ -45389,7 +45389,7 @@ msgstr "Filtre de mapa de degradats"
 #: plugins/filters/gradientmap/KisGradientMapFilter.cpp:32
 #, kde-format
 msgid "&Gradient Map..."
-msgstr "Mapa de de&gradats..."
+msgstr "Mapa de de&gradats…"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, GradientMapFilterConfigWidget)
 #: plugins/filters/gradientmap/KisGradientMapFilter.h:27
@@ -45509,7 +45509,7 @@ msgstr "Mode:"
 #: plugins/filters/halftone/KisHalftoneFilter.cpp:43
 #, kde-format
 msgid "&Halftone..."
-msgstr "&Semi to..."
+msgstr "&Semi to…"
 
 #: plugins/filters/halftone/KisHalftoneFilter.h:37
 #, kde-format
@@ -45519,7 +45519,7 @@ msgstr "Semi to"
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:30
 #, kde-format
 msgid "&Gaussian Noise Reduction..."
-msgstr "Reducció del soroll &gaussià..."
+msgstr "Reducció del soroll &gaussià…"
 
 #: plugins/filters/imageenhancement/kis_simple_noise_reducer.cpp:44
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:40
@@ -45541,7 +45541,7 @@ msgstr "Reducció del soroll gaussià"
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.cpp:26
 #, kde-format
 msgid "&Wavelet Noise Reducer..."
-msgstr "Reducció del soroll per &ondetes..."
+msgstr "Reducció del soroll per &ondetes…"
 
 #: plugins/filters/imageenhancement/kis_wavelet_noise_reduction.h:37
 #, kde-format
@@ -45551,7 +45551,7 @@ msgstr "Reducció del soroll per ondetes"
 #: plugins/filters/indexcolors/indexcolors.cpp:33
 #, kde-format
 msgid "&Index Colors..."
-msgstr "Í&ndex del color..."
+msgstr "Í&ndex del color…"
 
 #: plugins/filters/indexcolors/indexcolors.cpp:66
 #, kde-format
@@ -45767,12 +45767,12 @@ msgstr "Restablix tots els canals"
 #: plugins/filters/levelfilter/KisLevelsFilter.cpp:18
 #, kde-format
 msgid "&Levels..."
-msgstr "Nive&lls..."
+msgstr "Nive&lls…"
 
 #: plugins/filters/noisefilter/noisefilter.cpp:53
 #, kde-format
 msgid "&Random Noise..."
-msgstr "So&roll aleatori..."
+msgstr "So&roll aleatori…"
 
 #: plugins/filters/noisefilter/noisefilter.h:38
 #, kde-format
@@ -45813,7 +45813,7 @@ msgstr "Filtre normalitza"
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:44
 #, kde-format
 msgid "&Oilpaint..."
-msgstr "Pintura a l'&oli..."
+msgstr "Pintura a l'&oli…"
 
 #: plugins/filters/oilpaintfilter/kis_oilpaint_filter.cpp:205
 #: plugins/paintops/deform/KisBrushSizeOptionWidget.cpp:67
@@ -45868,7 +45868,7 @@ msgstr "Índex:"
 #: plugins/filters/palettize/palettize.cpp:190
 #, kde-format
 msgid "&Palettize..."
-msgstr "&Paletitza..."
+msgstr "&Paletitza…"
 
 #: plugins/filters/palettize/palettize.h:67
 #, kde-format
@@ -45919,7 +45919,7 @@ msgstr "Mapa de relleu Phong"
 #: plugins/filters/phongbumpmap/kis_phong_bumpmap_filter.cpp:26
 #, kde-format
 msgid "&Phong Bumpmap..."
-msgstr "Mapa de relleu &Phong..."
+msgstr "Mapa de relleu &Phong…"
 
 #. i18n: ectx: attribute (title), widget (QWidget, generalSettings)
 #: plugins/filters/phongbumpmap/wdgphongbumpmap.ui:64
@@ -46066,7 +46066,7 @@ msgstr "Origen de la llum &3"
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:46
 #, kde-format
 msgid "&Pixelize..."
-msgstr "&Pixelar..."
+msgstr "&Pixelar…"
 
 #: plugins/filters/pixelizefilter/kis_pixelize_filter.cpp:139
 #, kde-format
@@ -46086,7 +46086,7 @@ msgstr "Pixela"
 #: plugins/filters/posterize/posterize.cpp:43
 #, kde-format
 msgid "&Posterize..."
-msgstr "&Posteritza..."
+msgstr "&Posteritza…"
 
 #: plugins/filters/posterize/posterize.cpp:81
 #, kde-format
@@ -46102,7 +46102,7 @@ msgstr "Posteritza"
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:46
 #, kde-format
 msgid "&Raindrops..."
-msgstr "&Gotes de pluja..."
+msgstr "&Gotes de pluja…"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:381
 #, kde-format
@@ -46127,7 +46127,7 @@ msgstr "Gotes de pluja"
 #: plugins/filters/randompickfilter/randompickfilter.cpp:54
 #, kde-format
 msgid "&Random Pick..."
-msgstr "&Elecció aleatòria..."
+msgstr "&Elecció aleatòria…"
 
 #: plugins/filters/randompickfilter/randompickfilter.h:37
 #, kde-format
@@ -46149,7 +46149,7 @@ msgstr "Reinicia el transparent"
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:42
 #, kde-format
 msgid "&Round Corners..."
-msgstr "Cantons a&rredonits..."
+msgstr "Cantons a&rredonits…"
 
 #: plugins/filters/roundcorners/kis_round_corners_filter.cpp:133
 #, kde-format
@@ -46164,7 +46164,7 @@ msgstr "Cantons arredonits"
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:44
 #, kde-format
 msgid "&Small Tiles..."
-msgstr "&Mosaics petits..."
+msgstr "&Mosaics petits…"
 
 #: plugins/filters/smalltilesfilter/kis_small_tiles_filter.cpp:91
 #, kde-format
@@ -46193,7 +46193,7 @@ msgstr "Llindar del filtratge"
 #: plugins/filters/threshold/threshold.cpp:55
 #, kde-format
 msgid "&Threshold..."
-msgstr "&Llindar..."
+msgstr "&Llindar…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/filters/threshold/wdg_threshold.ui:127
@@ -46204,7 +46204,7 @@ msgstr "Nive&ll del llindar:"
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:31
 #, kde-format
 msgid "&Unsharp Mask..."
-msgstr "&Màscara de desenfocament..."
+msgstr "&Màscara de desenfocament…"
 
 #: plugins/filters/unsharp/kis_unsharp_filter.cpp:76
 #: plugins/filters/unsharp/kis_unsharp_filter.h:27
@@ -46228,7 +46228,7 @@ msgstr "Només claredat:"
 #: plugins/filters/wavefilter/wavefilter.cpp:97
 #, kde-format
 msgid "&Wave..."
-msgstr "&Ona..."
+msgstr "&Ona…"
 
 #: plugins/filters/wavefilter/wavefilter.h:39
 #, kde-format
@@ -46557,7 +46557,7 @@ msgstr "Un hexàgon"
 #: plugins/generators/gradient/KisGradientGenerator.cpp:20
 #, kde-format
 msgid "&Gradient..."
-msgstr "De&gradat..."
+msgstr "De&gradat…"
 
 #: plugins/generators/gradient/KisGradientGeneratorConfigWidget.cpp:28
 #: plugins/tools/basictools/kis_tool_gradient.cc:252
@@ -46798,7 +46798,7 @@ msgstr "Punt en el cantó"
 #: plugins/generators/multigridpattern/multigridpatterngenerator.cpp:52
 #, kde-format
 msgid "&Multigrid Pattern..."
-msgstr "&Patró multiquadrícula..."
+msgstr "&Patró multiquadrícula…"
 
 #: plugins/generators/multigridpattern/multigridpatterngenerator.h:69
 #, kde-format
@@ -46919,7 +46919,7 @@ msgstr[1] "Cada {n} repeticions verticalment"
 #: plugins/generators/pattern/patterngenerator.cpp:198
 #, kde-format
 msgid "&Pattern..."
-msgstr "&Patró..."
+msgstr "&Patró…"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPattern)
 #: plugins/generators/pattern/wdgpatternoptions.ui:27
@@ -47125,7 +47125,7 @@ msgstr "Contrast:"
 #: plugins/generators/screentone/KisScreentoneGenerator.cpp:30
 #, kde-format
 msgid "&Screentone..."
-msgstr "&Tons a la pantalla..."
+msgstr "&Tons a la pantalla…"
 
 #: plugins/generators/screentone/KisScreentoneGenerator.h:52
 #, kde-format
@@ -47221,7 +47221,7 @@ msgstr "Sinusoidal"
 #: plugins/generators/seexpr/generator.cpp:72
 #, kde-format
 msgid "&SeExpr..."
-msgstr "&SeExpr..."
+msgstr "&SeExpr…"
 
 #: plugins/generators/seexpr/generator.h:52
 #, kde-format
@@ -47296,7 +47296,7 @@ msgstr "Opcions"
 #: plugins/generators/seexpr/wdgseexpr.ui:237
 #, kde-format
 msgid "Save New SeExpr Preset..."
-msgstr "Guarda la predefinició nova del SeExpr..."
+msgstr "Guarda la predefinició nova del SeExpr…"
 
 #. i18n: ectx: property (text), widget (QPushButton, saveBrushPresetButton)
 #: plugins/generators/seexpr/wdgseexpr.ui:244
@@ -47319,7 +47319,7 @@ msgstr "&Renderitza l'script a la miniatura"
 #: plugins/generators/simplexnoise/simplexnoisegenerator.cpp:38
 #, kde-format
 msgid "&Simplex Noise..."
-msgstr "So&roll símplex..."
+msgstr "So&roll símplex…"
 
 #: plugins/generators/simplexnoise/simplexnoisegenerator.h:40
 #, kde-format
@@ -47341,7 +47341,7 @@ msgstr "Utilitza una llavor personalitzada"
 #: plugins/generators/solid/colorgenerator.cpp:44
 #, kde-format
 msgid "&Solid Color..."
-msgstr "Color &sòlid..."
+msgstr "Color &sòlid…"
 
 #. i18n: ectx: property (text), widget (QLabel, lblColor)
 #: plugins/generators/solid/wdgcoloroptions.ui:21
@@ -48983,7 +48983,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:779
 #, kde-format
 msgid "Use color palette for ... colors or less"
-msgstr "Utilitza la paleta de colors per a ... colors o menys"
+msgstr "Utilitza la paleta de colors per a … colors o menys"
 
 #. i18n: ectx: property (toolTip), widget (QSpinBox, paletteColors)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:793
@@ -49295,8 +49295,8 @@ msgid ""
 msgstr ""
 "La capa «%1x té el mode de barreja «%2», que ha canviat el seu comportament "
 "per al color CMYK en Krita 5.2. Comproveu el resultat i considereu habilitar "
-"l'algorisme «Additiu» antic en «Configuració -> Configura Krita... -> "
-"General -> Eines -> Mode de barreja CMYK»"
+"l'algorisme «Additiu» antic en «Configuració -> Configura Krita… -> General -"
+"> Eines -> Mode de barreja CMYK»"
 
 #: plugins/impex/libkra/kis_kra_loader.cpp:1115
 #, kde-format
@@ -49769,7 +49769,7 @@ msgstr "Mida xicoteta del fitxer"
 #: plugins/impex/png/kis_wdg_options_png.ui:153
 #, kde-format
 msgid "Save as HDR image (Rec. 2020 PQ)"
-msgstr "Anomena i guarda imatge en HDR (Rec. 2020 PQ)"
+msgstr "Anomena i guarda com a imatge en HDR (Rec. 2020 PQ)"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1)
 #: plugins/impex/png/kis_wdg_options_png.ui:167
@@ -50858,7 +50858,7 @@ msgstr "Restablix als valors predeterminats"
 #: plugins/impex/raw/3rdparty/libkdcraw/src/rwidgetutils.cpp:377
 #, kde-format
 msgid "Browse..."
-msgstr "Explora..."
+msgstr "Explora…"
 
 #. i18n: ectx: property (text), widget (QLabel, preview)
 #: plugins/impex/raw/wdgrawimport.ui:55
@@ -55443,7 +55443,7 @@ msgstr "TIFF"
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:423
 #, python-brace-format
 msgid "v{version}-in this version..."
-msgstr "v{version}-en esta versió..."
+msgstr "v{version}-en esta versió…"
 
 #: plugins/python/comics_project_management_tools/comics_export_dialog.py:446
 #: plugins/python/comics_project_management_tools/comics_metadata_dialog.py:525
@@ -55466,7 +55466,7 @@ msgstr "Preparant l'exportació."
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:139
 msgid "Exporting Comic..."
-msgstr "Exportant cap a Comic..."
+msgstr "Exportant cap a Comic…"
 
 #: plugins/python/comics_project_management_tools/comics_exporter.py:157
 msgid ""
@@ -56017,7 +56017,7 @@ msgstr ""
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:379
 msgid "Loading Pages..."
-msgstr "Càrrega de pàgines..."
+msgstr "Càrrega de pàgines…"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:532
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:652
@@ -56057,7 +56057,7 @@ msgstr "Redimensiona totes les pàgines"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:895
 msgid "Resizing pages..."
-msgstr "S'estan redimensionant les pàgines..."
+msgstr "S'estan redimensionant les pàgines…"
 
 #: plugins/python/comics_project_management_tools/comics_project_manager_docker.py:896
 msgid "Resizing Pages"
@@ -56939,7 +56939,7 @@ msgstr "Establix la carpeta de referències"
 #: plugins/python/photobash_images/photobash_images_docker.ui:71
 #, kde-format
 msgid "Filter images by words..."
-msgstr "Filtra les imatges per paraules..."
+msgstr "Filtra les imatges per paraules…"
 
 #. i18n: ectx: property (text), widget (QCheckBox, fitCanvasCheckBox)
 #: plugins/python/photobash_images/photobash_images_docker.ui:388
@@ -56963,14 +56963,14 @@ msgstr "Importador de connectors en Python"
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from File..."
-msgstr "Importa un connector en Python des d'un fitxer..."
+msgstr "Importa un connector en Python des d'un fitxer…"
 
 #. i18n: context: text @ Action (plugin_importer_web), Actions (Scripts), ActionCollection (Scripts)
 #: plugins/python/plugin_importer/plugin_importer.action:21
 #, kde-format
 msgctxt "action"
 msgid "Import Python Plugin from Web..."
-msgstr "Importa un connector en Python des del web..."
+msgstr "Importa un connector en Python des del web…"
 
 #: plugins/python/plugin_importer/plugin_importer.py:142
 msgid "Desktop file"
@@ -56982,11 +56982,11 @@ msgstr "No s'ha trobat cap connector en l'arxiu"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:32
 msgid "Import Python Plugin from File..."
-msgstr "Importa un connector en Python des d'un fitxer..."
+msgstr "Importa un connector en Python des d'un fitxer…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:37
 msgid "Import Python Plugin from Web..."
-msgstr "Importa un connector en Python des del web..."
+msgstr "Importa un connector en Python des del web…"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:44
 msgid "Overwrite Plugin"
@@ -58772,7 +58772,7 @@ msgstr "Forma cal·ligràfica"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:59
 #, kde-format
 msgid "Save profile as..."
-msgstr "Anomena i guarda el perfil..."
+msgstr "Anomena i guarda el perfil…"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:65
 #, kde-format
@@ -59519,7 +59519,7 @@ msgstr "Color de text"
 #, kde-format
 msgctxt "action"
 msgid "Text Color..."
-msgstr "Color del text..."
+msgstr "Color del text…"
 
 #. i18n: context: iconText @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_background_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59537,7 +59537,7 @@ msgstr "Fons"
 #, kde-format
 msgctxt "action"
 msgid "Background Color..."
-msgstr "Color de fons..."
+msgstr "Color de fons…"
 
 #. i18n: context: iconText @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_size), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59562,7 +59562,7 @@ msgstr "Mida del tipus de lletra"
 #, kde-format
 msgctxt "action"
 msgid "Font..."
-msgstr "Tipus de lletra..."
+msgstr "Tipus de lletra…"
 
 #. i18n: context: toolTip @ Action (svg_font), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:48
@@ -59587,7 +59587,7 @@ msgstr "Canvia els atributs dels caràcters seleccionats."
 #, kde-format
 msgctxt "action"
 msgid "Special Character..."
-msgstr "Caràcter especial..."
+msgstr "Caràcter especial…"
 
 #. i18n: context: toolTip @ Action (svg_insert_special_character), Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:58
@@ -59829,7 +59829,7 @@ msgstr "Configuració per a l'editor de text"
 #, kde-format
 msgctxt "Text Editor Settings label"
 msgid "Settings..."
-msgstr "Configuració..."
+msgstr "Configuració…"
 
 #. i18n: context: iconText @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: text @ Action (svg_sample_color), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -59990,7 +59990,7 @@ msgstr "Edita el text"
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:28
 #, kde-format
 msgid "Create new texts with..."
-msgstr "Crea textos nous amb..."
+msgstr "Crea textos nous amb…"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, alignLeft)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:42

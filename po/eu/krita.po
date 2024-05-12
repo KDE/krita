@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"POT-Creation-Date: 2024-05-12 03:41+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -43637,12 +43637,12 @@ msgstr "X zizailatze angelua:"
 msgid "Shear angle Y:"
 msgstr "Y zizailatze angelua:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
 msgid "Do nothing"
 msgstr "Ez egin ezer"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, kde-format
 msgid "S-Pen Actions"
 msgstr "S-Pen ekintzak"

@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"POT-Creation-Date: 2024-05-12 03:41+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -44461,12 +44461,12 @@ msgstr "Γωνία διάτμησης X:"
 msgid "Shear angle Y:"
 msgstr "Γωνία διάτμησης Y:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, fuzzy, kde-format
 msgid "Do nothing"
 msgstr "να μη γίνεται τίποτε"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
 #| msgid "Selection decoration"
 msgid "S-Pen Actions"

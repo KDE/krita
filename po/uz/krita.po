@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"POT-Creation-Date: 2024-05-12 03:41+0000\n"
 "PO-Revision-Date: 2007-02-11 00:31+0100\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -43049,12 +43049,12 @@ msgstr "Yangi rasm"
 msgid "Shear angle Y:"
 msgstr "Yangi rasm"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, fuzzy, kde-format
 msgid "Do nothing"
 msgstr "Tekis"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
 #| msgid "Fill entire selection"
 msgid "S-Pen Actions"

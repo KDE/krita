@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"POT-Creation-Date: 2024-05-12 03:41+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -44029,12 +44029,12 @@ msgstr "Lygmuo"
 msgid "Shear angle Y:"
 msgstr "Lygmuo"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, fuzzy, kde-format
 msgid "Do nothing"
 msgstr "nieko nedaryti"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
 msgid "S-Pen Actions"
 msgstr "Nieko nepažymėta"

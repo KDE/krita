@@ -25,7 +25,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"POT-Creation-Date: 2024-05-12 03:41+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -43385,12 +43385,12 @@ msgstr "Imagine nouă"
 msgid "Shear angle Y:"
 msgstr "Imagine nouă"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, fuzzy, kde-format
 msgid "Do nothing"
 msgstr "Decalaj aleator"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, fuzzy, kde-format
 msgid "S-Pen Actions"
 msgstr "Selecția"

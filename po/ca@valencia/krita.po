@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-09 03:28+0000\n"
+"POT-Creation-Date: 2024-05-12 03:41+0000\n"
 "PO-Revision-Date: 2024-05-02 17:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -36162,7 +36162,7 @@ msgstr ""
 "<html>KDE és i sempre serà disponible sense càrrecs, però la seua creació no "
 "és debades.<br /><br />Per a donar suport al desenvolupament, la comunitat "
 "KDE va formar la KDE e.V., una organització sense ànim de lucre, fundada "
-"legalment a Alemanya. La KDE e.V. representa la comunitat KDE en qüestions "
+"legalment en Alemanya. La KDE e.V. representa la comunitat KDE en qüestions "
 "legals i financeres. Consulteu a <a href=\"%1\">%1</a> la informació quant a "
 "KDE e.V.<br /><br />KDE es beneficia de molts tipus de col·laboracions, "
 "inclosa la financera. Els fons obtinguts s'empraran per a tornar als seus "
@@ -43730,12 +43730,12 @@ msgstr "Angle d'inclinació X:"
 msgid "Shear angle Y:"
 msgstr "Angle d'inclinació Y:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
 msgid "Do nothing"
 msgstr "No faces res"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, kde-format
 msgid "S-Pen Actions"
 msgstr "Accions S-Pen"

@@ -25,7 +25,7 @@
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1
-    - git clone https://invent.kde.org/dkazakov/ci-utilities.git -b work/split-ci-branch krita-deps-management/ci-utilities --depth=1
+    - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
     - if [ "$KRITACI_ANDROID_PACKAGE_TYPE" == "nightly" ]; then pip install -r ci-notary-service/requirements.txt; fi

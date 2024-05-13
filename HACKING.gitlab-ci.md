@@ -45,7 +45,7 @@ Here is a list of guidelines that we follow when developing CI pipeline for Krit
         KDECI_CC_CACHE: /mnt/caches/krita-appimage/ # Linux path -> unquoted
     ```
 
-4) Boolean values passed to our CI scritps should be (unquoted) `True` or `False` strings.
+4) Boolean values passed to our CI scripts should be (unquoted) `True` or `False` strings.
 
     ```yaml
     windows-build:

@@ -781,7 +781,6 @@ void StoryboardModel::reorderKeyframes()
         QModelIndex sceneIndex = index(i, 0);
         int sceneFrame = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt();
         earliestFrame = sceneFrame < earliestFrame ? sceneFrame : earliestFrame;
-        frameAssociates.insert(sceneIndex, 0);
 
         const int lastFrameOfScene = index(StoryboardItem::FrameNumber, 0, sceneIndex).data().toInt()
                                      + data(sceneIndex, TotalSceneDurationInFrames).toInt();

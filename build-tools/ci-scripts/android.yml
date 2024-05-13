@@ -10,8 +10,8 @@
     KDECI_BUILD_TYPE: Release
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
-    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: "False"
-    KDECI_SKIP_ECM_ANDROID_TOOLCHAIN: "True"
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: False
+    KDECI_SKIP_ECM_ANDROID_TOOLCHAIN: True
     # ANDROID_HOME: /opt/android-tooling # <-- set up in the base image!
     # KDECI_ANDROID_SDK_ROOT: $ANDROID_HOME/sdk # <-- set up in the base image!
     # KDECI_ANDROID_NDK_ROOT: $ANDROID_HOME/android-ndk-r22b/ # <-- set up in the base image!
@@ -19,9 +19,9 @@
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake
-    KRITACI_ANDROID_PACKAGE_TYPE: "debug"
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "True"
-    KRITACI_PUBLISH_BUILD_CONFIG: "upstream-ci-utilities/signing/publishbuild.ini"
+    KRITACI_ANDROID_PACKAGE_TYPE: debug
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
+    KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git --depth=1
@@ -47,12 +47,12 @@
     - .ci-artifacts-without-packages-mixin
   interruptible: false
   variables:
-    KRITACI_ANDROID_PACKAGE_TYPE: "nightly"
+    KRITACI_ANDROID_PACKAGE_TYPE: nightly
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/android-toolchain-krita.cmake
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
 
 .android-release-base:
   extends:
@@ -60,7 +60,7 @@
   - .ci-release-job-mixin
   interruptible: false
   variables:
-    KRITACI_ANDROID_PACKAGE_TYPE: "release"
+    KRITACI_ANDROID_PACKAGE_TYPE: release
     KRITACI_ANDROID_RELEASE_MODE: 1
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
@@ -73,8 +73,8 @@
     KDECI_ANDROID_ABI: x86_64
     KDECI_CC_CACHE: /mnt/caches/krita-android/x86_64/
     KDECI_CACHE_PATH: /mnt/artifacts/krita-android/x86_64/
-    KRITACI_ARCHIVE_ARTIFACTS: "True"
-    KRITACI_SKIP_COMMON_ARTIFACTS: "True"
+    KRITACI_ARCHIVE_ARTIFACTS: True
+    KRITACI_SKIP_COMMON_ARTIFACTS: True
 
 .android-arm64-v8a-mixin:
   variables:
@@ -82,8 +82,8 @@
     KDECI_ANDROID_ABI: arm64-v8a
     KDECI_CC_CACHE: /mnt/caches/krita-android/arm64-v8a/
     KDECI_CACHE_PATH: /mnt/artifacts/krita-android/arm64-v8a/
-    KRITACI_ARCHIVE_ARTIFACTS: "True"
-    KRITACI_SKIP_COMMON_ARTIFACTS: "False" # only arm64-v8a packages common artifacts
+    KRITACI_ARCHIVE_ARTIFACTS: True
+    KRITACI_SKIP_COMMON_ARTIFACTS: False # only arm64-v8a packages common artifacts
 
 .android-armeabi-v7a-mixin:
   variables:
@@ -91,8 +91,8 @@
     KDECI_ANDROID_ABI: armeabi-v7a
     KDECI_CC_CACHE: /mnt/caches/krita-android/armeabi-v7a/
     KDECI_CACHE_PATH: /mnt/artifacts/krita-android/armeabi-v7a/
-    KRITACI_ARCHIVE_ARTIFACTS: "True"
-    KRITACI_SKIP_COMMON_ARTIFACTS: "True"
+    KRITACI_ARCHIVE_ARTIFACTS: True
+    KRITACI_SKIP_COMMON_ARTIFACTS: True
 
 android-build-appbundle:
   stage: deploy

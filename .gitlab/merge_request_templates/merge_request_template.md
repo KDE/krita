@@ -14,6 +14,7 @@ Formalities Checklist
 - [ ] I made sure my commits build individually and have good descriptions as per [KDE guidelines](https://community.kde.org/Policies/Commit_Policy).
 - [ ] I made sure my code conforms to the standards set in the HACKING file.
 - [ ] I can confirm the code is licensed and attributed appropriately, and that unattributed code is mine, as per [KDE Licensing Policy](https://community.kde.org/Policies/Licensing_Policy).
+- [ ] Does the patch add a user-visible feature? If yes, is there a documentation MR ready for it at [Krita Documentation Repository](https://invent.kde.org/documentation/docs-krita-org)?
 
 _**Reminder: the reviewer is responsible for merging the patch, this is to ensure at the least two people can build the patch. In case a patch breaks the build, both the author and the reviewer should be contacted to fix the build.**_
 _**If this is not possible, the commits shall be reverted, and a notification with the reasoning and any relevant logs shall be sent to the mailing list, kimageshop@kde.org.**_

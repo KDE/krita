@@ -656,6 +656,8 @@ krita_deploy () {
     libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents" -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
 #    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
+    # remove debug version as both versions can't be signed.
+    rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
     echo "## Finished preparing krita.app bundle!"
 }
 
@@ -668,14 +670,12 @@ batch_codesign() {
     fi
     xargs -P4 -I FILE codesign --options runtime --timestamp -f -s "${CODE_SIGNATURE}" --entitlements "${entitlements}" FILE
 }
+
 # Code sign must be done as recommended by apple "sign code inside out in individual stages"
 signBundle() {
-    cd ${KRITA_DMG}
-
     # sign Frameworks and libs
     cd ${KRITA_DMG}/krita.app/Contents/Frameworks
-    # remove debug version as both versions can't be signed.
-    rm ${KRITA_DMG}/krita.app/Contents/Frameworks/QtScript.framework/Versions/Current/QtScript_debug
+
     # Do not sign binaries inside frameworks except for Python's
     find . -type d -path "*.framework" -prune -false -o -perm +111 -not -type d | batch_codesign
     find Python.framework -type f -name "*.o" -or -name "*.so" -or -perm +111 -not -type d -not -type l | batch_codesign

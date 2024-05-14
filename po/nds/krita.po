@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -37388,7 +37388,7 @@ msgstr "Kiekwinkel"
 msgid "Perspective Ellipse assistant"
 msgstr "Kiekwinkelhölper"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 #| msgid "Perspective grid"
 msgid "Perspective Ellipse"
@@ -37422,7 +37422,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Spline-Hölper"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "2 Point Perspective"

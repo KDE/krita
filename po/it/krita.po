@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2024-04-27 10:24+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -37267,7 +37267,7 @@ msgstr "Prospettiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Assistente ellisse della prospettiva"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Ellisse della prospettiva"
@@ -37298,7 +37298,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Assistente a due punti"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Prospettiva a due punti"

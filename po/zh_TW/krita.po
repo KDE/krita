@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -36685,7 +36685,7 @@ msgstr "透視"
 msgid "Perspective Ellipse assistant"
 msgstr "透視橢圓輔助尺"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "透視橢圓"
@@ -36716,7 +36716,7 @@ msgstr "樣條曲線 (Spline)"
 msgid "Two point assistant"
 msgstr "兩點透視輔助尺"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "兩點透視"

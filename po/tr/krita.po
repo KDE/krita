@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2024-05-06 00:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -37085,7 +37085,7 @@ msgstr "Perspektif"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektif Elips yardımcısı"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektif Elips"
@@ -37116,7 +37116,7 @@ msgstr "Şerit"
 msgid "Two point assistant"
 msgstr "İki nokta yardımcısı"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "2 Noktalı Perspektif"

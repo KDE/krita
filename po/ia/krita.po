@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2023-11-23 10:49+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -37290,7 +37290,7 @@ msgstr "Perspectiva"
 msgid "Perspective Ellipse assistant"
 msgstr "Computo de rango"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "Perspective Ellipse"
@@ -37326,7 +37326,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Selige un assistente"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 #| msgid "Line Count"
 msgid "2 Point Perspective"

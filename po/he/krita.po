@@ -40,7 +40,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2017-05-16 06:47-0400\n"
 "Last-Translator: Copied by Zanata <copied-by-zanata@zanata.org>\n"
 "Language-Team: Hebrew <kde-l10n-he@kde.org>\n"
@@ -36313,7 +36313,7 @@ msgstr "כלי מ&חיקה"
 msgid "Perspective Ellipse assistant"
 msgstr "כלי מ&חיקה"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "כלי מ&חיקה"
@@ -36344,7 +36344,7 @@ msgstr "מקושר"
 msgid "Two point assistant"
 msgstr "אליפסה"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "כלי מ&חיקה"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2024-03-21 22:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -37605,7 +37605,7 @@ msgstr "Перспектива"
 msgid "Perspective Ellipse assistant"
 msgstr "Інструмент створення перспективи еліпса"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Перспектива еліпса"
@@ -37636,7 +37636,7 @@ msgstr "Сплайни"
 msgid "Two point assistant"
 msgstr "Допоміжний інструмент двоточкової перспективи"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "Двоточкова перспектива"

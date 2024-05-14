@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2024-02-02 13:03+0200\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -38875,7 +38875,7 @@ msgstr "Perspektiivi"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektiiviavustaja"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Perspective Grid"
@@ -38908,7 +38908,7 @@ msgstr "BSpline"
 msgid "Two point assistant"
 msgstr "Gaussin:"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 #| msgid "Perspective"
 msgid "2 Point Perspective"

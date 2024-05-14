@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -36383,7 +36383,7 @@ msgstr "&Bijela"
 msgid "Perspective Ellipse assistant"
 msgstr "&Bijela"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "&Bijela"
@@ -36414,7 +36414,7 @@ msgstr "linija"
 msgid "Two point assistant"
 msgstr "Izmjesti"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "&Bijela"

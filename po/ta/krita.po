@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-12 03:41+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -36433,7 +36433,7 @@ msgstr "அழிக்கும் கருவி"
 msgid "Perspective Ellipse assistant"
 msgstr "அழிக்கும் கருவி"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, fuzzy, kde-format
 msgid "Perspective Ellipse"
 msgstr "அழிக்கும் கருவி"
@@ -36464,7 +36464,7 @@ msgstr "B-Spline"
 msgid "Two point assistant"
 msgstr "காஸ்சியன் தெளிவற்ற நிலை"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, fuzzy, kde-format
 msgid "2 Point Perspective"
 msgstr "அழிக்கும் கருவி"

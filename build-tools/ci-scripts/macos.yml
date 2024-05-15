@@ -7,8 +7,7 @@ macos-build:
     - .ci-artifacts-with-packages-mixin
   variables:
     KDECI_BUILD_TYPE: Release
-    # ccache is not present on macOS
-    # KDECI_CC_CACHE: /Users/gitlab/caches/krita-macos/cache
+    KDECI_CC_CACHE: /Users/gitlab/caches/krita-macos/ccache
     KDECI_CACHE_PATH: /Users/gitlab/caches/krita-macos/artifacts
     KDECI_GITLAB_SERVER: https://invent.kde.org/
     KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-macos-qt5.15
@@ -20,10 +19,8 @@ macos-build:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
       -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
+    # TODO: clear the folder
     KDECI_CRAFT_DOWNLOADS: /Users/gitlab/caches/krita-macos/craft-downloads
-    KDECI_CRAFT_CONFIG: $CI_PROJECT_DIR/upstream-ci-utilities/craft/qt5/CraftConfig.ini
-    KDECI_CRAFT_PROJECT_CONFIG: $CI_PROJECT_DIR/.craft.ini
-    KDECI_CRAFT_PLATFORM: macos-arm-clang
 
     #KDECI_REMOVE_INSTALL_FOLDERS_AFTER_BUILD: True
 
@@ -37,7 +34,6 @@ macos-build:
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1
     - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
-    - git clone https://invent.kde.org/packaging/craftmaster.git --depth=1
     - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1 upstream-ci-utilities
 
     - python3 -m venv venv --upgrade-deps
@@ -48,16 +44,11 @@ macos-build:
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - pip install -r ci-notary-service/requirements.txt
 
-    - touch $KDECI_CRAFT_PROJECT_CONFIG
-    - function craftmaster { python3 craftmaster/CraftMaster.py --config $KDECI_CRAFT_CONFIG --config-override $KDECI_CRAFT_PROJECT_CONFIG --target $KDECI_CRAFT_PLATFORM --variables DownloadDir=$KDECI_CRAFT_DOWNLOADS $@; }
-
-    - craftmaster --setup
-    - craftmaster -c -i --options virtual.ignored=True --update craft
-    - craftmaster -c -i core/cacert dev-utils/7zip-base dev-utils/cmake-base dev-utils/7zip dev-utils/cmake dev-utils/patchelf dev-utils/ninja
-
-    - export PATH=$CI_PROJECT_DIR/$KDECI_CRAFT_PLATFORM/dev-utils/bin/:$PATH
+    - python3 -u build-tools/ci-scripts/download-macos-tools.py
+    - source _krita-tools/activate
 
     - git config --global --add safe.directory $CI_PROJECT_DIR
+
   script:
     - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
     - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing 2>&1 | tee build-krita.log

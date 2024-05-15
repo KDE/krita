@@ -12,6 +12,7 @@
 namespace KritaVersionWrapper {
 
     KRITAVERSION_EXPORT QString versionString(bool checkGit = false);
+    KRITAVERSION_EXPORT bool isDevelopersBuild();
 }
 
 #endif // KRITAVERSIONWRAPPER_H

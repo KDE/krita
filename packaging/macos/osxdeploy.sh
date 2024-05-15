@@ -868,36 +868,40 @@ createDMG () {
 # Program starts!!
 ########################
 # Run deploy command, installation is assumed to exist in BUILDROOT/i
-krita_deploy
-
-# Code sign krita.app if signature given
-if [[ -n "${CODE_SIGNATURE}" ]]; then
-    signBundle
+if [[ -z "${ONLY_DMG}" ]]; then
+    krita_deploy
 fi
 
-# Manually check every single Mach-O file for signature status
-if [[ "${NOTARIZE}" = "true" ]]; then
-    print_msg "Checking if all files are signed before sending for notarization..."
-    if [[ $(sign_hasError) -eq 1 ]]; then
-        print_error "CodeSign errors cannot send to notarize!"
-        echo "krita.app not sent to notarization, stopping...."
-        exit 1
-    fi
-    print_msg "Done! all files appear to be correct."
+# # Code sign krita.app if signature given
+# if [[ -n "${CODE_SIGNATURE}" ]]; then
+#     signBundle
+# fi
 
-    # notarize apple
-    notarize_build "${KRITA_DMG}" krita.app
-fi
+# # Manually check every single Mach-O file for signature status
+# if [[ "${NOTARIZE}" = "true" ]]; then
+#     print_msg "Checking if all files are signed before sending for notarization..."
+#     if [[ $(sign_hasError) -eq 1 ]]; then
+#         print_error "CodeSign errors cannot send to notarize!"
+#         echo "krita.app not sent to notarization, stopping...."
+#         exit 1
+#     fi
+#     print_msg "Done! all files appear to be correct."
+
+#     # notarize apple
+#     notarize_build "${KRITA_DMG}" krita.app
+# fi
 
 # Create DMG from files inside ${KRITA_DMG} folder
-createDMG
-
-if [[ "${NOTARIZE}" = "false" ]]; then
-    macosVersion="$(sw_vers | grep ProductVersion | awk '
-       BEGIN { FS = "[ .\t]" }
-             { print $3}
-    ')"
-    if (( ${macosVersion} == 15 )); then
-        print_error "Build not notarized! Needed for macOS versions above 10.14"
-    fi
+if [[ -z "${ONLY_APP}" ]]; then
+    createDMG
 fi
+
+# if [[ "${NOTARIZE}" = "false" ]]; then
+#     macosVersion="$(sw_vers | grep ProductVersion | awk '
+#        BEGIN { FS = "[ .\t]" }
+#              { print $3}
+#     ')"
+#     if (( ${macosVersion} == 15 )); then
+#         print_error "Build not notarized! Needed for macOS versions above 10.14"
+#     fi
+# fi

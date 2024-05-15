@@ -30,6 +30,9 @@ macos-build:
     KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: False
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
     KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+
+    # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
+    KDECI_ONLY_BUILD: True
   interruptible: true
   before_script:
     - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1
@@ -74,7 +77,8 @@ macos-nightly:
   interruptible: false
   variables:
     # still run the tests, since we don't run them for every commit!
-    KDECI_ONLY_BUILD: False
+    # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
+    KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON

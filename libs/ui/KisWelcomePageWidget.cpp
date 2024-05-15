@@ -662,13 +662,7 @@ void KisWelcomePageWidget::slotRecentDocContextMenuRequest(const QPoint &pos)
 
 bool KisWelcomePageWidget::isDevelopmentBuild()
 {
-    QString versionString = KritaVersionWrapper::versionString(true);
-
-    if (versionString.contains("git")) {
-        return true;
-    } else {
-        return false;
-    }
+    return KritaVersionWrapper::isDevelopersBuild();
 }
 
 void KisWelcomePageWidget::slotNewFileClicked()

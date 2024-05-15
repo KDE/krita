@@ -21,3 +21,12 @@ QString KritaVersionWrapper::versionString(bool checkGit)
     }
     return version;
 }
+
+bool KritaVersionWrapper::isDevelopersBuild()
+{
+#ifdef KRITA_STABLE
+    return false;
+#else
+    return true;
+#endif
+}

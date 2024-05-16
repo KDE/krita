@@ -132,6 +132,12 @@ void KisRegenerateFrameStrokeStrategy::initStrokeCallback()
         return;
     }
     if (m_d->type == EXTERNAL_FRAME) {
+        if (!image->animationInterface()->hasAnimation()) {
+            warnKrita << "KisRegenerateFrameStrokeStrategy::initStrokeCallback(): WARNING: trying to"
+                      << "regenerate an external frame on a non-animated image, that will cause"
+                      << "a useless consumption of memory";
+        }
+
         m_d->saveAndResetUpdatesFilter();
         image->disableUIUpdates();
         m_d->interface->saveAndResetCurrentTime(m_d->frameId, &m_d->previousFrameId);

@@ -118,10 +118,12 @@ struct KisAnimationCachePopulator::Private
 
     RegenerationRequestResult tryRequestGeneration()
     {
-        if (!priorityFrames.isEmpty()) {
+        while (!priorityFrames.isEmpty()) {
             KisImageSP image = priorityFrames.top().first;
             const int priorityFrame = priorityFrames.top().second;
             priorityFrames.pop();
+
+            if (!image->animationInterface()->hasAnimation()) continue;
 
             KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, RequestRejected);
@@ -138,7 +140,9 @@ struct KisAnimationCachePopulator::Private
         if (activeWindow && activeWindow->activeView()) {
             KisCanvas2 *activeCanvas = activeWindow->activeView()->canvasBase();
 
-            if (activeCanvas && activeCanvas->frameCache()) {
+            if (activeCanvas && activeCanvas->frameCache() &&
+                activeCanvas->image()->animationInterface()->hasAnimation()) {
+
                 activeDocumentCache = activeCanvas->frameCache();
 
                 // Let's skip frames affected by changes to the active node (on the active document)
@@ -171,6 +175,11 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
+            if (!cache->image()->animationInterface()->hasAnimation()) {
+                // This image is not animated
+                continue;
+            }
+
             RegenerationRequestResult result =
                 tryRequestGeneration(cache, KisTimeSpan(), -1);
             if (result == RequestSuccessful) return result;
@@ -189,6 +198,10 @@ struct KisAnimationCachePopulator::Private
         if (animation->backgroundFrameGenerationBlocked()) {
             return RequestPostponed;
         }
+
+        // the higher levels of code should have caught the case when
+        // the image is not animated
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(animation->hasAnimation(), RequestRejected);
 
         KisTimeSpan currentRange = animation->documentPlaybackRange();
 
@@ -310,6 +323,7 @@ void KisAnimationCachePopulator::requestRegenerationWithPriorityFrame(KisImageSP
 {
     if (!m_d->calculateAnimationCacheInBackground) return;
     if (!KisAnimationFrameCache::cacheForImage(image)) return;
+    if (!image->animationInterface()->hasAnimation()) return;
 
     m_d->priorityFrames.append(qMakePair(image, frameIndex));
 

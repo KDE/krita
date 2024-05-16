@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-04-02 02:58+0000\n"
+"POT-Creation-Date: 2024-05-14 03:08+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -32424,7 +32424,7 @@ msgstr ""
 "derfor brukt som standard. Du kan manuelt byta til OpenGL, men det er ikkje "
 "sikkert det vil verka skikkeleg."
 
-#: libs/ui/opengl/kis_opengl.cpp:1064
+#: libs/ui/opengl/kis_opengl.cpp:1057
 #, kde-format
 msgid ""
 "Preferred renderer doesn't support requested surface format. Another "
@@ -32433,7 +32433,7 @@ msgstr ""
 "Den føretrekte oppteiknaren støttar ikkje det førespurde overflateformatet. "
 "Ein annan oppteiknar vert derfor brukt."
 
-#: libs/ui/opengl/kis_opengl.cpp:1066
+#: libs/ui/opengl/kis_opengl.cpp:1059
 #, kde-format
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
@@ -37127,7 +37127,7 @@ msgstr "Perspektiv"
 msgid "Perspective Ellipse assistant"
 msgstr "Perspektivellipse-assistent"
 
-#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:625
+#: plugins/assistants/Assistants/PerspectiveEllipseAssistant.cc:629
 #, kde-format
 msgid "Perspective Ellipse"
 msgstr "Perspektivellipse"
@@ -37158,7 +37158,7 @@ msgstr "Spline"
 msgid "Two point assistant"
 msgstr "Topunkts-assistent"
 
-#: plugins/assistants/Assistants/TwoPointAssistant.cc:524
+#: plugins/assistants/Assistants/TwoPointAssistant.cc:528
 #, kde-format
 msgid "2 Point Perspective"
 msgstr "2-punktsperspektiv"
@@ -43634,12 +43634,12 @@ msgstr "X-vinkel:"
 msgid "Shear angle Y:"
 msgstr "Y-vinkel:"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:54
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:55
 #, kde-format
 msgid "Do nothing"
 msgstr "Ikkje gjer noko"
 
-#: plugins/extensions/spensettings/KisSPenSettings.cpp:86
+#: plugins/extensions/spensettings/KisSPenSettings.cpp:87
 #, kde-format
 msgid "S-Pen Actions"
 msgstr "S-penn-handlingar"

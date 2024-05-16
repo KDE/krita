@@ -52,7 +52,7 @@ linux-nightly:
 linux-release:
   extends:
   - linux-build
-  - .ci-manual-job-mixin
+  - .ci-release-job-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: True

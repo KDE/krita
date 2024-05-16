@@ -83,11 +83,10 @@ macos-nightly:
       -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
 
-# TODO: this pipeline is hidden currently (not implemented)
-.macos-release:
+macos-release:
   extends:
   - macos-build
-  - .ci-manual-job-mixin
+  - .ci-release-job-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: True

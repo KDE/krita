@@ -75,20 +75,20 @@
 # Syptchenko Georgiy <superzhook@gmail.com>, 2014, 2016, 2017.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2020, 2023.
 # Мария Шикунова <mariia@basealt.ru>, 2020, 2021.
-# Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Olesya Gerasimenko <translation-team@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-14 03:08+0000\n"
-"PO-Revision-Date: 2023-11-10 14:24+0300\n"
+"PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -22560,6 +22560,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Фонд развития</h1><p align=\"center"
+"\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 align="
+"\"center\">Разовые спонсоры</h2><p align=\"center\"> <a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src="
+"\":/gamechuck.png\"></a> <p align=\"center\"> <a href=\"https://www.fosshub."
+"com/Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"> <a "
+"href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
+"body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -24361,10 +24371,9 @@ msgstr "Переводчики"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
-msgstr "Спонсор"
+msgstr "Спонсоры"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83
@@ -25022,9 +25031,9 @@ msgstr "Режим масштабирования:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Привязка:"
+msgstr "Режим вспомогательных средств:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -25035,26 +25044,29 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Позволяет повысить производительность или устранить "
+"артефакты изображения при работе со вспомогательными средствами для "
+"рисования.\n"
+"              </p><p>Для изменения размера кэша пиксельных карт требуется "
+"перезапуск.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Прямой (рекомендуется)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Кэш анимации"
+msgstr "Кэш пиксельных карт"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Использовать кэш больших пиксельных карт"
+msgstr "Кэш больших пиксельных карт"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -38487,12 +38499,11 @@ msgid "Zoom view to fit curve."
 msgstr "Увеличить масштаб изображения, чтобы оно соответствовало кривой."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:660
-#, fuzzy
-#| msgctxt "action"
-#| msgid "Add scalar keyframes"
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Добавить скалярные ключевые кадры"
+msgstr ""
+"Добавление скалярных ключевых кадров\n"
+"добавление скалярных ключевых кадров"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -43276,8 +43287,8 @@ msgid ""
 msgstr ""
 "Значок, связанный с этим действием. Он будет отображаться рядом с текстом "
 "действия в меню и на панелях инструментов, если это будет необходимо. Строка "
-"используется системой загрузки изображений KDE, нетипичное значение QPixmap "
-"или QIcon, или «Нет»."
+"определяет, что будет использоваться: система загрузки изображений KDE, "
+"пользовательское значение QPixmap или QIcon или же ничего («Нет»)."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:41
@@ -58961,9 +58972,7 @@ msgid "Threshold: "
 msgstr "Порог: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:243
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
 msgstr "Размах: "

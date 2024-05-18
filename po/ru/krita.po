@@ -75,20 +75,20 @@
 # Syptchenko Georgiy <superzhook@gmail.com>, 2014, 2016, 2017.
 # Alexander Yavorsky <kekcuha@gmail.com>, 2020, 2023.
 # Мария Шикунова <mariia@basealt.ru>, 2020, 2021.
-# Olesya Gerasimenko <translation-team@basealt.ru>, 2022, 2023.
+# SPDX-FileCopyrightText: 2022, 2023, 2024 Olesya Gerasimenko <translation-team@basealt.ru>
 msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-16 02:06+0000\n"
-"PO-Revision-Date: 2023-11-10 14:24+0300\n"
+"PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.04.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Environment: kde\n"
@@ -8505,8 +8505,6 @@ msgstr "Образец цвета с экрана (образец с реаль�
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
 msgctxt "action"
 msgid "Show Docker Box"
 msgstr "Показать панели"
@@ -12055,8 +12053,6 @@ msgstr "Преобразовать слой в кадры анимации"
 #. i18n: context: text @ Action (convert_to_file_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3038
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Convert to File Layer"
 msgctxt "action"
 msgid "Convert to &File Layer..."
 msgstr "Преобразовать в файловый слой"
@@ -15910,8 +15906,6 @@ msgstr "Ползунок параметров кисти 4"
 #: krita/kritamenu.action:2031 krita/kritamenu.action:2033
 #: krita/kritamenu.action:2034
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Brush option slider 1"
 msgctxt "action"
 msgid "Brush option slider 5"
 msgstr "Ползунок параметров кисти 1"
@@ -16386,8 +16380,6 @@ msgstr ""
 
 #: libs/flake/commands/KoShapePaintOrderCommand.cpp:44
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Set point type"
 msgctxt "(qtundo-format)"
 msgid "Set paint order"
 msgstr ""
@@ -16567,8 +16559,6 @@ msgstr ""
 #: libs/flake/text/KoSvgTextShape.cpp:109
 #: libs/flake/text/KoSvgTextShape.cpp:1568
 #, fuzzy, kde-format
-#| msgctxt "Default text for the text shape"
-#| msgid "<text>Placeholder Text</text>"
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "<text>Замещающий текст</text>"
@@ -22656,6 +22646,16 @@ msgid ""
 "align=\"center\"> <a href=\"http://www.asifa-hollywood.org/\"><img src=\":/"
 "asifa.png\"></a> </body></html>"
 msgstr ""
+"<html><head/><body><h1 align=\"center\">Фонд развития</h1><p align=\"center"
+"\"> <a href=\"https://intel.com\"><img src=\":/intel.png\"></a> <h2 align="
+"\"center\">Разовые спонсоры</h2><p align=\"center\"> <a href=\"https://www."
+"unrealengine.com/en-US/megagrants\"><img src=\":/epic.png\"></a> <p align="
+"\"center\"> <a href=\"http://brokenrul.es/\"><img src=\":/broken_rules.png"
+"\"></a> <p align=\"center\"> <a href=\"https://game-chuck.com/\"><img src="
+"\":/gamechuck.png\"></a> <p align=\"center\"> <a href=\"https://www.fosshub."
+"com/Krita.html\"><img src=\":/fosshub.png\"></a> <p align=\"center\"> <a "
+"href=\"http://www.asifa-hollywood.org/\"><img src=\":/asifa.png\"></a> </"
+"body></html>"
 
 #: libs/ui/dialogs/kis_about_application.cpp:106
 #, kde-format
@@ -23173,7 +23173,6 @@ msgstr "Перетаскивание средней кнопкой мыши"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:374
 #, fuzzy, kde-format
-#| msgid "All supported formats"
 msgid "All Supported Files"
 msgstr "Все поддерживаемые форматы"
 
@@ -24377,10 +24376,9 @@ msgstr "Переводчики"
 
 #. i18n: ectx: attribute (title), widget (QWidget, kickstarterTab)
 #: libs/ui/forms/wdgaboutapplication.ui:66
-#, fuzzy, kde-format
-#| msgid "Sponsor"
+#, kde-format
 msgid "Sponsors"
-msgstr "Спонсор"
+msgstr "Спонсоры"
 
 #. i18n: ectx: attribute (title), widget (QWidget, creditsTab)
 #: libs/ui/forms/wdgaboutapplication.ui:83
@@ -25038,9 +25036,9 @@ msgstr "Режим масштабирования:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:155
-#, fuzzy, kde-format
+#, kde-format
 msgid "Assistants Mode:"
-msgstr "Привязка:"
+msgstr "Режим вспомогательных средств:"
 
 #. i18n: ectx: property (toolTip), widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:172
@@ -25051,26 +25049,29 @@ msgid ""
 "              </p><p>Changing the pixmap cache size requires a restart.</p></"
 "body></html>"
 msgstr ""
+"<html><head/><body><p>Позволяет повысить производительность или устранить "
+"артефакты изображения при работе со вспомогательными средствами для "
+"рисования.\n"
+"              </p><p>Для изменения размера кэша пиксельных карт требуется "
+"перезапуск.</p></body></html>"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:179
 #, kde-format
 msgid "Direct (Recommended)"
-msgstr ""
+msgstr "Прямой (рекомендуется)"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:184
-#, fuzzy, kde-format
-#| msgid "Animation Cache"
+#, kde-format
 msgid "Pixmap Cache"
-msgstr "Кэш анимации"
+msgstr "Кэш пиксельных карт"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbAssistantsDrawMode)
 #: libs/ui/forms/wdgdisplaysettings.ui:189
-#, fuzzy, kde-format
-#| msgid "Use large pixmap cache"
+#, kde-format
 msgid "Large Pixmap Cache"
-msgstr "Использовать кэш больших пиксельных карт"
+msgstr "Кэш больших пиксельных карт"
 
 #. i18n: ectx: property (text), widget (QLabel, lblPreferredRenderer)
 #: libs/ui/forms/wdgdisplaysettings.ui:203
@@ -25975,7 +25976,6 @@ msgstr "Обрезать кадры при импорте анимации"
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1040
 #, fuzzy, kde-format
-#| msgid "Default &printer profile:"
 msgid "Default Export Filetype: "
 msgstr "&Профиль принтера по умолчанию:"
 
@@ -29227,7 +29227,6 @@ msgstr "Активировать инструмент «Выделение от 
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
 #, fuzzy, kde-format
-#| msgid "Activate Line Tool"
 msgid "Activate with Other Color"
 msgstr "Активировать рисование прямых линий"
 
@@ -29551,7 +29550,6 @@ msgstr "&Открыть панель выбора цвета фона"
 
 #: libs/ui/kis_control_frame.cpp:132
 #, fuzzy, kde-format
-#| msgid "&Docker"
 msgid "&Docker Box"
 msgstr "&Панель"
 
@@ -29580,13 +29578,11 @@ msgstr "Градиенты"
 
 #: libs/ui/kis_control_frame.cpp:281
 #, fuzzy, kde-format
-#| msgid "Docker:"
 msgid "Docker box"
 msgstr "Панель:"
 
 #: libs/ui/kis_control_frame.cpp:287
 #, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
 msgid "Toolbar Docker Box"
 msgstr "Набор инструментов и панели"
 
@@ -30224,7 +30220,6 @@ msgstr "Маскирование"
 
 #: libs/ui/kis_popup_palette.cpp:134
 #, fuzzy, kde-format
-#| msgid "Pop-up Palette"
 msgid "Popup Palette"
 msgstr "Всплывающая палитра"
 
@@ -35256,7 +35251,6 @@ msgstr "Вниз"
 
 #: libs/ui/widgets/KisDockerHud.cpp:60
 #, fuzzy, kde-format
-#| msgid "Configure Krita"
 msgid "Configure docker panel"
 msgstr "Настройка Krita"
 
@@ -35269,20 +35263,17 @@ msgstr ""
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
 #, fuzzy, kde-format
-#| msgid "Configure Krita"
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Настройка Krita"
+msgstr "Настроить панели инструментов"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, fuzzy, kde-format
-#| msgid "Available properties:"
 msgid "Available dockers"
 msgstr "Доступные свойства:"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, fuzzy, kde-format
-#| msgid "Current Layer"
 msgid "Current dockers"
 msgstr "Текущий слой"
 
@@ -38675,7 +38666,6 @@ msgstr "Синее/Желтее: "
 
 #: plugins/dockers/animation/kis_equalizer_widget.cpp:144
 #, fuzzy, kde-format
-#| msgid "Reset"
 msgctxt "Reset to default"
 msgid "Reset"
 msgstr "Сброс"
@@ -38713,7 +38703,6 @@ msgstr "Кол.:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
 #, fuzzy, kde-format
-#| msgid "Frame register"
 msgid "Value register"
 msgstr "Список кадров"
 
@@ -38724,7 +38713,6 @@ msgstr "Собел по горизонтали"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
 #, fuzzy, kde-format
-#| msgid "Flip vertically"
 msgid "Zoom vertically"
 msgstr "Отразить вертикально"
 
@@ -38820,10 +38808,11 @@ msgid "Zoom view to fit curve."
 msgstr "Увеличить масштаб изображения, чтобы оно соответствовало кривой."
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:663
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Scalar Keyframes"
-msgstr "Добавить скалярные ключевые кадры"
+msgstr ""
+"Добавление скалярных ключевых кадров\n"
+"добавление скалярных ключевых кадров"
 
 #: plugins/dockers/animation/KisAnimCurvesModel.cpp:230
 msgctxt "(qtundo-format)"
@@ -39430,7 +39419,6 @@ msgstr "По умолчанию"
 
 #: plugins/dockers/brushhud/brushhud_dock.cpp:20
 #, fuzzy, kde-format
-#| msgid "Brush Editor"
 msgctxt "@title:window On-Canvas Brush Editor docker"
 msgid "On-Canvas Brush Editor"
 msgstr "Редактор кистей"
@@ -39656,7 +39644,6 @@ msgstr "Прямоугольник"
 #: plugins/dockers/griddocker/grid_config_widget.cpp:64
 #: plugins/dockers/griddocker/grid_config_widget.cpp:418
 #, fuzzy, kde-format
-#| msgid "Isometric"
 msgid "Isometric (Legacy)"
 msgstr "Изометрический"
 
@@ -39667,7 +39654,6 @@ msgstr "Изометрический"
 
 #: plugins/dockers/griddocker/grid_config_widget.cpp:420
 #, fuzzy, kde-format
-#| msgid "Isometric (requires OpenGL)"
 msgid "Isometric (Legacy - requires OpenGL)"
 msgstr "Изометрический (требуется OpenGL)"
 
@@ -39729,14 +39715,12 @@ msgstr "Левый угол:"
 #. i18n: ectx: property (text), widget (QLabel, cellSizeLabel)
 #: plugins/dockers/griddocker/grid_config_widget.ui:155
 #, fuzzy, kde-format
-#| msgid "Pixel Size"
 msgid "Cell Size:"
 msgstr "Размер в пикселах"
 
 #. i18n: ectx: property (text), widget (QLabel, lblVerticalStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:168
 #, fuzzy, kde-format
-#| msgid "Vertical Scale"
 msgid "Vertical Style:"
 msgstr "Вертикальное масштабирование"
 
@@ -39767,7 +39751,6 @@ msgstr "Деление:"
 #. i18n: ectx: property (text), widget (QLabel, lblSubdivisionStyle)
 #: plugins/dockers/griddocker/grid_config_widget.ui:273
 #, fuzzy, kde-format
-#| msgid "Subdivision:"
 msgid "Subdivision Style:"
 msgstr "Деление:"
 
@@ -40966,7 +40949,6 @@ msgstr "Качество:"
 #. i18n: ectx: property (text), widget (QLabel, labelResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:225
 #, fuzzy, kde-format
-#| msgid "Resolution:"
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:         "
 msgstr "Разрешение:"
@@ -41001,8 +40983,6 @@ msgstr "Формат:"
 #: plugins/dockers/recorder/recorderdocker.ui:304
 #: plugins/dockers/recorder/recorderdocker.ui:326
 #, fuzzy, kde-format
-#| msgid ""
-#| "Please choose the language which should be used for this application:"
 msgid "Number of threads, which should be used for recording"
 msgstr ""
 "Пожалуйста, выберите язык, который следует использовать для этого приложения:"
@@ -41010,7 +40990,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
 #, fuzzy, kde-format
-#| msgid "Spread:"
 msgid "Threads:"
 msgstr "Размах:"
 
@@ -41026,7 +41005,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxRealTimeCaptureMode)
 #: plugins/dockers/recorder/recorderdocker.ui:348
 #, fuzzy, kde-format
-#| msgid "Cap&ture mode:"
 msgid "Real Time Capture mode"
 msgstr "Режим &захвата:"
 
@@ -41118,14 +41096,12 @@ msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:184
 #, fuzzy, kde-format
-#| msgid "Video FPS:"
 msgctxt "Title for label. Video frames per second"
 msgid "Video FPS:"
 msgstr "Частота кадров:"
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:193
 #, fuzzy, kde-format
-#| msgid "Capture interval:"
 msgctxt "Title for label. Capture rate"
 msgid "Capture interval:"
 msgstr "Интервал захвата:"
@@ -41246,9 +41222,6 @@ msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:718
 #, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time during Real Time Capture mode.\n"
@@ -41260,9 +41233,6 @@ msgstr ""
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:720
 #, fuzzy, kde-format
-#| msgid ""
-#| "Low performance warning. The recorder is not able to write all the frames "
-#| "in time. Try increasing the capture interval."
 msgid ""
 "Low performance warning. The recorder is not able to write all the frames in "
 "time.\n"
@@ -41325,7 +41295,6 @@ msgstr "Установить цветовое пространство"
 #. i18n: ectx: property (toolTip), widget (QToolButton, useSameColorSpace)
 #: plugins/dockers/specificcolorselector/wdgSpecificColorSelectorWidget.ui:60
 #, fuzzy, kde-format
-#| msgid "Limit to current layer"
 msgid "Lock to current layer colorspace"
 msgstr "Ограничиться текущим слоем"
 
@@ -43804,8 +43773,8 @@ msgid ""
 msgstr ""
 "Значок, связанный с этим действием. Он будет отображаться рядом с текстом "
 "действия в меню и на панелях инструментов, если это будет необходимо. Строка "
-"используется системой загрузки изображений KDE, нетипичное значение QPixmap "
-"или QIcon, или «Нет»."
+"определяет, что будет использоваться: система загрузки изображений KDE, "
+"пользовательское значение QPixmap или QIcon или же ничего («Нет»)."
 
 #. i18n: ectx: property (whatsThis), widget (QLabel, shortcut)
 #: plugins/extensions/pykrita/plugin/info.ui:41
@@ -47501,11 +47470,6 @@ msgstr "Y: "
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:69
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "Horizontal pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell horizontally"
-#| msgid_plural "Every {n} cells horizontally"
 msgctxt ""
 "Horizontal pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
@@ -47521,11 +47485,6 @@ msgstr[3] "Каждая {n} ячейка по горизонтали"
 #. used as the prefix and the text after as the suffix
 #: plugins/generators/pattern/kis_wdg_pattern.cpp:75
 #, fuzzy, kde-format
-#| msgctxt ""
-#| "Vertical pixel grid alignment prefix/suffix for spinboxes in screentone "
-#| "generator"
-#| msgid "Every {n} cell vertically"
-#| msgid_plural "Every {n} cells vertically"
 msgctxt ""
 "Vertical pixel grid alignment prefix/suffix for spinboxes in pattern "
 "generator"
@@ -47550,8 +47509,6 @@ msgstr "&Текстура:"
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: plugins/generators/pattern/wdgpatternoptions.ui:255
 #, fuzzy, kde-format
-#| msgctxt "Job Position"
-#| msgid "Position:"
 msgid "Position:"
 msgstr "Положение:"
 
@@ -49178,7 +49135,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, losslessAlpha)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131
 #, fuzzy, kde-format
-#| msgid "Lossless"
 msgid "Lossless alpha"
 msgstr "Без потерь"
 
@@ -49276,7 +49232,6 @@ msgstr "Сведение изображения"
 #. i18n: ectx: property (title), widget (QGroupBox, colorProfileGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
 #, fuzzy, kde-format
-#| msgid "Color profile:"
 msgid "Color profile"
 msgstr "Цветовой профиль:"
 
@@ -49298,7 +49253,6 @@ msgstr ""
 #. i18n: ectx: property (title), widget (QGroupBox, hdrConversionGrp)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:285
 #, fuzzy, kde-format
-#| msgid "Color conversion"
 msgid "HDR conversion"
 msgstr "Преобразование цвета"
 
@@ -49735,7 +49689,6 @@ msgstr "Не удалось загрузить «id» трансформирую
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
 #, fuzzy, kde-format
-#| msgid "Could not create transform mask params"
 msgid "Could not find transform mask XML element"
 msgstr "Не удалось создать параметры трансформирующей маски"
 
@@ -53756,7 +53709,6 @@ msgstr ""
 #. i18n: ectx: property (text), widget (QCheckBox, checkBoxSoftTexturing)
 #: plugins/paintops/libpaintop/forms/wdgtexturechooser.ui:220
 #, fuzzy, kde-format
-#| msgid "Soft Proofing"
 msgid "Soft texturing"
 msgstr "Мягкая цветопроба"
 
@@ -58205,8 +58157,6 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:551
 #, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
@@ -58227,8 +58177,6 @@ msgstr "Порог: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
 #, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
@@ -58237,7 +58185,6 @@ msgstr "Размах: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, fuzzy, kde-format
-#| msgid "Close"
 msgctxt "The 'close gap' spinbox prefix in fill tool options"
 msgid "Close Gap: "
 msgstr "Закрыть"
@@ -58354,7 +58301,6 @@ msgstr ""
 #: plugins/tools/basictools/kis_tool_fill.cc:657
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:566
 #, fuzzy, kde-format
-#| msgid "Blur the selection by the set amount"
 msgid "Close gaps in lines up to the set amount"
 msgstr "Размыть выделение на указанную величину"
 
@@ -58409,7 +58355,6 @@ msgstr ""
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
 #, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
 msgid "Dragging will not fill different regions"
 msgstr "Перетаскивание зальёт области любого цвета"
 
@@ -59189,7 +59134,6 @@ msgstr "Непрозрачность: "
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
 #, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
 msgstr "Непрозрачность (*меняется*): "
@@ -59340,7 +59284,6 @@ msgstr "Эталонные изображения"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
 #, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
 msgstr "Непрозрачность (*меняется*): "
@@ -59353,7 +59296,6 @@ msgstr "Насыщенность: "
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
 #, fuzzy, kde-format
-#| msgid "Saturation [*varies*]: "
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
 msgstr "Насыщенность (*изменяется*): "
@@ -59616,8 +59558,6 @@ msgstr "Порог: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
 #, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
@@ -59674,7 +59614,6 @@ msgstr ""
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:413
 #, fuzzy, kde-format
-#| msgid "Close"
 msgctxt "The 'close gap' spinbox prefix in contiguous selection tool options"
 msgid "Close Gap: "
 msgstr "Закрыть"
@@ -59797,8 +59736,6 @@ msgstr "Порог: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
 #, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
@@ -60150,8 +60087,6 @@ msgstr "Инвертированный текст"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
 #, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Layer Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr ""
@@ -60709,16 +60644,12 @@ msgstr ""
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionLtr)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:216
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Escape in right direction"
 msgid "Left to right text direction."
 msgstr "Вправо"
 
 #. i18n: ectx: property (toolTip), widget (QToolButton, directionRtl)
 #: plugins/tools/svgtexttool/WdgSvgTextOptionWidget.ui:242
 #, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Change text direction"
 msgid "Right to left text direction."
 msgstr "Изменить направление текста"
 
@@ -61034,8 +60965,6 @@ msgstr "Включить контуры областей"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
 #, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
@@ -61050,8 +60979,6 @@ msgstr "Порог: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:497
 #, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
@@ -61060,7 +60987,6 @@ msgstr "Размах: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, fuzzy, kde-format
-#| msgid "Close"
 msgctxt "The 'close gap' spinbox prefix in enclose and fill tool options"
 msgid "Close Gap: "
 msgstr "Закрыть"
@@ -62305,7 +62231,6 @@ msgid "Reference Images Tool"
 msgstr "Эталонные изображения"
 
 #, fuzzy
-#~| msgid "Show a palette docker"
 #~ msgid "Configure Popup Palette dockers"
 #~ msgstr "Показать панель палитры"
 
@@ -62313,7 +62238,6 @@ msgstr "Эталонные изображения"
 #~ msgstr "Поддержать Krita!"
 
 #, fuzzy
-#~| msgid "Anti-aliased"
 #~ msgid "Antialiased"
 #~ msgstr "Сглаживание"
 
@@ -62365,7 +62289,6 @@ msgstr "Эталонные изображения"
 #~ msgid "Spread: "
 #~ msgstr "Размах: "
 
-#, fuzzy
 #~ msgctxt ""
 #~ "The 'spread' spinbox prefix in similar color selection tool options"
 #~ msgid "Spread: "
@@ -103772,3 +103695,6 @@ msgstr "Эталонные изображения"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Mirror Layer Vertically"
 #~ msgstr "Отразить слой по вертикали"
+
+#~ msgid "Set the angle of the light source"
+#~ msgstr "Задайте угол источника света"

@@ -12,4 +12,5 @@ sip-files-dir = "@module_srcs@"
 abi-version = "12.8"
 
 [tool.sip.bindings.@module_name_toml@]
+pep484-pyi = true
 tags = @module_tags@

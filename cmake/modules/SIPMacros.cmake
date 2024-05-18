@@ -187,6 +187,8 @@ else()
             endif( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS})
         endforeach(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS})
 
+        set(_sip_output_stubs ${CMAKE_CURRENT_SIP_OUTPUT_DIR}/${_child_module_name}/${_child_module_name}.pyi )
+
         configure_file(
             ${pyproject_toml}
             ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml
@@ -213,7 +215,7 @@ else()
             DEPENDS
                 ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml
             OUTPUT
-                ${_sip_output_files}
+                ${_sip_output_files} ${_sip_output_stubs}
         )
 
         # not sure if type MODULE could be usec anywhere, limit to cygwin for now
@@ -243,6 +245,7 @@ else()
             SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES SUFFIX ".pyd")
         ENDIF ()
 
+        install(FILES ${_sip_output_stubs} DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}")
         install(TARGETS ${_logical_name} DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}")
     endmacro()
 endif()

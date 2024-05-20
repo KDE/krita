@@ -15487,7 +15487,7 @@ msgstr "界面颜色"
 #, kde-format
 msgctxt "action"
 msgid "&Styles"
-msgstr "界面风格(&S)"
+msgstr "界面样式(&S)"
 
 #. i18n: context: toolTip @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (style_menu), Actions (Settings), ActionCollection (Menu)
@@ -15497,7 +15497,7 @@ msgstr "界面风格(&S)"
 #, kde-format
 msgctxt "action"
 msgid "Styles"
-msgstr "界面风格"
+msgstr "界面样式"
 
 #. i18n: context: text @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: toolTip @ Action (settings_active_author), Actions (Settings), ActionCollection (Menu)
@@ -30627,7 +30627,7 @@ msgstr "更新图层缩略图"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Styles"
-msgstr "界面风格"
+msgstr "界面样式"
 
 #: libs/ui/KisMainWindow.cpp:187
 #, kde-format

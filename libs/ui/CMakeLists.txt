@@ -301,6 +301,8 @@ set(kritaui_LIB_SRCS
     widgets/kis_round_hud_button.cpp
     widgets/KisDockerHud.cpp
 
+    widgets/KisGrabKeyboardFocusRecoveryWorkaround.cpp
+
     # Gradient related widgets
     widgets/gradient/KisStopGradientEditor.cpp
     widgets/gradient/KisSegmentGradientEditor.cpp

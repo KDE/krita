@@ -28,6 +28,8 @@
 #include "KisDlgInternalColorSelector.h"
 #include <KisStaticInitializer.h>
 
+#include <KisGrabKeyboardFocusRecoveryWorkaround.h>
+
 struct KisScreenColorSampler::Private
 {
     QPushButton *screenColorSamplerButton = 0;
@@ -240,6 +242,9 @@ bool KisScreenColorSampler::handleColorSamplingKeyPress(QKeyEvent *e)
 
 void KisScreenColorSampler::releaseColorSampling()
 {
+    // HACK: see class KisGrabKeyboardFocusRecoveryWorkaround
+    KisGrabKeyboardFocusRecoveryWorkaround::instance()->recoverFocus();
+
     m_d->inputGrabberWidget->removeEventFilter(m_d->colorSamplingEventFilter);
     m_d->inputGrabberWidget->releaseMouse();
 #ifdef Q_OS_WIN32

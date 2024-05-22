@@ -61,7 +61,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-14 03:08+0000\n"
+"POT-Creation-Date: 2024-05-22 03:12+0000\n"
 "PO-Revision-Date: 2024-02-29 10:31+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: Dutch <kde-i18n-nl@kde.org>\n"
@@ -40467,7 +40467,7 @@ msgstr ""
 "Gaarne een juist bereik invoeren. Er zijn geen panelen in het geleverde "
 "bereik van frames."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1262
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1261
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

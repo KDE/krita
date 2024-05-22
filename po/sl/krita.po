@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 02:06+0000\n"
+"POT-Creation-Date: 2024-05-22 01:47+0000\n"
 "PO-Revision-Date: 2024-04-26 18:47+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -40821,7 +40821,7 @@ msgid ""
 "provided."
 msgstr "Vnesite pravilen obseg. V podanem obsegu sličic ni podoken."
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1262
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1261
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

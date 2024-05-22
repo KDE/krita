@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 02:06+0000\n"
+"POT-Creation-Date: 2024-05-22 01:47+0000\n"
 "PO-Revision-Date: 2024-01-14 20:21+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -39832,7 +39832,7 @@ msgid ""
 "provided."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1262
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1261
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-16 02:06+0000\n"
+"POT-Creation-Date: 2024-05-22 01:47+0000\n"
 "PO-Revision-Date: 2023-12-13 16:50-0500\n"
 "Last-Translator: Agron Selimaj <as9902613@gmail.com>\n"
 "Language-Team: sq\n"
@@ -39939,7 +39939,7 @@ msgid ""
 "provided."
 msgstr ""
 
-#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1262
+#: plugins/dockers/storyboarddocker/StoryboardModel.cpp:1261
 #, kde-format
 msgctxt "default name for storyboard item"
 msgid "scene "

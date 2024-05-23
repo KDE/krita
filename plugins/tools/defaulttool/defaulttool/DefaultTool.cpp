@@ -1967,7 +1967,7 @@ QList<KoSvgTextProperties> DefaultToolTextPropertiesInterface::getSelectedProper
 
 KoSvgTextProperties DefaultToolTextPropertiesInterface::getInheritedProperties()
 {
-    return KoSvgTextProperties::defaultProperties();
+    return KoSvgTextProperties();
 }
 
 void DefaultToolTextPropertiesInterface::setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties)

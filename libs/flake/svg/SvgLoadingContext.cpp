@@ -283,7 +283,7 @@ QHash<QString, const KoColorProfile *> SvgLoadingContext::profiles()
 
 KoSvgTextProperties SvgLoadingContext::resolvedProperties() const
 {
-    KoSvgTextProperties props = KoSvgTextProperties::defaultProperties();
+    KoSvgTextProperties props;
     for (auto it = d->gcStack.begin(); it != d->gcStack.end(); it++) {
         SvgGraphicsContext *gc = *it;
         KoSvgTextProperties props2 = gc->textProperties;

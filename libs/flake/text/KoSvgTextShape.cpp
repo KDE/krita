@@ -878,7 +878,12 @@ QList<KoSvgTextProperties> KoSvgTextShape::propertiesForRange(const int startPos
         while(sought < endIndex) {
             int currentIndex = 0;
             auto it = d->findTextContentElementForIndex(d->textData, currentIndex, sought);
-            if (it != d->textData.depthFirstTailEnd()) {
+            if (KisForestDetail::siblingCurrent(it) == d->textData.childBegin()) {
+                // If there's a selection and the search algorithm only returns the root, return empty.
+                // The root text properties should be retrieved explicitely (either by using -1 as pos, or by calling textProperties()).
+                props = {KoSvgTextProperties()};
+                return props;
+            } else if (it != d->textData.depthFirstTailEnd()) {
                 if (inherited) {
                     props.append(inheritProperties(it));
                 } else {

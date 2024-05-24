@@ -69,6 +69,14 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
+// copy MLT plugins and rename
+// them to start with `lib_`
+task copyMltPlugins(type: Copy) {
+    from "$installPrefix/lib/mlt-7"
+    into "libs/$abi"
+    rename ('^libmlt(.*).so$', 'lib_mltplugin_$1.so')
+}
+
 task copyFonts(type: Copy) {
     from "$installPrefix/etc"
     into 'assets/etc/'
@@ -196,6 +204,7 @@ android {
     configure.onlyIf { isPackagingAPK() }
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
+    configure.finalizedBy(copyMltPlugins)
     configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(copyLocaleFiles)

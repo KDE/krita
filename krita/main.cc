@@ -624,6 +624,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     qputenv("MLT_ROOT_DIR", QFile::encodeName(loc));
     qputenv("MLT_PROFILES_PATH", QFile::encodeName(loc + "/share/mlt/profiles/"));
     qputenv("MLT_PRESETS_PATH", QFile::encodeName(loc + "/share/mlt/presets/"));
+    qputenv("MLT_PLUGIN_FILTER_STRING", "lib_mltplugin_");
 #endif
     KisApplicationArguments args(app);
 

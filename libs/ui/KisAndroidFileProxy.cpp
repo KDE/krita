@@ -10,6 +10,7 @@
 #include <QDir>
 #include <QFile>
 #include <QStandardPaths>
+#include <kis_debug.h>
 
 QString KisAndroidFileProxy::getFileFromContentUri(QString contentUri)
 {
@@ -24,9 +25,10 @@ QString KisAndroidFileProxy::getFileFromContentUri(QString contentUri)
         dirPath.remove(filename);
     }
 
-    bool copyResult = file.copy(contentUri, savePath + "/" + filename);
+    bool copyResult = file.copy(savePath + "/" + filename);
     if (!copyResult) {
         qWarning() << "Failed to copy file from content uri" << contentUri << "to" << savePath + "/" + filename;
+        qWarning() << "    " << ppVar(file.error()) << ppVar(file.errorString());
         return "";
     }
     return savePath + "/" + filename;

@@ -42,7 +42,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-22 03:12+0000\n"
+"POT-Creation-Date: 2024-05-25 03:22+0000\n"
 "PO-Revision-Date: 2024-04-27 22:28+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
@@ -19459,7 +19459,7 @@ msgstr "Lokaj Rimedoj"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:697
-#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:731
+#: libs/ui/KisView.cpp:1182 libs/ui/KisWelcomePageWidget.cpp:725
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:293
@@ -31390,17 +31390,17 @@ msgstr "Anglaj novaĵoj ĉiam estas ĝisdatigitaj."
 msgid "Forget \"%1\""
 msgstr "Forgesi \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:750
+#: libs/ui/KisWelcomePageWidget.cpp:744
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Nova versio de Krita disponeblas."
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:773
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Eraro okazis dum la ĝisdatigo"
 
-#: libs/ui/KisWelcomePageWidget.cpp:785
+#: libs/ui/KisWelcomePageWidget.cpp:779
 #, kde-format
 msgid "Restart is required."
 msgstr "Rekomenco estas bezonata."

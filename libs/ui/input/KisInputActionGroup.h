@@ -14,7 +14,8 @@ enum KisInputActionGroup {
     NoActionGroup = 0x0,
     ViewTransformActionGroup = 0x1,
     ModifyingActionGroup = 0x2,
-    AllActionGroup = ViewTransformActionGroup | ModifyingActionGroup
+    ToolInvoactionActionGroup = 0x4,
+    AllActionGroup = ViewTransformActionGroup | ModifyingActionGroup | ToolInvoactionActionGroup
 };
 
 Q_DECLARE_FLAGS(KisInputActionGroupsMask, KisInputActionGroup)

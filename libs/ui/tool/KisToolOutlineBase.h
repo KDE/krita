@@ -12,6 +12,7 @@
 
 #include <kis_tool_shape.h>
 #include <kis_cursor.h>
+#include "input/KisInputActionGroup.h"
 
 class KRITAUI_EXPORT KisToolOutlineBase : public KisToolShape
 {
@@ -62,6 +63,7 @@ private:
     ToolType m_type;
     int m_numberOfContinuedModePoints;
     bool m_hasUserInteractionRunning;
+    KisInputActionGroupsMaskGuard *m_blockModifyingActionsGuard {nullptr};
 
     void updateFeedback();
     void updateContinuedMode();
@@ -69,6 +71,9 @@ private:
     void endStroke();
     void cancelStroke();
     QRectF dragBoundingRect();
+    void installBlockActionGuard();
+    void uninstallBlockActionGuard();
+
 };
 
 #endif

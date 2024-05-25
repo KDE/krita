@@ -237,3 +237,9 @@ bool KisToolInvocationAction::isShortcutRequired(int shortcut) const
     // so they should always exist.
     return (shortcut == ActivateShortcut || shortcut == ConfirmShortcut || shortcut == CancelShortcut);
 }
+
+KisInputActionGroup KisToolInvocationAction::inputActionGroup(int shortcut) const
+{
+    Q_UNUSED(shortcut);
+    return ToolInvoactionActionGroup;
+}

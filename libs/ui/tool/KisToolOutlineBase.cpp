@@ -37,6 +37,7 @@ void KisToolOutlineBase::keyPressEvent(QKeyEvent *event)
     // Allow to enter continued mode only if we started drawing the shape
     if (mode() == PAINT_MODE && event->key() == Qt::Key_Control) {
         m_continuedMode = true;
+        installBlockActionGuard();
     }
     KisToolShape::keyPressEvent(event);
 }
@@ -268,6 +269,7 @@ void KisToolOutlineBase::endStroke()
     if (!hasUserInteractionRunning()) {
         return;
     }
+    uninstallBlockActionGuard();
     setMode(KisTool::HOVER_MODE);
     m_hasUserInteractionRunning = false;
 
@@ -281,6 +283,7 @@ void KisToolOutlineBase::cancelStroke()
     if (!hasUserInteractionRunning()) {
         return;
     }
+    uninstallBlockActionGuard();
     setMode(KisTool::HOVER_MODE);
     m_hasUserInteractionRunning = false;
 
@@ -296,4 +299,22 @@ void KisToolOutlineBase::requestStrokeEnd()
 void KisToolOutlineBase::requestStrokeCancellation()
 {
     cancelStroke();
+}
+
+void KisToolOutlineBase::installBlockActionGuard()
+{
+    if (!m_blockModifyingActionsGuard) {
+        m_blockModifyingActionsGuard = new KisInputActionGroupsMaskGuard(
+            static_cast<KisCanvas2*>(canvas())->inputActionGroupsMaskInterface(),
+            ViewTransformActionGroup | ToolInvoactionActionGroup
+        );
+    }
+}
+
+void KisToolOutlineBase::uninstallBlockActionGuard()
+{
+    if (m_blockModifyingActionsGuard) {
+        delete m_blockModifyingActionsGuard;
+        m_blockModifyingActionsGuard = nullptr;
+    }
 }

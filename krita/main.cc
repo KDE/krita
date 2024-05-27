@@ -55,6 +55,7 @@
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #include <KisAndroidCrashHandler.h>
+#include <KisAndroidLogHandler.h>
 #endif
 
 #if defined Q_OS_WIN
@@ -232,6 +233,10 @@ Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
 
 extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 {
+#ifdef Q_OS_ANDROID
+    KisAndroidLogHandler::handler_init();
+#endif
+
 #ifdef Q_OS_WIN
     // Fix QCommandLineParser help output with UTF-8 codepage:
     if (GetACP() == CP_UTF8) {

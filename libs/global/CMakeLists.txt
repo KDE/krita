@@ -58,6 +58,10 @@ if (ANDROID)
     include_directories(${Qt5AndroidExtras_INCLUDE_DIRS})
 endif()
 
+if (ANDROID)
+    set (kritaglobal_LIB_SRCS ${kritaglobal_LIB_SRCS} KisAndroidLogHandler.cpp)
+endif()
+
 kis_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS}
    )
 generate_export_header(kritaglobal BASE_NAME kritaglobal)

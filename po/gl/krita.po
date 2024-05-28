@@ -79,7 +79,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-22 01:47+0000\n"
+"POT-Creation-Date: 2024-05-28 01:42+0000\n"
 "PO-Revision-Date: 2024-04-27 10:23+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
@@ -15941,13 +15941,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espazos de traballo"
 
-#: krita/main.cc:557
+#: krita/main.cc:562
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Erro fatal"
 
-#: krita/main.cc:558
+#: krita/main.cc:563
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15956,14 +15956,14 @@ msgstr ""
 "Krita non permite a plataforma Wayland. Use XWayland para executar Krita en "
 "Wayland. Krita pecharase."
 
-#: krita/main.cc:676 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:682 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Aviso — Krita"
 
-#: krita/main.cc:677
+#: krita/main.cc:683
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15974,12 +15974,12 @@ msgstr ""
 "Non se recomenda. Non informe de ningún fallo.\n"
 "Actualice a unha versión compatíbel de Windows: Windows 7, 8, 8.1 ou 10."
 
-#: krita/main.cc:699 krita/main.cc:704
+#: krita/main.cc:705 krita/main.cc:710
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Compatibilidade de Krita con tabletas"
 
-#: krita/main.cc:700
+#: krita/main.cc:706
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15990,7 +15990,7 @@ msgstr ""
 "de bolígrafo Windows Ink. Se ten unha tableta de debuxo asegúrese de que o "
 "controlador da tableta está correctamente instalado."
 
-#: krita/main.cc:705
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

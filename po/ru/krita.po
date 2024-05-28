@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-22 01:47+0000\n"
+"POT-Creation-Date: 2024-05-28 01:42+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -15951,13 +15951,13 @@ msgid "Workspaces"
 msgstr "Рабочие пространства"
 
 # BUGME: "критическая ошибка"? --aspotashev
-#: krita/main.cc:557
+#: krita/main.cc:562
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Фатальная ошибка"
 
-#: krita/main.cc:558
+#: krita/main.cc:563
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15966,14 +15966,14 @@ msgstr ""
 "Krita не поддерживает платформу Wayland. Чтобы обеспечить работу Krita на "
 "Wayland, используйте компонент XWayland. Krita закрывается."
 
-#: krita/main.cc:676 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:682 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Предупреждение Krita"
 
-#: krita/main.cc:677
+#: krita/main.cc:683
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15984,12 +15984,12 @@ msgstr ""
 "Это не рекомендуется. Не сообщайте об ошибках.\n"
 "Обновите систему до поддерживаемой версии Windows: Windows 7, 8, 8.1 или 10."
 
-#: krita/main.cc:699 krita/main.cc:704
+#: krita/main.cc:705 krita/main.cc:710
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Поддержка графических планшетов Krita"
 
-#: krita/main.cc:700
+#: krita/main.cc:706
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16000,7 +16000,7 @@ msgstr ""
 "Ink Pen. Если используется планшет для рисования, убедитесь, что драйвер "
 "планшета установлен правильно."
 
-#: krita/main.cc:705
+#: krita/main.cc:711
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-25 03:22+0000\n"
+"POT-Creation-Date: 2024-05-28 03:10+0000\n"
 "PO-Revision-Date: 2024-05-01 07:42+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -15844,14 +15844,14 @@ msgstr ""
 "Krita stöder inte Wayland-plattformen. Använd XWayland för att köra Krita på "
 "Wayland. Krita kommer nu att avslutas."
 
-#: krita/main.cc:676 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:677 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varning"
 
-#: krita/main.cc:677
+#: krita/main.cc:678
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15862,12 +15862,12 @@ msgstr ""
 "Det rekommenderas inte. Rapportera inte några fel.\n"
 "Uppdatera till en version av Windows som stöds: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:699 krita/main.cc:704
+#: krita/main.cc:700 krita/main.cc:705
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita stöd för ritplatta"
 
-#: krita/main.cc:700
+#: krita/main.cc:701
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15878,7 +15878,7 @@ msgstr ""
 "hittades. Om du har en ritplatta, försäkra dig om att ritplattans drivrutin "
 "är riktigt installerad."
 
-#: krita/main.cc:705
+#: krita/main.cc:706
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

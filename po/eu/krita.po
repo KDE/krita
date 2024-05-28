@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-25 03:22+0000\n"
+"POT-Creation-Date: 2024-05-28 03:10+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -15928,14 +15928,14 @@ msgstr ""
 "Kritak ez du Wayland plataforma onartzen. Erabili XWayland, Krita Wayland-en "
 "exekutatzeko. Krita orain itxiko da."
 
-#: krita/main.cc:676 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:677 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Abisua"
 
-#: krita/main.cc:677
+#: krita/main.cc:678
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15946,12 +15946,12 @@ msgstr ""
 "Ez da gomendagarria. Ez jakinarazi inolako akatsik.\n"
 "Eguneratu euskarria duen Windowsen bertsio batera: Windows 7, 8, 8.1 edo 10."
 
-#: krita/main.cc:699 krita/main.cc:704
+#: krita/main.cc:700 krita/main.cc:705
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Kritaren tableta euskarria"
 
-#: krita/main.cc:700
+#: krita/main.cc:701
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15962,7 +15962,7 @@ msgstr ""
 "Marrazteko tableta bat baduzu, ziurtatu tabletaren gidaria behar bezala "
 "instalatuta dagoela."
 
-#: krita/main.cc:705
+#: krita/main.cc:706
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

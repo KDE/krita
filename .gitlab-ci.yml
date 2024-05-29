@@ -10,6 +10,11 @@ variables:
     - if: $CI_PIPELINE_SOURCE == "schedule" && $KRITACI_SCHEDULED_JOB_NAME == "nightly"
       when: always
 
+.weekly-job-mixin:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" && $KRITACI_SCHEDULED_JOB_NAME == "weekly"
+      when: always
+
 .ci-manual-job-mixin:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"

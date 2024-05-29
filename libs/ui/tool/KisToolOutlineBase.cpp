@@ -20,6 +20,7 @@
 #include <input/kis_input_manager.h>
 
 #include "KisToolOutlineBase.h"
+#include "input/KisInputActionGroup.h"
 
 KisToolOutlineBase::KisToolOutlineBase(KoCanvasBase * canvas, ToolType type, const QCursor & cursor)
     : KisToolShape(canvas, cursor)
@@ -303,18 +304,13 @@ void KisToolOutlineBase::requestStrokeCancellation()
 
 void KisToolOutlineBase::installBlockActionGuard()
 {
-    if (!m_blockModifyingActionsGuard) {
-        m_blockModifyingActionsGuard = new KisInputActionGroupsMaskGuard(
-            static_cast<KisCanvas2*>(canvas())->inputActionGroupsMaskInterface(),
-            ViewTransformActionGroup | ToolInvoactionActionGroup
-        );
-    }
+    m_blockModifyingActionsGuard.reset(new KisInputActionGroupsMaskGuard(
+        static_cast<KisCanvas2*>(canvas())->inputActionGroupsMaskInterface(),
+                                 ViewTransformActionGroup | ToolInvoactionActionGroup
+                                ));
 }
 
 void KisToolOutlineBase::uninstallBlockActionGuard()
 {
-    if (m_blockModifyingActionsGuard) {
-        delete m_blockModifyingActionsGuard;
-        m_blockModifyingActionsGuard = nullptr;
-    }
+    m_blockModifyingActionsGuard.reset();
 }

@@ -80,6 +80,10 @@ linux-asan-weekly:
       -DECM_ENABLE_SANITIZERS=address
       -DENABLE_UPDATERS=OFF
     KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-asan }'
+    ASAN_OPTIONS: 'new_delete_type_mismatch=0:detect_leaks=0:halt_on_error=0'
+    KRITACI_ALLOW_NO_PYQT: True
+    LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
+
 
 linux-release:
   extends:

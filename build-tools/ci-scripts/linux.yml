@@ -62,6 +62,7 @@ linux-debug-weekly:
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
+      -DENABLE_UPDATERS=OFF
     KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-debug }'
 
 linux-asan-weekly:
@@ -77,6 +78,7 @@ linux-asan-weekly:
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
       -DECM_ENABLE_SANITIZERS=address
+      -DENABLE_UPDATERS=OFF
     KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-asan }'
 
 linux-release:

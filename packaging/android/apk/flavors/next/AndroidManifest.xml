@@ -2,7 +2,8 @@
         xmlns:tools="http://schemas.android.com/tools">
     <application
             tools:replace="android:icon"
-            android:icon="@mipmap/ic_launcher_next">
+            android:icon="@mipmap/ic_launcher_next"
+            android:roundIcon="@mipmap/ic_launcher_next_round">
         <activity
             android:name="org.krita.android.MainActivity"
             tools:replace="android:label"

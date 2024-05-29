@@ -54,16 +54,30 @@ linux-debug-weekly:
   extends:
   - linux-build
   - .weekly-job-mixin
-  - .ci-artifacts-without-packages-mixin
+  - .ci-artifacts-with-packages-mixin
   interruptible: false
   variables:
     KDECI_ONLY_BUILD: "True"
     KDECI_BUILD_TYPE: RelWithDebInfo
-    KRITACI_LINUX_PUBLISH_PLATFORM: linux-debug
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=OFF
-    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: "False"
+    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-debug }'
+
+linux-asan-weekly:
+  extends:
+  - linux-build
+  - .weekly-job-mixin
+  - .ci-artifacts-with-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DECM_ENABLE_SANITIZERS=address
+    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-asan }'
 
 linux-release:
   extends:

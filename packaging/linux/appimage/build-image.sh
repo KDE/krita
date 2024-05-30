@@ -174,8 +174,8 @@ cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfribidi.so.0* $APPDIR/usr/li
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libfreetype.so.6* $APPDIR/usr/lib/
 
 ## == MLT Dependencies and Resources ==
-cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt
-cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt
+cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt-7
+cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt-7
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libmlt*.so* $APPDIR/usr/lib/
 
 export MLT_BINARIES=""
@@ -183,7 +183,7 @@ for BIN in $APPDIR/usr/lib/libmlt*.so*; do
   MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
 done
 
-for BIN in $APPDIR/usr/lib/mlt/*.so*; do
+for BIN in $APPDIR/usr/lib/mlt-7/*.so*; do
   MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
 done
 

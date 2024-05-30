@@ -56,6 +56,27 @@ https://www.krita.org
 
 * https://cdn.kde.org/ci-builds/graphics/krita/krita/5.2/
 
+#### Developers builds
+
+##### Linux build with debug symbols in Qt and Krita
+
+1) Go to Jobs section of Krita's CI: https://invent.kde.org/graphics/krita/-/jobs
+2) Search for the latest `linux-debug-weekly` job
+3) Enter the job and click on Artifacts->Browse
+4) Download the AppImage
+
+##### Linux build with ASAN in Qt and Krita
+
+1) Go to Jobs section of Krita's CI: https://invent.kde.org/graphics/krita/-/jobs
+2) Search for the latest `linux-asan-weekly` job
+3) Enter the job and click on Artifacts->Browse
+4) Download the AppImage
+5) Set up environment variable for ASAN:
+    ```bash
+        export ASAN_OPTIONS=new_delete_type_mismatch=0:detect_leaks=0
+    ```
+6) Run the AppImage in the modified environment
+
 ### License
 
 Krita as a whole is licensed under the GNU Public License, Version 3. Individual files may have a different, but compatible license.

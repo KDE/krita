@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 01:42+0000\n"
+"POT-Creation-Date: 2024-05-30 01:46+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -32993,7 +32993,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_freehand.cc:216
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:167
+#: libs/ui/tool/KisToolOutlineBase.cpp:169
 #: plugins/tools/basictools/kis_tool_line.cc:211
 #: plugins/tools/basictools/kis_tool_path.cc:90
 #: plugins/tools/basictools/kis_tool_pencil.cc:63
@@ -33012,7 +33012,7 @@ msgstr "Tamanho do pincel"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:117
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:161
+#: libs/ui/tool/KisToolOutlineBase.cpp:163
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
 #, kde-format
 msgid ""

@@ -109,7 +109,7 @@ task copyLocaleFiles(type: Copy) {
 
 task copyExtraMltFiles(type: Copy) {
     from "$installPrefix/share/mlt-7"
-    into 'assets/mlt'
+    into 'assets/mlt-7'
     include '**'
 }
 

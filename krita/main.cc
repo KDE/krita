@@ -314,6 +314,22 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
             QFile::encodeName(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)));
 #endif
 
+/**
+ * MLT installation notes.
+ *
+ * On Linux and Android MLT is installed into a versioned
+ * location, i.e. 'mlt-7'. On Windows and MacOS into a non-versioned
+ * one, i.e. 'mlt'.
+ *
+ * On Windows and MacOS MLT uses detects all the paths via the relative
+ * path against the currently running executable, so we don't have to
+ * configure anything special for these platforms.
+ *
+ * On Linux and Android MLT does not have such detection, so we should
+ * configure environment variables manually and instruct MLT where to
+ * look for plugins, profiles and presets. Otherwise MLT will look for
+ * plugins from the **build environment** location.
+ */
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 
     // APPIMAGE SOUND ADDITIONS
@@ -327,11 +343,11 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
         {   // MLT
             //Plugins Path is where mlt should expect to find its plugin libraries.
-            qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt/"));
-            qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt/"));
+            qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt-7/"));
+            qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/"));
             qputenv("MLT_ROOT_DIR", appimageMountDir + QFile::encodeName("/usr/"));
-            qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/profiles/"));
-            qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/presets/"));
+            qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/profiles/"));
+            qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/presets/"));
         }
 
         {
@@ -625,10 +641,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     } else {
         loc = QStandardPaths::standardLocations(QStandardPaths::HomeLocation)[0];
     }
-    qputenv("MLT_DATA", QFile::encodeName(loc + "/share/mlt/"));
+    qputenv("MLT_DATA", QFile::encodeName(loc + "/share/mlt-7/"));
     qputenv("MLT_ROOT_DIR", QFile::encodeName(loc));
-    qputenv("MLT_PROFILES_PATH", QFile::encodeName(loc + "/share/mlt/profiles/"));
-    qputenv("MLT_PRESETS_PATH", QFile::encodeName(loc + "/share/mlt/presets/"));
+    qputenv("MLT_PROFILES_PATH", QFile::encodeName(loc + "/share/mlt-7/profiles/"));
+    qputenv("MLT_PRESETS_PATH", QFile::encodeName(loc + "/share/mlt-7/presets/"));
     qputenv("MLT_PLUGIN_FILTER_STRING", "lib_mltplugin_");
 #endif
     KisApplicationArguments args(app);

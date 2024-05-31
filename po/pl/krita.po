@@ -91,7 +91,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-30 03:18+0000\n"
+"POT-Creation-Date: 2024-05-31 03:40+0000\n"
 "PO-Revision-Date: 2024-03-23 11:19+0100\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -15875,13 +15875,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Przestrzenie pracy"
 
-#: krita/main.cc:557
+#: krita/main.cc:573
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Błąd krytyczny"
 
-#: krita/main.cc:558
+#: krita/main.cc:574
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15890,14 +15890,14 @@ msgstr ""
 "Krita nie obsługuje platformy Wayland. Użyj XWayland, aby uruchomić Kritę na "
 "Waylandzie. Krita zakończy teraz swoje działanie."
 
-#: krita/main.cc:677 libs/ui/KisApplication.cpp:412
+#: krita/main.cc:693 libs/ui/KisApplication.cpp:412
 #: libs/ui/KisApplication.cpp:684
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Ostrzeżenie"
 
-#: krita/main.cc:678
+#: krita/main.cc:694
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15908,12 +15908,12 @@ msgstr ""
 "Nie jest to zalecane. Nie zgłaszaj żadnych błędów.\n"
 "Uaktualnij do obsługiwanej wersji Windowsa: Windows 7, 8, 8.1 lub 10."
 
-#: krita/main.cc:700 krita/main.cc:705
+#: krita/main.cc:716 krita/main.cc:721
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Obsługa tabletu Krity"
 
-#: krita/main.cc:701
+#: krita/main.cc:717
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15924,7 +15924,7 @@ msgstr ""
 "Windows Ink. Jeśli posiadasz tablet do rysowania, to upewnij się, że jego "
 "sterownik jest poprawnie wgrany."
 
-#: krita/main.cc:706
+#: krita/main.cc:722
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

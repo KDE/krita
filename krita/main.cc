@@ -800,6 +800,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         KisUsageLogger::close();
     }
 
+    KisPart::instance()->unloadPlaybackEngine();
+
 #ifdef Q_OS_HAIKU
 	kill(::getpid(), SIGKILL);
 #endif

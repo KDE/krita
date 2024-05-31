@@ -306,6 +306,12 @@ public:
 public:
     void upgradeToPlaybackEngineMLT(class KoCanvasBase *canvas);
 
+    /**
+     * Called on application to make sure that the engine is unloaded
+     * before the MLT library is actually unloaded
+     */
+    void unloadPlaybackEngine();
+
 private:
 
     void setPlaybackEngine(KisPlaybackEngine *p_playbackEngine);

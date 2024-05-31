@@ -185,6 +185,7 @@ struct KisPlaybackEngineMLT::Private {
 
         pullConsumer.reset();
         pushConsumer.reset();
+        pullConsumerConnection.reset();
     }
 
     KisCanvas2* activeCanvas() {

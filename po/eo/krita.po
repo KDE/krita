@@ -1,7 +1,7 @@
 # translation of krita.po to Esperanto
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # Wolfram Diestel <wolfram@steloj.de>, 2002.
-# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+# Oliver Kellogg <olivermkellogg@gmail.com>, 2023.
 #
 # --- kritalibs
 # translation of koffice.po to Esperanto
@@ -42,9 +42,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-30 01:46+0000\n"
-"PO-Revision-Date: 2024-04-27 22:28+0100\n"
-"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"POT-Creation-Date: 2024-05-31 01:56+0000\n"
+"PO-Revision-Date: 2024-05-30 22:41+0200\n"
+"Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
@@ -12944,7 +12944,7 @@ msgstr "Skriptoj"
 #: krita/krita5.xmlgui:378 plugins/tools/svgtexttool/svgtexttool.xmlgui:70
 #, kde-format
 msgid "Setti&ngs"
-msgstr "Agordoj"
+msgstr "A&gordoj"
 
 #: krita/krita5.xmlgui:405 libs/widgetutils/xmlgui/khelpmenu.cpp:132
 #: libs/widgetutils/xmlgui/ui_standards.xmlgui:177
@@ -14507,7 +14507,7 @@ msgstr "Snap Bildo-Centro"
 #, kde-format
 msgctxt "action"
 msgid "S&how Painting Assistants"
-msgstr "Montri Pentrajn Asistantojn"
+msgstr "Montri Pentra&jn Asistantojn"
 
 #. i18n: context: toolTip @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_painting_assistants), Actions (View), ActionCollection (Menu)
@@ -15483,7 +15483,7 @@ msgstr "Montri Docker-ojn"
 #, kde-format
 msgctxt "action"
 msgid "Sho&w Docker Titlebars"
-msgstr "Montri Docker-Titolbretojn"
+msgstr "Montri Docker-Titol&bretojn"
 
 #. i18n: context: toolTip @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggledockertitlebars), Actions (Settings), ActionCollection (Menu)
@@ -15889,13 +15889,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Laborspacoj"
 
-#: krita/main.cc:562
+#: krita/main.cc:578
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Grava eraro"
 
-#: krita/main.cc:563
+#: krita/main.cc:579
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15904,14 +15904,14 @@ msgstr ""
 "Krita ne subtenas la Wayland-platformon. Uzu XWayland por ruli Krita sur "
 "Wayland. Krita fermos nun."
 
-#: krita/main.cc:682 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Averto"
 
-#: krita/main.cc:683
+#: krita/main.cc:699
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15922,12 +15922,12 @@ msgstr ""
 "Ĉi tio ne estas rekomendita. Ne raportu cimojn.\n"
 "Bonvolu ĝisdatigi al subtenata versio de Vindozo: Windows 7, 8, 8.1 aŭ 10."
 
-#: krita/main.cc:705 krita/main.cc:710
+#: krita/main.cc:721 krita/main.cc:726
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita Tabuleta Subteno"
 
-#: krita/main.cc:706
+#: krita/main.cc:722
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15935,17 +15935,17 @@ msgid ""
 "installed."
 msgstr ""
 "Ne povas ŝargi WinTab-pelilon kaj neniuj aparatoj de Windows Ink plumo estas "
-"trovitaj. Se vi havas desegnan tablojdon, bonvolu certigi, ke la tablojda "
+"trovitaj. Se vi havas desegnan tabuleton, bonvolu certigi, ke la tabuleta "
 "pelilo estas ĝuste instalita."
 
-#: krita/main.cc:711
+#: krita/main.cc:727
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
 "the tablet driver is properly installed."
 msgstr ""
-"Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tablojdon, bonvolu "
-"certigi, ke la tablojda pelilo estas ĝuste instalita."
+"Ne povas ŝargi WinTab-pelilon. Se vi havas desegnan tabuleton, bonvolu "
+"certigi, ke la tabuleta pelilo estas ĝuste instalita."
 
 #: libs/basicflakes/tools/KoCreatePathTool.cpp:552
 #, kde-format
@@ -22256,8 +22256,7 @@ msgstr "Wolfram Diestel,Axel Rousseau,Oliver Kellogg"
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr ""
-"wolfram@steloj.de,axel@esperanto-jeunes.org,okellogg@users.sourceforge.net"
+msgstr "wolfram@steloj.de,axel@esperanto-jeunes.org,olivermkellogg@gmail.com"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format
@@ -22925,7 +22924,7 @@ msgid ""
 "Use tablet driver timestamps for brush speed (may cause severe artifacts "
 "when using WinTab tablet API)"
 msgstr ""
-"Uzu tabulmarkojn por tablojda rapido (povas kaŭzi severajn artefaktojn kiam "
+"Uzu tabulmarkojn por tabuleta rapido (povas kaŭzi severajn artefaktojn kiam "
 "vi uzas WinTab-tabulo-API)"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:1354
@@ -23107,7 +23106,7 @@ msgstr "Rendimento"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2176
 #, kde-format
 msgid "Tablet settings"
-msgstr "Agordoj de la tablojdo"
+msgstr "Agordoj de la tabuleto"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2178
 #, kde-format
@@ -23352,7 +23351,7 @@ msgstr "Elekti areon al kiu via tabuleto estas mapita:"
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:30
 #, kde-format
 msgid "Use information provided by tablet"
-msgstr "Uzi informojn provizitajn de tablojdo"
+msgstr "Uzi informojn provizitajn de tabuleto"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioCustomMapping)
 #: libs/ui/dialogs/KisDlgCustomTabletResolution.ui:46
@@ -23857,7 +23856,7 @@ msgstr "Kreita:"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:138
 #, kde-format
 msgid "Total editing ti&me:"
-msgstr "Tuta redakta tempo:"
+msgstr "Su&ma daŭro de redaktado:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #. i18n: ectx: property (text), widget (QLabel, lbCommentsDesc)
@@ -23898,7 +23897,7 @@ msgstr "Titolo:"
 #: libs/ui/forms/koDocumentInfoAboutWidget.ui:241
 #, kde-format
 msgid "Sub&ject:"
-msgstr "Subjekto:"
+msgstr "Sub&jekto:"
 
 #. i18n: ectx: property (text), widget (QLabel, fullNameLabel)
 #: libs/ui/forms/koDocumentInfoAuthorWidget.ui:21
@@ -27785,11 +27784,11 @@ msgid ""
 "tablet driver implementation).</p><p><br/></p><p>After changing this option "
 "Krita should be restarted.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>Kelkaj tablojdaj aparatoj ne pasas barelbutonajn "
+"<html><head/><body><p>Kelkaj tabuletaj aparatoj ne pasas barelbutonajn "
 "klakojn per tableta API. Se vi havas tian aparaton, vi povas provi aktivigi "
 "ĉi tiun solvon. Krita provos legi dekstren kaj mezbutonajn klakojn de la "
 "musa eventofluo. Ĝi eble aŭ ne funkcias ĉe via aparato (dependas de la "
-"efektivigo de la tablojda pelilo).</p><p><br/></p><p>Post ŝanĝi ĉi tiun "
+"efektivigo de la tabuleta pelilo).</p><p><br/></p><p>Post ŝanĝi ĉi tiun "
 "opcion Krita devus esti rekomencita.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseRightMiddleClickWorkaround)
@@ -28716,12 +28715,12 @@ msgstr "Neniu Gesto"
 #: libs/ui/input/kis_tablet_debugger.cpp:97
 #, kde-format
 msgid "Tablet Event Logging Enabled"
-msgstr "Tablojda Eventa Registrado Ebligita"
+msgstr "Tabuleta Eventa Registrado Ebligita"
 
 #: libs/ui/input/kis_tablet_debugger.cpp:98
 #, kde-format
 msgid "Tablet Event Logging Disabled"
-msgstr "Tablojda Eventa Registrado Malŝaltita"
+msgstr "Tabuleta Eventa Registrado Malŝaltita"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:38
 #, kde-format
@@ -28999,8 +28998,8 @@ msgid ""
 "agree on the size of the screen your tablet is connected to. Please select "
 "the right option.</p></body></html>"
 msgstr ""
-"<html><head/><body><p>La pelilo por via desegna tablojdo kaj Vindozo ne "
-"konsentas pri la grandeco de la ekrano al kiu via tablojdo estas konektita. "
+"<html><head/><body><p>La pelilo por via desegna tabuleto kaj Vindozo ne "
+"konsentas pri la grandeco de la ekrano al kiu via tabuleto estas konektita. "
 "Bonvolu elekti la ĝustan opcion.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioManual)
@@ -39401,7 +39400,7 @@ msgstr "Agoj"
 #: plugins/dockers/logdocker/LogDockerDock.cpp:184
 #, kde-format
 msgid "Tablet Handling"
-msgstr "Manipulado de Tablojdoj"
+msgstr "Manipulado de Tabuletoj"
 
 #: plugins/dockers/logdocker/LogDockerDock.cpp:188
 #, kde-format
@@ -44371,7 +44370,7 @@ msgstr "Nebuligo"
 #: plugins/filters/blur/kis_gaussian_blur_filter.cpp:32
 #, kde-format
 msgid "&Gaussian Blur..."
-msgstr "Gaŭsa malklariĝo..."
+msgstr "&Gaŭsa Malklariĝo..."
 
 #: plugins/filters/blur/kis_gaussian_blur_filter.h:28
 #, kde-format
@@ -44391,7 +44390,7 @@ msgstr "Lenso Blur"
 #: plugins/filters/blur/kis_motion_blur_filter.cpp:33
 #, kde-format
 msgid "&Motion Blur..."
-msgstr "Movmalklaro..."
+msgstr "&Movmalklaro..."
 
 #: plugins/filters/blur/kis_motion_blur_filter.h:30
 #, kde-format
@@ -44615,7 +44614,7 @@ msgstr "Aŭtokontrasto"
 #: plugins/filters/colorsfilters/kis_color_balance_filter.cpp:16
 #, kde-format
 msgid "&Color Balance..."
-msgstr "Kolora Ekvilibro..."
+msgstr "&Kolora Ekvilibro..."
 
 #: plugins/filters/colorsfilters/kis_color_balance_filter.h:40
 #, kde-format
@@ -54700,7 +54699,7 @@ msgid ""
 "<html><head/><body><p>Use the tilt of the tablet to determine the normals.</"
 "p></body></html>"
 msgstr ""
-"<html><head/><body><p>Uzu la kliniĝon de la tablojdo por determini la "
+"<html><head/><body><p>Uzu la kliniĝon de la tabuleto por determini la "
 "normalojn.</p></body></html>"
 
 #. i18n: ectx: property (text), widget (QRadioButton, optionTilt)
@@ -58508,7 +58507,7 @@ msgstr "&Sekvi elektitan vojon"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:77
 #, kde-format
 msgid "Use tablet &pressure"
-msgstr "Uzi tablojdon kaj premon"
+msgstr "Uzi tabuletan &premon"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:88
 #, kde-format
@@ -58518,7 +58517,7 @@ msgstr "Maldikiĝo:"
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:97
 #, kde-format
 msgid "Use tablet &angle"
-msgstr "Uzi tablojdon &angulon"
+msgstr "Uzi tabuletan &angulon"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphyOptionWidget.cpp:111
 #, kde-format

@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-30 01:46+0000\n"
+"POT-Creation-Date: 2024-05-31 01:56+0000\n"
 "PO-Revision-Date: 2024-05-07 12:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -15987,13 +15987,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espaces de travail"
 
-#: krita/main.cc:562
+#: krita/main.cc:578
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Erreur fatale"
 
-#: krita/main.cc:563
+#: krita/main.cc:579
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16002,14 +16002,14 @@ msgstr ""
 "Krita ne prend pas en charge la plate-forme « Wayland ». Veuillez utiliser "
 "« XWayland » pour exécuter Krita. Krita va maintenant se fermer."
 
-#: krita/main.cc:682 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita : avertissement"
 
-#: krita/main.cc:683
+#: krita/main.cc:699
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16021,12 +16021,12 @@ msgstr ""
 "Veuillez faire une mise à jour vers une version prise en charge de Windows : "
 " Windows 7, 8, 8.1 or 10."
 
-#: krita/main.cc:705 krita/main.cc:710
+#: krita/main.cc:721 krita/main.cc:726
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Prise en charge des tablettes sous Krita"
 
-#: krita/main.cc:706
+#: krita/main.cc:722
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16037,7 +16037,7 @@ msgstr ""
 "« Windows Ink ». Si vous avez une tablette graphique, veuillez vous assurer "
 "que son pilote est correctement installé."
 
-#: krita/main.cc:711
+#: krita/main.cc:727
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

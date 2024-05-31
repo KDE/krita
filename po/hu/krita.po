@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-30 01:46+0000\n"
+"POT-Creation-Date: 2024-05-31 01:56+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -16286,13 +16286,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
-#: krita/main.cc:562
+#: krita/main.cc:578
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Végzetes hiba"
 
-#: krita/main.cc:563
+#: krita/main.cc:579
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -16301,14 +16301,14 @@ msgstr ""
 "A Krita nem támogatja a Wayland platformot, használja az XWaylandot, ha azon "
 "szeretné futtatni. A Krita kilép."
 
-#: krita/main.cc:682 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Figyelmeztetés"
 
-#: krita/main.cc:683
+#: krita/main.cc:699
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16319,12 +16319,12 @@ msgstr ""
 "Ez nem ajánlott, ha hibát talál, ne jelentse be.\n"
 "Frissítsen egy támogatott verzióra: Windows 7, 8, 8.1 vagy 10."
 
-#: krita/main.cc:705 krita/main.cc:710
+#: krita/main.cc:721 krita/main.cc:726
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita rajztábla támogatás"
 
-#: krita/main.cc:706
+#: krita/main.cc:722
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16332,7 +16332,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:711
+#: krita/main.cc:727
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "

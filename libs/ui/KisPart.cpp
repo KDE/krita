@@ -706,6 +706,15 @@ void KisPart::upgradeToPlaybackEngineMLT(KoCanvasBase* canvas)
 #endif //HAVE_MLT
 }
 
+void KisPart::unloadPlaybackEngine()
+{
+#ifdef HAVE_MLT
+
+    d->playbackEngine.reset();
+
+#endif //HAVE_MLT
+}
+
 void KisPart::setPlaybackEngine(KisPlaybackEngine *p_playbackEngine)
 {
     // make sure that the old engine is still alive until the end

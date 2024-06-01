@@ -17,11 +17,13 @@ struct PAINTOP_EXPORT KisSharpnessOptionMixInImpl
 {
     inline friend bool operator==(const KisSharpnessOptionMixInImpl &lhs, const KisSharpnessOptionMixInImpl &rhs) {
             return lhs.alignOutlinePixels == rhs.alignOutlinePixels &&
-            lhs.softness == rhs.softness;
+            lhs.softness == rhs.softness && 
+            lhs.perfectPixel == rhs.perfectPixel;
     }
 
     bool alignOutlinePixels {false};
     int softness {0};
+    bool perfectPixel {false};
 
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;

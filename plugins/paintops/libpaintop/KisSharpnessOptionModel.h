@@ -19,6 +19,7 @@ public:
     lager::cursor<KisSharpnessOptionMixIn> sharpnessOptionData;
     LAGER_QT_CURSOR(bool, alignOutlinePixels);
     LAGER_QT_CURSOR(int, softness);
+    LAGER_QT_CURSOR(bool, perfectPixel);
 };
 
 #endif // KISSHARPNESSOPTIONMODEL_H

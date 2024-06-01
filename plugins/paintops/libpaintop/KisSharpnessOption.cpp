@@ -25,6 +25,7 @@ KisSharpnessOption::KisSharpnessOption(const KisSharpnessOptionData &data)
     : KisCurveOption(data)
     , m_alignOutlinePixels(data.alignOutlinePixels)
     , m_softness(data.softness)
+    , m_perfectPixel(data.perfectPixel)
 {
 
 }
@@ -96,3 +97,8 @@ bool KisSharpnessOption::alignOutlineToPixels() const
 {
     return m_alignOutlinePixels;
 }
+
+// bool KisSharpnessOption::applyPerfectPixels() const
+// {
+//     qDebug() << "applied perfect pixels";
+// }

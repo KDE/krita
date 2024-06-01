@@ -9,5 +9,6 @@ KisSharpnessOptionModel::KisSharpnessOptionModel(lager::cursor<KisSharpnessOptio
     : sharpnessOptionData(optionData)
     , LAGER_QT(alignOutlinePixels) {sharpnessOptionData[&KisSharpnessOptionMixIn::alignOutlinePixels]}
     , LAGER_QT(softness) {sharpnessOptionData[&KisSharpnessOptionMixIn::softness]}
+    , LAGER_QT(perfectPixel) {sharpnessOptionData[&KisSharpnessOptionMixIn::perfectPixel]}
 {
 }

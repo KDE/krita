@@ -26,12 +26,14 @@ public:
     void applyThreshold(KisFixedPaintDeviceSP dab, const KisPaintInformation &info);
 
     bool alignOutlineToPixels() const;
+    // bool applyPerfectPixels() const;
 
 private:
     KisSharpnessOption(const KisSharpnessOptionData &data);
 private:
     bool m_alignOutlinePixels;
     int m_softness;
+    bool m_perfectPixel;
 };
 
 #endif // KISSHARPNESSOPTION_H

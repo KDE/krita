@@ -39,6 +39,7 @@ KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOpt
     QWidget *page = new QWidget;
 
     QCheckBox *alignOutline = new QCheckBox(("Align the brush preview outline to the pixel grid"), page);
+    QCheckBox *pixelOption = new QCheckBox(("Perfect-Pixel"), page);
 
     QLabel* thresholdLbl = new QLabel(i18n("Soften edge:"), page);
     KisSliderSpinBox *softenEdge = new KisSliderSpinBox(page);
@@ -48,6 +49,7 @@ KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOpt
     QHBoxLayout* alignHL = new QHBoxLayout;
     alignHL->setContentsMargins(2, 2, 2, 2);
     alignHL->addWidget(alignOutline);
+    alignHL->addWidget(pixelOption);
 
     QHBoxLayout* softnessHL = new QHBoxLayout;
     softnessHL->setContentsMargins(9, 9, 9, 9);
@@ -63,6 +65,7 @@ KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOpt
     setConfigurationPage(page);
 
     connectControl(alignOutline, &m_d->model, "alignOutlinePixels");
+    connectControl(pixelOption, &m_d->model, "perfectPixel");
     connectControl(softenEdge, &m_d->model, "softness");
 
     m_d->model.sharpnessOptionData.bind(std::bind(&KisSharpnessOptionWidget::emitSettingChanged, this));

@@ -8,12 +8,14 @@
 const QString SHARPNESS_FACTOR = "Sharpness/factor";
 const QString SHARPNESS_ALIGN_OUTLINE_PIXELS = "Sharpness/alignoutline";
 const QString SHARPNESS_SOFTNESS  = "Sharpness/softness";
+const QString PERFECT_PIXEL = "Sharpness/perfectpixel";
 
 
 bool KisSharpnessOptionMixInImpl::read(const KisPropertiesConfiguration *setting)
 {
     alignOutlinePixels = setting->getBool(SHARPNESS_ALIGN_OUTLINE_PIXELS);
     softness = setting->getInt(SHARPNESS_SOFTNESS);
+    perfectPixel = setting->getBool(PERFECT_PIXEL);
 
     if (setting->hasProperty(SHARPNESS_FACTOR) && !setting->hasProperty("SharpnessValue")) {
         softness = quint32(setting->getDouble(SHARPNESS_FACTOR) * 100);
@@ -26,6 +28,7 @@ void KisSharpnessOptionMixInImpl::write(KisPropertiesConfiguration *setting) con
 {
     setting->setProperty(SHARPNESS_ALIGN_OUTLINE_PIXELS, alignOutlinePixels);
     setting->setProperty(SHARPNESS_SOFTNESS, softness);
+    setting->setProperty(PERFECT_PIXEL, perfectPixel);
 }
 
 KisSharpnessOptionData::KisSharpnessOptionData(const QString &prefix)

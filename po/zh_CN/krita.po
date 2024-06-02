@@ -35683,7 +35683,7 @@ msgstr "字体系列"
 #: libs/widgetutils/kis_font_family_combo_box.cpp:223
 #, kde-format
 msgid "Font Style"
-msgstr "字体风格"
+msgstr "字体样式"
 
 #: libs/widgetutils/kis_multipliers_double_slider_spinbox.cpp:51
 #, kde-format

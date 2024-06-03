@@ -228,6 +228,8 @@ public Q_SLOTS:
 
     void resetRotationCenterButtonsRequested();
     void imageTooBigRequested(bool value);
+    void convexHullCalculationRequested();
+    void slotConvexHullCalculated(QPolygon hull, void *strokeStrategyCookie);
 
 private:
     QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent);

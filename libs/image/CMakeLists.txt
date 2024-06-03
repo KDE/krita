@@ -354,6 +354,8 @@ set(kritaimage_LIB_SRCS
    KisEncloseAndFillPainter.cpp
    KisBlockBackgroundFrameGenerationLock.cpp
    KisLockFrameGenerationLock.cpp
+
+   kis_convex_hull.cpp
 )
 
 set(einspline_SRCS

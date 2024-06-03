@@ -21,6 +21,7 @@
 #include <kis_transform_mask.h>
 #include "kis_transform_mask_adapter.h"
 #include "kis_transform_utils.h"
+#include "kis_convex_hull.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_recalculate_transform_mask_job.h"
 
@@ -130,6 +131,8 @@ struct InplaceTransformStrokeStrategy::Private
 
     KisBatchNodeUpdateSP updateDataForUndo;
     KisBatchNodeUpdate initialUpdatesBeforeClear;
+
+    bool convexHullHasBeenCalculated = false;
 };
 
 
@@ -203,6 +206,16 @@ void InplaceTransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                dynamic_cast<KisAsynchronousStrokeUpdateHelper::UpdateData*>(data)) {
 
         tryPostUpdateJob(updateData->forceUpdate);
+
+    } else if (dynamic_cast<CalculateConvexHullData*>(data)) {
+
+        if (!m_d->convexHullHasBeenCalculated) {
+            m_d->convexHullHasBeenCalculated = true;
+            QPolygon hull = calculateConvexHull();
+            if (!hull.isEmpty()) {
+                Q_EMIT sigConvexHullCalculated(hull, this);
+            }
+        }
 
     } else {
         KisStrokeStrategyUndoCommandBased::doStrokeCallback(data);
@@ -280,6 +293,78 @@ void InplaceTransformStrokeStrategy::postProcessToplevelCommand(KUndo2Command *c
     KisStrokeStrategyUndoCommandBased::postProcessToplevelCommand(command);
 }
 
+QPolygon InplaceTransformStrokeStrategy::calculateConvexHull()
+{
+    // Best effort attempt to calculate the convex hull, mimicking the
+    // approach that computes srcRect in initStrokeCallback below
+    KisPaintDeviceSP externalSource =
+        m_d->externalSource ? m_d->externalSource :
+        m_d->initialTransformArgs.externalSource() ?
+            m_d->initialTransformArgs.externalSource() : 0;
+
+    QVector<QPoint> points;
+    if (externalSource) {
+        points = KisConvexHull::findConvexHull(externalSource);
+    } else if (m_d->selection) {
+        points = KisConvexHull::findConvexHull(m_d->selection->pixelSelection());
+    } else {
+        int numContributions = 0;
+        Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+            if (node->inherits("KisGroupLayer")) continue;
+
+            if (dynamic_cast<const KisTransformMask*>(node.data())) {
+                return QPolygon(); // Produce no convex hull if a KisTransformMask is present
+            } else {
+                KisPaintDeviceSP device;
+                // Get the original device as per createCacheAndClearNode below
+                if (KisExternalLayer *extLayer = dynamic_cast<KisExternalLayer*>(node.data())) {
+                    device = extLayer->projection();
+                } else {
+                    device = node->paintDevice();
+                }
+                if (device) {
+                    // Use the original device to get the cached device containing the original image data
+                    KisPaintDeviceSP toUse;
+                    {
+                        QMutexLocker l(&m_d->devicesCacheMutex);
+                        if (m_d->devicesCacheHash.contains(device.data())) {
+                            toUse = m_d->devicesCacheHash[device.data()];
+                        } else {
+                            toUse = device;
+                        }
+                    }
+                    /* This sometimes does not agree with the original exactBounds
+                       because of colorspace changes between the original device
+                       and cached. E.g. When the defaultPixel changes as follows it
+                       triggers different behavior in calculateExactBounds:
+                       KoColor ("ALPHA", "Alpha":0) => KoColor ("GRAYA", "Gray":0, "Alpha":255) 
+                    */
+                    const bool isConvertedSelection =
+                        node->paintDevice() &&
+                        node->paintDevice()->colorSpace()->colorModelId() == AlphaColorModelID &&
+                        *toUse->colorSpace() == *node->paintDevice()->compositionSourceColorSpace();
+
+
+                    QPolygon polygon = isConvertedSelection ?
+                        KisConvexHull::findConvexHullSelectionLike(toUse) :
+                        KisConvexHull::findConvexHull(toUse);
+
+                    points += polygon;
+
+                    numContributions += 1;
+                } else {
+                    // When can this happen?  Should it continue instead?
+                    ENTER_FUNCTION() << "Bailing out, device was null" << ppVar(node);
+                    return QPolygon();
+                }
+            }
+        }
+        if (numContributions > 1) {
+            points = KisConvexHull::findConvexHull(points);
+        }
+    }
+    return QPolygon(points);
+}
 
 
 void InplaceTransformStrokeStrategy::initStrokeCallback()
@@ -488,6 +573,12 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
                 KisLodTransform t(m_d->previewLevelOfDetail);
                 m_d->prevDirtyPreviewRects.addUpdate(it->first, t.map(it->second));
             }
+        }
+
+        if (transaction.currentConfig()->boundsRotation() != 0.0) {
+            m_d->convexHullHasBeenCalculated = true;
+            transaction.setConvexHull(calculateConvexHull());
+            transaction.setConvexHullHasBeenRequested(true);
         }
 
         Q_EMIT sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);

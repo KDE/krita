@@ -50,6 +50,7 @@ Q_SIGNALS:
     void requestResetRotationCenterButtons();
     void requestShowImageTooBig(bool value);
     void requestImageRecalculation();
+    void requestConvexHullCalculation();
 
 private:
     struct Private;

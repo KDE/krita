@@ -40,7 +40,8 @@ enum StrokeFunction {
     TOPSHEAR,
     LEFTSHEAR,
     MOVECENTER,
-    PERSPECTIVE
+    PERSPECTIVE,
+    ROTATEBOUNDS
 };
 }
 
@@ -67,6 +68,7 @@ struct KisFreeTransformStrategy::Private
         scaleCursors[7] = KisCursor::sizeBDiagCursor();
 
         shearCursorPixmap.load(":/shear_cursor.png");
+        rotateHandlesCursor = QCursor(QPixmap(":/rotate_cursor_handles.xpm"));
     }
 
     KisFreeTransformStrategy *q;
@@ -108,10 +110,14 @@ struct KisFreeTransformStrategy::Private
     };
     HandlePoints transformedHandles;
 
+    QRectF bounds;
+    QTransform boundsTransform; // Transforms bounds into original image space (rotates by boundsRotation)
+
     QTransform transform;
 
     QCursor scaleCursors[8]; // cursors for the 8 directions
     QPixmap shearCursorPixmap;
+    QCursor rotateHandlesCursor;
 
     bool imageTooBig {false};
 
@@ -125,6 +131,7 @@ struct KisFreeTransformStrategy::Private
     QCursor getShearCursor(const QPointF &start, const QPointF &end);
     void recalculateTransformations();
     void recalculateTransformedHandles();
+    void recalculateBounds();
 };
 
 KisFreeTransformStrategy::KisFreeTransformStrategy(const KisCoordinatesConverter *converter,
@@ -140,38 +147,75 @@ KisFreeTransformStrategy::~KisFreeTransformStrategy()
 {
 }
 
+namespace {
+QPointF middleLeft(const QRectF &rect)
+{
+    return (rect.topLeft() + rect.bottomLeft()) * 0.5;
+}
+QPointF middleRight(const QRectF &rect)
+{
+    return (rect.topRight() + rect.bottomRight()) * 0.5;
+}
+QPointF bottomMiddle(const QRectF &rect)
+{
+    return (rect.bottomLeft() + rect.bottomRight()) * 0.5;
+}
+QPointF topMiddle(const QRectF &rect)
+{
+    return (rect.topLeft() + rect.topRight()) * 0.5;
+}
+}
+
+void KisFreeTransformStrategy::Private::recalculateBounds()
+{
+    const QPolygonF &convexHull = transaction.convexHull();
+    if (!convexHull.isEmpty()) {
+        bounds = boundsTransform.inverted().map(convexHull).boundingRect();
+    } else {
+        bounds = boundsTransform.inverted().mapRect(transaction.originalRect());
+    }
+}
+
+
 void KisFreeTransformStrategy::Private::recalculateTransformedHandles()
 {
-    transformedHandles.topLeft = transform.map(transaction.originalTopLeft());
-    transformedHandles.topMiddle = transform.map(transaction.originalMiddleTop());
-    transformedHandles.topRight = transform.map(transaction.originalTopRight());
+    QTransform boundsFullTransform = boundsTransform * transform;
+    transformedHandles.topLeft = boundsFullTransform.map(bounds.topLeft());
+    transformedHandles.topMiddle = boundsFullTransform.map(topMiddle(bounds));
+    transformedHandles.topRight = boundsFullTransform.map(bounds.topRight());
 
-    transformedHandles.middleLeft = transform.map(transaction.originalMiddleLeft());
+    transformedHandles.middleLeft = boundsFullTransform.map(middleLeft(bounds));
+    transformedHandles.middleRight = boundsFullTransform.map(middleRight(bounds));
+
+    transformedHandles.bottomLeft = boundsFullTransform.map(bounds.bottomLeft());
+    transformedHandles.bottomMiddle = boundsFullTransform.map(bottomMiddle(bounds));
+    transformedHandles.bottomRight = boundsFullTransform.map(bounds.bottomRight());
+
     transformedHandles.rotationCenter = transform.map(currentArgs.originalCenter() + currentArgs.rotationCenterOffset());
-    transformedHandles.middleRight = transform.map(transaction.originalMiddleRight());
-
-    transformedHandles.bottomLeft = transform.map(transaction.originalBottomLeft());
-    transformedHandles.bottomMiddle = transform.map(transaction.originalMiddleBottom());
-    transformedHandles.bottomRight = transform.map(transaction.originalBottomRight());
 }
 
 void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive)
 {
     Q_UNUSED(shiftModifierActive);
-    Q_UNUSED(altModifierActive);
 
     if (perspectiveModifierActive && !m_d->transaction.shouldAvoidPerspectiveTransform()) {
         m_d->function = PERSPECTIVE;
         return;
     }
 
-    QPolygonF transformedPolygon = m_d->transform.map(QPolygonF(m_d->transaction.originalRect()));
+    QTransform boundsFullTransform = m_d->boundsTransform * m_d->transform;
+    QPolygonF transformedPolygon = boundsFullTransform.map(QPolygonF(m_d->bounds));
     qreal handleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
     qreal rotationHandleRadius = KisTransformUtils::effectiveHandleGrabRadius(m_d->converter);
 
 
-    StrokeFunction defaultFunction =
-        transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill) ? MOVE : ROTATE;
+    StrokeFunction defaultFunction;
+    if (transformedPolygon.containsPoint(mousePos, Qt::OddEvenFill))
+        defaultFunction = MOVE;
+    else if (m_d->transaction.boundsRotationAllowed() && altModifierActive)
+        defaultFunction = ROTATEBOUNDS;
+    else
+        defaultFunction = ROTATE;
     KisTransformUtils::HandleChooser<StrokeFunction>
         handleChooser(mousePos, defaultFunction);
 
@@ -198,19 +242,19 @@ void KisFreeTransformStrategy::setTransformFunction(const QPointF &mousePos, boo
     m_d->function = handleChooser.function();
 
     if (m_d->function == ROTATE || m_d->function == MOVE) {
-        QRectF originalRect = m_d->transaction.originalRect();
-        QPointF t = m_d->transform.inverted().map(mousePos);
+        QRectF bounds = m_d->bounds;
+        QPointF t = boundsFullTransform.inverted().map(mousePos);
 
-        if (t.x() >= originalRect.left() && t.x() <= originalRect.right()) {
-            if (fabs(t.y() - originalRect.top()) <= handleRadius)
+        if (t.x() >= bounds.left() && t.x() <= bounds.right()) {
+            if (fabs(t.y() - bounds.top()) <= handleRadius)
                 m_d->function = TOPSHEAR;
-            if (fabs(t.y() - originalRect.bottom()) <= handleRadius)
+            if (fabs(t.y() - bounds.bottom()) <= handleRadius)
                 m_d->function = BOTTOMSHEAR;
         }
-        if (t.y() >= originalRect.top() && t.y() <= originalRect.bottom()) {
-            if (fabs(t.x() - originalRect.left()) <= handleRadius)
+        if (t.y() >= bounds.top() && t.y() <= bounds.bottom()) {
+            if (fabs(t.x() - bounds.left()) <= handleRadius)
                 m_d->function = LEFTSHEAR;
-            if (fabs(t.x() - originalRect.right()) <= handleRadius)
+            if (fabs(t.x() - bounds.right()) <= handleRadius)
                 m_d->function = RIGHTSHEAR;
         }
     }
@@ -251,6 +295,9 @@ QCursor KisFreeTransformStrategy::getCurrentCursor() const
     switch (m_d->function) {
     case MOVE:
         cursor = KisCursor::moveCursor();
+        break;
+    case ROTATEBOUNDS:
+        cursor = m_d->rotateHandlesCursor;
         break;
     case ROTATE:
         cursor = KisCursor::rotateCursor();
@@ -318,35 +365,35 @@ void KisFreeTransformStrategy::paint(QPainter &gc)
     QRectF handleRect =
         KisTransformUtils::handleRect(KisTransformUtils::handleVisualRadius,
                                       m_d->handlesTransform,
-                                      m_d->transaction.originalRect(), 0, 0);
+                                      m_d->bounds, 0, 0);
 
     qreal rX = 1;
     qreal rY = 1;
     QRectF rotationCenterRect =
         KisTransformUtils::handleRect(KisTransformUtils::rotationHandleVisualRadius,
                                       m_d->handlesTransform,
-                                      m_d->transaction.originalRect(),
+                                      m_d->bounds,
                                       &rX,
                                       &rY);
 
     QPainterPath handles;
 
-    handles.moveTo(m_d->transaction.originalTopLeft());
-    handles.lineTo(m_d->transaction.originalTopRight());
-    handles.lineTo(m_d->transaction.originalBottomRight());
-    handles.lineTo(m_d->transaction.originalBottomLeft());
-    handles.lineTo(m_d->transaction.originalTopLeft());
+    handles.moveTo(m_d->bounds.topLeft());
+    handles.lineTo(m_d->bounds.topRight());
+    handles.lineTo(m_d->bounds.bottomRight());
+    handles.lineTo(m_d->bounds.bottomLeft());
+    handles.lineTo(m_d->bounds.topLeft());
 
-    handles.addRect(handleRect.translated(m_d->transaction.originalTopLeft()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalTopRight()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalBottomLeft()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalBottomRight()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalMiddleLeft()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalMiddleRight()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalMiddleTop()));
-    handles.addRect(handleRect.translated(m_d->transaction.originalMiddleBottom()));
+    handles.addRect(handleRect.translated(m_d->bounds.topLeft()));
+    handles.addRect(handleRect.translated(m_d->bounds.topRight()));
+    handles.addRect(handleRect.translated(m_d->bounds.bottomLeft()));
+    handles.addRect(handleRect.translated(m_d->bounds.bottomRight()));
+    handles.addRect(handleRect.translated(middleLeft(m_d->bounds)));
+    handles.addRect(handleRect.translated(middleRight(m_d->bounds)));
+    handles.addRect(handleRect.translated(topMiddle(m_d->bounds)));
+    handles.addRect(handleRect.translated(bottomMiddle(m_d->bounds)));
 
-    QPointF rotationCenter = m_d->currentArgs.originalCenter() + m_d->currentArgs.rotationCenterOffset();
+    QPointF rotationCenter = m_d->boundsTransform.inverted().map(m_d->currentArgs.originalCenter() + m_d->currentArgs.rotationCenterOffset());
     QPointF dx(rX + 3, 0);
     QPointF dy(0, rY + 3);
     handles.addEllipse(rotationCenterRect.translated(rotationCenter));
@@ -392,6 +439,10 @@ bool KisFreeTransformStrategy::beginPrimaryAction(const QPointF &pt)
     KisTransformUtils::MatricesPack m(m_d->clickArgs);
     m_d->clickTransform = m.finalTransform();
 
+    if (m_d->function == ROTATEBOUNDS) {
+        emit requestConvexHullCalculation();
+    }
+
     return true;
 }
 
@@ -429,6 +480,45 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         break;
     }
+    case ROTATEBOUNDS:
+    {
+        const KisTransformUtils::MatricesPack clickM(m_d->clickArgs);
+        const QTransform clickT = clickM.finalTransform();
+
+        const QPointF rotationCenter = m_d->clickArgs.originalCenter() + m_d->clickArgs.rotationCenterOffset();
+        const QPointF clickMouseImagePos = clickT.inverted().map(m_d->clickPos) - rotationCenter;
+        const QPointF mouseImagePosClickSpace = clickT.inverted().map(mousePos) - rotationCenter;
+
+        const qreal a1 = atan2(clickMouseImagePos.y(), clickMouseImagePos.x());
+        const qreal a2 = atan2(mouseImagePosClickSpace.y(), mouseImagePosClickSpace.x());
+
+        const qreal theta = a2 - a1;
+        m_d->currentArgs.setBoundsRotation(m_d->clickArgs.boundsRotation() + theta);
+        
+        // Find new scale/shear/rotation for the rotated bounds
+        QTransform newBR; newBR.rotateRadians(m_d->currentArgs.boundsRotation());
+        QTransform clickZ; clickZ.rotateRadians(m_d->clickArgs.aZ());
+        // newM.BRI * newM.SC * newM.S * newZ = clickM.BRI * clickM.SC * clickM.S * clickZ
+        // newM.SC * newM.S * newZ = newM.BR * clickM.BRI * clickM.SC * clickM.S * clickZ
+        QTransform desired = newBR * clickM.BRI * clickM.SC * clickM.S * clickZ;
+        KisAlgebra2D::DecomposedMatrix dm(desired);
+        if (dm.isValid()) {
+            m_d->currentArgs.setScaleX(dm.scaleX);
+            m_d->currentArgs.setScaleY(dm.scaleY);
+            m_d->currentArgs.setShearX(dm.shearXY);
+            m_d->currentArgs.setShearY(0);
+            m_d->currentArgs.setAZ(kisDegreesToRadians(dm.angle));
+        }
+
+        // Snap with shift key
+        // if (shiftModifierActive) {
+        //     const qreal angle = m_d->currentArgs.boundsRotation();
+        //     const qreal snapAngle = M_PI_4 / 6.0; // 7.5 degrees
+        //     qint32 angleIndex = static_cast<qint32>((angle / snapAngle) + 0.5);
+        //     m_d->currentArgs.setBoundsRotation(angleIndex * snapAngle);
+        // }
+    }
+    break;
     case ROTATE:
     {
         const KisTransformUtils::MatricesPack clickM(m_d->clickArgs);
@@ -449,7 +539,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
 
         // Snap with shift key
         if (shiftModifierActive) {
-            const qreal snapAngle = M_PI_4 / 6.0; // fifteen degrees
+            const qreal snapAngle = M_PI_4 / 6.0; // 7.5 degrees
             qint32 thetaIndex = static_cast<qint32>((theta / snapAngle) + 0.5);
             m_d->currentArgs.setAZ(thetaIndex * snapAngle);
         }
@@ -498,11 +588,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         QPointF movingPoint;
 
         if (m_d->function == TOPSCALE) {
-            staticPoint = m_d->transaction.originalMiddleBottom();
-            movingPoint = m_d->transaction.originalMiddleTop();
+            staticPoint = m_d->boundsTransform.map(bottomMiddle(m_d->bounds));
+            movingPoint = m_d->boundsTransform.map(topMiddle(m_d->bounds));
         } else {
-            staticPoint = m_d->transaction.originalMiddleTop();
-            movingPoint = m_d->transaction.originalMiddleBottom();
+            staticPoint = m_d->boundsTransform.map(topMiddle(m_d->bounds));
+            movingPoint = m_d->boundsTransform.map(bottomMiddle(m_d->bounds));
         }
 
         QPointF staticPointInView = m_d->clickTransform.map(staticPoint);
@@ -551,11 +641,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         QPointF movingPoint;
 
         if (m_d->function == LEFTSCALE) {
-            staticPoint = m_d->transaction.originalMiddleRight();
-            movingPoint = m_d->transaction.originalMiddleLeft();
+            staticPoint = m_d->boundsTransform.map(middleRight(m_d->bounds));
+            movingPoint = m_d->boundsTransform.map(middleLeft(m_d->bounds));
         } else {
-            staticPoint = m_d->transaction.originalMiddleLeft();
-            movingPoint = m_d->transaction.originalMiddleRight();
+            staticPoint = m_d->boundsTransform.map(middleLeft(m_d->bounds));
+            movingPoint = m_d->boundsTransform.map(middleRight(m_d->bounds));
         }
 
         QPointF staticPointInView = m_d->clickTransform.map(staticPoint);
@@ -605,17 +695,17 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         QPointF movingPoint;
 
         if (m_d->function == TOPRIGHTSCALE) {
-            staticPoint = m_d->transaction.originalBottomLeft();
-            movingPoint = m_d->transaction.originalTopRight();
+            staticPoint = m_d->boundsTransform.map(m_d->bounds.bottomLeft());
+            movingPoint = m_d->boundsTransform.map(m_d->bounds.topRight());
         } else if (m_d->function == BOTTOMRIGHTSCALE) {
-            staticPoint = m_d->transaction.originalTopLeft();
-            movingPoint = m_d->transaction.originalBottomRight();
+            staticPoint = m_d->boundsTransform.map(m_d->bounds.topLeft());
+            movingPoint = m_d->boundsTransform.map(m_d->bounds.bottomRight());
         } else if (m_d->function == TOPLEFTSCALE) {
-            staticPoint = m_d->transaction.originalBottomRight();
-            movingPoint = m_d->transaction.originalTopLeft();
+            staticPoint = m_d->boundsTransform.map(m_d->bounds.bottomRight());
+            movingPoint = m_d->boundsTransform.map(m_d->bounds.topLeft());
         } else {
-            staticPoint = m_d->transaction.originalTopRight();
-            movingPoint = m_d->transaction.originalBottomLeft();
+            staticPoint = m_d->boundsTransform.map(m_d->bounds.topRight());
+            movingPoint = m_d->boundsTransform.map(m_d->bounds.bottomLeft());
         }
 
         // override scale static point if it is locked
@@ -663,9 +753,14 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         break;
     }
     case MOVECENTER: {
-        QPointF pt = m_d->transform.inverted().map(mousePos);
+
+        QPointF pt;
         if (altModifierActive) {
-            pt = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
+            pt = (m_d->boundsTransform * m_d->transform).inverted().map(mousePos);
+            pt = KisTransformUtils::clipInRect(pt, m_d->bounds);
+            pt = m_d->boundsTransform.map(pt);
+        } else {
+            pt = m_d->transform.inverted().map(mousePos);
         }
 
         QPointF newRotationCenterOffset = pt - m_d->currentArgs.originalCenter();
@@ -694,11 +789,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         qreal sign = m_d->function == BOTTOMSHEAR ? 1.0 : -1.0;
 
         // get the dx pixels corresponding to the current shearX factor
-        qreal dx = sign * m_d->clickArgs.shearX() * m_d->clickArgs.scaleY() * m_d->transaction.originalHalfHeight(); // get the dx pixels corresponding to the current shearX factor
+        qreal dx = sign * m_d->clickArgs.shearX() * m_d->clickArgs.scaleY() * (m_d->bounds.height() / 2.0); // get the dx pixels corresponding to the current shearX factor
         dx += diff.x();
 
         // calculate the new shearX factor
-        m_d->currentArgs.setShearX(sign * dx / m_d->currentArgs.scaleY() / m_d->transaction.originalHalfHeight()); // calculate the new shearX factor
+        m_d->currentArgs.setShearX(sign * dx / m_d->currentArgs.scaleY() / (m_d->bounds.height() / 2.0)); // calculate the new shearX factor
 
         KisTransformUtils::MatricesPack currentM(m_d->currentArgs);
         QTransform t = currentM.finalTransform();
@@ -719,11 +814,11 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
         qreal sign = m_d->function == RIGHTSHEAR ? 1.0 : -1.0;
 
         // get the dx pixels corresponding to the current shearX factor
-        qreal dy = sign *  m_d->clickArgs.shearY() * m_d->clickArgs.scaleX() * m_d->transaction.originalHalfWidth();
+        qreal dy = sign *  m_d->clickArgs.shearY() * m_d->clickArgs.scaleX() * (m_d->bounds.width() / 2.0);
         dy += diff.y();
 
         // calculate the new shearY factor
-        m_d->currentArgs.setShearY(sign * dy / m_d->clickArgs.scaleX() / m_d->transaction.originalHalfWidth());
+        m_d->currentArgs.setShearY(sign * dy / m_d->clickArgs.scaleX() / (m_d->bounds.width() / 2.0));
 
         KisTransformUtils::MatricesPack currentM(m_d->currentArgs);
         QTransform t = currentM.finalTransform();
@@ -761,9 +856,11 @@ void KisFreeTransformStrategy::Private::recalculateTransformations()
     KIS_ASSERT_RECOVER_NOOP(sanityCheckMatrix.map(currentArgs.originalCenter()).manhattanLength() < 1e-4);
 
     transform = m.finalTransform();
+    boundsTransform = m.BRI.inverted();
+    recalculateBounds();
 
     QTransform viewScaleTransform = converter->imageToDocumentTransform() * converter->documentToFlakeTransform();
-    handlesTransform = transform * viewScaleTransform;
+    handlesTransform = boundsTransform * transform * viewScaleTransform;
 
     QTransform tl = QTransform::fromTranslate(transaction.originalTopLeft().x(), transaction.originalTopLeft().y());
     paintingTransform = tl.inverted() * q->thumbToImageTransform() * tl * transform * viewScaleTransform;

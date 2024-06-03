@@ -157,7 +157,7 @@ private:
     void setFramesPerSecond(int fps);
 
     QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
-    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
+    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows, bool ignoreEditability) const;
 
     /**   Insert new keyframes/columns.
      *

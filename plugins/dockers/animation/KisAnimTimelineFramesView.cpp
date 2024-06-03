@@ -552,7 +552,7 @@ void KisAnimTimelineFramesView::slotUpdatePlaybackRange()
     int minColumn = 0;
     int maxColumn = 0;
 
-    calculateSelectionMetrics(minColumn, maxColumn, rows);
+    calculateSelectionMetrics(minColumn, maxColumn, rows, true);
 
     m_d->model->setDocumentClipRangeStart(minColumn);
     m_d->model->setDocumentClipRangeEnd(maxColumn);
@@ -1378,7 +1378,7 @@ QModelIndexList KisAnimTimelineFramesView::calculateSelectionSpan(bool entireCol
         int minColumn = 0;
         int maxColumn = 0;
 
-        calculateSelectionMetrics(minColumn, maxColumn, rows);
+        calculateSelectionMetrics(minColumn, maxColumn, rows, true);
 
         rows.clear();
         for (int i = 0; i < m_d->model->rowCount(); i++) {
@@ -1400,13 +1400,14 @@ QModelIndexList KisAnimTimelineFramesView::calculateSelectionSpan(bool entireCol
     return indexes;
 }
 
-void KisAnimTimelineFramesView::calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const
+void KisAnimTimelineFramesView::calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows, bool ignoreEditability) const
 {
     minColumn = std::numeric_limits<int>::max();
     maxColumn = std::numeric_limits<int>::min();
 
     Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
-        if (!m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) continue;
+        if (!ignoreEditability &&
+            !m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) continue;
 
         rows.insert(index.row());
         minColumn = qMin(minColumn, index.column());
@@ -1419,7 +1420,8 @@ void KisAnimTimelineFramesView::insertKeyframes(int count, int timing, TimelineD
     QSet<int> rows;
     int minColumn = 0, maxColumn = 0;
 
-    calculateSelectionMetrics(minColumn, maxColumn, rows);
+    calculateSelectionMetrics(minColumn, maxColumn, rows, entireColumn);
+    if (minColumn > maxColumn) return;
 
     if (count <= 0) { //Negative count? Use number of selected frames.
         count = qMax(1, maxColumn - minColumn + 1);
@@ -1600,7 +1602,7 @@ void KisAnimTimelineFramesView::createFrameEditingMenuActions(QMenu *menu, bool 
     QSet<int> rows;
     int minColumn = 0;
     int maxColumn = 0;
-    calculateSelectionMetrics(minColumn, maxColumn, rows);
+    calculateSelectionMetrics(minColumn, maxColumn, rows, true);
     bool selectionExists = minColumn != maxColumn;
 
     menu->addSection(i18n("Edit Frames:"));

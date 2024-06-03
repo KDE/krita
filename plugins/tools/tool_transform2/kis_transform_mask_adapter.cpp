@@ -96,13 +96,20 @@ QString KisTransformMaskAdapter::id() const
 
 void KisTransformMaskAdapter::toXML(QDomElement *e) const
 {
+    // bounds rotation cannot be used on transform masks currently
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(m_d->args->boundsRotation()));
     m_d->args->toXML(e);
 }
 
 KisTransformMaskParamsInterfaceSP KisTransformMaskAdapter::fromXML(const QDomElement &e)
 {
+    ToolTransformArgs args(ToolTransformArgs::fromXML(e));
+
+    // bounds rotation cannot be used on transform masks currently
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(args.boundsRotation()));
+
     return KisTransformMaskParamsInterfaceSP(
-        new KisTransformMaskAdapter(ToolTransformArgs::fromXML(e)));
+        new KisTransformMaskAdapter(args));
 }
 
 void KisTransformMaskAdapter::translateSrcAndDst(const QPointF &offset)

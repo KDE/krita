@@ -398,8 +398,8 @@ void ToolTransformArgs::toXML(QDomElement *e) const
         KisDomUtils::saveValue(&freeEl, "shearX", m_shearX);
         KisDomUtils::saveValue(&freeEl, "shearY", m_shearY);
 
-        // KisDomUtils::saveValue(&freeEl, "boundsRotation", m_boundsRotation);
-        KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyIsNull(m_boundsRotation));
+        // bounds rotation is currently not supported by transform masks, so it should be null
+        KisDomUtils::saveValue(&freeEl, "boundsRotation", m_boundsRotation);
 
         KisDomUtils::saveValue(&freeEl, "keepAspectRatio", m_keepAspectRatio);
         KisDomUtils::saveValue(&freeEl, "flattenedPerspectiveTransform", m_flattenedPerspectiveTransform);
@@ -479,7 +479,8 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
             KisDomUtils::loadValue(freeEl, "shearX", &args.m_shearX) &&
             KisDomUtils::loadValue(freeEl, "shearY", &args.m_shearY) &&
 
-            // KisDomUtils::loadValue(freeEl, "boundsRotation", &args.m_boundsRotation) &&
+            // bounds rotation is currently not supported by transform masks, so it should be null for them
+            KisDomUtils::loadValue(freeEl, "boundsRotation", &args.m_boundsRotation) &&
 
             KisDomUtils::loadValue(freeEl, "keepAspectRatio", &args.m_keepAspectRatio) &&
             KisDomUtils::loadValue(freeEl, "flattenedPerspectiveTransform", &args.m_flattenedPerspectiveTransform) &&

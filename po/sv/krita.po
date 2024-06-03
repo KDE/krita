@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-05-31 01:56+0000\n"
-"PO-Revision-Date: 2024-05-03 13:35+0200\n"
-"Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
+"PO-Revision-Date: 2024-06-02 18:11+0200\n"
+"Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -791,98 +791,98 @@ msgstr "b) Grund-5 standardstorlek"
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Dry.kpp"
 msgid "j) WaterC Basic Lines-Dry"
-msgstr "j) Vattenfärg enkel linjer torra"
+msgstr "j) Akvarell enkel linjer torra"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Wet-Pattern.kpp"
 msgid "j) WaterC Basic Lines-Wet-Pattern"
-msgstr "j) Vattenfärg enkel linjer vått mönster"
+msgstr "j) Akvarell enkel linjer vått mönster"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Lines-Wet.kpp"
 msgid "j) WaterC Basic Lines-Wet"
-msgstr "j) Vattenfärg enkel linjer våta"
+msgstr "j) Akvarell enkel linjer våta"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Fringe_02.kpp"
 msgid "j) WaterC Basic Round-Fringe 02"
-msgstr "j) Vattenfärg enkel rund frans 02"
+msgstr "j) Akvarell enkel rund frans 02"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Grain.kpp"
 msgid "j) WaterC Basic Round-Grain"
-msgstr "j) Vattenfärg enkel rund ådring"
+msgstr "j) Akvarell enkel rund ådring"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Basic_Round-Grunge.kpp"
 msgid "j) WaterC Basic Round-Grunge"
-msgstr "j) Vattenfärg enkelt rund grunge"
+msgstr "j) Akvarell enkelt rund grunge"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Flat_Big-Grain_Tilt.kpp"
 msgid "j) WaterC Flat Big-Grain Tilt"
-msgstr "j) Vattenfärg flat stor ådring lutande"
+msgstr "j) Akvarell flat stor ådring lutande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Flat_Decay_Tilt.kpp"
 msgid "j) WaterC Flat Decay Tilt"
-msgstr "j) Vattenfärg flat avklingande lutande"
+msgstr "j) Akvarell flat avklingande lutande"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Special_Blobs.kpp"
 msgid "j) WaterC Special Blobs"
-msgstr "j) Vattenfärg specialklickar"
+msgstr "j) Akvarell specialklickar"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Special_Splats.kpp"
 msgid "j) WaterC Special Splats"
-msgstr "j) Vattenfärg specialstänk"
+msgstr "j) Akvarell specialstänk"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Spread-Pattern.kpp"
 msgid "j) WaterC Spread-Pattern"
-msgstr "j) Vattenfärg sprid mönster"
+msgstr "j) Akvarell sprid mönster"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Spread.kpp"
 msgid "j) WaterC Spread"
-msgstr "j) Vattenfärg sprid"
+msgstr "j) Akvarell sprid"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Spread_WideArea.kpp"
 msgid "j) WaterC Spread WideArea"
-msgstr "j) Vattenfärg sprid brett område"
+msgstr "j) Akvarell sprid brett område"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
 #, kde-format
 msgctxt "./krita/data/paintoppresets/j)_WaterC_Water-Pattern.kpp"
 msgid "j) WaterC Water-Pattern"
-msgstr "j) Vattenfärg vattenmönster"
+msgstr "j) Akvarell vattenmönster"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -4340,7 +4340,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Watercolor_Fringe.kpp"
 msgid "j) Watercolor Fringe"
-msgstr "j) Vattenfärg frans"
+msgstr "j) Akvarell frans"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4349,7 +4349,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Watercolor_Texture.kpp"
 msgid "j) Watercolor Texture"
-msgstr "j) Vattenfärg struktur"
+msgstr "j) Akvarell struktur"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4358,7 +4358,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Hard_Edges.kpp"
 msgid "j) Waterpaint Hard Edges"
-msgstr "j) Vattenfärg hårda kanter"
+msgstr "j) Akvarell hårda kanter"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -4367,7 +4367,7 @@ msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:paintoppresets/"
 "j)_Waterpaint_Soft_Edges.kpp"
 msgid "j) Waterpaint Soft Edges"
-msgstr "j) Vattenfärg mjuka kanter"
+msgstr "j) Akvarell mjuka kanter"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #. i18n: 'a)', 'b)' etc. in resource names are used to keep resources in a specific order when Krita sorts them alphabetically. The order will be kept only using the original/untranslated names
@@ -7026,7 +7026,7 @@ msgstr "Stilla vatten"
 msgctxt ""
 "./krita/data/bundles/Krita_4_Default_Resources.bundle:brushes/watercolor.gih"
 msgid "Watercolor"
-msgstr "Vattenfärg"
+msgstr "Akvarell"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #: krita/data/gradients/BG-Krita2.ggr:2
@@ -67373,7 +67373,7 @@ msgstr "Referensbildverktyg"
 
 #~ msgctxt "./krita/data/brushes/cazu_watercolor2.gih"
 #~ msgid "Cazu Watercolor 2"
-#~ msgstr "Cazu vattenfärg 2"
+#~ msgstr "Cazu akvarell 2"
 
 #~ msgctxt "./krita/data/brushes/cazu-chalk.gbr"
 #~ msgid "Cazu Chalk"

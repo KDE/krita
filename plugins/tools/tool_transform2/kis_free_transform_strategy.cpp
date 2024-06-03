@@ -68,6 +68,7 @@ struct KisFreeTransformStrategy::Private
         scaleCursors[7] = KisCursor::sizeBDiagCursor();
 
         shearCursorPixmap.load(":/shear_cursor.png");
+        rotateHandlesCursor = QCursor(QPixmap(":/rotate_cursor_handles.xpm"));
     }
 
     KisFreeTransformStrategy *q;
@@ -116,6 +117,7 @@ struct KisFreeTransformStrategy::Private
 
     QCursor scaleCursors[8]; // cursors for the 8 directions
     QPixmap shearCursorPixmap;
+    QCursor rotateHandlesCursor;
 
     bool imageTooBig {false};
 
@@ -295,7 +297,7 @@ QCursor KisFreeTransformStrategy::getCurrentCursor() const
         cursor = KisCursor::moveCursor();
         break;
     case ROTATEBOUNDS:
-        cursor = KisCursor::rotateCursor();
+        cursor = m_d->rotateHandlesCursor;
         break;
     case ROTATE:
         cursor = KisCursor::rotateCursor();

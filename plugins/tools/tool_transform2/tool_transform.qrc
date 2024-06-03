@@ -8,5 +8,6 @@
         <file>mesh_cursor_free.png</file>
         <file>mesh_cursor_locked.png</file>
         <file>shear_cursor.png</file>
+        <file>rotate_cursor_handles.xpm</file>
     </qresource>
 </RCC>

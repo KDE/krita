@@ -270,9 +270,7 @@ namespace KisConvexHull {
 
 QPolygon findConvexHull(const QVector<QPoint> &points)
 {
-    ENTER_FUNCTION() << ppVar(points.size());
     QPolygon hull = convexHull(points);
-    ENTER_FUNCTION() << ppVar(hull.size());
     return hull;
 }
 
@@ -281,9 +279,7 @@ QPolygon findConvexHull(KisPaintDeviceSP device)
     QElapsedTimer timer;
     timer.start();
     auto ps = retrieveAllBoundaryPoints(device);
-    ENTER_FUNCTION() << "found boundary points in" << timer.nsecsElapsed() / 1000;
     auto p = findConvexHull(ps);
-    ENTER_FUNCTION() << "found hull in" << timer.nsecsElapsed() / 1000;
     return p;
 }
 
@@ -292,9 +288,7 @@ QPolygon findConvexHullSelectionLike(KisPaintDeviceSP device)
     QElapsedTimer timer;
     timer.start();
     auto ps = retrieveAllBoundaryPointsSelectionLike(device);
-    ENTER_FUNCTION() << "found boundary points in" << timer.nsecsElapsed() / 1000;
     auto p = findConvexHull(ps);
-    ENTER_FUNCTION() << "found hull in" << timer.nsecsElapsed() / 1000;
     return p;
 }
 

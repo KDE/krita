@@ -339,8 +339,6 @@ QPolygon InplaceTransformStrokeStrategy::calculateConvexHull()
                        triggers different behavior in calculateExactBounds:
                        KoColor ("ALPHA", "Alpha":0) => KoColor ("GRAYA", "Gray":0, "Alpha":255) 
                     */
-                    ENTER_FUNCTION() << "Finding convex hull of" << ppVar(node);
-
                     const bool isConvertedSelection =
                         node->paintDevice() &&
                         node->paintDevice()->colorSpace()->colorModelId() == AlphaColorModelID &&

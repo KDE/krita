@@ -169,7 +169,7 @@ QPointF topMiddle(const QRectF &rect)
 void KisFreeTransformStrategy::Private::recalculateBounds()
 {
     const QPolygonF &convexHull = transaction.convexHull();
-    if (convexHull.size() > 0) {
+    if (!convexHull.isEmpty()) {
         bounds = boundsTransform.inverted().map(convexHull).boundingRect();
     } else {
         bounds = boundsTransform.inverted().mapRect(transaction.originalRect());

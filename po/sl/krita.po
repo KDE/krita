@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-31 01:56+0000\n"
+"POT-Creation-Date: 2024-06-04 01:39+0000\n"
 "PO-Revision-Date: 2024-04-26 18:47+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -19592,7 +19592,7 @@ msgstr "Krajevni viri"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
-#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
+#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita"
@@ -38409,30 +38409,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Povečaj časovnico. Držite pritisnjeno in povlecite levo ali desno."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Vstavi ali izbriši zadržane sličice"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Vnesite število sličic"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Uredi sličice:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Ključne sličice"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -60516,7 +60516,7 @@ msgstr "Natančnost:"
 msgid "Patch Radius:"
 msgstr "Polmer obliža:"
 
-#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
+#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
 "Sorry, Krita was built without the support of GNU Scientific Library, so you "
@@ -60590,18 +60590,18 @@ msgstr "Zasukaj za 90° v obratni SUK"
 msgid "Apply"
 msgstr "Uporabi"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:378
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:422
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Dejanja orodja Preoblikovanje"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:864
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:908
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Vrsta plasti ne more uporabiti orodja za preoblikovanje."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:915
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60609,7 +60609,7 @@ msgstr ""
 "Vrsta plasti ne more uporabiti orodja za preoblikovanje. Namesto tega "
 "uporabite masko za preoblikovanje."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:891
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:935
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60619,20 +60619,20 @@ msgstr ""
 "Plast ima z maskami preoblikovanja izvedene (hčerinske) plasti. Pred "
 "preoblikovanjem jih onemogočite."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Izbori se ne uporabijo pri urejanju mask transformacije "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1073
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Prazne plasti ni mogoče preoblikovati"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1060
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60642,7 +60642,7 @@ msgstr ""
 "Preoblikovale se bodo tudi nevidne podplasti. Zaklenite plasti, če ne "
 "želite, da se preoblikujejo "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Preoblikuj plast ali izbor"
@@ -60791,8 +60791,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Preoblikuj plast ali izbor"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:149
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Preoblikuj"

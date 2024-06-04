@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-31 01:56+0000\n"
+"POT-Creation-Date: 2024-06-04 01:39+0000\n"
 "PO-Revision-Date: 2022-08-28 09:26+0200\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -20476,7 +20476,7 @@ msgstr "Lokale Ressourcen"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
-#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
+#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita"
@@ -39375,14 +39375,14 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr ""
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
 #, fuzzy, kde-format
 #| msgid "Insert Name"
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Namen eingeben"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
 #, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Enter new style name"
@@ -39390,18 +39390,18 @@ msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Neuen Stilnamen eingeben"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
 #, fuzzy, kde-format
 msgid "Edit Frames:"
 msgstr "Die aktuelle Größe speichern"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Keyframes"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, fuzzy, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -62027,7 +62027,7 @@ msgstr "Genauigkeit:"
 msgid "Patch Radius:"
 msgstr "Senkrechter Radius"
 
-#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
+#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
 "Sorry, Krita was built without the support of GNU Scientific Library, so you "
@@ -62108,24 +62108,24 @@ msgstr "Um 90° gegen den Uhrzeigersinn drehen"
 msgid "Apply"
 msgstr "Anwenden"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:378
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:422
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Transformieren"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:864
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:908
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:915
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:891
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:935
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62133,7 +62133,7 @@ msgid ""
 "transformation."
 msgstr ""
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
@@ -62141,14 +62141,14 @@ msgstr ""
 "Auswahlen werden nicht bei der Bearbeitung von Transformationsmasken "
 "verwendet"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1073
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Leere Ebene kann nicht transformiert werden "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1060
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -62158,7 +62158,7 @@ msgstr ""
 "Unsichtbare Unterebenen werden auch transformiert. Sperren Sie die Ebenen "
 "wenn Sie sie nicht transformieren möchten"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Eine Ebene oder Auswahl transformieren"
@@ -62302,8 +62302,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Eine Ebene oder Auswahl transformieren"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:149
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformieren"

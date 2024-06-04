@@ -11,6 +11,7 @@ import copy
 parser = argparse.ArgumentParser(description='A script for building Krita Windows package on CI')
 parser.add_argument('--skip-debug-package', default=False, action='store_true')
 parser.add_argument('--build-installers', default=False, action='store_true')
+parser.add_argument('--release-package-naming', default=False, action='store_true')
 arguments = parser.parse_args()
 
 if 'KRITACI_SKIP_DEBUG_PACKAGE' in os.environ:
@@ -20,6 +21,10 @@ if 'KRITACI_SKIP_DEBUG_PACKAGE' in os.environ:
 if 'KRITACI_BUILD_INSTALLERS' in os.environ:
     arguments.build_installers = (os.environ['KRITACI_BUILD_INSTALLERS'].lower() in ['true', '1', 't', 'y', 'yes'])
     print ('## Overriding --build-installers from environment: {}'.format(arguments.build_installers))
+
+if 'KRITACI_RELEASE_PACKAGE_NAMING' in os.environ:
+    arguments.release_package_naming = (os.environ['KRITACI_RELEASE_PACKAGE_NAMING'].lower() in ['true', '1', 't', 'y', 'yes'])
+    print ('## Overriding --release-package-naming from environment: {}'.format(arguments.release_package_naming))
 
 signPackages = True
 
@@ -47,7 +52,11 @@ with open(os.path.join(buildPath, "libs/version/kritaversion.h"), "r") as fp:
             print ('krita version: {}'.format(kritaVersionString))
             break
 
-packageName = 'krita-{}-{}'.format(kritaVersionString, os.environ['CI_COMMIT_SHORT_SHA'])
+
+unstablePackageSuffix = '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA']) \
+    if not arguments.release_package_naming else ''
+
+packageName = 'krita-x64-{}{}'.format(kritaVersionString, unstablePackageSuffix)
 hookFile = os.path.join(srcPath, 'build-tools', 'ci-scripts', 'sign-windows-package-at-notary-service.cmd')
 
 commandToRun = ' '.join(['cmd.exe /c',
@@ -57,11 +66,11 @@ commandToRun = ' '.join(['cmd.exe /c',
                          '--src-dir',  srcPath,
                          '--deps-install-dir', depsPath,
                          '--krita-install-dir', depsPath,
-                         '--pre-zip-hook', '\"{}\"'.format(os.path.join(srcPath,
+                         '--pre-zip-hook \"{}\"'.format(os.path.join(srcPath,
                                                                         'build-tools',
                                                                         'ci-scripts',
-                                                                        'sign-windows-package-at-notary-service.cmd')
-                            if signPackages else '')
+                                                                        'sign-windows-package-at-notary-service.cmd'))
+                            if signPackages else ''
                         ])
 
 # Run the command

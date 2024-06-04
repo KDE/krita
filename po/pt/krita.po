@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-31 03:40+0000\n"
+"POT-Creation-Date: 2024-06-04 03:06+0000\n"
 "PO-Revision-Date: 2021-07-04 00:31+0100\n"
 "Last-Translator: José Nuno Pires <zepires@gmail.com>\n"
 "Language-Team:  pt <kde-i18n-pt@kde.org>\n"
@@ -39489,30 +39489,30 @@ msgstr ""
 "Ampliação da Linha Temporal. Mantenha carregado e arraste para a esquerda ou "
 "direita."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Inserir ou Remover as Imagens em Suspenso"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Indique o número de imagens"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Editar as Imagens:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Imagens-Chave"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-31 03:40+0000\n"
+"POT-Creation-Date: 2024-06-04 03:06+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -37680,30 +37680,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "缩放时间轴 - 按住此按钮并左右拖拽。"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "插入或移除定格帧"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "输入帧数"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
 #, kde-format
 msgid "Edit Frames:"
 msgstr "编辑帧："
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "关键帧"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

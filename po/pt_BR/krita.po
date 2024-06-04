@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-31 03:40+0000\n"
+"POT-Creation-Date: 2024-06-04 03:06+0000\n"
 "PO-Revision-Date: 2023-12-13 10:06-0300\n"
 "Last-Translator: Geraldo Simiao <geraldosimiao@fedoraproject.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -38419,30 +38419,30 @@ msgstr ""
 "Zoom da linha do tempo. Mantenha pressionado e arraste para a esquerda ou "
 "direita."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Inserir ou Remover Quadros Retidos"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Digite o número de quadros"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Editar quadros:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Quadros-chave"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"

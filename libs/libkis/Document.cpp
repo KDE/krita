@@ -1132,3 +1132,13 @@ void Document::removeAnnotation(const QString &type)
     KisImageSP image = d->document->image().toStrongRef();
     image->removeAnnotation(type);
 }
+
+void Document::setAutosave(bool active)
+{
+    d->document->setAutoSaveActive(active);
+}
+
+bool Document::autosave()
+{
+    return d->document->isAutoSaveActive();
+}

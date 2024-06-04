@@ -271,6 +271,20 @@ public:
     bool loadNativeFormat(const QString & file);
 
     /**
+     * allow to activate or deactivate autosave on document, independently of auto save delay
+     *
+     * the value is independant of auto save delay
+     */
+    void setAutoSaveActive(bool autoSaveIsActive);
+
+    /**
+     * indicate if autosave is active or inactive
+     *
+     * the value is independant of auto save delay
+     */
+    bool isAutoSaveActive();
+
+    /**
      * Set standard autosave interval that is set by a config file
      */
     void setNormalAutoSaveInterval();

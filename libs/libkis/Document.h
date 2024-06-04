@@ -112,7 +112,6 @@ public Q_SLOTS:
      */
     Node *nodeByName(const QString &name) const;
 
-
     /**
      * @brief nodeByUniqueID searches the node tree for a node with the given name and returns it.
      * @param uuid the unique id of the node
@@ -925,6 +924,35 @@ print(root.childNodes())
      * @param type the type defining the annotation
      */
     void removeAnnotation(const QString &type);
+
+
+    /**
+     * @brief Allow to activate/deactivate autosave for document
+     * When activated, it will use default Krita autosave settings
+     * It means that even when autosave is set to True, under condition Krita will not proceed to automatic save of document:
+     * - autosave is globally deactivated
+     * - document is read-only
+     *
+     * Being able to deactivate autosave on a document can make sense when a plugin use internal document
+     * (document is not exposed in a view, only created for intenal process purposes)
+     *
+     * @param active True to activate autosave
+     */
+    void setAutosave(bool active);
+
+    /**
+     * @brief Return autosave status for document
+     * Notes:
+     * - returned value is Autosave flag value
+     *   Even if autosave is set to True, under condition Krita will not proceed to automatic save of document:
+     *   - autosave is globally deactivated
+     *   - document is read-only
+     * - When autosave is set to False, Krita never execute automatic save for document
+     *
+     * @return True if autosave is active, otherwise False
+     */
+    bool autosave();
+
 private:
 
     friend class Krita;

@@ -303,6 +303,7 @@ public:
         , m_bAutoDetectedMime(false)
         , modified(false)
         , readwrite(true)
+        , autoSaveActive(true)
         , firstMod(QDateTime::currentDateTime())
         , lastMod(firstMod)
         , nserver(new KisNameServer(1))
@@ -369,6 +370,7 @@ public:
 
     bool modified = false;
     bool readwrite = false;
+    bool autoSaveActive = true;
 
     QDateTime firstMod;
     QDateTime lastMod;
@@ -527,6 +529,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
     m_path = rhs.m_path;
     m_file = rhs.m_file;
     readwrite = rhs.readwrite;
+    autoSaveActive = rhs.autoSaveActive;
     firstMod = rhs.firstMod;
     lastMod = rhs.lastMod;
     // XXX: the display properties will be shared between different snapshots
@@ -1691,9 +1694,19 @@ void KisDocument::setReadWrite(bool readwrite)
     }
 }
 
+void KisDocument::setAutoSaveActive(bool autoSaveActive)
+{
+    const bool changed = autoSaveActive != d->autoSaveActive;
+
+    if (changed) {
+        d->autoSaveActive = autoSaveActive;
+        setNormalAutoSaveInterval();
+    }
+}
+
 void KisDocument::setAutoSaveDelay(int delay)
 {
-    if (isReadWrite() && delay > 0) {
+    if (isReadWrite() && delay > 0 && d->autoSaveActive) {
         d->autoSaveTimer->start(delay * 1000);
     } else {
         d->autoSaveTimer->stop();
@@ -1716,6 +1729,11 @@ void KisDocument::setEmergencyAutoSaveInterval()
 void KisDocument::setInfiniteAutoSaveInterval()
 {
     setAutoSaveDelay(-1);
+}
+
+bool KisDocument::isAutoSaveActive()
+{
+    return d->autoSaveActive;
 }
 
 KoDocumentInfo *KisDocument::documentInfo() const

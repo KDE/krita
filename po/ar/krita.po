@@ -22,7 +22,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Lokalize 21.12.3\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17398,7 +17397,7 @@ msgstr "محرّكات الفُرش"
 #: libs/image/brushengine/kis_paintop_registry.cc:126
 #, kde-format
 msgid "default"
-msgstr "مبدئي"
+msgstr "المبدئيّ"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgRectangleConstraints)
 #: libs/image/brushengine/kis_standard_uniform_properties_factory.cpp:34
@@ -26925,7 +26924,7 @@ msgstr "المقاسات"
 #: libs/ui/forms/wdgimageproperties.ui:119
 #, kde-format
 msgid "pixels-per-inch"
-msgstr "بكسل لكلّ بوصة"
+msgstr "بكسل لكلّ بوصة<br><b>P</b>ixel <b>p</b>er <b>I</b>nch"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: libs/ui/forms/wdgimageproperties.ui:122
@@ -38245,7 +38244,7 @@ msgstr "احفظ المساعد"
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1722
 #, kde-format
 msgid "Opacity: "
-msgstr "التعتيم:"
+msgstr "الشّفافيّة:"
 
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1729
 #: plugins/assistants/Assistants/kis_assistant_tool.cc:1733
@@ -38448,7 +38447,7 @@ msgstr "سماوي"
 #: plugins/python/channels2layers/channels2layers.py:1364
 #, kde-format
 msgid "Magenta"
-msgstr "أرجواني"
+msgstr "البنفسجيّ"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #. i18n: ectx: property (text), widget (QLabel, label_21)
@@ -42898,19 +42897,19 @@ msgstr "تحديد المدى اللونيّ"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:27
 #, kde-format
 msgid "Reds"
-msgstr "الحمر"
+msgstr "درجات الأحمر"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:32
 #, kde-format
 msgid "Yellows"
-msgstr "الصفر"
+msgstr "درجات الأصفر"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:37
 #, kde-format
 msgid "Greens"
-msgstr "الخضر"
+msgstr "درجات الأخضر"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:42
@@ -42922,7 +42921,7 @@ msgstr "درجات السماوي"
 #: plugins/extensions/colorrange/wdg_colorrange.ui:47
 #, kde-format
 msgid "Blues"
-msgstr "أزرق"
+msgstr "درجات الأزرق"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelect)
 #: plugins/extensions/colorrange/wdg_colorrange.ui:52
@@ -53000,7 +52999,7 @@ msgstr ""
 #: plugins/paintops/libpaintop/KisPaintingModeOptionWidget.cpp:55
 #, kde-format
 msgid "Painting Mode"
-msgstr "وضع الرسم"
+msgstr "وضع الطّلاء"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, cbPerspective)
 #: plugins/paintops/defaultpaintops/duplicate/wdgduplicateop.ui:32

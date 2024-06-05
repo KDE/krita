@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-05-28 01:42+0000\n"
+"POT-Creation-Date: 2024-06-04 01:39+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -15898,13 +15898,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Arbeidsflate"
 
-#: krita/main.cc:562
+#: krita/main.cc:578
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kritisk feil"
 
-#: krita/main.cc:563
+#: krita/main.cc:579
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15913,14 +15913,14 @@ msgstr ""
 "Krita støttar ikkje Wayland-plattforma. Bruk XWayland for å køyra Krita på "
 "Wayland. Krita vert no lukka."
 
-#: krita/main.cc:682 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: åtvaring"
 
-#: krita/main.cc:683
+#: krita/main.cc:699
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15931,12 +15931,12 @@ msgstr ""
 "Dette er ikkje tilrådd. Ikkje meld frå om eventuelle feil du opplever.\n"
 "Du bør oppdatera til ein versjon som er støtta: Windows 7, 8, 8.1 eller 10."
 
-#: krita/main.cc:705 krita/main.cc:710
+#: krita/main.cc:721 krita/main.cc:726
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Teikneplate-støtte i Krita"
 
-#: krita/main.cc:706
+#: krita/main.cc:722
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15947,7 +15947,7 @@ msgstr ""
 "penneeining. Viss du har ei teikneplate, sjå til at drivaren til teikneplata "
 "er rett installert."
 
-#: krita/main.cc:711
+#: krita/main.cc:727
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -19632,7 +19632,7 @@ msgstr "Lokale ressursar"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
-#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:436
+#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita"
@@ -32691,7 +32691,7 @@ msgstr ""
 #: libs/ui/tool/kis_tool_freehand.cc:216
 #: libs/ui/tool/kis_tool_polyline_base.cpp:123
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:164
-#: libs/ui/tool/KisToolOutlineBase.cpp:167
+#: libs/ui/tool/KisToolOutlineBase.cpp:169
 #: plugins/tools/basictools/kis_tool_line.cc:211
 #: plugins/tools/basictools/kis_tool_path.cc:90
 #: plugins/tools/basictools/kis_tool_pencil.cc:63
@@ -32708,7 +32708,7 @@ msgstr "Penselstorleik: %1 pikslar"
 
 #: libs/ui/tool/kis_tool_polyline_base.cpp:117
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:158
-#: libs/ui/tool/KisToolOutlineBase.cpp:161
+#: libs/ui/tool/KisToolOutlineBase.cpp:163
 #: plugins/tools/tool_enclose_and_fill/subtools/KisToolBasicBrushBase.cpp:65
 #, kde-format
 msgid ""
@@ -38396,30 +38396,30 @@ msgctxt "@info:tooltip"
 msgid "Zoom Timeline. Hold down and drag left or right."
 msgstr "Forstørrings-tidslinje. Trykk og dra til venstre eller høgre."
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1498
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1500
 #, kde-format
 msgctxt "@title:window"
 msgid "Insert or Remove Hold Frames"
 msgstr "Set inn / fjern haldbilete"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1499
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1501
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Enter number of frames"
 msgstr "Skriv inn talet på bilete"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1606
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1608
 #, kde-format
 msgid "Edit Frames:"
 msgstr "Rediger animasjonsbilete:"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1633
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1635
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Keyframes"
 msgstr "Nøkkelbilete"
 
-#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1641
+#: plugins/dockers/animation/KisAnimTimelineFramesView.cpp:1643
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Hold Frames"
@@ -60461,7 +60461,7 @@ msgstr "Nøyaktigheit:"
 msgid "Patch Radius:"
 msgstr "Retusjeringsradius:"
 
-#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
+#: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:438
 #, kde-format
 msgid ""
 "Sorry, Krita was built without the support of GNU Scientific Library, so you "
@@ -60534,18 +60534,18 @@ msgstr "Drei 90° til venstre"
 msgid "Apply"
 msgstr "Bruk"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:378
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:422
 #, kde-format
 msgid "Transform Tool Actions"
 msgstr "Transformeringshandlingar"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:864
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:908
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool"
 msgstr "Lagtypen kan ikkje bruka transformeringsverktøyet"
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:871
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:915
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Layer type cannot use the transform tool. Use transform mask instead."
@@ -60553,7 +60553,7 @@ msgstr ""
 "Lagtypen kan ikkje bruka transformerings­verktøyet. Bruk heller ei "
 "transformerings­maske."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:891
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:935
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60563,20 +60563,20 @@ msgstr ""
 "Laget har barnelag med transformerings­masker. Slå av maskene før du gjer "
 "transformeringa."
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:905
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:949
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Selections are not used when editing transform masks "
 msgstr "Utval vert ikkje brukte ved redigering av transformeringsmasker "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:988
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1027
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1034
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1073
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid "Cannot transform empty layer "
 msgstr "Kan ikkje transformera tomt lag "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.cc:1014
+#: plugins/tools/tool_transform2/kis_tool_transform.cc:1060
 #, kde-format
 msgctxt "floating message in transformation tool"
 msgid ""
@@ -60586,7 +60586,7 @@ msgstr ""
 "Usynlege underlag vert òg transformerte. Lås laga dersom du ikkje vil at dei "
 "skal verta transformerte. "
 
-#: plugins/tools/tool_transform2/kis_tool_transform.h:358
+#: plugins/tools/tool_transform2/kis_tool_transform.h:360
 #, kde-format
 msgid "Transform a layer or a selection"
 msgstr "Transformer eit lag eller utval"
@@ -60733,8 +60733,8 @@ msgctxt "action"
 msgid "Transform a layer or a selection"
 msgstr "Transformer eit lag eller utval"
 
-#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:146
-#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:60
+#: plugins/tools/tool_transform2/strokes/inplace_transform_stroke_strategy.cpp:149
+#: plugins/tools/tool_transform2/strokes/transform_stroke_strategy.cpp:61
 msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Transformer"

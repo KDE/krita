@@ -210,6 +210,11 @@ void KisActionManager::updateGUI()
                 flags |= KisAction::IMAGE_HAS_ANIMATION;
             }
 
+            KisDocument *document = d->viewManager->document();
+            if (document && document->isReadWrite()) {
+                flags |= KisAction::IMAGE_IS_WRITABLE;
+            }
+
             if (d->viewManager->viewCount() > 1) {
                 flags |= KisAction::MULTIPLE_IMAGES;
             }

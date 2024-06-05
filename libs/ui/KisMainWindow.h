@@ -120,8 +120,6 @@ public:
      */
     bool saveDocument(KisDocument *document, bool saveas, bool isExporting, bool isAdvancedExporting = false);
 
-    void setReadWrite(bool readwrite);
-
     /// Return the list of dock widgets belonging to this main window.
     QList<QDockWidget*> dockWidgets() const;
 
@@ -304,6 +302,7 @@ private Q_SLOTS:
     void slotUpdateWidgetStyle();
 
     void slotUpdateSaveActionTitle(const QString &documentPath);
+    void slotUpdateReadWriteMode(bool readWrite);
 
     /**
      *  Saves the current document with a new name.

@@ -995,12 +995,6 @@ QWidget * KisMainWindow::canvasWindow() const
     return d->canvasWindow;
 }
 
-void KisMainWindow::setReadWrite(bool readwrite)
-{
-    d->saveAction->setEnabled(readwrite);
-    d->importFile->setEnabled(readwrite);
-}
-
 void KisMainWindow::clearRecentFiles()
 {
     KisRecentFilesManager::instance()->clear();
@@ -1021,6 +1015,12 @@ void KisMainWindow::slotUpdateSaveActionTitle(const QString &documentPath)
     else {
         d->saveAction->setToolTip(i18n("Save"));
     }
+}
+
+void KisMainWindow::slotUpdateReadWriteMode(bool readWrite)
+{
+    Q_UNUSED(readWrite);
+    d->actionManager()->updateGUI();
 }
 
 KisView *KisMainWindow::activeView() const
@@ -1409,7 +1409,6 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
                     if (ret) {
                         dbgUI << "Successful Save As!";
                         KisPart::instance()->queueAddRecentURLToAllMainWindowsOnFileSaved(QUrl::fromLocalFile(newFilePath));
-                        setReadWrite(true);
                     } else {
                         dbgUI << "Failed Save As!";
 
@@ -1643,6 +1642,10 @@ void KisMainWindow::setActiveView(KisView* view)
                                            SIGNAL(sigPathChanged(QString)),
                                            this, SLOT(slotUpdateSaveActionTitle(QString)));
     slotUpdateSaveActionTitle(view->document()->path());
+    d->activeViewConnections.addConnection(view->document(),
+                                           SIGNAL(sigReadWriteChanged(bool)),
+                                           this, SLOT(slotUpdateReadWriteMode(bool)));
+    slotUpdateReadWriteMode(view->document()->isReadWrite());
 
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
@@ -1653,6 +1656,7 @@ void KisMainWindow::unsetActiveView()
 {
     d->activeViewConnections.clear();
     slotUpdateSaveActionTitle(QString());
+    slotUpdateReadWriteMode(false);
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -2911,7 +2915,7 @@ void KisMainWindow::createActions()
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
 
     d->saveAction = actionManager->createStandardAction(KStandardAction::Save, this, SLOT(slotFileSave()));
-    d->saveAction->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    d->saveAction->setActivationFlags(KisAction::IMAGE_IS_WRITABLE);
 
     d->saveActionAs = actionManager->createStandardAction(KStandardAction::SaveAs, this, SLOT(slotFileSaveAs()));
     d->saveActionAs->setActivationFlags(KisAction::ACTIVE_IMAGE);
@@ -2943,6 +2947,7 @@ void KisMainWindow::createActions()
     connect(d->closeAll, SIGNAL(triggered()), this, SLOT(slotFileCloseAll()));
 
     d->importFile  = actionManager->createAction("file_import_file");
+    d->importFile->setActivationFlags(KisAction::IMAGE_IS_WRITABLE);
     connect(d->importFile, SIGNAL(triggered(bool)), this, SLOT(slotImportFile()));
 
     d->exportFile  = actionManager->createAction("file_export_file");

@@ -1030,6 +1030,9 @@ void KisDocument::Private::updateDocumentMetadataOnSaving(const QString &filePat
     q->setMimeType(mimeType);
     q->updateEditingTime(true);
 
+    QFileInfo fi(filePath);
+    q->setReadWrite(fi.isWritable());
+
     if (!modifiedWhileSaving) {
         /**
          * If undo stack is already clean/empty, it doesn't emit any
@@ -1679,11 +1682,6 @@ void KisDocument::setReadWrite(bool readwrite)
     const bool changed = readwrite != d->readwrite;
 
     d->readwrite = readwrite;
-    setNormalAutoSaveInterval();
-
-    Q_FOREACH (KisMainWindow *mainWindow, KisPart::instance()->mainWindows()) {
-        mainWindow->setReadWrite(readwrite);
-    }
 
     if (changed) {
         Q_EMIT sigReadWriteChanged(readwrite);

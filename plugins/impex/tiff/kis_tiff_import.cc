@@ -1569,27 +1569,27 @@ KisImportExportErrorCode KisTIFFImport::readImageFromPsd(KisDocument *m_doc, TIF
             }
         }
 
-
-        if (importUserFeedBackInterface()) {
-
-            bool usePsd = true;
-            importUserFeedBackInterface()->askUser([&] (QWidget *parent) {
-                usePsd = QMessageBox::question(parent, i18nc("@title:window", "TIFF image with PSD data"),
-                                      i18nc("the choice for the user on loading a TIFF file",
-                                            "The TIFF image contains valid PSD data embedded. "
-                                            "Would you like to use PSD data instead of normal TIFF data?"))
-                    == QMessageBox::Yes;
-
-                return true;
-            });
-
-            if (!usePsd) {
-                return ImportExportCodes::Cancelled;
-            }
-        }
-
         if (photoshopLayerRecord.valid()
             && photoshopImageResourceRecord.valid()) {
+
+            if (importUserFeedBackInterface()) {
+
+                bool usePsd = true;
+                importUserFeedBackInterface()->askUser([&] (QWidget *parent) {
+                    usePsd = QMessageBox::question(parent, i18nc("@title:window", "TIFF image with PSD data"),
+                                            i18nc("the choice for the user on loading a TIFF file",
+                                                "The TIFF image contains valid PSD data embedded. "
+                                                "Would you like to use PSD data instead of normal TIFF data?"))
+                        == QMessageBox::Yes;
+
+                    return true;
+                });
+
+                if (!usePsd) {
+                    return ImportExportCodes::Cancelled;
+                }
+            }
+
             KisImportExportErrorCode result =
                 readImageFromPsdRecords(m_doc,
                                         photoshopLayerRecord,

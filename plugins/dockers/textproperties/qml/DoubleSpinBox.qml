@@ -10,6 +10,7 @@ import QtQuick.Controls 2.15
 // Simple double spinbox based on Qt example implementation, should proly be switched to spinbox slider at some point.
 SpinBox {
     editable: true;
+    wheelEnabled: true;
 
     property int decimals: 2;
     property int multiplier: Math.pow(10, decimals);

@@ -27,9 +27,12 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
+
+
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
+    void connectAutoEnabler(QObject *watched);
 
 private:
     QPointer<KisCanvas2> m_canvas;

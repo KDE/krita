@@ -32,6 +32,10 @@ Column {
     property string toolTip;
     property string searchTerms;
 
+    function autoEnable() {
+        enabled = true;
+    }
+
     MenuSeparator {
         width: parent.width;
     }

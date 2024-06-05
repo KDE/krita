@@ -19,11 +19,11 @@ Item {
         id: revert;
         icon.width: 22;
         icon.height: 22;
-        icon.color: revertState === KoSvgTextPropertiesModel.PropertyTriState? sysPalette.highlight: sysPalette.text;
+        icon.color: /*revertState === KoSvgTextPropertiesModel.PropertyTriState? sysPalette.highlight:*/ sysPalette.text;
         enabled: revertState !== KoSvgTextPropertiesModel.PropertyUnset && revertState !== KoSvgTextPropertiesModel.PropertyInherited;
-        opacity: enabled? 1.0: 0.5;
+        opacity: enabled? 1.0: 0.3;
         display: AbstractButton.IconOnly
-        icon.source: parent.inheritable? "qrc:///light_edit-undo.svg": "qrc:///22_light_trash-empty.svg";
+        icon.source: parent.inheritable? revertState === KoSvgTextPropertiesModel.PropertyTriState? "qrc:///light_edit-undo-tristate.svg": "qrc:///light_edit-undo.svg": "qrc:///22_light_trash-empty.svg";
         onClicked: parent.clicked();
     }
 }

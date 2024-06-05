@@ -33,5 +33,6 @@
         <file alias="TextPropertyBaseList.qml">qml/TextPropertyBaseList.qml</file>
         <file alias="UnitComboBox.qml">qml/UnitComboBox.qml</file>
         <file alias="DoubleSpinBox.qml">qml/DoubleSpinBox.qml</file>
+        <file alias="light_edit-undo-tristate.svg">icons/light_edit-undo-tristate.svg</file>
     </qresource>
 </RCC>

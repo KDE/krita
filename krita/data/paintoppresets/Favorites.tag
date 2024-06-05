@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=★ My Favorites
+Name[ar]=★ مفضلتي
 Name[bg]=★ Любими
 Name[ca]=★ Preferits
 Name[ca@valencia]=★ Preferits

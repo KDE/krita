@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Tag
 Name=Digital
+Name[ar]=رقمية
 Name[bg]=Дигитален
 Name[bs]=Digitalni
 Name[ca]=Digital

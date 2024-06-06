@@ -49,7 +49,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-04 01:39+0000\n"
+"POT-Creation-Date: 2024-06-06 01:47+0000\n"
 "PO-Revision-Date: 2009-04-22 00:18+0530\n"
 "Last-Translator: Sangeeta Kumari <sangeeta09@gmail.com>\n"
 "Language-Team: Maithili <maithili.sf.net>\n"
@@ -17367,7 +17367,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "चित्र काटू"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2591
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2589
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17727,7 +17727,7 @@ msgstr "प्रगतिशील"
 
 #: libs/image/kis_psd_layer_style.cpp:104
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1390
-#: libs/ui/KisMainWindow.cpp:1756 libs/ui/KisMainWindow.cpp:1769
+#: libs/ui/KisMainWindow.cpp:1760 libs/ui/KisMainWindow.cpp:1773
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18478,8 +18478,8 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "चित्र मापू"
 
-#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2127
-#: libs/ui/KisMainWindow.cpp:2210
+#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2131
+#: libs/ui/KisMainWindow.cpp:2214
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "चित्र काटू"
@@ -19823,14 +19823,14 @@ msgstr "श्रोत"
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
+#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
+#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
-#: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1987
-#: libs/ui/KisMainWindow.cpp:1996 libs/ui/KisMainWindow.cpp:2135
-#: libs/ui/KisMainWindow.cpp:2196 libs/ui/KisMainWindow.cpp:2217
-#: libs/ui/KisMainWindow.cpp:2832 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
+#: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
+#: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2221
+#: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -20347,7 +20347,7 @@ msgid "Delete resource"
 msgstr "मेटाबू"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2629
+#: libs/ui/KisMainWindow.cpp:2633
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, fuzzy, kde-format
 #| msgid "Filter"
@@ -20798,7 +20798,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "चयन घोकचाबू"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2237
+#: libs/ui/KisMainWindow.cpp:2241
 #, fuzzy, kde-format
 msgid "Render Animation"
 msgstr "दिशा"
@@ -22843,7 +22843,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "झुकाव"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2640
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:278 libs/ui/KisMainWindow.cpp:2644
 #, fuzzy, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -26694,7 +26694,7 @@ msgstr "मूलभूत"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1023
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1017
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30389,33 +30389,33 @@ msgstr ""
 msgid "Finished saving %1"
 msgstr "आँशिक"
 
-#: libs/ui/KisDocument.cpp:1425
+#: libs/ui/KisDocument.cpp:1428
 #, fuzzy, kde-format
 msgid "Autosaving... %1"
 msgstr "अंतरण"
 
-#: libs/ui/KisDocument.cpp:1433
+#: libs/ui/KisDocument.cpp:1436
 #, fuzzy, kde-format
 msgid "Autosaving..."
 msgstr "अंतरण"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1442
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1582
+#: libs/ui/KisDocument.cpp:1585
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1596
+#: libs/ui/KisDocument.cpp:1599
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "अंतरण"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1841
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -30427,38 +30427,38 @@ msgstr ""
 "गलत URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1907
 #, fuzzy, kde-format
 msgid "File %1 does not exist."
 msgstr "पुस्तक चिन्ह जोड़ू"
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1936
 #, fuzzy, kde-format
 msgid "Opening document"
 msgstr "दस्तावेज सहेजू"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
 #, fuzzy, kde-format
 msgid "Could not open %1."
 msgstr "चयन घोकचाबू"
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2110
 #, fuzzy, kde-format
 msgid "Not Saved"
 msgstr "परिभाषित नहि"
 
-#: libs/ui/KisDocument.cpp:2598
+#: libs/ui/KisDocument.cpp:2596
 #, fuzzy, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "पृष्ठभूमि रँग"
 
-#: libs/ui/KisDocument.cpp:2650
+#: libs/ui/KisDocument.cpp:2648
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30866,7 +30866,7 @@ msgstr "नकल"
 msgid "Hide %1 Toolbar"
 msgstr "अओजार"
 
-#: libs/ui/KisMainWindow.cpp:1020
+#: libs/ui/KisMainWindow.cpp:1014
 #, fuzzy, kde-format
 msgid "Save as %1"
 msgstr "कारक मापू"
@@ -30900,36 +30900,36 @@ msgstr "निर्यात"
 msgid "Saving As"
 msgstr "दस्तावेज सहेजू"
 
-#: libs/ui/KisMainWindow.cpp:1735
+#: libs/ui/KisMainWindow.cpp:1739
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, fuzzy, kde-format
 msgid "Create new document"
 msgstr "हालक दस्ताबेज"
 
-#: libs/ui/KisMainWindow.cpp:1759
+#: libs/ui/KisMainWindow.cpp:1763
 #, fuzzy, kde-format
 #| msgid "Document"
 msgid "Custom Document"
 msgstr "दस्तावेज"
 
-#: libs/ui/KisMainWindow.cpp:1771
+#: libs/ui/KisMainWindow.cpp:1775
 #, fuzzy, kde-format
 msgid "Create from Clipboard"
 msgstr "बनाबू"
 
-#: libs/ui/KisMainWindow.cpp:1956
+#: libs/ui/KisMainWindow.cpp:1960
 #, fuzzy, kde-format
 msgid "Layers/Masks"
 msgstr "परत जोड़ू"
 
-#: libs/ui/KisMainWindow.cpp:1982
+#: libs/ui/KisMainWindow.cpp:1986
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:194
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:350
 #, fuzzy, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "चयन घोकचाबू"
 
-#: libs/ui/KisMainWindow.cpp:1986
+#: libs/ui/KisMainWindow.cpp:1990
 #, kde-format
 msgid ""
 "\n"
@@ -30937,7 +30937,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:1996
+#: libs/ui/KisMainWindow.cpp:2000
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:362
 #, kde-format
@@ -30946,66 +30946,66 @@ msgid ""
 "Only your local resources are available."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2135 libs/ui/KisMainWindow.cpp:2217
+#: libs/ui/KisMainWindow.cpp:2139 libs/ui/KisMainWindow.cpp:2221
 #, fuzzy, kde-format
 msgid ""
 "Could not finish import animation:\n"
 "%1"
 msgstr "संतृप्ति:"
 
-#: libs/ui/KisMainWindow.cpp:2196
+#: libs/ui/KisMainWindow.cpp:2200
 #, fuzzy, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "चयन घोकचाबू"
 
-#: libs/ui/KisMainWindow.cpp:2620
+#: libs/ui/KisMainWindow.cpp:2624
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "रँग स्पेस"
 
-#: libs/ui/KisMainWindow.cpp:2635
+#: libs/ui/KisMainWindow.cpp:2639
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "रँग स्पेस"
 
-#: libs/ui/KisMainWindow.cpp:2639
+#: libs/ui/KisMainWindow.cpp:2643
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "रँग स्पेस"
 
-#: libs/ui/KisMainWindow.cpp:2683
+#: libs/ui/KisMainWindow.cpp:2687
 #, kde-format
 msgid "&%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2686
+#: libs/ui/KisMainWindow.cpp:2690
 #, kde-format
 msgid "%1 %2"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2855
+#: libs/ui/KisMainWindow.cpp:2859
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:2871
+#: libs/ui/KisMainWindow.cpp:2875
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "अंतर्वेशन:"
 
-#: libs/ui/KisMainWindow.cpp:2980
+#: libs/ui/KisMainWindow.cpp:2985
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr ""
 
-#: libs/ui/KisMainWindow.cpp:3039
+#: libs/ui/KisMainWindow.cpp:3044
 #, kde-format
 msgid "Expanding Spacer"
 msgstr ""
@@ -50199,13 +50199,13 @@ msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
 msgstr ""
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#: plugins/impex/tiff/kis_tiff_import.cc:1581
 #, kde-format
 msgctxt "the choice for the user on loading a TIFF file"
 msgid ""

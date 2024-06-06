@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-04 03:06+0000\n"
+"POT-Creation-Date: 2024-06-06 03:11+0000\n"
 "PO-Revision-Date: 2024-05-01 07:42+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -17095,7 +17095,7 @@ msgstr "Importerad bild"
 msgid "Selection Mask"
 msgstr "Markeringsmask"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2585
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17404,7 +17404,7 @@ msgstr "Behandlar"
 
 #: libs/image/kis_psd_layer_style.cpp:104
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
-#: libs/ui/KisMainWindow.cpp:1741 libs/ui/KisMainWindow.cpp:1754
+#: libs/ui/KisMainWindow.cpp:1745 libs/ui/KisMainWindow.cpp:1758
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18149,8 +18149,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV-dokument"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2110
-#: libs/ui/KisMainWindow.cpp:2193
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Import frames"
 msgstr "Importera bildrutor"
@@ -19459,14 +19459,14 @@ msgstr "Lokala resurser"
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
 #: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
+#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
+#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
-#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1972
-#: libs/ui/KisMainWindow.cpp:1981 libs/ui/KisMainWindow.cpp:2118
-#: libs/ui/KisMainWindow.cpp:2179 libs/ui/KisMainWindow.cpp:2200
-#: libs/ui/KisMainWindow.cpp:2811 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
+#: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
+#: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19968,7 +19968,7 @@ msgid "Delete resource"
 msgstr "Ta bort resurs"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2608
+#: libs/ui/KisMainWindow.cpp:2612
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20425,7 +20425,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "Misslyckades återge animeringsbildrutor. Utdatafiler är ofullständiga."
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2220
+#: libs/ui/KisMainWindow.cpp:2224
 #, kde-format
 msgid "Render Animation"
 msgstr "Återge animering"
@@ -22627,7 +22627,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "Ange nytt stilnamn"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -25013,7 +25013,7 @@ msgstr "Profil:"
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
-#: plugins/dockers/recorder/recorder_profile_settings.ui:177
+#: plugins/dockers/recorder/recorder_profile_settings.ui:179
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -26578,7 +26578,7 @@ msgstr "Nuvarande penselförinställningar"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1022
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -30254,33 +30254,33 @@ msgstr "Vissa problem uppstod när det sparades."
 msgid "Finished saving %1"
 msgstr "Spara %1 färdigt"
 
-#: libs/ui/KisDocument.cpp:1425
+#: libs/ui/KisDocument.cpp:1428
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Sparar automatiskt... %1"
 
-#: libs/ui/KisDocument.cpp:1433
+#: libs/ui/KisDocument.cpp:1436
 #, kde-format
 msgid "Autosaving..."
 msgstr "Sparar automatiskt..."
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1442
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Spara automatiskt fördröjt: dokumentet är upptaget ..."
 
-#: libs/ui/KisDocument.cpp:1582
+#: libs/ui/KisDocument.cpp:1585
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fel vid spara automatiskt av %1: %2"
 
-#: libs/ui/KisDocument.cpp:1596
+#: libs/ui/KisDocument.cpp:1599
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Spara %1 automatiskt färdigt"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1841
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30289,38 +30289,38 @@ msgstr ""
 "Felaktig sökväg\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1907
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Filen %1 finns inte."
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1936
 #, kde-format
 msgid "Opening document"
 msgstr "Öppnar dokument"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
 #, kde-format
 msgid "Could not open %1."
 msgstr "Kunde inte öppna %1."
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Problem uppstod när %1 skulle öppnas."
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2110
 #, kde-format
 msgid "Not Saved"
 msgstr "Inte sparad"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2592
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Bakgrundsfyllnad"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2644
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30752,7 +30752,7 @@ msgstr "Visa verktygsrad %1"
 msgid "Hide %1 Toolbar"
 msgstr "Dölj verktygsrad %1"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1013
 #, kde-format
 msgid "Save as %1"
 msgstr "Spara som %1"
@@ -30790,35 +30790,35 @@ msgstr "Exporterar"
 msgid "Saving As"
 msgstr "Sparar som"
 
-#: libs/ui/KisMainWindow.cpp:1720
+#: libs/ui/KisMainWindow.cpp:1724
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "Skapa nytt dokument"
 
-#: libs/ui/KisMainWindow.cpp:1744
+#: libs/ui/KisMainWindow.cpp:1748
 #, kde-format
 msgid "Custom Document"
 msgstr "Eget dokument"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1760
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "Skapa från klippbord"
 
-#: libs/ui/KisMainWindow.cpp:1941
+#: libs/ui/KisMainWindow.cpp:1945
 #, kde-format
 msgid "Layers/Masks"
 msgstr "Lager och masker"
 
-#: libs/ui/KisMainWindow.cpp:1967
+#: libs/ui/KisMainWindow.cpp:1971
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "Du har inga resurspackar aktiverade."
 
-#: libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1975
 #, kde-format
 msgid ""
 "\n"
@@ -30829,7 +30829,7 @@ msgstr ""
 "Det finns inga tillgängliga penselförinställningar. Aktivera en packe som "
 "har penselförinställningar innan du fortsätter.\n"
 
-#: libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1985
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30840,7 +30840,7 @@ msgstr ""
 "\n"
 "Bara dina lokala resurser är tillgängliga."
 
-#: libs/ui/KisMainWindow.cpp:2118 libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30849,40 +30849,40 @@ msgstr ""
 "Kunde inte slutföra import av animering:\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2179
+#: libs/ui/KisMainWindow.cpp:2183
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "Misslyckades skapa nytt dokument. Import av animering avbruten."
 
-#: libs/ui/KisMainWindow.cpp:2599
+#: libs/ui/KisMainWindow.cpp:2603
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "&Importera arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2618
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "&Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2622
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "Ny arbetsyta..."
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2666
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2665
+#: libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2834
+#: libs/ui/KisMainWindow.cpp:2838
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
@@ -30891,19 +30891,19 @@ msgstr ""
 "Kritas insticksprogram för LittleCMS-färghantering är inte installerat. "
 "Krita avslutas nu."
 
-#: libs/ui/KisMainWindow.cpp:2850
+#: libs/ui/KisMainWindow.cpp:2854
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "Installationsfel"
 
-#: libs/ui/KisMainWindow.cpp:2959
+#: libs/ui/KisMainWindow.cpp:2964
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "&Teman"
 
-#: libs/ui/KisMainWindow.cpp:3018
+#: libs/ui/KisMainWindow.cpp:3023
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "Expanderande mellanrum"
@@ -39455,7 +39455,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "Exporterar tidsförlopp..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:104
+#: plugins/dockers/recorder/recorder_export.cpp:108
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -39463,7 +39463,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[Hittades inte]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:105
+#: plugins/dockers/recorder/recorder_export.cpp:109
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -39472,86 +39472,86 @@ msgstr ""
 "Plats för FFmpeg körbart program kunde inte detekteras. Installera det eller "
 "ange dess plats manuellt."
 
-#: plugins/dockers/recorder/recorder_export.cpp:169
+#: plugins/dockers/recorder/recorder_export.cpp:173
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "Avbryt kodning av tidsförloppsvideo?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:241
+#: plugins/dockers/recorder/recorder_export.cpp:244
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "Startar FFmpeg ..."
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:343
+#: plugins/dockers/recorder/recorder_export.cpp:352
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "Exportera"
 
-#: plugins/dockers/recorder/recorder_export.cpp:370
+#: plugins/dockers/recorder/recorder_export.cpp:379
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "Inga bildrutor att exportera"
 
-#: plugins/dockers/recorder/recorder_export.cpp:374
+#: plugins/dockers/recorder/recorder_export.cpp:383
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "Inspelningsinformation"
 
-#: plugins/dockers/recorder/recorder_export.cpp:377
+#: plugins/dockers/recorder/recorder_export.cpp:386
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "bildpunkter"
 
-#: plugins/dockers/recorder/recorder_export.cpp:379
+#: plugins/dockers/recorder/recorder_export.cpp:388
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "bildrutor (b)"
 
-#: plugins/dockers/recorder/recorder_export.cpp:434
+#: plugins/dockers/recorder/recorder_export.cpp:443
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "Inga bildrutor att bläddra bland."
 
-#: plugins/dockers/recorder/recorder_export.cpp:522
+#: plugins/dockers/recorder/recorder_export.cpp:531
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "Välj FFmpeg körbart program"
 
-#: plugins/dockers/recorder/recorder_export.cpp:568
+#: plugins/dockers/recorder/recorder_export.cpp:577
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "Exportera tidsförloppsvideo som"
 
-#: plugins/dockers/recorder/recorder_export.cpp:584
+#: plugins/dockers/recorder/recorder_export.cpp:593
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "Videofilen finns redan. Vill du skriva över den?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:589
+#: plugins/dockers/recorder/recorder_export.cpp:598
 #, kde-format
 msgid "No frames to export."
 msgstr "Inga bildrutor att exportera."
 
-#: plugins/dockers/recorder/recorder_export.cpp:616
+#: plugins/dockers/recorder/recorder_export.cpp:625
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "Tidsförloppsvideon kodas..."
 
-#: plugins/dockers/recorder/recorder_export.cpp:631
+#: plugins/dockers/recorder/recorder_export.cpp:640
 #, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "Export misslyckades: FFmpeg-meddelande:"
 
-#: plugins/dockers/recorder/recorder_export.cpp:652
+#: plugins/dockers/recorder/recorder_export.cpp:661
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -39566,7 +39566,7 @@ msgstr ""
 "\n"
 "Vill du fortsätta?"
 
-#: plugins/dockers/recorder/recorder_export.cpp:659
+#: plugins/dockers/recorder/recorder_export.cpp:668
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -39779,19 +39779,19 @@ msgid "Insert variable:"
 msgstr "Infoga variabel:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:167
+#: plugins/dockers/recorder/recorder_profile_settings.ui:169
 #, kde-format
 msgid "FFMpeg arguments:"
 msgstr "FFmpeg-argument:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:194
+#: plugins/dockers/recorder/recorder_profile_settings.ui:196
 #, kde-format
 msgid "Profile name:"
 msgstr "Profilnamn:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:214
+#: plugins/dockers/recorder/recorder_profile_settings.ui:216
 #, kde-format
 msgid "File extension:"
 msgstr "Filändelse:"
@@ -50083,13 +50083,13 @@ msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr "Delsamplade YCbCr TIFF-filer komprimerade med JPEG kan inte läsas in."
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
 msgstr "TIFF-bild med PSD-data"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#: plugins/impex/tiff/kis_tiff_import.cc:1581
 #, kde-format
 msgctxt "the choice for the user on loading a TIFF file"
 msgid ""

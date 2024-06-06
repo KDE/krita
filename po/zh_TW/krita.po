@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-04 03:06+0000\n"
+"POT-Creation-Date: 2024-06-06 03:11+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -17017,7 +17017,7 @@ msgstr "匯入的影像"
 msgid "Selection Mask"
 msgstr "選取區域遮罩"
 
-#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2587
+#: libs/image/kis_image.cc:748 libs/ui/KisDocument.cpp:2585
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -17326,7 +17326,7 @@ msgstr "正在處理"
 
 #: libs/image/kis_psd_layer_style.cpp:104
 #: libs/ui/KisApplicationArguments.cpp:378 libs/ui/KisMainWindow.cpp:1369
-#: libs/ui/KisMainWindow.cpp:1741 libs/ui/KisMainWindow.cpp:1754
+#: libs/ui/KisMainWindow.cpp:1745 libs/ui/KisMainWindow.cpp:1758
 #: plugins/impex/libkra/kis_kra_saver.cpp:90
 #, kde-format
 msgid "Unnamed"
@@ -18053,8 +18053,8 @@ msgctxt "description of a file type"
 msgid "CSV Document"
 msgstr "CSV 檔案"
 
-#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2110
-#: libs/ui/KisMainWindow.cpp:2193
+#: libs/libkis/Document.cpp:964 libs/ui/KisMainWindow.cpp:2114
+#: libs/ui/KisMainWindow.cpp:2197
 #, kde-format
 msgid "Import frames"
 msgstr "匯入影格"
@@ -19359,14 +19359,14 @@ msgstr "本機資源"
 #: libs/ui/KisApplication.cpp:1063 libs/ui/KisApplication.cpp:1077
 #: libs/ui/KisApplication.cpp:1105 libs/ui/KisDocument.cpp:969
 #: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1909 libs/ui/KisDocument.cpp:1953
-#: libs/ui/KisDocument.cpp:1959 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1976 libs/ui/KisMainWindow.cpp:971
+#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
+#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
+#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:971
 #: libs/ui/KisMainWindow.cpp:1041 libs/ui/KisMainWindow.cpp:1170
-#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1972
-#: libs/ui/KisMainWindow.cpp:1981 libs/ui/KisMainWindow.cpp:2118
-#: libs/ui/KisMainWindow.cpp:2179 libs/ui/KisMainWindow.cpp:2200
-#: libs/ui/KisMainWindow.cpp:2811 libs/ui/KisPart.cpp:578
+#: libs/ui/KisMainWindow.cpp:1267 libs/ui/KisMainWindow.cpp:1976
+#: libs/ui/KisMainWindow.cpp:1985 libs/ui/KisMainWindow.cpp:2122
+#: libs/ui/KisMainWindow.cpp:2183 libs/ui/KisMainWindow.cpp:2204
+#: libs/ui/KisMainWindow.cpp:2815 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
@@ -19867,7 +19867,7 @@ msgid "Delete resource"
 msgstr "刪除資源"
 
 #: libs/resourcewidgets/KisResourceItemChooser.cpp:340
-#: libs/ui/KisMainWindow.cpp:2608
+#: libs/ui/KisMainWindow.cpp:2612
 #: plugins/paintops/libpaintop/kis_predefined_brush_chooser.cpp:404
 #, kde-format
 msgctxt "@title:window"
@@ -20320,7 +20320,7 @@ msgid "Failed to render animation frames! Output files are incomplete."
 msgstr "動畫影格繪製失敗！輸出檔案不完整。"
 
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:54
-#: libs/ui/KisMainWindow.cpp:2220
+#: libs/ui/KisMainWindow.cpp:2224
 #, kde-format
 msgid "Render Animation"
 msgstr "繪製動畫"
@@ -22484,7 +22484,7 @@ msgctxt "@title:window"
 msgid "Enter new style name"
 msgstr "輸入新樣式名稱"
 
-#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2619
+#: libs/ui/dialogs/kis_dlg_layer_style.cpp:275 libs/ui/KisMainWindow.cpp:2623
 #, kde-format
 msgctxt "@label:textbox"
 msgid "Name:"
@@ -24823,7 +24823,7 @@ msgstr "色彩特性檔案："
 #: libs/ui/forms/wdgfilterdialog.ui:67
 #: libs/widgetutils/KisPreviewFileDialog.cpp:50
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:219
-#: plugins/dockers/recorder/recorder_profile_settings.ui:177
+#: plugins/dockers/recorder/recorder_profile_settings.ui:179
 #: plugins/impex/raw/wdgrawimport.ui:49
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:50
 #, kde-format
@@ -26365,7 +26365,7 @@ msgstr "目前筆刷預設"
 
 #. i18n: ectx: property (text), widget (QPushButton, updateBrushNameButton)
 #. i18n: ectx: property (toolTip), widget (QToolButton, bnSaveMask)
-#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1022
+#: libs/ui/forms/wdgpaintopsettings.ui:184 libs/ui/KisMainWindow.cpp:1016
 #: libs/ui/widgets/kis_workspace_chooser.cpp:135
 #: libs/ui/widgets/kis_workspace_chooser.cpp:210
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:232
@@ -29998,33 +29998,33 @@ msgstr "儲存檔案時遇到問題："
 msgid "Finished saving %1"
 msgstr "完成儲存 %1"
 
-#: libs/ui/KisDocument.cpp:1425
+#: libs/ui/KisDocument.cpp:1428
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "正在自動儲存… %1"
 
-#: libs/ui/KisDocument.cpp:1433
+#: libs/ui/KisDocument.cpp:1436
 #, kde-format
 msgid "Autosaving..."
 msgstr "正在自動儲存…"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1442
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "自動儲存已推遲：檔案正在被佔用…"
 
-#: libs/ui/KisDocument.cpp:1582
+#: libs/ui/KisDocument.cpp:1585
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "自動儲存 %1 時出錯：%2"
 
-#: libs/ui/KisDocument.cpp:1596
+#: libs/ui/KisDocument.cpp:1599
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "完成自動儲存 %1"
 
-#: libs/ui/KisDocument.cpp:1843
+#: libs/ui/KisDocument.cpp:1841
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30033,38 +30033,38 @@ msgstr ""
 "路徑格式錯誤\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1909
+#: libs/ui/KisDocument.cpp:1907
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "檔案 %1 不存在。"
 
-#: libs/ui/KisDocument.cpp:1938
+#: libs/ui/KisDocument.cpp:1936
 #, kde-format
 msgid "Opening document"
 msgstr "正在開啟檔案"
 
-#: libs/ui/KisDocument.cpp:1954 libs/ui/KisDocument.cpp:1960
+#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
 #, kde-format
 msgid "Could not open %1."
 msgstr "無法開啟 %1。"
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1977
+#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "開啟 %1 時遇到了一些問題。"
 
-#: libs/ui/KisDocument.cpp:2112
+#: libs/ui/KisDocument.cpp:2110
 #, kde-format
 msgid "Not Saved"
 msgstr "未儲存"
 
-#: libs/ui/KisDocument.cpp:2594
+#: libs/ui/KisDocument.cpp:2592
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "背景色填充"
 
-#: libs/ui/KisDocument.cpp:2646
+#: libs/ui/KisDocument.cpp:2644
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -30482,7 +30482,7 @@ msgstr "顯示%1工具列"
 msgid "Hide %1 Toolbar"
 msgstr "隱藏%1工具列"
 
-#: libs/ui/KisMainWindow.cpp:1019
+#: libs/ui/KisMainWindow.cpp:1013
 #, kde-format
 msgid "Save as %1"
 msgstr "另存為 %1"
@@ -30519,35 +30519,35 @@ msgstr "正在匯出"
 msgid "Saving As"
 msgstr "正在儲存為"
 
-#: libs/ui/KisMainWindow.cpp:1720
+#: libs/ui/KisMainWindow.cpp:1724
 #: libs/widgetutils/config/kstandardaction_p.h:29
 #, kde-format
 msgid "Create new document"
 msgstr "建立檔案"
 
-#: libs/ui/KisMainWindow.cpp:1744
+#: libs/ui/KisMainWindow.cpp:1748
 #, kde-format
 msgid "Custom Document"
 msgstr "自訂檔案"
 
-#: libs/ui/KisMainWindow.cpp:1756
+#: libs/ui/KisMainWindow.cpp:1760
 #, kde-format
 msgid "Create from Clipboard"
 msgstr "從剪貼簿建立"
 
-#: libs/ui/KisMainWindow.cpp:1941
+#: libs/ui/KisMainWindow.cpp:1945
 #, kde-format
 msgid "Layers/Masks"
 msgstr "圖層/遮罩"
 
-#: libs/ui/KisMainWindow.cpp:1967
+#: libs/ui/KisMainWindow.cpp:1971
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:189
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:292
 #, kde-format
 msgid "You don't have any resource bundles enabled."
 msgstr "您沒有啟用任何資源包"
 
-#: libs/ui/KisMainWindow.cpp:1971
+#: libs/ui/KisMainWindow.cpp:1975
 #, kde-format
 msgid ""
 "\n"
@@ -30557,7 +30557,7 @@ msgstr ""
 "\n"
 "無可用的筆刷預設。在繼續之前請先啟用一個含有筆刷預設的資源包。\n"
 
-#: libs/ui/KisMainWindow.cpp:1981
+#: libs/ui/KisMainWindow.cpp:1985
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:199
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:304
 #, kde-format
@@ -30568,7 +30568,7 @@ msgstr ""
 "\n"
 "只有您在本機的資源可用。"
 
-#: libs/ui/KisMainWindow.cpp:2118 libs/ui/KisMainWindow.cpp:2200
+#: libs/ui/KisMainWindow.cpp:2122 libs/ui/KisMainWindow.cpp:2204
 #, kde-format
 msgid ""
 "Could not finish import animation:\n"
@@ -30577,59 +30577,59 @@ msgstr ""
 "無法完成匯入動畫：\n"
 "%1"
 
-#: libs/ui/KisMainWindow.cpp:2179
+#: libs/ui/KisMainWindow.cpp:2183
 #, kde-format
 msgid "Failed to create new document. Animation import aborted."
 msgstr "無法建立新文件。已終止匯入動畫。"
 
-#: libs/ui/KisMainWindow.cpp:2599
+#: libs/ui/KisMainWindow.cpp:2603
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Import Workspace..."
 msgstr "匯入作業空間(&I)…"
 
-#: libs/ui/KisMainWindow.cpp:2614
+#: libs/ui/KisMainWindow.cpp:2618
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&New Workspace..."
 msgstr "新作業空間(&N)…"
 
-#: libs/ui/KisMainWindow.cpp:2618
+#: libs/ui/KisMainWindow.cpp:2622
 #, kde-format
 msgctxt "@title:window"
 msgid "New Workspace..."
 msgstr "新作業空間…"
 
-#: libs/ui/KisMainWindow.cpp:2662
+#: libs/ui/KisMainWindow.cpp:2666
 #, kde-format
 msgid "&%1 %2"
 msgstr "&%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2665
+#: libs/ui/KisMainWindow.cpp:2669
 #, kde-format
 msgid "%1 %2"
 msgstr "%1 %2"
 
-#: libs/ui/KisMainWindow.cpp:2834
+#: libs/ui/KisMainWindow.cpp:2838
 #, kde-format
 msgid ""
 "The Krita LittleCMS color management plugin is not installed. Krita will "
 "quit now."
 msgstr "未安裝 Krita 的 LittleCMS 色彩管理外掛程式。Krita 將立即退出。"
 
-#: libs/ui/KisMainWindow.cpp:2850
+#: libs/ui/KisMainWindow.cpp:2854
 #, kde-format
 msgctxt "@title:window"
 msgid "Installation error"
 msgstr "安裝錯誤"
 
-#: libs/ui/KisMainWindow.cpp:2959
+#: libs/ui/KisMainWindow.cpp:2964
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "&Themes"
 msgstr "主題(&T)"
 
-#: libs/ui/KisMainWindow.cpp:3018
+#: libs/ui/KisMainWindow.cpp:3023
 #, kde-format
 msgid "Expanding Spacer"
 msgstr "擴張空白佔位符"
@@ -39004,7 +39004,7 @@ msgctxt "action"
 msgid "Export Timelapse..."
 msgstr "匯出縮時影片…"
 
-#: plugins/dockers/recorder/recorder_export.cpp:104
+#: plugins/dockers/recorder/recorder_export.cpp:108
 #, kde-format
 msgctxt ""
 "This text is displayed instead of path to external tool in case of external "
@@ -39012,7 +39012,7 @@ msgctxt ""
 msgid "[NOT FOUND]"
 msgstr "[找不到]"
 
-#: plugins/dockers/recorder/recorder_export.cpp:105
+#: plugins/dockers/recorder/recorder_export.cpp:109
 #, kde-format
 msgid ""
 "FFmpeg executable location couldn't be detected, please install it or select "
@@ -39020,86 +39020,86 @@ msgid ""
 msgstr ""
 "未能檢測到 FFmpeg 執行檔的位置。請先安裝其軟體套件或手動選擇執行檔的位置"
 
-#: plugins/dockers/recorder/recorder_export.cpp:169
+#: plugins/dockers/recorder/recorder_export.cpp:173
 #, kde-format
 msgid "Abort encoding the timelapse video?"
 msgstr "是否中止縮時影片的編碼程序？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:241
+#: plugins/dockers/recorder/recorder_export.cpp:244
 #, kde-format
 msgctxt "Status for the export of the video record"
 msgid "Starting FFmpeg..."
 msgstr "正在啟動 FFmpeg……"
 
 #. i18n: ectx: property (text), widget (QToolButton, btnExport)
-#: plugins/dockers/recorder/recorder_export.cpp:343
+#: plugins/dockers/recorder/recorder_export.cpp:352
 #: plugins/dockers/storyboarddocker/DlgExportStoryboard.cpp:29
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:21
 #, kde-format
 msgid "Export"
 msgstr "匯出"
 
-#: plugins/dockers/recorder/recorder_export.cpp:370
+#: plugins/dockers/recorder/recorder_export.cpp:379
 #, kde-format
 msgctxt "Can't export recording because nothing to export"
 msgid "No frames to export"
 msgstr "沒有要匯出的影格"
 
-#: plugins/dockers/recorder/recorder_export.cpp:374
+#: plugins/dockers/recorder/recorder_export.cpp:383
 #, kde-format
 msgctxt "General information about recording"
 msgid "Recording info"
 msgstr "錄影資訊"
 
-#: plugins/dockers/recorder/recorder_export.cpp:377
+#: plugins/dockers/recorder/recorder_export.cpp:386
 #, kde-format
 msgctxt "Pixel dimension suffix"
 msgid "px"
 msgstr "px"
 
-#: plugins/dockers/recorder/recorder_export.cpp:379
+#: plugins/dockers/recorder/recorder_export.cpp:388
 #, kde-format
 msgctxt "The suffix after number of frames"
 msgid "frame(s)"
 msgstr "影格"
 
-#: plugins/dockers/recorder/recorder_export.cpp:434
+#: plugins/dockers/recorder/recorder_export.cpp:443
 #, kde-format
 msgctxt "Can't browse frames of recording because no frames have been recorded"
 msgid "No frames to browse."
 msgstr "沒有可供瀏覽的影格。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:522
+#: plugins/dockers/recorder/recorder_export.cpp:531
 #, kde-format
 msgid "Select FFmpeg Executable File"
 msgstr "選擇 FFmpeg 可執行檔"
 
-#: plugins/dockers/recorder/recorder_export.cpp:568
+#: plugins/dockers/recorder/recorder_export.cpp:577
 #, kde-format
 msgid "Export Timelapse Video As"
 msgstr "匯出縮時影片為"
 
-#: plugins/dockers/recorder/recorder_export.cpp:584
+#: plugins/dockers/recorder/recorder_export.cpp:593
 #, kde-format
 msgid "The video file already exists. Do you wish to overwrite it?"
 msgstr "影片檔已經存在。是否覆寫？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:589
+#: plugins/dockers/recorder/recorder_export.cpp:598
 #, kde-format
 msgid "No frames to export."
 msgstr "沒有要匯出的影格。"
 
-#: plugins/dockers/recorder/recorder_export.cpp:616
+#: plugins/dockers/recorder/recorder_export.cpp:625
 #, kde-format
 msgid "The timelapse video is being encoded..."
 msgstr "正在編碼縮時影片……"
 
-#: plugins/dockers/recorder/recorder_export.cpp:631
+#: plugins/dockers/recorder/recorder_export.cpp:640
 #, kde-format
 msgid "Export failed. FFmpeg message:"
 msgstr "匯出失敗。FFmpeg 訊息："
 
-#: plugins/dockers/recorder/recorder_export.cpp:652
+#: plugins/dockers/recorder/recorder_export.cpp:661
 #, kde-format
 msgid ""
 "The recordings for this document will be deleted and you will not be able to "
@@ -39113,7 +39113,7 @@ msgstr ""
 "\n"
 "是否繼續？"
 
-#: plugins/dockers/recorder/recorder_export.cpp:659
+#: plugins/dockers/recorder/recorder_export.cpp:668
 #: plugins/dockers/recorder/recorder_snapshots_manager.cpp:262
 #, kde-format
 msgctxt "Label title, Snapshot directory deleting is in progress"
@@ -39323,19 +39323,19 @@ msgid "Insert variable:"
 msgstr "插入變數："
 
 #. i18n: ectx: property (text), widget (QLabel, labelTitleFFMpegArguments)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:167
+#: plugins/dockers/recorder/recorder_profile_settings.ui:169
 #, kde-format
 msgid "FFMpeg arguments:"
 msgstr "FFmpeg 引數："
 
 #. i18n: ectx: property (text), widget (QLabel, labelProfileName)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:194
+#: plugins/dockers/recorder/recorder_profile_settings.ui:196
 #, kde-format
 msgid "Profile name:"
 msgstr "設定檔名稱："
 
 #. i18n: ectx: property (text), widget (QLabel, labelFileExt)
-#: plugins/dockers/recorder/recorder_profile_settings.ui:214
+#: plugins/dockers/recorder/recorder_profile_settings.ui:216
 #, kde-format
 msgid "File extension:"
 msgstr "檔案副檔名："
@@ -49460,13 +49460,13 @@ msgctxt "TIFF"
 msgid "Subsampled YCbCr TIFF files compressed with JPEG cannot be loaded."
 msgstr "無法載入經 YCbCr 色度採樣並以 JPEG 壓縮的檔案。"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1577
+#: plugins/impex/tiff/kis_tiff_import.cc:1579
 #, kde-format
 msgctxt "@title:window"
 msgid "TIFF image with PSD data"
 msgstr "含 PSD 資料的 TIFF 影像"
 
-#: plugins/impex/tiff/kis_tiff_import.cc:1579
+#: plugins/impex/tiff/kis_tiff_import.cc:1581
 #, kde-format
 msgctxt "the choice for the user on loading a TIFF file"
 msgid ""

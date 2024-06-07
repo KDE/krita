@@ -15,7 +15,9 @@ def download_until_double_newline(url):
     with requests.get(url, stream=True) as r:
         r.raise_for_status()
         for chunk in r.iter_content(chunk_size=16):
-            if downloadedFile and chunk[0] == '\n' and downloadedFile[-1] == '\n':
+            binNewlineChar = b'\n'[0]
+
+            if downloadedFile and chunk[0] == binNewlineChar and downloadedFile[-1] == binNewlineChar:
                 break
             
             index = chunk.find(b'\n\n')
@@ -56,7 +58,7 @@ printZSyncStat("Channel: Stable", 'https://download.kde.org/stable/krita/updates
 print('')
 printZSyncStat("Channel: Beta (unstable)", 'https://download.kde.org/unstable/krita/updates/Krita-Beta-x86_64.appimage.zsync')
 print('')
-printZSyncStat("Channel: Plus", 'https://cdn.kde.org/ci-builds/graphics/krita/krita-5.2/linux/Krita-Plus-x86_64.appimage.zsync')
+printZSyncStat("Channel: Plus", 'https://autoconfig.kde.org/krita/updates/plus/linux/Krita-Plus-x86_64.appimage.zsync')
 print('')
-printZSyncStat("Channel: Next", 'https://cdn.kde.org/ci-builds/graphics/krita/master/linux/Krita-Next-x86_64.appimage.zsync')
+printZSyncStat("Channel: Next", 'https://autoconfig.kde.org/krita/updates/next/linux/Krita-Next-x86_64.appimage.zsync')
 print('')

@@ -106,12 +106,12 @@ else
         ESCAPED_COMMIT_BRANCH="${CI_COMMIT_BRANCH//\//-}"
 
         CHANNEL="Plus"
-        ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/${ESCAPED_COMMIT_BRANCH}/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
-        ZSYNC_SOURCE_URL="https://cdn.kde.org/ci-builds/graphics/krita/${ESCAPED_COMMIT_BRANCH}/linux/${NEW_APPIMAGE_NAME}"
+        ZSYNC_URL="zsync|https://autoconfig.kde.org/krita/updates/plus/linux/Krita-Plus-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://autoconfig.kde.org/krita/updates/plus/linux/${NEW_APPIMAGE_NAME}"
     else
         CHANNEL="Next"
-        ZSYNC_URL="zsync|https://cdn.kde.org/ci-builds/graphics/krita/master/linux/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
-        ZSYNC_SOURCE_URL="https://cdn.kde.org/ci-builds/graphics/krita/master/linux/${NEW_APPIMAGE_NAME}"
+        ZSYNC_URL="zsync|https://autoconfig.kde.org/krita/updates/next/linux/Krita-Next-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
+        ZSYNC_SOURCE_URL="https://autoconfig.kde.org/krita/updates/next/linux/${NEW_APPIMAGE_NAME}"
     fi
 fi
 

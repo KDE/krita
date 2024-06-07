@@ -113,7 +113,7 @@ public:
 
 private:
     void mergeLabeledLayers();
-    bool hastToCheckForChangesInNodes() const;
+    bool hasToCheckForChangesInNodes() const;
     QPair<KisNodeSP, QPair<bool, bool>> collectNode(KisNodeSP node) const;
     bool collectNodes(KisNodeSP node, QList<KisNodeSP> &nodeList, ReferenceNodeInfoList &nodeInfoList) const;
 

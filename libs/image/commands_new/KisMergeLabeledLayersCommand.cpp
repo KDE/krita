@@ -101,9 +101,9 @@ QPair<KisNodeSP, QPair<bool, bool>> KisMergeLabeledLayersCommand::collectNode(Ki
     }
 
     if (node->inherits("KisMask")) {
-        // This is the a mask node. Do not use, nor visit the siblings,
-        // nor visit the children
-        return {nullptr, {false, false}};
+        // This is the a mask node. Do not use, nor visit the children,
+        // but visit the siblings as they may be normal layers
+        return {nullptr, {true, false}};
     }
 
     if (!node->visible()) {
@@ -181,7 +181,7 @@ bool KisMergeLabeledLayersCommand::collectNodes(KisNodeSP node, QList<KisNodeSP>
         nodeList << collectedNode;
         // Store additional info to check if the new list of reference nodes
         // is different. Use the original node to extract the info
-        if (hastToCheckForChangesInNodes()) {
+        if (hasToCheckForChangesInNodes()) {
             const QUuid uuid = node->uuid();
             const int sequenceNumber = node->projection()->sequenceNumber();
             const int opacity = node->opacity();
@@ -210,11 +210,11 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
 
     collectNodes(m_currentRoot, currentNodesList, currentNodeInfoList);
 
-    if (hastToCheckForChangesInNodes()) {
+    if (hasToCheckForChangesInNodes()) {
         *m_newRefNodeInfoList = currentNodeInfoList;
     }
-    
-    if (hastToCheckForChangesInNodes() && !m_forceRegeneration && (currentNodeInfoList == *m_prevRefNodeInfoList)) {
+
+    if (hasToCheckForChangesInNodes() && !m_forceRegeneration && (currentNodeInfoList == *m_prevRefNodeInfoList)) {
         m_newRefPaintDevice->prepareClone(m_prevRefPaintDevice);
         m_newRefPaintDevice->makeCloneFromRough(m_prevRefPaintDevice, m_prevRefPaintDevice->extent());
     } else {
@@ -272,7 +272,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
     m_refImage.clear();
 }
 
-bool KisMergeLabeledLayersCommand::hastToCheckForChangesInNodes() const
+bool KisMergeLabeledLayersCommand::hasToCheckForChangesInNodes() const
 {
     return m_prevRefNodeInfoList && m_newRefNodeInfoList && m_prevRefPaintDevice;
 }

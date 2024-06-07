@@ -1,0 +1,10 @@
+{
+    "Id": "Propagate Colors Filter",
+    "Type": "Service",
+    "X-KDE-Library": "KritaPropagateColorsFilter",
+    "X-KDE-ServiceTypes": [
+        "Krita/Filter"
+    ],
+    "X-Krita-Version": "28"
+}
+

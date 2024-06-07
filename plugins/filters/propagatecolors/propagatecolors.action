@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Krita">
+  <Actions category="Filters">
+    <text context="Filter as an effect">Filters</text>
+    <Action name="krita_filter_propagatecolors">
+      <icon/>
+      <text>Propagate Colors Filter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Propagate Colors Filter</toolTip>
+      <iconText>Propagate Colors Filter</iconText>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

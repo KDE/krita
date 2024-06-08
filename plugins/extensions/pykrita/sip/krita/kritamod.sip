@@ -58,3 +58,5 @@
 %Include IntParseSpinBox.sip
 %Include DoubleParseSpinBox.sip
 %Include SliderSpinBox.sip
+
+%Include GuidesConfig.sip

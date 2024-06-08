@@ -67,6 +67,7 @@
 #include <kis_undo_adapter.h>
 #include <commands/kis_set_global_selection_command.h>
 
+
 struct Document::Private {
     Private() {}
     QPointer<KisDocument> document;
@@ -830,6 +831,7 @@ void Document::refreshProjection()
 
 QList<qreal> Document::horizontalGuides() const
 {
+    warnScript << "DEPRECATED Document.horizontalGuides() - use Document.guidesConfig().horizontalGuides() instead";
     QList<qreal> lines;
     if (!d->document || !d->document->image()) return lines;
     KisCoordinatesConverter converter;
@@ -845,6 +847,7 @@ QList<qreal> Document::horizontalGuides() const
 
 QList<qreal> Document::verticalGuides() const
 {
+    warnScript << "DEPRECATED Document.verticalGuides() - use Document.guidesConfig().verticalGuides() instead";
     QList<qreal> lines;
     if (!d->document || !d->document->image()) return lines;
     KisCoordinatesConverter converter;
@@ -860,11 +863,13 @@ QList<qreal> Document::verticalGuides() const
 
 bool Document::guidesVisible() const
 {
+    warnScript << "DEPRECATED Document.guidesVisible() - use Document.guidesConfig().visible() instead";
     return d->document->guidesConfig().showGuides();
 }
 
 bool Document::guidesLocked() const
 {
+    warnScript << "DEPRECATED Document.guidesLocked() - use Document.guidesConfig().locked() instead";
     return d->document->guidesConfig().lockGuides();
 }
 
@@ -882,6 +887,7 @@ Document *Document::clone() const
 
 void Document::setHorizontalGuides(const QList<qreal> &lines)
 {
+    warnScript << "DEPRECATED Document.setHorizontalGuides() - use Document.guidesConfig().setHorizontalGuides() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     KisCoordinatesConverter converter;
@@ -898,6 +904,7 @@ void Document::setHorizontalGuides(const QList<qreal> &lines)
 
 void Document::setVerticalGuides(const QList<qreal> &lines)
 {
+    warnScript << "DEPRECATED Document.setVerticalGuides() - use Document.guidesConfig().setVerticalGuides() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     KisCoordinatesConverter converter;
@@ -914,6 +921,7 @@ void Document::setVerticalGuides(const QList<qreal> &lines)
 
 void Document::setGuidesVisible(bool visible)
 {
+    warnScript << "DEPRECATED Document.setGuidesVisible() - use Document.guidesConfig().setVisible() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     config.setShowGuides(visible);
@@ -922,6 +930,7 @@ void Document::setGuidesVisible(bool visible)
 
 void Document::setGuidesLocked(bool locked)
 {
+    warnScript << "DEPRECATED Document.setGuidesLocked() - use Document.guidesConfig().setLocked() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     config.setLockGuides(locked);
@@ -1141,4 +1150,96 @@ void Document::setAutosave(bool active)
 bool Document::autosave()
 {
     return d->document->isAutoSaveActive();
+}
+
+GuidesConfig *Document::guidesConfig()
+{
+    // The way Krita manage guides position is a little bit strange
+    //
+    // Let's say, set a guide at a position of 100pixels from UI
+    // In KisGuidesConfig, the saved position (using KoUnit 'px') is set taking in account the
+    // document resolution
+    // So:
+    //  100px at 300dpi ==> the stored value will be 72 * 100 / 300.00 = 24.00
+    //  100px at 600dpi ==> the stored value will be 72 * 100 / 600.00 = 12.00
+    // We have a position saved in 'pt', with unit 'px'
+    // This is also what is saved in maindoc.xml...
+    //
+    // The weird thing in this process:
+    // - use unit 'px' as what is reallt stored is 'pt'
+    // - use 'pt' to store an information that should be 'px' (because 100pixels is 100pixels whatever the
+    //   resolution of document)
+    //
+    // But OK, it works like this and reviewing this is probably a huge workload, and also there'll be
+    // a problem with old saved documents (taht's store 100px@300dpi as '24.00')
+    //
+    // The solution here is, before restitue the guideConfig to user, the internal value is transformed...
+    KisGuidesConfig *tmpConfig = new KisGuidesConfig(d->document->guidesConfig());
+
+    if (d->document && d->document->image()) {
+        KisCoordinatesConverter converter;
+        converter.setImage(d->document->image());
+
+        QTransform transform = converter.imageToDocumentTransform().inverted();
+
+        QList<qreal> transformedLines;
+        QList<qreal> untransformedLines = tmpConfig->horizontalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+        }
+        tmpConfig->setHorizontalGuideLines(transformedLines);
+
+        transformedLines.clear();
+        untransformedLines = tmpConfig->verticalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).y());
+        }
+        tmpConfig->setVerticalGuideLines(transformedLines);
+    }
+    else {
+        // unable to proceed to transform, return no guides
+        tmpConfig->removeAllGuides();
+    }
+
+    GuidesConfig *guideConfig = new GuidesConfig(tmpConfig);
+    return guideConfig;
+}
+
+void Document::setGuidesConfig(GuidesConfig *guidesConfig)
+{
+    if (!d->document) return;
+    // Like for guidesConfig() method, need to manage transform from internal stored value
+    // to pixels values
+    KisGuidesConfig tmpConfig = guidesConfig->guidesConfig();
+
+    if(d->document->image()) {
+        KisCoordinatesConverter converter;
+        converter.setImage(d->document->image());
+
+        QTransform transform = converter.imageToDocumentTransform();
+
+        QList<qreal> transformedLines;
+        QList<qreal> untransformedLines = tmpConfig.horizontalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+        }
+        tmpConfig.setHorizontalGuideLines(transformedLines);
+
+        transformedLines.clear();
+        untransformedLines = tmpConfig.verticalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+        }
+        tmpConfig.setVerticalGuideLines(transformedLines);
+    }
+    else {
+        // unable to proceed to transform, set no guides
+        tmpConfig.removeAllGuides();
+    }
+
+    d->document->setGuidesConfig(tmpConfig);
 }

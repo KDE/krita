@@ -23,6 +23,8 @@
 #include "TransformMask.h"
 #include "ColorizeMask.h"
 
+#include "GuidesConfig.h"
+
 class KisDocument;
 
 /**
@@ -42,33 +44,32 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+public Q_SLOTS:
     /**
-     * @brief horizontalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * The horizontal guides.
      * @return a list of the horizontal positions of guides.
      */
-    QList<qreal> horizontalGuides() const;
+    Q_DECL_DEPRECATED QList<qreal> horizontalGuides() const;
     /**
-     * @brief verticalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * The vertical guide lines.
      * @return a list of vertical guides.
      */
-    QList<qreal> verticalGuides() const;
+    Q_DECL_DEPRECATED QList<qreal> verticalGuides() const;
 
     /**
-     * @brief guidesVisible
+     * @brief DEPRECATED - use guidesConfig() instead
      * Returns guide visibility.
      * @return whether the guides are visible.
      */
-    bool guidesVisible() const;
+    Q_DECL_DEPRECATED bool guidesVisible() const;
     /**
-     * @brief guidesLocked
+     * @brief DEPRECATED - use guidesConfig() instead
      * Returns guide lockedness.
      * @return whether the guides are locked.
      */
-    bool guidesLocked() const;
-
-public Q_SLOTS:
+    Q_DECL_DEPRECATED bool guidesLocked() const;
 
     /**
      * @brief clone create a shallow clone of this document.
@@ -766,31 +767,31 @@ print(root.childNodes())
     void refreshProjection();
 
     /**
-     * @brief setHorizontalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * replace all existing horizontal guides with the entries in the list.
      * @param lines a list of floats containing the new guides.
      */
-    void setHorizontalGuides(const QList<qreal> &lines);
+    Q_DECL_DEPRECATED void setHorizontalGuides(const QList<qreal> &lines);
     /**
-     * @brief setVerticalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * replace all existing horizontal guides with the entries in the list.
      * @param lines a list of floats containing the new guides.
      */
-    void setVerticalGuides(const QList<qreal> &lines);
+    Q_DECL_DEPRECATED void setVerticalGuides(const QList<qreal> &lines);
 
     /**
-     * @brief setGuidesVisible
+     * @brief DEPRECATED - use guidesConfig() instead
      * set guides visible on this document.
      * @param visible whether or not the guides are visible.
      */
-    void setGuidesVisible(bool visible);
+    Q_DECL_DEPRECATED void setGuidesVisible(bool visible);
 
     /**
-     * @brief setGuidesLocked
+     * @brief DEPRECATED - use guidesConfig() instead
      * set guides locked on this document
      * @param locked whether or not to lock the guides on this document.
      */
-    void setGuidesLocked(bool locked);
+    Q_DECL_DEPRECATED void setGuidesLocked(bool locked);
 
     /**
      * @brief modified returns true if the document has unsaved modifications.
@@ -925,7 +926,6 @@ print(root.childNodes())
      */
     void removeAnnotation(const QString &type);
 
-
     /**
      * @brief Allow to activate/deactivate autosave for document
      * When activated, it will use default Krita autosave settings
@@ -952,6 +952,38 @@ print(root.childNodes())
      * @return True if autosave is active, otherwise False
      */
     bool autosave();
+
+    /**
+     * @brief Returns a GuidesConfig guides configuration for current document
+     * @return a GuidesConfig object with guides configuration
+     */
+    GuidesConfig *guidesConfig();
+
+    /**
+     * @brief Set guides configuration for current document
+     * @param guidesConfig a GuidesConfig object to apply for guides configuration
+     *
+     * To modify/set guides property on a document
+@code
+# get document (create one or get active one for example)
+newDoc = Krita.instance().createDocument(500, 500, "Test", "RGBA", "U8", "", 300)
+
+# retrieve document guides configuration
+newDocGuides = newDoc.guidesConfig()
+
+# update properties
+newDocGuides.setColor(QColor('#ff00ff'))
+newDocGuides.setLineType('dotted')
+newDocGuides.setVisible(True)
+newDocGuides.setLocked(True)
+newDocGuides.setSnap(True)
+newDocGuides.setHorizontalGuides([100,200])
+
+# set guides configuration to document
+newDoc.setGuidesConfig(newDocGuides)
+@endcode
+     */
+    void setGuidesConfig(GuidesConfig *guidesConfig);
 
 private:
 

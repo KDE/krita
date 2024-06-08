@@ -8,11 +8,11 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+public Q_SLOTS:
     QList<qreal> horizontalGuides() const;
     QList<qreal> verticalGuides() const;
     bool guidesVisible() const;
     bool guidesLocked() const;
-public Q_SLOTS:
 
     Document *clone() const /Factory/;
     Node * activeNode() const  /Factory/;
@@ -108,8 +108,13 @@ public Q_SLOTS:
     QByteArray annotation(const QString &type);
     void setAnnotation(const QString &type, const QString &description, const QByteArray &annotation);
     void removeAnnotation(const QString &type);
+
     void setAutosave(bool active);
     bool autosave();
+
+    GuidesConfig *guidesConfig();
+    void setGuidesConfig(GuidesConfig *guidesConfig);
+
 private:
 
 };

@@ -42,6 +42,8 @@ set(kritalibkis_LIB_SRCS
     IntParseSpinBox.cpp
     DoubleParseSpinBox.cpp
     SliderSpinBox.cpp
+
+    GuidesConfig.cpp
 )
 
 kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})

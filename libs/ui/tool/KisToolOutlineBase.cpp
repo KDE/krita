@@ -304,6 +304,8 @@ void KisToolOutlineBase::requestStrokeCancellation()
 
 void KisToolOutlineBase::installBlockActionGuard()
 {
+    if (m_blockModifyingActionsGuard)
+        return;
     m_blockModifyingActionsGuard.reset(new KisInputActionGroupsMaskGuard(
         static_cast<KisCanvas2*>(canvas())->inputActionGroupsMaskInterface(),
                                  ViewTransformActionGroup | ToolInvoactionActionGroup

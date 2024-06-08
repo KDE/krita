@@ -44,6 +44,7 @@ set(kritalibkis_LIB_SRCS
     SliderSpinBox.cpp
 
     GuidesConfig.cpp
+    GridConfig.cpp
 )
 
 kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})

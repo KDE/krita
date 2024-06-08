@@ -38,6 +38,7 @@
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
+#include <kis_grid_config.h>
 #include <kis_coordinates_converter.h>
 #include <kis_time_span.h>
 #include <KisImportExportErrorCode.h>
@@ -1243,3 +1244,19 @@ void Document::setGuidesConfig(GuidesConfig *guidesConfig)
 
     d->document->setGuidesConfig(tmpConfig);
 }
+
+
+GridConfig *Document::gridConfig()
+{
+    KisGridConfig *tmpConfig = new KisGridConfig(d->document->gridConfig());
+    GridConfig *gridConfig = new GridConfig(tmpConfig);
+    return gridConfig;
+}
+
+void Document::setGridConfig(GridConfig *gridConfig)
+{
+    if (!d->document) return;
+    KisGridConfig tmpConfig = gridConfig->gridConfig();
+    d->document->setGridConfig(tmpConfig);
+}
+

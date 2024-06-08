@@ -24,6 +24,7 @@
 #include "ColorizeMask.h"
 
 #include "GuidesConfig.h"
+#include "GridConfig.h"
 
 class KisDocument;
 
@@ -845,7 +846,6 @@ print(root.childNodes())
      */
     int fullClipRangeStartTime();
 
-
     /**
      * @brief set full clip range end time
      */
@@ -984,6 +984,39 @@ newDoc.setGuidesConfig(newDocGuides)
 @endcode
      */
     void setGuidesConfig(GuidesConfig *guidesConfig);
+
+    /**
+     * @brief Returns a GridConfig grid configuration for current document
+     * @return a GridConfig object with grid configuration
+     */
+    GridConfig *gridConfig();
+
+    /**
+     * @brief Set grid configuration for current document
+     * @param gridConfig a GridConfig object to apply for grid configuration
+     *
+     * To modify/set grid property on a document
+@code
+# get document (create one or get active one for example)
+newDoc = Krita.instance().createDocument(500, 500, "Test", "RGBA", "U8", "", 300)
+
+# retrieve document grid configuration
+newDocGrid = newDoc.gridConfig()
+
+# update properties
+newDocGrid.setColorMain(QColor('#ff00ff'))
+newDocGrid.setLineTypeMain('dashed')
+newDocGrid.setVisible(True)
+newDocGrid.setAngleLeft(30)
+newDocGrid.setAngleRight(15)
+newDocGrid.setType('isometric')
+
+# set grid configuration to document
+newDoc.setGridConfig(newDocGrid)
+@endcode
+     */
+    void setGridConfig(GridConfig *gridConfig);
+
 
 private:
 

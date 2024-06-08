@@ -60,3 +60,4 @@
 %Include SliderSpinBox.sip
 
 %Include GuidesConfig.sip
+%Include GridConfig.sip

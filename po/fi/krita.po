@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-06 01:47+0000\n"
-"PO-Revision-Date: 2024-02-02 13:03+0200\n"
+"PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -56129,36 +56129,30 @@ msgid "Ascension"
 msgstr "Ulottuvuus &pikseleinä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Radius Logarithmic"
-msgstr "Logaritminen"
+msgstr "Logaritminen säde"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:78
-#, fuzzy, kde-format
-#| msgid "Sharpness:"
+#, kde-format
 msgid "Hardness"
-msgstr "Terävyys:"
+msgstr "Kovuus"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:31
-#, fuzzy, kde-format
-#| msgid "Radius y:"
+#, kde-format
 msgid "Radius by Random"
-msgstr "y-säde:"
+msgstr "Satunnaissäde"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:39
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
+msgstr "Satunnaissäde, harkitse välittömän esikatselun poistamista käytöstä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgid "Anti Aliasing"
-msgstr "Antialiasoidaan"
+msgstr "Antialiasointi"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, fuzzy, kde-format
@@ -56179,10 +56173,9 @@ msgid "Direction Filter"
 msgstr "Suunta"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
-#, fuzzy, kde-format
-#| msgid "Black Pixel"
+#, kde-format
 msgid "Snap To Pixel"
-msgstr "Musta kuvapiste"
+msgstr "Kiinnity kuvapisteeseen"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, fuzzy, kde-format
@@ -56265,16 +56258,14 @@ msgid "Gross Speed Slowness"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
-#, fuzzy, kde-format
-#| msgid "offset by speed"
+#, kde-format
 msgid "Offset By Speed"
-msgstr "nopeuden mukainen siirtymä"
+msgstr "Nopeussiirtymä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
-#, fuzzy, kde-format
-#| msgid "offset by speed filter"
+#, kde-format
 msgid "Offset by Speed Filter"
-msgstr "nopeussuotimen mukainen siirtymä"
+msgstr "Nopeussiirtymäsuodatin"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
@@ -56282,12 +56273,11 @@ msgid "Offset By Random"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
+msgstr ""
+"Satunnaissiirtymä, harkitse välittömän esikatselun poistamista käytöstä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, fuzzy, kde-format
@@ -59438,11 +59428,10 @@ msgid "None"
 msgstr "Ei mitään"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:346
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
-msgstr "Perus"
+msgstr "Tavallinen"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
@@ -59597,14 +59586,12 @@ msgstr ""
 "tasainen täyttö"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:551
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in fill tool options; {n} is the number value, % "
 "is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Mittakaava: "
+msgstr "Mittakaava: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:555
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:482
@@ -59619,14 +59606,12 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/basictools/kis_tool_fill.cc:577
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in fill tool options; {n} is the number value, % is the "
 "percent sign"
 msgid "Spread: {n}%"
-msgstr "Levitä: "
+msgstr "Levitä: {n} %"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:580
 #, fuzzy, kde-format
@@ -60381,17 +60366,15 @@ msgstr "Poista kaikki"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalXLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:250
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval X:"
-msgstr "Sisäinen"
+msgstr "X-väli:"
 
 #. i18n: ectx: property (text), widget (QLabel, intervalYLabel)
 #: plugins/tools/basictools/wdgmultihandtool.ui:263
-#, fuzzy, kde-format
-#| msgid "Internal"
+#, kde-format
 msgid "Interval Y:"
-msgstr "Sisäinen"
+msgstr "Y-väli:"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
 #, kde-format
@@ -60530,17 +60513,16 @@ msgid "Markers, Stroke, Fill"
 msgstr ""
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:121
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr "Peittävyys:"
+msgstr "Peittävyys: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}"
-msgstr "Peittävyys [*vaihtelee*]: "
+msgstr "Peittävyys [*vaihtelee*]: {n}"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAnchorLock)
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.ui:195
@@ -60679,25 +60661,22 @@ msgid "Reference Images Tool"
 msgstr "Viitekuvatyökalu"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
-#, fuzzy, kde-format
-#| msgid "Opacity [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity [*varies*]: {n}%"
-msgstr "Peittävyys [*vaihtelee*]: "
+msgstr "Peittävyys [*vaihtelee*]: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:54
-#, fuzzy, kde-format
-#| msgid "Saturation: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation: {n}%"
-msgstr "Kylläisyys: "
+msgstr "Kylläisyys: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Saturation [*varies*]: "
+#, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Saturation [*varies*]: {n}%"
-msgstr "Kylläisyys [*vaihtelee*]: "
+msgstr "Kylläisyys [*vaihtelee*]: {n} %"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
@@ -60957,14 +60936,12 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:387
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in contiguous selection tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Levitä: "
+msgstr "Levitys: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:391
 #, kde-format
@@ -61130,14 +61107,12 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:246
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in similar color selection tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Levitä: "
+msgstr "Levitys: {n} %"
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:261
 #, kde-format
@@ -61434,9 +61409,9 @@ msgid "Text Color"
 msgstr "Tekstiväri"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1563
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample a Color"
-msgstr "Valitse läpinäkymätön"
+msgstr "Valitse väri"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1577
 #, kde-format
@@ -61464,32 +61439,24 @@ msgid "Letter Spacing"
 msgstr "Kirjasinvälistys"
 
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
-#, fuzzy
-#| msgid "Inverted Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr "Käännetty teksti"
+msgstr "Lisää teksti"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
-#, fuzzy
-#| msgid "Inverted Text"
 msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
-msgstr "Käännetty teksti"
+msgstr "Lisää muotoiltua teksti"
 
 #: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
-#, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
-msgstr "Uuden tason ominaisuudet"
+msgstr "Muuta tekstin ominaisuuksia"
 
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
-#, fuzzy
-#| msgctxt "@title:window"
-#| msgid "Remove Template"
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr "Poista pohja"
+msgstr "Poista teksti"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4
@@ -61855,11 +61822,10 @@ msgstr "Asetukset…"
 #: plugins/tools/svgtexttool/SvgTextTool.action:246
 #: plugins/tools/svgtexttool/SvgTextTool.action:253
 #: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, fuzzy, kde-format
-#| msgid "Color Sliders"
+#, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Värisäätimet"
+msgstr "Värivalitsin"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -62361,14 +62327,12 @@ msgid "Include contour regions"
 msgstr "Lisää kommentti"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:478
-#, fuzzy, kde-format
-#| msgctxt "The pattern 'scale' spinbox prefix in fill tool options"
-#| msgid "Scale: "
+#, kde-format
 msgctxt ""
 "The pattern 'scale' spinbox in enclose and fill tool options; {n} is the "
 "number value, % is the percent sign"
 msgid "Scale: {n}%"
-msgstr "Mittakaava: "
+msgstr "Mittakaava: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:491
 #, kde-format
@@ -62377,14 +62341,12 @@ msgid "Threshold: "
 msgstr "Kynnys: "
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:497
-#, fuzzy, kde-format
-#| msgctxt "The 'spread' spinbox prefix in fill tool options"
-#| msgid "Spread: "
+#, kde-format
 msgctxt ""
 "The 'spread' spinbox in enclose and fill tool options; {n} is the number "
 "value, % is the percent sign"
 msgid "Spread: {n}%"
-msgstr "Levitä: "
+msgstr "Levitys: {n} %"
 
 #: plugins/tools/tool_enclose_and_fill/KisToolEncloseAndFill.cpp:500
 #, fuzzy, kde-format
@@ -62767,21 +62729,19 @@ msgid "Liquify"
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:126
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
-msgstr "Siveltimen koko"
+msgstr "Verkko"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
-msgstr "M_Häkki"
+msgstr "Häkki"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:128
-#, fuzzy, kde-format
-#| msgid "Free"
+#, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "Vapaa"
@@ -62793,18 +62753,14 @@ msgid "Perspective"
 msgstr "Perspektiivi"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:132
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgid "Mirror Horizontal"
-msgstr "Peilaa taso vaakasuunnassa"
+msgstr "Peilaa vaakasuunnassa"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:133
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgid "Mirror Vertical"
-msgstr "Peilaa taso pystysuunnassa"
+msgstr "Peilaa pystysuunnassa"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, kde-format
@@ -63348,10 +63304,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2153
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgid "Mesh size"
-msgstr "Siveltimen koko"
+msgstr "Verkon koko"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182

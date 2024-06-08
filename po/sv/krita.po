@@ -53,7 +53,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-06 01:47+0000\n"
-"PO-Revision-Date: 2024-06-02 18:11+0200\n"
+"PO-Revision-Date: 2024-06-07 16:10+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -28472,7 +28472,7 @@ msgstr "Markera lager"
 #: libs/ui/input/kis_select_layer_action.cpp:117
 #, kde-format
 msgid "Select layers under the cursor position"
-msgstr "Markerar lagret under markörpositionen"
+msgstr "Markera lager under markörpositionen"
 
 #: libs/ui/input/kis_select_layer_action.cpp:120
 #, kde-format
@@ -54400,7 +54400,7 @@ msgstr "Sprejform"
 #: plugins/paintops/spray/spray_paintop_plugin.cpp:27
 #, kde-format
 msgid "Spray"
-msgstr "Spray"
+msgstr "Sprej"
 
 #. i18n: ectx: property (text), widget (QCheckBox, randomSizeCHBox)
 #: plugins/paintops/spray/wdgshapedynamicsoptions.ui:36

@@ -89,7 +89,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-06 03:11+0000\n"
-"PO-Revision-Date: 2024-02-02 13:03+0200\n"
+"PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
 "Language: fi\n"
@@ -55373,36 +55373,30 @@ msgid "Ascension"
 msgstr "Ulottuvuus &pikseleinä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:70
-#, fuzzy, kde-format
-#| msgid "Logarithmic"
+#, kde-format
 msgid "Radius Logarithmic"
-msgstr "Logaritminen"
+msgstr "Logaritminen säde"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.cpp:78
-#, fuzzy, kde-format
-#| msgid "Sharpness:"
+#, kde-format
 msgid "Hardness"
-msgstr "Terävyys:"
+msgstr "Kovuus"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:31
-#, fuzzy, kde-format
-#| msgid "Radius y:"
+#, kde-format
 msgid "Radius by Random"
-msgstr "y-säde:"
+msgstr "Satunnaissäde"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:39
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Radius by Random, consider disabling Instant Preview"
-msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
+msgstr "Satunnaissäde, harkitse välittömän esikatselun poistamista käytöstä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:48
-#, fuzzy, kde-format
-#| msgid "Anti-aliasing"
+#, kde-format
 msgid "Anti Aliasing"
-msgstr "Antialiasoidaan"
+msgstr "Antialiasointi"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:58
 #, fuzzy, kde-format
@@ -55423,10 +55417,9 @@ msgid "Direction Filter"
 msgstr "Suunta"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:86
-#, fuzzy, kde-format
-#| msgid "Black Pixel"
+#, kde-format
 msgid "Snap To Pixel"
-msgstr "Musta kuvapiste"
+msgstr "Kiinnity kuvapisteeseen"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:96
 #, fuzzy, kde-format
@@ -55509,16 +55502,14 @@ msgid "Gross Speed Slowness"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:214
-#, fuzzy, kde-format
-#| msgid "offset by speed"
+#, kde-format
 msgid "Offset By Speed"
-msgstr "nopeuden mukainen siirtymä"
+msgstr "Nopeussiirtymä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:223
-#, fuzzy, kde-format
-#| msgid "offset by speed filter"
+#, kde-format
 msgid "Offset by Speed Filter"
-msgstr "nopeussuotimen mukainen siirtymä"
+msgstr "Nopeussiirtymäsuodatin"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:232
 #, kde-format
@@ -55526,12 +55517,11 @@ msgid "Offset By Random"
 msgstr ""
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:240
-#, fuzzy, kde-format
-#| msgctxt "PaintOp instant preview limitation"
-#| msgid "Spacing > 0.5, consider disabling Instant Preview"
+#, kde-format
 msgctxt "PaintOp instant preview limitation"
 msgid "Offset by Random, consider disabling Instant Preview"
-msgstr "Välistys > 0,5, harkitse välittömän esikatselun ottamista käytöstä"
+msgstr ""
+"Satunnaissiirtymä, harkitse välittömän esikatselun poistamista käytöstä"
 
 #: plugins/paintops/mypaint/MyPaintStandardOptionData.h:250
 #, fuzzy, kde-format
@@ -58686,11 +58676,10 @@ msgid "None"
 msgstr "Ei mitään"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:346
-#, fuzzy, kde-format
-#| msgid "Basic"
+#, kde-format
 msgctxt "@item:inlistbox Brush Smoothing"
 msgid "Basic"
-msgstr "Perus"
+msgstr "Tavallinen"
 
 #: plugins/tools/basictools/kis_tool_brush.cc:347
 #, kde-format
@@ -60564,9 +60553,9 @@ msgid "Text Color"
 msgstr "Tekstiväri"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1468
-#, fuzzy, kde-format
+#, kde-format
 msgid "Sample a Color"
-msgstr "Valitse läpinäkymätön"
+msgstr "Valitse väri"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1479
 #, kde-format
@@ -60943,11 +60932,10 @@ msgstr "Asetukset…"
 #: plugins/tools/svgtexttool/SvgTextTool.action:246
 #: plugins/tools/svgtexttool/SvgTextTool.action:253
 #: plugins/tools/tools.action:74 plugins/tools/tools.action:77
-#, fuzzy, kde-format
-#| msgid "Color Sliders"
+#, kde-format
 msgctxt "action"
 msgid "Color Sampler"
-msgstr "Värisäätimet"
+msgstr "Värivalitsin"
 
 #. i18n: context: iconText @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
 #. i18n: context: toolTip @ Action (svg_font_kerning), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -61768,21 +61756,19 @@ msgid "Liquify"
 msgstr ""
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:126
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgctxt "Mesh Transform Tab Label"
 msgid "Mesh"
-msgstr "Siveltimen koko"
+msgstr "Verkko"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:127
-#, fuzzy, kde-format
+#, kde-format
 msgctxt "Cage Transform Tab Label"
 msgid "Cage"
-msgstr "M_Häkki"
+msgstr "Häkki"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:128
-#, fuzzy, kde-format
-#| msgid "Free"
+#, kde-format
 msgctxt "Free Transform Tab Label"
 msgid "Free"
 msgstr "Vapaa"
@@ -61794,18 +61780,14 @@ msgid "Perspective"
 msgstr "Perspektiivi"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:132
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Horizontally"
+#, kde-format
 msgid "Mirror Horizontal"
-msgstr "Peilaa taso vaakasuunnassa"
+msgstr "Peilaa vaakasuunnassa"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:133
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Mirror Layer Vertically"
+#, kde-format
 msgid "Mirror Vertical"
-msgstr "Peilaa taso pystysuunnassa"
+msgstr "Peilaa pystysuunnassa"
 
 #: plugins/tools/tool_transform2/kis_tool_transform.cc:134
 #, kde-format
@@ -62341,10 +62323,9 @@ msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2153
-#, fuzzy, kde-format
-#| msgid "Brush size"
+#, kde-format
 msgid "Mesh size"
-msgstr "Siveltimen koko"
+msgstr "Verkon koko"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkShowControlPoints)
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2182

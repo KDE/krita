@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (QFormLayout, QListWidget, QHBoxLayout,
                              QDialogButtonBox, QVBoxLayout, QFrame,
                              QPushButton, QAbstractScrollArea, QLineEdit,
                              QMessageBox, QFileDialog, QCheckBox, QSpinBox,
-                             QComboBox)
+                             QComboBox, QListWidgetItem)
 import os
 import krita
 
@@ -51,6 +51,8 @@ class UIExportLayers(object):
         self.batchmodeCheckBox.setChecked(True)
         self.directoryDialogButton.clicked.connect(self._selectDir)
         self.widgetDocuments.currentRowChanged.connect(self._setResolution)
+        self.widgetDocuments.setSelectionMode(3) #multi-selection
+        self.widgetDocuments.setMouseTracking(True) #enable ToolTips to show the paths
         self.refreshButton.clicked.connect(self.refreshButtonClicked)
         self.buttonBox.accepted.connect(self.confirmButton)
         self.buttonBox.rejected.connect(self.mainDialog.close)
@@ -115,28 +117,35 @@ class UIExportLayers(object):
 
         self.documentsList = [
             document for document in self.kritaInstance.documents()
-            if document.fileName()
         ]
 
         currentDoc = None
         if self.kritaInstance.activeDocument():
             currentDoc = self.kritaInstance.activeDocument().fileName()
         
-        cdoc = 0
+        activeDoc = 0
+        docCount = 0
         for document in self.documentsList:
-            theName = document.fileName()
-            self.widgetDocuments.addItem(theName)
-            if theName == currentDoc:
-                cdoc = self.widgetDocuments.count() - 1
+            fullName = document.fileName()
+            if document.name(): #if you open a file that isn't a .kra file it won't have a name property...
+                shortName = document.name()
+            else:
+                shortName = os.path.basename(document.fileName()) #... so just get the name from the file using os.path.basename()
+            newListItem= QListWidgetItem(shortName)
+            newListItem.setToolTip(fullName) # ... show the full path as a ToolTip, rather than in the list, better UX
+            if fullName == currentDoc:
+                activeDoc = docCount
+            self.widgetDocuments.addItem(newListItem)
+            docCount += 1
         if self.widgetDocuments.count():
-            self.widgetDocuments.setCurrentItem(self.widgetDocuments.item(cdoc))
+            self.widgetDocuments.setCurrentItem(self.widgetDocuments.item(activeDoc))
         
     def refreshButtonClicked(self):
         self.loadDocuments()
 
     def confirmButton(self):
         selectedPaths = [
-            item.text() for item in self.widgetDocuments.selectedItems()]
+            item.toolTip() for item in self.widgetDocuments.selectedItems()]
         selectedDocuments = [
             document for document in self.documentsList
             for path in selectedPaths if path == document.fileName()
@@ -148,7 +157,8 @@ class UIExportLayers(object):
         elif not self.directoryTextField.text():
             self.msgBox.setText(i18n("Select the initial directory."))
         else:
-            self.export(selectedDocuments[0])
+            for doc in selectedDocuments:
+                self.export(doc)
             self.msgBox.setText(i18n("All layers have been exported."))
         self.msgBox.exec_()
 

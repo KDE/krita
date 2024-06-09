@@ -122,13 +122,7 @@ int GridConfig::subdivision() const
 
 void GridConfig::setSubdivision(int subdivision)
 {
-    if (subdivision < 1) {
-        subdivision = 1;
-    }
-    else if (subdivision > 10) {
-        subdivision = 10;
-    }
-    d->gridConfig->setSubdivision(subdivision);
+    d->gridConfig->setSubdivision(qBound(1, subdivision, 10));
 }
 
 qreal GridConfig::angleLeft() const
@@ -138,13 +132,7 @@ qreal GridConfig::angleLeft() const
 
 void GridConfig::setAngleLeft(qreal angleLeft)
 {
-    if (angleLeft < 0) {
-        angleLeft = 0;
-    }
-    else if (angleLeft > 89) {
-        angleLeft = 89;
-    }
-    d->gridConfig->setAngleLeft(angleLeft);
+    d->gridConfig->setAngleLeft(qBound(1, angleLeft, 10));
 }
 
 qreal GridConfig::angleRight() const
@@ -154,13 +142,7 @@ qreal GridConfig::angleRight() const
 
 void GridConfig::setAngleRight(qreal angleRight)
 {
-    if (angleRight < 0) {
-        angleRight = 0;
-    }
-    else if (angleRight > 89) {
-        angleRight = 89;
-    }
-    d->gridConfig->setAngleRight(angleRight);
+    d->gridConfig->setAngleRight(qBound(1, angleRight, 10));
 }
 
 bool GridConfig::angleLeftActive() const
@@ -190,13 +172,7 @@ int GridConfig::cellSpacing() const
 
 void GridConfig::setCellSpacing(int cellSpacing)
 {
-    if (cellSpacing < 10) {
-        cellSpacing = 10;
-    }
-    else if (cellSpacing > 1000) {
-        cellSpacing = 1000;
-    }
-    d->gridConfig->setCellSpacing(cellSpacing);
+    d->gridConfig->setCellSpacing(qBound(10, cellSpacing, 1000));
 }
 
 int GridConfig::cellSize() const
@@ -206,13 +182,7 @@ int GridConfig::cellSize() const
 
 void GridConfig::setCellSize(int cellSize)
 {
-    if (cellSize < 10) {
-        cellSize = 10;
-    }
-    else if (cellSize > 1000) {
-        cellSize = 1000;
-    }
-    d->gridConfig->setCellSize(cellSize);
+    d->gridConfig->setCellSize(qBound(10, cellSize, 1000));
 }
 
 QString GridConfig::type() const

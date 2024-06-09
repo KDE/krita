@@ -118,6 +118,9 @@ public Q_SLOTS:
     qreal audioLevel() const;
     void setAudioLevel(const qreal level);
 
+    QList<QString> audioTracks() const;
+    bool setAudioTracks(const QList<QString> files) const;
+
 private:
 
 };

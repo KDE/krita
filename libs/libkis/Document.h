@@ -7,6 +7,7 @@
 #define LIBKIS_DOCUMENT_H
 
 #include <QObject>
+#include <QFileInfo>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -1028,6 +1029,26 @@ newDoc.setGridConfig(newDocGrid)
      * @param level Audio volumne between 0.0 and 1.0 (1.0 = 100%)
      */
     void setAudioLevel(const qreal level);
+
+    /**
+     * @brief Return a list of current audio tracks for document
+     * @return List of absolute path/file name of audio files
+     */
+    QList<QString> audioTracks() const;
+
+    /**
+     * @brief Set a list of audio tracks for document
+     * Note: the function allows to add more than one file while from Krita's UI, importing a file
+     * will replace the complete list
+     *
+     * The reason why this method let the ability to provide more than one file is related to
+     * the internal's Krita method from KisDocument class:
+     * void KisDocument::setAudioTracks(QVector<QFileInfo> f)
+     *
+     * @param files List of absolute path/file name of audio files
+     * @return True if all files from list have been added, otherwise False (a file was not found)
+     */
+    bool setAudioTracks(const QList<QString> files) const;
 
 private:
 

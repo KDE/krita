@@ -1215,7 +1215,7 @@ void Document::setGuidesConfig(GuidesConfig *guidesConfig)
     // to pixels values
     KisGuidesConfig tmpConfig = guidesConfig->guidesConfig();
 
-    if(d->document->image()) {
+    if (d->document->image()) {
         KisCoordinatesConverter converter;
         converter.setImage(d->document->image());
 
@@ -1268,4 +1268,33 @@ qreal Document::audioLevel() const
 void Document::setAudioLevel(const qreal level)
 {
     d->document->setAudioVolume(level);
+}
+
+QList<QString> Document::audioTracks() const
+{
+    QList<QString> fileList;
+    Q_FOREACH(QFileInfo fileInfo, d->document->getAudioTracks()) {
+        fileList.append(fileInfo.absoluteFilePath());
+    }
+    return fileList;
+}
+
+bool Document::setAudioTracks(const QList<QString> files) const
+{
+    bool returned = true;
+    QVector<QFileInfo> fileList;
+    QFileInfo fileInfo;
+    Q_FOREACH(QString fileName, files) {
+        fileInfo.setFile(fileName);
+        if (fileInfo.exists()) {
+            // ensure the file exists before adding it
+            fileList.append(fileName);
+        }
+        else {
+            // if at least one file is not valid, return false
+            returned = false;
+        }
+    }
+    d->document->setAudioTracks(fileList);
+    return returned;
 }

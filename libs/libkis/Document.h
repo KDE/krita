@@ -1017,6 +1017,17 @@ newDoc.setGridConfig(newDocGrid)
      */
     void setGridConfig(GridConfig *gridConfig);
 
+    /**
+     * @brief Return current audio level for document
+     * @return A value between 0.0 and 1.0 (1.0 = 100%)
+     */
+    qreal audioLevel() const;
+
+    /**
+     * @brief Set current audio level for document
+     * @param level Audio volumne between 0.0 and 1.0 (1.0 = 100%)
+     */
+    void setAudioLevel(const qreal level);
 
 private:
 

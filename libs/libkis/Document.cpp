@@ -1260,3 +1260,12 @@ void Document::setGridConfig(GridConfig *gridConfig)
     d->document->setGridConfig(tmpConfig);
 }
 
+qreal Document::audioLevel() const
+{
+    return d->document->getAudioLevel();
+}
+
+void Document::setAudioLevel(const qreal level)
+{
+    d->document->setAudioVolume(level);
+}

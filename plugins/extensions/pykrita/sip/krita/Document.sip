@@ -115,6 +115,9 @@ public Q_SLOTS:
     GuidesConfig *guidesConfig();
     void setGuidesConfig(GuidesConfig *guidesConfig);
 
+    qreal audioLevel() const;
+    void setAudioLevel(const qreal level);
+
 private:
 
 };

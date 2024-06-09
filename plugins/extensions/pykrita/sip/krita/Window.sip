@@ -3,6 +3,18 @@ class Window : QObject
 %TypeHeaderCode
 #include "Window.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Window passed to a Signal is provided as a QObject instead of
+  // a Window object
+  // (not sure why, but explicit conversion here fix the problem)
+  Window* mc = qobject_cast<Window*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Window;
+  }
+%End
+
     Window(const Window & __0);
 public:
     bool operator==(const Window &other) const;

@@ -3,6 +3,18 @@ class Resource : QObject
 %TypeHeaderCode
 #include "Resource.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Resource passed to a Signal is provided as a QObject instead of
+  // a Resource object
+  // (not sure why, but explicit conversion here fix the problem)
+  Resource* mc = qobject_cast<Resource*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Resource;
+  }
+%End
+
     Resource(const Resource & __0);
 public:    
     bool operator==(const Resource &other) const;

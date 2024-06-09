@@ -3,6 +3,18 @@ class Document : QObject /NoDefaultCtors/
 %TypeHeaderCode
 #include "Document.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Document passed to a Signal is provided as a QObject instead of
+  // a Document object
+  // (not sure why, but explicit conversion here fix the problem)
+  Document* mc = qobject_cast<Document*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Document;
+  }
+%End
+
     Document(const Document & __0);
 public:
     bool operator==(const Document &other) const;

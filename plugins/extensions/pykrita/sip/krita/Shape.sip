@@ -3,6 +3,18 @@ class Shape : QObject
 %TypeHeaderCode
 #include "Shape.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Shape passed to a Signal is provided as a QObject instead of
+  // a Shape object
+  // (not sure why, but explicit conversion here fix the problem)
+  Shape* mc = qobject_cast<Shape*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Shape;
+  }
+%End
+
     Shape(const Shape & __0);
     virtual ~Shape();
     bool operator==(const Shape &other) const;

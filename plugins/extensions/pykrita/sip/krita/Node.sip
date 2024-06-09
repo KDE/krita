@@ -3,6 +3,18 @@ class Node : QObject
 %TypeHeaderCode
 #include "Node.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Node passed to a Signal is provided as a QObject instead of
+  // a Node object
+  // (not sure why, but explicit conversion here fix the problem)
+  Node* mc = qobject_cast<Node*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Node;
+  }
+%End
+
     Node(const Node & __0);
 public:
     virtual ~Node();

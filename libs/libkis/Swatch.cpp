@@ -11,14 +11,16 @@ struct Swatch::Private {
     KisSwatch swatch;
 };
 
-Swatch::Swatch(const KisSwatch &kisSwatch)
-    : d(new Private)
+Swatch::Swatch(const KisSwatch &kisSwatch, QObject *parent)
+      : QObject(parent)
+      , d(new Private)
 {
     d->swatch = kisSwatch;
 }
 
-Swatch::Swatch()
-    : d(new Private)
+Swatch::Swatch(QObject *parent)
+      : QObject(parent)
+      , d(new Private)
 {
 
 }
@@ -28,8 +30,9 @@ Swatch::~Swatch()
     delete d;
 }
 
-Swatch::Swatch(const Swatch &rhs)
-    : d(new Private)
+Swatch::Swatch(const Swatch &rhs, QObject *parent)
+      : QObject(parent)
+      , d(new Private)
 {
     d->swatch = rhs.d->swatch;
 }
@@ -39,6 +42,16 @@ Swatch &Swatch::operator=(const Swatch &rhs)
     if (&rhs == this) return *this;
     d->swatch = rhs.d->swatch;
     return *this;
+}
+
+bool Swatch::operator==(const Swatch &other) const
+{
+    return (d->swatch == other.d->swatch);
+}
+
+bool Swatch::operator!=(const Swatch &other) const
+{
+    return !(operator==(other));
 }
 
 QString Swatch::name() const

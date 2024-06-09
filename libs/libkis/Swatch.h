@@ -18,18 +18,24 @@ class KisSwatch;
  * A Swatch is a single color that is part of a palette, that has a name
  * and an id. A Swatch color can be a spot color.
  */
-class KRITALIBKIS_EXPORT Swatch
+class KRITALIBKIS_EXPORT Swatch : public QObject
 {
+    Q_OBJECT
+
 private:
     friend class Palette;
     friend class PaletteView;
-    Swatch(const KisSwatch &kisSwatch);
+    Swatch(const KisSwatch &kisSwatch, QObject *parent = 0);
 public:
-    Swatch();
+    explicit Swatch(QObject *parent = 0);
     virtual ~Swatch();
-    Swatch(const Swatch &rhs);
+    Swatch(const Swatch &rhs, QObject *parent = 0);
     Swatch &operator=(const Swatch &rhs);
 
+    bool operator==(const Swatch &other) const;
+    bool operator!=(const Swatch &other) const;
+
+public Q_SLOTS:
     QString name() const;
     void setName(const QString &name);
 

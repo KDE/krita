@@ -15,7 +15,9 @@ struct Palette::Private {
     KoColorSetSP palette {0};
 };
 
-Palette::Palette(Resource *resource): d(new Private()) {
+Palette::Palette(Resource *resource, QObject *parent)
+       : QObject(parent)
+       , d(new Private()) {
     d->palette = resource->resource().dynamicCast<KoColorSet>();
 }
 
@@ -23,6 +25,17 @@ Palette::~Palette()
 {
     delete d;
 }
+
+bool Palette::operator==(const Palette &other) const
+{
+    return (d->palette == other.d->palette);
+}
+
+bool Palette::operator!=(const Palette &other) const
+{
+    return !(operator==(other));
+}
+
 
 int Palette::numberOfEntries() const
 {
@@ -80,6 +93,12 @@ int Palette::colorsCountTotal()
 
 Swatch *Palette::colorSetEntryByIndex(int index)
 {
+    warnScript << "DEPRECATED Palette.colorSetEntryByIndex() - use Palette.entryByIndex() instead";
+    return entryByIndex(index);
+}
+
+Swatch *Palette::entryByIndex(int index)
+{
     if (!d->palette || columnCount() == 0) {
         return new Swatch();
     }
@@ -89,6 +108,12 @@ Swatch *Palette::colorSetEntryByIndex(int index)
 }
 
 Swatch *Palette::colorSetEntryFromGroup(int index, const QString &groupName)
+{
+    warnScript << "DEPRECATED Palette.colorSetEntryFromGroup() - use Palette.entryByIndexFromGroup() instead";
+    return entryByIndexFromGroup(index, groupName);
+}
+
+Swatch *Palette::entryByIndexFromGroup(int index, const QString &groupName)
 {
     if (!d->palette || columnCount() == 0) {
         return new Swatch();
@@ -123,6 +148,12 @@ void Palette::removeEntry(int index, const QString &/*groupName*/)
 }
 
 void Palette::changeGroupName(QString oldGroupName, QString newGroupName)
+{
+    warnScript << "DEPRECATED Palette.changeGroupName() - use Palette.renameGroup() instead";
+    return renameGroup(oldGroupName, newGroupName);
+}
+
+void Palette::renameGroup(QString oldGroupName, QString newGroupName)
 {
     d->palette->changeGroupName(oldGroupName, newGroupName);
 }

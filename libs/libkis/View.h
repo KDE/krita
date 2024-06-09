@@ -51,7 +51,7 @@ public Q_SLOTS:
     void setDocument(Document *document);
 
     /**
-     * @return true if the current view is visible, false if not.
+     * @return True if the current view is visible, False if not.
      */
     bool visible() const;
 
@@ -75,8 +75,9 @@ public Q_SLOTS:
 
 
     /**
-     * @brief foregroundColor allows access to the currently active color.
+     * @brief foregroundColor allows access to the currently active foreground color.
      * This is nominally per canvas/view, but in practice per mainwindow.
+     *
      * @code
 color = Application.activeWindow().activeView().foregroundColor()
 components = color.components()
@@ -86,42 +87,212 @@ components[2] = 0.7
 color.setComponents(components)
 Application.activeWindow().activeView().setForeGroundColor(color)
      * @endcode
+     *
+     * @return The current foreground color
      */
     ManagedColor *foregroundColor() const;
     void setForeGroundColor(ManagedColor *color);
 
+    /**
+     * @brief backgroundColor allows access to the currently active background color.
+     * This is nominally per canvas/view, but in practice per mainwindow.
+     *
+     * @return The current background color
+     */
     ManagedColor *backgroundColor() const;
     void setBackGroundColor(ManagedColor *color);
 
+    /**
+     * @brief return the current selected preset
+     *
+     * @return the current preset (Resource type = 'preset')
+     */
     Resource *currentBrushPreset() const;
+
+    /**
+     * @brief set the current selected preset
+     *
+     * @param resource the current preset to set (Resource type = 'preset')
+     */
     void setCurrentBrushPreset(Resource *resource);
 
+    /**
+     * @brief return the current selected pattern
+     *
+     * @return the current pattern (Resource type = 'pattern')
+     */
     Resource *currentPattern() const;
+
+    /**
+     * @brief set the current selected pattern
+     *
+     * @param resource the current pattern to set (Resource type = 'pattern')
+     */
     void setCurrentPattern(Resource *resource);
 
+    /**
+     * @brief return the current selected gradient
+     *
+     * @return the current gradient (Resource type = 'gradient')
+     */
     Resource *currentGradient() const;
+
+    /**
+     * @brief set the current selected gradient
+     *
+     * @param resource the current gradient to set (Resource type = 'gradient')
+     */
     void setCurrentGradient(Resource *resource);
 
+    /**
+     * @brief return the current blending mode for brush
+     *
+     * @return the current blending mode identifier
+     */
     QString currentBlendingMode() const;
+
+    /**
+     * @brief set the current blending mode for brush
+     *
+     * @param blendingMode the current belding mode identifier
+     */
     void setCurrentBlendingMode(const QString &blendingMode);
 
+    /**
+     * @return the current HDR Exposure value
+     */
     float HDRExposure() const;
+
+    /**
+     * @brief set the current HDR Exposure value
+     *
+     * @param exposure the HDR Exposure to set
+     */
     void setHDRExposure(float exposure);
 
+    /**
+     * @return the current HDR Gamma value
+     */
     float HDRGamma() const;
+
+    /**
+     * @brief set the current HDR Gamma value
+     *
+     * @param exposure the HDR Gamma to set
+     */
     void setHDRGamma(float gamma);
 
+    /**
+     * @brief return the current opacity for brush
+     *
+     * @return the brush opacity value (0.00=fully transparent - 1.00=fully opaque)
+     */
     qreal paintingOpacity() const;
+
+    /**
+     * @brief set the current opacity for brush
+     *
+     * @param opacity the opacity value (0.00=fully transparent - 1.00=fully opaque)
+     */
     void setPaintingOpacity(qreal opacity);
 
+    /**
+     * @brief return the current size for brush
+     *
+     * @return the brush size value (in pixels)
+     */
     qreal brushSize() const;
+
+    /**
+     * @brief set the current size for brush
+     *
+     * @param brushSize the brush size (in pixels)
+     */
     void setBrushSize(qreal brushSize);
 
+    /**
+     * @brief return the current rotation for brush tip
+     *
+     * @return the brush tip rotation value (in degrees)
+     */
     qreal brushRotation() const;
+
+    /**
+     * @brief set the current rotation for brush tip
+     *
+     * @param brushRotation the brush tip rotation (in degrees)
+     */
     void setBrushRotation(qreal brushRotation);
 
+    /**
+     * @brief return the current flow for brush
+     *
+     * @return the brush flow value
+     */
     qreal paintingFlow() const;
+
+    /**
+     * @brief set the current flow value for brush
+     *
+     * @param flow the brush flow
+     */
     void setPaintingFlow(qreal flow);
+
+    /**
+     * @brief return the current pattern size for brush
+     *
+     * @return the brush pattern size value
+     */
+    qreal patternSize() const;
+
+    /**
+     * @brief set the current pattern size value for brush
+     *
+     * @param flow the brush pattern size
+     */
+    void setPatternSize(qreal size);
+
+    /**
+     * @brief return current eraser mode status (active/inactive)
+     *
+     * @return True if eraser mode is active, otherwise False
+     */
+    bool eraserMode() const;
+
+    /**
+     * @brief set current eraser active/inactive
+     *
+     * @param value Set to True to activate eraser mode, False to deactivate
+     */
+    void setEraserMode(bool value);
+
+    /**
+     * @brief return current global alpha lock mode (active/inactive)
+     *
+     * @return True if is active, otherwise False
+     */
+    bool globalAlphaLock() const;
+
+    /**
+     * @brief set current global alpha lock mode active/inactive
+     *
+     * @param value Set to True to lock global alpha mode, False to unlock
+     */
+    void setGlobalAlphaLock(bool value);
+
+    /**
+     * @brief return current disabled pressure status
+     *
+     * @return True if is pressure is disabled, otherwise False
+     */
+    bool disablePressure() const;
+
+    /**
+     * @brief set current disabled pressure status
+     *
+     * @param value Set to True to disable pressure, False to enabled pressure
+     */
+    void setDisablePressure(bool value);
 
     /**
      * @brief showFloatingMessage displays a floating message box on the top-left corner of the canvas

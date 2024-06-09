@@ -271,6 +271,67 @@ void View::setPaintingFlow(qreal flow)
     d->view->resourceProvider()->setFlow(flow);
 }
 
+qreal View::patternSize() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->patternSize();
+}
+
+void View::setPatternSize(qreal size)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setPatternSize(size);
+}
+
+bool View::eraserMode() const
+{
+    if (!d->view) {
+        return false;
+    }
+    return d->view->resourceProvider()->eraserMode();
+}
+
+void View::setEraserMode(bool value)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->resourceProvider()->setEraserMode(value);
+}
+
+bool View::globalAlphaLock() const
+{
+    if (!d->view) {
+        return false;
+    }
+    return d->view->resourceProvider()->globalAlphaLock();
+}
+
+void View::setGlobalAlphaLock(bool value)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->resourceProvider()->setGlobalAlphaLock(value);
+}
+
+bool View::disablePressure() const
+{
+    if (!d->view) {
+        return false;
+    }
+    return d->view->resourceProvider()->disablePressure();
+}
+
+void View::setDisablePressure(bool value)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->resourceProvider()->setDisablePressure(value);
+}
+
+
 QList<Node *> View::selectedNodes() const
 {
     if (!d->view) return QList<Node *>();

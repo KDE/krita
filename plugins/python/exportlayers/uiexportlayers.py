@@ -103,7 +103,7 @@ class UIExportLayers(object):
         self.mainLayout.addLayout(self.formLayout)
         self.mainLayout.addWidget(self.line)
         self.mainLayout.addWidget(self.buttonBox)
-
+        
         self.mainDialog.resize(500, 300)
         self.mainDialog.setWindowTitle(i18n("Export Layers"))
         self.mainDialog.setSizeGripEnabled(True)
@@ -118,9 +118,19 @@ class UIExportLayers(object):
             if document.fileName()
         ]
 
+        currentDoc = None
+        if self.kritaInstance.activeDocument():
+            currentDoc = self.kritaInstance.activeDocument().fileName()
+        
+        cdoc = 0
         for document in self.documentsList:
-            self.widgetDocuments.addItem(document.fileName())
-
+            theName = document.fileName()
+            self.widgetDocuments.addItem(theName)
+            if theName == currentDoc:
+                cdoc = self.widgetDocuments.count() - 1
+        if self.widgetDocuments.count():
+            self.widgetDocuments.setCurrentItem(self.widgetDocuments.item(cdoc))
+        
     def refreshButtonClicked(self):
         self.loadDocuments()
 
@@ -131,8 +141,8 @@ class UIExportLayers(object):
             document for document in self.documentsList
             for path in selectedPaths if path == document.fileName()
         ]
-
         self.msgBox = QMessageBox(self.mainDialog)
+
         if not selectedDocuments:
             self.msgBox.setText(i18n("Select one document."))
         elif not self.directoryTextField.text():

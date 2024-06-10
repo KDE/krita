@@ -9,6 +9,7 @@
 #include <QDomElement>
 
 #include "kis_grid_config.h"
+#include "kis_debug.h"
 
 struct GridConfig::Private {
     Private() {}
@@ -132,7 +133,7 @@ qreal GridConfig::angleLeft() const
 
 void GridConfig::setAngleLeft(qreal angleLeft)
 {
-    d->gridConfig->setAngleLeft(qBound(1, angleLeft, 10));
+    d->gridConfig->setAngleLeft(qBound(0.0, angleLeft, 89.0));
 }
 
 qreal GridConfig::angleRight() const
@@ -142,7 +143,7 @@ qreal GridConfig::angleRight() const
 
 void GridConfig::setAngleRight(qreal angleRight)
 {
-    d->gridConfig->setAngleRight(qBound(1, angleRight, 10));
+    d->gridConfig->setAngleRight(qBound(0.0, angleRight, 89.0));
 }
 
 bool GridConfig::angleLeftActive() const

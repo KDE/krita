@@ -22472,7 +22472,7 @@ msgstr "Sergiu Bivol"
 #, fuzzy, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "sergiu@ase.md"
+msgstr "sergiu@cip.md"
 
 #: libs/ui/dialogs/kis_about_application.cpp:73
 #, kde-format

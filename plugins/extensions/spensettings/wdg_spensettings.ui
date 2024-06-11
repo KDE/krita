@@ -61,7 +61,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Following button actions are supported on the Note 9, Note 10 and Tab S6 devices.</string>
+         <string>Following button actions are supported on the Note 9, Note 10, Tab S6 and Tab S9 devices.</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>
@@ -151,7 +151,7 @@
          </font>
         </property>
         <property name="text">
-         <string>Following gestures are supported on the Note 10 and Tab S6 devices.</string>
+         <string>Following gestures are supported on the Note 10, Tab S6 and Tab S9 devices.</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

@@ -8,8 +8,8 @@
 <p>Batch Exporter exports individual layers to image files based on metadata in the layer name. The supported options are:</p>
 <ul>
 <li><code>[e=jpg,png]</code> - supported export image extensions</li>
-<li><code>[s=20,50,100,150]</code> - size in <code>%</code></li>
-<li><code>[p=path/to/custom/export/directory]</code> - custom output path. Paths can be absolute or relative to the Krita document.</li>
+<li><code>[s=20,33.333,100,150]</code> - size in <code>%</code>.</li>
+<li><code>[p=path/to/custom/export/directory]</code> or <code>[p="path with spaces"]</code> - custom output path. Paths can be absolute or relative to the Krita document.</li>
 <li><code>[m=20,30,100]</code> - extra margin in <code>px</code>. The layer is trimmed to the smallest bounding box by default. This option adds extra padding around the layer.</li>
 <li><code>[t=false]</code> or <code>[t=no]</code> - disable trimming the exported layer to the bounding box of the content.</li>
 <li><code>[i=false]</code> or <code>[i=no]</code> - disable parent metadata inheritance for a layer. More info <a href="#layer-inheritance">below</a>.</li>
@@ -39,7 +39,7 @@ Background</code></pre>
 <p>Say that we made a mistake: we want to export to <code>50%</code> instead of <code>40%</code>. Select the layers once more and write <code>s=50,100</code> in the text box. Press <kbd>Enter</kbd>. This will update the size tag and leave <code>e=png</code> untouched.</p>
 <p>The tool can do more than add and update meta tags. If you want to remove <code>GroupLayer</code> from the name on <code>GodetteGroupLayer</code> and <code>HeadGroupLayer</code>, select them and write <code>GroupLayer=</code> in the text box. Press <kbd>Enter</kbd> and the <code>GroupLayer</code> text will disappear from the selected layers.</p>
 <p>The <code>=</code> tells the tool to search and replace. <code>this=[that]</code> will replace <code>this</code> with <code>[that]</code>. If you don’t write anything after the equal sign, the tool will erase the text you searched for.</p>
-<p>The rename tool is smarter with meta tags. Writing <code>e=</code> will remove the extension tag entirely. For example, <code>Godette e=png s=50,100</code> will become <code>Godette s=50,100</code>.</p>
+<p>The rename tool is smarter with meta tags. Writing <code>e=</code> will remove the extension tag entirely. For example, <code>Godete e=png s=50,100</code> will become <code>Godette s=50,100</code>.</p>
 <h2 id="coa-tools-format">COA Tools format</h2>
 <p>The exporter will generate the necessary sprite contents and metadata file for easy import in COA Tools / Blender.</p>
 <p>If you want to export your krita document to COA Tools format, simply click the <code>Document</code> button under COA Tools.</p>

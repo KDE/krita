@@ -626,8 +626,8 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
         QLineF l0(far1_dst, mousePos);
         QLineF l1(far2_dst, mousePos);
         QLineF l2(otherV_dst, near1_dst);
-        l0.intersect(l2, &near1_dst);
-        l1.intersect(l2, &near2_dst);
+        l0.intersects(l2, &near1_dst);
+        l1.intersects(l2, &near2_dst);
 
         srcPoints << far1_src;
         srcPoints << far2_src;
@@ -706,7 +706,7 @@ void KisPerspectiveTransformStrategy::Private::recalculateTransformations()
             QLineF l2(prev, next);
 
             QPointF intersection;
-            l1.intersect(l2, &intersection);
+            l1.intersects(l2, &intersection);
 
             qreal maxDistance = kisSquareDistance(pt, other);
 

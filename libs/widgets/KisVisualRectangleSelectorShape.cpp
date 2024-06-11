@@ -208,7 +208,7 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
             qreal totalLength = 0.0;
             bool foundIntersect = false;
             Q_FOREACH(QLineF line, polygonLines) {
-                if (line.intersect(radius,&intersect)==QLineF::BoundedIntersection && foundIntersect==false)
+                if (line.intersects(radius, &intersect) == QLineF::BoundedIntersection && foundIntersect == false)
                 {
                     foundIntersect = true;
                     length+=QLineF(line.p1(), intersect).length();
@@ -240,7 +240,7 @@ QPointF KisVisualRectangleSelectorShape::convertWidgetCoordinateToShapeCoordinat
             qreal totalLength = 0.0;
             bool foundIntersect = false;
             Q_FOREACH(QLineF line, polygonLines) {
-                if (line.intersect(radius,&intersect)==QLineF::BoundedIntersection && foundIntersect==false)
+                if (line.intersects(radius, &intersect) == QLineF::BoundedIntersection && foundIntersect == false)
                 {
                     foundIntersect = true;
                     length+=QLineF(line.p1(), intersect).length();

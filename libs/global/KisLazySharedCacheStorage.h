@@ -160,7 +160,7 @@ public:
 
     void reset() {
         QMutexLocker l(&m_mutex);
-        m_cachedValue.store(nullptr);
+        m_cachedValue.storeRelaxed(nullptr);
         m_dataWrapper.reset();
     }
 

@@ -48,7 +48,7 @@ void TestPerspectiveBasedAssistantHelper::testDistanceInGrid()
     QLineF first = QLineF(QPointF(10, 0), QPointF(-10, 8));
     QLineF second = QLineF(QPointF(-10, 0), QPointF(0, 13));
     QPointF inters;
-    if (first.intersect(second, &inters) != QLineF::NoIntersection) {
+    if (first.intersects(second, &inters) != QLineF::NoIntersection) {
         ENTER_FUNCTION() << "Intersection is: " << inters << "and was supposed to be: " << QPointF(-5 - 15.0/19, 6 + 6.0/19);
     }
 

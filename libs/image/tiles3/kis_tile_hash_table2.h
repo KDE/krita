@@ -48,7 +48,7 @@ public:
 
     bool isEmpty()
     {
-        return !m_numTiles.load();
+        return !m_numTiles.loadRelaxed();
     }
 
     bool tileExists(qint32 col, qint32 row);
@@ -101,7 +101,7 @@ public:
 
     qint32 numTiles()
     {
-        return m_numTiles.load();
+        return m_numTiles.loadRelaxed();
     }
 
     void debugPrintInfo();
@@ -480,7 +480,7 @@ void KisTileHashTableTraits2<T>::clear()
             iter.next();
         }
 
-        m_numTiles.store(0);
+        m_numTiles.storeRelaxed(0);
     }
 
     // garbage collection must **not** be run with locks held

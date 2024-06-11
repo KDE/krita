@@ -294,13 +294,14 @@ LayerBox::LayerBox()
     layerFilterWidget = new KisLayerFilterWidget(this);
     connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
     connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, [this, filterIcon, filterEnabledIcon](){
-        if(layerFilterWidget->isCurrentlyFiltering()) {
+        if (layerFilterWidget->isCurrentlyFiltering()) {
             m_wdgLayerBox->bnLayerFilters->setIcon(filterEnabledIcon);
         } else {
             m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
         }
 
-        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList<int>::fromSet(layerFilterWidget->getActiveColors()));
+        auto activeColors = layerFilterWidget->getActiveColors();
+        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList(activeColors.begin(), activeColors.end()));
         m_wdgLayerBox->bnLayerFilters->setTextFilter(layerFilterWidget->hasTextFilter());
     });
 

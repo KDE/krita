@@ -356,7 +356,7 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
     QLineF line4(pi1.pos(), pi2.pos());
 
     QPointF intersection;
-    if (line3.intersect(line4, &intersection) == QLineF::BoundedIntersection) {
+    if (line3.intersects(line4, &intersection) == QLineF::BoundedIntersection) {
         qreal controlLength = line4.length() / 2;
 
         line1.setLength(controlLength);
@@ -365,7 +365,7 @@ void KisToolFreehandHelper::paintBezierSegment(KisPaintInformation pi1, KisPaint
         controlTarget1 = line1.p2();
         controlTarget2 = line2.p2();
     } else {
-        QLineF::IntersectType type = line1.intersect(line2, &intersection);
+        QLineF::IntersectType type = line1.intersects(line2, &intersection);
 
         if (type == QLineF::NoIntersection ||
             intersection.manhattanLength() > maxSanePoint) {

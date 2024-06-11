@@ -155,7 +155,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     text[0].text   = (png_charp) png_malloc(ping, allocated_length);
     memset(text[0].text, 0, allocated_length);
 
-    QString key = QLatin1Literal("Raw profile type ") + profile_type.toLatin1();
+    QString key = QLatin1String("Raw profile type ") + profile_type.toLatin1();
     QByteArray keyData = key.toLatin1();
     text[0].key = keyData.data();
 

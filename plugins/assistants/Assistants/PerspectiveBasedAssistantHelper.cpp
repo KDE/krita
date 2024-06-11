@@ -264,14 +264,14 @@ bool PerspectiveBasedAssistantHelper::getVanishingPointsOptional(const QPolygonF
 
     if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0
             || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
-        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+        if (QLineF(poly[0], poly[1]).intersects(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
             vp2 = intersection;
             either = true;
         }
     }
     if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0
             || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
-        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+        if (QLineF(poly[1], poly[2]).intersects(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
             vp1 = intersection;
             either = true;
         }

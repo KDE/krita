@@ -596,7 +596,7 @@ QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p)
 
         if (p1Valid != p2Valid) {
             QPointF intersection;
-            cutLine.intersect(QLineF(p1, p2), &intersection);
+            cutLine.intersects(QLineF(p1, p2), &intersection);
             resultPoints << intersection;
         }
 

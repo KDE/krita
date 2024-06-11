@@ -61,12 +61,12 @@ KisResourcesInterfaceSP KisGlobalResourcesInterface::instance()
     int x = guard.loadAcquire();
     if (Q_UNLIKELY(x >= QtGlobalStatic::Uninitialized)) {
         QMutexLocker locker(&mutex);
-        if (guard.load() == QtGlobalStatic::Uninitialized) {
+        if (guard.loadRelaxed() == QtGlobalStatic::Uninitialized) {
             d.reset(new KisGlobalResourcesInterface());
             static struct Cleanup {
                 ~Cleanup() {
                     d.reset();
-                    guard.store(QtGlobalStatic::Destroyed);
+                    guard.storeRelaxed(QtGlobalStatic::Destroyed);
                 }
             } cleanup;
             guard.storeRelease(QtGlobalStatic::Initialized);

@@ -61,7 +61,7 @@ KisKritaSensorData::KisKritaSensorData()
       sensorDrawingAngle(),
       sensorRotation(RotationId),
       sensorDistance(DistanceId),
-      sensorTime(TimeId, QLatin1Literal("duration")),
+      sensorTime(TimeId, QLatin1String("duration")),
       sensorFuzzyPerDab(FuzzyPerDabId),
       sensorFuzzyPerStroke(FuzzyPerStrokeId),
       sensorFade(FadeId),

@@ -61,7 +61,7 @@ PageBundleSaver::PageBundleSaver(KoResourceBundleSP bundle, QWidget *parent) :
         }
 
         if (!set.isEmpty()) {
-            m_tags = "<b>Tags</b><br>" + set.toList().join(", ") + "<br>";
+            m_tags = "<b>Tags</b><br>" + QList(set.begin(), set.end()).join(", ") + "<br>";
         }
 
         m_ui->lblDetails->setText(m_ui->lblDetails->text() + m_tags);

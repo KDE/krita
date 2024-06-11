@@ -89,7 +89,7 @@ struct Q_DECL_HIDDEN KisSafeTransform::Private
                 QPointF intersection;
                 QLineF edge(prevPoint, pt);
                 QLineF::IntersectType intersectionType =
-                    horizon.intersect(edge, &intersection);
+                    horizon.intersects(edge, &intersection);
 
                 KIS_ASSERT_RECOVER_NOOP(intersectionType != QLineF::NoIntersection);
 

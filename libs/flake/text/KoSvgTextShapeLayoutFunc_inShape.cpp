@@ -168,7 +168,7 @@ static bool getFirstPosition(QPointF &firstPoint,
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
                 QLineF::IntersectType intersect = line.intersects(line2, &intersectPoint);
 #else
-                QLineF::IntersectType intersect = line.intersect(line2, &intersectPoint);
+                QLineF::IntersectType intersect = line.intersects(line2, &intersectPoint);
 #endif
                 if (intersect != QLineF::NoIntersection) {
                     // should proly handle 'reflex' vertices better.
@@ -300,20 +300,12 @@ findLineBoxesForFirstPos(QPainterPath shape, QPointF firstPos, QRectF wordBox, K
         QPointF intersectA;
         QPointF intersectB;
         QPointF intersect;
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
         if (topLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
-#else
-        if (topLine.intersect(line, &intersect) == QLineF::BoundedIntersection) {
-#endif
             intersectA = intersect-lineTop;
             intersects.append(intersectA);
             addedA = true;
         }
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 13, 0))
         if (bottomLine.intersects(line, &intersect) == QLineF::BoundedIntersection) {
-#else
-        if (bottomLine.intersect(line, &intersect) == QLineF::BoundedIntersection) {
-#endif
             intersectB = intersect-lineBottom;
             if (intersectA != intersectB || !addedA) {
                 intersects.append(intersectB);

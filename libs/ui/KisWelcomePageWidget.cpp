@@ -579,7 +579,8 @@ void KisWelcomePageWidget::setupNewsLangSelection(QMenu *newsOptionsMenu)
     {
         // Initialize with the config.
         KisConfig cfg(true);
-        *enabledNewsLangs = cfg.readList<QString>(newsLangConfigName).toSet();
+        auto languagesList = cfg.readList<QString>(newsLangConfigName);
+        *enabledNewsLangs = QSet(languagesList.begin(), languagesList.end());
     }
 
     // If no languages are selected in the config, use the automatic selection.

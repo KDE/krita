@@ -245,7 +245,7 @@ void KisTile::lockForWrite()
 
             DEBUG_COWING(tileData);
 
-            KisMementoManager *mm = m_mementoManager.load();
+            KisMementoManager *mm = m_mementoManager.loadRelaxed();
             if (mm) {
                 mm->registerTileChange(this);
             }

@@ -588,7 +588,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
                 QLineF perspectiveline = QLineF(*assistant->sideHandles()[0], *assistant->sideHandles()[1]);
                 QLineF perspectiveline2 = QLineF(*assistant->sideHandles()[2], *assistant->sideHandles()[3]);
 
-                if (QLineF(perspectiveline2).intersect(QLineF(perspectiveline), &vanishingpoint) != QLineF::NoIntersection){
+                if (QLineF(perspectiveline2).intersects(QLineF(perspectiveline), &vanishingpoint) != QLineF::NoIntersection){
                     *assistant->handles()[0] = vanishingpoint;
                 }
             }// and for the vanishing point itself, only the outer handles get translated.
@@ -638,7 +638,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
                     perspective_line_a = QLineF(*side_hndl[3],*side_hndl[2]);
                     perspective_line_b = QLineF(*side_hndl[6],*side_hndl[7]);
                 }
-                if (perspective_line_a.intersect(perspective_line_b, &vp_new_pos) != QLineF::NoIntersection) {
+                if (perspective_line_a.intersects(perspective_line_b, &vp_new_pos) != QLineF::NoIntersection) {
                     *vp_moved = vp_new_pos;
                 }
             } else {
@@ -1968,14 +1968,14 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             if (preserve_distortion_snap) {
                 const QLineF sp_to_vp = QLineF(sp, t.map(*m_handleDrag));
                 sp_to_opp_vp = sp_to_vp.normalVector();
-                sp_to_vp.intersect(horizon,&snap_point);
+                sp_to_vp.intersects(horizon,&snap_point);
             } else if (preserve_left_right_ratio_snap) {
                 const QLineF prev_sp_to_vp = QLineF(sp, horizon.p1());
                 QLineF new_sp_to_vp = prev_sp_to_vp.translated(t.map(*m_handleDrag)-sp);
                 QPointF new_sp;
-                new_sp_to_vp.intersect(QLineF(QPoint(0,0),QPointF(0,1)),&new_sp);
+                new_sp_to_vp.intersects(QLineF(QPoint(0,0),QPointF(0,1)),&new_sp);
                 sp_to_opp_vp = new_sp_to_vp.normalVector().translated(new_sp-new_sp_to_vp.p1());
-                new_sp_to_vp.intersect(horizon,&snap_point);
+                new_sp_to_vp.intersects(horizon,&snap_point);
             } else if (preserve_horizon_snap) {
                 snap_point = QPointF(t.map(*m_handleDrag).x(),horizon.p1().y());
                 sp_to_opp_vp = QLineF(sp,QPointF(t.map(prevPoint).x(),horizon.p1().y())).normalVector();
@@ -1986,7 +1986,7 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             // actually do make sense
             const bool no_intersection =
                 // NB: opp_snap_point is initialized here
-                sp_to_opp_vp.intersect(horizon, &opp_snap_point) == QLineF::NoIntersection;
+                sp_to_opp_vp.intersects(horizon, &opp_snap_point) == QLineF::NoIntersection;
             const bool origin_is_between =
                 (snap_point.x() < 0 && opp_snap_point.x() > 0) ||
                 (snap_point.x() > 0 && opp_snap_point.x() < 0);
@@ -2004,7 +2004,7 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                 // snapping modes
                 if (preserve_distortion_snap) {
                     sp_to_opp_vp = QLineF(sp, t.map(m_dragStart)).normalVector();
-                    sp_to_opp_vp.intersect(horizon, &oppStart);
+                    sp_to_opp_vp.intersects(horizon, &oppStart);
                 } else {
                     const QPointF p1 = t.map(m_dragStart);
                     const qreal p2x = preserve_horizon_snap ? t.map(*handleOpp).x() : -p1.x();
@@ -2015,7 +2015,7 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                     const QPointF new_sp = QPointF(0,horizon.p1().y()+new_size);
                     sp_to_opp_vp = QLineF(new_sp, t.map(m_dragStart)).normalVector();
                 }
-                sp_to_opp_vp.intersect(horizon, &oppStart);
+                sp_to_opp_vp.intersects(horizon, &oppStart);
                 *handleOpp=inv.map(oppStart);
                 m_currentAdjustment = QPointF(0,0); // clear
             } else {

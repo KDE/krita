@@ -69,6 +69,7 @@ CollapsibleGroupProperty {
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
             elide: Text.ElideRight;
             Layout.maximumWidth: implicitWidth;
+            font.italic: properties.textAlignAllState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         ComboBox {
@@ -85,6 +86,7 @@ CollapsibleGroupProperty {
             textRole: "text";
             valueRole: "value";
             onActivated: textAlignAll = currentValue;
+            wheelEnabled: true;
         }
 
         RevertPropertyButton {
@@ -96,6 +98,7 @@ CollapsibleGroupProperty {
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
             elide: Text.ElideRight;
             Layout.preferredWidth: implicitWidth;
+            font.italic: properties.textAlignLastState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         ComboBox {
@@ -112,6 +115,7 @@ CollapsibleGroupProperty {
             textRole: "text";
             valueRole: "value";
             onActivated: textAlignLast = currentValue;
+            wheelEnabled: true;
         }
 
 
@@ -124,6 +128,7 @@ CollapsibleGroupProperty {
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter;
             elide: Text.ElideRight;
             Layout.preferredWidth: implicitWidth;
+            font.italic: properties.textAnchorState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         ComboBox {
@@ -136,6 +141,7 @@ CollapsibleGroupProperty {
             textRole: "text";
             valueRole: "value";
             onActivated: textAnchor = currentValue;
+            wheelEnabled: true;
         }
 
     }

@@ -47,6 +47,7 @@ TextPropertyBase {
             text: propertyName;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.dominantBaselineState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
 
@@ -71,6 +72,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: baselineSelection = currentValue;
+            wheelEnabled: true;
         }
     }
 }

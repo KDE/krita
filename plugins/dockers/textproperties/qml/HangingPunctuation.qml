@@ -63,6 +63,7 @@ TextPropertyBase {
             text: propertyName;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.hangingPunctuationState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         Item {
@@ -96,6 +97,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: hangComma = currentValue;
+            wheelEnabled: true;
         }
 
         Item {

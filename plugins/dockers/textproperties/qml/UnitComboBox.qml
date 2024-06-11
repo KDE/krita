@@ -11,6 +11,7 @@ ComboBox {
     property QtObject spinBoxControl;
     property bool isFontSize: false;
     property int comboBoxUnit;
+    wheelEnabled: true;
 
     model: [
         {text: i18nc("@label:inlistbox", "Pt"), value: 0},

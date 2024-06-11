@@ -64,6 +64,7 @@ TextPropertyBase {
             Layout.columnSpan: 2;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.textTransformState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
 
@@ -88,6 +89,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: capitals = currentValue;
+            wheelEnabled: true;
         }
 
         Item {

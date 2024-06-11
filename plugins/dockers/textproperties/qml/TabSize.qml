@@ -56,6 +56,7 @@ TextPropertyBase {
             Layout.columnSpan: 2;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.tabSizeState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         Item {
@@ -81,6 +82,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             Layout.fillWidth: true;
+            wheelEnabled: true;
 
             onActivated: {
                 if (currentValue === TabSizeModel.Spaces) {

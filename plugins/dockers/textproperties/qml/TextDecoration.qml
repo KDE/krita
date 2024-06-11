@@ -79,6 +79,7 @@ TextPropertyBase {
             Layout.columnSpan: 2;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.textDecorationLineState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
 
@@ -161,6 +162,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: lineStyle = currentValue;
+            wheelEnabled: true;
         }
     }
 }

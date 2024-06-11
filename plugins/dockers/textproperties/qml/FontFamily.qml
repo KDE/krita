@@ -45,6 +45,7 @@ CollapsibleGroupProperty {
                 fontFamilies[0] = currentText;
             }
         }
+        wheelEnabled: true;
     }
 
     onEnableProperty: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertySet;

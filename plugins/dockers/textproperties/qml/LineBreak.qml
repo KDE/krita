@@ -47,6 +47,7 @@ TextPropertyBase {
             text: propertyName;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.lineBreakState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         ComboBox {

@@ -52,6 +52,9 @@ TextPropertyBase {
 
     onEnableProperty: properties.baselineShiftState = KoSvgTextPropertiesModel.PropertySet;
 
+    Component.onCompleted: {
+        mainWindow.connectAutoEnabler(baselineShiftSpnArea);
+    }
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -67,6 +70,7 @@ TextPropertyBase {
             elide: Text.ElideRight;
             Layout.fillWidth: true;
             Layout.columnSpan: 2;
+            font.italic: properties.baselineShiftState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
 
@@ -88,24 +92,33 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: baselineShiftMode = currentValue;
+            wheelEnabled: true;
         }
 
         Item {
             width: firstColumnWidth;
             height: 1;
         }
-        DoubleSpinBox {
-            id: baselineShiftSpn
+
+        MouseArea {
+            id: baselineShiftSpnArea;
+            function autoEnable() {
+                baselineShiftMode = 3;
+            }
             Layout.fillWidth: true;
-            enabled: baselineShiftMode == 3;
-            from: -999 * multiplier;
-            to: 999 * multiplier;
+            Layout.fillHeight: true;
+            DoubleSpinBox {
+                id: baselineShiftSpn
+                width: parent.width;
+                enabled: baselineShiftMode == 3;
+                from: -999 * multiplier;
+                to: 999 * multiplier;
+            }
         }
 
         UnitComboBox {
             id: baselineShiftUnitCmb;
             spinBoxControl: baselineShiftSpn;
-            Layout.fillWidth: true;
         }
     }
 }

@@ -36,13 +36,9 @@ CollapsibleGroupProperty {
         fontSlant = properties.fontStyle;
         visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
                  || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                 || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset;
+                 || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
+                 || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
-
-        fontWeightSpn.enabled = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyTriState;
-        fontStretchSpn.enabled = properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyTriState;
-        fontSlantCmb.enabled = properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyTriState;
-        opticalSizeCbx.enabled = properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyTriState;
     }
     onFontWeightChanged: {
         if (!blockSignals) {
@@ -64,13 +60,6 @@ CollapsibleGroupProperty {
 
     onEnableProperty: {
         properties.fontWeightState = KoSvgTextPropertiesModel.PropertySet;
-    }
-
-    Component.onCompleted: {
-        mainWindow.connectAutoEnabler(fontWeightArea);
-        mainWindow.connectAutoEnabler(fontStretchArea);
-        mainWindow.connectAutoEnabler(fontSlantArea);
-        mainWindow.connectAutoEnabler(fontOpticalArea);
     }
 
     titleItem: ComboBox {
@@ -95,26 +84,19 @@ CollapsibleGroupProperty {
             horizontalAlignment: Text.AlignRight;
             Layout.preferredWidth: implicitWidth;
             elide: Text.ElideRight;
+            font.italic: properties.fontWeightState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
-        MouseArea {
-            id: fontWeightArea;
-            function autoEnable() {
-                fontWeightSpn.enabled = true;
-            }
+
+        SpinBox {
+            id: fontWeightSpn
+            from: 0;
+            to: 1000;
+            editable: true;
             Layout.fillWidth: true;
-            Layout.fillHeight: true;
 
-            SpinBox {
-                id: fontWeightSpn
-                from: 0;
-                to: 1000;
-                editable: true;
-                width: parent.width;
+            wheelEnabled: true;
 
-                wheelEnabled: true;
-
-            }
         }
 
 
@@ -128,23 +110,15 @@ CollapsibleGroupProperty {
             horizontalAlignment: Text.AlignRight;
             Layout.preferredWidth: implicitWidth;
             elide: Text.ElideRight;
+            font.italic: properties.fontWidthState === KoSvgTextPropertiesModel.PropertyTriState;
         }
-
-        MouseArea {
-            id: fontStretchArea;
-            function autoEnable() {
-                fontStretchSpn.enabled = true;
-            }
+        SpinBox {
+            id: fontStretchSpn
+            from: 0;
+            to: 200;
+            editable: true;
             Layout.fillWidth: true;
-            Layout.fillHeight: true;
-            SpinBox {
-                id: fontStretchSpn
-                from: 0;
-                to: 200;
-                editable: true;
-                width: parent.width;
-                wheelEnabled: true;
-            }
+            wheelEnabled: true;
         }
 
         RevertPropertyButton {
@@ -157,29 +131,21 @@ CollapsibleGroupProperty {
             horizontalAlignment: Text.AlignRight;
             Layout.preferredWidth: implicitWidth;
             elide: Text.ElideRight;
+            font.italic: properties.fontStyleState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
-        MouseArea {
-            id: fontSlantArea;
-            function autoEnable() {
-                fontSlantCmb.enabled = true;
-            }
-            Layout.fillWidth: true;
-            Layout.fillHeight: true;
-            ComboBox {
-                id: fontSlantCmb
-                model: [
-                    {text: i18nc("@label:inlistbox", "Normal"), value: KoSvgTextPropertiesModel.StyleNormal},
-                    {text: i18nc("@label:inlistbox", "Italic"), value: KoSvgTextPropertiesModel.StyleItalic},
-                    {text: i18nc("@label:inlistbox", "Oblique"), value: KoSvgTextPropertiesModel.StyleOblique}
-                ]
-                Layout.fillWidth: true
-                textRole: "text";
-                valueRole: "value";
-                onActivated: fontSlant = currentValue;
-                wheelEnabled: true;
-                width: parent.width;
-            }
+        ComboBox {
+            id: fontSlantCmb
+            model: [
+                {text: i18nc("@label:inlistbox", "Normal"), value: KoSvgTextPropertiesModel.StyleNormal},
+                {text: i18nc("@label:inlistbox", "Italic"), value: KoSvgTextPropertiesModel.StyleItalic},
+                {text: i18nc("@label:inlistbox", "Oblique"), value: KoSvgTextPropertiesModel.StyleOblique}
+            ]
+            Layout.fillWidth: true
+            textRole: "text";
+            valueRole: "value";
+            onActivated: fontSlant = currentValue;
+            wheelEnabled: true;
         }
 
         RevertPropertyButton {
@@ -189,18 +155,12 @@ CollapsibleGroupProperty {
         Item {
         width: 1;
         height: 1;}
-        MouseArea {
-            id: fontOpticalArea;
-            function autoEnable() {
-                opticalSizeCbx.enabled = true;
-            }
-            Layout.fillWidth: true;
-            Layout.fillHeight: true;
+
         CheckBox {
             id: opticalSizeCbx
             text: i18nc("@option:check", "Optical Size")
-            width: parent.width;
-        }
+            Layout.fillWidth: true;
+            font.italic: properties.fontOpticalSizeLinkState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
     }

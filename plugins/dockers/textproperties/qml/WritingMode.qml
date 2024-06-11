@@ -46,6 +46,7 @@ TextPropertyBase {
             text: propertyName;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.writingModeState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
 
@@ -60,6 +61,7 @@ TextPropertyBase {
             textRole: "text";
             valueRole: "value";
             onActivated: writingMode = currentValue;
+            wheelEnabled: true;
         }
     }
 }

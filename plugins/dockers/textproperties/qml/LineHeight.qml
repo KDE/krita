@@ -48,6 +48,10 @@ TextPropertyBase {
 
     onEnableProperty: properties.lineHeightState = KoSvgTextPropertiesModel.PropertySet;
 
+    Component.onCompleted: {
+        mainWindow.connectAutoEnabler(lineHeightSpnArea);
+    }
+
     GridLayout {
         columns: 3;
         columnSpacing: columnSpacing;
@@ -62,6 +66,7 @@ TextPropertyBase {
             text: propertyName;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.lineHeightState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         CheckBox {
@@ -76,12 +81,20 @@ TextPropertyBase {
             width: firstColumnWidth;
             height: 1;
         }
-        DoubleSpinBox {
-            id: lineHeightSpn
+        MouseArea {
+            id: lineHeightSpnArea;
+            function autoEnable() {
+                lineHeightNormalCbx.checked = false;
+            }
             Layout.fillWidth: true;
-            enabled: !lineHeightNormalCbx.enabled;
-            from: 0;
-            to: 999 * multiplier;
+            Layout.fillHeight: true;
+            DoubleSpinBox {
+                id: lineHeightSpn
+                width: parent.width;
+                enabled: !lineHeightNormalCbx.checked;
+                from: 0;
+                to: 999 * multiplier;
+            }
         }
 
         ComboBox {
@@ -96,7 +109,8 @@ TextPropertyBase {
             ]
             textRole: "text";
             valueRole: "value";
-            enabled: !lineHeightNormalCbx.enabled;
+            enabled: !lineHeightNormalCbx.checked;
+            wheelEnabled: true;
 
             onActivated: {
                 var currentValueInPt = 0;

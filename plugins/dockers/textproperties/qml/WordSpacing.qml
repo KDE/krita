@@ -54,6 +54,7 @@ TextPropertyBase {
             text: propertyName;
             elide: Text.ElideRight;
             Layout.fillWidth: true;
+            font.italic: properties.wordSpacingState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         DoubleSpinBox {

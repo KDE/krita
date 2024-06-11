@@ -22,6 +22,16 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Make sure the actions are corresponding to the correct gesture on the system level. These can be configured under S Pen Settings &gt; Air actions.</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="boxButtonActions">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">

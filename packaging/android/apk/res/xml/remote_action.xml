@@ -8,6 +8,7 @@
 		repeatable_interval="short"
 		trigger_key="AT">
 		<preference name="gesture" value="click"/>
+		<preference name="button_only" value="true"/>
 	</action>
 
 	<action
@@ -18,6 +19,7 @@
 		repeatable_interval="short"
 		trigger_key="POUND">
 		<preference name="gesture" value="double_click"/>
+		<preference name="button_only" value="true"/>
 	</action>
 
 	<action
@@ -28,6 +30,7 @@
 		repeatable_interval="short"
 		trigger_key="F7">
 		<preference name="gesture" value="swipe_up"/>
+		<preference name="motion_only" value="true"/>
 	</action>
 
 	<action
@@ -38,6 +41,7 @@
 		repeatable_interval="short"
 		trigger_key="F8">
 		<preference name="gesture" value="swipe_down"/>
+		<preference name="motion_only" value="true"/>
 	</action>
 
 
@@ -49,6 +53,7 @@
 		repeatable_interval="short"
 		trigger_key="F9">
 		<preference name="gesture" value="swipe_left"/>
+		<preference name="motion_only" value="true"/>
 	</action>
 
 	<action
@@ -59,6 +64,7 @@
 		repeatable_interval="short"
 		trigger_key="F10">
 		<preference name="gesture" value="swipe_right"/>
+		<preference name="motion_only" value="true"/>
 	</action>
 
 
@@ -70,6 +76,7 @@
 		repeatable_interval="short"
 		trigger_key="F11">
 		<preference name="gesture" value="circle_cw"/>
+		<preference name="motion_only" value="true"/>
 	</action>
 
 	<action
@@ -80,6 +87,7 @@
 		repeatable_interval="short"
 		trigger_key="F12">
 		<preference name="gesture" value="circle_ccw"/>
+		<preference name="motion_only" value="true"/>
 	</action>
 
 </remote-actions>

@@ -16,6 +16,7 @@ from .Utils import flip, kickstart
 from .Utils.Export import exportPath, sanitize
 from .Utils.Tree import path, pathFS
 
+RE_QUOTED_PATH = re.compile(r'p="(.*?)"\s*')
 KI = Krita.instance()
 
 
@@ -24,14 +25,7 @@ def nodeToImage(wnode):
     Returns an QImage 8-bit sRGB
     """
     SRGB_PROFILE = "sRGB-elle-V2-srgbtrc.icc"
-    if wnode.trim == False:
-        bounds = KI.activeDocument().bounds()
-        x = bounds.x()
-        y = bounds.y()
-        w = bounds.width()
-        h = bounds.height()
-    else:
-        [x, y, w, h] = wnode.bounds
+    [x, y, w, h] = wnode.bounds
 
     is_srgb = (
         wnode.node.colorModel() == "RGBA"
@@ -85,7 +79,8 @@ class WNode:
     @property
     def name(self):
         a = self.cfg["delimiters"]["assign"]
-        name = self.node.name()
+        name = self.node.name().strip()
+        name = RE_QUOTED_PATH.sub("", name)
         name = name.split()
         name = filter(lambda n: a not in n, name)
         name = "_".join(name)
@@ -96,12 +91,17 @@ class WNode:
         a, s = self.cfg["delimiters"].values()
         meta = {}
 
-        for m in self.node.name().strip().split():
+        name = self.node.name().strip()
+        if len(path := RE_QUOTED_PATH.findall(name)) == 1:
+            meta["p"] = path
+
+        for m in RE_QUOTED_PATH.sub("", name).split():
             data = m.split(a)
 
             if len(data) == 2:
                 k, v = data[0], data[1].split(s)
-                meta[k] = list(map(int, v)) if k in "ms" else v
+                parser = int if k == "m" else float if k == "s" else lambda x: x
+                meta[k] = list(map(parser, v))
 
         return meta
 
@@ -143,18 +143,16 @@ class WNode:
 
     @property
     def position(self):
-        bounds = self.node.bounds()
-        return bounds.x(), bounds.y()
+        return self.bounds[0], self.bounds[1]
 
     @property
     def bounds(self):
-        bounds = self.node.bounds()
+        bounds = KI.activeDocument().bounds() if self.trim == False else self.node.bounds()
         return bounds.x(), bounds.y(), bounds.width(), bounds.height()
 
     @property
     def size(self):
-        bounds = self.node.bounds()
-        return bounds.width(), bounds.height()
+        return self.bounds[2], self.bounds[3]
 
     def hasDestination(self):
         return "d=" in self.node.name()

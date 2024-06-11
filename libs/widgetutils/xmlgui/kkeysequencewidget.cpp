@@ -221,7 +221,7 @@ KisKKeySequenceWidget::KisKKeySequenceWidget(QWidget *parent)
 void KisKKeySequenceWidgetPrivate::init()
 {
     layout = new QHBoxLayout(q);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     keyButton = new KKeySequenceButton(this, q);
     keyButton->setFocusPolicy(Qt::StrongFocus);

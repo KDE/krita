@@ -21,7 +21,7 @@ DlgWaveletDecompose::DlgWaveletDecompose(QWidget *  parent,
 
     m_page = new WdgWaveletDecompose(this);
     Q_CHECK_PTR(m_page);
-     m_page->layout()->setMargin(0);
+     m_page->layout()->setContentsMargins(0, 0, 0, 0);
      m_page->setObjectName("wavelet_decompose");
 
     setMainWidget(m_page);

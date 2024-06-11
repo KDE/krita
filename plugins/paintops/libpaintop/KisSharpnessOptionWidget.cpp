@@ -46,16 +46,16 @@ KisSharpnessOptionWidget::KisSharpnessOptionWidget(lager::cursor<KisSharpnessOpt
     softenEdge->setSingleStep(1);
 
     QHBoxLayout* alignHL = new QHBoxLayout;
-    alignHL->setMargin(2);
+    alignHL->setContentsMargins(2, 2, 2, 2);
     alignHL->addWidget(alignOutline);
 
     QHBoxLayout* softnessHL = new QHBoxLayout;
-    softnessHL->setMargin(9);
+    softnessHL->setContentsMargins(9, 9, 9, 9);
     softnessHL->addWidget(thresholdLbl);
     softnessHL->addWidget(softenEdge, 1);
 
     QVBoxLayout* pageLayout = new QVBoxLayout(page);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
     pageLayout->addLayout(alignHL);
     pageLayout->addLayout(softnessHL);
     pageLayout->addWidget(configurationPage());

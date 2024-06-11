@@ -74,7 +74,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
 
     d->numRecents = 0;
     d->recentsLayout = new QHBoxLayout;
-    d->recentsLayout->setMargin(0);
+    d->recentsLayout->setContentsMargins(0, 0, 0, 0);
     d->recentsLayout->addWidget(new QLabel(i18n("Recent:")));
     d->recentsLayout->addStretch(1);
 
@@ -103,7 +103,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->bottomLayout->setStretch(1, 1); // maximize color name cmb
 
     d->mainLayout = new QVBoxLayout(this);
-    d->mainLayout->setMargin(4);
+    d->mainLayout->setContentsMargins(4, 4, 4, 4);
     d->mainLayout->setSpacing(2);
     d->mainLayout->addLayout(d->recentsLayout);
     d->mainLayout->addWidget(d->paletteView);

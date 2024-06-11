@@ -49,11 +49,11 @@ KisCurveOptionInputControlsStrategy(KisCurveRangeModelInterface *rangeInterface,
 
     QHBoxLayout *inLayout = new QHBoxLayout(inPlaceholder);
     inLayout->addWidget(inSpinBox);
-    inLayout->setMargin(0);
+    inLayout->setContentsMargins(0, 0, 0, 0);
 
     QHBoxLayout *outLayout = new QHBoxLayout(outPlaceholder);
     outLayout->addWidget(outSpinBox);
-    outLayout->setMargin(0);
+    outLayout->setContentsMargins(0, 0, 0, 0);
 
     xValueSuffix = rangeInterface->xValueSuffix();
     yValueSuffix = rangeInterface->yValueSuffix();

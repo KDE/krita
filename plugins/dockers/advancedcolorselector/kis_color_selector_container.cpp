@@ -44,7 +44,7 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 {
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
     m_widgetLayout->setSpacing(0);
-    m_widgetLayout->setMargin(0);
+    m_widgetLayout->setContentsMargins(0, 0, 0, 0);
 
     m_gamutMaskToolbar->setContentsMargins(0, 0, 0, 5);
     m_gamutMaskToolbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);

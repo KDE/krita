@@ -41,7 +41,7 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
     //layout->setSizeConstraint(QLayout::SetFixedSize);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
     d->input = new KoZoomInput(this);

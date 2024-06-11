@@ -57,7 +57,7 @@ KisDlgAdjLayerProps::KisDlgAdjLayerProps(KisNodeSP node,
     QWidget * page = new QWidget(this);
     page->setObjectName("page widget");
     QHBoxLayout * layout = new QHBoxLayout(page);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
     setMainWidget(page);
 
     QVBoxLayout *v1 = new QVBoxLayout();

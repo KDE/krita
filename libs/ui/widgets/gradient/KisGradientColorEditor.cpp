@@ -102,7 +102,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
     connect(m_d->positionSlider, SIGNAL(valueChanged(double)), this, SIGNAL(positionChanged(qreal)));
 
     QHBoxLayout *colorTypeButtonsLayout = new QHBoxLayout;
-    colorTypeButtonsLayout->setMargin(0);
+    colorTypeButtonsLayout->setContentsMargins(0, 0, 0, 0);
     colorTypeButtonsLayout->setSpacing(0);
     colorTypeButtonsLayout->addWidget(m_d->colorTypeForegroundButton);
     colorTypeButtonsLayout->addWidget(m_d->colorTypeBackgroundButton);
@@ -110,7 +110,7 @@ KisGradientColorEditor::KisGradientColorEditor(QWidget *parent)
     colorTypeButtonsContainer->setLayout(colorTypeButtonsLayout);
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->setSpacing(5);
     mainLayout->addWidget(colorTypeButtonsContainer);
     mainLayout->addWidget(m_d->transparentCheckBox);

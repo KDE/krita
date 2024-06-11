@@ -32,7 +32,7 @@ KisMinimalShadeSelector::KisMinimalShadeSelector(QWidget *parent)
 
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setSpacing(0);
-    l->setMargin(0);
+    l->setContentsMargins(0, 0, 0, 0);
 
     updateSettings();
 

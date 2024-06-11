@@ -52,7 +52,7 @@ void KisShortcutsEditorPrivate::initGUI(KisShortcutsEditor::ActionTypes types,
     actionTypes = types;
 
     ui.setupUi(q);
-    q->layout()->setMargin(0);
+    q->layout()->setContentsMargins(0, 0, 0, 0);
     ui.searchFilter->searchLine()->setTreeWidget(ui.list); // Plug into search line
     ui.list->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 

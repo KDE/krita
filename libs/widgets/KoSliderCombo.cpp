@@ -49,7 +49,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->firstShowOfSlider = false; //true;
 
     QHBoxLayout *layout = new QHBoxLayout(d->container);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(2);
     layout->addWidget(d->slider);
     d->container->resize(200, 30);

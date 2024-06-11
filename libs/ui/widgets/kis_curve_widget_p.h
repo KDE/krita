@@ -185,7 +185,7 @@ void KisCurveWidget::Private::drawGrid(QPainter &p, int wWidth, int wHeight)
 
     QPalette appPalette = QApplication::palette();
 
-    p.setPen(QPen(appPalette.color(QPalette::Background), 1, Qt::SolidLine));
+    p.setPen(QPen(appPalette.color(QPalette::Window), 1, Qt::SolidLine));
     p.drawLine(div4_round(wWidth), 0, div4_round(wWidth), wHeight);
     p.drawLine(div2_round(wWidth), 0, div2_round(wWidth), wHeight);
     p.drawLine(div4_round(3*wWidth), 0, div4_round(3*wWidth), wHeight);

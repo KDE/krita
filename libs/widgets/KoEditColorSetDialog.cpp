@@ -110,7 +110,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
 
     QWidget *wdg = new QWidget(m_scrollArea);
     m_gridLayout = new QGridLayout(wdg);
-    m_gridLayout->setMargin(0);
+    m_gridLayout->setContentsMargins(0, 0, 0, 0);
     m_gridLayout->setSpacing(2);
 
     m_activeColorSet = m_colorSets.value(index);

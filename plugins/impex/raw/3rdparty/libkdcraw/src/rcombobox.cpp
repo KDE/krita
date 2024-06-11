@@ -76,7 +76,7 @@ RComboBox::RComboBox(QWidget* const parent)
     hlay->addWidget(d->combo);
     hlay->addWidget(d->resetButton);
     hlay->setStretchFactor(d->combo, 10);
-    hlay->setMargin(0);
+    hlay->setContentsMargins(0, 0, 0, 0);
     hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
 
     // -------------------------------------------------------------

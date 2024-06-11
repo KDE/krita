@@ -48,7 +48,7 @@ KisPaintThicknessOptionWidget::KisPaintThicknessOptionWidget(lager::cursor<KisPa
     formLayout->addRow(new QLabel(i18n("Describes how the brush's paint thickness interacts with existing thick paint, especially at low values.")));
 
     QVBoxLayout* pageLayout = new QVBoxLayout(page);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
     pageLayout->addWidget(enabledLabel);
     pageLayout->addLayout(formLayout);
     pageLayout->addWidget(configurationPage());

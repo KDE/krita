@@ -26,7 +26,7 @@ DlgShearImage::DlgShearImage(QWidget *  parent,
 
     m_page = new WdgShearImage(this);
     Q_CHECK_PTR(m_page);
-    m_page->layout()->setMargin(0);
+    m_page->layout()->setContentsMargins(0, 0, 0, 0);
     m_page->setObjectName("shear_image");
     
     m_page->shearAngleX->setDecimals(0);

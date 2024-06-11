@@ -70,27 +70,27 @@ KisColorSelectorNgDockerWidget::KisColorSelectorNgDockerWidget(QWidget *parent) 
     //layout
     m_widgetLayout = new QHBoxLayout(this);
     m_widgetLayout->setSpacing(0);
-    m_widgetLayout->setMargin(0);
+    m_widgetLayout->setContentsMargins(0, 0, 0, 0);
 
     m_mainLayout = new QVBoxLayout();
     m_mainLayout->setSpacing(0);
-    m_mainLayout->setMargin(0);
+    m_mainLayout->setContentsMargins(0, 0, 0, 0);
 
     m_horizontalPatchesContainer = new QHBoxLayout();
     m_horizontalPatchesContainer->setSpacing(0);
-    m_horizontalPatchesContainer->setMargin(0);
+    m_horizontalPatchesContainer->setContentsMargins(0, 0, 0, 0);
 
     m_sidebarLayout = new QVBoxLayout();
     m_sidebarLayout->setSpacing(0);
-    m_sidebarLayout->setMargin(0);
+    m_sidebarLayout->setContentsMargins(0, 0, 0, 0);
 
     m_verticalColorPatchesLayout = new QHBoxLayout();
     m_verticalColorPatchesLayout->setSpacing(0);
-    m_verticalColorPatchesLayout->setMargin(0);
+    m_verticalColorPatchesLayout->setContentsMargins(0, 0, 0, 0);
 
     m_horizontalColorPatchesLayout = new QVBoxLayout();
     m_horizontalColorPatchesLayout->setSpacing(0);
-    m_horizontalColorPatchesLayout->setMargin(0);
+    m_horizontalColorPatchesLayout->setContentsMargins(0, 0, 0, 0);
 
     m_horizontalPatchesContainer->addLayout(m_horizontalColorPatchesLayout);
 

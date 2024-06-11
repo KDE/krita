@@ -56,7 +56,7 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     setDefaultButton(Ok);
 
     m_page = new WdgAnimationRenderer(this);
-    m_page->layout()->setMargin(0);
+    m_page->layout()->setContentsMargins(0, 0, 0, 0);
 
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
 

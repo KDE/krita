@@ -46,7 +46,7 @@ KisKShortcutSchemesEditor::KisKShortcutSchemesEditor(KisShortcutsDialog *parent)
     if (!QFileInfo(schemeFileName).exists()) {
         currentScheme = "Default";
     }
-    setMargin(0);
+    setContentsMargins(0, 0, 0, 0);
 
     QLabel *schemesLabel = new QLabel(i18n("Shortcut Schemes:"), m_dialog);
     addWidget(schemesLabel);

@@ -231,7 +231,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
 
     // Edit widgets
     QHBoxLayout* layoutEditWidgets = new QHBoxLayout;
-    layoutEditWidgets->setMargin(0);
+    layoutEditWidgets->setContentsMargins(0, 0, 0, 0);
     m_d->containerEditWidgets = new QWidget(this);
 
     m_d->buttonAddGradient = new QToolButton(this);
@@ -260,7 +260,7 @@ KisGradientChooser::KisGradientChooser(QWidget *parent, const char *name, bool u
     // Layout
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setObjectName("main layout");
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->addWidget(m_d->labelName);
     mainLayout->addWidget(m_d->itemChooser);
     mainLayout->addWidget(m_d->containerEditWidgets);

@@ -679,8 +679,11 @@ void KisPaintOpPresetsEditor::showEvent(QShowEvent *)
     }
     else {
         int presetPanelWidth = splitterSizes[0] != 0 ? splitterSizes[0] : m_d->uiWdgPaintOpPresetSettings.showPresetsButton->width();
-        int scratchPanelWidth = splitterSizes[2] != 0 ? splitterSizes[2] : m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->width();
-        int width = presetPanelWidth + splitterSizes[1] + scratchPanelWidth + m_d->layout->margin() * 4;
+        int scratchPanelWidth =
+            splitterSizes[2] != 0 ? splitterSizes[2] : m_d->uiWdgPaintOpPresetSettings.showScratchpadButton->width();
+        const QMargins margins = m_d->layout->contentsMargins();
+        int width = presetPanelWidth + splitterSizes[1] + scratchPanelWidth +
+            margins.bottom() + margins.left() + margins.top() + margins.right();
         QRect defaultGeometry = QRect(frame->geometry().x(), frame->geometry().y(), width, frame->geometry().height());
         frame->setGeometry(defaultGeometry);
     }
@@ -718,9 +721,10 @@ void KisPaintOpPresetsEditor::slotSwitchScratchpad(bool visible)
     }
 
     QPushButton* showBtn = m_d->uiWdgPaintOpPresetSettings.showScratchpadButton;
-    QGroupBox* container = m_d->uiWdgPaintOpPresetSettings.scratchpadControls;
+    QGroupBox *container = m_d->uiWdgPaintOpPresetSettings.scratchpadControls;
 
-    int emptyContainerWidth = showBtn->width() + m_d->layout->margin() * 2;
+    const QMargins margins = m_d->layout->contentsMargins();
+    int emptyContainerWidth = showBtn->width() + margins.left() + margins.right();
 
     if (visible) {
         showBtn->setIcon(KisIconUtils::loadIcon("arrow-left"));
@@ -777,9 +781,10 @@ void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible)
     }
 
     QPushButton* showBtn = m_d->uiWdgPaintOpPresetSettings.showPresetsButton;
-    QGroupBox* container = m_d->uiWdgPaintOpPresetSettings.presetsContainer;
+    QGroupBox *container = m_d->uiWdgPaintOpPresetSettings.presetsContainer;
 
-    int emptyContainerWidth = showBtn->width() + m_d->layout->margin() * 2;
+    const QMargins margins = m_d->layout->contentsMargins();
+    int emptyContainerWidth = showBtn->width() + margins.left() + margins.right();
 
     if (visible) {
         showBtn->setIcon(KisIconUtils::loadIcon("arrow-right"));

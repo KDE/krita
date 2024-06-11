@@ -210,12 +210,12 @@ KisResourceItemChooser::KisResourceItemChooser(const QString &resourceType, bool
     d->importExportBtns = new QFrame(this);  
     QHBoxLayout* importExportLayout = new QHBoxLayout(d->importExportBtns);
     importExportLayout->setAlignment(Qt::AlignmentFlag::AlignLeft);
-    importExportLayout->setMargin(0);
+    importExportLayout->setContentsMargins(0, 0, 0, 0);
     importExportLayout->addWidget(d->importButton);
     importExportLayout->addWidget(d->deleteButton);
 
     auto removePadding = [](QLayout* layout) {
-        layout->setMargin(0);
+        layout->setContentsMargins(0, 0, 0, 0);
         layout->setSpacing(0);
     };
 

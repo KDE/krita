@@ -56,7 +56,7 @@ KisSpacingSelectionWidget::KisSpacingSelectionWidget(QWidget *parent)
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(m_d->autoButton);
     layout->addWidget(m_d->slider);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     connect(m_d->slider, SIGNAL(valueChanged(qreal)), SLOT(slotSpacingChanged(qreal)));
     connect(m_d->autoButton, SIGNAL(toggled(bool)), SLOT(slotAutoSpacing(bool)));

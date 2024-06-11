@@ -49,7 +49,7 @@ KisColorSourceOptionWidget::KisColorSourceOptionWidget(lager::cursor<KisColorSou
         buttonGroup->addButton(radioButton, KisColorSourceOptionData::id2Type(id));
     }
     QVBoxLayout* verticalLayout_2 = new QVBoxLayout(widget);
-    verticalLayout_2->setMargin(0);
+    verticalLayout_2->setContentsMargins(0, 0, 0, 0);
     verticalLayout_2->addWidget(groupBox);
     verticalLayout_2->addStretch();
 

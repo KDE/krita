@@ -44,7 +44,7 @@ DlgCanvasSize::DlgCanvasSize(QWidget *parent, int width, int height, double reso
 
     m_page = new WdgCanvasSize(this);
     Q_CHECK_PTR(m_page);
-    m_page->layout()->setMargin(0);
+    m_page->layout()->setContentsMargins(0, 0, 0, 0);
     m_page->setObjectName("canvas_size");
 
     _widthUnitManager = new KisDocumentAwareSpinBoxUnitManager(this);

@@ -75,7 +75,7 @@ KisTagChooserWidget::KisTagChooserWidget(KisTagModel *model, QString resourceTyp
     comboLayout->addWidget(d->tagToolButton, 0, 1);
 
     comboLayout->setSpacing(0);
-    comboLayout->setMargin(0);
+    comboLayout->setContentsMargins(0, 0, 0, 0);
     comboLayout->setColumnStretch(0, 3);
     this->setEnabled(true);
 

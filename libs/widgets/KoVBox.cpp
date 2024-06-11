@@ -16,7 +16,7 @@ KoVBox::KoVBox(QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 
 KoVBox::~KoVBox()
@@ -78,6 +78,6 @@ void KoVBox::setStretchFactor(QWidget *widget, int stretch)
 
 void KoVBox::setMargin(int margin)
 {
-    layout()->setMargin(margin);
+    layout()->setContentsMargins(margin, margin, margin, margin);
 }
 

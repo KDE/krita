@@ -360,7 +360,7 @@ IconTextEditDialog::IconTextEditDialog(QWidget *parent)
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     QGridLayout *grid = new QGridLayout;
-    grid->setMargin(0);
+    grid->setContentsMargins(0, 0, 0, 0);
 
     m_lineEdit = new QLineEdit(this);
     m_lineEdit->setClearButtonEnabled(true);
@@ -1088,7 +1088,7 @@ void KisKEditToolBarWidgetPrivate::setupLayout()
 
     // now start with our layouts
     QVBoxLayout *top_layout = new QVBoxLayout(m_widget);
-    top_layout->setMargin(0);
+    top_layout->setContentsMargins(0, 0, 0, 0);
 
     QVBoxLayout *name_layout = new QVBoxLayout();
     QHBoxLayout *list_layout = new QHBoxLayout();

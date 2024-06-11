@@ -46,7 +46,7 @@ KisTagToolButton::KisTagToolButton(QWidget* parent)
     , d(new Private())
 {
     QGridLayout* buttonLayout = new QGridLayout(this);
-    buttonLayout->setMargin(0);
+    buttonLayout->setContentsMargins(0, 0, 0, 0);
     buttonLayout->setSpacing(0);
 
     d->tagToolButton = new QToolButton(this);

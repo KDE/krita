@@ -76,7 +76,7 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     : QMenu(parent)
 {
     QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setMargin(2);
+    mainLayout->setContentsMargins(2, 2, 2, 2);
 
     // The cap group
     capGroup = new QButtonGroup(this);

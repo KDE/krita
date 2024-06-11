@@ -43,7 +43,7 @@ KisSpacingOptionWidget::KisSpacingOptionWidget(lager::cursor<KisSpacingOptionDat
     hl->addWidget(useSpacingUpdates);
 
     QVBoxLayout *pageLayout = new QVBoxLayout(page);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
     pageLayout->addLayout(hl);
     pageLayout->addWidget(configurationPage());
 

@@ -28,7 +28,7 @@ KisCollapsibleButtonGroup::KisCollapsibleButtonGroup(QWidget *parent)
 {
     m_d->layout = new QHBoxLayout;
     m_d->layout->setSpacing(0);
-    m_d->layout->setMargin(0);
+    m_d->layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_d->layout);
 
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::MinimumExpanding);

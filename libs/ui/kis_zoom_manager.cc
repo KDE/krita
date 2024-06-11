@@ -127,7 +127,7 @@ void KisZoomManager::setup(KisKActionCollection * actionCollection)
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     m_view->document()->setUnit(KoUnit(KoUnit::Pixel));
 

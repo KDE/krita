@@ -18,7 +18,7 @@ WGShadeSelector::WGShadeSelector(WGSelectorDisplayConfigSP displayConfig, KisVis
 {
     QVBoxLayout* l = new QVBoxLayout(this);
     l->setSpacing(1);
-    l->setMargin(0);
+    l->setContentsMargins(0, 0, 0, 0);
     setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
 
     connectToModel();

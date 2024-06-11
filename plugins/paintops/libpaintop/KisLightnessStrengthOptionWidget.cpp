@@ -32,7 +32,7 @@ KisLightnessStrengthOptionWidget::KisLightnessStrengthOptionWidget(lager::cursor
     enabledLabel->setAlignment(Qt::AlignHCenter);
 
     QVBoxLayout* pageLayout = new QVBoxLayout(page);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
     pageLayout->addWidget(enabledLabel);
     pageLayout->addWidget(configurationPage());
 

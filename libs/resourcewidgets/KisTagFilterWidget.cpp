@@ -59,7 +59,7 @@ KisTagFilterWidget::KisTagFilterWidget(KisTagModel* model, QWidget* parent)
     d->completer->setCaseSensitivity(Qt::CaseInsensitive);
     d->tagSearchLineEdit->setCompleter(d->completer);
 
-    filterBarLayout->setMargin(0);
+    filterBarLayout->setContentsMargins(0, 0, 0, 0);
     filterBarLayout->setColumnStretch(0, 1);
     filterBarLayout->addWidget(d->tagSearchLineEdit, 0, 0);
 

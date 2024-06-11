@@ -800,7 +800,7 @@ void KisSegmentGradientEditor::editSelectedHandle()
     handleEditorContainer->removeWidget(editor);
 
     QVBoxLayout *dialogLayout = new QVBoxLayout;
-    dialogLayout->setMargin(10);
+    dialogLayout->setContentsMargins(10, 10, 10, 10);
     dialogLayout->addWidget(editor);
 
     dialog->setLayout(dialogLayout);

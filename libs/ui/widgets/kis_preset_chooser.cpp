@@ -184,7 +184,7 @@ KisPresetChooser::KisPresetChooser(QWidget *parent)
     setObjectName("KisPresetChooser");
 
     QVBoxLayout * layout = new QVBoxLayout(this);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     m_chooser = new KisResourceItemChooser(ResourceType::PaintOpPresets, false, this);
     m_chooser->setRowHeight(50);

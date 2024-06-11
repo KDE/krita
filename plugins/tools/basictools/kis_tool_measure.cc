@@ -42,7 +42,7 @@ KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, KisIma
 
     QGridLayout* optionLayout = new QGridLayout(this);
     Q_CHECK_PTR(optionLayout);
-    optionLayout->setMargin(0);
+    optionLayout->setContentsMargins(0, 0, 0, 0);
 
     optionLayout->addWidget(new QLabel(i18n("Distance:"), this), 0, 0);
     optionLayout->addWidget(new QLabel(i18n("Angle:"), this), 1, 0);

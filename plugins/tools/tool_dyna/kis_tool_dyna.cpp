@@ -270,7 +270,7 @@ QWidget * KisToolDyna::createOptionWidget()
 
     m_optionLayout = new QGridLayout();
 
-    m_optionLayout->setMargin(0);
+    m_optionLayout->setContentsMargins(0, 0, 0, 0);
     m_optionLayout->setSpacing(2);
     KisToolFreehand::addOptionWidgetLayout(m_optionLayout);
 

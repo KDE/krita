@@ -62,7 +62,7 @@ KisSmudgeLengthOptionWidget::KisSmudgeLengthOptionWidget(lager::cursor<KisSmudge
     formLayout->addRow(new QLabel(i18n("(required for Color Image, Lightness Map, and Gradient Map brushes)")));
 
     QVBoxLayout *pageLayout = new QVBoxLayout(page);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
 
     pageLayout->addLayout(formLayout);
     pageLayout->addWidget(configurationPage());

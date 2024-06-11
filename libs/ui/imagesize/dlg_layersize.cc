@@ -48,7 +48,7 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
 
     m_page = new WdgLayerSize(this);
     Q_CHECK_PTR(m_page);
-    m_page->layout()->setMargin(0);
+    m_page->layout()->setContentsMargins(0, 0, 0, 0);
     m_page->setObjectName(name);
 
     KisConfig cfg(true);

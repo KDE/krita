@@ -24,7 +24,7 @@ WGSelectorPopup::WGSelectorPopup(QWidget *parent)
     QBoxLayout *lo = new QBoxLayout(QBoxLayout::LeftToRight, this);
     lo->setObjectName("WGSelectorPopupLayout");
     lo->setSizeConstraint(QLayout::SetFixedSize);
-    lo->setMargin(m_margin);
+    lo->setContentsMargins(m_margin, m_margin, m_margin, m_margin);
     m_hideTimer->setSingleShot(true);
     m_hideTimer->setInterval(50);
     connect(m_hideTimer, SIGNAL(timeout()), this, SLOT(hide()));

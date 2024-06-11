@@ -67,7 +67,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     connect(m_toggle, SIGNAL(toggled(bool)), SLOT(slotColorSourceToggled(bool)));
     headerLayout->addWidget(m_toggle);
     headerLayout->addStretch();
-    headerLayout->setMargin(0);
+    headerLayout->setContentsMargins(0, 0, 0, 0);
 
     m_configButton = new QToolButton(this);
     m_configButton->setIcon(KisIconUtils::loadIcon("view-choose"));

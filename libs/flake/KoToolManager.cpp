@@ -565,7 +565,7 @@ void KoToolManager::Private::postSwitchTool()
             toolWidget = new QWidget();
             toolWidget->setObjectName("DummyToolWidget");
             QVBoxLayout *layout = new QVBoxLayout(toolWidget);
-            layout->setMargin(3);
+            layout->setContentsMargins(3, 3, 3, 3);
             canvasData->dummyToolLabel = new QLabel(toolWidget);
             layout->addWidget(canvasData->dummyToolLabel);
             layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding));

@@ -71,7 +71,7 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
     setMenu(d->menu);
     new QHBoxLayout(d->menu);
     d->menu->layout()->addWidget(widget);
-    d->menu->layout()->setMargin(0);
+    d->menu->layout()->setContentsMargins(0, 0, 0, 0);
 
     connect(d->resourceList, SIGNAL(clicked(QModelIndex)), this, SLOT(indexChanged(QModelIndex)));
 

@@ -38,7 +38,7 @@ public:
         cmbSelectionMode.addItem(i18n("Velocity"));
 
         horizLayout.setSpacing(6);
-        horizLayout.setMargin(0);
+        horizLayout.setContentsMargins(0, 0, 0, 0);
 
         QSizePolicy sizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Fixed));
         sizePolicy.setHorizontalStretch(1);

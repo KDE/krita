@@ -49,7 +49,7 @@ KisMirrorOptionWidget::KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> 
     hl->addWidget(verticalMirror);
 
     QVBoxLayout *pageLayout = new QVBoxLayout(page);
-    pageLayout->setMargin(0);
+    pageLayout->setContentsMargins(0, 0, 0, 0);
     pageLayout->addLayout(hl);
     pageLayout->addWidget(configurationPage());
 

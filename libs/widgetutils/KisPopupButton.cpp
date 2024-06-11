@@ -32,7 +32,7 @@ public:
         setObjectName("KisPopupButtonFrame");
         setProperty("_kis_excludeFromLayoutThumbnail", true);
         frameLayout = new QHBoxLayout(this);
-        frameLayout->setMargin(0);
+        frameLayout->setContentsMargins(0, 0, 0, 0);
 
         setDetached(detach);
     }

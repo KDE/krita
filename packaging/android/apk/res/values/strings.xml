@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="remote_action_click">Click</string>
-	<string name="remote_action_doubleclick">Double Click</string>
+	<string name="remote_action_click">Press</string>
+	<string name="remote_action_doubleclick">Double Press</string>
 	<string name="remote_action_swipeup">Swipe Up</string>
 	<string name="remote_action_swipedown">Swipe Down</string>
 	<string name="remote_action_swipeleft">Swipe Left</string>

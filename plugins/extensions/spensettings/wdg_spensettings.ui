@@ -46,7 +46,7 @@
       <item column="0" row="1">
        <widget class="QLabel" name="labelClick">
         <property name="text">
-         <string>Click</string>
+         <string>Press</string>
         </property>
        </widget>
       </item>
@@ -56,7 +56,7 @@
       <item column="0" row="2">
        <widget class="QLabel" name="labelDoubleClick">
         <property name="text">
-         <string>Double Click</string>
+         <string>Double Press</string>
         </property>
        </widget>
       </item>

@@ -9,7 +9,7 @@ endif()
 project(krita LANGUAGES ${SUPPORTED_LANGUAGES})
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
-set(MIN_QT_VERSION 5.12.0)
+set(MIN_QT_VERSION 5.15.0)
 set(MIN_FRAMEWORKS_VERSION 5.44.0)
 
 set( CMAKE_CXX_STANDARD 17 )

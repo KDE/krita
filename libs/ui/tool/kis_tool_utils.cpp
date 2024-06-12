@@ -53,6 +53,10 @@ namespace KisToolUtils {
         const KoColorSpace *cs = dev->colorSpace();
         KoColor sampledColor = KoColor::createTransparent(cs);
 
+        // Wrap around color sampling is supported on any paint device
+        bool oldSupportsWraparound = dev->supportsWraproundMode();
+        dev->setSupportsWraparoundMode(true);
+
         // Sampling radius.
         if (!pure && radius > 1) {
             QScopedPointer<KoMixColorsOp::Mixer> mixer(cs->mixColorsOp()->createMixer());
@@ -79,6 +83,8 @@ namespace KisToolUtils {
         } else {
             dev->pixel(pos.x(), pos.y(), &sampledColor);
         }
+
+        dev->setSupportsWraparoundMode(oldSupportsWraparound);
         
         // Color blending.
         if (!pure && blendColor && blend < 100) {

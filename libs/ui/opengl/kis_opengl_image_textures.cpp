@@ -33,6 +33,13 @@
 #include "kis_painting_tweaks.h"
 #include "KisOpenGLBufferCreationGuard.h"
 
+/// we use Angle's EGL on Windows, so we need access to
+/// EGL_ANGLE_platform_angle definition
+#if defined Q_OS_WIN && (defined QT_OPENGL_DYNAMIC || defined QT_OPENGL_ES_2_ANGLE)
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#endif
+
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
@@ -777,7 +784,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                              "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
             } else {
-#ifdef QT_OPENGL_ES_2_ANGLE
+#ifdef EGL_ANGLE_platform_angle
                 // If OpenGL ES, fall back to 16-bit float -- supports HDR
                 // Angle does ship GL_EXT_texture_norm16 but it doesn't seem
                 // to be renderable by DXGI - it returns a pixel size of 0
@@ -817,7 +824,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                     "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
             } else {
-#ifdef QT_OPENGL_ES_2_ANGLE
+#ifdef EGL_ANGLE_platform_angle
                 // If OpenGL ES, fall back to 16-bit float -- supports HDR
                 // Angle does ship GL_EXT_texture_norm16 but it doesn't seem
                 // to be renderable by DXGI - it returns a pixel size of 0

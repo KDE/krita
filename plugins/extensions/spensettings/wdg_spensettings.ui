@@ -134,7 +134,7 @@
       <item column="0" row="7">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Circle Counterclockwise</string>
+         <string>Circle Counter-Clockwise</string>
         </property>
        </widget>
       </item>

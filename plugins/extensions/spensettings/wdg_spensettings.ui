@@ -40,7 +40,7 @@
       </sizepolicy>
      </property>
      <property name="title">
-      <string>Button Actions</string>
+      <string>Buttons</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <item column="0" row="1">
@@ -71,7 +71,7 @@
          </font>
         </property>
         <property name="text">
-         <string>The following button actions are supported on the Note 9, Note 10, Tab S6 and Tab S9 devices.</string>
+         <string>The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab S9 devices.</string>
         </property>
         <property name="wordWrap">
          <bool>true</bool>

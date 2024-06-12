@@ -345,7 +345,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
         KisNodeList nodes;
         Q_FOREACH (KisNodeSP node, selectedNodes) {
             KisNodeSP dupNode;
-            if (node->inherits("KisShapeLayer")) {
+            if (node->inherits("KisShapeLayer") || node->inherits("KisFileLayer")) {
                 KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
                 // might have to change node's name (vector to paint layer)
                 dupNode = new KisPaintLayer(image, node->name(), node->opacity(), dev);

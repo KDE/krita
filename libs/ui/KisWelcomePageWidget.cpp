@@ -626,7 +626,7 @@ void KisWelcomePageWidget::showDevVersionHighlight()
     if (isDevelopmentBuild()) {
         QString devBuildLabelText = QString("<a style=\"color: " +
                                            blendedColor.name() +
-                                           " \" href=\"https://docs.krita.org/untranslatable_pages/triaging_bugs.html?"
+                                           " \" href=\"https://docs.krita.org/en/untranslatable_pages/triaging_bugs.html?"
                                            + analyticsString + "dev-build" + "\">")
                                   .append(i18n("DEV BUILD")).append("</a>");
 

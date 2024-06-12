@@ -30738,7 +30738,7 @@ msgid ""
 "presets before continuing.\n"
 msgstr ""
 "\n"
-"无可用笔刷预设。请在继续操作之前重新启用一些资源包。\n"
+"没有可用的笔刷预设。请在继续操作之前重新启用一些资源包。\n"
 
 #: libs/ui/KisMainWindow.cpp:2000
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:204
@@ -31117,7 +31117,7 @@ msgstr "无法加载图片。"
 #: libs/ui/KisTemplateCreateDia.cpp:499
 #, kde-format
 msgid "No picture available."
-msgstr "无可用图片。"
+msgstr "没有可用的图片。"
 
 #: libs/ui/KisTemplatesPane.cpp:39
 #, kde-format
@@ -43009,7 +43009,7 @@ msgid ""
 "If there are no bundles, please import a bundle before continuing."
 msgstr ""
 "\n"
-"无可用笔刷预设。请在继续操作之前重新启用一些包含预设的资源包。\n"
+"没有可用的笔刷预设。请在继续操作之前重新启用一些包含预设的资源包。\n"
 "如果本机没有安装资源包，请在继续操作之前导入一些资源包。"
 
 #: plugins/extensions/resourcemanager/dlg_bundle_manager.cpp:212

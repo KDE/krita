@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 03:11+0000\n"
+"POT-Creation-Date: 2024-06-13 03:07+0000\n"
 "PO-Revision-Date: 2024-05-07 12:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -32694,7 +32694,7 @@ msgstr ""
 "Le format préféré de la sortie n'est pas prise en charge par les moteurs de "
 "rendu disponibles."
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""

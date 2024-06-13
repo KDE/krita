@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 03:11+0000\n"
+"POT-Creation-Date: 2024-06-13 03:07+0000\n"
 "PO-Revision-Date: 2024-03-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -32140,7 +32140,7 @@ msgstr "首选渲染器不支持请求的表面格式。已选择另一个渲染
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用渲染器不支持首选输出格式"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO 已被禁用：图像的色彩空间不受支持"

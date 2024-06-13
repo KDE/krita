@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 03:11+0000\n"
+"POT-Creation-Date: 2024-06-13 03:07+0000\n"
 "PO-Revision-Date: 2016-03-29 00:49+0100\n"
 "Last-Translator: enolp <enolp@softastur.org>\n"
 "Language-Team: Asturian <>\n"
@@ -32020,7 +32020,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""

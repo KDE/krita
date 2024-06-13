@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 03:11+0000\n"
+"POT-Creation-Date: 2024-06-13 03:07+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -32133,7 +32133,7 @@ msgstr "首選繪製器不支援請求的表面格式。已選用另一個繪製
 msgid "Preferred output format is not supported by available renderers"
 msgstr "可用繪製器不支援首選輸出格式"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "已停用 OpenColorIO：不支援影像色彩空間"

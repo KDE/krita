@@ -1,7 +1,7 @@
 {
-    "Id": "Touch Gui Docker",
+    "Id": "Touch Docker",
     "Type": "Service",
-    "X-KDE-Library": "kritatouchdocker",
+    "X-KDE-Library": "kritatouchdocker.json",
     "X-KDE-ServiceTypes": [
         "Krita/Dock"
     ],

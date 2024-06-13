@@ -1,22 +1,13 @@
-set(KRITA_TOUCHDOCKER_SOURCES 
-    TouchDockerPlugin.cpp 
-    TouchDockerDock.cpp 
+set(KRITA_TOUCHDOCKER_SOURCES TouchDocker.cpp
+    TouchDockerDock.cpp
+    TouchDockerWidget.cpp
 )
 
-if(WIN32)
-set(KRITA_TOUCHDOCKER_SOURCES ${KRITA_TOUCHDOCKER_SOURCES} 
-    TouchDockerQQuickWidget.cpp
+ki18n_wrap_ui(KRITA_TOUCHDOCKER_SOURCES
+    TouchDockerWidget.ui
 )
-endif(WIN32)
-
-qt5_add_resources(KRITA_TOUCHDOCKER_SOURCES touchdocker.qrc)
 
 kis_add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES})
-target_link_libraries(kritatouchdocker 
-    kritaui 
-    kritaqml
-    Qt5::Quick  
-    Qt5::QuickWidgets 
-    Qt5::Qml
-)
+
+target_link_libraries(kritatouchdocker kritaui)
 install(TARGETS kritatouchdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

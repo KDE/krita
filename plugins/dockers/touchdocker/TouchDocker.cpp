@@ -1,24 +1,18 @@
 /*
- *  SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2024 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
-#include "TouchDockerPlugin.h"
-
-#include <kis_debug.h>
-#include <kpluginfactory.h>
-#include <klocalizedstring.h>
-#include <KoDockFactoryBase.h>
-
-#include "kis_config.h"
-#include "kis_types.h"
-#include "KisViewManager.h"
-
+#include "TouchDocker.h"
 #include "TouchDockerDock.h"
+
+#include <kpluginfactory.h>
+
+#include <KoDockFactoryBase.h>
 #include <KoDockRegistry.h>
 
-K_PLUGIN_FACTORY_WITH_JSON(TouchDockerPluginFactory, "krita_touchdocker.json", registerPlugin<TouchDockerPlugin>();)
+K_PLUGIN_FACTORY_WITH_JSON(TouchDockerPluginFactory, "kritatouchdocker.json", registerPlugin<TouchDockerPlugin>();)
 
 class TouchDockerDockFactory : public KoDockFactoryBase {
 public:
@@ -39,7 +33,6 @@ public:
     QDockWidget* createDockWidget() override
     {
         TouchDockerDock * dockWidget = new TouchDockerDock();
-
         dockWidget->setObjectName(id());
 
         return dockWidget;
@@ -49,6 +42,8 @@ public:
     {
         return DockMinimized;
     }
+private:
+
 
 };
 
@@ -63,4 +58,4 @@ TouchDockerPlugin::~TouchDockerPlugin()
 {
 }
 
-#include "TouchDockerPlugin.moc"
+#include "TouchDocker.moc"

@@ -11,38 +11,81 @@
 #include <utility>
 #include <xsimd_extensions/xsimd.hpp>
 
-#include "KisSupportedArchitectures.h"
+#include <KConfigGroup>
+#include <KSharedConfig>
+#include <kis_debug.h>
+
+inline std::tuple<bool, bool> vectorizationConfiguration()
+{
+    static const std::tuple<bool, bool> vectorization = [&]() {
+        KConfigGroup cfg = KSharedConfig::openConfig()->group("");
+        // use the old key name for compatibility
+        const bool useVectorization =
+            !cfg.readEntry("amdDisableVectorWorkaround", false);
+        const bool disableAVXOptimizations =
+            cfg.readEntry("disableAVXOptimizations", false);
+
+        return std::make_tuple(useVectorization, disableAVXOptimizations);
+    }();
+
+    return vectorization;
+}
 
 template<class FactoryType, class... Args>
 auto createOptimizedClass(Args &&...param)
 {
 #ifdef HAVE_XSIMD
-    const unsigned int best_arch = KisSupportedArchitectures::bestArch();
+    bool useVectorization = true;
+    bool disableAVXOptimizations = false;
+
+    std::tie(useVectorization, disableAVXOptimizations) =
+        vectorizationConfiguration();
+
+    if (!useVectorization) {
+        qWarning() << "WARNING: vector instructions disabled by the "
+                      "\'amdDisableVectorWorkaround\' option!";
+        return FactoryType::template create<xsimd::generic>(
+            std::forward<Args>(param)...);
+    }
+
+    if (disableAVXOptimizations
+        && (xsimd::available_architectures().fma3_avx2
+            || xsimd::available_architectures().avx)) {
+        qWarning() << "WARNING: AVX and AVX2 optimizations are disabled by the "
+                      "\'disableAVXOptimizations\' option!";
+    }
 
 #ifdef Q_PROCESSOR_X86
-    if (xsimd::fma3<xsimd::avx2>::version() <= best_arch) {
+
+    if (!disableAVXOptimizations &&
+        xsimd::available_architectures().fma3_avx2) {
+
         return FactoryType::template create<xsimd::fma3<xsimd::avx2>>(
             std::forward<Args>(param)...);
-    } else if (xsimd::avx::version() <= best_arch) {
+
+    } else if (!disableAVXOptimizations &&
+               xsimd::available_architectures().avx) {
+
         return FactoryType::template create<xsimd::avx>(
             std::forward<Args>(param)...);
-    } else if (xsimd::sse4_1::version() <= best_arch) {
+
+    } else if (xsimd::available_architectures().sse4_1) {
         return FactoryType::template create<xsimd::sse4_1>(
             std::forward<Args>(param)...);
-    } else if (xsimd::ssse3::version() <= best_arch) {
+    } else if (xsimd::available_architectures().ssse3) {
         return FactoryType::template create<xsimd::ssse3>(
             std::forward<Args>(param)...);
-    } else if (xsimd::sse2::version() <= best_arch) {
+    } else if (xsimd::available_architectures().sse2) {
         return FactoryType::template create<xsimd::sse2>(
             std::forward<Args>(param)...);
     }
 #elif XSIMD_WITH_NEON64
-    if (xsimd::neon64::version() <= best_arch) {
+    if (xsimd::available_architectures().neon64) {
         return FactoryType::template create<xsimd::neon64>(
             std::forward<Args>(param)...);
     }
 #elif XSIMD_WITH_NEON
-    if (xsimd::neon::version() <= best_arch) {
+    if (xsimd::available_architectures().neon) {
         return FactoryType::template create<xsimd::neon>(
             std::forward<Args>(param)...);
     }

@@ -82,6 +82,8 @@ set(kritawidgets_LIB_SRCS
     KisWidgetConnectionUtils.cpp
     kis_spacing_selection_widget.cpp
     kis_stacked_widget.cpp
+
+    KisStretchedIconButton.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS

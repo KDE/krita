@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-13 01:40+0000\n"
 "PO-Revision-Date: 2024-05-07 12:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -12970,7 +12970,7 @@ msgstr "&Importer / Exporter"
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "&Convert"
 msgstr "&Convertir"
@@ -12978,14 +12978,14 @@ msgstr "&Convertir"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: plugins/dockers/layerdocker/LayerBox.cpp:1219
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Sélectionner"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13006,7 +13006,7 @@ msgstr "Tr&ansformer tous les calques"
 msgid "S&plit"
 msgstr "Fra&ctionner"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Sé&parer le canal Alpha"
@@ -19678,7 +19678,7 @@ msgstr "Ressources locales"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -23766,7 +23766,7 @@ msgid "Start"
 msgstr "Début"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr "VERSION COMPILÉE DE DÉVELOPPEMENT"
@@ -29861,7 +29861,7 @@ msgstr "Choisir le préréglage de la brosse"
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -31845,23 +31845,23 @@ msgstr "Langue"
 msgid "English news is always up to date."
 msgstr "Les nouvelles en anglais sont toujours à jour."
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Oublier « %1 »"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Une nouvelle version de Krita est disponible ."
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Une erreur est survenue durant la mise à jour."
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "Un re-démarrage est nécessaire."
@@ -32881,7 +32881,7 @@ msgstr ""
 "Le format préféré de la sortie n'est pas prise en charge par les moteurs de "
 "rendu disponibles."
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
@@ -39556,24 +39556,24 @@ msgstr ""
 "Affiche la sélection globale comme un masque de sélection normal dans le "
 "panneau <b>Calques</b>."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:324
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Taille des vignettes"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:352
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Indentation de l'arborescence"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Style des informations de mélange"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39588,43 +39588,43 @@ msgstr ""
 "Détaillé : affiche à la fois l'opacité et le mode de mélange, même s'ils "
 "sont inchangés."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Aucun"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Simple"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Équilibré"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Détaillé"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:398
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Opacité du texte pour les informations de mélange"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:416
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Intégré"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:418
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39636,36 +39636,36 @@ msgstr ""
 "Si cette option est désactivée, elles sont affichées sous les noms des "
 "calques (s'il y a assez d'espace)."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Boîte à cocher pour la sélection de calques"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:431
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 "Afficher la boîte à cocher pour sélectionner / dé-sélectionner des calques."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:997
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Masque de sélection rapide"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1018
+#: plugins/dockers/layerdocker/LayerBox.cpp:1019
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Annuler le masque de sélection rapide"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Verrouillage et visibilité"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
-#: plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Add"
 msgstr "&Ajouter"
@@ -44652,80 +44652,102 @@ msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
 msgstr "(Dés)Activer la palette contextuelle avec S-Pen"
 
-#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:33
-#, kde-format
-msgid "Button Actions"
-msgstr "Actions avec bouton"
-
-#. i18n: ectx: property (text), widget (QLabel, labelClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:39
-#, kde-format
-msgid "Click"
-msgstr "Cliquer"
-
-#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, kde-format
-msgid "Double Click"
-msgstr "Double cliquer"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:64
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-"devices."
+"Make sure the actions are corresponding to the correct gesture on the system "
+"level. These can be configured under S Pen Settings > Air actions."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:43
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
+#| "number of buttons in that list."
+#| msgid "%1 Button"
+#| msgid_plural "%1 Buttons"
+msgid "Buttons"
+msgstr "%1 bouton"
+
+#. i18n: ectx: property (text), widget (QLabel, labelClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:49
+#, fuzzy, kde-format
+#| msgid "Presets"
+msgid "Press"
+msgstr "Préréglages"
+
+#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:59
+#, fuzzy, kde-format
+#| msgid "Key Press"
+msgid "Double Press"
+msgstr "Cliquer sur une touche"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:74
+#, fuzzy, kde-format
+#| msgid ""
+#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
+#| "devices."
+msgid ""
+"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
+"S9 devices."
 msgstr ""
 "Les actions suivantes de bouton sont pris en charge sur les périphériques "
 "« Note 9 », « Note 10 » et « Tablette S6 »."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:83
+#: plugins/extensions/spensettings/wdg_spensettings.ui:93
 #, kde-format
 msgid "Gestures"
 msgstr "Gestes"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:89
+#: plugins/extensions/spensettings/wdg_spensettings.ui:99
 #, kde-format
 msgid "Swipe Up"
 msgstr "Balayer vers le haut"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:109
 #, kde-format
 msgid "Swipe Down"
 msgstr "Balayer vers le bas"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:106
+#: plugins/extensions/spensettings/wdg_spensettings.ui:116
 #, kde-format
 msgid "Swipe Right"
 msgstr "Balayer à droite"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:113
+#: plugins/extensions/spensettings/wdg_spensettings.ui:123
 #, kde-format
 msgid "Swipe Left"
 msgstr "Balayer vers la gauche"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:120
+#: plugins/extensions/spensettings/wdg_spensettings.ui:130
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "Tracer un cercle en sens horaire"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:127
-#, kde-format
-msgid "Circle Counterclockwise"
+#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#, fuzzy, kde-format
+#| msgid "Circle Counterclockwise"
+msgid "Circle Counter-Clockwise"
 msgstr "Faire un cercle dans le sens anti horaire"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:154
-#, kde-format
-msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#: plugins/extensions/spensettings/wdg_spensettings.ui:164
+#, fuzzy, kde-format
+#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+msgid ""
+"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+"devices."
 msgstr ""
 "Le suivi des gestes sont pris en charge sur les périphériques « Note 10 » et "
 "« Tablette S6 »."
@@ -50809,49 +50831,49 @@ msgstr ""
 "<title>Valeur du point blanc</title><p>Définir une valeur du point blanc "
 "spécifique dans l'image de sortie.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Balance des blancs"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "Réduction du bruit :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "Aucun"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "Ondelettes"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "Réduction du bruit de ligne « CFA »"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "Réduction du bruit d'impulsion"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:640
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50881,13 +50903,13 @@ msgstr ""
 "suppression de bruit par impulsions. Elle est appliquée après "
 "l'interpolation.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "Activer la correction d'aberration chromatique automatique"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:667
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50898,13 +50920,13 @@ msgstr ""
 "Agrandir les axes bruts « Rouge-Vert » et « Bleu-Jaune »avec les facteurs "
 "fournis (automatique par défaut).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:672
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "Ajustement automatique des axes de couleurs"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:673
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50921,13 +50943,13 @@ msgstr ""
 "pourrait échouée. Dans ce cas, veuillez désactiver l'option et régler "
 "manuellement les facteurs de couleurs.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "Rouge-Vert :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:685
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50937,13 +50959,13 @@ msgstr ""
 "<title>Multiplicateur Rouge - Vert</title><p>Définir ici la quantité de "
 "corrections sur l'axe Rouge - Vert</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:688
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "Bleu-Jaune :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:693
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50953,37 +50975,37 @@ msgstr ""
 "<title>Multiplicateur Bleu - Jaune</title><p>Définir ici la quantité de "
 "corrections sur l'axe Bleu - Jaune</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:713
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "Corrections"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "Profil de l'appareil photo :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "Aucun"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Intégré"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:725
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "Personnalisé"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:727
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -51003,54 +51025,54 @@ msgstr ""
 "utiliser un profil d'espace colorimétrique personnalisé en entrée.</li></"
 "ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:738
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "Fichiers ICC (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "Espace de travail"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "Raw (aucun profil)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "Wide Gamut"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:747
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "Personnalisé"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:749
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -51090,24 +51112,24 @@ msgstr ""
 "« Personnalisé » : </emphasis>: utilisation d'un profil d'espace "
 "colorimétrique personnalisé de sortie.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:772
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr "Fichiers ICC (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:784
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "Gestion des couleurs"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:990
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "Seuil :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:991
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -51117,13 +51139,13 @@ msgstr ""
 "<title>Seuil</title><p>Définir ici la valeur de seuil pour la réduction du "
 "bruit.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "Luminance :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -51132,13 +51154,13 @@ msgstr ""
 "<title>Luminosité</title><p>Quantité de réduction de luminosité pour le "
 "bruit en impulsion.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1007
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "Chrominance :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1008
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -61970,6 +61992,15 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Images de référence"
 
+#~ msgid "Button Actions"
+#~ msgstr "Actions avec bouton"
+
+#~ msgid "Click"
+#~ msgstr "Cliquer"
+
+#~ msgid "Double Click"
+#~ msgstr "Double cliquer"
+
 #~ msgid "Configure Popup Palette dockers"
 #~ msgstr "Configurer les panneaux contextuels de palettes"
 
@@ -65745,9 +65776,6 @@ msgstr "Images de référence"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete"
 #~ msgstr "Supprimer"
-
-#~ msgid "Key Press"
-#~ msgstr "Cliquer sur une touche"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text"

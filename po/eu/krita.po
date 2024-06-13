@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-13 01:40+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -12993,7 +12993,7 @@ msgstr "&Inportatu/esportatu"
 msgid "Import"
 msgstr "Inportatu"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "&Convert"
 msgstr "&Bihurtu"
@@ -13001,14 +13001,14 @@ msgstr "&Bihurtu"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: plugins/dockers/layerdocker/LayerBox.cpp:1219
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Hautatu"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13029,7 +13029,7 @@ msgstr "Eraldatu geruza &guztiak"
 msgid "S&plit"
 msgstr "&Zatitu"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "&Zatitu alfa"
@@ -19725,7 +19725,7 @@ msgstr "Baliabide lokalak"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -23754,7 +23754,7 @@ msgid "Start"
 msgstr "Hasiera"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr "DEV BUILD"
@@ -29817,7 +29817,7 @@ msgstr "Aukeratu pintzelaren aurre-ezarpenak"
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -31805,23 +31805,23 @@ msgstr "Hizkuntza"
 msgid "English news is always up to date."
 msgstr "Ingelesezko albisteak beti daude eguneratuta."
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Ahaztu «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Krita-ren bertsio berria erabilgarri dago."
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Errore bat gertatu da eguneratzean"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "Berrabiatu beharra dago."
@@ -32832,7 +32832,7 @@ msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 "Hobetsitako irteerako formatua, errendatzaile erabilgarriek, ez dute onartzen"
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO desgaituta dago: irudiaren kolore-eremua ez da onartzen"
@@ -39311,25 +39311,25 @@ msgstr ""
 "Erakutsi hautapen orokorra ohiko hautapen maskara gisa <interface>Geruzak</"
 "interface> panelean"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:324
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Koadro txikien tamaina"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:352
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Orientazioa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "Nahaste informazio estiloa"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39339,44 +39339,44 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "Sinplea"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "Orekatua"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "Zehaztua"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:398
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, fuzzy, kde-format
 #| msgid "Line Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "Lerroaren opakutasuna"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:416
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Lerro barruan"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:418
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39384,35 +39384,35 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "Geruzak hautatzeko kontrol-laukia"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:431
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:997
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Hautapen maskara azkarra"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1018
+#: plugins/dockers/layerdocker/LayerBox.cpp:1019
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Utzi hautapen maskara azkarra"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Txandakatu giltzapetzeak eta ikusgaitasuna"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
-#: plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Add"
 msgstr "&Gehitu"
@@ -44393,80 +44393,102 @@ msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
 msgstr "Txandakatu paleta gainerakorra S-Pen erabiliz"
 
-#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:33
-#, kde-format
-msgid "Button Actions"
-msgstr "Botoien ekintzak"
-
-#. i18n: ectx: property (text), widget (QLabel, labelClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:39
-#, kde-format
-msgid "Click"
-msgstr "Klik"
-
-#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, kde-format
-msgid "Double Click"
-msgstr "Klik bikoitza"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:64
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-"devices."
+"Make sure the actions are corresponding to the correct gesture on the system "
+"level. These can be configured under S Pen Settings > Air actions."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:43
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
+#| "number of buttons in that list."
+#| msgid "%1 Button"
+#| msgid_plural "%1 Buttons"
+msgid "Buttons"
+msgstr "Botoi %1"
+
+#. i18n: ectx: property (text), widget (QLabel, labelClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:49
+#, fuzzy, kde-format
+#| msgid "Presets"
+msgid "Press"
+msgstr "Aurrehautaketak"
+
+#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:59
+#, fuzzy, kde-format
+#| msgid "Key Press"
+msgid "Double Press"
+msgstr "Tekla-sakatzea"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:74
+#, fuzzy, kde-format
+#| msgid ""
+#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
+#| "devices."
+msgid ""
+"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
+"S9 devices."
 msgstr ""
 "Botoien ekintzak hauek ez dira Note 9, Note 10 eta Tab S6-arekin "
 "bateragarriak."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:83
+#: plugins/extensions/spensettings/wdg_spensettings.ui:93
 #, kde-format
 msgid "Gestures"
 msgstr "Keinuak"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:89
+#: plugins/extensions/spensettings/wdg_spensettings.ui:99
 #, kde-format
 msgid "Swipe Up"
 msgstr "Kolpe arina gora"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:109
 #, kde-format
 msgid "Swipe Down"
 msgstr "Kolpe arina behera"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:106
+#: plugins/extensions/spensettings/wdg_spensettings.ui:116
 #, kde-format
 msgid "Swipe Right"
 msgstr "Kolpe arina eskuinera"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:113
+#: plugins/extensions/spensettings/wdg_spensettings.ui:123
 #, kde-format
 msgid "Swipe Left"
 msgstr "Kolpe arina ezkerrera"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:120
+#: plugins/extensions/spensettings/wdg_spensettings.ui:130
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "Zirkulua erlojuaren noranzkoan"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:127
-#, kde-format
-msgid "Circle Counterclockwise"
+#: plugins/extensions/spensettings/wdg_spensettings.ui:137
+#, fuzzy, kde-format
+#| msgid "Circle Counterclockwise"
+msgid "Circle Counter-Clockwise"
 msgstr "Zirkulua erlojuaren aurkako noranzkoan"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:154
-#, kde-format
-msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#: plugins/extensions/spensettings/wdg_spensettings.ui:164
+#, fuzzy, kde-format
+#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+msgid ""
+"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+"devices."
 msgstr "Ondoko keinuak Note 10 eta Tab S6 gailuekin bateragarriak dira."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
@@ -50325,49 +50347,49 @@ msgstr ""
 "<title>Puntu zuriaren balioa</title><p>Zehaztu irteera-irudiko puntu "
 "zuriaren berariazko balioa.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Zurien oreka"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "Zarata murriztea:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "Uhintxoak"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "CFA lerroen zarata kentzea"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "Bulkaden zarata kentzea"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:640
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50395,13 +50417,13 @@ msgstr ""
 "strong='true'>Bulkaden zarata murriztea</emphasis>: Bulkaden zarata kentzea. "
 "Interpolazioaren ondoren aplikatzen da.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "Gaitu aberrazio kromatikoaren zuzenketa"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:667
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50412,13 +50434,13 @@ msgstr ""
 "eta urdin-horia emandako faktoreengatik handitzea (automatikoa era "
 "lehenetsian).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:672
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "Kolore-ardatzen doikuntza automatikoak"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:673
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50429,13 +50451,13 @@ msgid ""
 "factors.</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "Gorria-Berdea:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:685
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50445,13 +50467,13 @@ msgstr ""
 "<title>Gorri-Berde biderkatzailea</title><p>Ezarri hemen ardatz gorri-"
 "berdeko zuzenketaren zenbatekoa</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:688
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "Urdina-Horia:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:693
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50461,37 +50483,37 @@ msgstr ""
 "<title>Urdin-Hori biderkatzailea</title><p>Ezarri hemen ardatz urdin-horiko "
 "zuzenketaren zenbatekoa</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:713
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "Zuzenketak"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "Kameraren profila:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Kapsulatua"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:725
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "Pertsonalizatua"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:727
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50503,54 +50525,54 @@ msgid ""
 "custom input color space profile.</li></ul></p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:738
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "ICC fitxategiak (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "Langunea:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "RAW (profilik gabe)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "Gamut zabala"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:747
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "Pertsonalizatua"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:749
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50571,24 +50593,24 @@ msgid ""
 "output color space profile.</li></ul></p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:772
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr "ICC fitxategiak (*.icc *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:784
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "Kolore kudeaketa"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:990
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "Atalasea:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:991
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50598,13 +50620,13 @@ msgstr ""
 "<title>Atalasea</title><p>Ezarri hemen zarata murrizteko erabili beharreko "
 "atalase balioa.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "Luminantzia:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50613,13 +50635,13 @@ msgstr ""
 "<title>Luminantzia</title><p>Luminantzia bulkaden zarata murrizketaren "
 "zenbatekoa.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1007
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "Krominantzia:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1008
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -61321,6 +61343,15 @@ msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Erreferentziazko irudien tresna"
 
+#~ msgid "Button Actions"
+#~ msgstr "Botoien ekintzak"
+
+#~ msgid "Click"
+#~ msgstr "Klik"
+
+#~ msgid "Double Click"
+#~ msgstr "Klik bikoitza"
+
 #, fuzzy
 #~| msgid "Python Palette Docker"
 #~ msgid "Configure Popup Palette dockers"
@@ -65063,9 +65094,6 @@ msgstr "Erreferentziazko irudien tresna"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete"
 #~ msgstr "Ezabatu"
-
-#~ msgid "Key Press"
-#~ msgstr "Tekla-sakatzea"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Text"

@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-13 01:40+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -12920,7 +12920,7 @@ msgstr "आयात/निर्यात (&I)"
 msgid "Import"
 msgstr "आयात करें"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "&Convert"
 msgstr "परिवर्तित करें (&C)"
@@ -12928,14 +12928,14 @@ msgstr "परिवर्तित करें (&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: plugins/dockers/layerdocker/LayerBox.cpp:1219
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "चुनें (&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12956,7 +12956,7 @@ msgstr "सभी परतें रूपांतित करें (&A)"
 msgid "S&plit"
 msgstr "विभाजन (&p)"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "अल्फ़ा विभाजन (&p)"
@@ -19651,7 +19651,7 @@ msgstr "स्थानीय संसाधन"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -23617,7 +23617,7 @@ msgid "Start"
 msgstr "आरंभ"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr "डेव बिल्ड"
@@ -29498,7 +29498,7 @@ msgstr "ब्रश नमूना चुनें"
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -31399,23 +31399,23 @@ msgstr "भाषा"
 msgid "English news is always up to date."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "भूलें \"%1\""
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr ""
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "अद्यतन के समय एक त्रुटि हुई"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "पुनरारंभ करना आवश्यक है।"
@@ -32414,7 +32414,7 @@ msgstr ""
 msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr ""
@@ -38845,26 +38845,26 @@ msgid ""
 "Shows global selection as a usual selection mask in <b>Layers</b> docker"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:324
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "लघुछवि आकार"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:352
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, fuzzy, kde-format
 #| msgid "Orientation"
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "दिशा निर्धारण"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, fuzzy, kde-format
 #| msgid "Blending Mode"
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr "सम्मिश्रण मोड"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38874,42 +38874,42 @@ msgid ""
 "Detailed: Show both opacity and blending mode even if unchanged."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, fuzzy, kde-format
 #| msgid "None"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr "कोई नहीं"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, fuzzy, kde-format
 #| msgid "Simple"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr "साधारण"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, fuzzy, kde-format
 #| msgid "Color Balance"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr "रंग संतुलन"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, fuzzy, kde-format
 #| msgid "Details"
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr "विवरण"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:398
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, fuzzy, kde-format
 #| msgid "Line Opacity"
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr "लकीर की अपारदर्शिता"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:416
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, fuzzy, kde-format
 #| msgctxt "spline filtering"
 #| msgid "spline"
@@ -38917,7 +38917,7 @@ msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "स्प्लाइन"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:418
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -38925,35 +38925,35 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, fuzzy, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr "परत का आकार बदलें"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:431
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:997
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "त्वरित चयन मास्क"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1018
+#: plugins/dockers/layerdocker/LayerBox.cpp:1019
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "त्वरित चयन मास्क रद्द करें"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
 #, fuzzy, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "क्लिपबोर्ड से प्रथम परत"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
-#: plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Add"
 msgstr "जोड़ें (&A)"
@@ -44012,80 +44012,95 @@ msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
 msgstr ""
 
-#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:33
-#, fuzzy, kde-format
-#| msgid "Fill entire selection"
-msgid "Button Actions"
-msgstr "संपूर्ण चयन में भरें"
-
-#. i18n: ectx: property (text), widget (QLabel, labelClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:39
-#, kde-format
-msgid "Click"
-msgstr "क्लिक"
-
-#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, kde-format
-msgid "Double Click"
-msgstr "डबल क्लिक"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:64
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-"devices."
+"Make sure the actions are corresponding to the correct gesture on the system "
+"level. These can be configured under S Pen Settings > Air actions."
+msgstr ""
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:43
+#, fuzzy, kde-format
+#| msgctxt ""
+#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
+#| "number of buttons in that list."
+#| msgid "%1 Button"
+#| msgid_plural "%1 Buttons"
+msgid "Buttons"
+msgstr "%1 बटन"
+
+#. i18n: ectx: property (text), widget (QLabel, labelClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:49
+#, fuzzy, kde-format
+#| msgid "Presets"
+msgid "Press"
+msgstr "नमूने :"
+
+#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:59
+#, fuzzy, kde-format
+msgid "Double Press"
+msgstr "कुंजी दबाएं"
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:74
+#, kde-format
+msgid ""
+"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
+"S9 devices."
 msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:83
+#: plugins/extensions/spensettings/wdg_spensettings.ui:93
 #, kde-format
 msgid "Gestures"
 msgstr "संकेत"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:89
+#: plugins/extensions/spensettings/wdg_spensettings.ui:99
 #, kde-format
 msgid "Swipe Up"
 msgstr "ऊपर स्वाइप"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:109
 #, kde-format
 msgid "Swipe Down"
 msgstr "नीचे स्वाइप"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:106
+#: plugins/extensions/spensettings/wdg_spensettings.ui:116
 #, kde-format
 msgid "Swipe Right"
 msgstr "दायाँ स्वाइप"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:113
+#: plugins/extensions/spensettings/wdg_spensettings.ui:123
 #, kde-format
 msgid "Swipe Left"
 msgstr "बाएं स्वाइप"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:120
+#: plugins/extensions/spensettings/wdg_spensettings.ui:130
 #, fuzzy, kde-format
 #| msgid "C&lockwise"
 msgid "Circle Clockwise"
 msgstr "घड़ी की दिशा में (&l)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:127
+#: plugins/extensions/spensettings/wdg_spensettings.ui:137
 #, fuzzy, kde-format
-msgid "Circle Counterclockwise"
+msgid "Circle Counter-Clockwise"
 msgstr "ब्रुश आउटलाइन"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:154
+#: plugins/extensions/spensettings/wdg_spensettings.ui:164
 #, kde-format
-msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+msgid ""
+"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+"devices."
 msgstr ""
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
@@ -49919,49 +49934,49 @@ msgid ""
 "output image.</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "श्वेत संतुलन"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "नॉइस घटौती :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "कोई नहीं"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "वेवलेट्स"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "एफबीडीडी"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:640
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49977,13 +49992,13 @@ msgid ""
 "suppression. It's applied after interpolation.</li></ul></p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:667
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -49991,13 +50006,13 @@ msgid ""
 "green and blue-yellow axis by the given factors (automatic by default).</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:672
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "स्वचालित रंग अक्ष समायोजन"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:673
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50008,13 +50023,13 @@ msgid ""
 "factors.</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "लाल-हरा:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:685
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50022,13 +50037,13 @@ msgid ""
 "red-green axis</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:688
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "नीला-पीला :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:693
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50036,37 +50051,37 @@ msgid ""
 "blue-yellow axis</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:713
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "सुधार"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, fuzzy, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "परत प्रोफ़ाइल :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "कोई नहीं"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "सन्निहित"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:725
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "मनपसंद"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:727
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50078,54 +50093,54 @@ msgid ""
 "custom input color space profile.</li></ul></p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:738
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "कार्यक्षेत्र :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, fuzzy, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "कोई प्रोफ़ाइल नहीं"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "एस.आर.जी.बी"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "अडोबी आरजीबी"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "विस्तृत वर्ण विस्तार"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "प्रो-फोटो"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:747
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "मनपसंद"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:749
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50160,24 +50175,24 @@ msgstr ""
 "बड़ा रंग-विस्तार प्रदान करता है।</li><li><emphasis strong='true'>तदनुकूल</"
 "emphasis>: एक तदनुकूल आउटपुट रंग-स्थान प्रोफ़ाइल का उपयोग करें।</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:772
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:784
 #, fuzzy, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "रंग प्रबंधन"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:990
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "देहलीज :"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:991
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50185,26 +50200,26 @@ msgid ""
 "use.</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "ज्योतिर्मयता:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
 "<title>Luminance</title><p>Amount of Luminance impulse noise reduction.</p>"
 msgstr ""
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1007
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "क्रोमिनेंस"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1008
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -60928,6 +60943,17 @@ msgid "Reference Images Tool"
 msgstr "संदर्भ छवि औज़ार"
 
 #, fuzzy
+#~| msgid "Fill entire selection"
+#~ msgid "Button Actions"
+#~ msgstr "संपूर्ण चयन में भरें"
+
+#~ msgid "Click"
+#~ msgstr "क्लिक"
+
+#~ msgid "Double Click"
+#~ msgstr "डबल क्लिक"
+
+#, fuzzy
 #~| msgid "Palette"
 #~ msgid "Configure Popup Palette dockers"
 #~ msgstr "रंग पट्टिका"
@@ -64355,10 +64381,6 @@ msgstr "संदर्भ छवि औज़ार"
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Delete"
 #~ msgstr "मिटाएँ"
-
-#, fuzzy
-#~ msgid "Key Press"
-#~ msgstr "कुंजी दबाएं"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

@@ -1843,11 +1843,6 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         grpOpenGLWarnings->setVisible(true);
     }
 
-    if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {
-       grpOpenGL->setVisible(false);
-       grpOpenGL->setMaximumHeight(0);
-    }
-
     KisImageConfig imageCfg(false);
 
     KoColor c;

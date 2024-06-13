@@ -11,13 +11,30 @@ ComboBox {
     property QtObject spinBoxControl;
     property bool isFontSize: false;
     property int comboBoxUnit;
+    property bool allowPercentage: true;
     wheelEnabled: true;
 
+    property string ptString: i18nc("@label:inlistbox", "Pt");
+    property string emString: i18nc("@label:inlistbox", "Em");
+    property string exString: i18nc("@label:inlistbox", "Ex");
+    property string prcString: i18nc("@label:inlistbox", "%");
+
+    Component.onCompleted: {
+        if (!allowPercentage) {
+            // Not great, but listmodels don't seem to allow adding i18n strings as properties, because they are in functions?
+            model = [
+                        {text: ptString, value: 0},
+                        {text: emString, value: 2},
+                        {text: exString, value: 3}
+                    ];
+        }
+    }
+
     model: [
-        {text: i18nc("@label:inlistbox", "Pt"), value: 0},
-        {text: i18nc("@label:inlistbox", "Em"), value: 2},
-        {text: i18nc("@label:inlistbox", "Ex"), value: 3},
-        {text: i18nc("@label:inlistbox", "%"), value: 1}
+        {text: ptString, value: 0},
+        {text: emString, value: 2},
+        {text: exString, value: 3},
+        {text: prcString, value: 1}
     ]
     textRole: "text";
     valueRole: "value";

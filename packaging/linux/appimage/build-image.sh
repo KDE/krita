@@ -238,9 +238,6 @@ for lib in $APPDIR/usr/lib/python3.10/lib-dynload/*.so*; do
   patchelf --set-rpath '$ORIGIN/../..' $lib;
 done
 
-patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/qml/org/krita/draganddrop/libdraganddropplugin.so
-patchelf --set-rpath '$ORIGIN/../../../..' $APPDIR/usr/qml/org/krita/sketch/libkritasketchplugin.so
-
 if [[ -n $KRITACI_ALLOW_NO_PYQT && ! -f $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so ]]; then
   echo "WARNING: not found $APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so, skipping..."
 else
@@ -324,7 +321,7 @@ linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
-  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so,$APPDIR/usr/qml/org/krita/sketch/libkritasketchplugin.so,$APPDIR/usr/qml/org/krita/draganddrop/libdraganddropplugin.so  \
+  -extra-plugins=$PLUGINS,$APPDIR/usr/lib/krita-python-libs/PyKrita/krita.so  \
   -updateinformation="${ZSYNC_URL}" \
   -appimage
 

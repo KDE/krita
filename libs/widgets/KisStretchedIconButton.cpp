@@ -43,10 +43,12 @@ void KisStretchedIconButton::setAssociatedAction(QAction *action)
 {
     m_actionConnections.clear();
     m_action = action;
-    m_actionConnections.addConnection(action, &QAction::changed,
-                                      this, &KisStretchedIconButton::slotActionChanged);
-    m_actionConnections.addConnection(this, &KisStretchedIconButton::clicked,
-                                      action, &QAction::trigger);
+    if (action) {
+        m_actionConnections.addConnection(action, &QAction::changed,
+                                          this, &KisStretchedIconButton::slotActionChanged);
+        m_actionConnections.addConnection(this, &KisStretchedIconButton::clicked,
+                                          action, &QAction::trigger);
+    }
     slotActionChanged();
 }
 

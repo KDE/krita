@@ -42,6 +42,13 @@ GlyphPaletteDialog::GlyphPaletteDialog(QWidget *parent)
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib/qml/");
     m_quickWidget->engine()->addPluginPath(KoResourcePaths::getApplicationRoot() + "/lib64/qml/");
 
+    /*
+    // Default to fusion style unless the user forces another style
+        if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE")) {
+             QQuickStyle::setStyle(QStringLiteral("Fusion"));
+        }
+    */
+
     m_quickWidget->setPalette(this->palette());
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     m_quickWidget->setSource(QUrl("qrc:/GlyphPalette.qml"));

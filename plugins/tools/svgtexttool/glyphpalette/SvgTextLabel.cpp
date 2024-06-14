@@ -9,6 +9,7 @@
 #include <KoColorBackground.h>
 #include <QPainter>
 #include <QImage>
+#include <QQuickWindow>
 
 struct Q_DECL_HIDDEN SvgTextLabel::Private {
     KoSvgTextShape* shape{nullptr};
@@ -32,8 +33,13 @@ SvgTextLabel::~SvgTextLabel()
 
 void SvgTextLabel::paint(QPainter *painter)
 {
+    if (!painter->isActive()) return;
     painter->save();
     painter->fillRect(0, 0, width(), height(), fillColor());
+    if (d->shape->boundingRect().isEmpty()) {
+        painter->restore();
+        return;
+    }
 
     QRectF bbox = d->shape->selectionBoxes(0, d->shape->posForIndex(d->shape->plainText().size())).boundingRect();
     qreal boxHeight = bbox.isEmpty()? fontSize(): bbox.height();
@@ -44,8 +50,10 @@ void SvgTextLabel::paint(QPainter *painter)
     painter->scale(scale, scale);
     painter->translate(-bbox.center());
 
+    qreal pixelRatio = this->window()->effectiveDevicePixelRatio();
+    QRectF scaledBounds = QRectF(0, 0, this->boundingRect().width()*pixelRatio, this->boundingRect().height()*pixelRatio);
 
-    painter->setClipRect(painter->transform().inverted().mapRect(this->boundingRect()));
+    painter->setClipRect(painter->transform().inverted().mapRect(scaledBounds));
     painter->setPen(Qt::transparent);
     d->shape->paint(*painter);
 

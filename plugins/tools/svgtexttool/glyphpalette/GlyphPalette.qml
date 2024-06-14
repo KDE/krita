@@ -155,6 +155,8 @@ Rectangle {
                     focus: true
                     padding: 2;
                     closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+
+                    palette: TabBar.palette;
                     GridView {
                         anchors.fill: parent;
                         clip: true;

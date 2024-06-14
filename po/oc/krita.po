@@ -31,7 +31,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-13 01:40+0000\n"
+"POT-Creation-Date: 2024-06-14 01:38+0000\n"
 "PO-Revision-Date: 2008-08-05 22:28+0200\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan (lengadocian) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
@@ -16683,6 +16683,24 @@ msgstr "Reduire el zoom"
 #. i18n: ectx: property (text), widget (QToolButton, bnClear)
 #. i18n: ectx: property (text), widget (QToolButton, bnSave)
 #. i18n: ectx: property (text), widget (QToolButton, bnSettings)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnOpen)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnSave)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnSaveAs)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnUndo)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnRedo)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnOpacityUp)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnBrightnessUp)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnOpacityDown)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnBrightnessDown)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnRotateLeft)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnResetCanvas)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnRotateRight)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnBrushSizeUp)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnZoomUp)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnBrushSizeDown)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnZoomDown)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnPreviousPreset)
+#. i18n: ectx: property (text), widget (KisStretchedIconButton, btnClear)
 #. i18n: ectx: property (text), widget (QToolButton, bnSavePalette)
 #. i18n: ectx: property (text), widget (QToolButton, bnAdd)
 #. i18n: ectx: property (text), widget (QToolButton, bnRemove)
@@ -16749,6 +16767,24 @@ msgstr "Reduire el zoom"
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:97
 #: plugins/dockers/storyboarddocker/wdgstoryboarddock.ui:117
 #: plugins/dockers/svgcollectiondocker/WdgSvgCollection.ui:26
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:28
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:44
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:60
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:80
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:96
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:116
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:132
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:152
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:168
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:188
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:204
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:220
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:240
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:256
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:276
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:292
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:310
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:326
 #: plugins/extensions/resourcemanager/pagebundlesaver.ui:95
 #: plugins/extensions/resourcemanager/pagemetadatainfo.ui:287
 #: plugins/extensions/resourcemanager/wdgdlgembedtags.ui:146
@@ -21728,8 +21764,8 @@ msgstr "Visualizar"
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgDisplaySettings)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_6)
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2146
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2148
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2141
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2143
 #: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
@@ -21831,8 +21867,8 @@ msgstr "&Suprimir "
 #. i18n: ectx: attribute (title), widget (QWidget, general)
 #: libs/ui/animation/VideoImportDialog.ui:34
 #: libs/ui/animation/wdg_animationrenderer.ui:16
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2116
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2118
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2111
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2113
 #: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
@@ -23165,96 +23201,96 @@ msgstr ""
 msgid "White Point: %1, %2"
 msgstr "Opcions"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2024
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2019
 #, kde-format
 msgid "<b>Warning:</b> current display doesn't support HDR rendering"
 msgstr ""
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2109
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2104
 #, fuzzy, kde-format
 msgid "Configure Krita"
 msgstr "Saturacion :"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2126
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2121
 #, fuzzy, kde-format
 msgid "Keyboard Shortcuts"
 msgstr "Importar un document"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2128
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2123
 #: libs/widgetutils/xmlgui/KisShortcutsEditor_p.cpp:282
 #, fuzzy, kde-format
 msgid "Shortcuts"
 msgstr "Importar un document"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2138
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2133
 #, fuzzy, kde-format
 msgid "Canvas Input Settings"
 msgstr "Seleccion"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2139
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2134
 #, fuzzy, kde-format
 msgid "Canvas Input"
 msgstr "Seleccion"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2156
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2151
 #: plugins/dockers/logdocker/LogDockerDock.cpp:196
 #, fuzzy, kde-format
 msgid "Color Management"
 msgstr "Seleccion"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2158
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2153
 #, fuzzy, kde-format
 #| msgid "Color"
 msgctxt "Label of color as in Color Management"
 msgid "Color"
 msgstr "Color"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2166
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2168
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2161
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2163
 #, fuzzy, kde-format
 msgid "Performance"
 msgstr "OpenGL"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2176
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2171
 #, fuzzy, kde-format
 msgid "Tablet settings"
 msgstr "Seleccion"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2178
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2173
 #, fuzzy, kde-format
 msgid "Tablet"
 msgstr "Paleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2186
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2181
 #, fuzzy, kde-format
 msgid "Canvas-only settings"
 msgstr "Seleccion"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2188
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2183
 #, fuzzy, kde-format
 msgid "Canvas-only"
 msgstr "Seleccion"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2196
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2198
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2191
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2193
 #, fuzzy, kde-format
 msgid "Pop-up Palette"
 msgstr "Paleta"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2206
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2201
 #, fuzzy, kde-format
 msgctxt "@title:tab Author page"
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2208
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2203
 #: libs/ui/KoDocumentInfoDlg.cpp:114
 #: plugins/python/comics_project_management_tools/exporters/CPMT_EPUB_exporter.py:227
 #, kde-format
 msgid "Author"
 msgstr "Autor"
 
-#: libs/ui/dialogs/kis_dlg_preferences.cc:2215
+#: libs/ui/dialogs/kis_dlg_preferences.cc:2210
 #, fuzzy, kde-format
 msgctxt "@action:button"
 msgid "Restore Defaults"
@@ -27177,6 +27213,7 @@ msgstr "Linha"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgPopupPaletteSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisAutoLevelsWidget)
+#. i18n: ectx: property (windowTitle), widget (QWidget, TouchDockerWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, QuickSettingsWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WGConfigWidget)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgResourcePreview)
@@ -27185,6 +27222,7 @@ msgstr "Linha"
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisResourceItemViewer)
 #: libs/ui/forms/WdgPopupPaletteSettings.ui:14
 #: libs/ui/widgets/KisAutoLevelsWidget.ui:14
+#: plugins/dockers/touchdocker/TouchDockerWidget.ui:14
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:14
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:14
 #: plugins/extensions/resourcemanager/kisresourceitemviewer.ui:16
@@ -32516,7 +32554,7 @@ msgid ""
 "Y: %2 px"
 msgstr ""
 
-#: libs/ui/tool/kis_tool_utils.cpp:206 libs/ui/tool/kis_tool_utils.cpp:218
+#: libs/ui/tool/kis_tool_utils.cpp:212 libs/ui/tool/kis_tool_utils.cpp:224
 #: plugins/dockers/animation/KisAnimUtils.cpp:79
 #, fuzzy
 msgctxt "(qtundo-format)"
@@ -40526,12 +40564,7 @@ msgstr "Duplicar"
 msgid "Delete the taskset"
 msgstr "Suprimir pagina"
 
-#: plugins/dockers/throttle/ThrottlePlugin.h:23
-#, kde-format
-msgid "CPU Throttle"
-msgstr ""
-
-#: plugins/dockers/touchdocker/TouchDockerDock.cpp:86
+#: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
 msgid "Touch Docker"
 msgstr "Grasilha"

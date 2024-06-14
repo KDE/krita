@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-06 01:47+0000\n"
+"POT-Creation-Date: 2024-06-13 01:40+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -12882,7 +12882,7 @@ msgstr "&Importer/eksporter"
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1244
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
 #, kde-format
 msgid "&Convert"
 msgstr "&Konverter"
@@ -12890,7 +12890,7 @@ msgstr "&Konverter"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1218
+#: plugins/dockers/layerdocker/LayerBox.cpp:1219
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
@@ -12898,7 +12898,7 @@ msgid "&Select"
 msgstr "&Merk"
 
 # Inneheld kommandoar for gruppering, så det er best med imperativ her (til trass for den offisielle konteksten).
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12919,7 +12919,7 @@ msgstr "Transformer &alle laga"
 msgid "S&plit"
 msgstr "&Del opp"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1253
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Del opp &alfa"
@@ -19595,7 +19595,7 @@ msgstr "Lokale ressursar"
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
-#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:725
+#: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
 #: libs/ui/opengl/KisOpenGLCanvasRenderer.cpp:331
 #: libs/ui/widgets/kis_custom_image_widget.cc:294
@@ -23613,7 +23613,7 @@ msgid "Start"
 msgstr "Start"
 
 #. i18n: ectx: property (text), widget (QLabel, devBuildLabel)
-#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:630
+#: libs/ui/forms/KisWelcomePage.ui:164 libs/ui/KisWelcomePageWidget.cpp:631
 #, kde-format
 msgid "DEV BUILD"
 msgstr "UTVIKLARVERSJON"
@@ -29654,7 +29654,7 @@ msgstr "Vel ferdigpensel"
 #: libs/ui/kis_paintop_box.cc:266
 #: libs/ui/widgets/gradient/KisGradientColorEditor.cpp:94
 #: plugins/dockers/layerdocker/LayerBox.cpp:210
-#: plugins/dockers/layerdocker/LayerBox.cpp:397
+#: plugins/dockers/layerdocker/LayerBox.cpp:398
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:53
 #: plugins/filters/halftone/KisHalftoneConfigPageWidget.cpp:56
 #: plugins/generators/screentone/KisScreentoneConfigWidget.cpp:39
@@ -31582,23 +31582,23 @@ msgstr "Språk"
 msgid "English news is always up to date."
 msgstr "Engelske nyheiter er alltid oppdaterte"
 
-#: libs/ui/KisWelcomePageWidget.cpp:653
+#: libs/ui/KisWelcomePageWidget.cpp:654
 #: plugins/dockers/presethistory/presethistory_dock.cpp:306
 #, kde-format
 msgid "Forget \"%1\""
 msgstr "Gløym «%1»"
 
-#: libs/ui/KisWelcomePageWidget.cpp:744
+#: libs/ui/KisWelcomePageWidget.cpp:745
 #, kde-format
 msgid "New version of Krita is available."
 msgstr "Ein ny versjon av Krita er tilgjengeleg."
 
-#: libs/ui/KisWelcomePageWidget.cpp:773
+#: libs/ui/KisWelcomePageWidget.cpp:774
 #, kde-format
 msgid "An error occurred during the update"
 msgstr "Det oppstod ein feil ved oppdatering"
 
-#: libs/ui/KisWelcomePageWidget.cpp:779
+#: libs/ui/KisWelcomePageWidget.cpp:780
 #, kde-format
 msgid "Restart is required."
 msgstr "Du må starta programmet på nytt."
@@ -32616,7 +32616,7 @@ msgid "Preferred output format is not supported by available renderers"
 msgstr ""
 "Det føretrekte utformatet er ikkje støtta av alle tilgjengelege oppteiknarar."
 
-#: libs/ui/opengl/kis_opengl_image_textures.cpp:848
+#: libs/ui/opengl/kis_opengl_image_textures.cpp:855
 #, kde-format
 msgid "OpenColorIO is disabled: image color space is not supported"
 msgstr "OpenColorIO er slått av: Biletfargerom er ikkje støtta"
@@ -39196,24 +39196,24 @@ msgid ""
 msgstr ""
 "Vis det globale utvalet som ei vanleg utvalsmaske i <b>Lag</b>-dokkpanelet"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:324
+#: plugins/dockers/layerdocker/LayerBox.cpp:325
 #, kde-format
 msgid "Thumbnail Size"
 msgstr "Storleik på miniatyrbileta"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:352
+#: plugins/dockers/layerdocker/LayerBox.cpp:353
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, slider"
 msgid "Tree Indentation"
 msgstr "Treinnrykk"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:375
+#: plugins/dockers/layerdocker/LayerBox.cpp:376
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, combobox"
 msgid "Blending Info Style"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:377
+#: plugins/dockers/layerdocker/LayerBox.cpp:378
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39227,43 +39227,43 @@ msgstr ""
 "Balansert: Vis både tettleik og overgangsmodusar viss minst éin er endra.\n"
 "Detaljert: Vis alltid både tettleik og overgangsmodusar."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:382
+#: plugins/dockers/layerdocker/LayerBox.cpp:383
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "None"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:383
+#: plugins/dockers/layerdocker/LayerBox.cpp:384
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Simple"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:384
+#: plugins/dockers/layerdocker/LayerBox.cpp:385
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Balanced"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:385
+#: plugins/dockers/layerdocker/LayerBox.cpp:386
 #, kde-format
 msgctxt "@item:inlistbox Layer Docker blending info style"
 msgid "Detailed"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:398
+#: plugins/dockers/layerdocker/LayerBox.cpp:399
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Blending info text opacity"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:416
+#: plugins/dockers/layerdocker/LayerBox.cpp:417
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Inline"
 msgstr "Vis på same linje"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:418
+#: plugins/dockers/layerdocker/LayerBox.cpp:419
 #, kde-format
 msgctxt "@item:tooltip"
 msgid ""
@@ -39271,35 +39271,35 @@ msgid ""
 "If disabled, show below layer names (when enough space)."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:430
+#: plugins/dockers/layerdocker/LayerBox.cpp:431
 #, kde-format
 msgctxt "@item:inmenu Layers Docker settings, checkbox"
 msgid "Checkbox for Selecting Layers"
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:431
+#: plugins/dockers/layerdocker/LayerBox.cpp:432
 #, kde-format
 msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:996
+#: plugins/dockers/layerdocker/LayerBox.cpp:997
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Kjapp utvalsmaske"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1018
+#: plugins/dockers/layerdocker/LayerBox.cpp:1019
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Avbryt kjapp utvalsmaske"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1228
+#: plugins/dockers/layerdocker/LayerBox.cpp:1229
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Låsar og synlegheit på/av"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1235
-#: plugins/dockers/layerdocker/LayerBox.cpp:1258
+#: plugins/dockers/layerdocker/LayerBox.cpp:1236
+#: plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Add"
 msgstr "&Legg til"
@@ -44244,80 +44244,89 @@ msgctxt "action"
 msgid "Toggle popup palette with S-Pen"
 msgstr "Vis/gøym sprettopp-palett med S-pennen"
 
-#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:33
-#, kde-format
-msgid "Button Actions"
-msgstr "Knappehandlingar"
-
-#. i18n: ectx: property (text), widget (QLabel, labelClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:39
-#, kde-format
-msgid "Click"
-msgstr "Klikk"
-
-#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, kde-format
-msgid "Double Click"
-msgstr "Dobbeltklikk"
-
-#. i18n: ectx: property (text), widget (QLabel, label_7)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:64
+#. i18n: ectx: property (text), widget (QLabel, label_9)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:27
 #, kde-format
 msgid ""
-"Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-"devices."
+"Make sure the actions are corresponding to the correct gesture on the system "
+"level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
-"Desse knappehandlingane er støtta på Note 9, Note 10 og Tab S6-einingar."
+
+#. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:43
+#, kde-format
+msgid "Buttons"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:49
+#, kde-format
+msgid "Press"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:59
+#, kde-format
+msgid "Double Press"
+msgstr ""
+
+#. i18n: ectx: property (text), widget (QLabel, label_7)
+#: plugins/extensions/spensettings/wdg_spensettings.ui:74
+#, kde-format
+msgid ""
+"The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
+"S9 devices."
+msgstr ""
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:83
+#: plugins/extensions/spensettings/wdg_spensettings.ui:93
 #, kde-format
 msgid "Gestures"
 msgstr "Muserørsler"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:89
+#: plugins/extensions/spensettings/wdg_spensettings.ui:99
 #, kde-format
 msgid "Swipe Up"
 msgstr "Sveip opp"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:99
+#: plugins/extensions/spensettings/wdg_spensettings.ui:109
 #, kde-format
 msgid "Swipe Down"
 msgstr "Svei ned"
 
 #. i18n: ectx: property (text), widget (QLabel, label_4)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:106
+#: plugins/extensions/spensettings/wdg_spensettings.ui:116
 #, kde-format
 msgid "Swipe Right"
 msgstr "Sveip til høgre"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:113
+#: plugins/extensions/spensettings/wdg_spensettings.ui:123
 #, kde-format
 msgid "Swipe Left"
 msgstr "Sveip til venstre"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:120
+#: plugins/extensions/spensettings/wdg_spensettings.ui:130
 #, kde-format
 msgid "Circle Clockwise"
 msgstr "Sirkel med klokka"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:127
+#: plugins/extensions/spensettings/wdg_spensettings.ui:137
 #, kde-format
-msgid "Circle Counterclockwise"
-msgstr "Sirkel mot klokka"
+msgid "Circle Counter-Clockwise"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/extensions/spensettings/wdg_spensettings.ui:154
+#: plugins/extensions/spensettings/wdg_spensettings.ui:164
 #, kde-format
-msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
-msgstr "Desse knappehandlingane er støtta på Note 10 og Tab S6-einingar."
+msgid ""
+"The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
+"devices."
+msgstr ""
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -50303,49 +50312,49 @@ msgstr ""
 "<title>Kvitpunktverdi</title><p>Vel kva kvitpunktverdi du vil bruka på "
 "biletet.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:622
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:624
 #, kde-format
 msgctxt "@label"
 msgid "White Balance"
 msgstr "Kvitbalanse"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:630
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Noise reduction:"
 msgstr "Støyfjerning:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:632
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "None"
 msgstr "Ingen"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:633
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Wavelets"
 msgstr "Waveletar"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:634
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "FBDD"
 msgstr "FBDD"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:635
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:637
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "CFA Line Denoise"
 msgstr "CFA-linjestøyfjerning"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:636
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
 #, kde-format
 msgctxt "@item:inlistbox Noise Reduction"
 msgid "Impulse Denoise"
 msgstr "Impuls-støyfjerning"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:638
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:640
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50371,13 +50380,13 @@ msgstr ""
 "strong='true'>Impuls-støyfjerning</emphasis>: Fjerning av impulsstøy. Vert "
 "brukt etter interpolering.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:664
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:666
 #, kde-format
 msgctxt "@option:check"
 msgid "Enable Chromatic Aberration correction"
 msgstr "Rett opp kromatisk avvik"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:665
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:667
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50387,13 +50396,13 @@ msgstr ""
 "<title>Rett opp kromatisk avvik</title><p>Forstørr raud–grøn- og blå–gul-"
 "aksane med oppgjeven faktor (standard: automatisk).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:670
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:672
 #, kde-format
 msgctxt "@option:check"
 msgid "Automatic color axis adjustments"
 msgstr "Automatisk fargeaksejustering"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:671
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:673
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50409,13 +50418,13 @@ msgstr ""
 "vil ikkje denne metoden fungera. I alle tilfelle kan du slå av dette valet "
 "og manuelt justera fargefaktorane.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:678
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:680
 #, kde-format
 msgctxt "@label:slider"
 msgid "Red-Green:"
 msgstr "Raud–grøn:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:683
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:685
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50425,13 +50434,13 @@ msgstr ""
 "<title>Raud–grøn-faktor</title><p>Vel korrigeringsfaktor for raud–grøn-aksen."
 "</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:686
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:688
 #, kde-format
 msgctxt "@label:slider"
 msgid "Blue-Yellow:"
 msgstr "Blå-gul:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:691
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:693
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50440,37 +50449,37 @@ msgid ""
 msgstr ""
 "<title>Blå–gul-faktor</title><p>Vel korrigeringsfaktor for blå–gul-aksen.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:710
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:713
 #, kde-format
 msgctxt "@label"
 msgid "Corrections"
 msgstr "Korrigeringar"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:718
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Camera Profile:"
 msgstr "Kameraprofil:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:720
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:723
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "None"
 msgstr "Ingen"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:721
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Embedded"
 msgstr "Innebygd"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:722
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:725
 #, kde-format
 msgctxt "@item:inlistbox Camera Profile"
 msgid "Custom"
 msgstr "Tilpassa"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:724
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:727
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50489,55 +50498,55 @@ msgstr ""
 "strong='true'>Tilpassa</emphasis>: Bruk ein sjølvvald fargeprofil for å "
 "dekoda råbilet­fila.</li></ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:735
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:738
 #, kde-format
 msgid "ICC Files (*.icc; *.icm)"
 msgstr "ICC-filer (*.icc; *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:737
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Workspace:"
 msgstr "Arbeidsfargerom:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:739
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Raw (no profile)"
 msgstr "Rå (ingen profil)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:740
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "sRGB"
 msgstr "sRGB"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:741
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Adobe RGB"
 msgstr "Adobe RGB"
 
 # Ser ut tiil å vera eit særnamn her («Wide Gamut D65»?).
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:742
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:745
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Wide Gamut"
 msgstr "Wide Gamut"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:743
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Pro-Photo"
 msgstr "Pro-Photo"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:744
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:747
 #, kde-format
 msgctxt "@item:inlistbox Workspace"
 msgid "Custom"
 msgstr "Tilpassa"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:746
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:749
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50572,24 +50581,24 @@ msgstr ""
 "strong='true'>Tilpassa</emphasis>: Bruk ein sjølvvalt fargeromprofil.</li></"
 "ul></p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:769
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:772
 #, kde-format
 msgid "ICC Files (*.icc *.icm)"
 msgstr "ICC-filer (*.icc *.icm)"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:781
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:784
 #, kde-format
 msgctxt "@label"
 msgid "Color Management"
 msgstr "Fargestyring"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:987
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:990
 #, kde-format
 msgctxt "@label"
 msgid "Threshold:"
 msgstr "Terskel:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:988
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:991
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50597,13 +50606,13 @@ msgid ""
 "use.</p>"
 msgstr "<title>Terskel</title><p>Vel terskelverdi for støyfjerning.</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1001
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
 #, kde-format
 msgctxt "@label"
 msgid "Luminance:"
 msgstr "Lysstyrke:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1002
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -50612,13 +50621,13 @@ msgstr ""
 "<title>Lysstyrke</title><p>Mengd støyfjerning for lysstyrkeimpuls "
 "(luminansimpuls).</p>"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1004
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1007
 #, kde-format
 msgctxt "@label"
 msgid "Chrominance:"
 msgstr "Krominans:"
 
-#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1005
+#: plugins/impex/raw/3rdparty/libkdcraw/src/dcrawsettingswidget.cpp:1008
 #, kde-format
 msgctxt "@info:whatsthis"
 msgid ""

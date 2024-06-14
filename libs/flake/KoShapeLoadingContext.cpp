@@ -6,6 +6,8 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+#include <QMultiMap>
+
 #include "KoShapeLoadingContext.h"
 #include "KoShape.h"
 #include "KoShapeContainer.h"
@@ -48,8 +50,8 @@ public:
     QMap<QString, QPair<KoShape *, QVariant> > subIds;
     QMap<QString, KoSharedLoadingData *> sharedData; //FIXME: use QScopedPointer here to auto delete in destructor
     int zIndex;
-    QMap<QString, KoLoadingShapeUpdater*> updaterById;
-    QMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
+    QMultiMap<QString, KoLoadingShapeUpdater*> updaterById;
+    QMultiMap<KoShape *, KoLoadingShapeUpdater*> updaterByShape;
     KoDocumentResourceManager *documentResources;
     KoSectionModel *sectionModel; };
 
@@ -95,7 +97,7 @@ void KoShapeLoadingContext::addShapeId(KoShape * shape, const QString & id)
     d->drawIds.insert(id, shape);
     QMap<QString, KoLoadingShapeUpdater*>::iterator it(d->updaterById.find(id));
     while (it != d->updaterById.end() && it.key() == id) {
-        d->updaterByShape.insertMulti(shape, it.value());
+        d->updaterByShape.insert(shape, it.value());
         it = d->updaterById.erase(it);
     }
 }
@@ -119,7 +121,7 @@ QPair<KoShape *, QVariant> KoShapeLoadingContext::shapeSubItemById(const QString
 // TODO make sure to remove the shape from the loading context when loading for it failed and it was deleted. This can also happen when the parent is deleted
 void KoShapeLoadingContext::updateShape(const QString & id, KoLoadingShapeUpdater * shapeUpdater)
 {
-    d->updaterById.insertMulti(id, shapeUpdater);
+    d->updaterById.insert(id, shapeUpdater);
 }
 
 void KoShapeLoadingContext::shapeLoaded(KoShape * shape)

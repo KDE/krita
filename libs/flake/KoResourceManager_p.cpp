@@ -236,7 +236,7 @@ void KoResourceManager::addDerivedResourceConverter(KoDerivedResourceConverterSP
     KIS_SAFE_ASSERT_RECOVER_NOOP(!m_derivedResources.contains(converter->key()));
 
     m_derivedResources.insert(converter->key(), converter);
-    m_derivedFromSource.insertMulti(converter->sourceKey(), converter);
+    m_derivedFromSource.insert(converter->sourceKey(), converter);
 }
 
 bool KoResourceManager::hasDerivedResourceConverter(int key)
@@ -275,8 +275,8 @@ void KoResourceManager::addActiveCanvasResourceDependency(KoActiveCanvasResource
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!hasActiveCanvasResourceDependency(dep->sourceKey(), dep->targetKey()));
 
-    m_dependencyFromSource.insertMulti(dep->sourceKey(), dep);
-    m_dependencyFromTarget.insertMulti(dep->targetKey(), dep);
+    m_dependencyFromSource.insert(dep->sourceKey(), dep);
+    m_dependencyFromTarget.insert(dep->targetKey(), dep);
 }
 
 bool KoResourceManager::hasActiveCanvasResourceDependency(int sourceKey, int targetKey) const

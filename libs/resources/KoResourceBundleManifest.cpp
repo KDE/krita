@@ -133,7 +133,7 @@ bool KoResourceBundleManifest::save(QIODevice *device)
        manifestWriter.addAttribute("manifest:version", "1.2");
        manifestWriter.addManifestEntry("/", "application/x-krita-resourcebundle");
 
-       Q_FOREACH (QString resourceType, m_resources.uniqueKeys()) {
+       Q_FOREACH (QString resourceType, m_resources.keys()) {
            Q_FOREACH (const ResourceReference &resource, m_resources[resourceType].values()) {
                manifestWriter.startElement("manifest:file-entry");
                manifestWriter.addAttribute("manifest:media-type", resourceTypeToManifestType(resourceType));

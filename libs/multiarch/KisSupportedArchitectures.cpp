@@ -34,6 +34,14 @@ struct ArchToString : ArchToStringBase {
     }
 };
 
+#if XSIMD_VERSION_MAJOR < 13
+template <>
+struct ArchToString<xsimd::generic> : ArchToStringBase {
+    QString name() const override {
+        return "generic";
+    }
+};
+#endif
 
 struct ArchToStringFactory {
     template <typename arch>
@@ -57,6 +65,15 @@ QString KisSupportedArchitectures::bestArchName()
     return bestArchName;
 }
 
+#ifdef HAVE_XSIMD
+#if (XSIMD_VERSION_MAJOR >= 13 && XSIMD_VERSION_MINOR >=1) \
+    || defined(XSIMD_HAS_ARCH_LIST_FIX_PR1032)
+#define XSIMD_SUPPORTS_NEW_ARCH_DETECTION
+#elif XSIMD_VERSION_MAJOR < 13
+#define XSIMD_SUPPORTS_OLD_ARCH_DETECTION
+#endif
+#endif
+
 template<typename S>
 struct is_supported_arch {
     is_supported_arch(S &log)
@@ -67,10 +84,12 @@ struct is_supported_arch {
     template<typename A>
     void operator()(A arch) const
     {
-#ifdef HAVE_XSIMD
+#ifdef XSIMD_SUPPORTS_NEW_ARCH_DETECTION
         if (xsimd::available_architectures().has(arch)) {
             l.append(A::name()).append(" ");
         }
+#else
+        Q_UNUSED(arch)
 #endif
     }
 
@@ -81,8 +100,33 @@ QString KisSupportedArchitectures::supportedInstructionSets()
 {
     static const QString archs = []() {
         QString archs;
-#ifdef HAVE_XSIMD
+#ifdef XSIMD_SUPPORTS_NEW_ARCH_DETECTION
         xsimd::all_architectures::for_each(is_supported_arch<QString>{archs});
+#elif defined XSIMD_SUPPORTS_OLD_ARCH_DETECTION
+        QStringList archsList;
+        auto available = xsimd::available_architectures();
+#define CHECK_ARCH(arch) if (available.arch) archsList << #arch
+        CHECK_ARCH(sse2);
+        CHECK_ARCH(sse3);
+        CHECK_ARCH(ssse3);
+        CHECK_ARCH(sse4_1);
+        CHECK_ARCH(sse4_2);
+        CHECK_ARCH(sse4a);
+        CHECK_ARCH(fma3_sse);
+        CHECK_ARCH(fma4);
+        CHECK_ARCH(xop);
+        CHECK_ARCH(avx);
+        CHECK_ARCH(fma3_avx);
+        CHECK_ARCH(avx2);
+        CHECK_ARCH(fma3_avx2);
+        CHECK_ARCH(avx512f);
+        CHECK_ARCH(avx512cd);
+        CHECK_ARCH(avx512dq);
+        CHECK_ARCH(avx512bw);
+        CHECK_ARCH(neon);
+        CHECK_ARCH(neon64);
+#undef CHECK_ARCH
+        archs = archsList.join(' ');
 #endif
         return archs;
     }();

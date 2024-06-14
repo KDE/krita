@@ -1,5 +1,6 @@
 set(kritamultiarch_SRCS
     KisSupportedArchitectures.cpp
+    KoMultiArchBuildSupport.cpp
 )
 
 kis_add_library(kritamultiarch SHARED ${kritamultiarch_SRCS})

@@ -8,28 +8,15 @@
 #ifndef KO_MULTI_ARCH_BUILD_SUPPORT_H
 #define KO_MULTI_ARCH_BUILD_SUPPORT_H
 
+#include "kritamultiarch_export.h"
+
 #include <utility>
 #include <xsimd_extensions/xsimd.hpp>
 
-#include <KConfigGroup>
-#include <KSharedConfig>
-#include <kis_debug.h>
+#include <QDebug>
 
-inline std::tuple<bool, bool> vectorizationConfiguration()
-{
-    static const std::tuple<bool, bool> vectorization = [&]() {
-        KConfigGroup cfg = KSharedConfig::openConfig()->group("");
-        // use the old key name for compatibility
-        const bool useVectorization =
-            !cfg.readEntry("amdDisableVectorWorkaround", false);
-        const bool disableAVXOptimizations =
-            cfg.readEntry("disableAVXOptimizations", false);
-
-        return std::make_tuple(useVectorization, disableAVXOptimizations);
-    }();
-
-    return vectorization;
-}
+KRITAMULTIARCH_EXPORT
+std::tuple<bool, bool> vectorizationConfiguration();
 
 template<class FactoryType, class... Args>
 auto createOptimizedClass(Args &&...param)

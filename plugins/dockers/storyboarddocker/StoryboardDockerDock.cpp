@@ -414,7 +414,11 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
             printer.setPageOrientation(dlg.pageOrientation());
             painter.begin(&printer); // We need to begin the painter temporarily for font metrics.
             painter.setFont(font);
-            layoutPage = getPageLayout(rows, columns, QRect(0, 0, m_canvas->image()->width(), m_canvas->image()->height()), printer.pageRect(), painter.fontMetrics());
+            layoutPage = getPageLayout(rows,
+                                       columns,
+                                       QRect(0, 0, m_canvas->image()->width(), m_canvas->image()->height()),
+                                       printer.pageLayout().paintRectPixels(printer.resolution()),
+                                       painter.fontMetrics());
             painter.end(); // End temporary painter begin.
         }
 
@@ -440,7 +444,7 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
 
         if (dlg.format() == ExportFormat::SVG) {
             generator.setFileName(dlg.saveFileName() + "/" + imageFileName + "0.svg");
-            QSize sz = printer.pageRect().size();
+            QSize sz = printer.pageLayout().paintRectPixels(printer.resolution()).size();
             generator.setSize(sz);
             generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
             generator.setResolution(printer.resolution());
@@ -465,9 +469,9 @@ void StoryboardDockerDock::slotExport(ExportFormat format)
                 if (dlg.format() == ExportFormat::SVG) {
                     if (currentBoard != 0) {
                         painter.end();
-                        painter.eraseRect(printer.pageRect());
+                        painter.eraseRect(printer.pageLayout().paintRectPixels(printer.resolution()));
                         generator.setFileName(dlg.saveFileName() + "/" + imageFileName + QString::number(currentBoard / layoutPage.elements.length()) + ".svg");
-                        QSize sz = printer.pageRect().size();
+                        QSize sz = printer.pageLayout().paintRectPixels(printer.resolution()).size();
                         generator.setSize(sz);
                         generator.setViewBox(QRect(0, 0, sz.width(), sz.height()));
                         generator.setResolution(printer.resolution());
@@ -722,11 +726,7 @@ StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(int rows, i
     QSizeF cellSize(pageSize.width() / columns, pageSize.height() / rows);
     QVector<QRectF> rects;
 
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
     int numericFontWidth = fontMetrics.horizontalAdvance("0");
-#else
-    int numericFontWidth = fontMetrics.width("0");
-#endif
 
     for (int row = 0; row < rows; row++) {
 
@@ -810,8 +810,8 @@ StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(QString lay
 
     QStringList lst = eroot.attribute("viewBox").split(" ");
     QSizeF sizeMM(lst.at(2).toDouble(), lst.at(3).toDouble());
-    printer->setPageSizeMM(sizeMM);
-    QSizeF size = printer->pageRect().size();
+    printer->setPageSize(QPageSize(sizeMM, QPageSize::Millimeter));
+    QSizeF size = printer->pageLayout().paintRectPixels(printer->resolution()).size();
     QSizeF scaling = QSizeF( size.width() / sizeMM.width(), size.height() / sizeMM.height());
 
     QVector<QString> commentLayers;

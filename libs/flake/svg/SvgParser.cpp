@@ -65,8 +65,8 @@
 #include "kis_algebra_2d.h"
 #include "kis_debug.h"
 #include "kis_global.h"
+#include <QXmlStreamReader>
 #include <algorithm>
-
 
 struct SvgParser::DeferredUseStore {
     struct El {
@@ -140,37 +140,25 @@ SvgParser::~SvgParser()
 
 QDomDocument SvgParser::createDocumentFromSvg(QIODevice *device, QString *errorMsg, int *errorLine, int *errorColumn)
 {
-    QXmlInputSource source(device);
-    return createDocumentFromSvg(&source, errorMsg, errorLine, errorColumn);
+    return createDocumentFromSvg(QXmlStreamReader(device), errorMsg, errorLine, errorColumn);
 }
 
 QDomDocument SvgParser::createDocumentFromSvg(const QByteArray &data, QString *errorMsg, int *errorLine, int *errorColumn)
 {
-    QXmlInputSource source;
-    source.setData(data);
-
-    return createDocumentFromSvg(&source, errorMsg, errorLine, errorColumn);
+    return createDocumentFromSvg(QXmlStreamReader(data), errorMsg, errorLine, errorColumn);
 }
 
 QDomDocument SvgParser::createDocumentFromSvg(const QString &data, QString *errorMsg, int *errorLine, int *errorColumn)
 {
-    QXmlInputSource source;
-    source.setData(data);
-
-    return createDocumentFromSvg(&source, errorMsg, errorLine, errorColumn);
+    return createDocumentFromSvg(QXmlStreamReader(data), errorMsg, errorLine, errorColumn);
 }
 
-QDomDocument SvgParser::createDocumentFromSvg(QXmlInputSource *source, QString *errorMsg, int *errorLine, int *errorColumn)
+QDomDocument SvgParser::createDocumentFromSvg(QXmlStreamReader reader, QString *errorMsg, int *errorLine, int *errorColumn)
 {
-    // we should read all spaces to parse text node correctly
-    QXmlSimpleReader reader;
-    reader.setFeature("http://qt-project.org/xml/features/report-whitespace-only-CharData", true);
-    reader.setFeature("http://xml.org/sax/features/namespaces", false);
-    reader.setFeature("http://xml.org/sax/features/namespace-prefixes", true);
-
     QDomDocument doc;
-    if (!doc.setContent(source, &reader, errorMsg, errorLine, errorColumn)) {
-        return QDomDocument();
+    reader.setNamespaceProcessing(false);
+    if (!doc.setContent(&reader, false, errorMsg, errorLine, errorColumn)) {
+        return {};
     }
 
     return doc;

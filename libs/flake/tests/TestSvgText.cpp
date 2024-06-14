@@ -19,6 +19,7 @@
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
 #include <QFont>
+#include <QXmlStreamReader>
 
 void addProp(SvgLoadingContext &context,
              KoSvgTextProperties &props,
@@ -398,10 +399,7 @@ void TestSvgText::testSimpleText()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_simple", QSize(140, 40), 72.0);
 
@@ -447,10 +445,7 @@ void TestSvgText::testComplexText()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_complex", QSize(370, 56), 72.0);
 
@@ -567,10 +562,7 @@ void TestSvgText::testHindiText()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
 
     t.setCheckQImagePremultiplied(true);
     t.setFuzzyThreshold(5);
@@ -590,10 +582,7 @@ void TestSvgText::testTextBaselineShift()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
 
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_baseline_shift", QSize(180, 40), 72);
@@ -617,10 +606,7 @@ void TestSvgText::testTextSpacing()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setCheckQImagePremultiplied(true);
     t.setFuzzyThreshold(5);
 
@@ -641,10 +627,7 @@ void TestSvgText::testTextTabSpacing()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_tab_spacing", QSize(400, 170), 72.0);
@@ -664,10 +647,7 @@ void TestSvgText::testTextDecorations()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_decorations", QSize(290, 135), 72.0);
@@ -683,10 +663,7 @@ void TestSvgText::testRightToLeft()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_right_to_left", QSize(500, 600), 72.0);
 
@@ -710,10 +687,7 @@ void TestSvgText::testRightToLeftAnchoring()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_right_to_left_anchoring", QSize(500, 500), 72.0);
 }
@@ -724,10 +698,7 @@ void TestSvgText::testVerticalText()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text-test-vertical-text", QSize(80, 400), 72.0);
 }
@@ -839,10 +810,7 @@ void TestSvgText::testTextOutlineSolid()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.test_standard("text_outline_solid", QSize(30, 30), 72.0);
 }
 
@@ -857,10 +825,7 @@ void TestSvgText::testNbspHandling()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.test_standard("text_nbsp", QSize(30, 30), 72.0);
 }
 
@@ -880,10 +845,7 @@ void TestSvgText::testMulticolorText()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multicolor", QSize(100, 30), 72.0);
 }
@@ -1124,10 +1086,7 @@ void TestSvgText::testWhiteSpaceRules()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text-test-white-space", QSize(400, 320), 72.0);
 }
@@ -1175,10 +1134,7 @@ void TestSvgText::testTextWithMultipleRelativeOffsets()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_relative_offsets", QSize(300, 80), 72.0);
 }
@@ -1199,10 +1155,7 @@ void TestSvgText::testTextWithMultipleAbsoluteOffsetsArabic()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_absolute_offsets_arabic", QSize(530, 70), 72.0);
 }
@@ -1222,10 +1175,7 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
 
     // we cannot expect more than one failure
     /*#ifndef USE_ROUND_TRIP
@@ -1246,10 +1196,7 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsVertical()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_relative_offsets_vertical", QSize(80, 400), 72.0);
 }
@@ -1266,10 +1213,7 @@ void TestSvgText::testTextWithMultipleRotations()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_rotations", QSize(340, 400), 72.0);
 }
@@ -1280,10 +1224,7 @@ void TestSvgText::testTextOutline()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
 
     QRect renderRect(0, 0, 450, 40);
 
@@ -1757,12 +1698,9 @@ void TestSvgText::testFontStyleSelection()
         res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-        QXmlInputSource data;
-        data.setData(file.readAll());
-
         QRect renderRect(0, 0, 300, 150);
 
-        SvgRenderTester t(data.data());
+        SvgRenderTester t(file.readAll());
         t.setFuzzyThreshold(5);
         t.setCheckQImagePremultiplied(true);
         t.test_standard("font-weight-bolder-001", renderRect.size(), 72.0);
@@ -1868,10 +1806,7 @@ void TestSvgText::testFontSizeRender()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setCheckQImagePremultiplied(true);
     t.test_standard("font-sizes", QSize(140, 40), 72.0);
 }
@@ -1893,12 +1828,9 @@ void TestSvgText::testFontOpenTypeVariationsConfiguration()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
     QRect renderRect(0, 0, 300, 150);
 
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("font-opentype-variations", renderRect.size(), 72.0);
 }
@@ -1961,10 +1893,7 @@ void TestSvgText::testCssFontVariants()
         bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-        QXmlInputSource data;
-        data.setData(file.readAll());
-
-        SvgRenderTester t(data.data());
+        SvgRenderTester t(file.readAll());
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
@@ -1981,10 +1910,7 @@ void TestSvgText::testTextLength()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text-test-textLength", QSize(360, 210), 72.0);
@@ -2057,10 +1983,7 @@ void TestSvgText::testTextPathBasic()
         bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-        QXmlInputSource data;
-        data.setData(file.readAll());
-
-        SvgRenderTester t(data.data());
+        SvgRenderTester t(file.readAll());
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
@@ -2087,10 +2010,7 @@ void TestSvgText::testTextPathComplex()
         bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-        QXmlInputSource data;
-        data.setData(file.readAll());
-
-        SvgRenderTester t(data.data());
+        SvgRenderTester t(file.readAll());
         t.setFuzzyThreshold(5);
         t.setCheckQImagePremultiplied(true);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
@@ -2214,10 +2134,7 @@ void TestSvgText::testTextInlineSize()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("text-test-inline-size-anchoring", QSize(420, 200), 72.0);
 
@@ -2271,10 +2188,7 @@ void TestSvgText::testTextWrap()
         bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-        QXmlInputSource data;
-        data.setData(file.readAll());
-
-        SvgRenderTester t(data.data());
+        SvgRenderTester t(file.readAll());
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
@@ -2293,10 +2207,7 @@ void TestSvgText::testTextBaselineAlignment()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgRenderTester t(data.data());
+    SvgRenderTester t(file.readAll());
     t.setFuzzyThreshold(5);
     t.test_standard("test-text-baseline-alignment", QSize(90, 51), 72.0);
 }
@@ -2310,10 +2221,7 @@ void TestSvgText::testCssShapeParsing()
     bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
     QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    SvgTester t(data.data());
+    SvgTester t(file.readAll());
     t.parser().setResolution(QRectF(0, 0, 380, 380) /* px */, 72 /* ppi */);
     t.run();
 
@@ -2361,10 +2269,7 @@ void TestSvgText::testShapeInsideRender()
         bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
         QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-        QXmlInputSource data;
-        data.setData(file.readAll());
-
-        SvgRenderTester t(data.data());
+        SvgRenderTester t(file.readAll());
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }

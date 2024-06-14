@@ -1171,7 +1171,7 @@ void TestSvgParser::testIccColor()
     // and the fill will be red if the icc-color is not loaded (it should be cyan).
     const QString data =
         "<svg width=\"30px\" height=\"30px\""
-        "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+        "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
         "<g xml:base=\"icc\">"
         "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
@@ -3283,7 +3283,7 @@ void TestSvgParser::testRenderImage_AspectDefault()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
             "<g id=\"testRect\">"
             "    <rect id=\"testRect1\" x=\"2\" y=\"2\" width=\"26\" height=\"26\""
@@ -3314,7 +3314,7 @@ void TestSvgParser::testRenderImage_AspectNone()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
             "<g id=\"testRect\">"
             "    <rect id=\"testRect1\" x=\"2\" y=\"2\" width=\"26\" height=\"26\""
@@ -3347,7 +3347,7 @@ void TestSvgParser::testRenderImage_AspectMeet()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
             "<g id=\"testRect\">"
             "    <rect id=\"testRect1\" x=\"2\" y=\"2\" width=\"26\" height=\"26\""
@@ -3604,7 +3604,7 @@ void TestSvgParser::testDefsUseInheritance()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
 
 
@@ -3643,7 +3643,7 @@ void TestSvgParser::testUseWithoutDefs()
 {
     const QString data =
             "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">"
 
             // technical rect for rendering
             "<g id=\"testRect\">"
@@ -4163,6 +4163,7 @@ void TestSvgParser::testKritaChordShape()
             "<svg width=\"30px\" height=\"30px\""
             "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\""
             "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\""
+            "    xmlns:krita=\"http://krita.org/namespaces/svg/krita\""
             ">"
 
             "<path"

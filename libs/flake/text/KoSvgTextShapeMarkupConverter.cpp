@@ -424,7 +424,7 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
     }
 
     if (!propertyIds.isEmpty()) {
-        QMap<int, QMap<QVariant, int>> propertyFrequency;
+        QMap<int, QList<std::pair<QVariant, int>>> propertyFrequency;
 
         /**
          * Calculate the frequency of values used in *all* the formats
@@ -434,7 +434,20 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
 
             Q_FOREACH (int id, propertyIds) {
                 KIS_SAFE_ASSERT_RECOVER_BREAK(formatProperties.contains(id));
-                propertyFrequency[id][formatProperties.value(id)]++;
+                QList<std::pair<QVariant, int>> &valueFrequencies = propertyFrequency[id];
+                const QVariant formatPropValue = formatProperties.value(id);
+
+                // Find the value in frequency table
+                auto it = std::find_if(valueFrequencies.begin(), valueFrequencies.end(),
+                [formatPropValue](const std::pair<QVariant, int> &element) { return element.first == formatPropValue; });
+
+                if (it != valueFrequencies.end()) {
+                    // Increase frequency by 1, if already met
+                    it->second += 1;
+                } else {
+                    // Add with initial frequency of 1 if met for the first time
+                    valueFrequencies.push_front({formatPropValue, 1});
+                }
             }
         }
 
@@ -443,15 +456,15 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
          */
         for (auto it = propertyFrequency.constBegin(); it != propertyFrequency.constEnd(); ++it) {
             const int id = it.key();
-            const QMap<QVariant, int> allValues = it.value();
+            const QList<std::pair<QVariant, int>>& allValues = it.value();
 
             int maxCount = 0;
             QVariant maxValue;
 
-            for (auto valIt = allValues.constBegin(); valIt != allValues.constEnd(); ++valIt) {
-                if (valIt.value() > maxCount) {
-                    maxCount = valIt.value();
-                    maxValue = valIt.key();
+            for (const auto& [propValue, valFrequency] : allValues) {
+                if (valFrequency > maxCount) {
+                    maxCount = valFrequency;
+                    maxValue = propValue;
                 }
             }
 

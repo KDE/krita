@@ -65,10 +65,12 @@ struct is_supported_arch {
     }
 
     template<typename A>
-    void operator()(A) const
+    void operator()(A arch) const
     {
 #ifdef HAVE_XSIMD
-        l.append(A::name()).append(" ");
+        if (xsimd::available_architectures().has(arch)) {
+            l.append(A::name()).append(" ");
+        }
 #endif
     }
 
@@ -80,8 +82,7 @@ QString KisSupportedArchitectures::supportedInstructionSets()
     static const QString archs = []() {
         QString archs;
 #ifdef HAVE_XSIMD
-        // TODO: still returns incorrect value!
-        xsimd::supported_architectures::for_each(is_supported_arch<QString>{archs});
+        xsimd::all_architectures::for_each(is_supported_arch<QString>{archs});
 #endif
         return archs;
     }();

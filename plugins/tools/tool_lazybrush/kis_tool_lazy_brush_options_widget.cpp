@@ -54,7 +54,7 @@ struct PaletteEventFilter : public QObject
 
             if (wevent->modifiers() == Qt::ControlModifier) {
                 if (watched == m_parentView->viewport()) {
-                    const int columnCountDelta = -wevent->delta() / QWheelEvent::DefaultDeltasPerStep;
+                    const int columnCountDelta = -wevent->angleDelta().y() / QWheelEvent::DefaultDeltasPerStep;
                     const int newColumnCount = qMax(1, m_optionsWidget->m_d->preferredColumnCount + columnCountDelta);
 
                     m_optionsWidget->m_d->preferredColumnCount = newColumnCount;

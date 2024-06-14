@@ -316,7 +316,7 @@ void RAbstractSliderSpinBox::wheelEvent(QWheelEvent *e)
         step = d->singleStep;
     }
 
-    if ( e->delta() > 0)
+    if ( e->angleDelta().y() > 0)
     {
         setInternalValue(d->value + step);
     }

@@ -51,6 +51,15 @@ template <class Event>
     s << "gpos: "  << qSetFieldWidth(4) << ev.globalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalY() << qSetFieldWidth(0) << " ";
 }
 
+template <>
+    void dumpMouseRelatedParams(QTextStream &s, const QWheelEvent &ev)
+{
+    s << "btn: " << button(ev) << " ";
+    s << "btns: " << buttons(ev) << " ";
+    s << "pos: " << qSetFieldWidth(4) << ev.position().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.position().y() << qSetFieldWidth(0) << " ";
+    s << "gpos: "  << qSetFieldWidth(4) << ev.globalPosition().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalPosition().y() << qSetFieldWidth(0) << " ";
+}
+
 QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
     return
         type == QEvent::TabletEnterProximity ? "TabletEnterProximity" :
@@ -164,8 +173,7 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
 
-    s << "delta: " << ev.delta() << " ";
-    s << "orientation: " << (ev.orientation() == Qt::Horizontal ? "H" : "V") << " ";
+    s << "delta: x: " << ev.angleDelta().x() << " y: " << ev.angleDelta().y() << " ";
 
     return string;
 }

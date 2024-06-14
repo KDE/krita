@@ -133,27 +133,17 @@ void KisInputButton::mouseReleaseEvent(QMouseEvent *)
 
 void KisInputButton::wheelEvent(QWheelEvent *event)
 {
-    if (isChecked() && event->delta() != 0) {
-        switch (event->orientation()) {
-        case Qt::Horizontal:
-            if (event->delta() < 0) {
-                d->wheel = KisShortcutConfiguration::WheelRight;
-            }
-            else {
-                d->wheel = KisShortcutConfiguration::WheelLeft;
-            }
+    if (isChecked() && !event->angleDelta().isNull()) {
+        if (event->angleDelta().x() < 0) {
+            d->wheel = KisShortcutConfiguration::WheelRight;
+        } else if (event->angleDelta().x() > 0) {
+            d->wheel = KisShortcutConfiguration::WheelLeft;
+        }
 
-            break;
-
-        case Qt::Vertical:
-            if (event->delta() > 0) {
-                d->wheel = KisShortcutConfiguration::WheelUp;
-            }
-            else {
-                d->wheel = KisShortcutConfiguration::WheelDown;
-            }
-
-            break;
+        if (event->angleDelta().y() < 0) {
+            d->wheel = KisShortcutConfiguration::WheelDown;
+        } else if (event->angleDelta().y() > 0) {
+            d->wheel = KisShortcutConfiguration::WheelUp;
         }
 
         d->updateLabel();

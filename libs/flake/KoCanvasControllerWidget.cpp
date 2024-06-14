@@ -534,8 +534,8 @@ void KoCanvasControllerWidget::dragLeaveEvent(QDragLeaveEvent *event)
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 {
     if (d->zoomWithWheel != ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {
-        const qreal zoomCoeff = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
-        zoomRelativeToPoint(event->pos(), zoomCoeff);
+        const qreal zoomCoeff = event->angleDelta().y() > 0 ? sqrt(2.0) : sqrt(0.5);
+        zoomRelativeToPoint(event->position().toPoint(), zoomCoeff);
 
         event->accept();
     } else

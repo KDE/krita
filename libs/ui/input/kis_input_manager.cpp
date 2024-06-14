@@ -505,7 +505,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
 #endif
 
-        d->accumulatedScrollDelta += wheelEvent->delta();
+        d->accumulatedScrollDelta += wheelEvent->angleDelta().y();
         KisSingleActionShortcut::WheelAction action;
 
         /**
@@ -513,27 +513,22 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          * proximity when using Wacom devices.
          */
 #ifdef Q_OS_MACOS
-        if(wheelEvent->delta() == 0) {
+        if (wheelEvent->angleDelta().isNull()) {
             retval = true;
             break;
         }
 #endif
 
-        if (wheelEvent->orientation() == Qt::Horizontal) {
-            if(wheelEvent->delta() < 0) {
-                action = KisSingleActionShortcut::WheelRight;
-            }
-            else {
-                action = KisSingleActionShortcut::WheelLeft;
-            }
+        if (wheelEvent->angleDelta().x() < 0) {
+            action = KisSingleActionShortcut::WheelRight;
+        } else if (wheelEvent->angleDelta().x() >0) {
+            action = KisSingleActionShortcut::WheelLeft;
         }
-        else {
-            if(wheelEvent->delta() > 0) {
-                action = KisSingleActionShortcut::WheelUp;
-            }
-            else {
-                action = KisSingleActionShortcut::WheelDown;
-            }
+
+        if (wheelEvent->angleDelta().y() < 0) {
+            action = KisSingleActionShortcut::WheelDown;
+        } else if (wheelEvent->angleDelta().y() > 0) {
+            action = KisSingleActionShortcut::WheelUp;
         }
 
         bool wasScrolled = false;

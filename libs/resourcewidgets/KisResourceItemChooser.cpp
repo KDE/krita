@@ -674,7 +674,7 @@ bool KisResourceItemChooser::eventFilter(QObject *object, QEvent *event)
         QWheelEvent *qwheel = static_cast<QWheelEvent *>(event);
         if (qwheel->modifiers() & Qt::ControlModifier) {
 
-            int degrees = qwheel->delta() / 8;
+            int degrees = qwheel->angleDelta().y() / 8;
             int newBaseLength = chooserSync->baseLength() + degrees / 15 * 10;
             chooserSync->setBaseLength(newBaseLength);
             return true;

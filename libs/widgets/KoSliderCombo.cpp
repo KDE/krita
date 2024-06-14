@@ -199,7 +199,7 @@ void KoSliderCombo::keyPressEvent(QKeyEvent *e)
 
 void KoSliderCombo::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
+    if (e->angleDelta().y() > 0) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
     else setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
 }
 

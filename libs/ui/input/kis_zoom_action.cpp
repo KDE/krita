@@ -30,7 +30,7 @@ inline QPoint pointFromEvent(QEvent *event) {
     } else if (QTabletEvent *tabletEvent = dynamic_cast<QTabletEvent*>(event)) {
         return tabletEvent->pos();
     } else if (QWheelEvent *wheelEvent = dynamic_cast<QWheelEvent*>(event)) {
-        return wheelEvent->pos();
+        return wheelEvent->position().toPoint();
     }
 
     return QPoint();

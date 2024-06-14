@@ -1354,7 +1354,7 @@ void SvgTextEditor::wheelEvent(QWheelEvent *event)
     }
 
     if (event->modifiers() & Qt::ControlModifier) {
-        int numDegrees = event->delta() / 8;
+        int numDegrees = event->angleDelta().y() / 8;
         int numSteps = numDegrees / 7;
         m_textEditorWidget.svgTextEdit->zoomOut(numSteps);
         event->accept();

@@ -429,8 +429,8 @@ void KisCompositeOpComboBox::wheelEvent(QWheelEvent *e)
     if (1) {
 #endif
 
-        if (e->delta() != 0) {
-            selectNeighbouringBlendMode(e->delta() < 0);
+        if (e->angleDelta().y() != 0) {
+            selectNeighbouringBlendMode(e->angleDelta().y() < 0);
         }
 
         e->accept();

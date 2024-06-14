@@ -1272,8 +1272,8 @@ void KisAnimTimelineFramesView::dropEvent(QDropEvent *event)
 
 void KisAnimTimelineFramesView::wheelEvent(QWheelEvent *e)
 {
-    const int scrollDirection = e->delta() > 0 ? 1 : -1;
-    bool mouseOverLayerPanel = verticalHeader()->geometry().contains(verticalHeader()->mapFromGlobal(e->globalPos()));
+    const int scrollDirection = e->angleDelta().y() > 0 ? 1 : -1;
+    bool mouseOverLayerPanel = verticalHeader()->geometry().contains(verticalHeader()->mapFromGlobal(e->globalPosition().toPoint()));
 
     if (mouseOverLayerPanel) {
         QTableView::wheelEvent(e);

@@ -8,6 +8,7 @@
 #include <simpletest.h>
 
 #include <QTime>
+#include <QRandomGenerator>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -301,15 +302,15 @@ void KisFixedPaintDeviceTest::testMirroring()
 
     KoColor c(Qt::black, cs);
 
-    qsrand(1);
+    QRandomGenerator rng{};
     int value = 0;
 
     for (int i = rc.x(); i < rc.x() + rc.width(); i++) {
         for (int j = rc.y(); j < rc.y() + rc.height(); j++) {
             setPixel(dev, i, j, value);
-            value = qrand() % 255;
+            value = rng.bounded(255);
         }
-        value = qrand() % 255;
+        value = rng.bounded(255);
     }
 
     //dev->convertToQImage(0).save("0_a.png");
@@ -344,15 +345,15 @@ void KisFixedPaintDeviceTest::testMirroring()
         incY = 1;
     }
 
-    qsrand(1);
+    rng.seed(1);
     value = 0;
 
     for (int i = startX; i != endX ; i += incX) {
         for (int j = startY; j != endY; j += incY) {
             QCOMPARE(pixel(dev, i, j), (quint8)value);
-            value = qrand() % 255;
+            value = rng.bounded(255);
         }
-        value = qrand() % 255;
+        value = rng.bounded(255);
     }
 }
 

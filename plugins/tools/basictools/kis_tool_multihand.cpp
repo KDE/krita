@@ -22,17 +22,10 @@
 
 #include "kis_tool_multihand_helper.h"
 
+#include <QtGlobal>
+#include <QRandomGenerator>
 
 static const int MAXIMUM_BRUSHES = 50;
-
-#include <QtGlobal>
-#ifdef Q_OS_WIN
-// quoting DRAND48(3) man-page:
-// These functions are declared obsolete by  SVID  3,
-// which  states  that rand(3) should be used instead.
-#define drand48() (static_cast<double>(qrand()) / static_cast<double>(RAND_MAX))
-#endif
-
 
 KisToolMultihand::KisToolMultihand(KoCanvasBase *canvas)
     : KisToolBrush(canvas),
@@ -385,8 +378,8 @@ void KisToolMultihand::initTransformations()
          * strokes
          */
         for (int i = 0; i < m_handsCount; i++){
-            const qreal angle = drand48() * M_PI * 2;
-            const qreal length = drand48();
+            const qreal angle = QRandomGenerator::global()->bounded(2.0 * M_PI);
+            const qreal length = QRandomGenerator::global()->bounded(1.0);
 
             // convert the Polar coordinates to Cartesian coordinates
             qreal nx = (m_translateRadius * cos(angle) * length);

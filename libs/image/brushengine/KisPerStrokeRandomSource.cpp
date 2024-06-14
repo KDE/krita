@@ -9,10 +9,11 @@
 #include <QHash>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QRandomGenerator>
 
+#include <boost/random/normal_distribution.hpp>
 #include <boost/random/taus88.hpp>
 #include <boost/random/uniform_smallint.hpp>
-#include <boost/random/normal_distribution.hpp>
 
 struct KisPerStrokeRandomSource::Private
 {
@@ -39,7 +40,7 @@ struct KisPerStrokeRandomSource::Private
 };
 
 KisPerStrokeRandomSource::KisPerStrokeRandomSource()
-    : m_d(new Private(qrand()))
+    : m_d(new Private(QRandomGenerator::global()->generate()))
 {
 
 }

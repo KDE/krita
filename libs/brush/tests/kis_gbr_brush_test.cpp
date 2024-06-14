@@ -6,9 +6,11 @@
 
 #include "kis_gbr_brush_test.h"
 
-#include <simpletest.h>
+#include <QRandomGenerator>
 #include <QString>
 #include <QDir>
+
+#include <simpletest.h>
 #include <KoColor.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -89,16 +91,16 @@ void KisGbrBrushTest::testImageGeneration()
     Q_UNUSED(res);
     Q_ASSERT(res);
     QVERIFY(!brush->brushTipImage().isNull());
-    qsrand(1);
+    QRandomGenerator rng{};
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
     KisFixedPaintDeviceSP dab;
 
     for (int i = 0; i < 200; i++) {
-        qreal scale = qreal(qrand()) / RAND_MAX * 2.0;
-        qreal rotation = qreal(qrand()) / RAND_MAX * 2 * M_PI;
-        qreal subPixelX = qreal(qrand()) / RAND_MAX * 0.5;
+        qreal scale = rng.bounded(2.0);
+        qreal rotation = rng.bounded(2.0 * M_PI);
+        qreal subPixelX = rng.bounded(0.5);
         QString testName =
             QString("brush_%1_sc_%2_rot_%3_sub_%4")
             .arg(i).arg(scale).arg(rotation).arg(subPixelX);
@@ -135,7 +137,7 @@ void KisGbrBrushTest::benchmarkScaling()
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + '/' + "testing_brush_512_bars.gbr"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
-    qsrand(1);
+    QRandomGenerator rng{};
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
@@ -143,13 +145,13 @@ void KisGbrBrushTest::benchmarkScaling()
 
     {
         // warm up the pyramid!
-        dab = brush->paintDevice(cs, KisDabShape(qreal(qrand()) / RAND_MAX * 2.0, 1.0, 0.0), info);
+        dab = brush->paintDevice(cs, KisDabShape(rng.bounded(2.0), 1.0, 0.0), info);
         QVERIFY(dab); // avoid compiler elimination of unused code!
         dab.clear();
     }
 
     QBENCHMARK {
-        dab = brush->paintDevice(cs, KisDabShape(qreal(qrand()) / RAND_MAX * 2.0, 1.0, 0.0), info);
+        dab = brush->paintDevice(cs, KisDabShape(rng.bounded(2.0), 1.0, 0.0), info);
         //dab->convertToQImage(0).save(QString("dab_%1_new_smooth.png").arg(i++));
     }
 }
@@ -159,14 +161,14 @@ void KisGbrBrushTest::benchmarkRotation()
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + '/' + "testing_brush_512_bars.gbr"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
-    qsrand(1);
+    QRandomGenerator rng{};
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
     KisFixedPaintDeviceSP dab;
 
     QBENCHMARK {
-        dab = brush->paintDevice(cs, KisDabShape(1.0, 1.0, qreal(qrand()) / RAND_MAX * 2 * M_PI), info);
+        dab = brush->paintDevice(cs, KisDabShape(1.0, 1.0, rng.bounded(2 * M_PI)), info);
     }
 }
 
@@ -175,7 +177,7 @@ void KisGbrBrushTest::benchmarkMaskScaling()
     QScopedPointer<KisGbrBrush> brush(new KisGbrBrush(QString(FILES_DATA_DIR) + '/' + "testing_brush_512_bars.gbr"));
     brush->load(KisGlobalResourcesInterface::instance());
     QVERIFY(!brush->brushTipImage().isNull());
-    qsrand(1);
+    QRandomGenerator rng{};
 
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintInformation info(QPointF(100.0, 100.0), 0.5);
@@ -183,7 +185,7 @@ void KisGbrBrushTest::benchmarkMaskScaling()
 
     QBENCHMARK {
         KoColor c(Qt::black, cs);
-        qreal scale = qreal(qrand()) / RAND_MAX * 2.0;
+        qreal scale = rng.bounded(2.0);
         brush->mask(dab, c, KisDabShape(scale, 1.0, 0.0), info, 0.0, 0.0, 1.0);
     }
 }

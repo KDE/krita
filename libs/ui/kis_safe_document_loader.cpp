@@ -8,6 +8,7 @@
 
 #include <QTimer>
 #include <QFileSystemWatcher>
+#include <QRandomGenerator>
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
@@ -298,7 +299,7 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
             QDir::tempPath() + '/' +
             QString("krita_file_layer_copy_%1_%2.%3")
             .arg(QApplication::applicationPid())
-            .arg(qrand())
+            .arg(QRandomGenerator::global()->generate())
             .arg(initialFileInfo.suffix());
 
     QFile::copy(m_d->path, m_d->temporaryPath);

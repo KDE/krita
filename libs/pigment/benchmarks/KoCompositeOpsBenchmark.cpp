@@ -13,6 +13,8 @@
 #include <KoColorSpaceTraits.h>
 #include <KoColorSpaceRegistry.h>
 
+#include <QRandomGenerator>
+
 #include <simpletest.h>
 
 const int TILE_WIDTH = 64;
@@ -52,10 +54,10 @@ void KoCompositeOpsBenchmark::initTestCase()
 // this is called before every benchmark
 void KoCompositeOpsBenchmark::init()
 {
-    qsrand(42);
+    QRandomGenerator rng(42);
 
     for (int i = 0; i < int(IMG_WIDTH * IMG_HEIGHT * KoBgrU8Traits::pixelSize); i++) {
-        const int randVal = qrand();
+        const int randVal = rng.bounded(RAND_MAX);
 
         m_srcBuffer[i] = randVal & 0x0000FF;
         m_dstBuffer[i] = (randVal & 0x00FF000) >> 8;

@@ -38,9 +38,9 @@ void KisChunkAllocatorTest::testOperations()
 #define CHUNK_DEV_SIZE 1024*4
 #define SWAP_SIZE (1ULL * CHUNK_AV_SIZE * NUM_CHUNKS_ALLOC * NUM_TRANSACTIONS)
 
-quint64 getChunkSize()
+quint64 KisChunkAllocatorTest::getChunkSize()
 {
-    quint64 deviation = qrand() % (2 * CHUNK_DEV_SIZE);
+    quint64 deviation = m_rng.bounded(2 * CHUNK_DEV_SIZE);
     return CHUNK_AV_SIZE - CHUNK_DEV_SIZE + deviation;
 }
 
@@ -56,7 +56,7 @@ qreal KisChunkAllocatorTest::measureFragmentation(qint32 transactions,
     for(qint32 k = 0; k < transactions; k++) {
         if(chunks.size() > 0) {
             for(qint32 i = 0; i < chunksFree; i++) {
-                qint32 idx = qrand() % chunks.size();
+                qint32 idx = m_rng.bounded(chunks.size());
                 allocator.freeChunk(chunks.takeAt(idx));
             }
         }
@@ -74,8 +74,7 @@ qreal KisChunkAllocatorTest::measureFragmentation(qint32 transactions,
 
 void KisChunkAllocatorTest::testFragmentation()
 {
-
-    qsrand(QTime::currentTime().msec());
+    m_rng.seed(QTime::currentTime().msec());
 
     measureFragmentation(NUM_TRANSACTIONS, NUM_CHUNKS_ALLOC,
                          NUM_CHUNKS_FREE, true);

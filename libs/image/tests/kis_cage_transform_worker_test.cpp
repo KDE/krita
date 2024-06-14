@@ -8,6 +8,8 @@
 
 #include <simpletest.h>
 
+#include <QRandomGenerator>
+
 #include <KoProgressUpdater.h>
 #include <KoUpdater.h>
 
@@ -151,10 +153,10 @@ void KisCageTransformWorkerTest::testCageCounterclockwiseUnity()
 #include <QtGlobal>
 
 
-QPointF generatePoint(const QRectF &rc)
+QPointF generatePoint(const QRectF &rc, QRandomGenerator &rng)
 {
-    qreal cx = qreal(qrand()) / RAND_MAX;
-    qreal cy = qreal(qrand()) / RAND_MAX;
+    qreal cx = rng.bounded(1.0);
+    qreal cy = rng.bounded(1.0);
 
     QPointF diff = rc.bottomRight() - rc.topLeft();
 
@@ -179,7 +181,7 @@ void KisCageTransformWorkerTest::stressTestRandomCages()
     const int pixelPrecision = 8;
     QRectF bounds(dev->exactBounds());
 
-    qsrand(1);
+    QRandomGenerator rng{};
 
     for (int numPoints = 4; numPoints < 15; numPoints+=5) {
         for (int j = 0; j < 200; j++) {
@@ -189,8 +191,8 @@ void KisCageTransformWorkerTest::stressTestRandomCages()
             dbgKrita << ppVar(j);
 
             for (int i = 0; i < numPoints; i++) {
-                origPoints << generatePoint(bounds);
-                transfPoints << generatePoint(bounds);
+                origPoints << generatePoint(bounds, rng);
+                transfPoints << generatePoint(bounds, rng);
             }
 
             // no just hope it doesn't crash ;)

@@ -6,6 +6,7 @@
 
 #include "kis_iterator_test.h"
 #include <QApplication>
+#include <QRandomGenerator>
 
 #include <simpletest.h>
 #include <KoColorSpace.h>
@@ -425,8 +426,8 @@ public:
 
     void run() override {
         for(int i = 0; i < NUM_CYCLES; i++) {
-            m_device->setX(-0x400 + (qrand() & 0x7FF));
-            m_device->setY(-0x400 + (qrand() & 0x7FF));
+            m_device->setX(QRandomGenerator::global()->bounded(-0x400, 0x800));
+            m_device->setY(QRandomGenerator::global()->bounded(-0x400, 0x800));
             QTest::qSleep(10);
         }
     }

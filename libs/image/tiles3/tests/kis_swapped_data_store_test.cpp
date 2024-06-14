@@ -7,6 +7,8 @@
 #include "kis_swapped_data_store_test.h"
 #include <simpletest.h>
 
+#include <QRandomGenerator>
+
 #include "kis_debug.h"
 
 #include "kis_image_config.h"
@@ -85,7 +87,7 @@ void KisSwappedDataStoreTest::processTileData(qint32 column, KisTileData *td, Ki
 
 void KisSwappedDataStoreTest::testRandomAccess()
 {
-    qsrand(10);
+    QRandomGenerator rng(10);
     const qint32 pixelSize = 1;
     const quint8 defaultPixel = 128;
     const qint32 NUM_CYCLES = 50000;
@@ -107,7 +109,7 @@ void KisSwappedDataStoreTest::testRandomAccess()
         if(!(i%5000))
             dbgKrita << i << "of" << NUM_CYCLES;
 
-        qint32 col = qrand() % NUM_TILES;
+        qint32 col = rng.bounded(NUM_TILES);
 
         KisTileData *td = tileDataList[col];
         processTileData(col, td, store);

@@ -7,6 +7,8 @@
 #include "kis_tiled_data_manager_test.h"
 #include <simpletest.h>
 
+#include <QRandomGenerator>
+
 #include "tiles3/kis_tiled_data_manager.h"
 
 #include "tiles_test_utils.h"
@@ -675,9 +677,9 @@ public:
     }
 
     void run() override {
-        qsrand(QTime::currentTime().msec());
+        QRandomGenerator rng(QTime::currentTime().msec());
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
-            qint32 type = qrand() % NUM_TYPES;
+            qint32 type = rng.bounded(NUM_TYPES);
 
             qint32 t;
 

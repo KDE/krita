@@ -9,6 +9,7 @@
 #include <simpletest.h>
 
 #include <QElapsedTimer>
+#include <QRandomGenerator>
 
 #include <KoColor.h>
 #include <KoColorSpace.h>
@@ -2345,12 +2346,12 @@ void KisPaintDeviceTest::testCompositionAssociativity()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
 
-    qsrand(500);
+    QRandomGenerator rng(500);
 
-    boost::mt11213b _rnd0(qrand());
-    boost::mt11213b _rnd1(qrand());
-    boost::mt11213b _rnd2(qrand());
-    boost::mt11213b _rnd3(qrand());
+    boost::mt11213b _rnd0(rng.bounded(RAND_MAX));
+    boost::mt11213b _rnd1(rng.bounded(RAND_MAX));
+    boost::mt11213b _rnd2(rng.bounded(RAND_MAX));
+    boost::mt11213b _rnd3(rng.bounded(RAND_MAX));
 
     boost::uniform_smallint<int> rnd0(0, 255);
     boost::uniform_smallint<int> rnd1(0, 255);

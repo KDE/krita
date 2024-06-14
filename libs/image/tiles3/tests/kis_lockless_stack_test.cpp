@@ -300,8 +300,6 @@ private:
 
 void KisLocklessStackTest::stressTestBulkPop()
 {
-    qsrand(10);
-
     KisLocklessStack<int> stack;
 
 #ifdef LIMIT_LONG_TESTS

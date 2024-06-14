@@ -15,6 +15,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <testpigment.h>
 
+#include <QRandomGenerator>
 
 TestColorConversionSystem::TestColorConversionSystem()
 {
@@ -424,9 +425,9 @@ void TestColorConversionSystem::benchmarkAlphaToRgbConversion()
     QByteArray srcBuf(numPixels * alpha8->pixelSize(), '\0');
     QByteArray dstBuf(numPixels * rgb8->pixelSize(), '\0');
 
-    qsrand(1);
+    QRandomGenerator rng{};
     for (int i = 0; i < srcBuf.size(); i++) {
-        srcBuf[i] = qrand() & 0xFF;
+        srcBuf[i] = static_cast<char>(rng.bounded(256));
     }
 
     QBENCHMARK {
@@ -448,9 +449,9 @@ void TestColorConversionSystem::benchmarkRgbToAlphaConversion()
     QByteArray srcBuf(numPixels * rgb8->pixelSize(), '\0');
     QByteArray dstBuf(numPixels * alpha8->pixelSize(), '\0');
 
-    qsrand(1);
+    QRandomGenerator rng{};
     for (int i = 0; i < srcBuf.size(); i++) {
-        srcBuf[i] = qrand() & 0xFF;
+        srcBuf[i] = static_cast<char>(rng.bounded(256));
     }
 
     QBENCHMARK {

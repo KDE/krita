@@ -62,7 +62,7 @@ void KisMemoryWindowTest::testTopReports()
 
     for (int i = 0; i < 1024; i++) {
         {
-            int chunkIndex = qrand() % 1024;
+            int chunkIndex = QRandomGenerator::global()->bounded(1024);
 
             qint64 chunkStart = chunkIndex * chunkLength;
             maxChunk = qMax(chunkStart, maxChunk);
@@ -76,7 +76,7 @@ void KisMemoryWindowTest::testTopReports()
         }
 
         {
-            int chunkIndex = qrand() % 1024;
+            int chunkIndex = QRandomGenerator::global()->bounded(1024);
 
             qint64 chunkStart = chunkIndex * chunkLength;
 

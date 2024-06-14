@@ -10,6 +10,7 @@
 #include <QRect>
 #include <QIcon>
 #include <QBitArray>
+#include <QRandomGenerator>
 
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -292,7 +293,7 @@ void KisLayerTest::testMoveLayerWithMaskThreaded()
     for(int i = 0; i < 100; i++) {
         paintLayer->setDirty();
 
-        QTest::qSleep(1 + (qrand() & 63));
+        QTest::qSleep(QRandomGenerator::global()->bounded(1, 64));
 
         paintLayer->setX((i*67) % 1873);
         paintLayer->setY((i*23) % 1873);

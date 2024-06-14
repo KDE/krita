@@ -5,23 +5,18 @@
  */
 
 #include <cstdlib>
-#include <random>
 
 #include <QString>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-#include <KisApplication.h>
 #include "PythonPluginManager.h"
+#include <KisApplication.h>
+
 #include <opengl/kis_opengl.h>
 
 extern "C" int main(int argc, char **argv)
 {
-    // The global initialization of the random generator
-    {
-        std::random_device urandom;
-        qsrand(urandom());
-    }
     KLocalizedString::setApplicationDomain("kritarunner");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     KisOpenGL::testingInitializeDefaultSurfaceFormat();

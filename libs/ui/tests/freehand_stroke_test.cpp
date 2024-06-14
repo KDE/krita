@@ -168,8 +168,6 @@ void FreehandStrokeTest::testAutoBrushStrokeLod()
 
 void FreehandStrokeTest::testPredefinedBrushStrokeLod()
 {
-    qsrand(QTime::currentTime().msec());
-
     FreehandStrokeTester tester("testing_predefined_lod_spc13.kpp", true);
     //FreehandStrokeTester tester("testing_predefined_lod.kpp", true);
     tester.testSimpleStroke();

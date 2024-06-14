@@ -15,10 +15,10 @@ macos-build:
     KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
     MACOSX_DEPLOYMENT_TARGET: "10.14"
     QMAKE_MACOSX_DEPLOYMENT_TARGET: "10.14"
+    CMAKE_TOOLCHAIN_FILE: $CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
-      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
     # TODO: clear the folder
     KDECI_CRAFT_DOWNLOADS: /Users/gitlab/caches/krita-macos/craft-downloads
 
@@ -82,7 +82,6 @@ macos-nightly:
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=OFF
       -DBUILD_TESTING=ON
-      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
     KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
 
 macos-release:
@@ -96,4 +95,3 @@ macos-release:
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON
       -DBUILD_TESTING=OFF
-      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake

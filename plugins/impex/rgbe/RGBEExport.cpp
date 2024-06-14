@@ -192,7 +192,7 @@ KisImportExportErrorCode RGBEExport::convert(KisDocument *document, QIODevice *i
         header.append("#?RADIANCE\n");
         header.append("# Created with Krita RGBE Export\n");
         header.append("FORMAT=32-bit_rle_rgbe\n\n");
-        header.append(QString("-Y %1 +X %2\n").arg(image->height()).arg(image->width()));
+        header.append(QStringLiteral("-Y %1 +X %2\n").arg(image->height()).arg(image->width()).toUtf8());
 
         fileBuffer.append(header);
     }

@@ -518,7 +518,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "line-break") {
         setProperty(LineBreakId, KoSvgText::parseLineBreak(value));
     } else if (command == "text-align" || command == "text-align-all" || command == "text-align-last") {
-        QStringList params = value.split(' ', QString::SkipEmptyParts);
+        QStringList params = value.split(' ', Qt::SkipEmptyParts);
         if (command == "text-align" || command == "text-align-all") {
             setProperty(TextAlignAllId, KoSvgText::parseTextAlign(params.first()));
             if (value == "justify-all") {

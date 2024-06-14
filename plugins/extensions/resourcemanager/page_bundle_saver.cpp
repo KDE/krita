@@ -131,7 +131,7 @@ void PageBundleSaver::onTagsUpdated()
             tagPresent = true;
             m_tags = m_tags + "<b>Tags</b>" + "<br>";
         }
-        if (it + 1 == set.constEnd()) {
+        if (std::next(it) == set.constEnd()) {
             m_tags = m_tags + *it;
         } else {
             m_tags = m_tags + *it + ", ";

@@ -192,7 +192,7 @@ void KisUpdateTimeMonitor::printValues()
            << i18n("Mouse Speed:") << QString::number( mouseSpeed, 'f', 3 ) << "\t"
            << i18n("Jobs/Update:") << QString::number( jobsPerUpdate, 'f', 3 ) << "\t"
            << i18n("Non Update Time:") << QString::number( nonUpdateTime, 'f', 3 ) << "\t"
-           << i18n("Response Time:") << responseTime << endl; // 'endl' will use the correct OS line ending
+           << i18n("Response Time:") << responseTime << Qt::endl; // 'endl' will use the correct OS line ending
     logFile.close();
 }
 

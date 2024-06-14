@@ -847,7 +847,7 @@ struct DetectionDebug : public QDebug
           m_string(string),
           m_originalSize(string->size())
     {}
-    ~DetectionDebug() { dbgOpenGL << m_string->right(m_string->size() - m_originalSize); *this << endl; }
+    ~DetectionDebug() { dbgOpenGL << m_string->right(m_string->size() - m_originalSize); *this << Qt::endl; }
 
     QString *m_string;
     int m_originalSize;

@@ -67,10 +67,7 @@ bool KisRemoteFileFetcher::fetchFile(const QUrl &remote, QIODevice *io)
     progress.setWindowFlag(Qt::CustomizeWindowHint, true);
     progress.setWindowFlag(Qt::WindowCloseButtonHint, false);
     connect(m_reply, &QNetworkReply::finished, &progress, &QProgressDialog::accept);
-    connect(m_reply,
-            qOverload<QNetworkReply::NetworkError>(&QNetworkReply::error),
-            &progress,
-            &QProgressDialog::cancel);
+    connect(m_reply, &QNetworkReply::errorOccurred, &progress, &QProgressDialog::cancel);
     connect(m_reply, &QNetworkReply::downloadProgress, &progress, [&](const int ist, const int max) {
         progress.setMaximum(max);
         progress.setValue(ist);

@@ -216,7 +216,7 @@ KisAutoSaveRecoveryDialog::KisAutoSaveRecoveryDialog(const QStringList &filename
 
         // get the date
         QDateTime date = QFileInfo(path).lastModified();
-        file->date = "(" + date.toString(Qt::LocalDate) + ")";
+        file->date = "(" + QLocale::system().toString(date, QLocale::ShortFormat) + ")";
 
         fileItems.append(file);
     }

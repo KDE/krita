@@ -161,7 +161,7 @@ void KoXmlWriter::endElement()
     if (d->tags.isEmpty())
         warnStore << "EndElement() was called more times than startElement(). "
                      "The generated XML will be invalid! "
-                     "Please report this bug (by saving the document to another format...)" << endl;
+                     "Please report this bug (by saving the document to another format...)" << Qt::endl;
 
     Tag tag = d->tags.pop();
 

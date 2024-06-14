@@ -146,7 +146,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
 
     const uchar hex[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-    dbgFile << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << endl;
+    dbgFile << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << Qt::endl;
 
     text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
     description_length = profile_type.length();
@@ -496,7 +496,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, 0, 0);
-    dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
+    dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << Qt::endl;
     // swap byte order on little endian machines.
 #ifndef WORDS_BIGENDIAN
     if (color_nb_bits > 8)

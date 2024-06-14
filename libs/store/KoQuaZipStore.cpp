@@ -95,12 +95,12 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
     if (_len == 0) return 0;
 
     if (!d->isOpen) {
-        errorStore << "KoStore: You must open before writing" << endl;
+        errorStore << "KoStore: You must open before writing" << Qt::endl;
         return 0;
     }
 
     if (d->mode != Write) {
-        errorStore << "KoStore: Can not write to store that is opened for reading" << endl;
+        errorStore << "KoStore: Can not write to store that is opened for reading" << Qt::endl;
         return 0;
     }
 

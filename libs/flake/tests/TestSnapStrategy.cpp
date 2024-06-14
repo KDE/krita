@@ -717,8 +717,7 @@ void TestSnapStrategy::testExtensionDirection()
     KoPathPoint::PointProperties normal = KoPathPoint::Normal;
     const QPointF initiatedPoint0(0,0);
     KoPathPoint initiatedPoint(&uninitiatedPathShape, initiatedPoint0, normal);
-    QMatrix initiatedMatrixParam(1,1,1,1,1,1);
-    const QTransform initiatedMatrix(initiatedMatrixParam);
+    const QTransform initiatedMatrix(1, 1, 1, 1, 1, 1);
     QPointF direction2 = toTestOne.extensionDirection( &initiatedPoint, initiatedMatrix);
     QVERIFY(direction2.isNull());
 

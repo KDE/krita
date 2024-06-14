@@ -197,7 +197,7 @@ void KoToolProxy::tabletEvent(QTabletEvent *event, const QPointF &point)
     // We get these events exclusively from KisToolProxy - accept them
     event->accept();
 
-    KoInputDevice id(event->device(), event->pointerType(), event->uniqueId());
+    KoInputDevice id(event->deviceType(), event->pointerType(), event->uniqueId());
     KoToolManager::instance()->priv()->switchInputDevice(id);
 
     KoPointerEvent ev(event, point);

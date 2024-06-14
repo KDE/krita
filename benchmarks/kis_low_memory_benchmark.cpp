@@ -141,7 +141,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
             logStream << "L 1" << i << lineTime.elapsed()
                       << KisTileDataStore::instance()->numTilesInMemory() * 16
                       << KisTileDataStore::instance()->numTiles() * 16
-                      << createTransaction << endl;
+                      << createTransaction << Qt::endl;
 
             line.translate(0, vstep);
         }
@@ -161,7 +161,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
                   << createTransaction
                   << config.memoryHardLimitPercent() / _MiB
                   << config.memorySoftLimitPercent() / _MiB
-                  << config.memoryPoolLimitPercent() / _MiB  << endl;
+                  << config.memoryPoolLimitPercent() / _MiB  << Qt::endl;
     }
 
     config.setMemoryHardLimitPercent(oldHardLimit * _MiB);

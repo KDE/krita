@@ -93,10 +93,14 @@ int main(int argc, char** argv)
         }
         QTextStream out(&file);
         out << dot;
-        QString cmd = QString("dot -T%1 %2 -o %3").arg(outputType).arg(file.fileName()).arg(outputFileName);
+        const QString cmd = QStringLiteral("dot");
+        const QStringList args{QStringLiteral("-T%1").arg(outputType),
+                               file.fileName(),
+                               QStringLiteral("-o"),
+                               outputFileName};
         file.close();
 
-        if (QProcess::execute(cmd) != 0) {
+        if (QProcess::execute(cmd, args) != 0) {
             errorPigment << "An error has occurred when executing : '" << cmd << "' the most likely cause is that 'dot' command is missing, and that you should install graphviz (from https://www.graphviz.org)";
         }
     } else {

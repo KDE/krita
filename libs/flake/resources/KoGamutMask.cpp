@@ -268,11 +268,11 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         QDomDocument xmlDocument = SvgParser::createDocumentFromSvg(ba, &errorMsg, &errorLine, &errorColumn);
         if (xmlDocument.isNull()) {
 
-            errorFlake << "Parsing error in " << filename() << "! Aborting!" << endl
-            << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
+            errorFlake << "Parsing error in " << filename() << "! Aborting!" << Qt::endl
+            << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+            << " Error message: " << errorMsg << Qt::endl;
             errorFlake << "Parsing error in the main document at line" << errorLine
-                       << ", column" << errorColumn << endl
+                       << ", column" << errorColumn << Qt::endl
                        << "Error message: " << errorMsg;
 
             return false;

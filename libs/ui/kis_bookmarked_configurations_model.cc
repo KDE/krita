@@ -82,7 +82,7 @@ KisSerializableConfigurationSP KisBookmarkedConfigurationsModel::configuration(c
     if (!index.isValid()) return 0;
     switch (index.row()) {
     case 0:
-        dbgKrita << "loading default" << endl;
+        dbgKrita << "loading default" << Qt::endl;
         return d->bookmarkManager->load(KisBookmarkedConfigurationManager::ConfigDefault);
         break;
     case 1:

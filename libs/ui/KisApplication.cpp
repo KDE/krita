@@ -580,7 +580,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                 if (exportAs) {
                     QString outputMimetype = KisMimeDatabase::mimeTypeForFile(exportFileName, false);
                     if (outputMimetype == "application/octetstream") {
-                        dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << endl;
+                        dbgKrita << i18n("Mimetype not found, try using the -mimetype option") << Qt::endl;
                         return false;
                     }
 
@@ -618,7 +618,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     qApp->processEvents(); // For vector layers to be updated
                     
                     if (!doc->image()->animationInterface()->hasAnimation()) {
-                        errKrita << "This file has no animation." << endl;
+                        errKrita << "This file has no animation." << Qt::endl;
                         QTimer::singleShot(0, this, SLOT(quit()));
                         return false;
                     }
@@ -636,7 +636,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     KisAsyncAnimationFramesSaveDialog::Result result =
                         exporter.regenerateRange(0);
                     if (result != KisAsyncAnimationFramesSaveDialog::RenderComplete) {
-                        errKrita << i18n("Failed to render animation frames!") << endl;
+                        errKrita << i18n("Failed to render animation frames!") << Qt::endl;
                     }
                     QTimer::singleShot(0, this, SLOT(quit()));
                     return true;

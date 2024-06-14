@@ -39,6 +39,7 @@
 #include <KisNetworkAccessManager.h>
 
 #include <KisRssReader.h>
+#include <QApplication>
 
 MultiFeedRssModel::MultiFeedRssModel(QObject *parent) :
     QAbstractListModel(parent),
@@ -157,7 +158,7 @@ QVariant MultiFeedRssModel::data(const QModelIndex &index, int role) const
                 text.append("...");
             }
             return QString("<b><a href=\"" + item.link + "\">" + item.title + "</a></b>"
-                "<br><small>(" + item.pubDate.toLocalTime().toString(Qt::DefaultLocaleShortDate) + ") "
+                "<br><small>(" + QLocale().toString(item.pubDate.toLocalTime(), QLocale::ShortFormat) + ") "
                 "<p style=\"margin-top: 4px\">" + text + "</p></small>");
         }
         case KisRssReader::RssRoles::TitleRole:

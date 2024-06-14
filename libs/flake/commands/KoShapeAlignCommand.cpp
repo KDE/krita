@@ -64,7 +64,7 @@ KoShapeAlignCommand::KoShapeAlignCommand(const QList<KoShape*> &shapes, Align al
         };
         newPositions  << position + delta;
 //debugFlake <<"-> moving" <<  position.x() <<"," << position.y() <<" to" <<
-//        (position + delta).x() << ", " << (position+delta).y() << endl;
+//        (position + delta).x() << ", " << (position+delta).y() << Qt::endl;
     }
     d->command = new KoShapeMoveCommand(shapes, previousPositions, newPositions);
 

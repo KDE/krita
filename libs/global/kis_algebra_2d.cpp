@@ -804,7 +804,11 @@ DecomposedMatrix::DecomposedMatrix(const QTransform &t0)
     }
 
     if (t.type() == QTransform::TxProject) {
-        QTransform affineTransform(t.toAffine());
+        QTransform affineTransform(
+            t.m11(), t.m12(), 0,
+            t.m21(), t.m22(), 0,
+            t.m31(), t.m32(), 1
+        );
         projMatrix = affineTransform.inverted() * t;
 
         t = affineTransform;

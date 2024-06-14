@@ -34,7 +34,7 @@ template<> void copyEventHack(const QMouseEvent *src, QScopedPointer<QEvent> &ds
 template<> void copyEventHack(const QTabletEvent *src, QScopedPointer<QEvent> &dst) {
     QTabletEvent *tmp = new QTabletEvent(src->type(),
                                          src->posF(), src->globalPosF(),
-                                         src->device(), src->pointerType(),
+                                         src->deviceType(), src->pointerType(),
                                          src->pressure(),
                                          src->xTilt(), src->yTilt(),
                                          src->tangentialPressure(),

@@ -27,7 +27,7 @@ KisDlgPasteFormat::KisDlgPasteFormat(QWidget *parent)
     pasteSources.addButton(wdg->btnDownload, KisClipboard::PASTE_FORMAT_DOWNLOAD);
     pasteSources.addButton(wdg->btnUseLocal, KisClipboard::PASTE_FORMAT_LOCAL);
     pasteSources.addButton(wdg->btnUseBitmap, KisClipboard::PASTE_FORMAT_CLIP);
-    connect(&pasteSources, qOverload<int>(&QButtonGroup::buttonClicked), this, &KisDlgPasteFormat::onInputChanged);
+    connect(&pasteSources, &QButtonGroup::idClicked, this, &KisDlgPasteFormat::onInputChanged);
 
     wdg->btnDownload->setEnabled(false);
     wdg->btnUseLocal->setEnabled(false);

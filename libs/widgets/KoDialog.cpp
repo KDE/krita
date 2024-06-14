@@ -445,7 +445,7 @@ void KoDialog::showEvent(QShowEvent *e)
 
 int KoDialog::marginHint()
 {
-    return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
+    return QApplication::style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
 }
 
 int KoDialog::spacingHint()

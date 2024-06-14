@@ -195,7 +195,7 @@ void KisCompositeOpComboBox::selectCompositeOp(const KoID &op) {
 
     setCurrentIndex(index.row());
     emit activated(index.row());
-    emit activated(op.name());
+    emit textActivated(op.name());
 }
 
 KoID KisCompositeOpComboBox::selectedCompositeOp() const {
@@ -407,7 +407,7 @@ void KisCompositeOpComboBox::selectNeighbouringBlendMode(bool down)
 
         emit activated(newIndex);
         if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
-            emit activated(op.name());
+            emit textActivated(op.name());
         }
     }
 }
@@ -525,7 +525,7 @@ void KisCompositeOpComboBox::keyPressEvent(QKeyEvent *e)
             emit activated(newIndex);
 
             if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
-                emit activated(op.name());
+                emit textActivated(op.name());
             }
         }
     } else {

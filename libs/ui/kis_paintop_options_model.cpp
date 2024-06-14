@@ -13,7 +13,7 @@
 KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
     : BaseOptionCategorizedListModel(parent)
 {
-    connect(&m_stateSignalsMapper, qOverload<int>(&QSignalMapper::mapped),
+    connect(&m_stateSignalsMapper, &QSignalMapper::mappedInt,
             this, &KisPaintOpOptionListModel::slotCheckedEnabledStateChanged);
 }
 

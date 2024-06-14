@@ -89,9 +89,9 @@ void TabletTester::tabletEvent(QTabletEvent *e)
     e->accept();
 
     QString msg;
-    switch(e->device()) {
+    switch(e->deviceType()) {
         case QTabletEvent::Stylus: msg = "Stylus"; break;
-        default: msg = QString("Device(%1)").arg(e->device()); break;
+        default: msg = QString("Device(%1)").arg(e->deviceType()); break;
     }
 
     switch(e->type()) {

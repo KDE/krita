@@ -88,12 +88,12 @@ bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
     svgStream.setCodec("UTF-8");
 
     // standard header:
-    svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
+    svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << Qt::endl;
     svgStream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
-    svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
+    svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << Qt::endl;
 
     // add some PR.  one line is more than enough.
-    svgStream << "<!-- Created using Krita: https://krita.org -->" << endl;
+    svgStream << "<!-- Created using Krita: https://krita.org -->" << Qt::endl;
 
     svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
     svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
@@ -104,14 +104,14 @@ bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
     svgStream << "    viewBox=\"0 0 "
               << pageSize.width() << " " << pageSize.height()
               << "\"";
-    svgStream << ">" << endl;
+    svgStream << ">" << Qt::endl;
 
     if (!m_documentTitle.isNull() && !m_documentTitle.isEmpty()) {
-        svgStream << "<title>" << m_documentTitle << "</title>" << endl;
+        svgStream << "<title>" << m_documentTitle << "</title>" << Qt::endl;
     }
 
     if (!m_documentDescription.isNull() && !m_documentDescription.isEmpty()) {
-        svgStream << "<desc>" << m_documentDescription << "</desc>" << endl;
+        svgStream << "<desc>" << m_documentDescription << "</desc>" << Qt::endl;
     }
 
     {
@@ -120,7 +120,7 @@ bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
     }
 
     // end tag:
-    svgStream << endl << "</svg>" << endl;
+    svgStream << Qt::endl << "</svg>" << Qt::endl;
 
     return true;
 }

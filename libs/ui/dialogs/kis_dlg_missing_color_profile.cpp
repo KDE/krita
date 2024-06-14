@@ -26,10 +26,7 @@ KisDlgMissingColorProfile::KisDlgMissingColorProfile(QWidget *parent)
 
     colorProfiles.addButton(wdg.btnAsMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
     colorProfiles.addButton(wdg.btnAsWeb, KisClipboard::PASTE_ASSUME_WEB);
-    connect(&colorProfiles,
-            qOverload<int>(&QButtonGroup::buttonClicked),
-            this,
-            &KisDlgMissingColorProfile::onInputChanged);
+    connect(&colorProfiles, &QButtonGroup::idClicked, this, &KisDlgMissingColorProfile::onInputChanged);
 }
 
 KisClipboard::PasteBehaviour KisDlgMissingColorProfile::source() const

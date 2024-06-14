@@ -419,13 +419,13 @@ QString SvgStyleWriter::saveSvgGradient(const QGradient *gradient, const QTransf
         double r = sqrt( pow( grad.vector().x() - grad.origin().x(), 2 ) + pow( grad.vector().y() - grad.origin().y(), 2 ) );
         *m_defs << "r=\"" << QString().setNum( r ) << "\" ";
         *m_defs << spreadMethod[g->spread()];
-        *m_defs << ">" << endl;
+        *m_defs << ">" << Qt::endl;
 
         // color stops
         getColorStops( gradient->stops() );
 
         printIndentation( m_defs, m_indent2 );
-        *m_defs << "</radialGradient>" << endl;
+        *m_defs << "</radialGradient>" << Qt::endl;
         *m_body << "url(#" << uid << ")";
         */
     }

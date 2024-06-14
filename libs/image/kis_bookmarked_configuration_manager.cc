@@ -58,7 +58,7 @@ KisSerializableConfigurationSP KisBookmarkedConfigurationManager::load(const QSt
     doc.setContent(cfg.readEntry<QString>(configname, ""));
     QDomElement e = doc.documentElement();
     KisSerializableConfigurationSP config = d->configFactory->create(e);
-    dbgImage << config << endl;
+    dbgImage << config << Qt::endl;
     return config;
 }
 

@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-14 01:38+0000\n"
-"PO-Revision-Date: 2024-04-26 18:47+0200\n"
+"PO-Revision-Date: 2024-06-14 22:25+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -44325,43 +44325,36 @@ msgid ""
 "Make sure the actions are corresponding to the correct gesture on the system "
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
+"Prepričajte se, da dejanja ustrezajo pravilni potezi na sistemski ravni. Te "
+"lahko prilagodite v nastavitvah S Pen > Dejanja Air."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
-#| "number of buttons in that list."
-#| msgid "%1 Button"
-#| msgid_plural "%1 Buttons"
+#, kde-format
 msgid "Buttons"
-msgstr "%1 gumbov"
+msgstr "Gumbi"
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Presets"
+#, kde-format
 msgid "Press"
-msgstr "Prednastavitve"
+msgstr "Pritisk"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Mouse pressure"
+#, kde-format
 msgid "Double Press"
-msgstr "Pritisk miške"
+msgstr "Dvojni pritisk"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#| "devices."
+#, kde-format
 msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
 msgstr ""
-"Naslednja dejanja gumbov so podprta na napravah Note 9, Note 10 in Tab S6."
+"Naslednja dejanja gumbov so podprta na napravah Note 9, Note 10, Tab S6 in "
+"Tab S9."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -44401,19 +44394,17 @@ msgstr "Kroži v SUK"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:137
-#, fuzzy, kde-format
-#| msgid "Circle Counterclockwise"
+#, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "Kroži v nasprotni SUK"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, fuzzy, kde-format
-#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#, kde-format
 msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
-msgstr "Naslednje poteze so podprte na napravah Note 10 in Tab S6."
+msgstr "Naslednje poteze so podprte na napravah Note 10, Tab S6 in Tab S9."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -61453,15 +61444,3 @@ msgstr "Orodje za približevanje"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Orodje za referenčne slike"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "Krmilna ročica CPE"
-
-#~ msgid "Button Actions"
-#~ msgstr "Dejanja gumbov"
-
-#~ msgid "Click"
-#~ msgstr "Klik"
-
-#~ msgid "Double Click"
-#~ msgstr "Dvoklik"

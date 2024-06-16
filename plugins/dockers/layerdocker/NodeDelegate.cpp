@@ -50,6 +50,8 @@ public:
     NodeToolTip tip;
 
     QImage checkers;
+    QColor checkersColor1;
+    QColor checkersColor2;
 
     QRect thumbnailGeometry;
     int thumbnailSize {-1};
@@ -1314,15 +1316,24 @@ void NodeDelegate::slotConfigChanged()
     d->thumbnailGeometry = KisNodeViewColorScheme::instance()->relThumbnailRect();
     d->rowHeight = KisNodeViewColorScheme::instance()->rowHeight();
 
+    const QColor newCheckersColor1 = cfg.checkersColor1();
+    const QColor newCheckersColor2 = cfg.checkersColor2();
+
     // generate the checker backdrop for thumbnails
     const int step = d->thumbnailSize / 6;
-    if (d->checkers.width() != 2 * step) {
+    if ((d->checkers.width() != 2 * step) ||
+        (d->checkersColor1 != newCheckersColor1) ||
+        (d->checkersColor2 != newCheckersColor2)) {
+
+        d->checkersColor1 = newCheckersColor1;
+        d->checkersColor2 = newCheckersColor2;
         d->checkers = QImage(2 * step, 2 * step, QImage::Format_ARGB32);
+
         QPainter gc(&d->checkers);
-        gc.fillRect(QRect(0, 0, step, step), cfg.checkersColor1());
-        gc.fillRect(QRect(step, 0, step, step), cfg.checkersColor2());
-        gc.fillRect(QRect(step, step, step, step), cfg.checkersColor1());
-        gc.fillRect(QRect(0, step, step, step), cfg.checkersColor2());
+        gc.fillRect(QRect(0, 0, step, step), newCheckersColor1);
+        gc.fillRect(QRect(step, 0, step, step), newCheckersColor2);
+        gc.fillRect(QRect(step, step, step, step), newCheckersColor1);
+        gc.fillRect(QRect(0, step, step, step), newCheckersColor2);
     }
 
     if (d->rowHeight != oldHeight) {

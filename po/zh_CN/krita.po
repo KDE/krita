@@ -43787,42 +43787,33 @@ msgid ""
 "Make sure the actions are corresponding to the correct gesture on the system "
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
+"确保操作对应系统级别的手势。这些操作可在 S Pen 设置 > 悬空操作 中进行配置。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
-#| "number of buttons in that list."
-#| msgid "%1 Button"
-#| msgid_plural "%1 Buttons"
+#, kde-format
 msgid "Buttons"
-msgstr "%1 键"
+msgstr "按钮"
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Presets"
+#, kde-format
 msgid "Press"
-msgstr "笔刷预设"
+msgstr "单击"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Mouse pressure"
+#, kde-format
 msgid "Double Press"
-msgstr "鼠标速度模仿压力"
+msgstr "双击"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#| "devices."
+#, kde-format
 msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
-msgstr "下列操作在 Note 9、Note 10 和 Tab S6 等设备上可用。"
+msgstr "以下按钮在 Note 9、Note 10、Tab S6 和 Tab S9 设备上可用。"
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -43862,19 +43853,17 @@ msgstr "画圈 (顺时针)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:137
-#, fuzzy, kde-format
-#| msgid "Circle Counterclockwise"
+#, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "画圈 (逆时针)"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, fuzzy, kde-format
-#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#, kde-format
 msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
-msgstr "下列操作在 Note 10 和 Tab S6 等设备上可用。"
+msgstr "以下手势在 Note 10、Note 、Tab S6 和 Tab S9 设备上可用。"
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -60610,12 +60599,3 @@ msgstr "参考图像工具"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "CPU 限速"
-
-#~ msgid "Button Actions"
-#~ msgstr "按钮操作"
-
-#~ msgid "Click"
-#~ msgstr "单击"
-
-#~ msgid "Double Click"
-#~ msgstr "双击"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-14 01:38+0000\n"
+"POT-Creation-Date: 2024-06-17 01:47+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -39127,7 +39127,7 @@ msgstr "ស្រទាប់​ដំបូង​ពី​ក្ដារតម
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
 #, kde-format
 msgid "%1 %"
 msgstr ""

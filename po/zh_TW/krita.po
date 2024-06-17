@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-14 01:38+0000\n"
+"POT-Creation-Date: 2024-06-17 01:47+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -38906,7 +38906,7 @@ msgstr "切換鎖定與可見性(&T)"
 msgid "&Add"
 msgstr "新增(&A)"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"

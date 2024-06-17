@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-14 01:38+0000\n"
+"POT-Creation-Date: 2024-06-17 01:47+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -39978,7 +39978,7 @@ msgstr "Kever&hetőség:"
 msgid "&Add"
 msgstr ""
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"

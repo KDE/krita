@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-14 01:38+0000\n"
+"POT-Creation-Date: 2024-06-17 01:47+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -40001,7 +40001,7 @@ msgstr "&Переключить блокировки и видимость"
 msgid "&Add"
 msgstr "&Добавить"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"

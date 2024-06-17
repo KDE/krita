@@ -42,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-14 01:38+0000\n"
-"PO-Revision-Date: 2024-05-30 22:41+0200\n"
+"POT-Creation-Date: 2024-06-17 01:47+0000\n"
+"PO-Revision-Date: 2024-06-16 07:39+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -39306,7 +39306,7 @@ msgstr "&Baskuligi Ŝlosojn && Videblecon"
 msgid "&Add"
 msgstr "&Aldoni"
 
-#: plugins/dockers/layerdocker/NodeDelegate.cpp:1299
+#: plugins/dockers/layerdocker/NodeDelegate.cpp:1301
 #, kde-format
 msgid "%1 %"
 msgstr "%1 %"
@@ -44251,44 +44251,36 @@ msgid ""
 "Make sure the actions are corresponding to the correct gesture on the system "
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
+"Certiĝu, ke la agoj estas respondantaj al la ĝusta gesto sur la sistema "
+"nivelo. Ĉi tiuj povas esti agorditaj sub Agordoj S-Pen > Aeraj agoj."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
-#| "number of buttons in that list."
-#| msgid "%1 Button"
-#| msgid_plural "%1 Buttons"
+#, kde-format
 msgid "Buttons"
-msgstr "%1 Butono"
+msgstr "Butonoj"
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Presets"
+#, kde-format
 msgid "Press"
-msgstr "Antaŭagordoj"
+msgstr "Muspremo"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Mouse pressure"
+#, kde-format
 msgid "Double Press"
-msgstr "Muspremo"
+msgstr "Duobla Muspremo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#| "devices."
+#, kde-format
 msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
 msgstr ""
-"La sekvaj butonaj agoj estas subtenataj sur la aparatoj Note 9, Note 10 kaj "
-"Tab S6."
+"La sekvaj butonaj agoj estas subtenataj sur la aparatoj Note 9, Note 10, Tab "
+"S6 kaj Tab S9."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -44324,19 +44316,17 @@ msgstr "Ŝovumi Maldekstren"
 #: plugins/extensions/spensettings/wdg_spensettings.ui:130
 #, kde-format
 msgid "Circle Clockwise"
-msgstr "Cirklo dekstrume"
+msgstr "Cirklo Dekstrume"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:137
-#, fuzzy, kde-format
-#| msgid "Circle Counterclockwise"
+#, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "Cirklo Maldekstrume"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, fuzzy, kde-format
-#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#, kde-format
 msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
@@ -61370,15 +61360,3 @@ msgstr "Zomi Ilo"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Ilo por Referencbildoj"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "CPU-Akcelilo"
-
-#~ msgid "Button Actions"
-#~ msgstr "Butonaj Agoj"
-
-#~ msgid "Click"
-#~ msgstr "Klaki"
-
-#~ msgid "Double Click"
-#~ msgstr "Duobla klako"

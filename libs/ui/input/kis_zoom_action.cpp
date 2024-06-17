@@ -89,7 +89,6 @@ void KisZoomAction::Private::zoomTo(bool zoomIn, const QPoint &point)
             dynamic_cast<KoCanvasControllerWidget*>(
                 q->inputManager()->canvas()->canvasController());
         KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
-
         controller->zoomRelativeToPoint(point, newZoom / oldZoom);
     } else {
         if (zoomIn) {
@@ -114,6 +113,8 @@ KisZoomAction::KisZoomAction()
     shortcuts.insert(i18n("Relative Discrete Zoom Mode"), RelativeDiscreteZoomModeShortcut);
     shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
     shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
+    shortcuts.insert(i18n("Zoom In To Cursor"), ZoomInToCursorShortcut);
+    shortcuts.insert(i18n("Zoom Out From Cursor"), ZoomOutFromCursorShortcut);
     shortcuts.insert(i18n("Zoom to 100%"), Zoom100PctShortcut);
     shortcuts.insert(i18n("Fit to View"), FitToViewShortcut);
     shortcuts.insert(i18n("Fit to View Width"), FitToWidthShortcut);
@@ -173,6 +174,34 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case ZoomOutShortcut:
             d->zoomTo(false, pointFromEvent(event));
             break;
+        case ZoomInToCursorShortcut: {
+            QPoint pt = pointFromEvent(event);
+
+            if (pt.isNull()) {
+                KoCanvasControllerWidget *controller =
+                            dynamic_cast<KoCanvasControllerWidget*>(
+                                inputManager()->canvas()->canvasController());
+                    KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
+                pt = controller->mapFromGlobal(QCursor::pos());
+            }
+
+            d->zoomTo(true, pt);
+            break;
+        }
+        case ZoomOutFromCursorShortcut: {
+            QPoint pt = pointFromEvent(event);
+
+            if (pt.isNull()) {
+                KoCanvasControllerWidget *controller =
+                        dynamic_cast<KoCanvasControllerWidget*>(
+                            inputManager()->canvas()->canvasController());
+                KIS_SAFE_ASSERT_RECOVER_RETURN(controller);
+                pt = controller->mapFromGlobal(QCursor::pos());
+            }
+
+            d->zoomTo(false, pt);
+            break;
+        }
         case Zoom100PctShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;

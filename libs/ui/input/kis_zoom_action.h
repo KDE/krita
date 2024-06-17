@@ -30,7 +30,9 @@ public:
         FitToWidthShortcut, ///< Zoom fit to width.
         RelativeZoomModeShortcut, ///< Toggle zoom mode relative to cursor
         RelativeDiscreteZoomModeShortcut, ///< Toggle discrete zoom mode relative to cursor
-        FitToHeightShortcut ///< Zoom fit to height.
+        FitToHeightShortcut, ///< Zoom fit to height.
+        ZoomInToCursorShortcut, ///< Zoom in to cursor
+        ZoomOutFromCursorShortcut ///< Zoom out from cursor
     };
     explicit KisZoomAction();
     ~KisZoomAction() override;

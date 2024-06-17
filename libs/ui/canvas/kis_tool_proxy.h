@@ -7,11 +7,12 @@
 #ifndef __KIS_TOOL_PROXY_H
 #define __KIS_TOOL_PROXY_H
 
+#include <kritaui_export.h>
 #include <KoToolProxy.h>
 #include <kis_tool.h>
 
 
-class KisToolProxy : public KoToolProxy
+class KRITAUI_EXPORT KisToolProxy : public KoToolProxy
 {
     Q_OBJECT
 public:

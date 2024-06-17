@@ -12,6 +12,7 @@
 #include <kis_image.h>
 #include <KisDocument.h>
 #include <KoToolProxy.h>
+#include "kis_tool_proxy.h"
 #include <KisMainWindow.h>
 
 #include <QDir>
@@ -29,7 +30,26 @@
 
 namespace
 {
-const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform", "KritaShape/KisToolLine" };
+    const QStringList forceBlacklistedTools = {
+        "KisToolTransform",
+        "KisToolPolyline",
+        "KisToolPolygon",
+        "KisToolSelectOutline",
+        "KisToolSelectPolygonal",
+        "KisToolEncloseAndFill",
+        "KisToolPath",
+        "KisToolCrop",
+        "KisToolSelectPath",
+        "KisToolSelectMagnetic",
+    }; // disable recorder when toggled to one of these tools.
+    const QStringList activateBlacklistedTools = {
+        "KritaTransform/KisToolMove",
+        "KritaShape/KisToolLine",
+        "KritaShape/KisToolRectangle",
+        "KritaShape/KisToolEllipse",
+        "KisToolSelectRectangular",
+        "KisToolSelectElliptical",
+    }; // disable recorder when toggled to one of these tools and activated tool(left button pressed on canvas).
 }
 
 bool ThreadCounter::set(int value)
@@ -350,7 +370,9 @@ public:
     ThreadCounter& recorderThreads;
     volatile std::atomic_bool enabled = false;                  // enable recording only for active documents
     volatile std::atomic_bool imageModified = false;
-    volatile std::atomic_bool skipCapturing = false;            // set true on move or transform enabled to prevent tool deactivation
+    volatile std::atomic_bool isForceBlackTool = false;
+    volatile std::atomic_bool isActivateBlackTool = false; 
+    volatile std::atomic_bool toolActivated = false;
     int partIndex = 0;                                          // Consecutive file number
     std::atomic_int freeWriterId = -1;
     int interval = 1;
@@ -457,6 +479,15 @@ public:
         }
         freeWriterId = -1;
     }
+
+    bool canStartCapture() // skip capture when use some tools.
+    {
+        if (isForceBlackTool)
+            return false;
+        if (isActivateBlackTool && toolActivated)
+            return false;
+        return true;
+    }
 };
 
 RecorderWriterManager::RecorderWriterManager(const RecorderExportSettings &es)
@@ -480,15 +511,24 @@ void RecorderWriterManager::setCanvas(QPointer<KisCanvas2> canvas)
     }
 
     if (d->canvas) {
-        disconnect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)));
+        KoToolProxy *proxy = d->canvas->toolProxy();
+        KisToolProxy *kritaProxy = dynamic_cast<KisToolProxy*>(proxy);
+
+        disconnect(proxy, SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)));
+        disconnect(kritaProxy, SIGNAL(toolPrimaryActionActivated(bool)), this, SLOT(onToolPrimaryActionActivated(bool)));
         disconnect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()));
     }
 
     d->canvas = canvas;
 
     if (d->canvas) {
-        connect(d->canvas->toolProxy(), SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)),
+        KoToolProxy *proxy = d->canvas->toolProxy();
+        KisToolProxy *kritaProxy = dynamic_cast<KisToolProxy*>(proxy);
+
+        connect(proxy, SIGNAL(toolChanged(QString)), this, SLOT(onToolChanged(QString)),
                 Qt::DirectConnection); // need to handle it even if our event loop is not running
+        connect(kritaProxy, SIGNAL(toolPrimaryActionActivated(bool)), this, SLOT(onToolPrimaryActionActivated(bool)),
+                Qt::DirectConnection);
         connect(d->canvas->image(), SIGNAL(sigImageUpdated(QRect)), this, SLOT(onImageModified()),
                 Qt::DirectConnection); // because it spams
     }
@@ -579,7 +619,7 @@ void RecorderWriterManager::onTimer()
 
     d->imageModified = false;
 
-    if (d->skipCapturing)
+    if (!d->canStartCapture())
         return;
 
     d->searchForFreeWriter();
@@ -611,7 +651,7 @@ void RecorderWriterManager::onCapturingDone(int workerId, bool success)
 
 void RecorderWriterManager::onImageModified()
 {
-    if (d->skipCapturing || !d->enabled)
+    if (!d->enabled || !d->canStartCapture() )
         return;
 
     if ((!d->settings.recordIsolateLayerMode) &&
@@ -623,5 +663,11 @@ void RecorderWriterManager::onImageModified()
 
 void RecorderWriterManager::onToolChanged(const QString &toolId)
 {
-    d->skipCapturing = blacklistedTools.contains(toolId);
+    d->isForceBlackTool = forceBlacklistedTools.contains(toolId);
+    d->isActivateBlackTool = activateBlacklistedTools.contains(toolId);
+}
+
+void RecorderWriterManager::onToolPrimaryActionActivated(bool activated)
+{
+    d->toolActivated = activated;
 }

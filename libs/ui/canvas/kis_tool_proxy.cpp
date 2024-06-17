@@ -179,6 +179,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
                 activeTool->beginAlternateAction(&ev, KisTool::actionToAlternateAction(action));
             }
         }
+        emit toolPrimaryActionActivated(true);
         break;
     case CONTINUE:
         if (action == KisTool::Primary) {
@@ -193,6 +194,7 @@ void KisToolProxy::forwardToTool(ActionState state, KisTool::ToolAction action, 
         } else {
             activeTool->endAlternateAction(&ev, KisTool::actionToAlternateAction(action));
         }
+        emit toolPrimaryActionActivated(false);
         break;
     }
 }

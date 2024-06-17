@@ -46,6 +46,8 @@ public:
     void deactivateToolAction(KisTool::ToolAction action);
 
     bool supportsPaintingAssistants() const;
+Q_SIGNALS:
+    void toolPrimaryActionActivated(bool activated);
 
 private:
     KoPointerEvent convertEventToPointerEvent(QEvent *event, const QPointF &docPoint, bool *result);

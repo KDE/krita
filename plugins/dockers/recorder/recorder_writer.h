@@ -130,6 +130,7 @@ private Q_SLOTS:
     void onCapturingDone(int workerId, bool success);
     void onImageModified();
     void onToolChanged(const QString &toolId);
+    void onToolPrimaryActionActivated(bool activated);
 
 public:
     ThreadCounter recorderThreads{};

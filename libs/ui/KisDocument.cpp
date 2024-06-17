@@ -2031,7 +2031,11 @@ void KisDocument::setModified(bool mod)
         updateEditingTime(false);
     }
 
-    if (d->isAutosaving || d->documentIsClosing)   // ignore setModified calls due to autosaving
+    /// 1) Ignore setModified calls due to autosaving
+    /// 2) When closing a document, QUndoStack emits a lot of
+    ///    modified signals, when clearing itself, so we should
+    ///    ignore all of them.
+    if (d->isAutosaving || d->documentIsClosing)
         return;
 
     //dbgUI<<" url:" << url.path();

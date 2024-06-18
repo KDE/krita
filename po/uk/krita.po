@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 01:47+0000\n"
+"POT-Creation-Date: 2024-06-18 01:51+0000\n"
 "PO-Revision-Date: 2024-06-13 09:08+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
@@ -17329,7 +17329,7 @@ msgstr "Пропускання"
 msgid "Imported Image"
 msgstr "Імпортоване зображення"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2589
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2596
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19830,11 +19830,11 @@ msgstr "Локальні ресурси"
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
-#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
-#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:972
+#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1910 libs/ui/KisDocument.cpp:1954
+#: libs/ui/KisDocument.cpp:1960 libs/ui/KisDocument.cpp:1973
+#: libs/ui/KisDocument.cpp:1977 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19842,7 +19842,7 @@ msgstr "Локальні ресурси"
 #: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
-#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
 #: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
@@ -29192,64 +29192,75 @@ msgstr "Задіяти інструмент «Довільне позначен�
 msgid "Activate with Other Color"
 msgstr "Задіяти з іншим кольором"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:106
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Масштабувати полотно"
 
-#: libs/ui/input/kis_zoom_action.cpp:108
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
 "Дія <i>Масштабування полотна</i> виконує збільшення або зменшення області "
 "видимості на полотні."
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:110
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Режим масштабування"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Режим дискретного масштабування"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Режим відносного масштабування"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Режим відносного дискретного масштабування"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: libs/ui/input/kis_zoom_action.cpp:116
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:116
+#, fuzzy, kde-format
+#| msgid "No Cursor"
+msgid "Zoom In To Cursor"
+msgstr "Без курсора"
+
+#: libs/ui/input/kis_zoom_action.cpp:117
+#, kde-format
+msgid "Zoom Out From Cursor"
+msgstr ""
+
+#: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Масштаб у 100%"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View"
 msgstr "Підібрати за розмірами"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Розмір за шириною перегляду"
 
-#: libs/ui/input/kis_zoom_action.cpp:120
+#: libs/ui/input/kis_zoom_action.cpp:121
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Розмір за висотою перегляду"
@@ -30842,35 +30853,35 @@ msgstr ""
 "Клонувати документ\n"
 "клонування документа"
 
-#: libs/ui/KisDocument.cpp:733
+#: libs/ui/KisDocument.cpp:736
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 "Запис до %1 неможливий. Будь ласка, збережіть дані до файла з іншою назвою."
 
-#: libs/ui/KisDocument.cpp:783
+#: libs/ui/KisDocument.cpp:786
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Не вдалося створити файл резервної копії"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:803
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Не вдалося створити нумерований файл резервної копії"
 
-#: libs/ui/KisDocument.cpp:822
+#: libs/ui/KisDocument.cpp:825
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Експортуємо документ…"
 
-#: libs/ui/KisDocument.cpp:823
+#: libs/ui/KisDocument.cpp:826
 #, kde-format
 msgid "Saving Document..."
 msgstr "Зберігаємо документ…"
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:836
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30879,18 +30890,18 @@ msgstr ""
 "Не вдалося розпочати збереження %1. Зачекайте, доки буде завершено поточну "
 "дію зі збереження."
 
-#: libs/ui/KisDocument.cpp:962
+#: libs/ui/KisDocument.cpp:965
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Помилка під час збереження %1: %2"
 
-#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
+#: libs/ui/KisDocument.cpp:973 libs/ui/KisDocument.cpp:980
 #, kde-format
 msgid "Could not save %1."
 msgstr "Не вдалося зберегти %1."
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1002
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30898,45 +30909,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 було записано, але дані є неповними."
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1008
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Під час збереження виникли певні проблеми."
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1025
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Завершено збереження %1"
 
-#: libs/ui/KisDocument.cpp:1428
+#: libs/ui/KisDocument.cpp:1431
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Автозбереження… %1"
 
-#: libs/ui/KisDocument.cpp:1436
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving..."
 msgstr "Автозбереження…"
 
-#: libs/ui/KisDocument.cpp:1442
+#: libs/ui/KisDocument.cpp:1445
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Автозберення відкладено: документ зайнято…"
 
-#: libs/ui/KisDocument.cpp:1585
+#: libs/ui/KisDocument.cpp:1588
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Помилка під час автозбереження %1: %2"
 
-#: libs/ui/KisDocument.cpp:1599
+#: libs/ui/KisDocument.cpp:1602
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Завершено автозбереження %1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1844
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30945,38 +30956,38 @@ msgstr ""
 "Помилкове форматування шляху\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1910
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Файла %1 не існує."
 
-#: libs/ui/KisDocument.cpp:1936
+#: libs/ui/KisDocument.cpp:1939
 #, kde-format
 msgid "Opening document"
 msgstr "Відкриваємо документ"
 
-#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
+#: libs/ui/KisDocument.cpp:1955 libs/ui/KisDocument.cpp:1961
 #, kde-format
 msgid "Could not open %1."
 msgstr "Не вдалось відкрити %1."
 
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
+#: libs/ui/KisDocument.cpp:1974 libs/ui/KisDocument.cpp:1978
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Під час спроби відкрити %1 виникли проблеми."
 
-#: libs/ui/KisDocument.cpp:2110
+#: libs/ui/KisDocument.cpp:2117
 #, kde-format
 msgid "Not Saved"
 msgstr "Не збережено"
 
-#: libs/ui/KisDocument.cpp:2596
+#: libs/ui/KisDocument.cpp:2603
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Заповнення тла"
 
-#: libs/ui/KisDocument.cpp:2648
+#: libs/ui/KisDocument.cpp:2655
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31746,13 +31757,13 @@ msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Отримуємо зображення з %1…"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:77
+#: libs/ui/KisRemoteFileFetcher.cpp:74
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "Отримуємо зображення з %1... (%2 з %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:94
+#: libs/ui/KisRemoteFileFetcher.cpp:91
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."

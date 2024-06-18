@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 01:47+0000\n"
+"POT-Creation-Date: 2024-06-18 01:51+0000\n"
 "PO-Revision-Date: 2024-06-14 22:25+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -17190,7 +17190,7 @@ msgstr "Prepusti skozi"
 msgid "Imported Image"
 msgstr "Uvožena slika"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2589
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2596
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19577,11 +19577,11 @@ msgstr "Krajevni viri"
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
-#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
-#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:972
+#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1910 libs/ui/KisDocument.cpp:1954
+#: libs/ui/KisDocument.cpp:1960 libs/ui/KisDocument.cpp:1973
+#: libs/ui/KisDocument.cpp:1977 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19589,7 +19589,7 @@ msgstr "Krajevni viri"
 #: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
-#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
 #: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
@@ -28842,62 +28842,73 @@ msgstr "Aktiviraj orodje Prostoročni izbor"
 msgid "Activate with Other Color"
 msgstr "Aktiviraj z drugo barvo"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:106
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "Približaj platno"
 
-#: libs/ui/input/kis_zoom_action.cpp:108
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr "Dejanje <i>Približaj platno</i> približa pogled na platno."
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:110
 #, kde-format
 msgid "Zoom Mode"
 msgstr "Način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "Diskretni način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "Relativni način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "Relativni diskretni način povečave"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Zoom In"
 msgstr "Približaj"
 
-#: libs/ui/input/kis_zoom_action.cpp:116
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom Out"
 msgstr "Oddalji"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:116
+#, fuzzy, kde-format
+#| msgid "No Cursor"
+msgid "Zoom In To Cursor"
+msgstr "Brez kazalca"
+
+#: libs/ui/input/kis_zoom_action.cpp:117
+#, kde-format
+msgid "Zoom Out From Cursor"
+msgstr ""
+
+#: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "Približaj na 100 %"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View"
 msgstr "Prilagodi pogledu"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Width"
 msgstr "Prilagodi širini pogleda"
 
-#: libs/ui/input/kis_zoom_action.cpp:120
+#: libs/ui/input/kis_zoom_action.cpp:121
 #, kde-format
 msgid "Fit to View Height"
 msgstr "Prilagodi višini pogleda"
@@ -30401,34 +30412,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Kloniraj dokument"
 
-#: libs/ui/KisDocument.cpp:733
+#: libs/ui/KisDocument.cpp:736
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "V %1 ni možno pisati. Shranite pod drugim imenom."
 
-#: libs/ui/KisDocument.cpp:783
+#: libs/ui/KisDocument.cpp:786
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Datoteke varnostne kopije ni mogoče ustvariti."
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:803
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Oštevilčene datoteke varnostne kopije ni mogoče ustvariti."
 
-#: libs/ui/KisDocument.cpp:822
+#: libs/ui/KisDocument.cpp:825
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Izvažanje dokumenta ..."
 
-#: libs/ui/KisDocument.cpp:823
+#: libs/ui/KisDocument.cpp:826
 #, kde-format
 msgid "Saving Document..."
 msgstr "Shranjevanje dokumenta ..."
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:836
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30437,18 +30448,18 @@ msgstr ""
 "Ni bilo mogoče začeti shranjevanje %1. Počakajte, da se trenutna operacija "
 "shranjevanje konča."
 
-#: libs/ui/KisDocument.cpp:962
+#: libs/ui/KisDocument.cpp:965
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Napaka med shranjevanjem %1: %2"
 
-#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
+#: libs/ui/KisDocument.cpp:973 libs/ui/KisDocument.cpp:980
 #, kde-format
 msgid "Could not save %1."
 msgstr "Ni bilo mogoče shraniti %1."
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1002
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30456,45 +30467,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 je bil shranjen, vendar je nepopoln."
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1008
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Pri shranjevanju je prišlo do določenih težav."
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1025
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Dokončano shranjevanje %1"
 
-#: libs/ui/KisDocument.cpp:1428
+#: libs/ui/KisDocument.cpp:1431
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Samodejno shranjevanje ... %1"
 
-#: libs/ui/KisDocument.cpp:1436
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving..."
 msgstr "Samodejno shranjevanje ..."
 
-#: libs/ui/KisDocument.cpp:1442
+#: libs/ui/KisDocument.cpp:1445
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Samodejno shranjevanje preloženo: dokument je zaseden ..."
 
-#: libs/ui/KisDocument.cpp:1585
+#: libs/ui/KisDocument.cpp:1588
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Napaka pri samodejnem shranjevanju %1: %2"
 
-#: libs/ui/KisDocument.cpp:1599
+#: libs/ui/KisDocument.cpp:1602
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Samodejno shranjevanje %1 je končano"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1844
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30503,38 +30514,38 @@ msgstr ""
 "Nepravilno oblikovana pot\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1910
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Datoteka %1 ne obstaja."
 
-#: libs/ui/KisDocument.cpp:1936
+#: libs/ui/KisDocument.cpp:1939
 #, kde-format
 msgid "Opening document"
 msgstr "Odpiranje dokumenta"
 
-#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
+#: libs/ui/KisDocument.cpp:1955 libs/ui/KisDocument.cpp:1961
 #, kde-format
 msgid "Could not open %1."
 msgstr "Ni mogoče odpreti %1."
 
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
+#: libs/ui/KisDocument.cpp:1974 libs/ui/KisDocument.cpp:1978
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Prišlo je do težav pri odpiranju %1."
 
-#: libs/ui/KisDocument.cpp:2110
+#: libs/ui/KisDocument.cpp:2117
 #, kde-format
 msgid "Not Saved"
 msgstr "Ni shranjeno"
 
-#: libs/ui/KisDocument.cpp:2596
+#: libs/ui/KisDocument.cpp:2603
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Polnilo ozadja"
 
-#: libs/ui/KisDocument.cpp:2648
+#: libs/ui/KisDocument.cpp:2655
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31292,13 +31303,13 @@ msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "Prenašanje slike iz %1 ..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:77
+#: libs/ui/KisRemoteFileFetcher.cpp:74
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "Prejemanje slike iz %1 ... (%2/%3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:94
+#: libs/ui/KisRemoteFileFetcher.cpp:91
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."

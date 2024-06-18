@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 01:47+0000\n"
+"POT-Creation-Date: 2024-06-18 01:51+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -17215,7 +17215,7 @@ msgstr "通過"
 msgid "Imported Image"
 msgstr "画像をインポート"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2589
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2596
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19598,11 +19598,11 @@ msgstr "ローカルリソース"
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:969
-#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:996
-#: libs/ui/KisDocument.cpp:1907 libs/ui/KisDocument.cpp:1951
-#: libs/ui/KisDocument.cpp:1957 libs/ui/KisDocument.cpp:1970
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:972
+#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1910 libs/ui/KisDocument.cpp:1954
+#: libs/ui/KisDocument.cpp:1960 libs/ui/KisDocument.cpp:1973
+#: libs/ui/KisDocument.cpp:1977 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -19610,7 +19610,7 @@ msgstr "ローカルリソース"
 #: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
 #: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
-#: libs/ui/KisRemoteFileFetcher.cpp:92 libs/ui/KisTemplateCreateDia.cpp:284
+#: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
 #: libs/ui/KisView.cpp:1193 libs/ui/KisWelcomePageWidget.cpp:726
 #: libs/ui/KisWindowLayoutResource.cpp:375
@@ -28844,63 +28844,74 @@ msgstr "フリーハンド選択ツールをアクティブ化"
 msgid "Activate with Other Color"
 msgstr "直線ツールをアクティブ化"
 
-#: libs/ui/input/kis_zoom_action.cpp:107
+#: libs/ui/input/kis_zoom_action.cpp:106
 #, kde-format
 msgid "Zoom Canvas"
 msgstr "キャンバスの表示倍率変更"
 
-#: libs/ui/input/kis_zoom_action.cpp:108
+#: libs/ui/input/kis_zoom_action.cpp:107
 #, kde-format
 msgid "The <i>Zoom Canvas</i> action zooms the canvas."
 msgstr ""
 "「<i>キャンバスの表示倍率変更</i>」操作はキャンバスの表示倍率を変更します"
 
-#: libs/ui/input/kis_zoom_action.cpp:111
+#: libs/ui/input/kis_zoom_action.cpp:110
 #, kde-format
 msgid "Zoom Mode"
 msgstr "表示倍率変更モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:112
+#: libs/ui/input/kis_zoom_action.cpp:111
 #, kde-format
 msgid "Discrete Zoom Mode"
 msgstr "個別拡大モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:113
+#: libs/ui/input/kis_zoom_action.cpp:112
 #, kde-format
 msgid "Relative Zoom Mode"
 msgstr "相対倍率変更モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:114
+#: libs/ui/input/kis_zoom_action.cpp:113
 #, kde-format
 msgid "Relative Discrete Zoom Mode"
 msgstr "段階的倍率変更モード"
 
-#: libs/ui/input/kis_zoom_action.cpp:115
+#: libs/ui/input/kis_zoom_action.cpp:114
 #, kde-format
 msgid "Zoom In"
 msgstr "倍率拡大"
 
-#: libs/ui/input/kis_zoom_action.cpp:116
+#: libs/ui/input/kis_zoom_action.cpp:115
 #, kde-format
 msgid "Zoom Out"
 msgstr "倍率縮小"
 
-#: libs/ui/input/kis_zoom_action.cpp:117 libs/ui/kis_popup_palette.cpp:192
+#: libs/ui/input/kis_zoom_action.cpp:116
+#, fuzzy, kde-format
+#| msgid "No Cursor"
+msgid "Zoom In To Cursor"
+msgstr "カーソルなし"
+
+#: libs/ui/input/kis_zoom_action.cpp:117
+#, kde-format
+msgid "Zoom Out From Cursor"
+msgstr ""
+
+#: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
 msgid "Zoom to 100%"
 msgstr "倍率を100%にリセット"
 
-#: libs/ui/input/kis_zoom_action.cpp:118
+#: libs/ui/input/kis_zoom_action.cpp:119
 #, kde-format
 msgid "Fit to View"
 msgstr "表示領域に合わせる"
 
-#: libs/ui/input/kis_zoom_action.cpp:119
+#: libs/ui/input/kis_zoom_action.cpp:120
 #, kde-format
 msgid "Fit to View Width"
 msgstr "表示領域の幅に合わせる"
 
-#: libs/ui/input/kis_zoom_action.cpp:120
+#: libs/ui/input/kis_zoom_action.cpp:121
 #, kde-format
 msgid "Fit to View Height"
 msgstr "表示領域の高さに合わせる"
@@ -30405,34 +30416,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "ドキュメントの複製"
 
-#: libs/ui/KisDocument.cpp:733
+#: libs/ui/KisDocument.cpp:736
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1 には書き込みできません。別の名前で保存してください。"
 
-#: libs/ui/KisDocument.cpp:783
+#: libs/ui/KisDocument.cpp:786
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "バックアップファイルの作成に失敗しました。"
 
-#: libs/ui/KisDocument.cpp:800
+#: libs/ui/KisDocument.cpp:803
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "番号付きバックアップファイルの作成に失敗しました。"
 
-#: libs/ui/KisDocument.cpp:822
+#: libs/ui/KisDocument.cpp:825
 #, kde-format
 msgid "Exporting Document..."
 msgstr "ドキュメントをエクスポート中..."
 
-#: libs/ui/KisDocument.cpp:823
+#: libs/ui/KisDocument.cpp:826
 #, kde-format
 msgid "Saving Document..."
 msgstr "ドキュメントを保存中..."
 
-#: libs/ui/KisDocument.cpp:833
+#: libs/ui/KisDocument.cpp:836
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30440,18 +30451,18 @@ msgid ""
 msgstr ""
 "%1 の保存を開始できませんでした。現在の保存操作が終了するまでお待ちください。"
 
-#: libs/ui/KisDocument.cpp:962
+#: libs/ui/KisDocument.cpp:965
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "保存中のエラー %1: %2"
 
-#: libs/ui/KisDocument.cpp:970 libs/ui/KisDocument.cpp:977
+#: libs/ui/KisDocument.cpp:973 libs/ui/KisDocument.cpp:980
 #, kde-format
 msgid "Could not save %1."
 msgstr "%1 の保存に失敗しました。"
 
-#: libs/ui/KisDocument.cpp:999
+#: libs/ui/KisDocument.cpp:1002
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30459,45 +30470,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 は保存されましたが、不完全です。"
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1008
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "保存時に問題が発生しました。"
 
-#: libs/ui/KisDocument.cpp:1022
+#: libs/ui/KisDocument.cpp:1025
 #, kde-format
 msgid "Finished saving %1"
 msgstr "保存が完了しました %1"
 
-#: libs/ui/KisDocument.cpp:1428
+#: libs/ui/KisDocument.cpp:1431
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "自動保存中... %1"
 
-#: libs/ui/KisDocument.cpp:1436
+#: libs/ui/KisDocument.cpp:1439
 #, kde-format
 msgid "Autosaving..."
 msgstr "自動保存中..."
 
-#: libs/ui/KisDocument.cpp:1442
+#: libs/ui/KisDocument.cpp:1445
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "自動保存が延期されました: ドキュメントが使用中です..."
 
-#: libs/ui/KisDocument.cpp:1585
+#: libs/ui/KisDocument.cpp:1588
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "自動保存中のエラー %1: %2"
 
-#: libs/ui/KisDocument.cpp:1599
+#: libs/ui/KisDocument.cpp:1602
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "自動保存が完了しました %1"
 
-#: libs/ui/KisDocument.cpp:1841
+#: libs/ui/KisDocument.cpp:1844
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30506,38 +30517,38 @@ msgstr ""
 "パスの形式が不正です\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1907
+#: libs/ui/KisDocument.cpp:1910
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "ファイル %1 がありません。"
 
-#: libs/ui/KisDocument.cpp:1936
+#: libs/ui/KisDocument.cpp:1939
 #, kde-format
 msgid "Opening document"
 msgstr "ドキュメントを開いています"
 
-#: libs/ui/KisDocument.cpp:1952 libs/ui/KisDocument.cpp:1958
+#: libs/ui/KisDocument.cpp:1955 libs/ui/KisDocument.cpp:1961
 #, kde-format
 msgid "Could not open %1."
 msgstr "%1 を開けませんでした。"
 
-#: libs/ui/KisDocument.cpp:1971 libs/ui/KisDocument.cpp:1975
+#: libs/ui/KisDocument.cpp:1974 libs/ui/KisDocument.cpp:1978
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "%1 を開いている最中に問題が発生しました。"
 
-#: libs/ui/KisDocument.cpp:2110
+#: libs/ui/KisDocument.cpp:2117
 #, kde-format
 msgid "Not Saved"
 msgstr "未保存"
 
-#: libs/ui/KisDocument.cpp:2596
+#: libs/ui/KisDocument.cpp:2603
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "塗りつぶしの背景"
 
-#: libs/ui/KisDocument.cpp:2648
+#: libs/ui/KisDocument.cpp:2655
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31295,13 +31306,13 @@ msgctxt "Fetching remote image"
 msgid "Downloading image from %1..."
 msgstr "%1 から画像をダウンロード中..."
 
-#: libs/ui/KisRemoteFileFetcher.cpp:77
+#: libs/ui/KisRemoteFileFetcher.cpp:74
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Downloading image from %1... (%2 / %3)"
 msgstr "%1 から画像をダウンロード中... (%2 / %3)"
 
-#: libs/ui/KisRemoteFileFetcher.cpp:94
+#: libs/ui/KisRemoteFileFetcher.cpp:91
 #, kde-format
 msgctxt "Fetching remote image"
 msgid "Could not download %1."

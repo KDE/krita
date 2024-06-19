@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013, 2014.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
 # -- kritalibs
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -48,16 +48,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 03:20+0000\n"
-"PO-Revision-Date: 2023-11-10 16:10+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"POT-Creation-Date: 2024-06-19 03:13+0000\n"
+"PO-Revision-Date: 2024-06-18 14:49+0200\n"
+"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 24.05.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -17117,7 +17117,7 @@ msgstr "Změnit rozlišení obrázku"
 #: libs/image/kis_image.cc:1033
 msgctxt "(qtundo-format)"
 msgid "Scale Layer"
-msgstr ""
+msgstr "Měřítko vrstvy"
 
 #: libs/image/kis_image.cc:1158
 msgctxt "(qtundo-format)"
@@ -17132,7 +17132,7 @@ msgstr "Otočit masku"
 #: libs/image/kis_image.cc:1166
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
-msgstr ""
+msgstr "Otočit vrstvu"
 
 #: libs/image/kis_image.cc:1247
 msgctxt "(qtundo-format)"
@@ -17142,7 +17142,7 @@ msgstr "Zkosit masku"
 #: libs/image/kis_image.cc:1250
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
-msgstr ""
+msgstr "Zkosit vrstvu"
 
 #: libs/image/kis_image.cc:1257
 msgctxt "(qtundo-format)"
@@ -23238,14 +23238,14 @@ msgstr "Posun Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23253,7 +23253,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23282,7 +23282,7 @@ msgstr "Jméno palety:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr ""
@@ -23296,7 +23296,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -24731,13 +24731,13 @@ msgid "Layer Name:"
 msgstr "Název vrstvy:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, kde-format
 msgid "Storage location:"
 msgstr "Umístění úložiště:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, kde-format
 msgid "Swatch group:"
 msgstr ""
@@ -28922,7 +28922,7 @@ msgstr ""
 #: libs/ui/kis_node_manager.cpp:1038
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer X"
-msgstr ""
+msgstr "Zrcadlení vrstvy X"
 
 #: libs/ui/kis_node_manager.cpp:1040
 msgctxt "(qtundo-format)"
@@ -28932,7 +28932,7 @@ msgstr "Zrcadlení masky podle X"
 #: libs/ui/kis_node_manager.cpp:1051
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Y"
-msgstr ""
+msgstr "Zrcadlení vrstvy Y"
 
 #: libs/ui/kis_node_manager.cpp:1053
 msgctxt "(qtundo-format)"
@@ -29276,6 +29276,25 @@ msgid ""
 "lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
 "\">Scripting School</span></a></p></td></table></body></html>"
 msgstr ""
+"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
+"style=\" color:%1;\"><b>Použití aplikace Krita</b></span></p><p><a href="
+"\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Podpořte vývoj aplikace Krita.</span></a></p><p><a href="
+"\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style="
+"\" text-decoration: underline; color:%1;\">Začínáme</span></a></p><p><a href="
+"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
+"%1;\">Manuál</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
+"text-decoration: underline; color:%1;\">Webové stránky Krita</span></a></p></"
+"td><td><p><span style=\" color:%1;\"><b>Programování aplikace Krita</b></"
+"span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
+"decoration: underline; color:%1;\">Komunita uživatelů</span></a></p><p><a "
+"href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Zdrojové kódy</span></a></p><p><a href="
+"\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-"
+"decoration: underline; color:%1;\">Skriptovací API</span></a></p><p><a href="
+"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
+"decoration: underline; color:%1;\">Škola skriptování</span></a></p></td></"
+"table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -31999,22 +32018,22 @@ msgstr "Zmenšit velikost štětce"
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
 #, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr ""
+msgstr "Otočit špičku štětce ve směru hodinových ručiček"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
 #, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr ""
+msgstr "Otočit špičku štětce ve směru hodinových ručiček (přesně)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
 #, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr ""
+msgstr "Otočit špičku štětce proti směru hodinových ručiček"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
 #, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr ""
+msgstr "Otočit špičku štětce proti směru hodinových ručiček (přesně)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -39674,7 +39693,7 @@ msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
 msgid "Static"
-msgstr ""
+msgstr "Statický"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
@@ -39683,7 +39702,7 @@ msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamický"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -41640,13 +41659,13 @@ msgstr "Posunout obrázek"
 #: plugins/extensions/offsetimage/offsetimage.cpp:80
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
-msgstr ""
+msgstr "Posunout vrstvu"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:81
 #, kde-format
 msgctxt "@title:window"
 msgid "Offset Layer"
-msgstr ""
+msgstr "Posunout vrstvu"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -42487,7 +42506,7 @@ msgstr "Zrcadlit obrázek vodorovně"
 #: plugins/extensions/rotateimage/rotateimage.cc:144
 #, kde-format
 msgid "Rotate Layer"
-msgstr ""
+msgstr "Otočit vrstvu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -42628,7 +42647,7 @@ msgstr "Zkosit obrázek"
 #: plugins/extensions/shearimage/shearimage.cc:72
 #, kde-format
 msgid "Shear Layer"
-msgstr ""
+msgstr "Zkosit vrstvu"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -56548,7 +56567,7 @@ msgstr "Práh: "
 #, kde-format
 msgctxt "The 'spread' spinbox prefix in similar color selection tool options"
 msgid "Spread: "
-msgstr ""
+msgstr "Rozptyl: "
 
 #: plugins/tools/selectiontools/kis_tool_select_similar.cc:260
 #, kde-format

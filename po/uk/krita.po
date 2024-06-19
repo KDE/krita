@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 03:20+0000\n"
+"POT-Creation-Date: 2024-06-19 03:13+0000\n"
 "PO-Revision-Date: 2024-03-21 22:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -23743,14 +23743,14 @@ msgstr "Відступ за Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Додати групу зразків"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23758,7 +23758,7 @@ msgstr "Вилучити позначену групу"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23787,7 +23787,7 @@ msgstr "Назва палітри:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Параметри групи зразків"
@@ -23801,7 +23801,7 @@ msgstr "Стовпчиків зразків:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Рядків зразків у групі:"
@@ -25292,13 +25292,13 @@ msgid "Layer Name:"
 msgstr "Назва шару:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, kde-format
 msgid "Storage location:"
 msgstr "Розташування сховища:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, kde-format
 msgid "Swatch group:"
 msgstr "Група зразків:"

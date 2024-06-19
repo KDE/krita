@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 03:20+0000\n"
+"POT-Creation-Date: 2024-06-19 03:13+0000\n"
 "PO-Revision-Date: 2024-04-10 00:25+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -23535,14 +23535,14 @@ msgstr "Desplazamiento Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Añadir un grupo de muestra"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23550,7 +23550,7 @@ msgstr "Eliminar el grupo seleccionado"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23579,7 +23579,7 @@ msgstr "Nombre de la paleta:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Opciones del grupo de muestra"
@@ -23593,7 +23593,7 @@ msgstr "Columnas de las muestras:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Filas de las muestras del grupo:"
@@ -25089,13 +25089,13 @@ msgid "Layer Name:"
 msgstr "Nombre de la capa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, kde-format
 msgid "Storage location:"
 msgstr "Ubicación de almacenamiento:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, kde-format
 msgid "Swatch group:"
 msgstr "Grupo de muestra:"

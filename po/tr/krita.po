@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 03:20+0000\n"
+"POT-Creation-Date: 2024-06-19 03:13+0000\n"
 "PO-Revision-Date: 2024-05-06 00:54+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -23455,14 +23455,14 @@ msgstr "Y ofseti:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Yeni örnek grubu ekle"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23470,7 +23470,7 @@ msgstr "Seçili grubu kaldır"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23499,7 +23499,7 @@ msgstr "Palet adı:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Örnek Grubu Seçenekleri"
@@ -23513,7 +23513,7 @@ msgstr "Örnek sütunları:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Gruptaki örnek satırları:"
@@ -24993,13 +24993,13 @@ msgid "Layer Name:"
 msgstr "Katman adı:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, kde-format
 msgid "Storage location:"
 msgstr "Depolama konumu:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, kde-format
 msgid "Swatch group:"
 msgstr "Örnek grubu:"

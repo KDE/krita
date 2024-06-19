@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-17 03:20+0000\n"
+"POT-Creation-Date: 2024-06-19 03:13+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -25241,7 +25241,7 @@ msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, fuzzy, kde-format
 #| msgid "Group"
 msgid "Add a swatch group"
@@ -25249,7 +25249,7 @@ msgstr "ਗਰੁੱਪ"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, fuzzy, kde-format
 #| msgid "Delete Page"
 msgctxt "Group as Swatch Group in a Palette"
@@ -25258,7 +25258,7 @@ msgstr "ਸਫ਼ਾ ਹਟਾਓ"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "Group as Swatch Group in a Palette"
@@ -25291,7 +25291,7 @@ msgstr "ਸਫ਼ਾ %1"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, fuzzy, kde-format
 #| msgid "Change master slide"
 msgid "Swatch Group options"
@@ -25307,7 +25307,7 @@ msgstr "ਰੇਖਾ ਰੰਗ"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -26837,14 +26837,14 @@ msgid "Layer Name:"
 msgstr "ਨਾਂ"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, fuzzy, kde-format
 #| msgid "Change Connection"
 msgid "Storage location:"
 msgstr "ਕੁਨੈਕਸ਼ਨ ਬਦਲੋ"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, fuzzy, kde-format
 #| msgid "Change master slide"
 msgid "Swatch group:"

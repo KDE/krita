@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-18 01:51+0000\n"
+"POT-Creation-Date: 2024-06-19 01:43+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -9595,6 +9595,8 @@ msgstr "Masc Roghnaithe"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1019 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
@@ -9604,6 +9606,7 @@ msgstr "Masc Roghnaithe"
 #: plugins/filters/halftone/halftone.action:4
 #: plugins/filters/normalize/normalize.action:4
 #: plugins/filters/palettize/palettize.action:4
+#: plugins/filters/propagatecolors/propagatecolors.action:4
 #: plugins/filters/threshold/threshold.action:4
 #, fuzzy, kde-format
 msgctxt "Filter as an effect"
@@ -16141,27 +16144,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Samhail de dhathanna:"
 
-#: krita/main.cc:578
+#: krita/main.cc:571
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Ingearach"
 
-#: krita/main.cc:579
+#: krita/main.cc:572
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:691 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Rabhadh!"
 
-#: krita/main.cc:699
+#: krita/main.cc:692
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -16169,12 +16172,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:721 krita/main.cc:726
+#: krita/main.cc:714 krita/main.cc:719
 #, fuzzy, kde-format
 msgid "Krita Tablet Support"
 msgstr "Krita %1"
 
-#: krita/main.cc:722
+#: krita/main.cc:715
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -16182,7 +16185,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:727
+#: krita/main.cc:720
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -17152,9 +17155,9 @@ msgstr "Méid"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:486
-#: plugins/tools/basictools/kis_tool_multihand.cpp:497
-#: plugins/tools/basictools/kis_tool_multihand.cpp:499
+#: plugins/tools/basictools/kis_tool_multihand.cpp:479
+#: plugins/tools/basictools/kis_tool_multihand.cpp:490
+#: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -23817,14 +23820,14 @@ msgstr "Fritháireamh Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, fuzzy, kde-format
 msgid "Add a swatch group"
 msgstr "Cuir giuirléidí le grúpa"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, fuzzy, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23832,7 +23835,7 @@ msgstr "Ainm na sraithe:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, fuzzy, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23862,7 +23865,7 @@ msgstr "Oibriú an Phailéid"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch Group options"
@@ -23877,7 +23880,7 @@ msgstr "Spás datha:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -25402,13 +25405,13 @@ msgid "Layer Name:"
 msgstr "Ainm na &Sraithe:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, fuzzy, kde-format
 msgid "Storage location:"
 msgstr "Sáithiú"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, fuzzy, kde-format
 #| msgid "Enter group name:"
 msgid "Swatch group:"
@@ -33019,7 +33022,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:550
+#: plugins/tools/basictools/kis_tool_multihand.cpp:543
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -43344,25 +43347,25 @@ msgstr[4] "Fritháireamh X:"
 msgid "Offset by x/2, y/2"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:77
+#: plugins/extensions/pykrita/kritarunner/main.cpp:72
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:80
+#: plugins/extensions/pykrita/kritarunner/main.cpp:75
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:83
+#: plugins/extensions/pykrita/kritarunner/main.cpp:78
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:86
+#: plugins/extensions/pykrita/kritarunner/main.cpp:81
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
@@ -46290,23 +46293,165 @@ msgstr "Roghanna Alfa"
 msgid "Posterize"
 msgstr "&Picteilínigh..."
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:46
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:49
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Rectangle"
+msgstr "Dronuilleog"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
+#, kde-format
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Diamond"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
+#, fuzzy, kde-format
+#| msgid "Rotation"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Octagon"
+msgstr "Rothlú"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
+#, kde-format
+msgctxt "Expansion distance button in propagate colors filter"
+msgid "Unrestricted"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
+#, fuzzy, kde-format
+msgctxt "Expansion distance button in propagate colors filter"
+msgid "Restricted"
+msgstr "Tosaigh"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
+#, fuzzy, kde-format
+#| msgid "Brush size"
+msgctxt ""
+"The 'maximum distance' slider in propagate colors filter; {n} is the number "
+"value, px is the pixels suffix"
+msgid "Maximum Distance: {n}px"
+msgstr "Méid na scuaibe"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
+#, fuzzy, kde-format
+#| msgid "Expand..."
+msgctxt "Transparency behavior button in propagate colors filter"
+msgid "Expand"
+msgstr "Leathnaigh..."
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Pressure"
+msgctxt "Transparency behavior button in propagate colors filter"
+msgid "Preserve"
+msgstr "Brú"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
+#, kde-format
+msgid "Expand the colors in a rectangular-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
+#, kde-format
+msgid "Expand the colors in a diamond-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
+#, kde-format
+msgid "Expand the colors in a octagonal-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
+#, kde-format
+msgid "Expand the colors all the way until all transparent regions are filled"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
+#, kde-format
+msgid "Expand the colors only until a specific distance"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
+#, kde-format
+msgid ""
+"Specify the maximum distance to expand when the restricted mode is active"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
+#, kde-format
+msgid "Expand the alpha channel as well as the color"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
+#, kde-format
+msgid "Expand only the color, leaving the alpha channel untouched"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "Custom Pattern"
+msgctxt "The 'distance metric' section label in propagate colors filter dialog"
+msgid "Expansion Pattern"
+msgstr "Patrún Saincheaptha"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
+#, fuzzy, kde-format
+#| msgid "Distance"
+msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
+msgid "Expansion Distance"
+msgstr "Fad"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
+#, fuzzy, kde-format
+msgctxt ""
+"The 'transparency behavior' section label in propagate colors filter dialog"
+msgid "Transparency Behavior"
+msgstr "Tréshoilseán Trí Thine"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
+#, fuzzy, kde-format
+#| msgid "Tropical Colors"
+msgid "Propagate Colors"
+msgstr "Dathanna Trópaiceacha"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
+#, fuzzy, kde-format
+msgid "&Propagate Colors..."
+msgstr "Cuir Dath Nua Leis..."
+
+#. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#: plugins/filters/propagatecolors/propagatecolors.action:7
+#: plugins/filters/propagatecolors/propagatecolors.action:9
+#: plugins/filters/propagatecolors/propagatecolors.action:10
+#, fuzzy, kde-format
+msgctxt "action"
+msgid "Propagate Colors Filter"
+msgstr "Athraigh Scagaire"
+
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
 msgid "&Raindrops..."
 msgstr "&Braonta báistí..."
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:381
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
 #, kde-format
 msgid "Drop size"
 msgstr "Méid na mbraonta"
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
 #, fuzzy, kde-format
 #| msgid "Number of rows"
 msgid "Number of drops"
 msgstr "Líon na rónna"
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:384
 #, kde-format
 msgid "Fish eyes"
 msgstr "Súil an éisc"
@@ -58132,45 +58277,45 @@ msgstr ""
 msgid "Move Tool"
 msgstr "Gan Uirlis Bheo"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:57
+#: plugins/tools/basictools/kis_tool_multihand.cpp:50
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Uirlis Scuaibe"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:447
 #, kde-format
 msgid "Symmetry"
 msgstr "Siméadracht"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:448
 #, fuzzy, kde-format
 #| msgid "Mirror"
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Scáthán"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:456
+#: plugins/tools/basictools/kis_tool_multihand.cpp:449
 #, fuzzy, kde-format
 msgid "Translate"
 msgstr "Triantán"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:457
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:458
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, fuzzy, kde-format
 msgid "Copy Translate"
 msgstr "Triantán"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:459
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, fuzzy, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "Triantán"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:570
+#: plugins/tools/basictools/kis_tool_multihand.cpp:563
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
@@ -88091,10 +88236,6 @@ msgstr "Athainmnigh Íomhá"
 #~ msgstr "Scuaba Réamhshocraithe"
 
 #, fuzzy
-#~ msgid "Choose Filter"
-#~ msgstr "Athraigh Scagaire"
-
-#, fuzzy
 #~| msgid "Move layer or mask down"
 #~ msgctxt "action"
 #~ msgid "Move Layer or Mask down"
@@ -89568,9 +89709,6 @@ msgstr "Athainmnigh Íomhá"
 #~ msgid "Sunrise"
 #~ msgstr "Éirí Gréine"
 
-#~ msgid "Tropical Colors"
-#~ msgstr "Dathanna Trópaiceacha"
-
 #~ msgid "Wood 1"
 #~ msgstr "Adhmad 1"
 
@@ -89971,9 +90109,6 @@ msgstr "Athainmnigh Íomhá"
 
 #~ msgid "Applying pixelize filter..."
 #~ msgstr "Scagaire picteilínithe á chur i bhfeidhm..."
-
-#~ msgid "Expand..."
-#~ msgstr "Leathnaigh..."
 
 #~ msgid "Contract..."
 #~ msgstr "Crap..."

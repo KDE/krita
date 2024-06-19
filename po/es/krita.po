@@ -65,7 +65,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-18 01:51+0000\n"
+"POT-Creation-Date: 2024-06-19 01:43+0000\n"
 "PO-Revision-Date: 2024-06-14 01:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -9387,6 +9387,8 @@ msgstr "Mostrar máscara de selección global"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1019 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
@@ -9396,6 +9398,7 @@ msgstr "Mostrar máscara de selección global"
 #: plugins/filters/halftone/halftone.action:4
 #: plugins/filters/normalize/normalize.action:4
 #: plugins/filters/palettize/palettize.action:4
+#: plugins/filters/propagatecolors/propagatecolors.action:4
 #: plugins/filters/threshold/threshold.action:4
 #, kde-format
 msgctxt "Filter as an effect"
@@ -15929,13 +15932,13 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Espacios de trabajo"
 
-#: krita/main.cc:578
+#: krita/main.cc:571
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Error fatal"
 
-#: krita/main.cc:579
+#: krita/main.cc:572
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
@@ -15944,14 +15947,14 @@ msgstr ""
 "Krita no funciona en la plataforma Wayland. Use XWayland para ejecutar Krita "
 "en Wayland. Krita se cerrará ahora."
 
-#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:691 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Advertencia"
 
-#: krita/main.cc:699
+#: krita/main.cc:692
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15962,12 +15965,12 @@ msgstr ""
 "Esto no está recomendado. Por favor, no informe de ningún error.\n"
 "Actualice a una versión de Windows compatible: Windows 7, 8, 8.1 o 10."
 
-#: krita/main.cc:721 krita/main.cc:726
+#: krita/main.cc:714 krita/main.cc:719
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr "Uso de tabletas en Krita"
 
-#: krita/main.cc:722
+#: krita/main.cc:715
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15978,7 +15981,7 @@ msgstr ""
 "dispositivos de lápiz Windows Ink. Si tiene una tableta de dibujo, asegúrese "
 "de que su controlador se ha instalado correctamente."
 
-#: krita/main.cc:727
+#: krita/main.cc:720
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16900,9 +16903,9 @@ msgstr "Tamaño"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:486
-#: plugins/tools/basictools/kis_tool_multihand.cpp:497
-#: plugins/tools/basictools/kis_tool_multihand.cpp:499
+#: plugins/tools/basictools/kis_tool_multihand.cpp:479
+#: plugins/tools/basictools/kis_tool_multihand.cpp:490
+#: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -23518,14 +23521,14 @@ msgstr "Desplazamiento Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr "Añadir un grupo de muestra"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23533,7 +23536,7 @@ msgstr "Eliminar el grupo seleccionado"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23562,7 +23565,7 @@ msgstr "Nombre de la paleta:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr "Opciones del grupo de muestra"
@@ -23576,7 +23579,7 @@ msgstr "Columnas de las muestras:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr "Filas de las muestras del grupo:"
@@ -25129,13 +25132,13 @@ msgid "Layer Name:"
 msgstr "Nombre de la capa:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, kde-format
 msgid "Storage location:"
 msgstr "Ubicación de almacenamiento:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, kde-format
 msgid "Swatch group:"
 msgstr "Grupo de muestra:"
@@ -32893,7 +32896,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:550
+#: plugins/tools/basictools/kis_tool_multihand.cpp:543
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -43282,25 +43285,25 @@ msgstr[1] "Desplazar %1 capas"
 msgid "Offset by x/2, y/2"
 msgstr "Desplazar por x/2, y/2"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:77
+#: plugins/extensions/pykrita/kritarunner/main.cpp:72
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
 msgstr "No ha sido posible cargar la biblioteca de Python"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:80
+#: plugins/extensions/pykrita/kritarunner/main.cpp:75
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
 msgstr "No ha sido posible definir las rutas de Python"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:83
+#: plugins/extensions/pykrita/kritarunner/main.cpp:78
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
 msgstr "No se ha podido cargar el módulo integrado «pykrita»"
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:86
+#: plugins/extensions/pykrita/kritarunner/main.cpp:81
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
@@ -46208,22 +46211,171 @@ msgstr "Pasos"
 msgid "Posterize"
 msgstr "Posterizar"
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:46
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:49
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Rectangle"
+msgstr "Rectángulo"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
+#, fuzzy, kde-format
+#| msgctxt "Gradient type - Diamond"
+#| msgid "Diamond"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Diamond"
+msgstr "Diamante"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
+#, fuzzy, kde-format
+#| msgid "Octagon (8)"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Octagon"
+msgstr "Octágono (8)"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
+#, kde-format
+msgctxt "Expansion distance button in propagate colors filter"
+msgid "Unrestricted"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
+#, fuzzy, kde-format
+#| msgctxt "Button to restart the timelapse video configuring"
+#| msgid "Restart"
+msgctxt "Expansion distance button in propagate colors filter"
+msgid "Restricted"
+msgstr "Reiniciar"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
+#, fuzzy, kde-format
+#| msgid "Maximum brush speed: {n} px/ms"
+#| msgid_plural "Maximum brush speed: {n} px/ms"
+msgctxt ""
+"The 'maximum distance' slider in propagate colors filter; {n} is the number "
+"value, px is the pixels suffix"
+msgid "Maximum Distance: {n}px"
+msgstr "Velocidad máxima del pincel: {n} px/ms"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
+#, kde-format
+msgctxt "Transparency behavior button in propagate colors filter"
+msgid "Expand"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Pressure"
+msgctxt "Transparency behavior button in propagate colors filter"
+msgid "Preserve"
+msgstr "Presión"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
+#, kde-format
+msgid "Expand the colors in a rectangular-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
+#, kde-format
+msgid "Expand the colors in a diamond-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
+#, kde-format
+msgid "Expand the colors in a octagonal-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
+#, kde-format
+msgid "Expand the colors all the way until all transparent regions are filled"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
+#, kde-format
+msgid "Expand the colors only until a specific distance"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
+#, kde-format
+msgid ""
+"Specify the maximum distance to expand when the restricted mode is active"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
+#, kde-format
+msgid "Expand the alpha channel as well as the color"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
+#, kde-format
+msgid "Expand only the color, leaving the alpha channel untouched"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "Expanding Spacer"
+msgctxt "The 'distance metric' section label in propagate colors filter dialog"
+msgid "Expansion Pattern"
+msgstr "Separador de expansión"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
+#, fuzzy, kde-format
+#| msgid "Expanding Spacer"
+msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
+msgid "Expansion Distance"
+msgstr "Separador de expansión"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
+#, fuzzy, kde-format
+#| msgid "Transparency Mask"
+msgctxt ""
+"The 'transparency behavior' section label in propagate colors filter dialog"
+msgid "Transparency Behavior"
+msgstr "Máscara de transparencia"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
+#, fuzzy, kde-format
+#| msgid "Tropical Colors"
+msgid "Propagate Colors"
+msgstr "Colores tropicales"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
+#, fuzzy, kde-format
+#| msgid "&Index Colors..."
+msgid "&Propagate Colors..."
+msgstr "Colores &indexados..."
+
+#. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#: plugins/filters/propagatecolors/propagatecolors.action:7
+#: plugins/filters/propagatecolors/propagatecolors.action:9
+#: plugins/filters/propagatecolors/propagatecolors.action:10
+#, fuzzy, kde-format
+#| msgid "Painterly Color Mixer"
+msgctxt "action"
+msgid "Propagate Colors Filter"
+msgstr "Mezclador de color pictórico"
+
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
 msgid "&Raindrops..."
 msgstr "Gotas de ll&uvia..."
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:381
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
 #, kde-format
 msgid "Drop size"
 msgstr "Tamaño de la gota"
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
 #, kde-format
 msgid "Number of drops"
 msgstr "Número de gotas"
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:384
 #, kde-format
 msgid "Fish eyes"
 msgstr "Ojos de pez"
@@ -58082,43 +58234,43 @@ msgstr "El área seleccionada no contiene píxeles"
 msgid "Move Tool"
 msgstr "Herramienta para mover"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:57
+#: plugins/tools/basictools/kis_tool_multihand.cpp:50
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Trazo de pincel múltiple"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:447
 #, kde-format
 msgid "Symmetry"
 msgstr "Simetría"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:448
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Espejo"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:456
+#: plugins/tools/basictools/kis_tool_multihand.cpp:449
 #, kde-format
 msgid "Translate"
 msgstr "Traducir"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:457
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, kde-format
 msgid "Snowflake"
 msgstr "Copo de nieve"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:458
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Copy Translate"
 msgstr "Copiar traducir"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:459
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgid "Copy Translate at Intervals"
 msgstr "Copiar traducir a intervalos"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:570
+#: plugins/tools/basictools/kis_tool_multihand.cpp:563
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
@@ -96361,9 +96513,6 @@ msgstr "Herramienta de imágenes de referencia"
 #~ msgid "Absorption"
 #~ msgstr "Absorción"
 
-#~ msgid "Painterly Color Mixer"
-#~ msgstr "Mezclador de color pictórico"
-
 #~ msgid "Unknown pattern \"%1\""
 #~ msgstr "Patrón desconocido «%1»"
 
@@ -96621,9 +96770,6 @@ msgstr "Herramienta de imágenes de referencia"
 
 #~ msgid "Three bars sin"
 #~ msgstr "Tres barrotes"
-
-#~ msgid "Tropical Colors"
-#~ msgstr "Colores tropicales"
 
 #~ msgid "Tube Red"
 #~ msgstr "Tubo rojo"

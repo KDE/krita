@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2023 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013, 2014.
-# Vit Pelcak <vit@pelcak.org>, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
 #
 # -- kritalibs
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
@@ -48,16 +48,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-18 01:51+0000\n"
-"PO-Revision-Date: 2023-11-10 16:10+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"POT-Creation-Date: 2024-06-19 01:43+0000\n"
+"PO-Revision-Date: 2024-06-18 16:11+0200\n"
+"Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 24.05.1\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -9356,6 +9356,8 @@ msgstr "Zobrazit masku globálního výběru"
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Actions (Filters), ActionCollection (Krita)
 #: krita/krita.action:1019 plugins/dockers/logdocker/LogDockerDock.cpp:148
 #: plugins/filters/asccdl/asccdl.action:4
 #: plugins/filters/colorsfilters/colorsfilters.action:4
@@ -9365,6 +9367,7 @@ msgstr "Zobrazit masku globálního výběru"
 #: plugins/filters/halftone/halftone.action:4
 #: plugins/filters/normalize/normalize.action:4
 #: plugins/filters/palettize/palettize.action:4
+#: plugins/filters/propagatecolors/propagatecolors.action:4
 #: plugins/filters/threshold/threshold.action:4
 #, kde-format
 msgctxt "Filter as an effect"
@@ -12254,7 +12257,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layers Hori&zontally"
-msgstr ""
+msgstr "Zrcadlit vrstv&y vodorovně"
 
 #. i18n: context: toolTip @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeX), Actions (Layers), ActionCollection (Krita)
@@ -12264,14 +12267,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layers Horizontally"
-msgstr ""
+msgstr "Zrcadlit vrstvy vodorovně"
 
 #. i18n: context: text @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3230
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layers &Vertically"
-msgstr ""
+msgstr "Zrcadlit vrstvy s&visle"
 
 #. i18n: context: toolTip @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (mirrorNodeY), Actions (Layers), ActionCollection (Krita)
@@ -12281,14 +12284,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Mirror Layers Vertically"
-msgstr ""
+msgstr "Zrcadlit vrstvy svisle"
 
 #. i18n: context: text @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3242
 #, kde-format
 msgctxt "action"
 msgid "&Rotate Layers..."
-msgstr ""
+msgstr "&Otočit vrstvy..."
 
 #. i18n: context: toolTip @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotatelayer), Actions (Layers), ActionCollection (Krita)
@@ -12298,14 +12301,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layers"
-msgstr ""
+msgstr "Otočit vrstvy"
 
 #. i18n: context: text @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3254
 #, kde-format
 msgctxt "action"
 msgid "Rotate &Layers 90° to the Right"
-msgstr ""
+msgstr "Otočit vrs&tvy o 90° doprava"
 
 #. i18n: context: toolTip @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCW90), Actions (Layers), ActionCollection (Krita)
@@ -12315,14 +12318,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Right"
-msgstr ""
+msgstr "Otočit vrstvy o 90° doprava"
 
 #. i18n: context: text @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3266
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layers &90° to the Left"
-msgstr ""
+msgstr "Otočit vrstvy o &90° doleva"
 
 #. i18n: context: toolTip @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayerCCW90), Actions (Layers), ActionCollection (Krita)
@@ -12332,14 +12335,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layers 90° to the Left"
-msgstr ""
+msgstr "Otočit vrstvy o 90° doleva"
 
 #. i18n: context: text @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3278
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layers &180°"
-msgstr ""
+msgstr "Otočit vrstvy o &180°"
 
 #. i18n: context: toolTip @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (rotateLayer180), Actions (Layers), ActionCollection (Krita)
@@ -12349,14 +12352,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Rotate Layers 180°"
-msgstr ""
+msgstr "Otočit vrstvy o 180°"
 
 #. i18n: context: text @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3290
 #, kde-format
 msgctxt "action"
 msgid "Scale &Layers to new Size..."
-msgstr ""
+msgstr "Změnit měřítko vrstev na novou ve&likost..."
 
 #. i18n: context: toolTip @ Action (layersize), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (layersize), Actions (Layers), ActionCollection (Krita)
@@ -12366,14 +12369,14 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Scale Layers to new Size"
-msgstr ""
+msgstr "Změnit měřítko vrstev na novou velikost"
 
 #. i18n: context: text @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3302
 #, kde-format
 msgctxt "action"
 msgid "&Shear Layers..."
-msgstr ""
+msgstr "Zko&sit vrstvy..."
 
 #. i18n: context: toolTip @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (shearlayer), Actions (Layers), ActionCollection (Krita)
@@ -12383,7 +12386,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Shear Layers"
-msgstr ""
+msgstr "Zkosit vrstvy"
 
 #. i18n: context: text @ Action (mirrorAllNodesX), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3314
@@ -12526,7 +12529,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "&Offset Layers..."
-msgstr ""
+msgstr "P&osunout vrstvy..."
 
 #. i18n: context: toolTip @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (offsetlayer), Actions (Layers), ActionCollection (Krita)
@@ -12536,7 +12539,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Offset Layers"
-msgstr ""
+msgstr "Posunout vrstvy"
 
 #. i18n: context: text @ Action (clones_array), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3422
@@ -15868,27 +15871,27 @@ msgctxt "action"
 msgid "Workspaces"
 msgstr "Pracovní plochy"
 
-#: krita/main.cc:578
+#: krita/main.cc:571
 #, kde-format
 msgctxt "@title:window"
 msgid "Fatal Error"
 msgstr "Kritická chyba"
 
-#: krita/main.cc:579
+#: krita/main.cc:572
 #, kde-format
 msgid ""
 "Krita does not support the Wayland platform. Use XWayland to run Krita on "
 "Wayland. Krita will close now."
 msgstr ""
 
-#: krita/main.cc:698 libs/ui/KisApplication.cpp:413
+#: krita/main.cc:691 libs/ui/KisApplication.cpp:413
 #: libs/ui/KisApplication.cpp:685
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita: Warning"
 msgstr "Krita: Varování"
 
-#: krita/main.cc:699
+#: krita/main.cc:692
 #, kde-format
 msgid ""
 "You are running an unsupported version of Windows: %1.\n"
@@ -15896,12 +15899,12 @@ msgid ""
 "Please update to a supported version of Windows: Windows 7, 8, 8.1 or 10."
 msgstr ""
 
-#: krita/main.cc:721 krita/main.cc:726
+#: krita/main.cc:714 krita/main.cc:719
 #, kde-format
 msgid "Krita Tablet Support"
 msgstr ""
 
-#: krita/main.cc:722
+#: krita/main.cc:715
 #, kde-format
 msgid ""
 "Cannot load WinTab driver and no Windows Ink pen devices are found. If you "
@@ -15909,7 +15912,7 @@ msgid ""
 "installed."
 msgstr ""
 
-#: krita/main.cc:727
+#: krita/main.cc:720
 #, kde-format
 msgid ""
 "Cannot load WinTab driver. If you have a drawing tablet, please make sure "
@@ -16824,9 +16827,9 @@ msgstr "Velikost"
 #: plugins/tools/basictools/kis_tool_fill.cc:610
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:51
 #: plugins/tools/basictools/kis_tool_movetooloptionswidget.cpp:52
-#: plugins/tools/basictools/kis_tool_multihand.cpp:486
-#: plugins/tools/basictools/kis_tool_multihand.cpp:497
-#: plugins/tools/basictools/kis_tool_multihand.cpp:499
+#: plugins/tools/basictools/kis_tool_multihand.cpp:479
+#: plugins/tools/basictools/kis_tool_multihand.cpp:490
+#: plugins/tools/basictools/kis_tool_multihand.cpp:492
 #: plugins/tools/basictools/wdgcolorsampler.ui:186
 #: plugins/tools/selectiontools/kis_tool_select_contiguous.cc:415
 #: plugins/tools/tool_crop/wdg_tool_crop.ui:117
@@ -17225,9 +17228,9 @@ msgstr "Otočit masku"
 msgctxt "(qtundo-format)"
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Otočit vrstvu"
+msgstr[1] "Otočit %1 vrstvy"
+msgstr[2] "Otočit %1 vrstev"
 
 #: libs/image/kis_image.cc:1264
 msgctxt "(qtundo-format)"
@@ -17239,9 +17242,9 @@ msgstr "Zkosit masku"
 msgctxt "(qtundo-format)"
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zkosit vrstvu"
+msgstr[1] "Zkosit %1 vrstvy"
+msgstr[2] "Zkosit %1 vrstev"
 
 #: libs/image/kis_image.cc:1275
 msgctxt "(qtundo-format)"
@@ -23220,14 +23223,14 @@ msgstr "Posun Y:"
 
 #. i18n: ectx: property (text), widget (QToolButton, bnAddGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:39
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:82
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:86
 #, kde-format
 msgid "Add a swatch group"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, bnDelGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:40
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:150
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:158
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Remove selected group"
@@ -23235,7 +23238,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QToolButton, bnRenGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:41
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:137
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:145
 #, kde-format
 msgctxt "Group as Swatch Group in a Palette"
 msgid "Rename selected group"
@@ -23264,7 +23267,7 @@ msgstr "Jméno palety:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, gbxGroup)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:52
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:92
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:96
 #, kde-format
 msgid "Swatch Group options"
 msgstr ""
@@ -23278,7 +23281,7 @@ msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, labelRowCount)
 #: libs/ui/dialogs/KisDlgPaletteEditor.cpp:54
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:108 libs/ui/KisPaletteEditor.cpp:229
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:112 libs/ui/KisPaletteEditor.cpp:229
 #, kde-format
 msgid "Rows of swatches in group:"
 msgstr ""
@@ -24770,13 +24773,13 @@ msgid "Layer Name:"
 msgstr "Název vrstvy:"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:53
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:57
 #, kde-format
 msgid "Storage location:"
 msgstr "Umístění úložiště:"
 
 #. i18n: ectx: property (text), widget (QLabel, labelColorGroupList)
-#: libs/ui/forms/WdgDlgPaletteEditor.ui:98
+#: libs/ui/forms/WdgDlgPaletteEditor.ui:102
 #, kde-format
 msgid "Swatch group:"
 msgstr ""
@@ -28464,15 +28467,14 @@ msgid "Zoom Out"
 msgstr "Oddálit"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
-#, fuzzy, kde-format
-#| msgid "No Cursor"
+#, kde-format
 msgid "Zoom In To Cursor"
-msgstr "Žádný kurzor"
+msgstr "Přiblížit se ke kurzoru"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
 #, kde-format
 msgid "Zoom Out From Cursor"
-msgstr ""
+msgstr "Vzdálit se kurzoru"
 
 #: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
@@ -29081,9 +29083,9 @@ msgstr ""
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
 msgid_plural "Mirror %1 Layers Horizontally"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zrcadlit vrstvu vodorovně"
+msgstr[1] "Zrcadlit %1 vrstvy vodorovně"
+msgstr[2] "Zrcadlit %1 vrstev vodorovně"
 
 #: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
@@ -29212,13 +29214,13 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1%"
-msgstr ""
+msgstr "%1%"
 
 #: libs/ui/kis_node_model.cpp:604
 #, kde-format
 msgctxt "%1 is the percent value, % is the percent sign"
 msgid "%1% %2"
-msgstr ""
+msgstr "%1% %2"
 
 #: libs/ui/kis_paintop_box.cc:101
 #, kde-format
@@ -29254,7 +29256,7 @@ msgstr "Zvolte předvolbu štětce"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}%"
-msgstr ""
+msgstr "Krytí: {n}%"
 
 #: libs/ui/kis_paintop_box.cc:268
 #, kde-format
@@ -29352,7 +29354,7 @@ msgstr ""
 #: libs/ui/kis_popup_palette.cpp:134
 #, kde-format
 msgid "Popup Palette"
-msgstr ""
+msgstr "Vyskakovací paleta"
 
 #: libs/ui/kis_popup_palette.cpp:153
 #, kde-format
@@ -29473,6 +29475,25 @@ msgid ""
 "lessons/introduction\"><span style=\" text-decoration: underline; color:%1;"
 "\">Scripting School</span></a></p></td></table></body></html>"
 msgstr ""
+"<html><head/><body><table width=\"100%\" cellpadding=\"30\"><tr><td><p><span "
+"style=\" color:%1;\"><b>Použití aplikace Krita</b></span></p><p><a href="
+"\"https://krita.org/support-us/\"><span style=\" text-decoration: underline; "
+"color:%1;\">Podpořte vývoj aplikace Krita.</span></a></p><p><a href="
+"\"https://docs.krita.org/en/user_manual/getting_started.html\"><span style="
+"\" text-decoration: underline; color:%1;\">Začínáme</span></a></p><p><a href="
+"\"https://docs.krita.org/\"><span style=\" text-decoration: underline; color:"
+"%1;\">Manuál</span></a></p><p><a href=\"https://krita.org/\"><span style=\" "
+"text-decoration: underline; color:%1;\">Webové stránky Krita</span></a></p></"
+"td><td><p><span style=\" color:%1;\"><b>Programování aplikace Krita</b></"
+"span></p><p><a href=\"https://krita-artists.org\"><span style=\" text-"
+"decoration: underline; color:%1;\">Komunita uživatelů</span></a></p><p><a "
+"href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-"
+"decoration: underline; color:%1;\">Zdrojové kódy</span></a></p><p><a href="
+"\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-"
+"decoration: underline; color:%1;\">Skriptovací API</span></a></p><p><a href="
+"\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-"
+"decoration: underline; color:%1;\">Škola skriptování</span></a></p></td></"
+"table></body></html>"
 
 #: libs/ui/kis_statusbar.cc:88
 #, kde-format
@@ -32167,7 +32188,7 @@ msgstr ""
 
 #: libs/ui/tool/kis_tool_rectangle_base.cpp:294
 #: plugins/tools/basictools/kis_tool_line.cc:293
-#: plugins/tools/basictools/kis_tool_multihand.cpp:550
+#: plugins/tools/basictools/kis_tool_multihand.cpp:543
 #, kde-format
 msgid ""
 "X: %1 px\n"
@@ -32198,22 +32219,22 @@ msgstr "Zmenšit velikost štětce"
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:41
 #, kde-format
 msgid "Rotate brush tip clockwise"
-msgstr ""
+msgstr "Otočit špičku štětce ve směru hodinových ručiček"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:47
 #, kde-format
 msgid "Rotate brush tip clockwise (precise)"
-msgstr ""
+msgstr "Otočit špičku štětce ve směru hodinových ručiček (přesně)"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:53
 #, kde-format
 msgid "Rotate brush tip counter-clockwise"
-msgstr ""
+msgstr "Otočit špičku štětce proti směru hodinových ručiček"
 
 #: libs/ui/tool/KisToolPaintFactoryBase.cpp:59
 #, kde-format
 msgid "Rotate brush tip counter-clockwise (precise)"
-msgstr ""
+msgstr "Otočit špičku štětce proti směru hodinových ručiček (přesně)"
 
 #: libs/ui/tool/strokes/kis_filter_stroke_strategy.cpp:143
 #, kde-format
@@ -32475,7 +32496,7 @@ msgstr "Průhledné"
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Position: {n}%"
-msgstr ""
+msgstr "Pozice: {n}%"
 
 #: libs/ui/widgets/gradient/KisSegmentGradientEditor.cpp:40
 #, kde-format
@@ -36303,7 +36324,7 @@ msgstr ""
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:245
 #, kde-format
 msgid "Show Move"
-msgstr ""
+msgstr "Zobrazit tah"
 
 #. i18n: ectx: property (text), widget (QCheckBox, showSnap)
 #: plugins/assistants/Assistants/AssistantsToolOptions.ui:261
@@ -37271,7 +37292,7 @@ msgstr ""
 #, kde-format
 msgctxt "Reset to default"
 msgid "Reset"
-msgstr ""
+msgstr "Obnovit"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:61
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:264
@@ -39414,7 +39435,7 @@ msgstr "Kvalita:"
 #, kde-format
 msgctxt "Resolution for recorded frames"
 msgid "Resolution:         "
-msgstr ""
+msgstr "Rozlišení:         "
 
 #. i18n: ectx: property (text), item, widget (QComboBox, comboResolution)
 #: plugins/dockers/recorder/recorderdocker.ui:248
@@ -39447,7 +39468,7 @@ msgstr "Formát:"
 #: plugins/dockers/recorder/recorderdocker.ui:326
 #, kde-format
 msgid "Number of threads, which should be used for recording"
-msgstr ""
+msgstr "Počet vláken pro použití při nahrávání"
 
 #. i18n: ectx: property (text), widget (QLabel, labelThreads)
 #: plugins/dockers/recorder/recorderdocker.ui:335
@@ -40149,7 +40170,7 @@ msgctxt ""
 "Wide Gamut Color Selector option: Always shows full saturation and full "
 "brightness colors."
 msgid "Static"
-msgstr ""
+msgstr "Statický"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:55
@@ -40158,7 +40179,7 @@ msgctxt ""
 "Wide Gamut Color Selector option: Shows colors depending on the current "
 "color saturation and brightness."
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamický"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbSelectorRenderingMode)
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:60
@@ -42107,18 +42128,18 @@ msgstr "Posunout obrázek"
 msgctxt "@title:window"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Posunout vrstvu"
+msgstr[1] "Posunout %1 vrstvy"
+msgstr[2] "Posunout %1 vrstev"
 
 #: plugins/extensions/offsetimage/offsetimage.cpp:85
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Offset Layer"
 msgid_plural "Offset %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Posunout vrstvu"
+msgstr[1] "Posunout %1 vrstvy"
+msgstr[2] "Posunout %1 vrstev"
 
 #. i18n: ectx: property (text), widget (QPushButton, middleOffsetBtn)
 #: plugins/extensions/offsetimage/wdg_offsetimage.ui:111
@@ -42126,25 +42147,25 @@ msgstr[2] ""
 msgid "Offset by x/2, y/2"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:77
+#: plugins/extensions/pykrita/kritarunner/main.cpp:72
 #: plugins/extensions/pykrita/plugin/plugin.cpp:33
 #, kde-format
 msgid "Cannot load Python library"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:80
+#: plugins/extensions/pykrita/kritarunner/main.cpp:75
 #: plugins/extensions/pykrita/plugin/plugin.cpp:36
 #, kde-format
 msgid "Cannot set Python paths"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:83
+#: plugins/extensions/pykrita/kritarunner/main.cpp:78
 #: plugins/extensions/pykrita/plugin/plugin.cpp:39
 #, kde-format
 msgid "Cannot load built-in pykrita module"
 msgstr ""
 
-#: plugins/extensions/pykrita/kritarunner/main.cpp:86
+#: plugins/extensions/pykrita/kritarunner/main.cpp:81
 #: plugins/extensions/pykrita/plugin/plugin.cpp:42
 #, kde-format
 msgid "Unexpected error initializing python plugin."
@@ -42628,7 +42649,7 @@ msgstr "Vytvořit balíček zdrojů"
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:141
 #, kde-format
 msgid "Edit Resources"
-msgstr ""
+msgstr "Upravit zdroje"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:142
 #, kde-format
@@ -43043,9 +43064,9 @@ msgstr "Zrcadlit obrázek vodorovně"
 #, kde-format
 msgid "Rotate Layer"
 msgid_plural "Rotate %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Otočit vrstvu"
+msgstr[1] "Otočit %1 vrstvy"
+msgstr[2] "Otočit %1 vrstev"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpDirection)
 #: plugins/extensions/rotateimage/wdg_rotateimage.ui:24
@@ -43187,9 +43208,9 @@ msgstr "Zkosit obrázek"
 #, kde-format
 msgid "Shear Layer"
 msgid_plural "Shear %1 Layers"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Zkosit vrstvu"
+msgstr[1] "Zkosit %1 vrstvy"
+msgstr[2] "Zkosit %1 vrstev"
 
 #. i18n: ectx: property (text), widget (QLabel, lblShearAngleX)
 #: plugins/extensions/shearimage/wdg_shearimage.ui:24
@@ -44989,22 +45010,169 @@ msgstr "Kroky"
 msgid "Posterize"
 msgstr ""
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:46
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:49
+#, fuzzy, kde-format
+#| msgid "Rectangle"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Rectangle"
+msgstr "Obdélníkový"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
+#, fuzzy, kde-format
+#| msgctxt "Gradient type - Diamond"
+#| msgid "Diamond"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Diamond"
+msgstr "Diamant"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
+#, fuzzy, kde-format
+#| msgid "Octagon (8)"
+msgctxt "Expansion pattern button in propagate colors filter"
+msgid "Octagon"
+msgstr "Osmistěn (8)"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
+#, kde-format
+msgctxt "Expansion distance button in propagate colors filter"
+msgid "Unrestricted"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
+#, fuzzy, kde-format
+#| msgctxt "Button to restart the timelapse video configuring"
+#| msgid "Restart"
+msgctxt "Expansion distance button in propagate colors filter"
+msgid "Restricted"
+msgstr "Restartovat"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
+#, kde-format
+msgctxt ""
+"The 'maximum distance' slider in propagate colors filter; {n} is the number "
+"value, px is the pixels suffix"
+msgid "Maximum Distance: {n}px"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
+#, kde-format
+msgctxt "Transparency behavior button in propagate colors filter"
+msgid "Expand"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
+#, fuzzy, kde-format
+#| msgid "Pressure"
+msgctxt "Transparency behavior button in propagate colors filter"
+msgid "Preserve"
+msgstr "Tlak"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
+#, kde-format
+msgid "Expand the colors in a rectangular-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
+#, kde-format
+msgid "Expand the colors in a diamond-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
+#, kde-format
+msgid "Expand the colors in a octagonal-like way"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
+#, kde-format
+msgid "Expand the colors all the way until all transparent regions are filled"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
+#, kde-format
+msgid "Expand the colors only until a specific distance"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
+#, kde-format
+msgid ""
+"Specify the maximum distance to expand when the restricted mode is active"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
+#, kde-format
+msgid "Expand the alpha channel as well as the color"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
+#, kde-format
+msgid "Expand only the color, leaving the alpha channel untouched"
+msgstr ""
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
+#, fuzzy, kde-format
+#| msgid "Custom Pattern"
+msgctxt "The 'distance metric' section label in propagate colors filter dialog"
+msgid "Expansion Pattern"
+msgstr "Vlastní vzorek"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
+#, fuzzy, kde-format
+#| msgid "Distance"
+msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
+msgid "Expansion Distance"
+msgstr "Vzdálenost"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
+#, fuzzy, kde-format
+#| msgid "Transparency Mask"
+msgctxt ""
+"The 'transparency behavior' section label in propagate colors filter dialog"
+msgid "Transparency Behavior"
+msgstr "Maska průhlednosti"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
+#, fuzzy, kde-format
+#| msgid "Gradient Colors"
+msgid "Propagate Colors"
+msgstr "Barvy přechodu"
+
+#: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
+#, fuzzy, kde-format
+#| msgid "&Index Colors..."
+msgid "&Propagate Colors..."
+msgstr "&Indexovat barvy..."
+
+#. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#. i18n: context: iconText @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
+#: plugins/filters/propagatecolors/propagatecolors.action:7
+#: plugins/filters/propagatecolors/propagatecolors.action:9
+#: plugins/filters/propagatecolors/propagatecolors.action:10
+#, fuzzy, kde-format
+#| msgid "Digital Colors Mixer"
+msgctxt "action"
+msgid "Propagate Colors Filter"
+msgstr "Digitální mixer barev"
+
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
 msgid "&Raindrops..."
 msgstr "&Dešťové kapky..."
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:381
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
 #, kde-format
 msgid "Drop size"
 msgstr "Velikost kapek"
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:382
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
 #, kde-format
 msgid "Number of drops"
 msgstr ""
 
-#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:383
+#: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:384
 #, kde-format
 msgid "Fish eyes"
 msgstr "Rybí oči"
@@ -47449,7 +47617,7 @@ msgstr "Zploštit obraz"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:266
 #, kde-format
 msgid "Color profile"
-msgstr ""
+msgstr "Profil barev"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, forceCicpLossless)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:272
@@ -56182,43 +56350,43 @@ msgstr ""
 msgid "Move Tool"
 msgstr "Nástroj pro přesouvání"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:57
+#: plugins/tools/basictools/kis_tool_multihand.cpp:50
 msgctxt "(qtundo-format)"
 msgid "Multibrush Stroke"
 msgstr "Tah vícero štětců"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:454
+#: plugins/tools/basictools/kis_tool_multihand.cpp:447
 #, kde-format
 msgid "Symmetry"
 msgstr "Symetrie"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:455
+#: plugins/tools/basictools/kis_tool_multihand.cpp:448
 #, kde-format
 msgctxt "Label of Mirror in Multihand brush tool options"
 msgid "Mirror"
 msgstr "Zrcadlit"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:456
+#: plugins/tools/basictools/kis_tool_multihand.cpp:449
 #, kde-format
 msgid "Translate"
 msgstr "Posunout"
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:457
+#: plugins/tools/basictools/kis_tool_multihand.cpp:450
 #, kde-format
 msgid "Snowflake"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:458
+#: plugins/tools/basictools/kis_tool_multihand.cpp:451
 #, kde-format
 msgid "Copy Translate"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:459
+#: plugins/tools/basictools/kis_tool_multihand.cpp:452
 #, kde-format
 msgid "Copy Translate at Intervals"
 msgstr ""
 
-#: plugins/tools/basictools/kis_tool_multihand.cpp:570
+#: plugins/tools/basictools/kis_tool_multihand.cpp:563
 #, kde-format
 msgid ""
 "Multibrush Tool does not support more than %1 brushes; use a larger interval."
@@ -56731,7 +56899,7 @@ msgstr ""
 #, kde-format
 msgctxt "{n} is the number value, % is the percent sign"
 msgid "Opacity: {n}"
-msgstr ""
+msgstr "Krytí: {n}"
 
 #: plugins/tools/defaulttool/defaulttool/DefaultToolGeometryWidget.cpp:122
 #, kde-format
@@ -57616,13 +57784,13 @@ msgstr "Tloušťka čáry"
 #, kde-format
 msgctxt "Default line height for text"
 msgid "Normal"
-msgstr ""
+msgstr "Normální"
 
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1594
 #, kde-format
 msgctxt "line height for text"
 msgid "100%"
-msgstr ""
+msgstr "100%"
 
 #. i18n: ectx: property (toolTip), widget (QDoubleSpinBox, defLetterSpacing)
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1608
@@ -57634,7 +57802,7 @@ msgstr "Rozestupy znaků"
 #: plugins/tools/svgtexttool/SvgTextInsertCommand.cpp:18
 msgctxt "(qtundo-format)"
 msgid "Insert Text"
-msgstr ""
+msgstr "Vložit text"
 
 #: plugins/tools/svgtexttool/SvgTextInsertRichCommand.cpp:16
 msgctxt "(qtundo-format)"
@@ -57649,7 +57817,7 @@ msgstr ""
 #: plugins/tools/svgtexttool/SvgTextRemoveCommand.cpp:28
 msgctxt "(qtundo-format)"
 msgid "Remove Text"
-msgstr ""
+msgstr "Odstranit text"
 
 #. i18n: context: text @ Actions (Text Tool), ActionCollection (SVG Tools)
 #: plugins/tools/svgtexttool/SvgTextTool.action:4

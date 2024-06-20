@@ -210,6 +210,7 @@ extern "C" void* producer_krita_init(mlt_profile profile,
              * seeking or resetting the producer speed to null.
              */
             mlt_properties_set_string(internalProducerProps, "eof", "continue");
+            mlt_properties_set_int(internalProducerProps, "noimagecache", 1);
         }
 
         mlt_events_listen( producer_properties, producer, "property-changed", ( mlt_listener )producer_property_changed );

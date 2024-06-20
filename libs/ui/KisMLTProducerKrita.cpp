@@ -146,6 +146,16 @@ static int producer_seek(mlt_producer producer, mlt_position position)
 
     int retval = mlt_producer_seek(pdata->producer_internal, position);
 
+    /**
+     * Update the position values of the parent producer
+     */
+    mlt_properties_set_position(MLT_PRODUCER_PROPERTIES(producer),
+                                "_position",
+                                position);
+    mlt_properties_set_position(MLT_PRODUCER_PROPERTIES(producer),
+                                "_frame",
+                                position);
+
     return retval;
 }
 

@@ -40,6 +40,7 @@
 typedef struct
 {
     mlt_producer producer_internal;
+    int audio_sample_rate = 0;
 } private_data;
 
 /** Restricts frame index to within range by modulus wrapping (not clamping).
@@ -56,6 +57,23 @@ static int is_valid_range(const int frame_start, const int frame_end)
     const bool NON_INVERTED = frame_end > frame_start;
 
     return NON_NEGATIVE && NON_INVERTED;
+}
+
+void scale_audio_frequency(mlt_producer producer, mlt_audio audio)
+{
+    mlt_properties props = MLT_PRODUCER_PROPERTIES(producer);
+
+    // Scale the frequency to account for the dynamic speed (normalized).
+    double SPEED = mlt_properties_get_double(props, "speed");
+
+    KIS_SAFE_ASSERT_RECOVER(!qFuzzyIsNull(SPEED)) {
+        SPEED = 1.0;
+    }
+
+    audio->frequency = (double) audio->frequency * fabs(SPEED);
+    if (SPEED < 0.0) {
+        mlt_audio_reverse(audio);
+    }
 }
 
 static int producer_get_audio(mlt_frame frame,
@@ -78,23 +96,62 @@ static int producer_get_audio(mlt_frame frame,
                                     &audio.channels,
                                     &audio.samples);
 
-    mlt_properties props = MLT_PRODUCER_PROPERTIES(producer);
-
-    // Scale the frequency to account for the dynamic speed (normalized).
-    double SPEED = mlt_properties_get_double(props, "speed");
-
-    KIS_SAFE_ASSERT_RECOVER(!qFuzzyIsNull(SPEED)) {
-        SPEED = 1.0;
-    }
-
-    audio.frequency = (double) audio.frequency * fabs(SPEED);
-    if (SPEED < 0.0) {
-        mlt_audio_reverse(&audio);
-    }
-
+    scale_audio_frequency(producer, &audio);
     mlt_audio_get_values(&audio, buffer, frequency, format, samples, channels);
 
     return error;
+}
+
+static int producer_generate_silent_audio(mlt_frame frame,
+                                          void **buffer,
+                                          mlt_audio_format *format,
+                                          int *frequency,
+                                          int *channels,
+                                          int *samples)
+{
+    mlt_producer producer = static_cast<mlt_producer>(mlt_frame_pop_audio(frame));
+    private_data *pdata = (private_data *) producer->child;
+
+    {
+        // Get the producer fps
+        double fps = mlt_producer_get_fps(producer);
+
+        if (mlt_properties_get(MLT_FRAME_PROPERTIES(frame), "producer_consumer_fps"))
+            fps = mlt_properties_get_double(MLT_FRAME_PROPERTIES(frame), "producer_consumer_fps");
+
+        mlt_position position = mlt_properties_get_position(MLT_FRAME_PROPERTIES(frame), "_position");
+
+        int size = 0;
+        *channels = *channels <= 0 ? 2 : *channels;
+        *frequency = pdata->audio_sample_rate > 0 ? pdata->audio_sample_rate : 44100;
+        *samples = mlt_audio_calculate_frame_samples(fps, *frequency, position);
+        *format = *format == mlt_audio_none ? mlt_audio_s16 : *format;
+
+        size = mlt_audio_format_size(*format, *samples, *channels);
+        if (size)
+            *buffer = mlt_pool_alloc(size);
+        else
+            *buffer = NULL;
+
+        /**
+         * Save the generated audio into the frame itself,
+         * since this overloaded function will not be called
+         * on the further calls to mlt_frame_get_audio (the
+         * pointer to the function was placed on the stack,
+         * which has already been taken)
+         */
+        mlt_frame_set_audio(frame, *buffer, *format, size, mlt_pool_release);
+    }
+
+    struct mlt_audio_s audio;
+    mlt_audio_set_values(&audio, *buffer, *frequency, *format, *samples, *channels);
+    mlt_audio_silence(&audio, *samples, 0);
+
+    scale_audio_frequency(producer, &audio);
+
+    mlt_audio_get_values(&audio, buffer, frequency, format, samples, channels);
+
+    return 0;
 }
 
 static int producer_get_frame(mlt_producer producer, mlt_frame_ptr frame, int index)
@@ -118,6 +175,25 @@ static int producer_get_frame(mlt_producer producer, mlt_frame_ptr frame, int in
     if (!mlt_frame_is_test_audio(*frame)) {
         mlt_frame_push_audio(*frame, producer);
         mlt_frame_push_audio(*frame, (void*)producer_get_audio);
+    } else {
+        /**
+         * Generate a slowed-down silence frame and reset
+         * the `test_audio` flag
+         *
+         * When the data stream ends, the AVformat library
+         * returns and empty frame, flagged with "test_audio"
+         * tag. Later on, when the consumer reads this frame,
+         * mlt_frame_get_audio() generates a frame of silence
+         * with 48kHz resolution. We cannot use this variant
+         * of silence, since it is not scaled. We need to
+         * generate our own version of silence, which is
+         * scaled according to our format.
+         */
+        mlt_frame_push_audio(*frame, producer);
+        mlt_frame_push_audio(*frame, (void*)producer_generate_silent_audio);
+
+        mlt_properties properties = MLT_FRAME_PROPERTIES(*frame);
+        mlt_properties_set_int(properties, "test_audio", 0);
     }
 
     return retval;
@@ -211,6 +287,19 @@ extern "C" void* producer_krita_init(mlt_profile profile,
              */
             mlt_properties_set_string(internalProducerProps, "eof", "continue");
             mlt_properties_set_int(internalProducerProps, "noimagecache", 1);
+
+            char key[200];
+            const int numberOfStreams = mlt_properties_get_int(internalProducerProps, "meta.media.nb_streams");
+
+            for (int i = 0; i < numberOfStreams; i++) {
+                snprintf(key, sizeof(key), "meta.media.%u.stream.type", i);
+
+                const char* type = mlt_properties_get(internalProducerProps, key);
+                if (type && !strcmp(type, "audio")) {
+                    snprintf(key, sizeof(key), "meta.media.%u.codec.sample_rate", i);
+                    pdata->audio_sample_rate = mlt_properties_get_int(internalProducerProps, key);
+                }
+            }
         }
 
         mlt_properties_set_string(producer_properties, "eof", "continue");

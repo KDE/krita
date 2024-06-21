@@ -41,6 +41,7 @@ typedef struct
 {
     mlt_producer producer_internal;
     int audio_sample_rate = 0;
+    bool force_reset_audio_frequency_for_frames = false; // used for 'count' producer
 } private_data;
 
 /** Restricts frame index to within range by modulus wrapping (not clamping).
@@ -71,6 +72,11 @@ void scale_audio_frequency(mlt_producer producer, mlt_audio audio)
     }
 
     audio->frequency = (double) audio->frequency * fabs(SPEED);
+
+    KIS_SAFE_ASSERT_RECOVER(audio->frequency > 0) {
+        audio->frequency = 1;
+    }
+
     if (SPEED < 0.0) {
         mlt_audio_reverse(audio);
     }
@@ -84,8 +90,21 @@ static int producer_get_audio(mlt_frame frame,
                               int *samples)
 {
     mlt_producer producer = static_cast<mlt_producer>(mlt_frame_pop_audio(frame));
+    private_data *pdata = (private_data *) producer->child;
 
     struct mlt_audio_s audio;
+
+    /**
+     * MLT doesn't reset the requested frequency on every call, that is, if the
+     * underlying producer just passes through the frequency, it will eventually
+     * drop to zero and crash. AVformat resets the frequency every time to the
+     * value of the underlying media. Count producer doesn't reset the frequency
+     * by default, so we should reset it manually by passing negative values.
+     */
+    if (pdata->force_reset_audio_frequency_for_frames) {
+        *frequency = -1;
+        *samples = -1;
+    }
 
     mlt_audio_set_values(&audio, *buffer, *frequency, *format, *samples, *channels);
 
@@ -286,19 +305,42 @@ extern "C" void* producer_krita_init(mlt_profile profile,
              * seeking or resetting the producer speed to null.
              */
             mlt_properties_set_string(internalProducerProps, "eof", "continue");
-            mlt_properties_set_int(internalProducerProps, "noimagecache", 1);
 
-            char key[200];
-            const int numberOfStreams = mlt_properties_get_int(internalProducerProps, "meta.media.nb_streams");
+            const char *serviceName = mlt_properties_get(internalProducerProps, "mlt_service");
 
-            for (int i = 0; i < numberOfStreams; i++) {
-                snprintf(key, sizeof(key), "meta.media.%u.stream.type", i);
+            if (!strcmp(serviceName, "avformat")) {
+                /**
+                 * Disable caching of frames in avformat producer
+                 *
+                 * Caching in MLT library is broken. When a frame is taken from the
+                 * cache its "audio" property is not resotred. It breaks the work
+                 * of "read-ahead" consumer thread, which also temporarily stores
+                 * this frame.
+                 */
+                mlt_properties_set_int(internalProducerProps, "noimagecache", 1);
 
-                const char* type = mlt_properties_get(internalProducerProps, key);
-                if (type && !strcmp(type, "audio")) {
-                    snprintf(key, sizeof(key), "meta.media.%u.codec.sample_rate", i);
-                    pdata->audio_sample_rate = mlt_properties_get_int(internalProducerProps, key);
+                /**
+                 * Fetch media sample rate to be able to generate correct
+                 * silence stream
+                 */
+
+                char key[200];
+                const int numberOfStreams = mlt_properties_get_int(internalProducerProps, "meta.media.nb_streams");
+
+                for (int i = 0; i < numberOfStreams; i++) {
+                    snprintf(key, sizeof(key), "meta.media.%u.stream.type", i);
+
+                    const char* type = mlt_properties_get(internalProducerProps, key);
+                    if (type && !strcmp(type, "audio")) {
+                        snprintf(key, sizeof(key), "meta.media.%u.codec.sample_rate", i);
+                        pdata->audio_sample_rate = mlt_properties_get_int(internalProducerProps, key);
+                    }
                 }
+            } else if (!strcmp(serviceName, "count")) {
+                pdata->audio_sample_rate = 48000;
+                pdata->force_reset_audio_frequency_for_frames = true;
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "mlt_service used for media is unknown!");
             }
         }
 

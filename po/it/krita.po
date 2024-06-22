@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-19 01:43+0000\n"
-"PO-Revision-Date: 2024-04-27 10:24+0200\n"
+"PO-Revision-Date: 2024-06-19 23:22+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -28987,15 +28987,14 @@ msgid "Zoom Out"
 msgstr "Rimpicciolisci"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
-#, fuzzy, kde-format
-#| msgid "No Cursor"
+#, kde-format
 msgid "Zoom In To Cursor"
-msgstr "Nessun cursore"
+msgstr "Ingrandisci al cursore"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
 #, kde-format
 msgid "Zoom Out From Cursor"
-msgstr ""
+msgstr "Rimpicciolisci dal cursore"
 
 #: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
@@ -44474,43 +44473,36 @@ msgid ""
 "Make sure the actions are corresponding to the correct gesture on the system "
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
+"Accertati che le azioni corrispondano al gesto corretto a livello di "
+"sistema. Esse posso essere configurate in Impostazioni S Pen > Azioni Air."
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
-#| "number of buttons in that list."
-#| msgid "%1 Button"
-#| msgid_plural "%1 Buttons"
+#, kde-format
 msgid "Buttons"
-msgstr "Pulsante %1"
+msgstr "Pulsanti"
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Presets"
+#, kde-format
 msgid "Press"
-msgstr "Preimpostazioni"
+msgstr "Pressione"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Key Press"
+#, kde-format
 msgid "Double Press"
-msgstr "Pressione tasto"
+msgstr "Doppia pressione"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#| "devices."
+#, kde-format
 msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
 msgstr ""
-"Sono supportate le azioni seguenti nei dispositivi Note 9, Note 10 e Tab S6."
+"Sono supportati i pulsanti seguenti nei dispositivi Note 9, Note 10, Tab S6 "
+"e Tab S9."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -44550,19 +44542,18 @@ msgstr "Cerchio in senso orario"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:137
-#, fuzzy, kde-format
-#| msgid "Circle Counterclockwise"
+#, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "Cerchio in senso antiorario"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, fuzzy, kde-format
-#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#, kde-format
 msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
-msgstr "Sono supportati i seguenti gesti nei dispositivi Note 10 e Tab S6."
+msgstr ""
+"Sono supportati i gesti seguenti nei dispositivi Note 10, Tab S6 e Tab S9."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -46207,139 +46198,128 @@ msgid "Posterize"
 msgstr "Posterizza"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:49
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Rectangle"
 msgstr "Rettangolo"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Diamond"
-#| msgid "Diamond"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Diamond"
 msgstr "Diamante"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Octagon (8)"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Octagon"
-msgstr "Ottagono (8)"
+msgstr "Ottagono"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
 #, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Unrestricted"
-msgstr ""
+msgstr "Senza restrizioni"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "Button to restart the timelapse video configuring"
-#| msgid "Restart"
+#, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Restricted"
-msgstr "Riavvia"
+msgstr "Con restrizioni"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
-#, fuzzy, kde-format
-#| msgid "Maximum brush speed: {n} px/ms"
-#| msgid_plural "Maximum brush speed: {n} px/ms"
+#, kde-format
 msgctxt ""
 "The 'maximum distance' slider in propagate colors filter; {n} is the number "
 "value, px is the pixels suffix"
 msgid "Maximum Distance: {n}px"
-msgstr "Velocità massima del pennello: {n} px/ms"
+msgstr "Distanza massima: {n}px"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Expand..."
+#, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Expand"
-msgstr "Espandi..."
+msgstr "Espandi"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Preserve"
-msgstr "Pressione"
+msgstr "Mantieni"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
 msgid "Expand the colors in a rectangular-like way"
-msgstr ""
+msgstr "Espandi i colori in forma rettangolare"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
 #, kde-format
 msgid "Expand the colors in a diamond-like way"
-msgstr ""
+msgstr "Espandi i colori in forma a diamante"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
 #, kde-format
 msgid "Expand the colors in a octagonal-like way"
-msgstr ""
+msgstr "Espandi i colori in forma ottagonale"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
 #, kde-format
 msgid "Expand the colors all the way until all transparent regions are filled"
 msgstr ""
+"Espandi i colori in tutte le forme fino al riempimento di tutte le regioni "
+"trasparenti"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
 #, kde-format
 msgid "Expand the colors only until a specific distance"
-msgstr ""
+msgstr "Espandi i colori fino a una distanza specifica"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
 #, kde-format
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
 msgstr ""
+"Specifica la distanza massima di espansione quando la modalità con "
+"restrizioni è attiva"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
 msgid "Expand the alpha channel as well as the color"
-msgstr ""
+msgstr "Espandi il canale alfa oltre al colore"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
 #, kde-format
 msgid "Expand only the color, leaving the alpha channel untouched"
-msgstr ""
+msgstr "Espandi solo il colore, lasciando immutato il canale alfa"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgctxt "The 'distance metric' section label in propagate colors filter dialog"
 msgid "Expansion Pattern"
-msgstr "Spaziatore di espansione"
+msgstr "Modello di espansione"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
 msgid "Expansion Distance"
-msgstr "Spaziatore di espansione"
+msgstr "Distanza di espansione"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
-#, fuzzy, kde-format
-#| msgid "Transparency Mask"
+#, kde-format
 msgctxt ""
 "The 'transparency behavior' section label in propagate colors filter dialog"
 msgid "Transparency Behavior"
-msgstr "Maschera di trasparenza"
+msgstr "Comportamento trasparenza"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
-#, fuzzy, kde-format
-#| msgid "Tropical Colors"
+#, kde-format
 msgid "Propagate Colors"
-msgstr "Colori tropicali"
+msgstr "Propaga i colori"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
-#, fuzzy, kde-format
-#| msgid "&Index Colors..."
+#, kde-format
 msgid "&Propagate Colors..."
-msgstr "&Indicizza colori..."
+msgstr "&Propaga i colori..."
 
 #. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
@@ -46350,11 +46330,10 @@ msgstr "&Indicizza colori..."
 #: plugins/filters/propagatecolors/propagatecolors.action:7
 #: plugins/filters/propagatecolors/propagatecolors.action:9
 #: plugins/filters/propagatecolors/propagatecolors.action:10
-#, fuzzy, kde-format
-#| msgid "Painterly Color Mixer"
+#, kde-format
 msgctxt "action"
 msgid "Propagate Colors Filter"
-msgstr "Miscelatore di colore di pittura"
+msgstr "Filtro Propaga i colori"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format

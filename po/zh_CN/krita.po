@@ -28660,12 +28660,12 @@ msgstr "缩小"
 #: libs/ui/input/kis_zoom_action.cpp:116
 #, kde-format
 msgid "Zoom In To Cursor"
-msgstr ""
+msgstr "放大 (以光标为中心)"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
 #, kde-format
 msgid "Zoom Out From Cursor"
-msgstr ""
+msgstr "缩小 (以光标为中心)"
 
 #: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
@@ -45503,26 +45503,22 @@ msgid "Posterize"
 msgstr "色调分离"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:49
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Rectangle"
-msgstr "矩形"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Diamond"
-#| msgid "Diamond"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Diamond"
-msgstr "菱形渐变"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Octagon (8)"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Octagon"
-msgstr "八角"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
 #, kde-format
@@ -45531,22 +45527,18 @@ msgid "Unrestricted"
 msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "Button to restart the timelapse video configuring"
-#| msgid "Restart"
+#, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Restricted"
-msgstr "重新开始"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
-#, fuzzy, kde-format
-#| msgid "Maximum brush speed: {n} px/ms"
-#| msgid_plural "Maximum brush speed: {n} px/ms"
+#, kde-format
 msgctxt ""
 "The 'maximum distance' slider in propagate colors filter; {n} is the number "
 "value, px is the pixels suffix"
 msgid "Maximum Distance: {n}px"
-msgstr "最大笔刷速度：{n} 像素/毫秒"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
 #, kde-format
@@ -45555,11 +45547,10 @@ msgid "Expand"
 msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Preserve"
-msgstr "压力"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
@@ -45603,38 +45594,33 @@ msgid "Expand only the color, leaving the alpha channel untouched"
 msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgctxt "The 'distance metric' section label in propagate colors filter dialog"
 msgid "Expansion Pattern"
-msgstr "<<--- 空白占位符 (自动伸展) --->>"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
 msgid "Expansion Distance"
-msgstr "<<--- 空白占位符 (自动伸展) --->>"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
-#, fuzzy, kde-format
-#| msgid "Transparency Mask"
+#, kde-format
 msgctxt ""
 "The 'transparency behavior' section label in propagate colors filter dialog"
 msgid "Transparency Behavior"
-msgstr "透明度蒙版"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
-#, fuzzy, kde-format
-#| msgid "Sort Colors"
+#, kde-format
 msgid "Propagate Colors"
-msgstr "整理颜色"
+msgstr ""
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
-#, fuzzy, kde-format
-#| msgid "&Index Colors..."
+#, kde-format
 msgid "&Propagate Colors..."
-msgstr "索引颜色(&I)..."
+msgstr ""
 
 #. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
@@ -45645,11 +45631,10 @@ msgstr "索引颜色(&I)..."
 #: plugins/filters/propagatecolors/propagatecolors.action:7
 #: plugins/filters/propagatecolors/propagatecolors.action:9
 #: plugins/filters/propagatecolors/propagatecolors.action:10
-#, fuzzy, kde-format
-#| msgid "Digital Colors Mixer"
+#, kde-format
 msgctxt "action"
 msgid "Propagate Colors Filter"
-msgstr "过渡色调混合器"
+msgstr ""
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format

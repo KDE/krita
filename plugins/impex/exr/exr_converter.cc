@@ -618,9 +618,15 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                                                          << ".red"
                                                          << ".green"
                                                          << ".blue"
+                                                         << "X"
                                                          << "Y"
+                                                         << "Z"
+                                                         << ".X"
                                                          << ".Y"
-                                                         << "Y.";
+                                                         << ".Z"
+                                                         << "X."
+                                                         << "Y."
+                                                         << "Z.";
 
         for (Imf::ChannelList::ConstIterator i = channels.begin(); i != channels.end(); ++i) {
             const Imf::Channel &channel = i.channel();
@@ -751,9 +757,9 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
                         newChannelMap["A"] = info.channelMap["A"];
                     }
                     // The decode function expect R, G, B in the channel map
-                    newChannelMap["B"] = info.channelMap["X"];
+                    newChannelMap["R"] = info.channelMap["X"];
                     newChannelMap["G"] = info.channelMap["Y"];
-                    newChannelMap["R"] = info.channelMap["Z"];
+                    newChannelMap["B"] = info.channelMap["Z"];
                     info.channelMap = newChannelMap;
                 }
                 else {

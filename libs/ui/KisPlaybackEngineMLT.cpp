@@ -452,6 +452,19 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
         connect(image->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
             StopAndResume callbackStopResume(m_d.data());
             m_d->profile->set_frame_rate(activeCanvas()->image()->animationInterface()->framerate(), 1);
+
+            /**
+             * Both, producer and consumers store frame rate in their private properties
+             * and do **not** track updates in the profile, so we should recreate all the
+             * three to actually make the changes to take effect.
+             *
+             * Theoretically, we could just call set_profile on all the three, but the fact
+             * that we embed one more producer into our own one, prevents it from working.
+             */
+            KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+            if (animationState) {
+                setupProducer(animationState->mediaInfo());
+            }
         });
 
         // cold init the framerate

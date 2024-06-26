@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-19 03:13+0000\n"
-"PO-Revision-Date: 2024-06-18 14:49+0200\n"
+"PO-Revision-Date: 2024-06-25 10:56+0200\n"
 "Last-Translator: Vit Pelcak <vpelcak@suse.cz>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -21805,7 +21805,7 @@ msgstr ""
 #: libs/ui/animation/wdg_animationrenderer.ui:232
 #, kde-format
 msgid "Include Audio"
-msgstr ""
+msgstr "Zahrnout zvuk"
 
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: libs/ui/animation/wdg_animationrenderer.ui:239
@@ -38569,7 +38569,7 @@ msgstr ""
 #: plugins/dockers/presethistory/presethistory_dock.cpp:316
 #, kde-format
 msgid "Configure Number of Brushes Shown..."
-msgstr ""
+msgstr "Nastavte počet zobrazených štětců..."
 
 #. i18n: context: text @ Actions (Recorder), ActionCollection (Recorder)
 #: plugins/dockers/recorder/recorder.action:4
@@ -39624,7 +39624,7 @@ msgstr "Režim"
 #: plugins/dockers/svgcollectiondocker/SvgSymbolCollectionDocker.cpp:156
 #, kde-format
 msgid "Symbol Libraries"
-msgstr ""
+msgstr "Knihovny symbolů"
 
 #: plugins/dockers/tasksetdocker/tasksetdocker_dock.cpp:78
 #, kde-format
@@ -43219,7 +43219,7 @@ msgstr ""
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:233
 #, kde-format
 msgid "Green-Red"
-msgstr ""
+msgstr "Zelená-Červená"
 
 #: plugins/filters/colorsfilters/kis_hsv_adjustment_filter.cpp:254
 #, kde-format
@@ -43475,7 +43475,7 @@ msgstr ""
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
 #, kde-format
 msgid "Prewitt"
-msgstr ""
+msgstr "Prewitt"
 
 #: plugins/filters/convertheightnormalmap/kis_wdg_convert_height_to_normal_map.cpp:28
 #: plugins/filters/edgedetection/kis_wdg_edge_detection.cpp:20
@@ -46718,7 +46718,7 @@ msgstr "Pokud je tato volba není zapnuta, bude obrázek uložen bezeztrátově.
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:59
 #, kde-format
 msgid "Lossy encoding"
-msgstr ""
+msgstr "Ztrátové kódování"
 
 #. i18n: ectx: property (text), widget (QLabel, lblHighQual)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:77
@@ -46757,7 +46757,7 @@ msgstr ""
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:121
 #, kde-format
 msgid "Use modular mode"
-msgstr ""
+msgstr "Použít modulární režim"
 
 #. i18n: ectx: property (text), widget (QLabel, lblTradeoff)
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:131

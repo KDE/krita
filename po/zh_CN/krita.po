@@ -908,7 +908,7 @@ msgstr "双屏编辑"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Atmosphere_With_Accent.kgm"
 msgid "Atmosphere With Accent"
-msgstr "空气透视与重点色"
+msgstr "空气透视与强调色"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -926,7 +926,7 @@ msgstr "互补色"
 #, kde-format
 msgctxt "./krita/data/gamutmasks/Dominant_Hue_With_Accent.kgm"
 msgid "Dominant Hue With Accent"
-msgstr "主色调与重点色"
+msgstr "主色调与强调色"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -45506,31 +45506,31 @@ msgstr "色调分离"
 #, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Rectangle"
-msgstr ""
+msgstr "矩形"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
 #, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Diamond"
-msgstr ""
+msgstr "菱形"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
 #, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Octagon"
-msgstr ""
+msgstr "八边形"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
 #, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Unrestricted"
-msgstr ""
+msgstr "无限制"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
 #, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Restricted"
-msgstr ""
+msgstr "限制"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
 #, kde-format
@@ -45538,89 +45538,89 @@ msgctxt ""
 "The 'maximum distance' slider in propagate colors filter; {n} is the number "
 "value, px is the pixels suffix"
 msgid "Maximum Distance: {n}px"
-msgstr ""
+msgstr "最大距离：{n} 像素"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
 #, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Expand"
-msgstr ""
+msgstr "扩展"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
 #, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Preserve"
-msgstr ""
+msgstr "保留"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
 msgid "Expand the colors in a rectangular-like way"
-msgstr ""
+msgstr "以近似矩形的方式扩展颜色"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
 #, kde-format
 msgid "Expand the colors in a diamond-like way"
-msgstr ""
+msgstr "以近似菱形的方式扩展颜色"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
 #, kde-format
 msgid "Expand the colors in a octagonal-like way"
-msgstr ""
+msgstr "以近似八边形的方式扩展颜色"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
 #, kde-format
 msgid "Expand the colors all the way until all transparent regions are filled"
-msgstr ""
+msgstr "扩展颜色直至填满所有透明区域"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
 #, kde-format
 msgid "Expand the colors only until a specific distance"
-msgstr ""
+msgstr "扩展颜色到指定的距离为止"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
 #, kde-format
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
-msgstr ""
+msgstr "指定扩展颜色的最大距离，仅在限制模式下有效。"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
 msgid "Expand the alpha channel as well as the color"
-msgstr ""
+msgstr "同时扩展透明度通道和颜色"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
 #, kde-format
 msgid "Expand only the color, leaving the alpha channel untouched"
-msgstr ""
+msgstr "仅扩展颜色，不扩展透明度通道"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
 #, kde-format
 msgctxt "The 'distance metric' section label in propagate colors filter dialog"
 msgid "Expansion Pattern"
-msgstr ""
+msgstr "扩展模式"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
 #, kde-format
 msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
 msgid "Expansion Distance"
-msgstr ""
+msgstr "扩展距离"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
 #, kde-format
 msgctxt ""
 "The 'transparency behavior' section label in propagate colors filter dialog"
 msgid "Transparency Behavior"
-msgstr ""
+msgstr "透明度行为"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
 #, kde-format
 msgid "Propagate Colors"
-msgstr ""
+msgstr "颜色向外扩展"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
 #, kde-format
 msgid "&Propagate Colors..."
-msgstr ""
+msgstr "颜色向外扩展(&P)..."
 
 #. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
@@ -45634,7 +45634,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Propagate Colors Filter"
-msgstr ""
+msgstr "颜色向外扩展滤镜"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format

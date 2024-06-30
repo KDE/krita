@@ -35,6 +35,7 @@ public:
     ~KisToolFreehand() override;
     int flags() const override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    const std::vector<QPoint>& getSmoothedPoints() const { return smoothedPoints; }
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
@@ -61,6 +62,11 @@ protected:
     virtual void initStroke(KoPointerEvent *event);
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
+
+    extern std::vector<QPointF> strokeCoordinates;
+    std::vector<QPoint> removeDuplicates(const std::vector<QPoint>& points);
+    std::vector<QPoint> removeLShapes(const std::vector<QPoint>& points);
+
 
     KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
                                             const KoPointerEvent *event,
@@ -116,6 +122,7 @@ private:
 
     bool m_paintopBasedSamplingInAction {false};
     KisSignalCompressorWithParam<qreal> m_brushResizeCompressor;
+    std::vector<QPoint> smoothedPoints;
 };
 
 

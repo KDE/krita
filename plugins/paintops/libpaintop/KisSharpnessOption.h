@@ -24,9 +24,10 @@ public:
     * Apply threshold specified by user
     */
     void applyThreshold(KisFixedPaintDeviceSP dab, const KisPaintInformation &info);
+    // void applyPerfectPixel(KisFixedPaintDeviceSP device, const KisPaintInformation &info);
 
     bool alignOutlineToPixels() const;
-    // bool applyPerfectPixels() const;
+    bool perfectPixelOption() const;
 
 private:
     KisSharpnessOption(const KisSharpnessOptionData &data);

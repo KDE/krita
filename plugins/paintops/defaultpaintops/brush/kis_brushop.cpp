@@ -33,6 +33,8 @@
 #include <KisDabRenderingExecutor.h>
 #include <KisDabCacheUtils.h>
 #include <KisRenderedDab.h>
+#include <kis_tool_freehand.h>
+// #include "smoothedpointsmanager.h"
 #include "KisBrushOpResources.h"
 
 #include <KisRunnableStrokeJobData.h>
@@ -105,6 +107,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return KisSpacingInformation(1.0);
 
+    qDebug()<< "kis_brushop::paintAt";
     KisBrushSP brush = m_brush;
     Q_ASSERT(brush);
     if (!brush)
@@ -381,28 +384,61 @@ KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &inf
 {
     return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
+//original kisbrushop:paintline
+// void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
+// {
+//     //qDebug() << "KisBrushOp::paintLine";
+//     if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
-void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
-{
+//         if (!m_lineCacheDevice) {
+//             m_lineCacheDevice = source()->createCompositionSourceDevice();
+//         }
+//         else {
+//             m_lineCacheDevice->clear();
+//         }
+
+//         KisPainter p(m_lineCacheDevice);
+//         //qDebug()<< "p(m_lineCacheDevice): " << m_lineCacheDevice;
+//         p.setPaintColor(painter()->paintColor());
+//         //qDebug() << "pi1.posx: "<< pi1.pos().x()<< "pi1.posy: "<< pi1.pos().y();
+//         p.drawDDALine(pi1.pos(), pi2.pos());
+
+//         QRect rc = m_lineCacheDevice->extent();
+//         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
+//     //fixes Bug 338011
+//     painter()->renderMirrorMask(rc, m_lineCacheDevice);
+//     }
+//     else {
+//         KisPaintOp::paintLine(pi1, pi2, currentDistance);
+//     }
+// }
+
+void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance) {
+    qDebug() << "KisBrushOp::paintLine";
     if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
         if (!m_lineCacheDevice) {
             m_lineCacheDevice = source()->createCompositionSourceDevice();
-        }
-        else {
+        } else {
             m_lineCacheDevice->clear();
         }
 
         KisPainter p(m_lineCacheDevice);
         p.setPaintColor(painter()->paintColor());
-        p.drawDDALine(pi1.pos(), pi2.pos());
+
+
+        qDebug() << "Number of smoothed points:" << smoothedPoints.size();
+        for (size_t i = 1; i < smoothedPoints.size(); ++i) {
+            const QPoint& point1 = smoothedPoints[i - 1];
+            const QPoint& point2 = smoothedPoints[i];
+            qDebug() << "Drawing line from" << point1 << "to" << point2;
+            p.drawDDALine(point1, point2);
+        }
 
         QRect rc = m_lineCacheDevice->extent();
         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-    //fixes Bug 338011
-    painter()->renderMirrorMask(rc, m_lineCacheDevice);
-    }
-    else {
+        painter()->renderMirrorMask(rc, m_lineCacheDevice);
+    } else {
         KisPaintOp::paintLine(pi1, pi2, currentDistance);
     }
 }

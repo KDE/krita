@@ -1152,7 +1152,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
 void KisPainter::paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2,
                            KisDistanceInformation *currentDistance)
-{
+{   
+    //qDebug()<< "kis_painter::paintLine";
     if (d->device && d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintLine(pi1, pi2, currentDistance);
     }
@@ -1238,7 +1239,8 @@ void KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2,
                                   KisDistanceInformation *currentDistance)
-{
+{   
+    //qDebug() << "KisPainter::paintBezierCurve";
     if (d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, currentDistance);
     }
@@ -1635,6 +1637,7 @@ void KisPainter::drawPainterPath(const QPainterPath& path, const QPen& _pen, con
 
 inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
 {
+    //qDebug()<< "kis_painter compositeOnePixel";
     d->paramInfo.dstRowStart = dst;
     d->paramInfo.dstRowStride = 0;
     d->paramInfo.srcRowStart = color.data();
@@ -1651,6 +1654,7 @@ inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
 
 /**/
 void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width, bool antialias){
+    //qDebug()<< "kis_painter::drawLine";
     int x1 = qFloor(start.x());
     int y1 = qFloor(start.y());
     int x2 = qFloor(end.x());
@@ -1737,7 +1741,7 @@ void KisPainter::drawLine(const QPointF & start, const QPointF & end)
     drawThickLine(start, end, 1, 1);
 }
 
-
+//original drawDDALine
 void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 {
     int x = qFloor(start.x());
@@ -1745,7 +1749,8 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
 
     int x2 = qFloor(end.x());
     int y2 = qFloor(end.y());
-
+    //qDebug() << " start: " << x  <<" start " << x2  << " y: " << y << " y2 " << y2 ;
+    //qDebug() << "drawDDAlinepainter x: " << x  <<" x2 " << x2  << " y: " << y << " y2 " << y2 ;
     // Width and height of the line
     int xd = x2 - x;
     int yd = y2 - y;
@@ -1779,6 +1784,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     }
 
     if (fabs(m) > 1.0f) {
+        //qDebug() << "fabs in kis_painter";
         inc = (yd > 0) ? 1 : -1;
         m = (lockAxis)? 0 : 1.0f / m;
         m *= inc;
@@ -1795,6 +1801,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
             }
         }
     } else {
+        //qDebug() <<  "not fabs in kis_painter";
         inc = (xd > 0) ? 1 : -1;
         m *= inc;
         while (x != x2) {
@@ -1811,6 +1818,8 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
         }
     }
 }
+
+//qDebug() << " x: " << x << " y: " << y << " x2 " << x2 << " y2 " << y2 ;
 
 void KisPainter::drawWobblyLine(const QPointF & start, const QPointF & end)
 {

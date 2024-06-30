@@ -49,6 +49,7 @@
 #include "kis_tool_freehand_helper.h"
 #include "strokes/freehand_stroke.h"
 #include "kis_tool_utils.h"
+//#include "smoothedpointsmanager.h"
 
 using namespace std::placeholders; // For _1 placeholder
 
@@ -169,26 +170,122 @@ void KisToolFreehand::deactivate()
     }
     KisToolPaint::deactivate();
 }
+//original
+// void KisToolFreehand::initStroke(KoPointerEvent *event)
+// {
+//     //qDebug() << "KisToolFreehand:initStroke";
+//     m_helper->initPaint(event,
+//                         convertToPixelCoord(event),
+//                         image(),
+//                         currentNode(),
+//                         image().data());
+// }
+
+// void KisToolFreehand::initStroke(KoPointerEvent *event)
+// {
+//     qDebug() << "KisToolFreehand:initStroke";
+//     qDebug() << "Event Position (global):" << event->globalPos();
+//     qDebug() << "Event Position (widget):" << event->pos();
+//     qDebug() << "Event Document Coordinates:" << event->point;
+//     qDebug() << "Event Pressure:" << event->pressure();
+//     qDebug() << "Event Rotation:" << event->rotation();
+//     qDebug() << "Event Tangential Pressure:" << event->tangentialPressure();
+//     qDebug() << "Event xTilt:" << event->xTilt();
+//     qDebug() << "Event yTilt:" << event->yTilt();
+//     qDebug() << "Event z Position:" << event->z();
+//     qDebug() << "Event Time:" << event->time();
+//     qDebug() << "Event isTabletEvent:" << event->isTabletEvent();
+
+//     m_helper->initPaint(event,
+//                         convertToPixelCoord(event),
+//                         image(),
+//                         currentNode(),
+//                         image().data());
+// }
 
 void KisToolFreehand::initStroke(KoPointerEvent *event)
 {
+    qDebug() << "KisToolFreehand:initStroke";
     m_helper->initPaint(event,
                         convertToPixelCoord(event),
                         image(),
                         currentNode(),
                         image().data());
+
+    strokeCoordinates.clear(); 
+    strokeCoordinates.push_back(convertToPixelCoord(event)); 
 }
+
+//original
+// void KisToolFreehand::doStroke(KoPointerEvent *event)
+// {
+//     m_helper->paintEvent(event);
+// }
 
 void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
+    // qDebug() << "KisToolFreehand:doStroke";
     m_helper->paintEvent(event);
+
+    strokeCoordinates.push_back(convertToPixelCoord(event)); // Track the coordinates
 }
+//original
+// void KisToolFreehand::endStroke()
+// {
+//     //qDebug() << "KisToolFreehand:endStroke";
+//     m_helper->endPaint();
+//     bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->mouseReleaseEvent();
+//     Q_UNUSED(paintOpIgnoredEvent);
+// }
+
 
 void KisToolFreehand::endStroke()
 {
+    qDebug() << "KisToolFreehand:endStroke";
     m_helper->endPaint();
     bool paintOpIgnoredEvent = currentPaintOpPreset()->settings()->mouseReleaseEvent();
     Q_UNUSED(paintOpIgnoredEvent);
+
+    std::vector<QPoint> points;
+    for (const QPointF& point : strokeCoordinates) {
+        QPoint intPoint = point.toPoint();  //convert QPointF to QPoint
+        points.push_back(intPoint);
+    }
+
+    std::vector<QPoint> uniquePoints = removeDuplicates(points);
+
+    std::vector<QPoint> smoothedPoints = removeLShapes(uniquePoints);
+
+    for (const QPoint& point : smoothedPoints) {
+        qDebug() << "Smoothed Stroke Point (Integer):" << point.x() << point.y();
+    }
+
+    strokeCoordinates.clear();
+}
+
+std::vector<QPoint> KisToolFreehand::removeDuplicates(const std::vector<QPoint>& points) {
+    std::vector<QPoint> uniquePoints;
+    for (const auto& point : points) {
+        if (uniquePoints.empty() || uniquePoints.back() != point) {
+            uniquePoints.push_back(point);
+        }
+    }
+    return uniquePoints;
+}
+
+std::vector<QPoint> KisToolFreehand::removeLShapes(const std::vector<QPoint>& points) {
+    std::vector<QPoint> smoothedPoints;
+    for (size_t c = 0; c < points.size(); ++c) {
+        if (c > 0 && c + 1 < points.size() &&
+            (points[c - 1].x() == points[c].x() || points[c - 1].y() == points[c].y()) &&
+            (points[c + 1].x() == points[c].x() || points[c + 1].y() == points[c].y()) &&
+            points[c - 1].x() != points[c + 1].x() &&
+            points[c - 1].y() != points[c + 1].y()) {
+            continue;
+        }
+        smoothedPoints.push_back(points[c]);
+    }
+    return smoothedPoints;
 }
 
 bool KisToolFreehand::primaryActionSupportsHiResEvents() const

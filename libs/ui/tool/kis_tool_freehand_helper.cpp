@@ -450,6 +450,7 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
 
 void KisToolFreehandHelper::paint(KisPaintInformation &info)
 {
+    //qDebug()<< "kis_tool_freehand_helper::paint";
     /**
      * Smooth the coordinates out using the history and the
      * distance. This is a heavily modified version of an algo used in
@@ -471,7 +472,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      */
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
         && m_d->smoothingOptions->smoothnessDistance() > 0.0) {
-
+            //qDebug() << "weighted smoothing in kistool freehand";
         { // initialize current distance
             QPointF prevPos;
 
@@ -564,6 +565,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
         || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING)
     {
+        //qDebug() << "simple smoothing in kistool freehand";
         // Now paint between the coordinates, using the bezier curve interpolation
         if (!m_d->haveTangent) {
             m_d->haveTangent = true;
@@ -576,8 +578,12 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
 
             if (newTangent.isNull() || m_d->previousTangent.isNull())
             {
+                // qDebug() << "if in simple";
                 paintLine(m_d->previousPaintInformation, info);
             } else {
+                //qDebug() << "else in simple"; this one
+                //qDebug() << m_d->olderPaintInformation << m_d->previousPaintInformation << m_d->previousTangent << newTangent;
+
                 paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
                                    m_d->previousTangent, newTangent);
             }
@@ -592,21 +598,25 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
         }
     }
     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
+        //qDebug() << "no smoothing in kistool freehand";
         paintLine(m_d->previousPaintInformation, info);
     }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         m_d->stabilizedSampler.addEvent(info);
+        //qDebug() << "stablizer in kistool freehand";
         if (m_d->stabilizerDelayedPaintHelper.running()) {
             // Paint here so we don't have to rely on the timer
             // This is just a tricky source for a relatively stable 7ms "timer"
             m_d->stabilizerDelayedPaintHelper.paintSome();
         }
     } else {
+        //qDebug() << "else";
         m_d->previousPaintInformation = info;
     }
 
     if(m_d->airbrushingTimer.isActive()) {
+        //qDebug() << "airbrush timer";
         m_d->airbrushingTimer.start();
     }
 }

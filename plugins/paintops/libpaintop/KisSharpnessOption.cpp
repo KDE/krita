@@ -98,7 +98,7 @@ bool KisSharpnessOption::alignOutlineToPixels() const
     return m_alignOutlinePixels;
 }
 
-// bool KisSharpnessOption::applyPerfectPixels() const
-// {
-//     qDebug() << "applied perfect pixels";
-// }
+bool KisSharpnessOption::perfectPixelOption() const
+{
+    return m_perfectPixel;
+}

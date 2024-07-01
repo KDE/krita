@@ -24,6 +24,7 @@
 #include <kis_debug.h>
 
 #include "KoFontLibraryResourceUtils.h"
+#include "KoFFWWSConverter.h"
 
 
 static unsigned int firstCharUcs4(const QStringView qsv)
@@ -50,6 +51,7 @@ class Q_DECL_HIDDEN KoFontRegistry::Private
 {
 private:
     FcConfigSP m_config;
+    KoFFWWSConverter fontFamilyConverter;
 
     struct ThreadData {
         FT_LibrarySP m_library;
@@ -93,10 +95,21 @@ public:
         debugFlake << "Setting FONTCONFIG_PATH" << qgetenv("FONTCONFIG_PATH");
         if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
             errorFlake << "Failed loading the Fontconfig configuration";
+            config = FcConfigGetCurrent();
         } else {
             FcConfigSetCurrent(config);
         }
         m_config.reset(config);
+
+        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_INDEX, nullptr);
+        FcFontSetSP allFonts(FcFontList(m_config.data(), FcPatternCreate(), objectSet));
+
+        qDebug() << allFonts->nfont;
+        for (int j = 0; j < allFonts->nfont; j++) {
+            fontFamilyConverter.addFontFromPattern(allFonts->fonts[j], library());
+        }
+
+        fontFamilyConverter.debugInfo();
     }
 
     ~Private() = default;
@@ -161,8 +174,6 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                                                          int slant,
                                                          const QString &language)
 {
-    // FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH,
-    // FC_WEIGHT, FC_SLANT, nullptr);
     FcPatternSP p(FcPatternCreate());
     Q_FOREACH (const QString &family, families) {
         QByteArray utfData = family.toUtf8();

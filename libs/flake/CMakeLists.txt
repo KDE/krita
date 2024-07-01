@@ -233,6 +233,7 @@ set(kritaflake_SRCS
     text/lager/TextIndentModel.cpp
     text/lager/TabSizeModel.cpp
     text/lager/TextTransformModel.cpp
+    text/KoFFWWSConverter.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp

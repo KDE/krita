@@ -285,6 +285,11 @@ public:
      */
     static bool propertyIsBlockOnly(KoSvgTextProperties::PropertyId id);
 
+    /**
+     * returns whether a property can be inherited.
+     */
+    bool propertyIsInheritable(KoSvgTextProperties::PropertyId id) const;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

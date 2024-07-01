@@ -38,7 +38,7 @@ auto propertyModifyState = [](KoSvgTextProperties::PropertyId propId) { return l
             return KoSvgTextPropertiesModel::PropertySet;
         } else if (value.tristate.contains(propId)) {
             return KoSvgTextPropertiesModel::PropertyTriState;
-        } else if (value.inheritedProperties.hasProperty(propId)) {
+        } else if (value.inheritedProperties.hasProperty(propId) && value.inheritedProperties.propertyIsInheritable(propId)) {
             return KoSvgTextPropertiesModel::PropertyInherited;
         }
         return KoSvgTextPropertiesModel::PropertyUnset;

@@ -1219,3 +1219,8 @@ bool KoSvgTextProperties::propertyIsBlockOnly(PropertyId id)
             id == HangingPunctuationId;
 }
 
+bool KoSvgTextProperties::propertyIsInheritable(PropertyId id) const
+{
+    return m_d->isInheritable(id);
+}
+

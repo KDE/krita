@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-19 01:43+0000\n"
-"PO-Revision-Date: 2024-06-19 12:42+0200\n"
+"PO-Revision-Date: 2024-06-27 13:49+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -15358,7 +15358,7 @@ msgstr "Altres"
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
-msgstr "Inicia el G'MIC de les Qt"
+msgstr "Inicia G'MIC de les Qt"
 
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
@@ -15368,14 +15368,14 @@ msgstr "Inicia el G'MIC de les Qt"
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
-msgstr "Inicia el G'MIC de les Qt"
+msgstr "Inicia G'MIC de les Qt"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1725
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
-msgstr "Torna a aplicar l'últim filtre del G'MIC"
+msgstr "Torna a aplicar l'últim filtre de G'MIC"
 
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
@@ -15385,7 +15385,7 @@ msgstr "Torna a aplicar l'últim filtre del G'MIC"
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
-msgstr "Torna a aplicar l'última acció del G'MIC de les Qt"
+msgstr "Torna a aplicar l'última acció de G'MIC de les Qt"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -57217,7 +57217,7 @@ msgid ""
 "(https://github.com/test/plugin)</li>"
 msgstr ""
 "<p><strong>Introduïu l'URL de baixada</strong></p><p>Per exemple:"
-"<ul><li>Enllaç de la baixada de ZIP (https://exemple.org/connector.zip)</"
+"<ul><li>Enllaç de la baixada de ZIP (https://example.com/connector.zip)</"
 "li><li>Repositori de GitHub (https://github.com/prova/connector)</li>"
 
 #: plugins/python/plugin_importer/plugin_importer_extension.py:102

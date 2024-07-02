@@ -12,21 +12,27 @@
 
 #include <QFileInfo>
 
-QString KoFontFamilyNode::debugInfo()
+QStringList KoFontFamilyNode::debugInfo()
 {
     QString style = isItalic? isOblique? "Oblique": "Italic": "Roman";
-    QStringList axisInfo;
+    QStringList debug = {QString("\'%1\' \'%2\', style: %3").arg(fontFamily, fontStyle, style)};
+    debug.append(QString("Index: %1, File: %2").arg(fileIndex).arg(fileName));
     for (int i=0; i< axes.size(); i++) {
         KoFontFamilyAxis axis = axes.value(axes.keys().at(i));
-        axisInfo.append(QString(axis.tag+"="+QString::number(axis.value)));
+        debug.append(axis.debugInfo());
     }
-    QString debug = QString("\'%1\' \'%2\', style: %3, axes: %4").arg(fontFamily, fontStyle, style, axisInfo.join(", "));
+    for (int i=0; i< styleInfo.size(); i++) {
+        debug.append(styleInfo.at(i).debugInfo());
+    }
+    if (sizeInfo.low >= 0 && sizeInfo.high >= 0) {
+        debug.append(sizeInfo.debugInfo());
+    }
     if (!pixelSizes.isEmpty()) {
         QStringList pix;
         for (int i=0; i< pixelSizes.size(); i++) {
             pix.append(QString::number(pixelSizes.keys().at(i)));
         }
-        debug += " pixelSizes: "+pix.join(", ");
+        debug.append("PixelSizes: "+pix.join(", "));
     }
     return debug;
 }
@@ -73,12 +79,12 @@ qreal percentageFromUsWidthClass(int width) {
     }
 }
 
-constexpr unsigned ITALIC = 1u << 0;
-constexpr unsigned BOLD = 1u << 5;
-constexpr unsigned REGULAR = 1u << 6;
-constexpr unsigned WWS = 1u << 8;
-constexpr unsigned OBLIQUE = 1u << 9;
-constexpr unsigned USE_TYPO_METRICS = 1u << 7;
+constexpr unsigned OS2_ITALIC = 1u << 0;
+constexpr unsigned OS2_BOLD = 1u << 5;
+constexpr unsigned OS2_REGULAR = 1u << 6;
+constexpr unsigned OS2_WWS = 1u << 8;
+constexpr unsigned OS2_OBLIQUE = 1u << 9;
+constexpr unsigned OS2_USE_TYPO_METRICS = 1u << 7;
 
 bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP freeTypeLibrary)
 {
@@ -109,6 +115,15 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
         return getFile;
     }
 
+    if (fontFamily.fileIndex > 0xffff) { // this indicates the font is a variable font instance, so we don't try to load it.
+        return false;
+    }
+    for (auto it = d->fontFamilyCollection.compositionBegin(); it != d->fontFamilyCollection.compositionEnd(); it++) {
+        if (it->fileName == fontFamily.fileName && it->fileIndex == fontFamily.fileIndex) {
+            return true;
+        }
+    }
+
 
     FT_Face f = nullptr;
     FT_FaceSP face;
@@ -136,9 +151,10 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
             fontFamily.fontFamily = QFileInfo(fontFamily.fileName).baseName();
         }
         for (int i=0; i< face->num_fixed_sizes; i++) {
-            fontFamily.pixelSizes.insert((face->available_sizes[i].size / 64.0), fontFamily.fileName);
+            fontFamily.pixelSizes.insert((face->available_sizes[i].size / 64.0), {fontFamily.fileName});
         }
     } else {
+        fontFamily.type = OpenType;
         hb_face_t *hbFace = hb_ft_face_create_referenced(face.data());
 
         // Retrieve width, weight and slant data.
@@ -147,23 +163,25 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
         if (os2Table) {
             fontFamily.axes.insert("wght", KoFontFamilyAxis::weightAxis(os2Table->usWeightClass));
             fontFamily.axes.insert("wdth", KoFontFamilyAxis::widthAxis(percentageFromUsWidthClass(os2Table->usWidthClass)));
-            if (os2Table->fsSelection & BOLD && os2Table->usWeightClass == 400) {
+            if (os2Table->fsSelection & OS2_BOLD && os2Table->usWeightClass == 400) {
                 fontFamily.axes.insert("wght", KoFontFamilyAxis::weightAxis(700));
             }
-            fontFamily.isItalic = (os2Table->fsSelection & ITALIC);
-            fontFamily.isOblique = (os2Table->fsSelection & OBLIQUE);
-            if (os2Table->fsSelection & REGULAR) {
+            fontFamily.isItalic = (os2Table->fsSelection & OS2_ITALIC);
+            fontFamily.isOblique = (os2Table->fsSelection & OS2_OBLIQUE);
+            if (os2Table->fsSelection & OS2_REGULAR) {
                 fontFamily.axes.insert("wght", KoFontFamilyAxis::weightAxis(400));
                 fontFamily.isItalic = false;
                 fontFamily.isOblique = false;
             }
             if (os2Table->version >= 5) {
                 FontFamilySizeInfo sizeInfo;
-                sizeInfo.high = os2Table->usUpperOpticalPointSize;
-                sizeInfo.low = os2Table->usLowerOpticalPointSize;
+                qreal twip = 0.05; ///< twip is 'Twenty-in-point';
+                sizeInfo.high = os2Table->usUpperOpticalPointSize * twip;
+                sizeInfo.low = os2Table->usLowerOpticalPointSize * twip;
                 sizeInfo.os2table = true;
                 fontFamily.sizeInfo = sizeInfo;
             }
+            isWWSFamilyWithoutName = (os2Table->fsSelection & OS2_WWS);
         }
 
         // retrieve gpos size data...
@@ -174,20 +192,25 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
         hb_ot_name_id_t sizeNameId;
         if (hb_ot_layout_get_size_params(hbFace, &designSize, &subFamilyId, &sizeNameId, &rangeStart, &rangeEnd)) {
             FontFamilySizeInfo sizeInfo;
-            sizeInfo.low = rangeStart;
-            sizeInfo.high = rangeEnd;
-            sizeInfo.uniqueIDX = subFamilyId;
-            sizeInfo.designSize = designSize;
+            qreal tenth = 0.1;
+            sizeInfo.low = rangeStart * tenth;
+            sizeInfo.high = rangeEnd * tenth;
+            sizeInfo.subFamilyID = subFamilyId;
+            sizeInfo.designSize = designSize * tenth;
             fontFamily.sizeInfo = sizeInfo;
         }
 
         // retrieve axis data...
+        // Would also be good if we could read the STAT table for more info, but we cannot as there's no API for that in harfbuzz.
 
         QHash<hb_ot_name_id_t, QString> axisNameIDs;
+        QVector<hb_ot_name_id_t> instanceNameIDs;
         if (hb_ot_var_has_data(hbFace)) {
+            fontFamily.isVariable = true;
             uint count = hb_ot_var_get_axis_count(hbFace);
             uint maxInfos = 1;
-            for (FT_UInt i = 0; i < count; i++) {
+            QStringList axesTags;
+            for (uint i = 0; i < count; i++) {
                 KoFontFamilyAxis axisInfo;
                 hb_ot_var_axis_info_t axis;
                 hb_ot_var_get_axis_infos(hbFace, i, &maxInfos, &axis);
@@ -198,17 +221,43 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
                 hb_tag_to_string(axis.tag, buff);
                 axisInfo.tag = QString::fromLatin1(buff, 4);
                 axisNameIDs.insert(axis.name_id, axisInfo.tag);
+                axisInfo.variableAxis = true;
                 fontFamily.axes.insert(axisInfo.tag, axisInfo);
+                axesTags.append(axisInfo.tag);
             }
+            count = hb_ot_var_get_named_instance_count (hbFace);
+            for (uint i = 0; i < count; i++) {
+                QHash<QString, float> instanceCoords;
+                uint coordLength = axesTags.size();
+                float coordinate[coordLength];
+                hb_ot_var_named_instance_get_design_coords (hbFace, i, &coordLength, coordinate);
+                for (uint j =0; j < coordLength; j++ ){
+                    instanceCoords.insert(axesTags.value(j), coordinate[j]);
+                }
+                FontFamilyStyleInfo style;
+                style.instanceCoords = instanceCoords;
+                instanceNameIDs.append(hb_ot_var_named_instance_get_subfamily_name_id(hbFace, i));
+                fontFamily.styleInfo.append(style);
+            }
+
         }
+
+        // Get some basic color data.
+        fontFamily.colorBitMap = hb_ot_color_has_png(hbFace);
+        fontFamily.colorSVG = hb_ot_color_has_svg(hbFace);
+        fontFamily.colorClrV0 = hb_ot_color_has_layers(hbFace);
+        //fontFamily.colorClrV1 = hb_ot_color_has_paint(hbFace);
 
         uint numEntries = 0;
         const hb_ot_name_entry_t *entries = hb_ot_name_list_names(hbFace, &numEntries);
 
         QHash<QString, QString> ribbiFamilyNames;
+        QHash<QString, QString> ribbiStyleNames;
         QHash<QString, QString> WWSFamilyNames;
+        QHash<QString, QString> WWSStyleNames;
         QHash<QString, QString> typographicFamilyNames;
-        for (int i = 0; i < numEntries; i++) {
+        QHash<QString, QString> typographicStyleNames;
+        for (uint i = 0; i < numEntries; i++) {
             hb_ot_name_entry_t entry = entries[i];
             QString lang(hb_language_to_string(entry.language));
             uint length = hb_ot_name_get_utf8(hbFace, entry.name_id, entry.language, nullptr, nullptr)+1;
@@ -222,28 +271,47 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
                 typographicFamilyNames.insert(lang, name);
             } else if (entry.name_id == HB_OT_NAME_ID_WWS_FAMILY) {
                 WWSFamilyNames.insert(lang, name);
+            } else if (entry.name_id == HB_OT_NAME_ID_FONT_SUBFAMILY) {
+                ribbiStyleNames.insert(lang, name);
+            } else if (entry.name_id == HB_OT_NAME_ID_TYPOGRAPHIC_SUBFAMILY) {
+                typographicStyleNames.insert(lang, name);
+            } else if (entry.name_id == HB_OT_NAME_ID_WWS_SUBFAMILY) {
+                WWSStyleNames.insert(lang, name);
             } else if (axisNameIDs.keys().contains(entry.name_id)) {
                 fontFamily.axes[axisNameIDs.value(entry.name_id)].localizedLabels.insert(lang, name);
             } else if (entry.name_id == sizeNameId) {
                 fontFamily.sizeInfo.localizedLabels.insert(lang, name);
+            } else if (instanceNameIDs.contains(entry.name_id)) {
+                int idx = instanceNameIDs.indexOf(entry.name_id);
+                fontFamily.styleInfo[idx].localizedLabels.insert(lang, name);
             }
         }
         if (!typographicFamilyNames.isEmpty()) {
             typographicFamily.fontFamily = typographicFamilyNames.value("en", typographicFamilyNames.values().first());
             typographicFamily.localizedFontFamilies = typographicFamilyNames;
         }
-
+        if (!typographicStyleNames.isEmpty()) {
+            typographicFamily.fontStyle = typographicStyleNames.value("en", typographicStyleNames.values().first());
+            typographicFamily.localizedFontStyle = typographicStyleNames;
+        }
         if (!ribbiFamilyNames.isEmpty()) {
             fontFamily.fontFamily = ribbiFamilyNames.value("en", ribbiFamilyNames.values().first());
             fontFamily.localizedFontFamilies = ribbiFamilyNames;
         }
-
+        if (!ribbiStyleNames.isEmpty()) {
+            fontFamily.fontStyle = ribbiStyleNames.value("en", ribbiStyleNames.values().first());
+            fontFamily.localizedFontStyle = ribbiStyleNames;
+        }
         if (!WWSFamilyNames.isEmpty()) {
             wwsFamily.fontFamily = WWSFamilyNames.value("en", WWSFamilyNames.values().first());
             wwsFamily.localizedFontFamilies = WWSFamilyNames;
         }
+        if (!WWSStyleNames.isEmpty()) {
+            wwsFamily.fontStyle = WWSStyleNames.value("en", WWSStyleNames.values().first());
+            wwsFamily.localizedFontFamilies = WWSStyleNames;
+        }
 
-
+        hb_face_destroy(hbFace);
     }
     if (typographicFamily.fontFamily.isEmpty()) {
         typographicFamily.fontFamily = fontFamily.fontFamily;
@@ -254,22 +322,149 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
     if (typographicFamily.fontFamily.isEmpty() && fontFamily.fontFamily.isEmpty()) {
         d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), fontFamily);
     } else {
-        auto it = d->fontFamilyCollection.begin();
-        for (; it != d->fontFamilyCollection.end(); it++) {
+        // find potential typographic family
+        auto it = d->fontFamilyCollection.childBegin();
+        for (; it != d->fontFamilyCollection.childEnd(); it++) {
             if (!typographicFamily.fontFamily.isEmpty() && it->fontFamily == typographicFamily.fontFamily) {
                 break;
             } else if (it->fontFamily == fontFamily.fontFamily) {
                 break;
             }
         }
-        if (it != d->fontFamilyCollection.end()) {
-            d->fontFamilyCollection.insert(childEnd(it), fontFamily);
+        if (it != d->fontFamilyCollection.childEnd()) {
+
+            if (isWWSFamilyWithoutName) {
+                wwsFamily.fontFamily = fontFamily.fontFamily;
+            }
+            if (!wwsFamily.fontFamily.isEmpty()) {
+                // sort into wws family
+                auto wws = childBegin(it);
+                for (; wws != childEnd(it); wws++) {
+                    if (wws->fontFamily == wwsFamily.fontFamily) {
+                        break;
+                    }
+                }
+                if (wws != childEnd(it)) {
+                    d->fontFamilyCollection.insert(childEnd(wws), fontFamily);
+                } else {
+                    auto wwsNew = d->fontFamilyCollection.insert(childEnd(it), wwsFamily);
+                    d->fontFamilyCollection.insert(childEnd(wwsNew), fontFamily);
+                }
+            } else if (!fontFamily.pixelSizes.isEmpty()) {
+                // sort any pixel sizes into the appropriate family.
+                auto pixel = childBegin(it);
+                for (; pixel != childEnd(it); pixel++) {
+                    if (pixel->fontFamily == fontFamily.fontFamily && pixel->fontStyle == fontFamily.fontStyle && !pixel->pixelSizes.isEmpty()) {
+                        for (int pxSize = 0; pxSize < fontFamily.pixelSizes.keys().size(); pxSize++) {
+                            int px = fontFamily.pixelSizes.keys().at(pxSize);
+                            QStringList files = pixel->pixelSizes.value(px, QStringList());
+                            files.append(fontFamily.pixelSizes.value(px));
+                            pixel->pixelSizes.insert(px, files);
+                        }
+                        break;
+                    }
+                }
+                if (pixel == childEnd(it)) {
+                    d->fontFamilyCollection.insert(childEnd(it), fontFamily);
+                }
+
+            } else {
+                d->fontFamilyCollection.insert(childEnd(it), fontFamily);
+            }
         } else {
             auto typographic = d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), typographicFamily);
-            d->fontFamilyCollection.insert(childEnd(typographic), fontFamily);
+            if (isWWSFamilyWithoutName) {
+                wwsFamily.fontFamily = fontFamily.fontFamily;
+            }
+            if (!wwsFamily.fontFamily.isEmpty()) {
+                auto wwsNew = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
+                d->fontFamilyCollection.insert(childEnd(wwsNew), fontFamily);
+            } else {
+                d->fontFamilyCollection.insert(childEnd(typographic), fontFamily);
+            }
         }
     }
     return true;
+}
+
+void KoFFWWSConverter::sortIntoWWSFamilies()
+{
+    for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
+        KisForest<KoFontFamilyNode> tempList;
+        QVector<qreal> weights;
+        QVector<qreal> widths;
+
+        for (auto child = childBegin(typographic); child != childEnd(typographic); child++) {
+            if (childBegin(child) != childEnd(child)) {
+                continue;
+            }
+            tempList.insert(tempList.childEnd(), *child);
+            qreal wght = child->axes.value("wght", KoFontFamilyAxis::weightAxis(400)).value;
+            if (!weights.contains(wght)) weights.append(wght);
+            qreal wdth = child->axes.value("wdth", KoFontFamilyAxis::widthAxis(100)).value;
+            if (!widths.contains(wdth)) widths.append(wdth);
+
+            d->fontFamilyCollection.erase(child);
+        }
+        //split up in
+        if (KisForestDetail::size(tempList) > 0) {
+            for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
+                qreal testWeight = weights.contains(400)? 400: weights.first();
+                qreal testWidth = widths.contains(100)? 100: widths.first();
+                bool widthTested = !font->axes.keys().contains("wdth");
+                widthTested = widthTested? true: font->axes.value("wdth").value == testWidth;
+
+                if (font->axes.value("wght").value == testWeight && widthTested
+                        && !font->isItalic && !font->isOblique) {
+                    KoFontFamilyNode wwsFamily;
+                    wwsFamily.fontFamily = font->fontFamily;
+                    wwsFamily.fontStyle = font->fontStyle;
+                    auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
+                    d->fontFamilyCollection.insert(childEnd(newWWS), *font);
+                    tempList.erase(font);
+                }
+            }
+            for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
+                qDebug() << "testing" << font->fontFamily;
+                auto wws = childBegin(typographic);
+                for (; wws != childEnd(typographic); wws++) {
+                    if (wws->fontFamily != font->fontFamily) {
+                        continue;
+                    }
+                    if (font->type != OpenType) {
+                        // Hack for really old fonts.
+                        if (wws->fontStyle.toLower() != "regular"
+                                && !font->fontStyle.contains(wws->fontStyle)) {
+                            continue;
+                        }
+                    }
+                    auto wwsChild = childBegin(wws);
+                    for (; wwsChild != childEnd(wws); wwsChild++) {
+
+                        if (wwsChild->isItalic == font->isItalic
+                                && wwsChild->isOblique == font->isOblique
+                                && wwsChild->compareAxes(font->axes)) {
+                            break;
+                        }
+                    }
+                    if (wwsChild != childEnd(wws)) {
+                        continue;
+                    } else {
+                        d->fontFamilyCollection.insert(childEnd(wws), *font);
+                        break;
+                    }
+                }
+                if (wws == childEnd(typographic)) {
+                    KoFontFamilyNode wwsFamily;
+                    wwsFamily.fontFamily = font->fontFamily;
+                    wwsFamily.fontStyle = font->fontStyle;
+                    auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
+                    d->fontFamilyCollection.insert(childEnd(newWWS), *font);
+                }
+            }
+        }
+
+    }
 }
 
 void KoFFWWSConverter::debugInfo()
@@ -278,12 +473,19 @@ void KoFFWWSConverter::debugInfo()
     QString spaces;
     for (auto it = compositionBegin(d->fontFamilyCollection); it != compositionEnd(d->fontFamilyCollection); it++) {
         if (it.state() == KisForestDetail::Enter) {
-            qDebug().noquote() << QString(spaces + "+") << it->debugInfo();
-            spaces.append("\t");
+            QStringList debugInfo = it->debugInfo();
+            for (int i = 0; i< debugInfo.size(); i++) {
+                if (i==0) {
+                    qDebug().noquote() << QString(spaces + "+") << debugInfo.at(i);
+                } else {
+                    qDebug().noquote() << QString(spaces + "| ") << debugInfo.at(i);
+                }
+            }
+            spaces.append("    ");
         }
 
         if (it.state() == KisForestDetail::Leave) {
-            spaces.chop(1);
+            spaces.chop(4);
         }
     }
 }

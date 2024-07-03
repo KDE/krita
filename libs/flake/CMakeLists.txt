@@ -237,6 +237,8 @@ set(kritaflake_SRCS
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp
+    resources/KoFontFamily.cpp
+    resources/KoFontStorage.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp

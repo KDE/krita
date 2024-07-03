@@ -10,6 +10,7 @@
 #include <QVector>
 
 #include <KoFontLibraryResourceUtils.h>
+#include <KoFFWWSConverter.h>
 
 #include "kritaflake_export.h"
 
@@ -72,6 +73,8 @@ public:
                         quint32 xRes,
                         quint32 yRes,
                         const QMap<QString, qreal> &axisSettings);
+
+    QList<KoFontFamilyWWSRepresentation> collectRepresentations() const;
 
 private:
     class Private;

@@ -1065,6 +1065,10 @@ void KisResourceLocator::findStorages()
     d->storages["memory"] = QSharedPointer<KisResourceStorage>::create("memory");
     d->storages["memory"]->setMetaData(KisResourceStorage::s_meta_name, i18n("Temporary Resources"));
 
+    // Add font storage
+    d->storages["fontregistery"] = QSharedPointer<KisResourceStorage>::create("fontregistery");
+    d->storages["fontregistery"]->setMetaData(KisResourceStorage::s_meta_name, i18n("Font Storage"));
+
     // And add bundles and adobe libraries
     QStringList filters = QStringList() << "*.bundle" << "*.abr" << "*.asl";
     QDirIterator iter(d->resourceLocation, filters, QDir::Files, QDirIterator::Subdirectories);
@@ -1107,6 +1111,11 @@ KisResourceStorageSP KisResourceLocator::folderStorage() const
 KisResourceStorageSP KisResourceLocator::memoryStorage() const
 {
     return storageByLocation("memory");
+}
+
+KisResourceStorageSP KisResourceLocator::fontStorage() const
+{
+    return storageByLocation("fontregistery");
 }
 
 KisResourceLocator::ResourceStorage KisResourceLocator::getResourceStorage(int resourceId) const

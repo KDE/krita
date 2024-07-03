@@ -28,6 +28,7 @@ namespace ResourceType {
     KRITARESOURCES_EXPORT extern const QString FilterEffects;
     KRITARESOURCES_EXPORT extern const QString TaskSets;
     KRITARESOURCES_EXPORT extern const QString LayerStyles;
+    KRITARESOURCES_EXPORT extern const QString FontFamilies;
 }
 
 namespace ResourceSubType {
@@ -57,6 +58,7 @@ namespace ResourceName {
     KRITARESOURCES_EXPORT extern const KLocalizedString FilterEffects;
     KRITARESOURCES_EXPORT extern const KLocalizedString TaskSets;
     KRITARESOURCES_EXPORT extern const KLocalizedString LayerStyles;
+    KRITARESOURCES_EXPORT extern const KLocalizedString FontFamilies;
 
     KRITARESOURCES_EXPORT QString resourceTypeToName(const QString &resourceType);
 

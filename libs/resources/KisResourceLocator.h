@@ -333,6 +333,7 @@ private:
     KisResourceStorageSP storageByLocation(const QString &location) const;
     KisResourceStorageSP folderStorage() const;
     KisResourceStorageSP memoryStorage() const;
+    KisResourceStorageSP fontStorage() const;
 
     struct ResourceStorage {
         QString storageLocation;

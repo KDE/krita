@@ -146,6 +146,11 @@ public:
     {
         return m_config;
     }
+
+    QList<KoFontFamilyWWSRepresentation> representations() const
+    {
+        return fontFamilyConverter.collectFamilies();
+    }
 };
 
 KoFontRegistry::KoFontRegistry()
@@ -540,6 +545,11 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
         }
     }
     return (errorCode == 0);
+}
+
+QList<KoFontFamilyWWSRepresentation> KoFontRegistry::collectRepresentations() const
+{
+    return d->representations();
 }
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)

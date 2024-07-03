@@ -107,7 +107,8 @@ public:
         Bundle = 3,
         AdobeBrushLibrary = 4,
         AdobeStyleLibrary = 5,
-        Memory = 6
+        Memory = 6,
+        FontStorage = 7
     };
 
     static QString storageTypeToString(StorageType storageType) {
@@ -122,6 +123,8 @@ public:
             return i18n("Adobe Brush Library");
         case StorageType::AdobeStyleLibrary:
             return i18n("Adobe Style Library");
+        case StorageType::FontStorage:
+            return i18n("Font Storage");
         case StorageType::Memory:
             return i18n("Memory");
         default:
@@ -142,6 +145,8 @@ public:
             return ("Adobe Brush Library");
         case StorageType::AdobeStyleLibrary:
             return ("Adobe Style Library");
+        case StorageType::FontStorage:
+            return ("Font Storage");
         case StorageType::Memory:
             return ("Memory");
         default:

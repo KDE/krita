@@ -30,6 +30,10 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
     qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
     qRegisterMetaType<KoSvgText::LineHeightInfo>("KoSvgText::LineHeightInfo");
+    qRegisterMetaType<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
+    qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
+    qRegisterMetaType<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
+    qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<KoSvgText::CssLengthPercentage>();
@@ -64,7 +68,12 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
     QMetaType::registerEqualsComparator<KoSvgText::LineHeightInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::LineHeightInfo>();
-#endif
+    
+    QMetaType::registerEqualsComparator<KoSvgText::FontFamilyAxis>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::FontFamilyAxis>();
+    
+    QMetaType::registerEqualsComparator<KoSvgText::FontFamilyStyleInfo>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::FontFamilyStyleInfo>();
 }
 
 namespace KoSvgText {
@@ -1045,6 +1054,65 @@ QDebug operator<<(QDebug dbg, const KoSvgText::AutoLengthPercentage &value)
         dbg.nospace() << value.length;
     }
     return dbg.space();
+}
+
+
+QDebug operator<<(QDebug dbg, const KoSvgText::FontFamilyAxis &axis)
+{
+    dbg.nospace() << axis.debugInfo();
+    return dbg.space();
+}
+
+QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyAxis &axis) {
+
+    out << axis.tag;
+    out << axis.min;
+    out << axis.defaultValue;
+    out << axis.max;
+    return out;
+}
+QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis) {
+
+    in >> axis.tag;
+    in >> axis.min;
+    in >> axis.defaultValue;
+    in >> axis.max;
+    return in;
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::FontFamilyStyleInfo &style)
+{
+    dbg.nospace() << style.debugInfo();
+    return dbg.space();
+}
+
+QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyStyleInfo &style) {
+
+    out << style.isItalic;
+    out << style.isOblique;
+    QStringList coords;
+    Q_FOREACH(const QString key, style.instanceCoords.keys()) {
+        coords.append(key+"="+QString::number(style.instanceCoords.value(key)));
+    }
+    out << coords.join(" ");
+    return out;
+}
+QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyStyleInfo &style) {
+
+    in >> style.isItalic;
+    in >> style.isOblique;
+    QString coords;
+    in >> coords;
+    style.instanceCoords.clear();
+    Q_FOREACH(const QString coord, coords.split(" ")) {
+        QStringList key = coord.split("=");
+        QString last = key.last();
+        bool ok = false;
+        float val = last.toFloat(&ok);
+        style.instanceCoords.insert(key.first(), ok? val: 0.0);
+    }
+
+    return in;
 }
 
 } // namespace KoSvgText

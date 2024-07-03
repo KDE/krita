@@ -697,6 +697,100 @@ struct StrokeProperty : public boost::equality_comparable<StrokeProperty>
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::StrokeProperty &prop);
 
+struct FontFamilyAxis : public boost::equality_comparable<FontFamilyAxis> {
+
+    FontFamilyAxis() {}
+    FontFamilyAxis (QString _tag, qreal _value)
+        : tag(_tag), value(_value) {}
+
+    static FontFamilyAxis weightAxis(qreal val) {
+        FontFamilyAxis axis("wght", val);
+        axis.min = val;
+        axis.max = val;
+        axis.defaultValue = 400;
+        return axis;
+    }
+    static FontFamilyAxis widthAxis(qreal val) {
+        FontFamilyAxis axis("wdth", val);
+        axis.min = val;
+        axis.max = val;
+        axis.defaultValue = 100;
+        return axis;
+    }
+    static FontFamilyAxis slantAxis(qreal val) {
+        FontFamilyAxis axis("slnt", val);
+        axis.min = val;
+        axis.max = val;
+        axis.defaultValue = 0;
+        return axis;
+    }
+
+    QString tag;
+    QHash<QString, QString> localizedLabels;
+    qreal min = -1;
+    qreal max = -1;
+    qreal value = 0;
+    qreal defaultValue = 0;
+    bool variableAxis = false;
+
+    QString debugInfo() const {
+        QString label;
+        if (!localizedLabels.isEmpty()) {
+            label = localizedLabels.value("en", localizedLabels.values().first());
+        }
+        return QString("Axis: %1 (%2), min: %3, default:%4, max: %5").arg(tag).arg(label).arg(min).arg(value).arg(max);
+    }
+
+    bool operator==(const FontFamilyAxis & other) const {
+        return (other.tag != tag)
+                && (other.min != min)
+                && (other.max != max)
+                && (other.defaultValue != defaultValue)
+                && (other.value != value);
+    }
+};
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFamilyAxis &axis);
+QDataStream KRITAFLAKE_EXPORT &operator<<(QDataStream &out, const KoSvgText::FontFamilyAxis &axis);
+QDataStream KRITAFLAKE_EXPORT &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis);
+
+enum FontFormatType {
+    Unknown,
+    BDF,
+    Type1,
+    OpenType
+};
+Q_ENUM_NS(FontFormatType)
+
+struct FontFamilyStyleInfo : public boost::equality_comparable<FontFamilyStyleInfo> {
+    QHash<QString, QString> localizedLabels;
+    QHash<QString, float> instanceCoords;
+
+    bool isItalic = false;
+    bool isOblique = false;
+
+    QString debugInfo() const {
+        QString label;
+        if (!localizedLabels.isEmpty()) {
+            label = localizedLabels.value("en", localizedLabels.values().first());
+        }
+        QStringList coords;
+        for (int i = 0; i < instanceCoords.size(); i++) {
+            QString key = instanceCoords.keys().at(i);
+            coords.append(key+"="+QString::number(instanceCoords.value(key)));
+        }
+        return QString("Instance: %1, coords: [ %2 ]").arg(label).arg(coords.join(" "));
+    }
+
+    bool operator==(const FontFamilyStyleInfo & other) const {
+        return (other.instanceCoords != instanceCoords)
+                && (other.isItalic != isItalic)
+                && (other.isOblique != isOblique);
+    }
+};
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::FontFamilyStyleInfo &style);
+
 } // namespace KoSvgText
 
 Q_DECLARE_METATYPE(KoSvgText::CssLengthPercentage)
@@ -711,5 +805,8 @@ Q_DECLARE_METATYPE(KoSvgText::TextTransformInfo)
 Q_DECLARE_METATYPE(KoSvgText::TextIndentInfo)
 Q_DECLARE_METATYPE(KoSvgText::TabSizeInfo)
 Q_DECLARE_METATYPE(KoSvgText::LineHeightInfo)
+
+Q_DECLARE_METATYPE(KoSvgText::FontFamilyAxis)
+Q_DECLARE_METATYPE(KoSvgText::FontFamilyStyleInfo)
 
 #endif // KOSVGTEXT_H

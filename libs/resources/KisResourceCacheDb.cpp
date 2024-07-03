@@ -95,7 +95,7 @@ QSqlError createDatabase(const QString &location)
                                      << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(4))
                                      << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(5))
                                      << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(6))
-                                     ;
+                                     << KisResourceStorage::storageTypeToUntranslatedString(KisResourceStorage::StorageType(7));
 
     if (!QSqlDatabase::connectionNames().isEmpty()) {
         return QSqlError();

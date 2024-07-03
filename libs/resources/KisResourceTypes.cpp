@@ -25,6 +25,7 @@ namespace ResourceType {
     const QString FilterEffects {QStringLiteral("ko_effects")};
     const QString TaskSets {QStringLiteral("tasksets")};
     const QString LayerStyles {QStringLiteral("layerstyles")};
+    const QString FontFamilies {QStringLiteral("fontfamilies")};
 }
 
 namespace ResourceSubType {
@@ -54,6 +55,7 @@ namespace ResourceName {
     const KLocalizedString FilterEffects = ki18nc("resource type", "Filter Effects");
     const KLocalizedString TaskSets = ki18nc("resource type", "Task Sets");
     const KLocalizedString LayerStyles = ki18nc("resource type", "Layer Styles");
+    const KLocalizedString FontFamilies = ki18nc("resource type", "Font Families");
 }
 
 QString ResourceName::resourceTypeToName(const QString &resourceType)
@@ -77,6 +79,7 @@ QString ResourceName::resourceTypeToName(const QString &resourceType)
         typeMap[ResourceType::FilterEffects] = ResourceName::FilterEffects.toString();
         typeMap[ResourceType::TaskSets] = ResourceName::TaskSets.toString();
         typeMap[ResourceType::LayerStyles] = ResourceName::LayerStyles.toString();
+        typeMap[ResourceType::FontFamilies] = ResourceName::FontFamilies.toString();
         return typeMap;
     }();
 

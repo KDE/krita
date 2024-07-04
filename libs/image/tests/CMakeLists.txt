@@ -83,6 +83,7 @@ kis_add_tests(
     kis_filter_config_widget_test.cpp
     kis_mask_generator_test.cpp
     kis_cubic_curve_test.cpp
+    kis_cubic_spline_test.cpp
     kis_fixed_point_maths_test.cpp
     kis_node_query_path_test.cpp
     kis_filter_weights_buffer_test.cpp

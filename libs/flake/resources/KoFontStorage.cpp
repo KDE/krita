@@ -61,7 +61,6 @@ public:
             const_cast<FontIterator*>(this)->m_representationIterator.reset(new QListIterator<KoFontFamilyWWSRepresentation>(KoFontRegistry::instance()->collectRepresentations()));
             const_cast<FontIterator*>(this)->m_isLoaded = true;
         }
-        qDebug() << m_resourceType << m_representationIterator->hasNext();
 
         return m_representationIterator->hasNext();
     }
@@ -109,14 +108,12 @@ KisResourceStorage::ResourceItem KoFontStorage::resourceItem(const QString &url)
 
 KoResourceSP KoFontStorage::resource(const QString &url)
 {
-
-    qDebug() << Q_FUNC_INFO << url;
     QList<KoFontFamilyWWSRepresentation> reps = KoFontRegistry::instance()->collectRepresentations();
     QListIterator<KoFontFamilyWWSRepresentation> it(reps);
     KoFontFamilySP fam;
     while(it.hasNext()) {
         KoFontFamilyWWSRepresentation rep = it.next();
-        if (rep.fontFamilyName == url) {
+        if (ResourceType::FontFamilies+"/"+rep.fontFamilyName == url) {
             fam.reset(new KoFontFamily(rep));
             break;
         }

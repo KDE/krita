@@ -35,6 +35,7 @@ CollapsibleGroupProperty {
         } else {
             properties.fontFamilies = fontFamilies;
         }
+        mainWindow.slotUpdateStylesModel();
     }
 
     titleItem: ComboBox {
@@ -45,6 +46,7 @@ CollapsibleGroupProperty {
                 fontFamilies[0] = currentText;
             }
         }
+        textRole: "name";
         wheelEnabled: true;
     }
 

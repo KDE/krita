@@ -17,10 +17,14 @@ struct KoFontFamilyWWSRepresentation {
     QString fontFamilyName;
     QString typographicFamilyName;
 
+    QHash<QString, QString> localizedFontFamilyNames;
+    QHash<QString, QString> localizedTypographicFamily;
+    QHash<QString, QString> localizedTypographicStyles;
+
     QHash<QString, KoSvgText::FontFamilyAxis> axes;
     QList<KoSvgText::FontFamilyStyleInfo> styles;
 
-    KoSvgText::FontFormatType type = KoSvgText::Unknown;
+    KoSvgText::FontFormatType type = KoSvgText::UnknownFontType;
     bool isVariable = false;
     bool colorClrV0 = false;
     bool colorClrV1 = false;

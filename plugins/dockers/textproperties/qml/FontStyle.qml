@@ -64,7 +64,9 @@ CollapsibleGroupProperty {
 
     titleItem: ComboBox {
         id: styleCmb;
-        Layout.fillWidth: true;
+        model: fontStylesModel;
+        textRole: "display";
+        width: parent.width;
     }
 
     contentItem: GridLayout {

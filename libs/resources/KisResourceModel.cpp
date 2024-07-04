@@ -178,6 +178,28 @@ Qt::ItemFlags KisAllResourcesModel::flags(const QModelIndex &index) const
     return QAbstractTableModel::flags(index) | Qt::ItemIsEditable | Qt::ItemNeverHasChildren;
 }
 
+QHash<int, QByteArray> KisAllResourcesModel::roleNames() const
+{
+    QHash<int, QByteArray> roles = QAbstractItemModel::roleNames();
+    roles[Qt::UserRole + Id] = "id";
+    roles[Qt::UserRole + StorageId] = "storageId";
+    roles[Qt::UserRole + Name] = "name";
+    roles[Qt::UserRole + Filename] = "filename";
+    //roles[Qt::UserRole + Tooltip] = "tooltip";
+    roles[Qt::UserRole + Thumbnail] = "thumbnail";
+    roles[Qt::UserRole + Status] = "status";
+    roles[Qt::UserRole + Location] = "location";
+    roles[Qt::UserRole + ResourceType] = "resourcetype";
+    roles[Qt::UserRole + MD5] = "md5";
+    roles[Qt::UserRole + Tags] = "tags";
+    roles[Qt::UserRole + LargeThumbnail] = "largethumbnail";
+    roles[Qt::UserRole + Dirty] = "dirty";
+    roles[Qt::UserRole + ResourceActive] = "resourceactive";
+    roles[Qt::UserRole + StorageActive] = "storageactive";
+
+    return roles;
+}
+
 KoResourceSP KisAllResourcesModel::resourceForIndex(QModelIndex index) const
 {
     KoResourceSP resource = 0;

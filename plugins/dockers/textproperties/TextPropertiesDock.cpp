@@ -23,6 +23,9 @@
 #include <KLocalizedContext>
 
 #include <KoResourcePaths.h>
+#include <KisResourceModel.h>
+#include <KisResourceModelProvider.h>
+
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
 #include <text/lager/KoSvgTextPropertiesModel.h>
@@ -31,6 +34,7 @@
 #include <text/lager/TextIndentModel.h>
 #include <text/lager/TabSizeModel.h>
 #include <text/lager/TextTransformModel.h>
+#include <resources/KoFontFamily.h>
 #include <lager/state.hpp>
 
 /// Strange place to put this, do we have a better spot?
@@ -76,6 +80,8 @@ private:
 struct TextPropertiesDock::Private
 {
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
+    QStringListModel stylesModel;
+    KisAllResourcesModel *fontModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
 };
 
@@ -104,10 +110,12 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setPalette(this->palette());
     m_quickWidget->setMinimumHeight(100);
 
-    QFontDatabase fontDataBase = QFontDatabase();
+    d->fontModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
+
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
-    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(fontDataBase.families()));
+    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontModel));
+    m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -182,5 +190,27 @@ void TextPropertiesDock::slotTextPropertiesChanged()
         QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
         d->provider->setTextPropertyData(textData);
     }
+}
+
+void TextPropertiesDock::slotUpdateStylesModel()
+{
+    QStringList families = d->textModel->fontFamilies();
+    QStringList styleList;
+
+    if (!families.isEmpty() && d->fontModel) {
+        QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(families.first());
+        if (!res.isEmpty()) {
+            KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
+            if (family) {
+                QList<KoSvgText::FontFamilyStyleInfo> styles = family->styles();
+                for(int i=0; i<styles.size(); i++) {
+                    KoSvgText::FontFamilyStyleInfo style = styles.at(i);
+                    QString label = style.localizedLabels.value("en", style.localizedLabels.values().first());
+                    styleList.append(label);
+                }
+            }
+        }
+    }
+    d->stylesModel.setStringList(styleList);
 }
 #include "TextPropertiesDock.moc"

@@ -12,6 +12,10 @@
 class KoFontFamily;
 typedef QSharedPointer<KoFontFamily> KoFontFamilySP;
 
+/**
+ * @brief The KoFontFamily class
+ * Abstract representation of a Weight/Width/Slant font family, as determined by KoFFWWSConverter.
+ */
 class KRITAFLAKE_EXPORT KoFontFamily : public KoResource
 {
 public:
@@ -27,11 +31,24 @@ public:
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
 
     bool isSerializable() const override;
-    //bool isEphemeral() const override;
     QPair<QString, QString> resourceType() const override;
 
-    QString translatedFontName(QList<QLocale> locales);
-    QString translatedTypographicName(QList<QLocale> locales);
+    /// Returns the typographic family name, if any.
+    QString typographicFamily() const;
+
+    QString translatedFontName(QList<QLocale> locales) const;
+    QString translatedTypographicName(QList<QLocale> locales) const;
+
+    /// Font is variable
+    bool isVariable() const;
+    /// Font has color bitmaps.
+    bool colorBitmap() const;
+    /// Font has colrv0 layers
+    bool colorClrV0() const;
+    /// Font has colrv1 layers -- doesn't yet work.
+    bool colorClrV1() const;
+    /// Font is SVG.
+    bool colorSVG() const;
 
     QList<KoSvgText::FontFamilyAxis> axes() const;
     QList<KoSvgText::FontFamilyStyleInfo> styles() const;

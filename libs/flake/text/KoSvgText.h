@@ -755,10 +755,10 @@ QDataStream KRITAFLAKE_EXPORT &operator<<(QDataStream &out, const KoSvgText::Fon
 QDataStream KRITAFLAKE_EXPORT &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis);
 
 enum FontFormatType {
-    Unknown,
-    BDF,
-    Type1,
-    OpenType
+    UnknownFontType,
+    BDFFontType,
+    Type1FontType,
+    OpenTypeFontType
 };
 Q_ENUM_NS(FontFormatType)
 

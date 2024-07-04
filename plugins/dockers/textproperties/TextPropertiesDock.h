@@ -32,6 +32,7 @@ public:
 public Q_SLOTS:
     void slotCanvasTextPropertiesChanged();
     void slotTextPropertiesChanged();
+    void slotUpdateStylesModel();
     void connectAutoEnabler(QObject *watched);
 
 private:

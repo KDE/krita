@@ -75,6 +75,7 @@ public:
                         const QMap<QString, qreal> &axisSettings);
 
     QList<KoFontFamilyWWSRepresentation> collectRepresentations() const;
+    KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
 
 private:
     class Private;

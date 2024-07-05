@@ -51,7 +51,7 @@ class Q_DECL_HIDDEN KoFontRegistry::Private
 {
 private:
     FcConfigSP m_config;
-    KoFFWWSConverter fontFamilyConverter;
+    QSharedPointer<KoFFWWSConverter> fontFamilyConverter;
 
     struct ThreadData {
         FT_LibrarySP m_library;
@@ -86,30 +86,31 @@ public:
     {
         FcConfig *config = FcConfigCreate();
         KIS_ASSERT(config && "No Fontconfig support available");
+
+#ifdef Q_OS_LINUX
+        // This loads the fontconfig configured on Linux.
         if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
-            QDir appdir(KoResourcePaths::getApplicationRoot() + "/etc/fonts");
+            QDir appdir("/etc/fonts");
             if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
                 qputenv("FONTCONFIG_PATH", QFile::encodeName(QDir::toNativeSeparators(appdir.absolutePath())));
             }
         }
-        debugFlake << "Setting FONTCONFIG_PATH" << qgetenv("FONTCONFIG_PATH");
         if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
             errorFlake << "Failed loading the Fontconfig configuration";
             config = FcConfigGetCurrent();
         } else {
             FcConfigSetCurrent(config);
         }
+#else
+        // Otherwise use default, which is defined in src/fcinit.c , windows and macos
+        // default locations *are* defined in fontconfig's meson build system.
+        config = FcConfigGetCurrent();
+#endif
         m_config.reset(config);
 
-        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_INDEX, nullptr);
-        FcFontSetSP allFonts(FcFontList(m_config.data(), FcPatternCreate(), objectSet));
 
-        qDebug() << allFonts->nfont;
-        for (int j = 0; j < allFonts->nfont; j++) {
-            fontFamilyConverter.addFontFromPattern(allFonts->fonts[j], library());
-        }
-        fontFamilyConverter.sortIntoWWSFamilies();
-        fontFamilyConverter.debugInfo();
+        reloadConverter();
+        fontFamilyConverter->debugInfo();
     }
 
     ~Private() = default;
@@ -147,9 +148,20 @@ public:
         return m_config;
     }
 
-    QList<KoFontFamilyWWSRepresentation> representations() const
-    {
-        return fontFamilyConverter.collectFamilies();
+    QSharedPointer<KoFFWWSConverter> converter() const {
+        return fontFamilyConverter;
+    }
+
+    bool reloadConverter() {
+        fontFamilyConverter.reset(new KoFFWWSConverter());
+        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_INDEX, nullptr);
+        FcFontSetSP allFonts(FcFontList(m_config.data(), FcPatternCreate(), objectSet));
+
+        for (int j = 0; j < allFonts->nfont; j++) {
+            fontFamilyConverter->addFontFromPattern(allFonts->fonts[j], library());
+        }
+        fontFamilyConverter->sortIntoWWSFamilies();
+        return true;
     }
 };
 
@@ -179,6 +191,12 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                                                          int slant,
                                                          const QString &language)
 {
+    QStringList candidates = d->converter()->candidatesForCssValues(families,
+                                                                    axisSettings,
+                                                                    xRes, yRes, size,
+                                                                    weight, width,
+                                                                    italic, slant);
+
     FcPatternSP p(FcPatternCreate());
     Q_FOREACH (const QString &family, families) {
         QByteArray utfData = family.toUtf8();
@@ -192,6 +210,12 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         fallback.type = FcTypeString;
         fallback.u.s = reinterpret_cast<FcChar8 *>(fallbackBuf.data());
         FcPatternAddWeak(p.data(), FC_FAMILY, fallback, true);
+    }
+
+    Q_FOREACH (const QString &file, candidates) {
+        QByteArray utfData = file.toUtf8();
+        const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
+        FcPatternAddString(p.data(), FC_FILE, vals);
     }
 
     if (italic || slant != 0) {
@@ -465,7 +489,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
                     break;
                 case FT_ENCODING_ADOBE_CUSTOM:
                 case FT_ENCODING_MS_SYMBOL:
-                    if (!map || map->encoding != FT_ENCODING_UNICODE || map->encoding != FT_ENCODING_APPLE_ROMAN || map->encoding != FT_ENCODING_ADOBE_LATIN_1) {
+                    if (!map || (map->encoding != FT_ENCODING_UNICODE && map->encoding != FT_ENCODING_APPLE_ROMAN && map->encoding != FT_ENCODING_ADOBE_LATIN_1)) {
                         map = m;
                     }
                 default:
@@ -549,19 +573,32 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceSP> &faces,
 
 QList<KoFontFamilyWWSRepresentation> KoFontRegistry::collectRepresentations() const
 {
-    return d->representations();
+    return d->converter()->collectFamilies();
+}
+
+KoFontFamilyWWSRepresentation KoFontRegistry::representationByFamilyName(const QString &familyName, bool *found) const
+{
+    return d->converter()->representationByFamilyName(familyName, found);
 }
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)
 {
     const QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(utfData.data());
-    return FcConfigAppFontAddFile(d->config().data(), vals);
+    bool success = false;
+    if (FcConfigAppFontAddFile(d->config().data(), vals)) {
+        success = d->reloadConverter();
+    }
+    return success;
 }
 
 bool KoFontRegistry::addFontFileDirectoryToRegistery(const QString &path)
 {
     const QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(utfData.data());
-    return FcConfigAppFontAddDir(d->config().data(), vals);
+    bool success = false;
+    if (FcConfigAppFontAddDir(d->config().data(), vals)) {
+        success = d->reloadConverter();
+    }
+    return success;
 }

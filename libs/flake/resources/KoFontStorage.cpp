@@ -108,16 +108,19 @@ KisResourceStorage::ResourceItem KoFontStorage::resourceItem(const QString &url)
 
 KoResourceSP KoFontStorage::resource(const QString &url)
 {
-    QList<KoFontFamilyWWSRepresentation> reps = KoFontRegistry::instance()->collectRepresentations();
-    QListIterator<KoFontFamilyWWSRepresentation> it(reps);
     KoFontFamilySP fam;
-    while(it.hasNext()) {
-        KoFontFamilyWWSRepresentation rep = it.next();
-        if (ResourceType::FontFamilies+"/"+rep.fontFamilyName == url) {
-            fam.reset(new KoFontFamily(rep));
-            break;
-        }
+    QString familyName = url;
+    QString prefix (ResourceType::FontFamilies+"/");
+    if (familyName.startsWith(prefix)) {
+        familyName.remove(0, prefix.size());
     }
+
+    bool found = false;
+    KoFontFamilyWWSRepresentation rep = KoFontRegistry::instance()->representationByFamilyName(familyName, &found);
+    if (found) {
+        fam.reset(new KoFontFamily(rep));
+    }
+
     return fam;
 }
 

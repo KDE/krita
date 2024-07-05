@@ -53,6 +53,8 @@ struct FontFamilyNode {
     QString fileName;
     int fileIndex = 0;
 
+    QStringList otherFiles;
+
     QHash<QString, QString> localizedFontFamilies;
     QHash<QString, QString> localizedFontStyle;
     QHash<QString, QString> localizedTypographicStyle;
@@ -119,7 +121,7 @@ struct FontFamilyNode {
 QStringList FontFamilyNode::debugInfo()
 {
     QString style = isItalic? isOblique? "Oblique": "Italic": "Roman";
-    QStringList debug = {QString("\'%1\' \'%2\', style: %3").arg(fontFamily, fontStyle, style)};
+    QStringList debug = {QString("\'%1\' \'%2\', style: %3, type:%4").arg(fontFamily, fontStyle, style).arg(type)};
     debug.append(QString("Index: %1, File: %2").arg(fileIndex).arg(fileName));
     for (int i=0; i< axes.size(); i++) {
         KoSvgText::FontFamilyAxis axis = axes.value(axes.keys().at(i));
@@ -137,6 +139,8 @@ QStringList FontFamilyNode::debugInfo()
             pix.append(QString::number(pixelSizes.keys().at(i)));
         }
         debug.append("PixelSizes: "+pix.join(", "));
+    } else if (!otherFiles.isEmpty()) {
+        debug.append("Other files: "+otherFiles.join(", "));
     }
     return debug;
 }
@@ -192,8 +196,6 @@ constexpr unsigned OS2_USE_TYPO_METRICS = 1u << 7;
 
 bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP freeTypeLibrary)
 {
-
-    FontFamilyNode fontFamily;
     if (!freeTypeLibrary.data()) {
         return false;
     }
@@ -205,29 +207,35 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
     } else {
         getFile = true;
     }
-    fontFamily.fileName = QString::fromUtf8(reinterpret_cast<char *>(fileValue));
+    QString filename = QString::fromUtf8(reinterpret_cast<char *>(fileValue));
 
     int indexValue{};
     if (FcPatternGetInteger(pattern, FC_INDEX, 0, &indexValue) != FcResultMatch) {
-        qWarning() << "Failed to get font index for" << pattern << "(file:" << fontFamily.fileName << ")";
+        qWarning() << "Failed to get font index for" << pattern << "(file:" << filename << ")";
         getFile = false;
-    } else {
-        fontFamily.fileIndex = indexValue;
     }
 
     if (getFile == false) {
         return getFile;
     }
 
-    if (fontFamily.fileIndex > 0xffff) { // this indicates the font is a variable font instance, so we don't try to load it.
+    if (indexValue > 0xffff) { // this indicates the font is a variable font instance, so we don't try to load it.
         return false;
     }
+
+    return addFontFromFile(filename, indexValue, freeTypeLibrary);
+}
+
+bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index, FT_LibrarySP freeTypeLibrary) {
+
+    FontFamilyNode fontFamily;
+    fontFamily.fileName = filename;
+    fontFamily.fileIndex = index;
     for (auto it = d->fontFamilyCollection.compositionBegin(); it != d->fontFamilyCollection.compositionEnd(); it++) {
         if (it->fileName == fontFamily.fileName && it->fileIndex == fontFamily.fileIndex) {
             return true;
         }
     }
-
 
     FT_Face f = nullptr;
     FT_FaceSP face;
@@ -245,6 +253,8 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
     bool isWWSFamilyWithoutName = false;
 
     if (!FT_IS_SFNT(face.data())) {
+        fontFamily.type = FT_IS_SCALABLE(face.data())? KoSvgText::Type1FontType: KoSvgText::BDFFontType;
+
         fontFamily.isItalic = face->style_flags & FT_STYLE_FLAG_ITALIC;
         if (face->style_flags & FT_STYLE_FLAG_BOLD) {
             fontFamily.axes.insert("wght", KoSvgText::FontFamilyAxis::weightAxis(700));
@@ -255,6 +265,7 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
             fontFamily.fontFamily = QFileInfo(fontFamily.fileName).baseName();
         }
         for (int i=0; i< face->num_fixed_sizes; i++) {
+            // 64 = Freetype pixel
             fontFamily.pixelSizes.insert((face->available_sizes[i].size / 64.0), {fontFamily.fileName});
         }
     } else {
@@ -386,13 +397,15 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
                 typographicStyleNames.insert(lang, name);
             } else if (entry.name_id == HB_OT_NAME_ID_WWS_SUBFAMILY) {
                 WWSStyleNames.insert(lang, name);
-            } else if (axisNameIDs.keys().contains(entry.name_id)) {
-                fontFamily.axes[axisNameIDs.value(entry.name_id)].localizedLabels.insert(lang, name);
-            } else if (entry.name_id == sizeNameId) {
-                fontFamily.sizeInfo.localizedLabels.insert(lang, name);
-            } else if (instanceNameIDs.contains(entry.name_id)) {
-                int idx = instanceNameIDs.indexOf(entry.name_id);
-                fontFamily.styleInfo[idx].localizedLabels.insert(lang, name);
+            } else if (entry.name_id > 0) { // Fonts made by Adobe seem to use the copyright id (0) as the input when the given value is empty.
+                if (axisNameIDs.keys().contains(entry.name_id)) {
+                    fontFamily.axes[axisNameIDs.value(entry.name_id)].localizedLabels.insert(lang, name);
+                } else if (entry.name_id == sizeNameId) {
+                    fontFamily.sizeInfo.localizedLabels.insert(lang, name);
+                } else if (instanceNameIDs.contains(entry.name_id)) {
+                    int idx = instanceNameIDs.indexOf(entry.name_id);
+                    fontFamily.styleInfo[idx].localizedLabels.insert(lang, name);
+                }
             }
         }
         if (!typographicFamilyNames.isEmpty()) {
@@ -421,7 +434,7 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
     }
     wwsFamily.isVariable = fontFamily.isVariable;
 
-    qDebug() << "adding..." << fontFamily.fontFamily << fontFamily.fileName;
+    //qDebug() << "adding..." << fontFamily.fontFamily << fontFamily.fileName;
 
     if (typographicFamily.fontFamily.isEmpty() && fontFamily.fontFamily.isEmpty()) {
         d->fontFamilyCollection.insert(d->fontFamilyCollection.childEnd(), fontFamily);
@@ -496,8 +509,10 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
     QStringList wwsNames;
     for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
         KisForest<FontFamilyNode> tempList;
+
         QVector<qreal> weights;
         QVector<qreal> widths;
+        QVector<KoSvgText::FontFormatType> types;
 
         for (auto child = childBegin(typographic); child != childEnd(typographic); child++) {
             if (childBegin(child) != childEnd(child)) {
@@ -509,21 +524,30 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
             if (!weights.contains(wght)) weights.append(wght);
             qreal wdth = child->axes.value("wdth", KoSvgText::FontFamilyAxis::widthAxis(100)).value;
             if (!widths.contains(wdth)) widths.append(wdth);
-
+            types.append(child->type);
             d->fontFamilyCollection.erase(child);
         }
         //Do most regular first...
         if (KisForestDetail::size(tempList) > 0) {
+            KoSvgText::FontFormatType testType = types.contains(KoSvgText::OpenTypeFontType)? KoSvgText::OpenTypeFontType: types.first();
+            QVector<QPair<QString, QString>> existing;
             for (auto font = tempList.childBegin(); font != tempList.childEnd(); font++) {
                 qreal testWeight = weights.contains(400)? 400: weights.first();
                 qreal testWidth = widths.contains(100)? 100: widths.first();
+
                 bool widthTested = !font->axes.keys().contains("wdth");
                 widthTested = widthTested? true: font->axes.value("wdth").value == testWidth;
 
+                QPair<QString, QString> fontStyle(font->fontFamily, font->fontStyle);
                 if (font->axes.value("wght").value == testWeight && widthTested
-                        && !font->isItalic && !font->isOblique) {
+                        && !font->isItalic
+                        && !font->isOblique
+                        && font->type == testType
+                        && !existing.contains(fontStyle)) {
                     FontFamilyNode wwsFamily = FontFamilyNode::createWWSFam(*font, wwsNames);
                     wwsNames.append(wwsFamily.fontFamily);
+                    existing.append(fontStyle);
+
                     auto newWWS = d->fontFamilyCollection.insert(childEnd(typographic), wwsFamily);
                     d->fontFamilyCollection.insert(childEnd(newWWS), *font);
                     tempList.erase(font);
@@ -533,8 +557,14 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                 auto wws = childBegin(typographic);
                 for (; wws != childEnd(typographic); wws++) {
                     auto wwsChild = childBegin(wws);
-                    if (font->type != KoSvgText::OpenTypeFontType) {
+                    if (font->type != KoSvgText::OpenTypeFontType && font->type != KoSvgText::Type1FontType) {
                         // Hack for really old fonts.
+                        // It's questionable whether this is wise, given that it is not the family name,
+                        // but it seems CSS is explicitely vague about what the family name is, because
+                        // of the varying ways a font can be assigned a family name.
+                        // Like, it is technically correct, because it allows us to select fonts with CSS
+                        // that would otherwise be unselectable, but this does mean that other applications
+                        // would need to have our exact idea of a CSS family name.
                         if (wws->fontStyle.toLower() != "regular"
                                 && !font->fontStyle.contains(wws->fontStyle)) {
                             continue;
@@ -545,19 +575,35 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
                     }
 
                     if (!wwsChild->sizeInfo.compare(font->sizeInfo)) {
-                        qDebug() << wwsChild->sizeInfo.debugInfo() << font->sizeInfo.debugInfo();
-                        qDebug() << "skipping...";
+                        // Skip sorting if the WWS family has size info that is incompatible with the sorted font.
                         continue;
                     }
                     for (; wwsChild != childEnd(wws); wwsChild++) {
                         if (wwsChild->isItalic == font->isItalic
                                 && wwsChild->isOblique == font->isOblique
                                 && wwsChild->compareAxes(font->axes)) {
+                            // TODO: test color.
                             break;
                         }
                     }
                     if (wwsChild != childEnd(wws)) {
-                        continue;
+                        if (wwsChild->fontFamily == font->fontFamily && wwsChild->fontStyle == font->fontStyle) {
+                            // If, for all intends and purposes, the font seems to be the same, merge nodes.
+                            // This sometimes happens with installations where the same font is installed in
+                            // a variety of formats. We want to prefer the opentype version in any case.
+                            if (wwsChild->type != KoSvgText::OpenTypeFontType && font->type == KoSvgText::OpenTypeFontType) {
+                                wwsChild->otherFiles.append(wwsChild->fileName);
+                                wwsChild->otherFiles.append(font->otherFiles);
+                                wwsChild->fileName = font->fileName;
+                                wwsChild->type = KoSvgText::OpenTypeFontType;
+                            } else {
+                                wwsChild->otherFiles.append(font->fileName);
+                                wwsChild->otherFiles.append(font->otherFiles);
+                            }
+                            break;
+                        } else {
+                            continue;
+                        }
                     } else {
                         d->fontFamilyCollection.insert(childEnd(wws), *font);
                         break;
@@ -575,6 +621,63 @@ void KoFFWWSConverter::sortIntoWWSFamilies()
     }
 }
 
+KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::child_iterator wws, KisForest<FontFamilyNode>::child_iterator typographic, bool singleFamily) {
+    KoFontFamilyWWSRepresentation representation;
+    representation.fontFamilyName = wws->fontFamily;
+    representation.localizedFontFamilyNames = wws->localizedFontFamilies;
+    if (!singleFamily)  {
+        representation.typographicFamilyName = typographic->fontFamily;
+        representation.localizedTypographicFamily = typographic->localizedFontFamilies;
+        representation.localizedTypographicStyles = wws->localizedTypographicStyle;
+    }
+    representation.isVariable = wws->isVariable;
+    representation.colorBitMap = wws->colorBitMap;
+    representation.colorClrV0 = wws->colorClrV0;
+    representation.colorClrV1 = wws->colorClrV1;
+    representation.colorSVG = wws->colorSVG;
+
+    for (auto subFamily = childBegin(wws); subFamily != childEnd(wws); subFamily++) {
+        KoSvgText::FontFamilyStyleInfo style;
+
+        for (int a = 0; a < subFamily->axes.size(); a++) {
+            QString key = subFamily->axes.keys().at(a);
+            KoSvgText::FontFamilyAxis axis = subFamily->axes.value(key);
+            KoSvgText::FontFamilyAxis mainAxis = representation.axes.value(key);
+            mainAxis.min = qMin(mainAxis.min, axis.min);
+            mainAxis.defaultValue = axis.defaultValue;
+            mainAxis.max = qMax(mainAxis.max, axis.max);
+            mainAxis.localizedLabels.insert(axis.localizedLabels);
+            representation.axes.insert(mainAxis.tag, mainAxis);
+
+            if (!subFamily->isVariable) {
+                style.instanceCoords.insert(key, axis.value);
+            }
+        }
+        if (!subFamily->isVariable) {
+            if (!subFamily->localizedWWSStyle.isEmpty()) {
+                style.localizedLabels = subFamily->localizedWWSStyle;
+            } else if (!subFamily->localizedFontStyle.isEmpty()) {
+                style.localizedLabels = subFamily->localizedFontStyle;
+            } else {
+                style.localizedLabels.insert("en", subFamily->fontStyle);
+            }
+            style.isItalic = subFamily->isItalic;
+            style.isOblique = subFamily->isOblique;
+            representation.styles.append(style);
+        } else {
+            for (int i = 0; i < subFamily->styleInfo.size(); i++) {
+                KoSvgText::FontFamilyStyleInfo styleInfo = subFamily->styleInfo.at(i);
+                if (!styleInfo.localizedLabels.isEmpty()) {
+                    styleInfo.isItalic = subFamily->isItalic;
+                    styleInfo.isOblique = subFamily->isOblique;
+                    representation.styles.append(styleInfo);
+                }
+            }
+        }
+    }
+    return representation;
+}
+
 QList<KoFontFamilyWWSRepresentation> KoFFWWSConverter::collectFamilies() const
 {
     QList<KoFontFamilyWWSRepresentation> collection;
@@ -584,57 +687,195 @@ QList<KoFontFamilyWWSRepresentation> KoFFWWSConverter::collectFamilies() const
         bool singleFamily = counter == childEnd(typographic);
 
         for (auto wws = childBegin(typographic); wws != childEnd(typographic); wws++) {
-            KoFontFamilyWWSRepresentation representation;
-            representation.fontFamilyName = wws->fontFamily;
-            representation.localizedFontFamilyNames = wws->localizedFontFamilies;
-            if (!singleFamily)  {
-                representation.typographicFamilyName = typographic->fontFamily;
-                representation.localizedTypographicFamily = typographic->localizedFontFamilies;
-                representation.localizedTypographicStyles = wws->localizedTypographicStyle;
-            }
-            representation.isVariable = wws->isVariable;
-            representation.colorBitMap = wws->colorBitMap;
-            representation.colorClrV0 = wws->colorClrV0;
-            representation.colorClrV1 = wws->colorClrV1;
-            representation.colorSVG = wws->colorSVG;
 
-            for (auto subFamily = childBegin(wws); subFamily != childEnd(wws); subFamily++) {
-                KoSvgText::FontFamilyStyleInfo style;
-
-                for (int a = 0; a < subFamily->axes.size(); a++) {
-                    QString key = subFamily->axes.keys().at(a);
-                    KoSvgText::FontFamilyAxis axis = subFamily->axes.value(key);
-                    KoSvgText::FontFamilyAxis mainAxis = representation.axes.value(key);
-                    mainAxis.min = qMin(mainAxis.min, axis.min);
-                    mainAxis.defaultValue = axis.defaultValue;
-                    mainAxis.max = qMax(mainAxis.max, axis.max);
-                    mainAxis.localizedLabels.insert(axis.localizedLabels);
-                    representation.axes.insert(mainAxis.tag, mainAxis);
-
-                    if (!subFamily->isVariable) {
-                        style.instanceCoords.insert(key, axis.value);
-                    }
-                }
-                if (!subFamily->isVariable) {
-                    if (!subFamily->localizedWWSStyle.isEmpty()) {
-                        style.localizedLabels = subFamily->localizedWWSStyle;
-                    } else if (!subFamily->localizedFontStyle.isEmpty()) {
-                        style.localizedLabels = subFamily->localizedFontStyle;
-                    } else {
-                        style.localizedLabels.insert("en", subFamily->fontStyle);
-                    }
-                    style.isItalic = subFamily->isItalic;
-                    style.isOblique = subFamily->isOblique;
-                    representation.styles.append(style);
-                } else {
-                    representation.styles.append(subFamily->styleInfo);
-                }
-            }
-            collection.append(representation);
+            collection.append(createRepresentation(wws, typographic, singleFamily));
         }
     }
-    qDebug() << "returning collection" << collection.size();
     return collection;
+}
+
+KoFontFamilyWWSRepresentation KoFFWWSConverter::representationByFamilyName(const QString &familyName, bool *found) const
+{
+    KoFontFamilyWWSRepresentation representation;
+    if (found) {
+        *found = false;
+    }
+    for (auto typographic = d->fontFamilyCollection.childBegin(); typographic != d->fontFamilyCollection.childEnd(); typographic++) {
+        auto counter = childBegin(typographic);
+        counter++;
+        bool singleFamily = counter == childEnd(typographic);
+
+        for (auto wws = childBegin(typographic); wws != childEnd(typographic); wws++) {
+            if (wws->fontFamily == familyName) {
+                representation = createRepresentation(wws, typographic, singleFamily);
+                if (found) {
+                    *found = true;
+                }
+                return representation;
+            }
+        }
+    }
+    return representation;
+}
+
+QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, const QString axisTag, const qreal &value, const qreal &defaultValue, const qreal &defaultValueUpper) {
+    QVector<FontFamilyNode> candidates;
+    QVector<qreal> values;
+    Q_FOREACH (const FontFamilyNode &node, nodes) {
+        qreal selectingVal = defaultValue;
+
+        if (node.axes.keys().contains(axisTag)) {
+            KoSvgText::FontFamilyAxis axis = node.axes.value(axisTag);
+            selectingVal = axis.value;
+            if (axis.variableAxis) {
+                if (value >= axis.min && value <= axis.max) {
+                    candidates.append(node);
+                    selectingVal = value;
+                }
+            }
+            values.append(selectingVal);
+        }
+    }
+    // We found some variable fonts already, so lets return early.
+    if (!candidates.isEmpty()) {
+        return candidates;
+    }
+
+    // follow the CSS Fonts selection mechanism.
+    std::sort(values.begin(), values.end());
+    qreal selectedValue = defaultValue;
+    auto upper = std::lower_bound(values.begin(), values.end(), value);
+    if (upper == values.end()) {
+        upper--;
+    }
+    auto lower = upper;
+    if (lower != values.begin() && *lower > value) {
+        lower--;
+    }
+
+    // ... Which wants to select the lower possible selection when the value is below the default.
+    if (value < defaultValue) {
+        selectedValue = *lower;
+    // ... the higher closest value when the value is higher than the default (upper bound)
+    } else if (value > defaultValueUpper) {
+        selectedValue = *upper;
+    } else {
+        // ... and if the value is between the lower and upper default bounds, first higher (within bounds)
+        // then lower, then higher.
+        if (*upper <= defaultValueUpper && *lower != value) {
+            selectedValue = *upper;
+        } else {
+            selectedValue = *lower;
+        }
+    }
+
+    Q_FOREACH (const FontFamilyNode &node, nodes) {
+        if (node.axes.keys().contains(axisTag)) {
+            KoSvgText::FontFamilyAxis axis = node.axes.value(axisTag);
+            if (axis.value == selectedValue) {
+                candidates.append(node);
+            }
+        } else if (value == defaultValue) {
+            candidates.append(node);
+        }
+    }
+    return candidates;
+}
+
+QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families,
+                                                     const QMap<QString, qreal> &axisSettings,
+                                                     quint32 xRes, quint32 yRes,
+                                                     qreal size,
+                                                     int weight, int width,
+                                                     bool italic, int slant) const
+{
+    Q_UNUSED(axisSettings)
+    Q_UNUSED(slant)
+    QStringList candidateFileNames;
+
+    int pixelSize = size * (qMin(xRes, yRes) / 72.0);
+
+    Q_FOREACH(const QString &family, families) {
+
+        auto it = d->fontFamilyCollection.depthFirstTailBegin();
+        for (; it != d->fontFamilyCollection.depthFirstTailEnd(); it++) {
+            if (childBegin(it) == childEnd(it)) {
+                // TODO: test full names (?);
+                continue;
+            }
+            QStringList local = it->localizedFontFamilies.values();
+            if (QString(it->fontFamily).toLower() == family.toLower()
+                    || local.contains(family.toLower(), Qt::CaseInsensitive)) {
+                break;
+            }
+
+        }
+        if (it != d->fontFamilyCollection.depthFirstTailEnd()) {
+            auto wws = siblingCurrent(it); //TODO: check if we're inside a wws or typographic family.
+            auto style = childBegin(wws);
+            auto styleEnd = childEnd(wws);
+            if (style == styleEnd) {
+                // direct match.
+                QStringList fileNames = wws->pixelSizes.value(pixelSize, {wws->fileName});
+                Q_FOREACH(const QString &fileName, fileNames) {
+                    candidateFileNames.append(fileName);
+                }
+
+            } else {
+                QVector<FontFamilyNode> candidates;
+                for (;style != styleEnd; style++) {
+                    candidates.append(*style);
+                }
+
+                if (candidates.size() > 1) {
+                    // first find width
+                    candidates = findNodesByAxis(candidates, "wdth", width, 100.0, 100.0);
+                }
+
+                if (candidates.size() > 1) {
+                    // then find weight
+                    candidates = findNodesByAxis(candidates, "wght", weight, 400.0, 500.0);
+
+                }
+                // then match italic
+                if (candidates.size() > 1) {
+                    QVector<FontFamilyNode> italics;
+                    Q_FOREACH(const FontFamilyNode &node, candidates) {
+                        if (italic == node.isItalic) {
+                            // TODO: match oblique
+                            italics.append(node);
+                        }
+                    }
+                    candidates = italics;
+                }
+
+                // prefer opentype
+                if (candidates.size() > 1) {
+                    QVector<FontFamilyNode> openType;
+                    Q_FOREACH(const FontFamilyNode &node, candidates) {
+                        if (node.type == KoSvgText::OpenTypeFontType) {
+                            openType.append(node);
+                        }
+                    }
+                    if (!openType.isEmpty()) {
+                        candidates = openType;
+                    }
+                }
+
+                // finally, match size.
+                Q_FOREACH(const FontFamilyNode &node, candidates) {
+                    QStringList fileNames = node.otherFiles;
+                    fileNames.append(node.fileName);
+                    fileNames = node.pixelSizes.value(pixelSize, fileNames);
+                    Q_FOREACH(const QString &fileName, fileNames) {
+                        candidateFileNames.append(fileName);
+                    }
+                }
+            }
+        }
+    }
+    // TODO: There's something weird about not returning the file index as well, but am somewhat lost how to use it.
+    return candidateFileNames;
 }
 
 void KoFFWWSConverter::debugInfo()

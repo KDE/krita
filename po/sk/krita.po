@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-19 01:43+0000\n"
+"POT-Creation-Date: 2024-07-05 01:41+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -17274,7 +17274,7 @@ msgstr "Prechod cez"
 msgid "Imported Image"
 msgstr "Importovaný obrázok"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2596
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2614
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -19664,18 +19664,18 @@ msgstr "Lokálne zdroje"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:951
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
+#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:972
-#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:999
-#: libs/ui/KisDocument.cpp:1910 libs/ui/KisDocument.cpp:1954
-#: libs/ui/KisDocument.cpp:1960 libs/ui/KisDocument.cpp:1973
-#: libs/ui/KisDocument.cpp:1977 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
+#: libs/ui/KisDocument.cpp:982 libs/ui/KisDocument.cpp:1002
+#: libs/ui/KisDocument.cpp:1928 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1991
+#: libs/ui/KisDocument.cpp:1995 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -28311,7 +28311,7 @@ msgid "None"
 msgstr "Žiadne"
 
 #: libs/ui/input/config/kis_input_button.cpp:128
-#: libs/ui/input/config/kis_input_button.cpp:190
+#: libs/ui/input/config/kis_input_button.cpp:180
 #, kde-format
 msgctxt "Waiting for user input"
 msgid "Input..."
@@ -28937,12 +28937,12 @@ msgstr "Ťahanie piatimi prstami"
 msgid "No Gesture"
 msgstr "Žiadne gesto"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:97
+#: libs/ui/input/kis_tablet_debugger.cpp:106
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr "Záznam udalostí tabletu povolený"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:98
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr "Záznam udalostí tabletu zakázaný"
@@ -30655,12 +30655,12 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Klonovať dokument"
 
-#: libs/ui/KisDocument.cpp:736
+#: libs/ui/KisDocument.cpp:739
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Nie je možné zapisovať do %1. Prosím, uložte pod iným názvom."
 
-#: libs/ui/KisDocument.cpp:786
+#: libs/ui/KisDocument.cpp:789
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Failed to create an action."
@@ -30668,7 +30668,7 @@ msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Zlyhalo vytvorenie akcie."
 
-#: libs/ui/KisDocument.cpp:803
+#: libs/ui/KisDocument.cpp:806
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Failed to create an action."
@@ -30676,17 +30676,17 @@ msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Zlyhalo vytvorenie akcie."
 
-#: libs/ui/KisDocument.cpp:825
+#: libs/ui/KisDocument.cpp:828
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Exportovanie dokumentu..."
 
-#: libs/ui/KisDocument.cpp:826
+#: libs/ui/KisDocument.cpp:829
 #, kde-format
 msgid "Saving Document..."
 msgstr "Ukladanie dokumentu..."
 
-#: libs/ui/KisDocument.cpp:836
+#: libs/ui/KisDocument.cpp:839
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30695,13 +30695,13 @@ msgstr ""
 "Nebolo možné spustiť ukladanie %1. Počkajte, kým sa neukončí aktuálna "
 "operácia ukladania."
 
-#: libs/ui/KisDocument.cpp:965
+#: libs/ui/KisDocument.cpp:968
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Chyba počas ukladania %1: %2"
 
-#: libs/ui/KisDocument.cpp:973 libs/ui/KisDocument.cpp:980
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:983
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -30709,7 +30709,7 @@ msgstr "Chyba počas ukladania %1: %2"
 msgid "Could not save %1."
 msgstr "Nepodarilo sa uložiť '%1'"
 
-#: libs/ui/KisDocument.cpp:1002
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30717,7 +30717,7 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1008
+#: libs/ui/KisDocument.cpp:1011
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "dialog box shown to the user if there were warnings while saving the "
@@ -30732,38 +30732,38 @@ msgstr ""
 "%1 bol uložený, ale nie je kompletný.\n"
 "Pri ukladaní sa vyskytli nasledovné problémy:"
 
-#: libs/ui/KisDocument.cpp:1025
+#: libs/ui/KisDocument.cpp:1028
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Dokončené ukladanie %1"
 
-#: libs/ui/KisDocument.cpp:1431
+#: libs/ui/KisDocument.cpp:1434
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Automatické ukladanie... %1"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1442
 #, kde-format
 msgid "Autosaving..."
 msgstr "Automatické ukladanie..."
 
-#: libs/ui/KisDocument.cpp:1445
+#: libs/ui/KisDocument.cpp:1448
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Automatické ukladanie odložené: dokument je zaneprázdnený..."
 
-#: libs/ui/KisDocument.cpp:1588
+#: libs/ui/KisDocument.cpp:1591
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Chyba počas automatického ukladania %1: %2"
 
-#: libs/ui/KisDocument.cpp:1602
+#: libs/ui/KisDocument.cpp:1605
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Dokončené automatické ukladanie %1"
 
-#: libs/ui/KisDocument.cpp:1844
+#: libs/ui/KisDocument.cpp:1862
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30772,40 +30772,40 @@ msgstr ""
 "Nesprávne vytvorená cesta\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1928
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Súbor %1 neexistuje."
 
-#: libs/ui/KisDocument.cpp:1939
+#: libs/ui/KisDocument.cpp:1957
 #, kde-format
 msgid "Opening document"
 msgstr "Otvorenie dokumentu"
 
-#: libs/ui/KisDocument.cpp:1955 libs/ui/KisDocument.cpp:1961
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1979
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "Nepodarilo sa otvoriť '%1'."
 
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisDocument.cpp:1978
+#: libs/ui/KisDocument.cpp:1992 libs/ui/KisDocument.cpp:1996
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1"
 msgid "There were problems opening %1."
 msgstr "Nastali problémy pri otváraní %1"
 
-#: libs/ui/KisDocument.cpp:2117
+#: libs/ui/KisDocument.cpp:2135
 #, kde-format
 msgid "Not Saved"
 msgstr "Neuložené"
 
-#: libs/ui/KisDocument.cpp:2603
+#: libs/ui/KisDocument.cpp:2621
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Výplň pozadia"
 
-#: libs/ui/KisDocument.cpp:2655
+#: libs/ui/KisDocument.cpp:2673
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -47996,7 +47996,7 @@ msgstr "Možnosti animovaných štýlov"
 msgid "Selection mode:"
 msgstr "Režim výberu:"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:907
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48010,19 +48010,19 @@ msgstr ""
 "hodnoty <i>nebudú</i> vrátené pri spätnom uložení obrázka. <br/><br/> Toto "
 "nespôsobí takmer žiadnu viditeľný rozdiel, nezabudnite na to."
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:914
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Obrázok EXR bol zmenený"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1329
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (typ: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1334
 #, kde-format
 msgctxt "@info"
 msgid ""

@@ -60,7 +60,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-19 01:43+0000\n"
+"POT-Creation-Date: 2024-07-05 01:41+0000\n"
 "PO-Revision-Date: 2020-08-01 13:09+0200\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -17777,7 +17777,7 @@ msgstr ""
 msgid "Imported Image"
 msgstr "Importér billede"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2596
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2614
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -20271,18 +20271,18 @@ msgstr "Åbn ressourcemappe"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:951
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
+#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:972
-#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:999
-#: libs/ui/KisDocument.cpp:1910 libs/ui/KisDocument.cpp:1954
-#: libs/ui/KisDocument.cpp:1960 libs/ui/KisDocument.cpp:1973
-#: libs/ui/KisDocument.cpp:1977 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
+#: libs/ui/KisDocument.cpp:982 libs/ui/KisDocument.cpp:1002
+#: libs/ui/KisDocument.cpp:1928 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1991
+#: libs/ui/KisDocument.cpp:1995 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -28922,7 +28922,7 @@ msgid "None"
 msgstr "Ingen"
 
 #: libs/ui/input/config/kis_input_button.cpp:128
-#: libs/ui/input/config/kis_input_button.cpp:190
+#: libs/ui/input/config/kis_input_button.cpp:180
 #, kde-format
 msgctxt "Waiting for user input"
 msgid "Input..."
@@ -29556,12 +29556,12 @@ msgstr ""
 msgid "No Gesture"
 msgstr "Gestus"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:97
+#: libs/ui/input/kis_tablet_debugger.cpp:106
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr ""
 
-#: libs/ui/input/kis_tablet_debugger.cpp:98
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr ""
@@ -31233,51 +31233,51 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Åbn dokument"
 
-#: libs/ui/KisDocument.cpp:736
+#: libs/ui/KisDocument.cpp:739
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:786
+#: libs/ui/KisDocument.cpp:789
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Kunne ikke oprette en handling."
 
-#: libs/ui/KisDocument.cpp:803
+#: libs/ui/KisDocument.cpp:806
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Kunne ikke oprette en handling."
 
-#: libs/ui/KisDocument.cpp:825
+#: libs/ui/KisDocument.cpp:828
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Exporting Document..."
 msgstr "Åbner dokument"
 
-#: libs/ui/KisDocument.cpp:826
+#: libs/ui/KisDocument.cpp:829
 #, fuzzy, kde-format
 msgid "Saving Document..."
 msgstr "Gem dokument"
 
-#: libs/ui/KisDocument.cpp:836
+#: libs/ui/KisDocument.cpp:839
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:965
+#: libs/ui/KisDocument.cpp:968
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fejl ved at gemme automatisk. Er partitionen fuld?"
 
-#: libs/ui/KisDocument.cpp:973 libs/ui/KisDocument.cpp:980
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:983
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31287,7 +31287,7 @@ msgstr ""
 "Kunne ikke gemme\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1002
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -31295,47 +31295,47 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1008
+#: libs/ui/KisDocument.cpp:1011
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1025
+#: libs/ui/KisDocument.cpp:1028
 #, fuzzy, kde-format
 msgid "Finished saving %1"
 msgstr "&Færdiggør polylinje"
 
-#: libs/ui/KisDocument.cpp:1431
+#: libs/ui/KisDocument.cpp:1434
 #, fuzzy, kde-format
 #| msgid "Autosaving..."
 msgid "Autosaving... %1"
 msgstr "Gemmer automatisk..."
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1442
 #, kde-format
 msgid "Autosaving..."
 msgstr "Gemmer automatisk..."
 
-#: libs/ui/KisDocument.cpp:1445
+#: libs/ui/KisDocument.cpp:1448
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1588
+#: libs/ui/KisDocument.cpp:1591
 #, fuzzy, kde-format
 #| msgid "Error during autosave! Partition full?"
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fejl ved at gemme automatisk. Er partitionen fuld?"
 
-#: libs/ui/KisDocument.cpp:1602
+#: libs/ui/KisDocument.cpp:1605
 #, fuzzy, kde-format
 msgid "Finished autosaving %1"
 msgstr "&Færdiggør polylinje"
 
-#: libs/ui/KisDocument.cpp:1844
+#: libs/ui/KisDocument.cpp:1862
 #, fuzzy, kde-format
 #| msgid ""
 #| "Malformed URL\n"
@@ -31347,18 +31347,18 @@ msgstr ""
 "Misdannet URL\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1928
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Filen %1 findes ikke."
 
-#: libs/ui/KisDocument.cpp:1939
+#: libs/ui/KisDocument.cpp:1957
 #, fuzzy, kde-format
 #| msgid "Opening Document"
 msgid "Opening document"
 msgstr "Åbner dokumentet %1"
 
-#: libs/ui/KisDocument.cpp:1955 libs/ui/KisDocument.cpp:1961
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1979
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not open\n"
@@ -31366,25 +31366,25 @@ msgstr "Åbner dokumentet %1"
 msgid "Could not open %1."
 msgstr "Kunne ikke åbne \"%1\"."
 
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisDocument.cpp:1978
+#: libs/ui/KisDocument.cpp:1992 libs/ui/KisDocument.cpp:1996
 #, kde-format
 msgid "There were problems opening %1."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:2117
+#: libs/ui/KisDocument.cpp:2135
 #, fuzzy, kde-format
 #| msgid "Not Filled"
 msgid "Not Saved"
 msgstr "Ikke gemt."
 
-#: libs/ui/KisDocument.cpp:2603
+#: libs/ui/KisDocument.cpp:2621
 #, fuzzy, kde-format
 #| msgid "Background"
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Baggrund"
 
-#: libs/ui/KisDocument.cpp:2655
+#: libs/ui/KisDocument.cpp:2673
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -48770,7 +48770,7 @@ msgstr "Indstillinger for børstehår"
 msgid "Selection mode:"
 msgstr "Markeringstilstand:"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:907
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48780,13 +48780,13 @@ msgid ""
 ">This will hardly make any visual difference just keep it in mind."
 msgstr ""
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:914
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "Opret nyt dokument fra en skabelon"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1329
 #, fuzzy, kde-format
 #| msgctxt "@option:radio"
 #| msgid "%1 (Qt)"
@@ -48794,7 +48794,7 @@ msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1 (Qt)"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1334
 #, kde-format
 msgctxt "@info"
 msgid ""

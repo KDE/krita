@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-06-19 01:43+0000\n"
+"POT-Creation-Date: 2024-07-05 01:41+0000\n"
 "PO-Revision-Date: 2023-07-24 21:59+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -18120,7 +18120,7 @@ msgstr "통과"
 msgid "Imported Image"
 msgstr "가져온 이미지"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2596
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2614
 #: plugins/impex/psd/psd_loader.cpp:193
 #, fuzzy, kde-format
 #| msgid "Background"
@@ -20513,18 +20513,18 @@ msgstr "로컬 리소스"
 #: libs/ui/animation/KisDlgImportVideoAnimation.cpp:768
 #: libs/ui/dialogs/kis_dlg_layer_style.cpp:355
 #: libs/ui/dialogs/kis_dlg_preferences.cc:951
-#: libs/ui/input/kis_tablet_debugger.cpp:96 libs/ui/kis_clipboard.cc:720
+#: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
 #: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:972
-#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:999
-#: libs/ui/KisDocument.cpp:1910 libs/ui/KisDocument.cpp:1954
-#: libs/ui/KisDocument.cpp:1960 libs/ui/KisDocument.cpp:1973
-#: libs/ui/KisDocument.cpp:1977 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
+#: libs/ui/KisDocument.cpp:982 libs/ui/KisDocument.cpp:1002
+#: libs/ui/KisDocument.cpp:1928 libs/ui/KisDocument.cpp:1972
+#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1991
+#: libs/ui/KisDocument.cpp:1995 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
@@ -29197,7 +29197,7 @@ msgid "None"
 msgstr "없음"
 
 #: libs/ui/input/config/kis_input_button.cpp:128
-#: libs/ui/input/config/kis_input_button.cpp:190
+#: libs/ui/input/config/kis_input_button.cpp:180
 #, kde-format
 msgctxt "Waiting for user input"
 msgid "Input..."
@@ -29826,12 +29826,12 @@ msgstr ""
 msgid "No Gesture"
 msgstr "제스처"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:97
+#: libs/ui/input/kis_tablet_debugger.cpp:106
 #, kde-format
 msgid "Tablet Event Logging Enabled"
 msgstr "태블릿 이벤트 기록 사용"
 
-#: libs/ui/input/kis_tablet_debugger.cpp:98
+#: libs/ui/input/kis_tablet_debugger.cpp:107
 #, kde-format
 msgid "Tablet Event Logging Disabled"
 msgstr "태블릿 이벤트 기록 사용 안 함"
@@ -31537,49 +31537,49 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "문서 복제"
 
-#: libs/ui/KisDocument.cpp:736
+#: libs/ui/KisDocument.cpp:739
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "%1에 쓸 수 없습니다. 다른 이름으로 저장하십시오."
 
-#: libs/ui/KisDocument.cpp:786
+#: libs/ui/KisDocument.cpp:789
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "동작을 만들 수 없습니다."
 
-#: libs/ui/KisDocument.cpp:803
+#: libs/ui/KisDocument.cpp:806
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "동작을 만들 수 없습니다."
 
-#: libs/ui/KisDocument.cpp:825
+#: libs/ui/KisDocument.cpp:828
 #, kde-format
 msgid "Exporting Document..."
 msgstr "문서 내보내는 중..."
 
-#: libs/ui/KisDocument.cpp:826
+#: libs/ui/KisDocument.cpp:829
 #, kde-format
 msgid "Saving Document..."
 msgstr "문서 저장하는 중..."
 
-#: libs/ui/KisDocument.cpp:836
+#: libs/ui/KisDocument.cpp:839
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
 "finished."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:965
+#: libs/ui/KisDocument.cpp:968
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "%1을(를) 저장하는 중 오류 발생: %2"
 
-#: libs/ui/KisDocument.cpp:973 libs/ui/KisDocument.cpp:980
+#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:983
 #, fuzzy, kde-format
 #| msgid ""
 #| "Could not save\n"
@@ -31589,7 +31589,7 @@ msgstr ""
 "%1을(를)\n"
 "저장할 수 없음"
 
-#: libs/ui/KisDocument.cpp:1002
+#: libs/ui/KisDocument.cpp:1005
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -31597,45 +31597,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1008
+#: libs/ui/KisDocument.cpp:1011
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr ""
 
-#: libs/ui/KisDocument.cpp:1025
+#: libs/ui/KisDocument.cpp:1028
 #, kde-format
 msgid "Finished saving %1"
 msgstr "%1 저장 완료"
 
-#: libs/ui/KisDocument.cpp:1431
+#: libs/ui/KisDocument.cpp:1434
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "자동 저장 중... %1"
 
-#: libs/ui/KisDocument.cpp:1439
+#: libs/ui/KisDocument.cpp:1442
 #, kde-format
 msgid "Autosaving..."
 msgstr "자동 저장 중..."
 
-#: libs/ui/KisDocument.cpp:1445
+#: libs/ui/KisDocument.cpp:1448
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "자동 저장 지연됨: 문서 작업 진행 중..."
 
-#: libs/ui/KisDocument.cpp:1588
+#: libs/ui/KisDocument.cpp:1591
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "%1 자동 저장 중 오류 발생: %2"
 
-#: libs/ui/KisDocument.cpp:1602
+#: libs/ui/KisDocument.cpp:1605
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "%1 자동 저장 완료됨"
 
-#: libs/ui/KisDocument.cpp:1844
+#: libs/ui/KisDocument.cpp:1862
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -31644,40 +31644,40 @@ msgstr ""
 "잘못된 경로\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1910
+#: libs/ui/KisDocument.cpp:1928
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "%1 파일이 없습니다."
 
-#: libs/ui/KisDocument.cpp:1939
+#: libs/ui/KisDocument.cpp:1957
 #, kde-format
 msgid "Opening document"
 msgstr "문서 여는 중"
 
-#: libs/ui/KisDocument.cpp:1955 libs/ui/KisDocument.cpp:1961
+#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1979
 #, fuzzy, kde-format
 #| msgid "Could not open '%1'."
 msgid "Could not open %1."
 msgstr "'%1'을(를) 열 수 없습니다."
 
-#: libs/ui/KisDocument.cpp:1974 libs/ui/KisDocument.cpp:1978
+#: libs/ui/KisDocument.cpp:1992 libs/ui/KisDocument.cpp:1996
 #, fuzzy, kde-format
 #| msgid "There were problems opening %1."
 msgid "There were problems opening %1."
 msgstr "%1을(를) 여는 중 문제가 발생했습니다."
 
-#: libs/ui/KisDocument.cpp:2117
+#: libs/ui/KisDocument.cpp:2135
 #, kde-format
 msgid "Not Saved"
 msgstr "저장되지 않음"
 
-#: libs/ui/KisDocument.cpp:2603
+#: libs/ui/KisDocument.cpp:2621
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "배경 채우기"
 
-#: libs/ui/KisDocument.cpp:2655
+#: libs/ui/KisDocument.cpp:2673
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -48876,7 +48876,7 @@ msgstr "애니메이션이 있는 스타일 옵션"
 msgid "Selection mode:"
 msgstr "선택 모드:"
 
-#: plugins/impex/exr/exr_converter.cc:901
+#: plugins/impex/exr/exr_converter.cc:907
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -48890,19 +48890,19 @@ msgstr ""
 "시 저장하면 초기 값이 되돌아오지 <i>않습니다</i>.<br/><br/>그래도 시각적 차이"
 "는 거의 발생하지 않습니다."
 
-#: plugins/impex/exr/exr_converter.cc:908
+#: plugins/impex/exr/exr_converter.cc:914
 #, kde-format
 msgctxt "@title:window"
 msgid "EXR image has been modified"
 msgstr "EXR 이미지가 수정됨"
 
-#: plugins/impex/exr/exr_converter.cc:1323
+#: plugins/impex/exr/exr_converter.cc:1329
 #, kde-format
 msgctxt "@item:unsupported-node-message"
 msgid "%1 (type: \"%2\")"
 msgstr "%1(형식: \"%2\")"
 
-#: plugins/impex/exr/exr_converter.cc:1328
+#: plugins/impex/exr/exr_converter.cc:1334
 #, kde-format
 msgctxt "@info"
 msgid ""

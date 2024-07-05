@@ -133,8 +133,8 @@ public:
          {}
 
     KisPaintDeviceSP paintDevice;
-    KisShapeLayerCanvasBase * canvas;
-    KoShapeControllerBase* controller;
+    KisShapeLayerCanvasBase *canvas;
+    KoShapeControllerBase *controller;
     int x;
     int y;
     bool isAntialiased;
@@ -785,6 +785,6 @@ void KisShapeLayer::setAntialiased(const bool antialiased)
     if (antialiased != oldAntialiased) {
         m_d->isAntialiased = antialiased;
         // is it the best way to rerender the vector layer?
-        if(m_d->canvas) m_d->canvas->resetCache();
+        if(m_d->canvas) m_d->canvas->resetCache(colorSpace());
     }
 }

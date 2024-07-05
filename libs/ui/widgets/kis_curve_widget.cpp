@@ -166,7 +166,7 @@ QPixmap KisCurveWidget::getPixmap()
 
 bool KisCurveWidget::pointSelected() const
 {
-    return d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_curve.curvePoints().count() - 1;
+    return d->m_grab_point_index > 0 && d->m_grab_point_index < d->m_curve.curvePoints().count();
 }
 
 void KisCurveWidget::keyPressEvent(QKeyEvent *e)
@@ -204,6 +204,10 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
     } else if ((e->key() == Qt::Key_A || e->key() == Qt::Key_Insert) && d->state() == ST_NORMAL) {
         /* FIXME: Lets user choose the hotkeys */
         addPointInTheMiddle();
+        e->accept();
+    } else if (e->key() == Qt::Key_S && pointSelected() && d->state() == ST_NORMAL) {
+        /* FIXME: Lets user choose the hotkeys */
+        setCurrentPointAsCorner(!*isCurrentPointSetAsCorner());
         e->accept();
     } else
         QWidget::keyPressEvent(e);
@@ -310,28 +314,30 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
 
 
     // Drawing curve handles.
-    double curveX;
-    double curveY;
     if (!d->m_readOnlyMode) {
+        const qreal halfHandleSize = d->m_handleSize * 0.5;
+
         for (int i = 0; i < d->m_curve.curvePoints().count(); ++i) {
-            curveX = d->m_curve.curvePoints().at(i).x();
-            curveY = d->m_curve.curvePoints().at(i).y();
+            const KisCubicCurvePoint &point = d->m_curve.points().at(i);
 
             if (i == d->m_grab_point_index) {
                 // active point is slightly more "bold"
                 p.setPen(QPen(appPalette.color(QPalette::Text), 4, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth - (d->m_handleSize*0.5),
-                                     wHeight - (d->m_handleSize*0.5) - curveY * wHeight,
-                                     d->m_handleSize,
-                                     d->m_handleSize));
-
             } else {
                 p.setPen(QPen(appPalette.color(QPalette::Text), 2, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth - (d->m_handleSize*0.5),
-                                     wHeight - (d->m_handleSize*0.5) - curveY * wHeight,
-                                     d->m_handleSize,
-                                     d->m_handleSize));
+            }
 
+            const QPointF handleCenter(point.x() * wWidth, wHeight - point.y() * wHeight);
+
+            if (point.isSetAsCorner()) {
+                QPolygonF rhombusHandle;
+                rhombusHandle.append(QPointF(handleCenter.x() - halfHandleSize, handleCenter.y()));
+                rhombusHandle.append(QPointF(handleCenter.x(), handleCenter.y() - halfHandleSize));
+                rhombusHandle.append(QPointF(handleCenter.x() + halfHandleSize, handleCenter.y()));
+                rhombusHandle.append(QPointF(handleCenter.x(), handleCenter.y() + halfHandleSize));
+                p.drawPolygon(rhombusHandle);
+            } else {
+                p.drawEllipse(handleCenter, halfHandleSize, halfHandleSize);
             }
         }
     }
@@ -369,10 +375,15 @@ void KisCurveWidget::mousePressEvent(QMouseEvent * e)
         Q_EMIT pointSelectedChanged();
     }
 
-    d->m_grabOriginalX = d->m_curve.curvePoints()[d->m_grab_point_index].x();
-    d->m_grabOriginalY = d->m_curve.curvePoints()[d->m_grab_point_index].y();
-    d->m_grabOffsetX = d->m_curve.curvePoints()[d->m_grab_point_index].x() - x;
-    d->m_grabOffsetY = d->m_curve.curvePoints()[d->m_grab_point_index].y() - y;
+    const KisCubicCurvePoint &currentPoint = d->m_curve.curvePoints()[d->m_grab_point_index];
+    
+    d->m_grabOriginalX = currentPoint.x();
+    d->m_grabOriginalY = currentPoint.y();
+    d->m_grabOffsetX = currentPoint.x() - x;
+    d->m_grabOffsetY = currentPoint.y() - y;
+    if (e->modifiers().testFlag(Qt::ControlModifier)) {
+        d->m_curve.setPointAsCorner(d->m_grab_point_index, !currentPoint.isSetAsCorner());
+    }
     d->m_curve.setPointPosition(d->m_grab_point_index, QPointF(x + d->m_grabOffsetX, y + d->m_grabOffsetY));
 
     d->m_draggedAwayPointIndex = -1;

@@ -74,7 +74,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-05 01:41+0000\n"
+"POT-Creation-Date: 2024-07-06 01:46+0000\n"
 "PO-Revision-Date: 2014-02-17 01:14+0100\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -13319,7 +13319,7 @@ msgstr "Instellen"
 msgid "&Help"
 msgstr "&Hülp"
 
-#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, fuzzy, kde-format
@@ -17342,7 +17342,7 @@ msgstr "Afkören"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Laag tofögen"
@@ -17631,7 +17631,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Achtergrund"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Klöörlaag"
@@ -18416,12 +18416,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "&Kloonlaag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
 #: libs/ui/kis_node_manager.cpp:1527
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -18429,18 +18429,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "Koppel:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "&Filterlaag..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "Laag scheren"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "&Filterlaag..."
@@ -20061,10 +20061,10 @@ msgstr "Rin"
 msgid "Out"
 msgstr "Rut"
 
-#: libs/pigment/resources/KoColorSet.cpp:1044
-#: libs/pigment/resources/KoColorSet.cpp:1389
-#: libs/pigment/resources/KoColorSet.cpp:1472
-#: libs/pigment/resources/KoColorSet.cpp:1721
+#: libs/pigment/resources/KoColorSet.cpp:1052
+#: libs/pigment/resources/KoColorSet.cpp:1400
+#: libs/pigment/resources/KoColorSet.cpp:1483
+#: libs/pigment/resources/KoColorSet.cpp:1892
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -20119,7 +20119,7 @@ msgstr "Borndateien:"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1231
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -24148,7 +24148,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Betogbild:"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:156
 #, fuzzy, kde-format
 #| msgid "Reference image:"
 msgid "Reference images"
@@ -29752,20 +29752,20 @@ msgstr ""
 "Dat gifft al en Profil mit dissen Naam.\n"
 "Wullt Du dat överschrieven?"
 
-#: libs/ui/kis_file_layer.cpp:133
+#: libs/ui/kis_file_layer.cpp:134
 #, fuzzy, kde-format
 #| msgid "Profile name"
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "Profilnaam"
 
-#: libs/ui/kis_file_layer.cpp:138
+#: libs/ui/kis_file_layer.cpp:139
 #, fuzzy, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Index güntsiets de Grenzen"
 
-#: libs/ui/kis_file_layer.cpp:141
+#: libs/ui/kis_file_layer.cpp:142
 #, fuzzy, kde-format
 #| msgid "Failed to create an action."
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
@@ -29837,7 +29837,7 @@ msgstr "Filterlaag-Egenschappen"
 msgid "File Layer Properties"
 msgstr "Filterlaag-Egenschappen"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
 #, kde-format
 msgid "No file name specified"
 msgstr ""
@@ -29873,30 +29873,30 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Aktuell Laag ümwanneln ut"
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:700
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nieg Filterlaag"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "&Filterlaag..."
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:776
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Bild glattmaken"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:777
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "Dat Bild bargt versteken Lagen, de verloren geiht."
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:855
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29904,13 +29904,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Laag-Grött"
 msgstr[1] "Laag-Grött"
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:877
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Laag-Grött"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:894
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29920,12 +29920,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:943
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -49703,14 +49703,14 @@ msgid ""
 msgstr ""
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:676
+#: plugins/impex/libkra/kis_kra_loader.cpp:671
 #: plugins/impex/libkra/kis_kra_loader.cpp:1120
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "File not found"
 msgstr "Index güntsiets de Grenzen"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:263
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:259
 #, kde-format
 msgctxt "Warning during loading a kra file with a filter layer"
 msgid ""
@@ -49718,7 +49718,7 @@ msgid ""
 "selection."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:326
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:322
 #, kde-format
 msgctxt "Loading a .kra file"
 msgid ""
@@ -49726,72 +49726,72 @@ msgid ""
 "layer will be converted into a paint layer."
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, fuzzy, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:401
 #, fuzzy, kde-format
 msgid "Could not find transform mask XML element"
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:409
 #, fuzzy, kde-format
 msgid "Could not create transform mask params"
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:565
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
 #, fuzzy, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:573
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
 #, fuzzy, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:602
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
 #, fuzzy, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:609
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
 #, fuzzy, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:625
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
 #, fuzzy, kde-format
 msgid "Could not load profile: %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:680
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
 #, fuzzy, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Nieg Instellen %1"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:721
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
 #, fuzzy, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:764
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
 #, fuzzy, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Vektorköör"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:780
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
 #, fuzzy, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:810
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
 #, fuzzy, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Laag lett sik nich dat Bild tofögen."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:824
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, fuzzy, kde-format
 #| msgid ""
 #| "Parsing error in %1 at line %2, column %3\n"
@@ -49803,7 +49803,7 @@ msgstr ""
 "Inleesfehler in %1 in Reeg %2, Striep %3\n"
 "Fehlermellen: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
 #, fuzzy, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "Laag lett sik nich dat Bild tofögen."
@@ -49828,26 +49828,26 @@ msgstr ""
 msgid "Image specifies an unsupported color model: %1."
 msgstr "Laag-Grött"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:567
+#: plugins/impex/libkra/kis_kra_loader.cpp:562
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:578
+#: plugins/impex/libkra/kis_kra_loader.cpp:573
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:587
+#: plugins/impex/libkra/kis_kra_loader.cpp:582
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:671
+#: plugins/impex/libkra/kis_kra_loader.cpp:666
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49859,7 +49859,7 @@ msgid ""
 "Do you want to locate it manually?"
 msgstr ""
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:845
+#: plugins/impex/libkra/kis_kra_loader.cpp:840
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "

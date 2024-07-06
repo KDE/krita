@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-05 01:41+0000\n"
+"POT-Creation-Date: 2024-07-06 01:46+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -12994,7 +12994,7 @@ msgstr "Nastave&nia"
 msgid "&Help"
 msgstr "&Pomocník"
 
-#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:128
+#: krita/krita5.xmlgui:423 libs/ui/kis_file_layer.cpp:129
 #: plugins/python/scripter/uicontroller.py:94
 #: plugins/tools/svgtexttool/svgtexttool.xmlgui:77
 #, kde-format
@@ -17000,7 +17000,7 @@ msgstr "Zrušiť výber"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:680 libs/ui/kis_layer_manager.cc:732
+#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Pridať vrstvu"
@@ -17281,7 +17281,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadie"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:623
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
 #, kde-format
 msgid "Paint Layer"
 msgstr "Maľovať vrstvu"
@@ -18018,30 +18018,30 @@ msgstr ""
 "to nedokáže znázorniť a trvanie snímky sa zaokrúhli na najbližšiu "
 "milisekundu."
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:652
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
 #, kde-format
 msgid "Clone Layer"
 msgstr "Klonovať vrstvu"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:636
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
 #: libs/ui/kis_node_manager.cpp:1527
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Skupina"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:972
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
 #, kde-format
 msgid "File Layer"
 msgstr "Vrstva súborov"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektorová vrstva"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:687
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
 #, kde-format
 msgid "Filter Layer"
 msgstr "Vrstva filtrov"
@@ -19609,10 +19609,10 @@ msgstr "Dovnútra"
 msgid "Out"
 msgstr "Von"
 
-#: libs/pigment/resources/KoColorSet.cpp:1044
-#: libs/pigment/resources/KoColorSet.cpp:1389
-#: libs/pigment/resources/KoColorSet.cpp:1472
-#: libs/pigment/resources/KoColorSet.cpp:1721
+#: libs/pigment/resources/KoColorSet.cpp:1052
+#: libs/pigment/resources/KoColorSet.cpp:1400
+#: libs/pigment/resources/KoColorSet.cpp:1483
+#: libs/pigment/resources/KoColorSet.cpp:1892
 #: libs/ui/actions/KisPasteActionFactories.cpp:359
 #: libs/ui/animation/KisDlgAnimationRenderer.cpp:507 libs/ui/KisView.cpp:1190
 #: plugins/generators/seexpr/kis_wdg_seexpr.cpp:34
@@ -19667,7 +19667,7 @@ msgstr "Lokálne zdroje"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:980 libs/ui/kis_node_manager.cpp:1231
+#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1231
 #: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -23745,7 +23745,7 @@ msgctxt "(qtundo-format)"
 msgid "Add reference image"
 msgstr "Pridať referenčný obrázok"
 
-#: libs/ui/flake/KisReferenceImagesLayer.cpp:153
+#: libs/ui/flake/KisReferenceImagesLayer.cpp:156
 #, kde-format
 msgid "Reference images"
 msgstr "Referenčné obrázky"
@@ -29414,19 +29414,19 @@ msgstr "Pridať do preddefinovaných vzorov"
 msgid "This pattern already exists. Do you want to overwrite it?"
 msgstr "Tento vzor už existuje. Chcete ho prepísať?"
 
-#: libs/ui/kis_file_layer.cpp:133
+#: libs/ui/kis_file_layer.cpp:134
 #, kde-format
 msgctxt "placeholder test for a warning when not file is set in the file layer"
 msgid "<No file name is set>"
 msgstr "<Nie je nastavený žiadny názov súboru>"
 
-#: libs/ui/kis_file_layer.cpp:138
+#: libs/ui/kis_file_layer.cpp:139
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot find its linked file"
 msgid "Linked file not found: %1"
 msgstr "Prepojený súbor nebol nájdený: %1"
 
-#: libs/ui/kis_file_layer.cpp:141
+#: libs/ui/kis_file_layer.cpp:142
 #, kde-format
 msgctxt "a tooltip shown when a file layer cannot load its linked file"
 msgid "Failed to load linked file: %1"
@@ -29496,7 +29496,7 @@ msgstr "Vlastnosti vyplnenia vrstvy"
 msgid "File Layer Properties"
 msgstr "Vlastnosti vrstvy súborov"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:980
+#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
 #, kde-format
 msgid "No file name specified"
 msgstr "Nezadané žiadne meno súboru"
@@ -29530,23 +29530,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Previesť na vrstvu súborov"
 
-#: libs/ui/kis_layer_manager.cc:687
+#: libs/ui/kis_layer_manager.cc:700
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nová vrstva filtra"
 
-#: libs/ui/kis_layer_manager.cc:736 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "Vyplniť vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:763
+#: libs/ui/kis_layer_manager.cc:776
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Zarovnať obrázok"
 
-#: libs/ui/kis_layer_manager.cc:764
+#: libs/ui/kis_layer_manager.cc:777
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29554,7 +29554,7 @@ msgid ""
 msgstr ""
 "Obrázok obsahuje skryté vrstvy, ktoré budú stratené. Chcete zarovnať obrázok?"
 
-#: libs/ui/kis_layer_manager.cc:842
+#: libs/ui/kis_layer_manager.cc:855
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29563,13 +29563,13 @@ msgstr[0] "Vrstva je zamknutá."
 msgstr[1] "Vrstvy sú zamknuté."
 msgstr[2] "Vrstvy sú zamknuté."
 
-#: libs/ui/kis_layer_manager.cc:864
+#: libs/ui/kis_layer_manager.cc:877
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Vrstva je zamknutá"
 
-#: libs/ui/kis_layer_manager.cc:881
+#: libs/ui/kis_layer_manager.cc:894
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29579,12 +29579,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:930
+#: libs/ui/kis_layer_manager.cc:943
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Previesť neviditeľné skupiny"
 
-#: libs/ui/kis_layer_manager.cc:933
+#: libs/ui/kis_layer_manager.cc:946
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exportovať iba skupiny najvyššej úrovne"
@@ -49572,14 +49572,14 @@ msgstr ""
 "Chcete vybrať iné umiestnenie?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:676
+#: plugins/impex/libkra/kis_kra_loader.cpp:671
 #: plugins/impex/libkra/kis_kra_loader.cpp:1120
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
 msgstr "Súbor nenájdený"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:263
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:259
 #, kde-format
 msgctxt "Warning during loading a kra file with a filter layer"
 msgid ""
@@ -49588,7 +49588,7 @@ msgid ""
 msgstr ""
 "Výber na vrstve %s sa nepodarilo načítať. Bude nahradený prázdnym výberom."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:326
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:322
 #, kde-format
 msgctxt "Loading a .kra file"
 msgid ""
@@ -49598,73 +49598,73 @@ msgstr ""
 "Súbor obsahuje vrstvu klonov, ktorá má nesprávne id zdrojového uzla. Táto "
 "vrstva sa prevedie na vrstvu maľovania."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:398
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:394
 #, kde-format
 msgid "Could not load \"id\" of the transform mask"
 msgstr "Nie je možné načítať \"id\" masky transformácie"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:405
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:401
 #, fuzzy, kde-format
 #| msgid "Could not create transform mask params"
 msgid "Could not find transform mask XML element"
 msgstr "Nemôžem vytvoriť parametre masky transformácie"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:413
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:409
 #, kde-format
 msgid "Could not create transform mask params"
 msgstr "Nemôžem vytvoriť parametre masky transformácie"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:565
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:561
 #, kde-format
 msgid "Could not find keyframe pixel data for frame %1 in %2."
 msgstr "Nebolo možné nájsť pixlové údaje kľúčovej snímky pre snímku %1 v %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:573
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:569
 #, kde-format
 msgid "Could not load keyframe pixel data for frame %1 in %2."
 msgstr "Nebolo možné načítať pixlové údaje kľúčovej snímky pre snímku %1 v %2."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:602
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:598
 #, kde-format
 msgid "Could not read pixel data: %1."
 msgstr "Nemôžem načítať pixlové údaje: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:609
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:605
 #, kde-format
 msgid "Could not load pixel data: %1."
 msgstr "Nemôžem načítať pixlové údaje: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:625
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:621
 #, kde-format
 msgid "Could not load profile: %1."
 msgstr "Nebolo možné načítať profil: %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:680
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:676
 #, kde-format
 msgid "Could not filter configuration %1."
 msgstr "Nemôžem filtrovať nastavenie %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:721
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:717
 #, kde-format
 msgid "Could not load metadata for layer %1."
 msgstr "Nemôžem načítať metadáta pre vrstvu %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:764
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:760
 #, kde-format
 msgid "Could not load vector selection %1."
 msgstr "Nemôžem načítať vektorový výber %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:780
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:776
 #, kde-format
 msgid "Could not load raster selection %1."
 msgstr "Nebolo možné načítať rastrový výber %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:810
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:806
 #, kde-format
 msgid "Could not load keyframes from %1."
 msgstr "Nebolo možné načítať kľúčové snímky z %1."
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:824
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:820
 #, kde-format
 msgid ""
 "parsing error in the keyframe file %1 at line %2, column %3\n"
@@ -49673,7 +49673,7 @@ msgstr ""
 "chyba pri spracovaní v súbore kľúčových snímok %1 na riadku %2, stĺpec %3\n"
 "Chybová správa: %4"
 
-#: plugins/impex/libkra/kis_kra_load_visitor.cpp:837
+#: plugins/impex/libkra/kis_kra_load_visitor.cpp:833
 #, kde-format
 msgid "unknown keyframe channel type: %1 in %2"
 msgstr "neznámy typ kanála kľúčových snímok: %1 in %2"
@@ -49698,26 +49698,26 @@ msgstr "Obrázok neurčuje výšku."
 msgid "Image specifies an unsupported color model: %1."
 msgstr "Obrázok určuje nepodporovaný farebný model: %1."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:567
+#: plugins/impex/libkra/kis_kra_loader.cpp:562
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
 "Embedded palette is empty and cannot be loaded. The name of the palette: %1"
 msgstr "Vložená paleta je prázdna a nedá sa načítať. Názov palety: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:578
+#: plugins/impex/libkra/kis_kra_loader.cpp:573
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
 msgstr "Vložený zdroj sa nedá prečítať. Názov súboru zdroja: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:587
+#: plugins/impex/libkra/kis_kra_loader.cpp:582
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr "Vložený zdroj nie je možné importovať. Názov súboru zdroja: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:671
+#: plugins/impex/libkra/kis_kra_loader.cpp:666
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49735,7 +49735,7 @@ msgstr ""
 "\n"
 "Chcete ho vyhľadať ručne?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:845
+#: plugins/impex/libkra/kis_kra_loader.cpp:840
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "

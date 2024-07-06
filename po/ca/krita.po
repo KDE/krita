@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-19 03:13+0000\n"
-"PO-Revision-Date: 2024-05-02 17:03+0200\n"
+"PO-Revision-Date: 2024-07-05 19:19+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -15583,7 +15583,7 @@ msgstr "Manual del Krita"
 #, kde-format
 msgctxt "action"
 msgid "&Report Bug..."
-msgstr "&Informa d'un error..."
+msgstr "&Informeu d'un error..."
 
 #. i18n: context: toolTip @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (help_report_bug), Actions (Help), ActionCollection (Menu)
@@ -15593,7 +15593,7 @@ msgstr "&Informa d'un error..."
 #, kde-format
 msgctxt "action"
 msgid "Report Bug"
-msgstr "Informa d'un error"
+msgstr "Informeu d'un error"
 
 #. i18n: context: text @ Action (help_about_app), Actions (Help), ActionCollection (Menu)
 #: krita/kritamenu.action:1917
@@ -35958,7 +35958,7 @@ msgstr "Consell del &dia"
 #: libs/widgetutils/config/kstandardaction_p.h:102
 #, kde-format
 msgid "&Report Bug..."
-msgstr "&Informa d'un error..."
+msgstr "&Informeu d'un error..."
 
 #: libs/widgetutils/config/kstandardaction_p.h:103
 #, kde-format
@@ -36154,7 +36154,7 @@ msgstr ""
 "preparat per a fer-ho. En canvi, vós - l'usuari - heu de dir-nos quan alguna "
 "cosa no funciona tal com s'espera o es pot fer millor.<br /><br />El KDE té "
 "un sistema de seguiment d'errors. Visiteu <a href=\"%1\">%1</a> o useu el "
-"diàleg «Informe d'un error...» des del menú «Ajuda» per a informar dels "
+"diàleg «Informeu d'un error...» des del menú «Ajuda» per a informar dels "
 "errors. <br /><br /> Si teniu un suggeriment de millora, us convidem a usar "
 "el sistema de seguiment d'errors per a registrar la vostra petició. "
 "Assegureu-vos d'usar el nivell de severitat anomenat «Llista de desitjos».</"
@@ -36218,7 +36218,7 @@ msgstr "&Quant a"
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:129
 #, kde-format
 msgid "&Report Bugs or Wishes"
-msgstr "&Informa d'errors o desitjos"
+msgstr "&Informeu d'errors o desitjos"
 
 #: libs/widgetutils/xmlgui/kaboutkdedialog_p.cpp:130
 #, kde-format
@@ -36243,7 +36243,7 @@ msgid ""
 "please use the Report Bug menu item of the correct application"
 msgstr ""
 "L'aplicació per a la qual voleu enviar un informe d'error -si és "
-"incorrecta-, useu l'element de menú «Informa d'un error» des de l'aplicació "
+"incorrecta-, useu l'element de menú «Informeu d'un error» des de l'aplicació "
 "correcta"
 
 #: libs/widgetutils/xmlgui/kbugreport.cpp:118

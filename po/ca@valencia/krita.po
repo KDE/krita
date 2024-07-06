@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-06-19 03:13+0000\n"
-"PO-Revision-Date: 2024-05-02 17:03+0200\n"
+"PO-Revision-Date: 2024-07-05 19:19+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca@valencia\n"
@@ -15282,7 +15282,7 @@ msgstr "Altres"
 #, kde-format
 msgctxt "action"
 msgid "Start G'MIC-Qt"
-msgstr "Inicia el G'MIC de les Qt"
+msgstr "Inicia G'MIC de les Qt"
 
 #. i18n: context: toolTip @ Action (QMic), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMic), Actions (Filter), ActionCollection (Menu)
@@ -15292,14 +15292,14 @@ msgstr "Inicia el G'MIC de les Qt"
 #, kde-format
 msgctxt "action"
 msgid "Start G'Mic-Qt"
-msgstr "Inicia el G'MIC de les Qt"
+msgstr "Inicia G'MIC de les Qt"
 
 #. i18n: context: text @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #: krita/kritamenu.action:1725
 #, kde-format
 msgctxt "action"
 msgid "Re-apply the last G'MIC filter"
-msgstr "Torna a aplicar l'últim filtre del G'MIC"
+msgstr "Torna a aplicar l'últim filtre de G'MIC"
 
 #. i18n: context: toolTip @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (QMicAgain), Actions (Filter), ActionCollection (Menu)
@@ -15309,7 +15309,7 @@ msgstr "Torna a aplicar l'últim filtre del G'MIC"
 #, kde-format
 msgctxt "action"
 msgid "Apply the last G'Mic-Qt action again"
-msgstr "Torna a aplicar l'última acció del G'MIC de les Qt"
+msgstr "Torna a aplicar l'última acció de G'MIC de les Qt"
 
 #. i18n: context: text @ Actions (Settings), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (svg_settings), Actions (Text Tool), ActionCollection (SVG Tools)
@@ -22331,7 +22331,7 @@ msgstr ""
 "diverses llibertats:</p><ul><li>Sou lliure d'emprar Krita, per a qualsevol "
 "finalitat</li><li>Sou lliure per a distribuir Krita</li><li>Podeu estudiar "
 "com funciona Krita i canviar-ho</li><li>Podeu distribuir versions canviades "
-"de Krita</li></ul><p>La Fundació Krita i els seus projectes a krita.org es "
+"de Krita</li></ul><p>La Krita Foundation i els seus projectes a krita.org es "
 "<b>comprometen</b> a mantindre Krita com a programari lliure.</p><h1 align="
 "\"center\">El vostre treball artístic</h1><p>El què creeu amb Krita és de la "
 "vostra única propietat. Tot el vostre treball artístic és lliure per a tu "
@@ -36157,7 +36157,7 @@ msgstr ""
 "per a fer-ho. En canvi, vós - l'usuari - heu de dir-nos quan alguna cosa no "
 "funciona tal com s'espera o es pot fer millor.<br /><br />KDE té un sistema "
 "de seguiment d'errors. Visiteu <a href=\"%1\">%1</a> o utilitzeu el diàleg "
-"«Informe d'un error…» des del menú «Ajuda» per a informar dels errors. <br /"
+"«Informeu d'un error…» des del menú «Ajuda» per a informar dels errors. <br /"
 "><br /> Si teniu un suggeriment de millora, us convidem a utilitzar el "
 "sistema de seguiment d'errors per a registrar la vostra petició. Assegureu-"
 "vos d'utilitzar el nivell de gravetat anomenat «Llista de desitjos».</html>"
@@ -47279,7 +47279,7 @@ msgstr "Especifiqueu l'alçària"
 msgid "Too many possible combinations. Input a width or height and try again."
 msgstr ""
 "Hi ha massa combinacions possibles. Introduïu una amplària o una alçària i "
-"torneu-ho a intentar."
+"torneu-ho a provar."
 
 #: plugins/impex/heightmap/kis_wdg_options_heightmap.cpp:195
 #, kde-format
@@ -60730,6 +60730,3 @@ msgstr "Eina de zoom"
 msgctxt "action"
 msgid "Reference Images Tool"
 msgstr "Eina d'imatges de referència"
-
-#~ msgid "CPU Throttle"
-#~ msgstr "Regulador de la CPU"

@@ -43,7 +43,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-06 01:46+0000\n"
-"PO-Revision-Date: 2024-06-28 21:02+0200\n"
+"PO-Revision-Date: 2024-07-06 16:50+0200\n"
 "Last-Translator: Oliver Kellogg <olivermkellogg@gmail.com>\n"
 "Language-Team: Esperanto <kde-i18n-eo@kde.org>\n"
 "Language: eo\n"
@@ -46058,6 +46058,7 @@ msgstr "Vastigi la kolorojn nur ĝis specifa distanco"
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
 msgstr ""
+"Specifu la maksimuman distancon vastigi kiam la limigita reĝimno estas aktiva"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
@@ -46067,7 +46068,7 @@ msgstr "Vastigi kaj la alfa-kanalon kaj la koloron"
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
 #, kde-format
 msgid "Expand only the color, leaving the alpha channel untouched"
-msgstr ""
+msgstr "Vastiginur la koloron, lasante la alfa-kanalon netuŝita"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
 #, kde-format

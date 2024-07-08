@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:46+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -18356,7 +18356,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "ลบรูปภาพ"
 
-#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2214
 #, fuzzy, kde-format
 msgid "Import frames"

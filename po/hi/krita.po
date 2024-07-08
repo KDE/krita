@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:46+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2022-03-29 20:36+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -18370,7 +18370,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "छवि अलग करें"
 
-#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2214
 #, kde-format
 msgid "Import frames"

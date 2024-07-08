@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:46+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2023-11-25 10:03+0000\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese (Traditional) <http://weblate.slat.org/projects/krita/"
@@ -18208,7 +18208,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "Radiance RGBE 影像"
 
-#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2214
 #, kde-format
 msgid "Import frames"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:46+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -19743,7 +19743,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "ਤਬਦੀਲ"
 
-#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2214
 #, fuzzy, kde-format
 #| msgid "Import Slideshow"

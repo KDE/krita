@@ -57,7 +57,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KOffice 1.6\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-06 01:46+0000\n"
+"POT-Creation-Date: 2024-07-08 01:43+0000\n"
 "PO-Revision-Date: 2022-09-06 17:24+0200\n"
 "Last-Translator: Kristof Kiszel <ulysses@fsf.hu>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -18769,7 +18769,7 @@ msgctxt "description of a file type"
 msgid "Radiance RGBE Image"
 msgstr "A kép átnevezése"
 
-#: libs/libkis/Document.cpp:967 libs/ui/KisMainWindow.cpp:2131
+#: libs/libkis/Document.cpp:977 libs/ui/KisMainWindow.cpp:2131
 #: libs/ui/KisMainWindow.cpp:2214
 #, fuzzy, kde-format
 msgid "Import frames"

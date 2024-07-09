@@ -39,6 +39,7 @@
 #include <lager/state.hpp>
 
 #include "FontStyleModel.h"
+#include "FontAxesModel.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -51,6 +52,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterUncreatableMetaObject(KoSvgText::staticMetaObject, "org.krita.flake.text", 1, 0, "KoSvgText", "Error: Namespace with enums");
 
     qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");
+    qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
 }
 
 
@@ -86,6 +88,7 @@ struct TextPropertiesDock::Private
 {
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
     FontStyleModel stylesModel;
+    FontAxesModel axesModel;
     KisAllResourcesModel *fontModel{nullptr};
     KisTagFilterResourceProxyModel *fontTagFilterProxyModel {nullptr};
     KisCanvasResourceProvider *provider{nullptr};
@@ -121,9 +124,13 @@ TextPropertiesDock::TextPropertiesDock()
     d->fontTagFilterProxyModel->setSourceModel(d->fontModel);
     d->fontTagFilterProxyModel->sort(KisAbstractResourceModel::Name);
 
+    connect(d->textModel, SIGNAL(axisValuesChanged(const QVariantHash&)), &d->axesModel, SLOT(setAxisValues(const QVariantHash&)));
+    connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
+
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontTagFilterProxyModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
+    m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
@@ -204,6 +211,7 @@ void TextPropertiesDock::slotUpdateStylesModel()
 {
     QStringList families = d->textModel->fontFamilies();
     QList<KoSvgText::FontFamilyStyleInfo> styles;
+    QList<KoSvgText::FontFamilyAxis> axes;
 
     if (!families.isEmpty() && d->fontModel) {
         QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(families.first());
@@ -211,10 +219,17 @@ void TextPropertiesDock::slotUpdateStylesModel()
             KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
             if (family) {
                 styles = family->styles();
-
+                axes = family->axes();
             }
         }
     }
+    d->axesModel.setAxesData(axes);
+    d->axesModel.setAxisValues(d->textModel->axisValues());
     d->stylesModel.setStylesInfo(styles);
+}
+
+void TextPropertiesDock::slotUpdateAxesValues()
+{
+    d->textModel->setaxisValues(d->axesModel.axisValues());
 }
 #include "TextPropertiesDock.moc"

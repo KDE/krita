@@ -334,6 +334,7 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
                 axisInfo.min = axis.min_value;
                 axisInfo.max = axis.max_value;
                 axisInfo.value = axis.default_value;
+                axisInfo.axisHidden = axis.flags & HB_OT_VAR_AXIS_FLAG_HIDDEN;
                 char buff[4];
                 hb_tag_to_string(axis.tag, buff);
                 axisInfo.tag = QString::fromLatin1(buff, 4);
@@ -647,6 +648,8 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
             mainAxis.defaultValue = axis.defaultValue;
             mainAxis.max = qMax(mainAxis.max, axis.max);
             mainAxis.localizedLabels.insert(axis.localizedLabels);
+            mainAxis.tag = axis.tag;
+            mainAxis.axisHidden = axis.axisHidden;
             representation.axes.insert(mainAxis.tag, mainAxis);
 
             if (!subFamily->isVariable) {

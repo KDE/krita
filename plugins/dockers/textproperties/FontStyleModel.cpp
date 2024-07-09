@@ -70,6 +70,11 @@ int FontStyleModel::styleModeValue(int row)
     return style.isItalic? style.isOblique? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
 }
 
+QVariantHash FontStyleModel::axesValues(int row)
+{
+    return data(index(row, 0), AxisValues).toHash();
+}
+
 // TODO: consider somehow using the exact same method as in KoFFWWSConverter
 QHash<int, KoSvgText::FontFamilyStyleInfo> searchAxisTag(QString tag, qreal value, QVector<qreal> values, qreal defaultVal, QHash<int, KoSvgText::FontFamilyStyleInfo> styles) {
     QHash<int, KoSvgText::FontFamilyStyleInfo> filteredStyles;
@@ -77,8 +82,6 @@ QHash<int, KoSvgText::FontFamilyStyleInfo> searchAxisTag(QString tag, qreal valu
     if (valIt == values.end()) valIt--;
     qreal selectedValue = *valIt;
     if (valIt != values.begin()) valIt--;
-    qDebug() << tag << values << value;
-    qDebug() << tag << *valIt << qAbs(*valIt - value) << selectedValue << qAbs(selectedValue - value);
     if (qAbs(*valIt - value) < qAbs(selectedValue - value)) {
         selectedValue = *valIt;
     }
@@ -125,7 +128,7 @@ int FontStyleModel::rowForStyle(qreal weight, qreal width, int styleMode)
 QModelIndex FontStyleModel::index(int row, int column, const QModelIndex &parent) const
 {
     if (column != 0) return QModelIndex();
-    if (row > 0 && row < d->styles.size()) return createIndex(row, column, &row);
+    if (row >= 0 && row < d->styles.size()) return createIndex(row, column, &row);
     return QModelIndex();
 }
 
@@ -171,7 +174,12 @@ QVariant FontStyleModel::data(const QModelIndex &index, int role) const
     } else if (role == AxisValues) {
         QVariantHash vals;
         for (auto it = style.instanceCoords.begin(); it != style.instanceCoords.end(); it++) {
-            vals.insert(it.key(), it.value());
+            if (!(it.key() == WEIGHT_TAG
+                  || it.key() == WIDTH_TAG
+                  || it.key() == SLANT_TAG
+                  || it.key() == ITALIC_TAG)) {
+                vals.insert(it.key(), QVariant::fromValue(it.value()));
+            }
         }
         return vals;
     }

@@ -732,6 +732,7 @@ struct FontFamilyAxis : public boost::equality_comparable<FontFamilyAxis> {
     qreal value = 0;
     qreal defaultValue = 0;
     bool variableAxis = false;
+    bool axisHidden = false; /// Some variable fonts have axes that are not really supossed to be shown to the user.
 
     QString debugInfo() const {
         QString label;

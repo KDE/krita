@@ -213,6 +213,25 @@ inline qreal roundToStraightAngle(qreal value)
     return normalizeAngle(int((value + M_PI_4) / M_PI_2) * M_PI_2);
 }
 
+QVariantHash parseVariantStringList(const QStringList features) {
+    QVariantHash settings;
+    QString tag;
+    for (int i = 0; i < features.size(); i++) {
+        QString feature = features.at(i).trimmed();
+        if ((feature.startsWith('\'') || feature.startsWith('\"')) && feature.size() == 6) {
+            tag = feature.mid(1, 4);
+        }
+        bool ok = false;
+        double featureVal = feature.toDouble(&ok);
+
+        if (ok && !tag.isEmpty()) {
+            settings.insert(tag, QVariant(featureVal));
+            tag = QString();
+        }
+    }
+    return settings;
+}
+
 void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context, const QString &command, const QString &value)
 {
     const QMap<QString, KoSvgText::FontVariantFeature> featureMap = KoSvgText::fontVariantStrings();
@@ -423,7 +442,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "font-optical-sizing") {
         setProperty(FontOpticalSizingId, value == "auto");
     } else if (command == "font-variation-settings") {
-        setProperty(FontVariationSettingsId, value.split(", "));
+        setProperty(FontVariationSettingsId, parseVariantStringList(value.split(", ")));
     } else if (command == "text-decoration" || command == "text-decoration-line" || command == "text-decoration-style" || command == "text-decoration-color"
                || command == "text-decoration-position") {
         using namespace KoSvgText;
@@ -712,7 +731,12 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
     if (hasProperty(FontVariationSettingsId)) {
-        result.insert("font-variation-settings", property(FontVariationSettingsId).toStringList().join(", "));
+        QStringList settings;
+        QVariantHash vals = property(FontVariationSettingsId).toHash();
+        for(auto it = vals.begin(); it != vals.end(); it++) {
+            settings.append(QString("'%1' %2").arg(it.key()).arg(it.value().toDouble()));
+        }
+        result.insert("font-variation-settings", settings.join(", "));
     }
 
     if (hasProperty(FontStretchId)) {
@@ -1085,20 +1109,9 @@ QMap<QString, qreal> KoSvgTextProperties::fontAxisSettings() const
         settings.insert("ital", 0);
     }
     if (hasProperty(FontVariationSettingsId)) {
-        QStringList features = property(FontVariationSettingsId).toStringList();
-        QString tag;
-        for (int i = 0; i < features.size(); i++) {
-            QString feature = features.at(i).trimmed();
-            if ((feature.startsWith('\'') || feature.startsWith('\"')) && feature.size() == 6) {
-                tag = feature.mid(1, 4);
-            }
-            bool ok = false;
-            int featureVal = feature.toInt(&ok);
-
-            if (ok && !tag.isEmpty()) {
-                settings.insert(tag, featureVal);
-                tag = QString();
-            }
+        QVariantHash features = property(FontVariationSettingsId).toHash();
+        for (auto it = features.begin(); it != features.end(); it++) {
+            settings.insert(it.key(), it.value().toDouble());
         }
     }
 

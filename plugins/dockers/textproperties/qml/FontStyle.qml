@@ -75,14 +75,17 @@ CollapsibleGroupProperty {
                 var weight = fontStylesModel.weightValue(currentIndex);
                 var width = fontStylesModel.widthValue(currentIndex);
                 var styleMode = fontStylesModel.styleModeValue(currentIndex);
+                var axesValues = fontStylesModel.axesValues(currentIndex);
                 properties.fontWeight = weight;
                 properties.fontWidth = width;
                 properties.fontStyle = styleMode;
+                properties.axisValues = axesValues;
             }
         }
     }
 
     contentItem: GridLayout {
+        id: mainLayout;
         columns: 3
         anchors.left: parent.left
         anchors.right: parent.right
@@ -120,6 +123,7 @@ CollapsibleGroupProperty {
             onClicked: properties.fontWidthState = KoSvgTextPropertiesModel.PropertyUnset;
         }
         Label {
+            id: widthLabel;
             text: i18nc("@label:spinbox", "Width:")
             Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
             horizontalAlignment: Text.AlignRight;
@@ -176,6 +180,56 @@ CollapsibleGroupProperty {
             text: i18nc("@option:check", "Optical Size")
             Layout.fillWidth: true;
             font.italic: properties.fontOpticalSizeLinkState === KoSvgTextPropertiesModel.PropertyTriState;
+        }
+
+        ColumnLayout {
+            RevertPropertyButton {
+                revertState: properties.axisValueState;
+                onClicked: properties.axisValueState = KoSvgTextPropertiesModel.PropertyUnset;
+            }
+            Item {
+                Layout.fillHeight: true;
+            }
+        }
+        ListView {
+            id: axesView;
+            model: fontAxesModel;
+            Layout.columnSpan: 2;
+            Layout.fillWidth: true;
+            Layout.preferredHeight: contentHeight;
+            spacing: parent.columnSpacing;
+
+            function updateAxes() {
+
+            }
+
+            delegate: RowLayout {
+                spacing: axesView.spacing;
+                width: axesView.width;
+                height: implicitHeight;
+                required property string display;
+                required property double axismin;
+                required property double axismax;
+                required property bool axishidden;
+                required property var model;
+
+                Label {
+                    text: parent.display;
+                    Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+                    horizontalAlignment: Text.AlignRight;
+                    height: parent.height;
+                    elide: Text.ElideRight;
+                    Layout.preferredWidth: widthLabel.width+spacing;
+                }
+                DoubleSpinBox {
+                    id: axisSpn;
+                    from: parent.axismin * multiplier;
+                    to: parent.axismax * multiplier;
+                    value: model.edit * multiplier;
+                    onValueChanged: model.edit = (value / axisSpn.multiplier);
+                    Layout.fillWidth: true;
+                }
+            }
         }
 
     }

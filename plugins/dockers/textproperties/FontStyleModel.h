@@ -39,6 +39,7 @@ public:
     Q_INVOKABLE qreal weightValue(int row);
     Q_INVOKABLE qreal widthValue(int row);
     Q_INVOKABLE int styleModeValue(int row);
+    Q_INVOKABLE QVariantHash axesValues(int row);
 
     /// Find the closest style that represents the current width, weight and stylemode.
     Q_INVOKABLE int rowForStyle(qreal weight, qreal width, int styleMode);

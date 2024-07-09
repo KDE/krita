@@ -656,6 +656,8 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
         if (!subFamily->isVariable) {
             if (!subFamily->localizedWWSStyle.isEmpty()) {
                 style.localizedLabels = subFamily->localizedWWSStyle;
+            } else if (!subFamily->localizedTypographicStyle.isEmpty()) {
+                style.localizedLabels = subFamily->localizedTypographicStyle;
             } else if (!subFamily->localizedFontStyle.isEmpty()) {
                 style.localizedLabels = subFamily->localizedFontStyle;
             } else {

@@ -1,6 +1,7 @@
 set(KRITA_TEXTPROPERTIES_SOURCES 
     TextPropertiesPlugin.cpp 
     TextPropertiesDock.cpp 
+    FontStyleModel.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

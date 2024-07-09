@@ -25,6 +25,7 @@
 #include <KoResourcePaths.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
+#include <KisTagFilterResourceProxyModel.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -37,6 +38,8 @@
 #include <resources/KoFontFamily.h>
 #include <lager/state.hpp>
 
+#include "FontStyleModel.h"
+
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<KoSvgTextPropertiesModel>("org.krita.flake.text", 1, 0, "KoSvgTextPropertiesModel");
@@ -46,6 +49,8 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qmlRegisterType<TabSizeModel>("org.krita.flake.text", 1, 0, "TabSizeModel");
     qmlRegisterType<TextTransformModel>("org.krita.flake.text", 1, 0, "TextTransformModel");
     qmlRegisterUncreatableMetaObject(KoSvgText::staticMetaObject, "org.krita.flake.text", 1, 0, "KoSvgText", "Error: Namespace with enums");
+
+    qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");
 }
 
 
@@ -80,8 +85,9 @@ private:
 struct TextPropertiesDock::Private
 {
     KoSvgTextPropertiesModel *textModel {new KoSvgTextPropertiesModel()};
-    QStringListModel stylesModel;
+    FontStyleModel stylesModel;
     KisAllResourcesModel *fontModel{nullptr};
+    KisTagFilterResourceProxyModel *fontTagFilterProxyModel {nullptr};
     KisCanvasResourceProvider *provider{nullptr};
 };
 
@@ -111,10 +117,12 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->setMinimumHeight(100);
 
     d->fontModel = KisResourceModelProvider::resourceModel(ResourceType::FontFamilies);
-
+    d->fontTagFilterProxyModel = new KisTagFilterResourceProxyModel(ResourceType::FontFamilies);
+    d->fontTagFilterProxyModel->setSourceModel(d->fontModel);
+    d->fontTagFilterProxyModel->sort(KisAbstractResourceModel::Name);
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
-    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontModel));
+    m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontTagFilterProxyModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
@@ -195,22 +203,18 @@ void TextPropertiesDock::slotTextPropertiesChanged()
 void TextPropertiesDock::slotUpdateStylesModel()
 {
     QStringList families = d->textModel->fontFamilies();
-    QStringList styleList;
+    QList<KoSvgText::FontFamilyStyleInfo> styles;
 
     if (!families.isEmpty() && d->fontModel) {
         QVector<KoResourceSP> res = d->fontModel->resourcesForFilename(families.first());
         if (!res.isEmpty()) {
             KoFontFamilySP family = res.first().staticCast<KoFontFamily>();
             if (family) {
-                QList<KoSvgText::FontFamilyStyleInfo> styles = family->styles();
-                for(int i=0; i<styles.size(); i++) {
-                    KoSvgText::FontFamilyStyleInfo style = styles.at(i);
-                    QString label = style.localizedLabels.value("en", style.localizedLabels.values().first());
-                    styleList.append(label);
-                }
+                styles = family->styles();
+
             }
         }
     }
-    d->stylesModel.setStringList(styleList);
+    d->stylesModel.setStylesInfo(styles);
 }
 #include "TextPropertiesDock.moc"

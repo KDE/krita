@@ -34,6 +34,7 @@ CollapsibleGroupProperty {
         fontWidth = properties.fontWidth;
         fontOptical = properties.fontOpticalSizeLink;
         fontSlant = properties.fontStyle;
+        styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle);
         visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
                  || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
                  || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
@@ -67,6 +68,18 @@ CollapsibleGroupProperty {
         model: fontStylesModel;
         textRole: "display";
         width: parent.width;
+        onActivated: {
+            if (!blockSignals) {
+                // Because each change to propertiesModel causes signals to fire,
+                // we need to first store the vars and then apply them.
+                var weight = fontStylesModel.weightValue(currentIndex);
+                var width = fontStylesModel.widthValue(currentIndex);
+                var styleMode = fontStylesModel.styleModeValue(currentIndex);
+                properties.fontWeight = weight;
+                properties.fontWidth = width;
+                properties.fontStyle = styleMode;
+            }
+        }
     }
 
     contentItem: GridLayout {

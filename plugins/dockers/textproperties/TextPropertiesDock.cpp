@@ -26,6 +26,7 @@
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
 #include <KisTagFilterResourceProxyModel.h>
+#include <KisTagModel.h>
 
 #include <KoCanvasResourcesIds.h>
 #include <KoSvgTextPropertyData.h>
@@ -91,6 +92,7 @@ struct TextPropertiesDock::Private
     FontAxesModel axesModel;
     KisAllResourcesModel *fontModel{nullptr};
     KisTagFilterResourceProxyModel *fontTagFilterProxyModel {nullptr};
+    KisTagModel *tagModel{nullptr};
     KisCanvasResourceProvider *provider{nullptr};
 };
 
@@ -123,12 +125,14 @@ TextPropertiesDock::TextPropertiesDock()
     d->fontTagFilterProxyModel = new KisTagFilterResourceProxyModel(ResourceType::FontFamilies);
     d->fontTagFilterProxyModel->setSourceModel(d->fontModel);
     d->fontTagFilterProxyModel->sort(KisAbstractResourceModel::Name);
+    d->tagModel = new KisTagModel(ResourceType::FontFamilies);
 
     connect(d->textModel, SIGNAL(axisValuesChanged(const QVariantHash&)), &d->axesModel, SLOT(setAxisValues(const QVariantHash&)));
     connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontTagFilterProxyModel));
+    m_quickWidget->rootContext()->setContextProperty("fontTagModel", QVariant::fromValue(d->tagModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
@@ -231,5 +235,23 @@ void TextPropertiesDock::slotUpdateStylesModel()
 void TextPropertiesDock::slotUpdateAxesValues()
 {
     d->textModel->setaxisValues(d->axesModel.axisValues());
+}
+
+void TextPropertiesDock::slotFontTagActivated(int row)
+{
+    QModelIndex idx = d->tagModel->index(row, 0);
+    if (idx.isValid()) {
+        d->fontTagFilterProxyModel->setTagFilter(d->tagModel->tagForIndex(idx));
+    }
+}
+
+void TextPropertiesDock::slotFontSearchTextChanged(const QString &text)
+{
+    d->fontTagFilterProxyModel->setSearchText(text);
+}
+
+void TextPropertiesDock::slotFontSearchInTag(const bool checked)
+{
+    d->fontTagFilterProxyModel->setFilterInCurrentTag(checked);
 }
 #include "TextPropertiesDock.moc"

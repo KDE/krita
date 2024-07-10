@@ -47,6 +47,33 @@ CollapsibleGroupProperty {
             }
         }
         textRole: "name";
+
+        delegate: ItemDelegate {
+            required property var model;
+            contentItem: Label {
+                text: model.name;
+                Layout.fillWidth: true;
+                height:implicitHeight;
+            }
+            width: fontResourceView.listWidth;
+            highlighted: mainFamilyCmb.highlightedIndex === model.index;
+            background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
+        }
+        popup: Popup {
+            y: mainFamilyCmb.height - 1;
+            x: mainFamilyCmb.width - width;
+            width: contentWidth;
+            height: contentHeight;
+            padding: 1;
+
+            contentItem: FontResourceView {
+                id: fontResourceView;
+                fontModel: mainFamilyCmb.delegateModel;
+                tagModel: fontTagModel;
+                currentIndex: mainFamilyCmb.highlightedIndex;
+            }
+            palette: mainFamilyCmb.palette;
+        }
         wheelEnabled: true;
     }
 

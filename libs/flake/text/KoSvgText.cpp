@@ -1065,18 +1065,46 @@ QDebug operator<<(QDebug dbg, const KoSvgText::FontFamilyAxis &axis)
 
 QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyAxis &axis) {
 
-    out << axis.tag;
-    out << axis.min;
-    out << axis.defaultValue;
-    out << axis.max;
+    QDomDocument doc;
+    QDomElement root = doc.createElement("axis");
+    root.setAttribute("tagName", axis.tag);
+    root.setAttribute("min", axis.min);
+    root.setAttribute("max", axis.max);
+    root.setAttribute("default", axis.defaultValue);
+    root.setAttribute("hidden", axis.axisHidden? "true": "false");
+    root.setAttribute("variable", axis.variableAxis? "true": "false");
+    for(auto it = axis.localizedLabels.begin(); it != axis.localizedLabels.end(); it++) {
+        QDomElement name = doc.createElement("name");
+        name.setAttribute("lang", it.key());
+        name.setAttribute("value", it.value());
+        root.appendChild(name);
+    }
+    doc.appendChild(root);
+    out << doc.toString(0);
     return out;
 }
 QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis) {
 
-    in >> axis.tag;
-    in >> axis.min;
-    in >> axis.defaultValue;
-    in >> axis.max;
+    QString xml;
+    in >> xml;
+
+    QDomDocument doc;
+    doc.setContent(xml);
+    QDomElement root = doc.childNodes().at(0).toElement();
+    axis.tag = root.attribute("tagName");
+    axis.min = root.attribute("min").toDouble();
+    axis.max = root.attribute("max").toDouble();
+    axis.defaultValue = root.attribute("default").toDouble();
+    axis.axisHidden = root.attribute("hidden") == "true"? true: false;
+    axis.variableAxis = root.attribute("variable") == "true"? true: false;
+    QDomNodeList names =  root.elementsByTagName("name");
+    for(int i = 0; i < names.size(); i++) {
+        QDomElement name = names.at(i).toElement();
+        QString lang = name.attribute("lang");
+        QString value = name.attribute("value");
+        axis.localizedLabels.insert(lang, value);
+    }
+
     return in;
 }
 
@@ -1088,28 +1116,48 @@ QDebug operator<<(QDebug dbg, const KoSvgText::FontFamilyStyleInfo &style)
 
 QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyStyleInfo &style) {
 
-    out << style.isItalic;
-    out << style.isOblique;
-    QStringList coords;
-    Q_FOREACH(const QString key, style.instanceCoords.keys()) {
-        coords.append(key+"="+QString::number(style.instanceCoords.value(key)));
+    QDomDocument doc;
+    QDomElement root = doc.createElement("style");
+    root.setAttribute("italic", style.isItalic? "true": "false");
+    root.setAttribute("oblique", style.isOblique? "true": "false");
+    for(auto it = style.instanceCoords.begin(); it != style.instanceCoords.end(); it++) {
+        QDomElement coord = doc.createElement("coord");
+        coord.setAttribute("tag", it.key());
+        coord.setAttribute("value", it.value());
+        root.appendChild(coord);
     }
-    out << coords.join(" ");
+    for(auto it = style.localizedLabels.begin(); it != style.localizedLabels.end(); it++) {
+        QDomElement name = doc.createElement("name");
+        name.setAttribute("lang", it.key());
+        name.setAttribute("value", it.value());
+        root.appendChild(name);
+    }
+    doc.appendChild(root);
+    out << doc.toString(0);
     return out;
 }
 QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyStyleInfo &style) {
+    QString xml;
+    in >> xml;
 
-    in >> style.isItalic;
-    in >> style.isOblique;
-    QString coords;
-    in >> coords;
-    style.instanceCoords.clear();
-    Q_FOREACH(const QString coord, coords.split(" ")) {
-        QStringList key = coord.split("=");
-        QString last = key.last();
-        bool ok = false;
-        float val = last.toFloat(&ok);
-        style.instanceCoords.insert(key.first(), ok? val: 0.0);
+    QDomDocument doc;
+    doc.setContent(xml);
+    QDomElement root = doc.childNodes().at(0).toElement();
+    style.isItalic = root.attribute("italic") == "true"? true: false;
+    style.isOblique = root.attribute("oblique") == "true"? true: false;
+    QDomNodeList names =  root.elementsByTagName("name");
+    for(int i = 0; i < names.size(); i++) {
+        QDomElement name = names.at(i).toElement();
+        QString lang = name.attribute("lang");
+        QString value = name.attribute("value");
+        style.localizedLabels.insert(lang, value);
+    }
+    QDomNodeList coords =  root.elementsByTagName("coord");
+    for(int i = 0; i < coords.size(); i++) {
+        QDomElement coord = coords.at(i).toElement();
+        QString tag = coord.attribute("tag");
+        double value = coord.attribute("value").toDouble();
+        style.instanceCoords.insert(tag, value);
     }
 
     return in;

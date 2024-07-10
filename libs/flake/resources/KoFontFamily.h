@@ -33,6 +33,8 @@ public:
     bool isSerializable() const override;
     QPair<QString, QString> resourceType() const override;
 
+    void updateThumbnail() override;
+
     /// Returns the typographic family name, if any.
     QString typographicFamily() const;
 

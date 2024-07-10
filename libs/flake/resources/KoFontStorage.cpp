@@ -68,6 +68,7 @@ public:
     void next() override {
         KoFontFamilyWWSRepresentation rep = m_representationIterator->next();
         m_currentResource = KoFontFamilySP (new KoFontFamily(rep));
+        m_currentResource->updateThumbnail();
     }
 
     QString url() const override {
@@ -119,6 +120,7 @@ KoResourceSP KoFontStorage::resource(const QString &url)
     KoFontFamilyWWSRepresentation rep = KoFontRegistry::instance()->representationByFamilyName(familyName, &found);
     if (found) {
         fam.reset(new KoFontFamily(rep));
+        fam->updateThumbnail();
     }
 
     return fam;

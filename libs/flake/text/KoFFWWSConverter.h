@@ -11,6 +11,7 @@
 #include <kritaflake_export.h>
 
 #include <KoSvgText.h>
+#include <QLocale>
 
 /// This struct represents a CSS-compatible font family, containing all
 /// sorts of info useful for the GUI.
@@ -21,6 +22,9 @@ struct KoFontFamilyWWSRepresentation {
     QHash<QString, QString> localizedFontFamilyNames;
     QHash<QString, QString> localizedTypographicFamily;
     QHash<QString, QString> localizedTypographicStyles;
+
+    QHash<QLocale::Script, QString> sampleStrings; /// sample string used to generate the preview;
+    QList<QLocale> supportedLanguages;
 
     QHash<QString, KoSvgText::FontFamilyAxis> axes;
     QList<KoSvgText::FontFamilyStyleInfo> styles;
@@ -56,11 +60,14 @@ public:
     /// and other font features.
     bool addFontFromFile(const QString &filename, const int index, FT_LibrarySP freeTypeLibrary);
 
+    void addSupportedLanguagesByFile(const QString &filename, const int index, const QList<QLocale> &supportedLanguages);
+
     /// Sort any straggling fonts into WWSFamilies.
     void sortIntoWWSFamilies();
 
     /// Collects all WWSFamilies (that is, CSS compatible groupings of font files) and return them.
     QList<KoFontFamilyWWSRepresentation> collectFamilies() const;
+
     /// Gets a single WWSFamily representation for a given CSS Family Name, used by KoFontStorage.
     KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
 

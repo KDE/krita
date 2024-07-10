@@ -5,6 +5,9 @@
  */
 #include "KoFontFamily.h"
 #include <KoMD5Generator.h>
+#include <KoSvgTextShape.h>
+#include <KoColorBackground.h>
+#include <QPainter>
 
 const QString TYPOGRAPHIC_NAME = "typographic_name";
 const QString LOCALIZED_TYPOGRAPHIC_NAME = "localized_typographic_name";
@@ -17,9 +20,42 @@ const QString COLOR_BITMAP = "color_bitmap";
 const QString COLOR_CLRV0 = "color_clrv0";
 const QString COLOR_CLRV1 = "color_clrv1";
 const QString COLOR_SVG = "color_SVG";
+const QString SAMPLE_STRING = "sample_string";
 
 struct KoFontFamily::Private {
 };
+
+QImage generateImage(QString sample, QString fontFamily, bool isColor) {
+    QSharedPointer<KoSvgTextShape> shape(new KoSvgTextShape);
+    shape->setResolution(300, 300);
+    shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::black)));
+    KoSvgTextProperties props = shape->textProperties();
+    props.setProperty(KoSvgTextProperties::FontFamiliesId, {fontFamily});
+    shape->setPropertiesAtPos(-1, props);
+    shape->insertText(0, sample);
+
+    QRectF bbox = shape->boundingRect();
+    qreal boxHeight = bbox.width();
+    qreal scale = (256 * 0.95) / boxHeight;
+    QRectF boundingRect(0, 0, 256, 256);
+    QImage img(boundingRect.width(),
+               boundingRect.height(),
+               isColor? QImage::Format_ARGB32: QImage::Format_Grayscale8);
+    QPainter gc(&img);
+    gc.setRenderHint(QPainter::Antialiasing, true);
+    gc.fillRect(0, 0, boundingRect.width(), boundingRect.height(), Qt::white);
+    gc.setPen(QPen(Qt::transparent));
+
+    gc.translate(boundingRect.center());
+    gc.scale(scale, scale);
+    gc.translate(-bbox.center());
+
+    gc.setClipRect(gc.transform().inverted().mapRect(boundingRect));
+
+    shape->paint(gc);
+    gc.end();
+    return img;
+}
 
 QHash<QString, QVariant> stringHashtoVariantHash(QHash<QString, QString> names) {
     QHash<QString, QVariant> newNames;
@@ -40,12 +76,12 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
     addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, stringHashtoVariantHash(representation.localizedTypographicFamily));
     addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, stringHashtoVariantHash(representation.localizedTypographicStyles));
 
-    QImage img(256, 256, QImage::Format_ARGB32);
-    /*QPainter gc(&img);
-    gc.fillRect(0, 0, 256, 256, Qt::white);
-    gc.end();*/
-    setImage(img);
+    QVariantHash samples;
+    Q_FOREACH(const QLocale::Script &key, representation.sampleStrings.keys()) {
+        samples.insert(QString::number(key), QVariant::fromValue(representation.sampleStrings.value(key)));
+    }
 
+    addMetaData(SAMPLE_STRING, samples);
     addMetaData(IS_VARIABLE, representation.isVariable);
     addMetaData(COLOR_BITMAP, representation.colorBitMap);
     addMetaData(COLOR_CLRV0, representation.colorClrV0);
@@ -108,6 +144,15 @@ bool KoFontFamily::isSerializable() const
 QPair<QString, QString> KoFontFamily::resourceType() const
 {
     return QPair<QString, QString>(ResourceType::FontFamilies, "");
+}
+
+void KoFontFamily::updateThumbnail()
+{
+    QHash<QString, QVariant> samples = metadata().value(SAMPLE_STRING).toHash();
+    QString sample = samples.isEmpty()? QString("AaBbGg"):
+                                        samples.value(QString::number(QLocale::LatinScript), samples.values().first()).toString();
+    bool isColor = (metadata().value(COLOR_BITMAP).toBool() || metadata().value(COLOR_CLRV0).toBool());
+    setImage(generateImage(sample, filename(), isColor));
 }
 
 QString KoFontFamily::typographicFamily() const

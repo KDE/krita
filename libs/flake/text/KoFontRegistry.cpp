@@ -154,7 +154,7 @@ public:
 
     bool reloadConverter() {
         fontFamilyConverter.reset(new KoFFWWSConverter());
-        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_INDEX, nullptr);
+        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_INDEX, FC_LANG, nullptr);
         FcFontSetSP allFonts(FcFontList(m_config.data(), FcPatternCreate(), objectSet));
 
         for (int j = 0; j < allFonts->nfont; j++) {

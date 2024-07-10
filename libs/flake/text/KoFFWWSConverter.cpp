@@ -13,6 +13,8 @@
 
 #include <QFileInfo>
 
+#include <QFontDatabase>
+
 
 
 struct FontFamilySizeInfo {
@@ -52,6 +54,9 @@ struct FontFamilyNode {
     QString fontStyle;
     QString fileName;
     int fileIndex = 0;
+
+    QHash<QLocale::Script, QString> sampleStrings; /// sample string used to generate the preview;
+    QList<QLocale> supportedLanguages;
 
     QStringList otherFiles;
 
@@ -223,7 +228,30 @@ bool KoFFWWSConverter::addFontFromPattern(const FcPattern *pattern, FT_LibrarySP
         return false;
     }
 
-    return addFontFromFile(filename, indexValue, freeTypeLibrary);
+    bool success = addFontFromFile(filename, indexValue, freeTypeLibrary);
+    if (success) {
+        FcLangSet *set;
+        if (FcPatternGetLangSet(pattern, FC_LANG, 0, &set) != FcResultMatch) {
+            qWarning() << "Failed to get font index for" << pattern << "(file:" << filename << ")";
+            return success;
+        }
+        FcStrList *list = FcStrListCreate(FcLangSetGetLangs(set));
+        FcStrListFirst(list);
+        FcChar8 *langString = FcStrListNext(list);
+        QString lang = QString::fromUtf8(reinterpret_cast<char *>(langString));
+        QList<QLocale> languages;
+        while (!lang.isEmpty()) {
+            languages.append(QLocale(lang));
+
+            langString = FcStrListNext(list);
+            lang = QString::fromUtf8(reinterpret_cast<char *>(langString));
+        }
+        FcStrListDone(list);
+        if (!languages.isEmpty()) {
+            addSupportedLanguagesByFile(filename, indexValue, languages);
+        }
+    }
+    return success;
 }
 
 bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index, FT_LibrarySP freeTypeLibrary) {
@@ -505,6 +533,130 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
     return true;
 }
 
+void KoFFWWSConverter::addSupportedLanguagesByFile(const QString &filename, const int index, const QList<QLocale> &supportedLanguages)
+{
+    auto it = d->fontFamilyCollection.depthFirstTailBegin();
+    for (; it!= d->fontFamilyCollection.depthFirstTailEnd(); it++) {
+        if (it->fileName == filename && it->fileIndex == index) {
+            break;
+        }
+    }
+    if (it != d->fontFamilyCollection.depthFirstTailEnd()) {
+        it->supportedLanguages = supportedLanguages;
+        Q_FOREACH(const QLocale &locale, supportedLanguages) {
+            QLocale::Script script = locale.script();
+            QString sample;
+
+            if (!it->sampleStrings.keys().contains(script)) {
+
+                // The QFontDatabase writing system list seems similar to the MacOS list.
+                switch(script) {
+                case QLocale::LatinScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Latin);
+                    break;
+                case QLocale::GreekScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Greek);
+                    break;
+                case QLocale::CyrillicScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Cyrillic);
+                    break;
+                case QLocale::ArmenianScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Armenian);
+                    break;
+                case QLocale::HebrewScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Hebrew);
+                    break;
+                case QLocale::ArabicScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Arabic);
+                    break;
+                case QLocale::SyriacScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Syriac);
+                    break;
+                case QLocale::ThaanaScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Thaana);
+                    break;
+                case QLocale::DevanagariScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Devanagari);
+                    break;
+                case QLocale::BengaliScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Bengali);
+                    break;
+                case QLocale::GurmukhiScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Gurmukhi);
+                    break;
+                case QLocale::GujaratiScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Gujarati);
+                    break;
+                case QLocale::OriyaScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Oriya);
+                    break;
+                case QLocale::TamilScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Tamil);
+                    break;
+                case QLocale::TeluguScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Telugu);
+                    break;
+                case QLocale::KannadaScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Kannada);
+                    break;
+                case QLocale::MalayalamScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Malayalam);
+                    break;
+                case QLocale::SinhalaScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Sinhala);
+                    break;
+                case QLocale::ThaiScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Thai);
+                    break;
+                case QLocale::LaoScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Lao);
+                    break;
+                case QLocale::TibetanScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Tibetan);
+                    break;
+                case QLocale::MyanmarScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Myanmar);
+                    break;
+                case QLocale::GeorgianScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Georgian);
+                    break;
+                case QLocale::KhmerScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Khmer);
+                    break;
+                case QLocale::SimplifiedChineseScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::SimplifiedChinese);
+                    break;
+                case QLocale::TraditionalChineseScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::TraditionalChinese);
+                    break;
+                case QLocale::JapaneseScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Japanese);
+                    break;
+                case QLocale::KoreanScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Korean);
+                    break;
+                case QLocale::OghamScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Ogham);
+                    break;
+                case QLocale::RunicScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Runic);
+                    break;
+                case QLocale::NkoScript:
+                    sample = QFontDatabase::writingSystemSample(QFontDatabase::Nko);
+                    break;
+                default:
+                    // TODO: misses symbol and vietnamese sample, but I have no idea what is meant by the latter...
+                    sample = QString();
+                }
+                if (!sample.isEmpty()) {
+                    it->sampleStrings.insert(script, sample);
+                }
+            }
+        }
+
+    }
+}
+
 void KoFFWWSConverter::sortIntoWWSFamilies()
 {
     QStringList wwsNames;
@@ -639,6 +791,12 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
 
     for (auto subFamily = childBegin(wws); subFamily != childEnd(wws); subFamily++) {
         KoSvgText::FontFamilyStyleInfo style;
+        representation.sampleStrings.insert(subFamily->sampleStrings);
+        Q_FOREACH(const QLocale &locale, subFamily->supportedLanguages) {
+            if (!representation.supportedLanguages.contains(locale)) {
+                representation.supportedLanguages.append(locale);
+            }
+        }
 
         for (int a = 0; a < subFamily->axes.size(); a++) {
             QString key = subFamily->axes.keys().at(a);

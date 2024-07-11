@@ -19,9 +19,9 @@ struct KoFontFamilyWWSRepresentation {
     QString fontFamilyName;
     QString typographicFamilyName;
 
-    QHash<QString, QString> localizedFontFamilyNames;
-    QHash<QString, QString> localizedTypographicFamily;
-    QHash<QString, QString> localizedTypographicStyles;
+    QHash<QLocale, QString> localizedFontFamilyNames;
+    QHash<QLocale, QString> localizedTypographicFamily;
+    QHash<QLocale, QString> localizedTypographicStyles;
 
     QHash<QLocale::Script, QString> sampleStrings; /// sample string used to generate the preview;
     QList<QLocale> supportedLanguages;

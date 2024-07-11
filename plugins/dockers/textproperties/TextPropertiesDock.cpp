@@ -127,8 +127,16 @@ TextPropertiesDock::TextPropertiesDock()
     d->fontTagFilterProxyModel->sort(KisAbstractResourceModel::Name);
     d->tagModel = new KisTagModel(ResourceType::FontFamilies);
 
+    QList<QLocale> locales;
+    Q_FOREACH (const QString langCode, KLocalizedString::languages()) {
+        locales.append(QLocale(langCode));
+    }
+    d->axesModel.setLocales(locales);
+    d->stylesModel.setLocales(locales);
+
     connect(d->textModel, SIGNAL(axisValuesChanged(const QVariantHash&)), &d->axesModel, SLOT(setAxisValues(const QVariantHash&)));
     connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
+
 
     m_quickWidget->rootContext()->setContextProperty("textPropertiesModel", d->textModel);
     m_quickWidget->rootContext()->setContextProperty("fontFamiliesModel", QVariant::fromValue(d->fontTagFilterProxyModel));

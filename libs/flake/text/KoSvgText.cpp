@@ -1075,7 +1075,7 @@ QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyAxis &axis)
     root.setAttribute("variable", axis.variableAxis? "true": "false");
     for(auto it = axis.localizedLabels.begin(); it != axis.localizedLabels.end(); it++) {
         QDomElement name = doc.createElement("name");
-        name.setAttribute("lang", it.key());
+        name.setAttribute("lang", it.key().bcp47Name());
         name.setAttribute("value", it.value());
         root.appendChild(name);
     }
@@ -1102,7 +1102,7 @@ QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyAxis &axis) {
         QDomElement name = names.at(i).toElement();
         QString lang = name.attribute("lang");
         QString value = name.attribute("value");
-        axis.localizedLabels.insert(lang, value);
+        axis.localizedLabels.insert(QLocale(lang), value);
     }
 
     return in;
@@ -1128,7 +1128,7 @@ QDataStream &operator<<(QDataStream &out, const KoSvgText::FontFamilyStyleInfo &
     }
     for(auto it = style.localizedLabels.begin(); it != style.localizedLabels.end(); it++) {
         QDomElement name = doc.createElement("name");
-        name.setAttribute("lang", it.key());
+        name.setAttribute("lang", it.key().bcp47Name());
         name.setAttribute("value", it.value());
         root.appendChild(name);
     }
@@ -1150,7 +1150,7 @@ QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyStyleInfo &style) 
         QDomElement name = names.at(i).toElement();
         QString lang = name.attribute("lang");
         QString value = name.attribute("value");
-        style.localizedLabels.insert(lang, value);
+        style.localizedLabels.insert(QLocale(lang), value);
     }
     QDomNodeList coords =  root.elementsByTagName("coord");
     for(int i = 0; i < coords.size(); i++) {

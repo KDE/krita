@@ -154,11 +154,10 @@ QVariant FontStyleModel::data(const QModelIndex &index, int role) const
     KoSvgText::FontFamilyStyleInfo style = d->styles.at(index.row());
     if (role == Qt::DisplayRole) {
         if (style.localizedLabels.isEmpty()) return QString();
-        QString label = style.localizedLabels.value("en", style.localizedLabels.values().first());
+        QString label = style.localizedLabels.value(QLocale(QLocale::English), style.localizedLabels.values().first());
         Q_FOREACH(const QLocale &locale, d->locales) {
-            QString bcp = locale.bcp47Name();
-            if (style.localizedLabels.keys().contains(bcp)) {
-                label = style.localizedLabels.value(bcp, label);
+            if (style.localizedLabels.keys().contains(locale)) {
+                label = style.localizedLabels.value(locale, label);
                 break;
             }
         }

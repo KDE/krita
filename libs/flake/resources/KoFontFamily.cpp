@@ -57,10 +57,10 @@ QImage generateImage(QString sample, QString fontFamily, bool isColor) {
     return img;
 }
 
-QHash<QString, QVariant> stringHashtoVariantHash(QHash<QString, QString> names) {
+QHash<QString, QVariant> localeHashtoVariantHash(QHash<QLocale, QString> names) {
     QHash<QString, QVariant> newNames;
-    Q_FOREACH(const QString key, names.keys()) {
-        newNames.insert(key, QVariant::fromValue(names.value(key)));
+    Q_FOREACH(const QLocale key, names.keys()) {
+        newNames.insert(key.bcp47Name(), QVariant::fromValue(names.value(key)));
     }
     return newNames;
 }
@@ -72,9 +72,9 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
 {
     setName(representation.fontFamilyName);
     addMetaData(TYPOGRAPHIC_NAME, representation.typographicFamilyName);
-    addMetaData(LOCALIZED_FONT_FAMILY, stringHashtoVariantHash(representation.localizedFontFamilyNames));
-    addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, stringHashtoVariantHash(representation.localizedTypographicFamily));
-    addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, stringHashtoVariantHash(representation.localizedTypographicStyles));
+    addMetaData(LOCALIZED_FONT_FAMILY, localeHashtoVariantHash(representation.localizedFontFamilyNames));
+    addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, localeHashtoVariantHash(representation.localizedTypographicFamily));
+    addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, localeHashtoVariantHash(representation.localizedTypographicStyles));
 
     QVariantHash samples;
     Q_FOREACH(const QLocale::Script &key, representation.sampleStrings.keys()) {

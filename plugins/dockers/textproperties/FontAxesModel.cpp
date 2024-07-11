@@ -89,11 +89,10 @@ QVariant FontAxesModel::data(const QModelIndex &index, int role) const
     KoSvgText::FontFamilyAxis axis = d->axes.at(index.row());
     if (role == Qt::DisplayRole) {
         if (axis.localizedLabels.isEmpty()) return axis.tag;
-        QString label = axis.localizedLabels.value("en", axis.localizedLabels.values().first());
+        QString label = axis.localizedLabels.value(QLocale(QLocale::English), axis.localizedLabels.values().first());
         Q_FOREACH(const QLocale &locale, d->locales) {
-            QString bcp = locale.bcp47Name();
-            if (axis.localizedLabels.keys().contains(bcp)) {
-                label = axis.localizedLabels.value(bcp, label);
+            if (axis.localizedLabels.keys().contains(locale)) {
+                label = axis.localizedLabels.value(locale, label);
                 break;
             }
         }

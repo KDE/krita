@@ -25,11 +25,11 @@ struct FontFamilySizeInfo {
     qreal low = -1;
     qreal high = -1;
     qreal designSize = 0;
-    QHash<QString, QString> localizedLabels;
+    QHash<QLocale, QString> localizedLabels;
     QString debugInfo() const {
         QString label;
         if (!localizedLabels.isEmpty()) {
-            label = localizedLabels.value("en", localizedLabels.values().first());
+            label = localizedLabels.value(QLocale(QLocale::English), localizedLabels.values().first());
         }
         return QString("Optical Size Info: OS2=%1, label: %2, min: %3, max: %4, designSize: %5").arg(os2table? "true": "false").arg(label).arg(low).arg(high).arg(designSize);
     }
@@ -60,10 +60,10 @@ struct FontFamilyNode {
 
     QStringList otherFiles;
 
-    QHash<QString, QString> localizedFontFamilies;
-    QHash<QString, QString> localizedFontStyle;
-    QHash<QString, QString> localizedTypographicStyle;
-    QHash<QString, QString> localizedWWSStyle;
+    QHash<QLocale, QString> localizedFontFamilies;
+    QHash<QLocale, QString> localizedFontStyle;
+    QHash<QLocale, QString> localizedTypographicStyle;
+    QHash<QLocale, QString> localizedWWSStyle;
 
     QHash<QString, KoSvgText::FontFamilyAxis> axes;
     QList<KoSvgText::FontFamilyStyleInfo> styleInfo;
@@ -400,58 +400,60 @@ bool KoFFWWSConverter::addFontFromFile(const QString &filename, const int index,
         uint numEntries = 0;
         const hb_ot_name_entry_t *entries = hb_ot_name_list_names(hbFace, &numEntries);
 
-        QHash<QString, QString> ribbiFamilyNames;
-        QHash<QString, QString> ribbiStyleNames;
-        QHash<QString, QString> WWSFamilyNames;
-        QHash<QString, QString> WWSStyleNames;
-        QHash<QString, QString> typographicFamilyNames;
-        QHash<QString, QString> typographicStyleNames;
+        QHash<QLocale, QString> ribbiFamilyNames;
+        QHash<QLocale, QString> ribbiStyleNames;
+        QHash<QLocale, QString> WWSFamilyNames;
+        QHash<QLocale, QString> WWSStyleNames;
+        QHash<QLocale, QString> typographicFamilyNames;
+        QHash<QLocale, QString> typographicStyleNames;
         for (uint i = 0; i < numEntries; i++) {
             hb_ot_name_entry_t entry = entries[i];
             QString lang(hb_language_to_string(entry.language));
+            QLocale locale(lang);
             uint length = hb_ot_name_get_utf8(hbFace, entry.name_id, entry.language, nullptr, nullptr)+1;
             char buff[length];
             hb_ot_name_get_utf8(hbFace, entry.name_id, entry.language, &length, buff);
             QString name = QString::fromUtf8(buff, length);
 
             if (entry.name_id == HB_OT_NAME_ID_FONT_FAMILY) {
-                ribbiFamilyNames.insert(lang, name);
+                ribbiFamilyNames.insert(locale, name);
             } else if (entry.name_id == HB_OT_NAME_ID_TYPOGRAPHIC_FAMILY) {
-                typographicFamilyNames.insert(lang, name);
+                typographicFamilyNames.insert(locale, name);
             } else if (entry.name_id == HB_OT_NAME_ID_WWS_FAMILY) {
-                WWSFamilyNames.insert(lang, name);
+                WWSFamilyNames.insert(locale, name);
             } else if (entry.name_id == HB_OT_NAME_ID_FONT_SUBFAMILY) {
-                ribbiStyleNames.insert(lang, name);
+                ribbiStyleNames.insert(locale, name);
             } else if (entry.name_id == HB_OT_NAME_ID_TYPOGRAPHIC_SUBFAMILY) {
-                typographicStyleNames.insert(lang, name);
+                typographicStyleNames.insert(locale, name);
             } else if (entry.name_id == HB_OT_NAME_ID_WWS_SUBFAMILY) {
-                WWSStyleNames.insert(lang, name);
+                WWSStyleNames.insert(locale, name);
             } else if (entry.name_id > 0) { // Fonts made by Adobe seem to use the copyright id (0) as the input when the given value is empty.
                 if (axisNameIDs.keys().contains(entry.name_id)) {
-                    fontFamily.axes[axisNameIDs.value(entry.name_id)].localizedLabels.insert(lang, name);
+                    fontFamily.axes[axisNameIDs.value(entry.name_id)].localizedLabels.insert(locale, name);
                 } else if (entry.name_id == sizeNameId) {
-                    fontFamily.sizeInfo.localizedLabels.insert(lang, name);
+                    fontFamily.sizeInfo.localizedLabels.insert(locale, name);
                 } else if (instanceNameIDs.contains(entry.name_id)) {
                     int idx = instanceNameIDs.indexOf(entry.name_id);
-                    fontFamily.styleInfo[idx].localizedLabels.insert(lang, name);
+                    fontFamily.styleInfo[idx].localizedLabels.insert(locale, name);
                 }
             }
         }
+        QLocale english(QLocale::English);
         if (!typographicFamilyNames.isEmpty()) {
-            typographicFamily.fontFamily = typographicFamilyNames.value("en", typographicFamilyNames.values().first());
+            typographicFamily.fontFamily = typographicFamilyNames.value(english, typographicFamilyNames.values().first());
             typographicFamily.localizedFontFamilies = typographicFamilyNames;
         }
         fontFamily.localizedTypographicStyle = typographicStyleNames;
         if (!ribbiFamilyNames.isEmpty()) {
-            fontFamily.fontFamily = ribbiFamilyNames.value("en", ribbiFamilyNames.values().first());
+            fontFamily.fontFamily = ribbiFamilyNames.value(english, ribbiFamilyNames.values().first());
             fontFamily.localizedFontFamilies = ribbiFamilyNames;
         }
         if (!ribbiStyleNames.isEmpty()) {
-            fontFamily.fontStyle = ribbiStyleNames.value("en", ribbiStyleNames.values().first());
+            fontFamily.fontStyle = ribbiStyleNames.value(english, ribbiStyleNames.values().first());
             fontFamily.localizedFontStyle = ribbiStyleNames;
         }
         if (!WWSFamilyNames.isEmpty()) {
-            wwsFamily.fontFamily = WWSFamilyNames.value("en", WWSFamilyNames.values().first());
+            wwsFamily.fontFamily = WWSFamilyNames.value(english, WWSFamilyNames.values().first());
             wwsFamily.localizedFontFamilies = WWSFamilyNames;
         }
         fontFamily.localizedWWSStyle = WWSStyleNames;
@@ -822,7 +824,7 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
             } else if (!subFamily->localizedFontStyle.isEmpty()) {
                 style.localizedLabels = subFamily->localizedFontStyle;
             } else {
-                style.localizedLabels.insert("en", subFamily->fontStyle);
+                style.localizedLabels.insert(QLocale(QLocale::English), subFamily->fontStyle);
             }
             style.isItalic = subFamily->isItalic;
             style.isOblique = subFamily->isOblique;

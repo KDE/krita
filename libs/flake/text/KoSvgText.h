@@ -13,6 +13,7 @@
 #include <QTextCharFormat>
 #include <QVariant>
 #include <QVector>
+#include <QLocale>
 #include <array>
 #include <boost/operators.hpp>
 #include <boost/optional.hpp>
@@ -726,7 +727,7 @@ struct FontFamilyAxis : public boost::equality_comparable<FontFamilyAxis> {
     }
 
     QString tag;
-    QHash<QString, QString> localizedLabels;
+    QHash<QLocale, QString> localizedLabels;
     qreal min = -1;
     qreal max = -1;
     qreal value = 0;
@@ -737,7 +738,7 @@ struct FontFamilyAxis : public boost::equality_comparable<FontFamilyAxis> {
     QString debugInfo() const {
         QString label;
         if (!localizedLabels.isEmpty()) {
-            label = localizedLabels.value("en", localizedLabels.values().first());
+            label = localizedLabels.value(QLocale(QLocale::English), localizedLabels.values().first());
         }
         return QString("Axis: %1 (%2), min: %3, default:%4, max: %5").arg(tag).arg(label).arg(min).arg(value).arg(max);
     }
@@ -764,7 +765,7 @@ enum FontFormatType {
 Q_ENUM_NS(FontFormatType)
 
 struct FontFamilyStyleInfo : public boost::equality_comparable<FontFamilyStyleInfo> {
-    QHash<QString, QString> localizedLabels;
+    QHash<QLocale, QString> localizedLabels;
     QHash<QString, float> instanceCoords;
 
     bool isItalic = false;
@@ -773,7 +774,7 @@ struct FontFamilyStyleInfo : public boost::equality_comparable<FontFamilyStyleIn
     QString debugInfo() const {
         QString label;
         if (!localizedLabels.isEmpty()) {
-            label = localizedLabels.value("en", localizedLabels.values().first());
+            label = localizedLabels.value(QLocale(QLocale::English), localizedLabels.values().first());
         }
         QStringList coords;
         for (int i = 0; i < instanceCoords.size(); i++) {

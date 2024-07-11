@@ -472,8 +472,9 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      */
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING
         && m_d->smoothingOptions->smoothnessDistance() > 0.0) {
+        { 
             //qDebug() << "weighted smoothing in kistool freehand";
-        { // initialize current distance
+            // initialize current distance
             QPointF prevPos;
 
             if (!m_d->history.isEmpty()) {
@@ -597,10 +598,17 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             m_d->strokeTimeoutTimer.start(100);
         }
     }
+
+
     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
         //qDebug() << "no smoothing in kistool freehand";
         paintLine(m_d->previousPaintInformation, info);
     }
+
+    // if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::PIXEL_PERFECT) {
+    //     m_d->history.clear();
+    //     qDebug() << "pixel perfect option detected";
+    // }
 
     if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER) {
         m_d->stabilizedSampler.addEvent(info);
@@ -658,7 +666,36 @@ void KisToolFreehandHelper::endPaint()
     m_d->strokeId.clear();
     m_d->infoBuilder->reset();
 }
+//origin
+// void KisToolFreehandHelper::cancelPaint()
+// {
+//     if (!m_d->strokeId) return;
 
+//     m_d->strokeTimeoutTimer.stop();
+
+//     if (m_d->airbrushingTimer.isActive()) {
+//         m_d->airbrushingTimer.stop();
+//     }
+
+//     if (m_d->asyncUpdateHelper.isActive()) {
+//         m_d->asyncUpdateHelper.cancelUpdateStream();
+//     }
+
+//     if (m_d->stabilizerPollTimer.isActive()) {
+//         m_d->stabilizerPollTimer.stop();
+//     }
+
+//     if (m_d->stabilizerDelayedPaintHelper.running()) {
+//         m_d->stabilizerDelayedPaintHelper.cancel();
+//     }
+
+//     // see a comment in endPaint()
+//     m_d->strokeInfos.clear();
+
+//     m_d->strokesFacade->cancelStroke(m_d->strokeId);
+//     m_d->strokeId.clear();
+
+// }
 void KisToolFreehandHelper::cancelPaint()
 {
     if (!m_d->strokeId) return;
@@ -681,12 +718,13 @@ void KisToolFreehandHelper::cancelPaint()
         m_d->stabilizerDelayedPaintHelper.cancel();
     }
 
+    //pixelPerfectLinePainter();
+
     // see a comment in endPaint()
     m_d->strokeInfos.clear();
 
     m_d->strokesFacade->cancelStroke(m_d->strokeId);
     m_d->strokeId.clear();
-
 }
 
 int KisToolFreehandHelper::elapsedStrokeTime() const
@@ -769,13 +807,17 @@ KisToolFreehandHelper::getStabilizedPaintInfo(const QQueue<KisPaintInformation> 
 
     return result;
 }
-
+//original
 void KisToolFreehandHelper::stabilizerPollAndPaint()
 {
     KisStabilizedEventsSampler::iterator it;
     KisStabilizedEventsSampler::iterator end;
     std::tie(it, end) = m_d->stabilizedSampler.range();
     QVector<KisPaintInformation> delayedPaintTodoItems;
+
+    // for (const KisPaintInformation &info : m_d->stabilizerDeque) {
+    //     qDebug() << info.pos(); 
+    // }
 
     for (; it != end; ++it) {
         KisPaintInformation sampledInfo = *it;
@@ -803,8 +845,10 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             KisPaintInformation newInfo = getStabilizedPaintInfo(m_d->stabilizerDeque, sampledInfo);
 
             if (m_d->stabilizerDelayedPaintHelper.running()) {
+                //qDebug() << "if in stablizer reached new infopos: " << newInfo.pos();
                 delayedPaintTodoItems.append(newInfo);
             } else {
+                //qDebug() << "else in stablizer reached new infopos: " << newInfo.pos();
                 paintLine(m_d->previousPaintInformation, newInfo);
             }
             m_d->previousPaintInformation = newInfo;
@@ -813,7 +857,7 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
             m_d->stabilizerDeque.dequeue();
             m_d->stabilizerDeque.enqueue(sampledInfo);
         } else if (m_d->stabilizerDeque.head().pos() != m_d->previousPaintInformation.pos()) {
-
+            //qDebug() << "else if : " << m_d->stabilizerDeque.head().pos();
             QQueue<KisPaintInformation>::iterator it = m_d->stabilizerDeque.begin();
             QQueue<KisPaintInformation>::iterator end = m_d->stabilizerDeque.end();
 
@@ -833,6 +877,61 @@ void KisToolFreehandHelper::stabilizerPollAndPaint()
     }
 }
 
+// void KisToolFreehandHelper::stabilizerPollAndPaint()
+// {
+//     KisStabilizedEventsSampler::iterator it;
+//     KisStabilizedEventsSampler::iterator end;
+//     std::tie(it, end) = m_d->stabilizedSampler.range();
+//     QVector<KisPaintInformation> delayedPaintTodoItems;
+
+//     // Variables to store the accumulated movement and last valid position
+//     QPointF accumulatedMovement(0, 0);
+//     QPointF lastValidPoint = m_d->previousPaintInformation.pos();
+
+//     for (; it != end; ++it) {
+//         KisPaintInformation sampledInfo = *it;
+
+//         // Calculate the movement difference from the last valid point
+//         QPointF diff = sampledInfo.pos() - lastValidPoint;
+//         accumulatedMovement += diff;
+
+//         qreal accumulatedDistance = sqrt(pow(accumulatedMovement.x(), 2) + pow(accumulatedMovement.y(), 2));
+
+//         // Check if the accumulated distance is greater than 1 pixel
+//         if (accumulatedDistance >= 1.0) {
+//             // Update the last valid point
+//             lastValidPoint = sampledInfo.pos();
+//             accumulatedMovement = QPointF(0, 0); // Reset the accumulated movement
+
+//             KisPaintInformation newInfo = getStabilizedPaintInfo(m_d->stabilizerDeque, sampledInfo);
+
+//             if (m_d->stabilizerDelayedPaintHelper.running()) {
+//                 delayedPaintTodoItems.append(newInfo);
+//             } else {
+//                 paintLine(m_d->previousPaintInformation, newInfo);
+//             }
+
+//             m_d->previousPaintInformation = newInfo;
+
+//             // Push the new entry through the queue
+//             m_d->stabilizerDeque.dequeue();
+//             m_d->stabilizerDeque.enqueue(sampledInfo);
+//         } else {
+//             // Enqueue the sampled info for future processing
+//             m_d->stabilizerDeque.enqueue(sampledInfo);
+//         }
+//     }
+
+//     m_d->stabilizedSampler.clear();
+
+//     if (m_d->stabilizerDelayedPaintHelper.running()) {
+//         m_d->stabilizerDelayedPaintHelper.update(delayedPaintTodoItems);
+//     } else {
+//         emit requestExplicitUpdateOutline();
+//     }
+// }
+
+
 void KisToolFreehandHelper::stabilizerEnd()
 {
     // Stop the timer
@@ -841,11 +940,13 @@ void KisToolFreehandHelper::stabilizerEnd()
     // Finish the line
     if (m_d->smoothingOptions->finishStabilizedCurve()) {
         // Process all the existing events first
-        stabilizerPollAndPaint();
+        //stabilizerPollAndPaint();
+        //pixelPerfectLinePainter();
 
         // Draw the finish line with pending events and a time override
         m_d->stabilizedSampler.addFinishingEvent(m_d->stabilizerDeque.size());
-        stabilizerPollAndPaint();
+        //stabilizerPollAndPaint();
+        //pixelPerfectLinePainter();
     }
 
     if (m_d->stabilizerDelayedPaintHelper.running()) {
@@ -883,7 +984,55 @@ void KisToolFreehandHelper::finishStroke()
                            m_d->previousTangent,
                            newTangent);
     }
+
+    // pixelPerfectLinePainter();
+    
 }
+
+// QVector<KisPaintInformation> KisToolFreehandHelper::filterSubpixelMovements(const QVector<KisPaintInformation> &points) {
+//     QVector<KisPaintInformation> filteredPoints;
+    
+//     if (points.isEmpty()) return filteredPoints;
+    
+//     KisPaintInformation prevInfo = points.first();
+//     filteredPoints.append(prevInfo);
+
+//     for (int i = 1; i < points.size(); ++i) {
+//         KisPaintInformation currentInfo = points[i];
+
+//         QPointF diff = currentInfo.pos() - prevInfo.pos();
+//         qreal distance = sqrt(diff.x() * diff.x() + diff.y() * diff.y());
+
+//         if (distance > 1.0) {
+//             filteredPoints.append(currentInfo);
+//             prevInfo = currentInfo;
+//         }
+//     }
+
+//     return filteredPoints;
+// }
+
+// void KisToolFreehandHelper::pixelPerfectLinePainter() {
+//     QVector<KisPaintInformation> historyVector = m_d->history.toVector();
+//     QVector<KisPaintInformation> filteredPoints = filterSubpixelMovements(historyVector);
+
+//     //qDebug() << "Filtered Points:" << filteredPoints;
+
+//     if (filteredPoints.size() > 1) {
+//         for (int i = 1; i < filteredPoints.size(); ++i) {
+//             KisPaintInformation currentInfo = filteredPoints[i];
+//             KisPaintInformation prevInfo = filteredPoints[i - 1];
+
+//             paintLine(prevInfo, currentInfo);
+//         }
+//     } else if (filteredPoints.size() == 1) {
+//         // If there's only one point, ensure it's drawn
+//         paintLine(filteredPoints.first(), filteredPoints.first());
+//     }
+
+//     // clear the history to avoid reprocessing the same points
+//     m_d->history.clear();
+// }
 
 void KisToolFreehandHelper::doAirbrushing()
 {
@@ -924,6 +1073,15 @@ qreal KisToolFreehandHelper::currentPhysicalZoom() const
 {
     return m_d->resourceManager ? m_d->resourceManager->resource(KoCanvasResource::EffectivePhysicalZoom).toReal() : 1.0;
 }
+//origin
+// void KisToolFreehandHelper::paintAt(int strokeInfoId,
+//                                     const KisPaintInformation &pi)
+// {
+//     m_d->hasPaintAtLeastOnce = true;
+//     m_d->strokesFacade->addJob(m_d->strokeId,
+//                                new FreehandStrokeStrategy::Data(strokeInfoId, pi));
+
+// }
 
 void KisToolFreehandHelper::paintAt(int strokeInfoId,
                                     const KisPaintInformation &pi)
@@ -932,8 +1090,20 @@ void KisToolFreehandHelper::paintAt(int strokeInfoId,
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(strokeInfoId, pi));
 
+    // Add point to history for pixel-perfect processing
+    m_d->history.append(pi);
 }
 
+//origin
+// void KisToolFreehandHelper::paintLine(int strokeInfoId,
+//                                       const KisPaintInformation &pi1,
+//                                       const KisPaintInformation &pi2)
+// {
+//     m_d->hasPaintAtLeastOnce = true;
+//     m_d->strokesFacade->addJob(m_d->strokeId,
+//                                new FreehandStrokeStrategy::Data(strokeInfoId, pi1, pi2));
+
+// }
 void KisToolFreehandHelper::paintLine(int strokeInfoId,
                                       const KisPaintInformation &pi1,
                                       const KisPaintInformation &pi2)
@@ -942,6 +1112,9 @@ void KisToolFreehandHelper::paintLine(int strokeInfoId,
     m_d->strokesFacade->addJob(m_d->strokeId,
                                new FreehandStrokeStrategy::Data(strokeInfoId, pi1, pi2));
 
+    // add points to history for pixel-perfect processing
+    // m_d->history.append(pi1);
+    // m_d->history.append(pi2);
 }
 
 void KisToolFreehandHelper::paintBezierCurve(int strokeInfoId,

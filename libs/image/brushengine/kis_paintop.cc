@@ -142,7 +142,7 @@ void KisPaintOp::paintLine(const KisPaintInformation &pi1,
                            const KisPaintInformation &pi2,
                            KisDistanceInformation *currentDistance)
 {
-    qDebug()<< "KisPaintOp::paintLine";
+    //qDebug()<< "KisPaintOp::paintLine";
     KisPaintOpUtils::paintLine(*this, pi1, pi2, currentDistance,
                                d->fanCornersEnabled,
                                d->fanCornersStep);

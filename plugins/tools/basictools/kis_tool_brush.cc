@@ -345,7 +345,8 @@ QWidget * KisToolBrush::createOptionWidget()
                                  << i18nc("@item:inlistbox Brush Smoothing", "None")
                                  << i18nc("@item:inlistbox Brush Smoothing", "Basic")
                                  << i18nc("@item:inlistbox Brush Smoothing", "Weighted")
-                                 << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer"));
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer")
+                                 << i18nc("@item:inlistbox Brush Smoothing", "Pixel"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
     addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:"), optionsWidget));
 

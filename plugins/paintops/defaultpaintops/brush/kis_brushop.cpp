@@ -107,7 +107,7 @@ KisSpacingInformation KisBrushOp::paintAt(const KisPaintInformation& info)
 {
     if (!painter()->device()) return KisSpacingInformation(1.0);
 
-    qDebug()<< "kis_brushop::paintAt";
+    //qDebug()<< "kis_brushop::paintAt";
     KisBrushSP brush = m_brush;
     Q_ASSERT(brush);
     if (!brush)
@@ -385,9 +385,37 @@ KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &inf
     return KisPaintOpPluginUtils::effectiveTiming(&m_airbrushData, &m_rateOption, info);
 }
 //original kisbrushop:paintline
-// void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
-// {
-//     //qDebug() << "KisBrushOp::paintLine";
+void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance)
+{
+    //qDebug() << "KisBrushOp::paintLine";
+    if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
+
+        if (!m_lineCacheDevice) {
+            m_lineCacheDevice = source()->createCompositionSourceDevice();
+        }
+        else {
+            m_lineCacheDevice->clear();
+        }
+
+        KisPainter p(m_lineCacheDevice);
+        //qDebug()<< "p(m_lineCacheDevice): " << m_lineCacheDevice;
+        p.setPaintColor(painter()->paintColor());
+        //qDebug() << "pi1.posx: "<< pi1.pos().x()<< "pi1.posy: "<< pi1.pos().y();
+        p.drawDDALine(pi1.pos(), pi2.pos());
+
+        QRect rc = m_lineCacheDevice->extent();
+        painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
+    //fixes Bug 338011
+    painter()->renderMirrorMask(rc, m_lineCacheDevice);
+    }
+    else {
+        KisPaintOp::paintLine(pi1, pi2, currentDistance);
+    }
+}
+// This is a vector approach where we populate/filter out corner pixels in kis_tool_freehand and than call draw line on that (don't know how to get the vector here)
+// std::vector<QPoint> KisBrushOp::smoothedPoints;
+// void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance) {
+
 //     if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
 
 //         if (!m_lineCacheDevice) {
@@ -398,47 +426,105 @@ KisTimingInformation KisBrushOp::updateTimingImpl(const KisPaintInformation &inf
 //         }
 
 //         KisPainter p(m_lineCacheDevice);
-//         //qDebug()<< "p(m_lineCacheDevice): " << m_lineCacheDevice;
 //         p.setPaintColor(painter()->paintColor());
-//         //qDebug() << "pi1.posx: "<< pi1.pos().x()<< "pi1.posy: "<< pi1.pos().y();
-//         p.drawDDALine(pi1.pos(), pi2.pos());
+
+//         // Use smoothedPoints to draw lines
+//         for (size_t i = 0; i < smoothedPoints.size() - 1; ++i) {
+//             qDebug() << "smoothedPoints[i], smoothedPoints[i + 1]: " << smoothedPoints[i], smoothedPoints[i + 1];
+//             p.drawDDALine(smoothedPoints[i], smoothedPoints[i + 1]);
+//         }
 
 //         QRect rc = m_lineCacheDevice->extent();
 //         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-//     //fixes Bug 338011
-//     painter()->renderMirrorMask(rc, m_lineCacheDevice);
+
+//         // Fixes Bug 338011
+//         painter()->renderMirrorMask(rc, m_lineCacheDevice);
 //     }
 //     else {
 //         KisPaintOp::paintLine(pi1, pi2, currentDistance);
 //     }
 // }
 
-void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance) {
-    qDebug() << "KisBrushOp::paintLine";
-    if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
-
-        if (!m_lineCacheDevice) {
-            m_lineCacheDevice = source()->createCompositionSourceDevice();
-        } else {
-            m_lineCacheDevice->clear();
-        }
-
-        KisPainter p(m_lineCacheDevice);
-        p.setPaintColor(painter()->paintColor());
+// void KisBrushOp::setSmoothedPoints(const std::vector<QPoint>& points) {
+//     smoothedPoints = points;
+// }
 
 
-        qDebug() << "Number of smoothed points:" << smoothedPoints.size();
-        for (size_t i = 1; i < smoothedPoints.size(); ++i) {
-            const QPoint& point1 = smoothedPoints[i - 1];
-            const QPoint& point2 = smoothedPoints[i];
-            qDebug() << "Drawing line from" << point1 << "to" << point2;
-            p.drawDDALine(point1, point2);
-        }
+// Trying the 3 pixel approach where we track current/lastdrawn/waiting pixel see blog 1 for more info
+// basically if currentpixel deviates from the x/y axis of lastdrawn pixel we skip over the intermediary waiting pixel (needs fixes)
+// void KisBrushOp::paintLine(const KisPaintInformation& pi1, const KisPaintInformation& pi2, KisDistanceInformation *currentDistance) {
+//     static bool lastDrawnPixelInitialized = false;
+//     static QPoint lastDrawnPixel;
 
-        QRect rc = m_lineCacheDevice->extent();
-        painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
-        painter()->renderMirrorMask(rc, m_lineCacheDevice);
-    } else {
-        KisPaintOp::paintLine(pi1, pi2, currentDistance);
-    }
-}
+//     if (m_sharpnessOption.isChecked() && m_brush && (m_brush->width() == 1) && (m_brush->height() == 1)) {
+
+//         if (!m_lineCacheDevice) {
+//             m_lineCacheDevice = source()->createCompositionSourceDevice();
+//         } else {
+//             m_lineCacheDevice->clear();
+//         }
+
+//         KisPainter p(m_lineCacheDevice);
+//         p.setPaintColor(painter()->paintColor());
+
+//         QPoint currentPixel = pi2.pos().toPoint();
+           //this is for the case where last drawn isn't initialized so we draw at least one pixel
+//         if (!lastDrawnPixelInitialized) {
+//             // First call, initialize lastDrawnPixel and set the flag
+//             lastDrawnPixel = pi1.pos().toPoint();
+//             lastDrawnPixelInitialized = true;
+
+//             p.drawDDALine(pi1.pos(), pi2.pos());
+
+//             // update lastDrawnPixel to the endpoint of the first drawDDALine call (might not work)
+//             lastDrawnPixel = currentPixel;
+//         } else {
+            
+//             // 
+//             QPoint waitingPixel = lastDrawnPixel;
+//             qDebug() << "waitingPixel: " << waitingPixel << "currentPixel: " << currentPixel << "lastDrawnPixel: "<< lastDrawnPixel;
+//             // Function to draw a line between two points
+//             auto drawLine = [&](const QPoint& start, const QPoint& end) {
+//                 p.drawDDALine(QPointF(start), QPointF(end));
+//             };
+
+//             // determine the movement direction
+//             int dx = currentPixel.x() - lastDrawnPixel.x();
+//             int dy = currentPixel.y() - lastDrawnPixel.y();
+
+//             int steps = std::max(abs(dx), abs(dy));
+//             float xIncrement = dx / static_cast<float>(steps);
+//             float yIncrement = dy / static_cast<float>(steps);
+
+//             float x = lastDrawnPixel.x();
+//             float y = lastDrawnPixel.y();
+
+//             for (int i = 0; i <= steps; ++i) {
+//                 QPoint tempPixel = QPoint(qRound(x), qRound(y));
+
+//                 // check if tempPixel is in the same direction as lastDrawnPixel
+//                 if ((abs(tempPixel.x() - lastDrawnPixel.x()) <= 1 && tempPixel.y() == lastDrawnPixel.y()) ||
+//                     (abs(tempPixel.y() - lastDrawnPixel.y()) <= 1 && tempPixel.x() == lastDrawnPixel.x())) {
+//                     // continue drawing in the same direction
+//                     waitingPixel = tempPixel;
+//                     drawLine(lastDrawnPixel, waitingPixel);
+//                     lastDrawnPixel = waitingPixel;
+//                 } else {
+//                     // current pixel deviates from x and y, do not draw waiting pixel
+//                     lastDrawnPixel = tempPixel;
+//                 }
+
+//                 x += xIncrement;
+//                 y += yIncrement;
+//             }
+//         }
+
+//         QRect rc = m_lineCacheDevice->extent();
+//         painter()->bitBlt(rc.x(), rc.y(), m_lineCacheDevice, rc.x(), rc.y(), rc.width(), rc.height());
+//         painter()->renderMirrorMask(rc, m_lineCacheDevice);
+//     } else {
+//         KisPaintOp::paintLine(pi1, pi2, currentDistance);
+//         // Reset the flag when not in pixel-perfect mode
+//         lastDrawnPixelInitialized = false;
+//     }
+// }

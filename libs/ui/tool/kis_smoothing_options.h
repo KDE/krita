@@ -21,7 +21,8 @@ public:
         NO_SMOOTHING = 0,
         SIMPLE_SMOOTHING,
         WEIGHTED_SMOOTHING,
-        STABILIZER
+        STABILIZER,
+        PIXEL_PERFECT
     };
 
 public:

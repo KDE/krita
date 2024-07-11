@@ -145,6 +145,8 @@ private Q_SLOTS:
     void finishStroke();
     void doAirbrushing();
     void stabilizerPollAndPaint();
+    // QVector<KisPaintInformation> filterSubpixelMovements(const QVector<KisPaintInformation> &points);
+    // void pixelPerfectLinePainter();
     void slotSmoothingTypeChanged();
 
 private:

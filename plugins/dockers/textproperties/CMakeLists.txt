@@ -3,6 +3,7 @@ set(KRITA_TEXTPROPERTIES_SOURCES
     TextPropertiesDock.cpp 
     FontStyleModel.cpp
     FontAxesModel.cpp
+    KoShapeQtQuickLabel.cpp
 )
 
 qt_add_resources(KRITA_TEXTPROPERTIES_SOURCES textproperties.qrc)

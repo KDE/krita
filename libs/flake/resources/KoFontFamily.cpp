@@ -7,7 +7,9 @@
 #include <KoMD5Generator.h>
 #include <KoSvgTextShape.h>
 #include <KoColorBackground.h>
+#include <SvgWriter.h>
 #include <QPainter>
+#include <QBuffer>
 
 const QString TYPOGRAPHIC_NAME = "typographic_name";
 const QString LOCALIZED_TYPOGRAPHIC_NAME = "localized_typographic_name";
@@ -21,6 +23,7 @@ const QString COLOR_CLRV0 = "color_clrv0";
 const QString COLOR_CLRV1 = "color_clrv1";
 const QString COLOR_SVG = "color_SVG";
 const QString SAMPLE_STRING = "sample_string";
+const QString SAMPLE_SVG = "sample_svg";
 
 struct KoFontFamily::Private {
 };
@@ -55,6 +58,24 @@ QImage generateImage(QString sample, QString fontFamily, bool isColor) {
     shape->paint(gc);
     gc.end();
     return img;
+}
+
+QString generateSVG(QString sample, QString fontFamily) {
+    QSharedPointer<KoSvgTextShape> shape(new KoSvgTextShape);
+    shape->setResolution(300, 300);
+    shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(Qt::black)));
+    KoSvgTextProperties props = shape->textProperties();
+    props.setProperty(KoSvgTextProperties::FontFamiliesId, {fontFamily});
+    shape->setPropertiesAtPos(-1, props);
+    shape->insertText(0, sample);
+
+    SvgWriter writer({shape->textOutline()});
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    writer.save(buffer, shape->boundingRect().size());
+    buffer.close();
+
+    return QString::fromUtf8(buffer.data());
 }
 
 QHash<QString, QVariant> localeHashtoVariantHash(QHash<QLocale, QString> names) {
@@ -152,6 +173,7 @@ void KoFontFamily::updateThumbnail()
     QString sample = samples.isEmpty()? QString("AaBbGg"):
                                         samples.value(QString::number(QLocale::LatinScript), samples.values().first()).toString();
     bool isColor = (metadata().value(COLOR_BITMAP).toBool() || metadata().value(COLOR_CLRV0).toBool());
+    addMetaData(SAMPLE_SVG, generateSVG(sample, filename()));
     setImage(generateImage(sample, filename(), isColor));
 }
 

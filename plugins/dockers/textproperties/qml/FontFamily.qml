@@ -49,14 +49,27 @@ CollapsibleGroupProperty {
         textRole: "name";
 
         delegate: ItemDelegate {
+            id: fontDelegate
             required property var model;
-            contentItem: Label {
-                text: model.name;
+
+            highlighted: mainFamilyCmb.highlightedIndex === model.index;
+            contentItem: KoShapeQtQuickLabel{
                 Layout.fillWidth: true;
-                height:implicitHeight;
+                height: fontResourceView.listWidth/8;
+                svgData: model.metadata["sample_svg"]
+
+                imageScale: 3;
+                imagePadding: nameLabel.height;
+                foregroundColor: sysPalette.text;
+
+                Label {
+                    id: nameLabel;
+                    text: model.name;
+                    anchors.top: parent.top;
+                    anchors.left: parent.left;
+                }
             }
             width: fontResourceView.listWidth;
-            highlighted: mainFamilyCmb.highlightedIndex === model.index;
             background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
         }
         popup: Popup {

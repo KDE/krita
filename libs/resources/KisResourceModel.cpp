@@ -194,6 +194,7 @@ QHash<int, QByteArray> KisAllResourcesModel::roleNames() const
     roles[Qt::UserRole + Tags] = "tags";
     roles[Qt::UserRole + LargeThumbnail] = "largethumbnail";
     roles[Qt::UserRole + Dirty] = "dirty";
+    roles[Qt::UserRole + MetaData] = "metadata";
     roles[Qt::UserRole + ResourceActive] = "resourceactive";
     roles[Qt::UserRole + StorageActive] = "storageactive";
 

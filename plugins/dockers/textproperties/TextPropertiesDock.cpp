@@ -41,6 +41,7 @@
 
 #include "FontStyleModel.h"
 #include "FontAxesModel.h"
+#include "KoShapeQtQuickLabel.h"
 
 /// Strange place to put this, do we have a better spot?
 KIS_DECLARE_STATIC_INITIALIZER {
@@ -54,6 +55,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
 
     qmlRegisterType<FontStyleModel>("org.krita.flake.text", 1, 0, "FontStyleModel");
     qmlRegisterType<FontAxesModel>("org.krita.flake.text", 1, 0, "FontAxesModel");
+    qmlRegisterType<KoShapeQtQuickLabel>("org.krita.flake.text", 1, 0, "KoShapeQtQuickLabel");
 }
 
 

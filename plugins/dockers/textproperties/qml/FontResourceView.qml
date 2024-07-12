@@ -46,6 +46,7 @@ ColumnLayout {
         }
     }
     RowLayout {
+        Layout.preferredHeight: childrenRect.height;
         TextField {
             id: search;
             placeholderText: i18nc("@info:placeholder", "Search...");

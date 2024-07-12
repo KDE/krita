@@ -38,7 +38,19 @@ CollapsibleGroupProperty {
         mainWindow.slotUpdateStylesModel();
     }
 
-    titleItem: ComboBox {
+    titleItem: RowLayout {
+        width: parent.width;
+        height: childrenRect.height;
+        Label {
+            id: propertyTitle;
+            text: propertyName;
+            verticalAlignment: Text.AlignVCenter
+            color: sysPalette.text;
+            elide: Text.ElideRight;
+            Layout.maximumWidth: contentWidth;
+
+        }
+        ComboBox {
         id: mainFamilyCmb;
         model: fontFamilyModel;
         Layout.fillWidth: true;
@@ -77,7 +89,7 @@ CollapsibleGroupProperty {
             x: mainFamilyCmb.width - width;
             width: contentWidth;
             height: contentHeight;
-            padding: 1;
+            padding: 2;
 
             contentItem: FontResourceView {
                 id: fontResourceView;
@@ -88,6 +100,7 @@ CollapsibleGroupProperty {
             palette: mainFamilyCmb.palette;
         }
         wheelEnabled: true;
+    }
     }
 
     onEnableProperty: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertySet;
@@ -119,6 +132,13 @@ CollapsibleGroupProperty {
                 delegate: ItemDelegate {
                     text: modelData;
                     width: parent.width;
+                }
+                Label {
+                    text: i18n("Family list is empty");
+                    wrapMode: Text.WordWrap;
+                    anchors.fill: parent;
+                    anchors.horizontalCenter: parent.horizontalCenter;
+                    visible: parent.count === 0;
                 }
             }
         }

@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.12
 import org.krita.flake.text 1.0
@@ -19,7 +19,7 @@ CollapsibleGroupProperty {
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
     property alias fontSlantSlope: fontSlantSpn.value;
-    property int fontSlant: KoSvgTextPropertiesModel.StyleNormal;
+    property int fontSlant: CssFontStyleModel.StyleNormal;
 
     onFontSlantChanged: {
         fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
@@ -90,11 +90,25 @@ CollapsibleGroupProperty {
         properties.fontWeightState = KoSvgTextPropertiesModel.PropertySet;
     }
 
-    titleItem: ComboBox {
+
+    titleItem: RowLayout{
+        width: parent.width;
+        height: childrenRect.height;
+        spacing: columnSpacing;
+        Label {
+            id: propertyTitle;
+            text: propertyName;
+            verticalAlignment: Text.AlignVCenter
+            color: sysPalette.text;
+            elide: Text.ElideRight;
+            Layout.maximumWidth: contentWidth;
+        }
+
+        ComboBox {
         id: styleCmb;
         model: fontStylesModel;
         textRole: "display";
-        width: parent.width;
+        Layout.fillWidth: true;
         onActivated: {
             if (!blockSignals) {
                 // Because each change to propertiesModel causes signals to fire,
@@ -113,7 +127,7 @@ CollapsibleGroupProperty {
                 properties.axisValues = axesValues;
             }
         }
-    }
+    }}
 
     contentItem: GridLayout {
         id: mainLayout;
@@ -275,8 +289,12 @@ CollapsibleGroupProperty {
             Layout.preferredHeight: contentHeight;
             spacing: parent.columnSpacing;
 
-            function updateAxes() {
-
+            Label {
+                text: i18n("No extra variable axes in this font");
+                wrapMode: Text.WordWrap;
+                anchors.fill: parent;
+                anchors.horizontalCenter: parent.horizontalCenter;
+                visible: parent.count === 0;
             }
 
             delegate: RowLayout {

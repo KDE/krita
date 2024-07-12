@@ -184,15 +184,17 @@ ColumnLayout {
         popup: Popup {
             y: addPropertyCmb.height - 1;
             width: addPropertyCmb.width;
-            height: childrenRect.height;
-            padding: 1;
+            height: contentHeight;
+            padding: 2;
 
             contentItem: ColumnLayout {
                 clip: true;
                 width: parent.width;
                 ListView {
+                    clip: true;
+                    Layout.preferredHeight: contentHeight;
+                    Layout.maximumHeight: 300;
                     Layout.fillWidth: true;
-                    Layout.fillHeight: true;
                     model: addPropertyCmb.popup.visible ? addPropertyCmb.delegateModel : null
                     currentIndex: addPropertyCmb.highlightedIndex;
 

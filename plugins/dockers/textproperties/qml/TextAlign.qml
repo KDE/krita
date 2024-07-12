@@ -52,6 +52,19 @@ CollapsibleGroupProperty {
         }
     }
 
+    titleItem: RowLayout {
+        width: parent.width;
+        height: childrenRect.height;
+        Label {
+            id: propertyTitle;
+            text: propertyName;
+            verticalAlignment: Text.AlignVCenter
+            color: sysPalette.text;
+            elide: Text.ElideRight;
+            Layout.maximumWidth: contentWidth;
+        }
+    }
+
     onEnableProperty: properties.textAnchorState = KoSvgTextPropertiesModel.PropertySet;
 
     contentItem: GridLayout {

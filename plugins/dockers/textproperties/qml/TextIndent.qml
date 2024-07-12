@@ -59,8 +59,19 @@ CollapsibleGroupProperty {
     onEnableProperty: properties.textIndentState = KoSvgTextPropertiesModel.PropertySet;
 
     titleItem: RowLayout {
+        width: parent.width;
+        height: childrenRect.height;
         spacing: columnSpacing;
-        Layout.fillWidth: true;
+
+        Label {
+            id: propertyTitle;
+            text: propertyName;
+            verticalAlignment: Text.AlignVCenter
+            color: sysPalette.text;
+            elide: Text.ElideRight;
+            Layout.maximumWidth: contentWidth;
+        }
+
         DoubleSpinBox {
             id: textIndentSpn;
             Layout.fillWidth: true;

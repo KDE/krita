@@ -443,10 +443,25 @@ struct AutoLengthPercentage : public boost::equality_comparable<AutoLengthPercen
     }
 };
 
+/// When style is oblique, a custom slant value can be specified for variable fonts.
+struct CssFontStyleData : public boost::equality_comparable<CssFontStyleData>
+{
+    CssFontStyleData() {}
+    CssFontStyleData(QFont::Style _style): style(_style){}
+    QFont::Style style = QFont::StyleNormal;
+    KoSvgText::AutoValue slantValue;
+
+    bool operator==(const CssFontStyleData & other) const {
+        return style == other.style
+                && (style != QFont::StyleOblique || slantValue == other.slantValue);
+    }
+};
+
 
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::AutoValue &value);
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::AutoLengthPercentage &value);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CssFontStyleData &value);
 
 inline QVariant fromAutoValue(const KoSvgText::AutoValue &value) {
     return QVariant::fromValue(value);
@@ -488,6 +503,8 @@ bool xmlSpaceToLongHands(const QString &value, TextSpaceCollapse &collapseMethod
 WordBreak parseWordBreak(const QString &value);
 LineBreak parseLineBreak(const QString &value);
 TextAlign parseTextAlign(const QString &value);
+
+CssFontStyleData parseFontStyle(const QString &value);
 
 Baseline parseBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
@@ -544,6 +561,8 @@ QString writeTextPathSide(TextPathSide value);
 QString writeWordBreak(WordBreak value);
 QString writeLineBreak(LineBreak value);
 QString writeTextAlign(TextAlign value);
+
+QString writeFontStyle(CssFontStyleData value);
 
 /**
  * @brief writeWhiteSpaceValue
@@ -807,6 +826,7 @@ Q_DECLARE_METATYPE(KoSvgText::TextTransformInfo)
 Q_DECLARE_METATYPE(KoSvgText::TextIndentInfo)
 Q_DECLARE_METATYPE(KoSvgText::TabSizeInfo)
 Q_DECLARE_METATYPE(KoSvgText::LineHeightInfo)
+Q_DECLARE_METATYPE(KoSvgText::CssFontStyleData)
 
 Q_DECLARE_METATYPE(KoSvgText::FontFamilyAxis)
 Q_DECLARE_METATYPE(KoSvgText::FontFamilyStyleInfo)

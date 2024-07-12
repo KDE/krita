@@ -59,7 +59,7 @@ public:
         WordSpacingId, ///< KoSvgText::AutoLengthPercentage
 
         FontFamiliesId, ///< QStringList
-        FontStyleId, ///< QFont::Style
+        FontStyleId, ///< KoSvgText::CssSlantData
         FontStretchId, ///< Int
         FontWeightId, ///< Int
         FontSizeId, ///< Double
@@ -117,6 +117,11 @@ public:
 
         ShapePaddingId, ///< Double
         ShapeMarginId,  ///< Double
+
+        FontSynthesisBoldId, ///< Bool
+        FontSynthesisItalicId, ///< Bool
+        FontSynthesisSmallCapsId, ///< Bool
+        FontSynthesisSuperSubId, ///< Bool
 
         KraTextVersionId ///< Int, used for handling incorrectly saved files.
     };

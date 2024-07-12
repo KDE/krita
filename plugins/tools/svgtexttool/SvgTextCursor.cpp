@@ -898,9 +898,17 @@ void SvgTextCursor::toggleProperty(KoSvgTextProperties::PropertyId property)
                 newVal = value == 400? QVariant(700): QVariant(400);
                 if (value == 400) break;
             } else if (property == KoSvgTextProperties::FontStyleId) {
-                QFont::Style value = QFont::Style(it->property(property, QVariant(QFont::StyleNormal)).toInt());
-                newVal = value == QFont::StyleNormal? QVariant(QFont::StyleItalic): QVariant(QFont::StyleNormal);
-                if (value == QFont::StyleNormal) break;
+                KoSvgText::CssFontStyleData value = it->property(property, QVariant(QFont::StyleNormal)).value<KoSvgText::CssFontStyleData>();
+                KoSvgText::CssFontStyleData newSlant = value;
+                if (value.style == QFont::StyleNormal) {
+                    newSlant.style = QFont::StyleItalic;
+                } else {
+                    newSlant.style = QFont::StyleNormal;
+                    newSlant.slantValue.customValue = 0;
+                    newSlant.slantValue.isAuto = true;
+                }
+                newVal = QVariant::fromValue(newSlant);
+                if (value.style == QFont::StyleNormal) break;
             } else if (property == KoSvgTextProperties::TextDecorationLineId) {
                 KoSvgText::TextDecorations decor = it->propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<KoSvgText::TextDecorations>();
                 KoSvgText::TextDecorations newDecor;

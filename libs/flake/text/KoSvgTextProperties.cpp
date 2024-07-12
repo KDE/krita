@@ -319,12 +319,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(FontFamiliesId, familiesList);
 
     } else if (command == "font-style") {
-        const QFont::Style style =
-            value == "italic" ? QFont::StyleItalic :
-            value == "oblique" ? QFont::StyleOblique :
-            QFont::StyleNormal;
-
-        setProperty(FontStyleId, style);
+        setProperty(FontStyleId, QVariant::fromValue(KoSvgText::parseFontStyle(value)));
     } else if (command == "font-variant" || command == "font-variant-ligatures" || command == "font-variant-position" || command == "font-variant-caps"
                || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-alternates") {
         const QStringList features = value.split(" ");
@@ -584,6 +579,34 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(ShapePaddingId, SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), value));
     } else if (command == "shape-margin") {
         setProperty(ShapeMarginId, SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), value));
+    } else if (command == "font-synthesis") {
+        setProperty(FontSynthesisBoldId, false);
+        setProperty(FontSynthesisItalicId, false);
+        setProperty(FontSynthesisSuperSubId, false);
+        setProperty(FontSynthesisSmallCapsId, false);
+        if (value != "none") {
+            QStringList params = value.split(" ");
+            if (params.contains("position")) {
+                setProperty(FontSynthesisSuperSubId, true);
+            }
+            if (params.contains("weight")) {
+                setProperty(FontSynthesisBoldId, true);
+            }
+            if (params.contains("style")) {
+                setProperty(FontSynthesisItalicId, false);
+            }
+            if (params.contains("small-caps")) {
+                setProperty(FontSynthesisSmallCapsId, false);
+            }
+        }
+    } else if (command == "font-synthesis-weight") {
+        setProperty(FontSynthesisBoldId, (value == "auto"));
+    } else if (command == "font-synthesis-style") {
+        setProperty(FontSynthesisItalicId, (value == "auto"));
+    } else if (command == "font-synthesis-small-caps") {
+        setProperty(FontSynthesisSmallCapsId, (value == "auto"));
+    } else if (command == "font-synthesis-position") {
+        setProperty(FontSynthesisSuperSubId, (value == "auto"));
     } else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }
@@ -686,13 +709,8 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
 
     if (hasProperty(FontStyleId)) {
-        const QFont::Style style = QFont::Style(property(FontStyleId).toInt());
-
-        const QString value =
-            style == QFont::StyleItalic ? "italic" :
-            style == QFont::StyleOblique ? "oblique" : "normal";
-
-        result.insert("font-style", value);
+        const KoSvgText::CssFontStyleData style = property(FontStyleId).value<KoSvgText::CssFontStyleData>();
+        result.insert("font-style", KoSvgText::writeFontStyle(style));
     }
 
     QStringList features;
@@ -913,6 +931,38 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
 
+    if (hasProperty(FontSynthesisBoldId) && hasProperty(FontSynthesisItalicId)
+            && hasProperty(FontSynthesisSuperSubId) && hasProperty(FontSynthesisSmallCapsId)) {
+        bool weight = property(FontSynthesisBoldId).toBool();
+        bool italic = property(FontSynthesisItalicId).toBool();
+        bool caps = property(FontSynthesisSmallCapsId).toBool();
+        bool super = property(FontSynthesisSuperSubId).toBool();
+
+        if (!weight && !italic && !caps && !super) {
+            result.insert("font-synthesis", "none");
+        } else {
+            QStringList params;
+            if (weight) params.append("weight");
+            if (italic) params.append("style");
+            if (caps) params.append("small-caps");
+            if (super) params.append("position");
+            result.insert("font-synthesis", params.join(" "));
+        }
+    } else {
+        if (hasProperty(FontSynthesisBoldId)) {
+            result.insert("font-synthesis-weight", property(FontSynthesisBoldId).toBool()? "auto": "none");
+        }
+        if (hasProperty(FontSynthesisItalicId)) {
+            result.insert("font-synthesis-style", property(FontSynthesisItalicId).toBool()? "auto": "none");
+        }
+        if (hasProperty(FontSynthesisSmallCapsId)) {
+            result.insert("font-synthesis-small-caps", property(FontSynthesisSmallCapsId).toBool()? "auto": "none");
+        }
+        if (hasProperty(FontSynthesisSuperSubId)) {
+            result.insert("font-synthesis-position", property(FontSynthesisSuperSubId).toBool()? "auto": "none");
+        }
+    }
+
     return result;
 }
 
@@ -1099,12 +1149,11 @@ QMap<QString, qreal> KoSvgTextProperties::fontAxisSettings() const
     if (propertyOrDefault(KoSvgTextProperties::FontOpticalSizingId).toBool()) {
         settings.insert("opsz", fontSize().value);
     }
-    const QFont::Style style = QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    if (style == QFont::StyleItalic) {
+    const KoSvgText::CssFontStyleData style = propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
+    if (style.style == QFont::StyleItalic) {
         settings.insert("ital", 1);
-    } else if (style == QFont::StyleOblique) {
-        settings.insert("ital", 1);
-        settings.insert("slnt", 11);
+    } else if (style.style == QFont::StyleOblique) {
+        settings.insert("slnt", -(style.slantValue.isAuto? 14: style.slantValue.customValue));
     } else {
         settings.insert("ital", 0);
     }
@@ -1181,11 +1230,16 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(WordSpacingId, QVariant::fromValue(AutoLengthPercentage()));
 
         s_defaultProperties->setProperty(FontFamiliesId, QStringLiteral("sans-serif"));
-        s_defaultProperties->setProperty(FontStyleId, QFont::StyleNormal);
+        s_defaultProperties->setProperty(FontStyleId, QVariant::fromValue(KoSvgText::CssFontStyleData()));
         s_defaultProperties->setProperty(FontStretchId, 100);
         s_defaultProperties->setProperty(FontWeightId, 400);
         s_defaultProperties->setProperty(FontSizeId, QVariant::fromValue(KoSvgText::CssLengthPercentage(12.0)));
         s_defaultProperties->setProperty(FontSizeAdjustId, fromAutoValue(AutoValue()));
+
+        s_defaultProperties->setProperty(FontSynthesisBoldId, true);
+        s_defaultProperties->setProperty(FontSynthesisItalicId, true);
+        s_defaultProperties->setProperty(FontSynthesisSmallCapsId, true);
+        s_defaultProperties->setProperty(FontSynthesisSuperSubId, true);
 
         s_defaultProperties->setProperty(FontOpticalSizingId, true);
         {

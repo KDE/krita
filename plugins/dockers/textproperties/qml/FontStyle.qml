@@ -18,27 +18,36 @@ CollapsibleGroupProperty {
 
     property alias fontWeight: fontWeightSpn.value;
     property alias fontWidth: fontStretchSpn.value;
+    property alias fontSlantSlope: fontSlantSpn.value;
     property int fontSlant: KoSvgTextPropertiesModel.StyleNormal;
 
     onFontSlantChanged: {
         fontSlantCmb.currentIndex = fontSlantCmb.indexOfValue(fontSlant);
         if (!blockSignals) {
-            properties.fontStyle = fontSlant;
+            properties.fontStyle.style = fontSlant;
         }
     }
     property alias fontOptical: opticalSizeCbx.checked;
+    property alias fontSynthesizeWeight: synthesizeWeightCbx.checked;
+    property alias fontSynthesizeSlant: synthesizeSlantCbx.checked;
 
     onPropertiesUpdated: {
         blockSignals = true;
         fontWeight = properties.fontWeight;
         fontWidth = properties.fontWidth;
         fontOptical = properties.fontOpticalSizeLink;
-        fontSlant = properties.fontStyle;
+        fontSlant = properties.fontStyle.style;
+        fontSlantSlope = properties.fontStyle.value;
+        fontSynthesizeSlant = properties.fontSynthesisStyle;
+        fontSynthesizeWeight = properties.fontSynthesisWeight;
         styleCmb.currentIndex = fontStylesModel.rowForStyle(properties.fontWeight, properties.fontWidth, properties.fontStyle);
         visible = properties.fontWeightState !== KoSvgTextPropertiesModel.PropertyUnset
-                 || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
-                 || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
-                 || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset;
+                || properties.fontStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontWidthState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontOpticalSizeLinkState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.axisValueState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontSynthesisStyleState !== KoSvgTextPropertiesModel.PropertyUnset
+                || properties.fontSynthesisWeightState !== KoSvgTextPropertiesModel.PropertyUnset;
         blockSignals = false;
     }
     onFontWeightChanged: {
@@ -53,9 +62,27 @@ CollapsibleGroupProperty {
         }
     }
 
+    onFontSlantSlopeChanged: {
+        if (!blockSignals) {
+            properties.fontStyle.value = fontSlantSlope;
+        }
+    }
+
     onFontOpticalChanged: {
         if (!blockSignals) {
             properties.fontOpticalSizeLink = fontOptical;
+        }
+    }
+
+    onFontSynthesizeSlantChanged:  {
+        if (!blockSignals) {
+            properties.fontSynthesisStyle = fontSynthesizeSlant;
+        }
+    }
+
+    onFontSynthesizeWeightChanged:  {
+        if (!blockSignals) {
+            properties.fontSynthesisWeight = fontSynthesizeWeight;
         }
     }
 
@@ -75,10 +102,14 @@ CollapsibleGroupProperty {
                 var weight = fontStylesModel.weightValue(currentIndex);
                 var width = fontStylesModel.widthValue(currentIndex);
                 var styleMode = fontStylesModel.styleModeValue(currentIndex);
+                var styleVal = fontStylesModel.slantValue(currentIndex);
                 var axesValues = fontStylesModel.axesValues(currentIndex);
                 properties.fontWeight = weight;
                 properties.fontWidth = width;
-                properties.fontStyle = styleMode;
+                properties.fontStyle.style = styleMode;
+                if (styleMode === CssFontStyleModel.StyleOblique) {
+                    properties.fontStyle.value = styleVal;
+                }
                 properties.axisValues = axesValues;
             }
         }
@@ -115,6 +146,20 @@ CollapsibleGroupProperty {
 
             wheelEnabled: true;
 
+        }
+        RevertPropertyButton {
+            revertState: properties.fontSynthesisWeightState;
+            onClicked: properties.fontSynthesisWeightState = KoSvgTextPropertiesModel.PropertyUnset;
+        }
+        Item {
+        width: 1;
+        height: 1;}
+
+        CheckBox {
+            id: synthesizeWeightCbx
+            text: i18nc("@option:check", "Synthesize Bold")
+            Layout.fillWidth: true;
+            font.italic: properties.fontSynthesisWeightState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
 
@@ -156,15 +201,46 @@ CollapsibleGroupProperty {
         ComboBox {
             id: fontSlantCmb
             model: [
-                {text: i18nc("@label:inlistbox", "Normal"), value: KoSvgTextPropertiesModel.StyleNormal},
-                {text: i18nc("@label:inlistbox", "Italic"), value: KoSvgTextPropertiesModel.StyleItalic},
-                {text: i18nc("@label:inlistbox", "Oblique"), value: KoSvgTextPropertiesModel.StyleOblique}
+                {text: i18nc("@label:inlistbox", "Normal"), value: CssFontStyleModel.StyleNormal},
+                {text: i18nc("@label:inlistbox", "Italic"), value: CssFontStyleModel.StyleItalic},
+                {text: i18nc("@label:inlistbox", "Oblique"), value: CssFontStyleModel.StyleOblique}
             ]
             Layout.fillWidth: true
             textRole: "text";
             valueRole: "value";
             onActivated: fontSlant = currentValue;
             wheelEnabled: true;
+        }
+
+        Item {
+        width: 1;
+        height: 1;
+        Layout.columnSpan: 2;
+        }
+        SpinBox {
+            id: fontSlantSpn
+            from: -90;
+            to: 90;
+            editable: true;
+            Layout.fillWidth: true;
+
+            wheelEnabled: true;
+
+        }
+
+        RevertPropertyButton {
+            revertState: properties.fontSynthesisStyleState;
+            onClicked: properties.fontSynthesisStyleState = KoSvgTextPropertiesModel.PropertyUnset;
+        }
+        Item {
+        width: 1;
+        height: 1;}
+
+        CheckBox {
+            id: synthesizeSlantCbx
+            text: i18nc("@option:check", "Synthesize Slant")
+            Layout.fillWidth: true;
+            font.italic: properties.fontSynthesisStyleState === KoSvgTextPropertiesModel.PropertyTriState;
         }
 
         RevertPropertyButton {

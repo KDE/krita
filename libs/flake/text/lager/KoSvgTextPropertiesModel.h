@@ -18,6 +18,7 @@
 #include "TextIndentModel.h"
 #include "TabSizeModel.h"
 #include "TextTransformModel.h"
+#include "CssFontStyleModel.h"
 
 #include <kritaflake_export.h>
 
@@ -41,6 +42,7 @@ class KRITAFLAKE_EXPORT KoSvgTextPropertiesModel : public QObject
     Q_PROPERTY(TextIndentModel *textIndent READ textIndent NOTIFY textIndentChanged)
     Q_PROPERTY(TabSizeModel *tabSize READ tabSize NOTIFY tabSizeChanged)
     Q_PROPERTY(TextTransformModel *textTransform READ textTransform NOTIFY textTransformChanged)
+    Q_PROPERTY(CssFontStyleModel *fontStyle READ fontStyle NOTIFY fontStyleChanged)
 public:
     KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData = lager::make_state(KoSvgTextPropertyData(), lager::automatic_tag{}));
 
@@ -54,6 +56,7 @@ public:
     lager::cursor<KoSvgText::TextIndentInfo> textIndentData;
     lager::cursor<KoSvgText::TabSizeInfo> tabSizeData;
     lager::cursor<KoSvgText::TextTransformInfo> textTransformData;
+    lager::cursor<KoSvgText::CssFontStyleData> cssFontStyleData;
 
 
     CssLengthPercentageModel fontSizeModel;
@@ -66,6 +69,7 @@ public:
     TextIndentModel textIndentModel;
     TabSizeModel tabSizeModel;
     TextTransformModel textTransformModel;
+    CssFontStyleModel cssFontStyleModel;
 
     // Whether a given property is set, unset or tristate.
     enum PropertyState {
@@ -94,6 +98,9 @@ public:
     TextTransformModel *textTransform();
     LAGER_QT_CURSOR(PropertyState, textTransformState);
 
+    CssFontStyleModel *fontStyle();
+    LAGER_QT_CURSOR(PropertyState, fontStyleState);
+
     LAGER_QT_CURSOR(int, writingMode);
     LAGER_QT_CURSOR(PropertyState, writingModeState);
     LAGER_QT_CURSOR(int, direction);
@@ -112,16 +119,6 @@ public:
     LAGER_QT_CURSOR(int, fontWidth);
     LAGER_QT_CURSOR(PropertyState, fontWidthState);
 
-    // QFont::Style isn't exposed to qml.
-    enum FontStyle {
-        StyleNormal = QFont::StyleNormal,
-        StyleItalic = QFont::StyleItalic,
-        StyleOblique = QFont::StyleOblique
-    };
-    Q_ENUM(FontStyle)
-
-    LAGER_QT_CURSOR(FontStyle, fontStyle);
-    LAGER_QT_CURSOR(PropertyState, fontStyleState);
     LAGER_QT_CURSOR(bool, fontOpticalSizeLink);
     LAGER_QT_CURSOR(PropertyState, fontOpticalSizeLinkState);
 
@@ -163,6 +160,11 @@ public:
     LAGER_QT_CURSOR(int, lineBreak);
     LAGER_QT_CURSOR(PropertyState, lineBreakState);
 
+    LAGER_QT_CURSOR(bool, fontSynthesisWeight);
+    LAGER_QT_CURSOR(PropertyState, fontSynthesisWeightState);
+    LAGER_QT_CURSOR(bool, fontSynthesisStyle);
+    LAGER_QT_CURSOR(PropertyState, fontSynthesisStyleState);
+
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 
@@ -196,6 +198,7 @@ Q_SIGNALS:
     void textIndentChanged();
     void tabSizeChanged();
     void textTransformChanged();
+    void fontStyleChanged();
 };
 
 #endif // KOSVGTEXTPROPERTIESMODEL_H

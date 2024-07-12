@@ -127,7 +127,6 @@ auto hangingPunactuationCommaPropImpl = lager::lenses::getset(
 auto hangingPunactuationCommaProp =
         variant_to<KoSvgText::HangingPunctuations> | hangingPunactuationCommaPropImpl;
 
-
 }
 
 auto propertyState = [](const KoSvgTextProperties::PropertyId &propId) { return [propId] (const KoSvgTextPropertyData &value) -> KoSvgTextPropertiesModel::PropertyState {
@@ -152,6 +151,7 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , textIndentData(textData.zoom(createTextProperty(KoSvgTextProperties::TextIndentId)).zoom(variant_to<KoSvgText::TextIndentInfo>))
     , tabSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::TabSizeId)).zoom(variant_to<KoSvgText::TabSizeInfo>))
     , textTransformData(textData.zoom(createTextProperty(KoSvgTextProperties::TextTransformId)).zoom(variant_to<KoSvgText::TextTransformInfo>))
+    , cssFontStyleData(textData.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(variant_to<KoSvgText::CssFontStyleData>))
     , fontSizeModel(fontSizeData)
     , lineHeightModel(lineHeightData)
     , letterSpacingModel(letterSpacingData)
@@ -160,6 +160,7 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , textIndentModel(textIndentData)
     , tabSizeModel(tabSizeData)
     , textTransformModel(textTransformData)
+    , cssFontStyleModel(cssFontStyleData)
     , LAGER_QT(fontSizeState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontSizeId))}
     , LAGER_QT(lineHeightState) {textData.zoom(propertyModifyState(KoSvgTextProperties::LineHeightId))}
     , LAGER_QT(letterSpacingState) {textData.zoom(propertyModifyState(KoSvgTextProperties::LetterSpacingId))}
@@ -167,6 +168,7 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(textIndentState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextIndentId))}
     , LAGER_QT(tabSizeState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TabSizeId))}
     , LAGER_QT(textTransformState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextTransformId))}
+    , LAGER_QT(fontStyleState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontStyleId))}
     , LAGER_QT(writingMode) {textData.zoom(createTextProperty(KoSvgTextProperties::WritingModeId)).zoom(variant_to<int>)}
     , LAGER_QT(writingModeState) {textData.zoom(propertyModifyState(KoSvgTextProperties::WritingModeId))}
     , LAGER_QT(direction) {textData.zoom(createTextProperty(KoSvgTextProperties::DirectionId)).zoom(variant_to<int>)}
@@ -183,8 +185,6 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(fontWeightState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontWeightId))}
     , LAGER_QT(fontWidth) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStretchId)).zoom(variant_to<int>)}
     , LAGER_QT(fontWidthState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontStretchId))}
-    , LAGER_QT(fontStyle) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(variant_to<KoSvgTextPropertiesModel::FontStyle>)}
-    , LAGER_QT(fontStyleState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontStyleId))}
     , LAGER_QT(fontOpticalSizeLink) {textData.zoom(createTextProperty(KoSvgTextProperties::FontOpticalSizingId)).zoom(variant_to<bool>)}
     , LAGER_QT(fontOpticalSizeLinkState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontOpticalSizingId))}
     , LAGER_QT(fontFamilies) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(variant_to<QStringList>)}
@@ -211,6 +211,10 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(wordBreakState) {textData.zoom(propertyModifyState(KoSvgTextProperties::WordBreakId))}
     , LAGER_QT(lineBreak){textData.zoom(createTextProperty(KoSvgTextProperties::LineBreakId)).zoom(variant_to<int>)}
     , LAGER_QT(lineBreakState) {textData.zoom(propertyModifyState(KoSvgTextProperties::LineBreakId))}
+    , LAGER_QT(fontSynthesisWeight){textData.zoom(createTextProperty(KoSvgTextProperties::FontSynthesisBoldId)).zoom(variant_to<bool>)}
+    , LAGER_QT(fontSynthesisWeightState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontSynthesisBoldId))}
+    , LAGER_QT(fontSynthesisStyle){textData.zoom(createTextProperty(KoSvgTextProperties::FontSynthesisItalicId)).zoom(variant_to<bool>)}
+    , LAGER_QT(fontSynthesisStyleState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontSynthesisItalicId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {
     lager::watch(textData, std::bind(&KoSvgTextPropertiesModel::textPropertyChanged, this));
@@ -225,6 +229,7 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     connect(&textIndentModel, SIGNAL(lengthChanged()), this, SIGNAL(textIndentChanged()));
     lager::watch(tabSizeData, std::bind(&KoSvgTextPropertiesModel::tabSizeChanged, this));
     lager::watch(textTransformData, std::bind(&KoSvgTextPropertiesModel::textTransformChanged, this));
+    lager::watch(cssFontStyleData, std::bind(&KoSvgTextPropertiesModel::fontStyleChanged, this));
 }
 
 CssLengthPercentageModel *KoSvgTextPropertiesModel::fontSize()
@@ -265,6 +270,11 @@ TabSizeModel *KoSvgTextPropertiesModel::tabSize()
 TextTransformModel *KoSvgTextPropertiesModel::textTransform()
 {
     return &this->textTransformModel;
+}
+
+CssFontStyleModel *KoSvgTextPropertiesModel::fontStyle()
+{
+    return &this->cssFontStyleModel;
 }
 
 qreal KoSvgTextPropertiesModel::resolvedFontSize(bool fontSize)

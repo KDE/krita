@@ -67,7 +67,18 @@ qreal FontStyleModel::widthValue(int row)
 int FontStyleModel::styleModeValue(int row)
 {
     KoSvgText::FontFamilyStyleInfo style = d->styles.value(row);
-    return style.isItalic? style.isOblique? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
+    QFont::Style styleType = style.isItalic? style.isOblique? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
+    if (style.instanceCoords.value(ITALIC_TAG, 0) != 0) {
+        styleType = QFont::StyleItalic;
+    } else if (style.instanceCoords.value(SLANT_TAG, 0) != 0) {
+        styleType = QFont::StyleOblique;
+    }
+    return styleType;
+}
+
+qreal FontStyleModel::slantValue(int row)
+{
+    return -(d->styles.value(row).instanceCoords.value(SLANT_TAG, 0));
 }
 
 QVariantHash FontStyleModel::axesValues(int row)
@@ -127,6 +138,7 @@ int FontStyleModel::rowForStyle(qreal weight, qreal width, int styleMode)
 
 QModelIndex FontStyleModel::index(int row, int column, const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     if (column != 0) return QModelIndex();
     if (row >= 0 && row < d->styles.size()) return createIndex(row, column, &row);
     return QModelIndex();
@@ -134,16 +146,19 @@ QModelIndex FontStyleModel::index(int row, int column, const QModelIndex &parent
 
 QModelIndex FontStyleModel::parent(const QModelIndex &child) const
 {
+    Q_UNUSED(child)
      return QModelIndex();
 }
 
 int FontStyleModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return d->styles.size();
 }
 
 int FontStyleModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return 1;
 }
 
@@ -167,9 +182,15 @@ QVariant FontStyleModel::data(const QModelIndex &index, int role) const
     } else if (role == Width){
         return style.instanceCoords.value(WIDTH_TAG, 100.0);
     } else if (role == StyleMode){
-        return style.isItalic? style.isOblique? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
+        QFont::Style styleType = style.isItalic? style.isOblique? QFont::StyleOblique: QFont::StyleItalic: QFont::StyleNormal;
+        if (style.instanceCoords.value(ITALIC_TAG, 0) != 0) {
+            styleType = QFont::StyleItalic;
+        } else if (style.instanceCoords.value(SLANT_TAG, 0) != 0) {
+            styleType = QFont::StyleOblique;
+        }
+        return styleType;
     } else if (role == Slant){
-        return style.instanceCoords.value(SLANT_TAG, 0);
+        return -(style.instanceCoords.value(SLANT_TAG, 0));
     } else if (role == AxisValues) {
         QVariantHash vals;
         for (auto it = style.instanceCoords.begin(); it != style.instanceCoords.end(); it++) {

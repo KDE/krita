@@ -34,6 +34,8 @@ KIS_DECLARE_STATIC_INITIALIZER {
     qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyAxis>("KoSvgText::FontFamilyAxis");
     qRegisterMetaType<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
     qRegisterMetaTypeStreamOperators<KoSvgText::FontFamilyStyleInfo>("KoSvgText::FontFamilyStyleInfo");
+    qRegisterMetaType<KoSvgText::CssFontStyleData>("KoSvgText::CssSlantData");
+    qRegisterMetaType<KoSvgText::BackgroundProperty>("KoSvgText::BackgroundProperty");
 
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     QMetaType::registerEqualsComparator<KoSvgText::CssLengthPercentage>();
@@ -46,7 +48,9 @@ KIS_DECLARE_STATIC_INITIALIZER {
     QMetaType::registerEqualsComparator<KoSvgText::AutoLengthPercentage>();
     QMetaType::registerDebugStreamOperator<KoSvgText::AutoLengthPercentage>();
 
-
+    QMetaType::registerEqualsComparator<KoSvgText::CssFontStyleData>();
+    QMetaType::registerDebugStreamOperator<KoSvgText::CssFontStyleData>();
+    
     QMetaType::registerEqualsComparator<KoSvgText::BackgroundProperty>();
     QMetaType::registerDebugStreamOperator<KoSvgText::BackgroundProperty>();
 
@@ -74,6 +78,7 @@ KIS_DECLARE_STATIC_INITIALIZER {
     
     QMetaType::registerEqualsComparator<KoSvgText::FontFamilyStyleInfo>();
     QMetaType::registerDebugStreamOperator<KoSvgText::FontFamilyStyleInfo>();
+#endif
 }
 
 namespace KoSvgText {
@@ -259,6 +264,19 @@ QString writeLengthAdjust(LengthAdjust value)
 QDebug operator<<(QDebug dbg, const KoSvgText::AutoValue &value)
 {
     dbg.nospace() << (value.isAuto ? "auto" : QString::number(value.customValue));
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const KoSvgText::CssFontStyleData &value)
+{
+    if (value.style == QFont::StyleOblique) {
+        dbg.nospace() << "oblique ";
+        dbg.nospace() << value.slantValue;
+    } else {
+        dbg.nospace() << (value.style == QFont::StyleItalic? "italic": "roman");
+    }
+
+
     return dbg.space();
 }
 
@@ -1161,6 +1179,36 @@ QDataStream &operator>>(QDataStream &in, KoSvgText::FontFamilyStyleInfo &style) 
     }
 
     return in;
+}
+
+CssFontStyleData parseFontStyle(const QString &value)
+{
+    CssFontStyleData slant;
+    QStringList params = value.split(" ");
+    if (!params.isEmpty()) {
+        QString style = params.first();
+        slant.style = style == "italic"? QFont::StyleItalic: style == "oblique"? QFont::StyleOblique: QFont::StyleNormal;
+    }
+    if (params.size() > 1) {
+        QString angle = params.last();
+        if (angle.endsWith("deg")) {
+            angle.chop(3);
+            slant.slantValue.isAuto = false;
+            slant.slantValue.customValue = angle.toDouble();
+        }
+    }
+    return slant;
+}
+
+QString writeFontStyle(CssFontStyleData value)
+{
+    QString style =
+        value.style == QFont::StyleItalic ? "italic" :
+        value.style == QFont::StyleOblique ? "oblique" : "normal";
+    if (value.style == QFont::StyleOblique && !value.slantValue.isAuto) {
+        style.append(QString(" ")+QString::number(value.slantValue.customValue)+QString("deg"));
+    }
+    return style;
 }
 
 } // namespace KoSvgText

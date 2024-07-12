@@ -52,6 +52,11 @@ public:
                        << "font" // why are we doing this after the rest?
                        << "font-optical-sizing"
                        << "font-variation-settings"
+                       << "font-synthesis-weight"
+                       << "font-synthesis-style"
+                       << "font-synthesis-small-caps"
+                       << "font-synthesis-position"
+                       << "font-synthesis"
                        << "text-decoration"
                        << "text-decoration-line"
                        << "text-decoration-style"
@@ -257,6 +262,10 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "font-optical-sizing") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size-adjust") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+    } else if (command == "font-synthesis"
+               || command == "font-synthesis-weight" || command == "font-synthesis-style"
+               || command == "font-synthesis-small-caps" || command == "font-synthesis-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font") {
         qWarning() << "Krita does not support the 'font' shorthand";

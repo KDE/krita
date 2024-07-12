@@ -122,6 +122,29 @@ emboldenGlyphIfNeeded(const FT_Face ftface, const CharacterResult &charResult, i
     }
 }
 
+bool faceIsItalic(const FT_Face face) {
+    bool isItalic = (face->style_flags & FT_STYLE_FLAG_ITALIC);
+
+    if (FT_IS_SFNT(face) && FT_HAS_MULTIPLE_MASTERS(face)) {
+        FT_MM_Var *amaster = nullptr;
+        FT_Get_MM_Var(face, &amaster);
+        std::vector<FT_Fixed> designCoords(amaster->num_axis);
+        FT_Get_Var_Design_Coordinates(face, amaster->num_axis, designCoords.data());
+        for (FT_UInt i = 0; i < amaster->num_axis; i++) {
+            FT_Var_Axis axis = amaster->axis[i];
+            if (axis.tag == FT_MAKE_TAG('i', 't', 'a', 'l')) {
+                isItalic = !(designCoords[i] == axis.def);
+                break;
+            } else if (axis.tag == FT_MAKE_TAG('s', 'l', 'n', 't')) {
+                isItalic = !(designCoords[i] == axis.def);
+                break;
+            }
+        }
+
+    }
+    return isItalic;
+}
+
 /**
  * @brief Calculate the transformation matrices for an outline glyph, taking
  * synthesized italic into account.
@@ -141,7 +164,7 @@ static std::pair<QTransform, QTransform> calcOutlineGlyphTransform(const QTransf
     QTransform glyphObliqueTf;
 
     // Check whether we need to synthesize italic by shearing the glyph:
-    if (charResult.fontStyle != QFont::StyleNormal && !(currentGlyph.ftface->style_flags & FT_STYLE_FLAG_ITALIC)) {
+    if (charResult.fontStyle != QFont::StyleNormal && !faceIsItalic(currentGlyph.ftface)) {
         // CSS Fonts Module Level 4, 2.4. Font style: the font-style property:
         // For `oblique`, "lack of an <angle> represents 14deg".
         constexpr double SLANT_14DEG = 0.24932800284318069162403993780486;

@@ -274,7 +274,8 @@ void TestSvgText::testParseFontStyles()
     }
 
     QCOMPARE(getFont().fontSize().value, 15.0);
-    QCOMPARE(QFont::Style(getFont().property(KoSvgTextProperties::FontStyleId).toInt()), QFont::StyleOblique);
+
+    QCOMPARE(getFont().property(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>(), KoSvgText::CssFontStyleData(QFont::StyleOblique));
     QCOMPARE(getFont().property(KoSvgTextProperties::FontVariantCapsId).toInt(), KoSvgText::SmallCaps);
     QCOMPARE(getFont().property(KoSvgTextProperties::FontWeightId).toInt(), 600);
 
@@ -2544,7 +2545,7 @@ void TestSvgText::testTextCleanUp()
     el1.text = "The quick brown fox";
     KoSvgTextContentElement el2;
     el2.text = " jumps over the";
-    el2.properties.setProperty(KoSvgTextProperties::FontStyleId, QFont::StyleItalic);
+    el2.properties.setProperty(KoSvgTextProperties::FontStyleId, QVariant::fromValue(KoSvgText::CssFontStyleData(QFont::StyleItalic)));
     KoSvgTextContentElement el3;
     el3.text =  " lazy dog.";
     auto child1 = forest.insert(childEnd(root), el1);
@@ -2556,13 +2557,13 @@ void TestSvgText::testTextCleanUp()
     QCOMPARE(depth(forest), 2);
 
     // test merging siblings with the same properties.
-    child1->properties.setProperty(KoSvgTextProperties::FontStyleId, QFont::StyleItalic);
+    child1->properties.setProperty(KoSvgTextProperties::FontStyleId, QVariant::fromValue(KoSvgText::CssFontStyleData(QFont::StyleItalic)));
     KoSvgTextShape::Private::cleanUp(forest);
     QCOMPARE(size(forest), 3);
     QCOMPARE(depth(forest), 2);
 
     // test merging children with parents.
-    child2->properties.setProperty(KoSvgTextProperties::FontStyleId, QFont::StyleItalic);
+    child2->properties.setProperty(KoSvgTextProperties::FontStyleId, QVariant::fromValue(KoSvgText::CssFontStyleData(QFont::StyleItalic)));
     KoSvgTextShape::Private::cleanUp(forest);
     QCOMPARE(size(forest), 1);
     QCOMPARE(depth(forest), 1);

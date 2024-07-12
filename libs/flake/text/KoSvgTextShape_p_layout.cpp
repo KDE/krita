@@ -389,8 +389,10 @@ void KoSvgTextShape::Private::relayout()
             QStringList fontFeatures = properties.fontFeaturesForText(start, length);
 
             qreal fontSize = properties.fontSize().value;
-            const QFont::Style style = QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+            const KoSvgText::CssFontStyleData style = properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
             KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
+            bool synthesizeWeight = properties.propertyOrDefault(KoSvgTextProperties::FontSynthesisBoldId).toBool();
+            bool synthesizeStyle = properties.propertyOrDefault(KoSvgTextProperties::FontSynthesisItalicId).toBool();
             if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
                 fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
             }
@@ -405,7 +407,7 @@ void KoSvgTextShape::Private::relayout()
                 fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
                 properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
                 properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                style != QFont::StyleNormal);
+                style.style != QFont::StyleNormal);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout.data(),
                                   properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
@@ -550,8 +552,8 @@ void KoSvgTextShape::Private::relayout()
                         }
                     }
                     result[j].fontHalfLeading = leading * 0.5;
-                    result[j].fontStyle = style;
-                    result[j].fontWeight = properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt();
+                    result[j].fontStyle = synthesizeStyle? style.style: QFont::StyleNormal;
+                    result[j].fontWeight = synthesizeWeight? properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(): 400;
                 }
 
                 start += length;
@@ -1160,7 +1162,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
     }
 
     QVector<int> lengths;
-    const QFont::Style style = QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    const KoSvgText::CssFontStyleData style = properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).value<KoSvgText::CssFontStyleData>();
     KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
     if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
         fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
@@ -1176,7 +1178,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
         properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
         properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-        style != QFont::StyleNormal);
+        style.style != QFont::StyleNormal);
 
     hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);

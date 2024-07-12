@@ -84,8 +84,8 @@ public:
                                        qreal size = -1,
                                        int weight = 400,
                                        int width = 100,
-                                       bool italic = false,
-                                       int slant = 0) const;
+                                       int slantMode = 0,
+                                       int slantValue = 0) const;
 
     /// Print out the font family hierarchy into the debug output.
     void debugInfo();

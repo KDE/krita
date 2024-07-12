@@ -58,6 +58,7 @@ private:
         QHash<FcChar32, FcPatternSP> m_patterns;
         QHash<FcChar32, FcFontSetSP> m_fontSets;
         QHash<QString, FT_FaceSP> m_faces;
+        QHash<QString, QStringList> m_suggestedFiles;
 
         ThreadData(FT_LibrarySP lib)
             : m_library(std::move(lib))
@@ -163,6 +164,13 @@ public:
         fontFamilyConverter->sortIntoWWSFamilies();
         return true;
     }
+
+    QHash<QString, QStringList> &suggestedFileNames()
+    {
+        if (!m_data.hasLocalData())
+            initialize();
+        return m_data.localData()->m_suggestedFiles;
+    }
 };
 
 KoFontRegistry::KoFontRegistry()
@@ -187,15 +195,40 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
                                                          qreal fontSizeAdjust,
                                                          int weight,
                                                          int width,
-                                                         bool italic,
-                                                         int slant,
+                                                         int slantMode,
+                                                         int slantValue,
                                                          const QString &language)
 {
-    QStringList candidates = d->converter()->candidatesForCssValues(families,
-                                                                    axisSettings,
-                                                                    xRes, yRes, size,
-                                                                    weight, width,
-                                                                    italic, slant);
+    // Generate a hash for the cache.
+    // Because FT_faces cannot be cloned, we need to include the sizes and font variation modifications.
+    QString modifications;
+    if (size > -1) {
+        modifications += QString::number(size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
+    }
+    if (fontSizeAdjust != 1.0) {
+        modifications += QString::number(fontSizeAdjust);
+    }
+    if (!axisSettings.isEmpty()) {
+        Q_FOREACH (const QString &key, axisSettings.keys()) {
+            modifications += "|" + key + QString::number(axisSettings.value(key));
+        }
+    }
+
+    QStringList candidates;
+    const QString suggestedHash = families.join("+") + QString::number(slantMode) + modifications;
+    auto entry = d->suggestedFileNames().find(suggestedHash);
+    if (entry != d->suggestedFileNames().end()) {
+        candidates = entry.value();
+    } else {
+        candidates = d->converter()->candidatesForCssValues(families,
+                                                            axisSettings,
+                                                            xRes, yRes, size,
+                                                            weight, width,
+                                                            slantMode, slantValue);
+        d->suggestedFileNames().insert(suggestedHash, candidates);
+    }
+
+
 
     FcPatternSP p(FcPatternCreate());
     Q_FOREACH (const QString &family, families) {
@@ -218,8 +251,10 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
         FcPatternAddString(p.data(), FC_FILE, vals);
     }
 
-    if (italic || slant != 0) {
+    if (slantMode == 1) {
         FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);
+    } else if (slantMode == 2) {
+        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_OBLIQUE);
     } else {
         FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ROMAN);
     }
@@ -414,20 +449,6 @@ std::vector<FT_FaceSP> KoFontRegistry::facesForCSSValues(const QStringList &fami
     }
 
     std::vector<FT_FaceSP> faces;
-
-    // Because FT_faces cannot be cloned, we need to include the sizes and font variation modifications.
-    QString modifications;
-    if (size > -1) {
-        modifications += QString::number(size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
-    }
-    if (fontSizeAdjust != 1.0) {
-        modifications += QString::number(fontSizeAdjust);
-    }
-    if (!axisSettings.isEmpty()) {
-        Q_FOREACH (const QString &key, axisSettings.keys()) {
-            modifications += "|" + key + QString::number(axisSettings.value(key));
-        }
-    }
 
     for (int i = 0; i < lengths.size(); i++) {
         const FontEntry &font = fonts.at(i);

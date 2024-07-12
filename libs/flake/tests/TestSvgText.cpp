@@ -1711,7 +1711,7 @@ void TestSvgText::testFontStyleSelection()
         QString testItalic = "CSS Test Basic";
         QVector<int> lengths;
         const std::vector<FT_FaceSP> faces =
-            KoFontRegistry::instance()->facesForCSSValues({testItalic}, lengths, axisSettings, test, 72, 72, 1, 1.0, 400, 100, true);
+            KoFontRegistry::instance()->facesForCSSValues({testItalic}, lengths, axisSettings, test, 72, 72, 1, 1.0, 400, 100, QFont::StyleItalic);
 
         bool res = false;
         for (const FT_FaceSP &face : faces) {

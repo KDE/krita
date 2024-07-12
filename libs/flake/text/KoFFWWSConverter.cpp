@@ -896,7 +896,11 @@ QVector<FontFamilyNode> findNodesByAxis(const QVector<FontFamilyNode> &nodes, co
                 if (value >= axis.min && value <= axis.max) {
                     candidates.append(node);
                     selectingVal = value;
+                } else {
+                    values.append(axis.min);
+                    values.append(axis.max);
                 }
+                continue;
             }
             values.append(selectingVal);
         }
@@ -952,10 +956,10 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                                                      quint32 xRes, quint32 yRes,
                                                      qreal size,
                                                      int weight, int width,
-                                                     bool italic, int slant) const
+                                                     int slantMode, int slantValue) const
 {
     Q_UNUSED(axisSettings)
-    Q_UNUSED(slant)
+    Q_UNUSED(slantValue)
     QStringList candidateFileNames;
 
     int pixelSize = size * (qMin(xRes, yRes) / 72.0);
@@ -1005,13 +1009,35 @@ QStringList KoFFWWSConverter::candidatesForCssValues(const QStringList &families
                 // then match italic
                 if (candidates.size() > 1) {
                     QVector<FontFamilyNode> italics;
-                    Q_FOREACH(const FontFamilyNode &node, candidates) {
-                        if (italic == node.isItalic) {
-                            // TODO: match oblique
-                            italics.append(node);
+                    QVector<FontFamilyNode> obliques;
+                    if (wws->isVariable) {
+                        italics = findNodesByAxis(candidates, "ital", 1.0, 0.0, 0.0);
+                        obliques = findNodesByAxis(candidates, "slnt", -slantValue, 0.0, 0.0);
+                    }
+                    if (italics.isEmpty() && obliques.isEmpty()) {
+                        Q_FOREACH(const FontFamilyNode &node, candidates) {
+                            if (slantMode > 0 && node.isItalic) {
+                                if (!node.isOblique) {
+                                    italics.append(node);
+                                } else {
+                                    obliques.append(node);
+                                }
+                            }
                         }
                     }
-                    candidates = italics;
+                    if (slantMode == QFont::StyleItalic) {
+                        if (!italics.isEmpty()) {
+                            candidates = italics;
+                        } else if (!obliques.isEmpty()) {
+                            candidates = obliques;
+                        }
+                    } else if (slantMode == QFont::StyleOblique) {
+                        if (!obliques.isEmpty()) {
+                            candidates = obliques;
+                        } else if (!italics.isEmpty()) {
+                            candidates = italics;
+                        }
+                    }
                 }
 
                 // prefer opentype

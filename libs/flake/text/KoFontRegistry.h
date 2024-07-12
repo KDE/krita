@@ -53,8 +53,8 @@ public:
                                              qreal fontSizeAdjust = 1.0,
                                              int weight = 400,
                                              int width = 100,
-                                             bool italic = false,
-                                             int slant = 0,
+                                             int slantMode = false,
+                                             int slantValue = 0,
                                              const QString &language = QString());
 
     /**

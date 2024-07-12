@@ -407,7 +407,7 @@ void KoSvgTextShape::Private::relayout()
                 fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
                 properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
                 properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                style.style != QFont::StyleNormal);
+                style.style, style.slantValue.isAuto? 14: style.slantValue.customValue);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout.data(),
                                   properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
@@ -1178,7 +1178,7 @@ void KoSvgTextShape::Private::computeFontMetrics( // NOLINT(readability-function
         fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
         properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
         properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-        style.style != QFont::StyleNormal);
+        style.style, style.slantValue.isAuto? 14: style.slantValue.customValue);
 
     hb_font_t_sp font(hb_ft_font_create_referenced(faces.front().data()));
     const qreal freetypePixelsToPt = (1.0 / 64.0) * (72. / res);

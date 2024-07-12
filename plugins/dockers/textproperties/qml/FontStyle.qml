@@ -320,7 +320,7 @@ CollapsibleGroupProperty {
                     from: parent.axismin * multiplier;
                     to: parent.axismax * multiplier;
                     value: model.edit * multiplier;
-                    onValueChanged: model.edit = (value / axisSpn.multiplier);
+                    onValueModified: model.edit = (value / axisSpn.multiplier);
                     Layout.fillWidth: true;
                 }
             }

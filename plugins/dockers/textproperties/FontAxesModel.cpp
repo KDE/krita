@@ -17,6 +17,8 @@ struct FontAxesModel::Private {
     QList<QLocale> locales;
     bool opticalSizeDisabled = false;
     QVariantHash axisValues;
+
+    bool blockAxesValuesUpdate = false;
 };
 
 FontAxesModel::FontAxesModel(QObject *parent)
@@ -54,6 +56,16 @@ void FontAxesModel::setLocales(QList<QLocale> locales)
 void FontAxesModel::setOpticalSizeDisabled(bool disable)
 {
     d->opticalSizeDisabled = disable;
+}
+
+void FontAxesModel::setBlockAxesValuesSignal(bool block)
+{
+    d->blockAxesValuesUpdate = block;
+}
+
+bool FontAxesModel::axesValueSignalBlocked() const
+{
+    return d->blockAxesValuesUpdate;
 }
 
 QModelIndex FontAxesModel::index(int row, int column, const QModelIndex &parent) const
@@ -114,9 +126,11 @@ bool FontAxesModel::setData(const QModelIndex &index, const QVariant &value, int
     if (index.isValid() && role == Qt::EditRole) {
 
         KoSvgText::FontFamilyAxis axis = d->axes.at(index.row());
-        if (!d->axisValues.keys().contains(axis.tag) || d->axisValues.value(axis.tag) != value) {
+        if (!d->axisValues.keys().contains(axis.tag) || !qFuzzyCompare(d->axisValues.value(axis.tag).toDouble(), value.toDouble())) {
             d->axisValues.insert(axis.tag, value);
-            emit axisValuesChanged();
+            if (!d->blockAxesValuesUpdate) {
+                emit axisValuesChanged();
+            }
             emit dataChanged(index, index, { Qt::EditRole});
             return true;
         }
@@ -155,7 +169,10 @@ void FontAxesModel::setAxisValues(const QVariantHash &newAxisValues)
     if (d->axisValues == newAxisValues)
         return;
     d->axisValues = newAxisValues;
-    emit axisValuesChanged();
+
+    if (!d->blockAxesValuesUpdate) {
+        emit axisValuesChanged();
+    }
     if (!d->axes.isEmpty()) {
         QModelIndex idx1 = index(0, 0, QModelIndex());
         QModelIndex idx2 = index(d->axes.size()-1, 0, QModelIndex());
@@ -163,4 +180,5 @@ void FontAxesModel::setAxisValues(const QVariantHash &newAxisValues)
             emit dataChanged(idx1, idx2, {Qt::EditRole});
         }
     }
+
 }

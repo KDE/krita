@@ -39,6 +39,9 @@ public:
     /// If optical size link is enabled, then the slider should be disabled.
     void setOpticalSizeDisabled(bool disable);
 
+    void setBlockAxesValuesSignal(bool block);
+    bool axesValueSignalBlocked() const;
+
     QVariantHash axisValues() const;
 public Q_SLOTS:
     void setAxisValues(const QVariantHash &newAxisValues);

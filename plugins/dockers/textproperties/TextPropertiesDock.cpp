@@ -138,7 +138,6 @@ TextPropertiesDock::TextPropertiesDock()
     d->axesModel.setLocales(locales);
     d->stylesModel.setLocales(locales);
 
-    connect(d->textModel, SIGNAL(axisValuesChanged(const QVariantHash&)), &d->axesModel, SLOT(setAxisValues(const QVariantHash&)));
     connect(&d->axesModel, SIGNAL(axisValuesChanged()), this, SLOT(slotUpdateAxesValues()));
 
 
@@ -219,6 +218,7 @@ void TextPropertiesDock::slotTextPropertiesChanged()
     debugFlake << Q_FUNC_INFO << textData;
     if (d->provider && d->provider->textPropertyData() != textData) {
         QMetaObject::invokeMethod(m_quickWidget->rootObject(), "setProperties");
+
         d->provider->setTextPropertyData(textData);
     }
 }
@@ -239,13 +239,18 @@ void TextPropertiesDock::slotUpdateStylesModel()
             }
         }
     }
+    d->axesModel.setBlockAxesValuesSignal(true);
     d->axesModel.setAxesData(axes);
     d->axesModel.setAxisValues(d->textModel->axisValues());
+    d->axesModel.setBlockAxesValuesSignal(false);
     d->stylesModel.setStylesInfo(styles);
 }
 
 void TextPropertiesDock::slotUpdateAxesValues()
 {
+    if (d->axesModel.axesValueSignalBlocked()) return;
+    if (d->axesModel.axisValues() == d->textModel->axisValues())
+        return;
     d->textModel->setaxisValues(d->axesModel.axisValues());
 }
 

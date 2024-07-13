@@ -17,11 +17,12 @@ const QString LOCALIZED_TYPOGRAPHIC_STYLE = "localized_typographic_style";
 const QString LOCALIZED_FONT_FAMILY = "localized_font_family";
 const QString AXES = "axes";
 const QString STYLES = "styles";
+const QString FONT_TYPE = "font_type";
 const QString IS_VARIABLE = "is_variable";
 const QString COLOR_BITMAP = "color_bitmap";
 const QString COLOR_CLRV0 = "color_clrv0";
 const QString COLOR_CLRV1 = "color_clrv1";
-const QString COLOR_SVG = "color_SVG";
+const QString COLOR_SVG = "color_svg";
 const QString SAMPLE_STRING = "sample_string";
 const QString SAMPLE_SVG = "sample_svg";
 
@@ -103,6 +104,7 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
     }
 
     addMetaData(SAMPLE_STRING, samples);
+    addMetaData(FONT_TYPE, representation.type);
     addMetaData(IS_VARIABLE, representation.isVariable);
     addMetaData(COLOR_BITMAP, representation.colorBitMap);
     addMetaData(COLOR_CLRV0, representation.colorClrV0);

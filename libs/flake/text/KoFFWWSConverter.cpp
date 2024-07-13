@@ -110,6 +110,7 @@ struct FontFamilyNode {
         wwsFamily.colorSVG = child.colorSVG;
         wwsFamily.colorClrV0 = child.colorClrV0;
         wwsFamily.colorClrV1 = child.colorClrV1;
+        wwsFamily.type = child.type;
         return wwsFamily;
     }
 
@@ -790,6 +791,7 @@ KoFontFamilyWWSRepresentation createRepresentation(KisForest<FontFamilyNode>::ch
     representation.colorClrV0 = wws->colorClrV0;
     representation.colorClrV1 = wws->colorClrV1;
     representation.colorSVG = wws->colorSVG;
+    representation.type = wws->type;
 
     for (auto subFamily = childBegin(wws); subFamily != childEnd(wws); subFamily++) {
         KoSvgText::FontFamilyStyleInfo style;

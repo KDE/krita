@@ -16,6 +16,9 @@ struct KoShapeQtQuickLabel::Private {
     QString svgData;
     int imagePadding = 5;
     qreal imageScale = 1;
+    bool fullColor = false;
+
+    bool firstPaint = false;
 };
 
 KoShapeQtQuickLabel::KoShapeQtQuickLabel(QQuickItem *parent)
@@ -32,6 +35,10 @@ KoShapeQtQuickLabel::~KoShapeQtQuickLabel()
 void KoShapeQtQuickLabel::paint(QPainter *painter)
 {
     if (!painter->isActive()) return;
+    if (!d->firstPaint) {
+        updateShapes();
+        d->firstPaint = true;
+    }
     painter->save();
     painter->setRenderHint(QPainter::Antialiasing, true);
     painter->fillRect(0, 0, width(), height(), fillColor());
@@ -54,7 +61,10 @@ void KoShapeQtQuickLabel::paint(QPainter *painter)
     painter->setPen(Qt::transparent);
 
     Q_FOREACH(const KoShape *shape, d->shape->shapes()) {
+        painter->save();
+        painter->setTransform(shape->transformation() * painter->transform());
         shape->paint(*painter);
+        painter->restore();
     }
 
     painter->restore();
@@ -68,6 +78,8 @@ QString KoShapeQtQuickLabel::svgData() const
 
 void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
 {
+    qreal max = qMax(20.0*imageScale(), qMax(width()-(d->imagePadding*2), height()-(d->imagePadding*2)));
+    setImplicitHeight(max);
     if (d->svgData == newSvgData)
         return;
     d->svgData = newSvgData;
@@ -75,8 +87,7 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
     QDomDocument doc = SvgParser::createDocumentFromSvg(d->svgData);
     KoDocumentResourceManager resourceManager;
     SvgParser p(&resourceManager);
-    qreal max = qMax(60.0, qMax(width()-(d->imagePadding*2), height()-(d->imagePadding*2)));
-    QRectF bb = QRectF( 0, 0, max, max);
+    QRectF bb = QRectF( 0, 0, 200, 200);
     QSizeF sz = bb.size();
     p.setResolution(bb, 72);
 
@@ -86,11 +97,7 @@ void KoShapeQtQuickLabel::setSvgData(const QString &newSvgData)
     KoShapeGroupCommand cmd(d->shape, shapes, false);
     cmd.redo();
 
-    d->shape->setAbsolutePosition(QPointF(), KoFlake::TopLeft);
 
-    qreal scale = bb.height() / sz.height();
-
-    setImplicitHeight(bb.height());
 
     emit svgDataChanged();
 }
@@ -146,4 +153,27 @@ void KoShapeQtQuickLabel::setImageScale(qreal newImageScale)
         return;
     d->imageScale = newImageScale;
     emit imageScaleChanged();
+}
+
+bool KoShapeQtQuickLabel::fullColor() const
+{
+    return d->fullColor;
+}
+
+void KoShapeQtQuickLabel::setFullColor(bool newFullColor)
+{
+    if (d->fullColor == newFullColor)
+        return;
+    d->fullColor = newFullColor;
+
+    emit fullColorChanged();
+}
+
+void KoShapeQtQuickLabel::updateShapes()
+{
+    if (d->shape) {
+        for (int i = 0; i < d->shape->shapes().size(); i++) {
+            d->shape->shapes().at(i)->setInheritBackground(!d->fullColor);
+        }
+    }
 }

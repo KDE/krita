@@ -21,6 +21,7 @@ class KoShapeQtQuickLabel: public QQuickPaintedItem
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(int imagePadding READ imagePadding WRITE setImagePadding NOTIFY imagePaddingChanged)
     Q_PROPERTY(qreal imageScale READ imageScale WRITE setImageScale NOTIFY imageScaleChanged)
+    Q_PROPERTY(bool fullColor READ fullColor WRITE setFullColor NOTIFY fullColorChanged)
 public:
     KoShapeQtQuickLabel(QQuickItem *parent = nullptr);
     ~KoShapeQtQuickLabel();
@@ -43,6 +44,9 @@ public:
     qreal imageScale() const;
     void setImageScale(qreal newImageScale);
 
+    bool fullColor() const;
+    void setFullColor(bool newFullColor);
+
 Q_SIGNALS:
     void svgDataChanged();
 
@@ -53,6 +57,11 @@ Q_SIGNALS:
     void imagePaddingChanged();
 
     void imageScaleChanged();
+
+    void fullColorChanged();
+
+private Q_SLOTS:
+    void updateShapes();
 
 private:
     struct Private;

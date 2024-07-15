@@ -119,6 +119,8 @@ android-build-appbundle:
     - job: android-build-x86_64
       artifacts: true
     # x86 job is intentionally not included!
+  variables:
+    KRITACI_ANDROID_PACKAGE_TYPE: debug
   script:
     - git config --global --add safe.directory $CI_PROJECT_DIR
     - python3 -u build-tools/ci-scripts/build-android-appbundle.py 2>&1 | tee build-aab.log
@@ -207,3 +209,5 @@ android-build-appbundle-release:
     - job: android-build-x86_64-release
       artifacts: true
     # x86 job is intentionally not included!
+  variables:
+    KRITACI_ANDROID_PACKAGE_TYPE: release

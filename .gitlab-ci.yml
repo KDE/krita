@@ -4,8 +4,7 @@
 
 variables:
   DEBIAN_FRONTEND: "noninteractive"
-  # release_branch_pattern: '/^release\/.*/'
-  release_branch_pattern: '/^work\/release\/.*/'
+  release_branch_pattern: '/^release\/.*/'
 
 .nightly-job-mixin:
   rules:

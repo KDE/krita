@@ -12,7 +12,7 @@
 #include "kis_tool_freehand.h"
 //#include "../../../plugins/paintops/defaultpaintops/brush/kis_brushop.h" 
 //#include <../../../plugins/paintops/defaultpaintops/brush/kis_brushop.>
-#include "plugins/paintops/defaultpaintops/brush/kis_brushop.h"
+//#include "plugins/paintops/defaultpaintops/brush/kis_brushop.h"
 #include <QPainter>
 #include <QRect>
 #include <QThreadPool>
@@ -184,40 +184,40 @@ void KisToolFreehand::deactivate()
 //                         image().data());
 // }
 
-void KisToolFreehand::initStroke(KoPointerEvent *event)
-{
-    // qDebug() << "KisToolFreehand:initStroke";
-    // qDebug() << "Event Position (global):" << event->globalPos();
-    // qDebug() << "Event Position (widget):" << event->pos();
-    // qDebug() << "Event Document Coordinates:" << event->point;
-    // qDebug() << "Event Pressure:" << event->pressure();
-    // qDebug() << "Event Rotation:" << event->rotation();
-    // qDebug() << "Event Tangential Pressure:" << event->tangentialPressure();
-    // qDebug() << "Event xTilt:" << event->xTilt();
-    // qDebug() << "Event yTilt:" << event->yTilt();
-    // qDebug() << "Event z Position:" << event->z();
-    // qDebug() << "Event Time:" << event->time();
-    // qDebug() << "Event isTabletEvent:" << event->isTabletEvent();
-
-    m_helper->initPaint(event,
-                        convertToPixelCoord(event),
-                        image(),
-                        currentNode(),
-                        image().data());
-}
-
 // void KisToolFreehand::initStroke(KoPointerEvent *event)
 // {
-//     qDebug() << "KisToolFreehand:initStroke";
+//     // qDebug() << "KisToolFreehand:initStroke";
+//     // qDebug() << "Event Position (global):" << event->globalPos();
+//     // qDebug() << "Event Position (widget):" << event->pos();
+//     // qDebug() << "Event Document Coordinates:" << event->point;
+//     // qDebug() << "Event Pressure:" << event->pressure();
+//     // qDebug() << "Event Rotation:" << event->rotation();
+//     // qDebug() << "Event Tangential Pressure:" << event->tangentialPressure();
+//     // qDebug() << "Event xTilt:" << event->xTilt();
+//     // qDebug() << "Event yTilt:" << event->yTilt();
+//     // qDebug() << "Event z Position:" << event->z();
+//     // qDebug() << "Event Time:" << event->time();
+//     // qDebug() << "Event isTabletEvent:" << event->isTabletEvent();
+
 //     m_helper->initPaint(event,
 //                         convertToPixelCoord(event),
 //                         image(),
 //                         currentNode(),
 //                         image().data());
-
-//     strokeCoordinates.clear(); 
-//     strokeCoordinates.push_back(convertToPixelCoord(event)); 
 // }
+
+void KisToolFreehand::initStroke(KoPointerEvent *event)
+{
+    qDebug() << "KisToolFreehand:initStroke";
+    m_helper->initPaint(event,
+                        convertToPixelCoord(event),
+                        image(),
+                        currentNode(),
+                        image().data());
+
+    strokeCoordinates.clear(); 
+    strokeCoordinates.push_back(convertToPixelCoord(event)); 
+}
 
 //original
 // void KisToolFreehand::doStroke(KoPointerEvent *event)
@@ -228,7 +228,7 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
     // qDebug() << "KisToolFreehand:doStroke";
-    m_helper->paintEvent(event);
+    m_helper->paintEvent(event, m_smoothedPoints);
 
     strokeCoordinates.push_back(convertToPixelCoord(event)); // Track the coordinates
 }
@@ -259,16 +259,21 @@ void KisToolFreehand::endStroke()
 
     std::vector<QPoint> smoothedPoints = removeLShapes(uniquePoints);
 
-    for (const QPoint& point : smoothedPoints) {
-        qDebug() << "Smoothed Stroke Point (Integer):" << point.x() << point.y();
-    }
+    // for (const QPoint& point : smoothedPoints) {
+    //     qDebug() << "Smoothed Stroke Point (Integer):" << point.x() << point.y();
+    // }
 
     //KisBrushOp::smoothedPoints = smoothedPoints;
-    KisBrushOp* brushOp = dynamic_cast<KisBrushOp*>(currentPaintOp());
-    if (brushOp) {
-        brushOp->setSmoothedPoints(smoothedPoints);
-    }
+    // KisBrushOp* brushOp = dynamic_cast<KisBrushOp*>(currentPaintOp());
+    // if (brushOp) {
+    //     brushOp->setSmoothedPoints(smoothedPoints);
+    // }
+    m_smoothedPoints = smoothedPoints;
 
+    for (const QPoint& point : m_smoothedPoints) {
+        qDebug() << "Smoothed Stroke Point (Integer):" << point.x() << point.y();
+    }
+    
 
     strokeCoordinates.clear();
 }

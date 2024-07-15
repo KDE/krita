@@ -41,7 +41,7 @@ public:
     KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image);
     ~KisBrushOp() override;
 
-    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance) override;
+    void paintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2, KisDistanceInformation *currentDistance, const std::vector<QPoint>& smoothedPoints) override;
 
     std::pair<int, bool> doAsynchronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs) override;
 

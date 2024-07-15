@@ -448,7 +448,19 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
     paint(info);
 }
 
-void KisToolFreehandHelper::paint(KisPaintInformation &info)
+void KisToolFreehandHelper::paintEvent(KoPointerEvent *event, const std::vector<QPoint>& smoothedPoints)
+{
+    KisPaintInformation info =
+            m_d->infoBuilder->continueStroke(event,
+                                             elapsedStrokeTime());
+    KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
+
+    paint(info, smoothedPoints);
+}
+
+
+
+void KisToolFreehandHelper::paint(KisPaintInformation &info, const std::vector<QPoint>& smoothedPoints)
 {
     //qDebug()<< "kis_tool_freehand_helper::paint";
     /**
@@ -586,7 +598,7 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
                 //qDebug() << m_d->olderPaintInformation << m_d->previousPaintInformation << m_d->previousTangent << newTangent;
 
                 paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
-                                   m_d->previousTangent, newTangent);
+                                   m_d->previousTangent, newTangent, smoothedPoints);
             }
 
             m_d->previousTangent = newTangent;

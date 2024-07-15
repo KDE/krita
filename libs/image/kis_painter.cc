@@ -1238,11 +1238,24 @@ void KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
                                   const QPointF &control1,
                                   const QPointF &control2,
                                   const KisPaintInformation &pi2,
-                                  KisDistanceInformation *currentDistance)
+                                  KisDistanceInformation *currentDistance)                              
 {   
     //qDebug() << "KisPainter::paintBezierCurve";
     if (d->paintOp && d->paintOp->canPaint()) {
         d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, currentDistance);
+    }
+}
+
+void KisPainter::paintBezierCurve(const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2,
+                                  KisDistanceInformation *currentDistance,
+                                  const std::vector<QPoint>& smoothedPoints)
+{   
+    //qDebug() << "KisPainter::paintBezierCurve";
+    if (d->paintOp && d->paintOp->canPaint()) {
+        d->paintOp->paintBezierCurve(pi1, control1, control2, pi2, currentDistance, smoothedPoints);
     }
 }
 

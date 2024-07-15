@@ -36,7 +36,8 @@ public:
     int flags() const override;
     void mouseMoveEvent(KoPointerEvent *event) override;
     //const std::vector<QPoint>& getSmoothedPoints() const { return smoothedPoints; }
-    std::vector<QPoint> smoothedPoints;
+    std::vector<QPoint> m_smoothedPoints;
+    
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;

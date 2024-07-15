@@ -464,10 +464,19 @@ public:
      * because the currently set brush has a spacing greater than that distance.
      */
     void paintBezierCurve(const KisPaintInformation &pi1,
-                          const QPointF &control1,
-                          const QPointF &control2,
-                          const KisPaintInformation &pi2,
-                          KisDistanceInformation *currentDistance);
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2,
+                                  KisDistanceInformation *currentDistance)  ;
+
+    void paintBezierCurve(const KisPaintInformation &pi1,
+                                  const QPointF &control1,
+                                  const QPointF &control2,
+                                  const KisPaintInformation &pi2,
+                                  KisDistanceInformation *currentDistance, 
+                                  const std::vector<QPoint>& smoothedPoints) ;
+
+
     /**
      * Fill the given vector points with the points needed to draw the Bezier curve between
      * @p pos1 and @p pos2 using control points @p control1 and @p control2, excluding the final pos2.

@@ -56,9 +56,26 @@ KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h 
 # Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
 
-if [[ "${CI_COMMIT_TAG}" =~ v.* ]]; then
-    STRIPPED_COMMIT_TAG="$(echo ${CI_COMMIT_TAG} | sed -e 's/v\(.*\)/\1/')"
-    echo "Found a released tag: ${CI_COMMIT_TAG} ${STRIPPED_COMMIT_TAG}"
+if [[ "${CI_COMMIT_BRANCH}" =~ release/.* ]]; then
+    BRANCH_VERSION=${CI_COMMIT_BRANCH/#release\//}
+    echo "Found a release branch: ${CI_COMMIT_BRANCH} using version: ${BRANCH_VERSION}"
+
+    if [[ "$BRANCH_VERSION" != "$KRITA_VERSION" ]]; then
+        echo "ERROR: Branch version does not coincide with the version in kritaversion.h:"
+        echo "    branch version: $BRANCH_VERSION"
+        echo "    kritaversion.h: $KRITA_VERSION"
+        exit 2
+    fi
+
+    if [[ "${BRANCH_VERSION}" =~ -beta$ ]]; then
+        echo "ERROR: beta version does not have a numeric suffix, please change it to \"beta1\""
+        exit 3
+    fi
+
+    if [[ "${BRANCH_VERSION}" =~ -rc$ ]]; then
+        echo "ERROR: release candidate version does not have a numeric suffix, please change it to \"rc1\""
+        exit 4
+    fi
 
     export VERSION=$KRITA_VERSION
     NEW_APPIMAGE_NAME="krita-${VERSION}-${APPIMAGE_ARCHITECTURE}.appimage"
@@ -74,20 +91,16 @@ if [[ "${CI_COMMIT_TAG}" =~ v.* ]]; then
 
     popd
 
-    if [ $is_beta -eq 0 ]; then
-        VERSION_TYPE="development"
-    else
-        VERSION_TYPE="stable"
-    fi
-
     if [ $is_beta -eq 0 ] || [ $is_rc -eq 0 ]; then
         CHANNEL="Beta"
         ZSYNC_URL="zsync|https://download.kde.org/unstable/krita/updates/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
-        ZSYNC_SOURCE_URL="https://download.kde.org/unstable/krita/${STRIPPED_COMMIT_TAG}/${NEW_APPIMAGE_NAME}"
+        ZSYNC_SOURCE_URL="https://download.kde.org/unstable/krita/${KRITA_VERSION}/${NEW_APPIMAGE_NAME}"
+        VERSION_TYPE="development"
     else
         CHANNEL="Stable"
         ZSYNC_URL="zsync|https://download.kde.org/stable/krita/updates/Krita-${CHANNEL}-${APPIMAGE_ARCHITECTURE}.appimage.zsync"
-        ZSYNC_SOURCE_URL="https://download.kde.org/stable/krita/${STRIPPED_COMMIT_TAG}/${NEW_APPIMAGE_NAME}"
+        ZSYNC_SOURCE_URL="https://download.kde.org/stable/krita/${KRITA_VERSION}/${NEW_APPIMAGE_NAME}"
+        VERSION_TYPE="stable"
     fi
 
 else

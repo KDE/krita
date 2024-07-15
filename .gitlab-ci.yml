@@ -4,6 +4,8 @@
 
 variables:
   DEBIAN_FRONTEND: "noninteractive"
+  # release_branch_pattern: '/^release\/.*/'
+  release_branch_pattern: '/^work\/release\/.*/'
 
 .nightly-job-mixin:
   rules:
@@ -14,7 +16,7 @@ variables:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
       when: never
     - when: manual
 
@@ -22,16 +24,15 @@ variables:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
       when: never
     - when: always
 
 .ci-release-job-mixin:
   interruptible: false
   rules:
-    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH =~ $release_branch_pattern
       when: manual
-
 
 .ci-artifacts-with-packages-mixin:
   artifacts:
@@ -86,7 +87,7 @@ clang_format:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
-    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
       when: never
     - when: manual
       allow_failure: true
@@ -98,10 +99,13 @@ workflow:
       when: never
     # Allow merge request pipelines.
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # Build tags and branches too
+    # don't create pipelines for tags, since it is impossible to sign them
     - if: $CI_COMMIT_TAG
+      when: never
+    # Build branches too
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH =~ /^krita\//
+    - if: $CI_COMMIT_BRANCH =~ $release_branch_pattern
 
 include:
   - local: /build-tools/ci-scripts/cppcheck.yml

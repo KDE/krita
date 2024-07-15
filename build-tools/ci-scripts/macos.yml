@@ -91,6 +91,7 @@ macos-release:
   - .ci-release-job-mixin
   interruptible: false
   variables:
+    KRITACI_RELEASE_PACKAGE_NAMING: True
     KDECI_ONLY_BUILD: True
     KDECI_EXTRA_CMAKE_ARGS: >
       -DHIDE_SAFE_ASSERTS=ON

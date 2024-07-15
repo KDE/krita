@@ -87,6 +87,13 @@ export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.14
 
 KRITA_VERSION="$(${KIS_INSTALL_DIR}/bin/krita_version -v)"
 
+if [[ -n $KRITACI_RELEASE_PACKAGE_NAMING ]]; then
+    # remove git-sha1, which is split with the space char
+    KRITA_VERSION=${KRITA_VERSION% [a-f0-9]*}
+else
+    # merge version and git-sha1 for non-release versions
+    KRITA_VERSION=${KRITA_VERSION// /-}
+fi
 
 print_usage () {
     printf "USAGE:
@@ -799,7 +806,7 @@ createDMG () {
 
     if [[ -z "${DMG_NAME}" ]]; then
         # Add git version number
-        DMG_NAME="krita-${KRITA_VERSION// /_}.dmg"
+        DMG_NAME="krita-${KRITA_VERSION}.dmg"
     else
         DMG_NAME="${DMG_NAME}.dmg"
     fi

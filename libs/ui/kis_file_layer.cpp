@@ -181,6 +181,19 @@ void KisFileLayer::openFile() const
             fileAlreadyOpen = true;
         }
     }
+    if (qEnvironmentVariableIsSet("KRITA_ENABLE_ASSERT_TESTS")) {
+        ENTER_FUNCTION() << ppVar(m_filename);
+        if (m_filename.toLower() == "crash_me_with_safe_assert") {
+            KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "safe assert for testing purposes");
+        }
+        if (m_filename.toLower() == "crash_me_with_normal_assert") {
+            KIS_ASSERT_RECOVER_NOOP(0 && "normal assert for testing purposes");
+        }
+        if (m_filename.toLower() == "crash_me_with_qfatal") {
+            qFatal("Testing fatal message");
+        }
+    }
+
     if (!fileAlreadyOpen && QFile::exists(QFileInfo(path()).absoluteFilePath())) {
         KisPart::instance()->openExistingFile(QFileInfo(path()).absoluteFilePath());
     }

@@ -9,7 +9,15 @@ import glob
 
 # Capture our command line parameters
 parser = argparse.ArgumentParser(description='A script for building Krita Android AppBundle package on CI')
+parser.add_argument('--package-type', type=str, choices=['debug', 'release', 'nightly'], default = 'debug', help='Type of a package to build')
 arguments = parser.parse_args()
+
+if 'KRITACI_ANDROID_PACKAGE_TYPE' in os.environ:
+    arguments.package_type = os.environ['KRITACI_ANDROID_PACKAGE_TYPE']
+    if not arguments.package_type in ['debug', 'release', 'nightly']:
+        print('## ERROR: incorrect package type provided via KRITACI_ANDROID_PACKAGE_TYPE: {}'.format(arguments.package_type))
+        sys.exit(1)
+    print ('## Overriding --package-type from environment: {}'.format(arguments.package_type))
 
 currentFileDirectoryPath = os.path.dirname(os.path.abspath(__file__))
 baseWorkDirectoryPath = os.getcwd()
@@ -24,6 +32,8 @@ buildEnvironment = dict(os.environ)
 buildEnvironment['KRITA_BUILD_APPBUNDLE'] = '1'
 buildEnvironment['APK_PATH'] = artifactsFolder
 buildEnvironment['KRITA_INSTALL_PREFIX'] = '.xxx' # just a fake path to trigger an error if used (if shouldn't be used for aab)
+buildEnvironment['KRITA_UNSTABLE_PACKAGE_SUFFIX'] = '' if arguments.package_type == 'release' \
+    else '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA'])
 
 try:
     print( "## MERGING libs.xml" )

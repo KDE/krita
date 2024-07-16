@@ -49,6 +49,9 @@ buildEnvironment = dict(os.environ)
 buildEnvironment['ANDROID_ABI'] = os.environ['KDECI_ANDROID_ABI']
 buildEnvironment['KRITA_INSTALL_PREFIX'] = depsPath
 
+buildEnvironment['KRITA_UNSTABLE_PACKAGE_SUFFIX'] = '' if arguments.package_type == 'release' \
+    else '-{}'.format(os.environ['CI_COMMIT_SHORT_SHA'])
+
 commandToRun = 'cmake --build . --target create-apk'
 try:
     print( "## RUNNING: " + commandToRun )

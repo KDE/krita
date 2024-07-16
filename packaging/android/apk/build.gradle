@@ -197,7 +197,8 @@ android {
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
         versionName "5.2.3"
-        archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName" : "krita-$abi-$versionName"
+        unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')
+        archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName$unstableSuffix" : "krita-$abi-$versionName$unstableSuffix"
     }
 
     preBuild.dependsOn(configure)

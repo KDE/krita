@@ -67,14 +67,6 @@
 #include "LibKisUtils.h"
 #include <kis_layer_utils.h>
 
-#include <KoCanvasResourceProvider.h>
-#include "strokes/KisFreehandStrokeInfo.h"
-#include "kis_resources_snapshot.h"
-#include "kis_canvas_resource_provider.h"
-#include "strokes/freehand_stroke.h"
-#include "kis_painting_information_builder.h"
-#include "KisAsynchronousStrokeUpdateHelper.h"
-#include "kis_stroke_strategy.h"
 #include "PaintingResources.h"
 
 

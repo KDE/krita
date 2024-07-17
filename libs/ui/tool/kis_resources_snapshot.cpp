@@ -76,8 +76,11 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->currentBgColor = resourceManager->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KoCanvasResource::CurrentPattern).value<KoPatternSP>();
     if (resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()) {
-        m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()
-                ->cloneAndBakeVariableColors(m_d->globalCanvasResourcesInterface);
+        m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+        if(m_d->currentGradient) {
+            m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()
+                    ->cloneAndBakeVariableColors(m_d->globalCanvasResourcesInterface);
+        }
     }
     m_d->isUsingOtherColor = resourceManager->boolResource(KoCanvasResource::UsingOtherColor);
 

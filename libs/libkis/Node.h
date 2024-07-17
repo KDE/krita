@@ -570,6 +570,36 @@ public Q_SLOTS:
      */
     QUuid uniqueId() const;
 
+    /**
+     * @brief paint a line on the canvas. Uses current brush preset
+     * @param pointOne starting point
+     * @param pointTwo end point
+     */
+    void paintLine(const QPointF pointOne, const QPointF pointTwo);
+
+    /**
+     * @brief paint a rectangle on the canvas. Uses current brush preset
+     * @param rect QRect with x, y, width, and height
+     */
+    void paintRectangle(const QRectF &rect);
+ 
+    /**
+     * @brief paint a polygon on the canvas. Uses current brush preset
+     * @param list of Qpoints
+     */
+    void paintPolygon(const QList<QPointF> points);
+
+    /**
+     * @brief paint an ellipse on the canvas. Uses current brush preset
+     * @param rect QRect with x, y, width, and height
+     */
+    void paintEllipse(const QRectF &rect);
+
+    /**
+     * @brief paint a custom path on the canvas. Uses current brush preset
+     * @param  path QPainterPath to determine path
+     */
+    void paintPath(const QPainterPath &path);
 
 private:
 

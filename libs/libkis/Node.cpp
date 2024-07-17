@@ -67,6 +67,17 @@
 #include "LibKisUtils.h"
 #include <kis_layer_utils.h>
 
+#include <KoCanvasResourceProvider.h>
+#include "strokes/KisFreehandStrokeInfo.h"
+#include "kis_resources_snapshot.h"
+#include "kis_canvas_resource_provider.h"
+#include "strokes/freehand_stroke.h"
+#include "kis_painting_information_builder.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
+#include "kis_stroke_strategy.h"
+#include "PaintingResources.h"
+
+
 struct Node::Private {
     Private() {}
     KisImageWSP image;
@@ -820,4 +831,51 @@ KisImageSP Node::image() const
 KisNodeSP Node::node() const
 {
     return d->node;
+}
+
+void Node::paintLine(const QPointF pointOne, const QPointF pointTwo)
+{
+    KisPaintInformation pointOneInfo;
+    pointOneInfo.setPressure(1.0);
+    pointOneInfo.setPos(pointOne);
+
+    KisPaintInformation pointTwoInfo;
+    pointTwoInfo.setPressure(1.0);
+    pointTwoInfo.setPos(pointTwo);
+
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    helper.paintLine(pointOneInfo, pointTwoInfo);
+}
+
+
+void Node::paintRectangle(const QRectF &rect)
+{
+    // reference class where this stuff is being done. Maybe can use the "facade" like that does for setup?
+    // void KisFigurePaintingToolHelper::paintRect(const QRectF &rect)
+
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    helper.paintRect(rect);
+}
+
+
+void Node::paintPolygon(const QList<QPointF> listPoint)
+{
+    // strategy needs points in vPointF format
+    QVector<QPointF> points = points.fromList(listPoint);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    helper.paintPolygon(points);
+}
+
+
+void Node::paintEllipse(const QRectF &rect)
+{
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    helper.paintEllipse(rect);
+}
+
+
+void Node::paintPath(const QPainterPath &path)
+{
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    helper.paintPainterPath(path);
 }

@@ -10,6 +10,7 @@ set(kritalibkis_LIB_SRCS
     ManagedColor.cpp
     Node.cpp
     Notifier.cpp
+    PaintingResources.cpp
     PresetChooser.cpp
     Preset.cpp
     Palette.cpp

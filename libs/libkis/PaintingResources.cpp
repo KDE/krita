@@ -22,7 +22,7 @@ KisFigurePaintingToolHelper PaintingResources::createHelper(KisImageWSP image)
     // grab the image and current layer
     KisNodeSP node = activeView->currentNode();
 
-    const KUndo2MagicString name = kundo2_noi18n("python_stroke");
+    const KUndo2MagicString name = kundo2_i18n("Scripted Brush Stroke");
     KisFigurePaintingToolHelper helper(
         name,
         image,

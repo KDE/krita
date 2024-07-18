@@ -601,6 +601,18 @@ public Q_SLOTS:
      */
     void paintPath(const QPainterPath &path);
 
+    /**
+     * @brief paintAbility can be used to determine whether this node can be painted on with the current brush preset.
+     * @return QString, one of the following:
+     * <ul>
+     * <li>VECTOR - This node is vector-based.</li>
+     * <li>CLONE - This node is a Clone Layer.</li>
+     * <li>PAINT - This node is paintable by the current brush preset.</li>
+     * <li>UNPAINTABLE - This node is not paintable, or a null preset is somehow selected./li>
+     * <li>MYPAINTBRUSH_UNPAINTABLE - This node's non-RGBA colorspace cannot be painted on by the currently selected MyPaint brush.</li>
+     */
+    QString paintAbility();
+
 private:
 
     friend class Filter;

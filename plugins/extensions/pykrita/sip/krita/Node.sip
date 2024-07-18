@@ -87,6 +87,7 @@ public Q_SLOTS:
     void paintPolygon(const QList<QPointF> points);
     void paintEllipse(const QRectF &rect);
     void paintPath(const QPainterPath &path);
+    QString paintAbility();
 Q_SIGNALS:
 private:
 };

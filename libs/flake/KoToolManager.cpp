@@ -443,7 +443,7 @@ void KoToolManager::Private::connectActiveTool()
     }
 
     // we expect the tool to emit a cursor on activation.
-    updateCursor(Qt::ForbiddenCursor);
+    updateCursor(Qt::BlankCursor);
 }
 
 

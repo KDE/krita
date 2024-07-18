@@ -654,7 +654,13 @@ void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
 
     forceDeactivateAllActions();
 
-    // TODO: also deactivate all touch and native gestures on focus out
+    /// TODO: it might be that we should also deactivate
+    /// touch and native gestures on focus-out events.
+    /// After testing on Windows it seems like it works
+    /// fine without any explicit stopping the touch
+    /// strokes. They just continue in the unfocused
+    /// application (given that Krita does not get
+    /// overlapped by another window)
 }
 
 void KisShortcutMatcher::toolHasBeenActivated()

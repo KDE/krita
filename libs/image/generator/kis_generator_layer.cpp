@@ -123,7 +123,7 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
 
     if (filterConfig != m_d->preparedForFilter) {
         locker.unlock();
-        resetCacheWithoutUpdate(this->paintDevice()->colorSpace());
+        resetCacheWithoutUpdate(image->colorSpace());
         locker.relock();
     }
 

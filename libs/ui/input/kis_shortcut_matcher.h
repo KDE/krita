@@ -184,9 +184,6 @@ public:
      */
     void touchCancelEvent(QTouchEvent *event, const QPointF &localPos);
 
-    void touchResetStateForPointerEvents();
-
-
     bool nativeGestureBeginEvent(QNativeGestureEvent *event);
     bool nativeGestureEvent(QNativeGestureEvent *event);
     bool nativeGestureEndEvent(QNativeGestureEvent *event);

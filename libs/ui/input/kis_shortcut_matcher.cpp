@@ -465,6 +465,8 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 
 bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 {
+    Private::RecursionNotifier notifier(this);
+
     m_d->maxTouchPoints = 0;
 
     if (!m_d->isTouchDragDetected && m_d->bestCandidateTouchEvent && !hasRunningShortcut()) {
@@ -473,11 +475,22 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 
     DEBUG_TOUCH_ACTION("ending", event)
     // we should try and end the shortcut too (it might be that there is none? (sketch))
-    return tryEndTouchShortcut(event);
+    const bool retval = tryEndTouchShortcut(event);
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!hasRunningShortcut()) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+
+    return retval;
 }
 
 void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &localPos)
 {
+    Private::RecursionNotifier notifier(this);
+
     m_d->maxTouchPoints = 0;
 
     KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->runningShortcut || !m_d->touchShortcut);
@@ -494,6 +507,13 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &loc
         touchEvent->setTouchPoints(m_d->lastTouchPoints);
         touchShortcut->action()->end(dstEvent.data());
         touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
+    }
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!hasRunningShortcut()) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
     }
 }
 
@@ -522,9 +542,19 @@ bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
 
 bool KisShortcutMatcher::nativeGestureEndEvent(QNativeGestureEvent *event)
 {
+    Private::RecursionNotifier notifier(this);
+
     if ( m_d->nativeGestureShortcut && !m_d->nativeGestureShortcut->match( event ) ) {
         tryEndNativeGestureShortcut( event );
     }
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!hasRunningShortcut()) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+
     return true;
 }
 
@@ -1042,6 +1072,8 @@ bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
 
 bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
 {
+    Private::RecursionNotifier notifier(this);
+
     if (m_d->nativeGestureShortcut) {
         // first reset running shortcut to avoid infinite recursion via end()
         KisNativeGestureShortcut *nativeGestureShortcut = m_d->nativeGestureShortcut;
@@ -1052,6 +1084,13 @@ bool KisShortcutMatcher::tryEndNativeGestureShortcut(QNativeGestureEvent* event)
         m_d->nativeGestureShortcut = 0; // empty it out now that we are done with it
 
         return true;
+    }
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!hasRunningShortcut()) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
     }
 
     return false;

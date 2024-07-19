@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2021-05-15 15:07+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian\n"
@@ -18495,6 +18495,12 @@ msgstr "Șterge imaginea"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Importă imagine"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Selecția"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

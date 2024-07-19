@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita 0\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2011-03-18 18:21+0100\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -18336,6 +18336,12 @@ msgstr "Nova slika"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Sve slike"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Odabir"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

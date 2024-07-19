@@ -26,7 +26,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2007-08-24 15:02+0545\n"
 "Last-Translator: Shyam Krishna Bal <shyamkrishna_bal@yahoo.com>\n"
 "Language-Team: Nepali <info@mpp.org.np>\n"
@@ -18559,6 +18559,12 @@ msgstr "छवि विभाजन गर्नुहोस्"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "छवि आयात गर्नुहोस्"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "फ्रिह्यान्ड उपकरण"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

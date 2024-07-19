@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18779,6 +18779,12 @@ msgstr "वेगळी प्रतिमा"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "प्रतिमा आयात करा"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "मुक्तहस्त फटकारा"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

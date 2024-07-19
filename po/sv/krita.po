@@ -52,7 +52,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2024-06-19 17:09+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -18306,6 +18306,14 @@ msgstr "Radiance RGBE-bild"
 #, kde-format
 msgid "Import frames"
 msgstr "Importera bildrutor"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Freehand Brush Stroke"
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Frihandsdrag med pensel"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

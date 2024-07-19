@@ -23,7 +23,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2023-08-26 10:02+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -18447,6 +18447,14 @@ msgstr "Irudia bereizi"
 #, kde-format
 msgid "Import frames"
 msgstr "Inportatu fotogramak"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Freehand Brush Stroke"
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Esku hutsezko pintzel trazua"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

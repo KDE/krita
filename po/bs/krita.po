@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -18871,6 +18871,14 @@ msgstr "Razdvoji sliku"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Uvezi sliku"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Freehand Brush Stroke"
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Ručni potez četkom"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

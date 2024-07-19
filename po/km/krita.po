@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2010-06-29 09:54+0700\n"
 "Last-Translator: Khoem Sokhem <khoemsokhem@khmeros.info>\n"
 "Language-Team: Khmer <support@khmeros.info>\n"
@@ -18568,6 +18568,12 @@ msgstr "បំបែក​រូបភាព"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "នាំ​ចូល​រូបភាព"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "ជក់​ដែល​បានកំណត់​ជា​ស្រេច"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

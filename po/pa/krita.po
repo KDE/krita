@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -19749,6 +19749,13 @@ msgstr "ਤਬਦੀਲ"
 #| msgid "Import Slideshow"
 msgid "Import frames"
 msgstr "ਸਲਾਈਡਸ਼ੋ ਇੰਪੋਰਟ"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+#| msgid "Line Weight"
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "ਰੇਖਾ ਭਾਰ"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

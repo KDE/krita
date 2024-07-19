@@ -88,7 +88,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2024-04-18 16:16+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -19517,6 +19517,16 @@ msgstr "Korvaa kuva"
 #, kde-format
 msgid "Import frames"
 msgstr "Tuo ruutuja"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Freehand Brush Stroke"
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr ""
+"Vapaan käden sivellinveto\n"
+"vapaan käden sivellinveto"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

@@ -97,7 +97,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2012-11-26 15:40+0200\n"
 "Last-Translator: Stelios <sstavra@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -18831,6 +18831,12 @@ msgstr "Διαχωρισμός εικόνας"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Εισαγωγή εικόνας"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Ελεύθερη πινελιά"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

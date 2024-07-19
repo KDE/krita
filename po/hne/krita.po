@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -18587,6 +18587,12 @@ msgstr "फोटू अलग करव"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "फोटू आयात करव"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "मुक्तहस्त औजार"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

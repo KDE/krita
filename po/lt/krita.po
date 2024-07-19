@@ -53,7 +53,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2017-06-25 15:06+0200\n"
 "Last-Translator: Mindaugas Baranauskas <opensuse.lietuviu.kalba@gmail.com>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
@@ -18707,6 +18707,12 @@ msgstr "Keisti paveikslėlio dydį"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "Paveikslėliams"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "Paruošti teptukai"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, fuzzy, kde-format

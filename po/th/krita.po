@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-08 01:43+0000\n"
+"POT-Creation-Date: 2024-07-19 01:44+0000\n"
 "PO-Revision-Date: 2010-05-20 14:01+0700\n"
 "Last-Translator: Phuwanat Sakornsakolpat <narachai@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -18361,6 +18361,12 @@ msgstr "ลบรูปภาพ"
 #, fuzzy, kde-format
 msgid "Import frames"
 msgstr "นำเข้ารูปภาพ"
+
+#: libs/libkis/PaintingResources.cpp:25
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Scripted Brush Stroke"
+msgstr "แปรงที่ตั้งค่าไว้แล้ว"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

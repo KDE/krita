@@ -73,7 +73,6 @@ public:
 
     QPointF previousPos;
     QScopedPointer<QEvent> originatingTouchBeginEvent;
-    bool buttonPressed = false;
 
     bool useUnbalancedKeyPressEventWorkaround = false;
     bool shouldSynchronizeOnNextKeyPress = false;

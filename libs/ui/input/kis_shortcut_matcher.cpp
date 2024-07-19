@@ -336,14 +336,19 @@ bool KisShortcutMatcher::pointerMoved(QEvent *event)
 {
     Private::RecursionNotifier notifier(this);
 
-    if (!m_d->runningShortcut || notifier.isInRecursion()) {
+    if (notifier.isInRecursion()) {
         return false;
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->touchShortcut && !m_d->nativeGestureShortcut, false);
+    bool retval = false;
 
-    m_d->runningShortcut->action()->inputEvent(event);
-    return true;
+    if (m_d->runningShortcut) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->touchShortcut && !m_d->nativeGestureShortcut, false);
+        m_d->runningShortcut->action()->inputEvent(event);
+        retval = true;
+    }
+
+    return retval;
 }
 
 void KisShortcutMatcher::enterEvent()
@@ -1052,7 +1057,7 @@ bool KisShortcutMatcher::tryRunNativeGestureShortcut(QNativeGestureEvent* event)
     }
 
     if (goodCandidate) {
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_d->runningShortcut, false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->runningShortcut, false);
 
         // Because we don't match keyboard or button based actions with touch system, we have to ensure that we first
         // deactivate an activated readyShortcut, to not throw other statemachines out of place.

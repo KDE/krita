@@ -316,6 +316,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     cmbCmykBlendingMode->setCurrentIndex((int)!cfg.readEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
+    chkTouchPressureSensitivity->setChecked(cfg.readEntry("useTouchPressureSensitivity", true));
+    connect(chkEnableTouch, SIGNAL(toggled(bool)),
+            chkTouchPressureSensitivity, SLOT(setEnabled(bool)));
+    chkTouchPressureSensitivity->setEnabled(chkEnableTouch->isChecked());
+
     chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
     chkZoomHorizontally->setChecked(cfg.zoomHorizontal());
 
@@ -731,6 +736,7 @@ void GeneralTab::setDefault()
     intZoomMarginSize->setValue(cfg.zoomMarginSize(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
+    chkTouchPressureSensitivity->setChecked(true);
     chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
     chkZoomHorizontally->setChecked(cfg.zoomHorizontal(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
@@ -2392,6 +2398,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setSwitchSelectionCtrlAlt(m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!m_general->chkEnableTouch->isChecked());
+        cfg.writeEntry("useTouchPressureSensitivity", m_general->chkTouchPressureSensitivity->isChecked());
         cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setZoomHorizontal(m_general->chkZoomHorizontally->isChecked());
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());

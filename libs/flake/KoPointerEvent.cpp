@@ -15,6 +15,34 @@
 #include <cmath>
 #include <boost/variant2/variant.hpp>
 
+#include <ksharedconfig.h>
+#include <kconfiggroup.h>
+#include <kis_config_notifier.h>
+
+class KisTouchPressureSensitivityOptionContainer : public QObject
+{
+private:
+    Q_OBJECT
+public:
+    KisTouchPressureSensitivityOptionContainer() {
+        connect(KisConfigNotifier::instance(), SIGNAL(configChanged()),
+                this, SLOT(slotSettingsChanged()));
+        slotSettingsChanged();
+    }
+
+    bool useTouchPressure = true;
+
+private Q_SLOTS:
+    void slotSettingsChanged() {
+
+        KConfigGroup group = KSharedConfig::openConfig()->group("");
+        useTouchPressure = group.readEntry("useTouchPressureSensitivity", true);
+    }
+};
+
+Q_GLOBAL_STATIC(KisTouchPressureSensitivityOptionContainer, s_optionContainer)
+
+
 namespace detail {
 
 // Qt's events do not have copy-ctors yet, so we should emulate them
@@ -224,7 +252,7 @@ qreal KoPointerEvent::pressure() const
             return event->pressure();
         }
         qreal operator() (const QTouchEvent *event) {
-            return event->touchPoints().at(0).pressure();
+            return s_optionContainer->useTouchPressure ? event->touchPoints().at(0).pressure() : 1.0;
         }
         qreal operator() (...) {
             return 1.0;
@@ -393,3 +421,5 @@ void KoPointerEvent::copyQtPointerEvent(const QTouchEvent *event, QScopedPointer
 {
     detail::copyEventHack(event, dst);
 }
+
+#include <KoPointerEvent.moc>

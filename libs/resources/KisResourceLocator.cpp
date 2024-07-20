@@ -973,6 +973,15 @@ QString KisResourceLocator::filePathForResource(KoResourceSP resource)
     return storage->resourceFilePath(resourceUrl);
 }
 
+void KisResourceLocator::updateFontStorage()
+{
+    if (!KisResourceCacheDb::synchronizeStorage(fontStorage())) {
+        qWarning() << i18n("Could not synchronize updated font registery with the database");
+    } else {
+        emit storageUpdated(fontStorage()->location());
+    }
+}
+
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)
 {
     Q_EMIT progressMessage(i18n("Krita is running for the first time. Initialization will take some time."));

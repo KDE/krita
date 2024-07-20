@@ -271,6 +271,7 @@ public:
 private Q_SLOTS:
 
     void storageActiveStateChanged(const QString &location);
+    void storageUpdated(const QString &location);
 
     /**
      * A special connection for KisResourceLocator, which can import

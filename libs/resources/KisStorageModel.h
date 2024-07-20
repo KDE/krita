@@ -68,6 +68,7 @@ Q_SIGNALS:
 
     void storageEnabled(const QString &storage);
     void storageDisabled(const QString &storage);
+    void storageUpdated(const QString &storage);
 
 private Q_SLOTS:
 
@@ -76,6 +77,9 @@ private Q_SLOTS:
 
     /// This is called when a storage really is deleted both from database and anywhere else
     void removeStorage(const QString &location);
+
+    /// Called when the storage is updated and everything needs to be reloaded.
+    void updateStorage(const QString &location);
 
 private:
 

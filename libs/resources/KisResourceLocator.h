@@ -118,6 +118,9 @@ public:
      * separate physical representation on the disk
      */
     QString filePathForResource(KoResourceSP resource);
+public Q_SLOTS:
+    /// This updates the "fontregistery" storage. Called when the font directories change;
+    void updateFontStorage();
 
 Q_SIGNALS:
 
@@ -143,6 +146,9 @@ Q_SIGNALS:
 
     /// Emitted when a resource changes its active state
     void resourceActiveStateChanged(const QString &resourceType, int resourceId);
+
+    /// Emitted when a storage is updated.
+    void storageUpdated(const QString &location);
 
 private:
 

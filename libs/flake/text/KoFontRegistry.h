@@ -74,8 +74,25 @@ public:
                         quint32 yRes,
                         const QMap<QString, qreal> &axisSettings);
 
+    /**
+     * @brief collectRepresentations
+     * @return a list of Width/Weight/Slant font family representations.
+     */
     QList<KoFontFamilyWWSRepresentation> collectRepresentations() const;
+
+    /**
+     * @brief representationByFamilyName
+     * This simplifies retrieving the representation for a given font family.
+     * @param familyName - the familyName associated with the font.
+     * @param found - bool to check for success.
+     * @return the font family.
+     */
     KoFontFamilyWWSRepresentation representationByFamilyName(const QString &familyName, bool *found = nullptr) const;
+
+    /**
+     * Update the config and reset the FontChangeListener.
+     */
+    void updateConfig();
 
 private:
     class Private;

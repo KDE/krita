@@ -42,6 +42,7 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
 
     connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(storageActiveStateChanged(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(storageActiveStateChanged(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageUpdated(const QString&)), this, SLOT(storageUpdated(const QString&)));
 
     connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceImport(QString, int)), this, SLOT(beginExternalResourceImport(QString, int)));
     connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceImport(QString)), this, SLOT(endExternalResourceImport(QString)));
@@ -667,6 +668,13 @@ void KisAllResourcesModel::storageActiveStateChanged(const QString &location)
             Q_EMIT dataChanged(index, index, {Qt::UserRole + KisAbstractResourceModel::StorageActive});
         }
     }
+}
+
+void KisAllResourcesModel::storageUpdated(const QString &location)
+{
+    beginResetModel();
+    resetQuery();
+    endResetModel();
 }
 
 void KisAllResourcesModel::beginExternalResourceImport(const QString &resourceType, int numResources)

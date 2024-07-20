@@ -32,6 +32,7 @@ KisStorageModel::KisStorageModel(QObject *parent)
 {
     connect(KisResourceLocator::instance(), SIGNAL(storageAdded(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(storageUpdated(const QString&)), this, SLOT(updateStorage(const QString&)));
 
     QSqlQuery query;
 
@@ -507,6 +508,11 @@ void KisStorageModel::removeStorage(const QString &location)
     beginRemoveRows(QModelIndex(), row, row);
     d->storages.removeAt(row);
     endRemoveRows();
+}
+
+void KisStorageModel::updateStorage(const QString &location)
+{
+    emit storageUpdated(location);
 }
 
 

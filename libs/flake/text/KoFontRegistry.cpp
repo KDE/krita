@@ -25,6 +25,8 @@
 
 #include "KoFontLibraryResourceUtils.h"
 #include "KoFFWWSConverter.h"
+#include "KoFontChangeTracker.h"
+#include <KisResourceLocator.h>
 
 
 static unsigned int firstCharUcs4(const QStringView qsv)
@@ -52,6 +54,7 @@ class Q_DECL_HIDDEN KoFontRegistry::Private
 private:
     FcConfigSP m_config;
     QSharedPointer<KoFFWWSConverter> fontFamilyConverter;
+    QSharedPointer<KoFontChangeTracker> changeTracker;
 
     struct ThreadData {
         FT_LibrarySP m_library;
@@ -109,6 +112,23 @@ public:
 #endif
         m_config.reset(config);
 
+        /// Setup the change tracker.
+        FcStrList *list = FcConfigGetFontDirs(m_config.data());
+        FcStrListFirst(list);
+        FcChar8 *dirString = FcStrListNext(list);
+        QString path = QString::fromUtf8(reinterpret_cast<char *>(dirString));
+        QStringList paths;
+        while (!path.isEmpty()) {
+            paths.append(path);
+            FcStrListNext(list);
+            dirString = FcStrListNext(list);
+            path = QString::fromUtf8(reinterpret_cast<char *>(dirString));
+        }
+        FcStrListDone(list);
+        int rescanInterval = FcConfigGetRescanInterval(m_config.data());
+        changeTracker.reset(new KoFontChangeTracker(paths, rescanInterval * 1000));
+        changeTracker->connectToRegistery();
+        changeTracker->resetChangeTracker();
 
         reloadConverter();
         fontFamilyConverter->debugInfo();
@@ -170,6 +190,18 @@ public:
         if (!m_data.hasLocalData())
             initialize();
         return m_data.localData()->m_suggestedFiles;
+    }
+
+public Q_SLOTS:
+    void updateConfig() {
+        if (!FcInitBringUptoDate()) {
+            return;
+        }
+        if (FcConfigBuildFonts(m_config.data())) {
+            reloadConverter();
+            KisResourceLocator::instance()->updateFontStorage();
+            changeTracker->resetChangeTracker();
+        }
     }
 };
 
@@ -600,6 +632,11 @@ QList<KoFontFamilyWWSRepresentation> KoFontRegistry::collectRepresentations() co
 KoFontFamilyWWSRepresentation KoFontRegistry::representationByFamilyName(const QString &familyName, bool *found) const
 {
     return d->converter()->representationByFamilyName(familyName, found);
+}
+
+void KoFontRegistry::updateConfig()
+{
+    d->updateConfig();
 }
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)

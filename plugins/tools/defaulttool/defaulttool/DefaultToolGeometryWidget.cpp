@@ -427,6 +427,12 @@ void DefaultToolGeometryWidget::setUnit(const KoUnit &unit)
     widthSpinBox->setDecimals(2);
     heightSpinBox->setDecimals(2);
 
+    // here we need to ensure that even for pixels unit, we can use decimals
+    positionXSpinBox->preventDecimalsChangeFromUnitManager(true);
+    positionYSpinBox->preventDecimalsChangeFromUnitManager(true);
+    widthSpinBox->preventDecimalsChangeFromUnitManager(true);
+    heightSpinBox->preventDecimalsChangeFromUnitManager(true);
+
     positionXSpinBox->setLineStep(1.0);
     positionYSpinBox->setLineStep(1.0);
     widthSpinBox->setLineStep(1.0);

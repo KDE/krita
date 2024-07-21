@@ -61,8 +61,6 @@ DlgLayerSize::DlgLayerSize(QWidget *  parent, const char * name,
 
     m_page->newWidthDouble->setUnitManager(_widthUnitManager);
     m_page->newHeightDouble->setUnitManager(_heightUnitManager);
-    m_page->newWidthDouble->setDecimals(2);
-    m_page->newHeightDouble->setDecimals(2);
     m_page->newWidthDouble->setDisplayUnit(false);
     m_page->newHeightDouble->setDisplayUnit(false);
 

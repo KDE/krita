@@ -1556,7 +1556,6 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.fixedLengthSpinbox->setUnitManager(m_unitManager);
         m_options.fixedLengthSpinbox->setDisplayUnit(false);
         m_options.fixedLengthSpinbox->setMinimum(0);
-        m_options.fixedLengthSpinbox->setDecimals(2);
         m_options.fixedLengthUnit->setModel(m_unitManager);
         m_unitManager->setApparentUnitFromSymbol("px");
         connect(m_options.fixedLengthUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotChangeFixedLengthUnit(int)));

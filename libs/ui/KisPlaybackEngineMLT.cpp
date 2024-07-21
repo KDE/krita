@@ -154,9 +154,10 @@ struct KisPlaybackEngineMLT::Private {
 
         QSharedPointer<Mlt::Producer> activeProducer = canvasProducers[m_self->activeCanvas()];
         if (activePlaybackMode() == PLAYBACK_PUSH && activeProducer) {
-            const int SCRUB_AUDIO_WINDOW = profile->frame_rate_num() * SCRUB_AUDIO_SECONDS;
+            const int SCRUB_AUDIO_WINDOW = qMax(1, qRound(profile->frame_rate_num() * SCRUB_AUDIO_SECONDS));
+            activeProducer->seek(frame);
             for (int i = 0; i < SCRUB_AUDIO_WINDOW; i++ ) {
-                Mlt::Frame* f = activeProducer->get_frame(frame + i );
+                Mlt::Frame* f = activeProducer->get_frame();
                 pushConsumer->push(*f);
                 delete f;
             }

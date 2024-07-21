@@ -63,7 +63,6 @@ KisDoubleParseUnitSpinBox::KisDoubleParseUnitSpinBox(QWidget *parent) :
     connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
     setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
-
 }
 
 KisDoubleParseUnitSpinBox::~KisDoubleParseUnitSpinBox()
@@ -75,8 +74,25 @@ KisDoubleParseUnitSpinBox::~KisDoubleParseUnitSpinBox()
 
 void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManager)
 {
-    qreal oldVal = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());
-    QString oldSymbol = d->unitManager->getApparentUnitSymbol();
+    if (unitManager == d->unitManager) {
+        // just in case we're trying to set manager with the current one...
+        return;
+    }
+
+    KisSpinBoxUnitManager* oldUnitManager = d->unitManager;
+    d->unitManager = unitManager;
+
+    disconnect(oldUnitManager, &QObject::destroyed,
+               this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependence anymore.
+    disconnect(oldUnitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange,
+               this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
+    disconnect(oldUnitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged,
+               this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
+
+    // decimals must be set before value, otherwise value/step/min/max values will be rounded to previous unit decimals value
+    if (d->allowResetDecimals) { //if the user has not fixed the number of decimals.
+        setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
+    }
 
     qreal newVal = 0.0;
 
@@ -84,56 +100,38 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
     double newMax;
     double newStep;
 
-    if (oldSymbol == unitManager->getApparentUnitSymbol() &&
-            d->unitManager->getUnitDimensionType() == unitManager->getUnitDimensionType())
-    {
-        d->unitManager = unitManager; //set the new unitmanager anyway, since it may be a subclass, so change the behavior anyway.
-        goto connect_signals;
+    if (d->unitManager->getApparentUnitSymbol() != oldUnitManager->getApparentUnitSymbol() ||
+        d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()) {
+
+        if (d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()) {
+            //dimension is the same, calculate the new value
+            newVal = d->unitManager->getApparentValue(oldUnitManager->getReferenceValue(KisDoubleParseSpinBox::value()));
+        } else {
+            newVal = d->unitManager->getApparentValue(d->lowerInPoints);
+        }
+
+        newMin = d->unitManager->getApparentValue(d->lowerInPoints);
+        newMax = d->unitManager->getApparentValue(d->upperInPoints);
+        newStep = d->unitManager->getApparentValue(d->stepInPoints);
+
+        if (d->unitManager->getApparentUnitSymbol() == KoUnit(KoUnit::Pixel).symbol()) {
+            // limit the pixel step by 1.0
+            newStep = 1.0;
+        }
+
+        KisDoubleParseSpinBox::setMinimum(newMin);
+        KisDoubleParseSpinBox::setMaximum(newMax);
+        KisDoubleParseSpinBox::setSingleStep(newStep);
     }
-
-    if (d->unitManager->getUnitDimensionType() == unitManager->getUnitDimensionType()) {
-        //dimension is the same, calculate the new value
-        newVal = unitManager->getApparentValue(oldVal);
-    } else {
-        newVal = unitManager->getApparentValue(d->lowerInPoints);
-    }
-
-    newMin = unitManager->getApparentValue(d->lowerInPoints);
-    newMax = unitManager->getApparentValue(d->upperInPoints);
-    newStep = unitManager->getApparentValue(d->stepInPoints);
-
-    if (unitManager->getApparentUnitSymbol() == KoUnit(KoUnit::Pixel).symbol()) {
-        // limit the pixel step by 1.0
-        newStep = qMax(qreal(1.0), newStep);
-    }
-
-    KisDoubleParseSpinBox::setMinimum(newMin);
-    KisDoubleParseSpinBox::setMaximum(newMax);
-    KisDoubleParseSpinBox::setSingleStep(newStep);
-
-connect_signals:
-
-    if (d->unitManager != d->defaultUnitManager) {
-        disconnect(d->unitManager, &QObject::destroyed,
-                   this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependence anymore.
-    }
-    disconnect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
-    disconnect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
-
-    d->unitManager = unitManager;
 
     connect(d->unitManager, &QObject::destroyed,
             this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager);
-
-
-    connect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange, this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
-    connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged, this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
+    connect(d->unitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange,
+            this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
+    connect(d->unitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged,
+            this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
     KisDoubleParseSpinBox::setValue(newVal);
-
-    if (d->allowResetDecimals) { //if the user has not fixed the number of decimals.
-        setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
-    }
 }
 
 void KisDoubleParseUnitSpinBox::changeValue( double newValue )
@@ -195,11 +193,15 @@ void KisDoubleParseUnitSpinBox::prepareUnitChange() {
 }
 
 void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
-
     //d->unitManager->setApparentUnitFromSymbol(symbol);
 
     if (d->unitManager->getApparentUnitSymbol() == d->previousSymbol) { //the setApparentUnitFromSymbol is a bit clever, for example in regard of Casesensitivity. So better check like this.
         return;
+    }
+
+    // decimals must be updated before value/step/min/max otherwise they'll rounded with previous unit decimal value
+    if (d->allowResetDecimals) {
+        setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
     }
 
     KisDoubleParseSpinBox::setMinimum( d->unitManager->getApparentValue( d->lowerInPoints ) );
@@ -209,15 +211,12 @@ void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
 
     if (symbol == KoUnit(KoUnit::Pixel).symbol()) {
         // limit the pixel step by 1.0
-        step = qMax(qreal(1.0), step);
+        step = 1.0;
     }
 
     KisDoubleParseSpinBox::setSingleStep( step );
     KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( d->previousValueInPoint ) );
 
-    if (d->allowResetDecimals) {
-        setDecimals(d->unitManager->getApparentUnitRecommendedDecimals());
-    }
 
     d->unitHasBeenChangedFromOutSideOnce = true;
 }
@@ -246,11 +245,24 @@ double KisDoubleParseUnitSpinBox::value( ) const
 
 void KisDoubleParseUnitSpinBox::setMinimum(double min)
 {
+    d->lowerInPoints = d->unitManager->getReferenceValue(min);
+    KisDoubleParseSpinBox::setMinimum( min );
+}
+
+void KisDoubleParseUnitSpinBox::setMinimumPt(double min)
+{
     d->lowerInPoints = min;
     KisDoubleParseSpinBox::setMinimum( d->unitManager->getApparentValue( min ) );
 }
 
+
 void KisDoubleParseUnitSpinBox::setMaximum(double max)
+{
+    d->upperInPoints = d->unitManager->getReferenceValue(max);
+    KisDoubleParseSpinBox::setMaximum( max );
+}
+
+void KisDoubleParseUnitSpinBox::setMaximumPt(double max)
 {
     d->upperInPoints = max;
     KisDoubleParseSpinBox::setMaximum( d->unitManager->getApparentValue( max ) );
@@ -272,8 +284,16 @@ void KisDoubleParseUnitSpinBox::setMinMaxStep( double min, double max, double st
 {
     setMinimum( min );
     setMaximum( max );
+    setLineStep( step );
+}
+
+void KisDoubleParseUnitSpinBox::setMinMaxStepPt( double min, double max, double step )
+{
+    setMinimumPt( min );
+    setMaximumPt( max );
     setLineStepPt( step );
 }
+
 
 QString KisDoubleParseUnitSpinBox::textFromValue( double value ) const
 {

@@ -58,11 +58,17 @@ public:
     /// @return the current value, converted in points
     double value( ) const;
 
-    /// Set minimum value in points.
+    /// Set minimum value in current unit.
     void setMinimum(double min);
 
-    /// Set maximum value in points.
+    /// Set minimum value in points.
+    void setMinimumPt(double min);
+
+    /// Set maximum value in current unit.
     void setMaximum(double max);
+
+    /// Set maximum value in points.
+    void setMaximumPt(double max);
 
     /// Set step size in the current unit.
     void setLineStep(double step);
@@ -70,8 +76,11 @@ public:
     /// Set step size in points.
     void setLineStepPt(double step);
 
-    /// Set minimum, maximum value and the step size (all in points)
+    /// Set minimum, maximum value and the step size (in current unit)
     void setMinMaxStep( double min, double max, double step );
+
+    /// Set minimum, maximum value and the step size (all in points)
+    void setMinMaxStepPt( double min, double max, double step );
 
     /**
      * Transform the double in a nice text, using locale symbols

@@ -7,8 +7,11 @@
 
 #include "kis_double_parse_unit_spin_box.h"
 #include "kis_spin_box_unit_manager.h"
+#include <klocalizedstring.h>
 
 #include <QLineEdit>
+#include <QMenu>
+#include <QAction>
 #include <QtMath>
 
 class Q_DECL_HIDDEN KisDoubleParseUnitSpinBox::Private
@@ -430,3 +433,92 @@ void KisDoubleParseUnitSpinBox::setSingleStep(double val)
     // ensure step value is never below minimal value for precision
     KisDoubleParseSpinBox::setSingleStep(qMax(d->minStepForPrec, val));
 }
+
+
+void KisDoubleParseUnitSpinBox::contextMenuEvent(QContextMenuEvent *event)
+{
+    // default standard menu for line edit, not possible to get the default menu from a QSpinBox
+    QMenu* menu = lineEdit()->createStandardContextMenu();
+    if (!menu)
+        return;
+
+    // then need to recreate "Step Up" and "Step Down" actions
+    menu->addSeparator();
+    const uint se = stepEnabled();
+    QAction *up = menu->addAction(tr("&Step up"));
+    up->setEnabled(se & StepUpEnabled);
+    QAction *down = menu->addAction(tr("Step &down"));
+    down->setEnabled(se & StepDownEnabled);
+    menu->addSeparator();
+
+    // and add expected new entries: menu/submenu with Units
+    QMenu* menuUnit = menu->addMenu(i18n("Unit"));
+    QActionGroup* unitActions = new QActionGroup(this);
+    Q_FOREACH(QString unitSymbol, d->unitManager->getsUnitSymbolList(false)) {
+        QString unitLabel = KoUnit::unitDescription(KoUnit::fromSymbol(unitSymbol).type());
+
+        // need to check symbol not managed by KoUnit (return "Points (pt)" in this case...)
+        switch (d->unitManager->getUnitDimensionType()) {
+            case KisSpinBoxUnitManager::UnitDimension::LENGTH:
+            case KisSpinBoxUnitManager::UnitDimension::IMLENGTH:
+                if (unitSymbol == "%") {
+                    unitLabel = i18n("Percent (%)");
+                } else if (unitSymbol == "vw") {
+                    unitLabel = i18n("percent of view width (vw)");
+                } else if (unitSymbol == "vh") {
+                    unitLabel = i18n("percent of view height (vh)");
+                }
+                break;
+
+            case KisSpinBoxUnitManager::ANGLE:
+                if (unitSymbol == "°") {
+                    unitLabel = i18n("degrees (°)");
+                } else if (unitSymbol == "rad") {
+                    unitLabel = i18n("radians (rad)");
+                } else if (unitSymbol == "gon") {
+                    unitLabel = i18n("gons (gon)");
+                } else if (unitSymbol == "%") {
+                    unitLabel = i18n("percent of circle (%)");
+                }
+                break;
+
+            case KisSpinBoxUnitManager::TIME:
+                if (unitSymbol == "f") {
+                    unitLabel = i18n("frames (f)");
+                } else if (unitSymbol == "s") {
+                    unitLabel = i18n("seconds (s)");
+                } else if (unitSymbol == "%") {
+                    unitLabel = i18n("percent of animation (%)");
+                }
+                break;
+        }
+
+        QAction *unitAction = menuUnit->addAction(unitLabel);
+        unitAction->setProperty("symbol", unitSymbol);
+        unitAction->setCheckable(true);
+        unitAction->setActionGroup(unitActions);
+        unitAction->setChecked(unitSymbol == d->unitManager->getApparentUnitSymbol());
+    }
+
+    const QPoint pos = (event->reason() == QContextMenuEvent::Mouse)
+        ? event->globalPos() : mapToGlobal(QPoint(event->pos().x(), 0)) + QPoint(width() / 2, height() / 2);
+    const QAction *action = menu->exec(pos);
+
+    if (action) {
+        if (action == up) {
+            stepBy(1);
+        } else if (action == down) {
+            stepBy(-1);
+        } else {
+            QVariant symbol = action->property("symbol");
+            if (symbol.isValid()) {
+                d->unitManager->setApparentUnitFromSymbol(symbol.toString());
+            }
+        }
+    }
+
+    delete static_cast<QMenu *>(menuUnit);
+    delete static_cast<QMenu *>(menu);
+    event->accept();
+}
+

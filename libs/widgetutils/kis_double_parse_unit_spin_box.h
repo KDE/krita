@@ -9,6 +9,7 @@
 #define KIS_DOUBLEPARSEUNITSPINBOX_H
 
 #include <KoUnit.h>
+#include <QContextMenuEvent>
 
 #include "kis_double_parse_spin_box.h"
 #include "kritawidgetutils_export.h"
@@ -125,6 +126,8 @@ private:
     //! \brief change the unit, reset the spin box every time. From the outside it's always set unit that should be called.
     void internalUnitChange(QString const& symbol);
     void prepareUnitChange();
+
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private Q_SLOTS:
     // exists to do emits for valueChangedPt

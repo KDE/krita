@@ -13,6 +13,8 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
+#include "PaintingResources.h"
+
 /**
  * Node represents a layer or mask in a Krita image's Node hierarchy. Group layers can contain
  * other layers and masks; layers can contain masks.
@@ -574,33 +576,101 @@ public Q_SLOTS:
      * @brief paint a line on the canvas. Uses current brush preset
      * @param pointOne starting point
      * @param pointTwo end point
+     * @param strokeStyle appearance of the outline, one of:
+     * <ul>
+     * <li>None - will use Foreground Color, since line would be invisible otherwise
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
      */
-    void paintLine(const QPointF pointOne, const QPointF pointTwo);
+    void paintLine(const QPointF pointOne, const QPointF pointTwo, const QString strokeStyle = PaintingResources::defaultStrokeStyle);
 
     /**
      * @brief paint a rectangle on the canvas. Uses current brush preset
      * @param rect QRect with x, y, width, and height
+     * @param strokeStyle appearance of the outline, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
      */
-    void paintRectangle(const QRectF &rect);
+    void paintRectangle(const QRectF &rect,
+                        const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                        const QString fillStyle = PaintingResources::defaultFillStyle);
  
     /**
      * @brief paint a polygon on the canvas. Uses current brush preset
      * @param list of Qpoints
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
      */
-    void paintPolygon(const QList<QPointF> points);
-
+    void paintPolygon(const QList<QPointF> points,
+                      const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                      const QString fillStyle = PaintingResources::defaultFillStyle);
     /**
      * @brief paint an ellipse on the canvas. Uses current brush preset
      * @param rect QRect with x, y, width, and height
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
      */
-    void paintEllipse(const QRectF &rect);
-
+    void paintEllipse(const QRectF &rect,
+                      const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                      const QString fillStyle = PaintingResources::defaultFillStyle);
     /**
      * @brief paint a custom path on the canvas. Uses current brush preset
      * @param  path QPainterPath to determine path
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
      */
-    void paintPath(const QPainterPath &path);
-
+    void paintPath(const QPainterPath &path,
+                   const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                   const QString fillStyle = PaintingResources::defaultFillStyle);
     /**
      * @brief paintAbility can be used to determine whether this node can be painted on with the current brush preset.
      * @return QString, one of the following:
@@ -610,6 +680,7 @@ public Q_SLOTS:
      * <li>PAINT - This node is paintable by the current brush preset.</li>
      * <li>UNPAINTABLE - This node is not paintable, or a null preset is somehow selected./li>
      * <li>MYPAINTBRUSH_UNPAINTABLE - This node's non-RGBA colorspace cannot be painted on by the currently selected MyPaint brush.</li>
+     * </ul>
      */
     QString paintAbility();
 

@@ -82,11 +82,11 @@ public Q_SLOTS:
     int index() const;
     QUuid uniqueId() const;
 
-    void paintLine(const QPoint pointOne, const QPoint pointTwo);
-    void paintRectangle(const QRectF &rect);
-    void paintPolygon(const QList<QPointF> points);
-    void paintEllipse(const QRectF &rect);
-    void paintPath(const QPainterPath &path);
+    void paintLine(const QPoint pointOne, const QPoint pointTwo, const QString strokeStyle = "ForegroundColor");
+    void paintRectangle(const QRectF &rect, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    void paintPolygon(const QList<QPointF> points, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    void paintEllipse(const QRectF &rect, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    void paintPath(const QPainterPath &path, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
     QString paintAbility();
 Q_SIGNALS:
 private:

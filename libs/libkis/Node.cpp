@@ -863,7 +863,7 @@ QString Node::paintAbility()
     return "UNPAINTABLE";
 }
 
-void Node::paintLine(const QPointF pointOne, const QPointF pointTwo)
+void Node::paintLine(const QPointF pointOne, const QPointF pointTwo, const QString strokeStyle)
 {
     if (paintAbility() != "PAINT") {
         dbgScript << "Script attempted to use Node::paintLine() on an unpaintable node, ignoring.";
@@ -878,12 +878,12 @@ void Node::paintLine(const QPointF pointOne, const QPointF pointTwo)
     pointTwoInfo.setPressure(1.0);
     pointTwoInfo.setPos(pointTwo);
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle);
     helper.paintLine(pointOneInfo, pointTwoInfo);
 }
 
 
-void Node::paintRectangle(const QRectF &rect)
+void Node::paintRectangle(const QRectF &rect, const QString strokeStyle, const QString fillStyle)
 {
     if (paintAbility() != "PAINT") {
         dbgScript << "Script attempted to use Node::paintRectangle() on an unpaintable node, ignoring.";
@@ -893,12 +893,12 @@ void Node::paintRectangle(const QRectF &rect)
     // reference class where this stuff is being done. Maybe can use the "facade" like that does for setup?
     // void KisFigurePaintingToolHelper::paintRect(const QRectF &rect)
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
     helper.paintRect(rect);
 }
 
 
-void Node::paintPolygon(const QList<QPointF> listPoint)
+void Node::paintPolygon(const QList<QPointF> listPoint, const QString strokeStyle, const QString fillStyle)
 {
     if (paintAbility() != "PAINT") {
         dbgScript << "Script attempted to use Node::paintPolygon() on an unpaintable node, ignoring.";
@@ -907,30 +907,30 @@ void Node::paintPolygon(const QList<QPointF> listPoint)
 
     // strategy needs points in vPointF format
     QVector<QPointF> points = points.fromList(listPoint);
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
     helper.paintPolygon(points);
 }
 
 
-void Node::paintEllipse(const QRectF &rect)
+void Node::paintEllipse(const QRectF &rect, const QString strokeStyle, const QString fillStyle)
 {
     if (paintAbility() != "PAINT") {
         dbgScript << "Script attempted to use Node::paintEllipse() on an unpaintable node, ignoring.";
         return;
     }
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
     helper.paintEllipse(rect);
 }
 
 
-void Node::paintPath(const QPainterPath &path)
+void Node::paintPath(const QPainterPath &path, const QString strokeStyle, const QString fillStyle)
 {
     if (paintAbility() != "PAINT") {
         dbgScript << "Script attempted to use Node::paintPath() on an unpaintable node, ignoring.";
         return;
     }
 
-    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
     helper.paintPainterPath(path);
 }

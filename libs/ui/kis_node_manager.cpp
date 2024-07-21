@@ -217,6 +217,13 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
+        if (shapeController->lastActivatedNode()) {
+            slotNonUiActivatedNode(shapeController->lastActivatedNode());
+        } else {
+            // if last activated node is null, most probably, it means that the shape controller
+            // is going to emit the activation signal very soon
+        }
+
         m_d->activateNodeConnection.connectInputSignal(m_d->imageView->image(), &KisImage::sigRequestNodeReselection);
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()), this, SLOT(handleExternalIsolationChange()));

@@ -44,6 +44,15 @@ public:
     virtual KisNodeDummy* rootDummy() const = 0;
     virtual int dummiesCount() const = 0;
 
+    /**
+     * Sometimes (e.g. on setImage() call) sigActivateNode() signal may be emitted
+     * while the dummies facade is not yet connected to the node managed. In this
+     * case, the activation signal would be lost. Hence we should provide the last
+     * emitted value, so that node manager could cold-initialize the current node
+     * value on connection.
+     */
+    KisNodeSP lastActivatedNode() const;
+
 protected:
     KisImageWSP image() const;
 

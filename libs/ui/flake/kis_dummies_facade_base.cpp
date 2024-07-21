@@ -30,6 +30,13 @@ public:
      */
     QList<KisNodeSP> pendingNodeSet;
     QMutex pendingNodeSetLock;
+
+    /**
+     * The node activation signal may be emitted while the facade was
+     * not connected to anything. In such case we need to save the last-
+     * emitted value for cold-initialization on the connection.
+     */
+    KisNodeWSP lastActivatedNode;
 };
 
 
@@ -57,6 +64,7 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image, KisNodeSP activeNode)
 {
     if (m_d->image) {
         emit sigActivateNode(0);
+        m_d->lastActivatedNode = 0;
         m_d->image->disconnect(this);
         m_d->image->disconnect(&m_d->nodeChangedConnection);
         m_d->image->disconnect(&m_d->activateNodeConnection);
@@ -98,6 +106,11 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image, KisNodeSP activeNode)
 
         m_d->activateNodeConnection.start(activeNode);
     }
+}
+
+KisNodeSP KisDummiesFacadeBase::lastActivatedNode() const
+{
+    return m_d->lastActivatedNode;
 }
 
 KisImageWSP KisDummiesFacadeBase::image() const
@@ -143,6 +156,7 @@ void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
         !node->inherits("KisDecorationsWrapperLayer")) {
 
         emit sigActivateNode(node);
+        m_d->lastActivatedNode = node;
     }
 }
 

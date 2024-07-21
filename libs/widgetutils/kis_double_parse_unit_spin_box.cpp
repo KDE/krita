@@ -9,6 +9,7 @@
 #include "kis_spin_box_unit_manager.h"
 
 #include <QLineEdit>
+#include <QtMath>
 
 class Q_DECL_HIDDEN KisDoubleParseUnitSpinBox::Private
 {
@@ -24,6 +25,7 @@ public:
     {
     }
 
+    double minStepForPrec {0};  /// minimum precision for given decimals
     double lowerInPoints {0.0}; ///< lowest value in points
     double upperInPoints {0.0}; ///< highest value in points
     double stepInPoints {0.0};  ///< step in points
@@ -214,9 +216,8 @@ void KisDoubleParseUnitSpinBox::internalUnitChange(const QString &symbol) {
         step = 1.0;
     }
 
-    KisDoubleParseSpinBox::setSingleStep( step );
+    setSingleStep( step );
     KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue( d->previousValueInPoint ) );
-
 
     d->unitHasBeenChangedFromOutSideOnce = true;
 }
@@ -413,4 +414,19 @@ void KisDoubleParseUnitSpinBox::disconnectExternalUnitManager()
     {
         setUnitManager(d->defaultUnitManager); //go back to default unit manager.
     }
+}
+
+void KisDoubleParseUnitSpinBox::setDecimals(int prec)
+{
+    KisDoubleParseSpinBox::setDecimals(prec);
+    d->minStepForPrec = 1/qPow(10, prec);
+
+    // fix current single step value is needed
+    setSingleStep(singleStep());
+}
+
+void KisDoubleParseUnitSpinBox::setSingleStep(double val)
+{
+    // ensure step value is never below minimal value for precision
+    KisDoubleParseSpinBox::setSingleStep(qMax(d->minStepForPrec, val));
 }

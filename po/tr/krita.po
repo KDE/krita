@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-20 01:44+0000\n"
-"PO-Revision-Date: 2024-07-19 14:24+0300\n"
+"PO-Revision-Date: 2024-07-21 01:09+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -25482,12 +25482,15 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Dokunmatik olaylar için basınç durumunun okunmasını etkinleştirin. Bu "
+"veriler bazı platformlarda bozuk olabilir; örneğin, bazı Android aygıtlarda "
+"basınç sürekli 0,0 olarak bildirilebilir."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Dokunmatik basınç hassaslığını etkinleştir (bozuk olabilir)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

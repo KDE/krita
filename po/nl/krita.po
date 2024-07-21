@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-20 01:44+0000\n"
-"PO-Revision-Date: 2024-07-19 10:00+0200\n"
+"PO-Revision-Date: 2024-07-20 10:45+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -25606,12 +25606,15 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Het lezen van de drukstatus voor aanraakgebeurtenissen inschakelen. Deze "
+"gegevens kunne gebroken zijn op sommige platforms, bijv. op sommige Android "
+"apparaten, waar druk altijd gerapporteerd kan worden als 0,0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Aanraakdrukgevoeligheid inschakelen (kan gebroken zijn)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

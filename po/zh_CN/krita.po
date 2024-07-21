@@ -18206,7 +18206,7 @@ msgstr "导入帧"
 #: libs/libkis/PaintingResources.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr ""
+msgstr "脚本编程的笔画"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -25332,12 +25332,14 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"启用触摸事件的压力状态读取功能。请注意，某些平台上的压力数据可能是错误的，例"
+"如某些安卓设备总是将压力报告为 0.0。"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "启用触摸压力感应 (可能工作不正常)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

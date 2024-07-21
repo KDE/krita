@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-20 01:44+0000\n"
-"PO-Revision-Date: 2024-06-19 12:34+0200\n"
+"PO-Revision-Date: 2024-07-20 13:33+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -18280,12 +18280,9 @@ msgid "Import frames"
 msgstr "Uvozi sličice"
 
 #: libs/libkis/PaintingResources.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Freehand Brush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "Prostoročna poteza s čopičem"
+msgstr "Poteza s čopičem po skriptu"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -25489,12 +25486,15 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Omogoči branje stanja pritiska za dogodke dotika. Ti podatki so lahko "
+"okvarjeni na nekaterih platformah, npr. na nekaterih napravah Android, kjer "
+"se o pritisku lahko ves čas poroča z vrednostjo 0,0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Omogoči občutljivost na pritisk dotika (morda je pokvarjena)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

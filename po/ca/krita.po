@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-20 01:44+0000\n"
-"PO-Revision-Date: 2024-07-19 09:38+0200\n"
+"PO-Revision-Date: 2024-07-20 09:51+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -25548,12 +25548,16 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Activa la lectura de l'estat de la pressió per als esdeveniments tàctils. "
+"Aquesta dada pot ser incorrecta en algunes platformes, p. ex. en alguns "
+"dispositius Android, a on la pressió pot estar informada com a 0,0 tota "
+"l'estona."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Activa la sensibilitat a la pressió tàctil (pot ser incorrecta)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

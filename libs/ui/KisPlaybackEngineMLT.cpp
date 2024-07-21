@@ -39,6 +39,42 @@
 #include "KisMLTProducerKrita.h"
 
 
+//#define MLT_LOG_REDIRECTION
+
+#ifdef MLT_LOG_REDIRECTION
+void qt_redirection_callback(void *ptr, int level, const char *fmt, va_list vl)
+{
+    static int print_prefix = 1;
+    mlt_properties properties = ptr ? MLT_SERVICE_PROPERTIES((mlt_service) ptr) : NULL;
+
+    if (level > mlt_log_get_level())
+        return;
+
+    static const int prefix_size = 200;
+    char prefix[prefix_size] = "";
+
+    if (print_prefix && properties) {
+        char *mlt_type = mlt_properties_get(properties, "mlt_type");
+        char *mlt_service = mlt_properties_get(properties, "mlt_service");
+        char *resource = mlt_properties_get(properties, "resource");
+
+        if (!(resource && *resource && resource[0] == '<' && resource[strlen(resource) - 1] == '>'))
+            mlt_type = mlt_properties_get(properties, "mlt_type");
+        if (mlt_service)
+            snprintf(prefix, prefix_size, "[%s %s] ", mlt_type, mlt_service);
+        else
+            snprintf(prefix, prefix_size, "[%s %p] ", mlt_type, ptr);
+        if (resource)
+            snprintf(prefix, prefix_size, "%s\n    ", resource);
+        qDebug().nospace() << qPrintable(prefix);
+    }
+    print_prefix = strstr(fmt, "\n") != NULL;
+    vsnprintf(prefix, prefix_size, fmt, vl);
+    qDebug().nospace() << qPrintable(prefix);
+}
+#endif
+
+
 const float SCRUB_AUDIO_SECONDS = 0.128f;
 
 struct KisPlaybackEngineMLT::FrameWaitingInterface {
@@ -116,6 +152,11 @@ struct KisPlaybackEngineMLT::Private {
     {
         // Initialize MLT...
         repository.reset(Mlt::Factory::init());
+
+#ifdef MLT_LOG_REDIRECTION
+        mlt_log_set_level(MLT_LOG_VERBOSE);
+        mlt_log_set_callback(&qt_redirection_callback);
+#endif /* MLT_LOG_REDIRECTION */
 
         // Register our backend plugin
         registerKritaMLTProducer(repository.data());

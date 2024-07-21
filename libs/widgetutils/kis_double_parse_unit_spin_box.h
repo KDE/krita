@@ -106,6 +106,9 @@ public:
 
     void preventDecimalsChangeFromUnitManager(bool prevent);
 
+    void setDecimals(int prec);
+    void setSingleStep(double val);
+
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value, or converted to another reference unit.
     void valueChangedPt( qreal );

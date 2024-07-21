@@ -528,7 +528,7 @@ bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)
 bool KisShortcutMatcher::nativeGestureEvent(QNativeGestureEvent *event)
 {
     bool retval = false;
-    if (hasRunningShortcut()) {
+    if (!hasRunningShortcut()) {
         retval = tryRunNativeGestureShortcut( event );
     }
     else if (m_d->nativeGestureShortcut) {

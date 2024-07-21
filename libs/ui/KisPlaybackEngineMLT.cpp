@@ -428,7 +428,6 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 
         connect(animationState, &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             Q_UNUSED(state); // We don't need the state yet -- we just want to stop and resume playback according to new state info.
-            QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[activeCanvas()];
             StopAndResume callbackStopResume(m_d.data());
         });
 

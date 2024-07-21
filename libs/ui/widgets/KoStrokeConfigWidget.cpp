@@ -131,11 +131,11 @@ CapNJoinMenu::CapNJoinMenu(QWidget *parent)
     mainLayout->addWidget(button, 3, 2, Qt::AlignLeft);
 
     // Miter limit
-    // set min/max/step and value in points, then set actual unit
     miterLimit = new KisDoubleParseUnitSpinBox(this);
-    miterLimit->setMinMaxStep(0.0, 1000.0, 0.5);
-    miterLimit->setDecimals(2);
+    miterLimit->preventDecimalsChangeFromUnitManager(true);
     miterLimit->setUnit(KoUnit(KoUnit::Point));
+    miterLimit->setMinMaxStep(0.0, 240.0, 0.01);
+    miterLimit->setDecimals(2);
     miterLimit->setToolTip(i18n("Miter limit"));
     mainLayout->addWidget(miterLimit, 4, 0, 1, 3);
 
@@ -224,9 +224,14 @@ KoStrokeConfigWidget::KoStrokeConfigWidget(KoCanvasBase *canvas, QWidget * paren
     d->ui->thicknessLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
     // set min/max/step and value in points, then set actual unit
-    d->ui->lineWidth->setMinMaxStep(0.5, 1000.0, 0.5); // if someone wants 0, just set to "none" on UI
-    d->ui->lineWidth->setDecimals(2);
+    d->ui->lineWidth->preventDecimalsChangeFromUnitManager(true);
     d->ui->lineWidth->setUnit(KoUnit(KoUnit::Point));
+    // if someone wants 0, just set to "none" on UI
+    // note: when intialized, there's probably no document opened or even if some documents are opened, the resolution
+    //       of document may not be the same...
+    //       min/max/step are then defined in Pt - values here are considered @600dpi; 0.10px = 0.03Pt / 1000px = 240.00pt
+    d->ui->lineWidth->setMinMaxStep(0.03, 240.0, 0.01);
+    d->ui->lineWidth->setDecimals(2);
     d->ui->lineWidth->setToolTip(i18n("Set line width of actual selection"));
 
     d->ui->capNJoinButton->setMinimumHeight(25);

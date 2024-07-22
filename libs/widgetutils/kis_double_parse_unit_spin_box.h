@@ -40,6 +40,13 @@ public:
     virtual void changeValue( double newValue );
 
     /**
+     * Set the new value in points whatever is the reference unit for display
+     * @param newValue the new value
+     * @see valuePt()
+     */
+    void changeValuePt( double newValue );
+
+    /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
     virtual void setUnit(const KoUnit &unit);
@@ -56,8 +63,11 @@ public:
      */
     virtual void setDimensionType(int dim);
 
-    /// @return the current value, converted in points
+    /// @return the current value, converted in "return unit"
     double value( ) const;
+
+    /// @return the current value as Point, whatever is "return unit"
+    double valuePt( ) const;
 
     /// Set minimum value in current unit.
     void setMinimum(double min);

@@ -160,12 +160,22 @@ void KisDoubleParseUnitSpinBox::changeValue( double newValue )
     }
 
     if (d->outPutSymbol.isEmpty()) {
-        KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue(newValue) );
+        KisDoubleParseSpinBox::setValue( apparentValue );
     } else {
-
         KisDoubleParseSpinBox::setValue( d->unitManager->getApparentValue((newValue - cons)/fact) );
     }
 }
+
+void KisDoubleParseUnitSpinBox::changeValuePt( double newValue )
+{
+    double apparentValue = d->unitManager->getApparentValue(newValue);
+
+    if (apparentValue == KisDoubleParseSpinBox::value()) {
+        return;
+    }
+    KisDoubleParseSpinBox::setValue( apparentValue );
+}
+
 
 void KisDoubleParseUnitSpinBox::setUnit( const KoUnit & unit)
 {
@@ -245,6 +255,11 @@ double KisDoubleParseUnitSpinBox::value( ) const
     double cons = d->unitManager->getConversionConstant(d->unitManager->getUnitDimensionType(), d->outPutSymbol);
 
     return fact*ref + cons;
+}
+
+double KisDoubleParseUnitSpinBox::valuePt( ) const
+{
+    return d->unitManager->getReferenceValue( KisDoubleParseSpinBox::value() );
 }
 
 void KisDoubleParseUnitSpinBox::setMinimum(double min)

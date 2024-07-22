@@ -201,6 +201,11 @@ void KisDoubleParseUnitSpinBox::setReturnUnit(const QString & symbol)
     d->outPutSymbol = symbol;
 }
 
+QString KisDoubleParseUnitSpinBox::returnUnit() const
+{
+    return d->outPutSymbol;
+}
+
 void KisDoubleParseUnitSpinBox::prepareUnitChange() {
 
     d->previousValueInPoint = d->unitManager->getReferenceValue(KisDoubleParseSpinBox::value());

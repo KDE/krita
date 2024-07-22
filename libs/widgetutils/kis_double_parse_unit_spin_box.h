@@ -51,11 +51,19 @@ public:
      */
     virtual void setUnit(const KoUnit &unit);
     virtual void setUnit(const QString & symbol);
-    /*!
+
+    /**
      * \brief setReturnUnit set a unit, such that the spinbox now return values in this unit instead of the reference unit for the current dimension.
      * \param symbol the symbol of the new unit.
+     * @see returnUnit()
      */
     void setReturnUnit(const QString & symbol);
+
+    /**
+     * \brief returnUnit returns the unit in which values are returned
+     * @see returnUnit()
+     */
+    QString returnUnit() const;
 
     /**
      * @brief setDimensionType set the dimension (for example length or angle) of the units the spinbox manage

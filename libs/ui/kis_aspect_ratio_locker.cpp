@@ -30,7 +30,8 @@ struct SliderWrapper
     void setValue(qreal value) {
 
         if (m_slider.canConvert<KisDoubleParseUnitSpinBox*>()) {
-            m_slider.value<KisDoubleParseUnitSpinBox*>()->changeValue(value);
+            // assume value from a KisDoubleParseUnitSpinBox is always provided in Pt
+            m_slider.value<KisDoubleParseUnitSpinBox*>()->changeValuePt(value);
 
         } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
             m_slider.value<KisDoubleParseSpinBox*>()->setValue(value);
@@ -56,8 +57,7 @@ struct SliderWrapper
         qreal result = 0.0;
 
         if (m_slider.canConvert<KisDoubleParseUnitSpinBox*>()) {
-            result = m_slider.value<KisDoubleParseUnitSpinBox*>()->value();
-
+            result = m_slider.value<KisDoubleParseUnitSpinBox*>()->valuePt();
         } else if (m_slider.canConvert<KisDoubleParseSpinBox*>()) {
             result = m_slider.value<KisDoubleParseSpinBox*>()->value();
 

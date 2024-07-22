@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-20 01:44+0000\n"
+"POT-Creation-Date: 2024-07-22 01:47+0000\n"
 "PO-Revision-Date: 2024-04-07 19:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -17866,7 +17866,7 @@ msgid "Clone Layer"
 msgstr "Клониран слой"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
-#: libs/ui/kis_node_manager.cpp:1527
+#: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -17910,7 +17910,7 @@ msgid "Transform Mask"
 msgstr "Маска за трансформиране"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1307
+#: libs/ui/kis_node_manager.cpp:1314
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19501,8 +19501,8 @@ msgstr ""
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
@@ -29146,62 +29146,62 @@ msgstr "Огледален изглед около курсора"
 msgid "Mirror View Around Canvas"
 msgstr "Огледален изглед около платното"
 
-#: libs/ui/kis_node_manager.cpp:453
+#: libs/ui/kis_node_manager.cpp:460
 #, kde-format
 msgid "Layer is locked"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
+#: libs/ui/kis_node_manager.cpp:462 libs/ui/kis_node_manager.cpp:487
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:508
+#: libs/ui/kis_node_manager.cpp:515
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:515
+#: libs/ui/kis_node_manager.cpp:522
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Копиране на възли"
 
-#: libs/ui/kis_node_manager.cpp:522
+#: libs/ui/kis_node_manager.cpp:529
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:693
+#: libs/ui/kis_node_manager.cpp:700
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Преобразуване в маска на селекция"
 
-#: libs/ui/kis_node_manager.cpp:941
+#: libs/ui/kis_node_manager.cpp:948
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:968
+#: libs/ui/kis_node_manager.cpp:975
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:993
+#: libs/ui/kis_node_manager.cpp:1000
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1002
+#: libs/ui/kis_node_manager.cpp:1009
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1022
+#: libs/ui/kis_node_manager.cpp:1029
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1038
+#: libs/ui/kis_node_manager.cpp:1045
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Horizontally"
@@ -29209,7 +29209,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Огледално завъртане по хоризонтала"
 
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1048
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Horizontally"
@@ -29219,7 +29219,7 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Огледално завъртане на слой по хоризонтала"
 msgstr[1] "Огледално завъртане на слой по хоризонтала"
 
-#: libs/ui/kis_node_manager.cpp:1052
+#: libs/ui/kis_node_manager.cpp:1059
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror Vertically"
@@ -29227,7 +29227,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Огледално завъртане по вертикала"
 
-#: libs/ui/kis_node_manager.cpp:1055
+#: libs/ui/kis_node_manager.cpp:1062
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Mirror Layer Vertically"
@@ -29237,7 +29237,7 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Огледално завъртане на слой по вертикала"
 msgstr[1] "Огледално завъртане на слой по вертикала"
 
-#: libs/ui/kis_node_manager.cpp:1063
+#: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Horizontally"
@@ -29245,7 +29245,7 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Огледално завъртане на всички слоеве по хоризонтала"
 
-#: libs/ui/kis_node_manager.cpp:1070
+#: libs/ui/kis_node_manager.cpp:1077
 #, fuzzy
 #| msgctxt "action"
 #| msgid "Mirror All Layers Vertically"
@@ -29253,90 +29253,90 @@ msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Огледално завъртане на всички слоеве по вертикала"
 
-#: libs/ui/kis_node_manager.cpp:1202
+#: libs/ui/kis_node_manager.cpp:1209
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Експортиране \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1232
+#: libs/ui/kis_node_manager.cpp:1239
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1250
+#: libs/ui/kis_node_manager.cpp:1257
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Слоят няма данни за пиксели"
 
-#: libs/ui/kis_node_manager.cpp:1274
+#: libs/ui/kis_node_manager.cpp:1281
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1294
+#: libs/ui/kis_node_manager.cpp:1301
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Неуспешно запазване в svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1320
+#: libs/ui/kis_node_manager.cpp:1327
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1328
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1352
+#: libs/ui/kis_node_manager.cpp:1359
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Записване на Алфа в слой"
 
-#: libs/ui/kis_node_manager.cpp:1475
+#: libs/ui/kis_node_manager.cpp:1482
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1557
+#: libs/ui/kis_node_manager.cpp:1564
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Бързо групиране"
 
-#: libs/ui/kis_node_manager.cpp:1568
+#: libs/ui/kis_node_manager.cpp:1575
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Бързо създаване на закачени групи"
 
-#: libs/ui/kis_node_manager.cpp:1575
+#: libs/ui/kis_node_manager.cpp:1582
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Закачени групи"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1583
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Маска на слой"
 
-#: libs/ui/kis_node_manager.cpp:1603
+#: libs/ui/kis_node_manager.cpp:1610
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1606
+#: libs/ui/kis_node_manager.cpp:1613
 #, fuzzy, kde-format
 #| msgid "Put every layer in its own, separate group layer"
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Поставяне на всеки слой в свой собствен, отделен групов слой"
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1621
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Бързо разгрупиране"

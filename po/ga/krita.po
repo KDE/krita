@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice/krita.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-20 01:44+0000\n"
+"POT-Creation-Date: 2024-07-22 01:47+0000\n"
 "PO-Revision-Date: 2004-12-03 14:52-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -18322,7 +18322,7 @@ msgid "Clone Layer"
 msgstr "Bog Sraith"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
-#: libs/ui/kis_node_manager.cpp:1527
+#: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -18368,7 +18368,7 @@ msgid "Transform Mask"
 msgstr "Trasfhoirmigh"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1307
+#: libs/ui/kis_node_manager.cpp:1314
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -20009,8 +20009,8 @@ msgstr "&Acmhainní"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
@@ -29778,76 +29778,76 @@ msgstr "Scáthán"
 msgid "Mirror View Around Canvas"
 msgstr "Scáthán"
 
-#: libs/ui/kis_node_manager.cpp:453
+#: libs/ui/kis_node_manager.cpp:460
 #, fuzzy, kde-format
 msgid "Layer is locked"
 msgstr "Méid an tSratha"
 
-#: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
+#: libs/ui/kis_node_manager.cpp:462 libs/ui/kis_node_manager.cpp:487
 #, fuzzy, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Méid an tSratha"
 
-#: libs/ui/kis_node_manager.cpp:508
+#: libs/ui/kis_node_manager.cpp:515
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Gan Uirlis Bheo"
 
-#: libs/ui/kis_node_manager.cpp:515
+#: libs/ui/kis_node_manager.cpp:522
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Cóipeáil Ó"
 
-#: libs/ui/kis_node_manager.cpp:522
+#: libs/ui/kis_node_manager.cpp:529
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "&Acmhainní"
 
-#: libs/ui/kis_node_manager.cpp:693
+#: libs/ui/kis_node_manager.cpp:700
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "&Inbhéartaigh an Rogha"
 
-#: libs/ui/kis_node_manager.cpp:941
+#: libs/ui/kis_node_manager.cpp:948
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:968
+#: libs/ui/kis_node_manager.cpp:975
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Dúblach"
 
-#: libs/ui/kis_node_manager.cpp:993
+#: libs/ui/kis_node_manager.cpp:1000
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Gan Uirlis Bheo"
 
-#: libs/ui/kis_node_manager.cpp:1002
+#: libs/ui/kis_node_manager.cpp:1009
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Gan Uirlis Bheo"
 
-#: libs/ui/kis_node_manager.cpp:1022
+#: libs/ui/kis_node_manager.cpp:1029
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Gan Uirlis Bheo"
 
-#: libs/ui/kis_node_manager.cpp:1038
+#: libs/ui/kis_node_manager.cpp:1045
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Scáthánaigh go Cothrománach"
 
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1048
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29858,13 +29858,13 @@ msgstr[2] "Scáthánaigh go Cothrománach"
 msgstr[3] "Scáthánaigh go Cothrománach"
 msgstr[4] "Scáthánaigh go Cothrománach"
 
-#: libs/ui/kis_node_manager.cpp:1052
+#: libs/ui/kis_node_manager.cpp:1059
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Scáthánaigh go hIngearach"
 
-#: libs/ui/kis_node_manager.cpp:1055
+#: libs/ui/kis_node_manager.cpp:1062
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29875,105 +29875,105 @@ msgstr[2] "Scáthánaigh go hIngearach"
 msgstr[3] "Scáthánaigh go hIngearach"
 msgstr[4] "Scáthánaigh go hIngearach"
 
-#: libs/ui/kis_node_manager.cpp:1063
+#: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Scáthánaigh go Cothrománach"
 
-#: libs/ui/kis_node_manager.cpp:1070
+#: libs/ui/kis_node_manager.cpp:1077
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Scáthánaigh go hIngearach"
 
-#: libs/ui/kis_node_manager.cpp:1202
+#: libs/ui/kis_node_manager.cpp:1209
 #, fuzzy, kde-format
 msgid "Export \"%1\""
 msgstr "Easpórtáil"
 
-#: libs/ui/kis_node_manager.cpp:1232
+#: libs/ui/kis_node_manager.cpp:1239
 #, fuzzy, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Níorbh fhéidir sraith a chur leis an íomhá."
 
-#: libs/ui/kis_node_manager.cpp:1250
+#: libs/ui/kis_node_manager.cpp:1257
 #, fuzzy, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Méid an tSratha"
 
-#: libs/ui/kis_node_manager.cpp:1274
+#: libs/ui/kis_node_manager.cpp:1281
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Easpórtáil"
 
-#: libs/ui/kis_node_manager.cpp:1294
+#: libs/ui/kis_node_manager.cpp:1301
 #, fuzzy, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Níorbh fhéidir sraith a chur leis an íomhá."
 
-#: libs/ui/kis_node_manager.cpp:1320
+#: libs/ui/kis_node_manager.cpp:1327
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Méid an tSratha"
 
-#: libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1328
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
 "The operation will be cancelled."
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1352
+#: libs/ui/kis_node_manager.cpp:1359
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Cruthaigh Sraith Lánléargais"
 
-#: libs/ui/kis_node_manager.cpp:1475
+#: libs/ui/kis_node_manager.cpp:1482
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Dúblach"
 
-#: libs/ui/kis_node_manager.cpp:1557
+#: libs/ui/kis_node_manager.cpp:1564
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Díghrúpáil"
 
-#: libs/ui/kis_node_manager.cpp:1568
+#: libs/ui/kis_node_manager.cpp:1575
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Díghrúpáil"
 
-#: libs/ui/kis_node_manager.cpp:1575
+#: libs/ui/kis_node_manager.cpp:1582
 #, fuzzy, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Díghrúpáil"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1583
 #, fuzzy, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Rothlaigh Sraith"
 
-#: libs/ui/kis_node_manager.cpp:1603
+#: libs/ui/kis_node_manager.cpp:1610
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1606
+#: libs/ui/kis_node_manager.cpp:1613
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr ""
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1621
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"

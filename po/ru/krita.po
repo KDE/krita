@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-20 01:44+0000\n"
+"POT-Creation-Date: 2024-07-22 01:47+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -18276,7 +18276,7 @@ msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
-#: libs/ui/kis_node_manager.cpp:1527
+#: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18321,7 +18321,7 @@ msgid "Transform Mask"
 msgstr "Трансформирующая маска"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1307
+#: libs/ui/kis_node_manager.cpp:1314
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19926,8 +19926,8 @@ msgstr "Локальные источники"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1231
-#: libs/ui/kis_node_manager.cpp:1294 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
 #: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
@@ -29925,84 +29925,84 @@ msgstr "Отзеркалить отображение вокруг курсор�
 msgid "Mirror View Around Canvas"
 msgstr "Отзеркалить отображение вокруг холста"
 
-#: libs/ui/kis_node_manager.cpp:453
+#: libs/ui/kis_node_manager.cpp:460
 #, kde-format
 msgid "Layer is locked"
 msgstr "Слой заблокирован"
 
-#: libs/ui/kis_node_manager.cpp:455 libs/ui/kis_node_manager.cpp:480
+#: libs/ui/kis_node_manager.cpp:462 libs/ui/kis_node_manager.cpp:487
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Слой «%1» заблокирован"
 
-#: libs/ui/kis_node_manager.cpp:508
+#: libs/ui/kis_node_manager.cpp:515
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr ""
 "Перемещение узлов\n"
 "перемещение узлов"
 
-#: libs/ui/kis_node_manager.cpp:515
+#: libs/ui/kis_node_manager.cpp:522
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr ""
 "Копирование узлов\n"
 "копирование узлов"
 
-#: libs/ui/kis_node_manager.cpp:522
+#: libs/ui/kis_node_manager.cpp:529
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr ""
 "Добавление узлов\n"
 "добавление узлов"
 
-#: libs/ui/kis_node_manager.cpp:693
+#: libs/ui/kis_node_manager.cpp:700
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr ""
 "Преобразование в маску выделения\n"
 "преобразование в маску выделения"
 
-#: libs/ui/kis_node_manager.cpp:941
+#: libs/ui/kis_node_manager.cpp:948
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Для режима «Луковая кожа» требуется слой с прозрачным фоном."
 
-#: libs/ui/kis_node_manager.cpp:968
+#: libs/ui/kis_node_manager.cpp:975
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr ""
 "Дублирование узлов\n"
 "дублирование узлов"
 
-#: libs/ui/kis_node_manager.cpp:993
+#: libs/ui/kis_node_manager.cpp:1000
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr ""
 "Увеличение узлов\n"
 "увеличение узлов"
 
-#: libs/ui/kis_node_manager.cpp:1002
+#: libs/ui/kis_node_manager.cpp:1009
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr ""
 "Уменьшение узлов\n"
 "уменьшение узлов"
 
-#: libs/ui/kis_node_manager.cpp:1022
+#: libs/ui/kis_node_manager.cpp:1029
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr ""
 "Удаление узлов\n"
 "удаление узлов"
 
-#: libs/ui/kis_node_manager.cpp:1038
+#: libs/ui/kis_node_manager.cpp:1045
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Отразить по горизонтали"
 
-#: libs/ui/kis_node_manager.cpp:1041
+#: libs/ui/kis_node_manager.cpp:1048
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -30012,13 +30012,13 @@ msgstr[1] "Отразить слой по горизонтали"
 msgstr[2] "Отразить слой по горизонтали"
 msgstr[3] "Отразить слой по горизонтали"
 
-#: libs/ui/kis_node_manager.cpp:1052
+#: libs/ui/kis_node_manager.cpp:1059
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Отразить по вертикали"
 
-#: libs/ui/kis_node_manager.cpp:1055
+#: libs/ui/kis_node_manager.cpp:1062
 #, fuzzy, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -30028,52 +30028,52 @@ msgstr[1] "Отразить слой по вертикали"
 msgstr[2] "Отразить слой по вертикали"
 msgstr[3] "Отразить слой по вертикали"
 
-#: libs/ui/kis_node_manager.cpp:1063
+#: libs/ui/kis_node_manager.cpp:1070
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Отразить все слои по горизонтали"
 
-#: libs/ui/kis_node_manager.cpp:1070
+#: libs/ui/kis_node_manager.cpp:1077
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Отразить все слои по вертикали"
 
-#: libs/ui/kis_node_manager.cpp:1202
+#: libs/ui/kis_node_manager.cpp:1209
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Экспорт «%1»"
 
-#: libs/ui/kis_node_manager.cpp:1232
+#: libs/ui/kis_node_manager.cpp:1239
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Не удалось сохранить слой. %1"
 
-#: libs/ui/kis_node_manager.cpp:1250
+#: libs/ui/kis_node_manager.cpp:1257
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Слой не имеет пиксельные данные"
 
-#: libs/ui/kis_node_manager.cpp:1274
+#: libs/ui/kis_node_manager.cpp:1281
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Экспорт в SVG"
 
-#: libs/ui/kis_node_manager.cpp:1294
+#: libs/ui/kis_node_manager.cpp:1301
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Не удалось сохранить как svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1320
+#: libs/ui/kis_node_manager.cpp:1327
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Слой %1 нельзя редактировать"
 
-#: libs/ui/kis_node_manager.cpp:1321
+#: libs/ui/kis_node_manager.cpp:1328
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -30082,57 +30082,57 @@ msgstr ""
 "Не удалось изменить альфа-канал родительского слоя «%1».\n"
 "Операция будет отменена."
 
-#: libs/ui/kis_node_manager.cpp:1352
+#: libs/ui/kis_node_manager.cpp:1359
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr ""
 "Запись альфа-канал в слой\n"
 "запись альфа-канала в слой"
 
-#: libs/ui/kis_node_manager.cpp:1475
+#: libs/ui/kis_node_manager.cpp:1482
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr ""
 "Вырезание узлов\n"
 "вырезание узлов"
 
-#: libs/ui/kis_node_manager.cpp:1557
+#: libs/ui/kis_node_manager.cpp:1564
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr ""
 "Быстрая группировка\n"
 "быструю группировку"
 
-#: libs/ui/kis_node_manager.cpp:1568
+#: libs/ui/kis_node_manager.cpp:1575
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr ""
 "Быстрая группировка в макетную группу\n"
 "быструю группировку в макетную группу"
 
-#: libs/ui/kis_node_manager.cpp:1575
+#: libs/ui/kis_node_manager.cpp:1582
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Макетная группа"
 
-#: libs/ui/kis_node_manager.cpp:1576
+#: libs/ui/kis_node_manager.cpp:1583
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Маскирующий слой"
 
-#: libs/ui/kis_node_manager.cpp:1603
+#: libs/ui/kis_node_manager.cpp:1610
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Не удалось переместить слой «%1» в новый родительский слой «%2»"
 
-#: libs/ui/kis_node_manager.cpp:1606
+#: libs/ui/kis_node_manager.cpp:1613
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Не удалось переместить слой «%1» в корневой слой"
 
-#: libs/ui/kis_node_manager.cpp:1614
+#: libs/ui/kis_node_manager.cpp:1621
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr ""

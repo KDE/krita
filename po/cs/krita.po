@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:47+0000\n"
-"PO-Revision-Date: 2024-07-15 15:26+0200\n"
+"PO-Revision-Date: 2024-07-22 16:59+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -18224,12 +18224,9 @@ msgid "Import frames"
 msgstr "Importovat rámce"
 
 #: libs/libkis/PaintingResources.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Freehand Brush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "Tah štětcem volnou rukou"
+msgstr "Naskriptovaný tah štětcem"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format

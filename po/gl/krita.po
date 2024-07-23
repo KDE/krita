@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:47+0000\n"
-"PO-Revision-Date: 2024-06-21 22:17+0200\n"
+"PO-Revision-Date: 2024-07-22 19:28+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -88,7 +88,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 24.05.0\n"
+"X-Generator: Lokalize 24.05.2\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -18348,12 +18348,9 @@ msgid "Import frames"
 msgstr "Importar fotogramas"
 
 #: libs/libkis/PaintingResources.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Freehand Brush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "Trazo de pincel a man alzada"
+msgstr "Trazo de pincel guionizado"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -25567,12 +25564,15 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Activar a lectura do estado de presión dos eventos táctiles. Estes datos "
+"poden non funcionar nalgunhas plataformas, p. ex. nalgúns dispositivos con "
+"Android, nos que pode que a presión que se indique sexa sempre 0.0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Activar a sensibilidade á presión táctil (quizais non funcione)."
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

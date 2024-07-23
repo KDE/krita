@@ -33,7 +33,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-22 01:47+0000\n"
-"PO-Revision-Date: 2024-06-19 23:22+0200\n"
+"PO-Revision-Date: 2024-07-20 11:46+0200\n"
 "Last-Translator: Valter Mura <valtermura@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18327,12 +18327,9 @@ msgid "Import frames"
 msgstr "Importa fotogrammi"
 
 #: libs/libkis/PaintingResources.cpp:25
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Freehand Brush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "Tratto pennello a mano libera"
+msgstr "Tratto pennello con script"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -25565,12 +25562,16 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Abilita la lettura dello stato di pressione per gli eventi di tocco. Questi "
+"dati potrebbero non essere corretti in alcune piattaforme, per esempio su "
+"alcuni dispositivi Android, dove la pressione potrebbe essere rilevata "
+"sempre come 0,0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Abilita sensibilità di pressione del tocco (potrebbe essere scorretta)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872

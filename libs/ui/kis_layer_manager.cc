@@ -186,10 +186,16 @@ void KisLayerManager::updateGUI()
 
     const bool isGroupLayer = layer && layer->inherits("KisGroupLayer");
 
-    m_imageMergeLayer->setText(
-                isGroupLayer ?
-                    i18nc("@action:inmenu", "Merge Group") :
-                    i18nc("@action:inmenu", "Merge with Layer Below"));
+    QString mergeLayerText;
+    if (m_view->nodeManager()->selectedNodes().size() > 1) {
+        mergeLayerText = i18nc("@action:inmenu", "Merge Selected Layers");
+    } else if (isGroupLayer) {
+        mergeLayerText = i18nc("@action:inmenu", "Merge Group");
+    } else {
+        mergeLayerText = i18nc("@action:inmenu", "Merge with Layer Below");
+    }
+    m_imageMergeLayer->setText(mergeLayerText);
+
     m_flattenLayer->setVisible(!isGroupLayer);
 
     if (m_view->statusBar())

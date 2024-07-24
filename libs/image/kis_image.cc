@@ -1611,9 +1611,7 @@ void KisImage::flatten(KisNodeSP activeNode)
 
 void KisImage::mergeMultipleLayers(QList<KisNodeSP> mergedNodes, KisNodeSP putAfter)
 {
-    if (!KisLayerUtils::tryMergeSelectionMasks(this, mergedNodes, putAfter)) {
-        KisLayerUtils::mergeMultipleLayers(this, mergedNodes, putAfter);
-    }
+    KisLayerUtils::mergeMultipleNodes(this, mergedNodes, putAfter);
 }
 
 void KisImage::mergeDown(KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)

@@ -244,6 +244,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
         }
 
         currentNodesListCopy = KisLayerUtils::sortAndFilterAnyMergeableNodesSafe(currentNodesListCopy, m_refImage);
+
         m_refImage->initialRefreshGraph();
         KisLayerUtils::refreshHiddenAreaAsync(m_refImage, m_refImage->root(), m_refImage->bounds());
         m_refImage->waitForDone();
@@ -253,7 +254,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
         }
 
         m_refImage->waitForDone();
-        m_refImage->mergeMultipleLayers(currentNodesListCopy, 0);
+        KisLayerUtils::mergeMultipleNodes(m_refImage, currentNodesListCopy, 0, KisLayerUtils::SkipMergingFrames);
         m_refImage->waitForDone();
 
         KisPainter::copyAreaOptimized(m_refImage->projection()->exactBounds().topLeft(), m_refImage->projection(), m_newRefPaintDevice, m_refImage->projection()->exactBounds());

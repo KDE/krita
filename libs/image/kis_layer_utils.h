@@ -28,6 +28,12 @@ namespace KisMetaData
 
 namespace KisLayerUtils
 {
+    enum MergeFlag {
+        None,
+        SkipMergingFrames = 0x1
+    };
+    Q_DECLARE_FLAGS(MergeFlags, MergeFlag)
+
     KRITAIMAGE_EXPORT void sortMergeableNodes(KisNodeSP root, QList<KisNodeSP> &inputNodes, QList<KisNodeSP> &outputNodes);
     KRITAIMAGE_EXPORT KisNodeList sortMergeableNodes(KisNodeSP root, KisNodeList nodes);
     KRITAIMAGE_EXPORT void filterMergeableNodes(KisNodeList &nodes, bool allowMasks = false);
@@ -52,18 +58,24 @@ namespace KisLayerUtils
 
     KRITAIMAGE_EXPORT KisNodeList sortAndFilterMergeableInternalNodes(KisNodeList nodes, bool allowMasks = false);
 
-    KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy);
+    KRITAIMAGE_EXPORT void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy, MergeFlags flags = None);
 
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFrames(KisNodeSP node);
     KRITAIMAGE_EXPORT QSet<int> fetchLayerFramesRecursive(KisNodeSP rootNode);
 
-    KRITAIMAGE_EXPORT void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
-    KRITAIMAGE_EXPORT void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter);
+    KRITAIMAGE_EXPORT void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, MergeFlags flags = None);
+    KRITAIMAGE_EXPORT void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter, MergeFlags flags = None);
+
+    /**
+     * Same as mergeMultipleLayers() but tries to merge masks with tryMergeSelectionMasks()
+     * first.
+     */
+    KRITAIMAGE_EXPORT void mergeMultipleNodes(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, MergeFlags flags = None);
 
     KRITAIMAGE_EXPORT bool tryMergeSelectionMasks(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter);
 
-    KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer);
-    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image, KisNodeSP activeNode);
+    KRITAIMAGE_EXPORT void flattenLayer(KisImageSP image, KisLayerSP layer, MergeFlags flags = None);
+    KRITAIMAGE_EXPORT void flattenImage(KisImageSP image, KisNodeSP activeNode, MergeFlags flags = None);
 
     KRITAIMAGE_EXPORT void addCopyOfNameTag(KisNodeSP node);
     KRITAIMAGE_EXPORT KisNodeList findNodesWithProps(KisNodeSP root, const KoProperties &props, bool excludeRoot);
@@ -267,5 +279,7 @@ namespace KisLayerUtils
     /* Returns a set of times associated with every unique frame from a selection. */
     KRITAIMAGE_EXPORT QSet<int> fetchUniqueFrameTimes(KisNodeSP node, QSet<int> selectedTimes, bool filterActiveFrameID);
 }
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisLayerUtils::MergeFlags);
 
 #endif /* __KIS_LAYER_UTILS_H */

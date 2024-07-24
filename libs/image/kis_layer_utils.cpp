@@ -138,13 +138,16 @@ namespace Private {
     struct MergeDownInfo : public MergeDownInfoBase {
         MergeDownInfo(KisImageSP _image,
                       KisLayerSP _prevLayer,
-                      KisLayerSP _currLayer)
+                      KisLayerSP _currLayer,
+                      MergeFlags flags)
             : MergeDownInfoBase(_image),
               prevLayer(_prevLayer),
               currLayer(_currLayer)
         {
-            frames = fetchLayerFramesRecursive(prevLayer) |
-                fetchLayerFramesRecursive(currLayer);
+            if (!flags.testFlag(SkipMergingFrames)) {
+                frames = fetchLayerFramesRecursive(prevLayer) |
+                    fetchLayerFramesRecursive(currLayer);
+            }
 
             /**
              * If source layer is not animated, then just merge that into the current frame
@@ -326,12 +329,15 @@ namespace Private {
 
     struct MergeMultipleInfo : public MergeDownInfoBase {
         MergeMultipleInfo(KisImageSP _image,
-                          KisNodeList _mergedNodes)
+                          KisNodeList _mergedNodes,
+                          MergeFlags flags)
             : MergeDownInfoBase(_image),
               mergedNodes(_mergedNodes)
         {
             foreach (KisNodeSP node, mergedNodes) {
-                frames |= fetchLayerFramesRecursive(node);
+                if (!flags.testFlag(SkipMergingFrames)) {
+                    frames |= fetchLayerFramesRecursive(node);
+                }
                 pinnedToTimeline |= node->isPinnedToTimeline();
 
                 const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer*>(node.data());
@@ -1398,7 +1404,7 @@ namespace Private {
     /**
      * \see a comment in mergeMultipleLayersImpl()
      */
-    void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy)
+    void mergeDown(KisImageSP image, KisLayerSP layer, const KisMetaData::MergeStrategy* strategy, MergeFlags flags)
     {
         if (!layer->prevSibling()) return;
 
@@ -1417,7 +1423,7 @@ namespace Private {
                                            kundo2_i18n("Merge Down"));
 
         if (layer->visible() && prevLayer->visible()) {
-            MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer));
+            MergeDownInfoSP info(new MergeDownInfo(image, prevLayer, layer, flags));
 
             // disable key strokes on all colorize masks, all onion skins on
             // paint layers and wait until update is finished with a barrier
@@ -1816,8 +1822,9 @@ namespace Private {
      * as if nothing has happened (if it is technically possible).
      */
     void mergeMultipleLayersImpl(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter,
-                                           bool flattenSingleLayer, const KUndo2MagicString &actionName,
-                                           bool cleanupNodes = true, const QString layerName = QString())
+                                 bool flattenSingleLayer, const KUndo2MagicString &actionName,
+                                 bool cleanupNodes = true, const QString layerName = QString(),
+                                 MergeFlags flags = None)
     {
         if (!putAfter) {
             putAfter = mergedNodes.first();
@@ -1891,7 +1898,7 @@ namespace Private {
         }
 
         if (mergedNodes.size() > 1 || invisibleNodes.isEmpty()) {
-            MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
+            MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes, flags));
 
             // disable key strokes on all colorize masks, all onion skins on
             // paint layers and wait until update is finished with a barrier
@@ -1957,17 +1964,30 @@ namespace Private {
 
     }
 
-    void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter)
+    void mergeMultipleLayers(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, MergeFlags flags)
     {
-        mergeMultipleLayersImpl(image, mergedNodes, putAfter, false, kundo2_i18n("Merge Selected Nodes"));
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter,
+                                false, kundo2_i18n("Merge Selected Nodes"),
+                                true, QString(),
+                                flags);
     }
 
-    void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter)
+    void mergeMultipleNodes(KisImageSP image, KisNodeList mergedNodes, KisNodeSP putAfter, MergeFlags flags)
+    {
+        if (!tryMergeSelectionMasks(image, mergedNodes, putAfter)) {
+            mergeMultipleLayers(image, mergedNodes, putAfter, flags);
+        }
+    }
+
+    void newLayerFromVisible(KisImageSP image, KisNodeSP putAfter, MergeFlags flags)
     {
         KisNodeList mergedNodes;
         mergedNodes << image->root();
 
-        mergeMultipleLayersImpl(image, mergedNodes, putAfter, true, kundo2_i18n("New From Visible"), false, i18nc("New layer created from all the visible layers", "Visible"));
+        mergeMultipleLayersImpl(image, mergedNodes, putAfter,
+                                true, kundo2_i18n("New From Visible"),
+                                false, i18nc("New layer created from all the visible layers", "Visible"),
+                                flags);
     }
 
     struct MergeSelectionMasks : public KisCommandUtils::AggregateCommand {
@@ -2047,7 +2067,7 @@ namespace Private {
                                            emitSignals,
                                            kundo2_i18n("Merge Selection Masks"));
 
-        MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes));
+        MergeMultipleInfoSP info(new MergeMultipleInfo(image, mergedNodes, None));
 
 
         applicator.applyCommand(new MergeSelectionMasks(info, putAfter));
@@ -2060,7 +2080,7 @@ namespace Private {
         return true;
     }
 
-    void flattenLayer(KisImageSP image, KisLayerSP layer)
+    void flattenLayer(KisImageSP image, KisLayerSP layer, MergeFlags flags)
     {
         if (!layer->childCount() && !layer->layerStyle())
             return;
@@ -2068,10 +2088,13 @@ namespace Private {
         KisNodeList mergedNodes;
         mergedNodes << layer;
 
-        mergeMultipleLayersImpl(image, mergedNodes, layer, true, kundo2_i18n("Flatten Layer"));
+        mergeMultipleLayersImpl(image, mergedNodes, layer,
+                                true, kundo2_i18n("Flatten Layer"),
+                                true, QString(),
+                                flags);
     }
 
-    void flattenImage(KisImageSP image, KisNodeSP activeNode)
+    void flattenImage(KisImageSP image, KisNodeSP activeNode, MergeFlags flags)
     {
         if (!activeNode) {
             activeNode = image->root()->lastChild();
@@ -2081,7 +2104,10 @@ namespace Private {
         KisNodeList mergedNodes;
         mergedNodes << image->root();
 
-        mergeMultipleLayersImpl(image, mergedNodes, activeNode, true, kundo2_i18n("Flatten Image"));
+        mergeMultipleLayersImpl(image, mergedNodes, activeNode,
+                                true, kundo2_i18n("Flatten Image"),
+                                true, QString(),
+                                flags);
     }
 
     KisSimpleUpdateCommand::KisSimpleUpdateCommand(KisNodeList nodes, bool finalize, KUndo2Command *parent)

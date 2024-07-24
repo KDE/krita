@@ -44,7 +44,6 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
     bool m_usenormalmap = config->getBool(USE_NORMALMAP_IS_ENABLED);
 
     if (userChosenHeightChannel == "FAIL") {
-        qDebug("FIX YOUR FILTER");
         return;
     }
 

@@ -145,7 +145,7 @@ private:
     void internalUnitChange(QString const& symbol);
     void prepareUnitChange();
 
-    void contextMenuEvent(QContextMenuEvent *event);
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private Q_SLOTS:
     // exists to do emits for valueChangedPt

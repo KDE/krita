@@ -233,10 +233,14 @@ void KisLayerManager::layerProperties()
     if (!m_view) return;
     if (!m_view->document()) return;
 
+    // For non-modal dialogs, only allow one instance of the dialog to exist.
+    // Modal dialogs won't set this.
+    if (m_layerPropertiesDialogActive) return;
+
     KisLayerSP layer = activeLayer();
     if (!layer) return;
 
-    QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+    const QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
     const bool multipleLayersSelected = selectedNodes.size() > 1;
 
     if (!m_view->nodeManager()->canModifyLayers(selectedNodes)) return;
@@ -288,21 +292,6 @@ void KisLayerManager::layerProperties()
             }
         }
     }
-    else if (generatorLayer && !multipleLayersSelected) {
-        KisFilterConfigurationSP configBefore(generatorLayer->filter());
-        Q_ASSERT(configBefore);
-
-        KisDlgGeneratorLayer *dlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->mainWindow(), generatorLayer, configBefore, KisStrokeId());
-        dlg->setWindowTitle(i18n("Fill Layer Properties"));
-        dlg->setAttribute(Qt::WA_DeleteOnClose);
-
-        dlg->setConfiguration(configBefore.data());
-
-        Qt::WindowFlags flags = dlg->windowFlags();
-        dlg->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
-        dlg->show();
-
-    }
     else if (fileLayer && !multipleLayersSelected){
         QString basePath = QFileInfo(m_view->document()->path()).absolutePath();
         QString fileNameOld = fileLayer->fileName();
@@ -339,22 +328,46 @@ void KisLayerManager::layerProperties()
                 m_view->undoAdapter()->addCommand(cmd);
             }
         }
-    } else { // If layer == normal painting layer, vector layer, or group layer
-        QList<KisNodeSP> selectedNodes = m_view->nodeManager()->selectedNodes();
+    } else {
+        QDialog* dlg = nullptr;
 
-        KisDlgLayerProperties *dialog = new KisDlgLayerProperties(selectedNodes, m_view, m_view->canvas());
-        dialog->resize(dialog->minimumSizeHint());
-        dialog->setAttribute(Qt::WA_DeleteOnClose);
-        Qt::WindowFlags flags = dialog->windowFlags();
+        if (generatorLayer && !multipleLayersSelected) {
+            KisFilterConfigurationSP configBefore(generatorLayer->filter());
+            Q_ASSERT(configBefore);
+
+            auto* genDlg = new KisDlgGeneratorLayer(generatorLayer->name(), m_view, m_view->canvas(), generatorLayer, configBefore, KisStrokeId());
+            genDlg->setWindowTitle(i18n("Fill Layer Properties"));
+            genDlg->setConfiguration(configBefore.data());
+
+            dlg = genDlg;
+        }
+
+        // Handle these layer(s) as normal painting layer, vector layer, or group layer
+        if (!dlg) {
+            dlg = new KisDlgLayerProperties(selectedNodes, m_view, m_view->canvas());
+        }
+
+        dlg->resize(dlg->minimumSizeHint());
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+
+        const Qt::WindowFlags flags = dlg->windowFlags();
 #ifdef Q_OS_ANDROID
         // a Qt::Tool window seems incapable of receiving keyboard focus
-        dialog->setWindowFlags(flags | Qt::Dialog);
+        dlg->setWindowFlags(flags | Qt::Dialog);
 #else
-        dialog->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
+        dlg->setWindowFlags(flags | Qt::Tool | Qt::Dialog);
 #endif
-        dialog->show();
-        dialog->activateWindow();
+        connect(dlg, SIGNAL(destroyed()), this, SLOT(layerPropertiesDialogClosed()));
+        m_layerPropertiesDialogActive = true;
+
+        dlg->show();
+        dlg->activateWindow();
     }
+}
+
+void KisLayerManager::layerPropertiesDialogClosed()
+{
+    m_layerPropertiesDialogActive = false;
 }
 
 void KisLayerManager::changeCloneSource()

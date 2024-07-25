@@ -65,6 +65,7 @@ private Q_SLOTS:
     void trimToImage();
 
     void layerProperties();
+    void layerPropertiesDialogClosed();
 
     void flattenImage();
 
@@ -124,6 +125,8 @@ private:
     KisAction *m_layerStyle {0};
     KisAction *m_copyLayerStyle {0};
     KisAction *m_pasteLayerStyle {0};
+
+    bool m_layerPropertiesDialogActive {false};
 };
 
 #endif

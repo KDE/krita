@@ -785,8 +785,6 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.buttonReleased(Qt::LeftButton, touchEvent);
             d->previousPos = {0, 0};
             d->touchStrokeStarted = false; // stroke ended
-        } else {
-            d->matcher.touchResetStateForPointerEvents();
         }
 
         // if the event isn't handled, Qt starts to send MouseEvents

@@ -271,7 +271,7 @@ class CodeEditor(QPlainTextEdit):
             self.dedentBlock(blockNumber)
 
     def autoindent(self):
-        """The return key has just been pressed (and processed by the editor)
+        r"""The return key has just been pressed (and processed by the editor)
         now insert leading spaces to reflect an appropriate indent level
         against the previous line.
         This will depend on the end of the previous line. If it ends:

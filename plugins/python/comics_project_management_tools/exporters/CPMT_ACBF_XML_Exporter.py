@@ -507,8 +507,8 @@ def write_xml(configDictionary = {}, pageData = [],  pagesLocationList = [], loc
                     figureOut = figure_out_type(svg.documentElement())
                     type = figureOut[0]
                     inverted = figureOut[1]
-                    string = re.sub("\<\/*?text.*?\>",'', str(v["text"]))
-                    string = re.sub("\s+?", " ", string)
+                    string = re.sub(r"\<\/*?text.*?\>",'', str(v["text"]))
+                    string = re.sub(r"\s+?", " ", string)
                     translationEntry = poParser.get_entry_for_key(string, lang)
                     string = translationEntry.get("trans", string)
                     svg.setContent("<text>"+string+"</text>")

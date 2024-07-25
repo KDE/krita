@@ -46,8 +46,8 @@ class po_file_parser():
                         key = ""
                     if self.key_xml:
                         text = entry.get("text", "")
-                        text = re.sub("\<.*?\>", " ", text)
-                        key += str(re.sub("\s+", " ", text)).strip()
+                        text = re.sub(r"\<.*?\>", " ", text)
+                        key += str(re.sub(r"\s+", " ", text)).strip()
                     else:
                         key += entry.get("text", None)
                     if key is not None:
@@ -111,8 +111,8 @@ class po_file_parser():
         entry = {}
         entry["trans"] = " "
         if self.key_xml:
-            key = re.sub("\<.*?\>", " ", key)
-            key = re.sub("\s+", " ", key)
+            key = re.sub(r"\<.*?\>", " ", key)
+            key = re.sub(r"\s+", " ", key)
             key = key.strip()
         if key in self.translationDict.keys():
             translations = {}

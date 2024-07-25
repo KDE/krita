@@ -8,6 +8,8 @@
 #define __KIS_CACHED_PAINT_DEVICE_H
 
 #include "kis_lockless_stack.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 #include "kis_paint_device.h"
 #include "kis_selection.h"
 #include "KoColorSpace.h"
@@ -91,7 +93,7 @@ public:
         KisSelectionSP selection;
 
         if(!m_stack.pop(selection)) {
-            selection = new KisSelection(new KisSelectionEmptyBounds(0));
+            selection = new KisSelection(new KisSelectionEmptyBounds(), KisImageResolutionProxy::identity());
         }
 
         return selection;
@@ -99,7 +101,8 @@ public:
 
     void putSelection(KisSelectionSP selection) {
         selection->clear();
-        selection->setDefaultBounds(new KisSelectionEmptyBounds(0));
+        selection->setDefaultBounds(new KisSelectionEmptyBounds());
+        selection->setResolutionProxy(KisImageResolutionProxy::identity());
         selection->pixelSelection()->moveTo(QPoint());
         m_stack.push(selection);
     }

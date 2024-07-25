@@ -11,7 +11,6 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeLayer.h>
-#include <KoImageData.h>
 
 #include <QTemporaryFile>
 
@@ -101,9 +100,15 @@ QString SvgSavingContext::createUID(const QString &base)
 {
     QString idBase = base.isEmpty() ? "defitem" : base;
     int counter = d->uniqueNames.value(idBase);
-    d->uniqueNames.insert(idBase, counter+1);
+    QString res;
+    do {
+        res = idBase + QString::number(counter);
+        counter++;
+    } while (d->uniqueNames.contains(res));
 
-    return idBase + QString("%1").arg(counter);
+    d->uniqueNames.insert(idBase, counter);
+    d->uniqueNames.insert(res, 1);
+    return res;
 }
 
 QString SvgSavingContext::getID(const KoShape *obj)
@@ -199,34 +204,6 @@ QString SvgSavingContext::saveImage(const QImage &image)
         }
     }
 
-    return QString();
-}
-
-QString SvgSavingContext::saveImage(KoImageData *image)
-{
-    if (isSavingInlineImages()) {
-        QBuffer buffer;
-        buffer.open(QIODevice::WriteOnly);
-        if (image->saveData(buffer)) {
-            const QString header("data:" + KisMimeDatabase::mimeTypeForSuffix(image->suffix()) + ";base64,");
-            return header + buffer.data().toBase64();
-        }
-    } else {
-        // write to a temp file first
-        QTemporaryFile imgFile;
-        if (image->saveData(imgFile)) {
-            QString ext = image->suffix();
-            QString dstFilename = createFileName(ext);
-            // move the temp file to the destination directory
-            if (QFile::copy(imgFile.fileName(), dstFilename)) {
-                return dstFilename;
-            }
-            else {
-                QFile f(imgFile.fileName());
-                f.remove();
-            }
-        }
-    }
     return QString();
 }
 

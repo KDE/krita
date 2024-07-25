@@ -148,7 +148,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 }
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KisKActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent)
     : QAbstractScrollArea(parent)
     , KoCanvasController(actionCollection)
     , d(new Private(this, observerProvider))
@@ -178,6 +178,7 @@ KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCol
     connect(horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetX()));
     connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(updateCanvasOffsetY()));
     connect(d->viewportWidget, SIGNAL(sizeChanged()), this, SLOT(updateCanvasOffsetX()));
+    connect(d->viewportWidget, SIGNAL(sizeChanged()), this, SLOT(updateCanvasOffsetY()));
     connect(proxyObject, SIGNAL(moveDocumentOffset(QPoint)), d->viewportWidget, SLOT(documentOffsetMoved(QPoint)));
 }
 
@@ -533,8 +534,8 @@ void KoCanvasControllerWidget::dragLeaveEvent(QDragLeaveEvent *event)
 void KoCanvasControllerWidget::wheelEvent(QWheelEvent *event)
 {
     if (d->zoomWithWheel != ((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier)) {
-        const qreal zoomCoeff = event->delta() > 0 ? sqrt(2.0) : sqrt(0.5);
-        zoomRelativeToPoint(event->pos(), zoomCoeff);
+        const qreal zoomCoeff = event->angleDelta().y() > 0 ? sqrt(2.0) : sqrt(0.5);
+        zoomRelativeToPoint(event->position().toPoint(), zoomCoeff);
 
         event->accept();
     } else

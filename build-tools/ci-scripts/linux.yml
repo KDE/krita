@@ -1,0 +1,97 @@
+linux-build:
+  stage: build
+  image: invent-registry.kde.org/sysadmin/ci-images/krita-appimage-builder:latest
+  tags:
+    - Linux
+  extends:
+    - .ci-always-job-mixin
+    - .ci-artifacts-with-packages-mixin
+  variables:
+    KDECI_BUILD_TYPE: Release
+    KDECI_CC_CACHE: /mnt/caches/krita-appimage/
+    KDECI_CACHE_PATH: /mnt/artifacts/krita-appimage/
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-appimage-qt5.15
+    KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: False
+    KDECI_EXTRA_CMAKE_ARGS: -DHIDE_SAFE_ASSERTS=OFF
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
+    KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+    KRITACI_LINUX_PUBLISH_PLATFORM: linux
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1
+    - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git upstream-ci-utilities --depth=1
+    - if [ "$KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE" != "True" ]; then pip install -r ci-notary-service/requirements.txt; fi
+    - export PATH="$HOME/tools/bin:$PATH"
+  script:
+    # GitLab freaks out when we try to use `tee` to save the logs manually, the job
+    # just silently hangs up. For this reason we don't use extra logging on Linux.
+
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+    - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform Linux/Qt5/Shared --skip-publishing
+    - python3 -u build-tools/ci-scripts/build-appimage.py
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform $KRITACI_LINUX_PUBLISH_PLATFORM --folder $CI_PROJECT_DIR/_packaging
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+linux-nightly:
+  extends:
+  - linux-build
+  - .nightly-job-mixin
+  - .ci-artifacts-without-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: True
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
+
+linux-debug-weekly:
+  extends:
+  - linux-build
+  - .weekly-job-mixin
+  - .ci-artifacts-with-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DENABLE_UPDATERS=OFF
+    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-debug }'
+
+linux-asan-weekly:
+  extends:
+  - linux-build
+  - .weekly-job-mixin
+  - .ci-artifacts-with-packages-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: "True"
+    KDECI_BUILD_TYPE: RelWithDebInfo
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=OFF
+      -DECM_ENABLE_SANITIZERS=address
+      -DENABLE_UPDATERS=OFF
+    KDECI_PACKAGE_ALIASES_YAML: '{ ext_qt : ext_qt-asan }'
+    ASAN_OPTIONS: 'new_delete_type_mismatch=0:detect_leaks=0:halt_on_error=0'
+    KRITACI_ALLOW_NO_PYQT: True
+    LD_PRELOAD: /usr/lib/gcc/x86_64-linux-gnu/11/libasan.so
+
+
+linux-release:
+  extends:
+  - linux-build
+  - .ci-release-job-mixin
+  interruptible: false
+  variables:
+    KDECI_ONLY_BUILD: True
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=ON
+      -DBUILD_TESTING=OFF

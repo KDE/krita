@@ -25,6 +25,7 @@ class KisNodeInsertionAdapter;
 class KisSelectionActionsAdapter;
 class KisNodeDisplayModeAdapter;
 class KisNodeManager;
+class KisIdleTasksManager;
 
 /**
  * KisNodeModel offers a Qt model-view compatible view of the node
@@ -63,11 +64,11 @@ public:
         /// Use to communicate a progress report to the section delegate on an action (a value of -1 or a QVariant() disable the progress bar
         ProgressRole,
 
-        /// Special activation role which is emitted when the user Atl-clicks on a section
+        /// Special activation role which is emitted when the user Alt-clicks on a section
         /// The item is first activated with ActiveRole, then a separate AlternateActiveRole comes
         AlternateActiveRole,
 
-        // When a layer is not (recursively) visible, then it should be gayed out
+        // When a layer is not (recursively) visible, then it should be grayed out
         ShouldGrayOutRole,
 
         // An index of a color label associated with the node
@@ -91,6 +92,10 @@ public:
         // animated content attached to it.
         IsAnimatedRole,
 
+        // Returns a string with layer opacity and blending mode information;
+        // content depends on style setting.
+        InfoTextRole,
+
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = Qt::UserRole + 99,
 
@@ -105,7 +110,7 @@ public:
 
 public: // from QAbstractItemModel
 
-    KisNodeModel(QObject * parent);
+    explicit KisNodeModel(QObject * parent, int clonedColumns = 0);
     ~KisNodeModel() override;
 
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,
@@ -113,10 +118,12 @@ public: // from QAbstractItemModel
                           KisShapeController *shapeController,
                           KisSelectionActionsAdapter *selectionActionsAdapter,
                           KisNodeManager *nodeManager);
+    void setIdleTaskManager(KisIdleTasksManager *idleTasksManager);
     KisNodeSP nodeFromIndex(const QModelIndex &index) const;
     QModelIndex indexFromNode(KisNodeSP node) const;
 
     bool showGlobalSelection() const;
+    void setPreferredThumnalSize(int preferredSize) const;
 
 public Q_SLOTS:
     void setShowGlobalSelection(bool value);
@@ -127,6 +134,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
     QModelIndex parent(const QModelIndex &index) const override;
+    QModelIndex sibling(int row, int column, const QModelIndex &idx) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex &index) const override;
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
@@ -158,6 +166,8 @@ protected Q_SLOTS:
 
     void processUpdateQueue();
     void progressPercentageChanged(int, const KisNodeSP);
+
+    void slotLayerThumbnailUpdated(KisNodeSP node);
 
 protected:
     virtual KisModelIndexConverterBase *createIndexConverter();

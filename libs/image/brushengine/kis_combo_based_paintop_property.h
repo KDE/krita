@@ -9,9 +9,9 @@
 
 #include <QScopedPointer>
 
-#include "kis_uniform_paintop_property.h"
+#include "kis_image_export.h"
 #include "kis_types.h"
-#include "kritaimage_export.h"
+#include "kis_uniform_paintop_property.h"
 
 class QIcon;
 
@@ -39,6 +39,7 @@ private:
 
 #include "kis_callback_based_paintop_property.h"
 extern template class KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty>;
-typedef KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty> KisComboBasedPaintOpPropertyCallback;
+using KisComboBasedPaintOpPropertyCallback =
+    KisCallbackBasedPaintopProperty<KisComboBasedPaintOpProperty>;
 
 #endif /* __KIS_COMBO_BASED_PAINTOP_PROPERTY_H */

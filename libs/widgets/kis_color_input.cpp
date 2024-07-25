@@ -30,6 +30,8 @@
 #include <KoColorSlider.h>
 #include <KoColorSpace.h>
 #include <KisHsvColorSlider.h>
+#include <KoColorConversions.h>
+#include <KisSpinBoxI18nHelper.h>
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
@@ -51,11 +53,10 @@ void KisColorInput::init()
     m_layout->addWidget(m_label);
 
     m_colorSlider = new KoColorSlider(Qt::Horizontal, this, m_displayRenderer);
-    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_layout->addWidget(m_colorSlider);
 
     QWidget* m_input = createInput();
-    m_colorSlider->setFixedHeight(m_input->sizeHint().height());
     m_layout->addWidget(m_input);
 }
 
@@ -145,9 +146,7 @@ QWidget* KisIntegerColorInput::createInput()
     m_colorSlider->setMinimum(0);
 
     if (m_usePercentage) {
-        m_intNumInput->setSuffix(i18n("%"));
-    } else {
-        m_intNumInput->setSuffix("");
+        KisSpinBoxI18nHelper::setText(m_intNumInput, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     }
 
     switch (m_channelInfo->channelValueType()) {
@@ -188,8 +187,9 @@ void KisIntegerColorInput::setPercentageWise(bool val)
     m_usePercentage = val;
 
     if (m_usePercentage) {
-        m_intNumInput->setSuffix(i18n("%"));
+        KisSpinBoxI18nHelper::setText(m_intNumInput, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     } else {
+        m_intNumInput->setPrefix("");
         m_intNumInput->setSuffix("");
     }
 }
@@ -443,13 +443,14 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
     , m_color(color)
     , m_hSlider(nullptr)
     , m_sSlider(nullptr)
-    , m_vSlider(nullptr)
+    , m_xSlider(nullptr)
     , m_hInput(nullptr)
     , m_sInput(nullptr)
-    , m_vInput(nullptr)
+    , m_xInput(nullptr)
     , m_h(0)
     , m_s(0)
-    , m_v(0)
+    , m_x(0)
+    , m_mixMode(KisHsvColorSlider::MIX_MODE::HSV)
 {
 
     QLabel *labels[3];
@@ -474,6 +475,9 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
 
         // Slider itself
         KisHsvColorSlider *slider = new KisHsvColorSlider(Qt::Horizontal, this);
+        slider->setMixMode(m_mixMode);
+        slider->setMinimum(0);
+        slider->setMaximum(maxValues[i]);
         slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sliderLayout->addWidget(slider);
 
@@ -486,8 +490,7 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
         input->setMinimumWidth(60);
         input->setMaximumWidth(60);
 
-        // For some reason, the size hint is off by 1px
-        slider->setFixedHeight(input->sizeHint().height() - 1);
+        slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sliderLayout->addWidget(input);
 
         mainLayout->addLayout(sliderLayout);
@@ -514,40 +517,63 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
     connect(inputs[2], SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
 
     m_hSlider = sliders[0];
+    m_hSlider->setMixMode(KisHsvColorSlider::MIX_MODE::HSV);
     m_sSlider = sliders[1];
-    m_vSlider = sliders[2];
+    m_xSlider = sliders[2];
 
     m_hInput = inputs[0];
     m_sInput = inputs[1];
-    m_vInput = inputs[2];
+    m_xInput = inputs[2];
 
     // Set initial values
     QColor c = m_color->toQColor();
-    c.getHsvF(&m_h, &m_s, &m_v);
+    getHsxF(c, &m_h, &m_s, &m_x);
+
     m_hInput->setValue(m_h);
     m_sInput->setValue(m_s);
-    m_vInput->setValue(m_v);
+    m_xInput->setValue(m_x);
 
     // Update sliders
     QColor minC, maxC;
-    KoColor minK, maxK;
-
     minC.setHsvF(0, 1, 1);
     maxC.setHsvF(1, 1, 1);
-    minK.fromQColor(minC);
-    maxK.fromQColor(maxC);
-    m_hSlider->setColors(minK, maxK);
+    m_hSlider->setColors(minC, maxC);
     m_hSlider->setCircularHue(true);
 
     recolorSliders();
 }
 
+void KisHsvColorInput::setMixMode(KisHsvColorSlider::MIX_MODE mixMode) {
+	QColor c = m_color->toQColor();
+	m_mixMode = mixMode;
+	getHsxF(c, &m_h, &m_s, &m_x);
+
+	m_sSlider->setMixMode(m_mixMode);
+	m_xSlider->setMixMode(m_mixMode);
+
+    sendUpdate();
+}
+
 void KisHsvColorInput::sendUpdate()
 {
+    {
+        KisSignalsBlocker blocker(
+            m_hSlider, m_sSlider, m_xSlider,
+            m_hInput, m_sInput, m_xInput
+        );
+        m_hSlider->setValue(m_h * 360);
+        m_sSlider->setValue(m_s * 100);
+        m_xSlider->setValue(m_x * 100);
+
+		m_hInput->setValue(m_h * 360);
+		m_sInput->setValue(m_s * 100);
+		m_xInput->setValue(m_x * 100);
+    }
+
     recolorSliders();
 
-    QColor c;
-    c.setHsvF(m_h, m_s, m_v);
+	QColor c;
+    fillColor(c);
 
     m_color->fromQColor(c);
     emit(updated());
@@ -591,69 +617,140 @@ void KisHsvColorInput::setValue(double x)
         x = 100;
     }
 
-    m_v = x / 100;
+    m_x = x / 100;
     sendUpdate();
 }
 
 void KisHsvColorInput::hueSliderChanged(int i)
 {
-    m_hInput->setValue((i / 255.0) * 360);
+    m_hInput->setValue(i);
 }
 
 void KisHsvColorInput::saturationSliderChanged(int i)
 {
-    m_sInput->setValue((i / 255.0) * 100);
+    m_sInput->setValue(i);
 }
 
 void KisHsvColorInput::valueSliderChanged(int i)
 {
-    m_vInput->setValue((i / 255.0) * 100);
+    m_xInput->setValue(i);
 }
 
 void KisHsvColorInput::recolorSliders() {
     // Update sliders
     QColor minC, maxC;
-    KoColor minK, maxK;
 
-    minC.setHsvF(m_h, 0, m_v);
-    maxC.setHsvF(m_h, 1, m_v);
-    minK.fromQColor(minC);
-    maxK.fromQColor(maxC);
-    m_sSlider->setColors(minK, maxK);
+    minC.setHsvF(m_h, 0, m_x);
+    maxC.setHsvF(m_h, 1, m_x);
+    m_sSlider->setColors(minC, maxC);
 
-    minC.setHsvF(0, 0, 0);
-    maxC.setHsvF(0, 0, 1);
-    minK.fromQColor(minC);
-    maxK.fromQColor(maxC);
-    m_vSlider->setColors(minK, maxK);
+    minC.setHsvF(m_h, m_s, 0);
+    maxC.setHsvF(m_h, m_s, 1);
+    m_xSlider->setColors(minC, maxC);
 }
 
 void KisHsvColorInput::update()
 {
     KisSignalsBlocker blocker(
-        m_hInput, m_sInput, m_vInput,
-        m_hSlider, m_sSlider, m_vSlider
+        m_hInput, m_sInput, m_xInput,
+        m_hSlider, m_sSlider, m_xSlider
     );
 
     // Check if it is the same color we have
     QColor current;
-    current.setHsvF(m_h, m_s, m_v);
+
+    fillColor(current);
+
     QColor theirs = m_color->toQColor();
 
     // Truncate to integer for this check
     if (!(current.red() == theirs.red() && current.green() == theirs.green() && current.blue() == theirs.blue())) {
         // Apply the update
-        theirs.getHsvF(&m_h, &m_s, &m_v);
+        qreal theirH;
+        getHsxF(theirs, &theirH, &m_s, &m_x);
+
+        // Don't jump the Hue slider around to 0 if it is currently on 360
+        const qreal EPSILON = 1e-6;
+        if (!((1.0 - m_h) < EPSILON && (theirH - 0.0) < EPSILON)) {
+            m_h = theirH;
+        }
 
         m_hInput->setValue(m_h * 360);
         m_sInput->setValue(m_s * 100);
-        m_vInput->setValue(m_v * 100);
+        m_xInput->setValue(m_x * 100);
 
         recolorSliders();
 
         // Update slider positions
-        m_hSlider->setValue(m_h * 255);
-        m_sSlider->setValue(m_s * 255);
-        m_vSlider->setValue(m_v * 255);
+        m_hSlider->setValue(m_h * 360);
+        m_sSlider->setValue(m_s * 100);
+        m_xSlider->setValue(m_x * 100);
+    }
+}
+
+void KisHsvColorInput::fillColor(QColor& c) {
+    fillColor(c, m_h, m_s, m_x);
+}
+
+void KisHsvColorInput::fillColor(QColor& c, const qreal& h, const qreal& s, const qreal& x)
+{
+	switch (m_mixMode) {
+	case KisHsvColorSlider::MIX_MODE::HSL:
+		c.setHslF(h, s, x);
+		break;
+
+	case KisHsvColorSlider::MIX_MODE::HSY: {
+		qreal r, g, b;
+		HSYToRGB(h, s, x, &r, &g, &b);
+
+		// Clamp
+		r = qBound(0.0, r, 1.0);
+		g = qBound(0.0, g, 1.0);
+		b = qBound(0.0, b, 1.0);
+
+		c.setRgbF(r, g, b);
+		break;
+	}
+
+	case KisHsvColorSlider::MIX_MODE::HSI: {
+		qreal r, g, b;
+		HSIToRGB(h, s, x, &r, &g, &b);
+		c.setRgbF(r, g, b);
+		break;
+	}
+
+	default: // fallthrough
+	case KisHsvColorSlider::MIX_MODE::HSV:
+		c.setHsvF(h, s, x);
+		break;
+	}
+}
+
+void KisHsvColorInput::getHsxF(const QColor& color, qreal* h, qreal* s, qreal* x)
+{
+    qreal tempH;
+	switch (m_mixMode) {
+	case KisHsvColorSlider::MIX_MODE::HSL:
+        color.getHslF(&tempH, s, x);
+		break;
+
+	case KisHsvColorSlider::MIX_MODE::HSY: {
+		RGBToHSY(color.redF(), color.greenF(), color.blueF(), &tempH, s, x);
+		break;
+	}
+
+	case KisHsvColorSlider::MIX_MODE::HSI: {
+		RGBToHSI(color.redF(), color.greenF(), color.blueF(), &tempH, s, x);
+		break;
+	}
+
+	default: // fallthrough
+	case KisHsvColorSlider::MIX_MODE::HSV:
+		color.getHsvF(&tempH, s, x);
+		break;
+	}
+
+    if (tempH >= 0.0 && tempH <= 1.0) {
+        *h = tempH;
     }
 }

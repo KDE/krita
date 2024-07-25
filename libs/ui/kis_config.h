@@ -24,6 +24,7 @@ class KoColorSpace;
 class KisSnapConfig;
 class QSettings;
 class KisOcioConfiguration;
+struct KisCumulativeUndoData;
 
 class KRITAUI_EXPORT KisConfig
 {
@@ -58,14 +59,8 @@ public:
     bool useCumulativeUndoRedo(bool defaultValue = false) const;
     void setCumulativeUndoRedo(bool value);
 
-    double stackT1(bool defaultValue = false) const;
-    void setStackT1(int T1);
-
-    double stackT2(bool defaultValue = false) const;
-    void setStackT2(int T2);
-
-    int stackN(bool defaultValue = false) const;
-    void setStackN(int N);
+    KisCumulativeUndoData cumulativeUndoData(bool defaultValue = false) const;
+    void setCumulativeUndoData(KisCumulativeUndoData value);
 
     qint32 defImageWidth(bool defaultValue = false) const;
     void defImageWidth(qint32 width) const;
@@ -147,6 +142,8 @@ public:
     /// the custom monitor profile set by the user, depending on the configuration
     const KoColorProfile *displayProfile(int screen) const;
 
+    const QString getScreenStringIdentfier(int screenNo) const;
+
     QString workingColorSpace(bool defaultValue = false) const;
     void setWorkingColorSpace(const QString & workingColorSpace) const;
 
@@ -210,12 +207,6 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
-    // XXX Unused?
-    bool disableVSync(bool defaultValue = false) const;
-    void setDisableVSync(bool disableVSync);
-
-    bool showAdvancedOpenGLSettings(bool defaultValue = false) const;
-
     bool forceOpenGLFenceWorkaround(bool defaultValue = false) const;
 
     int numMipmapLevels(bool defaultValue = false) const;
@@ -228,11 +219,17 @@ public:
     quint32 getGridSubdivisionStyle(bool defaultValue = false) const;
     void setGridSubdivisionStyle(quint32 v) const;
 
+    quint32 getGridIsoVerticalStyle(bool defaultValue = false) const;
+    void setGridIsoVerticalStyle(quint32 v) const;
+
     QColor getGridMainColor(bool defaultValue = false) const;
     void setGridMainColor(const QColor & v) const;
 
     QColor getGridSubdivisionColor(bool defaultValue = false) const;
     void setGridSubdivisionColor(const QColor & v) const;
+
+    QColor getGridIsoVerticalColor(bool defaultValue = false) const;
+    void setGridIsoVerticalColor(const QColor & v) const;
 
     QColor getPixelGridColor(bool defaultValue = false) const;
     void setPixelGridColor(const QColor & v) const;
@@ -255,7 +252,7 @@ public:
     void setCheckSize(qint32 checkSize) const;
 
     bool scrollCheckers(bool defaultValue = false) const;
-    void setScrollingCheckers(bool scollCheckers) const;
+    void setScrollingCheckers(bool scrollCheckers) const;
 
     QColor checkersColor1(bool defaultValue = false) const;
     void setCheckersColor1(const QColor & v) const;
@@ -306,6 +303,9 @@ public:
 
     bool saveSessionOnQuit(bool defaultValue) const;
     void setSaveSessionOnQuit(bool value);
+
+    bool hideDevFundBanner(bool defaultValue = false) const;
+    void setHideDevFundBanner(bool value = true);
 
     qreal outlineSizeMinimum(bool defaultValue = false) const;
     void setOutlineSizeMinimum(qreal outlineSizeMinimum) const;
@@ -449,6 +449,9 @@ public:
     int layerThumbnailSize(bool defaultValue = false) const;
     void setLayerThumbnailSize(int size);
 
+    int layerTreeIndentation(bool defaultValue = false) const;
+    void setLayerTreeIndentation(int percentage);
+
 
     bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);
@@ -466,7 +469,7 @@ public:
     void setShowSingleChannelAsColor(bool asColor);
 
     bool hidePopups(bool defaultValue = false) const;
-    void setHidePopups(bool hidepopups);
+    void setHidePopups(bool hidePopups);
 
     int numDefaultLayers(bool defaultValue = false) const;
     void setNumDefaultLayers(int num);
@@ -539,6 +542,9 @@ public:
     bool useEraserBrushOpacity(bool defaultValue = false) const;
     void setUseEraserBrushOpacity(bool value);
 
+    QPoint getDefaultGridSpacing(bool defaultValue = false) const;
+    void setDefaultGridSpacing(QPoint gridSpacing);
+
     QString getMDIBackgroundColor(bool defaultValue = false) const;
     void setMDIBackgroundColor(const QString & v) const;
 
@@ -559,6 +565,9 @@ public:
     bool trimFramesImport(bool defaultValue = false) const;
     void setTrimFramesImport(bool trim);
 
+    QString exportMimeType(bool defaultValue) const;
+    void setExportMimeType(const QString &defaultExportMimeType);
+
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
@@ -574,10 +583,10 @@ public:
     bool kineticScrollingHiddenScrollbars(bool defaultValue = false) const;
     void setKineticScrollingHideScrollbars(bool scrollbar);
 
-    bool smoothZooming(bool defaultValue = false) const;
-    void setSmoothZooming(bool scale);
+    int zoomSteps(bool defaultValue = false) const;
+    void setZoomSteps(int steps);
 
-    int zoomMarginSize(int defaultValue = 0) const;
+    int zoomMarginSize(bool defaultValue = false) const;
     void setZoomMarginSize(int zoomMarginSize);
 
     void setEnableOpenGLFramerateLogging(bool value) const;
@@ -591,6 +600,9 @@ public:
 
     void setDisableAVXOptimizations(bool value);
     bool disableAVXOptimizations(bool defaultValue = false) const;
+
+    void setAnimationPlaybackBackend(int value);
+    int animationPlaybackBackend(bool defaultValue = false) const;
 
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
@@ -649,6 +661,9 @@ public:
     bool activateTransformToolAfterPaste(bool defaultValue = false) const;
     void setActivateTransformToolAfterPaste(bool value);
     
+    bool zoomHorizontal(bool defaultValue = false) const;
+    void setZoomHorizontal(bool value);
+    
     enum RootSurfaceFormat {
         BT709_G22 = 0,
         BT709_G10,
@@ -665,6 +680,35 @@ public:
 
     bool convertLayerColorSpaceInProperties(bool defaultValue = false) const;
     void setConvertLayerColorSpaceInProperties(bool value);
+
+    bool renamePastedLayers(bool defaultValue = false) const;
+    void setRenamePastedLayers(bool value);
+
+    enum LayerInfoTextStyle {
+        INFOTEXT_NONE = 0,
+        INFOTEXT_SIMPLE,
+        INFOTEXT_BALANCED,
+        INFOTEXT_DETAILED
+    };
+    LayerInfoTextStyle layerInfoTextStyle(bool defaultValue = false) const;
+    void setLayerInfoTextStyle(LayerInfoTextStyle value);
+
+    int layerInfoTextOpacity(bool defaultValue = false) const;
+    void setLayerInfoTextOpacity(int value);
+
+    bool useInlineLayerInfoText(bool defaultValue = false) const;
+    void setUseInlineLayerInfoText(bool value);
+
+    bool useLayerSelectionCheckbox(bool defaultValue = false) const;
+    void setUseLayerSelectionCheckbox(bool value);
+
+    enum AssistantsDrawMode {
+        ASSISTANTS_DRAW_MODE_DIRECT = 0,             // no caching, draw directly on canvas
+        ASSISTANTS_DRAW_MODE_PIXMAP_CACHE = 1,
+        ASSISTANTS_DRAW_MODE_LARGE_PIXMAP_CACHE = 2,
+    };
+    AssistantsDrawMode assistantsDrawMode(bool defaultValue = false) const;
+    void setAssistantsDrawMode(AssistantsDrawMode value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

@@ -33,6 +33,7 @@ public:
         RectSelToolShortcut,
         ContigSelToolShortcut,
         FreehandSelToolShortcut,
+        ActivateWithOtherColorShortcut,
     };
 
     explicit KisToolInvocationAction();
@@ -54,9 +55,12 @@ public:
 
     bool isShortcutRequired(int shortcut) const override;
 
+    KisInputActionGroup inputActionGroup(int shortcut) const override;
+
+
 private:
     class Private;
     Private * const d;
 };
 
-#endif // KISTOOLINVOCATIONACTION_H
+#endif // KIS_TOOL_INVOCATION_ACTION_H

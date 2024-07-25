@@ -191,7 +191,7 @@ void KisPrescaledProjection::slotImageSizeChanged(qint32 w, qint32 h)
 KisUpdateInfoSP KisPrescaledProjection::updateCache(const QRect &dirtyImageRect)
 {
     if (!m_d->image) {
-        dbgRender.noquote() << "Calling updateCache without an image:" << kisBacktrace() << endl;
+        dbgRender.noquote() << "Calling updateCache without an image:" << kisBacktrace() << Qt::endl;
         // return invalid info
         return new KisPPUpdateInfo();
     }
@@ -343,7 +343,7 @@ void KisPrescaledProjection::fillInUpdateInformation(const QRect &viewportRect,
     info->borderWidth = 0;
     if (SCALE_MORE_OR_EQUAL_TO(info->scaleX, info->scaleY, 1.0)) {
         if (SCALE_LESS_THAN(info->scaleX, info->scaleY, 2.0)) {
-            dbgRender << "smoothBetween100And200Percent" << endl;
+            dbgRender << "smoothBetween100And200Percent" << Qt::endl;
             info->renderHints = QPainter::SmoothPixmapTransform;
             info->borderWidth = borderSize;
         }

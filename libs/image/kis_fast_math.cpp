@@ -81,7 +81,7 @@ qreal KisFastMath::atan2(qreal y, qreal x)
         }
         return -M_PI_2;
     }
-    // from here on we know that niether x nor y is 0
+    // from here on we know that neither x nor y is 0
     if (x > 0.0) {
         // we are in quadrant 1 or 4
         if (y > 0.0) {

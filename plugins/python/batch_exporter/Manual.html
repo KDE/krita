@@ -8,8 +8,8 @@
 <p>Batch Exporter exports individual layers to image files based on metadata in the layer name. The supported options are:</p>
 <ul>
 <li><code>[e=jpg,png]</code> - supported export image extensions</li>
-<li><code>[s=20,50,100,150]</code> - size in <code>%</code></li>
-<li><code>[p=path/to/custom/export/directory]</code> - custom output path. Paths can be absolute or relative to the Krita document.</li>
+<li><code>[s=20,33.333,100,150]</code> - size in <code>%</code>.</li>
+<li><code>[p=path/to/custom/export/directory]</code> or <code>[p="path with spaces"]</code> - custom output path. Paths can be absolute or relative to the Krita document.</li>
 <li><code>[m=20,30,100]</code> - extra margin in <code>px</code>. The layer is trimmed to the smallest bounding box by default. This option adds extra padding around the layer.</li>
 <li><code>[t=false]</code> or <code>[t=no]</code> - disable trimming the exported layer to the bounding box of the content.</li>
 <li><code>[i=false]</code> or <code>[i=no]</code> - disable parent metadata inheritance for a layer. More info <a href="#layer-inheritance">below</a>.</li>

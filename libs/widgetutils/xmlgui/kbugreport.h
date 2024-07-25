@@ -10,7 +10,7 @@
 #include <kritawidgetutils_export.h>
 
 class KAboutData;
-class KBugReportPrivate;
+class KisKBugReportPrivate;
 
 /**
  * @short A dialog box for sending bug reports.
@@ -25,7 +25,7 @@ class KBugReportPrivate;
  *
  * @author David Faure <faure@kde.org>
  */
-class KRITAWIDGETUTILS_EXPORT KBugReport : public QDialog
+class KRITAWIDGETUTILS_EXPORT KisKBugReport : public QDialog
 {
     Q_OBJECT
 
@@ -33,15 +33,15 @@ public:
     /**
      * Creates a bug-report dialog.
      * Note that you shouldn't have to do this manually,
-     * since KHelpMenu takes care of the menu item
-     * for "Report Bug..." and of creating a KBugReport dialog.
+     * since KisKHelpMenu takes care of the menu item
+     * for "Report Bug..." and of creating a KisKBugReport dialog.
      */
-    explicit KBugReport(const KAboutData &aboutData, QWidget *parent = 0L);
+    explicit KisKBugReport(const KAboutData &aboutData, QWidget *parent = 0L);
 
     /**
      * Destructor
      */
-    ~KBugReport() override;
+    ~KisKBugReport() override;
 
 
     /**
@@ -57,10 +57,10 @@ private:
 
 
 private:
-    friend class KBugReportPrivate;
-    KBugReportPrivate *const d;
+    friend class KisKBugReportPrivate;
+    KisKBugReportPrivate *const d;
 
-    Q_DISABLE_COPY(KBugReport)
+    Q_DISABLE_COPY(KisKBugReport)
 };
 
 #endif

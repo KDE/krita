@@ -21,7 +21,6 @@
 #include <KoColorBackground.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoColor.h>
-#include <KoShapePaintingContext.h>
 #include <KoViewConverter.h>
 #include <KisPopupWidgetInterface.h>
 
@@ -77,8 +76,8 @@ void KarbonCalligraphyTool::paint(QPainter &painter, const KoViewConverter &conv
     painter.setTransform(m_shape->absoluteTransformation() *
                          converter.documentToView() *
                          painter.transform());
-    KoShapePaintingContext paintContext; //FIXME
-    m_shape->paint(painter, paintContext);
+
+    m_shape->paint(painter);
 
     painter.restore();
 }
@@ -199,7 +198,7 @@ void KarbonCalligraphyTool::setAngle(KoPointerEvent *event)
 
     // setting m_angle to the angle of the device
     if (event->xTilt() != 0 || event->yTilt() != 0) {
-        m_deviceSupportsTilt = false;
+        m_deviceSupportsTilt = true;
     }
 
     if (m_deviceSupportsTilt) {

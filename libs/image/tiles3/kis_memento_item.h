@@ -51,7 +51,7 @@ public:
      * So m_parent should be NULL. Taking into account the tile
      * was not present before, the status of the item
      * should be 'DELETED'.
-     * This memmento item is considered as committed, so we acquire
+     * This memento item is considered as committed, so we acquire
      * the tile data right at the beginning.
      */
     KisMementoItem(qint32 col, qint32 row, KisTileData* defaultTileData, KisMementoManager *mm) {

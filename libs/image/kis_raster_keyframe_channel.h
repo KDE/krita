@@ -28,7 +28,7 @@ public:
     KisRasterKeyframe(KisPaintDeviceWSP paintDevice, const int &premadeFrameID, const int &colorLabelId = 0);
     ~KisRasterKeyframe() override;
 
-    /** @brief Get the frameID of the "phsyical" raster frame on the associated KisPaintDevice. */
+    /** @brief Get the frameID of the "physical" raster frame on the associated KisPaintDevice. */
     int frameID() const;
     bool hasContent();
     QRect contentBounds();

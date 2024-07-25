@@ -196,7 +196,7 @@ void KisAslParserTest::testWritingGradients()
                                   0.6, 1.0, 0.8,
                                   Qt::green, Qt::white);
 
-    w1.writeSegmentGradient("tstG", &segmentGradient);
+    w1.writeSegmentGradient("tstG", segmentGradient);
     //dbgKrita << "===";
     //dbgKrita << ppVar(w1.document().toString());
 
@@ -213,7 +213,7 @@ void KisAslParserTest::testWritingGradients()
     KoStopGradient stopGradient;
     stopGradient.setStops(stops);
 
-    w2.writeStopGradient("tstG", &stopGradient);
+    w2.writeStopGradient("tstG", stopGradient);
 
     //dbgKrita << "===";
     //dbgKrita << ppVar(w2.document().toString());

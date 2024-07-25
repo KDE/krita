@@ -30,6 +30,8 @@ public:
     ///     check usages of writeSysInfo for details)
     static QString basicSystemInfo();
 
+    static void writeLocaleSysInfo();
+
     /// Logs with date/time
     static void log(const QString &message);
 

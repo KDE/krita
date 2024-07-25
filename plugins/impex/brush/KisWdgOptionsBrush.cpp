@@ -37,7 +37,7 @@ KisWdgOptionsBrush::KisWdgOptionsBrush(QWidget *parent)
 void KisWdgOptionsBrush::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     spacingWidget->setSpacing(false, cfg->getDouble("spacing"));
-    if (nameLineEdit->text().isEmpty()) {
+    if (!cfg->getString("name").isEmpty()) {
         nameLineEdit->setText(cfg->getString("name"));
     }
     colorAsMask->setChecked(cfg->getBool("mask"));

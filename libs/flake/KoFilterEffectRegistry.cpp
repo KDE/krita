@@ -13,7 +13,6 @@
 #include <KoPluginLoader.h>
 
 #include <FlakeDebug.h>
-#include <KoXmlReader.h>
 
 Q_GLOBAL_STATIC(KoFilterEffectRegistry, s_instance)
 

@@ -19,8 +19,7 @@
 #include "KoCompositeOp.h"
 #include "KoMixColorsOp.h"
 #include <KoCompositeOpRegistry.h>
-#include "sdk/tests/kistest.h"
-
+#include <kistest.h>
 
 #define NUM_CHANNELS 4
 
@@ -296,7 +295,7 @@ void KoRgbU8ColorSpaceTester::testCompositeOpsWithChannelFlags()
 
 // for posix_memalign()
 #include <stdlib.h>
-#include <config-vc.h>
+#include <config-xsimd.h>
 
 #if defined Q_OS_WIN
 #define MEMALIGN_ALLOC(p, a, s) ((*(p)) = _aligned_malloc((s), (a)), *(p) ? 0 : errno)
@@ -362,10 +361,10 @@ void KoRgbU8ColorSpaceTester::testCompositeCopyDivisionByZero()
             qDebug() << "oriD" << badDst[0] << badDst[1] << badDst[2] << badDst[3];
             qDebug() << "expD" << expectedDst[0] << expectedDst[1] << expectedDst[2] << expectedDst[3];
             qDebug() << "dst1" << badPixelDstPtr[0] << badPixelDstPtr[1] << badPixelDstPtr[2] << badPixelDstPtr[3];
-#if HAVE_VC
+#if defined HAVE_XSIMD && !defined(XSIMD_NO_SUPPORTED_ARCHITECTURE)
             QFAIL("Failed to compose pixels");
 #else
-            qWarning() << "Skipping failed test when Vc library is not used";
+            qWarning() << "Skipping failed test when xsimd library is not used";
 #endif
         }
     };

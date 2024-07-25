@@ -8,7 +8,7 @@
 #include "SvgGraphicContext.h"
 
 #include <KoUnit.h>
-#include <KoXmlReader.h>
+#include <KoSvgText.h>
 
 #include <QString>
 #include <QRectF>
@@ -151,10 +151,10 @@ bool SvgUtil::parseViewBox(const QDomElement &e,
 
     QStringList points = viewBoxStr.replace(',', ' ').simplified().split(' ');
     if (points.count() == 4) {
-        viewBoxRect.setX(SvgUtil::fromUserSpace(points[0].toFloat()));
-        viewBoxRect.setY(SvgUtil::fromUserSpace(points[1].toFloat()));
-        viewBoxRect.setWidth(SvgUtil::fromUserSpace(points[2].toFloat()));
-        viewBoxRect.setHeight(SvgUtil::fromUserSpace(points[3].toFloat()));
+        viewBoxRect.setX(SvgUtil::fromUserSpace(points[0].toDouble()));
+        viewBoxRect.setY(SvgUtil::fromUserSpace(points[1].toDouble()));
+        viewBoxRect.setWidth(SvgUtil::fromUserSpace(points[2].toDouble()));
+        viewBoxRect.setHeight(SvgUtil::fromUserSpace(points[3].toDouble()));
 
         result = true;
     } else {
@@ -163,11 +163,19 @@ bool SvgUtil::parseViewBox(const QDomElement &e,
 
     if (!result) return false;
 
+    qreal scaleX = 1;
+    if (!qFuzzyCompare(elementBounds.width(), viewBoxRect.width())) {
+        scaleX = elementBounds.width() / viewBoxRect.width();
+    }
+    qreal scaleY = 1;
+    if (!qFuzzyCompare(elementBounds.height(), viewBoxRect.height())) {
+        scaleY = elementBounds.height() / viewBoxRect.height();
+    }
+
     QTransform viewBoxTransform =
         QTransform::fromTranslate(-viewBoxRect.x(), -viewBoxRect.y()) *
-        QTransform::fromScale(elementBounds.width() / viewBoxRect.width(),
-                                  elementBounds.height() / viewBoxRect.height()) *
-            QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
+        QTransform::fromScale(scaleX, scaleY) *
+        QTransform::fromTranslate(elementBounds.x(), elementBounds.y());
 
     const QString aspectString = e.attribute("preserveAspectRatio");
     // give initial value if value not defined
@@ -208,7 +216,7 @@ void SvgUtil::parseAspectRatio(const PreserveAspectRatioParser &p, const QRectF 
     }
 }
 
-qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz, bool vert, const QRectF &bbox)
+qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const KoSvgTextProperties &resolved, QStringView unit, bool horiz, bool vert, const QRectF &bbox)
 {
     if (unit.isEmpty())
         return 0.0;
@@ -218,82 +226,99 @@ qreal SvgUtil::parseUnit(SvgGraphicsContext *gc, const QString &unit, bool horiz
     if (!start) {
         return 0.0;
     }
-    qreal value = 0.0;
-    const char *end = parseNumber(start, value);
+    KoSvgText::CssLengthPercentage length = parseUnitStruct(gc, unit, horiz, vert, bbox);
+    length.convertToAbsolute(resolved.fontSize().value, resolved.xHeight());
 
-    if (int(end - start) < unit.length()) {
-        if (unit.right(2) == "px")
-            value = SvgUtil::fromUserSpace(value);
-        else if (unit.right(2) == "pt")
-            value = ptToPx(gc, value);
-        else if (unit.right(2) == "cm")
-            value = ptToPx(gc, CM_TO_POINT(value));
-        else if (unit.right(2) == "pc")
-            value = ptToPx(gc, PI_TO_POINT(value));
-        else if (unit.right(2) == "mm")
-            value = ptToPx(gc, MM_TO_POINT(value));
-        else if (unit.right(2) == "in")
-            value = ptToPx(gc, INCH_TO_POINT(value));
-        else if (unit.right(2) == "em") {
-            value = value * gc->textProperties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
-        }
-        else if (unit.right(2) == "ex") {
-
-            QFontMetrics metrics(gc->textProperties.generateFont());
-            value = value * metrics.xHeight();
-        } else if (unit.right(1) == "%") {
-            if (horiz && vert)
-                value = (value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
-            else if (horiz)
-                value = (value / 100.0) * bbox.width();
-            else if (vert)
-                value = (value / 100.0) * bbox.height();
-        }
-    } else {
-        value = SvgUtil::fromUserSpace(value);
-    }
-    /*else
-    {
-        if( m_gc.top() )
-        {
-            if( horiz && vert )
-                value *= sqrt( pow( m_gc.top()->matrix.m11(), 2 ) + pow( m_gc.top()->matrix.m22(), 2 ) ) / sqrt( 2.0 );
-            else if( horiz )
-                value /= m_gc.top()->matrix.m11();
-            else if( vert )
-                value /= m_gc.top()->matrix.m22();
-        }
-    }*/
-    //value *= 90.0 / DPI;
-
-    return value;
+    return length.value;
 }
 
-qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const QString &unit)
+KoSvgText::CssLengthPercentage SvgUtil::parseUnitStruct(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox)
+{
+    return parseUnitStructImpl(gc, unit, horiz, vert, bbox, true);
+}
+
+KoSvgText::CssLengthPercentage SvgUtil::parseTextUnitStruct(SvgGraphicsContext *gc, QStringView unit)
+{
+    return parseUnitStructImpl(gc, unit, false, false, QRectF(), false);
+}
+
+KoSvgText::CssLengthPercentage SvgUtil::parseUnitStructImpl(SvgGraphicsContext *gc, QStringView unit, bool horiz, bool vert, const QRectF &bbox, bool percentageViewBox)
+{
+    KoSvgText::CssLengthPercentage length;
+
+    if (unit.isEmpty())
+        return length;
+    QByteArray unitLatin1 = unit.trimmed().toLatin1();
+    // TODO : percentage?
+    const char *start = unitLatin1.data();
+    if (!start) {
+        return length;
+    }
+    const char *end = parseNumber(start, length.value);
+
+    if (int(end - start) < unit.length()) {
+        if (unit.right(2) == QLatin1String("px"))
+            length.value = SvgUtil::fromUserSpace(length.value);
+        else if (unit.right(2) == QLatin1String("pt"))
+            length.value = ptToPx(gc, length.value);
+        else if (unit.right(2) == QLatin1String("cm"))
+            length.value = ptToPx(gc, CM_TO_POINT(length.value));
+        else if (unit.right(2) == QLatin1String("pc"))
+            length.value = ptToPx(gc, PI_TO_POINT(length.value));
+        else if (unit.right(2) == QLatin1String("mm"))
+            length.value = ptToPx(gc, MM_TO_POINT(length.value));
+        else if (unit.right(2) == QLatin1String("in"))
+            length.value = ptToPx(gc, INCH_TO_POINT(length.value));
+        else if (unit.right(2) == QLatin1String("em")) {
+            length.unit = KoSvgText::CssLengthPercentage::Em;
+        } else if (unit.right(2) == QLatin1String("ex")) {
+            length.unit = KoSvgText::CssLengthPercentage::Ex;
+        } else if (unit.right(1) == QLatin1Char('%')) {
+
+            if (percentageViewBox) {
+                if (horiz && vert)
+                    length.value = (length.value / 100.0) * (sqrt(pow(bbox.width(), 2) + pow(bbox.height(), 2)) / sqrt(2.0));
+                else if (horiz)
+                    length.value = (length.value / 100.0) * bbox.width();
+                else if (vert)
+                    length.value = (length.value / 100.0) * bbox.height();
+            } else {
+                length.value = (length.value / 100.0);
+                length.unit = KoSvgText::CssLengthPercentage::Percentage;
+            }
+        }
+    } else {
+        length.value = SvgUtil::fromUserSpace(length.value);
+    }
+
+    return length;
+}
+
+qreal SvgUtil::parseUnitX(SvgGraphicsContext *gc, const KoSvgTextProperties &resolved, const QString &unit)
 {
     if (gc->forcePercentage) {
         return SvgUtil::fromPercentage(unit) * gc->currentBoundingBox.width();
     } else {
-        return SvgUtil::parseUnit(gc, unit, true, false, gc->currentBoundingBox);
+        return SvgUtil::parseUnit(gc, resolved, unit, true, false, gc->currentBoundingBox);
     }
 }
 
-qreal SvgUtil::parseUnitY(SvgGraphicsContext *gc, const QString &unit)
+qreal SvgUtil::parseUnitY(SvgGraphicsContext *gc, const KoSvgTextProperties &resolved, const QString &unit)
 {
     if (gc->forcePercentage) {
         return SvgUtil::fromPercentage(unit) * gc->currentBoundingBox.height();
     } else {
-        return SvgUtil::parseUnit(gc, unit, false, true, gc->currentBoundingBox);
+        return SvgUtil::parseUnit(gc, resolved, unit, false, true, gc->currentBoundingBox);
     }
 }
 
-qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const QString &unit)
+qreal SvgUtil::parseUnitXY(SvgGraphicsContext *gc, const KoSvgTextProperties &resolved, const QString &unit)
 {
     if (gc->forcePercentage) {
         const qreal value = SvgUtil::fromPercentage(unit);
         return value * sqrt(pow(gc->currentBoundingBox.width(), 2) + pow(gc->currentBoundingBox.height(), 2)) / sqrt(2.0);
     } else {
-        return SvgUtil::parseUnit(gc, unit, true, true, gc->currentBoundingBox);
+        return SvgUtil::parseUnit(gc, resolved, unit, true, true, gc->currentBoundingBox);
     }
 }
 
@@ -421,7 +446,11 @@ QStringList SvgUtil::simplifyList(const QString &str)
     attribute.replace(',', ' ');
     attribute.remove('\r');
     attribute.remove('\n');
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+    return attribute.simplified().split(' ', Qt::SkipEmptyParts);
+#else
     return attribute.simplified().split(' ', QString::SkipEmptyParts);
+#endif
 }
 
 SvgUtil::PreserveAspectRatioParser::PreserveAspectRatioParser(const QString &str)

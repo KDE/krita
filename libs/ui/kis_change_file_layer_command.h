@@ -16,9 +16,11 @@ public:
                           const QString &oldPath,
                           const QString &oldFileName,
                           const KisFileLayer::ScalingMethod &oldMethod,
+                          const QString &oldFilter,
                           const QString &newPath,
                           const QString &newFileName,
-                          const KisFileLayer::ScalingMethod &newMethod)
+                          const KisFileLayer::ScalingMethod &newMethod,
+                          const QString &newFilter)
         : KUndo2Command(kundo2_i18n("Change File Layer")) {
         m_node = fileLayer;
 
@@ -28,17 +30,21 @@ public:
         m_newFileName = newFileName;
         m_oldMethod = oldMethod;
         m_newMethod = newMethod;
+        m_oldFilter = oldFilter;
+        m_newFilter = newFilter;
     }
 public:
     void redo() override {
         // setFileName() automatically issues a setDirty call
         m_node->setScalingMethod(m_newMethod);
+        m_node->setScalingFilter(m_newFilter);
         m_node->setFileName(m_newPath, m_newFileName);
     }
 
     void undo() override {
         // setFileName() automatically issues a setDirty call
         m_node->setScalingMethod(m_oldMethod);
+        m_node->setScalingFilter(m_oldFilter);
         m_node->setFileName(m_oldPath, m_oldFileName);
     }
 private:
@@ -50,5 +56,7 @@ private:
     QString m_newFileName;
     KisFileLayer::ScalingMethod m_oldMethod;
     KisFileLayer::ScalingMethod m_newMethod;
+    QString m_oldFilter;
+    QString m_newFilter;
 };
 #endif // KIS_CHANGE_FILE_LAYER_COMMAND_H

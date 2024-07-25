@@ -1,0 +1,44 @@
+From b98d9a624776e7ba0d0480a42e5cc5653953c532 Mon Sep 17 00:00:00 2001
+From: Oliver Wolff <oliver.wolff@qt.io>
+Date: Wed, 22 Aug 2018 13:01:10 +0200
+Subject: [PATCH 03/17] ANGLE: Fix Windows Store D3D Trim and Level 9
+ requirements
+
+Due to additional validation not covered in previous patches, the Windows
+Store certification compatibility had regressed. These changes ensure that
+the required D3D behaviors are met.
+
+Change-Id: If8bc2f8cd4b2f84e1d92a1627951da2537212125
+---
+ src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+index e71891ed3..a29a807fd 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+@@ -489,7 +489,20 @@ Renderer11::Renderer11(egl::Display *display)
+ 
+         if (requestedMajorVersion == 9 && requestedMinorVersion == 3)
+         {
+-            mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
++            if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 3)
++            {
++                mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_3);
++            }
++#if defined(ANGLE_ENABLE_WINDOWS_UWP)
++            if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 2)
++            {
++                mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_2);
++            }
++            if (requestedMinorVersion == EGL_DONT_CARE || requestedMinorVersion >= 1)
++            {
++                mAvailableFeatureLevels.push_back(D3D_FEATURE_LEVEL_9_1);
++            }
++#endif
+         }
+ 
+         EGLint requestedDeviceType = static_cast<EGLint>(attributes.get(
+-- 
+2.24.1.windows.2
+

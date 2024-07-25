@@ -20,57 +20,6 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
-      <attribute name="title">
-       <string>Editor Mode</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item column="0" row="3">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Note: the Rich Text editor only supports a subset of SVG.</string>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item column="0" row="0">
-        <widget class="QRadioButton" name="radioRichText">
-         <property name="text">
-          <string>Rich Te&amp;xt Only</string>
-         </property>
-        </widget>
-       </item>
-       <item column="0" row="2">
-        <widget class="QRadioButton" name="radioBoth">
-         <property name="text">
-          <string>Both</string>
-         </property>
-        </widget>
-       </item>
-       <item column="0" row="1">
-        <widget class="QRadioButton" name="radioSvgSource">
-         <property name="text">
-          <string>S&amp;VG Source Only</string>
-         </property>
-        </widget>
-       </item>
-       <item column="0" row="4">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
        <string>Colors</string>

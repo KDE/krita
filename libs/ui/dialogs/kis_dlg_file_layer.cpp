@@ -21,6 +21,7 @@
 #include <kis_transaction.h>
 #include <kis_node.h>
 #include <kis_file_layer.h>
+#include <kis_filter_strategy.h>
 
 KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, QWidget * parent)
     : KoDialog(parent)
@@ -42,12 +43,30 @@ KisDlgFileLayer::KisDlgFileLayer(const QString &basePath, const QString & name, 
     connect(dlgWidget.wdgUrlRequester, SIGNAL(textChanged(QString)),
             SLOT(slotNameChanged(QString)));
 
+    dlgWidget.cmbFilter->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
+    dlgWidget.cmbFilter->setCurrent("Bicubic");
+    dlgWidget.cmbFilter->setToolTip(i18nc("@info:tooltip",
+                                "<p>Select filtering mode:\n"
+                                "<ul>"
+                                "<li><b>Nearest neighbor</b> for pixel art. Does not produce new color.</li>"
+                                "<li><b>Bilinear</b> for areas with uniform color to avoid artifacts.</li>"
+                                "<li><b>Bicubic</b> for smoother results.</li>"
+                                "<li><b>Lanczos3</b> for sharp results. May produce aerials.</li>"
+                                "</ul></p>"));
+    connect(dlgWidget.radioDontScale, SIGNAL(toggled(bool)),
+            this, SLOT(slotMethodChanged(bool)));
+
     enableButtonOk(false);
 }
 
 void KisDlgFileLayer::slotNameChanged(const QString & text)
 {
     enableButtonOk(!text.isEmpty());
+}
+
+void KisDlgFileLayer::slotMethodChanged(const bool & value)
+{
+    dlgWidget.cmbFilter->setDisabled(value);
 }
 
 QString KisDlgFileLayer::layerName() const
@@ -68,6 +87,11 @@ KisFileLayer::ScalingMethod KisDlgFileLayer::scaleToImageResolution() const
     }
 }
 
+QString KisDlgFileLayer::scalingFilter() const
+{
+    return dlgWidget.cmbFilter->currentItem().id();
+}
+
 void KisDlgFileLayer::setFileName(QString fileName)
 {
     dlgWidget.wdgUrlRequester->setFileName(fileName);
@@ -85,6 +109,11 @@ void KisDlgFileLayer::setScalingMethod(KisFileLayer::ScalingMethod method)
     } else {
         dlgWidget.radioScalePPI->setChecked(true);
     }
+}
+
+void KisDlgFileLayer::setScalingFilter(QString filter)
+{
+    dlgWidget.cmbFilter->setCurrent(filter);
 }
 
 QString KisDlgFileLayer::fileName() const

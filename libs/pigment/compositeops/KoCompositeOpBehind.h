@@ -12,10 +12,10 @@
 /**
  *  Generic implementation of the Behind composite op, which blends the colors of a foreground layer as if it were in the background instead
  */
-template<class CS_Traits>
-class KoCompositeOpBehind : public KoCompositeOpBase<CS_Traits, KoCompositeOpBehind<CS_Traits> >
+template<class CS_Traits, typename BlendingPolicy>
+class KoCompositeOpBehind : public KoCompositeOpBase<CS_Traits, KoCompositeOpBehind<CS_Traits, BlendingPolicy> >
 {
-    typedef KoCompositeOpBase<CS_Traits, KoCompositeOpBehind<CS_Traits> > base_class;
+    typedef KoCompositeOpBase<CS_Traits, KoCompositeOpBehind<CS_Traits, BlendingPolicy> > base_class;
     typedef typename CS_Traits::channels_type channels_type;
 
     static const qint8 channels_nb = CS_Traits::channels_nb;
@@ -44,9 +44,9 @@ public:
             for (qint8 channel = 0; channel < channels_nb; ++channel)
                 if(channel != alpha_pos && (allChannelFlags || channelFlags.testBit(channel))) {
                     /*each color blended in proportion to their calculated opacity*/
-                    channels_type srcMult= mul(src[channel], appliedAlpha);
-                    channels_type blendedValue = lerp(srcMult,dst[channel],dstAlpha);
-                    dst[channel] = KoColorSpaceMaths<channels_type>::divide(blendedValue,newDstAlpha);
+                    channels_type srcMult= mul(BlendingPolicy::toAdditiveSpace(src[channel]), appliedAlpha);
+                    channels_type blendedValue = lerp(srcMult,BlendingPolicy::toAdditiveSpace(dst[channel]),dstAlpha);
+                    dst[channel] = BlendingPolicy::fromAdditiveSpace(KoColorSpaceMaths<channels_type>::divide(blendedValue,newDstAlpha));
                 }
         }
         else {

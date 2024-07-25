@@ -12,7 +12,7 @@
 #include <QRect>
 #include <kis_projection_leaf.h>
 
-KisNodeActivationActionCreatorVisitor::KisNodeActivationActionCreatorVisitor(KActionCollection *actionCollection, KisNodeManager *nodeManager)
+KisNodeActivationActionCreatorVisitor::KisNodeActivationActionCreatorVisitor(KisKActionCollection *actionCollection, KisNodeManager *nodeManager)
     : m_nodeManager(nodeManager)
     , m_actionCollection(actionCollection)
 {

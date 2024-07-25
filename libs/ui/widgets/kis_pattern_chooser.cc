@@ -48,7 +48,7 @@ KisPatternChooser::KisPatternChooser(QWidget *parent)
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
-    mainLayout->setMargin(0);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->addWidget(m_lblName);
     mainLayout->addWidget(m_itemChooser, 10);
 }

@@ -14,7 +14,7 @@
 #include <KoShape.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
-#include <KoSvgTextChunkShape.h>
+#include <KoSvgTextShape.h>
 
 #include <html/HtmlSavingContext.h>
 
@@ -74,9 +74,9 @@ void HtmlWriter::saveShapes(const QList<KoShape *> shapes, HtmlSavingContext &sa
                 m_errors << i18n("KoShapeGroup to html is not implemented yet!");
             }
             else {
-                KoSvgTextChunkShape *svgTextChunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-                if (svgTextChunkShape) {
-                    if (!svgTextChunkShape->saveHtml(savingContext)) {
+                KoSvgTextShape *svgTextShape = dynamic_cast<KoSvgTextShape*>(shape);
+                if (svgTextShape) {
+                    if (!svgTextShape->saveHtml(savingContext)) {
                         m_errors << i18n("saving to html failed");
                     }
                 }

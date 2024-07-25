@@ -17,7 +17,7 @@
 class KoCanvasController;
 class KoZoomAction;
 class KoZoomHandler;
-class KActionCollection;
+class KisKActionCollection;
 class QSize;
 
 
@@ -57,7 +57,7 @@ public:
     */
     KoZoomController(KoCanvasController *controller,
                      KoZoomHandler *zoomHandler,
-                     KActionCollection *actionCollection,
+                     KisKActionCollection *actionCollection,
                      QObject *parent = 0);
 
     /// destructor

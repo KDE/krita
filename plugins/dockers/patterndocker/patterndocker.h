@@ -21,8 +21,6 @@ class PatternDockerPlugin : public QObject
     public:
         PatternDockerPlugin(QObject *parent, const QVariantList &);
         ~PatternDockerPlugin() override;
-    private:
-        KisViewManager* m_view {nullptr};
 };
 
 #endif

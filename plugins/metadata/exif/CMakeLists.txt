@@ -3,7 +3,7 @@ set(kritaexif_SOURCES
     kis_exif_plugin.cpp
 )
 
-add_library(kritaexif MODULE ${kritaexif_SOURCES})
+kis_add_library(kritaexif MODULE ${kritaexif_SOURCES})
 
 generate_export_header(kritaexif)
 

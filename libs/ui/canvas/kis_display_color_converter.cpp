@@ -59,6 +59,23 @@ struct KisDisplayColorConverter::Private
 
     const KoColorProfile* inputImageProfile = 0;
 
+    mutable const KoColorSpace *cachedOcioInputColorSpace = 0;
+    mutable const KoColorSpace *cachedOcioOutputColorSpace = 0;
+    mutable const KoColorSpace *cachedQtWidgetsColorSpace = 0;
+    mutable const KoColorSpace *cachedOpenGLSurfaceColorSpace = 0;
+
+    // this color space will never change during the run of Krita
+    mutable const KoColorSpace *cachedIntermediateColorSpace = 0;
+
+    void notifyDisplayConfigurationChanged() {
+        cachedOcioInputColorSpace = 0;
+        cachedOcioOutputColorSpace = 0;
+        cachedQtWidgetsColorSpace = 0;
+        cachedOpenGLSurfaceColorSpace = 0;
+
+        emit q->displayConfigurationChanged();
+    }
+
     const KoColorProfile* qtWidgetsProfile() const {
         return useHDRMode ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : monitorProfile;
     }
@@ -77,45 +94,62 @@ struct KisDisplayColorConverter::Private
     }
 
     const KoColorSpace* ocioInputColorSpace() const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Float32BitsColorDepthID.id(),
-                    ocioInputProfile());
+        return cachedOcioInputColorSpace
+            ? cachedOcioInputColorSpace
+            : (cachedOcioInputColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Float32BitsColorDepthID.id(),
+                                    ocioInputProfile()));
     }
 
     const KoColorSpace* ocioOutputColorSpace() const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Float32BitsColorDepthID.id(),
-                    ocioOutputProfile());
+        return cachedOcioOutputColorSpace
+            ? cachedOcioOutputColorSpace
+            : (cachedOcioOutputColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Float32BitsColorDepthID.id(),
+                                    ocioOutputProfile()));
+
     }
 
     const KoColorSpace* qtWidgetsColorSpace() const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Integer8BitsColorDepthID.id(),
-                    qtWidgetsProfile());
+        return cachedQtWidgetsColorSpace
+            ? cachedQtWidgetsColorSpace
+            : (cachedQtWidgetsColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Integer8BitsColorDepthID.id(),
+                                    qtWidgetsProfile()));
+
     }
 
     const KoColorSpace* openGLSurfaceColorSpace(const KoID &bitDepthId) const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    bitDepthId.id(),
-                    openGLSurfaceProfile());
+        return cachedOpenGLSurfaceColorSpace
+            ? cachedOpenGLSurfaceColorSpace
+            : (cachedOpenGLSurfaceColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    bitDepthId.id(),
+                                    openGLSurfaceProfile()));
     }
 
     const KoColorSpace* intermediateColorSpace() const {
         // the color space where we apply exposure and
         // gamma should always be linear
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Float32BitsColorDepthID.id(),
-                    KoColorSpaceRegistry::instance()->p2020G10Profile());
+        return cachedIntermediateColorSpace
+            ? cachedIntermediateColorSpace
+            : (cachedIntermediateColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Float32BitsColorDepthID.id(),
+                                    KoColorSpaceRegistry::instance()->p2020G10Profile()));
     }
 
     const KoColorProfile *monitorProfile;
@@ -142,6 +176,7 @@ struct KisDisplayColorConverter::Private
     void updateIntermediateFgColor(const KoColor &color);
     void setCurrentNode(KisNodeSP node);
     bool useOcio() const;
+    bool needsColorProofing(const KoColorSpace *srcColorSpace) const;
 
     class DisplayRenderer : public KoColorDisplayRendererInterface {
     public:
@@ -153,14 +188,13 @@ struct KisDisplayColorConverter::Private
                             this, SIGNAL(displayConfigurationChanged()), Qt::UniqueConnection);
         }
 
-        QImage convertToQImage(const KoColorSpace *srcColorSpace, const quint8 *data, qint32 width, qint32 height) const override {
-            KisPaintDeviceSP dev = new KisPaintDevice(srcColorSpace);
-            dev->writeBytes(data, 0, 0, width, height);
-            return m_displayColorConverter->toQImage(dev);
+        QImage toQImage(const KoColorSpace *srcColorSpace, const quint8 *data, QSize size, bool proofPaintColors = false) const override {
+            QImage result = m_displayColorConverter->toQImage(srcColorSpace, data, size, proofPaintColors);
+            return result;
         }
 
-        QColor toQColor(const KoColor &c) const override {
-            return m_displayColorConverter->toQColor(c);
+        QColor toQColor(const KoColor &c, bool proofToPaintColors = false) const override {
+            return m_displayColorConverter->toQColor(c, proofToPaintColors);
         }
 
         KoColor approximateFromRenderedQColor(const QColor &c) const override {
@@ -242,7 +276,7 @@ void KisDisplayColorConverter::setImageColorSpace(const KoColorSpace *cs)
         cs->profile() :
         KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    emit displayConfigurationChanged();
+    m_d->notifyDisplayConfigurationChanged();
 }
 
 
@@ -259,6 +293,30 @@ KoColorDisplayRendererInterface* KisDisplayColorConverter::displayRendererInterf
 bool KisDisplayColorConverter::Private::useOcio() const
 {
     return displayFilter && paintingColorSpace && paintingColorSpace->colorModelId() == RGBAColorModelID;
+}
+
+bool KisDisplayColorConverter::Private::needsColorProofing(const KoColorSpace *srcColorSpace) const
+{
+    if (!paintingColorSpace || srcColorSpace == paintingColorSpace || *srcColorSpace == *paintingColorSpace) {
+        return false;
+    }
+    // TODO: ideally, we'd identify color profiles that only differ in transfer curves but
+    // define the same primaries/gamut and return false for them aswell
+    if (srcColorSpace->colorModelId() == paintingColorSpace->colorModelId()) {
+        const KoColorProfile *paintProfile = paintingColorSpace->profile();
+        const KoColorProfile *srcProfile = srcColorSpace->profile();
+        bool matchingProfiles = (paintProfile == srcProfile) ||
+                                (paintProfile && srcProfile && *paintProfile == *srcProfile);
+        // unless we go float->int, the color spaces are considered compatible
+        if (matchingProfiles &&
+                (srcColorSpace->colorDepthId() == Integer8BitsColorDepthID ||
+                 srcColorSpace->colorDepthId() == Integer16BitsColorDepthID ||
+                 paintingColorSpace->colorModelId() == Float16BitsColorDepthID ||
+                 paintingColorSpace->colorModelId() == Float32BitsColorDepthID)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void KisDisplayColorConverter::Private::updateIntermediateFgColor(const KoColor &srcColor)
@@ -337,7 +395,7 @@ void KisDisplayColorConverter::Private::selectPaintingColorSpace()
         paintingColorSpace = nodeColorSpace;
     }
 
-    emit q->displayConfigurationChanged();
+    notifyDisplayConfigurationChanged();
 }
 
 const KoColorSpace* KisDisplayColorConverter::paintingColorSpace() const
@@ -349,10 +407,15 @@ const KoColorSpace* KisDisplayColorConverter::paintingColorSpace() const
     return m_d->paintingColorSpace;
 }
 
+const KoColorSpace *KisDisplayColorConverter::nodeColorSpace() const
+{
+    return m_d->nodeColorSpace;
+}
+
 void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->useHDRMode) {
-        // we don't use ICCcolor management in HDR mode
+        // we don't use ICC color management in HDR mode
         monitorProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     }
 
@@ -361,7 +424,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
     m_d->renderingIntent = renderingIntent();
     m_d->conversionFlags = conversionFlags();
 
-    emit displayConfigurationChanged();
+    m_d->notifyDisplayConfigurationChanged();
 }
 
 void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
@@ -436,13 +499,17 @@ bool KisDisplayColorConverter::isHDRMode() const
 void KisDisplayColorConverter::notifyOpenGLCanvasIsActive(bool value)
 {
     m_d->openGLCanvasIsActive = value;
-    emit displayConfigurationChanged();
+    m_d->notifyDisplayConfigurationChanged();
 }
 
 
-QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor) const
+QColor KisDisplayColorConverter::toQColor(const KoColor &srcColor, bool proofToPaintColors) const
 {
     KoColor c(srcColor);
+
+    if (proofToPaintColors && m_d->needsColorProofing(c.colorSpace())) {
+        c.convertTo(m_d->paintingColorSpace, m_d->renderingIntent, m_d->conversionFlags);
+    }
 
     if (m_d->useOcio()) {
         KIS_ASSERT_RECOVER(m_d->ocioInputColorSpace()->pixelSize() == 16) {
@@ -500,13 +567,16 @@ KoColor KisDisplayColorConverter::approximateFromRenderedQColor(const QColor &c)
     return m_d->approximateFromQColor(c);
 }
 
-QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
+QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice, bool proofPaintColors) const
 {
     KisPaintDeviceSP device = srcDevice;
 
     QRect bounds = srcDevice->exactBounds();
     if (bounds.isEmpty()) return QImage();
 
+    if (proofPaintColors && m_d->needsColorProofing(srcDevice->colorSpace())) {
+        srcDevice->convertTo(paintingColorSpace(), m_d->renderingIntent, m_d->conversionFlags);
+    }
 
     if (m_d->useOcio()) {
         KIS_ASSERT_RECOVER(m_d->ocioInputColorSpace()->pixelSize() == 16) {
@@ -536,12 +606,54 @@ QImage KisDisplayColorConverter::toQImage(KisPaintDeviceSP srcDevice) const
                                    m_d->renderingIntent, m_d->conversionFlags);
 }
 
+QImage KisDisplayColorConverter::toQImage(const KoColorSpace *srcColorSpace, const quint8 *data, QSize size, bool proofPaintColors) const
+{
+    const int numPixels = size.width() * size.height();
+
+    const KoColorSpace  *colorSpace = srcColorSpace;
+    const quint8 *pixels = data;
+
+    QScopedArrayPointer<quint8> proofBuffer;
+
+    if (proofPaintColors && m_d->needsColorProofing(srcColorSpace)) {
+        const int imageSize = numPixels * paintingColorSpace()->pixelSize();
+        proofBuffer.reset(new quint8[imageSize]);
+        colorSpace->convertPixelsTo(pixels, proofBuffer.data(),
+                                      paintingColorSpace(),
+                                      numPixels,
+                                      m_d->renderingIntent,
+                                      m_d->conversionFlags);
+        colorSpace = paintingColorSpace();
+        pixels = proofBuffer.data();
+    }
+
+    QScopedArrayPointer<quint8> ocioBuffer;
+    if (m_d->useOcio()) {
+        const int imageSize = numPixels * m_d->ocioInputColorSpace()->pixelSize();
+        ocioBuffer.reset(new quint8[imageSize]);
+        colorSpace->convertPixelsTo(pixels, ocioBuffer.data(),
+                                      m_d->ocioInputColorSpace(),
+                                      numPixels,
+                                      m_d->renderingIntent,
+                                      m_d->conversionFlags);
+        m_d->displayFilter->filter(ocioBuffer.data(), numPixels);
+
+        return m_d->ocioOutputColorSpace()->convertToQImage(ocioBuffer.data(), size.width(), size.height(),
+                                                            m_d->qtWidgetsProfile(),
+                                                            m_d->renderingIntent, m_d->conversionFlags);
+    }
+
+    return colorSpace->convertToQImage(pixels, size.width(), size.height(),
+                                          m_d->qtWidgetsProfile(),
+                                          m_d->renderingIntent, m_d->conversionFlags);
+}
+
 void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP device,
                                                         const KoID &bitDepthId) const
 {
     /**
      * This method is optimized for the case when device is already in 32f
-     * version of the pating color space.
+     * version of the painting color space.
      */
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorDepthId() == Float32BitsColorDepthID);

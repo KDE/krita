@@ -37,6 +37,11 @@ public:
     bool match(const QSet<Qt::Key> &modifiers, Qt::Key key);
     bool match(const QSet<Qt::Key> &modifiers, WheelAction wheelAction);
 
+    /**
+     * Check is the shortcut or the key sequnce is a prefix of one another
+     */
+    bool conflictsWith(const QKeySequence &seq);
+
 private:
     class Private;
     Private * const m_d;

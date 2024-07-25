@@ -11,11 +11,10 @@
 //#include "kis_debug.h"
 
 #include <boost/config/warning_disable.hpp>
+#include <boost/phoenix/fusion.hpp>
+#include <boost/phoenix/operator.hpp>
+#include <boost/phoenix/stl.hpp>
 #include <boost/spirit/include/qi.hpp>
-#include <boost/spirit/include/phoenix_stl.hpp>
-#include <boost/spirit/include/phoenix_operator.hpp>
-#include <boost/spirit/include/phoenix_fusion.hpp>
-
 
 namespace Private
 {

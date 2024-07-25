@@ -11,6 +11,7 @@
 #include "kis_algebra_2d.h"
 #include "KisDocument.h"
 #include "KisReferenceImagesLayer.h"
+#include "kis_layer_utils.h"
 
 struct KisReferenceImagesDecoration::Private {
     struct Buffer
@@ -95,6 +96,7 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
 {
     connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
     connect(document->image().data(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
+    connect(document->image().data(), SIGNAL(sigLayersChangedAsync()), this, SLOT(slotLayersChanged()));
     connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, &KisReferenceImagesDecoration::slotNodeAdded);
 
     auto referenceImageLayer = document->referenceImagesLayer();
@@ -108,9 +110,8 @@ KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
-    KisDocument *document = view()->document();
-    KUndo2Command *cmd = KisReferenceImagesLayer::addReferenceImages(document, {referenceImage});
-    document->addCommand(cmd);
+    KUndo2Command *cmd = KisReferenceImagesLayer::addReferenceImages(view()->document(), {referenceImage});
+    view()->canvasBase()->addCommand(cmd);
 }
 
 bool KisReferenceImagesDecoration::documentHasReferenceImages() const
@@ -159,6 +160,16 @@ void KisReferenceImagesDecoration::slotNodeRemoved(KisNodeSP node)
     if (referenceImagesLayer && referenceImagesLayer == d->layer) {
         setReferenceImageLayer(0, true);
     }
+}
+
+void KisReferenceImagesDecoration::slotLayersChanged()
+{
+    KisImageSP image = view()->image();
+
+    KisReferenceImagesLayer *referenceImagesLayer =
+        KisLayerUtils::findNodeByType<KisReferenceImagesLayer>(image->root());
+
+    setReferenceImageLayer(referenceImagesLayer, true);
 }
 
 void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirtyRect)

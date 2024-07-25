@@ -1,0 +1,61 @@
+<svg width="230px" height="180px"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+        <style>
+        .test {
+        font-size: 10pt;
+	  font-family: FontWithFeaturesOTF;
+    fill: purple;
+  }
+  .outer {
+    font-variant-ligatures: common-ligatures  discretionary-ligatures historical-ligatures contextual;
+    font-variant-numeric: oldstyle-nums;
+    font-variant-caps: small-caps;
+    font-variant-east-asian: jis90;
+  }
+  .outer-test3 {
+    font-feature-settings: "liga" on, "clig" on, "calt" on, "hlig" on, "dlig" on, "onum" on, "smcp" on, "jp90" on;
+  }
+  .child {
+    fill: green;
+    }</style>
+    </defs>
+
+    <g id="testRect" class="test">
+        <!-- These tests are all adapted from the font-variant tests of the web-platform-tests: https://github.com/web-platform-tests/wpt/tree/master/css/css-fonts -->
+
+        <rect id="boundingRect" x="5" y="5" width="220" height="170"
+            fill="none" stroke="red"/>
+
+        
+        <!-- Adapted from font-variant-01.html: Test passes if the two lines below are identical, with (in purple) eight check marks (✓),
+        and then (in green) three check marks (✓) followed by five crosses (✗). -->
+        <text id="test1" x="7" y="27" >
+            <tspan class="outer">CDGFEJQa<tspan class="child" style="font-variant: normal;">CDGFEJQa</tspan></tspan>
+            <tspan class="ref" x="7" dy="1em">AAAAAAAA<tspan class="child">AAABBBBB</tspan></tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-02.html: Test passes if the two lines below are identical, with (in purple) eight check marks (✓),
+and then (in green) eight crosses (✗). -->
+        <text id="test2" x="7" y="67" >
+            <tspan class="outer">CDGFEJQa<tspan class="child" style="font-variant: none;">CDGFEJQa</tspan></tspan>
+            <tspan class="ref" x="7" dy="1em">AAAAAAAA<tspan class="child">BBBBBBBB</tspan></tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-03.html: Test passes if the two lines below are identical, with (in purple) eight check marks (✓),
+and then (in green) eight check marks (✓). -->
+        <text id="test3" x="7" y="107" >
+            <tspan class="outer-test3">CDGFEJQa<tspan class="child" style="font-variant: normal;">CDGFEJQa</tspan></tspan>
+            <tspan class="ref" x="7" dy="1em">AAAAAAAA<tspan class="child">AAAAAAAA</tspan></tspan>
+        </text>
+        
+        <!-- Adapted from font-variant-04.html: Test passes if the two lines below are identical, with (in purple) eight check marks (✓),
+and then (in green) eight check marks (✓). -->
+        <text id="test4" x="7" y="147" >
+            <tspan class="outer-test3">CDGFEJQa<tspan class="child" style="font-variant: none;">CDGFEJQa</tspan></tspan>
+            <tspan class="ref" x="7" dy="1em">AAAAAAAA<tspan class="child">AAAAAAAA</tspan></tspan>
+        </text>
+
+    </g>
+
+</svg>

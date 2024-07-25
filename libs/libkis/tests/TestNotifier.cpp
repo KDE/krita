@@ -11,7 +11,7 @@
 #include <KisPart.h>
 #include <Document.h>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 void TestNotifier::testNotifier()
 {

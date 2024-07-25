@@ -7,3 +7,4 @@
 
 -keep class org.qtproject.qt5.android.** { *; }
 -keep class org.krita.android.** { *; }
+-keep class org.libsdl.app.** { *; }

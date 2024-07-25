@@ -57,7 +57,7 @@ KisNodeViewColorScheme* KisNodeViewColorScheme::instance()
     return s_instance;
 }
 
-QColor KisNodeViewColorScheme::gridColor(const QStyleOptionViewItem &option, QTreeView *view)
+QColor KisNodeViewColorScheme::gridColor(const QStyleOptionViewItem &option, QTreeView *view) const
 {
     const int gridHint = view->style()->styleHint(QStyle::SH_Table_GridLineColor, &option, view);
     const QColor gridColor = static_cast<QRgb>(gridHint);
@@ -132,9 +132,16 @@ int KisNodeViewColorScheme::visibilityColumnWidth() const
 
 int KisNodeViewColorScheme::indentation() const
 {
-    return
-        2 * thumbnailMargin() + thumbnailSize() +
-        border();
+    KisConfig cfg(true);
+    int percentage = cfg.layerTreeIndentation();
+    int absoluteMax = 2 * thumbnailMargin() + thumbnailSize() + border();
+
+    return qMax(8, percentage*absoluteMax/100);
+}
+
+int KisNodeViewColorScheme::selectedButtonColumnWidth() const
+{
+    return visibilityColumnWidth();
 }
 
 QRect KisNodeViewColorScheme::relVisibilityRect() const

@@ -3,6 +3,18 @@ class Selection : QObject
 %TypeHeaderCode
 #include "Selection.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Selection passed to a Signal is provided as a QObject instead of
+  // a Selection object
+  // (not sure why, but explicit conversion here fix the problem)
+  Selection* mc = qobject_cast<Selection*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Selection;
+  }
+%End
+
     Selection(const Selection & __0);
 public:
     Selection(QObject*  parent /TransferThis/ = 0);

@@ -33,4 +33,4 @@ private:
     QScopedPointer<KoCheckerBoardPainter> m_checkersPainter;
 };
 
-#endif // KOICONTOOLTIP_H
+#endif // KISICONTOOLTIP_H

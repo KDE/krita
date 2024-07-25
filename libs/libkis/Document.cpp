@@ -9,7 +9,6 @@
 #include <QDomDocument>
 
 #include <KoColorSpaceConstants.h>
-#include <KoXmlReader.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <KisPart.h>
@@ -27,6 +26,7 @@
 #include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
 #include <kis_effect_mask.h>
 #include <kis_paint_layer.h>
 #include <kis_generator_layer.h>
@@ -38,6 +38,7 @@
 #include <KisMimeDatabase.h>
 #include <kis_filter_strategy.h>
 #include <kis_guides_config.h>
+#include <kis_grid_config.h>
 #include <kis_coordinates_converter.h>
 #include <kis_time_span.h>
 #include <KisImportExportErrorCode.h>
@@ -63,6 +64,10 @@
 #include <QMessageBox>
 
 #include <kis_image_animation_interface.h>
+#include <kis_layer_utils.h>
+#include <kis_undo_adapter.h>
+#include <commands/kis_set_global_selection_command.h>
+
 
 struct Document::Private {
     Private() {}
@@ -128,6 +133,7 @@ Node *Document::activeNode() const
 
 void Document::setActiveNode(Node* value)
 {
+    if (!value) return;
     if (!value->node()) return;
     KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
     if (!mainWin) return;
@@ -153,15 +159,19 @@ QList<Node *> Document::topLevelNodes() const
 Node *Document::nodeByName(const QString &name) const
 {
     if (!d->document) return 0;
-    KisNodeSP node = d->document->image()->rootLayer()->findChildByName(name);
+    KisNodeSP node = KisLayerUtils::findNodeByName(d->document->image()->rootLayer(),name);
+
     if (node.isNull()) return 0;
+
     return Node::createNode(d->document->image(), node);
 }
 
 Node *Document::nodeByUniqueID(const QUuid &id) const
 {
     if (!d->document) return 0;
-    KisNodeSP node = d->document->image()->rootLayer()->findChildByUniqueID(id);
+
+    KisNodeSP node = KisLayerUtils::findNodeByUuid(d->document->image()->rootLayer(), id);
+
     if (node.isNull()) return 0;
     return Node::createNode(d->document->image(), node);
 }
@@ -343,10 +353,10 @@ void Document::setSelection(Selection* value)
     if (!d->document) return;
     if (!d->document->image()) return;
     if (value) {
-        d->document->image()->setGlobalSelection(value->selection());
+        d->document->image()->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(d->document->image(), value->selection()));
     }
     else {
-        d->document->image()->setGlobalSelection(0);
+        d->document->image()->undoAdapter()->addCommand(new KisSetGlobalSelectionCommand(d->document->image(), nullptr));
     }
 }
 
@@ -541,7 +551,7 @@ void Document::scaleImage(int w, int h, int xres, int yres, QString strategy)
     KisFilterStrategy *actualStrategy = KisFilterStrategyRegistry::instance()->get(strategy);
     if (!actualStrategy) actualStrategy = KisFilterStrategyRegistry::instance()->get("Bicubic");
 
-    image->scaleImage(rc.size(), xres/72, yres/72, actualStrategy);
+    image->scaleImage(rc.size(), xres / 72.0, yres / 72.0, actualStrategy);
     image->waitForDone();
 }
 
@@ -578,6 +588,7 @@ bool Document::saveAs(const QString &filename)
 {
     if (!d->document) return false;
 
+    setFileName(filename);
     const QString outputFormatString = KisMimeDatabase::mimeTypeForFile(filename, false);
     const QByteArray outputFormat = outputFormatString.toLatin1();
     QString oldPath = d->document->path();
@@ -630,6 +641,9 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     else if (nodeType.toLower()  == "selectionmask") {
         node = new Node(image, new KisSelectionMask(image, name));
     }
+    else if (nodeType.toLower()  == "colorizemask") {
+        node = new Node(image, new KisColorizeMask(image, name));
+    }
 
     return node;
 }
@@ -643,13 +657,13 @@ GroupLayer *Document::createGroupLayer(const QString &name)
     return new GroupLayer(image, name);
 }
 
-FileLayer *Document::createFileLayer(const QString &name, const QString fileName, const QString scalingMethod)
+FileLayer *Document::createFileLayer(const QString &name, const QString fileName, const QString scalingMethod, const QString scalingFilter)
 {
     if (!d->document) return 0;
     if (!d->document->image()) return 0;
     KisImageSP image = d->document->image();
 
-    return new FileLayer(image, name, this->fileName(), fileName, scalingMethod);
+    return new FileLayer(image, name, this->fileName(), fileName, scalingMethod, scalingFilter);
 }
 
 FilterLayer *Document::createFilterLayer(const QString &name, Filter &filter, Selection &selection)
@@ -745,6 +759,15 @@ SelectionMask *Document::createSelectionMask(const QString &name)
     return new SelectionMask(image, name);
 }
 
+TransparencyMask *Document::createTransparencyMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new TransparencyMask(image, name);
+}
+
 TransformMask *Document::createTransformMask(const QString &name)
 {
     if (!d->document) return 0;
@@ -752,6 +775,15 @@ TransformMask *Document::createTransformMask(const QString &name)
     KisImageSP image = d->document->image();
 
     return new TransformMask(image, name);
+}
+
+ColorizeMask *Document::createColorizeMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new ColorizeMask(image, name);
 }
 
 QImage Document::projection(int x, int y, int w, int h) const
@@ -782,6 +814,7 @@ void Document::unlock()
 void Document::waitForDone()
 {
     if (!d->document || !d->document->image()) return;
+    KisLayerUtils::forceAllDelayedNodesUpdate(d->document->image()->rootLayer());
     d->document->image()->waitForDone();
 }
 
@@ -799,6 +832,7 @@ void Document::refreshProjection()
 
 QList<qreal> Document::horizontalGuides() const
 {
+    warnScript << "DEPRECATED Document.horizontalGuides() - use Document.guidesConfig().horizontalGuides() instead";
     QList<qreal> lines;
     if (!d->document || !d->document->image()) return lines;
     KisCoordinatesConverter converter;
@@ -814,6 +848,7 @@ QList<qreal> Document::horizontalGuides() const
 
 QList<qreal> Document::verticalGuides() const
 {
+    warnScript << "DEPRECATED Document.verticalGuides() - use Document.guidesConfig().verticalGuides() instead";
     QList<qreal> lines;
     if (!d->document || !d->document->image()) return lines;
     KisCoordinatesConverter converter;
@@ -829,11 +864,13 @@ QList<qreal> Document::verticalGuides() const
 
 bool Document::guidesVisible() const
 {
+    warnScript << "DEPRECATED Document.guidesVisible() - use Document.guidesConfig().visible() instead";
     return d->document->guidesConfig().showGuides();
 }
 
 bool Document::guidesLocked() const
 {
+    warnScript << "DEPRECATED Document.guidesLocked() - use Document.guidesConfig().locked() instead";
     return d->document->guidesConfig().lockGuides();
 }
 
@@ -841,13 +878,17 @@ Document *Document::clone() const
 {
     if (!d->document) return 0;
     QPointer<KisDocument> clone = d->document->clone();
-    Document * newDocument = new Document(clone, d->ownsDocument);
-    clone->setParent(newDocument); // It's owned by the document, not KisPart
+
+    /// We set ownsDocument to true, it will be reset
+    /// automatically as soon as we create the first
+    /// view for the document
+    Document * newDocument = new Document(clone, true);
     return newDocument;
 }
 
 void Document::setHorizontalGuides(const QList<qreal> &lines)
 {
+    warnScript << "DEPRECATED Document.setHorizontalGuides() - use Document.guidesConfig().setHorizontalGuides() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     KisCoordinatesConverter converter;
@@ -864,6 +905,7 @@ void Document::setHorizontalGuides(const QList<qreal> &lines)
 
 void Document::setVerticalGuides(const QList<qreal> &lines)
 {
+    warnScript << "DEPRECATED Document.setVerticalGuides() - use Document.guidesConfig().setVerticalGuides() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     KisCoordinatesConverter converter;
@@ -880,6 +922,7 @@ void Document::setVerticalGuides(const QList<qreal> &lines)
 
 void Document::setGuidesVisible(bool visible)
 {
+    warnScript << "DEPRECATED Document.setGuidesVisible() - use Document.guidesConfig().setVisible() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     config.setShowGuides(visible);
@@ -888,6 +931,7 @@ void Document::setGuidesVisible(bool visible)
 
 void Document::setGuidesLocked(bool locked)
 {
+    warnScript << "DEPRECATED Document.setGuidesLocked() - use Document.guidesConfig().setLocked() instead";
     if (!d->document) return;
     KisGuidesConfig config = d->document->guidesConfig();
     config.setLockGuides(locked);
@@ -898,6 +942,12 @@ bool Document::modified() const
 {
     if (!d->document) return false;
     return d->document->isModified();
+}
+
+void Document::setModified(bool modified)
+{
+    if (!d->document) return;
+    d->document->setModified(modified);
 }
 
 QRect Document::bounds() const
@@ -954,7 +1004,7 @@ void Document::setFullClipRangeStartTime(int startTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setFullClipRangeStartTime(startTime);
+    d->document->image()->animationInterface()->setDocumentRangeStartFrame(startTime);
 }
 
 
@@ -963,7 +1013,7 @@ int Document::fullClipRangeStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->fullClipRange().start();
+    return d->document->image()->animationInterface()->documentPlaybackRange().start();
 }
 
 
@@ -972,7 +1022,7 @@ void Document::setFullClipRangeEndTime(int endTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setFullClipRangeEndTime(endTime);
+    d->document->image()->animationInterface()->setDocumentRangeEndFrame(endTime);
 }
 
 
@@ -981,7 +1031,7 @@ int Document::fullClipRangeEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->fullClipRange().end();
+    return d->document->image()->animationInterface()->documentPlaybackRange().end();
 }
 
 int Document::animationLength()
@@ -998,7 +1048,7 @@ void Document::setPlayBackRange(int start, int stop)
     if (!d->document->image()) return;
 
     const KisTimeSpan newTimeRange = KisTimeSpan::fromTimeWithDuration(start, (stop-start));
-    d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
+    d->document->image()->animationInterface()->setActivePlaybackRange(newTimeRange);
 }
 
 int Document::playBackStartTime()
@@ -1006,7 +1056,7 @@ int Document::playBackStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->playbackRange().start();
+    return d->document->image()->animationInterface()->activePlaybackRange().start();
 }
 
 int Document::playBackEndTime()
@@ -1014,7 +1064,7 @@ int Document::playBackEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->playbackRange().end();
+    return d->document->image()->animationInterface()->activePlaybackRange().end();
 }
 
 int Document::currentTime()
@@ -1091,4 +1141,160 @@ void Document::removeAnnotation(const QString &type)
 {
     KisImageSP image = d->document->image().toStrongRef();
     image->removeAnnotation(type);
+}
+
+void Document::setAutosave(bool active)
+{
+    d->document->setAutoSaveActive(active);
+}
+
+bool Document::autosave()
+{
+    return d->document->isAutoSaveActive();
+}
+
+GuidesConfig *Document::guidesConfig()
+{
+    // The way Krita manage guides position is a little bit strange
+    //
+    // Let's say, set a guide at a position of 100pixels from UI
+    // In KisGuidesConfig, the saved position (using KoUnit 'px') is set taking in account the
+    // document resolution
+    // So:
+    //  100px at 300dpi ==> the stored value will be 72 * 100 / 300.00 = 24.00
+    //  100px at 600dpi ==> the stored value will be 72 * 100 / 600.00 = 12.00
+    // We have a position saved in 'pt', with unit 'px'
+    // This is also what is saved in maindoc.xml...
+    //
+    // The weird thing in this process:
+    // - use unit 'px' as what is reallt stored is 'pt'
+    // - use 'pt' to store an information that should be 'px' (because 100pixels is 100pixels whatever the
+    //   resolution of document)
+    //
+    // But OK, it works like this and reviewing this is probably a huge workload, and also there'll be
+    // a problem with old saved documents (taht's store 100px@300dpi as '24.00')
+    //
+    // The solution here is, before restitue the guideConfig to user, the internal value is transformed...
+    KisGuidesConfig *tmpConfig = new KisGuidesConfig(d->document->guidesConfig());
+
+    if (d->document && d->document->image()) {
+        KisCoordinatesConverter converter;
+        converter.setImage(d->document->image());
+
+        QTransform transform = converter.imageToDocumentTransform().inverted();
+
+        QList<qreal> transformedLines;
+        QList<qreal> untransformedLines = tmpConfig->horizontalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+        }
+        tmpConfig->setHorizontalGuideLines(transformedLines);
+
+        transformedLines.clear();
+        untransformedLines = tmpConfig->verticalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).y());
+        }
+        tmpConfig->setVerticalGuideLines(transformedLines);
+    }
+    else {
+        // unable to proceed to transform, return no guides
+        tmpConfig->removeAllGuides();
+    }
+
+    GuidesConfig *guideConfig = new GuidesConfig(tmpConfig);
+    return guideConfig;
+}
+
+void Document::setGuidesConfig(GuidesConfig *guidesConfig)
+{
+    if (!d->document) return;
+    // Like for guidesConfig() method, need to manage transform from internal stored value
+    // to pixels values
+    KisGuidesConfig tmpConfig = guidesConfig->guidesConfig();
+
+    if (d->document->image()) {
+        KisCoordinatesConverter converter;
+        converter.setImage(d->document->image());
+
+        QTransform transform = converter.imageToDocumentTransform();
+
+        QList<qreal> transformedLines;
+        QList<qreal> untransformedLines = tmpConfig.horizontalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+        }
+        tmpConfig.setHorizontalGuideLines(transformedLines);
+
+        transformedLines.clear();
+        untransformedLines = tmpConfig.verticalGuideLines();
+        for (int i = 0; i< untransformedLines.size(); i++) {
+            qreal untransformedLine = untransformedLines[i];
+            transformedLines.append(transform.map(QPointF(untransformedLine, untransformedLine)).x());
+        }
+        tmpConfig.setVerticalGuideLines(transformedLines);
+    }
+    else {
+        // unable to proceed to transform, set no guides
+        tmpConfig.removeAllGuides();
+    }
+
+    d->document->setGuidesConfig(tmpConfig);
+}
+
+
+GridConfig *Document::gridConfig()
+{
+    KisGridConfig *tmpConfig = new KisGridConfig(d->document->gridConfig());
+    GridConfig *gridConfig = new GridConfig(tmpConfig);
+    return gridConfig;
+}
+
+void Document::setGridConfig(GridConfig *gridConfig)
+{
+    if (!d->document) return;
+    KisGridConfig tmpConfig = gridConfig->gridConfig();
+    d->document->setGridConfig(tmpConfig);
+}
+
+qreal Document::audioLevel() const
+{
+    return d->document->getAudioLevel();
+}
+
+void Document::setAudioLevel(const qreal level)
+{
+    d->document->setAudioVolume(level);
+}
+
+QList<QString> Document::audioTracks() const
+{
+    QList<QString> fileList;
+    Q_FOREACH(QFileInfo fileInfo, d->document->getAudioTracks()) {
+        fileList.append(fileInfo.absoluteFilePath());
+    }
+    return fileList;
+}
+
+bool Document::setAudioTracks(const QList<QString> files) const
+{
+    bool returned = true;
+    QVector<QFileInfo> fileList;
+    QFileInfo fileInfo;
+    Q_FOREACH(QString fileName, files) {
+        fileInfo.setFile(fileName);
+        if (fileInfo.exists()) {
+            // ensure the file exists before adding it
+            fileList.append(fileName);
+        }
+        else {
+            // if at least one file is not valid, return false
+            returned = false;
+        }
+    }
+    d->document->setAudioTracks(fileList);
+    return returned;
 }

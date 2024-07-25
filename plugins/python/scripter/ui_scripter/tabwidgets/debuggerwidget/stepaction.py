@@ -6,6 +6,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from PyQt5.QtWidgets import QAction
 from PyQt5.QtGui import QIcon
 from scripter import resources_rc
+from .... import utils
 import krita
 
 
@@ -20,7 +21,7 @@ class StepAction(QAction):
 
         self.setText(i18n("Step Over"))
         # path to the icon
-        self.setIcon(QIcon(':/icons/step.svg'))
+        self.setIcon(utils.getThemedIcon(':/icons/step.svg'))
 
     def step(self):
         status = self.scripter.debugcontroller.isActive

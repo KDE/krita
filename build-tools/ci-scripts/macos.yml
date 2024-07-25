@@ -1,0 +1,99 @@
+macos-build:
+  stage: build
+  tags:
+    - macOS
+  extends:
+    - .ci-manual-job-mixin
+    - .ci-artifacts-with-packages-mixin
+  variables:
+    KDECI_BUILD_TYPE: Release
+    KDECI_CC_CACHE: /Users/gitlab/caches/krita-macos/ccache
+    KDECI_CACHE_PATH: /Users/gitlab/caches/krita-macos/artifacts
+    KDECI_GITLAB_SERVER: https://invent.kde.org/
+    KDECI_PACKAGE_PROJECT: dkazakov/krita-ci-artifacts-macos-qt5.15
+    EXTERNALS_DOWNLOAD_DIR: /Users/gitlab/caches/krita-macos/downloads
+    KDECI_REPO_METADATA_PATH: $CI_PROJECT_DIR/krita-deps-management/repo-metadata
+    MACOSX_DEPLOYMENT_TARGET: "10.14"
+    QMAKE_MACOSX_DEPLOYMENT_TARGET: "10.14"
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=ON
+      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
+    # TODO: clear the folder
+    KDECI_CRAFT_DOWNLOADS: /Users/gitlab/caches/krita-macos/craft-downloads
+
+    #KDECI_REMOVE_INSTALL_FOLDERS_AFTER_BUILD: True
+
+    KDECI_COMPRESS_PACKAGES_ON_DOWNLOAD: False
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: True
+    KRITACI_PUBLISH_BUILD_CONFIG: upstream-ci-utilities/signing/publishbuild.ini
+
+    # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
+    KDECI_ONLY_BUILD: True
+  interruptible: true
+  before_script:
+    - git clone https://invent.kde.org/dkazakov/krita-deps-management.git krita-deps-management --depth=1
+    - git clone https://invent.kde.org/dkazakov/ci-utilities.git krita-deps-management/ci-utilities --depth=1
+    - git clone https://invent.kde.org/sysadmin/ci-utilities.git --depth=1 upstream-ci-utilities
+
+    - python3 -m venv venv --upgrade-deps
+    - . venv/bin/activate
+    - pip install -r krita-deps-management/requirements.txt
+
+    # framework for signing, notarization and package upload
+    - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
+    - pip install -r ci-notary-service/requirements.txt
+
+    - python3 -u build-tools/ci-scripts/download-macos-tools.py
+    - source _krita-tools/activate
+
+    - git config --global --add safe.directory $CI_PROJECT_DIR
+
+  script:
+    - python3 -u krita-deps-management/tools/generate-deps-file.py -s krita-deps-management/latest/krita-deps.yml -o .kde-ci.yml
+    - python3 -u krita-deps-management/ci-utilities/run-ci-build.py --project $CI_PROJECT_NAME --branch $CI_COMMIT_REF_NAME --platform MacOS/Qt5/Shared --skip-publishing 2>&1 | tee build-krita.log
+
+    # firstly, build .app bundle and sign it
+    - env BUILDROOT=$CI_PROJECT_DIR ONLY_APP=1 $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-app.log
+    # TODO: add a note about absolute paths if they were actually the problem
+    # TODO: temporarily disable macos signing and notarization since it doesn't work
+    #- python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-sign.log
+    #- python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_dmg/*.app 2>&1 | tee app-notarize.log
+    
+    # secondly, build .dmg image and sign it as well
+    - env BUILDROOT=$CI_PROJECT_DIR ONLY_DMG=1 $CI_PROJECT_DIR/packaging/macos/osxdeploy.sh | tee build-dmg.log
+    # TODO: add a note about absolute paths if they were actually the problem
+    # TODO: temporarily disable macos signing and notarization since it doesn't work
+    #- python3 ci-notary-service/signmacapp.py --config upstream-ci-utilities/signing/signmacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-sign.log
+    #- python3 ci-notary-service/notarizemacapp.py --config upstream-ci-utilities/signing/notarizemacapp.ini $CI_PROJECT_DIR/_packaging/*.dmg 2>&1 | tee dmg-notarize.log
+    - python3 -u build-tools/ci-scripts/upload-nightly-packages.py --platform macos --folder $CI_PROJECT_DIR/_packaging 2>&1 | tee dmg-publish.log
+  coverage: '/^TOTAL.*\s+(\d+\%)$/'
+
+macos-nightly:
+  extends:
+  - macos-build
+  - .nightly-job-mixin
+  - .ci-artifacts-without-packages-mixin
+  interruptible: false
+  variables:
+    # still run the tests, since we don't run them for every commit!
+    # TODO: temporarily disable unittests runs on MacOS, since they flood the logs on GitLab
+    KDECI_ONLY_BUILD: True
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=OFF
+      -DBUILD_TESTING=ON
+      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake
+    KRITACI_SKIP_UPLOAD_NIGHTLY_PACKAGE: False
+
+macos-release:
+  extends:
+  - macos-build
+  - .ci-release-job-mixin
+  interruptible: false
+  variables:
+    KRITACI_RELEASE_PACKAGE_NAMING: True
+    KDECI_ONLY_BUILD: True
+    KDECI_EXTRA_CMAKE_ARGS: >
+      -DHIDE_SAFE_ASSERTS=ON
+      -DBUILD_TESTING=OFF
+      -DCMAKE_TOOLCHAIN_FILE=$CI_PROJECT_DIR/krita-deps-management/tools/macos-toolchain-krita.cmake

@@ -17,7 +17,12 @@ private Q_SLOTS:
     void testPixelData();
     void testThumbnail();
     void testCreateFillLayer();
+    void testCreateCloneLayer();
+    void testCreateTransparencyMask();
+    void testCreateColorizeMask();
     void testAnnotations();
+    void testNodeByName();
+    void testNodeByUniqueId();
 };
 
 #endif

@@ -32,8 +32,6 @@ public:
 Q_DECLARE_OPERATORS_FOR_FLAGS(ExtendedModifiers::Modifiers)
 
 static id localMonitor = 0;
-static id globalMonitor = 0;
-static bool fromGlobalEvent = false;
 
 static ExtendedModifiers::Modifiers extendedMods;
 static QMutex mutex;

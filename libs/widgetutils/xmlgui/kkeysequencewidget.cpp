@@ -25,15 +25,18 @@
 
 #include <kis_icon_utils.h>
 
+#include <QtGui/private/qkeymapper_p.h>
+
+
 uint qHash(const QKeySequence &seq)
 {
     return qHash(seq.toString());
 }
 
-class KKeySequenceWidgetPrivate
+class KisKKeySequenceWidgetPrivate
 {
 public:
-    KKeySequenceWidgetPrivate(KKeySequenceWidget *q);
+    KisKKeySequenceWidgetPrivate(KisKKeySequenceWidget *q);
 
     void init();
 
@@ -69,20 +72,20 @@ public:
 
     bool checkAgainstStandardShortcuts() const
     {
-        return checkAgainstShortcutTypes & KKeySequenceWidget::StandardShortcuts;
+        return checkAgainstShortcutTypes & KisKKeySequenceWidget::StandardShortcuts;
     }
 
     bool checkAgainstGlobalShortcuts() const
     {
-        return checkAgainstShortcutTypes & KKeySequenceWidget::GlobalShortcuts;
+        return checkAgainstShortcutTypes & KisKKeySequenceWidget::GlobalShortcuts;
     }
 
     bool checkAgainstLocalShortcuts() const
     {
-        return checkAgainstShortcutTypes & KKeySequenceWidget::LocalShortcuts;
+        return checkAgainstShortcutTypes & KisKKeySequenceWidget::LocalShortcuts;
     }
 
-    void controlModifierlessTimout()
+    void controlModifierlessTimeout()
     {
         if (nKey != 0 && !modifierKeys) {
             // No modifier key pressed currently. Start the timeout
@@ -104,7 +107,7 @@ public:
     void doneRecording(bool validate = true);
 
 //members
-    KKeySequenceWidget *const q;
+    KisKKeySequenceWidget *const q;
     QHBoxLayout *layout;
     KKeySequenceButton *keyButton;
     QToolButton *clearButton;
@@ -120,7 +123,7 @@ public:
     QString componentName;
 
     //! Check the key sequence against KStandardShortcut::find()
-    KKeySequenceWidget::ShortcutTypes checkAgainstShortcutTypes;
+    KisKKeySequenceWidget::ShortcutTypes checkAgainstShortcutTypes;
 
     /**
      * The list of action to check against for conflict shortcut
@@ -130,7 +133,7 @@ public:
     /**
      * The list of action collections to check against for conflict shortcut
      */
-    QList<KActionCollection *> checkActionCollections;
+    QList<KisKActionCollection *> checkActionCollections;
 
     /**
      * The action to steal the shortcut from.
@@ -142,7 +145,7 @@ public:
 
 };
 
-KKeySequenceWidgetPrivate::KKeySequenceWidgetPrivate(KKeySequenceWidget *q)
+KisKKeySequenceWidgetPrivate::KisKKeySequenceWidgetPrivate(KisKKeySequenceWidget *q)
     : q(q)
     , layout(0)
     , keyButton(0)
@@ -153,11 +156,11 @@ KKeySequenceWidgetPrivate::KKeySequenceWidgetPrivate(KKeySequenceWidget *q)
     , isRecording(false)
     , multiKeyShortcutsAllowed(true)
     , componentName()
-    , checkAgainstShortcutTypes(KKeySequenceWidget::LocalShortcuts | KKeySequenceWidget::GlobalShortcuts)
+    , checkAgainstShortcutTypes(KisKKeySequenceWidget::LocalShortcuts | KisKKeySequenceWidget::GlobalShortcuts)
     , stealActions()
 {}
 
-bool KKeySequenceWidgetPrivate::stealShortcuts(
+bool KisKKeySequenceWidgetPrivate::stealShortcuts(
     const QList<QAction *> &actions,
     const QKeySequence &seq)
 {
@@ -190,7 +193,7 @@ bool KKeySequenceWidgetPrivate::stealShortcuts(
     return true;
 }
 
-void KKeySequenceWidgetPrivate::wontStealShortcut(QAction *item, const QKeySequence &seq)
+void KisKKeySequenceWidgetPrivate::wontStealShortcut(QAction *item, const QKeySequence &seq)
 {
     QString title(i18n("Shortcut conflict"));
     QString msg(i18n("<qt>The '%1' key combination is already used by the <b>%2</b> action.<br>"
@@ -199,9 +202,9 @@ void KKeySequenceWidgetPrivate::wontStealShortcut(QAction *item, const QKeySeque
     KMessageBox::sorry(q, msg, title);
 }
 
-KKeySequenceWidget::KKeySequenceWidget(QWidget *parent)
+KisKKeySequenceWidget::KisKKeySequenceWidget(QWidget *parent)
     : QWidget(parent),
-      d(new KKeySequenceWidgetPrivate(this))
+      d(new KisKKeySequenceWidgetPrivate(this))
 {
     d->init();
     setFocusProxy(d->keyButton);
@@ -215,10 +218,10 @@ KKeySequenceWidget::KKeySequenceWidget(QWidget *parent)
     d->updateShortcutDisplay();
 }
 
-void KKeySequenceWidgetPrivate::init()
+void KisKKeySequenceWidgetPrivate::init()
 {
     layout = new QHBoxLayout(q);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     keyButton = new KKeySequenceButton(this, q);
     keyButton->setFocusPolicy(Qt::StrongFocus);
@@ -236,42 +239,42 @@ void KKeySequenceWidgetPrivate::init()
     }
 }
 
-KKeySequenceWidget::~KKeySequenceWidget()
+KisKKeySequenceWidget::~KisKKeySequenceWidget()
 {
     delete d;
 }
 
-KKeySequenceWidget::ShortcutTypes KKeySequenceWidget::checkForConflictsAgainst() const
+KisKKeySequenceWidget::ShortcutTypes KisKKeySequenceWidget::checkForConflictsAgainst() const
 {
     return d->checkAgainstShortcutTypes;
 }
 
-void KKeySequenceWidget::setComponentName(const QString &componentName)
+void KisKKeySequenceWidget::setComponentName(const QString &componentName)
 {
     d->componentName = componentName;
 }
 
-bool KKeySequenceWidget::multiKeyShortcutsAllowed() const
+bool KisKKeySequenceWidget::multiKeyShortcutsAllowed() const
 {
     return d->multiKeyShortcutsAllowed;
 }
 
-void KKeySequenceWidget::setMultiKeyShortcutsAllowed(bool allowed)
+void KisKKeySequenceWidget::setMultiKeyShortcutsAllowed(bool allowed)
 {
     d->multiKeyShortcutsAllowed = allowed;
 }
 
-void KKeySequenceWidget::setCheckForConflictsAgainst(ShortcutTypes types)
+void KisKKeySequenceWidget::setCheckForConflictsAgainst(ShortcutTypes types)
 {
     d->checkAgainstShortcutTypes = types;
 }
 
-void KKeySequenceWidget::setModifierlessAllowed(bool allow)
+void KisKKeySequenceWidget::setModifierlessAllowed(bool allow)
 {
     d->allowModifierless = allow;
 }
 
-bool KKeySequenceWidget::isKeySequenceAvailable(const QKeySequence &keySequence) const
+bool KisKKeySequenceWidget::isKeySequenceAvailable(const QKeySequence &keySequence) const
 {
     if (keySequence.isEmpty()) {
         // qDebug() << "Key sequence" << keySequence.toString() << "is empty and available.";
@@ -293,34 +296,34 @@ bool KKeySequenceWidget::isKeySequenceAvailable(const QKeySequence &keySequence)
 
 }
 
-bool KKeySequenceWidget::isModifierlessAllowed()
+bool KisKKeySequenceWidget::isModifierlessAllowed()
 {
     return d->allowModifierless;
 }
 
-void KKeySequenceWidget::setClearButtonShown(bool show)
+void KisKKeySequenceWidget::setClearButtonShown(bool show)
 {
     d->clearButton->setVisible(show);
 }
 
-void KKeySequenceWidget::setCheckActionCollections(const QList<KActionCollection *> &actionCollections)
+void KisKKeySequenceWidget::setCheckActionCollections(const QList<KisKActionCollection *> &actionCollections)
 {
     d->checkActionCollections = actionCollections;
 }
 
 //slot
-void KKeySequenceWidget::captureKeySequence()
+void KisKKeySequenceWidget::captureKeySequence()
 {
     d->startRecording();
 }
 
-QKeySequence KKeySequenceWidget::keySequence() const
+QKeySequence KisKKeySequenceWidget::keySequence() const
 {
     return d->keySequence;
 }
 
 //slot
-void KKeySequenceWidget::setKeySequence(const QKeySequence &seq, Validation validate)
+void KisKKeySequenceWidget::setKeySequence(const QKeySequence &seq, Validation validate)
 {
     // oldKeySequence holds the key sequence before recording started, if setKeySequence()
     // is called while not recording then set oldKeySequence to the existing sequence so
@@ -335,15 +338,15 @@ void KKeySequenceWidget::setKeySequence(const QKeySequence &seq, Validation vali
 }
 
 //slot
-void KKeySequenceWidget::clearKeySequence()
+void KisKKeySequenceWidget::clearKeySequence()
 {
     setKeySequence(QKeySequence());
 }
 
 //slot
-void KKeySequenceWidget::applyStealShortcut()
+void KisKKeySequenceWidget::applyStealShortcut()
 {
-    QSet<KActionCollection *> changedCollections;
+    QSet<KisKActionCollection *> changedCollections;
 
     Q_FOREACH (QAction *stealAction, d->stealActions) {
 
@@ -351,9 +354,9 @@ void KKeySequenceWidget::applyStealShortcut()
         stealAction->setShortcuts(QList<QKeySequence>());
 
         // The following code will find the action we are about to
-        // steal from and save it's actioncollection.
-        KActionCollection *parentCollection = 0;
-        foreach (KActionCollection *collection, d->checkActionCollections) {
+        // steal from and save its action collection.
+        KisKActionCollection *parentCollection = 0;
+        foreach (KisKActionCollection *collection, d->checkActionCollections) {
             if (collection->actions().contains(stealAction)) {
                 parentCollection = collection;
                 break;
@@ -366,14 +369,14 @@ void KKeySequenceWidget::applyStealShortcut()
         }
     }
 
-    Q_FOREACH (KActionCollection *col, changedCollections) {
+    Q_FOREACH (KisKActionCollection *col, changedCollections) {
         col->writeSettings();
     }
 
     d->stealActions.clear();
 }
 
-void KKeySequenceWidgetPrivate::startRecording()
+void KisKKeySequenceWidgetPrivate::startRecording()
 {
     nKey = 0;
     modifierKeys = 0;
@@ -390,7 +393,7 @@ void KKeySequenceWidgetPrivate::startRecording()
     updateShortcutDisplay();
 }
 
-void KKeySequenceWidgetPrivate::doneRecording(bool validate)
+void KisKKeySequenceWidgetPrivate::doneRecording(bool validate)
 {
     modifierlessTimeout.stop();
     isRecording = false;
@@ -414,7 +417,7 @@ void KKeySequenceWidgetPrivate::doneRecording(bool validate)
     updateShortcutDisplay();
 }
 
-bool KKeySequenceWidgetPrivate::conflictWithGlobalShortcuts(const QKeySequence &keySequence)
+bool KisKKeySequenceWidgetPrivate::conflictWithGlobalShortcuts(const QKeySequence &keySequence)
 {
     // This could hold some OS-specific stuff, or it could be linked back with
     // the KDE global shortcut code at some point in the future.
@@ -447,9 +450,9 @@ bool shortcutsConflictWith(const QList<QKeySequence> &shortcuts, const QKeySeque
     return false;
 }
 
-bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &keySequence)
+bool KisKKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &keySequence)
 {
-    if (!(checkAgainstShortcutTypes & KKeySequenceWidget::LocalShortcuts)) {
+    if (!(checkAgainstShortcutTypes & KisKKeySequenceWidget::LocalShortcuts)) {
         return false;
     }
 
@@ -462,7 +465,7 @@ bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &k
     // removed from the collection again.
     QList<QAction *> allActions;
     allActions += checkList;
-    foreach (KActionCollection *collection, checkActionCollections) {
+    foreach (KisKActionCollection *collection, checkActionCollections) {
         allActions += collection->actions();
     }
 
@@ -519,9 +522,9 @@ bool KKeySequenceWidgetPrivate::conflictWithLocalShortcuts(const QKeySequence &k
     }
 }
 
-bool KKeySequenceWidgetPrivate::conflictWithStandardShortcuts(const QKeySequence &keySequence)
+bool KisKKeySequenceWidgetPrivate::conflictWithStandardShortcuts(const QKeySequence &keySequence)
 {
-    if (!(checkAgainstShortcutTypes & KKeySequenceWidget::StandardShortcuts)) {
+    if (!(checkAgainstShortcutTypes & KisKKeySequenceWidget::StandardShortcuts)) {
         return false;
     }
     KStandardShortcut::StandardShortcut ssc = KStandardShortcut::find(keySequence);
@@ -531,7 +534,7 @@ bool KKeySequenceWidgetPrivate::conflictWithStandardShortcuts(const QKeySequence
     return false;
 }
 
-bool KKeySequenceWidgetPrivate::stealStandardShortcut(KStandardShortcut::StandardShortcut std, const QKeySequence &seq)
+bool KisKKeySequenceWidgetPrivate::stealStandardShortcut(KStandardShortcut::StandardShortcut std, const QKeySequence &seq)
 {
     QString title = i18n("Conflict with Standard Application Shortcut");
     QString message = i18n("The '%1' key combination is also used for the standard action "
@@ -545,7 +548,7 @@ bool KKeySequenceWidgetPrivate::stealStandardShortcut(KStandardShortcut::Standar
     return true;
 }
 
-void KKeySequenceWidgetPrivate::updateShortcutDisplay()
+void KisKKeySequenceWidgetPrivate::updateShortcutDisplay()
 {
     //empty string if no non-modifier was pressed
     QString s = keySequence.toString(QKeySequence::NativeText);
@@ -669,7 +672,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Meta:
     case Qt::Key_Super_L:
     case Qt::Key_Super_R:
-        d->controlModifierlessTimout();
+        d->controlModifierlessTimeout();
         d->updateShortcutDisplay();
         break;
     default:
@@ -677,7 +680,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
         if (d->nKey == 0 && !(d->modifierKeys & ~Qt::SHIFT)) {
             // It's the first key and no modifier pressed. Check if this is
             // allowed
-            if (!(KKeySequenceWidgetPrivate::isOkWhenModifierless(keyQt)
+            if (!(KisKKeySequenceWidgetPrivate::isOkWhenModifierless(keyQt)
                     || d->allowModifierless)) {
                 // No it's not
                 return;
@@ -686,7 +689,27 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
 
         // We now have a valid key press.
         if (keyQt) {
-            if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
+            /**
+             * Here is the trap, which is different on every OS. On Widnows Qt
+             * has incomprehensible rules on translating AltGr-related key
+             * sequences into shortcuts. On macOS symbols may confuse Qt when
+             * using Cmd+Shift-based shortcuts. * So we should just ask Qt
+             * itself what it expects to receive as a shortcut :)
+             *
+             * That is exactly what Qt's QKeySequenceEdit does internally.
+             *
+             * TODO: in the future replace the whole widget with QKeySequenceEdit,
+             *       it uses QKeyMapper directly.
+             */
+            const QList<int> vec = QKeyMapper::possibleKeys(e);
+
+            if (!vec.isEmpty() && e->modifiers() != Qt::NoModifier) {
+                /**
+                 * Take the first element, which is usually the shortcut form the latin
+                 * layout of the keyboard
+                 */
+                keyQt = vec.first();
+            } else if ((keyQt == Qt::Key_Backtab) && (d->modifierKeys & Qt::SHIFT)) {
                 keyQt = Qt::Key_Tab | d->modifierKeys;
             } else if (KKeyServer::isShiftAsModifierAllowed(keyQt)) {
                 keyQt |= d->modifierKeys;
@@ -698,7 +721,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
                 d->keySequence = QKeySequence(keyQt);
             } else {
                 d->keySequence =
-                    KKeySequenceWidgetPrivate::appendToSequence(d->keySequence, keyQt);
+                    KisKKeySequenceWidgetPrivate::appendToSequence(d->keySequence, keyQt);
             }
 
             d->nKey++;
@@ -706,7 +729,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
                 d->doneRecording();
                 return;
             }
-            d->controlModifierlessTimout();
+            d->controlModifierlessTimeout();
             d->updateShortcutDisplay();
         }
     }
@@ -730,13 +753,13 @@ void KKeySequenceButton::keyReleaseEvent(QKeyEvent *e)
     //if a modifier that belongs to the shortcut was released...
     if ((newModifiers & d->modifierKeys) < d->modifierKeys) {
         d->modifierKeys = newModifiers;
-        d->controlModifierlessTimout();
+        d->controlModifierlessTimeout();
         d->updateShortcutDisplay();
     }
 }
 
 //static
-QKeySequence KKeySequenceWidgetPrivate::appendToSequence(const QKeySequence &seq, int keyQt)
+QKeySequence KisKKeySequenceWidgetPrivate::appendToSequence(const QKeySequence &seq, int keyQt)
 {
     switch (seq.count()) {
     case 0:
@@ -753,7 +776,7 @@ QKeySequence KKeySequenceWidgetPrivate::appendToSequence(const QKeySequence &seq
 }
 
 //static
-bool KKeySequenceWidgetPrivate::isOkWhenModifierless(int keyQt)
+bool KisKKeySequenceWidgetPrivate::isOkWhenModifierless(int keyQt)
 {
     //this whole function is a hack, but especially the first line of code
     if (QKeySequence(keyQt).toString().length() == 1) {

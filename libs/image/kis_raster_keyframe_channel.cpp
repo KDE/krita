@@ -239,22 +239,24 @@ KisPaintDeviceWSP KisRasterKeyframeChannel::paintDevice()
 
 void KisRasterKeyframeChannel::insertKeyframe(int time, KisKeyframeSP keyframe, KUndo2Command *parentUndoCmd)
 {
-    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
-
     KisRasterKeyframeSP rasterKey = keyframe.dynamicCast<KisRasterKeyframe>();
     if (rasterKey) {
         m_d->frameIDTimesMap.insert(rasterKey->frameID(), time);
     }
+
+    KisKeyframeChannel::insertKeyframe(time, keyframe, parentUndoCmd);
 }
 
 void KisRasterKeyframeChannel::removeKeyframe(int time, KUndo2Command *parentUndoCmd)
 {
+    emit sigKeyframeAboutToBeRemoved(this, time);
+
     KisRasterKeyframeSP rasterKey = keyframeAt<KisRasterKeyframe>(time);
     if (rasterKey) {
         m_d->frameIDTimesMap.remove(rasterKey->frameID(), time);
     }
 
-    KisKeyframeChannel::removeKeyframe(time, parentUndoCmd);
+    KisKeyframeChannel::removeKeyframeImpl(time, parentUndoCmd);
 
     if (time == 0) { // There should always be a raster frame on frame 0.
         addKeyframe(time, parentUndoCmd);

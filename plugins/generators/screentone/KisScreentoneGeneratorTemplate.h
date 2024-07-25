@@ -42,7 +42,7 @@ private:
 
     template <typename ScreentoneFunction>
     void makeTemplate(const KisScreentoneGeneratorConfigurationSP config, ScreentoneFunction screentoneFunction);
-    QVector<int> makeCellOrderList(int macrocellColums, int macrocellRows) const;
+    QVector<int> makeCellOrderList(int macrocellColumns, int macrocellRows) const;
 };
 
 #endif

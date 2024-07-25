@@ -42,7 +42,7 @@ void replaceAction(QToolButton *button, QAction *newAction)
     }
 }
 
-void ArrangeDockerWidget::setActionCollection(KActionCollection *collection)
+void ArrangeDockerWidget::setActionCollection(KisKActionCollection *collection)
 {
     const bool enabled = collection->action("object_order_front");
 

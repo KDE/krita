@@ -39,7 +39,7 @@ public:
     }
 
     KisViewManager* viewManager {nullptr};
-    KActionCollection *actionCollection {nullptr};
+    KisKActionCollection *actionCollection {nullptr};
 
     QList<QPointer<KisAction>> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
@@ -47,7 +47,7 @@ public:
 
 };
 
-KisActionManager::KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection)
+KisActionManager::KisActionManager(KisViewManager* viewManager, KisKActionCollection *actionCollection)
     : d(new Private)
 {
     d->viewManager = viewManager;
@@ -210,6 +210,11 @@ void KisActionManager::updateGUI()
                 flags |= KisAction::IMAGE_HAS_ANIMATION;
             }
 
+            KisDocument *document = d->viewManager->document();
+            if (document && document->isReadWrite()) {
+                flags |= KisAction::IMAGE_IS_WRITABLE;
+            }
+
             if (d->viewManager->viewCount() > 1) {
                 flags |= KisAction::MULTIPLE_IMAGES;
             }
@@ -255,6 +260,10 @@ void KisActionManager::updateGUI()
         }
 
         if (selectionManager) {
+
+            if (selectionManager->canReselectDeactivatedSelection()) {
+                flags |= KisAction::IMAGE_CAN_RESELECT;
+            }
 
             if (selectionManager->havePixelsSelected()) {
                 flags |= KisAction::PIXELS_SELECTED;

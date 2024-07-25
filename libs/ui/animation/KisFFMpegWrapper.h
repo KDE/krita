@@ -25,7 +25,7 @@ struct KRITAUI_EXPORT KisFFMpegWrapperSettings
     QString outputFile;
     bool storeOutput = false;
     QString logPath = "";
-    QStringList defaultPrependArgs = {"-hide_banner", "-nostdin", "-y"};
+    QStringList defaultPrependArgs = {"-hide_banner", "-y"};
     bool batchMode = false;
     bool binaryOutput = false;
     int totalFrames = 0;
@@ -43,7 +43,7 @@ enum FFProbeErrorCodes {
 
 const int FFMPEG_TIMEOUT = 600000;
 
-class KRITAUI_EXPORT  KisFFMpegWrapper : public QObject
+class KRITAUI_EXPORT KisFFMpegWrapper : public QObject
 {
     Q_OBJECT
 public:
@@ -56,9 +56,10 @@ public:
     void reset();
 
     static QJsonObject findProcessPath(const QString &processName, const QString &customLocation, bool processInfo);
+    static QJsonObject findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo);
+    static QStringList getSupportedCodecs(const QJsonObject& ffmpegJsonProcessInput);
     static QJsonObject findFFMpeg(const QString &customLocation);
     static QJsonObject findFFProbe(const QString &customLocation);
-    static QJsonObject findProcessInfo(const QString &processName, const QString &processPath, bool includeProcessInfo);
     static QByteArray runProcessAndReturn(const QString &processPath, const QStringList &args, int msecs = FFMPEG_TIMEOUT);
     static QString configuredFFMpegLocation();
     static void setConfiguredFFMpegLocation(QString& location);
@@ -89,12 +90,14 @@ private:
 
     /**
      * @brief ffprobeCheckStreamsValid
-     * @param ffprobeJsonObj JsonObject resulting from ffprobe proces.
+     * @param ffprobeJsonObj JsonObject resulting from ffprobe process.
      * @param ffprobeSTDERR STDERR output from ffprobe.
      * @return bool -> Whether we support a video format based on it's internal streams.
      */
     bool ffprobeCheckStreamsValid(const QJsonObject& ffprobeJsonObj, const QString& ffprobeSTDERR);
     
+    static void fixUpNonEmbeddedProcessEnvironment(const QString &processPath, QProcess &process);
+
 private:
     QScopedPointer<QProcess> m_process;
     QSharedPointer<QProgressDialog> m_progress = nullptr;

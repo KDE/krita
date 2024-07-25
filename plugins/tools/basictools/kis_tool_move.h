@@ -21,7 +21,7 @@
 #include "KisToolChangesTracker.h"
 #include "kis_signal_compressor.h"
 #include "kis_signal_auto_connection.h"
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 
 #include "kis_canvas2.h"
 
@@ -170,7 +170,7 @@ private:
     KisSignalAutoConnectionsStore m_actionConnections;
     KisSignalAutoConnectionsStore m_canvasConnections;
 
-    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
+    KisAsynchronousStrokeUpdateHelper m_asyncUpdateHelper;
 };
 
 

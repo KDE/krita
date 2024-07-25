@@ -59,7 +59,7 @@ public:
 
     // paintop overrides
 
-    std::pair<int, bool> doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
+    std::pair<int, bool> doAsynchronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
     bool hasDirtyRegion() const;
     QVector<QRect> takeDirtyRegion();
 

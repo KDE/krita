@@ -1,7 +1,6 @@
-/* This file is part of the KDE project
+/*
  * SPDX-FileCopyrightText: 2006-2010 Thomas Zander <zander@kde.org>
- * SPDX-FileCopyrightText: 2010 KO GmbH <boud@valdyas.org>
- *
+ * SPDX-FileCopyrightText: 2010 Halla Rempt <halla@valdyas.org>
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
@@ -47,14 +46,13 @@ public:
 
     void connectSignals()
     {
-        if (canvas) { // in the case of KoToolManagers dummytool it can be zero :(
+        if (canvas) { // in the case of KoToolManagers dummy tool it can be zero :(
             KoCanvasResourceProvider * crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)
                 q->connect(crp, SIGNAL(canvasResourceChanged(int, const QVariant &)),
                         SLOT(canvasResourceChanged(int, const QVariant &)));
 
-            // can be 0 in the case of Calligra Sheets
             KoDocumentResourceManager *scrm = canvas->shapeController()->resourceManager();
             if (scrm) {
                 q->connect(scrm, SIGNAL(resourceChanged(int, const QVariant &)),

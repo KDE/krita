@@ -38,6 +38,7 @@ Brad Hards
 Bram Schoenmakers
 Burkhard Lück
 Carlo Segato
+Carsten Hartenfels
 C. Boemann
 Christer Stenbrenden
 Christian Ehrlicher
@@ -151,6 +152,7 @@ Pierre Stirnweiss
 Pino Toscano
 Rafael Fernández López
 Raphael Langerhorst
+Rasyuqa A. Hafiidh
 Rex Dieter
 Rob Buis
 Roopesh Chander

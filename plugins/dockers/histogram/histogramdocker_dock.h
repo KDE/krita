@@ -20,8 +20,8 @@ class KisIdleWatcher;
 class KoHistogramProducer;
 class HistogramDockerWidget;
 
-class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase {
-    Q_OBJECT
+class HistogramDockerDock : public QDockWidget, public KoCanvasObserverBase
+{
 public:
     HistogramDockerDock();
 
@@ -29,17 +29,8 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
 
-public Q_SLOTS:
-    void startUpdateCanvasProjection();
-    void sigColorSpaceChanged(const KoColorSpace* cs);
-    void updateHistogram();
-
-protected:
-    void showEvent(QShowEvent *event) override;
-
 private:
     QVBoxLayout *m_layout;
-    KisIdleWatcher *m_imageIdleWatcher;
     HistogramDockerWidget *m_histogramWidget;
     QPointer<KisCanvas2> m_canvas;
 };

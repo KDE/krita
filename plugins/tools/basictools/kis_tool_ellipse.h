@@ -29,6 +29,8 @@ public:
     KisToolEllipse(KoCanvasBase * canvas);
     ~KisToolEllipse() override;
 
+    bool supportsPaintingAssistants() const override;
+
 protected Q_SLOTS:
     void resetCursorStyle() override;
 

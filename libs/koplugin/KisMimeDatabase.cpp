@@ -55,7 +55,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
 
 #ifdef Q_OS_ANDROID
     QString basename = fi.baseName();
-    // HACK: because we use sanitzed suffix
+    // HACK: because we use sanitized suffix
     mime = db.mimeTypeForFile(basename + "." + suffix);
 #else
     mime = db.mimeTypeForFile(file);
@@ -232,7 +232,7 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "application/x-gimp-color-palette";
         mimeType.description = i18nc("description of a file type", "Color Palette");
-        mimeType.suffixes = QStringList() << "gpl" << "pal" << "act" << "aco" << "colors" << "xml" << "sbz" << "acb" << "ase";
+        mimeType.suffixes = QStringList() << "gpl" << "pal" << "act" << "aco" << "colors" << "xml" << "sbz" << "acb" << "ase" << "css";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-krita-palette";
@@ -297,7 +297,7 @@ void KisMimeDatabase::fillMimeData()
 
         mimeType.mimeType = "image/x-krita-raw";
         mimeType.description = i18nc("description of a file type", "Camera Raw Files");
-        mimeType.suffixes = QStringList() << "bay" << "bmq" << "cr2" << "crw" << "cs1" << "dc2" << "dcr" << "dng" << "erf" << "fff" << "hdr" << "k25" << "kdc" << "mdc" << "mos" << "mrw" << "nef" << "orf" << "pef" << "pxn" << "raf" << "raw" << "rdc" << "sr2" << "srf" << "x3f" << "arw" << "3fr" << "cine" << "ia" << "kc2" << "mef" << "nrw" << "qtk" << "rw2" << "sti" << "rwl" << "srw";
+        mimeType.suffixes = QStringList() << "bay" << "bmq" << "cr2" << "crw" << "cs1" << "dc2" << "dcr" << "dng" << "erf" << "fff" << "k25" << "kdc" << "mdc" << "mos" << "mrw" << "nef" << "orf" << "pef" << "pxn" << "raf" << "raw" << "rdc" << "sr2" << "srf" << "x3f" << "arw" << "3fr" << "cine" << "ia" << "kc2" << "mef" << "nrw" << "qtk" << "rw2" << "sti" << "rwl" << "srw";
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "application/x-extension-exr";
@@ -340,6 +340,21 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "apng";
         s_mimeDatabase << mimeType;
 
-        dbgPlugins << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
+        mimeType.mimeType = "image/jxl";
+        mimeType.description = i18nc("description of a file type", "JPEG-XL Image");
+        mimeType.suffixes = QStringList() << "jxl";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "text/csv";
+        mimeType.description = i18nc("description of a file type", "CSV Document");
+        mimeType.suffixes = QStringList() << "csv";
+        s_mimeDatabase << mimeType;
+
+        mimeType.mimeType = "image/vnd.radiance";
+        mimeType.description = i18nc("description of a file type", "Radiance RGBE Image");
+        mimeType.suffixes = QStringList() << "hdr";
+        s_mimeDatabase << mimeType;
+
+        dbgPlugins << "Filled mime database with" << s_mimeDatabase.count() << "special mimetypes";
     }
 }

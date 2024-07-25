@@ -112,7 +112,7 @@ public:
         }
     }
 
-    void activate(const QSet<KoShape*> &shapes)
+    void activate(const QSet<KoShape *> &shapes) override
     {
         BaseClass::activate(shapes);
 
@@ -135,40 +135,43 @@ public:
         updateActionShortcutToolTips();
 
         if (m_widgetHelper.optionWidget()) {
-
-            m_widgetHelper.optionWidget()->activateConnectionToImage();
-
             if (isPixelOnly()) {
-                m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+                m_widgetHelper.optionWidget()->setModeSectionVisible(false);
+                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(
+                    true);
             }
-            m_widgetHelper.optionWidget()->setColorLabelsEnabled(usesColorLabels());
+            m_widgetHelper.optionWidget()->setReferenceSectionVisible(
+                usesColorLabels());
         }
     }
 
-    void deactivate()
+    void deactivate() override
     {
         BaseClass::deactivate();
         m_modeConnections.clear();
-        if (m_widgetHelper.optionWidget()) {
-            m_widgetHelper.optionWidget()->deactivateConnectionToImage();
-        }
     }
 
-    QWidget* createOptionWidget()
+    QWidget *createOptionWidget() override
     {
-        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
-        Q_ASSERT(canvas);
+        m_widgetHelper.createOptionWidget(this->toolId());
+        m_widgetHelper.setConfigGroupForExactTool(this->toolId());
 
-        m_widgetHelper.createOptionWidget(canvas, this->toolId());
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
-        this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
+        this->connect(&m_widgetHelper,
+                      SIGNAL(selectionActionChanged(SelectionAction)),
+                      this,
+                      SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
         if (m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->setContentsMargins(0, 10, 0, 10);
             if (isPixelOnly()) {
-                m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+                m_widgetHelper.optionWidget()->setModeSectionVisible(false);
+                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(
+                    true);
             }
-            m_widgetHelper.optionWidget()->setColorLabelsEnabled(usesColorLabels());
+            m_widgetHelper.optionWidget()->setReferenceSectionVisible(
+                usesColorLabels());
         }
 
         return m_widgetHelper.optionWidget();
@@ -192,19 +195,35 @@ public:
         return m_widgetHelper.antiAliasSelection();
     }
 
+    int growSelection() const
+    {
+        return m_widgetHelper.growSelection();
+    }
+
+    bool stopGrowingAtDarkestPixel() const
+    {
+        return m_widgetHelper.stopGrowingAtDarkestPixel();
+    }
+
+    int featherSelection() const
+    {
+        return m_widgetHelper.featherSelection();
+    }
+
     QList<int> colorLabelsSelected() const
     {
-        return m_widgetHelper.colorLabelsSelected();
+        return m_widgetHelper.selectedColorLabels();
     }
 
     SampleLayersMode sampleLayersMode() const
     {
-        QString layersMode = m_widgetHelper.sampleLayersMode();
-        if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_ALL) {
+        KisSelectionOptions::ReferenceLayers referenceLayers =
+            m_widgetHelper.referenceLayers();
+        if (referenceLayers == KisSelectionOptions::AllLayers) {
             return SampleAllLayers;
-        } else if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_CURRENT) {
+        } else if (referenceLayers == KisSelectionOptions::CurrentLayer) {
             return SampleCurrentLayer;
-        } else if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+        } else if (referenceLayers == KisSelectionOptions::ColorLabeledLayers) {
             return SampleColorLabeledLayers;
         }
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(true, SampleAllLayers);
@@ -224,32 +243,37 @@ public:
     virtual void setAlternateSelectionAction(SelectionAction action)
     {
         m_selectionActionAlternate = action;
-        dbgKrita << "Changing to selection action" << m_selectionActionAlternate;
     }
 
-    void activateAlternateAction(KisTool::AlternateAction action)
+    void activateAlternateAction(KisTool::AlternateAction action) override
     {
         Q_UNUSED(action);
         BaseClass::activatePrimaryAction();
     }
 
-    void deactivateAlternateAction(KisTool::AlternateAction action)
+    void deactivateAlternateAction(KisTool::AlternateAction action) override
     {
         Q_UNUSED(action);
         BaseClass::deactivatePrimaryAction();
     }
 
-    void beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) {
+    void beginAlternateAction(KoPointerEvent *event,
+                              KisTool::AlternateAction action) override
+    {
         Q_UNUSED(action);
         beginPrimaryAction(event);
     }
 
-    void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) {
+    void continueAlternateAction(KoPointerEvent *event,
+                                 KisTool::AlternateAction action) override
+    {
         Q_UNUSED(action);
         continuePrimaryAction(event);
     }
 
-    void endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) {
+    void endAlternateAction(KoPointerEvent *event,
+                            KisTool::AlternateAction action) override
+    {
         Q_UNUSED(action);
         endPrimaryAction(event);
     }
@@ -281,19 +305,23 @@ public:
         return 0;
     }
 
-    void keyPressEvent(QKeyEvent *event) {
-        m_currentModifiers = event->modifiers();
+    void keyPressEvent(QKeyEvent *event) override
+    {
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
-
-        if (key == Qt::Key_Control) {
-            m_currentModifiers |= Qt::ControlModifier;
-        } else if (key == Qt::Key_Shift) {
-            m_currentModifiers |= Qt::ShiftModifier;
-        } else if (key == Qt::Key_Alt) {
-            m_currentModifiers |= Qt::AltModifier;
+        // Assume all the modifiers were unpressed...
+        m_currentModifiers = Qt::NoModifier;
+        // ...and add those which are right now
+        if (key == Qt::Key_Control || event->modifiers().testFlag(Qt::ControlModifier)) {
+            m_currentModifiers.setFlag(Qt::ControlModifier);
+        }
+        if (key == Qt::Key_Shift || event->modifiers().testFlag(Qt::ShiftModifier)) {
+            m_currentModifiers.setFlag(Qt::ShiftModifier);
+        }
+        if (key == Qt::Key_Alt || event->modifiers().testFlag(Qt::AltModifier)) {
+            m_currentModifiers.setFlag(Qt::AltModifier);
         }
         
-        // Avoid changing the selection mode and cursor if the user is interactiong
+        // Avoid changing the selection mode and cursor if the user is interacting
         if (isSelecting()) {
             BaseClass::keyPressEvent(event);
             return;
@@ -306,16 +334,20 @@ public:
         this->resetCursorStyle();
     }
 
-    void keyReleaseEvent(QKeyEvent *event) {
-        m_currentModifiers = event->modifiers();
+    void keyReleaseEvent(QKeyEvent *event) override
+    {
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
-
-        if (key == Qt::Key_Control) {
-            m_currentModifiers &= ~Qt::ControlModifier;
-        } else if (key == Qt::Key_Shift) {
-            m_currentModifiers &= ~Qt::ShiftModifier;
-        } else if (key == Qt::Key_Alt) {
-            m_currentModifiers &= ~Qt::AltModifier;
+        // Assume all the modifiers were pressed...
+        m_currentModifiers = Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier;
+        // ...and remove those which aren't right now
+        if (key == Qt::Key_Control || !event->modifiers().testFlag(Qt::ControlModifier)) {
+            m_currentModifiers.setFlag(Qt::ControlModifier, false);
+        }
+        if (key == Qt::Key_Shift || !event->modifiers().testFlag(Qt::ShiftModifier)) {
+            m_currentModifiers.setFlag(Qt::ShiftModifier, false);
+        }
+        if (key == Qt::Key_Alt || !event->modifiers().testFlag(Qt::AltModifier)) {
+            m_currentModifiers.setFlag(Qt::AltModifier, false);
         }
 
         // Avoid changing the selection mode and cursor if the user is interacting
@@ -340,7 +372,8 @@ public:
         }
     }
 
-    void mouseMoveEvent(KoPointerEvent *event) {
+    void mouseMoveEvent(KoPointerEvent *event) override
+    {
         m_currentPos = this->convertToPixelCoord(event->point);
 
         if (isSelecting()) {
@@ -360,7 +393,7 @@ public:
         }
     }
 
-    virtual void beginPrimaryAction(KoPointerEvent *event)
+    void beginPrimaryAction(KoPointerEvent *event) override
     {
         if (isSelecting()) {
             BaseClass::beginPrimaryAction(event);
@@ -389,7 +422,7 @@ public:
         BaseClass::beginPrimaryAction(event);
     }
 
-    virtual void continuePrimaryAction(KoPointerEvent *event)
+    void continuePrimaryAction(KoPointerEvent *event) override
     {
         if (isMovingSelection()) {
             const QPointF pos = this->convertToPixelCoord(event->point);
@@ -402,7 +435,7 @@ public:
         BaseClass::continuePrimaryAction(event);
     }
 
-    void endPrimaryAction(KoPointerEvent *event)
+    void endPrimaryAction(KoPointerEvent *event) override
     {
         if (isMovingSelection()) {
             this->image()->endStroke(m_moveStrokeId);
@@ -414,15 +447,29 @@ public:
         BaseClass::endPrimaryAction(event);
     }
 
-    bool selectionDidMove() const {
+    bool selectionDidMove() const
+    {
         return m_didMove;
     }
 
-    QMenu* popupActionsMenu() {
+    QMenu *popupActionsMenu() override
+    {
+        if (isSelecting()) {
+            return BaseClass::popupActionsMenu();
+        }
+
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
 
         return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    }
+
+    KisPopupWidgetInterface* popupWidget() override
+    {
+        if (isSelecting()) {
+            return BaseClass::popupWidget();
+        }
+        return nullptr;
     }
 
     bool beginMoveSelectionInteraction() {
@@ -470,6 +517,7 @@ public:
     void updateCursorDelayed() {
         setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
         QTimer::singleShot(100,
+            this,
             [this]()
             {
                 KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);

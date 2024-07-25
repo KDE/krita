@@ -149,4 +149,4 @@ private:
 
 };
 
-#endif // SQUEEZEDCOMBOBOX_H
+#endif // KISSQUEEZEDCOMBOBOX_H

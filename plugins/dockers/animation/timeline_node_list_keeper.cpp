@@ -11,10 +11,9 @@
 #include "timeline_frames_index_converter.h"
 
 #include <QSet>
-#include <KisSignalMapper.h>
 #include "kis_keyframe_channel.h"
 #include "KisNodeDisplayModeAdapter.h"
-
+#include "kis_signal_auto_connection.h"
 
 struct TimelineNodeListKeeper::Private
 {
@@ -41,8 +40,8 @@ struct TimelineNodeListKeeper::Private
     TimelineFramesIndexConverter converter;
 
     QVector<KisNodeDummy*> dummiesList;
-    KisSignalMapper dummiesUpdateMapper;
     QSet<KisNodeDummy*> connectionsSet;
+    KisSignalAutoConnectionsStore channelConnectionsStore;
 
     void populateDummiesList() {
         const int rowCount = converter.rowCount();
@@ -78,8 +77,6 @@ TimelineNodeListKeeper::TimelineNodeListKeeper(ModelWithExternalNotifications *m
             SLOT(slotDummyChanged(KisNodeDummy*)));
 
     m_d->populateDummiesList();
-
-    connect(&m_d->dummiesUpdateMapper, SIGNAL(mapped(QObject*)), SLOT(slotUpdateDummyContent(QObject*)));
 
     connect(m_d->displayModeAdapter, SIGNAL(sigNodeDisplayModeChanged(bool, bool)), SLOT(slotDisplayModeChanged()));
 }
@@ -124,9 +121,15 @@ void TimelineNodeListKeeper::updateActiveDummy(KisNodeDummy *dummy)
     }
 }
 
-void TimelineNodeListKeeper::slotUpdateDummyContent(QObject *_dummy)
+void TimelineNodeListKeeper::slotUpdateDummyContent(QPointer<KisNodeDummy> dummy)
 {
-    KisNodeDummy *dummy = qobject_cast<KisNodeDummy*>(_dummy);
+    /**
+     * The dummy object has been destroyed in the meantime, while the
+     * event was hanging in the queue. We shouldn't try to dereference/update
+     * it anymore, since the whole layer has already been removed
+     */
+    if (!dummy) return;
+
     int pos = m_d->converter.rowForDummy(dummy);
     if (pos < 0) return;
 
@@ -149,9 +152,17 @@ void TimelineNodeListKeeper::Private::tryConnectDummy(KisNodeDummy *dummy)
 
     if (connectionsSet.contains(dummy)) return;
 
+    QPointer<KisNodeDummy> safeDummyPointer(dummy);
+
     Q_FOREACH(KisKeyframeChannel *channel, channels) {
-        connect(channel, SIGNAL(sigChannelUpdated(KisTimeSpan,QRect)), &dummiesUpdateMapper, SLOT(map()));
-        dummiesUpdateMapper.setMapping(channel, (QObject*)dummy);
+        channelConnectionsStore.addConnection(channel, &KisKeyframeChannel::sigAnyKeyframeChange,
+                                              q,
+                                              [this, safeDummyPointer ] () {
+                                                  // make sure that the pointer is invalidated when
+                                                  // the dummy is destroyed, it might happen on
+                                                  // reordering of the signals
+                                                  q->slotUpdateDummyContent(safeDummyPointer);
+                                              });
     }
     connectionsSet.insert(dummy);
 }
@@ -170,7 +181,7 @@ void TimelineNodeListKeeper::Private::disconnectDummy(KisNodeDummy *dummy)
     }
 
     Q_FOREACH(KisKeyframeChannel *channel, channels) {
-        channel->disconnect(&dummiesUpdateMapper);
+        channelConnectionsStore.clear();
     }
 
     connectionsSet.remove(dummy);
@@ -264,6 +275,10 @@ TimelineNodeListKeeper::OtherLayersList
 TimelineNodeListKeeper::otherLayersList() const
 {
     OtherLayersList list;
-    m_d->findOtherLayers(m_d->dummiesFacade->rootDummy(), &list, "");
+
+    KisNodeDummy *rootDummy = m_d->dummiesFacade->rootDummy();
+    if (!rootDummy) return list;
+
+    m_d->findOtherLayers(rootDummy, &list, "");
     return list;
 }

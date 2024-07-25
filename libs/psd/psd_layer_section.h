@@ -30,9 +30,6 @@ public:
 
     QString error;
 
-    // https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_21849
-    quint64 layerMaskBlockSize{0}; // Length of the layer and mask information section
-
     // layer info: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/#50577409_16000
     bool hasTransparency{false};
 

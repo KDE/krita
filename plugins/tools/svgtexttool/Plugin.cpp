@@ -6,10 +6,8 @@
  */
 #include "Plugin.h"
 
-// KDE
 #include <kpluginfactory.h>
 
-// Calligra libs
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 

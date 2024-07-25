@@ -29,5 +29,5 @@ Qt,https://www.qt.io,GPLv2 + GPLv3 + LGPLv2.1 + LGPLv3
 Quazip,https://github.com/stachenov/quazip,LGPLv2.1
 KSeExpr,https://invent.kde.org/graphics/KSeExpr,Apache License Version 2.0
 SIP,https://www.riverbankcomputing.com/software/sip/download,GPLv3
-Vc,https://github.com/VcDevel/Vc,BSD
+xsimd,https://github.com/xtensor-stack/xsimd,BSD
 zlib,http://www.zlib.net/,BSD

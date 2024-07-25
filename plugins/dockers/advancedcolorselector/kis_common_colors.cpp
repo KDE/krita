@@ -30,16 +30,16 @@
 KisCommonColors::KisCommonColors(QWidget *parent) :
     KisColorPatches("commonColors", parent)
 {
-    m_reloadButton = new QToolButton();
+    m_reloadButton = new QToolButton(this);
     m_reloadButton->setIcon(KisIconUtils::loadIcon("reload-preset-16")); //small reload icon
     m_reloadButton->setToolTip(i18n("Create a list of colors from the image"));
     m_reloadButton->setAutoRaise(true);
     connect(m_reloadButton, SIGNAL(clicked()), this, SLOT(recalculate()));
 
+    updateSettings();
     QList<QWidget*> tmpList;
     tmpList.append(m_reloadButton);
     setAdditionalButtons(tmpList);
-    updateSettings();
 
     m_recalculationTimer.setInterval(2000);
     m_recalculationTimer.setSingleShot(true);

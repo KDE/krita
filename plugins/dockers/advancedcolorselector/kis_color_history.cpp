@@ -79,18 +79,10 @@ void KisColorHistory::addColorToHistory(const KoColor &color)
     // don't add color in erase mode. See https://bugs.kde.org/show_bug.cgi?id=298940
     if (m_resourceProvider && m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;
 
-    QList<KoColor> history = colorHistory();
+    KisColorPatches::addColorPatch(color);
 
-    history.removeAll(color);
-    history.prepend(color);
-
-    //the history holds 200 colors, but not all are displayed
-    if (history.size() > 200) {
-        history.removeLast();
-    }
-
-    updateColorHistory(history);
-    s_color_history_change_notifier->notifyColorHistoryChanged(history);
+    updateColorHistory(colors());
+    s_color_history_change_notifier->notifyColorHistoryChanged(colors());
 }
 
 void KisColorHistory::clearColorHistory()

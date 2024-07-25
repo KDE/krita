@@ -15,6 +15,7 @@
 #include <KoProperties.h>
 #include <KoColorSpace.h>
 #include <KoCompositeOp.h>
+#include <KoColorProfile.h>
 
 #include <kis_debug.h>
 #include <filter/kis_filter_configuration.h>
@@ -78,6 +79,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         saveLayer(layerElement, FILE_LAYER, layer);
 
         KisFileLayer *fileLayer = dynamic_cast<KisFileLayer*>(layer);
+        KIS_ASSERT(fileLayer);
 
         QString path = fileLayer->path();
 
@@ -97,6 +99,7 @@ bool KisSaveXmlVisitor::visit(KisExternalLayer * layer)
         }
         layerElement.setAttribute("scalingmethod", (int)fileLayer->scalingMethod());
         layerElement.setAttribute(COLORSPACE_NAME, layer->original()->colorSpace()->id());
+        layerElement.setAttribute("scalingfilter", fileLayer->scalingFilter());
 
         m_elem.appendChild(layerElement);
         m_count++;
@@ -145,6 +148,8 @@ bool KisSaveXmlVisitor::visit(KisGroupLayer *layer)
         layerElement = m_doc.createElement(LAYER);
         saveLayer(layerElement, GROUP_LAYER, layer);
         layerElement.setAttribute(PASS_THROUGH_MODE, layer->passThroughMode());
+        layerElement.setAttribute(COLORSPACE_NAME, layer->colorSpace()->id());
+        layerElement.setAttribute(PROFILE, layer->colorSpace()->profile()->name());
         m_elem.appendChild(layerElement);
     }
     QDomElement elem = m_doc.createElement(LAYERS);
@@ -342,6 +347,11 @@ void KisSaveXmlVisitor::loadLayerAttributes(const QDomElement &el, KisLayer *lay
             warnKrita << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
         }
     }
+
+    if (layer->inherits("KisShapeLayer") && el.hasAttribute(ANTIALIASED)) {
+        KisShapeLayer *shapeLayer = static_cast<KisShapeLayer*>(layer);
+        shapeLayer->setAntialiased(el.attribute(ANTIALIASED).toInt());
+    }
 }
 
 void KisSaveXmlVisitor::saveNodeKeyframes(const KisNode* node, QString nodeFilename, QDomElement& nodeElement)
@@ -371,6 +381,11 @@ void KisSaveXmlVisitor::saveLayer(QDomElement & el, const QString & layerType, c
     el.setAttribute(COLLAPSED, layer->collapsed());
     el.setAttribute(COLOR_LABEL, layer->colorLabelIndex());
     el.setAttribute(VISIBLE_IN_TIMELINE, layer->isPinnedToTimeline());
+
+    if(layerType == SHAPE_LAYER) {
+        const KisShapeLayer *shapeLayer = static_cast<const KisShapeLayer*>(layer);
+        el.setAttribute(ANTIALIASED, shapeLayer->antialiased());
+    }
 
     if (layer->layerStyle()) {
         el.setAttribute(LAYER_STYLE_UUID, layer->layerStyle()->uuid().toString());

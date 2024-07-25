@@ -47,7 +47,7 @@ protected:
     virtual bool shiftModifierIsUsed() const;
 
     virtual bool beginPrimaryAction(const QPointF &pt) = 0;
-    virtual void continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive) = 0;
+    virtual void continuePrimaryAction(const QPointF &pt, bool shiftModifierActive, bool altModifierActive) = 0;
     virtual bool endPrimaryAction() = 0;
     virtual void hoverActionCommon(const QPointF &pt);
 

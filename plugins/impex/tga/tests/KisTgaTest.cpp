@@ -23,19 +23,19 @@ const QString TgaMimetype = "image/x-gimp-brush";
 
 void KisTgaTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), TgaMimetype);
+    TestUtil::testImportFromWriteonly(TgaMimetype);
 }
 
 
 void KisTgaTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TgaMimetype);
+    TestUtil::testExportToReadonly(TgaMimetype);
 }
 
 
 void KisTgaTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), TgaMimetype);
+    TestUtil::testImportIncorrectFormat(TgaMimetype);
 }
 
 

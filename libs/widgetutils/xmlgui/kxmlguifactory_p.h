@@ -13,10 +13,10 @@
 #include <QAction>
 
 class QWidget;
-class KXMLGUIClient;
-class KXMLGUIBuilder;
+class KisKXMLGUIClient;
+class KisKXMLGUIBuilder;
 
-namespace KXMLGUI
+namespace KisKXMLGUI
 {
 
 struct BuildState;
@@ -53,7 +53,7 @@ typedef QMap< QString, ActionList > ActionListMap;
  * A ContainerClient always belongs to a ContainerNode.
  */
 struct ContainerClient {
-    KXMLGUIClient *client;
+    KisKXMLGUIClient *client;
     ActionList actions;
     QList<QAction *> customElements;
     QString groupName; //is empty if no group client
@@ -93,8 +93,8 @@ typedef QList<MergingIndex> MergingIndexList;
  */
 struct ContainerNode {
     ContainerNode(QWidget *_container, const QString &_tagName, const QString &_name,
-                  ContainerNode *_parent = 0L, KXMLGUIClient *_client = 0L,
-                  KXMLGUIBuilder *_builder = 0L, QAction *containerAction = 0,
+                  ContainerNode *_parent = 0L, KisKXMLGUIClient *_client = 0L,
+                  KisKXMLGUIBuilder *_builder = 0L, QAction *containerAction = 0,
                   const QString &_mergingName = QString(),
                   const QString &groupName = QString(),
                   const QStringList &customTags = QStringList(),
@@ -102,8 +102,8 @@ struct ContainerNode {
     ~ContainerNode();
 
     ContainerNode *parent;
-    KXMLGUIClient *client;
-    KXMLGUIBuilder *builder;
+    KisKXMLGUIClient *client;
+    KisKXMLGUIBuilder *builder;
     QStringList builderCustomTags;
     QStringList builderContainerTags;
     QWidget *container;
@@ -136,9 +136,9 @@ struct ContainerNode {
     ContainerNode *findContainer(const QString &_name, bool tag);
     ContainerNode *findContainer(const QString &name, const QString &tagName,
                                  const QList<QWidget *> *excludeList,
-                                 KXMLGUIClient *currClient);
+                                 KisKXMLGUIClient *currClient);
 
-    ContainerClient *findChildContainerClient(KXMLGUIClient *currentGUIClient,
+    ContainerClient *findChildContainerClient(KisKXMLGUIClient *currentGUIClient,
             const QString &groupName,
             const MergingIndexList::Iterator &mergingIdx);
 
@@ -190,7 +190,7 @@ private:
                                  const QString &name);
 
     QWidget *createContainer(QWidget *parent, int index, const QDomElement &element,
-                             QAction *&containerAction, KXMLGUIBuilder **builder);
+                             QAction *&containerAction, KisKXMLGUIBuilder **builder);
 
     int calcMergingIndex(const QDomElement &element, MergingIndexList::Iterator &it, QString &group);
 
@@ -218,16 +218,16 @@ struct BuildState {
     QString actionListName;
     ActionList actionList;
 
-    KXMLGUIClient *guiClient;
+    KisKXMLGUIClient *guiClient;
 
     MergingIndexList::Iterator currentDefaultMergingIt;
     MergingIndexList::Iterator currentClientMergingIt;
 
-    KXMLGUIBuilder *builder;
+    KisKXMLGUIBuilder *builder;
     QStringList builderCustomTags;
     QStringList builderContainerTags;
 
-    KXMLGUIBuilder *clientBuilder;
+    KisKXMLGUIBuilder *clientBuilder;
     QStringList clientBuilderCustomTags;
     QStringList clientBuilderContainerTags;
 };

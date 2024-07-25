@@ -92,7 +92,7 @@ bool KisTiledExtentManager::Data::remove(qint32 index)
      * to remove the same tile. Look higher!
      */
     KIS_SAFE_ASSERT_RECOVER(oldValue > 0) {
-        m_buffer[currentIndex].store(0);
+        m_buffer[currentIndex].storeRelaxed(0);
         return false;
     }
 
@@ -116,7 +116,7 @@ void KisTiledExtentManager::Data::replace(const QVector<qint32> &indexes)
     QWriteLocker l(&m_extentLock);
 
     for (qint32 i = 0; i < m_capacity; ++i) {
-        m_buffer[i].store(0);
+        m_buffer[i].storeRelaxed(0);
     }
 
     m_min = qint32_MAX;
@@ -134,7 +134,7 @@ void KisTiledExtentManager::Data::clear()
     QWriteLocker l(&m_extentLock);
 
     for (qint32 i = 0; i < m_capacity; ++i) {
-        m_buffer[i].store(0);
+        m_buffer[i].storeRelaxed(0);
     }
 
     m_min = qint32_MAX;
@@ -193,7 +193,7 @@ void KisTiledExtentManager::Data::unsafeMigrate(qint32 index)
         qint32 start = m_offset - oldOffset;
 
         for (qint32 i = 0; i < oldCapacity; ++i) {
-            newBuffer[start + i].store(m_buffer[i].load());
+            newBuffer[start + i].storeRelaxed(m_buffer[i].loadRelaxed());
         }
 
         delete[] m_buffer;
@@ -214,7 +214,7 @@ void KisTiledExtentManager::Data::updateMin()
     qint32 start = m_min + m_offset;
 
     for (qint32 i = start; i < m_capacity; ++i) {
-        qint32 current = m_buffer[i].load();
+        qint32 current = m_buffer[i].loadRelaxed();
 
         if (current > 0) {
             m_min = i - m_offset;
@@ -232,7 +232,7 @@ void KisTiledExtentManager::Data::updateMax()
     qint32 start = m_max + m_offset;
 
     for (qint32 i = start; i >= 0; --i) {
-        qint32 current = m_buffer[i].load();
+        qint32 current = m_buffer[i].loadRelaxed();
 
         if (current > 0) {
             m_max = i - m_offset;

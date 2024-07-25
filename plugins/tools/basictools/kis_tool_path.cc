@@ -10,16 +10,28 @@
 #include <KoCanvasBase.h>
 #include <kis_cursor.h>
 #include <KisViewManager.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
+
 
 KisToolPath::KisToolPath(KoCanvasBase * canvas)
     : DelegatedPathTool(canvas, Qt::ArrowCursor,
                         new __KisToolPathLocalTool(canvas, this))
 {
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
+
 }
 
 void KisToolPath::resetCursorStyle()
 {
-    DelegatedPathTool::resetCursorStyle();
+    if (isEraser() && (nodePaintAbility() == PAINT)) {
+        useCursor(KisCursor::eraserCursor());
+    } else {
+        DelegatedPathTool::resetCursorStyle();
+    }
+
     overrideCursorIfNotEditable();
 }
 
@@ -33,6 +45,11 @@ void KisToolPath::requestStrokeCancellation()
     localTool()->cancelPath();
 }
 
+KisPopupWidgetInterface* KisToolPath::popupWidget()
+{
+    return localTool()->pathStarted() ? nullptr : DelegatedPathTool::popupWidget();
+}
+
 void KisToolPath::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event)
@@ -44,6 +61,9 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
 bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!localTool()->pathStarted()) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

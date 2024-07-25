@@ -245,6 +245,12 @@ KisPaintDeviceSP KisProjectionLeaf::projection()
     return m_d->node->projection();
 }
 
+KisPaintDeviceSP KisProjectionLeaf::lazyDestinationForSubtreeComposition()
+{
+    const KisGroupLayer *group = qobject_cast<const KisGroupLayer*>(m_d->node.data());
+    return group ? group->lazyDestinationForSubtreeComposition() : nullptr;
+}
+
 bool KisProjectionLeaf::isRoot() const
 {
     return (bool)!m_d->node->parent();

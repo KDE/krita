@@ -8,10 +8,12 @@
 
 #include <QString>
 #include <QStringList>
+#include <boost/operators.hpp>
 
 #include "kritawidgets_export.h"
 
-class KRITAWIDGETS_EXPORT KisColorSelectorConfiguration {
+class KRITAWIDGETS_EXPORT KisColorSelectorConfiguration
+        : public boost::equality_comparable<KisColorSelectorConfiguration> {
 
 public:
 
@@ -65,6 +67,14 @@ public:
         KisColorSelectorConfiguration ret;
         ret.readString(string);
         return ret;
+    }
+
+    bool operator==(const KisColorSelectorConfiguration &rhs) const
+    {
+        return (mainType == rhs.mainType &&
+                subType == rhs.subType &&
+                mainTypeParameter == rhs.mainTypeParameter &&
+                subTypeParameter == rhs.subTypeParameter);
     }
 };
 

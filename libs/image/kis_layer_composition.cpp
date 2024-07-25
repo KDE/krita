@@ -60,6 +60,9 @@ public:
             dbgKrita << "Compositions: Skipping over Fake Node" << node->uuid() << node->name();
             return true;
         }
+
+        bool result = visitAll(node);
+
         if(m_mode == STORE) {
             m_layerComposition->m_visibilityMap[node->uuid()] = node->visible();
             m_layerComposition->m_collapsedMap[node->uuid()] = node->collapsed();
@@ -77,7 +80,7 @@ public:
             }
         }
         
-        return true;
+        return result;
     }
 private:
     KisLayerComposition* m_layerComposition;
@@ -195,7 +198,7 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
         valueElement.setAttribute("visible", iter.value());
         dbgKrita << "contains" << m_collapsedMap.contains(iter.key());
         if (m_collapsedMap.contains(iter.key())) {
-            dbgKrita << "colapsed :" << m_collapsedMap[iter.key()];
+            dbgKrita << "collapsed :" << m_collapsedMap[iter.key()];
             valueElement.setAttribute("collapsed", m_collapsedMap[iter.key()]);
         }
         compositionElement.appendChild(valueElement);

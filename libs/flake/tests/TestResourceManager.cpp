@@ -321,7 +321,7 @@ void TestResourceManager::testComplexResource()
     spy.clear();
 
     // ####################################################
-    // No devived values are changed!
+    // No derived values are changed!
     // ####################################################
     *r1 = *r2;
     m.setResource(key, QVariant::fromValue(r1));

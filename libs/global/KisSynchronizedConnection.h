@@ -13,13 +13,13 @@
 #include <QEvent>
 
 #include <KisMpl.h>
-#include <functional>
-#include <queue>
-#include <boost/bind.hpp>
-#include <kis_assert.h>
-#include <QPointer>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QPointer>
+#include <boost/bind/bind.hpp>
+#include <functional>
+#include <kis_assert.h>
+#include <queue>
 
 /**
  * @brief Event type used for synchronizing connection in KisSynchronizedConnection
@@ -31,7 +31,7 @@ struct KRITAGLOBAL_EXPORT KisSynchronizedConnectionEvent : public QEvent
 {
     KisSynchronizedConnectionEvent(QObject *_destination);
     KisSynchronizedConnectionEvent(const KisSynchronizedConnectionEvent &rhs);
-    ~KisSynchronizedConnectionEvent();
+    ~KisSynchronizedConnectionEvent() override;
 
     const QPointer<QObject> destination;
 };
@@ -51,8 +51,19 @@ public:
     static int eventType();
     static void registerSynchronizedEventBarrier(std::function<void()> callback);
 
+    /**
+     * In unittests the connection should work in 'Auto' mode, because most of the
+     * actions are executed in the GUI thread, and (usually) don't have an event
+     * loop at all
+     *
+     * Defautl value: false
+     */
+    static void setAutoModeForUnittestsEnabled(bool value);
+    static bool isAutoModeForUnittestsEnabled();
+
+
 protected:
-    bool event(QEvent *event);
+    bool event(QEvent *event) override;
 
 protected:
     virtual void deliverEventToReceiver() = 0;
@@ -64,7 +75,7 @@ protected:
  * a recursive event processing loop.
  *
  * In several places in Krita we use queued signals for synchronizing
- * image chages to the GUI. In such cases we use Qt::DirectConnection
+ * image changes to the GUI. In such cases we use Qt::DirectConnection
  * to fetch some data from the image, wrap that into the signal
  * parameters and post at the events queue as a queued signal. Obviously,
  * we expect this queued signal to be executed "after all the currently
@@ -130,7 +141,7 @@ public:
     {}
 
     /**
-     * Triggers the delivery of the signal to the destination slot manualy
+     * Triggers the delivery of the signal to the destination slot manually
      */
     void start(const Args &...argsTuple) {
         {
@@ -181,7 +192,7 @@ public:
     }
 
     /**
-     * A convenience method for seting up input and output connections at
+     * A convenience method for setting up input and output connections at
      * the same time
      */
     template <typename Dptr1, typename C1, typename R1, typename ...MemFnArgs1,
@@ -219,7 +230,7 @@ protected:
             m_queue.pop();
         }
 
-        kismpl::apply(m_callback, args);
+        std::apply(m_callback, args);
     }
 
 private:

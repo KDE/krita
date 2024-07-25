@@ -17,10 +17,12 @@
 #include <QStandardPaths>
 #include <QDebug>
 #include <QFileInfo>
+#include <QScreen>
 
 #include <kconfig.h>
 
 #include <KisDocument.h>
+#include <KisResourceLocator.h>
 
 #include <KoColor.h>
 #include <KoColorSpaceRegistry.h>
@@ -40,6 +42,7 @@
 #include <KisOcioConfiguration.h>
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
+#include <KisCumulativeUndoData.h>
 
 #ifdef Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
@@ -97,6 +100,7 @@ void KisConfig::logImportantSettings() const
     }
     KisUsageLogger::writeSysInfo(QString("  Backup Location: %1").arg(backupDir));
     KisUsageLogger::writeSysInfo(QString("  Backup Location writable: %1").arg(QFileInfo(backupDir).isWritable() ? "true" : "false"));
+    KisUsageLogger::writeSysInfo(QString("  Resource Location: %1").arg(m_cfg.readEntry(KisResourceLocator::resourceLocationKey)));
 
     KisUsageLogger::writeSysInfo(QString("  Use Win8 Pointer Input: %1").arg(useWin8PointerInput() ? "true" : "false"));
     KisUsageLogger::writeSysInfo(QString("  Use RightMiddleTabletButton Workaround: %1").arg(useRightMiddleTabletButtonWorkaround() ? "true" : "false"));
@@ -156,34 +160,20 @@ void KisConfig::setCumulativeUndoRedo(bool value)
     m_cfg.writeEntry("useCumulativeUndoRedo", value);
 }
 
-qreal KisConfig::stackT1(bool defaultValue) const
+KisCumulativeUndoData KisConfig::cumulativeUndoData(bool defaultValue) const
 {
-     return (defaultValue ? 5 : m_cfg.readEntry("stackT1",5));
+    if (defaultValue) {
+        return KisCumulativeUndoData::defaultValue;
+    }
+
+    KisCumulativeUndoData data;
+    data.read(&m_cfg);
+    return data;
 }
 
-void KisConfig::setStackT1(int T1)
+void KisConfig::setCumulativeUndoData(KisCumulativeUndoData value)
 {
-    m_cfg.writeEntry("stackT1", T1);
-}
-
-qreal KisConfig::stackT2(bool defaultValue) const
-{
-     return (defaultValue ? 1 : m_cfg.readEntry("stackT2",1));
-}
-
-void KisConfig::setStackT2(int T2)
-{
-    m_cfg.writeEntry("stackT2", T2);
-}
-
-int KisConfig::stackN(bool defaultValue) const
-{
-    return (defaultValue ? 5 : m_cfg.readEntry("stackN",5));
-}
-
-void KisConfig::setStackN(int N)
-{
-     m_cfg.writeEntry("stackN", N);
+    value.write(&m_cfg);
 }
 
 qint32 KisConfig::defImageWidth(bool defaultValue) const
@@ -526,6 +516,15 @@ void KisConfig::setUseEraserBrushOpacity(bool value)
     KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
+QPoint KisConfig::getDefaultGridSpacing(bool defaultValue) const
+{
+    return (defaultValue ? QPoint(16, 16) : m_cfg.readEntry("defaultGridSpacing", QPoint(16, 16)));
+}
+
+void KisConfig::setDefaultGridSpacing(QPoint gridSpacing)
+{
+    m_cfg.writeEntry("defaultGridSpacing", gridSpacing);
+}
 
 QString KisConfig::getMDIBackgroundColor(bool defaultValue) const
 {
@@ -554,7 +553,23 @@ void KisConfig::setMDIBackgroundImage(const QString &filename) const
 QString KisConfig::monitorProfile(int screen) const
 {
     // Note: keep this in sync with the default profile for the RGB colorspaces!
-    QString profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), "sRGB-elle-V2-srgbtrc.icc");
+    const QString defaultProfile = "sRGB-elle-V2-srgbtrc.icc";
+
+    QString profile;
+    const QString screenIdentifier = getScreenStringIdentfier(screen);
+    const QString screenIdentifierKey = "monitorProfile" + screenIdentifier;
+
+    /**
+     * Screen identifier may be empty (e.g. on macOS), so the identifier
+     * key will be plain 'monitorProfile', which is the key fot the **first**
+     * display's profile, so we shouldn't fall into this trap...
+     */
+    if (!screenIdentifier.isEmpty() && m_cfg.hasKey(screenIdentifierKey)) {
+        profile = m_cfg.readEntry(screenIdentifierKey, defaultProfile);
+    } else {
+        profile = m_cfg.readEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), defaultProfile);
+    }
+
     //dbgKrita << "KisConfig::monitorProfile()" << profile;
     return profile;
 }
@@ -574,8 +589,12 @@ void KisConfig::setMonitorProfile(int screen, const QString & monitorProfile, bo
 {
     m_cfg.writeEntry("monitorProfile/OverrideX11", override);
     m_cfg.writeEntry("monitorProfile" + QString(screen == 0 ? "": QString("_%1").arg(screen)), monitorProfile);
+    if (!getScreenStringIdentfier(screen).isEmpty()) {
+        m_cfg.writeEntry("monitorProfile" + getScreenStringIdentfier(screen), monitorProfile);
+    }
 }
 
+// TODO: rename into getSystemScreenProfile
 const KoColorProfile *KisConfig::getScreenProfile(int screen)
 {
     if (screen < 0) return 0;
@@ -646,6 +665,24 @@ const KoColorProfile *KisConfig::displayProfile(int screen) const
     }
 
     return profile;
+}
+
+const QString KisConfig::getScreenStringIdentfier(int screenNo) const {
+    if (screenNo < 0 || screenNo >= QGuiApplication::screens().length()) {
+        return QString();
+    }
+    QScreen* screen = QGuiApplication::screens()[screenNo];
+
+    QString manufacturer = screen->manufacturer();
+    QString model = screen->model();
+    QString serialNumber = screen->serialNumber();
+
+    if (manufacturer == "" && model == "" && serialNumber == "") {
+        return QString(); // it would be scary to base the profile just on resolution
+    }
+
+    QString identifier = QStringList({manufacturer, model, serialNumber}).join("_");
+    return identifier;
 }
 
 QString KisConfig::workingColorSpace(bool defaultValue) const
@@ -852,21 +889,6 @@ int KisConfig::openGLTextureSize(bool defaultValue) const
     return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));
 }
 
-bool KisConfig::disableVSync(bool defaultValue) const
-{
-    return (defaultValue ? true : m_cfg.readEntry("disableVSync", true));
-}
-
-void KisConfig::setDisableVSync(bool disableVSync)
-{
-    m_cfg.writeEntry("disableVSync", disableVSync);
-}
-
-bool KisConfig::showAdvancedOpenGLSettings(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("showAdvancedOpenGLSettings", false));
-}
-
 bool KisConfig::forceOpenGLFenceWorkaround(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("forceOpenGLFenceWorkaround", false));
@@ -906,6 +928,18 @@ void KisConfig::setGridSubdivisionStyle(quint32 v) const
     m_cfg.writeEntry("gridsubdivisionstyle", v);
 }
 
+quint32 KisConfig::getGridIsoVerticalStyle(bool defaultValue) const
+{
+    int v = m_cfg.readEntry("gridisoverticalstyle", 0);
+    v = qBound(0, v, 3);
+    return (defaultValue ? 0 : v);
+}
+
+void KisConfig::setGridIsoVerticalStyle(quint32 v) const
+{
+    m_cfg.writeEntry("gridisoverticalstyle", v);
+}
+
 QColor KisConfig::getGridMainColor(bool defaultValue) const
 {
     QColor col(99, 99, 99);
@@ -926,6 +960,17 @@ QColor KisConfig::getGridSubdivisionColor(bool defaultValue) const
 void KisConfig::setGridSubdivisionColor(const QColor & v) const
 {
     m_cfg.writeEntry("gridsubdivisioncolor", v);
+}
+
+QColor KisConfig::getGridIsoVerticalColor(bool defaultValue) const
+{
+    QColor col(150, 150, 150);
+    return (defaultValue ? col : m_cfg.readEntry("gridisoverticalcolor", col));
+}
+
+void KisConfig::setGridIsoVerticalColor(const QColor & v) const
+{
+    m_cfg.writeEntry("gridisoverticalcolor", v);
 }
 
 QColor KisConfig::getPixelGridColor(bool defaultValue) const
@@ -1193,6 +1238,16 @@ bool KisConfig::saveSessionOnQuit(bool defaultValue) const
 void KisConfig::setSaveSessionOnQuit(bool value)
 {
     m_cfg.writeEntry("saveSessionOnQuit", value);
+}
+
+bool KisConfig::hideDevFundBanner(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("hideDevFundBanner", false);
+}
+
+void KisConfig::setHideDevFundBanner(bool value)
+{
+    m_cfg.writeEntry("hideDevFundBanner", value);
 }
 
 qreal KisConfig::outlineSizeMinimum(bool defaultValue) const
@@ -1713,6 +1768,16 @@ void KisConfig::setLayerThumbnailSize(int size)
     m_cfg.writeEntry("layerThumbnailSize", size);
 }
 
+int KisConfig::layerTreeIndentation(bool defaultValue) const
+{
+    return (defaultValue ? 50 : m_cfg.readEntry("layerTreeIndentation", 50));
+}
+
+void KisConfig::setLayerTreeIndentation(int percentage)
+{
+    m_cfg.writeEntry("layerTreeIndentation", percentage);
+}
+
 bool KisConfig::sliderLabels(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("sliderLabels", true));
@@ -1778,9 +1843,9 @@ bool KisConfig::hidePopups(bool defaultValue) const
     return (defaultValue ? false : m_cfg.readEntry("hidePopups", false));
 }
 
-void KisConfig::setHidePopups(bool hidepopups)
+void KisConfig::setHidePopups(bool hidePopups)
 {
-    m_cfg.writeEntry("hidePopups", hidepopups);
+    m_cfg.writeEntry("hidePopups", hidePopups);
 }
 
 int KisConfig::numDefaultLayers(bool defaultValue) const
@@ -2002,6 +2067,16 @@ void KisConfig::setTrimFramesImport(bool trim)
     m_cfg.writeEntry("TrimFramesImport", trim);
 }
 
+QString KisConfig::exportMimeType(bool defaultValue) const
+{
+    return (defaultValue ? 0 : m_cfg.readEntry("defaultExportMimeType", QString()));
+}
+
+void KisConfig::setExportMimeType(const QString &defaultExportMimeType)
+{
+    m_cfg.writeEntry("defaultExportMimeType", defaultExportMimeType);
+}
+
 bool KisConfig::toolOptionsInDocker(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("ToolOptionsInDocker", true));
@@ -2058,17 +2133,17 @@ void KisConfig::setKineticScrollingHideScrollbars(bool scrollbar)
     m_cfg.writeEntry("KineticScrollingHideScrollbar", scrollbar);
 }
 
-bool KisConfig::smoothZooming(bool defaultValue) const
+int KisConfig::zoomSteps(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("SmoothZooming", false));
+    return (defaultValue ? 2 : m_cfg.readEntry("zoomSteps", 2));
 }
 
-void KisConfig::setSmoothZooming(bool scale)
+void KisConfig::setZoomSteps(int steps)
 {
-    m_cfg.writeEntry("SmoothZooming", scale);
+    m_cfg.writeEntry("zoomSteps", steps);
 }
 
-int KisConfig::zoomMarginSize(int defaultValue) const
+int KisConfig::zoomMarginSize(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("zoomMarginSize", 0));
 }
@@ -2149,6 +2224,16 @@ void KisConfig::setDisableAVXOptimizations(bool value)
 bool KisConfig::disableAVXOptimizations(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("disableAVXOptimizations", false));
+}
+
+void KisConfig::setAnimationPlaybackBackend(int value)
+{
+    m_cfg.writeEntry("animationPlaybackBackend", value);
+}
+
+int KisConfig::animationPlaybackBackend(bool defaultValue) const
+{
+    return (defaultValue ? 1 : m_cfg.readEntry("animationPlaybackBackend", 1));
 }
 
 void KisConfig::setAnimationDropFrames(bool value)
@@ -2242,7 +2327,6 @@ bool KisConfig::switchSelectionCtrlAlt(bool defaultValue) const
 void KisConfig::setSwitchSelectionCtrlAlt(bool value)
 {
     m_cfg.writeEntry("switchSelectionCtrlAlt", value);
-    KisConfigNotifier::instance()->notifyConfigChanged();
 }
 
 bool KisConfig::convertToImageColorspaceOnImport(bool defaultValue) const
@@ -2357,6 +2441,16 @@ void KisConfig::setActivateTransformToolAfterPaste(bool value)
     m_cfg.writeEntry("activateTransformToolAfterPaste", value);
 }
 
+bool KisConfig::zoomHorizontal(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("zoomHorizontal", false);
+}
+
+void KisConfig::setZoomHorizontal(bool value)
+{
+    m_cfg.writeEntry("zoomHorizontal", value);
+}
+
 KisConfig::RootSurfaceFormat KisConfig::rootSurfaceFormat(bool defaultValue) const
 {
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
@@ -2414,6 +2508,71 @@ bool KisConfig::convertLayerColorSpaceInProperties(bool defaultValue) const
 void KisConfig::setConvertLayerColorSpaceInProperties(bool value)
 {
     m_cfg.writeEntry("convertLayerColorSpaceInProperties", value);
+}
+
+bool KisConfig::renamePastedLayers(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("renamePastedLayers", true);
+}
+
+void KisConfig::setRenamePastedLayers(bool value)
+{
+    m_cfg.writeEntry("renamePastedLayers", value);
+}
+
+KisConfig::LayerInfoTextStyle KisConfig::layerInfoTextStyle(bool defaultValue) const
+{
+    return (KisConfig::LayerInfoTextStyle)(defaultValue ? INFOTEXT_NONE : m_cfg.readEntry("layerInfoTextStyle", (int)INFOTEXT_NONE));
+}
+
+void KisConfig::setLayerInfoTextStyle(KisConfig::LayerInfoTextStyle value)
+{
+    m_cfg.writeEntry("layerInfoTextStyle", (int)value);
+}
+
+int KisConfig::layerInfoTextOpacity(bool defaultValue) const
+{
+    return defaultValue ? 55 : m_cfg.readEntry("layerInfoTextOpacity", 55);
+}
+
+void KisConfig::setLayerInfoTextOpacity(int value)
+{
+    m_cfg.writeEntry("layerInfoTextOpacity", value);
+}
+
+bool KisConfig::useInlineLayerInfoText(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("useInlineLayerInfoText", false);
+}
+
+void KisConfig::setUseInlineLayerInfoText(bool value)
+{
+    m_cfg.writeEntry("useInlineLayerInfoText", value);
+}
+
+bool KisConfig::useLayerSelectionCheckbox(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("useLayerSelectionCheckbox", true);
+}
+
+void KisConfig::setUseLayerSelectionCheckbox(bool value)
+{
+    m_cfg.writeEntry("useLayerSelectionCheckbox", value);
+}
+
+KisConfig::AssistantsDrawMode KisConfig::assistantsDrawMode(bool defaultValue) const
+{
+    if (defaultValue) {
+        return ASSISTANTS_DRAW_MODE_DIRECT;
+    }
+
+    return static_cast<AssistantsDrawMode>(
+                m_cfg.readEntry("assistantsDrawMode", static_cast<int>(ASSISTANTS_DRAW_MODE_DIRECT)));
+}
+
+void  KisConfig::setAssistantsDrawMode(AssistantsDrawMode value)
+{
+    m_cfg.writeEntry("assistantsDrawMode", static_cast<int>(value));
 }
 
 #include <QDomDocument>

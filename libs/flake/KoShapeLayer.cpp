@@ -11,7 +11,6 @@
 #include "SimpleShapeContainerModel.h"
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 
@@ -38,6 +37,6 @@ QRectF KoShapeLayer::boundingRect() const
     return KoShape::boundingRect(shapes());
 }
 
-void KoShapeLayer::paintComponent(QPainter &, KoShapePaintingContext &) const
+void KoShapeLayer::paintComponent(QPainter &) const
 {
 }

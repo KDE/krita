@@ -56,7 +56,7 @@ ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &de
     m_defaultLabel->setText(defaultText);
 
     m_customRadio = new QRadioButton(i18n("Custom:"), this);
-    m_customEditor = new KKeySequenceWidget(this);
+    m_customEditor = new KisKKeySequenceWidget(this);
     m_customEditor->setModifierlessAllowed(allowLetterShortcuts);
 
     layout->addWidget(m_defaultRadio, 0, 0);
@@ -75,7 +75,7 @@ ShortcutEditWidget::ShortcutEditWidget(QWidget *viewport, const QKeySequence &de
             this, SIGNAL(stealShortcut(QKeySequence,QAction*)));
 }
 
-KKeySequenceWidget::ShortcutTypes ShortcutEditWidget::checkForConflictsAgainst() const
+KisKKeySequenceWidget::ShortcutTypes ShortcutEditWidget::checkForConflictsAgainst() const
 {
     return m_customEditor->checkForConflictsAgainst();
 }
@@ -108,13 +108,13 @@ void ShortcutEditWidget::defaultToggled(bool checked)
 }
 
 void ShortcutEditWidget::setCheckActionCollections(
-    const QList<KActionCollection *> checkActionCollections)
+    const QList<KisKActionCollection *> checkActionCollections)
 {
-    // We just forward them to out KKeySequenceWidget.
+    // We just forward them to out KisKKeySequenceWidget.
     m_customEditor->setCheckActionCollections(checkActionCollections);
 }
 
-void ShortcutEditWidget::setCheckForConflictsAgainst(KKeySequenceWidget::ShortcutTypes types)
+void ShortcutEditWidget::setCheckForConflictsAgainst(KisKKeySequenceWidget::ShortcutTypes types)
 {
     m_customEditor->setCheckForConflictsAgainst(types);
 }
@@ -126,7 +126,7 @@ void ShortcutEditWidget::setComponentName(const QString componentName)
 
 void ShortcutEditWidget::setMultiKeyShortcutsAllowed(bool allowed)
 {
-    // We just forward them to out KKeySequenceWidget.
+    // We just forward them to out KisKKeySequenceWidget.
     m_customEditor->setMultiKeyShortcutsAllowed(allowed);
 }
 
@@ -147,7 +147,7 @@ void ShortcutEditWidget::setCustom(const QKeySequence &seq)
         return;
     }
 
-    // seq is a const reference to a private variable of KKeySequenceWidget.
+    // seq is a const reference to a private variable of KisKKeySequenceWidget.
     // Somewhere below we possible change that one. But we want to emit seq
     // whatever happens. So we make a copy.
     QKeySequence original = seq;

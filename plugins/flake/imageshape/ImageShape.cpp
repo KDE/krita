@@ -59,9 +59,8 @@ KoShape *ImageShape::cloneShape() const
     return new ImageShape(*this);
 }
 
-void ImageShape::paint(QPainter &painter, KoShapePaintingContext &paintContext) const
+void ImageShape::paint(QPainter &painter) const
 {
-    Q_UNUSED(paintContext);
     KisQPainterStateSaver saver(&painter);
 
     const QRectF myrect(QPointF(), size());
@@ -106,10 +105,10 @@ bool ImageShape::saveSvg(SvgSavingContext &context)
 
 bool ImageShape::loadSvg(const QDomElement &element, SvgLoadingContext &context)
 {
-    const qreal x = SvgUtil::parseUnitX(context.currentGC(), element.attribute("x"));
-    const qreal y = SvgUtil::parseUnitY(context.currentGC(), element.attribute("y"));
-    const qreal w = SvgUtil::parseUnitX(context.currentGC(), element.attribute("width"));
-    const qreal h = SvgUtil::parseUnitY(context.currentGC(), element.attribute("height"));
+    const qreal x = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute("x"));
+    const qreal y = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute("y"));
+    const qreal w = SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), element.attribute("width"));
+    const qreal h = SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), element.attribute("height"));
 
     setSize(QSizeF(w, h));
     setPosition(QPointF(x, y));

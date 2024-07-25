@@ -8,15 +8,12 @@
 #define KoOptimizedPixelDataScalerU8ToU16FACTORYIMPL_H
 
 #include <KoOptimizedPixelDataScalerU8ToU16Base.h>
-#include <KoVcMultiArchBuildSupport.h>
+#include <KoMultiArchBuildSupport.h>
 
 class KRITAPIGMENT_EXPORT KoOptimizedPixelDataScalerU8ToU16FactoryImpl
 {
 public:
-    typedef int ParamType;
-    typedef KoOptimizedPixelDataScalerU8ToU16Base* ReturnType;
-
-    template<Vc::Implementation _impl>
+    template<typename _impl>
     static KoOptimizedPixelDataScalerU8ToU16Base* create(int);
 };
 

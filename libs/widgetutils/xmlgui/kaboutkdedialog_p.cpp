@@ -26,7 +26,7 @@
 namespace KDEPrivate
 {
 
-KAboutKdeDialog::KAboutKdeDialog(QWidget *parent)
+KisKAboutKdeDialog::KisKAboutKdeDialog(QWidget *parent)
     : QDialog(parent),
       d(0)
 {

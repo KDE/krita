@@ -44,7 +44,7 @@ public:
      */
     const TypeInfo* propertyType(const QString& _propertyName) const;
     /**
-     * @return the \ref TypeInfo describing a given structure of that scheam
+     * @return the \ref TypeInfo describing a given structure of that schema
      */
     const TypeInfo* structure(const QString& _structureName) const;
 public:

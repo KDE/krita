@@ -10,6 +10,7 @@ import sys
 import traceback
 import inspect
 from . import docwrapper
+from .... import utils
 import krita
 
 if sys.version_info[0] > 2:
@@ -37,8 +38,8 @@ class RunAction(QAction):
 
         self.setText(i18n("Run"))
         self.setToolTip(i18n('Run Ctrl+R'))
-        self.setIcon(QIcon(':/icons/run.svg'))
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_R))
+        self.setIcon(utils.getThemedIcon(':/icons/run.svg'))
 
     @property
     def parent(self):

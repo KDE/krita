@@ -16,7 +16,7 @@
 
 struct KisActionsSnapshot::Private
 {
-    QMap<QString, KActionCollection*> actionCollections;
+    QMap<QString, KisKActionCollection*> actionCollections;
 
     ~Private() {
         qDeleteAll(actionCollections);
@@ -59,17 +59,17 @@ void KisActionsSnapshot::addAction(const QString &name, QAction *action)
     }
 #endif /* ACTIONS_CHECKSUM_SANITY_CHECK */
 
-    KActionCollection *collection =  m_d->actionCollections[cat.componentName];
+    KisKActionCollection *collection =  m_d->actionCollections[cat.componentName];
 
     if (!collection) {
-        collection = new KActionCollection(0, cat.componentName);
+        collection = new KisKActionCollection(0, cat.componentName);
         m_d->actionCollections.insert(cat.componentName, collection);
     }
 
     collection->addCategorizedAction(name, action, cat.categoryName);
 }
 
-QMap<QString, KActionCollection *> KisActionsSnapshot::actionCollections()
+QMap<QString, KisKActionCollection *> KisActionsSnapshot::actionCollections()
 {
     /**
      * A small heuristics to show warnings only when unknown shortcuts appear

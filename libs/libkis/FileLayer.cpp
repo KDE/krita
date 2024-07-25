@@ -9,7 +9,8 @@
 #include <QFileInfo>
 #include <QDir>
 
-FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseName, const QString fileName, const QString scalingMethod, QObject *parent)
+FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseName, const QString fileName,
+                     const QString scalingMethod, const QString scalingFilter, QObject *parent)
     : Node(image, new KisFileLayer(image, name, OPACITY_OPAQUE_U8), parent)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
@@ -21,6 +22,7 @@ FileLayer::FileLayer(KisImageSP image, const QString name, const QString baseNam
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
+    file->setScalingFilter(scalingFilter);
 
     const QString &basePath = QFileInfo(baseName).absolutePath();
     const QString &absoluteFilePath = QFileInfo(fileName).absoluteFilePath();
@@ -43,7 +45,7 @@ QString FileLayer::type() const
     return "filelayer";
 }
 
-void FileLayer::setProperties(QString fileName, QString scalingMethod)
+void FileLayer::setProperties(QString fileName, QString scalingMethod, QString scalingFilter)
 {
     KisFileLayer *file = dynamic_cast<KisFileLayer*>(this->node().data());
     KIS_ASSERT(file);
@@ -54,6 +56,7 @@ void FileLayer::setProperties(QString fileName, QString scalingMethod)
         sm= KisFileLayer::ToImagePPI;
     }
     file->setScalingMethod(sm);
+    file->setScalingFilter(scalingFilter);
 
     const QString basePath = QFileInfo(file->path()).absolutePath();
     const QString absoluteFilePath = QFileInfo(fileName).absoluteFilePath();
@@ -87,6 +90,13 @@ QString FileLayer::scalingMethod() const
         method = "ToImagePPI";
     }
     return method;
+}
+
+QString FileLayer::scalingFilter() const
+{
+    const KisFileLayer *file = qobject_cast<const KisFileLayer*>(this->node());
+    KIS_ASSERT_RECOVER_RETURN_VALUE(file, "Bicubic");
+    return file->scalingFilter();
 }
 
 QString FileLayer::getFileNameFromAbsolute(const QString &basePath, QString filePath)

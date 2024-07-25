@@ -11,9 +11,8 @@
 #include <QScopedPointer>
 #include <QObject>
 
-#include "kritaimage_export.h"
+#include "kis_image_export.h"
 #include "kis_types.h"
-
 
 class KRITAIMAGE_EXPORT KisUniformPaintOpProperty : public QObject
 {
@@ -73,11 +72,13 @@ template<class T> class QSharedPointer;
 template<class T> class QWeakPointer;
 template<class T> class QList;
 
-typedef QSharedPointer<KisUniformPaintOpProperty> KisUniformPaintOpPropertySP;
-typedef QWeakPointer<KisUniformPaintOpProperty> KisUniformPaintOpPropertyWSP;
+using KisUniformPaintOpPropertySP = QSharedPointer<KisUniformPaintOpProperty>;
+using KisUniformPaintOpPropertyWSP = QWeakPointer<KisUniformPaintOpProperty>;
 
 #include "kis_callback_based_paintop_property.h"
-extern template class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;
-typedef KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty> KisUniformPaintOpPropertyCallback;
+extern template class KisCallbackBasedPaintopProperty<
+    KisUniformPaintOpProperty>;
+using KisUniformPaintOpPropertyCallback =
+    KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;
 
 #endif /* __KIS_UNIFORM_PAINT_OP_PROPERTY_H */

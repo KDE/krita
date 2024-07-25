@@ -16,6 +16,18 @@ KisUpdateCommand::KisUpdateCommand(KisNodeSP node, QRect dirtyRect,
     : KUndo2Command(kundo2_noi18n("UPDATE_COMMAND")),
       m_node(node),
       m_dirtyRect(dirtyRect),
+      m_sharedDirtyRect(nullptr),
+      m_updatesFacade(updatesFacade),
+      m_needsFullRefresh(needsFullRefresh)
+{
+}
+
+KisUpdateCommand::KisUpdateCommand(KisNodeSP node, QSharedPointer<QRect> dirtyRect,
+                                   KisUpdatesFacade *updatesFacade,
+                                   bool needsFullRefresh)
+    : KUndo2Command(kundo2_noi18n("UPDATE_COMMAND")),
+      m_node(node),
+      m_sharedDirtyRect(dirtyRect),
       m_updatesFacade(updatesFacade),
       m_needsFullRefresh(needsFullRefresh)
 {
@@ -43,6 +55,10 @@ void KisUpdateCommand::update()
         m_updatesFacade->refreshGraphAsync(m_node, m_dirtyRect);
     }
     else {
-        m_node->setDirty(m_dirtyRect);
+        if (m_sharedDirtyRect) {
+            m_node->setDirty(*m_sharedDirtyRect);
+        } else {
+            m_node->setDirty(m_dirtyRect);
+        }
     }
 }

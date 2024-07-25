@@ -9,6 +9,18 @@
 
 #include "kis_uniform_paintop_property.h"
 
+class KRITAIMAGE_EXPORT KisSliderBasedPaintOpPropertyBase
+    : public KisUniformPaintOpProperty
+{
+    Q_OBJECT
+
+public:
+    using KisUniformPaintOpProperty::KisUniformPaintOpProperty;
+
+Q_SIGNALS:
+    void sigRangeChanged();
+};
+
 
 /**
  * This is a general class for the properties that can be represented
@@ -20,8 +32,9 @@
  * Kis{,Double}SliderSpinbox
  */
 
-template <typename T>
-class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty : public KisUniformPaintOpProperty
+template<typename T>
+class KRITAIMAGE_EXPORT_TEMPLATE KisSliderBasedPaintOpProperty
+    : public KisSliderBasedPaintOpPropertyBase
 {
 public:
     KisSliderBasedPaintOpProperty(Type type, SubType subType, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
@@ -66,12 +79,13 @@ extern template class KisSliderBasedPaintOpProperty<qreal>;
 extern template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
 extern template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;
 
-typedef KisSliderBasedPaintOpProperty<int> KisIntSliderBasedPaintOpProperty;
-typedef KisSliderBasedPaintOpProperty<qreal> KisDoubleSliderBasedPaintOpProperty;
+using KisIntSliderBasedPaintOpProperty = KisSliderBasedPaintOpProperty<int>;
+using KisDoubleSliderBasedPaintOpProperty =
+    KisSliderBasedPaintOpProperty<qreal>;
 
-typedef KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>> KisIntSliderBasedPaintOpPropertyCallback;
-typedef KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>> KisDoubleSliderBasedPaintOpPropertyCallback;
-
-
+using KisIntSliderBasedPaintOpPropertyCallback =
+    KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
+using KisDoubleSliderBasedPaintOpPropertyCallback =
+    KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;
 
 #endif /* __KIS_SLIDER_BASED_PAINTOP_PROPERTY_H */

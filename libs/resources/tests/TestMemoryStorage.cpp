@@ -17,10 +17,6 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-#ifndef FILES_DEST_DIR
-#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
-#endif
-
 void TestMemoryStorage::initTestCase()
 {
     ResourceTestHelper::createDummyLoaderRegistry();

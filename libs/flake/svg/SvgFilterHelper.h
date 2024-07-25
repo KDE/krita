@@ -9,9 +9,9 @@
 
 #include <QSizeF>
 #include <QPointF>
+#include <QDomDocument>
 
 #include <KoFlakeCoordinateSystem.h>
-#include <KoXmlReader.h>
 
 class QRectF;
 

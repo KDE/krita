@@ -22,7 +22,48 @@ public:
 
     KisImportExportErrorCode runAction(std::function<KisImportExportErrorCode()> func);
     void runVoidAction(std::function<void()> func);
-    void waitForMutex(QMutex *mutex);
+
+    template <typename Mutex>
+    void waitForMutex(Mutex &mutex) {
+        waitForMutexLikeImpl(std::make_unique<MutexLike<Mutex>>(mutex));
+    }
+
+private:
+
+    /**
+     * A simple base for type-erasure wrapper for mutex-like
+     * objects.
+     */
+    struct MutexLikeBase
+    {
+        virtual ~MutexLikeBase() = default;
+        virtual void lock() = 0;
+        virtual void unlock() = 0;
+        virtual bool try_lock() = 0;
+    };
+
+    /**
+     * A type-erasure wrapper for mutex-like objects
+     */
+    template <typename T>
+    struct MutexLike : MutexLikeBase
+    {
+        MutexLike(T& m) : mutex(m) {}
+
+        T &mutex;
+
+        void lock() override {
+            mutex.lock();
+        }
+        void unlock() override {
+            mutex.unlock();
+        }
+        bool try_lock() override {
+            return mutex.try_lock();
+        }
+    };
+
+    void waitForMutexLikeImpl(std::unique_ptr<MutexLikeBase> &&mutex);
 
 private:
     struct Private;

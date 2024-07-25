@@ -57,6 +57,15 @@ QMainWindow *Window::qwindow() const
     return d->window;
 }
 
+QList<QDockWidget*> Window::dockers() const
+{
+    KisMainWindow *mainWindow = d->window;
+
+    if (!mainWindow) return {};
+
+    return mainWindow->dockWidgets();
+}
+
 QList<View*> Window::views() const
 {
     QList<View *> ret;

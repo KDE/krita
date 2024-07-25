@@ -414,7 +414,7 @@ public:
      * application is running, pass in a pointer to the window the caption will
      * be applied to.
      *
-     * If using a KoDialog or KMainWindow subclass, call setCaption instead and
+     * If using a KoDialog or KisKMainWindow subclass, call setCaption instead and
      * an appropriate standard caption will be created for you
      *
      * @param userCaption The caption string you want to display in the
@@ -754,6 +754,8 @@ protected:
      */
     void keyPressEvent(QKeyEvent *) override;
 
+    void showEvent(QShowEvent *e) override;
+
 protected Q_SLOTS:
     /**
      * Activated when the button @p button is clicked
@@ -778,15 +780,9 @@ protected Q_SLOTS:
      */
     virtual void slotButtonClicked(int button);
 
-    /**
-     * Updates the margins and spacings.
-     *
-     * @deprecated KoDialog respects the style's margins and spacings automatically. Calling
-     * this function has no effect.
-     */
-    void updateGeometry();
-
 private:
+
+
     KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
     KoDialogPrivate *const d_ptr;
 

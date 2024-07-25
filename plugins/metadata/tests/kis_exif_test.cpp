@@ -8,8 +8,9 @@
 #include "kis_exif_test.h"
 
 #include <filestest.h>
-#include <sdk/tests/testui.h>
 #include <simpletest.h>
+#include <testui.h>
+
 
 #include <QBuffer>
 #include <QCoreApplication>

@@ -22,7 +22,7 @@ const QString QmlMimetype = "text/x-qml";
 
 void KisQmlTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), QmlMimetype);
+    TestUtil::testExportToReadonly(QmlMimetype);
 }
 
 

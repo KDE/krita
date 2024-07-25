@@ -9,8 +9,6 @@
 #ifndef SVGPARSER_H
 #define SVGPARSER_H
 
-#include <KoXmlReader.h>
-
 #include <QMap>
 #include <QSizeF>
 #include <QRectF>
@@ -35,6 +33,7 @@ class KoVectorPatternBackground;
 class KoMarker;
 class KoPathShape;
 class KoSvgTextShape;
+class KoSvgTextLoader;
 
 class KRITAFLAKE_EXPORT SvgParser
 {
@@ -84,8 +83,11 @@ protected:
     /// Parses a group-like element element, saving all its topmost properties
     KoShape* parseGroup(const QDomElement &e, const QDomElement &overrideChildrenFrom = QDomElement(), bool createContext = true);
 
-    // XXX
-    KoShape* parseTextNode(const QDomText &e);
+    /// Get the path for the gives textPath element.
+    KoShape* getTextPath(const QDomElement &e);
+
+    /// parse children of a <text /> element into the root shape.
+    void parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader);
     
     /// Parses a container element, returning a list of child shapes
     QList<KoShape*> parseContainer(const QDomElement &, bool parseTextNodes = false);
@@ -165,6 +167,12 @@ protected:
     /// Creates shape from specified svg element
     KoShape * createShapeFromElement(const QDomElement &element, SvgLoadingContext &context);
 
+    /// Creates a shape from a CSS shapes definition.
+    KoShape * createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context);
+
+    /// Create a list of shapes from a CSS shapes definition with potentially multiple shapes.
+    QList<KoShape*> createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context);
+
     /// Builds the document from the given shapes list
     void buildDocument(QList<KoShape*> shapes);
 
@@ -192,6 +200,8 @@ protected:
     void applyMaskClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates);
     void applyMarkers(KoPathShape *shape);
 
+    void applyPaintOrder(KoShape *shape);
+
     /// Applies id to specified shape
     void applyId(const QString &id, KoShape *shape);
 
@@ -200,7 +210,6 @@ protected:
     void applyViewBoxTransform(const QDomElement &element);
 
 private:
-    QSizeF m_documentSize;
     SvgLoadingContext m_context;
     QMap<QString, SvgGradientHelper> m_gradients;
     QMap<QString, SvgFilterHelper> m_filters;
@@ -215,6 +224,7 @@ private:
     QString m_documentTitle;
     QString m_documentDescription;
     QVector<KoID> m_warnings;
+    QMap<KoShape *, QTransform> m_shapeParentTransform;
 };
 
 #endif

@@ -47,8 +47,12 @@ public:
     {
     }
 
-
-    virtual void execute(const KisConvolutionKernelSP kernel, const KisPaintDeviceSP src, QPoint srcPos, QPoint dstPos, QSize areaSize, const QRect& dataRect)
+    void execute(const KisConvolutionKernelSP kernel,
+                 const KisPaintDeviceSP src,
+                 QPoint srcPos,
+                 QPoint dstPos,
+                 QSize areaSize,
+                 const QRect &dataRect) override
     {
         // Make the area we cover as small as possible
         if (this->m_painter->selection())

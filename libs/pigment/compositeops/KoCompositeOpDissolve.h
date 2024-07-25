@@ -7,8 +7,10 @@
 #ifndef _KOCOMPOSITEOP_DISSOLVE_H_
 #define _KOCOMPOSITEOP_DISSOLVE_H_
 
-#include <KoCompositeOp.h>
 #include <KoColorSpaceMaths.h>
+#include <KoCompositeOp.h>
+
+#include <QRandomGenerator>
 
 template<class Traits>
 class KoCompositeOpDissolve: public KoCompositeOp
@@ -75,8 +77,8 @@ public:
                 channels_type dstAlpha = (alpha_pos == -1) ? unitValue : dst[alpha_pos];
                 channels_type blend    = useMask ? mul(opacity, scale<channels_type>(*mask), srcAlpha) : mul(opacity, srcAlpha);
 
-//                 if(getRandomValue(ctr) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
-                if((qrand() % 256) <= scale<quint8>(blend) && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
+                if (QRandomGenerator::global()->bounded(256) <= scale<quint8>(blend)
+                    && blend != KoColorSpaceMathsTraits<channels_type>::zeroValue) {
                     for(qint32 i=0; i <channels_nb; i++) {
                         if(i != alpha_pos && flags.testBit(i))
                             dst[i] = src[i];

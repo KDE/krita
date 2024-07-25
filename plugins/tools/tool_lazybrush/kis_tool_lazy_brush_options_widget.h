@@ -24,9 +24,6 @@ class KoColor;
 class KisToolLazyBrushOptionsWidget : public QWidget
 {
     Q_OBJECT
-private /* typedef */:
-    typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
-
 public:
     KisToolLazyBrushOptionsWidget(KisCanvasResourceProvider *provider, QWidget *parent);
     ~KisToolLazyBrushOptionsWidget() override;
@@ -59,7 +56,7 @@ protected:
     void hideEvent(QHideEvent *event) override;
 
 private /* methods */:
-    static bool sortSwatchInfo(const SwatchInfoType &first, const SwatchInfoType &second);
+    static bool sortSwatchInfo(const KisSwatchGroup::SwatchInfo &first, const KisSwatchGroup::SwatchInfo &second);
 
 private /* member variables */:
     friend struct PaletteEventFilter;

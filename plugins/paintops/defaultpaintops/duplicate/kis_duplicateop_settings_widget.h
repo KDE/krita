@@ -24,7 +24,7 @@ class KisDuplicateOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
 
-    KisDuplicateOpSettingsWidget(QWidget* parent = nullptr);
+    KisDuplicateOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     ~KisDuplicateOpSettingsWidget() override;
 

@@ -26,29 +26,9 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
 #include "krita_container_utils.h"
-
-
-struct TransformTransactionPropertiesRegistrar {
-    TransformTransactionPropertiesRegistrar() {
-        qRegisterMetaType<TransformTransactionProperties>("TransformTransactionProperties");
-    }
-};
-static TransformTransactionPropertiesRegistrar __registrar1;
-
-struct ToolTransformArgsRegistrar {
-    ToolTransformArgsRegistrar() {
-        qRegisterMetaType<ToolTransformArgs>("ToolTransformArgs");
-    }
-};
-static ToolTransformArgsRegistrar __registrar2;
-
-struct QPainterPathRegistrar {
-    QPainterPathRegistrar() {
-        qRegisterMetaType<QPainterPath>("QPainterPath");
-    }
-};
-static QPainterPathRegistrar __registrar3;
-
+#include "kis_selection.h"
+#include "kis_image.h"
+#include "kis_image_animation_interface.h"
 
 const int KisTransformUtils::rotationHandleVisualRadius = 12;
 const int KisTransformUtils::rotationHandleRadius = 8;
@@ -182,6 +162,7 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
     S.shear(0, args.shearY()); S.shear(args.shearX(), 0);
 
     if (args.mode() == ToolTransformArgs::FREE_TRANSFORM) {
+        BRI.rotate(180. * -args.boundsRotation() / M_PI);
         P.rotate(180. * normalizeAngle(args.aX()) / M_PI, QVector3D(1, 0, 0));
         P.rotate(180. * normalizeAngle(args.aY()) / M_PI, QVector3D(0, 1, 0));
         P.rotate(180. * normalizeAngle(args.aZ()) / M_PI, QVector3D(0, 0, 1));
@@ -203,7 +184,7 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
 
 QTransform KisTransformUtils::MatricesPack::finalTransform() const
 {
-    return TS * SC * S * projectedP * T;
+    return TS * BRI * SC * S * projectedP * T;
 }
 
 bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPack &m, qreal cameraHeight)
@@ -235,36 +216,55 @@ bool KisTransformUtils::checkImageTooBig(const QRectF &bounds, const MatricesPac
 
 KisTransformWorker KisTransformUtils::createTransformWorker(const ToolTransformArgs &config,
                                                             KisPaintDeviceSP device,
-                                                            KoUpdaterPtr updater,
-                                                            QVector3D *transformedCenter /* OUT */)
+                                                            KoUpdaterPtr updater)
 {
+    double scaleX = config.scaleX();
+    double scaleY = config.scaleY();
+    double shearX = config.shearX();
+    double shearY = config.shearY();
+    double aZ = config.aZ();
+
+    if (config.boundsRotation() != 0.0) {
+        const KisTransformUtils::MatricesPack m(config);
+        QTransform Z; Z.rotateRadians(aZ);
+        QTransform desired = m.BRI * m.SC * m.S * Z;
+        KisAlgebra2D::DecomposedMatrix dm(desired);
+        if (dm.isValid()) {
+            scaleX = dm.scaleX;
+            scaleY = dm.scaleY;
+            shearX = dm.shearXY;
+            shearY = 0;
+            aZ = kisDegreesToRadians(dm.angle);
+        }
+    }
+
+    QPointF transformedCenter;
     {
         KisTransformWorker t(0,
-                             config.scaleX(), config.scaleY(),
-                             config.shearX(), config.shearY(),
-                             config.originalCenter().x(),
-                             config.originalCenter().y(),
-                             config.aZ(),
+                             scaleX, scaleY,
+                             shearX, shearY,
+                             aZ,
                              0, // set X and Y translation
                              0, // to null for calculation
                              0,
                              config.filter());
 
-        *transformedCenter = QVector3D(t.transform().map(config.originalCenter()));
+        transformedCenter = t.transform().map(config.originalCenter());
     }
 
-    QPointF translation = config.transformedCenter() - (*transformedCenter).toPointF();
+    QPointF translation = config.transformedCenter() - transformedCenter;
 
     KisTransformWorker transformWorker(device,
-                                       config.scaleX(), config.scaleY(),
-                                       config.shearX(), config.shearY(),
-                                       config.originalCenter().x(),
-                                       config.originalCenter().y(),
-                                       normalizeAngle(config.aZ()),
+                                       scaleX, scaleY,
+                                       shearX, shearY,
+                                       normalizeAngle(aZ),
                                        translation.x(),
                                        translation.y(),
                                        updater,
                                        config.filter());
+
+    // MatricesPack m(config);
+    // ENTER_FUNCTION() << ppVar(m.finalTransform() - transformWorker.transform());
 
     return transformWorker;
 }
@@ -284,7 +284,8 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                          KisPaintDeviceSP srcDevice,
                          KisPaintDeviceSP dstDevice,
                          KisProcessingVisitor::ProgressHelper *helper,
-                         bool cropDst)
+                         bool cropDst,
+                         bool forceSubPixelTranslation)
 {
     if (config.mode() == ToolTransformArgs::WARP) {
         KoUpdaterPtr updater = helper->updater();
@@ -323,15 +324,15 @@ void transformDeviceImpl(const ToolTransformArgs &config,
         config.meshTransform()->transformMesh(srcDevice, dstDevice);
 
     } else {
-        QVector3D transformedCenter;
         KoUpdaterPtr updater1 = helper->updater();
         KoUpdaterPtr updater2 = helper->updater();
 
         dstDevice->makeCloneFromRough(srcDevice, srcDevice->extent());
 
         KisTransformWorker transformWorker =
-            KisTransformUtils::createTransformWorker(config, dstDevice, updater1, &transformedCenter);
+            KisTransformUtils::createTransformWorker(config, dstDevice, updater1);
 
+        transformWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
         transformWorker.run();
 
         KisPerspectiveTransformWorker::SampleType sampleType =
@@ -347,6 +348,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                                                             config.cameraPos().z(),
                                                             cropDst,
                                                             updater2);
+            perspectiveWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
             perspectiveWorker.run(sampleType);
         } else if (config.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
             QTransform T =
@@ -357,6 +359,7 @@ void transformDeviceImpl(const ToolTransformArgs &config,
                                                             T.inverted() * config.flattenedPerspectiveTransform() * T,
                                                             cropDst,
                                                             updater2);
+            perspectiveWorker.setForceSubPixelTranslation(forceSubPixelTranslation);
             perspectiveWorker.run(sampleType);
         }
     }
@@ -369,12 +372,12 @@ void KisTransformUtils::transformDevice(const ToolTransformArgs &config,
                                         KisPaintDeviceSP dstDevice,
                                         KisProcessingVisitor::ProgressHelper *helper)
 {
-    transformDeviceImpl(config, srcDevice, dstDevice, helper, false);
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, false, false);
 }
 
-void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper)
+void KisTransformUtils::transformDeviceWithCroppedDst(const ToolTransformArgs &config, KisPaintDeviceSP srcDevice, KisPaintDeviceSP dstDevice, KisProcessingVisitor::ProgressHelper *helper, bool forceSubPixelTranslation)
 {
-    transformDeviceImpl(config, srcDevice, dstDevice, helper, true);
+    transformDeviceImpl(config, srcDevice, dstDevice, helper, true, forceSubPixelTranslation);
 }
 
 QRect KisTransformUtils::needRect(const ToolTransformArgs &config,
@@ -591,20 +594,22 @@ void KisTransformUtils::transformAndMergeDevice(const ToolTransformArgs &config,
 struct TransformExtraData : public KUndo2CommandExtraData
 {
     ToolTransformArgs savedTransformArgs;
-    KisNodeSP rootNode;
+    KisNodeList rootNodes;
     KisNodeList transformedNodes;
+    int transformedTime = -1;
 
     KUndo2CommandExtraData* clone() const override {
         return new TransformExtraData(*this);
     }
 };
 
-void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const ToolTransformArgs &args, KisNodeSP rootNode, KisNodeList processedNodes, const KisSavedMacroCommand *overriddenCommand)
+void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const ToolTransformArgs &args, KisNodeList rootNodes, KisNodeList processedNodes, int currentTime, const KisSavedMacroCommand *overriddenCommand)
 {
     TransformExtraData *data = new TransformExtraData();
     data->savedTransformArgs = args;
-    data->rootNode = rootNode;
+    data->rootNodes = rootNodes;
     data->transformedNodes = processedNodes;
+    data->transformedTime = currentTime;
 
     command->setExtraData(data);
 
@@ -616,14 +621,15 @@ void KisTransformUtils::postProcessToplevelCommand(KUndo2Command *command, const
     }
 }
 
-bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeSP *rootNode, KisNodeList *transformedNodes)
+bool KisTransformUtils::fetchArgsFromCommand(const KUndo2Command *command, ToolTransformArgs *args, KisNodeList *rootNodes, KisNodeList *transformedNodes, int *oldTime)
 {
     const TransformExtraData *data = dynamic_cast<const TransformExtraData*>(command->extraData());
 
     if (data) {
         *args = data->savedTransformArgs;
-        *rootNode = data->rootNode;
+        *rootNodes = data->rootNodes;
         *transformedNodes = data->transformedNodes;
+        *oldTime = data->transformedTime;
     }
 
     return bool(data);
@@ -648,58 +654,79 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
     return root;
 }
 
-QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent)
+int KisTransformUtils::fetchCurrentImageTime(KisNodeList rootNodes)
+{
+    Q_FOREACH(KisNodeSP node, rootNodes) {
+        /**
+         * We cannot just use projection's default bounds, because masks don't have
+         * any projection
+         */
+        if (node && node->image()) {
+            return node->image()->animationInterface()->currentTime();
+        }
+    }
+    return -1;
+}
+
+QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeList rootNodes, bool isExternalSourcePresent, KisSelectionSP selection)
 {
     QList<KisNodeSP> result;
 
-    bool hasTransformMaskDescendant =
-        KisLayerUtils::recursiveFindNode(root, [root] (KisNodeSP node) {
-            return node != root && node->visible() && node->inherits("KisTransformMask");
-        });
+    Q_FOREACH (KisNodeSP root, rootNodes) {
+        bool hasTransformMaskDescendant =
+            KisLayerUtils::recursiveFindNode(root, [root] (KisNodeSP node) {
+                return node != root && node->visible() && node->inherits("KisTransformMask");
+            });
 
-    /// Cannot transform nodes with visible transform masks inside,
-    /// this situation should have been caught either in
-    /// tryOverrideRootToTransformMask or in the transform tool
-    /// stroke initialization routine.
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!hasTransformMaskDescendant);
+        /// Cannot transform nodes with visible transform masks inside,
+        /// this situation should have been caught either in
+        /// tryOverrideRootToTransformMask or in the transform tool
+        /// stroke initialization routine.
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!hasTransformMaskDescendant);
 
-    auto fetchFunc =
-        [&result, mode, root] (KisNodeSP node) {
-        if (node->isEditable(node == root) &&
-                (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
-                !node->inherits("KisFileLayer") &&
-                !node->inherits("KisColorizeMask") &&
-                (!node->inherits("KisTransformMask") || node == root)) {
+        KisNodeSP selectionNode = selection ? selection->parentNode() : 0;
 
-                result << node;
-            }
-    };
+        auto fetchFunc =
+            [&result, mode, root, selectionNode] (KisNodeSP node) {
+            if (node->isEditable(node == root) &&
+                    (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
+                    !node->inherits("KisFileLayer") &&
+                    !node->inherits("KisColorizeMask") &&
+                    (!node->inherits("KisTransformMask") || node == root) &&
+                    (!selectionNode || node != selectionNode)) {
 
-    if (isExternalSourcePresent) {
-        fetchFunc(root);
-    } else {
-        KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
+                    result << node;
+                }
+        };
+
+        if (isExternalSourcePresent) {
+            fetchFunc(root);
+        } else {
+            KisLayerUtils::recursiveApplyNodes(root, fetchFunc);
+        }
     }
 
     return result;
 }
 
-bool KisTransformUtils::tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *args)
+bool KisTransformUtils::tryInitArgsFromNode(KisNodeList rootNodes, ToolTransformArgs *args)
 {
     bool result = false;
 
-    if (KisTransformMaskSP mask =
-        dynamic_cast<KisTransformMask*>(node.data())) {
+    Q_FOREACH(KisNodeSP node, rootNodes) {
+        if (KisTransformMaskSP mask =
+            dynamic_cast<KisTransformMask*>(node.data())) {
 
-        KisTransformMaskParamsInterfaceSP savedParams =
-            mask->transformParams();
+            KisTransformMaskParamsInterfaceSP savedParams =
+                mask->transformParams();
 
-        KisTransformMaskAdapter *adapter =
-            dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
+            KisTransformMaskAdapter *adapter =
+                dynamic_cast<KisTransformMaskAdapter*>(savedParams.data());
 
-        if (adapter) {
-            *args = *adapter->transformArgs();
-            result = true;
+            if (adapter && adapter->isInitialized()) {
+                *args = *adapter->transformArgs();
+                result = true;
+            }
         }
     }
 
@@ -707,25 +734,28 @@ bool KisTransformUtils::tryInitArgsFromNode(KisNodeSP node, ToolTransformArgs *a
 }
 
 bool KisTransformUtils::tryFetchArgsFromCommandAndUndo(ToolTransformArgs *outArgs,
-                                                                    ToolTransformArgs::TransformMode mode,
-                                                                    KisNodeSP currentNode,
-                                                                    KisNodeList selectedNodes,
-                                                                    KisStrokeUndoFacade *undoFacade,
-                                                                    QVector<KisStrokeJobData *> *undoJobs,
-                                                                    const KisSavedMacroCommand **overriddenCommand)
+                                                       ToolTransformArgs::TransformMode mode,
+                                                       KisNodeList currentNodes,
+                                                       KisNodeList selectedNodes,
+                                                       KisStrokeUndoFacade *undoFacade,
+                                                       int currentTime,
+                                                       QVector<KisStrokeJobData *> *undoJobs,
+                                                       const KisSavedMacroCommand **overriddenCommand)
 {
     bool result = false;
 
     const KUndo2Command *lastCommand = undoFacade->lastExecutedCommand();
-    KisNodeSP oldRootNode;
+    KisNodeList oldRootNodes;
     KisNodeList oldTransformedNodes;
+    int oldTime = -1;
 
     ToolTransformArgs args;
 
     if (lastCommand &&
-        KisTransformUtils::fetchArgsFromCommand(lastCommand, &args, &oldRootNode, &oldTransformedNodes) &&
+        KisTransformUtils::fetchArgsFromCommand(lastCommand, &args, &oldRootNodes, &oldTransformedNodes, &oldTime) &&
         args.mode() == mode &&
-        oldRootNode == currentNode) {
+        oldRootNodes == currentNodes &&
+        oldTime == currentTime) {
 
         if (KritaUtils::compareListsUnordered(oldTransformedNodes, selectedNodes)) {
             args.saveContinuedState();

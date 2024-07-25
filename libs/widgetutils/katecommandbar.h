@@ -11,7 +11,7 @@ class QLineEdit;
 class CommandModel;
 class QAction;
 class CommandBarFilterModel;
-class KActionCollection;
+class KisKActionCollection;
 
 #include <kritawidgetutils_export.h>
 
@@ -21,7 +21,7 @@ class KRITAWIDGETUTILS_EXPORT KateCommandBar : public QMenu
 public:
     KateCommandBar(QWidget *parent = nullptr);
 
-    void updateBar(const QList<KActionCollection *> &actions, int totalActions);
+    void updateBar(const QList<KisKActionCollection *> &actions, int totalActions);
 
     void updateViewGeometry();
 
@@ -37,5 +37,5 @@ private:
     QLineEdit *m_lineEdit;
     CommandModel *m_model;
     CommandBarFilterModel *m_proxyModel;
-    QVector<KActionCollection *> m_disposableActionCollections;
+    QVector<KisKActionCollection *> m_disposableActionCollections;
 };

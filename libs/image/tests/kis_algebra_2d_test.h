@@ -22,6 +22,7 @@ private Q_SLOTS:
 
     void testMatrixDecomposition1();
     void testMatrixDecomposition2();
+    void testMatrixDecomposition3();
 
     void testDivisionWithFloor();
     void testDrawEllipse();
@@ -44,6 +45,12 @@ private Q_SLOTS:
 
     void testMultiplyWrappedRect_data();
     void testMultiplyWrappedRect();
+
+    void testMultiplyWrappedRectHorizontal_data();
+    void testMultiplyWrappedRectHorizontal();
+
+    void testMultiplyWrappedRectVertical_data();
+    void testMultiplyWrappedRectVertical();
 };
 
 #endif /* __KIS_ALGEBRA_2D_TEST_H */

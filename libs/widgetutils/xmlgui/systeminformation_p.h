@@ -71,6 +71,9 @@ inline QString SystemInformation::operatingSystemVersion()
     case PROCESSOR_ARCHITECTURE_ARM:
         arch = QStringLiteral(" (ARM)");
         break;
+    case PROCESSOR_ARCHITECTURE_ARM64:
+        arch = QStringLiteral(" (ARM64)");
+        break;
     default:
         arch = QStringLiteral(" (unknown architecture)");
     }

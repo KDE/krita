@@ -17,6 +17,9 @@
 #include "kis_types.h"
 #include "kis_selection.h"
 
+#include <KisRunnableStrokeJobUtils.h>
+#include <kis_processing_visitor.h>
+
 #include <kritaimage_export.h>
 
 
@@ -31,6 +34,11 @@ class KRITAIMAGE_EXPORT KisFillPainter : public KisPainter
 {
 
 public:
+    enum RegionFillingMode
+    {
+        RegionFillingMode_FloodFill,
+        RegionFillingMode_BoundaryFill
+    };
 
     /**
      * Construct an empty painter. Use the begin(KisPaintDeviceSP) method to attach
@@ -49,16 +57,6 @@ private:
     void initFillPainter();
 
 public:
-
-    /**
-     * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
-     */
-    void eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h);
-    /**
-     * Overloaded version of the above function.
-     */
-    void eraseRect(const QRect& rc);
-
     /**
      * Fill current selection of KisPainter with a specified \p color.
      *
@@ -68,24 +66,39 @@ public:
     void fillSelection(const QRect &rc, const KoColor &color);
 
     /**
-     * Fill a rectangle with a certain color.
-     */
-    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c);
-
-    /**
-     * Overloaded version of the above function.
-     */
-    void fillRect(const QRect& rc, const KoColor& c);
-
-    /**
      * Fill a rectangle with a certain color and opacity.
      */
-    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c, quint8 opacity);
+    void fillRect(qint32 x,
+                  qint32 y,
+                  qint32 w,
+                  qint32 h,
+                  const KoColor &c,
+                  quint8 opacity);
 
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoColor& c, quint8 opacity);
+    inline void fillRect(const QRect &rc, const KoColor &c, quint8 opacity)
+    {
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
+    }
+
+    /**
+     * Fill a rectangle with a certain color.
+     */
+    inline void
+    fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor &c)
+    {
+        fillRect(x, y, w, h, c, OPACITY_OPAQUE_U8);
+    }
+
+    /**
+     * Overloaded version of the above function.
+     */
+    inline void fillRect(const QRect &rc, const KoColor &c)
+    {
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE_U8);
+    }
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
@@ -110,6 +123,31 @@ public:
      * Overloaded version of the above function.
      */
     void fillRect(const QRect& rc, const KoPatternSP pattern, const QPoint &offset = QPoint());
+
+    /**
+     * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
+     */
+    inline void eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
+    {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoColor c(Qt::black, cs);
+        fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT_U8);
+    }
+
+    /**
+     * Overloaded version of the above function.
+     */
+    inline void eraseRect(const QRect &rc)
+    {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoColor c(Qt::black, cs);
+        fillRect(rc.x(),
+                 rc.y(),
+                 rc.width(),
+                 rc.height(),
+                 c,
+                 OPACITY_TRANSPARENT_U8);
+    }
 
     /**
      * @brief fillRect
@@ -192,10 +230,52 @@ public:
                                              KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
 
     /**
+     * Fills all the pixels of the @ref outSelection device inside @ref rect
+     * if the corresponding pixels on @ref referenceDevice are similar
+     * to @ref referenceColor
+     *
+     * @param outSelection the selection where the values are written to
+     * @param referenceColor the color that we have to compare pixels to
+     * @param referenceDevice the device that we have to use to compare colors
+     * @param rect the rectangle that defines the area to be processed
+     * @param mask a selection to mask the results. Set to nullptr if not needed
+     */
+    void createSimilarColorsSelection(KisPixelSelectionSP outSelection,
+                                      const KoColor &referenceColor,
+                                      KisPaintDeviceSP referenceDevice,
+                                      const QRect &rect,
+                                      KisPixelSelectionSP mask);
+
+    /**
+     * Create a list of jobs that will fill synchronously all the pixels of the
+     * @ref outSelection device inside @ref rect if the corresponding pixels
+     * on @ref referenceDevice are similar to @ref referenceColor. @ref rect
+     * is splitted into smaller rects if needed, and the painting of each one
+     * is distributed on several jobs
+     *
+     * @param outSelection the selection where the values are written to
+     * @param referenceColor the color that we have to compare pixels to
+     * @param referenceDevice the device that we have to use to compare colors
+     * @param rect the rectangle that defines the area to be processed
+     * @param mask a selection to mask the results. Set to nullptr if not needed
+     */
+    QVector<KisStrokeJobData*> createSimilarColorsSelectionJobs(
+        KisPixelSelectionSP outSelection,
+        const QSharedPointer<KoColor> referenceColor,
+        KisPaintDeviceSP referenceDevice,
+        const QRect &rect,
+        KisPixelSelectionSP mask,
+        QSharedPointer<KisProcessingVisitor::ProgressHelper> progressHelper = nullptr
+    );
+
+    /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
      * fill parts that are the exact same color, 255 means anything will be filled
      */
-    void setFillThreshold(int threshold);
+    inline void setFillThreshold(int threshold)
+    {
+        m_threshold = threshold;
+    }
 
     /** Returns the fill threshold, see setFillThreshold for details */
     int fillThreshold() const {
@@ -209,9 +289,9 @@ public:
      * semi-transparent (depending on how similar they are to the seed pixel)
      * up to the region boundary (given by the threshold value). 100 means that
      * the fully opaque area will encompass all the pixels of the selected
-     * region up to the contour. Any value inbetween will make the fully opaque
+     * region up to the contour. Any value in between will make the fully opaque
      * portion of the region vary in size, with semi-transparent pixels
-     * inbetween it and  the region boundary
+     * in between it and  the region boundary
      */
     void setOpacitySpread(int opacitySpread)
     {
@@ -223,12 +303,25 @@ public:
         return m_opacitySpread;
     }
 
-    bool useCompositioning() const {
-        return m_useCompositioning;
+    /** Sets the gap radius for a gap closing fill. */
+    void setCloseGap(int gap) {
+        m_closeGap = gap;
     }
 
-    void setUseCompositioning(bool useCompositioning) {
-        m_useCompositioning = useCompositioning;
+    /**
+     * Defines the gap closing radius for the contiguous selection and fill operations.
+     * Does not affect the fill similar regions operation.
+     */
+    uint closeGap() const {
+        return m_closeGap;
+    }
+
+    bool useCompositing() const {
+        return m_useCompositing;
+    }
+
+    void setUseCompositing(bool useCompositing) {
+        m_useCompositing = useCompositing;
     }
 
     /** Sets the width of the paint device */
@@ -293,6 +386,46 @@ public:
         return m_useSelectionAsBoundary;
     }
 
+    /** Sets the region filling mode */
+    void setRegionFillingMode(RegionFillingMode regionFillingMode) {
+        m_regionFillingMode = regionFillingMode;
+    }
+
+    /** Gets the region filling mode */
+    RegionFillingMode regionFillingMode() const {
+        return m_regionFillingMode;
+    }
+
+    /** Sets the color of the boundary used when the region filling mode is
+     *  RegionFillingMode_BoundaryFill
+     */
+    void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor) {
+        m_regionFillingBoundaryColor = regionFillingBoundaryColor;
+    }
+
+    /** Gets the color of the boundary used when the region filling mode is
+     *  RegionFillingMode_BoundaryFill
+     */
+    KoColor regionFillingBoundaryColor() const {
+        return m_regionFillingBoundaryColor;
+    }
+
+    /**
+     *  Sets if the selection should stop growing at the darkest and/or more
+     *  opaque pixel when using a positive grow value (sizemod)
+     */
+    void setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel) {
+        m_stopGrowingAtDarkestPixel = stopGrowingAtDarkestPixel;
+    }
+    
+    /**
+     *  Gets if the selection should stop growing at the darkest and/or more
+     *  opaque pixel when using a positive grow value (sizemod)
+     */
+    bool stopGrowingAtDarkestPixel() const {
+        return m_stopGrowingAtDarkestPixel;
+    }
+
 protected:
     void setCurrentFillSelection(KisSelectionSP fillSelection)
     {
@@ -316,55 +449,15 @@ private:
     bool m_antiAlias;
     int m_threshold;
     int m_opacitySpread;
+    int m_closeGap;
     int m_width, m_height;
     QRect m_rect;
     bool m_careForSelection;
-    bool m_useCompositioning;
+    bool m_useCompositing;
     bool m_useSelectionAsBoundary;
+    RegionFillingMode m_regionFillingMode;
+    KoColor m_regionFillingBoundaryColor;
+    bool m_stopGrowingAtDarkestPixel;
 };
-
-
-inline
-void KisFillPainter::fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c)
-{
-    fillRect(x, y, w, h, c, OPACITY_OPAQUE_U8);
-}
-
-inline
-void KisFillPainter::fillRect(const QRect& rc, const KoColor& c)
-{
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE_U8);
-}
-
-inline
-void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoColor c(Qt::black, cs);
-    fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT_U8);
-}
-
-inline
-void KisFillPainter::eraseRect(const QRect& rc)
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoColor c(Qt::black, cs);
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT_U8);
-}
-
-inline
-void KisFillPainter::fillRect(const QRect& rc, const KoColor& c, quint8 opacity)
-{
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
-}
-
-
-
-inline
-void KisFillPainter::setFillThreshold(int threshold)
-{
-    m_threshold = threshold;
-}
-
 
 #endif //KIS_FILL_PAINTER_H_

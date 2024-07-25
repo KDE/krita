@@ -1,5 +1,4 @@
-macro_add_unittest_definitions()
-include_directories(${CMAKE_SOURCE_DIR}/sdk/tests ../)
+include(KritaAddBrokenUnitTest)
 
 ########### next target ###############
 
@@ -13,13 +12,13 @@ else()
   )
 endif()
 
-krita_add_broken_unit_test(kis_ocio_display_filter_test.cpp 
+kis_add_test(
+    kis_ocio_display_filter_test.cpp
     ../black_white_point_chooser.cpp  
     ${KRITA_LUTDOCKER_SOURCES}
-    ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
+     $<TARGET_PROPERTY:kritatestsdk,SOURCE_DIR>/stroke_testing_utils.cpp
     TEST_NAME KisOcioDisplayFilterTest
-    LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF5::I18n Qt5::Test
+    LINK_LIBRARIES kritaui OpenColorIO::OpenColorIO KF5::I18n kritatestsdk kritalutdocker_static
     NAME_PREFIX "plugins-dockers-lut-"
-    ${MACOS_GUI_TEST})
+    )
 
-macos_test_fixrpath(KisOcioDisplayFilterTest)

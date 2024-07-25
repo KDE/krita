@@ -21,7 +21,7 @@ class KisFreehandStrokeInfo;
 class KisMaskedFreehandStrokePainter;
 class KisMaskingBrushRenderer;
 class KisRunnableStrokeJobData;
-
+class KisUndoStore;
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {
@@ -126,6 +126,9 @@ private:
 
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
+
+    QScopedPointer<KUndo2Command> m_autokeyCommand;
+
     bool m_useMergeID {false};
 
     bool m_supportsMaskingBrush {false};

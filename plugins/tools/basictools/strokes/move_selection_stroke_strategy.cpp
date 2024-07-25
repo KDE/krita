@@ -12,9 +12,14 @@
 #include "kis_image.h"
 #include "kis_paint_layer.h"
 #include "kis_painter.h"
+#include "kis_paint_device.h"
+#include "kis_image_animation_interface.h"
+#include "kis_raster_keyframe_channel.h"
 #include "kis_transaction.h"
+#include "KisRunnableStrokeJobUtils.h"
 #include <commands_new/kis_selection_move_command2.h>
 #include "kis_lod_transform.h"
+#include "KisAnimAutoKey.h"
 
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
@@ -52,6 +57,12 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 
     KisPaintDeviceSP movedDevice = new KisPaintDevice(m_paintLayer.data(), paintDevice->colorSpace());
 
+    KUndo2Command *autoKeyframeCommand =
+        KisAutoKey::tryAutoCreateDuplicatedFrame(m_paintLayer->paintDevice(),
+                                                 KisAutoKey::SupportsLod);
+    if (autoKeyframeCommand) {
+        runAndSaveCommand(toQShared(autoKeyframeCommand), KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+    }
 
     QRect copyRect = m_selection->selectedRect();
     KisPainter gc(movedDevice);
@@ -95,10 +106,11 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
     KisIndirectPaintingSupport *indirect =
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
 
-    KisTransaction transaction(name(), m_paintLayer->paintDevice());
-    indirect->mergeToLayer(m_paintLayer, (KisPostExecutionUndoAdapter*)0, KUndo2MagicString(), -1);
+    KUndo2CommandSP parentCommand(new KUndo2Command());
 
-    runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
+    indirect->mergeToLayer(m_paintLayer, parentCommand.data(), name(), -1);
+
+    runAndSaveCommand(parentCommand,
                       KisStrokeJobData::SEQUENTIAL,
                       KisStrokeJobData::NORMAL);
 

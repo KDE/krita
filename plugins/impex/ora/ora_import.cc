@@ -29,10 +29,8 @@ KisImportExportErrorCode OraImport::convert(KisDocument *document, QIODevice *io
     OraConverter oraConverter(document);
     KisImportExportErrorCode result = oraConverter.buildImage(io);
     if (result.isOk()) {
-        document->setCurrentImage(oraConverter.image());
-        if (oraConverter.activeNodes().size() > 0) {
-            document->setPreActivatedNode(oraConverter.activeNodes()[0]);
-        }
+        KisNodeSP preActivatedNode = !oraConverter.activeNodes().isEmpty() ? oraConverter.activeNodes().first() : nullptr;
+        document->setCurrentImage(oraConverter.image(), true, preActivatedNode);
     }
     return result;
 }

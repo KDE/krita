@@ -167,7 +167,7 @@ private:
         typedef typename KoColorSpaceMathsTraits<typename _CSTrait::channels_type>::mixtype mixtype;
 
         NoWeightsSurrogate(int numPixels)
-            : m_numPixles(numPixels)
+            : m_numPixels(numPixels)
         {
         }
 
@@ -178,11 +178,11 @@ private:
         }
 
         inline int normalizeFactor() const {
-            return m_numPixles;
+            return m_numPixels;
         }
 
     private:
-        const int m_numPixles;
+        const int m_numPixels;
     };
 
     class MixDataResult {

@@ -17,8 +17,8 @@
 #include "kis_painter.h"
 #include <kis_vec.h>
 
-#include <kis_hairy_ink_option.h>
-#include <kis_hairy_bristle_option.h>
+#include "KisHairyInkOptionData.h"
+#include "KisHairyBristleOptionData.h"
 #include <kis_brush_option.h>
 #include <kis_brush_based_paintop_settings.h>
 #include <kis_fixed_paint_device.h>
@@ -31,9 +31,15 @@
 
 KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP image)
     : KisPaintOp(painter)
+    , m_opacityOption(settings.data())
+    , m_sizeOption(settings.data())
+    , m_rotationOption(settings.data())
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
+
+    m_hairyBristleOption.read(settings.data());
+    m_hairyInkOption.read(settings.data());
 
     m_dev = node ? node->paintDevice() : 0;
 
@@ -53,18 +59,11 @@ KisHairyPaintOp::KisHairyPaintOp(const KisPaintOpSettingsSP settings, KisPainter
         brush->mask(dab, painter->paintColor(), KisDabShape(), fakePaintInformation);
     }
 
-    m_brush.fromDabWithDensity(dab, settings->getDouble(HAIRY_BRISTLE_DENSITY) * 0.01);
+    m_brush.fromDabWithDensity(dab, m_hairyBristleOption.densityFactor * 0.01);
     m_brush.setInkColor(painter->paintColor());
 
-    loadSettings(static_cast<const KisBrushBasedPaintOpSettings*>(settings.data()));
+    loadSettings();
     m_brush.setProperties(&m_properties);
-
-    m_rotationOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_rotationOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
-    m_sizeOption.resetAllSensors();
 }
 
 QList<KoResourceLoadResult> KisHairyPaintOp::prepareLinkedResources(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface)
@@ -73,32 +72,32 @@ QList<KoResourceLoadResult> KisHairyPaintOp::prepareLinkedResources(const KisPai
     return brushOption.prepareLinkedResources(settings, resourcesInterface);
 }
 
-void KisHairyPaintOp::loadSettings(const KisBrushBasedPaintOpSettings *settings)
+void KisHairyPaintOp::loadSettings()
 {
-    m_properties.inkAmount = settings->getInt(HAIRY_INK_AMOUNT);
+    m_properties.inkAmount = m_hairyInkOption.inkAmount;
     //TODO: wait for the transfer function with variable size
 
-    m_properties.inkDepletionCurve = settings->getCubicCurve(HAIRY_INK_DEPLETION_CURVE).floatTransfer(m_properties.inkAmount);
+    m_properties.inkDepletionCurve = KisCubicCurve(m_hairyInkOption.inkDepletionCurve).floatTransfer(m_hairyInkOption.inkAmount);
 
-    m_properties.inkDepletionEnabled = settings->getBool(HAIRY_INK_DEPLETION_ENABLED);
-    m_properties.useSaturation = settings->getBool(HAIRY_INK_USE_SATURATION);
-    m_properties.useOpacity = settings->getBool(HAIRY_INK_USE_OPACITY);
-    m_properties.useWeights = settings->getBool(HAIRY_INK_USE_WEIGHTS);
+    m_properties.inkDepletionEnabled = m_hairyInkOption.inkDepletionEnabled;
+    m_properties.useSaturation = m_hairyInkOption.useSaturation;
+    m_properties.useOpacity = m_hairyInkOption.useOpacity;
+    m_properties.useWeights = m_hairyInkOption.useWeights;
 
-    m_properties.pressureWeight = settings->getDouble(HAIRY_INK_PRESSURE_WEIGHT) / 100.0;
-    m_properties.bristleLengthWeight = settings->getDouble(HAIRY_INK_BRISTLE_LENGTH_WEIGHT) / 100.0;
-    m_properties.bristleInkAmountWeight = settings->getDouble(HAIRY_INK_BRISTLE_INK_AMOUNT_WEIGHT) / 100.0;
-    m_properties.inkDepletionWeight = settings->getDouble(HAIRY_INK_DEPLETION_WEIGHT);
-    m_properties.useSoakInk = settings->getBool(HAIRY_INK_SOAK);
+    m_properties.pressureWeight = m_hairyInkOption.pressureWeight / 100.0;
+    m_properties.bristleLengthWeight = m_hairyInkOption.bristleLengthWeight / 100.0;
+    m_properties.bristleInkAmountWeight = m_hairyInkOption.bristleInkAmountWeight / 100.0;
+    m_properties.inkDepletionWeight = m_hairyInkOption.inkDepletionWeight;
+    m_properties.useSoakInk = m_hairyInkOption.useSoakInk;
 
-    m_properties.useMousePressure = settings->getBool(HAIRY_BRISTLE_USE_MOUSEPRESSURE);
-    m_properties.shearFactor = settings->getDouble(HAIRY_BRISTLE_SHEAR);
-    m_properties.randomFactor = settings->getDouble(HAIRY_BRISTLE_RANDOM);
-    m_properties.scaleFactor = settings->getDouble(HAIRY_BRISTLE_SCALE);
-    m_properties.threshold = settings->getBool(HAIRY_BRISTLE_THRESHOLD);
-    m_properties.antialias = settings->getBool(HAIRY_BRISTLE_ANTI_ALIASING);
-    m_properties.useCompositing = settings->getBool(HAIRY_BRISTLE_USE_COMPOSITING);
-    m_properties.connectedPath = settings->getBool(HAIRY_BRISTLE_CONNECTED);
+    m_properties.useMousePressure = m_hairyBristleOption.useMousePressure;
+    m_properties.shearFactor = m_hairyBristleOption.shearFactor;
+    m_properties.randomFactor = m_hairyBristleOption.randomFactor;
+    m_properties.scaleFactor = m_hairyBristleOption.scaleFactor;
+    m_properties.threshold = m_hairyBristleOption.threshold;
+    m_properties.antialias = m_hairyBristleOption.antialias;
+    m_properties.useCompositing = m_hairyBristleOption.useCompositing;
+    m_properties.connectedPath = m_hairyBristleOption.connectedPath;
 }
 
 
@@ -148,7 +147,7 @@ void KisHairyPaintOp::paintLine(const KisPaintInformation &pi1, const KisPaintIn
     // during initialization), so we should just skip the distance info
     // update
 
-    m_brush.paintLine(m_dab, m_dev, pi1, pi, scale * m_properties.scaleFactor, mirrorFlip ? -rotation : rotation);
+    m_brush.paintLine(m_dab, m_dev, pi1, pi, scale * m_hairyBristleOption.scaleFactor, mirrorFlip ? -rotation : rotation);
 
     //QRect rc = m_dab->exactBounds();
     QRect rc = m_dab->extent();

@@ -22,7 +22,28 @@ public:
     explicit KisSelectionPropertySliderBase(QWidget* parent = 0);
     ~KisSelectionPropertySliderBase() override;
 
-    void setPrefixes(const QString &normalPrefix, const QString &mixedPrefix);
+    /**
+     * Set the prefix/suffix using i18n strings in the form of `prefix {n} suffix`.
+     *
+     * @param normalTemplate The text in the form of `prefix{n}suffix`, usually
+     *                       passed through `i18n` or `i18nc`, for when there
+     *                       is only one selection or multiple selections with
+     *                       the same value.
+     * @param mixedTemplate The text in the form of `prefix{n}suffix`, usually
+     *                      passed through `i18n` or `i18nc`, for when there
+     *                      are multiple selections with different values.
+     */
+    void setTextTemplates(const QString &normalTemplate, const QString &mixedTemplate);
+
+    /**
+     * **Deleted function** - use `setTextTemplates` instead.
+     */
+    void setPrefix(const QString &) = delete;
+
+    /**
+     * **Deleted function** - use `setTextTemplates` instead.
+     */
+    void setSuffix(const QString &) = delete;
 
 protected:
     void setInternalValue(qreal value, bool blockUpdateSignal) override;

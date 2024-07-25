@@ -395,7 +395,7 @@
                             
                             Defines a GUI state, esp. which actions to enable and which
                             ones to disable on entering this state (see
-                            KXMLGUIClient::stateChanged()).
+                            KisKXMLGUIClient::stateChanged()).
                             
                             Actions listed in &quot;disable&quot; are disabled, and vice
                             versa for &quot;enable&quot;.

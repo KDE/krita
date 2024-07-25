@@ -41,6 +41,7 @@ public:
     void colorFromXML(quint8 *pixel, const QDomElement &elt) const override;
 
     quint8 intensity8(const quint8 * src) const override;
+    qreal intensityF(const quint8 * src) const override;
     
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
     QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
@@ -49,7 +50,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return QString("RGBA");
+        return QStringLiteral("RGBA");
     }
 
     void fillGrayBrushWithColorAndLightnessOverlay(quint8 *dst, const QRgb *brush, quint8 *brushColor, qint32 nPixels) const override;

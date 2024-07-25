@@ -19,7 +19,7 @@ namespace KDEPrivate
 {
 
 class ToolBarItem;
-class KEditToolBarWidgetPrivate;
+class KisKEditToolBarWidgetPrivate;
 
 class ToolBarListWidget : public QListWidget
 {
@@ -93,7 +93,7 @@ private:
  * @short A widget used to customize or configure toolbars
  *
  * This is the widget that does all of the work for the
- * KEditToolBar dialog.  In most cases, you will want to use the
+ * KisKEditToolBar dialog.  In most cases, you will want to use the
  * dialog instead of this widget directly.
  *
  * Typically, you would use this widget only if you wanted to embed
@@ -108,7 +108,7 @@ private:
  * @author Kurt Granroth <granroth@kde.org>
  * @internal
  */
-class KEditToolBarWidget : public QWidget, virtual public KXMLGUIClient
+class KisKEditToolBarWidget : public QWidget, virtual public KisKXMLGUIClient
 {
     Q_OBJECT
 public:
@@ -124,7 +124,7 @@ public:
      * @param collection The collection of actions to work on
      * @param parent This widget's parent
      */
-    explicit KEditToolBarWidget(KActionCollection *collection,
+    explicit KisKEditToolBarWidget(KisKActionCollection *collection,
                                 QWidget *parent = 0L);
 
     /**
@@ -132,21 +132,21 @@ public:
      *
      * Use this like so:
      * \code
-     * KEditToolBarWidget widget(this);
+     * KisKEditToolBarWidget widget(this);
      * widget.load(factory());
      * ...
      * \endcode
      *
      * @param parent This widget's parent
      */
-    explicit KEditToolBarWidget(QWidget *parent = 0L);
+    explicit KisKEditToolBarWidget(QWidget *parent = 0L);
 
     /**
      * Destructor.  Note that any changes done in this widget will
      * @p NOT be saved in the destructor.  You @p must call save()
      * to do that.
      */
-    ~KEditToolBarWidget() override;
+    ~KisKEditToolBarWidget() override;
 
     /**
      * Old-style load.
@@ -156,7 +156,7 @@ public:
      * @param resourceFile the name (absolute or relative) of your application's UI
      * resource file.  If it is left blank, then the resource file: share/apps/appname/appnameui.xmlgui
      * is used.  This is the same resource file that is used by the
-     * default createGUI function in KMainWindow so you're usually
+     * default createGUI function in KisKMainWindow so you're usually
      * pretty safe in leaving it blank.
      *
      * @param global controls whether or not the
@@ -171,7 +171,7 @@ public:
      * If not set, or QString() is passed in, the global default tool bar name
      * will be used.
      *
-     * @see KEditToolBar
+     * @see KisKEditToolBar
      */
     void load(const QString &resourceFile,
               bool global = true,
@@ -188,15 +188,15 @@ public:
      * If not set, or QString() is passed in, the global default tool bar name
      * will be used.
      *
-     * @see KEditToolBar
+     * @see KisKEditToolBar
      */
-    void load(KXMLGUIFactory *factory,
+    void load(KisKXMLGUIFactory *factory,
               const QString &defaultToolBar = QString());
 
     /**
      * @internal Reimplemented for internal purposes.
      */
-    KActionCollection *actionCollection() const override;
+    KisKActionCollection *actionCollection() const override;
 
     /**
      * Save any changes the user made.  The file will be in the user's
@@ -210,7 +210,7 @@ public:
     /**
      * Remove and readd all KMXLGUIClients to update the GUI
      */
-    void rebuildKXMLGUIClients();
+    void rebuildKisKXMLGUIClients();
 
 Q_SIGNALS:
     /**
@@ -232,10 +232,10 @@ private:
     Q_PRIVATE_SLOT(d, void slotDropped(ToolBarListWidget *, int, ToolBarItem *, bool))
 
 private:
-    friend class KEditToolBarWidgetPrivate;
-    KEditToolBarWidgetPrivate *const d;
+    friend class KisKEditToolBarWidgetPrivate;
+    KisKEditToolBarWidgetPrivate *const d;
 
-    Q_DISABLE_COPY(KEditToolBarWidget)
+    Q_DISABLE_COPY(KisKEditToolBarWidget)
 };
 
 }

@@ -16,7 +16,6 @@
 #include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
 #include "KoCanvasBase.h"
-#include "KoDocumentResourceManager.h"
 #include "KoViewConverter.h"
 #include "KoPointerEvent.h"
 #include "KoShapeController.h"
@@ -33,10 +32,6 @@ KoPathToolHandle::~KoPathToolHandle()
 {
 }
 
-uint KoPathToolHandle::handleRadius() const
-{
-    return m_tool->canvas()->shapeController()->resourceManager()->handleRadius();
-}
 
 PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint::PointType activePointType)
         : KoPathToolHandle(tool)
@@ -45,7 +40,7 @@ PointHandle::PointHandle(KoPathTool *tool, KoPathPoint *activePoint, KoPathPoint
 {
 }
 
-void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness)
 {
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
 
@@ -55,7 +50,7 @@ void PointHandle::paint(QPainter &painter, const KoViewConverter &converter, qre
     }
 
 
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_activePoint->parent(), converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_activePoint->parent(), converter, handleRadius, decorationThickness);
 
 
     if (allPaintedTypes != m_activePointType) {
@@ -92,6 +87,7 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
         return 0;
     if ((event->modifiers() & Qt::ControlModifier) == 0) { // no shift pressed.
         KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(selection, 0);
 
         // control select adds/removes points to/from the selection
         if (event->modifiers() & Qt::ShiftModifier) {
@@ -108,8 +104,8 @@ KoInteractionStrategy * PointHandle::handleMousePress(KoPointerEvent *event)
         }
         // TODO remove canvas from call ?
         if (m_activePointType == KoPathPoint::Node) {
-            QPointF startPoint = m_activePoint->parent()->shapeToDocument(m_activePoint->point());
-            return new KoPathPointMoveStrategy(m_tool, startPoint);
+            QPointF movedPointPosition = m_activePoint->parent()->shapeToDocument(m_activePoint->point());
+            return new KoPathPointMoveStrategy(m_tool, event->point, movedPointPosition);
         } else {
             KoPathShape * pathShape = m_activePoint->parent();
             KoPathPointData pd(pathShape, pathShape->pathPointIndex(m_activePoint));
@@ -155,6 +151,7 @@ KoPathPoint::PointType PointHandle::activePointType() const
 void PointHandle::trySelectHandle()
 {
     KoPathToolSelection * selection = dynamic_cast<KoPathToolSelection*>(m_tool->selection());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(selection);
 
     if (!selection->contains(m_activePoint) && m_activePointType == KoPathPoint::Node) {
         selection->clear();
@@ -169,9 +166,9 @@ ParameterHandle::ParameterHandle(KoPathTool *tool, KoParameterShape *parameterSh
 {
 }
 
-void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius)
+void ParameterHandle::paint(QPainter &painter, const KoViewConverter &converter, qreal handleRadius, int decorationThickness)
 {
-    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_parameterShape, converter, handleRadius);
+    KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, m_parameterShape, converter, handleRadius, decorationThickness);
     helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
     m_parameterShape->paintHandle(helper, m_handleId);
 }

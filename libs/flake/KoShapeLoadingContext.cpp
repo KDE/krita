@@ -11,7 +11,6 @@
 #include "KoShapeContainer.h"
 #include "KoSharedLoadingData.h"
 #include "KoShapeControllerBase.h"
-#include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoLoadingShapeUpdater.h"
@@ -23,7 +22,7 @@ uint qHash(const KoShapeLoadingContext::AdditionalAttributeData & attributeData)
     return qHash(attributeData.name);
 }
 
-static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionlAttributes;
+static QSet<KoShapeLoadingContext::AdditionalAttributeData> s_additionalAttributes;
 
 class Q_DECL_HIDDEN KoShapeLoadingContext::Private
 {
@@ -133,10 +132,6 @@ void KoShapeLoadingContext::shapeLoaded(KoShape * shape)
     }
 }
 
-KoImageCollection * KoShapeLoadingContext::imageCollection()
-{
-    return d->documentResources ? d->documentResources->imageCollection() : 0;
-}
 
 int KoShapeLoadingContext::zIndex()
 {
@@ -172,12 +167,12 @@ KoSharedLoadingData * KoShapeLoadingContext::sharedData(const QString & id) cons
 
 void KoShapeLoadingContext::addAdditionalAttributeData(const AdditionalAttributeData & attributeData)
 {
-    s_additionlAttributes.insert(attributeData);
+    s_additionalAttributes.insert(attributeData);
 }
 
 QSet<KoShapeLoadingContext::AdditionalAttributeData> KoShapeLoadingContext::additionalAttributeData()
 {
-    return s_additionlAttributes;
+    return s_additionalAttributes;
 }
 
 KoDocumentResourceManager *KoShapeLoadingContext::documentResourceManager() const

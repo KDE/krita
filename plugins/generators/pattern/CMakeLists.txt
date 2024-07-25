@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritapatterngenerator_SOURCES
     wdgpatternoptions.ui
     )
 
-add_library(kritapatterngenerator MODULE ${kritapatterngenerator_SOURCES})
+kis_add_library(kritapatterngenerator MODULE ${kritapatterngenerator_SOURCES})
 
 target_link_libraries(kritapatterngenerator kritaui)
 

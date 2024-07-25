@@ -100,6 +100,9 @@ public:
 
     static bool supportsBufferMapping();
 
+    static bool forceDisableTextureBuffers();
+    static bool shouldUseTextureBuffers(bool userPreference);
+
     static bool useTextureBufferInvalidation();
 
     /**
@@ -115,11 +118,6 @@ public:
      * and false otherwise.
      */
     static bool needsFenceWorkaround();
-
-    /**
-     * @see a comment in initializeContext()
-     */
-    static bool needsPixmapCacheWorkaround();
 
     static void testingInitializeDefaultSurfaceFormat();
     static void setDebugSynchronous(bool value);

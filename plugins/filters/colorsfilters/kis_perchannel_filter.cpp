@@ -70,7 +70,7 @@ void KisPerChannelConfigWidget::updateChannelControls()
     int min;
     int max;
 
-    m_page->curveWidget->dropInOutControls();
+    m_curveControlsManager.reset();
 
     switch (valueType) {
     case KoChannelInfo::UINT8:
@@ -90,9 +90,10 @@ void KisPerChannelConfigWidget::updateChannelControls()
     default:
         //Hack Alert: should be changed to float
         if (m_dev->colorSpace()->colorModelId() == LABAColorModelID || m_dev->colorSpace()->colorModelId() == CMYKAColorModelID) {
-            if (m_dev->colorSpace()->channels().length() > m_activeVChannel) {
-                min = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMin();
-                max = m_dev->colorSpace()->channels()[m_activeVChannel]->getUIMax();
+            if (m_dev->colorSpace()->channelCount() > m_activeVChannel) {
+                const QList<KoChannelInfo*> channels = m_dev->colorSpace()->channels();
+                min = channels[m_activeVChannel]->getUIMin();
+                max = channels[m_activeVChannel]->getUIMax();
             } else {
                 // it must be "Hue", "Saturation" or other "channel" that isn't actually accessible in the color space
                 min = 0;
@@ -107,7 +108,8 @@ void KisPerChannelConfigWidget::updateChannelControls()
         break;
     }
 
-    m_page->curveWidget->setupInOutControls(m_page->intIn, m_page->intOut, min, max, min, max);
+    m_curveControlsManager.reset(new KisCurveWidgetControlsManagerInt(m_page->curveWidget,
+                                                                      m_page->intIn, m_page->intOut, min, max, min, max));
 }
 
 

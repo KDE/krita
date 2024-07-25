@@ -146,7 +146,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
 
     const uchar hex[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-    dbgFile << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << endl;
+    dbgFile << "Writing Raw profile: type=" << profile_type << ", length=" << profile_data.length() << Qt::endl;
 
     text               = (png_textp) png_malloc(ping, (png_uint_32) sizeof(png_text));
     description_length = profile_type.length();
@@ -155,7 +155,7 @@ void writeRawProfile(png_struct *ping, png_info *ping_info, QString profile_type
     text[0].text   = (png_charp) png_malloc(ping, allocated_length);
     memset(text[0].text, 0, allocated_length);
 
-    QString key = QLatin1Literal("Raw profile type ") + profile_type.toLatin1();
+    QString key = QLatin1String("Raw profile type ") + profile_type.toLatin1();
     QByteArray keyData = key.toLatin1();
     text[0].key = keyData.data();
 
@@ -496,8 +496,8 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     png_uint_32 width, height;
     int color_nb_bits, color_type, interlace_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, 0, 0);
-    dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
-    // swap byteorder on little endian machines.
+    dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << Qt::endl;
+    // swap byte order on little endian machines.
 #ifndef WORDS_BIGENDIAN
     if (color_nb_bits > 8)
         png_set_swap(png_ptr);
@@ -662,7 +662,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 
     png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
     if (x_resolution > 0 && y_resolution > 0 && unit_type == PNG_RESOLUTION_METER) {
-        m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from point-per-inch to points
     }
 
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
@@ -872,6 +872,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
         options.saveSRGBProfile = false;
+        options.downsample = false;
 
         if (dev->colorSpace()->id() != "RGBA") {
             dev = new KisPaintDevice(*dev.data());
@@ -927,46 +928,53 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         device = tmp;
     }
 
-    if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
-            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID
-            || options.saveAsHDR) {
-
-        const KoColorSpace *dstCS =
-            KoColorSpaceRegistry::instance()->colorSpace(
-                device->colorSpace()->colorModelId().id(),
-                Integer16BitsColorDepthID.id(),
-                device->colorSpace()->profile());
-
-        if (options.saveAsHDR) {
-            dstCS =
-                KoColorSpaceRegistry::instance()->colorSpace(
-                        RGBAColorModelID.id(),
-                        Integer16BitsColorDepthID.id(),
-                        KoColorSpaceRegistry::instance()->p2020PQProfile());
-        }
-
-        KisPaintDeviceSP tmp = new KisPaintDevice(device->colorSpace());
-        tmp->makeCloneFromRough(device, imageRect);
-        tmp->convertTo(dstCS);
-
-        device = tmp;
-
-    }
-
     KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
         options.forceSRGB = false;
     }
 
-    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
-        options.tryToSaveAsIndexed = false;
+    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
+    QString dstModel = device->colorSpace()->colorModelId().id();
+    QString dstDepth = device->colorSpace()->colorDepthId().id();
+    const KoColorProfile *dstProfile = device->colorSpace()->profile();
+    bool needColorTransform = false;
+
+    if (options.saveAsHDR || options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
+        dstModel = RGBAColorModelID.id();
+        dstProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+
+        needColorTransform = true;
+
+        if (options.saveAsHDR) {
+            dstProfile = KoColorSpaceRegistry::instance()->p2020PQProfile();
+        }
     }
 
-    QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
-    if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+    if (options.downsample
+            || device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
+            || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID) {
+        dstDepth = Integer16BitsColorDepthID.id();
+
+        needColorTransform = true;
+
+        if (options.downsample) {
+            dstDepth = Integer8BitsColorDepthID.id();
+        }
+    }
+
+    if (needColorTransform) {
+        const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(dstModel, dstDepth, dstProfile);
+
+        if (!dstCs) {
+            return ImportExportCodes::FormatColorSpaceUnsupported;
+        }
+
         device = new KisPaintDevice(*device);
-        device->convertTo(cs);
+        device->convertTo(dstCs);
+    }
+
+    KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.tryToSaveAsIndexed) {
+        options.tryToSaveAsIndexed = false;
     }
 
     // Initialize structures
@@ -1079,7 +1087,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         }
     }
 
-    int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
+    int interlace_type = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(color_type >= 0, ImportExportCodes::Failure);
 
@@ -1087,7 +1095,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
                  imageRect.width(),
                  imageRect.height(),
                  color_nb_bits,
-                 color_type, interlacetype,
+                 color_type, interlace_type,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
@@ -1280,7 +1288,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
 #endif
-    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(xRes) * 100.0, CM_TO_POINT(yRes) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(xRes) * 100.0, CM_TO_POINT(yRes) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from point-per-inch to points
 
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);

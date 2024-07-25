@@ -31,7 +31,7 @@
 #include "kis_pixel_selection.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLock.h"
 #include "kis_fill_painter.h"
 #include "kis_transaction.h"
 #include "kis_iterator_ng.h"
@@ -57,6 +57,9 @@
 #include <KisReferenceImagesLayer.h>
 
 #include <processing/fill_processing_visitor.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <commands_new/kis_processing_command.h>
+#include <commands_new/kis_update_command.h>
 #include <kis_selection_tool_helper.h>
 
 #include "kis_figure_painting_tool_helper.h"
@@ -69,7 +72,8 @@ namespace ActionHelper {
                         bool makeSharpClip = false,
                         const KisTimeSpan &range = KisTimeSpan())
     {
-        Q_UNUSED(range)
+        Q_UNUSED(range); // TODO: Allow multiple frame operation across a timespan.
+
         KisImageWSP image = view->image();
         if (!image) return;
 
@@ -82,7 +86,7 @@ namespace ActionHelper {
         // We need to allow for trimming from non-transparent defaultPixel layers.
         // Default color should be phased out of use when the area in question is not aligned with image bounds.
         // Otherwise, we can maintain default pixel.
-        const bool hasNonTransparentDefaultPixel = device->defaultPixel() != KoColor(Qt::transparent, device->colorSpace());
+        const bool hasNonTransparentDefaultPixel = device->defaultPixel() != KoColor::createTransparent(device->colorSpace());
         const bool needsTransparentPixel = selection && rc != image->bounds() && hasNonTransparentDefaultPixel;
 
         if (selection) {
@@ -113,8 +117,10 @@ namespace ActionHelper {
             }
         }
 
+
+
         if ( needsTransparentPixel ) {
-            device->setDefaultPixel(KoColor(Qt::transparent, device->colorSpace()));
+            device->setDefaultPixel(KoColor::createTransparent(device->colorSpace()));
             device->purgeDefaultPixels();
         }
 
@@ -126,6 +132,7 @@ namespace ActionHelper {
         KisImageWSP image = view->image();
 
         KisImageSP clipImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
+        clipImage->setResolution(image->xRes(), image->yRes());
         Q_FOREACH (KisNodeSP node, nodes) {
             clipImage->addNode(node, clipImage->root());
         }
@@ -141,6 +148,10 @@ void KisSelectAllActionFactory::run(KisViewManager *view)
 {
     KisImageWSP image = view->image();
     if (!image) return;
+
+    if (view->canvasBase()->toolProxy()->selectAll()) {
+        return;
+    }
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
@@ -176,6 +187,15 @@ void KisDeselectActionFactory::run(KisViewManager *view)
     KisImageWSP image = view->image();
     if (!image) return;
 
+    if (view->canvasBase()->toolProxy()->hasSelection()) {
+        // see KisCutCopyActionFactory::run
+        KisImageBarrierLock lock(image, std::try_to_lock);
+        if (!lock.owns_lock()) return;
+
+        view->canvasBase()->toolProxy()->deselect();
+        return;
+    }
+
     KUndo2Command *cmd = new KisDeselectActiveSelectionCommand(view->selection(), image);
 
     KisProcessingApplicator *ap = beginAction(view, cmd->text());
@@ -200,47 +220,62 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
     KisNodeSP node = view->activeNode();
     if (!node || !node->hasEditablePaintDevice()) return;
 
+    KisImageWSP image = view->image();
+
     KisSelectionSP selection = view->selection();
-    QRect selectedRect = selection ?
-                         selection->selectedRect() : view->image()->bounds();
-    Q_UNUSED(selectedRect);
-    KisPaintDeviceSP filled = node->paintDevice()->createCompositionSourceDevice();
-    Q_UNUSED(filled);
+
     bool usePattern = false;
     bool useBgColor = false;
-
     if (fillSource.contains("pattern")) {
         usePattern = true;
     } else if (fillSource.contains("bg")) {
         useBgColor = true;
     }
 
-    KisProcessingApplicator applicator(view->image(), node,
-                                       KisProcessingApplicator::NONE,
-                                       KisImageSignalVector(),
-                                       kundo2_i18n("Flood Fill Layer"));
-
     KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(view->image(), node, view->canvasResourceProvider()->resourceManager());
+        new KisResourcesSnapshot(image, node, view->canvasResourceProvider()->resourceManager());
     if (!fillSource.contains("opacity")) {
         resources->setOpacity(1.0);
     }
 
-    FillProcessingVisitor *visitor =
-        new FillProcessingVisitor(resources->image()->projection(),
-                                  selection,
-                                  resources);
+    KisStrokeStrategyUndoCommandBased *strategy =
+            new KisStrokeStrategyUndoCommandBased(
+                kundo2_i18n("Flood Fill Layer"), false, image.data()
+            );
+    strategy->setSupportsWrapAroundMode(true);
+    KisStrokeId fillStrokeId = image->startStroke(strategy);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(fillStrokeId);
 
+    QSharedPointer<QRect> dirtyRect = QSharedPointer<QRect>(new QRect);
+
+    FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr, selection, resources);
     visitor->setSeedPoint(QPoint(0, 0));
-    visitor->setUsePattern(usePattern);
     visitor->setSelectionOnly(true);
+    visitor->setOutDirtyRect(dirtyRect);
+    visitor->setUsePattern(usePattern);
     visitor->setUseBgColor(useBgColor);
 
-    applicator.applyVisitor(visitor,
-                            KisStrokeJobData::SEQUENTIAL,
-                            KisStrokeJobData::EXCLUSIVE);
+    image->addJob(
+        fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisProcessingCommand(visitor, node)),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
 
-    applicator.end();
+    image->addJob(
+        fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisUpdateCommand(node, dirtyRect, image.data())),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
+
+    image->endStroke(fillStrokeId);
 
     view->canvasResourceProvider()->slotPainting();
 }
@@ -267,22 +302,29 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisImageSP image = view->image();
     if (!image) return;
 
+    if (!view->blockUntilOperationsFinished(image)) return;
+
     // Reference layers is a fake node, so it isn't added to the layer stack, this results in KisSelectedShapesProxy not
     // being aware of the active shapeManager and its selected shapes.
-    const auto hasReferenceImageSelected = [&]() {
-        KisReferenceImagesLayerSP refLayer = view->document()->referenceImagesLayer();
-        return refLayer && refLayer->shapeManager()->selection()->count();
-    };
+    const auto currentToolHasSelection =
+        view->canvasBase()->toolProxy()->hasSelection();
 
-    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected() || hasReferenceImageSelected();
+    const bool haveShapesSelected =
+        view->selectionManager()->haveShapesSelected();
 
     KisNodeSP node = view->activeNode();
     KisSelectionSP selection = view->selection();
 
-    if (!makeSharpClip && haveShapesSelected) {
-        // XXX: "Add saving of XML data for Cut/Copy of shapes"
+    if (!makeSharpClip && (haveShapesSelected || currentToolHasSelection)) {
+        /**
+         * Make sure that we use tryBarrierLock() here becasue it does **not**
+         * cause requestStrokeEnd() to be called in the tools, hence does not
+         * prevent disruptions in the text tool.
+         */
+        KisImageBarrierLock lock(image, std::try_to_lock);
+        if (!lock.owns_lock()) return;
 
-        KisImageBarrierLocker locker(image);
+        // XXX: "Add saving of XML data for Cut/Copy of shapes"
         if (willCut) {
             view->canvasBase()->toolProxy()->cut();
         } else {
@@ -298,12 +340,12 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             }
         }
 
-        selectedNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(selectedNodes);
+        selectedNodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(selectedNodes);
 
         KisNodeList nodes;
         Q_FOREACH (KisNodeSP node, selectedNodes) {
             KisNodeSP dupNode;
-            if (node->inherits("KisShapeLayer")) {
+            if (node->inherits("KisShapeLayer") || node->inherits("KisFileLayer")) {
                 KisPaintDeviceSP dev = new KisPaintDevice(*node->projection());
                 // might have to change node's name (vector to paint layer)
                 dupNode = new KisPaintLayer(image, node->name(), node->opacity(), dev);
@@ -313,64 +355,29 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             nodes.append(dupNode);
         }
 
-        {
-            //KisImageBarrierLocker locker(image);  not needed as these nodes do not belong to 'image'
-            Q_FOREACH (KisNodeSP node, nodes) {
-                KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
-                    KisPaintDeviceSP dev = node->paintDevice();
+        Q_FOREACH (KisNodeSP node, nodes) {
+            KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
+                if (node && node->paintDevice()) {
+                    node->paintDevice()->burnKeyframe();
+                }
 
-                    KisTimeSpan range;
+                KisTimeSpan range;
 
-                    KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-                    if (channel) {
-                        const int currentTime = image->animationInterface()->currentTime();
-                        range = channel->affectedFrames(currentTime);
-                    }
+                KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+                if (channel) {
+                    const int currentTime = image->animationInterface()->currentTime();
+                    range = channel->affectedFrames(currentTime);
+                }
 
-                    if (dev && !node->inherits("KisMask")) {
-                        ActionHelper::trimDevice(view, dev, makeSharpClip, range);
-                    }
-                });
-            }
+                if (node && node->paintDevice() && !node->inherits("KisMask")) {
+                    ActionHelper::trimDevice(view, node->paintDevice(), makeSharpClip, range);
+                }
+            });
         }
+
         KisImageSP tempImage = ActionHelper::makeImage(view, nodes);
         KisClipboard::instance()->setLayers(nodes, tempImage);
 
-/*        {
-            KisImageBarrierLocker locker(image);
-            KisPaintDeviceSP dev = node->paintDevice();
-            if (!dev) {
-                dev = node->projection();
-            }
-
-            if (!dev) {
-                view->showFloatingMessage(
-                    i18nc("floating message when cannot copy from a node",
-                          "Cannot copy pixels from this type of layer "),
-                    QIcon(), 3000, KisFloatingMessage::Medium);
-
-                return;
-            }
-
-            if (dev->exactBounds().isEmpty()) {
-                view->showFloatingMessage(
-                    i18nc("floating message when copying empty selection",
-                          "Selection is empty: no pixels were copied "),
-                    QIcon(), 3000, KisFloatingMessage::Medium);
-
-                return;
-            }
-
-            KisTimeSpan range;
-
-            KisKeyframeChannel *channel = node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-            if (channel) {
-                const int currentTime = image->animationInterface()->currentTime();
-                range = channel->affectedFrames(currentTime);
-            }
-
-            ActionHelper::copyFromDevice(view, dev, makeSharpClip, range);
-        }*/
 
         KUndo2MagicString actionName = willCut ?
                     kundo2_i18n("Cut") :
@@ -556,7 +563,8 @@ void KisShapesToVectorSelectionActionFactory::run(KisViewManager* view)
             hasSelectionShapes = true;
             continue;
         }
-        clonedShapes << shape->cloneShape();
+
+        clonedShapes << shape->cloneShapeAndBakeAbsoluteTransform();
     }
 
     if (clonedShapes.isEmpty()) {

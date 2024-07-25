@@ -233,7 +233,7 @@ void KoFlake::resizeShape(KoShape *shape, qreal scaleX, qreal scaleY,
          *           `uniformGlobalTransform`, we cannot guarantee equivalent changes on
          *           both globalScaleX and globalScaleY at the same time. We can guarantee
          *           only one of them. Therefore we select the most "important" axis and
-         *           guarantee scael along it. The scale along the other direction is not
+         *           guarantee scale along it. The scale along the other direction is not
          *           controlled.
          * 5) After we have the two most distant points, we can just calculate the scale
          *    by dividing difference between their expected and original positions. This

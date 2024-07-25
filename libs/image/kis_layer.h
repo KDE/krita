@@ -169,13 +169,13 @@ public:
      *
      * This method is designed to be called only within KisImage::mergeLayerDown().
      *
-     * Decendands override this to create specific merged types when possible.
+     * Descendants override this to create specific merged types when possible.
      * The KisLayer one creates a KisPaintLayerSP via a bitBlt, and can work on all layer types.
      *
      * Descendants that perform their own version do NOT call KisLayer::createMergedLayer
      */
     virtual KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer);
-    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer);
+    virtual void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer = false);
 
     /**
      * Clones should be informed about updates of the original
@@ -235,6 +235,8 @@ public:
     QRect exactBounds() const override;
 
     QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
+
+    int thumbnailSeqNo() const override;
 
     QImage createThumbnailForFrame(qint32 w, qint32 h, int time, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
@@ -332,7 +334,7 @@ protected:
      *      |
      *      | <-- KisLayer::updateProjection() starts composing a layer
      *      |     It calls KisLayer::copyOriginalToProjection() which copies some area
-     *      |     to a temporaty device. The temporary device now stores
+     *      |     to a temporary device. The temporary device now stores
      *      |     R3 = KisLayer::outgoingChangeRect(R2)
      *      |
      * 3. Temporary device / changed rect: R3

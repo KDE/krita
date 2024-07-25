@@ -13,7 +13,7 @@
 
 #include "KoPointerEvent.h"
 #include "KoSnapGuide.h"
-
+#include "kis_icon_utils.h"
 #include "canvas/kis_canvas_decoration.h"
 #include "kis_painting_assistant.h"
 #include <kritaui_export.h>
@@ -23,15 +23,40 @@ class KisView;
 class KisPaintingAssistantsDecoration;
 typedef KisSharedPtr<KisPaintingAssistantsDecoration> KisPaintingAssistantsDecorationSP;
 
-/// data for editor widget. This is shared between the decoration and assistant tool which needs hit box information
+// Data for editor widget. This is shared between the decoration and assistant tool which needs hit box information
 struct AssistantEditorData {
-    const int moveIconSize = 32;
-    const int deleteIconSize = 24;
-    const int snapIconSize = 20;
-    const QPointF moveIconPosition = QPointF(15, 15);
-    const QPointF snapIconPosition = QPointF(54, 20);
-    const QPointF deleteIconPosition = QPointF(83, 18);
-    const QSize boundingSize = QSize(110, 40);
+    //button count to loop over
+    unsigned int buttoncount = 6;
+    //button icon size
+    const int buttonSize = 24;
+    //boolean values track which buttons are enabled within the editor widget
+    bool moveButtonActivated = true;
+    bool snapButtonActivated = true;
+    bool lockButtonActivated = true;
+    bool duplicateButtonActivated = true;
+    bool deleteButtonActivated = true;
+    bool widgetActivated = true;
+    //padding for dynamic positioning between buttons
+    const int buttonPadding = 7;
+    //button positions
+    QPointF moveIconPosition = QPointF(0, 0);
+    QPointF snapIconPosition = QPointF(0, 0);
+    QPointF lockedIconPosition = QPointF(0, 0);
+    QPointF duplicateIconPosition = QPointF(0, 0);
+    QPointF deleteIconPosition = QPointF(0, 0);
+    QSize boundingSize = QSize(0, 0);
+    //size of the side drag decoration
+    const int dragDecorationWidth = 15;
+    //QPixMaps representing icons for buttons
+    const QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(buttonSize+10, buttonSize+10);
+    const QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(buttonSize, buttonSize);
+    const QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(buttonSize, buttonSize);
+    const QPixmap m_iconLockOn = KisIconUtils::loadIcon("layer-locked").pixmap(buttonSize, buttonSize);
+    const QPixmap m_iconLockOff = KisIconUtils::loadIcon("layer-unlocked").pixmap(buttonSize, buttonSize);
+    const QPixmap m_iconDuplicate = KisIconUtils::loadIcon("duplicateitem").pixmap(buttonSize, buttonSize);
+    const QPixmap m_iconDelete = KisIconUtils::loadIcon("deletelayer").pixmap(buttonSize, buttonSize);
+    //how many buttons fit horizontally before extending to the next row
+    const int horizontalButtonLimit = 4;
 };
 
 /**
@@ -55,11 +80,13 @@ public:
     void removeAll();
     void setAssistants(const QList<KisPaintingAssistantSP> &assistants);
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    void adjustLine(QPointF &point, QPointF& strokeBegin);
     void setAdjustedBrushPosition(const QPointF position);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();
     QList<KisPaintingAssistantSP> assistants() const;
-
+    //store the editor data to be used to control the render/interaction of the editor widget.
+    struct AssistantEditorData globalEditorWidgetData;
     bool hasPaintableAssistants() const;
 
 
@@ -126,6 +153,7 @@ public Q_SLOTS:
     QPointF snapToGuide(const QPointF& pt, const QPointF &offset);
 
     void slotUpdateDecorationVisibility();
+    void slotConfigChanged();
 
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;

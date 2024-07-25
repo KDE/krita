@@ -35,10 +35,9 @@ void KoDockRegistry::init()
 
 KoDockRegistry::~KoDockRegistry()
 {
-    // XXX: Intentionally leak the dockwidget factories to work around, for now, a bug in SIP
-    //      See https://bugs.kde.org/show_bug.cgi?id=391992
-    //    qDeleteAll(doubleEntries());
-    //    qDeleteAll(values());
+    Q_FOREACH(const KoDockFactoryBase *a, values()) {
+        delete a;
+    }
 }
 
 KoDockRegistry* KoDockRegistry::instance()

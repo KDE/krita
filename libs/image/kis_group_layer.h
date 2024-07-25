@@ -23,7 +23,7 @@ class KRITAIMAGE_EXPORT KisGroupLayer : public KisLayer
     Q_OBJECT
 
 public:
-    KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity);
+    KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity, const KoColorSpace * colorSpace = 0);
     KisGroupLayer(const KisGroupLayer& rhs);
     ~KisGroupLayer() override;
 
@@ -41,12 +41,12 @@ public:
     void setImage(KisImageWSP image) override;
 
     KisLayerSP createMergedLayerTemplate(KisLayerSP prevLayer) override;
-    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer) override;
+    void fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer) override;
 
     /**
      * Clear the projection
      */
-    void resetCache(const KoColorSpace *colorSpace = 0);
+    void resetCache(const KoColorSpace *colorSpace);
 
     /**
      * XXX: make the colorspace of a layergroup user-settable: we want
@@ -58,6 +58,13 @@ public:
 
     /// @return the projection of the layers in the group before the masks are applied.
     KisPaintDeviceSP original() const override;
+
+    /**
+     * Returns own original device when tryOblidgeChild() mechanism is not triggered.
+     * When tryOblidgeChild() mechanism is in action, returns null (therefor
+     * there is no need to do subtree composition).
+     */
+    KisPaintDeviceSP lazyDestinationForSubtreeComposition() const;
 
     qint32 x() const override;
     qint32 y() const override;
@@ -98,6 +105,7 @@ public:
 protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
+    std::tuple<KisPaintDeviceSP, bool> originalImpl() const;
 
     QRect amortizedProjectionRectForCleanupInChangePass() const override;
 private:

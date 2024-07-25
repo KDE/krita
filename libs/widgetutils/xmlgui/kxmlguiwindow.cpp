@@ -51,13 +51,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-class KXmlGuiWindowPrivate : public KMainWindowPrivate
+class KXmlGuiWindowPrivate : public KisKMainWindowPrivate
 {
 public:
     void _k_slotFactoryMakingChanges(bool b)
     {
         // While the GUI factory is adding/removing clients,
-        // don't let KMainWindow think those are changes made by the user
+        // don't let KisKMainWindow think those are changes made by the user
         // #105525
         letDirtySettings = !b;
     }
@@ -67,12 +67,12 @@ public:
 
     KDEPrivate::ToolBarHandler *toolBarHandler;
     KToggleAction *showStatusBarAction;
-    QPointer<KEditToolBar> toolBarEditor;
-    KXMLGUIFactory *factory;
+    QPointer<KisKEditToolBar> toolBarEditor;
+    KisKXMLGUIFactory *factory;
 };
 
 KXmlGuiWindow::KXmlGuiWindow(QWidget *parent, Qt::WindowFlags f)
-    : KMainWindow(*new KXmlGuiWindowPrivate, parent, f), KXMLGUIBuilder(this)
+    : KisKMainWindow(*new KXmlGuiWindowPrivate, parent, f), KisKXMLGUIBuilder(this)
 {
     K_D(KXmlGuiWindow);
     d->showHelpMenu = true;
@@ -80,7 +80,7 @@ KXmlGuiWindow::KXmlGuiWindow(QWidget *parent, Qt::WindowFlags f)
     d->showStatusBarAction = 0;
     d->factory = 0;
 #ifdef HAVE_DBUS
-    new KMainWindowInterface(this);
+    new KisKMainWindowInterface(this);
 #endif
 }
 
@@ -110,7 +110,7 @@ KXmlGuiWindow::~KXmlGuiWindow()
 
 bool KXmlGuiWindow::event(QEvent *ev)
 {
-    bool ret = KMainWindow::event(ev);
+    bool ret = KisKMainWindow::event(ev);
 #ifdef HAVE_DBUS
     if (ev->type() == QEvent::Polish) {
         QDBusConnection::sessionBus().registerObject(dbusName() + QStringLiteral("/actions"), actionCollection(),
@@ -136,11 +136,11 @@ bool KXmlGuiWindow::isHelpMenuEnabled() const
     return d->showHelpMenu;
 }
 
-KXMLGUIFactory *KXmlGuiWindow::guiFactory()
+KisKXMLGUIFactory *KXmlGuiWindow::guiFactory()
 {
     K_D(KXmlGuiWindow);
     if (!d->factory) {
-        d->factory = new KXMLGUIFactory(this, this);
+        d->factory = new KisKXMLGUIFactory(this, this);
         connect(d->factory, SIGNAL(makingChanges(bool)),
                 this, SLOT(_k_slotFactoryMakingChanges(bool)));
     }
@@ -153,7 +153,7 @@ void KXmlGuiWindow::configureToolbars()
     KConfigGroup cg(KSharedConfig::openConfig(), "");
     saveMainWindowSettings(cg);
     if (!d->toolBarEditor) {
-        d->toolBarEditor = new KEditToolBar(guiFactory(), this);
+        d->toolBarEditor = new KisKEditToolBar(guiFactory(), this);
         d->toolBarEditor->setAttribute(Qt::WA_DeleteOnClose);
         connect(d->toolBarEditor, SIGNAL(newToolBarConfig()), SLOT(saveNewToolbarConfig()));
     }
@@ -235,15 +235,15 @@ void KXmlGuiWindow::createGUI(const QString &xmlfile)
     if (d->showHelpMenu) {
         delete d->helpMenu;
         // we always want a help menu
-        d->helpMenu = new KHelpMenu(this, KAboutData::applicationData(), true);
+        d->helpMenu = new KisKHelpMenu(this, KAboutData::applicationData(), true);
 
-        KActionCollection *actions = actionCollection();
-        QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
-        QAction *whatsThisAction = d->helpMenu->action(KHelpMenu::menuWhatsThis);
-        QAction *reportBugAction = d->helpMenu->action(KHelpMenu::menuReportBug);
-        QAction *switchLanguageAction = d->helpMenu->action(KHelpMenu::menuSwitchLanguage);
-        QAction *aboutAppAction = d->helpMenu->action(KHelpMenu::menuAboutApp);
-        QAction *aboutKdeAction = d->helpMenu->action(KHelpMenu::menuAboutKDE);
+        KisKActionCollection *actions = actionCollection();
+        QAction *helpContentsAction = d->helpMenu->action(KisKHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->helpMenu->action(KisKHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->helpMenu->action(KisKHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->helpMenu->action(KisKHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->helpMenu->action(KisKHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->helpMenu->action(KisKHelpMenu::menuAboutKDE);
 
         if (helpContentsAction) {
             actions->addAction(helpContentsAction->objectName(), helpContentsAction);
@@ -292,14 +292,14 @@ void KXmlGuiWindow::createGUI(const QString &xmlfile)
 
 void KXmlGuiWindow::slotStateChanged(const QString &newstate)
 {
-    stateChanged(newstate, KXMLGUIClient::StateNoReverse);
+    stateChanged(newstate, KisKXMLGUIClient::StateNoReverse);
 }
 
 void KXmlGuiWindow::slotStateChanged(const QString &newstate,
                                      bool reverse)
 {
     stateChanged(newstate,
-                 reverse ? KXMLGUIClient::StateReverse : KXMLGUIClient::StateNoReverse);
+                 reverse ? KisKXMLGUIClient::StateReverse : KisKXMLGUIClient::StateNoReverse);
 }
 
 void KXmlGuiWindow::setStandardToolBarMenuEnabled(bool enable)
@@ -366,18 +366,18 @@ void KXmlGuiWindow::finalizeGUI(bool /*force*/)
 void KXmlGuiWindow::applyMainWindowSettings(const KConfigGroup &config)
 {
     K_D(KXmlGuiWindow);
-    KMainWindow::applyMainWindowSettings(config);
+    KisKMainWindow::applyMainWindowSettings(config);
     QStatusBar *sb = findChild<QStatusBar *>();
     if (sb && d->showStatusBarAction) {
         d->showStatusBarAction->setChecked(!sb->isHidden());
     }
 }
 
-// KDE5 TODO: change it to "using KXMLGUIBuilder::finalizeGUI;" in the header
+// KDE5 TODO: change it to "using KisKXMLGUIBuilder::finalizeGUI;" in the header
 // and remove the reimplementation
-void KXmlGuiWindow::finalizeGUI(KXMLGUIClient *client)
+void KXmlGuiWindow::finalizeGUI(KisKXMLGUIClient *client)
 {
-    KXMLGUIBuilder::finalizeGUI(client);
+    KisKXMLGUIBuilder::finalizeGUI(client);
 }
 
 #include "moc_kxmlguiwindow.cpp"

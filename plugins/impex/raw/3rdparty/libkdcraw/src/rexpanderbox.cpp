@@ -226,7 +226,7 @@ void RArrowClickLabel::paintEvent(QPaintEvent*)
     opt.midLineWidth = 0;
 
     /*
-    p.fillRect( rect(), palette().brush( QPalette::Background ) );
+    p.fillRect( rect(), palette().brush( QPalette::Window ) );
     style()->drawPrimitive( QStyle::PE_Frame, &opt, &p, this);
     */
 
@@ -347,8 +347,10 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     hlay->addWidget(d->checkBox);
     hlay->addWidget(d->pixmapLabel);
     hlay->addWidget(d->clickLabel, 10);
-    hlay->setMargin(0);
-    hlay->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    hlay->setContentsMargins(0, 0, 0, 0);
+
+    const int styleSpacing = QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing);
+    hlay->setSpacing(styleSpacing);
 
     d->pixmapLabel->installEventFilter(this);
     d->pixmapLabel->setCursor(Qt::PointingHandCursor);
@@ -359,8 +361,8 @@ RLabelExpander::RLabelExpander(QWidget* const parent)
     d->grid->addWidget(d->line, 0, 0, 1, 3);
     d->grid->addWidget(d->hbox, 1, 0, 1, 3);
     d->grid->setColumnStretch(2, 10);
-    d->grid->setMargin(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
-    d->grid->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->grid->setContentsMargins(styleSpacing, styleSpacing, styleSpacing, styleSpacing);
+    d->grid->setSpacing(styleSpacing);
 
     connect(d->arrow, &RArrowClickLabel::leftClicked,
             this, &RLabelExpander::slotToggleContainer);
@@ -556,8 +558,8 @@ RExpanderBox::RExpanderBox(QWidget* const parent)
     setWidgetResizable(true);
     QWidget* const main = new QWidget(viewport());
     d->vbox             = new QVBoxLayout(main);
-    d->vbox->setMargin(0);
-    d->vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_DefaultLayoutSpacing));
+    d->vbox->setContentsMargins(0, 0, 0, 0);
+    d->vbox->setSpacing(QApplication::style()->pixelMetric(QStyle::PM_LayoutHorizontalSpacing));
     setWidget(main);
 
     setAutoFillBackground(false);

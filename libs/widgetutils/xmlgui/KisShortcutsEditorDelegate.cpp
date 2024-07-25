@@ -282,7 +282,7 @@ void KisShortcutsEditorDelegate::keySequenceChanged(const QKeySequence &seq)
 }
 
 void KisShortcutsEditorDelegate::setCheckActionCollections(
-    const QList<KActionCollection *> checkActionCollections)
+    const QList<KisKActionCollection *> checkActionCollections)
 {
     m_checkActionCollections = checkActionCollections;
 }

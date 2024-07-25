@@ -48,10 +48,10 @@ using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;
  * interfaces to store caches/resources outside the preset:
  *
  * 1) KisResourcesInterface is the interface that lets the preset
- *    to fetch dependent resources from the cenralized storage.
+ *    to fetch dependent resources from the centralized storage.
  *    Theoretically, the preset could create dependent resources
  *    from its XML representation internally all the time, but
- *    there are two reasond against that:
+ *    there are two reasons against that:
  *
  *       1) That is inefficient to load the brushes and/or textures
  *          for every stroke. It can create significant delay in the
@@ -75,7 +75,7 @@ using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;
  *    global storage with the created local snapshot.
  *
  *    Please take it into account that some of the embedded/linked
- *    resources privided by KisResourcesInterface may **change**
+ *    resources provided by KisResourcesInterface may **change**
  *    while cloning. It happens when these resources "bake" the state
  *    of canvas resources into themselves (e.g. gradient may change
  *    the "fg-stop" with real fg color).

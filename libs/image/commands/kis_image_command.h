@@ -32,7 +32,7 @@ public:
     KisImageCommand(const KUndo2MagicString& name, KisImageWSP image, KUndo2Command *parent = 0);
     ~KisImageCommand() override;
 
-protected:
+public:
 
     /**
      * Used for performing the smallest update

@@ -12,11 +12,11 @@ class KisShortcutsDialog;
 class QPushButton;
 class QComboBox;
 
-class KShortcutSchemesEditor: public QHBoxLayout
+class KisKShortcutSchemesEditor: public QHBoxLayout
 {
     Q_OBJECT
 public:
-    KShortcutSchemesEditor(KisShortcutsDialog *parent);
+    KisKShortcutSchemesEditor(KisShortcutsDialog *parent);
 
     /** @return the currently selected scheme in the editor (may differ from current app's scheme.*/
     QString currentScheme();

@@ -38,8 +38,8 @@ QString buttons(const T &ev) {
 template <class Event>
     void dumpBaseParams(QTextStream &s, const Event &ev, const QString &prefix)
 {
-    s << qSetFieldWidth(5)  << left << prefix << reset << " ";
-    s << qSetFieldWidth(17) << left << KisTabletDebugger::exTypeToString(ev.type()) << reset;
+    s << qSetFieldWidth(5)  << Qt::left << prefix << Qt::reset << " ";
+    s << qSetFieldWidth(17) << Qt::left << KisTabletDebugger::exTypeToString(ev.type()) << Qt::reset;
 }
 
 template <class Event>
@@ -49,6 +49,15 @@ template <class Event>
     s << "btns: " << buttons(ev) << " ";
     s << "pos: " << qSetFieldWidth(4) << ev.x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.y() << qSetFieldWidth(0) << " ";
     s << "gpos: "  << qSetFieldWidth(4) << ev.globalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalY() << qSetFieldWidth(0) << " ";
+}
+
+template <>
+    void dumpMouseRelatedParams(QTextStream &s, const QWheelEvent &ev)
+{
+    s << "btn: " << button(ev) << " ";
+    s << "btns: " << buttons(ev) << " ";
+    s << "pos: " << qSetFieldWidth(4) << ev.position().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.position().y() << qSetFieldWidth(0) << " ";
+    s << "gpos: "  << qSetFieldWidth(4) << ev.globalPosition().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(4) << ev.globalPosition().y() << qSetFieldWidth(0) << " ";
 }
 
 QString KisTabletDebugger::exTypeToString(QEvent::Type type) {
@@ -147,9 +156,10 @@ QString KisTabletDebugger::eventToString(const QKeyEvent &ev, const QString &pre
 
     dumpBaseParams(s, ev, prefix);
 
-    s << "key: 0x" << hex << ev.key() << reset << " ";
-    s << "mod: 0x" << hex << ev.modifiers() << reset << " ";
-    s << "text: " << (ev.text().isEmpty() ? "none" : ev.text());
+    s << "key: 0x" << Qt::hex << ev.key() << Qt::reset << " ";
+    s << "mod: 0x" << Qt::hex << ev.modifiers() << Qt::reset << " ";
+    s << "text: " << (ev.text().isEmpty() ? "none" : ev.text()) << " ";
+    s << "autorepeat: " << bool(ev.isAutoRepeat());
 
     return string;
 }
@@ -163,8 +173,7 @@ QString KisTabletDebugger::eventToString(const QWheelEvent &ev, const QString &p
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
 
-    s << "delta: " << ev.delta() << " ";
-    s << "orientation: " << (ev.orientation() == Qt::Horizontal ? "H" : "V") << " ";
+    s << "delta: x: " << ev.angleDelta().x() << " y: " << ev.angleDelta().y() << " ";
 
     return string;
 }
@@ -182,7 +191,9 @@ QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &p
         s << "id: " << touchpoint.id() << " ";
         s << "hires: " << qSetFieldWidth(8) << touchpoint.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << touchpoint.screenPos().y() << qSetFieldWidth(0) << " ";
         s << "prs: " << touchpoint.pressure() << " ";
-        s << "rot: "<< touchpoint.rotation() << "; ";
+        s << "rot: "<< touchpoint.rotation() << " ";
+        s << "state: 0x" << Qt::hex << touchpoint.state() << "; ";
+        s << Qt::dec;
     }
 
     return string;
@@ -209,10 +220,10 @@ template <class Event>
     dumpBaseParams(s, ev, prefix);
     dumpMouseRelatedParams(s, ev);
 
-    s << "hires: " << qSetFieldWidth(8) << ev.hiResGlobalX() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.hiResGlobalY() << qSetFieldWidth(0) << " ";
-    s << "prs: " << qSetFieldWidth(4) << fixed << ev.pressure() << reset << " ";
+    s << "hires: " << qSetFieldWidth(8) << ev.globalPosF().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << ev.globalPosF().y() << qSetFieldWidth(0) << " ";
+    s << "prs: " << qSetFieldWidth(4) << Qt::fixed << ev.pressure() << Qt::reset << " ";
 
-    s << KisTabletDebugger::tabletDeviceToString((QTabletEvent::TabletDevice) ev.device()) << " ";
+    s << KisTabletDebugger::tabletDeviceToString((QTabletEvent::TabletDevice) ev.deviceType()) << " ";
     s << KisTabletDebugger::pointerTypeToString((QTabletEvent::PointerType) ev.pointerType()) << " ";
     s << "id: " << ev.uniqueId() << " ";
 

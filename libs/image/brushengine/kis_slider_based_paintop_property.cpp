@@ -14,7 +14,7 @@ KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(Type type,
                                                                 const KoID &id,
                                                                 KisPaintOpSettingsRestrictedSP settings,
                                                                 QObject *parent)
-    : KisUniformPaintOpProperty(type, subType, id, settings, parent)
+    : KisSliderBasedPaintOpPropertyBase(type, subType, id, settings, parent)
     , m_min(T(0))
     , m_max(T(100))
     , m_singleStep(T(1))
@@ -26,7 +26,7 @@ KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(Type type,
 
 template<typename T>
 KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(Type type, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
-    : KisUniformPaintOpProperty(type, id, settings, parent)
+    : KisSliderBasedPaintOpPropertyBase(type, id, settings, parent)
     , m_min(T(0))
     , m_max(T(100))
     , m_singleStep(T(1))
@@ -38,7 +38,7 @@ KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(Type type, const
 
 template<typename T>
 KisSliderBasedPaintOpProperty<T>::KisSliderBasedPaintOpProperty(const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
-    : KisUniformPaintOpProperty(Int, id, settings, parent)
+    : KisSliderBasedPaintOpPropertyBase(Int, id, settings, parent)
     , m_min(T(0))
     , m_max(T(100))
     , m_singleStep(T(1))
@@ -64,8 +64,14 @@ T KisSliderBasedPaintOpProperty<T>::max() const
 template <typename T>
 void KisSliderBasedPaintOpProperty<T>::setRange(T min, T max)
 {
+    const bool valueChanged = m_min != min || m_max != max;
+
     m_min = min;
     m_max = max;
+
+    if (valueChanged) {
+        Q_EMIT sigRangeChanged();
+    }
 }
 
 template <typename T>
@@ -131,8 +137,10 @@ void KisSliderBasedPaintOpProperty<T>::setSuffix(QString value)
 
 #include "kis_callback_based_paintop_property_impl.h"
 
-template class KisSliderBasedPaintOpProperty<int>;
-template class KisSliderBasedPaintOpProperty<qreal>;
+template class KRITAIMAGE_EXPORT_INSTANCE KisSliderBasedPaintOpProperty<int>;
+template class KRITAIMAGE_EXPORT_INSTANCE KisSliderBasedPaintOpProperty<qreal>;
 
-template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
-template class KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;
+template class KRITAIMAGE_EXPORT_INSTANCE
+    KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<int>>;
+template class KRITAIMAGE_EXPORT_INSTANCE
+    KisCallbackBasedPaintopProperty<KisSliderBasedPaintOpProperty<qreal>>;

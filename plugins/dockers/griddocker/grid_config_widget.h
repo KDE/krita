@@ -33,10 +33,11 @@ public:
 
     bool showRulers() const;
 
-    void enableIsometricGrid(bool value);
+    void enableIsometricLegacyGrid(bool value);
 
 public Q_SLOTS:
     void setShowRulers(bool value);
+    void removeAllGuides();
 
 private Q_SLOTS:
     void slotGridGuiChanged();

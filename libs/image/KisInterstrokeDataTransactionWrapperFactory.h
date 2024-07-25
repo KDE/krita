@@ -14,8 +14,8 @@ class KisInterstrokeDataFactory;
 
 /**
  * A factory object to extend the behavior of a normal transaction and
- * handle management of interstroke data. It will create a new interstorke
- * data using passed passed `KisInterstrokeDataFactory` or reset it if the
+ * handle management of interstroke data. It will create a new interstroke
+ * data using the passed `KisInterstrokeDataFactory` or reset it if the
  * current transaction is incompatible with it.
  *
  * \see KisTransactionWrapperFactory

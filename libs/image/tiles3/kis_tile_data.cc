@@ -199,7 +199,8 @@ void KisTileData::releaseInternalPools()
 
             // check if the tile data has actually been pooled
             if (item->m_pixelSize != 4 &&
-                item->m_pixelSize != 8) {
+                item->m_pixelSize != 8 &&
+                item->m_pixelSize != 16) {
 
                 continue;
             }

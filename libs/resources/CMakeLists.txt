@@ -50,11 +50,14 @@ set(kritaresources_LIB_SRCS
 
     KoCanvasResourcesInterface.cpp
     KoLocalStrokeCanvasResources.cpp
+    KisEmbeddedResourceStorageProxy.cpp
+
+    KisResourceThumbnailCache.cpp
 )
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)
 
-add_library(kritaresources SHARED ${kritaresources_LIB_SRCS})
+kis_add_library(kritaresources SHARED ${kritaresources_LIB_SRCS})
 
 generate_export_header(kritaresources BASE_NAME kritaresources)
 
@@ -63,6 +66,7 @@ target_link_libraries(kritaresources
         Qt5::Core
         Qt5::Widgets
         Qt5::Sql
+        Boost::boost
     PRIVATE
         kritaversion
         kritaglobal

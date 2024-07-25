@@ -7,23 +7,22 @@
 */
 #include "LcmsEnginePlugin.h"
 
-#include <QHash>
-
-#include <QStringList>
-#include <QDir>
-
-#include <kpluginfactory.h>
-#include <KoResourcePaths.h>
-#include <klocalizedstring.h>
-#include <QDebug>
 #include <QApplication>
+#include <QDebug>
+#include <QDir>
+#include <QHash>
+#include <QStringList>
 
-#include "kis_assert.h"
+#include <klocalizedstring.h>
+#include <kpluginfactory.h>
 
 #include <KoBasicHistogramProducers.h>
 #include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
 #include <KoColorSpaceEngine.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoResourcePaths.h>
+#include <kis_assert.h>
+#include <kis_debug.h>
 
 #include "IccColorSpaceEngine.h"
 #include "colorprofiles/LcmsColorProfileContainer.h"
@@ -71,7 +70,7 @@
 
 void lcms2LogErrorHandlerFunction(cmsContext /*ContextID*/, cmsUInt32Number ErrorCode, const char *Text)
 {
-    qCritical() << "Lcms2 error: " << ErrorCode << Text;
+    errorPigment << "Lcms2 error: " << ErrorCode << Text;
 }
 
 K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json", registerPlugin<LcmsEnginePlugin>();)
@@ -79,8 +78,8 @@ K_PLUGIN_FACTORY_WITH_JSON(PluginFactory, "kolcmsengine.json", registerPlugin<Lc
 LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     : QObject(parent)
 {
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/profiles/");
 
     // Set the lmcs error reporting function
     cmsSetLogErrorHandler(&lcms2LogErrorHandlerFunction);
@@ -90,12 +89,11 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     // Initialise color engine
     KoColorSpaceEngineRegistry::instance()->add(new IccColorSpaceEngine);
 
-
     QStringList profileFilenames;
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icm",  KoResourcePaths::Recursive);
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICM",  KoResourcePaths::Recursive);
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
-    profileFilenames += KoResourcePaths::findAllResources("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllAssets("icc_profiles", "*.icm",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllAssets("icc_profiles", "*.ICM",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllAssets("icc_profiles", "*.ICC",  KoResourcePaths::Recursive);
+    profileFilenames += KoResourcePaths::findAllAssets("icc_profiles", "*.icc",  KoResourcePaths::Recursive);
 
     QStringList iccProfileDirs;
 

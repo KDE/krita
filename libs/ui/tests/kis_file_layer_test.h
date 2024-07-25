@@ -13,6 +13,7 @@ class KisFileLayerTest : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     void testFileLayerPlusTransformMaskOffImage();
     void testFileLayerPlusTransformMaskSmallFileBigOffset();
 };

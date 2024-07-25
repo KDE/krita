@@ -7,20 +7,23 @@
 
 #include "IccColorProfile.h"
 
-#include <stdint.h>
-#include <limits.h>
+#include <cmath>
+#include <cstdint>
+#include <limits>
 
+#include <lcms2.h>
+
+#include <QDebug>
 #include <QFile>
 #include <QSharedPointer>
-#include <KoColorConversions.h>
-#include <math.h>
 
-#include "QDebug"
+#include <KoColorConversions.h>
+#include <kis_assert.h>
+
 #include "LcmsColorProfileContainer.h"
 
-#include "lcms2.h"
-
-#include "kis_assert.h"
+#include <KisLazyStorage.h>
+#include <KisLazyValueWrapper.h>
 
 
 struct IccColorProfile::Data::Private {
@@ -60,29 +63,41 @@ IccColorProfile::Container::~Container()
 }
 
 struct IccColorProfile::Private {
-    struct Shared {
-        QScopedPointer<IccColorProfile::Data> data;
-        QScopedPointer<LcmsColorProfileContainer> lcmsProfile;
+    struct ProfileInfo {
         QVector<KoChannelInfo::DoubleRange> uiMinMaxes;
         bool canCreateCyclicTransform = false;
     };
+
+    using LazyProfileInfo = KisLazyStorage<KisLazyValueWrapper<ProfileInfo>, std::function<ProfileInfo()>>;
+
+    struct Shared {
+        QScopedPointer<IccColorProfile::Data> data;
+        QScopedPointer<LcmsColorProfileContainer> lcmsProfile;
+        LazyProfileInfo profileInfo = LazyProfileInfo(LazyProfileInfo::init_value_tag{}, {});
+
+        Shared()
+            : data(new IccColorProfile::Data())
+        {
+        }
+    };
+
+    Private()
+        : shared(QSharedPointer<Shared>::create())
+    {
+    }
     QSharedPointer<Shared> shared;
+
+    ProfileInfo calculateFloatUIMinMax() const;
 };
 
 IccColorProfile::IccColorProfile(const QString &fileName)
     : KoColorProfile(fileName), d(new Private)
 {
-    // QSharedPointer lacks a reset in Qt 4.x
-    d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
-    d->shared->data.reset(new Data());
 }
 
 IccColorProfile::IccColorProfile(const QByteArray &rawData)
     : KoColorProfile(QString()), d(new Private)
 {
-    d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
-    d->shared->data.reset(new Data());
-
     setRawData(rawData);
     init();
 }
@@ -92,6 +107,10 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
                                  const TransferCharacteristics transferFunction)
 : KoColorProfile(QString()), d(new Private)
 {
+    KIS_ASSERT(
+        (!colorants.isEmpty() || colorPrimariesType != PRIMARIES_UNSPECIFIED)
+        && transferFunction != TRC_UNSPECIFIED);
+
     cmsCIExyY whitePoint;
 
     QVector<double> modifiedColorants = colorants;
@@ -114,7 +133,7 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
                      {modifiedColorants[6], modifiedColorants[7], 1.0}};
     }
 
-    cmsHPROFILE iccProfile;
+    cmsHPROFILE iccProfile = nullptr;
 
     if (colorants.size() == 2) {
         iccProfile = cmsCreateGrayProfile(&whitePoint, mainCurve);
@@ -124,6 +143,9 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
         curve[0] = curve[1] = curve[2] = mainCurve;
         iccProfile = cmsCreateRGBProfile(&whitePoint, &primaries, curve);
     }
+
+    KIS_ASSERT(iccProfile);
+
     QStringList name;
     name.append("Krita");
     name.append(KoColorProfile::getColorPrimariesName(colorPrimariesType));
@@ -145,8 +167,7 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
 
     setCharacteristics(colorPrimariesType, transferFunction);
 
-    d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
-    d->shared->data.reset(new Data());
+    d->shared = QSharedPointer<Private::Shared>::create();
 
     setRawData(LcmsColorProfileContainer::lcmsProfileToByteArray(iccProfile));
     cmsCloseProfile(iccProfile);
@@ -229,7 +250,7 @@ QString IccColorProfile::colorModelID() const
 bool IccColorProfile::isSuitableForOutput() const
 {
     if (d->shared->lcmsProfile) {
-        return d->shared->lcmsProfile->isSuitableForOutput() && d->shared->canCreateCyclicTransform;
+        return d->shared->lcmsProfile->isSuitableForOutput() && d->shared->profileInfo->value.canCreateCyclicTransform;
     }
     return false;
 }
@@ -339,6 +360,14 @@ QVector <qreal> IccColorProfile::getEstimatedTRC() const
     return dummy;
 }
 
+bool IccColorProfile::compareTRC(TransferCharacteristics characteristics, float error) const
+{
+    if (d->shared->lcmsProfile) {
+        return d->shared->lcmsProfile->compareTRC(characteristics, error);
+    }
+    return false;
+}
+
 void IccColorProfile::linearizeFloatValue(QVector <qreal> & Value) const
 {
     if (d->shared->lcmsProfile)
@@ -399,7 +428,9 @@ bool IccColorProfile::init()
         setManufacturer(d->shared->lcmsProfile->manufacturer());
         setCopyright(d->shared->lcmsProfile->copyright());
         if (d->shared->lcmsProfile->valid()) {
-            calculateFloatUIMinMax();
+            d->shared->profileInfo = Private::LazyProfileInfo([this] () {
+                return d->calculateFloatUIMinMax();
+            });
         }
         return true;
     } else {
@@ -424,15 +455,17 @@ bool IccColorProfile::operator==(const KoColorProfile &rhs) const
 
 const QVector<KoChannelInfo::DoubleRange> &IccColorProfile::getFloatUIMinMax(void) const
 {
-    Q_ASSERT(!d->shared->uiMinMaxes.isEmpty());
-    return d->shared->uiMinMaxes;
+    Q_ASSERT(!d->shared->profileInfo->value.uiMinMaxes.isEmpty());
+    return d->shared->profileInfo->value.uiMinMaxes;
 }
 
-void IccColorProfile::calculateFloatUIMinMax(void)
+IccColorProfile::Private::ProfileInfo
+IccColorProfile::Private::calculateFloatUIMinMax() const
 {
-    QVector<KoChannelInfo::DoubleRange> &ret = d->shared->uiMinMaxes;
+    Private::ProfileInfo info;
+    QVector<KoChannelInfo::DoubleRange> &ret = info.uiMinMaxes;
 
-    cmsHPROFILE cprofile = d->shared->lcmsProfile->lcmsProfile();
+    cmsHPROFILE cprofile = shared->lcmsProfile->lcmsProfile();
     Q_ASSERT(cprofile);
 
     cmsColorSpaceSignature color_space_sig = cmsGetColorSpace(cprofile);
@@ -441,19 +474,6 @@ void IccColorProfile::calculateFloatUIMinMax(void)
 
     Q_ASSERT(num_channels >= 1 && num_channels <= 4); // num_channels==1 is for grayscale, we need to handle it
     Q_ASSERT(color_space_mask);
-
-    if (color_space_sig == cmsSigYCbCrData) {
-        // tricky, because the fundamental problem is that YCbCr profiles
-        // are LUT based, but this seems to be the case with the profiles
-        // that can be tested. Given this space is a reinterpretation of
-        // RGB spaces, this might be the appropriate value, though.
-        ret.resize(num_channels);
-        for (unsigned int i = 0; i < num_channels; ++i) {
-            ret[i].minVal = 0;
-            ret[i].maxVal = 1;
-        }
-        return;
-    }
 
     // to try to find the max range of float/doubles for this profile,
     // pass in min/max int and make the profile convert that
@@ -478,7 +498,7 @@ void IccColorProfile::calculateFloatUIMinMax(void)
         cmsDeleteTransform(trans);
     }//else, we'll just default to [0..1] below
 
-    // Some (calibration) proifles may have a weird RGB->XYZ transformation matrix,
+    // Some (calibration) profiles may have a weird RGB->XYZ transformation matrix,
     // which is not invertible. Therefore, such profile cannot be used as
     // a workspace color profile and we should convert the image to sRGB
     // right on image loading
@@ -489,11 +509,20 @@ void IccColorProfile::calculateFloatUIMinMax(void)
     // is created successfully, then this profile is probably suitable for
     // usage as a working color space.
 
-    d->shared->canCreateCyclicTransform = bool(trans);
+    info.canCreateCyclicTransform = bool(trans);
 
     ret.resize(num_channels);
     for (unsigned int i = 0; i < num_channels; ++i) {
-        if (out_min_pixel[i] < out_max_pixel[i]) {
+        if (color_space_sig == cmsSigYCbCrData) {
+            // Although YCbCr profiles are essentially LUT-based
+            // (due to the inability of ICC to represent multiple successive
+            // matrix transforms except with BtoD0 tags in V4),
+            // YCbCr is intended to be a roundtrip transform to the
+            // corresponding RGB transform (BT.601, BT.709).
+            // Force enable the full range of values.
+            ret[i].minVal = 0;
+            ret[i].maxVal = 1;
+        } else if (out_min_pixel[i] < out_max_pixel[i]) {
             ret[i].minVal = out_min_pixel[i];
             ret[i].maxVal = out_max_pixel[i];
         } else {
@@ -504,5 +533,7 @@ void IccColorProfile::calculateFloatUIMinMax(void)
             ret[i].maxVal = 1;
         }
     }
+
+    return info;
 }
 

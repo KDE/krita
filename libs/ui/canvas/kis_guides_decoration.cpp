@@ -49,7 +49,7 @@ void KisGuidesDecoration::drawDecoration(QPainter &painter, const QRectF& update
     painter.setPen(guidesPen);
     painter.setTransform(QTransform());
     painter.setRenderHints(QPainter::Antialiasing, false);
-    painter.setRenderHints(QPainter::HighQualityAntialiasing, false);
+    painter.setRenderHints(QPainter::Antialiasing, false);
 
     Q_FOREACH (qreal guide, m_d->guidesConfig.horizontalGuideLines()) {
         if (guide < updateArea.top() - borderDelta ||

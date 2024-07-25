@@ -32,7 +32,7 @@ namespace {
      * piece of information is a QDomElement, containing the raw data from the
      * .action XML file. The second and third are QKeySequences, the first of
      * which is the default shortcut, the last of which is any custom shortcut.
-     * The last two are the KActionCollection and KActionCategory used to
+     * The last two are the KisKActionCollection and KisKActionCategory used to
      * organize the shortcut editor.
      */
     struct ActionInfoItem {
@@ -155,7 +155,7 @@ public:
     void loadActionFiles();
     void loadCustomShortcuts(QString filename = QStringLiteral("kritashortcutsrc"));
 
-    // XXX: this adds a default item for the given name to the list of actioninfo objects!
+    // XXX: this adds a default item for the given name to the list of actionInfo objects!
     ActionInfoItem &actionInfo(const QString &name) {
         if (!actionInfoList.contains(name)) {
             dbgAction << "Tried to look up info for unknown action" << name;
@@ -189,7 +189,7 @@ KisActionRegistry::KisActionRegistry()
 {
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
-    QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+    QString schemeFileName = KisKShortcutSchemesHelper::schemeFileLocations().value(schemeName);
     if (!QFileInfo(schemeFileName).exists()) {
         schemeName = "Default";
     }
@@ -223,7 +223,7 @@ void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
 {
     // Load scheme file
     if (schemeName != QStringLiteral("Default")) {
-        QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+        QString schemeFileName = KisKShortcutSchemesHelper::schemeFileLocations().value(schemeName);
         if (schemeFileName.isEmpty() || !QFileInfo(schemeFileName).exists()) {
             applyShortcutScheme();
             return;
@@ -287,6 +287,17 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
     action->setProperty("defaultShortcuts", QVariant::fromValue(info.defaultShortcuts()));
 
     d->sanityPropertizedShortcuts.insert(name);
+
+    // TODO: KisShortcutsEditor overwrites shortcuts as you edit them, so we cannot know here
+    // if the old shortcut is indeed "old" and must regenerate the tooltip unconditionally.
+
+    QString plainTip = quietlyTranslate(getChild(info.xmlData, "toolTip"));
+    if (action->shortcut().isEmpty()) {
+        action->setToolTip(plainTip);
+    } else {
+        //qDebug() << "action with shortcut:" << name << action->shortcut();
+        action->setToolTip(plainTip + " (" + action->shortcut().toString(QKeySequence::NativeText) + ")");
+    }
 }
 
 bool KisActionRegistry::sanityCheckPropertized(const QString &name)
@@ -317,7 +328,8 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         QString icon      = getChildContent(actionXml, "icon");
         QString text      = getChildContent_i18n("text");
         QString whatsthis = getChildContent_i18n("whatsThis");
-        QString toolTip   = getChildContent_i18n("toolTip");
+        // tooltip is set in updateShortcut() because shortcut gets appended to the tooltip
+        //QString toolTip   = getChildContent_i18n("toolTip");
         QString statusTip = getChildContent_i18n("statusTip");
         QString iconText  = getChildContent_i18n("iconText");
         bool isCheckable  = getChildContent(actionXml, "isCheckable") == QString("true");
@@ -325,11 +337,12 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         a->setObjectName(name); // This is helpful, should be added more places in Krita
         if (!icon.isEmpty()) {
             a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+            a->setProperty("iconName", QVariant::fromValue(icon)); // test
         }
         a->setText(text);
         a->setObjectName(name);
         a->setWhatsThis(whatsthis);
-        a->setToolTip(toolTip);
+
         a->setStatusTip(statusTip);
         a->setIconText(iconText);
         a->setCheckable(isCheckable);
@@ -358,7 +371,7 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
-        KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+        KoResourcePaths::findAllAssets("kis_actions", "*.action", KoResourcePaths::Recursive);
     dbgAction << "Action Definitions" << actionDefinitions;
 
     // Extract actions all XML .action files.
@@ -377,7 +390,7 @@ void KisActionRegistry::Private::loadActionFiles()
         }
 
         // Loop over <Actions> nodes. Each of these corresponds to a
-        // KActionCategory, producing a group of actions in the shortcut dialog.
+        // KisKActionCategory, producing a group of actions in the shortcut dialog.
         QDomElement actions = base.firstChild().toElement();
         while (!actions.isNull()) {
 
@@ -389,7 +402,7 @@ void KisActionRegistry::Private::loadActionFiles()
             QDomElement actionXml  = categoryTextNode.nextSiblingElement();
 
             if (actionXml.isNull()) {
-                qWarning() << actionDefinition << "does not contain any valid actios! (Or the text element was left empty...)";
+                qWarning() << actionDefinition << "does not contain any valid actions! (Or the text element was left empty...)";
             }
 
             // Loop over individual actions

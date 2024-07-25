@@ -25,11 +25,14 @@ setlocal
 set FULL_PATH=%~f2
 if not exist "%FULL_PATH%" (
     set FULL_PATH=
-) else (
-    if exist "%FULL_PATH%\" (
-        set FULL_PATH=
-    )
 )
+:: else (
+    :: TODO: do NOT use this way of checking! On Windows Server with docker,
+    ::       this check triggers for normal files as well!
+    :: if exist "%FULL_PATH%\" (
+    ::     set FULL_PATH=
+    :: )
+:: )
 endlocal & set "%1=%FULL_PATH%"
 goto :EOF
 
@@ -323,6 +326,24 @@ if "%MINGW_BIN_DIR%" == "" (
 )
 echo mingw-w64: %MINGW_BIN_DIR%
 
+if "%PYTHON_BIN_DIR%" == "" (
+    call :find_on_path PYTHON_BIN_DIR_PYTHON_EXE python.exe
+    if "!PYTHON_BIN_DIR_PYTHON_EXE!" == "" (
+        if not "%ARG_NO_INTERACTIVE%" == "1" (
+            call :prompt_for_file PYTHON_BIN_DIR_PYTHON_EXE "Provide path to python.exe"
+        )
+        if "!PYTHON_BIN_DIR_PYTHON_EXE!" == "" (
+            echo ERROR: python.exe not found! 1>&2
+            exit /b 102
+        )
+        call :get_dir_path PYTHON_BIN_DIR "!PYTHON_BIN_DIR_PYTHON_EXE!"
+    ) else (
+        call :get_dir_path PYTHON_BIN_DIR "!PYTHON_BIN_DIR_PYTHON_EXE!"
+        echo Found python.exe on PATH: !PYTHON_BIN_DIR!
+    )
+)
+echo "Python path found: %PYTHON_BIN_DIR%"
+
 :: Windows SDK is needed for windeployqt to get d3dcompiler_xx.dll
 if "%WindowsSdkDir%" == "" if not "%ProgramFiles(x86)%" == "" set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
 if "%WindowsSdkDir%" == "" set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
@@ -463,20 +484,28 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 
 
 :: Initialize clean PATH
-set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
-set PATH=%MINGW_BIN_DIR%;%DEPS_INSTALL_DIR%\bin;%PATH%
+set "PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\"
+set "PATH=%MINGW_BIN_DIR%;%DEPS_INSTALL_DIR%\bin;%PATH%"
 
 
 echo.
-echo Trying to guess GCC version...
-g++ --version > NUL
-if errorlevel 1 (
-	echo ERROR: g++ is not working.
-	exit /B 1
+echo Trying to guess compiler version...
+for %%a in (g++ clang++) do (
+    %%a --version > NUL
+    if not errorlevel 1 (
+        set CC=%%a
+    )
 )
-for /f "delims=" %%a in ('g++ --version ^| find "g++"') do set GCC_VERSION_LINE=%%a
+if "%CC%" == "" (
+    echo ERROR: No working compiler.
+    exit /B 1
+)
+%CC% --version > NUL
+for /f "delims=" %%a in ('%CC% --version ^| find "g++"') do set GCC_VERSION_LINE=%%a
+:: The space in "clang " is essential to detect
+:: the version line and not the InstalledDir
 if "%GCC_VERSION_LINE%" == "" (
-    for /f "delims=" %%a in ('g++ --version ^| find "clang"') do set GCC_VERSION_LINE=%%a
+    for /f "delims=" %%a in ('%CC% --version ^| find "clang "') do set GCC_VERSION_LINE=%%a
 )
 if "%GCC_VERSION_LINE%" == "" (
 	echo ERROR: Failed to get version of g++.
@@ -501,12 +530,15 @@ if not "%GCC_VERSION_LINE:tdm64=%" == "%GCC_VERSION_LINE%" (
 set IS_LLVM_MINGW=
 set IS_MSYS_CLANG=
 if not x%IS_CLANG% == x (
-    :: Look for "llvm-mingw" in the toolchain path. Unfortunately there is
-    :: no surefire way to detect a llvm-mingw toolchain.
-    if not "%MINGW_BIN_DIR:llvm-mingw=%" == "%MINGW_BIN_DIR%" (
-        echo Toolchain looks like llvm-mingw
-        set IS_LLVM_MINGW=1
-    ) else (
+    rem Look for the multiarch target binary dirs. Unfortunately there is
+    rem no surefire way to detect a llvm-mingw toolchain.
+    if exist "%MINGW_BIN_DIR%\..\i686-w64-mingw32\bin\" (
+        if exist "%MINGW_BIN_DIR%\..\x86_64-w64-mingw32\bin\" (
+            echo Toolchain looks like llvm-mingw
+            set IS_LLVM_MINGW=1
+        )
+    )
+    if "!IS_LLVM_MINGW!" == "" (
         echo Toolchain does not look like llvm-mingw, assuming MSYS Clang
         set IS_MSYS_CLANG=1
     )
@@ -521,13 +553,13 @@ for %%a in (objdump llvm-objdump) do (
         set OBJDUMP=%%a
     )
 )
-if "OBJDUMP" == "" (
+if "%OBJDUMP%" == "" (
     echo ERROR: objdump is not working.
     exit /B 1
 )
 for /f "delims=, tokens=1" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
 if "%TARGET_ARCH_LINE%" == "" (
-    echo "Possible LLVM objdump, trying to detect architecture..."
+    echo Possible LLVM objdump, trying to detect architecture...
     for /f "delims=" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
 )
 echo -- %TARGET_ARCH_LINE%
@@ -559,6 +591,7 @@ echo.
 echo Creating base directories...
 mkdir %pkg_root% && ^
 mkdir %pkg_root%\bin && ^
+mkdir %pkg_root%\etc && ^
 mkdir %pkg_root%\lib && ^
 mkdir %pkg_root%\share
 if errorlevel 1 (
@@ -589,16 +622,16 @@ if not x%IS_TDM% == x (
 ) else if not x%IS_MSYS_CLANG% == x (
 	if x%is_x64% == x (
 		:: msys-mingw-w64-clang64 x86
-		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1 libcrypto-1_1"
+		set "STDLIBS=libomp libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1 libcrypto-1_1"
 	) else (
 		:: msys-mingw-w64-clang64 x64
-		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
+		set "STDLIBS=libomp libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
 	)
 ) else if not x%IS_LLVM_MINGW% == x (
     :: llvm-mingw
     set "STDLIBS=libc++ libomp libssp-0 libunwind libwinpthread-1"
-    :: The toolchain does not include all of the DLLs in the compiler bin dir,
-    :: so we need to copy them from the cross target bin dir.
+    rem The toolchain does not include all of the DLLs in the compiler bin dir,
+    rem so we need to copy them from the cross target bin dir.
     if x%is_x64% == x (
         set "STDLIBS_DIR=%MINGW_BIN_DIR%\..\i686-w64-mingw32\bin"
     ) else (
@@ -639,12 +672,12 @@ setlocal enableextensions enabledelayedexpansion
 for /f "delims=" %%F in ('dir /b "%KRITA_INSTALL_DIR%\bin\*.dll"') do (
 	set file=%%F
 	set file=!file:~0,3!
-	if not x!file! == xQt5 copy %KRITA_INSTALL_DIR%\bin\%%F %pkg_root%\bin
+	if not x!file! == xQt5 copy "%KRITA_INSTALL_DIR%\bin\%%F" %pkg_root%\bin
 )
 for /f "delims=" %%F in ('dir /b "%DEPS_INSTALL_DIR%\bin\*.dll"') do (
 	set file=%%F
 	set file=!file:~0,3!
-	if not x!file! == xQt5 copy %DEPS_INSTALL_DIR%\bin\%%F %pkg_root%\bin
+	if not x!file! == xQt5 copy "%DEPS_INSTALL_DIR%\bin\%%F" %pkg_root%\bin
 )
 endlocal
 :: symsrv.yes for Dr. Mingw
@@ -679,6 +712,13 @@ xcopy /Y %KRITA_INSTALL_DIR%\lib\kritaplugins\*.dll %pkg_root%\lib\kritaplugins\
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\lib\krita-python-libs %pkg_root%\lib\krita-python-libs
 
+:: MLT plugins and their data
+xcopy /S /Y /I %DEPS_INSTALL_DIR%\lib\mlt %pkg_root%\lib\mlt
+xcopy /S /Y /I %DEPS_INSTALL_DIR%\share\mlt %pkg_root%\share\mlt
+
+:: Fontconfig
+xcopy /Y /S /I %DEPS_INSTALL_DIR%\etc\fonts %pkg_root%\etc\fonts
+
 :: Share
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\color %pkg_root%\share\color
 xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\color-schemes %pkg_root%\share\color-schemes
@@ -689,7 +729,9 @@ xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\kf5 %pkg_root%\share\kf5
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\mime %pkg_root%\share\mime
 :: Python libs
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\krita\pykrita %pkg_root%\share\krita\pykrita
-xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\site-packages %pkg_root%\lib\site-packages
+robocopy %DEPS_INSTALL_DIR%\lib\site-packages %pkg_root%\lib\site-packages /S /E ^
+    /XF "setuptools.pth" "easy-install.pth" ^
+    /XD "packaging*" "pip*" "ply*" "pyparsing*" "PyQt_builder*" "sip*" "toml*" "meson*"
 :: Not useful on Windows it seems
 rem xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\appdata %pkg_root%\share\appdata
 rem xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\applications %pkg_root%\share\applications
@@ -715,7 +757,7 @@ if exist "%KRITA_INSTALL_DIR%\lib\qml" (
 )
 
 :: windeployqt
-windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -multimedia -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll
+windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll
 if errorlevel 1 (
 	echo ERROR: WinDeployQt failed! 1>&2
 	exit /B 1
@@ -723,6 +765,7 @@ if errorlevel 1 (
 
 :: ffmpeg
 copy %DEPS_INSTALL_DIR%\bin\ffmpeg.exe %pkg_root%\bin
+copy %DEPS_INSTALL_DIR%\bin\ffprobe.exe %pkg_root%\bin
 copy %DEPS_INSTALL_DIR%\bin\ffmpeg_LICENSE.txt %pkg_root%\bin
 copy %DEPS_INSTALL_DIR%\bin\ffmpeg_README.txt %pkg_root%\bin
 
@@ -787,6 +830,8 @@ endlocal
 if not "%ARG_PRE_ZIP_HOOK%" == "" (
     echo Running pre-zip-hook...
     setlocal
+    :: add python to PATH of the pre-zip hook
+    set "PATH=%PYTHON_BIN_DIR%;%PATH%"
     cmd /c ""%ARG_PRE_ZIP_HOOK%" "%pkg_root%\""
     if errorlevel 1 (
         echo ERROR: Got exit code !errorlevel! from pre-zip-hook! 1>&2
@@ -800,11 +845,13 @@ echo Packaging stripped binaries...
 "%SEVENZIP_EXE%" a -tzip %pkg_name%.zip %pkg_root%\ "-xr^!.debug"
 echo --------
 
-echo.
-echo Packaging debug info...
-:: (note that the top-level package dir is not included)
-"%SEVENZIP_EXE%" a -tzip %pkg_name%-dbg.zip -r %pkg_root%\*.debug
-echo --------
+if "%KRITA_SKIP_DEBUG_PACKAGE%" == "" (
+    echo.
+    echo Packaging debug info...
+    :: (note that the top-level package dir is not included)
+    "%SEVENZIP_EXE%" a -tzip %pkg_name%-dbg.zip -r %pkg_root%\*.debug
+    echo --------
+)
 
 echo.
 echo.

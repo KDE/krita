@@ -1,15 +1,20 @@
 set(kritagridpaintop_SOURCES
     grid_paintop_plugin.cpp
     kis_grid_paintop.cpp
-    kis_gridop_option.cpp
-    kis_grid_shape_option.cpp
+    KisGridOpOptionData.cpp
+    KisGridOpOptionModel.cpp
+    KisGridOpOptionWidget.cpp
+    
     kis_grid_paintop_settings.cpp
     kis_grid_paintop_settings_widget.cpp
+    KisGridShapeOptionData.cpp
+    KisGridShapeOptionModel.cpp
+    KisGridShapeOptionWidget.cpp
     )
 
 ki18n_wrap_ui(kritagridpaintop_SOURCES wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
-add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES})
+kis_add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES})
 
 target_link_libraries(kritagridpaintop kritalibpaintop)
 

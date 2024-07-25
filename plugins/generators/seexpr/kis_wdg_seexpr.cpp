@@ -340,11 +340,11 @@ void KisWdgSeExpr::isValid()
     m_widget->txtEditor->clearErrors();
 
     if (!expression.isValid()) {
-        auto errors = expression.getErrors();
+        const auto &errors = expression.getErrors();
 
-        for (auto occurrence : errors) {
+        for (const auto &occurrence : errors) {
             QString message = ErrorMessages::message(occurrence.error);
-            for (auto arg : occurrence.ids) {
+            for (const auto &arg : occurrence.ids) {
                 message = message.arg(QString::fromStdString(arg));
             }
             m_widget->txtEditor->addError(occurrence.startPos, occurrence.endPos, message);

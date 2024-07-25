@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include <KritaVersionWrapper.h>
+#include "KritaVersionWrapper.h"
 
 #include <kritaversion.h>
 #include <kritagitversion.h>
@@ -20,4 +20,13 @@ QString KritaVersionWrapper::versionString(bool checkGit)
 #endif
     }
     return version;
+}
+
+bool KritaVersionWrapper::isDevelopersBuild()
+{
+#ifdef KRITA_STABLE
+    return false;
+#else
+    return true;
+#endif
 }

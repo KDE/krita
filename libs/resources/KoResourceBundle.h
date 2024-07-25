@@ -10,6 +10,7 @@
 #include <QSet>
 #include <QList>
 #include <QSharedPointer>
+#include <QDomDocument>
 
 #include <KoXmlWriter.h>
 
@@ -80,6 +81,7 @@ public:
     QList<QString> getTagsList();
 
     void setThumbnail(QString);
+    void setThumbnail(QImage);
 
     /**
      * @brief saveMetadata: saves bundle metadata

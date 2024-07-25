@@ -6,7 +6,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_unsharp_filter.h"
 #include <QBitArray>
 
@@ -167,7 +166,7 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
     quint16 labColorDst[4];
 
     const int posL = 0;
-    const int posAplha = 3;
+    const int posAlpha = 3;
 
     const qreal factorInv = 1.0 / factor;
 
@@ -184,8 +183,8 @@ void KisUnsharpFilter::processLightnessOnly(KisPaintDeviceSP device,
                                       KoColorSpaceMathsTraits<quint16>::min,
                                       KoColorSpaceMathsTraits<quint16>::max);
 
-            qint32 valueAlpha = (labColorSrc[posAplha] * weights[0] + labColorDst[posAplha] * weights[1]) * factorInv;
-            labColorSrc[posAplha] = CLAMP(valueAlpha,
+            qint32 valueAlpha = (labColorSrc[posAlpha] * weights[0] + labColorDst[posAlpha] * weights[1]) * factorInv;
+            labColorSrc[posAlpha] = CLAMP(valueAlpha,
                                           KoColorSpaceMathsTraits<quint16>::min,
                                           KoColorSpaceMathsTraits<quint16>::max);
 

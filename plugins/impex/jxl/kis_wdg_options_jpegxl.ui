@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>
+  SPDX-FileCopyrightText: 2022 L. E. Segovia &lt;amy@amyspark.me&gt;
+  SPDX-License-Identifier: GPL-2.0-or-later
+ </author>
+ <class>KisWdgOptionsJPEGXL</class>
+ <widget class="QWidget" name="KisWdgOptionsJPEGXL">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>480</width>
+    <height>474</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>0</height>
+   </size>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="general">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_10">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="haveAnimation">
+         <property name="toolTip">
+          <string>If this is not enabled, only the first frame will be saved.</string>
+         </property>
+         <property name="text">
+          <string>Save as animated JPEG-XL</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Encoding options</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_8">
+          <item row="0" column="0" colspan="2">
+           <widget class="QGroupBox" name="lossyEncoding">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="toolTip">
+             <string>If this is not enabled, the image will be saved losslessly.</string>
+            </property>
+            <property name="title">
+             <string>Lossy encoding</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <layout class="QFormLayout" name="formLayout_6">
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblQuality">
+               <property name="text">
+                <string>Quality</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <layout class="QGridLayout" name="gridLayout_qual">
+               <item row="0" column="1">
+                <widget class="QLabel" name="lblHighQual">
+                 <property name="text">
+                  <string>High</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="KisSliderSpinBox" name="lossyQuality">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <property name="toolTip">
+                  <string>Set the lossy quality of JPEG-XL export.
+Default: 90 (visually lossless).</string>
+                 </property>
+                 <property name="minimum">
+                  <number>0</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="value">
+                  <number>90</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="lblLowQual">
+                 <property name="text">
+                  <string>Low</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item row="1" column="1">
+              <widget class="QCheckBox" name="forceModular">
+               <property name="toolTip">
+                <string>Use modular encoding instead of default VarDCT for lossy compression
+(e.g. for non-photographic images).
+Default: disabled.</string>
+               </property>
+               <property name="text">
+                <string>Use modular mode</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QCheckBox" name="losslessAlpha">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, this will set alpha channel (transparency) to lossless. Useful to reduce transparency artifact on lossy export.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Lossless alpha</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="lblTradeoff">
+            <property name="text">
+             <string>Tradeoff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblFaster">
+              <property name="text">
+               <string>Faster</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblSlowerBetter">
+              <property name="text">
+               <string>Slower/Better</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="KisSliderSpinBox" name="effort">
+              <property name="toolTip">
+               <string>Sets encoder effort/speed level without affecting decoding speed.
+Valid values are, from faster to slower speed: 1:lightning 2:thunder 3:falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.
+Default: squirrel (7).</string>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>9</number>
+              </property>
+              <property name="value">
+               <number>7</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Decoding speed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <layout class="QGridLayout" name="gridLayout_4">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblSlowest">
+              <property name="text">
+               <string>Slowest/Best quality</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblSlowerBetter2">
+              <property name="text">
+               <string>Fastest/Slight quality loss</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="KisSliderSpinBox" name="decodingSpeed">
+              <property name="toolTip">
+               <string>Sets the decoding speed tier for the provided options.
+Minimum is 0 (slowest to decode, best quality/density), and maximum is 4 (fastest to decode, at the cost of some quality/density).
+Default is 0.</string>
+              </property>
+              <property name="maximum">
+               <number>4</number>
+              </property>
+              <property name="value">
+               <number>0</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>17</width>
+           <height>10</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="flattenLayers">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this is not enabled, the layers will be rasterized and saved. However, animated exports are always flattened regardless of this setting.&lt;/p&gt;&lt;p&gt;It is advised to leave this option checked for web delivery and general compatibility with other applications.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Flatten the image</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Conversion settings</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QGroupBox" name="colorProfileGrp">
+         <property name="title">
+          <string>Color profile</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="forceCicpLossless">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use CICP if ICC profile is convertible to CICP on lossless, otherwise keep using ICC. Useful to make filesize even smaller (eg. for web delivery).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>(Lossless) Use CICP instead of ICC if possible</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="hdrConversionGrp">
+         <property name="title">
+          <string>HDR conversion</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="explanationLabel">
+            <property name="text">
+             <string>Applications like Google Chrome expect HDR images to store their color profile as CICP values. You can adjust the ICC profile conversion below.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="spaceLabel">
+            <property name="text">
+             <string>Space:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="cmbConversionPolicy"/>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QGroupBox" name="chkHLGOOTF">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita currently cannot send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="title">
+             <string>Apply reverse Hybrid Log Gamma OOTF</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <layout class="QFormLayout" name="formLayout_9">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Gamma:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="spnGamma">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="maximum">
+                <double>3.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Brightness:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="spnNits">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The display brightness in nits. By default this is set to 1000 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="suffix">
+                <string> cd/m²</string>
+               </property>
+               <property name="maximum">
+                <double>100000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="advanced">
+      <attribute name="title">
+       <string>Advanced</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QTabWidget" name="advancedParameters">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="encoderParameters">
+          <attribute name="title">
+           <string>Encoder parameters</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_11">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblResampling">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Color channel resampling</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="resampling">
+             <property name="toolTip">
+              <string>Sets resampling option. If enabled, the image's color channels are downsampled before compression, and upsampled to original size in the decoder.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblAlphaResampling">
+             <property name="text">
+              <string>Alpha channel resampling</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="extraChannelResampling">
+             <property name="toolTip">
+              <string>Sets resampling option. If enabled, the image's alpha channel is downsampled before compression, and upsampled to original size in the decoder.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblPhotonNoise">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Photon noise</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QSpinBox" name="photonNoise">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Adds noise to the image emulating photographic film noise, the higher the given number, the grainier the image will be.
+As an example, a value of 100 gives low noise whereas a value of 3200 gives a lot of noise.
+The default value is 0.</string>
+             </property>
+             <property name="maximum">
+              <number>1000000000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblDots">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Generate dots</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QComboBox" name="dots">
+             <property name="toolTip">
+              <string>Enables or disables dots generation.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Generate patches</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="patches">
+             <property name="toolTip">
+              <string>Enables or disables patches generation.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="lblEpf">
+             <property name="text">
+              <string>Edge preserving filter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <layout class="QGridLayout" name="gridLayout">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblMax">
+               <property name="text">
+                <string>Maximum strength</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNone1">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="epf">
+               <property name="toolTip">
+                <string>Edge preserving filter level, -1 to 3. Use -1 for the default (encoder chooses), 0 to 3 to set a strength.</string>
+               </property>
+               <property name="maximum">
+                <number>3</number>
+               </property>
+               <property name="pageStep" stdset="0">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="6" column="1">
+            <widget class="QComboBox" name="gaborish">
+             <property name="toolTip">
+              <string>Enables or disables the gaborish filter.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblGaborishFilter">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Gaborish filter</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="lbModularEncoding">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Modular encoding</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QComboBox" name="modular">
+             <property name="toolTip">
+              <string>Enables modular encoding.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QComboBox" name="keepInvisible">
+             <property name="toolTip">
+              <string>Enables or disables preserving color of invisible pixels.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1">
+            <widget class="QComboBox" name="groupOrder">
+             <property name="toolTip">
+              <string>Determines the order in which 256x256 regions are stored in the codestream for progressive rendering.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="1">
+            <widget class="QComboBox" name="jpegReconCFL"/>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="lblKeepInvisible">
+             <property name="text">
+              <string>Keep color of invisible pixels</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="lblGroupOrder">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Group order</string>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0">
+            <widget class="QLabel" name="lblJPEGReconCFL">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Chroma-from-luma</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="varDCTParameters">
+          <attribute name="title">
+           <string>VarDCT parameters</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_12">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblProgressiveAC">
+             <property name="text">
+              <string>Spectral progression</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="progressiveAC">
+             <property name="toolTip">
+              <string>Set the progressive mode for the AC coefficients of VarDCT, using spectral progression from the DCT coefficients.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblQProgressiveAC">
+             <property name="toolTip">
+              <string/>
+             </property>
+             <property name="text">
+              <string>Quantization</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="qProgressiveAC">
+             <property name="toolTip">
+              <string>Set the progressive mode for the AC coefficients of VarDCT, using spectral progression from the DCT coefficients.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblProgressiveDC">
+             <property name="text">
+              <string>Low resolution DC</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="progressiveDC">
+             <property name="toolTip">
+              <string>Set the progressive mode using lower-resolution DC images for VarDCT.</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="modularEncodingParameters">
+          <attribute name="title">
+           <string>Modular parameters</string>
+          </attribute>
+          <layout class="QFormLayout" name="formLayout_3">
+           <item row="0" column="0">
+            <widget class="QLabel" name="lblResponsive">
+             <property name="text">
+              <string>Progressive encoding</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="responsive">
+             <property name="toolTip">
+              <string>Enables or disables progressive encoding for modular mode.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="lblChannelColorsGlobalPercent">
+             <property name="text">
+              <string>Global channel palette range</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <layout class="QGridLayout" name="gridLayout2">
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="channelColorsGlobalPercent">
+               <property name="toolTip">
+                <string>Use Global channel palette if the amount of colors is smaller than this percentage of range.
+Use 0-100 to set an explicit percentage, -1 to use the encoder default.
+Used for modular encoding.</string>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+               <property name="pageStep" stdset="0">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNone">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblBest">
+               <property name="text">
+                <string>All</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="lblChannelColorsGroupPercent">
+             <property name="text">
+              <string>Local channel palette range</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <layout class="QGridLayout" name="gridLayout3">
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="channelColorsGroupPercent">
+               <property name="toolTip">
+                <string>Use Local (per-group) channel palette if the amount of colors is smaller than this percentage of range.
+Use 0-100 to set an explicit percentage, -1 to use the encoder default.
+Used for modular encoding.</string>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+               <property name="pageStep" stdset="0">
+                <number>1</number>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNone2">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblBest2">
+               <property name="text">
+                <string>All</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="lblPaletteColors">
+             <property name="text">
+              <string>Use color palette for ... colors or less</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QSpinBox" name="paletteColors">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>Use color palette if amount of colors is smaller than or equal to this amount, or -1 to use the encoder default.
+Used for modular encoding.</string>
+             </property>
+             <property name="minimum">
+              <number>-1</number>
+             </property>
+             <property name="maximum">
+              <number>1000000000</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>-1</number>
+             </property>
+             <property name="pageStep" stdset="0">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="lblLossyPalette">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Delta palette</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QComboBox" name="lossyPalette">
+             <property name="toolTip">
+              <string>Enables or disables delta palette. Used in modular mode.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="lblModularGroupSize">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Group size</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QComboBox" name="modularGroupSize">
+             <property name="toolTip">
+              <string>Group size for modular encoding.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
+            <widget class="QComboBox" name="modularPredictor">
+             <property name="toolTip">
+              <string>Predictor for modular encoding.</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="lblModularPredictor">
+             <property name="text">
+              <string comment="JPEG-XL encoder options">Predictor</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="lblModularMATreeLearningPercent">
+             <property name="text">
+              <string>Pixels for MA tree learning</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="1">
+              <widget class="QLabel" name="lblMaximumDegradation">
+               <property name="text">
+                <string>All</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="lblNoDegradation">
+               <property name="text">
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="KisSliderSpinBox" name="modularMATreeLearningPercent">
+               <property name="toolTip">
+                <string>Fraction of pixels used to learn MA trees as a percentage.
+-1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all.
+Higher values use more encoder memory.</string>
+               </property>
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="minimum">
+                <number>-1</number>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>-1</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="metadata">
+      <attribute name="title">
+       <string>Metadata</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_7">
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="chkMetadata">
+         <property name="title">
+          <string>Store Document Metadata</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QGroupBox" name="groupBox_3">
+              <property name="title">
+               <string>Formats:</string>
+              </property>
+              <layout class="QFormLayout" name="formLayout_5">
+               <item row="0" column="0" colspan="2">
+                <widget class="QCheckBox" name="exif">
+                 <property name="text">
+                  <string>Exif</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QCheckBox" name="iptc">
+                 <property name="text">
+                  <string>IPTC</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QCheckBox" name="xmp">
+                 <property name="text">
+                  <string>XMP</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_4">
+              <property name="title">
+               <string comment="JPEG-XL metadata options">Filters:</string>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QListView" name="metaDataFilters"/>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkAuthor">
+            <property name="text">
+             <string>Sign with Author Profile Data</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisSliderSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

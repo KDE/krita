@@ -5,25 +5,11 @@
  */
 
 #include "digitalmixer.h"
+#include "digitalmixer_dock.h"
 
-#include <stdlib.h>
-
-#include <QTimer>
-
-
-#include <kis_debug.h>
 #include <kpluginfactory.h>
-#include <klocalizedstring.h>
 
 #include <KoDockFactoryBase.h>
-
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-#include "KisViewManager.h"
-
-#include "digitalmixer_dock.h"
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(DigitalMixerPluginFactory, "krita_digitalmixer.json", registerPlugin<DigitalMixerPlugin>();)
@@ -71,7 +57,6 @@ DigitalMixerPlugin::DigitalMixerPlugin(QObject *parent, const QVariantList &)
 
 DigitalMixerPlugin::~DigitalMixerPlugin()
 {
-    m_view = 0;
 }
 
 #include "digitalmixer.moc"

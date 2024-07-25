@@ -24,14 +24,6 @@ if(${SIP_VERSION_STR} VERSION_LESS 5)
     file(GLOB PYKRITA_KRITA_sip_files ./krita/*.sip)
     set(SIP_EXTRA_FILES_DEPEND ${PYKRITA_KRITA_sip_files})
     add_sip_python_module(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)
-
-    if (ENABLE_PYTHON_2)
-        # Add an init file to turn it into a valid py2 module.
-        # Otherwise PyKrita cannot be loaded.
-        install(FILES
-            ./__init__.py
-            DESTINATION ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/PyKrita)
-    endif (ENABLE_PYTHON_2)
 else()
     set(SIP_CONCAT_PARTS 1)
     set(SIP_MODULE ${PYQT5_SIP_NAME})
@@ -39,5 +31,6 @@ else()
     set(SIP_INCLUDES ${PYQT5_SIP_DIR})
     set(PYTHON_SITE_PACKAGES_INSTALL_DIR ${LIB_INSTALL_DIR}/krita-python-libs)
     set(SIP_EXTRA_FILES_DEPEND "${CMAKE_CURRENT_SOURCE_DIR}/krita")
+    set(SIP_EXTRA_STUBS "${CMAKE_CURRENT_SOURCE_DIR}/extra.pyi")
     add_sip_python_module_v5(PyKrita.krita ./krita/kritamod.sip kritalibkis kritaui kritaimage kritalibbrush)
 endif()

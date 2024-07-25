@@ -30,6 +30,10 @@
 #include <QFileDevice>
 #include <QIODevice>
 
+#ifdef Q_OS_UNIX
+#   include <unistd.h>
+#endif
+
 namespace TestUtil
 {
 
@@ -82,8 +86,8 @@ void testFiles(const QString& _dirname, const QStringList& exclusions, const QSt
 
 
             QImage resultImage(resultFileInfo.absoluteFilePath());
-            resultImage = resultImage.convertToFormat(QImage::Format_ARGB32);
-            sourceImage = sourceImage.convertToFormat(QImage::Format_ARGB32);
+            resultImage.convertTo(QImage::Format_ARGB32);
+            sourceImage.convertTo(QImage::Format_ARGB32);
 
             QPoint pt;
 
@@ -158,17 +162,32 @@ void restorePermissionsToReadAndWrite(QFileInfo sourceFileInfo)
     }
 }
 
+const QString &impexTempFilesDir() {
+    static const QString s_path = []() {
+        const QString path = QDir::cleanPath(
+                QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/impex_test") + '/';
+        QDir(path).mkpath(QStringLiteral("."));
+        return path;
+    }();
+    return s_path;
+}
 
-void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
+
+void testImportFromWriteonly(QString mimetype)
 {
 #ifdef Q_OS_WIN
     /// on Windows one cannot create a write-only file, so just skip this test
     /// (but keep it compiled to avoid compilation issues)
-
-    return;
+    QSKIP("Cannot test write-only file on Windows.");
 #endif
 
-    QString writeonlyFilename = _dirname + "writeonlyFile.txt";
+#ifdef Q_OS_UNIX
+    if (geteuid() == 0) {
+        QSKIP("Test is being run as root; removing read permission has no effect.");
+    }
+#endif
+
+    QString writeonlyFilename = impexTempFilesDir() + "writeonlyFile.txt";
     QFileInfo sourceFileInfo(writeonlyFilename);
 
     prepareFile(sourceFileInfo, false, true);
@@ -198,6 +217,10 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 
     delete doc;
 
+    if (fail || status.isOk()) {
+        qDebug() << "The file permission is:" << QFile::permissions(sourceFileInfo.absoluteFilePath());
+    }
+
     restorePermissionsToReadAndWrite(sourceFileInfo);
 
     QVERIFY(!status.isOk());
@@ -208,9 +231,15 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 }
 
 
-void testExportToReadonly(const QString& _dirname, QString mimetype = "")
+void testExportToReadonly(QString mimetype)
 {
-    QString readonlyFilename = _dirname + "readonlyFile.txt";
+#ifdef Q_OS_UNIX
+    if (geteuid() == 0) {
+        QSKIP("Test is being run as root; removing write permission has no effect.");
+    }
+#endif
+
+    QString readonlyFilename = impexTempFilesDir() + "readonlyFile.txt";
 
     QFileInfo sourceFileInfo(readonlyFilename);
     prepareFile(sourceFileInfo, true, false);
@@ -244,6 +273,10 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
     }
     delete doc;
 
+    if (status.isOk()) {
+        qDebug() << "The file permission is:" << QFile::permissions(sourceFileInfo.absoluteFilePath());
+    }
+
     restorePermissionsToReadAndWrite(sourceFileInfo);
 
     QVERIFY(!status.isOk());
@@ -254,9 +287,9 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
 
 
 
-void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
+void testImportIncorrectFormat(QString mimetype)
 {
-    QString incorrectFormatFilename = _dirname + "incorrectFormatFile.txt";
+    QString incorrectFormatFilename = impexTempFilesDir() + "incorrectFormatFile.txt";
     QFileInfo sourceFileInfo(incorrectFormatFilename);
 
     prepareFile(sourceFileInfo, false, false);
@@ -284,9 +317,9 @@ void testImportIncorrectFormat(const QString& _dirname, QString mimetype = "")
 }
 
 
-void testExportToColorSpace(const QString& _dirname, QString mimetype, const KoColorSpace* space, KisImportExportErrorCode expected)
+void testExportToColorSpace(QString mimetype, const KoColorSpace* space, KisImportExportErrorCode expected)
 {
-    QString colorspaceFilename = _dirname + "colorspace.txt";
+    QString colorspaceFilename = impexTempFilesDir() + "colorspace.txt";
 
     QFileInfo sourceFileInfo(colorspaceFilename);
     prepareFile(sourceFileInfo, true, true);

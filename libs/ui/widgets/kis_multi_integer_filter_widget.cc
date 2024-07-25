@@ -14,6 +14,8 @@
 #include <filter/kis_filter_configuration.h>
 #include <klocalizedstring.h>
 #include <KisGlobalResourcesInterface.h>
+#include "kis_slider_spin_box.h"
+#include "kis_aspect_ratio_locker.h"
 
 KisDelayedActionIntegerInput::KisDelayedActionIntegerInput(QWidget * parent, const QString & name)
     : KisSliderSpinBox(parent)
@@ -41,12 +43,13 @@ void KisDelayedActionIntegerInput::cancelDelayedSignal()
     m_timer->stop();
 }
 
-KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname)
+KisIntegerWidgetParam::KisIntegerWidgetParam(qint32 nmin, qint32 nmax, qint32 ninitvalue, const QString & label, const QString & nname, const QString & lockerName)
     : min(nmin)
     , max(nmax)
     , initvalue(ninitvalue)
     , label(label)
     , name(nname)
+    , lockerName(lockerName)
 {
 }
 
@@ -80,6 +83,20 @@ KisMultiIntegerFilterWidget::KisMultiIntegerFilterWidget(const QString& filterid
         widgetLayout->addWidget(widget, i , 1);
 
         m_integerWidgets.append(widget);
+
+        // Add an aspect ratio locker if requested;
+        // it must be requested by the second paired spinbox only.
+        if (!iwparam[i].lockerName.isEmpty()) {
+            KoAspectButton *aspectButton = new KoAspectButton(this);
+            aspectButton->setObjectName(iwparam[i].lockerName);
+            widgetLayout->addWidget(aspectButton, i-1, 2, 2, 1);
+            KisAspectRatioLocker *aspectLocker = new KisAspectRatioLocker(this);
+            aspectLocker->connectSpinBoxes(dynamic_cast<KisSliderSpinBox*>(m_integerWidgets[i-1]), dynamic_cast<KisSliderSpinBox*>(widget), aspectButton);
+
+            m_aspectButtons.append(aspectButton);
+        }
+
+
     }
     widgetLayout->setRowStretch(iwparam.size(),1);
 
@@ -101,6 +118,14 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
 
     m_config->fromXML(config->toXML());
     for (int i = 0; i < nbValues(); ++i) {
+
+    // Keep aspect must be unset first if false, to not interfere with the values
+    Q_FOREACH(KoAspectButton *aspectButton, m_aspectButtons) {
+        if (!config->getBool(aspectButton->objectName(), true)) {
+            aspectButton->setKeepAspectRatio(false);
+        }
+    }
+
         KisDelayedActionIntegerInput*  w = m_integerWidgets[i];
         if (w) {
             int val = config->getInt(m_integerWidgets[i]->objectName());
@@ -108,6 +133,14 @@ void KisMultiIntegerFilterWidget::setConfiguration(const KisPropertiesConfigurat
             m_integerWidgets[i]->cancelDelayedSignal();
         }
     }
+
+    // Keep aspect must be set last if true, to not interfere with the values
+    Q_FOREACH(KoAspectButton *aspectButton, m_aspectButtons) {
+        if (config->getBool(aspectButton->objectName(), true)) {
+            aspectButton->setKeepAspectRatio(true);
+        }
+    }
+
 }
 
 KisPropertiesConfigurationSP KisMultiIntegerFilterWidget::configuration() const
@@ -123,6 +156,11 @@ KisPropertiesConfigurationSP KisMultiIntegerFilterWidget::configuration() const
             config->setProperty(w->objectName(), w->value());
         }
     }
+
+    Q_FOREACH(KoAspectButton *aspectButton, m_aspectButtons) {
+        config->setProperty(aspectButton->objectName(), aspectButton->keepAspectRatio());
+    }
+
     return config;
 }
 

@@ -8,6 +8,7 @@
 
 #include <simpletest.h>
 
+#include <QRandomGenerator>
 
 class KisChunkAllocatorTest : public QObject
 {
@@ -20,6 +21,11 @@ qreal measureFragmentation(qint32 transactions, qint32 chunksAlloc,
 private Q_SLOTS:
     void testOperations();
     void testFragmentation();
+
+private:
+    quint64 getChunkSize();
+
+    QRandomGenerator m_rng{};
 };
 
 #endif /* KIS_CHUNK_ALLOCATOR_TEST_H */

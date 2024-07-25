@@ -25,11 +25,11 @@ public:
         USE_CUSTOM
     };
 
-    void accept();
+    void accept() override;
 
 public:
-    explicit KisDlgCustomTabletResolution(QWidget *parent = 0);
-    ~KisDlgCustomTabletResolution();
+    explicit KisDlgCustomTabletResolution(QWidget *parent = nullptr);
+    ~KisDlgCustomTabletResolution() override;
 
     static QRect calcNativeScreenRect();
     static Mode getTabletMode(QRect *customRect);

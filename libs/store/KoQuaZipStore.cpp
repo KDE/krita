@@ -31,6 +31,8 @@ struct KoQuaZipStore::Private {
 
     QuaZip *archive {0};
     QuaZipFile *currentFile {0};
+    QStringList directoryListCache;
+    bool directoryListCached {false};
     int compressionLevel {Z_DEFAULT_COMPRESSION};
     bool usingSaveFile {false};
     QByteArray cache;
@@ -93,12 +95,12 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
     if (_len == 0) return 0;
 
     if (!d->isOpen) {
-        errorStore << "KoStore: You must open before writing" << endl;
+        errorStore << "KoStore: You must open before writing" << Qt::endl;
         return 0;
     }
 
     if (d->mode != Write) {
-        errorStore << "KoStore: Can not write to store that is opened for reading" << endl;
+        errorStore << "KoStore: Can not write to store that is opened for reading" << Qt::endl;
         return 0;
     }
 
@@ -109,7 +111,17 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
 
 QStringList KoQuaZipStore::directoryList() const
 {
-    return dd->archive->getFileNameList();
+    // If in Read mode, we can assume the directory listing won't change between invocations.
+    if(mode() == Read) {
+        if(!dd->directoryListCached) {
+            dd->directoryListCache = dd->archive->getFileNameList();
+            dd->directoryListCached = true;
+        }
+        return dd->directoryListCache;
+    }
+    else {
+        return dd->archive->getFileNameList();
+    }
 }
 
 void KoQuaZipStore::init(const QByteArray &appIdentification)
@@ -147,7 +159,7 @@ void KoQuaZipStore::init(const QByteArray &appIdentification)
         }
     }
     else {
-        debugStore << dd->archive->getEntriesCount() << dd->archive->getFileNameList();
+        debugStore << dd->archive->getEntriesCount() << directoryList();
         d->good = dd->archive->getEntriesCount();
     }
 }
@@ -278,5 +290,5 @@ bool KoQuaZipStore::fileExists(const QString &absPath) const
         fixedPath = fixedPath.replace(d->substituteThis, d->substituteWith);
     }
 
-    return dd->archive->getFileNameList().contains(fixedPath);
+    return directoryList().contains(fixedPath);
 }

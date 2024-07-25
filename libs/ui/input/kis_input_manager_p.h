@@ -41,6 +41,7 @@ public:
     void setupActions();
     bool handleCompressedTabletEvent(QEvent *event);
     void fixShortcutMatcherModifiersState();
+    void fixShortcutMatcherModifiersState(QVector<Qt::Key> newKeys, Qt::KeyboardModifiers modifiers);
 
     KisInputManager *q;
 
@@ -72,7 +73,9 @@ public:
 
     QPointF previousPos;
     QScopedPointer<QEvent> originatingTouchBeginEvent;
-    bool buttonPressed = false;
+
+    bool useUnbalancedKeyPressEventWorkaround = false;
+    bool shouldSynchronizeOnNextKeyPress = false;
 
     KisPopupWidgetInterface* popupWidget;
 

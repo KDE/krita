@@ -9,6 +9,8 @@
 #include <kis_cursor.h>
 #include <KoPathShape.h>
 #include <KisViewManager.h>
+#include <canvas/kis_canvas2.h>
+#include <kis_canvas_resource_provider.h>
 #include <KoIcon.h>
 
 #include "KisPathEnclosingProducer.h"
@@ -51,10 +53,25 @@ KisPathEnclosingProducer::KisPathEnclosingProducer(KoCanvasBase * canvas)
     setObjectName("enclosing_tool_path");
     setSupportOutline(true);
     setOutlineEnabled(false);
+
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas);
+
+    connect(kritaCanvas->viewManager()->canvasResourceProvider(), SIGNAL(sigEffectiveCompositeOpChanged()), SLOT(resetCursorStyle()));
 }
 
 KisPathEnclosingProducer::~KisPathEnclosingProducer()
 {}
+
+void  KisPathEnclosingProducer::resetCursorStyle()
+{
+    if (isEraser()) {
+        useCursor(KisCursor::load("tool_polygonal_selection_enclose_eraser_cursor.png", 6, 6));
+    } else {
+        KisDynamicDelegateTool::resetCursorStyle();
+    }
+
+    overrideCursorIfNotEditable();
+}
 
 void KisPathEnclosingProducer::requestStrokeEnd()
 {
@@ -68,6 +85,11 @@ void KisPathEnclosingProducer::requestStrokeCancellation()
     localTool()->cancelPath();
 }
 
+KisPopupWidgetInterface* ::KisPathEnclosingProducer::popupWidget()
+{
+    return m_hasUserInteractionRunning ? nullptr : KisDynamicDelegateTool::popupWidget();
+}
+
 void KisPathEnclosingProducer::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event)
@@ -79,6 +101,9 @@ void KisPathEnclosingProducer::mousePressEvent(KoPointerEvent *event)
 bool KisPathEnclosingProducer::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!m_hasUserInteractionRunning) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

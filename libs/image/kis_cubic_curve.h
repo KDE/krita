@@ -7,6 +7,8 @@
 #ifndef _KIS_CUBIC_CURVE_H_
 #define _KIS_CUBIC_CURVE_H_
 
+#include <boost/operators.hpp>
+
 #include<QList>
 #include<QVector>
 #include<QVariant>
@@ -20,12 +22,13 @@ const QString DEFAULT_CURVE_STRING = "0,0;1,1;";
 /**
  * Hold the data for a cubic curve.
  */
-class KRITAIMAGE_EXPORT KisCubicCurve
+class KRITAIMAGE_EXPORT KisCubicCurve : public boost::equality_comparable<KisCubicCurve>
 {
 public:
     KisCubicCurve();
     KisCubicCurve(const QList<QPointF>& points);
     KisCubicCurve(const QVector<QPointF>& points);
+    KisCubicCurve(const QString &curveString);
     KisCubicCurve(const KisCubicCurve& curve);
     ~KisCubicCurve();
     KisCubicCurve& operator=(const KisCubicCurve& curve);
@@ -67,7 +70,7 @@ public:
     const QVector<qreal> floatTransfer(int size = 256) const;
 public:
     QString toString() const;
-    void fromString(const QString&);
+    Q_DECL_DEPRECATED void fromString(const QString&);
 private:
     struct Data;
     struct Private;

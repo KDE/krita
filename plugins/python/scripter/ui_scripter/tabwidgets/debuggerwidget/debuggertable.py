@@ -13,7 +13,7 @@ class DebuggerTable(QTableWidget):
 
         self.setColumnCount(4)
 
-        tableHeader = [i18n('Scope'), i18n('Name'), i18n('Value'), i18n('Type')]
+        tableHeader = [i18n('Scope'), i18n('Name'), i18nc('Value in DebuggerTable', 'Value'), i18n('Type')]
         self.setHorizontalHeaderLabels(tableHeader)
         self.setEditTriggers(self.NoEditTriggers)
 

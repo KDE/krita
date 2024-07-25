@@ -19,7 +19,7 @@ class KoShapeControllerBase;
 class KoToolFactoryBase;
 class KoCanvasBase;
 class KoToolBase;
-class KActionCollection;
+class KisKActionCollection;
 class KoShape;
 class KoShapeLayer;
 class QKeySequence;
@@ -140,7 +140,7 @@ public:
      * @param ac the actionCollection that will be the parent of the actions.
      * @param controller tools registered with this controller will have all their actions added as well.
      */
-    void registerToolActions(KActionCollection *ac, KoCanvasController *controller);
+    void registerToolActions(KisKActionCollection *ac, KoCanvasController *controller);
 
     /**
      * Register a new canvas controller
@@ -224,6 +224,11 @@ public Q_SLOTS:
      */
     void switchBackRequested();
 
+    /**
+     * Notify theme changes
+     */
+    void themeChanged();
+    
 Q_SIGNALS:
     /**
      * Emitted when a new tool is going to override the current tool
@@ -278,6 +283,12 @@ Q_SIGNALS:
      * Emit the new tool option widgets to be used with this canvas.
      */
     void toolOptionWidgetsChanged(KoCanvasController *controller, const QList<QPointer<QWidget> > &widgets);
+
+    /**
+     * Emitted when the tool's text mode has changed.
+     * @param inTextMode whether it is now in text mode.
+     */
+    void textModeChanged(bool text);
 private:
     KoToolManager(const KoToolManager&);
     KoToolManager operator=(const KoToolManager&);

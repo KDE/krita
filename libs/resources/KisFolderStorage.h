@@ -39,6 +39,7 @@ public:
     QVariant metaData(const QString &key) const override;
 
     QString resourceMd5(const QString &url) override;
+    QString resourceFilePath(const QString &url) override;
 private:
     friend class FolderIterator;
 

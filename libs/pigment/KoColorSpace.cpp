@@ -20,7 +20,6 @@
 #include "KoColorProfile.h"
 #include "KoCopyColorConversionTransformation.h"
 #include "KoFallBackColorTransformation.h"
-#include "KoUniqueNumberForIdServer.h"
 #include "KoMixColorsOp.h"
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
@@ -47,7 +46,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     : d(new Private())
 {
     d->id = id;
-    d->idNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->id);
+    d->idNumber = qHash(d->id);
     d->name = name;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;
@@ -67,13 +66,18 @@ KoColorSpace::~KoColorSpace()
 {
     Q_ASSERT(d->deletability != OwnedByRegistryDoNotDelete);
 
-    qDeleteAll(d->compositeOps);
+    Q_FOREACH(const KoCompositeOp *op, d->compositeOps) {
+        delete op;
+    }
+    d->compositeOps.clear();
     for (const auto& map: d->ditherOps) {
         qDeleteAll(map);
     }
+    d->ditherOps.clear();
     Q_FOREACH (KoChannelInfo * channel, d->channels) {
         delete channel;
     }
+    d->channels.clear();
     if (d->deletability == NotOwnedByRegistry) {
         KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
         if (cache) {
@@ -185,10 +189,12 @@ QPolygonF KoColorSpace::gamutXYY() const
 QPolygonF KoColorSpace::estimatedTRCXYY() const
 {
     if (d->TRCXYY.empty()){
+        const QList<KoChannelInfo *> channelInfo = this->channels();
+
         qreal max = 1.0;
         if ((colorModelId().id()=="CMYKA" || colorModelId().id()=="LABA") && colorDepthId().id()=="F32") {
             //boundaries for cmyka/laba have trouble getting the max values for Float, and are pretty awkward in general.
-            max = this->channels()[0]->getUIMax();
+            max = channelInfo[0]->getUIMax();
         }
         const KoColorSpace* xyzColorSpace = KoColorSpaceRegistry::instance()->colorSpace("XYZA", "F32");
         quint8 *data = new quint8[pixelSize()];
@@ -205,7 +211,7 @@ QPolygonF KoColorSpace::estimatedTRCXYY() const
             if (colorModelId().id()!="CMYKA") {
                 for (int j = 0; j <= segments; j++) {
                     channelValuesF.fill(0.0);
-                    channelValuesF[channels()[i]->displayPosition()] = ((max/segments)*(segments-j));
+                    channelValuesF[channelInfo[i]->displayPosition()] = ((max/segments)*(segments-j));
 
                     if (colorModelId().id()!="XYZA") { //no need for conversion when using xyz.
                         fromNormalisedChannelsValue(data, channelValuesF);
@@ -308,8 +314,11 @@ void KoColorSpace::addChannel(KoChannelInfo * ci)
 {
     d->channels.push_back(ci);
 }
-bool KoColorSpace::hasCompositeOp(const QString& id) const
+bool KoColorSpace::hasCompositeOp(const QString& id, const KoColorSpace *srcSpace) const
 {
+    if (srcSpace && preferCompositionInSourceColorSpace() && srcSpace->hasCompositeOp(id)) {
+        return true;
+    }
     return d->compositeOps.contains(id);
 }
 
@@ -360,14 +369,19 @@ KoConvolutionOp* KoColorSpace::convolutionOp() const
     return d->convolutionOp;
 }
 
-const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
+const KoCompositeOp * KoColorSpace::compositeOp(const QString & id, const KoColorSpace *srcSpace) const
 {
+    if (srcSpace && preferCompositionInSourceColorSpace()) {
+        if (const KoCompositeOp *op = srcSpace->compositeOp(id)) {
+            return op;
+        }
+    }
     const QHash<QString, KoCompositeOp*>::ConstIterator it = d->compositeOps.constFind(id);
     if (it != d->compositeOps.constEnd()) {
         return it.value();
     }
     else {
-        warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
+        warnPigment << "Asking for nonexistent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value(COMPOSITE_OVER);
     }
 }
@@ -377,6 +391,12 @@ void KoColorSpace::addCompositeOp(const KoCompositeOp * op)
     if (op->colorSpace()->id() == id()) {
         d->compositeOps.insert(op->id(), const_cast<KoCompositeOp*>(op));
     }
+}
+
+void KoColorSpace::transparentColor(quint8 *dst, quint32 nPixels) const
+{
+    memset(dst, 0, pixelSize() * nPixels);
+    setOpacity(dst, OPACITY_TRANSPARENT_U8, nPixels);
 }
 
 const KoColorConversionTransformation* KoColorSpace::toLabA16Converter() const
@@ -481,17 +501,18 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
                           KoColorConversionTransformation::Intent renderingIntent,
                           KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
-    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
+    Q_ASSERT_X(*op->colorSpace() == *this || (preferCompositionInSourceColorSpace() && *op->colorSpace() == *srcSpace),
+               "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
 
     if(params.rows <= 0 || params.cols <= 0)
         return;
 
     if(!(*this == *srcSpace)) {
         if (preferCompositionInSourceColorSpace() &&
-                srcSpace->hasCompositeOp(op->id())) {
+                (*op->colorSpace() == *srcSpace || srcSpace->hasCompositeOp(op->id()))) {
 
             quint32           conversionDstBufferStride = params.cols * srcSpace->pixelSize();
-            QVector<quint8> * conversionDstCache        = threadLocalConversionCache(params.rows * conversionDstBufferStride);
+            QVector<quint8> * conversionDstCache        = d->conversionCache.get(params.rows * conversionDstBufferStride);
             quint8*           conversionDstData         = conversionDstCache->data();
 
             for(qint32 row=0; row<params.rows; row++) {
@@ -500,8 +521,9 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
                                 renderingIntent, conversionFlags);
             }
 
-            // FIXME: do not calculate the otherOp every time
-            const KoCompositeOp *otherOp = srcSpace->compositeOp(op->id());
+            // TODO: Composite op substitution should eventually be removed here, but it's not urgent.
+            //       Code should just provide srcSpace to KoColorSpace::compositeOp() to avoid the lookups.
+            const KoCompositeOp *otherOp = (*op->colorSpace() == *srcSpace) ? op : srcSpace->compositeOp(op->id());
 
             KoCompositeOp::ParameterInfo paramInfo(params);
             paramInfo.dstRowStart  = conversionDstData;
@@ -516,39 +538,53 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
 
         } else {
             quint32           conversionBufferStride = params.cols * pixelSize();
-            QVector<quint8> * conversionCache        = threadLocalConversionCache(params.rows * conversionBufferStride);
+            QVector<quint8> * conversionCache        = d->conversionCache.get(params.rows * conversionBufferStride);
             quint8*           conversionData         = conversionCache->data();
 
-            for(qint32 row=0; row<params.rows; row++) {
-                srcSpace->convertPixelsTo(params.srcRowStart + row * params.srcRowStride,
-                                          conversionData     + row * conversionBufferStride, this, params.cols,
-                                          renderingIntent, conversionFlags);
+
+            const bool noChannelFlags = params.channelFlags.isEmpty() ||
+                    params.channelFlags == srcSpace->channelFlags(true, true);
+
+            if (noChannelFlags) {
+                for(qint32 row=0; row<params.rows; row++) {
+                    srcSpace->convertPixelsTo(params.srcRowStart + row * params.srcRowStride,
+                                              conversionData     + row * conversionBufferStride, this, params.cols,
+                                              renderingIntent, conversionFlags);
+                }
+
+                KoCompositeOp::ParameterInfo paramInfo(params);
+                paramInfo.srcRowStart  = conversionData;
+                paramInfo.srcRowStride = conversionBufferStride;
+                paramInfo.channelFlags = QBitArray();
+                op->composite(paramInfo);
+            } else {
+                quint32           homogenizationBufferStride = params.cols * srcSpace->pixelSize();
+                QVector<quint8> * homogenizationCache        = d->channelFlagsApplicationCache.get(homogenizationBufferStride);
+                quint8*           homogenizationData         = homogenizationCache->data();
+
+                for(qint32 row=0; row<params.rows; row++) {
+                    srcSpace->convertChannelToVisualRepresentation(params.srcRowStart + row * params.srcRowStride,
+                                                                   homogenizationData, params.cols,
+                                                                   params.channelFlags | srcSpace->channelFlags(false, true));
+                    srcSpace->convertPixelsTo(homogenizationData,
+                                              conversionData + row * conversionBufferStride, this, params.cols,
+                                              renderingIntent, conversionFlags);
+                }
+
+
+                KoCompositeOp::ParameterInfo paramInfo(params);
+                paramInfo.srcRowStart  = conversionData;
+                paramInfo.srcRowStride = conversionBufferStride;
+                paramInfo.channelFlags = channelFlags(true, params.channelFlags.testBit(srcSpace->alphaPos()));
+                op->composite(paramInfo);
             }
 
-            KoCompositeOp::ParameterInfo paramInfo(params);
-            paramInfo.srcRowStart  = conversionData;
-            paramInfo.srcRowStride = conversionBufferStride;
-            op->composite(paramInfo);
+
         }
     }
     else {
         op->composite(params);
     }
-}
-
-
-QVector<quint8> * KoColorSpace::threadLocalConversionCache(quint32 size) const
-{
-    QVector<quint8> * ba = 0;
-    if (!d->conversionCache.hasLocalData()) {
-        ba = new QVector<quint8>(size, '0');
-        d->conversionCache.setLocalData(ba);
-    } else {
-        ba = d->conversionCache.localData();
-        if ((quint8)ba->size() < size)
-            ba->resize(size);
-    }
-    return ba;
 }
 
 KoColorTransformation* KoColorSpace::createColorTransformation(const QString & id, const QHash<QString, QVariant> & parameters) const

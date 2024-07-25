@@ -8,14 +8,15 @@
 
 #include <QtCore/qmath.h>
 
-#include <KoPointerEvent.h>
+#include "KisViewManager.h"
+#include "kis_canvas2.h"
+#include <KisOptionCollectionWidget.h>
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
+#include <KoPointerEvent.h>
 #include <KoViewConverter.h>
-#include "kis_canvas2.h"
-#include "KisViewManager.h"
-#include <kis_icon.h>
 #include <input/kis_extended_modifiers_mapper.h>
+#include <kis_icon.h>
 
 #include "kis_rectangle_constraint_widget.h"
 
@@ -43,25 +44,42 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
 
 QList<QPointer<QWidget> > KisToolRectangleBase::createOptionWidgets()
 {
-  QList<QPointer<QWidget> > widgetsList = KisToolShape::createOptionWidgets();
+    QList<QPointer<QWidget>> widgetsList = KisToolShape::createOptionWidgets();
 
-  widgetsList.append(new KisRectangleConstraintWidget(0, this, showRoundCornersGUI()));
+    KisRectangleConstraintWidget *widget =
+        new KisRectangleConstraintWidget(0, this, showRoundCornersGUI());
 
-  return widgetsList;
+    if (widgetsList.size() > 0
+        && dynamic_cast<KisOptionCollectionWidget *>(
+            widgetsList.first().data())) {
+        KisOptionCollectionWidget *baseOptions =
+            dynamic_cast<KisOptionCollectionWidget *>(
+                widgetsList.first().data());
+        KisOptionCollectionWidgetWithHeader *sectionRectangle =
+            new KisOptionCollectionWidgetWithHeader(widget->windowTitle());
+        sectionRectangle->appendWidget("rectangleConstraintWidget", widget);
+        baseOptions->appendWidget("sectionRectangle", sectionRectangle);
+    } else {
+        widget->setContentsMargins(10, 10, 10, 10);
+        widgetsList.append(widget);
+    }
+
+    return widgetsList;
 }
 
 void KisToolRectangleBase::constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height)
 {
-  m_isWidthForced = forceWidth;
-  m_isHeightForced = forceHeight;
-  m_isRatioForced = forceRatio;
+    m_isWidthForced = forceWidth;
+    m_isHeightForced = forceHeight;
+    m_isRatioForced = forceRatio;
 
-  m_forcedHeight = height;
-  m_forcedWidth = width;
-  m_forcedRatio = ratio;
+    m_forcedHeight = height;
+    m_forcedWidth = width;
+    m_forcedRatio = ratio;
 
-  // Avoid division by zero in size calculations
-  if (ratio < 0.0001f) m_isRatioForced = false;
+    // Avoid division by zero in size calculations
+    if (ratio < 0.0001f)
+        m_isRatioForced = false;
 }
 
 void KisToolRectangleBase::roundCornersChanged(int rx, int ry)
@@ -73,6 +91,7 @@ void KisToolRectangleBase::roundCornersChanged(int rx, int ry)
 void KisToolRectangleBase::showSize()
 {
     KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->viewManager()->showFloatingMessage(i18n("Width: %1 px\nHeight: %2 px"
                                                        , createRect(m_dragStart, m_dragEnd).width()
                                                        , createRect(m_dragStart, m_dragEnd).height()), QIcon(), 1000
@@ -97,9 +116,8 @@ void KisToolRectangleBase::activate(const QSet<KoShape *> &shapes)
 
 void KisToolRectangleBase::deactivate()
 {
-    updateArea();
+    cancelStroke();
     KisToolShape::deactivate();
-    endShape();
 }
 
 void KisToolRectangleBase::keyPressEvent(QKeyEvent *event) {
@@ -272,6 +290,7 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
     }
     else {
         KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
+        KIS_ASSERT(kisCanvas);
         kisCanvas->viewManager()->showFloatingMessage(i18n("X: %1 px\nY: %2 px"
                                                            , QString::number(m_dragStart.x(), 'f', 1)
                                                            , QString::number(m_dragStart.y(), 'f', 1)), QIcon(), 1000
@@ -287,41 +306,65 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+    // If the event was not originated by the user releasing the button
+    // (for example due to the canvas loosing focus), then we just cancel the
+    // operation. This prevents some issues with shapes being added after
+    // the image was closed while the shape was being made
+    if (event->spontaneous()) {
+        endStroke();
+    } else {
+        cancelStroke();
+    }
+    event->accept();
+}
+
+void KisToolRectangleBase::requestStrokeEnd()
+{
+    if (mode() != KisTool::PAINT_MODE) {
+        return;
+    }
+    endStroke();
+}
+
+void KisToolRectangleBase::requestStrokeCancellation()
+{
+    if (mode() != KisTool::PAINT_MODE) {
+        return;
+    }
+    cancelStroke();
+}
+
+void KisToolRectangleBase::endStroke()
+{
     setMode(KisTool::HOVER_MODE);
-
     updateArea();
-
     finishRect(createRect(m_dragStart, m_dragEnd), m_roundCornersX, m_roundCornersY);
     endShape();
-    event->accept();
+}
+
+void KisToolRectangleBase::cancelStroke()
+{
+    setMode(KisTool::HOVER_MODE);
+    updateArea();
+    endShape();
 }
 
 QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end)
 {
-    /**
-     * To make the dragging user-friendly it should work in a bit
-     * non-obvious way: the start-drag point must be handled with
-     * "ceil"/"floor" (depending on the direction of the drag) and the
-     * end-drag point should follow usual "round" semantics.
-     */
     QTransform t;
+    t.translate(start.x(), start.y());
     t.rotateRadians(-getRotationAngle());
-    QPointF end1 = t.map(end-start) + start;
+    t.translate(-start.x(), -start.y());
+    const QTransform tInv = t.inverted();
 
-    qreal x0 = start.x();
-    qreal y0 = start.y();
-    qreal x1 = end1.x();
-    qreal y1 = end1.y();
+    const QPointF end1 = t.map(end);
+    const QPointF newStart(qRound(start.x()), qRound(start.y()));
+    const QPointF newEnd(qRound(end1.x()), qRound(end1.y()));
+    const QPointF newCenter = (newStart + newEnd) / 2.0;
+   
+    QRectF result(newStart, newEnd);
+    result.moveCenter(tInv.map(newCenter));
 
-    int newX0 = qRound(x0);
-    int newY0 = qRound(y0);
-
-    int newX1 = qRound(x1);
-    int newY1 = qRound(y1);
-
-    QRectF result;
-    result.setCoords(newX0, newY0, newX1, newY1);
-    result.moveCenter(m_dragCenter);
     return result.normalized();
 }
 

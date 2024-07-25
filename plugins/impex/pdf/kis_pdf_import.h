@@ -16,9 +16,13 @@ class KisPDFImport : public KisImportExportFilter
     Q_OBJECT
 public:
     KisPDFImport(QObject *parent, const QVariantList &);
-    virtual ~KisPDFImport();
+    ~KisPDFImport() override;
+
 public:
-    virtual KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0);
+    KisImportExportErrorCode
+    convert(KisDocument *document,
+            QIODevice *io,
+            KisPropertiesConfigurationSP configuration = nullptr) override;
 };
 
 #endif

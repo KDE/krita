@@ -34,7 +34,7 @@
 SelectionDecorator::SelectionDecorator(KoCanvasResourceProvider *resourceManager)
     : m_hotPosition(KoFlake::Center)
     , m_handleRadius(7)
-    , m_lineWidth(2)
+    , m_decorationThickness(1)
     , m_showFillGradientHandles(false)
     , m_showStrokeFillGradientHandles(false)
     , m_forceShapeOutlines(false)
@@ -52,7 +52,11 @@ void SelectionDecorator::setSelection(KoSelection *selection)
 void SelectionDecorator::setHandleRadius(int radius)
 {
     m_handleRadius = radius;
-    m_lineWidth = qMax(1, (int)(radius / 2));
+}
+
+void SelectionDecorator::setDecorationThickness(int thickness)
+{
+    m_decorationThickness = thickness;
 }
 
 void SelectionDecorator::setShowFillGradientHandles(bool value)
@@ -87,12 +91,12 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         selectedShapes.size() == 1;
 
     bool editable = false;
-    bool forceBoundngRubberLine = false;
+    bool forceBoundingRubberLine = false;
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
             KisHandlePainterHelper helper =
-                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+                KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, m_decorationThickness);
 
             helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
@@ -106,7 +110,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
                     const QPolygonF poly2 = QPolygonF(polys[0].boundingRect());
                     const QPolygonF nonoverlap = poly2.subtracted(poly1);
 
-                    forceBoundngRubberLine |= !nonoverlap.isEmpty();
+                    forceBoundingRubberLine |= !nonoverlap.isEmpty();
                 }
 
                 Q_FOREACH (const QPolygonF &poly, polys) {
@@ -123,9 +127,9 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     const QRectF handleArea = m_selection->outlineRect();
 
     // draw extra rubber line around all the shapes
-    if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
+    if (selectedShapes.size() > 1 || forceBoundingRubberLine) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, m_decorationThickness);
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         helper.drawRubberLine(handleArea);
@@ -135,7 +139,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     // is no need drawing the selection handles
     if (editable) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius, m_decorationThickness);
         helper.setHandleStyle(KisHandleStyle::primarySelection());
 
         QPolygonF outline = handleArea;
@@ -179,7 +183,7 @@ void SelectionDecorator::paintGradientHandles(KoShape *shape, KoFlake::FillVaria
     QVector<KoShapeGradientHandles::Handle> handles = gradientHandles.handles();
 
     KisHandlePainterHelper helper =
-        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, m_decorationThickness);
 
     const QTransform t = shape->absoluteTransformation().inverted();
 
@@ -211,7 +215,7 @@ void SelectionDecorator::paintMeshGradientHandles(KoShape *shape,
     KoShapeMeshGradientHandles gradientHandles(fillVariant, shape);
 
     KisHandlePainterHelper helper =
-        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius);
+        KoShape::createHandlePainterHelperView(&painter, shape, converter, m_handleRadius, m_decorationThickness);
     helper.setHandleStyle(KisHandleStyle::secondarySelection());
 
     helper.drawPath(gradientHandles.path());

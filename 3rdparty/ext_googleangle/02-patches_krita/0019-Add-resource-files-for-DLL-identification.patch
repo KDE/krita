@@ -1,0 +1,39 @@
+From b9d7063a6edb93ac4e0fa3783d1600fb193bc772 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Tue, 10 Jan 2023 21:01:34 -0300
+Subject: [PATCH 19/19] Add resource files for DLL version information
+
+---
+ CMakeLists.txt | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ea7894442..7d9ec7322 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -612,8 +612,13 @@ list(APPEND LIBGLESV2_SOURCES
+     "src/libGLESv2/proc_table_egl.h"
+     "src/libGLESv2/proc_table_egl_autogen.cpp"
+     "src/libGLESv2/resource.h"
+-    "src/libGLESv2/libGLESv2_autogen.def"
+ )
++if (WIN32)
++    list(APPEND LIBGLESV2_SOURCES
++        "src/libGLESv2/libGLESv2_autogen.def"
++        "src/libGLESv2/libGLESv2.rc"
++    )
++endif()
+ add_library(libGLESv2 ${LIBGLESV2_SOURCES})
+ target_link_libraries(libGLESv2 PRIVATE angle::common angle::libANGLE)
+ target_compile_definitions(libGLESv2
+@@ -647,6 +652,7 @@ target_include_directories(libGLESv2 PUBLIC "$<INSTALL_INTERFACE:include>")
+ # libEGL
+ if(WIN32)
+     set(libEGL_def
++        "src/libEGL/libEGL.rc"
+         "src/libEGL/libEGL_autogen.def"
+     )
+ endif()
+-- 
+2.37.1.windows.1
+

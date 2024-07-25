@@ -15,7 +15,7 @@
 #include "KisView.h"
 
 class KisViewManager;
-class KActionCollection;
+class KisKActionCollection;
 class KisMirrorAxis;
 class KisMirrorAxisConfig;
 
@@ -27,7 +27,7 @@ public:
     KisMirrorManager(KisViewManager* view);
     ~KisMirrorManager() override;
 
-    void setup(KActionCollection* collection);
+    void setup(KisKActionCollection* collection);
     void setView(QPointer<KisView> imageView);
 
 private Q_SLOTS:
@@ -40,6 +40,8 @@ private:
     QPointer<KisView> m_imageView;
     QAction *m_mirrorCanvas {nullptr};
     QAction *m_mirrorCanvasAroundCursor {nullptr};
+    QAction *m_mirrorCanvasAroundCanvas {nullptr};
+
     void setDecorationConfig();
     KisMirrorAxisSP decoration() const;
 };

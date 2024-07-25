@@ -17,9 +17,10 @@
 #include <FlakeDebug.h>
 
 #include <QColor>
+#include <QDir>
 #include <QPainter>
 #include <QPainterPath>
-#include <QDir>
+#include <QRandomGenerator>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -30,8 +31,6 @@
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
-#include <KoXmlReader.h>
-#include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoMeshGradientBackground.h>
@@ -59,7 +58,7 @@
 #include <KoMarker.h>
 
 #include <text/KoSvgTextShape.h>
-#include <text/KoSvgTextChunkShape.h>
+#include <text/KoSvgTextLoader.h>
 
 #include "kis_dom_utils.h"
 
@@ -279,7 +278,7 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return 0;
 
     const QDomElement &e = m_context.definition(id);
-    if (KoXml::childNodesCount(e) == 0) {
+    if (e.childNodes().count() == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
         if (m_context.hasDefinition(mhref))
@@ -315,22 +314,22 @@ SvgClipPathHelper* SvgParser::findClipPath(const QString &id)
 
 qreal SvgParser::parseUnit(const QString &unit, bool horiz, bool vert, const QRectF &bbox)
 {
-    return SvgUtil::parseUnit(m_context.currentGC(), unit, horiz, vert, bbox);
+    return SvgUtil::parseUnit(m_context.currentGC(), m_context.resolvedProperties(), unit, horiz, vert, bbox);
 }
 
 qreal SvgParser::parseUnitX(const QString &unit)
 {
-    return SvgUtil::parseUnitX(m_context.currentGC(), unit);
+    return SvgUtil::parseUnitX(m_context.currentGC(), m_context.resolvedProperties(), unit);
 }
 
 qreal SvgParser::parseUnitY(const QString &unit)
 {
-    return SvgUtil::parseUnitY(m_context.currentGC(), unit);
+    return SvgUtil::parseUnitY(m_context.currentGC(), m_context.resolvedProperties(), unit);
 }
 
 qreal SvgParser::parseUnitXY(const QString &unit)
 {
-    return SvgUtil::parseUnitXY(m_context.currentGC(), unit);
+    return SvgUtil::parseUnitXY(m_context.currentGC(), m_context.resolvedProperties(), unit);
 }
 
 qreal SvgParser::parseAngular(const QString &unit)
@@ -537,6 +536,10 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const QDomElement &e)
     return &m_gradients[gradientId];
 }
 
+#define forEachElement( elem, parent ) \
+    for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+    if ( ( elem = _node.toElement() ).isNull() ) {} else
+
 QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const QDomNode& meshpatchNode)
 {
     // path and its associated color
@@ -548,6 +551,7 @@ QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const QDomNode& meshpatc
     QDomElement e = meshpatchNode.toElement();
 
     QDomElement stop;
+
     forEachElement(stop, e) {
         qreal X = 0;    // dummy value, don't care, just to ensure the function won't blow up (also to avoid a Coverity issue)
         QColor color = m_context.styleParser().parseColorStop(stop, gc, X).second;
@@ -638,7 +642,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const QDomElem
     /**
      * In Krita shapes X,Y coordinates are baked into the shape global transform, but
      * the pattern should be painted in "user" coordinates. Therefore, we should handle
-     * this offfset separately.
+     * this offset separately.
      *
      * TODO: Please also note that this offset is different from extraShapeOffset(),
      * because A.inverted() * B != A * B.inverted(). I'm not sure which variant is
@@ -973,6 +977,8 @@ void SvgParser::applyCurrentBasicStyle(KoShape *shape)
         shape->setVisible(false);
     }
     shape->setTransparency(1.0 - gc->opacity);
+
+    applyPaintOrder(shape);
 }
 
 
@@ -1009,6 +1015,7 @@ void SvgParser::applyStyle(KoShape *obj, const SvgStyles &styles, const QPointF 
         obj->setVisible(false);
     }
     obj->setTransparency(1.0 - gc->opacity);
+    applyPaintOrder(obj);
 }
 
 QGradient* prepareGradientForShape(const SvgGradientHelper *gradient,
@@ -1123,7 +1130,7 @@ SvgMeshGradient* prepareMeshGradientForShape(SvgGradientHelper *gradient,
         resultGradient->setTransform(gradient->transform() * relativeToShape);
     } else {
         // NOTE: Krita's shapes use their own coordinate system. Where origin is at the top left
-        // of the SHAPE. All the mesh patches will be rendered in the global 'user' coorindate system
+        // of the SHAPE. All the mesh patches will be rendered in the global 'user' coordinate system
         // where the origin is at the top left of the LAYER/DOCUMENT.
 
         // Get the user coordinates of the shape
@@ -1403,6 +1410,41 @@ void SvgParser::applyMarkers(KoPathShape *shape)
     shape->setAutoFillMarkers(gc->autoFillMarkers);
 }
 
+void SvgParser::applyPaintOrder(KoShape *shape)
+{
+    SvgGraphicsContext *gc = m_context.currentGC();
+    if (!gc)
+        return;
+
+    if (!gc->paintOrder.isEmpty() && gc->paintOrder != "inherit") {
+        QStringList paintOrder = gc->paintOrder.split(" ");
+        QVector<KoShape::PaintOrder> order;
+        Q_FOREACH(const QString p, paintOrder) {
+            if (p == "fill") {
+                order.append(KoShape::Fill);
+            } else if (p == "stroke") {
+                order.append(KoShape::Stroke);
+            } else if (p == "markers") {
+                order.append(KoShape::Markers);
+            }
+        }
+        if (paintOrder.size() == 1 && order.isEmpty()) { // Normal
+            order = KoShape::defaultPaintOrder();
+        }
+        if (order.size() == 1) {
+            if (order.first() == KoShape::Fill) {
+                shape->setPaintOrder(KoShape::Fill, KoShape::Stroke);
+            } else if (order.first() == KoShape::Stroke) {
+                shape->setPaintOrder(KoShape::Stroke, KoShape::Fill);
+            } else if (order.first() == KoShape::Markers) {
+                shape->setPaintOrder(KoShape::Markers, KoShape::Fill);
+            }
+        } else if (order.size() > 1) {
+            shape->setPaintOrder(order.at(0), order.at(1));
+        }
+    }
+}
+
 void SvgParser::applyClipping(KoShape *shape, const QPointF &shapeToOriginalUserCoordinates)
 {
     SvgGraphicsContext *gc = m_context.currentGC();
@@ -1566,7 +1608,7 @@ QList<KoShape*> SvgParser::parseSvg(const QDomElement &e, QSizeF *fragmentSize)
     }
 
     /**
-     * In internal SVG coordinate systems pixles are linked to absolute
+     * In internal SVG coordinate systems pixels are linked to absolute
      * values with a fixed ratio.
      *
      * See CSS specification:
@@ -1683,7 +1725,11 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
     if (!overrideChildrenFrom.isNull()) {
         // we upload styles from both: <use> and <defs>
         uploadStyleToContext(overrideChildrenFrom);
-        childShapes = parseSingleElement(overrideChildrenFrom, 0);
+        if (overrideChildrenFrom.tagName() == "symbol") {
+            childShapes = {parseGroup(overrideChildrenFrom)};
+        } else {
+            childShapes = parseSingleElement(overrideChildrenFrom, 0);
+        }
     } else {
         childShapes = parseContainer(b);
     }
@@ -1702,21 +1748,6 @@ KoShape* SvgParser::parseGroup(const QDomElement &b, const QDomElement &override
     return group;
 }
 
-KoShape* SvgParser::parseTextNode(const QDomText &e)
-{
-    QScopedPointer<KoSvgTextChunkShape> textChunk(new KoSvgTextChunkShape());
-    textChunk->setZIndex(m_context.nextZIndex());
-
-    if (!textChunk->loadSvgTextNode(e, m_context)) {
-        return 0;
-    }
-
-    textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-    applyCurrentBasicStyle(textChunk.data()); // apply style to this group after size is set
-
-    return textChunk.take();
-}
-
 QDomText getTheOnlyTextChild(const QDomElement &e)
 {
     QDomNode firstChild = e.firstChild();
@@ -1724,24 +1755,79 @@ QDomText getTheOnlyTextChild(const QDomElement &e)
                 firstChild.toText() : QDomText();
 }
 
+KoShape* SvgParser::getTextPath(const QDomElement &e) {
+    if (e.hasAttribute("path")) {
+        QDomElement p = e.ownerDocument().createElement("path");
+        p.setAttribute("d", e.attribute("path"));
+        KoShape *s = createPath(p);
+        return s;
+    } else {
+        QString pathId;
+        if (e.hasAttribute("href")) {
+            pathId = e.attribute("href").remove(0, 1);
+        } else if (e.hasAttribute("xlink:href")) {
+            pathId = e.attribute("xlink:href").remove(0, 1);
+        }
+        if (!pathId.isNull()) {
+            KoShape *s = m_context.shapeById(pathId);
+            if (s) {
+                const QTransform absTf = s->absoluteTransformation();
+                KoShape *cloned = s->cloneShape();
+                cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+                return cloned;
+            }
+        }
+    }
+    return nullptr;
+}
+
+void SvgParser::parseTextChildren(const QDomElement &e, KoSvgTextLoader &textLoader) {
+    QDomText t = getTheOnlyTextChild(e);
+    if (!t.isNull()) {
+        textLoader.loadSvgText(t, m_context);
+    } else {
+        textLoader.enterNodeSubtree();
+        for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
+            QDomElement b = n.toElement();
+            textLoader.nextNode();
+            if (b.isNull()) {
+                textLoader.loadSvgText(n.toText(), m_context);
+                KoShape *styleDummy = new KoPathShape();
+                applyCurrentBasicStyle(styleDummy);
+                textLoader.setStyleInfo(styleDummy);
+            } else {
+                m_context.pushGraphicsContext(b);
+                uploadStyleToContext(b);
+                textLoader.loadSvg(b, m_context);
+                if (b.hasChildNodes()) {
+                    parseTextChildren(b, textLoader);
+                }
+                textLoader.setTextPathOnCurrentNode(getTextPath(b));
+                m_context.popGraphicsContext();
+            }
+        }
+        textLoader.leaveNodeSubtree();
+    }
+    KoShape *styleDummy = new KoPathShape();
+    applyCurrentBasicStyle(styleDummy);
+    textLoader.setStyleInfo(styleDummy);
+}
+
 KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *mergeIntoShape)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || e.tagName() == "tspan", 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || e.tagName() == "tspan" || e.tagName() == "textPath", 0);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_isInsideTextSubtree || e.tagName() == "text", 0);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || !mergeIntoShape, 0);
 
     KoSvgTextShape *rootTextShape  = 0;
 
-    if (e.tagName() == "text") {
-        // XXX: Shapes need to be created by their factories
-        if (mergeIntoShape) {
-            rootTextShape = mergeIntoShape;
-        } else {
-            rootTextShape = new KoSvgTextShape();
-            const QString useRichText = e.attribute("krita:useRichText", "true");
-            rootTextShape->setRichTextPreferred(useRichText != "false");
-        }
+    if (mergeIntoShape) {
+        rootTextShape = mergeIntoShape;
+    } else {
+        KoShapeFactoryBase *factory = KoShapeRegistry::instance()->value("KoSvgTextShapeID");
+        rootTextShape = dynamic_cast<KoSvgTextShape*>(factory->createDefaultShape(m_documentResourceManager));
     }
+    KoSvgTextLoader textLoader(rootTextShape);
 
     if (rootTextShape) {
         m_isInsideTextSubtree = true;
@@ -1749,6 +1835,18 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
 
     m_context.pushGraphicsContext(e);
     uploadStyleToContext(e);
+
+    if (rootTextShape) {
+        if (!m_context.currentGC()->shapeInsideValue.isEmpty()) {
+            QList<KoShape*> shapesInside = createListOfShapesFromCSS(e, m_context.currentGC()->shapeInsideValue, m_context);
+            rootTextShape->setShapesInside(shapesInside);
+        }
+
+        if (!m_context.currentGC()->shapeSubtractValue.isEmpty()) {
+            QList<KoShape*> shapesSubtract = createListOfShapesFromCSS(e, m_context.currentGC()->shapeSubtractValue, m_context);
+            rootTextShape->setShapesSubtract(shapesSubtract);
+        }
+    }
 
     if (e.hasAttribute("krita:textVersion")) {
         m_context.currentGC()->textProperties.setProperty(KoSvgTextProperties::KraTextVersionId, e.attribute("krita:textVersion", "1").toInt());
@@ -1758,15 +1856,13 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    KoSvgTextChunkShape *textChunk = rootTextShape ? rootTextShape : new KoSvgTextChunkShape();
-
     if (!mergeIntoShape) {
-        textChunk->setZIndex(m_context.nextZIndex());
+        rootTextShape->setZIndex(m_context.nextZIndex());
     }
 
 
-    if (!m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) ||
-         m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
+    if (m_context.currentGC()->textProperties.hasProperty(KoSvgTextProperties::KraTextVersionId) &&
+        m_context.currentGC()->textProperties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 2) {
 
         static const KoID warning("warn_text_version_1",
                                   i18nc("warning while loading SVG text",
@@ -1781,43 +1877,45 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         }
     }
 
-    textChunk->loadSvg(e, m_context);
+    textLoader.loadSvg(e, m_context, true);
 
     // 1) apply transformation only in case we are not overriding the shape!
     // 2) the transformation should be applied *before* the shape is added to the group!
     if (!mergeIntoShape) {
         // groups should also have their own coordinate system!
-        textChunk->applyAbsoluteTransformation(m_context.currentGC()->matrix);
-        const QPointF extraOffset = extraShapeOffset(textChunk, m_context.currentGC()->matrix);
+        rootTextShape->applyAbsoluteTransformation(m_context.currentGC()->matrix);
+        const QPointF extraOffset = extraShapeOffset(rootTextShape, m_context.currentGC()->matrix);
 
         // handle id
-        applyId(e.attribute("id"), textChunk);
-        applyCurrentStyle(textChunk, extraOffset); // apply style to this group after size is set
+        applyId(e.attribute("id"), rootTextShape);
+        applyCurrentStyle(rootTextShape, extraOffset); // apply style to this group after size is set
     } else {
         m_context.currentGC()->matrix = mergeIntoShape->absoluteTransformation();
-        applyCurrentBasicStyle(textChunk);
+        applyCurrentBasicStyle(rootTextShape);
     }
 
     QDomText onlyTextChild = getTheOnlyTextChild(e);
     if (!onlyTextChild.isNull()) {
-        textChunk->loadSvgTextNode(onlyTextChild, m_context);
+        textLoader.loadSvgText(onlyTextChild, m_context);
+
     } else {
-        QList<KoShape*> childShapes = parseContainer(e, true);
-        addToGroup(childShapes, textChunk);
+        parseTextChildren(e, textLoader);
+
     }
 
     m_context.popGraphicsContext();
 
-    textChunk->normalizeCharTransformations();
-
-    if (rootTextShape) {
-        textChunk->simplifyFillStrokeInheritance();
-
-        m_isInsideTextSubtree = false;
-        rootTextShape->relayout();
+    if (e.hasAttribute("text-rendering")) {
+        rootTextShape->setTextRenderingFromString(e.attribute("text-rendering"));
     }
 
-    return textChunk;
+    m_isInsideTextSubtree = false;
+
+    //rootTextShape->debugParsing();
+    rootTextShape->relayout();
+
+
+    return rootTextShape;
 }
 
 QList<KoShape*> SvgParser::parseContainer(const QDomElement &e, bool parseTextNodes)
@@ -1832,14 +1930,6 @@ QList<KoShape*> SvgParser::parseContainer(const QDomElement &e, bool parseTextNo
     for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
         QDomElement b = n.toElement();
         if (b.isNull()) {
-            if (parseTextNodes && n.isText()) {
-                KoShape *shape = parseTextNode(n.toText());
-
-                if (shape) {
-                    shapes += shape;
-                }
-            }
-
             continue;
         }
 
@@ -1887,20 +1977,17 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
 
     if (b.tagName() == "svg") {
         shapes += parseSvg(b);
-    } else if (b.tagName() == "g" || b.tagName() == "a" || b.tagName() == "symbol") {
+    } else if (b.tagName() == "g" || b.tagName() == "a") {
         // treat svg link <a> as group so we don't miss its child elements
         shapes += parseGroup(b);
-
-        if (b.tagName() == "symbol") {
-            parseSymbol(b);
-        }
-
+    } else if (b.tagName() == "symbol") {
+        parseSymbol(b);
     } else if (b.tagName() == "switch") {
         m_context.pushGraphicsContext(b);
         shapes += parseContainer(b);
         m_context.popGraphicsContext();
     } else if (b.tagName() == "defs") {
-        if (KoXml::childNodesCount(b) > 0) {
+        if (b.childNodes().count() > 0) {
             /**
              * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
              *          any role in shapes outline calculation. But setVisible(false) shapes do!
@@ -1923,18 +2010,10 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
         parseMarker(b);
     } else if (b.tagName() == "style") {
         m_context.addStyleSheet(b);
-    } else if (b.tagName() == "text" ||
-               b.tagName() == "tspan") {
-
+    } else if (b.tagName() == "text" || b.tagName() == "tspan" || b.tagName() == "textPath") {
         shapes += parseTextElement(b);
-    } else if (b.tagName() == "rect" ||
-               b.tagName() == "ellipse" ||
-               b.tagName() == "circle" ||
-               b.tagName() == "line" ||
-               b.tagName() == "polyline" ||
-               b.tagName() == "polygon" ||
-               b.tagName() == "path" ||
-               b.tagName() == "image") {
+    } else if (b.tagName() == "rect" || b.tagName() == "ellipse" || b.tagName() == "circle" || b.tagName() == "line" || b.tagName() == "polyline"
+               || b.tagName() == "polygon" || b.tagName() == "path" || b.tagName() == "image") {
         KoShape *shape = createObjectDirect(b);
 
         if (shape) {
@@ -2064,6 +2143,9 @@ KoShape * SvgParser::createObjectDirect(const QDomElement &b)
 
     m_context.popGraphicsContext();
 
+    if (obj) {
+        m_shapeParentTransform.insert(obj, m_context.currentGC()->matrix);
+    }
     return obj;
 }
 
@@ -2086,6 +2168,10 @@ KoShape * SvgParser::createObject(const QDomElement &b, const SvgStyles &style)
     }
 
     m_context.popGraphicsContext();
+
+    if (obj) {
+        m_shapeParentTransform.insert(obj, m_context.currentGC()->matrix);
+    }
 
     return obj;
 }
@@ -2135,6 +2221,94 @@ KoShape * SvgParser::createShapeFromElement(const QDomElement &element, SvgLoadi
     return object;
 }
 
+KoShape *SvgParser::createShapeFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)
+{
+    if (value.isEmpty()) {
+        return 0;
+    }
+    unsigned int start = value.indexOf('(') + 1;
+    unsigned int end = value.indexOf(')', start);
+
+    QString val = value.mid(start, end - start);
+    QString fillRule;
+    if (val.startsWith("evenodd,")) {
+        start += QString("evenodd,").size();
+        fillRule = "evenodd";
+    } else if (val.startsWith("nonzero,")) {
+        start += QString("nonzero,").size();
+        fillRule = "nonzero";
+    }
+    val = value.mid(start, end - start);
+
+    QDomElement el;
+    if (value.startsWith("url(")) {
+        start = value.indexOf('#') + 1;
+        KoShape *s = m_context.shapeById(value.mid(start, end - start));
+        if (s) {
+            const QTransform absTf = s->absoluteTransformation();
+            KoShape *cloned = s->cloneShape();
+            cloned->setTransformation(absTf * m_shapeParentTransform.value(s).inverted());
+            return cloned;
+        }
+    } else if (value.startsWith("circle(")) {
+        el = e.ownerDocument().createElement("circle");
+        QStringList params = val.split(" ");
+        el.setAttribute("r", SvgUtil::parseUnitXY(context.currentGC(), context.resolvedProperties(), params.first()));
+        if (params.contains("at")) {
+            // 1 == "at"
+            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), params.at(2)));
+            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), params.at(3)));
+        }
+    } else if (value.startsWith("ellipse(")) {
+        el = e.ownerDocument().createElement("ellipse");
+        QStringList params = val.split(" ");
+        el.setAttribute("rx", SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), params.at(0)));
+        el.setAttribute("ry", SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), params.at(1)));
+        if (params.contains("at")) {
+            // 2 == "at"
+            el.setAttribute("cx", SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), params.at(3)));
+            el.setAttribute("cy", SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), params.at(4)));
+        }
+    } else if (value.startsWith("polygon(")) {
+        el = e.ownerDocument().createElement("polygon");
+        QStringList points;
+        Q_FOREACH(QString point,  SvgUtil::simplifyList(val)) {
+            bool xVal = points.size() % 2;
+            if (xVal) {
+                points.append(QString::number(SvgUtil::parseUnitX(context.currentGC(), context.resolvedProperties(), point)));
+            } else {
+                points.append(QString::number(SvgUtil::parseUnitY(context.currentGC(), context.resolvedProperties(), point)));
+            }
+        }
+        el.setAttribute("points", points.join(" "));
+    } else if (value.startsWith("path(")) {
+        el = e.ownerDocument().createElement("path");
+        // SVG path data is inside a string.
+        start += 1;
+        end -= 1;
+        el.setAttribute("d", value.mid(start, end - start));
+    }
+
+    el.setAttribute("fill-rule", fillRule);
+    return createShapeFromElement(el, context);
+}
+
+QList<KoShape *> SvgParser::createListOfShapesFromCSS(const QDomElement e, const QString value, SvgLoadingContext &context)
+{
+    QList<KoShape*> shapeList;
+    if (value == "auto" || value == "none") {
+        return shapeList;
+    }
+    QStringList params = value.split(")");
+    Q_FOREACH(const QString param, params) {
+        KoShape *s = createShapeFromCSS(e, param.trimmed()+")", context);
+        if (s) {
+            shapeList.append(s);
+        }
+    }
+    return shapeList;
+}
+
 KoShape *SvgParser::createShape(const QString &shapeID)
 {
     KoShapeFactoryBase *factory = KoShapeRegistry::instance()->get(shapeID);
@@ -2170,6 +2344,17 @@ void SvgParser::applyId(const QString &id, KoShape *shape)
     if (id.isEmpty())
         return;
 
-    shape->setName(id);
-    m_context.registerShape(id, shape);
+    KoShape *existingShape = m_context.shapeById(id);
+    if (existingShape) {
+        debugFlake << "SVG contains nodes with duplicated id:" << id;
+        // Generate a random name and just don't register the shape.
+        // We don't use the name as a unique identifier so we don't need to
+        // worry about the extremely rare case of name collision.
+        const QString suffix = QString::number(QRandomGenerator::system()->bounded(0x10000000, 0x7FFFFFFF), 16);
+        const QString newName = id + '_' + suffix;
+        shape->setName(newName);
+    } else {
+        shape->setName(id);
+        m_context.registerShape(id, shape);
+    }
 }

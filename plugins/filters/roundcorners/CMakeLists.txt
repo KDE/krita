@@ -1,4 +1,4 @@
 set(kritaroundcornersfilter_SOURCES kis_round_corners_filter_plugin.cpp kis_round_corners_filter.cpp )
-add_library(kritaroundcornersfilter MODULE ${kritaroundcornersfilter_SOURCES})
+kis_add_library(kritaroundcornersfilter MODULE ${kritaroundcornersfilter_SOURCES})
 target_link_libraries(kritaroundcornersfilter kritaui)
 install(TARGETS kritaroundcornersfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

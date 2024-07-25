@@ -37,6 +37,8 @@ public:
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
 
+    bool hasSelection() override;
+
     void deleteSelection() override;
 
     QMenu* popupActionsMenu() override;
@@ -67,6 +69,9 @@ public Q_SLOTS:
     void cut() override;
     void copy() const override;
     bool paste() override;
+
+    bool selectAll() override;
+    void deselect() override;
 
 
 private:

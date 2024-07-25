@@ -10,6 +10,7 @@
 #include <QWidget>
 
 #include <KoColor.h>
+#include <QtWidgets/QComboBox>
 #include "kis_signal_auto_connection.h"
 
 #include "ui_wdgSpecificColorSelectorWidget.h"
@@ -35,7 +36,6 @@ class KisSpecificColorSelectorWidget : public QWidget
 public:
     KisSpecificColorSelectorWidget(QWidget* parent);
     ~KisSpecificColorSelectorWidget() override;
-    bool customColorSpaceUsed();
 
 protected:
     void resizeEvent(QResizeEvent* event) override;
@@ -45,14 +45,17 @@ public Q_SLOTS:
 
     void setColorSpace(const KoColorSpace *cs, bool force = false);
     void setColor(const KoColor&);
+    void setFGColor(const KoColor& c);
 
 private Q_SLOTS:
     void update();
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
+    void setUseSameColorSpace(bool locked, bool reloadColorSpace = true);
     void rereadCurrentColorSpace(bool force = false);
     void onChkUsePercentageChanged(bool);
     void hsvSelectorClicked(QAbstractButton *);
+    void changeHsxMode(int index);
 
 Q_SIGNALS:
     void colorChanged(const KoColor&);
@@ -65,18 +68,21 @@ private:
     KisHexColorInput *m_hexInput;
     KisHsvColorInput *m_hsvSlider;
     QRadioButton *m_rgbButton;
-    QRadioButton *m_hsvButton;
+    QRadioButton *m_hsxButton;
+
     QButtonGroup *m_hsvSelector;
     const KoColorSpace* m_colorSpace;
     KoColor m_color;
+    KoColor m_FGColor;
     bool m_updateAllowed;
     KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
-    bool m_customColorSpaceSelected;
     QScopedPointer<Ui_wdgSpecificColorSelectorWidget> m_ui;
 
     KisDisplayColorConverter *m_displayConverter;
     KisSignalAutoConnectionsStore m_converterConnection;
+
+    QComboBox* m_hsxModeComboBox;
 };
 
 #endif

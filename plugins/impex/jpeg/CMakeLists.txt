@@ -22,7 +22,7 @@ set(kritajpegimport_SOURCES
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
+kis_add_library(kritajpegimport MODULE ${kritajpegimport_SOURCES})
 
 target_link_libraries(kritajpegimport kritaui  ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 
@@ -35,9 +35,17 @@ set(kritajpegexport_SOURCES
 
 ki18n_wrap_ui(kritajpegexport_SOURCES kis_wdg_options_jpeg.ui )
 
-add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
+kis_add_library(kritajpegexport MODULE ${kritajpegexport_SOURCES})
 
 target_link_libraries(kritajpegexport kritaui kritaimpex ${JPEG_LIBRARIES} ${LCMS2_LIBRARIES} LibExiv2::LibExiv2 )
 
+if (MSVC AND "${CMAKE_CXX_FLAGS}" MATCHES "-EHsc") 
+    message(WARNING "The JPEG error catcher requires crossing the C ABI on MSVC. Exceptions need to be patched in.")
+    # It needs to be done at the file level to override OpenEXR sneaking /EHsc.
+    # See https://github.com/AcademySoftwareFoundation/openexr/issues/1326
+    set_source_files_properties(kis_jpeg_converter.cc PROPERTIES COMPILE_OPTIONS "/EHsc-")
+endif()
+
 install(TARGETS kritajpegexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_jpeg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+install(FILES krita_jpeg.desktop DESTINATION ${KDE_INSTALL_APPDIR})

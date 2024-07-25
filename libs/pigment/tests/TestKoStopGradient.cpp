@@ -20,7 +20,7 @@
 #include "DebugPigment.h"
 #include "kis_debug.h"
 
-#include "sdk/tests/testpigment.h"
+#include <testpigment.h>
 
 void TestKoStopGradient::TestSVGStopGradientLoading()
 {

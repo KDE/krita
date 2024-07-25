@@ -45,7 +45,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBoxCol"/>
+          <widget class="QSpinBox" name="spinBoxCol">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label">
@@ -110,7 +114,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QSpinBox" name="spinBoxRow"/>
+          <widget class="QSpinBox" name="spinBoxRow">
+           <property name="minimum">
+            <number>1</number>
+           </property>
+          </widget>
          </item>
          <item>
           <spacer name="verticalSpacer">

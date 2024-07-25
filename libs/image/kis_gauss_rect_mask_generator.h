@@ -14,7 +14,7 @@
 #include "kis_base_mask_generator.h"
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * This mask generator uses a Gaussian-blurred rectangle
@@ -32,14 +32,14 @@ public:
     void setScale(qreal scaleX, qreal scaleY) override;
 
     bool shouldVectorize() const override;
-    KisBrushMaskApplicatorBase* applicator() override;
-    void resetMaskApplicator(bool forceScalar);
+    KisBrushMaskApplicatorBase *applicator() const override;
+    void setMaskScalarApplicator();
 
 private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisGaussRectangleMaskGenerator>;
+    friend struct FastRowProcessor<KisGaussRectangleMaskGenerator>;
 };
 
 #endif

@@ -27,6 +27,7 @@
 
 #ifdef Q_OS_MACOS
 #include <errno.h>
+#include "KisMacosSecurityBookmarkManager.h"
 #endif
 
 KisImageConfig::KisImageConfig(bool readOnly)
@@ -237,10 +238,24 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
     // nice to the user. having a clearly named swap file in the home folder is
     // much nicer to Krita's users.
 
+    // NOTE: QStandardPaths::AppLocalDataLocation on macos sandboxed envs
+    // does not return writable locations at all times, using QDir static methods
+    // will always return locations inside the sandbox Container
+
     // furthermore, this is just a default and swapDir can always be configured
     // to another location.
 
-    QString swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + '/' + suffix;
+    QString swap;
+
+    KisMacosSecurityBookmarkManager *bookmarkmngr = KisMacosSecurityBookmarkManager::instance();
+    if ( bookmarkmngr->isSandboxed() ) {
+        QDir sandboxHome = QDir::home();
+        if (sandboxHome.cd("tmp")) {
+            swap = sandboxHome.path();
+        }
+    } else {
+        swap = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + '/' + suffix;
+    }
 #else
     Q_UNUSED(suffix);
     QString swap = QDir::tempPath();
@@ -255,6 +270,7 @@ QString KisImageConfig::safelyGetWritableTempLocation(const QString &suffix, con
 
     QString chosenLocation;
     QStringList proposedSwapLocations;
+
     proposedSwapLocations << swap;
     proposedSwapLocations << QDir::tempPath();
     proposedSwapLocations << QDir::homePath();
@@ -319,14 +335,16 @@ void KisImageConfig::setOnionSkinTintFactor(int value)
     m_config.writeEntry("onionSkinTintFactor", value);
 }
 
-int KisImageConfig::onionSkinOpacity(int offset) const
+int KisImageConfig::onionSkinOpacity(int offset, bool requestDefault) const
 {
     int value = m_config.readEntry("onionSkinOpacity_" + QString::number(offset), -1);
 
-    if (value < 0) {
+    if (value < 0 || requestDefault) {
         const int num = numberOfOnionSkins();
-        const qreal dx = qreal(qAbs(offset)) / num;
-        value = 0.7 * exp(-pow2(dx) / 0.5) * 255;
+        if (num > 0) {
+            const qreal dx = qreal(qAbs(offset)) / num;
+            value = 0.7 * exp(-pow2(dx) / 0.5) * 255;
+        }
     }
 
     return value;
@@ -392,6 +410,8 @@ void KisImageConfig::setAutoKeyModeDuplicate(bool value)
 
 #if defined Q_OS_LINUX
 #include <sys/sysinfo.h>
+#elif defined Q_OS_HAIKU
+#include <OS.h>
 #elif defined Q_OS_FREEBSD || defined Q_OS_NETBSD || defined Q_OS_OPENBSD
 #include <sys/sysctl.h>
 #elif defined Q_OS_WIN
@@ -414,6 +434,13 @@ int KisImageConfig::totalRAM()
     if(!error) {
         totalMemory = info.totalram * info.mem_unit / (1UL << 20);
     }
+#elif defined Q_OS_HAIKU
+	system_info info;
+	error = get_system_info(&info) == B_OK ? 0 : 1;
+	if (!error) {
+		uint64_t size = (info.max_pages * B_PAGE_SIZE);
+	totalMemory = size >> 20;
+	}
 #elif defined Q_OS_FREEBSD || defined Q_OS_NETBSD || defined Q_OS_OPENBSD
     u_long physmem;
 #   if defined HW_PHYSMEM64 // NetBSD only
@@ -508,6 +535,10 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
 
 void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
 {
+    if (!proofingSpace || !proofingSpace->profile()) {
+        return;
+    }
+
     m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
     m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
     m_config.writeEntry("defaultProofingProfileDepth", proofingSpace->colorDepthId().id());
@@ -637,6 +668,16 @@ void KisImageConfig::setAnimationCacheRegionOfInterestMargin(qreal value)
     m_config.writeEntry("animationCacheRegionOfInterestMargin", value);
 }
 
+qreal KisImageConfig::selectionOutlineOpacity(bool defaultValue) const
+{
+    return defaultValue ? 1.0 : m_config.readEntry("selectionOutlineOpacity", 1.0);
+}
+
+void KisImageConfig::setSelectionOutlineOpacity(qreal value)
+{
+    m_config.writeEntry("selectionOutlineOpacity", value);
+}
+
 QColor KisImageConfig::selectionOverlayMaskColor(bool defaultValue) const
 {
     QColor def(255, 0, 0, 128);
@@ -661,6 +702,16 @@ void KisImageConfig::setMaxBrushSize(int value)
 int KisImageConfig::maxMaskingBrushSize() const
 {
     return qMin(15000, 3 * maxBrushSize());
+}
+
+bool KisImageConfig::renameMergedLayers(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("renameMergedLayers", true);
+}
+
+void KisImageConfig::setRenameMergedLayers(bool value)
+{
+    m_config.writeEntry("renameMergedLayers", value);
 }
 
 QString KisImageConfig::exportConfigurationXML(const QString &exportConfigId, bool defaultValue) const

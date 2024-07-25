@@ -86,7 +86,7 @@ void KisPerspectiveTransformWorker::init(const QTransform &transform)
     m_backwardTransform = transform.inverted();
 
     if (m_dev) {
-        m_srcRect = m_dev->exactBounds();
+        m_srcRect = kisGrowRect(m_dev->exactBounds(), 1.0);
 
         QPolygonF dstClipPolygonUnused;
 
@@ -205,12 +205,12 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
     KIS_SAFE_ASSERT_RECOVER_RETURN(srcDev->pixelSize() == dstDev->pixelSize());
     KIS_SAFE_ASSERT_RECOVER_NOOP(*srcDev->colorSpace() == *dstDev->colorSpace());
 
-    QRectF srcClipRect = srcDev->exactBounds() | srcDev->defaultBounds()->imageBorderRect();
+    QRectF srcClipRect = kisGrowRect(srcDev->exactBounds(), 1) | srcDev->defaultBounds()->imageBorderRect();
     if (srcClipRect.isEmpty()) return;
 
-    if (m_isIdentity || m_isTranslating) {
+    if (m_isIdentity || (m_isTranslating && !m_forceSubPixelTranslation)) {
         KisPainter gc(dstDev);
-        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(dstRect.topLeft(), srcDev, m_backwardTransform.mapRect(dstRect));
     } else {
         KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());
@@ -243,4 +243,14 @@ QTransform KisPerspectiveTransformWorker::forwardTransform() const
 QTransform KisPerspectiveTransformWorker::backwardTransform() const
 {
     return m_backwardTransform;
+}
+
+bool KisPerspectiveTransformWorker::forceSubPixelTranslation() const
+{
+    return m_forceSubPixelTranslation;
+}
+
+void KisPerspectiveTransformWorker::setForceSubPixelTranslation(bool value)
+{
+    m_forceSubPixelTranslation = value;
 }

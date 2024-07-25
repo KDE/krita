@@ -1,6 +1,6 @@
 set(kritarotateimage_SOURCES rotateimage.cc dlg_rotateimage.cc )
 ki18n_wrap_ui(kritarotateimage_SOURCES wdg_rotateimage.ui )
-add_library(kritarotateimage MODULE ${kritarotateimage_SOURCES})
+kis_add_library(kritarotateimage MODULE ${kritarotateimage_SOURCES})
 target_link_libraries(kritarotateimage kritaui)
 install(TARGETS kritarotateimage  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  rotateimage.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

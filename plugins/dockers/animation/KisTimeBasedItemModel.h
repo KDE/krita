@@ -16,8 +16,9 @@
 #include "kis_types.h"
 
 class KisTimeSpan;
-class KisAnimationPlayer;
+class KisCanvasAnimationState;
 class KisKeyframeChannel;
+enum PlaybackState : unsigned int;
 
 class KRITAANIMATIONDOCKER_EXPORT KisTimeBasedItemModel : public QAbstractTableModel
 {
@@ -30,7 +31,9 @@ public:
     void setImage(KisImageWSP image);
     void setFrameCache(KisAnimationFrameCacheSP cache);
     bool isFrameCached(const int frame);
-    void setAnimationPlayer(KisAnimationPlayer *player);
+    void setAnimationPlayer(KisCanvasAnimationState *player);
+    void setDocument(class KisDocument* document);
+    KisDocument* document() const;
 
     void setLastVisibleFrame(int time);
 
@@ -51,7 +54,6 @@ public:
 
     void setScrubState(bool active);
     bool isScrubbing();
-    void scrubTo(int time, bool preview);
 
     void setPlaybackRange(const KisTimeSpan &range);
     bool isPlaybackActive() const;
@@ -62,6 +64,7 @@ public:
     enum ItemDataRole
     {
         ActiveFrameRole = Qt::UserRole + 101,
+        ScrubToRole,
         CloneOfActiveFrame,
         CloneCount,
         FrameExistsRole,
@@ -92,12 +95,11 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void slotFramerateChanged();
-    void slotClipRangeChanged();
+    void slotPlaybackRangeChanged();
     void slotCacheChanged();
-    void slotInternalScrubPreviewRequested(int time);
 
     void slotPlaybackFrameChanged();
-    void slotPlaybackStopped();
+    void slotPlaybackStateChanged(PlaybackState state);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

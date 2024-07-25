@@ -12,7 +12,7 @@
 #include "filestest.h"
 #include "jpeglib.h"
 #include <kis_meta_data_backend_registry.h>
-#include <sdk/tests/testui.h>
+#include <testui.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -44,19 +44,19 @@ void KisJpegTest::testFiles()
 
 void KisJpegTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testImportFromWriteonly(JpegMimetype);
 }
 
 
 void KisJpegTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testExportToReadonly(JpegMimetype);
 }
 
 
 void KisJpegTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testImportIncorrectFormat(JpegMimetype);
 }
 KISTEST_MAIN(KisJpegTest)
 

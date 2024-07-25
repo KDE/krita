@@ -9,12 +9,13 @@
 #include <kritaimage_export.h>
 #include <kundo2command.h>
 #include "kis_types.h"
+#include "kis_command_utils.h"
 
 /**
  * This command sets the global selection of the image. No saving
  * of the previous selection for "Reselect" action happens
  */
-class KRITAIMAGE_EXPORT KisSetGlobalSelectionCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisSetGlobalSelectionCommand : public KisCommandUtils::AggregateCommand
 {
 
 public:
@@ -26,8 +27,7 @@ public:
      */
     KisSetGlobalSelectionCommand(KisImageWSP image, KisSelectionSP selection);
 
-    void redo() override;
-    void undo() override;
+    void populateChildCommands() override;
 
 private:
     KisImageWSP m_image;

@@ -17,7 +17,7 @@
 class KisInsertKeyframeCommand : public KUndo2Command
 {
 public:
-    KisInsertKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd);
+    KisInsertKeyframeCommand(KisKeyframeChannel *channel, int time, KisKeyframeSP keyframe, KUndo2Command *parentCmd = nullptr);
 
     void redo() override;
     void undo() override;
@@ -34,7 +34,7 @@ private:
 class KisRemoveKeyframeCommand : public KUndo2Command
 {
 public:
-    KisRemoveKeyframeCommand(KisKeyframeChannel *channel, int time, KUndo2Command* parentCmd);
+    KisRemoveKeyframeCommand(KisKeyframeChannel *channel, int time, KUndo2Command* parentCmd = nullptr);
 
     void redo() override;
     void undo() override;

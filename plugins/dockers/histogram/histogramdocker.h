@@ -21,8 +21,6 @@ class HistogramDockerPlugin : public QObject
     public:
         HistogramDockerPlugin(QObject *parent, const QVariantList &);
         ~HistogramDockerPlugin() override;
-    private:
-        KisViewManager* m_view {nullptr};
 };
 
 #endif

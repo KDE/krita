@@ -59,9 +59,9 @@ QTextDocument *NodeToolTip::createDocument(const QModelIndex &index)
     QString errorMessage;
     {
         auto it = std::find_if(properties.begin(), properties.end(),
-        [] (const KisBaseNode::Property &prop) {
-            return prop.id == KisLayerPropertiesIcons::layerError.id();
-        });
+                               kismpl::mem_equal_to(&KisBaseNode::Property::id,
+                                                    KisLayerPropertiesIcons::layerError.id()));
+
         if (it != properties.end()) {
             doc->addResource(QTextDocument::ImageResource, QUrl("data:warn_symbol"), it->onIcon.pixmap(QSize(32,32)).toImage());
             errorMessage = QString("<table align=\"center\" border=\"0\"><tr valign=\"middle\"><td align=\"right\"><img src=\"data:warn_symbol\"></td><td align=\"left\"><b>%1</b></td></tr></table>").arg(it->state.toString());

@@ -23,7 +23,7 @@
  * Waiting thread:
  *
  * KisLazyWaitCondition condition;
- * condition.initWainting();   // (1)
+ * condition.initWaiting();   // (1)
  * while(!checkSatisfied()) {
  *     condition.wait();
  * }

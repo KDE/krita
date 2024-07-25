@@ -18,7 +18,7 @@
 
 #include <transform_transaction_properties.h>
 
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include <commands_new/KisUpdateCommandEx.h>
 
 class KisPostExecutionUndoAdapter;
@@ -63,13 +63,20 @@ public:
         Destination destination;
     };
 
+    class CalculateConvexHullData : public KisStrokeJobData {
+    public:
+        CalculateConvexHullData()
+            : KisStrokeJobData(SEQUENTIAL, NORMAL) // Is this right?
+        {}
+    };
+
 private:
 
     /**
      * A special barrier update data that triggers regeneration of
      * all the processed nodes.
      */
-    struct BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    struct BarrierUpdateData : public KisAsynchronousStrokeUpdateHelper::UpdateData
     {
         BarrierUpdateData(bool forceUpdate);
         KisStrokeJobData* createLodClone(int levelOfDetail) override;
@@ -86,7 +93,7 @@ public:
      * be "temporary", that is, they do not go to the final history, e.g. when
      * clearing a shape layer's projection.
      *
-     * 2) Apply TransoformLod commands to generate preview of the
+     * 2) Apply TransformLod commands to generate preview of the
      * transformation. Some commands may be declared as "temporary", that is,
      * they do not go to the final history, e.g. for the shape layer, for
      * which we just write to the projection device explicitly.
@@ -120,7 +127,7 @@ public:
     InplaceTransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
                                    const QString &filterId,
                                    bool forceReset,
-                                   KisNodeSP rootNode,
+                                   KisNodeList rootNodes,
                                    KisSelectionSP selection,
                                    KisPaintDeviceSP externalSource,
                                    KisStrokeUndoFacade *undoFacade,
@@ -135,6 +142,7 @@ public:
 
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
+    void sigConvexHullCalculated(QPolygon convexHull, void *cookie);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -146,6 +154,7 @@ private:
 
     void tryPostUpdateJob(bool forceUpdate);
     void doCanvasUpdate(bool forceUpdate);
+    QPolygon calculateConvexHull();
 
     int calculatePreferredLevelOfDetail(const QRect &srcRect);
 

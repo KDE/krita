@@ -22,7 +22,7 @@ class KRITAIMAGE_EXPORT KisTransformProcessingVisitor : public KisProcessingVisi
 {
 public:
     KisTransformProcessingVisitor(qreal  xscale, qreal  yscale,
-                                  qreal  xshear, qreal  yshear, const QPointF &shearOrigin, qreal angle,
+                                  qreal  xshear, qreal  yshear, qreal angle,
                                   qreal  tx, qreal ty,
                                   KisFilterStrategy *filter,
                                   const QTransform &shapesCorrection = QTransform());
@@ -55,7 +55,6 @@ private:
     qreal m_sx, m_sy;
     qreal m_tx, m_ty;
     qreal m_shearx, m_sheary;
-    QPointF m_shearOrigin;
     KisFilterStrategy *m_filter;
     qreal m_angle;
     QTransform m_shapesCorrection;

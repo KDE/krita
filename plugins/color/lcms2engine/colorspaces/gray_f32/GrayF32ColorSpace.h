@@ -10,7 +10,9 @@
 #include <KoColorModelStandardIds.h>
 #include "LcmsColorSpace.h"
 
+#if !defined(TYPE_GRAYA_FLT)
 #define TYPE_GRAYA_FLT         (FLOAT_SH(1)|COLORSPACE_SH(PT_GRAY)|EXTRA_SH(1)|CHANNELS_SH(1)|BYTES_SH(4))
+#endif
 
 struct KoGrayF32Traits;
 
@@ -47,7 +49,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return "GRAYAF32";
+        return QStringLiteral("GRAYAF32");
     }
 
     bool hasHighDynamicRange() const override

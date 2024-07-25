@@ -34,13 +34,25 @@ class KRITAUI_EXPORT KisUtilityTitleBar : public QWidget
 public:
     KisUtilityTitleBar(QWidget *parent = nullptr);
     KisUtilityTitleBar(QLabel *title, QWidget *parent = nullptr);
+    ~KisUtilityTitleBar();
+    QSize sizeHint() const override
+    {
+        return QSize(32, 32);
+    }
 
-    virtual QSize sizeHint() const {return QSize(32,32);}
+    QWidget* widgetArea();
+    void setWidgetArea(QWidget* widgetArea);
 
+
+public Q_SLOTS:
+    void setLocked(bool locked);
 protected:
     QHBoxLayout *widgetAreaLayout;
 
     const int SPACING_UNIT = 16;
+
+    class Private;
+    Private * const d;
 };
 
 #endif // KISUTILITYTITLEBAR_H

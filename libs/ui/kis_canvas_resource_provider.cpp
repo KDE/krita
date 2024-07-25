@@ -327,6 +327,9 @@ void KisCanvasResourceProvider::slotCanvasResourceChanged(int key, const QVarian
     case(KoCanvasResource::CurrentKritaNode) :
         emit sigNodeChanged(currentNode());
         break;
+    case(KoCanvasResource::CurrentEffectiveCompositeOp) :
+        emit sigEffectiveCompositeOpChanged();
+        break;
     case (KoCanvasResource::Opacity):
     {
         emit sigOpacityChanged(res.toDouble());
@@ -357,7 +360,6 @@ void KisCanvasResourceProvider::setEraserMode(bool value)
 {
     m_resourceManager->setResource(KoCanvasResource::EraserMode,
                                    QVariant::fromValue(value));
-    emit sigEraserModeToggled(value);
 }
 
 void KisCanvasResourceProvider::slotPainting()
@@ -395,26 +397,6 @@ void KisCanvasResourceProvider::slotGamutMaskDeactivate()
 {
     m_resourceManager->setResource(KoCanvasResource::GamutMaskActive, QVariant::fromValue(false));
     emit sigGamutMaskDeactivated();
-}
-
-QList<QPointer<KisAbstractPerspectiveGrid> > KisCanvasResourceProvider::perspectiveGrids() const
-{
-    return m_perspectiveGrids;
-}
-
-void KisCanvasResourceProvider::addPerspectiveGrid(KisAbstractPerspectiveGrid* grid)
-{
-    m_perspectiveGrids.append(grid);
-}
-
-void KisCanvasResourceProvider::removePerspectiveGrid(KisAbstractPerspectiveGrid* grid)
-{
-    m_perspectiveGrids.removeOne(grid);
-}
-
-void KisCanvasResourceProvider::clearPerspectiveGrids()
-{
-    m_perspectiveGrids.clear();
 }
 
 void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
@@ -521,6 +503,16 @@ void KisCanvasResourceProvider::setSize(qreal size)
 qreal KisCanvasResourceProvider::size() const
 {
     return m_resourceManager->resource(KoCanvasResource::Size).toReal();
+}
+
+void KisCanvasResourceProvider::setBrushRotation(qreal rotation)
+{
+    m_resourceManager->setResource(KoCanvasResource::BrushRotation, rotation);
+}
+
+qreal KisCanvasResourceProvider::brushRotation() const
+{
+    return m_resourceManager->resource(KoCanvasResource::BrushRotation).toReal();
 }
 
 void KisCanvasResourceProvider::setPatternSize(qreal size)

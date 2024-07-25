@@ -10,6 +10,7 @@
 #include <kis_image.h>
 #include <kis_wrapped_rect.h>
 #include <lazybrush/kis_colorize_mask.h>
+#include <KoCompositeOpRegistry.h>
 
 #include "KisEncloseAndFillProcessingVisitor.h"
 
@@ -25,13 +26,19 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         bool regionSelectionIncludeSurroundingRegions,
         int fillThreshold,
         int fillOpacitySpread,
+        int closeGap,
         bool antiAlias,
         int expand,
+        bool stopGrowingAtDarkestPixel,
         int feather,
         bool useSelectionAsBoundary,
         bool usePattern,
         bool unmerged,
-        bool useBgColor
+        bool useBgColor,
+        bool useCustomBlendingOptions,
+        int customOpacity,
+        const QString &customCompositeOp,
+        QSharedPointer<QRect> outDirtyRect
 )
     : m_referencePaintDevice(referencePaintDevice)
     , m_enclosingMask(enclosingMask)
@@ -44,13 +51,19 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
     , m_regionSelectionIncludeSurroundingRegions(regionSelectionIncludeSurroundingRegions)
     , m_fillThreshold(fillThreshold)
     , m_fillOpacitySpread(fillOpacitySpread)
+    , m_closeGap(closeGap)
     , m_useSelectionAsBoundary(useSelectionAsBoundary)
     , m_antiAlias(antiAlias)
     , m_expand(expand)
+    , m_stopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel)
     , m_feather(feather)
     , m_usePattern(usePattern)
     , m_unmerged(unmerged)
     , m_useBgColor(useBgColor)
+    , m_useCustomBlendingOptions(useCustomBlendingOptions)
+    , m_customOpacity(customOpacity)
+    , m_customCompositeOp(customCompositeOp)
+    , m_outDirtyRect(outDirtyRect)
 {}
 
 void KisEncloseAndFillProcessingVisitor::visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter)
@@ -73,7 +86,7 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
 
     const QRect fillRect = m_resources->image()->bounds();
 
-    KisEncloseAndFillPainter painter(device, m_selection);
+    KisEncloseAndFillPainter painter(device, m_selection, fillRect.size());
     painter.beginTransaction();
 
     m_resources->setupPainter(&painter);
@@ -90,12 +103,16 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setRegionSelectionIncludeSurroundingRegions(m_regionSelectionIncludeSurroundingRegions);
     painter.setFillThreshold(m_fillThreshold);
     painter.setOpacitySpread(m_fillOpacitySpread);
+    painter.setCloseGap(m_closeGap);
     painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     painter.setAntiAlias(m_antiAlias);
     painter.setSizemod(m_expand);
+    painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     painter.setFeather(m_feather);
-    painter.setWidth(fillRect.width());
-    painter.setHeight(fillRect.height());
+    if (m_useCustomBlendingOptions) {
+        painter.setOpacity(m_customOpacity);
+        painter.setCompositeOpId(m_customCompositeOp);
+    }
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_referencePaintDevice;
 
@@ -106,6 +123,14 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     }
 
     painter.endTransaction(undoAdapter);
+
+    if (m_outDirtyRect) {
+        *m_outDirtyRect = m_enclosingMask->selectedRect();
+        QVector<QRect> dirtyRects = painter.takeDirtyRegion();
+        Q_FOREACH(const QRect &r, dirtyRects) {
+            *m_outDirtyRect = m_outDirtyRect->united(r);
+        }
+    }
 }
 
 void KisEncloseAndFillProcessingVisitor::visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter)

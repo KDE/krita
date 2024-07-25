@@ -147,7 +147,7 @@ int JP2Converter::infile_format(const char *fname) {
 
 KisImportExportErrorCode JP2Converter::buildImage(const QString &filename) {
 	KisImportExportErrorCode res = ImportExportCodes::OK;
-	const char *file_str = filename.toUtf8().data();
+	const QByteArray file_str = filename.toUtf8();
 	opj_codec_t *l_codec = 0;
 	opj_dparameters_t parameters;
 	bool hasColorSpaceInfo = false;
@@ -167,7 +167,7 @@ KisImportExportErrorCode JP2Converter::buildImage(const QString &filename) {
 	// decompression parameters
 	opj_set_default_decoder_parameters(&parameters);
 	// Determine the type
-	parameters.decod_format = infile_format(file_str);
+	parameters.decod_format = infile_format(file_str.constData());
 	if (parameters.decod_format == -1) {
 		addErrorString("Not a JPEG 2000 file.");
 		res = ImportExportCodes::FileFormatIncorrect;
@@ -194,7 +194,7 @@ KisImportExportErrorCode JP2Converter::buildImage(const QString &filename) {
 	/* setup the decoder decoding parameters using user parameters */
 	opj_setup_decoder(l_codec, &parameters);
 
-	l_stream = opj_stream_create_default_file_stream(file_str, 1);
+	l_stream = opj_stream_create_default_file_stream(file_str.constData(), 1);
 	if (!l_stream) {
 		addErrorString("Failed to create the stream");
 		res = ImportExportCodes::ErrorWhileReading;

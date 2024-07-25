@@ -12,9 +12,7 @@
 
 #include <QSharedDataPointer>
 
-class KoImageCollection;
 class KoPatternBackgroundPrivate;
-class KoImageData;
 
 class QTransform;
 class QImage;
@@ -44,8 +42,7 @@ public:
         BottomRight
     };
 
-    /// Constructs a new pattern background utilizing the given image collection
-    explicit KoPatternBackground(KoImageCollection *collection);
+    explicit KoPatternBackground();
 
     ~KoPatternBackground() override;
 
@@ -63,9 +60,6 @@ public:
 
     /// Sets a new pattern
     void setPattern(const QImage &pattern);
-
-    /// Sets a new pattern. imageData memory is deleted inside this class
-    void setPattern(KoImageData *imageData);
 
     /// Returns the pattern
     QImage pattern() const;
@@ -104,7 +98,7 @@ public:
     QSizeF patternOriginalSize() const;
 
     /// reimplemented from KoShapeBackground
-    void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, const QPainterPath &fillPath) const override;
 
     /// Returns the bounding rect of the pattern image based on the given fill size
     QRectF patternRectFromFillSize(const QSizeF &size);

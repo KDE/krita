@@ -9,11 +9,11 @@
 #include <QString>
 #include <QHash>
 
-class KActionCollection;
-class KXMLGUIClient;
+class KisKActionCollection;
+class KisKXMLGUIClient;
 class KConfigBase;
 
-class KShortcutSchemesHelper
+class KisKShortcutSchemesHelper
 {
 public:
 

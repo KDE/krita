@@ -66,7 +66,7 @@ void testShapedGradientPainterImpl(const QPolygonF &selectionPolygon,
     selPainter.paintPolygon(selectionPolygon);
 
     if (!selectionErasePolygon.isEmpty()) {
-        selPainter.setCompositeOp(COMPOSITE_ERASE);
+        selPainter.setCompositeOpId(COMPOSITE_ERASE);
         selPainter.setPaintColor(KoColor(Qt::white, pixelSelection->colorSpace()));
         selPainter.paintPolygon(selectionErasePolygon);
     }

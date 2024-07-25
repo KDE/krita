@@ -28,6 +28,7 @@
 #include "kis_painting_assistants_decoration.h"
 #include "input/KisInputActionGroup.h"
 #include "KisReferenceImagesDecoration.h"
+#include "KisWraparoundAxis.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -40,7 +41,7 @@ class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
 class KisView;
 class KisInputManager;
-class KisAnimationPlayer;
+class KisCanvasAnimationState;
 class KisShapeController;
 class KisCoordinatesConverter;
 class KoViewConverter;
@@ -118,10 +119,9 @@ public: // KoCanvasBase implementation
 
     void updateCanvas(const QRectF& rc) override;
 
-    void updateInputMethodInfo() override;
-
     const KisCoordinatesConverter* coordinatesConverter() const;
-    KoViewConverter *viewConverter() const override;
+    const KoViewConverter *viewConverter() const override;
+    KoViewConverter *viewConverter() override;
 
     QWidget* canvasWidget() override;
 
@@ -191,7 +191,7 @@ public: // KisCanvas2 methods
 
     void setCursor(const QCursor &cursor) override;
     KisAnimationFrameCacheSP frameCache() const;
-    KisAnimationPlayer *animationPlayer() const;
+    KisCanvasAnimationState *animationState() const;
     void refetchDataFromImage();
 
     /**
@@ -207,7 +207,7 @@ public: // KisCanvas2 methods
     void setRenderingLimit(const QRect &rc);
 
     /**
-     * @return aftificial limit outside which the image will not be rendered
+     * @return artificial limit outside which the image will not be rendered
      */
     QRect renderingLimit() const;
 
@@ -266,6 +266,8 @@ public Q_SLOTS:
      */
     void slotConfigChanged();
 
+    void slotScreenChanged(QScreen *screen);
+
 
 private Q_SLOTS:
 
@@ -302,6 +304,9 @@ public:
     // interface for KisCanvasController only
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
+
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value);
+    WrapAroundAxis wrapAroundViewingModeAxis() const;
 
     void setLodPreferredInCanvas(bool value);
     bool lodPreferredInCanvas() const;

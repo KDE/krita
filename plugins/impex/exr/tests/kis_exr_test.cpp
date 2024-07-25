@@ -9,7 +9,7 @@
 #include <simpletest.h>
 #include <QCoreApplication>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 #include <half.h>
 #include <KisMimeDatabase.h>
@@ -28,17 +28,17 @@ void KisExrTest::testFiles()
 
 void KisExrTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), ExrMimetype);
+    TestUtil::testImportFromWriteonly(ExrMimetype);
 }
 
 void KisExrTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), ExrMimetype);
+    TestUtil::testExportToReadonly(ExrMimetype);
 }
 
 void KisExrTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), ExrMimetype);
+    TestUtil::testImportIncorrectFormat(ExrMimetype);
 }
 
 void KisExrTest::testRoundTrip()

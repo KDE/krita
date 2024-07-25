@@ -1,0 +1,82 @@
+From 16ce00cdd735a4f369abfb71908c280b6cc3ab14 Mon Sep 17 00:00:00 2001
+From: Oliver Wolff <oliver.wolff@qt.io>
+Date: Wed, 22 Aug 2018 12:58:13 +0200
+Subject: [PATCH 02/17] ANGLE: Add support for querying platform device
+
+The EGL_EXT_device_base extension allows for querying the platform
+device of the graphics hardware via eglQueryDisplayAttribEXT().
+As that extension is not supported by ANGLE, this patch adds similar
+functionality to the existing eglQuerySurfacePointerANGLE API. When
+EGL_DEVICE_EXT is passed as the queried attribute, the underlying
+D3D/DXGI device pointer is passed back to the caller via the value
+argument.
+
+The D3D device is needed for the IDXGIDevice3::Trim() calls required by the Windows Store.
+
+Change-Id: Ib3dfd3edc47dbcc02b07f71980ba785508f2ee57
+---
+ src/libANGLE/renderer/d3d/SurfaceD3D.cpp        | 4 ++++
+ src/libANGLE/renderer/d3d/SwapChainD3D.h        | 1 +
+ src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp | 5 +++++
+ src/libANGLE/renderer/d3d/d3d11/SwapChain11.h   | 2 ++
+ 4 files changed, 12 insertions(+)
+
+diff --git a/src/libANGLE/renderer/d3d/SurfaceD3D.cpp b/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+index 6e0e2b37e..6fc42139a 100644
+--- a/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
++++ b/src/libANGLE/renderer/d3d/SurfaceD3D.cpp
+@@ -429,6 +429,10 @@ egl::Error SurfaceD3D::querySurfacePointerANGLE(EGLint attribute, void **value)
+     {
+         *value = mSwapChain->getKeyedMutex();
+     }
++    else if (attribute == EGL_DEVICE_EXT)
++    {
++        *value = mSwapChain->getDevice();
++    }
+     else
+         UNREACHABLE();
+ 
+diff --git a/src/libANGLE/renderer/d3d/SwapChainD3D.h b/src/libANGLE/renderer/d3d/SwapChainD3D.h
+index fcbab95c8..8e4750a6d 100644
+--- a/src/libANGLE/renderer/d3d/SwapChainD3D.h
++++ b/src/libANGLE/renderer/d3d/SwapChainD3D.h
+@@ -59,6 +59,7 @@ class SwapChainD3D : angle::NonCopyable
+                             EGLint width,
+                             EGLint height)       = 0;
+     virtual void recreate()                      = 0;
++    virtual void *getDevice() { return nullptr; }
+ 
+     virtual RenderTargetD3D *getColorRenderTarget()        = 0;
+     virtual RenderTargetD3D *getDepthStencilRenderTarget() = 0;
+diff --git a/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp b/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+index 39a1f8b1f..a82b77b33 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/SwapChain11.cpp
+@@ -1049,6 +1049,11 @@ void SwapChain11::recreate()
+     // possibly should use this method instead of reset
+ }
+ 
++void *rx::SwapChain11::getDevice()
++{
++    return mRenderer->getDevice();
++}
++
+ RenderTargetD3D *SwapChain11::getColorRenderTarget()
+ {
+     return &mColorRenderTarget;
+diff --git a/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h b/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+index ada35b99b..9dd98462c 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
++++ b/src/libANGLE/renderer/d3d/d3d11/SwapChain11.h
+@@ -59,6 +59,8 @@ class SwapChain11 final : public SwapChainD3D
+     void *getKeyedMutex() override;
+     EGLint getSamples() const { return mEGLSamples; }
+ 
++    void *getDevice() override;
++
+     egl::Error getSyncValues(EGLuint64KHR *ust, EGLuint64KHR *msc, EGLuint64KHR *sbc) override;
+ 
+   private:
+-- 
+2.24.1.windows.2
+

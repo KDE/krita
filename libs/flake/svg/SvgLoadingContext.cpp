@@ -1,4 +1,4 @@
-﻿/* This file is part of the KDE project
+/* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -89,12 +89,14 @@ SvgGraphicsContext *SvgLoadingContext::pushGraphicsContext(const QDomElement &el
         gc = new SvgGraphicsContext();
     }
 
-    gc->textProperties.resetNonInheritableToDefault(); // some of the text properties are not inherited
+    gc->textProperties = KoSvgTextProperties();
+
     gc->filterId.clear(); // filters are not inherited
     gc->clipPathId.clear(); // clip paths are not inherited
     gc->clipMaskId.clear(); // clip masks are not inherited
     gc->display = true; // display is not inherited
     gc->opacity = 1.0; // opacity is not inherited
+    gc->paintOrder = QString(); //paint order is inherited by default
 
     if (!element.isNull()) {
         if (element.hasAttribute("transform")) {
@@ -184,11 +186,6 @@ int SvgLoadingContext::nextZIndex()
     return d->zIndex++;
 }
 
-KoImageCollection* SvgLoadingContext::imageCollection()
-{
-    return d->documentResourceManager->imageCollection();
-}
-
 void SvgLoadingContext::registerShape(const QString &id, KoShape *shape)
 {
     if (!id.isEmpty())
@@ -241,7 +238,7 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
 
     if (element.attribute("rendering-intent", "auto") != "auto") {
         // WARNING: Krita does *not* treat rendering intents attributes of the profile!
-        debugFlake << "WARNING: we do *not* treat rendering intents attributes of the profile!";
+        warnFlake << "WARNING: we do *not* treat rendering intents attributes of the profile!";
     }
 
     if (d->profiles.contains(name)) {
@@ -262,12 +259,12 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
                 profile = engine->addProfile(profileData);
 
                 if (profile->uniqueId() != uniqueId) {
-                    debugFlake << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
-                    debugFlake << "       " << ppVar(profile->uniqueId().toHex());
-                    debugFlake << "       " << ppVar(uniqueId.toHex());
+                    warnFlake << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
+                    warnFlake << "       " << ppVar(profile->uniqueId().toHex());
+                    warnFlake << "       " << ppVar(uniqueId.toHex());
                 }
             } else {
-                debugFlake << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
+                warnFlake << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
             }
         }
     }
@@ -275,13 +272,26 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
     if (profile) {
         d->profiles.insert(name, profile);
     } else {
-        debugFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
+        warnFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
     }
 }
 
 QHash<QString, const KoColorProfile *> SvgLoadingContext::profiles()
 {
     return d->profiles;
+}
+
+KoSvgTextProperties SvgLoadingContext::resolvedProperties() const
+{
+    KoSvgTextProperties props = KoSvgTextProperties::defaultProperties();
+    for (auto it = d->gcStack.begin(); it != d->gcStack.end(); it++) {
+        SvgGraphicsContext *gc = *it;
+        KoSvgTextProperties props2 = gc->textProperties;
+        props.resetNonInheritableToDefault();
+        props2.inheritFrom(props, true);
+        props = props2;
+    }
+    return props;
 }
 
 bool SvgLoadingContext::isRootContext() const

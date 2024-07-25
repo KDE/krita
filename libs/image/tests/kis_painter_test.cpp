@@ -71,7 +71,7 @@ void KisPainterTest::testSimpleBlt(const KoColorSpace * cs)
     {
         op = cs->compositeOp(COMPOSITE_OVER);
         KisPainter painter(dst);
-        painter.setCompositeOp(op);
+        painter.setCompositeOpId(op);
         painter.bitBlt(50, 50, src, 20, 20, 20, 20);
         painter.end();
         QCOMPARE(dst->exactBounds(), QRect(50,50,20,20));
@@ -82,7 +82,7 @@ void KisPainterTest::testSimpleBlt(const KoColorSpace * cs)
     {
         op = cs->compositeOp(COMPOSITE_COPY);
         KisPainter painter(dst);
-        painter.setCompositeOp(op);
+        painter.setCompositeOpId(op);
         painter.bitBlt(50, 50, src, 20, 20, 20, 20);
         painter.end();
         QCOMPARE(dst->exactBounds(), QRect(50,50,20,20));
@@ -145,7 +145,7 @@ void KisPainterTest::testPaintDeviceBltSelection(const KoColorSpace * cs)
         KisPaintDeviceSP dst2 = new KisPaintDevice(cs);
         KisPainter painter2(dst2);
         painter2.setSelection(selection);
-        painter2.setCompositeOp(op);
+        painter2.setCompositeOpId(op);
         painter2.bitBlt(0, 0, src, 0, 0, 30, 30);
         painter2.end();
 
@@ -382,7 +382,7 @@ void KisPainterTest::testSelectionBitBltEraseCompositeOp()
     const KoCompositeOp* op = cs->compositeOp(COMPOSITE_ERASE);
     KisPainter painter(dst);
     painter.setSelection(sel);
-    painter.setCompositeOp(op);
+    painter.setCompositeOpId(op);
     painter.bitBlt(0, 0, src, 0, 0, 150, 150);
     painter.end();
 
@@ -406,7 +406,7 @@ void KisPainterTest::testSimpleAlphaCopy()
     src->fill(0, 0, 100, 100, &p);
     QVERIFY(src->exactBounds() == QRect(0, 0, 100, 100));
     KisPainter gc(dst);
-    gc.setCompositeOp(KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_COPY));
+    gc.setCompositeOpId(KoColorSpaceRegistry::instance()->alpha8()->compositeOp(COMPOSITE_COPY));
     gc.bitBlt(QPoint(0, 0), src, src->exactBounds());
     gc.end();
     QCOMPARE(dst->exactBounds(), QRect(0, 0, 100, 100));

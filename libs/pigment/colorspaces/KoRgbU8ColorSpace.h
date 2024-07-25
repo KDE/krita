@@ -32,9 +32,9 @@ public:
 
     virtual KoColorSpace* clone() const;
 
-    void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const override;
+    void fromQColor(const QColor& color, quint8 *dst) const override;
 
-    void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const override;
+    void toQColor(const quint8 *src, QColor *c) const override;
     
     void toHSY(const QVector<double> &channelValues, qreal *hue, qreal *sat, qreal *luma) const override;
     QVector <double> fromHSY(qreal *hue, qreal *sat, qreal *luma) const override;
@@ -51,7 +51,7 @@ class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory
 
 public:
     KoRgbU8ColorSpaceFactory()
-            : KoSimpleColorSpaceFactory("RGBA",
+            : KoSimpleColorSpaceFactory(QStringLiteral("RGBA"),
                                         i18n("RGB (8-bit integer/channel, unmanaged)"),
                                         true,
                                         RGBAColorModelID,

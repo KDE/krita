@@ -22,19 +22,19 @@ const QString JP2Mimetype = "image/jp2";
 
 void KisJP2Test::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), JP2Mimetype);
+    TestUtil::testImportFromWriteonly(JP2Mimetype);
 }
 
 
 void KisJP2Test::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), JP2Mimetype);
+    TestUtil::testExportToReadonly(JP2Mimetype);
 }
 
 
 void KisJP2Test::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), JP2Mimetype);
+    TestUtil::testImportIncorrectFormat(JP2Mimetype);
 }
 
 

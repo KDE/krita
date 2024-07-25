@@ -14,17 +14,17 @@
 #include <QAction>
 #include <QClipboard>
 
-KMainWindowInterface::KMainWindowInterface(KXmlGuiWindow *mainWindow)
+KisKMainWindowInterface::KisKMainWindowInterface(KXmlGuiWindow *mainWindow)
     : QDBusAbstractAdaptor(mainWindow)
 {
     m_MainWindow = mainWindow;
 }
 
-KMainWindowInterface::~KMainWindowInterface()
+KisKMainWindowInterface::~KisKMainWindowInterface()
 {
 }
 
-QStringList KMainWindowInterface::actions()
+QStringList KisKMainWindowInterface::actions()
 {
     QStringList tmp_actions;
     QList<QAction *> lst = m_MainWindow->actionCollection()->actions();
@@ -36,7 +36,7 @@ QStringList KMainWindowInterface::actions()
     return tmp_actions;
 }
 
-bool KMainWindowInterface::activateAction(const QString &action)
+bool KisKMainWindowInterface::activateAction(const QString &action)
 {
     QAction *tmp_Action = m_MainWindow->actionCollection()->action(action);
     if (tmp_Action) {
@@ -47,7 +47,7 @@ bool KMainWindowInterface::activateAction(const QString &action)
     }
 }
 
-bool KMainWindowInterface::disableAction(const QString &action)
+bool KisKMainWindowInterface::disableAction(const QString &action)
 {
     QAction *tmp_Action = m_MainWindow->actionCollection()->action(action);
     if (tmp_Action) {
@@ -58,7 +58,7 @@ bool KMainWindowInterface::disableAction(const QString &action)
     }
 }
 
-bool KMainWindowInterface::enableAction(const QString &action)
+bool KisKMainWindowInterface::enableAction(const QString &action)
 {
     QAction *tmp_Action = m_MainWindow->actionCollection()->action(action);
     if (tmp_Action) {
@@ -69,7 +69,7 @@ bool KMainWindowInterface::enableAction(const QString &action)
     }
 }
 
-bool KMainWindowInterface::actionIsEnabled(const QString &action)
+bool KisKMainWindowInterface::actionIsEnabled(const QString &action)
 {
     QAction *tmp_Action = m_MainWindow->actionCollection()->action(action);
     if (tmp_Action) {
@@ -79,7 +79,7 @@ bool KMainWindowInterface::actionIsEnabled(const QString &action)
     }
 }
 
-QString KMainWindowInterface::actionToolTip(const QString &action)
+QString KisKMainWindowInterface::actionToolTip(const QString &action)
 {
     QAction *tmp_Action = m_MainWindow->actionCollection()->action(action);
     if (tmp_Action) {
@@ -89,12 +89,12 @@ QString KMainWindowInterface::actionToolTip(const QString &action)
     }
 }
 
-qlonglong KMainWindowInterface::winId()
+qlonglong KisKMainWindowInterface::winId()
 {
     return qlonglong(m_MainWindow->winId());
 }
 
-void KMainWindowInterface::grabWindowToClipBoard()
+void KisKMainWindowInterface::grabWindowToClipBoard()
 {
     QClipboard *clipboard = QApplication::clipboard();
     clipboard->setPixmap(m_MainWindow->grab());

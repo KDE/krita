@@ -13,6 +13,8 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
+#include "PaintingResources.h"
+
 /**
  * Node represents a layer or mask in a Krita image's Node hierarchy. Group layers can contain
  * other layers and masks; layers can contain masks.
@@ -71,10 +73,22 @@ public Q_SLOTS:
     QList<Channel*> channels() const;
 
     /**
-     * Return a list of child nodes of the current node. The nodes are ordered from the bottommost up.
+     * @brief childNodes
+     * @return returns a list of child nodes of the current node. The nodes are ordered from the bottommost up.
      * The function is not recursive.
      */
     QList<Node*> childNodes() const;
+
+    /**
+     * @brief findChildNodes
+     * @param name name of the child node to search for. Leaving this blank will return all nodes.
+     * @param recursive whether or not to search recursively. Defaults to false.
+     * @param partialMatch return if the name partially contains the string (case insensitive). Defaults to false.
+     * @param type filter returned nodes based on type
+     * @param colorLabelIndex filter returned nodes based on color label index
+     * @return returns a list of child nodes and grand child nodes of the current node that match the search criteria.
+     */
+    QList<Node*> findChildNodes(const QString &name = QString(), bool recursive = false, bool partialMatch = false, const QString &type = QString(), int colorLabelIndex = 0) const;
 
     /**
      * @brief addChildNode adds the given node in the list of children.
@@ -534,7 +548,7 @@ public Q_SLOTS:
     QImage thumbnail(int w, int h);
 
     /**
-     * @brief layerStyleToAsl retreive the current layer's style in ASL format.
+     * @brief layerStyleToAsl retrieve the current layer's style in ASL format.
      * @return a QString in ASL format representing the layer style.
      */
     QString layerStyleToAsl();
@@ -558,6 +572,117 @@ public Q_SLOTS:
      */
     QUuid uniqueId() const;
 
+    /**
+     * @brief paint a line on the canvas. Uses current brush preset
+     * @param pointOne starting point
+     * @param pointTwo end point
+     * @param strokeStyle appearance of the outline, one of:
+     * <ul>
+     * <li>None - will use Foreground Color, since line would be invisible otherwise
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     */
+    void paintLine(const QPointF pointOne, const QPointF pointTwo, const QString strokeStyle = PaintingResources::defaultStrokeStyle);
+
+    /**
+     * @brief paint a rectangle on the canvas. Uses current brush preset
+     * @param rect QRect with x, y, width, and height
+     * @param strokeStyle appearance of the outline, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
+     */
+    void paintRectangle(const QRectF &rect,
+                        const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                        const QString fillStyle = PaintingResources::defaultFillStyle);
+ 
+    /**
+     * @brief paint a polygon on the canvas. Uses current brush preset
+     * @param list of Qpoints
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
+     */
+    void paintPolygon(const QList<QPointF> points,
+                      const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                      const QString fillStyle = PaintingResources::defaultFillStyle);
+    /**
+     * @brief paint an ellipse on the canvas. Uses current brush preset
+     * @param rect QRect with x, y, width, and height
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
+     */
+    void paintEllipse(const QRectF &rect,
+                      const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                      const QString fillStyle = PaintingResources::defaultFillStyle);
+    /**
+     * @brief paint a custom path on the canvas. Uses current brush preset
+     * @param  path QPainterPath to determine path
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * </ul>
+     * Default is ForegroundColor.
+     * @param fillStyle appearance of the fill, one of:
+     * <ul>
+     * <li>None
+     * <li>ForegroundColor</li>
+     * <li>BackgroundColor</li>
+     * <li>Pattern</li>
+     * </ul>
+     * Default is None.
+     */
+    void paintPath(const QPainterPath &path,
+                   const QString strokeStyle = PaintingResources::defaultStrokeStyle,
+                   const QString fillStyle = PaintingResources::defaultFillStyle);
+    /**
+     * @brief paintAbility can be used to determine whether this node can be painted on with the current brush preset.
+     * @return QString, one of the following:
+     * <ul>
+     * <li>VECTOR - This node is vector-based.</li>
+     * <li>CLONE - This node is a Clone Layer.</li>
+     * <li>PAINT - This node is paintable by the current brush preset.</li>
+     * <li>UNPAINTABLE - This node is not paintable, or a null preset is somehow selected./li>
+     * <li>MYPAINTBRUSH_UNPAINTABLE - This node's non-RGBA colorspace cannot be painted on by the currently selected MyPaint brush.</li>
+     * </ul>
+     */
+    QString paintAbility();
 
 private:
 
@@ -571,7 +696,9 @@ private:
     friend class VectorLayer;
     friend class FilterMask;
     friend class SelectionMask;
+    friend class TransparencyMask;
     friend class TransformMask;
+    friend class ColorizeMask;
     friend class CloneLayer;
 
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);

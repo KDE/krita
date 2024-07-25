@@ -6,17 +6,14 @@
 
 #include "TestProfileGeneration.h"
 
-#include <LcmsColorProfileContainer.h>
-#include <KoColorConversions.h>
-#include <IccColorProfile.h>
-#include "KoColorTransferFunctions.h"
-
 #include <QTest>
-#include "sdk/tests/testpigment.h"
+#include <cmath>
+#include <lcms2.h>
 
-#include "kis_debug.h"
-#include <math.h>
-
+#include <KoColorConversions.h>
+#include <KoColorTransferFunctions.h>
+#include <kis_debug.h>
+#include <testpigment.h>
 
 void TestProfileGeneration::testTransferFunctions()
 {
@@ -222,7 +219,7 @@ void TestProfileGeneration::testTransferFunctions()
          *
          * for 1.33 > Lc >= β (0.018)
          *  V = α * Lc^0.45 − ( α − 1 )
-         * for for β > Lc >= −γ (-0.0045)
+         * for β > Lc >= −γ (-0.0045)
          *  V = 4.500 * Lc
          * for −γ >= Lc >= −0.25
          *  V = −( α * ( −4 * Lc )^0.45 − ( α − 1 ) ) ÷ 4

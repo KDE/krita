@@ -16,7 +16,7 @@ public:
     SvgTextToolFactory();
     ~SvgTextToolFactory();
 
-    KoToolBase *createTool(KoCanvasBase *canvas);
+    KoToolBase *createTool(KoCanvasBase *canvas) override;
 };
 
 #endif

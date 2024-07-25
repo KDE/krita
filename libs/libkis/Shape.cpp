@@ -21,6 +21,7 @@
 
 #include "Krita.h"
 #include "Document.h"
+#include "GroupShape.h"
 
 struct Shape::Private {
     Private() {}
@@ -37,6 +38,16 @@ Shape::Shape(KoShape *shape, QObject *parent)
 Shape::~Shape()
 {
     delete d;
+}
+
+bool Shape::operator==(const Shape &other) const
+{
+    return (d->shape == other.d->shape);
+}
+
+bool Shape::operator!=(const Shape &other) const
+{
+    return !(operator==(other));
 }
 
 QString Shape::name() const
@@ -117,6 +128,11 @@ QTransform Shape::transformation() const
 void Shape::setTransformation(QTransform matrix)
 {
     d->shape->setTransformation(matrix);
+}
+
+QTransform Shape::absoluteTransformation() const
+{
+    return d->shape->absoluteTransformation();
 }
 
 void Shape::update()
@@ -203,6 +219,19 @@ bool Shape::isSelected()
 
     return selection->isSelected(d->shape);
 }
+
+Shape* Shape::parentShape() const
+{
+    if (!d->shape) return 0;
+    if (!d->shape->parent()) return 0;
+
+    if (dynamic_cast<KoShapeGroup*>(d->shape->parent())) {
+        return new GroupShape(dynamic_cast<KoShapeGroup*>(d->shape->parent()));
+    } else {
+        return 0;
+    }
+}
+
 
 KoShape *Shape::shape()
 {

@@ -20,7 +20,6 @@
 
 class KoCanvasBase;
 class KoShapeGroup;
-class KoShapePaintingContext;
 class QPainter;
 
 class Q_DECL_HIDDEN KoShapeManager::Private
@@ -31,8 +30,7 @@ public:
           canvas(c),
           tree(4, 2),
           q(shapeManager),
-          shapeInterface(shapeManager),
-          updateCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
+          shapeInterface(shapeManager)
     {
     }
 
@@ -46,7 +44,7 @@ public:
      */
     void updateTree();
 
-    void forwardCompressedUdpate();
+    void forwardCompressedUpdate();
 
 
     /**
@@ -65,7 +63,6 @@ public:
     QMutex shapesMutex;
     QMutex treeMutex;
 
-    KisThreadSafeSignalCompressor updateCompressor;
     QRectF compressedUpdate;
     QSet<const KoShape*> compressedUpdatedShapes;
 

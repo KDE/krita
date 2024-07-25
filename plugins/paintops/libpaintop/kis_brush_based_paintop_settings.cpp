@@ -6,8 +6,7 @@
 
 #include "kis_brush_based_paintop_settings.h"
 
-#include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option_widget.h>
+#include <KisPaintingModeOptionData.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
 #include "KisBrushServerProvider.h"
@@ -19,6 +18,7 @@
 #include "KoCanvasResourcesIds.h"
 #include "kis_texture_option.h"
 #include <KoResourceCacheInterface.h>
+#include <KisOptimizedBrushOutline.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -67,10 +67,9 @@ KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings(KisResourcesInterface
 
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
-    if (hasProperty("PaintOpAction")) {
-        return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
-    }
-    return true;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return !data.hasPaintingModeProperty || data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const
@@ -103,19 +102,19 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
     return brush;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
+KisOptimizedBrushOutline KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             const OutlineMode &mode,
                                                             qreal alignForZoom,
                                                             qreal additionalScale)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
 
     if (mode.isVisible) {
         KisBrushSP brush = this->brush();
         if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
-        QPainterPath realOutline = brush->outline(alignForZoom > 2.0 || qFuzzyCompare(alignForZoom, 2.0));
+        KisOptimizedBrushOutline realOutline = brush->outline(alignForZoom > 2.0 || qFuzzyCompare(alignForZoom, 2.0));
 
         if (mode.forceCircle) {
 
@@ -138,21 +137,9 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     return brushOutlineImpl(info, mode, alignForZoom, 1.0);
-}
-
-void KisBrushBasedPaintOpSettings::setAngle(qreal value)
-{
-    BrushWriter w(this);
-    if (!w.brush()) return;
-    w.brush()->setAngle(value);
-}
-
-qreal KisBrushBasedPaintOpSettings::angle()
-{
-    return this->brush()->angle();
 }
 
 void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
@@ -164,6 +151,7 @@ void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::spacing()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 1.0);
     return this->brush()->spacing();
 }
 
@@ -177,11 +165,13 @@ void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
 
 bool KisBrushBasedPaintOpSettings::autoSpacingActive()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), false);
     return this->brush()->autoSpacingActive();
 }
 
 qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 1.0);
     return this->brush()->autoSpacingCoeff();
 }
 
@@ -195,9 +185,26 @@ void KisBrushBasedPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 1.0);
     return this->brush()->userEffectiveSize();
 }
 
+void KisBrushBasedPaintOpSettings::setPaintOpAngle(qreal value)
+{
+    BrushWriter w(this);
+    if (!w.brush()) return;
+
+    value = normalizeAngleDegrees(value);
+    value = kisDegreesToRadians(value);
+    w.brush()->setAngle(value);
+}
+
+qreal KisBrushBasedPaintOpSettings::paintOpAngle() const
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 0.0);
+    const qreal value = kisRadiansToDegrees(this->brush()->angle());
+    return value;
+}
 
 
 #include <brushengine/kis_slider_based_paintop_property.h>
@@ -225,15 +232,14 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
                     KisBrushBasedPaintOpSettings *s =
                         dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
 
-                    const qreal angleResult = kisRadiansToDegrees(s->angle());
-                    prop->setValue(angleResult);
+                    prop->setValue(s->paintOpAngle());
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisBrushBasedPaintOpSettings *s =
                         dynamic_cast<KisBrushBasedPaintOpSettings*>(prop->settings().data());
 
-                    s->setAngle(kisDegreesToRadians(prop->value().toReal()));
+                    s->setPaintOpAngle(prop->value().toReal());
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -322,8 +328,9 @@ bool KisBrushBasedPaintOpSettings::hasPatternSettings() const
 QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
 {
     QList<int> result;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), result);
 
-    if (brush()->applyingGradient() || KisTextureProperties::applyingGradient(this)) {
+    if (brush()->applyingGradient() || KisTextureOption::applyingGradient(this)) {
         result << KoCanvasResource::CurrentGradient;
         result << KoCanvasResource::ForegroundColor;
         result << KoCanvasResource::BackgroundColor;

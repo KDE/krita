@@ -34,7 +34,6 @@
 
 KoGamutMaskShape::KoGamutMaskShape(KoShape* shape)
     : m_maskShape(shape)
-    , m_shapePaintingContext(KoShapePaintingContext())
 {
 }
 
@@ -63,7 +62,7 @@ void KoGamutMaskShape::paint(QPainter &painter)
 {
     painter.save();
     painter.setTransform(m_maskShape->absoluteTransformation(), true);
-    m_maskShape->paint(painter, m_shapePaintingContext);
+    m_maskShape->paint(painter);
     painter.restore();
 }
 
@@ -71,7 +70,7 @@ void KoGamutMaskShape::paintStroke(QPainter &painter)
 {
     painter.save();
     painter.setTransform(m_maskShape->absoluteTransformation(), true);
-    m_maskShape->paintStroke(painter, m_shapePaintingContext);
+    m_maskShape->paintStroke(painter);
     painter.restore();
 }
 
@@ -269,11 +268,11 @@ bool KoGamutMask::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         QDomDocument xmlDocument = SvgParser::createDocumentFromSvg(ba, &errorMsg, &errorLine, &errorColumn);
         if (xmlDocument.isNull()) {
 
-            errorFlake << "Parsing error in " << filename() << "! Aborting!" << endl
-            << " In line: " << errorLine << ", column: " << errorColumn << endl
-            << " Error message: " << errorMsg << endl;
+            errorFlake << "Parsing error in " << filename() << "! Aborting!" << Qt::endl
+            << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+            << " Error message: " << errorMsg << Qt::endl;
             errorFlake << "Parsing error in the main document at line" << errorLine
-                       << ", column" << errorColumn << endl
+                       << ", column" << errorColumn << Qt::endl
                        << "Error message: " << errorMsg;
 
             return false;

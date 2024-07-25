@@ -6,8 +6,8 @@ SET(EXTPREFIX_gsl "${EXTPREFIX}" )
 ExternalProject_Add( ext_gsl
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/ampl/gsl/archive/e020de75f5b469b8cab600c9da64c39383ca9ab1.tar.gz
-    URL_HASH SHA256=1cf1528d49ca845ca6b96b8593abbb5e3e332dec6b44fe33a62e1a2b3999bc65
+    URL https://github.com/ampl/gsl/archive/8eac3b0b5cffb90004a729f0675011e718f41379.zip
+    URL_HASH SHA256=124bf79bfd2c3cb07df02a2b0e80e13d29a94cab8acae1c2c1e086474381a6c2
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gsl-android.patch
                 COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gsl-2.3_clang12.patch
@@ -20,8 +20,8 @@ SET(EXTPREFIX_gsl "${EXTPREFIX}" )
 ExternalProject_Add( ext_gsl
 
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/ampl/gsl/archive/e020de75f5b469b8cab600c9da64c39383ca9ab1.tar.gz
-    URL_HASH SHA256=1cf1528d49ca845ca6b96b8593abbb5e3e332dec6b44fe33a62e1a2b3999bc65
+    URL https://github.com/ampl/gsl/archive/8eac3b0b5cffb90004a729f0675011e718f41379.zip
+    URL_HASH SHA256=124bf79bfd2c3cb07df02a2b0e80e13d29a94cab8acae1c2c1e086474381a6c2
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/windows-no-fPIC.patch
 

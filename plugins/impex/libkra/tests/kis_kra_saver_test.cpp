@@ -19,6 +19,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
 #include "kis_image.h"
+#include <KisImageResolutionProxy.h>
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
@@ -38,23 +39,28 @@
 #include "kis_layer_properties_icons.h"
 #include <KisGlobalResourcesInterface.h>
 
-#include "kis_transform_mask_params_interface.h"
+#include "KritaTransformMaskStubs.h"
+#include "KisDumbTransformMaskParams.h"
+
 #include "StoryboardItem.h"
 
 #include <generator/kis_generator_registry.h>
 
 #include <KoResourcePaths.h>
-#include  <sdk/tests/testui.h>
 #include <filestest.h>
+#include <testui.h>
+
 
 const QString KraMimetype = "application/x-krita";
 
 void KisKraSaverTest::initTestCase()
 {
-    KoResourcePaths::addResourceDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
+    KoResourcePaths::addAssetDir(ResourceType::Patterns, QString(SYSTEM_RESOURCES_DATA_DIR) + "/patterns");
 
     KisFilterRegistry::instance();
     KisGeneratorRegistry::instance();
+
+    TestUtil::registerTransformMaskStubs();
 }
 
 void KisKraSaverTest::testCrashyShapeLayer()
@@ -71,17 +77,19 @@ void KisKraSaverTest::testCrashyShapeLayer()
 
 void KisKraSaverTest::testRoundTrip()
 {
-    KisDocument* doc = createCompleteDocument();
+    QScopedPointer<KisDocument> doc(createCompleteDocument());
     KoColor bgColor(Qt::red, doc->image()->colorSpace());
     doc->image()->setDefaultProjectionColor(bgColor);
-    doc->exportDocumentSync("roundtriptest.kra", doc->mimeType());
+    doc->image()->waitForDone(); // wait to make sure the image can be locked for saving!
+    bool result = doc->exportDocumentSync("roundtriptest.kra", doc->mimeType());
+    QVERIFY(result);
 
     QStringList list;
     KisCountVisitor cv1(list, KoProperties());
     doc->image()->rootLayer()->accept(cv1);
 
-    KisDocument *doc2 = KisPart::instance()->createDocument();
-    bool result = doc2->loadNativeFormat("roundtriptest.kra");
+    QScopedPointer<KisDocument> doc2(KisPart::instance()->createDocument());
+    result = doc2->loadNativeFormat("roundtriptest.kra");
     QVERIFY(result);
 
     KisCountVisitor cv2(list, KoProperties());
@@ -97,14 +105,10 @@ void KisKraSaverTest::testRoundTrip()
     QVERIFY(tnode);
     KisTransformMask *tmask = dynamic_cast<KisTransformMask*>(tnode);
     QVERIFY(tmask);
-    KisDumbTransformMaskParams *params = dynamic_cast<KisDumbTransformMaskParams*>(tmask->transformParams().data());
+    QSharedPointer<KisDumbTransformMaskParams> params = tmask->transformParams().dynamicCast<KisDumbTransformMaskParams>();
     QVERIFY(params);
     QTransform t = params->testingGetTransform();
     QCOMPARE(t, createTestingTransform());
-
-
-    delete doc2;
-    delete doc;
 }
 
 void KisKraSaverTest::testSaveEmpty()
@@ -483,9 +487,9 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     p.layer->paintDevice()->setDefaultPixel(KoColor(Qt::green, p.layer->colorSpace()));
 
-    KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
-
-    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
+    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(p.image));
+    KisSelectionSP selection = new KisSelection(p.layer->paintDevice() ->defaultBounds(), resolutionProxy);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();
@@ -565,7 +569,7 @@ void KisKraSaverTest::testRoundTripStoryboard()
 
 void KisKraSaverTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), KraMimetype);
+    TestUtil::testExportToReadonly(KraMimetype);
 }
 
 KISTEST_MAIN(KisKraSaverTest)

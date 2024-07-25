@@ -40,7 +40,6 @@
 #include "kis_node.h"
 
 #include <KoDocumentResourceManager.h>
-#include <KoDataCenterBase.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_undo_adapter.h>
 #include "KoSelectedShapesProxy.h"
@@ -180,7 +179,7 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
             KisSelectionComponent* shapeSelectionComponent = selection->shapeSelection();
 
             if (!shapeSelectionComponent) {
-                shapeSelectionComponent = new KisShapeSelection(this, image(), selection);
+                shapeSelectionComponent = new KisShapeSelection(this, selection);
                 resultCommand->addCommand(selection->convertToVectorSelection(shapeSelectionComponent));
             }
 
@@ -239,7 +238,7 @@ void KisShapeController::setInitialShapeForCanvas(KisCanvas2 *canvas)
     }
 }
 
-void KisShapeController::setImage(KisImageWSP image)
+void KisShapeController::setImage(KisImageWSP image, KisNodeSP activeNode)
 {
     m_d->imageConnections.clear();
 
@@ -248,7 +247,7 @@ void KisShapeController::setImage(KisImageWSP image)
         m_d->imageConnections.addConnection(image, SIGNAL(sigSizeChanged(QPointF, QPointF)), this, SLOT(slotUpdateDocumentSize()));
     }
 
-    KisDummiesFacadeBase::setImage(image);
+    KisDummiesFacadeBase::setImage(image, activeNode);
 
     slotUpdateDocumentResolution();
     slotUpdateDocumentSize();

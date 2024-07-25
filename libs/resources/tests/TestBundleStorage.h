@@ -23,6 +23,10 @@ private Q_SLOTS:
     void testAddResource();
     void testResourceCaseSensitivity();
     void cleanupTestCase();
+
+private:
+    
+    QString m_dstLocation;
 };
 
 #endif // TESTBUNDLESTORAGE_H

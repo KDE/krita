@@ -7,8 +7,17 @@
 #ifndef KISIMPORTEXPORTUTILS_H
 #define KISIMPORTEXPORTUTILS_H
 
+#include <mutex>
+
 #include <QFlags>
 #include <QString>
+
+#include <kritaui_export.h>
+#include "KisImportExportErrorCode.h"
+#include <KisImageBarrierLock.h>
+
+class KisImportUserFeedbackInterface;
+
 
 namespace KritaUtils {
 
@@ -17,6 +26,12 @@ enum SaveFlag {
     SaveShowWarnings = 0x1,
     SaveIsExporting = 0x2,
     SaveInAutosaveMode = 0x4
+};
+
+enum JobResult {
+    Success = 0,
+    Failure = 1,
+    Busy = 2
 };
 
 Q_DECLARE_FLAGS(SaveFlags, SaveFlag)
@@ -41,6 +56,17 @@ struct ExportFileJob {
     QByteArray mimeType;
     SaveFlags flags;
 };
+
+/**
+ * When the image has a colorspace that is not suitable for displaying,
+ * Krita should convert that into something more useful. This tool funcion
+ * asks the user about the desired working color space and converts into
+ * it.
+ */
+KisImportExportErrorCode KRITAUI_EXPORT
+workaroundUnsuitableImageColorSpace(KisImageSP image,
+                                    KisImportUserFeedbackInterface *feedbackInterface,
+                                    KisImageBarrierLock &lock);
 
 }
 

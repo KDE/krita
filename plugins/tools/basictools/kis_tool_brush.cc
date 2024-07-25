@@ -58,15 +58,12 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
 {
     setObjectName("tool_brush");
 
-    createOptionWidget();
-
     connect(this, SIGNAL(smoothingTypeChanged()), this, SLOT(resetCursorStyle()));
 
     addSmoothingAction(KisSmoothingOptions::NO_SMOOTHING, "set_no_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing");
-
 }
 
 KisToolBrush::~KisToolBrush()
@@ -78,10 +75,10 @@ void KisToolBrush::activate(const QSet<KoShape*> &shapes)
     KisToolFreehand::activate(shapes);
     connect(&m_signalMapper, SIGNAL(mapped(int)), SLOT(slotSetSmoothingType(int)), Qt::UniqueConnection);
 
+    m_configGroup = KSharedConfig::openConfig()->group(toolId());
+    optionWidgets(); // Ensure m_chkAssistant is initialized.
     QAction *toggleaction = action("toggle_assistant");
     connect(toggleaction, SIGNAL(triggered(bool)), m_chkAssistant, SLOT(toggle()), Qt::UniqueConnection);
-
-    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
 void KisToolBrush::deactivate()
@@ -206,7 +203,7 @@ void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
     emit smoothnessQualityChanged();
 }
 
-void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
+void KisToolBrush::slotSetTailAggressiveness(qreal argh_rhhrr)
 {
     smoothingOptions()->setTailAggressiveness(argh_rhhrr);
     emit smoothnessFactorChanged();
@@ -350,14 +347,14 @@ QWidget * KisToolBrush::createOptionWidget()
                                  << i18nc("@item:inlistbox Brush Smoothing", "Weighted")
                                  << i18nc("@item:inlistbox Brush Smoothing", "Stabilizer"));
     connect(m_cmbSmoothingType, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSmoothingType(int)));
-    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:")));
+    addOptionWidgetOption(m_cmbSmoothingType, new QLabel(i18n("Brush Smoothing:"), optionsWidget));
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setEnabled(true);
-    m_lblSmoothnessDistance = new QLabel();
+    m_lblSmoothnessDistance = new QLabel(optionsWidget);
     updateSmoothnessDistanceLabel();
 
-    // make sure that initializaiotion of the value happens **after** we
+    // make sure that initialization of the value happens **after** we
     // have configured the slider's range in updateSmoothnessDistanceLabel()
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
@@ -392,7 +389,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_sliderDelayDistance, SIGNAL(valueChanged(qreal)), SLOT(setDelayDistance(qreal)));
 
     addOptionWidgetOption(m_sliderDelayDistance, delayWidget);
-    addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:")));
+    addOptionWidgetOption(m_chkFinishStabilizedCurve, new QLabel(i18n("Finish line:"), optionsWidget));
 
     m_sliderDelayDistance->setValue(smoothingOptions()->delayDistance());
     m_chkDelayDistance->setChecked(smoothingOptions()->useDelayDistance());
@@ -405,23 +402,23 @@ QWidget * KisToolBrush::createOptionWidget()
                                                  m_chkStabilizeSensors->sizeHint().height()));
     connect(m_chkStabilizeSensors, SIGNAL(toggled(bool)), this, SLOT(setStabilizeSensors(bool)));
     m_chkStabilizeSensors->setChecked(smoothingOptions()->stabilizeSensors());
-    addOptionWidgetOption(m_chkStabilizeSensors, new QLabel(i18n("Stabilize Sensors:")));
+    addOptionWidgetOption(m_chkStabilizeSensors, new QLabel(i18n("Stabilize Sensors:"), optionsWidget));
 
 
     m_sliderTailAggressiveness = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
     m_sliderTailAggressiveness->setSingleStep(0.01);
     m_sliderTailAggressiveness->setEnabled(true);
-    connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
+    connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAggressiveness(qreal)));
     m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());
-    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
+    addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:"), optionsWidget));
 
     m_chkSmoothPressure = new QCheckBox(optionsWidget);
     m_chkSmoothPressure->setMinimumHeight(qMax(m_sliderSmoothnessDistance->sizeHint().height()-3,
                                                m_chkSmoothPressure->sizeHint().height()));
     m_chkSmoothPressure->setChecked(smoothingOptions()->smoothPressure());
     connect(m_chkSmoothPressure, SIGNAL(toggled(bool)), this, SLOT(setSmoothPressure(bool)));
-    addOptionWidgetOption(m_chkSmoothPressure, new QLabel(QString("%1:").arg(i18n("Smooth Pressure"))));
+    addOptionWidgetOption(m_chkSmoothPressure, new QLabel(QString("%1:").arg(i18n("Smooth Pressure")), optionsWidget));
 
     m_chkUseScalableDistance = new QCheckBox(optionsWidget);
     m_chkUseScalableDistance->setChecked(smoothingOptions()->useScalableDistance());
@@ -433,7 +430,7 @@ QWidget * KisToolBrush::createOptionWidget()
                                                "be visually constant whatever zoom "
                                                "level is chosen"));
     connect(m_chkUseScalableDistance, SIGNAL(toggled(bool)), this, SLOT(setUseScalableDistance(bool)));
-    addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance"))));
+    addOptionWidgetOption(m_chkUseScalableDistance, new QLabel(QString("%1:").arg(i18n("Scalable Distance")), optionsWidget));
 
 
     // add a line spacer so we know that the next set of options are for different settings
@@ -462,10 +459,10 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderMagnetism->setValue(m_magnetism * MAXIMUM_MAGNETISM);
     connect(m_sliderMagnetism, SIGNAL(valueChanged(int)), SLOT(slotSetMagnetism(int)));
 
-    QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"));
+    QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"), optionsWidget);
     addOptionWidgetOption(m_sliderMagnetism, magnetismLabel);
 
-    QLabel* snapSingleLabel = new QLabel(i18n("Snap to Single Line"));
+    QLabel* snapSingleLabel = new QLabel(i18n("Snap to Single Line"), optionsWidget);
 
     m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
     m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant line, prevents snapping mess while using the infinite assistants."));
@@ -473,7 +470,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
     addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
 
-    QLabel* snapEraserLabel = new QLabel(i18n("Snap Eraser"));
+    QLabel* snapEraserLabel = new QLabel(i18n("Snap Eraser"), optionsWidget);
 
     m_chkSnapEraser = new QCheckBox(optionsWidget);
     m_chkSnapEraser->setToolTip(i18nc("@info:tooltip","Enable snapping when using erasers"));
@@ -481,7 +478,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkSnapEraser, SIGNAL(toggled(bool)), this, SLOT(setSnapEraser(bool)));
     addOptionWidgetOption(m_chkSnapEraser, snapEraserLabel);
 
-    // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
+    // set the assistant snapping options to hidden by default and toggle their visibility based off snapping checkbox
     m_sliderMagnetism->setVisible(false);
     m_chkOnlyOneAssistant->setVisible(false);
     m_chkSnapEraser->setVisible(false);
@@ -509,11 +506,11 @@ QList<QAction *> KisToolBrushFactory::createActionsImpl()
 
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("set_no_brush_smoothing");
-    actions << actionRegistry->makeQAction("set_simple_brush_smoothing");
-    actions << actionRegistry->makeQAction("set_weighted_brush_smoothing");
-    actions << actionRegistry->makeQAction("set_stabilizer_brush_smoothing");
-    actions << actionRegistry->makeQAction("toggle_assistant");
+    actions << actionRegistry->makeQAction("set_no_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_simple_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_weighted_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_stabilizer_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("toggle_assistant", this);
 
     return actions;
 

@@ -40,7 +40,6 @@
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
 #include <KoShapeMoveCommand.h>
@@ -64,8 +63,11 @@
 #include "commands/KoShapeReorderCommand.h"
 #include "kis_do_something_command.h"
 #include <KisSafeBlockingQueueConnectionProxy.h>
+#include <kis_signal_auto_connection.h>
 #include <QThread>
 #include <QApplication>
+
+#include "kis_layer_properties_icons.h"
 
 
 #include <SimpleShapeContainerModel.h>
@@ -89,6 +91,7 @@ public:
             QTransform parentTransform = q->absoluteTransformation();
             child->applyAbsoluteTransformation(parentTransform.inverted());
         }
+        child->setResolution(m_xRes, m_yRes);
     }
 
     void remove(KoShape *child) override {
@@ -101,8 +104,20 @@ public:
         SimpleShapeContainerModel::remove(child);
     }
 
+    void setResolution(qreal xRes, qreal yRes) {
+        if (!qFuzzyCompare(m_xRes, xRes) || !qFuzzyCompare(m_yRes, yRes)) {
+            m_xRes = xRes;
+            m_yRes = yRes;
+            Q_FOREACH (KoShape *shape, shapes()) {
+                shape->setResolution(xRes, yRes);
+            }
+        }
+    }
+
 private:
     KisShapeLayer *q;
+    qreal m_xRes{72.0};
+    qreal m_yRes{72.0};
 };
 
 
@@ -114,13 +129,16 @@ public:
         , controller(0)
         , x(0)
         , y(0)
+        , isAntialiased(true)
          {}
 
     KisPaintDeviceSP paintDevice;
-    KisShapeLayerCanvasBase * canvas;
-    KoShapeControllerBase* controller;
+    KisShapeLayerCanvasBase *canvas;
+    KoShapeControllerBase *controller;
     int x;
     int y;
+    bool isAntialiased;
+    KisSignalAutoConnectionsStore imageConnections;
 };
 
 
@@ -128,25 +146,38 @@ KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
-    : KisShapeLayer(controller, image, name, opacity, nullptr)
+    : KisShapeLayer(controller, image, name, opacity,
+                    [&] () { return new KisShapeLayerCanvas(image->colorSpace(), new KisDefaultBounds(image), this);})
 {
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
-    : KisShapeLayer(rhs, rhs.m_d->controller)
+    : KisShapeLayer(rhs,
+                    rhs.m_d->controller)
 {
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs, KoShapeControllerBase* controller)
+    : KisShapeLayer(rhs,
+                    controller,
+                    [&] () {
+                            const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(rhs.m_d->canvas);
+                            KIS_ASSERT(shapeLayerCanvas);
+                            return new KisShapeLayerCanvas(*shapeLayerCanvas, this);})
+{
+}
+
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller,
+                             std::function<KisShapeLayerCanvasBase *()> canvasFactory)
         : KisExternalLayer(_rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
-    // copy the projection to avoid extra round of updates!
-    initClonedShapeLayer(controller, _rhs.m_d->paintDevice, canvas);
+    initShapeLayerImpl(controller, canvasFactory());
+    m_d->isAntialiased = _rhs.m_d->isAntialiased;
 
     /**
-     * The transformaitons of the added shapes are automatically merged into the transformation
+     * The transformations of the added shapes are automatically merged into the transformation
      * of the layer, so we should apply this extra transform separately
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();
@@ -171,9 +202,11 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    initNewShapeLayer(_rhs.m_d->controller,
-                      _rhs.m_d->paintDevice->colorSpace(),
-                      _rhs.m_d->paintDevice->defaultBounds());
+    m_d->isAntialiased = _rhs.m_d->isAntialiased;
+
+    const KisShapeLayerCanvas* shapeLayerCanvas = dynamic_cast<const KisShapeLayerCanvas*>(_rhs.canvas());
+    KIS_ASSERT(shapeLayerCanvas);
+    initShapeLayerImpl(_rhs.m_d->controller, new KisShapeLayerCanvas(*shapeLayerCanvas, this));
 
     /**
      * With current implementation this matrix will always be an identity, because
@@ -215,27 +248,12 @@ KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity,
-                             KisShapeLayerCanvasBase *canvas)
+                             std::function<KisShapeLayerCanvasBase *()> canvasFactory)
         : KisExternalLayer(image, name, opacity)
         , KoShapeLayer(new ShapeLayerContainerModel(this))
         , m_d(new Private())
 {
-    const KoColorSpace *cs = 0;
-    KisDefaultBoundsBaseSP bounds;
-
-    if (image) {
-        cs = image->colorSpace();
-        bounds = new KisDefaultBounds(this->image());
-    } else {
-        /// assert will always fail, because it is
-        /// a recovery code path
-        KIS_SAFE_ASSERT_RECOVER_NOOP(image);
-
-        cs = KoColorSpaceRegistry::instance()->rgb8();
-        bounds = new KisDefaultBounds();
-    }
-
-    initNewShapeLayer(controller, cs, bounds, canvas);
+    initShapeLayerImpl(controller, canvasFactory());
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -255,21 +273,16 @@ KisShapeLayer::~KisShapeLayer()
 }
 
 void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
-                                   KisPaintDeviceSP newProjectionDevice,
-                                   KisShapeLayerCanvasBase *overrideCanvas)
+                                       KisShapeLayerCanvasBase *canvas)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
-    m_d->paintDevice = newProjectionDevice;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
 
-    if (!overrideCanvas) {
-        KisShapeLayerCanvas *slCanvas = new KisShapeLayerCanvas(this, image());
-        slCanvas->setProjection(m_d->paintDevice);
-        overrideCanvas = slCanvas;
-    }
+    m_d->paintDevice = canvas->projection();
 
-    m_d->canvas = overrideCanvas;
+    m_d->canvas = canvas;
     m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
 
@@ -284,24 +297,11 @@ void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
     ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
     KIS_SAFE_ASSERT_RECOVER_RETURN(model);
     model->setAssociatedRootShapeManager(m_d->canvas->shapeManager());
-}
 
-void KisShapeLayer::initNewShapeLayer(KoShapeControllerBase *controller,
-                                      const KoColorSpace *projectionColorSpace,
-                                      KisDefaultBoundsBaseSP bounds,
-                                      KisShapeLayerCanvasBase *overrideCanvas)
-{
-    KisPaintDeviceSP projection = new KisPaintDevice(projectionColorSpace);
-    projection->setDefaultBounds(bounds);
-    projection->setParentNode(this);
-
-    initShapeLayerImpl(controller, projection, overrideCanvas);
-}
-
-void KisShapeLayer::initClonedShapeLayer(KoShapeControllerBase *controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas)
-{
-    KisPaintDeviceSP projection = new KisPaintDevice(*copyFromProjection);
-    initShapeLayerImpl(controller, projection, overrideCanvas);
+    if (this->image()) {
+        m_d->imageConnections.addUniqueConnection(this->image(), SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageResolutionChanged()));
+        slotImageResolutionChanged();
+    }
 }
 
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
@@ -311,12 +311,37 @@ bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 
 void KisShapeLayer::setImage(KisImageWSP _image)
 {
+    m_d->imageConnections.clear();
     KisLayer::setImage(_image);
     m_d->canvas->setImage(_image);
-    if (_image) {
-        m_d->paintDevice->convertTo(_image->colorSpace());
+    if (m_d->paintDevice) {
+        m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
     }
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
+    if (_image) {
+        m_d->imageConnections.addUniqueConnection(_image, SIGNAL(sigResolutionChanged(double, double)), this, SLOT(slotImageResolutionChanged()));
+        slotImageResolutionChanged();
+    }
+}
+
+
+KisBaseNode::PropertyList KisShapeLayer::sectionModelProperties() const
+{
+    KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
+
+    l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::antialiased, antialiased());
+
+    return l;
+}
+
+void KisShapeLayer::setSectionModelProperties(const KisBaseNode::PropertyList &properties)
+{
+    Q_FOREACH (const KisBaseNode::Property &property, properties) {
+        if (property.name == i18n("Anti-aliasing")) {
+            setAntialiased(property.state.toBool());
+        }
+    }
+
+    KisLayer::setSectionModelProperties(properties);
 }
 
 KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
@@ -329,10 +354,10 @@ KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)
         return KisExternalLayer::createMergedLayerTemplate(prevLayer);
 }
 
-void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer)
+void KisShapeLayer::fillMergedLayerTemplate(KisLayerSP dstLayer, KisLayerSP prevLayer, bool skipPaintingThisLayer)
 {
     if (!dynamic_cast<KisShapeLayer*>(dstLayer.data())) {
-        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer);
+        KisLayer::fillMergedLayerTemplate(dstLayer, prevLayer, skipPaintingThisLayer);
     }
 }
 
@@ -458,7 +483,7 @@ KoShapeManager* KisShapeLayer::shapeManager() const
     return m_d->canvas->shapeManager();
 }
 
-KoViewConverter* KisShapeLayer::converter() const
+const KoViewConverter* KisShapeLayer::converter() const
 {
     return m_d->canvas->viewConverter();
 }
@@ -537,7 +562,7 @@ bool KisShapeLayer::saveShapesToStore(KoStore *store, QList<KoShape *> shapes, c
     return true;
 }
 
-QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, bool loadingFromKra, QSizeF *fragmentSize, QStringList *warnings)
+QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QString &baseXmlDir, const QRectF &rectInPixels, qreal resolutionPPI, KoDocumentResourceManager *resourceManager, bool loadingFromKra, QSizeF *fragmentSize, QStringList *warnings, QStringList *errors)
 {
 
     QString errorMsg;
@@ -546,11 +571,15 @@ QList<KoShape *> KisShapeLayer::createShapesFromSvg(QIODevice *device, const QSt
 
     QDomDocument doc = SvgParser::createDocumentFromSvg(device, &errorMsg, &errorLine, &errorColumn);
     if (doc.isNull()) {
-        errKrita << "Parsing error in " << "contents.svg" << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
-        errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
+        errKrita << "Parsing error in contents.svg! Aborting!" << Qt::endl
+        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+        << " Error message: " << errorMsg << Qt::endl;
+
+        if (errors) {
+            *errors << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
                          , errorLine , errorColumn , errorMsg);
+        }
+        return QList<KoShape*>();
     }
 
     SvgParser parser(resourceManager);
@@ -635,9 +664,9 @@ bool KisShapeLayer::loadLayer(KoStore* store, QStringList *warnings)
 
 }
 
-void KisShapeLayer::resetCache()
+void KisShapeLayer::resetCache(const KoColorSpace *colorSpace)
 {
-    m_d->canvas->resetCache();
+    m_d->canvas->resetCache(colorSpace);
 }
 
 KUndo2Command* KisShapeLayer::crop(const QRect & rect)
@@ -658,13 +687,13 @@ public:
     {
     }
 
-    void undo()
+    void undo() override
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() != qApp->thread());
         m_blockingConnection.start(m_savedTransform);
     }
 
-    void redo()
+    void redo() override
     {
         m_savedTransform = m_shapeLayer->transformation();
 
@@ -693,7 +722,8 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
      * We cannot transform shapes in the worker thread. Therefor we emit blocking-queued
      * signal to transform them in the GUI thread and then return.
      */
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
+    const KisImageViewConverter *converter = dynamic_cast<const KisImageViewConverter*>(this->converter());
+    KIS_ASSERT(converter);
     QTransform docSpaceTransform = converter->documentToView() *
         transform * converter->viewToDocument();
 
@@ -726,4 +756,35 @@ KUndo2Command *KisShapeLayer::convertTo(const KoColorSpace *dstColorSpace, KoCol
 KoShapeControllerBase *KisShapeLayer::shapeController() const
 {
     return m_d->controller;
+}
+
+KisShapeLayerCanvasBase *KisShapeLayer::canvas() const
+{
+    return m_d->canvas;
+}
+
+void KisShapeLayer::slotImageResolutionChanged()
+{
+    ShapeLayerContainerModel *model = dynamic_cast<ShapeLayerContainerModel*>(this->model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(model);
+    if (this->image()) {
+        model->setResolution(image()->xRes() * 72.0, image()->yRes() * 72.0);
+    }
+}
+
+
+bool KisShapeLayer::antialiased() const
+{
+    return m_d->isAntialiased;
+}
+
+void KisShapeLayer::setAntialiased(const bool antialiased)
+{
+    const bool oldAntialiased = m_d->isAntialiased;
+
+    if (antialiased != oldAntialiased) {
+        m_d->isAntialiased = antialiased;
+        // is it the best way to rerender the vector layer?
+        if(m_d->canvas) m_d->canvas->resetCache(colorSpace());
+    }
 }

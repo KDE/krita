@@ -12,8 +12,8 @@
 #define KIS_FILTEROP_H_
 
 #include "kis_brush_based_paintop.h"
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_rotation_option.h>
+#include <KisStandardOptions.h>
+#include <KisRotationOption.h>
 
 class KisFilterConfiguration;
 class KisFilterOpSettings;
@@ -40,8 +40,8 @@ protected:
 private:
 
     KisPaintDeviceSP m_tmpDevice;
-    KisPressureSizeOption m_sizeOption;
-    KisPressureRotationOption m_rotationOption;
+    KisSizeOption m_sizeOption;
+    KisRotationOption m_rotationOption;
     KisFilterSP m_filter;
     KisFilterConfigurationSP m_filterConfiguration;
     bool m_smudgeMode;

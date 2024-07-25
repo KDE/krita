@@ -46,7 +46,7 @@
 #include <kis_node_manager.h>
 #include <kis_node_commands_adapter.h>
 #include <KisMimeDatabase.h>
-#include "kis_image_barrier_locker.h"
+#include "KisImageBarrierLock.h"
 
 KisChannelSeparator::KisChannelSeparator(KisViewManager * view)
     : m_viewManager(view)
@@ -81,12 +81,17 @@ void KisChannelSeparator::separate(KoUpdater * progressUpdater, enumSepAlphaOpti
 
     quint32 numberOfChannels = src->channelCount();
     const KoColorSpace * srcCs  = src->colorSpace();
-    QList<KoChannelInfo *> channels = srcCs->channels();
+    const QList<KoChannelInfo *> channels = srcCs->channels();
     vKisPaintDeviceSP paintDevices;
 
-    QRect rect = src->exactBounds();
+    /**
+     * We should process the entire image, even when its pixels are
+     * transparent, because we might be pulling colors from under a
+     * zero-alpha channel.
+     */
+    const QRect rect = image->bounds();
 
-    KisImageBarrierLocker locker(image);
+    KisImageBarrierLock lock(image);
     int i = 0;
     for (QList<KoChannelInfo *>::const_iterator it =  channels.constBegin(); it != channels.constEnd(); ++it) {
 

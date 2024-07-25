@@ -3,7 +3,7 @@ set(kritaiptc_SOURCES
     kis_iptc_plugin.cpp
 )
 
-add_library(kritaiptc MODULE ${kritaiptc_SOURCES})
+kis_add_library(kritaiptc MODULE ${kritaiptc_SOURCES})
 
 generate_export_header(kritaiptc)
 

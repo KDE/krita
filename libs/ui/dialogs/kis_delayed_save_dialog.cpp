@@ -7,60 +7,75 @@
 #include "kis_delayed_save_dialog.h"
 #include "ui_kis_delayed_save_dialog.h"
 
-#include <QTimer>
 #include <QElapsedTimer>
 #include <QThread>
+#include <QTimer>
+#include <QtGlobal>
 
 #include "kis_debug.h"
 #include "kis_image.h"
 #include "kis_composite_progress_proxy.h"
 
-
-struct KisDelayedSaveDialog::Private
-{
+struct Q_DECL_HIDDEN KisDelayedSaveDialog::Private {
     Private(KisImageSP _image, int _busyWait, Type _type) : image(_image), busyWait(_busyWait), type(_type) {}
 
     KisImageSP image;
     QTimer updateTimer;
     int busyWait;
 
-
     bool checkImageIdle() {
         const bool allowLocked = type != SaveDialog;
         return image->isIdle(allowLocked);
     }
 
-private:
     Type type;
 };
 
+class Q_DECL_HIDDEN WdgDelayedSaveDialog : public QWidget, public Ui::KisDelayedSaveDialog
+{
+    Q_OBJECT
+
+public:
+    WdgDelayedSaveDialog(QWidget *parent = nullptr)
+        : QWidget(parent)
+    {
+        setupUi(this);
+    }
+};
+
 KisDelayedSaveDialog::KisDelayedSaveDialog(KisImageSP image, Type type, int busyWait, QWidget *parent)
-    : QDialog(parent),
-      ui(new Ui::KisDelayedSaveDialog),
-      m_d(new Private(image, busyWait, type))
+    : KoDialog(parent)
+    , ui(new WdgDelayedSaveDialog())
+    , m_d(new Private(image, busyWait, type))
 {
     KIS_ASSERT_RECOVER_NOOP(image);
 
-    ui->setupUi(this);
+    setMainWidget(ui);
 
     if (type == SaveDialog) {
-        connect(ui->bnDontWait, SIGNAL(clicked()), SLOT(slotIgnoreRequested()));
-        connect(ui->bnCancel, SIGNAL(clicked()), SLOT(slotCancelRequested()));
-    } else {
-        ui->bnDontSave->setText(i18n("Cancel"));
-        ui->bnDontWait->setVisible(false);
-        ui->bnCancel->setVisible(false);
+        setButtons(KoDialog::Ok | KoDialog::Cancel | KoDialog::User1);
+        setButtonText(KoDialog::Ok, i18n("Save without waiting"));
+        setButtonText(KoDialog::Cancel, i18n("Cancel operation and save"));
+        setButtonText(KoDialog::User1, i18n("Close, do not save"));
 
-        if (type == ForcedDialog) {
-            ui->bnDontSave->setVisible(false);
-        }
+        connect(this, &KoDialog::okClicked, this, &KisDelayedSaveDialog::slotIgnoreRequested);
+
+        connect(this, &KoDialog::cancelClicked, this, &KisDelayedSaveDialog::slotCancelRequested);
+
+        connect(this, &KoDialog::user1Clicked, this, &KisDelayedSaveDialog::reject);
+    } else if (type == GeneralDialog) {
+        setButtons(KoDialog::Cancel);
+        connect(this, &KoDialog::cancelClicked, &KisDelayedSaveDialog::reject);
+    } else { // type == ForcedDialog, disable closing
+        setButtons(KoDialog::None);
+        setWindowFlags(windowFlags() & ~Qt::WindowCloseButtonHint);
     }
 
-    connect(ui->bnDontSave, SIGNAL(clicked()), SLOT(reject()));
-
-    connect(&m_d->updateTimer, SIGNAL(timeout()), SLOT(slotTimerTimeout()));
+    connect(&m_d->updateTimer, &QTimer::timeout, this, &KisDelayedSaveDialog::slotTimerTimeout);
 
     m_d->image->compositeProgressProxy()->addProxy(ui->progressBar);
+
+    resize(sizeHint());
 }
 
 KisDelayedSaveDialog::~KisDelayedSaveDialog()
@@ -113,3 +128,5 @@ void KisDelayedSaveDialog::slotIgnoreRequested()
 {
     done(Ignored);
 }
+
+#include "kis_delayed_save_dialog.moc"

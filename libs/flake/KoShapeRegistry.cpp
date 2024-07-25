@@ -19,7 +19,6 @@
 #include "KoShapeLayer.h"
 
 #include <KoPluginLoader.h>
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include <QString>

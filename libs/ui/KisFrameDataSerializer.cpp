@@ -212,6 +212,8 @@ KisFrameDataSerializer::Frame KisFrameDataSerializer::loadFrame(int frameId, Kis
         frame.frameTiles.push_back(std::move(tile));
     }
 
+    Q_UNUSED(compressionTime);
+
     file.close();
 
     return frame;
@@ -265,11 +267,15 @@ boost::optional<qreal> KisFrameDataSerializer::estimateFrameUniqueness(const Kis
 
         if (sampleStep > 0) {
             const int numPixels = lhsTile.rect.width() * lhsTile.rect.height();
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lhsTile.data.data(), boost::none);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(rhsTile.data.data(), boost::none);
+
             for (int j = 0; j < numPixels; j += sampleStep) {
                 quint8 *lhsDataPtr = lhsTile.data.data() + j * pixelSize;
                 quint8 *rhsDataPtr = rhsTile.data.data() + j * pixelSize;
 
-                if (lhsDataPtr && rhsDataPtr && std::memcmp(lhsDataPtr, rhsDataPtr, pixelSize) != 0) {
+                if (std::memcmp(lhsDataPtr, rhsDataPtr, pixelSize) != 0) {
                     numUniquePixels++;
                 }
                 numSampledPixels++;

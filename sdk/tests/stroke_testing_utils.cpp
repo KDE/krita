@@ -134,9 +134,19 @@ void utils::StrokeTester::setBaseFuzziness(int value)
     m_baseFuzziness = value;
 }
 
+void utils::StrokeTester::setCancelOnIteration(int value)
+{
+    m_cancelOnIteration = value;
+}
+
 void utils::StrokeTester::testSimpleStroke()
 {
     testOneStroke(false, true, false, true);
+}
+
+void utils::StrokeTester::testSimpleStrokeCancelled()
+{
+    testOneStroke(true, true, false, true);
 }
 
 int utils::StrokeTester::lastStrokeTime() const
@@ -254,7 +264,9 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
                                      bool testUpdates,
                                      bool needQImage)
 {
-    KisImageSP image = utils::createImage(0, m_imageSize);
+    KisUndoStore *undoStore = new KisSurrogateUndoStore();
+
+    KisImageSP image = utils::createImage(undoStore, m_imageSize);
     KoCanvasResourceProvider *manager = utils::createResourceManager(image, 0, m_presetFilename);
     KisNodeSP currentNode;
 
@@ -281,7 +293,7 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
         m_strokeId = image->startStroke(stroke);
         addPaintingJobs(image, resources, i);
 
-        if(!cancelled) {
+        if(!cancelled || i < m_cancelOnIteration) {
             image->endStroke(m_strokeId);
         }
         else {
@@ -292,6 +304,8 @@ QImage utils::StrokeTester::doStroke(bool cancelled,
 
         m_strokeTime = strokeTime.elapsed();
         currentNode = resources->currentNode();
+
+        iterationEndedCallback(image, currentNode, i);
     }
 
     beforeCheckingResult(image, currentNode);
@@ -355,4 +369,11 @@ void utils::StrokeTester::beforeCheckingResult(KisImageWSP image, KisNodeSP acti
 {
     Q_UNUSED(image);
     Q_UNUSED(activeNode);
+}
+
+void utils::StrokeTester::iterationEndedCallback(KisImageWSP image, KisNodeSP activeNode, int iteration)
+{
+    Q_UNUSED(image);
+    Q_UNUSED(activeNode);
+    Q_UNUSED(iteration);
 }

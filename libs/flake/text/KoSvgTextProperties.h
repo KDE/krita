@@ -8,14 +8,17 @@
 #define KOSVGTEXTPROPERTIES_H
 
 #include "kritaflake_export.h"
+#include "KoFlakeTypes.h"
+#include "KoSvgText.h"
 
 #include <QScopedPointer>
 #include <QVariant>
 #include <QList>
 
+#include <boost/operators.hpp>
+
 class SvgLoadingContext;
-
-
+class KoShapeBackground;
 
 /**
  * KoSvgTextProperties represents the text attributes defined in SVG DOM tree
@@ -35,49 +38,95 @@ class SvgLoadingContext;
  * QVariant-based comparison operator. If the property value in a child and a
  * parent is not the same, then it is not inherited.
  */
-class KRITAFLAKE_EXPORT KoSvgTextProperties
+class KRITAFLAKE_EXPORT KoSvgTextProperties : public boost::equality_comparable<KoSvgTextProperties>
 {
 public:
     /**
      * Defines a set of supported properties. See SVG 1.1 for details.
      */
     enum PropertyId {
-        WritingModeId,
-        DirectionId,
-        UnicodeBidiId,
-        TextAnchorId,
-        DominantBaselineId,
-        AlignmentBaselineId,
-        BaselineShiftModeId,
-        BaselineShiftValueId,
-        KerningId,
-        GlyphOrientationVerticalId,
-        GlyphOrientationHorizontalId,
-        LetterSpacingId,
-        WordSpacingId,
+        WritingModeId, ///< KoSvgText::WritingMode
+        DirectionId, ///< KoSvgText::Direction
+        UnicodeBidiId, ///< KoSvgText::UnicodeBidi
+        TextAnchorId, ///< KoSvgText::TextAnchor
+        DominantBaselineId, ///< KoSvgText::Baseline
+        AlignmentBaselineId, ///< KoSvgText::Baseline
+        BaselineShiftModeId, ///< KoSvgText::BaselineShiftMode
+        BaselineShiftValueId, ///< Double
+        KerningId, ///< KoSvgText::AutoValue
+        TextOrientationId, ///< KoSvgText::TextOrientation
+        LetterSpacingId, ///< KoSvgText::AutoLengthPercentage
+        WordSpacingId, ///< KoSvgText::AutoLengthPercentage
 
-        FontFamiliesId,
-        FontStyleId,
-        FontIsSmallCapsId,
-        FontStretchId,
-        FontWeightId,
-        FontSizeId,
-        FontSizeAdjustId,
-        TextDecorationId,
+        FontFamiliesId, ///< QStringList
+        FontStyleId, ///< QFont::Style
+        FontStretchId, ///< Int
+        FontWeightId, ///< Int
+        FontSizeId, ///< Double
+        FontSizeAdjustId, ///< KoSvgText::AutoValue
 
-        FillId,
-        StrokeId,
+        /// KoSvgText::FontVariantFeature
+        FontVariantCommonLigId,
+        FontVariantDiscretionaryLigId,
+        FontVariantHistoricalLigId,
+        FontVariantContextualAltId,
+        FontVariantPositionId,
+        FontVariantCapsId,
+        FontVariantNumFigureId,
+        FontVariantNumSpacingId,
+        FontVariantNumFractId,
+        FontVariantNumOrdinalId,
+        FontVariantNumSlashedZeroId,
+        FontVariantHistoricalFormsId,
+        FontVariantEastAsianVarId,
+        FontVariantEastAsianWidthId,
+        FontVariantRubyId,
 
-        KraTextVersionId
+        FontFeatureSettingsId, ///< QStringList
+        FontOpticalSizingId, ///< Bool
+        FontVariationSettingsId, ///< QStringList
+
+        TextDecorationLineId, ///< Flags, KoSvgText::TextDecorations
+        TextDecorationStyleId, ///< KoSvgText::TextDecorationStyle
+        TextDecorationColorId, ///< QColor
+        TextDecorationPositionHorizontalId, ///< KoSvgText::TextDecorationUnderlinePosition
+        TextDecorationPositionVerticalId, ///< KoSvgText::TextDecorationUnderlinePosition
+        FillId, ///< KoSvgText::BackgroundProperty
+        StrokeId, ///< KoSvgText::StrokeProperty
+        Opacity, ///< Double, SVG shape opacity.
+        PaintOrder, ///< QVector<KoShape::PaintOrder>
+        Visiblity, ///< Bool, CSS visibility
+
+        TextLanguage, ///< a language string.
+
+        TextCollapseId, ///< KoSvgText::TextSpaceCollapse
+        TextWrapId, ///< KoSvgText::TextWrap
+        TextTrimId, ///< Flags, KoSvgText::TextSpaceTrims
+        LineBreakId, ///< KoSvgText::LineBreak
+        WordBreakId, ///< KoSvgText::WordBreak
+        TextAlignAllId, ///< KoSvgText::TextAlign
+        TextAlignLastId, ///< KoSvgText::TextAlign
+        TextTransformId, ///< KoSvgText::TextTransformInfo Struct
+        TextOverFlowId, ///< KoSvgText::WordBreak
+        OverflowWrapId, ///<
+        InlineSizeId, ///< KoSvgText::AutoValue
+        LineHeightId, ///< KoSvgText::AutoValue
+        TextIndentId, ///< KoSvgText::TextIndentInfo Struct.
+        HangingPunctuationId, ///< Flags, KoSvgText::HangingPunctuations
+        TabSizeId, ///< Int
+
+        ShapePaddingId, ///< Double
+        ShapeMarginId,  ///< Double
+
+        KraTextVersionId ///< Int, used for handling incorrectly saved files.
     };
-
-public:
 
     KoSvgTextProperties();
     ~KoSvgTextProperties();
 
     KoSvgTextProperties(const KoSvgTextProperties &rhs);
     KoSvgTextProperties& operator=(const KoSvgTextProperties &rhs);
+    bool operator==(const KoSvgTextProperties &rhs);
 
     /**
      * Set the property \p id to \p value
@@ -129,7 +178,15 @@ public:
      * property is inheritable according to SVG and this set does not define
      * it.
      */
-    void inheritFrom(const KoSvgTextProperties &parentProperties);
+    void inheritFrom(const KoSvgTextProperties &parentProperties, bool resolve = false);
+
+    /**
+     * @brief resolveRelativeValues
+     * resolve the font-relative values.
+     * @param fontSize -- fontsize to resolve 'em' to.
+     * @param xHeight -- xHeight to resolve 'ex' to.
+     */
+    void resolveRelativeValues(const qreal fontSize = 12.0, const qreal xHeight = 6.0);
 
     /**
      * Return true if the property \p id is inherited from \p parentProperties.
@@ -139,13 +196,22 @@ public:
      */
     bool inheritsProperty(PropertyId id, const KoSvgTextProperties &parentProperties) const;
 
+    /// Test whether it has non-inheritable properties set.
+    bool hasNonInheritableProperties() const;
+
+    /// Used to merge child properties into parent properties
+    void setAllButNonInheritableProperties(const KoSvgTextProperties &properties);
+
     /**
      * Return a set of properties that ar **not** inherited from \p
      * parentProperties. The property is considered "inherited" **iff* it is
      * inheritable according to SVG and the parent defined the same property
      * with the same value.
+     * @param keepFontSize whether to keep the font size, use for root nodes
+     * so that it won't be omitted and inheriting from the "default", which may
+     * not be deterministic.
      */
-    KoSvgTextProperties ownProperties(const KoSvgTextProperties &parentProperties) const;
+    KoSvgTextProperties ownProperties(const KoSvgTextProperties &parentProperties, bool keepFontSize = false) const;
 
     /**
      * @brief parseSvgTextAttribute add a property according to an XML attribute value.
@@ -161,9 +227,44 @@ public:
      * Convert all the properties of the set into a map of XML attribute/value
      * pairs.
      */
-    QMap<QString,QString> convertToSvgTextAttributes() const;
+    QMap<QString, QString> convertToSvgTextAttributes() const;
+
+    /**
+     * @brief convertParagraphProperties
+     * some properties only apply to the root shape, so we write those separately.
+     * @return
+     */
+    QMap<QString, QString> convertParagraphProperties() const;
 
     QFont generateFont() const;
+
+    qreal xHeight() const;
+
+    /**
+     * @brief fontFeaturesForText
+     * Returns a harfbuzz friendly list of opentype font-feature settings using
+     * the various font-variant and font-feature-settings values.
+     * @param start the start pos of the text.
+     * @param length the length of the text.
+     * @return a list of strings for font-features and their ranges that can be
+     * understood by harfbuzz.
+     */
+    QStringList fontFeaturesForText(int start, int length) const;
+
+    /**
+     * @brief fontAxisSettings
+     * This is used to configure variable fonts. It gets the appropriate values
+     * from font width, stretch, style, size, if font-optical-sizing is not set
+     * to 'none, and finally the font-variation-settings property.
+     * @return a map of axis-tags and their values.
+     */
+    QMap<QString, qreal> fontAxisSettings() const;
+
+    QSharedPointer<KoShapeBackground> background() const;
+    KoShapeStrokeModelSP stroke() const;
+
+    KoSvgText::CssLengthPercentage fontSize() const;
+    void setFontSize(const KoSvgText::CssLengthPercentage length);
 
     /**
      * Return a list of supported XML attribute names (defined in SVG)

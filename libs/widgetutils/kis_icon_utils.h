@@ -13,6 +13,8 @@ class QAbstractButton;
 class QComboBox;
 class QAction;
 class QObject;
+class QTabBar;
+class QTabWidget;
 
 #include <QIcon>
 #include <QString>
@@ -46,7 +48,7 @@ namespace KisIconUtils
     KRITAWIDGETUTILS_EXPORT QIcon loadIcon(const QString &name);
 
     /**
-     * Should we use a dark or light themeed icon? Useful for images that are loaded
+     * Should we use a dark or light themed icon? Useful for images that are loaded
      * dynamically like document templates instead of being in static resource files
      */
     KRITAWIDGETUTILS_EXPORT bool useDarkIcons();
@@ -74,6 +76,11 @@ namespace KisIconUtils
      * Update an icon of \p action according to the current theme
      */
     KRITAWIDGETUTILS_EXPORT void updateIcon(QAction *action);
+
+    /**
+     * Update the iconst of the \p tabBar according to the current theme
+     */
+    KRITAWIDGETUTILS_EXPORT void updateIcon(QTabBar *tabBar);
 }
 
 #endif /* __KIS_ICON_UTILS_H */

@@ -33,7 +33,7 @@ public:
     }
 
     QByteArray toolBarName;
-    QPointer<KToolBar> toolBar;
+    QPointer<KisToolBar> toolBar;
     bool beingToggled;
 };
 
@@ -44,7 +44,7 @@ KToggleToolBarAction::KToggleToolBarAction(const char *toolBarName, const QStrin
     d->toolBarName = toolBarName;
 }
 
-KToggleToolBarAction::KToggleToolBarAction(KToolBar *toolBar, const QString &text, QObject *parent)
+KToggleToolBarAction::KToggleToolBarAction(KisToolBar *toolBar, const QString &text, QObject *parent)
     : KToggleAction(text, parent),
       d(new Private)
 {
@@ -93,7 +93,7 @@ bool KToggleToolBarAction::eventFilter(QObject *watched, QEvent *event)
     return false;
 }
 
-KToolBar *KToggleToolBarAction::toolBar()
+KisToolBar *KToggleToolBarAction::toolBar()
 {
     return d->toolBar;
 }
@@ -106,8 +106,8 @@ void KToggleToolBarAction::slotToggled(bool checked)
         d->beingToggled = false;
 
         QMainWindow *mw = d->toolBar->mainWindow();
-        if (mw && qobject_cast<KMainWindow *>(mw)) {
-            static_cast<KMainWindow *>(mw)->setSettingsDirty();
+        if (mw && qobject_cast<KisKMainWindow *>(mw)) {
+            static_cast<KisKMainWindow *>(mw)->setSettingsDirty();
         }
     }
 

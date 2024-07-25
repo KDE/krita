@@ -16,15 +16,11 @@
 #include "kis_dom_utils.h"
 #include "kis_algebra_2d.h"
 #include "kis_global.h"
+#include <KisStaticInitializer.h>
 
-
-struct KisGuidesConfigStaticRegistrar {
-    KisGuidesConfigStaticRegistrar() {
-        qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
-    }
-};
-static KisGuidesConfigStaticRegistrar __registrar;
-
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<KisGuidesConfig>("KisGuidesConfig");
+}
 
 class Q_DECL_HIDDEN KisGuidesConfig::Private
 {
@@ -110,6 +106,13 @@ void KisGuidesConfig::addGuideLine(Qt::Orientation o, qreal pos)
     } else {
         d->vertGuideLines.append(pos);
     }
+}
+
+void KisGuidesConfig::removeAllGuides()
+{
+    QList<qreal> emptyGuides ;
+    setVerticalGuideLines(emptyGuides);
+    setHorizontalGuideLines(emptyGuides);
 }
 
 bool KisGuidesConfig::showGuides() const
@@ -231,6 +234,8 @@ QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) co
     KisDomUtils::saveValue(&guidesElement, "showGuides", d->showGuides);
     KisDomUtils::saveValue(&guidesElement, "snapToGuides", d->snapToGuides);
     KisDomUtils::saveValue(&guidesElement, "lockGuides", d->lockGuides);
+    KisDomUtils::saveValue(&guidesElement, "colorGuides", d->guidesColor);
+    KisDomUtils::saveValue(&guidesElement, "lineTypeGuides", d->guidesLineType);
 
     KisDomUtils::saveValue(&guidesElement, "horizontalGuides", d->horzGuideLines.toVector());
     KisDomUtils::saveValue(&guidesElement, "verticalGuides", d->vertGuideLines.toVector());
@@ -244,6 +249,7 @@ QDomElement KisGuidesConfig::saveToXml(QDomDocument& doc, const QString &tag) co
 
 bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
 {
+    KisConfig cfg(false);
     bool result = true;
 
     result &= KisDomUtils::loadValue(parent, "showGuides", &d->showGuides);
@@ -269,6 +275,13 @@ bool KisGuidesConfig::loadFromXml(const QDomElement &parent)
     }
     result &= ok;
 
+    // following variables may not be present in older files; do not update result variable
+    int guidesLineType = cfg.guidesLineStyle();
+    KisDomUtils::loadValue(parent, "lineTypeGuides", &guidesLineType);
+    d->guidesLineType = LineTypeInternal(guidesLineType);
+
+    d->guidesColor = cfg.guidesColor();
+    KisDomUtils::loadValue(parent, "colorGuides", &d->guidesColor);
 
     return result;
 }
@@ -285,7 +298,7 @@ void KisGuidesConfig::transform(const QTransform &transform)
 {
     if (transform.type() >= QTransform::TxShear) return;
 
-    KisAlgebra2D::DecomposedMatix m(transform);
+    KisAlgebra2D::DecomposedMatrix m(transform);
 
     QTransform t = m.scaleTransform();
 

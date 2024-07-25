@@ -28,11 +28,12 @@ struct KoGrayTraits : public KoColorSpaceTrait<_channels_type_, 2, 1> {
     };
 
     /// @return the gray component
-    inline static channels_type gray(quint8* data) {
-        channels_type* d = parent::nativeArray(data);
+    inline static channels_type gray(const quint8 *data)
+    {
+        const channels_type *d = parent::nativeArray(data);
         return d[gray_pos];
     }
-    
+
     /// Set the gray component
     inline static void setGray(quint8* data, channels_type nv) {
         channels_type* d = parent::nativeArray(data);

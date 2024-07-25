@@ -3,7 +3,7 @@ set(kritaxmp_SOURCES
     kis_xmp_plugin.cpp
 )
 
-add_library(kritaxmp MODULE ${kritaxmp_SOURCES})
+kis_add_library(kritaxmp MODULE ${kritaxmp_SOURCES})
 
 generate_export_header(kritaxmp)
 

@@ -64,7 +64,6 @@ KoMeshGradientBackground &KoMeshGradientBackground::operator=(const KoMeshGradie
 }
 
 void KoMeshGradientBackground::paint(QPainter &painter,
-                                     KoShapePaintingContext &,
                                      const QPainterPath &fillPath) const
 {
     if (!d->gradient || !d->gradient->isValid())   return;

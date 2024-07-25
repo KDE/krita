@@ -341,7 +341,7 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
 {
     QMenu *m_contextMenu = new QMenu();
 
-    KActionCollection *actionCollection = canvas->viewManager()->actionCollection();
+    KisKActionCollection *actionCollection = canvas->viewManager()->actionCollection();
 
     m_contextMenu->addSection(i18n("Selection Actions"));
     m_contextMenu->addSeparator();

@@ -26,7 +26,7 @@ class KoPageWidgetItem;
  *
  * This dialog is invoked by KoMainWindow and shows the content
  * of the given KoDocumentInfo class. It consists of several pages,
- * one showing general information about the document and an other
+ * one showing general information about the document and another
  * showing information about the author.
  * This dialog implements only things that are stored in the OASIS
  * meta.xml file and therefore available through the KoDocumentInfo

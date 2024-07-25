@@ -21,8 +21,6 @@ class GridDockerPlugin : public QObject
     public:
         GridDockerPlugin(QObject *parent, const QVariantList &);
         ~GridDockerPlugin() override;
-    private:
-        KisViewManager* m_view {nullptr};
 };
 
 #endif

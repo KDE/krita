@@ -42,7 +42,7 @@ KoEditColorSetWidget::KoEditColorSetWidget(const QList<KoColorSet *> &palettes, 
     connect(widget.selector, SIGNAL(currentIndexChanged(int)), this, SLOT(setActiveColorSet(int)));
 
     // A widget that shows all colors from active palette
-    // FIXME no need to handcode the QScrollArea if designer can add QScrollArea (Qt 4.4?)
+    // FIXME no need to hand code the QScrollArea if designer can add QScrollArea (Qt 4.4?)
     m_scrollArea = new QScrollArea(widget.patchesFrame);
 
     int index = 0;
@@ -110,7 +110,7 @@ void KoEditColorSetWidget::setActiveColorSet(int index)
 
     QWidget *wdg = new QWidget(m_scrollArea);
     m_gridLayout = new QGridLayout(wdg);
-    m_gridLayout->setMargin(0);
+    m_gridLayout->setContentsMargins(0, 0, 0, 0);
     m_gridLayout->setSpacing(2);
 
     m_activeColorSet = m_colorSets.value(index);

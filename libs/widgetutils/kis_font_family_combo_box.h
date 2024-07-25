@@ -96,10 +96,13 @@ public:
     void setTopFont(const QString &family);
     void setInitialized();
 
+private Q_SLOTS:
+    void slotTextChanged(const QString &input);
+
 private:
     QStringList m_pinnedFonts;
     QStringList m_blacklistedFonts;
-    bool m_initilized {false};
+    bool m_initialized {false};
     bool m_initializeFromConfig;
     int m_separatorIndex;
     PinnedFontsSeparator *m_fontSeparator;

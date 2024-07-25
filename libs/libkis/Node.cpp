@@ -60,9 +60,18 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransparencyMask.h"
 #include "TransformMask.h"
+#include "ColorizeMask.h"
 
 #include "LibKisUtils.h"
+#include <kis_layer_utils.h>
+
+#include "PaintingResources.h"
+#include "KisMainWindow.h"
+#include "kis_canvas2.h"
+#include "KoCanvasResourceProvider.h"
+
 
 struct Node::Private {
     Private() {}
@@ -107,8 +116,14 @@ Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
     else if (node->inherits("KisSelectionMask")) {
         return new SelectionMask(image, dynamic_cast<KisSelectionMask*>(node.data()));
     }
+    else if (node->inherits("KisTransparencyMask")) {
+        return new TransparencyMask(image, dynamic_cast<KisTransparencyMask*>(node.data()));
+    }
     else if (node->inherits("KisTransformMask")) {
         return new TransformMask(image, dynamic_cast<KisTransformMask*>(node.data()));
+    }
+    else if (node->inherits("KisColorizeMask")) {
+        return new ColorizeMask(image, dynamic_cast<KisColorizeMask*>(node.data()));
     }
     else {
         return new Node(image, node, parent);
@@ -207,6 +222,45 @@ QList<Node*> Node::childNodes() const
     return nodes;
 }
 
+QList<Node*> Node::findChildNodes(const QString &name, bool recursive, bool partialMatch, const QString &type, int colorLabelIndex) const
+{
+    if (!d->node) return {};
+
+    QList<Node*> nodes;
+    KisNodeList nodeList = KisLayerUtils::findNodesByName(d->node, name, recursive, partialMatch);
+
+    if (!type.isEmpty()) {
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
+            if ((type == "paintlayer" && !qobject_cast<const KisPaintLayer*>(nodeList.at(i))) ||
+                (type == "vectorlayer" && !qobject_cast<const KisShapeLayer*>(nodeList.at(i))) ||
+                (type == "grouplayer" && !qobject_cast<const KisGroupLayer*>(nodeList.at(i))) ||
+                (type == "filelayer" && !qobject_cast<const KisFileLayer*>(nodeList.at(i))) ||
+                (type == "filterlayer" && !qobject_cast<const KisAdjustmentLayer*>(nodeList.at(i))) ||
+                (type == "filllayer" && !qobject_cast<const KisGeneratorLayer*>(nodeList.at(i))) ||
+                (type == "clonelayer" && !qobject_cast<const KisCloneLayer*>(nodeList.at(i))) ||
+                (type == "transformmask" && !qobject_cast<const KisTransformMask*>(nodeList.at(i))) ||
+                (type == "referenceimageslayer" && !qobject_cast<const KisReferenceImagesLayer*>(nodeList.at(i))) ||
+                (type == "transparencymask" && !qobject_cast<const KisTransformMask*>(nodeList.at(i))) ||
+                (type == "filtermask" && !qobject_cast<const KisFilterMask*>(nodeList.at(i))) ||
+                (type == "selectionmask" && !qobject_cast<const KisSelectionMask*>(nodeList.at(i))) ||
+                (type == "colorizemask" && !qobject_cast<const KisColorizeMask*>(nodeList.at(i)))
+            ) {
+                nodeList.removeAt(i);
+            }
+        }
+    }
+
+    if (colorLabelIndex > 0) {
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
+            if (nodeList.at(i)->colorLabelIndex() != colorLabelIndex) {
+                nodeList.removeAt(i);
+            }
+        }
+    }
+
+    return LibKisUtils::createNodeList(nodeList, d->image);
+}
+
 bool Node::addChildNode(Node *child, Node *above)
 {
     if (!d->node) return false;
@@ -294,6 +348,7 @@ bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, c
     if (!d->node) return false;
     if (!d->node->inherits("KisLayer")) return false;
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
+    if (!profile) return false;
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorModel,
                                                                              colorDepth,
                                                                              profile);
@@ -529,7 +584,13 @@ QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
 
     if (!d->node) return ba;
 
-    KisPaintDeviceSP dev = d->node->projection();
+    KisPaintDeviceSP dev;
+    if (const KisColorizeMask *mask = qobject_cast<const KisColorizeMask*>(d->node)) {
+
+        dev = mask->coloringProjection();
+    } else {
+        dev = d->node->projection();
+    }
     if (!dev) return ba;
 
     ba.resize(w * h * dev->pixelSize());
@@ -765,4 +826,111 @@ KisImageSP Node::image() const
 KisNodeSP Node::node() const
 {
     return d->node;
+}
+
+QString Node::paintAbility()
+{
+    // Taken from KisTool:nodePaintAbility().
+    KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+    KisCanvas2 *canvas = mainWindow->activeView()->canvasBase();
+    if (canvas->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).isNull()) {
+        return "UNPAINTABLE";
+    }
+
+    if (!d->node) {
+        return "UNPAINTABLE";
+    }
+
+    if (d->node->inherits("KisShapeLayer")) {
+        return "VECTOR";
+    }
+    if (d->node->inherits("KisCloneLayer")) {
+        return "CLONE";
+    }
+    if (d->node->paintDevice()) {
+
+        KisPaintOpPresetSP currentPaintOpPreset = canvas->resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (currentPaintOpPreset->paintOp().id() == "mypaintbrush") {
+            const KoColorSpace *colorSpace = d->node->paintDevice()->colorSpace();
+            if (colorSpace->colorModelId() != RGBAColorModelID) {
+                return "MYPAINTBRUSH_UNPAINTABLE";
+            }
+        }
+
+        return "PAINT";
+    }
+
+    return "UNPAINTABLE";
+}
+
+void Node::paintLine(const QPointF pointOne, const QPointF pointTwo, const QString strokeStyle)
+{
+    if (paintAbility() != "PAINT") {
+        dbgScript << "Script attempted to use Node::paintLine() on an unpaintable node, ignoring.";
+        return;
+    }
+
+    KisPaintInformation pointOneInfo;
+    pointOneInfo.setPressure(1.0);
+    pointOneInfo.setPos(pointOne);
+
+    KisPaintInformation pointTwoInfo;
+    pointTwoInfo.setPressure(1.0);
+    pointTwoInfo.setPos(pointTwo);
+
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle);
+    helper.paintLine(pointOneInfo, pointTwoInfo);
+}
+
+
+void Node::paintRectangle(const QRectF &rect, const QString strokeStyle, const QString fillStyle)
+{
+    if (paintAbility() != "PAINT") {
+        dbgScript << "Script attempted to use Node::paintRectangle() on an unpaintable node, ignoring.";
+        return;
+    }
+
+    // reference class where this stuff is being done. Maybe can use the "facade" like that does for setup?
+    // void KisFigurePaintingToolHelper::paintRect(const QRectF &rect)
+
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    helper.paintRect(rect);
+}
+
+
+void Node::paintPolygon(const QList<QPointF> listPoint, const QString strokeStyle, const QString fillStyle)
+{
+    if (paintAbility() != "PAINT") {
+        dbgScript << "Script attempted to use Node::paintPolygon() on an unpaintable node, ignoring.";
+        return;
+    }
+
+    // strategy needs points in vPointF format
+    QVector<QPointF> points = points.fromList(listPoint);
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    helper.paintPolygon(points);
+}
+
+
+void Node::paintEllipse(const QRectF &rect, const QString strokeStyle, const QString fillStyle)
+{
+    if (paintAbility() != "PAINT") {
+        dbgScript << "Script attempted to use Node::paintEllipse() on an unpaintable node, ignoring.";
+        return;
+    }
+
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    helper.paintEllipse(rect);
+}
+
+
+void Node::paintPath(const QPainterPath &path, const QString strokeStyle, const QString fillStyle)
+{
+    if (paintAbility() != "PAINT") {
+        dbgScript << "Script attempted to use Node::paintPath() on an unpaintable node, ignoring.";
+        return;
+    }
+
+    KisFigurePaintingToolHelper helper = PaintingResources::createHelper(d->image, strokeStyle, fillStyle);
+    helper.paintPainterPath(path);
 }

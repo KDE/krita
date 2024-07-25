@@ -1,0 +1,78 @@
+From 4ed2b4de1f58dc22773b1a75487f47cb92f80c34 Mon Sep 17 00:00:00 2001
+From: Oliver Wolff <oliver.wolff@qt.io>
+Date: Tue, 16 Apr 2019 10:19:27 +0200
+Subject: [PATCH 10/17] ANGLE: clean up displays on dll unload
+
+If the displays are not cleaned up on dll unloading, profilers might
+report memory leaks.
+
+Change-Id: I04cbc3c2448bfb450f7d840e216827f86856e963
+---
+ src/libANGLE/Display.cpp       | 17 +++++++++++++++++
+ src/libANGLE/Display.h         |  1 +
+ src/libGLESv2/global_state.cpp |  2 ++
+ 3 files changed, 20 insertions(+)
+
+diff --git a/src/libANGLE/Display.cpp b/src/libANGLE/Display.cpp
+index bd2bd59d7..8772b2fe1 100644
+--- a/src/libANGLE/Display.cpp
++++ b/src/libANGLE/Display.cpp
+@@ -827,6 +827,23 @@ Display::EglDisplaySet Display::GetEglDisplaySet()
+     return displays;
+ }
+ 
++//static
++void Display::CleanupDisplays()
++{
++    // ~Display takes care of removing the entry from the according map
++    {
++        ANGLEPlatformDisplayMap *displays = GetANGLEPlatformDisplayMap();
++        while (!displays->empty())
++            delete displays->begin()->second;
++    }
++
++    {
++        DevicePlatformDisplayMap *displays = GetDevicePlatformDisplayMap();
++        while (!displays->empty())
++            delete displays->begin()->second;
++    }
++}
++
+ Display::Display(EGLenum platform, EGLNativeDisplayType displayId, Device *eglDevice)
+     : mState(displayId),
+       mImplementation(nullptr),
+diff --git a/src/libANGLE/Display.h b/src/libANGLE/Display.h
+index 7e7abb695..d5235046b 100644
+--- a/src/libANGLE/Display.h
++++ b/src/libANGLE/Display.h
+@@ -156,6 +156,7 @@ class Display final : public LabeledObject,
+ 
+     using EglDisplaySet = std::set<Display *>;
+     static EglDisplaySet GetEglDisplaySet();
++    static void CleanupDisplays();
+ 
+     static const ClientExtensions &GetClientExtensions();
+     static const std::string &GetClientExtensionString();
+diff --git a/src/libGLESv2/global_state.cpp b/src/libGLESv2/global_state.cpp
+index 276c694c2..f29b0b6c8 100644
+--- a/src/libGLESv2/global_state.cpp
++++ b/src/libGLESv2/global_state.cpp
+@@ -13,6 +13,7 @@
+ #include "common/system_utils.h"
+ #include "libANGLE/ErrorStrings.h"
+ #include "libANGLE/Thread.h"
++#include "libANGLE/Display.h"
+ #include "libGLESv2/resource.h"
+ 
+ #include <atomic>
+@@ -353,6 +354,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)
+             break;
+ 
+         case DLL_PROCESS_DETACH:
++            egl::Display::CleanupDisplays();
+             egl::TerminateProcess();
+             break;
+     }
+-- 
+2.24.1.windows.2
+

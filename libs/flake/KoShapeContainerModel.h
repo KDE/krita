@@ -138,7 +138,7 @@ public:
 
     /**
      * This method is called when one of the shape shapes has been modified.
-     * When a shape shape is rotated, moved or scaled/skewed this method will be called
+     * When a shape is rotated, moved or scaled/skewed this method will be called
      * to inform the container of such a change.  The change has already happened at the
      * time this method is called.
      * The base implementation notifies the grand parent of the shape that there was a

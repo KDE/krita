@@ -49,7 +49,7 @@ KoSliderCombo::KoSliderCombo(QWidget *parent)
     d->firstShowOfSlider = false; //true;
 
     QHBoxLayout *layout = new QHBoxLayout(d->container);
-    layout->setMargin(2);
+    layout->setContentsMargins(2, 2, 2, 2);
     layout->setSpacing(2);
     layout->addWidget(d->slider);
     d->container->resize(200, 30);
@@ -99,7 +99,7 @@ QSize KoSliderCombo::minimumSizeHint() const
 void KoSliderCombo::KoSliderComboPrivate::showPopup()
 {
     if(firstShowOfSlider) {
-        container->show(); //show container a bit early so the slider can be layout'ed
+        container->show(); //show container a bit early so the slider can be laid out
         firstShowOfSlider = false;
     }
 
@@ -199,7 +199,7 @@ void KoSliderCombo::keyPressEvent(QKeyEvent *e)
 
 void KoSliderCombo::wheelEvent(QWheelEvent *e)
 {
-    if (e->delta() > 0) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
+    if (e->angleDelta().y() > 0) setValue(value() + d->slider->singleStep() * (maximum() - minimum()) / 256 + 0.5);
     else setValue(value() - d->slider->singleStep() * (maximum() - minimum()) / 256 - 0.5);
 }
 

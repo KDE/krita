@@ -43,6 +43,16 @@ KoID KisCompositeOpListWidget::selectedCompositeOp() const {
     return KoCompositeOpRegistry::instance().getDefaultCompositeOp();
 }
 
+void KisCompositeOpListWidget::setCompositeOp(const KoID &id)
+{
+    const QModelIndex index = m_model->indexOf(id);
+    if (index.isValid()) {
+        setCurrentIndex(index);
+    } else {
+        qWarning() << "KisCompositeOpListWidget::setCompositeOp: ailed to find index for blendmode" << ppVar(id);
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // ---- KisCompositeOpComboBox -------------------------------------------------------- //
 
@@ -185,7 +195,7 @@ void KisCompositeOpComboBox::selectCompositeOp(const KoID &op) {
 
     setCurrentIndex(index.row());
     emit activated(index.row());
-    emit activated(op.name());
+    emit textActivated(op.name());
 }
 
 KoID KisCompositeOpComboBox::selectedCompositeOp() const {
@@ -397,7 +407,7 @@ void KisCompositeOpComboBox::selectNeighbouringBlendMode(bool down)
 
         emit activated(newIndex);
         if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
-            emit activated(op.name());
+            emit textActivated(op.name());
         }
     }
 }
@@ -419,8 +429,8 @@ void KisCompositeOpComboBox::wheelEvent(QWheelEvent *e)
     if (1) {
 #endif
 
-        if (e->delta() != 0) {
-            selectNeighbouringBlendMode(e->delta() < 0);
+        if (e->angleDelta().y() != 0) {
+            selectNeighbouringBlendMode(e->angleDelta().y() < 0);
         }
 
         e->accept();
@@ -515,7 +525,7 @@ void KisCompositeOpComboBox::keyPressEvent(QKeyEvent *e)
             emit activated(newIndex);
 
             if (m_model->entryAt(op, m_model->index(newIndex, 0))) {
-                emit activated(op.name());
+                emit textActivated(op.name());
             }
         }
     } else {

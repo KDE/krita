@@ -1,22 +1,3 @@
-include_directories(
-    ${CMAKE_SOURCE_DIR}/sdk/tests
-    ${CMAKE_SOURCE_DIR}/libs/pigment
-    ${CMAKE_SOURCE_DIR}/libs/pigment/compositeops
-)
-include_directories(SYSTEM
-    ${EIGEN3_INCLUDE_DIR}
-)
-
-
-set(LINK_VC_LIB)
-if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-  set(LINK_VC_LIB ${Vc_LIBRARIES})
-endif()
-
-macro_add_unittest_definitions()
-
 ########### next target ###############
 
 set(kis_datamanager_benchmark_SRCS kis_datamanager_benchmark.cpp)
@@ -36,7 +17,6 @@ set(kis_mask_generator_benchmark_SRCS kis_mask_generator_benchmark.cpp)
 set(kis_low_memory_benchmark_SRCS kis_low_memory_benchmark.cpp)
 set(KisAnimationRenderingBenchmark_SRCS KisAnimationRenderingBenchmark.cpp)
 set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp)
-set(kis_composition_benchmark_SRCS kis_composition_benchmark.cpp)
 set(kis_thumbnail_benchmark_SRCS kis_thumbnail_benchmark.cpp)
 
 krita_add_benchmark(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
@@ -56,31 +36,51 @@ krita_add_benchmark(KisMaskGeneratorBenchmark TESTNAME krita-benchmarks-KisMaskG
 krita_add_benchmark(KisLowMemoryBenchmark TESTNAME krita-benchmarks-KisLowMemory ${kis_low_memory_benchmark_SRCS})
 krita_add_benchmark(KisAnimationRenderingBenchmark TESTNAME krita-benchmarks-KisAnimationRenderingBenchmark ${KisAnimationRenderingBenchmark_SRCS})
 krita_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
-krita_add_benchmark(KisCompositionBenchmark TESTNAME krita-benchmarks-KisComposition ${kis_composition_benchmark_SRCS})
 krita_add_benchmark(KisThumbnailBenchmark TESTNAME krita-benchmarks-KisThumbnail ${kis_thumbnail_benchmark_SRCS})
 
-target_link_libraries(KisDatamanagerBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisHLineIteratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisVLineIteratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisRandomIteratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisProjectionBenchmark  kritaimage  kritaui Qt5::Test)
-target_link_libraries(KisBContrastBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisBlurBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisLevelFilterBenchmark kritaimage  Qt5::Test)
-target_link_libraries(KisPainterBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisStrokeBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisFastMathBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisFloodfillBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisGradientBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisLowMemoryBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  Qt5::Test)
-target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  Qt5::Test)
+target_link_libraries(KisDatamanagerBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisHLineIteratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisVLineIteratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisRandomIteratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisProjectionBenchmark  kritaimage  kritaui kritatestsdk)
+target_link_libraries(KisBContrastBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisBlurBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisLevelFilterBenchmark kritaimage  kritatestsdk)
+target_link_libraries(KisPainterBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisStrokeBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisFastMathBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisFloodfillBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisGradientBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisLowMemoryBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  kritatestsdk)
+target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  kritatestsdk)
 
-target_link_libraries(KisCompositionBenchmark  kritaimage  Qt5::Test ${LINK_VC_LIB})
-if(HAVE_VC)
-    set_property(TARGET KisCompositionBenchmark APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+if(HAVE_XSIMD)
+ko_compile_for_all_implementations_no_scalar(__per_arch_composition_objects kis_composition_benchmark.cpp)
+message("Following objects are generated for the composition benchmark")
+foreach(_obj IN LISTS __per_arch_composition_objects)
+    string(REPLACE "\.cpp" "" _target ${_obj})
+    string(REPLACE "\.cpp" "\.h" _fake_header ${_obj})
+    get_filename_component(_target ${_target} NAME)
+    message("    * ${_target} <- ${_obj}")
+    krita_add_benchmark(${_target} TESTNAME "krita-benchmarks-${_target}" ${_obj})
+
+    # Automoc goes crazy if the source file is located in the build
+    # directory and does not have a header with exactly the same
+    # base name. It just skips generation for such a source, since
+    # it doesn't include Q_OBJECT macro directly.
+    #
+    # So here we just generate a fake header which makes
+    # automoc happy
+    #
+    # `configure_file` is used to create a semantic dependency
+    # between the two files
+
+    configure_file(kis_composition_benchmark.h ${_fake_header} COPYONLY)
+
+    target_link_libraries(${_target} kritaimage kritatestsdk kritamultiarch)
+endforeach()
 endif()
-target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)
-target_link_libraries(KisThumbnailBenchmark  kritaimage  Qt5::Test)
 
-
+target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  kritatestsdk)
+target_link_libraries(KisThumbnailBenchmark  kritaimage  kritatestsdk)

@@ -223,7 +223,7 @@ void KisSplashScreen::displayLinks(bool show) {
                                "</td><td><p><span style=\" color:%1;\"><b>Coding Krita</b></span></p>"
                                "<p><a href=\"https://krita-artists.org\"><span style=\" text-decoration: underline; color:%1;\">User Community</span></a></p>"
                                "<p><a href=\"https://invent.kde.org/graphics/krita\"><span style=\" text-decoration: underline; color:%1;\">Source Code</span></a></p>"
-                               "<p><a href=\"https://api.kde.org/appscomplete-api/krita-apidocs/libs/libkis/html/index.html\"><span style=\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
+                               "<p><a href=\"https://api.kde.org/krita/html/classKrita.html\"><span style=\" text-decoration: underline; color:%1;\">Scripting API</span></a></p>"
                                "<p><a href=\"https://scripting.krita.org/lessons/introduction\"><span style=\" text-decoration: underline; color:%1;\">Scripting School</span></a></p>"
                                "</td></table></body>"
                                "</html>", color));

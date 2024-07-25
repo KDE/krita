@@ -23,20 +23,17 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-#ifndef FILES_DEST_DIR
-#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
-#endif
-
 
 void TestBundleStorage::initTestCase()
 {
-    ResourceTestHelper::cleanDstLocation(FILES_DEST_DIR);
+    m_dstLocation = ResourceTestHelper::filesDestDir();
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 
-    QDir().mkpath(FILES_DEST_DIR + QString("/bundles"));
+    QDir().mkpath(m_dstLocation + QString("/bundles"));
 
     const bool copyResult =
         QFile::copy(KRITA_SOURCE_DIR + QString("/krita/data/bundles/Krita_4_Default_Resources.bundle"),
-                    FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+                    m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
 
     QVERIFY(copyResult);
 
@@ -45,8 +42,8 @@ void TestBundleStorage::initTestCase()
 
 void TestBundleStorage::testMetaData()
 {
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
-    QVERIFY(storage.location() == FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    QVERIFY(storage.location() == m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
     QVERIFY(!storage.metaData(KisResourceStorage::s_meta_generator).isNull());
     QVERIFY(!storage.metaData(KisResourceStorage::s_meta_author).isNull());
     QVERIFY(!storage.metaData(KisResourceStorage::s_meta_description).isNull());
@@ -57,7 +54,7 @@ void TestBundleStorage::testMetaData()
 
 void TestBundleStorage::testResourceIterator()
 {
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = storage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());
     int count = 0;
@@ -72,7 +69,7 @@ void TestBundleStorage::testResourceIterator()
 
 void TestBundleStorage::testTagIterator()
 {
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage.tags(ResourceType::PaintOpPresets);
     QVERIFY(iter->hasNext());
     int count = 0;
@@ -86,14 +83,14 @@ void TestBundleStorage::testTagIterator()
 
 void TestBundleStorage::testResourceItem()
 {
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
     KisResourceStorage::ResourceItem item = storage.resourceItem("paintoppresets/g)_Dry_Brushing.kpp");
     QVERIFY(!item.url.isEmpty());
 }
 
 void TestBundleStorage::testResource()
 {
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
     KoResourceSP res = storage.resource("paintoppresets/g)_Dry_Brushing.kpp");
     QVERIFY(res);
     QVERIFY(res->filename() == "g)_Dry_Brushing.kpp");
@@ -102,13 +99,13 @@ void TestBundleStorage::testResource()
 void TestBundleStorage::testAddResource()
 {
 
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
 
     const QString resourceUrl = "paintoppresets/g)_Dry_Brushing.kpp";
     const QString resourceType = ResourceType::PaintOpPresets;
 
     ResourceTestHelper::testVersionedStorage(storage, resourceType, resourceUrl,
-                                            FILES_DEST_DIR +
+                                            m_dstLocation +
                                              QString("/bundles/Krita_4_Default_Resources.bundle_modified"));
 
     ResourceTestHelper::testVersionedStorageIterator(storage, resourceType, resourceUrl);
@@ -116,7 +113,7 @@ void TestBundleStorage::testAddResource()
 
 void TestBundleStorage::testResourceCaseSensitivity()
 {
-    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+    KisBundleStorage storage(m_dstLocation + QString("/bundles/Krita_4_Default_Resources.bundle"));
 
     const QString resourceUrl = "paintoppresets/g)_Dry_Brushing.kpp";
     const QString resourceType = ResourceType::PaintOpPresets;
@@ -146,7 +143,7 @@ void TestBundleStorage::testResourceCaseSensitivity()
 
 void TestBundleStorage::cleanupTestCase()
 {
-    ResourceTestHelper::cleanDstLocation(FILES_DEST_DIR);
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 

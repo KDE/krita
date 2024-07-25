@@ -157,7 +157,7 @@ void KisTile::notifyAttachedToDataManager(KisMementoManager *mm)
 inline void KisTile::blockSwapping() const
 {
     /**
-     * We need to hold a specal barrier lock here to ensure
+     * We need to hold a special barrier lock here to ensure
      * m_tileData->blockSwapping() has finished executing
      * before anyone started reading the tile data. That is
      * why we can not use atomic operations here.
@@ -245,7 +245,7 @@ void KisTile::lockForWrite()
 
             DEBUG_COWING(tileData);
 
-            KisMementoManager *mm = m_mementoManager.load();
+            KisMementoManager *mm = m_mementoManager.loadRelaxed();
             if (mm) {
                 mm->registerTileChange(this);
             }

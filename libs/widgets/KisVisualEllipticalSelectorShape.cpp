@@ -14,28 +14,26 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
-KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(QWidget *parent,
+#include "resources/KoGamutMask.h"
+
+#define KVESS_MARGIN 2
+
+KisVisualEllipticalSelectorShape::KisVisualEllipticalSelectorShape(KisVisualColorSelector *parent,
                                                                  Dimensions dimension,
-                                                                 const KoColorSpace *cs,
                                                                  int channel1, int channel2,
-                                                                 const KoColorDisplayRendererInterface *displayRenderer,
                                                                  int barWidth,
                                                                  singelDTypes d)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer)
+    : KisVisualColorSelectorShape(parent, dimension, channel1, channel2)
 {
     //qDebug() << "creating KisVisualEllipticalSelectorShape" << this;
     m_type = d;
     m_barWidth = barWidth;
+    m_gamutMaskNeedsUpdate = (dimension == KisVisualColorSelectorShape::twodimensional);
 }
 
 KisVisualEllipticalSelectorShape::~KisVisualEllipticalSelectorShape()
 {
     //qDebug() << "deleting KisVisualEllipticalSelectorShape" << this;
-}
-
-QSize KisVisualEllipticalSelectorShape::sizeHint() const
-{
-    return QSize(180,180);
 }
 
 void KisVisualEllipticalSelectorShape::setBorderWidth(int width)
@@ -47,43 +45,65 @@ void KisVisualEllipticalSelectorShape::setBorderWidth(int width)
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForSquare(QRect geom)
 {
-    int sizeValue = qMin(width(),height());
-    QRect b(geom.left(), geom.top(), sizeValue, sizeValue);
-    QLineF radius(b.center(), QPointF(b.left()+m_barWidth, b.center().y()) );
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(geom.contains(geometry()), geom);
+    int sizeValue = qMin(width(), height());
+    QRectF b(0, 0, sizeValue, sizeValue);
+    QLineF radius(b.center(), QPointF(b.left() + m_barWidth - 1, b.center().y()) );
     radius.setAngle(135);
-    QPointF tl = radius.p2();
-    radius.setAngle(315);
-    QPointF br = radius.p2();
-    QRect r(tl.toPoint(), br.toPoint());
+    QPointF tl(qFloor(radius.p2().x()), qFloor(radius.p2().y()));
+    QPointF br = b.bottomRight() - tl;
+    // QRect interprets bottomRight differently (unsuitable) for "historical reasons",
+    // so construct a QRectF and convert to QRect
+    QRect r = QRectF(tl, br).toRect();
+    r.translate(pos());
     return r;
 }
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForCircle(QRect geom)
 {
-    int sizeValue = qMin(width(),height());
-    QRect b(geom.left(), geom.top(), sizeValue, sizeValue);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(geom.contains(geometry()), geom);
+    int sizeValue = qMin(width(), height());
+    QRect b(0, 0, sizeValue, sizeValue);
     QPointF tl = QPointF (b.topLeft().x()+m_barWidth, b.topLeft().y()+m_barWidth);
     QPointF br = QPointF (b.bottomRight().x()-m_barWidth, b.bottomRight().y()-m_barWidth);
     QRect r(tl.toPoint(), br.toPoint());
+    r.translate(pos());
     return r;
 }
 
 QRect KisVisualEllipticalSelectorShape::getSpaceForTriangle(QRect geom)
 {
-    int sizeValue = qMin(width(),height());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(geom.contains(geometry()), geom);
+    int sizeValue = qMin(width(), height());
     QPointF center(0.5 * width(), 0.5 * height());
     qreal radius = 0.5 * sizeValue - (m_barWidth + 4);
     QLineF rLine(center, QPointF(center.x() + radius, center.y()));
     rLine.setAngle(330);
     QPoint br(rLine.p2().toPoint());
-    //QPoint br(qCeil(rLine.p2().x()), qCeil(rLine.p2().y()));
     QPoint tl(width() - br.x(), m_barWidth + 4);
-    QRect bound(tl, br);
-    // adjust with triangle default margin for cursor rendering
-    // it's not +5 because above calculation is for pixel center and ignores
-    // the fact that dimensions are then effectively 1px smaller...
-    bound.adjust(-5, -5, 4, 4);
-    return bound.intersected(geom);
+    // can't use QRect(tl, br) constructor because it interprets br unsuitably for "historical reasons"
+    QRect bound(tl, QSize(br.x() - tl.x(), br.y() - tl.y()));
+    bound.adjust(-5, -5, 5, 5);
+    bound.translate(pos());
+    return bound;
+}
+
+bool KisVisualEllipticalSelectorShape::supportsGamutMask() const
+{
+    return (getDimensions() == KisVisualColorSelectorShape::twodimensional);
+}
+
+void KisVisualEllipticalSelectorShape::updateGamutMask()
+{
+    if (supportsGamutMask()) {
+        m_gamutMaskNeedsUpdate = true;
+        KoGamutMask *mask = colorSelector()->activeGamutMask();
+        if (mask) {
+            m_gamutMaskTransform = mask->viewToMaskTransform(width() - 2*KVESS_MARGIN);
+            m_gamutMaskTransform.translate(-KVESS_MARGIN, -KVESS_MARGIN);
+        }
+        update();
+    }
 }
 
 QPointF KisVisualEllipticalSelectorShape::convertShapeCoordinateToWidgetCoordinate(QPointF coordinate) const
@@ -153,6 +173,17 @@ QPointF KisVisualEllipticalSelectorShape::mousePositionToShapeCoordinate(const Q
             pos2.setX(h_center);
         }
     }
+    else if (getDimensions() == KisVisualColorSelectorShape::twodimensional) {
+        KoGamutMask *mask = colorSelector()->activeGamutMask();
+        if (mask) {
+            QPointF maskPoint = m_gamutMaskTransform.map(pos);
+            if (!mask->coordIsClear(maskPoint, true)) {
+                // Ideally we try  to find the closest point on the mask border, possibly
+                // depending on dragStart. Currently just returns old position.
+                return getCursorPosition();
+            }
+        }
+    }
     return convertWidgetCoordinateToShapeCoordinate(pos2);
 }
 
@@ -165,7 +196,7 @@ QRegion KisVisualEllipticalSelectorShape::getMaskMap()
     return mask;
 }
 
-QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
+QImage KisVisualEllipticalSelectorShape::renderAlphaMaskImpl(qreal outerBorder, qreal innerBorder) const
 {
     // Hi-DPI aware rendering requires that we determine the device pixel dimension;
     // actual widget size in device pixels is not accessible unfortunately, it might be 1px smaller...
@@ -179,26 +210,95 @@ QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
     painter.setRenderHint(QPainter::Antialiasing);
     painter.setBrush(Qt::white);
     painter.setPen(Qt::NoPen);
-    painter.drawEllipse(2, 2, width() - 4, height() - 4);
+    QRectF circle(outerBorder, outerBorder, width() - 2*outerBorder, height() - 2*outerBorder);
+    painter.drawEllipse(circle);
+
     //painter.setBrush(Qt::black);
-    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+    if (innerBorder > outerBorder) {
+        circle = QRectF(innerBorder, innerBorder, width() - 2*innerBorder, height() - 2*innerBorder);
         painter.setCompositionMode(QPainter::CompositionMode_Clear);
-        painter.drawEllipse(m_barWidth - 2, m_barWidth - 2, width() - 2*(m_barWidth-2), height() - 2*(m_barWidth-2));
+        painter.drawEllipse(circle);
     }
     return alphaMask;
 }
 
-void KisVisualEllipticalSelectorShape::drawCursor()
+QImage KisVisualEllipticalSelectorShape::renderAlphaMask() const
+{
+    KisVisualColorSelector::RenderMode mode = colorSelector()->renderMode();
+    if (isHueControl() && mode == KisVisualColorSelector::StaticBackground) {
+        return QImage();
+    }
+    qreal outerBorder = KVESS_MARGIN;
+    qreal innerBorder = -1;
+    if (mode == KisVisualColorSelector::CompositeBackground && isHueControl()) {
+        outerBorder += 0.25 * (m_barWidth - 4);
+    }
+    if (getDimensions() == KisVisualColorSelectorShape::onedimensional) {
+        innerBorder = m_barWidth - 2;
+    }
+    return renderAlphaMaskImpl(outerBorder, innerBorder);
+}
+
+QImage KisVisualEllipticalSelectorShape::renderStaticAlphaMask() const
+{
+    KisVisualColorSelector::RenderMode mode = colorSelector()->renderMode();
+    if (!isHueControl() || mode == KisVisualColorSelector::DynamicBackground) {
+        return QImage();
+    }
+    qreal innerBorder = m_barWidth - 2;
+    if (mode == KisVisualColorSelector::CompositeBackground) {
+        innerBorder = KVESS_MARGIN + 1 + 0.25 * (m_barWidth - 4);
+    }
+    return renderAlphaMaskImpl(KVESS_MARGIN, innerBorder);
+}
+
+void KisVisualEllipticalSelectorShape::renderGamutMask()
+{
+    KoGamutMask *mask = colorSelector()->activeGamutMask();
+
+    if (!mask) {
+        m_gamutMaskImage = QImage();
+        return;
+    }
+    const int deviceWidth = qCeil(width() * devicePixelRatioF());
+    const int deviceHeight = qCeil(height() * devicePixelRatioF());
+
+    if (m_gamutMaskImage.size() != QSize(deviceWidth, deviceHeight)) {
+        m_gamutMaskImage = QImage(deviceWidth, deviceHeight, QImage::Format_ARGB32_Premultiplied);
+        m_gamutMaskImage.setDevicePixelRatio(devicePixelRatioF());
+    }
+    m_gamutMaskImage.fill(0);
+
+    QPainter painter(&m_gamutMaskImage);
+    QPen pen(Qt::white);
+    painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.translate(KVESS_MARGIN, KVESS_MARGIN);
+    painter.setBrush(QColor(0, 0, 0, 128));
+    painter.setPen(pen);
+
+    painter.drawEllipse(QRectF(0, 0, width() - 2*KVESS_MARGIN, height() - 2*KVESS_MARGIN));
+
+    painter.setTransform(mask->maskToViewTransform(width() - 2*KVESS_MARGIN), true);
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+    mask->paint(painter, true);
+
+    // TODO: implement a way to render gamut mask outline with custom pen
+    // determine how many units 1 pixel is now:
+    //QLineF measure = painter.transform().map(QLineF(0.0, 0.0, 1.0, 0.0));
+    //pen.setWidthF(1.0 / measure.length());
+    //painter.setPen(pen);
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    mask->paintStroke(painter, true);
+
+    m_gamutMaskNeedsUpdate = false;
+}
+
+void KisVisualEllipticalSelectorShape::drawCursor(QPainter &painter)
 {
     //qDebug() << this << "KisVisualEllipticalSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
-    QPainter painter;
-    painter.begin(&fullSelector);
-    painter.setRenderHint(QPainter::Antialiasing);
-    QBrush fill;
-    fill.setStyle(Qt::SolidPattern);
+    QBrush fill(Qt::SolidPattern);
 
     int cursorwidth = 5;
 
@@ -225,6 +325,12 @@ void KisVisualEllipticalSelectorShape::drawCursor()
         painter.setBrush(fill);
         painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
     }
-    painter.end();
-    setFullImage(fullSelector);
+}
+
+void KisVisualEllipticalSelectorShape::drawGamutMask(QPainter &painter)
+{
+    if (m_gamutMaskNeedsUpdate) {
+        renderGamutMask();
+    }
+    painter.drawImage(0, 0, m_gamutMaskImage);
 }

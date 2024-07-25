@@ -58,11 +58,11 @@ struct KisAsyncAnimationFramesSaveDialog::Private {
 KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP originalImage,
                                                                      const KisTimeSpan &range,
                                                                      const QString &baseFilename,
-                                                                     int sequenceNumberingOffset,
-                                                                     bool onlyNeedsUniqeFrames,
+                                                                     int startNumberingAt,
+                                                                     bool onlyNeedsUniqueFrames,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
     : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
-      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, onlyNeedsUniqeFrames, exportConfiguration))
+      m_d(new Private(originalImage, range, baseFilename, qMax(startNumberingAt - range.start(), range.start() * -1), onlyNeedsUniqueFrames, exportConfiguration))
 {
 
 
@@ -89,19 +89,6 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         if (batchMode()) {
             return RenderFailed;
         }
-
-        QStringList filesWithinRange;
-        const int numberOfDigits = 4;
-        Q_FOREACH(const QString &filename, filesList) {
-            // Counting based on suffix, since prefix may include the path while filename doesn't
-            int digitsPosition = filename.length() - m_d->filenameSuffix.length() - numberOfDigits;
-            int fileNumber = filename.midRef(digitsPosition, numberOfDigits).toInt();
-            auto frameNumber = fileNumber - m_d->sequenceNumberingOffset;
-            if (m_d->range.contains(frameNumber)) {
-                filesWithinRange.append(filename);
-            }
-        }
-        filesList = filesWithinRange;
 
         QStringList truncatedList = filesList;
 
@@ -144,7 +131,21 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         }
     }
 
-    return KisAsyncAnimationRenderDialogBase::regenerateRange(viewManager);
+    KisAsyncAnimationRenderDialogBase::Result renderingResult = KisAsyncAnimationRenderDialogBase::regenerateRange(viewManager);
+
+    filesList = savedFiles();
+
+    // If we cancel rendering or fail rendering process, lets clean up any files that may have been created
+    // to keep the next render from having artifacts.
+    if (renderingResult != RenderComplete) {
+        Q_FOREACH (const QString &file, filesList) {
+            if (dir.exists(file)) {
+                (void)dir.remove(file);
+            }
+        }
+    }
+
+    return renderingResult;
 }
 
 QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
@@ -198,6 +199,36 @@ QString KisAsyncAnimationFramesSaveDialog::savedFilesMask() const
 QString KisAsyncAnimationFramesSaveDialog::savedFilesMaskWildcard() const
 {
     return m_d->filenamePrefix + "????" + m_d->filenameSuffix;
+}
+
+QStringList KisAsyncAnimationFramesSaveDialog::savedFiles() const
+{
+    QStringList files;
+
+    for (int i = m_d->range.start(); i <= m_d->range.end(); i++) {
+        const int num = m_d->sequenceNumberingOffset + i;
+        QString name = QString("%1").arg(num, 4, 10, QChar('0'));
+        name = m_d->filenamePrefix + name + m_d->filenameSuffix;
+        files.append(QFileInfo(name).fileName());
+    }
+
+    return files;
+}
+
+QStringList KisAsyncAnimationFramesSaveDialog::savedUniqueFiles() const
+{
+    QStringList files;
+
+    const QList<int> frames = calcDirtyFrames();
+
+    Q_FOREACH (int frame, frames) {
+        const int num = m_d->sequenceNumberingOffset + frame;
+        QString name = QString("%1").arg(num, 4, 10, QChar('0'));
+        name = m_d->filenamePrefix + name + m_d->filenameSuffix;
+        files.append(QFileInfo(name).fileName());
+    }
+
+    return files;
 }
 
 QList<int> KisAsyncAnimationFramesSaveDialog::getUniqueFrames() const

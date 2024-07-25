@@ -12,6 +12,7 @@
 #include <QDebug>
 
 #include <klocalizedstring.h>
+#include <boost/operators.hpp>
 
 #include "kritacommand_export.h"
 
@@ -35,12 +36,12 @@
  *       because in many languages you cannot combine words without
  *       knowing the proper case.
  */
-class KRITACOMMAND_EXPORT KUndo2MagicString
+class KRITACOMMAND_EXPORT KUndo2MagicString : public boost::equality_comparable<KUndo2MagicString>
 {
 public:
     /**
      * Construct an empty string. Note that you cannot create a
-     * non-empy string without special functions, all the calls to which
+     * non-empty string without special functions, all the calls to which
      * are processed by xgettext.
      */
     KUndo2MagicString();
@@ -65,7 +66,6 @@ public:
     bool isEmpty() const;
 
     bool operator==(const KUndo2MagicString &rhs) const;
-    bool operator!=(const KUndo2MagicString &rhs) const;
 
 private:
     /**

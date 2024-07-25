@@ -7,13 +7,12 @@
 #define KIS_RESELECT_GLOBAL_SELECTION_COMMAND_H
 
 #include <kritaimage_export.h>
-#include <kundo2command.h>
+#include <kis_command_utils.h>
 #include "kis_types.h"
 
 /// The command for deselection the global selection of KisImage
-class KRITAIMAGE_EXPORT KisReselectGlobalSelectionCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisReselectGlobalSelectionCommand : public KisCommandUtils::AggregateCommand
 {
-
 public:
     /**
      * Constructor
@@ -23,12 +22,10 @@ public:
     KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = nullptr);
     ~KisReselectGlobalSelectionCommand() override;
 
-    void redo() override;
-    void undo() override;
+    void populateChildCommands() override;
 
 protected:
     KisImageWSP m_image;
-    bool m_canReselect {false};
 };
 
 

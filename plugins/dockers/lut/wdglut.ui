@@ -160,7 +160,7 @@
          </widget>
         </item>
         <item row="8" column="1">
-         <widget class="KisDoubleWidget" name="m_exposureDoubleWidget" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="m_exposureDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -255,7 +255,7 @@
          </widget>
         </item>
         <item row="9" column="1">
-         <widget class="KisDoubleWidget" name="m_gammaDoubleWidget" native="true">
+         <widget class="KisDoubleSliderSpinBox" name="m_gammaDoubleWidget" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
@@ -342,7 +342,7 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1,0,0">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
         <property name="spacing">
          <number>2</number>
         </property>
@@ -354,23 +354,16 @@
         </property>
         <item>
          <widget class="QLabel" name="m_lblOcioVersion">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="text">
            <string>TextLabel</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>0</width>
-            <height>0</height>
-           </size>
-          </property>
-         </spacer>
         </item>
         <item>
          <widget class="QToolButton" name="m_btnConvertCurrentColor">
@@ -440,9 +433,9 @@
    <header>KisSqueezedComboBox.h</header>
   </customwidget>
   <customwidget>
-   <class>KisDoubleWidget</class>
-   <extends>QWidget</extends>
-   <header>widgets/kis_double_widget.h</header>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

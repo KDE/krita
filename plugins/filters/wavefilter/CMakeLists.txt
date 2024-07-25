@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritawavefilter_SOURCES
     wdgwaveoptions.ui
     )
 
-add_library(kritawavefilter MODULE ${kritawavefilter_SOURCES})
+kis_add_library(kritawavefilter MODULE ${kritawavefilter_SOURCES})
 
 target_link_libraries(kritawavefilter kritaui)
 

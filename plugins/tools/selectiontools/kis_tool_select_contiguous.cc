@@ -18,6 +18,12 @@
 #include <QCheckBox>
 #include <QVBoxLayout>
 
+#include <KisOptionButtonStrip.h>
+#include <KisOptionCollectionWidget.h>
+#include <KoGroupButton.h>
+#include <KisSpinBoxI18nHelper.h>
+#include <kis_color_button.h>
+
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <ksharedconfig.h>
@@ -37,24 +43,25 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
 #include "tiles3/kis_hline_iterator.h"
-#include "commands_new/KisMergeLabeledLayersCommand.h"
 #include "kis_image.h"
 #include "kis_undo_stores.h"
 #include "kis_resources_snapshot.h"
 #include "kis_processing_applicator.h"
 #include <processing/fill_processing_visitor.h>
+#include <kis_image_animation_interface.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_command_utils.h"
 
-
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-    : KisToolSelect(canvas,
-                    KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                    i18n("Contiguous Area Selection")),
-    m_fuzziness(20),
-    m_opacitySpread(100),
-    m_sizemod(0),
-    m_feather(0)
+    : KisToolSelect(
+        canvas,
+        KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+        i18n("Contiguous Area Selection"))
+    , m_threshold(8)
+    , m_opacitySpread(100)
+    , m_useSelectionAsBoundary(false)
+    , m_previousTime(0)
 {
     setObjectName("tool_select_contiguous");
 }
@@ -69,6 +76,13 @@ void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
+void KisToolSelectContiguous::deactivate()
+{
+    m_referencePaintDevice = nullptr;
+    m_referenceNodeList = nullptr;
+    KisToolSelect::deactivate();
+}
+
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
@@ -80,7 +94,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     if (!currentNode() ||
         !(dev = currentNode()->projection()) ||
-        !currentNode()->visible() ||
         !selectionEditable()) {
         event->ignore();
         return;
@@ -88,7 +101,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
     beginSelectInteraction();
 
-    QApplication::setOverrideCursor(KisCursor::waitCursor());
+    KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
     // -------------------------------
 
@@ -100,40 +113,62 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     QPoint pos = convertToImagePixelCoordFloored(event);
     QRect rc = currentImage()->bounds();
 
-
-    KisImageSP image = currentImage();
     KisPaintDeviceSP sourceDevice;
-    if (sampleLayersMode() == SampleAllLayers) {
-        sourceDevice = image->projection();
+
+    if (sampleLayersMode() == SampleCurrentLayer) {
+        sourceDevice = m_referencePaintDevice = dev;
+    } else if (sampleLayersMode() == SampleAllLayers) {
+        sourceDevice = m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image, "Contiguous Selection Tool Reference Image");
-        sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
-                    image, "Contiguous Selection Tool Reference Result Paint Device");
-
-        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice,
-                                                                                 image->root(), colorLabelsSelected(),
-                                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled);
-        applicator.applyCommand(command,
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
-
-    } else { // Sample Current Layer
-        sourceDevice = dev;
+        if (!m_referenceNodeList) {
+            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Contiguous Selection Tool Reference Result Paint Device");
+            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        }
+        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Contiguous Selection Tool Reference Result Paint Device");
+        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        const int currentTime = image()->animationInterface()->currentTime();
+        applicator.applyCommand(
+            new KisMergeLabeledLayersCommand(
+                image(),
+                m_referenceNodeList,
+                newReferenceNodeList,
+                m_referencePaintDevice,
+                newReferencePaintDevice,
+                colorLabelsSelected(),
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                m_previousTime != currentTime
+            ),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        );
+        sourceDevice = m_referencePaintDevice = newReferencePaintDevice;
+        m_referenceNodeList = newReferenceNodeList;
+        m_previousTime = currentTime;
     }
 
-    KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(new KisSelectionDefaultBounds(dev)));
+    if (sampleLayersMode() != SampleColorLabeledLayers) {
+        // Reset this so that the device from color labeled layers gets
+        // regenerated when that mode is selected again
+        m_referenceNodeList.reset();
+    }
 
-    int fuzziness = m_fuzziness;
+    KisPixelSelectionSP selection =
+        new KisPixelSelection(new KisSelectionDefaultBounds(dev));
+
+    ContiguousSelectionMode contiguousSelectionMode = m_contiguousSelectionMode;
+    KoColor contiguousSelectionBoundaryColor = m_contiguousSelectionBoundaryColor;
+    int threshold = m_threshold;
     int opacitySpread = m_opacitySpread;
-    int feather = m_feather;
-    int sizemod = m_sizemod;
+    int closeGap = m_closeGap;
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
     bool antiAlias = antiAliasSelection();
+    int grow = growSelection();
+    bool stopGrowingAtDarkestPixel = this->stopGrowingAtDarkestPixel();
+    int feather = featherSelection();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
         applicator.cancel();
-        QApplication::restoreOverrideCursor();
         return;
     };
 
@@ -143,19 +178,44 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         existingSelection = kisCanvas->imageView()->selection()->pixelSelection();
     }
 
-    KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, fuzziness, opacitySpread, antiAlias, feather, sizemod, useSelectionAsBoundary,
-                selection, pos, sourceDevice, existingSelection] () mutable -> KUndo2Command* {
-
+    KUndo2Command
+        *cmd =
+            new KisCommandUtils::LambdaCommand(
+                [dev,
+                 rc,
+                 contiguousSelectionMode,
+                 contiguousSelectionBoundaryColor,
+                 threshold,
+                 opacitySpread,
+                 closeGap,
+                 antiAlias,
+                 feather,
+                 grow,
+                 stopGrowingAtDarkestPixel,
+                 useSelectionAsBoundary,
+                 selection,
+                 pos,
+                 sourceDevice,
+                 existingSelection]() mutable -> KUndo2Command * {
                     KisFillPainter fillpainter(dev);
                     fillpainter.setHeight(rc.height());
                     fillpainter.setWidth(rc.width());
-                    fillpainter.setFillThreshold(fuzziness);
+                    fillpainter.setRegionFillingMode(
+                        contiguousSelectionMode == FloodFill
+                        ? KisFillPainter::RegionFillingMode_FloodFill
+                        : KisFillPainter::RegionFillingMode_BoundaryFill
+                    );
+                    if (contiguousSelectionMode == BoundaryFill) {
+                        fillpainter.setRegionFillingBoundaryColor(contiguousSelectionBoundaryColor);
+                    }
+                    fillpainter.setFillThreshold(threshold);
                     fillpainter.setOpacitySpread(opacitySpread);
                     fillpainter.setAntiAlias(antiAlias);
                     fillpainter.setFeather(feather);
-                    fillpainter.setSizemod(sizemod);
-                    fillpainter.setUseCompositioning(true);
+                    fillpainter.setCloseGap(closeGap);
+                    fillpainter.setSizemod(grow);
+                    fillpainter.setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
+                    fillpainter.setUseCompositing(true);
 
                     useSelectionAsBoundary &=
                         existingSelection &&
@@ -168,8 +228,8 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     selection->invalidateOutlineCache();
 
                     return 0;
-    });
-    applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+                });
+    applicator.applyCommand(cmd, KisStrokeJobData::BARRIER);
 
 
 
@@ -178,7 +238,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     helper.selectPixelSelection(applicator, selection, selectionAction());
 
     applicator.end();
-    QApplication::restoreOverrideCursor();
 
 }
 
@@ -198,10 +257,35 @@ void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &co
     Q_UNUSED(converter);
 }
 
-void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
+void KisToolSelectContiguous::slotSetContiguousSelectionMode(
+    ContiguousSelectionMode contiguousSelectionMode)
 {
-    m_fuzziness = fuzziness;
-    m_configGroup.writeEntry("fuzziness", fuzziness);
+    if (contiguousSelectionMode == m_contiguousSelectionMode) {
+        return;
+    }
+    m_contiguousSelectionMode = contiguousSelectionMode;
+    m_configGroup.writeEntry(
+        "contiguousSelectionMode",
+        contiguousSelectionMode == FloodFill
+        ? "floodFill"
+        : "boundaryFill"
+    );
+}
+
+void KisToolSelectContiguous::slotSetContiguousSelectionBoundaryColor(
+    const KoColor &color)
+{
+    if (color == m_contiguousSelectionBoundaryColor) {
+        return;
+    }
+    m_contiguousSelectionBoundaryColor = color;
+    m_configGroup.writeEntry("contiguousSelectionBoundaryColor", color.toXML());
+}
+
+void KisToolSelectContiguous::slotSetThreshold(int threshold)
+{
+    m_threshold = threshold;
+    m_configGroup.writeEntry("threshold", threshold);
 }
 
 void KisToolSelectContiguous::slotSetOpacitySpread(int opacitySpread)
@@ -210,16 +294,10 @@ void KisToolSelectContiguous::slotSetOpacitySpread(int opacitySpread)
     m_configGroup.writeEntry("opacitySpread", opacitySpread);
 }
 
-void KisToolSelectContiguous::slotSetSizemod(int sizemod)
+void KisToolSelectContiguous::slotSetCloseGap(int closeGap)
 {
-    m_sizemod = sizemod;
-    m_configGroup.writeEntry("sizemod", sizemod);
-}
-
-void KisToolSelectContiguous::slotSetFeather(int feather)
-{
-    m_feather = feather;
-    m_configGroup.writeEntry("feather", feather);
+    m_closeGap = closeGap;
+    m_configGroup.writeEntry("closeGapAmount", closeGap);
 }
 
 void KisToolSelectContiguous::slotSetUseSelectionAsBoundary(bool useSelectionAsBoundary)
@@ -228,95 +306,200 @@ void KisToolSelectContiguous::slotSetUseSelectionAsBoundary(bool useSelectionAsB
     m_configGroup.writeEntry("useSelectionAsBoundary", useSelectionAsBoundary);
 }
 
+void KisToolSelectContiguous::slot_optionButtonStripContiguousSelectionMode_buttonToggled(
+    KoGroupButton *button,
+    bool checked)
+{
+    if (!checked) {
+        return;
+    }
+
+    KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =
+        selectionOptionWidget()->widgetAs<KisOptionCollectionWidgetWithHeader*>(
+            "sectionSelectionExtent"
+        );
+    const KoGroupButton *buttonContiguousSelectionModeBoundaryFill =
+        sectionSelectionExtent->primaryWidgetAs<KisOptionButtonStrip*>()->button(1);
+    const bool visible = button == buttonContiguousSelectionModeBoundaryFill;
+    sectionSelectionExtent->setWidgetVisible(
+        "buttonContiguousSelectionBoundaryColor", visible
+    );
+
+    slotSetContiguousSelectionMode(
+        button == buttonContiguousSelectionModeBoundaryFill
+        ? BoundaryFill
+        : FloodFill
+    );
+}
+
+KoColor KisToolSelectContiguous::loadContiguousSelectionBoundaryColorFromConfig()
+{
+    const QString xmlColor =
+        m_configGroup.readEntry("contiguousSelectionBoundaryColor", QString());
+    QDomDocument doc;
+    if (doc.setContent(xmlColor)) {
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        QString channelDepthID =
+            doc.documentElement().attribute("channeldepth",
+                                            Integer16BitsColorDepthID.id());
+        bool ok;
+        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
+            return KoColor::fromXML(e, channelDepthID, &ok);
+        } else if (doc.documentElement().hasAttribute("space") ||
+                   doc.documentElement().tagName().toLower() == "srgb") {
+            return KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+        }
+    }
+    return KoColor();
+}
+
 QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
 
-    QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
-    Q_ASSERT(l);
-    if (l) {
+    selectionWidget->setStopGrowingAtDarkestPixelButtonVisible(true);
 
-        QGridLayout * gridLayout = new QGridLayout();
-        l->insertLayout(1, gridLayout);
+    // Create widgets
+    KisOptionButtonStrip *optionButtonStripContiguousSelectionMode =
+        new KisOptionButtonStrip;
+    KoGroupButton *buttonContiguousSelectionModeFloodFill =
+        optionButtonStripContiguousSelectionMode->addButton(
+            KisIconUtils::loadIcon("region-filling-flood-fill")
+        );
+    KoGroupButton *buttonContiguousSelectionModeBoundaryFill =
+        optionButtonStripContiguousSelectionMode->addButton(
+            KisIconUtils::loadIcon("region-filling-boundary-fill")
+        );
+    buttonContiguousSelectionModeFloodFill->setChecked(true);
+    KisColorButton *buttonContiguousSelectionBoundaryColor = new KisColorButton;
+    KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
+    sliderThreshold->setPrefix(i18nc(
+        "The 'threshold' spinbox prefix in contiguous selection tool options",
+        "Threshold: "));
+    sliderThreshold->setRange(1, 100);
+    KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
+    sliderSpread->setRange(0, 100);
+    KisSpinBoxI18nHelper::setText(
+        sliderSpread,
+        i18nc(
+            "The 'spread' spinbox in contiguous selection tool options; {n} is the number value, % is the percent sign",
+            "Spread: {n}%"));
+    QCheckBox *checkBoxSelectionAsBoundary = new QCheckBox(i18nc(
+        "The 'use selection as boundary' checkbox in contiguous selection tool "
+        "to use selection borders as boundary when filling",
+        "Use selection as boundary"));
+    checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored,
+                                               QSizePolicy::Preferred);
 
-        QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
-        gridLayout->addWidget(lbl, 0, 0, 1, 1);
-
-        KisSliderSpinBox *input = new KisSliderSpinBox(selectionWidget);
-        Q_CHECK_PTR(input);
-        input->setObjectName("fuzziness");
-        input->setRange(1, 100);
-        input->setSingleStep(1);
-        input->setExponentRatio(2);
-        gridLayout->addWidget(input, 0, 1, 1, 1);
-
-        lbl = new QLabel(i18n("Opacity Spread: "), selectionWidget);
-        gridLayout->addWidget(lbl, 1, 0, 1, 1);
-
-        KisSliderSpinBox *sliderOpacitySpread = new KisSliderSpinBox(selectionWidget);
-        Q_CHECK_PTR(sliderOpacitySpread);
-        sliderOpacitySpread->setObjectName("opacitySpread");
-        sliderOpacitySpread->setRange(0, 100);
-        sliderOpacitySpread->setSingleStep(1);
-        sliderOpacitySpread->setSuffix(i18n("%"));
-        gridLayout->addWidget(sliderOpacitySpread, 1, 1, 1, 1);
-
-        lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
-        gridLayout->addWidget(lbl, 2, 0, 1, 1);
-
-        KisSliderSpinBox *sizemod = new KisSliderSpinBox(selectionWidget);
-        Q_CHECK_PTR(sizemod);
-        sizemod->setObjectName("sizemod"); //grow/shrink selection
-        sizemod->setRange(-40, 40);
-        sizemod->setSingleStep(1);
-        gridLayout->addWidget(sizemod, 2, 1, 1, 1);
-
-        lbl = new QLabel(i18n("Feathering radius: "), selectionWidget);
-        gridLayout->addWidget(lbl, 3, 0, 1, 1);
-
-        KisSliderSpinBox *feather = new KisSliderSpinBox(selectionWidget);
-        Q_CHECK_PTR(feather);
-        feather->setObjectName("feathering");
-        feather->setRange(0, 40);
-        feather->setSingleStep(1);
-        gridLayout->addWidget(feather, 3, 1, 1, 1);
-
-        lbl = new QLabel(i18n("Use selection as boundary: "), selectionWidget);
-        gridLayout->addWidget(lbl, 4, 0, 1, 1);
-
-        QCheckBox *useSelectionAsBoundary = new QCheckBox(selectionWidget);
-        Q_CHECK_PTR(useSelectionAsBoundary);
-        gridLayout->addWidget(useSelectionAsBoundary, 4, 1, 1, 1);
-
-        connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
-        connect (sliderOpacitySpread, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
-        connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
-        connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
-        connect (useSelectionAsBoundary, SIGNAL(toggled(bool)), this, SLOT(slotSetUseSelectionAsBoundary(bool)));
+    // Set the tooltips
+    buttonContiguousSelectionModeFloodFill->setToolTip(
+        i18n("Select regions similar in color to the clicked region"));
+    buttonContiguousSelectionModeBoundaryFill->setToolTip(
+        i18n("Select all regions until a specific boundary color"));
+    buttonContiguousSelectionBoundaryColor->setToolTip(i18n("Boundary color"));
+    sliderThreshold->setToolTip(
+        i18n("Set the color similarity tolerance of the selection. "
+             "Increasing threshold increases the range of similar colors to be selected."));
+    sliderSpread->setToolTip(i18n(
+        "Set the extent of the opaque portion of the selection. "
+        "Decreasing spread decreases opacity of selection areas depending on color similarity."));
+    checkBoxSelectionAsBoundary->setToolTip(
+        i18n("Set if the contour of the active selection should be treated as "
+             "a boundary when making a new selection"));
 
 
-        selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
-        m_widgetHelper.setConfigGroupForExactTool(toolId());
+    KisSliderSpinBox *sliderCloseGap = new KisSliderSpinBox;
+    sliderCloseGap->setPrefix(i18nc("The 'close gap' spinbox prefix in contiguous selection tool options", "Close Gap: "));
+    sliderCloseGap->setRange(0, 32);
+    sliderCloseGap->setSuffix(i18n(" px"));
 
-        // load configuration settings into tool options
-        input->setValue(m_configGroup.readEntry("fuzziness", 8)); // fuzziness
-        sliderOpacitySpread->setValue(m_configGroup.readEntry("opacitySpread", 100)); // opacity spread
-        sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
-        sizemod->setSuffix(i18n(" px"));
+    // Construct the option widget
+    KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'selection extent' section label in contiguous "
+                  "selection tool options",
+                  "Selection extent"));
+    sectionSelectionExtent->setPrimaryWidget(
+        optionButtonStripContiguousSelectionMode
+    );
+    sectionSelectionExtent->appendWidget(
+        "buttonContiguousSelectionBoundaryColor",
+        buttonContiguousSelectionBoundaryColor
+    );
+    sectionSelectionExtent->setWidgetVisible(
+        "buttonContiguousSelectionBoundaryColor",
+        false
+    );
+    sectionSelectionExtent->appendWidget("sliderThreshold", sliderThreshold);
+    sectionSelectionExtent->appendWidget("sliderSpread", sliderSpread);
+    sectionSelectionExtent->appendWidget("sliderCloseGap", sliderCloseGap);
+    sectionSelectionExtent->appendWidget("checkBoxSelectionAsBoundary",
+                                         checkBoxSelectionAsBoundary);
 
-        feather->setValue(m_configGroup.readEntry("feather", 0));
-        feather->setSuffix(i18n(" px"));
+    selectionWidget->insertWidget(3,
+                                  "sectionSelectionExtent",
+                                  sectionSelectionExtent);
 
-        useSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
-
-        // manually set up all variables in case there were no signals when setting value
-        m_fuzziness = input->value();
-        m_opacitySpread = sliderOpacitySpread->value();
-        m_sizemod = sizemod->value();
-        m_feather = feather->value();
-        m_useSelectionAsBoundary = useSelectionAsBoundary->isChecked();
+    // Load configuration settings into tool options
+    const QString contiguousSelectionModeStr =
+        m_configGroup.readEntry<QString>("contiguousSelectionMode", "");
+    m_contiguousSelectionMode =
+        contiguousSelectionModeStr == "boundaryFill"
+        ? BoundaryFill
+        : FloodFill;
+    m_contiguousSelectionBoundaryColor =
+        loadContiguousSelectionBoundaryColorFromConfig();
+    if (m_configGroup.hasKey("threshold")) {
+        m_threshold = m_configGroup.readEntry("threshold", 8);
+    } else {
+        m_threshold = m_configGroup.readEntry("fuzziness", 8);
     }
+    m_opacitySpread = m_configGroup.readEntry("opacitySpread", 100);
+    m_closeGap = m_configGroup.readEntry("closeGapAmount", 0);
+    m_useSelectionAsBoundary =
+        m_configGroup.readEntry("useSelectionAsBoundary", false);
+
+    if (m_contiguousSelectionMode == BoundaryFill) {
+        buttonContiguousSelectionModeBoundaryFill->setChecked(true);
+        sectionSelectionExtent->setWidgetVisible(
+            "buttonContiguousSelectionBoundaryColor",
+            true
+        );
+    }
+    buttonContiguousSelectionBoundaryColor->setColor(
+        m_contiguousSelectionBoundaryColor
+    );
+    sliderThreshold->setValue(m_threshold);
+    sliderSpread->setValue(m_opacitySpread);
+    sliderCloseGap->setValue(m_closeGap);
+    checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
+
+    // Make connections
+    connect(optionButtonStripContiguousSelectionMode,
+            SIGNAL(buttonToggled(KoGroupButton*, bool)),
+            SLOT(slot_optionButtonStripContiguousSelectionMode_buttonToggled(
+                    KoGroupButton*, bool)));
+    connect(buttonContiguousSelectionBoundaryColor,
+            SIGNAL(changed(const KoColor&)),
+            SLOT(slotSetContiguousSelectionBoundaryColor(const KoColor&)));
+    connect(sliderThreshold,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetThreshold(int)));
+    connect(sliderSpread,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetOpacitySpread(int)));
+    connect(sliderCloseGap,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetCloseGap(int)));
+    connect(checkBoxSelectionAsBoundary,
+            SIGNAL(toggled(bool)),
+            this,
+            SLOT(slotSetUseSelectionAsBoundary(bool)));
+
     return selectionWidget;
 }
 

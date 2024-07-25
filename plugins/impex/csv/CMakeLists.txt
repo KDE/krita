@@ -9,7 +9,7 @@ set(kritacsvimport_SOURCES
     csv_layer_record.cpp
 )
 
-add_library(kritacsvimport MODULE ${kritacsvimport_SOURCES})
+kis_add_library(kritacsvimport MODULE ${kritacsvimport_SOURCES})
 
 target_link_libraries(kritacsvimport kritaui )
 
@@ -23,10 +23,10 @@ set(kritacsvexport_SOURCES
     csv_layer_record.cpp
 )
 
-add_library(kritacsvexport MODULE ${kritacsvexport_SOURCES})
+kis_add_library(kritacsvexport MODULE ${kritacsvexport_SOURCES})
 
 target_link_libraries(kritacsvexport kritaui kritaimpex)
 
 install(TARGETS kritacsvexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_csv.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_csv.desktop DESTINATION ${KDE_INSTALL_APPDIR})

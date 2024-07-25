@@ -133,6 +133,10 @@ void RotateImage::slotMirrorImageHorizontal()
 
 void RotateImage::rotateLayerCustomImpl(KisNodeSP rootNode)
 {
+    rotateLayersCustomImpl(KisNodeList{rootNode});
+}
+void RotateImage::rotateLayersCustomImpl(KisNodeList nodes)
+{
     KisImageWSP image = viewManager()->image();
     if (!image) return;
 
@@ -141,28 +145,32 @@ void RotateImage::rotateLayerCustomImpl(KisNodeSP rootNode)
     DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindowAsQWidget(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
-    dlgRotateImage->setCaption(i18n("Rotate Layer"));
+    dlgRotateImage->setCaption(i18np("Rotate Layer", "Rotate %1 Layers", nodes.size()));
 
     if (dlgRotateImage->exec() == QDialog::Accepted) {
         double angle = dlgRotateImage->angle() * M_PI / 180;
-        image->rotateNode(rootNode, angle, viewManager()->selection());
+        image->rotateNodes(nodes, angle, viewManager()->selection());
     }
     delete dlgRotateImage;
 }
 
 void RotateImage::rotateLayerImpl(KisNodeSP rootNode, qreal radians)
 {
+    rotateLayersImpl(KisNodeList{rootNode}, radians);
+}
+void RotateImage::rotateLayersImpl(KisNodeList nodes, qreal radians)
+{
     KisImageWSP image = viewManager()->image();
     if (!image) return;
 
     if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    image->rotateNode(rootNode, radians, viewManager()->selection());
+    image->rotateNodes(nodes, radians, viewManager()->selection());
 }
 
 void RotateImage::slotRotateLayer()
 {
-    rotateLayerCustomImpl(viewManager()->activeLayer());
+    rotateLayersCustomImpl(viewManager()->nodeManager()->selectedNodes());
 }
 
 void RotateImage::slotRotateAllLayers()
@@ -175,17 +183,17 @@ void RotateImage::slotRotateAllLayers()
 
 void RotateImage::slotRotateLayerCW90()
 {
-    rotateLayerImpl(viewManager()->activeLayer(), M_PI / 2);
+    rotateLayersImpl(viewManager()->nodeManager()->selectedNodes(), M_PI / 2);
 }
 
 void RotateImage::slotRotateLayerCCW90()
 {
-    rotateLayerImpl(viewManager()->activeLayer(), -M_PI / 2);
+    rotateLayersImpl(viewManager()->nodeManager()->selectedNodes(), -M_PI / 2);
 }
 
 void RotateImage::slotRotateLayer180()
 {
-    rotateLayerImpl(viewManager()->activeLayer(), M_PI);
+    rotateLayersImpl(viewManager()->nodeManager()->selectedNodes(), M_PI);
 }
 
 void RotateImage::slotRotateAllLayersCW90()

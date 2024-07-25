@@ -16,6 +16,9 @@
 #include "canvas/kis_canvas_decoration.h"
 
 class KisView;
+class QWindow;
+class QScreen;
+class KisScreenMigrationTracker;
 
 class KRITAUI_EXPORT KisSelectionDecoration : public KisCanvasDecoration
 {
@@ -33,12 +36,16 @@ public:
     void setMode(Mode mode);
     void setVisible(bool v) override;
 
+    void notifyWindowMinimized(bool minimized) override;
+
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 
 private Q_SLOTS:
     void slotStartUpdateSelection();
     void slotConfigChanged();
+    void slotCanvasResourcesChanged(int key, const QVariant &v);
+    void initializePens();
 
 public Q_SLOTS:
     void selectionChanged();
@@ -47,6 +54,7 @@ private:
     bool selectionIsActive();
 
 private:
+
     KisSignalCompressor m_signalCompressor;
     QPainterPath m_outlinePath;
     QImage m_thumbnailImage;
@@ -57,6 +65,8 @@ private:
     QPen m_antsPen;
     QPen m_outlinePen;
     Mode m_mode;
+
+    qreal m_opacity;
 
     QColor m_maskColor;
     bool m_antialiasSelectionOutline;

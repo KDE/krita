@@ -25,11 +25,13 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-#ifndef FILES_DEST_DIR
-#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
-#endif
-
 namespace ResourceTestHelper {
+
+const QString &filesDestDir() {
+    static const QString s_path = QDir::cleanPath(
+            QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/testdest") + '/';
+    return s_path;
+}
 
 void rmTestDb() {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -105,7 +107,7 @@ bool cleanDstLocation(const QString &dstLocation)
             QDirIterator iter(dstLocation, QStringList() << "*", QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
             while (iter.hasNext()) {
                 iter.next();
-                QDir(iter.filePath()).rmpath(iter.filePath());
+                QDir(iter.filePath()).rmdir(iter.filePath());
                 //qDebug() << (r ? "Removed" : "Failed to remove") << iter.filePath();
             }
         }
@@ -121,7 +123,7 @@ void initTestDb()
     cleanDstLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 }
 
-void overrideResourceVesion(KoResourceSP resource, int version)
+void overrideResourceVersion(KoResourceSP resource, int version)
 {
     resource->setVersion(version);
 }
@@ -184,12 +186,12 @@ void testVersionedStorage(KisStoragePlugin &storage, const QString &resourceType
     QCOMPARE(res4.dynamicCast<DummyResource>()->something(), "It's changed");
     verifyFileExists(res4);
 
-    overrideResourceVesion(res4, 10000);
+    overrideResourceVersion(res4, 10000);
     storage.saveAsNewVersion(resourceType, res4);
     QCOMPARE(res4->filename(), fileInfo.baseName() + ".10000." + fileInfo.suffix());
     verifyFileExists(res4);
 
-    overrideResourceVesion(res4, -1);
+    overrideResourceVersion(res4, -1);
     const QString versionedName2 = fileInfo.baseName() + ".10001." + fileInfo.suffix();
 
     storage.saveAsNewVersion(resourceType, res4);

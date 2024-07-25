@@ -33,6 +33,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QProxyStyle>
+#include <QStyleFactory>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -76,26 +77,30 @@
 #include "kis_signals_blocker.h"
 #include "kis_color_filter_combo.h"
 #include "kis_node_filter_proxy_model.h"
+#include <KisSpinBoxI18nHelper.h>
 
 #include "kis_selection.h"
 #include "kis_processing_applicator.h"
 #include "commands/kis_set_global_selection_command.h"
 #include "KisSelectionActionsAdapter.h"
+#include "KisIdleTasksManager.h"
 
 #include "kis_layer_utils.h"
 
 #include "ui_WdgLayerBox.h"
 #include "NodeView.h"
 #include "SyncButtonAndAction.h"
-
+#include "KisMenuStyleDontCloseOnAlt.h"
 
 class LayerBoxStyle : public QProxyStyle
 {
 public:
     LayerBoxStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
 
-    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                       QPainter *painter, const QWidget *widget) const
+    void drawPrimitive(PrimitiveElement element,
+                       const QStyleOption *option,
+                       QPainter *painter,
+                       const QWidget *widget) const override
     {
         if (element == QStyle::PE_IndicatorItemViewItemDrop)
         {
@@ -156,19 +161,25 @@ LayerBox::LayerBox()
     : QDockWidget(i18n("Layers"))
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
-    , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_infoTextOpacityCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_nodeOpacityCompressor(200, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
 
     QWidget* mainWidget = new QWidget(this);
     setWidget(mainWidget);
-    m_opacityDelayTimer.setSingleShot(true);
 
     m_wdgLayerBox->setupUi(mainWidget);
 
-    m_wdgLayerBox->listLayers->setStyle(new LayerBoxStyle(m_wdgLayerBox->listLayers->style()));
+    QStyle *newStyle = QStyleFactory::create(m_wdgLayerBox->listLayers->style()->objectName());
+    // proxy style steals the ownership of the style and deletes it later
+    LayerBoxStyle *proxyStyle = new LayerBoxStyle(newStyle);
+
+    proxyStyle->setParent(m_wdgLayerBox->listLayers);
+    m_wdgLayerBox->listLayers->setStyle(proxyStyle);
 
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(contextMenuRequested(QPoint,QModelIndex)),
@@ -192,15 +203,18 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnLower->setEnabled(false);
     m_wdgLayerBox->bnRaise->setEnabled(false);
 
+    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
     if (cfg.sliderLabels()) {
         m_wdgLayerBox->opacityLabel->hide();
-        m_wdgLayerBox->doubleOpacity->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
+        KisSpinBoxI18nHelper::setText(m_wdgLayerBox->doubleOpacity,
+                                      i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+    } else {
+        KisSpinBoxI18nHelper::setText(m_wdgLayerBox->doubleOpacity,
+                                      i18nc("{n} is the number value, % is the percent sign", "{n}%"));
     }
-    m_wdgLayerBox->doubleOpacity->setRange(0, 100, 0);
-    m_wdgLayerBox->doubleOpacity->setSuffix(i18n("%"));
 
     connect(m_wdgLayerBox->doubleOpacity, SIGNAL(valueChanged(qreal)), SLOT(slotOpacitySliderMoved(qreal)));
-    connect(&m_opacityDelayTimer, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
+    connect(&m_nodeOpacityCompressor, SIGNAL(timeout()), SLOT(slotOpacityChanged()));
 
     connect(m_wdgLayerBox->cmbComposite, SIGNAL(activated(int)), SLOT(slotCompositeOpChanged(int)));
 
@@ -212,7 +226,7 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnProperties->setMenu(m_opLayerMenu);
     m_wdgLayerBox->bnProperties->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_nodeModel = new KisNodeModel(this);
+    m_nodeModel = new KisNodeModel(this, 2);
     m_filteringModel = new KisNodeFilterProxyModel(this);
     m_filteringModel->setNodeModel(m_nodeModel);
 
@@ -280,13 +294,14 @@ LayerBox::LayerBox()
     layerFilterWidget = new KisLayerFilterWidget(this);
     connect(layerFilterWidget, SIGNAL(filteringOptionsChanged()), this, SLOT(updateLayerFiltering()));
     connect(layerFilterWidget, &KisLayerFilterWidget::filteringOptionsChanged, [this, filterIcon, filterEnabledIcon](){
-        if(layerFilterWidget->isCurrentlyFiltering()) {
+        if (layerFilterWidget->isCurrentlyFiltering()) {
             m_wdgLayerBox->bnLayerFilters->setIcon(filterEnabledIcon);
         } else {
             m_wdgLayerBox->bnLayerFilters->setIcon(filterIcon);
         }
 
-        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList<int>::fromSet(layerFilterWidget->getActiveColors()));
+        auto activeColors = layerFilterWidget->getActiveColors();
+        m_wdgLayerBox->bnLayerFilters->setSelectedColors(QList(activeColors.begin(), activeColors.end()));
         m_wdgLayerBox->bnLayerFilters->setTextFilter(layerFilterWidget->hasTextFilter());
     });
 
@@ -294,19 +309,22 @@ LayerBox::LayerBox()
     layerFilterMenuAction->setDefaultWidget(layerFilterWidget);
     layerFilterMenu->addAction(layerFilterMenuAction);
 
+
+    KisMenuStyleDontCloseOnAlt *menuStyle = new KisMenuStyleDontCloseOnAlt(layerFilterMenu->style());
+    menuStyle->setParent(layerFilterMenu);
+    layerFilterMenu->setStyle(menuStyle);
+
     setEnabled(false);
 
-    connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
 
 
     // set up the configure menu for changing thumbnail size
     QMenu* configureMenu = new QMenu(this);
-    configureMenu->setStyleSheet("margin: 6px");
+    configureMenu->setContentsMargins(6, 6, 6, 6);
     configureMenu->addSection(i18n("Thumbnail Size"));
 
     m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
-    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(16, 16));
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->configureLayerDockerToolbar->setAutoRaise(true);
@@ -322,16 +340,102 @@ LayerBox::LayerBox()
     thumbnailSizeSlider->setMinimumHeight(20);
     thumbnailSizeSlider->setMinimumWidth(40);
     thumbnailSizeSlider->setTickInterval(5);
-
+    m_nodeModel->setPreferredThumnalSize(cfg.layerThumbnailSize());
 
     QWidgetAction *sliderAction= new QWidgetAction(this);
     sliderAction->setDefaultWidget(thumbnailSizeSlider);
     configureMenu->addAction(sliderAction);
 
 
-    connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
+    connect(thumbnailSizeSlider, SIGNAL(valueChanged(int)), &m_thumbnailSizeCompressor, SLOT(start()));
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
 
+    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, slider", "Tree Indentation"));
+
+    // add horizontal slider
+    indentationSlider = new QSlider(Qt::Horizontal, this);
+    indentationSlider->setRange(20, 100);
+    indentationSlider->setMinimumSize(40, 20);
+    indentationSlider->setSingleStep(5);
+    indentationSlider->setPageStep(20);
+    indentationSlider->setValue(cfg.layerTreeIndentation());
+
+
+    sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(indentationSlider);
+    configureMenu->addAction(sliderAction);
+
+    // NOTE: if KisConfig would just compress its file sync events, we wouldn't need
+    // this extra compressor that juggles between slow UI and disk thrashing
+    connect(indentationSlider, SIGNAL(valueChanged(int)), &m_treeIndentationCompressor, SLOT(start()));
+    connect(&m_treeIndentationCompressor, SIGNAL(timeout()), SLOT(slotUpdateTreeIndentation()));
+
+
+    // Layer info-text settings:
+    // blending info-text style combobox
+    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, combobox", "Blending Info Style"));
+    infoTextCombobox = new QComboBox(this);
+    infoTextCombobox->setToolTip(i18nc("@item:tooltip", "None: Show nothing.\n"
+                                                        "Simple: Show changed opacities or blending modes.\n"
+                                                        "Balanced: Show both opacity and blending mode if either are changed.\n"
+                                                        "Detailed: Show both opacity and blending mode even if unchanged."));
+    infoTextCombobox->insertItems(0, QStringList ({
+        i18nc("@item:inlistbox Layer Docker blending info style", "None"),
+        i18nc("@item:inlistbox Layer Docker blending info style", "Simple"),
+        i18nc("@item:inlistbox Layer Docker blending info style", "Balanced"),
+        i18nc("@item:inlistbox Layer Docker blending info style", "Detailed"),
+    }));
+    infoTextCombobox->setCurrentIndex((int)cfg.layerInfoTextStyle());
+
+    QWidgetAction *cmbboxAction = new QWidgetAction(this);
+    cmbboxAction->setDefaultWidget(infoTextCombobox);
+    configureMenu->addAction(cmbboxAction);
+    connect(infoTextCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateLayerInfoTextStyle()));
+
+    // info-text opacity slider
+    infoTextOpacitySlider = new KisSliderSpinBox(this);
+    KisSpinBoxI18nHelper::setText(infoTextOpacitySlider,
+                                  i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"));
+    infoTextOpacitySlider->setToolTip(i18nc("@item:tooltip", "Blending info text opacity"));
+    // 55% is the opacity of nonvisible layer text
+    infoTextOpacitySlider->setRange(55, 100);
+    infoTextOpacitySlider->setMinimumSize(40, 20);
+    infoTextOpacitySlider->setSingleStep(5);
+    infoTextOpacitySlider->setPageStep(15);
+    infoTextOpacitySlider->setValue(cfg.layerInfoTextOpacity());
+    if (infoTextCombobox->currentIndex() == 0) {
+        infoTextOpacitySlider->setDisabled(true);
+    }
+
+    sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(infoTextOpacitySlider);
+    configureMenu->addAction(sliderAction);
+    connect(infoTextOpacitySlider, SIGNAL(valueChanged(int)), &m_infoTextOpacityCompressor, SLOT(start()));
+    connect(&m_infoTextOpacityCompressor, SIGNAL(timeout()), SLOT(slotUpdateLayerInfoTextOpacity()));
+
+    // info-text inline checkbox
+    infoTextInlineChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Inline"), this);
+    infoTextInlineChkbox->setChecked(cfg.useInlineLayerInfoText());
+    infoTextInlineChkbox->setToolTip(i18nc("@item:tooltip", "If enabled, show blending info beside layer names.\n"
+                                                            "If disabled, show below layer names (when enough space)."));
+    if (infoTextCombobox->currentIndex() == 0) {
+        infoTextInlineChkbox->setDisabled(true);
+    }
+
+    QWidgetAction *chkboxAction = new QWidgetAction(this);
+    chkboxAction->setDefaultWidget(infoTextInlineChkbox);
+    configureMenu->addAction(chkboxAction);
+    connect(infoTextInlineChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseInlineLayerInfoText()));
+
+    layerSelectionCheckBox = new QCheckBox(
+        i18nc("@item:inmenu Layers Docker settings, checkbox", "Checkbox for Selecting Layers"), this);
+    layerSelectionCheckBox->setToolTip(i18nc("@item:tooltip", "Show checkbox to select/unselect layers."));
+    layerSelectionCheckBox->setChecked(cfg.useLayerSelectionCheckbox());
+
+    QWidgetAction *layerSelectionAction = new QWidgetAction(this);
+    layerSelectionAction->setDefaultWidget(layerSelectionCheckBox);
+    configureMenu->addAction(layerSelectionAction);
+    connect(layerSelectionCheckBox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseLayerSelectionCheckbox()));
 }
 
 LayerBox::~LayerBox()
@@ -443,6 +547,7 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
 
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
+        m_nodeModel->setIdleTaskManager(0);
         m_nodeModel->setDummiesFacade(0, 0, 0, 0, 0);
         m_selectionActionsAdapter.reset();
 
@@ -462,7 +567,6 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         m_image = m_canvas->image();
         emit imageChanged();
-        connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController =
@@ -477,6 +581,10 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
                                       kritaShapeController,
                                       m_selectionActionsAdapter.data(),
                                       m_nodeManager);
+
+        if (isVisible()) {
+            m_nodeModel->setIdleTaskManager(m_canvas->viewManager()->idleTasksManager());
+        }
 
         connect(m_image, SIGNAL(sigAboutToBeDeleted()), SLOT(notifyImageDeleted()));
         connect(m_image, SIGNAL(sigNodeCollapsedChanged()), SLOT(slotNodeCollapsedChanged()));
@@ -540,6 +648,21 @@ void LayerBox::unsetCanvas()
     m_nodeManager->slotSetSelectedNodes(KisNodeList());
 
     m_canvas = 0;
+}
+
+void LayerBox::showEvent(QShowEvent *event)
+{
+    QDockWidget::showEvent(event);
+
+    if (m_canvas) {
+        m_nodeModel->setIdleTaskManager(m_canvas->viewManager()->idleTasksManager());
+    }
+}
+
+void LayerBox::hideEvent(QHideEvent *event)
+{
+    QDockWidget::hideEvent(event);
+    m_nodeModel->setIdleTaskManager(0);
 }
 
 void LayerBox::notifyImageDeleted()
@@ -683,21 +806,6 @@ void LayerBox::slotContextMenuRequested(const QPoint &pos, const QModelIndex &in
     }
 }
 
-void LayerBox::slotMinimalView()
-{
-    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::MinimalMode);
-}
-
-void LayerBox::slotDetailedView()
-{
-    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::DetailedMode);
-}
-
-void LayerBox::slotThumbnailView()
-{
-    m_wdgLayerBox->listLayers->setDisplayMode(NodeView::ThumbnailMode);
-}
-
 void LayerBox::slotRmClicked()
 {
     if (!m_canvas) return;
@@ -754,16 +862,14 @@ void LayerBox::slotCompositeOpChanged(int index)
 void LayerBox::slotOpacityChanged()
 {
     if (!m_canvas) return;
-    m_blockOpacityUpdate = true;
     m_nodeManager->setNodeOpacity(m_changedOpacityNode, convertOpacityToInt(m_newOpacity));
-    m_blockOpacityUpdate = false;
 }
 
 void LayerBox::slotOpacitySliderMoved(qreal opacity)
 {
     m_newOpacity = opacity;
     m_changedOpacityNode = m_activeNode;
-    m_opacityDelayTimer.start(200);
+    m_nodeOpacityCompressor.start();
 }
 
 void LayerBox::slotCollapsed(const QModelIndex &index)
@@ -920,7 +1026,7 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
     }
 }
 
-void LayerBox::selectionChanged(const QModelIndexList selection)
+void LayerBox::selectionChanged(const QModelIndexList &selection)
 {
     if (!m_nodeManager) return;
 
@@ -940,6 +1046,11 @@ void LayerBox::selectionChanged(const QModelIndexList selection)
 
     QList<KisNodeSP> selectedNodes;
     Q_FOREACH (const QModelIndex &idx, selection) {
+        // Precaution because node manager doesn't like duplicates in that list.
+        // NodeView Selection behavior is SelectRows, although currently only column 0 allows selections.
+        if (idx.column() != 0) {
+            continue;
+        }
         selectedNodes << m_filteringModel->nodeFromIndex(idx);
     }
 
@@ -952,7 +1063,7 @@ void LayerBox::slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int 
     /**
      * Qt has changed its behavior when deleting an item. Previously
      * the selection priority was on the next item in the list, and
-     * now it has shanged to the previous item. Here we just adjust
+     * now it has changed to the previous item. Here we just adjust
      * the selected item after the node removal.
      *
      * This method is called right before the Qt's beginRemoveRows()
@@ -993,7 +1104,7 @@ void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
 
     QItemSelectionModel *model = m_wdgLayerBox->listLayers->selectionModel();
 
-    if (KritaUtils::compareListsUnordered(newSelection, model->selectedIndexes())) {
+    if (KritaUtils::compareListsUnordered(newSelection, model->selectedRows())) {
         return;
     }
 
@@ -1002,12 +1113,7 @@ void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
         selection.select(idx, idx);
     }
 
-    model->select(selection, QItemSelectionModel::ClearAndSelect);
-}
-
-void LayerBox::updateThumbnail()
-{
-    m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
+    model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 }
 
 void LayerBox::slotRenameCurrentNode()
@@ -1142,6 +1248,8 @@ void LayerBox::updateLayerOpMenu(const QModelIndex &index, QMenu &menu) {
             addActionToMenu(convertToMenu, "convert_to_filter_mask");
             addActionToMenu(convertToMenu, "convert_to_selection_mask");
             addActionToMenu(convertToMenu, "convert_to_file_layer");
+            addActionToMenu(convertToMenu, "convert_to_animated");
+            addActionToMenu(convertToMenu, "layercolorspaceconversion");
 
             QMenu *splitAlphaMenu = menu.addMenu(i18n("S&plit Alpha"));
             addActionToMenu(splitAlphaMenu, "split_alpha_into_mask");
@@ -1181,6 +1289,7 @@ void LayerBox::slotUpdateIcons() {
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
     m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
     m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     // call child function about needing to update icons
     m_wdgLayerBox->listLayers->slotUpdateIcons();
@@ -1207,11 +1316,71 @@ void LayerBox::slotUpdateThumbnailIconSize()
     KisConfig cfg(false);
     cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
 
-    // this is a hack to force the layers list to update its display and
-    // re-layout all the layers with the new thumbnail size
-    resize(this->width()+1, this->height()+1);
-    resize(this->width()-1, this->height()-1);
+    m_nodeModel->setPreferredThumnalSize(thumbnailSizeSlider->value());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
 }
 
+void LayerBox::slotUpdateTreeIndentation()
+{
+    KisConfig cfg(false);
+    if (indentationSlider->value() == cfg.layerTreeIndentation()) {
+        return;
+    }
+    cfg.setLayerTreeIndentation(indentationSlider->value());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+}
+
+void LayerBox::slotUpdateLayerInfoTextStyle()
+{
+    KisConfig cfg(false);
+    if (infoTextCombobox->currentIndex() == cfg.layerInfoTextStyle()) {
+        return;
+    }
+    cfg.setLayerInfoTextStyle((KisConfig::LayerInfoTextStyle)infoTextCombobox->currentIndex());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
+    if (infoTextCombobox->currentIndex() == 0) {
+        infoTextOpacitySlider->setDisabled(true);
+        infoTextInlineChkbox->setDisabled(true);
+    }
+    else {
+        infoTextOpacitySlider->setDisabled(false);
+        infoTextInlineChkbox->setDisabled(false);
+    }
+}
+
+void LayerBox::slotUpdateLayerInfoTextOpacity()
+{
+    KisConfig cfg(false);
+    if (infoTextOpacitySlider->value() == cfg.layerInfoTextOpacity()) {
+        return;
+    }
+    cfg.setLayerInfoTextOpacity(infoTextOpacitySlider->value());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
+}
+
+void LayerBox::slotUpdateUseInlineLayerInfoText()
+{
+    KisConfig cfg(false);
+    if (infoTextInlineChkbox->isChecked() == cfg.useInlineLayerInfoText()) {
+        return;
+    }
+    cfg.setUseInlineLayerInfoText(infoTextInlineChkbox->isChecked());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
+}
+
+
+void LayerBox::slotUpdateUseLayerSelectionCheckbox()
+{
+    KisConfig cfg(false);
+    if (layerSelectionCheckBox->isChecked() == cfg.useLayerSelectionCheckbox()) {
+        return;
+    }
+    cfg.setUseLayerSelectionCheckbox(layerSelectionCheckBox->isChecked());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
+}
 
 #include "moc_LayerBox.cpp"

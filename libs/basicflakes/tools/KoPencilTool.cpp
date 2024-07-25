@@ -20,7 +20,6 @@
 #include <KoPathPoint.h>
 #include <KoPathPointData.h>
 #include <KoPathPointMergeCommand.h>
-#include <KoShapePaintingContext.h>
 #include <widgets/KoStrokeConfigWidget.h>
 #include <KisHandlePainterHelper.h>
 
@@ -70,8 +69,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
                              painter.transform());
 
         painter.save();
-        KoShapePaintingContext paintContext; //FIXME
-        m_shape->paint(painter, paintContext);
+        m_shape->paint(painter);
         painter.restore();
 
         if (m_shape->stroke()) {
@@ -85,7 +83,7 @@ void KoPencilTool::paint(QPainter &painter, const KoViewConverter &converter)
 
     if (m_hoveredPoint) {
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, m_hoveredPoint->parent(), converter, handleRadius());
+            KoShape::createHandlePainterHelperView(&painter, m_hoveredPoint->parent(), converter, handleRadius(), decorationThickness());
 
         helper.setHandleStyle(KisHandleStyle::primarySelection());
         m_hoveredPoint->paint(helper, KoPathPoint::Node);

@@ -23,14 +23,22 @@
 #include <QGuiApplication>
 #include <QStyle>
 #include <QStyleFactory>
+#include <QTextCodec>
 
 #ifdef Q_OS_WIN
 #include "KisWindowsPackageUtils.h"
+#include <windows.h>
 #endif
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras/QtAndroid>
 #endif
+
+#ifdef Q_OS_MACOS
+#include "KisMacosEntitlements.h"
+#endif
+
+#include <clocale>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
 
@@ -104,8 +112,11 @@ QString KisUsageLogger::basicSystemInfo()
         }
     }
 #endif
-    systemInfo.append("\n Languages: ").append(KLocalizedString::languages().join(", "));
     systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
+#ifdef Q_OS_MACOS
+    KisMacosEntitlements entitlements;
+    systemInfo.append("\n Sandbox: ").append((entitlements.sandbox()) ? "true" : "false");
+#endif
     systemInfo.append("\n\n");
 
     systemInfo.append("Qt\n");
@@ -133,10 +144,55 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n  Product Model: ").append(manufacturer + " " + model);
 #elif defined(Q_OS_LINUX)
     systemInfo.append("\n  Desktop: ").append(qgetenv("XDG_CURRENT_DESKTOP"));
+
+    systemInfo.append("\n  Appimage build: ").append(qEnvironmentVariableIsSet("APPIMAGE") ? "Yes" : "No");
 #endif
     systemInfo.append("\n\n");
 
     return systemInfo;
+}
+
+void KisUsageLogger::writeLocaleSysInfo()
+{
+    if (!s_instance->d->active) {
+        return;
+    }
+    QString systemInfo;
+    systemInfo.append("Locale\n");
+    systemInfo.append("\n  Languages: ").append(KLocalizedString::languages().join(", "));
+    systemInfo.append("\n  C locale: ").append(std::setlocale(LC_ALL, nullptr));
+    systemInfo.append("\n  QLocale current: ").append(QLocale().bcp47Name());
+    systemInfo.append("\n  QLocale system: ").append(QLocale::system().bcp47Name());
+    const QTextCodec *codecForLocale = QTextCodec::codecForLocale();
+    systemInfo.append("\n  QTextCodec for locale: ").append(codecForLocale->name());
+#ifdef Q_OS_WIN
+    {
+        systemInfo.append("\n  Process ACP: ");
+        CPINFOEXW cpInfo {};
+        if (GetCPInfoExW(CP_ACP, 0, &cpInfo)) {
+            systemInfo.append(QString::fromWCharArray(cpInfo.CodePageName));
+        } else {
+            // Shouldn't happen, but just in case
+            systemInfo.append(QString::number(GetACP()));
+        }
+        wchar_t lcData[2];
+        int result = GetLocaleInfoEx(LOCALE_NAME_SYSTEM_DEFAULT, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER, lcData, sizeof(lcData) / sizeof(lcData[0]));
+        if (result == 2) {
+            systemInfo.append("\n  System locale default ACP: ");
+            int systemACP = lcData[1] << 16 | lcData[0];
+            if (systemACP == CP_ACP) {
+                systemInfo.append("N/A");
+            } else if (GetCPInfoExW(systemACP, 0, &cpInfo)) {
+                systemInfo.append(QString::fromWCharArray(cpInfo.CodePageName));
+            } else {
+                // Shouldn't happen, but just in case
+                systemInfo.append(QString::number(systemACP));
+            }
+        }
+    }
+#endif
+    systemInfo.append("\n\n");
+    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
 }
 
 void KisUsageLogger::close()
@@ -224,12 +280,22 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tName: ").append(screen->name());
         info.append("\n\t\tDepth: ").append(QString::number(screen->depth()));
         info.append("\n\t\tScale: ").append(QString::number(screen->devicePixelRatio()));
+        info.append("\n\t\tPhysical DPI").append(QString::number(screen->physicalDotsPerInch()));
+        info.append("\n\t\tLogical DPI").append(QString::number(screen->logicalDotsPerInch()));
+        info.append("\n\t\tPhysical Size: ").append(QString::number(screen->physicalSize().width()))
+                .append(", ")
+                .append(QString::number(screen->physicalSize().height()));
+        info.append("\n\t\tPosition: ").append(QString::number(screen->geometry().x()))
+                .append(", ")
+                .append(QString::number(screen->geometry().y()));
         info.append("\n\t\tResolution in pixels: ").append(QString::number(screen->geometry().width()))
                 .append("x")
                 .append(QString::number(screen->geometry().height()));
         info.append("\n\t\tManufacturer: ").append(screen->manufacturer());
         info.append("\n\t\tModel: ").append(screen->model());
         info.append("\n\t\tRefresh Rate: ").append(QString::number(screen->refreshRate()));
+        info.append("\n\t\tSerial Number: ").append(screen->serialNumber());
+
     }
     info.append("\n");
     return info;
@@ -238,7 +304,6 @@ QString KisUsageLogger::screenInformation()
 void KisUsageLogger::rotateLog()
 {
     if (d->logFile.exists()) {
-
         {
             // Check for CLOSING SESSION
             d->logFile.open(QFile::ReadOnly);

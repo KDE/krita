@@ -109,20 +109,6 @@ KUndo2Stack *KoDocumentResourceManager::undoStack() const
     return static_cast<KUndo2Stack*>(resource(UndoStack).value<void*>());
 }
 
-void KoDocumentResourceManager::setHandleRadius(int handleRadius)
-{
-    // do not allow arbitrary small handles
-    if (handleRadius < 5)
-        handleRadius = 5;
-    setResource(HandleRadius, QVariant(handleRadius));
-}
-
-int KoDocumentResourceManager::handleRadius() const
-{
-    if (hasResource(HandleRadius))
-        return intResource(HandleRadius);
-    return 5; // default value (and is used just about everywhere)
-}
 void KoDocumentResourceManager::setGrabSensitivity(int grabSensitivity)
 {
     // do not allow arbitrary small grab sensitivity
@@ -143,20 +129,6 @@ void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
     QVariant variant;
     variant.setValue<void*>(undoStack);
     setResource(UndoStack, variant);
-}
-
-KoImageCollection *KoDocumentResourceManager::imageCollection() const
-{
-    if (!hasResource(ImageCollection))
-        return 0;
-    return static_cast<KoImageCollection*>(resource(ImageCollection).value<void*>());
-}
-
-void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
-{
-    QVariant variant;
-    variant.setValue<void*>(ic);
-    setResource(ImageCollection, variant);
 }
 
 qreal KoDocumentResourceManager::documentResolution() const

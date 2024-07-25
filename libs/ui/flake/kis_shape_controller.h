@@ -37,13 +37,21 @@ public:
 
     bool hasDummyForNode(KisNodeSP node) const override;
     KisNodeDummy* dummyForNode(KisNodeSP layer) const override;
+
+    /**
+     * Return the root dummy of the graph. Since the call to
+     * KisDummiesFacadeBase::setImage() causes and **asynchronous** update of
+     * the dummies graph, it may cause rootDummy() to be null at some moments,
+     * which is a valid state.
+     */
     KisNodeDummy* rootDummy() const override;
     int dummiesCount() const override;
 
     KoShapeLayer* shapeForNode(KisNodeSP layer) const;
     void setInitialShapeForCanvas(KisCanvas2 *canvas);
 
-    void setImage(KisImageWSP image) override;
+    using KisDummiesFacadeBase::setImage;
+    void setImage(KisImageWSP image, KisNodeSP activeNode) override;
 
 
 private:

@@ -43,7 +43,7 @@ public:
     KoSelection(QObject *parent = 0);
     ~KoSelection() override;
 
-    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
+    void paint(QPainter &painter) const override;
     void setSize(const QSizeF &size) override;
     QSizeF size() const override;
     QRectF outlineRect() const override;

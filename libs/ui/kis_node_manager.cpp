@@ -217,6 +217,13 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
         KisShapeController *shapeController = dynamic_cast<KisShapeController*>(m_d->imageView->document()->shapeController());
         Q_ASSERT(shapeController);
         connect(shapeController, SIGNAL(sigActivateNode(KisNodeSP)), SLOT(slotNonUiActivatedNode(KisNodeSP)));
+        if (shapeController->lastActivatedNode()) {
+            slotNonUiActivatedNode(shapeController->lastActivatedNode());
+        } else {
+            // if last activated node is null, most probably, it means that the shape controller
+            // is going to emit the activation signal very soon
+        }
+
         m_d->activateNodeConnection.connectInputSignal(m_d->imageView->image(), &KisImage::sigRequestNodeReselection);
         m_d->imageView->resourceProvider()->slotNodeActivated(m_d->imageView->currentNode());
         connect(m_d->imageView->image(), SIGNAL(sigIsolatedModeChanged()), this, SLOT(handleExternalIsolationChange()));
@@ -245,7 +252,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 #define CONVERT_NODE_ACTION(id, layerType)              \
     CONVERT_NODE_ACTION_2(id, layerType, layerType)
 
-void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
+void KisNodeManager::setup(KisKActionCollection * actionCollection, KisActionManager* actionManager)
 {
     m_d->layerManager.setup(actionManager);
     m_d->maskManager.setup(actionCollection, actionManager);
@@ -1031,41 +1038,43 @@ void KisNodeManager::removeNode()
 
 void KisNodeManager::mirrorNodeX()
 {
-    KisNodeSP node = activeNode();
+    KisNodeList nodes = selectedNodes();
 
     KUndo2MagicString commandName;
-    if (node->inherits("KisLayer")) {
-        commandName = kundo2_i18n("Mirror Layer X");
-    } else if (node->inherits("KisMask")) {
-        commandName = kundo2_i18n("Mirror Mask X");
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        commandName = kundo2_i18n("Mirror Mask Horizontally");
     }
-    mirrorNode(node, commandName, Qt::Horizontal, m_d->view->selection());
+    else {
+        commandName = kundo2_i18np("Mirror Layer Horizontally", "Mirror %1 Layers Horizontally", nodes.size());
+    }
+    mirrorNodes(nodes, commandName, Qt::Horizontal, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorNodeY()
 {
-    KisNodeSP node = activeNode();
+    KisNodeList nodes = selectedNodes();
 
     KUndo2MagicString commandName;
-    if (node->inherits("KisLayer")) {
-        commandName = kundo2_i18n("Mirror Layer Y");
-    } else if (node->inherits("KisMask")) {
-        commandName = kundo2_i18n("Mirror Mask Y");
+    if (nodes.size() == 1 && nodes[0]->inherits("KisMask")) {
+        commandName = kundo2_i18n("Mirror Mask Vertically");
     }
-    mirrorNode(node, commandName, Qt::Vertical, m_d->view->selection());
+    else {
+        commandName = kundo2_i18np("Mirror Layer Vertically", "Mirror %1 Layers Vertically", nodes.size());
+    }
+    mirrorNodes(nodes, commandName, Qt::Vertical, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorAllNodesX()
 {
     KisNodeSP node = m_d->view->image()->root();
-    mirrorNode(node, kundo2_i18n("Mirror All Layers X"),
+    mirrorNode(node, kundo2_i18n("Mirror All Layers Horizontally"),
                Qt::Horizontal, m_d->view->selection());
 }
 
 void KisNodeManager::mirrorAllNodesY()
 {
     KisNodeSP node = m_d->view->image()->root();
-    mirrorNode(node, kundo2_i18n("Mirror All Layers Y"),
+    mirrorNode(node, kundo2_i18n("Mirror All Layers Vertically"),
                Qt::Vertical, m_d->view->selection());
 }
 
@@ -1151,11 +1160,22 @@ void KisNodeManager::mirrorNode(KisNodeSP node,
                                 Qt::Orientation orientation,
                                 KisSelectionSP selection)
 {
-    if (!canModifyLayer(node)) return;
+    KisNodeList nodes = {node};
+    mirrorNodes(nodes, actionName, orientation, selection);
+}
+
+void KisNodeManager::mirrorNodes(KisNodeList nodes,
+                                const KUndo2MagicString& actionName,
+                                Qt::Orientation orientation,
+                                KisSelectionSP selection)
+{
+    Q_FOREACH(KisNodeSP node, nodes) {
+        if (!canModifyLayer(node)) return;
+    }
 
     KisImageSignalVector emitSignals;
 
-    KisProcessingApplicator applicator(m_d->view->image(), node,
+    KisProcessingApplicator applicator(m_d->view->image(), nodes,
                                        KisProcessingApplicator::RECURSIVE,
                                        emitSignals, actionName);
 
@@ -1518,8 +1538,8 @@ bool KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
     nodes1 << group;
 
     KisNodeList nodes2;
-    nodes2 = KisLayerUtils::sortMergableNodes(image->root(), selectedNodes());
-    KisLayerUtils::filterMergableNodes(nodes2);
+    nodes2 = KisLayerUtils::sortMergeableNodes(image->root(), selectedNodes());
+    KisLayerUtils::filterMergeableNodes(nodes2);
 
     if (nodes2.size() == 0) return false;
 
@@ -1577,14 +1597,37 @@ void KisNodeManager::quickUngroup()
     KisNodeSP parent = active->parent();
     KisNodeSP aboveThis = active;
 
+    auto checkCanMoveLayers = [this] (KisNodeList nodes, KisNodeSP newParent) -> bool {
+        auto incompatibleNode =
+            std::find_if(nodes.begin(), nodes.end(),
+                [newParent] (KisNodeSP node) {
+                    return !newParent->allowAsChild(node);
+                });
+
+        if (incompatibleNode != nodes.end()) {
+            const QString message =
+                    newParent->parent() ?
+                        i18n("Cannot move layer \"%1\" into new parent \"%2\"",
+                             (*incompatibleNode)->name(),
+                             newParent->name()) :
+                        i18n("Cannot move layer \"%1\" into the root layer",
+                             (*incompatibleNode)->name());
+            m_d->view->showFloatingMessage(message, QIcon());
+            return false;
+        }
+        return true;
+    };
+
     KUndo2MagicString actionName = kundo2_i18n("Quick Ungroup");
 
     if (parent && dynamic_cast<KisGroupLayer*>(active.data())) {
         KisNodeList nodes = active->childNodes(QStringList(), KoProperties());
 
-        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
-        juggler->moveNode(nodes, parent, active);
-        juggler->removeNode(KisNodeList() << active);
+        if (checkCanMoveLayers(nodes, parent)) {
+            KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+            juggler->moveNode(nodes, parent, active);
+            juggler->removeNode(KisNodeList() << active);
+        }
     } else if (parent && parent->parent()) {
         KisNodeSP grandParent = parent->parent();
 
@@ -1593,10 +1636,12 @@ void KisNodeManager::quickUngroup()
 
         const bool removeParent = KritaUtils::compareListsUnordered(allChildNodes, allSelectedNodes);
 
-        KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
-        juggler->moveNode(allSelectedNodes, grandParent, parent);
-        if (removeParent) {
-            juggler->removeNode(KisNodeList() << parent);
+        if (checkCanMoveLayers(allSelectedNodes, parent)) {
+            KisNodeJugglerCompressed *juggler = m_d->lazyGetJuggler(actionName);
+            juggler->moveNode(allSelectedNodes, grandParent, parent);
+            if (removeParent) {
+                juggler->removeNode(KisNodeList() << parent);
+            }
         }
     }
 }
@@ -1671,7 +1716,7 @@ void KisNodeManager::slotUiActivateNode()
 {
     if (!sender()->property("node").isNull()) {
         QString name = sender()->property("node").toString();
-        KisNodeSP node = m_d->imageView->image()->rootLayer()->findChildByName(name);
+        KisNodeSP node = KisLayerUtils::findNodeByName(m_d->imageView->image()->rootLayer(),name);
         if (node) {
             slotUiActivatedNode(node);
         }

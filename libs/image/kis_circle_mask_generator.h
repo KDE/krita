@@ -14,7 +14,7 @@
 #include <QScopedPointer>
 
 template <typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * Create, serialize and deserialize an elliptical 8-bit mask.
@@ -31,12 +31,12 @@ public:
 
     bool shouldVectorize() const override;
 
-    KisBrushMaskApplicatorBase* applicator() override;
+    KisBrushMaskApplicatorBase *applicator() const override;
 
     void setSoftness(qreal softness) override;
     void setScale(qreal scaleX, qreal scaleY) override;
 
-    void resetMaskApplicator(bool forceScalar);
+    void setMaskScalarApplicator();
 
 private:
 
@@ -48,7 +48,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisCircleMaskGenerator>;
+    friend struct FastRowProcessor<KisCircleMaskGenerator>;
 };
 
 #endif

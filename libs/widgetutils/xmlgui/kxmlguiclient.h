@@ -4,8 +4,8 @@
 
    SPDX-License-Identifier: LGPL-2.0-only
 */
-#ifndef KXMLGUICLIENT_H
-#define KXMLGUICLIENT_H
+#ifndef KisKXMLGUICLIENT_H
+#define KisKXMLGUICLIENT_H
 
 #include <kritawidgetutils_export.h>
 
@@ -17,37 +17,37 @@ class QDomElement;
 class QWidget;
 
 class QAction;
-class KActionCollection;
-class KXMLGUIClientPrivate;
-class KXMLGUIFactory;
-class KXMLGUIBuilder;
+class KisKActionCollection;
+class KisKXMLGUIClientPrivate;
+class KisKXMLGUIFactory;
+class KisKXMLGUIBuilder;
 
 namespace KDEPrivate
 {
-class KEditToolBarWidget;
+class KisKEditToolBarWidget;
 }
 
 /**
  *
- * A KXMLGUIClient can be used with KXMLGUIFactory to create a
+ * A KisKXMLGUIClient can be used with KisKXMLGUIFactory to create a
  * GUI from actions and an XML document, and can be dynamically merged
- * with other KXMLGUIClients.
+ * with other KisKXMLGUIClients.
  */
-class KRITAWIDGETUTILS_EXPORT KXMLGUIClient
+class KRITAWIDGETUTILS_EXPORT KisKXMLGUIClient
 {
-    friend class KDEPrivate::KEditToolBarWidget; // for setXMLFile(3 args)
+    friend class KDEPrivate::KisKEditToolBarWidget; // for setXMLFile(3 args)
 public:
     /**
-     * Constructs a KXMLGUIClient which can be used with a
-     * KXMLGUIFactory to create a GUI from actions and an XML document, and
-     * which can be dynamically merged with other KXMLGUIClients.
+     * Constructs a KisKXMLGUIClient which can be used with a
+     * KisKXMLGUIFactory to create a GUI from actions and an XML document, and
+     * which can be dynamically merged with other KisKXMLGUIClients.
      */
-    KXMLGUIClient();
+    KisKXMLGUIClient();
 
     /**
-     * Constructs a KXMLGUIClient which can be used with a KXMLGUIFactory
+     * Constructs a KisKXMLGUIClient which can be used with a KisKXMLGUIFactory
      * to create a GUI from actions and an XML document,
-     * and which can be dynamically merged with other KXMLGUIClients.
+     * and which can be dynamically merged with other KisKXMLGUIClients.
      *
      * This constructor takes an additional @p parent argument, which makes
      * the client a child client of the parent.
@@ -55,10 +55,10 @@ public:
      * Child clients are automatically added to the GUI if the parent is added.
      *
      */
-    explicit KXMLGUIClient(KXMLGUIClient *parent);
+    explicit KisKXMLGUIClient(KisKXMLGUIClient *parent);
 
     /**
-     * Destructs the KXMLGUIClient.
+     * Destructs the KisKXMLGUIClient.
      *
      * If the client was in a factory, the factory is NOT informed about the client
      * being removed. This is a feature, it makes window destruction fast (the xmlgui
@@ -66,7 +66,7 @@ public:
      * one client and to keep using the window, make sure to call factory->removeClient(client)
      * before deleting the client.
      */
-    virtual ~KXMLGUIClient();
+    virtual ~KisKXMLGUIClient();
 
     /**
      * Retrieves an action of the client by name.  If not found, it looks in its child clients.
@@ -85,7 +85,7 @@ public:
     /**
      * Retrieves the entire action collection for the GUI client.
      */
-    virtual KActionCollection *actionCollection() const;
+    virtual KisKActionCollection *actionCollection() const;
 
     /**
      * @return The component name for this GUI client.
@@ -126,23 +126,23 @@ public:
     QDomDocument xmlguiBuildDocument() const;
 
     /**
-     * This method is called by the KXMLGUIFactory as soon as the client
-     * is added to the KXMLGUIFactory's GUI.
+     * This method is called by the KisKXMLGUIFactory as soon as the client
+     * is added to the KisKXMLGUIFactory's GUI.
      */
-    void setFactory(KXMLGUIFactory *factory);
+    void setFactory(KisKXMLGUIFactory *factory);
     /**
-     * Retrieves a pointer to the KXMLGUIFactory this client is
+     * Retrieves a pointer to the KisKXMLGUIFactory this client is
      * associated with (will return 0 if the client's GUI has not been built
-     * by a KXMLGUIFactory.
+     * by a KisKXMLGUIFactory.
      */
-    KXMLGUIFactory *factory() const;
+    KisKXMLGUIFactory *factory() const;
 
     /**
-     * KXMLGUIClients can form a simple child/parent object tree. This
+     * KisKXMLGUIClients can form a simple child/parent object tree. This
      * method returns a pointer to the parent client or 0 if it has no
      * parent client assigned.
      */
-    KXMLGUIClient *parentClient() const;
+    KisKXMLGUIClient *parentClient() const;
 
     /**
      * Use this method to make a client a child client of another client.
@@ -150,33 +150,33 @@ public:
      * automatically when using the second constructor, which takes a
      * parent argument.
      */
-    void insertChildClient(KXMLGUIClient *child);
+    void insertChildClient(KisKXMLGUIClient *child);
 
     /**
      * Removes the given @p child from the client's children list.
      */
-    void removeChildClient(KXMLGUIClient *child);
+    void removeChildClient(KisKXMLGUIClient *child);
 
     /**
      * Retrieves a list of all child clients.
      */
-    QList<KXMLGUIClient *> childClients();
+    QList<KisKXMLGUIClient *> childClients();
 
     /**
-     * A client can have an own KXMLGUIBuilder.
+     * A client can have an own KisKXMLGUIBuilder.
      * Use this method to assign your builder instance to the client (so that the
-     * KXMLGUIFactory can use it when building the client's GUI)
+     * KisKXMLGUIFactory can use it when building the client's GUI)
      *
      * Client specific guibuilders are useful if you want to create
      * custom container widgets for your GUI.
      */
-    void setClientBuilder(KXMLGUIBuilder *builder);
+    void setClientBuilder(KisKXMLGUIBuilder *builder);
 
     /**
      * Retrieves the client's GUI builder or 0 if no client specific
      * builder has been assigned via setClientBuilder()
      */
-    KXMLGUIBuilder *clientBuilder() const;
+    KisKXMLGUIBuilder *clientBuilder() const;
 
     /**
      * Forces this client to re-read its XML resource file.  This is
@@ -278,7 +278,7 @@ public:
      * @note If in any doubt whether you need this or not, use setXMLFile()
      *       and setLocalXMLFile(), instead of this function.
      * @note Just like setXMLFile(), this function has to be called before
-     *       the client is added to a KXMLGUIFactory in order to have an
+     *       the client is added to a KisKXMLGUIFactory in order to have an
      *       effect.
      *
      * @since 4.4
@@ -314,7 +314,7 @@ protected:
      *
      * Since KF 5.1, the file will then be assumed to be installed in DATADIR/kxmlgui5/, under a directory
      * named after the component name.
-     * You should use ${KXMLGUI_INSTALL_DIR}/componentname in your CMakeLists.txt file, to install
+     * You should use ${KisKXMLGUI_INSTALL_DIR}/componentname in your CMakeLists.txt file, to install
      * the .xmlgui file(s).
      *
      * Since KF 5.4, the file will then be assumed to be installed in a Qt resource in :/kxmlgui5/,
@@ -323,7 +323,7 @@ protected:
      * Compatibility notes:
      * Fallback lookups exist to older locations: DATADIR/componentname/file and DATADIR/file.
      * The latter was there so that setXMLFile("componentname/filename") worked (but this was
-     * undocumented). Do not do this anymore after porting to KXMLGUI_INSTALL_DIR, use
+     * undocumented). Do not do this anymore after porting to KisKXMLGUI_INSTALL_DIR, use
      * setComponentName("componentname") and setXMLFile("filename").
      **/
     void setXMLFile(const QString &file, bool merge = false, bool setXMLDoc = true);
@@ -392,7 +392,7 @@ protected:
     virtual void virtual_hook(int id, void *data);
 
 private:
-    KXMLGUIClientPrivate *const d;
+    KisKXMLGUIClientPrivate *const d;
 };
 
 #endif

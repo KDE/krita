@@ -34,10 +34,6 @@ set(kritawidgets_LIB_SRCS
     
     KoTitledTabWidget.cpp
 
-    KoToolBoxButton.cpp
-    KoToolBox.cpp
-    KoToolBoxDocker.cpp
-    KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
     KoShadowConfigWidget.cpp
@@ -59,8 +55,10 @@ set(kritawidgets_LIB_SRCS
     # classes used by internal color selector
     kis_spinbox_color_selector.cpp
     KisSpinboxHSXSelector.cpp
+    KisVisualColorModel.cpp
     KisVisualColorSelector.cpp
     KisVisualColorSelectorShape.cpp
+    KisVisualDiamondSelectorShape.cpp
     KisVisualEllipticalSelectorShape.cpp
     KisVisualRectangleSelectorShape.cpp
     KisVisualTriangleSelectorShape.cpp
@@ -74,11 +72,18 @@ set(kritawidgets_LIB_SRCS
     KisPaletteComboBox.cpp
 
     kis_color_button.cpp
-    
+
     KisAngleGauge.cpp
     KisAngleSelector.cpp
 
     KisTagSelectionWidget.cpp
+
+    kis_warning_block.cpp
+    KisWidgetConnectionUtils.cpp
+    kis_spacing_selection_widget.cpp
+    kis_stacked_widget.cpp
+
+    KisStretchedIconButton.cpp
 )
 
 ki18n_wrap_ui( kritawidgets_LIB_SRCS
@@ -89,7 +94,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     WdgPaletteListWidget.ui
 )
 
-add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
+kis_add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
 target_link_libraries(kritawidgets
     

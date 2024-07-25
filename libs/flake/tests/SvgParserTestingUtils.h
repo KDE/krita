@@ -24,12 +24,12 @@
 struct SvgTester
 {
     SvgTester (const QString &data)
-        : parser(&resourceManager),
+        : m_parser(new SvgParser(&resourceManager)),
           doc(SvgParser::createDocumentFromSvg(data))
     {
         root = doc.documentElement();
 
-        parser.setXmlBaseDir("./");
+        parser().setXmlBaseDir("./");
 
 
         savedData = data;
@@ -43,7 +43,7 @@ struct SvgTester
     }
 
     void run() {
-        shapes = parser.parseSvg(root, &fragmentSize);
+        shapes = parser().parseSvg(root, &fragmentSize);
     }
 
     KoShape* findShape(const QString &name, KoShape *parent = 0) {
@@ -81,18 +81,22 @@ struct SvgTester
         return group;
     }
 
-
+    SvgParser& parser() {
+        return *m_parser;
+    }
 
     KoDocumentResourceManager resourceManager;
-    SvgParser parser;
     QDomDocument doc;
     QDomElement root;
     QSizeF fragmentSize;
     QList<KoShape*> shapes;
     QString savedData;
+
+protected:
+    QScopedPointer<SvgParser> m_parser;
 };
 
-#include "../../sdk/tests/qimage_test_util.h"
+#include <qimage_test_util.h>
 
 #ifdef USE_ROUND_TRIP
 #include "SvgWriter.h"
@@ -113,7 +117,7 @@ struct SvgRenderTester : public SvgTester
     }
 
     void setCheckQImagePremultiplied(bool value) {
-        m_checkQImagePremiltiplied = value;
+        m_checkQImagePremultiplied = value;
     }
 
     static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, qreal dpi, int fuzzyThreshold = 0, bool checkQImagePremultiplied = false) {
@@ -154,7 +158,7 @@ struct SvgRenderTester : public SvgTester
         Q_UNUSED(sizeInPt); // used in some definitions only!
 
 
-        parser.setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
+        parser().setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
         run();
 
 #ifdef USE_CLONED_SHAPES
@@ -194,6 +198,12 @@ struct SvgRenderTester : public SvgTester
 
         QVERIFY(doc.setContent(writeBuf.data()));
         root = doc.documentElement();
+
+        // reset the parser to avoid name conflicts
+
+        m_parser.reset(new SvgParser(&resourceManager));
+        parser().setResolution(QRectF(QPointF(), sizeInPx) /* px */, pixelsPerInch /* ppi */);
+
         run();
 #endif /* USE_ROUND_TRIP */
 
@@ -211,12 +221,12 @@ struct SvgRenderTester : public SvgTester
             }
         }
 
-        testRender(shape, "load", testName, canvasSize, pixelsPerInch, m_fuzzyThreshold, m_checkQImagePremiltiplied);
+        testRender(shape, "load", testName, canvasSize, pixelsPerInch, m_fuzzyThreshold, m_checkQImagePremultiplied);
     }
 
 private:
     int m_fuzzyThreshold;
-    int m_checkQImagePremiltiplied = false;
+    int m_checkQImagePremultiplied = false;
 };
 
 

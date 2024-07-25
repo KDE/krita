@@ -1,11 +1,8 @@
 SET(EXTPREFIX_tiff "${EXTPREFIX}" )
 ExternalProject_Add( ext_tiff
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://download.osgeo.org/libtiff/tiff-4.2.0.tar.gz
-    URL_HASH SHA256=eb0484e568ead8fa23b513e9b0041df7e327f4ee2d22db5a533929dfc19633cb
-
-    PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/CVE-2018-12900.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Enable-writing-Photoshop-blobs.patch
+    URL https://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz
+    URL_HASH SHA256=917223b37538959aca3b790d2d73aa6e626b688e02dcda272aec24c2f498abed
 
     INSTALL_DIR ${EXTPREFIX_tiff}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_tiff} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}

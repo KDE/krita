@@ -44,7 +44,6 @@ private:
     bool m_history_per_document = false;
 
     QToolButton* m_clearButton;
-
     KisDocument *m_document; // Color history is now stored in the document
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
 };

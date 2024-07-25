@@ -32,6 +32,8 @@ public:
     void add(KisFilterSP item);
     void add(const QString &id, KisFilterSP item);
 
+    KisFilterSP fallbackFilter() const;
+
 Q_SIGNALS:
 
     void filterAdded(QString id);

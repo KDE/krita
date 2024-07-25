@@ -18,56 +18,63 @@
 
 template<>
 template<>
-MaskApplicatorFactory<KisMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisMaskGenerator>::create<xsimd::generic>(
+    KisMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisMaskGenerator, xsimd::generic>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisCircleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisCircleMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisCircleMaskGenerator>::create<xsimd::generic>(
+    KisCircleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisCircleMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisCircleMaskGenerator, xsimd::generic>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisGaussCircleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisGaussCircleMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisGaussCircleMaskGenerator>::create<xsimd::generic>(
+    KisGaussCircleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisGaussCircleMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisGaussCircleMaskGenerator, xsimd::generic>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisCurveCircleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisCurveCircleMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisCurveCircleMaskGenerator>::create<xsimd::generic>(
+    KisCurveCircleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisCurveCircleMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisCurveCircleMaskGenerator, xsimd::generic>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisRectangleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisRectangleMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisRectangleMaskGenerator>::create<xsimd::generic>(
+    KisRectangleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisRectangleMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisRectangleMaskGenerator, xsimd::generic>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisGaussRectangleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisGaussRectangleMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisGaussRectangleMaskGenerator>::create<xsimd::generic>(
+    KisGaussRectangleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisGaussRectangleMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisGaussRectangleMaskGenerator, xsimd::generic>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::create<Vc::ScalarImpl>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::create<xsimd::generic>(
+    KisCurveRectangleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisCurveRectangleMaskGenerator, Vc::ScalarImpl>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisCurveRectangleMaskGenerator, xsimd::generic>(maskGenerator);
 }

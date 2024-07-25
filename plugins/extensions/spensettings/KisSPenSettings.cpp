@@ -28,6 +28,7 @@ KisSPenSettings::KisSPenSettings(QWidget *parent)
     , m_model(new QStandardItemModel())
 {
     mUi = new WdgSPenSettings(this);
+    mUi->setupUi(this);
 
     m_model->setColumnCount(2);
 
@@ -35,13 +36,13 @@ KisSPenSettings::KisSPenSettings(QWidget *parent)
     // Thanks to the KisActionSnapshot, we can list all actions even when no document is open
     QScopedPointer<KisActionsSnapshot> actionsSnapshot(new KisActionsSnapshot());
 
-    KActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
+    KisKActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
     for (QAction *action: actionCollection->actions()) {
         actionsSnapshot->addAction(action->objectName(), action);
     }
 
-    QMap<QString, KActionCollection*> sortedCollections = actionsSnapshot->actionCollections();
-    for (KActionCollection* collection: sortedCollections) {
+    QMap<QString, KisKActionCollection*> sortedCollections = actionsSnapshot->actionCollections();
+    for (KisKActionCollection* collection: sortedCollections) {
         for (QAction* action: collection->actions()) {
             QString actionName = KLocalizedString::removeAcceleratorMarker(action->text());
             QStandardItem* item = new QStandardItem(action->icon(), actionName);

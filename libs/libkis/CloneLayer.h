@@ -47,6 +47,18 @@ public Q_SLOTS:
      * @return clonelayer
      */
     virtual QString type() const override;
+
+    /**
+     * @brief sourceNode
+     * @return the node the clone layer is based on.
+     */
+    Node* sourceNode() const;
+
+    /**
+     * @brief setSourceNode
+     * @param node the node to use as the source of the clone layer.
+     */
+    void setSourceNode(Node* node);
 };
 
 #endif // LIBKIS_PAINTLAYER_H

@@ -6,14 +6,14 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef KXMLGUIVERSIONHANDLER_P_H
-#define KXMLGUIVERSIONHANDLER_P_H
+#ifndef KisKXMLGUIVERSIONHANDLER_P_H
+#define KisKXMLGUIVERSIONHANDLER_P_H
 
 #include <QStringList>
 
 /**
  * @internal
- * Helper class for KXMLGUIClient::setXMLFile
+ * Helper class for KisKXMLGUIClient::setXMLFile
  * Finds the xml file with the largest version number and takes
  * care of keeping user settings (from the most local file)
  * like action shortcuts or toolbar customizations.
@@ -43,4 +43,4 @@ private:
     QString m_doc;
 };
 
-#endif /* KXMLGUIVERSIONHANDLER_P_H */
+#endif /* KisKXMLGUIVERSIONHANDLER_P_H */

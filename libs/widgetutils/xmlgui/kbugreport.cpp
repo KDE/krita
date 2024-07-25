@@ -45,14 +45,14 @@
 
 #include <kis_icon_utils.h>
 
-class KBugReportPrivate
+class KisKBugReportPrivate
 {
 public:
-    KBugReportPrivate(KBugReport *q): q(q), m_aboutData(KAboutData::applicationData()) {}
+    KisKBugReportPrivate(KisKBugReport *q): q(q), m_aboutData(KAboutData::applicationData()) {}
 
     void _k_updateUrl();
 
-    KBugReport *q {nullptr};
+    KisKBugReport *q {nullptr};
     QProcess *m_process {nullptr};
     KAboutData m_aboutData;
 
@@ -78,8 +78,8 @@ public:
     }
 };
 
-KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
-    : QDialog(_parent), d(new KBugReportPrivate(this))
+KisKBugReport::KisKBugReport(const KAboutData &aboutData, QWidget *_parent)
+    : QDialog(_parent), d(new KisKBugReportPrivate(this))
 {
     setWindowTitle(i18n("Submit Bug Report"));
 
@@ -210,12 +210,12 @@ KBugReport::KBugReport(const KAboutData &aboutData, QWidget *_parent)
     setMinimumHeight(sizeHint().height() + 20);   // WORKAROUND: prevent "cropped" qcombobox
 }
 
-KBugReport::~KBugReport()
+KisKBugReport::~KisKBugReport()
 {
     delete d;
 }
 
-void KBugReportPrivate::_k_updateUrl()
+void KisKBugReportPrivate::_k_updateUrl()
 {
     url = QUrl(QStringLiteral("https://bugs.kde.org/enter_bug.cgi"));
     QUrlQuery query;
@@ -239,7 +239,7 @@ void KBugReportPrivate::_k_updateUrl()
     url.setQuery(query);
 }
 
-void KBugReport::accept()
+void KisKBugReport::accept()
 {
     QDesktopServices::openUrl(d->url);
 }

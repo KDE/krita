@@ -157,9 +157,9 @@ void KisDoubleSliderSpinBox::setValue(double newValue)
     d->setValue(newValue);
 }
 
-void KisDoubleSliderSpinBox::setRange(double newMinimum, double newMaximum, int newNumberOfecimals, bool computeNewFastSliderStep)
+void KisDoubleSliderSpinBox::setRange(double newMinimum, double newMaximum, int newNumberOfDecimals, bool computeNewFastSliderStep)
 {
-    d->setRange(newMinimum, newMaximum, newNumberOfecimals, computeNewFastSliderStep);
+    d->setRange(newMinimum, newMaximum, newNumberOfDecimals, computeNewFastSliderStep);
 }
 
 void KisDoubleSliderSpinBox::setMinimum(double newMinimum, bool computeNewFastSliderStep)

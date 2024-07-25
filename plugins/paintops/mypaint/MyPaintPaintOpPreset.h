@@ -39,11 +39,6 @@ public:
     QString thumbnailPath() const override;
 
     QByteArray getJsonData();
-    float getSize();
-    float getHardness();
-    float getOpacity();
-    float getOffset();
-    float isEraser();
 
 private:
     class Private;

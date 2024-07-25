@@ -361,6 +361,7 @@ if "%CMAKE_EXE%" == "" (
             echo ERROR: CMake not found! 1>&2
             exit /b 102
         )
+        call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
     ) else (
         echo Found CMake on PATH: !CMAKE_EXE!
         if not "%ARG_NO_INTERACTIVE%" == "1" (
@@ -372,11 +373,13 @@ if "%CMAKE_EXE%" == "" (
                     echo ERROR: CMake not found! 1>&2
                     exit /b 102
                 )
+                call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
             )
         )
+        call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
     )
 )
-echo CMake: %CMAKE_EXE%
+echo CMake: %CMAKE_BIN_DIR%
 
 if "%SEVENZIP_EXE%" == "" (
     call :find_on_path SEVENZIP_EXE 7z.exe
@@ -733,21 +736,21 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 )
 
 :: Initialize clean PATH
-set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
-set PATH=%PYTHON_BIN_DIR%;%MINGW_BIN_DIR%;%PATH%
+set "PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\"
+set "PATH=%PYTHON_BIN_DIR%;%MINGW_BIN_DIR%;%PATH%"
 if NOT "%KRITA_GIT_DIR%" == "" (
-    set PATH=%PATH%;%KRITA_GIT_DIR%
+    set "PATH=%PATH%;%KRITA_GIT_DIR%"
 )
 if NOT "%KRITA_NINJA_DIR%" == "" (
     if NOT "%KRITA_NINJA_DIR%" == "%MINGW_BIN_DIR%" (
-        set PATH=%PATH%;%KRITA_NINJA_DIR%
+        set "PATH=%PATH%;%KRITA_NINJA_DIR%"
     )
 )
 if NOT "%SVN_DIR%" == "" (
-    set PATH=%PATH%;%SVN_DIR%
+    set "PATH=%PATH%;%SVN_DIR%"
 )
-if NOT "%PERL_DIR%" == "" (
-    set PATH=%PATH%;%PERL_DIR%
+if NOT "%CMAKE_BIN_DIR%" == "" (
+    set PATH=%PATH%;%CMAKE_BIN_DIR%
 )
 
 echo Creating dirs...
@@ -848,10 +851,26 @@ set "BUILDDIR_KRITA_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
-set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
+if not "%PERL_DIR%" == "" (
+    :: Safety measure for Strawberry Perl injecting pkg-config in the PATH
+    if exist "%PERL_DIR%\pkg-config.bat" (
+        echo Found unpatched Strawberry Perl, ignoring due to its pkg-config introducing external binaries.
+        set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
+    ) else (
+        echo Found patched Strawberry Perl, it is safe to use.
+        set "PERL_EXECUTABLE=%PERL_DIR%\perl.exe"
+        set "PERL_EXECUTABLE=!PERL_EXECUTABLE:\=/!"
+        set "PERL_EXECUTABLE=!PERL_EXECUTABLE: =\ !"
+        set "PATH=%PATH%;%PERL_DIR%"
+    )
+) else (
+    set "PATH=%PATH%;%DEPS_INSTALL_DIR%\Strawberry\perl\bin"
+)
+
+set "PATH=%DEPS_INSTALL_DIR%\bin;%PATH%"
 
 if not "%GETTEXT_SEARCH_PATH%" == "" (
-    set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
+    set "PATH=%PATH%;%GETTEXT_SEARCH_PATH%"
 )
 
 :: Prepare the CMake command lines
@@ -859,9 +878,10 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
     -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
+    -DPERL_EXECUTABLE=%PERL_EXECUTABLE% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "MinGW Makefiles" ^
+    -G "%KRITA_GENERATOR%" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
     
 set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
@@ -876,8 +896,8 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
+    -DKRITA_ENABLE_PCH=OFF ^
     -DHIDE_SAFE_ASSERTS=ON ^
-    -DFETCH_TRANSLATIONS=ON ^
     -DBRANDING=%KRITA_BRANDING% ^
     -Wno-dev ^
     -G "%KRITA_GENERATOR%" ^
@@ -942,11 +962,13 @@ echo Running CMake for deps...
 echo.
 
 set EXT_TARGETS=patch zlib gettext openssl boost exiv2 fftw3 eigen3 jpeg lcms2
-set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl vc libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
+set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl
+set EXT_TARGETS=%EXT_TARGETS% giflib qt libraw kwindowsystem drmingw
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
-set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp
+set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
+set EXT_TARGETS=%EXT_TARGETS% freetype fontconfig poppler fribidi unibreak
+set EXT_TARGETS=%EXT_TARGETS% ffmpeg lager mlt
 
 for %%a in (%EXT_TARGETS%) do (
     set TEST_HAS_TARGET=
@@ -959,7 +981,7 @@ for %%a in (%EXT_TARGETS%) do (
 
     if defined TEST_HAS_TARGET (
         echo Building ext_%%a...
-        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a
+        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% -j%PARALLEL_JOBS% --target ext_%%a
         if errorlevel 1 (
             echo ERROR: Building of ext_%%a failed! 1>&2
             exit /b 105

@@ -7,6 +7,9 @@
 
 #include "kis_painter.h"
 #include "KoCompositeOpRegistry.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
+
 
 KisLayerStyleKnockoutBlower::KisLayerStyleKnockoutBlower()
 {
@@ -31,7 +34,8 @@ KisSelectionSP KisLayerStyleKnockoutBlower::knockoutSelectionLazy()
         if (m_knockoutSelection) {
             return m_knockoutSelection;
         } else {
-            m_knockoutSelection = new KisSelection(new KisSelectionEmptyBounds(0));
+            m_knockoutSelection = new KisSelection(new KisSelectionEmptyBounds(),
+                                                   KisImageResolutionProxy::identity());
             return m_knockoutSelection;
         }
     }
@@ -57,7 +61,7 @@ void KisLayerStyleKnockoutBlower::apply(KisPainter *painter, KisPaintDeviceSP me
 
     painter->setOpacity(OPACITY_OPAQUE_U8);
     painter->setChannelFlags(QBitArray());
-    painter->setCompositeOp(COMPOSITE_COPY);
+    painter->setCompositeOpId(COMPOSITE_COPY);
     painter->setSelection(m_knockoutSelection);
     painter->bitBlt(rect.topLeft(), mergedStyle, rect);
     painter->setSelection(0);

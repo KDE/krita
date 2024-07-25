@@ -14,7 +14,7 @@ class KisDocumentTest : public QObject
     Q_OBJECT
 
 private Q_SLOTS:
-    void init();
+    void initTestCase();
     void testOpenImageTwiceInSameDoc();
 };
 

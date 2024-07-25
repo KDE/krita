@@ -124,7 +124,7 @@ KUndo2View::KUndo2View(KUndo2QStack *stack, QWidget *parent) : QListView(parent)
 /*!
     Constructs a new view with parent \a parent and sets the observed group to \a group.
 
-    The view will update itself autmiatically whenever the active stack of the group changes.
+    The view will update itself automatically whenever the active stack of the group changes.
 */
 
 KUndo2View::KUndo2View(KUndo2Group *group, QWidget *parent) : QListView(parent), d(new KUndo2ViewPrivate)
@@ -181,7 +181,7 @@ void KUndo2View::setStack(KUndo2QStack *stack)
     Sets the group displayed by this view to \a group. If \a group is 0, the view will
     be empty.
 
-    The view will update itself autmiatically whenever the active stack of the group changes.
+    The view will update itself automatically whenever the active stack of the group changes.
 
     \sa group() setStack()
 */

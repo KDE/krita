@@ -14,7 +14,6 @@
 
 struct KisIdleWatcher::Private
 {
-    static const int IDLE_CHECK_PERIOD = 200; /* ms */
     static const int IDLE_CHECK_COUNT = 4; /* ticks */
 
     Private(int delay, KisIdleWatcher *q)
@@ -23,7 +22,7 @@ struct KisIdleWatcher::Private
           idleCheckCounter(0)
     {
         idleCheckTimer.setSingleShot(true);
-        idleCheckTimer.setInterval(IDLE_CHECK_PERIOD);
+        idleCheckTimer.setInterval(delay);
     }
 
     KisSignalAutoConnectionsStore connectionsStore;
@@ -32,6 +31,13 @@ struct KisIdleWatcher::Private
     KisSignalCompressor imageModifiedCompressor;
 
     QTimer idleCheckTimer;
+
+    /**
+     * We wait until the counter reaches IDLE_CHECK_COUNT, then consider the
+     * image to be really "idle". If the counter is negative, it means that
+     * "no delay" update is triggered, which desables couting and the event
+     * is triggered on the next non-busy tick.
+     */
     int idleCheckCounter;
 };
 
@@ -62,6 +68,11 @@ bool KisIdleWatcher::isIdle() const
     return idle;
 }
 
+bool KisIdleWatcher::isCounting() const
+{
+    return m_d->idleCheckTimer.isActive();
+}
+
 void KisIdleWatcher::setTrackedImages(const QVector<KisImageSP> &images)
 {
     m_d->connectionsStore.clear();
@@ -86,10 +97,25 @@ void KisIdleWatcher::setTrackedImage(KisImageSP image)
     setTrackedImages(images);
 }
 
-void KisIdleWatcher::slotImageModified()
+void KisIdleWatcher::restartCountdown()
 {
     stopIdleCheck();
     m_d->imageModifiedCompressor.start();
+}
+
+void KisIdleWatcher::triggerCountdownNoDelay()
+{
+    stopIdleCheck();
+    m_d->idleCheckCounter = -1;
+    m_d->idleCheckTimer.start();
+}
+
+void KisIdleWatcher::slotImageModified()
+{
+    if (m_d->idleCheckCounter >= 0) {
+        restartCountdown();
+    }
+    Q_EMIT imageModified();
 }
 
 void KisIdleWatcher::startIdleCheck()
@@ -107,7 +133,9 @@ void KisIdleWatcher::stopIdleCheck()
 void KisIdleWatcher::slotIdleCheckTick()
 {
     if (isIdle()) {
-        if (m_d->idleCheckCounter >= Private::IDLE_CHECK_COUNT) {
+        if (m_d->idleCheckCounter < 0 ||
+            m_d->idleCheckCounter >= Private::IDLE_CHECK_COUNT) {
+
             stopIdleCheck();
             if (!m_d->trackedImages.isEmpty()) {
                 emit startedIdleMode();
@@ -117,6 +145,10 @@ void KisIdleWatcher::slotIdleCheckTick()
             m_d->idleCheckTimer.start();
         }
     } else {
-        slotImageModified();
+        if (m_d->idleCheckCounter >= 0) {
+            restartCountdown();
+        } else {
+            m_d->idleCheckTimer.start();
+        }
     }
 }

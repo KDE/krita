@@ -8,6 +8,7 @@
 #include <simpletest.h>
 
 #include <QTime>
+#include <QRandomGenerator>
 
 #include <KoColorSpace.h>
 #include <KoColor.h>
@@ -144,7 +145,7 @@ void KisFixedPaintDeviceTest::testBltFixedOpacity()
     QPoint errpoint;
 
     if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
-        checkResult.save("kis_fixed_paint_device_test_test_blt_fixed_opactiy_expected.png");
+        checkResult.save("kis_fixed_paint_device_test_test_blt_fixed_opacity_expected.png");
         result.save("kis_fixed_paint_device_test_test_blt_fixed_opacity_result.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
@@ -301,15 +302,15 @@ void KisFixedPaintDeviceTest::testMirroring()
 
     KoColor c(Qt::black, cs);
 
-    qsrand(1);
+    QRandomGenerator rng{};
     int value = 0;
 
     for (int i = rc.x(); i < rc.x() + rc.width(); i++) {
         for (int j = rc.y(); j < rc.y() + rc.height(); j++) {
             setPixel(dev, i, j, value);
-            value = qrand() % 255;
+            value = rng.bounded(255);
         }
-        value = qrand() % 255;
+        value = rng.bounded(255);
     }
 
     //dev->convertToQImage(0).save("0_a.png");
@@ -344,15 +345,15 @@ void KisFixedPaintDeviceTest::testMirroring()
         incY = 1;
     }
 
-    qsrand(1);
+    rng.seed(1);
     value = 0;
 
     for (int i = startX; i != endX ; i += incX) {
         for (int j = startY; j != endY; j += incY) {
             QCOMPARE(pixel(dev, i, j), (quint8)value);
-            value = qrand() % 255;
+            value = rng.bounded(255);
         }
-        value = qrand() % 255;
+        value = rng.bounded(255);
     }
 }
 

@@ -25,6 +25,26 @@ CloneLayer::~CloneLayer()
 
 }
 
+Node* CloneLayer::sourceNode() const
+{
+    const KisCloneLayer* layer = qobject_cast<const KisCloneLayer*>(this->node().data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(layer, 0);
+
+    return Node::createNode(0, layer->copyFrom());
+}
+
+void CloneLayer::setSourceNode(Node* node)
+{
+    if (!node->node()) return;
+
+    KisCloneLayerSP layer = qobject_cast<KisCloneLayer*>(this->node().data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(layer);
+
+    KisLayerSP source = qobject_cast<KisLayer*>(node->node().data());
+
+    layer->setCopyFrom(source);
+}
+
 QString CloneLayer::type() const
 {
     return "clonelayer";

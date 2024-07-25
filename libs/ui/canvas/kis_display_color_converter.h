@@ -49,10 +49,11 @@ public:
     KoColorDisplayRendererInterface* displayRendererInterface() const;
 
     const KoColorSpace* paintingColorSpace() const;
+    const KoColorSpace* nodeColorSpace() const;
     void setMonitorProfile(const KoColorProfile *monitorProfile);
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
 
-    QColor toQColor(const KoColor &c) const;
+    QColor toQColor(const KoColor &c, bool proofToPaintColors = false) const;
     KoColor approximateFromRenderedQColor(const QColor &c) const;
 
     bool canSkipDisplayConversion(const KoColorSpace *cs) const;
@@ -66,7 +67,8 @@ public:
      * offset of the image in QImage is always zero for efficiency
      * reasons.
      */
-    QImage toQImage(KisPaintDeviceSP srcDevice) const;
+    QImage toQImage(KisPaintDeviceSP srcDevice, bool proofPaintColors = false) const;
+    QImage toQImage(const KoColorSpace *srcColorSpace, const quint8 *data, QSize size, bool proofPaintColors = false) const;
 
     KoColor fromHsv(int h, int s, int v, int a = 255) const;
     KoColor fromHsvF(qreal h, qreal s, qreal v, qreal a = 1.0);

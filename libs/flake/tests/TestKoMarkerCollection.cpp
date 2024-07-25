@@ -16,8 +16,8 @@
 #include <KoColorBackground.h>
 
 #include "kis_debug.h"
-#include "../../sdk/tests/qimage_test_util.h"
-#include <sdk/tests/testflake.h>
+#include <qimage_test_util.h>
+#include <testflake.h>
 
 #include <cmath>
 

@@ -12,10 +12,10 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QRegularExpression>
+#include <KisStaticInitializer.h>
 
-namespace
-{
-const int typeidSnapshotDirInfoList = qRegisterMetaType<SnapshotDirInfoList>("SnapshotDirInfoList");
+KIS_DECLARE_STATIC_INITIALIZER {
+    qRegisterMetaType<SnapshotDirInfoList>("SnapshotDirInfoList");
 }
 
 RecorderSnapshotsScanner::RecorderSnapshotsScanner()

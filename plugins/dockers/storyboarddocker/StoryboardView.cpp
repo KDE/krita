@@ -9,6 +9,7 @@
 #include <QPaintEvent>
 #include <QMenu>
 #include <QProxyStyle>
+#include <QStyleFactory>
 
 #include "StoryboardView.h"
 #include "StoryboardModel.h"
@@ -20,8 +21,10 @@ class StoryboardStyle : public QProxyStyle
 public:
     StoryboardStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
 
-    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                       QPainter *painter, const QWidget *widget) const
+    void drawPrimitive(PrimitiveElement element,
+                       const QStyleOption *option,
+                       QPainter *painter,
+                       const QWidget *widget) const override
     {
         if (element == QStyle::PE_IndicatorItemViewItemDrop)
         {
@@ -79,7 +82,13 @@ StoryboardView::StoryboardView(QWidget *parent)
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
-    setStyle(new StoryboardStyle(this->style()));
+
+    QStyle *newStyle = QStyleFactory::create(this->style()->objectName());
+    // proxy style steals the ownership of the style and deletes it later
+    StoryboardStyle *proxyStyle = new StoryboardStyle(newStyle);
+    proxyStyle->setParent(this);
+    setStyle(proxyStyle);
+
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(slotContextMenuRequested(const QPoint &)));
 
@@ -204,6 +213,7 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                 int thumbnailheight = thumbnailIsVisible() ? 120 : 0;
                 if (m_itemOrientation == Qt::Vertical) {
                     const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
+                    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(Model, QRect());
                     parentRect.setTop(parentRect.top() + thumbnailheight + fontHeight + Model->visibleCommentsUpto(index) * 100);
                     parentRect.setHeight(100);
                     return parentRect;

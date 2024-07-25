@@ -6,7 +6,7 @@
 #ifndef LIBKIS_DOCUMENT_H
 #define LIBKIS_DOCUMENT_H
 
-#include <QObject>
+#include <QFileInfo>
 
 #include "kritalibkis_export.h"
 #include "libkis.h"
@@ -19,7 +19,12 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransparencyMask.h"
 #include "TransformMask.h"
+#include "ColorizeMask.h"
+
+#include "GuidesConfig.h"
+#include "GridConfig.h"
 
 class KisDocument;
 
@@ -40,33 +45,32 @@ public:
     bool operator==(const Document &other) const;
     bool operator!=(const Document &other) const;
 
+public Q_SLOTS:
     /**
-     * @brief horizontalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * The horizontal guides.
      * @return a list of the horizontal positions of guides.
      */
-    QList<qreal> horizontalGuides() const;
+    Q_DECL_DEPRECATED QList<qreal> horizontalGuides() const;
     /**
-     * @brief verticalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * The vertical guide lines.
      * @return a list of vertical guides.
      */
-    QList<qreal> verticalGuides() const;
+    Q_DECL_DEPRECATED QList<qreal> verticalGuides() const;
 
     /**
-     * @brief guidesVisible
+     * @brief DEPRECATED - use guidesConfig() instead
      * Returns guide visibility.
      * @return whether the guides are visible.
      */
-    bool guidesVisible() const;
+    Q_DECL_DEPRECATED bool guidesVisible() const;
     /**
-     * @brief guidesLocked
+     * @brief DEPRECATED - use guidesConfig() instead
      * Returns guide lockedness.
      * @return whether the guides are locked.
      */
-    bool guidesLocked() const;
-
-public Q_SLOTS:
+    Q_DECL_DEPRECATED bool guidesLocked() const;
 
     /**
      * @brief clone create a shallow clone of this document.
@@ -109,7 +113,6 @@ public Q_SLOTS:
      * @return the first node with the given name or 0 if no node is found
      */
     Node *nodeByName(const QString &name) const;
-
 
     /**
      * @brief nodeByUniqueID searches the node tree for a node with the given name and returns it.
@@ -590,9 +593,11 @@ print(root.childNodes())
      * @param fileName the absolute filename of the file referenced. Symlinks will be resolved.
      * @param scalingMethod how the dimensions of the file are interpreted
      *        can be either "None", "ImageToSize" or "ImageToPPI"
+     * @param scalingFilter filter used to scale the file
+     *        can be "Bicubic", "Hermite", "NearestNeighbor", "Bilinear", "Bell", "BSpline", "Lanczos3", "Mitchell"
      * @return a FileLayer
      */
-    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod);
+    FileLayer* createFileLayer(const QString &name, const QString fileName, const QString scalingMethod, const QString scalingFilter = "Bicubic");
 
     /**
      * @brief createFilterLayer creates a filter layer, which is a layer that represents a filter
@@ -673,12 +678,28 @@ print(root.childNodes())
     SelectionMask* createSelectionMask(const QString &name);
 
     /**
+     * @brief createTransparencyMask
+     * Creates a transparency mask, which can be used to assign transparency to regions.
+     * @param name - the name of the layer.
+     * @return a TransparencyMask
+     */
+    TransparencyMask* createTransparencyMask(const QString &name);
+
+    /**
      * @brief createTransformMask
      * Creates a transform mask, which can be used to apply a transformation non-destructively.
      * @param name - the name of the layer mask.
      * @return a TransformMask
      */
     TransformMask* createTransformMask(const QString &name);
+
+    /**
+     * @brief createColorizeMask
+     * Creates a colorize mask, which can be used to color fill via keystrokes.
+     * @param name - the name of the layer.
+     * @return a TransparencyMask
+     */
+    ColorizeMask* createColorizeMask(const QString &name);
 
     /**
      * @brief projection creates a QImage from the rendered image or
@@ -724,7 +745,7 @@ print(root.childNodes())
 
     /**
      * Wait for all the internal image jobs to complete and return without locking
-     * the image. This function is handly for tests or other synchronous actions,
+     * the image. This function is handy for tests or other synchronous actions,
      * when one needs to wait for the result of his actions.
      */
     void waitForDone();
@@ -747,36 +768,42 @@ print(root.childNodes())
     void refreshProjection();
 
     /**
-     * @brief setHorizontalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * replace all existing horizontal guides with the entries in the list.
      * @param lines a list of floats containing the new guides.
      */
-    void setHorizontalGuides(const QList<qreal> &lines);
+    Q_DECL_DEPRECATED void setHorizontalGuides(const QList<qreal> &lines);
     /**
-     * @brief setVerticalGuides
+     * @brief DEPRECATED - use guidesConfig() instead
      * replace all existing horizontal guides with the entries in the list.
      * @param lines a list of floats containing the new guides.
      */
-    void setVerticalGuides(const QList<qreal> &lines);
+    Q_DECL_DEPRECATED void setVerticalGuides(const QList<qreal> &lines);
 
     /**
-     * @brief setGuidesVisible
+     * @brief DEPRECATED - use guidesConfig() instead
      * set guides visible on this document.
      * @param visible whether or not the guides are visible.
      */
-    void setGuidesVisible(bool visible);
+    Q_DECL_DEPRECATED void setGuidesVisible(bool visible);
 
     /**
-     * @brief setGuidesLocked
+     * @brief DEPRECATED - use guidesConfig() instead
      * set guides locked on this document
      * @param locked whether or not to lock the guides on this document.
      */
-    void setGuidesLocked(bool locked);
+    Q_DECL_DEPRECATED void setGuidesLocked(bool locked);
 
     /**
      * @brief modified returns true if the document has unsaved modifications.
      */
     bool modified() const;
+
+    /**
+     * @brief setModified sets the modified status of the document
+     * @param modified if true, the document is considered modified and closing it will ask for saving.
+     */
+    void setModified(bool modified);
 
     /**
      * @brief bounds return the bounds of the image
@@ -818,7 +845,6 @@ print(root.childNodes())
      * @return full clip range start time
      */
     int fullClipRangeStartTime();
-
 
     /**
      * @brief set full clip range end time
@@ -899,6 +925,130 @@ print(root.childNodes())
      * @param type the type defining the annotation
      */
     void removeAnnotation(const QString &type);
+
+    /**
+     * @brief Allow to activate/deactivate autosave for document
+     * When activated, it will use default Krita autosave settings
+     * It means that even when autosave is set to True, under condition Krita will not proceed to automatic save of document:
+     * - autosave is globally deactivated
+     * - document is read-only
+     *
+     * Being able to deactivate autosave on a document can make sense when a plugin use internal document
+     * (document is not exposed in a view, only created for intenal process purposes)
+     *
+     * @param active True to activate autosave
+     */
+    void setAutosave(bool active);
+
+    /**
+     * @brief Return autosave status for document
+     * Notes:
+     * - returned value is Autosave flag value
+     *   Even if autosave is set to True, under condition Krita will not proceed to automatic save of document:
+     *   - autosave is globally deactivated
+     *   - document is read-only
+     * - When autosave is set to False, Krita never execute automatic save for document
+     *
+     * @return True if autosave is active, otherwise False
+     */
+    bool autosave();
+
+    /**
+     * @brief Returns a GuidesConfig guides configuration for current document
+     * @return a GuidesConfig object with guides configuration
+     */
+    GuidesConfig *guidesConfig();
+
+    /**
+     * @brief Set guides configuration for current document
+     * @param guidesConfig a GuidesConfig object to apply for guides configuration
+     *
+     * To modify/set guides property on a document
+@code
+# get document (create one or get active one for example)
+newDoc = Krita.instance().createDocument(500, 500, "Test", "RGBA", "U8", "", 300)
+
+# retrieve document guides configuration
+newDocGuides = newDoc.guidesConfig()
+
+# update properties
+newDocGuides.setColor(QColor('#ff00ff'))
+newDocGuides.setLineType('dotted')
+newDocGuides.setVisible(True)
+newDocGuides.setLocked(True)
+newDocGuides.setSnap(True)
+newDocGuides.setHorizontalGuides([100,200])
+
+# set guides configuration to document
+newDoc.setGuidesConfig(newDocGuides)
+@endcode
+     */
+    void setGuidesConfig(GuidesConfig *guidesConfig);
+
+    /**
+     * @brief Returns a GridConfig grid configuration for current document
+     * @return a GridConfig object with grid configuration
+     */
+    GridConfig *gridConfig();
+
+    /**
+     * @brief Set grid configuration for current document
+     * @param gridConfig a GridConfig object to apply for grid configuration
+     *
+     * To modify/set grid property on a document
+@code
+# get document (create one or get active one for example)
+newDoc = Krita.instance().createDocument(500, 500, "Test", "RGBA", "U8", "", 300)
+
+# retrieve document grid configuration
+newDocGrid = newDoc.gridConfig()
+
+# update properties
+newDocGrid.setColorMain(QColor('#ff00ff'))
+newDocGrid.setLineTypeMain('dashed')
+newDocGrid.setVisible(True)
+newDocGrid.setAngleLeft(30)
+newDocGrid.setAngleRight(15)
+newDocGrid.setType('isometric')
+
+# set grid configuration to document
+newDoc.setGridConfig(newDocGrid)
+@endcode
+     */
+    void setGridConfig(GridConfig *gridConfig);
+
+    /**
+     * @brief Return current audio level for document
+     * @return A value between 0.0 and 1.0 (1.0 = 100%)
+     */
+    qreal audioLevel() const;
+
+    /**
+     * @brief Set current audio level for document
+     * @param level Audio volumne between 0.0 and 1.0 (1.0 = 100%)
+     */
+    void setAudioLevel(const qreal level);
+
+    /**
+     * @brief Return a list of current audio tracks for document
+     * @return List of absolute path/file name of audio files
+     */
+    QList<QString> audioTracks() const;
+
+    /**
+     * @brief Set a list of audio tracks for document
+     * Note: the function allows to add more than one file while from Krita's UI, importing a file
+     * will replace the complete list
+     *
+     * The reason why this method let the ability to provide more than one file is related to
+     * the internal's Krita method from KisDocument class:
+     * void KisDocument::setAudioTracks(QVector<QFileInfo> f)
+     *
+     * @param files List of absolute path/file name of audio files
+     * @return True if all files from list have been added, otherwise False (a file was not found)
+     */
+    bool setAudioTracks(const QList<QString> files) const;
+
 private:
 
     friend class Krita;

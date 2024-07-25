@@ -10,7 +10,7 @@
 #include <simpletest.h>
 #include <QCoreApplication>
 
-#include  <sdk/tests/testui.h>
+#include <testui.h>
 
 #include "filestest.h"
 
@@ -510,19 +510,19 @@ void KisPSDTest::testSavingAllFormats()
 
 void KisPSDTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), PSDMimetype);
+    TestUtil::testImportFromWriteonly(PSDMimetype);
 }
 
 
 void KisPSDTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), PSDMimetype);
+    TestUtil::testExportToReadonly(PSDMimetype);
 }
 
 
 void KisPSDTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), PSDMimetype);
+    TestUtil::testImportIncorrectFormat(PSDMimetype);
 }
 
 

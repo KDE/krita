@@ -16,7 +16,7 @@
 #include "kis_base_mask_generator.h"
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * Represent, serialize and deserialize a rectangular 8-bit mask.
@@ -36,14 +36,14 @@ public:
     void setSoftness(qreal softness) override;
 
     bool shouldVectorize() const override;
-    KisBrushMaskApplicatorBase* applicator() override;
-    void resetMaskApplicator(bool forceScalar);
+    KisBrushMaskApplicatorBase *applicator() const override;
+    void setMaskScalarApplicator();
 
 private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisRectangleMaskGenerator>;
+    friend struct FastRowProcessor<KisRectangleMaskGenerator>;
 };
 
 #endif

@@ -105,12 +105,14 @@ bool KisGaussRectangleMaskGenerator::shouldVectorize() const
     return !shouldSupersample() && spikes() == 2;
 }
 
-KisBrushMaskApplicatorBase* KisGaussRectangleMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisGaussRectangleMaskGenerator::applicator() const
 {
     return d->applicator.data();
 }
 
-void KisGaussRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisGaussRectangleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussRectangleMaskGenerator>>(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<
+            MaskApplicatorFactory<KisGaussRectangleMaskGenerator>>(this));
 }

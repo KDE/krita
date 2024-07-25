@@ -9,7 +9,6 @@
 #include "EllipseShapeConfigWidget.h"
 #include <KoShapeStroke.h>
 #include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoGradientBackground.h>
 #include <KoShapeLoadingContext.h>
 

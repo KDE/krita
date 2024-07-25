@@ -20,11 +20,15 @@ TabletTestDialog::TabletTestDialog(QWidget *parent)
     setMainWidget(page);
     setButtons(KoDialog::Close);
     qApp->installEventFilter(this);
+    // Hack to work around extreme lag w/ S Pen on Android. Unless the focus is set on the tablet tester itself, pen input will appear to lag.
+    m_ui->tablettest->setFocus();
 
     m_ui->logView->appendPlainText(
                 "## Legend:\n"
                 "# X,Y - event coordinate\n"
                 "# B - buttons pressed\n"
+                "# P - pressure\n"
+                "# TX,TY - tilt\n"
                 "# S - speed\n"
                 "\n");
 }

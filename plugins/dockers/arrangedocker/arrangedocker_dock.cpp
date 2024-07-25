@@ -67,7 +67,7 @@ void ArrangeDockerDock::unsetCanvas()
 
 void ArrangeDockerDock::slotToolChanged()
 {
-    KActionCollection *collection = m_canvas->viewManager()->actionCollection();
+    KisKActionCollection *collection = m_canvas->viewManager()->actionCollection();
     m_configWidget->setActionCollection(collection);
 }
 

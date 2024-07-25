@@ -29,7 +29,7 @@ public:
     KisDistanceInformation *dragDistance;
 
     /**
-     * The distance inforametion of the associated LodN
+     * The distance information of the associated LodN
      * stroke. Returns zero if LodN stroke has already finished
      * execution or does not exist.
      */

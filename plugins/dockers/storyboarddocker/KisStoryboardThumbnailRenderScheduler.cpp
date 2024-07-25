@@ -9,6 +9,9 @@
 #include "KisAsyncStoryboardThumbnailRenderer.h"
 #include "kis_paint_device.h"
 
+#include <KisLockFrameGenerationLock.h>
+#include <kis_image_animation_interface.h>
+
 KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QObject *parent)
     : QObject(parent)
     , m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
@@ -126,12 +129,17 @@ void KisStoryboardThumbnailRenderScheduler::renderNextFrame()
         return;
     }
 
+    if (m_image->animationInterface()->backgroundFrameGenerationBlocked()) {
+        return;
+    }
+
     KisImageSP image = m_image->clone(false);
     KIS_SAFE_ASSERT_RECOVER_RETURN(image);
 
     int frame = !m_changedFramesQueue.isEmpty() ? m_changedFramesQueue.takeFirst() : m_affectedFramesQueue.takeFirst();;
-    image->requestTimeSwitch(frame);
 
-    m_renderer->startFrameRegeneration(image, frame);
+    KisLockFrameGenerationLock lock(image->animationInterface());
+
+    m_renderer->startFrameRegeneration(image, frame, KisAsyncAnimationRendererBase::None, std::move(lock));
     m_currentFrame = frame;
 }

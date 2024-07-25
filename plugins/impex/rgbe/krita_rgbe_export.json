@@ -1,0 +1,13 @@
+{
+    "Icon": "",
+    "Id": "Krita RGBE Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/vnd.radiance",
+    "X-KDE-Library": "kritargbeexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": 1,
+    "X-KDE-Extensions" : "hdr"
+}

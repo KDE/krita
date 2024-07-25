@@ -1,0 +1,16 @@
+<svg width="90px" height="51px"
+     xmlns="http://www.w3.org/2000/svg" version="2.0">
+
+    <g id="test">
+
+        <!-- This is the actual bounding box Krita calculates for this line box-->
+        <rect id="boundingRect" x="6" y="5" width="78" height="41"
+            fill="none" stroke="red"/>
+
+        <text id="testRect" x="6" y="35"
+            font-family="Baseline Test" font-size="15" fill="blue" >道道<tspan alignment-baseline="ideographic" font-size="30">LL</tspan><tspan alignment-baseline="text-top" font-size="5">LL</tspan>
+        </text>
+
+    </g>
+
+</svg>

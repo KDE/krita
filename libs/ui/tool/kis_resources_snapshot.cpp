@@ -40,6 +40,7 @@ struct KisResourcesSnapshot::Private {
     qreal currentExposure {0.0};
     KisFilterConfigurationSP currentGenerator;
     KisNodeList selectedNodes;
+    bool isUsingOtherColor {false};
 
     QPointF axesCenter;
     bool mirrorMaskHorizontal {false};
@@ -75,9 +76,13 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->currentBgColor = resourceManager->resource(KoCanvasResource::BackgroundColor).value<KoColor>();
     m_d->currentPattern = resourceManager->resource(KoCanvasResource::CurrentPattern).value<KoPatternSP>();
     if (resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()) {
-        m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()
-                ->cloneAndBakeVariableColors(m_d->globalCanvasResourcesInterface);
+        m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+        if(m_d->currentGradient) {
+            m_d->currentGradient = resourceManager->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>()
+                    ->cloneAndBakeVariableColors(m_d->globalCanvasResourcesInterface);
+        }
     }
+    m_d->isUsingOtherColor = resourceManager->boolResource(KoCanvasResource::UsingOtherColor);
 
     /**
      * We should deep-copy the preset, so that long-running actions
@@ -87,7 +92,7 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     if (presetOverride) {
         /// we don't use global resource cache object in this case,
-        /// because the passet preset might be not the global one
+        /// because the passed preset might be not the global one
         m_d->currentPaintOpPreset =
             presetOverride->cloneWithResourcesSnapshot(
                 KisGlobalResourcesInterface::instance(),
@@ -148,10 +153,12 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
     m_d->strokeStyle = KisPainter::StrokeStyleBrush;
     m_d->fillStyle = KisPainter::FillStyleNone;
 
-    m_d->globalAlphaLock = resourceManager->resource(KoCanvasResource::GlobalAlphaLock).toBool();
+    // Erasing and alpha lock don't mix. If both are enabled, erasing takes priority.
+    m_d->globalAlphaLock = !resourceManager->resource(KoCanvasResource::EraserMode).toBool()
+            && resourceManager->resource(KoCanvasResource::GlobalAlphaLock).toBool();
     m_d->effectiveZoom = resourceManager->resource(KoCanvasResource::EffectiveZoom).toDouble();
 
-    m_d->presetAllowsLod = resourceManager->resource(KoCanvasResource::EffectiveLodAvailablility).toBool();
+    m_d->presetAllowsLod = resourceManager->resource(KoCanvasResource::EffectiveLodAvailability).toBool();
 }
 
 KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds)
@@ -194,8 +201,8 @@ KisResourcesSnapshot::~KisResourcesSnapshot()
 
 void KisResourcesSnapshot::setupPainter(KisPainter* painter)
 {
-    painter->setPaintColor(m_d->currentFgColor);
-    painter->setBackgroundColor(m_d->currentBgColor);
+    painter->setPaintColor(currentFgColor());
+    painter->setBackgroundColor(currentBgColor());
     painter->setGenerator(m_d->currentGenerator);
     painter->setPattern(m_d->currentPattern);
     painter->setGradient(m_d->currentGradient);
@@ -206,7 +213,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
     }
 
     painter->setOpacity(m_d->opacity);
-    painter->setCompositeOp(m_d->compositeOp);
+    painter->setCompositeOpId(m_d->compositeOpId);
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
     painter->setStrokeStyle(m_d->strokeStyle);
@@ -233,7 +240,7 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
     painter->setChannelFlags(QBitArray());
 
     // masked brush always paints in indirect mode
-    painter->setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+    painter->setCompositeOpId(COMPOSITE_ALPHA_DARKEN);
 
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
@@ -255,14 +262,6 @@ KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() co
 void KisResourcesSnapshot::setCurrentNode(KisNodeSP node)
 {
     m_d->currentNode = node;
-
-    KisPaintDeviceSP device;
-    if(m_d->currentNode && (device = m_d->currentNode->paintDevice())) {
-        m_d->compositeOp = device->colorSpace()->compositeOp(m_d->compositeOpId);
-        if(!m_d->compositeOp) {
-            m_d->compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
-        }
-    }
 }
 
 void KisResourcesSnapshot::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
@@ -324,7 +323,7 @@ KisSelectionSP KisResourcesSnapshot::activeSelection() const
 
     KisSelectionSP selection = m_d->image ? m_d->image->globalSelection() : 0;
 
-    KisLayerSP layer = qobject_cast<KisLayer*>(m_d->currentNode.data());
+    KisLayerSP layer;
     KisSelectionMaskSP mask;
     if((layer = qobject_cast<KisLayer*>(m_d->currentNode.data()))) {
          selection = layer->selection();
@@ -368,11 +367,6 @@ quint8 KisResourcesSnapshot::opacity() const
     return m_d->opacity;
 }
 
-const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
-{
-    return m_d->compositeOp;
-}
-
 QString KisResourcesSnapshot::compositeOpId() const
 {
     return m_d->compositeOpId;
@@ -385,12 +379,22 @@ KoPatternSP KisResourcesSnapshot::currentPattern() const
 
 KoColor KisResourcesSnapshot::currentFgColor() const
 {
-    return m_d->currentFgColor;
+    if (m_d->isUsingOtherColor) {
+        // temporarily swap colors if requested by user
+        return m_d->currentBgColor;
+    } else {
+        return m_d->currentFgColor;
+    }
 }
 
 KoColor KisResourcesSnapshot::currentBgColor() const
 {
-    return m_d->currentBgColor;
+    if (m_d->isUsingOtherColor) {
+        // temporarily swap colors if requested by user
+        return m_d->currentFgColor;
+    } else {
+        return m_d->currentBgColor;
+    }
 }
 
 KisPaintOpPresetSP KisResourcesSnapshot::currentPaintOpPreset() const
@@ -406,6 +410,16 @@ QTransform KisResourcesSnapshot::fillTransform() const
 KoAbstractGradientSP KisResourcesSnapshot::currentGradient() const
 {
     return m_d->currentGradient;
+}
+
+KisFilterConfigurationSP KisResourcesSnapshot::currentGenerator() const
+{
+    return m_d->currentGenerator;
+}
+
+bool KisResourcesSnapshot::isUsingOtherColor() const
+{
+    return m_d->isUsingOtherColor;
 }
 
 QBitArray KisResourcesSnapshot::channelLockFlags() const

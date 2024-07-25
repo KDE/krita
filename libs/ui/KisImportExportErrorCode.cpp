@@ -136,7 +136,7 @@ bool KisImportExportErrorCode::isInternalError() const
 
 QString KisImportExportErrorCode::errorMessage() const
 {
-    QString internal = i18n("Unexpected error. Please contact developers.");
+    QString internal = i18n("Unexpected error.");
     if (errorFieldUsed == CannotRead) {
         return cannotRead.errorMessage();
     } else if (errorFieldUsed == CannotWrite) {
@@ -178,7 +178,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("Unknown error.");
             case ImportExportCodes::InternalError:
                 return internal;
-
+            case ImportExportCodes::Busy:
+                return i18n("Image is busy.");
             // OK
             case ImportExportCodes::OK:
                 return i18n("The action has been completed successfully.");
@@ -205,25 +206,3 @@ bool KisImportExportErrorCode::operator==(KisImportExportErrorCode errorCode)
     }
     return cannotWrite == errorCode.cannotWrite;
 }
-
-
-QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode)
-{
-    switch(errorCode.errorFieldUsed) {
-    case KisImportExportErrorCode::None:
-            d << "None of the error fields is in use.";
-        break;
-    case KisImportExportErrorCode::CannotRead:
-            d << "Cannot read: " << errorCode.cannotRead.m_error;
-        break;
-    case KisImportExportErrorCode::CannotWrite:
-        d << "Cannot write: " << errorCode.cannotRead.m_error;
-        break;
-    case KisImportExportErrorCode::CodeId:
-        d << "Error code = " << errorCode.codeId;
-    }
-    d << " " << errorCode.errorMessage();
-    return d;
-}
-
-

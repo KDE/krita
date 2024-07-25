@@ -58,6 +58,13 @@ public:
     QPoint documentOffset() const;
     qreal rotationAngle() const;
 
+    // Use the begin/end interface to rotate the canvas in one transformation.
+    // This method is more accurate and doesn't amplify numerical errors from very small angles.
+    void beginRotation();
+    void endRotation();
+
+    void enableNatureGestureFlag();
+
     QPoint rotate(QPointF center, qreal angle);
     QPoint mirror(QPointF center, bool mirrorXAxis, bool mirrorYAxis);
     bool xAxisMirrored() const;
@@ -117,7 +124,7 @@ public:
 
     void getQPainterCheckersInfo(QTransform *transform,
                                  QPointF *brushOrigin,
-                                 QPolygonF *poligon,
+                                 QPolygonF *polygon,
                                  const bool scrollCheckers) const;
 
     void getOpenGLCheckersInfo(const QRectF &viewportRect,

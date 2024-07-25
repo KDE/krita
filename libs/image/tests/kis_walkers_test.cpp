@@ -25,7 +25,7 @@
 #include "filter/kis_filter_registry.h"
 #include "kis_filter_mask.h"
 #include "kis_transparency_mask.h"
-#include <sdk/tests/testimage.h>
+#include <testimage.h>
 
 //#define DEBUG_VISITORS
 
@@ -803,7 +803,7 @@ void KisWalkersTest::testFullRefreshVisiting()
 
         reportStartWith("root");
         walker.collectRects(groupLayer, testRect);
-        verifyResult(walker, orderList, accessRect, false, true);
+        verifyResult(walker, orderList, accessRect, true, true);
     }
 }
 

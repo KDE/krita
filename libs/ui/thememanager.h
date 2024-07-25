@@ -25,7 +25,7 @@
 
 #include <ksharedconfig.h>
 
-class KActionCollection;
+class KisKActionCollection;
 class KActionMenu;
 
 namespace Digikam
@@ -50,7 +50,7 @@ public:
     void    setCurrentTheme(const QString& name);
 
     void    setThemeMenuAction(KActionMenu* const action);
-    void    registerThemeActions(KActionCollection *actionCollection);
+    void    registerThemeActions(KisKActionCollection *actionCollection);
 
 Q_SIGNALS:
 

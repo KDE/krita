@@ -36,21 +36,21 @@
 
 Q_DECLARE_METATYPE(QList<QKeySequence>)
 
-using namespace KXMLGUI;
+using namespace KisKXMLGUI;
 
-class KXMLGUIFactoryPrivate : public BuildState
+class KisKXMLGUIFactoryPrivate : public BuildState
 {
 public:
     enum ShortcutOption { SetActiveShortcut = 1, SetDefaultShortcut = 2};
 
-    KXMLGUIFactoryPrivate()
+    KisKXMLGUIFactoryPrivate()
     {
         m_rootNode = new ContainerNode(0L, QString(), QString());
         m_defaultMergingName = QStringLiteral("<default>");
         tagActionList = QStringLiteral("actionlist");
         attrName = QStringLiteral("name");
     }
-    ~KXMLGUIFactoryPrivate()
+    ~KisKXMLGUIFactoryPrivate()
     {
         delete m_rootNode;
     }
@@ -70,17 +70,17 @@ public:
         return m_stateStack.isEmpty();
     }
 
-    QWidget *findRecursive(KXMLGUI::ContainerNode *node, bool tag);
-    QList<QWidget *> findRecursive(KXMLGUI::ContainerNode *node, const QString &tagName);
+    QWidget *findRecursive(KisKXMLGUI::ContainerNode *node, bool tag);
+    QList<QWidget *> findRecursive(KisKXMLGUI::ContainerNode *node, const QString &tagName);
     void applyActionProperties(const QDomElement &element,
-                               ShortcutOption shortcutOption = KXMLGUIFactoryPrivate::SetActiveShortcut);
+                               ShortcutOption shortcutOption = KisKXMLGUIFactoryPrivate::SetActiveShortcut);
     void configureAction(QAction *action, const QDomNamedNodeMap &attributes,
-                         ShortcutOption shortcutOption = KXMLGUIFactoryPrivate::SetActiveShortcut);
+                         ShortcutOption shortcutOption = KisKXMLGUIFactoryPrivate::SetActiveShortcut);
     void configureAction(QAction *action, const QDomAttr &attribute,
-                         ShortcutOption shortcutOption = KXMLGUIFactoryPrivate::SetActiveShortcut);
+                         ShortcutOption shortcutOption = KisKXMLGUIFactoryPrivate::SetActiveShortcut);
 
 
-    void refreshActionProperties(KXMLGUIClient *client, const QList<QAction *> &actions, const QDomDocument &doc);
+    void refreshActionProperties(KisKXMLGUIClient *client, const QList<QAction *> &actions, const QDomDocument &doc);
     void saveDefaultActionProperties(const QList<QAction *> &actions);
 
     ContainerNode *m_rootNode;
@@ -95,7 +95,7 @@ public:
     /*
      * List of all clients
      */
-    QList<KXMLGUIClient *> m_clients;
+    QList<KisKXMLGUIClient *> m_clients;
 
     QString tagActionList;
 
@@ -104,7 +104,7 @@ public:
     BuildStateStack m_stateStack;
 };
 
-QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_componentName)
+QString KisKXMLGUIFactory::readConfigFile(const QString &filename, const QString &_componentName)
 {
     QString componentName = _componentName.isEmpty() ? QCoreApplication::applicationName() : _componentName;
     QString xml_file;
@@ -112,7 +112,7 @@ QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_
     if (!QDir::isRelativePath(filename)) {
         xml_file = filename;
     } else {
-        // KF >= 5.1 (KXMLGUI_INSTALL_DIR)
+        // KF >= 5.1 (KisKXMLGUI_INSTALL_DIR)
         xml_file = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("kxmlgui5/") + componentName + QLatin1Char('/') + filename);
         if (!QFile::exists(xml_file)) {
             // KF >= 5.4 (resource file)
@@ -135,7 +135,7 @@ QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_
         }
 
         if (warn) {
-            qWarning() << "kxmlguifactory: KXMLGUI file found at deprecated location" << xml_file << "-- please use ${KXMLGUI_INSTALL_DIR} to install these files instead.";
+            qWarning() << "kxmlguifactory: KisKXMLGUI file found at deprecated location" << xml_file << "-- please use ${KisKXMLGUI_INSTALL_DIR} to install these files instead.";
         }
     }
 
@@ -149,7 +149,7 @@ QString KXMLGUIFactory::readConfigFile(const QString &filename, const QString &_
     return QString::fromUtf8(buffer.constData(), buffer.size());
 }
 
-bool KXMLGUIFactory::saveConfigFile(const QDomDocument &doc,
+bool KisKXMLGUIFactory::saveConfigFile(const QDomDocument &doc,
                                     const QString &filename, const QString &_componentName)
 {
     QString componentName = _componentName.isEmpty() ? QCoreApplication::applicationName() : _componentName;
@@ -196,8 +196,8 @@ static void removeDOMComments(QDomNode &node)
     }
 }*/
 
-KXMLGUIFactory::KXMLGUIFactory(KXMLGUIBuilder *builder, QObject *parent)
-    : QObject(parent), d(new KXMLGUIFactoryPrivate)
+KisKXMLGUIFactory::KisKXMLGUIFactory(KisKXMLGUIBuilder *builder, QObject *parent)
+    : QObject(parent), d(new KisKXMLGUIFactoryPrivate)
 {
     d->builder = builder;
     d->guiClient = 0;
@@ -207,15 +207,15 @@ KXMLGUIFactory::KXMLGUIFactory(KXMLGUIBuilder *builder, QObject *parent)
     }
 }
 
-KXMLGUIFactory::~KXMLGUIFactory()
+KisKXMLGUIFactory::~KisKXMLGUIFactory()
 {
-    Q_FOREACH (KXMLGUIClient *client, d->m_clients) {
+    Q_FOREACH (KisKXMLGUIClient *client, d->m_clients) {
         client->setFactory(0L);
     }
     delete d;
 }
 
-void KXMLGUIFactory::addClient(KXMLGUIClient *client)
+void KisKXMLGUIFactory::addClient(KisKXMLGUIClient *client)
 {
     debugWidgetUtils << client;
     if (client->factory()) {
@@ -299,7 +299,7 @@ void KXMLGUIFactory::addClient(KXMLGUIClient *client)
     emit clientAdded(client);
 
     // build child clients
-    Q_FOREACH (KXMLGUIClient *child, client->childClients()) {
+    Q_FOREACH (KisKXMLGUIClient *child, client->childClients()) {
         addClient(child);
     }
 
@@ -308,7 +308,7 @@ void KXMLGUIFactory::addClient(KXMLGUIClient *client)
     }
     /*
         QString unaddedActions;
-        Q_FOREACH (KActionCollection* ac, KActionCollection::allCollections())
+        Q_FOREACH (KisKActionCollection* ac, KisKActionCollection::allCollections())
           Q_FOREACH (QAction* action, ac->actions())
             if (action->associatedWidgets().isEmpty())
               unaddedActions += action->objectName() + ' ';
@@ -333,7 +333,7 @@ static QDomElement findActionPropertiesElement(const QDomDocument &doc)
     return QDomElement();
 }
 
-void KXMLGUIFactoryPrivate::refreshActionProperties(KXMLGUIClient *client, const QList<QAction *> &actions, const QDomDocument &doc)
+void KisKXMLGUIFactoryPrivate::refreshActionProperties(KisKXMLGUIClient *client, const QList<QAction *> &actions, const QDomDocument &doc)
 {
     // These were used for applyShortcutScheme() but not for applyActionProperties()??
     Q_UNUSED(client);
@@ -347,7 +347,7 @@ void KXMLGUIFactoryPrivate::refreshActionProperties(KXMLGUIClient *client, const
     }
 }
 
-void KXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &actions)
+void KisKXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &actions)
 {
     // This method is called every time the user activated a new
     // kxmlguiclient. We only want to execute the following code only once in
@@ -373,12 +373,12 @@ void KXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &
     }
 }
 
-void KXMLGUIFactory::forgetClient(KXMLGUIClient *client)
+void KisKXMLGUIFactory::forgetClient(KisKXMLGUIClient *client)
 {
     d->m_clients.removeAll(client);
 }
 
-void KXMLGUIFactory::removeClient(KXMLGUIClient *client)
+void KisKXMLGUIFactory::removeClient(KisKXMLGUIClient *client)
 {
     //qDebug(260) << client;
 
@@ -396,8 +396,8 @@ void KXMLGUIFactory::removeClient(KXMLGUIClient *client)
 
     // remove child clients first (create a copy of the list just in case the
     // original list is modified directly or indirectly in removeClient())
-    const QList<KXMLGUIClient *> childClients(client->childClients());
-    Q_FOREACH (KXMLGUIClient *child, childClients) {
+    const QList<KisKXMLGUIClient *> childClients(client->childClients());
+    Q_FOREACH (KisKXMLGUIClient *child, childClients) {
         removeClient(child);
     }
 
@@ -439,12 +439,12 @@ void KXMLGUIFactory::removeClient(KXMLGUIClient *client)
     emit clientRemoved(client);
 }
 
-QList<KXMLGUIClient *> KXMLGUIFactory::clients() const
+QList<KisKXMLGUIClient *> KisKXMLGUIFactory::clients() const
 {
     return d->m_clients;
 }
 
-QWidget *KXMLGUIFactory::container(const QString &containerName, KXMLGUIClient *client,
+QWidget *KisKXMLGUIFactory::container(const QString &containerName, KisKXMLGUIClient *client,
                                    bool useTagName)
 {
     d->pushState();
@@ -461,19 +461,19 @@ QWidget *KXMLGUIFactory::container(const QString &containerName, KXMLGUIClient *
     return result;
 }
 
-QList<QWidget *> KXMLGUIFactory::containers(const QString &tagName)
+QList<QWidget *> KisKXMLGUIFactory::containers(const QString &tagName)
 {
     return d->findRecursive(d->m_rootNode, tagName);
 }
 
-void KXMLGUIFactory::reset()
+void KisKXMLGUIFactory::reset()
 {
     d->m_rootNode->reset();
 
     d->m_rootNode->clearChildren();
 }
 
-void KXMLGUIFactory::resetContainer(const QString &containerName, bool useTagName)
+void KisKXMLGUIFactory::resetContainer(const QString &containerName, bool useTagName)
 {
     if (containerName.isEmpty()) {
         return;
@@ -495,7 +495,7 @@ void KXMLGUIFactory::resetContainer(const QString &containerName, bool useTagNam
     parent->removeChild(container);
 }
 
-QWidget *KXMLGUIFactoryPrivate::findRecursive(KXMLGUI::ContainerNode *node, bool tag)
+QWidget *KisKXMLGUIFactoryPrivate::findRecursive(KisKXMLGUI::ContainerNode *node, bool tag)
 {
     if (((!tag && node->name == m_containerName) ||
             (tag && node->tagName == m_containerName)) &&
@@ -523,7 +523,7 @@ static inline bool equals(const QString &str1, const QString &str2)
     return str1.compare(str2, Qt::CaseInsensitive) == 0;
 }
 
-QList<QWidget *> KXMLGUIFactoryPrivate::findRecursive(KXMLGUI::ContainerNode *node,
+QList<QWidget *> KisKXMLGUIFactoryPrivate::findRecursive(KisKXMLGUI::ContainerNode *node,
         const QString &tagName)
 {
     QList<QWidget *> res;
@@ -532,14 +532,14 @@ QList<QWidget *> KXMLGUIFactoryPrivate::findRecursive(KXMLGUI::ContainerNode *no
         res.append(node->container);
     }
 
-    Q_FOREACH (KXMLGUI::ContainerNode *child, node->children) {
+    Q_FOREACH (KisKXMLGUI::ContainerNode *child, node->children) {
         res << findRecursive(child, tagName);
     }
 
     return res;
 }
 
-void KXMLGUIFactory::plugActionList(KXMLGUIClient *client, const QString &name,
+void KisKXMLGUIFactory::plugActionList(KisKXMLGUIClient *client, const QString &name,
                                     const QList<QAction *> &actionList)
 {
     d->pushState();
@@ -558,7 +558,7 @@ void KXMLGUIFactory::plugActionList(KXMLGUIClient *client, const QString &name,
     d->popState();
 }
 
-void KXMLGUIFactory::unplugActionList(KXMLGUIClient *client, const QString &name)
+void KisKXMLGUIFactory::unplugActionList(KisKXMLGUIClient *client, const QString &name)
 {
     d->pushState();
     d->guiClient = client;
@@ -571,7 +571,7 @@ void KXMLGUIFactory::unplugActionList(KXMLGUIClient *client, const QString &name
     d->popState();
 }
 
-void KXMLGUIFactoryPrivate::applyActionProperties(const QDomElement &actionPropElement,
+void KisKXMLGUIFactoryPrivate::applyActionProperties(const QDomElement &actionPropElement,
         ShortcutOption shortcutOption)
 {
     for (QDomElement e = actionPropElement.firstChildElement();
@@ -589,7 +589,7 @@ void KXMLGUIFactoryPrivate::applyActionProperties(const QDomElement &actionPropE
     }
 }
 
-void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomNamedNodeMap &attributes,
+void KisKXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomNamedNodeMap &attributes,
         ShortcutOption shortcutOption)
 {
     for (int i = 0; i < attributes.length(); i++) {
@@ -602,7 +602,7 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomNamedNode
     }
 }
 
-void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &attribute,
+void KisKXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &attribute,
         ShortcutOption shortcutOption)
 {
     QString attrName = attribute.name();
@@ -634,7 +634,7 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &att
         // Setting the shortcut by property also sets the default shortcut
         // (which is incorrect), so we have to do it directly
         action->setShortcuts(QKeySequence::listFromString(attribute.value()));
-        if (shortcutOption & KXMLGUIFactoryPrivate::SetDefaultShortcut) {
+        if (shortcutOption & KisKXMLGUIFactoryPrivate::SetDefaultShortcut) {
             action->setProperty("defaultShortcuts",
                                 QVariant::fromValue(QKeySequence::listFromString(attribute.value())));
         }
@@ -647,7 +647,7 @@ void KXMLGUIFactoryPrivate::configureAction(QAction *action, const QDomAttr &att
 }
 
 // Find or create
-QDomElement KXMLGUIFactory::actionPropertiesElement(QDomDocument &doc)
+QDomElement KisKXMLGUIFactory::actionPropertiesElement(QDomDocument &doc)
 {
     // first, lets see if we have existing properties
     QDomElement elem = findActionPropertiesElement(doc);
@@ -660,7 +660,7 @@ QDomElement KXMLGUIFactory::actionPropertiesElement(QDomDocument &doc)
     return elem;
 }
 
-QDomElement KXMLGUIFactory::findActionByName(QDomElement &elem, const QString &sName, bool create)
+QDomElement KisKXMLGUIFactory::findActionByName(QDomElement &elem, const QString &sName, bool create)
 {
     const QLatin1String attrName("name");
     for (QDomNode it = elem.firstChild(); !it.isNull(); it = it.nextSibling()) {

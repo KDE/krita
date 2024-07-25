@@ -6,15 +6,16 @@
 
 #include "kis_random_source.h"
 
+#include <boost/random/normal_distribution.hpp>
 #include <boost/random/taus88.hpp>
 #include <boost/random/uniform_smallint.hpp>
-#include <boost/random/normal_distribution.hpp>
 
+#include <QRandomGenerator>
 
 struct KisRandomSource::Private
 {
     Private()
-        : uniformSource(qrand()) {}
+        : uniformSource(QRandomGenerator::global()->generate()) {}
 
     Private(int seed)
         : uniformSource(seed) {}

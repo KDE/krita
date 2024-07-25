@@ -573,7 +573,7 @@ const uint16_t PrintImageMatching = 0xc4a5;
  */
 const uint16_t DNGVersion = 0xc612;
 /**
- * This tag specifies the oldest version of the Digital Negative specification for which a file is compatible. Readers shouldnot attempt to read a file if this
+ * This tag specifies the oldest version of the Digital Negative specification for which a file is compatible. Readers should not attempt to read a file if this
  * tag specifies a version number that is higher than the version number of the specification the reader was based on.  In addition to checking the version
  * tags, readers should, for all tags, check the types, counts, and values, to verify it is able to correctly read the file.
  */
@@ -1114,7 +1114,7 @@ const uint16_t SemanticName = 0xcd2e;
  */
 const uint16_t SemanticInstanceID = 0xcd30;
 /**
- * The illuminant used for an optional thrid set of color calibration tags (ColorMatrix3, CameraCalibration3, ReductionMatrix3). The legal values for this tag
+ * The illuminant used for an optional third set of color calibration tags (ColorMatrix3, CameraCalibration3, ReductionMatrix3). The legal values for this tag
  * are the same as the legal values for the LightSource EXIF tag; CalibrationIlluminant1 and CalibrationIlluminant2 must also be present. If set to 255 (Other),
  * then the IFD must also include a IlluminantData3 tag to specify the x-y chromaticity or spectral power distribution function for this illuminant.
  */

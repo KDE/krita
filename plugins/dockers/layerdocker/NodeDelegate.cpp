@@ -49,8 +49,13 @@ public:
     QPointer<QWidget> edit;
     NodeToolTip tip;
 
+    QImage checkers;
     QColor checkersColor1;
     QColor checkersColor2;
+
+    QRect thumbnailGeometry;
+    int thumbnailSize {-1};
+    int rowHeight {-1};
 
     QList<QModelIndex> shiftClickedIndexes;
 
@@ -100,9 +105,11 @@ NodeDelegate::~NodeDelegate()
 
 QSize NodeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    Q_UNUSED(index);
     KisNodeViewColorScheme scm;
-    return QSize(option.rect.width(), scm.rowHeight());
+    if (index.column() == NodeView::VISIBILITY_COL) {
+        return QSize(scm.visibilityColumnWidth(), d->rowHeight);
+    }
+    return QSize(option.rect.width(), d->rowHeight);
 }
 
 void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
@@ -119,51 +126,46 @@ void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QMode
             option.state &= ~QStyle::State_Enabled;
         }
 
-        p->setFont(option.font);
-        drawColorLabel(p, option, index);
         drawFrame(p, option, index);
-        drawThumbnail(p, option, index);
-        drawText(p, option, index); // BUG: Creating group moves things around (RTL-layout alignment)
-        drawIcons(p, option, index);
-        drawVisibilityIconHijack(p, option, index); // TODO hide when dragging
-        drawDecoration(p, option, index);
-        drawExpandButton(p, option, index);
-        drawAnimatedDecoration(p, option, index);
-        drawBranch(p, option, index);
 
-        drawProgressBar(p, option, index);
+        if (index.column() == NodeView::SELECTED_COL) {
+            drawSelectedButton(p, o, index, style);
+        } else if (index.column() == NodeView::VISIBILITY_COL) {
+            drawVisibilityIcon(p, option, index); // TODO hide when dragging
+        } else {
+            p->setFont(option.font);
+            drawColorLabel(p, option, index);
+            drawThumbnail(p, option, index);
+            drawText(p, option, index); // BUG: Creating group moves things around (RTL-layout alignment)
+            drawIcons(p, option, index);
+            drawDecoration(p, option, index);
+            drawExpandButton(p, option, index);
+            drawAnimatedDecoration(p, option, index);
+
+            drawProgressBar(p, option, index);
+        }
     }
     p->restore();
 }
 
-void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawBranches(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    p->save();
+    drawFrame(p, option, index);
+    p->restore();
+
     QModelIndex tmp = index.parent();
 
     // there is no indentation if we have no parent group, so don't draw a branch
     if (!tmp.isValid()) return;
 
-    KisNodeViewColorScheme scm;
+    const KisNodeViewColorScheme &scm = *KisNodeViewColorScheme::instance();
 
     int rtlNum = (option.direction == Qt::RightToLeft) ? 1 : -1;
+    QPoint nodeCorner = (option.direction == Qt::RightToLeft) ? option.rect.topLeft() : option.rect.topRight();
+    int branchSpacing = rtlNum * d->view->indentation();
 
-    QRect baseRect = scm.relThumbnailRect();
-
-    // Move to current index
-    baseRect.moveTop(option.rect.topLeft().y());
-    // Move to correct location.
-    if (option.direction == Qt::RightToLeft) {
-        baseRect.moveLeft(option.rect.topRight().x());
-    } else {
-        baseRect.moveRight(option.rect.topLeft().x());
-    }
-
-    QPoint base = baseRect.adjusted(rtlNum*scm.indentation(), 0,
-                                    rtlNum*scm.indentation(), 0).center() + QPoint(0, scm.iconSize()/4);
-
-    QPen oldPen = p->pen();
-    const qreal oldOpacity = p->opacity(); // remember previous opacity
-    p->setOpacity(1.0);
+    QPoint base = nodeCorner + 0.5 * QPoint(branchSpacing, option.rect.height()) + QPoint(0, scm.iconSize()/4);
 
     QColor color = scm.gridColor(option, d->view);
     QColor bgColor = option.state & QStyle::State_Selected ?
@@ -175,33 +177,35 @@ void NodeDelegate::drawBranch(QPainter *p, const QStyleOptionViewItem &option, c
     // p->setPen(QPen(p->pen().color(), 2, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
     p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-    QPoint p2 = base - QPoint(rtlNum*(scm.iconSize()/2), 0);
+    QPoint p2 = base - QPoint(rtlNum*(qMin(d->view->indentation(), scm.iconSize())/2), 0);
     QPoint p3 = base - QPoint(0, scm.iconSize()/2);
     p->drawLine(base, p2);
     p->drawLine(base, p3);
 
-     // draw parent lines (keep drawing until x position is less than 0
-     QPoint parentBase1 = base + QPoint(rtlNum*scm.indentation(), 0);
-     QPoint parentBase2 = p3 + QPoint(rtlNum*scm.indentation(), 0);
+    // draw parent lines (keep drawing until x position is less than 0
+    QPoint parentBase1 = base + QPoint(branchSpacing, 0);
+    QPoint parentBase2 = p3 + QPoint(branchSpacing, 0);
 
-     // indent lines needs to be very subtle to avoid making the docker busy looking
-     color = KisPaintingTweaks::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
-     p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    // indent lines needs to be very subtle to avoid making the docker busy looking
+    color = KisPaintingTweaks::blendColors(color, bgColor, 0.9); // makes it a little lighter than L lines
+    p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-     if (tmp.isValid()) {
-         tmp = tmp.parent(); // Ignore the first group as it was already painted
-     }
-     while (tmp.isValid()) {
-         p->drawLine(parentBase1, parentBase2);
 
-         parentBase1 += QPoint(rtlNum*scm.indentation(), 0);
-         parentBase2 += QPoint(rtlNum*scm.indentation(), 0);
+    int levelRowIndex = tmp.row();
+    tmp = tmp.parent(); // Ignore the first group as it was already painted
 
-         tmp = tmp.parent();
-     }
+    while (tmp.isValid()) {
+        bool moreSiblings = index.model()->rowCount(tmp) > (levelRowIndex + 1);
+        if (moreSiblings) {
+            p->drawLine(parentBase1, parentBase2);
+        }
 
-     p->setPen(oldPen);
-     p->setOpacity(oldOpacity);
+        parentBase1 += QPoint(branchSpacing, 0);
+        parentBase2 += QPoint(branchSpacing, 0);
+
+        levelRowIndex = tmp.row();
+        tmp = tmp.parent();
+    }
 }
 
 void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -212,22 +216,9 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
-    if ((option.state & QStyle::State_MouseOver) && !(option.state & QStyle::State_Selected)) {
-        color = KisPaintingTweaks::blendColors(color, bgColor, 0.6);
-    } else {
-        color = KisPaintingTweaks::blendColors(color, bgColor, 0.3);
-    }
+    color = KisPaintingTweaks::blendColors(color, bgColor, 0.3);
 
-    QRect optionRect = option.rect.adjusted(0, 0, scm.indentation(), 0);
-    if (option.state & QStyle::State_Selected) {
-        optionRect = iconsRect(option, index);
-    }
-
-    if (option.direction == Qt::RightToLeft) {
-        optionRect.moveLeft(option.rect.topLeft().x());
-    } else {
-        optionRect.moveRight(option.rect.topRight().x());
-    }
+    QRect optionRect = (option.state & QStyle::State_Selected) ? iconsRect(option, index) : option.rect;
 
     p->fillRect(optionRect, color);
 }
@@ -273,17 +264,16 @@ void NodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, co
 QRect NodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
-    KisNodeViewColorScheme scm;
 
-    QRect rc = scm.relThumbnailRect();
+    QRect rc = d->thumbnailGeometry;
 
     // Move to current index
     rc.moveTop(option.rect.topLeft().y());
     // Move to correct location.
     if (option.direction == Qt::RightToLeft) {
-        rc.moveLeft(option.rect.topRight().x());
+        rc.moveRight(option.rect.right());
     } else {
-        rc.moveRight(option.rect.topLeft().x());
+        rc.moveLeft(option.rect.left());
     }
 
     return rc;
@@ -293,9 +283,8 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
 {
     KisNodeViewColorScheme scm;
 
-    const int thumbSize = scm.thumbnailSize();
     const qreal devicePixelRatio = p->device()->devicePixelRatioF();
-    const int thumbSizeHighRes = thumbSize*devicePixelRatio;
+    const int thumbSizeHighRes = d->thumbnailSize*devicePixelRatio;
 
     const qreal oldOpacity = p->opacity(); // remember previous opacity
 
@@ -304,16 +293,6 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     if (!(option.state & QStyle::State_Enabled)) {
         p->setOpacity(0.35);
     }
-
-    // paint in a checkerboard pattern behind the layer contents to represent transparent
-    const int step = scm.thumbnailSize() / 6;
-    QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
-    QPainter gc(&checkers);
-    gc.fillRect(QRect(0, 0, step, step), d->checkersColor1);
-    gc.fillRect(QRect(step, 0, step, step), d->checkersColor2);
-    gc.fillRect(QRect(step, step, step, step), d->checkersColor1);
-    gc.fillRect(QRect(0, step, step, step), d->checkersColor2);
-
 
     QRect fitRect = thumbnailClickRect(option, index);
     // Shrink to icon rect
@@ -324,7 +303,7 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     offset.setY((fitRect.height() - img.height()/devicePixelRatio) / 2);
     offset += fitRect.topLeft();
 
-    QBrush brush(checkers);
+    QBrush brush(d->checkers);
     p->setBrushOrigin(offset);
     QRect imageRectLowRes = QRect(img.rect().topLeft(), img.rect().size()/devicePixelRatio);
     p->fillRect(imageRectLowRes.translated(offset), brush);
@@ -346,8 +325,7 @@ QRect NodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QModelIn
         propCount * (scm.iconSize() + 2 * scm.iconMargin()) +
         (propCount + 1) * scm.border();
 
-    QRect fitRect = QRect(0, 0,
-                          iconsWidth, scm.rowHeight() - scm.border());
+    QRect fitRect = QRect(0, 0, iconsWidth, d->rowHeight - scm.border());
     // Move to current index
     fitRect.moveTop(option.rect.topLeft().y());
     // Move to correct location.
@@ -399,7 +377,51 @@ void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, con
 
     const QString text = index.data(Qt::DisplayRole).toString();
     const QString elided = p->fontMetrics().elidedText(text, Qt::ElideRight, rc.width());
-    p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
+    KisConfig cfg(true);
+    if (cfg.layerInfoTextStyle() == KisConfig::LayerInfoTextStyle::INFOTEXT_NONE) {
+        p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
+    }
+    else {
+        const QString infoText = index.data(KisNodeModel::InfoTextRole).toString();
+        if (infoText.isEmpty()) {
+            p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
+        } else {
+            bool useOneLine = cfg.useInlineLayerInfoText();
+            if (!useOneLine) {
+                // check whether there is enough space for two lines
+                const int textHeight = p->fontMetrics().height();
+                useOneLine = rc.height() < textHeight*2;
+            }
+
+            const int rectCenter = rc.height()/2;
+            const int nameWidth = p->fontMetrics().horizontalAdvance(elided);
+            // draw the layer name
+            if (!useOneLine) {
+                // enforce Qt::TextSingleLine because we are adding a line below it
+                p->drawText(rc.adjusted(0, 0, 0, -rectCenter), Qt::AlignLeft | Qt::AlignBottom | Qt::TextSingleLine, elided);
+            }
+            else {
+                p->drawText(rc.adjusted(0, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, elided);
+            }
+            // draw the info-text
+            p->save();
+            QFont layerInfoTextFont = p->font();
+            layerInfoTextFont.setBold(false);
+            p->setFont(layerInfoTextFont);
+            if (option.state & QStyle::State_Enabled) {
+                p->setOpacity(qreal(cfg.layerInfoTextOpacity())/100);
+            }
+            if (!useOneLine) {
+                const QString infoTextElided = p->fontMetrics().elidedText(infoText, Qt::ElideRight, rc.width());
+                p->drawText(rc.adjusted(0, rectCenter, 0, 0), Qt::AlignLeft | Qt::AlignTop, infoTextElided);
+            }
+            else {
+                const QString infoTextElided = p->fontMetrics().elidedText(" "+infoText, Qt::ElideRight, rc.width()-nameWidth);
+                p->drawText(rc.adjusted(nameWidth, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, infoTextElided);
+            }
+            p->restore();
+        }
+    }
 
     p->setPen(oldPen); // restore pen settings
     p->setOpacity(oldOpacity);
@@ -699,7 +721,7 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
     p->setPen(scm.gridColor(option, d->view));
 
     int x = 0;
-    const int y = (scm.rowHeight() - scm.border() - scm.iconSize()) / 2;
+    const int y = (d->rowHeight - scm.border() - scm.iconSize()) / 2;
     KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QList<OptionalProperty> realProps = d->rightmostProperties(props);
 
@@ -739,16 +761,15 @@ QRect NodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, cons
     KisNodeViewColorScheme scm;
 
     QRect rc = scm.relVisibilityRect();
-    rc.setHeight(scm.rowHeight());
+    rc.setHeight(d->rowHeight);
 
     // Move to current index
     rc.moveCenter(option.rect.center());
     // Move to correct location.
     if (option.direction == Qt::RightToLeft) {
-        // HACK: Without the -5, the right edge is outside the view
-        rc.moveRight(d->view->width()-5);
+        rc.moveRight(option.rect.right());
     } else {
-        rc.moveLeft(0);
+        rc.moveLeft(option.rect.left());
     }
 
     return rc;
@@ -763,26 +784,19 @@ QRect NodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, cons
 
     // Move to current index
     rc.moveTop(option.rect.topLeft().y());
-    rc.setHeight(scm.rowHeight());
+    rc.setHeight(d->rowHeight);
     // Move to correct location.
     if (option.direction == Qt::RightToLeft) {
-        rc.moveRight(option.rect.topRight().x());
+        rc.moveRight(option.rect.right() - d->thumbnailGeometry.width());
     } else {
-        rc.moveLeft(option.rect.topLeft().x());
+        rc.moveLeft(option.rect.left() + d->thumbnailGeometry.width());
     }
 
     return rc;
 }
 
-void NodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void NodeDelegate::drawVisibilityIcon(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    /**
-     * Small hack Alert:
-     *
-     * Here wepaint over the area that sits basically outside our layer's
-     * row. Anyway, just update it later...
-     */
-
     KisNodeViewColorScheme scm;
 
     KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
@@ -791,7 +805,7 @@ void NodeDelegate::drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewI
 
     QRect fitRect = visibilityClickRect(option, index);
     // Shrink to icon rect
-    fitRect = kisGrowRect(fitRect, -(scm.visibilityMargin()+scm.border()));
+    fitRect = kisGrowRect(fitRect, -(scm.visibilityMargin() + scm.border()));
 
     QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
 
@@ -906,6 +920,45 @@ void NodeDelegate::drawAnimatedDecoration(QPainter *p, const QStyleOptionViewIte
     p->setOpacity(oldOpacity);
 }
 
+void NodeDelegate::drawSelectedButton(QPainter *p, const QStyleOptionViewItem &option,
+                                      const QModelIndex &index, QStyle *style) const
+{
+    QStyleOptionButton buttonOption;
+
+    KisNodeViewColorScheme scm;
+    QRect rect = option.rect;
+
+    // adjust the icon to not touch the borders
+    rect = kisGrowRect(rect, -(scm.thumbnailMargin() + scm.border()));
+    // Make the rect a square so the check mark is not distorted. also center
+    // it horizontally and vertically with respect to the whole area rect
+    constexpr qint32 maximumAllowedSideLength = 48;
+    const qint32 minimumSideLength = qMin(rect.width(), rect.height());
+    const qint32 sideLength = qMin(minimumSideLength, maximumAllowedSideLength);
+    rect =
+        QRect(rect.left() + static_cast<qint32>(qRound(static_cast<qreal>(rect.width() - sideLength) / 2.0)),
+              rect.top() + static_cast<qint32>(qRound(static_cast<qreal>(rect.height() - sideLength) / 2.0)),
+              sideLength, sideLength);
+
+    buttonOption.rect = rect;
+
+    // Update palette colors to make the check box more readable over the base
+    // color
+    const QColor prevBaseColor = buttonOption.palette.base().color();
+    const qint32 windowLightness = buttonOption.palette.window().color().lightness();
+    const qint32 baseLightness = prevBaseColor.lightness();
+    const QColor newBaseColor =
+        baseLightness > windowLightness ? prevBaseColor.lighter(120) : prevBaseColor.darker(120);
+    buttonOption.palette.setColor(QPalette::Window, prevBaseColor);
+    buttonOption.palette.setColor(QPalette::Base, newBaseColor);
+
+    // check if the current index exists in the selected rows.
+    buttonOption.state.setFlag((d->view->selectionModel()->isRowSelected(index.row(), index.parent())
+                                    ? QStyle::State_On
+                                    : QStyle::State_Off));
+    style->drawPrimitive(QStyle::PE_IndicatorCheckBox, &buttonOption, p);
+}
+
 boost::optional<KisBaseNode::Property>
 NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &mousePos, const QStyleOptionViewItem &option)
 {
@@ -933,6 +986,7 @@ NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &m
 
     if (clickedIcon >= 0 &&
         clickedIcon < numProps &&
+        realProps[clickedIcon] &&
         distToBorder > scm.iconMargin()) {
 
         return *realProps[clickedIcon];
@@ -943,49 +997,19 @@ NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &m
 
 bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
-    KisNodeViewColorScheme scm;
-
-    QStyleOptionViewItem newOption = option;
-    newOption.rect = d->view->originalVisualRect(index);
-
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
         && (index.flags() & Qt::ItemIsEnabled))
     {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
 
-        /**
-         * Small hack Alert:
-         *
-         * Here we handle clicking even when it happened outside
-         * the rectangle of the current index. The point is, we
-         * use some virtual scroling offset to move the tree to the
-         * right of the visibility icon. So the icon itself is placed
-         * in an empty area that doesn't belong to any index. But we still
-         * handle it.
-         */
-
-        const QRect visibilityRect = visibilityClickRect(newOption, index);
-        const bool visibilityClicked = visibilityRect.isValid() &&
-            visibilityRect.contains(mouseEvent->pos());
-
-        const QRect thumbnailRect = thumbnailClickRect(newOption, index);
-        const bool thumbnailClicked = thumbnailRect.isValid() &&
-            thumbnailRect.contains(mouseEvent->pos());
-
-        const QRect decorationRect = decorationClickRect(newOption, index);
-        const bool decorationClicked = decorationRect.isValid() &&
-            decorationRect.contains(mouseEvent->pos());
-
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
         const bool altButton = mouseEvent->modifiers() & Qt::AltModifier;
 
-        if (leftButton) {
-            if (altButton) {
-                d->view->setCurrentIndex(index);
-                model->setData(index, true, KisNodeModel::AlternateActiveRole);
+        if (index.column() == NodeView::VISIBILITY_COL) {
 
-                return true;
-            } else if (visibilityClicked) {
+            const QRect visibilityRect = visibilityClickRect(option, index);
+            const bool visibilityClicked = visibilityRect.isValid() && visibilityRect.contains(mouseEvent->pos());
+            if (leftButton && visibilityClicked) {
                 KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 OptionalProperty clickedProperty = d->findVisibilityProperty(props);
                 if (!clickedProperty) return false;
@@ -993,7 +1017,26 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                 d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
 
                 return true;
-            } else if (decorationClicked) {
+            }
+            return false;
+        } else if (index.column() == NodeView::SELECTED_COL) {
+            if (leftButton && option.rect.contains(mouseEvent->pos())) {
+                changeSelectionAndCurrentIndex(index);
+                return true;
+            }
+        }
+
+        const QRect thumbnailRect = thumbnailClickRect(option, index);
+        const bool thumbnailClicked = thumbnailRect.isValid() &&
+            thumbnailRect.contains(mouseEvent->pos());
+
+        const QRect decorationRect = decorationClickRect(option, index);
+        const bool decorationClicked = decorationRect.isValid() &&
+            decorationRect.contains(mouseEvent->pos());
+
+
+        if (leftButton) {
+            if (decorationClicked) {
                 bool isExpandable = model->hasChildren(index);
                 if (isExpandable) {
                     bool isExpanded = d->view->isExpanded(index);
@@ -1027,8 +1070,22 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                 return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
 
             } else {
-                auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), newOption);
-                if (!clickedProperty) return false;
+                auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), option);
+
+                if (!clickedProperty) {
+                    if (altButton) {
+                        d->view->setCurrentIndex(index);
+                        model->setData(index, true, KisNodeModel::AlternateActiveRole);
+
+                        return true;
+                    } else if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                        // the control modifier shifts the current index as well (even when deselected), so we
+                        // handle it manually.
+                        changeSelectionAndCurrentIndex(index);
+                        return true;
+                    }
+                    return false;
+                }
 
                 KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 d->toggleProperty(props, &(*clickedProperty), mouseEvent->modifiers(), index);
@@ -1040,12 +1097,11 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
         if (!KisConfig(true).hidePopups()) {
             QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
 
-            auto hoveredProperty = d->propForMousePos(index, helpEvent->pos(), newOption);
+            auto hoveredProperty = d->propForMousePos(index, helpEvent->pos(), option);
             if (hoveredProperty && hoveredProperty->id == KisLayerPropertiesIcons::layerError.id()) {
                 QToolTip::showText(helpEvent->globalPos(), hoveredProperty->state.toString(), d->view);
             } else {
-                QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
-                d->tip.showTip(d->view, helpEvent->pos(), newOption, index);
+                d->tip.showTip(d->view, helpEvent->pos(), option, index);
             }
         }
         return true;
@@ -1054,6 +1110,30 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
     }
 
     return false;
+}
+
+void NodeDelegate::changeSelectionAndCurrentIndex(const QModelIndex &index)
+{
+    QItemSelectionModel *selectionModel = d->view->selectionModel();
+    const bool wasSelected = selectionModel->isRowSelected(index.row(), index.parent());
+
+    // if only one item is selected and that too is us then in that case we don't do anything to
+    // the selection.
+    if (selectionModel->selectedIndexes().size() == 1
+        && selectionModel->isRowSelected(index.row(), index.parent())) {
+        selectionModel->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+    } else {
+        selectionModel->select(index, QItemSelectionModel::Toggle | QItemSelectionModel::Rows);
+    }
+
+    const auto belongToSameRow = [](const QModelIndex &a, const QModelIndex &b) {
+        return a.row() == b.row() && a.parent() == b.parent();
+    };
+
+    // in this condition we move the current index to the best guessed previous one.
+    if (wasSelected && belongToSameRow(selectionModel->currentIndex(), index)) {
+        selectionModel->setCurrentIndex(selectionModel->selectedRows().last(), QItemSelectionModel::NoUpdate);
+    }
 }
 
 QWidget *NodeDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem&, const QModelIndex &index) const
@@ -1175,10 +1255,10 @@ QStyleOptionViewItem NodeDelegate::getOptions(const QStyleOptionViewItem &o, con
     v = index.data(Qt::TextAlignmentRole);
     if (v.isValid())
         option.displayAlignment = QFlag(v.toInt());
-    v = index.data(Qt::TextColorRole);
+    v = index.data(Qt::ForegroundRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Text, v.value<QColor>());
-    v = index.data(Qt::BackgroundColorRole);
+    v = index.data(Qt::BackgroundRole);
     if (v.isValid())
         option.palette.setColor(QPalette::Window, v.value<QColor>());
 
@@ -1230,9 +1310,36 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
 void NodeDelegate::slotConfigChanged()
 {
     KisConfig cfg(true);
+    const int oldHeight = d->rowHeight;
+    // cache values that require a config lookup and get used frequently
+    d->thumbnailSize = KisNodeViewColorScheme::instance()->thumbnailSize();
+    d->thumbnailGeometry = KisNodeViewColorScheme::instance()->relThumbnailRect();
+    d->rowHeight = KisNodeViewColorScheme::instance()->rowHeight();
 
-    d->checkersColor1 = cfg.checkersColor1();
-    d->checkersColor2 = cfg.checkersColor2();
+    const QColor newCheckersColor1 = cfg.checkersColor1();
+    const QColor newCheckersColor2 = cfg.checkersColor2();
+
+    // generate the checker backdrop for thumbnails
+    const int step = d->thumbnailSize / 6;
+    if ((d->checkers.width() != 2 * step) ||
+        (d->checkersColor1 != newCheckersColor1) ||
+        (d->checkersColor2 != newCheckersColor2)) {
+
+        d->checkersColor1 = newCheckersColor1;
+        d->checkersColor2 = newCheckersColor2;
+        d->checkers = QImage(2 * step, 2 * step, QImage::Format_ARGB32);
+
+        QPainter gc(&d->checkers);
+        gc.fillRect(QRect(0, 0, step, step), newCheckersColor1);
+        gc.fillRect(QRect(step, 0, step, step), newCheckersColor2);
+        gc.fillRect(QRect(step, step, step, step), newCheckersColor1);
+        gc.fillRect(QRect(0, step, step, step), newCheckersColor2);
+    }
+
+    if (d->rowHeight != oldHeight) {
+        // QAbstractItemView/QTreeView don't even look at the index and redo the whole layout...
+        emit sizeHintChanged(QModelIndex());
+    }
 }
 
 void NodeDelegate::slotUpdateIcon()
@@ -1255,3 +1362,4 @@ void NodeDelegate::slotResetState(){
         }
     }
 }
+

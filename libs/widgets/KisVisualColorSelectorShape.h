@@ -13,7 +13,6 @@
 #include <QMouseEvent>
 
 #include <KoColor.h>
-#include <KoColorSpace.h>
 #include "KoColorDisplayRendererInterface.h"
 
 #include "KisVisualColorSelector.h"
@@ -22,12 +21,9 @@
 /**
  * @brief The KisVisualColorSelectorShape class
  * A 2d widget can represent at maximum 2 coordinates.
- * So first decide howmany coordinates you need. (onedimensional, or twodimensional)
- * Then the model, (Channel, HSV, HSL, HSI, YUV). Channel is the raw color channels.
- * When it finds a non-implemented feature it'll return to Channel.
+ * So first decide how many coordinates you need. (onedimensional, or twodimensional)
  * Then, select the channels you wish to be affected. This uses the model, so for cmyk
  * the channel is c=0, m=1, y=2, k=3, but for hsv, hue=0, sat=1, and val=2
- * These can also be set with 'slotsetactive channels'.
  * Then finally, connect the displayrenderer, you can also do this with 'setdisplayrenderer'
  *
  * Either way, this class is made to be subclassed, with a few virtuals so that the geometry
@@ -43,50 +39,33 @@ public:
      * Whether or not the shape is single or two dimensional.
      **/
     enum Dimensions{onedimensional, twodimensional};
-    enum ColorModel{Channel, HSV, HSL, HSI, HSY, YUV};
-    explicit KisVisualColorSelectorShape(QWidget *parent,
+    explicit KisVisualColorSelectorShape(KisVisualColorSelector *parent,
                                          KisVisualColorSelectorShape::Dimensions dimension,
-                                         const KoColorSpace *cs,
-                                         int channel1, int channel2,
-                                         const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
+                                         int channel1, int channel2);
     ~KisVisualColorSelectorShape() override;
 
     /**
      * @brief getCursorPosition
      * @return current cursor position in shape-coordinates.
      */
-    QPointF getCursorPosition();
+    QPointF getCursorPosition() const;
     /**
      * @brief getDimensions
      * @return whether this is a single or twodimensional widget.
      */
     Dimensions getDimensions() const;
     /**
-     * @brief getPixmap
-     * @return the pixmap of the gradient, for drawing on with a subclass.
-     * the pixmap will not change unless 'm_d->setPixmap=true' which is toggled by
-     * refresh and update functions.
+     * @brief getImageMap returns  the updated base image
+     * @return the final image of the shape content, before the handle gets drawn.
+     * the pixmap will not change until a redraw is required, which depends on
+     * whether the shape is static or changes depending on other color channels.
      */
-    bool imagesNeedUpdate() const;
-    QImage getImageMap();
-    const QImage getAlphaMask() const;
-    /**
-     * @brief setFullImage
-     * Set the full widget image to be painted.
-     * @param full this should be the full image.
-     */
-    void setFullImage(QImage full);
+    const QImage& getImageMap();
     /**
      * @brief getCurrentColor
      * @return the current kocolor
      */
     KoColor getCurrentColor();
-    /**
-     * @brief setDisplayRenderer
-     * disconnect the old display renderer if needed and connect the new one.
-     * @param displayRenderer
-     */
-    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
     /**
      * @brief getColorFromConverter
      * @param c a koColor.
@@ -103,11 +82,22 @@ public:
     virtual QRect getSpaceForCircle(QRect geom) = 0;
     virtual QRect getSpaceForTriangle(QRect geom) = 0;
 
+    bool isHueControl() const;
+    virtual bool supportsGamutMask() const;
+
     /**
      * @brief forceImageUpdate
      * force the image to recache.
      */
     void forceImageUpdate();
+
+    /**
+     * @brief Notify shape that the gamut mask changed
+     *
+     * The gamut mask shall be updated and the widget repainted if necessary.
+     * This includes removal of gamut masks
+     */
+    virtual void updateGamutMask();
 
     /**
      * @brief setBorderWidth
@@ -117,11 +107,14 @@ public:
     virtual void setBorderWidth(int width) = 0;
 
     /**
-     * @brief getChannels
-     * get used channels
+     * @brief channel
+     * Get the channel index associated with a selector shape dimension
+     * @param dimension A shape dimension that can be controlled by the cursor
      * @return
      */
-    QVector <int> getChannels() const;
+    int channel(int dimension) const;
+
+    quint32 channelMask() const;
 
     /**
       * @brief setCursorPosition
@@ -140,28 +133,21 @@ public:
       * these are not yet transformed to color space specific ranges!
       * @param setCursor if true, sets the cursor too, otherwise the shape-controlled channels are not set
       */
-    void setChannelValues(QVector4D channelValues, bool setCursor);
+    void setChannelValues(QVector4D channelValues, quint32 channelFlags);
 
     void setAcceptTabletEvents(bool on);
 
 Q_SIGNALS:
     void sigCursorMoved(QPointF pos);
 
-public Q_SLOTS:
-    /**
-     * @brief slotSetActiveChannels
-     * Change the active channels if necessary.
-     * @param channel1 used by single and twodimensional widgets.
-     * @param channel2 only used by twodimensional widgets.
-     */
-    void slotSetActiveChannels(int channel1, int channel2);
-
 protected:
+    KisVisualColorSelector* colorSelector() const;
+    KisVisualColorModel* selectorModel() const;
     /**
      * @brief convertImageMap
      * convert image data containing raw KoColor data into a QImage
      * @param data must point to memory of size width()*height()*pixelSize
-     * @param size the number of bytes to read from data, must match aforementioned cirteria
+     * @param size the number of bytes to read from data, must match aforementioned criteria
      * @return the converted QImage guaranteed to match the widget size (black content on failure)
      */
     QImage convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const;
@@ -174,12 +160,14 @@ protected:
      * in the current color space
      * @param channelValues the normalized channel values of the currently selected color
      */
-    virtual QImage renderBackground(const QVector4D &channelValues, quint32 pixelSize) const;
+    virtual QImage renderBackground(const QVector4D &channelValues, const QImage &alpha) const;
+    virtual QImage compositeBackground() const;
     /**
      * @brief render the alpha mask for the widget background
      * the returned image is expected to be QImage::Format_Alpha8
      */
     virtual QImage renderAlphaMask() const;
+    virtual QImage renderStaticAlphaMask() const;
     /**
      * @brief default implementation just calls convertWidgetCoordinateToShapeCoordinate(pos)
     */
@@ -214,7 +202,8 @@ private:
      * @return the pixmap of this shape.
      */
     virtual QRegion getMaskMap() = 0;
-    virtual void drawCursor() = 0;
+    virtual void drawCursor(QPainter &painter) = 0;
+    virtual void drawGamutMask(QPainter &painter);
 };
 
 #endif

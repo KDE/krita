@@ -27,12 +27,15 @@
 #include "KisMemoryStorage.h"
 
 
+const QString KisResourceStorage::s_xmlns_meta("urn:oasis:names:tc:opendocument:xmlns:meta:1.0");
+const QString KisResourceStorage::s_xmlns_dc("http://purl.org/dc/elements/1.1");
+
 const QString KisResourceStorage::s_meta_generator("meta:generator");
 const QString KisResourceStorage::s_meta_author("dc:author");
 const QString KisResourceStorage::s_meta_title("dc:title");
 const QString KisResourceStorage::s_meta_description("dc:description");
 const QString KisResourceStorage::s_meta_initial_creator("meta:initial-creator");
-const QString KisResourceStorage::s_meta_creator("cd:creator");
+const QString KisResourceStorage::s_meta_creator("dc:creator");
 const QString KisResourceStorage::s_meta_creation_date("meta:creation-date");
 const QString KisResourceStorage::s_meta_dc_date("meta:dc-date");
 const QString KisResourceStorage::s_meta_user_defined("meta:meta-userdefined");
@@ -107,7 +110,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
         d->storageType = StorageType::Memory;
         d->valid = true;
     } else {
-        // we create a fake memeory storage to make sure methods like `timestamp()` still work
+        // we create a fake memory storage to make sure methods like `timestamp()` still work
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
         d->valid = false;
     }
@@ -130,7 +133,9 @@ KisResourceStorage &KisResourceStorage::operator=(const KisResourceStorage &rhs)
         d->location = rhs.d->location;
         d->storageType = rhs.d->storageType;
         if (d->storageType == StorageType::Memory) {
-            d->storagePlugin = QSharedPointer<KisMemoryStorage>(new KisMemoryStorage(*dynamic_cast<KisMemoryStorage*>(rhs.d->storagePlugin.data())));
+            const QSharedPointer<KisMemoryStorage> memoryStorage = rhs.d->storagePlugin.dynamicCast<KisMemoryStorage>();
+            KIS_ASSERT(memoryStorage);
+            d->storagePlugin = QSharedPointer<KisMemoryStorage>(new KisMemoryStorage(*memoryStorage));
         }
         else {
             d->storagePlugin = rhs.d->storagePlugin;
@@ -197,6 +202,11 @@ KoResourceSP KisResourceStorage::resource(const QString &url)
 QString KisResourceStorage::resourceMd5(const QString &url)
 {
     return d->storagePlugin->resourceMd5(url);
+}
+
+QString KisResourceStorage::resourceFilePath(const QString &url)
+{
+    return d->storagePlugin->resourceFilePath(url);
 }
 
 QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType) const

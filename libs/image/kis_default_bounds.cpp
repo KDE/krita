@@ -55,6 +55,11 @@ bool KisDefaultBounds::wrapAroundMode() const
     return m_d->image ? m_d->image->wrapAroundModeActive() : false;
 }
 
+WrapAroundAxis KisDefaultBounds::wrapAroundModeAxis() const
+{
+    return m_d->image ? m_d->image->wrapAroundModeAxis() : WRAPAROUND_BOTH;
+}
+
 int KisDefaultBounds::currentLevelOfDetail() const
 {
     return m_d->image ? m_d->image->currentLevelOfDetail() : 0;
@@ -115,6 +120,12 @@ bool KisSelectionDefaultBounds::wrapAroundMode() const
         m_d->parentDevice->defaultBounds()->wrapAroundMode() : false;
 }
 
+WrapAroundAxis KisSelectionDefaultBounds::wrapAroundModeAxis() const
+{
+    return m_d->parentDevice ?
+        m_d->parentDevice->defaultBounds()->wrapAroundModeAxis() : WRAPAROUND_BOTH;
+}
+
 int KisSelectionDefaultBounds::currentLevelOfDetail() const
 {
     return m_d->parentDevice ?
@@ -141,6 +152,11 @@ void *KisSelectionDefaultBounds::sourceCookie() const
 /******************************************************************/
 /*                   KisSelectionEmptyBounds                      */
 /******************************************************************/
+
+KisSelectionEmptyBounds::KisSelectionEmptyBounds()
+    : KisSelectionEmptyBounds(nullptr)
+{
+}
 
 KisSelectionEmptyBounds::KisSelectionEmptyBounds(KisImageWSP image)
     : KisDefaultBounds(image)
@@ -186,6 +202,11 @@ QRect KisWrapAroundBoundsWrapper::bounds() const
 bool KisWrapAroundBoundsWrapper::wrapAroundMode() const
 {
     return true;
+}
+
+WrapAroundAxis KisWrapAroundBoundsWrapper::wrapAroundModeAxis() const
+{
+    return m_d->base->wrapAroundModeAxis();
 }
 
 int KisWrapAroundBoundsWrapper::currentLevelOfDetail() const

@@ -22,6 +22,7 @@
 #include "kis_image_interfaces.h"
 #include "kis_strokes_queue_undo_result.h"
 #include "KisLodPreferences.h"
+#include "KisWraparoundAxis.h"
 
 #include <kritaimage_export.h>
 
@@ -41,6 +42,7 @@ class KisImageAnimationInterface;
 class KUndo2MagicString;
 class KisProofingConfiguration;
 class KisPaintDevice;
+class KisImageGlobalSelectionManagementInterface;
 
 namespace KisMetaData
 {
@@ -189,7 +191,7 @@ public:
     bool locked() const;
 
     /**
-     * Sets the mask (it must be a part of the node hierarchy already) to be paited on
+     * Sets the mask (it must be a part of the node hierarchy already) to be painted on
      * the top of all layers. This method does all the locking and syncing for you. It
      * is executed asynchronously.
      */
@@ -273,6 +275,7 @@ public:
      * right after this call.
      */
     void cropNode(KisNodeSP node, const QRect& newRect, const bool activeFrameOnly = false);
+    void cropNodes(KisNodeList nodes, const QRect& newRect, const bool activeFrameOnly = false);
 
     /**
      * @brief start asynchronous operation on scaling the image
@@ -301,6 +304,7 @@ public:
      * right after this call.
      */
     void scaleNode(KisNodeSP node, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
+    void scaleNodes(KisNodeList nodes, const QPointF &center, qreal scaleX, qreal scaleY, KisFilterStrategy *filterStrategy, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on rotating the image
@@ -329,6 +333,7 @@ public:
      * right after the call
      */
     void rotateNode(KisNodeSP node, double radians, KisSelectionSP selection);
+    void rotateNodes(KisNodeList nodes, double radians, KisSelectionSP selection);
 
     /**
      * @brief start asynchronous operation on shearing the image
@@ -358,6 +363,7 @@ public:
      * right after the call
      */
     void shearNode(KisNodeSP node, double angleX, double angleY, KisSelectionSP selection);
+    void shearNodes(KisNodeList nodes, double angleX, double angleY, KisSelectionSP selection);
 
     /**
      * Convert image projection to \p dstColorSpace, keeping all the layers intouched.
@@ -559,7 +565,7 @@ public:
     qint32 nHiddenLayers() const;
 
     /*
-     * Return the number of layers (not other node tyoes) that are
+     * Return the number of layers (not other node types) that are
      * descendants of the rootLayer in this image.
      */
     qint32 nChildLayers() const;
@@ -660,7 +666,7 @@ public:
     void addComposition(KisLayerCompositionSP composition);
 
     /**
-     * Remove the layer compostion
+     * Remove the layer composition
      */
     void removeComposition(KisLayerCompositionSP composition);
 
@@ -692,6 +698,17 @@ public:
      * \see setWrapAroundMode
      */
     bool wrapAroundModePermitted() const;
+
+    /**
+     * Set which axis to use for wraparound mode
+     */
+    void setWrapAroundModeAxis(WrapAroundAxis value);
+    /**
+     * \return the axis being used for wraparound mode
+     *
+     * \see setWrapAroundModeAxis
+     */
+    WrapAroundAxis wrapAroundModeAxis() const;
 
 
     /**
@@ -986,7 +1003,7 @@ public Q_SLOTS:
 
     /**
      * Wait for all the internal image jobs to complete and return without locking
-     * the image. This function is handly for tests or other synchronous actions,
+     * the image. This function is handy for tests or other synchronous actions,
      * when one needs to wait for the result of his actions.
      */
     void waitForDone();
@@ -1098,7 +1115,7 @@ public Q_SLOTS:
 
     /**
      * @brief removes already installed filter from the stack of updates filers
-     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on intallation
+     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on installation
      * @return the installed filter. If the cookie is invalid, or nesting rule has been
      *         broken, then removeProjectionUpdatesFilter() may safe-assert and return nullptr.
      *
@@ -1224,6 +1241,11 @@ public Q_SLOTS:
      */
     void requestStrokeEndActiveNode();
 
+    /**
+     * A special interface that commands use to modify image's global selection
+     */
+    KisImageGlobalSelectionManagementInterface* globalSelectionManagementInterface() const;
+
 private:
 
     KisImage(const KisImage& rhs, KisUndoStore *undoStore, bool exactCopy);
@@ -1234,7 +1256,11 @@ private:
     void resizeImageImpl(const QRect& newRect, bool cropLayers);
     void rotateImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode, double radians,
                     bool resizeImage, KisSelectionSP selection);
+    void rotateImpl(const KUndo2MagicString &actionName, KisNodeList nodes, double radians,
+                    bool resizeImage, KisSelectionSP selection);
     void shearImpl(const KUndo2MagicString &actionName, KisNodeSP rootNode,
+                   bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
+    void shearImpl(const KUndo2MagicString &actionName, KisNodeList nodes,
                    bool resizeImage, double angleX, double angleY, KisSelectionSP selection);
 
     void safeRemoveTwoNodes(KisNodeSP node1, KisNodeSP node2);
@@ -1250,32 +1276,7 @@ private:
 
     void setProjectionColorSpace(const KoColorSpace * colorSpace);
 
-
-    friend class KisDeselectGlobalSelectionCommand;
-    friend class KisReselectGlobalSelectionCommand;
-    friend class KisSetGlobalSelectionCommand;
-    friend class KisImageTest;
-    friend class Document; // For libkis
-
-    /**
-     * Replaces the current global selection with globalSelection. If
-     * \p globalSelection is empty, removes the selection object, so that
-     * \ref globalSelection() will return 0 after that.
-     */
-    void setGlobalSelection(KisSelectionSP globalSelection);
-
-    /**
-     * Deselects current global selection.
-     * \ref globalSelection() will return 0 after that.
-     */
-    void deselectGlobalSelection();
-
-    /**
-     * Reselects current deselected selection
-     *
-     * \see deselectGlobalSelection()
-     */
-    void reselectGlobalSelection();
+    friend class KisImageGlobalSelectionManagementInterface;
 
 private:
     class KisImagePrivate;

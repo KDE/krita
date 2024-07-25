@@ -42,7 +42,14 @@ void KisUpdaterContext::getJobsSnapshot(qint32 &numMergeJobs,
     numMergeJobs = 0;
     numStrokeJobs = 0;
 
-    Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
+    /**
+     * We cannot use Q_FOREACH here since the function may
+     * be called concurrently without any locks, causing detaching
+     * of the vector and causing a crash. Only read-only accesses
+     * are allowed in such environment
+     */
+    for (const KisUpdateJobItem *item : std::as_const(m_jobs)) {
+
         if(item->type() == KisUpdateJobItem::Type::MERGE ||
            item->type() == KisUpdateJobItem::Type::SPONTANEOUS) {
             numMergeJobs++;
@@ -57,7 +64,13 @@ KisUpdaterContextSnapshotEx KisUpdaterContext::getContextSnapshotEx() const
 {
     KisUpdaterContextSnapshotEx state = ContextEmpty;
 
-    Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
+    /**
+     * We cannot use Q_FOREACH here since the function may
+     * be called concurrently without any locks, causing detaching
+     * of the vector and causing a crash. Only read-only accesses
+     * are allowed in such environment
+     */
+    for (const KisUpdateJobItem *item : std::as_const(m_jobs)) {
         if (item->type() == KisUpdateJobItem::Type::MERGE ||
             item->type() == KisUpdateJobItem::Type::SPONTANEOUS) {
             state |= HasMergeJob;
@@ -91,7 +104,13 @@ bool KisUpdaterContext::hasSpareThread()
 {
     bool found = false;
 
-    Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
+    /**
+     * We cannot use Q_FOREACH here since the function may
+     * be called concurrently without any locks, causing detaching
+     * of the vector and causing a crash. Only read-only accesses
+     * are allowed in such environment
+     */
+    for (const KisUpdateJobItem *item : std::as_const(m_jobs)) {
         if(!item->isRunning()) {
             found = true;
             break;
@@ -107,7 +126,13 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
 
     bool intersects = false;
 
-    Q_FOREACH (const KisUpdateJobItem *item, m_jobs) {
+    /**
+     * We cannot use Q_FOREACH here since the function may
+     * be called concurrently without any locks, causing detaching
+     * of the vector and causing a crash. Only read-only accesses
+     * are allowed in such environment
+     */
+    for (const KisUpdateJobItem *item : std::as_const(m_jobs)) {
         if(item->isRunning() && walkerIntersectsJob(walker, item)) {
             intersects = true;
             break;

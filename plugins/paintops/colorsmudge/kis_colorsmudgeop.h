@@ -14,23 +14,20 @@
 
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_ratio_option.h>
-#include <kis_pressure_spacing_option.h>
-#include <kis_pressure_rate_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_scatter_option.h>
-#include <kis_pressure_gradient_option.h>
-#include <kis_pressure_hsv_option.h>
-#include "kis_pressure_paint_thickness_option.h"
-#include <kis_airbrush_option_widget.h>
 
-#include "kis_overlay_mode_option.h"
-#include "kis_rate_option.h"
-#include "kis_smudge_option.h"
-#include "kis_smudge_radius_option.h"
 #include "KisOverlayPaintDeviceWrapper.h"
+#include <KisOpacityOption.h>
+#include <KisSpacingOption.h>
+#include <KisScatterOption.h>
+#include <KisRotationOption.h>
+#include <KisHSVOption.h>
+#include <KisAirbrushOptionData.h>
+#include <KisPaintThicknessOption.h>
+#include <KisGradientOption.h>
+#include <KisSmudgeLengthOption.h>
+#include <KisColorRateOption.h>
+#include <KisSmudgeRadiusOption.h>
+#include <KisSmudgeOverlayModeOptionData.h>
 
 class QPointF;
 
@@ -60,21 +57,23 @@ private:
 
     KoColor                   m_paintColor;
     KoAbstractGradientSP      m_gradient;
-    KisPressureSizeOption     m_sizeOption;
-    KisPressureOpacityOption  m_opacityOption;
-    KisPressureRatioOption    m_ratioOption;
-    KisPressureSpacingOption  m_spacingOption;
-    KisPressureRateOption     m_rateOption;
-    KisPressurePaintThicknessOption   m_paintThicknessOption;
-    KisSmudgeOption           m_smudgeRateOption;
-    KisRateOption             m_colorRateOption;
-    KisSmudgeRadiusOption     m_smudgeRadiusOption;
-    KisOverlayModeOption      m_overlayModeOption;
-    KisPressureRotationOption m_rotationOption;
-    KisPressureScatterOption  m_scatterOption;
-    KisPressureGradientOption m_gradientOption;
-    QList<KisPressureHSVOption*> m_hsvOptions;
-    KisAirbrushOptionProperties m_airbrushOption;
+    KisSizeOption m_sizeOption;
+    KisRatioOption m_ratioOption;
+    KisOpacityOption m_opacityOption;
+    KisSpacingOption m_spacingOption;
+    KisRateOption m_rateOption;
+    KisRotationOption m_rotationOption;
+    KisScatterOption m_scatterOption;
+    KisPaintThicknessOption m_paintThicknessOption;
+    KisGradientOption m_gradientOption;
+    KisSmudgeLengthOption m_smudgeRateOption;
+    KisColorRateOption2 m_colorRateOption;
+    KisSmudgeRadiusOption2 m_smudgeRadiusOption;
+
+    QList<KisHSVOption*> m_hsvOptions;
+    KisAirbrushOptionData m_airbrushData;
+    KisSmudgeOverlayModeOptionData m_overlayModeData;
+
     QRect                     m_dstDabRect;
     QPointF                   m_lastPaintPos;
 

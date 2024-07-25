@@ -16,9 +16,12 @@
 */
 
 #include <QString>
+#include <QStringList>
 #include <QTextStream>
+#include <QCommandLineParser>
 
 #include <kritaversion.h>
+#include <kritagitversion.h>
 
 QTextStream& qStdOut()
 {
@@ -26,8 +29,24 @@ QTextStream& qStdOut()
     return ts;
 }
 
-extern "C" int main(int , char **)
+extern "C" int main(int argc, char **argv)
 {
-    qStdOut() << KRITA_VERSION_STRING << "\n";
+    QStringList argList;
+    for (int i = 0; i < argc; i++) {
+        argList << QString::fromLocal8Bit(argv[i]);
+    }
+
+    QCommandLineParser parser;
+    QCommandLineOption verbose(QStringList() << "v" << "verbose" << "showhash");
+    parser.addOption(verbose);
+    parser.process(argList);
+
+    qStdOut() << KRITA_VERSION_STRING;
+#ifdef KRITA_GIT_SHA1_STRING
+    if (parser.isSet(verbose)) {
+        qStdOut() << " " << KRITA_GIT_SHA1_STRING;
+    }
+#endif
+    qStdOut() << "\n";
     return 0;
 }

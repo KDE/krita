@@ -182,6 +182,7 @@ QStyleOptionSlider StoryboardDelegate::drawCommentHeader(QPainter *p, const QSty
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index.model(), QStyleOptionSlider());
     const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(model, QStyleOptionSlider());
     QString data = index.data().toString();
 
     QRect titleRect = option.rect;
@@ -382,6 +383,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue - option.fontMetrics.height();
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(modelSB, false);
                 modelSB->setCommentScrollData(index, qMax(0, value));
                 return true;
             }
@@ -389,6 +391,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue + option.fontMetrics.height();
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(modelSB, false);
                 modelSB->setCommentScrollData(index, qMin(scrollBarOption.maximum, value));
                 return true;
             }
@@ -437,6 +440,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
                 int value = lastValue + mouseEvent->pos().y() - m_lastDragPos.y();
 
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(modelSB, false);
                 if (value >= 0 && value <= scrollBarOption.maximum) {
                     modelSB->setCommentScrollData(index, value);
                     return true;
@@ -513,6 +517,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
             int value = spinbox->value();
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(sbModel);
             KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
                                                                                     value,
                                                                                     index.parent().row(),

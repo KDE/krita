@@ -25,7 +25,6 @@
 #include <kis_brush_based_paintop.h>
 #include <brushengine/kis_paint_information.h>
 #include <kis_fixed_paint_device.h>
-#include <kis_pressure_opacity_option.h>
 #include <kis_lod_transform.h>
 #include <kis_spacing_information.h>
 
@@ -35,6 +34,12 @@
 
 KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisPainter * painter, KisNodeSP node, KisImageSP /*image*/)
     : KisBrushBasedPaintOp(settings, painter)
+    , m_angleOption(settings.data())
+    , m_crosshatchingOption(settings.data())
+    , m_separationOption(settings.data())
+    , m_thicknessOption(settings.data())
+    , m_opacityOption(settings.data())
+    , m_sizeOption(settings.data())
 {
     Q_UNUSED(node);
 
@@ -42,19 +47,9 @@ KisHatchingPaintOp::KisHatchingPaintOp(const KisPaintOpSettingsSP settings, KisP
     static_cast<const KisHatchingPaintOpSettings*>(settings.data())->initializeTwin(m_settings);
 
     m_hatchingBrush = new HatchingBrush(m_settings);
+    m_hatchingOptions.read(settings.data());
+    m_hatchingPreferences.read(settings.data());
 
-    m_angleOption.readOptionSetting(settings);
-    m_crosshatchingOption.readOptionSetting(settings);
-    m_separationOption.readOptionSetting(settings);
-    m_thicknessOption.readOptionSetting(settings);
-    m_opacityOption.readOptionSetting(settings);
-    m_sizeOption.readOptionSetting(settings);
-    m_angleOption.resetAllSensors();
-    m_crosshatchingOption.resetAllSensors();
-    m_separationOption.resetAllSensors();
-    m_thicknessOption.resetAllSensors();
-    m_opacityOption.resetAllSensors();
-    m_sizeOption.resetAllSensors();
 }
 
 KisHatchingPaintOp::~KisHatchingPaintOp()
@@ -115,56 +110,56 @@ KisSpacingInformation KisHatchingPaintOp::paintAt(const KisPaintInformation& inf
     dstRect.getRect(&x, &y, &sw, &sh);
 
     //------This If_block pre-fills the future m_hatchedDab with a pretty backgroundColor
-    if (m_settings->opaquebackground) {
+    if (m_hatchingPreferences.useOpaqueBackground) {
         KoColor aersh = painter()->backgroundColor();
         m_hatchedDab->fill(0, 0, (sw - 1), (sh - 1), aersh.data()); //this plus yellow background = french fry brush
     }
 
     /* If block describing how to stack hatching passes to generate
     crosshatching according to user specifications */
-    if (m_settings->enabledcurvecrosshatching) {
-        if (m_settings->perpendicular) {
+    if (m_crosshatchingOption.isChecked()) {
+        if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::Perpendicular) {
             if (m_settings->crosshatchingsensorvalue > 0.5)
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor(), additionalScale);
         }
-        else if (m_settings->minusthenplus) {
+        else if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::MinusThenPlus) {
             if (m_settings->crosshatchingsensorvalue > 0.33)
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
             if (m_settings->crosshatchingsensorvalue > 0.67)
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
         }
-        else if (m_settings->plusthenminus) {
+        else if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::PlusThenMinus) {
             if (m_settings->crosshatchingsensorvalue > 0.33)
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
             if (m_settings->crosshatchingsensorvalue > 0.67)
                 m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
         }
-        else if (m_settings->moirepattern) {
+        else if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::MoirePattern) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->crosshatchingsensorvalue) * 360), painter()->paintColor(), additionalScale);
         }
     } else {
-        if (m_settings->perpendicular) {
+        if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::Perpendicular) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(90), painter()->paintColor(), additionalScale);
         }
-        else if (m_settings->minusthenplus) {
+        else if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::MinusThenPlus) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
         }
-        else if (m_settings->plusthenminus) {
+        else if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::PlusThenMinus) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(45), painter()->paintColor(), additionalScale);
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-45), painter()->paintColor(), additionalScale);
         }
-        else if (m_settings->moirepattern) {
+        else if (m_hatchingOptions.crosshatchingStyle == CrosshatchingType::MoirePattern) {
             m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle(-10), painter()->paintColor(), additionalScale);
         }
     }
 
-    if (m_settings->enabledcurveangle)
-      m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->anglesensorvalue)*360+m_settings->angle), painter()->paintColor(), additionalScale);
+    if (m_angleOption.isChecked())
+      m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, spinAngle((m_settings->anglesensorvalue)*360+m_hatchingOptions.angle), painter()->paintColor(), additionalScale);
 
     // The base hatch... unless moiré or angle
-    if (!m_settings->moirepattern && !m_settings->enabledcurveangle)
-        m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_settings->angle, painter()->paintColor(), additionalScale);
+    if (m_hatchingOptions.crosshatchingStyle != CrosshatchingType::MoirePattern && !m_angleOption.isChecked())
+        m_hatchingBrush->hatch(m_hatchedDab, x, y, sw, sh, m_hatchingOptions.angle, painter()->paintColor(), additionalScale);
 
 
     // The most important line, the one that paints to the screen.
@@ -184,7 +179,7 @@ KisSpacingInformation KisHatchingPaintOp::updateSpacingImpl(const KisPaintInform
 
 double KisHatchingPaintOp::spinAngle(double spin)
 {
-    double tempangle = m_settings->angle + spin;
+    double tempangle = m_hatchingOptions.angle + spin;
     qint8 factor = 1;
 
     if (tempangle < 0)

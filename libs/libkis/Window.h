@@ -39,6 +39,12 @@ public Q_SLOTS:
     QMainWindow *qwindow() const;
 
     /**
+     * @brief dockers
+     * @return a list of all the dockers belonging to this window
+     */
+    QList<QDockWidget *> dockers() const;
+
+    /**
      * @return a list of open views in this window
      */
     QList<View*> views() const;

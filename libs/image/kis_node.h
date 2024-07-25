@@ -29,7 +29,7 @@ class KisProjectionLeaf;
 class KisKeyframeChannel;
 class KisTimeSpan;
 class KisUndoAdapter;
-
+struct KisFrameChangeUpdateRecipe;
 
 /**
  * A KisNode is a KisBaseNode that knows about its direct peers, parent
@@ -135,7 +135,7 @@ public:
 
     /**
      * @brief setDirtyDontResetAnimationCache does almost the same thing as usual
-     * setDirty() call, but doesn't reset the animation cache (since onlion skins are
+     * setDirty() call, but doesn't reset the animation cache (since onion skins are
      * not used when rendering animation.
      */
     void setDirtyDontResetAnimationCache(const QVector<QRect> &rects);
@@ -147,7 +147,10 @@ public:
      */
     void invalidateFrames(const KisTimeSpan &range, const QRect &rect);
 
-    void handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect &rect);
+    virtual void handleKeyframeChannelFrameChange(const KisKeyframeChannel *channel, int time);
+    virtual void handleKeyframeChannelFrameAdded(const KisKeyframeChannel *channel, int time);
+    void handleKeyframeChannelFrameAboutToBeRemoved(const KisKeyframeChannel *channel, int time);
+    void handleKeyframeChannelFrameHasBeenRemoved(const KisKeyframeChannel *channel, int time);
 
     /**
      * Informs that the current world time should be changed.
@@ -201,7 +204,7 @@ protected:
      * apply a convolution filter with kernel 4x4 (changeRect is
      * (2+2*3)x(2+2*3)=8x8) to that area. The rect that should be updated
      * on the layer will be exactly 8x8. More than that the needRect for
-     * that update will be 14x14. See \ref needeRect.
+     * that update will be 14x14. See \ref needRect.
      */
     virtual QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
@@ -258,7 +261,7 @@ public: // Graph methods
 
     /**
      * @return the graph listener this node belongs to. 0 if the node
-     * does not belong to a grap listener.
+     * does not belong to a graph listener.
      */
     KisNodeGraphListener * graphListener() const;
 
@@ -336,20 +339,6 @@ public: // Graph methods
      */
     QList<KisNodeSP> childNodes(const QStringList & nodeTypes, const KoProperties & properties) const;
 
-    /**
-     * @brief findChildByName finds the first child that has the given name
-     * @param name the name to look for
-     * @return the first child with the given name
-     */
-    KisNodeSP findChildByName(const QString &name);
-
-    /**
-     * @brief nodeByUniqueID searches the node tree for a node with the given name and returns it.
-     * @param uuid the unique id of the node
-     * @return the node with the given unique id, or 0 if no node is found.
-     */
-    KisNodeSP findChildByUniqueID(const QUuid &uuid);
-
 Q_SIGNALS:
     /**
      * Don't use this signal anywhere other than KisNodeShape. It's a hack.
@@ -385,6 +374,8 @@ protected:
 
 protected:
     void addKeyframeChannel(KisKeyframeChannel* channel) override;
+    virtual KisFrameChangeUpdateRecipe handleKeyframeChannelFrameAboutToBeRemovedImpl(const KisKeyframeChannel *channel, int time);
+
 private:
 
     friend class KisNodeFacade;

@@ -26,8 +26,6 @@
 
 ParallelRulerAssistant::ParallelRulerAssistant()
     : KisPaintingAssistant("parallel ruler", i18n("Parallel Ruler assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
 {
 }
 
@@ -38,43 +36,12 @@ KisPaintingAssistantSP ParallelRulerAssistant::clone(QMap<KisPaintingAssistantHa
 
 ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
 }
 
-void ParallelRulerAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void ParallelRulerAssistant::endStroke()
-{
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
-    m_hasBeenInsideLocalRect = false;
-}
-
-
-void ParallelRulerAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
-}
-
-QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin, qreal /*moveThresholdPt*/)
 {
     Q_ASSERT(isAssistantComplete());
-
-    //code nicked from the perspective ruler.
-    qreal dx = pt.x() - strokeBegin.x();
-    qreal dy = pt.y() - strokeBegin.y();
-
-    if (dx * dx + dy * dy < 4.0) {
-        return strokeBegin; // allow some movement before snapping
-    }
 
     if (isLocal() && isAssistantComplete()) {
         if (getLocalRect().contains(pt)) {
@@ -89,8 +56,8 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
     QPointF translation = (*handles()[0]-strokeBegin)*-1.0;
     snapLine = snapLine.translated(translation);
 
-    dx = snapLine.dx();
-    dy = snapLine.dy();
+    qreal dx = snapLine.dx();
+    qreal dy = snapLine.dy();
 
     const qreal
             dx2 = dx * dx,
@@ -100,30 +67,22 @@ QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& stroke
               dx2 * snapLine.y1() + dy2 * pt.y() + dx * dy * (pt.x() - snapLine.x1()));
     r *= invsqrlen;
     return r;
-    //return pt;
 }
 
-QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
+QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal moveThresholdPt)
 {
-    return project(pt, strokeBegin);
+    return project(pt, strokeBegin, moveThresholdPt);
+}
+
+void ParallelRulerAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point, strokeBegin, 0.0);
 }
 
 void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();
     gc.resetTransform();
-    QPointF mousePos(0,0);
-
-    if (canvas){
-        //simplest, cheapest way to get the mouse-position//
-        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
-    }
-    else {
-        //...of course, you need to have access to a canvas-widget for that.//
-        mousePos = QCursor::pos();//this'll give an offset//
-        dbgFile<<"canvas does not exist in ruler, you may have passed arguments incorrectly:"<<canvas;
-    }
-
 
     QTransform initialTransform = converter->documentToWidgetTransform();
     QRectF local = getLocalRect();
@@ -150,9 +109,7 @@ void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRec
         //don't draw if invalid.
         QLineF snapLine= QLineF(initialTransform.map(*handles()[0]), initialTransform.map(*handles()[1]));
 
-        if (m_followBrushPosition && m_adjustedPositionValid) {
-            mousePos = initialTransform.map(m_adjustedBrushPosition);
-        }
+        QPointF mousePos = effectiveBrushPosition(converter, canvas);
 
         QPointF translation = (initialTransform.map(*handles()[0])-mousePos)*-1.0;
         snapLine= snapLine.translated(translation);
@@ -202,7 +159,7 @@ KisPaintingAssistantHandleSP ParallelRulerAssistant::secondLocalHandle() const
     return handles().size() > 3 ? handles()[3] : 0;
 }
 
-QPointF ParallelRulerAssistant::getEditorPosition() const
+QPointF ParallelRulerAssistant::getDefaultEditorPosition() const
 {
     if (handles().size() > 1) {
         return (*handles()[0] + *handles()[1]) * 0.5;

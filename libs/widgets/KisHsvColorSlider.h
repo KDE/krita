@@ -16,13 +16,21 @@ class KoColor;
 class KRITAWIDGETS_EXPORT KisHsvColorSlider : public KSelector
 {
     Q_OBJECT
+
 public:
+    enum class MIX_MODE {
+        COLOR_SPACE, HSV, HSL, HSI, HSY,
+    };
+
     explicit KisHsvColorSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     explicit KisHsvColorSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisHsvColorSlider() override;
 
-    void setColors(const KoColor& minColor, const KoColor& maxColor);
-    KoColor currentColor() const;
+    void setColors(const KoColor minColor, const KoColor maxColor);
+    void setColors(const QColor minColor, const QColor maxColor);
+    void setColors(qreal minH, qreal minS, qreal minV, qreal maxH, qreal maxS, qreal maxV);
+
+    void setMixMode(MIX_MODE mode);
 
     void setCircularHue(bool);
 
@@ -30,12 +38,10 @@ protected:
     void drawContents(QPainter*) override;
     void drawArrow(QPainter *painter, const QPoint &pos) override;
 
+    QPoint calcArrowPos(int value);
+
     struct Private;
     Private* const d;
-
-private:
-    // Determine the commonly used hsv values for calulations.
-    void baseRange(qreal &minH, qreal &minS, qreal &minV, qreal &dH, qreal &dS, qreal &dV) const;
 };
 
 #endif

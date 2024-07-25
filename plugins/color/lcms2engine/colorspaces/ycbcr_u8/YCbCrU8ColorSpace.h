@@ -25,7 +25,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return QString("YCBCRA8");
+        return QStringLiteral("YCBCRA8");
     }
 
     KoID colorModelId() const override
@@ -95,7 +95,7 @@ public:
 
     QString defaultProfile() const override
     {
-        return QString();
+        return "ITU-R BT.709-6 YCbCr ICC V4 profile";
     }
 };
 

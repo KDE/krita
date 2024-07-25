@@ -7,8 +7,8 @@
 #include "kis_hline_iterator.h"
 
 
-KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *competionListener)
-    : KisBaseIterator(dataManager, writable, competionListener),
+KisHLineIterator2::KisHLineIterator2(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY, bool writable, KisIteratorCompleteListener *completionListener)
+    : KisBaseIterator(dataManager, writable, completionListener),
       m_offsetX(offsetX),
       m_offsetY(offsetY)
 {

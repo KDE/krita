@@ -1,0 +1,5 @@
+[host_machine]
+system = '@_system_name@'
+cpu_family = '@MESON_CPU_FAMILY@'
+cpu = '@CMAKE_SYSTEM_PROCESSOR@'
+endian = '@_endian@'

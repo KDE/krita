@@ -11,11 +11,11 @@
 #include <simpletest.h>
 #include <svg/SvgUtil.h>
 #include <KoColorBackground.h>
-
+#include <KoColorProfile.h>
 
 #include "SvgParserTestingUtils.h"
-#include <sdk/tests/testflake.h>
-#include "../../sdk/tests/qimage_test_util.h"
+#include <qimage_test_util.h>
+#include <testflake.h>
 
 #ifdef USE_ROUND_TRIP
 #include "SvgWriter.h"
@@ -36,7 +36,7 @@ void TestSvgParser::testUnitPx()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -61,7 +61,7 @@ void TestSvgParser::testUnitPxResolution()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -87,7 +87,7 @@ void TestSvgParser::testUnitPt()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -112,7 +112,7 @@ void TestSvgParser::testUnitIn()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 666 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -137,7 +137,7 @@ void TestSvgParser::testUnitPercentInitial()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 80, 80) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 80, 80) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -162,7 +162,7 @@ void TestSvgParser::testScalingViewport()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -174,6 +174,35 @@ void TestSvgParser::testScalingViewport()
     QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(8,2));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomLeft), QPointF(2,18));
     QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(8,18));
+}
+
+void TestSvgParser::testScalingViewportNoScale()
+{
+    const QString data =
+            "<svg width=\"10.1px\" height=\"20.2px\" viewBox=\"60 70 10.1 20.2\""
+            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+            "<rect id=\"testRect\" x=\"64\" y=\"74\" width=\"12\" height=\"32\""
+            "    fill=\"none\" stroke=\"none\" stroke-width=\"10\"/>"
+
+            "</svg>";
+
+    SvgTester t (data);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.run();
+
+    KoShape *shape = t.findShape("testRect");
+    QVERIFY(shape);
+
+    QCOMPARE(shape->absoluteTransformation(), QTransform::fromTranslate(4, 4));
+    // Verify that the scale factors are exactly 1.0
+    QVERIFY(shape->absoluteTransformation().m11() == 1.0);
+    QVERIFY(shape->absoluteTransformation().m22() == 1.0);
+    QCOMPARE(shape->outlineRect(), QRectF(0,0,12,32));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopLeft), QPointF(4,4));
+    QCOMPARE(shape->absolutePosition(KoFlake::TopRight), QPointF(16,4));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomLeft), QPointF(4,36));
+    QCOMPARE(shape->absolutePosition(KoFlake::BottomRight), QPointF(16,36));
 }
 
 void TestSvgParser::testScalingViewportKeepMeet1()
@@ -189,7 +218,7 @@ void TestSvgParser::testScalingViewportKeepMeet1()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -216,7 +245,7 @@ void TestSvgParser::testScalingViewportKeepMeet2()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -243,7 +272,7 @@ void TestSvgParser::testScalingViewportKeepMeetAlign()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -270,7 +299,7 @@ void TestSvgParser::testScalingViewportKeepSlice1()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -297,7 +326,7 @@ void TestSvgParser::testScalingViewportKeepSlice2()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -323,7 +352,7 @@ void TestSvgParser::testScalingViewportResolution()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -349,7 +378,7 @@ void TestSvgParser::testScalingViewportPercentInternal()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -496,7 +525,7 @@ void TestSvgParser::testScalingViewportTransform()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -523,7 +552,7 @@ void TestSvgParser::testTransformNesting()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -550,7 +579,7 @@ void TestSvgParser::testTransformNestingGroups()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -575,7 +604,7 @@ void TestSvgParser::testTransformRotation1()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -600,7 +629,7 @@ void TestSvgParser::testTransformRotation2()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 72 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -969,7 +998,7 @@ void TestSvgParser::testRenderDisplayAttribute()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -991,7 +1020,7 @@ void TestSvgParser::testRenderVisibilityAttribute()
                 "</svg>";
 
         SvgTester t (data);
-        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
         t.run();
 
         KoShape *shape = t.findShape("testRect");
@@ -1011,7 +1040,7 @@ void TestSvgParser::testRenderVisibilityAttribute()
                 "</svg>";
 
         SvgTester t (data);
-        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
         t.run();
 
         KoShape *shape = t.findShape("testRect");
@@ -1031,7 +1060,7 @@ void TestSvgParser::testRenderVisibilityAttribute()
                 "</svg>";
 
         SvgTester t (data);
-        t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+        t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
         t.run();
 
         KoShape *shape = t.findShape("testRect");
@@ -1055,7 +1084,7 @@ void TestSvgParser::testRenderVisibilityInheritance()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -1079,7 +1108,7 @@ void TestSvgParser::testRenderDisplayInheritance()
             "</svg>";
 
     SvgTester t (data);
-    t.parser.setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
+    t.parser().setResolution(QRectF(0, 0, 600, 400) /* px */, 144 /* ppi */);
     t.run();
 
     KoShape *shape = t.findShape("testRect");
@@ -1107,35 +1136,67 @@ void TestSvgParser::testRenderStrokeWithInlineStyle()
 
 void TestSvgParser::testIccColor()
 {
+#ifdef Q_OS_WIN
+    // HACK: For reasons yet unknown, the profile unique id is different on Windows.
+    // See https://invent.kde.org/graphics/krita/-/commit/1191295a4618a93893987497e3c54e6f0c2fd025#note_634123
+#define PROFILE_UNIQUE_ID_HEX "84f64878faf21217362594685be031d5"
+#else
+#define PROFILE_UNIQUE_ID_HEX "133a66607cffeebdd64dd433ada9bf4e"
+#endif
+    struct ScopedProfileRemover
+    {
+        ScopedProfileRemover()
+            : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(
+                QByteArray::fromHex(PROFILE_UNIQUE_ID_HEX)))
+        {
+            if (m_profile) {
+                qWarning() << "Profile already loaded, removing profile before test";
+                KoColorProfile *clone = m_profile->clone();
+                KoColorSpaceRegistry::instance()->removeProfile(clone);
+                m_profile = clone;
+            }
+        }
+        ~ScopedProfileRemover() {
+            if (m_profile) {
+                qWarning() << "Restoring removed profile after test";
+                KoColorSpaceRegistry::instance()->addProfile(m_profile);
+                delete m_profile;
+            }
+        }
+        const KoColorProfile *m_profile;
+    };
+    ScopedProfileRemover _profileRemover;
+
     // This test works because the icc-color won't be loaded unless there's a profile for it,
     // and the fill will be red if the icc-color is not loaded (it should be cyan).
     const QString data =
-            "<svg width=\"30px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+        "<svg width=\"30px\" height=\"30px\""
+        "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
 
-            "<g xml:base=\"icc\">"
-            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"default-profile\"/>"
+        "<g xml:base=\"icc\">"
+        "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+        "        local=\"" PROFILE_UNIQUE_ID_HEX "\" name=\"default-profile\"/>"
 
-            "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
-            "        local=\"133a66607cffeebdd64dd433ada9bf4e\" name=\"some-other-name\"/>"
+        "    <color-profile xlink:href=\"sRGB-elle-V4-srgbtrc.icc\""
+        "        local=\"" PROFILE_UNIQUE_ID_HEX "\" name=\"some-other-name\"/>"
 
-            "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
-            "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
-            "</g>"
+        "    <rect id=\"testRect\" x=\"5\" y=\"5\" width=\"10\" height=\"20\""
+        "        style = \"fill: red icc-color(default-profile, 0, 1, 1); stroke :blue; stroke-width:2;\"/>"
+        "</g>"
 
-            "</svg>";
+        "</svg>";
 
     SvgRenderTester t (data);
 
     int numFetches = 0;
 
-
-
-    t.parser.setFileFetcher(
+    t.parser().setFileFetcher(
         [&numFetches](const QString &name) {
             numFetches++;
-            const QString fileName = TestUtil::fetchDataFileLazy(name);
+            QString fileName = TestUtil::fetchDataFileLazy(name);
+            if (fileName.isEmpty()) {
+                fileName = TestUtil::fetchDataFileLazy("icc/" + name);
+            }
             QFile file(fileName);
             KIS_ASSERT(file.exists());
             file.open(QIODevice::ReadOnly);
@@ -1149,6 +1210,8 @@ void TestSvgParser::testIccColor()
         QSharedPointer<KoColorBackground>  bg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
         QVERIFY2(bg->color() == QColor("#00FFFF"), "icc-color is not being loaded during parsing");
     }
+    QCOMPARE(numFetches, 1);
+#undef PROFILE_UNIQUE_ID_HEX
 }
 
 void TestSvgParser::testRenderFillLinearGradientRelativePercent()
@@ -3242,7 +3305,7 @@ void TestSvgParser::testRenderImage_AspectDefault()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.parser.setFileFetcher(fileFetcherFunc);
+    t.parser().setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_default", false);
 }
@@ -3275,7 +3338,7 @@ void TestSvgParser::testRenderImage_AspectNone()
 
     SvgRenderTester t (data);
     t.setFuzzyThreshold(5);
-    t.parser.setFileFetcher(fileFetcherFunc);
+    t.parser().setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_none", false);
 }
@@ -3307,7 +3370,7 @@ void TestSvgParser::testRenderImage_AspectMeet()
             "</svg>";
 
     SvgRenderTester t (data);
-    t.parser.setFileFetcher(fileFetcherFunc);
+    t.parser().setFileFetcher(fileFetcherFunc);
 
     t.test_standard_30px_72ppi("image_aspect_meet", false);
 }
@@ -3479,6 +3542,19 @@ void TestSvgParser::testPathShape()
     t.test_standard_30px_72ppi("polygon", false);
 }
 
+void TestSvgParser::testPathData()
+{
+    const QString fileName = TestUtil::fetchDataFileLazy("paths-data-03-f.svg");
+    QVERIFY(!fileName.isEmpty());
+
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray pathData = file.readAll();
+
+    SvgRenderTester t(pathData);
+    t.test_standard("paths_data", {480, 360}, 72);
+}
+
 void TestSvgParser::testPathShapeEllipticalArc()
 {
     const QString data =
@@ -3490,7 +3566,8 @@ void TestSvgParser::testPathShapeEllipticalArc()
         "        a 1.8474812,2.9054325 0 013.3048758,-2.598695 l 3.3048637,-2.598687"
         "        a 5.4242101,1.9738467 73.492263 0,1,3.304876,-2.598694 l 3.304865,-2.598696"
         "        A 8.0718175,1.9886167 71.359615,0119.9573,14.244222 l 3.304873,-2.598695"
-        "        a 10.73523,1.9933048 70.675722   0  1 3.304865,-2.5986956 l 3.304876,-2.598694\""
+        "        a 10.73523,1.9933048 70.675722   0  1 3.304865,-2.5986956 l 3.304876,-2.598694"
+        "        a 0,0,0 00, 0.12808856,29.836374 a 10.73523,1.9933048,0 00, 0,0\""
         "     fill=\"none\" stroke=\"#ff0000\" stroke-width=\"0.414447\""
         "     transform=\"scale(3, 3)\""
         "     id=\"testRect\" />"
@@ -3800,6 +3877,49 @@ void TestSvgParser::testMarkersFillAsShape()
     SvgRenderTester t (data);
 
     t.test_standard_30px_72ppi("markers_scaled_fill_as_shape", false);
+}
+
+void TestSvgParser::testRenderPaintOrderProperty_data()
+{
+    QTest::addColumn<QString>("paintOrderChunk");
+
+    QTest::newRow("fill-stroke-markers") << "";
+    QTest::newRow("stroke-fill-markers") << " paint-order=\"stroke\"";
+    QTest::newRow("stroke-markers-fill") << " paint-order=\"stroke markers\"";
+    QTest::newRow("fill-markers-stroke") << " paint-order=\"fill markers\"";
+    QTest::newRow("markers-fill-stroke") << " paint-order=\"markers\"";
+    QTest::newRow("markers-stroke-fill") << " paint-order=\"markers stroke\"";
+}
+
+void TestSvgParser::testRenderPaintOrderProperty()
+{
+    const QString dataBefore = "<svg width=\"30px\" height=\"30px\""
+                               "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+
+                               "<marker id=\"SimpleRectMarker\""
+                               "    orient=\"auto\" refY=\"12.5\" refX=\"12.5\" >"
+
+                               "    <rect id=\"markerRect\" x=\"10\" y=\"10\" width=\"5\" height=\"5\""
+                               "        fill=\"red\" stroke=\"none\"/>"
+                               "    <rect id=\"markerRect\" x=\"14\" y=\"12\" width=\"1\" height=\"1\""
+                               "        fill=\"yellow\" stroke=\"none\"/>"
+                               "    <rect id=\"markerRect\" x=\"12\" y=\"12\" width=\"1\" height=\"1\""
+                               "        fill=\"white\" stroke=\"none\"/>"
+                               "</marker>"
+
+                               "<path id=\"testRect\"";
+    const QString dataAfter = "    style=\"fill:#ffffff;stroke:#000000;stroke-width:2px;marker-start:url(#SimpleRectMarker);marker-end:url(#SimpleRectMarker);marker-mid:url(#SimpleRectMarker)\""
+                              "    d=\"M5,15 C5,5 25,5 25,15 L15,25\"/>"
+
+                              "</svg>";
+
+    const QString name = QTest::currentDataTag();
+    QFETCH(QString, paintOrderChunk);
+
+    const QString data = dataBefore + paintOrderChunk + dataAfter;
+
+    SvgRenderTester t (data);
+    t.test_standard_30px_72ppi(name, false);
 }
 
 void TestSvgParser::testMarkersOnClosedPath()

@@ -14,7 +14,6 @@
 #include "KoPathShape.h"
 #include "KoSelection.h"
 #include "KoDocumentResourceManager.h"
-#include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
 #include "KoCanvasBase.h"
 #include "kis_int_parse_spin_box.h"
@@ -26,12 +25,12 @@
 
 #include <klocalizedstring.h>
 
-#include <QSpinBox>
-#include <QPainter>
-#include <QLabel>
-#include <QGridLayout>
 #include <QCheckBox>
-
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)
     : KoToolBase(*(new KoCreatePathToolPrivate(this, canvas)))
@@ -87,7 +86,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
         painter.restore();
 
         KisHandlePainterHelper helper =
-            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius);
+            KoShape::createHandlePainterHelperView(&painter, d->shape, converter, d->handleRadius, d->decorationThickness);
 
         const bool firstPointActive = d->firstPoint == d->activePoint;
 
@@ -112,7 +111,7 @@ void KoCreatePathTool::paint(QPainter &painter, const KoViewConverter &converter
     }
 
     if (d->hoveredPoint) {
-        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius);
+        KisHandlePainterHelper helper = KoShape::createHandlePainterHelperView(&painter, d->hoveredPoint->parent(), converter, d->handleRadius, d->decorationThickness);
         helper.setHandleStyle(KisHandleStyle::highlightedPrimaryHandles());
         d->hoveredPoint->paint(helper, KoPathPoint::Node);
     }
@@ -131,8 +130,7 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
                          painter.transform());
     painter.save();
 
-    KoShapePaintingContext paintContext; //FIXME
-    pathShape.paint(painter, paintContext);
+    pathShape.paint(painter);
     painter.restore();
 
     if (pathShape.stroke()) {
@@ -386,6 +384,9 @@ void KoCreatePathTool::endPath()
 {
     Q_D(KoCreatePathTool);
 
+    if (!d->shape) {
+        return;
+    }
     d->addPathShape();
     repaintDecorations();
     endShape();
@@ -395,12 +396,13 @@ void KoCreatePathTool::endPathWithoutLastPoint()
 {
     Q_D(KoCreatePathTool);
 
-    if (d->shape) {
-        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-        d->addPathShape();
-
-        repaintDecorations();
+    if (!d->shape) {
+        return;
     }
+    delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
+    d->addPathShape();
+
+    repaintDecorations();
     endShape();
 }
 
@@ -408,10 +410,11 @@ void KoCreatePathTool::cancelPath()
 {
     Q_D(KoCreatePathTool);
 
-    if (d->shape) {
-        d->firstPoint = 0;
-        d->activePoint = 0;
+    if (!d->shape) {
+        return;
     }
+    d->firstPoint = 0;
+    d->activePoint = 0;
     d->cleanUp();
     repaintDecorations();
     endShape();
@@ -444,6 +447,7 @@ void KoCreatePathTool::activate(const QSet<KoShape*> &shapes)
 
     // retrieve the actual global handle radius
     d->handleRadius = handleRadius();
+    d->decorationThickness = decorationThickness();
     d->loadAutoSmoothValueFromConfig();
 
     // reset snap guide
@@ -457,13 +461,17 @@ void KoCreatePathTool::deactivate()
     KoToolBase::deactivate();
 }
 
-void KoCreatePathTool::documentResourceChanged(int key, const QVariant & res)
+void KoCreatePathTool::canvasResourceChanged(int key, const QVariant & res)
 {
     Q_D(KoCreatePathTool);
 
     switch (key) {
-    case KoDocumentResourceManager::HandleRadius: {
+    case KoCanvasResource::HandleRadius: {
         d->handleRadius = res.toUInt();
+    }
+    break;
+    case KoCanvasResource::DecorationThickness: {
+        d->decorationThickness = res.toUInt();
     }
     break;
     default:
@@ -539,37 +547,58 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
 
     QList<QPointer<QWidget> > list;
 
-    QCheckBox *smoothCurves = new QCheckBox(i18n("Autosmooth curve"));
+    QWidget *widget = new QWidget();
+    widget->setObjectName("bezier-curve-tool-widget");
+    widget->setWindowTitle(i18n("Path options"));
+
+    QCheckBox *smoothCurves = new QCheckBox(i18n("Autosmooth curve"), widget);
     smoothCurves->setObjectName("smooth-curves-widget");
     smoothCurves->setChecked(d->autoSmoothCurves);
-    connect(smoothCurves, SIGNAL(toggled(bool)), this, SLOT(autoSmoothCurvesChanged(bool)));
-    connect(this, SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)), smoothCurves, SLOT(setChecked(bool)));
 
-    list.append(smoothCurves);
+    QCheckBox *angleSnap = new QCheckBox(i18n("Activate angle snap"), widget);
+    angleSnap->setObjectName("angle-snap-widget");
+    angleSnap->setChecked(false);
+    angleSnap->setCheckable(true);
 
-    QWidget *angleWidget = new QWidget();
-    angleWidget->setObjectName("Angle Constraints");
-    QGridLayout *layout = new QGridLayout(angleWidget);
-    layout->addWidget(new QLabel(i18n("Angle snapping delta:"), angleWidget), 0, 0);
-    KisAngleSelector *angleEdit = new KisAngleSelector(angleWidget);
+    KisAngleSelector *angleEdit = new KisAngleSelector(widget);
+    angleEdit->setObjectName("angle-edit-widget");
     angleEdit->setAngle(d->angleSnappingDelta);
     angleEdit->setRange(1, 360);
     angleEdit->setDecimals(0);
     angleEdit->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
-    layout->addWidget(angleEdit, 0, 1);
-    layout->addWidget(new QLabel(i18n("Activate angle snap:"), angleWidget), 1, 0);
-    QCheckBox *angleSnap = new QCheckBox(angleWidget);
-    angleSnap->setChecked(false);
-    angleSnap->setCheckable(true);
-    layout->addWidget(angleSnap, 1, 1);
-    QWidget *specialSpacer = new QWidget();
-    specialSpacer->setObjectName("SpecialSpacer");
-    layout->addWidget(specialSpacer, 2, 1);
-    angleWidget->setWindowTitle(i18n("Angle Constraints"));
-    list.append(angleWidget);
+    angleEdit->setEnabled(angleSnap->isChecked());
 
+    QHBoxLayout *angleEditLayout = new QHBoxLayout;
+    angleEditLayout->setContentsMargins(10, 0, 0, 0);
+    angleEditLayout->setSpacing(0);
+    angleEditLayout->addWidget(angleEdit);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(5);
+
+    mainLayout->addWidget(smoothCurves);
+    mainLayout->addWidget(angleSnap);
+    mainLayout->addLayout(angleEditLayout);
+
+    widget->setLayout(mainLayout);
+
+    list.append(widget);
+
+    connect(smoothCurves,
+            SIGNAL(toggled(bool)),
+            this,
+            SLOT(autoSmoothCurvesChanged(bool)));
+    connect(this,
+            SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)),
+            smoothCurves,
+            SLOT(setChecked(bool)));
     connect(angleEdit, SIGNAL(angleChanged(qreal)), this, SLOT(angleDeltaChanged(qreal)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
+    connect(angleSnap,
+            SIGNAL(toggled(bool)),
+            angleEdit,
+            SLOT(setEnabled(bool)));
 
     return list;
 }

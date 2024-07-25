@@ -82,7 +82,7 @@ qreal DotsRoundSinusoidalEqualized::operator()(qreal x, qreal y) const
 qreal DotsEllipseLinear::operator()(qreal x, qreal y) const
 {
     constexpr qreal aspectRatio = 1.25;
-    // The folowing magic number makes the function go to 1.0 in
+    // The following magic number makes the function go to 1.0 in
     // the corners of the cell (normalizes it)
     constexpr qreal factor = 0.625;
     x = triangle(x);

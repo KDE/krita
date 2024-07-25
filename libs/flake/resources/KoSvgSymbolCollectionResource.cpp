@@ -25,7 +25,6 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeManager.h>
-#include <KoShapePaintingContext.h>
 #include <SvgParser.h>
 #include <KoMD5Generator.h>
 
@@ -42,14 +41,12 @@ QImage KoSvgSymbol::icon()
     QPainter gc(&image);
     image.fill(Qt::gray);
 
-    KoShapePaintingContext ctx;
-
 //        debugFlake << "Going to render. Original bounding rect:" << group->boundingRect()
 //                 << "Normalized: " << rc
 //                 << "Scale W" << 256 / rc.width() << "Scale H" << 256 / rc.height();
 
     gc.translate(-rc.x(), -rc.y());
-    KoShapeManager::renderSingleShape(group, gc, ctx);
+    KoShapeManager::renderSingleShape(group, gc);
     gc.end();
     image = image.scaled(128, 128, Qt::KeepAspectRatio);
     return image;
@@ -120,9 +117,9 @@ bool KoSvgSymbolCollectionResource::loadFromDevice(QIODevice *dev, KisResourcesI
     QDomDocument doc = SvgParser::createDocumentFromSvg(dev, &errorMsg, &errorLine, &errorColumn);
     if (doc.isNull()) {
 
-        errKrita << "Parsing error in " << filename() << "! Aborting!" << endl
-        << " In line: " << errorLine << ", column: " << errorColumn << endl
-        << " Error message: " << errorMsg << endl;
+        errKrita << "Parsing error in " << filename() << "! Aborting!" << Qt::endl
+        << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+        << " Error message: " << errorMsg << Qt::endl;
         errKrita << i18n("Parsing error in the main document at line %1, column %2\nError message: %3"
                          , errorLine , errorColumn , errorMsg);
         return false;

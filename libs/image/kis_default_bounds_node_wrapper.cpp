@@ -46,6 +46,11 @@ bool KisDefaultBoundsNodeWrapper::wrapAroundMode() const
     return m_d->node && m_d->node->image() ? m_d->node->image()->wrapAroundModeActive() : false;
 }
 
+WrapAroundAxis KisDefaultBoundsNodeWrapper::wrapAroundModeAxis() const
+{
+    return m_d->node && m_d->node->image() ? m_d->node->image()->wrapAroundModeAxis() : WRAPAROUND_BOTH;
+}
+
 int KisDefaultBoundsNodeWrapper::currentLevelOfDetail() const
 {
     return m_d->node && m_d->node->image() ? m_d->node->image()->currentLevelOfDetail() : 0;

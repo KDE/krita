@@ -32,7 +32,12 @@ KisToolPolygon::~KisToolPolygon()
 
 void KisToolPolygon::resetCursorStyle()
 {
-    KisToolPolylineBase::resetCursorStyle();
+    if (isEraser()) {
+        useCursor(KisCursor::load("tool_polygon_eraser_cursor.png", 6, 6));
+    } else {
+        KisToolPolylineBase::resetCursorStyle();
+    }
+
     overrideCursorIfNotEditable();
 }
 
@@ -73,3 +78,7 @@ void KisToolPolygon::finishPolyline(const QVector<QPointF>& points)
     }
 }
 
+bool KisToolPolygon::supportsPaintingAssistants() const
+{
+    return true;
+}

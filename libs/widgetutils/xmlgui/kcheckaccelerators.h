@@ -64,11 +64,11 @@ class QTextBrowser;
 
 */
 
-class KCheckAccelerators: public QObject
+class KisKCheckAccelerators: public QObject
 {
     Q_OBJECT
 public:
-    KCheckAccelerators(QObject *parent, int key, bool autoCheck, bool copyWidgetText);
+    KisKCheckAccelerators(QObject *parent, int key, bool autoCheck, bool copyWidgetText);
     /**
      * Re-implemented to filter the parent's events.
      */

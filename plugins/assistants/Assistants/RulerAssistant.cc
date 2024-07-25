@@ -69,9 +69,15 @@ QPointF RulerAssistant::project(const QPointF& pt) const
     return t * u + pt1;
 }
 
-QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/, const bool /*snapToAny*/)
+QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strokeBegin*/, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
 {
     return project(pt);
+}
+
+void RulerAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point);
+    strokeBegin = project(strokeBegin);
 }
 
 void RulerAssistant::drawSubdivisions(QPainter& gc, const KisCoordinatesConverter *converter) {
@@ -210,7 +216,7 @@ void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conv
     drawPath(gc, path, isSnappingActive());
 }
 
-QPointF RulerAssistant::getEditorPosition() const
+QPointF RulerAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

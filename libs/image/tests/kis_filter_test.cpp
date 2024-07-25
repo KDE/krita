@@ -10,6 +10,8 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
 #include <testutil.h>
@@ -109,7 +111,7 @@ void KisFilterTest::testDifferentSrcAndDst()
     QImage inverted(QString(FILES_DATA_DIR) + '/' + "inverted_hakonepa.png");
     KisPaintDeviceSP src = new KisPaintDevice(cs);
     KisPaintDeviceSP dst = new KisPaintDevice(cs);
-    KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src));
+    KisSelectionSP sel = new KisSelection(new KisSelectionDefaultBounds(src), KisImageResolutionProxy::identity());
     sel->pixelSelection()->invert(); // select everything
     sel->updateProjection();
 

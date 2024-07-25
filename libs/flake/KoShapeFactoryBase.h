@@ -12,10 +12,9 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <QDomDocument>
 
 #include "kritaflake_export.h"
-
-#include <KoXmlReader.h>
 
 class KoShape;
 class KoProperties;
@@ -157,7 +156,7 @@ public:
      * FIXME: this method is only used by Tables. We should refactor so
      * it is no longer necessary.
      *
-     * NOTE: this actually is also used somehow to create the imagecollection
+     * NOTE: this actually is also used somehow to create the image collection
      *        for the picture shape?
      *
      * NOTE: we store the documentmanagers in a list, and remove them

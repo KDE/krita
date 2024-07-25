@@ -41,7 +41,7 @@ class QIODevice;
  *
  * The interface definition is enforced by KisDataManager calling all the methods
  * which must also be defined in KisTiledDataManager. It is not allowed to change the interface
- * as other datamangers may also rely on the same interface.
+ * as other datamanagers may also rely on the same interface.
  *
  * * Storing undo/redo data
  * * Offering ordered and unordered iterators over rects of pixels
@@ -95,7 +95,7 @@ public:
         *tile = getTile(col, row, writable);
 
         bool unused;
-        *oldTile = m_mementoManager->getCommitedTile(col, row, unused);
+        *oldTile = m_mementoManager->getCommittedTile(col, row, unused);
 
         if (!*oldTile) {
             *oldTile = *tile;
@@ -122,7 +122,7 @@ public:
     }
 
     inline KisTileSP getOldTile(qint32 col, qint32 row, bool &existingTile) {
-        KisTileSP tile = m_mementoManager->getCommitedTile(col, row, existingTile);
+        KisTileSP tile = m_mementoManager->getCommittedTile(col, row, existingTile);
         return tile ? tile : getReadOnlyTileLazy(col, row, existingTile);
     }
 
@@ -345,8 +345,14 @@ private:
     // and pixel size
     friend class KisAbstractTileCompressor;
     friend class KisTileDataWrapper;
-    qint32 xToCol(qint32 x) const;
-    qint32 yToRow(qint32 y) const;
+    inline qint32 xToCol(qint32 x) const
+    {
+        return divideRoundDown(x, KisTileData::WIDTH);
+    }
+    inline qint32 yToRow(qint32 y) const
+    {
+        return divideRoundDown(y, KisTileData::HEIGHT);
+    }
 
 private:
     void setDefaultPixelImpl(const quint8 *defPixel);
@@ -354,7 +360,15 @@ private:
     bool writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
-    qint32 divideRoundDown(qint32 x, const qint32 y) const;
+    inline qint32 divideRoundDown(qint32 x, const qint32 y) const
+    {
+        /**
+         * Equivalent to the following:
+         * -(( -x + (y-1) ) / y)
+         */
+
+        return x >= 0 ? x / y : -(((-x - 1) / y) + 1);
+    }
 
     void recalculateExtent();
 
@@ -387,28 +401,6 @@ public:
     }
 
 };
-
-inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) const
-{
-    /**
-     * Equivalent to the following:
-     * -(( -x + (y-1) ) / y)
-     */
-
-    return x >= 0 ?
-           x / y :
-           -(((-x - 1) / y) + 1);
-}
-
-inline qint32 KisTiledDataManager::xToCol(qint32 x) const
-{
-    return divideRoundDown(x, KisTileData::WIDTH);
-}
-
-inline qint32 KisTiledDataManager::yToRow(qint32 y) const
-{
-    return divideRoundDown(y, KisTileData::HEIGHT);
-}
 
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation

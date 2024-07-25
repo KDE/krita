@@ -13,7 +13,7 @@
 #include "KisView.h"
 
 class KisViewManager;
-class KActionCollection;
+class KisKActionCollection;
 class KisNodeCommandsAdapter;
 class KisActionManager;
 
@@ -38,7 +38,7 @@ private:
     
     friend class KisNodeManager;
     
-    void setup(KActionCollection * actionCollection, KisActionManager *actionManager);
+    void setup(KisKActionCollection * actionCollection, KisActionManager *actionManager);
 
     void updateGUI();
     

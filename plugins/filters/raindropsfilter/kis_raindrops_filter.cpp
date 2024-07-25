@@ -41,6 +41,7 @@
 
 #include "widgets/kis_multi_integer_filter_widget.h"
 
+#include <QRandomGenerator>
 
 KisRainDropsFilter::KisRainDropsFilter()
     : KisFilter(id(), FiltersCategoryArtisticId, i18n("&Raindrops..."))
@@ -88,7 +89,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     quint32 DropSize = config->getInt("dropSize", 80);
     quint32 number = config->getInt("number", 80);
     quint32 fishEyes = config->getInt("fishEyes", 30);
-    qsrand(config->getInt("seed"));
+    QRandomGenerator rng(config->getInt("seed"));
 
     if (fishEyes <= 0) fishEyes = 1;
 
@@ -111,7 +112,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
     double    r, a;                             // polar coordinates
     double    OldRadius;                        // Radius before processing
-    double    NewfishEyes = (double)fishEyes * 0.01;  // FishEye fishEyesicients
+    double    NewfishEyes = (double)fishEyes * 0.01;  // FishEye Coefficients
     double    s;
     double    R, G, B;
 
@@ -131,7 +132,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
     KisRandomAccessorSP dstAccessor = device->createRandomAccessorNG();
     
     for (uint NumBlurs = 0; NumBlurs <= number; ++NumBlurs) {
-        NewSize = (int)(qrand() * ((double)(DropSize - 5) / RAND_MAX) + 5);
+        NewSize = 5 + static_cast<int>(rng.bounded(1.0) * (DropSize - 5));
         halfSize = NewSize / 2;
         Radius = halfSize;
         s = Radius / log(NewfishEyes * Radius + 1);
@@ -140,8 +141,8 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 
         do {
             FindAnother = false;
-            y = (int)(qrand() * ((double)(Width - 1) / RAND_MAX));
-            x = (int)(qrand() * ((double)(Height - 1) / RAND_MAX));
+            y = static_cast<int>(rng.bounded(static_cast<double>(Width - 1) / RAND_MAX));
+            x = static_cast<int>(rng.bounded(static_cast<double>(Height - 1) / RAND_MAX));
 
             if (BoolMatrix[y][x])
                 FindAnother = true;
@@ -316,7 +317,7 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
 /* Function to free a dynamic boolean array
  *
  * lpbArray          => Dynamic boolean array
- * Columns           => The array bidimension value
+ * Columns           => The number of array columns
  *
  * Theory            => An easy to understand 'for' statement
  */
@@ -328,7 +329,7 @@ void KisRainDropsFilter::FreeBoolArray(bool** lpbArray, uint Columns) const
     free(lpbArray);
 }
 
-/* Function to create a bidimentional dynamic boolean array
+/* Function to create a bidimensional dynamic boolean array
  *
  * Columns           => Number of columns
  * Rows              => Number of rows

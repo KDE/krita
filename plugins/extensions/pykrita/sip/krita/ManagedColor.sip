@@ -3,6 +3,18 @@ class ManagedColor : QObject
 %TypeHeaderCode
 #include "ManagedColor.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a ManagedColor passed to a Signal is provided as a QObject instead of
+  // a ManagedColor object
+  // (not sure why, but explicit conversion here fix the problem)
+  ManagedColor* mc = qobject_cast<ManagedColor*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_ManagedColor;
+  }
+%End
+
     ManagedColor(const ManagedColor & __0);
 public:
     ManagedColor(const QString &colorModel, const QString &colorDepth, const QString &colorProfile, QObject *parent = 0);

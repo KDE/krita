@@ -27,19 +27,19 @@ void KisCsvTest::testFiles()
 
 void KisCsvTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), CsvMimetype);
+    TestUtil::testImportFromWriteonly(CsvMimetype);
 }
 
 
 void KisCsvTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), CsvMimetype);
+    TestUtil::testExportToReadonly(CsvMimetype);
 }
 
 
 void KisCsvTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), CsvMimetype);
+    TestUtil::testImportIncorrectFormat(CsvMimetype);
 }
 
 SIMPLE_TEST_MAIN(KisCsvTest)

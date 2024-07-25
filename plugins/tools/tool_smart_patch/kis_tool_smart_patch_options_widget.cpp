@@ -39,11 +39,12 @@ KisToolSmartPatchOptionsWidget::KisToolSmartPatchOptionsWidget(KisCanvasResource
 {
     m_d->ui = new Ui_KisToolSmartPatchOptionsWidget();
     m_d->ui->setupUi(this);
-
 }
 
 KisToolSmartPatchOptionsWidget::~KisToolSmartPatchOptionsWidget()
 {
+    delete m_d->ui;
+    m_d->ui = nullptr;
 }
 
 int KisToolSmartPatchOptionsWidget::getPatchRadius()

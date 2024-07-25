@@ -47,16 +47,6 @@ public:
         ExportPageShot()
             : commentRects() {
         }
-
-        ExportPageShot(const ExportPageShot& other)
-            : cutNameRect(other.cutNameRect)
-            , cutNumberRect(other.cutNumberRect)
-            , cutDurationRect(other.cutDurationRect)
-            , cutImageRect(other.cutImageRect) {
-            Q_FOREACH(const QString& key, other.commentRects.keys()) {
-                commentRects.insert(key, other.commentRects[key]);
-            }
-        }
     };
 
     struct ExportPage {
@@ -68,15 +58,6 @@ public:
         ExportPage()
             : elements()
         {}
-
-        ExportPage(const ExportPage& other)
-            : elements(other.elements)
-            , pageTimeRect(other.pageTimeRect)
-            , pageNumberRect(other.pageNumberRect)
-            , svg(other.svg)
-        {}
-
-        ~ExportPage() {}
     };
 
 private Q_SLOTS:

@@ -3,6 +3,18 @@ class Node : QObject
 %TypeHeaderCode
 #include "Node.h"
 %End
+
+%ConvertToSubClassCode
+  // Need to add sub class conversion, otherwise a Node passed to a Signal is provided as a QObject instead of
+  // a Node object
+  // (not sure why, but explicit conversion here fix the problem)
+  Node* mc = qobject_cast<Node*>(sipCpp);
+  sipType = 0;
+  if (mc) {
+      sipType = sipType_Node;
+  }
+%End
+
     Node(const Node & __0);
 public:
     virtual ~Node();
@@ -17,6 +29,7 @@ public Q_SLOTS:
     void setBlendingMode(QString value);
     QList<Channel *> channels() const /Factory/;
     QList<Node *> childNodes() const /Factory/;
+    QList<Node *> findChildNodes(const QString &name = QString(), bool recursive = false, bool partialMatch = false, const QString &type = QString(), int colorLabelIndex = 0) const /Factory/;
     bool addChildNode(Node *child, Node *above);
     bool removeChildNode(Node *child);
     void setChildNodes(QList<Node *> nodes);
@@ -37,6 +50,7 @@ public Q_SLOTS:
     void setInheritAlpha(bool value);
     bool locked() const;
     void setLocked(bool value);
+    bool hasExtents();
     QString name() const;
     void setName(QString value);
     int opacity() const;
@@ -65,7 +79,15 @@ public Q_SLOTS:
     QImage thumbnail(int w, int h);
     QString layerStyleToAsl();
     void setLayerStyleFromAsl(const QString &asl);
+    int index() const;
     QUuid uniqueId() const;
+
+    void paintLine(const QPoint pointOne, const QPoint pointTwo, const QString strokeStyle = "ForegroundColor");
+    void paintRectangle(const QRectF &rect, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    void paintPolygon(const QList<QPointF> points, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    void paintEllipse(const QRectF &rect, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    void paintPath(const QPainterPath &path, const QString strokeStyle = "ForegroundColor", const QString fillStyle = "None");
+    QString paintAbility();
 Q_SIGNALS:
 private:
 };

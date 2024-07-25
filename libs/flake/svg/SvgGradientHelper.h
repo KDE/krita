@@ -28,7 +28,7 @@ public:
 
     /// Sets the gradient
     void setGradient(QGradient * g);
-    /// Retrurns the gradient
+    /// Returns the gradient
     QGradient * gradient() const;
 
     /// Sets the meshgradient

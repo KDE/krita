@@ -28,38 +28,67 @@
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
-#include <KisUsageLogger.h>
-#include <KoFileDialog.h>
-#include <kis_icon_utils.h>
-#include <KoDialog.h>
-#include <KoProgressUpdater.h>
-#include <KoJsonTrader.h>
 #include <KisMimeDatabase.h>
+#include <KisPart.h>
+#include <KisPopupButton.h>
+#include <KisPreExportChecker.h>
+#include <KisUsageLogger.h>
+#include <KoColorProfile.h>
+#include <KoColorProfileConstants.h>
+#include <KoDialog.h>
+#include <KoFileDialog.h>
+#include <KoJsonTrader.h>
+#include <KoProgressUpdater.h>
+#include <kis_assert.h>
 #include <kis_config_widget.h>
 #include <kis_debug.h>
-#include <KisPreExportChecker.h>
-#include <KisPart.h>
-#include "kis_assert.h"
-#include "kis_config.h"
-#include "KisImportExportFilter.h"
-#include "KisDocument.h"
+#include <kis_icon_utils.h>
 #include <kis_image.h>
-#include <kis_paint_layer.h>
-#include "kis_painter.h"
-#include "kis_guides_config.h"
-#include "kis_grid_config.h"
-#include "KisPopupButton.h"
 #include <kis_iterator_ng.h>
-#include "kis_async_action_feedback.h"
+#include <kis_layer_utils.h>
+#include <kis_paint_layer.h>
+#include <kis_painter.h>
+
+#include "KisDocument.h"
+#include "KisImportExportErrorCode.h"
+#include "KisImportExportFilter.h"
+#include "KisMainWindow.h"
 #include "KisReferenceImagesLayer.h"
 #include "imagesize/dlg_imagesize.h"
-#include "kis_layer_utils.h"
-#include <KoColorProfile.h>
-#include "KisMainWindow.h"
+#include "kis_async_action_feedback.h"
+#include "kis_config.h"
+#include "kis_grid_config.h"
+#include "kis_guides_config.h"
+
+#include <KisImportUserFeedbackInterface.h>
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
 QStringList KisImportExportManager::m_exportMimeTypes;
+
+namespace {
+struct SynchronousUserFeedbackInterface : KisImportUserFeedbackInterface
+{
+    SynchronousUserFeedbackInterface(QWidget *parent, bool batchMode)
+        : m_parent(parent)
+        , m_batchMode(batchMode)
+    {
+    }
+
+    Result askUser(AskCallback callback) override
+    {
+        if (m_batchMode) return SuppressedByBatchMode;
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_parent, SuppressedByBatchMode);
+
+        return callback(m_parent) ? Success : UserCancelled;
+    }
+
+    QWidget *m_parent {nullptr};
+    bool m_batchMode {false};
+};
+
+}
+
 
 class Q_DECL_HIDDEN KisImportExportManager::Private
 {
@@ -140,7 +169,7 @@ KisImportExportErrorCode KisImportExportManager::exportDocument(const QString& l
     return result.status();
 }
 
-QFuture<KisImportExportErrorCode> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType,
+QFuture<KisImportExportErrorCode> KisImportExportManager::exportDocumentAsync(const QString &location, const QString &realLocation, const QByteArray &mimeType,
                                                                             KisImportExportErrorCode &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
     ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true, isAdvancedExporting);
@@ -161,15 +190,19 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
 
     if (direction == KisImportExportManager::Import) {
         if (m_importMimeTypes.isEmpty()) {
-            QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
-            Q_FOREACH(QPluginLoader *loader, list) {
-                QJsonObject json = loader->metaData().value("MetaData").toObject();
+            QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
+            Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
+                QJsonObject json = loader.metaData().value("MetaData").toObject();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", Qt::SkipEmptyParts)) {
+#else
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
+#endif
+
                     //qDebug() << "Adding  import mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
             }
-            qDeleteAll(list);
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
             m_importMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
 #else
@@ -180,15 +213,19 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
     }
     else if (direction == KisImportExportManager::Export) {
         if (m_exportMimeTypes.isEmpty()) {
-            QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
-            Q_FOREACH(QPluginLoader *loader, list) {
-                QJsonObject json = loader->metaData().value("MetaData").toObject();
+            QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
+            Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
+                QJsonObject json = loader.metaData().value("MetaData").toObject();
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+                Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", Qt::SkipEmptyParts)) {
+#else
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
+#endif
+
                     //qDebug() << "Adding  export mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
                 }
             }
-           qDeleteAll(list);
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
             m_exportMimeTypes = QList<QString>(mimeTypes.begin(), mimeTypes.end());
 #else
@@ -205,15 +242,22 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
 {
     int weight = -1;
     KisImportExportFilter *filter = 0;
-    QList<QPluginLoader *>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
-    Q_FOREACH(QPluginLoader *loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
+    QList<KoJsonTrader::Plugin>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
+
+    Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
+        QJsonObject json = loader.metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+        if (json.value(directionKey).toString().split(",", Qt::SkipEmptyParts).contains(mimetype)) {
+#else
         if (json.value(directionKey).toString().split(",", QString::SkipEmptyParts).contains(mimetype)) {
-            KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
+#endif
+
+            KLibFactory *factory = qobject_cast<KLibFactory *>(loader.instance());
 
             if (!factory) {
-                warnUI << loader->errorString();
+                warnUI << loader.errorString();
                 continue;
             }
 
@@ -236,12 +280,12 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
             if (w > weight) {
                 delete filter;
                 filter = f;
-                f->setObjectName(loader->fileName());
+                f->setObjectName(loader.fileName());
                 weight = w;
             }
         }
     }
-    qDeleteAll(list);
+
     if (filter) {
         filter->setMimeType(mimetype);
     }
@@ -331,6 +375,11 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     filter->setBatchMode(batchMode());
     filter->setMimeType(typeName);
 
+    if (direction == Import) {
+        KisMainWindow *kisMain = KisPart::instance()->currentMainwindow();
+        filter->setImportUserFeedBackInterface(new SynchronousUserFeedbackInterface(kisMain, batchMode()));
+    }
+
     if (!d->updater.isNull()) {
         // WARNING: The updater is not guaranteed to be persistent! If you ever want
         // to add progress reporting to "Save also as .kra", make sure you create
@@ -360,13 +409,8 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     if (direction == Import) {
 
         KisUsageLogger::log(QString("Importing %1 to %2. Location: %3. Real location: %4. Batchmode: %5")
-                            .arg(QString::fromLatin1(from))
-                            .arg(QString::fromLatin1(to))
-                            .arg(location)
-                            .arg(realLocation)
-                            .arg(batchMode()));
-
-
+                                .arg(QString::fromLatin1(from), QString::fromLatin1(to), location,
+                                     realLocation, QString::number(batchMode())));
 
         // async importing is not yet supported!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
@@ -381,17 +425,21 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         if (result.status().isOk()) {
             KisImageSP image = m_document->image().toStrongRef();
             if (image) {
-                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
-                                    .arg(QString::fromLatin1(from))
-                                    .arg(image->width())
-                                    .arg(image->height())
-                                    .arg(image->xRes())
-                                    .arg(image->colorSpace()->colorModelId().name())
-                                    .arg(image->colorSpace()->colorDepthId().name())
-                                    .arg(image->colorSpace()->profile()->name())
-                                    .arg(image->nlayers()));
-            }
-            else {
+                KIS_SAFE_ASSERT_RECOVER(image->colorSpace() != nullptr && image->colorSpace()->profile() != nullptr)
+                {
+                    qWarning() << "Loaded a profile-less file without a fallback. Rejecting image "
+                                  "opening";
+                    return KisImportExportErrorCode(ImportExportCodes::InternalError);
+                }
+                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color "
+                                            "model: %6 %5 (%7). Layers: %8")
+                                        .arg(QString::fromLatin1(from), QString::number(image->width()),
+                                             QString::number(image->height()), QString::number(image->xRes()),
+                                             image->colorSpace()->colorModelId().name(),
+                                             image->colorSpace()->colorDepthId().name(),
+                                             image->colorSpace()->profile()->name(),
+                                             QString::number(image->nlayers())));
+            } else {
                 qWarning() << "The filter returned OK, but there is no image";
             }
 
@@ -421,27 +469,27 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             return KisImportExportErrorCode(ImportExportCodes::Cancelled);
         }
 
-        KisUsageLogger::log(QString("Converting from %1 to %2. Location: %3. Real location: %4. Batchmode: %5. Configuration: %6")
-                            .arg(QString::fromLatin1(from))
-                            .arg(QString::fromLatin1(to))
-                            .arg(location)
-                            .arg(realLocation)
-                            .arg(batchMode())
-                            .arg(exportConfiguration ? exportConfiguration->toXML() : "none"));
+        KisUsageLogger::log(
+            QString(
+                "Converting from %1 to %2. Location: %3. Real location: %4. Batchmode: %5. Configuration: %6")
+                .arg(QString::fromLatin1(from), QString::fromLatin1(to), location, realLocation,
+                     QString::number(batchMode()),
+                     (exportConfiguration ? exportConfiguration->toXML() : "none")));
 
-
-
+        const QString alsoAsKraLocation = alsoAsKra ? getAlsoAsKraLocation(location) : QString();
         if (isAsync) {
-            result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+            result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter,
+                                                 exportConfiguration, alsoAsKraLocation));
 
             // we should explicitly report that the exporting has been initiated
             result.setStatus(ImportExportCodes::OK);
 
         } else if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Saving document..."), 0);
-            result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+            result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter,
+                                           exportConfiguration, alsoAsKraLocation));
         } else {
-            result = doExport(location, filter, exportConfiguration, alsoAsKra);
+            result = doExport(location, filter, exportConfiguration, alsoAsKraLocation);
         }
 
         if (exportConfiguration && !batchMode()) {
@@ -466,17 +514,21 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
             (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
              !cs->profile()->name().contains(QLatin1String("g10")));
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
-    
-    int primaries = cs->profile()->getColorPrimaries();
-    if (primaries >= 256) {
+
+    ColorPrimaries primaries = cs->profile()->getColorPrimaries();
+    if (primaries >= PRIMARIES_ADOBE_RGB_1998) {
         primaries = PRIMARIES_UNSPECIFIED;
     }
-    int transferFunction = cs->profile()->getTransferCharacteristics();
-    if (transferFunction >= 256) {
+    TransferCharacteristics transferFunction =
+        cs->profile()->getTransferCharacteristics();
+    if (transferFunction >= TRC_GAMMA_1_8) {
         transferFunction = TRC_UNSPECIFIED;
     }
-    exportConfiguration->setProperty(KisImportExportFilter::CICPPrimariesTag, primaries);
-    exportConfiguration->setProperty(KisImportExportFilter::CICPTransferCharacteristicsTag, transferFunction);
+    exportConfiguration->setProperty(KisImportExportFilter::CICPPrimariesTag,
+                                     static_cast<int>(primaries));
+    exportConfiguration->setProperty(
+        KisImportExportFilter::CICPTransferCharacteristicsTag,
+        static_cast<int>(transferFunction));
     exportConfiguration->setProperty(KisImportExportFilter::HDRTag, cs->hasHighDynamicRange());
 }
 
@@ -555,13 +607,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
     }
 
     if (!batchMode && (wdg || !warnings.isEmpty() || isAdvancedExporting)) {
-
-        KoDialog dlg;
-
-        dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
-        dlg.setWindowTitle(mimeUserDescription);
-
-        QWidget *page = new QWidget(&dlg);
+        QWidget *page = new QWidget();
         QVBoxLayout *layout = new QVBoxLayout(page);
 
         if (showWarnings && !warnings.isEmpty()) {
@@ -625,8 +671,11 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             layout->addWidget(chkAlsoAsKra);
         }
 
+        KoDialog dlg(qApp->activeWindow());
         dlg.setMainWidget(page);
-        dlg.resize(dlg.minimumSize());
+        page->setParent(&dlg);
+        dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+        dlg.setWindowTitle(mimeUserDescription);
 
         if (showWarnings || wdg || isAdvancedExporting) {
             if (!dlg.exec()) {
@@ -677,17 +726,15 @@ KisImportExportErrorCode KisImportExportManager::doImport(const QString &locatio
     return status;
 }
 
-KisImportExportErrorCode KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
+KisImportExportErrorCode KisImportExportManager::doExport(const QString &location,
+                                                          QSharedPointer<KisImportExportFilter> filter,
+                                                          KisPropertiesConfigurationSP exportConfiguration,
+                                                          const QString alsoAsKraLocation)
 {
     KisImportExportErrorCode status =
             doExportImpl(location, filter, exportConfiguration);
 
-    if (alsoAsKra && status.isOk()) {
-#ifdef Q_OS_ANDROID
-        QString kraLocation = getUriForAdditionalFile(location, nullptr);
-#else
-        QString kraLocation = location + ".kra";
-#endif
+    if (!alsoAsKraLocation.isNull() && status.isOk()) {
         QByteArray mime = m_document->nativeFormatMimeType();
         QSharedPointer<KisImportExportFilter> filter(
                     filterForMimeType(QString::fromLatin1(mime), Export));
@@ -695,12 +742,12 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
         KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
 
         if (filter) {
-            filter->setFilename(kraLocation);
+            filter->setFilename(alsoAsKraLocation);
 
             KisPropertiesConfigurationSP kraExportConfiguration =
                     filter->lastSavedConfiguration(mime, mime);
 
-            status = doExportImpl(kraLocation, filter, kraExportConfiguration);
+            status = doExportImpl(alsoAsKraLocation, filter, kraExportConfiguration);
         } else {
             status = ImportExportCodes::FileFormatIncorrect;
         }
@@ -714,7 +761,10 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
 //                    and without using QSaveFile the issue can still occur
 //                    when QFile::copy fails because Dropbox/Google/OneDrive
 //                    locks the target file.
-#ifndef Q_OS_WIN
+// 02-24-2022 update: Added macOS since QSaveFile does not work on sandboxed krita
+//                    It can work if user gives access to the container dir, but
+//                    we cannot guarantee the user gave us permission.
+#if !(defined(Q_OS_WIN) || defined(Q_OS_MACOS))
 #define USE_QSAVEFILE
 #endif
 
@@ -776,6 +826,15 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
 
     return status;
 
+}
+
+QString KisImportExportManager::getAlsoAsKraLocation(const QString location) const
+{
+#ifdef Q_OS_ANDROID
+    return getUriForAdditionalFile(location, nullptr);
+#else
+    return location + ".kra";
+#endif
 }
 
 #include <KisMimeDatabase.h>

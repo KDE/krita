@@ -8,6 +8,7 @@
 #define __FREEHAND_STROKE_H
 
 
+#include <QPen>
 #include "kritaui_export.h"
 #include "kis_types.h"
 #include "kis_node.h"

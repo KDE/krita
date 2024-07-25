@@ -1,4 +1,4 @@
-/* This file is part of the Calligra project
+/*
  * SPDX-FileCopyrightText: 2005 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2005 C. Boemann <cbo@boemann.dk>
  * SPDX-FileCopyrightText: 2007 Boudewijn Rempt <boud@valdyas.org>
@@ -46,9 +46,9 @@
 
 #include "kis_config.h"
 #include "KisPart.h"
-#include "kis_clipboard.h"
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
+#include <KisSpinBoxI18nHelper.h>
 #include <KisSqueezedComboBox.h>
 #include "kis_signals_blocker.h"
 
@@ -92,12 +92,11 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     doubleResolution->setValue(72.0 * resolution);
     doubleResolution->setDecimals(2);
 
-    imageGroupSpacer->changeSize(0, 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     grpClipboard->hide();
 
     sliderOpacity->setRange(0, 100, 0);
     sliderOpacity->setValue(100);
-    sliderOpacity->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(sliderOpacity, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
 
     connect(cmbPredefined, SIGNAL(activated(int)), SLOT(predefinedClicked(int)));
     connect(doubleResolution, SIGNAL(valueChanged(double)),
@@ -269,8 +268,10 @@ void KisCustomImageWidget::createImage()
     KisDocument *doc = createNewImage();
     if (doc) {
         doc->setModified(false);
-        m_openPane->accept();
         emit m_openPane->documentSelected(doc);
+        m_openPane->accept();
+    } else {
+        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
     }
 }
 
@@ -370,7 +371,7 @@ void KisCustomImageWidget::fillPredefined()
 
     cmbPredefined->addItem("");
 
-    QStringList definitions = KoResourcePaths::findAllResources("data", "predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive);
+    QStringList definitions = KoResourcePaths::findAllAssets("data", "predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive);
     definitions.sort();
 
     if (!definitions.empty()) {
@@ -532,7 +533,7 @@ void KisCustomImageWidget::changeDocumentInfoLabel()
     int bitSize = 8 * cs->pixelSize(); //pixelsize is in bytes.
     layerSize = layerSize * cs->pixelSize();
     QString text = i18nc("arg1: width. arg2: height. arg3: colorspace name. arg4: size of a channel in bits. arg5: image size",
-                         "This document will be %1 pixels by %2 pixels in %3, which means the pixel size is %4 bit. A single paint layer will thus take up %5 of RAM.",
+                         "This document will be %1 pixels by %2 pixels in %3. The pixel size is %4 bit. A single paint layer will use %5 of RAM.",
                          width,
                          height,
                          cs->name(),

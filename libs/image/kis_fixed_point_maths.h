@@ -10,20 +10,20 @@
 #include <boost/operators.hpp>
 #include <QDataStream>
 
-
 class KisFixedPoint : boost::ordered_field_operators<KisFixedPoint>
 {
 public:
-    KisFixedPoint() {
-        d = 0;
+    KisFixedPoint()
+        : d(0){};
+
+    KisFixedPoint(int iValue)
+        : d(iValue * 256)
+    {
     }
 
-    KisFixedPoint(int iValue) {
-        d = iValue << 8;
-    }
-
-    KisFixedPoint(qreal fValue) {
-        d = fValue * (1 << 8);
+    KisFixedPoint(qreal fValue)
+        : d(static_cast<int>(fValue * 256))
+    {
     }
 
     qint32 toInt() const {
@@ -87,7 +87,8 @@ public:
         return *this;
     }
 
-    KisFixedPoint& operator*=(const KisFixedPoint& x) {
+    KisFixedPoint &operator*=(const KisFixedPoint &x)
+    {
         /**
          * Until C++20 `d >>= 8` is "implementation defined" for negative `d`.
          * But we have a unittest that confirms that the our compiler handles
@@ -99,14 +100,15 @@ public:
         return *this;
     }
 
-    KisFixedPoint& operator/=(const KisFixedPoint& x) {
+    KisFixedPoint &operator/=(const KisFixedPoint &x)
+    {
         /**
          * Until C++20 `d <<= 8` is an "undefined behavior" for negative `d`.
          * But we have a unittest that confirms that the our compiler handles
          * that in an expected way
          */
 
-        d <<= 8;
+        d *= 256;
         d /= x.d;
         return *this;
     }

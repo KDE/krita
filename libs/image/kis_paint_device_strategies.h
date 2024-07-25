@@ -252,11 +252,27 @@ public:
     }
 
     QRect extent() const override {
-        return KisPaintDeviceStrategy::extent() & m_wrapRect;
+        return KisWrappedRect::clipToWrapRect(KisPaintDeviceStrategy::extent(),
+            m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
     }
 
     KisRegion region() const override {
-        return KisPaintDeviceStrategy::region() & m_wrapRect;
+        const WrapAroundAxis wrapAxis = m_device->defaultBounds()->wrapAroundModeAxis();
+        if (wrapAxis != WRAPAROUND_BOTH) {
+            KisRegion region = KisPaintDeviceStrategy::region();
+            QVector<QRect> rects;
+            Q_FOREACH (const QRect &rc, region.rects()) {
+                const QRect clippedRect = KisWrappedRect::clipToWrapRect(rc, m_wrapRect, wrapAxis);
+                if (!clippedRect.isEmpty()) {
+                    rects.append(clippedRect);
+                }
+            }
+            region = KisRegion(rects);
+            return region;
+        }
+        else {
+            return KisPaintDeviceStrategy::region() & m_wrapRect;
+        }
     }
 
     void crop(const QRect &rect) override {
@@ -264,21 +280,21 @@ public:
     }
 
     void clear(const QRect &rect) override {
-        KisWrappedRect splitRect(rect, m_wrapRect);
+        KisWrappedRect splitRect(rect, m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::clear(rc);
         }
     }
 
     void fill(const QRect &rect, const quint8 *fillPixel) override {
-        KisWrappedRect splitRect(rect, m_wrapRect);
+        KisWrappedRect splitRect(rect, m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fill(rc, fillPixel);
         }
     }
 
     KisHLineIteratorSP createHLineIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) override {
-        KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
+        KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineIteratorNG(dataManager, x, y, w, offsetX, offsetY);
         }
@@ -286,7 +302,7 @@ public:
     }
 
     KisHLineConstIteratorSP createHLineConstIteratorNG(KisDataManager *dataManager, qint32 x, qint32 y, qint32 w, qint32 offsetX, qint32 offsetY) const override {
-        KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect);
+        KisWrappedRect splitRect(QRect(x, y, w, m_wrapRect.height()), m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createHLineConstIteratorNG(dataManager, x, y, w, offsetX, offsetY);
         }
@@ -296,7 +312,7 @@ public:
     KisVLineIteratorSP createVLineIteratorNG(qint32 x, qint32 y, qint32 h) override {
         m_d->cache()->invalidate();
 
-        KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect);
+        KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createVLineIteratorNG(x, y, h);
         }
@@ -304,7 +320,7 @@ public:
     }
 
     KisVLineConstIteratorSP createVLineConstIteratorNG(qint32 x, qint32 y, qint32 h) const override {
-        KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect);
+        KisWrappedRect splitRect(QRect(x, y, m_wrapRect.width(), h), m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         if (!splitRect.isSplit()) {
             return KisPaintDeviceStrategy::createVLineConstIteratorNG(x, y, h);
         }
@@ -313,22 +329,26 @@ public:
 
     KisRandomAccessorSP createRandomAccessorNG() override {
         m_d->cache()->invalidate();
-        return new KisWrappedRandomAccessor(m_d->dataManager().data(), m_d->x(), m_d->y(), true, m_d->cacheInvalidator(), m_wrapRect);
+        return new KisWrappedRandomAccessor(
+            m_d->dataManager().data(), m_d->x(), m_d->y(), true, m_d->cacheInvalidator(), m_wrapRect,
+            m_device->defaultBounds()->wrapAroundModeAxis());
     }
 
     KisRandomConstAccessorSP createRandomConstAccessorNG() const override {
-        return new KisWrappedRandomAccessor(m_d->dataManager().data(), m_d->x(), m_d->y(), false, m_d->cacheInvalidator(), m_wrapRect);
+        return new KisWrappedRandomAccessor(
+            m_d->dataManager().data(), m_d->x(), m_d->y(), false, m_d->cacheInvalidator(), m_wrapRect,
+            m_device->defaultBounds()->wrapAroundModeAxis());
     }
 
     void fastBitBltImpl(KisDataManagerSP srcDataManager, const QRect &rect) override {
-        KisWrappedRect splitRect(rect, m_wrapRect);
+        KisWrappedRect splitRect(rect, m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltImpl(srcDataManager, rc);
         }
     }
 
     void fastBitBltOldData(KisPaintDeviceSP src, const QRect &rect) override {
-        KisWrappedRect splitRect(rect, m_wrapRect);
+        KisWrappedRect splitRect(rect, m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
         Q_FOREACH (const QRect &rc, splitRect) {
             KisPaintDeviceStrategy::fastBitBltOldData(src, rc);
         }
@@ -346,7 +366,7 @@ public:
     }
 
     void readBytes(quint8 *data, const QRect &rect) const override {
-        KisWrappedRect splitRect(rect, m_wrapRect);
+        KisWrappedRect splitRect(rect, m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
 
         if (!splitRect.isSplit()) {
             KisPaintDeviceStrategy::readBytes(data, rect);
@@ -396,7 +416,7 @@ public:
     }
 
     void writeBytes(const quint8 *data, const QRect &rect) override {
-        KisWrappedRect splitRect(rect, m_wrapRect);
+        KisWrappedRect splitRect(rect, m_wrapRect, m_device->defaultBounds()->wrapAroundModeAxis());
 
         if (!splitRect.isSplit()) {
             KisPaintDeviceStrategy::writeBytes(data, rect);

@@ -43,8 +43,6 @@ DlgOffsetImage::DlgOffsetImage(QWidget *  parent, const char * name, QSize image
 
     m_page->offsetXdoubleSpinBox->setUnitManager(_widthUnitManager);
     m_page->offsetYdoubleSpinBox->setUnitManager(_heightUnitManager);
-    m_page->offsetXdoubleSpinBox->setDecimals(2);
-    m_page->offsetYdoubleSpinBox->setDecimals(2);
     m_page->offsetXdoubleSpinBox->setDisplayUnit(false);
     m_page->offsetYdoubleSpinBox->setDisplayUnit(false);
 

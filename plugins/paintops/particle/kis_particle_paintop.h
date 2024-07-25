@@ -9,8 +9,8 @@
 
 #include <brushengine/kis_paintop.h>
 #include <kis_types.h>
-#include <kis_airbrush_option_widget.h>
-#include <kis_pressure_rate_option.h>
+#include <KisAirbrushOptionData.h>
+#include <KisStandardOptions.h>
 
 #include "kis_particle_paintop_settings.h"
 #include "particle_brush.h"
@@ -39,11 +39,11 @@ private:
     void doPaintLine(const KisPaintInformation &pi1, const KisPaintInformation &pi2);
 
 private:
-    KisParticleBrushProperties m_properties;
+    KisParticleOpOptionData m_particleOpData;
     KisPaintDeviceSP m_dab;
     ParticleBrush m_particleBrush;
-    KisAirbrushOptionProperties m_airbrushOption;
-    KisPressureRateOption m_rateOption;
+    KisAirbrushOptionData m_airbrushData;
+    KisRateOption m_rateOption;
     bool m_first;
 };
 

@@ -11,6 +11,7 @@
 
 #include <QBuffer>
 #include <QtEndian>
+#include <algorithm>
 #include <zlib.h>
 
 #include <kis_debug.h>
@@ -83,114 +84,65 @@ QByteArray compress(const QByteArray &data)
         return output;
 }
 
-// from gimp's psd-util.c
-int decompress(const QByteArray &input, QByteArray &output, int unpacked_len)
+QByteArray decompress(const QByteArray &input, int unpacked_len)
 {
+    QByteArray output;
     output.resize(unpacked_len);
 
-    /*
-     *  Decode a PackBits chunk.
-     */
-    qint32 n;
-    const char *src = input.data();
-    char *dst = output.data();
-    char dat;
-    int unpack_left = unpacked_len;
-    int pack_left = input.size();
-    qint32 error_code = 0;
-    int return_val = 0;
+    const auto *src = input.cbegin();
+    auto *dst = output.begin();
 
-    while (unpack_left > 0 && pack_left > 0) {
-        n = *src;
-        src++;
-        pack_left--;
+    while (src < input.end() && dst < output.end()) {
+        // NOLINTNEXTLINE(*-reinterpret-cast,readability-identifier-length)
+        const int8_t n = *reinterpret_cast<const int8_t *>(src);
+        src += 1;
 
-        if (n == 128) /* nop */
+        if (n >= 0) { // copy next n+1 chars
+            const int bytes = 1 + n;
+            if (src + bytes > input.cend()) {
+                errFile << "Input buffer exhausted in replicate of" << bytes << "chars, left" << (input.cend() - src);
+                return {};
+            }
+            if (dst + bytes > output.end()) {
+                errFile << "Overrun in packbits replicate of" << bytes << "chars, left" << (output.end() - dst);
+                return {};
+            }
+            std::copy_n(src, bytes, dst);
+            src += bytes;
+            dst += bytes;
+        } else if (n >= -127 && n <= -1) { // replicate next char -n+1 times
+            const int bytes = 1 - n;
+            if (src >= input.cend()) {
+                errFile << "Input buffer exhausted in copy";
+                return {};
+            }
+            if (dst + bytes > output.end()) {
+                errFile << "Output buffer exhausted in copy of" << bytes << "chars, left" << (output.end() - dst);
+                return {};
+            }
+            const auto byte = *src;
+            std::fill_n(dst, bytes, byte);
+            src += 1;
+            dst += bytes;
+        } else if (n == -128) {
             continue;
-        else if (n > 128)
-            n -= 256;
-
-        if (n < 0) /* replicate next gchar |n|+ 1 times */
-        {
-            n = 1 - n;
-            if (!pack_left) {
-                dbgFile << "Input buffer exhausted in replicate";
-                error_code = 1;
-                break;
-            }
-            if (n > unpack_left) {
-                dbgFile << "Overrun in packbits replicate of" << n - unpack_left << "chars";
-                error_code = 2;
-            }
-            dat = *src;
-            for (; n > 0; --n) {
-                if (!unpack_left)
-                    break;
-                *dst = dat;
-                dst++;
-                unpack_left--;
-            }
-            if (unpack_left) {
-                src++;
-                pack_left--;
-            }
-        } else /* copy next n+1 gchars literally */
-        {
-            n++;
-            for (; n > 0; --n) {
-                if (!pack_left) {
-                    dbgFile << "Input buffer exhausted in copy";
-                    error_code = 3;
-                    break;
-                }
-                if (!unpack_left) {
-                    dbgFile << "Output buffer exhausted in copy";
-                    error_code = 4;
-                    break;
-                }
-                *dst = *src;
-                dst++;
-                unpack_left--;
-                src++;
-                pack_left--;
-            }
         }
     }
 
-    if (unpack_left > 0) {
-        /* Pad with zeros to end of output buffer */
-        for (n = 0; n < pack_left; ++n) {
-            *dst = 0;
-            dst++;
-        }
+    if (dst < output.end()) {
+        errFile << "Packbits decode - unpack left" << (output.end() - dst);
+        std::fill(dst, output.end(), 0);
     }
 
-    if (unpack_left) {
-        dbgFile << "Packbits decode - unpack left" << unpack_left;
-        return_val -= unpack_left;
-    }
-    if (pack_left) {
-        /* Some images seem to have a pad byte at the end of the packed data */
-        if (error_code || pack_left != 1) {
-            dbgFile << "Packbits decode - pack left" << pack_left;
-            return_val = pack_left;
-        }
+    // If the input line was odd width, there's a padding byte
+    if (src + 1 < input.cend()) {
+        QByteArray leftovers;
+        leftovers.resize(static_cast<int>(input.cend() - src));
+        std::copy(src, input.cend(), leftovers.begin());
+        errFile << "Packbits decode - pack left" << leftovers.size() << leftovers.toHex();
     }
 
-    if (error_code)
-        dbgFile << "Error code" << error_code;
-
-    return return_val;
-}
-
-QByteArray decompress(const QByteArray &data, int expected_length)
-{
-    QByteArray output(expected_length, '\0');
-    const int result = KisRLE::decompress(data, output, expected_length);
-    if (result != 0)
-        return QByteArray();
-    else
-        return output;
+    return output;
 }
 } // namespace KisRLE
 
@@ -290,34 +242,62 @@ int psd_unzip_without_prediction(const char *src, int packed_len, char *dst, int
     return static_cast<int>(stream.total_out);
 }
 
+template<typename T>
+inline void psd_unzip_with_prediction(QByteArray &dst_buf, int row_size);
+
+template<>
+inline void psd_unzip_with_prediction<uint8_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            *(buf + 1) += *buf;
+            buf++;
+        }
+        buf++;
+        dst_len -= row_size;
+    }
+}
+
+template<>
+inline void psd_unzip_with_prediction<uint16_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            buf[2] += buf[0] + ((buf[1] + buf[3]) >> 8);
+            buf[3] += buf[1];
+            buf += 2;
+        }
+        buf += 2;
+        dst_len -= row_size * 2;
+    }
+}
+
 QByteArray psd_unzip_with_prediction(const QByteArray &src, int dst_len, int row_size, int color_depth)
 {
-    int len;
-
     QByteArray dst_buf = Compression::uncompress(dst_len, src, psd_compression_type::ZIP);
-    if (dst_buf.size() == 0)
-        return dst_buf;
 
-    char *buf = dst_buf.data();
-    do {
-        len = row_size;
-        if (color_depth == 16) {
-            while (--len) {
-                buf[2] += buf[0] + ((buf[1] + buf[3]) >> 8);
-                buf[3] += buf[1];
-                buf += 2;
-            }
-            buf += 2;
-            dst_len -= row_size * 2;
-        } else {
-            while (--len) {
-                *(buf + 1) += *buf;
-                buf++;
-            }
-            buf++;
-            dst_len -= row_size;
-        }
-    } while (dst_len > 0);
+    if (dst_buf.size() == 0)
+        return {};
+
+    if (color_depth == 32) {
+        // Placeholded for future implementation.
+        errKrita << "Unsupported bit depth for prediction";
+        return {};
+    } else if (color_depth == 16) {
+        psd_unzip_with_prediction<quint16>(dst_buf, row_size);
+    } else {
+        psd_unzip_with_prediction<quint8>(dst_buf, row_size);
+    }
 
     return dst_buf;
 }
@@ -326,35 +306,60 @@ QByteArray psd_unzip_with_prediction(const QByteArray &src, int dst_len, int row
 /* End of third party block                                           */
 /**********************************************************************/
 
+template<typename T>
+inline void psd_zip_with_prediction(QByteArray &dst_buf, int row_size);
+
+template<>
+inline void psd_zip_with_prediction<uint8_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            *(buf + 1) -= *buf;
+            buf++;
+        }
+        buf++;
+        dst_len -= row_size;
+    }
+}
+
+template<>
+inline void psd_zip_with_prediction<uint16_t>(QByteArray &dst_buf, const int row_size)
+{
+    auto *buf = reinterpret_cast<uint8_t *>(dst_buf.data());
+    int len = 0;
+    int dst_len = dst_buf.size();
+
+    while (dst_len > 0) {
+        len = row_size;
+        while (--len) {
+            buf[2] -= buf[0] + ((buf[1] + buf[3]) >> 8);
+            buf[3] -= buf[1];
+            buf += 2;
+        }
+        buf += 2;
+        dst_len -= row_size * 2;
+    }
+}
+
 QByteArray psd_zip_with_prediction(const QByteArray &src, int row_size, int color_depth)
 {
-    QByteArray tempbuf(src);
+    QByteArray dst_buf(src);
+    if (color_depth == 32) {
+        // Placeholded for future implementation.
+        errKrita << "Unsupported bit depth for prediction";
+        return {};
+    } else if (color_depth == 16) {
+        psd_zip_with_prediction<quint16>(dst_buf, row_size);
+    } else {
+        psd_zip_with_prediction<quint8>(dst_buf, row_size);
+    }
 
-    int len;
-    int dst_len = src.size();
-
-    char *buf = tempbuf.data();
-    do {
-        len = row_size;
-        if (color_depth == 16) {
-            while (--len) {
-                buf[2] -= buf[0] + ((buf[1] + buf[3]) >> 8);
-                buf[3] -= buf[1];
-                buf += 2;
-            }
-            buf += 2;
-            dst_len -= row_size * 2;
-        } else {
-            while (--len) {
-                *(buf + 1) -= *buf;
-                buf++;
-            }
-            buf++;
-            dst_len -= row_size;
-        }
-    } while (dst_len > 0);
-
-    return Compression::compress(tempbuf, psd_compression_type::ZIP);
+    return Compression::compress(dst_buf, psd_compression_type::ZIP);
 }
 
 QByteArray decompress(const QByteArray &data, int expected_length)

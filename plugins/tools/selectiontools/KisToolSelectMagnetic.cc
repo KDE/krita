@@ -7,12 +7,10 @@
 #include "KisToolSelectMagnetic.h"
 
 #include <QApplication>
-#include <QLayout>
 #include <QPainter>
 #include <QPainterPath>
 #include <QPushButton>
 #include <QVBoxLayout>
-#include <QWidget>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -28,17 +26,21 @@
 #include <kis_selection_options.h>
 #include <kis_cursor.h>
 #include <kis_image.h>
+#include <kis_default_bounds.h>
 
-#include "kis_painter.h"
-#include <brushengine/kis_paintop_registry.h>
 #include "canvas/kis_canvas2.h"
+#include "kis_painter.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include <brushengine/kis_paintop_registry.h>
+#include <kis_command_utils.h>
+#include <kis_selection_filters.h>
+#include <KisCursorOverrideLock.h>
 
 #include "kis_algebra_2d.h"
 
 #include "KisHandlePainterHelper.h"
-
+#include <KisOptimizedBrushOutline.h>
 #include <kis_slider_spin_box.h>
 
 #define FEEDBACK_LINE_WIDTH 2
@@ -488,29 +490,79 @@ void KisToolSelectMagnetic::finishSelectionAction()
     if (m_points.count() > 2 &&
         !helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction()))
     {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
+        KisCursorOverrideLock cursorLock(KisCursor::waitCursor());
 
         const SelectionMode mode =
             helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
                                             selectionMode(),
                                             selectionAction());
         if (mode == PIXEL_SELECTION) {
-            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+            KisProcessingApplicator applicator(
+                currentImage(),
+                currentNode(),
+                KisProcessingApplicator::NONE,
+                KisImageSignalVector(),
+                kundo2_i18n("Magnetic Selection"));
 
-            KisPainter painter(tmpSel);
-            painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-            painter.setAntiAliasPolygonFill(antiAliasSelection());
-            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+            KisPixelSelectionSP tmpSel =
+                new KisPixelSelection(new KisDefaultBounds(currentImage()));
 
-            painter.paintPolygon(m_points);
+            const bool antiAlias = antiAliasSelection();
+            const int grow = growSelection();
+            const int feather = featherSelection();
 
-            QPainterPath cache;
-            cache.addPolygon(m_points);
-            cache.closeSubpath();
-            tmpSel->setOutlineCache(cache);
+            QPainterPath path;
+            path.addPolygon(m_points);
+            path.closeSubpath();
 
-            helper.selectPixelSelection(tmpSel, selectionAction());
+            KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
+                [tmpSel, antiAlias, grow, feather, path]() mutable
+                -> KUndo2Command * {
+                    KisPainter painter(tmpSel);
+                    painter.setPaintColor(
+                        KoColor(Qt::black, tmpSel->colorSpace()));
+                    // Since the feathering already smooths the selection, the
+                    // antiAlias is not applied if we must feather
+                    painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
+                    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                    painter.paintPainterPath(path);
+
+                    if (grow > 0) {
+                        KisGrowSelectionFilter biggy(grow, grow);
+                        biggy.process(tmpSel,
+                                      tmpSel->selectedRect().adjusted(-grow,
+                                                                      -grow,
+                                                                      grow,
+                                                                      grow));
+                    } else if (grow < 0) {
+                        KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                        tiny.process(tmpSel, tmpSel->selectedRect());
+                    }
+                    if (feather > 0) {
+                        KisFeatherSelectionFilter feathery(feather);
+                        feathery.process(
+                            tmpSel,
+                            tmpSel->selectedRect().adjusted(-feather,
+                                                            -feather,
+                                                            feather,
+                                                            feather));
+                    }
+
+                    if (grow == 0 && feather == 0) {
+                        tmpSel->setOutlineCache(path);
+                    } else {
+                        tmpSel->invalidateOutlineCache();
+                    }
+
+                    return 0;
+                });
+
+            applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+            helper.selectPixelSelection(applicator, tmpSel, selectionAction());
+            applicator.end();
+
         } else {
             KoPathShape *path = new KoPathShape();
             path->setShapeId(KoPathShapeId);
@@ -524,7 +576,6 @@ void KisToolSelectMagnetic::finishSelectionAction()
             path->normalize();
             helper.addSelectionShape(path, selectionAction());
         }
-        QApplication::restoreOverrideCursor();
     }
 
     resetVariables();
@@ -580,7 +631,7 @@ void KisToolSelectMagnetic::drawAnchors(QPainter &gc)
 {
     int sides = updateInitialAnchorBounds(m_anchorPoints.first());
     Q_FOREACH (const QPoint pt, m_anchorPoints) {
-        KisHandlePainterHelper helper(&gc, handleRadius());
+        KisHandlePainterHelper helper(&gc, handleRadius(), decorationThickness());
         QRect r(QPoint(0, 0), QSize(sides, sides));
         r.moveCenter(pt);
         if (r.contains(m_lastCursorPos.toPoint())) {
@@ -672,87 +723,127 @@ QWidget * KisToolSelectMagnetic::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
-    QHBoxLayout *f1 = new QHBoxLayout();
-    QLabel *filterRadiusLabel = new QLabel(i18nc("Filter radius in Magnetic Select Tool settings", "Filter Radius: "), selectionWidget);
-    f1->addWidget(filterRadiusLabel);
 
-    KisDoubleSliderSpinBox *filterRadiusInput = new KisDoubleSliderSpinBox(selectionWidget);
-    filterRadiusInput->setObjectName("radius");
-    filterRadiusInput->setRange(2.5, 100.0, 2);
-    filterRadiusInput->setSingleStep(0.5);
-    filterRadiusInput->setToolTip(
-        i18nc("@info:tooltip", "Radius of the filter for the detecting edges, might take some time to calculate"));
-    f1->addWidget(filterRadiusInput);
-    connect(filterRadiusInput, SIGNAL(valueChanged(qreal)), this, SLOT(slotSetFilterRadius(qreal)));
+    // Create widgets
+    KisDoubleSliderSpinBox *sliderRadius = new KisDoubleSliderSpinBox;
+    sliderRadius->setObjectName("radius");
+    sliderRadius->setRange(2.5, 100.0, 2);
+    sliderRadius->setSingleStep(0.5);
+    sliderRadius->setPrefix(
+        i18nc("Filter radius in Magnetic Select Tool settings",
+              "Filter Radius: "));
 
-    QHBoxLayout *f2        = new QHBoxLayout();
-    QLabel *thresholdLabel = new QLabel(i18nc("Threshold label in Magnetic Selection's Tool options", "Threshold: "), selectionWidget);
-    f2->addWidget(thresholdLabel);
+    KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
+    sliderThreshold->setObjectName("threshold");
+    sliderThreshold->setRange(1, 255);
+    sliderThreshold->setSingleStep(10);
+    sliderThreshold->setPrefix(
+        i18nc("Threshold in Magnetic Selection's Tool options", "Threshold: "));
 
-    KisSliderSpinBox *thresholdInput = new KisSliderSpinBox(selectionWidget);
-    thresholdInput->setObjectName("threshold");
-    thresholdInput->setRange(1, 255);
-    thresholdInput->setSingleStep(10);
-    thresholdInput->setToolTip(i18nc("@info:tooltip", "Threshold for determining the minimum intensity of the edges"));
-    f2->addWidget(thresholdInput);
-    connect(thresholdInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+    KisSliderSpinBox *sliderSearchRadius = new KisSliderSpinBox;
+    sliderSearchRadius->setObjectName("frequency");
+    sliderSearchRadius->setRange(20, 200);
+    sliderSearchRadius->setSingleStep(10);
+    sliderSearchRadius->setPrefix(
+        i18nc("Search Radius in Magnetic Selection's Tool options",
+              "Search Radius: "));
+    sliderSearchRadius->setSuffix(" px");
 
-    QHBoxLayout *f3 = new QHBoxLayout();
-    QLabel *searchRadiusLabel = new QLabel(i18n("Search Radius: "), selectionWidget);
-    f3->addWidget(searchRadiusLabel);
+    KisSliderSpinBox *sliderAnchorGap = new KisSliderSpinBox;
+    sliderAnchorGap->setObjectName("anchorgap");
+    sliderAnchorGap->setRange(20, 200);
+    sliderAnchorGap->setSingleStep(10);
+    sliderAnchorGap->setPrefix(
+        i18nc("Anchor Gap in Magnetic Selection's Tool options",
+              "Anchor Gap: "));
+    sliderAnchorGap->setSuffix(" px");
 
-    KisSliderSpinBox *searchRadiusInput = new KisSliderSpinBox(selectionWidget);
-    searchRadiusInput->setObjectName("frequency");
-    searchRadiusInput->setRange(20, 200);
-    searchRadiusInput->setSingleStep(10);
-    searchRadiusInput->setToolTip(i18nc("@info:tooltip", "Extra area to be searched"));
-    searchRadiusInput->setSuffix(" px");
-    f3->addWidget(searchRadiusInput);
-    connect(searchRadiusInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetSearchRadius(int)));
+    QPushButton *buttonCompleteSelection =
+        new QPushButton(i18nc("Complete the selection", "Complete"),
+                        selectionWidget);
+    buttonCompleteSelection->setEnabled(false);
 
-    QHBoxLayout *f4        = new QHBoxLayout();
-    QLabel *anchorGapLabel = new QLabel(i18n("Anchor Gap: "), selectionWidget);
-    f4->addWidget(anchorGapLabel);
+    QPushButton *buttonDiscardSelection =
+        new QPushButton(i18nc("Discard the selection", "Discard"),
+                        selectionWidget);
+    buttonDiscardSelection->setEnabled(false);
 
-    KisSliderSpinBox *anchorGapInput = new KisSliderSpinBox(selectionWidget);
-    anchorGapInput->setObjectName("anchorgap");
-    anchorGapInput->setRange(20, 200);
-    anchorGapInput->setSingleStep(10);
-    anchorGapInput->setToolTip(i18nc("@info:tooltip", "Gap between 2 anchors in interactive mode"));
-    anchorGapInput->setSuffix(" px");
-    f4->addWidget(anchorGapInput);
+    // Set the tooltips
+    sliderRadius->setToolTip(i18nc("@info:tooltip",
+                                   "Radius of the filter for the detecting "
+                                   "edges, might take some time to calculate"));
+    sliderThreshold->setToolTip(
+        i18nc("@info:tooltip",
+              "Threshold for determining the minimum intensity of the edges"));
+    sliderSearchRadius->setToolTip(
+        i18nc("@info:tooltip", "Extra area to be searched"));
+    sliderAnchorGap->setToolTip(
+        i18nc("@info:tooltip", "Gap between 2 anchors in interactive mode"));
+    buttonCompleteSelection->setToolTip(
+        i18nc("@info:tooltip", "Complete Selection"));
+    buttonDiscardSelection->setToolTip(
+        i18nc("@info:tooltip", "Discard Selection"));
 
-    connect(anchorGapInput, SIGNAL(valueChanged(int)), this, SLOT(slotSetAnchorGap(int)));
+    // Construct the option widget
+    KisOptionCollectionWidgetWithHeader *sectionPathOptions =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'path options' section label in magnetic selection's "
+                  "tool options",
+                  "Path options"));
+    sectionPathOptions->appendWidget("sliderRadius", sliderRadius);
+    sectionPathOptions->appendWidget("sliderThreshold", sliderThreshold);
+    sectionPathOptions->appendWidget("sliderSearchRadius", sliderSearchRadius);
+    sectionPathOptions->appendWidget("sliderAnchorGap", sliderAnchorGap);
+    sectionPathOptions->appendWidget("buttonCompleteSelection",
+                                     buttonCompleteSelection);
+    sectionPathOptions->appendWidget("buttonDiscardSelection",
+                                     buttonDiscardSelection);
+    selectionWidget->appendWidget("sectionPathOptions", sectionPathOptions);
 
-    QHBoxLayout *f5 = new QHBoxLayout();
-    QPushButton* completeSelection = new QPushButton(i18nc("Complete the selection", "Complete"), selectionWidget);
-    QPushButton* discardSelection = new QPushButton(i18nc("Discard the selection", "Discard"), selectionWidget);
+    // Load configuration settings into tool options
+    m_filterRadius = m_configGroup.readEntry("filterradius", 3.0);
+    m_threshold = m_configGroup.readEntry("threshold", 100);
+    m_searchRadius = m_configGroup.readEntry("searchradius", 30);
+    m_anchorGap = m_configGroup.readEntry("anchorgap", 20);
 
-    f5->addWidget(completeSelection);
-    f5->addWidget(discardSelection);
+    sliderRadius->setValue(m_filterRadius);
+    sliderThreshold->setValue(m_threshold);
+    sliderSearchRadius->setValue(m_searchRadius);
+    sliderAnchorGap->setValue(m_anchorGap);
 
-    completeSelection->setEnabled(false);
-    completeSelection->setToolTip(i18nc("@info:tooltip", "Complete Selection"));
-    connect(completeSelection, SIGNAL(clicked()), this, SLOT(requestStrokeEnd()));
-    connect(this, SIGNAL(setButtonsEnabled(bool)), completeSelection, SLOT(setEnabled(bool)));
-
-    discardSelection->setEnabled(false);
-    discardSelection->setToolTip(i18nc("@info:tooltip", "Discard Selection"));
-    connect(discardSelection, SIGNAL(clicked()), this, SLOT(requestStrokeCancellation()));
-    connect(this, SIGNAL(setButtonsEnabled(bool)), discardSelection, SLOT(setEnabled(bool)));
-
-    QVBoxLayout *l = dynamic_cast<QVBoxLayout *>(selectionWidget->layout());
-
-    l->insertLayout(1, f1);
-    l->insertLayout(2, f2);
-    l->insertLayout(3, f3);
-    l->insertLayout(4, f4);
-    l->insertLayout(5, f5);
-
-    filterRadiusInput->setValue(m_configGroup.readEntry("filterradius", 3.0));
-    thresholdInput->setValue(m_configGroup.readEntry("threshold", 100));
-    searchRadiusInput->setValue(m_configGroup.readEntry("searchradius", 30));
-    anchorGapInput->setValue(m_configGroup.readEntry("anchorgap", 20));
+    // Make connections
+    connect(sliderRadius,
+            SIGNAL(valueChanged(qreal)),
+            this,
+            SLOT(slotSetFilterRadius(qreal)));
+    connect(sliderThreshold,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetThreshold(int)));
+    connect(sliderSearchRadius,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetSearchRadius(int)));
+    connect(sliderAnchorGap,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetAnchorGap(int)));
+    connect(buttonCompleteSelection,
+            SIGNAL(clicked()),
+            this,
+            SLOT(requestStrokeEnd()));
+    connect(this,
+            SIGNAL(setButtonsEnabled(bool)),
+            buttonCompleteSelection,
+            SLOT(setEnabled(bool)));
+    connect(buttonDiscardSelection,
+            SIGNAL(clicked()),
+            this,
+            SLOT(requestStrokeCancellation()));
+    connect(this,
+            SIGNAL(setButtonsEnabled(bool)),
+            buttonDiscardSelection,
+            SLOT(setEnabled(bool)));
 
     return selectionWidget;
 

@@ -20,7 +20,10 @@
 #include <kis_selection_mask.h>
 #include <lazybrush/kis_colorize_mask.h>
 #include <kis_layer.h>
+#include <KisPart.h>
+#include <KisDocument.h>
 
+#include "Document.h"
 #include "Node.h"
 #include "GroupLayer.h"
 #include "CloneLayer.h"
@@ -30,7 +33,10 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransparencyMask.h"
 #include "TransformMask.h"
+
+
 
 QList<Node *> LibKisUtils::createNodeList(KisNodeList kisnodes, KisImageWSP image)
 {
@@ -39,4 +45,12 @@ QList<Node *> LibKisUtils::createNodeList(KisNodeList kisnodes, KisImageWSP imag
         nodes << Node::createNode(image, node);
     }
     return nodes;
+}
+
+Document* LibKisUtils::findNodeInDocuments(KisNodeSP kisnode) {
+    foreach(QPointer<KisDocument> doc, KisPart::instance()->documents()) {
+        if (kisnode->image()->rootLayer()->uuid() == doc->image()->rootLayer()->uuid()) return new Document(doc, false);
+    }
+
+    return 0;
 }

@@ -113,10 +113,10 @@ void KisLsStrokeFilter::applyStroke(KisPaintDeviceSP srcDevice,
 
         KisPainter gc(selection);
 
-        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(applyRect.topLeft(), dilatedSelection, applyRect);
 
-        gc.setCompositeOp(COMPOSITE_ERASE);
+        gc.setCompositeOpId(COMPOSITE_ERASE);
         gc.bitBlt(applyRect.topLeft(), erodedSelection, applyRect);
         gc.end();
     }

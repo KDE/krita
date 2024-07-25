@@ -8,7 +8,7 @@ set(kritapsd_SRCS
     psd_resource_section.cpp
 )
 
-add_library(kritapsd SHARED ${kritapsd_SRCS})
+kis_add_library(kritapsd SHARED ${kritapsd_SRCS})
 generate_export_header(kritapsd)
 
 target_link_libraries(kritapsd

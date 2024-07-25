@@ -10,6 +10,8 @@
 
 #include <QPushButton>
 #include <QSlider>
+#include <QComboBox>
+#include <QLabel>
 #include <QGraphicsOpacityEffect>
 #include "KisViewManager.h"
 #include "kactioncollection.h"
@@ -23,8 +25,8 @@ class QWidget;
 class KoColor;
 class KoTriangleColorSelector;
 class KisSignalCompressor;
-class KisBrushHud;
 class KisRoundHudButton;
+class KisDockerHud;
 class KisCanvasResourceProvider;
 class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
@@ -53,7 +55,7 @@ class KisPopupPalette : public QWidget, public KisPopupWidgetInterface
 
 public:
     KisPopupPalette(KisViewManager*, KisCoordinatesConverter* ,KisFavoriteResourceManager*, const KoColorDisplayRendererInterface *displayRenderer,
-                    KisCanvasResourceProvider *provider, QWidget *parent = 0);
+                    QWidget *parent = 0);
     ~KisPopupPalette() override;
     QSize sizeHint() const override;
 
@@ -142,10 +144,10 @@ private:
     KisColorSelectorInterface *m_colorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
-    KActionCollection *m_actionCollection;
+    KisKActionCollection *m_actionCollection;
 
     QSpacerItem *m_mainArea {0};
-    KisBrushHud *m_brushHud {0};
+    KisDockerHud *m_dockerHud {0};
     QWidget* m_bottomBarWidget {0};
     qreal m_popupPaletteSize {385.0};
     qreal m_colorHistoryInnerRadius {72.0};
@@ -158,7 +160,7 @@ private:
     KisRoundHudButton *m_clearColorHistoryButton {0};
     KisRoundHudButton *m_tagsButton {0};
     KisRoundHudButton *m_bottomBarButton {0};
-    KisRoundHudButton *m_brushHudButton {0};
+    KisRoundHudButton *m_dockerHudButton {0};
     QRectF m_canvasRotationIndicatorRect;
     QRectF m_resetCanvasRotationIndicatorRect;
     bool m_isOverCanvasRotationIndicator {false};
@@ -169,6 +171,7 @@ private:
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
     QPushButton *zoomToOneHundredPercentButton {0};
+    QPushButton *fitToViewButton {0};
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
@@ -204,6 +207,7 @@ private Q_SLOTS:
     void showHudWidget(bool visible);
     void showBottomBarWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();
+    void slotFitToViewClicked();
     void slotZoomSliderChanged(int zoom);
 
     void slotZoomSliderPressed();

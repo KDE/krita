@@ -22,6 +22,7 @@ public:
 
 private:
     void scaleLayerImpl(KisNodeSP rootNode);
+    void scaleLayersImpl(KisNodeList nodes);
 
 private Q_SLOTS:
 

@@ -43,6 +43,7 @@
 #include <ctime>
 
 #include "ui_wdgGamutMaskChooser.h"
+#include <kis_layer_utils.h>
 
 struct GamutMaskChooserUI: public QWidget, public Ui_wdgGamutMaskChooser
 {
@@ -149,11 +150,9 @@ bool GamutMaskDock::openMaskEditor()
     // otherwise bugs happen when slotDocumentRemoved is called
     // (e.g. user closes another view, the template stays open, but the edit operation is canceled)
     m_maskDocument->setInfiniteAutoSaveInterval();
-    QString maskPath = QString("%1%2%3_%4.kra")
-            .arg(QDir::tempPath())
-            .arg('/')
-            .arg("GamutMaskTemplate")
-            .arg(std::time(nullptr));
+    QString maskPath =
+        QString("%1%2%3_%4.kra")
+            .arg(QDir::tempPath(), "/", "GamutMaskTemplate", QString::number(std::time(nullptr)));
     m_maskDocument->setPath(maskPath);
     m_maskDocument->setLocalFilePath(maskPath);
 
@@ -434,7 +433,7 @@ QList<KoShape*> GamutMaskDock::getShapesFromLayer()
 
 KisShapeLayerSP GamutMaskDock::getShapeLayer()
 {
-    KisNodeSP node = m_maskDocument->image()->rootLayer()->findChildByName("maskShapesLayer");
+    KisNodeSP node = KisLayerUtils::findNodeByName(m_maskDocument->image()->rootLayer(),"maskShapesLayer");
     return KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(node.data()));
 }
 

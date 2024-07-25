@@ -29,6 +29,9 @@ private Q_SLOTS:
 
     void slotWidthChanged(double w);
     void slotHeightChanged(double h);
+    void slotScaleAspectRatioChanged(bool checked);
+    void slot_sliderAlignToPixelGridX_valueChanged(int value);
+    void slot_sliderAlignToPixelGridY_valueChanged(int value);
 private:
     Ui_WdgPatternOptions* m_widget;
 };

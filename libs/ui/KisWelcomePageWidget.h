@@ -60,6 +60,29 @@ public Q_SLOTS:
     void slotStartDonationFlow();
 #endif
 
+private Q_SLOTS:
+    void slotNewFileClicked();
+    void slotOpenFileClicked();
+
+    void recentDocumentClicked(QModelIndex index);
+    void slotRecentDocContextMenuRequest(const QPoint &pos);
+
+    /**
+     * Once all files in the recent documents model are checked, cleanup the UI if the model is empty
+     */
+    void slotRecentFilesModelIsUpToDate();
+
+    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
+
+#ifdef ENABLE_UPDATERS
+    void slotRunVersionUpdate();
+    void slotToggleUpdateChecks(bool state);
+#endif
+
+    bool isDevelopmentBuild();
+
+    QFont largerFont();
+
 protected:
 
     // QWidget overrides
@@ -99,7 +122,7 @@ private:
     QScopedPointer<KisUpdaterBase> m_versionUpdater;
     KisUpdaterStatus m_updaterStatus;
 #endif
-    bool m_checkUpdates {false};
+    bool m_networkIsAllowed {false};
 
 #ifdef Q_OS_ANDROID
 public:
@@ -108,27 +131,6 @@ public:
 #endif
     QScopedPointer<RecentItemDelegate> recentItemDelegate;
 
-private Q_SLOTS:
-    void slotNewFileClicked();
-    void slotOpenFileClicked();
-
-    void recentDocumentClicked(QModelIndex index);
-
-    /**
-     * Once all files in the recent documents model are checked, cleanup the UI if the model is empty
-     */
-    void slotRecentFilesModelIsUpToDate();
-
-    void slotScrollerStateChanged(QScroller::State state){ KisKineticScroller::updateCursor(this, state); }
-
-#ifdef ENABLE_UPDATERS
-    void slotRunVersionUpdate();
-    void slotToggleUpdateChecks(bool state);
-#endif
-
-    bool isDevelopmentBuild();
-
-    QFont largerFont();
 };
 
 #endif // KISWELCOMEPAGEWIDGET_H

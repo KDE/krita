@@ -114,20 +114,15 @@ void View::activateResource(Resource *resource)
     KoResourceSP r = resource->resource();
     if (!r) return;
 
-    if (r.dynamicCast<KoPattern>()) {
-        QVariant v;
-        v.setValue<KoResourceSP>(r);
-        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentPattern, v);
+    if (KoPatternSP pattern = r.dynamicCast<KoPattern>()) {
+        QVariant value = QVariant::fromValue(pattern);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentPattern, value);
+    } else if (KoAbstractGradientSP gradient = r.dynamicCast<KoAbstractGradient>()) {
+        QVariant value = QVariant::fromValue(gradient);
+        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentGradient, value);
+    } else if (KoResourceSP preset = r.dynamicCast<KisPaintOpPreset>()) {
+        d->view->viewManager()->paintOpBox()->resourceSelected(preset);
     }
-    else if (r.dynamicCast<KoAbstractGradient>()) {
-        QVariant v;
-        v.setValue<KoResourceSP>(r);
-        d->view->canvasBase()->resourceManager()->setResource(KoCanvasResource::CurrentGradient, v);
-    }
-    else if (r.dynamicCast<KisPaintOpPreset>()) {
-        d->view->viewManager()->paintOpBox()->resourceSelected(r);
-    }
-
 }
 
 
@@ -252,6 +247,18 @@ void View::setBrushSize(qreal brushSize)
     d->view->resourceProvider()->setSize(brushSize);
 }
 
+qreal View::brushRotation() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->brushRotation();
+}
+
+void View::setBrushRotation(qreal brushRotation)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setBrushRotation(brushRotation);
+}
+
 qreal View::paintingFlow() const
 {
     if (!d->view) return 0.0;
@@ -263,6 +270,67 @@ void View::setPaintingFlow(qreal flow)
     if (!d->view) return;
     d->view->resourceProvider()->setFlow(flow);
 }
+
+qreal View::patternSize() const
+{
+    if (!d->view) return 0.0;
+    return d->view->resourceProvider()->patternSize();
+}
+
+void View::setPatternSize(qreal size)
+{
+    if (!d->view) return;
+    d->view->resourceProvider()->setPatternSize(size);
+}
+
+bool View::eraserMode() const
+{
+    if (!d->view) {
+        return false;
+    }
+    return d->view->resourceProvider()->eraserMode();
+}
+
+void View::setEraserMode(bool value)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->resourceProvider()->setEraserMode(value);
+}
+
+bool View::globalAlphaLock() const
+{
+    if (!d->view) {
+        return false;
+    }
+    return d->view->resourceProvider()->globalAlphaLock();
+}
+
+void View::setGlobalAlphaLock(bool value)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->resourceProvider()->setGlobalAlphaLock(value);
+}
+
+bool View::disablePressure() const
+{
+    if (!d->view) {
+        return false;
+    }
+    return d->view->resourceProvider()->disablePressure();
+}
+
+void View::setDisablePressure(bool value)
+{
+    if (!d->view) {
+        return;
+    }
+    d->view->resourceProvider()->setDisablePressure(value);
+}
+
 
 QList<Node *> View::selectedNodes() const
 {
@@ -282,4 +350,26 @@ void View::showFloatingMessage(const QString &message, const QIcon& icon, int ti
     p = static_cast<KisFloatingMessage::Priority>(priority);
 
     d->view->showFloatingMessage(message, icon, timeout, p);
+}
+
+QTransform View::flakeToDocumentTransform() const
+{
+    if (!d->view->document()) return QTransform();
+    return d->view->canvasBase()->coordinatesConverter()->documentToFlakeTransform().inverted();
+}
+
+QTransform View::flakeToCanvasTransform() const
+{
+    if (!d->view->document()) return QTransform();
+    return d->view->canvasBase()->coordinatesConverter()->flakeToWidgetTransform();
+}
+
+QTransform View::flakeToImageTransform() const
+{
+    if (!d->view->document()) return QTransform();
+
+    const KisCoordinatesConverter* coordinatesConverter(d->view->canvasBase()->coordinatesConverter());
+    QTransform imageToFlakeTransform = coordinatesConverter->imageToDocumentTransform() * coordinatesConverter->documentToFlakeTransform();
+
+    return imageToFlakeTransform.inverted();
 }

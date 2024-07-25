@@ -5,7 +5,6 @@
 -->
 <RCC version="1.0">
     <qresource>
-        <file>backers.txt</file>
         <file>credits.txt</file>
         <file>developers.txt</file>
         <file>LICENSE</file>

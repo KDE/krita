@@ -28,26 +28,16 @@ class QDomElement;
 class StoryboardComment
 {
 public:
-    StoryboardComment()
-        : name(QString(""))
-        , visibility(true)
-    {}
+    StoryboardComment() = default;
 
-    StoryboardComment(const StoryboardComment& rhs)
-        : name(rhs.name)
-        , visibility(rhs.visibility)
-    {}
-
-public:
     QString name;
-    bool visibility;
-
+    bool visibility = true;
 };
 
 /**
  * @class CommentBox
  * @brief This class is a simple combination of two QVariants.
- * It can be converted to and from QVarinat type and
+ * It can be converted to and from QVariant type and
  * is used in StoryboardModel.
  */
 class CommentBox
@@ -78,7 +68,7 @@ public:
 /**
  * @class ThumbnailData
  * @brief This class is a simple combination of two QVariants.
- * It can be converted to and from QVarinat type and
+ * It can be converted to and from QVariant type and
  * is used in StoryboardModel.
  */
 class ThumbnailData

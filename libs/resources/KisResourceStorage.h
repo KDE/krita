@@ -190,6 +190,13 @@ public:
     /// The MD5 checksum of the resource in the storage
     QString resourceMd5(const QString &url);
 
+    /// If the resource is present on the filesystem as a distinct fine,
+    /// returns the full file path of it, otherwise returns an empty string.
+    ///
+    /// Never manipulate the file in any way directly! It will destroy the
+    /// resources database. Use this file path only for informational purposes.
+    QString resourceFilePath(const QString &url);
+
     /// An iterator over all the resources in the storage
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
 
@@ -205,7 +212,7 @@ public:
 
     /// Adds the given resource to the storage. If there is already a resource
     /// with the given filename of the given type, this should return false and
-    /// saveAsnewVersion should be used.
+    /// saveAsNewVersion should be used.
     bool addResource(KoResourceSP resource);
 
     /**
@@ -218,7 +225,7 @@ public:
     bool importResource(const QString &url, QIODevice *device);
 
     /**
-     * Copies the given given resource from the storage into \p device
+     * Copies the given resource from the storage into \p device
      *
      * @param url is the URL of the resource inside the storage, which is usually
      *            resource_type/resource_filename.ext
@@ -231,6 +238,9 @@ public:
 
     /// Reloads the given resource from the persistent storage
     bool loadVersionedResource(KoResourceSP resource);
+
+    static const QString s_xmlns_meta;
+    static const QString s_xmlns_dc;
 
     static const QString s_meta_generator;
     static const QString s_meta_author;

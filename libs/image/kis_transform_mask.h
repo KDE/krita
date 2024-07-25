@@ -12,6 +12,8 @@
 #include "kis_effect_mask.h"
 #include "KisDelayedUpdateNodeInterface.h"
 
+class KisTransformMaskTestingInterface;
+
 /**
    Transform a layer according to a matrix transform
 */
@@ -54,10 +56,14 @@ public:
     QRect exactBounds() const override;
     QRect sourceDataBounds() const;
 
+    void setImage(KisImageWSP image) override;
+
+    void setTransformParamsWithUndo(KisTransformMaskParamsInterfaceSP params, KUndo2Command *parentCommand);
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
 
-    void recaclulateStaticImage();
+    bool staticImageCacheIsValid() const;
+    void recalculateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
     KisPaintDeviceSP buildSourcePreviewDevice();
 
@@ -76,11 +82,15 @@ public:
     void forceUpdateTimedNode() override;
     bool hasPendingTimedUpdates() const override;
 
+    void threadSafeForceStaticImageUpdate(const QRect &extraUpdateRect);
     void threadSafeForceStaticImageUpdate();
 
     void syncLodCache() override;
 
     KisPaintDeviceList getLodCapableDevices() const override;
+
+    void setTestingInterface(KisTransformMaskTestingInterface *interface);
+    KisTransformMaskTestingInterface* testingInterface() const;
 
 protected:
     KisKeyframeChannel *requestKeyframeChannel(const QString &id) override;
@@ -91,8 +101,11 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotDelayedStaticUpdate();
-
     void slotInternalForceStaticImageUpdate();
+
+ private:
+    void startAsyncRegenerationJob();
+    void forceStartAsyncRegenerationJob();
 
 private:
     struct Private;

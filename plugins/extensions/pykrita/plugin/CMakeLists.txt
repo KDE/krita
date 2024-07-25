@@ -17,8 +17,8 @@ ki18n_wrap_ui(SOURCES
     manager.ui
 )
 
-add_library(kritapykrita MODULE ${SOURCES})
-add_library(pykrita STATIC ${SOURCES})
+kis_add_library(kritapykrita MODULE ${SOURCES})
+kis_add_library(pykrita STATIC ${SOURCES})
 
 target_include_directories(kritapykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
 target_include_directories(pykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
@@ -40,7 +40,13 @@ target_link_libraries(
 if (MINGW)
     target_compile_definitions(kritapykrita PRIVATE _hypot=hypot)
     target_compile_definitions(pykrita PRIVATE _hypot=hypot)
-endif (MINGW)
+endif()
+if (WIN32)
+    # Banish Python 3.8 from mucking up Boost.Assert use of snprintf.
+    # https://github.com/boostorg/system/issues/32
+    target_compile_definitions(kritapykrita PRIVATE HAVE_SNPRINTF=1)
+    target_compile_definitions(pykrita PRIVATE HAVE_SNPRINTF=1)
+endif (WIN32)
 
 install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

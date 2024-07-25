@@ -19,6 +19,7 @@ class KisCanvas2;
 class KisDisplayColorConverter;
 class QOpenGLShaderProgram;
 class QPainterPath;
+class KisOptimizedBrushOutline;
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
@@ -49,8 +50,14 @@ public: // QOpenGLWidget
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     void inputMethodEvent(QInputMethodEvent *event) override;
 
+    void focusInEvent(QFocusEvent *event) override;
+    void focusOutEvent(QFocusEvent *event) override;
+    
+    void hideEvent(QHideEvent *event) override;
+    void showEvent(QShowEvent *event) override;
+
 public:
-    void paintToolOutline(const QPainterPath &path);
+    void paintToolOutline(const KisOptimizedBrushOutline &path, int thickness = 1);
 
 
 public: // Implement kis_abstract_canvas_widget interface
@@ -59,11 +66,13 @@ public: // Implement kis_abstract_canvas_widget interface
 
     void setWrapAroundViewingMode(bool value) override;
     bool wrapAroundViewingMode() const override;
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value) override;
+    WrapAroundAxis wrapAroundViewingModeAxis() const override;
 
     void channelSelectionChanged(const QBitArray &channelFlags) override;
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
     void finishResizingImage(qint32 w, qint32 h) override;
-    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;
     QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) override;
     void updateCanvasImage(const QRect &imageUpdateRect) override;

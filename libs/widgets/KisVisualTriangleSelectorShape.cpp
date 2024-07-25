@@ -13,13 +13,11 @@
 #include "kis_debug.h"
 #include "kis_global.h"
 
-KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(QWidget *parent,
+KisVisualTriangleSelectorShape::KisVisualTriangleSelectorShape(KisVisualColorSelector *parent,
                                                                Dimensions dimension,
-                                                               const KoColorSpace *cs,
                                                                int channel1, int channel2,
-                                                               const KoColorDisplayRendererInterface *displayRenderer,
                                                                int margin)
-    : KisVisualColorSelectorShape(parent, dimension, cs, channel1, channel2, displayRenderer),
+    : KisVisualColorSelectorShape(parent, dimension, channel1, channel2),
       m_margin(margin)
 {
     //qDebug() << "creating KisVisualTriangleSelectorShape" << this;
@@ -123,15 +121,11 @@ QImage KisVisualTriangleSelectorShape::renderAlphaMask() const
     return alphaMask;
 }
 
-void KisVisualTriangleSelectorShape::drawCursor()
+void KisVisualTriangleSelectorShape::drawCursor(QPainter &painter)
 {
     //qDebug() << this << "KisVisualTriangleSelectorShape::drawCursor: image needs update" << imagesNeedUpdate();
     QPointF cursorPoint = convertShapeCoordinateToWidgetCoordinate(getCursorPosition());
-    QImage fullSelector = getImageMap();
     QColor col = getColorFromConverter(getCurrentColor());
-    QPainter painter(&fullSelector);
-    painter.setRenderHint(QPainter::Antialiasing);
-
     QBrush fill(Qt::SolidPattern);
 
     int cursorwidth = 5;
@@ -144,7 +138,4 @@ void KisVisualTriangleSelectorShape::drawCursor()
     painter.setPen(Qt::black);
     painter.setBrush(fill);
     painter.drawEllipse(cursorPoint, cursorwidth-1.0, cursorwidth-1.0);
-
-    painter.end();
-    setFullImage(fullSelector);
 }

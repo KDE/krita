@@ -70,7 +70,7 @@ public:
     QRectF imageRectInTexturePixels(const QRect &imageRect) const;
 
     /**
-     * Binds the tile's testure to the current GL_TEXTURE_2D binding point,
+     * Binds the tile's texture to the current GL_TEXTURE_2D binding point,
      * regenerates the mipmap if needed and returns the levelOfDetail that
      * should be used for painting
      */
@@ -78,6 +78,7 @@ public:
 
 private:
     inline void setTextureParameters();
+    inline void restoreTextureParameters();
 
     void setNeedsMipmapRegeneration();
     void setPreparedLodPlane(int lod);

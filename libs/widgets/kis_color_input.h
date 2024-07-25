@@ -8,6 +8,7 @@
 #define _KIS_COLOR_INPUT_H_
 
 #include <QWidget>
+#include "KisHsvColorSlider.h"
 
 class KoChannelInfo;
 class KoColor;
@@ -107,6 +108,8 @@ class KRITAWIDGETS_EXPORT KisHsvColorInput : public QWidget
 public:
     KisHsvColorInput(QWidget* parent, KoColor* color);
 
+    void setMixMode(KisHsvColorSlider::MIX_MODE mixMode);
+
 public Q_SLOTS:
     void setHue(double);
     void setSaturation(double);
@@ -124,20 +127,25 @@ Q_SIGNALS:
 private:
     void sendUpdate();
     void recolorSliders();
+    void fillColor(QColor& color);
+    void fillColor(QColor& color, const qreal& h, const qreal& s, const qreal& x);
+    void getHsxF(const QColor& color, qreal* h, qreal* s, qreal* x);
 
     KoColor* m_color;
 
     KisHsvColorSlider* m_hSlider;
     KisHsvColorSlider* m_sSlider;
-    KisHsvColorSlider* m_vSlider;
+    KisHsvColorSlider* m_xSlider;
 
     KisDoubleParseSpinBox* m_hInput;
     KisDoubleParseSpinBox* m_sInput;
-    KisDoubleParseSpinBox* m_vInput;
+    KisDoubleParseSpinBox* m_xInput;
 
     qreal m_h;
     qreal m_s;
-    qreal m_v;
+    qreal m_x;
+
+    KisHsvColorSlider::MIX_MODE m_mixMode;
 };
 
 #endif

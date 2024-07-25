@@ -52,11 +52,11 @@ void KisShortcutsEditorPrivate::initGUI(KisShortcutsEditor::ActionTypes types,
     actionTypes = types;
 
     ui.setupUi(q);
-    q->layout()->setMargin(0);
+    q->layout()->setContentsMargins(0, 0, 0, 0);
     ui.searchFilter->searchLine()->setTreeWidget(ui.list); // Plug into search line
     ui.list->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
-    // Create the Delegate. It is responsible for the KKeySeqeunceWidgets that
+    // Create the Delegate. It is responsible for the KKeySequenceWidgets that
     // really change the shortcuts.
     delegate = new KisShortcutsEditorDelegate(
         ui.list,
@@ -77,7 +77,7 @@ void KisShortcutsEditorPrivate::initGUI(KisShortcutsEditor::ActionTypes types,
 
     QObject::connect(delegate, SIGNAL(shortcutChanged(QVariant,QModelIndex)),
                      q, SLOT(capturedShortcut(QVariant,QModelIndex)));
-    //hide the editor widget chen its item becomes hidden
+    //hide the editor widget when its item becomes hidden
     QObject::connect(ui.searchFilter->searchLine(), SIGNAL(hiddenChanged(QTreeWidgetItem*,bool)),
                      delegate, SLOT(hiddenBySearchLine(QTreeWidgetItem*,bool)));
     //Expand items when searching
@@ -184,7 +184,7 @@ void KisShortcutsEditorPrivate::capturedShortcut(const QVariant &newShortcut, co
 
 void KisShortcutsEditorPrivate::changeKeyShortcut(KisShortcutsEditorItem *item, uint column, const QKeySequence &capture)
 {
-    // The keySequence we get is cleared by KKeySequenceWidget. No conflicts.
+    // The keySequence we get is cleared by KisKKeySequenceWidget. No conflicts.
     if (capture == item->keySequence(column)) {
         return;
     }

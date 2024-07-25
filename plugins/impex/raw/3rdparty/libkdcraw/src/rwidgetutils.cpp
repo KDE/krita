@@ -59,7 +59,7 @@ namespace KDcrawIface
 RActiveLabel::RActiveLabel(const QUrl& url, const QString& imgPath, QWidget* const parent)
     : QLabel(parent)
 {
-    setMargin(0);
+    setContentsMargins(0, 0, 0, 0);
     setScaledContents(false);
     setOpenExternalLinks(true);
     setTextFormat(Qt::RichText);
@@ -121,7 +121,7 @@ RHBox::RHBox(QWidget* const parent)
 {
     QHBoxLayout* const layout = new QHBoxLayout(this);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 
 RHBox::RHBox(bool /*vertical*/, QWidget* const parent)
@@ -129,7 +129,7 @@ RHBox::RHBox(bool /*vertical*/, QWidget* const parent)
 {
     QVBoxLayout* const layout = new QVBoxLayout(this);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 }
 
 RHBox::~RHBox()
@@ -196,7 +196,7 @@ void RHBox::setSpacing(int spacing)
 
 void RHBox::setMargin(int margin)
 {
-    layout()->setMargin(margin);
+    layout()->setContentsMargins(margin, margin, margin, margin);
 }
 
 void RHBox::setStretchFactor(QWidget* const widget, int stretch)

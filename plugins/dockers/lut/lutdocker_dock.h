@@ -51,29 +51,27 @@ class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui
 public:
 
     LutDockerDock();
-    ~LutDockerDock();
-    QString observerName() { return "LutDockerDock"; }
+    ~LutDockerDock() override;
+    QString observerName() override
+    {
+        return "LutDockerDock";
+    }
     /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
-    bool canChangeExposureAndGamma() const;
-    qreal currentExposure() const;
-    void setCurrentExposure(qreal value);
-    qreal currentGamma() const;
-    void setCurrentGamma(qreal value);
+    bool canChangeExposureAndGamma() const override;
+    qreal currentExposure() const override;
+    void setCurrentExposure(qreal value) override;
+    void setCurrentGamma(qreal value) override;
+    qreal currentGamma() const override;
 
 private Q_SLOTS:
 
     void slotImageColorSpaceChanged();
 
     void exposureValueChanged(double exposure);
-    void exposureSliderPressed();
-    void exposureSliderReleased();
-
     void gammaValueChanged(double exposure);
-    void gammaSliderPressed();
-    void gammaSliderReleased();
 
     void updateDisplaySettings();
 
@@ -94,9 +92,6 @@ private:
     void enableControls();
     void refillControls();
 
-    void setCurrentExposureImpl(qreal value);
-    void setCurrentGammaImpl(qreal value);
-
 private:
 
     QWidget *m_page;
@@ -104,8 +99,6 @@ private:
     QPointer<KisCanvas2> m_canvas;
     OCIO::ConstConfigRcPtr m_ocioConfig;
     QSharedPointer<KisDisplayFilter> m_displayFilter;
-
-    bool m_draggingSlider;
 
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_exposureCompressor;
     QScopedPointer<KisSignalCompressorWithParam<qreal> > m_gammaCompressor;

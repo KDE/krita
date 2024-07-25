@@ -8,6 +8,7 @@
 #include "SvgTextEditor.h"
 
 #include <QAction>
+#include <QActionGroup>
 #include <QApplication>
 #include <QBuffer>
 #include <QComboBox>
@@ -53,6 +54,7 @@
 #include <KoColorPopupAction.h>
 #include <svg/SvgUtil.h>
 
+#include <KisSpinBoxI18nHelper.h>
 #include <KisScreenColorSampler.h>
 #include <kis_icon.h>
 #include <kis_config.h>
@@ -62,6 +64,8 @@
 #include "kis_font_family_combo_box.h"
 #include "FontSizeAction.h"
 #include "kis_signals_blocker.h"
+
+using WrappingMode = KoSvgTextShapeMarkupConverter::WrappingMode;
 
 
 class SvgTextEditor::Private
@@ -74,6 +78,8 @@ public:
         // conflicting property in QTextCharFormat
         font.setPointSize(fontSize);
     }
+
+    QActionGroup *textWrappingActionGroup {};
 
     // collection of last-used properties
     QColor fontColor {Qt::black};
@@ -97,7 +103,7 @@ public:
     // horizontal alignment - it seems to work without saving
     // line height - it seems to work without saving
 
-    void saveFromWidgets(KActionCollection* actions)
+    void saveFromWidgets(KisKActionCollection* actions)
     {
 
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actions->action("svg_font_size"));
@@ -123,7 +129,7 @@ public:
         saveBoolActionFromWidget(actions, "svg_font_kerning", kerning);
     }
 
-    void setSavedToWidgets(KActionCollection* actions)
+    void setSavedToWidgets(KisKActionCollection* actions)
     {
 
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actions->action("svg_font_size"));
@@ -205,7 +211,7 @@ public:
     }
 
 
-    void setSavedLineDecorationToWidgets(KActionCollection* actions)
+    void setSavedLineDecorationToWidgets(KisKActionCollection* actions)
     {
         setBoolActionToWidget(actions, "svg_format_underline", underline);
         setBoolActionToWidget(actions, "svg_format_strike_through", strikeThrough);
@@ -213,14 +219,14 @@ public:
 
 private:
 
-    void saveBoolActionFromWidget(KActionCollection* actions, QString actionName, bool &variable)
+    void saveBoolActionFromWidget(KisKActionCollection* actions, QString actionName, bool &variable)
     {
         QAction *boolAction = actions->action(actionName);
         KIS_ASSERT_RECOVER_RETURN(boolAction);
         variable = boolAction->isChecked();
     }
 
-    void setBoolActionToWidget(KActionCollection* actions, QString actionName, bool variable)
+    void setBoolActionToWidget(KisKActionCollection* actions, QString actionName, bool variable)
     {
         QAction *boolAction = actions->action(actionName);
         KIS_ASSERT_RECOVER_RETURN(boolAction);
@@ -241,7 +247,6 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     m_textEditorWidget.setupUi(m_page);
     setCentralWidget(m_page);
 
-    m_textEditorWidget.chkVertical->setVisible(false);
 #ifndef Q_OS_WIN
     KCharSelect *charSelector = new KCharSelect(m_charSelectDialog, 0, KCharSelect::AllGuiElements);
     m_charSelectDialog->setMainWidget(charSelector);
@@ -261,7 +266,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     actionCollection()->setComponentDisplayName(i18n("Text Tool"));
 
     if (cg.hasKey("WindowState")) {
-        QByteArray state = cg.readEntry("State", state);
+        QByteArray state = cg.readEntry("State", QByteArray());
         // One day will need to load the version number, but for now, assume 0
         restoreState(QByteArray::fromBase64(state));
     }
@@ -270,7 +275,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
         restoreGeometry(QByteArray::fromBase64(ba));
     }
     else {
-        const int scnum = QApplication::desktop()->screenNumber(parent);
+        const int scnum = QApplication::desktop()->screenNumber(QApplication::activeWindow());
         QRect desk = QGuiApplication::screens().at(scnum)->availableGeometry();
 
         quint32 x = desk.x();
@@ -308,7 +313,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
-        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+        KisToolBar * toolBar = ::qobject_cast<KisToolBar *>(it);
         if (toolBar) {
             toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);
@@ -319,11 +324,31 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
             toolbarList.append(act);
         }
     }
+
+    {
+        // Make the text color and text wrapping actions a simple drop-down
+        // button and not the split button/drop-down combo.
+        QAction *const color = actionCollection()->action("svg_format_textcolor");
+        Q_FOREACH(KisToolBar *const toolBar, toolBars()) {
+            if (QToolButton *const btn = qobject_cast<QToolButton *>(toolBar->widgetForAction(color))) {
+                btn->setPopupMode(QToolButton::InstantPopup);
+            }
+            Q_FOREACH(QAction *const action, toolBar->actions()) {
+                if (action->objectName() == QLatin1String("svg_text_wrapping")) {
+                    if (QToolButton *const btn = qobject_cast<QToolButton *>(toolBar->widgetForAction(action))) {
+                        btn->setPopupMode(QToolButton::InstantPopup);
+                    }
+                }
+            }
+        }
+    }
+
     plugActionList("toolbarlist", toolbarList);
     connect(m_textEditorWidget.textTab, SIGNAL(currentChanged(int)), this, SLOT(switchTextEditorTab()));
     switchTextEditorTab();
 
     m_textEditorWidget.richTextEdit->document()->setDefaultStyleSheet("p {margin:0px;}");
+    m_textEditorWidget.richTextEdit->installEventFilter(this);
 
     applySettings();
 
@@ -354,7 +379,9 @@ void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
             m_textEditorWidget.svgStylesEdit->setPlainText(styles);
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
 
-            if (shape->isRichTextPreferred() &&
+            /// Todo: remove this bool when removing rich text editor.
+            bool richtextPreferred = false;
+            if (richtextPreferred &&
                 converter.convertSvgToDocument(svg, doc)) {
 
                 m_textEditorWidget.richTextEdit->setDocument(doc);
@@ -388,6 +415,7 @@ void SvgTextEditor::setInitialShape(KoSvgTextShape *shape)
     cursor.setBlockCharFormat(format);
 
     m_textEditorWidget.richTextEdit->document()->setModified(false);
+    checkDocumentFormat();
 }
 
 void SvgTextEditor::save()
@@ -402,9 +430,9 @@ void SvgTextEditor::save()
                     qWarning()<<"new converter doesn't work!";
             }
             m_textEditorWidget.richTextEdit->document()->setModified(false);
-            emit textUpdated(m_shape, svg, styles, true);
+            emit textUpdated(m_shape, svg, styles);
         } else if (isSvgSourceEditorTabActive()) {
-            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText(), false);
+            emit textUpdated(m_shape, m_textEditorWidget.svgTextEdit->document()->toPlainText(), m_textEditorWidget.svgStylesEdit->document()->toPlainText());
             m_textEditorWidget.svgTextEdit->document()->setModified(false);
         }
     }
@@ -416,8 +444,10 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
     KoSvgTextShape shape;
     KoSvgTextShapeMarkupConverter converter(&shape);
 
+    bool wasModified = false;
     if (m_currentEditor) {
         disconnect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), this, SLOT(setModified(bool)));
+        wasModified = m_currentEditor->document()->isModified();
     }
 
     // do not switch to the same tab again, otherwise we're losing current changes
@@ -429,6 +459,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
         //then connect the cursor change to the checkformat();
         connect(m_textEditorWidget.richTextEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkFormat()));
         connect(m_textEditorWidget.richTextEdit, SIGNAL(textChanged()), this, SLOT(slotFixUpEmptyTextBlock()));
+        connect(m_textEditorWidget.richTextEdit, SIGNAL(textChanged()), this, SLOT(checkDocumentFormat()));
         checkFormat();
 
         if (m_shape && convertData) {
@@ -457,6 +488,7 @@ void SvgTextEditor::switchTextEditorTab(bool convertData)
         m_currentEditor = m_textEditorWidget.svgTextEdit;
     }
 
+    m_currentEditor->document()->setModified(wasModified);
     connect(m_currentEditor->document(), SIGNAL(modificationChanged(bool)), SLOT(setModified(bool)));
 }
 
@@ -481,7 +513,11 @@ void SvgTextEditor::checkFormat()
     {
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actionCollection()->action("svg_font_size"));
         KisSignalsBlocker b(fontSizeAction);
-        fontSizeAction->setFontSize(format.font().pointSize());
+        qreal pointSize = format.fontPointSize();
+        if (pointSize <= 0.0) {
+            pointSize = format.font().pointSizeF();
+        }
+        fontSizeAction->setFontSize(pointSize);
     }
 
 
@@ -506,13 +542,15 @@ void SvgTextEditor::checkFormat()
     }
 
     {
-        QDoubleSpinBox *spnLineHeight = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget());
+        QDoubleSpinBox *spnLineHeight = qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget()->findChild<QDoubleSpinBox *>();
         KisSignalsBlocker b(spnLineHeight);
 
         if (blockFormat.lineHeightType() == QTextBlockFormat::SingleHeight) {
-            spnLineHeight->setValue(100.0);
+            spnLineHeight->setValue(-1.0);
+            spnLineHeight->setSingleStep(101.0);
         } else if(blockFormat.lineHeightType() == QTextBlockFormat::ProportionalHeight) {
             spnLineHeight->setValue(double(blockFormat.lineHeight()));
+            spnLineHeight->setSingleStep(10.0);
         }
     }
 
@@ -520,6 +558,36 @@ void SvgTextEditor::checkFormat()
         QDoubleSpinBox* spnLetterSpacing = qobject_cast<QDoubleSpinBox*>(qobject_cast<QWidgetAction*>(actionCollection()->action("svg_letter_spacing"))->defaultWidget());
         KisSignalsBlocker b(spnLetterSpacing);
         spnLetterSpacing->setValue(format.fontLetterSpacing());
+    }
+}
+
+void SvgTextEditor::checkDocumentFormat()
+{
+    QTextFrameFormat f = m_textEditorWidget.richTextEdit->document()->rootFrame()->frameFormat();
+    WrappingMode wrappingMode = KoSvgTextShapeMarkupConverter::getWrappingMode(f);
+    switch (wrappingMode) {
+    case WrappingMode::QtLegacy:
+    default:
+        if (wrappingMode != WrappingMode::QtLegacy) {
+            // For sanity
+            KoSvgTextShapeMarkupConverter::setWrappingMode(&f, WrappingMode::QtLegacy);
+            m_textEditorWidget.richTextEdit->document()->rootFrame()->setFrameFormat(f);
+        }
+        m_textEditorWidget.richTextEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+        actionCollection()->action("svg_text_wrapping_legacy")->setChecked(true);
+        break;
+    case WrappingMode::WhiteSpacePre:
+        m_textEditorWidget.richTextEdit->setLineWrapMode(QTextEdit::WidgetWidth);
+        actionCollection()->action("svg_text_wrapping_css_pre")->setChecked(true);
+        break;
+    case WrappingMode::WhiteSpacePreWrap:
+        const double inlineSize = KoSvgTextShapeMarkupConverter::getInlineSize(f).value_or(100.0);
+        const int wrapWidth = inlineSize * (96.0 / 72.0) + f.leftMargin() + f.rightMargin();
+        m_textEditorWidget.richTextEdit->setLineWrapColumnOrWidth(wrapWidth);
+        m_textEditorWidget.richTextEdit->setLineWrapMode(QTextEdit::FixedPixelWidth);
+        m_textEditorWidget.richTextEdit->setWordWrapMode(QTextOption::WordWrap);
+        actionCollection()->action("svg_text_wrapping_css_pre_wrap")->setChecked(true);
+        break;
     }
 }
 
@@ -866,8 +934,11 @@ void SvgTextEditor::increaseTextSize()
 {
     QTextCursor oldCursor = setTextSelection();
     QTextCharFormat format;
-    int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
-    if (pointSize<0) {
+    qreal pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().fontPointSize();
+    if (pointSize <= 0.0) {
+        pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSizeF();
+    }
+    if (pointSize <= 0.0) {
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
     }
     format.setFontPointSize(pointSize+1.0);
@@ -880,9 +951,15 @@ void SvgTextEditor::decreaseTextSize()
 {
     QTextCursor oldCursor = setTextSelection();
     QTextCharFormat format;
-    int pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSize();
-    if (pointSize<1) {
+    qreal pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().fontPointSize();
+    if (pointSize <= 0.0) {
+        pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pointSizeF();
+    }
+    if (pointSize <= 0.0) {
         pointSize = m_textEditorWidget.richTextEdit->textCursor().charFormat().font().pixelSize();
+    }
+    if (pointSize <= 1.0) {
+        return;
     }
     format.setFontPointSize(qMax(pointSize-1.0, 1.0));
     d->fontSize = format.fontPointSize();
@@ -892,9 +969,16 @@ void SvgTextEditor::decreaseTextSize()
 
 void SvgTextEditor::setLineHeight(double lineHeightPercentage)
 {
+    QDoubleSpinBox *spnLineHeight = qobject_cast<QWidgetAction*>(actionCollection()->action("svg_line_height"))->defaultWidget()->findChild<QDoubleSpinBox *>();
     QTextCursor oldCursor = setTextSelection();
     QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
-    format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
+    if (lineHeightPercentage < 0.0) {
+        format.setLineHeight(1.0, QTextBlockFormat::SingleHeight);
+        spnLineHeight->setSingleStep(101.0);
+    } else {
+        format.setLineHeight(lineHeightPercentage, QTextBlockFormat::ProportionalHeight);
+        spnLineHeight->setSingleStep(10.0);
+    }
     m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
     m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
 }
@@ -920,29 +1004,53 @@ void SvgTextEditor::setLetterSpacing(double letterSpacing)
 
 void SvgTextEditor::alignLeft()
 {
-    QTextCursor oldCursor = setTextSelection();
-    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    QTextBlockFormat format;
     format.setAlignment(Qt::AlignLeft);
-    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
-    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
+    if (KoSvgTextShapeMarkupConverter::getWrappingMode(
+            m_textEditorWidget.richTextEdit->document()->rootFrame()->frameFormat())
+        == WrappingMode::WhiteSpacePreWrap) {
+        QTextCursor cursor(m_textEditorWidget.richTextEdit->document());
+        cursor.select(QTextCursor::Document);
+        cursor.mergeBlockFormat(format);
+    } else {
+        QTextCursor oldCursor = setTextSelection();
+        m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
+    }
 }
 
 void SvgTextEditor::alignRight()
 {
-    QTextCursor oldCursor = setTextSelection();
-    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    QTextBlockFormat format;
     format.setAlignment(Qt::AlignRight);
-    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
-    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
+    if (KoSvgTextShapeMarkupConverter::getWrappingMode(
+            m_textEditorWidget.richTextEdit->document()->rootFrame()->frameFormat())
+        == WrappingMode::WhiteSpacePreWrap) {
+        QTextCursor cursor(m_textEditorWidget.richTextEdit->document());
+        cursor.select(QTextCursor::Document);
+        cursor.mergeBlockFormat(format);
+    } else {
+        QTextCursor oldCursor = setTextSelection();
+        m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
+    }
 }
 
 void SvgTextEditor::alignCenter()
 {
-    QTextCursor oldCursor = setTextSelection();
-    QTextBlockFormat format = m_textEditorWidget.richTextEdit->textCursor().blockFormat();
+    QTextBlockFormat format;
     format.setAlignment(Qt::AlignCenter);
-    m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
-    m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
+    if (KoSvgTextShapeMarkupConverter::getWrappingMode(
+            m_textEditorWidget.richTextEdit->document()->rootFrame()->frameFormat())
+        == WrappingMode::WhiteSpacePreWrap) {
+        QTextCursor cursor(m_textEditorWidget.richTextEdit->document());
+        cursor.select(QTextCursor::Document);
+        cursor.mergeBlockFormat(format);
+    } else {
+        QTextCursor oldCursor = setTextSelection();
+        m_textEditorWidget.richTextEdit->textCursor().mergeBlockFormat(format);
+        m_textEditorWidget.richTextEdit->setTextCursor(oldCursor);
+    }
 }
 
 void SvgTextEditor::alignJustified()
@@ -979,18 +1087,6 @@ void SvgTextEditor::setSettings()
     }
     textSettings.lwScripts->setModel(writingSystemsModel);
 
-    m_currentEditorMode = (EditorMode)cfg.readEntry("EditorMode", (int)EditorMode::Both);
-    switch (m_currentEditorMode) {
-    case EditorMode::RichText:
-        textSettings.radioRichText->setChecked(true);
-        break;
-    case EditorMode::SvgSource:
-        textSettings.radioSvgSource->setChecked(true);
-        break;
-    case EditorMode::Both:
-        textSettings.radioBoth->setChecked(true);
-    }
-
     QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
     textSettings.colorEditorBackground->setColor(background);
     textSettings.colorEditorForeground->setColor(cfg.readEntry("colorEditorForeground", qApp->palette().text().color()));
@@ -1026,16 +1122,6 @@ void SvgTextEditor::setSettings()
             }
         }
         cfg.writeEntry("selectedWritingSystems", writingSystems.join(','));
-
-        if (textSettings.radioRichText->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)EditorMode::RichText);
-        }
-        else if (textSettings.radioSvgSource->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)EditorMode::SvgSource);
-        }
-        else  if (textSettings.radioBoth->isChecked()) {
-            cfg.writeEntry("EditorMode", (int)EditorMode::Both);
-        }
 
         cfg.writeEntry("colorEditorBackground", textSettings.colorEditorBackground->color());
         cfg.writeEntry("colorEditorForeground", textSettings.colorEditorForeground->color());
@@ -1128,7 +1214,11 @@ void SvgTextEditor::setFont(const QString &fontName)
     QFont font;
     font.fromString(fontName);
     QTextCharFormat curFormat = m_textEditorWidget.richTextEdit->textCursor().charFormat();
-    font.setPointSize(curFormat.font().pointSize());
+    qreal pointSize = curFormat.fontPointSize();
+    if (pointSize <= 0.0) {
+        pointSize = curFormat.font().pointSizeF();
+    }
+    font.setPointSize(pointSize);
 
     QFontDatabase fontDatabase;
     const bool italic = fontDatabase.italic(font.family(), font.styleName());
@@ -1216,6 +1306,47 @@ void SvgTextEditor::setKerning(bool enable)
     }
 }
 
+void SvgTextEditor::setWrappingLegacy()
+{
+    QTextFrameFormat f = m_textEditorWidget.richTextEdit->document()->rootFrame()->frameFormat();
+    KoSvgTextShapeMarkupConverter::setWrappingMode(&f, WrappingMode::QtLegacy);
+    m_textEditorWidget.richTextEdit->document()->rootFrame()->setFrameFormat(f);
+    checkDocumentFormat();
+}
+
+void SvgTextEditor::setWrappingPre()
+{
+    QTextFrameFormat f = m_textEditorWidget.richTextEdit->document()->rootFrame()->frameFormat();
+    KoSvgTextShapeMarkupConverter::setWrappingMode(&f, WrappingMode::WhiteSpacePre);
+    m_textEditorWidget.richTextEdit->document()->rootFrame()->setFrameFormat(f);
+    checkDocumentFormat();
+}
+
+void SvgTextEditor::setWrappingPreWrap()
+{
+    KisSignalsBlocker b(m_textEditorWidget.richTextEdit);
+
+    QTextDocument *doc = m_textEditorWidget.richTextEdit->document();
+
+    // `inline-size` can only support one block alignment for the whole text
+    // element, therefore we should make all text blocks use the same alignment.
+    {
+        const Qt::Alignment firstBlockAlignment = doc->firstBlock().blockFormat().alignment();
+        QTextBlockFormat blockFmt;
+        blockFmt.setAlignment(firstBlockAlignment);
+        QTextCursor cursor(doc);
+        cursor.select(QTextCursor::Document);
+        cursor.mergeBlockFormat(blockFmt);
+    }
+
+    QTextFrameFormat f = doc->rootFrame()->frameFormat();
+    const double inlineSize = KoSvgTextShapeMarkupConverter::getInlineSize(f).value_or(100.0);
+    KoSvgTextShapeMarkupConverter::setWrappingMode(&f, WrappingMode::WhiteSpacePreWrap);
+    KoSvgTextShapeMarkupConverter::setInlineSize(&f, inlineSize);
+    doc->rootFrame()->setFrameFormat(f);
+    checkDocumentFormat();
+}
+
 void SvgTextEditor::wheelEvent(QWheelEvent *event)
 {
     if (!isSvgSourceEditorTabActive()) {
@@ -1223,7 +1354,7 @@ void SvgTextEditor::wheelEvent(QWheelEvent *event)
     }
 
     if (event->modifiers() & Qt::ControlModifier) {
-        int numDegrees = event->delta() / 8;
+        int numDegrees = event->angleDelta().y() / 8;
         int numSteps = numDegrees / 7;
         m_textEditorWidget.svgTextEdit->zoomOut(numSteps);
         event->accept();
@@ -1243,32 +1374,21 @@ void SvgTextEditor::applySettings()
 {
     KConfigGroup cfg(KSharedConfig::openConfig(), "SvgTextTool");
 
-    m_currentEditorMode = (EditorMode)cfg.readEntry("EditorMode", (int)EditorMode::Both);
-
     QWidget *richTab = m_textEditorWidget.richTab;
     QWidget *svgTab = m_textEditorWidget.svgTab;
 
     m_page->setUpdatesEnabled(false);
     m_textEditorWidget.textTab->clear();
 
-    switch (m_currentEditorMode) {
-    case EditorMode::RichText:
-        m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
-        break;
-    case EditorMode::SvgSource:
-        m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
-        break;
-    case EditorMode::Both:
-        m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
-        m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
-    }
+    m_textEditorWidget.textTab->addTab(richTab, i18n("Rich text"));
+    m_textEditorWidget.textTab->addTab(svgTab, i18n("SVG Source"));
 
     m_syntaxHighlighter->setFormats();
 
     QPalette palette = m_textEditorWidget.svgTextEdit->palette();
 
     QColor background = cfg.readEntry("colorEditorBackground", qApp->palette().window().color());
-    palette.setBrush(QPalette::Active, QPalette::Background, QBrush(background));
+    palette.setBrush(QPalette::Active, QPalette::Window, QBrush(background));
     m_textEditorWidget.richTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
     m_textEditorWidget.svgStylesEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
     m_textEditorWidget.svgTextEdit->setStyleSheet(QString("background-color:%1").arg(background.name()));
@@ -1392,6 +1512,14 @@ void SvgTextEditor::createActions()
     m_richTextActions << createAction("svg_font_kerning",
                                       SLOT(setKerning(bool)));
 
+    d->textWrappingActionGroup = new QActionGroup(this);
+    m_richTextActions << d->textWrappingActionGroup->addAction(
+        createAction("svg_text_wrapping_legacy", SLOT(setWrappingLegacy())));
+    m_richTextActions << d->textWrappingActionGroup->addAction(
+        createAction("svg_text_wrapping_css_pre", SLOT(setWrappingPre())));
+    m_richTextActions << d->textWrappingActionGroup->addAction(
+        createAction("svg_text_wrapping_css_pre_wrap", SLOT(setWrappingPreWrap())));
+
     // Settings
     // do not add settings action to m_richTextActions list,
     // it should always be active, regardless of which editor mode is used.
@@ -1442,13 +1570,35 @@ void SvgTextEditor::createActions()
     actionRegistry->propertizeAction("svg_sample_color", colorSamplerAction);
 
     QWidgetAction *lineHeight = new QWidgetAction(this);
+    QWidget *lineHeightWdg = new QWidget();
+    QHBoxLayout *lineHeightLayout = new QHBoxLayout(lineHeightWdg);
+    lineHeightLayout->setSpacing(0);
     QDoubleSpinBox *spnLineHeight = new QDoubleSpinBox();
     spnLineHeight->setToolTip(i18n("Line height"));
-    spnLineHeight->setRange(0.0, 1000.0);
+    spnLineHeight->setRange(-1.0, 1000.0);
     spnLineHeight->setSingleStep(10.0);
-    spnLineHeight->setSuffix(i18n("%"));
+    KisSpinBoxI18nHelper::setText(spnLineHeight, i18nc("{n} is the number value, % is the percent sign", "{n}%"));
+    spnLineHeight->setSpecialValueText(i18nc("Default line height for text", "Normal"));
     connect(spnLineHeight, SIGNAL(valueChanged(double)), SLOT(setLineHeight(double)));
-    lineHeight->setDefaultWidget(spnLineHeight);
+    lineHeightLayout->addWidget(spnLineHeight);
+    {
+        QToolButton *btn = new QToolButton();
+        btn->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::MinimumExpanding);
+        btn->setArrowType(Qt::DownArrow);
+        btn->setPopupMode(QToolButton::InstantPopup);
+        QMenu *lineHeightMenu = new QMenu(this);
+        QAction *actionNormal = lineHeightMenu->addAction(i18nc("Default line height for text", "Normal"));
+        connect(actionNormal, &QAction::triggered, spnLineHeight, [spnLineHeight]() {
+            spnLineHeight->setValue(-1.0);
+        });
+        QAction *action100 = lineHeightMenu->addAction(i18nc("line height for text", "100%"));
+        connect(action100, &QAction::triggered, spnLineHeight, [spnLineHeight]() {
+            spnLineHeight->setValue(100.0);
+        });
+        btn->setMenu(lineHeightMenu);
+        lineHeightLayout->addWidget(btn);
+    }
+    lineHeight->setDefaultWidget(lineHeightWdg);
     actionCollection()->addAction("svg_line_height", lineHeight);
     m_richTextActions << lineHeight;
     actionRegistry->propertizeAction("svg_line_height", lineHeight);
@@ -1480,19 +1630,31 @@ void SvgTextEditor::enableSvgTextActions(bool enable)
 }
 
 bool SvgTextEditor::isRichTextEditorTabActive() {
-    return m_currentEditorMode == EditorMode::RichText 
-        || (m_currentEditorMode == EditorMode::Both 
-            && m_textEditorWidget.textTab->currentIndex() == Editor::Richtext);
+    return m_textEditorWidget.textTab->currentIndex() == Editor::Richtext;
 }
 
 bool SvgTextEditor::isSvgSourceEditorTabActive() {
-    return m_currentEditorMode == EditorMode::SvgSource 
-        || (m_currentEditorMode == EditorMode::Both 
-            && m_textEditorWidget.textTab->currentIndex() == Editor::SVGsource);
+    return m_textEditorWidget.textTab->currentIndex() == Editor::SVGsource;
 }
 
 void SvgTextEditor::slotCloseEditor()
 {
     close();
     emit textEditorClosed();
+}
+
+bool SvgTextEditor::eventFilter(QObject *const watched, QEvent *const event)
+{
+    if (watched == m_textEditorWidget.richTextEdit) {
+        if (event->type() == QEvent::KeyPress || event->type() == QEvent::KeyRelease) {
+            QKeyEvent *const keyEvent = static_cast<QKeyEvent *>(event);
+            if ((keyEvent->key() == Qt::Key_Enter || keyEvent->key() == Qt::Key_Return)
+                && (keyEvent->modifiers() & Qt::ShiftModifier)) {
+                // Disable soft line breaks
+                return true;
+            }
+        }
+        return false;
+    }
+    return KXmlGuiWindow::eventFilter(watched, event);
 }

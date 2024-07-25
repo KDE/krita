@@ -234,7 +234,7 @@ void KisFilterSelectionsBenchmark::testBitBltWOSelections(int num)
 
         KisPainter painter(projection);
         painter.beginTransaction();
-        painter.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        painter.setCompositeOpId(COMPOSITE_ALPHA_DARKEN);
         painter.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
         painter.deleteTransaction();
     }
@@ -265,7 +265,7 @@ void KisFilterSelectionsBenchmark::testBitBltSelections(int num)
 
         KisPainter gc(projection);
         gc.beginTransaction();
-        gc.setCompositeOp(projection->colorSpace()->compositeOp(COMPOSITE_ALPHA_DARKEN));
+        gc.setCompositeOpId(COMPOSITE_ALPHA_DARKEN);
         gc.setSelection(m_selection);
         gc.bitBlt(filterRect.topLeft(), cacheDevice, filterRect);
         gc.deleteTransaction();

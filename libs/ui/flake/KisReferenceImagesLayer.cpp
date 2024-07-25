@@ -12,9 +12,11 @@
 #include <kis_processing_visitor.h>
 #include <kis_shape_layer_canvas.h>
 
+#include "kis_default_bounds.h"
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
 #include "KisDocument.h"
+#include <KoViewConverter.h>
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -83,11 +85,25 @@ private:
 
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
 {
+    Q_OBJECT
 public:
-    ReferenceImagesCanvas(KisReferenceImagesLayer *parent, KisImageWSP image)
-        : KisShapeLayerCanvasBase(parent, image)
+    ReferenceImagesCanvas(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds, KisReferenceImagesLayer *parent)
+        : KisShapeLayerCanvasBase(parent)
         , m_layer(parent)
-    {}
+        , m_fallbackProjection(new KisPaintDevice(parent, cs, defaultBounds))
+        , m_compressor(KisThreadSafeSignalCompressor(25, KisSignalCompressor::FIRST_ACTIVE))
+    {
+        connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotAsyncRepaint()));
+    }
+
+    ReferenceImagesCanvas(const ReferenceImagesCanvas &rhs, KisReferenceImagesLayer *parent)
+        : KisShapeLayerCanvasBase(rhs, parent)
+        , m_layer(parent)
+        , m_fallbackProjection(new KisPaintDevice(*rhs.m_fallbackProjection))
+        , m_compressor(KisThreadSafeSignalCompressor(25, KisSignalCompressor::FIRST_ACTIVE))
+    {
+        connect(&m_compressor, SIGNAL(timeout()), this, SLOT(slotAsyncRepaint()));
+    }
 
     void updateCanvas(const QRectF &rect) override
     {
@@ -95,8 +111,10 @@ public:
             return;
         }
 
-        QRectF r = m_viewConverter->documentToView(rect);
-        m_layer->signalUpdate(r);
+        m_dirtyRect |= rect;
+
+        m_compressor.start();
+        m_hasUpdateInCompressor = true;
     }
 
     void forceRepaint() override
@@ -106,26 +124,45 @@ public:
 
     bool hasPendingUpdates() const override
     {
-        return false;
+        return m_hasUpdateInCompressor;
     }
 
     void rerenderAfterBeingInvisible() override {}
-    void resetCache() override {}
-    void setImage(KisImageWSP image) override
-    {
-        m_viewConverter->setImage(image);
+
+    void resetCache(const KoColorSpace *colorSpace) override { 
+        Q_UNUSED(colorSpace); 
+    }
+
+    KisPaintDeviceSP projection() const override {
+        return m_fallbackProjection;
+    }
+private Q_SLOTS:
+    void slotAsyncRepaint() {
+        QRectF r = viewConverter()->documentToView(m_dirtyRect);
+        m_layer->signalUpdate(r);
+        m_dirtyRect = QRectF();
+        m_hasUpdateInCompressor = false;
     }
 
 private:
     KisReferenceImagesLayer *m_layer;
+    KisPaintDeviceSP m_fallbackProjection;
+    KisThreadSafeSignalCompressor m_compressor;
+    QRectF m_dirtyRect;
+    volatile bool m_hasUpdateInCompressor = false;
 };
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
-    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
+    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8,
+                    [&] () { return new ReferenceImagesCanvas(image->colorSpace(), new KisDefaultBounds(image), this); })
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
-    : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
+    : KisShapeLayer(rhs, rhs.shapeController(),
+                    [&] () {
+                            const ReferenceImagesCanvas* referenceImagesCanvas = dynamic_cast<const ReferenceImagesCanvas*>(rhs.canvas());
+                            KIS_ASSERT(referenceImagesCanvas);
+                            return new ReferenceImagesCanvas(*referenceImagesCanvas, this); })
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)
@@ -165,7 +202,7 @@ QVector<KisReferenceImage*> KisReferenceImagesLayer::referenceImages() const
 
 void KisReferenceImagesLayer::paintReferences(QPainter &painter) {
     painter.setTransform(converter()->documentToView(), true);
-    shapeManager()->paint(painter, false);
+    shapeManager()->paint(painter);
 }
 
 bool KisReferenceImagesLayer::allowAsChild(KisNodeSP) const
@@ -229,3 +266,5 @@ QColor KisReferenceImagesLayer::getPixel(QPointF position) const
 
     return QColor();
 }
+
+#include "KisReferenceImagesLayer.moc"

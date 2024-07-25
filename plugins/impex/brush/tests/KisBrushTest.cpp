@@ -23,19 +23,19 @@ const QString BrushMimetype = "image/x-gimp-brush";
 
 void KisBrushTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportFromWriteonly(BrushMimetype);
 }
 
 
 void KisBrushTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testExportToReadonly(BrushMimetype);
 }
 
 
 void KisBrushTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), BrushMimetype);
+    TestUtil::testImportIncorrectFormat(BrushMimetype);
 }
 
 

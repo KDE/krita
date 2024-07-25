@@ -65,52 +65,32 @@ public:
 
 QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
 {
-    QList<qreal> zoomLevels;
     KConfigGroup config = KSharedConfig::openConfig()->group("");
-    bool smoothZooming = config.readEntry("SmoothZooming", false);
-    qreal defaultZoomStep = sqrt(2);
+    int steps = config.readEntry("zoomSteps", 2);
+    qreal k = steps / M_LN2;
 
-    if (smoothZooming) {
-        defaultZoomStep = sqrt(1.25);
-        zoomLevels << 1.0;
-    }
-    else {
-        zoomLevels << 0.25 / 2.0;
-        zoomLevels << 0.25 / 1.5;
-        zoomLevels << 0.25;
-        zoomLevels << 1.0 / 3.0;
-        zoomLevels << 0.5;
-        zoomLevels << 2.0 / 3.0;
-        zoomLevels << 1.0;
+    int first =  ceil(log(parent->minimumZoom()) * k);
+    int size  = floor(log(parent->maximumZoom()) * k) - first + 1;
+    QVector<qreal> zoomLevels(size);
+
+    // enforce zoom levels relating to thirds (33.33%, 66.67%, ...)
+    QVector<qreal> snap(steps);
+    if (steps > 1) {
+        qreal third = log(4./ 3.) * k;
+        int i = round(third);
+        snap[(i - first) % steps] = third - i;
     }
 
-    for (qreal zoom = zoomLevels.first() / defaultZoomStep;
-         zoom > parent->minimumZoom();
-         zoom /= defaultZoomStep) {
-
-        zoomLevels.prepend(zoom);
+    k = 1./ k;
+    for (int i = 0; i < steps; i++) {
+        qreal f = exp((i + first + snap[i]) * k);
+        f = floor(f * 0x1p48 + 0.5) / 0x1p48; // round off inaccuracies
+        for (int j = i; j < size; j += steps, f *= 2.) {
+            zoomLevels[j] = f;
+        }
     }
 
-    for (qreal zoom = zoomLevels.last() * defaultZoomStep;
-         zoom < parent->maximumZoom();
-         zoom *= defaultZoomStep) {
-
-        zoomLevels.append(zoom);
-    }
-
-    if (smoothZooming) {
-        zoomLevels << 0.25 / 2.0;
-        zoomLevels << 0.25 / 1.5;
-        zoomLevels << 0.25;
-        zoomLevels << 1.0 / 3.0;
-        zoomLevels << 0.5;
-        zoomLevels << 2.0 / 3.0;
-        zoomLevels << 1.0;
-        std::sort(zoomLevels.begin(), zoomLevels.end());
-        KritaUtils::makeContainerUnique(zoomLevels);
-    }
-
-    return zoomLevels;
+    return QList<qreal>::fromVector(zoomLevels);
 }
 
 QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoomLevels) const
@@ -198,11 +178,11 @@ void KoZoomAction::regenerateItems(const qreal zoom)
 
     // update items with new sorted zoom values
     QStringList values;
-    if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
-        values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
-    }
     if(d->zoomModes & KoZoomMode::ZOOM_PAGE) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
+    }
+    if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
+        values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
     }
     if(d->zoomModes & KoZoomMode::ZOOM_HEIGHT) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_HEIGHT);
@@ -320,7 +300,6 @@ void KoZoomAction::slotUpdateGuiAfterZoom()
 void KoZoomAction::slotUpdateZoomLevels()
 {
     qreal currentZoom = d->effectiveZoom;
-    d->generateSliderZoomLevels();
     d->sliderLookup = d->generateSliderZoomLevels();
     regenerateItems(currentZoom);
     syncSliderWithZoom();
@@ -377,7 +356,6 @@ void KoZoomAction::setMinimumZoom(qreal zoom)
     Q_ASSERT(zoom > 0.0f);
     KoZoomMode::setMinimumZoom(zoom);
     d->minimumZoomValue = zoom;
-    d->generateSliderZoomLevels();
     d->sliderLookup = d->generateSliderZoomLevels();
     regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();
@@ -388,6 +366,19 @@ void KoZoomAction::setMaximumZoom(qreal zoom)
     Q_ASSERT(zoom > 0.0f);
     KoZoomMode::setMaximumZoom(zoom);
     d->maximumZoomValue = zoom;
+    d->sliderLookup = d->generateSliderZoomLevels();
+    regenerateItems(d->effectiveZoom);
+    syncSliderWithZoom();
+}
+
+void KoZoomAction::setMinMaxZoom(qreal min, qreal max)
+{
+    Q_ASSERT(min > 0.0f);
+    Q_ASSERT(max > 0.0f);
+    KoZoomMode::setMinimumZoom(min);
+    KoZoomMode::setMaximumZoom(max);
+    d->minimumZoomValue = min;
+    d->maximumZoomValue = max;
     d->sliderLookup = d->generateSliderZoomLevels();
     regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();

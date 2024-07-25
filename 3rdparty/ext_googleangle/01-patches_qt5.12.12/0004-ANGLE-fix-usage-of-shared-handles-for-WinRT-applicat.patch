@@ -1,0 +1,38 @@
+From a9cd3c30f0fe36756cf112878ba72a7ef3b7a84c Mon Sep 17 00:00:00 2001
+From: Oliver Wolff <oliver.wolff@qt.io>
+Date: Wed, 22 Aug 2018 13:08:19 +0200
+Subject: [PATCH 04/17] ANGLE: fix usage of shared handles for WinRT
+ applications
+
+The check is not relevant in Qt's context and was skipped before but
+it sneaked back in with the latest ANGLE update.
+
+Change-Id: Ic44de5468a3254afd76ef4804d97d245676daeb1
+---
+ src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp b/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+index a29a807fd..74110f04c 100644
+--- a/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
++++ b/src/libANGLE/renderer/d3d/d3d11/Renderer11.cpp
+@@ -2398,6 +2398,8 @@ bool Renderer11::getShareHandleSupport() const
+         return false;
+     }
+ 
++    // Qt: we don't care about the 9_3 limitation
++#if 0
+     // Also disable share handles on Feature Level 9_3, since it doesn't support share handles on
+     // RGBA8 textures/swapchains.
+     if (mRenderer11DeviceCaps.featureLevel <= D3D_FEATURE_LEVEL_9_3)
+@@ -2405,6 +2407,7 @@ bool Renderer11::getShareHandleSupport() const
+         mSupportsShareHandles = false;
+         return false;
+     }
++#endif
+ 
+     // Find out which type of D3D11 device the Renderer11 is using
+     d3d11::ANGLED3D11DeviceType deviceType = getDeviceType();
+-- 
+2.24.1.windows.2
+

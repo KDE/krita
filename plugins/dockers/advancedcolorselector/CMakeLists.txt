@@ -24,13 +24,14 @@ set(KRITA_COLORSELECTORNG_SOURCES
     kis_color_selector_wheel.cpp
     kis_color_selector_combo_box.cpp
     kis_color_selector_base_proxy.cpp
+    KisColorPatchesTableView.cpp
 )
 
 ki18n_wrap_ui(KRITA_COLORSELECTORNG_SOURCES
     wdg_color_selector_settings.ui
 )
 
-add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
+kis_add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritacolorselectorng kritaui)
 

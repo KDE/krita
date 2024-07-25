@@ -232,6 +232,8 @@ private:
     friend class FilterLayer;
     friend class FillLayer;
     friend class SelectionMask;
+    friend class TransparencyMask;
+    friend class FilterMask;
 
     KisSelectionSP selection() const;
 

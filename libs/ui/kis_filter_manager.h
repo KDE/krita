@@ -13,7 +13,7 @@
 #include <kis_types.h>
 
 class KisViewManager;
-class KActionCollection;
+class KisKActionCollection;
 class KisActionManager;
 class KisView;
 
@@ -31,7 +31,7 @@ public:
     ~KisFilterManager() override;
     void setView(QPointer<KisView>imageView);
 
-    void setup(KActionCollection * ac, KisActionManager *actionManager);
+    void setup(KisKActionCollection * ac, KisActionManager *actionManager);
     void updateGUI();
 
     void apply(KisFilterConfigurationSP filterConfig);

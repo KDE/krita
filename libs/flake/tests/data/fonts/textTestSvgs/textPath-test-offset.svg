@@ -1,0 +1,91 @@
+<svg width="350px" height="190px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+    <defs>
+    <path id="path-horizontal" d="M0 0C25 50 125 50 150 0" />
+    <path id="path-vertical" d="M0 0C50 25 50 125 0 150" />
+</defs>
+<g id="testRect">
+    
+    <!-- Test of starrtOffst. There's multiple ways of doing start offset.
+    the first set of tests test whether it behaves as expected with percentage,
+    and eventually there's some tests to check if absolute values also work.-->
+    
+    <text id="test1" transform="translate(20,30)"
+          font-family="DejaVu Sans" fill="blue" font-size="15"><textPath startOffset="0%" href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    <text id="test2" transform="translate(20,50)"
+          font-family="DejaVu Sans" fill="blue" font-size="15"><textPath startOffset="25%" href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    <text id="test3" transform="translate(20,70)"
+          font-family="DejaVu Sans" fill="blue" font-size="15"><textPath startOffset="50%" href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    <text id="test4" transform="translate(20,90)"
+          font-family="DejaVu Sans" fill="blue" font-size="15"><textPath startOffset="75%" href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    
+    <text id="test2rtl" transform="translate(20,70)"
+          font-family="DejaVu Sans" fill="green" font-size="15" direction="rtl" ><textPath href="#path-horizontal" startOffset="25%">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    <text id="test3rtl" transform="translate(20,90)"
+          font-family="DejaVu Sans" fill="green" font-size="15" direction="rtl" ><textPath href="#path-horizontal" startOffset="50%">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    <text id="test4rtl" transform="translate(20,110)"
+          font-family="DejaVu Sans" fill="green" font-size="15" direction="rtl" ><textPath href="#path-horizontal" startOffset="75%">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    <text id="test5rtl" transform="translate(20,130)"
+          font-family="DejaVu Sans" fill="green" font-size="15" direction="rtl" ><textPath href="#path-horizontal" startOffset="100%">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    
+    <text id="test1ttb" transform="translate(180,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="red" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="0%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test2ttb" transform="translate(200,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="red" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="25%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test3ttb" transform="translate(220,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="red" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="50%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test4ttb" transform="translate(240,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="red" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="75%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test5ttb" transform="translate(200,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="-75%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test6ttb" transform="translate(220,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="-50%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test7ttb" transform="translate(240,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="-25%">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <!-- Absolute values tests -->
+    <text id="test8ttb" transform="translate(260,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="orange" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="90">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test9ttb" transform="translate(280,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="orange" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="45">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test10ttb" transform="translate(300,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="orange" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="0">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test11ttb" transform="translate(260,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="purple" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="-90">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+    <text id="test12ttb" transform="translate(280,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="purple" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical" startOffset="-135">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ</textPath>
+    </text>
+
+</g>
+
+</svg>

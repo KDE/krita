@@ -35,7 +35,6 @@
 KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
                                        double xscale, double yscale,
                                        double xshear, double yshear,
-                                       double xshearOrigin, double yshearOrigin,
                                        double rotation,
                                        qreal xtranslate, qreal ytranslate,
                                        KoUpdaterPtr progress,
@@ -46,8 +45,6 @@ KisTransformWorker::KisTransformWorker(KisPaintDeviceSP dev,
     m_yscale = yscale;
     m_xshear = xshear;
     m_yshear = yshear;
-    m_xshearOrigin = xshearOrigin;
-    m_yshearOrigin = yshearOrigin;
     m_rotation = rotation,
     m_xtranslate = xtranslate;
     m_ytranslate = ytranslate;
@@ -61,13 +58,12 @@ KisTransformWorker::~KisTransformWorker()
 
 QTransform KisTransformWorker::transform() const
 {
-    QTransform TS = QTransform::fromTranslate(m_xshearOrigin, m_yshearOrigin);
-    QTransform S; S.shear(0, m_yshear); S.shear(m_xshear, 0);
     QTransform SC = QTransform::fromScale(m_xscale, m_yscale);
+    QTransform S; S.shear(0, m_yshear); S.shear(m_xshear, 0);
     QTransform R; R.rotateRadians(m_rotation);
     QTransform T = QTransform::fromTranslate(m_xtranslate, m_ytranslate);
 
-    return TS.inverted() * S * TS * SC * R * T;
+    return SC * S * R * T;
 }
 
 void KisTransformWorker::transformPixelSelectionOutline(KisPixelSelectionSP pixelSelection) const
@@ -142,6 +138,16 @@ QRect KisTransformWorker::rotate180(KisPaintDeviceSP dev,
     QRect r = rotateWithTf(180, dev, boundRect, progressUpdater, portion);
     dev->moveTo(dev->x() - 1, dev->y() -1);
     return QRect(- r.x() - r.width(), - r.top() - r.height(), r.width(), r.height());
+}
+
+bool KisTransformWorker::forceSubPixelTranslation() const
+{
+    return m_forceSubPixelTranslation;
+}
+
+void KisTransformWorker::setForceSubPixelTranslation(bool value)
+{
+    m_forceSubPixelTranslation = value;
 }
 
 template <class iter> void calcDimensions(QRect rc, qint32 &srcStart, qint32 &srcLen, qint32 &firstLine, qint32 &numLines);
@@ -259,24 +265,17 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
     if (m_xshear != 0 || m_yshear != 0) {
         int portion = 50;
 
-        int dx = - qRound(m_yshearOrigin * yscale * m_xshear);
-        int dy = - qRound(m_xshearOrigin * xscale * m_yshear);
-
         bool scalePresent = !(qFuzzyCompare(xscale, 1.0) && qFuzzyCompare(yscale, 1.0));
         bool xShearPresent = !qFuzzyCompare(m_xshear, 0.0);
         bool yShearPresent = !qFuzzyCompare(m_yshear, 0.0);
 
         if (scalePresent || (xShearPresent && yShearPresent)) {
-            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, yscale *  m_xshear, dx, m_filter, portion);
-            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, dy, m_filter, portion);
+            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, yscale *  m_xshear, 0, m_filter, portion);
+            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, 0, m_filter, portion);
         } else if (xShearPresent) {
-            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, m_xshear, dx, m_filter, portion);
-            m_boundRect.translate(0, dy);
-            m_dev->moveTo(m_dev->x(), m_dev->y() + dy);
+            transformPass <KisHLineIteratorSP>(m_dev.data(), m_dev.data(), xscale, m_xshear, 0, m_filter, portion);
         } else if (yShearPresent) {
-            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, dy, m_filter, portion);
-            m_boundRect.translate(dx, 0);
-            m_dev->moveTo(m_dev->x() + dx, m_dev->y());
+            transformPass <KisVLineIteratorSP>(m_dev.data(), m_dev.data(), yscale, m_yshear, 0, m_filter, portion);
         }
 
         yscale = 1.;
@@ -297,19 +296,23 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
      * We don't check for xtranslate and ytranslate to be integers here, because
      * people expect the translation to be lossless, that is, not doing any resampling.
      *
-     * Theoretically, we could implement a seperate option to allow translations with
+     * Theoretically, we could implement a separate option to allow translations with
      * resampling in the transform tool, but I don't know how useful it would be.
      * People who wo pixel art can set scale to something like 99.99% and it should
      * do the trick.
      *
      * See: https://bugs.kde.org/show_bug.cgi?id=445714
      */
-    const bool simpleTranslation =
-        qFuzzyCompare(rotation, 0.0) &&
-        qFuzzyCompare(xscale, 1.0) &&
-        qFuzzyCompare(yscale, 1.0);
+    const bool simpleTransform =
+        !m_forceSubPixelTranslation &&
+        (qFuzzyCompare(rotation, 0.0)) &&
+        (qFuzzyCompare(xscale, 1.0) ||
+         qFuzzyCompare(xscale, -1.0)) &&
+        (qFuzzyCompare(yscale, 1.0) ||
+         qFuzzyCompare(yscale, -1.0));
 
-    int progressTotalSteps = qMax(1, 2 * (!simpleTranslation) + (rotQuadrant != 0));
+
+    int progressTotalSteps = qMax(1, 2 * (!simpleTransform) + (rotQuadrant != 0));
     int progressPortion = 100 / progressTotalSteps;
 
     /**
@@ -334,12 +337,31 @@ bool KisTransformWorker::runPartial(const QRect &processRect)
         break;
     }
 
-    if (simpleTranslation) {
+    if (simpleTransform) {
+
+        // Flipping horizontally
+        if (qFuzzyCompare(xscale, -1.0)) {
+            QRect bounds = m_dev->exactBounds();
+            double center_x = bounds.topLeft().x() + bounds.width() / 2.0;
+            xtranslate -= 2 * center_x;
+            mirrorX(m_dev);
+        }
+
+        // Flipping vertically
+        if (qFuzzyCompare(yscale, -1.0)) {
+            QRect bounds = m_dev->exactBounds();
+            double center_y = bounds.topLeft().y() + bounds.height() / 2.0;
+            ytranslate -= 2 * center_y;
+            mirrorY(m_dev);
+        }
+
+        // Simple translation
         const int intXTranslate = qRound(xtranslate);
         const int intYTranslate = qRound(ytranslate);
 
         m_boundRect.translate(intXTranslate, intYTranslate);
         m_dev->moveTo(m_dev->x() + intXTranslate, m_dev->y() + intYTranslate);
+
     } else {
         QTransform SC = QTransform::fromScale(xscale, yscale);
         QTransform R; R.rotateRadians(rotation);

@@ -1,0 +1,13 @@
+<svg width="300px" height="80px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+<g id="test">
+    <text id="testRect" x="10" y="40"
+        font-family="DejaVu Sans" font-size="15" 
+        dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0">
+        Lorem ipsum dolor sit amet
+    </text>
+
+</g>
+
+</svg>

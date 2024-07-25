@@ -55,6 +55,7 @@ find_package(PkgConfig QUIET)
 pkg_check_modules(PC_OpenEXR QUIET OpenEXR)
 
 # Attempt to load OpenEXR's Find module
+set(PC_OpenEXR_CONFIG_DIR CACHE STRING "PkgConfig path for locating the package modules")
 foreach(_dir ${CMAKE_PREFIX_PATH})
     list(APPEND PC_OpenEXR_CONFIG_DIR ${_dir}/lib/cmake/OpenEXR)
 endforeach()

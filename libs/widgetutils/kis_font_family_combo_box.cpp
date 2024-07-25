@@ -5,6 +5,8 @@
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 #include "kis_font_family_combo_box.h"
+#include "KisFontFamilyValidator.h"
+
 #include <QFontDatabase>
 #include <QFontComboBox>
 #include <QHBoxLayout>
@@ -55,7 +57,7 @@ void PinnedFontsSeparator::setSeparatorAdded()
 
 KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
     : QComboBox(parent)
-    , m_initilized(false)
+    , m_initialized(false)
     , m_initializeFromConfig(false)
 {
     setEditable(true);
@@ -81,6 +83,7 @@ KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     m_pinnedFonts = cfg.readEntry<QStringList>("PinnedFonts", QStringList());
 
+    connect(this, SIGNAL(currentTextChanged(QString)), this, SLOT(slotTextChanged(QString)));
 }
 
 void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem> writingSystems)
@@ -136,6 +139,8 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
         }
     }
     this->addItems(filteredFonts);
+    KisFontFamilyValidator *familyValidator = new KisFontFamilyValidator(filteredFonts, this);
+    this->setValidator(familyValidator);
     if (this->count() > this->maxVisibleItems()) {
         maxWidth += view()->style()->pixelMetric(QStyle::PixelMetric::PM_ScrollBarExtent);
     }
@@ -144,7 +149,7 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
 
 void KisFontFamilyComboBox::setTopFont(const QString &family)
 {
-    if (family.isEmpty() || !m_initilized || m_pinnedFonts.contains(family)) {
+    if (family.isEmpty() || !m_initialized || m_pinnedFonts.contains(family)) {
         return;
     }
 
@@ -170,10 +175,10 @@ void KisFontFamilyComboBox::setTopFont(const QString &family)
 
 void KisFontFamilyComboBox::setInitialized()
 {
-    if(m_initilized)
+    if(m_initialized)
         return;
 
-    m_initilized = true;
+    m_initialized = true;
 
     for(int i=m_pinnedFonts.count()-1; i>=0; i--){
         this->insertItem(0, m_pinnedFonts[i]);
@@ -187,6 +192,16 @@ void KisFontFamilyComboBox::setInitialized()
     }
 
     this->setItemDelegate(m_fontSeparator);
+}
+
+void KisFontFamilyComboBox::slotTextChanged(const QString &input) {
+    QString text = input;
+    int pos = text.size();
+    this->validator()->fixup(text);
+    if (this->validator()->validate(text, pos) == QValidator::Acceptable) {
+        setCurrentText(text);
+        emit activated(currentIndex());
+    }
 }
 
 KisFontComboBoxes::KisFontComboBoxes(QWidget *parent)

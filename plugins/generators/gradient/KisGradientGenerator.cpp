@@ -33,13 +33,15 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
     KIS_SAFE_ASSERT_RECOVER_RETURN(config);
     const KisGradientGeneratorConfiguration *generatorConfiguration =
         dynamic_cast<const KisGradientGeneratorConfiguration*>(config.data());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(generatorConfiguration);
+
 
     QSize imageSize = device->defaultBounds()->imageBorderRect().size();
     QPair<QPointF, QPointF> positions =
         generatorConfiguration->absoluteCartesianPositionsInPixels(imageSize.width(), imageSize.height());
 
     KisGradientPainter painter(device);
-    painter.setCompositeOp(COMPOSITE_COPY);
+    painter.setCompositeOpId(COMPOSITE_COPY);
     painter.setProgress(progressUpdater);
     painter.setGradientShape(generatorConfiguration->shape());
     painter.setGradient(generatorConfiguration->gradient());

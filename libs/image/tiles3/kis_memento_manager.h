@@ -90,7 +90,7 @@ public:
      *                 non-default tile or it was created on the fly
      *                 from the default tile data
      */
-    KisTileSP getCommitedTile(qint32 col, qint32 row, bool &existingTile);
+    KisTileSP getCommittedTile(qint32 col, qint32 row, bool &existingTile);
 
     KisMementoSP getMemento();
 
@@ -147,6 +147,7 @@ protected:
      * It is the "name" of current named transaction
      */
     KisMementoSP m_currentMemento;
+    QMutex m_currentMementoExtentLock;
 
     /**
      * The flag that blocks registration of changes on tiles.

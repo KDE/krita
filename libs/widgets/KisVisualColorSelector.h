@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,14 +10,14 @@
 #include <QWidget>
 #include <QScopedPointer>
 
-#include <KoColor.h>
+#include <resources/KoGamutMask.h>
 
-#include "KisColorSelectorConfiguration.h"
 #include "KisColorSelectorInterface.h"
+#include "KisVisualColorModel.h"
 #include "kritawidgets_export.h"
 
-class KoColorSpace;
-class KoColorDisplayRendererInterface;
+class QVector4D;
+class KisColorSelectorConfiguration;
 
 /**
  * @brief The KisVisualColorSelector class
@@ -30,11 +31,24 @@ class KRITAWIDGETS_EXPORT KisVisualColorSelector : public KisColorSelectorInterf
 {
     Q_OBJECT
 public:
-    enum ColorModel { None, Channel, HSV, HSL, HSI, HSY, YUV };
 
-    explicit KisVisualColorSelector(QWidget *parent = 0);
+    enum RenderMode {
+        StaticBackground,
+        DynamicBackground,
+        CompositeBackground
+    };
+
+    /**
+     * @brief KisVisualColorSelector constructor.
+     * @param parent The parent widget.
+     * @param model The color model to work with. If not provided, a new one will be created.
+     */
+    explicit KisVisualColorSelector(QWidget *parent = 0, KisVisualColorModelSP model = KisVisualColorModelSP());
     ~KisVisualColorSelector() override;
 
+    QSize minimumSizeHint() const override;
+    void setSelectorModel(KisVisualColorModelSP model);
+    KisVisualColorModelSP selectorModel() const;
     /**
      * @brief setConfig
      * @param forceCircular
@@ -43,47 +57,79 @@ public:
      * ignored, can possibly be removed from parent class now
      */
     void setConfig(bool forceCircular, bool forceSelfUpdate) override;
+    const KisColorSelectorConfiguration& configuration() const;
+    /**
+    * @brief Explicitly set the shape configuration.
+    * Accepts all valid combinations of Advanced Color Selector, however parameters
+    * will be converted to HSV equivalent since color model is independent.
+    * @param config
+    * Passing null will load the Advanced Color Selector configuration
+    * Note: Null will also set the HSX color model for compatibility reasons,
+    * while otherwise shape layout and color model are independent.
+    */
+    void setConfiguration(const KisColorSelectorConfiguration *config);
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
-    QVector4D getChannelValues() const;
-    ColorModel getColorModel() const;
-    bool isHSXModel() const;
-    KoColor convertShapeCoordsToKoColor(const QVector4D &coordinates) const;
-    QVector4D convertKoColorToShapeCoordinates(KoColor c) const;
+    void setMinimumSliderWidth(int width);
+    const KoColorDisplayRendererInterface* displayRenderer() const;
+    RenderMode renderMode() const;
+    void setRenderMode(RenderMode mode);
+    /**
+     * @brief Get the state of automatic exposure adjustment.
+     * If enabled, the selector will set new maximum channel values on the selectorModel
+     * whenever the set display renderer signals a configuration change.
+     * The default value is true.
+     * @return the current state
+     */
+    bool autoAdjustExposure() const;
+    void setAutoAdjustExposure(bool enabled);
+    bool proofColors() const;
+    void setProofColors(bool enabled);
+    /**
+     * @brief Set the slider position for slider + square and slider + wheel configurations.
+     * @param edge Edge to position the slider; currently only supports LeftEdge and TopEdge
+     */
+    void setSliderPosition(Qt::Edge edge);
+    KoGamutMask* activeGamutMask() const;
 
 public Q_SLOTS:
-
     void slotSetColor(const KoColor &c) override;
     void slotSetColorSpace(const KoColorSpace *cs) override;
-    void slotSetHSX(const QVector3D &hsx);
-    void configurationChanged();
-    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer) override;
+    void slotConfigurationChanged();
+    void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer) override;
+    void slotGamutMaskChanged(KoGamutMaskSP mask);
+    void slotGamutMaskUnset();
+    void slotGamutMaskPreviewUpdate();
 
 private Q_SLOTS:
+    void slotChannelValuesChanged(const QVector4D &values, quint32 channelFlags);
+    void slotColorModelChanged();
+    void slotColorSpaceChanged();
     void slotCursorMoved(QPointF pos);
     void slotDisplayConfigurationChanged();
-    void slotRebuildSelectors();
+    void slotReloadConfiguration();
 
 Q_SIGNALS:
     /**
-     * @brief sigColorModelChanged is emitted whenever the selector's color model changes.
-     *
-     * This is mostly relevant for configuration changes where the same RGB model
-     * gets represented in a different way like HSV, HSL etc. so the values of
-     * sigHSXChanged() change meaning.
-     *
-     * @see getColorModel()
+     * @brief sigInteraction is emitted whenever mouse interaction status changes
+     * @param active when true, the user started dragging a handle, when false the
+     *        interaction has just finished
      */
-    void sigColorModelChanged();
-    void sigHSXChanged(const QVector3D &hsx);
+    void sigInteraction(bool active);
 
 protected:
     void resizeEvent(QResizeEvent *) override;
 
 private:
+    bool useHorizontalSlider();
+    void rebuildSelector();
+    void loadACSConfig();
+    void switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+    QVector4D calculateMaxChannelValues();
+    static KisColorSelectorConfiguration validatedConfiguration(const KisColorSelectorConfiguration &cfg);
+
     struct Private;
     const QScopedPointer<Private> m_d;
-
 };
 
-#endif
+#endif // KIS_VISUAL_COLOR_SELECTOR_H

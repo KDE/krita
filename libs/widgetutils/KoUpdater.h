@@ -11,6 +11,7 @@
 #include "KoProgressProxy.h"
 #include <QObject>
 #include <QPointer>
+#include <QAtomicInt>
 
 class KoProgressUpdater;
 class KoUpdaterPrivate;
@@ -106,15 +107,22 @@ private Q_SLOTS:
 
 private:
 
-    bool m_interrupted;
+    QAtomicInt m_interrupted;
     int  m_progressPercent;
 };
 
-/// An updater that does nothing
-class KRITAWIDGETUTILS_EXPORT KoDummyUpdater : public KoUpdater
+/// A holder for an updater that does nothing
+class KRITAWIDGETUTILS_EXPORT KoDummyUpdaterHolder
 {
 public:
-    KoDummyUpdater();
+    KoDummyUpdaterHolder();
+    ~KoDummyUpdaterHolder();
+
+    KoUpdater *updater();
+
+private:
+    Q_DISABLE_COPY_MOVE(KoDummyUpdaterHolder)
+    KoUpdaterPrivate *d;
 };
 
 #endif

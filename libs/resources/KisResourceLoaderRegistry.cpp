@@ -13,14 +13,21 @@
 #include <KisResourceCacheDb.h>
 #include <KisMimeDatabase.h>
 
+struct KisResourceLoaderRegistry::Private
+{
+    QMap<int, ResourceCacheFixup*> fixups;
+};
+
 KisResourceLoaderRegistry::KisResourceLoaderRegistry(QObject *parent)
-    : QObject(parent)
+    : QObject(parent),
+      m_d(new Private)
 {
 }
 
 KisResourceLoaderRegistry::~KisResourceLoaderRegistry()
 {
     qDeleteAll(values());
+    qDeleteAll(m_d->fixups);
 }
 
 KisResourceLoaderRegistry* KisResourceLoaderRegistry::instance()
@@ -57,6 +64,22 @@ QVector<KisResourceLoaderBase *> KisResourceLoaderRegistry::resourceTypeLoaders(
         }
     }
     return r;
+}
+
+void KisResourceLoaderRegistry::registerFixup(int priority, ResourceCacheFixup *fixup)
+{
+    m_d->fixups.insert(priority, fixup);
+}
+
+QStringList KisResourceLoaderRegistry::executeAllFixups()
+{
+    QStringList errorMessages;
+
+    Q_FOREACH (ResourceCacheFixup *fixup, m_d->fixups) {
+        errorMessages << fixup->executeFix();
+    }
+
+    return errorMessages;
 }
 
 QStringList KisResourceLoaderRegistry::filters(const QString &resourceType) const

@@ -27,8 +27,7 @@
 
 #include <filestest.h>
 
-#include  <sdk/tests/testui.h>
-
+#include <testui.h>
 
 const QString KraMimetype = "application/x-krita";
 
@@ -127,7 +126,7 @@ void KisKraLoaderTest::testLoadAnimated()
     QCOMPARE(channel1->keyframeCount(), 3);
 
     QCOMPARE(image->animationInterface()->framerate(), 17);
-    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTimeToTime(15, 45));
+    QCOMPARE(image->animationInterface()->documentPlaybackRange(), KisTimeSpan::fromTimeToTime(15, 45));
     QCOMPARE(image->animationInterface()->currentTime(), 19);
 
     KisPaintDeviceSP dev = layer1->paintDevice();
@@ -166,13 +165,13 @@ void KisKraLoaderTest::testLoadAnimated()
 
 void KisKraLoaderTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), KraMimetype);
+    TestUtil::testImportFromWriteonly(KraMimetype);
 }
 
 
 void KisKraLoaderTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), KraMimetype);
+    TestUtil::testImportIncorrectFormat(KraMimetype);
 }
 
 

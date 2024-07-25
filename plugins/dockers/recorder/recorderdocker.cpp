@@ -5,24 +5,11 @@
  */
 
 #include "recorderdocker.h"
+#include "recorderdocker_dock.h"
 
-#include <stdlib.h>
-
-#include <QTimer>
-
-#include <kis_debug.h>
-#include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
 #include <KoDockFactoryBase.h>
-
-#include "KisViewManager.h"
-#include "kis_config.h"
-#include "kis_cursor.h"
-#include "kis_global.h"
-#include "kis_types.h"
-
-#include "recorderdocker_dock.h"
 #include <KoDockRegistry.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(RecorderDockerPluginFactory, "krita_recorderdocker.json",
@@ -69,7 +56,6 @@ RecorderDockerPlugin::RecorderDockerPlugin(QObject* parent, const QVariantList&)
 
 RecorderDockerPlugin::~RecorderDockerPlugin()
 {
-    m_view = nullptr;
 }
 
 #include "recorderdocker.moc"

@@ -46,12 +46,12 @@ QString KisAnimationRenderingOptions::resolveAbsoluteFramesDirectory(const QStri
 
 QString KisAnimationRenderingOptions::resolveAbsoluteVideoFilePath() const
 {
-    return resolveAbsoluteVideoFilePath(lastDocuemntPath);
+    return resolveAbsoluteVideoFilePath(lastDocumentPath);
 }
 
 QString KisAnimationRenderingOptions::resolveAbsoluteFramesDirectory() const
 {
-    return resolveAbsoluteFramesDirectory(lastDocuemntPath);
+    return resolveAbsoluteFramesDirectory(lastDocumentPath);
 }
 
 KisAnimationRenderingOptions::RenderMode KisAnimationRenderingOptions::renderMode() const
@@ -72,7 +72,7 @@ KisPropertiesConfigurationSP KisAnimationRenderingOptions::toProperties() const
     KisPropertiesConfigurationSP config = new KisPropertiesConfiguration();
 
     config->setProperty("basename", basename);
-    config->setProperty("last_document_path", lastDocuemntPath);
+    config->setProperty("last_document_path", lastDocumentPath);
     config->setProperty("directory", directory);
     config->setProperty("first_frame", firstFrame);
     config->setProperty("last_frame", lastFrame);
@@ -100,7 +100,7 @@ KisPropertiesConfigurationSP KisAnimationRenderingOptions::toProperties() const
 void KisAnimationRenderingOptions::fromProperties(KisPropertiesConfigurationSP config)
 {
     basename = config->getPropertyLazy("basename", basename);
-    lastDocuemntPath = config->getPropertyLazy("last_document_path", "");
+    lastDocumentPath = config->getPropertyLazy("last_document_path", "");
     directory = config->getPropertyLazy("directory", directory);
     firstFrame = config->getPropertyLazy("first_frame", 0);
     lastFrame = config->getPropertyLazy("last_frame", 0);

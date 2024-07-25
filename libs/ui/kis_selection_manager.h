@@ -122,6 +122,7 @@ public:
     bool haveAnySelectionWithPixels();
     bool haveShapeSelectionWithShapes();
     bool haveRasterSelectionWithPixels();
+    bool canReselectDeactivatedSelection();
 
 private:
     void fill(const KoColor& color, bool fillWithPattern, const QString& transactionText);

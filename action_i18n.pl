@@ -46,8 +46,6 @@ use Data::Dumper; # Provides debugging command: print Dumper(\%hash);
 
 use constant TAG_GROUP =>
 {
-  default => "[tT][eE][xX][tT]|title|string|whatsthis|toolTip|label",
-  koffice => "Example|GroupName|Text|Comment|Syntax|TypeName",
   krita   => "[tT][eE][xX][tT]|title|string|whatsThis|toolTip|iconText",
   none    => "",
 };
@@ -132,7 +130,7 @@ unless( @ARGV )
   exit;
 }
 
-$opt_tag_group ||= "default";
+$opt_tag_group ||= "krita";
 
 die "Unknown tag group: '$opt_tag_group', should be one of " . TAG_GROUPS
     unless exists TAG_GROUP->{$opt_tag_group};
@@ -305,12 +303,9 @@ for my $file_name ( @ARGV )
 
        if ( ($tag, $attr) = $string =~ /<$text_string/o )
        {
-         my ($attr_comment) = $attr =~ /\bcomment=\"([^\"]*)\"/ if $attr;
-         $context = $attr_comment if $attr_comment;
+         # Only treat "context" as the gettext i18n context, not "comment".
          my ($attr_context) = $attr =~ /\bcontext=\"([^\"]*)\"/ if $attr;
          $context = $attr_context if $attr_context;
-         # It is unlikely that both attributes 'context' and 'comment'
-         # will be present, but if so happens, 'context' has priority.
          my ($attr_extracomment) = $attr =~ /\bextracomment=\"([^\"]*)\"/ if $attr;
          push @comments, "i18n: $attr_extracomment" if $attr_extracomment;
 
@@ -404,7 +399,7 @@ for my $file_name ( @ARGV )
              push @tag_gr, "$tgr->[1]" if not $attr;
            }
            my $context_str = join ", ", @tag_gr;
-           push @comments, "i18n: context: $context_str";
+           push @comments, "i18n: context: $tag @ $context_str";
          }
          push @comments, "xgettext: no-c-format" if $text =~ /%/o;
          $dummy_call->($context, $text, @comments);

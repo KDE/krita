@@ -12,6 +12,7 @@
 #include "kis_node.h"
 #include "kis_layer_utils.h"
 #include "kis_external_layer_iface.h"
+#include "kis_transform_mask.h"
 
 class ToolTransformArgs;
 
@@ -24,13 +25,14 @@ public:
 
 TransformTransactionProperties(const QRectF &originalRect,
                                ToolTransformArgs *currentConfig,
-                               KisNodeSP rootNode,
+                               KisNodeList rootNodes,
                                const QList<KisNodeSP> &transformedNodes)
         : m_originalRect(originalRect),
           m_currentConfig(currentConfig),
-          m_rootNode(rootNode),
+          m_rootNodes(rootNodes),
           m_transformedNodes(transformedNodes),
-          m_shouldAvoidPerspectiveTransform(false)
+          m_shouldAvoidPerspectiveTransform(false),
+          m_boundsRotationAllowed(true)
     {
         m_hasInvisibleNodes = false;
         Q_FOREACH (KisNodeSP node, transformedNodes) {
@@ -39,6 +41,9 @@ TransformTransactionProperties(const QRectF &originalRect,
                     m_shouldAvoidPerspectiveTransform = true;
                     break;
                 }
+            }
+            if (dynamic_cast<const KisTransformMask*>(node.data())) {
+                m_boundsRotationAllowed = false;
             }
 
             m_hasInvisibleNodes |= !node->visible(false);
@@ -105,8 +110,8 @@ TransformTransactionProperties(const QRectF &originalRect,
         return m_currentConfig;
     }
 
-    KisNodeSP rootNode() const {
-        return m_rootNode;
+    KisNodeList rootNodes() const {
+        return m_rootNodes;
     }
 
     KisNodeList transformedNodes() const {
@@ -114,7 +119,16 @@ TransformTransactionProperties(const QRectF &originalRect,
     }
 
     qreal basePreviewOpacity() const {
-        return 0.9 * qreal(m_rootNode->opacity()) / 255.0;
+        // Todo: this doesn't work for multiple layers
+        return 0.9 * qreal(m_rootNodes[0]->opacity()) / 255.0;
+    }
+
+    const QPolygonF convexHull() {
+        return m_convexHull;
+    }
+
+    bool convexHullHasBeenRequested() {
+        return m_convexHullHasBeenRequested;
     }
 
     bool shouldAvoidPerspectiveTransform() const {
@@ -125,8 +139,20 @@ TransformTransactionProperties(const QRectF &originalRect,
         return m_hasInvisibleNodes;
     }
 
+    bool boundsRotationAllowed() const {
+        return m_boundsRotationAllowed;
+    }
+
     void setCurrentConfigLocation(ToolTransformArgs *config) {
         m_currentConfig = config;
+    }
+
+    void setConvexHull(const QPolygonF &hull) {
+        m_convexHull = hull;
+    }
+
+    void setConvexHullHasBeenRequested(bool b) {
+        m_convexHullHasBeenRequested = b;
     }
 
 private:
@@ -136,10 +162,13 @@ private:
      */
     QRectF m_originalRect;
     ToolTransformArgs *m_currentConfig {0};
-    KisNodeSP m_rootNode;
+    KisNodeList m_rootNodes;
     KisNodeList m_transformedNodes;
+    QPolygonF m_convexHull;
+    bool m_convexHullHasBeenRequested {false};
     bool m_shouldAvoidPerspectiveTransform {false};
     bool m_hasInvisibleNodes {false};
+    bool m_boundsRotationAllowed {true};
 };
 
 #endif /* __TRANSFORM_TRANSACTION_PROPERTIES_H */

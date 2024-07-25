@@ -11,7 +11,6 @@
 
 class KoXmlWriter;
 class KoShape;
-class KoImageData;
 class QIODevice;
 class QString;
 class QTransform;
@@ -42,7 +41,7 @@ public:
     /// Returns the unique id for the given shape
     QString getID(const KoShape *obj);
 
-    /// Returns the transformation used to transform into usre space
+    /// Returns the transformation used to transform into user space
     QTransform userSpaceTransform() const;
 
     /// Returns if image should be saved inline
@@ -53,9 +52,6 @@ public:
 
     /// Saves given image and returns the href used
     QString saveImage(const QImage &image);
-
-    /// Saves given image and returns the href used
-    QString saveImage(KoImageData *image);
 
     void setStrippedTextMode(bool value);
     bool strippedTextMode() const;

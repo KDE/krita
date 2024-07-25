@@ -10,16 +10,14 @@
 #include <QTreeView>
 #include <QScroller>
 
+#include "kritalayerdocker_export.h"
+
 class QStyleOptionViewItem;
 class KisNodeModel;
 
 /**
  * A widget displaying the Krita nodes (layers, masks, local selections, etc.)
  * 
- * The widget can show the document sections as big thumbnails, 
- * in a listview with two rows of informative text and icons,
- * or as single rows of text and property icons.
- *
  * This class is designed as a Qt model-view widget.
  * 
  * The Qt documentation explains the design and terminology for these classes:
@@ -27,7 +25,7 @@ class KisNodeModel;
  *
  * This widget should work correctly in your Qt designer .ui file.
  */
-class NodeView: public QTreeView
+class KRITALAYERDOCKER_EXPORT NodeView : public QTreeView
 {
     Q_OBJECT
 Q_SIGNALS:
@@ -40,24 +38,19 @@ Q_SIGNALS:
     void selectionChanged(const QModelIndexList &);
 public:
 
+    enum ColumnIndex {
+        DEFAULT_COL = 0,
+        VISIBILITY_COL = 1,
+        SELECTED_COL = 2,
+    };
+
     /**
      * Create a new NodeView.
      */
     explicit NodeView(QWidget *parent = 0);
     ~NodeView() override;
 
-    /// how items should be displayed
-    enum DisplayMode {
-        /// large fit-to-width thumbnails, with only titles or page numbers
-        ThumbnailMode,
-
-        /// smaller thumbnails, with titles and property icons in two rows
-        DetailedMode,
-
-        /// no thumbnails, with titles and property icons in a single row
-        MinimalMode
-    };
-
+    void setModel(QAbstractItemModel *model) override;
     void resizeEvent(QResizeEvent * event) override;
     void paintEvent (QPaintEvent *event) override;
     void drawBranches(QPainter *painter, const QRect &rect,
@@ -70,18 +63,6 @@ public:
     void dragMoveEvent(QDragMoveEvent *ev) override;
 
     void dragLeaveEvent(QDragLeaveEvent *e) override;
-
-    /**
-     * Set the display mode of the view to one of the options.
-     *
-     * @param mode The NodeView::DisplayMode mode
-     */
-    void setDisplayMode(DisplayMode mode);
-
-    /**
-     * @return the currently active display mode
-     */
-    DisplayMode displayMode() const;
 
     /**
      * Add toggle actions for all the properties associated with the
@@ -106,7 +87,7 @@ public:
      @endcode
      *
      * @param menu A pointer to the menu that will be expanded with
-     * the toglge actions
+     * the toggle actions
      * @param index The model index associated with the document
      * section that may or may not provide a number of toggle actions.
      */
@@ -116,14 +97,10 @@ public:
 
     void toggleSolo(const QModelIndex &index);
 
-    QRect originalVisualRect(const QModelIndex &index) const;
-    QRect fullLineVisualRect(const QModelIndex &index) const;
-
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const override;
 
-    QRect visualRect(const QModelIndex &index) const override;
     QModelIndex indexAt(const QPoint &point) const override;
     bool viewportEvent(QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;
@@ -140,6 +117,7 @@ public Q_SLOTS:
     /// called with a theme change to refresh icon colors
     void slotUpdateIcons();
     void slotScrollerStateChanged(QScroller::State state);
+    void slotConfigurationChanged();
 
 protected Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;
@@ -164,6 +142,8 @@ private:
      * @param flag boolean
      */
     void setDraggingFlag(bool flag = true);
+
+    void updateSelectedCheckboxColumn();
 
     bool m_draggingFlag;
 

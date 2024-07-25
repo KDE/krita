@@ -24,7 +24,7 @@ public:
 
     static KisNodeViewColorScheme* instance();
 
-    QColor gridColor(const QStyleOptionViewItem &option, QTreeView *view);
+    QColor gridColor(const QStyleOptionViewItem &option, QTreeView *view) const;
 
     int visibilitySize() const;
     int visibilityMargin() const;
@@ -45,6 +45,7 @@ public:
     int rowHeight() const;
     int visibilityColumnWidth() const;
     int indentation() const;
+    int selectedButtonColumnWidth() const;
 
     QRect relVisibilityRect() const;
     QRect relThumbnailRect() const;

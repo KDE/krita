@@ -62,7 +62,7 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
     m_page = new WdgImageSize(this);
 
     Q_CHECK_PTR(m_page);
-    m_page->layout()->setMargin(0);
+    m_page->layout()->setContentsMargins(0, 0, 0, 0);
     m_page->setObjectName("image_size");
 
     m_page->pixelFilterCmb->setIDList(KisFilterStrategyRegistry::instance()->listKeys());
@@ -143,8 +143,6 @@ DlgImageSize::DlgImageSize(QWidget *parent, int width, int height, double resolu
 
     m_page->printWidth->setUnitManager(m_printSizeUnitManager);
     m_page->printHeight->setUnitManager(m_printSizeUnitManager);
-    m_page->printWidth->setDecimals(2);
-    m_page->printHeight->setDecimals(2);
     m_page->printWidth->setDisplayUnit(false);
     m_page->printHeight->setDisplayUnit(false);
     m_page->printResolution->setDecimals(2);

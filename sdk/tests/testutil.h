@@ -15,7 +15,7 @@
 #include <QDir>
 
 #include <KoResource.h>
-#include <KoConfig.h>
+#include <KoTestConfig.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
@@ -38,6 +38,10 @@
 
 #include "qimage_test_util.h"
 
+/**
+ * Compare values and return false on failure
+ * (normal QCOMPARE returns void)
+ */
 #define KIS_COMPARE_RF(expr, ref) \
     if ((expr) != (ref)) { \
         qDebug() << "Compared values are not the same at line" << __LINE__; \
@@ -45,6 +49,18 @@
         qDebug() << "    Expected: " << #ref << "=" << (ref); \
         return false; \
     }
+
+/**
+ * Compare two float numbers by rounding them up to \p prec
+ * decimals after the point.
+ */
+#define KIS_COMPARE_FLT(actual, expected, prec) \
+do {\
+        const qreal multiplier = pow(10, prec); \
+        if (!QTest::qCompare(qRound(actual * multiplier) / multiplier, qRound(expected * multiplier) / multiplier, #actual, #expected, __FILE__, __LINE__))\
+        return;\
+} while (false)
+
 
 /**
  * Routines that are useful for writing efficient tests
@@ -389,8 +405,11 @@ struct MaskParent
          * Therefore we should wait for a decent amount of time for all
          * of them to land.
          */
-        QTest::qWait(500);
-        image->waitForDone();
+
+        do {
+            QTest::qWait(500);
+        } while (!image->tryBarrierLock(true));
+        image->unlock();
     }
 
     KisSurrogateUndoStore *undoStore;

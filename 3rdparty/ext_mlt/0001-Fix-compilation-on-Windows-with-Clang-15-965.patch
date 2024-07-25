@@ -1,0 +1,66 @@
+From 3ffb57b99a62a6cd356e6548f233d4f683a4b21c Mon Sep 17 00:00:00 2001
+From: Emmet O'Neill <emmetoneill.pdx@gmail.com>
+Date: Tue, 12 Dec 2023 15:36:19 -0800
+Subject: [PATCH] Fix compilation on Windows with Clang 15 (#965)
+
+Co-authored-by: Dmitry Kazakov <dimula73@gmail.com>
+---
+ src/framework/CMakeLists.txt | 8 ++------
+ src/framework/mlt_property.h | 2 ++
+ src/mlt++/CMakeLists.txt     | 8 ++------
+ 3 files changed, 6 insertions(+), 12 deletions(-)
+
+diff --git a/src/framework/CMakeLists.txt b/src/framework/CMakeLists.txt
+index e17e43c0..c61cd3b8 100644
+--- a/src/framework/CMakeLists.txt
++++ b/src/framework/CMakeLists.txt
+@@ -96,12 +96,8 @@ set_target_properties(mlt PROPERTIES
+ 
+ if(WIN32)
+   if(MINGW)
+-    install(FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmlt-${MLT_VERSION_MAJOR}.dll"
+-      DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-      RENAME libmlt.dll
+-    )
+-    target_link_options(mlt PRIVATE -Wl,--output-def,libmlt.def)
+-    install(FILES "${CMAKE_BINARY_DIR}/libmlt.def" DESTINATION ${CMAKE_INSTALL_LIBDIR})
++    target_link_options(mlt PRIVATE -Wl,--output-def,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmlt-${MLT_VERSION_MAJOR}.def)
++    install(FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmlt-${MLT_VERSION_MAJOR}.def" DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   endif()
+   target_sources(mlt PRIVATE ../win32/win32.c ../win32/strptime.c)
+   target_link_libraries(mlt PRIVATE Iconv::Iconv)
+diff --git a/src/framework/mlt_property.h b/src/framework/mlt_property.h
+index 4b51af41..e347d4b6 100644
+--- a/src/framework/mlt_property.h
++++ b/src/framework/mlt_property.h
+@@ -39,6 +39,8 @@ typedef locale_t mlt_locale_t;
+ #elif defined(__OpenBSD__)
+ /* XXX matches __nop_locale glue in libc++ */
+ typedef void *mlt_locale_t;
++#elif (defined _WIN32 && defined _LIBCPP_VERSION)
++struct mlt_locale_t;
+ #else
+ typedef char *mlt_locale_t;
+ #endif
+diff --git a/src/mlt++/CMakeLists.txt b/src/mlt++/CMakeLists.txt
+index 26c05579..7028c41d 100644
+--- a/src/mlt++/CMakeLists.txt
++++ b/src/mlt++/CMakeLists.txt
+@@ -85,12 +85,8 @@ set_target_properties(mlt++ PROPERTIES
+ 
+ if(WIN32)
+   if(MINGW)
+-    install(FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmlt++-${MLT_VERSION_MAJOR}.dll"
+-      DESTINATION ${CMAKE_INSTALL_LIBDIR}
+-      RENAME libmlt++.dll
+-    )
+-    target_link_options(mlt++ PRIVATE -Wl,--output-def,libmlt++.def)
+-    install(FILES "${CMAKE_BINARY_DIR}/libmlt++.def" DESTINATION ${CMAKE_INSTALL_LIBDIR})
++    target_link_options(mlt++ PRIVATE -Wl,--output-def,${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmlt++-${MLT_VERSION_MAJOR}.def)
++    install(FILES "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/libmlt++-${MLT_VERSION_MAJOR}.def" DESTINATION ${CMAKE_INSTALL_LIBDIR})
+   endif()
+   target_compile_definitions(mlt++ PRIVATE MLTPP_EXPORTS)
+ endif()
+-- 
+2.23.0.windows.1
+

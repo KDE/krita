@@ -87,6 +87,8 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     QMutex mutex;
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisSuspendResumeStrategyPairFactory suspendResumeUpdatesStrokeStrategyFactory;
+    std::function<void()> purgeRedoStateCallback;
+    std::function<void()> postSyncLod0GUIPlaneRequestForResume;
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
@@ -105,6 +107,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     bool hasUnfinishedStrokes() const;
     void tryClearUndoOnStrokeCompletion(KisStrokeSP finishingStroke);
     void forceResetLodAndCloseCurrentLodRange();
+    void loadStroke(KisStrokeSP stroke);
 };
 
 
@@ -422,14 +425,28 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
     if (!m_d->strokesQueue.isEmpty() &&
         !m_d->hasUnfinishedStrokes()) {
 
-        anythingCanceled = true;
+        /**
+         * 1) We can cancel only cancellable strokes
+         * 2) We can only cancel a continuos set of strokes
+         *
+         * Basically, a non-cancellable stroke adds a barrier
+         * wall into the strokes queue, preventing cancellation
+         * of any strokes that we added into the queue earlier.
+         */
+        const auto lastNonCancellableStrokeIt =
+            std::find_if_not(std::make_reverse_iterator(m_d->strokesQueue.end()),
+                             std::make_reverse_iterator(m_d->strokesQueue.begin()),
+                             std::mem_fn(&KisStroke::isAsynchronouslyCancellable));
 
         bool needsLodNSynchronization = false;
 
-        Q_FOREACH (KisStrokeSP currentStroke, m_d->strokesQueue) {
+        for (auto it = lastNonCancellableStrokeIt.base(); it != m_d->strokesQueue.end(); it++) {
+            KisStrokeSP currentStroke = *it;
             KIS_ASSERT_RECOVER_NOOP(currentStroke->isEnded());
+            KIS_ASSERT_RECOVER_NOOP(currentStroke->isAsynchronouslyCancellable());
 
             currentStroke->cancelStroke();
+            anythingCanceled = true;
 
             // we shouldn't cancel buddies...
             if (currentStroke->type() == KisStroke::LOD0) {
@@ -693,6 +710,16 @@ void KisStrokesQueue::setSuspendResumeUpdatesStrokeStrategyFactory(const KisSusp
     m_d->suspendResumeUpdatesStrokeStrategyFactory = factory;
 }
 
+void KisStrokesQueue::setPurgeRedoStateCallback(const std::function<void ()> &callback)
+{
+    m_d->purgeRedoStateCallback = callback;
+}
+
+void KisStrokesQueue::setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void ()> &callback)
+{
+    m_d->postSyncLod0GUIPlaneRequestForResume = callback;
+}
+
 KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const
 {
     return &m_d->lodNPostExecutionUndoAdapter;
@@ -738,6 +765,26 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
     return result;
 }
 
+void KisStrokesQueue::Private::loadStroke(KisStrokeSP stroke)
+{
+    needsExclusiveAccess = stroke->isExclusive();
+    wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+    balancingRatioOverride = stroke->balancingRatioOverride();
+    currentStrokeLoaded = true;
+
+    /**
+     * Some of the strokes can cancel their work with undoing all the
+     * changes they did to the paint devices. The problem is that undo
+     * stack will know nothing about it. Therefore, just notify it
+     * explicitly
+     */
+    if (purgeRedoStateCallback &&
+        stroke->clearsRedoOnStart()) {
+
+        purgeRedoStateCallback();
+    }
+}
+
 bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
                                        int runningLevelOfDetail)
 {
@@ -767,10 +814,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * stroke might end up in loaded, but uninitialized state.
          */
         if (!m_d->currentStrokeLoaded) {
-            m_d->needsExclusiveAccess = stroke->isExclusive();
-            m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-            m_d->balancingRatioOverride = stroke->balancingRatioOverride();
-            m_d->currentStrokeLoaded = true;
+            m_d->loadStroke(stroke);
         }
 
         result = true;
@@ -781,16 +825,28 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * arrive here unloaded.
          */
         if (!m_d->currentStrokeLoaded) {
-            m_d->needsExclusiveAccess = stroke->isExclusive();
-            m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-            m_d->balancingRatioOverride = stroke->balancingRatioOverride();
-            m_d->currentStrokeLoaded = true;
+            m_d->loadStroke(stroke);
         }
 
         result = true;
     }
     else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
         m_d->tryClearUndoOnStrokeCompletion(stroke);
+
+        const bool needsSyncLod0PlaneToGUI =
+                stroke->type() == KisStroke::LOD0 &&
+                stroke->isCancelled();
+
+        /**
+         * If the Lod0 stroke has been cancelled without even being
+         * started, it means that the GUI still has LodN tiles active,
+         * so we should reread the data from the image to switch GUI
+         * tiles into Lod0 mode.
+         */
+        if (needsSyncLod0PlaneToGUI &&
+            m_d->postSyncLod0GUIPlaneRequestForResume) {
+            m_d->postSyncLod0GUIPlaneRequestForResume();
+        }
 
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;

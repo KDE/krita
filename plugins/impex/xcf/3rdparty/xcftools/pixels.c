@@ -43,6 +43,9 @@ typedef const struct _convertParams {
   const rgba *lookup ;
 } convertParams ;
 #define RGB_SHIFT RED_SHIFT, GREEN_SHIFT, BLUE_SHIFT
+#ifdef OPAQUE
+#undef OPAQUE
+#endif
 #define OPAQUE (255 << ALPHA_SHIFT)
 static convertParams convertRGB       = { 3, {RGB_SHIFT}, OPAQUE, 0 };
 static convertParams convertRGBA      = { 4, {RGB_SHIFT, ALPHA_SHIFT}, 0,0 };
@@ -56,7 +59,7 @@ static convertParams convertChannel   = { 1, {ALPHA_SHIFT}, 0, 0 };
 
 /* ****************************************************************** */
 
-static int
+static inline int
 tileDirectoryOneLevel(struct tileDimensions *dim,uint32_t ptr, int* ptrOut)
 {
   if( ptr == 0 ) {
@@ -121,8 +124,10 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
    */
   data = xcfL(ptr) ;
   if( xcfL(ptr) != tiles->params->bpp ) {
-    FatalBadXCF("%"PRIu32" bytes per pixel for %s drawable",xcfL(ptr),type);
-    return XCF_ERROR;
+      FatalBadXCF("%" PRIuPTR " bytes per pixel for %s drawable",
+                  xcfL(ptr),
+                  type);
+      return XCF_ERROR;
   }
   uint32_t ptrout;
   if(xcfOffset(ptr+4,3*4, &ptrout) != XCF_OK) return XCF_ERROR;
@@ -318,7 +323,7 @@ copyStraightPixels(rgba *dest,unsigned npixels,
   return XCF_OK;
 }
 
-static int
+static inline int
 copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
 {
   unsigned i,j ;
@@ -389,7 +394,7 @@ copyRLEpixels(rgba *dest,unsigned npixels,uint32_t ptr,convertParams *params)
     return XCF_OK;
 }
 
-static int
+static inline int
 copyTilePixels(struct Tile *dest, uint32_t ptr,convertParams *params)
 {
   if( FULLALPHA(params->base_pixel) )
@@ -428,7 +433,6 @@ getMaskOrLayerTile(struct tileDimensions *dim, struct xcfTiles *tiles,
       freeTile(tile);
       return XCF_PTR_EMPTY;
   }
-
 
   if( tiles->tileptrs == 0 ) {
     fillTile(tile,0);
@@ -581,4 +585,3 @@ getLayerTile(struct xcfLayer *layer,const struct rect *where)
   }
   return data ;
 }
-

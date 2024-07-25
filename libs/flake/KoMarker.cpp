@@ -6,7 +6,6 @@
 
 #include "KoMarker.h"
 
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include "KoPathShape.h"
 #include "KoPathShapeLoader.h"
@@ -192,7 +191,7 @@ QSizeF KoMarker::referenceSize() const
     return d->referenceSize;
 }
 
-bool KoMarker::hasAutoOtientation() const
+bool KoMarker::hasAutoOrientation() const
 {
     return d->hasAutoOrientation;
 }

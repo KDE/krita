@@ -75,8 +75,7 @@ class KRITAUI_EXPORT MouseClickIgnore : public QObject {
     Q_OBJECT
 public:
     MouseClickIgnore(QObject *parent = nullptr);
-    bool eventFilter(QObject *obj, QEvent *event);
-
+    bool eventFilter(QObject *obj, QEvent *event) override;
 };
 
 #endif // KISLAYERFILTERWIDGET_H

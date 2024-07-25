@@ -23,13 +23,13 @@ const QString RawMimetype = "image/x-krita-raw";
 
 void KisRawTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), RawMimetype);
+    TestUtil::testImportFromWriteonly(RawMimetype);
 }
 
 
 void KisRawTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), RawMimetype);
+    TestUtil::testImportIncorrectFormat(RawMimetype);
 }
 
 

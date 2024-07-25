@@ -12,6 +12,7 @@
 
 #include "kritaflake_export.h"
 
+#include <QDomDocument>
 #include <QList>
 
 class QRectF;

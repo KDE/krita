@@ -8,7 +8,7 @@
 #
 # This file defines the following macros:
 #
-# ADD_SIP_PYTHON_MODULE (MODULE_NAME MODULE_SIP [library1, libaray2, ...])
+# ADD_SIP_PYTHON_MODULE (MODULE_NAME MODULE_SIP [library1, library2, ...])
 #     Specifies a SIP file to be built into a Python module and installed.
 #     MODULE_NAME is the name of Python module including any path name. (e.g.
 #     os.sys, Foo.bar etc). MODULE_SIP the path and filename of the .sip file
@@ -116,7 +116,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
     ENDIF (MINGW)
 
     if (MSVC)
-        SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PDB_NAME "PyKrita.krita")
+        SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES PDB_NAME "sip_v4_${_logical_name}")
     ENDIF (MSVC)
 
     IF (WIN32)
@@ -128,7 +128,6 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
         INSTALL(
             FILES $<TARGET_PDB_FILE:${_logical_name}>
             DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}"
-            RENAME ${_child_module_name}.pdb
             OPTIONAL
         )
     endif()
@@ -136,6 +135,7 @@ MACRO(ADD_SIP_PYTHON_MODULE MODULE_NAME MODULE_SIP)
 ENDMACRO(ADD_SIP_PYTHON_MODULE)
 
 else()
+    find_file(join_files "join-files.py" PATHS ${CMAKE_MODULE_PATH} NO_CMAKE_FIND_ROOT_PATH) # ugh
     find_file(sip_generate "sip-generate.py" PATHS ${CMAKE_MODULE_PATH} NO_CMAKE_FIND_ROOT_PATH)
     find_file(pyproject_toml "pyproject.toml.in" PATHS ${CMAKE_MODULE_PATH} NO_CMAKE_FIND_ROOT_PATH)
 
@@ -188,6 +188,9 @@ else()
             endif( ${CONCAT_NUM} LESS ${SIP_CONCAT_PARTS})
         endforeach(CONCAT_NUM RANGE 0 ${SIP_CONCAT_PARTS})
 
+        set(_sip_output_stubs ${CMAKE_CURRENT_SIP_OUTPUT_DIR}/${_child_module_name}/${_child_module_name}.pyi )
+        set(_complete_stubs ${CMAKE_CURRENT_SIP_OUTPUT_DIR}/${_child_module_name}/${_child_module_name}_complete.pyi )
+
         configure_file(
             ${pyproject_toml}
             ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml
@@ -209,12 +212,19 @@ else()
                 --build-dir ${CMAKE_CURRENT_SIP_OUTPUT_DIR}
                 --target-dir ${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}
                 --concatenate ${SIP_CONCAT_PARTS}
+            COMMAND
+                ${CMAKE_COMMAND} -E env
+                "PYTHONPATH=${_krita_python_path}"
+                ${Python_EXECUTABLE}
+                ${join_files} 
+                ${_sip_output_stubs} ${SIP_EXTRA_STUBS} 
+                ${_complete_stubs}
             WORKING_DIRECTORY
                 ${CMAKE_CURRENT_BINARY_DIR}
             DEPENDS
-                ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml
+                ${CMAKE_CURRENT_BINARY_DIR}/pyproject.toml ${SIP_EXTRA_STUBS}
             OUTPUT
-                ${_sip_output_files}
+                ${_sip_output_files} ${_complete_stubs}
         )
 
         # not sure if type MODULE could be usec anywhere, limit to cygwin for now
@@ -234,12 +244,17 @@ else()
             # SIP v5+ redefines access to protected variables.
             target_compile_definitions(${_logical_name} PRIVATE SIP_PROTECTED_IS_PUBLIC)
             target_compile_definitions(${_logical_name} PRIVATE protected=public)
+        endif()
+
+        if(MSVC)
+            set_target_properties(${_logical_name} PROPERTIES PDB_NAME "sip_v5_${_logical_name}")
         endif ()
 
         if (WIN32)
             SET_TARGET_PROPERTIES(${_logical_name} PROPERTIES SUFFIX ".pyd")
         ENDIF ()
 
+        install(FILES ${_complete_stubs} DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}" RENAME "${_child_module_name}.pyi")
         install(TARGETS ${_logical_name} DESTINATION "${PYTHON_SITE_PACKAGES_INSTALL_DIR}/${_parent_module_path}")
     endmacro()
 endif()

@@ -275,7 +275,7 @@ namespace KisLsUtils
 
         KisPainter gc(selection);
         gc.setOpacity(noise);
-        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(applyRect.topLeft(), randomOverlay, applyRect);
     }
 
@@ -365,7 +365,7 @@ namespace KisLsUtils
         knockOutRect &= dstRect;
 
         KisPainter gc(selection);
-        gc.setCompositeOp(COMPOSITE_ERASE);
+        gc.setCompositeOpId(COMPOSITE_ERASE);
         gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
     }
 
@@ -388,7 +388,7 @@ namespace KisLsUtils
         const QRect boundsRect = alignWithLayer ?
             env->layerBounds() : env->defaultBounds();
 
-        patternOffset += boundsRect.topLeft();
+        patternOffset -= boundsRect.topLeft();
 
         patternOffset.rx() %= psize.width();
         patternOffset.ry() %= psize.height();
@@ -416,6 +416,8 @@ namespace KisLsUtils
 
         } else if (config->fillType() == psd_fill_pattern) {
             KoPatternSP pattern = config->pattern(resourcesInterface);
+
+            KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
 
             if (pattern->hasAlpha()) {
                 pattern = env->cachedFlattenedPattern(pattern);
@@ -555,7 +557,7 @@ namespace KisLsUtils
 
         if (config->fillType() == psd_fill_solid_color) {
             KisFillPainter gc(dstDevice);
-            gc.setCompositeOp(COMPOSITE_COPY);
+            gc.setCompositeOpId(COMPOSITE_COPY);
             gc.setSelection(baseSelection);
             gc.fillSelection(effectRect, effectColor);
             gc.end();

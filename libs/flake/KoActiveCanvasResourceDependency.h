@@ -13,7 +13,7 @@
 
 /**
  * @brief A representation of dependency between different canvas
- * resources stored in KoReosurceManager.
+ * resources stored in KoResourceManager.
  *
  * A resource dependency looks like that
  *

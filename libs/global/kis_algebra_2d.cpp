@@ -19,6 +19,8 @@
 #include <QVector2D>
 #include <QVector3D>
 
+#include <QtMath>
+
 #include <config-gsl.h>
 
 #ifdef HAVE_GSL
@@ -260,7 +262,7 @@ bool intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool exte
 
     // Cyrus-Beck algorithm: https://en.wikipedia.org/wiki/Cyrus%E2%80%93Beck_algorithm
 
-    // parametric equaltion for the line:
+    // parametric equation for the line:
     // p(t) = t*P1 + (1-t)*P2
 
     // we can't use infinity here, because the points would all end up as (+/- inf, +/- inf)
@@ -594,7 +596,7 @@ QRectF cutOffRect(const QRectF &rc, const KisAlgebra2D::RightHalfPlane &p)
 
         if (p1Valid != p2Valid) {
             QPointF intersection;
-            cutLine.intersect(QLineF(p1, p2), &intersection);
+            cutLine.intersects(QLineF(p1, p2), &intersection);
             resultPoints << intersection;
         }
 
@@ -763,15 +765,33 @@ bool fuzzyPointCompare(const QPointF &p1, const QPointF &p2, qreal delta)
 }
 
 
+inline QTransform toQTransformStraight(const Eigen::Matrix3d &m)
+{
+    return QTransform(m(0,0), m(0,1), m(0,2),
+                      m(1,0), m(1,1), m(1,2),
+                      m(2,0), m(2,1), m(2,2));
+}
+
+inline Eigen::Matrix3d fromQTransformStraight(const QTransform &t)
+{
+    Eigen::Matrix3d m;
+
+    m << t.m11() , t.m12() , t.m13()
+        ,t.m21() , t.m22() , t.m23()
+        ,t.m31() , t.m32() , t.m33();
+
+    return m;
+}
+
 /********************************************************/
-/*             DecomposedMatix                          */
+/*             DecomposedMatrix                         */
 /********************************************************/
 
-DecomposedMatix::DecomposedMatix()
+DecomposedMatrix::DecomposedMatrix()
 {
 }
 
-DecomposedMatix::DecomposedMatix(const QTransform &t0)
+DecomposedMatrix::DecomposedMatrix(const QTransform &t0)
 {
     QTransform t(t0);
 
@@ -784,7 +804,11 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
     }
 
     if (t.type() == QTransform::TxProject) {
-        QTransform affineTransform(t.toAffine());
+        QTransform affineTransform(
+            t.m11(), t.m12(), 0,
+            t.m21(), t.m22(), 0,
+            t.m31(), t.m32(), 1
+        );
         projMatrix = affineTransform.inverted() * t;
 
         t = affineTransform;
@@ -793,12 +817,14 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
         proj[2] = projMatrix.m33();
     }
 
+    // can't use QVector3D, because they have too little accuracy for ellipse in perspective calculations
+    std::array<Eigen::Vector3d, 3> rows;
 
-    std::array<QVector3D, 3> rows;
 
-    rows[0] = QVector3D(t.m11(), t.m12(), t.m13());
-    rows[1] = QVector3D(t.m21(), t.m22(), t.m23());
-    rows[2] = QVector3D(t.m31(), t.m32(), t.m33());
+    //  << t.m11() << t.m12() << t.m13())
+    rows[0] = Eigen::Vector3d(t.m11(), t.m12(), t.m13());
+    rows[1] = Eigen::Vector3d(t.m21(), t.m22(), t.m23());
+    rows[2] = Eigen::Vector3d(t.m31(), t.m32(), t.m33());
 
     if (!qFuzzyCompare(t.m33(), 1.0)) {
         const qreal invM33 = 1.0 / t.m33();
@@ -811,15 +837,16 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
     dx = rows[2].x();
     dy = rows[2].y();
 
-    rows[2] = QVector3D(0,0,1);
+    rows[2] = Eigen::Vector3d(0,0,1);
 
-    scaleX = rows[0].length();
+
+    scaleX = rows[0].norm();
     rows[0] *= 1.0 / scaleX;
 
-    shearXY = QVector3D::dotProduct(rows[0], rows[1]);
+    shearXY = rows[0].dot(rows[1]);
     rows[1] = rows[1] - shearXY * rows[0];
 
-    scaleY = rows[1].length();
+    scaleY = rows[1].norm();
     rows[1] *= 1.0 / scaleY;
     shearXY *= 1.0 / scaleY;
 
@@ -850,10 +877,10 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
         qreal m12 = rows[0].y();
         qreal m21 = rows[1].x();
         qreal m22 = rows[1].y();
-        rows[0].setX(cs * m11 + sn * m21);
-        rows[0].setY(cs * m12 + sn * m22);
-        rows[1].setX(-sn * m11 + cs * m21);
-        rows[1].setY(-sn * m12 + cs * m22);
+        rows[0][0] = (cs * m11 + sn * m21);
+        rows[0][1] = (cs * m12 + sn * m22);
+        rows[1][0] = (-sn * m11 + cs * m21);
+        rows[1][1] = (-sn * m12 + cs * m22);
     }
 
     QTransform leftOver(
@@ -861,33 +888,37 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
             rows[1].x(), rows[1].y(), rows[1].z(),
             rows[2].x(), rows[2].y(), rows[2].z());
 
+    if (/*true || */!fuzzyMatrixCompare(leftOver, QTransform(), 1e-4)) {
+        // what's wrong?
+        ENTER_FUNCTION() << "FAILING THE ASSERT BELOW!";
+        ENTER_FUNCTION() << ppVar(leftOver);
+        ENTER_FUNCTION() << "matrix to decompose was: " << ppVar(t0);
+        ENTER_FUNCTION() << ppVar(t.m33()) << ppVar(t0.determinant());
+        Eigen::Matrix3d mat1 = fromQTransformStraight(QTransform());
+        Eigen::Matrix3d mat2 = fromQTransformStraight(leftOver);
+        Eigen::Matrix3d mat3 = mat2 - mat1;
+        ENTER_FUNCTION() << mat3(0, 0) << mat3(0, 1) << mat3(0, 2);
+        ENTER_FUNCTION() << mat3(1, 0) << mat3(1, 1) << mat3(1, 2);
+        ENTER_FUNCTION() << mat3(2, 0) << mat3(2, 1) << mat3(2, 2);
+        //ENTER_FUNCTION() << ppVar(mat1 - mat2);
+    }
+
+
     KIS_SAFE_ASSERT_RECOVER_NOOP(fuzzyMatrixCompare(leftOver, QTransform(), 1e-4));
+    KIS_ASSERT(fuzzyMatrixCompare(leftOver, QTransform(), 1e-4));
 }
 
-inline QTransform toQTransformStraight(const Eigen::Matrix3d &m)
-{
-    return QTransform(m(0,0), m(0,1), m(0,2),
-                      m(1,0), m(1,1), m(1,2),
-                      m(2,0), m(2,1), m(2,2));
-}
-
-inline Eigen::Matrix3d fromQTransformStraight(const QTransform &t)
-{
-    Eigen::Matrix3d m;
-
-    m << t.m11() , t.m12() , t.m13()
-        ,t.m21() , t.m22() , t.m23()
-        ,t.m31() , t.m32() , t.m33();
-
-    return m;
-}
 
 std::pair<QPointF, QTransform> transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal)
 {
-    KisAlgebra2D::DecomposedMatix decomposed(fullLocalToGlobal);
+    KisAlgebra2D::DecomposedMatrix decomposed(fullLocalToGlobal);
     const QTransform localToGlobal =
             decomposed.scaleTransform() *
             decomposed.shearTransform() *
+
+            /* decomposed.projectTransform() * */
+            /*decomposed.translateTransform() * */
+
             decomposed.rotateTransform();
 
     const QTransform localEllipse = QTransform(1.0 / pow2(axes.x()), 0.0, 0.0,
@@ -1223,7 +1254,7 @@ QPointF moveElasticPoint(const QPointF &pt,
         status = gsl_multimin_test_size (size, 1e-6);
 
         /**
-         * Sometimes the algorithm may converge to a wrond point,
+         * Sometimes the algorithm may converge to a wrong point,
          * then just try to force it search better or return invalid
          * result.
          */
@@ -1271,6 +1302,88 @@ void cropLineToConvexPolygon(QLineF &line, const QPolygonF polygon, bool extendF
     if (!intersects) {
         line = QLineF(); // empty line to help with drawing
     }
+}
+
+
+qreal findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter = 100)
+{
+    // requirements:
+    // only one local minimum between xA and xB
+
+    int i = 0;
+    const double phi = 0.618033988749894; // 1/(golden ratio)
+    qreal a = xA;
+    qreal b = xB;
+    qreal c = b - (b - a)*phi;
+    qreal d = a + (b - a)*phi;
+
+    while (qAbs(b - a) > eps) {
+        if (f(c) < f(d)) {
+            b = d;
+        } else {
+            a = c;
+        }
+
+        // Wikipedia says to recompute both c and d here to avoid loss of precision which may lead to incorrect results or infinite loop
+        c = b - (b - a) * phi;
+        d = a + (b - a) * phi;
+
+        i++;
+        if (i > maxIter) {
+            break;
+        }
+
+    }
+
+    return (b + a)/2;
+}
+
+qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter = 100)
+{
+    // requirements:
+    // only one local minimum between xA and xB
+
+    int i = 0;
+    qreal l = qMin(xA, xB);
+    qreal r = qMax(xA, xB);
+
+
+    qreal m1 = l + (r - l)/3;
+    qreal m2 = r - (r - l)/3;
+
+    while ((r - l) > eps) {
+        qreal f1 = f(m1);
+        qreal f2 = f(m2);
+
+        if (f1 > f2) {
+            l = m1;
+        } else {
+            r = m2;
+        }
+
+        // In Golden Section, Wikipedia says to recompute both c and d here to avoid loss of precision which may lead to incorrect results or infinite loop
+        // so it's probably a good idea to do it here too
+        m1 = l + (r - l)/3;
+        m2 = r - (r - l)/3;
+
+        i++;
+
+        if (i > maxIter) {
+            break;
+        }
+    }
+
+    return (l + r)/2;
+}
+
+qreal pointToLineDistSquared(const QPointF &pt, const QLineF &line)
+{
+    // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
+
+    // magnitude of (p2 - p1) x (p1 - pt)
+    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
+
+    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
 }
 
 }

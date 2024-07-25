@@ -9,6 +9,7 @@
 #define KIS_DOUBLEPARSEUNITSPINBOX_H
 
 #include <KoUnit.h>
+#include <QContextMenuEvent>
 
 #include "kis_double_parse_spin_box.h"
 #include "kritawidgetutils_export.h"
@@ -39,15 +40,30 @@ public:
     virtual void changeValue( double newValue );
 
     /**
+     * Set the new value in points whatever is the reference unit for display
+     * @param newValue the new value
+     * @see valuePt()
+     */
+    void changeValuePt( double newValue );
+
+    /**
      * This spinbox shows the internal value after a conversion to the unit set here.
      */
     virtual void setUnit(const KoUnit &unit);
     virtual void setUnit(const QString & symbol);
-    /*!
+
+    /**
      * \brief setReturnUnit set a unit, such that the spinbox now return values in this unit instead of the reference unit for the current dimension.
      * \param symbol the symbol of the new unit.
+     * @see returnUnit()
      */
     void setReturnUnit(const QString & symbol);
+
+    /**
+     * \brief returnUnit returns the unit in which values are returned
+     * @see returnUnit()
+     */
+    QString returnUnit() const;
 
     /**
      * @brief setDimensionType set the dimension (for example length or angle) of the units the spinbox manage
@@ -55,14 +71,23 @@ public:
      */
     virtual void setDimensionType(int dim);
 
-    /// @return the current value, converted in points
+    /// @return the current value, converted in "return unit"
     double value( ) const;
 
-    /// Set minimum value in points.
+    /// @return the current value as Point, whatever is "return unit"
+    double valuePt( ) const;
+
+    /// Set minimum value in current unit.
     void setMinimum(double min);
 
-    /// Set maximum value in points.
+    /// Set minimum value in points.
+    void setMinimumPt(double min);
+
+    /// Set maximum value in current unit.
     void setMaximum(double max);
+
+    /// Set maximum value in points.
+    void setMaximumPt(double max);
 
     /// Set step size in the current unit.
     void setLineStep(double step);
@@ -70,8 +95,11 @@ public:
     /// Set step size in points.
     void setLineStepPt(double step);
 
-    /// Set minimum, maximum value and the step size (all in points)
+    /// Set minimum, maximum value and the step size (in current unit)
     void setMinMaxStep( double min, double max, double step );
+
+    /// Set minimum, maximum value and the step size (all in points)
+    void setMinMaxStepPt( double min, double max, double step );
 
     /**
      * Transform the double in a nice text, using locale symbols
@@ -97,6 +125,9 @@ public:
 
     void preventDecimalsChangeFromUnitManager(bool prevent);
 
+    void setDecimals(int prec);
+    void setSingleStep(double val);
+
 Q_SIGNALS:
     /// emitted like valueChanged in the parent, but this one emits the point value, or converted to another reference unit.
     void valueChangedPt( qreal );
@@ -113,6 +144,8 @@ private:
     //! \brief change the unit, reset the spin box every time. From the outside it's always set unit that should be called.
     void internalUnitChange(QString const& symbol);
     void prepareUnitChange();
+
+    void contextMenuEvent(QContextMenuEvent *event);
 
 private Q_SLOTS:
     // exists to do emits for valueChangedPt

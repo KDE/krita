@@ -249,6 +249,8 @@ KisScreenInformationAdapter::ScreenInfo KisScreenInformationAdapter::infoForScre
             }
         }
 
+        Q_UNUSED(result);
+
         i++;
     }
 

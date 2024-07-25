@@ -19,7 +19,6 @@
 
 #include "MyPaintPaintOp.h"
 #include "MyPaintPaintOpPreset.h"
-#include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettings.h"
 #include "MyPaintPaintOpSettingsWidget.h"
 
@@ -49,9 +48,14 @@ KisPaintOpSettingsSP KisMyPaintOpFactory::createSettings(KisResourcesInterfaceSP
     return settings;
 }
 
-KisPaintOpConfigWidget* KisMyPaintOpFactory::createConfigWidget(QWidget* parent) {
+KisPaintOpConfigWidget* KisMyPaintOpFactory::createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) {
 
-    return new KisMyPaintOpSettingsWidget(parent);
+    KisPaintOpConfigWidget *widget = new KisMyPaintOpSettingsWidget(parent);
+
+    widget->setResourcesInterface(resourcesInterface);
+    widget->setCanvasResourcesInterface(canvasResourcesInterface);
+
+    return widget;
 }
 
 QString KisMyPaintOpFactory::id() const {
@@ -88,4 +92,9 @@ QList<KoResourceLoadResult> KisMyPaintOpFactory::prepareEmbeddedResources(const 
     Q_UNUSED(resourcesInterface);
 
     return {};
+}
+
+bool KisMyPaintOpFactory::lodSizeThresholdSupported() const
+{
+    return true;
 }

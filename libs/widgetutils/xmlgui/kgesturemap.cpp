@@ -17,24 +17,24 @@
  code.
  */
 
-class KGestureMapContainer
+class KisKGestureMapContainer
 {
 public:
-    KGestureMap gestureMap;
+    KisKGestureMap gestureMap;
 };
 
-Q_GLOBAL_STATIC(KGestureMapContainer, g_instance)
+Q_GLOBAL_STATIC(KisKGestureMapContainer, g_instance)
 
-KGestureMap::~KGestureMap()
+KisKGestureMap::~KisKGestureMap()
 {
 }
 
-KGestureMap *KGestureMap::self()
+KisKGestureMap *KisKGestureMap::self()
 {
     return &g_instance()->gestureMap;
 }
 
-KGestureMap::KGestureMap()
+KisKGestureMap::KisKGestureMap()
 {
     m_gestureTimeout.setSingleShot(true);
     connect(&m_gestureTimeout, SIGNAL(timeout()), this, SLOT(stopAcquisition()));
@@ -46,57 +46,57 @@ KGestureMap::KGestureMap()
     }
 }
 
-void KGestureMap::setShapeGesture(QAction *act, const KShapeGesture &gesture)
+void KisKGestureMap::setShapeGesture(QAction *act, const KisKShapeGesture &gesture)
 {
     if (!gesture.isValid() || !act) {
         return;
     }
-    qDebug() << "KGestureMap::addGesture(KShapeGesture ...)";
+    qDebug() << "KisKGestureMap::addGesture(KisKShapeGesture ...)";
     if (m_shapeGestures.contains(gesture)) {
         qWarning() << "Replacing an action for a gesture already taken";
     }
     m_shapeGestures.insert(gesture, act);
 }
 
-void KGestureMap::setRockerGesture(QAction *act, const KRockerGesture &gesture)
+void KisKGestureMap::setRockerGesture(QAction *act, const KisKRockerGesture &gesture)
 {
     if (!gesture.isValid() || !act) {
         return;
     }
-    qDebug() << "KGestureMap::addGesture(KRockerGesture ...)";
+    qDebug() << "KisKGestureMap::addGesture(KisKRockerGesture ...)";
     if (m_rockerGestures.contains(gesture)) {
         qWarning() << "Replacing an action for a gesture already taken";
     }
     m_rockerGestures.insert(gesture, act);
 }
 
-void KGestureMap::setDefaultShapeGesture(QAction *act, const KShapeGesture &gesture)
+void KisKGestureMap::setDefaultShapeGesture(QAction *act, const KisKShapeGesture &gesture)
 {
     if (!gesture.isValid() || !act) {
         return;
     }
-    qDebug() << "KGestureMap::addGesture(KShapeGesture ...)";
+    qDebug() << "KisKGestureMap::addGesture(KisKShapeGesture ...)";
     if (m_defaultShapeGestures.contains(gesture)) {
         qWarning() << "Replacing an action for a gesture already taken";
     }
     m_defaultShapeGestures.insert(gesture, act);
 }
 
-void KGestureMap::setDefaultRockerGesture(QAction *act, const KRockerGesture &gesture)
+void KisKGestureMap::setDefaultRockerGesture(QAction *act, const KisKRockerGesture &gesture)
 {
     if (!gesture.isValid() || !act) {
         return;
     }
-    qDebug() << "KGestureMap::addGesture(KRockerGesture ...)";
+    qDebug() << "KisKGestureMap::addGesture(KisKRockerGesture ...)";
     if (m_defaultRockerGestures.contains(gesture)) {
         qWarning() << "Replacing an action for a gesture already taken";
     }
     m_defaultRockerGestures.insert(gesture, act);
 }
 
-void KGestureMap::removeAllGestures(QAction *kact)
+void KisKGestureMap::removeAllGestures(QAction *kact)
 {
-    KShapeGesture activeGesture;
+    KisKShapeGesture activeGesture;
     ShapeGestureHash::iterator si = m_shapeGestures.begin();
     ShapeGestureHash::iterator send = m_shapeGestures.end();
     for (; si != send; ++si) {
@@ -134,24 +134,24 @@ void KGestureMap::removeAllGestures(QAction *kact)
     }
 }
 
-QAction *KGestureMap::findAction(const KShapeGesture &gesture) const
+QAction *KisKGestureMap::findAction(const KisKShapeGesture &gesture) const
 {
     return m_shapeGestures.value(gesture);
 }
 
-QAction *KGestureMap::findAction(const KRockerGesture &gesture) const
+QAction *KisKGestureMap::findAction(const KisKRockerGesture &gesture) const
 {
     return m_rockerGestures.value(gesture);
 }
 
-void KGestureMap::installEventFilterOnMe(QApplication *app)
+void KisKGestureMap::installEventFilterOnMe(QApplication *app)
 {
     app->installEventFilter(this);
 }
 
-KShapeGesture KGestureMap::shapeGesture(const QAction *kact) const
+KisKShapeGesture KisKGestureMap::shapeGesture(const QAction *kact) const
 {
-    KShapeGesture activeGesture;
+    KisKShapeGesture activeGesture;
     ShapeGestureHash::const_iterator it = m_shapeGestures.constBegin();
     ShapeGestureHash::const_iterator end = m_shapeGestures.constEnd();
     for (; it != end; ++it) {
@@ -163,9 +163,9 @@ KShapeGesture KGestureMap::shapeGesture(const QAction *kact) const
     return activeGesture;
 }
 
-KShapeGesture KGestureMap::defaultShapeGesture(const QAction *kact) const
+KisKShapeGesture KisKGestureMap::defaultShapeGesture(const QAction *kact) const
 {
-    KShapeGesture defaultGesture;
+    KisKShapeGesture defaultGesture;
     ShapeGestureHash::const_iterator it = m_defaultShapeGestures.constBegin();
     ShapeGestureHash::const_iterator end = m_defaultShapeGestures.constEnd();
     for (; it != end; ++it) {
@@ -177,9 +177,9 @@ KShapeGesture KGestureMap::defaultShapeGesture(const QAction *kact) const
     return defaultGesture;
 }
 
-KRockerGesture KGestureMap::rockerGesture(const QAction *kact) const
+KisKRockerGesture KisKGestureMap::rockerGesture(const QAction *kact) const
 {
-    KRockerGesture activeGesture;
+    KisKRockerGesture activeGesture;
     RockerGestureHash::const_iterator it = m_rockerGestures.constBegin();
     RockerGestureHash::const_iterator end = m_rockerGestures.constEnd();
     for (; it != end; ++it) {
@@ -191,9 +191,9 @@ KRockerGesture KGestureMap::rockerGesture(const QAction *kact) const
     return activeGesture;
 }
 
-KRockerGesture KGestureMap::defaultRockerGesture(const QAction *kact) const
+KisKRockerGesture KisKGestureMap::defaultRockerGesture(const QAction *kact) const
 {
-    KRockerGesture defaultGesture;
+    KisKRockerGesture defaultGesture;
     RockerGestureHash::const_iterator it = m_defaultRockerGestures.constBegin();
     RockerGestureHash::const_iterator end = m_defaultRockerGestures.constEnd();
     for (; it != end; ++it) {
@@ -205,7 +205,7 @@ KRockerGesture KGestureMap::defaultRockerGesture(const QAction *kact) const
     return defaultGesture;
 }
 
-inline int KGestureMap::bitCount(int n)
+inline int KisKGestureMap::bitCount(int n)
 {
     int count = 0;
     while (n) {
@@ -215,7 +215,7 @@ inline int KGestureMap::bitCount(int n)
     return count;
 }
 
-void KGestureMap::handleAction(QAction *kact)
+void KisKGestureMap::handleAction(QAction *kact)
 {
     if (!kact) {
         return;
@@ -226,14 +226,14 @@ void KGestureMap::handleAction(QAction *kact)
     return;
 }
 
-void KGestureMap::matchShapeGesture()
+void KisKGestureMap::matchShapeGesture()
 {
     //TODO: tune and tweak until satisfied with result :)
     m_shapeGesture.setShape(m_points);
     float dist, minDist = 20.0;
     QAction *bestMatch = 0;
 
-    for (QHash<KShapeGesture, QAction *>::const_iterator it = m_shapeGestures.constBegin();
+    for (QHash<KisKShapeGesture, QAction *>::const_iterator it = m_shapeGestures.constBegin();
             it != m_shapeGestures.constEnd(); ++it) {
         dist = m_shapeGesture.distance(it.key(), 1000.0);
         if (dist < minDist) {
@@ -245,7 +245,7 @@ void KGestureMap::matchShapeGesture()
 }
 
 //slot
-void KGestureMap::stopAcquisition()
+void KisKGestureMap::stopAcquisition()
 {
     m_gestureTimeout.stop();
     m_acquiring = false;
@@ -262,7 +262,7 @@ void KGestureMap::stopAcquisition()
  * unintended clicks on links where there was free space before.
  */
 
-bool KGestureMap::eventFilter(QObject *obj, QEvent *e)
+bool KisKGestureMap::eventFilter(QObject *obj, QEvent *e)
 {
     //disable until it does not interfere with other input any more
     return false;

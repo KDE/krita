@@ -69,7 +69,7 @@ public:
         setData(sortValue, valueRole);
     }
 
-    bool operator<(const QStandardItem &other) const
+    bool operator<(const QStandardItem &other) const override
     {
         return data(valueRole).toULongLong() < other.data(valueRole).toULongLong();
     }

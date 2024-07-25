@@ -65,7 +65,7 @@ public Q_SLOTS:
     /// reimplemented
     void deactivate() override;
     /// reimplemented
-    void documentResourceChanged(int key, const QVariant & res) override;
+    void canvasResourceChanged(int key, const QVariant & res) override;
 
 Q_SIGNALS:
     void sigUpdateAutoSmoothCurvesGUI(bool value);

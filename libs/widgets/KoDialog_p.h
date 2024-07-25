@@ -74,4 +74,4 @@ private:
     bool dirty {false};
 };
 
-#endif // KDEUI_KDIALOG_P_H
+#endif // KODIALOG_P_H

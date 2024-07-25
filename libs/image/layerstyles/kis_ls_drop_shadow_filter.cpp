@@ -113,7 +113,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
                                             const QRect &applyRect,
                                             const psd_layer_effects_context *context,
                                             const psd_layer_effects_shadow_base *shadow,
-                                            KisResourcesInterfaceSP resourcesIntrerface,
+                                            KisResourcesInterfaceSP resourcesInterface,
                                             KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
@@ -215,7 +215,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
         knockOutRect &= d.dstRect;
 
         KisPainter gc(selection);
-        gc.setCompositeOp(COMPOSITE_ERASE);
+        gc.setCompositeOpId(COMPOSITE_ERASE);
         gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");
@@ -228,7 +228,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
                                     d.dstRect,
                                     context,
                                     shadow,
-                                    resourcesIntrerface,
+                                    resourcesInterface,
                                     env);
 }
 

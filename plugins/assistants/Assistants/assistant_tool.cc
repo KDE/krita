@@ -21,6 +21,8 @@
 #include "ConcentricEllipseAssistant.h"
 #include "FisheyePointAssistant.h"
 #include "TwoPointAssistant.h"
+#include "PerspectiveEllipseAssistant.h"
+#include "CurvilinearPerspectiveAssistant.h"
 //#include "mesh_assistant.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(AssistantToolFactory, "kritaassistanttool.json", registerPlugin<AssistantToolPlugin>();)
@@ -41,6 +43,8 @@ AssistantToolPlugin::AssistantToolPlugin(QObject *parent, const QVariantList &)
     KisPaintingAssistantFactoryRegistry::instance()->add(new ConcentricEllipseAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new FisheyePointAssistantFactory);
     KisPaintingAssistantFactoryRegistry::instance()->add(new TwoPointAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new PerspectiveEllipseAssistantFactory);
+    KisPaintingAssistantFactoryRegistry::instance()->add(new CurvilinearPerspectiveAssistantFactory);
 //    KisPaintingAssistantFactoryRegistry::instance()->add(new MeshAssistantFactory);
 }
 

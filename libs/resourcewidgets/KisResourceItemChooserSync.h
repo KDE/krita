@@ -50,4 +50,4 @@ private:
     const QScopedPointer<Private> d;
 };
 
-#endif // KORESOURCEITEMCHOOSERSYNC_H
+#endif // KISRESOURCEITEMCHOOSERSYNC_H

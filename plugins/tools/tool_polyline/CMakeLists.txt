@@ -5,7 +5,7 @@ set(kritatoolpolyline_SOURCES
 
 qt5_add_resources(kritatoolpolyline_SOURCES polyline.qrc)
 
-add_library(kritatoolpolyline MODULE ${kritatoolpolyline_SOURCES})
+kis_add_library(kritatoolpolyline MODULE ${kritatoolpolyline_SOURCES})
 
 target_link_libraries(kritatoolpolyline kritaui)
 

@@ -232,8 +232,10 @@ public:
 
     /**
      * Tests if the colorspace offers the specific composite op.
+     * @param srcSpace optional source color space. Some color spaces prefer blitting in source
+     *        color space. If already known, additional composite ops may be available.
      */
-    virtual bool hasCompositeOp(const QString & id) const;
+    virtual bool hasCompositeOp(const QString & id, const KoColorSpace *srcSpace = nullptr) const;
 
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
@@ -242,9 +244,12 @@ public:
 
     /**
      * Retrieve a single composite op from the ones this colorspace offers.
-     * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
+     * If the requested composite op does not exist, COMPOSITE_OVER is returned.
+     * @param srcSpace optional source color space. Some color spaces prefer blitting in source
+     *        color space. If already known, additional composite ops may be available.
+     *        _Note_: if given, the returned op is only safe to use with this exact source color space!
      */
-    const KoCompositeOp * compositeOp(const QString & id) const;
+    const KoCompositeOp * compositeOp(const QString & id, const KoColorSpace *srcSpace = nullptr) const;
 
     /**
      * add a composite op to this colorspace.
@@ -267,6 +272,14 @@ public:
 
 //================= Conversion functions ==================================//
 
+    /**
+     * Fills the provided buffer with fully transparent color in this
+     * color space.
+     *
+     * Not all color spaces support conversion from QColor (e.g. InputClass
+     * spaces), so for them we need to generate this color separately.
+     */
+    virtual void transparentColor(quint8 *dst, quint32 nPixels) const;
 
     /**
      * The fromQColor methods take a given color defined as an RGB QColor
@@ -275,9 +288,8 @@ public:
      *
      * @param color the QColor that will be used to fill dst
      * @param dst a pointer to a pixel
-     * @param profile the optional profile that describes the color values of QColor
      */
-    virtual void fromQColor(const QColor& color, quint8 *dst, const KoColorProfile * profile = 0) const = 0;
+    virtual void fromQColor(const QColor& color, quint8 *dst) const = 0;
 
     /**
      * The toQColor methods take a byte array that is at least pixelSize() long
@@ -286,9 +298,18 @@ public:
      *
      * @param src a pointer to the source pixel
      * @param c the QColor that will be filled with the color at src
-     * @param profile the optional profile that describes the color in c, for instance the monitor profile
      */
-    virtual void toQColor(const quint8 *src, QColor *c, const KoColorProfile * profile = 0) const = 0;
+    virtual void toQColor(const quint8 *src, QColor *c) const = 0;
+
+    /**
+     * The toQColor16 methods take a byte array that is at least pixelSize() long
+     * and converts the contents to a 16 bit QColor, using the given profile as a source
+     * profile and the optional profile as a destination profile.
+     *
+     * @param src a pointer to the source pixel
+     * @param c the QColor that will be filled with the color at src
+     */
+    virtual void toQColor16(const quint8 *src, QColor *c) const = 0;
 
     /**
      * Convert the pixels in data to (8-bit BGRA) QImage using the specified profiles.
@@ -598,6 +619,11 @@ public:
      */
     virtual quint8 intensity8(const quint8 * src) const = 0;
 
+    /**
+     * Calculate the intensity of the given pixel, scaled down to the range 0-1
+     */
+    virtual qreal intensityF(const quint8 * src) const = 0;
+
     /*
      *increase luminosity by step
      */
@@ -624,7 +650,13 @@ public:
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
      * @param params the information needed for blitting e.g. the source and destination pixel data,
      *        the opacity and flow, ...
-     * @param op the composition operator to use, e.g. COPY_OVER
+     * @param op the composition operator instance to use, e.g. COPY_OVER.
+     *        This operator must belong to this (dst) color space, UNLESS preferCompositionInSourceColorSpace()
+     *        returns true. In this case, the operator should be from the source color space. Besides avoiding
+     *        recurring lookups via ::compositeOp(), this is necessary if this color space does not implement
+     *        the desired composite op, but srcPace does.
+     *        Use ::compositeOp() with valid srcSpace to get the appropriate op.
+     *
      * @param renderingIntent the rendering intent
      * @param conversionFlags the conversion flags.
      *
@@ -672,12 +704,6 @@ protected:
     const KoColorConversionTransformation* fromLabA16Converter() const;
     const KoColorConversionTransformation* toRgbA16Converter() const;
     const KoColorConversionTransformation* fromRgbA16Converter() const;
-
-    /**
-     * Returns the thread-local conversion cache. If it doesn't exist
-     * yet, it is created. If it is currently too small, it is resized.
-     */
-    QVector<quint8> * threadLocalConversionCache(quint32 size) const;
 
     /**
      * This function defines the behavior of the bitBlt function

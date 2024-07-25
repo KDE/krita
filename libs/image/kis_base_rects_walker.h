@@ -307,7 +307,7 @@ protected:
          * dependOnLowerNodes(node)) because it may lead to an
          * infinite loop with filter layer. Activate it when it is
          * guaranteed that it is not possible to create a filter layer
-         * avobe its own clone
+         * above its own clone
          */
 
         if(hasClones(node) && position & (N_FILTHY | N_FILTHY_PROJECTION | N_EXTRA)) {

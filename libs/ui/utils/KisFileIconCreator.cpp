@@ -19,18 +19,14 @@
 
 #include <kis_painting_tweaks.h>
 #include <kis_debug.h>
+#include <KisStaticInitializer.h>
 
 namespace
 {
 
-struct KisFileIconRegistrar {
-    KisFileIconRegistrar() {
-        KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
-    }
-};
-
-
-static KisFileIconRegistrar s_registrar;
+KIS_DECLARE_STATIC_INITIALIZER {
+    KisPreviewFileDialog::s_iconCreator = new KisFileIconCreator();
+}
 
 
 QIcon createIcon(const QImage &source, const QSize &iconSize)
@@ -39,6 +35,8 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
 
     QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
     qreal scale = scaled.width()/(qreal)(source.width());
+
+
 
     if (scale >= 2) {
         // it can be treated like pixel art
@@ -62,10 +60,22 @@ QIcon createIcon(const QImage &source, const QSize &iconSize)
     // draw faint outline
     QPainter painter(&result);
     QColor textColor = qApp->palette().color(QPalette::Text);
-    QColor backgroundColor = qApp->palette().color(QPalette::Background);
-    QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
+    QColor backgroundColor = qApp->palette().color(QPalette::Window);
+    QColor blendedColor = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.1);
     painter.setPen(blendedColor);
+    painter.setBrush(QBrush(blendedColor));
+
+    painter.setCompositionMode(QPainter::CompositionMode_DestinationOver);
     painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+
+    QColor blendedColorBrighter = KisPaintingTweaks::blendColors(textColor, backgroundColor, 0.2);
+    painter.setPen(blendedColorBrighter);
+    painter.setBrush(QBrush());
+
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawRect(result.rect().adjusted(0, 0, -1, -1));
+
+    painter.end(); // Otherwise there will always be a copy
 
     return QIcon(QPixmap::fromImage(result));
 }
@@ -80,6 +90,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
     if (fi.exists()) {
         QString mimeType = KisMimeDatabase::mimeTypeForFile(path);
         if (mimeType == KisDocument::nativeFormatMimeType()
+               || mimeType == "application/x-krita-archive"
                || mimeType == "image/openraster") {
 
             QScopedPointer<KoStore> store(KoStore::createStore(path, KoStore::Read));
@@ -110,8 +121,9 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             } else {
                 return false;
             }
-        } else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
+        } else if (mimeType == "image/tiff" || mimeType == "image/x-tiff" || mimeType == "image/jxl") {
             // Workaround for a bug in Qt tiff QImageIO plugin
+            // XXX: Also for JPEG-XL if KImageFormats haven't updated to accomodate libjxl >= v0.9.0 API changes.
             QScopedPointer<KisDocument> doc(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);
             bool r = doc->openPath(path, KisDocument::DontAddToRecent);

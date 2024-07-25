@@ -21,7 +21,7 @@ class KRITAFLAKE_EXPORT KoShapeSizeCommand : public KUndo2Command
 public:
     /**
      * The undo / redo command for shape sizing.
-     * @param shapes all the shapes that will be rezised at the same time
+     * @param shapes all the shapes that will be resized at the same time
      * @param previousSizes the old sizes; in a list with a member for each shape
      * @param newSizes the new sizes; in a list with a member for each shape
      * @param parent the parent command used for macro commands

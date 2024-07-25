@@ -51,7 +51,7 @@ void KisEqualizerButton::setRightmost(bool value)
 
 QRect KisEqualizerButton::Private::boundingRect() const
 {
-    QRect bounds = q->rect().adjusted(0, 0, -isRightmost, 0);
+    QRect bounds = q->rect().adjusted(0, 0, -static_cast<int>(isRightmost), 0);
     return bounds;
 }
 

@@ -91,6 +91,7 @@ public:
     qreal strokeMaxMarkersInset(const KoShape *shape) const override;
     bool hasTransparency() const override;
     void paint(const KoShape *shape, QPainter &painter) const override;
+    void paintMarkers(const KoShape *shape, QPainter &painter) const override;
 
     QPen resultLinePen() const;
 

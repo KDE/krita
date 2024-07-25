@@ -160,18 +160,19 @@ void KisToneCurveWidget::drawGrid()
 void KisToneCurveWidget::updatePixmap()
 {
     d->needUpdatePixmap = false;
-    d->pixmap = QPixmap(size());
+    d->pixmap = QPixmap(size() * devicePixelRatioF());
     d->pixmap.setDevicePixelRatio(devicePixelRatioF());
-    d->curvemap = QPixmap(size());
+    d->curvemap = QPixmap(size() * devicePixelRatioF());
     d->curvemap.setDevicePixelRatio(devicePixelRatioF());
     d->pixmap.fill(Qt::black);
     d->curvemap.fill(Qt::transparent);
 
     d->painter.begin(&d->pixmap);
-    
 
-    int pixcols = d->pixmap.width();
-    int pixrows = d->pixmap.height();
+    int pixcols =
+        static_cast<int>(d->pixmap.width() / d->pixmap.devicePixelRatioF());
+    int pixrows =
+        static_cast<int>(d->pixmap.height() / d->pixmap.devicePixelRatioF());
 
     d->gridside = (qMin(pixcols, pixrows)) / 512.0;
     d->xBias    = grids(32);
@@ -273,11 +274,9 @@ void KisToneCurveWidget::updatePixmap()
         d->painter2.setPen(qRgb(80, 80, 80));
         d->painter2.drawPath(path4);
         d->painter2.end();
-        QRect area(d->xBias, 0, d->pxcols, d->pxrows);
-        d->painter.drawPixmap(area,d->curvemap, area);
+        d->painter.drawPixmap(d->xBias, 0, d->curvemap);
     }
     d->painter.end();
-
 }
 
 void KisToneCurveWidget::paintEvent(QPaintEvent*)
@@ -289,9 +288,9 @@ void KisToneCurveWidget::paintEvent(QPaintEvent*)
     if ( !isEnabled() )
     {
         p.fillRect(0, 0, width(), height(),
-                   palette().color(QPalette::Disabled, QPalette::Background));
+                   palette().color(QPalette::Disabled, QPalette::Window));
  
-        QPen pen(palette().color(QPalette::Disabled, QPalette::Foreground));
+        QPen pen(palette().color(QPalette::Disabled, QPalette::WindowText));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);
  
@@ -306,7 +305,7 @@ void KisToneCurveWidget::paintEvent(QPaintEvent*)
  
     if (!d->profileDataAvailable)
     {
-        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Background));
+        p.fillRect(0, 0, width(), height(), palette().color(QPalette::Active, QPalette::Window));
         QPen pen(palette().color(QPalette::Active, QPalette::Text));
         pen.setStyle(Qt::SolidLine);
         pen.setWidth(1);

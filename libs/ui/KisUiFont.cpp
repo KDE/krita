@@ -51,7 +51,12 @@ QFont systemDefaultUiFont()
 #if defined(Q_OS_WIN) && QT_VERSION < 0x060000
     return windowsSystemUiFont();
 #else
-    return QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    QFont font = QFontDatabase::systemFont(QFontDatabase::GeneralFont);
+    // On Android, font size may be in pixels, but we expect it to be in points
+    if (font.pointSizeF() == -1) {
+        font.setPointSizeF(font.pixelSize());
+    }
+    return font;
 #endif
 }
 

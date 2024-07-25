@@ -46,14 +46,6 @@ public:
      * Apply the color on a paint device
      */
     virtual void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const = 0;
-    /**
-     * @return true if the color is an uniform color
-     */
-    virtual bool isUniformColor() const = 0;
-    /**
-     * @return the color if the color is uniformed
-     */
-    virtual const KoColor& uniformColor() const;
 };
 
 class PAINTOP_EXPORT KisUniformColorSource : public KisColorSource
@@ -66,8 +58,7 @@ public:
     void applyColorTransformation(const KoColorTransformation* transfo) override;
     const KoColorSpace* colorSpace() const override;
     void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const override;
-    bool isUniformColor() const override;
-    const KoColor& uniformColor() const override;
+    const KoColor& uniformColor() const;
 protected:
     KoColor m_color;
 };
@@ -114,7 +105,6 @@ public:
     void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& offset) const override;
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
-    bool isUniformColor() const override;
 private:
     const KoColorSpace* m_colorSpace;
 };
@@ -131,7 +121,6 @@ public:
     void colorize(KisPaintDeviceSP, const QRect& rect, const QPoint& _offset) const override;
     virtual void rotate(double r);
     virtual void resize(double xs, double ys);
-    bool isUniformColor() const override;
 private:
     const KisPaintDeviceSP m_device;
     QRect m_bounds;

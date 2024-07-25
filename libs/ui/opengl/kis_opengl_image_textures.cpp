@@ -33,6 +33,13 @@
 #include "kis_painting_tweaks.h"
 #include "KisOpenGLBufferCreationGuard.h"
 
+/// we use Angle's EGL on Windows, so we need access to
+/// EGL_ANGLE_platform_angle definition
+#if defined Q_OS_WIN && (defined QT_OPENGL_DYNAMIC || defined QT_OPENGL_ES_2_ANGLE)
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#endif
+
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
@@ -226,7 +233,7 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
     KisConfig config(true);
     KisOpenGL::FilterMode mode = (KisOpenGL::FilterMode)config.openGLFilteringMode();
 
-    initBufferStorage(config.useOpenGLTextureBuffer());
+    initBufferStorage(KisOpenGL::shouldUseTextureBuffers(config.useOpenGLTextureBuffer()));
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx) {
@@ -348,11 +355,10 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
             qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
 #endif
 
-            const int nextSize = qNextPowerOfTwo(m_bufferStorage.size());
-            m_bufferStorage.allocateMoreBuffers(nextSize);
+            m_bufferStorage.allocateMoreBuffers();
 
 #ifdef DEBUG_BUFFER_REALLOCATION
-            qDebug() << "    increased number of buffers to" << nextSize;
+            qDebug() << "    increased number of buffers to" << m_bufferStorage.size();
 #endif
         }
 
@@ -415,6 +421,10 @@ void KisOpenGLImageTextures::generateCheckerTexture(const QImage &checkImage)
 
         f->glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, BACKGROUND_TEXTURE_SIZE, BACKGROUND_TEXTURE_SIZE,
                         0, format, type, checkers.data());
+
+        // QPainter::drawText relies on this.
+        // Ref: https://bugreports.qt.io/browse/QTBUG-65496
+        f->glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     }
     else {
         dbgUI << "OpenGL: Tried to generate checker texture before OpenGL was initialized.";
@@ -441,10 +451,11 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
     if(m_textureTiles.isEmpty()) return;
 
-    initBufferStorage(useBuffer);
+    const bool effectiveUseBuffer = KisOpenGL::shouldUseTextureBuffers(useBuffer);
+    initBufferStorage(effectiveUseBuffer);
 
     Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
-        tile->setBufferStorage(useBuffer ? &m_bufferStorage : 0);
+        tile->setBufferStorage(effectiveUseBuffer ? &m_bufferStorage : 0);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }
 }
@@ -504,7 +515,7 @@ void KisOpenGLImageTextures::setChannelFlags(const QBitArray &channelFlags)
     QBitArray targetChannelFlags = channelFlags;
     int selectedChannels = 0;
     const KoColorSpace *projectionCs = m_image->projection()->colorSpace();
-    QList<KoChannelInfo*> channelInfo = projectionCs->channels();
+    const QList<KoChannelInfo*> channelInfo = projectionCs->channels();
 
     if (targetChannelFlags.size() != channelInfo.size()) {
         targetChannelFlags = QBitArray();
@@ -576,7 +587,7 @@ bool KisOpenGLImageTextures::setInternalColorManagementActive(bool value)
         recreateImageTextureTiles();
 
         // at this point the value of m_internalColorManagementActive might
-        // have been forcely reverted to 'false' in case of some problems
+        // have been forcefully reverted to 'false' in case of some problems
     }
 
     return needsFinalRegeneration;
@@ -773,7 +784,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                              "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
             } else {
-#ifdef QT_OPENGL_ES_2_ANGLE
+#ifdef EGL_ANGLE_platform_angle
                 // If OpenGL ES, fall back to 16-bit float -- supports HDR
                 // Angle does ship GL_EXT_texture_norm16 but it doesn't seem
                 // to be renderable by DXGI - it returns a pixel size of 0
@@ -782,6 +793,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 if (ctx->hasExtension("GL_EXT_texture_norm16")) {
                     m_texturesInfo.internalFormat = GL_RGBA16_EXT;
                     m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                    m_texturesInfo.format = GL_RGBA;
                     destinationColorDepthId = Integer16BitsColorDepthID;
                     dbgUI << "Using 16 bits rgba (GLES v2)";
                 }
@@ -812,7 +824,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                     "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
             } else {
-#ifdef QT_OPENGL_ES_2_ANGLE
+#ifdef EGL_ANGLE_platform_angle
                 // If OpenGL ES, fall back to 16-bit float -- supports HDR
                 // Angle does ship GL_EXT_texture_norm16 but it doesn't seem
                 // to be renderable by DXGI - it returns a pixel size of 0
@@ -821,6 +833,7 @@ void KisOpenGLImageTextures::updateTextureFormat()
                 if (ctx->hasExtension("GL_EXT_texture_norm16")) {
                     m_texturesInfo.internalFormat = GL_RGBA16_EXT;
                     m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                    m_texturesInfo.format = GL_RGBA;
                     destinationColorDepthId = Integer16BitsColorDepthID;
                     dbgUI << "Using conversion to 16 bits rgba (GLES v2)";
                 }

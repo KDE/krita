@@ -22,7 +22,7 @@ class QDomDocument;
 class QPointF;
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * This mask generator use softness/hardness defined by user curve
@@ -45,9 +45,9 @@ public:
     void setSoftness(qreal softness) override;
 
     bool shouldVectorize() const override;
-    KisBrushMaskApplicatorBase* applicator() override;
+    KisBrushMaskApplicatorBase *applicator() const override;
 
-    void resetMaskApplicator(bool forceScalar);
+    void setMaskScalarApplicator();
 
     static void transformCurveForSoftness(qreal softness,const QList<QPointF> &points, int curveResolution, QVector<qreal> &result);
 
@@ -61,7 +61,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisCurveCircleMaskGenerator>;
+    friend struct FastRowProcessor<KisCurveCircleMaskGenerator>;
 };
 
 #endif

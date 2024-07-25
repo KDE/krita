@@ -73,7 +73,7 @@ class KisMeshTransformStrategy;
  *   of the resulting quadrilateral are on screen, the user can manipulate those
  *   as well.
  * - Liquify transform transforms the selection by painting motions, as if the
- *   user were fingerpainting.
+ *   user was finger painting.
  */
 class KisToolTransform : public KisTool
 {
@@ -228,6 +228,8 @@ public Q_SLOTS:
 
     void resetRotationCenterButtonsRequested();
     void imageTooBigRequested(bool value);
+    void convexHullCalculationRequested();
+    void slotConvexHullCalculated(QPolygon hull, void *strokeStrategyCookie);
 
 private:
     QList<KisNodeSP> fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent);
@@ -291,9 +293,9 @@ private:
 
     // a few extra context click options if free transform is active
     KisAction* mirrorHorizontalAction {0};
-    KisAction* mirrorVericalAction {0};
-    KisAction* rotateNinteyCWAction {0};
-    KisAction* rotateNinteyCCWAction {0};
+    KisAction* mirrorVerticalAction {0};
+    KisAction* rotateNinetyCWAction {0};
+    KisAction* rotateNinetyCCWAction {0};
 
 
 
@@ -315,7 +317,7 @@ private:
 
     QPainterPath m_cursorOutline;
 
-    KisAsyncronousStrokeUpdateHelper m_asyncUpdateHelper;
+    KisAsynchronousStrokeUpdateHelper m_asyncUpdateHelper;
 
 private Q_SLOTS:
     void slotTrackerChangedConfig(KisToolChangesTrackerDataSP status);
@@ -324,6 +326,7 @@ private Q_SLOTS:
     void slotResetTransform(ToolTransformArgs::TransformMode mode);
     void slotCancelTransform();
     void slotRestartTransform();
+    void slotRestartAndContinueTransform();
     void slotEditingFinished();
 
     void slotMoveDiscreteUp();

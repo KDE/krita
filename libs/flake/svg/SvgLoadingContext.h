@@ -9,13 +9,15 @@
 
 #include <functional>
 #include <QStringList>
-#include <KoXmlReader.h>
+#include <QDomDocument>
+#include <QScopedPointer>
+#include <KoSvgTextProperties.h>
+
 #include "kritaflake_export.h"
 
 class SvgGraphicsContext;
 class SvgStyleParser;
 class KoDocumentResourceManager;
-class KoImageCollection;
 class KoShape;
 class KoColorProfile;
 
@@ -49,9 +51,6 @@ public:
     /// Returns the next z-index
     int nextZIndex();
 
-    /// Returns the image collection used for managing images
-    KoImageCollection* imageCollection();
-
     /// Registers a shape so it can be referenced later
     void registerShape(const QString &id, KoShape *shape);
 
@@ -81,6 +80,9 @@ public:
 
     /// Return the profiles in the context.
     QHash<QString, const KoColorProfile*> profiles();
+
+    /// These are the text properties, completely resolved, ensuring that everything is inherited and the sizes are converted to pt.
+    KoSvgTextProperties resolvedProperties() const;
 
     bool isRootContext() const;
 

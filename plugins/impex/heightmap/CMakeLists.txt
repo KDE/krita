@@ -10,7 +10,7 @@ set(kritaheightmapimport_SOURCES
 
 ki18n_wrap_ui(kritaheightmapimport_SOURCES kis_wdg_options_heightmap.ui )
 
-add_library(kritaheightmapimport MODULE ${kritaheightmapimport_SOURCES})
+kis_add_library(kritaheightmapimport MODULE ${kritaheightmapimport_SOURCES})
 
 target_link_libraries(kritaheightmapimport kritaui )
 
@@ -24,9 +24,10 @@ set(kritaheightmapexport_SOURCES
 
 ki18n_wrap_ui(kritaheightmapexport_SOURCES kis_wdg_options_heightmap.ui )
 
-add_library(kritaheightmapexport MODULE ${kritaheightmapexport_SOURCES})
+kis_add_library(kritaheightmapexport MODULE ${kritaheightmapexport_SOURCES})
 
 target_link_libraries(kritaheightmapexport kritaui kritaimpex)
 
 install(TARGETS kritaheightmapexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_heightmap.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+install(FILES krita_heightmap.desktop DESTINATION ${KDE_INSTALL_APPDIR})

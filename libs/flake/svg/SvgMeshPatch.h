@@ -93,7 +93,7 @@ public:
     void subdivide(QVector<SvgMeshPatch*>& subdivided,
                    const QVector<QColor>& colors) const;
 
-    bool isDivisbleVertically() const;
+    bool isDivisibleVertically() const;
     bool isDivisibleHorizontally() const;
 
     int countPoints() const;

@@ -216,15 +216,15 @@ double treatLevel1(const QString &expr, bool & noProblem)
 
     noProblem = true;
 
-    QString exprDestructable = expr;
+    QString exprDestructible = expr;
 
     char nextOp = '+';
     double result = 0.0;
 
-    while (!exprDestructable.isEmpty()) {
+    while (!exprDestructible.isEmpty()) {
 
         double sign = (nextOp == '-') ? -1 : 1;
-        QString part = extractSubExprLevel1(exprDestructable, nextOp, noProblem);
+        QString part = extractSubExprLevel1(exprDestructible, nextOp, noProblem);
 
         if (!noProblem) {
         return 0.0;
@@ -258,22 +258,22 @@ double treatLevel2(QString const& expr, bool & noProblem)
 
     noProblem = true;
 
-    QString exprDestructable = expr;
+    QString exprDestructible = expr;
 
     char nextOp = '*';
 
-    QString part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
+    QString part = extractSubExprLevel2(exprDestructible, nextOp, noProblem);
 
     double result = treatLevel3(part, noProblem);
 
-    while (!exprDestructable.isEmpty()) {
+    while (!exprDestructible.isEmpty()) {
 
         if (!noProblem) {
         return 0.0;
         }
 
         bool needToMultiply = (nextOp == '*');
-        part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
+        part = extractSubExprLevel2(exprDestructible, nextOp, noProblem);
 
         if (!noProblem) {
         return 0.0;
@@ -439,15 +439,15 @@ double treatLevel1Int(QString const& expr, bool & noProblem)
 
     noProblem = true;
 
-    QString exprDestructable = expr;
+    QString exprDestructible = expr;
 
     char nextOp = '+';
     double result = 0.0;
 
-    while (!exprDestructable.isEmpty()) {
+    while (!exprDestructible.isEmpty()) {
 
     double sign = (nextOp == '-') ? -1 : 1;
-    QString part = extractSubExprLevel1(exprDestructable, nextOp, noProblem);
+    QString part = extractSubExprLevel1(exprDestructible, nextOp, noProblem);
 
     if( !noProblem) {
         return 0.0;
@@ -481,22 +481,22 @@ double treatLevel2Int(const QString &expr, bool &noProblem)
 
     noProblem = true;
 
-    QString exprDestructable = expr;
+    QString exprDestructible = expr;
 
     char nextOp = '*';
 
-    QString part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
+    QString part = extractSubExprLevel2(exprDestructible, nextOp, noProblem);
 
     double result = treatFuncsInt(part, noProblem);
 
-    while (!exprDestructable.isEmpty()) {
+    while (!exprDestructible.isEmpty()) {
 
     if (!noProblem) {
         return 0.0;
     }
 
     bool needToMultiply = (nextOp == '*');
-    part = extractSubExprLevel2(exprDestructable, nextOp, noProblem);
+    part = extractSubExprLevel2(exprDestructible, nextOp, noProblem);
 
     if (!noProblem) {
         return 0.0;

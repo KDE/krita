@@ -38,7 +38,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
     void tryFetchUsedUpdatesFilter(KisImageSP image);
     void tryIssueRecordedDirtyRequests(KisImageSP image);
 
-    class SuspendLod0Updates : public KisProjectionUpdatesFilter
+    class SuspendLod0Updates : public SuspendUpdatesFilterInterface
     {
 
         struct Request {
@@ -84,6 +84,15 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         {
         }
 
+        void addExplicitUIUpdateRect(const QRect &rc) override
+        {
+            m_explicitUIUpdateRequest |= rc;
+        }
+
+        QRect explicitUIUpdateRequest() const {
+            return m_explicitUIUpdateRequest;
+        }
+
         bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects,  bool resetAnimationCache) override {
             if (image->currentLevelOfDetail() > 0) return false;
 
@@ -120,27 +129,10 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             return true;
         }
 
-        static inline QRect alignRect(const QRect &rc, const int step) {
-            static const int decstep = step - 1;
-            static const int invstep = ~decstep;
-
-            int x0, y0, x1, y1;
-            rc.getCoords(&x0, &y0, &x1, &y1);
-
-            x0 &= invstep;
-            y0 &= invstep;
-            x1 |= decstep;
-            y1 |= decstep;
-
-            QRect result;
-            result.setCoords(x0, y0, x1, y1);
-            return result;
-        }
-
         void notifyUpdates(KisImageSP image) {
             const int step = 64;
 
-            {   // fithy refreshes
+            {   // filthy refreshes
                 RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
                 RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 
@@ -167,7 +159,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                 }
             }
 
-            {   // non-fithy refreshes
+            {   // non-filthy refreshes
                 RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
                 RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 
@@ -245,6 +237,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         UpdatesHash m_requestsHash;
         RefreshesHash m_refreshesHash;
         NoFilthyUpdatesHash m_noFilthyRequestsHash;
+        QRect m_explicitUIUpdateRequest;
         QMutex m_mutex;
     };
 
@@ -513,6 +506,7 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
     enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
 
     setNeedsExplicitCancel(true);
+    setClearsRedoOnStart(false);
 }
 
 KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStrategy()
@@ -623,6 +617,10 @@ void KisSuspendProjectionUpdatesStrokeStrategy::Private::tryIssueRecordedDirtyRe
 {
     Q_FOREACH (QSharedPointer<Private::SuspendLod0Updates> filter, usedFilters) {
         filter->notifyUpdates(image.data());
+
+        if (!filter->explicitUIUpdateRequest().isEmpty()) {
+            accumulatedDirtyRects.append(filter->explicitUIUpdateRequest());
+        }
     }
     usedFilters.clear();
 }

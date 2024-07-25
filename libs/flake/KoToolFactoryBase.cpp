@@ -44,13 +44,13 @@ KoToolFactoryBase::~KoToolFactoryBase()
     delete d;
 }
 
-QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionCollection)
+QList<QAction *> KoToolFactoryBase::createActions(KisKActionCollection *actionCollection)
 {
     QList<QAction *> toolActions;
 
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction*> actions = createActionsImpl();
-    QAction *action = actionRegistry->makeQAction(id());
+    QAction *action = actionRegistry->makeQAction(id(), this);
     actionCollection->addAction(id(), action);
     connect(action, SIGNAL(triggered()), SLOT(activateTool()));
     //qDebug() << action << action->shortcut();

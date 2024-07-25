@@ -19,7 +19,6 @@
 #include <resources/KoPattern.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoImageCollection.h>
 
 #include <QMenu>
 #include <QHBoxLayout>
@@ -37,7 +36,6 @@ public:
     KisResourceModel *model = 0;
     KisResourceItemListView *resourceList = 0;
     QSharedPointer<KoShapeBackground> background;
-    KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 };
@@ -73,7 +71,7 @@ KoResourcePopupAction::KoResourcePopupAction(const QString &resourceType, KoCanv
     setMenu(d->menu);
     new QHBoxLayout(d->menu);
     d->menu->layout()->addWidget(widget);
-    d->menu->layout()->setMargin(0);
+    d->menu->layout()->setContentsMargins(0, 0, 0, 0);
 
     connect(d->resourceList, SIGNAL(clicked(QModelIndex)), this, SLOT(indexChanged(QModelIndex)));
 
@@ -92,7 +90,6 @@ KoResourcePopupAction::~KoResourcePopupAction()
     }
 
     delete d->menu;
-    delete d->imageCollection;
     delete d;
 }
 
@@ -146,11 +143,12 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
         KoPatternSP pattern = resource.dynamicCast<KoPattern>();
         if (gradient) {
             QGradient *qg = gradient->cloneAndBakeVariableColors(d->canvasResourcesInterface)->toQGradient();
-            qg->setCoordinateMode(QGradient::ObjectBoundingMode);
-            d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
+            if (qg) {
+                qg->setCoordinateMode(QGradient::ObjectBoundingMode);
+                d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
+            }
         } else if (pattern) {
-            KoImageCollection *collection = new KoImageCollection();
-            d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(collection));
+            d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground());
             qSharedPointerDynamicCast<KoPatternBackground>(d->background)->setPattern(pattern->pattern());
         }
 

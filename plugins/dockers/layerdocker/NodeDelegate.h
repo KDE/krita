@@ -28,6 +28,7 @@ public:
     ~NodeDelegate() override;
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+    void drawBranches(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
     bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
 
@@ -54,7 +55,6 @@ private:
     static QStyleOptionViewItem getOptions(const QStyleOptionViewItem &option, const QModelIndex &index);
     void drawProgressBar(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    void drawBranch(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawColorLabel(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawFrame(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
@@ -67,15 +67,22 @@ private:
     void drawIcons(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QRect visibilityClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    void drawVisibilityIconHijack(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void drawVisibilityIcon(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
     QRect decorationClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawExpandButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     void drawAnimatedDecoration(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-private Q_SLOTS:
+    void drawSelectedButton(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index,
+                            QStyle *style) const;
+
+    // In here we handle the intricacies required to tie the state of selection and "current" index.
+    void changeSelectionAndCurrentIndex(const QModelIndex &index);
+
+public Q_SLOTS:
     void slotConfigChanged();
+private Q_SLOTS:
     void slotResetState();
 };
 

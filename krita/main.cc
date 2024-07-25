@@ -15,54 +15,51 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <stdlib.h>
-
-#include <QString>
+#include <KLocalizedTranslator>
+#include <QByteArray>
+#include <QDate>
+#include <QDir>
+#include <QLibraryInfo>
+#include <QLocale>
+#include <QMessageBox>
+#include <QOperatingSystemVersion>
 #include <QPixmap>
-#include <kis_debug.h>
 #include <QProcess>
 #include <QProcessEnvironment>
-#include <QStandardPaths>
-#include <QDir>
-#include <QDate>
-#include <QLocale>
 #include <QSettings>
-#include <QByteArray>
-#include <QMessageBox>
+#include <QStandardPaths>
+#include <QString>
 #include <QThread>
-#include <QLibraryInfo>
 #include <QTranslator>
 
-#include <QOperatingSystemVersion>
-
-#include <time.h>
-
 #include <KisApplication.h>
+#include <KisMainWindow.h>
+#include <KisSupportedArchitectures.h>
+#include <KisUsageLogger.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 #include <kis_config.h>
-
-#include "KisDocument.h"
-#include "kis_splash_screen.h"
-#include "KisPart.h"
-#include "KisApplicationArguments.h"
-#include <opengl/kis_opengl.h>
-#include "input/KisQtWidgetsTweaker.h"
-#include <KisUsageLogger.h>
+#include <kis_debug.h>
 #include <kis_image_config.h>
-#include "KisUiFont.h"
-#include <KisMainWindow.h>
+#include <opengl/kis_opengl.h>
 
-#include <KLocalizedTranslator>
+#include "KisApplicationArguments.h"
+#include "KisDocument.h"
+#include "KisPart.h"
+#include "KisUiFont.h"
+#include "input/KisQtWidgetsTweaker.h"
+#include "kis_splash_screen.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 #include <KisAndroidCrashHandler.h>
+#include <KisAndroidLogHandler.h>
 #endif
 
 #if defined Q_OS_WIN
 #include "config_use_qt_tablet_windows.h"
 #include <windows.h>
+#include <winuser.h>
 #ifndef USE_QT_TABLET_WINDOWS
 #include <kis_tablet_support_win.h>
 #include <kis_tablet_support_win8.h>
@@ -76,32 +73,51 @@
 #endif
 #include <QLibrary>
 #endif
+
+#ifdef Q_OS_MACOS
+#include "libs/macosutils/KisMacosEntitlements.h"
+#include "libs/macosutils/KisMacosSystemProber.h"
+#endif
+
+#ifdef Q_OS_HAIKU
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
+#endif
+
 #if defined HAVE_KCRASH
 #include <kcrash.h>
 #elif defined USE_DRMINGW
 namespace
 {
+template<typename T, typename U>
+inline T cast_to_function(U v) noexcept
+{
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return reinterpret_cast<T>(reinterpret_cast<void *>(v));
+}
+
 void tryInitDrMingw()
 {
-    wchar_t path[MAX_PATH];
-    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QStringLiteral("\\exchndl.dll");
-    if (pathStr.size() > MAX_PATH - 1) {
+    const QString pathStr = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("exchndl.dll");
+
+    QLibrary hMod(pathStr);
+    if (!hMod.load()) {
         return;
     }
-    int pathLen = pathStr.toWCharArray(path);
-    path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
-    HMODULE hMod = LoadLibraryW(path);
-    if (!hMod) {
-        return;
-    }
+
+    using ExcHndlSetLogFileNameA_type = BOOL(APIENTRY *)(const char *);
+
     // No need to call ExcHndlInit since the crash handler is installed on DllMain
-    auto myExcHndlSetLogFileNameA = reinterpret_cast<BOOL (APIENTRY *)(const char *)>(GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
+    const auto myExcHndlSetLogFileNameA = cast_to_function<ExcHndlSetLogFileNameA_type>(hMod.resolve("ExcHndlSetLogFileNameA"));
     if (!myExcHndlSetLogFileNameA) {
         return;
     }
+
     // Set the log file path to %LocalAppData%\kritacrash.log
-    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
-    myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+    const QString logFile = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation)).absoluteFilePath("kritacrash.log");
+    const QByteArray logFilePath = QDir::toNativeSeparators(logFile).toLocal8Bit();
+    myExcHndlSetLogFileNameA(logFilePath.data());
 }
 } // namespace
 #endif
@@ -116,22 +132,8 @@ void installTranslators(KisApplication &app);
 #ifdef Q_OS_WIN
 namespace
 {
-typedef enum ORIENTATION_PREFERENCE {
-    ORIENTATION_PREFERENCE_NONE = 0x0,
-    ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
-    ORIENTATION_PREFERENCE_PORTRAIT = 0x2,
-    ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
-    ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
-} ORIENTATION_PREFERENCE;
-#if !defined(_MSC_VER)
-    typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
-            ORIENTATION_PREFERENCE orientation
-            );
-#else
-    typedef BOOL (WINAPI *pSetDisplayAutoRotationPreferences_t)(
-        ORIENTATION_PREFERENCE orientation
-        );
-#endif()
+using pSetDisplayAutoRotationPreferences_t = decltype(&SetDisplayAutoRotationPreferences);
+
 void resetRotation()
 {
     QLibrary user32Lib("user32");
@@ -139,8 +141,7 @@ void resetRotation()
         qWarning() << "Failed to load user32.dll! This really should not happen.";
         return;
     }
-    pSetDisplayAutoRotationPreferences_t pSetDisplayAutoRotationPreferences
-            = reinterpret_cast<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
+    auto pSetDisplayAutoRotationPreferences = cast_to_function<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
     if (!pSetDisplayAutoRotationPreferences) {
         dbgKrita << "Failed to load function SetDisplayAutoRotationPreferences";
         return;
@@ -230,12 +231,25 @@ Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
 
 extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 {
-    // The global initialization of the random generator
-    qsrand(time(0));
+#ifdef Q_OS_ANDROID
+    KisAndroidLogHandler::handler_init();
+#endif
+
+#ifdef Q_OS_WIN
+    // Fix QCommandLineParser help output with UTF-8 codepage:
+    if (GetACP() == CP_UTF8) {
+        SetConsoleOutputCP(CP_UTF8);
+    }
+#endif
+
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();
 
 #if defined HAVE_X11
     qputenv("QT_QPA_PLATFORM", "xcb");
+#elif defined Q_OS_WIN
+    if (!qEnvironmentVariableIsSet("QT_QPA_PLATFORM")) {
+        qputenv("QT_QPA_PLATFORM", "windows:darkmode=1");
+    }
 #endif
 
     // Workaround a bug in QNetworkManager
@@ -285,10 +299,84 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     }
 
     KisAndroidCrashHandler::handler_init();
+    qputenv("QT_ANDROID_ENABLE_RIGHT_MOUSE_FROM_LONG_PRESS", "1");
+
+    qputenv("FONTCONFIG_PATH",
+            QFile::encodeName(KoResourcePaths::getApplicationRoot()) + "/share/etc/fonts/");
+    qputenv("XDG_CACHE_HOME",
+            QFile::encodeName(QStandardPaths::writableLocation(QStandardPaths::CacheLocation)));
 #endif
 
-    const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
-    QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+/**
+ * MLT installation notes.
+ *
+ * On Linux and Android MLT is installed into a versioned
+ * location, i.e. 'mlt-7'. On Windows and MacOS into a non-versioned
+ * one, i.e. 'mlt'.
+ *
+ * On Windows and MacOS MLT uses detects all the paths via the relative
+ * path against the currently running executable, so we don't have to
+ * configure anything special for these platforms.
+ *
+ * On Linux and Android MLT does not have such detection, so we should
+ * configure environment variables manually and instruct MLT where to
+ * look for plugins, profiles and presets. Otherwise MLT will look for
+ * plugins from the **build environment** location.
+ */
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+
+    // APPIMAGE SOUND ADDITIONS
+    // MLT needs a few environment variables set to properly function in an appimage context.
+    // The following code should be configured to **only** run when we detect that Krita is being
+    // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
+    // enough to filter out this step for non-appimage krita builds.
+    const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
+    if (isInAppimage) {
+        QByteArray appimageMountDir = qgetenv("APPDIR");
+
+        {   // MLT
+            //Plugins Path is where mlt should expect to find its plugin libraries.
+            qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt-7/"));
+            qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/"));
+            qputenv("MLT_ROOT_DIR", appimageMountDir + QFile::encodeName("/usr/"));
+            qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/profiles/"));
+            qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt-7/presets/"));
+        }
+
+        {
+            /**
+             * Since we package our own fontconfig into AppImage we should explicitly add
+             * system configuration file into the search list. Otherwise it will not be found.
+             *
+             * Please note that FONTCONFIG_PATH should be set **before** we create our first
+             * instance of QApplication for openGL probing, because it will make fontconfig
+             * to be loaded before this environment variable set.
+             */
+            if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
+                const QString defaultFontsConfig = "/etc/fonts/fonts.conf";
+                const QFileInfo info(defaultFontsConfig);
+                if (info.exists()) {
+                    qputenv("FONTCONFIG_PATH", QFile::encodeName(QDir::toNativeSeparators(info.absolutePath())));
+                }
+            }
+        }
+    }
+#endif
+
+    const QDir configPath(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
+    QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
+
+    QString root;
+    QString language;
+    {
+        // Create a temporary application to get the root
+        QCoreApplication app(argc, argv);
+        Q_UNUSED(app);
+        root = KoResourcePaths::getApplicationRoot();
+        QSettings languageoverride(configPath.absoluteFilePath("klanguageoverridesrc"), QSettings::IniFormat);
+        languageoverride.beginGroup("Language");
+        language = languageoverride.value(qAppName(), "").toString();
+    }
 
     bool enableOpenGLDebug = false;
     bool openGLDebugSynchronous = false;
@@ -344,51 +432,20 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     }
 
 
-    QString root;
-    QString language;
-    {
-        // Create a temporary application to get the root
-        QCoreApplication app(argc, argv);
-        Q_UNUSED(app);
-        root = KoResourcePaths::getApplicationRoot();
-        QSettings languageoverride(configPath + QStringLiteral("/klanguageoverridesrc"), QSettings::IniFormat);
-        languageoverride.beginGroup(QStringLiteral("Language"));
-        language = languageoverride.value(qAppName(), "").toString();
-    }
-
-
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     {
         QByteArray originalXdgDataDirs = qgetenv("XDG_DATA_DIRS");
         if (originalXdgDataDirs.isEmpty()) {
             // We don't want to completely override the default
             originalXdgDataDirs = "/usr/local/share/:/usr/share/";
         }
+
+        // NOTE: This line helps also fontconfig have a user-accessible location on Android (see the commit).
         qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
-
-        // APPIMAGE SOUND ADDITIONS
-        // GStreamer needs a few environment variables to properly function in an appimage context.
-        // The following code should be configured to **only** run when we detect that Krita is being
-        // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
-        // enough to filter out this step for non-appimage krita builds.
-
-        const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
-        if (isInAppimage) {
-            QByteArray appimageMountDir = qgetenv("APPDIR");
-
-            //We need to add new gstreamer plugin paths for the system to find the
-            //appropriate plugins.
-            const QByteArray gstPluginSystemPath = qgetenv("GST_PLUGIN_SYSTEM_PATH_1_0");
-            const QByteArray gstPluginScannerPath = qgetenv("GST_PLUGIN_SCANNER");
-
-            //Plugins Path is where libgstreamer-1.0 should expect to find plugin libraries.
-            qputenv("GST_PLUGIN_SYSTEM_PATH_1_0", appimageMountDir + QFile::encodeName("/usr/lib/gstreamer-1.0/") + ":" + gstPluginSystemPath);
-
-            //Plugin scanner is where gstreamer should expect to find the plugin scanner.
-            //Perhaps invoking the scanenr earlier in the code manually could allow ldd to quickly find all plugin dependencies?
-            qputenv("GST_PLUGIN_SCANNER", appimageMountDir + QFile::encodeName("/usr/lib/gstreamer-1.0/gst-plugin-scanner"));
-        }
     }
+#elif defined(Q_OS_HAIKU)
+	qputenv("KRITA_PLUGIN_PATH", QFile::encodeName(root + "lib"));
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + qgetenv("XDG_DATA_DIRS"));
 #else
     qputenv("XDG_DATA_DIRS", QFile::encodeName(QDir(root + "share").absolutePath()));
 #endif
@@ -461,7 +518,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                 }
             }
 
-            if (uiLanguages.size() > 0 ) {
+            if (!uiLanguages.empty()) {
                 QString envLanguage = uiLanguages.first();
                 envLanguage.replace(QChar('-'), QChar('_'));
 
@@ -488,6 +545,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
 
+    KisUsageLogger::writeLocaleSysInfo();
+
 #if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS && defined QT_HAS_WINTAB_SWITCH
     const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
     QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, forceWinTab);
@@ -507,8 +566,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     installTranslators(app);
 
-    if (app.platformName() == "wayland") {
-        QMessageBox::critical(0, i18nc("@title:window", "Fatal Error"), i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
+    if (KisApplication::platformName() == "wayland") {
+        QMessageBox::critical(nullptr,
+                              i18nc("@title:window", "Fatal Error"),
+                              i18n("Krita does not support the Wayland platform. Use XWayland to run Krita on Wayland. Krita will close now."));
         return -1;
     }
 
@@ -524,22 +585,17 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
     if (!language.isEmpty()) {
         if (rightToLeft) {
-            app.setLayoutDirection(Qt::RightToLeft);
+            KisApplication::setLayoutDirection(Qt::RightToLeft);
         }
         else {
-            app.setLayoutDirection(Qt::LeftToRight);
+            KisApplication::setLayoutDirection(Qt::LeftToRight);
         }
     }
 #ifdef Q_OS_ANDROID
     KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
-
-    // TODO: remove "share" - sh_zam
-    // points to /data/data/org.krita/files/share/locale
-    KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
-#else
+#endif
     // Enable debugging translations from undeployed apps
     KLocalizedString::addDomainLocaleDir("krita", QDir(root + "share/locale").absolutePath());
-#endif
 
     KLocalizedString::setApplicationDomain("krita");
 
@@ -559,17 +615,31 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     dbgKrita << "PATH" << qgetenv("PATH");
 #endif
 
-    if (qApp->applicationDirPath().contains(KRITA_BUILD_DIR)) {
+    if (KisApplication::applicationDirPath().contains(KRITA_BUILD_DIR)) {
         qFatal("FATAL: You're trying to run krita from the build location. You can only run Krita from the installation location.");
     }
-
 
 #if defined HAVE_KCRASH
     KCrash::initialize();
 #elif defined USE_DRMINGW
     tryInitDrMingw();
 #endif
+#if defined Q_OS_ANDROID
+    // because we need qApp
+    qputenv("MLT_REPOSITORY", QFile::encodeName(qApp->applicationDirPath()));
 
+    QString loc;
+    if (QStandardPaths::standardLocations(QStandardPaths::HomeLocation).size() > 1) {
+        loc = QStandardPaths::standardLocations(QStandardPaths::HomeLocation)[1];
+    } else {
+        loc = QStandardPaths::standardLocations(QStandardPaths::HomeLocation)[0];
+    }
+    qputenv("MLT_DATA", QFile::encodeName(loc + "/share/mlt-7/"));
+    qputenv("MLT_ROOT_DIR", QFile::encodeName(loc));
+    qputenv("MLT_PROFILES_PATH", QFile::encodeName(loc + "/share/mlt-7/profiles/"));
+    qputenv("MLT_PRESETS_PATH", QFile::encodeName(loc + "/share/mlt-7/presets/"));
+    qputenv("MLT_PLUGIN_FILTER_STRING", "lib_mltplugin_");
+#endif
     KisApplicationArguments args(app);
 
     if (app.isRunning()) {
@@ -578,19 +648,26 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         const bool batchRun = args.exportAs() || args.exportSequence();
 
         if (!batchRun) {
-            QByteArray ba = args.serialize();
-            if (app.sendMessage(ba)) {
+            if (app.sendMessage(args.serialize())) {
                 return 0;
             }
         }
     }
+#ifdef Q_OS_MACOS
+    // HACK: Sandboxed macOS cannot use QSharedMemory on Qt<6
+    else if (KisMacosEntitlements().sandbox()) {
+        if(iskritaRunningActivate()) {
+            return 0;
+        }
+    }
+#endif
 
     if (!runningInKDE) {
         // Icons in menus are ugly and distracting
-        app.setAttribute(Qt::AA_DontShowIconsInMenus);
+        KisApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
     }
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 10, 0))
-    app.setAttribute(Qt::AA_DisableWindowContextHelpButton);
+    KisApplication::setAttribute(Qt::AA_DisableWindowContextHelpButton);
 #endif
     app.installEventFilter(KisQtWidgetsTweaker::instance());
 
@@ -660,9 +737,10 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
 #elif defined QT_HAS_WINTAB_SWITCH
+    Q_UNUSED(supportedWindowsVersion);
 
     // Check if WinTab/WinInk has actually activated
-    const bool useWinInkAPI = !app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
+    const bool useWinInkAPI = !KisApplication::testAttribute(Qt::AA_MSWindowsUseWinTabAPI);
 
     if (useWinInkAPI != cfg.useWin8PointerInput()) {
         KisUsageLogger::log("WARNING: WinTab tablet protocol is not supported on this device. Switching to WinInk...");
@@ -673,7 +751,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 
 #endif
 #endif
-    app.setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
+    KisApplication::setAttribute(Qt::AA_CompressHighFrequencyEvents, false);
 
     // Set up remote arguments.
     QObject::connect(&app, SIGNAL(messageReceived(QByteArray,QObject*)),
@@ -685,30 +763,46 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     // Hardware information
     KisUsageLogger::writeSysInfo("\nHardware Information\n");
     KisUsageLogger::writeSysInfo(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
-    KisUsageLogger::writeSysInfo(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
+    KisUsageLogger::writeSysInfo(QString("  Memory: %1 Mb").arg(KisImageConfig::totalRAM()));
     KisUsageLogger::writeSysInfo(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
-    KisUsageLogger::writeSysInfo(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo(QString("  Swap Location: %1").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo(
+        QString("  Built for: %1")
+            .arg(KisSupportedArchitectures::baseArchName()));
+    KisUsageLogger::writeSysInfo(
+        QString("  Base instruction set: %1")
+            .arg(KisSupportedArchitectures::bestArchName()));
+    KisUsageLogger::writeSysInfo(
+        QString("  Supported instruction sets: %1")
+            .arg(KisSupportedArchitectures::supportedInstructionSets()));
+
+    KisUsageLogger::writeSysInfo("");
 
     KisConfig(true).logImportantSettings();
 
-    app.setFont(KisUiFont::normalFont());
+    KisApplication::setFont(KisUiFont::normalFont());
 
     if (!app.start(args)) {
         KisUsageLogger::log("Could not start Krita Application");
         return 1;
     }
 
-
-    int state = app.exec();
+    int state = KisApplication::exec();
 
     {
-        QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
+        QSettings kritarc(configPath.absoluteFilePath("kritadisplayrc"), QSettings::IniFormat);
         kritarc.setValue("canvasState", "OPENGL_SUCCESS");
     }
 
     if (logUsage) {
         KisUsageLogger::close();
     }
+
+    KisPart::instance()->unloadPlaybackEngine();
+
+#ifdef Q_OS_HAIKU
+	kill(::getpid(), SIGKILL);
+#endif
 
     return state;
 }
@@ -730,7 +824,7 @@ void removeInstalledTranslators(KisApplication &app)
     // ECMQmLoader creates all QTranslator's parented to the active QApp.
     QList<QTranslator *> translators = app.findChildren<QTranslator *>(QString(), Qt::FindDirectChildrenOnly);
     Q_FOREACH(const auto &translator, translators) {
-        app.removeTranslator(translator);
+        KisApplication::removeTranslator(translator);
     }
     dbgLocale << "Removed" << translators.size() << "QTranslator's";
 }
@@ -744,15 +838,14 @@ void installPythonPluginUITranslator(KisApplication &app)
     translator->setObjectName(QStringLiteral("KLocalizedTranslator.pykrita_plugin_ui"));
     translator->setTranslationDomain(QStringLiteral("krita"));
     translator->addContextToMonitor(QStringLiteral("pykrita_plugin_ui"));
-    app.installTranslator(translator);
+    KisApplication::installTranslator(translator);
 }
 
 void installQtTranslations(KisApplication &app)
 {
-    QStringList qtCatalogs = {
+    const QStringList qtCatalogs = {
         QStringLiteral("qt_"),
         QStringLiteral("qtbase_"),
-        QStringLiteral("qtmultimedia_"),
         QStringLiteral("qtdeclarative_"),
     };
     // A list of locale to add, note that the last added one has the
@@ -774,7 +867,7 @@ void installQtTranslations(KisApplication &app)
             if (translator->load(localeToLoad, catalog, QString(), translationsPath)) {
                 dbgLocale << "Loaded Qt translations for" << localeToLoad << catalog;
                 translator->setObjectName(QStringLiteral("QTranslator.%1.%2").arg(localeToLoad.name(), catalog));
-                app.installTranslator(translator);
+                KisApplication::installTranslator(translator);
             } else {
                 delete translator;
             }
@@ -832,7 +925,10 @@ void installEcmTranslations(KisApplication &app)
 #else
             const QString root = QLibraryInfo::location(QLibraryInfo::PrefixPath);
 
-            // Our patched k18n uses AppDataLocation (for AppImage).
+            // Our patched k18n uses AppDataLocation (for AppImage). Not using
+            // KoResourcePaths::getAppDataLocation is correct here, because we
+            // need to look into the installation folder, not the configured appdata
+            // folder.
             QString fullPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, subPath);
 
             if (fullPath.isEmpty()) {
@@ -854,7 +950,7 @@ void installEcmTranslations(KisApplication &app)
             if (translator->load(fullPath)) {
                 dbgLocale << "Loaded ECM translations for" << localeDirName << catalog;
                 translator->setObjectName(QStringLiteral("QTranslator.%1.%2").arg(localeDirName, catalog));
-                app.installTranslator(translator);
+                KisApplication::installTranslator(translator);
             } else {
                 delete translator;
             }

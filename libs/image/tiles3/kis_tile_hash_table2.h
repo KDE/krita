@@ -48,7 +48,7 @@ public:
 
     bool isEmpty()
     {
-        return !m_numTiles.load();
+        return !m_numTiles.loadRelaxed();
     }
 
     bool tileExists(qint32 col, qint32 row);
@@ -101,7 +101,7 @@ public:
 
     qint32 numTiles()
     {
-        return m_numTiles.load();
+        return m_numTiles.loadRelaxed();
     }
 
     void debugPrintInfo();
@@ -329,7 +329,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getT
         /// when invalid tile index is requested, just return a
         /// detached tile with the default data
 
-        /// we pretent as if this tile has already existed, it will
+        /// we pretend as if this tile has already existed, it will
         /// allow the calling code to avoid modifying the extent
         /// manager
         newTile = false;
@@ -408,7 +408,7 @@ typename KisTileHashTableTraits2<T>::TileTypeSP KisTileHashTableTraits2<T>::getR
         /// when invalid tile index is requested, just return a
         /// detached tile with the default data
 
-        /// we pretent as if this tile hasn't existed, it will
+        /// we pretend as if this tile hasn't existed, it will
         /// allow the calling code to avoid modifying the extent
         /// manager (note, that is opposite to what happens in
         /// getTileLazy())
@@ -480,7 +480,7 @@ void KisTileHashTableTraits2<T>::clear()
             iter.next();
         }
 
-        m_numTiles.store(0);
+        m_numTiles.storeRelaxed(0);
     }
 
     // garbage collection must **not** be run with locks held

@@ -255,6 +255,8 @@ KisGaussianKernel::createLoGMatrix(qreal radius, qreal coeff, bool zeroCentered,
     quarterSum *= scale;
 
     //qDebug() << ppVar(positiveSum) << ppVar(sideSum) << ppVar(quarterSum);
+    Q_UNUSED(sideSum);
+    Q_UNUSED(quarterSum);
 
     return matrix;
 }

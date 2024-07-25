@@ -8,8 +8,6 @@
 
 #include "KoZoomTool.h"
 
-#include <QStandardPaths>
-
 #include "KoZoomStrategy.h"
 #include "KoZoomToolWidget.h"
 #include "KoPointerEvent.h"

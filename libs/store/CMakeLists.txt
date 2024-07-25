@@ -8,13 +8,12 @@ set(kritastore_LIB_SRCS
     KoLZF.cpp
     KoStore.cpp
     KoXmlNS.cpp
-    KoXmlReader.cpp
     KoXmlWriter.cpp
     KoQuaZipStore.cpp
     StoreDebug.cpp
 )
 
-add_library(kritastore SHARED ${kritastore_LIB_SRCS})
+kis_add_library(kritastore SHARED ${kritastore_LIB_SRCS})
 generate_export_header(kritastore BASE_NAME kritastore)
 
 target_link_libraries(kritastore 

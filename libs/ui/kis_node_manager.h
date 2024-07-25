@@ -15,7 +15,7 @@
 #include "kis_image.h"
 #include <kritaui_export.h>
 
-class KActionCollection;
+class KisKActionCollection;
 
 class KoCompositeOp;
 class KoColorSpace;
@@ -61,7 +61,7 @@ Q_SIGNALS:
 
 public:
 
-    void setup(KActionCollection * collection, KisActionManager* actionManager);
+    void setup(KisKActionCollection * collection, KisActionManager* actionManager);
     void updateGUI();
 
     /// Convenience function to get the active layer or mask
@@ -200,6 +200,7 @@ public Q_SLOTS:
     void mirrorAllNodesY();
 
     void mirrorNode(KisNodeSP node, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
+    void mirrorNodes(KisNodeList nodes, const KUndo2MagicString& commandName, Qt::Orientation orientation, KisSelectionSP selection);
 
     void activateNextNode(bool siblingsOnly = false);
     void activateNextSiblingNode();

@@ -71,7 +71,7 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     m_iconLabel->setAttribute(Qt::WA_TranslucentBackground);
     {
         int h, s, v;
-        palette().color( QPalette::Normal, QPalette::Foreground ).getHsv( &h, &s, &v );
+        palette().color( QPalette::Normal, QPalette::WindowText ).getHsv( &h, &s, &v );
         const QColor shadowColor = v > 128 ? Qt::black : Qt::white;
         addDropShadow(m_messageLabel, shadowColor);
         addDropShadow(m_iconLabel, shadowColor);
@@ -88,6 +88,7 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
                                             KisFloatingMessage::Priority priority,
                                             int alignment)
 {
+#ifndef Q_OS_HAIKU
     if ((int)priority > (int)m_priority) return;
 
     m_message = message;
@@ -98,6 +99,7 @@ void KisFloatingMessage::tryOverrideMessage(const QString message,
     m_alignment = alignment;
     showMessage();
     update();
+#endif
 }
 
 void KisFloatingMessage::showMessage()

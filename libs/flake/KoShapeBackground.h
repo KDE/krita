@@ -15,7 +15,6 @@ class QSizeF;
 class QPainter;
 class QPainterPath;
 class KoShapeSavingContext;
-class KoShapePaintingContext;
 
 /**
  * This is the base class for shape backgrounds.
@@ -29,7 +28,7 @@ public:
     virtual ~KoShapeBackground();
 
     /// Paints the background using the given fill path
-    virtual void paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const = 0;
+    virtual void paint(QPainter &painter, const QPainterPath &fillPath) const = 0;
 
     /// Returns if the background has some transparency.
     virtual bool hasTransparency() const;

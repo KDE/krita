@@ -35,7 +35,7 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
     KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
     const int center = kernelSize / 2;
 
-    if (type==Prewit) {
+    if (type==Prewitt) {
         for (int x = 0; x < kernelSize; x++) {
             for (int y=0; y<kernelSize; y++) {
                 qreal xDistance;
@@ -94,7 +94,7 @@ Eigen::Matrix<qreal, Eigen::Dynamic, Eigen::Dynamic> KisEdgeDetectionKernel::cre
     KIS_ASSERT_RECOVER_NOOP(kernelSize & 0x1);
     const int center = kernelSize / 2;
 
-    if (type==Prewit) {
+    if (type==Prewitt) {
         for (int y = 0; y < kernelSize; y++) {
             for (int x=0; x<kernelSize; x++) {
                 qreal yDistance;
@@ -221,8 +221,8 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
                                       srcTopLeft,
                                       rect.size(), BORDER_REPEAT);
 
-        KisSequentialIterator yItterator(y_denormalised, rect);
-        KisSequentialIterator xItterator(x_denormalised, rect);
+        KisSequentialIterator yIterator(y_denormalised, rect);
+        KisSequentialIterator xIterator(x_denormalised, rect);
         KisSequentialIterator finalIt(device, rect);
         const int pixelSize = device->colorSpace()->pixelSize();
         const int channels = device->colorSpace()->channelCount();
@@ -233,9 +233,9 @@ void KisEdgeDetectionKernel::applyEdgeDetection(KisPaintDeviceSP device,
         QVector<float> xNormalised(channels);
         QVector<float> finalNorm(channels);
 
-        while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel()) {
-            device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
-            device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
+        while(yIterator.nextPixel() && xIterator.nextPixel() && finalIt.nextPixel()) {
+            device->colorSpace()->normalisedChannelsValue(yIterator.rawData(), yNormalised);
+            device->colorSpace()->normalisedChannelsValue(xIterator.rawData(), xNormalised);
             device->colorSpace()->normalisedChannelsValue(finalIt.rawData(), finalNorm);
 
             if (output == pythagorean) {
@@ -338,6 +338,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
                                                 KoUpdater *progressUpdater,
                                                 boost::optional<bool> useFftw)
 {
+    KIS_ASSERT_RECOVER_RETURN(device->colorSpace()->channelCount() > 3);
+
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
     finalPainter.setChannelFlags(channelFlags);
@@ -376,8 +378,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
                                   srcTopLeft,
                                   rect.size(), BORDER_REPEAT);
 
-    KisSequentialIterator yItterator(y_denormalised, rect);
-    KisSequentialIterator xItterator(x_denormalised, rect);
+    KisSequentialIterator yIterator(y_denormalised, rect);
+    KisSequentialIterator xIterator(x_denormalised, rect);
     KisSequentialIterator finalIt(device, rect);
     const int pixelSize = device->colorSpace()->pixelSize();
     const int channels = device->colorSpace()->channelCount();
@@ -388,9 +390,11 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
     QVector<float> xNormalised(channels);
     QVector<float> finalNorm(channels);
 
-    while(yItterator.nextPixel() && xItterator.nextPixel() && finalIt.nextPixel()) {
-        device->colorSpace()->normalisedChannelsValue(yItterator.rawData(), yNormalised);
-        device->colorSpace()->normalisedChannelsValue(xItterator.rawData(), xNormalised);
+    const QList<KoChannelInfo *> channelInfo = device->colorSpace()->channels();
+
+    while(yIterator.nextPixel() && xIterator.nextPixel() && finalIt.nextPixel()) {
+        device->colorSpace()->normalisedChannelsValue(yIterator.rawData(), yNormalised);
+        device->colorSpace()->normalisedChannelsValue(xIterator.rawData(), xNormalised);
 
         qreal z = 1.0;
         if (channelFlip[2]==true){
@@ -399,8 +403,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
         QVector3D normal = QVector3D((xNormalised[channelToConvert]-0.5)*2, (yNormalised[channelToConvert]-0.5)*2, z);
         normal.normalize();
         finalNorm.fill(1.0);
-        for (int c = 0; c<3; c++) {
-            finalNorm[device->colorSpace()->channels().at(channelOrder[c])->displayPosition()] = (normal[channelOrder[c]]/2)+0.5;
+        for (int c = 0; c < 3; c++) {
+            finalNorm[channelInfo.at(channelOrder[c])->displayPosition()] = (normal[channelOrder[c]]/2)+0.5;
         }
 
         finalNorm[alphaPos]= 1.0;

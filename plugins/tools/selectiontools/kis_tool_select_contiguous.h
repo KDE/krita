@@ -16,6 +16,9 @@
 #include <kis_icon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
+
+class KoGroupButton;
 
 /**
  * The 'magic wand' selection tool -- in fact just
@@ -27,6 +30,12 @@ class KisToolSelectContiguous : public KisToolSelect
     Q_OBJECT
 
 public:
+    enum ContiguousSelectionMode
+    {
+        FloodFill,
+        BoundaryFill
+    };
+
     KisToolSelectContiguous(KoCanvasBase *canvas);
     ~KisToolSelectContiguous() override;
 
@@ -47,23 +56,36 @@ protected:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
-    virtual void slotSetFuzziness(int);
-    virtual void slotSetOpacitySpread(int);
-    virtual void slotSetSizemod(int);
-    virtual void slotSetFeather(int);
-    virtual void slotSetUseSelectionAsBoundary(bool);
-    //virtual bool antiAliasSelection();
+    void deactivate() override;
+
+    void slotSetContiguousSelectionMode(ContiguousSelectionMode);
+    void slotSetContiguousSelectionBoundaryColor(const KoColor&);
+    void slotSetThreshold(int);
+    void slotSetOpacitySpread(int);
+    void slotSetCloseGap(int);
+    void slotSetUseSelectionAsBoundary(bool);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
 
 private:
-    int  m_fuzziness {20};
+    ContiguousSelectionMode m_contiguousSelectionMode {FloodFill};
+    KoColor m_contiguousSelectionBoundaryColor;
+    int m_threshold{8};
     int  m_opacitySpread {100};
-    int  m_sizemod {0};
-    int  m_feather {0};
+    int m_closeGap {0};
     bool m_useSelectionAsBoundary {false};
     KConfigGroup m_configGroup;
+    KisPaintDeviceSP m_referencePaintDevice;
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
+    int m_previousTime;
+
+    KoColor loadContiguousSelectionBoundaryColorFromConfig();
+
+private Q_SLOTS:
+    void slot_optionButtonStripContiguousSelectionMode_buttonToggled(
+        KoGroupButton*, bool
+    );
 };
 
 class KisToolSelectContiguousFactory : public KisSelectionToolFactoryBase

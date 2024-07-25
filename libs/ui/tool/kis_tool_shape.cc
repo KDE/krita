@@ -79,7 +79,8 @@ QWidget * KisToolShape::createOptionWidget()
     m_shapeOptionsWidget->angleSelectorRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
 
     m_shapeOptionsWidget->sldScale->setSuffix("%");
-    m_shapeOptionsWidget->sldScale->setRange(0.0, 500.0, 2);
+    m_shapeOptionsWidget->sldScale->setRange(0.0, 10000.0, 2);
+    m_shapeOptionsWidget->sldScale->setSoftMaximum(500);
     m_shapeOptionsWidget->sldScale->setSingleStep(1.0);
 
     //connect two combo box event. Inherited classes can call the slots to make appropriate changes
@@ -194,25 +195,18 @@ void KisToolShape::addShape(KoShape* shape)
 {
     using namespace KisToolShapeUtils;
 
-    KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
+    KisResourcesSnapshot resources(image(),
+                                   currentNode(),
+                                   canvas()->resourceManager());
     switch(fillStyle()) {
         case FillStyleForegroundColor:
-            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
+            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(resources.currentFgColor().toQColor())));
             break;
         case FillStyleBackgroundColor:
-            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
+            shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(resources.currentBgColor().toQColor())));
             break;
         case FillStylePattern:
-            if (imageCollection) {
-                QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
-                if (currentPattern()) {
-                    fill->setPattern(currentPattern()->pattern());
-                    fill->setTransform(fillTransform());
-                    shape->setBackground(fill);
-                }
-            } else {
-                shape->setBackground(QSharedPointer<KoShapeBackground>(0));
-            }
+            shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
         case FillStyleNone:
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));
@@ -228,8 +222,8 @@ void KisToolShape::addShape(KoShape* shape)
         KoShapeStrokeSP stroke(new KoShapeStroke());
         stroke->setLineWidth(currentStrokeWidth());
         const QColor color = strokeStyle() == KisToolShapeUtils::StrokeStyleForeground ?
-                    canvas()->resourceManager()->foregroundColor().toQColor() :
-                    canvas()->resourceManager()->backgroundColor().toQColor();
+                    resources.currentFgColor().toQColor() :
+                    resources.currentBgColor().toQColor();
         stroke->setColor(color);
         shape->setStroke(stroke);
         break;
@@ -263,7 +257,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
-    QPainterPath mapedOutline = matrix.map(pathShape->outline());
+    QPainterPath mappedOutline = matrix.map(pathShape->outline());
 
     if (node->hasEditablePaintDevice()) {
         KisFigurePaintingToolHelper helper(name,
@@ -273,7 +267,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
                                            strokeStyle(),
                                            fillStyle(),
                                            fillTransform());
-        helper.paintPainterPath(mapedOutline);
+        helper.paintPainterPath(mappedOutline);
     } else if (node->inherits("KisShapeLayer")) {
         pathShape->normalize();
         addShape(pathShape);

@@ -64,7 +64,7 @@ public:
      */
     virtual KisSerializableConfigurationSP createDefault() = 0;
     /**
-     * @return an unserialied version of the configuration
+     * @return an unserialized version of the configuration
      */
     virtual KisSerializableConfigurationSP create(const QDomElement&) = 0;
 };

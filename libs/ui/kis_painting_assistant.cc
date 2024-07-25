@@ -23,6 +23,9 @@
 #include <QPixmapCache>
 #include <QDomElement>
 #include <QDomDocument>
+#include <QPainterPath>
+#include <QDebug>
+#include <memory>
 
 Q_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance)
 
@@ -128,8 +131,16 @@ struct KisPaintingAssistant::Private {
         bool isSnappingActive {true};
         bool outlineVisible {true};
         bool isLocal {false};
+        bool isLocked {false};
+        //The isDuplicating flag only exists to draw the duplicate button depressed when pressed
+        bool isDuplicating {false};
+        bool followBrushPosition {false};
+        bool adjustedPositionValid {false};
+        QPointF adjustedBrushPosition;
 
         KisCanvas2* m_canvas {nullptr};
+
+        QPointF editorWidgetOffset {QPointF(0, 0)};
 
         QPixmapCache::Key cached;
         QRect cachedRect; // relative to boundingRect().topLeft()
@@ -154,6 +165,14 @@ struct KisPaintingAssistant::Private {
     };
 
     QSharedPointer<SharedData> s;
+
+
+    const int previewLineWidth {1};
+    const int mainLineWidth {2}; // for "drawPath" etc.
+    const int errorLineWidth {2};
+
+    int decorationThickness{1};
+
 };
 
 KisPaintingAssistant::Private::Private()
@@ -164,6 +183,16 @@ KisPaintingAssistant::Private::Private()
 KisPaintingAssistant::Private::Private(const Private &rhs)
     : s(rhs.s)
 {
+}
+
+void KisPaintingAssistant::copySharedData(KisPaintingAssistantSP assistant)
+{
+    /*Clones do not get a copy of the shared data, so this function is nessesary to copy
+    the SharedData struct from the old assistant to this one. The function returns a reference to
+    a new SharedData object copied from the original*/
+    this->d->s = (QSharedPointer<KisPaintingAssistant::Private::SharedData>)new KisPaintingAssistant::Private::SharedData;
+    QSharedPointer<KisPaintingAssistant::Private::SharedData> sd = assistant->d->s;
+    *this->d->s = *sd;
 }
 
 KisPaintingAssistantHandleSP KisPaintingAssistant::Private::reuseOrCreateHandle(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap, KisPaintingAssistantHandleSP origHandle, KisPaintingAssistant *q, bool registerAssistant)
@@ -225,8 +254,11 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
     d->s->outlineVisible = true;
 }
 
-KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-    : d(new Private(*(rhs.d)))
+KisPaintingAssistant::KisPaintingAssistant(
+    const KisPaintingAssistant &rhs,
+    QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : m_hasBeenInsideLocalRect(rhs.m_hasBeenInsideLocalRect)
+    , d(new Private(*(rhs.d)))
 {
     dbgUI << "creating handles...";
     Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->handles) {
@@ -258,6 +290,29 @@ void KisPaintingAssistant::setSnappingActive(bool set)
     d->s->isSnappingActive = set;
 }
 
+void KisPaintingAssistant::endStroke()
+{
+    d->s->adjustedPositionValid = false;
+    d->s->followBrushPosition = false;
+    m_hasBeenInsideLocalRect = false;
+}
+
+void KisPaintingAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    d->s->adjustedBrushPosition = position;
+    d->s->adjustedPositionValid = true;
+}
+
+void KisPaintingAssistant::setFollowBrushPosition(bool follow)
+{
+    d->s->followBrushPosition = follow;
+}
+
+QPointF KisPaintingAssistant::getEditorPosition() const
+{
+    return getDefaultEditorPosition() + d->s->editorWidgetOffset;
+}
+
 bool KisPaintingAssistant::canBeLocal() const
 {
     return false;
@@ -273,6 +328,36 @@ void KisPaintingAssistant::setLocal(bool value)
     d->s->isLocal = value;
 }
 
+bool KisPaintingAssistant::isLocked()
+{
+    return d->s->isLocked;
+}
+
+void KisPaintingAssistant::setLocked(bool value)
+{
+    d->s->isLocked = value;
+}
+
+void KisPaintingAssistant::setDuplicating(bool value)
+{
+    d->s->isDuplicating = value;
+}
+
+bool KisPaintingAssistant::isDuplicating()
+{
+    return d->s->isDuplicating;
+}
+
+QPointF KisPaintingAssistant::editorWidgetOffset()
+{
+    return d->s->editorWidgetOffset;
+}
+
+void KisPaintingAssistant::setEditorWidgetOffset(QPointF offset)
+{
+    d->s->editorWidgetOffset = offset;
+}
+
 
 void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path, bool isSnappingOn)
 {
@@ -284,7 +369,7 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
     }
 
     painter.save();
-    QPen pen_a(paintingColor, 2);
+    QPen pen_a(paintingColor, d->mainLineWidth * d->decorationThickness);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
@@ -294,12 +379,30 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
 void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
 {
     painter.save();
-    QPen pen_a(effectiveAssistantColor(), 1);
+    QPen pen_a(effectiveAssistantColor(), d->previewLineWidth);
     pen_a.setStyle(Qt::SolidLine);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
     painter.restore();
+}
+
+void KisPaintingAssistant::drawError(QPainter &painter, const QPainterPath &path)
+{
+    painter.save();
+    QPen pen_a(QColor(255, 0, 0, 125), d->errorLineWidth * d->decorationThickness);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.drawPath(path);
+    painter.restore();
+}
+
+void KisPaintingAssistant::drawX(QPainter &painter, const QPointF &pt)
+{
+    QPainterPath path;
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
+    drawPath(painter, path);
 }
 
 void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles)
@@ -478,6 +581,9 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeAttribute("active", QString::number(d->s->isSnappingActive));
     xml.writeAttribute("useCustomColor", QString::number(d->s->useCustomColor));
     xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(d->s->assistantCustomColor));
+    xml.writeAttribute("locked", QString::number(d->s->isLocked));
+    xml.writeAttribute("editorWidgetOffset_X", QString::number((double)(d->s->editorWidgetOffset.x()), 'f', 3));
+    xml.writeAttribute("editorWidgetOffset_Y", QString::number((double)(d->s->editorWidgetOffset.y()), 'f', 3));
 
 
 
@@ -551,10 +657,19 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                     setUseCustomColor(usingColor);
                 }
 
+                if (xml.attributes().hasAttribute("editorWidgetOffset_X") && xml.attributes().hasAttribute("editorWidgetOffset_Y")) {
+                    setEditorWidgetOffset(QPointF(xml.attributes().value("editorWidgetOffset_X").toDouble(), xml.attributes().value("editorWidgetOffset_Y").toDouble()));
+                }
+
                 if ( xml.attributes().hasAttribute("customColor")) {
                     QStringRef customColor = xml.attributes().value("customColor");
                     setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
+                }
+
+                if ( xml.attributes().hasAttribute("locked")) {
+                    QStringRef locked = xml.attributes().value("locked");
+                    setLocked(locked == "1");
                 }
 
             }
@@ -663,6 +778,18 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         QDomElement assistantElement = doc.createElement("assistant");
         assistantElement.setAttribute("type", "two point");
         assistantElement.setAttribute("filename", QString("two point%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->s->id == "perspective ellipse"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "perspective ellipse");
+        assistantElement.setAttribute("filename", QString("perspective ellipse%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
+    else if (d->s->id == "curvilinear-perspective"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "curvilinear-perspective");
+        assistantElement.setAttribute("filename", QString("curvilinear-perspective%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
 }
@@ -799,13 +926,13 @@ void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
 KisPaintingAssistantHandleSP KisPaintingAssistant::oppHandleOne()
 {
     QPointF intersection(0,0);
-    if((QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(1).data()->toPoint()).intersect(QLineF(d->handles.at(2).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::NoIntersection)
-            && (QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(1).data()->toPoint()).intersect(QLineF(d->handles.at(2).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::UnboundedIntersection))
+    if((QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(1).data()->toPoint()).intersects(QLineF(d->handles.at(2).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::NoIntersection)
+            && (QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(1).data()->toPoint()).intersects(QLineF(d->handles.at(2).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::UnboundedIntersection))
     {
         return d->handles.at(1);
     }
-    else if((QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(2).data()->toPoint()).intersect(QLineF(d->handles.at(1).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::NoIntersection)
-            && (QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(2).data()->toPoint()).intersect(QLineF(d->handles.at(1).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::UnboundedIntersection))
+    else if((QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(2).data()->toPoint()).intersects(QLineF(d->handles.at(1).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::NoIntersection)
+            && (QLineF(d->handles.at(0).data()->toPoint(),d->handles.at(2).data()->toPoint()).intersects(QLineF(d->handles.at(1).data()->toPoint(),d->handles.at(3).data()->toPoint()), &intersection) != QLineF::UnboundedIntersection))
     {
         return d->handles.at(2);
     }
@@ -951,6 +1078,23 @@ QPointF KisPaintingAssistant::pixelToView(const QPoint pixelCoords) const
     return d->s->m_canvas->viewConverter()->documentToView(documentCoord);
 }
 
+QPointF KisPaintingAssistant::effectiveBrushPosition(const KisCoordinatesConverter *converter, KisCanvas2* canvas) const
+{
+    QPointF mousePos;
+
+    if (d->s->followBrushPosition && d->s->adjustedPositionValid) {
+        mousePos = converter->documentToWidget(d->s->adjustedBrushPosition);
+    } else if (canvas) {
+        // FIXME: this may be simple and cheap, but it's only integer precision!
+        mousePos= canvas->canvasWidget()->mapFromGlobal(QCursor::pos());
+    } else {
+        //...of course, you need to have access to a canvas-widget for that.//
+        mousePos = QCursor::pos(); //this'll give an offset//
+        dbgUI << "no canvas given for assistant, you may have passed arguments incorrectly:";
+    }
+    return mousePos;
+}
+
 KisPaintingAssistantHandleSP KisPaintingAssistant::firstLocalHandle() const
 {
     return 0;
@@ -980,6 +1124,11 @@ QRectF KisPaintingAssistant::getLocalRect() const
 double KisPaintingAssistant::norm2(const QPointF& p)
 {
     return p.x() * p.x() + p.y() * p.y();
+}
+
+void KisPaintingAssistant::setDecorationThickness(int thickness)
+{
+    d->decorationThickness = thickness;
 }
 
 QList<KisPaintingAssistantSP> KisPaintingAssistant::cloneAssistantList(const QList<KisPaintingAssistantSP> &list)

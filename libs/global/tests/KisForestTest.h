@@ -37,6 +37,18 @@ private Q_SLOTS:
     void testReversedChildIteration();
 
     void testConversionsFromEnd();
+
+    void testCopyForest();
+
+    void testSiblingsOnEndIterator();
+    void testParentIterator();
+
+    void testConstChildIterators();
+    void testConstHierarchyIterators();
+    void testConstSubtreeIterators();
+    void testConstTailSubtreeIterators();
+    void testConstTailFreeStandingForestFunctions();
+
 };
 
 #endif // KISFORESTTEST_H

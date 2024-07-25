@@ -44,7 +44,7 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 {
     m_widgetLayout = new QBoxLayout(QBoxLayout::TopToBottom, this);
     m_widgetLayout->setSpacing(0);
-    m_widgetLayout->setMargin(0);
+    m_widgetLayout->setContentsMargins(0, 0, 0, 0);
 
     m_gamutMaskToolbar->setContentsMargins(0, 0, 0, 5);
     m_gamutMaskToolbar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -82,7 +82,7 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 
 void KisColorSelectorContainer::unsetCanvas()
 {
-    m_colorSelector->hasAtLeastOneDocument(doesAtleastOneDocumentExist());
+    m_colorSelector->hasAtLeastOneDocument(doesAtLeastOneDocumentExist());
 
     m_colorSelector->unsetCanvas();
     m_myPaintShadeSelector->unsetCanvas();
@@ -90,17 +90,12 @@ void KisColorSelectorContainer::unsetCanvas()
     m_canvas = 0;
 }
 
-bool KisColorSelectorContainer::doesAtleastOneDocumentExist()
+bool KisColorSelectorContainer::doesAtLeastOneDocumentExist()
 {
-    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document() ) {
-        if (m_canvas->viewManager()->document()->image()->height() == 0) {
-            return false;
-        } else {
-           return true;
-        }
-    } else {
-        return false;
-    }
+    return m_canvas &&
+            m_canvas->viewManager() &&
+            m_canvas->viewManager()->document() &&
+            m_canvas->viewManager()->document()->image();
 }
 
 void KisColorSelectorContainer::slotUpdateIcons()
@@ -116,7 +111,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->viewManager()->nodeManager()->disconnect(this);
-        KActionCollection *ac = m_canvas->viewManager()->actionCollection();
+        KisKActionCollection *ac = m_canvas->viewManager()->actionCollection();
         ac->takeAction(ac->action("show_color_selector"));
         ac->takeAction(ac->action("show_mypaint_shade_selector"));
         ac->takeAction(ac->action("show_minimal_shade_selector"));
@@ -129,7 +124,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     m_minimalShadeSelector->setCanvas(canvas);
 
 
-    m_colorSelector->hasAtLeastOneDocument(doesAtleastOneDocumentExist());
+    m_colorSelector->hasAtLeastOneDocument(doesAtLeastOneDocumentExist());
 
 
     if (m_canvas && m_canvas->viewManager()) {
@@ -148,7 +143,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 
         m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
 
-        KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
+        KisKActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
         actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
         actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);

@@ -7,7 +7,7 @@ set(kritagifexport_SOURCES
 
 ki18n_wrap_ui(kritagifexport_SOURCES )
 
-add_library(kritagifexport MODULE ${kritagifexport_SOURCES})
+kis_add_library(kritagifexport MODULE ${kritagifexport_SOURCES})
 
 target_link_libraries(kritagifexport kritaui kritaimpex ${GIF_LIBRARY})
 
@@ -20,9 +20,10 @@ set(kritagifimport_SOURCES
 
 ki18n_wrap_ui(kritagifimport_SOURCES )
 
-add_library(kritagifimport MODULE ${kritagifimport_SOURCES})
+kis_add_library(kritagifimport MODULE ${kritagifimport_SOURCES})
 
 target_link_libraries(kritagifimport kritaui ${GIF_LIBRARY})
 
 install(TARGETS kritagifimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-install( PROGRAMS  krita_gif.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+install(FILES krita_gif.desktop DESTINATION ${KDE_INSTALL_APPDIR})

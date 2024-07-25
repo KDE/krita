@@ -40,7 +40,7 @@
 class KisZoomController : public KoZoomController
 {
 public:
-    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, QObject *parent)
+    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KisKActionCollection *actionCollection, QObject *parent)
         : KoZoomController(co, zh, actionCollection, parent),
           m_converter(zh)
     {
@@ -92,13 +92,14 @@ void KisZoomManager::updateScreenResolution(QWidget *parentWidget)
 
     KisCoordinatesConverter *converter =
         dynamic_cast<KisCoordinatesConverter*>(m_zoomHandler);
+    KIS_ASSERT_RECOVER_RETURN(converter);
 
     converter->setDevicePixelRatio(m_devicePixelRatio);
 
     changeCanvasMappingMode(m_canvasMappingMode);
 }
 
-void KisZoomManager::setup(KActionCollection * actionCollection)
+void KisZoomManager::setup(KisKActionCollection * actionCollection)
 {
 
     KisImageWSP image = m_view->image();
@@ -126,7 +127,7 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     // Put the canvascontroller in a layout so it resizes with us
     QGridLayout * layout = new QGridLayout(m_view);
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     m_view->document()->setUnit(KoUnit(KoUnit::Pixel));
 
@@ -332,9 +333,7 @@ void KisZoomManager::setMinMaxZoom()
     qreal minDimension = qMin(imageSize.width(), imageSize.height());
     qreal minZoom = qMin(100.0 / minDimension, 0.1);
 
-    m_zoomAction->setMinimumZoom(minZoom);
-    m_zoomAction->setMaximumZoom(90.0);
-
+    m_zoomAction->setMinMaxZoom(minZoom, 90.0);
 }
 
 void KisZoomManager::updateGuiAfterDocumentSize()
@@ -387,6 +386,8 @@ void KisZoomManager::changeCanvasMappingMode(bool canvasMappingMode)
     m_canvasMappingMode = canvasMappingMode;
     m_zoomController->setZoom(newMode, newZoom, resolutionX(), resolutionY());
     m_view->canvasBase()->notifyZoomChanged();
+
+    m_view->viewManager()->updatePrintSizeAction(canvasMappingMode);
 }
 
 void KisZoomManager::pageOffsetChanged()
@@ -401,6 +402,23 @@ void KisZoomManager::pageOffsetChanged()
 void KisZoomManager::zoomTo100()
 {
     m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+
+void KisZoomManager::slotZoomToFit()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_PAGE, 0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+
+void KisZoomManager::slotZoomToFitWidth()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_WIDTH, 0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+void KisZoomManager::slotZoomToFitHeight()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_HEIGHT, 0);
     m_view->canvasBase()->notifyZoomChanged();
 }
 

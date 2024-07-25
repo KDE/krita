@@ -308,7 +308,7 @@ class comicsExporter():
                         else:
                             cropy = self.configDictionary["cropTop"]
                             croph = page.height() - self.configDictionary["cropBottom"] - cropy
-                        projection.crop(cropx, cropy, cropw, croph)
+                        projection.crop(int(cropx), int(cropy), int(cropw), int(croph))
                         projection.waitForDone()
                         qApp.processEvents()
                         # resize appropriately
@@ -408,7 +408,7 @@ class comicsExporter():
     """
 
     def getPanelsAndTextVector(self, group, list, textOnly=False):
-        for shape in group.shapes():
+        for shape in group.children():
             if (shape.type() == "groupshape"):
                 self.getPanelsAndTextVector(shape, list, textOnly)
             else:
@@ -418,6 +418,9 @@ class comicsExporter():
     """
 
     def handleShapeDescription(self, shape, list, textOnly=False):
+        return
+        # Turn off shape retrieval for now until the new text tool is finished.
+        """
         if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
             return
         shapeDesc = {}
@@ -587,6 +590,7 @@ class comicsExporter():
         if (shape.type() == "KoSvgTextShapeID" and textOnly is True):
             shapeDesc["text"] = shape.toSvg()
         list.append(shapeDesc)
+        """
 
     """
     Function to remove layers when they have the given labels.

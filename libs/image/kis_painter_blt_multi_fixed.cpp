@@ -59,7 +59,7 @@ void KisPainter::Private::applyDevice(const QRect &applyRect,
             localParamInfo.srcRowStride  = dabRowStride;
             localParamInfo.setOpacityAndAverage(dab.opacity, dab.averageOpacity);
             localParamInfo.flow = dab.flow;
-            colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
+            colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp(srcColorSpace), renderingIntent, conversionFlags);
 
             dstX += columns;
             columnsRemaining -= columns;
@@ -123,7 +123,7 @@ void KisPainter::Private::applyDeviceWithSelection(const QRect &applyRect,
             localParamInfo.srcRowStride  = dabRowStride;
             localParamInfo.setOpacityAndAverage(dab.opacity, dab.averageOpacity);
             localParamInfo.flow = dab.flow;
-            colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp, renderingIntent, conversionFlags);
+            colorSpace->bitBlt(srcColorSpace, localParamInfo, compositeOp(srcColorSpace), renderingIntent, conversionFlags);
 
             dstX += columns;
             columnsRemaining -= columns;

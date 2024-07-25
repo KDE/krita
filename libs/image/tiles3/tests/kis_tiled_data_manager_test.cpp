@@ -7,6 +7,8 @@
 #include "kis_tiled_data_manager_test.h"
 #include <simpletest.h>
 
+#include <QRandomGenerator>
+
 #include "tiles3/kis_tiled_data_manager.h"
 
 #include "tiles_test_utils.h"
@@ -417,7 +419,7 @@ void KisTiledDataManagerTest::testPurgeHistory()
     dm.purgeHistory(memento1);
 
     /**
-     * Nothing nas changed in the visible state of the data manager
+     * Nothing has changed in the visible state of the data manager
      */
 
     tile00 = dm.getTile(0, 0, false);
@@ -675,9 +677,9 @@ public:
     }
 
     void run() override {
-        qsrand(QTime::currentTime().msec());
+        QRandomGenerator rng(QTime::currentTime().msec());
         for(qint32 i = 0; i < NUM_CYCLES; i++) {
-            qint32 type = qrand() % NUM_TYPES;
+            qint32 type = rng.bounded(NUM_TYPES);
 
             qint32 t;
 
@@ -983,7 +985,7 @@ void KisTiledDataManagerTest::stressTestExtentsColumn()
     QVERIFY(column.max() < column.min()); // really empty :)
 }
 
-void KisTiledDataManagerTest::benchmaskQRegion()
+void KisTiledDataManagerTest::benchmarkQRegion()
 {
     QVector<QRect> rects;
 
@@ -1013,7 +1015,7 @@ void KisTiledDataManagerTest::benchmaskQRegion()
 }
 
 #include "KisRegion.h"
-void KisTiledDataManagerTest::benchmaskKisRegion()
+void KisTiledDataManagerTest::benchmarkKisRegion()
 {
     QVector<QRect> rects;
 
@@ -1048,7 +1050,7 @@ inline bool findPoint (const QPoint &pt, const QVector<QRect> &rects)
     return false;
 }
 
-void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
+void KisTiledDataManagerTest::benchmarkOverlappedKisRegion()
 {
     QVector<QRect> rects;
 
@@ -1081,7 +1083,7 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
     KisRegion::approximateOverlappingRects(rects, 64);
 
     qDebug() << "deoverlapped rects:" << ppVar(originalSize) << "-->" << ppVar(rects.size());
-    qDebug() << "deoverlaping time:" << timer.restart() << "ms";
+    qDebug() << "deoverlapping time:" << timer.restart() << "ms";
 
     KisRegion region(rects);
 
@@ -1099,7 +1101,7 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
     /// very slow sanity check for invariant: "all source rects are
     /// represented in the deoverlapped set of rects"
 
-    QVector<QRect> comressedRects = region.rects();
+    QVector<QRect> compressedRects = region.rects();
     int i = 0;
     Q_FOREACH(const QRect &rc, originalRects) {
         if (i % 1000 == 0) {
@@ -1108,7 +1110,7 @@ void KisTiledDataManagerTest::benchmaskOverlappedKisRegion()
 
         for (int y = rc.y(); y <= rc.bottom(); ++y) {
             for (int x = rc.x(); x <= rc.right(); ++x) {
-                QVERIFY(findPoint(QPoint(x, y), comressedRects));
+                QVERIFY(findPoint(QPoint(x, y), compressedRects));
             }
         }
         i++;

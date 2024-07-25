@@ -57,6 +57,7 @@
 #include <QPointer>
 #include <QAction>
 #include <QKeyEvent>
+#include <QTimer>
 #include <KisSignalMapper.h>
 #include <KoResourcePaths.h>
 
@@ -823,9 +824,10 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 
         m_decorator->setSelection(selection);
         m_decorator->setHandleRadius(handleRadius());
-        m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-        m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
-        m_decorator->setShowFillMeshGradientHandles(hasInteractioFactory(EditFillMeshGradientFactoryId));
+        m_decorator->setDecorationThickness(decorationThickness());
+        m_decorator->setShowFillGradientHandles(hasInteractionFactory(EditFillGradientFactoryId));
+        m_decorator->setShowStrokeFillGradientHandles(hasInteractionFactory(EditStrokeGradientFactoryId));
+        m_decorator->setShowFillMeshGradientHandles(hasInteractionFactory(EditFillMeshGradientFactoryId));
         m_decorator->setCurrentMeshGradientHandles(m_selectedMeshHandle, m_hoveredMeshHandle);
         m_decorator->paint(painter, converter);
     }
@@ -985,14 +987,6 @@ void DefaultTool::keyPressEvent(QKeyEvent *event)
                 event->accept();
             }
             break;
-        case Qt::Key_1:
-        case Qt::Key_2:
-        case Qt::Key_3:
-        case Qt::Key_4:
-        case Qt::Key_5:
-            canvas()->resourceManager()->setResource(HotPosition, event->key() - Qt::Key_1);
-            event->accept();
-            break;
         default:
             return;
         }
@@ -1047,6 +1041,27 @@ bool DefaultTool::paste()
 {
     // we no longer have to do anything as tool Proxy will do it for us
     return false;
+}
+
+bool DefaultTool::selectAll()
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->selectedShapesProxy());
+    Q_FOREACH(KoShape *shape, canvas()->shapeManager()->shapes()) {
+        if (!shape->isSelectable()) continue;
+        canvas()->selectedShapesProxy()->selection()->select(shape);
+    }
+    repaintDecorations();
+
+    return true;
+}
+
+void DefaultTool::deselect()
+{
+    Q_ASSERT(canvas());
+    Q_ASSERT(canvas()->selectedShapesProxy());
+    canvas()->selectedShapesProxy()->selection()->deselectAll();
+    repaintDecorations();
 }
 
 KoSelection *DefaultTool::koSelection() const
@@ -1859,6 +1874,7 @@ QMenu* DefaultTool::popupActionsMenu()
         m_contextMenu->addAction(action("edit_cut"));
         m_contextMenu->addAction(action("edit_copy"));
         m_contextMenu->addAction(action("edit_paste"));
+        m_contextMenu->addAction(action("paste_at"));
 
         m_contextMenu->addSeparator();
 
@@ -1893,5 +1909,8 @@ void DefaultTool::addTransformActions(QMenu *menu) const {
 void DefaultTool::explicitUserStrokeEndRequest()
 {
     QList<KoShape *> shapes = koSelection()->selectedEditableShapesAndDelegates();
-    KoToolManager::instance()->switchToolRequested(KoToolManager::instance()->preferredToolForSelection(shapes));
+    QString tool = KoToolManager::instance()->preferredToolForSelection(shapes);
+    QTimer::singleShot(0, [tool = std::move(tool)]() {
+        KoToolManager::instance()->switchToolRequested(tool);
+    });
 }

@@ -7,7 +7,7 @@ set(kritaqimageioexport_SOURCES
 ki18n_wrap_ui(kritaqimageioexport_SOURCES kis_wdg_options_qimageio.ui)
 ki18n_wrap_ui(kritaqimageioexport_SOURCES )
 
-add_library(kritaqimageioexport MODULE ${kritaqimageioexport_SOURCES})
+kis_add_library(kritaqimageioexport MODULE ${kritaqimageioexport_SOURCES})
 
 target_link_libraries(kritaqimageioexport kritaui kritaimpex)
 
@@ -18,10 +18,10 @@ set(kritaqimageioimport_SOURCES
     )
 
 
-add_library(kritaqimageioimport MODULE ${kritaqimageioimport_SOURCES})
+kis_add_library(kritaqimageioimport MODULE ${kritaqimageioimport_SOURCES})
 
 target_link_libraries(kritaqimageioimport kritaui)
 
 install(TARGETS kritaqimageioimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_qimageio.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+install(FILES krita_qimageio.desktop DESTINATION ${KDE_INSTALL_APPDIR})

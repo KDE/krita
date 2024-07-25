@@ -46,7 +46,7 @@ public:
 
     void updateScreenResolution(QWidget *parentWidget);
 
-    void setup(KActionCollection * actionCollection);
+    void setup(KisKActionCollection * actionCollection);
     void updateGuiAfterDocumentSize();
     KoZoomController * zoomController() const {
         return m_zoomController;
@@ -78,6 +78,9 @@ public Q_SLOTS:
     void changeCanvasMappingMode(bool canvasMappingMode);
     void pageOffsetChanged();
     void zoomTo100();
+    void slotZoomToFit();
+    void slotZoomToFitWidth();
+    void slotZoomToFitHeight();
     void slotToggleZoomToFit();
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();

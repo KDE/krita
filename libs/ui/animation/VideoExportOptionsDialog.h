@@ -24,31 +24,34 @@ class KisVideoExportOptionsDialog : public KisConfigWidget
 
 public:
     enum ContainerType {
-        DEFAULT,
-        OGV,
+        DEFAULT = 0,
+        MP4 = 0,
+        MKV,
         WEBM,
         GIF,
         APNG,
-        WEBP
+        WEBP,
+        OGV,
+        NUM_CONTAINER_TYPE
     };
 
     enum CodecPageIndex {
-        CODEC_H264 = 0,
+        CODEC_OPENH264,
+        CODEC_H264,
         CODEC_H265,
         CODEC_THEORA,
         CODEC_VP9,
         CODEC_GIF,
         CODEC_APNG,
         CODEC_WEBP
-        
     };
 
 public:
-    explicit KisVideoExportOptionsDialog(ContainerType containerType, QWidget *parent = 0);
+    explicit KisVideoExportOptionsDialog(ContainerType containerType, const QStringList& validEncoders, QWidget *parent = 0);
     ~KisVideoExportOptionsDialog() override;
 
     void setSupportsHDR(bool value);
-
+    
     QStringList customUserOptions() const;
     QString customUserOptionsString() const;
     bool videoConfiguredForHDR() const;
@@ -58,6 +61,7 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
     static ContainerType mimeToContainer(const QString & mimeType);
+    static QVector<KoID> encoderIdentifiers(ContainerType type);
 
 private Q_SLOTS:
     void slotCustomLineToggled(bool value);

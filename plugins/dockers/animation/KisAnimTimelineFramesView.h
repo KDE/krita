@@ -54,7 +54,7 @@ public Q_SLOTS:
 
     void slotSetStartTimeToCurrentPosition();
     void slotSetEndTimeToCurrentPosition();
-    void slotUpdatePlackbackRange();
+    void slotUpdatePlaybackRange();
     void slotUpdateInfiniteFramesCount();
 
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
@@ -119,7 +119,6 @@ public Q_SLOTS:
     void slotSelectAudioChannelFile();
     void slotAudioChannelMute(bool value);
     void slotAudioChannelRemove();
-    void slotUpdateAudioActions();
     void slotAudioVolumeChanged(int value);
 
     // Zoom & Scroll
@@ -158,7 +157,7 @@ private:
     void setFramesPerSecond(int fps);
 
     QModelIndexList calculateSelectionSpan(bool entireColumn, bool editableOnly = true) const;
-    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows) const;
+    void calculateSelectionMetrics(int &minColumn, int &maxColumn, QSet<int> &rows, bool ignoreEditability) const;
 
     /**   Insert new keyframes/columns.
      *

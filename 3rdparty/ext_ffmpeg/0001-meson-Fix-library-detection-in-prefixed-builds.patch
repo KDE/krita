@@ -1,0 +1,25 @@
+From 6df3e16836d91d2befaf4a6405038b6a17f78b9e Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 24 Nov 2022 12:47:22 -0300
+Subject: [PATCH] meson: Fix library detection in prefixed builds
+
+---
+ meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/meson.build b/meson.build
+index f812bb1f70..71c2ce7034 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1643,7 +1643,7 @@ foreach check : all_checks
+           else
+             req = false
+           endif
+-          dep = cc.find_library(link_with, required : req)
++          dep = cc.find_library(link_with, required : req, dirs: [join_paths(get_option('prefix'), get_option('libdir'))])
+           found = found and dep.found()
+           extra_deps += dep
+         endforeach
+-- 
+2.37.1.windows.1
+

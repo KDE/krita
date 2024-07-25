@@ -6,6 +6,7 @@
 
 #include "kis_iterator_test.h"
 #include <QApplication>
+#include <QRandomGenerator>
 
 #include <simpletest.h>
 #include <KoColorSpace.h>
@@ -20,13 +21,13 @@
 #include "kis_paint_device.h"
 #include <kis_repeat_iterators_pixel.h>
 
-#include "sdk/tests/testimage.h"
+#include <testimage.h>
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
-    QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
+    QList<const KoColorSpace*> colorspaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 
-    Q_FOREACH (const KoColorSpace* cs, colorsapces) {
+    Q_FOREACH (const KoColorSpace* cs, colorspaces) {
 
         dbgKrita << "Testing with" << cs->id();
 
@@ -425,8 +426,8 @@ public:
 
     void run() override {
         for(int i = 0; i < NUM_CYCLES; i++) {
-            m_device->setX(-0x400 + (qrand() & 0x7FF));
-            m_device->setY(-0x400 + (qrand() & 0x7FF));
+            m_device->setX(QRandomGenerator::global()->bounded(-0x400, 0x800));
+            m_device->setY(QRandomGenerator::global()->bounded(-0x400, 0x800));
             QTest::qSleep(10);
         }
     }

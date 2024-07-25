@@ -5,7 +5,7 @@ set(kritaqmlexport_SOURCES
     qml_export.cc
     )
 
-add_library(kritaqmlexport MODULE ${kritaqmlexport_SOURCES})
+kis_add_library(kritaqmlexport MODULE ${kritaqmlexport_SOURCES})
 
 target_link_libraries(kritaqmlexport kritaui kritaimpex)
 

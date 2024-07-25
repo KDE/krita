@@ -7,7 +7,6 @@
 #include "KoPathShapeFactory.h"
 #include "KoPathShape.h"
 #include "KoShapeStroke.h"
-#include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoShapeLoadingContext.h"
@@ -16,7 +15,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include "kis_pointer_utils.h"
@@ -62,14 +60,6 @@ bool KoPathShapeFactory::supports(const QDomElement & e, KoShapeLoadingContext &
 
 void KoPathShapeFactory::newDocumentResourceManager(KoDocumentResourceManager *manager) const
 {
-    // as we need an image collection for the pattern background
-    // we want to make sure that there is always an image collection
-    // added to the data center map, in case the picture shape plugin
-    // is not loaded
-    if (manager->imageCollection() == 0) {
-        KoImageCollection *imgCol = new KoImageCollection(manager);
-        manager->setImageCollection(imgCol);
-    }
     // we also need a MarkerCollection so add if it is not there yet
     if (!manager->hasResource(KoDocumentResourceManager::MarkerCollection)) {
         KoMarkerCollection *markerCollection = new KoMarkerCollection(manager);

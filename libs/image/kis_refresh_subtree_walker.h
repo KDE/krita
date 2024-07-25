@@ -17,7 +17,8 @@ public:
     enum Flag {
         None = 0x0,
         SkipNonRenderableNodes = 0x1,
-        NoFilthyMode = 0x2
+        NoFilthyMode = 0x2,
+        DontAdjustChangeRect = 0x4
     };
 
     Q_DECLARE_FLAGS(Flags, Flag);
@@ -86,7 +87,9 @@ protected:
     }
 
     void startTrip(KisProjectionLeafSP startWith) override {
-        setExplicitChangeRect(requestedRect(), false);
+        if (!m_flags.testFlag(DontAdjustChangeRect)) {
+            setExplicitChangeRect(requestedRect(), false);
+        }
 
         if (isStartLeaf(startWith)) {
             KisProjectionLeafSP extraUpdateLeaf = startWith;

@@ -93,6 +93,8 @@ public:
     QString info() const override;
     QByteArray getProfileUniqueId() const override;
 
+    bool compareTRC(TransferCharacteristics characteristics, float error) const override;
+
     static cmsToneCurve* transferFunction(TransferCharacteristics transferFunction);
 
 protected:
@@ -105,5 +107,5 @@ private:
     Private *const d;
 };
 
-#endif // KOCOLORPROFILE_H
+#endif // _KO_LCMS_COLORPROFILE_H
 

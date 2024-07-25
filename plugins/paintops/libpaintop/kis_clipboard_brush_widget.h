@@ -49,7 +49,7 @@ private Q_SLOTS:
     void slotClipboardContentChanged();
 
 protected:
-    void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *) override;
 
 Q_SIGNALS:
     void sigNewPredefinedBrush(KoResourceSP );

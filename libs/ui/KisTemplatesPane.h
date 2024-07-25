@@ -1,8 +1,7 @@
-/* This file is part of the KDE project
-   SPDX-FileCopyrightText: 2005-2006 Peter Simonsson <psn@linux.se>
-
-   SPDX-License-Identifier: LGPL-2.0-or-later
-*/
+/*
+ * SPDX-FileCopyrightText: 2005-2006 Peter Simonsson <psn@linux.se>
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
 
 #ifndef KIS_TEMPLATES_PANE_H
 #define KIS_TEMPLATES_PANE_H
@@ -16,7 +15,6 @@ class KisTemplatesPanePrivate;
 
 /**
  * This widget is the right-side part of the template opening widget.
- * The parent widget is initial widget in the document space of each Calligra component.
  * This widget shows a list of templates and can show their details or open it.
  */
 class KisTemplatesPane : public KisDetailsPane

@@ -30,6 +30,13 @@ public:
      */
     QList<KisNodeSP> pendingNodeSet;
     QMutex pendingNodeSetLock;
+
+    /**
+     * The node activation signal may be emitted while the facade was
+     * not connected to anything. In such case we need to save the last-
+     * emitted value for cold-initialization on the connection.
+     */
+    KisNodeWSP lastActivatedNode;
 };
 
 
@@ -50,27 +57,31 @@ KisDummiesFacadeBase::~KisDummiesFacadeBase()
 
 void KisDummiesFacadeBase::setImage(KisImageWSP image)
 {
+    setImage(image, nullptr);
+}
+
+void KisDummiesFacadeBase::setImage(KisImageWSP image, KisNodeSP activeNode)
+{
     if (m_d->image) {
         emit sigActivateNode(0);
+        m_d->lastActivatedNode = 0;
         m_d->image->disconnect(this);
         m_d->image->disconnect(&m_d->nodeChangedConnection);
         m_d->image->disconnect(&m_d->activateNodeConnection);
 
-        if (rootDummy()) {
-            KisNodeList nodesToRemove;
+        KisNodeList nodesToRemove;
 
-            {
-                QMutexLocker l(&m_d->pendingNodeSetLock);
-                std::swap(nodesToRemove, m_d->pendingNodeSet);
-                m_d->pendingNodeSet.clear();
-            }
+        {
+            QMutexLocker l(&m_d->pendingNodeSetLock);
+            std::swap(nodesToRemove, m_d->pendingNodeSet);
+            m_d->pendingNodeSet.clear();
+        }
 
-            for (auto it = std::make_reverse_iterator(nodesToRemove.end());
-                 it != std::make_reverse_iterator(nodesToRemove.begin());
-                 ++it) {
+        for (auto it = std::make_reverse_iterator(nodesToRemove.end());
+             it != std::make_reverse_iterator(nodesToRemove.begin());
+             ++it) {
 
-                m_d->removeNodeConnection.start(*it);
-            }
+            m_d->removeNodeConnection.start(*it);
         }
     }
 
@@ -89,8 +100,17 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->nodeChangedConnection.connectInputSignal(image, &KisImage::sigNodeChanged);
         m_d->activateNodeConnection.connectInputSignal(image, &KisImage::sigNodeAddedAsync);
 
-        m_d->activateNodeConnection.start(findFirstLayer(image->root()));
+        if (!activeNode) {
+            activeNode = findFirstLayer(image->root());
+        }
+
+        m_d->activateNodeConnection.start(activeNode);
     }
+}
+
+KisNodeSP KisDummiesFacadeBase::lastActivatedNode() const
+{
+    return m_d->lastActivatedNode;
 }
 
 KisImageWSP KisDummiesFacadeBase::image() const
@@ -136,6 +156,7 @@ void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
         !node->inherits("KisDecorationsWrapperLayer")) {
 
         emit sigActivateNode(node);
+        m_d->lastActivatedNode = node;
     }
 }
 

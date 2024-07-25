@@ -7,13 +7,14 @@
 #include "KisDocumentReplaceTest.h"
 
 #include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_types.h>
 #include <KisPart.h>
-#include <kis_layer_utils.h>
-#include <kis_group_layer.h>
-#include <sdk/tests/testui.h>
 #include <QScopedPointer>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_layer_utils.h>
+#include <kis_types.h>
+#include <testui.h>
+
 
 void KisDocumentReplaceTest::init()
 {

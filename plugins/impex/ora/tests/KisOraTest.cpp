@@ -23,19 +23,19 @@ const QString OraMimetype = "image/openraster";
 
 void KisOraTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), OraMimetype);
+    TestUtil::testImportFromWriteonly(OraMimetype);
 }
 
 
 void KisOraTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), OraMimetype);
+    TestUtil::testExportToReadonly(OraMimetype);
 }
 
 
 void KisOraTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), OraMimetype);
+    TestUtil::testImportIncorrectFormat(OraMimetype);
 }
 
 

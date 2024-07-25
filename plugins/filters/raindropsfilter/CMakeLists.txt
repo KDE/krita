@@ -1,4 +1,4 @@
 set(kritaraindropsfilter_SOURCES kis_raindrops_filter_plugin.cpp kis_raindrops_filter.cpp )
-add_library(kritaraindropsfilter MODULE ${kritaraindropsfilter_SOURCES})
+kis_add_library(kritaraindropsfilter MODULE ${kritaraindropsfilter_SOURCES})
 target_link_libraries(kritaraindropsfilter kritaui)
 install(TARGETS kritaraindropsfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

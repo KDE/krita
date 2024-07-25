@@ -1,17 +1,17 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.4.2'
     }
 }
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 apply plugin: 'com.android.application'
@@ -22,9 +22,19 @@ dependencies {
 
 ext {
     abi = System.getenv('ANDROID_ABI') ?: project.ext.properties['abi']
-    ndkpath = System.getenv('ANDROID_NDK_HOME') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
-    installPrefix = '../krita-android-build'
-    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? '../i/src/android/java' : ""
+    ndkpath = System.getenv('KDECI_ANDROID_NDK_ROOT') ?: project.ext.properties['ndk.dir']  // TODO: Newer versions of Qt do support this dir
+    installPrefix = System.getenv('KRITA_INSTALL_PREFIX')
+
+    // Note about qtResPath vs qt5AndroidDir:
+    //
+    // qt5AndroidDir is set up by androiddeployqt and points to exact files
+    // in _install directory, which is not available on the builder that builds
+    // AppBundle packages, so we should access these files from a manually copied
+    // location.
+    //
+    // tldr; at one time, either qt5AndroidDir or qtResPath is valid and points
+    //       to the same files
+    qtResPath = System.getenv('KRITA_BUILD_APPBUNDLE') ? 'extra-bundle-deps/android/java' : ""
 }
 
 task configure() {
@@ -36,7 +46,7 @@ task configure() {
 
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
-            throw new GradleException('Krita libraries not found, please check if -p=krita-bin finished without errors')
+            throw new FileNotFoundException('Krita libraries not found, please check if -p=krita-bin finished without errors')
         }
     }
 }
@@ -59,6 +69,26 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
+// copy MLT plugins and rename
+// them to start with `lib_`
+task copyMltPlugins(type: Copy) {
+    from "$installPrefix/lib/mlt-7"
+    into "libs/$abi"
+    rename ('^libmlt(.*).so$', 'lib_mltplugin_$1.so')
+}
+
+task copyFonts(type: Copy) {
+    from "$installPrefix/etc"
+    into 'assets/etc/'
+    include '**'
+}
+
+task copySDLJar(type: Copy) {
+    from "$installPrefix/jar"
+    into 'libs/'
+    include 'SDL2Android.jar'
+}
+
 /*
  * androiddeployqt doesn't fully copy the directories. Hidden directories
  * to be specific. That's why we copy manually and then delete the partial
@@ -67,6 +97,19 @@ task copyLibs(type: Copy) {
 task copyAssets(type: Copy) {
     from "$installPrefix/share/"
     into 'assets/'
+    include '**'
+}
+
+task copyLocaleFiles(type: Copy) {
+    from "$installPrefix/share/locale"
+    from "$installPrefix/translations"
+    into 'assets/locale/'
+    include '**'
+}
+
+task copyExtraMltFiles(type: Copy) {
+    from "$installPrefix/share/mlt-7"
+    into 'assets/mlt-7'
     include '**'
 }
 
@@ -86,6 +129,12 @@ android {
     compileSdkVersion androidCompileSdkVersion.toInteger()
 
     ndkPath ndkpath
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging = true
+        }
+    }
 
     sourceSets {
         main {
@@ -144,22 +193,29 @@ android {
     def versionRelease  = 0
 
     defaultConfig {
-        targetSdkVersion 30
+        targetSdkVersion 33
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.1.0-prealpha"
-        archivesBaseName = "krita-$abi-$versionName"
+        versionName "5.3.0-prealpha"
+        def unstableSuffix = System.getenv('KRITA_UNSTABLE_PACKAGE_SUFFIX')
+        archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName$unstableSuffix" : "krita-$abi-$versionName$unstableSuffix"
     }
 
     preBuild.dependsOn(configure)
     configure.onlyIf { isPackagingAPK() }
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
+    configure.finalizedBy(copyMltPlugins)
+    configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
+    configure.finalizedBy(copyLocaleFiles)
+    configure.finalizedBy(copySDLJar)
+    configure.finalizedBy(copyExtraMltFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:3.0.3'
+    implementation 'com.android.billingclient:billing:5.0.0'
+    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation files("libs/SDL2Android.jar")
 }
-

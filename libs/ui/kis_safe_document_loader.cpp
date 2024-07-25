@@ -8,6 +8,7 @@
 
 #include <QTimer>
 #include <QFileSystemWatcher>
+#include <QRandomGenerator>
 #include <QApplication>
 #include <QFileInfo>
 #include <QDir>
@@ -298,7 +299,7 @@ void KisSafeDocumentLoader::fileChangedCompressed(bool sync)
             QDir::tempPath() + '/' +
             QString("krita_file_layer_copy_%1_%2.%3")
             .arg(QApplication::applicationPid())
-            .arg(qrand())
+            .arg(QRandomGenerator::global()->generate())
             .arg(initialFileInfo.suffix());
 
     QFile::copy(m_d->path, m_d->temporaryPath);
@@ -336,6 +337,12 @@ void KisSafeDocumentLoader::delayedLoadStart()
                     mergedImage.loadFromData(bytes);
                     Q_ASSERT(!mergedImage.isNull());
                     KisImageSP image = new KisImage(0, mergedImage.width(), mergedImage.height(), KoColorSpaceRegistry::instance()->rgb8(), "");
+
+                    constexpr double DOTS_PER_METER_TO_DOTS_PER_INCH = 0.00035285815102328864;
+                    double xres = mergedImage.dotsPerMeterX()  * DOTS_PER_METER_TO_DOTS_PER_INCH;
+                    double yres = mergedImage.dotsPerMeterY() * DOTS_PER_METER_TO_DOTS_PER_INCH;
+
+                    image->setResolution(xres, yres);
                     KisPaintLayerSP layer = new KisPaintLayer(image, "", OPACITY_OPAQUE_U8);
                     layer->paintDevice()->convertFromQImage(mergedImage, 0);
                     image->addNode(layer, image->rootLayer());

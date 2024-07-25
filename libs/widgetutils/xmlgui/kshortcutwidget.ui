@@ -4,8 +4,8 @@
     SPDX-FileCopyrightText: none
     SPDX-License-Identifier: GPL-3.0-or-later
   </author>
- <class>KShortcutWidget</class>
- <widget class="QWidget" name="KShortcutWidget">
+ <class>KisKShortcutWidget</class>
+ <widget class="QWidget" name="KisKShortcutWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,7 +29,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KKeySequenceWidget" name="priEditor" native="1">
+    <widget class="KisKKeySequenceWidget" name="priEditor" native="1">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -59,7 +59,7 @@
     </widget>
    </item>
    <item>
-    <widget class="KKeySequenceWidget" name="altEditor" native="1">
+    <widget class="KisKKeySequenceWidget" name="altEditor" native="1">
      <property name="minimumSize">
       <size>
        <width>0</width>
@@ -72,7 +72,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KKeySequenceWidget</class>
+   <class>KisKKeySequenceWidget</class>
    <extends>QWidget</extends>
    <header>kkeysequencewidget.h</header>
   </customwidget>

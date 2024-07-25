@@ -59,6 +59,8 @@ public:
     // which now is used to start the path tool.
     void beginPrimaryDoubleClickAction(KoPointerEvent* event) override;
 
+    KisPopupWidgetInterface* popupWidget() override;
+    
 protected:
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;
@@ -74,6 +76,9 @@ Q_SIGNALS:
 
 private:
     bool m_hasUserInteractionRunning {false};
+
+protected Q_SLOTS:
+    void resetCursorStyle() override;
 };
 
 #endif

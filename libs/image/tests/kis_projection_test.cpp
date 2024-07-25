@@ -39,7 +39,8 @@ void KisProjectionTest::testDirty()
     KisSequentialConstIterator it(image->projection(), QRect(0, 0, 1000, 1000));
     while (it.nextPixel()) {
         QColor c;
-        image->colorSpace()->toQColor(it.oldRawData(), &c, image->profile());
+        image->colorSpace()->toQColor(it.oldRawData(), &c);
+        qDebug() << c;
         QVERIFY(c == Qt::red);
     }
 }

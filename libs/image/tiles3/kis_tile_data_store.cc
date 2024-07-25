@@ -98,7 +98,7 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 
     stats.totalMemorySize = memoryMetric() * metricCoeff + stats.poolSize;
 
-    stats.swapSize = m_swappedStore.totalMemoryMetric() * metricCoeff;
+    stats.swapSize = m_swappedStore.totalSwapMemoryUsed();
 
     return stats;
 }
@@ -123,6 +123,7 @@ inline void KisTileDataStore::registerTileDataImp(KisTileData *td)
     m_tileDataMap.getGC().lockRawPointerAccess();
     m_tileDataMap.assign(index, td);
     m_tileDataMap.getGC().unlockRawPointerAccess();
+    m_tileDataMap.getGC().update();
 
     m_numTiles.ref();
     m_memoryMetric += td->pixelSize();
@@ -154,6 +155,7 @@ inline void KisTileDataStore::unregisterTileDataImp(KisTileData *td)
     m_memoryMetric -= td->pixelSize();
 
     m_tileDataMap.getGC().unlockRawPointerAccess();
+    m_tileDataMap.getGC().update();
 }
 
 void KisTileDataStore::unregisterTileData(KisTileData *td)

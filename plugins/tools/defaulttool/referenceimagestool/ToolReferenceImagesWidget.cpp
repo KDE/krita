@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2017 Eugene Ingerman
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -15,8 +16,9 @@
 #include <kis_signals_blocker.h>
 #include <kis_signal_compressor.h>
 #include <KisReferenceImage.h>
+#include <KisSpinBoxI18nHelper.h>
+#include <kis_clipboard.h>
 
-#include <QClipboard>
 #include <QApplication>
 #include <QStandardItemModel>
 
@@ -40,15 +42,17 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->setupUi(this);
 
     d->ui->opacitySlider->setRange(0, 100);
-    d->ui->opacitySlider->setPrefixes(i18n("Opacity: "), i18n("Opacity [*varies*]: "));
-    d->ui->opacitySlider->setSuffix(i18n(" %"));
+    d->ui->opacitySlider->setTextTemplates(
+        i18nc("{n} is the number value, % is the percent sign", "Opacity: {n}%"),
+        i18nc("{n} is the number value, % is the percent sign", "Opacity [*varies*]: {n}%"));
     d->ui->opacitySlider->setValueGetter(
         [](KoShape *s){ return 100.0 * (1.0 - s->transparency()); }
     );
 
     d->ui->saturationSlider->setRange(0, 100);
-    d->ui->saturationSlider->setPrefixes(i18n("Saturation: "), i18n("Saturation [*varies*]: "));
-    d->ui->saturationSlider->setSuffix(i18n(" %"));
+    d->ui->saturationSlider->setTextTemplates(
+        i18nc("{n} is the number value, % is the percent sign", "Saturation: {n}%"),
+        i18nc("{n} is the number value, % is the percent sign", "Saturation [*varies*]: {n}%"));
     d->ui->saturationSlider->setValueGetter(
         [](KoShape *s){
             auto *r = dynamic_cast<KisReferenceImage*>(s);
@@ -77,9 +81,14 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     d->ui->bnPasteReferenceImage->setToolTip(i18n("Paste Reference Image From System Clipboard"));
     d->ui->bnPasteReferenceImage->setIcon(KisIconUtils::loadIcon("edit-paste-16"));
     d->ui->bnPasteReferenceImage->setIconSize(QSize(16, 16));
+    d->ui->bnPasteReferenceImage->setEnabled(KisClipboard::instance()->hasClip() || KisClipboard::instance()->hasUrls());
 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
+
+    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, [&]() {
+        d->ui->bnPasteReferenceImage->setEnabled(KisClipboard::instance()->hasClip() || KisClipboard::instance()->hasUrls());
+    });
 
     connect(d->ui->bnDelete, SIGNAL(clicked()), tool, SLOT(removeAllReferenceImages()));
     connect(d->ui->bnSave, SIGNAL(clicked()), tool, SLOT(saveReferenceImages()));
@@ -102,6 +111,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
 {
+    delete d->ui;
+    d->ui = nullptr;
 }
 
 void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
@@ -115,7 +126,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     bool anyNotKeepingAspectRatio = false;
     bool anyEmbedded = false;
     bool anyLinked = false;
-    bool anyNonLinkable = false;
+    // bool anyNonLinkable = false;
     bool anySelected = selection->count() > 0;
 
     Q_FOREACH(KoShape *shape, shapes) {
@@ -127,7 +138,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
         if (reference) {
             anyEmbedded |= reference->embed();
             anyLinked |= !reference->embed();
-            anyNonLinkable |= !reference->hasLocalFile();
+            // anyNonLinkable |= !reference->hasLocalFile();
         }
     }
 

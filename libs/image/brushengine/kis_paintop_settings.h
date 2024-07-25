@@ -29,6 +29,7 @@ using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 class KoResourceCacheInterface;
 using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;
 
+class KisOptimizedBrushOutline;
 
 /**
  * Configuration property used to control whether airbrushing is enabled.
@@ -109,7 +110,7 @@ public:
      * Removes all the settings from the object while keeping the paintop id,
      * which is loaded to the object by the factory
      */
-    void resetSettings(const QStringList &preserveProperties = QStringList());
+    virtual void resetSettings(const QStringList &preserveProperties = QStringList());
 
     /**
      * @return the node the paintop is working on.
@@ -166,7 +167,7 @@ public:
     virtual bool useSpacingUpdates() const;
 
     /**
-     * Indicates if the tool should call paintOp->doAsynchronousUpdate() inbetween
+     * Indicates if the tool should call paintOp->doAsynchronousUpdate() in between
      * paintAt() calls to do the asynchronous rendering
      */
     virtual bool needsAsynchronousUpdates() const;
@@ -186,12 +187,12 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom);
+    virtual KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom);
 
     /**
     * Helpers for drawing the brush outline
     */
-    static QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation);
+    static KisOptimizedBrushOutline ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation);
 
     /**
      * Helper for drawing a triangle representing the tilt of the stylus.
@@ -265,6 +266,17 @@ public:
     virtual qreal paintOpSize() const = 0;
 
     /**
+     * Set paintop angle (in degrees) directly in the properties.
+     * Increasing the angle corresponds to a counter-clockwise rotation.
+     */
+    virtual void setPaintOpAngle(qreal value) = 0;
+
+    /**
+     * @return paintop angle (in degrees) saved in the properties
+     */
+    virtual qreal paintOpAngle() const = 0;
+
+    /**
      * @return pattern size saved in the properties
      */
     virtual qreal paintOpPatternSize();
@@ -304,7 +316,7 @@ public:
     virtual bool isValid() const;
 
     /**
-     * Overrides the method in KisPropertiesCofiguration to allow
+     * Overrides the method in KisPropertiesConfiguration to allow
      * onPropertyChanged() callback
      */
     void setProperty(const QString & name, const QVariant & value) override;

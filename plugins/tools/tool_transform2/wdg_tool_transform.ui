@@ -2053,7 +2053,7 @@
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="buidupModeComboBox">
+            <widget class="QComboBox" name="buildupModeComboBox">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -2268,7 +2268,7 @@
  <customwidgets>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
+   <extends>QDoubleSpinBox</extends>
    <header>kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>

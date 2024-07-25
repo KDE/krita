@@ -8,16 +8,19 @@
 
 #include <KoPathShape.h>
 
+#include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_selection_options.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
+#include "kis_selection_options.h"
 #include "kis_selection_tool_helper.h"
 #include <KisView.h>
-
+#include <kis_command_utils.h>
+#include <kis_selection_filters.h>
+#include <KisOptimizedBrushOutline.h>
+#include <kis_default_bounds.h>
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,
@@ -41,6 +44,9 @@ void KisToolSelectPath::requestStrokeCancellation()
 bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!localTool()->pathStarted()) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
@@ -156,26 +162,76 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
                                         m_selectionTool->selectionAction());
 
     if (mode == PIXEL_SELECTION) {
+        KisProcessingApplicator applicator(
+            m_selectionTool->currentImage(),
+            m_selectionTool->currentNode(),
+            KisProcessingApplicator::NONE,
+            KisImageSignalVector(),
+            kundo2_i18n("Select by Bezier Curve"));
 
-        KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+        KisPixelSelectionSP tmpSel = new KisPixelSelection(
+            new KisDefaultBounds(m_selectionTool->currentImage()));
 
-        KisPainter painter(tmpSel);
-        painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter.setAntiAliasPolygonFill(m_selectionTool->antiAliasSelection());
-        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+        const bool antiAlias = m_selectionTool->antiAliasSelection();
+        const int grow = m_selectionTool->growSelection();
+        const int feather = m_selectionTool->featherSelection();
 
         QTransform matrix;
         matrix.scale(image->xRes(), image->yRes());
         matrix.translate(pathShape->position().x(), pathShape->position().y());
 
         QPainterPath path = matrix.map(pathShape->outline());
-        painter.fillPainterPath(path);
-        tmpSel->setOutlineCache(path);
 
-        helper.selectPixelSelection(tmpSel, m_selectionTool->selectionAction());
+        KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
+            [tmpSel, antiAlias, grow, feather, path]() mutable
+            -> KUndo2Command * {
+                KisPainter painter(tmpSel);
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                // Since the feathering already smooths the selection, the
+                // antiAlias is not applied if we must feather
+                painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                painter.fillPainterPath(path);
+
+                if (grow > 0) {
+                    KisGrowSelectionFilter biggy(grow, grow);
+                    biggy.process(tmpSel,
+                                  tmpSel->selectedRect().adjusted(-grow,
+                                                                  -grow,
+                                                                  grow,
+                                                                  grow));
+                } else if (grow < 0) {
+                    KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                    tiny.process(tmpSel, tmpSel->selectedRect());
+                }
+                if (feather > 0) {
+                    KisFeatherSelectionFilter feathery(feather);
+                    feathery.process(tmpSel,
+                                     tmpSel->selectedRect().adjusted(-feather,
+                                                                     -feather,
+                                                                     feather,
+                                                                     feather));
+                }
+
+                if (grow == 0 && feather == 0) {
+                    tmpSel->setOutlineCache(path);
+                } else {
+                    tmpSel->invalidateOutlineCache();
+                }
+
+                return 0;
+            });
+
+        applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+        helper.selectPixelSelection(applicator,
+                                    tmpSel,
+                                    m_selectionTool->selectionAction());
+        applicator.end();
 
         delete pathShape;
+
     } else {
         helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
     }
@@ -183,12 +239,16 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
 void __KisToolSelectPathLocalTool::beginShape()
 {
-    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->beginSelectInteraction();
+    KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
+    KIS_ASSERT(selectPathTool);
+    selectPathTool->beginSelectInteraction();
 }
 
 void __KisToolSelectPathLocalTool::endShape()
 {
-    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->endSelectInteraction();
+    KisToolSelectPath* selectPathTool = dynamic_cast<KisToolSelectPath*>(m_selectionTool);
+    KIS_ASSERT(selectPathTool);
+    selectPathTool->endSelectInteraction();
 }
 
 void KisToolSelectPath::resetCursorStyle()

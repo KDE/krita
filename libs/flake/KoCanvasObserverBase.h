@@ -57,7 +57,7 @@ protected:
     /**
      * Re-implement to notify the observer that its canvas is no longer
      * among the living. The daisies, it is pushing up. This means you
-     * don't have to unconnect, it's dead.
+     * don't have to disconnect, it's dead.
      *
      * The old canvas should be deleted already, so if you stored a
      * pointer to it, don't touch!

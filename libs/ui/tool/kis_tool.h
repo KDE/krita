@@ -31,8 +31,9 @@ class KisFilterConfiguration;
 class QPainter;
 class QPainterPath;
 class QPolygonF;
+class KisOptimizedBrushOutline;
 
-//activation id for Krita tools, Krita tools are always active and handle locked and invisible layers by themself
+//activation id for Krita tools, Krita tools are always active and handle locked and invisible layers by themselves
 static const QString KRITA_TOOL_ACTIVATION_ID = "flake/always";
 
 #include <kritaui_export.h>
@@ -163,6 +164,7 @@ public:
     virtual void endAlternateAction(KoPointerEvent *event, AlternateAction action);
     virtual void beginAlternateDoubleClickAction(KoPointerEvent *event, AlternateAction action);
     virtual bool alternateActionSupportsHiResEvents(AlternateAction action) const;
+    virtual bool supportsPaintingAssistants() const;
 
     void mousePressEvent(KoPointerEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
@@ -238,6 +240,8 @@ protected:
     /// Convert a pixel path into a view path
     QPainterPath pixelToView(const QPainterPath &pixelPath) const;
 
+    KisOptimizedBrushOutline pixelToView(const KisOptimizedBrushOutline &path) const;
+
     /// Convert a pixel polygon into a view path
     QPolygonF pixelToView(const QPolygonF &pixelPolygon) const;
 
@@ -276,7 +280,7 @@ protected:
 
     /// paint the path which is in view coordinates, default paint mode is XOR_MODE, BW_MODE is also possible
     /// never apply transformations to the painter, they would be useless, if drawing in OpenGL mode. The coordinates in the path should be in view coordinates.
-    void paintToolOutline(QPainter * painter, const QPainterPath &path);
+    void paintToolOutline(QPainter * painter, const KisOptimizedBrushOutline &path);
 
     /// Checks checks if the current node is editable
     bool nodeEditable();

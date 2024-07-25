@@ -53,9 +53,9 @@ private Q_SLOTS:
 
     void stressTestExtentsColumn();
 
-    void benchmaskQRegion();
-    void benchmaskKisRegion();
-    void benchmaskOverlappedKisRegion();
+    void benchmarkQRegion();
+    void benchmarkKisRegion();
+    void benchmarkOverlappedKisRegion();
 };
 
 #endif /* KIS_TILED_DATA_MANAGER_TEST_H */

@@ -69,7 +69,7 @@ bool KisCurveCircleMaskGenerator::shouldVectorize() const
     return !shouldSupersample() && spikes() == 2;
 }
 
-KisBrushMaskApplicatorBase* KisCurveCircleMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisCurveCircleMaskGenerator::applicator() const
 {
     return d->applicator.data();
 }
@@ -132,7 +132,7 @@ void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const
         // make place for new point in the centre
         newList.append(newList.at(1));
         newList[1] = (newList.at(0) + newList.at(2)) * 0.5;
-        // transoform it
+        // transform it
         newList[1].setY(qBound<qreal>(0.0,newList.at(1).y() * softness,1.0));
     }else{
         // transform all points except first and last
@@ -146,7 +146,9 @@ void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const
     result = curve.floatTransfer( curveResolution );
 }
 
-void KisCurveCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisCurveCircleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator> >(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator>>(
+            this));
 }

@@ -12,14 +12,13 @@
 #include "kis_paint_device.h"
 #include "kis_fixed_paint_device.h"
 #include "kis_selection.h"
-#include "kis_pressure_paint_thickness_option.h"
 
 #include "KisColorSmudgeInterstrokeData.h"
 #include "kis_algebra_2d.h"
 #include <KoBgrColorSpaceTraits.h>
 
 KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *painter, bool smearAlpha,
-                                                                 bool useDullingMode, KisPressurePaintThicknessOption::ThicknessMode thicknessMode)
+                                                                 bool useDullingMode, KisPaintThicknessOptionData::ThicknessMode thicknessMode)
         : KisColorSmudgeStrategyBase(useDullingMode)
         , m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
         , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
@@ -27,10 +26,10 @@ KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *pai
         , m_initializationPainter(painter)
         , m_thicknessMode(thicknessMode)
 {
-    KIS_SAFE_ASSERT_RECOVER(thicknessMode == KisPressurePaintThicknessOption::OVERLAY ||
-                            thicknessMode == KisPressurePaintThicknessOption::OVERWRITE) {
+    KIS_SAFE_ASSERT_RECOVER(thicknessMode == KisPaintThicknessOptionData::OVERLAY ||
+                            thicknessMode == KisPaintThicknessOptionData::OVERWRITE) {
 
-        thicknessMode = KisPressurePaintThicknessOption::OVERLAY;
+        thicknessMode = KisPaintThicknessOptionData::OVERLAY;
     }
 }
 
@@ -58,11 +57,13 @@ void KisColorSmudgeStrategyLightness::initializePainting()
 
         m_colorOnlyDevice = new KisPaintDevice(*m_projectionDevice);
         m_heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+        m_heightmapDevice->setDefaultBounds(m_colorOnlyDevice->defaultBounds());
+        m_heightmapDevice->setSupportsWraparoundMode(m_colorOnlyDevice->supportsWraproundMode());
     }
 
     initializePaintingImpl(m_colorOnlyDevice->colorSpace(),
                            m_smearAlpha,
-                           m_initializationPainter->compositeOp()->id());
+                           m_initializationPainter->compositeOpId());
 
     m_heightmapPainter.begin(m_heightmapDevice);
 
@@ -70,12 +71,12 @@ void KisColorSmudgeStrategyLightness::initializePainting()
     m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice, 1));
 
     m_finalPainter.begin(m_colorOnlyDevice);
-    m_finalPainter.setCompositeOp(COMPOSITE_COPY);
+    m_finalPainter.setCompositeOpId(COMPOSITE_COPY);
     m_finalPainter.setSelection(m_initializationPainter->selection());
     m_finalPainter.setChannelFlags(m_initializationPainter->channelFlags());
     m_finalPainter.copyMirrorInformationFrom(m_initializationPainter);
 
-    m_heightmapPainter.setCompositeOp(COMPOSITE_OVER);
+    m_heightmapPainter.setCompositeOpId(COMPOSITE_OVER);
     m_heightmapPainter.setSelection(m_initializationPainter->selection());
     m_heightmapPainter.copyMirrorInformationFrom(m_initializationPainter);
 
@@ -163,7 +164,7 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
 
     const qreal overlaySmearRate = smudgeRateValue - 0.01; //adjust so minimum value is 0 instead of 1%
     const qreal overlayAdjustment =
-        (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) ?
+        (m_thicknessMode == KisPaintThicknessOptionData::ThicknessMode::OVERWRITE) ?
         1.0 : KisAlgebra2D::lerp(overlaySmearRate, 1.0, paintThicknessValue);
     const quint8 brushHeightmapOpacity = qRound(opacity * overlayAdjustment * 255.0);
     m_heightmapPainter.setOpacity(brushHeightmapOpacity);

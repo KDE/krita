@@ -19,6 +19,7 @@
 
 #include <kis_fill_painter.h>
 #include <kis_paint_device.h>
+#include <kis_default_bounds.h>
 
 #include "KisResourceTypes.h"
 #include "kis_wdg_seexpr_presets_save.h"
@@ -124,6 +125,7 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
         KisDefaultBoundsBaseSP bounds(new KisWrapAroundBoundsWrapper(new KisDefaultBounds(), QRect(0, 0, 256, 256)));
         KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         src->setDefaultBounds(bounds);
+        src->setSupportsWraparoundMode(true);
         KisFillPainter fillPainter(src);
         fillPainter.fillRect(0, 0, 256, 256, m_currentConfiguration);
 
@@ -143,7 +145,7 @@ void KisWdgSeExprPresetsSave::savePreset()
     if (idx.isValid() && !m_useNewPresetDialog) {
         // saving a preset that is replacing an existing one
         const QString presetFileName = m_currentPreset->name().split(" ").join("_");
-        if (presetThumbnailWidget->pixmap()) {
+        if (!presetThumbnailWidget->pixmap()->isNull()) {
             m_currentPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
         }
         m_currentPreset->setScript(m_currentConfiguration->getString("script"));
@@ -162,7 +164,7 @@ void KisWdgSeExprPresetsSave::savePreset()
             const QString presetFileName = newPresetNameTextField->text().split(" ").join("_");
             newPreset->setName(newPresetNameTextField->text());
             newPreset->setFilename(presetFileName + newPreset->defaultFileExtension());
-            if (presetThumbnailWidget->pixmap()) {
+            if (!presetThumbnailWidget->pixmap()->isNull()) {
                 newPreset->setImage(presetThumbnailWidget->pixmap()->toImage());
             }
             newPreset->setScript(m_currentConfiguration->getString("script"));

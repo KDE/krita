@@ -153,7 +153,7 @@ public:
     int numberOfVisibleWidgets() const;
 
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> m_d;
 };
 
@@ -329,7 +329,7 @@ protected:
     void resizeEvent(QResizeEvent*) override;
 
 private:
-    class Private;
+    struct Private;
     QScopedPointer<Private> m_d;
     friend class KisOptionCollectionWidget;
 };

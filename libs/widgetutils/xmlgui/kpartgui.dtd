@@ -180,7 +180,7 @@
 >
 
 <!-- Defines a GUI state, esp. which actions to enable and which ones to -->
-<!-- disable on entering this state (see KXMLGUIClient::stateChanged())  -->
+<!-- disable on entering this state (see KisKXMLGUIClient::stateChanged())  -->
 <!ELEMENT State ( (enable, disable?) | disable )>
 <!ATTLIST State
   name CDATA #REQUIRED

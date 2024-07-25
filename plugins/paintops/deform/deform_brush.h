@@ -10,8 +10,8 @@
 #include <kis_paint_device.h>
 #include <brushengine/kis_paint_information.h>
 
-#include <kis_brush_size_option.h>
-#include <kis_deform_option.h>
+#include "KisBrushSizeOptionData.h"
+#include "KisDeformOptionData.h"
 #include "kis_algebra_2d.h"
 
 #include <time.h>
@@ -23,18 +23,6 @@ inline double drand48()
     return double(rand()) / RAND_MAX;
 }
 #endif
-
-enum DeformModes {GROW, SHRINK, SWIRL_CW, SWIRL_CCW, MOVE, LENS_IN, LENS_OUT, DEFORM_COLOR};
-
-class DeformProperties
-{
-public:
-    int action {0};
-    qreal deformAmount {0.0};
-    bool useBilinear {false};
-    bool useCounter {false};
-    bool useOldData {false};
-};
 
 
 class DeformBase
@@ -199,10 +187,10 @@ public:
                                     qreal scale, qreal rotation, QPointF pos,
                                     qreal subPixelX, qreal subPixelY, int dabX, int dabY);
 
-    void setSizeProperties(KisBrushSizeOptionProperties * properties) {
+    void setSizeProperties(KisBrushSizeOptionData * properties) {
         m_sizeProperties = properties;
     }
-    void setProperties(DeformOption * properties) {
+    void setProperties(KisDeformOptionData * properties) {
         m_properties = properties;
     }
     void initDeformAction();
@@ -215,11 +203,11 @@ private:
     void debugColor(const quint8* data, KoColorSpace * cs);
 
     qreal maskWidth(qreal scale) {
-        return m_sizeProperties->brush_diameter * scale;
+        return m_sizeProperties->brushDiameter * scale;
     }
 
     qreal maskHeight(qreal scale) {
-        return m_sizeProperties->brush_diameter * m_sizeProperties->brush_aspect  * scale;
+        return m_sizeProperties->brushDiameter * m_sizeProperties->brushAspect  * scale;
     }
 
     inline qreal norme(qreal x, qreal y) {
@@ -237,8 +225,8 @@ private:
 
     DeformBase * m_deformAction {0};
 
-    DeformOption * m_properties {0};
-    KisBrushSizeOptionProperties * m_sizeProperties {0};
+    KisDeformOptionData * m_properties {0};
+    KisBrushSizeOptionData * m_sizeProperties {0};
 };
 
 

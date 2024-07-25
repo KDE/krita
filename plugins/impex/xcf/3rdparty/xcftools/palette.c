@@ -47,7 +47,7 @@ init_palette_hash(void)
   paletteSize = 0 ;
 }
 
-int
+inline int
 lookup_or_intern(rgba color) {
   int *target = &masterhash[color % HASH_SIZE];
   while( *target >= 0 ) {
@@ -66,7 +66,7 @@ lookup_or_intern(rgba color) {
   return paletteSize++ ;
 }
 
-static void
+static inline void
 unpalettify_row(rgba *row,unsigned ncols)
 {
   index_t *newrow = (index_t*) row ;

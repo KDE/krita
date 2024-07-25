@@ -5,12 +5,27 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/flake/tools
     ${CMAKE_SOURCE_DIR}/libs/flake/svg
     ${CMAKE_SOURCE_DIR}/libs/flake/text
+    ${CMAKE_SOURCE_DIR}/libs/flake/xsimd
     ${CMAKE_BINARY_DIR}/libs/flake
 )
 
 add_subdirectory(styles)
 add_subdirectory(tests)
 add_subdirectory(resources/tests)
+
+set(DISABLE_CLIP_MASK_PAINTER_ON_MACOS FALSE)
+if (APPLE)
+    set(DISABLE_CLIP_MASK_PAINTER_ON_MACOS TRUE)
+endif()
+
+# generate krita_xsimd_macos_workaround.h
+configure_file(krita_xsimd_macos_workaround.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/krita_xsimd_macos_workaround.h)
+
+if(HAVE_XSIMD AND NOT DISABLE_CLIP_MASK_PAINTER_ON_MACOS)
+    ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs xsimd/KoClipMaskApplicatorFactoryImpl.cpp)
+else()
+    set(__per_arch_alpha_applicator_factory_objs xsimd/KoClipMaskApplicatorFactoryImpl.cpp)
+endif()
 
 set(kritaflake_SRCS
     KoGradientHelper.cpp
@@ -26,7 +41,6 @@ set(kritaflake_SRCS
     KoCanvasSupervisor.cpp
     KoDockFactoryBase.cpp
     KoDockRegistry.cpp
-    KoDataCenterBase.cpp
     KoInsets.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
@@ -42,8 +56,6 @@ set(kritaflake_SRCS
     KoShapeContainerModel.cpp
     KoShapeGroup.cpp
     KoShapeManager.cpp
-    KoShapePaintingContext.cpp
-    KoFrameShape.cpp
     KoMarker.cpp
     KoMarkerCollection.cpp
     KoToolBase.cpp
@@ -61,7 +73,6 @@ set(kritaflake_SRCS
     KoShapeController.cpp
     KoToolSelection.cpp
     KoShapeLayer.cpp
-    KoPostscriptPaintDevice.cpp
     KoInputDevice.cpp
     KoToolManager_p.cpp
     KoToolManager.cpp
@@ -93,9 +104,6 @@ set(kritaflake_SRCS
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
-    KoImageData.cpp
-    KoImageData_p.cpp
-    KoImageCollection.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactoryBase.cpp
@@ -106,9 +114,11 @@ set(kritaflake_SRCS
     KoTextShapeDataBase.cpp
     KoTosContainer.cpp
     KoTosContainerModel.cpp
+    KoClipMaskApplicatorBase.cpp
+    ${__per_arch_alpha_applicator_factory_objs}
+    KoClipMaskPainter.cpp
     KoClipPath.cpp
     KoClipMask.cpp
-    KoClipMaskPainter.cpp
     KoCurveFit.cpp
 
     commands/KoShapeGroupCommand.cpp
@@ -156,6 +166,7 @@ set(kritaflake_SRCS
     commands/KoKeepShapesSelectedCommand.cpp
     commands/KoPathMergeUtils.cpp
     commands/KoAddRemoveShapeCommands.cpp
+    commands/KoShapePaintOrderCommand.cpp
 
     html/HtmlSavingContext.cpp
     html/HtmlWriter.cpp
@@ -198,17 +209,28 @@ set(kritaflake_SRCS
     svg/SvgMeshPatch.cpp
     svg/SvgMeshArray.cpp
 
+    text/KisTofuGlyph.cpp
     text/KoSvgText.cpp
     text/KoSvgTextProperties.cpp
-    text/KoSvgTextChunkShape.cpp
+    text/KoSvgTextContentElement.cpp
     text/KoSvgTextShape.cpp
+    text/KoSvgTextLoader.cpp
+    text/KoSvgTextShape_p_glyphs.cpp
+    text/KoSvgTextShape_p_layout.cpp
+    text/KoSvgTextShape_p_output.cpp
+    text/KoSvgTextShapeLayoutFunc_inShape.cpp
+    text/KoSvgTextShapeLayoutFunc_lines.cpp
     text/KoSvgTextShapeMarkupConverter.cpp
+    text/KoFontRegistry.cpp
+    text/KoCssTextUtils.cpp
+    text/KoPolygonUtils.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp
 
     FlakeDebug.cpp
     tests/MockShapes.cpp
+
 )
 
 if (KSeExpr_FOUND)
@@ -222,7 +244,7 @@ ki18n_wrap_ui(kritaflake_SRCS
     tools/KoZoomToolWidget.ui
 )
 
-add_library(kritaflake SHARED ${kritaflake_SRCS})
+kis_add_library(kritaflake SHARED ${kritaflake_SRCS})
 generate_export_header(kritaflake BASE_NAME kritaflake)
 
 target_include_directories(kritaflake
@@ -233,7 +255,26 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritacommand KF5::WidgetsAddons Qt5::Svg KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaflake
+    PUBLIC
+        kritapigment
+        kritawidgetutils
+        kritacommand
+        KF5::WidgetsAddons
+        Qt5::Svg
+        KF5::CoreAddons
+        KF5::ConfigCore
+        KF5::I18n
+        Qt5::Gui
+        Qt5::Xml
+        Boost::boost
+        Freetype::Freetype
+        HarfBuzz::HarfBuzz
+    PRIVATE
+        Raqm::Raqm
+        Fontconfig::Fontconfig
+        libunibreak::libunibreak
+)
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

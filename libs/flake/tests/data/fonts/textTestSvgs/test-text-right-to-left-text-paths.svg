@@ -1,0 +1,47 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="500px" height="500px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+    <path id="path0" d="M0 0C25 50 125 50 150 0" />
+</defs>
+
+<g id="testRect">
+
+    <rect id="boundingRect" x="5" y="5" width="490" height="490"
+        fill="none" stroke="red"/>
+    <line x1="250" x2="250" y1="5" y2="495" stroke="orange" />
+
+    <!-- Because of peculiarities of repositioning glyphs after the bidi algorithm has been applied, the top 3 sentences here look like they have holes in them. This is because bidi reordering means text-chunks aren't contiguous in a visual manner. It is, unfortunately, correct according to the spec.-->
+    <text id="testText" x="20" y="34" 
+        font-family="DejaVu Sans" font-size="15" direction="rtl" fill="blue">
+
+<tspan x="250" dy="2.0em" text-anchor="start">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan><tspan x="250" dy="2.0em" text-anchor="middle">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+<tspan x="250" dy="2.0em" text-anchor="end">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+
+<tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+
+ <tspan x="250" dy="2.0em" text-anchor="start" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+ <tspan x="250" dy="2.0em" text-anchor="middle" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+ <tspan x="250" dy="2.0em" text-anchor="end" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+
+    </text>
+    
+    <text transform="translate(250, 410)" font-family="DejaVu Sans" font-size="15" fill="blue" direction="rtl" text-anchor="start">الناطقون: 295 مليون - 422 مليون</text>
+    <text transform="translate(250, 440)" font-family="DejaVu Sans" font-size="15" fill="blue" direction="rtl" text-anchor="middle">الناطقون: 295 مليون - 422 مليون</text>
+    <text transform="translate(250, 470)" font-family="DejaVu Sans" font-size="15" fill="blue" direction="rtl" text-anchor="end">الناطقون: 295 مليون - 422 مليون</text>
+    
+    <line stroke="orange" x1="125" y1="270" x2="125" y2="380" />
+
+    <text transform="translate(50, 270)" font-size="12" font-family="DejaVu Sans" fill="red" text-anchor="start" direction="rtl"><textPath href="#path0" startOffset="50%">الناطقون: 295 مليون - 422 مليون</textPath></text>
+    <text transform="translate(50, 300)" font-size="12" font-family="DejaVu Sans" fill="green" text-anchor="middle" direction="rtl"><textPath href="#path0" startOffset="50%">الناطقون: 295 مليون - 422 مليون</textPath></text>
+    <text transform="translate(50, 330)" font-size="12" font-family="DejaVu Sans" fill="blue" text-anchor="end" direction="rtl"><textPath href="#path0" startOffset="50%">الناطقون: 295 مليون - 422 مليون</textPath></text>
+
+    <line stroke="orange" x1="375" y1="270" x2="375" y2="380" />
+
+    <text transform="translate(300, 270)" font-size="12" font-family="DejaVu Sans" fill="red" text-anchor="start" direction="ltr"><textPath href="#path0" startOffset="50%">Text on path</textPath></text>
+    <text transform="translate(300, 300)" font-size="12" font-family="DejaVu Sans" fill="green" text-anchor="middle" direction="ltr"><textPath href="#path0" startOffset="50%">Text on path</textPath></text>
+    <text transform="translate(300, 330)" font-size="12" font-family="DejaVu Sans" fill="blue" text-anchor="end" direction="ltr"><textPath href="#path0" startOffset="50%">Text on path</textPath></text>
+
+</g>
+
+</svg>

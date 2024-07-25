@@ -63,6 +63,7 @@ void ToolTransformArgs::init(const ToolTransformArgs& args)
     m_scaleY = args.scaleY();
     m_shearX = args.shearX();
     m_shearY = args.shearY();
+    m_boundsRotation = args.boundsRotation();
     m_origPoints = args.origPoints(); //it's a copy
     m_transfPoints = args.transfPoints();
     m_warpType = args.warpType();
@@ -152,6 +153,7 @@ bool ToolTransformArgs::operator==(const ToolTransformArgs& other) const
         m_scaleY == other.m_scaleY &&
         m_shearX == other.m_shearX &&
         m_shearY == other.m_shearY &&
+        m_boundsRotation == other.m_boundsRotation &&
         m_keepAspectRatio == other.m_keepAspectRatio &&
         m_flattenedPerspectiveTransform == other.m_flattenedPerspectiveTransform &&
         m_editTransformPoints == other.m_editTransformPoints &&
@@ -187,6 +189,7 @@ bool ToolTransformArgs::isSameMode(const ToolTransformArgs& other) const
         result &= m_scaleY == other.m_scaleY;
         result &= m_shearX == other.m_shearX;
         result &= m_shearY == other.m_shearY;
+        result &= m_boundsRotation == other.m_boundsRotation;
         result &= m_aX == other.m_aX;
         result &= m_aY == other.m_aY;
         result &= m_aZ == other.m_aZ;
@@ -231,6 +234,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
                                      double aX, double aY, double aZ,
                                      double scaleX, double scaleY,
                                      double shearX, double shearY,
+                                     double boundsRotation,
                                      KisWarpTransformWorker::WarpType warpType,
                                      double alpha,
                                      bool defaultPoints,
@@ -254,6 +258,7 @@ ToolTransformArgs::ToolTransformArgs(TransformMode mode,
     , m_scaleY(scaleY)
     , m_shearX(shearX)
     , m_shearY(shearY)
+    , m_boundsRotation(boundsRotation)
     , m_liquifyProperties(new KisLiquifyProperties())
     , m_pixelPrecision(pixelPrecision)
     , m_previewPixelPrecision(previewPixelPrecision)
@@ -328,7 +333,7 @@ bool ToolTransformArgs::isIdentity() const
     if (m_mode == FREE_TRANSFORM) {
         return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                 && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
-                && m_aX == 0 && m_aY == 0 && m_aZ == 0);
+                && m_aX == 0 && m_aY == 0 && m_aZ == 0 && m_boundsRotation == 0);
     } else if (m_mode == PERSPECTIVE_4POINT) {
             return (m_transformedCenter == m_originalCenter && m_scaleX == 1
                     && m_scaleY == 1 && m_shearX == 0 && m_shearY == 0
@@ -392,6 +397,9 @@ void ToolTransformArgs::toXML(QDomElement *e) const
 
         KisDomUtils::saveValue(&freeEl, "shearX", m_shearX);
         KisDomUtils::saveValue(&freeEl, "shearY", m_shearY);
+
+        // bounds rotation is currently not supported by transform masks, so it should be null
+        KisDomUtils::saveValue(&freeEl, "boundsRotation", m_boundsRotation);
 
         KisDomUtils::saveValue(&freeEl, "keepAspectRatio", m_keepAspectRatio);
         KisDomUtils::saveValue(&freeEl, "flattenedPerspectiveTransform", m_flattenedPerspectiveTransform);
@@ -481,6 +489,11 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
             args.m_transformAroundRotationCenter = false;
         }
 
+        // bounds rotation is currently not supported by transform masks, so it should be null for them
+        if (!KisDomUtils::loadValue(freeEl, "boundsRotation", &args.m_boundsRotation)) {
+            args.m_boundsRotation = 0.0;
+        }
+
         if (result) {
             args.m_filter = KisFilterStrategyRegistry::instance()->value(filterId);
             result = (bool) args.m_filter;
@@ -505,7 +518,7 @@ ToolTransformArgs ToolTransformArgs::fromXML(const QDomElement &e)
         if(args.m_mode == CAGE){
             // Pixel precision is a parameter introduced in Krita 4.2, so we should
             // expect it not being present in older files. In case it is not found,
-            // just use the defalt value initialized by c-tor (that is, do nothing).
+            // just use the default value initialized by c-tor (that is, do nothing).
 
             (void) KisDomUtils::loadValue(warpEl, "pixelPrecision", &args.m_pixelPrecision);
             (void) KisDomUtils::loadValue(warpEl, "previewPixelPrecision", &args.m_previewPixelPrecision);

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Krita">
+  <Actions category="Krita">
+    <text>WG Color Selector Actions</text>
+    <Action name="show_wg_color_selector">
+      <icon></icon>
+      <text>Show wide-gamut color selector</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show color selector</toolTip>
+      <iconText>Show color selector</iconText>
+      <shortcut>Shift+O</shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="show_wg_shade_selector">
+      <icon></icon>
+      <text>Show wide-gamut shade selector</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show shade selector</toolTip>
+      <iconText>Show shade selector</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="show_wg_mypaint_selector">
+      <icon></icon>
+      <text>Show MyPaint shade selector</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show MyPaint selector</toolTip>
+      <iconText>Show MyPaint selector</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="show_wg_color_history">
+      <icon></icon>
+      <text>Show color history</text>
+      <whatsThis></whatsThis>
+      <toolTip>Show color history</toolTip>
+      <iconText>Show color history</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wgcs_lighten_color">
+      <icon></icon>
+      <text>Make color lighter</text>
+      <whatsThis></whatsThis>
+      <toolTip>Increase value, lightness, intensity or luma of the selected color, depending on selected color model</toolTip>
+      <iconText>Make color lighter</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wgcs_darken_color">
+      <icon></icon>
+      <text>Make color darker</text>
+      <whatsThis></whatsThis>
+      <toolTip>Decreases value, lightness, intensity or luma of the selected color, depending on selected color model</toolTip>
+      <iconText>Make color darker</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wgcs_increase_saturation">
+      <icon></icon>
+      <text>Increase color saturation</text>
+      <whatsThis></whatsThis>
+      <toolTip>Increase saturation of the selected color</toolTip>
+      <iconText>Increase color saturation</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wgcs_decrease_saturation">
+      <icon></icon>
+      <text>Decrease color saturation</text>
+      <whatsThis></whatsThis>
+      <toolTip>Decrease saturation of the selected color</toolTip>
+      <iconText>Decrease color saturation</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wgcs_shift_hue_clockwise">
+      <icon></icon>
+      <text>Shift hue clockwise</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shift hue of the selected color clockwise</toolTip>
+      <iconText>Shift hue clockwise</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wgcs_shift_hue_counterclockwise">
+      <icon></icon>
+      <text>Shift hue counter-clockwise</text>
+      <whatsThis></whatsThis>
+      <toolTip>Shift hue of the selected color counter-clockwise</toolTip>
+      <iconText>Shift hue counter-clockwise</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

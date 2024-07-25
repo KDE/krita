@@ -12,7 +12,6 @@
 #include <KoShapeStroke.h>
 #include <KoProperties.h>
 #include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoColorBackground.h>
 #include <KoShapeLoadingContext.h>
 

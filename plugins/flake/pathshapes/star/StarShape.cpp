@@ -11,7 +11,6 @@
 #include <KoPathPoint.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeSavingContext.h>
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <QStringList>

@@ -7,6 +7,7 @@
 
 #include "kis_brush_mask_applicator_factories.h"
 
+#if XSIMD_UNIVERSAL_BUILD_PASS
 #include "kis_circle_mask_generator.h"
 #include "kis_gauss_circle_mask_generator.h"
 #include "kis_curve_circle_mask_generator.h"
@@ -14,61 +15,69 @@
 #include "kis_curve_rect_mask_generator.h"
 #include "kis_rect_mask_generator.h"
 
-#include "kis_brush_mask_applicator_base.h"
 #include "kis_brush_mask_vector_applicator.h"
 
 template<>
 template<>
-MaskApplicatorFactory<KisMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisMaskGenerator>::create<xsimd::current_arch>(
+    KisMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskScalarApplicator<KisMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskScalarApplicator<KisMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisCircleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisCircleMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisCircleMaskGenerator>::create<xsimd::current_arch>(
+    KisCircleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisCircleMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisGaussCircleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisGaussCircleMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisGaussCircleMaskGenerator>::create<xsimd::current_arch>(
+    KisGaussCircleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisGaussCircleMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisGaussCircleMaskGenerator, xsimd::current_arch>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisCurveCircleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisCurveCircleMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisCurveCircleMaskGenerator>::create<xsimd::current_arch>(
+    KisCurveCircleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisCurveCircleMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisCurveCircleMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisRectangleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisRectangleMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisRectangleMaskGenerator>::create<xsimd::current_arch>(
+    KisRectangleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisRectangleMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisRectangleMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisGaussRectangleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisGaussRectangleMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisGaussRectangleMaskGenerator>::create<
+    xsimd::current_arch>(KisGaussRectangleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisGaussRectangleMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisGaussRectangleMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
 
 template<>
 template<>
-MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::create<Vc::CurrentImplementation::current()>(ParamType maskGenerator)
+KisBrushMaskApplicatorBase *
+MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::create<
+    xsimd::current_arch>(KisCurveRectangleMaskGenerator *maskGenerator)
 {
-    return new KisBrushMaskVectorApplicator<KisCurveRectangleMaskGenerator, Vc::CurrentImplementation::current()>(maskGenerator);
+    return new KisBrushMaskVectorApplicator<KisCurveRectangleMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
+
+#endif

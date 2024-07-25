@@ -12,8 +12,6 @@
 
 #include "kis_sketch_paintop_settings_widget.h"
 
-#include <kis_pressure_opacity_option.h>
-
 
 class KisSketchPaintOpSettings : public KisBrushBasedPaintOpSettings
 {
@@ -22,7 +20,7 @@ public:
     KisSketchPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisSketchPaintOpSettings() override {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     bool paintIncremental() override;
 

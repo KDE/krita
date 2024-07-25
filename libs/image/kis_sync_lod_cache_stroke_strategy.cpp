@@ -43,7 +43,7 @@ KisSyncLodCacheStrokeStrategy::~KisSyncLodCacheStrokeStrategy()
 void KisSyncLodCacheStrokeStrategy::initStrokeCallback()
 {
     QVector<KisStrokeJobData *> jobs;
-    createJobsData(jobs, m_d->image->root(), m_d->image->currentLevelOfDetail());
+    createJobsData(jobs, m_d->image->root(), m_d->image.data(), m_d->image->currentLevelOfDetail());
     addMutatedJobs(jobs);
 }
 
@@ -53,7 +53,7 @@ QList<KisStrokeJobData*> KisSyncLodCacheStrokeStrategy::createJobsData(KisImageW
     return {};
 }
 
-void KisSyncLodCacheStrokeStrategy::createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, int levelOfDetail, KisPaintDeviceList extraDevices)
+void KisSyncLodCacheStrokeStrategy::createJobsData(QVector<KisStrokeJobData *> &jobs, KisNodeSP imageRoot, KisUpdatesFacade *updatesFacade, int levelOfDetail, KisPaintDeviceList extraDevices)
 {
     using KisLayerUtils::recursiveApplyNodes;
     using KritaUtils::splitRegionIntoPatches;
@@ -73,6 +73,9 @@ void KisSyncLodCacheStrokeStrategy::createJobsData(QVector<KisStrokeJobData *> &
 
     KritaUtils::makeContainerUnique(deviceList);
 
+    KritaUtils::addJobBarrierNoCancel(jobs, [updatesFacade] () {
+        updatesFacade->blockUpdates();
+    });
 
     KritaUtils::addJobBarrier(jobs, [sharedData, deviceList, levelOfDetail] () mutable {
         Q_FOREACH (KisPaintDeviceSP device, deviceList) {
@@ -113,5 +116,9 @@ void KisSyncLodCacheStrokeStrategy::createJobsData(QVector<KisStrokeJobData *> &
             KisPaintDeviceSP dev = it.key();
             dev->uploadLodDataStruct(it.value().data());
         }
+    });
+
+    KritaUtils::addJobSequentialNoCancel(jobs, [updatesFacade] () {
+        updatesFacade->unblockUpdates();
     });
 }

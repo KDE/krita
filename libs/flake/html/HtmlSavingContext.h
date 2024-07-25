@@ -11,7 +11,6 @@
 
 class KoXmlWriter;
 class KoShape;
-class KoImageData;
 class QIODevice;
 class QString;
 class QTransform;

@@ -61,7 +61,7 @@ public:
      * resets cached projection of lower layer to a new device
      * @return void
      */
-    virtual void resetCache();
+    virtual void resetCache(const KoColorSpace *colorSpace);
 
     /**
      * for KisLayer::setDirty(const KisRegion&)
@@ -152,6 +152,8 @@ public:
      */
     QImage createThumbnail(qint32 w, qint32 h, Qt::AspectRatioMode aspectRatioMode = Qt::IgnoreAspectRatio) override;
 
+    int thumbnailSeqNo() const override;
+
 
 protected:
     // override from KisLayer
@@ -185,7 +187,7 @@ public Q_SLOTS:
     void slotImageSizeChanged();
 
     /**
-     * gets this layer. Overriddes function in
+     * gets this layer. Overridden function in
      * KisIndirectPaintingSupport
      * @return this AdjustmentLayer
      */

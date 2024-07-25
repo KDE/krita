@@ -13,6 +13,8 @@
 #include <kis_tool_shape.h>
 #include <kis_cursor.h>
 
+class KisInputActionGroupsMaskGuard;
+
 class KRITAUI_EXPORT KisToolOutlineBase : public KisToolShape
 {
     Q_OBJECT
@@ -36,11 +38,18 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    KisPopupWidgetInterface* popupWidget() override;
 
     bool hasUserInteractionRunning() const;
 
 public Q_SLOTS:
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
+    void requestStrokeEnd() override;
+    void requestStrokeCancellation() override;
+
+    void undoLastPoint();
 
 protected:
     virtual void finishOutline(const QVector<QPointF>& points) = 0;
@@ -53,11 +62,19 @@ private:
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     ToolType m_type;
+    int m_numberOfContinuedModePoints;
+    bool m_hasUserInteractionRunning;
+    QScopedPointer<KisInputActionGroupsMaskGuard> m_blockModifyingActionsGuard;
 
-    void finishOutlineAction();
     void updateFeedback();
     void updateContinuedMode();
     void updateCanvas();
+    void endStroke();
+    void cancelStroke();
+    QRectF dragBoundingRect();
+    void installBlockActionGuard();
+    void uninstallBlockActionGuard();
+
 };
 
 #endif

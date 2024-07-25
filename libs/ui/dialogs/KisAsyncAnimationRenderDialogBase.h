@@ -27,7 +27,7 @@ class KisRegion;
  * of the class are the following:
  *
  * Rendering itself:
- *   - fetch the list of dirtly frames using calcDirtyFrames()
+ *   - fetch the list of dirty frames using calcDirtyFrames()
  *   - create some clones of the image according to the user's settings
  *     to facilitate multithreaded rendering and processing of the frames
  *   - if the user doesn't have enough RAM, the clones will not be created

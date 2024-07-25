@@ -16,13 +16,13 @@
 #include "hatching_brush.h"
 #include "kis_hatching_paintop_settings.h"
 
-#include <kis_hatching_pressure_angle_option.h>
-#include <kis_hatching_pressure_crosshatching_option.h>
-#include <kis_hatching_pressure_separation_option.h>
-#include <kis_hatching_pressure_thickness_option.h>
+#include "KisHatchingStandardOptions.h"
 
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_size_option.h>
+#include "KisHatchingOptionsData.h"
+#include "KisHatchingPreferencesData.h"
+
+#include <KisStandardOptions.h>
+#include "KisOpacityOption.h"
 
 
 class KisPainter;
@@ -37,7 +37,7 @@ public:
 
     /**
      *  Returns a number between -90 and 90, and corresponds to the
-     *  angle that results from adding angle 'spin' to 'm_settings->angle',
+     *  angle that results from adding angle 'spin' to 'm_hatchingOptions.angle',
      *  corrected to coincide with the way the GUI operates.
      */
     double spinAngle(double spin);
@@ -53,6 +53,8 @@ protected:
 
 private:
     KisHatchingPaintOpSettingsSP m_settings;
+    KisHatchingOptionsData m_hatchingOptions;
+    KisHatchingPreferencesData m_hatchingPreferences;
     HatchingBrush *m_hatchingBrush;
 
     /**
@@ -65,37 +67,37 @@ private:
      *  Curve to control the hatching angle
      *  according to user preferences set in the GUI
      */
-    KisHatchingPressureAngleOption m_angleOption;
+    KisAngleOption m_angleOption;
 
     /**
      *  Curve to control the intensity of crosshatching
      *  according to user preferences set in the GUI
      */
-    KisHatchingPressureCrosshatchingOption m_crosshatchingOption;
+    KisCrosshatchingOption m_crosshatchingOption;
 
     /**
      *  Curve to control the dynamics of separation with
      *  device input
      */
-    KisHatchingPressureSeparationOption m_separationOption;
+    KisSeparationOption m_separationOption;
 
     /**
      *  Curve to control the thickness of the hatching lines
      *  with device input
      */
-    KisHatchingPressureThicknessOption m_thicknessOption;
+    KisThicknessOption m_thicknessOption;
 
     /**
      *  Curve to control the opacity of the entire dab
      *  with device input
      */
-    KisPressureOpacityOption m_opacityOption;
+    KisOpacityOption m_opacityOption;
 
     /**
      *  Curve to control the size of the entire dab
      *  with device input
      */
-    KisPressureSizeOption m_sizeOption;
+    KisSizeOption m_sizeOption;
 };
 
 #endif // KIS_HATCHING_PAINTOP_H_

@@ -31,7 +31,6 @@ KisMultiBoolFilterWidget::KisMultiBoolFilterWidget(const QString & filterid, QWi
     this->setWindowTitle(caption);
 
     QVBoxLayout *widgetLayout = new QVBoxLayout(this);
-    widgetLayout->setMargin(nbboolWidgets + 1);
     widgetLayout->setContentsMargins(0,0,0,0);
 
     for (qint32 i = 0; i < nbboolWidgets; ++i) {

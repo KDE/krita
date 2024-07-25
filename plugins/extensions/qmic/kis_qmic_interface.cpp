@@ -13,16 +13,14 @@
 #include <kis_algebra_2d.h>
 #include <kis_debug.h>
 #include <kis_image.h>
-#include <kis_image_barrier_locker.h>
-#include <kis_input_output_mapper.h>
+#include <KisImageBarrierLock.h>
 #include <kis_processing_applicator.h>
 #include <kis_selection.h>
 #include <kundo2magicstring.h>
 
 #include "gmic.h"
-#include "kis_qmic_processing_visitor.h"
+#include "kis_qmic_import_tools.h"
 #include "kis_qmic_simple_convertor.h"
-#include "kis_qmic_synchronize_image_size_command.h"
 #include "kis_qmic_synchronize_layers_command.h"
 
 struct KisImageInterface::Private {
@@ -44,15 +42,85 @@ KisImageInterface::KisImageInterface(KisViewManager *parent)
 
 KisImageInterface::~KisImageInterface() = default;
 
-QSize KisImageInterface::gmic_qt_get_image_size()
+QSize KisImageInterface::gmic_qt_get_image_size(int mode)
 {
+    if (!p->m_viewManager)
+        return {};
+
     KisSelectionSP selection = p->m_viewManager->image()->globalSelection();
 
     if (selection) {
         QRect selectionRect = selection->selectedExactRect();
         return selectionRect.size();
     } else {
-        return p->m_viewManager->image()->size();
+        p->m_inputMode = static_cast<InputLayerMode>(mode);
+
+        QSize size(0, 0);
+
+        dbgPlugins << "getImageSize()" << mode;
+
+        KisNodeListSP nodes =
+            KisQmicImportTools::inputNodes(p->m_viewManager->image(),
+                                           p->m_inputMode,
+                                           p->m_viewManager->activeNode());
+        if (nodes->isEmpty()) {
+            return size;
+        }
+
+        switch (p->m_inputMode) {
+        case InputLayerMode::NoInput:
+        case InputLayerMode::AllInvisible:
+            break;
+        case InputLayerMode::Active:
+        case InputLayerMode::ActiveAndBelow: {
+            // The last layer in the list is always the layer the user
+            // has selected in Paint.NET, so it will be treated as the
+            // active layer. The clipboard layer (if present) will be
+            // placed above the active layer.
+            const auto activeLayer = nodes->last();
+
+            // G'MIC takes as the image size the size of the active layer.
+            // This is a lie since a query to All will imply a query to Active
+            // through CroppedActiveLayerProxy, and the latter will return a
+            // bogus size if we reply straight with the paint device's bounds.
+            if (activeLayer && activeLayer->paintDevice()) {
+                const QSize layerSize = activeLayer->exactBounds().size();
+                const QSize imageSize = activeLayer->image()->bounds().size();
+                size = size.expandedTo(layerSize).expandedTo(imageSize);
+            }
+        } break;
+        case InputLayerMode::All:
+        case InputLayerMode::ActiveAndAbove:
+        case InputLayerMode::AllVisible:
+            for (auto &node : *nodes) {
+                if (node && node->paintDevice()) {
+                    // XXX: when using All, G'MIC will instead do another query
+                    // through CroppedActiveLayerProxy to determine the image's
+                    // "size". So we need to be both consistent with the image's
+                    // bounds, but also extend them in case the layer's
+                    // partially offscreen.
+                    const QSize layerSize = node->exactBounds().size();
+                    const QSize imageSize = node->image()->bounds().size();
+                    size = size.expandedTo(layerSize).expandedTo(imageSize);
+                }
+            }
+            break;
+        case InputLayerMode::AllVisiblesDesc_DEPRECATED:
+        case InputLayerMode::AllInvisiblesDesc_DEPRECATED:
+        case InputLayerMode::AllDesc_DEPRECATED: {
+            warnPlugins << "Inputmode" << static_cast<int>(p->m_inputMode)
+                        << "is not supported by GMic anymore";
+            break;
+        }
+        default: {
+            warnPlugins
+                << "Inputmode" << static_cast<int>(p->m_inputMode)
+                << "must be specified by GMic or is not implemented in Krita";
+            break;
+        }
+        }
+
+        return size;
     }
 }
 
@@ -65,29 +133,41 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
     if (!p->m_viewManager)
         return {};
 
-    KisImageBarrierLocker locker(p->m_viewManager->image());
+    if (!p->m_viewManager->image()->tryBarrierLock(true)) return {};
+
+    KisImageBarrierLock lock(p->m_viewManager->image(), std::adopt_lock);
 
     p->m_inputMode = static_cast<InputLayerMode>(inputMode);
 
     dbgPlugins << "prepareCroppedImages()" << message << rc << inputMode;
 
-    KisInputOutputMapper mapper(p->m_viewManager->image(), p->m_viewManager->activeNode());
-    KisNodeListSP nodes = mapper.inputNodes(p->m_inputMode);
+    KisNodeListSP nodes =
+        KisQmicImportTools::inputNodes(p->m_viewManager->image(),
+                                       p->m_inputMode,
+                                       p->m_viewManager->activeNode());
     if (nodes->isEmpty()) {
         return {};
     }
 
     for (auto &node : *nodes) {
          if (node && node->paintDevice()) {
-            QRect cropRect;
-
             KisSelectionSP selection = p->m_viewManager->image()->globalSelection();
 
-            if (selection) {
-                cropRect = selection->selectedExactRect();
-            } else {
-                cropRect = node->exactBounds();
-            }
+            const QRect cropRect = [&]() {
+                if (selection) {
+                    return selection->selectedExactRect();
+                } else {
+                    // XXX: This is a lie, see gmic_qt_get_image_size as to why
+                    const QRect nodeBounds = node->exactBounds();
+                    const QRect imageBounds = node->image()->bounds();
+
+                    if (imageBounds.contains(nodeBounds)) {
+                        return imageBounds;
+                    } else {
+                        return nodeBounds.united(imageBounds);
+                    }
+                }
+            }();
 
             dbgPlugins << "Converting node" << node->name() << cropRect;
 
@@ -112,13 +192,10 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
             {
                 QMutexLocker lock(&m->m_mutex);
 
-                gmic_image<float> img;
-                img.assign(resultRect.width(), resultRect.height(), 1, 4);
-
-                img._data = m->m_data;
-                img._is_shared = true;
-
-                KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, resultRect);
+                KisQmicSimpleConvertor::convertToGmicImageFast(
+                    node->paintDevice(),
+                    *m.data(),
+                    resultRect);
             }
 
             message << m;
@@ -132,10 +209,6 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
 void KisImageInterface::gmic_qt_detach()
 {
-    for (auto memorySegment : p->m_sharedMemorySegments) {
-        dbgPlugins << "detaching" << memorySegment;
-        memorySegment.clear();
-    }
     p->m_sharedMemorySegments.clear();
 }
 
@@ -152,46 +225,17 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
     dbgPlugins << "slotStartApplicator();" << layers;
     if (!p->m_viewManager)
         return;
-    // Create a vector of gmic images
 
-    QVector<gmic_image<float> *> images;
-
-    for (const auto &image : layers) {
-        QString layerName = image->m_layerName;
-        int spectrum = image->m_spectrum;
-        int width = image->m_width;
-        int height = image->m_height;
-
-        dbgPlugins << "Received image: " << (quintptr)image.data() << layerName << width << height;
-
-        gmic_image<float> *gimg = nullptr;
-
-        {
-            QMutexLocker lock(&image->m_mutex);
-
-            dbgPlugins << "Memory segment" << (quintptr)image.data() << image->size() << (quintptr)image->constData() << (quintptr)image->m_data;
-            gimg = new gmic_image<float>();
-            gimg->assign(width, height, 1, spectrum);
-            gimg->name = layerName;
-
-            gimg->_data = new float[width * height * spectrum * sizeof(float)];
-            dbgPlugins << "width" << width << "height" << height << "size" << width * height * spectrum * sizeof(float) << "shared memory size"
-                       << image->size();
-            memcpy(gimg->_data, image->constData(), width * height * spectrum * sizeof(float));
-
-            dbgPlugins << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
-        }
-        images.append(gimg);
-    }
-
-    dbgPlugins << "Got" << images.size() << "gmic images";
+    dbgPlugins << "Got" << layers.size() << "gmic images";
 
     {
         // Start the applicator
         KUndo2MagicString actionName = kundo2_i18n("G'MIC filter");
         KisNodeSP rootNode = p->m_viewManager->image()->root();
-        KisInputOutputMapper mapper(p->m_viewManager->image(), p->m_viewManager->activeNode());
-        KisNodeListSP mappedLayers = mapper.inputNodes(p->m_inputMode);
+        KisNodeListSP mappedLayers =
+            KisQmicImportTools::inputNodes(p->m_viewManager->image(),
+                                           p->m_inputMode,
+                                           p->m_viewManager->activeNode());
         // p->m_gmicApplicator->setProperties(p->m_viewManager->image(), rootNode, images, actionName, layers);
         // p->m_gmicApplicator->apply();
 
@@ -215,19 +259,19 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
 
         // This is a three-stage process.
 
-        if (!selection) {
-            // 1. synchronize Krita image size with biggest gmic layer size
-            applicator.applyCommand(new KisQmicSynchronizeImageSizeCommand(images, p->m_viewManager->image()));
-        }
-
-        // 2. synchronize layer count and convert excess GMic nodes to paint layers
-        applicator.applyCommand(new KisQmicSynchronizeLayersCommand(mappedLayers, images, p->m_viewManager->image(), layerSize, selection),
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
-
-        // 3. visit the existing nodes and reuse them to apply the remaining changes from GMic
-        applicator.applyVisitor(new KisQmicProcessingVisitor(mappedLayers, images, layerSize, selection),
-                                KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
+        // 1. Layer sizes must be adjusted individually
+        // 2. synchronize layer count and convert excess GMic nodes to paint
+        // layers
+        // 3. visit the existing nodes and reuse them to apply the remaining
+        // changes from GMic
+        applicator.applyCommand(
+            new KisQmicSynchronizeLayersCommand(mappedLayers,
+                                                layers,
+                                                p->m_viewManager->image(),
+                                                layerSize,
+                                                selection),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE);
 
         applicator.end();
     }

@@ -41,7 +41,7 @@ void nls_init(void);
 /* These legacy fall-backs will probably work on every system
  * that does not supply a inttypes.h ... */
 typedef unsigned char     uint8_t ;
-typedef unsigned long int uint32_t;
+typedef unsigned long int uint32_t, uintptr_t;
 typedef signed char       int8_t ;
 typedef signed long int   int32_t ;
 # define PRIX32 "lX"
@@ -55,8 +55,10 @@ typedef signed long int   int32_t ;
 # define __ATTRIBUTE__(x)
 #endif
 
-#if HAVE_NETINET_IN_H
-# include <netinet/in.h>
+#ifdef _WIN32
+#include <winsock2.h>
+#elif HAVE_NETINET_IN_H
+#include <netinet/in.h>
 #elif HAVE_ARPA_INET_H
 # include <arpa/inet.h>
 #elif WORDS_BIGENDIAN
@@ -100,11 +102,9 @@ void free_or_close_xcf(void);
 /* ****************************************************************** */
 /* utils.c */
 
-
 #define XCF_ERROR 1
 #define XCF_OK 0
 #define XCF_PTR_EMPTY 0
-
 
 extern const char *progname ;
 extern int verboseFlag ;
@@ -169,7 +169,7 @@ struct tileDimensions {
   unsigned ntiles ;
 };
 /* computeDimensions assumes that width, height, c.l, and c.t are set */
-void computeDimensions(struct tileDimensions *);
+int computeDimensions(struct tileDimensions *);
 
 struct xcfTiles {
   const struct _convertParams *params ;

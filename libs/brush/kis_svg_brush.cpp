@@ -56,13 +56,8 @@ bool KisSvgBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
 
     setValid(true);
 
-    // Well for now, always true
-    if (brushTipImage().isGrayscale()) {
-        setBrushType(MASK);
-    }
-    else {
-        setBrushType(IMAGE);
-    }
+    setBrushType(MASK);
+
     setWidth(brushTipImage().width());
     setHeight(brushTipImage().height());
 

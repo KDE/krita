@@ -6,7 +6,7 @@ set(kritatoollazybrush_SOURCES
 
 ki18n_wrap_ui(kritatoollazybrush_SOURCES kis_tool_lazy_brush_options_widget.ui)
 
-add_library(kritatoollazybrush MODULE ${kritatoollazybrush_SOURCES})
+kis_add_library(kritatoollazybrush MODULE ${kritatoollazybrush_SOURCES})
 
 generate_export_header(kritatoollazybrush BASE_NAME kritatoollazybrush)
 

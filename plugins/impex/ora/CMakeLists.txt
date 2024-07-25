@@ -13,7 +13,7 @@ set(kritaoraimport_SOURCES
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritaoraimport MODULE ${kritaoraimport_SOURCES})
+kis_add_library(kritaoraimport MODULE ${kritaoraimport_SOURCES})
 
 target_link_libraries(kritaoraimport kritaui )
 
@@ -24,11 +24,10 @@ set(kritaoraexport_SOURCES
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritaoraexport MODULE ${kritaoraexport_SOURCES})
+kis_add_library(kritaoraexport MODULE ${kritaoraexport_SOURCES})
 
 target_link_libraries(kritaoraexport kritaui kritaimpex)
 
 install(TARGETS kritaoraexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
-install( PROGRAMS  krita_ora.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-
+install(FILES krita_ora.desktop DESTINATION ${KDE_INSTALL_APPDIR})

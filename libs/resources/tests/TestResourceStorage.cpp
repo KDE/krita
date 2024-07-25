@@ -28,14 +28,10 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-#ifndef FILES_DEST_DIR
-#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
-#endif
-
 
 void TestResourceStorage::initTestCase()
 {
-    m_dstLocation = QString(FILES_DEST_DIR);
+    m_dstLocation = ResourceTestHelper::filesDestDir();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
     QDir().mkpath(m_dstLocation);
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
@@ -211,7 +207,7 @@ void TestResourceStorage::testStorageVersioningHelperCounting()
 
 void TestResourceStorage::cleanupTestCase()
 {
-    ResourceTestHelper::cleanDstLocation(FILES_DEST_DIR);
+    ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
 SIMPLE_TEST_MAIN(TestResourceStorage)

@@ -76,11 +76,18 @@ public:
         }
     };
 
+    class CalculateConvexHullData : public KisStrokeJobData {
+    public:
+        CalculateConvexHullData()
+            : KisStrokeJobData(SEQUENTIAL, NORMAL) // Is this right?
+        {}
+    };
+
 public:
     TransformStrokeStrategy(ToolTransformArgs::TransformMode mode,
                             const QString &filterId,
                             bool forceReset,
-                            KisNodeSP rootNode,
+                            KisNodeList rootNodes,
                             KisSelectionSP selection,
                             KisStrokeUndoFacade *undoFacade, KisUpdatesFacade *updatesFacade);
 
@@ -94,6 +101,7 @@ public:
 Q_SIGNALS:
     void sigTransactionGenerated(TransformTransactionProperties transaction, ToolTransformArgs args, void *cookie);
     void sigPreviewDeviceReady(KisPaintDeviceSP device);
+    void sigConvexHullCalculated(QPolygon convexHull, void *cookie);
 
 protected:
     void postProcessToplevelCommand(KUndo2Command *command) override;
@@ -114,6 +122,8 @@ private:
     void finishStrokeImpl(bool applyTransform,
                           const ToolTransformArgs &args);
 
+    QPolygon calculateConvexHull();
+
 private:
     KisUpdatesFacade *m_updatesFacade;
     KisBatchNodeUpdateSP m_updateData;
@@ -131,17 +141,19 @@ private:
 
     ToolTransformArgs m_initialTransformArgs;
     boost::optional<ToolTransformArgs> m_savedTransformArgs;
-    KisNodeSP m_rootNode;
+    KisNodeList m_rootNodes;
     KisNodeList m_processedNodes;
+    int m_currentTime = -1;
     QList<KisSelectionSP> m_deactivatedSelections;
     QList<KisNodeSP> m_hiddenProjectionLeaves;
-    KisSelectionMaskSP m_deactivatedOverlaySelectionMask;
+    QList<KisSelectionMaskSP> m_deactivatedOverlaySelectionMasks;
     QVector<KisDecoratedNodeInterface*> m_disabledDecoratedNodes;
 
     const KisSavedMacroCommand *m_overriddenCommand = 0;
     QVector<const KUndo2Command*> m_skippedWhileMergeCommands;
 
     bool m_finalizingActionsStarted = false;
+    bool m_convexHullHasBeenCalculated = false;
 };
 
 #endif /* __TRANSFORM_STROKE_STRATEGY_H */

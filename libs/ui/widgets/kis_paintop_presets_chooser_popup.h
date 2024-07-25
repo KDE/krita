@@ -22,8 +22,8 @@ public:
     KisPaintOpPresetsChooserPopup(QWidget * parent = 0);
     ~KisPaintOpPresetsChooserPopup() override;
     
-    void showButtons(bool show);
     void updateViewSettings();
+    void setResponsiveness(bool value);
 public Q_SLOTS:
     void canvasResourceChanged(KisPaintOpPresetSP  preset);
     void slotThemeChanged();
@@ -35,6 +35,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void slotThumbnailMode();
     void slotDetailMode();
+    void slotUpdateMenu();
     void paintEvent(QPaintEvent *) override;
    
 private:

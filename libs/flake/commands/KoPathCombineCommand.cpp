@@ -119,9 +119,9 @@ KoPathPointData KoPathCombineCommand::originalToCombined(KoPathPointData pd) con
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(d->shapeStartSegmentIndex.contains(pd.pathShape), pd);
 
-    const int segmentOffet = d->shapeStartSegmentIndex[pd.pathShape];
+    const int segmentOffset = d->shapeStartSegmentIndex[pd.pathShape];
 
-    KoPathPointIndex newIndex(segmentOffet + pd.pointIndex.first, pd.pointIndex.second);
+    KoPathPointIndex newIndex(segmentOffset + pd.pointIndex.first, pd.pointIndex.second);
     return KoPathPointData(d->combinedPath, newIndex);
 }
 

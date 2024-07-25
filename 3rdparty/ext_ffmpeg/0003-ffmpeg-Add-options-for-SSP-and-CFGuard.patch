@@ -1,0 +1,47 @@
+From 7aa8faf667f47e3679928fd415aac91f9a1b4e71 Mon Sep 17 00:00:00 2001
+From: Dmitry Kazakov <dimula73@gmail.com>
+Date: Tue, 11 Apr 2023 14:55:10 +0200
+Subject: [PATCH 3/3] Add options for SSP and CFGuard
+
+---
+ meson.build       | 13 +++++++++++++
+ meson_options.txt |  2 ++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index a14241eb45..8e0d2fa713 100644
+--- a/meson.build
++++ b/meson.build
+@@ -464,6 +464,19 @@ types_list = [
+   'struct_v4l2_frmivalenum_discrete',
+ ]
+ 
++option_cfguard = get_option('enable-cfguard').require(cc.has_argument('-mguard=cf'), error_message : 'Compiler does not support cfguard')
++if option_cfguard.allowed()
++  add_global_arguments('-mguard=cf', language : ['c', 'cpp'])
++  add_global_link_arguments('-mguard=cf', language : ['c', 'cpp'])
++  message('Enabled CFGuard')
++endif
++
++if get_option('enable-ssp').require(cc.has_argument('-fstack-protector-strong'), error_message : 'Compiler does not support -fstack-protector-strong').allowed()
++  add_global_arguments('-fstack-protector-strong', language : ['c', 'cpp'])
++  add_global_link_arguments('-fstack-protector-strong', language : ['c', 'cpp'])
++  message('Enabled SSP')
++endif
++
+ if get_option('no_uninit_ub')
+   add_global_arguments('-DDISABLE_AV_UNINIT_UB=1', language : 'c')
+   add_global_arguments('-DDISABLE_AV_UNINIT_UB=1', language : 'cpp')
+diff --git a/meson_options.txt b/meson_options.txt
+index d02877e76c..4452ddce72 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -2203,3 +2203,5 @@ option('inline_asm', type: 'feature', value: 'enabled', description: 'Enable inl
+ option('cli', type: 'feature', value: 'disabled')
+ option('tests', type : 'feature', value : 'auto', description : 'Build tests', yield : true)
+ option('no_uninit_ub', type: 'boolean', value: false, description: 'Disable UB in av_uninit optimization')
++option('enable-ssp', type: 'feature', value: 'enabled', description: 'Enable -fstack-protector-strong')
++option('enable-cfguard', type: 'feature', value: 'auto', description: 'Enable control flow guard')
+-- 
+2.40.1.windows.1
+

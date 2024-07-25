@@ -31,10 +31,6 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-#ifndef FILES_DEST_DIR
-#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
-#endif
-
 
 void TestTagFilterResourceProxyModel::initTestCase()
 {
@@ -44,7 +40,7 @@ void TestTagFilterResourceProxyModel::initTestCase()
     m_srcLocation = QString(FILES_DATA_DIR);
     QVERIFY2(QDir(m_srcLocation).exists(), m_srcLocation.toUtf8());
 
-    m_dstLocation = QString(FILES_DEST_DIR);
+    m_dstLocation = ResourceTestHelper::filesDestDir();
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
@@ -268,6 +264,6 @@ void TestTagFilterResourceProxyModel::cleanupTestCase()
     ResourceTestHelper::cleanDstLocation(m_dstLocation);
 }
 
-#include <sdk/tests/kistest.h>
+#include <kistest.h>
 KISTEST_MAIN(TestTagFilterResourceProxyModel)
 

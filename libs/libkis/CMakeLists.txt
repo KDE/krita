@@ -10,7 +10,9 @@ set(kritalibkis_LIB_SRCS
     ManagedColor.cpp
     Node.cpp
     Notifier.cpp
+    PaintingResources.cpp
     PresetChooser.cpp
+    Preset.cpp
     Palette.cpp
     PaletteView.cpp
     Scratchpad.cpp
@@ -28,15 +30,25 @@ set(kritalibkis_LIB_SRCS
     VectorLayer.cpp
     FilterMask.cpp
     SelectionMask.cpp
+    TransparencyMask.cpp
     TransformMask.cpp
+    ColorizeMask.cpp
 
     Shape.cpp
     GroupShape.cpp
 
     LibKisUtils.cpp
+
+    AngleSelector.cpp
+    IntParseSpinBox.cpp
+    DoubleParseSpinBox.cpp
+    SliderSpinBox.cpp
+
+    GuidesConfig.cpp
+    GridConfig.cpp
 )
 
-add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} )
+kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})
 generate_export_header(kritalibkis)
 
 target_link_libraries(kritalibkis kritaui kritaimage kritaversion)

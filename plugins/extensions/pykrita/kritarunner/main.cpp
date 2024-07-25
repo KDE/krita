@@ -4,20 +4,19 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include <QString>
 #include <QCommandLineParser>
 #include <QCommandLineOption>
 
-#include <KisApplication.h>
 #include "PythonPluginManager.h"
+#include <KisApplication.h>
+
 #include <opengl/kis_opengl.h>
 
 extern "C" int main(int argc, char **argv)
 {
-    // The global initialization of the random generator
-    qsrand(time(0));
     KLocalizedString::setApplicationDomain("kritarunner");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     KisOpenGL::testingInitializeDefaultSurfaceFormat();

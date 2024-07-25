@@ -17,15 +17,13 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoDocumentInfo.h>
 #include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 
+#include <KisDocument.h>
 #include <KritaVersionWrapper.h>
+#include <kis_clone_layer.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_png_converter.h>
-#include <KisDocument.h>
-#include <kis_clone_layer.h>
 
 static const char CURRENT_DTD_VERSION[] = "2.0";
 
@@ -91,7 +89,7 @@ KisImportExportErrorCode KraConverter::buildImage(QIODevice *io)
             }
 
         } else {
-            errUI << "ERROR: No maindoc.xml" << endl;
+            errUI << "ERROR: No maindoc.xml" << Qt::endl;
             m_doc->setErrorMessage(i18n("Invalid document: no file 'maindoc.xml'."));
             return ImportExportCodes::FileFormatIncorrect;
         }
@@ -195,6 +193,12 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
         qWarning() << "Saving animation metadata failed";
     }
 
+    result = m_kraSaver->saveAudio(m_store);
+    if (!result) {
+        success = false;
+        qWarning() << "Saving audio data failed";
+    }
+
     setProgress(80);
 
     if (!m_store->finalize()) {
@@ -289,9 +293,10 @@ KisImportExportErrorCode KraConverter::savePreview(KoStore *store)
 {
     QPixmap pix = m_doc->generatePreview(QSize(256, 256));
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
-    if (preview.size() == QSize(0,0)) {
+    if (preview.size().isEmpty()) {
         QSize newSize = m_doc->savingImage()->bounds().size();
-        newSize.scale(QSize(256, 256), Qt::KeepAspectRatio);
+        // make sure dimensions are at least one pixel, because extreme aspect ratios may cause rounding to zero
+        newSize = newSize.scaled(QSize(256, 256), Qt::KeepAspectRatio).expandedTo({1, 1});
         preview = QImage(newSize, QImage::Format_ARGB32);
         preview.fill(QColor(0, 0, 0, 0));
     }
@@ -321,9 +326,9 @@ KisImportExportErrorCode KraConverter::oldLoadAndParse(KoStore *store, const QSt
     bool ok = xmldoc.setContent(store->device(), &errorMsg, &errorLine, &errorColumn);
     store->close();
     if (!ok) {
-        errUI << "Parsing error in " << filename << "! Aborting!" << endl
-              << " In line: " << errorLine << ", column: " << errorColumn << endl
-              << " Error message: " << errorMsg << endl;
+        errUI << "Parsing error in " << filename << "! Aborting!" << Qt::endl
+              << " In line: " << errorLine << ", column: " << errorColumn << Qt::endl
+              << " Error message: " << errorMsg << Qt::endl;
         m_doc->setErrorMessage(i18n("Parsing error in %1 at line %2, column %3\nError message: %4",
                                     filename, errorLine, errorColumn,
                                     QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0)));
@@ -363,7 +368,13 @@ KisImportExportErrorCode KraConverter::loadXML(const QDomDocument &doc, KoStore 
         return ImportExportCodes::FileFormatIncorrect;
     }
 
-    m_kraLoader = new KisKraLoader(m_doc, syntaxVersion);
+    QString kritaVersionTag = root.attribute("kritaVersion", "6.0");
+    QVersionNumber kritaVersionNumber = QVersionNumber::fromString(kritaVersionTag);
+    if (kritaVersionNumber.isNull()) {
+        kritaVersionNumber = QVersionNumber::fromString(KritaVersionWrapper::versionString(false));
+    }
+
+    m_kraLoader = new KisKraLoader(m_doc, syntaxVersion, kritaVersionNumber);
 
     // reset the old image before loading the next one
     m_doc->setCurrentImage(0, false);
@@ -431,6 +442,7 @@ bool KraConverter::completeLoading(KoStore* store)
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadStoryboards(store, m_doc);
     m_kraLoader->loadAnimationMetadata(store, m_image);
+    m_kraLoader->loadAudio(store, m_doc);
 
     if (!m_kraLoader->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));

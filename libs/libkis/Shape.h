@@ -42,6 +42,10 @@ class KRITALIBKIS_EXPORT Shape : public QObject
 public:
     explicit Shape(KoShape *shape, QObject *parent = 0);
     ~Shape();
+
+    bool operator==(const Shape &other) const;
+    bool operator!=(const Shape &other) const;
+
 public Q_SLOTS:
 
     /**
@@ -141,6 +145,12 @@ public Q_SLOTS:
     void setTransformation(QTransform matrix);
 
     /**
+     * @brief transformation the 2D transformation matrix of the shape including all grandparent transforms.
+     * @return the 2D transformation matrix.
+     */
+    QTransform absoluteTransformation() const;
+
+    /**
      * @brief remove delete the shape.
      */
     bool remove();
@@ -181,6 +191,12 @@ public Q_SLOTS:
      * @return whether the shape is selected.
      */
     bool isSelected();
+
+    /**
+     * @brief parentShape
+     * @return the parent GroupShape of the current shape.
+     */
+    Shape* parentShape() const;
 
 private:
     friend class GroupShape;

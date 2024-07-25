@@ -34,8 +34,9 @@
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
 
-#include <sdk/tests/testutil.h>
-#include <sdk/tests/testui.h>
+#include <testui.h>
+#include <testutil.h>
+
 
 void TimelineModelTest::init()
 {
@@ -83,6 +84,8 @@ void TimelineModelTest::testConverter()
     m_layer1->setPinnedToTimeline(true);
     m_layer2->setPinnedToTimeline(true);
     m_sel3->setPinnedToTimeline(true);
+
+    QTest::qWait(200);
 
     TimelineFramesIndexConverter converter(m_shapeController);
 

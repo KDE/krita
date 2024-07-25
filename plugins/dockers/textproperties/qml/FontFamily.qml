@@ -67,23 +67,35 @@ CollapsibleGroupProperty {
             highlighted: mainFamilyCmb.highlightedIndex === model.index;
             contentItem: KoShapeQtQuickLabel{
                 id: fontFamilyDelegate;
-                property bool colorBitmap : model.metadata["color_bitmap"];
-                property bool colorCLRV0 : model.metadata["color_clrv0"];
-                property bool colorCLRV1 : model.metadata["color_clrv1"];
-                property bool colorSVG : model.metadata["color_svg"];
-                property bool isVariable : model.metadata["is_variable"];
-                property int type : model.metadata["font_type"];
+                property bool colorBitmap : model.metadata.color_bitmap;
+                property bool colorCLRV0 : model.metadata.color_clrv0;
+                property bool colorCLRV1 : model.metadata.color_clrv1;
+                property bool colorSVG : model.metadata.color_svg;
+                property bool isVariable : model.metadata.is_variable;
+                property int type : model.metadata.font_type;
+                property string fontName: model.name;
 
                 Layout.fillWidth: true;
-                svgData: model.metadata["sample_svg"];
+                svgData: model.metadata.sample_svg;
                 imageScale: 3;
                 imagePadding: nameLabel.height;
                 foregroundColor: sysPalette.text;
                 fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
 
+                Component.onCompleted: {
+                    var localizedDict = model.metadata.localized_font_family;
+                    for (var i in locales) {
+                        var key = locales[i];
+                        if (key in localizedDict) {
+                            fontName = localizedDict[key];
+                            break;
+                        }
+                    }
+                }
+
                 Label {
                     id: nameLabel;
-                    text: model.name;
+                    text: fontFamilyDelegate.fontName;
                     anchors.top: parent.top;
                     anchors.left: parent.left;
                 }

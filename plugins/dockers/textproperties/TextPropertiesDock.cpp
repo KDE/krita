@@ -132,8 +132,10 @@ TextPropertiesDock::TextPropertiesDock()
     d->tagModel = new KisTagModel(ResourceType::FontFamilies);
 
     QList<QLocale> locales;
+    QStringList wellFormedBCPNames;
     Q_FOREACH (const QString langCode, KLocalizedString::languages()) {
         locales.append(QLocale(langCode));
+        wellFormedBCPNames.append(langCode.split("_").join("-"));
     }
     d->axesModel.setLocales(locales);
     d->stylesModel.setLocales(locales);
@@ -146,6 +148,7 @@ TextPropertiesDock::TextPropertiesDock()
     m_quickWidget->rootContext()->setContextProperty("fontTagModel", QVariant::fromValue(d->tagModel));
     m_quickWidget->rootContext()->setContextProperty("fontStylesModel", QVariant::fromValue(&d->stylesModel));
     m_quickWidget->rootContext()->setContextProperty("fontAxesModel", QVariant::fromValue(&d->axesModel));
+    m_quickWidget->rootContext()->setContextProperty("locales", QVariant::fromValue(wellFormedBCPNames));
     connect(d->textModel, SIGNAL(textPropertyChanged()),
             this, SLOT(slotTextPropertiesChanged()));
     m_quickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);

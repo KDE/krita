@@ -79,8 +79,9 @@ QString generateSVG(QString sample, QString fontFamily) {
     return QString::fromUtf8(buffer.data());
 }
 
-QHash<QString, QVariant> localeHashtoVariantHash(QHash<QLocale, QString> names) {
-    QHash<QString, QVariant> newNames;
+QMap<QString, QVariant> localeHashtoVariantMap(QHash<QLocale, QString> names) {
+    // Needs to be a map to be accessible in qml (see https://bugreports.qt.io/browse/QTBUG-62014)
+    QMap<QString, QVariant> newNames;
     Q_FOREACH(const QLocale key, names.keys()) {
         newNames.insert(key.bcp47Name(), QVariant::fromValue(names.value(key)));
     }
@@ -94,9 +95,9 @@ KoFontFamily::KoFontFamily(KoFontFamilyWWSRepresentation representation)
 {
     setName(representation.fontFamilyName);
     addMetaData(TYPOGRAPHIC_NAME, representation.typographicFamilyName);
-    addMetaData(LOCALIZED_FONT_FAMILY, localeHashtoVariantHash(representation.localizedFontFamilyNames));
-    addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, localeHashtoVariantHash(representation.localizedTypographicFamily));
-    addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, localeHashtoVariantHash(representation.localizedTypographicStyles));
+    addMetaData(LOCALIZED_FONT_FAMILY, localeHashtoVariantMap(representation.localizedFontFamilyNames));
+    addMetaData(LOCALIZED_TYPOGRAPHIC_NAME, localeHashtoVariantMap(representation.localizedTypographicFamily));
+    addMetaData(LOCALIZED_TYPOGRAPHIC_STYLE, localeHashtoVariantMap(representation.localizedTypographicStyles));
 
     QVariantHash samples;
     Q_FOREACH(const QLocale::Script &key, representation.sampleStrings.keys()) {

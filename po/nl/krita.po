@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-22 01:47+0000\n"
+"POT-Creation-Date: 2024-07-25 01:45+0000\n"
 "PO-Revision-Date: 2024-07-20 10:45+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -17004,7 +17004,7 @@ msgstr "Deselecteren"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
+#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Laag toevoegen"
@@ -17042,7 +17042,7 @@ msgid "Reselect"
 msgstr "Opnieuw selecteren"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1999
+#: libs/image/kis_layer_utils.cpp:2019
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17285,7 +17285,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Achtergrond"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
 #, kde-format
 msgid "Paint Layer"
 msgstr "Tekenlaag"
@@ -17384,7 +17384,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Profiel toewijzen"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2502
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Selecties afsnijden"
@@ -17538,63 +17538,63 @@ msgstr "Fout"
 msgid "Anti-aliasing"
 msgstr "Anti-aliasing"
 
-#: libs/image/kis_layer_utils.cpp:619
+#: libs/image/kis_layer_utils.cpp:625
 #, kde-format
 msgid "Merged"
 msgstr "Samengevoegd"
 
-#: libs/image/kis_layer_utils.cpp:1417
+#: libs/image/kis_layer_utils.cpp:1423
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Samenvoegen ongedaan maken"
 
-#: libs/image/kis_layer_utils.cpp:1665
+#: libs/image/kis_layer_utils.cpp:1671
 #, kde-format
 msgid "Copy of"
 msgstr "Kopiëren van"
 
-#: libs/image/kis_layer_utils.cpp:1738
+#: libs/image/kis_layer_utils.cpp:1744
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Projectiekleur wijzigen"
 
-#: libs/image/kis_layer_utils.cpp:1962
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Geselecteerde nodes samenvoegen"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1988
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Nieuwe uit zichtbaar"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1989
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Zichtbaar"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2068
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Selectiemaskers samenvoegen"
 
-#: libs/image/kis_layer_utils.cpp:2071
+#: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Laag waar andere lagen in terecht komen"
 
-#: libs/image/kis_layer_utils.cpp:2084
+#: libs/image/kis_layer_utils.cpp:2108
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Afbeelding plat maken"
 
-#: libs/image/kis_layer_utils.cpp:2308
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Alfa naar een masker splitsen"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Naar een tekenlaag omzetten"
@@ -18018,30 +18018,30 @@ msgstr ""
 "milliseconde</b>. Het formaat kan dit niet representeren en de frameduur zal "
 "afgerond worden naar de dichtstbijzijnde milliseconde."
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
 #, kde-format
 msgid "Clone Layer"
 msgstr "Laag klonen"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
 #: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Groep"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
 #, kde-format
 msgid "File Layer"
 msgstr "Bestandslaag..."
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vectorlaag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "Filter Layer"
 msgstr "Filterlaag"
@@ -18366,7 +18366,7 @@ msgstr "Radiance RGBE-afbeelding"
 msgid "Import frames"
 msgstr "Frames importeren"
 
-#: libs/libkis/PaintingResources.cpp:25
+#: libs/libkis/PaintingResources.cpp:63
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
 msgstr "Penseelstreek uit script"
@@ -19671,8 +19671,8 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29427,59 +29427,67 @@ msgid "Select a Color"
 msgstr "Selecteer een kleur"
 
 #: libs/ui/kis_layer_manager.cc:191
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Merge Selected Layers"
+msgctxt "@action:inmenu"
+msgid "Merge Selected Layers"
+msgstr "Geselecteerde lagen samenvoegen"
+
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Groep samenvoegen"
 
-#: libs/ui/kis_layer_manager.cc:192
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Met onderliggende laag samenvoegen"
 
-#: libs/ui/kis_layer_manager.cc:211
+#: libs/ui/kis_layer_manager.cc:217
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Laag is leeg "
 
-#: libs/ui/kis_layer_manager.cc:246
+#: libs/ui/kis_layer_manager.cc:252
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Filterlaag-eigenschappen"
 
-#: libs/ui/kis_layer_manager.cc:290
+#: libs/ui/kis_layer_manager.cc:296
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Eigenschappen van vullaag"
 
-#: libs/ui/kis_layer_manager.cc:306
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Bestandslaageigenschappen"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
 #, kde-format
 msgid "No file name specified"
 msgstr "Geen bestandsnaam gespecificeerd"
 
-#: libs/ui/kis_layer_manager.cc:377
+#: libs/ui/kis_layer_manager.cc:383
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Kloonlaag wijzigen"
 
-#: libs/ui/kis_layer_manager.cc:486
+#: libs/ui/kis_layer_manager.cc:492
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Naar een geanimeerde laag omzetten"
 
-#: libs/ui/kis_layer_manager.cc:506
+#: libs/ui/kis_layer_manager.cc:512
 #, kde-format
 msgid "Save layers to..."
 msgstr "Lagen opslaan naar..."
 
-#: libs/ui/kis_layer_manager.cc:507
+#: libs/ui/kis_layer_manager.cc:513
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29488,28 +29496,28 @@ msgstr ""
 "De locatie waarnaar de laag zal worden opgeslagen. De nieuwe bestandslaag "
 "zal daarna naar deze locatie wijzen."
 
-#: libs/ui/kis_layer_manager.cc:570
+#: libs/ui/kis_layer_manager.cc:576
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Naar een bestandslaag omzetten"
 
-#: libs/ui/kis_layer_manager.cc:700
+#: libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nieuw filterlaag"
 
-#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "Vullaag"
 
-#: libs/ui/kis_layer_manager.cc:776
+#: libs/ui/kis_layer_manager.cc:782
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Afbeelding plat maken"
 
-#: libs/ui/kis_layer_manager.cc:777
+#: libs/ui/kis_layer_manager.cc:783
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29518,7 +29526,7 @@ msgstr ""
 "De afbeelding bevat verborgen lagen die verloren zullen gaan. Wilt u de "
 "afbeelding plat maken?"
 
-#: libs/ui/kis_layer_manager.cc:855
+#: libs/ui/kis_layer_manager.cc:861
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29526,13 +29534,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "Laag is vergrendeld"
 msgstr[1] "Laag is vergrendeld"
 
-#: libs/ui/kis_layer_manager.cc:877
+#: libs/ui/kis_layer_manager.cc:883
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Laag is vergrendeld"
 
-#: libs/ui/kis_layer_manager.cc:894
+#: libs/ui/kis_layer_manager.cc:900
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29544,12 +29552,12 @@ msgstr ""
 "Niet geanimeerde laag is gemengd in het huidige frame. Om het te mengen in "
 "de gehele clip, maak minstens één frame aan"
 
-#: libs/ui/kis_layer_manager.cc:943
+#: libs/ui/kis_layer_manager.cc:949
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Onzichtbare groepen converteren"
 
-#: libs/ui/kis_layer_manager.cc:946
+#: libs/ui/kis_layer_manager.cc:952
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Alleen groepen op topniveau exporteren"
@@ -79458,10 +79466,6 @@ msgstr "Referentie-afbeeldingen"
 #~ msgctxt "action"
 #~ msgid "&Merge Selected Layers"
 #~ msgstr "Geselecteerde lagen sa&menvoegen"
-
-#~ msgctxt "action"
-#~ msgid "Merge Selected Layers"
-#~ msgstr "Geselecteerde lagen samenvoegen"
 
 #~ msgctxt "(qtundo-format)"
 #~ msgid "Draw path"

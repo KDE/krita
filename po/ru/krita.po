@@ -80,7 +80,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-22 01:47+0000\n"
+"POT-Creation-Date: 2024-07-25 01:45+0000\n"
 "PO-Revision-Date: 2024-05-17 11:21+0300\n"
 "Last-Translator: Olesya Gerasimenko <translation-team@basealt.ru>\n"
 "Language-Team: Basealt Translation Team\n"
@@ -17115,7 +17115,7 @@ msgstr ""
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
+#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr ""
@@ -17168,7 +17168,7 @@ msgstr ""
 
 # BUGME: please remove ellipsis because no dialogs are opened --aspotashev
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1999
+#: libs/image/kis_layer_utils.cpp:2019
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17426,7 +17426,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Фон"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
 #, kde-format
 msgid "Paint Layer"
 msgstr "Обычный слой"
@@ -17584,7 +17584,7 @@ msgstr ""
 "Назначение профиля\n"
 "назначение профиля"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2502
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr ""
@@ -17740,79 +17740,79 @@ msgstr "Ошибка"
 msgid "Anti-aliasing"
 msgstr "Сглаживание"
 
-#: libs/image/kis_layer_utils.cpp:619
+#: libs/image/kis_layer_utils.cpp:625
 #, kde-format
 msgid "Merged"
 msgstr "Сведено"
 
-#: libs/image/kis_layer_utils.cpp:1417
+#: libs/image/kis_layer_utils.cpp:1423
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr ""
 "Объединение с нижележащим\n"
 "объединение c нижележащим"
 
-#: libs/image/kis_layer_utils.cpp:1665
+#: libs/image/kis_layer_utils.cpp:1671
 #, kde-format
 msgid "Copy of"
 msgstr "Копия"
 
-#: libs/image/kis_layer_utils.cpp:1738
+#: libs/image/kis_layer_utils.cpp:1744
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr ""
 "Изменение цвета проекции\n"
 "изменение цвета проекции"
 
-#: libs/image/kis_layer_utils.cpp:1962
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr ""
 "Сведение выбранных узлов\n"
 "сведение выбранных узлов"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1988
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr ""
 "Создание слоя из видимого\n"
 "создание слоя из видимого"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1989
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Видимый"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2068
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr ""
 "Объединение выбранных масок\n"
 "объединение выбранных масок"
 
-#: libs/image/kis_layer_utils.cpp:2071
+#: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr ""
 "Сведение слоя\n"
 "сведение слоя"
 
-#: libs/image/kis_layer_utils.cpp:2084
+#: libs/image/kis_layer_utils.cpp:2108
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr ""
 "Сведение изображения\n"
 "сведение изображения"
 
-#: libs/image/kis_layer_utils.cpp:2308
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr ""
 "Отделение альфа-канала в маску\n"
 "отделение альфа-канала в маску"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr ""
@@ -18270,30 +18270,30 @@ msgstr ""
 "Это не поддерживается форматом, поэтому длительность кадра будет округлена "
 "до ближайшей миллисекунды."
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
 #, kde-format
 msgid "Clone Layer"
 msgstr "Клонирующий слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
 #: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Группа"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
 #, kde-format
 msgid "File Layer"
 msgstr "Файловый слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Векторный слой"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "Filter Layer"
 msgstr "Фильтрующий слой"
@@ -18617,7 +18617,7 @@ msgstr "Заменить изображение"
 msgid "Import frames"
 msgstr "Импорт кадров"
 
-#: libs/libkis/PaintingResources.cpp:25
+#: libs/libkis/PaintingResources.cpp:63
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Freehand Brush Stroke"
@@ -19925,8 +19925,8 @@ msgstr "Локальные источники"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29726,62 +29726,70 @@ msgid "Select a Color"
 msgstr "Выберите цвет"
 
 #: libs/ui/kis_layer_manager.cc:191
+#, fuzzy, kde-format
+#| msgctxt "action"
+#| msgid "Merge Selected Layers"
+msgctxt "@action:inmenu"
+msgid "Merge Selected Layers"
+msgstr "Свести выбранные слои"
+
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Объединить группу"
 
-#: libs/ui/kis_layer_manager.cc:192
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Объединить со слоем ниже"
 
-#: libs/ui/kis_layer_manager.cc:211
+#: libs/ui/kis_layer_manager.cc:217
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Слой пустой "
 
-#: libs/ui/kis_layer_manager.cc:246
+#: libs/ui/kis_layer_manager.cc:252
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Свойства фильтрующего слоя"
 
-#: libs/ui/kis_layer_manager.cc:290
+#: libs/ui/kis_layer_manager.cc:296
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Свойства заливаемого слоя"
 
-#: libs/ui/kis_layer_manager.cc:306
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Свойства файлового слоя"
 
 # BUGME: please add full stop. --aspotashev
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
 #, kde-format
 msgid "No file name specified"
 msgstr "Не указано имя файла."
 
-#: libs/ui/kis_layer_manager.cc:377
+#: libs/ui/kis_layer_manager.cc:383
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Изменить клонирующий слой"
 
-#: libs/ui/kis_layer_manager.cc:486
+#: libs/ui/kis_layer_manager.cc:492
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr ""
 "Преобразование в анимированный слой\n"
 "преобразование в анимированный слой"
 
-#: libs/ui/kis_layer_manager.cc:506
+#: libs/ui/kis_layer_manager.cc:512
 #, kde-format
 msgid "Save layers to..."
 msgstr "Сохранить слои как..."
 
-#: libs/ui/kis_layer_manager.cc:507
+#: libs/ui/kis_layer_manager.cc:513
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29790,30 +29798,30 @@ msgstr ""
 "Выберите место, где будет храниться слой. Новый слой будет ссылаться на "
 "указанный файл."
 
-#: libs/ui/kis_layer_manager.cc:570
+#: libs/ui/kis_layer_manager.cc:576
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr ""
 "Преобразование в слой из файла\n"
 "преобразование в слой из файла"
 
-#: libs/ui/kis_layer_manager.cc:700
+#: libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Новый фильтрующий слой"
 
-#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "Заливаемый слой"
 
-#: libs/ui/kis_layer_manager.cc:776
+#: libs/ui/kis_layer_manager.cc:782
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Сведение изображения"
 
-#: libs/ui/kis_layer_manager.cc:777
+#: libs/ui/kis_layer_manager.cc:783
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29822,7 +29830,7 @@ msgstr ""
 "Изображение содержит скрытые слои, которые будут потеряны. Свести "
 "изображение?"
 
-#: libs/ui/kis_layer_manager.cc:855
+#: libs/ui/kis_layer_manager.cc:861
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29832,13 +29840,13 @@ msgstr[1] "Слои заблокированы"
 msgstr[2] "Слои заблокированы"
 msgstr[3] "Слой заблокирован"
 
-#: libs/ui/kis_layer_manager.cc:877
+#: libs/ui/kis_layer_manager.cc:883
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Слой заблокирован"
 
-#: libs/ui/kis_layer_manager.cc:894
+#: libs/ui/kis_layer_manager.cc:900
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29850,12 +29858,12 @@ msgstr ""
 "Неанимированный слой объединяется с текущим кадром. Чтобы объединить его со "
 "всем клипом, создайте хотя бы один кадр"
 
-#: libs/ui/kis_layer_manager.cc:943
+#: libs/ui/kis_layer_manager.cc:949
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Преобразовать невидимые группы"
 
-#: libs/ui/kis_layer_manager.cc:946
+#: libs/ui/kis_layer_manager.cc:952
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Экспортировать только группы верхнего уровня"
@@ -82203,10 +82211,6 @@ msgstr "Эталонные изображения"
 #~ msgctxt "action"
 #~ msgid "&Merge Selected Layers"
 #~ msgstr "Свести в&ыбранные слои"
-
-#~ msgctxt "action"
-#~ msgid "Merge Selected Layers"
-#~ msgstr "Свести выбранные слои"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format)"

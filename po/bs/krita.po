@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: calligra\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-22 01:47+0000\n"
+"POT-Creation-Date: 2024-07-25 01:45+0000\n"
 "PO-Revision-Date: 2015-02-24 23:27+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: Bosnian <bs@li.org>\n"
@@ -17413,7 +17413,7 @@ msgstr "Skini označenje"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
+#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Dodaj sloj"
@@ -17451,7 +17451,7 @@ msgid "Reselect"
 msgstr "Označi ponovo"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1999
+#: libs/image/kis_layer_utils.cpp:2019
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17712,7 +17712,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadina"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&Slikarski sloj"
@@ -17829,7 +17829,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "Otvor profil boje"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2502
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "Kropaj izbore"
@@ -17998,69 +17998,69 @@ msgstr "Ogledalo"
 msgid "Anti-aliasing"
 msgstr "Omekšavanje"
 
-#: libs/image/kis_layer_utils.cpp:619
+#: libs/image/kis_layer_utils.cpp:625
 #, kde-format
 msgid "Merged"
 msgstr "stopljene"
 
-#: libs/image/kis_layer_utils.cpp:1417
+#: libs/image/kis_layer_utils.cpp:1423
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "Čiste tačke"
 
-#: libs/image/kis_layer_utils.cpp:1665
+#: libs/image/kis_layer_utils.cpp:1671
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "Kopija od %1"
 
-#: libs/image/kis_layer_utils.cpp:1738
+#: libs/image/kis_layer_utils.cpp:1744
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "Promijeni povezanost"
 
-#: libs/image/kis_layer_utils.cpp:1962
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "Spoji odabrane čvorove"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1988
 #, fuzzy
 #| msgid "New Profile"
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "Novi profil"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1989
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "Vidljiv"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2068
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "Dodaj masku odabira"
 
-#: libs/image/kis_layer_utils.cpp:2071
+#: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "Izravnaj sloj"
 
-#: libs/image/kis_layer_utils.cpp:2084
+#: libs/image/kis_layer_utils.cpp:2108
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "Spljošti sliku"
 
-#: libs/image/kis_layer_utils.cpp:2308
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "Razdvoji Alpha u masku"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "Konvertuj u Paint sloj"
@@ -18513,30 +18513,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "&Kloniraj sloj"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
 #: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grupa:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "&Datoteka sloj"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektor sloj"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "&Datoteka sloj"
@@ -18872,7 +18872,7 @@ msgstr "Razdvoji sliku"
 msgid "Import frames"
 msgstr "Uvezi sliku"
 
-#: libs/libkis/PaintingResources.cpp:25
+#: libs/libkis/PaintingResources.cpp:63
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Freehand Brush Stroke"
@@ -20304,8 +20304,8 @@ msgstr "Upravljane Resurs Bundlima"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -30267,53 +30267,59 @@ msgstr "Izaberi neprozirno"
 
 #: libs/ui/kis_layer_manager.cc:191
 #, fuzzy, kde-format
+msgctxt "@action:inmenu"
+msgid "Merge Selected Layers"
+msgstr "&Spoji odabrane slojeve"
+
+#: libs/ui/kis_layer_manager.cc:193
+#, fuzzy, kde-format
 #| msgctxt "@title:window"
 #| msgid "Remove Group"
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "Ukloni grupu"
 
-#: libs/ui/kis_layer_manager.cc:192
+#: libs/ui/kis_layer_manager.cc:195
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "Stopi sa slojem ispod"
 
-#: libs/ui/kis_layer_manager.cc:211
+#: libs/ui/kis_layer_manager.cc:217
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Sloj je prazab"
 
-#: libs/ui/kis_layer_manager.cc:246
+#: libs/ui/kis_layer_manager.cc:252
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Svojstva filterskog sloja"
 
-#: libs/ui/kis_layer_manager.cc:290
+#: libs/ui/kis_layer_manager.cc:296
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "Postavke sloja popune"
 
-#: libs/ui/kis_layer_manager.cc:306
+#: libs/ui/kis_layer_manager.cc:312
 #, fuzzy, kde-format
 #| msgid "Filter Layer Properties"
 msgid "File Layer Properties"
 msgstr "Svojstva filterskog sloja"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
 #, kde-format
 msgid "No file name specified"
 msgstr "Nije navedeno ime datoteke."
 
-#: libs/ui/kis_layer_manager.cc:377
+#: libs/ui/kis_layer_manager.cc:383
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
 #| msgid "Change Filter"
 msgid "Change Clone Layer"
 msgstr "Promjeni filter"
 
-#: libs/ui/kis_layer_manager.cc:486
+#: libs/ui/kis_layer_manager.cc:492
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to a Paint Layer"
@@ -30321,19 +30327,19 @@ msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Konvertuj u Paint sloj"
 
-#: libs/ui/kis_layer_manager.cc:506
+#: libs/ui/kis_layer_manager.cc:512
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Spremi sloj/masku..."
 
-#: libs/ui/kis_layer_manager.cc:507
+#: libs/ui/kis_layer_manager.cc:513
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:570
+#: libs/ui/kis_layer_manager.cc:576
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to a Paint Layer"
@@ -30341,23 +30347,23 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Konvertuj u Paint sloj"
 
-#: libs/ui/kis_layer_manager.cc:700
+#: libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Novi filterski sloj"
 
-#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "&Datoteka sloj"
 
-#: libs/ui/kis_layer_manager.cc:776
+#: libs/ui/kis_layer_manager.cc:782
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Spljošti sliku"
 
-#: libs/ui/kis_layer_manager.cc:777
+#: libs/ui/kis_layer_manager.cc:783
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -30366,7 +30372,7 @@ msgstr ""
 "Slika sadrži skrivene slojeve, koji će biti izgubljeni. Želite li izravnati "
 "sliku?"
 
-#: libs/ui/kis_layer_manager.cc:855
+#: libs/ui/kis_layer_manager.cc:861
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager"
@@ -30376,14 +30382,14 @@ msgstr[0] "Sloj je zaključan"
 msgstr[1] "Sloj je zaključan"
 msgstr[2] "Sloj je zaključan"
 
-#: libs/ui/kis_layer_manager.cc:877
+#: libs/ui/kis_layer_manager.cc:883
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Sloj je zaključan"
 
-#: libs/ui/kis_layer_manager.cc:894
+#: libs/ui/kis_layer_manager.cc:900
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -30393,12 +30399,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:943
+#: libs/ui/kis_layer_manager.cc:949
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Prevedi nevidljive grupe"
 
-#: libs/ui/kis_layer_manager.cc:946
+#: libs/ui/kis_layer_manager.cc:952
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Izvezi samo grupe na najvišem nivou"
@@ -84355,11 +84361,6 @@ msgstr "Referentne slike"
 #, fuzzy
 #~ msgctxt "action"
 #~ msgid "&Merge Selected Layers"
-#~ msgstr "&Spoji odabrane slojeve"
-
-#, fuzzy
-#~ msgctxt "action"
-#~ msgid "Merge Selected Layers"
 #~ msgstr "&Spoji odabrane slojeve"
 
 #, fuzzy

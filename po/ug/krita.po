@@ -67,7 +67,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-22 01:47+0000\n"
+"POT-Creation-Date: 2024-07-25 01:45+0000\n"
 "PO-Revision-Date: 2013-09-08 07:04+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
@@ -17367,7 +17367,7 @@ msgstr "ئەكسىچە تاللا"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
+#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -17413,7 +17413,7 @@ msgid "Reselect"
 msgstr "ئەكسىچە تاللا"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1999
+#: libs/image/kis_layer_utils.cpp:2019
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, fuzzy, kde-format
 msgid "Selection Mask"
@@ -17662,7 +17662,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "تەگلىك"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "ھۆججەت …"
@@ -17773,7 +17773,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "كۆزەتكۈچ سەپلىكى(&M):"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2502
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
@@ -17939,13 +17939,13 @@ msgstr "ئەينەك"
 msgid "Anti-aliasing"
 msgstr "سائەت يۆنىلىشى(&C)"
 
-#: libs/image/kis_layer_utils.cpp:619
+#: libs/image/kis_layer_utils.cpp:625
 #, fuzzy, kde-format
 #| msgid "Merge"
 msgid "Merged"
 msgstr "بىرىكتۈر"
 
-#: libs/image/kis_layer_utils.cpp:1417
+#: libs/image/kis_layer_utils.cpp:1423
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Merge points"
@@ -17953,61 +17953,61 @@ msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "نۇقتىلارنى بىرىكتۈر"
 
-#: libs/image/kis_layer_utils.cpp:1665
+#: libs/image/kis_layer_utils.cpp:1671
 #, fuzzy, kde-format
 msgid "Copy of"
 msgstr "%1 نىڭ كۆپەيتىلمىسى"
 
-#: libs/image/kis_layer_utils.cpp:1738
+#: libs/image/kis_layer_utils.cpp:1744
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "ئېنىقلىق"
 
-#: libs/image/kis_layer_utils.cpp:1962
+#: libs/image/kis_layer_utils.cpp:1970
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "مۇندەرىجە تاللاش"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1988
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "ئاتى:"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1989
 #, fuzzy, kde-format
 #| msgid "Visible"
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "كۆرۈنۈشچان"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2068
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "تاللىغان شەكلى"
 
-#: libs/image/kis_layer_utils.cpp:2071
+#: libs/image/kis_layer_utils.cpp:2092
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/image/kis_layer_utils.cpp:2084
+#: libs/image/kis_layer_utils.cpp:2108
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/image/kis_layer_utils.cpp:2308
+#: libs/image/kis_layer_utils.cpp:2334
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "ئالفا"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2360
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to Path"
@@ -18448,12 +18448,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "قەۋەت"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
 #: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -18461,18 +18461,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "گۇرۇپپا:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "ھۆججەت …"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "قەۋەت"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
@@ -18792,7 +18792,7 @@ msgstr "سۈرەت رازمېرىنى ئۆزگەرتىش"
 msgid "Import frames"
 msgstr "سۈرەت رازمېرىنى ئۆزگەرتىش"
 
-#: libs/libkis/PaintingResources.cpp:25
+#: libs/libkis/PaintingResources.cpp:63
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
@@ -20175,8 +20175,8 @@ msgstr "مەنبەلەر(&R)"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29791,47 +29791,53 @@ msgstr "مۇندەرىجە تاللاش"
 #: libs/ui/kis_layer_manager.cc:191
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
+msgid "Merge Selected Layers"
+msgstr "مۇندەرىجە تاللاش"
+
+#: libs/ui/kis_layer_manager.cc:193
+#, fuzzy, kde-format
+msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "چىقىرىۋەت"
 
-#: libs/ui/kis_layer_manager.cc:192
+#: libs/ui/kis_layer_manager.cc:195
 #, fuzzy, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/ui/kis_layer_manager.cc:211
+#: libs/ui/kis_layer_manager.cc:217
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "قەۋەت"
 
-#: libs/ui/kis_layer_manager.cc:246
+#: libs/ui/kis_layer_manager.cc:252
 #, fuzzy, kde-format
 msgid "Filter Layer Properties"
 msgstr "سۈرەت خاسلىقى"
 
-#: libs/ui/kis_layer_manager.cc:290
+#: libs/ui/kis_layer_manager.cc:296
 #, fuzzy, kde-format
 msgid "Fill Layer Properties"
 msgstr "سۈرەت خاسلىقى"
 
-#: libs/ui/kis_layer_manager.cc:306
+#: libs/ui/kis_layer_manager.cc:312
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "سۈرەت خاسلىقى"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:377
+#: libs/ui/kis_layer_manager.cc:383
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "ھۆججەت …"
 
-#: libs/ui/kis_layer_manager.cc:486
+#: libs/ui/kis_layer_manager.cc:492
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to Path"
@@ -29839,19 +29845,19 @@ msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "يولغا ئۆزگەرت"
 
-#: libs/ui/kis_layer_manager.cc:506
+#: libs/ui/kis_layer_manager.cc:512
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "ھۆججەت …"
 
-#: libs/ui/kis_layer_manager.cc:507
+#: libs/ui/kis_layer_manager.cc:513
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:570
+#: libs/ui/kis_layer_manager.cc:576
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Convert to Path"
@@ -29859,43 +29865,43 @@ msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "يولغا ئۆزگەرت"
 
-#: libs/ui/kis_layer_manager.cc:700
+#: libs/ui/kis_layer_manager.cc:706
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "بوياش"
 
-#: libs/ui/kis_layer_manager.cc:776
+#: libs/ui/kis_layer_manager.cc:782
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "سۈرەتنى بىرلەشتۈرۈش"
 
-#: libs/ui/kis_layer_manager.cc:777
+#: libs/ui/kis_layer_manager.cc:783
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:855
+#: libs/ui/kis_layer_manager.cc:861
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "قەۋەت"
 
-#: libs/ui/kis_layer_manager.cc:877
+#: libs/ui/kis_layer_manager.cc:883
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "قەۋەت"
 
-#: libs/ui/kis_layer_manager.cc:894
+#: libs/ui/kis_layer_manager.cc:900
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29905,12 +29911,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:943
+#: libs/ui/kis_layer_manager.cc:949
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:946
+#: libs/ui/kis_layer_manager.cc:952
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -75205,11 +75211,6 @@ msgstr "نەقىل"
 #~ msgctxt "(qtundo-format) action"
 #~ msgid "Flatten image"
 #~ msgstr "سۈرەتنى بىرلەشتۈرۈش"
-
-#, fuzzy
-#~ msgctxt "(qtundo-format) action"
-#~ msgid "&Merge Selected Layers"
-#~ msgstr "مۇندەرىجە تاللاش"
 
 #, fuzzy
 #~ msgctxt "(qtundo-format) action"

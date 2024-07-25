@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-22 01:47+0000\n"
+"POT-Creation-Date: 2024-07-25 01:45+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16944,7 +16944,7 @@ msgstr "選択解除"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:693 libs/ui/kis_layer_manager.cc:745
+#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "レイヤーを追加"
@@ -16982,7 +16982,7 @@ msgid "Reselect"
 msgstr "再選択"
 
 #: libs/image/commands/kis_set_global_selection_command.cpp:54
-#: libs/image/kis_layer_utils.cpp:1999
+#: libs/image/kis_layer_utils.cpp:2019
 #: libs/impex/KisExportCheckRegistry.cpp:128
 #, kde-format
 msgid "Selection Mask"
@@ -17225,7 +17225,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:636
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
 #, kde-format
 msgid "Paint Layer"
 msgstr "ペイントレイヤー"
@@ -17321,7 +17321,7 @@ msgctxt "(qtundo-format)"
 msgid "Assign Profile"
 msgstr "プロファイルを適用"
 
-#: libs/image/kis_image.cc:2504
+#: libs/image/kis_image.cc:2502
 msgctxt "(qtundo-format)"
 msgid "Crop Selections"
 msgstr "選択範囲を切り取り"
@@ -17475,63 +17475,63 @@ msgstr "エラー"
 msgid "Anti-aliasing"
 msgstr "アンチエイリアシング"
 
-#: libs/image/kis_layer_utils.cpp:619
+#: libs/image/kis_layer_utils.cpp:625
 #, kde-format
 msgid "Merged"
 msgstr "統合済み"
 
-#: libs/image/kis_layer_utils.cpp:1417
+#: libs/image/kis_layer_utils.cpp:1423
 msgctxt "(qtundo-format)"
 msgid "Merge Down"
 msgstr "結合"
 
-#: libs/image/kis_layer_utils.cpp:1665
+#: libs/image/kis_layer_utils.cpp:1671
 #, kde-format
 msgid "Copy of"
 msgstr "コピー"
 
-#: libs/image/kis_layer_utils.cpp:1738
+#: libs/image/kis_layer_utils.cpp:1744
 msgctxt "(qtundo-format)"
 msgid "Change projection color"
 msgstr "投影色を変更"
 
-#: libs/image/kis_layer_utils.cpp:1962
+#: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
 msgstr "選択したレイヤーを統合"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1988
 msgctxt "(qtundo-format)"
 msgid "New From Visible"
 msgstr "表示されているレイヤーから新規作成"
 
-#: libs/image/kis_layer_utils.cpp:1970
+#: libs/image/kis_layer_utils.cpp:1989
 #, kde-format
 msgctxt "New layer created from all the visible layers"
 msgid "Visible"
 msgstr "表示レイヤー"
 
-#: libs/image/kis_layer_utils.cpp:2048
+#: libs/image/kis_layer_utils.cpp:2068
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
 msgstr "選択マスクを統合"
 
-#: libs/image/kis_layer_utils.cpp:2071
+#: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
 msgid "Flatten Layer"
 msgstr "レイヤーを統合"
 
-#: libs/image/kis_layer_utils.cpp:2084
+#: libs/image/kis_layer_utils.cpp:2108
 msgctxt "(qtundo-format)"
 msgid "Flatten Image"
 msgstr "画像を統合"
 
-#: libs/image/kis_layer_utils.cpp:2308
+#: libs/image/kis_layer_utils.cpp:2334
 msgctxt "(qtundo-format)"
 msgid "Split Alpha into a Mask"
 msgstr "アルファをマスクに分離"
 
-#: libs/image/kis_layer_utils.cpp:2334
+#: libs/image/kis_layer_utils.cpp:2360
 msgctxt "(qtundo-format)"
 msgid "Convert to a Paint Layer"
 msgstr "ペイントレイヤーに変換"
@@ -17953,30 +17953,30 @@ msgstr ""
 "この画像は<b>ミリ秒の分数</b>でフレーム間隔が設定されています。この形式では表"
 "現できないため、フレーム間隔は最も近いミリ秒に丸められます。"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:665
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
 #, kde-format
 msgid "Clone Layer"
 msgstr "クローンレイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:649
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
 #: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "グループ化"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:985
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
 #, kde-format
 msgid "File Layer"
 msgstr "ファイル参照レイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:678
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "ベクターレイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:700
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "Filter Layer"
 msgstr "フィルタレイヤー"
@@ -18301,7 +18301,7 @@ msgstr "Radiance RGBE 画像"
 msgid "Import frames"
 msgstr "フレームをインポート"
 
-#: libs/libkis/PaintingResources.cpp:25
+#: libs/libkis/PaintingResources.cpp:63
 #, fuzzy
 #| msgctxt "(qtundo-format)"
 #| msgid "Freehand Brush Stroke"
@@ -19604,8 +19604,8 @@ msgstr "ローカルリソース"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:317
-#: libs/ui/kis_layer_manager.cc:993 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
+#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29295,59 +29295,67 @@ msgid "Select a Color"
 msgstr "色を選択"
 
 #: libs/ui/kis_layer_manager.cc:191
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Merge Selected Nodes"
+msgctxt "@action:inmenu"
+msgid "Merge Selected Layers"
+msgstr "選択したレイヤーを統合"
+
+#: libs/ui/kis_layer_manager.cc:193
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Group"
 msgstr "グループを統合"
 
-#: libs/ui/kis_layer_manager.cc:192
+#: libs/ui/kis_layer_manager.cc:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge with Layer Below"
 msgstr "下のレイヤーと統合"
 
-#: libs/ui/kis_layer_manager.cc:211
+#: libs/ui/kis_layer_manager.cc:217
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "レイヤーは空です"
 
-#: libs/ui/kis_layer_manager.cc:246
+#: libs/ui/kis_layer_manager.cc:252
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "フィルタレイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:290
+#: libs/ui/kis_layer_manager.cc:296
 #, kde-format
 msgid "Fill Layer Properties"
 msgstr "塗りつぶしレイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:306
+#: libs/ui/kis_layer_manager.cc:312
 #, kde-format
 msgid "File Layer Properties"
 msgstr "ファイル参照レイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:317 libs/ui/kis_layer_manager.cc:993
+#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
 #, kde-format
 msgid "No file name specified"
 msgstr "ファイル名が指定されていません。"
 
-#: libs/ui/kis_layer_manager.cc:377
+#: libs/ui/kis_layer_manager.cc:383
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "クローンレイヤーを変更"
 
-#: libs/ui/kis_layer_manager.cc:486
+#: libs/ui/kis_layer_manager.cc:492
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "アニメーションレイヤーに変換"
 
-#: libs/ui/kis_layer_manager.cc:506
+#: libs/ui/kis_layer_manager.cc:512
 #, kde-format
 msgid "Save layers to..."
 msgstr "レイヤーを保存..."
 
-#: libs/ui/kis_layer_manager.cc:507
+#: libs/ui/kis_layer_manager.cc:513
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29356,48 +29364,48 @@ msgstr ""
 "レイヤーを保存する場所を選択します。新しいファイル参照レイヤーはこの場所を参"
 "照します。"
 
-#: libs/ui/kis_layer_manager.cc:570
+#: libs/ui/kis_layer_manager.cc:576
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "ファイル参照レイヤーに変換"
 
-#: libs/ui/kis_layer_manager.cc:700
+#: libs/ui/kis_layer_manager.cc:706
 #, kde-format
 msgid "New Filter Layer"
 msgstr "新しいフィルタレイヤー"
 
-#: libs/ui/kis_layer_manager.cc:749 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "塗りつぶしレイヤー"
 
-#: libs/ui/kis_layer_manager.cc:776
+#: libs/ui/kis_layer_manager.cc:782
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "画像を統合"
 
-#: libs/ui/kis_layer_manager.cc:777
+#: libs/ui/kis_layer_manager.cc:783
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "画像の非表示レイヤーはこの操作により失われます。画像を統合しますか？"
 
-#: libs/ui/kis_layer_manager.cc:855
+#: libs/ui/kis_layer_manager.cc:861
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "レイヤーはロックされています"
 
-#: libs/ui/kis_layer_manager.cc:877
+#: libs/ui/kis_layer_manager.cc:883
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "レイヤーはロックされています"
 
-#: libs/ui/kis_layer_manager.cc:894
+#: libs/ui/kis_layer_manager.cc:900
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29409,12 +29417,12 @@ msgstr ""
 "アニメーションレイヤーではないレイヤーが現在のフレームに統合されます。全ての"
 "クリップに統合するには少なくとも 1 つフレームを作成してください"
 
-#: libs/ui/kis_layer_manager.cc:943
+#: libs/ui/kis_layer_manager.cc:949
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "非表示グループを変換"
 
-#: libs/ui/kis_layer_manager.cc:946
+#: libs/ui/kis_layer_manager.cc:952
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "トップレベルグループのみをエクスポート"

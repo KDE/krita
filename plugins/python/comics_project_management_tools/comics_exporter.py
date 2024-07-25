@@ -420,7 +420,7 @@ class comicsExporter():
     def handleShapeDescription(self, shape, list, textOnly=False):
         return
         # Turn off shape retrieval for now until the new text tool is finished.
-        """
+        r"""
         if (shape.type() != "KoSvgTextShapeID" and textOnly is True):
             return
         shapeDesc = {}
@@ -429,7 +429,7 @@ class comicsExporter():
         listOfPoints = [rect.topLeft(), rect.topRight(), rect.bottomRight(), rect.bottomLeft()]
         shapeDoc = minidom.parseString(shape.toSvg())
         docElem = shapeDoc.documentElement
-        svgRegExp = re.compile('[MLCSQHVATmlzcqshva]\d+\.?\d* \d+\.?\d*')
+        svgRegExp = re.compile(r'[MLCSQHVATmlzcqshva]\d+\.?\d* \d+\.?\d*')
         transform = docElem.getAttribute("transform")
         coord = []
         adjust = QTransform()
@@ -539,7 +539,7 @@ class comicsExporter():
                     fontsize = int(size)
                     font = QFont(family, fontsize)
                     string = el.toxml()
-                    string = re.sub("\<.*?\>", " ", string)
+                    string = re.sub(r"\<.*?\>", " ", string)
                     string = string.replace("  ", " ")
                     width = min(QFontMetrics(font).width(string.strip()), rect.width())
                     height = QFontMetrics(font).height()

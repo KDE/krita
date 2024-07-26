@@ -2651,6 +2651,16 @@ bool KisDocument::newImage(const QString& name,
         layer->setDirty(QRect(0, 0, width, height));
     }
 
+    {
+        KisMainWindow *window = KisPart::instance()->currentMainwindow();
+        if (window) {
+            /**
+             * Preinitialize color history for new documents when possible
+             */
+            setColorHistory(window->viewManager()->canvasResourceProvider()->colorHistory());
+        }
+    }
+
     KisUsageLogger::log(
         QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
             .arg(name, QString::number(width), QString::number(height),

@@ -29,10 +29,10 @@ KisColorHistory::KisColorHistory(QWidget *parent)
     m_clearButton->setIcon(KisIconUtils::loadIcon("dialog-cancel-16"));
     m_clearButton->setToolTip(i18n("Clear all color history"));
     m_clearButton->setAutoRaise(true);
-    updateStrategy();
+    updateSettings();
 
     connect(m_clearButton, SIGNAL(clicked()), this, SLOT(clearColorHistory()));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateStrategy()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateUserSettings()));
     connect(s_color_history_change_notifier, SIGNAL(colorHistoryChanged(const QList<KoColor>&)),
             this, SLOT(colorHistoryChanged(const QList<KoColor>&)));
 
@@ -107,13 +107,20 @@ void KisColorHistory::updateColorHistory(const QList<KoColor> &history)
 {
     if (m_history_per_document && m_document) {
         m_document->setColorHistory(history);
-    } else if (m_resourceProvider) {
+    }
+
+    /**
+     * Resource provider saves the history all the time, whatever the
+     * option state is.
+     */
+    if (m_resourceProvider) {
         m_resourceProvider->setColorHistory(history);
     }
+
     setColors(history);
 }
 
-void KisColorHistory::updateStrategy()
+void KisColorHistory::updateUserSettings()
 {
    KisConfig config(true);
    m_history_per_document = config.colorHistoryPerDocument();
@@ -122,16 +129,12 @@ void KisColorHistory::updateStrategy()
 
 void KisColorHistory::colorHistoryChanged(const QList<KoColor> &history)
 {
-   if (sender() != this) {
-       if (m_history_per_document) {
-           // The document is shared also across windows to passed history is not required.
-           // Differently, the update may contain the history for another document.
-           updateColorHistory(colorHistory());
-       } else {
-           // The resource provider is per window so needs an update if the history must be global.
-           updateColorHistory(history);
-       }
-   }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(sender() != this);
+
+    if (m_resourceProvider) {
+        m_resourceProvider->setColorHistory(history);
+    }
+    setColors(history);
 }
 
 void KisColorHistoryNotifier::notifyColorHistoryChanged(const QList<KoColor> &history)

@@ -29,7 +29,7 @@ public Q_SLOTS:
 
     void clearColorHistory();
 
-    void updateStrategy();
+    void updateUserSettings();
 
     // Receive notification that the color history changed in some selector
     void colorHistoryChanged(const QList<KoColor> &history);

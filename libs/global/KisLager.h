@@ -7,6 +7,7 @@
 #define KISLAGER_H
 
 #include <QtGlobal>
+#include <QVariant>
 #include <type_traits>
 #include "KisMpl.h"
 
@@ -98,6 +99,18 @@ auto to_base = lager::lenses::getset(
     [] (const auto &value) -> Base { return static_cast<const Base&>(value); },
     [] (auto src, const Base &value) { static_cast<Base&>(src) = value; return src; }
     );
+
+template <typename T>
+auto variant_to = lager::lenses::getset(
+    [] (const QVariant &src) {
+        return src.value<T>();
+    },
+    [] (QVariant src, const T &value) {
+        src = QVariant::fromValue<T>(value);
+        return src;
+    }
+);
+
 
 } // namespace lenses
 

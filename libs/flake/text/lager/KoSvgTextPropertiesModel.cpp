@@ -3,22 +3,15 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
+#include <KisLager.h>
 #include "KoSvgTextPropertiesModel.h"
 #include "KoSvgTextProperties.h"
 #include <lager/constant.hpp>
 #include <QDebug>
 
-namespace {
+using kislager::lenses::variant_to;
 
-auto createCommonProperties = lager::lenses::getset (
-            [] (const KoSvgTextPropertyData &value) -> KoSvgTextProperties {
-    return value.commonProperties;
-},
-[] (KoSvgTextPropertyData data, const KoSvgTextProperties &props) -> KoSvgTextPropertyData {
-    data.commonProperties = props;
-    return data;
-}
-            );
+namespace {
 
 auto createTextProperty = [](KoSvgTextProperties::PropertyId propId) { return lager::lenses::getset(
                 [propId](const KoSvgTextPropertyData &value) -> QVariant {
@@ -60,102 +53,79 @@ auto propertyModifyState = [](KoSvgTextProperties::PropertyId propId) { return l
     );
 };
 
-auto integerProperty = lager::lenses::getset(
-            [](const QVariant &value) -> int {return value.toInt();},
-            [](QVariant value, const int &val){value = QVariant::fromValue(val); return value;});
-auto boolProperty = lager::lenses::getset(
-            [](const QVariant &value) -> bool {return value.toBool();},
-            [](QVariant value, const bool &val){value = QVariant::fromValue(val); return value;});
-auto lengthPercentageProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgText::CssLengthPercentage {return value.value<KoSvgText::CssLengthPercentage>();},
-            [](QVariant value, const KoSvgText::CssLengthPercentage &val){value = QVariant::fromValue(val); return value;});
-auto simplifiedAutoLengthProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgText::CssLengthPercentage {
-                KoSvgText::AutoLengthPercentage length = value.value<KoSvgText::AutoLengthPercentage>();
+auto simplifiedAutoLengthPropertyImpl = lager::lenses::getset(
+            [](const KoSvgText::AutoLengthPercentage &length) -> KoSvgText::CssLengthPercentage {
                 return length.isAuto? KoSvgText::CssLengthPercentage(): length.length;
             },
-            [](QVariant value, const KoSvgText::CssLengthPercentage &val){
-                value = QVariant::fromValue(KoSvgText::AutoLengthPercentage(val)); return value;
+            [](KoSvgText::AutoLengthPercentage length, const KoSvgText::CssLengthPercentage &val){
+                length = val; return length;
             }
         );
-auto stringListProperty = lager::lenses::getset(
-            [](const QVariant &value) -> QStringList {return value.value<QStringList>();},
-            [](QVariant value, const QStringList &val){value = QVariant::fromValue(val); return value;});
-auto lineHeightProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgText::LineHeightInfo {return value.value<KoSvgText::LineHeightInfo>();},
-            [](QVariant value, const KoSvgText::LineHeightInfo &val){value = QVariant::fromValue(val); return value;});
-auto textIndentProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgText::TextIndentInfo {return value.value<KoSvgText::TextIndentInfo>();},
-            [](QVariant value, const KoSvgText::TextIndentInfo &val){value = QVariant::fromValue(val); return value;});
-auto tabSizeProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgText::TabSizeInfo {return value.value<KoSvgText::TabSizeInfo>();},
-            [](QVariant value, const KoSvgText::TabSizeInfo &val){value = QVariant::fromValue(val); return value;});
-auto textTransformProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgText::TextTransformInfo {return value.value<KoSvgText::TextTransformInfo>();},
-            [](QVariant value, const KoSvgText::TextTransformInfo &val){value = QVariant::fromValue(val); return value;});
+
+auto simplifiedAutoLengthProperty = variant_to<KoSvgText::AutoLengthPercentage> | simplifiedAutoLengthPropertyImpl;
+
+auto textDecorLinePropImpl = [](KoSvgText::TextDecoration flag) {
+    return lager::lenses::getset(
+        [flag] (const KoSvgText::TextDecorations &value) -> bool {
+            return value.testFlag(flag);
+        },
+        [flag] (KoSvgText::TextDecorations value, const bool &val){
+            value.setFlag(flag, val);
+            return value;
+        }
+    );
+};
+
 auto textDecorLineProp = [](KoSvgText::TextDecoration flag) {
+    return variant_to<KoSvgText::TextDecorations> | textDecorLinePropImpl(flag);
+};
+
+auto hangPunctuationPropImpl = [](KoSvgText::HangingPunctuation flag) {
     return lager::lenses::getset(
-        [flag](const QVariant &value) -> bool {
-            return value.value<KoSvgText::TextDecorations>().testFlag(flag);
+        [flag] (const KoSvgText::HangingPunctuations &value) -> bool {
+            return value.testFlag(flag);
         },
-        [flag](QVariant value, const bool &val){
-            KoSvgText::TextDecorations decor = value.value<KoSvgText::TextDecorations>();
-            decor.setFlag(flag, val);
-            value = QVariant::fromValue(decor);
+        [flag] (KoSvgText::HangingPunctuations value, const bool &val){
+            value.setFlag(flag, val);
             return value;
         }
     );
 };
+
 auto hangPunctuationProp = [](KoSvgText::HangingPunctuation flag) {
-    return lager::lenses::getset(
-        [flag](const QVariant &value) -> bool {
-            return value.value<KoSvgText::HangingPunctuations>().testFlag(flag);
-        },
-        [flag](QVariant value, const bool &val){
-            KoSvgText::HangingPunctuations hang = value.value<KoSvgText::HangingPunctuations>();
-            hang.setFlag(flag, val);
-            value = QVariant::fromValue(hang);
-            return value;
-        }
-    );
+    return variant_to<KoSvgText::HangingPunctuations> | hangPunctuationPropImpl(flag);
 };
-auto hangingPunactuationCommaProp = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgTextPropertiesModel::HangComma {
-                KoSvgText::HangingPunctuations hang = value.value<KoSvgText::HangingPunctuations>();
-                if (hang.testFlag(KoSvgText::HangEnd)) {
-                    return hang.testFlag(KoSvgText::HangForce)?
-                                KoSvgTextPropertiesModel::HangComma::ForceHang:
+
+auto hangingPunactuationCommaPropImpl = lager::lenses::getset(
+            [] (const KoSvgText::HangingPunctuations &value) -> KoSvgTextPropertiesModel::HangComma {
+                if (value.testFlag(KoSvgText::HangEnd)) {
+                    return value.testFlag(KoSvgText::HangForce) ?
+                                KoSvgTextPropertiesModel::HangComma::ForceHang :
                                 KoSvgTextPropertiesModel::HangComma::AllowHang;
                 }
                 return KoSvgTextPropertiesModel::NoHang;
             },
-            [](QVariant value, const KoSvgTextPropertiesModel::HangComma &val){
-            KoSvgText::HangingPunctuations hang = value.value<KoSvgText::HangingPunctuations>();
-            switch (val) {
-            case KoSvgTextPropertiesModel::NoHang:
-                hang.setFlag(KoSvgText::HangEnd, false);
-                hang.setFlag(KoSvgText::HangForce, false);
-                break;
-            case KoSvgTextPropertiesModel::AllowHang:
-                hang.setFlag(KoSvgText::HangEnd, true);
-                hang.setFlag(KoSvgText::HangForce, false);
-                break;
-            case KoSvgTextPropertiesModel::ForceHang:
-                hang.setFlag(KoSvgText::HangEnd, true);
-                hang.setFlag(KoSvgText::HangForce, true);
-                break;
-            }
-            value = QVariant::fromValue(hang);
-            return value;
+            [] (KoSvgText::HangingPunctuations value, const KoSvgTextPropertiesModel::HangComma &val){
+                switch (val) {
+                case KoSvgTextPropertiesModel::NoHang:
+                    value.setFlag(KoSvgText::HangEnd, false);
+                    value.setFlag(KoSvgText::HangForce, false);
+                    break;
+                case KoSvgTextPropertiesModel::AllowHang:
+                    value.setFlag(KoSvgText::HangEnd, true);
+                    value.setFlag(KoSvgText::HangForce, false);
+                    break;
+                case KoSvgTextPropertiesModel::ForceHang:
+                    value.setFlag(KoSvgText::HangEnd, true);
+                    value.setFlag(KoSvgText::HangForce, true);
+                    break;
+                }
+                return value;
             }
         );
-auto fontStyleProperty = lager::lenses::getset(
-            [](const QVariant &value) -> KoSvgTextPropertiesModel::FontStyle {return KoSvgTextPropertiesModel::FontStyle(value.toInt());},
-            [](QVariant value, const KoSvgTextPropertiesModel::FontStyle &val){value = QVariant::fromValue(val); return value;});
-auto qColorProperty = lager::lenses::getset(
-            [](const QVariant &value) -> QColor {return value.value<QColor>();},
-            [](QVariant value, const QColor &val){value = QVariant::fromValue(val); return value;});
 
+auto hangingPunactuationCommaProp =
+        variant_to<KoSvgText::HangingPunctuations> | hangingPunactuationCommaPropImpl;
 
 }
 
@@ -172,15 +142,15 @@ auto propertyState = [](const KoSvgTextProperties::PropertyId &propId) { return 
 
 KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextPropertyData> _textData)
     : textData(_textData)
-    , commonProperties(textData.zoom(createCommonProperties))
-    , fontSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::FontSizeId)).zoom(lengthPercentageProperty))
-    , lineHeightData(textData.zoom(createTextProperty(KoSvgTextProperties::LineHeightId)).zoom(lineHeightProperty))
+    , commonProperties(textData[&KoSvgTextPropertyData::commonProperties])
+    , fontSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::FontSizeId)).zoom(variant_to<KoSvgText::CssLengthPercentage>))
+    , lineHeightData(textData.zoom(createTextProperty(KoSvgTextProperties::LineHeightId)).zoom(variant_to<KoSvgText::LineHeightInfo>))
     , letterSpacingData(textData.zoom(createTextProperty(KoSvgTextProperties::LetterSpacingId)).zoom(simplifiedAutoLengthProperty))
     , wordSpacingData(textData.zoom(createTextProperty(KoSvgTextProperties::WordSpacingId)).zoom(simplifiedAutoLengthProperty))
-    , baselineShiftValueData(textData.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftValueId)).zoom(lengthPercentageProperty))
-    , textIndentData(textData.zoom(createTextProperty(KoSvgTextProperties::TextIndentId)).zoom(textIndentProperty))
-    , tabSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::TabSizeId)).zoom(tabSizeProperty))
-    , textTransformData(textData.zoom(createTextProperty(KoSvgTextProperties::TextTransformId)).zoom(textTransformProperty))
+    , baselineShiftValueData(textData.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftValueId)).zoom(variant_to<KoSvgText::CssLengthPercentage>))
+    , textIndentData(textData.zoom(createTextProperty(KoSvgTextProperties::TextIndentId)).zoom(variant_to<KoSvgText::TextIndentInfo>))
+    , tabSizeData(textData.zoom(createTextProperty(KoSvgTextProperties::TabSizeId)).zoom(variant_to<KoSvgText::TabSizeInfo>))
+    , textTransformData(textData.zoom(createTextProperty(KoSvgTextProperties::TextTransformId)).zoom(variant_to<KoSvgText::TextTransformInfo>))
     , fontSizeModel(fontSizeData)
     , lineHeightModel(lineHeightData)
     , letterSpacingModel(letterSpacingData)
@@ -196,47 +166,47 @@ KoSvgTextPropertiesModel::KoSvgTextPropertiesModel(lager::cursor<KoSvgTextProper
     , LAGER_QT(textIndentState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextIndentId))}
     , LAGER_QT(tabSizeState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TabSizeId))}
     , LAGER_QT(textTransformState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextTransformId))}
-    , LAGER_QT(writingMode) {textData.zoom(createTextProperty(KoSvgTextProperties::WritingModeId)).zoom(integerProperty)}
+    , LAGER_QT(writingMode) {textData.zoom(createTextProperty(KoSvgTextProperties::WritingModeId)).zoom(variant_to<int>)}
     , LAGER_QT(writingModeState) {textData.zoom(propertyModifyState(KoSvgTextProperties::WritingModeId))}
-    , LAGER_QT(direction) {textData.zoom(createTextProperty(KoSvgTextProperties::DirectionId)).zoom(integerProperty)}
+    , LAGER_QT(direction) {textData.zoom(createTextProperty(KoSvgTextProperties::DirectionId)).zoom(variant_to<int>)}
     , LAGER_QT(directionState) {textData.zoom(propertyModifyState(KoSvgTextProperties::DirectionId))}
-    , LAGER_QT(unicodeBidi) {textData.zoom(createTextProperty(KoSvgTextProperties::UnicodeBidiId)).zoom(integerProperty)}
+    , LAGER_QT(unicodeBidi) {textData.zoom(createTextProperty(KoSvgTextProperties::UnicodeBidiId)).zoom(variant_to<int>)}
     , LAGER_QT(unicodeBidiState) {textData.zoom(propertyModifyState(KoSvgTextProperties::UnicodeBidiId))}
-    , LAGER_QT(textAlignAll) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAlignAllId)).zoom(integerProperty)}
+    , LAGER_QT(textAlignAll) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAlignAllId)).zoom(variant_to<int>)}
     , LAGER_QT(textAlignAllState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextAlignAllId))}
-    , LAGER_QT(textAlignLast) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAlignLastId)).zoom(integerProperty)}
+    , LAGER_QT(textAlignLast) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAlignLastId)).zoom(variant_to<int>)}
     , LAGER_QT(textAlignLastState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextAlignLastId))}
-    , LAGER_QT(textAnchor) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAnchorId)).zoom(integerProperty)}
+    , LAGER_QT(textAnchor) {textData.zoom(createTextProperty(KoSvgTextProperties::TextAnchorId)).zoom(variant_to<int>)}
     , LAGER_QT(textAnchorState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextAnchorId))}
-    , LAGER_QT(fontWeight) {textData.zoom(createTextProperty(KoSvgTextProperties::FontWeightId)).zoom(integerProperty)}
+    , LAGER_QT(fontWeight) {textData.zoom(createTextProperty(KoSvgTextProperties::FontWeightId)).zoom(variant_to<int>)}
     , LAGER_QT(fontWeightState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontWeightId))}
-    , LAGER_QT(fontWidth) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStretchId)).zoom(integerProperty)}
+    , LAGER_QT(fontWidth) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStretchId)).zoom(variant_to<int>)}
     , LAGER_QT(fontWidthState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontStretchId))}
-    , LAGER_QT(fontStyle) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(fontStyleProperty)}
+    , LAGER_QT(fontStyle) {textData.zoom(createTextProperty(KoSvgTextProperties::FontStyleId)).zoom(variant_to<KoSvgTextPropertiesModel::FontStyle>)}
     , LAGER_QT(fontStyleState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontStyleId))}
-    , LAGER_QT(fontOpticalSizeLink) {textData.zoom(createTextProperty(KoSvgTextProperties::FontOpticalSizingId)).zoom(boolProperty)}
+    , LAGER_QT(fontOpticalSizeLink) {textData.zoom(createTextProperty(KoSvgTextProperties::FontOpticalSizingId)).zoom(variant_to<bool>)}
     , LAGER_QT(fontOpticalSizeLinkState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontOpticalSizingId))}
-    , LAGER_QT(fontFamilies) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(stringListProperty)}
+    , LAGER_QT(fontFamilies) {textData.zoom(createTextProperty(KoSvgTextProperties::FontFamiliesId)).zoom(variant_to<QStringList>)}
     , LAGER_QT(fontFamiliesState) {textData.zoom(propertyModifyState(KoSvgTextProperties::FontFamiliesId))}
     , LAGER_QT(textDecorationUnderline){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationUnderline))}
     , LAGER_QT(textDecorationOverline){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationOverline))}
     , LAGER_QT(textDecorationLineThrough){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationLineId)).zoom(textDecorLineProp(KoSvgText::DecorationLineThrough))}
     , LAGER_QT(textDecorationLineState) {textData.zoom(propertyModifyState(KoSvgTextProperties::TextDecorationLineId))}
-    , LAGER_QT(textDecorationStyle){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationStyleId)).zoom(integerProperty)}
-    , LAGER_QT(textDecorationColor){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationColorId)).zoom(qColorProperty)}
+    , LAGER_QT(textDecorationStyle){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationStyleId)).zoom(variant_to<int>)}
+    , LAGER_QT(textDecorationColor){textData.zoom(createTextProperty(KoSvgTextProperties::TextDecorationColorId)).zoom(variant_to<QColor>)}
     , LAGER_QT(hangingPunctuationFirst){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangFirst))}
     , LAGER_QT(hangingPunctuationComma){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangingPunactuationCommaProp)}
     , LAGER_QT(hangingPunctuationLast){textData.zoom(createTextProperty(KoSvgTextProperties::HangingPunctuationId)).zoom(hangPunctuationProp(KoSvgText::HangLast))}
     , LAGER_QT(hangingPunctuationState) {textData.zoom(propertyModifyState(KoSvgTextProperties::HangingPunctuationId))}
-    , LAGER_QT(alignmentBaseline){textData.zoom(createTextProperty(KoSvgTextProperties::AlignmentBaselineId)).zoom(integerProperty)}
+    , LAGER_QT(alignmentBaseline){textData.zoom(createTextProperty(KoSvgTextProperties::AlignmentBaselineId)).zoom(variant_to<int>)}
     , LAGER_QT(alignmentBaselineState) {textData.zoom(propertyModifyState(KoSvgTextProperties::AlignmentBaselineId))}
-    , LAGER_QT(dominantBaseline){textData.zoom(createTextProperty(KoSvgTextProperties::DominantBaselineId)).zoom(integerProperty)}
+    , LAGER_QT(dominantBaseline){textData.zoom(createTextProperty(KoSvgTextProperties::DominantBaselineId)).zoom(variant_to<int>)}
     , LAGER_QT(dominantBaselineState) {textData.zoom(propertyModifyState(KoSvgTextProperties::DominantBaselineId))}
-    , LAGER_QT(baselineShiftMode){textData.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftModeId)).zoom(integerProperty)}
+    , LAGER_QT(baselineShiftMode){textData.zoom(createTextProperty(KoSvgTextProperties::BaselineShiftModeId)).zoom(variant_to<int>)}
     , LAGER_QT(baselineShiftState) {textData.zoom(propertyModifyState(KoSvgTextProperties::BaselineShiftModeId))}
-    , LAGER_QT(wordBreak){textData.zoom(createTextProperty(KoSvgTextProperties::WordBreakId)).zoom(integerProperty)}
+    , LAGER_QT(wordBreak){textData.zoom(createTextProperty(KoSvgTextProperties::WordBreakId)).zoom(variant_to<int>)}
     , LAGER_QT(wordBreakState) {textData.zoom(propertyModifyState(KoSvgTextProperties::WordBreakId))}
-    , LAGER_QT(lineBreak){textData.zoom(createTextProperty(KoSvgTextProperties::LineBreakId)).zoom(integerProperty)}
+    , LAGER_QT(lineBreak){textData.zoom(createTextProperty(KoSvgTextProperties::LineBreakId)).zoom(variant_to<int>)}
     , LAGER_QT(lineBreakState) {textData.zoom(propertyModifyState(KoSvgTextProperties::LineBreakId))}
     , LAGER_QT(spanSelection) {textData[&KoSvgTextPropertyData::spanSelection]}
 {

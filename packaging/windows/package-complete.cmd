@@ -756,6 +756,13 @@ if exist "%KRITA_INSTALL_DIR%\lib\qml" (
     set "QMLDIR_ARGS=%QMLDIR_ARGS% --qmldir %KRITA_INSTALL_DIR%\lib\qml"
 )
 
+:: For some reason windowsdeployqt skips installing Layouts QML plugin,
+:: so we need to copy it manually
+if exist "%DEPS_INSTALL_DIR%\qml\QtQuick\Layouts" (
+    xcopy.exe /Y /S /I %DEPS_INSTALL_DIR%\qml\QtQuick\Layouts %pkg_root%\bin\QtQuick\Layouts
+)
+
+
 :: windeployqt
 windeployqt.exe %QMLDIR_ARGS% --release -gui -core -concurrent -network -printsupport -svg -xml -sql -qml -quick -quickwidgets %pkg_root%\bin\krita.exe %pkg_root%\bin\krita.dll
 if errorlevel 1 (

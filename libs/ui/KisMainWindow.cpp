@@ -1362,13 +1362,13 @@ bool KisMainWindow::saveDocument(KisDocument *document, bool saveas, bool isExpo
 
             //For if the user picked All Files Supported as the default, where there would not be an extension
             if(default_mime_type == "all/mime"){
-                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : QFileInfo(suggestedURL.toLocalFile()).completeBaseName(), true);
+                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath : proposedPath + "/" + QFileInfo(suggestedURL.toLocalFile()).completeBaseName(), true);
             }
 
             if (default_mime_type != "all/mime" && !default_mime_type.isEmpty()) {
                 QString proposedExtension = KisMimeDatabase::suffixesForMimeType(proposedMimeType).first().remove("*,");
                 //This line is responsible for setting filename, which also manipulates filters.
-                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath :  QFileInfo(suggestedURL.toLocalFile()).completeBaseName() + "." + proposedExtension, true);
+                dialog.setDefaultDir(suggestedURL.isEmpty() ? proposedPath :  proposedPath + "/" + QFileInfo(suggestedURL.toLocalFile()).completeBaseName() + "." + proposedExtension, true);
             }
 
             if (!isExporting) {

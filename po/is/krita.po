@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 01:45+0000\n"
+"POT-Creation-Date: 2024-07-26 01:43+0000\n"
 "PO-Revision-Date: 2021-12-26 13:54+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -17252,7 +17252,7 @@ msgstr "Afvelja"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
+#: libs/ui/kis_layer_manager.cc:712 libs/ui/kis_layer_manager.cc:764
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -17547,7 +17547,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Bakgrunnur"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:655
 #, fuzzy, kde-format
 #| msgctxt "action"
 #| msgid "Paste Layer"
@@ -18316,30 +18316,30 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:684
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "Flytja lag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
 #: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Hópur"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:1004
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "Kvarða lag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:697
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "Vigralag"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:719
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "Mynstur"
@@ -19990,8 +19990,8 @@ msgstr "Mynd"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29489,79 +29489,79 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Mynd"
 
-#: libs/ui/kis_layer_manager.cc:252
+#: libs/ui/kis_layer_manager.cc:256
 #, fuzzy, kde-format
 msgid "Filter Layer Properties"
 msgstr "Eiginleikar mynda"
 
-#: libs/ui/kis_layer_manager.cc:296
-#, fuzzy, kde-format
-msgid "Fill Layer Properties"
-msgstr "Eiginleikar mynda"
-
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:301
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "Eiginleikar mynda"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1012
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:383
+#: libs/ui/kis_layer_manager.cc:339
+#, fuzzy, kde-format
+msgid "Fill Layer Properties"
+msgstr "Eiginleikar mynda"
+
+#: libs/ui/kis_layer_manager.cc:396
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "Kvarða lag"
 
-#: libs/ui/kis_layer_manager.cc:492
+#: libs/ui/kis_layer_manager.cc:505
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Fjaðra val"
 
-#: libs/ui/kis_layer_manager.cc:512
+#: libs/ui/kis_layer_manager.cc:525
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "Vista &sem..."
 
-#: libs/ui/kis_layer_manager.cc:513
+#: libs/ui/kis_layer_manager.cc:526
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:576
+#: libs/ui/kis_layer_manager.cc:589
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Ví&xla vali"
 
-#: libs/ui/kis_layer_manager.cc:706
+#: libs/ui/kis_layer_manager.cc:719
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "Nýtt lag"
 
-#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:768 libs/ui/kis_mimedata.cpp:320
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "Öll lög"
 
-#: libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:795
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Fletja mynd"
 
-#: libs/ui/kis_layer_manager.cc:783
+#: libs/ui/kis_layer_manager.cc:796
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:861
+#: libs/ui/kis_layer_manager.cc:874
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager"
@@ -29570,14 +29570,14 @@ msgid_plural "Layers are locked"
 msgstr[0] "Mynd"
 msgstr[1] "Mynd"
 
-#: libs/ui/kis_layer_manager.cc:883
+#: libs/ui/kis_layer_manager.cc:896
 #, fuzzy, kde-format
 #| msgid "Layer is locked."
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Mynd"
 
-#: libs/ui/kis_layer_manager.cc:900
+#: libs/ui/kis_layer_manager.cc:913
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29587,12 +29587,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:949
+#: libs/ui/kis_layer_manager.cc:962
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:952
+#: libs/ui/kis_layer_manager.cc:965
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -34986,37 +34986,37 @@ msgstr "Hornskeyting"
 msgid "Miter limit"
 msgstr "Afmarkari"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 msgid "Line Style:"
 msgstr "Línustíll"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Línustíll"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Stjarnan"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Valtól"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -36057,6 +36057,73 @@ msgstr "&Um %1"
 msgid "About &KDE"
 msgstr "Um &KDE"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#, fuzzy, kde-format
+msgid "Unit"
+msgstr "Eining:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "Mynstur"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+msgid "percent of view width (vw)"
+msgstr "Línubreidd"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+msgid "percent of view height (vh)"
+msgstr "Línubreidd"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+msgid "degrees (°)"
+msgstr " gráður"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+msgid "percent of circle (%)"
+msgstr "Mynstur"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, fuzzy, kde-format
+msgid "frames (f)"
+msgstr "Eyða lagi"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+msgid "seconds (s)"
+msgstr "{seconds}sek"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+msgid "percent of animation (%)"
+msgstr "Viðbót"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, fuzzy, kde-format
 msgid "Font Family"
@@ -36104,58 +36171,6 @@ msgstr "Skref"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "Færa niður"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "Mynstur"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-msgid "percent of view height (vh)"
-msgstr "Línubreidd"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-msgid "percent of view width (vw)"
-msgstr "Línubreidd"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-msgid "degrees (°)"
-msgstr " gráður"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-msgid "percent of circle (%)"
-msgstr "Mynstur"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, fuzzy, kde-format
-msgid "frames (f)"
-msgstr "Eyða lagi"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-msgid "percent of animation (%)"
-msgstr "Viðbót"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-msgid "seconds (s)"
-msgstr "{seconds}sek"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, fuzzy, kde-format

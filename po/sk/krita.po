@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 01:45+0000\n"
+"POT-Creation-Date: 2024-07-26 01:43+0000\n"
 "PO-Revision-Date: 2022-11-10 18:48+0100\n"
 "Last-Translator: Ferdinand Galko <galko.ferdinand@gmail.com>\n"
 "Language-Team: Slovak <opensuse-translation@opensuse.org>\n"
@@ -17000,7 +17000,7 @@ msgstr "Zrušiť výber"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
+#: libs/ui/kis_layer_manager.cc:712 libs/ui/kis_layer_manager.cc:764
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Pridať vrstvu"
@@ -17281,7 +17281,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Pozadie"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:655
 #, kde-format
 msgid "Paint Layer"
 msgstr "Maľovať vrstvu"
@@ -18018,30 +18018,30 @@ msgstr ""
 "to nedokáže znázorniť a trvanie snímky sa zaokrúhli na najbližšiu "
 "milisekundu."
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:684
 #, kde-format
 msgid "Clone Layer"
 msgstr "Klonovať vrstvu"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
 #: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Skupina"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:1004
 #, kde-format
 msgid "File Layer"
 msgstr "Vrstva súborov"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:697
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Vektorová vrstva"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:719
 #, kde-format
 msgid "Filter Layer"
 msgstr "Vrstva filtrov"
@@ -19674,8 +19674,8 @@ msgstr "Lokálne zdroje"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29510,42 +29510,42 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "Vrstva je prázdna "
 
-#: libs/ui/kis_layer_manager.cc:252
+#: libs/ui/kis_layer_manager.cc:256
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Vlastnosti filtrovej vrstvy"
 
-#: libs/ui/kis_layer_manager.cc:296
-#, kde-format
-msgid "Fill Layer Properties"
-msgstr "Vlastnosti vyplnenia vrstvy"
-
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:301
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Vlastnosti vrstvy súborov"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1012
 #, kde-format
 msgid "No file name specified"
 msgstr "Nezadané žiadne meno súboru"
 
-#: libs/ui/kis_layer_manager.cc:383
+#: libs/ui/kis_layer_manager.cc:339
+#, kde-format
+msgid "Fill Layer Properties"
+msgstr "Vlastnosti vyplnenia vrstvy"
+
+#: libs/ui/kis_layer_manager.cc:396
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Zmeniť klonovanú vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:492
+#: libs/ui/kis_layer_manager.cc:505
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Previesť na animovanú vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:512
+#: libs/ui/kis_layer_manager.cc:525
 #, kde-format
 msgid "Save layers to..."
 msgstr "Uložiť vrstvy do..."
 
-#: libs/ui/kis_layer_manager.cc:513
+#: libs/ui/kis_layer_manager.cc:526
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29554,28 +29554,28 @@ msgstr ""
 "Zvoliť umiestnenie, do ktorého sa uloží vrstva. Nová vrstva súborov potom "
 "bude odkazovať na toto umiestnenie."
 
-#: libs/ui/kis_layer_manager.cc:576
+#: libs/ui/kis_layer_manager.cc:589
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Previesť na vrstvu súborov"
 
-#: libs/ui/kis_layer_manager.cc:706
+#: libs/ui/kis_layer_manager.cc:719
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Nová vrstva filtra"
 
-#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:768 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "Vyplniť vrstvu"
 
-#: libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:795
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Zarovnať obrázok"
 
-#: libs/ui/kis_layer_manager.cc:783
+#: libs/ui/kis_layer_manager.cc:796
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
@@ -29583,7 +29583,7 @@ msgid ""
 msgstr ""
 "Obrázok obsahuje skryté vrstvy, ktoré budú stratené. Chcete zarovnať obrázok?"
 
-#: libs/ui/kis_layer_manager.cc:861
+#: libs/ui/kis_layer_manager.cc:874
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29592,13 +29592,13 @@ msgstr[0] "Vrstva je zamknutá."
 msgstr[1] "Vrstvy sú zamknuté."
 msgstr[2] "Vrstvy sú zamknuté."
 
-#: libs/ui/kis_layer_manager.cc:883
+#: libs/ui/kis_layer_manager.cc:896
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "Vrstva je zamknutá"
 
-#: libs/ui/kis_layer_manager.cc:900
+#: libs/ui/kis_layer_manager.cc:913
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29608,12 +29608,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:949
+#: libs/ui/kis_layer_manager.cc:962
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Previesť neviditeľné skupiny"
 
-#: libs/ui/kis_layer_manager.cc:952
+#: libs/ui/kis_layer_manager.cc:965
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exportovať iba skupiny najvyššej úrovne"
@@ -35348,37 +35348,37 @@ msgstr "Sklonené pripojenie"
 msgid "Miter limit"
 msgstr "Hranica mitry"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Nastaviť šírku riadku aktuálneho výberu"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "Štýl čiary:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Štýl čiary"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Spustiť značkovač"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Značkovač uzlov"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -36431,6 +36431,74 @@ msgstr "&O aplikácii %1"
 msgid "About &KDE"
 msgstr "Informácie o &KDE"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "Jednotka:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "Percentá (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view width (vw)"
+msgstr "percento šírky zobrazenia (vh)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view height (vh)"
+msgstr "percento výšky zobrazenia (vh)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr "stupne (°)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr "radiány (rad)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr "gony (gon)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "percent of circle (%)"
+msgstr "percentá kruhu (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, kde-format
+msgid "frames (f)"
+msgstr "snímky (f)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr "sekundy (s)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "percent of animation (%)"
+msgstr "percent animácie (%)"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -36476,58 +36544,6 @@ msgstr "Zvýšiť"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "Znížiť"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "Percentá (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view height (vh)"
-msgstr "percento výšky zobrazenia (vh)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view width (vw)"
-msgstr "percento šírky zobrazenia (vh)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr "stupne (°)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr "gony (gon)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "percent of circle (%)"
-msgstr "percentá kruhu (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr "radiány (rad)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, kde-format
-msgid "frames (f)"
-msgstr "snímky (f)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "percent of animation (%)"
-msgstr "percent animácie (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr "sekundy (s)"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format

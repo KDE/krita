@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 01:45+0000\n"
+"POT-Creation-Date: 2024-07-26 01:43+0000\n"
 "PO-Revision-Date: 2024-07-20 09:51+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -16949,7 +16949,7 @@ msgstr "Desselecciona"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
+#: libs/ui/kis_layer_manager.cc:712 libs/ui/kis_layer_manager.cc:764
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "Afig capa"
@@ -17230,7 +17230,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "Fons"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:655
 #, kde-format
 msgid "Paint Layer"
 msgstr "Capa de pintura"
@@ -17960,30 +17960,30 @@ msgstr ""
 "mil·lisegon</b>. El format no pot representar açò, i la duració del "
 "fotograma s'arredonirà al mil·lisegon més proper."
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:684
 #, kde-format
 msgid "Clone Layer"
 msgstr "Capa clonada"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
 #: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "Grup"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:1004
 #, kde-format
 msgid "File Layer"
 msgstr "Capa de fitxer"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:697
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "Capa vectorial"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:719
 #, kde-format
 msgid "Filter Layer"
 msgstr "Capa de filtratge"
@@ -19612,8 +19612,8 @@ msgstr "Recursos locals"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29392,42 +29392,42 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "La capa està buida "
 
-#: libs/ui/kis_layer_manager.cc:252
+#: libs/ui/kis_layer_manager.cc:256
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "Propietats de la capa de filtratge"
 
-#: libs/ui/kis_layer_manager.cc:296
-#, kde-format
-msgid "Fill Layer Properties"
-msgstr "Propietats de la capa d'emplenat"
-
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:301
 #, kde-format
 msgid "File Layer Properties"
 msgstr "Propietats de la capa de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1012
 #, kde-format
 msgid "No file name specified"
 msgstr "No s'ha indicat cap nom de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:383
+#: libs/ui/kis_layer_manager.cc:339
+#, kde-format
+msgid "Fill Layer Properties"
+msgstr "Propietats de la capa d'emplenat"
+
+#: libs/ui/kis_layer_manager.cc:396
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "Canvia la capa clonada"
 
-#: libs/ui/kis_layer_manager.cc:492
+#: libs/ui/kis_layer_manager.cc:505
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "Convertix a una capa animada"
 
-#: libs/ui/kis_layer_manager.cc:512
+#: libs/ui/kis_layer_manager.cc:525
 #, kde-format
 msgid "Save layers to..."
 msgstr "Guarda les capes a…"
 
-#: libs/ui/kis_layer_manager.cc:513
+#: libs/ui/kis_layer_manager.cc:526
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29436,35 +29436,35 @@ msgstr ""
 "Tria la ubicació a on es guardarà la capa. La capa de fitxer nova "
 "referenciarà esta ubicació."
 
-#: libs/ui/kis_layer_manager.cc:576
+#: libs/ui/kis_layer_manager.cc:589
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "Convertix a una capa de fitxer"
 
-#: libs/ui/kis_layer_manager.cc:706
+#: libs/ui/kis_layer_manager.cc:719
 #, kde-format
 msgid "New Filter Layer"
 msgstr "Capa de filtratge nova"
 
-#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:768 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "Capa d'emplenat"
 
-#: libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:795
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "Aplana la imatge"
 
-#: libs/ui/kis_layer_manager.cc:783
+#: libs/ui/kis_layer_manager.cc:796
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "La imatge conté capes ocultes que es perdran. Voleu aplanar la imatge?"
 
-#: libs/ui/kis_layer_manager.cc:861
+#: libs/ui/kis_layer_manager.cc:874
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29472,13 +29472,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "La capa està bloquejada"
 msgstr[1] "Les capes estan bloquejades"
 
-#: libs/ui/kis_layer_manager.cc:883
+#: libs/ui/kis_layer_manager.cc:896
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "La capa està bloquejada"
 
-#: libs/ui/kis_layer_manager.cc:900
+#: libs/ui/kis_layer_manager.cc:913
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29490,12 +29490,12 @@ msgstr ""
 "La capa no animada es fusiona amb el fotograma actual. Per a fusionar-la amb "
 "el clip sencer, creeu almenys un fotograma"
 
-#: libs/ui/kis_layer_manager.cc:949
+#: libs/ui/kis_layer_manager.cc:962
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "Convertix els grups invisibles"
 
-#: libs/ui/kis_layer_manager.cc:952
+#: libs/ui/kis_layer_manager.cc:965
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "Exporta només els grups de primer nivell"
@@ -35171,37 +35171,37 @@ msgstr "Unió en bisell"
 msgid "Miter limit"
 msgstr "Límit del biaix"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "Establix l'amplària de la línia de la selecció real"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "Estil de la línia:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "Estil de la línia"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "Marcador d'inici"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "Marcador de node"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -36255,6 +36255,74 @@ msgstr "&Quant a %1"
 msgid "About &KDE"
 msgstr "Quant a &KDE"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "Unitat:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "Percentatge (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view width (vw)"
+msgstr "percentatge de l'amplària de la vista (vam)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view height (vh)"
+msgstr "percentatge de l'alçària de la vista (val)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr "graus (°)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr "radians (rad)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr "gons (gon)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "percent of circle (%)"
+msgstr "percentatge del cercle (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, kde-format
+msgid "frames (f)"
+msgstr "fotogrames (f)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr "segons (s)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "percent of animation (%)"
+msgstr "percentatge d'animació (%)"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -36300,58 +36368,6 @@ msgstr "Pa&s amunt"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "Pas a&vall"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "Percentatge (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view height (vh)"
-msgstr "percentatge de l'alçària de la vista (val)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view width (vw)"
-msgstr "percentatge de l'amplària de la vista (vam)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr "graus (°)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr "gons (gon)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "percent of circle (%)"
-msgstr "percentatge del cercle (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr "radians (rad)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, kde-format
-msgid "frames (f)"
-msgstr "fotogrames (f)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "percent of animation (%)"
-msgstr "percentatge d'animació (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr "segons (s)"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format

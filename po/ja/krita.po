@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 01:45+0000\n"
+"POT-Creation-Date: 2024-07-26 01:43+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -16944,7 +16944,7 @@ msgstr "選択解除"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
+#: libs/ui/kis_layer_manager.cc:712 libs/ui/kis_layer_manager.cc:764
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
 msgstr "レイヤーを追加"
@@ -17225,7 +17225,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "背景"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:655
 #, kde-format
 msgid "Paint Layer"
 msgstr "ペイントレイヤー"
@@ -17953,30 +17953,30 @@ msgstr ""
 "この画像は<b>ミリ秒の分数</b>でフレーム間隔が設定されています。この形式では表"
 "現できないため、フレーム間隔は最も近いミリ秒に丸められます。"
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:684
 #, kde-format
 msgid "Clone Layer"
 msgstr "クローンレイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
 #: libs/ui/kis_node_manager.cpp:1534
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
 msgstr "グループ化"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:1004
 #, kde-format
 msgid "File Layer"
 msgstr "ファイル参照レイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:697
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, kde-format
 msgid "Vector Layer"
 msgstr "ベクターレイヤー"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:719
 #, kde-format
 msgid "Filter Layer"
 msgstr "フィルタレイヤー"
@@ -19604,8 +19604,8 @@ msgstr "ローカルリソース"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29320,42 +29320,42 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "レイヤーは空です"
 
-#: libs/ui/kis_layer_manager.cc:252
+#: libs/ui/kis_layer_manager.cc:256
 #, kde-format
 msgid "Filter Layer Properties"
 msgstr "フィルタレイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:296
-#, kde-format
-msgid "Fill Layer Properties"
-msgstr "塗りつぶしレイヤーのプロパティ"
-
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:301
 #, kde-format
 msgid "File Layer Properties"
 msgstr "ファイル参照レイヤーのプロパティ"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1012
 #, kde-format
 msgid "No file name specified"
 msgstr "ファイル名が指定されていません。"
 
-#: libs/ui/kis_layer_manager.cc:383
+#: libs/ui/kis_layer_manager.cc:339
+#, kde-format
+msgid "Fill Layer Properties"
+msgstr "塗りつぶしレイヤーのプロパティ"
+
+#: libs/ui/kis_layer_manager.cc:396
 #, kde-format
 msgid "Change Clone Layer"
 msgstr "クローンレイヤーを変更"
 
-#: libs/ui/kis_layer_manager.cc:492
+#: libs/ui/kis_layer_manager.cc:505
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "アニメーションレイヤーに変換"
 
-#: libs/ui/kis_layer_manager.cc:512
+#: libs/ui/kis_layer_manager.cc:525
 #, kde-format
 msgid "Save layers to..."
 msgstr "レイヤーを保存..."
 
-#: libs/ui/kis_layer_manager.cc:513
+#: libs/ui/kis_layer_manager.cc:526
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
@@ -29364,48 +29364,48 @@ msgstr ""
 "レイヤーを保存する場所を選択します。新しいファイル参照レイヤーはこの場所を参"
 "照します。"
 
-#: libs/ui/kis_layer_manager.cc:576
+#: libs/ui/kis_layer_manager.cc:589
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "ファイル参照レイヤーに変換"
 
-#: libs/ui/kis_layer_manager.cc:706
+#: libs/ui/kis_layer_manager.cc:719
 #, kde-format
 msgid "New Filter Layer"
 msgstr "新しいフィルタレイヤー"
 
-#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:768 libs/ui/kis_mimedata.cpp:320
 #, kde-format
 msgid "Fill Layer"
 msgstr "塗りつぶしレイヤー"
 
-#: libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:795
 #, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "画像を統合"
 
-#: libs/ui/kis_layer_manager.cc:783
+#: libs/ui/kis_layer_manager.cc:796
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "画像の非表示レイヤーはこの操作により失われます。画像を統合しますか？"
 
-#: libs/ui/kis_layer_manager.cc:861
+#: libs/ui/kis_layer_manager.cc:874
 #, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
 msgid_plural "Layers are locked"
 msgstr[0] "レイヤーはロックされています"
 
-#: libs/ui/kis_layer_manager.cc:883
+#: libs/ui/kis_layer_manager.cc:896
 #, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "レイヤーはロックされています"
 
-#: libs/ui/kis_layer_manager.cc:900
+#: libs/ui/kis_layer_manager.cc:913
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29417,12 +29417,12 @@ msgstr ""
 "アニメーションレイヤーではないレイヤーが現在のフレームに統合されます。全ての"
 "クリップに統合するには少なくとも 1 つフレームを作成してください"
 
-#: libs/ui/kis_layer_manager.cc:949
+#: libs/ui/kis_layer_manager.cc:962
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr "非表示グループを変換"
 
-#: libs/ui/kis_layer_manager.cc:952
+#: libs/ui/kis_layer_manager.cc:965
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr "トップレベルグループのみをエクスポート"
@@ -35047,37 +35047,37 @@ msgstr "ベベル結合"
 msgid "Miter limit"
 msgstr "マイター限界"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr "実際の選択オブジェクトの線幅を設定"
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, kde-format
 msgid "Line Style:"
 msgstr "ベクター線のスタイル:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "ベクター線のスタイル"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "ベクター線の始端"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "ベクター線の線部分"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -36127,6 +36127,74 @@ msgstr "%1について(&A)"
 msgid "About &KDE"
 msgstr "KDE について(&K)"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "単位:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, kde-format
+msgid "Percent (%)"
+msgstr "パーセント (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view width (vw)"
+msgstr "表示幅の割合 (vw)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, kde-format
+msgid "percent of view height (vh)"
+msgstr "表示高さの割合 (vh)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr "角度 (°)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr "ラジアン (rad)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr "角の数 (gon)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "percent of circle (%)"
+msgstr "円の割合 (%)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, kde-format
+msgid "frames (f)"
+msgstr "フレーム (f)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr "秒 (s)"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "percent of animation (%)"
+msgstr "アニメーションの割合 (%)"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -36172,58 +36240,6 @@ msgstr "上段へ移動(&S)"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "下段へ移動(&D)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, kde-format
-msgid "Percent (%)"
-msgstr "パーセント (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view height (vh)"
-msgstr "表示高さの割合 (vh)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, kde-format
-msgid "percent of view width (vw)"
-msgstr "表示幅の割合 (vw)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr "角度 (°)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr "角の数 (gon)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "percent of circle (%)"
-msgstr "円の割合 (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr "ラジアン (rad)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, kde-format
-msgid "frames (f)"
-msgstr "フレーム (f)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "percent of animation (%)"
-msgstr "アニメーションの割合 (%)"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr "秒 (s)"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, kde-format

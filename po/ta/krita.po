@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 01:45+0000\n"
+"POT-Creation-Date: 2024-07-26 01:43+0000\n"
 "PO-Revision-Date: 2023-07-02 15:17+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -16984,7 +16984,7 @@ msgstr "&திரும்ப தேர்ந்தெடு"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
+#: libs/ui/kis_layer_manager.cc:712 libs/ui/kis_layer_manager.cc:764
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Add Layer"
@@ -17272,7 +17272,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "பின்னணி"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:655
 #, fuzzy, kde-format
 msgid "Paint Layer"
 msgstr "&அடுக்கு"
@@ -18032,12 +18032,12 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:684
 #, fuzzy, kde-format
 msgid "Clone Layer"
 msgstr "புதிய அடுக்கு"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
 #: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy, kde-format
 #| msgid "Group:"
@@ -18045,18 +18045,18 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "தொகுதி:"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:1004
 #, fuzzy, kde-format
 msgid "File Layer"
 msgstr "அலங்காரம்"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:697
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 msgid "Vector Layer"
 msgstr "&அடுக்கை ஒன்றுசேர்"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:719
 #, fuzzy, kde-format
 msgid "Filter Layer"
 msgstr "அலங்காரம்"
@@ -19687,8 +19687,8 @@ msgstr "&அடுக்கை நீக்கு"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -29058,79 +29058,79 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/kis_layer_manager.cc:252
+#: libs/ui/kis_layer_manager.cc:256
 #, fuzzy, kde-format
 msgid "Filter Layer Properties"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/ui/kis_layer_manager.cc:296
-#, fuzzy, kde-format
-msgid "Fill Layer Properties"
-msgstr "அடுக்கு குணங்கள்..."
-
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:301
 #, fuzzy, kde-format
 msgid "File Layer Properties"
 msgstr "அடுக்கு குணங்கள்..."
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1012
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:383
+#: libs/ui/kis_layer_manager.cc:339
+#, fuzzy, kde-format
+msgid "Fill Layer Properties"
+msgstr "அடுக்கு குணங்கள்..."
+
+#: libs/ui/kis_layer_manager.cc:396
 #, fuzzy, kde-format
 msgid "Change Clone Layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/kis_layer_manager.cc:492
+#: libs/ui/kis_layer_manager.cc:505
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "நிகழ்விலுள்ள அடுக்கை மாற்று"
 
-#: libs/ui/kis_layer_manager.cc:512
+#: libs/ui/kis_layer_manager.cc:525
 #, fuzzy, kde-format
 msgid "Save layers to..."
 msgstr "அடுக்கை உருவமாக சேமி..."
 
-#: libs/ui/kis_layer_manager.cc:513
+#: libs/ui/kis_layer_manager.cc:526
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:576
+#: libs/ui/kis_layer_manager.cc:589
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "நிகழ்விலுள்ள அடுக்கை மாற்று"
 
-#: libs/ui/kis_layer_manager.cc:706
+#: libs/ui/kis_layer_manager.cc:719
 #, fuzzy, kde-format
 msgid "New Filter Layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:768 libs/ui/kis_mimedata.cpp:320
 #, fuzzy, kde-format
 msgid "Fill Layer"
 msgstr "அலங்காரம்"
 
-#: libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:795
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "உருவத்தை ஒன்றுசேர்"
 
-#: libs/ui/kis_layer_manager.cc:783
+#: libs/ui/kis_layer_manager.cc:796
 #, fuzzy, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr "பிம்பத்தில் மறைக்கப்பட்ட அடுக்குகள் உள்ளன."
 
-#: libs/ui/kis_layer_manager.cc:861
+#: libs/ui/kis_layer_manager.cc:874
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager"
 msgid "Layer is locked"
@@ -29138,13 +29138,13 @@ msgid_plural "Layers are locked"
 msgstr[0] "அடுக்கு அளவு"
 msgstr[1] "அடுக்கு அளவு"
 
-#: libs/ui/kis_layer_manager.cc:883
+#: libs/ui/kis_layer_manager.cc:896
 #, fuzzy, kde-format
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "அடுக்கு அளவு"
 
-#: libs/ui/kis_layer_manager.cc:900
+#: libs/ui/kis_layer_manager.cc:913
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -29154,12 +29154,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:949
+#: libs/ui/kis_layer_manager.cc:962
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:952
+#: libs/ui/kis_layer_manager.cc:965
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -34466,37 +34466,37 @@ msgstr "இணையை நீக்கு"
 msgid "Miter limit"
 msgstr "எண்ணி சீரமை:"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 msgid "Line Style:"
 msgstr "சைன்"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "சைன்"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "நொடி"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "நொடி"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, fuzzy, kde-format
 msgctxt "@info:tooltip"
 msgid "End marker"
@@ -35538,6 +35538,74 @@ msgstr "க்ரிட்டா"
 msgid "About &KDE"
 msgstr "க்ரிட்டா"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#, fuzzy, kde-format
+#| msgid "Unit:"
+msgid "Unit"
+msgstr "அலகு:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, fuzzy, kde-format
+msgid "Percent (%)"
+msgstr "&விகிதம்:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+msgid "percent of view width (vw)"
+msgstr "புள்ளிகள்/அங்குலம்"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+msgid "percent of view height (vh)"
+msgstr "புள்ளிகள்/அங்குலம்"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+msgid "degrees (°)"
+msgstr "&திரும்ப தேர்ந்தெடு"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+msgid "percent of circle (%)"
+msgstr "&விகிதம்:"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, fuzzy, kde-format
+msgid "frames (f)"
+msgstr "கோர்ஸ்"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+msgid "seconds (s)"
+msgstr "நொடி"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+msgid "percent of animation (%)"
+msgstr "நிலை இல்லை"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, kde-format
 msgid "Font Family"
@@ -35580,58 +35648,6 @@ msgstr "Alpha"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "நகர்த்தும் கருவி"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, fuzzy, kde-format
-msgid "Percent (%)"
-msgstr "&விகிதம்:"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-msgid "percent of view height (vh)"
-msgstr "புள்ளிகள்/அங்குலம்"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-msgid "percent of view width (vw)"
-msgstr "புள்ளிகள்/அங்குலம்"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-msgid "degrees (°)"
-msgstr "&திரும்ப தேர்ந்தெடு"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-msgid "percent of circle (%)"
-msgstr "&விகிதம்:"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, fuzzy, kde-format
-msgid "frames (f)"
-msgstr "கோர்ஸ்"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-msgid "percent of animation (%)"
-msgstr "நிலை இல்லை"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-msgid "seconds (s)"
-msgstr "நொடி"
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, fuzzy, kde-format

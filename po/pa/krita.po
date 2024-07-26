@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-25 01:45+0000\n"
+"POT-Creation-Date: 2024-07-26 01:43+0000\n"
 "PO-Revision-Date: 2010-12-26 09:39+0530\n"
 "Last-Translator: A S Alam <aalam@users.sf.net>\n"
 "Language-Team: Punjabi/Panjabi <punjabi-users@lists.sf.net>\n"
@@ -18207,7 +18207,7 @@ msgstr "ਸ਼ਕਲ ਬਣਾਓ"
 
 #: libs/image/commands/kis_image_layer_add_command.cpp:20
 #: libs/image/commands/kis_image_layer_add_command.cpp:36
-#: libs/ui/kis_layer_manager.cc:699 libs/ui/kis_layer_manager.cc:751
+#: libs/ui/kis_layer_manager.cc:712 libs/ui/kis_layer_manager.cc:764
 #, fuzzy
 #| msgid "Layer"
 msgctxt "(qtundo-format)"
@@ -18524,7 +18524,7 @@ msgctxt "Name for the bottom-most layer in the layerstack"
 msgid "Background"
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:642
+#: libs/image/kis_image.cc:727 libs/ui/kis_layer_manager.cc:655
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Paint Layer"
@@ -19376,13 +19376,13 @@ msgid ""
 "will be rounded to the nearest millisecond."
 msgstr ""
 
-#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:671
+#: libs/impex/KisExportCheckRegistry.cpp:108 libs/ui/kis_layer_manager.cc:684
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "Clone Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:655
+#: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
 #: libs/ui/kis_node_manager.cpp:1534
 #, fuzzy, kde-format
 #| msgid "Group"
@@ -19390,20 +19390,20 @@ msgctxt "A group of layers"
 msgid "Group"
 msgstr "ਗਰੁੱਪ"
 
-#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:991
+#: libs/impex/KisExportCheckRegistry.cpp:112 libs/ui/kis_layer_manager.cc:1004
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "File Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:684
+#: libs/impex/KisExportCheckRegistry.cpp:114 libs/ui/kis_layer_manager.cc:697
 #: plugins/impex/svg/kis_svg_import.cc:93
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "Vector Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:706
+#: libs/impex/KisExportCheckRegistry.cpp:116 libs/ui/kis_layer_manager.cc:719
 #, fuzzy, kde-format
 #| msgid "Delete Layer"
 msgid "Filter Layer"
@@ -21172,8 +21172,8 @@ msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
 #: libs/ui/dialogs/kis_dlg_preferences.cc:957
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
-#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:323
-#: libs/ui/kis_layer_manager.cc:999 libs/ui/kis_node_manager.cpp:1238
+#: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
 #: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
@@ -31397,89 +31397,89 @@ msgctxt "floating message in layer manager"
 msgid "Layer is empty "
 msgstr "ਬੈਕਗਰਾਊਂਡ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/kis_layer_manager.cc:252
+#: libs/ui/kis_layer_manager.cc:256
 #, fuzzy, kde-format
 #| msgid "Change master page"
 msgid "Filter Layer Properties"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
 
-#: libs/ui/kis_layer_manager.cc:296
-#, fuzzy, kde-format
-#| msgid "Change master page"
-msgid "Fill Layer Properties"
-msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
-
-#: libs/ui/kis_layer_manager.cc:312
+#: libs/ui/kis_layer_manager.cc:301
 #, fuzzy, kde-format
 #| msgid "Change master page"
 msgid "File Layer Properties"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
 
-#: libs/ui/kis_layer_manager.cc:323 libs/ui/kis_layer_manager.cc:999
+#: libs/ui/kis_layer_manager.cc:312 libs/ui/kis_layer_manager.cc:1012
 #, kde-format
 msgid "No file name specified"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:383
+#: libs/ui/kis_layer_manager.cc:339
+#, fuzzy, kde-format
+#| msgid "Change master page"
+msgid "Fill Layer Properties"
+msgstr "ਮਾਸਟਰ ਸਫ਼ਾ ਬਦਲੋ"
+
+#: libs/ui/kis_layer_manager.cc:396
 #, fuzzy, kde-format
 #| msgid "Change parameter"
 msgid "Change Clone Layer"
 msgstr "ਪੈਰਾਮੀਟਰ ਬਦਲੋ"
 
-#: libs/ui/kis_layer_manager.cc:492
+#: libs/ui/kis_layer_manager.cc:505
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Convert to an animated layer"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/ui/kis_layer_manager.cc:512
+#: libs/ui/kis_layer_manager.cc:525
 #, fuzzy, kde-format
 #| msgid "Create Layer"
 msgid "Save layers to..."
 msgstr "ਲੇਅਰ ਬਣਾਓ"
 
-#: libs/ui/kis_layer_manager.cc:513
+#: libs/ui/kis_layer_manager.cc:526
 #, kde-format
 msgid ""
 "Choose the location where the layer will be saved to. The new file layer "
 "will then reference this location."
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:576
+#: libs/ui/kis_layer_manager.cc:589
 #, fuzzy
 #| msgid "Delete shapes"
 msgctxt "(qtundo-format)"
 msgid "Convert to a file layer"
 msgstr "ਸ਼ਕਲਾਂ ਹਟਾਓ"
 
-#: libs/ui/kis_layer_manager.cc:706
+#: libs/ui/kis_layer_manager.cc:719
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "New Filter Layer"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/ui/kis_layer_manager.cc:755 libs/ui/kis_mimedata.cpp:320
+#: libs/ui/kis_layer_manager.cc:768 libs/ui/kis_mimedata.cpp:320
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgid "Fill Layer"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_layer_manager.cc:782
+#: libs/ui/kis_layer_manager.cc:795
 #, fuzzy, kde-format
 #| msgid "Master Page"
 msgctxt "@title:window"
 msgid "Flatten Image"
 msgstr "ਮਾਸਟਰ ਸਫ਼ਾ"
 
-#: libs/ui/kis_layer_manager.cc:783
+#: libs/ui/kis_layer_manager.cc:796
 #, kde-format
 msgid ""
 "The image contains hidden layers that will be lost. Do you want to flatten "
 "the image?"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:861
+#: libs/ui/kis_layer_manager.cc:874
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "floating message in layer manager"
@@ -31488,14 +31488,14 @@ msgid_plural "Layers are locked"
 msgstr[0] "ਪਰਤ"
 msgstr[1] "ਪਰਤ"
 
-#: libs/ui/kis_layer_manager.cc:883
+#: libs/ui/kis_layer_manager.cc:896
 #, fuzzy, kde-format
 #| msgid "Layer"
 msgctxt "floating message in layer manager when previous layer is locked"
 msgid "Layer is locked"
 msgstr "ਪਰਤ"
 
-#: libs/ui/kis_layer_manager.cc:900
+#: libs/ui/kis_layer_manager.cc:913
 #, kde-format
 msgctxt ""
 "floating message in layer manager when trying to merge a non-animated layer "
@@ -31505,12 +31505,12 @@ msgid ""
 "whole clip, create at least one frame"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:949
+#: libs/ui/kis_layer_manager.cc:962
 #, kde-format
 msgid "Convert Invisible Groups"
 msgstr ""
 
-#: libs/ui/kis_layer_manager.cc:952
+#: libs/ui/kis_layer_manager.cc:965
 #, kde-format
 msgid "Export Only Toplevel Groups"
 msgstr ""
@@ -37372,41 +37372,41 @@ msgstr "ਬਿੰਦੂ ਹਟਾਓ"
 msgid "Miter limit"
 msgstr "ਮਾਸਟਰ ਸਲਾਈਡ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:230
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:235
 #, kde-format
 msgid "Set line width of actual selection"
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, strokeStyleLabel)
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:241
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:246
 #: libs/ui/widgets/KoStrokeConfigWidget.ui:81
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgid "Line Style:"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:244
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:249
 #, fuzzy, kde-format
 #| msgid "New Layer"
 msgctxt "@info:tooltip"
 msgid "Line style"
 msgstr "ਨਵੀਂ ਲੇਅਰ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:255
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:260
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "@info:tooltip"
 msgid "Start marker"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:262
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:267
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "@info:tooltip"
 msgid "Node marker"
 msgstr "ਬਾਰਡਰ ਸੈੱਟ ਕਰੋ"
 
-#: libs/ui/widgets/KoStrokeConfigWidget.cpp:269
+#: libs/ui/widgets/KoStrokeConfigWidget.cpp:274
 #, fuzzy, kde-format
 #| msgid "Set border"
 msgctxt "@info:tooltip"
@@ -38577,6 +38577,79 @@ msgstr "ਸੰਰਚਨਾ"
 msgid "About &KDE"
 msgstr "ਸੰਰਚਨਾ"
 
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#, kde-format
+msgid "Unit"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "Percent (%)"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+#| msgid "Line Weight"
+msgid "percent of view width (vw)"
+msgstr "ਰੇਖਾ ਭਾਰ"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
+#, fuzzy, kde-format
+#| msgid "Line Weight"
+msgid "percent of view height (vh)"
+msgstr "ਰੇਖਾ ਭਾਰ"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "degrees (°)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "radians (rad)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, kde-format
+msgid "gons (gon)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "percent of circle (%)"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
+#, fuzzy, kde-format
+#| msgid "Insert Page"
+msgid "frames (f)"
+msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, kde-format
+msgid "seconds (s)"
+msgstr ""
+
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
+#, fuzzy, kde-format
+#| msgid "Import Document"
+msgid "percent of animation (%)"
+msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
+
 #: libs/widgetutils/kis_font_family_combo_box.cpp:222
 #, fuzzy, kde-format
 #| msgid "Size"
@@ -38624,64 +38697,6 @@ msgstr "ਟੂਲ ਚੋਣਾਂ"
 msgctxt "Menu action to step down in the slider spin box"
 msgid "Step &down"
 msgstr "ਬਿੰਦੂ ਹਿਲਾਓ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
-#, fuzzy, kde-format
-#| msgid "Import Document"
-msgid "Percent (%)"
-msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Line Weight"
-msgid "percent of view height (vh)"
-msgstr "ਰੇਖਾ ਭਾਰ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
-#, fuzzy, kde-format
-#| msgid "Line Weight"
-msgid "percent of view width (vw)"
-msgstr "ਰੇਖਾ ਭਾਰ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "degrees (°)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "gons (gon)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, fuzzy, kde-format
-#| msgid "Import Document"
-msgid "percent of circle (%)"
-msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
-#, kde-format
-msgid "radians (rad)"
-msgstr ""
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
-#, fuzzy, kde-format
-#| msgid "Insert Page"
-msgid "frames (f)"
-msgstr "ਸਫ਼ਾ ਸ਼ਾਮਲ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, fuzzy, kde-format
-#| msgid "Import Document"
-msgid "percent of animation (%)"
-msgstr "ਡੌਕੂਮੈਂਟ ਇੰਪੋਰਟ"
-
-#: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
-#, kde-format
-msgid "seconds (s)"
-msgstr ""
 
 #: libs/widgetutils/KisPreviewFileDialog.cpp:58
 #, fuzzy, kde-format

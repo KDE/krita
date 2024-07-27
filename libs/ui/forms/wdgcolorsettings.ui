@@ -6,6 +6,14 @@
   </author>
  <class>WdgColorSettings</class>
  <widget class="QWidget" name="WdgColorSettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>460</width>
+    <height>424</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Color Settings</string>
   </property>
@@ -127,14 +135,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="chkColorHistoryPerDocument">
-         <property name="text">
-          <string>Separate color history for each document.</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" colspan="2">
+       <item row="5" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -356,7 +357,13 @@
   <customwidget>
    <class>KisColorButton</class>
    <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
+   <header location="global">kis_color_button.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisColorSpaceSelector</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>KComboBox</class>
@@ -367,12 +374,6 @@
    <class>KisCmbIDList</class>
    <extends>QComboBox</extends>
    <header>widgets/kis_cmb_idlist.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KisColorSpaceSelector</class>
-   <extends>QWidget</extends>
-   <header>widgets/kis_color_space_selector.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

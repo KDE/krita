@@ -24,6 +24,7 @@
 #include "kis_color_selector_combo_box.h"
 #include "kis_color_selector.h"
 #include "kis_config.h"
+#include "kis_config_notifier.h"
 
 
 KisColorSelectorSettings::KisColorSelectorSettings(QWidget *parent) :
@@ -169,6 +170,7 @@ void KisColorSelectorSettings::savePreferences() const
     kisconfig.setCustomColorSelectorColorSpace(colorSpace);
 
     //color patches
+    cfg.writeEntry("lastUsedColorsPerDocument", ui->lastUsedColorsPerDocument->isChecked());
     cfg.writeEntry("lastUsedColorsShow", ui->lastUsedColorsShow->isChecked());
     cfg.writeEntry("lastUsedColorsAlignment", ui->lastUsedColorsAlignVertical->isChecked());
     cfg.writeEntry("lastUsedColorsScrolling", ui->lastUsedColorsAllowScrolling->isChecked());
@@ -253,6 +255,7 @@ void KisColorSelectorSettings::savePreferences() const
     hotkeycfg.writeEntry("steps_blueyellow", ui->sb_by->value());
 
     emit settingsChanged();
+    KisConfigNotifier::instance()->notifyColorHistoryModeChanged();
 }
 
 void KisColorSelectorSettings::changedColorDocker(int index)
@@ -370,6 +373,7 @@ void KisColorSelectorSettings::loadPreferences()
 
 
     //color patches
+    ui->lastUsedColorsPerDocument->setChecked(cfg.readEntry("lastUsedColorsPerDocument", false));
     ui->lastUsedColorsShow->setChecked(cfg.readEntry("lastUsedColorsShow", true));
     bool a = cfg.readEntry("lastUsedColorsAlignment", true);
     ui->lastUsedColorsAlignVertical->setChecked(a);

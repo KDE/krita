@@ -49,3 +49,8 @@ void KisConfigNotifier::notifyPixelGridModeChanged()
 {
     emit pixelGridModeChanged();
 }
+
+void KisConfigNotifier::notifyColorHistoryModeChanged()
+{
+    emit colorHistoryModeChanged();
+}

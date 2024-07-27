@@ -751,12 +751,8 @@ void KisConfig::setForcePaletteColors(bool forcePaletteColors)
 
 bool KisConfig::colorHistoryPerDocument(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("colorsettings/colorhistoryperdocument", false));
-}
-
-void KisConfig::setColorHistoryPerDocument(bool perDocument)
-{
-    m_cfg.writeEntry("colorsettings/colorhistoryperdocument", perDocument);
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("advancedColorSelector");
+    return (defaultValue ? false : cfg.readEntry("lastUsedColorsPerDocument", false));
 }
 
 bool KisConfig::showRulers(bool defaultValue) const

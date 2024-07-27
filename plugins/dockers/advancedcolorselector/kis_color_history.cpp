@@ -29,10 +29,10 @@ KisColorHistory::KisColorHistory(QWidget *parent)
     m_clearButton->setIcon(KisIconUtils::loadIcon("dialog-cancel-16"));
     m_clearButton->setToolTip(i18n("Clear all color history"));
     m_clearButton->setAutoRaise(true);
-    updateSettings();
+    updateUserSettings();
 
     connect(m_clearButton, SIGNAL(clicked()), this, SLOT(clearColorHistory()));
-    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateUserSettings()));
+    connect(KisConfigNotifier::instance(), SIGNAL(colorHistoryModeChanged()), this, SLOT(updateUserSettings()));
     connect(s_color_history_change_notifier, SIGNAL(colorHistoryChanged(const QList<KoColor>&)),
             this, SLOT(colorHistoryChanged(const QList<KoColor>&)));
 
@@ -122,9 +122,10 @@ void KisColorHistory::updateColorHistory(const QList<KoColor> &history)
 
 void KisColorHistory::updateUserSettings()
 {
-   KisConfig config(true);
-   m_history_per_document = config.colorHistoryPerDocument();
-   updateColorHistory(colorHistory()); // Show with respect to the current strategy
+
+    KisConfig config(true);
+    m_history_per_document = config.colorHistoryPerDocument();
+    updateColorHistory(colorHistory()); // Show with respect to the current strategy
 }
 
 void KisColorHistory::colorHistoryChanged(const QList<KoColor> &history)

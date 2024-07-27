@@ -355,16 +355,28 @@ find_missing_libs (){
     echo "${libs_missing}"
 }
 
+copy_missing_lib_wlink() {
+    local libfile=${1}
+    local dst=${2}
+
+    while [[ true ]]; do
+        echo "cp -av ${libfile} ${dst}"
+        cp -av ${libfile} ${dst}
+        libfile=$(readlink ${libfile})
+        if [[ -z ${libfile} ]]; then break; fi
+    done
+}
+
 copy_missing_libs () {
     for lib in ${@}; do
         result=$(find -L "${KIS_INSTALL_DIR}" -name "${lib}")
 
         if [[ $(countArgs ${result}) -eq 1 ]]; then
             if [ "$(stringContains "${result}" "plugin")" ]; then
-                cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/PlugIns/
+                copy_missing_lib_wlink ${result} ${KRITA_DMG}/krita.app/Contents/PlugIns/
                 krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/PlugIns/${result##*/}"
             else
-                cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/Frameworks/
+                copy_missing_lib_wlink ${result} ${KRITA_DMG}/krita.app/Contents/Frameworks/
                 krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/Frameworks/${result##*/}"
             fi
         else
@@ -495,6 +507,29 @@ ERROR: Failed to install macdeployqt!
     fi
 }
 
+run_macdeployqt() {
+    # To avoid errors macdeployqt must be run from bin location
+    # ext_qt will not build macdeployqt by default so it must be build manually
+    #   cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
+    #   make sub-macdeployqt-all
+    #   make sub-macdeployqt-install_subtargets
+    #   make install
+    echo "Running macdeployqt..."
+    cd ${KIS_INSTALL_DIR}/bin
+    ./macdeployqt ${KRITA_DMG}/krita.app \
+        -verbose=0 \
+        -executable=${KRITA_DMG}/krita.app/Contents/MacOS/krita \
+        -libpath=${KIS_INSTALL_DIR}/lib \
+        -qmldir=${KIS_INSTALL_DIR}/qml \
+        -appstore-compliant
+        # -extra-plugins=${KIS_INSTALL_DIR}/lib/kritaplugins \
+        # -extra-plugins=${KIS_INSTALL_DIR}/lib/plugins \
+        # -extra-plugins=${KIS_INSTALL_DIR}/plugins
+
+    cd ${BUILDROOT}
+    echo "macdeployqt done!"
+}
+
 krita_deploy () {
     # check for macdeployqt
     macdeployqt_exists
@@ -598,27 +633,6 @@ krita_deploy () {
 
     # rsync -prul {KIS_INSTALL_DIR}/lib/libkrita* Frameworks/
 
-    # To avoid errors macdeployqt must be run from bin location
-    # ext_qt will not build macdeployqt by default so it must be build manually
-    #   cd ${BUILDROOT}/depbuild/ext_qt/ext_qt-prefix/src/ext_qt/qttools/src
-    #   make sub-macdeployqt-all
-    #   make sub-macdeployqt-install_subtargets
-    #   make install
-    echo "Running macdeployqt..."
-    cd ${KIS_INSTALL_DIR}/bin
-    ./macdeployqt ${KRITA_DMG}/krita.app \
-        -verbose=0 \
-        -executable=${KRITA_DMG}/krita.app/Contents/MacOS/krita \
-        -libpath=${KIS_INSTALL_DIR}/lib \
-        -qmldir=${KIS_INSTALL_DIR}/qml \
-        -appstore-compliant
-        # -extra-plugins=${KIS_INSTALL_DIR}/lib/kritaplugins \
-        # -extra-plugins=${KIS_INSTALL_DIR}/lib/plugins \
-        # -extra-plugins=${KIS_INSTALL_DIR}/plugins
-
-    cd ${BUILDROOT}
-    echo "macdeployqt done!"
-
     echo "Copying python..."
     # Copy this framework last!
     # It is best that macdeployqt does not modify Python.framework
@@ -650,6 +664,9 @@ krita_deploy () {
     # repair krita for plugins
     printf "Searching for missing libraries\n"
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
+
+    # we delay macdeployqt after searching for libs as it does not follow links correctly
+    run_macdeployqt
 
     # Fix rpath for plugins
     # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below

@@ -25,6 +25,7 @@
 #include <kis_action_registry.h>
 #include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
+#include <kis_node_manager.h>
 #include <KisViewManager.h>
 #include <KisDocument.h>
 #include <KisReferenceImagesLayer.h>
@@ -115,6 +116,20 @@ void ToolReferenceImages::addReferenceImage()
     }
 }
 
+void ToolReferenceImages::addReferenceImageFromLayer()
+{
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    kisCanvas->viewManager()->nodeManager()->createReferenceImageFromLayer();
+}
+
+void ToolReferenceImages::addReferenceImageFromVisible()
+{
+    KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+    kisCanvas->viewManager()->nodeManager()->createReferenceImageFromVisible();
+}
+
 void ToolReferenceImages::pasteReferenceImage()
 {
     KisCanvas2* kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -133,7 +148,15 @@ void ToolReferenceImages::pasteReferenceImage()
     }
 }
 
+void ToolReferenceImages::removeSelectedReferenceImages()
+{
+    auto layer = m_layer.toStrongRef();
+    if (!layer) return;
+    if (!koSelection()) return;
+    if (koSelection()->selectedEditableShapes().isEmpty()) return;
 
+    canvas()->addCommand(layer->removeReferenceImages(document(), koSelection()->selectedEditableShapes()));
+}
 
 void ToolReferenceImages::removeAllReferenceImages()
 {
@@ -200,7 +223,8 @@ void ToolReferenceImages::saveReferenceImages()
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
             KoFileDialog dialog(kisCanvas->viewManager()->mainWindowAsQWidget(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
-    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
+    QString mimetype = "application/x-krita-reference-images";
+    dialog.setMimeTypeFilters(QStringList() << mimetype, mimetype);
     dialog.setCaption(i18n("Save Reference Images"));
 
     QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);

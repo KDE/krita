@@ -52,6 +52,7 @@ public:
      */
     static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent /*= nullptr*/);
     static KisReferenceImage * fromClipboard(const KisCoordinatesConverter &converter);
+    static KisReferenceImage * fromQImage(const KisCoordinatesConverter &converter, const QImage &img);
 
     /**
      * Load a reference image from specified paint device.

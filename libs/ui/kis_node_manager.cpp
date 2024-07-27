@@ -331,6 +331,12 @@ void KisNodeManager::setup(KisKActionCollection * actionCollection, KisActionMan
 
     action = actionManager->createAction("new_from_visible");
     connect(action, SIGNAL(triggered()), this, SLOT(createFromVisible()));
+    
+    action = actionManager->createAction("create_reference_image_from_active_layer");
+    connect(action, SIGNAL(triggered()), this, SLOT(createReferenceImageFromLayer()));
+    
+    action = actionManager->createAction("create_reference_image_from_visible_canvas");
+    connect(action, SIGNAL(triggered()), this, SLOT(createReferenceImageFromVisible()));
 
     action = actionManager->createAction("pin_to_timeline");
     action->setCheckable(true);
@@ -721,6 +727,43 @@ void KisNodeManager::convertNode(const QString &nodeType)
     } else {
         warnKrita << "Unsupported node conversion type:" << nodeType;
     }
+}
+
+void KisNodeManager::createReferenceImage(bool fromLayer) {
+    KisViewManager* m_view = m_d->view;
+    KisDocument *document = m_view->document();
+    KisCanvas2 *canvas = m_view->canvasBase();
+    
+    const KisPaintDeviceSP paintDevice = fromLayer ? m_view->activeLayer()->projection()
+                                                  : canvas->currentImage()->projection();
+    const QImage image = paintDevice->convertToQImage(0, KoColorConversionTransformation::internalRenderingIntent(),
+        KoColorConversionTransformation::internalConversionFlags());
+    QScopedPointer<KisReferenceImage> reference(KisReferenceImage::fromQImage(*canvas->coordinatesConverter(), image));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+    if (reference) {
+        if (document->referenceImagesLayer()) {
+            reference->setZIndex(document->referenceImagesLayer()->shapes().size());
+        }
+        canvas->addCommand(KisReferenceImagesLayer::addReferenceImages(document, {reference.take()}));
+
+        KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+
+    } else {
+        if (canvas->canvasWidget()) {
+            QString strMessage = fromLayer ? i18nc("error dialog from the reference tool", "Could not create a reference image from the active layer.")
+                : i18nc("error dialog from the reference tool", "Could not create a reference image from the visible canvas.");
+
+            m_d->view->showFloatingMessage(strMessage, QIcon(), 5000, KisFloatingMessage::High, Qt::TextSingleLine);
+        }
+    }
+}
+
+void KisNodeManager::createReferenceImageFromLayer() {
+    createReferenceImage(true);
+}
+
+void KisNodeManager::createReferenceImageFromVisible() {
+    createReferenceImage(false);
 }
 
 void KisNodeManager::slotSomethingActivatedNodeImpl(KisNodeSP node)

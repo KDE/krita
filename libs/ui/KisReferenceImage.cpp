@@ -91,6 +91,11 @@ struct KisReferenceImage::Private : public QSharedData
         return (!image.isNull());
     }
 
+    bool loadFromQImage(const QImage &img) {
+        image = img;
+        return !image.isNull();
+    }
+
     void updateCache() {
         if (saturation < 1.0) {
             cachedImage = KritaUtils::convertQImageToGrayA(image);
@@ -201,6 +206,23 @@ KisReferenceImage::fromPaintDevice(KisPaintDeviceSP src, const KisCoordinatesCon
     QRect r = QRect(QPoint(), reference->d->image.size());
     QSizeF size = converter.imageToDocument(r).size();
     reference->setSize(size);
+
+    return reference;
+}
+
+KisReferenceImage *KisReferenceImage::fromQImage(const KisCoordinatesConverter &converter, const QImage &img)
+{
+    KisReferenceImage *reference = new KisReferenceImage();
+    bool ok = reference->d->loadFromQImage(img);
+
+    if (ok) {
+        QRect r = QRect(QPoint(), reference->d->image.size());
+        QSizeF size = converter.imageToDocument(r).size();
+        reference->setSize(size);
+    } else {
+        delete reference;
+        reference = 0;
+    }
 
     return reference;
 }

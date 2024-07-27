@@ -1264,6 +1264,7 @@ void LayerBox::updateLayerOpMenu(const QModelIndex &index, QMenu &menu) {
 
         addActionToMenu(&menu, "pin_to_timeline");
 
+
         if (singleNode) {
             KisNodeSP node = m_filteringModel->nodeFromIndex(index);
             if (node && !node->inherits("KisTransformMask")) {

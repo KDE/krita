@@ -3605,5 +3605,29 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="create_reference_image_from_active_layer">
+      <icon></icon>
+      <text>Reference Image from Layer</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reference Image from Layer</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="create_reference_image_from_visible_canvas">
+      <icon></icon>
+      <text>Reference Image from Visible</text>
+      <whatsThis></whatsThis>
+      <toolTip>Reference Image from Visible</toolTip>
+      <iconText></iconText>
+      <activationFlags>100000</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
   </Actions>
 </ActionCollection>

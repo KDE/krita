@@ -168,8 +168,13 @@ void CompositionDockerDock::deleteClicked()
         m_canvas->viewManager()->image()->removeComposition(composition);
         updateModel();
 
-        if (index.isValid()) {
-            compositionView->setCurrentIndex(index);
+        const int compositionCount = compositionView->model()->rowCount();
+        if (compositionCount > 0) {
+            if (index.row() == compositionCount) {
+                compositionView->setCurrentIndex(index.siblingAtRow(compositionCount-1));
+            } else {
+                compositionView->setCurrentIndex(index);
+            }
         }
     }
 }

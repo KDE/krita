@@ -454,16 +454,20 @@ endif ()
 set(CMAKE_REQUIRED_INCLUDES ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS})
 set(CMAKE_REQUIRED_LIBRARIES ${Qt5Core_LIBRARIES} ${Qt5Gui_LIBRARIES} ${Qt5Widgets_LIBRARIES})
 
-CHECK_CXX_SOURCE_COMPILES("
-#include <QSurfaceFormat>
-int main(int argc, char *argv[]) {
-QSurfaceFormat fmt;
-fmt.setColorSpace(QSurfaceFormat::scRGBColorSpace);
-fmt.setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
-}
-"
-HAVE_HDR
-)
+
+set(HAVE_HDR 0)
+if (WIN32)
+    CHECK_CXX_SOURCE_COMPILES("
+    #include <QSurfaceFormat>
+    int main(int argc, char *argv[]) {
+    QSurfaceFormat fmt;
+    fmt.setColorSpace(QSurfaceFormat::scRGBColorSpace);
+    fmt.setColorSpace(QSurfaceFormat::bt2020PQColorSpace);
+    }
+    "
+    HAVE_HDR
+    )
+endif()
 configure_file(config-hdr.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-hdr.h)
 
 CHECK_CXX_SOURCE_COMPILES("

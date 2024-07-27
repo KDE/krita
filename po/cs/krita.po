@@ -49,7 +49,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-26 01:43+0000\n"
-"PO-Revision-Date: 2024-07-22 16:59+0200\n"
+"PO-Revision-Date: 2024-07-26 14:53+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -28859,11 +28859,10 @@ msgid "Select a Color"
 msgstr ""
 
 #: libs/ui/kis_layer_manager.cc:191
-#, fuzzy, kde-format
-#| msgid "Select Layer"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
-msgstr "Vybrat vrstvu"
+msgstr "Sloučit vybrané vrstvy"
 
 #: libs/ui/kis_layer_manager.cc:193
 #, kde-format
@@ -35307,10 +35306,9 @@ msgid "About &KDE"
 msgstr "O prostředí &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Jednotka:"
+msgstr "Jednotka"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

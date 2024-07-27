@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-26 01:43+0000\n"
-"PO-Revision-Date: 2024-07-25 13:07+0300\n"
+"PO-Revision-Date: 2024-07-26 13:27+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -36117,10 +36117,9 @@ msgid "About &KDE"
 msgstr "&KDE Hakkında"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Birim:"
+msgstr "Birim"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

@@ -53,14 +53,14 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-26 01:43+0000\n"
-"PO-Revision-Date: 2024-07-20 05:23+0200\n"
+"PO-Revision-Date: 2024-07-26 21:04+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 23.08.5\n"
+"X-Generator: Lokalize 24.05.2\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
@@ -29299,12 +29299,10 @@ msgid "Select a Color"
 msgstr "Välj en färg"
 
 #: libs/ui/kis_layer_manager.cc:191
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
-msgstr "Sammanfoga markera lager"
+msgstr "Sammanfoga markerade lager"
 
 #: libs/ui/kis_layer_manager.cc:193
 #, kde-format
@@ -36151,10 +36149,9 @@ msgid "About &KDE"
 msgstr "Om &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Enhet:"
+msgstr "Enhet"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

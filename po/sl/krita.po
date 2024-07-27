@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: krita trunk\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-26 01:43+0000\n"
-"PO-Revision-Date: 2024-07-20 13:33+0200\n"
+"PO-Revision-Date: 2024-07-25 11:14+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -29286,12 +29286,10 @@ msgid "Select a Color"
 msgstr "Izberite barvo"
 
 #: libs/ui/kis_layer_manager.cc:191
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Merge Selected Nodes"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
-msgstr "Spoji izbrana vozlišča"
+msgstr "Spoji izbrane plasti"
 
 #: libs/ui/kis_layer_manager.cc:193
 #, kde-format

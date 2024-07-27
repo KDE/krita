@@ -80,7 +80,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-07-26 01:43+0000\n"
-"PO-Revision-Date: 2024-07-25 16:37+0200\n"
+"PO-Revision-Date: 2024-07-26 23:11+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Proxecto Trasno (proxecto@trasno.gal)\n"
 "Language: gl\n"
@@ -36242,10 +36242,9 @@ msgid "About &KDE"
 msgstr "Sobre &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Unidade:"
+msgstr "Unidade"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

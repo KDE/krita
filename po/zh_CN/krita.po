@@ -17417,7 +17417,7 @@ msgstr "更改视图色彩空间"
 #: libs/image/kis_layer_utils.cpp:1970
 msgctxt "(qtundo-format)"
 msgid "Merge Selected Nodes"
-msgstr "合并所选节点"
+msgstr "合并选中的节点"
 
 #: libs/image/kis_layer_utils.cpp:1988
 msgctxt "(qtundo-format)"
@@ -17433,7 +17433,7 @@ msgstr "可见"
 #: libs/image/kis_layer_utils.cpp:2068
 msgctxt "(qtundo-format)"
 msgid "Merge Selection Masks"
-msgstr "合并选中的蒙版"
+msgstr "合并选区蒙版"
 
 #: libs/image/kis_layer_utils.cpp:2092
 msgctxt "(qtundo-format)"
@@ -29057,7 +29057,7 @@ msgstr "选择颜色"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
-msgstr ""
+msgstr "合并选中的图层"
 
 #: libs/ui/kis_layer_manager.cc:193
 #, kde-format
@@ -35755,10 +35755,9 @@ msgid "About &KDE"
 msgstr "关于 KDE(&K)"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "单位："
+msgstr ""
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16

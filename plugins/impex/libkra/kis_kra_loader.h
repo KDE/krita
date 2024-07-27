@@ -20,6 +20,8 @@ class QVersionNumber;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
+#include "KoColor.h"
+
 /**
  * Load old-style 1.x .kra files. Updated for 2.0, let's try to stay
  * compatible. But 2.0 won't be able to save 1.x .kra files unless we
@@ -117,6 +119,7 @@ private:
     void loadStoryboardItemList(const QDomElement& elem);
     void loadStoryboardCommentList(const QDomElement& elem);
     void loadAudioXML(QDomDocument& xmlDoc, QDomElement &xmlElement, KisDocument* kisDoc);
+    QList<KoColor> loadKoColors(const QDomElement& elem) const;
 private:
 
     struct Private;

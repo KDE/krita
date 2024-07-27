@@ -325,6 +325,7 @@ public:
         , importExportManager(new KisImportExportManager(_q))
         , autoSaveTimer(new QTimer(_q))
         , undoStack(new UndoStack(_q))
+        , colorHistory(rhs.colorHistory)
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
@@ -351,6 +352,7 @@ public:
     QTimer *autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     QString lastWarningMessage;
+
     int autoSaveDelay = 300; // in seconds, 0 to disable.
     bool modifiedAfterAutosave = false;
     bool isAutosaving = false;
@@ -395,6 +397,7 @@ public:
     qreal audioLevel = 1.0;
 
     QColor globalAssistantsColor;
+    QList<KoColor> colorHistory;
 
     KisGridConfig gridConfig;
 
@@ -2648,6 +2651,16 @@ bool KisDocument::newImage(const QString& name,
         layer->setDirty(QRect(0, 0, width, height));
     }
 
+    {
+        KisMainWindow *window = KisPart::instance()->currentMainwindow();
+        if (window) {
+            /**
+             * Preinitialize color history for new documents when possible
+             */
+            setColorHistory(window->viewManager()->canvasResourceProvider()->colorHistory());
+        }
+    }
+
     KisUsageLogger::log(
         QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
             .arg(name, QString::number(width), QString::number(height),
@@ -2841,6 +2854,11 @@ QColor KisDocument::assistantsGlobalColor()
     return d->globalAssistantsColor;
 }
 
+QList<KoColor> KisDocument::colorHistory()
+{
+    return d->colorHistory;
+}
+
 QRectF KisDocument::documentBounds() const
 {
     QRectF bounds = d->image->bounds();
@@ -2852,4 +2870,9 @@ QRectF KisDocument::documentBounds() const
     }
 
     return bounds;
+}
+
+void KisDocument::setColorHistory(const QList<KoColor> &colors)
+{
+    d->colorHistory = colors;
 }

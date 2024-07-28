@@ -227,11 +227,12 @@ private:
     const QScopedPointer<Private> d;
 };
 
-class KRITATOOLSVGTEXT_EXPORT SvgTextPropertyCursor : public KoSvgTextPropertiesInterface
+/// Interface to interact with the text property manager.
+class KRITATOOLSVGTEXT_EXPORT SvgTextCursorPropertyInterface : public KoSvgTextPropertiesInterface
 {
 public:
-    SvgTextPropertyCursor(SvgTextCursor *parent);
-    ~SvgTextPropertyCursor();
+    SvgTextCursorPropertyInterface(SvgTextCursor *parent);
+    ~SvgTextCursorPropertyInterface();
     virtual QList<KoSvgTextProperties> getSelectedProperties() override;
     virtual KoSvgTextProperties getInheritedProperties() override;
     virtual void setPropertiesOnSelected(KoSvgTextProperties properties, QSet<KoSvgTextProperties::PropertyId> removeProperties = QSet<KoSvgTextProperties::PropertyId>()) override;

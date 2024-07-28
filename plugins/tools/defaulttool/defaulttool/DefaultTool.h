@@ -206,6 +206,7 @@ private:
 
 #include <KoSvgTextShape.h>
 
+/// Interface to interact with the text property manager.
 class DefaultToolTextPropertiesInterface: public KoSvgTextPropertiesInterface, public KoSvgTextShape::TextCursorChangeListener
 {
     Q_OBJECT
@@ -220,6 +221,8 @@ public:
     virtual void notifyCursorPosChanged(int pos, int anchor) override;
     virtual void notifyMarkupChanged() override;
     virtual void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
+
+    void clearSelection();
 public Q_SLOTS:
     void slotSelectionChanged();
 private:

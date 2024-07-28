@@ -22,6 +22,7 @@ KoShapeMergeTextPropertiesCommand::KoShapeMergeTextPropertiesCommand(const QList
     : KUndo2Command(parent),
     d(new Private(shapes))
 {
+    setText(kundo2_i18n("Change Text Shape Properties"));
     d->newProperties = props;
     d->removeProperties = removeProperties;
 }

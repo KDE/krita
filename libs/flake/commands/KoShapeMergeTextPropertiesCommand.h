@@ -13,6 +13,11 @@
 class KoShape;
 class KoSvgTextProperties;
 
+/**
+ * @brief The KoShapeMergeTextPropertiesCommand class
+ * This sets text properties on given text shapes. For setting text
+ * on range, see SvgTextMergePropertiesRangeCommand.
+ */
 class KRITAFLAKE_EXPORT KoShapeMergeTextPropertiesCommand : public KUndo2Command
 {
 public:

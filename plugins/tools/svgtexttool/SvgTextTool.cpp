@@ -132,6 +132,7 @@ void SvgTextTool::deactivate()
     if (canvas2) {
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(nullptr);
     }
+    m_textCursor.setShape(nullptr);
 
     m_hoveredShapeHighlightRect = QPainterPath();
 
@@ -388,9 +389,9 @@ void SvgTextTool::storeDefaults()
 
 void SvgTextTool::slotShapeSelectionChanged()
 {
-    QList<KoShape *> shapes = koSelection()->selectedShapes();
+    QList<KoShape *> shapes = koSelection()->selectedEditableShapes();
     if (shapes.size() == 1) {
-        KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(*shapes.constBegin());
+        KoSvgTextShape *textShape = selectedShape();
         if (!textShape) {
             koSelection()->deselectAll();
             return;

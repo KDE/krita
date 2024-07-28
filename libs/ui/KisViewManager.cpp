@@ -535,7 +535,6 @@ void KisViewManager::setCurrentView(KisView *view)
     d->statusBar.setView(imageView);
     d->paintingAssistantsManager.setView(imageView);
     d->mirrorManager.setView(imageView);
-    d->textPropertyManager.setView(imageView);
 
     if (d->currentImageView) {
         d->currentImageView->notifyCurrentStateChanged(true);

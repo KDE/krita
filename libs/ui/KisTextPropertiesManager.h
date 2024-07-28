@@ -26,12 +26,23 @@ public:
     KisTextPropertiesManager(QObject *parent = nullptr);
     ~KisTextPropertiesManager();
 
-    void setView(QPointer<KisView> imageView);
+    /**
+     * @brief setCanvasResourceProvider
+     * set the canvas resource provider.
+     * @param provider
+     */
     void setCanvasResourceProvider(KisCanvasResourceProvider *provider);
+    /**
+     * @brief setTextPropertiesInterface
+     * set the text properties interface. This should be done on tool activation.
+     * On tool deactivation this should be set to a nullptr, so that signals
+     * from the text properties manager don't get sent to the deactivated tool if
+     * a tool that does not have a text properties interface is currently active.
+     * @param interface -- the tool's text property interface.
+     */
     void setTextPropertiesInterface(KoSvgTextPropertiesInterface *interface);
 
 private Q_SLOTS:
-    void slotShapeSelectionChanged();
     void slotInterfaceSelectionChanged();
     void slotTextPropertiesChanged();
 private:

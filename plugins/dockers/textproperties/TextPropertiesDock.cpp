@@ -143,10 +143,7 @@ void TextPropertiesDock::setCanvas(KoCanvasBase *canvas)
         m_canvas->disconnectCanvasObserver(this);
     }
 
-    if (!canvas) {
-        m_canvas = 0;
-        return;
-    }
+    KIS_ASSERT(canvas);
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 }
@@ -161,7 +158,7 @@ void TextPropertiesDock::connectAutoEnabler(QObject *watched)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(watched);
 
-    TextPropertyAutoEnabler *enabler = new TextPropertyAutoEnabler(watched, this);
+    new TextPropertyAutoEnabler(watched, watched);
 }
 
 void TextPropertiesDock::slotCanvasTextPropertiesChanged()

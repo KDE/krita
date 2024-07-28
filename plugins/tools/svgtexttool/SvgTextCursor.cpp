@@ -23,6 +23,7 @@
 #include "kis_painting_tweaks.h"
 #include "KoCanvasController.h"
 #include "KoCanvasResourceProvider.h"
+#include <kis_signal_compressor.h>
 
 #include "kundo2command.h"
 #include <QTimer>
@@ -1433,14 +1434,17 @@ void SvgTextCursor::updateCanvasResources()
 }
 
 struct SvgTextCursorPropertyInterface::Private {
-    Private(SvgTextCursor *parent): parent(parent) {}
+    Private(SvgTextCursor *parent)
+        : parent(parent)
+        , compressor(10, KisSignalCompressor::POSTPONE){}
     SvgTextCursor *parent{nullptr};
+    KisSignalCompressor compressor;
 };
 
 SvgTextCursorPropertyInterface::SvgTextCursorPropertyInterface(SvgTextCursor *parent)
     : KoSvgTextPropertiesInterface(parent), d(new Private(parent))
 {
-
+    connect(&d->compressor, SIGNAL(timeout()), this, SIGNAL(textSelectionChanged()));
 }
 
 SvgTextCursorPropertyInterface::~SvgTextCursorPropertyInterface()
@@ -1471,5 +1475,5 @@ bool SvgTextCursorPropertyInterface::spanSelection()
 
 void SvgTextCursorPropertyInterface::emitSelectionChange()
 {
-    emit textSelectionChanged();
+    d->compressor.start();
 }

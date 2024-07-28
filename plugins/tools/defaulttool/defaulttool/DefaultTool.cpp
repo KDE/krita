@@ -50,6 +50,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_resource_provider.h"
 #include "KisTextPropertiesManager.h"
+#include <kis_signal_compressor.h>
 #include <KoInteractionStrategyFactory.h>
 
 #include "kis_document_aware_spin_box_unit_manager.h"
@@ -1933,17 +1934,20 @@ void DefaultTool::explicitUserStrokeEndRequest()
 
 struct Q_DECL_HIDDEN DefaultToolTextPropertiesInterface::Private {
 
-    Private(DefaultTool *parent): parent(parent) {}
+    Private(DefaultTool *parent)
+        : parent(parent)
+        , compressor(10, KisSignalCompressor::POSTPONE){}
 
     DefaultTool *parent;
     QList<KoShape*> shapes;
+    KisSignalCompressor compressor;
 };
 
 DefaultToolTextPropertiesInterface::DefaultToolTextPropertiesInterface(DefaultTool *parent)
     : KoSvgTextPropertiesInterface(parent)
     , d(new Private(parent))
 {
-
+    connect(&d->compressor, SIGNAL(timeout()), this, SIGNAL(textSelectionChanged()));
 }
 
 DefaultToolTextPropertiesInterface::~DefaultToolTextPropertiesInterface()
@@ -1989,19 +1993,19 @@ void DefaultToolTextPropertiesInterface::notifyCursorPosChanged(int pos, int anc
 {
     Q_UNUSED(pos)
     Q_UNUSED(anchor)
-    emit textSelectionChanged();
+    d->compressor.start();
 }
 
 void DefaultToolTextPropertiesInterface::notifyMarkupChanged()
 {
-    emit textSelectionChanged();
+    d->compressor.start();
 }
 
 void DefaultToolTextPropertiesInterface::notifyShapeChanged(KoShape::ChangeType type, KoShape *shape)
 {
     Q_UNUSED(type)
     Q_UNUSED(shape)
-    emit textSelectionChanged();
+    d->compressor.start();
 }
 
 void DefaultToolTextPropertiesInterface::clearSelection()
@@ -2023,5 +2027,5 @@ void DefaultToolTextPropertiesInterface::slotSelectionChanged()
     Q_FOREACH(KoShape *shape, d->shapes) {
         shape->addShapeChangeListener(this);
     }
-    emit textSelectionChanged();
+    d->compressor.start();
 }

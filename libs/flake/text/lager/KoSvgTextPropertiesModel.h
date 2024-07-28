@@ -21,6 +21,15 @@
 
 #include <kritaflake_export.h>
 
+/**
+ * @brief The KoSvgTextPropertiesModel class
+ *
+ * A lager-based model to interact with a KoTextPropertyData struct.
+ *
+ * Each property has, outside of its main property also a state property,
+ * which indicates whether it is currently set, unset, inherited or tristate.
+ */
+
 class KRITAFLAKE_EXPORT KoSvgTextPropertiesModel : public QObject
 {
     Q_OBJECT
@@ -60,10 +69,10 @@ public:
 
     // Whether a given property is set, unset or tristate.
     enum PropertyState {
-        PropertyUnset,
-        PropertySet,
-        PropertyTriState,
-        PropertyInherited
+        PropertyUnset,    ///< The property is neither set on the inherited properties or the current properties, the value is the default.
+        PropertySet,      ///< The property is set on the current properties.
+        PropertyTriState, ///< The property has a mixed value across the range of current properties, the inherited properties are returned.
+        PropertyInherited ///< The property is inherited.
     };
     Q_ENUM(PropertyState)
 
@@ -154,7 +163,22 @@ public:
     /// We're selecting a span of text instead of the whole paragraph.
     LAGER_QT_CURSOR(bool, spanSelection);
 
+    /**
+     * @brief resolvedFontSize
+     * this returns the resolved font (em) size, needed for unit conversion for em.
+     * @param fontSize -- whether the current property is the fontSize, in which case
+     * the inherited properties need to be selected.
+     * @return the active font size.
+     */
     Q_INVOKABLE qreal resolvedFontSize(bool fontSize = false);
+
+    /**
+     * @brief resolvedXHeight
+     * this returns the resolved x-height, needed for unit conversion for ex.
+     * @param fontSize -- whether the current property is the fontSize, in which case
+     * the inherited properties'x-height needs to be returned.
+     * @return the current resolved x-height..
+     */
     Q_INVOKABLE qreal resolvedXHeight(bool fontSize = false);
 
 Q_SIGNALS:

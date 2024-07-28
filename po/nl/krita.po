@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-26 01:43+0000\n"
+"POT-Creation-Date: 2024-07-28 01:50+0000\n"
 "PO-Revision-Date: 2024-07-26 10:35+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -12866,6 +12866,28 @@ msgctxt "action"
 msgid "Set Copy From"
 msgstr "Kopiëren van instellen"
 
+#. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3610 krita/krita.action:3612
+#, fuzzy, kde-format
+#| msgid "Reference Images Tool"
+msgctxt "action"
+msgid "Reference Image from Layer"
+msgstr "Hulpmiddel voor referentie-afbeeldingen"
+
+#. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
+#. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
+#: krita/krita.action:3622 krita/krita.action:3624
+#, fuzzy, kde-format
+#| msgid "Reference Images Tool"
+msgctxt "action"
+msgid "Reference Image from Visible"
+msgstr "Hulpmiddel voor referentie-afbeeldingen"
+
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
 #: plugins/extensions/pykrita/plugin/krita/sceditor/mainwindow.ui:32
@@ -16882,8 +16904,8 @@ msgstr "Grootte"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:540
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:652
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:672
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:875
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:895
 #: plugins/dockers/griddocker/grid_config_widget.cpp:51
 #: plugins/dockers/griddocker/grid_config_widget.cpp:52
 #: plugins/dockers/griddocker/grid_config_widget.ui:420
@@ -17278,7 +17300,7 @@ msgstr "Doorgeven"
 msgid "Imported Image"
 msgstr "Geïmporteerde afbeelding"
 
-#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2614
+#: libs/image/kis_image.cc:723 libs/ui/KisDocument.cpp:2617
 #: plugins/impex/psd/psd_loader.cpp:193
 #, kde-format
 msgctxt "Name for the bottom-most layer in the layerstack"
@@ -18024,7 +18046,7 @@ msgid "Clone Layer"
 msgstr "Laag klonen"
 
 #: libs/impex/KisExportCheckRegistry.cpp:110 libs/ui/kis_layer_manager.cc:668
-#: libs/ui/kis_node_manager.cpp:1534
+#: libs/ui/kis_node_manager.cpp:1577
 #, kde-format
 msgctxt "A group of layers"
 msgid "Group"
@@ -18068,7 +18090,7 @@ msgid "Transform Mask"
 msgstr "Transformatiemasker"
 
 #: libs/impex/KisExportCheckRegistry.cpp:126 libs/ui/kis_mask_manager.cc:210
-#: libs/ui/kis_node_manager.cpp:1314
+#: libs/ui/kis_node_manager.cpp:1357
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:215
 #: plugins/impex/psd/psd_loader.cpp:383
 #: plugins/impex/tiff/kis_tiff_import.cc:566
@@ -19672,21 +19694,21 @@ msgstr "Lokale hulpbronnen"
 #: libs/ui/input/kis_tablet_debugger.cpp:105 libs/ui/kis_clipboard.cc:720
 #: libs/ui/kis_custom_pattern.cc:131 libs/ui/kis_filter_manager.cc:234
 #: libs/ui/kis_filter_manager.cc:243 libs/ui/kis_layer_manager.cc:312
-#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1238
-#: libs/ui/kis_node_manager.cpp:1301 libs/ui/KisApplication.cpp:1066
+#: libs/ui/kis_layer_manager.cc:1012 libs/ui/kis_node_manager.cpp:1281
+#: libs/ui/kis_node_manager.cpp:1344 libs/ui/KisApplication.cpp:1066
 #: libs/ui/KisApplication.cpp:1069 libs/ui/KisApplication.cpp:1085
 #: libs/ui/KisApplication.cpp:1117 libs/ui/KisApplication.cpp:1131
-#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:975
-#: libs/ui/KisDocument.cpp:982 libs/ui/KisDocument.cpp:1002
-#: libs/ui/KisDocument.cpp:1928 libs/ui/KisDocument.cpp:1972
-#: libs/ui/KisDocument.cpp:1978 libs/ui/KisDocument.cpp:1991
-#: libs/ui/KisDocument.cpp:1995 libs/ui/KisMainWindow.cpp:972
+#: libs/ui/KisApplication.cpp:1159 libs/ui/KisDocument.cpp:978
+#: libs/ui/KisDocument.cpp:985 libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1931 libs/ui/KisDocument.cpp:1975
+#: libs/ui/KisDocument.cpp:1981 libs/ui/KisDocument.cpp:1994
+#: libs/ui/KisDocument.cpp:1998 libs/ui/KisMainWindow.cpp:972
 #: libs/ui/KisMainWindow.cpp:1042 libs/ui/KisMainWindow.cpp:1171
 #: libs/ui/KisMainWindow.cpp:1268 libs/ui/KisMainWindow.cpp:1991
 #: libs/ui/KisMainWindow.cpp:2000 libs/ui/KisMainWindow.cpp:2139
 #: libs/ui/KisMainWindow.cpp:2200 libs/ui/KisMainWindow.cpp:2221
 #: libs/ui/KisMainWindow.cpp:2836 libs/ui/KisPart.cpp:578
-#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisPart.cpp:581 libs/ui/KisReferenceImage.cpp:180
 #: libs/ui/KisRemoteFileFetcher.cpp:38 libs/ui/KisRemoteFileFetcher.cpp:62
 #: libs/ui/KisRemoteFileFetcher.cpp:89 libs/ui/KisTemplateCreateDia.cpp:284
 #: libs/ui/KisTemplateCreateDia.cpp:390 libs/ui/KisView.cpp:699
@@ -19721,11 +19743,11 @@ msgstr "Lokale hulpbronnen"
 #: plugins/filters/colorsfilters/kis_multichannel_filter_base.cpp:448
 #: plugins/filters/levelfilter/KisLevelsConfigWidget.cpp:163
 #: plugins/tools/defaulttool/referenceimagestool/KisReferenceImageCollection.cpp:95
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:166
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
 #: plugins/tools/svgtexttool/SvgTextEditor.cpp:1206
 #: plugins/tools/tool_transform2/kis_free_transform_strategy_gsl_helpers.cpp:437
 #, kde-format
@@ -20089,7 +20111,6 @@ msgstr "Voorgeïnstalleerd"
 msgid "Thumbnail"
 msgstr "Miniatuur"
 
-#. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #. i18n: ectx: property (text), widget (QPushButton, deleteAllAssistantsButton)
 #. i18n: ectx: property (text), widget (QLabel, lblBest)
 #. i18n: ectx: property (text), widget (QLabel, lblBest2)
@@ -20102,7 +20123,6 @@ msgstr "Miniatuur"
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:715
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:767
 #: plugins/impex/jxl/kis_wdg_options_jpegxl.ui:866
-#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:220
 #, kde-format
 msgid "All"
 msgstr "Alles"
@@ -21691,7 +21711,7 @@ msgstr "Hoofdscherm:"
 #: libs/ui/animation/VideoHDRMetadataOptionsDialog.ui:40
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2147
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2149
-#: libs/ui/forms/wdgcolorsettings.ui:147 libs/ui/forms/wdgdisplaysettings.ui:24
+#: libs/ui/forms/wdgcolorsettings.ui:155 libs/ui/forms/wdgdisplaysettings.ui:24
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:444
 #, kde-format
 msgid "Display"
@@ -21792,7 +21812,7 @@ msgstr "Video-animatie importeren"
 #: libs/ui/animation/wdg_animationrenderer.ui:16
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2117
 #: libs/ui/dialogs/kis_dlg_preferences.cc:2119
-#: libs/ui/forms/wdgcolorsettings.ui:32 libs/ui/forms/wdggeneralsettings.ui:333
+#: libs/ui/forms/wdgcolorsettings.ui:40 libs/ui/forms/wdggeneralsettings.ui:333
 #: libs/ui/forms/wdgperformancesettings.ui:50 libs/ui/KoDocumentInfoDlg.cpp:91
 #: libs/ui/KoDocumentInfoDlg.cpp:92
 #: plugins/dockers/logdocker/LogDockerDock.cpp:124
@@ -21959,7 +21979,7 @@ msgstr "Document"
 #: libs/ui/imagesize/wdg_layersize.ui:62
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:81
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:645
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:881
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:888
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:328
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:660
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:867
@@ -22000,7 +22020,7 @@ msgstr "Breedte:"
 #: libs/ui/imagesize/wdg_imagesize.ui:101
 #: libs/ui/imagesize/wdg_layersize.ui:129
 #: libs/ui/input/wintab/kis_screen_size_choice_dialog.ui:118
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:861
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:868
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:342
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:680
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:887
@@ -24214,8 +24234,8 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:183
-#: libs/ui/forms/wdgcolorsettings.ui:274
+#: libs/ui/forms/wdgapplyprofile.ui:100 libs/ui/forms/wdgcolorsettings.ui:191
+#: libs/ui/forms/wdgcolorsettings.ui:282
 #: libs/ui/forms/wdgconvertcolorspace.ui:55
 #: libs/ui/forms/wdgimageproperties.ui:298
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:496
@@ -24257,8 +24277,8 @@ msgstr ""
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:193
-#: libs/ui/forms/wdgcolorsettings.ui:284
+#: libs/ui/forms/wdgapplyprofile.ui:120 libs/ui/forms/wdgcolorsettings.ui:201
+#: libs/ui/forms/wdgcolorsettings.ui:292
 #: libs/ui/forms/wdgconvertcolorspace.ui:99
 #: libs/ui/forms/wdgimageproperties.ui:308
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:505
@@ -24325,45 +24345,45 @@ msgstr "Kopiëren van:"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgTabletSettings)
 #. i18n: ectx: property (windowTitle), widget (QWidget, WdgColorSettings)
-#: libs/ui/forms/wdgcolorsettings.ui:10 libs/ui/forms/wdgtabletsettings.ui:10
+#: libs/ui/forms/wdgcolorsettings.ui:18 libs/ui/forms/wdgtabletsettings.ui:10
 #, kde-format
 msgid "Color Settings"
 msgstr "Kleurinstellingen"
 
 #. i18n: ectx: property (title), widget (QGroupBox, useDefColorSpace)
-#: libs/ui/forms/wdgcolorsettings.ui:38
+#: libs/ui/forms/wdgcolorsettings.ui:46
 #, kde-format
 msgid "Use Default color model for new images"
 msgstr "Standaard kleurmodel voor nieuwe afbeeldingen gebruiken:"
 
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteFrom)
 #. i18n: ectx: property (title), widget (QGroupBox, grpPasteBehaviour)
-#: libs/ui/forms/wdgcolorsettings.ui:69
+#: libs/ui/forms/wdgcolorsettings.ui:77
 #: libs/ui/forms/wdggeneralsettings.ui:1070
 #, kde-format
 msgid "When Pasting Into Krita From Other Applications"
 msgstr "Bij het plakken naar Krita vanuit andere toepassingen"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteWeb)
-#: libs/ui/forms/wdgcolorsettings.ui:75
+#: libs/ui/forms/wdgcolorsettings.ui:83
 #, kde-format
 msgid "Assume sRGB (like images from the web are supposed to be seen)"
 msgstr "Uitgaan van sRGB (zoals afbeeldingen van het web er uit horen te zien)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteMonitor)
-#: libs/ui/forms/wdgcolorsettings.ui:82
+#: libs/ui/forms/wdgcolorsettings.ui:90
 #, kde-format
 msgid "Assume &monitor profile (like you see it in other applications)"
 msgstr "Uitgaan van &monitorprofiel (zoals u het ziet in andere toepassingen)"
 
 #. i18n: ectx: property (text), widget (QRadioButton, radioPasteAsk)
-#: libs/ui/forms/wdgcolorsettings.ui:89
+#: libs/ui/forms/wdgcolorsettings.ui:97
 #, kde-format
 msgid "As&k each time"
 msgstr "El&ke keer vragen"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel1_2_2)
-#: libs/ui/forms/wdgcolorsettings.ui:96
+#: libs/ui/forms/wdgcolorsettings.ui:104
 #, kde-format
 msgid "Note: When copying/pasting inside Krita color info is always preserved."
 msgstr ""
@@ -24371,13 +24391,13 @@ msgstr ""
 "altijd behouden."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkBlackpoint)
-#: libs/ui/forms/wdgcolorsettings.ui:106
+#: libs/ui/forms/wdgcolorsettings.ui:114
 #, kde-format
 msgid "Use Blackpoint Compensation"
 msgstr "Zwartpuntcompensatie gebruiken"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkAllowLCMSOptimization)
-#: libs/ui/forms/wdgcolorsettings.ui:116
+#: libs/ui/forms/wdgcolorsettings.ui:124
 #: libs/ui/forms/wdgconvertcolorspace.ui:143
 #, kde-format
 msgid ""
@@ -24387,7 +24407,7 @@ msgstr ""
 "RGB of XYZ)"
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkForcePaletteColor)
-#: libs/ui/forms/wdgcolorsettings.ui:126
+#: libs/ui/forms/wdgcolorsettings.ui:134
 #, kde-format
 msgid ""
 "Enforce palette colors: always select the nearest color from the active "
@@ -24397,19 +24417,19 @@ msgstr ""
 "uit het actieve palet."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkUseSystemMonitorProfile)
-#: libs/ui/forms/wdgcolorsettings.ui:153
+#: libs/ui/forms/wdgcolorsettings.ui:161
 #, kde-format
 msgid "Use system monitor profile"
 msgstr "Monitorprofiel van systeem gebruiken"
 
 #. i18n: ectx: property (toolTip), widget (QLabel, lblRenderingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:163
+#: libs/ui/forms/wdgcolorsettings.ui:171
 #, kde-format
 msgid "The icm profile for your calibrated monitor"
 msgstr "Het ICM-profiel voor uw gekalibreerde monitor"
 
 #. i18n: ectx: property (text), widget (QLabel, lblRenderingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:166
+#: libs/ui/forms/wdgcolorsettings.ui:174
 #, kde-format
 msgid "&Rendering intent:"
 msgstr "&Rendermethode:"
@@ -24417,7 +24437,7 @@ msgstr "&Rendermethode:"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:188 libs/ui/forms/wdgcolorsettings.ui:279
+#: libs/ui/forms/wdgcolorsettings.ui:196 libs/ui/forms/wdgcolorsettings.ui:287
 #: libs/ui/forms/wdgimageproperties.ui:303
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:499
 #, kde-format
@@ -24427,7 +24447,7 @@ msgstr "Relatief colorimetrisch"
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbIntent)
 #. i18n: ectx: property (text), item, widget (KComboBox, cmbMonitorIntent)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:198 libs/ui/forms/wdgcolorsettings.ui:289
+#: libs/ui/forms/wdgcolorsettings.ui:206 libs/ui/forms/wdgcolorsettings.ui:297
 #: libs/ui/forms/wdgimageproperties.ui:313
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:502
 #, kde-format
@@ -24435,7 +24455,7 @@ msgid "Absolute Colorimetric"
 msgstr "Absoluut colorimetrisch"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnAddColorProfile)
-#: libs/ui/forms/wdgcolorsettings.ui:222
+#: libs/ui/forms/wdgcolorsettings.ui:230
 #: libs/ui/widgets/kis_advanced_color_space_selector.cc:67
 #: libs/ui/widgets/kis_color_space_selector.cc:55
 #, kde-format
@@ -24443,13 +24463,13 @@ msgid "Import profile"
 msgstr "Profiel importeren"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_3)
-#: libs/ui/forms/wdgcolorsettings.ui:243
+#: libs/ui/forms/wdgcolorsettings.ui:251
 #, kde-format
 msgid "Soft Proofing"
 msgstr "Soft-proofing"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
-#: libs/ui/forms/wdgcolorsettings.ui:249
+#: libs/ui/forms/wdgcolorsettings.ui:257
 #, kde-format
 msgid "Note: these are the default proofing settings for new images."
 msgstr ""
@@ -24457,20 +24477,20 @@ msgstr ""
 "afbeeldingen."
 
 #. i18n: ectx: property (text), widget (QLabel, lblProofingIntent)
-#: libs/ui/forms/wdgcolorsettings.ui:266
+#: libs/ui/forms/wdgcolorsettings.ui:274
 #, kde-format
 msgid "Proofing Rendering Intent:"
 msgstr "Renderingmethode voor proofing"
 
 #. i18n: ectx: property (text), widget (QLabel, lblAdaptationState)
-#: libs/ui/forms/wdgcolorsettings.ui:297
+#: libs/ui/forms/wdgcolorsettings.ui:305
 #: libs/ui/forms/wdgimageproperties.ui:326
 #, kde-format
 msgid "Adaptation State:"
 msgstr "Aanpassingsstatus:"
 
 #. i18n: ectx: property (text), widget (QLabel, lblGamutWarning)
-#: libs/ui/forms/wdgcolorsettings.ui:311
+#: libs/ui/forms/wdgcolorsettings.ui:319
 #: libs/ui/forms/wdgimageproperties.ui:350
 #, kde-format
 msgid "Gamut Warning:"
@@ -24478,7 +24498,7 @@ msgstr "Kleurenbereik-waarschuwing"
 
 #. i18n: ectx: property (text), widget (QCheckBox, ckbBlackPointComp)
 #. i18n: ectx: property (text), widget (QCheckBox, ckbProofBlackPoint)
-#: libs/ui/forms/wdgcolorsettings.ui:325
+#: libs/ui/forms/wdgcolorsettings.ui:333
 #: libs/ui/forms/wdgimageproperties.ui:367
 #, kde-format
 msgid "Black Point Compensation"
@@ -29615,67 +29635,81 @@ msgstr "Beeld om cursor spiegelen"
 msgid "Mirror View Around Canvas"
 msgstr "Weergave om werkveld spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:460
+#: libs/ui/kis_node_manager.cpp:466
 #, kde-format
 msgid "Layer is locked"
 msgstr "Laag is vergrendeld"
 
-#: libs/ui/kis_node_manager.cpp:462 libs/ui/kis_node_manager.cpp:487
+#: libs/ui/kis_node_manager.cpp:468 libs/ui/kis_node_manager.cpp:493
 #, kde-format
 msgid "Layer \"%1\" is locked"
 msgstr "Laag \"%1\" is vergrendeld"
 
-#: libs/ui/kis_node_manager.cpp:515
+#: libs/ui/kis_node_manager.cpp:521
 msgctxt "(qtundo-format)"
 msgid "Move Nodes"
 msgstr "Knooppunten verplaatsen"
 
-#: libs/ui/kis_node_manager.cpp:522
+#: libs/ui/kis_node_manager.cpp:528
 msgctxt "(qtundo-format)"
 msgid "Copy Nodes"
 msgstr "Knooppunten kopiëren"
 
-#: libs/ui/kis_node_manager.cpp:529
+#: libs/ui/kis_node_manager.cpp:535
 msgctxt "(qtundo-format)"
 msgid "Add Nodes"
 msgstr "Knooppunten toevoegen"
 
-#: libs/ui/kis_node_manager.cpp:700
+#: libs/ui/kis_node_manager.cpp:706
 msgctxt "(qtundo-format)"
 msgid "Convert to a Selection Mask"
 msgstr "Naar een selectiemasker converteren"
 
-#: libs/ui/kis_node_manager.cpp:948
+#: libs/ui/kis_node_manager.cpp:753
+#, fuzzy, kde-format
+#| msgid "Could not load reference image from clipboard"
+msgctxt "error dialog from the reference tool"
+msgid "Could not create a reference image from the active layer."
+msgstr "Kon de referentie-afbeelding niet laden uit het klembord"
+
+#: libs/ui/kis_node_manager.cpp:754
+#, fuzzy, kde-format
+#| msgid "Could not load reference image from clipboard"
+msgctxt "error dialog from the reference tool"
+msgid "Could not create a reference image from the visible canvas."
+msgstr "Kon de referentie-afbeelding niet laden uit het klembord"
+
+#: libs/ui/kis_node_manager.cpp:991
 #, kde-format
 msgid "Onion skins require a layer with transparent background."
 msgstr "Onion skins vereisen een laag met transparante achtergrond."
 
-#: libs/ui/kis_node_manager.cpp:975
+#: libs/ui/kis_node_manager.cpp:1018
 msgctxt "(qtundo-format)"
 msgid "Duplicate Nodes"
 msgstr "Knooppunten dupliceren"
 
-#: libs/ui/kis_node_manager.cpp:1000
+#: libs/ui/kis_node_manager.cpp:1043
 msgctxt "(qtundo-format)"
 msgid "Raise Nodes"
 msgstr "Knooppunten naar voren"
 
-#: libs/ui/kis_node_manager.cpp:1009
+#: libs/ui/kis_node_manager.cpp:1052
 msgctxt "(qtundo-format)"
 msgid "Lower Nodes"
 msgstr "Knooppunten naar omlaag"
 
-#: libs/ui/kis_node_manager.cpp:1029
+#: libs/ui/kis_node_manager.cpp:1072
 msgctxt "(qtundo-format)"
 msgid "Remove Nodes"
 msgstr "Knooppunten verwijderen"
 
-#: libs/ui/kis_node_manager.cpp:1045
+#: libs/ui/kis_node_manager.cpp:1088
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Horizontally"
 msgstr "Masker horizontaal spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:1048
+#: libs/ui/kis_node_manager.cpp:1091
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Horizontally"
@@ -29683,12 +29717,12 @@ msgid_plural "Mirror %1 Layers Horizontally"
 msgstr[0] "Laag horizontaal spiegelen"
 msgstr[1] "Laag %1 horizontaal spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:1059
+#: libs/ui/kis_node_manager.cpp:1102
 msgctxt "(qtundo-format)"
 msgid "Mirror Mask Vertically"
 msgstr "Masker verticaal spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:1062
+#: libs/ui/kis_node_manager.cpp:1105
 #, kde-format
 msgctxt "(qtundo-format)"
 msgid "Mirror Layer Vertically"
@@ -29696,50 +29730,50 @@ msgid_plural "Mirror %1 Layers Vertically"
 msgstr[0] "Laag verticaal spiegelen"
 msgstr[1] "%1 lagen verticaal spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:1070
+#: libs/ui/kis_node_manager.cpp:1113
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Horizontally"
 msgstr "Alle lagen horizontaal spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:1077
+#: libs/ui/kis_node_manager.cpp:1120
 msgctxt "(qtundo-format)"
 msgid "Mirror All Layers Vertically"
 msgstr "Alle lagen verticaal spiegelen"
 
-#: libs/ui/kis_node_manager.cpp:1209
+#: libs/ui/kis_node_manager.cpp:1252
 #, kde-format
 msgid "Export \"%1\""
 msgstr "Exporteren van \"%1\""
 
-#: libs/ui/kis_node_manager.cpp:1239
+#: libs/ui/kis_node_manager.cpp:1282
 #, kde-format
 msgid "Could not save the layer. %1"
 msgstr "Kon de laag niet opslaan. %1"
 
-#: libs/ui/kis_node_manager.cpp:1257
+#: libs/ui/kis_node_manager.cpp:1300
 #, kde-format
 msgctxt "warning message when trying to export a transform mask"
 msgid "Layer has no pixel data"
 msgstr "Laag heeft geen pixelgegevens"
 
-#: libs/ui/kis_node_manager.cpp:1281
+#: libs/ui/kis_node_manager.cpp:1324
 #, kde-format
 msgctxt "@title:window"
 msgid "Export to SVG"
 msgstr "Naar SVG exporteren"
 
-#: libs/ui/kis_node_manager.cpp:1301
+#: libs/ui/kis_node_manager.cpp:1344
 #, kde-format
 msgid "Could not save to svg: %1"
 msgstr "Kon niet opslaan naar svg: %1"
 
-#: libs/ui/kis_node_manager.cpp:1327
+#: libs/ui/kis_node_manager.cpp:1370
 #, kde-format
 msgctxt "@title:window"
 msgid "Layer %1 is not editable"
 msgstr "Laag %1 is niet te bewerken"
 
-#: libs/ui/kis_node_manager.cpp:1328
+#: libs/ui/kis_node_manager.cpp:1371
 #, kde-format
 msgid ""
 "Cannot write alpha channel of the parent layer \"%1\".\n"
@@ -29748,49 +29782,49 @@ msgstr ""
 "Kan alfakanaal van de moederlaag \"%1\" niet wegschrijven.\n"
 "De bewerking zal geannuleerd worden."
 
-#: libs/ui/kis_node_manager.cpp:1359
+#: libs/ui/kis_node_manager.cpp:1402
 msgctxt "(qtundo-format)"
 msgid "Write Alpha into a Layer"
 msgstr "Alfa in een laag wegschrijven"
 
-#: libs/ui/kis_node_manager.cpp:1482
+#: libs/ui/kis_node_manager.cpp:1525
 msgctxt "(qtundo-format)"
 msgid "Cut Nodes"
 msgstr "Knooppunten knippen"
 
-#: libs/ui/kis_node_manager.cpp:1564
+#: libs/ui/kis_node_manager.cpp:1607
 msgctxt "(qtundo-format)"
 msgid "Quick Group"
 msgstr "Snel groeperen"
 
-#: libs/ui/kis_node_manager.cpp:1575
+#: libs/ui/kis_node_manager.cpp:1618
 msgctxt "(qtundo-format)"
 msgid "Quick Clipping Group"
 msgstr "Snelle vastniet-groep"
 
-#: libs/ui/kis_node_manager.cpp:1582
+#: libs/ui/kis_node_manager.cpp:1625
 #, kde-format
 msgctxt "default name for a clipping group layer"
 msgid "Clipping Group"
 msgstr "Vastniet-groep"
 
-#: libs/ui/kis_node_manager.cpp:1583
+#: libs/ui/kis_node_manager.cpp:1626
 #, kde-format
 msgctxt "default name for quick clip group mask layer"
 msgid "Mask Layer"
 msgstr "Maskerlaag"
 
-#: libs/ui/kis_node_manager.cpp:1610
+#: libs/ui/kis_node_manager.cpp:1653
 #, kde-format
 msgid "Cannot move layer \"%1\" into new parent \"%2\""
 msgstr "Kan laag \"%1\" niet verplaatsen in nieuwe ouder \"%2\""
 
-#: libs/ui/kis_node_manager.cpp:1613
+#: libs/ui/kis_node_manager.cpp:1656
 #, kde-format
 msgid "Cannot move layer \"%1\" into the root layer"
 msgstr "Kan laag \"%1\" niet verplaatsen in de hoofdlaag"
 
-#: libs/ui/kis_node_manager.cpp:1621
+#: libs/ui/kis_node_manager.cpp:1664
 msgctxt "(qtundo-format)"
 msgid "Quick Ungroup"
 msgstr "Snel groepering opheffen"
@@ -30583,34 +30617,34 @@ msgctxt "(qtundo-format)"
 msgid "Clone Document"
 msgstr "Document klonen"
 
-#: libs/ui/KisDocument.cpp:739
+#: libs/ui/KisDocument.cpp:742
 #, kde-format
 msgid "%1 cannot be written to. Please save under a different name."
 msgstr "Naar %1 kan niet geschreven worden. Sla het op onder een andere naam."
 
-#: libs/ui/KisDocument.cpp:789
+#: libs/ui/KisDocument.cpp:792
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a backup file"
 msgstr "Een reservekopiebestand aanmaken is mislukt."
 
-#: libs/ui/KisDocument.cpp:806
+#: libs/ui/KisDocument.cpp:809
 #, kde-format
 msgctxt "Saving error message"
 msgid "Failed to create a numbered backup file"
 msgstr "Een genummerd reservekopiebestand aanmaken is mislukt."
 
-#: libs/ui/KisDocument.cpp:828
+#: libs/ui/KisDocument.cpp:831
 #, kde-format
 msgid "Exporting Document..."
 msgstr "Document wordt geëxporteerd..."
 
-#: libs/ui/KisDocument.cpp:829
+#: libs/ui/KisDocument.cpp:832
 #, kde-format
 msgid "Saving Document..."
 msgstr "Document wordt opgeslagen..."
 
-#: libs/ui/KisDocument.cpp:839
+#: libs/ui/KisDocument.cpp:842
 #, kde-format
 msgid ""
 "Could not start saving %1. Wait until the current save operation has "
@@ -30619,18 +30653,18 @@ msgstr ""
 "Beginnen met opslaan van %1 lukt niet. Wacht totdat de huidige "
 "opslagoperatie is geëindigd."
 
-#: libs/ui/KisDocument.cpp:968
+#: libs/ui/KisDocument.cpp:971
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during saving %1: %2"
 msgstr "Fout tijdens het opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:976 libs/ui/KisDocument.cpp:983
+#: libs/ui/KisDocument.cpp:979 libs/ui/KisDocument.cpp:986
 #, kde-format
 msgid "Could not save %1."
 msgstr "Kon %1 niet opslaan."
 
-#: libs/ui/KisDocument.cpp:1005
+#: libs/ui/KisDocument.cpp:1008
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the "
@@ -30638,45 +30672,45 @@ msgctxt ""
 msgid "%1 has been saved but is incomplete."
 msgstr "%1 is opgeslagen maar is niet compleet."
 
-#: libs/ui/KisDocument.cpp:1011
+#: libs/ui/KisDocument.cpp:1014
 #, kde-format
 msgctxt ""
 "dialog box shown to the user if there were warnings while saving the document"
 msgid "Some problems were encountered when saving."
 msgstr "Er zijn enige problemen opgetreden bij opslaan."
 
-#: libs/ui/KisDocument.cpp:1028
+#: libs/ui/KisDocument.cpp:1031
 #, kde-format
 msgid "Finished saving %1"
 msgstr "Opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1434
+#: libs/ui/KisDocument.cpp:1437
 #, kde-format
 msgid "Autosaving... %1"
 msgstr "Bezig met automatisch opslaan... %1"
 
-#: libs/ui/KisDocument.cpp:1442
+#: libs/ui/KisDocument.cpp:1445
 #, kde-format
 msgid "Autosaving..."
 msgstr "Bezig met automatisch opslaan..."
 
-#: libs/ui/KisDocument.cpp:1448
+#: libs/ui/KisDocument.cpp:1451
 #, kde-format
 msgid "Autosaving postponed: document is busy..."
 msgstr "Automatisch opslaan uitgesteld: document is bezig..."
 
-#: libs/ui/KisDocument.cpp:1591
+#: libs/ui/KisDocument.cpp:1594
 #, kde-format
 msgctxt "%1 --- failing file name, %2 --- error message"
 msgid "Error during autosaving %1: %2"
 msgstr "Fout tijdens het automatisch opslaan van %1: %2"
 
-#: libs/ui/KisDocument.cpp:1605
+#: libs/ui/KisDocument.cpp:1608
 #, kde-format
 msgid "Finished autosaving %1"
 msgstr "Automatisch opslaan van %1 beëindigd"
 
-#: libs/ui/KisDocument.cpp:1862
+#: libs/ui/KisDocument.cpp:1865
 #, kde-format
 msgid ""
 "Malformed Path\n"
@@ -30685,38 +30719,38 @@ msgstr ""
 "Misvormd pad\n"
 "%1"
 
-#: libs/ui/KisDocument.cpp:1928
+#: libs/ui/KisDocument.cpp:1931
 #, kde-format
 msgid "File %1 does not exist."
 msgstr "Bestand %1 bestaat niet."
 
-#: libs/ui/KisDocument.cpp:1957
+#: libs/ui/KisDocument.cpp:1960
 #, kde-format
 msgid "Opening document"
 msgstr "Bezig met document te openen"
 
-#: libs/ui/KisDocument.cpp:1973 libs/ui/KisDocument.cpp:1979
+#: libs/ui/KisDocument.cpp:1976 libs/ui/KisDocument.cpp:1982
 #, kde-format
 msgid "Could not open %1."
 msgstr "Kon '%1' niet openen."
 
-#: libs/ui/KisDocument.cpp:1992 libs/ui/KisDocument.cpp:1996
+#: libs/ui/KisDocument.cpp:1995 libs/ui/KisDocument.cpp:1999
 #, kde-format
 msgid "There were problems opening %1."
 msgstr "Er waren problemen om %1 te openen."
 
-#: libs/ui/KisDocument.cpp:2135
+#: libs/ui/KisDocument.cpp:2138
 #, kde-format
 msgid "Not Saved"
 msgstr "Niet opgeslagen"
 
-#: libs/ui/KisDocument.cpp:2621
+#: libs/ui/KisDocument.cpp:2624
 #, kde-format
 msgctxt "Name of automatically created background color fill layer"
 msgid "Background Fill"
 msgstr "Gekleurde achtergrond"
 
-#: libs/ui/KisDocument.cpp:2673
+#: libs/ui/KisDocument.cpp:2686
 #, kde-format
 msgctxt ""
 "progress dialog message when the user closes the document that is being saved"
@@ -31459,12 +31493,12 @@ msgstr ""
 "%1\n"
 "Reden: %2"
 
-#: libs/ui/KisReferenceImage.cpp:113
+#: libs/ui/KisReferenceImage.cpp:118
 msgctxt "(qtundo-format)"
 msgid "Set saturation"
 msgstr "Verzadiging instellen"
 
-#: libs/ui/KisReferenceImage.cpp:175
+#: libs/ui/KisReferenceImage.cpp:180
 #, kde-format
 msgid "Could not load %1."
 msgstr "Kon %1 niet laden."
@@ -31696,36 +31730,36 @@ msgstr "Maar soft-proofing is nog steeds uitgeschakeld."
 msgid "Gamut Warnings turned off."
 msgstr "Kleurenbereik-waarschuwing uitgeschakeld."
 
-#: libs/ui/KisViewManager.cpp:780
+#: libs/ui/KisViewManager.cpp:785
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Actief auteursprofiel"
 
-#: libs/ui/KisViewManager.cpp:910
+#: libs/ui/KisViewManager.cpp:915
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Kopiëren)"
 
-#: libs/ui/KisViewManager.cpp:1053 libs/ui/KisViewManager.cpp:1129
+#: libs/ui/KisViewManager.cpp:1058 libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternatieve namen zijn uitgeput, probeer handmatig op te slaan met een "
 "hoger nummer"
 
-#: libs/ui/KisViewManager.cpp:1053
+#: libs/ui/KisViewManager.cpp:1058
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Kon incrementele versie niet opslaan"
 
-#: libs/ui/KisViewManager.cpp:1129
+#: libs/ui/KisViewManager.cpp:1134
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Kon incrementele reservekopie niet opslaan"
 
-#: libs/ui/KisViewManager.cpp:1378
+#: libs/ui/KisViewManager.cpp:1383
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31734,13 +31768,13 @@ msgstr ""
 "Naar modus alleen werkblad gaan.\n"
 "Druk op %1 om terg te gaan."
 
-#: libs/ui/KisViewManager.cpp:1437
+#: libs/ui/KisViewManager.cpp:1442
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Map met hulpdata openen"
 
-#: libs/ui/KisViewManager.cpp:1441
+#: libs/ui/KisViewManager.cpp:1446
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31765,19 +31799,19 @@ msgstr ""
 "<p><b>Eigen locatie van toepassing</b>:\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1456
+#: libs/ui/KisViewManager.cpp:1461
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "In AppData van gebr&uiker openen"
 
-#: libs/ui/KisViewManager.cpp:1457
+#: libs/ui/KisViewManager.cpp:1462
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "In &eigen locatie van toepassing openen"
 
-#: libs/ui/KisViewManager.cpp:1570 libs/ui/KisViewManager.cpp:1588
+#: libs/ui/KisViewManager.cpp:1575 libs/ui/KisViewManager.cpp:1593
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32880,7 +32914,7 @@ msgstr "Acties voor selectie"
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
 #: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:308
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
 #, kde-format
 msgid "Transform"
 msgstr "Transformeren"
@@ -35178,7 +35212,7 @@ msgstr "Drukknop"
 #. i18n: ectx: property (text), widget (QLabel, label_4)
 #: libs/ui/widgets/KoFillConfigWidget.ui:376
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:749
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:959
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:966
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:159
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:309
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:602
@@ -35196,7 +35230,7 @@ msgstr "Rijen:"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: libs/ui/widgets/KoFillConfigWidget.ui:394
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:769
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:979
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:986
 #: plugins/dockers/storyboarddocker/wdgexportstoryboard.ui:185
 #: plugins/extensions/clonesarray/wdg_clonesarray.ui:122
 #: plugins/tools/tool_transform2/wdg_tool_transform.ui:2159
@@ -35403,8 +35437,8 @@ msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:314
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:66
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:75
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:67
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:79
 #, kde-format
@@ -35415,8 +35449,8 @@ msgstr "HSV"
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSL)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:317
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:67
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:76
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:75
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:68
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:33
@@ -35429,8 +35463,8 @@ msgstr "HSL"
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSI)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:320
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:68
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:77
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
 #: plugins/dockers/artisticcolorselector/forms/wdgARCSSettings.ui:85
 #: plugins/dockers/specificcolorselector/kis_specific_color_selector_widget.cc:69
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:43
@@ -35442,8 +35476,8 @@ msgstr "HSI"
 #. i18n: ectx: property (text), widget (QRadioButton, btnHSY)
 #. i18n: ectx: property (text), item, widget (QComboBox, cmbColorModel)
 #: libs/widgets/KisDlgInternalColorSelector.cpp:323
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:69
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:78
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:70
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:79
 #: plugins/dockers/widegamutcolorselector/WdgQuickSettings.ui:53
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:94
 #, kde-format
@@ -37910,75 +37944,75 @@ msgstr "YCBCr/16-histogram"
 msgid "YCbCr/F32 Histogram"
 msgstr "YCBCr/F32-histogram"
 
-#: plugins/dockers/advancedcolorselector/kis_color_history.cpp:26
+#: plugins/dockers/advancedcolorselector/kis_color_history.cpp:30
 #, kde-format
 msgid "Clear all color history"
 msgstr "Alle kleurgeschiedenis wissen"
 
 #: plugins/dockers/advancedcolorselector/kis_color_selector_ng_dock.cpp:24
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:43
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
 #, kde-format
 msgid "Advanced Color Selector"
 msgstr "Geavanceerde kleurenkiezer"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:44
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:45
 #, kde-format
 msgid "Color Hotkeys"
 msgstr "Sneltoetsen voor kleuren"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:54
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
 #, kde-format
 msgid "Change to a Horizontal Layout"
 msgstr "Naar een horizontale indeling wijzigen"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:55
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
 #, kde-format
 msgid "Hide Shade Selector"
 msgstr "Tint-kiezer verbergen"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:56
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:57
 #, kde-format
 msgid "Do Nothing"
 msgstr "Niets doen"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:60
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
 #, kde-format
 msgid "When Pressing Middle Mouse Button"
 msgstr "Bij indrukken van de middelste muisknop"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:61
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
 #, kde-format
 msgid "On Mouse Over"
 msgstr "Bij muis erboven"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:62
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:63
 #, kde-format
 msgid "Never"
 msgstr "Nooit"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:82
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
 #, kde-format
 msgid "MyPaint"
 msgstr "Mypaint"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:83
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:84
 #, kde-format
 msgid "Minimal"
 msgstr "Minimaal"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:84
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:85
 #, kde-format
 msgid "Do Not Show"
 msgstr "Niet tonen"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisColorSelectorSettings)
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:142
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:143
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:24
 #, kde-format
 msgid "Color Selector Settings"
 msgstr "Instellingen voor kleurenkiezer"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:268
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:271
 #, kde-format
 msgid ""
 "Values goes from black to white, or black to the most saturated color. "
@@ -37989,7 +38023,7 @@ msgstr ""
 "Verzadiging, op zijn beurt, loopt van de meest verzadigde kleur naar wit, "
 "grijs of zwart."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:271
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
 #, kde-format
 msgid ""
 "Lightness goes from black to white, with middle gray being equal to the most "
@@ -37998,12 +38032,12 @@ msgstr ""
 "Lichtheid loopt van zwart naar wit, met middelgrijs gelijk aan de meest "
 "verzadigde kleur."
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:274
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:277
 #, kde-format
 msgid "Intensity maps to the sum of rgb components"
 msgstr "Intensiteit komt overeen met de som van de rgb-componenten"
 
-#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:277
+#: plugins/dockers/advancedcolorselector/kis_color_selector_settings.cpp:280
 #, kde-format
 msgid ""
 "Luma(Y') is weighted by its coefficients which are configurable. Default "
@@ -38248,7 +38282,7 @@ msgstr "Kleurgesc&hiedenis tonen"
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:639
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:855
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:862
 #, kde-format
 msgid "Patch Options"
 msgstr "Opties bij vlekjes"
@@ -38256,7 +38290,7 @@ msgstr "Opties bij vlekjes"
 #. i18n: ectx: property (text), widget (QLabel, label_10)
 #. i18n: ectx: property (text), widget (QLabel, label_9)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:682
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:898
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:905
 #, kde-format
 msgid "Max Patches: "
 msgstr "Max. vlekjes: "
@@ -38267,7 +38301,7 @@ msgstr "Max. vlekjes: "
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
 #. i18n: ectx: property (title), widget (QGroupBox, groupBox_4)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:708
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:918
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:925
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:227
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:554
 #: plugins/dockers/widegamutcolorselector/WdgWGSelectorSettings.ui:761
@@ -38279,7 +38313,7 @@ msgstr "Opmaak"
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignVertical)
 #. i18n: ectx: property (text), widget (QRadioButton, chkVertical)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:729
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:939
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:946
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:97
 #, kde-format
 msgid "&Vertical"
@@ -38289,7 +38323,7 @@ msgstr "&Verticaal"
 #. i18n: ectx: property (text), widget (QRadioButton, commonColorsAlignHorizontal)
 #. i18n: ectx: property (text), widget (QRadioButton, chkHorizontal)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:739
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:946
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:953
 #: plugins/extensions/imagesplit/wdg_imagesplit.ui:85
 #, kde-format
 msgid "Hori&zontal"
@@ -38298,43 +38332,49 @@ msgstr "Hori&zontaal"
 #. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsAllowScrolling)
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAllowScrolling)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:795
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1005
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1012
 #, kde-format
 msgid "Allow scrolling"
 msgstr "Schuiven toestaan"
 
+#. i18n: ectx: property (text), widget (QCheckBox, lastUsedColorsPerDocument)
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
+#, kde-format
+msgid "Separate color history for each document"
+msgstr ""
+
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:822
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
 #, kde-format
 msgid "Colors from Image"
 msgstr "Kleuren uit de afbeelding"
 
 #. i18n: ectx: property (title), widget (QGroupBox, commonColorsShow)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:831
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:838
 #, kde-format
 msgid "Show Colors from the ima&ge"
 msgstr "Kleuren uit de afbeeldin&g tonen"
 
 #. i18n: ectx: property (toolTip), widget (QCheckBox, commonColorsAutoUpdate)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1015
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1022
 #, kde-format
 msgid "this can be slow on big images"
 msgstr "dit kan langzaam zijn bij grote afbeeldingen"
 
 #. i18n: ectx: property (text), widget (QCheckBox, commonColorsAutoUpdate)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1018
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1025
 #, kde-format
 msgid "Update after every stroke"
 msgstr "Bijwerken na elke streek"
 
 #. i18n: ectx: property (title), widget (QGroupBox, hsy)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1058
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1065
 #, kde-format
 msgid "Lightness, Saturation and Hue hotkey steps"
 msgstr "Stappen van sneltoetsen voor lichtheid, verzadiging en tint"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1064
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1071
 #, kde-format
 msgid "Lightness: "
 msgstr "Lichtheid: "
@@ -38344,41 +38384,41 @@ msgstr "Lichtheid: "
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_hue)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_rg)
 #. i18n: ectx: property (suffix), widget (KisIntParseSpinBox, sb_by)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1071
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1085
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1078
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1092
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1122
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1136
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1099
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1129
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1143
 #, kde-format
 msgid " steps"
 msgstr " stappen"
 
 #. i18n: ectx: property (text), widget (QLabel, label_13)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1078
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1085
 #, kde-format
 msgid "Saturation: "
 msgstr "Verzadiging: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_17)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1099
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1106
 #, kde-format
 msgid "Hue: "
 msgstr "Tint: "
 
 #. i18n: ectx: property (title), widget (QGroupBox, horizontalGroupBox_2)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1109
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1116
 #, kde-format
 msgid "YUV Redder/Greener/Bluer/Yellower hotkey steps"
 msgstr "Stappen van sneltoets voor YUV roder/groener/blauwer/geler"
 
 #. i18n: ectx: property (text), widget (QLabel, label_18)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1115
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1122
 #, kde-format
 msgid "Redder/Greener: "
 msgstr "Roder/groener: "
 
 #. i18n: ectx: property (text), widget (QLabel, label_19)
-#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1129
+#: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:1136
 #, kde-format
 msgid "Bluer/Yellower: "
 msgstr "Blauwer/geler: "
@@ -43916,7 +43956,7 @@ msgstr "Wilt u de bestaande bundel overschrijven?"
 
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:371
 #: plugins/extensions/resourcemanager/dlg_create_bundle.cpp:387
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:221
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:245
 #, kde-format
 msgid "Could not open '%1' for saving."
 msgstr "Kon '%1' niet openen voor opslaan."
@@ -49369,8 +49409,8 @@ msgstr ""
 "Wilt u een andere locatie selecteren?"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:149
-#: plugins/impex/libkra/kis_kra_loader.cpp:671
-#: plugins/impex/libkra/kis_kra_loader.cpp:1120
+#: plugins/impex/libkra/kis_kra_loader.cpp:674
+#: plugins/impex/libkra/kis_kra_loader.cpp:1124
 #, kde-format
 msgctxt "@title:window"
 msgid "File not found"
@@ -49495,7 +49535,7 @@ msgstr "Afbeelding specificeert geen hoogte."
 msgid "Image specifies an unsupported color model: %1."
 msgstr "Afbeelding specificeert een niet ondersteund kleurmodel: %1."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:562
+#: plugins/impex/libkra/kis_kra_loader.cpp:565
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid ""
@@ -49503,7 +49543,7 @@ msgid ""
 msgstr ""
 "Ingebed palet is leeg en kan niet geladen worden. De naam van het palet: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:573
+#: plugins/impex/libkra/kis_kra_loader.cpp:576
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be read. The filename of the resource: %1"
@@ -49511,14 +49551,14 @@ msgstr ""
 "Ingebedde hulpbron kan niet gelezen worden. De bestandsnaam van de hulpbron: "
 "%1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:582
+#: plugins/impex/libkra/kis_kra_loader.cpp:585
 #, kde-format
 msgctxt "Warning message on loading a .kra file"
 msgid "Embedded resource cannot be imported. The filename of the resource: %1"
 msgstr ""
 "Ingebedde hulpbron kan niet geïmporteerd worden. De naam van de hulpbron: %1"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:666
+#: plugins/impex/libkra/kis_kra_loader.cpp:669
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49536,7 +49576,7 @@ msgstr ""
 "\n"
 "Wilt u het handmatig lokaliseren?"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:840
+#: plugins/impex/libkra/kis_kra_loader.cpp:844
 #, kde-format
 msgid ""
 "Two global selection masks in active state found. \"%1\" is kept active, "
@@ -49545,27 +49585,27 @@ msgstr ""
 "Twee globale selectiemaskers in actieve status gevonden. \"%1\" is actief "
 "gehouden, \"%2\" is gedeactiveerd"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:900
+#: plugins/impex/libkra/kis_kra_loader.cpp:904
 #, kde-format
 msgid "Layer %1 specifies an unsupported color model: %2."
 msgstr "Laag %1 specificeert een niet ondersteund kleurmodel: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:928
+#: plugins/impex/libkra/kis_kra_loader.cpp:932
 #, kde-format
 msgid "Layer %1 has an unsupported type."
 msgstr "Laag %1 heeft een niet ondersteund type."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:963
+#: plugins/impex/libkra/kis_kra_loader.cpp:967
 #, kde-format
 msgid "Layer %1 has an unsupported type: %2."
 msgstr "Laag %1 heeft een niet ondersteund type: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:970
+#: plugins/impex/libkra/kis_kra_loader.cpp:974
 #, kde-format
 msgid "Failure loading layer %1 of type: %2."
 msgstr "Laden is mislukt van laag %1 van type: %2."
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:994
+#: plugins/impex/libkra/kis_kra_loader.cpp:998
 #, kde-format
 msgid ""
 "Layer \"%1\" has blending mode \"%2\" that has changed its behavior for CMYK "
@@ -49578,7 +49618,7 @@ msgstr ""
 "oudere algoritme \"Additief\" in Instellingen->Krita configureren->Algemeen-"
 ">Hulpmiddelen->Mengmodus CMYK"
 
-#: plugins/impex/libkra/kis_kra_loader.cpp:1115
+#: plugins/impex/libkra/kis_kra_loader.cpp:1119
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -49701,94 +49741,94 @@ msgstr ""
 msgid "Could not write for %1 metadata to the file."
 msgstr "Metagegevens voor %1 konden niet naar het bestand geschreven worden."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:195
+#: plugins/impex/libkra/kis_kra_saver.cpp:196
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not export resource for embedding: %1"
 msgstr "Kon hulpbron niet exporteren voor inbedden: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:210
+#: plugins/impex/libkra/kis_kra_saver.cpp:211
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not write resource: %1"
 msgstr "Kon hulpbron niet schrijven: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:222
+#: plugins/impex/libkra/kis_kra_saver.cpp:223
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is empty: %1"
 msgstr "Geschreven hulpbron is leeg: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:228
+#: plugins/impex/libkra/kis_kra_saver.cpp:229
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Written resource is incomplete: %1"
 msgstr "Geschreven hulpbron is niet compleet: %1"
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:245
-#: plugins/impex/libkra/kis_kra_saver.cpp:267
+#: plugins/impex/libkra/kis_kra_saver.cpp:246
+#: plugins/impex/libkra/kis_kra_saver.cpp:268
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save storyboards."
 msgstr "Kon storyboards niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:279
-#: plugins/impex/libkra/kis_kra_saver.cpp:303
+#: plugins/impex/libkra/kis_kra_saver.cpp:280
+#: plugins/impex/libkra/kis_kra_saver.cpp:304
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save animation meta data."
 msgstr "Kon geen metagegevens voor animatie opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:316
-#: plugins/impex/libkra/kis_kra_saver.cpp:339
+#: plugins/impex/libkra/kis_kra_saver.cpp:317
+#: plugins/impex/libkra/kis_kra_saver.cpp:340
 #, kde-format
 msgctxt "Error message when saving a .kra file"
 msgid "Could not save audio meta data."
 msgstr "Kon geen metagegevens voor audio opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:452
+#: plugins/impex/libkra/kis_kra_saver.cpp:453
 #, kde-format
 msgctxt "Error message on saving a .kra file"
 msgid "Could not save keyframes."
 msgstr "Kon keyframes niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:496
+#: plugins/impex/libkra/kis_kra_saver.cpp:497
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save annotations."
 msgstr "Kon annotaties niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:530
+#: plugins/impex/libkra/kis_kra_saver.cpp:531
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save image profile."
 msgstr "Kon afbeeldingsprofiel niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:560
+#: plugins/impex/libkra/kis_kra_saver.cpp:561
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save softproofing color profile."
 msgstr "Kon softproofing kleurprofiel niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:595
+#: plugins/impex/libkra/kis_kra_saver.cpp:596
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save additional annotations."
 msgstr "Kon extra annotaties niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:628
+#: plugins/impex/libkra/kis_kra_saver.cpp:629
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save layer styles."
 msgstr "Kon de laagstijlen niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:643
+#: plugins/impex/libkra/kis_kra_saver.cpp:644
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save merged image."
 msgstr "Kon samengevoegde afbeelding niet opslaan."
 
-#: plugins/impex/libkra/kis_kra_saver.cpp:738
+#: plugins/impex/libkra/kis_kra_saver.cpp:747
 #, kde-format
 msgctxt "Saving .kra file error message"
 msgid "Could not save assistants."
@@ -58925,47 +58965,47 @@ msgstr ""
 "Het volgende referentie-afbeeldingen kunnen niet worden geladen:\n"
 "%1"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:98
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:99
 #, kde-format
 msgid "Select a Reference Image"
 msgstr "Een referentie-afbeelding selecteren"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
 #, kde-format
 msgid "Could not load reference image from clipboard"
 msgstr "Kon de referentie-afbeelding niet laden uit het klembord"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:176
 #, kde-format
 msgid "Load Reference Images"
 msgstr "Referentie-afbeeldingen laden"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:166
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
 #, kde-format
 msgid "Could not open '%1'."
 msgstr "Kon '%1' niet openen."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:187
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #, kde-format
 msgid "Could not load reference images from '%1'."
 msgstr "Kon geen referentie-afbeeldingen laden uit '%1'."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:204
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:228
 #, kde-format
 msgid "Save Reference Images"
 msgstr "Referentie-afbeeldingen opslaan"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:230
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
 #, kde-format
 msgid "Failed to save reference images."
 msgstr "Referentie-afbeeldingen opslaan is mislukt."
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:305
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:329
 #, kde-format
 msgid "Reference Image Actions"
 msgstr "Acties op referentie-afbeeldingen"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:92
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:95
 #, kde-format
 msgid "Reference Images Tool"
 msgstr "Hulpmiddel voor referentie-afbeeldingen"
@@ -58989,36 +59029,55 @@ msgid "Saturation [*varies*]: {n}%"
 msgstr "Verzadiging [*varieert*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, kde-format
-msgid "Add Reference Image"
-msgstr "Referentie-afbeelding toevoegen"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:69
-#, kde-format
-msgid "Delete all Reference Images"
+#, fuzzy, kde-format
+#| msgid "Delete all Reference Images"
+msgid "Delete Selected Reference Images"
 msgstr "Alle referentie-afbeeldingen verwijderen"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:73
-#, kde-format
-msgid "Load Reference Images Set"
-msgstr "Set referentie-afbeeldingen laden"
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
+#, fuzzy, kde-format
+#| msgid "Add Reference Image"
+msgid "Add Reference Image From File"
+msgstr "Referentie-afbeelding toevoegen"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
-#, kde-format
-msgid "Export Reference Images Set"
-msgstr "Set referentie-afbeeldingen exporteren"
-
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:81
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
 msgid "Paste Reference Image From System Clipboard"
 msgstr "Referentie afbeelding plakken vanaf systeemklembord"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:105
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
+#, fuzzy, kde-format
+#| msgid "Paste Reference Image From System Clipboard"
+msgid "Create Reference Image from Active Layer"
+msgstr "Referentie afbeelding plakken vanaf systeemklembord"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
+#, fuzzy, kde-format
+#| msgid "Paste Reference Image From System Clipboard"
+msgid "Create Reference Image from Visible Canvas"
+msgstr "Referentie afbeelding plakken vanaf systeemklembord"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
+#, kde-format
+msgid "Delete all Reference Images"
+msgstr "Alle referentie-afbeeldingen verwijderen"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:87
+#, kde-format
+msgid "Load Reference Images Set"
+msgstr "Set referentie-afbeeldingen laden"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:91
+#, kde-format
+msgid "Export Reference Images Set"
+msgstr "Set referentie-afbeeldingen exporteren"
+
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:118
 #, kde-format
 msgid "Embed to .KRA"
 msgstr "Inbedden in .KRA"
 
-#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:106
+#: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:119
 #, kde-format
 msgid "Link to Image"
 msgstr "Koppeling naar afbeelding"
@@ -59035,11 +59094,40 @@ msgstr "Beeldverhouding behouden"
 msgid "Save Location:"
 msgstr "Opslaglocatie:"
 
+#. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
+#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
+#, fuzzy, kde-format
+#| msgid "Delete selected mask"
+msgid "Delete Selected Images"
+msgstr "Geselecteerd masker verwijderen"
+
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
-#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:56
+#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
 #, kde-format
 msgid "Add/Select an image to show options"
 msgstr "Een afbeelding toevoegen/selecteren om opties te tonen"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Add reference image"
+msgid "Add a new reference image:"
+msgstr "Referentie-afbeelding toevoegen"
+
+#. i18n: ectx: property (text), widget (QLabel, label1)
+#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
+#, fuzzy, kde-format
+#| msgid "Path options"
+msgid "Other options:"
+msgstr "Opties voor pad"
+
+#. i18n: ectx: property (text), widget (QPushButton, bnDelete)
+#: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
+#, fuzzy, kde-format
+#| msgid "Delete all"
+msgid "Delete All"
+msgstr "Alles verwijderen"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -67141,9 +67229,6 @@ msgstr "Referentie-afbeeldingen"
 
 #~ msgid "Save..."
 #~ msgstr "Opslaan..."
-
-#~ msgid "Delete all"
-#~ msgstr "Alles verwijderen"
 
 #~ msgid "Only print and exit"
 #~ msgstr "Alleen afdrukken en afsluiten"

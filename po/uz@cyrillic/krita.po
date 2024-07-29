@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: koffice\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
 "PO-Revision-Date: 2006-12-17 13:43+0000\n"
 "Last-Translator: Mashrab Kuvatov <kmashrab@uni-bremen.de>\n"
 "Language-Team: Uzbek <floss-uz-l10n@googlegroups.com>\n"
@@ -21353,7 +21353,7 @@ msgstr "Матнни алмаштириш"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -40149,31 +40149,31 @@ msgstr "&Экспорт қилиш"
 msgid "Insert Name"
 msgstr "Матнни қўйиш"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, fuzzy, kde-format
 #| msgid "Import Document"
 msgid "Select a Directory"
 msgstr "Ҳужжатни импорт қилиш"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Exporting Compositions..."
 msgstr "Жойлашиши"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, fuzzy, kde-format
 #| msgid "Position"
 msgid "Exporting composition: %1..."
 msgstr "Жойлашиши"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, fuzzy, kde-format
 msgid "Rename Composition"
 msgstr "Намунани яратиш"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, fuzzy, kde-format
 #| msgid "Name:"
 msgid "New Name:"

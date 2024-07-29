@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
-"PO-Revision-Date: 2024-07-26 13:27+0300\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"PO-Revision-Date: 2024-07-28 19:35+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -12774,22 +12774,20 @@ msgstr "Buradan Kopyala"
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr "Başvuru Görseller Aracı"
+msgstr "Katmandan Görsele Başvur"
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3622 krita/krita.action:3624
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "Başvuru Görseller Aracı"
+msgstr "Görünür Tuvalden Görsele Başvur"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -13591,7 +13589,7 @@ msgstr "Şekil Biçemini Yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "Başvuru Görsel Ol&arak Yapıştır"
+msgstr "Başvurulan Görsel Ol&arak Yapıştır"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13601,7 +13599,7 @@ msgstr "Başvuru Görsel Ol&arak Yapıştır"
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "Başvuru Görsel Olarak Yapıştır"
+msgstr "Başvurulan Görsel Olarak Yapıştır"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -14537,7 +14535,7 @@ msgstr "Yardımcı Önizlemelerini Göster"
 #, kde-format
 msgctxt "action"
 msgid "S&how Reference Images"
-msgstr "Başvuru Gö&rselleri Göster"
+msgstr "Başvurulan Gö&rselleri Göster"
 
 #. i18n: context: toolTip @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (view_toggle_reference_images), Actions (View), ActionCollection (Menu)
@@ -14547,7 +14545,7 @@ msgstr "Başvuru Gö&rselleri Göster"
 #, kde-format
 msgctxt "action"
 msgid "Show Reference Images"
-msgstr "Başvuru Görselleri Göster"
+msgstr "Başvurulan Görselleri Göster"
 
 #. i18n: context: text @ Actions (Image), ActionCollection (Menu)
 #: krita/kritamenu.action:1146
@@ -18205,7 +18203,7 @@ msgstr "Krita Görev Kümesi"
 #, kde-format
 msgctxt "description of a file type"
 msgid "Krita Reference Image Collection"
-msgstr "Krita Başvuru Görsel Koleksiyonu"
+msgstr "Krita Başvurulan Görsel Koleksiyonu"
 
 #: libs/koplugin/KisMimeDatabase.cpp:289
 #, kde-format
@@ -20388,7 +20386,7 @@ msgstr "Künyeyi değiştir (üzerine yaz)"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -23618,12 +23616,12 @@ msgstr "Vektör Seçimini Temizle"
 #: libs/ui/flake/KisReferenceImagesLayer.cpp:24
 msgctxt "(qtundo-format)"
 msgid "Add reference image"
-msgstr "Başvuru Görsel Ekle"
+msgstr "Başvurulan Görsel Ekle"
 
 #: libs/ui/flake/KisReferenceImagesLayer.cpp:156
 #, kde-format
 msgid "Reference images"
-msgstr "Başvuru görseller"
+msgstr "Başvurulan görseller"
 
 #. i18n: ectx: property (windowTitle), widget (QWidget, KisMatrixWidget)
 #: libs/ui/forms/kis_matrix_widget.ui:18
@@ -29510,18 +29508,16 @@ msgid "Convert to a Selection Mask"
 msgstr "Seçim Maskesine Dönüştür"
 
 #: libs/ui/kis_node_manager.cpp:753
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
-msgstr "Panodan başvuru görsel yüklenemedi"
+msgstr "Etkin katmandan bir başvurulan görsel oluşturulamadı."
 
 #: libs/ui/kis_node_manager.cpp:754
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
-msgstr "Panodan başvuru görsel yüklenemedi"
+msgstr "Görünür tuvalden bir başvurulan görsel oluşturulamadı."
 
 #: libs/ui/kis_node_manager.cpp:991
 #, kde-format
@@ -30884,7 +30880,8 @@ msgid ""
 "The image contains <b>reference images</b>. The reference images will not be "
 "saved."
 msgstr ""
-"Görsel, <b>başvuru görseller</b> içeriyor. Başvuru görseller kaydedilmeyecek."
+"Görsel, <b>başvurulan görseller</b> içeriyor. Başvurulan görseller "
+"kaydedilmeyecek."
 
 #: libs/ui/KisImportExportManager.cpp:588
 #, kde-format
@@ -34052,7 +34049,7 @@ msgstr "Yeni Belge İçinde Aç"
 #: libs/ui/widgets/kis_canvas_drop.cpp:36
 #, kde-format
 msgid "Insert as Reference Image"
-msgstr "Başvuru Görsel Olarak Ekle"
+msgstr "Başvurulan Görsel Olarak Ekle"
 
 #: libs/ui/widgets/kis_canvas_drop.cpp:38
 #, kde-format
@@ -34072,7 +34069,7 @@ msgstr "Birden Çok Belge Aç"
 #: libs/ui/widgets/kis_canvas_drop.cpp:41
 #, kde-format
 msgid "Insert as Reference Images"
-msgstr "Başvuru Görsel Olarak Ekle"
+msgstr "Başvurulan Görsel Olarak Ekle"
 
 #: libs/ui/widgets/kis_categorized_list_view.cpp:160
 #, kde-format
@@ -38121,7 +38118,7 @@ msgstr "Sarmaya izin ver"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "Her bir belge için renk geçmişini ayrı tut"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -38937,28 +38934,28 @@ msgstr "Canlandırmaları Dışa Aktar"
 msgid "Insert Name"
 msgstr "Ad Ekle"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
 msgstr "Bir Dizin Seçin"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "Kompozisyonlar Dışa Aktarılıyor…"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Kompozisyon dışa aktarılıyor: %1…"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
 msgstr "Kompozisyonu Yeniden Adlandır"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
 msgid "New Name:"
 msgstr "Yeni ad:"
@@ -45296,7 +45293,7 @@ msgstr "Renk Aktar"
 #: plugins/filters/fastcolortransfer/wdgfastcolortransfer.ui:36
 #, kde-format
 msgid "Reference image:"
-msgstr "Başvuru görsel:"
+msgstr "Başvurulan görsel:"
 
 #. i18n: context: text @ Action (krita_filter_gaussianhighpass), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_gaussianhighpass), Actions (Filters), ActionCollection (Krita)
@@ -49133,7 +49130,7 @@ msgstr "Süzgeçler:"
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:139
 #, kde-format
 msgid "Could not load embedded reference image %1 "
-msgstr "%1 gömülü başvuru görsel yüklenemedi"
+msgstr "%1 gömülü başvurulan görsel yüklenemedi"
 
 #: plugins/impex/libkra/kis_kra_load_visitor.cpp:144
 #, kde-format
@@ -49145,7 +49142,7 @@ msgid ""
 "\n"
 "Do you want to select another location?"
 msgstr ""
-"Dış bir dosyaya bağlantılanmış bir başvuru görseli yüklenemedi.\n"
+"Dış bir dosyaya bağlantılanmış bir başvurulan görseli yüklenemedi.\n"
 "\n"
 "Yol: %1\n"
 "\n"
@@ -49376,7 +49373,7 @@ msgstr ""
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:93
 #, kde-format
 msgid "Failed to save reference image %1."
-msgstr "%1 başvuru görseli kaydedilemedi."
+msgstr "%1 başvurulan görseli kaydedilemedi."
 
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:100
 #: plugins/impex/libkra/kis_kra_save_visitor.cpp:132
@@ -58635,23 +58632,23 @@ msgid ""
 "The following reference images could not be loaded:\n"
 "%1"
 msgstr ""
-"Aşağıdaki başvuru görseller yüklenemedi:\n"
+"Aşağıdaki başvurulan görseller yüklenemedi:\n"
 "%1"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:99
 #, kde-format
 msgid "Select a Reference Image"
-msgstr "Bir başvuru görsel seç"
+msgstr "Bir başvurulan görsel seç"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
 #, kde-format
 msgid "Could not load reference image from clipboard"
-msgstr "Panodan başvuru görsel yüklenemedi"
+msgstr "Panodan başvurulan görsel yüklenemedi"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:176
 #, kde-format
 msgid "Load Reference Images"
-msgstr "Başvuru Görseller Yükle"
+msgstr "Başvurulan Görseller Yükle"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:189
 #, kde-format
@@ -58661,27 +58658,27 @@ msgstr "“%1” açılamadı."
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:210
 #, kde-format
 msgid "Could not load reference images from '%1'."
-msgstr "Başvuru görseller, “%1” konumundan yüklenemedi."
+msgstr "Başvurulan görseller, “%1” konumundan yüklenemedi."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:228
 #, kde-format
 msgid "Save Reference Images"
-msgstr "Başvuru Görselleri Kaydet"
+msgstr "Başvurulan Görselleri Kaydet"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:254
 #, kde-format
 msgid "Failed to save reference images."
-msgstr "Başvuru görseller kaydedilemedi."
+msgstr "Başvurulan görseller kaydedilemedi."
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:329
 #, kde-format
 msgid "Reference Image Actions"
-msgstr "Başvuru Görsel Eylemleri"
+msgstr "Başvurulan Görsel Eylemleri"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.h:95
 #, kde-format
 msgid "Reference Images Tool"
-msgstr "Başvuru Görseller Aracı"
+msgstr "Başvurulan Görseller Aracı"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:47
 #, kde-format
@@ -58702,48 +58699,44 @@ msgid "Saturation [*varies*]: {n}%"
 msgstr "Doygunluk [*değişken*]: %{n}"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, fuzzy, kde-format
-#| msgid "Delete all Reference Images"
+#, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Tüm Başvuru Görselleri Sil"
+msgstr "Seçili Başvurulan Görselleri Sil"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Add Reference Image"
+#, kde-format
 msgid "Add Reference Image From File"
-msgstr "Başvuru Görsel Ekle"
+msgstr "Dosyadan Başvurulan Görsel Ekle"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
 msgid "Paste Reference Image From System Clipboard"
-msgstr "Sistem Panosundan Başvuru Görseli Yapıştır"
+msgstr "Sistem Panosundan Başvurulan Görseli Yapıştır"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr "Sistem Panosundan Başvuru Görseli Yapıştır"
+msgstr "Etkin Katmandan Başvurulan Görsel Oluştur"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Sistem Panosundan Başvuru Görseli Yapıştır"
+msgstr "Görünür Tuvalden Başvurulan Görsel Oluştur"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
 msgid "Delete all Reference Images"
-msgstr "Tüm Başvuru Görselleri Sil"
+msgstr "Tüm Başvurulan Görselleri Sil"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:87
 #, kde-format
 msgid "Load Reference Images Set"
-msgstr "Başvuru Görsel Kümelerini Yükle"
+msgstr "Başvurulan Görsel Kümelerini Yükle"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:91
 #, kde-format
 msgid "Export Reference Images Set"
-msgstr "Başvuru Görsel Kümelerini Dışa Aktar"
+msgstr "Başvurulan Görsel Kümelerini Dışa Aktar"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:118
 #, kde-format
@@ -58769,10 +58762,9 @@ msgstr "Konumu kaydet:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete selected mask"
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "Seçili maskeyi sil"
+msgstr "Seçili Görselleri Sil"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -58782,25 +58774,21 @@ msgstr "Seçenekleri görmek için bir görsel ekle/seç"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "Başvuru Görsel Ekle"
+msgstr "Yeni bir başvurulan görsel ekle:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
-#| msgid "Path options"
+#, kde-format
 msgid "Other options:"
-msgstr "Yol seçenekleri"
+msgstr "Diğer seçenekler:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Delete All"
-msgstr "Tümünü Seç"
+msgstr "Tümünü Sil"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format
@@ -61641,7 +61629,7 @@ msgstr "Yakınlaştırma Aracı"
 #, kde-format
 msgctxt "action"
 msgid "Reference Images Tool"
-msgstr "Başvuru Görseller Aracı"
+msgstr "Başvurulan Görseller Aracı"
 
 #~ msgid "CPU Throttle"
 #~ msgstr "İşlemci Kısma"

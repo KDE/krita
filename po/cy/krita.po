@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
 "PO-Revision-Date: 2004-07-06 17:18+0100\n"
 "Last-Translator: KD at KGyfieithu <kyfieithu@dotmon.com>\n"
 "Language-Team: Cymraeg <cy@li.org>\n"
@@ -20566,7 +20566,7 @@ msgstr "Amnewid Testun"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -38413,28 +38413,28 @@ msgstr "Dim cyfansoddiad"
 msgid "Insert Name"
 msgstr "Enw'r haen:"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, fuzzy, kde-format
 msgid "Select a Directory"
 msgstr "Hirsgwar"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, fuzzy, kde-format
 msgid "Exporting Compositions..."
 msgstr "Dim cyfansoddiad"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, fuzzy, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Dim cyfansoddiad"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, fuzzy, kde-format
 msgid "Rename Composition"
 msgstr "Dim cyfansoddiad"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, fuzzy, kde-format
 msgid "New Name:"
 msgstr "&Enw:"

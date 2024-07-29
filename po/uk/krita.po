@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
-"PO-Revision-Date: 2024-07-26 08:18+0300\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"PO-Revision-Date: 2024-07-28 09:20+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -12779,22 +12779,20 @@ msgstr "Встановити копіювання з"
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr "Засіб еталонних зображень"
+msgstr "Еталонне зображення з шару"
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3622 krita/krita.action:3624
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "Засіб еталонних зображень"
+msgstr "Еталонне зображення з видимого"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -20649,7 +20647,7 @@ msgstr "Замінити (перезаписати) мітку"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -29909,18 +29907,16 @@ msgstr ""
 "перетворення на маску позначення"
 
 #: libs/ui/kis_node_manager.cpp:753
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
-msgstr "Не вдалося прочитати еталонне зображення з буфера обміну даними"
+msgstr "Не вдалося створити еталонне зображення з активного шару."
 
 #: libs/ui/kis_node_manager.cpp:754
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
-msgstr "Не вдалося прочитати еталонне зображення з буфера обміну даними"
+msgstr "Не вдалося створити еталонне зображення з видимого на полотні."
 
 #: libs/ui/kis_node_manager.cpp:991
 #, kde-format
@@ -38695,7 +38691,7 @@ msgstr "Дозволити гортання"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "Окремий журнал кольорів для кожного документа"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -39600,28 +39596,28 @@ msgstr "Експортувати анімацію"
 msgid "Insert Name"
 msgstr "Вставте назву"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
 msgstr "Виберіть каталог"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "Експортування композицій…"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Експортування композиції: %1…"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
 msgstr "Перейменування композиції"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
 msgid "New Name:"
 msgstr "Нова назва:"
@@ -59577,16 +59573,14 @@ msgid "Saturation [*varies*]: {n}%"
 msgstr "Насиченість [*змінюється*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, fuzzy, kde-format
-#| msgid "Delete all Reference Images"
+#, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Вилучення усіх еталонних зображень"
+msgstr "Вилучити позначені еталонні зображення"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Add Reference Image"
+#, kde-format
 msgid "Add Reference Image From File"
-msgstr "Додавання еталонного зображення"
+msgstr "Додати еталонне зображення з файла"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
@@ -59594,16 +59588,14 @@ msgid "Paste Reference Image From System Clipboard"
 msgstr "Вставити еталонне зображення з буфера системи"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr "Вставити еталонне зображення з буфера системи"
+msgstr "Створити еталонне зображення з активного шару"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Вставити еталонне зображення з буфера системи"
+msgstr "Створити еталонне зображення з видимого на полотні"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -59644,10 +59636,9 @@ msgstr "Адреса збереження:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete selected mask"
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "Вилучити позначену маску"
+msgstr "Вилучити позначені зображення"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -59657,25 +59648,21 @@ msgstr "Додайте або виберіть зображення для по�
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "Додати еталонне зображення"
+msgstr "Додати нове еталонне зображення:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
-#| msgid "Path options"
+#, kde-format
 msgid "Other options:"
-msgstr "Параметри контурів"
+msgstr "Інші параметри:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Select All"
+#, kde-format
 msgid "Delete All"
-msgstr "Позначити усе"
+msgstr "Вилучити все"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format

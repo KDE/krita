@@ -65,8 +65,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
-"PO-Revision-Date: 2024-07-27 00:05+0100\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"PO-Revision-Date: 2024-07-28 12:53+0100\n"
 "Last-Translator: Sofía Priego <spriego@darksylvania.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -12843,22 +12843,20 @@ msgstr "Definir copia desde"
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr "Herramienta de imágenes de referencia"
+msgstr "Imagen de referencia de capa"
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3622 krita/krita.action:3624
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "Herramienta de imágenes de referencia"
+msgstr "Imagen de referencia del lienzo visible"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -20455,7 +20453,7 @@ msgstr "Sustituir (sobrescribir) la etiqueta"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -29639,18 +29637,16 @@ msgid "Convert to a Selection Mask"
 msgstr "Convertir a una máscara de selección"
 
 #: libs/ui/kis_node_manager.cpp:753
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
-msgstr "No se ha podido cargar la imagen de referencia desde el portapapeles"
+msgstr "No se ha podido crear una la imagen de referencia de la capa activa."
 
 #: libs/ui/kis_node_manager.cpp:754
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
-msgstr "No se ha podido cargar la imagen de referencia desde el portapapeles"
+msgstr "No se ha podido crear una imagen de referencia del lienzo visible."
 
 #: libs/ui/kis_node_manager.cpp:991
 #, kde-format
@@ -38327,7 +38323,7 @@ msgstr "Permitir desplazamiento"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "Separar el historial de color para cada documento"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -39146,28 +39142,28 @@ msgstr "Exportar animaciones"
 msgid "Insert Name"
 msgstr "Insertar un nombre"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
 msgstr "Seleccionar un directorio"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "Exportando composiciones..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Exportando composición: %1..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
 msgstr "Cambiar el nombre de la composición"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
 msgid "New Name:"
 msgstr "Nuevo nombre:"
@@ -59056,16 +59052,14 @@ msgid "Saturation [*varies*]: {n}%"
 msgstr "Saturación [*varía*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, fuzzy, kde-format
-#| msgid "Delete all Reference Images"
+#, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Borrar todas las imágenes de referencia"
+msgstr "Borrar las imágenes de referencia seleccionadas"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Add Reference Image"
+#, kde-format
 msgid "Add Reference Image From File"
-msgstr "Añadir imagen de referencia"
+msgstr "Añadir imagen de referencia de archivo"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
@@ -59073,16 +59067,14 @@ msgid "Paste Reference Image From System Clipboard"
 msgstr "Pegar imagen de referencia desde el portapapeles del sistema"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr "Pegar imagen de referencia desde el portapapeles del sistema"
+msgstr "Crear imagen de referencia de la capa activa"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Pegar imagen de referencia desde el portapapeles del sistema"
+msgstr "Crear imagen de referencia del lienzo visible"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -59123,10 +59115,9 @@ msgstr "Ubicación para guardar:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete selected mask"
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "Borrar la máscara seleccionada"
+msgstr "Borrar las imágenes seleccionadas"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -59136,23 +59127,19 @@ msgstr "Añada/seleccione una imagen para mostrar las opciones"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "Añadir imagen de referencia"
+msgstr "Añadir nueva imagen de referencia:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
-#| msgid "Path options"
+#, kde-format
 msgid "Other options:"
-msgstr "Opciones de la ruta"
+msgstr "Otras opciones:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Delete all"
+#, kde-format
 msgid "Delete All"
 msgstr "Borrar todo"
 

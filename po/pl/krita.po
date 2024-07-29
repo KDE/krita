@@ -91,8 +91,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
-"PO-Revision-Date: 2024-03-23 12:05+0100\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"PO-Revision-Date: 2024-07-28 09:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -101,6 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -8511,12 +8512,10 @@ msgstr "Pobierz barwę ekranu (próbkowanie rzeczywistego płótna)"
 #. i18n: context: toolTip @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #. i18n: context: iconText @ Action (docker_box), Actions (General), ActionCollection (Krita)
 #: krita/krita.action:321 krita/krita.action:323 krita/krita.action:324
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Show Dockers"
+#, kde-format
 msgctxt "action"
 msgid "Show Docker Box"
-msgstr "Pokaż doki"
+msgstr "Pokaż pole doku"
 
 #. i18n: context: text @ Actions (Painting), ActionCollection (Krita)
 #: krita/krita.action:333
@@ -12862,22 +12861,20 @@ msgstr "Ustaw kopię z"
 #. i18n: context: text @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr "Narzędzie obrazów wzorcowych"
+msgstr "Obrazów wzorcowy z warstwy"
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3622 krita/krita.action:3624
-#, fuzzy, kde-format
-#| msgid "Reference Images Tool"
+#, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr "Narzędzie obrazów wzorcowych"
+msgstr "Obrazów wzorcowy z tego co widoczne"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -13679,7 +13676,7 @@ msgstr "Wklej wygląd kształtu"
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "Wklej jako obraz odni&esienia"
+msgstr "Wkl&ej jako obraz wzorcowy"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13689,7 +13686,7 @@ msgstr "Wklej jako obraz odni&esienia"
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "Wklej jako obraz odniesienia"
+msgstr "Wklej jako obraz wzorcowy"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -18381,12 +18378,9 @@ msgid "Import frames"
 msgstr "Zaimportuj klatki"
 
 #: libs/libkis/PaintingResources.cpp:63
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Freehand Brush Stroke"
 msgctxt "(qtundo-format)"
 msgid "Scripted Brush Stroke"
-msgstr "Odręczne malowanie pędzlem"
+msgstr "Pociągnięcie skryptowym pędzlem"
 
 #: libs/metadata/kis_meta_data_filter_p.cc:39
 #, kde-format
@@ -20476,7 +20470,7 @@ msgstr "Zastąp znacznik"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -22956,10 +22950,9 @@ msgid "On Middle-Click Drag"
 msgstr "Na przeciągnięcie po kliknięciu środkowym"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:379
-#, fuzzy, kde-format
-#| msgid "All supported formats"
+#, kde-format
 msgid "All Supported Files"
-msgstr "Wszystkie obsługiwane formaty"
+msgstr "Wszystkie obsługiwane pliki"
 
 #: libs/ui/dialogs/kis_dlg_preferences.cc:407
 #, kde-format
@@ -25613,12 +25606,15 @@ msgid ""
 "on some platforms, e.g. on some Android devices, where pressure may be "
 "reported as 0.0 all the time."
 msgstr ""
+"Włącz odczyt stanu nacisku dla zdarzeń dotyku. Może to nie działać na "
+"niektórych platformach, np. niektórych urządzeniach z Androidem, gdzie "
+"nacisk jest zawsze zgłaszany jako 0.0."
 
 #. i18n: ectx: property (text), widget (QCheckBox, chkTouchPressureSensitivity)
 #: libs/ui/forms/wdggeneralsettings.ui:864
 #, kde-format
 msgid "Enable Touch Pressure Sensitivity (may be broken)"
-msgstr ""
+msgstr "Włącz wrażliwość na nacisk (może nie działać)"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_2)
 #: libs/ui/forms/wdggeneralsettings.ui:872
@@ -25754,10 +25750,9 @@ msgstr "Przytnij klatki przy importowaniu animacji"
 
 #. i18n: ectx: property (text), widget (QLabel, label_22)
 #: libs/ui/forms/wdggeneralsettings.ui:1050
-#, fuzzy, kde-format
-#| msgid "Default &printer profile:"
+#, kde-format
 msgid "Default Export Filetype: "
-msgstr "Domyślny profil &drukarki:"
+msgstr "Domyślny profil do eksportowania: "
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_5)
 #: libs/ui/forms/wdggeneralsettings.ui:1064
@@ -28988,10 +28983,9 @@ msgid "Activate Freehand Selection Tool"
 msgstr "Włącz narzędzie odręcznego zaznaczania"
 
 #: libs/ui/input/kis_tool_invocation_action.cpp:56
-#, fuzzy, kde-format
-#| msgid "Activate Line Tool"
+#, kde-format
 msgid "Activate with Other Color"
-msgstr "Włącz narzędzie linii"
+msgstr "Włącz inną barwą"
 
 #: libs/ui/input/kis_zoom_action.cpp:106
 #, kde-format
@@ -29034,15 +29028,14 @@ msgid "Zoom Out"
 msgstr "Pomniejszenie"
 
 #: libs/ui/input/kis_zoom_action.cpp:116
-#, fuzzy, kde-format
-#| msgid "No Cursor"
+#, kde-format
 msgid "Zoom In To Cursor"
-msgstr "Brak wskaźnika"
+msgstr "Zbliż wokół wskaźnika"
 
 #: libs/ui/input/kis_zoom_action.cpp:117
 #, kde-format
 msgid "Zoom Out From Cursor"
-msgstr ""
+msgstr "Oddal wokół wskaźnika"
 
 #: libs/ui/input/kis_zoom_action.cpp:118 libs/ui/kis_popup_palette.cpp:192
 #, kde-format
@@ -29316,10 +29309,9 @@ msgid "&Open Background color selector"
 msgstr "&Otwórz wybierak barwy drugoplanowej"
 
 #: libs/ui/kis_control_frame.cpp:132
-#, fuzzy, kde-format
-#| msgid "&Docker"
+#, kde-format
 msgid "&Docker Box"
-msgstr "&Dok:"
+msgstr "Pole &doku"
 
 #: libs/ui/kis_control_frame.cpp:194 libs/ui/KisApplication.cpp:351
 #: plugins/dockers/patterndocker/patterndocker_dock.cpp:20
@@ -29345,16 +29337,14 @@ msgid "Gradients"
 msgstr "Gradienty"
 
 #: libs/ui/kis_control_frame.cpp:281
-#, fuzzy, kde-format
-#| msgid "Docker:"
+#, kde-format
 msgid "Docker box"
-msgstr "Dok:"
+msgstr "Pole doku"
 
 #: libs/ui/kis_control_frame.cpp:287
-#, fuzzy, kde-format
-#| msgid "Toolbox and dockers"
+#, kde-format
 msgid "Toolbar Docker Box"
-msgstr "Paski narzędzi i doki"
+msgstr "Pole doku paska narzędzi"
 
 #: libs/ui/kis_custom_pattern.cc:108
 #, kde-format
@@ -29418,9 +29408,7 @@ msgid "Select a Color"
 msgstr "Wybierz barwę"
 
 #: libs/ui/kis_layer_manager.cc:191
-#, fuzzy, kde-format
-#| msgctxt "action"
-#| msgid "Merge Selected Layers"
+#, kde-format
 msgctxt "@action:inmenu"
 msgid "Merge Selected Layers"
 msgstr "Scal zaznaczone warstwy"
@@ -29640,18 +29628,16 @@ msgid "Convert to a Selection Mask"
 msgstr "Przekształć do maski zaznaczenia"
 
 #: libs/ui/kis_node_manager.cpp:753
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
-msgstr "Nie można wczytać obrazu odniesienia ze schowka"
+msgstr "Nie można utworzyć obrazu wzorcowego z bieżącej warstwy."
 
 #: libs/ui/kis_node_manager.cpp:754
-#, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
+#, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
-msgstr "Nie można wczytać obrazu odniesienia ze schowka"
+msgstr "Nie można utworzyć obrazu wzorcowego z widocznego płótna."
 
 #: libs/ui/kis_node_manager.cpp:991
 #, kde-format
@@ -29959,8 +29945,7 @@ msgid "Masked Brush"
 msgstr "Maskowany pędzel"
 
 #: libs/ui/kis_popup_palette.cpp:134
-#, fuzzy, kde-format
-#| msgid "Pop-up Palette"
+#, kde-format
 msgid "Popup Palette"
 msgstr "Paleta wysuwna"
 
@@ -34975,18 +34960,16 @@ msgstr "Ustawienia panelu dokera"
 
 #: libs/ui/widgets/KisDockerHud.cpp:73 libs/ui/widgets/KisDockerHud.cpp:309
 #: libs/ui/widgets/KisDockerHud.cpp:320
-#, fuzzy, kde-format
-#| msgid "Docker is open in Popup Palette. Close Popup Palette to show here."
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Docker is open in %1. Close %1 to show here."
-msgstr "Dok jest otwarty na palecie wysuwnej. Zamknij ją, aby pokazać tutaj."
+msgstr "Dok jest otwarty w %1. Zamknij %1, aby pokazać tutaj."
 
 #: libs/ui/widgets/KisDockerHud.cpp:215
-#, fuzzy, kde-format
-#| msgid "Configure docker panel"
+#, kde-format
 msgctxt "%1 is the name of the widget"
 msgid "Configure %1 dockers"
-msgstr "Ustawienia panelu dokera"
+msgstr "Ustawienia %1 doków"
 
 #: libs/ui/widgets/KisDockerHud.cpp:216
 #, kde-format
@@ -36314,10 +36297,9 @@ msgid "About &KDE"
 msgstr "Szczegóły o &KDE"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
-#, fuzzy, kde-format
-#| msgid "Unit:"
+#, kde-format
 msgid "Unit"
-msgstr "Jednostka:"
+msgstr "Jednostka"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -38296,7 +38278,7 @@ msgstr "Pozwól na przewijanie"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "Oddziel historię barw dla każdego dokumentu"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -38417,23 +38399,19 @@ msgid "Val:"
 msgstr "Wartość:"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:132
-#, fuzzy, kde-format
-#| msgid "Frame register"
+#, kde-format
 msgid "Value register"
-msgstr "Rejestr klatki"
+msgstr "Rejestr wartości"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:147
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Sobel horizontally"
+#, kde-format
 msgid "Zoom horizontally"
-msgstr "Sobel poziomo"
+msgstr "Powiększ w poziomie"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:154
-#, fuzzy, kde-format
-#| msgid "Flip vertically"
+#, kde-format
 msgid "Zoom vertically"
-msgstr "Odbij w pionie"
+msgstr "Powiększ w pionie"
 
 #: plugins/dockers/animation/KisAnimCurvesDocker.cpp:171
 #: plugins/dockers/animation/KisAnimTimelineDocker.cpp:131
@@ -39124,28 +39102,28 @@ msgstr "Wyeksportuj animacje"
 msgid "Insert Name"
 msgstr "Wstaw nazwę"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
 msgstr "Wybierz katalog"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "Eksportowanie złożeń..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Eksportowanie złożenia: %1..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
 msgstr "Zmień nazwę kompozycji"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
 msgid "New Name:"
 msgstr "Nowa nazwa:"
@@ -40789,13 +40767,7 @@ msgstr ""
 "Wiedz, że liczba większa niż %1 prawdopodobnie nie zwiększy wydajności."
 
 #: plugins/dockers/recorder/recorderdocker_dock.cpp:348
-#, fuzzy, kde-format
-#| msgid ""
-#| "Set the number of recording threads.\n"
-#| "Accordingly to your hardware setup you should record with no more than %1 "
-#| "threads.\n"
-#| "You can play around with one or two more threads, but keep an eye on your "
-#| "overall system performance."
+#, kde-format
 msgid ""
 "Set the number of recording threads.\n"
 "According to your hardware setup you should record with no more than %1 "
@@ -44541,44 +44513,36 @@ msgid ""
 "Make sure the actions are corresponding to the correct gesture on the system "
 "level. These can be configured under S Pen Settings > Air actions."
 msgstr ""
+"Upewnij się, że działania odpowiadają odpowiednim gestom na poziomie "
+"systemowym. Można to ustawić w Ustawienia rysika P > Działania w powietrzu"
 
 #. i18n: ectx: property (title), widget (QGroupBox, boxButtonActions)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:43
-#, fuzzy, kde-format
-#| msgctxt ""
-#| "%1 = List of mouse buttons for shortcut. Plural form is chosen upon the "
-#| "number of buttons in that list."
-#| msgid "%1 Button"
-#| msgid_plural "%1 Buttons"
+#, kde-format
 msgid "Buttons"
-msgstr "%1 przycisk"
+msgstr "Przyciski"
 
 #. i18n: ectx: property (text), widget (QLabel, labelClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:49
-#, fuzzy, kde-format
-#| msgid "Presets"
+#, kde-format
 msgid "Press"
-msgstr "Nastawy"
+msgstr "Naciśnij"
 
 #. i18n: ectx: property (text), widget (QLabel, labelDoubleClick)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:59
-#, fuzzy, kde-format
-#| msgid "Key Press"
+#, kde-format
 msgid "Double Press"
-msgstr "Naciśnięcie klawisza"
+msgstr "Dwukrotne naciśnięcie"
 
 #. i18n: ectx: property (text), widget (QLabel, label_7)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:74
-#, fuzzy, kde-format
-#| msgid ""
-#| "Following button actions are supported on the Note 9, Note 10 and Tab S6 "
-#| "devices."
+#, kde-format
 msgid ""
 "The following buttons are supported on the Note 9, Note 10, Tab S6 and Tab "
 "S9 devices."
 msgstr ""
-"Na urządzeniach Note 9, Note 10 oraz Tab S6 obsługiwane są następujące "
-"działania przycisków."
+"Na urządzeniach Note 9, Note 10, Tab S6 oraz Tab S9 obsługiwane są "
+"następujące działania przycisków."
 
 #. i18n: ectx: property (title), widget (QGroupBox, BoxGestures)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:93
@@ -44618,19 +44582,18 @@ msgstr "Okręg w prawo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_6)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:137
-#, fuzzy, kde-format
-#| msgid "Circle Counterclockwise"
+#, kde-format
 msgid "Circle Counter-Clockwise"
 msgstr "Okrąg w lewo"
 
 #. i18n: ectx: property (text), widget (QLabel, label_8)
 #: plugins/extensions/spensettings/wdg_spensettings.ui:164
-#, fuzzy, kde-format
-#| msgid "Following gestures are supported on the Note 10 and Tab S6 devices."
+#, kde-format
 msgid ""
 "The following gestures are supported on the Note 10, Tab S6 and Tab S9 "
 "devices."
-msgstr "Na urządzeniach Note 10 oraz Tab S6 obsługiwane są następujące gesty."
+msgstr ""
+"Na urządzeniach Note 10, Tab S6 oraz Tab S9 obsługiwane są następujące gesty."
 
 #: plugins/extensions/waveletdecompose/dlg_waveletdecompose.cpp:17
 #, kde-format
@@ -46266,138 +46229,127 @@ msgid "Posterize"
 msgstr "Posteryzacja"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:49
-#, fuzzy, kde-format
-#| msgid "Rectangle"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Rectangle"
 msgstr "Prostokąt"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:52
-#, fuzzy, kde-format
-#| msgctxt "Gradient type - Diamond"
-#| msgid "Diamond"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Diamond"
 msgstr "Diament"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:55
-#, fuzzy, kde-format
-#| msgid "Octagon (8)"
+#, kde-format
 msgctxt "Expansion pattern button in propagate colors filter"
 msgid "Octagon"
-msgstr "Ośmiokąt (8)"
+msgstr "Ośmiokąt"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:61
 #, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Unrestricted"
-msgstr ""
+msgstr "Nieograniczone"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:64
-#, fuzzy, kde-format
-#| msgctxt "Button to restart the timelapse video configuring"
-#| msgid "Restart"
+#, kde-format
 msgctxt "Expansion distance button in propagate colors filter"
 msgid "Restricted"
-msgstr "Uruchom ponownie"
+msgstr "Ograniczone"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:75
-#, fuzzy, kde-format
-#| msgid "Maximum brush speed: {n} px/ms"
-#| msgid_plural "Maximum brush speed: {n} px/ms"
+#, kde-format
 msgctxt ""
 "The 'maximum distance' slider in propagate colors filter; {n} is the number "
 "value, px is the pixels suffix"
 msgid "Maximum Distance: {n}px"
-msgstr "Największa szybkość pędzla: {n} px/ms"
+msgstr "Największa odległość: {n} px"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:80
 #, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Expand"
-msgstr ""
+msgstr "Rozprzestrzeń"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:83
-#, fuzzy, kde-format
-#| msgid "Pressure"
+#, kde-format
 msgctxt "Transparency behavior button in propagate colors filter"
 msgid "Preserve"
-msgstr "Naciskowy"
+msgstr "Zachowaj"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:88
 #, kde-format
 msgid "Expand the colors in a rectangular-like way"
-msgstr ""
+msgstr "Rozprzestrzeń barwy w prostokątach"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:89
 #, kde-format
 msgid "Expand the colors in a diamond-like way"
-msgstr ""
+msgstr "Rozprzestrzeń barwy w diamentach"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:90
 #, kde-format
 msgid "Expand the colors in a octagonal-like way"
-msgstr ""
+msgstr "Rozprzestrzeń barwy w ośmiokątach"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:92
 #, kde-format
 msgid "Expand the colors all the way until all transparent regions are filled"
 msgstr ""
+"Rozprzestrzeń barwy aż wszystkie przezroczyste obszary nie zostaną wypełnione"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:93
 #, kde-format
 msgid "Expand the colors only until a specific distance"
-msgstr ""
+msgstr "Rozprzestrzeń barwy tylko na daną odległość"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:94
 #, kde-format
 msgid ""
 "Specify the maximum distance to expand when the restricted mode is active"
 msgstr ""
+"Określ największą odległość rozprzestrzenienia przy włączonym trybie "
+"ograniczenia"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:96
 #, kde-format
 msgid "Expand the alpha channel as well as the color"
-msgstr ""
+msgstr "Rozprzestrzeń zarówno barwę jak i kanał alfa"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:97
 #, kde-format
 msgid "Expand only the color, leaving the alpha channel untouched"
-msgstr ""
+msgstr "Rozprzestrzeń tylko barwę, pozostawiając kanał alfa nietkniętym"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:105
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgctxt "The 'distance metric' section label in propagate colors filter dialog"
 msgid "Expansion Pattern"
-msgstr "Rozszerzalny wypełniacz"
+msgstr "Wzorzec rozszerzania"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:117
-#, fuzzy, kde-format
-#| msgid "Expanding Spacer"
+#, kde-format
 msgctxt "The 'expansion mode' section label in propagate colors filter dialog"
 msgid "Expansion Distance"
-msgstr "Rozszerzalny wypełniacz"
+msgstr "Odległość rozszerzenia"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsConfigWidget.cpp:130
-#, fuzzy, kde-format
-#| msgid "Transparency Mask"
+#, kde-format
 msgctxt ""
 "The 'transparency behavior' section label in propagate colors filter dialog"
 msgid "Transparency Behavior"
-msgstr "Maska przezroczystości"
+msgstr "Zachowanie przezroczystości"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:47
-#, fuzzy, kde-format
-#| msgid "Tropical Colors"
+#, kde-format
 msgid "Propagate Colors"
-msgstr "Kolory tropikalne"
+msgstr "Rozprzestrzeń barwy"
 
 #: plugins/filters/propagatecolors/KisPropagateColorsFilterConfiguration.h:48
-#, fuzzy, kde-format
-#| msgid "&Index Colors..."
+#, kde-format
 msgid "&Propagate Colors..."
-msgstr "&Indeksowanie barw..."
+msgstr "Roz&przestrzeń barwy..."
 
 #. i18n: context: text @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (krita_filter_propagatecolors), Actions (Filters), ActionCollection (Krita)
@@ -46408,11 +46360,10 @@ msgstr "&Indeksowanie barw..."
 #: plugins/filters/propagatecolors/propagatecolors.action:7
 #: plugins/filters/propagatecolors/propagatecolors.action:9
 #: plugins/filters/propagatecolors/propagatecolors.action:10
-#, fuzzy, kde-format
-#| msgid "Painterly Color Mixer"
+#, kde-format
 msgctxt "action"
 msgid "Propagate Colors Filter"
-msgstr "Malarski mieszalnik kolorów"
+msgstr "Filtr rozprzestrzeniania się barw"
 
 #: plugins/filters/raindropsfilter/kis_raindrops_filter.cpp:47
 #, kde-format
@@ -58054,10 +58005,9 @@ msgstr ""
 "Wypełnij obszary znalezione ze scalania warstw o danych etykietach barw"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:669
-#, fuzzy, kde-format
-#| msgid "Dragging will fill regions of any color"
+#, kde-format
 msgid "Dragging will not fill different regions"
-msgstr "Przeciągnięcie wypełni obszary o dowolnej barwie"
+msgstr "Przeciągnięcie nie wypełni różnych obszarów"
 
 #: plugins/tools/basictools/kis_tool_fill.cc:670
 #, kde-format
@@ -58911,7 +58861,7 @@ msgstr "Wybierz obraz wzorcowy"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:146
 #, kde-format
 msgid "Could not load reference image from clipboard"
-msgstr "Nie można wczytać obrazu odniesienia ze schowka"
+msgstr "Nie można wczytać obrazu wzorcowego ze schowka"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:176
 #, kde-format
@@ -58967,33 +58917,29 @@ msgid "Saturation [*varies*]: {n}%"
 msgstr "Nasycenie [*różne*]: {n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
-#, fuzzy, kde-format
-#| msgid "Delete all Reference Images"
+#, kde-format
 msgid "Delete Selected Reference Images"
-msgstr "Usuń wszystkie obrazy wzorcowe"
+msgstr "Usuń zaznaczone obrazy wzorcowe"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
-#, fuzzy, kde-format
-#| msgid "Add Reference Image"
+#, kde-format
 msgid "Add Reference Image From File"
-msgstr "Dodaj obraz wzorcowy"
+msgstr "Dodaj obraz wzorcowy z pliku"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
 msgid "Paste Reference Image From System Clipboard"
-msgstr "Wklej obraz odniesienia ze schowka systemowego"
+msgstr "Wklej obraz wzorcowy ze schowka systemowego"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr "Wklej obraz odniesienia ze schowka systemowego"
+msgstr "Utwórz obraz wzorcowy z bieżącej warstwy"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
-#, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
+#, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr "Wklej obraz odniesienia ze schowka systemowego"
+msgstr "Utwórz obraz wzorcowy z widocznego płótna"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -59034,10 +58980,9 @@ msgstr "Miejsce zapisu:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
-#, fuzzy, kde-format
-#| msgid "Delete selected mask"
+#, kde-format
 msgid "Delete Selected Images"
-msgstr "Usuń zaznaczoną maskę"
+msgstr "Usuń zaznaczone obrazy"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -59047,25 +58992,21 @@ msgstr "Dodaj/wybierz obraz, aby pokazać ustawienia"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
+#, kde-format
 msgid "Add a new reference image:"
-msgstr "Dodaj obraz wzorcowy"
+msgstr "Dodaj nowy obraz wzorcowy:"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
-#, fuzzy, kde-format
-#| msgid "Path options"
+#, kde-format
 msgid "Other options:"
-msgstr "Ustawienia ścieżki"
+msgstr "Inne ustawienia:"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
-#, fuzzy, kde-format
-#| msgid "Delete all"
+#, kde-format
 msgid "Delete All"
-msgstr "Usuń wszystko"
+msgstr "Usuń wszystkie"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-28 01:50+0000\n"
+"POT-Creation-Date: 2024-07-29 01:49+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12753,7 +12753,6 @@ msgstr "克隆图层来源"
 #. i18n: context: toolTip @ Action (create_reference_image_from_active_layer), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3610 krita/krita.action:3612
 #, fuzzy, kde-format
-#| msgid "Reference Images Tool"
 msgctxt "action"
 msgid "Reference Image from Layer"
 msgstr "参考图像工具"
@@ -12764,7 +12763,6 @@ msgstr "参考图像工具"
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #: krita/krita.action:3622 krita/krita.action:3624
 #, fuzzy, kde-format
-#| msgid "Reference Images Tool"
 msgctxt "action"
 msgid "Reference Image from Visible"
 msgstr "参考图像工具"
@@ -20310,7 +20308,7 @@ msgstr "替换 (覆盖) 标签"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:44
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:853
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -29287,14 +29285,12 @@ msgstr "转换为选区蒙版"
 
 #: libs/ui/kis_node_manager.cpp:753
 #, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
 msgstr "无法从剪贴板加载参考图像"
 
 #: libs/ui/kis_node_manager.cpp:754
 #, fuzzy, kde-format
-#| msgid "Could not load reference image from clipboard"
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
 msgstr "无法从剪贴板加载参考图像"
@@ -35791,7 +35787,7 @@ msgstr "关于 KDE(&K)"
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
 #, kde-format
 msgid "Unit"
-msgstr ""
+msgstr "单位"
 
 #: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
@@ -38542,28 +38538,28 @@ msgstr "导出为动画"
 msgid "Insert Name"
 msgstr "输入新图层显示方案名称"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
 msgstr "选择文件夹"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "导出图层显示方案为图像/动画..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "导出图层显示方案为图像/动画：%1..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
 msgstr "重命名图层显示方案"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
 msgid "New Name:"
 msgstr "新方案名称："
@@ -57963,13 +57959,11 @@ msgstr "饱和度 [*变化值*]：{n}%"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, fuzzy, kde-format
-#| msgid "Delete all Reference Images"
 msgid "Delete Selected Reference Images"
 msgstr "删除所有参考图像"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
 #, fuzzy, kde-format
-#| msgid "Add Reference Image"
 msgid "Add Reference Image From File"
 msgstr "添加参考图像"
 
@@ -57980,13 +57974,11 @@ msgstr "粘贴剪贴板内容"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
 #, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
 msgid "Create Reference Image from Active Layer"
 msgstr "粘贴剪贴板内容"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
 #, fuzzy, kde-format
-#| msgid "Paste Reference Image From System Clipboard"
 msgid "Create Reference Image from Visible Canvas"
 msgstr "粘贴剪贴板内容"
 
@@ -58030,7 +58022,6 @@ msgstr "参考图像存储位置："
 #. i18n: ectx: property (text), widget (QPushButton, bnDeleteSelectedImages)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
 #, fuzzy, kde-format
-#| msgid "Delete selected mask"
 msgid "Delete Selected Images"
 msgstr "删除所选蒙版"
 
@@ -58043,22 +58034,18 @@ msgstr "请添加/选择一张参考图像，选项将随之显示"
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
 #, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Add reference image"
 msgid "Add a new reference image:"
 msgstr "添加参考图像"
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
 #, fuzzy, kde-format
-#| msgid "Path options"
 msgid "Other options:"
 msgstr "路径选项"
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
 #, fuzzy, kde-format
-#| msgid "Select All"
 msgid "Delete All"
 msgstr "全部选择"
 

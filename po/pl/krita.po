@@ -91,8 +91,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-22 03:21+0000\n"
-"PO-Revision-Date: 2024-03-23 11:19+0100\n"
+"POT-Creation-Date: 2024-07-29 03:21+0000\n"
+"PO-Revision-Date: 2024-07-28 09:29+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
 "Language: pl\n"
@@ -101,6 +101,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #. i18n: Display name of resource, see context: [path-to-resources]/[resource-type]/[resource-filename]
 #, kde-format
@@ -13594,7 +13595,7 @@ msgstr "Wklej wygląd kształtu"
 #, kde-format
 msgctxt "action"
 msgid "Paste as R&eference Image"
-msgstr "Wklej jako obraz odni&esienia"
+msgstr "Wkl&ej jako obraz wzorcowy"
 
 #. i18n: context: toolTip @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_as_reference), Actions (Edit), ActionCollection (Menu)
@@ -13604,7 +13605,7 @@ msgstr "Wklej jako obraz odni&esienia"
 #, kde-format
 msgctxt "action"
 msgid "Paste as Reference Image"
-msgstr "Wklej jako obraz odniesienia"
+msgstr "Wklej jako obraz wzorcowy"
 
 #. i18n: context: text @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
 #. i18n: context: iconText @ Action (paste_layer_style), Actions (Edit), ActionCollection (Menu)
@@ -20324,7 +20325,7 @@ msgstr "Zastąp znacznik"
 #: libs/ui/forms/wdgpaintopsettings.ui:197
 #: libs/ui/input/kis_tool_invocation_action.cpp:43
 #: libs/ui/widgets/kis_canvas_drop.cpp:45
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:265
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:270
 #: plugins/dockers/gamutmask/forms/wdgGamutMaskChooser.ui:190
 #: plugins/dockers/recorder/recorder_export.ui:823
 #: plugins/dockers/recorder/recorder_snapshots_manager.ui:130
@@ -38680,28 +38681,28 @@ msgstr "Wyeksportuj animacje"
 msgid "Insert Name"
 msgstr "Wstaw nazwę"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:243
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:347
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:248
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:352
 #, kde-format
 msgid "Select a Directory"
 msgstr "Wybierz katalog"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:264
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:269
 #, kde-format
 msgid "Exporting Compositions..."
 msgstr "Eksportowanie złożeń..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:290
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:295
 #, kde-format
 msgid "Exporting composition: %1..."
 msgstr "Eksportowanie złożenia: %1..."
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:449
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:454
 #, kde-format
 msgid "Rename Composition"
 msgstr "Zmień nazwę kompozycji"
 
-#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:450
+#: plugins/dockers/compositiondocker/compositiondocker_dock.cpp:455
 #, kde-format
 msgid "New Name:"
 msgstr "Nowa nazwa:"
@@ -57874,7 +57875,7 @@ msgstr "Wybierz obraz wzorcowy"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:131
 #, kde-format
 msgid "Could not load reference image from clipboard"
-msgstr "Nie można wczytać obrazu odniesienia ze schowka"
+msgstr "Nie można wczytać obrazu wzorcowego ze schowka"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:153
 #, kde-format
@@ -57939,7 +57940,7 @@ msgstr "Wyeksportuj zestaw obrazów wzorcowych"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:78
 #, kde-format
 msgid "Paste Reference Image From System Clipboard"
-msgstr "Wklej obraz odniesienia ze schowka systemowego"
+msgstr "Wklej obraz wzorcowy ze schowka systemowego"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:102
 #, kde-format

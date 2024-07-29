@@ -100,8 +100,9 @@ static void paintBezierCurve(KisPaintOp *paintOp,
                              const KisVector2D &control1,
                              const KisVector2D &control2,
                              const KisPaintInformation &pi2,
-                             KisDistanceInformation *currentDistance,
-                             const std::vector<QPoint>& smoothedPoints)
+                             KisDistanceInformation *currentDistance
+                             )
+                             //const std::vector<QPoint>& smoothedPoints
 {
     LineEquation line = LineEquation::Through(toKisVector2D(pi1.pos()), toKisVector2D(pi2.pos()));
     qreal d1 = line.absDistance(control1);
@@ -111,7 +112,7 @@ static void paintBezierCurve(KisPaintOp *paintOp,
             || qIsNaN(d1) || qIsNaN(d2)) {
         //qDebug() << "kis_paintop:paintBeziercurve -> paintline";  this one 
         //qDebug() << "kis_paintop bezier curve" <<  "pi1: " << pi1 << "pi2: " << pi2 << "currentDistance" << currentDistance;
-        paintOp->paintLine(pi1, pi2, currentDistance, smoothedPoints);
+        paintOp->paintLine(pi1, pi2, currentDistance);
     } else {
         //qDebug() << "kis_paintop:paintBeziercurve -> else";
         // Midpoint subdivision. See Foley & Van Dam Computer Graphics P.508

@@ -228,10 +228,19 @@ void KisToolFreehand::initStroke(KoPointerEvent *event)
 void KisToolFreehand::doStroke(KoPointerEvent *event)
 {
     // qDebug() << "KisToolFreehand:doStroke";
-    m_helper->paintEvent(event, m_smoothedPoints);
+    m_helper->paintEvent(event);
 
     strokeCoordinates.push_back(convertToPixelCoord(event)); // Track the coordinates
 }
+
+// void KisToolFreehand::doStroke(KoPointerEvent *event)
+// {
+//     // qDebug() << "KisToolFreehand:doStroke";
+//     m_helper->paintEvent(event, m_smoothedPoints);
+
+//     strokeCoordinates.push_back(convertToPixelCoord(event)); // Track the coordinates
+// }
+
 //original
 // void KisToolFreehand::endStroke()
 // {
@@ -270,9 +279,9 @@ void KisToolFreehand::endStroke()
     // }
     m_smoothedPoints = smoothedPoints;
 
-    for (const QPoint& point : m_smoothedPoints) {
-        qDebug() << "Smoothed Stroke Point (Integer):" << point.x() << point.y();
-    }
+    // for (const QPoint& point : m_smoothedPoints) {
+    //     qDebug() << "Smoothed Stroke Point (Integer):" << point.x() << point.y();
+    // }
     
 
     strokeCoordinates.clear();

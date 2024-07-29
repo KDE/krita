@@ -132,7 +132,7 @@ void SvgTextTool::deactivate()
     if (canvas2) {
         canvas2->viewManager()->textPropertyManager()->setTextPropertiesInterface(nullptr);
     }
-    m_textCursor.setShape(nullptr);
+    // Exiting text editing mode is handled by requestStrokeEnd
 
     m_hoveredShapeHighlightRect = QPainterPath();
 
@@ -463,6 +463,7 @@ KoToolSelection *SvgTextTool::selection()
 
 void SvgTextTool::requestStrokeEnd()
 {
+    if (!isActivated()) return;
     if (!m_textCursor.isAddingCommand() && !m_strategyAddingCommand) {
         if (m_interactionStrategy) {
             m_dragging = DragMode::None;

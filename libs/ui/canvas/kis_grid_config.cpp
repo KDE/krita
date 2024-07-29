@@ -42,6 +42,9 @@ void KisGridConfig::transform(const QTransform &transform)
         }
 
         m_spacing = KisAlgebra2D::abs(t.map(m_spacing));
+        // Transform map may round spacing down to 0, but it must be at least 1
+        m_spacing.setX(qMax(1, m_spacing.x()));
+        m_spacing.setY(qMax(1, m_spacing.y()));
 
     } else if (m_gridType == GRID_ISOMETRIC_LEGACY) {
         if (qFuzzyCompare(m.scaleX, m.scaleY)) {

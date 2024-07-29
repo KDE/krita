@@ -21,6 +21,11 @@ struct TaskStruct {
 
 struct KisIdleTasksManager::Private
 {
+    Private()
+        : idleWatcher(KisIdleTaskStrokeStrategy::preferredIdleWatcherInterval())
+    {
+    }
+
     KisImageWSP image;
     KisIdleWatcher idleWatcher;
     QVector<TaskStruct> tasks;

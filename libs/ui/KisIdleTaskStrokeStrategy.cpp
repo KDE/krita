@@ -39,9 +39,30 @@ KisStrokeStrategy *KisIdleTaskStrokeStrategy::createLodClone(int levelOfDetail)
     return new KisSimpleStrokeStrategy(QLatin1String("KisIdleTaskStrokeStrategy_FakeLodN"));
 }
 
+void KisIdleTaskStrokeStrategy::initStrokeCallback()
+{
+    m_idleStrokeTime.start();
+}
+
 void KisIdleTaskStrokeStrategy::finishStrokeCallback()
 {
     emit sigIdleTaskFinished();
+
+    /**
+     * Just a small sanity check if idle tasks don't occupy too much time
+     * and don't interfere with user's workflow. Theoretically, even if the
+     * time consumed is too high, it may still be acceptable if the task is
+     * split in multiple jobs, which would be cancelled but the user's action.
+     */
+    const qint64 elapsedTime = m_idleStrokeTime.elapsed();
+
+    if (elapsedTime > preferredIdleTaskMaximumTime()) {
+        qWarning() << "WARNING: idle task consumed more than" <<
+                      preferredIdleTaskMaximumTime() <<
+                      "ms, it can cause visible distractions to the user";
+        qWarning() << "WARNING: time consumed in" << id() <<
+                      "is" << elapsedTime << "ms";
+    }
 }
 
 QWeakPointer<boost::none_t> KisIdleTaskStrokeStrategy::idleTaskCookie()
@@ -50,3 +71,31 @@ QWeakPointer<boost::none_t> KisIdleTaskStrokeStrategy::idleTaskCookie()
     m_idleTaskCookie.reset(new boost::none_t(boost::none));
     return m_idleTaskCookie;
 }
+
+int KisIdleTaskStrokeStrategy::preferredIdleTaskMaximumTime()
+{
+    /**
+     * Sometimes (unless split into multiple jobs) idle tasks can interfere
+     * with user actions. We have a sanity check that checks if the tasks are
+     * quick enough to not interfere into the user's actions. This time limit
+     * is the maximum "allowed" idle task size.
+     *
+     * Definition of "allowed" here is not strict, since the tasks are not
+     * cancelled when reaching the limit. Just a warning is spit into the
+     * terminal.
+     */
+
+    return 200; // ms
+}
+
+int KisIdleTaskStrokeStrategy::preferredIdleWatcherInterval()
+{
+    /**
+     * Preferred idle watcher interval for checks of the image idleness
+     * state. Idle watcher checks the image four times before starting an
+     * idle task, so the actual idle task delay is
+     * `4 * preferredIdleWatcherInterval()` milliseconds.
+     */
+    return 50; // ms
+}
+

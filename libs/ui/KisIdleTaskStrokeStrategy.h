@@ -13,6 +13,7 @@
 #include <boost/none.hpp>
 #include <kis_types.h>
 #include <KisRunnableBasedStrokeStrategy.h>
+#include <QElapsedTimer>
 
 /**
  * A base class for strategies used in "idle tasks". Such strategy
@@ -31,7 +32,11 @@ public:
     KisStrokeStrategy* createLodClone(int levelOfDetail) override;
     QWeakPointer<boost::none_t> idleTaskCookie();
 
+    static int preferredIdleTaskMaximumTime();
+    static int preferredIdleWatcherInterval();
+
 protected:
+    void initStrokeCallback() override;
     void finishStrokeCallback() override;
 
 Q_SIGNALS:
@@ -39,6 +44,7 @@ Q_SIGNALS:
 
 private:
     QSharedPointer<boost::none_t> m_idleTaskCookie;
+    QElapsedTimer m_idleStrokeTime;
 };
 
 using KisIdleTaskStrokeStrategyFactory = std::function<KisIdleTaskStrokeStrategy*(KisImageSP image)>;

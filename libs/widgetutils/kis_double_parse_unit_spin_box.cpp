@@ -84,15 +84,23 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
         return;
     }
 
-    KisSpinBoxUnitManager* oldUnitManager = d->unitManager;
+    KisSpinBoxUnitManager* oldUnitManager = 0;
+
+    if (d->unitManager) {
+        // current unit manager is still here (then setUnitManager not call because it has been destroyed)
+        //
+        oldUnitManager = d->unitManager;
+
+        disconnect(oldUnitManager, &QObject::destroyed,
+                this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependence anymore.
+        disconnect(oldUnitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange,
+                this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
+        disconnect(oldUnitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged,
+                this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
+    }
+
     d->unitManager = unitManager;
 
-    disconnect(oldUnitManager, &QObject::destroyed,
-               this, &KisDoubleParseUnitSpinBox::disconnectExternalUnitManager); //there's no dependence anymore.
-    disconnect(oldUnitManager, (void (KisSpinBoxUnitManager::*)()) &KisSpinBoxUnitManager::unitAboutToChange,
-               this, (void (KisDoubleParseUnitSpinBox::*)()) &KisDoubleParseUnitSpinBox::prepareUnitChange);
-    disconnect(oldUnitManager, (void (KisSpinBoxUnitManager::*)( QString )) &KisSpinBoxUnitManager::unitChanged,
-               this, (void (KisDoubleParseUnitSpinBox::*)( QString const& )) &KisDoubleParseUnitSpinBox::internalUnitChange);
 
     // decimals must be set before value, otherwise value/step/min/max values will be rounded to previous unit decimals value
     if (d->allowResetDecimals) { //if the user has not fixed the number of decimals.
@@ -105,10 +113,12 @@ void KisDoubleParseUnitSpinBox::setUnitManager(KisSpinBoxUnitManager* unitManage
     double newMax;
     double newStep;
 
-    if (d->unitManager->getApparentUnitSymbol() != oldUnitManager->getApparentUnitSymbol() ||
-        d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()) {
+    if (oldUnitManager == 0 ||
+        oldUnitManager &&
+        (d->unitManager->getApparentUnitSymbol() != oldUnitManager->getApparentUnitSymbol() ||
+         d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType())) {
 
-        if (d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()) {
+        if (oldUnitManager && d->unitManager->getUnitDimensionType() == oldUnitManager->getUnitDimensionType()) {
             //dimension is the same, calculate the new value
             newVal = d->unitManager->getApparentValue(oldUnitManager->getReferenceValue(KisDoubleParseSpinBox::value()));
         } else {
@@ -433,6 +443,11 @@ QString KisDoubleParseUnitSpinBox::makeTextClean(QString const& txt) const
 
 void KisDoubleParseUnitSpinBox::disconnectExternalUnitManager()
 {
+    // Internal disconnectExternalUnitManager() method is called when the current unit manager d->unitManager
+    // has been destroyed
+    // --> ensure the d->unitManager does not point to anything anymore
+    d->unitManager = 0;
+
     if (!d->isDeleting)
     {
         setUnitManager(d->defaultUnitManager); //go back to default unit manager.

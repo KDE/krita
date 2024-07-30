@@ -12,6 +12,7 @@
 #include "KisCurveOptionInputControlsStrategy.h"
 #include "MyPaintSensorPack.h"
 #include "kis_paintop_lod_limitations.h"
+#include "ui_wdgcurveoption2.h"
 
 namespace {
 KisPaintopLodLimitations calcGeneralMyPaintLodLimitations(const MyPaintCurveOptionData &data)
@@ -49,6 +50,7 @@ MyPaintCurveOptionWidget::MyPaintCurveOptionWidget(lager::cursor<MyPaintCurveOpt
                             UseFloatingPointStrength)
     , m_d(new Private(optionData))
 {
+    m_curveOptionWidget->curveWidget->setGlobalPointConstrain(KisCurveWidget::PointConstrain_AlwaysCorner);
 }
 
 MyPaintCurveOptionWidget::~MyPaintCurveOptionWidget()

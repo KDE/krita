@@ -40,6 +40,7 @@ public:
     /* The curve itself */
     bool    m_splineDirty {false};
     KisCubicCurve m_curve;
+    KisCurveWidget::PointConstrain m_globalPointConstrain {KisCurveWidget::PointConstrain_None};
 
     QPixmap m_pix;
     bool m_pixmapDirty {true};
@@ -102,6 +103,10 @@ public:
     inline
     void drawGrid(QPainter &p, int wWidth, int wHeight);
 
+    /**
+     * Ensure that all points conform to the global constrain set
+     */
+    void applyGlobalPointConstrain();
 };
 
 KisCurveWidget::Private::Private(KisCurveWidget *parent)
@@ -227,5 +232,17 @@ enumState KisCurveWidget::Private::state() const
     return m_state;
 }
 
+void KisCurveWidget::Private::applyGlobalPointConstrain()
+{
+    if (m_globalPointConstrain == PointConstrain_AlwaysCorner) {
+        for (int i = 0; i < m_curve.points().size(); ++i) {
+            m_curve.setPointAsCorner(i, true);
+        }
+    } else if (m_globalPointConstrain == PointConstrain_AlwaysSmooth) {
+        for (int i = 0; i < m_curve.points().size(); ++i) {
+            m_curve.setPointAsCorner(i, false);
+        }
+    } // else { // No need to change the points here }
+}
 
 #endif /* _KIS_CURVE_WIDGET_P_H_ */

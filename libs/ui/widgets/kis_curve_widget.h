@@ -74,12 +74,25 @@ public:
      */
     bool pointSelected() const;
 
+    /**
+     * @brief 
+     * 
+     */
+    enum PointConstrain
+    {
+        PointConstrain_None,
+        PointConstrain_AlwaysCorner,
+        PointConstrain_AlwaysSmooth,
+    };
+
     bool setCurrentPoint(const QPointF &position, bool setAsCorner);
     bool setCurrentPointPosition(const QPointF &position);
     bool setCurrentPointAsCorner(bool setAsCorner);
+    void setGlobalPointConstrain(PointConstrain constrain);
     std::optional<KisCubicCurvePoint> currentPoint() const;
     std::optional<QPointF> currentPointPosition() const;
     std::optional<bool> isCurrentPointSetAsCorner() const;
+    PointConstrain globalPointConstrain() const;
 
 Q_SIGNALS:
 

@@ -81,8 +81,14 @@ bool KisCurveWidget::setCurrentPoint(const QPointF &position, bool setAsCorner)
     Q_ASSERT(d->m_grab_point_index >= 0);
 
     bool needResyncControls = true;
+    bool isCorner;
 
-    d->m_curve.setPointAsCorner(d->m_grab_point_index, setAsCorner);
+    if (d->m_globalPointConstrain == PointConstrain_None) {
+        d->m_curve.setPointAsCorner(d->m_grab_point_index, setAsCorner);
+        isCorner = setAsCorner;
+    } else {
+        isCorner = d->m_globalPointConstrain == PointConstrain_AlwaysCorner;
+    }
 
     QPointF newPosition(position);
 
@@ -90,7 +96,7 @@ bool KisCurveWidget::setCurrentPoint(const QPointF &position, bool setAsCorner)
         needResyncControls = false;
         d->m_curve.setPointPosition(d->m_grab_point_index, newPosition);
         d->m_grab_point_index = d->m_curve.curvePoints().indexOf(
-            KisCubicCurvePoint(newPosition, setAsCorner)
+            KisCubicCurvePoint(newPosition, isCorner)
         );
         Q_EMIT pointSelectedChanged();
     }
@@ -110,12 +116,29 @@ bool KisCurveWidget::setCurrentPointAsCorner(bool setAsCorner)
 {
     Q_ASSERT(d->m_grab_point_index >= 0);
 
+    // Setting the point corner flag is not allowed if there is some global constrain set
+    if (d->m_globalPointConstrain != PointConstrain_None) {
+        return false;
+    }
+
     if (setAsCorner != d->m_curve.curvePoints()[d->m_grab_point_index].isSetAsCorner()) {
         d->m_curve.setPointAsCorner(d->m_grab_point_index, setAsCorner);
         d->setCurveModified(false);
     }
 
     return false;
+}
+
+void KisCurveWidget::setGlobalPointConstrain(PointConstrain constrain)
+{
+    if (d->m_globalPointConstrain == constrain) {
+        return;
+    }
+    
+    d->m_globalPointConstrain = constrain;
+    d->applyGlobalPointConstrain();
+
+    d->setCurveModified(false);
 }
 
 std::optional<KisCubicCurvePoint> KisCurveWidget::currentPoint() const
@@ -137,6 +160,11 @@ std::optional<bool> KisCurveWidget::isCurrentPointSetAsCorner() const
     return d->m_grab_point_index >= 0 && d->m_grab_point_index < d->m_curve.curvePoints().count()
             ? std::make_optional(d->m_curve.curvePoints()[d->m_grab_point_index].isSetAsCorner())
             : std::nullopt;
+}
+
+KisCurveWidget::PointConstrain KisCurveWidget::globalPointConstrain() const
+{
+    return d->m_globalPointConstrain;
 }
 
 void KisCurveWidget::reset(void)
@@ -205,7 +233,10 @@ void KisCurveWidget::keyPressEvent(QKeyEvent *e)
         /* FIXME: Lets user choose the hotkeys */
         addPointInTheMiddle();
         e->accept();
-    } else if (e->key() == Qt::Key_S && pointSelected() && d->state() == ST_NORMAL) {
+    } else if (e->key() == Qt::Key_S &&
+               d->m_globalPointConstrain == PointConstrain_None &&
+               pointSelected() &&
+               d->state() == ST_NORMAL) {
         /* FIXME: Lets user choose the hotkeys */
         setCurrentPointAsCorner(!*isCurrentPointSetAsCorner());
         e->accept();
@@ -220,7 +251,9 @@ void KisCurveWidget::addPointInTheMiddle()
     if (!d->jumpOverExistingPoints(position, -1))
         return;
 
-    d->m_grab_point_index = d->m_curve.addPoint(position);
+    const bool setAsCorner = d->m_globalPointConstrain == PointConstrain_AlwaysCorner;
+
+    d->m_grab_point_index = d->m_curve.addPoint(position, setAsCorner);
     Q_EMIT pointSelectedChanged();
 
     Q_EMIT shouldFocusIOControls();
@@ -368,7 +401,9 @@ void KisCurveWidget::mousePressEvent(QMouseEvent * e)
         QPointF newPoint(x, y);
         if (!d->jumpOverExistingPoints(newPoint, -1))
             return;
-        d->m_grab_point_index = d->m_curve.addPoint(newPoint);
+
+        const bool setAsCorner = d->m_globalPointConstrain == PointConstrain_AlwaysCorner;
+        d->m_grab_point_index = d->m_curve.addPoint(newPoint, setAsCorner);
         Q_EMIT pointSelectedChanged();
     } else {
         d->m_grab_point_index = closest_point_index;
@@ -381,7 +416,7 @@ void KisCurveWidget::mousePressEvent(QMouseEvent * e)
     d->m_grabOriginalY = currentPoint.y();
     d->m_grabOffsetX = currentPoint.x() - x;
     d->m_grabOffsetY = currentPoint.y() - y;
-    if (e->modifiers().testFlag(Qt::ControlModifier)) {
+    if (e->modifiers().testFlag(Qt::ControlModifier) && d->m_globalPointConstrain == PointConstrain_None) {
         d->m_curve.setPointAsCorner(d->m_grab_point_index, !currentPoint.isSetAsCorner());
     }
     d->m_curve.setPointPosition(d->m_grab_point_index, QPointF(x + d->m_grabOffsetX, y + d->m_grabOffsetY));
@@ -492,6 +527,7 @@ void KisCurveWidget::setCurve(KisCubicCurve inlist)
 {
     d->m_curve = inlist;
     d->m_grab_point_index = qBound(0, d->m_grab_point_index, d->m_curve.curvePoints().count() - 1);
+    d->applyGlobalPointConstrain();
     d->setCurveModified();
     Q_EMIT pointSelectedChanged();
 }

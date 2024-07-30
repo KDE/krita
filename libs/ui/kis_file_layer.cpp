@@ -193,6 +193,26 @@ void KisFileLayer::openFile() const
         if (m_filename.toLower() == "crash_me_with_qfatal") {
             qFatal("Testing fatal message");
         }
+
+        if (m_filename.toLower() == "crash_me_with_asan") {
+#if defined(__has_feature)
+#if __has_feature(address_sanitizer)
+            /**
+             * A simple out-of-bounds check test. It should be caught in the
+             * ASAN build and "should not" cause any crash in a normal build,
+             * since we are reading only one byte past the end of allocated area.
+             *
+             * We enable that check only for ASAN-capable builds, since having
+             * such code in production builds may be unsafe.
+             */
+            int *array = new int[10];
+            qDebug() << "Reading past the end of the allocated array" << array[10];
+            delete[] array;
+#else
+            qDebug() << "ASAN is not enabled for this build!";
+#endif
+#endif
+        }
     }
 
     if (!fileAlreadyOpen && QFile::exists(QFileInfo(path()).absoluteFilePath())) {

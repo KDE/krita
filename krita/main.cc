@@ -606,11 +606,13 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 #ifdef Q_OS_WIN
     QDir appdir(KoResourcePaths::getApplicationRoot());
     QString path = qgetenv("PATH");
-    qputenv("PATH", QFile::encodeName(appdir.absolutePath() + "/bin" + ";"
-                                      + appdir.absolutePath() + "/lib" + ";"
-                                      + appdir.absolutePath() + "/Frameworks" + ";"
-                                      + appdir.absolutePath() + ";"
-                                      + path));
+    qputenv("PATH",
+            QFile::encodeName(
+                QDir::toNativeSeparators(appdir.absolutePath() + "/bin") + ";" +
+                QDir::toNativeSeparators(appdir.absolutePath() + "/lib") + ";" +
+                QDir::toNativeSeparators(appdir.absolutePath()) + ";" +
+                path)
+            );
 
     dbgKrita << "PATH" << qgetenv("PATH");
 #endif

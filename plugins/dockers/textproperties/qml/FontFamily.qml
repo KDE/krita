@@ -50,123 +50,19 @@ CollapsibleGroupProperty {
             Layout.maximumWidth: contentWidth;
 
         }
-        ComboBox {
-        id: mainFamilyCmb;
-        model: fontFamilyModel;
-        Layout.fillWidth: true;
-        onActivated: {if (fontFamilies.length >0) {
-                fontFamilies[0] = currentText;
-            }
-        }
-        textRole: "name";
-
-        delegate: ItemDelegate {
-            id: fontDelegate
-            required property var model;
-
-            highlighted: mainFamilyCmb.highlightedIndex === model.index;
-            contentItem: KoShapeQtQuickLabel{
-                id: fontFamilyDelegate;
-                property bool colorBitmap : model.metadata.color_bitmap;
-                property bool colorCLRV0 : model.metadata.color_clrv0;
-                property bool colorCLRV1 : model.metadata.color_clrv1;
-                property bool colorSVG : model.metadata.color_svg;
-                property bool isVariable : model.metadata.is_variable;
-                property int type : model.metadata.font_type;
-                property string fontName: model.name;
-
-                Layout.fillWidth: true;
-                svgData: model.metadata.sample_svg;
-                imageScale: 3;
-                imagePadding: nameLabel.height;
-                foregroundColor: sysPalette.text;
-                fullColor: colorBitmap || colorCLRV0 || colorCLRV1 || colorSVG;
-
-                Component.onCompleted: {
-                    var localizedDict = model.metadata.localized_font_family;
-                    for (var i in locales) {
-                        var key = locales[i];
-                        if (key in localizedDict) {
-                            fontName = localizedDict[key];
-                            break;
-                        }
-                    }
-                }
-
-                Label {
-                    id: nameLabel;
-                    text: fontFamilyDelegate.fontName;
-                    anchors.top: parent.top;
-                    anchors.left: parent.left;
-                }
-
-                Row {
-                    id: featureRow;
-                    spacing: columnSpacing;
-                    anchors.bottom: parent.bottom;
-                    anchors.left: parent.left;
-                    property int imgHeight: 12;
-                    Image {
-                        property int type: fontFamilyDelegate.type;
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        source: type === KoSvgText.BDFFontType? "qrc:///light_select-pixel.svg"
-                                         : type === KoSvgText.Type1FontType? "qrc:///light_transparency-enabled.svg"
-                                         : type === KoSvgText.OpenTypeFontType? "qrc:///light_select-shape.svg":"qrc:///light_system-help.svg";
-                    }
-                    Image {
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        visible: fontFamilyDelegate.isVariable;
-                        source: "qrc:///light_zoom-horizontal.svg"
-                    }
-
-                    Image {
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        visible: fontFamilyDelegate.colorBitmap;
-                        source: "qrc:///light_palette-library.svg"
-                    }
-                    Image {
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        visible: fontFamilyDelegate.colorCLRV0;
-                        source: "qrc:///light_color-adjustment-mode-channels.svg"
-                    }
-                    Image {
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        visible: fontFamilyDelegate.colorCLRV1;
-                        source: "qrc:///light_config-color-manage.svg"
-                    }
-                    Image {
-                        width: parent.imgHeight;
-                        height: parent.imgHeight;
-                        visible: fontFamilyDelegate.colorSVG;
-                        source: "qrc:///light_sort-by-hue.svg"
-                    }
+        FontResourceDropdown {
+            id: mainFamilyCmb;
+            model: fontFamilyModel;
+            Layout.fillWidth: true;
+            onActivated: {
+                if (fontFamilies.length >0) {
+                    fontFamilies[0] = currentText;
+                } else {
+                    fontFamilies = [ currentText ];
                 }
             }
-            width: fontResourceView.listWidth;
-            background: Rectangle { color: highlighted? parent.palette.highlight:"transparent"; }
         }
-        popup: Popup {
-            y: mainFamilyCmb.height - 1;
-            x: mainFamilyCmb.width - width;
-            width: contentWidth;
-            height: contentHeight;
-            padding: 2;
 
-            contentItem: FontResourceView {
-                id: fontResourceView;
-                fontModel: mainFamilyCmb.delegateModel;
-                tagModel: fontTagModel;
-                currentIndex: mainFamilyCmb.highlightedIndex;
-            }
-            palette: mainFamilyCmb.palette;
-        }
-        wheelEnabled: true;
-    }
     }
 
     onEnableProperty: properties.fontFamiliesState = KoSvgTextPropertiesModel.PropertySet;
@@ -185,28 +81,55 @@ CollapsibleGroupProperty {
         ScrollView {
             id: fullFamilyList;
             Layout.fillWidth: true;
-            Layout.preferredHeight: ItemDelegate.implicitHeight * 3;
-            background: Rectangle {
-                color: sysPalette.alternateBase;
-                border.color: sysPalette.text;
-                border.width: 1;
-            }
+            Layout.preferredHeight: contentHeight;
             ListView {
                 id: familyListView;
                 anchors.fill: parent;
                 model: []
-                delegate: ItemDelegate {
-                    text: modelData;
+
+                delegate: RowLayout {
+                    id: fontListDelegate;
+                    spacing: 5;
                     width: parent.width;
+                    property int dIndex: index;
+                    FontResourceDropdown {
+                        model: fontFamilyModel;
+                        Layout.fillWidth: true;
+                        onActivated: {
+                            fontFamilies[fontListDelegate.dIndex] = currentText;
+                        }
+                        Component.onCompleted: currentIndex = find(fontFamilies[fontListDelegate.dIndex]);
+                    }
+                    ToolButton {
+                        id: removeFont;
+                        icon.width: 22;
+                        icon.height: 22;
+                        icon.source: "qrc:///22_light_list-remove.svg"
+                        onClicked: fontFamilies.splice(fontListDelegate.dIndex, 1);
+                        ToolTip.text: i18n("Remove family");
+                        ToolTip.delay: Qt.styleHints.mousePressAndHoldInterval;
+                        ToolTip.visible: hovered;
+                    }
                 }
                 Label {
-                    text: i18n("Family list is empty");
+                    text: i18n("Family list is empty.");
                     wrapMode: Text.WordWrap;
                     anchors.fill: parent;
                     anchors.horizontalCenter: parent.horizontalCenter;
                     visible: parent.count === 0;
                 }
             }
+        }
+
+        Item {
+            width: 1;
+            height: 1;
+        }
+        Button {
+            id: addFamilyButtons;
+            Layout.fillWidth: true;
+            text: i18n("Add Fallback Family");
+            onClicked: fontFamilies.push("sans-serif");
         }
 
 

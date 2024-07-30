@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"POT-Creation-Date: 2024-07-30 01:51+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -36161,69 +36161,69 @@ msgstr "%1について(&A)"
 msgid "About &KDE"
 msgstr "KDE について(&K)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "単位:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr "パーセント (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view width (vw)"
 msgstr "表示幅の割合 (vw)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
 msgstr "表示高さの割合 (vh)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr "角度 (°)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr "ラジアン (rad)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr "角の数 (gon)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "percent of circle (%)"
 msgstr "円の割合 (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
 msgstr "フレーム (f)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr "秒 (s)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
@@ -55120,7 +55120,7 @@ msgstr "リフレッシュ"
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:91
+#: plugins/python/exportlayers/uiexportlayers.py:93
 msgid "Documents:"
 msgstr "ドキュメント:"
 
@@ -56598,7 +56598,7 @@ msgid "The selected documents has been modified."
 msgstr "選択したドキュメントは変更されています。"
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:110
 msgid "Export Layers"
 msgstr "レイヤーをエクスポート"
 
@@ -56626,47 +56626,47 @@ msgstr "非表示レイヤーを無視"
 msgid "Adjust export size to layer content"
 msgstr "レイヤーの内容に合わせてエクスポートするサイズを調整する"
 
-#: plugins/python/exportlayers/uiexportlayers.py:70
+#: plugins/python/exportlayers/uiexportlayers.py:72
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:71
+#: plugins/python/exportlayers/uiexportlayers.py:73
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:85
+#: plugins/python/exportlayers/uiexportlayers.py:87
 msgid "dpi:"
 msgstr "dpi:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:95
 msgid "Initial directory:"
 msgstr "初期ディレクトリ:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:94
+#: plugins/python/exportlayers/uiexportlayers.py:96
 msgid "Export options:"
 msgstr "エクスポートのオプション:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:97
 msgid "Export size:"
 msgstr "エクスポートのサイズ:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "Images extensions:"
 msgstr "画像の拡張子:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:137
+#: plugins/python/exportlayers/uiexportlayers.py:156
 msgid "Select one document."
 msgstr "ドキュメントを1つ選択します。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:139
+#: plugins/python/exportlayers/uiexportlayers.py:158
 msgid "Select the initial directory."
 msgstr "初期ディレクトリを選択します。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:142
+#: plugins/python/exportlayers/uiexportlayers.py:162
 msgid "All layers have been exported."
 msgstr "すべてのレイヤーがエクスポートされました。"
 
-#: plugins/python/exportlayers/uiexportlayers.py:209
+#: plugins/python/exportlayers/uiexportlayers.py:229
 msgid "Select a Folder"
 msgstr "フォルダを選択"
 

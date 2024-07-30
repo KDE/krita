@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"POT-Creation-Date: 2024-07-30 01:51+0000\n"
 "PO-Revision-Date: 2021-09-09 23:33-0700\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: Tajik Language Support\n"
@@ -35408,68 +35408,68 @@ msgstr "&Дар бораи барномаи %1"
 msgid "About &KDE"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
 #, kde-format
 msgid "Unit"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view width (vw)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, kde-format
 msgid "percent of view height (vh)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "percent of circle (%)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, kde-format
 msgid "frames (f)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "percent of animation (%)"
@@ -53766,7 +53766,7 @@ msgstr ""
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:91
+#: plugins/python/exportlayers/uiexportlayers.py:93
 msgid "Documents:"
 msgstr ""
 
@@ -55175,7 +55175,7 @@ msgid "The selected documents has been modified."
 msgstr ""
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:110
 msgid "Export Layers"
 msgstr ""
 
@@ -55203,47 +55203,47 @@ msgstr ""
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:70
+#: plugins/python/exportlayers/uiexportlayers.py:72
 msgid "JPEG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:71
+#: plugins/python/exportlayers/uiexportlayers.py:73
 msgid "PNG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:85
+#: plugins/python/exportlayers/uiexportlayers.py:87
 msgid "dpi:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:95
 msgid "Initial directory:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:94
+#: plugins/python/exportlayers/uiexportlayers.py:96
 msgid "Export options:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:97
 msgid "Export size:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:99
 msgid "Images extensions:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:137
+#: plugins/python/exportlayers/uiexportlayers.py:156
 msgid "Select one document."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:139
+#: plugins/python/exportlayers/uiexportlayers.py:158
 msgid "Select the initial directory."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:142
+#: plugins/python/exportlayers/uiexportlayers.py:162
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:209
+#: plugins/python/exportlayers/uiexportlayers.py:229
 msgid "Select a Folder"
 msgstr ""
 

@@ -50,7 +50,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"POT-Creation-Date: 2024-07-30 01:51+0000\n"
 "PO-Revision-Date: 2009-03-03 11:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -36071,26 +36071,26 @@ msgstr "केरिता"
 msgid "About &KDE"
 msgstr "केरिता"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "इकाईः"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, fuzzy, kde-format
 msgid "Percent (%)"
 msgstr "प्रतिसत: (&P)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
 msgid "percent of view width (vw)"
 msgstr "पिक्सेल चौड़ाई"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
@@ -36098,44 +36098,44 @@ msgstr "पिक्सेल चौड़ाई"
 msgid "percent of view height (vh)"
 msgstr "पिक्सेल ऊंचाई"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 #| msgid "90 &degrees"
 msgid "degrees (°)"
 msgstr "90 अंस (&d)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 msgid "percent of circle (%)"
 msgstr "प्रतिसत: (&P)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, fuzzy, kde-format
 msgid "frames (f)"
 msgstr "परत मेटाव"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, fuzzy, kde-format
 msgid "percent of animation (%)"
@@ -54888,7 +54888,7 @@ msgstr ""
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:91
+#: plugins/python/exportlayers/uiexportlayers.py:93
 #, fuzzy
 #| msgid "Document"
 msgid "Documents:"
@@ -56565,7 +56565,7 @@ msgid "The selected documents has been modified."
 msgstr "नवा कागद टैम्प्लेट एखर साथ खोलव"
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:110
 #, fuzzy
 #| msgid "Export Layer"
 msgid "Export Layers"
@@ -56599,54 +56599,54 @@ msgstr "फिल्टर परत (&F)"
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:70
+#: plugins/python/exportlayers/uiexportlayers.py:72
 msgid "JPEG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:71
+#: plugins/python/exportlayers/uiexportlayers.py:73
 msgid "PNG"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:85
+#: plugins/python/exportlayers/uiexportlayers.py:87
 msgid "dpi:"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:95
 #, fuzzy
 msgid "Initial directory:"
 msgstr "पिक्सेल चौड़ाई"
 
-#: plugins/python/exportlayers/uiexportlayers.py:94
+#: plugins/python/exportlayers/uiexportlayers.py:96
 #, fuzzy
 msgid "Export options:"
 msgstr "ज्यामिती विकल्प"
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:97
 #, fuzzy
 msgid "Export size:"
 msgstr "निर्यात"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:99
 #, fuzzy
 #| msgid "&Image Selection"
 msgid "Images extensions:"
 msgstr "फोटू चयन (&I)"
 
-#: plugins/python/exportlayers/uiexportlayers.py:137
+#: plugins/python/exportlayers/uiexportlayers.py:156
 #, fuzzy
 msgid "Select one document."
 msgstr "हाल ही मं प्रयुक्त कागद"
 
-#: plugins/python/exportlayers/uiexportlayers.py:139
+#: plugins/python/exportlayers/uiexportlayers.py:158
 #, fuzzy
 msgid "Select the initial directory."
 msgstr "कोई चतुर्भुजीय छेत्र चुनव"
 
-#: plugins/python/exportlayers/uiexportlayers.py:142
+#: plugins/python/exportlayers/uiexportlayers.py:162
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:209
+#: plugins/python/exportlayers/uiexportlayers.py:229
 #, fuzzy
 msgid "Select a Folder"
 msgstr "चयन मोड:"

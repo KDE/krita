@@ -54,7 +54,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 01:49+0000\n"
+"POT-Creation-Date: 2024-07-30 01:51+0000\n"
 "PO-Revision-Date: 2023-05-30 22:55+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -36396,19 +36396,19 @@ msgstr "&A proposito de %1"
 msgid "About &KDE"
 msgstr "A proposito de &KDE"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:475
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:490
 #, fuzzy, kde-format
 #| msgid "Unit:"
 msgid "Unit"
 msgstr "Unitate:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:485
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:500
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:16
 #, kde-format
 msgid "Percent (%)"
 msgstr "Percentage (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:487
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:502
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
@@ -36416,51 +36416,51 @@ msgstr "Percentage (%)"
 msgid "percent of view width (vw)"
 msgstr "Largessa de linea"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:489
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:504
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:192
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:221
 #, fuzzy, kde-format
 msgid "percent of view height (vh)"
 msgstr "Altessa:"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:495
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:510
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "degrees (°)"
 msgstr "grados (°)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:497
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:512
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "radians (rad)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:499
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:514
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, kde-format
 msgid "gons (gon)"
 msgstr ""
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:501
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:516
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:231
 #, fuzzy, kde-format
 #| msgid "Percent (%)"
 msgid "percent of circle (%)"
 msgstr "Percentage (%)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:507
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:522
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:240
 #, fuzzy, kde-format
 msgid "frames (f)"
 msgstr "Remove strato (layer)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:509
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:524
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, kde-format
 msgid "seconds (s)"
 msgstr "secundas (s)"
 
-#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:511
+#: libs/widgetutils/kis_double_parse_unit_spin_box.cpp:526
 #: libs/widgetutils/kis_spin_box_unit_manager.cpp:247
 #, fuzzy, kde-format
 msgid "percent of animation (%)"
@@ -55781,7 +55781,7 @@ msgstr "Refresca"
 
 #: plugins/python/colorspace/uicolorspace.py:59
 #: plugins/python/documenttools/uidocumenttools.py:44
-#: plugins/python/exportlayers/uiexportlayers.py:91
+#: plugins/python/exportlayers/uiexportlayers.py:93
 msgid "Documents:"
 msgstr "Documentos:"
 
@@ -57311,7 +57311,7 @@ msgid "The selected documents has been modified."
 msgstr ""
 
 #: plugins/python/exportlayers/exportlayers.py:16
-#: plugins/python/exportlayers/uiexportlayers.py:108
+#: plugins/python/exportlayers/uiexportlayers.py:110
 msgid "Export Layers"
 msgstr "Exporta stratos (layers)"
 
@@ -57342,52 +57342,52 @@ msgstr "Mascara de &filtro..."
 msgid "Adjust export size to layer content"
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:70
+#: plugins/python/exportlayers/uiexportlayers.py:72
 msgid "JPEG"
 msgstr "JPEG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:71
+#: plugins/python/exportlayers/uiexportlayers.py:73
 msgid "PNG"
 msgstr "PNG"
 
-#: plugins/python/exportlayers/uiexportlayers.py:85
+#: plugins/python/exportlayers/uiexportlayers.py:87
 msgid "dpi:"
 msgstr "dpi:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:93
+#: plugins/python/exportlayers/uiexportlayers.py:95
 msgid "Initial directory:"
 msgstr "Directorio Initial:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:94
+#: plugins/python/exportlayers/uiexportlayers.py:96
 msgid "Export options:"
 msgstr "Optiones de exportar:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:95
+#: plugins/python/exportlayers/uiexportlayers.py:97
 msgid "Export size:"
 msgstr "Grandor de exportation:"
 
-#: plugins/python/exportlayers/uiexportlayers.py:97
+#: plugins/python/exportlayers/uiexportlayers.py:99
 #, fuzzy
 #| msgctxt "action"
 #| msgid "&Invert Selection"
 msgid "Images extensions:"
 msgstr "&Inverte selection"
 
-#: plugins/python/exportlayers/uiexportlayers.py:137
+#: plugins/python/exportlayers/uiexportlayers.py:156
 #, fuzzy
 msgid "Select one document."
 msgstr "Documentos recente"
 
-#: plugins/python/exportlayers/uiexportlayers.py:139
+#: plugins/python/exportlayers/uiexportlayers.py:158
 #, fuzzy
 msgid "Select the initial directory."
 msgstr "Selige disposition (Layer)"
 
-#: plugins/python/exportlayers/uiexportlayers.py:142
+#: plugins/python/exportlayers/uiexportlayers.py:162
 msgid "All layers have been exported."
 msgstr ""
 
-#: plugins/python/exportlayers/uiexportlayers.py:209
+#: plugins/python/exportlayers/uiexportlayers.py:229
 msgid "Select a Folder"
 msgstr "Selige un dossier"
 

@@ -338,6 +338,11 @@ public:
      * Merge given properties into the given range. This will first split
      * the nodes at the two range ends, and then merge in the properties
      * into each leaf node. Won't do anything when startPos == endPos
+     *
+     * First, the properties in @p removeProperties list will be removed,
+     * then properties in @p properties will be applied. If the property is
+     * present in both lists, then the value from @p properties will be used.
+     *
      * @param startPos -- cursor pos start.
      * @param endPos -- cursor pos end.
      * @param properties -- properties to merge in.

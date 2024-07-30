@@ -58,16 +58,22 @@ bool SvgTextMergePropertiesRangeCommand::mergeWith(const KUndo2Command *other)
         return false;
     }
 
+    /**
+     * The merging algorithm should follow the ordering of
+     * KoSvgTextShape::mergePropertiesIntoRange, that is, firstly,
+     * the properties in @p removeProperties list are removed,
+     * then properties in @p properties are applied. If the property is
+     * present in both lists, then the value from @p properties is used.
+     */
+
     Q_FOREACH(KoSvgTextProperties::PropertyId p, command->m_removeProperties) {
         m_props.removeProperty(p);
         m_removeProperties.insert(p);
     }
 
     Q_FOREACH(KoSvgTextProperties::PropertyId p, command->m_props.properties()) {
-        if (!command->m_removeProperties.contains(p)) {
-            m_props.setProperty(p, command->m_props.property(p));
-            m_removeProperties.remove(p);
-        }
+        m_props.setProperty(p, command->m_props.property(p));
+        m_removeProperties.remove(p);
     }
 
     return true;

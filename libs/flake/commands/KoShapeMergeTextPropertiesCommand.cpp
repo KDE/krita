@@ -67,15 +67,22 @@ bool KoShapeMergeTextPropertiesCommand::mergeWith(const KUndo2Command *other)
         return false;
     }
 
+    /**
+     * The merging algorithm should follow the ordering of
+     * KoSvgTextShape::mergePropertiesIntoRange, that is, firstly,
+     * the properties in @p removeProperties list are removed,
+     * then properties in @p properties are applied. If the property is
+     * present in both lists, then the value from @p properties is used.
+     */
+
     Q_FOREACH(KoSvgTextProperties::PropertyId p, command->d->removeProperties) {
         d->newProperties.removeProperty(p);
         d->removeProperties.insert(p);
     }
+
     Q_FOREACH(KoSvgTextProperties::PropertyId p, command->d->newProperties.properties()) {
-        if (!command->d->removeProperties.contains(p)) {
-            d->newProperties.setProperty(p, command->d->newProperties.property(p));
-            d->removeProperties.remove(p);
-        }
+        d->newProperties.setProperty(p, command->d->newProperties.property(p));
+        d->removeProperties.remove(p);
     }
 
     return true;

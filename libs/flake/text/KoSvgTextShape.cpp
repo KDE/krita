@@ -952,18 +952,18 @@ void KoSvgTextShape::mergePropertiesIntoRange(const int startPos,
         }
 
         if (currentIndex >= startIndex && currentIndex < endIndex) {
-            Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
-                if (KoSvgTextProperties::propertyIsBlockOnly(p) || (p == KoSvgTextProperties::TextAnchorId && isWrapping)) {
-                    d->textData.childBegin()->properties.setProperty(p, properties.property(p));
-                } else {
-                    it->properties.setProperty(p, properties.property(p));
-                }
-            }
             Q_FOREACH(KoSvgTextProperties::PropertyId p, removeProperties) {
                 if (KoSvgTextProperties::propertyIsBlockOnly(p)) {
                     d->textData.childBegin()->properties.removeProperty(p);
                 } else {
                     it->properties.removeProperty(p);
+                }
+            }
+            Q_FOREACH(KoSvgTextProperties::PropertyId p, properties.properties()) {
+                if (KoSvgTextProperties::propertyIsBlockOnly(p) || (p == KoSvgTextProperties::TextAnchorId && isWrapping)) {
+                    d->textData.childBegin()->properties.setProperty(p, properties.property(p));
+                } else {
+                    it->properties.setProperty(p, properties.property(p));
                 }
             }
 

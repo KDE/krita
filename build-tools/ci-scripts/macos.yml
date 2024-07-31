@@ -44,7 +44,7 @@ macos-build:
     - git clone https://invent.kde.org/sysadmin/ci-notary-service.git --depth=1
     - pip install -r ci-notary-service/requirements.txt
 
-    - python3 -u build-tools/ci-scripts/download-macos-tools.py
+    - python3 -u krita-deps-management/ci-utilities/tools/download-macos-tools.py
     - source _krita-tools/activate
 
     - git config --global --add safe.directory $CI_PROJECT_DIR

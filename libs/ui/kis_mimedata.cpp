@@ -391,6 +391,8 @@ bool correctNewNodeLocation(KisNodeList nodes,
                             KisNodeDummy* &parentDummy,
                             KisNodeDummy* &aboveThisDummy)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(parentDummy, false);
+
     KisNodeSP parentNode = parentDummy->node();
     bool result = true;
 
@@ -476,9 +478,9 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
         return false;
     }
 
-    KIS_ASSERT_RECOVER(nodeInsertionAdapter) { return false; }
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(nodeInsertionAdapter, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(parentDummy, false);
 
-    Q_ASSERT(parentDummy);
     KisNodeSP aboveThisNode = aboveThisDummy ? aboveThisDummy->node() : 0;
     if (copyNode) {
         nodeInsertionAdapter->addNodes(nodes, parentDummy->node(), aboveThisNode);

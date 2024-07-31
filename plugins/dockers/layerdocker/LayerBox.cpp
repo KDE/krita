@@ -742,6 +742,20 @@ void LayerBox::updateUI()
  */
 void LayerBox::setCurrentNode(KisNodeSP node)
 {
+    /**
+     * setCanvas() calls to node managed and layer box are coming out-of-sync,
+     * so it might happen that setCurrentNode() call will arrive with a node
+     * from a different image. We should check that and ignore such calls.
+     *
+     * TODO: make bootstrapping of layers-related structures a bit more
+     * straight-forward. We need to have a single source of truth for the
+     * "active layer", and all the initialization should happen in one
+     * direction without cycles.
+     */
+    if (node && m_image && node->graphListener() != m_image.data()) {
+        return;
+    }
+
     m_filteringModel->setActiveNode(node);
 
     QModelIndex index = node ? m_filteringModel->indexFromNode(node) : QModelIndex();

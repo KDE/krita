@@ -1549,7 +1549,7 @@ void KisNodeManager::pasteLayersFromClipboard(bool changeOffset, QPointF offset)
 
     const bool copyNode = false;
     KisImageSP image = m_d->view->image();
-    KisNodeDummy *parentDummy = dummiesFacade->dummyForNode(activeNode);
+    KisNodeDummy *parentDummy = dummiesFacade->dummyForNode(activeNode ? activeNode : image->root());
     KisNodeDummy *aboveThisDummy = parentDummy ? parentDummy->lastChild() : 0;
 
     KisMimeData::insertMimeLayers(data,

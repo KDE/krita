@@ -8,6 +8,9 @@
 #define KIS_POINTER_UTILS_H
 
 #include <QSharedPointer>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QForeach>
+#endif
 
 /**
  * Convert a raw pointer into a shared pointer

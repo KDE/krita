@@ -102,7 +102,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 03:21+0000\n"
+"POT-Creation-Date: 2024-08-01 03:25+0000\n"
 "PO-Revision-Date: 2024-05-07 12:12+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: French <French <kde-francophone@kde.org>>\n"
@@ -12908,7 +12908,7 @@ msgstr "&Importer / Exporter"
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Convert"
 msgstr "&Convertir"
@@ -12916,14 +12916,14 @@ msgstr "&Convertir"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1214
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Sélectionner"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1234
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12944,7 +12944,7 @@ msgstr "Tr&ansformer tous les calques"
 msgid "S&plit"
 msgstr "Fra&ctionner"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1261
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Sé&parer le canal Alpha"
@@ -39337,23 +39337,23 @@ msgid "Show checkbox to select/unselect layers."
 msgstr ""
 "Afficher la boîte à cocher pour sélectionner / dé-sélectionner des calques."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:992
+#: plugins/dockers/layerdocker/LayerBox.cpp:1006
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Masque de sélection rapide"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1014
+#: plugins/dockers/layerdocker/LayerBox.cpp:1028
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Annuler le masque de sélection rapide"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Verrouillage et visibilité"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1231
-#: plugins/dockers/layerdocker/LayerBox.cpp:1252
+#: plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "&Add"
 msgstr "&Ajouter"

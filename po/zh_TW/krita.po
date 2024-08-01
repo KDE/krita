@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 03:21+0000\n"
+"POT-Creation-Date: 2024-08-01 03:25+0000\n"
 "PO-Revision-Date: 2023-12-07 00:36+0800\n"
 "Last-Translator: Alvin Wong <alvin@alvinhc.com>\n"
 "Language-Team: Chinese <zh-l10n@lists.linux.org.tw>\n"
@@ -12774,7 +12774,7 @@ msgstr "匯入/匯出(&I)"
 msgid "Import"
 msgstr "匯入"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Convert"
 msgstr "轉換(&C)"
@@ -12782,14 +12782,14 @@ msgstr "轉換(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1214
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "選取(&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1234
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12810,7 +12810,7 @@ msgstr "變形全部圖層(&A)"
 msgid "S&plit"
 msgstr "分割(&P)"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1261
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "分割 Alpha (透明度) (&P)"
@@ -38520,23 +38520,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "顯示核取方塊以用作選取或取消選取圖層。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:992
+#: plugins/dockers/layerdocker/LayerBox.cpp:1006
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "快速選取區域遮罩"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1014
+#: plugins/dockers/layerdocker/LayerBox.cpp:1028
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "取消快速選取區域遮罩"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "切換鎖定與可見性(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1231
-#: plugins/dockers/layerdocker/LayerBox.cpp:1252
+#: plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "&Add"
 msgstr "新增(&A)"

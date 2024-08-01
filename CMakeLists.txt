@@ -581,6 +581,12 @@ add_definitions(
   -DQT_USE_FAST_OPERATOR_PLUS
 )
 
+remove_definitions(
+    -DQT_NO_CAST_FROM_ASCII
+    -DQT_NO_FOREACH
+)
+
+
 # MSVC is unable to disambiguate between definitions of QVector<QPointF> 
 # and QPolygonF. This is a known upstream bug e.g.:
 # - https://phabricator.kde.org/D21314

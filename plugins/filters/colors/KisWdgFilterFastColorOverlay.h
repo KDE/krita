@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISWDGFILTERFASTCOLOROVERLAY_H
 #define KISWDGFILTERFASTCOLOROVERLAY_H
 
@@ -8,8 +14,9 @@ class Ui_WdgFilterFastColorOverlay;
 class KisWdgFilterFastColorOverlay : public KisConfigWidget
 {
     Q_OBJECT
+
 public:
-    KisWdgFilterFastColorOverlay(QWidget *parent);
+    explicit KisWdgFilterFastColorOverlay(QWidget *parent);
     ~KisWdgFilterFastColorOverlay();
 
     void setView(KisViewManager *view) override;

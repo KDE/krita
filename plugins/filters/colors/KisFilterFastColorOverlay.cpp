@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #include "KisFilterFastColorOverlay.h"
 
 #include "kis_paint_device.h"
@@ -15,7 +21,6 @@
 KisFilterFastColorOverlay::KisFilterFastColorOverlay()
     : KisFilter(id(), FiltersCategoryColorId, i18n("Fast Color &Overlay..."))
 {
-
 }
 
 void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
@@ -24,16 +29,16 @@ void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect
 
     const KoColorSpace *colorSpace = device->colorSpace();
 
-    KoColor overlayColor = config->getColor("color", KoColor(QColor(185, 221, 255), KoColorSpaceRegistry::instance()->rgb8()));
+    KoColor overlayColor = config->getColor("color", KoColor(defaultColor(), KoColorSpaceRegistry::instance()->rgb8()));
     overlayColor.convertTo(colorSpace);
 
     KoCompositeOp::ParameterInfo paramInfo;
-    paramInfo.opacity = config->getPropertyLazy("opacity", 75) / 100.0f;
+    paramInfo.opacity = config->getPropertyLazy("opacity", defaultOpacity()) / 100.0f;
     paramInfo.flow = 1.0;
     paramInfo.channelFlags = colorSpace->channelFlags(true, false);
 
     const KoCompositeOp *compositeOp =
-        colorSpace->compositeOp(config->getPropertyLazy("compositeop", COMPOSITE_OVER));
+        colorSpace->compositeOp(config->getPropertyLazy("compositeop", defaultCompositeOp()));
 
     KisRandomAccessorSP dstIt = device->createRandomAccessorNG();
 
@@ -41,7 +46,6 @@ void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect
     qint32 rowsRemaining = rect.height();
 
     while (rowsRemaining > 0) {
-
         qint32 dstX_ = rect.x();
         qint32 columnsRemaining = rect.width();
         qint32 numContiguousDstRows = dstIt->numContiguousRows(dstY_);
@@ -73,20 +77,35 @@ void KisFilterFastColorOverlay::processImpl(KisPaintDeviceSP device, const QRect
         dstY_ += rows;
         rowsRemaining -= rows;
     }
-
 }
 
 KisConfigWidget *KisFilterFastColorOverlay::createConfigurationWidget(QWidget *parent, const KisPaintDeviceSP dev, bool useForMasks) const
 {
+    Q_UNUSED(dev);
     Q_UNUSED(useForMasks);
     return new KisWdgFilterFastColorOverlay(parent);
 }
 
-KisFilterConfigurationSP KisFilterFastColorOverlay::defaultConfiguration() const
+KisFilterConfigurationSP KisFilterFastColorOverlay::defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const
 {
-    KisFilterConfigurationSP config = factoryConfiguration();
-    config->setProperty("color", QColor(185, 221, 255));
-    config->setProperty("opacity", 75);
-    config->setProperty("compositeop", COMPOSITE_OVER);
+    KisFilterConfigurationSP config = factoryConfiguration(resourcesInterface);
+    config->setProperty("color", defaultColor());
+    config->setProperty("opacity", defaultOpacity());
+    config->setProperty("compositeop", defaultCompositeOp());
     return config;
+}
+
+QColor KisFilterFastColorOverlay::defaultColor()
+{
+    return QColor(62, 140, 236);
+}
+
+int KisFilterFastColorOverlay::defaultOpacity()
+{
+    return 100;
+}
+
+QString KisFilterFastColorOverlay::defaultCompositeOp()
+{
+    return COMPOSITE_SCREEN;
 }

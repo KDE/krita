@@ -1,12 +1,21 @@
+/*
+ *  SPDX-FileCopyrightText: 2020 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISFILTERFASTCOLOROVERLAY_H
 #define KISFILTERFASTCOLOROVERLAY_H
 
 #include "filter/kis_filter.h"
 
-
 class KisFilterFastColorOverlay : public KisFilter
 {
 public:
+    static QColor defaultColor();
+    static int defaultOpacity();
+    static QString defaultCompositeOp();
+
     KisFilterFastColorOverlay();
 
     void processImpl(KisPaintDeviceSP device,
@@ -20,7 +29,7 @@ public:
     }
 
     KisConfigWidget * createConfigurationWidget(QWidget* parent, const KisPaintDeviceSP dev, bool useForMasks) const override;
-    KisFilterConfigurationSP defaultConfiguration() const override;
+    KisFilterConfigurationSP defaultConfiguration(KisResourcesInterfaceSP resourcesInterface) const override;
 };
 
 #endif // KISFILTERFASTCOLOROVERLAY_H

@@ -65,9 +65,9 @@ constexpr auto scale_real_to_int = [] (qreal multiplier) {
         );
 };
 
-template <typename Src, typename Dst>
+template <typename Src, typename Dst, typename SrcConstRef = std::add_lvalue_reference_t<std::add_const_t<Src>>>
 auto do_static_cast = lager::lenses::getset(
-    [] (Src value) { return static_cast<Dst>(value); },
+    [] (SrcConstRef value) { return static_cast<Dst>(value); },
     [] (Src, Dst value) { return static_cast<Src>(value); }
     );
 

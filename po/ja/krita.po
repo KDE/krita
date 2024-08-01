@@ -33,7 +33,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-30 01:51+0000\n"
+"POT-Creation-Date: 2024-08-01 01:53+0000\n"
 "PO-Revision-Date: 2024-02-07 14:53-0800\n"
 "Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -12908,7 +12908,7 @@ msgstr "インポート/エクスポート(&I)"
 msgid "Import"
 msgstr "インポート"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Convert"
 msgstr "変換(&C)"
@@ -12916,14 +12916,14 @@ msgstr "変換(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1219
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "選択(&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12944,7 +12944,7 @@ msgstr "すべてのレイヤーを変形(&A)"
 msgid "S&plit"
 msgstr "アルファを分離(&P)"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1268
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "アルファを分離(&P)"
@@ -16247,7 +16247,7 @@ msgstr "シェイプを均等配置"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "シェイプをグループ化"
@@ -16266,6 +16266,14 @@ msgstr "アスペクト比を保つ"
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "シェイプをロック"
+
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Shape Properties"
+msgstr "テキストのプロパティを変更"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -16341,7 +16349,7 @@ msgid "Unclip Shapes"
 msgstr "シェイプのクリップを解除"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "シェイプのグループ化を解除"
@@ -16420,30 +16428,30 @@ msgstr ""
 "され、Krita 4.x との互換性がなくなります"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1568
+#: libs/flake/text/KoSvgTextShape.cpp:1614
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "このテキストを置き換えてください"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1547
+#: libs/flake/text/KoSvgTextShape.cpp:1593
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "テキスト"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1549
-#: libs/flake/text/KoSvgTextShape.cpp:1557
+#: libs/flake/text/KoSvgTextShape.cpp:1595
+#: libs/flake/text/KoSvgTextShape.cpp:1603
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG テキストシェイプ"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1555
+#: libs/flake/text/KoSvgTextShape.cpp:1601
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG テキスト"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1578
+#: libs/flake/text/KoSvgTextShape.cpp:1624
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -31584,35 +31592,35 @@ msgstr "ですがまだソフトプルーフは有効ではありません。"
 msgid "Gamut Warnings turned off."
 msgstr "色域警告無効"
 
-#: libs/ui/KisViewManager.cpp:785
+#: libs/ui/KisViewManager.cpp:793
 #, kde-format
 msgid "Active Author Profile"
 msgstr "アクティブな作者プロファイル"
 
-#: libs/ui/KisViewManager.cpp:915
+#: libs/ui/KisViewManager.cpp:923
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (コピー)"
 
-#: libs/ui/KisViewManager.cpp:1058 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "代わりの名前は既に使われています。より大きな数で手動で保存してください。"
 
-#: libs/ui/KisViewManager.cpp:1058
+#: libs/ui/KisViewManager.cpp:1066
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "増分バージョンを保存できませんでした"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "増分バックアップを保存できませんでした"
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1391
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31621,13 +31629,13 @@ msgstr ""
 "キャンバスのみ表示モードに移行する\n"
 "戻るには%1を押してください。."
 
-#: libs/ui/KisViewManager.cpp:1442
+#: libs/ui/KisViewManager.cpp:1450
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "リソースフォルダを開く"
 
-#: libs/ui/KisViewManager.cpp:1446
+#: libs/ui/KisViewManager.cpp:1454
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31651,19 +31659,19 @@ msgstr ""
 "<p><b>プライベートアプリの場所</b>:<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1461
+#: libs/ui/KisViewManager.cpp:1469
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "ユーザの AppData フォルダを開く(&U)"
 
-#: libs/ui/KisViewManager.cpp:1462
+#: libs/ui/KisViewManager.cpp:1470
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "プライベートアプリの場所を開く(&P)"
 
-#: libs/ui/KisViewManager.cpp:1575 libs/ui/KisViewManager.cpp:1593
+#: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32753,7 +32761,7 @@ msgstr "選択アクション"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
 #, kde-format
 msgid "Transform"
@@ -39392,23 +39400,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "レイヤーを選択/選択解除するためのチェックボックスを表示します。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:997
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "クイック選択マスク"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1019
+#: plugins/dockers/layerdocker/LayerBox.cpp:1033
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "クイック選択マスクをキャンセル"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "ロックの切り替えと表示(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1236
-#: plugins/dockers/layerdocker/LayerBox.cpp:1259
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1273
 #, kde-format
 msgid "&Add"
 msgstr "追加(&A)"
@@ -41147,6 +41155,13 @@ msgstr "タスクセットを保存"
 #, kde-format
 msgid "Delete the taskset"
 msgstr "このタスクセットを削除"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgid "Text Properties"
+msgstr "テキストのプロパティを変更"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -58378,7 +58393,7 @@ msgstr "X軸の間隔:"
 msgid "Interval Y:"
 msgstr "Y軸の間隔:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -58386,22 +58401,22 @@ msgstr ""
 "左クリックでセンターを中心に回転、右クリックでハイライトされた場所をセンター"
 "に回転します。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:748
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "選択物を切断するにはクリックしてドラッグします。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "選択物をサイズ変更するにはクリックしてドラッグします。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:788
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "選択物を移動するにはクリックしてドラッグします。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -58409,69 +58424,69 @@ msgstr ""
 "選択物をサイズ変更するにはクリックしてドラッグします。中クリックでハイライト"
 "された位置にセットします。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "このツールはベクターレイヤーのみで動作します。もしかして移動ツールを使いたい"
 "ですか？"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "オブジェクトを時計回りに90°回転"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "オブジェクトを反時計回りに90°回転"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "オブジェクトを180°回転"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "オブジェクトを水平方向に鏡像反転"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "オブジェクトを垂直方向に鏡像反転"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "オブジェクトの変形をリセット"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "形状を加算"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "形状を積集合"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "形状を減算"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "形状を分割"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "ベクター形状操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
 #, kde-format
 msgid "Logical Operations"
 msgstr "論理演算"
@@ -59488,7 +59503,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "リッチテキストを挿入"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "テキストのプロパティを変更"
@@ -59939,7 +59954,7 @@ msgstr ""
 "SVG の CSS `white-space: pre-wrap` ラップモードを使用し、`inline-size` でテキ"
 "ストの幅を定義します。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

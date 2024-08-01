@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-30 01:51+0000\n"
+"POT-Creation-Date: 2024-08-01 01:53+0000\n"
 "PO-Revision-Date: 2024-04-22 16:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -12849,7 +12849,7 @@ msgstr "导入/导出(&I)"
 msgid "Import"
 msgstr "导入"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Convert"
 msgstr "转换(&C)"
@@ -12857,14 +12857,14 @@ msgstr "转换(&C)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1219
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "选择(&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12885,7 +12885,7 @@ msgstr "变形 - 所有图层(&A)"
 msgid "S&plit"
 msgstr "拆分(&P)"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1268
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "透明度通道操作(&P)"
@@ -16175,7 +16175,7 @@ msgstr "分布形状"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "编组形状"
@@ -16194,6 +16194,14 @@ msgstr "保持宽高比"
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "锁定形状"
+
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Shape Properties"
+msgstr "更改文字属性"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -16269,7 +16277,7 @@ msgid "Unclip Shapes"
 msgstr "取消剪贴形状"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "取消编组形状"
@@ -16347,30 +16355,30 @@ msgstr ""
 "式。转换后的文字对象将不再兼容 Krita 4.x。"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1568
+#: libs/flake/text/KoSvgTextShape.cpp:1614
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "占位符文本"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1547
+#: libs/flake/text/KoSvgTextShape.cpp:1593
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1549
-#: libs/flake/text/KoSvgTextShape.cpp:1557
+#: libs/flake/text/KoSvgTextShape.cpp:1595
+#: libs/flake/text/KoSvgTextShape.cpp:1603
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG 文字形状"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1555
+#: libs/flake/text/KoSvgTextShape.cpp:1601
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG 文字"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1578
+#: libs/flake/text/KoSvgTextShape.cpp:1624
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -31305,34 +31313,34 @@ msgstr "但色彩校样尚未启用。"
 msgid "Gamut Warnings turned off."
 msgstr "色域超出警告色已关闭。"
 
-#: libs/ui/KisViewManager.cpp:785
+#: libs/ui/KisViewManager.cpp:793
 #, kde-format
 msgid "Active Author Profile"
 msgstr "作者档案切换"
 
-#: libs/ui/KisViewManager.cpp:915
+#: libs/ui/KisViewManager.cpp:923
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (副本)"
 
-#: libs/ui/KisViewManager.cpp:1058 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr "备用名称数字已用尽，请手动输入更大的数字保存文件"
 
-#: libs/ui/KisViewManager.cpp:1058
+#: libs/ui/KisViewManager.cpp:1066
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "无法保存增量版本"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "无法保存增量备份"
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1391
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31341,13 +31349,13 @@ msgstr ""
 "已切换到隐藏面板模式\n"
 "按 %1 返回"
 
-#: libs/ui/KisViewManager.cpp:1442
+#: libs/ui/KisViewManager.cpp:1450
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "打开资源文件夹"
 
-#: libs/ui/KisViewManager.cpp:1446
+#: libs/ui/KisViewManager.cpp:1454
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31370,19 +31378,19 @@ msgstr ""
 "<p><b>私人应用目录</b>：<br/>\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1461
+#: libs/ui/KisViewManager.cpp:1469
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "打开用户 AppData 目录(&U)"
 
-#: libs/ui/KisViewManager.cpp:1462
+#: libs/ui/KisViewManager.cpp:1470
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "打开私人应用目录(&P)"
 
-#: libs/ui/KisViewManager.cpp:1575 libs/ui/KisViewManager.cpp:1593
+#: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32460,7 +32468,7 @@ msgstr "选区操作"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
 #, kde-format
 msgid "Transform"
@@ -38971,23 +38979,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "显示用于选择/取消选择图层的复选框。"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:997
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "快速选区蒙版"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1019
+#: plugins/dockers/layerdocker/LayerBox.cpp:1033
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "取消快速选区蒙版"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "隐藏/锁定/透明度(&T)"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1236
-#: plugins/dockers/layerdocker/LayerBox.cpp:1259
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1273
 #, kde-format
 msgid "&Add"
 msgstr "新建(&A)"
@@ -40699,6 +40707,13 @@ msgstr "保存操作流程"
 #, kde-format
 msgid "Delete the taskset"
 msgstr "删除操作流程"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
+#, fuzzy, kde-format
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgid "Text Properties"
+msgstr "更改文字属性"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -57662,94 +57677,94 @@ msgstr "间隔 X："
 msgid "Interval Y:"
 msgstr "间隔 Y："
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr "左键点击绕中心旋转，右键点击绕高亮显示的位置旋转。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:748
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "点击并拖拽以斜切选区。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "点击并拖拽以调整选区大小。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:788
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "点击并拖拽以移动选区。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "点击并拖拽以调整选区大小。中键点击以设定高亮显示的位置。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr "此工具只适用于矢量图层。要移动颜料图层，请使用移动工具。"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "旋转对象 (顺时针 90°)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "旋转对象 (逆时针 90°)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "旋转对象 (180°)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "翻转对象 (水平)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "翻转对象 (垂直)"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "重置对象变形"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "形状并集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "形状交集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "形状差集"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "形状拆分"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "矢量形状操作"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
 #, kde-format
 msgid "Logical Operations"
 msgstr "布尔逻辑操作"
@@ -58754,7 +58769,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "插入增强文字"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "更改文字属性"
@@ -59205,7 +59220,7 @@ msgstr ""
 "使用 SVG 规范的 CSS “white-space: pre-wrap”自动换行模式，以“inline-size”定义"
 "每行文字宽度。"
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"

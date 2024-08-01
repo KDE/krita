@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-30 01:51+0000\n"
+"POT-Creation-Date: 2024-08-01 01:53+0000\n"
 "PO-Revision-Date: 2013-04-16 11:05+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -13223,7 +13223,7 @@ msgstr "प्रतिमा आयात करा"
 msgid "Import"
 msgstr "प्रतिमा आयात करा"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, fuzzy, kde-format
 msgid "&Convert"
 msgstr "उलट (&I)"
@@ -13231,14 +13231,14 @@ msgstr "उलट (&I)"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1219
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "निवडा (&S)"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
 #, fuzzy, kde-format
 #| msgid "Group:"
 msgctxt "A group of layers"
@@ -13262,7 +13262,7 @@ msgstr "नोड बदला"
 msgid "S&plit"
 msgstr "अल्फाचा उत्तराधिकार"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1268
 #, fuzzy, kde-format
 msgid "S&plit Alpha"
 msgstr "अल्फाचा उत्तराधिकार"
@@ -16633,7 +16633,7 @@ msgstr "डावीकडे फिरवा"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "आकारांचा समूह करा"
@@ -16654,6 +16654,12 @@ msgstr "स्वरूपाचे गुणोत्तर ठेवा"
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "केस जोडा"
+
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#, fuzzy
+msgctxt "(qtundo-format)"
+msgid "Change Text Shape Properties"
+msgstr "नवीन स्तराचे गुणधर्म"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -16749,7 +16755,7 @@ msgid "Unclip Shapes"
 msgstr "आकार जोडा"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "आकारांचा समूह काढून टाका"
@@ -16826,33 +16832,33 @@ msgid ""
 msgstr ""
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1568
+#: libs/flake/text/KoSvgTextShape.cpp:1614
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr ""
 
-#: libs/flake/text/KoSvgTextShape.cpp:1547
+#: libs/flake/text/KoSvgTextShape.cpp:1593
 #, fuzzy, kde-format
 #| msgid "Text"
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "मजकूर"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1549
-#: libs/flake/text/KoSvgTextShape.cpp:1557
+#: libs/flake/text/KoSvgTextShape.cpp:1595
+#: libs/flake/text/KoSvgTextShape.cpp:1603
 #, fuzzy, kde-format
 #| msgid "Type and Shape"
 msgid "SVG Text Shape"
 msgstr "प्रकार व आकार"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1555
+#: libs/flake/text/KoSvgTextShape.cpp:1601
 #, fuzzy, kde-format
 #| msgid " Text:"
 msgid "SVG Text"
 msgstr " मजकूर :"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1578
+#: libs/flake/text/KoSvgTextShape.cpp:1624
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -32158,34 +32164,34 @@ msgstr "डेकोरेशन्स दर्शवा"
 msgid "Gamut Warnings turned off."
 msgstr "इशारा"
 
-#: libs/ui/KisViewManager.cpp:785
+#: libs/ui/KisViewManager.cpp:793
 #, fuzzy, kde-format
 msgid "Active Author Profile"
 msgstr "खुली रंग रूपरेषा"
 
-#: libs/ui/KisViewManager.cpp:915
+#: libs/ui/KisViewManager.cpp:923
 #, fuzzy, kde-format
 msgid "%1 (Copy)"
 msgstr "प्रत बनवा"
 
-#: libs/ui/KisViewManager.cpp:1058 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1058
+#: libs/ui/KisViewManager.cpp:1066
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "वाढती आवृत्ती साठवा (&V)"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1142
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "वाढता बॅकअप साठवा"
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1391
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -32194,13 +32200,13 @@ msgstr ""
 "कॅनव्हास फक्त पद्धतमध्ये जातो \n"
 "मागे जाण्यासाठी %1 दाबा"
 
-#: libs/ui/KisViewManager.cpp:1442
+#: libs/ui/KisViewManager.cpp:1450
 #, fuzzy, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "संसाधन फाईल्स साफ करा"
 
-#: libs/ui/KisViewManager.cpp:1446
+#: libs/ui/KisViewManager.cpp:1454
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -32215,19 +32221,19 @@ msgid ""
 "%2</p>"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1461
+#: libs/ui/KisViewManager.cpp:1469
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1462
+#: libs/ui/KisViewManager.cpp:1470
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr ""
 
-#: libs/ui/KisViewManager.cpp:1575 libs/ui/KisViewManager.cpp:1593
+#: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
 #, fuzzy, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -33314,7 +33320,7 @@ msgstr "निवडीची सजावट"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
 #, fuzzy, kde-format
 #| msgctxt "(qtundo-format)"
@@ -39885,26 +39891,26 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:997
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "निवड नाही"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1019
+#: plugins/dockers/layerdocker/LayerBox.cpp:1033
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "निवड नाही"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, fuzzy, kde-format
 #| msgid "Layer is invisible."
 msgid "&Toggle Locks && Visibility"
 msgstr "स्तर अदृश्य आहे."
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1236
-#: plugins/dockers/layerdocker/LayerBox.cpp:1259
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1273
 #, kde-format
 msgid "&Add"
 msgstr ""
@@ -41683,6 +41689,12 @@ msgstr "वर्तमान फ्लिपबूक साठवा"
 #, fuzzy, kde-format
 msgid "Delete the taskset"
 msgstr "पान काढून टाका"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
+#, fuzzy, kde-format
+#| msgid "Effect Properties"
+msgid "Text Properties"
+msgstr "परिणाम गुणधर्म"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, fuzzy, kde-format
@@ -59453,41 +59465,41 @@ msgstr "इंटरलेसिंग"
 msgid "Interval Y:"
 msgstr "इंटरलेसिंग"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:748
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
 #, fuzzy, kde-format
 msgid "Click and drag to shear selection."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
 #, fuzzy, kde-format
 #| msgid "Size Canvas to Size of Selection"
 msgid "Click and drag to resize selection."
 msgstr "निवडीच्या आकाराप्रमाणे कॅनव्हासचा आकार ठेवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:788
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
 #, fuzzy, kde-format
 msgid "Click and drag to move selection."
 msgstr "प्रतिमेत स्तर जोडता आला नाही"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
 #, fuzzy, kde-format
 #| msgid "Size Canvas to Size of Selection"
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
 msgstr "निवडीच्या आकाराप्रमाणे कॅनव्हासचा आकार ठेवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -59495,7 +59507,7 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
 #, fuzzy
 #| msgctxt "rotate image 90 degrees to the left"
 #| msgid "Rotate Image 90° to the Left"
@@ -59503,64 +59515,64 @@ msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "प्रतिमा ९० अंशातून डावीकडे फिरवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "स्तर १८० अंशातून फिरवा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "प्रतिमा आडवेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "प्रतिमा उभेरित्या प्रतिबिंबित करा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
 #, fuzzy
 #| msgid "Reset Canvas Transformations"
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "कॅनव्हासमधील बदल पुन्हा निश्चित करा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
 #, fuzzy
 #| msgid "Add Shape"
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "आकार जोडा"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "घनता"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "फटकाऱ्याचे आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
 #, fuzzy
 #| msgid "Spray shape"
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "फवाऱ्याचा आकार"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, fuzzy, kde-format
 #| msgid "Vector Selection"
 msgid "Vector Shape Actions"
 msgstr "व्हेक्टर निवड"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
 #, fuzzy, kde-format
 #| msgid "Operation"
 msgid "Logical Operations"
@@ -60617,7 +60629,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "उलट टेक्श्चर :"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
 #, fuzzy
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
@@ -61077,7 +61089,7 @@ msgid ""
 "defining the text width."
 msgstr ""
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, fuzzy, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -65690,11 +65702,6 @@ msgstr "25%"
 #, fuzzy
 #~ msgid "Double click to put text on path."
 #~ msgstr "रंग जोडणारी रेषा"
-
-#, fuzzy
-#~| msgid "Effect Properties"
-#~ msgid "Text Properties"
-#~ msgstr "परिणाम गुणधर्म"
 
 #, fuzzy
 #~ msgid "Text On Path"

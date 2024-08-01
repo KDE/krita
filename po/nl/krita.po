@@ -62,7 +62,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-30 01:51+0000\n"
+"POT-Creation-Date: 2024-08-01 01:53+0000\n"
 "PO-Revision-Date: 2024-07-28 09:14+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -12968,7 +12968,7 @@ msgstr "&Importeren/Exporteren"
 msgid "Import"
 msgstr "Importeren"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1259
 #, kde-format
 msgid "&Convert"
 msgstr "&Converteren"
@@ -12976,14 +12976,14 @@ msgstr "&Converteren"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1219
+#: plugins/dockers/layerdocker/LayerBox.cpp:1233
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
 msgid "&Select"
 msgstr "&Selecteren"
 
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1225
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1239
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -13004,7 +13004,7 @@ msgstr "Alle lagen transformeren"
 msgid "S&plit"
 msgstr "S&plitsen"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1254
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1268
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Alfa s&plitsen"
@@ -16306,7 +16306,7 @@ msgstr "Vormen distribueren"
 
 #: libs/flake/commands/KoShapeGroupCommand.cpp:67
 #: libs/libkis/VectorLayer.cpp:225
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1253
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1270
 msgctxt "(qtundo-format)"
 msgid "Group shapes"
 msgstr "Vormen groeperen"
@@ -16325,6 +16325,14 @@ msgstr "Beeldverhouding behouden"
 msgctxt "(qtundo-format)"
 msgid "Lock shapes"
 msgstr "Vormen vergrendelen"
+
+#: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
+#, fuzzy
+#| msgctxt "(qtundo-format)"
+#| msgid "Change Text Properties"
+msgctxt "(qtundo-format)"
+msgid "Change Text Shape Properties"
+msgstr "Eigenschappen van tekst wijzigen"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -16400,7 +16408,7 @@ msgid "Unclip Shapes"
 msgstr "Vastnieten van vormen opheffen"
 
 #: libs/flake/commands/KoShapeUngroupCommand.cpp:42
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1281
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1298
 msgctxt "(qtundo-format)"
 msgid "Ungroup shapes"
 msgstr "Vormengroepering opheffen"
@@ -16479,30 +16487,30 @@ msgstr ""
 "geconverteerd die niet compatibel is met Krita 4.x"
 
 #: libs/flake/text/KoSvgTextShape.cpp:109
-#: libs/flake/text/KoSvgTextShape.cpp:1568
+#: libs/flake/text/KoSvgTextShape.cpp:1614
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "Placeholder Text"
 msgstr "Tekst van plaatshouder"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1547
+#: libs/flake/text/KoSvgTextShape.cpp:1593
 #, kde-format
 msgctxt "Text label in SVG Text Tool"
 msgid "Text"
 msgstr "Tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1549
-#: libs/flake/text/KoSvgTextShape.cpp:1557
+#: libs/flake/text/KoSvgTextShape.cpp:1595
+#: libs/flake/text/KoSvgTextShape.cpp:1603
 #, kde-format
 msgid "SVG Text Shape"
 msgstr "SVG-tekstvorm"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1555
+#: libs/flake/text/KoSvgTextShape.cpp:1601
 #, kde-format
 msgid "SVG Text"
 msgstr "SVG-tekst"
 
-#: libs/flake/text/KoSvgTextShape.cpp:1578
+#: libs/flake/text/KoSvgTextShape.cpp:1624
 #, kde-format
 msgctxt "Default text for the text shape"
 msgid "<text>Placeholder Text</text>"
@@ -31726,36 +31734,36 @@ msgstr "Maar soft-proofing is nog steeds uitgeschakeld."
 msgid "Gamut Warnings turned off."
 msgstr "Kleurenbereik-waarschuwing uitgeschakeld."
 
-#: libs/ui/KisViewManager.cpp:785
+#: libs/ui/KisViewManager.cpp:793
 #, kde-format
 msgid "Active Author Profile"
 msgstr "Actief auteursprofiel"
 
-#: libs/ui/KisViewManager.cpp:915
+#: libs/ui/KisViewManager.cpp:923
 #, kde-format
 msgid "%1 (Copy)"
 msgstr "%1 (Kopiëren)"
 
-#: libs/ui/KisViewManager.cpp:1058 libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1066 libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgid "Alternative names exhausted, try manually saving with a higher number"
 msgstr ""
 "Alternatieve namen zijn uitgeput, probeer handmatig op te slaan met een "
 "hoger nummer"
 
-#: libs/ui/KisViewManager.cpp:1058
+#: libs/ui/KisViewManager.cpp:1066
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental version"
 msgstr "Kon incrementele versie niet opslaan"
 
-#: libs/ui/KisViewManager.cpp:1134
+#: libs/ui/KisViewManager.cpp:1142
 #, kde-format
 msgctxt "@title:window"
 msgid "Couldn't save incremental backup"
 msgstr "Kon incrementele reservekopie niet opslaan"
 
-#: libs/ui/KisViewManager.cpp:1383
+#: libs/ui/KisViewManager.cpp:1391
 #, kde-format
 msgid ""
 "Going into Canvas-Only mode.\n"
@@ -31764,13 +31772,13 @@ msgstr ""
 "Naar modus alleen werkblad gaan.\n"
 "Druk op %1 om terg te gaan."
 
-#: libs/ui/KisViewManager.cpp:1442
+#: libs/ui/KisViewManager.cpp:1450
 #, kde-format
 msgctxt "@title:window resource folder"
 msgid "Open Resource Folder"
 msgstr "Map met hulpdata openen"
 
-#: libs/ui/KisViewManager.cpp:1446
+#: libs/ui/KisViewManager.cpp:1454
 #, kde-format
 msgctxt "@info resource folder"
 msgid ""
@@ -31795,19 +31803,19 @@ msgstr ""
 "<p><b>Eigen locatie van toepassing</b>:\n"
 "%2</p>"
 
-#: libs/ui/KisViewManager.cpp:1461
+#: libs/ui/KisViewManager.cpp:1469
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &user AppData"
 msgstr "In AppData van gebr&uiker openen"
 
-#: libs/ui/KisViewManager.cpp:1462
+#: libs/ui/KisViewManager.cpp:1470
 #, kde-format
 msgctxt "@action:button resource folder"
 msgid "Open in &private app location"
 msgstr "In &eigen locatie van toepassing openen"
 
-#: libs/ui/KisViewManager.cpp:1575 libs/ui/KisViewManager.cpp:1593
+#: libs/ui/KisViewManager.cpp:1583 libs/ui/KisViewManager.cpp:1601
 #, kde-format
 msgctxt "choice for author profile"
 msgid "Anonymous"
@@ -32909,7 +32917,7 @@ msgstr "Acties voor selectie"
 #. i18n: ectx: attribute (title), widget (QWidget, tabTransform)
 #: libs/ui/tool/kis_selection_tool_helper.cpp:374
 #: plugins/generators/pattern/wdgpatternoptions.ui:51
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1849
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1866
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImages.cpp:332
 #, kde-format
 msgid "Transform"
@@ -39590,23 +39598,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr "Keuzevakje tonen om lagen te selecteren/dit ongedaan maken"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:997
+#: plugins/dockers/layerdocker/LayerBox.cpp:1011
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Snel selectiemasker"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1019
+#: plugins/dockers/layerdocker/LayerBox.cpp:1033
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Snel selectiemasker annuleren"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1229
+#: plugins/dockers/layerdocker/LayerBox.cpp:1243
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "Vergrendeling && zichtbaarheid &omschakelen"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1236
-#: plugins/dockers/layerdocker/LayerBox.cpp:1259
+#: plugins/dockers/layerdocker/LayerBox.cpp:1250
+#: plugins/dockers/layerdocker/LayerBox.cpp:1273
 #, kde-format
 msgid "&Add"
 msgstr "&Toevoegen"
@@ -41355,6 +41363,11 @@ msgstr "De set taken opslaan"
 #, kde-format
 msgid "Delete the taskset"
 msgstr "De set taken verwijderen"
+
+#: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
+#, kde-format
+msgid "Text Properties"
+msgstr "Teksteigenschappen"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -58719,7 +58732,7 @@ msgstr "Interval X:"
 msgid "Interval Y:"
 msgstr "Interval Y:"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:745
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:751
 #, kde-format
 msgid ""
 "Left click rotates around center, right click around highlighted position."
@@ -58727,22 +58740,22 @@ msgstr ""
 "Klikken met links roteert rond het centrum, met rechts rond de oplichtende "
 "positie."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:748
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:754
 #, kde-format
 msgid "Click and drag to shear selection."
 msgstr "Klik en versleep om de selectie schuin te trekken."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:753
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:759
 #, kde-format
 msgid "Click and drag to resize selection."
 msgstr "Klik en versleep om van de selectie de grootte te wijzigen."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:788
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:794
 #, kde-format
 msgid "Click and drag to move selection."
 msgstr "Klik en versleep om de selectie te verplaatsen."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:792
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:798
 #, kde-format
 msgid ""
 "Click and drag to resize selection. Middle click to set highlighted position."
@@ -58750,69 +58763,69 @@ msgstr ""
 "Klik en versleep om de grootte van de selectie te wijzigen. Klik met het "
 "midden om de oplichtende positie in te stellen."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:862
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:868
 #, kde-format
 msgid "This tool only works on vector layers. You probably want the move tool."
 msgstr ""
 "Dit hulpmiddel werkt alleen op vectorlagen. U wilt waarschijnlijk het "
 "Verplaatsingshulpmiddel."
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1315
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1332
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CW"
 msgstr "Object 90° rechtsom draaien"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1319
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1336
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 90° CCW"
 msgstr "Object 90° linksom draaien"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1323
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1340
 msgctxt "(qtundo-format)"
 msgid "Rotate Object 180°"
 msgstr "Object 180° draaien"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1327
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1344
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Horizontally"
 msgstr "Afbeelding horizontaal spiegelen"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1331
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1348
 msgctxt "(qtundo-format)"
 msgid "Mirror Object Vertically"
 msgstr "Afbeelding verticaal spiegelen"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1335
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1352
 msgctxt "(qtundo-format)"
 msgid "Reset Object Transformations"
 msgstr "Transformaties van object herstellen"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1409
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1426
 msgctxt "(qtundo-format)"
 msgid "Unite Shapes"
 msgstr "Vormen gelijktrekken"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1423
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1440
 msgctxt "(qtundo-format)"
 msgid "Intersect Shapes"
 msgstr "Vormen van snijpunten"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1433
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1450
 msgctxt "(qtundo-format)"
 msgid "Subtract Shapes"
 msgstr "Vormen aftrekken"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1478
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1495
 msgctxt "(qtundo-format)"
 msgid "Split Shapes"
 msgstr "Vormen splitsen"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1846
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1863
 #, kde-format
 msgid "Vector Shape Actions"
 msgstr "Acties voor vectorvorm"
 
-#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1865
+#: plugins/tools/defaulttool/defaulttool/DefaultTool.cpp:1882
 #, kde-format
 msgid "Logical Operations"
 msgstr "Logische bewerkingen"
@@ -59830,7 +59843,7 @@ msgctxt "(qtundo-format)"
 msgid "Insert Rich Text"
 msgstr "Opgemaakte tekst invoegen"
 
-#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:23
+#: plugins/tools/svgtexttool/SvgTextMergePropertiesRangeCommand.cpp:25
 msgctxt "(qtundo-format)"
 msgid "Change Text Properties"
 msgstr "Eigenschappen van tekst wijzigen"
@@ -60286,7 +60299,7 @@ msgstr ""
 "CSS van SVG gebruiken modus `white-space: pre-wrap` tekstomloop, met `inline-"
 "size` die de tekstbreedte definieert."
 
-#: plugins/tools/svgtexttool/SvgTextTool.cpp:287
+#: plugins/tools/svgtexttool/SvgTextTool.cpp:300
 #, kde-format
 msgctxt "@title:window"
 msgid "Krita - Edit Text"
@@ -65000,9 +65013,6 @@ msgstr "Referentie-afbeeldingen"
 
 #~ msgid "Press return to finish editing."
 #~ msgstr "Druk op return om het bewerken te beëindigen."
-
-#~ msgid "Text Properties"
-#~ msgstr "Teksteigenschappen"
 
 #~ msgid "Text On Path"
 #~ msgstr "Tekst op een pad"

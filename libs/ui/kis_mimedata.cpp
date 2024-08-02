@@ -469,7 +469,8 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
             KisLayerUtils::recursiveApplyNodes(node, [offset] (KisNodeSP node){
                 if (node->hasEditablePaintDevice()) {
                     KisPaintDeviceSP dev = node->paintDevice();
-                    dev->moveTo(offset.x(), offset.y());
+                    QPointF newOffset = offset + dev->offset();
+                    dev->moveTo(newOffset.x(), newOffset.y()); 
                 }
             });
         }
@@ -531,6 +532,11 @@ bool KisMimeData::insertMimeLayers(const QMimeData *data,
          * that we should forcefully to make it stop
          */
         image->requestStrokeEnd();
+    }
+
+    if (changeOffset) {
+        image->waitForDone();
+        image->refreshGraphAsync();
     }
 
     return result;

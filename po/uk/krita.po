@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-01 01:53+0000\n"
-"PO-Revision-Date: 2024-07-28 09:20+0300\n"
+"PO-Revision-Date: 2024-08-01 20:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -16312,14 +16312,11 @@ msgstr ""
 "фіксацію форм"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
 msgstr ""
-"Змінити властивості тексту\n"
-"зміну властивостей тексту"
+"Змінити властивості форми тексту\n"
+"зміну властивостей форми тексту"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -41823,13 +41820,9 @@ msgid "Delete the taskset"
 msgstr "Вилучити набір завдань"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
+#, kde-format
 msgid "Text Properties"
-msgstr ""
-"Змінити властивості тексту\n"
-"зміну властивостей тексту"
+msgstr "Властивості тексту"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

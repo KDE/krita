@@ -63,7 +63,7 @@ msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2024-08-01 01:53+0000\n"
-"PO-Revision-Date: 2024-07-28 09:14+0200\n"
+"PO-Revision-Date: 2024-08-01 13:07+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -16327,12 +16327,9 @@ msgid "Lock shapes"
 msgstr "Vormen vergrendelen"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr "Eigenschappen van tekst wijzigen"
+msgstr "Eigenschappen van tekstvorm wijzigen"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36

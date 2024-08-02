@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: krita\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2024-07-29 03:21+0000\n"
+"POT-Creation-Date: 2024-08-01 03:25+0000\n"
 "PO-Revision-Date: 2023-07-30 21:46+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -12824,7 +12824,7 @@ msgstr "&Importer/eksporter"
 msgid "Import"
 msgstr "Importer"
 
-#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1240
+#: krita/krita5.xmlgui:234 plugins/dockers/layerdocker/LayerBox.cpp:1254
 #, kde-format
 msgid "&Convert"
 msgstr "&Konverter"
@@ -12832,7 +12832,7 @@ msgstr "&Konverter"
 #. i18n: ectx: property (text), widget (QPushButton, bnSelect)
 #: krita/krita5.xmlgui:245 krita/krita5.xmlgui:316
 #: libs/ui/imagesize/imagesize.xmlgui:12
-#: plugins/dockers/layerdocker/LayerBox.cpp:1214
+#: plugins/dockers/layerdocker/LayerBox.cpp:1228
 #: plugins/extensions/colorrange/wdg_colorrange.ui:134
 #: plugins/extensions/modify_selection/modify_selection.xmlgui:4
 #, kde-format
@@ -12840,7 +12840,7 @@ msgid "&Select"
 msgstr "&Merk"
 
 # Inneheld kommandoar for gruppering, så det er best med imperativ her (til trass for den offisielle konteksten).
-#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1220
+#: krita/krita5.xmlgui:253 plugins/dockers/layerdocker/LayerBox.cpp:1234
 #, kde-format
 msgctxt "A group of layers"
 msgid "&Group"
@@ -12861,7 +12861,7 @@ msgstr "Transformer &alle laga"
 msgid "S&plit"
 msgstr "&Del opp"
 
-#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1247
+#: krita/krita5.xmlgui:293 plugins/dockers/layerdocker/LayerBox.cpp:1261
 #, kde-format
 msgid "S&plit Alpha"
 msgstr "Del opp &alfa"
@@ -38980,23 +38980,23 @@ msgctxt "@item:tooltip"
 msgid "Show checkbox to select/unselect layers."
 msgstr ""
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:992
+#: plugins/dockers/layerdocker/LayerBox.cpp:1006
 msgctxt "(qtundo-format)"
 msgid "Quick Selection Mask"
 msgstr "Kjapp utvalsmaske"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1014
+#: plugins/dockers/layerdocker/LayerBox.cpp:1028
 msgctxt "(qtundo-format)"
 msgid "Cancel Quick Selection Mask"
 msgstr "Avbryt kjapp utvalsmaske"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1224
+#: plugins/dockers/layerdocker/LayerBox.cpp:1238
 #, kde-format
 msgid "&Toggle Locks && Visibility"
 msgstr "&Låsar og synlegheit på/av"
 
-#: plugins/dockers/layerdocker/LayerBox.cpp:1231
-#: plugins/dockers/layerdocker/LayerBox.cpp:1252
+#: plugins/dockers/layerdocker/LayerBox.cpp:1245
+#: plugins/dockers/layerdocker/LayerBox.cpp:1266
 #, kde-format
 msgid "&Add"
 msgstr "&Legg til"

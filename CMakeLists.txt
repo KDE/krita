@@ -526,7 +526,7 @@ macro_ensure_out_of_source_build("Compiling Krita inside the source directory is
 # Note: OPTIONAL_COMPONENTS does not seem to be reliable
 # (as of ECM 5.15.0, CMake 3.2)
 
-if (NOT APPLE)
+
 find_package(Qt5Quick ${MIN_QT_VERSION})
 set_package_properties(Qt5Quick PROPERTIES
         DESCRIPTION "QtQuick"
@@ -542,7 +542,7 @@ set_package_properties(Qt5QuickWidgets PROPERTIES
         URL "https://www.qt.io/"
         TYPE OPTIONAL
         PURPOSE "Optionally used for the touch gui for Krita")
-endif()
+
 if (Qt5QuickWidgets_FOUND)
     # This is needed because Qt dependencies aren't added by ECM but by androideployqt,
     # so it doesn't benefit from our patch in ECM.

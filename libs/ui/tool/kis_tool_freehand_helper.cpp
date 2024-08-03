@@ -81,6 +81,7 @@ struct KisToolFreehandHelper::Private
     QPointF lastDrawnPixel;
     QPointF waitingPixel;
     bool hasLastDrawnPixel;
+    int pixelInLineCount;
 
     KisSmoothingOptionsSP smoothingOptions;
 
@@ -313,6 +314,7 @@ void KisToolFreehandHelper::initPaintImpl(qreal startAngle,
     m_d->distanceHistory.clear();
     m_d->lastDrawnPixel = QPointF(-1.0, -1.0); 
     m_d->hasLastDrawnPixel = false;
+    m_d->pixelInLineCount = 0;
 
     if (airbrushing) {
         m_d->airbrushingTimer.setInterval(computeAirbrushTimerInterval());
@@ -455,16 +457,7 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
     paint(info);
 }
 
-// void KisToolFreehandHelper::paintEvent(KoPointerEvent *event, const std::vector<QPoint>& smoothedPoints)
-// {
-//     KisPaintInformation info =
-//             m_d->infoBuilder->continueStroke(event,
-//                                              elapsedStrokeTime());
-//     KisUpdateTimeMonitor::instance()->reportMouseMove(info.pos());
-
-//     paint(info, smoothedPoints);
-// }
-
+//original + filter
 // void KisToolFreehandHelper::paint(KisPaintInformation &info)
 // {
 //     //qDebug()<< "kis_tool_freehand_helper::paint";
@@ -593,60 +586,60 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
 //         }
 //     }
  
-//           if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
-//             || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING) 
-//         {
-//             // Now paint between the coordinates, using the bezier curve interpolation
-//             if (!m_d->haveTangent) {
-//                 qDebug() << "!m_d have tangent " << !m_d->haveTangent;
-//                 m_d->haveTangent = true;
-//                 m_d->previousTangent =
-//                     (info.pos() - m_d->previousPaintInformation.pos()) /
-//                     qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
-//             } else {
-//                 qDebug() << "else in simple" << !m_d->haveTangent;
-//                 QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
-//                     qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
+    //       if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
+    //         || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING) 
+    //     {
+    //         // Now paint between the coordinates, using the bezier curve interpolation
+    //         if (!m_d->haveTangent) {
+    //             qDebug() << "!m_d have tangent " << !m_d->haveTangent;
+    //             m_d->haveTangent = true;
+    //             m_d->previousTangent =
+    //                 (info.pos() - m_d->previousPaintInformation.pos()) /
+    //                 qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
+    //         } else {
+    //             qDebug() << "else in simple" << !m_d->haveTangent;
+    //             QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
+    //                 qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
 
-//             if (newTangent.isNull() || m_d->previousTangent.isNull()) 
-//             {   
-//                 qDebug() << "if (newTangent.isNull() || m_d->previousTangent.isNull()) ";
-//                 paintLine(m_d->previousPaintInformation, info);
-//             } else {
-//                 qDebug() << "else new tangent";
-//                 QPointF prevPos;
+    //         if (newTangent.isNull() || m_d->previousTangent.isNull()) 
+    //         {   
+    //             qDebug() << "if (newTangent.isNull() || m_d->previousTangent.isNull()) ";
+    //             paintLine(m_d->previousPaintInformation, info);
+    //         } else {
+    //             qDebug() << "else new tangent";
+    //             QPointF prevPos;
 
-//                 if (!m_d->history.isEmpty()) {
-//                     const KisPaintInformation &prevPi = m_d->history.last();
-//                     prevPos = prevPi.pos();
-//                 } else {
-//                     prevPos = m_d->previousPaintInformation.pos();
-//                 }
+    //             if (!m_d->history.isEmpty()) {
+    //                 const KisPaintInformation &prevPi = m_d->history.last();
+    //                 prevPos = prevPi.pos();
+    //             } else {
+    //                 prevPos = m_d->previousPaintInformation.pos();
+    //             }
 
-//                 // filtering out < 1 pixel distances
-//                 qreal currentDistance = QVector2D(info.pos() - prevPos).length();
-//                 if (currentDistance < 1) {
-//                     return; // discard this movement
-//                 }
+    //             // filtering out < 1 pixel distances
+    //             qreal currentDistance = QVector2D(info.pos() - prevPos).length();
+    //             if (currentDistance < 1) {
+    //                 return; // discard this movement
+    //             }
 
-//                 // check if the current information is different from the last used information
-//                 if (lastUsedPaintInformation.pos() != info.pos()) {
-//                     paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
-//                                        m_d->previousTangent, newTangent);
-//                     lastUsedPaintInformation = info; // update the last used information
-//                 }
-//             }
+    //             // check if the current information is different from the last used information
+    //             if (lastUsedPaintInformation.pos() != info.pos()) {
+    //                 paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
+    //                                    m_d->previousTangent, newTangent);
+    //                 lastUsedPaintInformation = info; // update the last used information
+    //             }
+    //         }
 
-//             m_d->previousTangent = newTangent;
-//         }
-//         m_d->olderPaintInformation = m_d->previousPaintInformation;
-//         //qDebug()<< "m_d->olderPaintInformation" << m_d->olderPaintInformation.pos();
+    //         m_d->previousTangent = newTangent;
+    //     }
+    //     m_d->olderPaintInformation = m_d->previousPaintInformation;
+    //     //qDebug()<< "m_d->olderPaintInformation" << m_d->olderPaintInformation.pos();
 
-//         // Enable stroke timeout only when not airbrushing.
-//         if (!m_d->airbrushingTimer.isActive()) {
-//             m_d->strokeTimeoutTimer.start(100);
-//         }
-//     }
+    //     // Enable stroke timeout only when not airbrushing.
+    //     if (!m_d->airbrushingTimer.isActive()) {
+    //         m_d->strokeTimeoutTimer.start(100);
+    //     }
+    // }
 
 
 //     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
@@ -680,7 +673,7 @@ void KisToolFreehandHelper::paintEvent(KoPointerEvent *event)
 // }
 
 void KisToolFreehandHelper::paint(KisPaintInformation &info)
-{
+{ 
     //qDebug()<< "kis_tool_freehand_helper::paint";
     /**
      * Smooth the coordinates out using the history and the
@@ -701,15 +694,10 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
      * 4) The formula is a little bit different: 'Distance' parameter
      *    stands for $3 \Sigma$
      */
-    // QPointF startPoint = m_d->previousPaintInformation.pos();
-    // QPointF endPoint = info.pos();
-    // qreal distance = QVector2D(endPoint - startPoint).length();
 
     KisPaintInformation lastUsedPaintInformation;
-    //static QPointF lastDrawnPixel = m_d->history.isEmpty() ? m_d->previousPaintInformation.pos() : m_d->history.last().pos();
-    // QPointF lastDrawnPixel = m_d->previousPaintInformation.pos();
-    // QPointF waitingPixel = lastDrawnPixel;
     QPointF currentPixel = info.pos();
+   
 
     //qDebug() << "lastDrawnPixel" << lastDrawnPixel << "waitingPixel" <<  waitingPixel  << "currentPixel" <<  currentPixel ;
     //qDebug() << "kis_tool_freehand_helper: paint";
@@ -806,133 +794,77 @@ void KisToolFreehandHelper::paint(KisPaintInformation &info)
             }
         }
     }
- 
-          if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
-            || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING){
-        //lets try paintLine before trying paintBezierSegment
-            
-        //qDebug() << "kis_toolfreehand m_d->history.isEmpty() check: " << m_d->history.isEmpty();
 
+
+ 
+        if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::SIMPLE_SMOOTHING
+            || m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::WEIGHTED_SMOOTHING){
+
+        //    QPointF prevPos;
+        //     if (!m_d->history.isEmpty()) {
+        //         const KisPaintInformation &prevPi = m_d->history.last();
+        //         prevPos = prevPi.pos();
+        //     } else {
+        //         prevPos = m_d->previousPaintInformation.pos();
+        //     }
+
+        //     qreal currentDistance = QVector2D(info.pos() - prevPos).length();
+        //     if (currentDistance < 1) {
+        //         return; // discard this movement
+        //     }
+
+        //lets try paintLine before trying paintBezierSegment
+        //qDebug() << "kis_toolfreehand m_d->history.isEmpty() check: " << m_d->history.isEmpty();
+        //qDebug() << "paintinfo: " << info.pos();
         // initial case: No last drawn pixel or waiting pixel
+
         if(!m_d->hasLastDrawnPixel){
             currentPixel = info.pos();
             m_d->waitingPixel = currentPixel;
-            paintLine(m_d->previousPaintInformation, m_d->waitingPixel);
+            paintLine(m_d->previousPaintInformation, KisPaintInformation(m_d->waitingPixel));
             m_d->lastDrawnPixel = m_d->waitingPixel;
             m_d->hasLastDrawnPixel = true;
-            qDebug() << "no lastDrawnPixel" << m_d->lastDrawnPixel << "waitingPixel" <<  m_d->waitingPixel  << "currentPixel" <<  currentPixel ;
-        // check axis 
+            m_d->pixelInLineCount = 1;
+            //qDebug() << "no lastDrawnPixel" << m_d->lastDrawnPixel << "waitingPixel" <<  m_d->waitingPixel  << "currentPixel" <<  currentPixel ;
         } else {
-            if(currentPixel.x() == m_d->lastDrawnPixel.x() || currentPixel.y() == m_d->lastDrawnPixel.y()){
-                if (!m_d->haveTangent) {
-                    m_d->haveTangent = true;
-                    m_d->previousTangent =
-                        (info.pos() - m_d->previousPaintInformation.pos()) /
-                        qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
-                } else {
-                    QPointF newTangent = (info.pos() - m_d->olderPaintInformation.pos()) /
-                        qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
+            // qDebug() << "currentPixel.x(): " << currentPixel.x() << "m_d->lastDrawnPixel.x(): " << m_d->lastDrawnPixel.x() << "currentPixel.y(): " << currentPixel.y() << "m_d->lastDrawnPixel.y(): " << m_d->lastDrawnPixel.y();
+            if (abs(currentPixel.x() - m_d->lastDrawnPixel.x()) > 1.7 || abs(currentPixel.y() - m_d->lastDrawnPixel.y()) > 1.7) {
+            // current pixel is too far, draw the waiting pixel
+                qDebug() << "Pixel is too far!";
+                qDebug() << "pixelInLineCount 1:" << m_d->pixelInLineCount;
+                paintLine(m_d->lastDrawnPixel, KisPaintInformation(m_d->waitingPixel));
+                m_d->pixelInLineCount += 1;
+                qDebug() << "pixelInLineCount 2:" << m_d->pixelInLineCount;
+                m_d->lastDrawnPixel = m_d->waitingPixel;
+                m_d->waitingPixel = currentPixel;
+            } 
+            // else {
+            //     // !!! try removing this
+            //     // update waiting pixel to current pixel
+            //     //m_d->waitingPixel = currentPixel;
+            // }
 
-                    if (newTangent.isNull() || m_d->previousTangent.isNull()) 
-                    {
-                        paintLine(m_d->previousPaintInformation, info);
-                    } else {
-                        QPointF prevPos;
-
-                        if (!m_d->history.isEmpty()) {
-                            const KisPaintInformation &prevPi = m_d->history.last();
-                            prevPos = prevPi.pos();
-                        } else {
-                            prevPos = m_d->previousPaintInformation.pos();
-                        }
-
-                        // filtering out < 1 pixel distances
-                        qreal currentDistance = QVector2D(info.pos() - prevPos).length();
-                        if (currentDistance < 1) {
-                            return; // discard this movement
-                        }
-
-                        // check if the current information is different from the last used information
-                        if (lastUsedPaintInformation.pos() != info.pos()) {
-                            paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
-                                            m_d->previousTangent, newTangent);
-                            lastUsedPaintInformation = info; // update the last used information
-                        }
-                    }
-
-                    m_d->previousTangent = newTangent;
-                }
-                m_d->olderPaintInformation = m_d->previousPaintInformation;
-                //qDebug()<< "m_d->olderPaintInformation" << m_d->olderPaintInformation.pos();
-
-                // Enable stroke timeout only when not airbrushing.
-                if (!m_d->airbrushingTimer.isActive()) {
-                    m_d->strokeTimeoutTimer.start(100);
-                }
-                    //paintLine(m_d->lastDrawnPixel, m_d->waitingPixel);
+            // check axis, if the currentpixel is in the same axis as the lastdrawnpixel, we can draw 
+            if (m_d->pixelInLineCount > 2 && (currentPixel.x() == m_d->lastDrawnPixel.x() || currentPixel.y() == m_d->lastDrawnPixel.y())) {
+                    qDebug() << "pixelInLineCount 3:" << m_d->pixelInLineCount;
+                    m_d->olderPaintInformation = m_d->previousPaintInformation;
+                    //qDebug()<< "m_d->olderPaintInformation" << m_d->olderPaintInformation.pos();
+                    //qDebug() << "m_d->lastDrawnPixel: " << m_d->lastDrawnPixel << "m_d->waitingPixel: " << m_d->waitingPixel  << "currentPixel" <<  currentPixel;
+                    //draw 
                     m_d->lastDrawnPixel = m_d->waitingPixel;
                 }
-            m_d->waitingPixel = currentPixel;
-            qDebug() << "lastDrawnPixel" << m_d->lastDrawnPixel << "waitingPixel" <<  m_d->waitingPixel  << "currentPixel" <<  currentPixel ;
+                //otherwise just change update waiting pixel without drawing it
+                m_d->waitingPixel = currentPixel;
+                
+                m_d->pixelInLineCount = 0;
+
+            //qDebug() << "lastDrawnPixel" << m_d->lastDrawnPixel << "waitingPixel" <<  m_d->waitingPixel  << "currentPixel" <<  currentPixel ;
+            }
+            // Enable stroke timeout only when not airbrushing.
+            if (!m_d->airbrushingTimer.isActive()) {
+                m_d->strokeTimeoutTimer.start(100);
+            }
         }
-
-        m_d->previousPaintInformation = info;
-        }
-        // if (m_d->history.isEmpty()) {
-        //     paintLine(m_d->previousPaintInformation, KisPaintInformation(currentPixel));
-        //     lastDrawnPixel = currentPixel;
-        // } else {
-        //     // check if the current pixel is still in the same x or y axis as the last drawn pixel
-        //     if ((currentPixel.x() == lastDrawnPixel.x()) || (currentPixel.y() == lastDrawnPixel.y())) {
-        //         if (hasWaitingPixel) {
-        //             paintLine(KisPaintInformation(lastDrawnPixel), KisPaintInformation(waitingPixel));
-        //         }
-        //         waitingPixel = currentPixel;
-        //         hasWaitingPixel = true;
-        //     } else {
-        //         // deviating from the straight line
-        //         if (hasWaitingPixel) {
-        //             paintLine(KisPaintInformation(lastDrawnPixel), KisPaintInformation(waitingPixel));
-        //         }
-        //         paintLine(KisPaintInformation(lastDrawnPixel), KisPaintInformation(currentPixel));
-        //         lastDrawnPixel = currentPixel;
-        //         hasWaitingPixel = false;
-        //     }
-        // }
-
-
-        // if (!m_d->haveTangent) {
-        //     m_d->haveTangent = true;
-        //     m_d->previousTangent = (currentPixel - m_d->lastDrawnPixel) / qMax(qreal(1.0), info.currentTime() - m_d->previousPaintInformation.currentTime());
-        // } else {
-        //     QPointF newTangent = (currentPixel - m_d->olderPaintInformation.pos()) / qMax(qreal(1.0), info.currentTime() - m_d->olderPaintInformation.currentTime());
-
-        //     if (newTangent.isNull() || m_d->previousTangent.isNull()) {
-        //         paintLine(m_d->previousPaintInformation, info);
-        //     } else {
-        //         qreal currentDistance = QVector2D(currentPixel - m_d->lastDrawnPixel).length();
-        //         if (currentDistance < 1) {
-        //             return; // Discard this movement
-        //         }
-
-        //         if (lastUsedPaintInformation.pos() != currentPixel) {
-        //             paintBezierSegment(m_d->olderPaintInformation, m_d->previousPaintInformation,
-        //                             m_d->previousTangent, newTangent);
-        //             lastUsedPaintInformation = info; // Update the last used information
-        //         }
-        //     }
-
-        //     m_d->previousTangent = newTangent;
-        // }
-
-        // m_d->olderPaintInformation = m_d->previousPaintInformation;
-
-        // // Enable stroke timeout only when not airbrushing.
-        // if (!m_d->airbrushingTimer.isActive()) {
-        //     m_d->strokeTimeoutTimer.start(100);
-        // }
-    // }
-    
 
     else if (m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::NO_SMOOTHING){
         paintLine(m_d->previousPaintInformation, info);

@@ -1751,7 +1751,7 @@ void KisPainter::drawDDALine(const QPointF & start, const QPointF & end)
     int x2 = qFloor(end.x());
     int y2 = qFloor(end.y());
     //qDebug() << " start: " << x  <<" start " << x2  << " y: " << y << " y2 " << y2 ;
-    //qDebug() << "drawDDAlinepainter x: " << x  <<" x2 " << x2  << " y: " << y << " y2 " << y2 ;
+    qDebug() << "drawDDAlinepainter x: " << x  <<" x2 " << x2  << " y: " << y << " y2 " << y2 ;
     // Width and height of the line
     int xd = x2 - x;
     int yd = y2 - y;

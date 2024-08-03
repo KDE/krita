@@ -12755,7 +12755,7 @@ msgstr "克隆图层来源"
 #, kde-format
 msgctxt "action"
 msgid "Reference Image from Layer"
-msgstr ""
+msgstr "创建参考图像 (来自活动图层)"
 
 #. i18n: context: text @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
 #. i18n: context: toolTip @ Action (create_reference_image_from_visible_canvas), Actions (Layers), ActionCollection (Krita)
@@ -12765,7 +12765,7 @@ msgstr ""
 #, kde-format
 msgctxt "action"
 msgid "Reference Image from Visible"
-msgstr ""
+msgstr "创建参考图像 (来自可见图层)"
 
 #. i18n: ectx: property (title), widget (QMenu, menuFile)
 #: krita/krita5.xmlgui:9 libs/widgetutils/xmlgui/ui_standards.xmlgui:5
@@ -16196,12 +16196,9 @@ msgid "Lock shapes"
 msgstr "锁定形状"
 
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
-#, fuzzy
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr "更改文字属性"
+msgstr ""
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -29295,13 +29292,13 @@ msgstr "转换为选区蒙版"
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the active layer."
-msgstr ""
+msgstr "无法从活动图层创建参考图像。"
 
 #: libs/ui/kis_node_manager.cpp:754
 #, kde-format
 msgctxt "error dialog from the reference tool"
 msgid "Could not create a reference image from the visible canvas."
-msgstr ""
+msgstr "无法从可见图层创建参考图像。"
 
 #: libs/ui/kis_node_manager.cpp:991
 #, kde-format
@@ -37739,7 +37736,7 @@ msgstr "允许滚动"
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:821
 #, kde-format
 msgid "Separate color history for each document"
-msgstr ""
+msgstr "独立记录每个图像的颜色历史"
 
 #. i18n: ectx: attribute (title), widget (QWidget, tab_colorsFromImage)
 #: plugins/dockers/advancedcolorselector/wdg_color_selector_settings.ui:829
@@ -40709,11 +40706,9 @@ msgid "Delete the taskset"
 msgstr "删除操作流程"
 
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
-#, fuzzy, kde-format
-#| msgctxt "(qtundo-format)"
-#| msgid "Change Text Properties"
+#, kde-format
 msgid "Text Properties"
-msgstr "更改文字属性"
+msgstr ""
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format
@@ -57975,27 +57970,27 @@ msgstr "饱和度 [*变化值*]：{n}%"
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:64
 #, kde-format
 msgid "Delete Selected Reference Images"
-msgstr ""
+msgstr "删除选中的参考图像"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:68
 #, kde-format
 msgid "Add Reference Image From File"
-msgstr ""
+msgstr "添加参考图像 (来自文件)"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:72
 #, kde-format
 msgid "Paste Reference Image From System Clipboard"
-msgstr "粘贴剪贴板内容"
+msgstr "粘贴参考图像 (来自剪贴板)"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:77
 #, kde-format
 msgid "Create Reference Image from Active Layer"
-msgstr ""
+msgstr "创建参考图像 (来自活动图层)"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:80
 #, kde-format
 msgid "Create Reference Image from Visible Canvas"
-msgstr ""
+msgstr "创建参考图像 (来自可见图层)"
 
 #: plugins/tools/defaulttool/referenceimagestool/ToolReferenceImagesWidget.cpp:83
 #, kde-format
@@ -58038,7 +58033,7 @@ msgstr "参考图像存储位置："
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:77
 #, kde-format
 msgid "Delete Selected Images"
-msgstr ""
+msgstr "删除所选图像"
 
 #. i18n: ectx: property (text), widget (QLabel, referenceImageOptionsLabel)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:95
@@ -58050,19 +58045,19 @@ msgstr "请添加/选择一张参考图像，选项将随之显示"
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:129
 #, kde-format
 msgid "Add a new reference image:"
-msgstr ""
+msgstr "添加新的参考图像："
 
 #. i18n: ectx: property (text), widget (QLabel, label1)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:255
 #, kde-format
 msgid "Other options:"
-msgstr ""
+msgstr "其他选项："
 
 #. i18n: ectx: property (text), widget (QPushButton, bnDelete)
 #: plugins/tools/defaulttool/referenceimagestool/WdgToolOptions.ui:354
 #, kde-format
 msgid "Delete All"
-msgstr ""
+msgstr "删除全部"
 
 #: plugins/tools/karbonplugins/tools/CalligraphyTool/KarbonCalligraphicShapeFactory.cpp:15
 #, kde-format

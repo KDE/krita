@@ -366,6 +366,7 @@ enable_scripter=true
 enable_tenbrushes=true
 enable_tenscripts=true
 enable_plugin_importer=true
+enable_workflow_buttons=true
 
 [SPenSettings]
 actionButtonClick=spen_show_popup_palette

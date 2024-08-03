@@ -78,6 +78,7 @@ install_pykrita_plugin(plugin_importer)
 install_pykrita_plugin(mixer_slider_docker)
 install_pykrita_plugin(channels2layers)
 install_pykrita_plugin(photobash_images)
+install_pykrita_plugin(workflow_buttons)
 
 # if(PYTHON_VERSION_MAJOR VERSION_EQUAL 3)
 #     install_pykrita_plugin(cmake_utils)

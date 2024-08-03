@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=Krita/PythonPlugin
+X-KDE-Library=workflow_buttons
+X-Python-2-Compatible=false
+X-Krita-Manual=Manual.html
+Name=Workflow buttons
+Comment=A Python-based docker to create multi-action buttons to improve your workflow.

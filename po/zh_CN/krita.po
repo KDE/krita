@@ -16198,7 +16198,7 @@ msgstr "锁定形状"
 #: libs/flake/commands/KoShapeMergeTextPropertiesCommand.cpp:26
 msgctxt "(qtundo-format)"
 msgid "Change Text Shape Properties"
-msgstr ""
+msgstr "更改文字形状属性"
 
 #: libs/flake/commands/KoShapeMoveCommand.cpp:24
 #: libs/flake/commands/KoShapeMoveCommand.cpp:36
@@ -40708,7 +40708,7 @@ msgstr "删除操作流程"
 #: plugins/dockers/textproperties/TextPropertiesDock.cpp:83
 #, kde-format
 msgid "Text Properties"
-msgstr ""
+msgstr "文字属性"
 
 #: plugins/dockers/touchdocker/TouchDockerDock.cpp:12
 #, kde-format

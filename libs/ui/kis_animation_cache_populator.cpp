@@ -45,7 +45,7 @@ struct KisAnimationCachePopulator::Private
      * Counts up the number of subsequent times Krita has been detected idle.
      */
     int idleCounter;
-    QStack<QPair<KisImageSP, int>> priorityFrames;
+    QStack<QPair<KisImageWSP, int>> priorityFrames;
     static const int IDLE_COUNT_THRESHOLD = 4;
     static const int IDLE_CHECK_INTERVAL = 500;
     static const int BETWEEN_FRAMES_INTERVAL = 10;
@@ -123,10 +123,40 @@ struct KisAnimationCachePopulator::Private
             const int priorityFrame = priorityFrames.top().second;
             priorityFrames.pop();
 
-            if (!image->animationInterface()->hasAnimation()) continue;
+            /**
+             * We have just upgraded the image pointer to the
+             * strong pointer, let's check if it is still valid.
+             */
+            if (!image) continue;
 
+            if (!image->animationInterface()->hasAnimation()) continue;
+            if (image->animationInterface()->backgroundFrameGenerationBlocked()) continue;
+
+            /**
+             * It may happen that the view (and the canvas) of this image has already
+             * been removed. Hence the cache does not exist anymore. So we should just
+             * skip this stinking image.
+             */
             KisAnimationFrameCacheSP cache = KisAnimationFrameCache::cacheForImage(image);
-            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(cache, RequestRejected);
+            if (!cache) {
+                // a small sanity check that our guess it right...
+                QList<QPointer<KisView>> views = KisPart::instance()->views();
+                auto it = std::find_if(views.constBegin(), views.constEnd(),
+                                       [image] (QPointer<KisView> view) {
+                                           return view && KisImageSP(view->image()) == image;
+                                       });
+                const bool foundExistingViewForImage = it != views.constEnd();
+
+                KIS_SAFE_ASSERT_RECOVER(!foundExistingViewForImage) {
+                    priorityFrames.erase(
+                        std::remove_if(priorityFrames.begin(), priorityFrames.end(),
+                                       [image] (auto requestPair) {
+                                           return KisImageSP(requestPair.first) == image;
+                                       }), priorityFrames.end());
+                }
+
+                continue;
+            }
 
             RegenerationRequestResult result =
                 tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);

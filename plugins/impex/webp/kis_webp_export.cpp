@@ -340,7 +340,7 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
 
                     // Convert to sRGB for non-RGBA color model
                     const KoColorProfile *imageProfile = (dst->colorSpace()->colorModelId() == RGBAColorModelID)
-                        ? dev->colorSpace()->profile()
+                        ? dst->colorSpace()->profile()
                         : nullptr;
 
                     const QImage imageOut = dst->convertToQImage(imageProfile, 0, 0, bounds.width(), bounds.height())
@@ -456,7 +456,7 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
 
                 // Convert to sRGB for non-RGBA color model
                 const KoColorProfile *imageProfile = (dst->colorSpace()->colorModelId() == RGBAColorModelID)
-                    ? document->savingImage()->projection()->colorSpace()->profile()
+                    ? dst->colorSpace()->profile()
                     : nullptr;
 
                 const QImage imageOut = dst->convertToQImage(imageProfile, 0, 0, bounds.width(), bounds.height())

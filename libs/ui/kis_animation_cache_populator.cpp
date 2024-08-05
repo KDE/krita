@@ -158,6 +158,13 @@ struct KisAnimationCachePopulator::Private
                 continue;
             }
 
+            /**
+             * The frame got cached in the meantime, so skip its recalculation
+             */
+            if (cache->frameStatus(priorityFrame) == KisAnimationFrameCache::Cached) {
+                continue;
+            }
+
             RegenerationRequestResult result =
                 tryRequestGeneration(cache, KisTimeSpan(), priorityFrame);
             if (result == RequestSuccessful) return result;

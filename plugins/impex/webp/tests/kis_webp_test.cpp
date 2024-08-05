@@ -113,6 +113,35 @@ void KisWebPTest::testAnimationWithTail()
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }
 
+inline void testSaveColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
+{
+    const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
+    if (space) {
+        TestUtil::testExportToColorSpace(MIMETYPE, space, ImportExportCodes::OK);
+    }
+}
+
+void KisWebPTest::testSaveRgbaColorSpace()
+{
+    QString profile = "sRGB-elle-V2-srgbtrc";
+    testSaveColorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+}
+
+void KisWebPTest::testSaveUnsupportedColorSpace()
+{
+    // Non-RGBA color model will trigger color conversion and dithering path on WebP exports,
+    // therefore it's sufficient to only test for U8 depths.
+
+    QString profile = "Gray-D50-elle-V2-srgbtrc";
+    testSaveColorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+
+    profile = "Chemical proof";
+    testSaveColorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+
+    profile = "Lab identity built-in";
+    testSaveColorSpace(LABAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+}
+
 #ifndef _WIN32
 void KisWebPTest::testImportFromWriteonly()
 {

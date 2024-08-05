@@ -93,7 +93,7 @@ public:
             if (!m_isLastValid) {
                 m_isLastValid = true;
                 hideWarning();
-                emit m_q->noMoreParsingError();
+                Q_EMIT m_q->noMoreParsingError();
             }
         }
     }
@@ -153,11 +153,11 @@ public:
             m_isLastValid = false;
             value = m_q->value();
             showWarning(showWarningInterval);
-            emit m_q->errorWhileParsing(text);
+            Q_EMIT m_q->errorWhileParsing(text);
         } else {
             if (!m_isLastValid) {
                 m_isLastValid = true;
-                emit m_q->noMoreParsingError();
+                Q_EMIT m_q->noMoreParsingError();
             }
         }
         return value;

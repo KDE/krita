@@ -442,7 +442,7 @@ void KoToolManager::Private::connectActiveTool()
                 q, SIGNAL(changedStatusText(QString)));
     }
 
-    // we expect the tool to emit a cursor on activation.
+    // we expect the tool to Q_EMIT a cursor on activation.
     updateCursor(Qt::BlankCursor);
 }
 
@@ -454,7 +454,7 @@ void KoToolManager::Private::disconnectActiveTool()
         canvasData->deactivateToolActions();
         // repaint the decorations before we deactivate the tool as it might deleted
         // data needed for the repaint
-        emit q->aboutToChangeTool(canvasData->canvas);
+        Q_EMIT q->aboutToChangeTool(canvasData->canvas);
         canvasData->activeTool->deactivate();
         disconnect(canvasData->activeTool, SIGNAL(cursorChanged(QCursor)),
                    q, SLOT(updateCursor(QCursor)));
@@ -464,8 +464,8 @@ void KoToolManager::Private::disconnectActiveTool()
                    q, SIGNAL(changedStatusText(QString)));
     }
 
-    // emit a empty status text to clear status text from last active tool
-    emit q->changedStatusText(QString());
+    // Q_EMIT a empty status text to clear status text from last active tool
+    Q_EMIT q->changedStatusText(QString());
 }
 
 void KoToolManager::Private::switchTool(const QString &id)
@@ -574,9 +574,9 @@ void KoToolManager::Private::postSwitchTool()
     }
 
 
-    emit q->changedTool(canvasData->canvas);
+    Q_EMIT q->changedTool(canvasData->canvas);
 
-    emit q->toolOptionWidgetsChanged(canvasData->canvas, optionWidgetList);
+    Q_EMIT q->toolOptionWidgetsChanged(canvasData->canvas, optionWidgetList);
 }
 
 
@@ -609,11 +609,11 @@ void KoToolManager::Private::switchCanvasData(CanvasData *cd)
     }
 
     if (oldInputDevice != canvasData->inputDevice) {
-        emit q->inputDeviceChanged(canvasData->inputDevice);
+        Q_EMIT q->inputDeviceChanged(canvasData->inputDevice);
     }
 
     if (oldCanvas != canvasData->canvas->canvas()) {
-        emit q->changedCanvas(canvasData->canvas->canvas());
+        Q_EMIT q->changedCanvas(canvasData->canvas->canvas());
     }
 }
 
@@ -635,7 +635,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
             switchCanvasData(canvasses.value(newCanvas).first());
         } else {
             disconnectActiveTool();
-            emit q->toolOptionWidgetsChanged(controller, QList<QPointer<QWidget> >());
+            Q_EMIT q->toolOptionWidgetsChanged(controller, QList<QPointer<QWidget> >());
             // as a last resort just set a blank one
             canvasData = 0;
         }
@@ -658,7 +658,7 @@ void KoToolManager::Private::detachCanvas(KoCanvasController *controller)
         delete tool;
     }
     canvasses.remove(controller);
-    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
 void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
@@ -701,7 +701,7 @@ void KoToolManager::Private::attachCanvas(KoCanvasController *controller)
             SIGNAL(currentLayerChanged(const KoShapeLayer*)),
             q, SLOT(currentLayerChanged(const KoShapeLayer*)));
 
-    emit q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
+    Q_EMIT q->changedCanvas(canvasData ? canvasData->canvas->canvas() : 0);
 }
 
 void KoToolManager::Private::movedFocus(QWidget *from, QWidget *to)
@@ -804,12 +804,12 @@ void KoToolManager::Private::selectionChanged(const QList<KoShape*> &shapes)
         }
     }
 
-    emit q->toolCodesSelected(types);
+    Q_EMIT q->toolCodesSelected(types);
 }
 
 void KoToolManager::Private::currentLayerChanged(const KoShapeLayer *layer)
 {
-    emit q->currentLayerChanged(canvasData->canvas, layer);
+    Q_EMIT q->currentLayerChanged(canvasData->canvas, layer);
     layerExplicitlyDisabled = layer && !layer->isShapeEditable();
     updateToolForProxy();
 

@@ -47,7 +47,7 @@ public:
 
     The class supports the mapping of particular strings or integers
     with particular objects using setMapping(). The objects' signals
-    can then be connected to the map() slot which will emit the
+    can then be connected to the map() slot which will Q_EMIT the
     mapped() signal with the string or integer associated with the
     original signaling object. Mappings can be removed later using
     removeMappings().
@@ -79,7 +79,7 @@ public:
     mapper from each button to the button's text. Finally we connect
     the signal mapper's mapped() signal to the custom widget's \c
     clicked() signal. When the user clicks a button, the custom
-    widget will emit a single \c clicked() signal whose argument is
+    widget will Q_EMIT a single \c clicked() signal whose argument is
     the text of the button the user clicked.
 
     This class was mostly useful before lambda functions could be used as
@@ -222,13 +222,13 @@ void KisSignalMapper::map() { map(sender()); }
 void KisSignalMapper::map(QObject *sender)
 {
     if (d->intHash.contains(sender))
-        emit mapped(d->intHash.value(sender));
+        Q_EMIT mapped(d->intHash.value(sender));
     if (d->stringHash.contains(sender))
-        emit mapped(d->stringHash.value(sender));
+        Q_EMIT mapped(d->stringHash.value(sender));
     if (d->widgetHash.contains(sender))
-        emit mapped(d->widgetHash.value(sender));
+        Q_EMIT mapped(d->widgetHash.value(sender));
     if (d->objectHash.contains(sender))
-        emit mapped(d->objectHash.value(sender));
+        Q_EMIT mapped(d->objectHash.value(sender));
 }
 
 

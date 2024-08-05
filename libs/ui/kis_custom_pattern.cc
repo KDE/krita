@@ -143,7 +143,7 @@ void KisCustomPattern::slotAddPredefined()
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {
-                emit patternAdded(m_pattern);
+                Q_EMIT patternAdded(m_pattern);
             }
         }
         else if (overwrite) {
@@ -151,7 +151,7 @@ void KisCustomPattern::slotAddPredefined()
                 qWarning() << "Could not add pattern with filename" << filename;
             }
             else {
-                emit patternUpdated(m_pattern);
+                Q_EMIT patternUpdated(m_pattern);
             }
         }
     }

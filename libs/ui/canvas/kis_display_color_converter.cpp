@@ -73,7 +73,7 @@ struct KisDisplayColorConverter::Private
         cachedQtWidgetsColorSpace = 0;
         cachedOpenGLSurfaceColorSpace = 0;
 
-        emit q->displayConfigurationChanged();
+        Q_EMIT q->displayConfigurationChanged();
     }
 
     const KoColorProfile* qtWidgetsProfile() const {

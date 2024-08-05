@@ -96,12 +96,12 @@ bool KisTagFilterWidget::isFilterByTagChecked()
 
 void KisTagFilterWidget::onTextChanged(const QString& lineEditText)
 {
-    emit filterTextChanged(lineEditText);
+    Q_EMIT filterTextChanged(lineEditText);
 }
 
 void KisTagFilterWidget::slotFilterByTagChanged(int filterByTag)
 {
-    emit filterByTagChanged(filterByTag == Qt::Checked);
+    Q_EMIT filterByTagChanged(filterByTag == Qt::Checked);
     KConfigGroup cfg = KSharedConfig::openConfig()->group(d->configGroup);
     cfg.writeEntry(d->configName, filterByTag == Qt::Checked);
 }

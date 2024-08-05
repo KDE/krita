@@ -63,7 +63,7 @@ void KisRectangleEnclosingProducer::finishRect(const QRectF& rect, qreal roundCo
 
     painter.paintPainterPath(path);
 
-    emit enclosingMaskProduced(enclosingMask);
+    Q_EMIT enclosingMaskProduced(enclosingMask);
 }
 
 bool KisRectangleEnclosingProducer::hasUserInteractionRunning() const

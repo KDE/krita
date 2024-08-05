@@ -116,7 +116,7 @@ void KisPaintingAssistantsDecoration::addAssistant(KisPaintingAssistantSP assist
 
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
-    emit assistantChanged();
+    Q_EMIT assistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistantSP assistant)
@@ -127,7 +127,7 @@ void KisPaintingAssistantsDecoration::removeAssistant(KisPaintingAssistantSP ass
     if (assistants.removeAll(assistant)) {
         view()->document()->setAssistants(assistants);
         setVisible(!assistants.isEmpty());
-        emit assistantChanged();
+        Q_EMIT assistantChanged();
     }
 }
 
@@ -138,7 +138,7 @@ void KisPaintingAssistantsDecoration::removeAll()
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
 
-    emit assistantChanged();
+    Q_EMIT assistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::setAssistants(const QList<KisPaintingAssistantSP> &assistants)
@@ -149,7 +149,7 @@ void KisPaintingAssistantsDecoration::setAssistants(const QList<KisPaintingAssis
     view()->document()->setAssistants(assistants);
     setVisible(!assistants.isEmpty());
 
-    emit assistantChanged();
+    Q_EMIT assistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::setAdjustedBrushPosition(const QPointF position)
@@ -431,7 +431,7 @@ KisPaintingAssistantSP KisPaintingAssistantsDecoration::selectedAssistant()
 void KisPaintingAssistantsDecoration::setSelectedAssistant(KisPaintingAssistantSP assistant)
 {
     d->selectedAssistant = assistant;
-    emit selectedAssistantChanged();
+    Q_EMIT selectedAssistantChanged();
 }
 
 void KisPaintingAssistantsDecoration::deselectAssistant()

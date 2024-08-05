@@ -125,13 +125,13 @@ void KisTool::activate(const QSet<KoShape*> &shapes)
     }
 
     d->m_isActive = true;
-    emit isActiveChanged(true);
+    Q_EMIT isActiveChanged(true);
 }
 
 void KisTool::deactivate()
 {
     d->m_isActive = false;
-    emit isActiveChanged(false);
+    Q_EMIT isActiveChanged(false);
 
     KoToolBase::deactivate();
 }

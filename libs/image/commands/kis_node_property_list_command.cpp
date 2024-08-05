@@ -253,7 +253,7 @@ void KisNodePropertyListCommand::setNodePropertiesAutoUndo(KisNodeSP node, KisIm
 
             void initStrokeCallback() override {
                 m_cmd->redo();
-                // NOTE: we don't emit imageModified signal here because this
+                // NOTE: we don't Q_EMIT imageModified signal here because this
                 // branch is only taken for the stasis changes, that do not
                 // change actual image representation.
             }

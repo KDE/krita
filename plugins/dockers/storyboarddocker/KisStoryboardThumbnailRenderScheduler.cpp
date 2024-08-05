@@ -97,13 +97,13 @@ void KisStoryboardThumbnailRenderScheduler::slotStartFrameRendering()
 
 void KisStoryboardThumbnailRenderScheduler::slotFrameRegenerationCompleted(int frame, KisPaintDeviceSP contents)
 {
-    emit sigFrameCompleted(frame, contents);
+    Q_EMIT sigFrameCompleted(frame, contents);
     renderNextFrame();
 }
 
 void KisStoryboardThumbnailRenderScheduler::slotFrameRegenerationCancelled(int frame)
 {
-    emit sigFrameCancelled(frame);
+    Q_EMIT sigFrameCancelled(frame);
     renderNextFrame();
 }
 

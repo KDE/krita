@@ -156,7 +156,7 @@ void KisGuidesManager::setGuidesConfigImpl(const KisGuidesConfig &value, bool em
         m_d->view->viewManager()->actionManager()->actionByName("ruler_pixel_multiple2")->setChecked(value.rulersMultiple2());
     }
 
-    emit sigRequestUpdateGuidesConfig(m_d->guidesConfig);
+    Q_EMIT sigRequestUpdateGuidesConfig(m_d->guidesConfig);
 }
 
 void KisGuidesManager::attachEventFilterImpl(bool value)

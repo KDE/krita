@@ -302,14 +302,14 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
             (d->canvas->image()->isIsolatingLayer() || d->canvas->image()->isIsolatingGroup())) {
         if (!d->paused) {
             d->paused = true;
-            emit pausedChanged(d->paused);
+            Q_EMIT pausedChanged(d->paused);
         }
         return;
     }
 
     if (d->imageModified == d->paused) {
         d->paused = !d->imageModified;
-        emit pausedChanged(d->paused);
+        Q_EMIT pausedChanged(d->paused);
     }
 
     if (!d->imageModified)
@@ -335,7 +335,7 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
 
     bool isFrameWritten = d->writeFrame();
     if (!isFrameWritten) {
-        emit frameWriteFailed();
+        Q_EMIT frameWriteFailed();
         quit();
     }
 
@@ -343,7 +343,7 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     if (static_cast<double>(elapsed) > static_cast<double>(d->interval) * lowPerformanceWarningThreshold) {
         ++d->lowPerformanceWarningCount;
         if (d->lowPerformanceWarningCount > lowPerformanceWarningMax) {
-            emit lowPerformanceWarning();
+            Q_EMIT lowPerformanceWarning();
         }
     } else if (d->lowPerformanceWarningCount != 0) {
         d->lowPerformanceWarningCount = 0;
@@ -360,7 +360,7 @@ void RecorderWriter::onImageModified()
         return;
 
     if (!d->imageModified)
-        emit pausedChanged(false);
+        Q_EMIT pausedChanged(false);
     d->imageModified = true;
 }
 
@@ -377,7 +377,7 @@ void RecorderWriter::run()
     d->enabled = true;
     d->paused = true;
     d->imageModified = false;
-    emit pausedChanged(d->paused);
+    Q_EMIT pausedChanged(d->paused);
 
     d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.);
     const int timerId = startTimer(d->interval);

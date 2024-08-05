@@ -296,7 +296,7 @@ void KisAnimTimelineLayersHeader::mousePressEvent(QMouseEvent *e)
 
         } else if (e->button() == Qt::RightButton) {
             model()->setHeaderData(layerIndex, orientation(), true, KisAnimTimelineFramesModel::ActiveLayerRole);
-            emit sigRequestContextMenu(e->globalPos());
+            Q_EMIT sigRequestContextMenu(e->globalPos());
             return;
         } else if (e->button() == Qt::LeftButton) {
             model()->setHeaderData(layerIndex, orientation(), true, KisAnimTimelineFramesModel::ActiveLayerRole);

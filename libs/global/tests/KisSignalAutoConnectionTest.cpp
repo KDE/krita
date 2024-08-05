@@ -14,11 +14,11 @@ void KisSignalAutoConnectionTest::testMacroConnection()
     QScopedPointer<TestClass> test2(new TestClass());
     KisSignalAutoConnectionsStore conn;
     conn.addConnection(test1.data(), SIGNAL(sigTest1()), test2.data(), SLOT(slotTest1()));
-    emit test1->sigTest1();
+    Q_EMIT test1->sigTest1();
     QVERIFY(test2->m_test1Called);
     test2->m_test1Called = false;
     conn.clear();
-    emit test1->sigTest1();
+    Q_EMIT test1->sigTest1();
     QVERIFY(test2->m_test1Called == false);
 }
 
@@ -28,11 +28,11 @@ void KisSignalAutoConnectionTest::testMemberFunctionConnection()
     QScopedPointer<TestClass> test2(new TestClass());
     KisSignalAutoConnectionsStore conn;
     conn.addConnection(test1.data(), &TestClass::sigTest1, test2.data(), &TestClass::slotTest1);
-    emit test1->sigTest1();
+    Q_EMIT test1->sigTest1();
     QVERIFY(test2->m_test1Called);
     test2->m_test1Called = false;
     conn.clear();
-    emit test1->sigTest1();
+    Q_EMIT test1->sigTest1();
     QVERIFY(test2->m_test1Called == false);
 }
 
@@ -44,18 +44,18 @@ void KisSignalAutoConnectionTest::testOverloadConnection()
     conn.addConnection(test1.data(), QOverload<const QString &, const QString &>::of(&TestClass::sigTest2),
                        test2.data(), QOverload<const QString &, const QString &>::of(&TestClass::slotTest2));
     conn.addConnection(test1.data(), SIGNAL(sigTest2(int)), test2.data(), SLOT(slotTest2(int)));
-    emit test1->sigTest2("foo", "bar");
+    Q_EMIT test1->sigTest2("foo", "bar");
     QVERIFY(test2->m_str1 == "foo");
     QVERIFY(test2->m_str2 == "bar");
-    emit test1->sigTest2(5);
+    Q_EMIT test1->sigTest2(5);
     QVERIFY(test2->m_number == 5);
     conn.clear();
-    emit test1->sigTest2("1", "2");
+    Q_EMIT test1->sigTest2("1", "2");
     QVERIFY(test2->m_str1 == "foo");
     QVERIFY(test2->m_str2 == "bar");
     conn.addConnection(test1.data(), SIGNAL(sigTest2(const QString &, const QString &)),
                        test2.data(), SLOT(slotTest2(const QString &)));
-    emit test1->sigTest2("3", "4");
+    Q_EMIT test1->sigTest2("3", "4");
     QVERIFY(test2->m_str1 == "3");
     QVERIFY(test2->m_str2 == "");
 }
@@ -68,13 +68,13 @@ void KisSignalAutoConnectionTest::testSignalToSignalConnection()
     conn.addConnection(test1.data(), QOverload<int>::of(&TestClass::sigTest2),
                        test2.data(), QOverload<int>::of(&TestClass::sigTest2));
     conn.addConnection(test2.data(), SIGNAL(sigTest2(int)), test2.data(), SLOT(slotTest2(int)));
-    emit test1->sigTest2(10);
+    Q_EMIT test1->sigTest2(10);
     QVERIFY(test2->m_number == 10);
     conn.clear();
     conn.addConnection(test1.data(), SIGNAL(sigTest2(int)), test2.data(), SIGNAL(sigTest2(int)));
     conn.addConnection(test2.data(), QOverload<int>::of(&TestClass::sigTest2),
                        test2.data(), QOverload<int>::of(&TestClass::slotTest2));
-    emit test1->sigTest2(50);
+    Q_EMIT test1->sigTest2(50);
     QVERIFY(test2->m_number == 50);
 }
 
@@ -85,7 +85,7 @@ void KisSignalAutoConnectionTest::testDestroyedObject()
     KisSignalAutoConnectionsStore conn;
     conn.addConnection(test1.data(), QOverload<int>::of(&TestClass::sigTest2),
                        test2.data(), QOverload<int>::of(&TestClass::slotTest2));
-    emit test1->sigTest2(10);
+    Q_EMIT test1->sigTest2(10);
     QVERIFY(test2->m_number == 10);
     test2.reset(0);
     conn.clear();

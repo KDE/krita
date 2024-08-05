@@ -224,7 +224,7 @@ void KisScreentoneConfigWidget::setConfiguration(const KisPropertiesConfiguratio
             slot_buttonSizeModeResolutionBased_toggled(true);
         }
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisScreentoneConfigWidget::configuration() const
@@ -367,14 +367,14 @@ void KisScreentoneConfigWidget::slot_comboBoxPattern_currentIndexChanged(int)
     KisSignalsBlocker blocker(m_ui.comboBoxShape, m_ui.comboBoxInterpolation);
     setupShapeComboBox();
     setupInterpolationComboBox();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_comboBoxShape_currentIndexChanged(int)
 {
     KisSignalsBlocker blocker(m_ui.comboBoxInterpolation);
     setupInterpolationComboBox();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_buttonSizeModeResolutionBased_toggled(bool checked)
@@ -405,7 +405,7 @@ void KisScreentoneConfigWidget::slot_buttonSizeModeResolutionBased_toggled(bool 
 
     m_ui.tabTransformation->setUpdatesEnabled(true);
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_buttonSizeModePixelBased_toggled(bool checked)
@@ -436,7 +436,7 @@ void KisScreentoneConfigWidget::slot_buttonSizeModePixelBased_toggled(bool check
 
     m_ui.tabTransformation->setUpdatesEnabled(true);
 
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_comboBoxUnits_currentIndexChanged(int index)
@@ -467,7 +467,7 @@ void KisScreentoneConfigWidget::slot_comboBoxUnits_currentIndexChanged(int index
             KoUnit::convertFromUnitToUnit(m_ui.sliderFrequencyY->value(), unitFrom, unitTo)
         );
     }
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_buttonResolutionFromImage_clicked()
@@ -490,7 +490,7 @@ void KisScreentoneConfigWidget::slot_sliderResolution_valueChanged(qreal value)
     Q_UNUSED(value);
     slot_setFrequencySlidersRanges();
     slot_setSizeFromFrequency();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_sliderFrequencyX_valueChanged(qreal value)
@@ -500,7 +500,7 @@ void KisScreentoneConfigWidget::slot_sliderFrequencyX_valueChanged(qreal value)
         m_ui.sliderFrequencyY->setValue(value);
     }
     slot_setSizeFromFrequency();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_sliderFrequencyY_valueChanged(qreal value)
@@ -510,7 +510,7 @@ void KisScreentoneConfigWidget::slot_sliderFrequencyY_valueChanged(qreal value)
         m_ui.sliderFrequencyX->setValue(value);
     }
     slot_setSizeFromFrequency();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_buttonConstrainFrequency_keepAspectRatioChanged(bool keep)
@@ -528,7 +528,7 @@ void KisScreentoneConfigWidget::slot_sliderSizeX_valueChanged(qreal value)
         m_ui.sliderSizeY->setValue(value);
     }
     slot_setFrequencyFromSize();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_sliderSizeY_valueChanged(qreal value)
@@ -538,7 +538,7 @@ void KisScreentoneConfigWidget::slot_sliderSizeY_valueChanged(qreal value)
         m_ui.sliderSizeX->setValue(value);
     }
     slot_setFrequencyFromSize();
-    emit sigConfigurationItemChanged();
+    Q_EMIT sigConfigurationItemChanged();
 }
 
 void KisScreentoneConfigWidget::slot_buttonConstrainSize_keepAspectRatioChanged(bool keep)
@@ -553,7 +553,7 @@ void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridX_valueChanged(int va
 {
     Q_UNUSED(value);
     if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
-        emit sigConfigurationItemChanged();
+        Q_EMIT sigConfigurationItemChanged();
     }
 }
 
@@ -561,7 +561,7 @@ void KisScreentoneConfigWidget::slot_sliderAlignToPixelGridY_valueChanged(int va
 {
     Q_UNUSED(value);
     if (m_ui.checkBoxAlignToPixelGrid->isChecked()) {
-        emit sigConfigurationItemChanged();
+        Q_EMIT sigConfigurationItemChanged();
     }
 }
 

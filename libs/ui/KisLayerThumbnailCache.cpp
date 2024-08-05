@@ -216,7 +216,7 @@ void KisLayerThumbnailCache::slotThumbnailGenerated(KisNodeSP node, int seqNo, i
     }
 
     m_d->cache[node] = {thumb, seqNo, maxSize};
-    emit sigLayerThumbnailUpdated(node);
+    Q_EMIT sigLayerThumbnailUpdated(node);
 }
 
 #include "KisLayerThumbnailCache.moc"

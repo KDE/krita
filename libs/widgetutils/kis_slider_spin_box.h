@@ -137,7 +137,7 @@ public:
      */
     void setExponentRatio(qreal newExponentRatio);
     /**
-     * @brief Set if the spinbox should not emit signals when dragging the
+     * @brief Set if the spinbox should not Q_EMIT signals when dragging the
      * slider.
      * 
      * This is useful to prevent multiple updates when changing the value if

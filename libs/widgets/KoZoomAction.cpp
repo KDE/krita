@@ -160,7 +160,7 @@ void KoZoomAction::triggered(const QString& text)
         }
     }
 
-    emit zoomChanged( mode, zoom/100.0 );
+    Q_EMIT zoomChanged( mode, zoom/100.0 );
 }
 
 void KoZoomAction::regenerateItems(const qreal zoom)
@@ -197,7 +197,7 @@ void KoZoomAction::regenerateItems(const qreal zoom)
 
     setItems( values );
 
-    emit zoomLevelsChanged(values);
+    Q_EMIT zoomLevelsChanged(values);
 
     {
         const qreal zoomInPercent = zoom * 100;
@@ -207,7 +207,7 @@ void KoZoomAction::regenerateItems(const qreal zoom)
 
         setCurrentAction(valueString);
 
-        emit currentZoomLevelChanged(valueString);
+        Q_EMIT currentZoomLevelChanged(valueString);
     }
 }
 
@@ -215,7 +215,7 @@ void KoZoomAction::sliderValueChanged(int value)
 {
     if (value < d->sliderLookup.size()) {
         setZoom(d->sliderLookup[value]);
-        emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value]);
+        Q_EMIT zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->sliderLookup[value]);
     }
 }
 
@@ -245,7 +245,7 @@ void KoZoomAction::zoomIn()
 
     if (zoom > d->effectiveZoom) {
         setZoom(zoom);
-        emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
+        Q_EMIT zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
     }
 }
 
@@ -255,7 +255,7 @@ void KoZoomAction::zoomOut()
 
     if (zoom < d->effectiveZoom) {
         setZoom(zoom);
-        emit zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
+        Q_EMIT zoomChanged(KoZoomMode::ZOOM_CONSTANT, d->effectiveZoom);
     }
 }
 
@@ -304,7 +304,7 @@ void KoZoomAction::slotUpdateZoomLevels()
     regenerateItems(currentZoom);
     syncSliderWithZoom();
 
-    emit sliderZoomLevelsChanged(d->sliderLookup.size() - 1);
+    Q_EMIT sliderZoomLevelsChanged(d->sliderLookup.size() - 1);
 
 }
 
@@ -313,12 +313,12 @@ void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
     QString modeString(KoZoomMode::toString(mode));
     setCurrentAction(modeString);
 
-    emit currentZoomLevelChanged(modeString);
+    Q_EMIT currentZoomLevelChanged(modeString);
 }
 
 void KoZoomAction::setCanvasMappingMode(bool status)
 {
-    emit canvasMappingModeChanged(status);
+    Q_EMIT canvasMappingModeChanged(status);
 }
 
 void KoZoomAction::syncSliderWithZoom()
@@ -327,7 +327,7 @@ void KoZoomAction::syncSliderWithZoom()
     int i = d->sliderLookup.size() - 1;
     while (d->effectiveZoom < d->sliderLookup[i] + eps && i > 0) i--;
     
-    emit sliderChanged(i);
+    Q_EMIT sliderChanged(i);
 }
 
 qreal KoZoomAction::minimumZoom()

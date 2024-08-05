@@ -32,7 +32,7 @@ void KoProgressBar::setValue(int value)
 
     } else {
 
-        emit done();
+        Q_EMIT done();
         setVisible( false );
     }
 }

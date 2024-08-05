@@ -321,7 +321,7 @@ void KisScratchPad::sample(KoPointerEvent *event)
 {
     KoColor color;
     if (KisToolUtils::sampleColor(color, m_paintLayer->projection(), event->point.toPoint())) {
-        emit colorSelected(color);
+        Q_EMIT colorSelected(color);
     }
 }
 
@@ -362,7 +362,7 @@ QRect KisScratchPad::imageBounds() const
 
 void KisScratchPad::imageUpdated(const QRect &rect)
 {
-    emit sigUpdateCanvas(documentToWidget().mapRect(QRectF(rect)).toAlignedRect());
+    Q_EMIT sigUpdateCanvas(documentToWidget().mapRect(QRectF(rect)).toAlignedRect());
 }
 
 void KisScratchPad::slotUpdateCanvas(const QRect &rect)

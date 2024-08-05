@@ -200,12 +200,12 @@ const KisColorSelectorConfiguration WGConfig::defaultColorSelectorConfiguration 
 
 void WGConfigNotifier::notifyConfigChanged()
 {
-    emit configChanged();
+    Q_EMIT configChanged();
 }
 
 void WGConfigNotifier::notifySelectorConfigChanged()
 {
-    emit selectorConfigChanged();
+    Q_EMIT selectorConfigChanged();
 }
 
 // ======== Static Configuration Object Instantiation ========

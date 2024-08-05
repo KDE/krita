@@ -108,7 +108,7 @@ void KisPaletteModel::setColorSet(KoColorSetSP colorSet)
         connect(colorSet.data(), SIGNAL(modified()), this, SIGNAL(sigPaletteModified()));
     }
     endResetModel();
-    emit sigPaletteChanged();
+    Q_EMIT sigPaletteChanged();
 }
 
 KoColorSetSP KisPaletteModel::colorSet() const
@@ -136,7 +136,7 @@ void KisPaletteModel::removeSwatch(const QModelIndex &index, bool keepColors)
         m_colorSet->removeSwatch(index.column(),
                                  rowNumberInGroup(index.row()),
                                  group);
-        emit dataChanged(index, index);
+        Q_EMIT dataChanged(index, index);
     } else {
         int groupNameRow = m_colorSet->startRowForGroup(group->name());
         QString groupName = m_colorSet->getGroup(groupNameRow)->name();
@@ -189,7 +189,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             }
             m_colorSet->moveGroup(groupNameDragged, groupNameDroppedOn);
             endMoveRows();
-            emit sigPaletteModified();
+            Q_EMIT sigPaletteModified();
         }
         return true;
     }
@@ -216,7 +216,7 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
                 }
             }
             setSwatch(entry, finalIndex);
-            emit sigPaletteModified();
+            Q_EMIT sigPaletteModified();
         }
 
         return true;
@@ -274,7 +274,7 @@ void KisPaletteModel::setSwatch(const KisSwatch &entry, const QModelIndex &index
 
     m_colorSet->addSwatch(entry, group->name(), index.column(), rowNumberInGroup(index.row()));
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 }
 
 void KisPaletteModel::changeGroupName(const QString &groupName, const QString &newName)

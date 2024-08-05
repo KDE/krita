@@ -342,7 +342,7 @@ bool ToolBarListWidget::dropMimeData(int index, const QMimeData *mimeData, Qt::D
     const bool sourceIsActiveList = mimeData->data(QStringLiteral("application/x-kde-source-treewidget")) == "active";
     ToolBarItem *item = new ToolBarItem(this); // needs parent, use this temporarily
     stream >> *item;
-    emit dropped(this, index, item, sourceIsActiveList);
+    Q_EMIT dropped(this, index, item, sourceIsActiveList);
     return true;
 }
 
@@ -720,8 +720,8 @@ void KisKEditToolBarPrivate::defaultClicked()
 
     _k_enableApply(false);
 
-    emit q->newToolBarConfig();
-    emit q->newToolbarConfig(); // compat
+    Q_EMIT q->newToolBarConfig();
+    Q_EMIT q->newToolbarConfig(); // compat
 }
 
 void KisKEditToolBarPrivate::_k_slotButtonClicked(QAbstractButton *button)
@@ -750,12 +750,12 @@ void KisKEditToolBarPrivate::okClicked()
         return;
     }
 
-    // Do not rebuild GUI and emit the "newToolBarConfig" signal again here if the "Apply"
+    // Do not rebuild GUI and Q_EMIT the "newToolBarConfig" signal again here if the "Apply"
     // button was already pressed and no further changes were made.
     if (m_buttonBox->button(QDialogButtonBox::Apply)->isEnabled()) {
         m_widget->save();
-        emit q->newToolBarConfig();
-        emit q->newToolbarConfig(); // compat
+        Q_EMIT q->newToolBarConfig();
+        Q_EMIT q->newToolbarConfig(); // compat
     }
     q->accept();
 }
@@ -764,8 +764,8 @@ void KisKEditToolBarPrivate::applyClicked()
 {
     (void)m_widget->save();
     _k_enableApply(false);
-    emit q->newToolBarConfig();
-    emit q->newToolbarConfig(); // compat
+    Q_EMIT q->newToolBarConfig();
+    Q_EMIT q->newToolbarConfig(); // compat
 }
 
 void KisKEditToolBar::setGlobalDefaultToolBar(const char *toolbarName)
@@ -1363,7 +1363,7 @@ void KisKEditToolBarWidgetPrivate::slotInsertButton()
 
     insertActive(m_inactiveList->currentItem(), m_activeList->currentItem(), false);
     // we're modified, so let this change
-    emit m_widget->enableOk(true);
+    Q_EMIT m_widget->enableOk(true);
 
     slotToolBarSelected(m_toolbarCombo->currentIndex());
 
@@ -1436,7 +1436,7 @@ void KisKEditToolBarWidgetPrivate::removeActive(ToolBarItem *item)
     }
 
     // we're modified, so let this change
-    emit m_widget->enableOk(true);
+    Q_EMIT m_widget->enableOk(true);
 
     // now iterate through to find the child to nuke
     QDomElement elem = findElementForToolBarItem(item);
@@ -1469,7 +1469,7 @@ void KisKEditToolBarWidgetPrivate::slotUpButton()
     }
 
     // we're modified, so let this change
-    emit m_widget->enableOk(true);
+    Q_EMIT m_widget->enableOk(true);
 
     moveActive(item, static_cast<ToolBarItem *>(item->listWidget()->item(row - 1)));
 }
@@ -1522,7 +1522,7 @@ void KisKEditToolBarWidgetPrivate::slotDownButton()
     }
 
     // we're modified, so let this change
-    emit m_widget->enableOk(true);
+    Q_EMIT m_widget->enableOk(true);
 
     moveActive(item, static_cast<ToolBarItem *>(item->listWidget()->item(newRow)));
 }
@@ -1590,7 +1590,7 @@ void KisKEditToolBarWidgetPrivate::slotDropped(ToolBarListWidget *list, int inde
     delete item; // not needed anymore. must be deleted before slotToolBarSelected clears the lists
 
     // we're modified, so let this change
-    emit m_widget->enableOk(true);
+    Q_EMIT m_widget->enableOk(true);
 
     slotToolBarSelected(m_toolbarCombo->currentIndex());
 }

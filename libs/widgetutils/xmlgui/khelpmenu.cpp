@@ -215,7 +215,7 @@ void KisKHelpMenu::appHelpActivated()
 void KisKHelpMenu::aboutApplication()
 {
     if (receivers(SIGNAL(showAboutApplication())) > 0) {
-        emit showAboutApplication();
+        Q_EMIT showAboutApplication();
     }
 }
 

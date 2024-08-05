@@ -71,7 +71,7 @@ void WGMyPaintShadeSelector::setModel(KisVisualColorModelSP model)
 void WGMyPaintShadeSelector::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit sigColorInteraction(true);
+        Q_EMIT sigColorInteraction(true);
         pickColorAt(event->localPos());
     } else {
         event->ignore();
@@ -92,7 +92,7 @@ void WGMyPaintShadeSelector::mouseMoveEvent(QMouseEvent *event)
 void WGMyPaintShadeSelector::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit sigColorInteraction(false);
+        Q_EMIT sigColorInteraction(false);
     } else {
         event->ignore();
     }
@@ -275,7 +275,7 @@ void WGMyPaintShadeSelector::pickColorAt(const QPointF &posF)
     QVector4D values, dummy;
     getChannelValues(pos, values, dummy);
     m_allowUpdates = false;
-    emit sigChannelValuesChanged(values);
+    Q_EMIT sigChannelValuesChanged(values);
     m_allowUpdates = true;
 }
 

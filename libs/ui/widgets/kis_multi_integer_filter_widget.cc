@@ -33,7 +33,7 @@ void KisDelayedActionIntegerInput::slotTimeToUpdate()
 
 void KisDelayedActionIntegerInput::slotValueChanged()
 {
-    emit valueChangedDelayed(value());
+    Q_EMIT valueChangedDelayed(value());
 }
 
 void KisDelayedActionIntegerInput::cancelDelayedSignal()

@@ -66,9 +66,9 @@ void KisDraggableToolButton::mousePressEvent(QMouseEvent *e)
 void KisDraggableToolButton::mouseMoveEvent(QMouseEvent *e)
 {
     int distance = continueDrag(e->pos());
-    emit offsetChanged(distance);
+    Q_EMIT offsetChanged(distance);
     int delta = movementDelta(e->pos());
-    emit valueChanged(delta);
+    Q_EMIT valueChanged(delta);
 
     QToolButton::mouseMoveEvent(e);
 }

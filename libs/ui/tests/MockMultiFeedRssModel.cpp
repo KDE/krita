@@ -19,7 +19,7 @@ void MockMultiFeedRssModel::addFeed(const QString &feed)
 {
     Q_UNUSED(feed);
 
-    emit feedDataChanged();
+    Q_EMIT feedDataChanged();
 }
 
 void MockMultiFeedRssModel::loadFeedData(const RssItemList& feed)

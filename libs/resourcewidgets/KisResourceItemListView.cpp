@@ -158,10 +158,10 @@ void KisResourceItemListView::selectionChanged(const QItemSelection &selected, c
     QListView::selectionChanged(selected, deselected);
 
     if (selected.isEmpty()) {
-        emit currentResourceChanged(QModelIndex());
+        Q_EMIT currentResourceChanged(QModelIndex());
     }
     else {
-        emit currentResourceChanged(selected.indexes().first());
+        Q_EMIT currentResourceChanged(selected.indexes().first());
     }
 }
 
@@ -182,7 +182,7 @@ QItemSelectionModel::SelectionFlags KisResourceItemListView::selectionCommand(co
 void KisResourceItemListView::contextMenuEvent(QContextMenuEvent *event)
 {
     QListView::contextMenuEvent(event);
-    emit contextMenuRequested(event->globalPos());
+    Q_EMIT contextMenuRequested(event->globalPos());
 }
 
 bool KisResourceItemListView::viewportEvent(QEvent *event)

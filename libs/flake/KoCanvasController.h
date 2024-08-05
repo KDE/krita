@@ -92,7 +92,7 @@ public:
 
     /**
      * Set the new canvas to be shown as a child
-     * Calling this will emit canvasRemoved() if there was a canvas before, and will emit
+     * Calling this will Q_EMIT canvasRemoved() if there was a canvas before, and will emit
      * canvasSet() with the new canvas.
      * @param canvas the new canvas. The KoCanvasBase::canvas() will be called to retrieve the
      *        actual widget which will then be added as child of this one.
@@ -329,15 +329,15 @@ public:
 
     // Convenience methods to invoke the signals from subclasses
 
-    void emitCanvasRemoved(KoCanvasController *canvasController) { emit canvasRemoved(canvasController); }
-    void emitCanvasSet(KoCanvasController *canvasController) { emit canvasSet(canvasController); }
-    void emitCanvasOffsetXChanged(int offset) { emit canvasOffsetXChanged(offset); }
-    void emitCanvasOffsetYChanged(int offset) { emit canvasOffsetYChanged(offset); }
-    void emitCanvasMousePositionChanged(const QPoint &position) { emit canvasMousePositionChanged(position); }
-    void emitDocumentMousePositionChanged(const QPointF &position) { emit documentMousePositionChanged(position); }
-    void emitSizeChanged(const QSize &size) { emit sizeChanged(size); }
-    void emitMoveDocumentOffset(const QPoint &point) { emit moveDocumentOffset(point); }
-    void emitZoomRelative(const qreal factor, const QPointF &stillPoint) { emit zoomRelative(factor, stillPoint); }
+    void emitCanvasRemoved(KoCanvasController *canvasController) { Q_EMIT canvasRemoved(canvasController); }
+    void emitCanvasSet(KoCanvasController *canvasController) { Q_EMIT canvasSet(canvasController); }
+    void emitCanvasOffsetXChanged(int offset) { Q_EMIT canvasOffsetXChanged(offset); }
+    void emitCanvasOffsetYChanged(int offset) { Q_EMIT canvasOffsetYChanged(offset); }
+    void emitCanvasMousePositionChanged(const QPoint &position) { Q_EMIT canvasMousePositionChanged(position); }
+    void emitDocumentMousePositionChanged(const QPointF &position) { Q_EMIT documentMousePositionChanged(position); }
+    void emitSizeChanged(const QSize &size) { Q_EMIT sizeChanged(size); }
+    void emitMoveDocumentOffset(const QPoint &point) { Q_EMIT moveDocumentOffset(point); }
+    void emitZoomRelative(const qreal factor, const QPointF &stillPoint) { Q_EMIT zoomRelative(factor, stillPoint); }
 
     // Convenience method to retrieve the canvas controller for who needs to use QPointer
     KoCanvasController *canvasController() const { return m_canvasController; }

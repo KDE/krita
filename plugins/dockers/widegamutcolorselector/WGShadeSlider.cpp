@@ -101,9 +101,9 @@ QSize WGShadeSlider::minimumSizeHint() const
 void WGShadeSlider::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit sigInteraction(true);
+        Q_EMIT sigInteraction(true);
         if (adjustHandleValue(event->localPos())) {
-            emit sigChannelValuesChanged(channelValues());
+            Q_EMIT sigChannelValuesChanged(channelValues());
             update();
         }
     } else {
@@ -115,7 +115,7 @@ void WGShadeSlider::mouseMoveEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         if (adjustHandleValue(event->localPos())) {
-            emit sigChannelValuesChanged(channelValues());
+            Q_EMIT sigChannelValuesChanged(channelValues());
             update();
         }
     } else {
@@ -126,7 +126,7 @@ void WGShadeSlider::mouseMoveEvent(QMouseEvent *event)
 void WGShadeSlider::mouseReleaseEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit sigInteraction(false);
+        Q_EMIT sigInteraction(false);
     } else {
         event->ignore();
     }

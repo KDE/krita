@@ -83,7 +83,7 @@ public:
         }
 
         void callIndexChanged(const QModelIndex &index0, const QModelIndex &index1) {
-            emit dataChanged(index0, index1);
+            Q_EMIT dataChanged(index0, index1);
         }
     };
 

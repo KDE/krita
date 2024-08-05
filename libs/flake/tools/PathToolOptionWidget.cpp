@@ -146,6 +146,6 @@ void PathToolOptionWidget::slotShapePropertyChanged()
 
 void PathToolOptionWidget::showEvent(QShowEvent *event)
 {
-    emit sigRequestUpdateActions();
+    Q_EMIT sigRequestUpdateActions();
     QWidget::showEvent(event);
 }

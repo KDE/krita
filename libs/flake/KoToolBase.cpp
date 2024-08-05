@@ -167,7 +167,7 @@ void KoToolBase::useCursor(const QCursor &cursor)
 {
     Q_D(KoToolBase);
     d->currentCursor = cursor;
-    emit cursorChanged(d->currentCursor);
+    Q_EMIT cursorChanged(d->currentCursor);
 }
 
 QList<QPointer<QWidget> > KoToolBase::optionWidgets()
@@ -248,7 +248,7 @@ KoCanvasBase * KoToolBase::canvas() const
 
 void KoToolBase::setStatusText(const QString &statusText)
 {
-    emit statusTextChanged(statusText);
+    Q_EMIT statusTextChanged(statusText);
 }
 
 int KoToolBase::handleRadius() const

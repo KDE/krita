@@ -16,6 +16,8 @@ class KisWebPTest : public QObject
 private Q_SLOTS:
     void testAnimation();
     void testAnimationWithTail();
+    void testSaveRgbaColorSpace();
+    void testSaveUnsupportedColorSpace();
     void testFiles();
     void testImportIncorrectFormat();
 
